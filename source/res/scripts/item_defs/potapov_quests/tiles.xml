@@ -6,8 +6,8 @@
     <chainsCount>	5	</chainsCount>
     <questsInChain>	15	</questsInChain>
     <chainsCountToUnlockNext>	4	</chainsCountToUnlockNext>
-    <userString>	#potapov_quests:tile_1	</userString>
-    <description>	#potapov_quests:tile_1_descr	</description>
+    <userString>	#personal_missions_details:tile_1	</userString>
+    <description>	#personal_missions_details:tile_1_descr	</description>
     <iconID>	tile_1_1	</iconID>
     <price>	0	</price>
     <tokens>	token:pt:final:s1:t1	</tokens>
@@ -26,8 +26,8 @@
     <chainsCount>	5	</chainsCount>
     <questsInChain>	15	</questsInChain>
     <chainsCountToUnlockNext>	4	</chainsCountToUnlockNext>
-    <userString>	#potapov_quests:tile_2	</userString>
-    <description>	#potapov_quests:tile_2_descr	</description>
+    <userString>	#personal_missions_details:tile_2	</userString>
+    <description>	#personal_missions_details:tile_2_descr	</description>
     <iconID>	tile_1_2	</iconID>
     <price>	0	</price>
     <tokens>	token:pt:final:s1:t2	</tokens>
@@ -46,8 +46,8 @@
     <chainsCount>	5	</chainsCount>
     <questsInChain>	15	</questsInChain>
     <chainsCountToUnlockNext>	4	</chainsCountToUnlockNext>
-    <userString>	#potapov_quests:tile_3	</userString>
-    <description>	#potapov_quests:tile_3_descr	</description>
+    <userString>	#personal_missions_details:tile_3	</userString>
+    <description>	#personal_missions_details:tile_3_descr	</description>
     <iconID>	tile_1_3	</iconID>
     <price>	0	</price>
     <tokens>	token:pt:final:s1:t3	</tokens>
@@ -66,8 +66,8 @@
     <chainsCount>	5	</chainsCount>
     <questsInChain>	15	</questsInChain>
     <chainsCountToUnlockNext>	0	</chainsCountToUnlockNext>
-    <userString>	#potapov_quests:tile_4	</userString>
-    <description>	#potapov_quests:tile_4_descr	</description>
+    <userString>	#personal_missions_details:tile_4	</userString>
+    <description>	#personal_missions_details:tile_4_descr	</description>
     <iconID>	tile_1_4	</iconID>
     <price>	0	</price>
     <tokens>	token:pt:final:s1:t4	</tokens>
@@ -86,8 +86,8 @@
     <chainsCount>	2	</chainsCount>
     <questsInChain>	15	</questsInChain>
     <chainsCountToUnlockNext>	0	</chainsCountToUnlockNext>
-    <userString>	#potapov_quests:tile_5	</userString>
-    <description>	#potapov_quests:tile_5_descr	</description>
+    <userString>	#personal_missions_details:tile_5	</userString>
+    <description>	#personal_missions_details:tile_5_descr	</description>
     <iconID>	tile_2_5	</iconID>
     <price>	0	</price>
     <tokens>	token:pt:final:s2:t5	</tokens>
@@ -102,8 +102,8 @@
           <account>
             <token>
               <id>	token:pt:final:s1:t1	</id>
-              <greaterOrEqual>	20	</greaterOrEqual>
-              <consume>	100	  <force></force>
+              <greaterOrEqual>	5	</greaterOrEqual>
+              <consume>	5	  <force></force>
               </consume>
             </token>
           </account>
@@ -117,6 +117,219 @@
             <gold>	0	</gold>
           </customCompensation>
         </vehicle>
+        <token>
+          <id>	token:pt:final:s1:t1:complete	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+        <dossier>
+          <name>	playerBadges:10	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_final_s1_t1_camouflage	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:final:s1:t1:main	</id>
+              <greaterOrEqual>	75	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <customizations>
+          <item>
+            <isPermanent>	true	</isPermanent>
+            <value>	1	</value>
+            <custType>	camouflages	</custType>
+            <nationID>	1	</nationID>
+            <innationID>	150	</innationID>
+            <boundVehicle>	germany:G104_Stug_IV	</boundVehicle>
+          </item>
+          <item>
+            <isPermanent>	true	</isPermanent>
+            <value>	1	</value>
+            <custType>	camouflages	</custType>
+            <nationID>	1	</nationID>
+            <innationID>	151	</innationID>
+            <boundVehicle>	germany:G104_Stug_IV	</boundVehicle>
+          </item>
+          <item>
+            <isPermanent>	true	</isPermanent>
+            <value>	1	</value>
+            <custType>	camouflages	</custType>
+            <nationID>	1	</nationID>
+            <innationID>	152	</innationID>
+            <boundVehicle>	germany:G104_Stug_IV	</boundVehicle>
+          </item>
+        </customizations>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_final_s1_t1_badge2	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:final:s1:t1:add	</id>
+              <greaterOrEqual>	75	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <dossier>
+          <name>	playerBadges:11	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+        <token>
+          <id>	token:pt:s1:badges	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:stugiv:camouflage	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_final_badge	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:s1:badges	</id>
+              <greaterOrEqual>	4	</greaterOrEqual>
+              <consume>	4	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <dossier>
+          <name>	playerBadges:18	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t1_c1_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t1:c1:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	50000	</credits>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t1_c2_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t1:c2:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	50000	</credits>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t1_c3_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t1:c3:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	50000	</credits>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t1_c4_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t1:c4:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	50000	</credits>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t1_c5_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t1:c5:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	50000	</credits>
       </bonus>
     </tokenQuest>
     <tokenQuest>
@@ -128,8 +341,8 @@
           <account>
             <token>
               <id>	token:pt:final:s1:t2	</id>
-              <greaterOrEqual>	20	</greaterOrEqual>
-              <consume>	100	  <force></force>
+              <greaterOrEqual>	5	</greaterOrEqual>
+              <consume>	5	  <force></force>
               </consume>
             </token>
           </account>
@@ -143,6 +356,195 @@
             <gold>	0	</gold>
           </customCompensation>
         </vehicle>
+        <token>
+          <id>	token:pt:final:s1:t2:complete	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+        <dossier>
+          <name>	playerBadges:12	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_final_s1_t2_camouflage	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:final:s1:t2:main	</id>
+              <greaterOrEqual>	75	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <customizations>
+          <item>
+            <isPermanent>	true	</isPermanent>
+            <value>	1	</value>
+            <custType>	camouflages	</custType>
+            <nationID>	2	</nationID>
+            <innationID>	149	</innationID>
+            <boundVehicle>	usa:A102_T28_concept	</boundVehicle>
+          </item>
+          <item>
+            <isPermanent>	true	</isPermanent>
+            <value>	1	</value>
+            <custType>	camouflages	</custType>
+            <nationID>	2	</nationID>
+            <innationID>	150	</innationID>
+            <boundVehicle>	usa:A102_T28_concept	</boundVehicle>
+          </item>
+          <item>
+            <isPermanent>	true	</isPermanent>
+            <value>	1	</value>
+            <custType>	camouflages	</custType>
+            <nationID>	2	</nationID>
+            <innationID>	151	</innationID>
+            <boundVehicle>	usa:A102_T28_concept	</boundVehicle>
+          </item>
+        </customizations>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_final_s1_t2_badge2	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:final:s1:t2:add	</id>
+              <greaterOrEqual>	75	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <dossier>
+          <name>	playerBadges:13	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+        <token>
+          <id>	token:pt:s1:badges	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:t28htc:camouflage	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t2_c1_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t2:c1:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	100000	</credits>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t2_c2_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t2:c2:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	100000	</credits>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t2_c3_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t2:c3:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	100000	</credits>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t2_c4_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t2:c4:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	100000	</credits>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t2_c5_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t2:c5:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	100000	</credits>
       </bonus>
     </tokenQuest>
     <tokenQuest>
@@ -154,8 +556,8 @@
           <account>
             <token>
               <id>	token:pt:final:s1:t3	</id>
-              <greaterOrEqual>	20	</greaterOrEqual>
-              <consume>	100	  <force></force>
+              <greaterOrEqual>	5	</greaterOrEqual>
+              <consume>	5	  <force></force>
               </consume>
             </token>
           </account>
@@ -169,6 +571,195 @@
             <gold>	0	</gold>
           </customCompensation>
         </vehicle>
+        <token>
+          <id>	token:pt:final:s1:t3:complete	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+        <dossier>
+          <name>	playerBadges:14	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_final_s1_t3_camouflage	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:final:s1:t3:main	</id>
+              <greaterOrEqual>	75	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <customizations>
+          <item>
+            <isPermanent>	true	</isPermanent>
+            <value>	1	</value>
+            <custType>	camouflages	</custType>
+            <nationID>	0	</nationID>
+            <innationID>	146	</innationID>
+            <boundVehicle>	germany:G105_T-55_NVA_DDR	</boundVehicle>
+          </item>
+          <item>
+            <isPermanent>	true	</isPermanent>
+            <value>	1	</value>
+            <custType>	camouflages	</custType>
+            <nationID>	0	</nationID>
+            <innationID>	147	</innationID>
+            <boundVehicle>	germany:G105_T-55_NVA_DDR	</boundVehicle>
+          </item>
+          <item>
+            <isPermanent>	true	</isPermanent>
+            <value>	1	</value>
+            <custType>	camouflages	</custType>
+            <nationID>	0	</nationID>
+            <innationID>	148	</innationID>
+            <boundVehicle>	germany:G105_T-55_NVA_DDR	</boundVehicle>
+          </item>
+        </customizations>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_final_s1_t3_badge2	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:final:s1:t3:add	</id>
+              <greaterOrEqual>	75	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <dossier>
+          <name>	playerBadges:15	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+        <token>
+          <id>	token:pt:s1:badges	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:t55a:camouflage	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t3_c1_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t3:c1:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	250000	</credits>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t3_c2_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t3:c2:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	250000	</credits>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t3_c3_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t3:c3:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	250000	</credits>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t3_c4_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t3:c4:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	250000	</credits>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t3_c5_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t3:c5:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	250000	</credits>
       </bonus>
     </tokenQuest>
     <tokenQuest>
@@ -180,8 +771,8 @@
           <account>
             <token>
               <id>	token:pt:final:s1:t4	</id>
-              <greaterOrEqual>	20	</greaterOrEqual>
-              <consume>	100	  <force></force>
+              <greaterOrEqual>	5	</greaterOrEqual>
+              <consume>	5	  <force></force>
               </consume>
             </token>
           </account>
@@ -195,6 +786,195 @@
             <gold>	0	</gold>
           </customCompensation>
         </vehicle>
+        <token>
+          <id>	token:pt:final:s1:t4:complete	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+        <dossier>
+          <name>	playerBadges:16	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_final_s1_t4_camouflage	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:final:s1:t4:main	</id>
+              <greaterOrEqual>	75	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <customizations>
+          <item>
+            <isPermanent>	true	</isPermanent>
+            <value>	1	</value>
+            <custType>	camouflages	</custType>
+            <nationID>	0	</nationID>
+            <innationID>	143	</innationID>
+            <boundVehicle>	ussr:R110_Object_260	</boundVehicle>
+          </item>
+          <item>
+            <isPermanent>	true	</isPermanent>
+            <value>	1	</value>
+            <custType>	camouflages	</custType>
+            <nationID>	0	</nationID>
+            <innationID>	144	</innationID>
+            <boundVehicle>	ussr:R110_Object_260	</boundVehicle>
+          </item>
+          <item>
+            <isPermanent>	true	</isPermanent>
+            <value>	1	</value>
+            <custType>	camouflages	</custType>
+            <nationID>	0	</nationID>
+            <innationID>	145	</innationID>
+            <boundVehicle>	ussr:R110_Object_260	</boundVehicle>
+          </item>
+        </customizations>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_final_s1_t4_badge2	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	token:pt:final:s1:t4:add	</id>
+              <greaterOrEqual>	75	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <dossier>
+          <name>	playerBadges:17	</name>
+          <value>	timestamp	</value>
+          <type>	set	</type>
+        </dossier>
+        <token>
+          <id>	token:pt:s1:badges	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+        <token>
+          <id>	token:object260:camouflage	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t4_c1_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t4:c1:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	500000	</credits>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t4_c2_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t4:c2:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	500000	</credits>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t4_c3_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t4:c3:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	500000	</credits>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t4_c4_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t4:c4:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	500000	</credits>
+      </bonus>
+    </tokenQuest>
+    <tokenQuest>
+      <enabled>	true	</enabled>
+      <id>	pt_s1_t4_c5_add_reward	</id>
+      <hidden>	true	</hidden>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	pt:s1:t4:c5:need_add_reward	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	500000	</credits>
       </bonus>
     </tokenQuest>
     <tokenQuest>

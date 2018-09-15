@@ -113,9 +113,9 @@ class BonusExtractor(object):
 
     def getBonusInfo(self):
         for bnsId, bnsGroup in self.__bonuses:
-            yield (bnsGroup, bnsId, self.__extractBonus(bnsGroup, bnsId))
+            yield (bnsGroup, bnsId, self.extractBonus(bnsGroup, bnsId))
 
-    def __extractBonus(self, bonusGroup, bonusID):
+    def extractBonus(self, bonusGroup, bonusID):
         """
         Remove bonus influence factor by vehicle modification and save previous params,
         return _ParameterInfo which contains parameters diffs

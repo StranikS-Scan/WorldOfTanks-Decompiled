@@ -13,6 +13,7 @@ from gui.Scaleform.daapi.view.lobby.vehiclePreview.vehicle_preview_dp import Def
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
 from gui.Scaleform.daapi.view.meta.VehiclePreviewMeta import VehiclePreviewMeta
 from gui.Scaleform.framework import g_entitiesFactories
+from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
@@ -44,7 +45,8 @@ _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_RESEARCH: 'researchTree',
  VIEW_ALIAS.LOBBY_TECHTREE: 'researchTree',
- VIEW_ALIAS.VEHICLE_COMPARE: 'vehicleCompare'}
+ VIEW_ALIAS.VEHICLE_COMPARE: 'vehicleCompare',
+ PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_AWARDS_VIEW_ALIAS: 'personalAwards'}
 
 def _buildBuyButtonTooltip(key):
     return makeTooltip(TOOLTIPS.vehiclepreview_buybutton_all(key, 'header'), TOOLTIPS.vehiclepreview_buybutton_all(key, 'body'))
@@ -63,9 +65,9 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         self._actionType = None
         self._showVehInfoPanel = True
         self._showHeaderCloseBtn = True
-        self.__vehicleCD = ctx['itemCD']
+        self._vehicleCD = ctx['itemCD']
         self.__vehicleStrCD = ctx.get('vehicleStrCD')
-        self.__backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
+        self._backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
         if 'previewAppearance' in ctx:
             self.__vehAppearanceChanged = True
             g_currentPreviewVehicle.resetAppearance(ctx['previewAppearance'])
@@ -77,7 +79,7 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         return
 
     def _populate(self):
-        g_currentPreviewVehicle.selectVehicle(self.__vehicleCD, self.__vehicleStrCD)
+        g_currentPreviewVehicle.selectVehicle(self._vehicleCD, self.__vehicleStrCD)
         super(VehiclePreview, self)._populate()
         g_clientUpdateManager.addMoneyCallback(self._updateBtnState)
         g_clientUpdateManager.addCallbacks({'stats.freeXP': self._updateBtnState})
@@ -115,23 +117,23 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         self.onBackClick()
 
     def onBackClick(self):
-        if self.__backAlias == VIEW_ALIAS.LOBBY_RESEARCH:
-            event_dispatcher.showResearchView(self.__vehicleCD)
+        if self._backAlias == VIEW_ALIAS.LOBBY_RESEARCH:
+            event_dispatcher.showResearchView(self._vehicleCD)
         else:
-            event = g_entitiesFactories.makeLoadEvent(self.__backAlias)
+            event = g_entitiesFactories.makeLoadEvent(self._backAlias, {'isBackEvent': True})
             self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onOpenInfoTab(self, index):
         AccountSettings.setSettings(PREVIEW_INFO_PANEL_IDX, index)
 
     def onBuyOrResearchClick(self):
-        self.__previewDP.buyAction(self._actionType, self.__vehicleCD, self._skipConfirm)
+        self.__previewDP.buyAction(self._actionType, self._vehicleCD, self._skipConfirm)
 
     def onCompareClick(self):
         """
         Add to compare button click handler
         """
-        self.comparisonBasket.addVehicle(self.__vehicleCD, initParameters={'strCD': g_currentPreviewVehicle.item.descriptor.makeCompactDescr()})
+        self.comparisonBasket.addVehicle(self._vehicleCD, initParameters={'strCD': g_currentPreviewVehicle.item.descriptor.makeCompactDescr()})
 
     def _updateBtnState(self, *args):
         if g_currentPreviewVehicle.item is None:
@@ -152,7 +154,7 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
 
     def __onVehicleChanged(self, *args):
         if g_currentPreviewVehicle.isPresent():
-            self.__vehicleCD = g_currentPreviewVehicle.item.intCD
+            self._vehicleCD = g_currentPreviewVehicle.item.intCD
             self.__fullUpdate()
 
     def __getVehiclePanelData(self):
@@ -180,11 +182,11 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
 
     def __onInventoryChanged(self, *arg):
         if not g_currentPreviewVehicle.isPresent():
-            event_dispatcher.selectVehicleInHangar(self.__vehicleCD)
+            event_dispatcher.selectVehicleInHangar(self._vehicleCD)
 
     def __onRestoreChanged(self, vehicles):
         if g_currentPreviewVehicle.isPresent():
-            if self.__vehicleCD in vehicles:
+            if self._vehicleCD in vehicles:
                 self._updateBtnState()
 
     def __updateStatus(self):
@@ -265,7 +267,7 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
          'showCloseBtn': self._showHeaderCloseBtn}
 
     def __getBackBtnLabel(self):
-        key = _BACK_BTN_LABELS.get(self.__backAlias, 'hangar')
+        key = _BACK_BTN_LABELS.get(self._backAlias, 'hangar')
         return '#vehicle_preview:header/backBtn/descrLabel/%s' % key
 
     def __getBottomPanelData(self):

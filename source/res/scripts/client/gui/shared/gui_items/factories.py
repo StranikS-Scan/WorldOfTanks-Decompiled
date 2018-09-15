@@ -8,6 +8,7 @@ from gui.shared.gui_items.vehicle_modules import Shell, VehicleGun, VehicleChass
 from gui.shared.gui_items.artefacts import Equipment, BattleBooster, OptionalDevice
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import Vehicle
+from gui.shared.gui_items.badge import Badge
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 _NONE_GUI_ITEM_TYPE = 0
 
@@ -23,7 +24,7 @@ class GuiItemFactory(IGuiItemsFactory):
         """
         Creates a GUI item by the given GUI item type ID.
         
-        :param itemTypeIdx: type of compact descriptor
+        :param itemTypeIdx: type of item in GUI list
         :param args: args to be passed in constructor
         :param kwargs: kwargs to be passed in constructor
         
@@ -220,6 +221,17 @@ class GuiItemFactory(IGuiItemsFactory):
         """
         return VehicleDossier(dossier, vehTypeCompDescr, playerDBID, rankedCurrentSeason)
 
+    def createBadge(self, descriptor, proxy=None):
+        """
+        Creates Badge item by the given arguments.
+        
+        :param descriptor: badge dict descriptor
+        :param proxy: instance of ItemsRequester
+        
+        :return: an instance of Badge class.
+        """
+        return Badge(descriptor, proxy)
+
 
 _ITEM_TYPES_MAPPING = {_NONE_GUI_ITEM_TYPE: lambda *args, **kwargs: None,
  GUI_ITEM_TYPE.SHELL: GuiItemFactory.createShell,
@@ -236,4 +248,5 @@ _ITEM_TYPES_MAPPING = {_NONE_GUI_ITEM_TYPE: lambda *args, **kwargs: None,
  GUI_ITEM_TYPE.TANKMAN: GuiItemFactory.createTankman,
  GUI_ITEM_TYPE.TANKMAN_DOSSIER: GuiItemFactory.createTankmanDossier,
  GUI_ITEM_TYPE.ACCOUNT_DOSSIER: GuiItemFactory.createAccountDossier,
- GUI_ITEM_TYPE.VEHICLE_DOSSIER: GuiItemFactory.createVehicleDossier}
+ GUI_ITEM_TYPE.VEHICLE_DOSSIER: GuiItemFactory.createVehicleDossier,
+ GUI_ITEM_TYPE.BADGE: GuiItemFactory.createBadge}

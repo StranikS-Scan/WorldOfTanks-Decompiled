@@ -104,10 +104,10 @@ class ToolTipRefSysDirects(ToolTipBaseData):
             resourceMultiplier = header.getIndustrialResourceMultiplier()
             rewardOnePoint = battle.getBattleReward()
             rewardTotal = rewardOnePoint
+            rewardRequisition = int(rewardTotal * reserves.getRequisitionBonusPercent() / 100)
             if isEnemyBuilding:
                 rewardResourceMultiplier = rewardOnePoint * (resourceMultiplier - 1)
                 rewardTotal += rewardResourceMultiplier
-            rewardRequisition = int(rewardTotal * reserves.getRequisitionBonusPercent() / 100)
             rewardTotal += rewardRequisition
             toolTipData['infoMapName'] = mapName
             toolTipData['infoDirection'] = infoDirection

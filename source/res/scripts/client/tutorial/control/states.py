@@ -43,7 +43,7 @@ class TutorialStateWaitScene(_TutorialState):
             postEffects = nextScene.getPostEffects()
             postEffects = filter(lambda item: functional.FunctionalConditions(item.getConditions()).allConditionsOk(), postEffects)
             self._isAllowedToSwitch = True
-            if len(postEffects):
+            if postEffects:
                 self._tutorial.storeEffectsInQueue(postEffects)
             else:
                 self._tutorial.evaluateState()
@@ -65,9 +65,6 @@ class TutorialStateNextScene(_TutorialState):
 
 
 class TutorialStateLearning(_TutorialState):
-
-    def __init__(self):
-        super(TutorialStateLearning, self).__init__()
 
     def tick(self):
         scene = self._tutorial.getFunctionalScene()

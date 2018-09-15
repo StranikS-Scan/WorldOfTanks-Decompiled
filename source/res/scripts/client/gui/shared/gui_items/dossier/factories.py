@@ -51,9 +51,6 @@ class _CustomAchieveFactory(_AchieveFactory):
 
 class _BlockAchieveFactory(_AchieveFactory):
 
-    def __init__(self, achieveClass, name, block, dossier):
-        super(_BlockAchieveFactory, self).__init__(achieveClass, name, block, dossier)
-
     def create(self, value=None):
         return self._achieveClass(self._name, self._dossier, value)
 
@@ -118,7 +115,11 @@ class _NationAchieveFactory(_AchieveFactory):
 _ACHIEVEMENTS_BY_BLOCK = {_AB.RARE: _BlockAchieveFactory.get(_abstract_achievements.RareAchievement)}
 _ACHIEVEMENTS_BY_TYPE = {ACHIEVEMENT_TYPE.CLASS: _AchieveFactory.get(_abstract_achievements.ClassProgressAchievement),
  ACHIEVEMENT_TYPE.SERIES: _AchieveFactory.get(_abstract_achievements.SeriesAchievement)}
-_ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'tankExpert'): _NationAchieveFactory.get(_as.TankExpertAchievement),
+_ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.WarriorAchievement),
+ (_AB.TOTAL, 'heroesOfRassenay'): _CustomAchieveFactory.get(_as.HeroesOfRassenayAchievement),
+ (_AB.TOTAL, 'medalLafayettePool'): _CustomAchieveFactory.get(_as.MedalLafayettePoolAchievement),
+ (_AB.TOTAL, 'medalRadleyWalters'): _CustomAchieveFactory.get(_as.MedalRadleyWaltersAchievement),
+ (_AB.TOTAL, 'tankExpert'): _NationAchieveFactory.get(_as.TankExpertAchievement),
  (_AB.TOTAL, 'mechanicEngineer'): _NationAchieveFactory.get(_as.MechEngineerAchievement),
  (_AB.TOTAL, 'mousebane'): _CustomAchieveFactory.get(_as.MousebaneAchievement),
  (_AB.TOTAL, 'beasthunter'): _CustomAchieveFactory.get(_as.BeasthunterAchievement),

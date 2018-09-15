@@ -84,7 +84,7 @@ class _BaseTimersCollection(object):
     def clear(self):
         pass
 
-    def addTimer(self, typeID, viewID, totalTime):
+    def addTimer(self, typeID, viewID, totalTime, startTimer=None):
         pass
 
     def removeTimer(self, typeID):
@@ -96,15 +96,12 @@ class _BaseTimersCollection(object):
 
 class _TimersCollection(_BaseTimersCollection):
 
-    def __init__(self, panel, clazz):
-        super(_TimersCollection, self).__init__(panel, clazz)
-
     def clear(self):
         while self._timers:
             _, timer = self._timers.popitem()
             timer.clear()
 
-    def addTimer(self, typeID, viewID, totalTime):
+    def addTimer(self, typeID, viewID, totalTime, startTimer=None):
         if typeID in self._timers:
             timer = self._timers.pop(typeID)
             timer.clear()
@@ -144,7 +141,7 @@ class _StackTimersCollection(_BaseTimersCollection):
 
         return
 
-    def addTimer(self, typeID, viewID, totalTime):
+    def addTimer(self, typeID, viewID, totalTime, startTime=None):
         if typeID in self._timers:
             oldTimer = self._timers.pop(typeID)
             if self._currentTimer and self._currentTimer.typeID == typeID:
@@ -154,7 +151,7 @@ class _StackTimersCollection(_BaseTimersCollection):
 
         else:
             oldTimer = None
-        timer = self._clazz(self._panel, typeID, viewID, totalTime)
+        timer = self._clazz(self._panel, typeID, viewID, totalTime, startTime)
         LOG_DEBUG('Adds destroy timer', timer)
         self._timers[typeID] = timer
         timerPriority = _TIMERS_PRIORITY[timer.typeID, timer.viewID]
@@ -326,9 +323,9 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
         else:
             self.__hideTimer(_TIMER_STATES.FIRE)
 
-    def __showTimer(self, typeID, totalTime, level):
+    def __showTimer(self, typeID, totalTime, level, startTime=None):
         if typeID is not None:
-            self.__timers.addTimer(typeID, _mapping.getTimerViewTypeID(level), totalTime)
+            self.__timers.addTimer(typeID, _mapping.getTimerViewTypeID(level), totalTime, startTime)
         return
 
     def __hideTimer(self, typeID):
@@ -337,8 +334,12 @@ class DestroyTimersPanel(DestroyTimersPanelMeta):
         return
 
     def __showDestroyTimer(self, value):
-        code, totalTime, level = value
-        self.__showTimer(self.__mapping.getTimerTypeIDByMiscCode(code), totalTime, level)
+        if len(value) == 4:
+            code, totalTime, level, startTime = value
+        else:
+            (code, totalTime, level), startTime = value, None
+        self.__showTimer(self.__mapping.getTimerTypeIDByMiscCode(code), totalTime, level, startTime)
+        return
 
     def __hideDestroyTimer(self, value):
         if value is not None:

@@ -980,7 +980,7 @@ class SniperControlMode(_GunControlMode):
             isRotationAroundCenter = desc.chassis.rotationIsAroundCenter
             turretHasYawLimits = desc.gun.turretYawLimits is not None
             yawHullAimingAvailable = desc.isYawHullAimingAvailable
-            return isRotationAroundCenter and not turretHasYawLimits or yawHullAimingAvailable
+            return yawHullAimingAvailable or isRotationAroundCenter and not turretHasYawLimits
 
     def enableSwitchAutorotationMode(self):
         return self.getPreferredAutorotationMode() is not False
@@ -1535,20 +1535,13 @@ def getFocalPoint():
     dir, start = cameras.getWorldRayAndPoint(0, 0)
     end = start + dir.scale(100000.0)
     point = collideDynamicAndStatic(start, end, (BigWorld.player().playerVehicleID,), 0)
-    if point is not None:
-        return point[0]
-    else:
-        return AimingSystems.shootInSkyPoint(start, dir)
-        return
+    return point[0] if point is not None else AimingSystems.shootInSkyPoint(start, dir)
 
 
 def _sign(val):
     if val > 0:
         return 1.0
-    elif val < 0:
-        return -1.0
-    else:
-        return 0.0
+    return -1.0 if val < 0 else 0.0
 
 
 def _buildTexCoord(vec4, textureSize):

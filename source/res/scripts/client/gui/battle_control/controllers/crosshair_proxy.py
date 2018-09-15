@@ -162,6 +162,22 @@ class CrosshairDataProxy(IBattleController):
             posY = int(self.__positionY)
         return (posX, posY)
 
+    def getDisaredPosition(self):
+        """ This method invokes 'getScaledPosition' in usual cases.
+        Special case, when player switches on to arty mode, when camera is moved with interpolation,
+        this method returns center of screen with scale. Because of we do not have mechanics
+        to predict when camera will be in desired position without reducing of performance,
+        see WOTD-83447."""
+        if self.__ctrlMode == _CTRL_MODE.ARTY:
+            if self.__scale > 1.0:
+                posX = int(0.5 * self.__width / self.__scale)
+                posY = int(0.5 * self.__height / self.__scale)
+            else:
+                posX = int(0.5 * self.__width)
+                posY = int(0.5 * self.__height)
+            return (posX, posY)
+        return self.getScaledPosition()
+
     def getScaleFactor(self):
         """Gets scale of crosshair view.
         :return: float containing scale factor.

@@ -233,19 +233,18 @@ def collideVehiclesAndStaticScene(startPoint, endPoint, vehicles, collisionFlags
     testResDynamic = collideEntities(startPoint, endPoint if testResStatic is None else testResStatic[0], vehicles, skipGun)
     if testResStatic is None and testResDynamic is None:
         return
+    distDynamic = 1000000.0
+    if testResDynamic is not None:
+        distDynamic = testResDynamic[0]
+    distStatic = 1000000.0
+    if testResStatic is not None:
+        distStatic = (testResStatic[0] - startPoint).length
+    if distDynamic <= distStatic:
+        dir = endPoint - startPoint
+        dir.normalise()
+        return (startPoint + distDynamic * dir, testResDynamic[1])
     else:
-        distDynamic = 1000000.0
-        if testResDynamic is not None:
-            distDynamic = testResDynamic[0]
-        distStatic = 1000000.0
-        if testResStatic is not None:
-            distStatic = (testResStatic[0] - startPoint).length
-        if distDynamic <= distStatic:
-            dir = endPoint - startPoint
-            dir.normalise()
-            return (startPoint + distDynamic * dir, testResDynamic[1])
         return (testResStatic[0], None)
-        return
 
 
 def segmentMayHitEntity(entity, startPoint, endPoint):

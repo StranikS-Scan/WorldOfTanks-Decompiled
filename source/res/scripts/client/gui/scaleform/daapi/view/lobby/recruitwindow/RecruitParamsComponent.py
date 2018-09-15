@@ -12,6 +12,10 @@ import nations
 from gui.Scaleform.locale.MENU import MENU
 import Event
 from skeletons.gui.shared import IItemsCache
+DEFAULT_NATION = -1
+DEFAULT_CLASS = ''
+DEFAULT_VEHICLE = -1
+DEFAULT_ROLE = ''
 
 class RecruitParamsComponent(RecruitParametersMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -19,23 +23,70 @@ class RecruitParamsComponent(RecruitParametersMeta):
     def __init__(self):
         super(RecruitParamsComponent, self).__init__()
         self.onDataChange = Event.Event()
-        self.__selectedNation = None
-        self.__selectedVehClass = None
-        self.__selectedVehicle = None
-        self.__selectedTmanRole = None
-        return
+        self.__selectedNation = DEFAULT_NATION
+        self.__selectedVehClass = DEFAULT_CLASS
+        self.__selectedVehicle = DEFAULT_VEHICLE
+        self.__selectedTmanRole = DEFAULT_ROLE
 
-    def setNationsData(self, nationID=None, enabled=True, showEmptyRow=True):
+    def init(self):
+        Waiting.show('updating')
+        self.__setNationsData()
+        self.__setVehicleClassesData()
+        self.as_setVehicleDataS(self.__getSendingData([self.__getVehicleEmptyRow()], False, 0))
+        self.as_setTankmanRoleDataS(self.__getSendingData([self.__getTankmanRoleEmptyRow()], False, 0))
+        Waiting.hide('updating')
+        self.onDataChange(self.__selectedNation, self.__selectedVehClass, self.__selectedVehicle, self.__selectedTmanRole)
+
+    def onNationChanged(self, nationID):
+        if self.__selectedNation == nationID:
+            return
+        Waiting.show('updating')
         self.__selectedNation = nationID
+        self.__setVehicleClassesData()
+        self.as_setVehicleDataS(self.__getSendingData([self.__getVehicleEmptyRow()], False, 0))
+        self.as_setTankmanRoleDataS(self.__getSendingData([self.__getTankmanRoleEmptyRow()], False, 0))
+        Waiting.hide('updating')
+        self.onDataChange(self.__selectedNation, self.__selectedVehClass, self.__selectedVehicle, self.__selectedTmanRole)
+
+    def onVehicleClassChanged(self, vehClass):
+        if self.__selectedVehClass == vehClass:
+            return
+        Waiting.show('updating')
+        self.__selectedVehClass = vehClass
+        self.__setVehicleData()
+        self.as_setTankmanRoleDataS(self.__getSendingData([self.__getTankmanRoleEmptyRow()], False, 0))
+        Waiting.hide('updating')
+        self.onDataChange(self.__selectedNation, self.__selectedVehClass, self.__selectedVehicle, self.__selectedTmanRole)
+
+    def onVehicleChanged(self, vehID):
+        if self.__selectedVehicle == vehID:
+            return
+        Waiting.show('updating')
+        self.__selectedVehicle = vehID
+        self.__setTankmenData()
+        Waiting.hide('updating')
+        self.onDataChange(self.__selectedNation, self.__selectedVehClass, self.__selectedVehicle, self.__selectedTmanRole)
+
+    def onTankmanRoleChanged(self, tManID):
+        if self.__selectedTmanRole == tManID:
+            return
+        self.__selectedTmanRole = tManID
+        self.onDataChange(self.__selectedNation, self.__selectedVehClass, self.__selectedVehicle, self.__selectedTmanRole)
+
+    def _dispose(self):
+        self.onDataChange.clear()
+        super(RecruitParamsComponent, self)._dispose()
+
+    def __setNationsData(self):
         vehsItems = self.itemsCache.items.getVehicles(self.__getNationsCriteria())
-        data = [self.__getNationEmptyRow()] if showEmptyRow else []
+        data = []
         selectedNationIndex = 0
         counter = 0
         for name in GUI_NATIONS:
             nationIdx = nations.INDICES[name]
             vehiclesAvailable = len(vehsItems.filter(REQ_CRITERIA.NATIONS([nationIdx]))) > 0
             if name in nations.AVAILABLE_NAMES and vehiclesAvailable:
-                if self.__selectedNation is None:
+                if self.__selectedNation == DEFAULT_NATION:
                     self.__selectedNation = nationIdx
                 data.append({'id': nationIdx,
                  'label': MENU.nations(name)})
@@ -43,17 +94,10 @@ class RecruitParamsComponent(RecruitParametersMeta):
                     selectedNationIndex = counter
                 counter = counter + 1
 
-        self.as_setNationsDataS(self.__getSendingData(data, enabled, selectedNationIndex))
-        self.onDataChange(self.__selectedNation, self.__selectedVehClass, self.__selectedVehicle, self.__selectedTmanRole)
-        return
+        self.as_setNationsDataS(self.__getSendingData(data, len(data) > 1, selectedNationIndex))
 
-    def onNationChanged(self, nationID):
-        self.changeNation(nationID)
-
-    def changeNation(self, nationID):
-        Waiting.show('updating')
-        self.__selectedNation = nationID
-        modulesAll = self.itemsCache.items.getVehicles(self.__getClassesCriteria(nationID)).values()
+    def __setVehicleClassesData(self):
+        modulesAll = self.itemsCache.items.getVehicles(self.__getClassesCriteria(self.__selectedNation)).values()
         classes = []
         data = [self.__getVehicleClassEmptyRow()]
         modulesAll.sort()
@@ -65,15 +109,9 @@ class RecruitParamsComponent(RecruitParametersMeta):
              'label': DIALOGS.recruitwindow_vehicleclassdropdown(module.type)})
 
         self.as_setVehicleClassDataS(self.__getSendingData(data, len(data) > 1, 0))
-        self.as_setVehicleDataS(self.__getSendingData([self.__getVehicleEmptyRow()], False, 0))
-        self.as_setTankmanRoleDataS(self.__getSendingData([self.__getTankmanRoleEmptyRow()], False, 0))
-        Waiting.hide('updating')
-        self.onDataChange(self.__selectedNation, self.__selectedVehClass, self.__selectedVehicle, self.__selectedTmanRole)
 
-    def onVehicleClassChanged(self, vehClass):
-        Waiting.show('updating')
-        self.__selectedVehClass = vehClass
-        modulesAll = self.itemsCache.items.getVehicles(self.__getVehicleTypeCriteria(self.__selectedNation, vehClass)).values()
+    def __setVehicleData(self):
+        modulesAll = self.itemsCache.items.getVehicles(self.__getVehicleTypeCriteria(self.__selectedNation, self.__selectedVehClass)).values()
         data = [self.__getVehicleEmptyRow()]
         modulesAll.sort()
         selectedIndex = 0
@@ -84,13 +122,8 @@ class RecruitParamsComponent(RecruitParametersMeta):
                 selectedIndex = i
 
         self.as_setVehicleDataS(self.__getSendingData(data, len(data) > 1, selectedIndex))
-        self.as_setTankmanRoleDataS(self.__getSendingData([self.__getTankmanRoleEmptyRow()], False, 0))
-        Waiting.hide('updating')
-        self.onDataChange(self.__selectedNation, self.__selectedVehClass, self.__selectedVehicle, self.__selectedTmanRole)
 
-    def onVehicleChanged(self, vehID):
-        Waiting.show('updating')
-        self.__selectedVehicle = vehID
+    def __setTankmenData(self):
         modulesAll = self.itemsCache.items.getVehicles(self.__getRoleCriteria(self.__selectedNation, self.__selectedVehClass, self.__selectedVehicle)).values()
         roles = []
         data = [self.__getTankmanRoleEmptyRow()]
@@ -110,16 +143,6 @@ class RecruitParamsComponent(RecruitParametersMeta):
                 counter = counter + 1
 
         self.as_setTankmanRoleDataS(self.__getSendingData(data, len(data) > 1, selectedIndex))
-        Waiting.hide('updating')
-        self.onDataChange(self.__selectedNation, self.__selectedVehClass, self.__selectedVehicle, self.__selectedTmanRole)
-
-    def onTankmanRoleChanged(self, tManID):
-        self.__selectedTmanRole = tManID
-        self.onDataChange(self.__selectedNation, self.__selectedVehClass, self.__selectedVehicle, self.__selectedTmanRole)
-
-    def _dispose(self):
-        self.onDataChange.clear()
-        super(RecruitParamsComponent, self)._dispose()
 
     def __getSendingData(self, data, enabled, selectedIndex):
         return {'enabled': enabled,
@@ -138,18 +161,14 @@ class RecruitParamsComponent(RecruitParametersMeta):
     def __getRoleCriteria(self, nationID, vclass, typeID):
         return self.__getVehicleTypeCriteria(nationID, vclass) | REQ_CRITERIA.INNATION_IDS([typeID])
 
-    def __getNationEmptyRow(self):
-        return {'id': -1,
-         'label': DIALOGS.RECRUITWINDOW_MENUEMPTYROW}
-
     def __getVehicleClassEmptyRow(self):
-        return {'id': None,
+        return {'id': DEFAULT_CLASS,
          'label': DIALOGS.RECRUITWINDOW_MENUEMPTYROW}
 
     def __getVehicleEmptyRow(self):
-        return {'id': None,
+        return {'id': DEFAULT_VEHICLE,
          'label': DIALOGS.RECRUITWINDOW_MENUEMPTYROW}
 
     def __getTankmanRoleEmptyRow(self):
-        return {'id': None,
+        return {'id': DEFAULT_ROLE,
          'label': DIALOGS.RECRUITWINDOW_MENUEMPTYROW}

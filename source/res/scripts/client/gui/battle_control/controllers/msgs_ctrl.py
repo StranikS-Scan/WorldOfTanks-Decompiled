@@ -116,12 +116,9 @@ class BattleMessagesController(IBattleController):
     def __getEntityString(self, avatar, entityID):
         if entityID == avatar.playerVehicleID:
             return _ENTITY_TYPE.SELF
-        elif self.__battleCtx.isAlly(entityID):
+        if self.__battleCtx.isAlly(entityID):
             return _ENTITY_TYPE.ALLY
-        elif self.__battleCtx.isEnemy(entityID):
-            return _ENTITY_TYPE.ENEMY
-        else:
-            return _ENTITY_TYPE.UNKNOWN
+        return _ENTITY_TYPE.ENEMY if self.__battleCtx.isEnemy(entityID) else _ENTITY_TYPE.UNKNOWN
 
     def __getDamageInfo(self, avatar, code, entityID, targetID):
         target = self.__getEntityString(avatar, targetID)

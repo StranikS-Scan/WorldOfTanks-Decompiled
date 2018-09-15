@@ -28,12 +28,10 @@ def _nearestComparator(x, y):
     if x.getLevelUpValue() == 1 or y.getLevelUpValue() == 1:
         if x.getLevelUpValue() == y.getLevelUpValue():
             return cmp(x.getProgressValue(), y.getProgressValue())
-        elif x.getLevelUpValue() == 1:
+        if x.getLevelUpValue() == 1:
             return 1
-        else:
-            return -1
-    else:
-        return cmp(x.getProgressValue(), y.getProgressValue())
+        return -1
+    return cmp(x.getProgressValue(), y.getProgressValue())
 
 
 class _StatsBlockAbstract(object):

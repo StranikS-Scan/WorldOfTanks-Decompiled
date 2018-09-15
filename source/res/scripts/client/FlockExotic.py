@@ -105,7 +105,7 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
             motor = self.__createMotor(model.position, targetPos, velocity, flightTime)
             model.addMotor(motor)
 
-        if flightTime is not None and len(self.__models) > 0:
+        if flightTime is not None and self.__models:
             self.delayCallback(flightTime, self.__onFlightEnd)
             self._addSound(self.__models[0], self.flightSound)
         return

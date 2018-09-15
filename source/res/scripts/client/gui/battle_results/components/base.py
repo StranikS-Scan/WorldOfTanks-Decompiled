@@ -293,11 +293,7 @@ def _getPropertyGetter(idx):
 
     def _getter(self):
         component = self.getComponent(idx)
-        if component is not None:
-            return component.getVO()
-        else:
-            return
-            return
+        return component.getVO() if component is not None else None
 
     return _getter
 
@@ -436,11 +432,7 @@ class StatsBlock(StatsComponent):
         return
 
     def getComponent(self, index):
-        if -1 < index < len(self._components):
-            return self._components[index]
-        else:
-            return None
-            return None
+        return self._components[index] if -1 < index < len(self._components) else None
 
     def addNextComponent(self, component):
         """Adds child component to end to list.

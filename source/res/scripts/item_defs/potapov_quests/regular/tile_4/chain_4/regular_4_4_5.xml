@@ -8,6 +8,12 @@
         <postBattle>
           <and>
             <vehicleKills>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_kills	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_4_4_5_condition_description_vehicleKills	</key>
+              </description>
               <distance>	300	</distance>
               <greaterOrEqual>	3	</greaterOrEqual>
             </vehicleKills>
@@ -21,6 +27,41 @@
         </item>
         <item>	507	  <count>	7	</count>
         </item>
+        <token>
+          <id>	token:pt:final:s1:t4:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_4_5_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_4_4_5_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <item>	1531	  <count>	7	</count>
+        </item>
+        <item>	1019	  <count>	7	</count>
+        </item>
+        <item>	507	  <count>	7	</count>
+        </item>
+        <token>
+          <id>	token:pt:final:s1:t4:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
       </bonus>
     </potapovQuest>
     <potapovQuest>
@@ -28,6 +69,56 @@
       <id>	regular_4_4_5_add	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
+        <postBattle>
+          <and>
+            <vehicleKills>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_kills	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_4_4_5_condition_description_vehicleKills	</key>
+              </description>
+              <distance>	300	</distance>
+              <greaterOrEqual>	3	</greaterOrEqual>
+            </vehicleKills>
+            <results>
+              <title>
+                <key>	#personal_missions_details:quest_4_4_5_condition_title_damageDealt	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_common_condition_description_empty	</key>
+              </description>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	4000	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	200000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t4:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_4_5_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_4_4_5_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
         <postBattle>
           <and>
             <vehicleKills>
@@ -42,7 +133,11 @@
         </postBattle>
       </conditions>
       <bonus>
-        <credits>	200000	</credits>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
       </bonus>
     </potapovQuest>
   </quests>

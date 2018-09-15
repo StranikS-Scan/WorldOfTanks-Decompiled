@@ -90,11 +90,7 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
         return self.app is not None and self.app.isModalViewShown()
 
     def getPlugin(self, name):
-        if self.__plugins is not None:
-            return self.__plugins.getPlugin(name)
-        else:
-            return
-            return
+        return self.__plugins.getPlugin(name) if self.__plugins is not None else None
 
     def getPlugins(self):
         return self.__plugins
@@ -177,9 +173,6 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
 
 class MinimapPluginsCollection(PluginsCollection):
     settingsCore = dependency.descriptor(ISettingsCore)
-
-    def init(self, arenaVisitor, arenaDP):
-        super(MinimapPluginsCollection, self).init(arenaVisitor, arenaDP)
 
     def start(self):
         super(MinimapPluginsCollection, self).start()

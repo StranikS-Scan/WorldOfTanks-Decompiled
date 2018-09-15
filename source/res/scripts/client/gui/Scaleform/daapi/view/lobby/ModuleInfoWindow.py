@@ -95,7 +95,7 @@ class ModuleInfoWindow(ModuleInfoMeta):
                 paramsList.append({'type': formatters.formatModuleParamName(paramName) + '\n',
                  'value': text_styles.stats(paramValue)})
 
-        moduleData['parameters'] = {'headerText': i18n.makeString(MENU.MODULEINFO_PARAMETERSLABEL) if len(paramsList) > 0 else '',
+        moduleData['parameters'] = {'headerText': i18n.makeString(MENU.MODULEINFO_PARAMETERSLABEL) if paramsList else '',
          'params': paramsList}
         moduleData[EXTRA_MODULE_INFO] = extraModuleInfo
         moduleCompatibles = params.get('compatible', tuple())

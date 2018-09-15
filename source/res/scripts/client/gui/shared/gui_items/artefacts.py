@@ -260,11 +260,7 @@ class BattleBooster(Equipment):
         :param vehicle: instance of gui_item.Vehicle
         :return: boolean result
         """
-        if vehicle is not None:
-            return isSkillLearnt(self.getAffectedSkillName(), vehicle)
-        else:
-            return False
-            return
+        return isSkillLearnt(self.getAffectedSkillName(), vehicle) if vehicle is not None else False
 
     def getCrewBoosterDescription(self, isPerkReplace, formatter=None):
         """
@@ -319,11 +315,7 @@ class BattleBooster(Equipment):
         return self.shortDescription % formatted
 
     def _getShortInfo(self, vehicle=None, expanded=False):
-        if self.isCrewBooster():
-            return self.getCrewBoosterDescription(isPerkReplace=False, formatter=None)
-        else:
-            return self.getOptDeviceBoosterDescription(vehicle=None, valueFormatter=None)
-            return None
+        return self.getCrewBoosterDescription(isPerkReplace=False, formatter=None) if self.isCrewBooster() else self.getOptDeviceBoosterDescription(vehicle=None, valueFormatter=None)
 
     def _getAltPrice(self, buyPrice, proxy):
         """
@@ -389,11 +381,11 @@ class OptionalDevice(RemovableDevice):
                 cost = proxy.shop.paidDeluxeRemovalCost
                 defaultCost = proxy.shop.defaults.paidDeluxeRemovalCost
                 return ItemPrice(price=cost, defPrice=defaultCost)
-            else:
-                cost = proxy.shop.paidRemovalCost
-                defaultCost = proxy.shop.defaults.paidRemovalCost
-                return ItemPrice(price=Money(gold=cost), defPrice=Money(gold=defaultCost))
-        return super(OptionalDevice, self).getRemovalPrice(proxy)
+            cost = proxy.shop.paidRemovalCost
+            defaultCost = proxy.shop.defaults.paidRemovalCost
+            return ItemPrice(price=Money(gold=cost), defPrice=Money(gold=defaultCost))
+        else:
+            return super(OptionalDevice, self).getRemovalPrice(proxy)
 
     def getBonusIcon(self, size='small'):
         iconName = self.descriptor.icon[0].split('/')[-1].split('.')[0]

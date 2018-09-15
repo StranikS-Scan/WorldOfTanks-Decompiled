@@ -26,6 +26,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IFalloutController, IRankedBattlesController
 from skeletons.gui.game_control import IIGRController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.ranked_battles.constants import PRIME_TIME_STATUS
 
@@ -35,6 +36,7 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
     itemsCache = dependency.descriptor(IItemsCache)
     falloutCtrl = dependency.descriptor(IFalloutController)
     igrCtrl = dependency.descriptor(IIGRController)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _=None):
         LobbySubView.__init__(self, 0)
@@ -56,6 +58,7 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         g_hangarSpace.onObjectUnselected += self.__on3DObjectUnSelected
         g_hangarSpace.onObjectClicked += self.__on3DObjectClicked
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         g_clientUpdateManager.addMoneyCallback(self.onMoneyUpdate)
         g_clientUpdateManager.addCallbacks({})
         self.startGlobalListening()
@@ -112,6 +115,7 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         g_hangarSpace.onObjectUnselected -= self.__on3DObjectUnSelected
         g_hangarSpace.onObjectClicked -= self.__on3DObjectClicked
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         if self.__selected3DEntity is not None:
             BigWorld.wgDelEdgeDetectEntity(self.__selected3DEntity)
             self.__selected3DEntity = None
@@ -125,7 +129,7 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         if self.falloutCtrl.isSelected():
             linkage = HANGAR_ALIASES.FALLOUT_TANK_CAROUSEL_UI
             newCarouselAlias = HANGAR_ALIASES.FALLOUT_TANK_CAROUSEL
-        elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
+        elif self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
             linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI
             newCarouselAlias = HANGAR_ALIASES.RANKED_TANK_CAROUSEL
         else:
@@ -134,6 +138,7 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         if prevCarouselAlias != newCarouselAlias:
             self.as_setCarouselS(linkage, newCarouselAlias)
             self.__currentCarouselAlias = newCarouselAlias
+        return
 
     def __updateAmmoPanel(self):
         if self.ammoPanel:
@@ -190,7 +195,7 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
     def __highlight3DEntityAndShowTT(self, entity):
         entity.highlight(True)
         itemId = entity.selectionId
-        if len(itemId) > 0:
+        if itemId:
             self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.ENVIRONMENT, [itemId])
 
     def __fade3DEntityAndHideTT(self, entity):
@@ -277,6 +282,9 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         if pInfo.isCurrentPlayer():
             self.__onEntityChanged()
 
+    def onUnitPlayersListChanged(self):
+        self.__updateHeader()
+
     def onPrbEntitySwitched(self):
         self.__onEntityChanged()
 
@@ -355,3 +363,7 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
 
     def __onVehicleClientStateChanged(self, vehicles):
         self.__updateAmmoPanel()
+
+    def __onServerSettingChanged(self, diff):
+        if 'isRegularQuestEnabled' in diff:
+            self.__updateHeader()

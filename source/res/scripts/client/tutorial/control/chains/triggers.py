@@ -278,7 +278,7 @@ class FightButtonDisabledTrigger(Trigger, IGlobalListener):
     def __updateFalloutSettings(self, *args):
         self.toggle(isOn=self.isOn())
 
-    def __onEventsCacheResync(self):
+    def __onEventsCacheResync(self, *args):
         self.toggle(isOn=self.isOn())
 
     def __onIGRChanged(self, *args):

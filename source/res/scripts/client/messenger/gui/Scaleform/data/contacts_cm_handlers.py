@@ -43,9 +43,6 @@ class SimpleContactsCMHandler(AbstractContextMenuHandler, EventSystemEntity):
 
 class PlayerContactsCMHandler(BaseUserCMHandler):
 
-    def __init__(self, cmProxy, ctx=None):
-        super(PlayerContactsCMHandler, self).__init__(cmProxy, ctx)
-
     def createContactNote(self):
         self.fireEvent(events.ContactsEvent(events.ContactsEvent.CREATE_CONTACT_NOTE, ctx={'databaseID': self.databaseID,
          'userName': self.userName}), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -77,6 +74,7 @@ class PlayerContactsCMHandler(BaseUserCMHandler):
     def _initFlashValues(self, ctx):
         super(PlayerContactsCMHandler, self)._initFlashValues(ctx)
         self.targetGroupName = ctx.targetGroupName
+        self.showUserNotes = getattr(ctx, 'showUserNotes', True)
 
     def _clearFlashValues(self):
         super(PlayerContactsCMHandler, self)._clearFlashValues()
@@ -91,7 +89,7 @@ class PlayerContactsCMHandler(BaseUserCMHandler):
         return option
 
     def _addContactsNoteInfo(self, options, userCMInfo):
-        if self.proto.contacts.isNoteSupported():
+        if self.showUserNotes and self.proto.contacts.isNoteSupported():
             userNote = userCMInfo.getNote()
             if userNote:
                 options.extend([self._makeItem(CONTACTS_ACTION_ID.EDIT_CONTACT_NOTE, MENU.contextmenu(CONTACTS_ACTION_ID.EDIT_CONTACT_NOTE)), self._makeItem(CONTACTS_ACTION_ID.REMOVE_CONTACT_NOTE, MENU.contextmenu(CONTACTS_ACTION_ID.REMOVE_CONTACT_NOTE))])

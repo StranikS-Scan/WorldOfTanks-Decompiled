@@ -10,11 +10,11 @@
     <backward>	12	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.043	</moving>
-    <still>	0.086	</still>
+    <moving>	0.039	</moving>
+    <still>	0.079	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
-    <firePenalty>	0.129	</firePenalty>
+    <firePenalty>	0.119	</firePenalty>
   </invisibility>
   <repairCost>	8.930	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -25,23 +25,21 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	130	</armor_1>
+      <armor_1>	152.4	</armor_1>
       <armor_2>	76.2	</armor_2>
-      <armor_3>	130	</armor_3>
+      <armor_3>	76.2	</armor_3>
       <armor_4>	38.1	</armor_4>
       <armor_5>	31.8	</armor_5>
-      <armor_6>	44.5	</armor_6>
-      <armor_7>	17	</armor_7>
+      <armor_6>	20	</armor_6>
+      <armor_7>	44.5	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	50.8	</armor_9>
-      <armor_10>	20	</armor_10>
-      <armor_11>	130	</armor_11>
+      <armor_9>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_9>
+      <armor_10>	304.8	</armor_10>
+      <armor_11>	17	</armor_11>
       <armor_12>	30	</armor_12>
-      <armor_13>	254	</armor_13>
-      <armor_14>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-      </armor_14>
     </armor>
-    <primaryArmor>	armor_1 armor_9 armor_4	</primaryArmor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	35270	</weight>
     <maxHealth>	1480	</maxHealth>
     <ammoBayHealth>
@@ -49,17 +47,6 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
-    <variants>
-      <hull2>
-        <turret0>	Turret_2_GB12_Conqueror	</turret0>
-        <turretPositions>
-          <turret>	0.000000 0.753851 0.439740	</turret>
-        </turretPositions>
-        <turretHardPoints>
-          <hardPoint>	HP_turretJoint_2	</hardPoint>
-        </turretHardPoints>
-      </hull2>
-    </variants>
     <models>
       <undamaged>	vehicles/british/GB12_Conqueror/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/british/GB12_Conqueror/crash/lod0/Hull.model	</destroyed>
@@ -75,11 +62,8 @@
       <pixie>	gas_large	</pixie>
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
-    <turretHardPoints>
-      <hardPoint>	HP_turretJoint_1	</hardPoint>
-    </turretHardPoints>
     <turretPositions>
-      <turret>	0.011808 0.684938 0.5518	</turret>
+      <turret>	0.000000 0.613526 0.515032	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/british/GB12_Conqueror/collision/Hull.model	</collisionModelServer>
@@ -103,7 +87,7 @@
     </emblemSlots>
     <hangarShadowTexture>	vehicles/british/GB12_Conqueror/Conqueror_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
-      <tiling>	2.2 2.2 0.000000 0.000000	</tiling>
+      <tiling>	0.505 0.505 0.13 0.27	</tiling>
     </camouflage>
   </hull>
   <chassis>
@@ -111,7 +95,7 @@
       <userString>	#gb_vehicles:Chassis_GB12_Conqueror	</userString>
       <tags></tags>
       <level>	8	</level>
-      <price>	31500.0	</price>
+      <price>	31500	</price>
       <unlocks>
         <chassis>	Chassis_GB12_Conqueror_2	  <cost>	23000	</cost>
         </chassis>
@@ -121,7 +105,7 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	12000	</weight>
-      <maxLoad>	65004	</maxLoad>
+      <maxLoad>	65504	</maxLoad>
       <terrainResistance>	1.2 1.5 2.5	</terrainResistance>
       <brakeForce>	48000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -217,7 +201,7 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.20447 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.21603 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB12_Conqueror/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB12_Conqueror/collision_client/Chassis.model	</collisionModelClient>
@@ -248,18 +232,15 @@
           <VTiles>	1	</VTiles>
         </atlas>
       </splineDesc>
-      <trackThickness>	0.0139	</trackThickness>
+      <trackThickness>	-0.0016	</trackThickness>
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.12	</maxAmplitude>
+        <maxAmplitude>	0.14	</maxAmplitude>
         <maxOffset>	0.14	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -475,7 +456,7 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.20447 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.21603 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB12_Conqueror/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB12_Conqueror/collision_client/Chassis.model	</collisionModelClient>
@@ -499,7 +480,7 @@
         <left>	vehicles/british/GB12_Conqueror/track/left.track	</left>
         <right>	vehicles/british/GB12_Conqueror/track/right.track	</right>
         <segmentLength>	0.13	</segmentLength>
-        <segmentOffset>	0.12	</segmentOffset>
+        <segmentOffset>	0.135	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -510,14 +491,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.12	</maxAmplitude>
+        <maxAmplitude>	0.14	</maxAmplitude>
         <maxOffset>	0.14	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -635,25 +613,27 @@
       <level>	8	</level>
       <price>	42000	</price>
       <armor>
-        <armor_1>	198.1	</armor_1>
-        <armor_2>	198.1	</armor_2>
-        <armor_3>	152.4	</armor_3>
-        <armor_4>	95.3	</armor_4>
-        <armor_5>	30.2	</armor_5>
-        <armor_6>	38.1	</armor_6>
-        <armor_7>	76.2	</armor_7>
+        <armor_1>	254	</armor_1>
+        <armor_2>	241.3	</armor_2>
+        <armor_3>	88.9	</armor_3>
+        <armor_4>	69.9	</armor_4>
+        <armor_5>	50.8	</armor_5>
+        <armor_6>	20	</armor_6>
+        <armor_7>	114.3	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	85.7	</armor_9>
-        <armor_10>	95.3	</armor_10>
-        <armor_11>	127	</armor_11>
-        <armor_12>	28.6	</armor_12>
-        <armor_13>	38.1	</armor_13>
-        <armor_14>	50.8	</armor_14>
+        <armor_9>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_9>
+        <armor_10>	31.8	</armor_10>
+        <armor_11>	177.8	</armor_11>
+        <armor_12>	152.4	</armor_12>
+        <armor_13>	203.2	</armor_13>
+        <armor_14>	127	</armor_14>
+        <armor_15>	190.5	</armor_15>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	10400	</weight>
+      <weight>	13800	</weight>
       <maxHealth>	370	</maxHealth>
-      <rotationSpeed>	36	</rotationSpeed>
+      <rotationSpeed>	30	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	160	</maxHealth>
         <maxRegenHealth>	80	</maxRegenHealth>
@@ -666,78 +646,62 @@
         <repairCost>	2.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_20pdr_Gun_Type_A>	shared	  <maxAmmo>	65	</maxAmmo>
+        <_32_pounder_Gun_OQF>	shared	  <maxAmmo>	50	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 10 0.325226 10 0.388888 5 0.611112 5 0.674774 10 1 10	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <gun>	_20pdr_Gun_Type_B	  <cost>	45000	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	6.9	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/british/GB12_Conqueror/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/british/GB12_Conqueror/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/british/GB12_Conqueror/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB12_Conqueror/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB12_Conqueror/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	-0.0118083 -0.000681282 2.58975	</rayStart>
-              <rayEnd>	0.0241 0.0109789 2.58918	</rayEnd>
-              <rayUp>	0.081 0.076 4	</rayUp>
-              <size>	0.64	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-        </_20pdr_Gun_Type_A>
-        <_20pdr_Gun_Type_B>	shared	  <maxAmmo>	65	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -18 1 -18	</minPitch>
-            <maxPitch>	0 10 0.325226 10 0.388888 5 0.611112 5 0.674774 10 1 10	</maxPitch>
+            <minPitch>	0 -15 1 -15	</minPitch>
+            <maxPitch>	0 10 0.416667 10 0.444444 8 0.555556 8 0.583333 10 1 10	</maxPitch>
           </pitchLimits>
           <unlocks>
             <turret>	Turret_2_GB12_Conqueror	  <cost>	28300	</cost>
             </turret>
           </unlocks>
           <armor>
+            <armor_1>	254	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.32	</shotDispersionRadius>
-          <reloadTime>	6.5	</reloadTime>
-          <aimingTime>	1.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
+          <reloadTime>	5.9	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <models>
-            <undamaged>	vehicles/british/GB12_Conqueror/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/british/GB12_Conqueror/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/british/GB12_Conqueror/crash/lod0/Gun_02.model	</exploded>
+            <undamaged>	vehicles/british/GB12_Conqueror/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/british/GB12_Conqueror/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/british/GB12_Conqueror/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/british/GB12_Conqueror/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB12_Conqueror/collision_client/Gun_02.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/british/GB12_Conqueror/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB12_Conqueror/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.0118078 -0.00068078 2.32001	</rayStart>
-              <rayEnd>	-0.0556869 -0.00216003 2.31949	</rayEnd>
-              <rayUp>	0.083 0.078 4	</rayUp>
+              <rayStart>	-0.00344601 0.0123307 2.51475	</rayStart>
+              <rayEnd>	-0.0526098 0.0437565 2.51442	</rayEnd>
+              <rayUp>	0.075 0.075 5	</rayUp>
               <size>	0.62	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-        </_20pdr_Gun_Type_B>
+          <camouflage>
+            <tiling>	0.25 0.25 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_32_pounder_Gun_OQF>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB12_Conqueror/normal/lod0/Turret_01.model	</undamaged>
@@ -748,28 +712,36 @@
         <collisionModelServer>	vehicles/british/GB12_Conqueror/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB12_Conqueror/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.326263 1.25517	</gunPosition>
+      <gunPosition>	0.012274 0.417546 1.55913	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-1.10909 0.716061 -1.16134	</rayStart>
-          <rayEnd>	-0.912767 0.713647 -1.12329	</rayEnd>
+          <rayStart>	-1.21492 0.701119 -0.201588	</rayStart>
+          <rayEnd>	-1.03767 0.609549 -0.215526	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.24	</size>
+          <size>	0.29	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	1.19987 0.718687 -1.16852	</rayStart>
-          <rayEnd>	0.805632 0.717839 -1.10089	</rayEnd>
+          <rayStart>	1.37837 0.545012 0.244183	</rayStart>
+          <rayEnd>	1.0638 0.304015 0.189838	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.5	</size>
+          <size>	0.7	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
+        <player>
+          <rayStart>	1.05923 0.727436 -1.91559	</rayStart>
+          <rayEnd>	0.871648 0.726819 -1.84625	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.29	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 0.930 0.000 0.494 0.317 0.794 0.744 0.299 0.500 0.000 0.424 0.057 0.437 0.130	</physicsShape>
+      <physicsShape>	1.011 -0.040 1.002 0.000 0.514 0.395 0.794 0.744 0.299 0.500 0.274 0.424 0.057 0.437 0.217	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
-        <tiling>	1.9 0.82 0.000000 0.000000	</tiling>
+        <tiling>	0.3 0.3 0.29 0.2	</tiling>
       </camouflage>
     </Turret_1_GB12_Conqueror>
     <Turret_2_GB12_Conqueror>
@@ -786,23 +758,25 @@
         <armor_2>	241.3	</armor_2>
         <armor_3>	88.9	</armor_3>
         <armor_4>	69.9	</armor_4>
-        <armor_5>	114.3	</armor_5>
-        <armor_6>	203.2	</armor_6>
-        <armor_7>	20	</armor_7>
+        <armor_5>	50.8	</armor_5>
+        <armor_6>	20	</armor_6>
+        <armor_7>	114.3	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	31.8	</armor_9>
-        <armor_10>	50.8	</armor_10>
+        <armor_9>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_9>
+        <armor_10>	31.8	</armor_10>
         <armor_11>	177.8	</armor_11>
         <armor_12>	152.4	</armor_12>
-        <armor_13>	44.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-        </armor_13>
+        <armor_13>	203.2	</armor_13>
         <armor_14>	127	</armor_14>
         <armor_15>	190.5	</armor_15>
+        <armor_16>	14	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_16>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
-      <weight>	13800	</weight>
+      <weight>	14400	</weight>
       <maxHealth>	470	</maxHealth>
-      <rotationSpeed>	34	</rotationSpeed>
+      <rotationSpeed>	32	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	74	</maxRegenHealth>
@@ -814,132 +788,89 @@
         <maxRegenHealth>	49	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
-      <invisibilityFactor>	0.981	</invisibilityFactor>
       <guns>
-        <_20pdr_Gun_Type_A>	shared	  <maxAmmo>	65	</maxAmmo>
+        <_32_pounder_Gun_OQF>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
             <armor_1>	254	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	203.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_4>	235	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
             <armor_6>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_7>	14	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_7>
             <gun>	40	</gun>
           </armor>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 7 0.325226 7 0.388888 5 0.611112 5 0.674774 7 1 7	</maxPitch>
+            <maxPitch>	0 10 0.416667 10 0.444444 7 0.555556 7 0.583333 10 1 10	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	6.5	</reloadTime>
+          <reloadTime>	5.9	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
-            <afterShot>	3.5	</afterShot>
+            <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.9	</aimingTime>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/british/GB12_Conqueror/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/british/GB12_Conqueror/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/british/GB12_Conqueror/crash/lod0/Gun_03.model	</exploded>
+            <undamaged>	vehicles/british/GB12_Conqueror/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/british/GB12_Conqueror/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/british/GB12_Conqueror/crash/lod0/Gun_07.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/british/GB12_Conqueror/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB12_Conqueror/collision_client/Gun_03.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/british/GB12_Conqueror/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB12_Conqueror/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.0224743 0.00923231 2.91339	</rayStart>
-              <rayEnd>	0.069558 0.0178495 2.91293	</rayEnd>
-              <rayUp>	0.082 0.078 4	</rayUp>
-              <size>	0.6	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-        </_20pdr_Gun_Type_A>
-        <_20pdr_Gun_Type_B>	shared	  <maxAmmo>	65	</maxAmmo>
-          <armor>
-            <armor_1>	254	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	203.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_4>	235	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
-            <gun>	40	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 7 0.325226 7 0.388888 5 0.611112 5 0.674774 7 1 7	</maxPitch>
-          </pitchLimits>
-          <shotDispersionRadius>	0.32	</shotDispersionRadius>
-          <reloadTime>	6	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	1.7	</aimingTime>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/british/GB12_Conqueror/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/british/GB12_Conqueror/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/british/GB12_Conqueror/crash/lod0/Gun_04.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/british/GB12_Conqueror/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB12_Conqueror/collision_client/Gun_04.model	</collisionModelClient>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.0224748 0.00923264 2.75191	</rayStart>
-              <rayEnd>	-0.0276653 -0.00599563 2.75148	</rayEnd>
-              <rayUp>	0.084 0.079 4	</rayUp>
+              <rayStart>	-0.00344601 0.0123307 2.515	</rayStart>
+              <rayEnd>	-0.0292956 0.0588082 2.56109	</rayEnd>
+              <rayUp>	0.075 0.075 5	</rayUp>
               <size>	0.62	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
-        </_20pdr_Gun_Type_B>
+          <camouflage>
+            <tiling>	0.49 0.49 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_32_pounder_Gun_OQF>
         <_120mm_Gun_L1A1>	shared	  <maxAmmo>	35	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -15 1 -15	</minPitch>
-            <maxPitch>	0 7 0.325226 7 0.388888 5 0.611112 5 0.674774 7 1 7	</maxPitch>
+            <maxPitch>	0 10 0.416667 10 0.444444 4.5 0.555556 4.5 0.583333 10 1 10	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <vehicle>	GB13_FV215b	  <cost>	210000	</cost>
+            <vehicle>	GB91_Super_Conqueror	  <cost>	255000	</cost>
             </vehicle>
           </unlocks>
           <armor>
             <armor_1>	254	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	203.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	177.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_4>	235	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
             <armor_6>	50.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_7>	14	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_7>
             <gun>	50	</gun>
           </armor>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	10.5	</reloadTime>
+          <reloadTime>	11.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -948,24 +879,27 @@
           <aimingTime>	1.9	</aimingTime>
           <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/british/GB12_Conqueror/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/british/GB12_Conqueror/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/british/GB12_Conqueror/crash/lod0/Gun_05.model	</exploded>
+            <undamaged>	vehicles/british/GB12_Conqueror/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/british/GB12_Conqueror/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/british/GB12_Conqueror/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/british/GB12_Conqueror/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB12_Conqueror/collision_client/Gun_05.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/british/GB12_Conqueror/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB12_Conqueror/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.0238784 0.0114779 4.09465	</rayStart>
-              <rayEnd>	0.119486 0.0188504 4.09432	</rayEnd>
-              <rayUp>	0.119 0.111 4	</rayUp>
-              <size>	0.771	</size>
+              <rayStart>	-0.00119558 0.0115704 3.89846	</rayStart>
+              <rayEnd>	0.163085 -0.0242474 3.89274	</rayEnd>
+              <rayUp>	0.119 0.112 5	</rayUp>
+              <size>	0.705	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.415 0.415 0.71 0.53	</tiling>
+          </camouflage>
         </_120mm_Gun_L1A1>
       </guns>
       <models>
@@ -977,36 +911,36 @@
         <collisionModelServer>	vehicles/british/GB12_Conqueror/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB12_Conqueror/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.0128 0.27568 1.57803	</gunPosition>
+      <gunPosition>	0.012274 0.417546 1.55913	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-1.23498 0.527594 -0.177346	</rayStart>
-          <rayEnd>	-1.05772 0.436019 -0.191285	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.3	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <rayStart>	-1.45877 0.776999 0.0142558	</rayStart>
+          <rayEnd>	-1.37858 0.723422 -0.0121662	</rayEnd>
+          <rayUp>	0.0360434 0.991223 0.127196	</rayUp>
+          <size>	0.27	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	1.33368 0.321775 0.201047	</rayStart>
-          <rayEnd>	1.17639 0.201271 0.173874	</rayEnd>
+          <rayStart>	0.951799 0.596768 0.917617	</rayStart>
+          <rayEnd>	0.8891 0.551412 0.854279	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.64	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
         <player>
-          <rayStart>	1.15035 0.603059 -1.88224	</rayStart>
-          <rayEnd>	0.775174 0.601825 -1.74355	</rayEnd>
+          <rayStart>	1.15656 0.728144 -1.94088	</rayStart>
+          <rayEnd>	0.781387 0.72691 -1.8022	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.3	</size>
+          <size>	0.27	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.948 0.000 1.044 0.000 0.604 0.487 0.740 0.591 0.394 0.500 0.371 0.500 0.008 0.096 0.379	</physicsShape>
+      <physicsShape>	1.016 -0.042 1.002 0.000 0.520 0.385 0.794 0.744 0.457 0.545 0.274 0.424 0.057 0.437 0.217	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
-        <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+        <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_2_GB12_Conqueror>
   </turrets0>
@@ -1057,7 +991,7 @@
           <smplEnginePower>	856.3977	</smplEnginePower>
         </Rolls_Royse_Meteor_M120>
         <Rolls_Royce_Griffon>
-          <smplEnginePower>	1004.417	</smplEnginePower>
+          <smplEnginePower>	950	</smplEnginePower>
         </Rolls_Royce_Griffon>
       </engines>
       <chassis>

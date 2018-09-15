@@ -95,6 +95,7 @@ class VEH_COMPARE(object):
     HEADER_BACKBTN_DESCRLABEL_RESEARCHTREE = '#veh_compare:header/backBtn/descrLabel/researchTree'
     HEADER_BACKBTN_DESCRLABEL_SHOP = '#veh_compare:header/backBtn/descrLabel/shop'
     HEADER_BACKBTN_DESCRLABEL_HANGAR = '#veh_compare:header/backBtn/descrLabel/hangar'
+    HEADER_BACKBTN_DESCRLABEL_PERSONALAWARDS = '#veh_compare:header/backBtn/descrLabel/personalAwards'
     VEHICLECOMPAREVIEW_HEADER = '#veh_compare:vehicleCompareView/header'
     VEHICLECOMPAREVIEW_BTNADDVEHICLES = '#veh_compare:vehicleCompareView/btnAddVehicles'
     VEHICLECOMPAREVIEW_CONFIGURATIONTYPE_BASIC = '#veh_compare:vehicleCompareView/configurationType/basic'

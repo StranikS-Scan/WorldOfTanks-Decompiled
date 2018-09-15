@@ -12,9 +12,6 @@ class GUICommand(object):
 
 class _PyDummyMethod(GUICommand):
 
-    def __init__(self):
-        super(_PyDummyMethod, self).__init__()
-
     def invoke(self, ui, cmdData):
         pathList = cmdData.name.split('.')
         method = pathList.pop()

@@ -40,7 +40,7 @@ for _nID, name in enumerate(nations.AVAILABLE_NAMES):
     MECH_ENGINEER_GROUP.append(_total('%s%d' % (_MECH_ENGINEER_PREFIX, _nID)))
 
 HISTORY_BATTLEFIELD_GROUP = []
-POTAPOV_QUESTS_GROUP = [_single('firstMerit'),
+PERSONAL_MISSIONS_GROUP = [_single('firstMerit'),
  _total('readyForBattleLT'),
  _total('readyForBattleMT'),
  _total('readyForBattleSPG'),

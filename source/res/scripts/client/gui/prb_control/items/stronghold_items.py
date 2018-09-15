@@ -56,15 +56,14 @@ class StrongholdSettings(object):
             self.__rawData = {}
 
     def updateData(self, rawData):
-        if self.__validateData(rawData):
+        if not self.__validateData(rawData):
+            LOG_ERROR('StrongholdSettings::updateData invalid data format')
+            return None
+        else:
             newRawData = self.__strongholdDataProxy(rawData)
             diffToUpdate = self.__makeDiff(newRawData)
             self.__setData(newRawData, diffToUpdate)
             return diffToUpdate
-        else:
-            LOG_ERROR('StrongholdSettings::updateData invalid data format')
-            return None
-            return None
 
     def getData(self):
         return self.__data
@@ -466,10 +465,7 @@ class StrongholdData(object):
                 return self.getGroupType() == REQUISITION
 
             def __eq__(self, other):
-                if isinstance(other, self.__class__):
-                    return self.__type == other.__type and self.__level == other.__level
-                else:
-                    return False
+                return self.__type == other.__type and self.__level == other.__level if isinstance(other, self.__class__) else False
 
             def __cmp__(self, other):
                 if not isinstance(other, self.__class__):

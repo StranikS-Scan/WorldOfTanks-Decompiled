@@ -10,6 +10,7 @@ from gui.battle_results.components import base
 from gui.battle_results.components import style
 from gui.battle_results.settings import PLAYER_TEAM_RESULT as _TEAM_RESULT, UI_VISIBILITY
 from gui.ranked_battles.ranked_models import RANK_CHANGE_STATES
+from gui.battle_results.reusable import sort_keys
 from skeletons.gui.game_control import IRankedBattlesController
 from helpers import i18n, dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -40,10 +41,7 @@ def makeRegularFinishResultLabel(finishReason, teamResult):
     :param teamResult: string containing one of PLAYER_TEAM_RESULT.*.
     :return: i18n string.
     """
-    if finishReason == FINISH_REASON.EXTERMINATION:
-        return i18n.makeString(_FINISH_REASON_LABEL.format(''.join((str(finishReason), str(teamResult)))))
-    else:
-        return i18n.makeString(_FINISH_REASON_LABEL.format(finishReason))
+    return i18n.makeString(_FINISH_REASON_LABEL.format(''.join((str(finishReason), str(teamResult))))) if finishReason == FINISH_REASON.EXTERMINATION else i18n.makeString(_FINISH_REASON_LABEL.format(finishReason))
 
 
 class RankInfoHelper(object):
@@ -61,11 +59,6 @@ class RankInfoHelper(object):
      (RANK_CHANGE_STATES.STEP_LOST, False): RANKED_BATTLES.BATTLERESULT_STAGELOST,
      (RANK_CHANGE_STATES.NOTHING_CHANGED, True): RANKED_BATTLES.BATTLERESULT_STAGENOTEARNED,
      (RANK_CHANGE_STATES.NOTHING_CHANGED, False): RANKED_BATTLES.BATTLERESULT_STAGESAVED}
-    __DESCRIPTION_LABEL_MAP = {RANK_CHANGE_STATES.RANK_EARNED: RANKED_BATTLES.getBattleResultsInTop,
-     RANK_CHANGE_STATES.RANK_LOST: RANKED_BATTLES.getBattleResultsNotInTop,
-     RANK_CHANGE_STATES.STEP_EARNED: RANKED_BATTLES.getBattleResultsInTop,
-     RANK_CHANGE_STATES.STEP_LOST: RANKED_BATTLES.getBattleResultsNotInTop,
-     RANK_CHANGE_STATES.NOTHING_CHANGED: RANKED_BATTLES.getBattleResultsNotInTop}
     __TOP_ICON_MAP = {RANK_CHANGE_STATES.RANK_EARNED: RES_ICONS.getRankedPostBattleTopIcon,
      RANK_CHANGE_STATES.RANK_LOST: RES_ICONS.getRankedPostBattleLoseIcon,
      RANK_CHANGE_STATES.STEP_EARNED: RES_ICONS.getRankedPostBattleTopIcon,
@@ -104,8 +97,7 @@ class RankInfoHelper(object):
             if isMaster:
                 return RANKEDBATTLES_ALIASES.SUBTASK_STATE_MASTER
             return RANKEDBATTLES_ALIASES.SUBTASK_STATE_RANK
-        else:
-            return RANKEDBATTLES_ALIASES.SUBTASK_STATE_STAGE
+        return RANKEDBATTLES_ALIASES.SUBTASK_STATE_STAGE
 
     def makeTitleLabel(self):
         """
@@ -115,28 +107,34 @@ class RankInfoHelper(object):
         isWin = self.__reusable.getPersonalTeam() == self.__reusable.common.winnerTeam
         return self.__TITLE_LABEL_MAP[self.getState(), isWin]
 
-    def makeDescriptionLabel(self, vehicles, reusable):
+    def makeDescriptionLabel(self, allyVehicles):
         """
         Returns 'description' field for RankChangesBlock
         :return: string, one from RANKED_BATTLES constants
         """
         state = self.getState()
-        descriptionMethod = self.__DESCRIPTION_LABEL_MAP[state]
         isWin = self.__reusable.getPersonalTeam() == self.__reusable.common.winnerTeam
-        accountDBID = reusable.personal.avatar.accountDBID
-        if isWin:
-            result = 'win'
-        elif state == RANK_CHANGE_STATES.NOTHING_CHANGED:
-            result = 'stageSaved'
-        else:
-            result = 'lose'
-        for vehId in vehicles:
-            for item in vehicles[vehId]:
-                if item['accountDBID'] == accountDBID and item['xp'] < self.getMinXp():
-                    result = 'minXP'
+        accountDBID = self.__reusable.personal.avatar.accountDBID
+        topNumber = self.__getTopBoundForPersonalTeam()
+        selfXp = None
+        for item in allyVehicles:
+            if item.player.dbID == accountDBID:
+                selfXp = item.xp
+                break
 
-        resKey = descriptionMethod(result)
-        return i18n.makeString(resKey).format(topNumber=self.__getTopBoundForPersonalTeam())
+        if len(allyVehicles) <= topNumber or topNumber <= 0 or selfXp is None:
+            isInTop = True
+        else:
+            topMinXp = min([ item.xp for item in allyVehicles[:topNumber] ])
+            isInTop = selfXp >= topMinXp
+        if selfXp is not None and selfXp < self.getMinXp():
+            resKey = RANKED_BATTLES.BATTLERESULT_NOTINTOP_MINXP
+        elif not isWin and isInTop and state == RANK_CHANGE_STATES.NOTHING_CHANGED:
+            resKey = RANKED_BATTLES.BATTLERESULT_NOTINTOP_STAGESAVED
+        else:
+            method = RANKED_BATTLES.getBattleResultsInTop if isInTop else RANKED_BATTLES.getBattleResultsNotInTop
+            resKey = method('win') if isWin else method('lose')
+        return i18n.makeString(resKey).format(topNumber=topNumber)
 
     def makeTopIcon(self):
         """
@@ -159,7 +157,6 @@ class RankInfoHelper(object):
             return resource('58x80', val)
         else:
             return resource
-            return
 
     def getTopBoundForTeam(self, team):
         """
@@ -167,10 +164,7 @@ class RankInfoHelper(object):
         For example: Win - TOP_12, Lose - TOP_3
         :param team: team index
         """
-        if self.__reusable.common.winnerTeam == team:
-            return self.getWinnerBounds(isTop=True)
-        else:
-            return self.getLoserBounds(isTop=True)
+        return self.getWinnerBounds(isTop=True) if self.__reusable.common.winnerTeam == team else self.getLoserBounds(isTop=True)
 
     def getPlayerNumber(self):
         return len(self.rankedController.getRanksChanges(isLoser=False))
@@ -469,7 +463,8 @@ class RankChangesBlock(base.StatsBlock):
         self.rankIcon = helper.makeRankIcon()
         self.linkage = RANKEDBATTLES_ALIASES.BATTLE_RESULTS_SUB_TASK_UI
         self.title = helper.makeTitleLabel()
-        self.description = helper.makeDescriptionLabel(result.get('vehicles', {}), reusable)
+        allies, _ = reusable.getBiDirectionTeamsIterator(result, sort_keys.VehicleXpSortKey)
+        self.description = helper.makeDescriptionLabel(list(allies))
 
 
 class RankedResultsBlockTitle(base.StatsItem):
@@ -495,9 +490,6 @@ class EligibleForCrystalRewards(base.StatsItem):
 
 
 class SortieTeamsUiVisibility(TeamsUiVisibility):
-
-    def __init__(self, field, *path):
-        super(SortieTeamsUiVisibility, self).__init__(field, *path)
 
     def _convert(self, value, reusable):
         ui_visibility = super(SortieTeamsUiVisibility, self)._convert(value, reusable)

@@ -16,7 +16,7 @@ from .notifications import configure_pointcuts as _notifications_configure_point
 from .invitations import configure_pointcuts as _configure_invitation_pointcuts
 from .lobby import configure_pointcuts as _configure_lobby_pointcuts
 from .login import configure_pointcuts as _configure_login_pointcuts
-from .personal_quests import configure_pointcuts as _configure_personal_quests_pointcuts
+from .personal_missions import configure_pointcuts as _configure_personal_missions_pointcuts
 from .tech_tree import configure_pointcuts as _configure_tech_tree_pointcuts
 from .vehicle_compare import configure_pointcuts as _configure_vehicle_compare_pointcuts
 from helpers import dependency
@@ -74,7 +74,7 @@ def _enable_all_pointcuts(config):
     _notifications_configure_pointcuts()
     _configure_tech_tree_pointcuts(config)
     _configure_invitation_pointcuts()
-    _configure_personal_quests_pointcuts()
+    _configure_personal_missions_pointcuts()
     _dynamic_squads.ParametrizeInitPointcut()
     _dynamic_squads.DisableGameSettingPointcut()
     _dynamic_squads.InviteReceivedMessagePointcut()
@@ -82,6 +82,7 @@ def _enable_all_pointcuts(config):
     _fallout_controller.InitFalloutPointcut()
     _ranked_battles_controller.InitRankedPointcut()
     _event.InitEventPointcut()
+    _event.DisableEventBoards()
     _preview.ChangeVehicleIsPreviewAllowed(config)
     _configure_vehicle_compare_pointcuts()
 
@@ -94,7 +95,6 @@ def _enable_sandbox_platform_pointcuts(config):
     from .lobby.profile.pointcuts import MakeClanBtnUnavailable, MakeClubProfileButtonUnavailable
     from .lobby.tank_carousel import configure_pointcuts as _configure_carousel_pointcuts
     from .lobby.hangar.pointcuts import DisableTankServiceButtons, MaintenanceButtonFlickering, DeviceButtonsFlickering, TankModelHangarVisibility, TankHangarStatus, EnableCrew
-    from .lobby.profile.pointcuts import MakeClanBtnUnavailable
     DisableFightButtonPointcut(config)
     DisableTrainingFightButtonPointcut(config)
     DisableBattlesForHiddenVehicles(config)

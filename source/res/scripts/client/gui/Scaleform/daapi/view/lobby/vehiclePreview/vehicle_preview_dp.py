@@ -46,10 +46,7 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
         return {'crewPanel': self.__packTabButtonsData()}
 
     def getBuyType(self, vehicle):
-        if vehicle.isUnlocked:
-            return factory.BUY_VEHICLE
-        else:
-            return factory.UNLOCK_ITEM
+        return factory.BUY_VEHICLE if vehicle.isUnlocked else factory.UNLOCK_ITEM
 
     def getBuyButtonState(self, data=None):
         return {'enabled': data.enabled,

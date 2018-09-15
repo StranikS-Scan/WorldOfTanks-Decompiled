@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/ReadyForBattleATSPGAchievement.py
-from abstract import ClassProgressAchievement, getCompletedPotapovQuestsCount
+from abstract import ClassProgressAchievement, getCompletedPersonalMissionsCount
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 
 class ReadyForBattleATSPGAchievement(ClassProgressAchievement):
@@ -17,4 +17,4 @@ class ReadyForBattleATSPGAchievement(ClassProgressAchievement):
         return dossier.getRecordValue(_AB.TOTAL, 'readyForBattleATSPG')
 
     def _readCurrentProgressValue(self, dossier):
-        return getCompletedPotapovQuestsCount(1, {'AT-SPG'})
+        return getCompletedPersonalMissionsCount(1, {'AT-SPG'})

@@ -12,19 +12,13 @@ class BCIntroFadeOut(BCIntroFadeOutMeta):
     def finished(self):
         self.destroy()
 
-    def handleError(self, data):
-        pass
-
     def _populate(self):
         super(BCIntroFadeOut, self)._populate()
+        g_bootcampEvents.onArenaStarted()
         self.__start()
 
-    def _dispose(self):
-        super(BCIntroFadeOut, self)._dispose()
-
     def __start(self):
-        self.as_StartFadeoutS(self.__duration)
-        self.app.leaveGuiControlMode(self.alias)
+        self.as_startFadeoutS(self.__duration)
 
     def __onFinish(self, destroyView):
         g_bootcampEvents.onIntroVideoStop()

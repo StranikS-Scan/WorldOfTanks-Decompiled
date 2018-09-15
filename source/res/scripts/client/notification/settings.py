@@ -59,6 +59,6 @@ class NOTIFICATION_BUTTON_STATE(object):
 
 def makePathToIcon(iconName):
     result = ''
-    if iconName and len(iconName):
+    if iconName:
         result = DEF_ICON_PATH.format(iconName)
     return result

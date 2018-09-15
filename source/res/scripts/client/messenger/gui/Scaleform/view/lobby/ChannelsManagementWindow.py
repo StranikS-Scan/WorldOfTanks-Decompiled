@@ -19,9 +19,6 @@ class ChannelsManagementWindow(ChannelsManagementWindowMeta, ISearchHandler):
         super(ChannelsManagementWindow, self).__init__()
         self._searchDP = SearchChannelsDataProvider(self.proto.messages.getSearchUserRoomsProcessor())
 
-    def destroy(self):
-        super(ChannelsManagementWindow, self).destroy()
-
     @proto_getter(PROTO_TYPE.MIGRATION)
     def proto(self):
         return None

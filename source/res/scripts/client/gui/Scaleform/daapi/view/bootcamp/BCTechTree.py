@@ -13,12 +13,6 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
 class BCTechTree(TechTree):
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, ctx=None):
-        super(BCTechTree, self).__init__(ctx)
-
-    def _populateAfter(self):
-        self.as_hideNationsBarS(True)
-
     def goToNextVehicle(self, vehCD):
         if not g_bootcamp.isResearchFreeLesson():
             nationData = g_bootcampGarage.getNationData()
@@ -40,7 +34,8 @@ class BCTechTree(TechTree):
                 node['state'] = NODE_STATE.removeIfHas(node['state'], NODE_STATE_FLAGS.ELITE)
                 if 'vehCompareTreeNodeData' in node:
                     node['vehCompareTreeNodeData']['modeAvailable'] = False
-                if not NODE_STATE.inInventory(node['state']):
+                nodeState = node['state']
+                if not NODE_STATE.inInventory(nodeState) and not NODE_STATE.isPremium(nodeState):
                     node['state'] = NODE_STATE_FLAGS.LOCKED
 
         data['nodes'][0]['displayInfo']['position'] = [16, 90]
@@ -49,3 +44,6 @@ class BCTechTree(TechTree):
 
     def setupContextHints(self, hintID):
         pass
+
+    def _populateAfter(self):
+        self.as_hideNationsBarS(True)

@@ -92,7 +92,7 @@ class ServerStats(ServerStatsMeta, ILegacyListener):
     def _updateServersList(self):
         result = []
         simpleHostList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming())
-        if len(simpleHostList):
+        if simpleHostList:
             for idx, (hostName, name, csisStatus, peripheryID) in enumerate(simpleHostList):
                 result.append({'label': wrapServerName(name),
                  'data': hostName,

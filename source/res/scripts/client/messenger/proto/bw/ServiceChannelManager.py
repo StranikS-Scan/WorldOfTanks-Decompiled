@@ -38,14 +38,10 @@ class ServiceChannelManager(ChatActionsListener):
         BigWorld.player().requestLastSysMessages()
 
     def onReceiveSysMessage(self, chatAction):
-        if self.isBootcampRunning():
-            return
         message = ServiceChannelMessage.fromChatAction(chatAction)
         self.__addServerMessage(message)
 
     def onReceivePersonalSysMessage(self, chatAction):
-        if self.isBootcampRunning():
-            return
         message = ServiceChannelMessage.fromChatAction(chatAction, personal=True)
         self.__addServerMessage(message)
 
@@ -79,13 +75,15 @@ class ServiceChannelManager(ChatActionsListener):
     def handleUnreadMessages(self):
         if not self.__unreadMessagesCount:
             return
-        if self.isBootcampRunning():
-            return
         unread = list(self.__messages)[-self.__unreadMessagesCount:]
-        serviceChannel = g_messengerEvents.serviceChannel
         for clientID, (isServerMsg, formatted, settings) in unread:
-            if isServerMsg:
-                serviceChannel.onServerMessageReceived(clientID, formatted, settings)
+            self._handleUnreadMessage(isServerMsg, clientID, formatted, settings)
+
+    def _handleUnreadMessage(self, isServerMsg, clientID, formatted, settings):
+        serviceChannel = g_messengerEvents.serviceChannel
+        if isServerMsg:
+            serviceChannel.onServerMessageReceived(clientID, formatted, settings)
+        else:
             serviceChannel.onClientMessageReceived(clientID, formatted, settings)
 
     @process
@@ -98,23 +96,26 @@ class ServiceChannelManager(ChatActionsListener):
         if formatter:
             try:
                 if formatter.isAsync():
-                    formatted, settings = yield formatter.format(message)
+                    messagesListData = yield formatter.format(message)
                 else:
-                    formatted, settings = formatter.format(message)
+                    messagesListData = formatter.format(message)
             except:
                 LOG_CURRENT_EXCEPTION()
                 return
 
-            if formatted:
-                clientID = self.__idGenerator.next()
-                self.__messages.append((clientID, (True, formatted, settings)))
-                self.__unreadMessagesCount += 1
-                serviceChannel.onServerMessageReceived(clientID, formatted, settings)
-                customEvent = settings.getCustomEvent()
-                if customEvent is not None:
-                    serviceChannel.onCustomMessageDataReceived(clientID, customEvent)
-            elif IS_DEVELOPMENT:
-                LOG_WARNING('Not enough data to format. Action data : ', message)
+            for mData in messagesListData:
+                if mData.data:
+                    formatted, settings = mData
+                    clientID = self.__idGenerator.next()
+                    self.__messages.append((clientID, (True, formatted, settings)))
+                    self.__unreadMessagesCount += 1
+                    serviceChannel.onServerMessageReceived(clientID, formatted, settings)
+                    customEvent = settings.getCustomEvent()
+                    if customEvent is not None:
+                        serviceChannel.onCustomMessageDataReceived(clientID, customEvent)
+                if IS_DEVELOPMENT:
+                    LOG_WARNING('Not enough data to format. Action data : ', message)
+
         elif IS_DEVELOPMENT:
             LOG_WARNING('Formatter not found. Action data : ', message)
         return
@@ -126,27 +127,23 @@ class ServiceChannelManager(ChatActionsListener):
         formatter = collections_by_type.CLIENT_FORMATTERS.get(msgType)
         if formatter:
             try:
-                formatted, settings = formatter.format(message, auxData)
+                messagesListData = formatter.format(message, auxData)
             except:
                 LOG_CURRENT_EXCEPTION()
                 return
 
-            if formatted:
-                clientID = self.__idGenerator.next()
-                if not settings.isAlert:
-                    settings.isAlert = isAlert
-                self.__messages.append((clientID, (False, formatted, settings)))
-                self.__unreadMessagesCount += 1
-                g_messengerEvents.serviceChannel.onClientMessageReceived(clientID, formatted, settings)
-            elif IS_DEVELOPMENT:
-                LOG_WARNING('Not enough data to format. Action data : ', message)
+            for mData in messagesListData:
+                if mData.data:
+                    formatted, settings = mData
+                    clientID = self.__idGenerator.next()
+                    if not settings.isAlert:
+                        settings.isAlert = isAlert
+                    self.__messages.append((clientID, (False, formatted, settings)))
+                    self.__unreadMessagesCount += 1
+                    g_messengerEvents.serviceChannel.onClientMessageReceived(clientID, formatted, settings)
+                if IS_DEVELOPMENT:
+                    LOG_WARNING('Not enough data to format. Action data : ', message)
+
         elif IS_DEVELOPMENT:
             LOG_WARNING('Formatter not found:', msgType, message)
         return clientID
-
-    def isBootcampRunning(self):
-        from bootcamp.Bootcamp import g_bootcamp
-        if g_bootcamp.isRunning():
-            self.clear()
-            return True
-        return False

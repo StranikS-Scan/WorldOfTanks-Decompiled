@@ -63,9 +63,5 @@ class InterfaceScaleManager(object):
         if powerOfTwo:
             if ind == 0:
                 return 2.0 ** (scaleLength - 2)
-            else:
-                return 2.0 ** (ind - 1)
-        else:
-            if ind == 0:
-                return scaleLength - 1
-            return ind
+            return 2.0 ** (ind - 1)
+        return scaleLength - 1 if ind == 0 else ind

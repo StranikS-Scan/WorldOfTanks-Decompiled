@@ -73,9 +73,6 @@ class DetectionItemPacker(TermsItemPacker):
 
 class LinerItemPacker(TermsItemPacker):
 
-    def __init__(self, headerTitle, icon, termsAlias):
-        super(LinerItemPacker, self).__init__(headerTitle, icon, termsAlias)
-
     def pack(self, data):
         items = super(LinerItemPacker, self).pack(data)
         values = data.get('values', None)
@@ -134,11 +131,11 @@ class CritsItemPacker(TermsItemPacker):
         critDamage = data.get('critDamage', None)
         critWound = data.get('critWound', None)
         critDestruction = data.get('critDestruction', None)
-        if critDamage is not None and len(critDamage) > 0:
+        if critDamage:
             self.__addResultBlock(items, BATTLE_RESULTS.COMMON_TOOLTIP_CRITS_CRITDAMAGE, critDamage)
-        if critDestruction is not None and len(critDestruction) > 0:
+        if critDestruction:
             self.__addResultBlock(items, BATTLE_RESULTS.COMMON_TOOLTIP_CRITS_CRITDESTRUCTION, critDestruction)
-        if critWound is not None and len(critWound) > 0:
+        if critWound:
             self.__addResultBlock(items, BATTLE_RESULTS.COMMON_TOOLTIP_CRITS_CRITWOUND, critWound)
         if data['isGarage']:
             text = makeHtmlText('tooltip_add_info_label', ms(BATTLE_RESULTS.FALLOUT_UNIQUEDAMAGE))

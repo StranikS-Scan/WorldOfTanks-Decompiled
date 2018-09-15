@@ -33,5 +33,16 @@
         <loop>	True	</loop>
       </arrow>
     </hint>
+    <hint>	HoldSheetHint	  <item-id>	HoldSheetBtn	</item-id>
+      <text>	_(#quests:quest/chain/hint/holdAwardSheet)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <condition>
+        <global-active>	_MayPawnPersonalMission	</global-active>
+      </condition>
+      <equal-actions>	True	</equal-actions>
+    </hint>
   </hints>
 </once-only-hints.xml>

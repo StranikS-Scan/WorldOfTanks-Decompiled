@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/MissionAwardWindowMeta.py
-from gui.Scaleform.framework.entities.abstract.AbstractWindowView import AbstractWindowView
+from gui.Scaleform.daapi.view.lobby.award_window_base import AwardWindowBase
 
-class MissionAwardWindowMeta(AbstractWindowView):
+class MissionAwardWindowMeta(AwardWindowBase):
 
     def onCurrentQuestClick(self):
         self._printOverrideError('onCurrentQuestClick')

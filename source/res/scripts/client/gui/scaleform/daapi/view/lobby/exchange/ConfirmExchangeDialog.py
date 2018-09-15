@@ -28,7 +28,7 @@ class ConfirmExchangeDialog(ConfirmExchangeDialogMeta):
     def exchange(self, goldValue):
         exchangedValue = goldValue * self.meta.getExchangeRate()
         result = yield self.meta.submit(goldValue, exchangedValue)
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         if result.success:
             self._callHandler(True, self.meta.getTypeCompDescr())

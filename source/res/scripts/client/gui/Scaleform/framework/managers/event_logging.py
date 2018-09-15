@@ -44,10 +44,10 @@ class EventLogManager(EventLogManagerMeta):
 
     def __sendSavedPackageToServer(self):
         self.__onAutoSending = False
-        if len(self.__sendList) > 0:
+        if self.__sendList:
             self.__sendPackageToServer(self.__sendList[0])
             del self.__sendList[0]
-            if len(self.__sendList) > 0:
+            if self.__sendList:
                 BigWorld.callback(REQUEST_COOLDOWN.CLIENT_LOG_UX_DATA_COOLDOWN * 2, self.__sendSavedPackageToServer)
                 self.__onAutoSending = True
         else:

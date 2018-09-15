@@ -302,7 +302,7 @@ class ThreadPool:
         self.__workers = []
 
     def add_task(self, task):
-        if len(self.__workers) == 0:
+        if not self.__workers:
             return
         type = task['opType']
         if type in (CFC_OP_TYPE.WRITE, CFC_OP_TYPE.READ, CFC_OP_TYPE.CHECK):

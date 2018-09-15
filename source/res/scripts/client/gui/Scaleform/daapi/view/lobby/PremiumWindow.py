@@ -96,7 +96,7 @@ class PremiumWindow(PremiumWindowMeta):
         if not result.success and result.auxData and result.auxData.get('errStr', '') in ('Battle not in cache', 'Not supported'):
             arenaUniqueID = 0
             result = yield PremiumAccountBuyer(days, cost, arenaUniqueID, withoutBenefits=True).request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         if result.success:
             if arenaUniqueID and self._premiumBonusesDiff:
@@ -193,7 +193,7 @@ class PremiumWindow(PremiumWindowMeta):
 
     def __isBuyBtnEnabled(self):
         premiumCost = self.itemsCache.items.shop.getPremiumCostWithDiscount()
-        if len(premiumCost) > 0:
+        if premiumCost:
             minPremiumPacketCost = min(premiumCost.values())
             return self.itemsCache.items.stats.gold >= minPremiumPacketCost and self.__canBuyPremium()
         return False

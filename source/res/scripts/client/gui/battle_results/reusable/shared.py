@@ -593,11 +593,7 @@ class VehicleSummarizeInfo(_VehicleInfo):
 
     @property
     def vehicle(self):
-        if self.__vehicles:
-            return self.__vehicles[0].vehicle
-        else:
-            return None
-            return None
+        return self.__vehicles[0].vehicle if self.__vehicles else None
 
     @property
     def killerID(self):
@@ -860,8 +856,4 @@ class FairplayViolationsInfo(object):
         """Gets penalty details if they have.
         :return: tuple(name of penalty, value in percent).
         """
-        if self.hasPenalties():
-            return (self.getPenaltyName(), self._penaltiesInPercent)
-        else:
-            return None
-            return None
+        return (self.getPenaltyName(), self._penaltiesInPercent) if self.hasPenalties() else None

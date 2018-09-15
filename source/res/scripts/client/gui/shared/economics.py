@@ -25,7 +25,7 @@ def calcRentPackages(vehicle, proxy):
     if proxy is not None and vehicle.isRentable:
         rentCost = proxy.shop.getVehicleRentPrices().get(vehicle.intCD, {})
         defaultRentCost = proxy.shop.defaults.getVehicleRentPrices().get(vehicle.intCD, {})
-        for key in sorted(rentCost.keys()):
+        for key in sorted(rentCost.iterkeys()):
             rentPrice = Money.makeFromMoneyTuple(rentCost[key].get('cost', ()))
             defaultRentPrice = Money.makeFromMoneyTuple(defaultRentCost.get(key, {}).get('cost', rentPrice.toMoneyTuple()))
             result.append({'days': key,
@@ -66,8 +66,7 @@ def getGUIPrice(item, money, exchangeRate):
         if item.isRestoreAvailable():
             if item.mayRestoreWithExchange(money, exchangeRate) or not mayRent:
                 return item.restorePrice
-            else:
-                return item.minRentPrice
-        elif item.hasRestoreCooldown():
+            return item.minRentPrice
+        if item.hasRestoreCooldown():
             return item.minRentPrice or item.restorePrice
     return item.minRentPrice or item.getBuyPrice(preferred=False).price

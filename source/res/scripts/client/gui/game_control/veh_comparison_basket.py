@@ -15,7 +15,7 @@ from helpers import dependency
 from helpers.local_cache import FileLocalCache
 from items import getTypeOfCompactDescr, ITEM_TYPE_NAMES
 from items.vehicles import VehicleDescr
-from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.game_control import IVehicleComparisonBasket, IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 PARAMS_AFFECTED_TANKMEN_SKILLS = ('camouflage', 'brotherhood', 'commander_eagleEye', 'driver_virtuoso', 'driver_badRoadsKing', 'radioman_inventor', 'radioman_finder')
@@ -362,6 +362,7 @@ class _VehCompareData(object):
 class VehComparisonBasket(IVehicleComparisonBasket):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self):
         super(VehComparisonBasket, self).__init__()
@@ -379,7 +380,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         self.__vehicles = []
 
     def onLobbyStarted(self, ctx):
-        self.__isEnabled = self.lobbyContext.getServerSettings().isVehicleComparingEnabled()
+        self.__isEnabled = self.lobbyContext.getServerSettings().isVehicleComparingEnabled() and not self.bootcampController.isInBootcamp()
 
     def onLobbyInited(self, event):
         if self.isEnabled() and self.isAvailable() and not self.isLocked:
@@ -755,8 +756,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         if self.isFull():
             LOG_DEBUG("Couldn't add vehicle into the comparison basket, basket is full!")
             return False
-        else:
-            return True
+        return True
 
     def __disposeCache(self):
         if self.__cache is not None:

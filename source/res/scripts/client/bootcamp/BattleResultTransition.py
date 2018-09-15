@@ -2,24 +2,22 @@
 # Embedded file name: scripts/client/bootcamp/BattleResultTransition.py
 import GUI
 from gui import g_guiResetters
-from gui.Scaleform.genConsts.ROOT_SWF_CONSTANTS import ROOT_SWF_CONSTANTS
 from gui.Scaleform.daapi.view.meta.BCBattleResultTransitionMeta import BCBattleResultTransitionMeta
 from gui.Scaleform.daapi.view.external_components import ExternalFlashComponent
 from gui.Scaleform.daapi.view.external_components import ExternalFlashSettings
-from gui.battle_control.battle_constants import WinStatus
 from Bootcamp import g_bootcamp
 
 class BattleResultTransition(ExternalFlashComponent, BCBattleResultTransitionMeta):
 
     def __init__(self):
-        super(BattleResultTransition, self).__init__(ExternalFlashSettings('transitionFlash', 'bootcampBattleResultTransitionsApp.swf', 'root.main', ROOT_SWF_CONSTANTS.BOOTCAMP_TRANISITION_CALLBACK))
+        super(BattleResultTransition, self).__init__(ExternalFlashSettings('transitionFlash', 'bootcampBattleResultTransitionsApp.swf', 'root.main', ''))
         self.movie.scaleMode = 'NoScale'
 
     def _populate(self):
         super(BattleResultTransition, self)._populate()
         self.__onUpdateStage()
         g_guiResetters.add(self.__onUpdateStage)
-        _, _, resultTypeStr, _, _ = g_bootcamp.getBattleResults()
+        resultTypeStr = g_bootcamp.getBattleResults().typeStr
         self.as_msgTypeHandlerS(resultTypeStr)
 
     def _dispose(self):

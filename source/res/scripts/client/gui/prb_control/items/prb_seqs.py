@@ -13,8 +13,8 @@ def PrbListIterator(prebattles):
         yield PrbListItem(time, prbID, info)
 
 
-def RosterIterator(roster):
-    for pID, name, dbID, roster, state, time, vehCompDescr, igrType, clanDBID, clanAbbrev in roster:
+def RosterIterator(roster_data):
+    for pID, name, dbID, roster, state, time, vehCompDescr, igrType, clanDBID, clanAbbrev in roster_data:
         yield PlayerPrbInfo(pID, name=name, dbID=dbID, state=state, time=time, vehCompDescr=vehCompDescr, igrType=igrType, clanDBID=clanDBID, clanAbbrev=clanAbbrev, roster=roster)
 
 
@@ -65,7 +65,7 @@ class PrbListItem(object):
         return 'PrbListItem(prbID = {0:n}, arenaTypeID = {1:n}, creator = {2:>s}, playersCount = {3:n}, isOpened = {4!r:s}, time = {5:n}, creatorIgrType = {6:n}, creatorDbId = {7:n})'.format(self.prbID, self.arenaTypeID, self.getCreatorFullName(), self.playersCount, self.isOpened, self.time, self.creatorIgrType, self.creatorDbId)
 
     def getCreatorFullName(self):
-        if self.clanAbbrev and len(self.clanAbbrev):
+        if self.clanAbbrev:
             fullName = '{0:>s}[{1:>s}]'.format(self.creator, self.clanAbbrev)
         else:
             fullName = self.creator

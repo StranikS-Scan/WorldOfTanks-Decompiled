@@ -43,8 +43,7 @@ def getTimeLeftInfo(timeLeft, timeStyle=None):
     if timeLeft > 0 and timeLeft != float('inf'):
         if timeLeft > time_utils.ONE_DAY:
             return ('days', formatTime(timeLeft, time_utils.ONE_DAY, timeStyle))
-        else:
-            return ('hours', formatTime(timeLeft, time_utils.ONE_HOUR, timeStyle))
+        return ('hours', formatTime(timeLeft, time_utils.ONE_HOUR, timeStyle))
 
 
 def getTimeLeftStr(localization, timeLeft, timeStyle=None, ctx=None, formatter=None):

@@ -52,6 +52,9 @@ class ApplicationMeta(BaseDAAPIComponent):
     def setTutorialMgr(self, mgr):
         self._printOverrideError('setTutorialMgr')
 
+    def setBootcampMgr(self, mgr):
+        self._printOverrideError('setBootcampMgr')
+
     def setImageManager(self, mgr):
         self._printOverrideError('setImageManager')
 
@@ -73,11 +76,11 @@ class ApplicationMeta(BaseDAAPIComponent):
     def as_registerManagersS(self):
         return self.flashObject.as_registerManagers() if self._isDAAPIInited() else None
 
-    def as_setLibrariesListS(self, list):
+    def as_loadLibrariesS(self, list):
         """
         :param list: Represented by Vector.<String> (AS)
         """
-        return self.flashObject.as_setLibrariesList(list) if self._isDAAPIInited() else None
+        return self.flashObject.as_loadLibraries(list) if self._isDAAPIInited() else None
 
     def as_updateStageS(self, w, h, scale):
         return self.flashObject.as_updateStage(w, h, scale) if self._isDAAPIInited() else None

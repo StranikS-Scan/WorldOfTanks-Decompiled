@@ -38,10 +38,6 @@ def updateVehiclesDataProps(listID, **kwargs):
         _g_sortedVehs[listID] = (vehs, props._replace(**kwargs))
 
 
-def clearVehiclesData():
-    _g_sortedVehs.clear()
-
-
 PQ_TABS = (_QA.SEASON_VIEW_TAB_RANDOM, _QA.SEASON_VIEW_TAB_FALLOUT)
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
@@ -84,8 +80,8 @@ class QuestInfo(object):
         return
 
 
-class PQInfo(QuestInfo):
-    __slots__ = ('tileID', 'questID', 'filters')
+class PMInfo(QuestInfo):
+    __slots__ = ('operationID', 'questID', 'filters')
 
 
 @ReprInjector.simple('tabID', 'random', 'falloutQuests')
@@ -93,8 +89,8 @@ class _NavigationInfo(object):
 
     def __init__(self):
         self.tabID = None
-        self.random = PQInfo(None, None, None)
-        self.falloutQuests = PQInfo(None, None, None)
+        self.random = PMInfo(None, None, None)
+        self.falloutQuests = PMInfo(None, None, None)
         self.__selectedPQType = _QA.SEASON_VIEW_TAB_RANDOM
         self._missionsTab = None
         self._vehicleSelectorFilters = {}
@@ -102,10 +98,7 @@ class _NavigationInfo(object):
 
     @property
     def selectedPQ(self):
-        if self.selectedPQType == _QA.SEASON_VIEW_TAB_RANDOM:
-            return self.random
-        else:
-            return self.falloutQuests
+        return self.random if self.selectedPQType == _QA.SEASON_VIEW_TAB_RANDOM else self.falloutQuests
 
     @property
     def selectedPQType(self):
@@ -126,20 +119,20 @@ class _NavigationInfo(object):
                 self.falloutQuests.clear()
         self.tabID = tabID
 
-    def selectPotapovQuest(self, tileID, questID=None):
+    def selectPersonalMission(self, operationID, questID=None):
         self.tabID = _QA.TAB_PERSONAL_QUESTS
-        self.selectedPQ.update(tileID=tileID, questID=questID)
+        self.selectedPQ.update(operationID=operationID, questID=questID)
 
-    def selectRandomQuest(self, tileID, questID=None):
+    def selectRandomQuest(self, operationID, questID=None):
         self.tabID = _QA.TAB_PERSONAL_QUESTS
         self.__selectedPQType = _QA.SEASON_VIEW_TAB_RANDOM
-        self.random = self.random.update(tileID=tileID, questID=questID, filters=None)
+        self.random = self.random.update(operationID=operationID, questID=questID, filters=None)
         return
 
-    def selectFalloutQuest(self, tileID, questID=None):
+    def selectFalloutQuest(self, operationID, questID=None):
         self.tabID = _QA.TAB_PERSONAL_QUESTS
         self.__selectedPQType = _QA.SEASON_VIEW_TAB_FALLOUT
-        self.falloutQuests = self.falloutQuests.update(tileID=tileID, questID=questID)
+        self.falloutQuests = self.falloutQuests.update(operationID=operationID, questID=questID)
 
     def changePQFilters(self, *args):
         self.selectedPQ.update(filters=args)

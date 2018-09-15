@@ -160,8 +160,8 @@ class VOIPChatController(IVOIPChatController):
         The method will initialize VOIP manager and request sound capture devices.
         It is done every time after user login.
         """
-        serverSettings = getattr(BigWorld.player(), 'serverSettings', None)
-        if serverSettings is not None and 'voipDomain' in serverSettings:
+        serverSettings = getattr(BigWorld.player(), 'serverSettings', {})
+        if serverSettings and 'voipDomain' in serverSettings:
             domain = serverSettings['voipUserDomain']
             server = serverSettings['voipDomain']
         else:
@@ -169,7 +169,6 @@ class VOIPChatController(IVOIPChatController):
             server = ''
         yield self.__initializeSettings(domain, server)
         yield self.requestCaptureDevices(True)
-        return
 
     @async
     def __initializeSettings(self, domain, server, callback):

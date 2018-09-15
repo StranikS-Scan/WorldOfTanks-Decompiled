@@ -50,7 +50,6 @@ class LogHandler(ClientEventsHandler):
         else:
             g_logOutput.error(CLIENT_LOG_AREA.GENERIC, 'Events logger is not found. Available loggers are', self.__loggers.keys())
             return None
-            return None
 
     def getNames(self):
         return self.__loggers.keys()

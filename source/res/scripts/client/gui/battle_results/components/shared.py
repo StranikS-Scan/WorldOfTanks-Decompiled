@@ -3,6 +3,7 @@
 """
 Module contains components that are included in different blocks.
 """
+from constants import ARENA_GUI_TYPE
 from debug_utils import LOG_ERROR
 from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, MARK_ON_GUN_RECORD, MARK_OF_MASTERY_RECORD
 from gui.battle_results import stored_sorting
@@ -119,12 +120,12 @@ class AchievementIcon(base.StatsBlock):
 
 
 class AchievementBlock(base.StatsBlock):
-    __slots__ = ('type', 'block', 'icon', 'specialIcon', 'title', 'description', 'hasRibbon', 'customData', 'isUnique', 'rank', 'i18nValue', 'inactive', 'isRare', 'rareIconID')
+    __slots__ = ('type', 'block', 'icon', 'specialIcon', 'title', 'description', 'hasRibbon', 'customData', 'isUnique', 'rank', 'i18nValue', 'inactive', 'isRare', 'rareIconID', 'arenaType', 'vehicleLevel')
 
     def setUnique(self, value):
         self.isUnique = value
 
-    def setRecord(self, result, _):
+    def setRecord(self, result, reusable):
         if result.getType() != ACHIEVEMENT_TYPE.SERIES:
             self.rank = result.getValue()
             self.i18nValue = result.getI18nValue()
@@ -144,6 +145,13 @@ class AchievementBlock(base.StatsBlock):
         self.description = result.getUserDescription()
         self.hasRibbon = result.hasRibbon()
         self.customData = customData
+        if reusable:
+            self.arenaType = reusable.common.arenaBonusType
+            playerVehiclesIterator = reusable.personal.getVehicleItemsIterator()
+            for _, vehicle in playerVehiclesIterator:
+                self.vehicleLevel = vehicle.level
+                break
+
         return
 
 

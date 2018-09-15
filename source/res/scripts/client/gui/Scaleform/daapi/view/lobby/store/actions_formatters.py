@@ -167,7 +167,7 @@ class ActionsBuilder(object):
          _VISIBLE_CARDS.ANNOUNCED: []}
 
     @classmethod
-    def getAllVisibleDiscounts(cls, actions, entities, announced):
+    def getAllVisibleDiscounts(cls, actions, entities, announced, sorting=False):
         """
         :param actions: actions list from server
         :param entities: dict
@@ -176,40 +176,15 @@ class ActionsBuilder(object):
              'steps': (list of active steps),
             }
         :param announced: future actions
+        :param sorting: if vlaue equals True than each list of discounts should be sorted,
+            otherwise - don't sort list of discounts. For example, if number of discount is needed
+            only, sorting is pointless.
         :return: dict of actions for view
         """
-        visibleCards = {_VISIBLE_CARDS.ACTIONS: [],
-         _VISIBLE_CARDS.ANNOUNCED: []}
-        composer = ActionComposer()
-        if actions:
-            affectedActions = set()
-            actionEntities = entities.get('actionEntities', None)
-            actionNames = entities.get('actions', None)
-            actionSteps = entities.get('steps', None)
-            if actionEntities and actionNames and actionSteps:
-                for name, step, _ in actionEntities.values():
-                    affectedActions.add((actionNames[name], actionSteps[step]))
-
-            for action in actions:
-                for actionInfo in getActionInfoData(action):
-                    if actionInfo.visualPriority not in _ACTIONS_PRIORITY_LEVEL.ALL_VISIBLE:
-                        continue
-                    aiName = actionInfo.event.getID()
-                    aiStep = actionInfo.discount.getName()
-                    if not actionInfo.isDiscountVisible():
-                        continue
-                    if aiStep in _INTERSECTED_ACTIONS_LIST:
-                        if (aiName, aiStep) in affectedActions:
-                            composer.add(actionInfo)
-                    composer.add(actionInfo)
-
-        for announce in announced:
-            infoList = getAnnouncedActionInfo(announce)
-            if infoList:
-                visibleCards[_VISIBLE_CARDS.ANNOUNCED].append(infoList)
-
-        visibleCards[_VISIBLE_CARDS.ACTIONS] = sorted(composer.getActions(), key=methodcaller('getFinishTime'))
-        visibleCards[_VISIBLE_CARDS.ANNOUNCED] = sorted(visibleCards[_VISIBLE_CARDS.ANNOUNCED], key=methodcaller('getStartTime'))
+        visibleCards = cls._getAllVisibleDiscounts(actions, entities, announced)
+        if sorting:
+            visibleCards[_VISIBLE_CARDS.ACTIONS] = sorted(visibleCards[_VISIBLE_CARDS.ACTIONS], key=methodcaller('getFinishTime'))
+            visibleCards[_VISIBLE_CARDS.ANNOUNCED] = sorted(visibleCards[_VISIBLE_CARDS.ANNOUNCED], key=methodcaller('getStartTime'))
         return visibleCards
 
     def createLayoutTemplate(self, allCards):
@@ -244,10 +219,10 @@ class ActionsBuilder(object):
         if len(priority1) > 1:
             priority2 = priority1[1:] + priority2[:]
             priority1 = [priority1[0]]
-        if len(priority3) == 0 and len(priority2) % 2 != 0:
+        if not priority3 and len(priority2) % 2 != 0:
             priority3 = priority2[-2:]
             priority2 = priority2[:-2]
-        elif len(priority2) == 0 and len(priority3) % 2 != 0:
+        elif not priority2 and len(priority3) % 2 != 0:
             priority2 = [priority3[0]]
             priority3 = priority3[1:]
         elif len(priority2) % 2 != 0 and len(priority3) % 2 != 0:
@@ -301,6 +276,51 @@ class ActionsBuilder(object):
         visitedCard = findFirst(lambda x: x.getID() == actionID, cards)
         if visitedCard:
             visitEventGUI(visitedCard)
+
+    @classmethod
+    def _getAllVisibleDiscounts(cls, actions, entities, announced):
+        """
+        :param actions: actions list from server
+        :param entities: dict
+            {'actionsEntities': (index from 'actions', index from 'step', intersected actions (bool)),
+             'actions': (list of active actions),
+             'steps': (list of active steps),
+            }
+        :param announced: future actions
+        :return: dict of actions for view
+        """
+        composer = ActionComposer()
+        visibleCards = {_VISIBLE_CARDS.ACTIONS: [],
+         _VISIBLE_CARDS.ANNOUNCED: []}
+        if actions:
+            affectedActions = set()
+            actionEntities = entities.get('actionEntities', None)
+            actionNames = entities.get('actions', None)
+            actionSteps = entities.get('steps', None)
+            if actionEntities and actionNames and actionSteps:
+                for name, step, _ in actionEntities.values():
+                    affectedActions.add((actionNames[name], actionSteps[step]))
+
+            for action in actions:
+                for actionInfo in getActionInfoData(action):
+                    if actionInfo.visualPriority not in _ACTIONS_PRIORITY_LEVEL.ALL_VISIBLE:
+                        continue
+                    aiName = actionInfo.event.getID()
+                    aiStep = actionInfo.discount.getName()
+                    if not actionInfo.isDiscountVisible():
+                        continue
+                    if aiStep in _INTERSECTED_ACTIONS_LIST:
+                        if (aiName, aiStep) in affectedActions:
+                            composer.add(actionInfo)
+                    composer.add(actionInfo)
+
+        visibleCards[_VISIBLE_CARDS.ACTIONS] = composer.getActions()
+        for announce in announced:
+            infoList = getAnnouncedActionInfo(announce)
+            if infoList:
+                visibleCards[_VISIBLE_CARDS.ANNOUNCED].append(infoList)
+
+        return visibleCards
 
     def __setVisualPriority(self, items, priority):
         """Set new visual priority according template rules"""

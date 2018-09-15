@@ -5,12 +5,6 @@ from messenger.gui.Scaleform.meta.BaseContactViewMeta import BaseContactViewMeta
 
 class BaseContactView(BaseContactViewMeta):
 
-    def __init__(self):
-        super(BaseContactView, self).__init__()
-
-    def _dispose(self):
-        super(BaseContactView, self)._dispose()
-
     def onCancel(self):
         pass
 

@@ -55,8 +55,8 @@ def notAvailableRed():
     return _getIcon('notAvailableRed')
 
 
-def checkmark():
-    return _getIcon('checkmark')
+def checkmark(vspace=-4):
+    return _getIcon('checkmark', vspace=vspace)
 
 
 def envelop():
@@ -109,6 +109,18 @@ def serverAlert():
 
 def markerBlocked(vspace=-2):
     return _getIcon('markerBlocked', vspace=vspace)
+
+
+def awardList():
+    return _getIcon('awardList')
+
+
+def inProgress(vspace=-2):
+    return _getIcon('inProgress', vspace=vspace)
+
+
+def doubleCheckmark(vspace=0):
+    return _getIcon('doubleCheckmark', vspace=vspace)
 
 
 def makeImageTag(source, width=16, height=16, vSpace=-4, hSpace=0):

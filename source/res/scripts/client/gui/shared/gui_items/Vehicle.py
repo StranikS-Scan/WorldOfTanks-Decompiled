@@ -190,8 +190,8 @@ class Vehicle(FittingItem, HasStrCD):
             self._xp = proxy.stats.vehiclesXPs.get(self.intCD, self._xp)
             if proxy.shop.winXPFactorMode == WIN_XP_FACTOR_MODE.ALWAYS or self.intCD not in proxy.stats.multipliedVehicles and not self.isOnlyForEventBattles:
                 self._dailyXPFactor = proxy.shop.dailyXPFactor
-            self._isElite = len(vehDescr.type.unlocksDescrs) == 0 or self.intCD in proxy.stats.eliteVehicles
-            self._isFullyElite = self.isElite and len([ data for data in vehDescr.type.unlocksDescrs if data[1] not in proxy.stats.unlocks ]) == 0
+            self._isElite = not vehDescr.type.unlocksDescrs or self.intCD in proxy.stats.eliteVehicles
+            self._isFullyElite = self.isElite and not any((data[1] not in proxy.stats.unlocks for data in vehDescr.type.unlocksDescrs))
             clanDamageLock = proxy.stats.vehicleTypeLocks.get(self.intCD, {}).get(CLAN_LOCK, 0)
             clanNewbieLock = proxy.stats.globalVehicleLocks.get(CLAN_LOCK, 0)
             self._clanLock = clanDamageLock or clanNewbieLock
@@ -207,7 +207,7 @@ class Vehicle(FittingItem, HasStrCD):
             self._rotationBattlesLeft = proxy.vehicleRotation.getBattlesCount(self.rotationGroupNum)
             self._isRotationGroupLocked = proxy.vehicleRotation.isGroupLocked(self.rotationGroupNum)
             self._isInfiniteRotationGroup = proxy.vehicleRotation.isInfinite(self.rotationGroupNum)
-        self._inventoryCount = 1 if len(invData.keys()) else 0
+        self._inventoryCount = 1 if invData.keys() else 0
         data = invData.get('rent')
         if data is not None:
             self._rentInfo = RentalInfoProvider(isRented=True, *data)
@@ -646,11 +646,11 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def maxRentDuration(self):
-        return max((item['days'] for item in self.rentPackages)) * self.MAX_RENT_MULTIPLIER * time_utils.ONE_DAY if len(self.rentPackages) > 0 else 0
+        return max((item['days'] for item in self.rentPackages)) * self.MAX_RENT_MULTIPLIER * time_utils.ONE_DAY if self.rentPackages else 0
 
     @property
     def minRentDuration(self):
-        return min((item['days'] for item in self.rentPackages)) * time_utils.ONE_DAY if len(self.rentPackages) > 0 else 0
+        return min((item['days'] for item in self.rentPackages)) * time_utils.ONE_DAY if self.rentPackages else 0
 
     @property
     def rentalIsOver(self):
@@ -954,11 +954,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def typeOfLockingArena(self):
-        if not self.isLocked:
-            return None
-        else:
-            return self.lock[1]
-            return None
+        return None if not self.isLocked else self.lock[1]
 
     @property
     def isBroken(self):
@@ -1052,10 +1048,7 @@ class Vehicle(FittingItem, HasStrCD):
         return True
 
     def isAutoEquipFull(self):
-        if self.isAutoEquip:
-            return self.equipment.regularConsumables == self.equipmentLayout.regularConsumables
-        else:
-            return True
+        return self.equipment.regularConsumables == self.equipmentLayout.regularConsumables if self.isAutoEquip else True
 
     def mayPurchase(self, money):
         if self.isOnlyForEventBattles:
@@ -1067,15 +1060,12 @@ class Vehicle(FittingItem, HasStrCD):
     def mayRent(self, money):
         if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
             return (False, GUI_ITEM_ECONOMY_CODE.CENTER_UNAVAILABLE)
-        elif self.isDisabledForBuy and not self.isRentable:
+        if self.isDisabledForBuy and not self.isRentable:
             return (False, GUI_ITEM_ECONOMY_CODE.RENTAL_DISABLED)
-        elif self.isRentable and not self.isRentAvailable:
+        if self.isRentable and not self.isRentAvailable:
             return (False, GUI_ITEM_ECONOMY_CODE.RENTAL_TIME_EXCEEDED)
         minRentPrice = self.minRentPrice
-        if minRentPrice:
-            return self._isEnoughMoney(minRentPrice, money)
-        else:
-            return (False, GUI_ITEM_ECONOMY_CODE.NO_RENT_PRICE)
+        return self._isEnoughMoney(minRentPrice, money) if minRentPrice else (False, GUI_ITEM_ECONOMY_CODE.NO_RENT_PRICE)
 
     def mayRestore(self, money):
         """
@@ -1097,12 +1087,11 @@ class Vehicle(FittingItem, HasStrCD):
         mayRestore, reason = self.mayRestore(money)
         if mayRestore:
             return mayRestore
-        elif reason == GUI_ITEM_ECONOMY_CODE.NOT_ENOUGH_CREDITS and money.isSet(Currency.GOLD):
+        if reason == GUI_ITEM_ECONOMY_CODE.NOT_ENOUGH_CREDITS and money.isSet(Currency.GOLD):
             money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0)
             mayRestore, reason = self._isEnoughMoney(self.restorePrice, money)
             return mayRestore
-        else:
-            return False
+        return False
 
     def getRentPackage(self, days=None):
         """
@@ -1117,7 +1106,7 @@ class Vehicle(FittingItem, HasStrCD):
                 if package.get('days', None) == days:
                     return package
 
-        elif len(self.rentPackages) > 0:
+        elif self.rentPackages:
             return min(self.rentPackages, key=itemgetter('rentPrice'))
         return
 
@@ -1300,10 +1289,7 @@ class Vehicle(FittingItem, HasStrCD):
 
 
 def getTypeUserName(vehType, isElite):
-    if isElite:
-        return i18n.makeString('#menu:header/vehicleType/elite/%s' % vehType)
-    else:
-        return i18n.makeString('#menu:header/vehicleType/%s' % vehType)
+    return i18n.makeString('#menu:header/vehicleType/elite/%s' % vehType) if isElite else i18n.makeString('#menu:header/vehicleType/%s' % vehType)
 
 
 def getTypeShortUserName(vehType):
@@ -1339,29 +1325,20 @@ def getSmallIconPath(vehicleName):
 
 
 def getUniqueIconPath(vehicleName, withLightning=False):
-    if withLightning:
-        return '../maps/icons/vehicle/unique/%s' % getItemIconName(vehicleName)
-    else:
-        return '../maps/icons/vehicle/unique/normal_%s' % getItemIconName(vehicleName)
+    return '../maps/icons/vehicle/unique/%s' % getItemIconName(vehicleName) if withLightning else '../maps/icons/vehicle/unique/normal_%s' % getItemIconName(vehicleName)
 
 
-def getTypeIconName(vehicleType):
-    return '%s.png' % vehicleType
-
-
-def getTypeEliteIconName(vehicleType, isElite):
-    if isElite:
-        return '%s_elite.png' % vehicleType
-    else:
-        return getTypeIconName(vehicleType)
-
-
-def getTypeSmallIconPath(vehicleType):
-    return '../maps/icons/vehicleTypes/%s' % getTypeIconName(vehicleType)
+def getTypeSmallIconPath(vehicleType, isElite=False):
+    key = vehicleType + '.png'
+    return RES_ICONS.maps_icons_vehicletypes_elite(key) if isElite else RES_ICONS.maps_icons_vehicletypes(key)
 
 
 def getTypeBigIconPath(vehicleType, isElite):
-    return '../maps/icons/vehicleTypes/big/%s' % getTypeEliteIconName(vehicleType, isElite)
+    key = 'big/' + vehicleType
+    if isElite:
+        key += '_elite'
+    key += '.png'
+    return RES_ICONS.maps_icons_vehicletypes(key)
 
 
 def getUserName(vehicleType, textPrefix=False):
@@ -1428,7 +1405,7 @@ def getOrderByVehicleClass(className=None):
 def getVehicleClassTag(tags):
     subSet = vehicles.VEHICLE_CLASS_TAGS & tags
     result = None
-    if len(subSet):
+    if subSet:
         result = list(subSet).pop()
     return result
 
@@ -1458,7 +1435,4 @@ def getVehicleStateIcon(vState):
 
 
 def getBattlesLeft(vehicle):
-    if vehicle.isInfiniteRotationGroup:
-        return i18n.makeString('#menu:infinitySymbol')
-    else:
-        return str(vehicle.rotationBattlesLeft)
+    return i18n.makeString('#menu:infinitySymbol') if vehicle.isInfiniteRotationGroup else str(vehicle.rotationBattlesLeft)

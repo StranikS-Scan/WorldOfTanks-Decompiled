@@ -88,7 +88,7 @@ def _readFinalWindowSection(xmlCtx, section, _, windowID, windowType, content):
     hintsSec = _xml.getSubsection(xmlCtx, section, 'battle-hints')
     hints = []
     for typeName, hintSec in hintsSec.items():
-        if len(hintSec.keys()):
+        if hintSec.keys():
             data = {'type': typeName}
             for key, subSec in hintSec.items():
                 data[key] = translation(subSec.asString)

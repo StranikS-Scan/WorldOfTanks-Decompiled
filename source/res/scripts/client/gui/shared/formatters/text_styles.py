@@ -220,6 +220,10 @@ def alignStandartText(text, align):
     return alignText(standard(text), align)
 
 
+def vehicleStatusSimpleText(text):
+    return _formatText('vehicleStatusSimpleText', text)
+
+
 def vehicleStatusInfoText(text):
     return _formatText('vehicleStatusInfoText', text)
 

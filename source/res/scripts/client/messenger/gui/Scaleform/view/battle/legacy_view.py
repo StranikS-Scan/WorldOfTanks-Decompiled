@@ -78,7 +78,7 @@ class BattleChannelView(UIInterface, IBattleChannelView):
                 result.append(clientID)
                 result.append(self.__getRecvConfig(controller)[0])
 
-        if len(result):
+        if result:
             self.__flashCall(BTMS_COMMANDS.UpdateReceivers(), result)
 
     def addMessage(self, message, fillColor=FILL_COLORS.BLACK, accountDBID=0):

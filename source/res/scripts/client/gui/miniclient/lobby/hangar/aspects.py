@@ -36,7 +36,6 @@ class DisableTankServiceButtons(aop.Aspect):
               tooltip), cd.kwargs)
         else:
             return
-            return
 
 
 class MaintenanceButtonFlickering(aop.Aspect):
@@ -58,7 +57,6 @@ class MaintenanceButtonFlickering(aop.Aspect):
             return (original_args, cd.kwargs)
         else:
             return
-            return
 
 
 class DeviceButtonsFlickering(aop.Aspect):
@@ -79,7 +77,6 @@ class DeviceButtonsFlickering(aop.Aspect):
             return (original_args, cd.kwargs)
         else:
             return
-            return
 
 
 class TankModelHangarVisibility(aop.Aspect):
@@ -93,7 +90,6 @@ class TankModelHangarVisibility(aop.Aspect):
             cd.avoid()
             return False
         else:
-            return None
             return None
 
 
@@ -109,7 +105,6 @@ class TankHangarStatus(aop.Aspect):
             return (Vehicle.VEHICLE_STATE.NOT_PRESENT, _ms(self.__config.get('sandbox_platform_message', '#miniclient:hangar/unavailable')), Vehicle.VEHICLE_STATE_LEVEL.CRITICAL)
         else:
             return None
-            return None
 
 
 class EnableCrew(aop.Aspect):
@@ -123,7 +118,6 @@ class EnableCrew(aop.Aspect):
             cd.change()
             return ([True], {})
         else:
-            return None
             return None
 
 

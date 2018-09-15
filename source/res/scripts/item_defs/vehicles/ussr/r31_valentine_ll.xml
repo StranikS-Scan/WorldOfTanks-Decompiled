@@ -21,7 +21,7 @@
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/russian/R31_Valentine_LL/Valentine_LL_CM.DDS	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -40,6 +40,7 @@
       <armor_13>	0	</armor_13>
       <armor_14>	40	</armor_14>
       <armor_15>	20	</armor_15>
+      <armor_16>	65	</armor_16>
     </armor>
     <primaryArmor>	armor_1 armor_5 armor_4	</primaryArmor>
     <weight>	8300	</weight>
@@ -61,11 +62,11 @@
       <sensitivityToImpulse>	0.4	</sensitivityToImpulse>
     </swinging>
     <exhaust>
-      <pixie>	diesel_medium	</pixie>
+      <pixie>	gas_medium	</pixie>
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.004731 0.48032 0.648006	</turret>
+      <turret>	0.000000 0.480475 0.6253	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/russian/R31_Valentine_LL/collision/Hull.model	</collisionModelServer>
@@ -73,14 +74,17 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	0.262381 0.301577 2.17955	</rayStart>
-        <rayEnd>	0.262381 0.301577 1.77955	</rayEnd>
+        <rayStart>	0.251007 0.334996 2.15276	</rayStart>
+        <rayEnd>	0.251007 0.334996 1.75276	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.2	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
+        <size>	0.165	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/russian/R31_Valentine_LL/Valentine_LL_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	0.9 0.9 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <ValentineMK_I>
@@ -116,13 +120,13 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	ussr_01	</textureSet>
-        <size>	0.4 0.32	</size>
+        <size>	0.4 0.37	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.06	</textureScale>
+        <textureScale>	-4.2	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -166,9 +170,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.314683	</radius>
+          <syncAngle>	18	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -179,15 +184,17 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.334206	</radius>
+          <syncAngle>	18	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.314683	</radius>
+          <syncAngle>	18	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -198,24 +205,25 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.334206	</radius>
+          <syncAngle>	18	</syncAngle>
         </wheel>
       </wheels>
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	smallTankMud	</mud>
+        <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.952525 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R31_Valentine_LL/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R31_Valentine_LL/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.0967 1.52204	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.10435 1.53382	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -228,6 +236,119 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/russian/R31_Valentine_LL/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/russian/R31_Valentine_LL/track/segment.model	</segmentModelRight>
+        <left>	vehicles/russian/R31_Valentine_LL/track/left.track	</left>
+        <right>	vehicles/russian/R31_Valentine_LL/track/right.track	</right>
+        <segmentLength>	0.1	</segmentLength>
+        <segmentOffset>	0.105	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0028	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.041	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+      </trackNodes>
     </ValentineMK_I>
   </chassis>
   <turrets0>
@@ -251,6 +372,8 @@
         <armor_11>	95	</armor_11>
         <armor_12>	15	</armor_12>
         <armor_13>	30	</armor_13>
+        <armor_16>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_16>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2000	</weight>
@@ -278,6 +401,8 @@
             </armor_1>
             <armor_2>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	20	</gun>
           </armor>
           <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
@@ -290,6 +415,9 @@
             <collisionModelServer>	vehicles/russian/R31_Valentine_LL/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/russian/R31_Valentine_LL/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	0.1 0.1 0.000000 0.000000	</tiling>
+          </camouflage>
         </_45mm_20KL>
       </guns>
       <models>
@@ -301,26 +429,29 @@
         <collisionModelServer>	vehicles/russian/R31_Valentine_LL/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R31_Valentine_LL/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.004731 0.279887 0.552927	</gunPosition>
+      <gunPosition>	0.000000 0.304885 0.541376	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.858623 0.375877 -0.38697	</rayStart>
-          <rayEnd>	-0.485897 0.375877 -0.241807	</rayEnd>
+          <rayStart>	-0.838006 0.380849 -0.0589871	</rayStart>
+          <rayEnd>	-0.638059 0.380849 -0.0543797	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.28	</size>
+          <size>	0.27	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	0.915991 0.321818 0.187145	</rayStart>
-          <rayEnd>	0.525804 0.321818 0.0991232	</rayEnd>
+          <rayStart>	0.918804 0.323664 0.164515	</rayStart>
+          <rayEnd>	0.52953 0.323663 0.072542	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.52	</size>
+          <size>	0.454	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.943 -0.030 1.000 0.000 0.525 0.239 0.829 0.542 0.473 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <physicsShape>	0.943 -0.030 1.000 0.000 0.568 0.239 0.829 0.542 0.473 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.5 0.2 0.000000 0.000000	</tiling>
+      </camouflage>
     </Valentine_LL>
   </turrets0>
   <engines>

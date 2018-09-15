@@ -28,7 +28,7 @@ class FunctionalLobbyChapterInfo(FunctionalChapterInfo):
         chapterID = chapter.getID()
         self._conditions = None
         conditions = chapter.getHasIDEntity(chapterID)
-        if conditions is not None and len(conditions):
+        if conditions:
             self._conditions = FunctionalConditions(conditions)
         self._isShow = False
         return

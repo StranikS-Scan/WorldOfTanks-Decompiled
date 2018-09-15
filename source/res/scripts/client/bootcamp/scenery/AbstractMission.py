@@ -11,7 +11,8 @@ from bootcamp.scenery.HintLink import HintLink
 from bootcamp.scenery.MarkerLink import MarkerLink
 from bootcamp.scenery.TriggerListener import TriggerListener
 from bootcamp.scenery.VehicleLink import VehicleLink
-from constants import HINT_TYPE, BOOTCAMP_BATTLE_ACTION
+from bootcamp.BootcampConstants import HINT_TYPE
+from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
 from debug_utils import LOG_ERROR
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 import TriggersManager
@@ -255,13 +256,11 @@ class AbstractMission(object):
 
     def _muteCombatMusic(self):
         if self.__combatMusic is not None and self.__combatMusic.isPlaying:
-            print '!!!!!!!!!!!!!!!!!! STOP!'
             self.__combatMusic.stop()
         return
 
     def _playCombatMusic(self):
         if self.__combatMusic is not None and not self.__combatMusic.isPlaying and not BattleReplay.g_replayCtrl.isTimeWarpInProgress:
-            print '!!!!!!!!!!!!!!!!!! PLAY!'
             self.__combatMusic.play()
         return
 

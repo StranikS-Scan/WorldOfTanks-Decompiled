@@ -3,6 +3,4 @@
 from gui.Scaleform.daapi.view.meta.RallyMainWindowWithSearchMeta import RallyMainWindowWithSearchMeta
 
 class RallyMainWindowWithSearch(RallyMainWindowWithSearchMeta):
-
-    def __init__(self):
-        super(RallyMainWindowWithSearch, self).__init__()
+    pass

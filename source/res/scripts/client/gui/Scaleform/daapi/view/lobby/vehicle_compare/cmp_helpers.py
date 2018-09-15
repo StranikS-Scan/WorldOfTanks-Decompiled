@@ -87,7 +87,7 @@ def getVehicleCrewSkills(vehicle):
                 if role in leftRoles:
                     leftRoles.remove(role)
                     outcome[idx][1] |= _PARAMS_AFFECTED_SKILLS_BY_ROLES[role]
-                    if len(leftRoles) == 0:
+                    if not leftRoles:
                         return outcome
 
     else:

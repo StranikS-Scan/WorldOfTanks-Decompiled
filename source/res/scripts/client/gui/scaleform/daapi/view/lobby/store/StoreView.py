@@ -25,6 +25,14 @@ def _getTabIndex(tabId):
     return index
 
 
+def _filterOutOfDate(info):
+    return not info.isOutOfDate()
+
+
+def _filterNewActions(info):
+    return info.getIsNew()
+
+
 class StoreView(StoreViewMeta):
     __sound_env__ = ShopEnv
     eventsCache = dependency.descriptor(IEventsCache)
@@ -66,12 +74,12 @@ class StoreView(StoreViewMeta):
         self.__updateActionsCounter()
 
     def __updateActionsCounter(self):
-        newActions = filter(lambda i: i.getIsNew(), self.__checkForActiveActions())
+        newActions = filter(_filterNewActions, self.__checkForActiveActions())
         if newActions:
-            self.as_setBtnTabCountersS([{'componentId': STORE_CONSTANTS.STORE_ACTIONS,
-              'count': str(len(newActions))}])
+            self.as_setBtnTabCountersS(({'componentId': STORE_CONSTANTS.STORE_ACTIONS,
+              'count': str(len(newActions))},))
         else:
-            self.as_removeBtnTabCountersS([STORE_CONSTANTS.STORE_ACTIONS])
+            self.as_removeBtnTabCountersS((STORE_CONSTANTS.STORE_ACTIONS,))
 
     def _initialize(self, ctx=None):
         ctx = ctx or {}
@@ -118,13 +126,9 @@ class StoreView(StoreViewMeta):
         self.__showBackButton = False
 
     def __checkForActiveActions(self):
-
-        def _filterFunc(x):
-            return not x.isOutOfDate()
-
         from gui.Scaleform.daapi.view.lobby.store.actions_formatters import _VISIBLE_CARDS
         from gui.Scaleform.daapi.view.lobby.store.actions_formatters import ActionsBuilder
-        actions = self.eventsCache.getActions(filterFunc=_filterFunc).values()
+        actions = self.eventsCache.getActions(filterFunc=_filterOutOfDate).values()
         entities = self.eventsCache.getActionEntities()
         visible = ActionsBuilder.getAllVisibleDiscounts(actions, entities, []).get(_VISIBLE_CARDS.ACTIONS, [])
         return visible

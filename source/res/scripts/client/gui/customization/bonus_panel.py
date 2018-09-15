@@ -71,7 +71,6 @@ class BonusPanel(object):
         self.__restoreInitialTooltipData()
         forEachSlotIn(updatedSlotsData, self.__initialSlotsData, self.__recalculateBonusData)
         self.__setAnimations()
-        self.__events.onBonusesUpdated(self.__bonusData)
 
     def __saveInstalledElements(self, newVehicleSelected, installed):
         self.__installedElements = installed

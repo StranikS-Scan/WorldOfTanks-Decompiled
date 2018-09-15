@@ -22,22 +22,22 @@
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/british/GB04_Valentine/Valentine_CM.dds	</exclusionMask>
+    <exclusionMask>	vehicles/british/GB04_Valentine/Valentine_hull_01_AO.dds	</exclusionMask>
   </camouflage>
   <hull>
     <armor>
       <armor_1>	60	</armor_1>
-      <armor_2>	30	</armor_2>
+      <armor_2>	60	</armor_2>
       <armor_3>	30	</armor_3>
       <armor_4>	60	</armor_4>
-      <armor_5>	10	</armor_5>
-      <armor_6>	7	</armor_6>
-      <armor_7>	60	</armor_7>
-      <armor_8>	0	</armor_8>
+      <armor_5>	60	</armor_5>
+      <armor_6>	30	</armor_6>
+      <armor_7>	20	</armor_7>
+      <armor_8>	20	</armor_8>
       <armor_9>	17	</armor_9>
-      <armor_10>	20	</armor_10>
-      <armor_11>	40	</armor_11>
-      <armor_12>	20	</armor_12>
+      <armor_10>	10	</armor_10>
+      <armor_11>	7	</armor_11>
+      <armor_16>	65	</armor_16>
     </armor>
     <primaryArmor>	armor_1 armor_7 armor_4	</primaryArmor>
     <weight>	9087	</weight>
@@ -61,9 +61,12 @@
     <exhaust>
       <pixie>	gas_medium	</pixie>
       <nodes>	HP_Track_Exhaus_1	</nodes>
+      <tags>
+        <diesel>	diesel_medium	</diesel>
+      </tags>
     </exhaust>
     <turretPositions>
-      <turret>	-0.007229 0.49301 0.674881	</turret>
+      <turret>	0.000000 0.476769 0.62	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Hull.model	</collisionModelServer>
@@ -71,14 +74,17 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	0.279745 0.324203 2.20735	</rayStart>
-        <rayEnd>	0.279745 0.324202 1.80735	</rayEnd>
+        <rayStart>	0.274996 0.331373 2.15111	</rayStart>
+        <rayEnd>	0.274996 0.331373 1.75111	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.2	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
+        <size>	0.181	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/british/GB04_Valentine/Valentine_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1.7 1.7 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_GB04_Valentine>
@@ -116,22 +122,23 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	ussr_01	</textureSet>
-        <size>	0.34 0.32	</size>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.32 0.42	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.12	</textureScale>
+        <textureScale>	-2.88	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.317189	</radius>
+          <syncAngle>	18.9	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -142,9 +149,10 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.3283	</radius>
+          <syncAngle>	18	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
@@ -167,9 +175,10 @@
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.308989	</radius>
+          <syncAngle>	18.9	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -180,9 +189,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.328932	</radius>
+          <syncAngle>	18	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
@@ -207,16 +217,16 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	smallTankMud	</mud>
+        <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.936231 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.09029 1.51696	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.10575 1.61158	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -229,6 +239,114 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB04_Valentine/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB04_Valentine/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/british/GB04_Valentine/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/british/GB04_Valentine/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/british/GB04_Valentine/track/left.track	</left>
+        <right>	vehicles/british/GB04_Valentine/track/right.track	</right>
+        <segmentLength>	0.111	</segmentLength>
+        <segmentOffset>	0.21	</segmentOffset>
+        <segment2Offset>	0.057	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	0.000000	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.85	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.85	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0728745	</minOffset>
+          <maxOffset>	0.0728745	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0728745	</minOffset>
+          <maxOffset>	0.0728745	</maxOffset>
+        </group>
+      </groundNodes>
     </Chassis_GB04_Valentine>
     <Chassis_GB04_Valentine_2>
       <userString>	#gb_vehicles:Chassis_GB04_Valentine_2	</userString>
@@ -261,22 +379,23 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	ussr_01	</textureSet>
-        <size>	0.34 0.32	</size>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.32 0.42	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.12	</textureScale>
+        <textureScale>	-2.88	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.317189	</radius>
+          <syncAngle>	18.9	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -287,9 +406,10 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.3283	</radius>
+          <syncAngle>	18	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
@@ -312,9 +432,10 @@
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.308989	</radius>
+          <syncAngle>	18.9	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -325,9 +446,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.328932	</radius>
+          <syncAngle>	18	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
@@ -352,16 +474,16 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	smallTankMud	</mud>
+        <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.936231 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.09029 1.51696	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.10575 1.61158	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -374,6 +496,114 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0728745	</minOffset>
+          <maxOffset>	0.0728745	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0728745	</minOffset>
+          <maxOffset>	0.0728745	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB04_Valentine/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB04_Valentine/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/british/GB04_Valentine/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/british/GB04_Valentine/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/british/GB04_Valentine/track/left.track	</left>
+        <right>	vehicles/british/GB04_Valentine/track/right.track	</right>
+        <segmentLength>	0.111	</segmentLength>
+        <segmentOffset>	0.21	</segmentOffset>
+        <segment2Offset>	0.057	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.85	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.85	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+      </trackNodes>
+      <trackThickness>	0.000000	</trackThickness>
     </Chassis_GB04_Valentine_2>
   </chassis>
   <turrets0>
@@ -388,16 +618,13 @@
       </unlocks>
       <armor>
         <armor_1>	65	</armor_1>
-        <armor_2>	45	</armor_2>
-        <armor_3>	60	</armor_3>
+        <armor_3>	65	</armor_3>
         <armor_4>	65	</armor_4>
-        <armor_5>	20	</armor_5>
-        <armor_6>	20	</armor_6>
-        <armor_7>	60	</armor_7>
-        <armor_8>	0	</armor_8>
-        <armor_9>	15	</armor_9>
-        <armor_10>	10	</armor_10>
-        <armor_11>	10	</armor_11>
+        <armor_6>	65	</armor_6>
+        <armor_7>	20	</armor_7>
+        <armor_8>	15	</armor_8>
+        <armor_9>	7	</armor_9>
+        <armor_11>	95	</armor_11>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2750	</weight>
@@ -423,6 +650,10 @@
           <armor>
             <armor_1>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	10	</gun>
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
@@ -443,6 +674,9 @@
             <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	1.2 0.3 0.000000 0.000000	</tiling>
+          </camouflage>
         </_2pdr_Gun_Mk_X>
       </guns>
       <models>
@@ -454,18 +688,18 @@
         <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000007 0.302635 0.5624	</gunPosition>
+      <gunPosition>	0.000000 0.3047 0.5435	</gunPosition>
       <emblemSlots>
         <inscription>
-          <rayStart>	-0.921404 0.257753 -0.109398	</rayStart>
-          <rayEnd>	-0.524339 0.257753 -0.0610873	</rayEnd>
+          <rayStart>	-0.988338 0.303638 -0.345234	</rayStart>
+          <rayEnd>	-0.411389 0.303638 -0.180523	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.58	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <size>	0.56	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
         <player>
-          <rayStart>	0.898413 0.442673 0.261786	</rayStart>
-          <rayEnd>	0.50679 0.442673 0.180357	</rayEnd>
+          <rayStart>	0.890844 0.416251 0.272982	</rayStart>
+          <rayEnd>	0.516423 0.416251 0.132246	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
@@ -476,7 +710,7 @@
       <physicsShape>	0.893 0.000 1.000 0.000 0.520 0.264 0.736 0.589 0.463 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
-        <tiling>	0.94 0.94 0.000000 0.000000	</tiling>
+        <tiling>	0.9 0.4 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_1_GB04_Valentine>
     <Turret_2_GB04_Valentine>
@@ -493,13 +727,12 @@
       <armor>
         <armor_1>	65	</armor_1>
         <armor_2>	60	</armor_2>
-        <armor_3>	60	</armor_3>
+        <armor_3>	65	</armor_3>
         <armor_4>	65	</armor_4>
         <armor_5>	20	</armor_5>
-        <armor_6>	20	</armor_6>
-        <armor_7>	50	</armor_7>
+        <armor_6>	65	</armor_6>
+        <armor_7>	20	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	10	</armor_9>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4530	</weight>
@@ -525,6 +758,10 @@
           <armor>
             <armor_1>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	10	</gun>
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
@@ -537,14 +774,17 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
-            <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_03.model	</exploded>
+            <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_03.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	1 0.3 0.000000 0.000000	</tiling>
+          </camouflage>
         </_2pdr_Gun_Mk_X>
         <QF_6_pounder_Mk_III>	shared	  <maxAmmo>	44	</maxAmmo>
           <pitchLimits>
@@ -554,6 +794,10 @@
           <armor>
             <armor_1>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.43	</shotDispersionRadius>
@@ -566,16 +810,16 @@
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.28	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_04.model	</exploded>
+            <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_04.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.895 0.895 0.000000 0.000000	</tiling>
+            <tiling>	0.895 0.4 0.000000 0.000000	</tiling>
           </camouflage>
         </QF_6_pounder_Mk_III>
         <QF_6_pounder_Mk_V>	shared	  <maxAmmo>	44	</maxAmmo>
@@ -590,6 +834,10 @@
           <armor>
             <armor_1>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
@@ -602,14 +850,18 @@
           <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.266	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_05.model	</exploded>
+            <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_05.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
+          <camouflage>
+            <tiling>	1 0.4 0.000000 0.000000	</tiling>
+          </camouflage>
         </QF_6_pounder_Mk_V>
         <_75mm_Gun_Mk_V>	shared	  <maxAmmo>	44	</maxAmmo>
           <pitchLimits>
@@ -619,6 +871,10 @@
           <armor>
             <armor_1>	65	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
+            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	30	</gun>
           </armor>
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
@@ -626,14 +882,18 @@
           <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Gun_06.model	</undamaged>
-            <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Gun_06.model	</destroyed>
-            <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_06.model	</exploded>
+            <undamaged>	vehicles/british/GB04_Valentine/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/british/GB04_Valentine/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/british/GB04_Valentine/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Gun_06.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_06.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium_mb	</effects>
+          <camouflage>
+            <tiling>	1 0.3 0.000000 0.000000	</tiling>
+          </camouflage>
         </_75mm_Gun_Mk_V>
       </guns>
       <models>
@@ -645,26 +905,29 @@
         <collisionModelServer>	vehicles/british/GB04_Valentine/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB04_Valentine/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.000013 0.23939 0.729812	</gunPosition>
+      <gunPosition>	0.000000 0.257933 0.68783	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.846563 0.443774 0.387436	</rayStart>
-          <rayEnd>	-0.49764 0.443774 0.191855	</rayEnd>
+          <rayStart>	-0.900827 0.437203 0.253094	</rayStart>
+          <rayEnd>	-0.52157 0.437202 0.125965	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	-0.764595 0.493885 -0.529807	</rayStart>
-          <rayEnd>	-0.427682 0.493885 -0.314193	</rayEnd>
+          <rayStart>	-0.77681 0.517697 -0.584432	</rayStart>
+          <rayEnd>	-0.438427 0.517697 -0.371134	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.52	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.010 -0.055 1.000 0.000 0.507 0.258 0.780 0.600 0.597 0.500 0.036 0.500 0.078 0.000 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
+      </camouflage>
     </Turret_2_GB04_Valentine>
   </turrets0>
   <engines>

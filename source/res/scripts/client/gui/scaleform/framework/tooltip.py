@@ -103,22 +103,20 @@ class ToolTip(ToolTipMgrMeta):
             if kind in tooltipData and tooltipData[kind] is not None:
                 result.append(self.__getFormattedText(tooltipData[kind], kind.upper(), stateType))
 
-        if len(result):
+        if result:
             self.as_showS(''.join(result), tooltipType)
         return
 
     def __genComplexToolTip(self, tooltipId, stateType, tooltipType):
-        if tooltipId is None or not len(tooltipId):
+        if not tooltipId:
             return
+        tooltipIsKey = tooltipId[0] == '#'
+        if tooltipIsKey:
+            tooltipData = self.__getToolTipFromKey(tooltipId, stateType)
         else:
-            tooltipIsKey = tooltipId[0] == '#'
-            if tooltipIsKey:
-                tooltipData = self.__getToolTipFromKey(tooltipId, stateType)
-            else:
-                tooltipData = self.__getToolTipFromText(tooltipId, stateType)
-            if len(tooltipData):
-                self.as_showS(tooltipData, tooltipType)
-            return
+            tooltipData = self.__getToolTipFromText(tooltipId, stateType)
+        if tooltipData:
+            self.as_showS(tooltipData, tooltipType)
 
     def __getToolTipFromKey(self, tooltipId, stateType):
         result = ''
@@ -126,7 +124,7 @@ class ToolTip(ToolTipMgrMeta):
             contentKey = tooltipId + '/' + kind
             content = i18n.makeString(contentKey)
             subkey = contentKey[1:].split(':', 1)
-            if content is not None and len(content) != 0 and content != subkey[1]:
+            if content and content != subkey[1]:
                 result += self.__getFormattedText(content, kind.upper(), stateType)
 
         return result

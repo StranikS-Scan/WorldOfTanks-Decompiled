@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/bootcamp_controller.py
+from copy import deepcopy
 import BigWorld
 from account_helpers.AccountSettings import CURRENT_VEHICLE, AccountSettings
+from bootcamp.BootcampSettings import getGarageDefaults
 from helpers import dependency
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.battle_session import IBattleSessionProvider
-from skeletons.gui.battle_results import IBattleResultsService
 from gui.Scaleform.Waiting import Waiting
+from gui.Scaleform.daapi.view.bootcamp.disabled_settings import BCDisabledSettings
 from bootcamp.BootCampEvents import g_bootcampEvents
 from PlayerEvents import g_playerEvents
 from bootcamp.Bootcamp import g_bootcamp
@@ -14,19 +16,19 @@ from debug_utils import LOG_ERROR
 
 class BootcampController(IBootcampController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    battleResults = dependency.descriptor(IBattleResultsService)
 
     def __init__(self):
         super(BootcampController, self).__init__()
         self.__inBootcamp = False
         self.__automaticStart = False
         self.__inBootcampAccount = False
+        self.__currentLobbySettingsVisibility = None
+        self.__disabledSettings = BCDisabledSettings()
         g_bootcampEvents.onBootcampBecomePlayer += self.__onBootcampBecomePlayer
         g_bootcampEvents.onBootcampBecomeNonPlayer += self.__onBootcampBecomeNonPlayer
         g_bootcampEvents.onBootcampStarted += self.__onEnterBootcamp
         g_bootcampEvents.onBootcampFinished += self.__onExitBootcamp
-        g_playerEvents.onAvatarBecomePlayer += self.__onAvatarBecomePlayer
-        g_playerEvents.onAvatarBecomeNonPlayer += self.__onAvatarBecomeNonPlayer
+        return
 
     def startBootcamp(self, inBattle):
         if g_playerEvents.isPlayerEntityChanging:
@@ -73,8 +75,6 @@ class BootcampController(IBootcampController):
         g_bootcampEvents.onBootcampBecomeNonPlayer -= self.__onBootcampBecomeNonPlayer
         g_bootcampEvents.onBootcampStarted -= self.__onEnterBootcamp
         g_bootcampEvents.onBootcampFinished -= self.__onExitBootcamp
-        g_playerEvents.onAvatarBecomePlayer -= self.__onAvatarBecomePlayer
-        g_playerEvents.onAvatarBecomeNonPlayer -= self.__onAvatarBecomeNonPlayer
 
     def onLobbyInited(self, event):
         if self.__automaticStart:
@@ -100,6 +100,34 @@ class BootcampController(IBootcampController):
     def getLessonNum(self):
         return g_bootcamp.getLessonNum()
 
+    @property
+    def nation(self):
+        return g_bootcamp.nation
+
+    def getDefaultLobbySettings(self):
+        return deepcopy(getGarageDefaults()['panels'])
+
+    def getLobbySettings(self):
+        if not self.__currentLobbySettingsVisibility:
+            self.__currentLobbySettingsVisibility = self.getDefaultLobbySettings()
+        return self.__currentLobbySettingsVisibility
+
+    def setLobbySettings(self, value):
+        self.__currentLobbySettingsVisibility = value
+
+    def updateLobbySettingsVisibility(self, element, value):
+        if element in self.__currentLobbySettingsVisibility:
+            self.__currentLobbySettingsVisibility[element] = value
+
+    def getContext(self):
+        return g_bootcamp.getContext()
+
+    def getContextIntParameter(self, parameter, default=0):
+        return g_bootcamp.getContextIntParameter(parameter, default)
+
+    def getDisabledSettings(self):
+        return self.__disabledSettings.disabledSetting
+
     def __onEnterBootcamp(self):
         self.__inBootcamp = True
 
@@ -118,12 +146,3 @@ class BootcampController(IBootcampController):
 
     def __onBootcampBecomeNonPlayer(self):
         self.__inBootcampAccount = False
-
-    def __onAvatarBecomePlayer(self):
-        self.battleResults.onResultPosted -= self.__onBattleResultsPosted
-
-    def __onAvatarBecomeNonPlayer(self):
-        self.battleResults.onResultPosted += self.__onBattleResultsPosted
-
-    def __onBattleResultsPosted(self, reusableInfo, composer):
-        g_bootcamp.setBattleResultsReusableInfo(reusableInfo)

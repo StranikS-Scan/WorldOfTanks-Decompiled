@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/common.py
 import cPickle
 from collections import namedtuple
-import types
 import math
 from operator import methodcaller
 import ResMgr
@@ -15,7 +14,6 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.formatters.servers import formatPingStatus, wrapServerName
 from helpers import dependency
 from shared_utils import findFirst
-from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.clans import formatters as clans_fmts
 from gui.clans.items import formatField
@@ -28,20 +26,18 @@ from gui.shared.tooltips import efficiency
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter, makeClanFullName, makeContactStatusDescription
 from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY, PING_STATUSES, PingData
-from constants import PREBATTLE_TYPE, WG_GAMES, VISIBILITY
-from debug_utils import LOG_WARNING, LOG_ERROR
+from constants import WG_GAMES, VISIBILITY
+from debug_utils import LOG_ERROR
 from helpers import i18n, time_utils, html, int2roman
-from helpers.i18n import makeString as ms, makeString
+from helpers.i18n import makeString
 from gui import g_htmlTemplates, makeHtmlString
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getReserveNameVO, getDirection
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.prb_control.items.unit_items import SupportedRosterSettings
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
 from gui.server_events.formatters import TOKEN_SIZES
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM
-from gui.shared.ClanCache import g_clanCache
 from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE, ToolTipParameterField
 from gui.Scaleform.daapi.view.lobby.customization import CAMOUFLAGES_KIND_TEXTS, CAMOUFLAGES_NATIONS_TEXTS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
@@ -93,7 +89,7 @@ class IgrTooltipData(ToolTipBaseData):
                     template = g_htmlTemplates['html_templates:lobby/tooltips']['igr_quest']
                     if q.accountReqs.hasIGRCondition() and not q.hasPremIGRVehBonus():
                         metaList = q.getBonuses('meta')
-                        if len(metaList):
+                        if metaList:
                             qLabels.append(metaList[0].format())
                         winCond = None
                         if q.postBattleCond.getConditions().getName() == 'and':
@@ -109,7 +105,7 @@ class IgrTooltipData(ToolTipBaseData):
                 if q.hasPremIGRVehBonus():
                     metaList = q.getBonuses('meta')
                     leftTime = time_utils.getTimeDeltaFromNow(q.getFinishTime())
-                    if len(metaList) and leftTime > 0:
+                    if metaList and leftTime > 0:
                         header = makeHtmlString('html_templates:lobby/tooltips', 'prem_igr_veh_quest_header', ctx={'qLabel': metaList[0].format()})
                         text = i18n.makeString('#tooltips:vehicleIgr/specialAbility')
                         localization = '#tooltips:vehicleIgr/%s'
@@ -118,7 +114,7 @@ class IgrTooltipData(ToolTipBaseData):
                         premVehQuests.append({'header': header,
                          'descr': text})
 
-        descriptionTemplate = 'igr_description' if len(qLabels) == 0 else 'igr_description_with_quests'
+        descriptionTemplate = 'igr_description' if not qLabels else 'igr_description_with_quests'
         igrPercent = (self.igrCtrl.getXPFactor() - 1) * 100
         igrType = self.igrCtrl.getRoomType()
         icon = makeHtmlString('html_templates:igr/iconBig', 'premium' if igrType == constants.IGR_TYPE.PREMIUM else 'basic')
@@ -229,11 +225,7 @@ class EfficiencyTooltipData(BlocksTooltipData):
         self._setWidth(300)
 
     def _packBlocks(self, data):
-        if data is not None and data.type in self._packers:
-            return self._packers[data.type]().pack(data.toDict())
-        else:
-            return []
-            return
+        return self._packers[data.type]().pack(data.toDict()) if data is not None and data.type in self._packers else []
 
 
 _ENV_TOOLTIPS_PATH = '#environment_tooltips:%s'
@@ -283,7 +275,7 @@ class ContactTooltipData(ToolTipBaseData):
             if resourceID == WG_GAMES.TANKS:
                 statusDescription = makeContactStatusDescription(userEntity.isOnline(), tags, userEntity.getClientInfo())
             else:
-                statusDescription = ms('#tooltips:Contact/resource/%s' % resourceID)
+                statusDescription = makeString('#tooltips:Contact/resource/%s' % resourceID)
             commonGuiData['statusDescription'] = statusDescription
             if defaultName and USER_TAG.INVALID_NAME in tags:
                 commonGuiData['userProps']['userName'] = defaultName
@@ -317,32 +309,32 @@ class ContactTooltipData(ToolTipBaseData):
                 units.append(currentUnit)
             groupsStr = ''
             userGroups = userEntity.getGroups()
-            if len(userGroups) > 0:
+            if userGroups:
                 groupsStr += ', '.join(map(lambda group: html.escape(group), userGroups))
             if clanAbbrev and USER_TAG.CLAN_MEMBER in tags:
                 groupsStr += self.__addComma(groupsStr)
                 groupsStr += makeClanFullName(clanAbbrev)
             if USER_TAG.IGNORED in tags or USER_TAG.IGNORED_TMP in tags:
                 groupsStr += self.__addComma(groupsStr)
-                groupsStr += ms(MESSENGER.MESSENGER_CONTACTS_MAINGROPS_OTHER_IGNORED)
+                groupsStr += makeString(MESSENGER.MESSENGER_CONTACTS_MAINGROPS_OTHER_IGNORED)
             if USER_TAG.SUB_PENDING_IN in tags:
                 groupsStr += self.__addComma(groupsStr)
-                groupsStr += ms(MESSENGER.MESSENGER_CONTACTS_MAINGROPS_OTHER_FRIENDSHIPREQUEST)
+                groupsStr += makeString(MESSENGER.MESSENGER_CONTACTS_MAINGROPS_OTHER_FRIENDSHIPREQUEST)
             if groupsStr != '':
                 units.append(self.__makeUnitStr(TOOLTIPS.CONTACT_UNITS_GROUPS, groupsStr + '.'))
-            if len(units) > 0:
+            if units:
                 commonGuiData['units'] = units
             return commonGuiData
 
     def __makeUnitStr(self, descr, val):
-        return makeHtmlString('html_templates:contacts/contact', 'tooltipUnitTxt', {'descr': ms(descr),
+        return makeHtmlString('html_templates:contacts/contact', 'tooltipUnitTxt', {'descr': makeString(descr),
          'value': val})
 
     def __makeIconUnitStr(self, icon, descr):
-        return self.__converter.makeIconTag(iconPath=icon) + ' ' + makeHtmlString('html_templates:contacts/contact', 'tooltipSimpleTxt', {'descr': ms(descr)})
+        return self.__converter.makeIconTag(iconPath=icon) + ' ' + makeHtmlString('html_templates:contacts/contact', 'tooltipSimpleTxt', {'descr': makeString(descr)})
 
     def __makeReferralStr(self, descr):
-        return self.__converter.makeIconTag(key='referrTag') + ' ' + makeHtmlString('html_templates:contacts/contact', 'tooltipSimpleTxt', {'descr': ms(descr)})
+        return self.__converter.makeIconTag(key='referrTag') + ' ' + makeHtmlString('html_templates:contacts/contact', 'tooltipSimpleTxt', {'descr': makeString(descr)})
 
     def __addBR(self, currentUnit):
         return '<br/>' if currentUnit != '' else ''
@@ -525,7 +517,7 @@ class SettingsButtonTooltipData(BlocksTooltipData):
         isColorBlind = self.settingsCore.getSetting('isColorBlind')
         if self.connectionMgr.peripheryID == 0:
             serverBlocks.append(self.__packServerBlock(wrapServerName(self.connectionMgr.serverUserName), self.__getPingData(self.connectionMgr.url), HOST_AVAILABILITY.IGNORED, True, isColorBlind))
-        if len(simpleHostList):
+        if simpleHostList:
             currServUrl = self.connectionMgr.url
             serverBlocks.append(self.__packServerListBlock(simpleHostList, currServUrl, isColorBlind))
         items.append(formatters.packBuildUpBlockData(serverBlocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
@@ -570,7 +562,7 @@ class SettingsButtonTooltipData(BlocksTooltipData):
     @classmethod
     def __formatServerName(cls, name, isSelected=False):
         if isSelected:
-            result = text_styles.main(name + ' ' + ms(TOOLTIPS.HEADER_MENU_SERVER_CURRENT))
+            result = text_styles.main(name + ' ' + makeString(TOOLTIPS.HEADER_MENU_SERVER_CURRENT))
         else:
             result = text_styles.standard(name)
         return result
@@ -578,10 +570,7 @@ class SettingsButtonTooltipData(BlocksTooltipData):
     @classmethod
     def __getPingData(cls, url):
         pingData = g_preDefinedHosts.getHostPingData(url)
-        if pingData.status == PING_STATUSES.REQUESTED:
-            return PingData(pingData.value, PING_STATUSES.UNDEFINED)
-        else:
-            return pingData
+        return PingData(pingData.value, PING_STATUSES.UNDEFINED) if pingData.status == PING_STATUSES.REQUESTED else pingData
 
 
 class CustomizationItemTooltipData(ToolTipBaseData):
@@ -640,9 +629,9 @@ class CustomizationItemTooltipData(ToolTipBaseData):
             descriptionText = ''
         allow = self._processVehiclesList(allow)
         deny = self._processVehiclesList(deny)
-        if boundVehicle is None and allow and len(allow) > 0:
+        if boundVehicle is None and allow:
             allowStr = ms(TOOLTIPS.CUSTOMIZATION_QUESTAWARD_EXACTVEHICLE, vehicle=', '.join(allow))
-        if boundVehicle is None and deny and len(deny) > 0:
+        if boundVehicle is None and deny:
             denyStr = ms(TOOLTIPS.CUSTOMIZATION_QUESTAWARD_DENYVEHICLE, vehicle=', '.join(deny))
         if boundToCurrentVehicle:
             usageStr = text_styles.stats(ms(TOOLTIPS.CUSTOMIZATION_QUESTAWARD_CURRENTVEHICLE))
@@ -657,7 +646,7 @@ class CustomizationItemTooltipData(ToolTipBaseData):
             footerList.append(allowStr)
         if denyStr:
             footerList.append(denyStr)
-        if len(footerList):
+        if footerList:
             footerStr = text_styles.stats('\n'.join(footerList))
         return {'header': text_styles.highTitle(ms(headerText)),
          'kind': text_styles.main(typeText),
@@ -738,16 +727,16 @@ class ToolTipRefSysDescription(ToolTipBaseData):
          'bottomTF': self.__makeMainText(TOOLTIPS.TOOLTIPREFSYSDESCRIPTION_BOTTOM_BOTTOMTF)}
 
     def __makeTitle(self):
-        return text_styles.highTitle(ms(TOOLTIPS.TOOLTIPREFSYSDESCRIPTION_HEADER_TITLETF))
+        return text_styles.highTitle(makeString(TOOLTIPS.TOOLTIPREFSYSDESCRIPTION_HEADER_TITLETF))
 
     def __makeMainText(self, value):
-        return text_styles.main(ms(value))
+        return text_styles.main(makeString(value))
 
     def __makeConditions(self):
-        return text_styles.standard(ms(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_CONDITIONS, top=self.refSystem.getPosByXPinTeam()))
+        return text_styles.standard(makeString(TOOLTIPS.TOOLTIPREFSYSAWARDS_INFOBODY_CONDITIONS, top=self.refSystem.getPosByXPinTeam()))
 
     def __makeStandardText(self, value):
-        return text_styles.standard(ms(value))
+        return text_styles.standard(makeString(value))
 
     def __makeBlocks(self):
         result = []
@@ -842,11 +831,11 @@ class ToolTipRefSysXPMultiplier(ToolTipBaseData):
 
     def getDisplayableData(self):
         icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NORMALXPICON, 16, 16, -3, 0)
-        expNum = text_styles.credits(ms(BigWorld.wg_getNiceNumberFormat(self.refSystem.getMaxReferralXPPool())))
-        titleText = text_styles.highTitle(ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_TITLE))
-        descriptionText = text_styles.main(ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_DESCRIPTION))
-        conditionsText = text_styles.standard(ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS))
-        bottomText = text_styles.main(ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_BOTTOM, expNum=expNum + '<nobr>' + icon))
+        expNum = text_styles.credits(makeString(BigWorld.wg_getNiceNumberFormat(self.refSystem.getMaxReferralXPPool())))
+        titleText = text_styles.highTitle(makeString(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_TITLE))
+        descriptionText = text_styles.main(makeString(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_DESCRIPTION))
+        conditionsText = text_styles.standard(makeString(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS))
+        bottomText = text_styles.main(makeString(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_BOTTOM, expNum=expNum + '<nobr>' + icon))
         xpBlocks = []
         for i, (period, bonus) in enumerate(self.refSystem.getRefPeriods()):
             xpBonus = 'x%s' % BigWorld.wg_getNiceNumberFormat(bonus)
@@ -863,8 +852,8 @@ class ToolTipRefSysXPMultiplier(ToolTipBaseData):
 
     def __formatPeriod(self, period):
         if period <= 24:
-            return ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS_HOURS, hoursNum=period)
-        return ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS_DAYS, daysNum=period / 24) if period <= 8760 else ms(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS_OTHER)
+            return makeString(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS_HOURS, hoursNum=period)
+        return makeString(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS_DAYS, daysNum=period / 24) if period <= 8760 else makeString(TOOLTIPS.TOOLTIPREFSYSXPMULTIPLIER_CONDITIONS_OTHER)
 
 
 class _BattleStatus(object):
@@ -878,7 +867,7 @@ class _BattleStatus(object):
         self.prefix = prefix
 
     def getMsgText(self):
-        return ms(self.msg)
+        return makeString(self.msg)
 
     def getResText(self, count):
         return ''.join((self.style('%s %s' % (self.prefix, BigWorld.wg_getIntegralFormat(count))), icons.nut()))
@@ -1082,11 +1071,11 @@ class QuestVehiclesBonusTooltipData(ToolTipBaseData):
             col1Str = '<br>'.join(vehiclesList[:maxColumnLen])
             col2 = vehiclesList[maxColumnLen:maxItemsLen - 1]
             vehiclesLeft = vehiclesListLen - maxItemsLen - 1
-            moreVehsStr = ms(TOOLTIPS.QUESTS_VEHICLESBONUS_VEHICLESLEFT, count=vehiclesLeft)
+            moreVehsStr = makeString(TOOLTIPS.QUESTS_VEHICLESBONUS_VEHICLESLEFT, count=vehiclesLeft)
             col2.append(text_styles.warning(moreVehsStr))
             col2Str = '<br>'.join(col2)
             columns = [col1Str, col2Str]
-        return {'name': ms(TOOLTIPS.QUESTS_VEHICLESBONUS_TITLE),
+        return {'name': makeString(TOOLTIPS.QUESTS_VEHICLESBONUS_TITLE),
          'columns': columns}
 
 
@@ -1199,12 +1188,11 @@ _OPERATIONS_SETTINGS = {CURRENCY_SETTINGS.BUY_CREDITS_PRICE: _CurrencySetting(TO
  CURRENCY_SETTINGS.UNLOCK_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_UNLOCK_PRICE, icons.xp(), text_styles.expText, ICON_TEXT_FRAMES.XP)}
 
 def _getCurrencySetting(key):
-    if key in _OPERATIONS_SETTINGS:
-        return _OPERATIONS_SETTINGS[key]
-    else:
+    if key not in _OPERATIONS_SETTINGS:
         LOG_ERROR('Unsupported currency type "' + key + '"!')
         return None
-        return None
+    else:
+        return _OPERATIONS_SETTINGS[key]
 
 
 def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, percent=0, valueWidth=-1, leftPadding=61):
@@ -1227,7 +1215,7 @@ def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, perc
             neededText = text_styles.concatStylesToSingleLine(text_styles.main('('), text_styles.error(TOOLTIPS.VEHICLE_GRAPH_BODY_NOTENOUGH), ' ', needFormatted, ' ', icon, text_styles.main(')'))
         text = text_styles.concatStylesWithSpace(text_styles.main(settings.text), neededText)
         if hasAction:
-            actionText = text_styles.main(ms(TOOLTIPS.VEHICLE_ACTION_PRC, actionPrc=text_styles.stats(str(percent) + '%'), oldPrice=oldPriceText))
+            actionText = text_styles.main(makeString(TOOLTIPS.VEHICLE_ACTION_PRC, actionPrc=text_styles.stats(str(percent) + '%'), oldPrice=oldPriceText))
             text = text_styles.concatStylesToMultiLine(text, actionText)
             settingsFrame = settings.frame
             if settingsFrame in Currency.ALL:
@@ -1256,13 +1244,13 @@ class SettingsBaseKey(BlocksTooltipData):
 
     def _getEnemyDescription(self):
         enemyDescriptionHtml = makeHtmlString(SettingsBaseKey.TEMPLATE_NAME, 'enemy_description')
-        return text_styles.main(ms(TOOLTIPS.SETTINGS_KEY_ENEMY_BODY, enemy=enemyDescriptionHtml % i18n.makeString(TOOLTIPS.SETTINGS_KEY_TARGET_ENEMY)))
+        return text_styles.main(makeString(TOOLTIPS.SETTINGS_KEY_ENEMY_BODY, enemy=enemyDescriptionHtml % i18n.makeString(TOOLTIPS.SETTINGS_KEY_TARGET_ENEMY)))
 
     def _packBlocks(self, *args):
         tooltipBlocks = super(SettingsBaseKey, self)._packBlocks()
         headerBlock = formatters.packTitleDescBlock(text_styles.highTitle(TOOLTIPS.SETTINGS_KEYFOLLOWME_TITLE))
         allyDescriptionHtml = makeHtmlString(SettingsBaseKey.TEMPLATE_NAME, 'ally_description')
-        allyDescription = text_styles.main(ms(TOOLTIPS.SETTINGS_KEY_ALLY_BODY, ally=allyDescriptionHtml % i18n.makeString(TOOLTIPS.SETTINGS_KEY_TARGET_ALLY)))
+        allyDescription = text_styles.main(makeString(TOOLTIPS.SETTINGS_KEY_ALLY_BODY, ally=allyDescriptionHtml % i18n.makeString(TOOLTIPS.SETTINGS_KEY_TARGET_ALLY)))
         enemyBlock = formatters.packImageTextBlockData(title=text_styles.middleTitle(self._enemyBlockTitle), desc=self._getEnemyDescription(), img=self._enemyBlockImage, imgPadding={'left': -4,
          'right': 4}, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding={'top': -8})
         allyBlock = formatters.packImageTextBlockData(title=text_styles.middleTitle(self._allyBlockTitle), desc=allyDescription, img=self._allyBlockImage, imgPadding={'left': -4,

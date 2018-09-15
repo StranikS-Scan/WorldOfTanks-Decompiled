@@ -6,8 +6,7 @@ from functools import partial
 import BattleReplay
 import BigWorld
 import SoundGroups
-from bootcamp.Bootcamp import g_bootcamp
-from constants import HINT_TYPE
+from bootcamp.BootcampConstants import HINT_TYPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import BootcampEvent
@@ -159,9 +158,6 @@ class SecondaryHintController(object):
 
 class PrimaryHintControllerReplayRecorder(PrimaryHintController):
 
-    def __init__(self, system, hintId, typeId, completed, timeCompleted, timeCooldown, message, voiceover):
-        super(PrimaryHintControllerReplayRecorder, self).__init__(system, hintId, typeId, completed, timeCompleted, timeCooldown, message, voiceover)
-
     def show(self):
         super(PrimaryHintControllerReplayRecorder, self).show()
         self.serializeMethod('bootcampHint_show', (self.id,
@@ -234,7 +230,7 @@ class ReplayHintPlaySystem:
         return
 
     def update(self):
-        while len(self.__commandBuffer):
+        while self.__commandBuffer:
             command, id, typeId, completed, message, voiceover, muted = self.__commandBuffer[0]
             if command == ReplayHintPlaySystem.COMMAND_SHOW:
                 self.__hints[id] = PrimaryHintController(self.__hintSystem, id, typeId, completed, 0, 0, message, voiceover)

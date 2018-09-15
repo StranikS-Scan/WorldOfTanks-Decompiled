@@ -962,6 +962,50 @@
       <devices>	105	</devices>
     </damage>
   </_76mm_UOF-354KA>
+  <_76mm_AP_M79>
+    <id>	204	</id>
+    <userString>	#ussr_vehicles:_76mm_AP_M79	</userString>
+    <icon>	ap	</icon>
+    <price>	96	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	76	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumArmorPiercing	</effects>
+    <damage>
+      <armor>	115	</armor>
+      <devices>	105	</devices>
+    </damage>
+  </_76mm_AP_M79>
+  <_76mm_HVAP_M93>
+    <id>	205	</id>
+    <userString>	#ussr_vehicles:_76mm_HVAP_M93	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	7	  <gold></gold>
+    </price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	76	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	115	</armor>
+      <devices>	105	</devices>
+    </damage>
+  </_76mm_HVAP_M93>
+  <_76mm_HE_M42A1>
+    <id>	206	</id>
+    <userString>	#ussr_vehicles:_76mm_HE_M42A1	</userString>
+    <icon>	he	</icon>
+    <price>	68	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	76	</caliber>
+    <explosionRadius>	1.09	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	185	</armor>
+      <devices>	105	</devices>
+    </damage>
+  </_76mm_HE_M42A1>
   <_85mm_UBR-365K>
     <id>	36	</id>
     <userString>	#ussr_vehicles:_85mm_UBR-365K	</userString>

@@ -7,7 +7,6 @@ from helpers import getClientOverride, dependency
 from skeletons.gui.game_control import IWalletController, ITradeInController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
-from bootcamp.Bootcamp import g_bootcamp
 
 class GlobalVarsManager(GlobalVarsMgrMeta):
     _isLoginLoadInfoRequested = False
@@ -15,9 +14,6 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
     wallet = dependency.descriptor(IWalletController)
     tradeIn = dependency.descriptor(ITradeInController)
     lobbyContext = dependency.descriptor(ILobbyContext)
-
-    def __init__(self):
-        super(GlobalVarsManager, self).__init__()
 
     def isDevelopment(self):
         return constants.IS_DEVELOPMENT
@@ -57,10 +53,7 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
         return self.lobbyContext.getServerSettings().roaming.isInRoaming()
 
     def isWalletAvailable(self):
-        if self.wallet:
-            return self.wallet.isAvailable
-        else:
-            return False
+        return self.wallet.isAvailable if self.wallet else False
 
     def isShowLoginRssFeed(self):
         return GUI_SETTINGS.loginRssFeed.show
@@ -71,21 +64,17 @@ class GlobalVarsManager(GlobalVarsMgrMeta):
     def isRentalsEnabled(self):
         return constants.IS_RENTALS_ENABLED
 
-    def isPotapovQuestEnabled(self):
-        return self.lobbyContext.getServerSettings().isPotapovQuestEnabled()
+    def isPersonalMissionsEnabled(self):
+        return self.lobbyContext.getServerSettings().isPersonalMissionsEnabled()
 
     def isLoginLoadedAtFirstTime(self):
         if GlobalVarsManager._isLoginLoadInfoRequested:
             return False
-        else:
-            GlobalVarsManager._isLoginLoadInfoRequested = True
-            return True
+        GlobalVarsManager._isLoginLoadInfoRequested = True
+        return True
 
     def isVehicleRestoreEnabled(self):
         return self.lobbyContext.getServerSettings().isVehicleRestoreEnabled()
 
     def isTradeInEnabled(self):
         return self.tradeIn.isEnabled()
-
-    def isBootcampFinished(self):
-        return g_bootcamp.isFinished()

@@ -15,6 +15,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.app_loader import g_appLoader
 from gui.shared import event_dispatcher
 from gui.shared.formatters import text_styles, icons
+from gui.sounds.ambients import LobbySubViewEnv
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from helpers import i18n, getShortClientVersion, dependency
@@ -33,6 +34,7 @@ def _getVersionMessage(promo):
 
 
 class LobbyMenu(LobbyMenuMeta):
+    __sound_env__ = LobbySubViewEnv
     promo = dependency.descriptor(IPromoController)
     bootcamp = dependency.descriptor(IBootcampController)
     lobbyContext = dependency.descriptor(ILobbyContext)

@@ -60,11 +60,7 @@ class PluginsCollection(IPlugin):
         return
 
     def getPlugin(self, name):
-        if name in self.__plugins:
-            return self.__plugins[name]
-        else:
-            return None
-            return None
+        return self.__plugins[name] if name in self.__plugins else None
 
     def init(self, *args):
         self._invoke('init', *args)

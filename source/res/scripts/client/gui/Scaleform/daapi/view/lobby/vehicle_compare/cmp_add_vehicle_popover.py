@@ -84,9 +84,6 @@ class VehicleCompareAddVehiclePopover(VehicleCompareAddVehiclePopoverMeta, Vehic
     def onWindowClose(self):
         self.destroy()
 
-    def _onRegisterFlashComponent(self, viewPy, alias):
-        super(VehicleCompareAddVehiclePopover, self)._onRegisterFlashComponent(viewPy, alias)
-
     def _populate(self):
         super(VehicleCompareAddVehiclePopover, self)._populate()
         self.__initControls()

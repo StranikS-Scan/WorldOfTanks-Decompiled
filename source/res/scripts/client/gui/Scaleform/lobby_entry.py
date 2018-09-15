@@ -10,6 +10,7 @@ from gui.Scaleform.framework.managers import LoaderManager, ContainerManager
 from gui.Scaleform.framework.managers.CacheManager import CacheManager
 from gui.Scaleform.framework.managers.ImageManager import ImageManager
 from gui.Scaleform.framework.managers.TutorialManager import TutorialManager
+from gui.Scaleform.framework.managers.BootcampManager import BootcampManager
 from gui.Scaleform.framework.managers.containers import DefaultContainer
 from gui.Scaleform.framework.managers.containers import PopUpContainer
 from gui.Scaleform.framework.managers.context_menu import ContextMenuManager
@@ -25,8 +26,11 @@ from gui.Scaleform.managers.UtilsManager import UtilsManager
 from gui.Scaleform.managers.voice_chat import LobbyVoiceChatManager
 from gui.shared import EVENT_BUS_SCOPE
 from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
+from helpers import dependency
+from skeletons.gui.game_control import IBootcampController
 
 class LobbyEntry(SFApplication):
+    bootcampCtrl = dependency.descriptor(IBootcampController)
 
     def __init__(self, appNS):
         super(LobbyEntry, self).__init__('lobby.swf', appNS)
@@ -100,6 +104,9 @@ class LobbyEntry(SFApplication):
 
     def _createTutorialManager(self):
         return TutorialManager(self.proxy, True, 'gui/tutorial-lobby-gui.xml')
+
+    def _createBootcampManager(self):
+        return BootcampManager(self.bootcampCtrl.isInBootcamp(), 'scripts/bootcamp_docs/bootcamp_manager.xml')
 
     def _setup(self):
         self.movie.backgroundAlpha = 0.0

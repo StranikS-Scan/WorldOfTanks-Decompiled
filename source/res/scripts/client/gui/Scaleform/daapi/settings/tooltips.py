@@ -1,13 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/settings/tooltips.py
+from gui.Scaleform.daapi.view.lobby.customization.tooltips import ElementTooltip as CustomizationElementTooltip, QuestElementTooltip as CustomizationQuestElementTooltip
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_calendar_day_tooltip import RankedCalendarDayTooltip
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_calendar_steps_tooltip import RankedCalendarStepsTooltip
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_selector_tooltip import RankedSelectorTooltip
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_step_tooltip import RankedStepTooltip
-from gui.shared.tooltips import vehicle, tankman, skill, shell, module, achievement, cybersport, common, contexts, battle_consumable, potapovquests, tutorial, fortifications, clans, boosters, veh_cmp, quests, ranked, battle_booster, bootcamp
-from gui.Scaleform.daapi.view.lobby.customization.tooltips import BonusTooltip as CustomizationBonusTooltip
-from gui.Scaleform.daapi.view.lobby.customization.tooltips import ElementTooltip as CustomizationElementTooltip, QuestElementTooltip as CustomizationQuestElementTooltip
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.shared.tooltips import vehicle, tankman, skill, shell, module, achievement, cybersport, common, contexts, battle_consumable, tutorial, fortifications, boosters, veh_cmp, quests, ranked, battle_booster, bootcamp, personal_missions, elen
 from gui.shared.tooltips.filter import VehicleFilterTooltip
 from gui.shared.tooltips.wgm_currency import WGMGoldCurrencyTooltip, WGMCreditsCurrencyTooltip
 DYNAMIC_TOOLTIPS = {TOOLTIPS_CONSTANTS.GOLD_STATS: WGMGoldCurrencyTooltip(contexts.ToolTipContext(None)),
@@ -40,7 +39,7 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
                      'method': None,
                      'complex': None},
  TOOLTIPS_CONSTANTS.MARK_OF_MASTERY: {'tooltip': TOOLTIPS_CONSTANTS.MARK_OF_MASTERY_UI,
-                                      'method': achievement.AchievementTooltipData(contexts.BattleResultMarkOfMasteryContext()).buildToolTip,
+                                      'method': achievement.AchievementTooltipData(contexts.BattleResultMarkOfMasteryContext(fieldsToExclude=('showCondSeparator',))).buildToolTip,
                                       'complex': None},
  TOOLTIPS_CONSTANTS.CAROUSEL_VEHICLE: {'tooltip': TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI,
                                        'method': vehicle.VehicleInfoTooltipData(contexts.CarouselContext()).buildToolTip,
@@ -258,24 +257,6 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM: {'tooltip': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI,
                                               'method': CustomizationElementTooltip(contexts.TechCustomizationContext()).buildToolTip,
                                               'complex': None},
- TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_BONUS: {'tooltip': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_BONUS_UI,
-                                               'method': CustomizationBonusTooltip(contexts.TechCustomizationContext()).buildToolTip,
-                                               'complex': None},
- TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_TILE: {'tooltip': TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_UI,
-                                          'method': potapovquests.PrivateQuestsTileTooltipData(contexts.PotapovQuestsTileContext()).buildToolTip,
-                                          'complex': None},
- TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_FALLOUT_TILE: {'tooltip': TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_UI,
-                                                  'method': potapovquests.PrivateQuestsFalloutTileTooltipData(contexts.PotapovQuestsTileContext()).buildToolTip,
-                                                  'complex': None},
- TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_CHAIN: {'tooltip': TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_UI,
-                                           'method': potapovquests.PrivateQuestsChainTooltipData(contexts.PotapovQuestsChainContext()).buildToolTip,
-                                           'complex': None},
- TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_FEMALE_TANKMAN_AWARD: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
-                                                          'method': potapovquests.FemaleTankmanAwardTooltipData().buildToolTip,
-                                                          'complex': None},
- TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_TOKENS_AWARD: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
-                                                  'method': potapovquests.TokensAwardTooltipData().buildToolTip,
-                                                  'complex': None},
  TOOLTIPS_CONSTANTS.QUESTS_VEHICLE_BONUSES: {'tooltip': TOOLTIPS_CONSTANTS.COLUMN_FIELDS_UI,
                                              'method': common.QuestVehiclesBonusTooltipData(contexts.QuestContext()).buildToolTip,
                                              'complex': None},
@@ -307,8 +288,14 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
                                      'method': quests.QuestsPreviewTooltipData(contexts.QuestsBoosterContext()).buildToolTip,
                                      'complex': None},
  TOOLTIPS_CONSTANTS.PERSONAL_QUESTS_PREVIEW: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
-                                              'method': quests.PersonalQuestsPreviewTooltipData(contexts.QuestsBoosterContext()).buildToolTip,
+                                              'method': personal_missions.PersonalMissionPreviewTooltipData(contexts.PersonalMissionContext()).buildToolTip,
                                               'complex': None},
+ TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_TANKWOMAN: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                                  'method': personal_missions.TankwomanTooltipData(contexts.PersonalMissionContext()).buildToolTip,
+                                                  'complex': None},
+ TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_TANKMODULE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                                   'method': personal_missions.TankModuleTooltipData(contexts.PersonalMissionContext()).buildToolTip,
+                                                   'complex': None},
  TOOLTIPS_CONSTANTS.SHEDULE_QUEST: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                     'method': quests.ScheduleQuestTooltipData(contexts.QuestContext()).buildToolTip,
                                     'complex': None},
@@ -383,4 +370,37 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
                                            'complex': None},
  TOOLTIPS_CONSTANTS.BOOTCAMP_AWARD_MEDAL: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                            'method': bootcamp.StatsTooltipData(contexts.ToolTipContext(None)).buildToolTip,
-                                           'complex': None}}
+                                           'complex': None},
+ TOOLTIPS_CONSTANTS.EVENT_QUESTS_PREVIEW: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                           'method': elen.ElenPreviewTooltipData(contexts.QuestsBoosterContext()).buildToolTip,
+                                           'complex': None},
+ TOOLTIPS_CONSTANTS.FREE_SHEET: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                 'method': personal_missions.FreeSheetTooltip(contexts.ToolTipContext(None)).buildToolTip,
+                                 'complex': None},
+ TOOLTIPS_CONSTANTS.FREE_SHEET_RETURN: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                        'method': personal_missions.FreeSheetReturnTooltip(contexts.ToolTipContext(None)).buildToolTip,
+                                        'complex': None},
+ TOOLTIPS_CONSTANTS.FREE_SHEET_NOT_ENOUGH: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                            'method': personal_missions.FreeSheetNotEnoughTooltip(contexts.ToolTipContext(None)).buildToolTip,
+                                            'complex': None},
+ TOOLTIPS_CONSTANTS.FREE_SHEET_USED: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                      'method': personal_missions.FreeSheetUsedTooltip(contexts.ToolTipContext(None)).buildToolTip,
+                                      'complex': None},
+ TOOLTIPS_CONSTANTS.BADGE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                            'method': personal_missions.BadgeTooltipData(contexts.ToolTipContext(None)).buildToolTip,
+                            'complex': None},
+ TOOLTIPS_CONSTANTS.OPERATION: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                'method': personal_missions.OperationTooltipData(contexts.PersonalMissionOperationContext()).buildToolTip,
+                                'complex': None},
+ TOOLTIPS_CONSTANTS.PERSONAL_MISSION_INFO: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                            'method': personal_missions.PersonalMissionInfoTooltipData(contexts.ToolTipContext(None)).buildToolTip,
+                                            'complex': None},
+ TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_MAP_REGION: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                                   'method': personal_missions.PersonalMissionsMapRegionTooltipData(contexts.PersonalMissionContext()).buildToolTip,
+                                                   'complex': None},
+ TOOLTIPS_CONSTANTS.EVENT_BOARDS_BADGE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                         'method': elen.BadgeTooltipData(contexts.ToolTipContext(None)).buildToolTip,
+                                         'complex': None},
+ TOOLTIPS_CONSTANTS.EVENT_BOARDS_BADGES_GROUP: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                                'method': elen.BabgesGroupTooltipData(contexts.QuestContext()).buildToolTip,
+                                                'complex': None}}

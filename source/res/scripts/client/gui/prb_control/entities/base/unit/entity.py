@@ -377,9 +377,6 @@ class _UnitEntity(BaseUnitEntity, ListenersCollection):
         self.clear()
         return super(_UnitEntity, self).fini(ctx=ctx, woEvents=woEvents)
 
-    def showGUI(self, ctx=None):
-        return super(_UnitEntity, self).showGUI(ctx)
-
     def getEntityType(self):
         return self._prbType
 
@@ -867,10 +864,7 @@ class UnitEntity(_UnitEntity):
     def getCensoredComment(self, unitMgrID=None):
         _, unit = self.getUnit(unitMgrID=unitMgrID)
         pInfo = self.getPlayerInfo(unitMgrID=unitMgrID)
-        if not pInfo.isCommander():
-            return passCensor(unit.getComment())
-        else:
-            return unit.getComment()
+        return passCensor(unit.getComment()) if not pInfo.isCommander() else unit.getComment()
 
     def getExtra(self, unitMgrID=None):
         _, unit = self.getUnit(unitMgrID=unitMgrID)

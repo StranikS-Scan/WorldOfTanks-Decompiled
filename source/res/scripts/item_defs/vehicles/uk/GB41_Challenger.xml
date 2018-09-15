@@ -131,7 +131,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	3.11	</textureScale>
+        <textureScale>	-3.1	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -205,16 +205,16 @@
           <startIndex>	0	</startIndex>
           <count>	6	</count>
           <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.07	</maxOffset>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
         </group>
         <group>
           <template>	Track_R	</template>
           <startIndex>	0	</startIndex>
           <count>	6	</count>
           <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.07	</maxOffset>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
         </group>
       </groundNodes>
       <splineDesc>
@@ -238,15 +238,13 @@
         <maxOffset>	0.1	</maxOffset>
         <gravity>	-9	</gravity>
         <elasticity>	1000	</elasticity>
-        <damping>	5	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
+        <damping>	2	</damping>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.113	</offset>
           <rightSibling>	Track_VT_L1	</rightSibling>
         </node>
         <node>
@@ -254,6 +252,7 @@
           <name>	Track_VT_L1	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.158	</offset>
           <leftSibling>	Track_VT_L0	</leftSibling>
           <rightSibling>	Track_VT_L2	</rightSibling>
         </node>
@@ -262,6 +261,7 @@
           <name>	Track_VT_L2	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.19	</offset>
           <leftSibling>	Track_VT_L1	</leftSibling>
           <rightSibling>	Track_VT_L3	</rightSibling>
         </node>
@@ -270,6 +270,7 @@
           <name>	Track_VT_L3	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.144	</offset>
           <leftSibling>	Track_VT_L2	</leftSibling>
           <rightSibling>	Track_VT_L4	</rightSibling>
         </node>
@@ -278,6 +279,7 @@
           <name>	Track_VT_L4	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.179	</offset>
           <leftSibling>	Track_VT_L3	</leftSibling>
           <rightSibling>	Track_VT_L5	</rightSibling>
         </node>
@@ -286,6 +288,7 @@
           <name>	Track_VT_L5	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.141	</offset>
           <leftSibling>	Track_VT_L4	</leftSibling>
           <rightSibling>	Track_VT_L6	</rightSibling>
         </node>
@@ -294,6 +297,7 @@
           <name>	Track_VT_L6	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.185	</offset>
           <leftSibling>	Track_VT_L5	</leftSibling>
           <rightSibling>	Track_VT_L7	</rightSibling>
         </node>
@@ -302,6 +306,7 @@
           <name>	Track_VT_L7	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.134	</offset>
           <leftSibling>	Track_VT_L6	</leftSibling>
           <rightSibling>	Track_VT_L8	</rightSibling>
         </node>
@@ -310,6 +315,7 @@
           <name>	Track_VT_L8	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.183	</offset>
           <leftSibling>	Track_VT_L7	</leftSibling>
           <rightSibling>	Track_VT_L9	</rightSibling>
         </node>
@@ -318,6 +324,7 @@
           <name>	Track_VT_L9	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.12	</offset>
           <leftSibling>	Track_VT_L8	</leftSibling>
           <rightSibling>	Track_VT_L10	</rightSibling>
         </node>
@@ -326,6 +333,7 @@
           <name>	Track_VT_L10	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.168	</offset>
           <leftSibling>	Track_VT_L9	</leftSibling>
           <rightSibling>	Track_VT_L11	</rightSibling>
         </node>
@@ -334,6 +342,7 @@
           <name>	Track_VT_L11	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	2.1	</backwardElastK>
+          <offset>	-0.115	</offset>
           <leftSibling>	Track_VT_L10	</leftSibling>
           <rightSibling>	Track_VT_L12	</rightSibling>
         </node>
@@ -342,6 +351,7 @@
           <name>	Track_VT_L12	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.094	</offset>
           <leftSibling>	Track_VT_L11	</leftSibling>
         </node>
         <node>
@@ -349,6 +359,7 @@
           <name>	Track_VT_R0	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.113	</offset>
           <rightSibling>	Track_VT_R1	</rightSibling>
         </node>
         <node>
@@ -356,6 +367,7 @@
           <name>	Track_VT_R1	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.158	</offset>
           <leftSibling>	Track_VT_R0	</leftSibling>
           <rightSibling>	Track_VT_R2	</rightSibling>
         </node>
@@ -364,6 +376,7 @@
           <name>	Track_VT_R2	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.19	</offset>
           <leftSibling>	Track_VT_R1	</leftSibling>
           <rightSibling>	Track_VT_R3	</rightSibling>
         </node>
@@ -372,6 +385,7 @@
           <name>	Track_VT_R3	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.144	</offset>
           <leftSibling>	Track_VT_R2	</leftSibling>
           <rightSibling>	Track_VT_R4	</rightSibling>
         </node>
@@ -380,6 +394,7 @@
           <name>	Track_VT_R4	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.179	</offset>
           <leftSibling>	Track_VT_R3	</leftSibling>
           <rightSibling>	Track_VT_R5	</rightSibling>
         </node>
@@ -388,6 +403,7 @@
           <name>	Track_VT_R5	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.141	</offset>
           <leftSibling>	Track_VT_R4	</leftSibling>
           <rightSibling>	Track_VT_R6	</rightSibling>
         </node>
@@ -396,6 +412,7 @@
           <name>	Track_VT_R6	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.185	</offset>
           <leftSibling>	Track_VT_R5	</leftSibling>
           <rightSibling>	Track_VT_R7	</rightSibling>
         </node>
@@ -404,6 +421,7 @@
           <name>	Track_VT_R7	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.134	</offset>
           <leftSibling>	Track_VT_R6	</leftSibling>
           <rightSibling>	Track_VT_R8	</rightSibling>
         </node>
@@ -412,6 +430,7 @@
           <name>	Track_VT_R8	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.183	</offset>
           <leftSibling>	Track_VT_R7	</leftSibling>
           <rightSibling>	Track_VT_R9	</rightSibling>
         </node>
@@ -420,6 +439,7 @@
           <name>	Track_VT_R9	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.12	</offset>
           <leftSibling>	Track_VT_R8	</leftSibling>
           <rightSibling>	Track_VT_R10	</rightSibling>
         </node>
@@ -428,6 +448,7 @@
           <name>	Track_VT_R10	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.168	</offset>
           <leftSibling>	Track_VT_R9	</leftSibling>
           <rightSibling>	Track_VT_R11	</rightSibling>
         </node>
@@ -436,6 +457,7 @@
           <name>	Track_VT_R11	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	2.1	</backwardElastK>
+          <offset>	-0.115	</offset>
           <leftSibling>	Track_VT_R10	</leftSibling>
           <rightSibling>	Track_VT_R12	</rightSibling>
         </node>
@@ -444,6 +466,7 @@
           <name>	Track_VT_R12	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.094	</offset>
           <leftSibling>	Track_VT_R11	</leftSibling>
         </node>
         <node>
@@ -512,7 +535,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	3.11	</textureScale>
+        <textureScale>	-3.1	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -586,16 +609,16 @@
           <startIndex>	0	</startIndex>
           <count>	6	</count>
           <isLeft>	true	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.07	</maxOffset>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
         </group>
         <group>
           <template>	Track_R	</template>
           <startIndex>	0	</startIndex>
           <count>	6	</count>
           <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.07	</maxOffset>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
         </group>
       </groundNodes>
       <splineDesc>
@@ -619,15 +642,13 @@
         <maxOffset>	0.1	</maxOffset>
         <gravity>	-9	</gravity>
         <elasticity>	1000	</elasticity>
-        <damping>	5	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
+        <damping>	2	</damping>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.113	</offset>
           <rightSibling>	Track_VT_L1	</rightSibling>
         </node>
         <node>
@@ -635,6 +656,7 @@
           <name>	Track_VT_L1	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.158	</offset>
           <leftSibling>	Track_VT_L0	</leftSibling>
           <rightSibling>	Track_VT_L2	</rightSibling>
         </node>
@@ -643,6 +665,7 @@
           <name>	Track_VT_L2	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.19	</offset>
           <leftSibling>	Track_VT_L1	</leftSibling>
           <rightSibling>	Track_VT_L3	</rightSibling>
         </node>
@@ -651,6 +674,7 @@
           <name>	Track_VT_L3	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.144	</offset>
           <leftSibling>	Track_VT_L2	</leftSibling>
           <rightSibling>	Track_VT_L4	</rightSibling>
         </node>
@@ -659,6 +683,7 @@
           <name>	Track_VT_L4	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.179	</offset>
           <leftSibling>	Track_VT_L3	</leftSibling>
           <rightSibling>	Track_VT_L5	</rightSibling>
         </node>
@@ -667,6 +692,7 @@
           <name>	Track_VT_L5	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.141	</offset>
           <leftSibling>	Track_VT_L4	</leftSibling>
           <rightSibling>	Track_VT_L6	</rightSibling>
         </node>
@@ -675,6 +701,7 @@
           <name>	Track_VT_L6	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.185	</offset>
           <leftSibling>	Track_VT_L5	</leftSibling>
           <rightSibling>	Track_VT_L7	</rightSibling>
         </node>
@@ -683,6 +710,7 @@
           <name>	Track_VT_L7	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.134	</offset>
           <leftSibling>	Track_VT_L6	</leftSibling>
           <rightSibling>	Track_VT_L8	</rightSibling>
         </node>
@@ -691,6 +719,7 @@
           <name>	Track_VT_L8	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.183	</offset>
           <leftSibling>	Track_VT_L7	</leftSibling>
           <rightSibling>	Track_VT_L9	</rightSibling>
         </node>
@@ -699,6 +728,7 @@
           <name>	Track_VT_L9	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.12	</offset>
           <leftSibling>	Track_VT_L8	</leftSibling>
           <rightSibling>	Track_VT_L10	</rightSibling>
         </node>
@@ -707,6 +737,7 @@
           <name>	Track_VT_L10	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.168	</offset>
           <leftSibling>	Track_VT_L9	</leftSibling>
           <rightSibling>	Track_VT_L11	</rightSibling>
         </node>
@@ -715,6 +746,7 @@
           <name>	Track_VT_L11	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	2.1	</backwardElastK>
+          <offset>	-0.115	</offset>
           <leftSibling>	Track_VT_L10	</leftSibling>
           <rightSibling>	Track_VT_L12	</rightSibling>
         </node>
@@ -723,6 +755,7 @@
           <name>	Track_VT_L12	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.094	</offset>
           <leftSibling>	Track_VT_L11	</leftSibling>
         </node>
         <node>
@@ -730,6 +763,7 @@
           <name>	Track_VT_R0	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.113	</offset>
           <rightSibling>	Track_VT_R1	</rightSibling>
         </node>
         <node>
@@ -737,6 +771,7 @@
           <name>	Track_VT_R1	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.158	</offset>
           <leftSibling>	Track_VT_R0	</leftSibling>
           <rightSibling>	Track_VT_R2	</rightSibling>
         </node>
@@ -745,6 +780,7 @@
           <name>	Track_VT_R2	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.19	</offset>
           <leftSibling>	Track_VT_R1	</leftSibling>
           <rightSibling>	Track_VT_R3	</rightSibling>
         </node>
@@ -753,6 +789,7 @@
           <name>	Track_VT_R3	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.144	</offset>
           <leftSibling>	Track_VT_R2	</leftSibling>
           <rightSibling>	Track_VT_R4	</rightSibling>
         </node>
@@ -761,6 +798,7 @@
           <name>	Track_VT_R4	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.179	</offset>
           <leftSibling>	Track_VT_R3	</leftSibling>
           <rightSibling>	Track_VT_R5	</rightSibling>
         </node>
@@ -769,6 +807,7 @@
           <name>	Track_VT_R5	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.141	</offset>
           <leftSibling>	Track_VT_R4	</leftSibling>
           <rightSibling>	Track_VT_R6	</rightSibling>
         </node>
@@ -777,6 +816,7 @@
           <name>	Track_VT_R6	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.185	</offset>
           <leftSibling>	Track_VT_R5	</leftSibling>
           <rightSibling>	Track_VT_R7	</rightSibling>
         </node>
@@ -785,6 +825,7 @@
           <name>	Track_VT_R7	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.134	</offset>
           <leftSibling>	Track_VT_R6	</leftSibling>
           <rightSibling>	Track_VT_R8	</rightSibling>
         </node>
@@ -793,6 +834,7 @@
           <name>	Track_VT_R8	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.183	</offset>
           <leftSibling>	Track_VT_R7	</leftSibling>
           <rightSibling>	Track_VT_R9	</rightSibling>
         </node>
@@ -801,6 +843,7 @@
           <name>	Track_VT_R9	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.12	</offset>
           <leftSibling>	Track_VT_R8	</leftSibling>
           <rightSibling>	Track_VT_R10	</rightSibling>
         </node>
@@ -809,6 +852,7 @@
           <name>	Track_VT_R10	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.168	</offset>
           <leftSibling>	Track_VT_R9	</leftSibling>
           <rightSibling>	Track_VT_R11	</rightSibling>
         </node>
@@ -817,6 +861,7 @@
           <name>	Track_VT_R11	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	2.1	</backwardElastK>
+          <offset>	-0.115	</offset>
           <leftSibling>	Track_VT_R10	</leftSibling>
           <rightSibling>	Track_VT_R12	</rightSibling>
         </node>
@@ -825,6 +870,7 @@
           <name>	Track_VT_R12	</name>
           <forwardElastK>	0.68	</forwardElastK>
           <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.094	</offset>
           <leftSibling>	Track_VT_R11	</leftSibling>
         </node>
         <node>
@@ -883,7 +929,7 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	7000	</weight>
       <maxHealth>	168	</maxHealth>
-      <rotationSpeed>	14	</rotationSpeed>
+      <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -932,10 +978,13 @@
               <rayEnd>	0.203867 -0.0359393 2.27003	</rayEnd>
               <rayUp>	0.067 0.065 5	</rayUp>
               <size>	0.35	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
+              <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
+          </camouflage>
         </_17pdr_OQF_AT_Mk_II>
         <_17pdr_OQF_AT_1>	shared	  <maxAmmo>	51	</maxAmmo>
           <unlocks>
@@ -973,7 +1022,7 @@
               <rayEnd>	0.0608865 -0.0735235 2.25909	</rayEnd>
               <rayUp>	0.068 0.066 5	</rayUp>
               <size>	0.35	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
+              <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
@@ -1032,6 +1081,8 @@
       <unlocks>
         <vehicle>	GB80_Charioteer	  <cost>	106250	</cost>
         </vehicle>
+        <gun>	_32_pounder_AT_Gun_OQF_Mk_II	  <cost>	16400	</cost>
+        </gun>
       </unlocks>
       <armor>
         <armor_1>	50.8	</armor_1>
@@ -1054,7 +1105,7 @@
       <primaryArmor>	armor_1 armor_3 armor_14	</primaryArmor>
       <weight>	5476	</weight>
       <maxHealth>	228	</maxHealth>
-      <rotationSpeed>	16	</rotationSpeed>
+      <rotationSpeed>	18	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -1100,7 +1151,7 @@
               <rayEnd>	0.100311 -0.017389 2.07495	</rayEnd>
               <rayUp>	0.069 0.067 5	</rayUp>
               <size>	0.35	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
+              <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
@@ -1137,11 +1188,49 @@
               <rayEnd>	0.0421859 -0.0291265 2.10645	</rayEnd>
               <rayUp>	0.07 0.067 5	</rayUp>
               <size>	0.35	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
+              <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
         </_17pdr_OQF_AT_1>
+        <_32_pounder_AT_Gun_OQF_Mk_II>	shared	  <maxAmmo>	30	</maxAmmo>
+          <armor>
+            <gun>	40	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <turretYawLimits>	-60 60	</turretYawLimits>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	7.8	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.08	</turretRotation>
+            <afterShot>	3	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2	</aimingTime>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/british/GB41_Challenger/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/british/GB41_Challenger/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/british/GB41_Challenger/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/british/GB41_Challenger/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB41_Challenger/collision_client/Gun_06.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00211782 -0.00700102 2.30948	</rayStart>
+              <rayEnd>	-0.0364467 0.0188863 2.30948	</rayEnd>
+              <rayUp>	0.076 0.074 5	</rayUp>
+              <size>	0.35	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_32_pounder_AT_Gun_OQF_Mk_II>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB41_Challenger/normal/lod0/Turret_02.model	</undamaged>

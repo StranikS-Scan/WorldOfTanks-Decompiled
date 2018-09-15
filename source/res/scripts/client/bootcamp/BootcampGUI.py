@@ -22,10 +22,6 @@ def getDirectionIndicator():
 
 class BootcampMarkersComponent(MarkersManager):
 
-    def __init__(self):
-        _markers2d_settings.MARKERS_MANAGER_SWF = 'battleVehicleMarkersApp.swf'
-        super(BootcampMarkersComponent, self).__init__()
-
     def _setupPlugins(self, arenaVisitor):
         setup = super(BootcampMarkersComponent, self)._setupPlugins(arenaVisitor)
         setup['bootcamp'] = BootcampStaticObjectsPlugin
@@ -60,7 +56,6 @@ class BootcampStaticObjectsPlugin(plugins.MarkerPlugin):
             return True
         else:
             return False
-            return
 
     def setupStaticObject(self, objectID, shape, minDistance, maxDistance, distance, color):
         if objectID in self.__objects:

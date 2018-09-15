@@ -52,7 +52,7 @@ class GUIDecorator(IGUIEntryDecorator):
     def clear(self):
         self.close(MESSENGER_SCOPE.UNKNOWN)
         self.__currentScope = MESSENGER_SCOPE.UNKNOWN
-        while len(self.__entries):
+        while self.__entries:
             _, entry = self.__entries.popitem()
             entry.clear()
 

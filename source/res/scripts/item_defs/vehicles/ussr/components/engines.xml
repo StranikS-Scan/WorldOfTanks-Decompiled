@@ -49,13 +49,13 @@
     <V-12A>	55	</V-12A>
     <V-54-6>	57	</V-54-6>
     <M_40>	59	</M_40>
-    <Medous_MAT>	58	</Medous_MAT>
     <V-2SNx2>	60	</V-2SNx2>
     <V-5F>	61	</V-5F>
+    <Medous_MAT>	58	</Medous_MAT>
     <V-12-5>	62	</V-12-5>
     <V-12-6>	63	</V-12-6>
-    <GAZ-34-BT>	71	</GAZ-34-BT>
     <TDDG>	72	</TDDG>
+    <GAZ-34-BT>	71	</GAZ-34-BT>
     <_5TD>	73	</_5TD>
     <V-12P>	75	</V-12P>
     <V-16FN>	76	</V-16FN>
@@ -100,8 +100,10 @@
     <V_2_10M>	130	</V_2_10M>
     <V-4M>	131	</V-4M>
     <MH_1>	132	</MH_1>
+    <GMC_6046>	133	</GMC_6046>
     <BAMM_V12>	134	</BAMM_V12>
     <M_50TI>	135	</M_50TI>
+    <V_11_Kirovets_1>	136	</V_11_Kirovets_1>
     <Engine_01_KV>	200	</Engine_01_KV>
     <V-54K_T>	201	</V-54K_T>
     <Engine_T-50-2>	202	</Engine_T-50-2>
@@ -614,8 +616,8 @@
       <maxRegenHealth>	70	</maxRegenHealth>
       <repairCost>	6	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	266	</rpm_min>
-      <rpm_max>	2167	</rpm_max>
+      <rpm_min>	221	</rpm_min>
+      <rpm_max>	2256	</rpm_max>
     </V-4M>
     <V-2-34M>
       <userString>	#ussr_vehicles:V-2-34M	</userString>
@@ -893,6 +895,23 @@
       <rpm_min>	346	</rpm_min>
       <rpm_max>	2160	</rpm_max>
     </V-11>
+    <V_11_Kirovets_1>
+      <userString>	#ussr_vehicles:V_11_Kirovets_1	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	720	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	381	</rpm_min>
+      <rpm_max>	2056	</rpm_max>
+    </V_11_Kirovets_1>
     <V-11-IS-3>
       <userString>	#ussr_vehicles:V-11-IS-3	</userString>
       <tags>	diesel	</tags>
@@ -1257,8 +1276,8 @@
       <maxRegenHealth>	180	</maxRegenHealth>
       <repairCost>	10	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	240	</rpm_min>
-      <rpm_max>	2480	</rpm_max>
+      <rpm_min>	200	</rpm_min>
+      <rpm_max>	2600	</rpm_max>
     </M_50TI>
     <M-50T_fallout>
       <userString>	#ussr_vehicles:M-50T_fallout	</userString>
@@ -1577,8 +1596,8 @@
       <maxRegenHealth>	130	</maxRegenHealth>
       <repairCost>	8	</repairCost>
       <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	253	</rpm_min>
-      <rpm_max>	2440	</rpm_max>
+      <rpm_min>	280	</rpm_min>
+      <rpm_max>	2360	</rpm_max>
     </MH_1>
     <TDDG>
       <userString>	#ussr_vehicles:TDDG	</userString>
@@ -2065,6 +2084,23 @@
       <rpm_min>	293	</rpm_min>
       <rpm_max>	2320	</rpm_max>
     </V-7>
+    <GMC_6046>
+      <userString>	#ussr_vehicles:GMC_6046	</userString>
+      <tags>	diesel	</tags>
+      <level>	5	</level>
+      <price>	13500	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Hetzer_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Hetzer_npc	</wwsoundNPC>
+      <power>	410	</power>
+      <weight>	2318	</weight>
+      <maxHealth>	176	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	217	</rpm_min>
+      <rpm_max>	2265	</rpm_max>
+    </GMC_6046>
     <Observer>
       <userString>	#ussr_vehicles:MS-1	</userString>
       <tags>	gasoline	</tags>

@@ -55,7 +55,7 @@ class BoostersController(IBoostersController):
         for booster in activeBoosters:
             notificationList.append((booster.boosterID, booster.getUsageLeftTime() % time_utils.ONE_MINUTE))
 
-        if len(notificationList) > 0:
+        if notificationList:
             _, nextBoosterNotification = min(notificationList, key=itemgetter(1))
             for item in notificationList:
                 if item[1] == nextBoosterNotification:

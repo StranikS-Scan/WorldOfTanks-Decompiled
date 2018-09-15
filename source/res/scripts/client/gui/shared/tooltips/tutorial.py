@@ -76,9 +76,6 @@ class ResearchModulesPacker(HeaderPacker):
 
 class ResearchModulesPackerEx(ResearchModulesPacker):
 
-    def __init__(self, context):
-        super(ResearchModulesPackerEx, self).__init__(context)
-
     def _packBlocks(self, *args, **kwargs):
         items = super(ResearchModulesPackerEx, self)._packBlocks(*args, **kwargs)
         blocksGap = 3

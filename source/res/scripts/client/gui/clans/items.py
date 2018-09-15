@@ -77,23 +77,20 @@ def fmtUnavailableValue(fields=tuple(), dummy=clans_fmts.DUMMY_UNAVAILABLE_DATA)
             checkAvailability = kwargs.pop('checkAvailability', False)
             if checkAvailability:
                 return _isAvailable(fields)
-            else:
-                doFmt = kwargs.get('doFmt', False)
-                placeholder = kwargs.get('dummy', dummy) or dummy
-                formatter = kwargs.get('formatter', None)
-                if doFmt and not _isAvailable(fields):
-                    return placeholder
-                try:
-                    value = func(self)
-                except ValueError:
-                    value = None
+            doFmt = kwargs.get('doFmt', False)
+            placeholder = kwargs.get('dummy', dummy) or dummy
+            formatter = kwargs.get('formatter', None)
+            if doFmt and not _isAvailable(fields):
+                return placeholder
+            try:
+                value = func(self)
+            except ValueError:
+                value = None
 
-                if value is None:
-                    return placeholder
-                if formatter is not None:
-                    return formatter(value)
-                return value
-                return
+            if value is None:
+                return placeholder
+            else:
+                return formatter(value) if formatter is not None else value
 
         return wrapper
 
@@ -127,8 +124,7 @@ def fmtZeroDivisionValue(defValue=0, dummy=clans_fmts.DUMMY_NULL_DATA):
             except ZeroDivisionError:
                 if kwargs.get('doFmt', False):
                     return kwargs.get('dummy', dummy) or dummy
-                else:
-                    return defValue
+                return defValue
 
             return value
 
@@ -138,7 +134,7 @@ def fmtZeroDivisionValue(defValue=0, dummy=clans_fmts.DUMMY_NULL_DATA):
 
 
 def _formatString(value):
-    return clans_fmts.DUMMY_UNAVAILABLE_DATA if not value or not len(value) else passCensor(value)
+    return clans_fmts.DUMMY_UNAVAILABLE_DATA if not value else passCensor(value)
 
 
 def fmtDelegat(path, dummy=clans_fmts.DUMMY_UNAVAILABLE_DATA):
@@ -852,10 +848,7 @@ class ClanProvinceData(_ClanProvinceData, FieldsCheckerMixin):
 
     @fmtUnavailableValue(fields=('pillage_end_datetime',))
     def getPillageEndDatetime(self):
-        if self.pillage_end_datetime:
-            return _getTimestamp(self.pillage_end_datetime)
-        else:
-            return 0
+        return _getTimestamp(self.pillage_end_datetime) if self.pillage_end_datetime else 0
 
 
 _GlobalMapFrontInfoData = namedtuple('_GlobalMapFrontInfoData', ['front_name', 'min_vehicle_level', 'max_vehicle_level'])

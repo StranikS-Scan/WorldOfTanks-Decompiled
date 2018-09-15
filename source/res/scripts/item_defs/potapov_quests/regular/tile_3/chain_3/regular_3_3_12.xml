@@ -8,6 +8,12 @@
         <postBattle>
           <and>
             <vehicleDamage>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_fire	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_3_3_12_condition_description_fire	</key>
+              </description>
               <lvlDiff>	0	</lvlDiff>
               <fireStarted></fireStarted>
               <eventCount></eventCount>
@@ -18,6 +24,36 @@
       </conditions>
       <bonus>
         <freeXP>	2000	</freeXP>
+        <token>
+          <id>	token:pt:final:s1:t3:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_3_12_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_3_3_12_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	2000	</freeXP>
+        <token>
+          <id>	token:pt:final:s1:t3:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
       </bonus>
     </potapovQuest>
     <potapovQuest>
@@ -25,6 +61,55 @@
       <id>	regular_3_3_12_add	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_fire	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_3_3_12_condition_description_fire	</key>
+              </description>
+              <lvlDiff>	0	</lvlDiff>
+              <fireStarted></fireStarted>
+              <eventCount></eventCount>
+              <greaterOrEqual>	1	</greaterOrEqual>
+            </vehicleDamage>
+            <results>
+              <description>
+                <key>	#personal_missions_details:quest_3_3_12_condition_description_top_xp	</key>
+              </description>
+              <key>	xp	</key>
+              <max>	3	</max>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <slots>	1	</slots>
+        <token>
+          <id>	token:pt:final:s1:t3:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_3_12_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_3_3_12_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
         <postBattle>
           <and>
             <vehicleDamage>
@@ -41,7 +126,11 @@
         </postBattle>
       </conditions>
       <bonus>
-        <slots>	1	</slots>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
       </bonus>
     </potapovQuest>
   </quests>

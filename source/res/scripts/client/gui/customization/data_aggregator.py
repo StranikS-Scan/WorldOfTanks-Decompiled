@@ -4,8 +4,8 @@ import nations
 from constants import IGR_TYPE
 from gui.customization.elements import InstalledElement, Emblem, Inscription, Camouflage, Qualifier, CamouflageQualifier
 from gui.customization.shared import CUSTOMIZATION_TYPE, SLOT_TYPE, TYPE_NAME, EMBLEM_IGR_GROUP_NAME, ELEMENT_PLACEMENT
-from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
+from gui.shared.items_cache import CACHE_SYNC_REASON
 from helpers import dependency
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.server_events import IEventsCache
@@ -31,8 +31,9 @@ class DataAggregator(object):
     def __init__(self, events, dependencies):
         self._events = events
         self.__currentVehicleInventoryID = None
-        self.__incompleteQuestItems = None
+        self.__incompleteQuestItems = ({}, {}, {})
         self.__inventoryItems = None
+        self.__requiredPMTokensQuestItems = {}
         self._currentVehicle = dependencies.g_currentVehicle
         self._vehiclesCache = dependencies.g_vehiclesCache
         self._activeCamouflage = dependencies.g_tankActiveCamouflage
@@ -43,9 +44,15 @@ class DataAggregator(object):
     def init(self):
         self._events.onQuestsUpdated += self.__saveIncompleteQuestItems
         self._events.onInventoryUpdated += self.__saveInventoryItems
+        self._events.onQuestsItemsChanged += self.__onQuestsElementsChanged
         self._itemsCache.onSyncCompleted += self.__onItemsCacheSynchronized
+        self._events.onPMRequiredTokensUpdated += self.__savePMRequiredTokensQuestItems
         self._currentVehicle.onChanged += self._update
         self._questsCache.onSyncCompleted += self._update
+
+    def __onQuestsElementsChanged(self):
+        self._update()
+        self._events.onQuestsItemsDataChanged()
 
     def start(self):
         self._update()
@@ -53,15 +60,19 @@ class DataAggregator(object):
     def fini(self):
         self._questsCache.onSyncCompleted -= self._update
         self._events.onQuestsUpdated -= self.__saveIncompleteQuestItems
+        self._events.onPMRequiredTokensUpdated -= self.__savePMRequiredTokensQuestItems
         self._events.onInventoryUpdated -= self.__saveInventoryItems
+        self._events.onQuestsItemsChanged -= self.__onQuestsElementsChanged
         self._itemsCache.onSyncCompleted -= self.__onItemsCacheSynchronized
         self._currentVehicle.onChanged -= self._update
         self.__currentVehicleInventoryID = None
-        self.__incompleteQuestItems = None
+        self.__incompleteQuestItems = ({}, {}, {})
+        self.__requiredPMTokensQuestItems = {}
         self.__inventoryItems = None
         return
 
     def createElement(self, itemId, cType, cNationID, isInShop=False, isInDossier=False, isInQuests=False, isReplacedByIGR=False, inventoryItems=None):
+        requiredToken = None
         rawElement = self.__getRawElement(cType, cNationID, itemId)
         groups = self.__getGroups(cType, cNationID)
         cls = _ITEM_CLASS[cType]
@@ -88,6 +99,7 @@ class DataAggregator(object):
             allowedVehicles = list(rawElement['allow'])
             notAllowedVehicles = rawElement['deny']
             readableGroupName = '#vehicle_customization:camouflage/{0}'.format(igrLessGroupName)
+            requiredToken = rawElement.get('requiredToken')
         numberOfDays = None
         numberOfItems = None
         if inventoryItems is not None:
@@ -121,10 +133,20 @@ class DataAggregator(object):
          'numberOfItems': numberOfItems,
          'numberOfDays': numberOfDays,
          'readableGroupName': readableGroupName,
+         'requiredToken': requiredToken,
          'price': self.__getPriceAttributes(cNationID, cType)})
 
     def getIncompleteQuestItems(self):
         return self.__incompleteQuestItems
+
+    def getRequiredPMTokensQuestItems(self):
+        return self.__requiredPMTokensQuestItems
+
+    def getQuestData(self, cType, item):
+        incompleteQuestItems = self.getIncompleteQuestItems()
+        pmTokenQuestData = self.getRequiredPMTokensQuestItems().get(item.requiredToken)
+        commonQuestData = incompleteQuestItems[cType].get(item.getID(), [])
+        return (pmTokenQuestData,) if pmTokenQuestData else commonQuestData
 
     def _update(self):
         isNewVehicle = self.__currentVehicleInventoryID is not None and self.__currentVehicleInventoryID != self._currentVehicle.item.invID
@@ -149,7 +171,9 @@ class DataAggregator(object):
         shop = self._itemsCache.items.shop
 
         def camouflageIsInShop(elementID):
-            return elementID not in shop.getCamouflagesHiddens(nationID)
+            pmTokenQuestData = self.__getPMTokenQuestData(nationID, cType, elementID)
+            isInShop = elementID not in shop.getCamouflagesHiddens(nationID)
+            return isInShop and pmTokenQuestData.isCompleted if pmTokenQuestData else isInShop
 
         def emblemGroupIsInShop(groupName):
             return groupName not in shop.getEmblemsGroupHiddens() and groupName != EMBLEM_IGR_GROUP_NAME or self._displayIgrItems and groupName == EMBLEM_IGR_GROUP_NAME
@@ -178,6 +202,14 @@ class DataAggregator(object):
          'default': {'base': defaultPrice[cType],
                      'factor': defaultPriceFactor[cType],
                      'vehicleFactor': defaultVehiclePriceFactor[cType]}}
+
+    def __getPMTokenQuestData(self, cNationID, cType, elementID):
+        if cType == CUSTOMIZATION_TYPE.CAMOUFLAGE:
+            rawElement = self.__getRawElement(cType, cNationID, elementID)
+            token = rawElement.get('requiredToken')
+            return self.__requiredPMTokensQuestItems.get(token)
+        else:
+            return None
 
     def __getInstalledElements(self, vehicleHullSlots, vehicleTurretSlots, installedRawItems):
         installedHullEmblems = []
@@ -228,6 +260,9 @@ class DataAggregator(object):
     def __saveIncompleteQuestItems(self, incompleteQuestItems):
         self.__incompleteQuestItems = incompleteQuestItems
 
+    def __savePMRequiredTokensQuestItems(self, requiredPMTokensQuestItems):
+        self.__requiredPMTokensQuestItems = requiredPMTokensQuestItems
+
     def __saveInventoryItems(self, inventoryItems):
         self.__inventoryItems = inventoryItems
 
@@ -264,7 +299,8 @@ class DataAggregator(object):
             for elementID, rawElement in typedRawElements.iteritems():
                 replacedByIGRItem = self._elementIsIGRReplaced(elementID, cType)
                 isMigrated = elementID not in notMigratedElements[cType]
-                isInQuests = elementID in self.__incompleteQuestItems[cType]
+                pmTokenQuestData = self.__getPMTokenQuestData(cNationID, cType, elementID)
+                isInQuests = elementID in self.__incompleteQuestItems[cType] or pmTokenQuestData and not pmTokenQuestData.isCompleted
                 if cType == CUSTOMIZATION_TYPE.CAMOUFLAGE:
                     criteria = elementID
                 else:
@@ -338,10 +374,7 @@ class DataAggregator(object):
         
         :return: True is element is default, False otherwise
         """
-        if cType == CUSTOMIZATION_TYPE.EMBLEM:
-            return self.__getRawElement(cType, cNationID, elementID)[0] == 'auto'
-        else:
-            return False
+        return self.__getRawElement(cType, cNationID, elementID)[0] == 'auto' if cType == CUSTOMIZATION_TYPE.EMBLEM else False
 
 
 class IgrDataAggregator(DataAggregator):
@@ -391,11 +424,7 @@ class IgrDataAggregator(DataAggregator):
         return elementID in self.__igrReplacedItems[cType]
 
     def _getIGRReplacedNumberOfDays(self, elementID, cType):
-        if self._elementIsIGRReplaced(elementID, cType):
-            return self.__igrReplacedItems[cType][elementID]
-        else:
-            return None
-            return None
+        return self.__igrReplacedItems[cType][elementID] if self._elementIsIGRReplaced(elementID, cType) else None
 
     def __onIGRTypeChanged(self, roomType, xpFactor):
         self._update()

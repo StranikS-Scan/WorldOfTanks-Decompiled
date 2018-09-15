@@ -76,9 +76,6 @@ class DescriptorParser(object):
 
 class ChapterParser(object):
 
-    def __init__(self):
-        super(ChapterParser, self).__init__()
-
     def _parseScene(self, xmlCtx, section, scene, flags, itemFlags, afterBattle=False, frontEffects=False):
         for _, subSec in _xml.getChildren(xmlCtx, section, 'gui-items'):
             item = sub_parsers._parseGuiItem(xmlCtx, subSec, flags, itemFlags)
@@ -105,7 +102,7 @@ class ChapterParser(object):
 
     def _parseSharedScene(self, chapter, scene, flags, itemFlags, afterBattle=False):
         filePath = chapter.getSharedScenePath()
-        if filePath is None or not len(filePath):
+        if not filePath:
             return
         else:
             section = ResMgr.openSection(filePath)
@@ -179,9 +176,6 @@ class ChapterParser(object):
 
 class GlobalRefParser(object):
 
-    def __init__(self):
-        super(GlobalRefParser, self).__init__()
-
     def parse(self, chapter, varIDs=None, flags=None):
         if varIDs is None:
             varIDs = []
@@ -191,7 +185,7 @@ class GlobalRefParser(object):
         if section is None:
             _xml.raiseWrongXml(None, GLOBAL_REFS_FILE_PATH, 'can not open or read')
         xmlCtx = (None, GLOBAL_REFS_FILE_PATH)
-        if len(varIDs):
+        if varIDs:
             for _, subSec in _xml.getChildren(xmlCtx, section, 'vars'):
                 varID = sub_parsers.parseID(xmlCtx, subSec, 'Specify a var ID')
                 if varID in varIDs:
@@ -201,9 +195,6 @@ class GlobalRefParser(object):
 
 
 class BonusRefParser(object):
-
-    def __init__(self):
-        super(BonusRefParser, self).__init__()
 
     def parse(self):
         section = ResMgr.openSection(BONUSES_REFS_FILE_PATH)

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/mods/__init__.py
 import importlib
 import ResMgr
+import string
 from constants import IS_DEVELOPMENT
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_WARNING
 from shared_utils import forEach
@@ -43,7 +44,7 @@ def _findValidMODs(path=None, package=None):
     package = package or __package__
     modsFolder = ResMgr.openSection(path)
     if modsFolder:
-        for scriptName in modsFolder.keys():
+        for scriptName in set(map(string.lower, modsFolder.keys())):
             if _isValidMOD(scriptName):
                 try:
                     moduleName = '%s.%s' % (package, scriptName.replace(_MOD_NAME_POSTFIX, ''))

@@ -15,6 +15,7 @@ from predefined_hosts import g_preDefinedHosts, getHostURL
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
+from constants import WGC_STATE
 __all__ = ('LeavePrbModalEntity', 'DisconnectFromPeriphery', 'ConnectToPeriphery', 'PrbInvitesInit', 'ActionsChain')
 
 class Action(object):
@@ -108,9 +109,6 @@ class SelectPrb(Action):
 class DisconnectFromPeriphery(Action):
     connectionMgr = dependency.descriptor(IConnectionManager)
 
-    def __init__(self):
-        super(DisconnectFromPeriphery, self).__init__()
-
     def isInstantaneous(self):
         return False
 
@@ -140,6 +138,7 @@ class ConnectToPeriphery(Action):
         self.__host = g_preDefinedHosts.periphery(peripheryID)
         self.__endTime = None
         self.__credentials = self.lobbyContext.getCredentials()
+        self.__wgcLogin = False
         return
 
     def isInstantaneous(self):
@@ -152,16 +151,19 @@ class ConnectToPeriphery(Action):
         return super(ConnectToPeriphery, self).isRunning()
 
     def invoke(self):
-        if self.__host and self.__credentials:
-            if len(self.__credentials) < 2:
-                self._completed = False
-                LOG_ERROR('Connect action. Login info is invalid')
-                return
-            login, token2 = self.__credentials
-            if not login or not token2:
-                self._completed = False
-                LOG_ERROR('Connect action. Login info is invalid')
-                return
+        p = BigWorld.WGC_processingState()
+        self.__wgcLogin = BigWorld.WGC_processingState() == WGC_STATE.READY_TO_LOGIN
+        if self.__host and (self.__credentials or self.__wgcLogin):
+            if not self.__wgcLogin:
+                if len(self.__credentials) < 2:
+                    self._completed = False
+                    LOG_ERROR('Connect action. Login info is invalid')
+                    return
+                login, token2 = self.__credentials
+                if not login or not token2:
+                    self._completed = False
+                    LOG_ERROR('Connect action. Login info is invalid')
+                    return
             self._running = True
             self.__endTime = BigWorld.time() + CONNECT_TO_PERIPHERY_DELAY
             Waiting.show('login')
@@ -171,7 +173,11 @@ class ConnectToPeriphery(Action):
             self._running = False
 
     def __doConnect(self):
-        login, token2 = self.__credentials
+        if not self.__wgcLogin:
+            login, token2 = self.__credentials
+        else:
+            login = 'wgc'
+            token2 = ''
         self.__addHandlers()
         self.loginManager.initiateRelogin(login, token2, getHostURL(self.__host, token2))
 
@@ -203,9 +209,6 @@ class ConnectToPeriphery(Action):
 
 
 class PrbInvitesInit(Action):
-
-    def __init__(self):
-        super(PrbInvitesInit, self).__init__()
 
     def isInstantaneous(self):
         return False

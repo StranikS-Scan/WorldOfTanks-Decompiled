@@ -9,6 +9,7 @@ class BROWSER(CONST_CONTAINER):
     PROMO_SIZE = (780, 470)
     VIDEO_SIZE = (864, 486)
     PROMO_BACKGROUND = 'file:///gui/maps/promo_bg.png'
+    PERSONAL_MISSIONS_VIDEO_SIZE = (740, 480)
 
 
 class PROMO(CONST_CONTAINER):

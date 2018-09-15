@@ -31,6 +31,3 @@ class SquadPromoWindow(SquadPromoWindowMeta):
           'action': self._CLOSE_BTN_ACTION,
           'isFocused': True,
           'tooltip': ''}], TEXT_ALIGN.RIGHT, self._BTN_WIDTH)
-
-    def _dispose(self):
-        super(SquadPromoWindow, self)._dispose()

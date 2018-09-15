@@ -48,7 +48,7 @@ class RankedBattlesView(LobbySubView, RankedBattlesViewMeta):
         elif blockID == _AWARD_BLOCK_IDS.BOOBY_QUEST:
             consolationQuest = self.rankedController.getConsolationQuest()
             if consolationQuest is not None:
-                showMissionDetails(eventID=consolationQuest.getID(), groupID=consolationQuest.getGroupID())
+                showMissionDetails(missionID=consolationQuest.getID(), groupID=consolationQuest.getGroupID())
         elif blockID == _AWARD_BLOCK_IDS.SEASON_AWARDS:
             g_eventBus.handleEvent(events.LoadViewEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_CYCLES_VIEW_ALIAS), scope=EVENT_BUS_SCOPE.LOBBY)
         return

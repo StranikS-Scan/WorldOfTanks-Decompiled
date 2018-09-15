@@ -4,7 +4,7 @@ _KEY_DELIMITER = '.'
 
 def synchronizeDicts(diff, cache, parentKey='', changeList=None, defaultCacheType=dict):
     updates, replaces, deletes = (0, 0, 0)
-    if parentKey is not '':
+    if parentKey != '':
         parentKey = parentKey + _KEY_DELIMITER
     keys_r, keys_d, keys_u = [], [], []
     for k in diff.iterkeys():

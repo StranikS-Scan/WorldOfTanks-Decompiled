@@ -7,9 +7,6 @@ from skeletons.gui.game_control import IVehicleComparisonBasket
 class VehicleCompareCartButton(ButtonWithCounterMeta):
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
-    def __init__(self):
-        super(VehicleCompareCartButton, self).__init__()
-
     def _populate(self):
         super(VehicleCompareCartButton, self)._populate()
         self.comparisonBasket.onChange += self.__onCountChanged

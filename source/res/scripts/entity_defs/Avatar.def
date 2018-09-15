@@ -171,7 +171,9 @@
     <onIGRTypeChanged>
       <Arg>	STRING	</Arg>
     </onIGRTypeChanged>
-    <onAutoAimVehicleLost></onAutoAimVehicleLost>
+    <onAutoAimVehicleLost>
+      <Arg>	UINT8	</Arg>
+    </onAutoAimVehicleLost>
     <receiveAccountStats>
       <Arg>	UINT32	</Arg>
       <Arg>	STRING	</Arg>
@@ -212,7 +214,8 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
-      <Arg>	FLOAT32	</Arg>
+      <Arg>	ARRAY	  <of>	FLOAT32	</of>
+      </Arg>
     </updateVehicleMiscStatus>
     <updateVehicleSetting>
       <Arg>	OBJECT_ID	</Arg>
@@ -653,6 +656,13 @@
       <Arg>	INT8	</Arg>
       <Arg>	UINT8	</Arg>
     </onRoundFinished>
+    <setVehicleDevFeature>
+      <Exposed></Exposed>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+    </setVehicleDevFeature>
     <setDevelopmentFeature>
       <Exposed></Exposed>
       <Arg>	STRING	</Arg>

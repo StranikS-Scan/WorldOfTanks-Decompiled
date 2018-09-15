@@ -25,7 +25,7 @@ _YEAR = 31556926
 MAX_BONUS_LIMIT = 1000000
 
 class XMLNode(object):
-    __slots__ = ('name', 'value', 'questClientConditions', 'relatedGroup', 'info', 'bonus', 'groupContent')
+    __slots__ = ('name', 'value', 'questClientConditions', 'relatedGroup', 'info', 'bonus', 'bonusDelayed', 'groupContent')
 
     def __init__(self, name=''):
         self.name = name
@@ -34,6 +34,7 @@ class XMLNode(object):
         self.relatedGroup = ''
         self.info = {}
         self.bonus = {}
+        self.bonusDelayed = {}
         self.groupContent = None
         return
 
@@ -114,6 +115,7 @@ class Source(object):
             availableBonuses = self.__getAvailableBonuses(eventType)
             commonNode = XMLNode('common')
             bonusNode = XMLNode('bonus')
+            bonusDelayedNode = XMLNode('bonusDelayed')
             prebattleNode = XMLNode('preBattle')
             accountNode = XMLNode('account')
             prebattleNode.addChild(accountNode)
@@ -126,6 +128,7 @@ class Source(object):
             mainNode.addChild(postbattleNode)
             mainNode.addChild(commonNode)
             mainNode.addChild(bonusNode)
+            mainNode.addChild(bonusDelayedNode)
             info['isIGR'] = accountNode.isExistChildNode('igrType')
             conditions = questSection['conditions']
             if conditions and conditions.has_key('preBattle'):
@@ -171,8 +174,12 @@ class Source(object):
                 if not bonusLimit and daily:
                     raise Exception('tokenQuest: daily should be used with bonusLimit tag')
             mainNode.bonus = walkBonuses(readBonusSection(availableBonuses, questSection['bonus'], eventType), FilterVisitor(eventType))
+            mainNode.bonusDelayed = walkBonuses(readBonusSection(availableBonuses, questSection['bonusDelayed'], eventType), FilterVisitor(eventType))
             questClientData = dict(info)
             questClientData['bonus'] = deepcopy(mainNode.bonus)
+            if mainNode.bonusDelayed is not None:
+                questClientData['bonus'].update(mainNode.bonusDelayed)
+            questClientData['bonusDelayed'] = deepcopy(mainNode.bonusDelayed)
             questClientData['conditions'] = mainNode.questClientConditions
             if mainNode.groupContent:
                 questClientData['groupContent'] = mainNode.groupContent
@@ -185,6 +192,7 @@ class Source(object):
     def __stripServerQuestData(self, questClientData):
         questClientData.pop('serverOnly', None)
         questClientData['bonus'] = walkBonuses(questClientData['bonus'], StripVisitor())
+        questClientData['bonusDelayed'] = walkBonuses(questClientData['bonusDelayed'], StripVisitor())
         return
 
     def __readHeader(self, eventType, questSection, curTime, gStartTime, gFinishTime):
@@ -231,7 +239,7 @@ class Source(object):
                     runFlags.append(QUEST_RUN_FLAGS.NAME_TO_TYPE[flagValue.asString])
 
         tOption = curTime > time.time()
-        showCongrats = questSection.readBool('showCongrats', eventType in (EVENT_TYPE.POTAPOV_QUEST,))
+        showCongrats = questSection.readBool('showCongrats', eventType in (EVENT_TYPE.PERSONAL_MISSION,))
         info = {'id': id,
          'hidden': questSection.readBool('hidden', False),
          'serverOnly': questSection.readBool('serverOnly', False),
@@ -311,8 +319,9 @@ class Source(object):
          'refSystemRalXPPool': self.__readBattleResultsConditionList,
          'refSystemRalBought10Lvl': self.__readCondition_true}
         if eventType in EVENT_TYPE.LIKE_BATTLE_QUESTS:
-            condition_readers.update({'win': self.__readCondition_true,
-             'isAlive': self.__readCondition_true,
+            condition_readers.update({'value': self.__readCondition_bool,
+             'win': self.__readConditionComplex_true,
+             'isAlive': self.__readConditionComplex_true,
              'isSquad': self.__readCondition_bool,
              'clanMembership': self.__readCondition_string,
              'allAlive': self.__readCondition_true,
@@ -359,7 +368,7 @@ class Source(object):
              'turrets': self.__readCondition_installedModules,
              'radios': self.__readCondition_installedModules,
              'optionalDevice': self.__readCondition_installedModules,
-             'correspondedCamouflage': self.__readCondition_true,
+             'correspondedCamouflage': self.__readConditionComplex_true,
              'unit': self.__readBattleResultsConditionList,
              'results': self.__readBattleResultsConditionList,
              'key': self.__readCondition_keyResults,
@@ -474,14 +483,27 @@ class Source(object):
 
     def __readBattleResultsConditionList(self, conditionReaders, section, node):
         for name, sub in section.items():
-            if name in 'meta':
-                node.questClientConditions.append(('meta', self.__readMetaSection(sub)))
+            if name in ('meta', 'title', 'description'):
+                node.questClientConditions.append((name, self.__readMetaSection(sub)))
+                continue
+            if name in ('hideInGui',):
+                node.questClientConditions.append((name, True))
                 continue
             subNode = XMLNode(name)
             if name in ('greater', 'equal', 'less', 'lessOrEqual', 'greaterOrEqual'):
                 subNode.relatedGroup = 'operator'
             conditionReaders[name](conditionReaders, sub, subNode)
             node.addChild(subNode)
+
+    def __readConditionComplex_true(self, conditionReaders, section, node):
+        for name, sub in section.items():
+            if name in ('title', 'description'):
+                node.questClientConditions.append((name, self.__readMetaSection(sub)))
+                continue
+            if name in ('hideInGui',):
+                node.questClientConditions.append((name, True))
+                continue
+            node.addChild(True)
 
     def __readCondition_achievements(self, _, section, node):
         dossierRecordDBIDs = set()

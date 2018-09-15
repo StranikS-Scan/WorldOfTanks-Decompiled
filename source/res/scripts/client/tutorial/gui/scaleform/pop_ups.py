@@ -18,7 +18,7 @@ class TutorialPopUp(AbstractWindowView, TutorialProxyHolder):
     def _onMouseClicked(self, targetKey):
         if targetKey in self._content:
             targetID = self._content[targetKey]
-            if len(targetID):
+            if targetID:
                 self._gui.onGUIInput(ClickEvent(targetID))
             else:
                 LOG_ERROR('ID of target is empty', targetKey)

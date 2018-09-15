@@ -70,7 +70,7 @@ class SimpleScope(object):
 class MultipleScope(SimpleScope):
 
     def __init__(self, scopeType, parentScopes):
-        if len(parentScopes) == 0:
+        if not parentScopes:
             raise Exception('parentScopes list can not be empty')
         if len(parentScopes) == 1:
             raise Exception('MultipleScope can not have an only one parent')

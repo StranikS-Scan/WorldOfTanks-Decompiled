@@ -25,9 +25,6 @@ class QuestsDescriptorParser(DescriptorParser):
 
 class QuestsChapterParser(ChapterParser):
 
-    def __init__(self):
-        super(QuestsChapterParser, self).__init__()
-
     def parse(self, chapter, afterBattle=False, initial=False):
         chapter = super(QuestsChapterParser, self).parse(chapter, afterBattle, initial)
         self.__parseSharedTriggers(chapter)
@@ -45,7 +42,7 @@ class QuestsChapterParser(ChapterParser):
 
     def __parseSharedTriggers(self, chapter):
         filePath = chapter.getSharedTriggersPath()
-        if filePath is None or not len(filePath):
+        if not filePath:
             return
         else:
             section = ResMgr.openSection(filePath)
@@ -56,7 +53,7 @@ class QuestsChapterParser(ChapterParser):
 
     def __parseSharedEntities(self, chapter):
         filePath = chapter.getSharedEntitiesPath()
-        if filePath is None or not len(filePath):
+        if not filePath:
             return
         else:
             section = ResMgr.openSection(filePath)
@@ -67,7 +64,7 @@ class QuestsChapterParser(ChapterParser):
 
     def __parseSharedVars(self, chapter):
         filePath = chapter.getSharedVarsPath()
-        if filePath is None or not len(filePath):
+        if not filePath:
             return
         else:
             section = ResMgr.openSection(filePath)

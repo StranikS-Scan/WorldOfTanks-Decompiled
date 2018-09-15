@@ -27,7 +27,7 @@ class ExchangeWindow(ExchangeWindowMeta):
     @decorators.process('transferMoney')
     def exchange(self, gold):
         result = yield GoldToCreditsExchanger(gold).request()
-        if result and len(result.userMsg):
+        if result and result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
             self.onWindowClose()
 

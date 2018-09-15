@@ -20,9 +20,6 @@ class CrewAboutDogWindow(SimpleWindowMeta):
         super(CrewAboutDogWindow, self)._populate()
         self.__populateData()
 
-    def _dispose(self):
-        super(CrewAboutDogWindow, self)._dispose()
-
     def __populateData(self):
         self.as_setImageS(RES_ICONS.MAPS_ICONS_TANKMEN_WINDOWS_ABOUTRUDY, -70)
         self.as_setWindowTitleS(MENU.HANGAR_CREW_RODY_DOG_WINDOW_TITLE)

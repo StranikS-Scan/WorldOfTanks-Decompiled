@@ -83,7 +83,7 @@ class XMLCollection(Collection):
             if section is None:
                 LOG_ERROR('{0:>s} can not open or read'.format(self._domain))
                 return
-        if len(self._ns):
+        if self._ns:
             subsection = section[self._ns]
             if subsection is None:
                 return
@@ -98,7 +98,7 @@ class XMLCollection(Collection):
         keys = source.keys()
         ctx = None
         srcDict = {}
-        if len(keys) > 0:
+        if keys:
             for key in keys:
                 if 'context' == key:
                     ctx = dict(map(lambda item: (item[0], item[1].asString), source['context'].items()))

@@ -88,9 +88,10 @@ def startPyDevD(ide, host='127.0.0.1', port=5678, suspend=False, traceOnlyCurren
     global bwPyDevDStarted
     if not bwPyDevDStarted:
         bwPyDevDStarted = True
-        pydevDir = ResMgr.resolveToAbsolutePath('scripts/common/pydev/%s/pydev' % ide)
-        if not os.path.isdir(pydevDir):
-            bwdebug.ERROR_MSG('Failed to start pydevd: Unable to find pydevd directory for IDE %s' % ide)
+        pydevDir = 'scripts/common/pydev/%s/pydev' % ide
+        absPydevDir = ResMgr.resolveToAbsolutePath(pydevDir)
+        if not os.path.isdir(absPydevDir):
+            bwdebug.ERROR_MSG('Unable to find pydevd directory for IDE %s (at %s)' % (ide, absPydevDir))
         sys.path.append(pydevDir)
         try:
             import pydevd

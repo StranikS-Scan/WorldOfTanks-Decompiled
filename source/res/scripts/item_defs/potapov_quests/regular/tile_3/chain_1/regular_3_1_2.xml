@@ -8,6 +8,12 @@
         <postBattle>
           <and>
             <results>
+              <title>
+                <key>	#personal_missions_details:quest_3_1_2_condition_title_spotted	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_common_condition_description_empty	</key>
+              </description>
               <key>	spotted	</key>
               <greaterOrEqual>	6	</greaterOrEqual>
             </results>
@@ -17,6 +23,36 @@
       </conditions>
       <bonus>
         <credits>	200000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t3:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_1_2_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_3_1_2_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	200000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t3:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
       </bonus>
     </potapovQuest>
     <potapovQuest>
@@ -24,6 +60,48 @@
       <id>	regular_3_1_2_add	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <title>
+                <key>	#personal_missions_details:quest_3_1_2_condition_title_spotted	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_common_condition_description_empty	</key>
+              </description>
+              <key>	spotted	</key>
+              <greaterOrEqual>	6	</greaterOrEqual>
+            </results>
+            <isAlive></isAlive>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	100000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t3:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_1_2_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_3_1_2_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
         <postBattle>
           <and>
             <results>
@@ -36,7 +114,11 @@
         </postBattle>
       </conditions>
       <bonus>
-        <credits>	100000	</credits>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
       </bonus>
     </potapovQuest>
   </quests>

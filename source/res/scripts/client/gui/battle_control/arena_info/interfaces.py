@@ -131,6 +131,12 @@ class IArenaVehiclesController(IArenaLoadController, IContactsController):
         """
         pass
 
+    def invalidateFogOfWarHiddenVehiclesFlag(self, flag):
+        """Flag "FogOfWarHiddenVehicles" has been set.
+        :param flag: boolean containing new value of flag.
+        """
+        pass
+
 
 class ITeamsBasesController(IArenaController):
     __slots__ = ()

@@ -112,10 +112,7 @@ class ConfirmModuleDialog(ConfirmItemWindowMeta):
     def __getHighlightType(item):
         if item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
             return SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
-        elif item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isDeluxe():
-            return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
-        else:
-            return SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+        return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS if item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isDeluxe() else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
 
     def onWindowClose(self):
         self._callHandler(False)

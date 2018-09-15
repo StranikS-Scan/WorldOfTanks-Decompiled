@@ -212,7 +212,7 @@ class ChannelEntity(ChatEntity, ChannelEvents):
         self._history.clear()
 
     def clearMembers(self):
-        while len(self._members):
+        while self._members:
             _, member = self._members.popitem()
             member.clear()
 
@@ -315,9 +315,6 @@ class MemberEntity(ChatEntity, MemberEvents):
     def update(self, **kwargs):
         if 'status' in kwargs:
             self.setStatus(kwargs['status'])
-
-    def clear(self):
-        super(MemberEntity, self).clear()
 
     def getFullName(self, isClan=True, isRegion=True):
         if isRegion:
@@ -428,11 +425,8 @@ class UserEntity(ChatEntity):
         if self.isFriend():
             if USER_TAG.SUB_TO in self.getTags():
                 return USER_GUI_TYPE.FRIEND
-            else:
-                return USER_GUI_TYPE.OTHER
-        elif self.isIgnored():
-            return USER_GUI_TYPE.IGNORED
-        return USER_GUI_TYPE.OTHER
+            return USER_GUI_TYPE.OTHER
+        return USER_GUI_TYPE.IGNORED if self.isIgnored() else USER_GUI_TYPE.OTHER
 
     def isOnline(self):
         return False

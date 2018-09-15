@@ -163,7 +163,7 @@ def updatePotapovQuestAchievements(accDossierDescr, progress, curQuest, bonusCou
     if not bonusCount:
         return
     else:
-        if curQuest.isInitial and not accDossierDescr['singleAchievements']['firstMerit']:
+        if not accDossierDescr['singleAchievements']['firstMerit']:
             accDossierDescr['singleAchievements']['firstMerit'] = 1
         tileID, chainID = curQuest.tileID, curQuest.chainID
         import potapov_quests

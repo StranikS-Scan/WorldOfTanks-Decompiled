@@ -15,7 +15,7 @@ class TrackCrashAudition(svarog_script.py_component.Component):
 
 
 class SingleEvent(object):
-    __slots__ = '__name'
+    __slots__ = ('__name',)
 
     def __init__(self, name):
         self.__name = name
@@ -25,7 +25,7 @@ class SingleEvent(object):
 
 
 class MultipleEvent(object):
-    __slots__ = '__names'
+    __slots__ = ('__names',)
 
     def __init__(self, names):
         self.__names = names

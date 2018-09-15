@@ -54,11 +54,7 @@ class _TutorialConfig(object):
             return ''
 
     def getItem(self, targetID):
-        if targetID in self.__guiItems:
-            return self.__guiItems[targetID]
-        else:
-            return None
-            return None
+        return self.__guiItems[targetID] if targetID in self.__guiItems else None
 
     def getItems(self):
         for itemID, item in self.__guiItems.iteritems():
@@ -84,12 +80,12 @@ def _readConfig(ctx, root, parentTag, childTag, itemClass):
     if not section:
         return {}
     config = {}
-    for ctx, subSection in resource_helper.getIterator(ctx, section):
-        item = resource_helper.readItem(ctx, subSection, childTag)
+    for xmlCtx, subSection in resource_helper.getIterator(ctx, section):
+        item = resource_helper.readItem(xmlCtx, subSection, childTag)
         assert item.type == _ITEM_TYPE.DICT, 'Type of value should be dict'
         name = item.name
         if name in config:
-            raise resource_helper.ResourceError(ctx, 'Item {0} is duplicated.'.format(name))
+            raise resource_helper.ResourceError(xmlCtx, 'Item {0} is duplicated.'.format(name))
         config[name] = itemClass(**item.value)
 
     return config

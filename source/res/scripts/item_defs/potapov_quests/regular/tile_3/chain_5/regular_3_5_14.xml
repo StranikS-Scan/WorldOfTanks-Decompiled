@@ -6,33 +6,80 @@
       <serverOnly>	true	</serverOnly>
       <conditions>
         <postBattle>
-          <or>
-            <results>
-              <key>	stunDuration	</key>
-              <greaterOrEqual>	180	</greaterOrEqual>
-            </results>
-            <results>
-              <key>	damageAssistedTrack	</key>
-              <greaterOrEqual>	800	</greaterOrEqual>
-            </results>
-            <unit>
-              <or>
+          <and>
+            <or>
+              <results>
+                <title>
+                  <key>	#personal_missions_details:quest_3_5_14_condition_title_stunDuration	</key>
+                </title>
+                <description>
+                  <key>	#personal_missions_details:quest_common_condition_description_empty	</key>
+                </description>
+                <key>	stunDuration	</key>
+                <greaterOrEqual>	180	</greaterOrEqual>
+              </results>
+              <results>
+                <title>
+                  <key>	#personal_missions_details:quest_common_condition_title_unit_damageAssistedTrack	</key>
+                </title>
+                <description>
+                  <key>	#personal_missions_details:quest_3_5_14_condition_description_damageAssistedTrack	</key>
+                </description>
+                <key>	damageAssistedTrack	</key>
+                <greaterOrEqual>	800	</greaterOrEqual>
+              </results>
+              <unit>
                 <results>
+                  <hideInGui></hideInGui>
                   <key>	stunDuration	</key>
                   <greaterOrEqual>	180	</greaterOrEqual>
                 </results>
+              </unit>
+              <unit>
                 <results>
+                  <hideInGui></hideInGui>
                   <key>	damageAssistedTrack	</key>
                   <greaterOrEqual>	800	</greaterOrEqual>
                 </results>
-              </or>
-            </unit>
-          </or>
+              </unit>
+            </or>
+          </and>
         </postBattle>
       </conditions>
       <bonus>
         <premium>	1	</premium>
         <freeXP>	2000	</freeXP>
+        <token>
+          <id>	token:pt:final:s1:t3:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_5_14_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_3_5_14_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <premium>	1	</premium>
+        <freeXP>	2000	</freeXP>
+        <token>
+          <id>	token:pt:final:s1:t3:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
       </bonus>
     </potapovQuest>
     <potapovQuest>
@@ -40,6 +87,73 @@
       <id>	regular_3_5_14_add	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
+        <postBattle>
+          <and>
+            <or>
+              <results>
+                <title>
+                  <key>	#personal_missions_details:quest_3_5_14_condition_title_stunDuration	</key>
+                </title>
+                <description>
+                  <key>	#personal_missions_details:quest_common_condition_description_empty	</key>
+                </description>
+                <key>	stunDuration	</key>
+                <greaterOrEqual>	180	</greaterOrEqual>
+              </results>
+              <results>
+                <title>
+                  <key>	#personal_missions_details:quest_common_condition_title_unit_damageAssistedTrack	</key>
+                </title>
+                <description>
+                  <key>	#personal_missions_details:quest_3_5_14_condition_description_damageAssistedTrack	</key>
+                </description>
+                <key>	damageAssistedTrack	</key>
+                <greaterOrEqual>	800	</greaterOrEqual>
+              </results>
+              <unit>
+                <results>
+                  <hideInGui></hideInGui>
+                  <key>	stunDuration	</key>
+                  <greaterOrEqual>	180	</greaterOrEqual>
+                </results>
+              </unit>
+              <unit>
+                <results>
+                  <hideInGui></hideInGui>
+                  <key>	damageAssistedTrack	</key>
+                  <greaterOrEqual>	800	</greaterOrEqual>
+                </results>
+              </unit>
+            </or>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <premium>	1	</premium>
+        <token>
+          <id>	token:pt:final:s1:t3:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_5_14_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_3_5_14_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
         <postBattle>
           <and>
             <or>
@@ -52,16 +166,16 @@
                 <greaterOrEqual>	800	</greaterOrEqual>
               </results>
               <unit>
-                <or>
-                  <results>
-                    <key>	stunDuration	</key>
-                    <greaterOrEqual>	180	</greaterOrEqual>
-                  </results>
-                  <results>
-                    <key>	damageAssistedTrack	</key>
-                    <greaterOrEqual>	800	</greaterOrEqual>
-                  </results>
-                </or>
+                <results>
+                  <key>	stunDuration	</key>
+                  <greaterOrEqual>	180	</greaterOrEqual>
+                </results>
+              </unit>
+              <unit>
+                <results>
+                  <key>	damageAssistedTrack	</key>
+                  <greaterOrEqual>	800	</greaterOrEqual>
+                </results>
               </unit>
             </or>
             <win></win>
@@ -69,7 +183,11 @@
         </postBattle>
       </conditions>
       <bonus>
-        <premium>	1	</premium>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
       </bonus>
     </potapovQuest>
   </quests>

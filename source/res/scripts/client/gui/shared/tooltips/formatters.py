@@ -12,6 +12,9 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from helpers import i18n, time_utils
 TXT_GAP_FOR_BIG_TITLE = 2
 TXT_GAP_FOR_SMALL_TITLE = 3
+RENDERERS_ALIGN_LEFT = 'renderers_left'
+RENDERERS_ALIGN_RIGHT = 'renderers_right'
+RENDERERS_ALIGN_CENTER = 'renderers_center'
 
 def packPadding(top=0, left=0, bottom=0, right=0):
     data = {}
@@ -91,7 +94,6 @@ def packTitleDescParameterWithIconBlockData(title, value='', icon=None, desc=Non
         return packBuildUpBlockData(blocks, gap, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, padding)
     else:
         return packBlockDataItem(linkage, data, padding)
-        return
 
 
 def packDashLineItemPriceBlockData(title, value, icon, desc=None, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_DASHLINE_ITEM_PRICE_BLOCK_LINKAGE, padding=None):
@@ -126,9 +128,10 @@ def packResultBlockData(title, text):
     return packBuildUpBlockData([packTextBlockData(title, True, BATTLE_RESULT_TYPES.TOOLTIP_RESULT_TTILE_LEFT_LINKAGE), packTextBlockData(text, True, BATTLE_RESULT_TYPES.TOOLTIP_ICON_TEXT_PARAMETER_LINKAGE)])
 
 
-def packImageTextBlockData(title=None, desc=None, img=None, imgPadding=None, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding=None):
+def packImageTextBlockData(title=None, desc=None, img=None, imgPadding=None, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', ignoreImageSize=False, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding=None):
     data = {'spriteAtLeft': imgAtLeft,
-     'textsAlign': txtAlign}
+     'textsAlign': txtAlign,
+     'ignoreImageSize': ignoreImageSize}
     if title is not None:
         data['title'] = title
     if desc is not None:
@@ -328,12 +331,12 @@ def packImageListParameterBlockData(listIconSrc, columnWidth, rowHeight, linkage
      'rowHeight': rowHeight}, padding)
 
 
-def packQuestAwardsBlockData(listData, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None):
+def packQuestAwardsBlockData(listData, columnWidth, rowHeight, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None):
     return packBlockDataItem(linkage, {'dataType': 'net.wg.gui.data.AwardItemVO',
      'rendererType': 'AwardItemRendererUI',
      'listIconSrc': listData,
-     'columnWidth': 85,
-     'rowHeight': 50}, padding)
+     'columnWidth': columnWidth,
+     'rowHeight': rowHeight}, padding)
 
 
 def packMissionVehiclesBlockData(listData, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None):
@@ -358,6 +361,16 @@ def packMissionVehiclesTypeBlockData(listData, linkage=BLOCKS_TOOLTIP_TYPES.TOOL
      'rowHeight': 70}, padding)
 
 
+def packAwardsExBlockData(listData, columnWidth, rowHeight, horizontalGap=0, renderersAlign=RENDERERS_ALIGN_LEFT, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None):
+    return packBlockDataItem(linkage, {'dataType': 'net.wg.gui.lobby.components.data.AwardItemRendererExVO',
+     'rendererType': 'AwardItemRendererExUI',
+     'listIconSrc': listData,
+     'columnWidth': columnWidth,
+     'rowHeight': rowHeight,
+     'renderersAlign': renderersAlign,
+     'horizontalGap': horizontalGap}, padding)
+
+
 def getActionPriceData(item):
     minRentPricePackage = item.getRentPackage()
     action = None
@@ -376,4 +389,12 @@ def getLimitExceededPremiumTooltip():
 def packCounterTextBlockData(countLabel, desc, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_COUNTER_TEXT_BLOCK_LINKAGE, padding=None):
     data = {'label': str(countLabel),
      'description': desc}
+    return packBlockDataItem(linkage, data, padding)
+
+
+def packBadgeInfoBlockData(badgeImgSource, vehImgSource, playerName, vehName, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BADGE_INFO_BLOCK_LINKAGE, padding=None):
+    data = {'badgeImgSource': badgeImgSource,
+     'vehImgSource': vehImgSource,
+     'playerName': playerName,
+     'vehName': vehName}
     return packBlockDataItem(linkage, data, padding)

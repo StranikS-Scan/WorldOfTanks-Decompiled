@@ -4,7 +4,7 @@ import BigWorld
 from adisp import async, process
 from constants import CURRENT_REALM
 from helpers import dependency
-from helpers.ServerSettings import ServerSettings
+from helpers.server_settings import ServerSettings
 from account_helpers import isRoamingEnabled
 from debug_utils import LOG_ERROR, LOG_NOTE
 from ids_generators import Int32IDGenerator
@@ -52,10 +52,9 @@ class LobbyContext(ILobbyContext):
     def getClientIDByArenaUniqueID(self, arenaUniqueID):
         if arenaUniqueID in self.__arenaUniqueIDs:
             return self.__arenaUniqueIDs[arenaUniqueID]
-        else:
-            clientID = self.__clientArenaIDGenerator.next()
-            self.__arenaUniqueIDs[arenaUniqueID] = clientID
-            return clientID
+        clientID = self.__clientArenaIDGenerator.next()
+        self.__arenaUniqueIDs[arenaUniqueID] = clientID
+        return clientID
 
     def setCredentials(self, login, token):
         """Set player credentials that required to accept invite form another periphery.
@@ -176,9 +175,9 @@ class LobbyContext(ILobbyContext):
                 result = False
             return result
 
-    def getPeripheryName(self, peripheryID):
+    def getPeripheryName(self, peripheryID, checkAnother=True):
         name = None
-        if self.isAnotherPeriphery(peripheryID):
+        if not checkAnother or self.isAnotherPeriphery(peripheryID):
             host = g_preDefinedHosts.periphery(peripheryID)
             if host is not None:
                 name = host.name

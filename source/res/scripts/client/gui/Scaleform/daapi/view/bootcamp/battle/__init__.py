@@ -35,9 +35,10 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.bootcamp.BCRibbonsPanel import BCRibbonsPanel
     from gui.Scaleform.daapi.view.bootcamp.BCSecondaryHint import BCSecondaryHint
     from gui.Scaleform.daapi.view.bootcamp.BCPrebattleHints import BCPrebattleHints
+    from gui.Scaleform.daapi.view.battle.shared import game_messages_panel
     return (ViewSettings(VIEW_ALIAS.BOOTCAMP_INTRO_VIDEO, BCIntroVideoPage, 'BCIntroVideo.swf', ViewTypes.TOP_WINDOW, None, ScopeTemplates.TOP_WINDOW_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_BATTLE_PAGE, BCBattlePage, 'BCbattlePage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.BOOTCAMP_INTRO_FADEOUT, BCIntroFadeOut, 'BCIntroFadeOut.swf', ViewTypes.TOP_WINDOW, None, ScopeTemplates.TOP_WINDOW_SCOPE),
+     ViewSettings(VIEW_ALIAS.BOOTCAMP_INTRO_FADEOUT, BCIntroFadeOut, 'BCIntroFadeOut.swf', ViewTypes.WINDOW, None, ScopeTemplates.TOP_WINDOW_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BOOTCAMP_BATTLE_TOP_HINT, BCBattleTopHint, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_BATTLE_FINISHED_WINDOW, BCOverlayFinalWindow, 'BCOverlayFinalWindow.swf', ViewTypes.TOP_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_BATTLE_HIGHLIGHTS, BCHighlights, 'BCHighlights.swf', ViewTypes.WINDOW, None, ScopeTemplates.DEFAULT_SCOPE),
@@ -54,7 +55,8 @@ def getViewSettings():
      ViewSettings(BATTLE_VIEW_ALIASES.DESTROY_TIMERS_PANEL, destroy_timers_panel.DestroyTimersPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL, battle_end_warning_panel.BattleEndWarningPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_LOADING, battle_loading.BattleLoading, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.MINIMAP, BootcampMinimapComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+     ViewSettings(BATTLE_VIEW_ALIASES.MINIMAP, BootcampMinimapComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL, game_messages_panel.GameMessagesPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():

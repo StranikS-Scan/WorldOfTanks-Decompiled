@@ -40,10 +40,7 @@ class ModuleBlockTooltipData(BlocksTooltipData):
         return
 
     def _getHighLightType(self):
-        if self.item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and self.item.isDeluxe():
-            return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
-        else:
-            return SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+        return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS if self.item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and self.item.isDeluxe() else SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
 
     def _packBlocks(self, *args, **kwargs):
         self.item = self.context.buildItem(*args, **kwargs)
@@ -68,7 +65,7 @@ class ModuleBlockTooltipData(BlocksTooltipData):
                 if cooldownSeconds > 0:
                     items.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName('cooldownSeconds'), value=text_styles.stats(int(cooldownSeconds)), valueWidth=valueWidth, padding=formatters.packPadding(left=leftPadding)))
             effectsBlock = EffectsBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
-            if len(effectsBlock) > 0:
+            if effectsBlock:
                 effectsItems.append(formatters.packBuildUpBlockData(effectsBlock))
         if statsConfig.vehicle is not None and not module.isInstalled(statsConfig.vehicle):
             if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
@@ -78,32 +75,32 @@ class ModuleBlockTooltipData(BlocksTooltipData):
             stockParams = params_helper.getParameters(self.itemsCache.items.getStockVehicle(statsConfig.vehicle.intCD))
             if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not module.hasSimilarDevicesInstalled(statsConfig.vehicle) or module.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
                 simplifiedBlock = SimplifiedStatsBlockConstructor(module, paramsConfig, leftPadding, rightPadding, stockParams, comparator).construct()
-                if len(simplifiedBlock) > 0:
+                if simplifiedBlock:
                     effectsItems.append(formatters.packBuildUpBlockData(simplifiedBlock, gap=-4, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-3, bottom=1)))
             if statsConfig.vehicle.optDevices[statsConfig.slotIdx]:
                 if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
                     comparator = params_helper.artifactRemovedComparator(statsConfig.vehicle, module, statsConfig.slotIdx)
                 simplifiedBlock = SimplifiedStatsBlockConstructor(module, paramsConfig, leftPadding, rightPadding, stockParams, comparator).construct()
-                if len(simplifiedBlock) > 0:
+                if simplifiedBlock:
                     replaceBlock = ModuleReplaceBlockConstructor(module, statsConfig, valueWidth, leftPadding).construct()
                     if replaceBlock:
                         replaceItems.append(formatters.packBuildUpBlockData(replaceBlock))
                     replaceItems.append(formatters.packBuildUpBlockData(simplifiedBlock, gap=-4, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=2, bottom=1)))
-        if len(effectsItems) > 0:
+        if effectsItems:
             items.append(formatters.packBuildUpBlockData(effectsItems, padding=blockPadding, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, stretchBg=True))
-        if len(replaceItems) > 0:
+        if replaceItems:
             items.append(formatters.packBuildUpBlockData(replaceItems, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=blockPadding, stretchBg=True))
         priceBlock, invalidWidth = PriceBlockConstructor(module, statsConfig, valueWidth, leftPadding, rightPadding).construct()
-        if len(priceBlock) > 0:
+        if priceBlock:
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
             items.append(formatters.packBuildUpBlockData(priceBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-1, bottom=-3), gap=textGap))
         statsModules = GUI_ITEM_TYPE.VEHICLE_MODULES + (GUI_ITEM_TYPE.OPTIONALDEVICE,)
         if module.itemTypeID in statsModules:
             commonStatsBlock = CommonStatsBlockConstructor(module, paramsConfig, statsConfig.slotIdx, valueWidth, leftPadding, rightPadding, params_formatters.BASE_SCHEME).construct()
-            if len(commonStatsBlock) > 0:
+            if commonStatsBlock:
                 items.append(formatters.packBuildUpBlockData(commonStatsBlock, padding=blockPadding, gap=textGap))
         statusBlock = StatusBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
-        if len(statusBlock) > 0:
+        if statusBlock:
             items.append(formatters.packBuildUpBlockData(statusBlock, padding=blockPadding))
         if bonus_helper.isSituationalBonus(module.name):
             items.append(formatters.packImageTextBlockData(title='', desc=text_styles.standard(TOOLTIPS.VEHICLEPARAMS_BONUS_SITUATIONAL), img=RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_OPTIONAL, imgPadding=formatters.packPadding(left=4, top=3), txtGap=-4, txtOffset=20, padding=formatters.packPadding(left=59, right=20)))
@@ -136,7 +133,7 @@ class VehCompareModuleBlockTooltipData(BlocksTooltipData):
         items.append(formatters.packBuildUpBlockData(HeaderBlockConstructor(module, statsConfig, leftPadding, rightPadding).construct(), padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=topPadding)))
         if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
             effectsBlock = EffectsBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
-            if len(effectsBlock) > 0:
+            if effectsBlock:
                 items.append(formatters.packBuildUpBlockData(effectsBlock, padding=blockPadding, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
         priceBlock, invalidWidth = PriceBlockConstructor(module, statsConfig, valueWidth, leftPadding, rightPadding).construct()
         if priceBlock:
@@ -193,9 +190,6 @@ class ModuleTooltipBlockConstructor(object):
 
 
 class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
-
-    def __init__(self, module, configuration, leftPadding, rightPadding):
-        super(HeaderBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
 
     def construct(self):
         module = self.module
@@ -396,7 +390,7 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                     if paramName in paramsList and paramValue is not None:
                         block.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName(paramName), value=paramValue, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5)))
 
-        if len(block) > 0:
+        if block:
             block.insert(0, formatters.packTextBlockData(text_styles.middleTitle(_ms(TOOLTIPS.TANKCARUSEL_MAINPROPERTY)), padding=formatters.packPadding(bottom=8)))
         return block
 
@@ -439,9 +433,6 @@ class SimilarOptionalDeviceBlockConstructor(ModuleTooltipBlockConstructor):
     Notification if the vehicle has an optional device with the same effect
     """
 
-    def __init__(self, module, configuration, leftPadding, rightPadding):
-        super(SimilarOptionalDeviceBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
-
     def construct(self):
         block = list()
         paddingTop = 8
@@ -452,9 +443,6 @@ class SimilarOptionalDeviceBlockConstructor(ModuleTooltipBlockConstructor):
 
 class EffectsBlockConstructor(ModuleTooltipBlockConstructor):
     lobbyContext = dependency.descriptor(ILobbyContext)
-
-    def __init__(self, module, configuration, leftPadding, rightPadding):
-        super(EffectsBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
 
     def construct(self):
         module = self.module
@@ -482,29 +470,23 @@ class EffectsBlockConstructor(ModuleTooltipBlockConstructor):
             block.append(formatters.packTitleDescBlock(title='', desc=desc, padding=formatters.packPadding(top=-8)))
         else:
             topPadding = 0
-            if always[0] and len(always[1]) > 0:
+            if always[0] and always[1]:
                 block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(TOOLTIPS.EQUIPMENT_ALWAYS), desc=text_styles.bonusAppliedText(always[1])))
                 topPadding = 5
-            if onUse[0] and len(onUse[1]) > 0:
+            if onUse[0] and onUse[1]:
                 block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(TOOLTIPS.EQUIPMENT_ONUSE), desc=text_styles.main(onUse[1]), padding=formatters.packPadding(top=topPadding)))
                 topPadding = 5
-            if restriction[0] and len(restriction[1]) > 0:
+            if restriction[0] and restriction[1]:
                 block.append(formatters.packTitleDescBlock(title=text_styles.middleTitle(TOOLTIPS.EQUIPMENT_RESTRICTION), desc=text_styles.main(restriction[1]), padding=formatters.packPadding(top=topPadding)))
         return block
 
 
 class StatusBlockConstructor(ModuleTooltipBlockConstructor):
 
-    def __init__(self, module, configuration, leftPadding, rightPadding):
-        super(StatusBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
-
     def construct(self):
         if self.configuration.isResearchPage:
             return self._getResearchPageStatus()
-        elif self.configuration.isAwardWindow:
-            return []
-        else:
-            return self._getStatus()
+        return [] if self.configuration.isAwardWindow else self._getStatus()
 
     def _getStatus(self):
         block = []
@@ -548,10 +530,10 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
                     conflictEqs = module.getConflictedEquipments(vehicle)
                     tooltipText %= {'eqs': ', '.join([ _ms(e.userName) for e in conflictEqs ])}
                     vehicle.equipment.setRegularConsumables(currentVehicleEqs)
-            elif reason == 'already_installed' and isEqOrDev and len(installedVehicles):
+            elif reason == 'already_installed' and isEqOrDev and installedVehicles:
                 tooltipHeader, _ = getComplexStatus('#tooltips:deviceFits/already_installed' if module.itemTypeName == GUI_ITEM_TYPE.OPTIONALDEVICE else '#tooltips:moduleFits/already_installed')
                 tooltipText = ', '.join(installedVehicles)
-        elif len(installedVehicles):
+        elif installedVehicles:
             tooltipHeader, _ = getComplexStatus('#tooltips:deviceFits/already_installed' if module.itemTypeName == GUI_ITEM_TYPE.OPTIONALDEVICE else '#tooltips:moduleFits/already_installed')
             tooltipText = ', '.join(installedVehicles)
         if tooltipHeader is not None or tooltipText is not None:
@@ -568,7 +550,7 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
                     titleFormatter = text_styles.critical
                 tooltipHeader, tooltipText = getComplexStatus('#tooltips:moduleFits/%s' % reason)
                 if tooltipHeader is not None or tooltipText is not None:
-                    if len(block):
+                    if block:
                         padding = formatters.packPadding(bottom=15)
                         block.insert(0, self._packStatusBlock(tooltipHeader, tooltipText, titleFormatter, padding))
                     else:

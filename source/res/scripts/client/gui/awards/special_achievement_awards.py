@@ -1,17 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/awards/special_achievement_awards.py
 import BigWorld
-import constants
-from adisp import process
-from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.CLANS import CLANS
-from gui.goodies.goodie_items import _BOOSTER_DESCRIPTION_LOCALE
-from gui.shared import event_dispatcher as shared_events
-from gui.shared.formatters import text_styles
-from gui.shared.formatters.ranges import toRomanRangeString
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardAbstract, ExplosionBackAward
+from gui.goodies.goodie_items import _BOOSTER_DESCRIPTION_LOCALE
+from gui.server_events.awards import AwardAbstract, ExplosionBackAward
+from gui.shared import event_dispatcher as shared_events
+from gui.shared.formatters import text_styles
 from helpers import dependency
 from helpers import i18n
 from skeletons.gui.shared import IItemsCache
@@ -130,79 +126,6 @@ class BoosterAward(ExplosionBackAward):
     def clear(self):
         self._booster = None
         return
-
-
-class FalloutAwardWindow(AwardAbstract):
-    TITLE_KEY = '#fallout:awardWindow/title/'
-    HEADER_KEY = '#fallout:awardWindow/header/'
-    MAIN_TEXT_KEY = '#fallout:awardWindow/mainText/'
-    ADDITIONAL_TEXT_KEY = '#fallout:awardWindow/additionalText/'
-    BTN_ACTION_KEY = '#fallout:awardWindow/btnAction/'
-    BTN_CLOSE_KEY = '#fallout:awardWindow/btnClose/'
-
-    def __init__(self, lvls, isRequiredVehicle=False):
-        self._lvls = lvls
-        self._isMaxLvl = isRequiredVehicle
-        if self._isMaxLvl:
-            self._typeID = '1'
-        else:
-            self._typeID = '2'
-
-    def getWindowTitle(self):
-        return i18n.makeString(self.TITLE_KEY + self._typeID)
-
-    def getBackgroundImage(self):
-        return RES_ICONS.MAPS_ICONS_WINDOWS_FALLOUT_CONGRATULATIONS_BG
-
-    def getHeader(self):
-        localeStr = i18n.makeString(self.HEADER_KEY + self._typeID)
-        return text_styles.highTitle(localeStr % toRomanRangeString(list(self._lvls), 1))
-
-    def getDescription(self):
-        localeStr = i18n.makeString(self.MAIN_TEXT_KEY + self._typeID)
-        return text_styles.main(localeStr % toRomanRangeString(list(self._lvls), 1))
-
-    def getAdditionalText(self):
-        if not self._isMaxLvl:
-            return text_styles.main(self.ADDITIONAL_TEXT_KEY + self._typeID)
-        else:
-            return super(FalloutAwardWindow, self).getAdditionalText()
-
-    def getHasDashedLine(self):
-        return not self._isMaxLvl
-
-    def getBodyButtonText(self):
-        return i18n.makeString(self.BTN_ACTION_KEY + self._typeID)
-
-    def getButtonStates(self):
-        return (False, True, True)
-
-    def getTextAreaIconIsShow(self):
-        return True
-
-    def getTextAreaIconPath(self):
-        return RES_ICONS.MAPS_ICONS_BATTLETYPES_64X64_FALLOUT
-
-    def handleBodyButton(self):
-        if self._isMaxLvl:
-            from gui.prb_control.entities.base.ctx import PrbAction
-            from gui.prb_control.dispatcher import g_prbLoader
-            from gui.prb_control.settings import PREBATTLE_ACTION_NAME
-            dispatcher = g_prbLoader.getDispatcher()
-            if dispatcher is not None:
-                self.__doSelect(dispatcher)
-            else:
-                LOG_ERROR('Prebattle dispatcher is not defined')
-        else:
-            from gui.server_events.events_dispatcher import showEventsWindow
-            showEventsWindow(eventType=constants.EVENT_TYPE.BATTLE_QUEST)
-        return
-
-    @process
-    def __doSelect(self, dispatcher):
-        from gui.prb_control.entities.base.ctx import PrbAction
-        from gui.prb_control.settings import PREBATTLE_ACTION_NAME
-        yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.FALLOUT))
 
 
 class ClanJoinAward(AwardAbstract):

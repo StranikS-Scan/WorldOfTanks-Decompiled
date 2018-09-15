@@ -1,17 +1,26 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/events_helpers.py
 import time
+from collections import namedtuple
+from functools import partial
 import BigWorld
+from adisp import async
+from constants import EVENT_TYPE
 from gui import makeHtmlString
+from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.server_events import formatters
-from helpers import time_utils, i18n
+from gui.shared.gui_items import Vehicle
+from gui.shared.gui_items.processors import quests as quests_proc
+from gui.shared.utils.decorators import process
+from helpers import time_utils, i18n, dependency
 from shared_utils import CONST_CONTAINER
+from skeletons.gui.server_events import IEventsCache
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
 AWARDS_PER_PAGE = 3
-AWARDS_PER_SINGLE_PAGE = 4
+AWARDS_PER_SINGLE_PAGE = 5
 
 class EventInfoModel(object):
     NO_BONUS_COUNT = -1
@@ -39,7 +48,7 @@ class EventInfoModel(object):
             return makeHtmlString('html_templates:lobby/quests', 'timerTillFinish', {'time': fmt})
 
     def _getStatus(self, pCur=None):
-        return (EVENT_STATUS.NONE, '')
+        return (MISSIONS_STATES.NONE, '')
 
     @classmethod
     def _getTillTimeString(cls, timeValue):
@@ -76,14 +85,14 @@ class EventInfoModel(object):
                 args = {'finishTime': self._getDateTimeString(self.event.getFinishTime())}
             weekDays = self.event.getWeekDays()
             intervals = self.event.getActiveTimeIntervals()
-            if len(weekDays) or len(intervals):
+            if weekDays or intervals:
                 if i18nKey is None:
                     i18nKey = '#quests:details/header/schedule'
-                if len(weekDays):
+                if weekDays:
                     days = ', '.join([ i18n.makeString('#menu:dateTime/weekDays/full/%d' % idx) for idx in self.event.getWeekDays() ])
                     i18nKey += 'Days'
                     args['days'] = days
-                if len(intervals):
+                if intervals:
                     times = []
                     for low, high in intervals:
                         times.append('%s - %s' % (BigWorld.wg_getShortTimeFormat(low), BigWorld.wg_getShortTimeFormat(high)))
@@ -118,24 +127,6 @@ class QuestInfoModel(EventInfoModel):
         return i18n.makeString(completeKey, time=self._getTillTimeString(time_utils.ONE_DAY - time_utils.getServerRegionalTimeCurrentDay()))
 
 
-def getCarouselAwardVO(bonuses, isReceived=False):
-    """ Generate award VOs for carousel.
-    
-    :param bonuses: list of bonuses (instances of gui.server_events.SimpleBonus).
-    :param isReceived: flag describing whether this is 'already received' context.
-    """
-    result = []
-    for bonus in bonuses:
-        if not bonus.isShowInGUI():
-            continue
-        result.extend(bonus.getCarouselList(isReceived))
-
-    while len(result) % AWARDS_PER_PAGE != 0 and len(result) > AWARDS_PER_SINGLE_PAGE:
-        result.append({})
-
-    return result
-
-
 class EVENT_STATUS(CONST_CONTAINER):
     COMPLETED = 'done'
     NOT_AVAILABLE = 'notAvailable'
@@ -149,7 +140,7 @@ def getMinutesRoundByTime(timeLeft):
 
 
 def missionsSortFunc(a, b):
-    """ Sort function for common quests (all except potapov and motive).
+    """ Sort function for common quests (all except personal mission and motive).
     """
     res = cmp(a.isAvailable()[0] and not a.isCompleted(), b.isAvailable()[0] and not b.isCompleted())
     if res:
@@ -165,3 +156,125 @@ def missionsSortFunc(a, b):
         return res
     res = cmp(a.isCompleted(), b.isCompleted())
     return res if res else cmp(a.getUserName(), b.getUserName())
+
+
+def getConditionsDiffStructure(fullConditions, mainConditions):
+    """
+    Return conditions diff structure between fullConditions and mainConditions sections with parent tags
+    Diff doesn't contain unique mainConditions sections.
+    
+    example:
+    fullConditions: ((win, 1), (and, [(survive, 5), (kill, 3)])
+    mainConditions: ((win, 1), (and, [(kill, 3), (damage, 3)])
+    result: (and, [(survive, 5)])
+    """
+    result = []
+    if fullConditions == mainConditions:
+        return result
+    if len(fullConditions) == len(mainConditions):
+        for fKey, fValue in fullConditions:
+            if (fKey, fValue) not in mainConditions:
+                for mKey, mValue in mainConditions:
+                    if (mKey, mValue) not in fullConditions:
+                        if fKey == mKey:
+                            if fValue != mValue:
+                                diffValue = getConditionsDiffStructure(fValue, mValue)
+                                if diffValue and (fKey, diffValue) not in result:
+                                    result.append((fKey, diffValue))
+                        elif (fKey, fValue) not in result:
+                            result.append((fKey, fValue))
+
+        return result
+    for fValue in fullConditions:
+        if fValue not in mainConditions:
+            result.append(fValue)
+
+    return result
+
+
+class _PMDependenciesResolver(object):
+    eventsCache = dependency.descriptor(IEventsCache)
+    _DEPENDENCIES_LIST = namedtuple('HandlersList', ['cache',
+     'progress',
+     'selectProcessor',
+     'refuseProcessor',
+     'rewardsProcessor',
+     'pawnProcessor',
+     'sorter'])
+
+    @classmethod
+    def _makeRandomDependencies(cls):
+        return cls._DEPENDENCIES_LIST(cls.eventsCache.random, cls.eventsCache.randomQuestsProgress, quests_proc.RandomQuestSelect, quests_proc.RandomQuestRefuse, quests_proc.PersonalMissionsGetRegularReward, quests_proc.PersonalMissionPawn, partial(sorted, cmp=Vehicle.compareByVehTypeName))
+
+    @classmethod
+    def chooseList(cls, _):
+        return cls._makeRandomDependencies()
+
+
+def getPersonalMissionsCache(questsType=None):
+    return _PMDependenciesResolver.chooseList(questsType).cache
+
+
+def getPersonalMissionsProgress(questsType=None):
+    return _PMDependenciesResolver.chooseList(questsType).progress
+
+
+def getPersonalMissionsSelectProcessor(questsType=None):
+    return _PMDependenciesResolver.chooseList(questsType).selectProcessor
+
+
+def getPersonalMissionsRefuseProcessor(questsType=None):
+    return _PMDependenciesResolver.chooseList(questsType).refuseProcessor
+
+
+def getPersonalMissionsRewardProcessor(questsType=None):
+    return _PMDependenciesResolver.chooseList(questsType).rewardsProcessor
+
+
+def getPersonalMissionsPawnProcessor(questsType=None):
+    return _PMDependenciesResolver.chooseList(questsType).pawnProcessor
+
+
+def sortWithQuestType(items, key, questsType=None):
+    return _PMDependenciesResolver.chooseList(questsType).sorter(items, key=key)
+
+
+@async
+@process('updating')
+def getPersonalMissionAward(quest, callback):
+    """ Display special tankwoman award window.
+    """
+    from gui.server_events.events_dispatcher import showTankwomanAward
+    tankman, isMainBonus = quest.getTankmanBonus()
+    needToGetTankman = quest.needToGetAddReward() and not isMainBonus or quest.needToGetMainReward() and isMainBonus
+    if needToGetTankman and tankman is not None:
+        for tmanData in tankman.getTankmenData():
+            showTankwomanAward(quest.getID(), tmanData)
+            break
+
+        result = None
+    else:
+        result = yield getPersonalMissionsRewardProcessor()(quest).request()
+    callback(result)
+    return
+
+
+def questsSortFunc(a, b):
+    """ Sort function for common quests (all except personal missions and motive).
+    """
+    res = cmp(a.isCompleted(), b.isCompleted())
+    if res:
+        return res
+    res = cmp(a.getPriority(), b.getPriority())
+    return res if res else cmp(a.getUserName(), b.getUserName())
+
+
+def getBoosterQuests():
+
+    def filterQuests(quest):
+        hasBooster = len(quest.getBonuses('goodies'))
+        isNotRanked = quest.getType() != EVENT_TYPE.RANKED_QUEST
+        return hasBooster and isNotRanked and quest.isAvailable()[0] and not quest.isCompleted()
+
+    eventsCache = dependency.instance(IEventsCache)
+    return eventsCache.getActiveQuests(filterFunc=filterQuests)

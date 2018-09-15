@@ -134,7 +134,7 @@ def createWheelsAnimator(compoundModel, typeDescriptor, splineTracks, filter=Non
 def createTrackNodesAnimator(compoundModel, typeDescriptor, wheelsDataProvider=None, lodStateLink=None):
     trackNodesConfig = typeDescriptor.chassis.trackNodes
     trackParams = typeDescriptor.chassis.trackParams
-    if not len(trackNodesConfig):
+    if not trackNodesConfig:
         return
     else:
         trackNodesAnimator = Vehicular.TrackNodesAnimator(compoundModel, TankNodeNames.HULL_SWINGING)

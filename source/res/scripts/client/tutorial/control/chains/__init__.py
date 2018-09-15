@@ -31,7 +31,6 @@ class ChainsControlsFactory(ControlsFactory):
          EFFECT_TYPE.SHOW_HINT: chains_func.FunctionalShowHint,
          EFFECT_TYPE.CLOSE_HINT: chains_func.FunctionalCloseHint,
          EFFECT_TYPE.ENTER_QUEUE: chains_func.FunctionalSwitchToRandom,
-         EFFECT_TYPE.SHOW_UNLOCKED_CHAPTER: chains_func.FunctionalShowUnlockedChapter,
          EFFECT_TYPE.SHOW_AWARD_WINDOW: chains_func.FunctionalShowAwardWindow}
         queries_ = {'awardWindow': queries.AwardWindowContentQuery}
         ControlsFactory.__init__(self, effects, queries_)

@@ -37,7 +37,7 @@ import zlib
 from debug_utils import LOG_DEBUG
 EXAMPLES = {}
 DEFAULT_SINCE_DELAY = timedelta(days=1)
-SUCCESS_STATUSES = [200, 201]
+SUCCESS_STATUSES = [200, 201, 304]
 ERROR_MAP = {e.response_code:e for e in exceptions.BaseRequestError.__subclasses__()}
 
 def get_error_from_response(response_code):
@@ -105,28 +105,32 @@ class GatewayDataAccessor(base.BaseDataAccessor):
             def wrapped(response, func=something):
                 try:
                     data = response.body
-                    content_encoding = response.headers().get('Content-Encoding')
-                    if content_encoding == 'gzip':
+                    headers = response.headers()
+                    try:
                         data = zlib.decompress(data, 16 + zlib.MAX_WBITS)
+                    except zlib.error:
+                        pass
+
                     data = json.loads(data)
                 except:
                     data = None
+                    headers = None
 
                 if response.responseCode not in SUCCESS_STATUSES:
                     error_data = None
                     if data:
-                        error_data = {'description': data['description'],
+                        error_data = {'description': data.get('description', ''),
                          'title': data.get('title', ''),
                          'notification_type': data.get('notification_type', ''),
                          'extra_data': data.get('extra_data')}
-                    return callback(error_data, response.responseCode, response.responseCode)
+                    return callback(error_data, response.responseCode, response.responseCode, headers)
                 else:
                     response_code = exceptions.ResponseCodes.NO_ERRORS
                     if func:
                         data = func(data)
                     if converters:
                         self._apply_converters(data, converters)
-                    callback(data, response.responseCode, response_code)
+                    callback(data, response.responseCode, response_code, headers)
                     return
 
             return wrapped(something, func=None) if not callable(something) else wrapped
@@ -167,10 +171,10 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         auth = b64encode(':'.join([str(account_id), str(spa_token)]))
         extra_headers = {'AUTHORIZATION': 'Basic %s' % auth}
 
-        def inner_callback(data, status_code, response_code):
+        def inner_callback(data, status_code, response_code, headers):
             if status_code in SUCCESS_STATUSES:
                 self._session_id = data['session']
-            callback(data, status_code, response_code)
+            callback(data, status_code, response_code, headers)
 
         self._request_data(inner_callback, '/login/', headers=extra_headers)
 
@@ -180,8 +184,8 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         return
 
     def _request_data(self, callback, url, get_data={}, method='GET', post_data=None, headers=None, converters=None):
-        get_data = {k:v for k, v in get_data.iteritems() if v}
-        url = '/'.join([self.gateway_host.strip('/'), url.strip('/'), ''])
+        get_data = {k:v for k, v in get_data.iteritems() if v is not None}
+        url = '/'.join([self.gateway_host.rstrip('/'), url.lstrip('/')])
         if get_data:
             values = []
             for k, val in get_data.iteritems():
@@ -199,7 +203,7 @@ class GatewayDataAccessor(base.BaseDataAccessor):
             default_headers['COOKIE'] = 'session=%s' % self._session_id
         if self.user_agent:
             default_headers['User-Agent'] = self.user_agent
-        headers = tuple(('{}: {}'.format(*d) for d in default_headers.iteritems()))
+        headers = tuple(('{}: {}'.format(k, v) for k, v in default_headers.iteritems() if v))
         args = [headers, 30.0, method]
         if post_data:
             args.append(json.dumps(post_data))
@@ -670,6 +674,70 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         """
         url = '/wgsh/accounts/{account_id}/'.format(account_id=account_id)
         return self._request_data(callback, url, get_data={}, converters={}, method='GET')
+
+    def join_event(self, callback, event_id, fields=None):
+        """
+        request WGELEN to join user to event
+        """
+        url = '/wgelen/v1/join_event'
+        post_data = {'event_id': event_id}
+        return self._request_data(callback, url, method='POST', post_data=post_data)
+
+    def leave_event(self, callback, event_id, fields=None):
+        """
+        request WGELEN to leave user from event
+        """
+        url = '/wgelen/v1/leave_event'
+        post_data = {'event_id': event_id}
+        return self._request_data(callback, url, method='POST', post_data=post_data)
+
+    def get_events_data(self, callback, fields=None):
+        """
+        request WGELEN to return events static settings
+        """
+        url = '/wgelen/v1/get_events_data'
+        return self._request_data(callback, url, method='GET')
+
+    def get_hangar_flag(self, callback, fields=None):
+        """
+        request WGELEN to return events state for hangar flag
+        """
+        url = '/wgelen/v1/get_hangar_flag'
+        return self._request_data(callback, url, method='GET')
+
+    def get_leaderboard(self, callback, event_id, page_number, leaderboard_id, fields=None):
+        """
+        request WGELEN to return leaderboard
+        """
+        url = '/wgelen/v1/get_leaderboard'
+        get_data = {'event_id': event_id,
+         'page_number': page_number,
+         'leaderboard_id': leaderboard_id}
+        return self._request_data(callback, url, get_data, 'GET')
+
+    def get_my_event_top(self, callback, event_id, fields=None):
+        """
+        request WGELEN to return my events top
+        """
+        url = '/wgelen/v1/get_my_event_top'
+        get_data = {'event_id': event_id}
+        return self._request_data(callback, url, get_data, 'GET')
+
+    def get_my_leaderboard_position(self, callback, event_id, leaderboard_id, fields=None):
+        """
+        request WGELEN to return leaderboard
+        """
+        url = '/wgelen/v1/get_my_leaderboard_position'
+        get_data = {'event_id': event_id,
+         'leaderboard_id': leaderboard_id}
+        return self._request_data(callback, url, get_data, 'GET')
+
+    def get_player_data(self, callback, fields=None):
+        """
+        request WGELEN to return events state for hangar flag
+        """
+        url = '/wgelen/v1/get_player_data'
+        return self._request_data(callback, url, method='GET')
 
     def hof_user_info(self, callback):
         """

@@ -16,11 +16,7 @@ def _resourceParam(value):
 
 
 def _getTooltip(headerKey, bodyKey, ratingOutdated=False):
-    if ratingOutdated:
-        return makeTooltip(headerKey, bodyKey, None, CL.GLOBALMAPVIEW_TOOLTIP_RATINGOUTDATED)
-    else:
-        return makeTooltip(headerKey, bodyKey)
-        return None
+    return makeTooltip(headerKey, bodyKey, None, CL.GLOBALMAPVIEW_TOOLTIP_RATINGOUTDATED) if ratingOutdated else makeTooltip(headerKey, bodyKey)
 
 
 def _getDataObject(key, i18nFunc, value, ratingOutdated=False, tooltipData=None):

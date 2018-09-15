@@ -94,11 +94,7 @@ class PlayerCtxStorage(SimpleCachedStorage):
             LOG_WARNING('Item is not enabled', key)
 
     def getCachedItem(self, key):
-        if key in self.__cachedItems:
-            return self.__cachedItems[key]
-        else:
-            return None
-            return None
+        return self.__cachedItems[key] if key in self.__cachedItems else None
 
     def _getCachedData(self):
         data = []

@@ -56,7 +56,7 @@ def loadDefault(xmlCtx, section, messengerSettings):
             data[name] = value
         raise _xml_helpers.XMLError(ctx, 'Invalid value of preference {0:>s}'.format(name))
 
-    if len(data):
+    if data:
         messengerSettings.userPrefs = messengerSettings.userPrefs._replace(**data)
 
 
@@ -87,6 +87,6 @@ def flush(messengerSettings, data):
         if key in _userProps:
             newData[key] = value
 
-    if len(newData):
+    if newData:
         messengerSettings.userPrefs = messengerSettings.userPrefs._replace(**data)
     return len(newData) > 0

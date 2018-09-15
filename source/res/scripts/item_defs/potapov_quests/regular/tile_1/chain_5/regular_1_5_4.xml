@@ -6,14 +6,52 @@
       <serverOnly>	true	</serverOnly>
       <conditions>
         <postBattle>
-          <vehicleStun>
-            <classes>	heavyTank AT-SPG	</classes>
-            <greaterOrEqual>	30	</greaterOrEqual>
-          </vehicleStun>
+          <and>
+            <vehicleStun>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_vehicleStun	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_1_5_4_condition_description_vehicleStun	</key>
+              </description>
+              <classes>	heavyTank AT-SPG	</classes>
+              <greaterOrEqual>	30	</greaterOrEqual>
+            </vehicleStun>
+          </and>
         </postBattle>
       </conditions>
       <bonus>
         <credits>	50000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t1:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_5_4_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_1_5_4_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	50000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t1:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
       </bonus>
     </potapovQuest>
     <potapovQuest>
@@ -21,6 +59,47 @@
       <id>	regular_1_5_4_add	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
+        <postBattle>
+          <and>
+            <vehicleStun>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_vehicleStun	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_1_5_4_condition_description_vehicleStun	</key>
+              </description>
+              <classes>	heavyTank AT-SPG	</classes>
+              <greaterOrEqual>	30	</greaterOrEqual>
+            </vehicleStun>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	25000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t1:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_5_4_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_1_5_4_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
         <postBattle>
           <and>
             <vehicleStun>
@@ -32,7 +111,11 @@
         </postBattle>
       </conditions>
       <bonus>
-        <credits>	25000	</credits>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
       </bonus>
     </potapovQuest>
   </quests>

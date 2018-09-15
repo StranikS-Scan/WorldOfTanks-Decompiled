@@ -43,12 +43,6 @@ class GroupManageView(BaseManageContactViewMeta):
             self.as_setLabelS(errorMsg)
             self.as_setOkBtnEnabledS(isAllowedResult)
 
-    def _dispose(self):
-        super(GroupManageView, self)._dispose()
-
-    def _populate(self):
-        super(GroupManageView, self)._populate()
-
     def _getDefaultInitData(self, mainLbl, btOkLbl, btnCancelLbl, btOkTooltip, btnCancelTooltip):
         defData = super(GroupManageView, self)._getDefaultInitData(mainLbl, btOkLbl, btnCancelLbl, btOkTooltip, btnCancelTooltip)
         defData['inputPrompt'] = i18n.makeString(MESSENGER.MESSENGER_CONTACTS_VIEW_MANAGEGROUP_RENAMEGROUP_SEARCHINPUTPROMPT, symbols=CONTACT_LIMIT.GROUP_MAX_LENGTH)

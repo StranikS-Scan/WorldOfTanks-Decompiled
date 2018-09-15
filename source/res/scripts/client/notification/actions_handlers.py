@@ -7,6 +7,7 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import DialogsInterface, makeHtmlString, SystemMessages
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
+from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.battle_results import RequestResultsContext
 from gui.clans import contexts as clan_ctxs
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
@@ -28,9 +29,6 @@ from skeletons.gui.game_control import IBrowserController
 
 class _ActionHandler(object):
 
-    def __init__(self):
-        super(_ActionHandler, self).__init__()
-
     @classmethod
     def getNotType(cls):
         return NotImplementedError
@@ -41,6 +39,21 @@ class _ActionHandler(object):
 
     def handleAction(self, model, entityID, action):
         assert action in self.getActions(), 'Handler does not handle action {0}'.format(action)
+
+
+class _OpenEventBoardsHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(self):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(_OpenEventBoardsHandler, self).handleAction(model, entityID, action)
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MISSIONS, ctx={'tab': QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 class _ShowArenaResultHandler(_ActionHandler):
@@ -205,9 +218,6 @@ class _ShowClanAppUserInfoHandler(_ClanAppHandler):
 
 class _ClanInviteHandler(_ActionHandler):
     clanCtrl = dependency.descriptor(IClanController)
-
-    def __init__(self):
-        super(_ClanInviteHandler, self).__init__()
 
     def _getInviteID(self, model, entityID):
         return model.getNotification(self.getNotType(), entityID).getInviteID()
@@ -500,7 +510,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _ShowClanSettingsFromAppsHandler,
  _ShowClanSettingsFromInvitesHandler,
  _AcceptClanInviteHandler,
- _DeclineClanInviteHandler)
+ _DeclineClanInviteHandler,
+ _OpenEventBoardsHandler)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

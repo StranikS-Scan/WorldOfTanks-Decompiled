@@ -22,8 +22,8 @@ class LightEffectsCache:
             LightEffectsCache.__addLightEffect(lightEffectSection)
 
     @staticmethod
-    def __parseDescriptions(descriptionStr):
-        descriptions = descriptionStr.split(',')
+    def __parseDescriptions(descriptionStrs):
+        descriptions = descriptionStrs.split(',')
         result = []
         for descriptionStr in descriptions:
             result.append(descriptionStr.strip())

@@ -525,7 +525,4 @@ class StoreBattleBoosterTab(StoreArtefactTab):
         targetType = self._filterData['targetType']
         if targetType == STORE_CONSTANTS.FOR_EQUIPMENT_FIT:
             return REQ_CRITERIA.BATTLE_BOOSTER.OPTIONAL_DEVICE_EFFECT
-        elif targetType == STORE_CONSTANTS.FOR_CREW_FIT:
-            return REQ_CRITERIA.BATTLE_BOOSTER.CREW_EFFECT
-        else:
-            return REQ_CRITERIA.BATTLE_BOOSTER.ALL
+        return REQ_CRITERIA.BATTLE_BOOSTER.CREW_EFFECT if targetType == STORE_CONSTANTS.FOR_CREW_FIT else REQ_CRITERIA.BATTLE_BOOSTER.ALL

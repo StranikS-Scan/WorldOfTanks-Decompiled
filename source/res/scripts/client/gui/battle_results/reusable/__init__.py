@@ -80,7 +80,6 @@ def createReusableInfo(results):
     else:
         LOG_WARNING('Records are not valid in the results. Perhaps, client and server versions of file battle_results_shared.py are different.', *[ (record, results[record]) for record in unpackedRecords ])
         return
-        return
 
 
 class _ReusableInfo(object):

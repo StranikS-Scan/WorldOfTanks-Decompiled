@@ -184,11 +184,7 @@ class SfLobbyProxy(GUIProxy):
             self.app.loadView(ViewLoadParams(alias, windowID), content)
 
     def getItemsOnScene(self):
-        if self.app is not None and self.app.tutorialManager is not None:
-            return self.app.tutorialManager.getFoundComponentsIDs()
-        else:
-            return set()
-            return
+        return self.app.tutorialManager.getFoundComponentsIDs() if self.app is not None and self.app.tutorialManager is not None else set()
 
     def clearScene(self):
         app = self.app

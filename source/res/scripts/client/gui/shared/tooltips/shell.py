@@ -49,22 +49,22 @@ class ShellBlockToolTipData(BlocksTooltipData):
         showBasicData = self.__basicDataAllowed and params['isBasic']
         items.append(formatters.packBuildUpBlockData(HeaderBlockConstructor(shell, statsConfig, leftPadding, rightPadding, params).construct(), padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=topPadding)))
         priceBlock, invalidWidth = PriceBlockConstructor(shell, statsConfig, 80).construct()
-        if len(priceBlock) > 0:
+        if priceBlock:
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
             items.append(formatters.packBuildUpBlockData(priceBlock, padding=blockPadding, gap=textGap))
         if vDescr is not None and not showBasicData:
             simplifiedStatsBlock = SimplifiedStatsBlockConstructor(shell, paramsConfig, params).construct()
-            if len(simplifiedStatsBlock) > 0:
+            if simplifiedStatsBlock:
                 items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, padding=blockPadding, gap=textGap))
         statusBlock = StatusBlockConstructor(shell, statusConfig).construct()
         if self.__basicDataAllowed:
             statsBlock = CommonStatsBlockConstructor(shell, paramsConfig, 80, params).construct()
         else:
             statsBlock = _AdvancedCommonStatsBlockConstructior(shell, paramsConfig, 80, params).construct()
-        bottomPadding = 4 if len(statusBlock) > 0 or showBasicData else 0
-        if len(statsBlock) > 0:
+        bottomPadding = 4 if statusBlock or showBasicData else 0
+        if statsBlock:
             items.append(formatters.packBuildUpBlockData(statsBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding, bottom=bottomPadding), gap=textGap))
-        if len(statusBlock) > 0:
+        if statusBlock:
             items.append(formatters.packBuildUpBlockData(statusBlock, padding=lrPaddings))
         if showBasicData:
             boldText = text_styles.neutral(TOOLTIPS.SHELL_BASIC_DESCRIPTION_BOLD)

@@ -59,12 +59,6 @@ class RankedBattlesCalendarPopover(RankedBattlesCalendarPopoverMeta):
          'dayText': text_styles.superPromoTitle(formattedDate.day),
          'dayNameText': text_styles.middleTitle(selectedDayOfWeek)})
 
-    def as_disposeS(self):
-        super(RankedBattlesCalendarPopover, self).as_disposeS()
-
-    def _dispose(self):
-        super(RankedBattlesCalendarPopover, self)._dispose()
-
     def __getCycleListString(self):
         key = RANKED_BATTLES.RANKEDBATTLEVIEW_STATUSBLOCK_CALENDARPOPOVER_CYCLEITEM
         cycles = self.__seasonInfo.getAllCycles()

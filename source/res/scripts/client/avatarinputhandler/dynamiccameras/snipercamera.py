@@ -105,15 +105,6 @@ class SniperCamera(ICamera, CallbackDelayer):
             self.__zoom = self.__cfg['zoom']
         else:
             self.__cfg['zoom'] = self.__zoom = self.__cfg['zooms'][0]
-        from constants import IS_BOOTCAMP_ENABLED
-        if IS_BOOTCAMP_ENABLED:
-            from bootcamp.Bootcamp import g_bootcamp
-            if not g_bootcamp.isSniperModeUsed():
-                zooms = self.__cfg['zooms']
-                if not self.__cfg['increasedZoom']:
-                    zooms = zooms[:3]
-                zoomIndex = -1 if not saveZoom else 1
-                self.__zoom = zooms[zoomIndex]
         self.__applyZoom(self.__zoom)
         self.__setupCamera(targetPos)
         vehicle = player.getVehicleAttached()
@@ -200,6 +191,11 @@ class SniperCamera(ICamera, CallbackDelayer):
             return
         self.applyImpulse(position, impulse, reason)
 
+    def setMaxZoom(self):
+        zooms = self.__getZooms()
+        self.__zoom = zooms[-1]
+        self.__applyZoom(self.__zoom)
+
     def __applyNoiseImpulse(self, noiseMagnitude):
         noiseImpulse = mathUtils.RandomVectors.random3(noiseMagnitude)
         self.__noiseOscillator.applyImpulse(noiseImpulse)
@@ -249,13 +245,17 @@ class SniperCamera(ICamera, CallbackDelayer):
             BattleReplay.g_replayCtrl.serializeCallbackData('applyZoom', (zoomFactor,))
         FovExtended.instance().setFovByMultiplier(1 / zoomFactor)
 
+    def __getZooms(self):
+        zooms = self.__cfg['zooms']
+        if not self.__cfg['increasedZoom']:
+            zooms = zooms[:3]
+        return zooms
+
     def __setupZoom(self, dz):
         if dz == 0:
             return
         else:
-            zooms = self.__cfg['zooms']
-            if not self.__cfg['increasedZoom']:
-                zooms = zooms[:3]
+            zooms = self.__getZooms()
             prevZoom = self.__zoom
             if self.__zoom == zooms[0] and dz < 0 and self.__onChangeControlMode is not None:
                 self.__onChangeControlMode(True)

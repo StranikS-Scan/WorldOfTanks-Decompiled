@@ -7,9 +7,9 @@ list of ally vehicles, detailed information about each vehicle.
 from constants import DEATH_REASON_ALIVE
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.battle_results.components import base, personal, shared, style, common
+from gui.battle_results.components.base import PropertyValue
 from gui.battle_results.reusable import sort_keys
 from gui.shared.gui_items.Vehicle import getSmallIconPath, getIconPath
 from gui.shared.formatters import text_styles
@@ -63,7 +63,7 @@ class RegularVehicleStatsBlock(base.StatsBlock):
         self._setTotalStats(result, noPenalties)
         self._setVehiclesStats(result)
         if not self.isPersonal or noPenalties:
-            self._setAchievements(result)
+            self._setAchievements(result, reusable)
         if not self._isObserver:
             self._setVehicleState(result, reusable)
         return
@@ -98,10 +98,10 @@ class RegularVehicleStatsBlock(base.StatsBlock):
     def _setVehiclesStats(self, result):
         self.statValues = (self.isPersonal, result.getVehiclesIterator())
 
-    def _setAchievements(self, result):
+    def _setAchievements(self, result, reusable):
         achievements = result.getAchievements()
         self.achievementsCount = len(achievements)
-        self.achievements = achievements
+        self.achievements = PropertyValue(achievements, reusable)
 
     def _setVehicleState(self, result, reusable):
         if self._isObserver:

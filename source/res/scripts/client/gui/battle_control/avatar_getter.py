@@ -331,11 +331,7 @@ def getDistanceToTarget(target, avatar=None):
     :return: float containing distance in meters.
     """
     ownPosition = getOwnVehiclePosition(avatar=avatar)
-    if ownPosition is not None:
-        return (target.position - ownPosition).length
-    else:
-        return 0.0
-        return
+    return (target.position - ownPosition).length if ownPosition is not None else 0.0
 
 
 def getDistanceToGunMarker(avatar=None):

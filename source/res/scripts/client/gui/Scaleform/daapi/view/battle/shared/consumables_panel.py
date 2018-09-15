@@ -11,6 +11,7 @@ from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
 from gui import TANKMEN_ROLES_ORDER_DICT
 from gui.Scaleform.daapi.view.meta.ConsumablesPanelMeta import ConsumablesPanelMeta
+from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL_SETTINGS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
 from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM, GUN_RELOADING_VALUE_TYPE
@@ -86,20 +87,23 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         if isDown:
             self.__collapseEquipmentSlot()
             return True
-        else:
-            return False
+        return False
 
     def _populate(self):
         super(ConsumablesPanel, self)._populate()
         if self.sessionProvider.isReplayPlaying:
             self.as_handleAsReplayS()
         self.__addListeners()
+        self.as_setPanelSettingsS(self._getPanelSettings())
 
     def _dispose(self):
         self.__clearAllEquipmentGlow()
         self.__removeListeners()
         self.__keys.clear()
         super(ConsumablesPanel, self)._dispose()
+
+    def _getPanelSettings(self):
+        return CONSUMABLES_PANEL_SETTINGS.DEFAULT_SETTINGS_ID
 
     def _addShellSlot(self, idx, keyCode, sfKeyCode, quantity, clipCapacity, shellIconPath, noShellIconPath, tooltipText):
         self.as_addShellSlotS(idx, keyCode, sfKeyCode, quantity, clipCapacity, shellIconPath, noShellIconPath, tooltipText)
@@ -567,7 +571,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         else:
             entityNames = [ name for name, state in equipment.getEntitiesIterator() if state == DEVICE_STATE_DESTROYED ]
             correction = hasDestroyed = len(entityNames)
-            entityName = hasDestroyed and entityNames[0] or None
+            entityName = entityNames[0] if hasDestroyed else None
         canActivate, info = equipment.canActivate(entityName)
         infoType = type(info)
         return correction and (canActivate or infoType == NeedEntitySelection) or infoType == IgnoreEntitySelection

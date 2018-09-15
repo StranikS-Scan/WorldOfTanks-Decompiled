@@ -190,9 +190,6 @@ class LazyUserRoomController(_ChannelController):
         else:
             self.__exitFromLazyChannel()
 
-    def addMessage(self, message, doFormatting=True):
-        return super(LazyUserRoomController, self).addMessage(message, doFormatting)
-
     def join(self):
         if not self._channel.isJoined():
             self.proto.messages.joinToMUC(self._channel.getID())

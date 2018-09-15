@@ -3,6 +3,7 @@
 import weakref
 import math
 from debug_utils import LOG_ERROR
+from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.clans import formatters as clans_fmts
 from gui.clans.settings import CLAN_INVITE_STATES, ACTIVE_INVITE_LIFE_TIME
 from gui.clans.items import isValueAvailable, formatField
@@ -40,7 +41,7 @@ class ClanInvitesViewWithTable(ClanInvitesViewWithTableMeta):
         self.as_setDataS(self._makeData())
 
     def _updateSortField(self, sort):
-        if sort is not None and len(sort):
+        if sort:
             order = 'ascending' if sort[0][1] else 'descending'
             self.as_updateDefaultSortFieldS(defaultSortField=sort[0][0], defaultSortDirection=order)
         else:
@@ -79,7 +80,8 @@ class ClanInvitesViewWithTable(ClanInvitesViewWithTableMeta):
          'alignCenter': alignCenter,
          'btnVisible': btnVisible,
          'btnLabel': btnLabel,
-         'btnTooltip': btnTooltip})
+         'btnTooltip': btnTooltip,
+         'btnLinkage': BUTTON_LINKAGES.BUTTON_BLACK})
 
 
 class ClanInvitesAbstractDataProvider(SortableDAAPIDataProvider):
@@ -212,7 +214,7 @@ class ClanInvitesAbstractDataProvider(SortableDAAPIDataProvider):
         return []
 
     def _makeTooltip(self, body):
-        return makeTooltip(body=body) if body is not None and len(body) else None
+        return makeTooltip(body=body) if body else None
 
     def _makeInviteStateString(self, item):
         status = item.getStatus()

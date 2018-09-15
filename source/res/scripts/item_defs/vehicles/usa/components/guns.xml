@@ -69,7 +69,6 @@
     <_90mm_Gun_T178>	79	</_90mm_Gun_T178>
     <_120mm_Gun_T179>	80	</_120mm_Gun_T179>
     <_105mm_Gun_T140E2>	81	</_105mm_Gun_T140E2>
-    <_25pdr_Field_Gun>	82	</_25pdr_Field_Gun>
     <Gun_1_M4A3E8_Sherman_training>	83	</Gun_1_M4A3E8_Sherman_training>
     <_105mm_Gun_M68_1>	85	</_105mm_Gun_M68_1>
     <_155mm_Gun_M46>	87	</_155mm_Gun_M46>
@@ -2786,6 +2785,7 @@
       <tags></tags>
       <level>	7	</level>
       <price>	74500	</price>
+      <notInShop>	true	</notInShop>
       <impulse>	0.48	</impulse>
       <recoil>
         <lodDist>	MEDIUM	</lodDist>
@@ -3549,67 +3549,6 @@
         </_76mm_AP_M79training>
       </shots>
     </Gun_1_M4A3E8_Sherman_training>
-    <_25pdr_Field_Gun>
-      <userString>	#usa_vehicles:_25pdr_Field_Gun	</userString>
-      <tags></tags>
-      <level>	4	</level>
-      <price>	22850	</price>
-      <notInShop>	true	</notInShop>
-      <impulse>	0.48	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.6	</amplitude>
-        <recoilEffect>	main	</recoilEffect>
-      </recoil>
-      <effects>	shot_main_mb	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
-        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	30.625	</rotationSpeed>
-      <reloadTime>	15.88571428571430	</reloadTime>
-      <maxAmmo>	112	</maxAmmo>
-      <aimingTime>	5.14285714285714	</aimingTime>
-      <weight>	510	</weight>
-      <maxHealth>	140	</maxHealth>
-      <maxRegenHealth>	70	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.46	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.44	</turretRotation>
-        <afterShot>	6.4	</afterShot>
-        <whileGunDamaged>	2.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_25pdr_HE_Mk_1D>
-          <defaultPortion>	1.0	</defaultPortion>
-          <speed>	420	</speed>
-          <gravity>	230	</gravity>
-          <maxDistance>	10000	</maxDistance>
-          <piercingPower>	44 44	</piercingPower>
-          <maxHeight>	245	</maxHeight>
-        </_25pdr_HE_Mk_1D>
-        <_25pdr_AP_Mk_1T_SC>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	525	</speed>
-          <gravity>	230	</gravity>
-          <maxDistance>	10000	</maxDistance>
-          <piercingPower>	92 81	</piercingPower>
-          <maxHeight>	372	</maxHeight>
-        </_25pdr_AP_Mk_1T_SC>
-        <_25pdr_AP_Mk_1T>
-          <defaultPortion>	0.0	</defaultPortion>
-          <speed>	420	</speed>
-          <gravity>	230	</gravity>
-          <maxDistance>	10000	</maxDistance>
-          <piercingPower>	71 63	</piercingPower>
-          <maxHeight>	245	</maxHeight>
-        </_25pdr_AP_Mk_1T>
-      </shots>
-    </_25pdr_Field_Gun>
     <_90mm_Gun_T7>
       <userString>	#usa_vehicles:_90mm_Gun_T7	</userString>
       <tags></tags>

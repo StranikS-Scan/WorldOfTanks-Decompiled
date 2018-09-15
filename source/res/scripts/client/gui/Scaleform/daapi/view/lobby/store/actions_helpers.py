@@ -10,8 +10,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events.event_items import ActionData
 from gui.server_events.events_helpers import EventInfoModel
-from gui.Scaleform.daapi.view.lobby.missions.conditions_formatters import formatters
-from gui.server_events.formatters import formatStrDiscount, formatPercentValue, formatMultiplierValue, DECORATION_SIZES, formatGoldPrice, formatGoldPriceBig, formatCreditPrice, formatCreditPriceBig, formatVehicleLevel
+from gui.server_events.formatters import formatStrDiscount, formatPercentValue, formatMultiplierValue, DECORATION_SIZES, formatGoldPrice, formatGoldPriceBig, formatCreditPrice, formatCreditPriceBig, formatVehicleLevel, DISCOUNT_TYPE
 from gui.shared.formatters import icons
 from gui.shared.formatters import text_styles
 from gui.server_events import settings as quest_settings
@@ -19,7 +18,7 @@ from gui.shared.money import Currency
 from helpers import i18n, dependency, time_utils
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-_DT = formatters.DISCOUNT_TYPE
+_DT = DISCOUNT_TYPE
 _VEHICLE_NATION_ICON_PATH = '../maps/icons/filters/nations/%s.png'
 _MAX_ITEMS_IN_TABLE = 3
 _PRIORITY_FOR_FUTURE_ACTION = 4
@@ -134,8 +133,7 @@ class ActionInfo(EventInfoModel):
         if discount:
             if discount.discountType == _DT.MULTIPLIER:
                 return not (discount.discountValue == 0 or discount.discountValue == 1)
-            else:
-                return discount.discountValue > 0
+            return discount.discountValue > 0
         return False
 
     def getDiscount(self):
@@ -264,13 +262,11 @@ class ActionInfo(EventInfoModel):
             if sellGold:
                 if useBigIco:
                     return formatGoldPriceBig(sellGold)
-                else:
-                    return formatGoldPrice(sellGold)
+                return formatGoldPrice(sellGold)
             if sellCredits:
                 if useBigIco:
                     return formatCreditPriceBig(sellCredits)
-                else:
-                    return formatCreditPrice(sellCredits)
+                return formatCreditPrice(sellCredits)
 
     @classmethod
     def _formatRentPriceIcon(cls, item, useBigIco):
@@ -284,20 +280,21 @@ class ActionInfo(EventInfoModel):
             if rentPrice[Currency.GOLD]:
                 if useBigIco:
                     return formatGoldPriceBig(rentPrice[Currency.GOLD])
-                else:
-                    return formatGoldPrice(rentPrice[Currency.GOLD])
+                return formatGoldPrice(rentPrice[Currency.GOLD])
             if rentPrice[Currency.CREDITS]:
                 if useBigIco:
                     return formatCreditPriceBig(rentPrice[Currency.CREDITS])
-                else:
-                    return formatCreditPrice(rentPrice[Currency.CREDITS])
+                return formatCreditPrice(rentPrice[Currency.CREDITS])
 
-    def _getPackedDiscounts(self):
+    def _getPackedDiscounts(self, sorting=False):
         """Gather info about all discounts for card
-        :return:
+        :param sorting: if value equals True than list should be sorted,
+            otherwise - do not sort list of discounts. For example, if user finds
+            max discount, sorting is pointless.
+        :return: list of discounts
         """
         if not self._packedDiscounts:
-            self._packedDiscounts = self.discount.packDiscounts()
+            self._packedDiscounts = self.discount.packDiscounts(sorting=sorting)
         return self._packedDiscounts
 
     def _getMaxDiscount(self):
@@ -305,7 +302,7 @@ class ActionInfo(EventInfoModel):
         :return: discount with max value
         """
         if not self._maxDiscount:
-            discounts = self._getPackedDiscounts()
+            discounts = self._getPackedDiscounts(sorting=False)
             if discounts:
                 self._maxDiscount = max(discounts.values(), key=operator.itemgetter(1))
         return self._maxDiscount
@@ -377,8 +374,7 @@ class EconomicsActionsInfo(ActionInfo):
             isPremium = getEconomicalStatsDict().get('isPremium', False)
             if isPremium:
                 return self._getButtonName('{}/continue'.format(_PREMIUM_PACKET))
-            else:
-                return self._getButtonName('{}/new'.format(_PREMIUM_PACKET))
+            return self._getButtonName('{}/new'.format(_PREMIUM_PACKET))
         return super(EconomicsActionsInfo, self).getActionBtnLabel()
 
     def getLinkBtnLabel(self):
@@ -434,8 +430,7 @@ class EconomicsActionsInfo(ActionInfo):
         if discount:
             if discount.discountType == _DT.MULTIPLIER:
                 return not (discount.discountValue == 0 or discount.discountValue == 1)
-            else:
-                return discount.discountValue > 0
+            return discount.discountValue > 0
         return False
 
     def __handleWinXPFactorMode(self):
@@ -534,7 +529,7 @@ class VehPriceActionInfo(ActionInfo):
 
         def __sortByVehicleParams(item):
             assert item.discountName
-            assert item.discountName.buyPrices.itemPrice.price
+            assert item.discountName.buyPrices.itemPrice.price.isDefined()
             assert item.discountName.level
             assert item.discountValue
             veh = item.discountName

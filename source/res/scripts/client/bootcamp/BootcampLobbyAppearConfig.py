@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/BootcampLobbyAppearConfig.py
-from gui.Scaleform.framework import ViewTypes
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+
 
 class Appear:
     TOP = 1

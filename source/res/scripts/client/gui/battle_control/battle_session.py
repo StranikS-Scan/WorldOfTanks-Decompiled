@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_control/battle_session.py
 import weakref
 from collections import namedtuple
+import BattleReplay
 from PlayerEvents import g_playerEvents
 from adisp import async
 from debug_utils import LOG_DEBUG
@@ -170,11 +171,7 @@ class BattleSessionProvider(IBattleSessionProvider):
         :param controller: object that implements IArenaController.
         :return: True if controller is added to arena listeners, otherwise - False.
         """
-        if self.__arenaListeners is not None:
-            return self.__arenaListeners.addController(controller)
-        else:
-            return False
-            return
+        return self.__arenaListeners.addController(controller) if self.__arenaListeners is not None else False
 
     def removeArenaCtrl(self, controller):
         """Removes arena controller.
@@ -194,7 +191,6 @@ class BattleSessionProvider(IBattleSessionProvider):
             return True
         else:
             return False
-            return
 
     def registerViewComponents(self, *data):
         """Sets view component data to find that components in routines
@@ -421,9 +417,9 @@ class BattleSessionProvider(IBattleSessionProvider):
         """It's listener of event _PlayerEvents.onBattleResultsReceived.
         :param isActiveVehicle: bool.
         """
-        if isActiveVehicle:
+        if isActiveVehicle and not BattleReplay.g_replayCtrl.isPlaying:
             arenaUniqueID = self.__arenaVisitor.getArenaUniqueID()
             LOG_DEBUG('Try to exit from arena', arenaUniqueID)
             if arenaUniqueID:
                 self.__ctx.lastArenaUniqueID = arenaUniqueID
-            avatar_getter.leaveArena()
+            BattleSessionProvider.exit()

@@ -125,7 +125,7 @@ class ViewContainer(object):
         """
         return self.__parentContainer
 
-    def addChildContainer(self, container, name):
+    def addChildContainer(self, container, name=None):
         """
         Adds the given sub-container and notify FE-side to register a new container with the given name.
         :param container: sub-container represented by ViewContainer
@@ -506,9 +506,6 @@ class _GlobalViewContainer(ViewContainer):
     def __init__(self, containerManager):
         super(_GlobalViewContainer, self).__init__(None, containerManager)
         return
-
-    def addChildContainer(self, container, name=None):
-        return super(_GlobalViewContainer, self).addChildContainer(container, name)
 
     def _registerContainer(self, viewType, name):
         pass

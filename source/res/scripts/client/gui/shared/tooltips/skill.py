@@ -60,7 +60,7 @@ class TankmanSkillTooltipData(BlocksTooltipData):
                 updatedParams = params.VehicleParams(vehicleWithSkill).getParamsDict()
                 comparator = VehiclesComparator(updatedParams, currentParams)
                 paramBlocks = self.__packParamsBlock(stockParams, comparator)
-                if len(paramBlocks) > 0:
+                if paramBlocks:
                     items.insert(1, formatters.packBuildUpBlockData(paramBlocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
         return items
 

@@ -1804,14 +1804,15 @@ def getUniformAmmoForGun(gunDescr):
 
 def getSpecificAmmoForGun(gunDescr, ammoProperties):
     ammo = []
+    usedShellKinds = set()
     maxCount = gunDescr.maxAmmo
     for shot in gunDescr.shots:
         shellKind = shot.shell.kind
         percentage = ammoProperties.get(shellKind, None)
-        if percentage is not None:
+        if percentage is not None and shellKind not in usedShellKinds:
             ammo.append(shot.shell.compactDescr)
             ammo.append(int(percentage * maxCount))
-            ammoProperties.pop(shellKind)
+            usedShellKinds.add(shellKind)
 
     return ammo
 
@@ -3870,7 +3871,8 @@ def _readCamouflage(xmlCtx, section, ids, groups, nationID, priceFactors, notInS
      'groupName': groupName,
      'invisibilityFactor': _xml.readNonNegativeFloat(xmlCtx, section, 'invisibilityFactor'),
      'allow': _readNationVehiclesByNames(xmlCtx, section, 'allow', nationID),
-     'deny': _readNationVehiclesByNames(xmlCtx, section, 'deny', nationID)}
+     'deny': _readNationVehiclesByNames(xmlCtx, section, 'deny', nationID),
+     'requiredToken': section.readString('requiredToken', '')}
     isNew = False
     if IS_CLIENT:
         isNew = section.readBool('isNew', False)

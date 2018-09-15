@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/search/ClanSearchWindow.py
 import BigWorld
 from debug_utils import LOG_ERROR, LOG_DEBUG
+from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.clans.clan_helpers import ClanListener, ClanFinder
 from gui.clans.items import ClanCommonData, formatField
 from gui.clans import formatters as clans_fmts
@@ -128,7 +129,7 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
 
     def _processSearchResponse(self, status, data, isInitial=False):
         if status:
-            if len(data) > 0:
+            if data:
                 self.__applyFoundData(data)
             elif isInitial:
                 self._searchDP.rebuildList(None)
@@ -163,7 +164,8 @@ class ClanSearchWindow(ClanSearchWindowMeta, ClanListener):
          'alignCenter': False,
          'btnVisible': btnVisible,
          'btnLabel': btnLabel,
-         'btnTooltip': btnTooltip})
+         'btnTooltip': btnTooltip,
+         'btnLinkage': BUTTON_LINKAGES.BUTTON_BLACK})
 
     def __initControls(self):
         headers = [_packHeaderColumnData('clan', CLANS.SEARCH_TABLE_CLAN, 244, CLANS.SEARCH_TABLE_CLAN_TOOLTIP, textAlign='left'),

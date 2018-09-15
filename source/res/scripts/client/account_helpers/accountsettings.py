@@ -12,16 +12,19 @@ from constants import VEHICLE_CLASSES, MAX_VEHICLE_LEVEL
 from account_helpers import gameplay_ctx
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
+from gui.Scaleform.genConsts.MISSIONS_CONSTANTS import MISSIONS_CONSTANTS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from copy import deepcopy
 KEY_FILTERS = 'filters'
 KEY_SETTINGS = 'settings'
 KEY_FAVORITES = 'favorites'
 KEY_COUNTERS = 'counters'
+KEY_NOTIFICATIONS = 'notifications'
 CAROUSEL_FILTER_1 = 'CAROUSEL_FILTER_1'
 CAROUSEL_FILTER_2 = 'CAROUSEL_FILTER_2'
 CAROUSEL_FILTER_CLIENT_1 = 'CAROUSEL_FILTER_CLIENT_1'
-SELECTOR_FILTER_1 = 'SELECTOR_FILTER_1'
+MISSION_SELECTOR_FILTER = 'MISSION_SELECTOR_FILTER'
+PM_SELECTOR_FILTER = 'PM_SELECTOR_FILTER'
 FALLOUT_CAROUSEL_FILTER_1 = 'FALLOUT_CAROUSEL_FILTER_1'
 FALLOUT_CAROUSEL_FILTER_2 = 'FALLOUT_CAROUSEL_FILTER_2'
 RANKED_CAROUSEL_FILTER_1 = 'RANKED_CAROUSEL_FILTER_1'
@@ -46,10 +49,12 @@ LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
 NEW_SETTINGS_COUNTER = 'newSettingsCounter'
 NEW_HOF_COUNTER = 'newHofCounter'
+NEW_LOBBY_TAB_COUNTER = 'newLobbyTabCounter'
 PROFILE_TECHNIQUE = 'profileTechnique'
 TRAJECTORY_VIEW_HINT_COUNTER = 'trajectoryViewHintCounter'
 PROFILE_TECHNIQUE_MEMBER = 'profileTechniqueMember'
 SHOW_CRYSTAL_HEADER_BAND = 'showCrystalHeaderBand'
+ELEN_NOTIFICATIONS = 'elenNotifications'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
@@ -220,7 +225,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                            'gameMode': False,
                                            'favorite': False,
                                            'bonus': False},
-               SELECTOR_FILTER_1: {'inventory': False},
+               MISSION_SELECTOR_FILTER: {'inventory': False},
+               PM_SELECTOR_FILTER: {'inventory': False},
                BARRACKS_FILTER: {'nation': -1,
                                  'role': 'None',
                                  'tankType': 'None',
@@ -385,9 +391,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'quests': {'lastVisitTime': -1,
                            'visited': [],
                            'naVisited': [],
-                           'potapov': {'introShown': False,
-                                       'tilesVisited': set(),
-                                       'headerAlert': False}},
+                           'personalMissions': {'introShown': False,
+                                                'operationsVisited': set(),
+                                                'headerAlert': False}},
                 'checkBoxConfirmator': {'questsConfirmDialogShow': True},
                 'customization': {},
                 'showVehModelsOnMap': 0,
@@ -424,7 +430,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 SHOW_OPT_DEVICE_HINT: True},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
-                                  PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True}}}
+                                  PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
+                NEW_LOBBY_TAB_COUNTER: {}},
+ KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),
+                                          MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
+                                          MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()}}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:
@@ -442,7 +452,7 @@ def _unpack(value):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 32
+    version = 33
     __cache = {'login': None,
      'section': None}
     __isFirstRun = True
@@ -808,6 +818,16 @@ class AccountSettings(object):
                     accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
                     accSettings.deleteSection(SHOW_CRYSTAL_HEADER_BAND)
 
+            if currVersion < 33:
+                for _, section in _filterAccountSection(ads):
+                    accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
+                    if 'quests' in accSettings.keys():
+                        quests = _unpack(accSettings['quests'].asString)
+                        if 'potapov' in quests:
+                            newVersion = quests.pop('potapov')
+                            newVersion['operationsVisited'] = newVersion.pop('tilesVisited')
+                            accSettings.write('quests', _pack(quests))
+
             ads.writeInt('version', AccountSettings.version)
         return
 
@@ -870,6 +890,14 @@ class AccountSettings(object):
     @staticmethod
     def setCounters(name, value):
         AccountSettings.__setValue(name, value, KEY_COUNTERS)
+
+    @staticmethod
+    def getNotifications(name):
+        return AccountSettings.__getValue(name, KEY_NOTIFICATIONS)
+
+    @staticmethod
+    def setNotifications(name, value):
+        AccountSettings.__setValue(name, value, KEY_NOTIFICATIONS)
 
     @staticmethod
     def updateNewSettingsCounter(defaultDict, savedDict):

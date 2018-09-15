@@ -4,15 +4,11 @@ from gui import makeHtmlString
 from gui.Scaleform.daapi.view.dialogs import IDialogMeta
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.locale.DIALOGS import DIALOGS
-from gui.shared import events
 from helpers import i18n
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 __author__ = 'd_savitski'
 
 class FreeXPInfoBaseMeta(IDialogMeta):
-
-    def __init__(self):
-        super(FreeXPInfoBaseMeta, self).__init__()
 
     def getTitle(self):
         pass
@@ -31,9 +27,6 @@ class FreeXPInfoBaseMeta(IDialogMeta):
 
 
 class FreeXPInfoMeta(FreeXPInfoBaseMeta):
-
-    def __init__(self):
-        super(FreeXPInfoMeta, self).__init__()
 
     def getTitle(self):
         return i18n.makeString(DIALOGS.FREEXPINFO_TITLE)

@@ -3,7 +3,6 @@
 import BigWorld
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, BOOSTERS
-from gui.Scaleform import settings
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.AccountPopoverMeta import AccountPopoverMeta
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
@@ -22,6 +21,7 @@ from gui.shared import events
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, icons
+from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
 from helpers import dependency
 from helpers import isPlayerAccount
@@ -275,14 +275,17 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
         return
 
     def __syncUserInfo(self):
-        selectedBages = self.itemsCache.items.ranked.badges
-        badge = selectedBages[0] if selectedBages else 'default'
+        selectedBages = self.itemsCache.items.getBadges(REQ_CRITERIA.BADGE.SELECTED).values()
+        if selectedBages:
+            badgeIcon = selectedBages[0].getSmallIcon()
+        else:
+            badgeIcon = RES_ICONS.MAPS_ICONS_LIBRARY_BADGES_48X48_BADGE_DEFAULT
         title = text_styles.middleTitle(MENU.HEADER_ACCOUNT_POPOVER_BOOSTERS_BLOCKTITLE) + ' ' + icons.info()
         userVO = {'userData': self.__userData,
          'isTeamKiller': self.itemsCache.items.stats.isTeamKiller,
          'boostersBlockTitle': title,
          'boostersBlockTitleTooltip': TOOLTIPS.HEADER_ACCOUNTPOPOVER_BOOSTERSTITLE,
-         'badgeIcon': settings.getBadgeIconPath(settings.BADGES_ICONS.X48, badge)}
+         'badgeIcon': badgeIcon}
         self.as_setDataS(userVO)
 
     def __setInfoButtonState(self):

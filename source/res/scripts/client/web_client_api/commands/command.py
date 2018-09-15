@@ -74,7 +74,7 @@ class SchemeValidator(object):
         validateSection('required', True)
         validateSection('optional', False)
         requiredUnionsFields = availableScheme.get('unions', [])
-        if len(requiredUnionsFields) > 0:
+        if requiredUnionsFields:
             unionFound = False
             for field in requiredUnionsFields:
                 name, type = field

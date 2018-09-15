@@ -1,29 +1,30 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/contexts.py
-import constants
-import gui
-from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
-from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from collections import namedtuple
-from gui.Scaleform.daapi.view.lobby.server_events import old_events_helpers
+import constants
+from constants import ARENA_GUI_TYPE
+import gui
+from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
+from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
-from gui.shared.items_parameters import params_helper
-from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
-from helpers import dependency
-from shared_utils import findFirst
+from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.server_events import events_helpers
+from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import getTankmanSkill
 from gui.shared.gui_items.dossier import factories, loadDossier
+from gui.shared.items_parameters import params_helper
+from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
 from gui.shared.tooltips import TOOLTIP_COMPONENT
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.formatters import text_styles
+from helpers import dependency
 from helpers.i18n import makeString
 from items import vehicles
-from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
+from shared_utils import findFirst
+from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.gui.game_control import IRankedBattlesController
 
 def _getCmpVehicle():
     return cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicle()
@@ -72,7 +73,7 @@ class StatusConfiguration(object):
 
 
 class ParamsConfiguration(object):
-    __slots__ = ('vehicle', 'params', 'crew', 'eqs', 'devices', 'dossier', 'dossierType', 'isCurrentUserDossier', 'historicalBattleID', 'checkAchievementExistence', 'simplifiedOnly', 'externalCrewParam')
+    __slots__ = ('vehicle', 'params', 'crew', 'eqs', 'devices', 'dossier', 'dossierType', 'isCurrentUserDossier', 'historicalBattleID', 'checkAchievementExistence', 'simplifiedOnly', 'externalCrewParam', 'vehicleLevel', 'arenaType')
 
     def __init__(self):
         self.vehicle = None
@@ -86,6 +87,8 @@ class ParamsConfiguration(object):
         self.historicalBattleID = -1
         self.simplifiedOnly = False
         self.externalCrewParam = False
+        self.vehicleLevel = 0
+        self.arenaType = ARENA_GUI_TYPE.RANDOM
         self.checkAchievementExistence = True
         return
 
@@ -259,8 +262,6 @@ class CarouselContext(InventoryContext):
 
 
 class PotapovQuestsChainContext(ToolTipContext):
-    """ Private quests context of chain
-    """
 
     def __init__(self, fieldsToExclude=None):
         super(PotapovQuestsChainContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
@@ -269,15 +270,13 @@ class PotapovQuestsChainContext(ToolTipContext):
         return (tileID, chainID)
 
 
-class PotapovQuestsTileContext(ToolTipContext):
-    """  Private quests context of tile
-    """
+class PersonalMissionOperationContext(ToolTipContext):
 
     def __init__(self, fieldsToExclude=None):
-        super(PotapovQuestsTileContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
+        super(PersonalMissionOperationContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
 
     def buildItem(self, tileID):
-        return old_events_helpers.getPotapovQuestsCache().getTiles().get(tileID)
+        return events_helpers.getPersonalMissionsCache().getOperations().get(tileID)
 
 
 class QuestContext(ToolTipContext):
@@ -290,6 +289,14 @@ class QuestContext(ToolTipContext):
 
     def buildItem(self, eventID):
         return self.eventsCache.getEvents().get(eventID, None)
+
+
+class PersonalMissionContext(QuestContext):
+    """ personal mission quest class for tool tip context
+    """
+
+    def buildItem(self, eventID, *args, **kwargs):
+        return self.eventsCache.personalMissions.getQuests().get(eventID, None)
 
 
 class BaseHangarParamContext(ToolTipContext):
@@ -519,15 +526,19 @@ class ProfileContext(ToolTipContext):
         self._dossier = None
         self._dossierType = None
         self._isCurrentUserDossier = True
+        self._vehicleLevel = 0
+        self._arenaType = ARENA_GUI_TYPE.RANDOM
         return
 
-    def buildItem(self, dossierType, dossierCompDescr, block, name, isRare, isCurrentUserDossier):
+    def buildItem(self, dossierType, dossierCompDescr, block, name, isRare, isUserDossier, vehicleLevel, arenaType):
         dossier = loadDossier(dossierCompDescr)
         if dossierType == constants.DOSSIER_TYPE.VEHICLE:
             self._component = TOOLTIP_COMPONENT.PROFILE_VEHICLE
         self._dossier = dossier
         self._dossierType = dossierType
-        self._isCurrentUserDossier = isCurrentUserDossier
+        self._isCurrentUserDossier = isUserDossier
+        self._vehicleLevel = vehicleLevel
+        self._arenaType = arenaType
         if block == ACHIEVEMENT_BLOCK.RARE:
             name = int(name)
         return dossier.getTotalStats().getAchievement((block, name))
@@ -537,6 +548,8 @@ class ProfileContext(ToolTipContext):
         value.dossier = self._dossier
         value.dossierType = self._dossierType
         value.isCurrentUserDossier = self._isCurrentUserDossier
+        value.vehicleLevel = self._vehicleLevel
+        value.arenaType = self._arenaType
         return value
 
 
@@ -548,20 +561,26 @@ class BattleResultContext(ProfileContext):
         super(BattleResultContext, self).__init__(fieldsToExclude)
         self._component = TOOLTIP_COMPONENT.PROFILE
 
-    def buildItem(self, block, name, value=0, customData=None):
+    def buildItem(self, block, name, value=0, customData=None, vehicleLevel=0, arenaType=ARENA_GUI_TYPE.RANDOM):
+        self._vehicleLevel = vehicleLevel
+        self._arenaType = arenaType
         factory = factories.getAchievementFactory((block, name))
         return factory.create(value=value) if factory is not None else None
 
     def getParamsConfiguration(self, item):
         value = super(ProfileContext, self).getParamsConfiguration(item)
         value.checkAchievementExistence = False
+        value.vehicleLevel = self._vehicleLevel
+        value.arenaType = self._arenaType
         return value
 
 
 class BattleResultMarksOnGunContext(BattleResultContext):
 
-    def buildItem(self, block, name, value=0, customData=None):
-        item = super(BattleResultMarksOnGunContext, self).buildItem(block, name, value, customData)
+    def buildItem(self, block, name, value=0, customData=None, vehicleLevel=0, arenaType=ARENA_GUI_TYPE.RANDOM):
+        self._vehicleLevel = vehicleLevel
+        self._arenaType = arenaType
+        item = super(BattleResultMarksOnGunContext, self).buildItem(block, name, value, customData, vehicleLevel, arenaType)
         if item is not None and customData is not None:
             damageRating, vehNationID = customData
             item.setVehicleNationID(vehNationID)
@@ -573,8 +592,10 @@ class BattleResultMarksOnGunContext(BattleResultContext):
 
 class BattleResultMarkOfMasteryContext(BattleResultContext):
 
-    def buildItem(self, block, name, value=0, customData=None):
-        item = super(BattleResultMarkOfMasteryContext, self).buildItem(block, name, value, customData)
+    def buildItem(self, block, name, value=0, customData=None, vehicleLevel=0, arenaType=ARENA_GUI_TYPE.RANDOM):
+        self._vehicleLevel = vehicleLevel
+        self._arenaType = arenaType
+        item = super(BattleResultMarkOfMasteryContext, self).buildItem(block, name, value, customData, vehicleLevel, arenaType)
         if item is not None and customData is not None:
             prevMarkOfMastery, compDescr = customData
             item.setPrevMarkOfMastery(prevMarkOfMastery)

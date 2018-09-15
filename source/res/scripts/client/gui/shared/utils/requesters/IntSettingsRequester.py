@@ -12,7 +12,7 @@ class IntSettingsRequester(object):
     Setting dictionary presenting int settings keys by section names.
     Don't forget to duplicate new value in common.constanst.INT_USER_SETTINGS_KEYS
     """
-    SETTINGS = {'VERSION': 0,
+    __SETTINGS = {'VERSION': 0,
      'GAME': 1,
      'GRAPHICS': 2,
      'SOUND': 3,
@@ -51,7 +51,8 @@ class IntSettingsRequester(object):
      'RANKED_CAROUSEL_FILTER_2': 81,
      'FEEDBACK_DAMAGE_INDICATOR': 82,
      'FEEDBACK_DAMAGE_LOG': 83,
-     'FEEDBACK_BATTLE_EVENTS': 84}
+     'FEEDBACK_BATTLE_EVENTS': 84,
+     'UI_STORAGE': 85}
 
     def __init__(self):
         self.__cache = dict()
@@ -104,15 +105,15 @@ class IntSettingsRequester(object):
 
     @process
     def setSetting(self, key, value):
-        yield self._addIntSettings({self.SETTINGS[key]: int(value)})
+        yield self._addIntSettings({self.__SETTINGS[key]: int(value)})
 
     @process
     def setSettings(self, settings):
-        intSettings = dict(map(lambda item: (self.SETTINGS[item[0]], int(item[1])), settings.iteritems()))
+        intSettings = {self.__SETTINGS[k]:int(v) for k, v in settings.iteritems()}
         yield self._addIntSettings(intSettings)
 
     def getSetting(self, key, defaultValue=None):
-        return self.getCacheValue(self.SETTINGS[key], defaultValue)
+        return self.getCacheValue(self.__SETTINGS[key], defaultValue)
 
     @async
     def _addIntSettings(self, settings, callback=None):

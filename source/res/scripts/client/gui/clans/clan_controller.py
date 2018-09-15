@@ -75,8 +75,8 @@ class _ClanDossier(object):
 
     def isSynced(self, key=None):
         if key is None:
-            for key in self.__vitalInfo.keys():
-                if not self.__syncState & key:
+            for syncKey in self.__vitalInfo.keys():
+                if not self.__syncState & syncKey:
                     return False
 
             return True
@@ -180,7 +180,7 @@ class _ClanDossier(object):
     @process
     def requestClanRatings(self, callback):
         result = yield self.__requestClanRatings()
-        if len(result) > 0:
+        if result:
             callback(result[0])
         else:
             callback(items.ClanRatingsData())

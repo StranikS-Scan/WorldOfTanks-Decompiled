@@ -10,7 +10,8 @@ from dossiers2.common.updater_utils import getHeader, getBlockSize, getBlockComp
 import dossiers2.custom.tankmen_dossier1_updater
 from VersionUpdater import VersionUpdaterBase
 from wotdecorators import singleton
-ACCOUNT_DOSSIER_VERSION = 108
+from debug_utils import LOG_DEBUG_DEV
+ACCOUNT_DOSSIER_VERSION = 109
 ACCOUNT_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromAccountDossier%d'
 VEHICLE_DOSSIER_VERSION = 99
 VEHICLE_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromVehicleDossier%d'
@@ -2121,7 +2122,7 @@ def __updateFromAccountDossier104(compDescr):
     getHeader(updateCtx)
     addBlock(updateCtx, 'ranked')
     addBlock(updateCtx, 'maxRanked')
-    addBlock(updateCtx, 'rankedCuts')
+    addBlock(updateCtx, 'rankedCut')
     addBlock(updateCtx, 'rankedBadges')
     addBlock(updateCtx, 'rankedSeasons')
     addBlock(updateCtx, 'rankedCurrent')
@@ -2190,7 +2191,7 @@ def __updateFromAccountDossier105(compDescr):
      'falloutAchievements',
      'ranked',
      'maxRanked',
-     'rankedCuts',
+     'rankedCut',
      'rankedBadges',
      'rankedSeasons',
      'rankedCurrent',
@@ -2276,7 +2277,7 @@ def __updateFromAccountDossier106(compDescr):
      'falloutAchievements',
      'ranked',
      'maxRanked',
-     'rankedCuts',
+     'rankedCut',
      'rankedBadges',
      'rankedSeasons',
      'rankedCurrent',
@@ -2401,6 +2402,110 @@ def __updateFromAccountDossier107(compDescr):
     addBlock(updateCtx, 'markOfMasteryCut', markOfMasteryCutBlockFormat, markOfMasteryCutBlockValues)
     setVersion(updateCtx, 108)
     return (108, updateCtx['dossierCompDescr'])
+
+
+def __updateFromAccountDossier108(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'a15x15Cut',
+     'rareAchievements',
+     'total',
+     'a7x7Cut',
+     'max15x15',
+     'max7x7',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'historicalAchievements',
+     'historicalCut',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortBattlesCut',
+     'fortSorties',
+     'maxFortSorties',
+     'fortSortiesCut',
+     'fortBattlesInClan',
+     'maxFortBattlesInClan',
+     'fortSortiesInClan',
+     'maxFortSortiesInClan',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'achievementsRated7x7',
+     'rated7x7Cut',
+     'globalMapMiddle',
+     'globalMapChampion',
+     'globalMapAbsolute',
+     'maxGlobalMapMiddle',
+     'maxGlobalMapChampion',
+     'maxGlobalMapAbsolute',
+     'globalMapCommonCut',
+     'fallout',
+     'falloutCut',
+     'maxFallout',
+     'falloutAchievements',
+     'ranked',
+     'maxRanked',
+     'rankedCut',
+     'rankedBadges',
+     'rankedSeasons',
+     'rankedCurrent',
+     'rankedPrevious',
+     'maxRankedCurrent',
+     'maxRankedPrevious',
+     'rankedCurrentCut',
+     'rankedPreviousCut',
+     'rankedCurrentCycle',
+     'rankedPreviousCycle',
+     'a30x30',
+     'a30x30Cut',
+     'max30x30',
+     'markOfMasteryCut']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    rankedBadgesPacking = {'1': (0, 'H'),
+     '2': (2, 'H'),
+     '3': (4, 'H'),
+     '4': (6, 'H'),
+     '5': (8, 'H'),
+     '6': (10, 'H'),
+     '7': (12, 'H'),
+     '8': (14, 'H'),
+     '9': (16, 'H')}
+    badges = getStaticSizeBlockRecordValues(updateCtx, 'rankedBadges', rankedBadgesPacking)
+    addItems = {}
+    _SECONDS_IN_DAY = 86400
+    for strBadgeID, daysTimestamp in badges.iteritems():
+        if daysTimestamp:
+            addItems[int(strBadgeID)] = daysTimestamp * _SECONDS_IN_DAY
+
+    LOG_DEBUG_DEV('addItems', addItems)
+    itemFormat = 'II'
+    subBlockFormat = '<'
+    subBlockValues = []
+    for k, v in addItems.iteritems():
+        subBlockFormat += itemFormat
+        subBlockValues.append(k)
+        subBlockValues.append(v)
+
+    LOG_DEBUG_DEV('subBlockFormat', subBlockFormat, subBlockValues)
+    addBlock(updateCtx, 'playerBadges', subBlockFormat, subBlockValues)
+    removeBlock(updateCtx, 'rankedBadges')
+    setVersion(updateCtx, 109)
+    return (109, updateCtx['dossierCompDescr'])
 
 
 def __updateFromVehicleDossier64(compDescr):

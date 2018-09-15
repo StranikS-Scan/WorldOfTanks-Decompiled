@@ -5,9 +5,11 @@ import cPickle
 import BigWorld
 import Settings
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
-from . import GAME_SETTINGS
+from . import GAME_SETTINGS_NEWBIE, GAME_SETTINGS_COMMON
 from account_helpers.settings_core import ISettingsCore
 from helpers import dependency
+from account_helpers.settings_core.settings_constants import BATTLE_EVENTS
+from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
 
 class BootcampPreferences(object):
     settingsCore = dependency.descriptor(ISettingsCore)
@@ -36,9 +38,13 @@ class BootcampPreferences(object):
         BigWorld.savePreferences()
         return
 
-    def setup(self, subscribeOnSettingsApplying=True):
+    def setup(self, isNewbie, subscribeOnSettingsApplying=True):
         LOG_DEBUG_DEV_BOOTCAMP('settingsCache version: ', self.settingsCore.serverSettings.settingsCache.getVersion())
-        self.settingsCore.applySettings(self.__prepareSettings())
+        if isNewbie:
+            self.settingsCore.serverSettings.setSectionSettings(SETTINGS_SECTIONS.BATTLE_EVENTS, {setting:True for _, setting in BATTLE_EVENTS.getIterator()})
+            self.settingsCore.applySettings(self.__prepareSettings(GAME_SETTINGS_NEWBIE, True))
+        else:
+            self.settingsCore.applySettings(self.__prepareSettings(GAME_SETTINGS_COMMON, False))
         self.settingsCore.confirmChanges(self.settingsCore.applyStorages(restartApproved=False))
         self.settingsCore.clearStorages()
         if subscribeOnSettingsApplying:
@@ -54,7 +60,7 @@ class BootcampPreferences(object):
 
         self.__bootcampDataSections.write('changedFields', base64.b64encode(cPickle.dumps(self.__changedFields, -1)))
 
-    def __prepareSettings(self):
+    def __prepareSettings(self, settingsTemplate, includePrefs):
 
         def _add(_container, _k, _v):
             i = _k.find(':')
@@ -64,10 +70,11 @@ class BootcampPreferences(object):
                 _container[_k] = _v
 
         toApply = {}
-        for k, v in GAME_SETTINGS.iteritems():
+        for k, v in settingsTemplate.iteritems():
             _add(toApply, k, v)
 
-        for k, v in self.__changedFields.iteritems():
-            _add(toApply, k, v)
+        if includePrefs:
+            for k, v in self.__changedFields.iteritems():
+                _add(toApply, k, v)
 
         return toApply

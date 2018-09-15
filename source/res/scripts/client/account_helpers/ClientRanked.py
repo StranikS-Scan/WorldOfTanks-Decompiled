@@ -3,7 +3,7 @@
 import AccountCommands
 from functools import partial
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
-from debug_utils import *
+from debug_utils import LOG_DEBUG_DEV
 import ranked_common
 
 def _skipResponse(resultID, errorCode):
@@ -18,10 +18,6 @@ class ClientRanked(object):
         self.__cache = {}
         self.__ignore = True
         return
-
-    def selectBadges(self, badgeList, callback=_skipResponse):
-        badgeList = map(int, badgeList)
-        self.__account._doCmdIntArr(AccountCommands.CMD_SELECT_BADGES, badgeList, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
     def setClientRank(self, clientRank, clientStep, callback=_skipResponse):
         self.__account._doCmdInt3(AccountCommands.CMD_SET_CLIENT_RANK, clientRank, clientStep, 0, lambda requestID, resultID, errorCode: callback(resultID, errorCode))

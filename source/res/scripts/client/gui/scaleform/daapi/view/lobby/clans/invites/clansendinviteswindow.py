@@ -54,9 +54,6 @@ class ClanSendInvitesWindow(SendInvitesWindow, UsersInfoHelper, ClanListener):
          USER_TAG.OTHER_CLAN_MEMBER])
         self.as_enableMassSendS(False, CLANS.CLANPROFILE_SENDINVITESWINDOW_TOOLTIP_MASSSENDBLOCKED)
 
-    def _dispose(self):
-        super(ClanSendInvitesWindow, self)._dispose()
-
     def _initCooldown(self):
         pass
 

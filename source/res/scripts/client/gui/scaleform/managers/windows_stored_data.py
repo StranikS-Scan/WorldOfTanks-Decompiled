@@ -326,7 +326,7 @@ class _WindowsStoredDataManager(object):
             self.__isStarted = False
             records = []
             for targetID, windowsData in self.__storedData.iteritems():
-                if not self.__targetMask & targetID and len(windowsData):
+                if not self.__targetMask & targetID and windowsData:
                     LOG_WARNING('Target is not enabled. Records are ignored to flush', targetID, self.__targetMask)
                     continue
                 for data in windowsData:

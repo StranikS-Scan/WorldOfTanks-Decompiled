@@ -112,7 +112,7 @@ class ClanPersonalInvitesView(ClanPersonalInvitesViewMeta, ClanListener):
         status, data = result
         if status is True:
             self._enableRefreshBtn(False)
-            if len(data) == 0:
+            if not data:
                 self._showDummy(CLANS.CLANPERSONALINVITESWINDOW_NOINVITES)
                 self.dataProvider.rebuildList(None, False)
             else:

@@ -27,6 +27,7 @@ from gui.battle_control.controllers import tmp_ignore_list_ctrl
 from gui.battle_control.controllers import vehicle_state_ctrl
 from gui.battle_control.controllers import view_points_ctrl
 from gui.battle_control.controllers import team_health_bar_ctrl
+from gui.battle_control.controllers import game_messages_ctrl
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 
 class BattleSessionSetup(object):
@@ -41,19 +42,11 @@ class BattleSessionSetup(object):
 
     @property
     def isReplayPlaying(self):
-        if self.replayCtrl is not None:
-            return self.replayCtrl.isPlaying and not self.replayCtrl.isBattleSimulation
-        else:
-            return False
-            return
+        return self.replayCtrl.isPlaying and not self.replayCtrl.isBattleSimulation if self.replayCtrl is not None else False
 
     @property
     def isReplayRecording(self):
-        if self.replayCtrl is not None:
-            return self.replayCtrl.isRecording
-        else:
-            return False
-            return
+        return self.replayCtrl.isRecording if self.replayCtrl is not None else False
 
     @property
     def battleCtx(self):
@@ -250,11 +243,7 @@ class _ControllersRepository(interfaces.IBattleControllersRepository):
             LOG_DEBUG('GUI Controller is stopped', getBattleCtrlName(ctrl.getControllerID()))
 
     def getController(self, ctrlID):
-        if ctrlID in self._ctrls:
-            return self._ctrls[ctrlID]
-        else:
-            return None
-            return None
+        return self._ctrls[ctrlID] if ctrlID in self._ctrls else None
 
     def addController(self, ctrl):
         assert isinstance(ctrl, interfaces.IBattleController), 'Controller is not valid'
@@ -313,6 +302,7 @@ class SharedControllersRepository(_ControllersRepository):
         repository.addArenaViewController(arena_load_ctrl.ArenaLoadController(), setup)
         repository.addArenaViewController(period_ctrl.createPeriodCtrl(setup), setup)
         repository.addViewController(hit_direction_ctrl.createHitDirectionController(setup), setup)
+        repository.addViewController(game_messages_ctrl.createGameMessagesController(setup), setup)
         return repository
 
 
@@ -346,8 +336,7 @@ class ClassicControllersRepository(_ControllersRepositoryByBonuses):
         repository.addArenaViewController(team_bases_ctrl.createTeamsBasesCtrl(setup), setup)
         repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
         repository.addViewController(debug_ctrl.DebugController(), setup)
-        if not setup.arenaEntity.hasFogOfWarHiddenVehicles:
-            repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
+        repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
         return repository
 
 

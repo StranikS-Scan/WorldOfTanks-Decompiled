@@ -405,30 +405,28 @@ class StrongholdEntity(UnitEntity):
         """
         if self.__errorCount > 0:
             return ValidationResult(False, UNIT_RESTRICTION.UNIT_MAINTENANCE)
+        elif self.isStrongholdUnitFreezed() or self.isStrongholdUnitWaitingForData():
+            isPlayerInSlot = self._isPlayerInSlot()
+            if isPlayerInSlot and self.isStrongholdUnitWaitingForData():
+                return ValidationResult(False, UNIT_RESTRICTION.UNIT_WAITINGFORDATA)
+            if isPlayerInSlot and self._hasInArenaMembers():
+                return ValidationResult(False, UNIT_RESTRICTION.IS_IN_ARENA)
+            result = self._actionsValidator.canPlayerDoAction() or ValidationResult(False, UNIT_RESTRICTION.UNDEFINED)
+            return ValidationResult(False, result.restriction, result.ctx)
         else:
-            if self.isStrongholdUnitFreezed() or self.isStrongholdUnitWaitingForData():
-                isPlayerInSlot = self._isPlayerInSlot()
-                if isPlayerInSlot and self.isStrongholdUnitWaitingForData():
-                    return ValidationResult(False, UNIT_RESTRICTION.UNIT_WAITINGFORDATA)
-                elif isPlayerInSlot and self._hasInArenaMembers():
-                    return ValidationResult(False, UNIT_RESTRICTION.IS_IN_ARENA)
-                else:
-                    result = self._actionsValidator.canPlayerDoAction() or ValidationResult(False, UNIT_RESTRICTION.UNDEFINED)
-                    return ValidationResult(False, result.restriction, result.ctx)
+            isStrongholdSettingsValid = self.isStrongholdSettingsValid()
+            self.__isInactiveMatchingButton = self.__doClockworkLogic(self.CWL_RETURN_MATCHING_BUTTON_STATUS)
+            if isStrongholdSettingsValid and self.__isInactiveMatchingButton and self.isCommander() and not self.getFlags().isInIdle():
+                resultId = UNIT_RESTRICTION.UNIT_INACTIVE_PERIPHERY_UNDEF
+                if isStrongholdSettingsValid:
+                    if self.isSortie():
+                        resultId = UNIT_RESTRICTION.UNIT_INACTIVE_PERIPHERY_SORTIE
+                    else:
+                        resultId = UNIT_RESTRICTION.UNIT_INACTIVE_PERIPHERY_BATTLE
+                matchingCommanderRestriction = ValidationResult(False, resultId)
             else:
-                isStrongholdSettingsValid = self.isStrongholdSettingsValid()
-                self.__isInactiveMatchingButton = self.__doClockworkLogic(self.CWL_RETURN_MATCHING_BUTTON_STATUS)
-                if isStrongholdSettingsValid and self.__isInactiveMatchingButton and self.isCommander() and not self.getFlags().isInIdle():
-                    resultId = UNIT_RESTRICTION.UNIT_INACTIVE_PERIPHERY_UNDEF
-                    if isStrongholdSettingsValid:
-                        if self.isSortie():
-                            resultId = UNIT_RESTRICTION.UNIT_INACTIVE_PERIPHERY_SORTIE
-                        else:
-                            resultId = UNIT_RESTRICTION.UNIT_INACTIVE_PERIPHERY_BATTLE
-                    matchingCommanderRestriction = ValidationResult(False, resultId)
-                else:
-                    matchingCommanderRestriction = None
-                return self._actionsValidator.canPlayerDoAction() or matchingCommanderRestriction or ValidationResult(True, UNIT_RESTRICTION.UNDEFINED)
+                matchingCommanderRestriction = None
+            return self._actionsValidator.canPlayerDoAction() or matchingCommanderRestriction or ValidationResult(True, UNIT_RESTRICTION.UNDEFINED)
             return
 
     def isPlayerJoined(self, ctx):
@@ -493,18 +491,14 @@ class StrongholdEntity(UnitEntity):
         return self.__strongholdSettings.isSortie()
 
     def getRosterSettings(self):
-        if self.isStrongholdSettingsValid():
-            return self.__updateRosterSettings()
-        else:
-            return self._rosterSettings
+        return self.__updateRosterSettings() if self.isStrongholdSettingsValid() else self._rosterSettings
 
     def animationNotAvailable(self):
         battleIdx = self.__strongholdSettings.getHeader().getBattleIdx()
         if self.storage.getActiveAnimationIdx() != battleIdx and battleIdx != 0:
             self.storage.setActiveAnimationIdx(battleIdx)
             return False
-        else:
-            return True
+        return True
 
     def updateStrongholdData(self):
         if self.isStrongholdSettingsValid():
@@ -754,8 +748,7 @@ class StrongholdEntity(UnitEntity):
         if not self.isStrongholdSettingsValid():
             if mode & self.CWL_RETURN_MATCHING_BUTTON_STATUS == self.CWL_RETURN_MATCHING_BUTTON_STATUS:
                 return True
-            else:
-                return
+            return
         isInBattle = self._hasInArenaMembers()
         isInQueue = self._isInQueue()
         dtime = None
@@ -882,8 +875,5 @@ class StrongholdEntity(UnitEntity):
              'forceUpdateBuildings': forceUpdateBuildings})
         if mode & self.CWL_RETURN_MATCHING_BUTTON_STATUS == self.CWL_RETURN_MATCHING_BUTTON_STATUS:
             return inactiveMatchingButton
-        elif mode & self.CWL_RETURN_MATCHMAKER_NEXT_TICK == self.CWL_RETURN_MATCHMAKER_NEXT_TICK:
-            return matchmakerNextTick
         else:
-            return
-            return
+            return matchmakerNextTick if mode & self.CWL_RETURN_MATCHMAKER_NEXT_TICK == self.CWL_RETURN_MATCHMAKER_NEXT_TICK else None

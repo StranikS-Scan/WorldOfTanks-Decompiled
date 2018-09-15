@@ -1,22 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCPersonalCase.py
-from gui.Scaleform.daapi.view.meta.BCPersonalCaseMeta import BCPersonalCaseMeta
-from gui.Scaleform.daapi.view.lobby.PersonalCase import PersonalCaseDataProvider
+from gui.Scaleform.daapi.view.lobby.PersonalCase import PersonalCaseDataProvider, PersonalCase
 from adisp import async
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from debug_utils import LOG_DEBUG
-from skeletons.gui.game_control import IBootcampController
-from bootcamp.Bootcamp import g_bootcamp
 from bootcamp.BootcampGarage import g_bootcampGarage
 from gui.Scaleform.locale.MENU import MENU
+from bootcamp.Bootcamp import g_bootcamp
 SKILLS_TAB_INDEX = 2
 PERSONAL_CASE_SKILLS = 'PersonalCaseSkills'
 
 class BCPersonalCaseDataProvider(PersonalCaseDataProvider):
-
-    def __init__(self, tmanInvID):
-        super(BCPersonalCaseDataProvider, self).__init__(tmanInvID)
 
     @async
     def getSkillsData(self, callback):
@@ -55,30 +50,21 @@ class BCPersonalCaseDataProvider(PersonalCaseDataProvider):
 
     def getTabsButtons(self, _):
         return [{'index': SKILLS_TAB_INDEX,
-          'info': MENU.TANKMANPERSONALCASE_TABSKILLS,
+          'label': MENU.TANKMANPERSONALCASE_TABSKILLS,
           'linkage': PERSONAL_CASE_SKILLS}]
 
 
-class BCPersonalCase(BCPersonalCaseMeta):
+class BCPersonalCase(PersonalCase):
 
     def __init__(self, ctx=None):
         LOG_DEBUG('BCPersonalCase.__init__')
         super(BCPersonalCase, self).__init__(ctx)
+        self.tabIndex = 0
         self.dataProvider = BCPersonalCaseDataProvider(self.tmanInvID)
         self.__skillSelected = False
         self.__skillAdded = False
         itemsCache = dependency.instance(IItemsCache)
         self.__tman = itemsCache.items.getTankmanDossier(self.tmanInvID)
-
-    def _populate(self):
-        LOG_DEBUG('BCPersonalCase._populate')
-        super(BCPersonalCase, self)._populate()
-        if self.checkRole():
-            g_bootcampGarage.runViewAlias('bootcampPresonalCase')
-
-    def _dispose(self):
-        super(BCPersonalCase, self)._dispose()
-        g_bootcampGarage.runViewAlias('hangar')
 
     def checkRole(self):
         return self.__tman.tmanDescr.role == 'commander'
@@ -95,5 +81,18 @@ class BCPersonalCase(BCPersonalCaseMeta):
             g_bootcampGarage.hideAllHints()
             g_bootcampGarage.runCustomAction('msgSkillsPerks')
 
-    def onWindowClose(self):
-        super(BCPersonalCase, self).onWindowClose()
+    def _populate(self):
+        LOG_DEBUG('BCPersonalCase._populate')
+        super(BCPersonalCase, self)._populate()
+        observer = self.app.bootcampManager.getObserver('BCPersonalCaseObserver')
+        if observer:
+            observer.onSkillClickEvent += self.onSkillClick
+        if self.checkRole():
+            g_bootcampGarage.runViewAlias('bootcampPresonalCase')
+
+    def _dispose(self):
+        super(BCPersonalCase, self)._dispose()
+        g_bootcampGarage.runViewAlias('hangar')
+        observer = self.app.bootcampManager.getObserver('BCPersonalCaseObserver')
+        if observer:
+            observer.onSkillClickEvent -= self.onSkillClick

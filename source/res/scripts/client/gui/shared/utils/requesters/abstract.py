@@ -99,7 +99,7 @@ class RequestCtx(object):
         return self._callback is not None
 
     def startProcessing(self, callback=None):
-        if len(self._waitingID):
+        if self._waitingID:
             Waiting.show(self._waitingID)
         if callback is not None and callable(callback):
             self._callback = callback
@@ -109,7 +109,7 @@ class RequestCtx(object):
         if self._callback is not None:
             self._callback(result)
             self._callback = None
-        if len(self._waitingID):
+        if self._waitingID:
             Waiting.hide(self._waitingID)
         return
 
@@ -132,7 +132,7 @@ class DataRequestCtx(RequestCtx):
         if self._callback is not None:
             self._callback(result, data)
             self._callback = None
-        if len(self._waitingID):
+        if self._waitingID:
             Waiting.hide(self._waitingID)
         return
 
@@ -151,7 +151,7 @@ class RequestsByIDProcessor(object):
         self.stopProcessing()
 
     def stopProcessing(self, resCode=RES_SUCCESS):
-        while len(self._requests):
+        while self._requests:
             ctx, data = self._requests.popitem()
             data[0].stopProcessing(self._makeResponse(resCode, 'stop processing', ctx=ctx))
 
@@ -209,7 +209,7 @@ class RequestsByIDProcessor(object):
         if requestID > 0:
             ctx, chain = self._requests.pop(requestID, (None, None))
             if ctx is not None:
-                if result and len(chain):
+                if result and chain:
                     BigWorld.callback(ctx.getCooldown(), lambda : self._sendNextRequest(ctx, chain))
                     return
                 ctx.stopProcessing(result)
@@ -219,11 +219,7 @@ class RequestsByIDProcessor(object):
 
     def _doCall(self, method, *args, **kwargs):
         result = method(*args, **kwargs)
-        if self._idsGenerator is not None:
-            return self._idsGenerator.next()
-        else:
-            return result
-            return
+        return self._idsGenerator.next() if self._idsGenerator is not None else result
 
     def _getSenderMethod(self, sender, methodName):
         return getattr(sender, methodName, None)
@@ -263,7 +259,7 @@ class DataRequestsByIDProcessor(RequestsByIDProcessor):
         if requestID > 0:
             ctx, chain = self._requests.pop(requestID, (None, None))
             if ctx is not None:
-                if result and len(chain):
+                if result and chain:
                     self._sendNextRequest(ctx, chain)
                     return
                 ctx.stopProcessing(result, data)
@@ -280,7 +276,8 @@ class DataRequestsByIDProcessor(RequestsByIDProcessor):
 _Response = namedtuple('_Response', ['code',
  'txtStr',
  'data',
- 'extraCode'])
+ 'extraCode',
+ 'headers'])
 _Response.__new__.__defaults__ = (0, '', None, 0)
 
 class Response(_Response):
@@ -299,6 +296,9 @@ class Response(_Response):
 
     def getData(self):
         return self.data
+
+    def getHeaders(self):
+        return self.headers
 
 
 class ClientRequestsByIDProcessor(RequestsByIDProcessor):
@@ -321,8 +321,8 @@ class ClientRequestsByIDProcessor(RequestsByIDProcessor):
         method(callback=_callback, *args, **kwargs)
         return requestID
 
-    def _makeResponse(self, code=0, txtMsg='', data=None, ctx=None, extraCode=0):
-        response = self.__responseClass(code, txtMsg, data, extraCode)
+    def _makeResponse(self, code=0, txtMsg='', data=None, ctx=None, extraCode=0, headers=None):
+        response = self.__responseClass(code, txtMsg, data, extraCode, headers)
         if not response.isSuccess():
             LOG_WARNING('Client request error', ctx, response)
         return response

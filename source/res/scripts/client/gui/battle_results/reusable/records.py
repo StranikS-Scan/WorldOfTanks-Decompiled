@@ -81,10 +81,7 @@ class ReplayRecord(ResultRecord):
         name = self._name.lower()
         if name.endswith('factor100') or name.endswith('factors100'):
             return 100
-        elif name.endswith('factor10') or name.endswith('factors10'):
-            return 10
-        else:
-            return 1
+        return 10 if name.endswith('factor10') or name.endswith('factors10') else 1
 
 
 class SubReplayRecord(ReplayRecord):
@@ -188,10 +185,7 @@ class ReplayRecords(ResultRecord):
         return result
 
     def _getRecord(self, name):
-        if name in self._records:
-            return self._records[name].getRecord()
-        else:
-            return 0
+        return self._records[name].getRecord() if name in self._records else 0
 
     def _addRecord(self, op, name, value, diff):
         if op in _SUPPORTED_OPS:
@@ -250,10 +244,7 @@ class RecordsIterator(ResultRecord):
         :return: float containing value of factor.
         """
         getter = operator.methodcaller('getFactor', name)
-        if self._seq:
-            return max((getter(item) for item in self._seq))
-        else:
-            return 1
+        return max((getter(item) for item in self._seq)) if self._seq else 1
 
     def _rebuild(self):
         self._indexes = range(len(self._seq) + 1)

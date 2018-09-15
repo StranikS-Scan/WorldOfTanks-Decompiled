@@ -32,7 +32,7 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
         tankman = self.itemsCache.items.getTankman(self.__tankManId)
         xpConverter = TankmanFreeToOwnXpConvertor(tankman, self.__selectedXpForConvert)
         result = yield xpConverter.request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         self.onWindowClose()
 
@@ -103,7 +103,7 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
     def __prepareAndSendInitData(self):
         items = self.itemsCache.items
         tankman = items.getTankman(self.__tankManId)
-        if len(tankman.skills) == 0:
+        if not tankman.skills:
             return
         rate = items.shop.freeXPToTManXPRate
         toNextPrcLeft = self.__getCurrentTankmanLevelCost(tankman)
@@ -126,7 +126,7 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
         self.as_setInitDataS(data)
 
     def __getCurrentTankmanLevelCost(self, tankman):
-        if tankman.roleLevel != MAX_SKILL_LEVEL or len(tankman.skills) and tankman.descriptor.lastSkillLevel != MAX_SKILL_LEVEL:
+        if tankman.roleLevel != MAX_SKILL_LEVEL or tankman.skills and tankman.descriptor.lastSkillLevel != MAX_SKILL_LEVEL:
             tankmanDescriptor = tankman.descriptor
             lastSkillNumberValue = tankmanDescriptor.lastSkillNumber - tankmanDescriptor.freeSkillsNumber
             if lastSkillNumberValue == 0 or tankman.roleLevel != MAX_SKILL_LEVEL:

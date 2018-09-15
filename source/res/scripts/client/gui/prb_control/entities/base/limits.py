@@ -79,9 +79,9 @@ class AbstractTeamIsValid(ITeamLimit):
             team accounts info
         """
         rosterKey = None
-        if team is 1:
+        if team == 1:
             rosterKey = PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1
-        elif team is 2:
+        elif team == 2:
             rosterKey = PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2
         if rosterKey in rosters:
             accountsInfo = rosters[rosterKey]
@@ -112,7 +112,7 @@ class TeamNoPlayersInBattle(ITeamLimit):
         for rosterKey in self.__range:
             if rosterKey & team and rosterKey in rosters:
                 filtered = filter(self.__isPlayerInBattle, rosters[rosterKey].itervalues())
-                if len(filtered):
+                if filtered:
                     return (False, PREBATTLE_RESTRICTION.HAS_PLAYER_IN_BATTLE)
 
         return (True, '')
@@ -222,11 +222,11 @@ class VehiclesLevelLimit(ITeamLimit):
             if not roster['state'] & PREBATTLE_ACCOUNT_STATE.READY:
                 continue
             vehCompDescr = roster.get('vehCompDescr', '')
-            if vehCompDescr is not None and len(vehCompDescr):
+            if vehCompDescr:
                 vehType = VehicleDescr(compactDescr=vehCompDescr).type
                 level = vehType.level
                 union = vehClassTags & vehType.tags
-                if len(union):
+                if union:
                     vehClass = union.pop()
                     classLevels[vehClass] = max(classLevels[vehClass], level)
                 totalLevel += level

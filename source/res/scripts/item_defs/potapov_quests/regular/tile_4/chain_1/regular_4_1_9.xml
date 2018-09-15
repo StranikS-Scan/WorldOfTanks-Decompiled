@@ -8,8 +8,14 @@
         <postBattle>
           <and>
             <results>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_spotted	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_4_1_9_condition_description_spottedBeforeWeBecameSpotted	</key>
+              </description>
               <key>	spottedBeforeWeBecameSpotted	</key>
-              <greaterOrEqual>	7	</greaterOrEqual>
+              <greaterOrEqual>	6	</greaterOrEqual>
             </results>
           </and>
         </postBattle>
@@ -21,6 +27,41 @@
         </item>
         <item>	507	  <count>	7	</count>
         </item>
+        <token>
+          <id>	token:pt:final:s1:t4:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_1_9_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_4_1_9_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <item>	1531	  <count>	7	</count>
+        </item>
+        <item>	1019	  <count>	7	</count>
+        </item>
+        <item>	507	  <count>	7	</count>
+        </item>
+        <token>
+          <id>	token:pt:final:s1:t4:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
       </bonus>
     </potapovQuest>
     <potapovQuest>
@@ -31,8 +72,14 @@
         <postBattle>
           <and>
             <results>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_spotted	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_4_1_9_condition_description_spottedBeforeWeBecameSpotted	</key>
+              </description>
               <key>	spottedBeforeWeBecameSpotted	</key>
-              <greaterOrEqual>	7	</greaterOrEqual>
+              <greaterOrEqual>	6	</greaterOrEqual>
             </results>
             <isAlive></isAlive>
             <win></win>
@@ -41,6 +88,46 @@
       </conditions>
       <bonus>
         <credits>	200000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t4:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_1_9_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_4_1_9_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <results>
+              <key>	spottedBeforeWeBecameSpotted	</key>
+              <greaterOrEqual>	6	</greaterOrEqual>
+            </results>
+            <isAlive></isAlive>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
       </bonus>
     </potapovQuest>
   </quests>

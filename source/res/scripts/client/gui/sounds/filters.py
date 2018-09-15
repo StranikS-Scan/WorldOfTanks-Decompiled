@@ -11,6 +11,9 @@ class _SoundFilterAbstract(object):
     def stop(self):
         pass
 
+    def stopView(self, view):
+        pass
+
 
 class EmptySoundFilter(_SoundFilterAbstract):
 
@@ -68,6 +71,9 @@ class WWISEFilteredHangarFilter(_WWISEStateAmbient):
 
     def __init__(self):
         _WWISEStateAmbient.__init__(self, 'STATE_hangar_filtered')
+
+    def stopView(self, view):
+        view.soundManager.clear(stopPersistent=True)
 
 
 class WWISEFilteredBootcampArenaFilter(_WWISEStateAmbient):

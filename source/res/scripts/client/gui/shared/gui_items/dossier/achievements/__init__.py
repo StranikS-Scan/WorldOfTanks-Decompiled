@@ -2,6 +2,10 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/dossier/achievements/__init__.py
 from AimerAchievement import AimerAchievement
 from ArmorPiercerAchievement import ArmorPiercerAchievement
+from WarriorAchievement import WarriorAchievement
+from HeroesOfRassenayAchievement import HeroesOfRassenayAchievement
+from MedalLafayettePoolAchievement import MedalLafayettePoolAchievement
+from MedalRadleyWaltersAchievement import MedalRadleyWaltersAchievement
 from BattleTestedAchievement import BattleTestedAchievement
 from BeasthunterAchievement import BeasthunterAchievement
 from BruteForceAchievement import BruteForceAchievement

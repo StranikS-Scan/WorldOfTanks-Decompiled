@@ -1,8 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/achievement.py
 import constants
-from debug_utils import LOG_ERROR
-from helpers import dependency
+import BigWorld
+from debug_utils import LOG_ERROR, LOG_DEBUG
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.shared.formatters.icons import makeImageTag
+from gui.shared.money import Money
+from helpers import dependency, int2roman
 from helpers.i18n import makeString
 from dossiers2.custom.config import RECORD_CONFIGS
 from dossiers2.ui.achievements import MARK_OF_MASTERY_RECORD
@@ -90,15 +95,106 @@ class AchievementRecordsField(ToolTipDataField):
         return records
 
 
+class AchievementCrystalRewardField(ToolTipDataField):
+    """
+    Crystal award for achievement per vehicle level
+    """
+    itemsCache = dependency.descriptor(IItemsCache)
+    _rewardsLabels = None
+    _rewardsValues = None
+    _playerVehicleLevel = 0
+    _playerRangeIndex = -1
+
+    def _getValue(self):
+        self._rewardsLabels = []
+        self._rewardsValues = []
+        self._playerRangeIndex = -1
+        achievement = self._tooltip.item
+        configuration = self._tooltip.context.getParamsConfiguration(achievement)
+        arenaType = configuration.arenaType
+        rewardData = self.itemsCache.items.shop.getAchievementReward(achievement, arenaType)
+        if not rewardData:
+            return
+        else:
+            self._playerVehicleLevel = configuration.vehicleLevel
+            baseReward = Money.makeMoney(rewardData['bonus'])
+            vehLevelMultipliers = self._applyMultiplierToReward(baseReward, rewardData['vehicleMultipliers'])
+            count = len(vehLevelMultipliers) - 1
+            i = 0
+            lastMulIndex = -1
+            lastMulValue = None
+            while i <= count:
+                mulValue = vehLevelMultipliers[i]
+                if lastMulIndex == -1:
+                    lastMulIndex = i
+                    lastMulValue = mulValue
+                else:
+                    isLastIndex = i == count
+                    if lastMulValue != mulValue:
+                        self._appendRewardsRange(lastMulIndex, i - 1, vehLevelMultipliers[lastMulIndex])
+                        if isLastIndex:
+                            self._appendRewardsRange(i, i, vehLevelMultipliers[i])
+                        else:
+                            lastMulIndex = i
+                            lastMulValue = mulValue
+                    elif isLastIndex:
+                        self._appendRewardsRange(lastMulIndex, i, vehLevelMultipliers[lastMulIndex])
+                i += 1
+
+            rewardsCount = len(self._rewardsLabels)
+            if rewardsCount > 0:
+                headerValue = ''
+                if rewardsCount == 1:
+                    headerValue = self._rewardsValues[0]
+                return {'selectedIndex': self._playerRangeIndex,
+                 'header': makeString(TOOLTIPS.ACHIEVEMENT_REWARD_HEADER),
+                 'headerValue': headerValue,
+                 'labels': self._rewardsLabels,
+                 'values': self._rewardsValues}
+            return
+            return
+
+    def _applyMultiplierToReward(self, money, multipliers):
+        result = []
+        for multiplier in multipliers:
+            moneyWithMultiplier = money * multiplier
+            result.append(moneyWithMultiplier.apply(lambda v: int(round(v))))
+
+        return result
+
+    def _getRangeStr(self, currentIndex, lastIndex):
+        if currentIndex - lastIndex > 0:
+            levelsRange = '{0}-{1}'.format(int2roman(lastIndex + 1), int2roman(currentIndex + 1))
+        else:
+            levelsRange = int2roman(lastIndex + 1)
+        return levelsRange
+
+    def _appendRewardsRange(self, startIndex, endIndex, rewardValue):
+        if rewardValue:
+            levelsRangeStr = self._getRangeStr(endIndex, startIndex)
+            self._rewardsLabels.append(makeString(TOOLTIPS.ACHIEVEMENT_REWARD_TANKLEVELS, range=levelsRangeStr))
+            if self._playerVehicleLevel > 0:
+                if self._playerVehicleLevel >= startIndex + 1 and self._playerVehicleLevel <= endIndex + 1:
+                    imgId = RES_ICONS.MAPS_ICONS_LIBRARY_CRYSTAL_16X16
+                    self._playerRangeIndex = len(self._rewardsLabels) - 1
+                else:
+                    imgId = RES_ICONS.MAPS_ICONS_LIBRARY_CRYSTALICONINACTIVE_2
+            else:
+                imgId = RES_ICONS.MAPS_ICONS_LIBRARY_CRYSTAL_16X16
+            rewardStr = BigWorld.wg_getIntegralFormat(rewardValue.crystal)
+            self._rewardsValues.append(rewardStr + ' ' + makeImageTag(imgId, 16, 16, -3, 0))
+
+
 class AchievementTooltipData(ToolTipData):
 
     def __init__(self, context):
         super(AchievementTooltipData, self).__init__(context, TOOLTIP_TYPE.ACHIEVEMENT)
         self.fields = (ToolTipMethodField(self, 'name', 'getUserName'),
-         ToolTipMethodField(self, 'icon', 'getBigIcon'),
+         ToolTipMethodField(self, 'icon', 'getHugeIcon'),
          ToolTipMethodField(self, 'type', 'getType'),
          ToolTipMethodField(self, 'section', 'getSection'),
          ToolTipMethodField(self, 'descr', 'getUserDescription'),
+         ToolTipMethodField(self, 'showCondSeparator', 'getShowCondSeparator'),
          ToolTipMethodField(self, 'value', 'getValue'),
          ToolTipMethodField(self, 'localizedValue', 'getI18nValue'),
          ToolTipMethodField(self, 'historyDescr', 'getUserHeroInfo'),
@@ -107,7 +203,8 @@ class AchievementTooltipData(ToolTipData):
          AchievementParamsField(self, 'params'),
          AchievementStatsField(self, 'stats'),
          AchievementIsInDossierField(self, 'isInDossier'),
-         AchievementRecordsField(self, 'records'))
+         AchievementRecordsField(self, 'records'),
+         AchievementCrystalRewardField(self, 'crystalAwards'))
 
 
 class GlobalRatingTooltipData(ToolTipBaseData):

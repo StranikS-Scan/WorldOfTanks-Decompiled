@@ -18,7 +18,7 @@ def getCrewNotFullTooltip():
         if tman is None:
             skill = skillsConfig.getSkill(crewRoles[slotIdx][0])
             userString = i18n.makeString(skill.userString).lower()
-            crew_list += (', ' if len(crew_list) != 0 else '') + userString
+            crew_list += (', ' if crew_list else '') + userString
 
     return makeTooltip('#tooltips:redButton/disabled/crew/notFull/header', i18n.makeString('#tooltips:redButton/disabled/crew/notFull/body') % crew_list)
 
@@ -44,7 +44,7 @@ def getTotalLevelInvalidTooltip(teamsLimit, restriction):
 
 
 def getActionDisabledTooltip(restriction, entity=None):
-    if not len(restriction):
+    if not restriction:
         return
     else:
         tooltip = None

@@ -65,11 +65,8 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.677679 0.561323	</turret>
+      <turret>	0.000000 0.618102 0.54566	</turret>
     </turretPositions>
-    <turretHardPoints>
-      <hardPoint>	HP_turretJoint_2	</hardPoint>
-    </turretHardPoints>
     <hitTester>
       <collisionModelServer>	vehicles/british/GB11_Caernarvon/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/british/GB11_Caernarvon/collision_client/Hull.model	</collisionModelClient>
@@ -93,7 +90,6 @@
     <hangarShadowTexture>	vehicles/british/GB11_Caernarvon/Caernarvon_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
       <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
-      <exclusionMask></exclusionMask>
     </camouflage>
   </hull>
   <chassis>
@@ -204,12 +200,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.19472 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.21618 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB11_Caernarvon/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB11_Caernarvon/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.52784 2.46214	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.51813 2.50191	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -246,7 +242,7 @@
         <left>	vehicles/british/GB11_Caernarvon/track/left.track	</left>
         <right>	vehicles/british/GB11_Caernarvon/track/right.track	</right>
         <segmentLength>	0.136	</segmentLength>
-        <segmentOffset>	0.155	</segmentOffset>
+        <segmentOffset>	0.216	</segmentOffset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -256,14 +252,11 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.12	</maxAmplitude>
+        <maxAmplitude>	0.14	</maxAmplitude>
         <maxOffset>	0.14	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -359,7 +352,7 @@
           <offset>	-0.036	</offset>
         </node>
       </trackNodes>
-      <trackThickness>	-0.0023	</trackThickness>
+      <trackThickness>	0.1	</trackThickness>
     </Chassis_GB11_Caernarvon_2_IGR>
   </chassis>
   <turrets0>
@@ -430,9 +423,9 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.0128477 -0.00247915 2.50836	</rayStart>
-              <rayEnd>	-0.0513541 -0.00625396 2.5079	</rayEnd>
-              <rayUp>	0.08 0.076 4	</rayUp>
+              <rayStart>	0.100814 -0.0317759 2.75815	</rayStart>
+              <rayEnd>	0.152606 -0.00237393 2.75791	</rayEnd>
+              <rayUp>	0.083 0.079 4	</rayUp>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -441,7 +434,6 @@
           <effects>	shot_main	</effects>
           <camouflage>
             <tiling>	0.535 0.535 0.000000 0.000000	</tiling>
-            <exclusionMask></exclusionMask>
           </camouflage>
         </_20pdr_Gun_Type_B_IGR>
       </guns>
@@ -454,28 +446,28 @@
         <collisionModelServer>	vehicles/british/GB11_Caernarvon/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB11_Caernarvon/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.326263 1.25517	</gunPosition>
+      <gunPosition>	-0.036073 0.427496 0.904735	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-1.10387 0.71871 -1.18817	</rayStart>
-          <rayEnd>	-0.907534 0.716296 -1.15012	</rayEnd>
+          <rayStart>	-1.08834 0.659286 -0.544116	</rayStart>
+          <rayEnd>	-0.895862 0.625419 -0.501599	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	1.09994 0.72095 -1.15965	</rayStart>
-          <rayEnd>	0.902824 0.720526 -1.12584	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.5	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <rayStart>	1.40201 0.729977 -0.512509	</rayStart>
+          <rayEnd>	1.3339 0.542199 -0.502659	</rayEnd>
+          <rayUp>	-0.9131 0.389937 0.119148	</rayUp>
+          <size>	0.596	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.976 -0.037 0.888 0.000 0.470 0.293 0.664 0.710 0.271 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <physicsShape>	0.943 -0.299 0.888 0.023 0.483 0.371 0.664 0.710 0.271 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
-        <tiling>	0.715 0.475 0.000000 0.000000	</tiling>
+        <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_2_GB11_Caernarvon_IGR>
   </turrets0>

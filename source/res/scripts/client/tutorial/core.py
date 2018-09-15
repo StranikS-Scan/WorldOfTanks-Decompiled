@@ -219,7 +219,7 @@ class Tutorial(object):
         Evaluate current state, if queue of effects is not empty than current
         state is play effects, otherwise - leaning.
         """
-        if len(self._effectsQueue):
+        if self._effectsQueue:
             if not isinstance(self._currentState, states.TutorialStateRunEffects):
                 self.setState(states.STATE_RUN_EFFECTS)
         else:
@@ -232,13 +232,13 @@ class Tutorial(object):
         :return: list or None.
         """
         result = None
-        if len(self._effectsQueue):
+        if self._effectsQueue:
             top = self._effectsQueue[0]
-            if not len(top):
+            if not top:
                 self._effectsQueue.pop(0)
-                if len(self._effectsQueue):
+                if self._effectsQueue:
                     top = self._effectsQueue[0]
-            if len(top):
+            if top:
                 result = top.pop(0)
         return result
 
@@ -250,7 +250,7 @@ class Tutorial(object):
         :param benefit: True - effects insert to head of queue,
             otherwise - tail of queue.
         """
-        if effects is None or len(effects) == 0:
+        if not effects:
             LOG_ERROR('Effect list is not defined')
         else:
             funcEffects = self._ctrlFactory.createFuncEffects(effects)
@@ -260,7 +260,6 @@ class Tutorial(object):
                 self._effectsQueue.append(funcEffects)
         if self._currentState.allowedToSwitch():
             self.setState(states.STATE_RUN_EFFECTS)
-        return
 
     def removeEffectsInQueue(self):
         """

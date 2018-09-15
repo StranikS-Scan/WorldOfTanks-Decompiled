@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/tutorial/gui/Scaleform/quests/pop_ups.py
 from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardWindow
 from gui.server_events.awards import FormattedAward
-from gui.server_events.bonuses import getTutorialBonusObj
+from gui.server_events.bonuses import getTutorialBonuses
 from gui.shared import events, g_eventBus
 from helpers import dependency
 from helpers import i18n
@@ -54,7 +54,7 @@ class _TutorialQuestAward(FormattedAward):
         bonuses = self.__content.get('bonuses', {})
         result = []
         for n, v in bonuses.iteritems():
-            result.append(getTutorialBonusObj(n, v))
+            result.extend(getTutorialBonuses(n, v))
 
         return result
 

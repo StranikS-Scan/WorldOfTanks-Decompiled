@@ -56,7 +56,7 @@ def validateUserRoomPwd(password, isRetype=False):
             return ('', ClientChannelError(errorID))
 
         length = len(password)
-        return ('', ClientIntLimitError(LIMIT_ERROR_ID.CHANNEL_INVALID_LENGTH, CHANNEL_LIMIT.NAME_MAX_CHARS_COUNT, CHANNEL_LIMIT.NAME_MIN_CHARS_COUNT)) if CHANNEL_LIMIT.NAME_MIN_CHARS_COUNT > length or CHANNEL_LIMIT.NAME_MAX_CHARS_COUNT < length else (password.encode('utf-8'), None)
+        return ('', ClientIntLimitError(LIMIT_ERROR_ID.PWD_INVALID_LENGTH, CHANNEL_LIMIT.PWD_MIN_CHARS_COUNT, CHANNEL_LIMIT.PWD_MAX_CHARS_COUNT)) if not isRetype and (CHANNEL_LIMIT.PWD_MIN_CHARS_COUNT > length or CHANNEL_LIMIT.PWD_MAX_CHARS_COUNT < length) else (password.encode('utf-8'), None)
 
 
 def validateUserRoomPwdPair(password, retype):

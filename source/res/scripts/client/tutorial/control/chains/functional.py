@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/tutorial/control/chains/functional.py
 from adisp import process
 from debug_utils import LOG_DEBUG
+from gui.Scaleform.genConsts.MISSIONS_STATES import MISSIONS_STATES
 from gui.server_events import events_dispatcher
-from gui.server_events.events_helpers import EVENT_STATUS
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from tutorial.control import game_vars
 from tutorial.control.functional import FunctionalEffect
@@ -64,26 +64,6 @@ class FunctionalSwitchToRandom(FunctionalEffect):
         from gui.prb_control.entities.base.ctx import PrbAction
         from gui.prb_control.settings import PREBATTLE_ACTION_NAME
         yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.RANDOM))
-
-
-class FunctionalShowUnlockedChapter(FunctionalEffect):
-
-    def triggerEffect(self):
-        chapterID = self._tutorial.getVars().get(self.getTargetID())
-        descriptor = getQuestsDescriptor()
-        completed = game_vars.getTutorialsCompleted()
-        chapterIdx = descriptor.getChapterIdx(chapterID)
-        chaptersCount = descriptor.getNumberOfChapters()
-        nextChapterID = self.__getOpenedChapterID(descriptor, completed, chapterIdx, chaptersCount) or self.__getOpenedChapterID(descriptor, completed, 0, chapterIdx)
-        events_dispatcher.showTutorialTabInEventsWindow(nextChapterID)
-
-    def __getOpenedChapterID(self, descriptor, completed, startIdx, stopIdx):
-        for i in range(startIdx, stopIdx):
-            chapter = descriptor.getChapterByIdx(i)
-            if chapter.getChapterStatus(descriptor, completed) == EVENT_STATUS.NONE:
-                return chapter.getID()
-
-        return None
 
 
 class FunctionalShowAwardWindow(FunctionalEffect):

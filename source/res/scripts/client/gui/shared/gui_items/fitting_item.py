@@ -56,7 +56,7 @@ class FittingItem(GUIItem, HasIntCD):
         self._rentInfo = RentalInfoProvider()
         self._restoreInfo = None
         self._personalDiscountPrice = None
-        if proxy is not None and proxy.isSynced():
+        if proxy is not None and proxy.inventory.isSynced() and proxy.stats.isSynced() and proxy.shop.isSynced():
             self._mayConsumeWalletResources = proxy.stats.mayConsumeWalletResources
             defaultPrice = proxy.shop.defaults.getItemPrice(self.intCD)
             if defaultPrice is None:
@@ -427,10 +427,7 @@ class FittingItem(GUIItem, HasIntCD):
             mayPurchase, reason = self.mayPurchase(money)
         if mayRent or mayPurchase:
             return (True, GUI_ITEM_ECONOMY_CODE.UNDEFINED)
-        elif self.isRentable and not mayRent:
-            return (mayRent, rentReason)
-        else:
-            return (mayPurchase, reason)
+        return (mayRent, rentReason) if self.isRentable and not mayRent else (mayPurchase, reason)
 
     def mayPurchaseWithExchange(self, money, exchangeRate):
         """
@@ -443,13 +440,12 @@ class FittingItem(GUIItem, HasIntCD):
         canBuy, reason = self.mayPurchase(money)
         if canBuy:
             return canBuy
-        elif reason == GUI_ITEM_ECONOMY_CODE.NOT_ENOUGH_CREDITS and money.isSet(Currency.GOLD):
+        if reason == GUI_ITEM_ECONOMY_CODE.NOT_ENOUGH_CREDITS and money.isSet(Currency.GOLD):
             money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0)
             price = self.getBuyPrice().price
             canBuy, reason = self._isEnoughMoney(price, money)
             return canBuy
-        else:
-            return False
+        return False
 
     def mayObtainWithMoneyExchange(self, money, exchangeRate):
         """

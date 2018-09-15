@@ -19,10 +19,7 @@ def isBattleLoadingShowed():
     """is battle loading screen has been showed
     """
     global __bBattleLoadingShowed
-    if BattleReplay.isPlaying():
-        return __bBattleLoadingShowed
-    else:
-        return False
+    return __bBattleLoadingShowed if BattleReplay.isPlaying() else False
 
 
 def _setBattleLoading(value):

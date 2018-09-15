@@ -77,11 +77,7 @@ class Qualifier(QualifierBase):
         return BONUS_ICONS['42x42'][self.__rawData.qualifierType].format(self.__rawData.crewRole)
 
     def getDescription(self):
-        if self.__rawData.conditionDescription:
-            return _ms(self.__rawData.conditionDescription)
-        else:
-            return None
-            return None
+        return _ms(self.__rawData.conditionDescription) if self.__rawData.conditionDescription else None
 
     def getValue(self):
         return self.__rawData.value
@@ -101,20 +97,18 @@ class InstalledElement(namedtuple('InstalledElement', 'cType elementID duration 
     @property
     def numberOfDaysLeft(self):
         timeLeft = (time.time() - self.installationTime) / time_utils.ONE_DAY
-        if self.duration == 0:
-            return 0
-        else:
-            return round(self.duration - timeLeft)
+        return 0 if self.duration == 0 else round(self.duration - timeLeft)
 
 
 class Element(object):
-    __slots__ = ('_rawData', '_qualifier', '_price', '__isInDossier', '__isInShop', '__isInQuests', '__itemID', '__nationID', '__allowedVehicles', '__notAllowedVehicles', '__allowedNations', '__notAllowedNations', '__igrReplaced', '__numberOfItems', '__numberOfDays', '__groupName')
+    __slots__ = ('_rawData', '_qualifier', '_price', '__isInDossier', '__isInShop', '__isInQuests', '__itemID', '__nationID', '__allowedVehicles', '__notAllowedVehicles', '__allowedNations', '__notAllowedNations', '__igrReplaced', '__numberOfItems', '__numberOfDays', '__groupName', '__requiredToken')
     igrCtrl = dependency.descriptor(IIGRController)
 
     def __init__(self, params):
         self.__isInShop = params['isInShop']
         self.__isInDossier = params['isInDossier']
         self.__isInQuests = params['isInQuests']
+        self.__requiredToken = params.get('requiredToken')
         self.__itemID = params['itemID']
         self.__allowedVehicles = params['allowedVehicles']
         self.__notAllowedVehicles = params['notAllowedVehicles']
@@ -188,13 +182,11 @@ class Element(object):
         if self.__allowedVehicles:
             if intCD in self.__allowedVehicles:
                 return True
-            else:
-                return False
+            return False
         if self.__notAllowedVehicles:
             if intCD not in self.__notAllowedVehicles:
                 return True
-            else:
-                return False
+            return False
         return False
 
     @property
@@ -212,6 +204,14 @@ class Element(object):
     @property
     def isFeatured(self):
         return False
+
+    @property
+    def hasRequiredToken(self):
+        return bool(self.__requiredToken)
+
+    @property
+    def requiredToken(self):
+        return self.__requiredToken
 
     @property
     def allowedVehicles(self):
@@ -251,9 +251,6 @@ class Element(object):
 class Emblem(Element):
     __slots__ = ('_rawData', '_qualifier', '_price', '__isInDossier', '__isInShop', '__isInQuests', '__itemID', '__nationID', '__allowedVehicles', '__notAllowedVehicles', '__allowedNations', '__notAllowedNations', '__igrReplaced', '__numberOfItems', '__numberOfDays', '__groupName')
 
-    def __init__(self, params):
-        super(Emblem, self).__init__(params)
-
     def getTexturePath(self):
         return self._rawData[2].replace('gui/maps', '../maps')
 
@@ -272,9 +269,6 @@ class Emblem(Element):
 
 class Inscription(Element):
     __slots__ = ('_rawData', '_qualifier', '_price', '__isInDossier', '__isInShop', '__isInQuests', '__itemID', '__nationID', '__allowedVehicles', '__notAllowedVehicles', '__allowedNations', '__notAllowedNations', '__igrReplaced', '__numberOfItems', '__numberOfDays', '__groupName')
-
-    def __init__(self, params):
-        super(Inscription, self).__init__(params)
 
     def getTexturePath(self):
         return self._rawData[2].replace('gui/maps', '../maps')
@@ -297,10 +291,7 @@ class Inscription(Element):
 
 
 class Camouflage(Element):
-    __slots__ = ('_rawData', '_qualifier', '_price', '__isInDossier', '__isInShop', '__isInQuests', '__itemID', '__nationID', '__allowedVehicles', '__notAllowedVehicles', '__allowedNations', '__notAllowedNations', '__igrReplaced', '__numberOfItems', '__numberOfDays', '__groupName')
-
-    def __init__(self, params):
-        super(Camouflage, self).__init__(params)
+    __slots__ = ('_rawData', '_qualifier', '_price', '__isInDossier', '__isInShop', '__isInQuests', '__itemID', '__nationID', '__allowedVehicles', '__notAllowedVehicles', '__allowedNations', '__notAllowedNations', '__igrReplaced', '__numberOfItems', '__numberOfDays', '__groupName', '__requiredToken')
 
     def getTexturePath(self):
         colors = self._rawData.get('colors', (0, 0, 0, 0))

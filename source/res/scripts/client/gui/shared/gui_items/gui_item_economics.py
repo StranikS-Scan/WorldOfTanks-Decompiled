@@ -9,8 +9,8 @@ def cmpByCurrencyWeight(p1, p2):
     Compares prices by currency weight and value (see Currency enum description). Comparator that takes two ItemPrice
     and returns int according to the following rules: -1 if p1 < p2, 0 if p1 == p2, 1 if p1 > p2.
     
-    :param x: ItemPrice
-    :param y: ItemPrice
+    :param p1: ItemPrice
+    :param p2: ItemPrice
     :return: int
     """
     price1 = p1.price
@@ -373,7 +373,7 @@ class ItemPrices(object):
         :param currency: str, see Currency enum.
         :return: iterator to float
         """
-        for itemPrice in self:
+        for itemPrice in self.iteritems(directOrder=True):
             yield itemPrice.price.get(currency)
 
 

@@ -61,7 +61,7 @@ class RentalsController(IRentalsController):
                     period = delta
                 notificationList.append((vehicle.intCD, delta % period or period))
 
-        if len(notificationList) > 0:
+        if notificationList:
             _, nextRentNotification = min(notificationList, key=itemgetter(1))
             for item in notificationList:
                 if item[1] == nextRentNotification:

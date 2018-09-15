@@ -23,11 +23,10 @@ class BaseNotificationView(object):
     def _getFlashID(self, notId):
         if notId in self.__entityIdToFlashIdMap:
             return self.__entityIdToFlashIdMap[notId]
-        else:
-            self.__flashIDCounter += 1
-            self.__flashIdToEntityIdMap[self.__flashIDCounter] = notId
-            self.__entityIdToFlashIdMap[notId] = self.__flashIDCounter
-            return self.__flashIDCounter
+        self.__flashIDCounter += 1
+        self.__flashIdToEntityIdMap[self.__flashIDCounter] = notId
+        self.__entityIdToFlashIdMap[notId] = self.__flashIDCounter
+        return self.__flashIDCounter
 
     def _getNotificationID(self, flashId):
         if flashId in self.__flashIdToEntityIdMap:

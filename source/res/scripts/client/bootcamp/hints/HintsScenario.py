@@ -6,18 +6,21 @@ import time
 import Math
 import math
 import TriggersManager
-from constants import BOOTCAMP_BATTLE_ACTION, HINT_TYPE
-from bootcamp.BootcampConstants import CONSUMABLE_ERROR_MESSAGES
+from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
+from bootcamp.BootcampConstants import CONSUMABLE_ERROR_MESSAGES, HINT_TYPE
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 from debug_utils import LOG_ERROR
 from HintsBase import HintBase, HINT_COMMAND
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.account_helpers.settings_core import ISettingsCore
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from functools import partial
+from bootcamp.Bootcamp import g_bootcamp
 
 class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, avatar, params):
         super(HintAvoidAndDestroy, self).__init__(avatar, HINT_TYPE.HINT_MESSAGE_AVOID, 0)
@@ -27,7 +30,8 @@ class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
         self.__vehicleIds = [ vehId for vehId, vehInfo in allVehicles if vehInfo['name'] in names ]
         self.__enemyWasKilled = False
         self.__avatar = avatar
-        self.__modelName = 'content/Interface/CheckPoint/angle_marker.model'
+        modName = 'angle_marker_purple.model' if self.settingsCore.getSetting('isColorBlind') else 'angle_marker.model'
+        self.__modelName = 'content/Interface/CheckPoint/' + modName
         self.__models = []
         self.__active = False
 
@@ -269,7 +273,7 @@ class HintEnemyTooStrong(HintBase, TriggersManager.ITriggerListener):
             allVehicles = self._avatar.arena.vehicles.iteritems()
             deadEnemies = set([ vehId for vehId, vehInfo in allVehicles if not vehInfo['isAlive'] ])
             strongVisEnemies -= deadEnemies
-            self.__strongEnemyVisible = len(strongVisEnemies) > 0
+            self.__strongEnemyVisible = bool(strongVisEnemies)
 
     def onTriggerDeactivated(self, args):
         pass
@@ -453,7 +457,7 @@ class HintSectorClear(HintBase, TriggersManager.ITriggerListener):
 
     def update(self):
         if self._state == HintBase.STATE_DEFAULT:
-            if len(self.__vehicleIds) == 0:
+            if not self.__vehicleIds:
                 self._timeStart = time.time()
                 self._state = HintBase.STATE_HINT
                 return HINT_COMMAND.SHOW
@@ -539,7 +543,6 @@ class HintSniperOnDistance(HintBase, TriggersManager.ITriggerListener):
                 if (self.__shootInTarget or inShootingRange) and not self.__inSniperMode:
                     self._state = HintBase.STATE_HINT
                     self._timeStart = time.time()
-                    from bootcamp.Bootcamp import g_bootcamp
                     g_bootcamp.resetSniperModeUsed()
                     return HINT_COMMAND.SHOW
             elif self._state == HintBase.STATE_HINT and (self.__inSniperMode and not self.__waitingForSnipeExit or not inShootingRange and not self.__waitingForSnipeExit):

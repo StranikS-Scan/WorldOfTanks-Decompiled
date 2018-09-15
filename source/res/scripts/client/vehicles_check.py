@@ -6,7 +6,7 @@ import ResMgr
 EPSILON = 0.001
 
 def check(*vehicleNames):
-    if len(vehicleNames) == 0:
+    if not vehicleNames:
         for nationID in (0, 1):
             for id in vehicles.g_list.getList(nationID).keys():
                 _vehicleCheck(vehicles.g_cache.vehicle(nationID, id))

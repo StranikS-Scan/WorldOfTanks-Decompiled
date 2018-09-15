@@ -104,7 +104,7 @@ class TechTree(TechTreeMeta):
         """
         super(TechTree, self).invalidateVTypeXP(xps)
         result = self._data.invalidateXpCosts()
-        if len(result):
+        if result:
             self.as_setUnlockPropsS(result)
 
     def invalidateWalletStatus(self, status):

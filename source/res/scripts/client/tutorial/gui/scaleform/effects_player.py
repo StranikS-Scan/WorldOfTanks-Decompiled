@@ -10,9 +10,6 @@ from tutorial.logger import LOG_ERROR, LOG_DEBUG
 class GUIEffect(object):
     __slots__ = ()
 
-    def __init__(self):
-        super(GUIEffect, self).__init__()
-
     def clear(self):
         pass
 

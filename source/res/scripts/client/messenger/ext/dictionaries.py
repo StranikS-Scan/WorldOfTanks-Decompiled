@@ -147,7 +147,7 @@ class SpecialOLDictionary(ObsceneLanguageDictionary):
 
                 if offset:
                     processed.append(text[offset:])
-                if len(processed):
+                if processed:
                     text = ''.join(processed)
 
         except Exception:

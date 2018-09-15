@@ -116,7 +116,7 @@ class MessageTemplates(templates.XMLCollection):
         result = {}
         if section is not None:
             result[None] = section.readString('')
-            if len(section.items()):
+            if section.items():
                 for secName, subSec in section.items():
                     result[secName] = subSec.readString('')
 

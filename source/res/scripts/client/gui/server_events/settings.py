@@ -4,19 +4,19 @@ import time
 from gui.shared import utils, events, g_eventBus
 _LAST_PQ_INTRO_VERSION = 'fallout'
 
-class _PQSettings(utils.SettingRecord):
+class _PMSettings(utils.SettingRecord):
 
-    def __init__(self, introShown=False, tilesVisited=set(), headerAlert=False):
-        super(_PQSettings, self).__init__(introShown=introShown, tilesVisited=tilesVisited, headerAlert=headerAlert)
+    def __init__(self, introShown=False, operationsVisited=set(), headerAlert=False):
+        super(_PMSettings, self).__init__(introShown=introShown, operationsVisited=operationsVisited, headerAlert=headerAlert)
 
-    def markTileAsVisited(self, tileID):
-        self.update(tilesVisited=self.tilesVisited | {tileID})
+    def markOperationAsVisited(self, operationID):
+        self.update(operationsVisited=self.operationsVisited | {operationID})
 
 
 class _QuestSettings(utils.SettingRootRecord):
 
-    def __init__(self, lastVisitTime=-1, visited=set(), naVisited=set(), minimized=set(), potapov=None):
-        super(_QuestSettings, self).__init__(lastVisitTime=lastVisitTime, visited=visited, naVisited=naVisited, minimized=minimized, potapov=_PQSettings(**(potapov or {})))
+    def __init__(self, lastVisitTime=-1, visited=set(), naVisited=set(), minimized=set(), personalMissions=None):
+        super(_QuestSettings, self).__init__(lastVisitTime=lastVisitTime, visited=visited, naVisited=naVisited, minimized=minimized, personalMissions=_PMSettings(**(personalMissions or {})))
 
     def updateVisited(self, visitSettingName, eventID):
         settingsValue = set(self[visitSettingName])
@@ -42,7 +42,7 @@ class _QuestSettings(utils.SettingRootRecord):
 
     def _asdict(self):
         result = super(_QuestSettings, self)._asdict()
-        result.update(potapov=self.potapov._asdict())
+        result.update(personalMissions=self.personalMissions._asdict())
         return result
 
     @classmethod
@@ -114,41 +114,24 @@ def updateCommonEventsSettings(svrEvents):
     s.save()
 
 
-def isNeedToShowPQIntro(pqCtrl):
+def _updatePMSettings(**kwargs):
     settings = get()
-    isShown = _LAST_PQ_INTRO_VERSION == settings.potapov.introShown
-    if not isShown:
-        for q in pqCtrl.getQuests().itervalues():
-            if q.hasProgress():
-                return False
-
-    return not isShown
-
-
-def _updatePQSettings(**kwargs):
-    settings = get()
-    settings.potapov.update(**kwargs)
+    settings.personalMissions.update(**kwargs)
     settings.save()
 
 
 def markPQIntroAsShown():
-    _updatePQSettings(introShown=_LAST_PQ_INTRO_VERSION)
+    _updatePMSettings(introShown=_LAST_PQ_INTRO_VERSION)
 
 
-def isPQTileNew(tileID, pqSettings=None):
-    pqSettings = pqSettings or get()
-    return tileID not in pqSettings.potapov.tilesVisited
-
-
-def markPQTileAsVisited(tileID):
-    settings = get()
-    settings.potapov.markTileAsVisited(tileID)
-    settings.save()
+def isPMOperationNew(operationID, pmSettings=None):
+    pqSettings = pmSettings or get()
+    return operationID not in pqSettings.personalMissions.operationsVisited
 
 
 def isNeedToShowHeaderAlert():
-    return get().potapov.headerAlert
+    return get().personalMissions.headerAlert
 
 
 def markHeaderAlertAsVisited():
-    _updatePQSettings(headerAlert=True)
+    _updatePMSettings(headerAlert=True)

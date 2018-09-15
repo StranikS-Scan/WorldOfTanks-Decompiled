@@ -32,12 +32,6 @@ class FalloutRespawn(FalloutRespawnViewMeta, IRespawnView):
         self.__disabled = False
         return
 
-    def _populate(self):
-        super(FalloutRespawn, self)._populate()
-
-    def _dispose(self):
-        super(FalloutRespawn, self)._dispose()
-
     def onVehicleSelected(self, vehicleID):
         ctrl = self.sessionProvider.dynamic.respawn
         if ctrl is not None:
@@ -143,7 +137,7 @@ class FalloutRespawn(FalloutRespawnViewMeta, IRespawnView):
         additionalBlockTemplate = makeHtmlString(_HTML_TEMPLATE_FALLOUT_INFO_KEY, 'winPoints')
         costKill, costFlags, costDamage = visitor.type.getWinPointsCosts(isSolo=isSolo, forVehicle=True)
         helpStr = ''
-        if visitor.hasFlags() and len(costFlags) > 0:
+        if visitor.hasFlags() and costFlags:
             costFlags = list(costFlags)[0]
             helpStr = self.__getAdditionalBlockStr(additionalBlockTemplate, FALLOUT.INFOPANEL_SINGLEHELPTEXT_WINPOINTS_FLAGCAPTURE, warning(plusStr + str(costFlags)))
             if isMultiteam and isSolo:

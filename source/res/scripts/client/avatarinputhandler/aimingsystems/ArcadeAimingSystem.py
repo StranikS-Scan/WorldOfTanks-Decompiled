@@ -159,18 +159,10 @@ class ArcadeAimingSystem(IAimingSystem):
 
     def getDesiredShotPoint(self):
         scanStart, scanDir = self.__getScanRay()
-        if self.__shotPointCalculator is None:
-            return self.getThirdPersonShotPoint()
-        else:
-            return self.__shotPointCalculator.getDesiredShotPoint(scanStart, scanDir)
-            return
+        return self.getThirdPersonShotPoint() if self.__shotPointCalculator is None else self.__shotPointCalculator.getDesiredShotPoint(scanStart, scanDir)
 
     def getThirdPersonShotPoint(self):
-        if self.__shotPointCalculator is not None:
-            return self.__shotPointCalculator.aimPlane.intersectRay(*self.__getScanRay())
-        else:
-            return AimingSystems.getDesiredShotPoint(*self.__getScanRay())
-            return
+        return self.__shotPointCalculator.aimPlane.intersectRay(*self.__getScanRay()) if self.__shotPointCalculator is not None else AimingSystems.getDesiredShotPoint(*self.__getScanRay())
 
     def handleMovement(self, dx, dy):
         self.yaw += dx

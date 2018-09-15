@@ -58,8 +58,8 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setGunMarkerColorS(self, name, colorName):
         return self.flashObject.as_setGunMarkerColor(name, colorName) if self._isDAAPIInited() else None
 
-    def as_setNetVisibleS(self, value):
-        return self.flashObject.as_setNetVisible(value) if self._isDAAPIInited() else None
+    def as_setNetVisibleS(self, mask):
+        return self.flashObject.as_setNetVisible(mask) if self._isDAAPIInited() else None
 
     def as_setNetTypeS(self, netType):
         return self.flashObject.as_setNetType(netType) if self._isDAAPIInited() else None

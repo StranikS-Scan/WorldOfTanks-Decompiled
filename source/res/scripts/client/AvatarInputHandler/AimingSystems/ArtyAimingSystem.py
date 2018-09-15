@@ -11,7 +11,7 @@ _MINIMAL_AIMING_RADIUS_SQ = _MINIMAL_AIMING_RADIUS * _MINIMAL_AIMING_RADIUS
 class ArtyAimingSystem(StrategicAimingSystem):
 
     def __init__(self):
-        StrategicAimingSystem.__init__(self, 0.0, 0.0)
+        super(ArtyAimingSystem, self).__init__(0.0, 0.0)
         self.__direction = Vector3(0.0, 0.0, 0.0)
         self.__aimMatrix = Matrix()
 

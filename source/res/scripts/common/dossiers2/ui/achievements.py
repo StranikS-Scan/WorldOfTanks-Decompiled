@@ -10,7 +10,7 @@ BATTLE_HERO_TEXTS = {'warrior': '#achievements:warrior',
  'supporter': '#achievements:supporter',
  'scout': '#achievements:scout',
  'evileye': '#achievements:evileye'}
-BADGES_BLOCK = 'rankedBadges'
+BADGES_BLOCK = 'playerBadges'
 
 class ACHIEVEMENT_BLOCK:
     CLIENT = 'client'

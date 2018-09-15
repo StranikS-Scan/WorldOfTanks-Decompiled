@@ -159,11 +159,7 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
 
     def _getCellName(self, cellIdx=None):
         from gui.battle_control import minimap_utils
-        if cellIdx is None:
-            return minimap_utils.getCellName(self.getFirstTargetID())
-        else:
-            return minimap_utils.getCellName(cellIdx)
-            return
+        return minimap_utils.getCellName(self.getFirstTargetID()) if cellIdx is None else minimap_utils.getCellName(cellIdx)
 
     def _getCommandVehMarker(self):
         command = _ACTIONS.battleChatCommandFromActionID(self._commandID)

@@ -255,11 +255,7 @@ class BattleFeedbackAdaptor(IBattleController):
         :param code: DEVELOPMENT_INFO.*.
         :return: last received information or None.
         """
-        if code in self.__devInfo:
-            return self.__devInfo[code]
-        else:
-            return None
-            return None
+        return self.__devInfo[code] if code in self.__devInfo else None
 
     def _setVehicleHealthChanged(self, vehicleID, newHealth, attackerID, attackReasonID):
         if attackerID:

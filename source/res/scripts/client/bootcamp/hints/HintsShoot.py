@@ -5,7 +5,8 @@ import TriggersManager
 import math
 import Math
 import BigWorld
-from constants import BOOTCAMP_BATTLE_ACTION, HINT_TYPE
+from bootcamp.BootcampConstants import HINT_TYPE
+from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
 from debug_utils_bootcamp import LOG_CURRENT_EXCEPTION_BOOTCAMP, LOG_DEBUG_DEV_BOOTCAMP
 from HintsBase import HINT_COMMAND, HintBase
 from helpers import dependency
@@ -78,7 +79,7 @@ class HintShoot(HintBase):
 
     def onAction(self, actionId, actionParams):
         if actionId == BOOTCAMP_BATTLE_ACTION.PLAYER_HIT_VEHICLE:
-            assert len(actionParams) > 0
+            assert actionParams
             vehicleId = actionParams[0]
             if vehicleId in self.__enemies:
                 self.__shootedEnemy = True
@@ -116,10 +117,7 @@ class HintAdvancedSniper(HintBase, TriggersManager.ITriggerListener):
     def message(self):
         if self._state == HintAdvancedSniper.STATE_HINT_SNIPER:
             return self.__messageSniperBefore
-        elif self._state == HintAdvancedSniper.STATE_EXIT_SNIPER_MODE:
-            return self.__messageSniperExit
-        else:
-            return self.__message
+        return self.__messageSniperExit if self._state == HintAdvancedSniper.STATE_EXIT_SNIPER_MODE else self.__message
 
     @message.setter
     def message(self, message):
@@ -129,10 +127,7 @@ class HintAdvancedSniper(HintBase, TriggersManager.ITriggerListener):
     def voiceover(self):
         if self._state == self.STATE_HINT_SNIPER:
             return self.__voiceoverEnterSniper
-        elif self._state == self.STATE_HINT_WEAK_POINTS:
-            return self.__voiceoverWeakPoints
-        else:
-            return self.__voiceoverExitSniper
+        return self.__voiceoverWeakPoints if self._state == self.STATE_HINT_WEAK_POINTS else self.__voiceoverExitSniper
 
     def __init__(self, avatar, params):
         super(HintAdvancedSniper, self).__init__(avatar, HINT_TYPE.HINT_SNIPER, 0)
@@ -357,7 +352,7 @@ class HintTargetLock(HintBase):
 
     def onAction(self, actionId, actionParams):
         if actionId == BOOTCAMP_BATTLE_ACTION.PLAYER_HIT_VEHICLE:
-            assert len(actionParams) > 0
+            assert actionParams
             vehicleId = actionParams[0]
             if vehicleId in self.__enemies:
                 self.__shootedEnemy = True

@@ -18,7 +18,7 @@ class MechEngineerAchievement(HasVehiclesList, NationSpecificAchievement):
         pass
 
     def isActive(self):
-        return not len(self.getVehiclesData())
+        return not self.getVehiclesData()
 
     def _readLevelUpValue(self, dossier):
         return len(self.getVehiclesData())

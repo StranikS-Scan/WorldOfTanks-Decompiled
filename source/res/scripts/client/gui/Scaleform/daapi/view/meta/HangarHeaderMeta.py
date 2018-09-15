@@ -13,6 +13,9 @@ class HangarHeaderMeta(BaseDAAPIComponent):
     def showBeginnerQuests(self):
         self._printOverrideError('showBeginnerQuests')
 
+    def showEventQuests(self):
+        self._printOverrideError('showEventQuests')
+
     def as_setDataS(self, data):
         """
         :param data: Represented by HangarHeaderVO (AS)

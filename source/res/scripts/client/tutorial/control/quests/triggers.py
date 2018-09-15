@@ -51,9 +51,6 @@ class AllTutorialBonusesTrigger(TriggerWithValidateVar):
 
 class InvalidateFlagsTrigger(Trigger):
 
-    def __init__(self, triggerID):
-        super(InvalidateFlagsTrigger, self).__init__(triggerID)
-
     def run(self):
         self.isRunning = True
         if not self.isSubscribed:
@@ -98,9 +95,6 @@ class ChapterBonusTrigger(TriggerWithValidateVar):
 class RandomBattlesCountTrigger(Trigger):
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, triggerID):
-        super(RandomBattlesCountTrigger, self).__init__(triggerID)
-
     def run(self):
         self.isRunning = True
         if not self.isSubscribed:
@@ -124,9 +118,6 @@ class RandomBattlesCountTrigger(Trigger):
 class ResearchModuleTrigger(Trigger):
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, triggerID):
-        super(ResearchModuleTrigger, self).__init__(triggerID)
-
     def run(self):
         self.isRunning = True
         if not self.isSubscribed:
@@ -139,7 +130,7 @@ class ResearchModuleTrigger(Trigger):
         unlocks = self.itemsCache.items.stats.unlocks
         unlockedItemsGetter = g_techTreeDP.getUnlockedVehicleItems
         for vehCD, vehicle in vehicles.iteritems():
-            if len(unlockedItemsGetter(vehicle, unlocks)):
+            if unlockedItemsGetter(vehicle, unlocks):
                 return True
 
         return False
@@ -155,9 +146,6 @@ class ResearchModuleTrigger(Trigger):
 
 class InstallModuleTrigger(Trigger):
     itemsCache = dependency.descriptor(IItemsCache)
-
-    def __init__(self, triggerID):
-        super(InstallModuleTrigger, self).__init__(triggerID)
 
     def run(self):
         self.isRunning = True
@@ -356,7 +344,7 @@ class InstallItemsTrigger(TriggerWithValidateVar):
         vehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
         items = self.itemsCache.items.getItems(itemTypeID=GUI_ITEM_TYPE_INDICES[itemType], criteria=criteria).values()
         for item in items:
-            if len(item.getInstalledVehicles(vehicles)) > 0:
+            if item.getInstalledVehicles(vehicles):
                 return True
 
         return False

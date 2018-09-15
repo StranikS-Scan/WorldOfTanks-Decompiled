@@ -11,6 +11,7 @@ from NationSpecificAchievement import NationSpecificAchievement
 from RareAchievement import RareAchievement
 from RegularAchievement import RegularAchievement
 from SeriesAchievement import SeriesAchievement
+from RegularExtAchievement import RegularExtAchievement
 from SimpleProgressAchievement import SimpleProgressAchievement
 from skeletons.gui.server_events import IEventsCache
 
@@ -38,17 +39,17 @@ def achievementHasVehiclesList(achievement):
     return isinstance(achievement, _HasVehiclesList)
 
 
-def getCompletedPotapovQuestsCount(seasonID, vehClasses):
+def getCompletedPersonalMissionsCount(campaignID, vehClasses):
     eventsCache = dependency.instance(IEventsCache)
 
     def _filter(quest):
         return quest.isFullCompleted() and len(vehClasses & quest.getVehicleClasses())
 
     result = 0
-    for tile in eventsCache.random.getSeasons()[seasonID].getTiles().itervalues():
-        result += len(tile.getQuestsByFilter(_filter))
+    for operation in eventsCache.random.getCampaigns()[campaignID].getOperations().itervalues():
+        result += len(operation.getQuestsByFilter(_filter))
 
     return result
 
 
-__all__ = ('ClassProgressAchievement', 'HistoricalAchievement', 'NationSpecificAchievement', 'RareAchievement', 'RegularAchievement', 'SeriesAchievement', 'SimpleProgressAchievement', 'DeprecatedAchievement', 'QuestAchievement', 'isRareAchievement', 'isSeriesAchievement', 'achievementHasVehiclesList')
+__all__ = ('ClassProgressAchievement', 'HistoricalAchievement', 'NationSpecificAchievement', 'RareAchievement', 'RegularAchievement', 'RegularExtAchievement', 'SeriesAchievement', 'SimpleProgressAchievement', 'DeprecatedAchievement', 'QuestAchievement', 'isRareAchievement', 'isSeriesAchievement', 'achievementHasVehiclesList')

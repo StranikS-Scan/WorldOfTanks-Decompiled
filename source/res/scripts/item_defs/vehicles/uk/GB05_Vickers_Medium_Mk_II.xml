@@ -21,8 +21,8 @@
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
-    <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/british/GB05_Vickers_Medium_Mk_II/Vickers_Medium_Mk_II_CM.dds	</exclusionMask>
+    <tiling>	2.7 2.6 0.33 0.000000	</tiling>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -37,6 +37,7 @@
       <armor_9>	6.35	</armor_9>
       <armor_10>	6.35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       </armor_10>
+      <armor_11>	0	</armor_11>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	7600	</weight>
@@ -62,7 +63,7 @@
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	-0.000000 1.17624 -0.279723	</turret>
+      <turret>	-0.000168 0.984014 -0.600308	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Hull.model	</collisionModelServer>
@@ -70,21 +71,24 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	0.565838 1.27279 1.98327	</rayStart>
-        <rayEnd>	0.565838 0.800608 1.61309	</rayEnd>
+        <rayStart>	0.631775 0.923775 1.53973	</rayStart>
+        <rayEnd>	0.631775 0.752535 1.4364	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.28	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	-0.172083 0.951235 2.30372	</rayStart>
-        <rayEnd>	-0.172083 0.399774 2.06732	</rayEnd>
+        <rayStart>	-0.0707398 0.57461 2.057	</rayStart>
+        <rayEnd>	-0.0707397 0.388597 1.98352	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.58	</size>
+        <size>	0.498	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/british/GB05_Vickers_Medium_Mk_II/Vickers_Medium_Mk_II_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	2.3 2.3 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_GB05_Vickers_Medium_Mk_II>
@@ -129,118 +133,223 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.08	</textureScale>
+        <textureScale>	-2.9	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	WD_R	</template>
-          <radius>	0.120638	</radius>
-          <startIndex>	3	</startIndex>
-          <count>	2	</count>
-        </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R6	</name>
-          <radius>	0.377735	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.118951	</radius>
-          <startIndex>	5	</startIndex>
-          <count>	6	</count>
-        </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R0	</name>
-          <radius>	0.31171	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	WD_R	</template>
-          <radius>	0.120638	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	2	</count>
-        </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R5	</name>
-          <radius>	0.118951	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.118951	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	5	</count>
-        </group>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	WD_L	</template>
-          <radius>	0.120638	</radius>
-          <startIndex>	3	</startIndex>
-          <count>	2	</count>
-        </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L6	</name>
-          <radius>	0.377735	</radius>
-        </wheel>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	W_L	</template>
-          <radius>	0.118951	</radius>
-          <startIndex>	5	</startIndex>
-          <count>	6	</count>
-        </group>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
-          <radius>	0.31171	</radius>
+          <radius>	0.26	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.1182	</radius>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	WD_L	</template>
-          <radius>	0.120638	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	2	</count>
+          <radius>	0.104864	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	4	</count>
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L5	</name>
-          <radius>	0.118951	</radius>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L6	</name>
+          <radius>	0.361797	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	W_L	</template>
-          <radius>	0.118951	</radius>
+          <radius>	0.118199	</radius>
           <startIndex>	0	</startIndex>
-          <count>	5	</count>
+          <count>	11	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.26	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.1182	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.104864	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R6	</name>
+          <radius>	0.361797	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.118199	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	11	</count>
         </group>
       </wheels>
-      <drivingWheels>	WD_L0 WD_L6	</drivingWheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.00608 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.16244 1.55974	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.20477 1.83431	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB05_Vickers_Medium_Mk_II/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB05_Vickers_Medium_Mk_II/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB05_Vickers_Medium_Mk_II/track/left.track	</left>
+        <right>	vehicles/british/GB05_Vickers_Medium_Mk_II/track/right.track	</right>
+        <segmentLength>	0.165	</segmentLength>
+        <segmentOffset>	0.065	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	11	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.04	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	11	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.04	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.0013	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.088	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.088	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.088	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.088	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.088	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.088	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+      </trackNodes>
       <AODecals>
         <decal>
           <transform>
@@ -290,118 +399,223 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.08	</textureScale>
+        <textureScale>	-2.9	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	WD_R	</template>
-          <radius>	0.120638	</radius>
-          <startIndex>	3	</startIndex>
-          <count>	2	</count>
-        </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R6	</name>
-          <radius>	0.377735	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.118951	</radius>
-          <startIndex>	5	</startIndex>
-          <count>	6	</count>
-        </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R0	</name>
-          <radius>	0.31171	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	WD_R	</template>
-          <radius>	0.120638	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	2	</count>
-        </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R5	</name>
-          <radius>	0.118951	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.118951	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	5	</count>
-        </group>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	WD_L	</template>
-          <radius>	0.120638	</radius>
-          <startIndex>	3	</startIndex>
-          <count>	2	</count>
-        </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L6	</name>
-          <radius>	0.377735	</radius>
-        </wheel>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	W_L	</template>
-          <radius>	0.118951	</radius>
-          <startIndex>	5	</startIndex>
-          <count>	6	</count>
-        </group>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
-          <radius>	0.31171	</radius>
+          <radius>	0.26	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.1182	</radius>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	WD_L	</template>
-          <radius>	0.120638	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	2	</count>
+          <radius>	0.104864	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	4	</count>
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L5	</name>
-          <radius>	0.118951	</radius>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L6	</name>
+          <radius>	0.361797	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	W_L	</template>
-          <radius>	0.118951	</radius>
+          <radius>	0.118199	</radius>
           <startIndex>	0	</startIndex>
-          <count>	5	</count>
+          <count>	11	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.26	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.1182	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.104864	</radius>
+          <startIndex>	2	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R6	</name>
+          <radius>	0.361797	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.118199	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	11	</count>
         </group>
       </wheels>
-      <drivingWheels>	WD_L0 WD_L6	</drivingWheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.00608 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.16244 1.55974	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.20477 1.83431	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB05_Vickers_Medium_Mk_II/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB05_Vickers_Medium_Mk_II/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB05_Vickers_Medium_Mk_II/track/left.track	</left>
+        <right>	vehicles/british/GB05_Vickers_Medium_Mk_II/track/right.track	</right>
+        <segmentLength>	0.165	</segmentLength>
+        <segmentOffset>	0.065	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	11	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.04	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	11	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.04	</minOffset>
+          <maxOffset>	0.04	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.0013	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.088	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.088	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.088	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	1.3	</backwardElastK>
+          <offset>	-0.057	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.088	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.088	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.088	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.054	</offset>
+        </node>
+      </trackNodes>
       <AODecals>
         <decal>
           <transform>
@@ -471,14 +685,17 @@
             <maxPitch>	0 6 0.083333 6 0.146995 7 0.853005 7 0.916667 6 1 6	</maxPitch>
           </pitchLimits>
           <models>
-            <undamaged>	vehicles/british/GB05_Vickers_Medium_Mk_II/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_02.model	</exploded>
+            <undamaged>	vehicles/british/GB05_Vickers_Medium_Mk_II/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Gun_02.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
+          </camouflage>
         </QF_6_pounder_8cwt_Mk_II>
       </guns>
       <models>
@@ -490,33 +707,33 @@
         <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.002673 0.361974 0.605508	</gunPosition>
+      <gunPosition>	0.000058 0.385437 0.573161	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-1.05177 0.229265 0.322148	</rayStart>
-          <rayEnd>	-0.682215 0.229265 0.169074	</rayEnd>
+          <rayStart>	-1.1689 0.231346 0.132857	</rayStart>
+          <rayEnd>	-0.770428 0.231319 0.0979171	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </player>
-        <player>
-          <rayStart>	1.05647 0.227029 0.309689	</rayStart>
-          <rayEnd>	0.686919 0.227028 0.156615	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.3	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
-        </player>
         <inscription>
-          <rayStart>	0.777608 0.843868 -0.0235188	</rayStart>
-          <rayEnd>	0.485829 0.319604 -0.0253131	</rayEnd>
-          <rayUp>	-0.875239 0.48369 -0.000009	</rayUp>
+          <rayStart>	0.67627 0.71757 0.000171696	</rayStart>
+          <rayEnd>	0.598571 0.53328 0.000072	</rayEnd>
+          <rayUp>	-0.921644 0.388037 0.000000	</rayUp>
           <size>	0.64	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
+        <player>
+          <rayStart>	1.06928 0.23134 0.124122	</rayStart>
+          <rayEnd>	0.870048 0.231326 0.106652	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.950 0.000 0.950 0.000 0.474 0.096 0.550 0.500 0.550 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <physicsShape>	1.081 0.000 1.102 0.000 0.496 0.114 0.579 0.500 0.593 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
     </Turret_1_GB05_Vickers_Medium_Mk_II>
     <Turret_2_GB05_Vickers_Medium_Mk_II>
@@ -576,14 +793,17 @@
             <maxPitch>	0 6 0.083333 6 0.146995 7 0.853005 7 0.916667 6 1 6	</maxPitch>
           </pitchLimits>
           <models>
-            <undamaged>	vehicles/british/GB05_Vickers_Medium_Mk_II/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_04.model	</exploded>
+            <undamaged>	vehicles/british/GB05_Vickers_Medium_Mk_II/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Gun_04.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
+          </camouflage>
         </QF_6_pounder_8cwt_Mk_II>
         <OQF_3pdr_Gun>	shared	  <maxAmmo>	111	</maxAmmo>
           <unlocks>
@@ -611,16 +831,16 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <models>
-            <undamaged>	vehicles/british/GB05_Vickers_Medium_Mk_II/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_05.model	</exploded>
+            <undamaged>	vehicles/british/GB05_Vickers_Medium_Mk_II/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Gun_05.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.79 0.79 0.000000 0.000000	</tiling>
+            <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
         </OQF_3pdr_Gun>
         <QF_6_pounder_8cwt_Mk_I>	shared	  <maxAmmo>	80	</maxAmmo>
@@ -643,14 +863,17 @@
             <maxPitch>	0 5 0.083333 5 0.146995 7 0.853005 7 0.916667 5 1 5	</maxPitch>
           </pitchLimits>
           <models>
-            <undamaged>	vehicles/british/GB05_Vickers_Medium_Mk_II/normal/lod0/Gun_06.model	</undamaged>
-            <destroyed>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_06.model	</destroyed>
-            <exploded>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_06.model	</exploded>
+            <undamaged>	vehicles/british/GB05_Vickers_Medium_Mk_II/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/british/GB05_Vickers_Medium_Mk_II/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Gun_06.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Gun_06.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
+          </camouflage>
         </QF_6_pounder_8cwt_Mk_I>
       </guns>
       <models>
@@ -662,33 +885,33 @@
         <collisionModelServer>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB05_Vickers_Medium_Mk_II/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.002673 0.337981 0.605508	</gunPosition>
+      <gunPosition>	0.000058 0.385437 0.573161	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.961163 0.457762 -0.92729	</rayStart>
-          <rayEnd>	-0.561169 0.457762 -0.92729	</rayEnd>
+          <rayStart>	-0.808099 0.50542 -0.993286	</rayStart>
+          <rayEnd>	-0.608099 0.50542 -0.993286	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <player>
-          <rayStart>	1.04714 0.222681 0.332205	</rayStart>
-          <rayEnd>	0.677596 0.22268 0.179134	</rayEnd>
+          <rayStart>	1.08594 0.232303 0.147544	</rayStart>
+          <rayEnd>	0.846857 0.232302 0.126626	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
         <inscription>
-          <rayStart>	0.713238 0.819275 -0.0164363	</rayStart>
-          <rayEnd>	0.474955 0.268624 -0.0163905	</rayEnd>
-          <rayUp>	-0.917727 0.397211 0.000000	</rayUp>
+          <rayStart>	0.773694 0.893414 0.000694761	</rayStart>
+          <rayEnd>	0.540698 0.340508 0.000525942	</rayEnd>
+          <rayUp>	-0.92163 0.38807 -0.000000	</rayUp>
           <size>	0.68	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.952 -0.011 1.000 0.000 0.444 0.138 0.585 0.651 0.500 0.500 0.019 0.500 0.000 1.000 0.000	</physicsShape>
+      <physicsShape>	1.027 0.006 1.021 0.000 0.516 0.082 0.750 0.651 0.539 0.500 0.000 0.500 0.000 1.000 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
     </Turret_2_GB05_Vickers_Medium_Mk_II>
   </turrets0>

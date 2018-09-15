@@ -59,7 +59,7 @@ class ModuleProcessor(ItemProcessor):
          'msg': msg}
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        if not len(errStr):
+        if not errStr:
             if code != AccountCommands.RES_CENTER_DISCONNECTED:
                 msg = 'server_error'
             else:
@@ -532,16 +532,10 @@ def getInstallerProcessor(vehicle, newComponentItem, slotIdx=0, install=True, is
     """
     if newComponentItem.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
         return EquipmentInstaller(vehicle, newComponentItem, slotIdx, install, conflictedEqs, skipConfirm)
-    elif newComponentItem.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
+    if newComponentItem.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
         return OptDeviceInstaller(vehicle, newComponentItem, slotIdx, install, isUseMoney, conflictedEqs, skipConfirm)
-    elif newComponentItem.itemTypeID == GUI_ITEM_TYPE.TURRET:
-        return TurretInstaller(vehicle, newComponentItem, conflictedEqs, skipConfirm)
-    else:
-        return OtherModuleInstaller(vehicle, newComponentItem, conflictedEqs, skipConfirm)
+    return TurretInstaller(vehicle, newComponentItem, conflictedEqs, skipConfirm) if newComponentItem.itemTypeID == GUI_ITEM_TYPE.TURRET else OtherModuleInstaller(vehicle, newComponentItem, conflictedEqs, skipConfirm)
 
 
 def getPreviewInstallerProcessor(vehicle, newComponentItem, conflictedEqs=None):
-    if newComponentItem.itemTypeID == GUI_ITEM_TYPE.TURRET:
-        return PreviewVehicleTurretInstaller(vehicle, newComponentItem, conflictedEqs)
-    else:
-        return PreviewVehicleModuleInstaller(vehicle, newComponentItem, conflictedEqs)
+    return PreviewVehicleTurretInstaller(vehicle, newComponentItem, conflictedEqs) if newComponentItem.itemTypeID == GUI_ITEM_TYPE.TURRET else PreviewVehicleModuleInstaller(vehicle, newComponentItem, conflictedEqs)

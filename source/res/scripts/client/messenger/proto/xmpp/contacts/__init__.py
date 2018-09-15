@@ -258,9 +258,9 @@ class ContactsManager(ClientEventsHandler):
                 tasks.append(block_tasks.RemoveBlockItemTask(jid, name))
                 task, exclude = None, set()
                 rosterGroups = contact.getItem().getRosterGroups()
-                for group in rosterGroups:
-                    if self.usersStorage.isGroupEmpty(group):
-                        exclude.add(group)
+                for rosterGroup in rosterGroups:
+                    if self.usersStorage.isGroupEmpty(rosterGroup):
+                        exclude.add(rosterGroup)
 
                 if groups:
                     if groups != exclude:

@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/game_control/BrowserController.py
 import BigWorld
 import Event
-import constants
 from WebBrowser import WebBrowser, LOG_BROWSER
 from adisp import async, process
 from debug_utils import LOG_WARNING
@@ -77,10 +76,6 @@ class BrowserController(IBrowserController):
     @async
     @process
     def load(self, url=None, title=None, showActionBtn=True, showWaiting=True, browserID=None, isAsync=False, browserSize=None, isDefault=True, callback=None, showCloseBtn=False, useBrowserWindow=True, isModal=False, showCreateWaiting=False, handlers=None, showBrowserCallback=None, isSolidBorder=False):
-        if constants.IS_BOOTCAMP_ENABLED:
-            from bootcamp.Bootcamp import g_bootcamp
-            if g_bootcamp.isRunning():
-                return
         if showCreateWaiting:
             Waiting.show('browser/init')
         url = yield self.__urlMacros.parse(url or GUI_SETTINGS.browser.url)
@@ -158,7 +153,7 @@ class BrowserController(IBrowserController):
 
     def __tryCreateNextPendingBrowser(self):
         self.__creatingBrowserID = None
-        if len(self.__pendingBrowsers) > 0:
+        if self.__pendingBrowsers:
             nextCtx = self.__pendingBrowsers.popitem()[1]
             self.__createBrowser(nextCtx)
         return
@@ -167,7 +162,8 @@ class BrowserController(IBrowserController):
         browserID = ctx['browserID']
         LOG_BROWSER('CTRL: Creating a browser: ', browserID, ctx['url'])
         self.__creatingBrowserID = browserID
-        if not self.__browsers[browserID].create():
+        browser = self.__browsers[browserID]
+        if not browser.create():
             LOG_BROWSER('CTRL: Failed the create step: ', browserID)
             self.delBrowser(browserID)
             self.__tryCreateNextPendingBrowser()
@@ -205,15 +201,25 @@ class BrowserController(IBrowserController):
                 g_eventBus.handleEvent(BrowserEvent(BrowserEvent.BROWSER_CREATED, ctx=ctx))
                 self.__createDone(ctx)
 
-            self.__browsers[browserID].onCanCreateNewBrowser += createNextBrowser
+            def titleUpdateCallback(title):
+                ctx['title'] = title
+
+            browser.onCanCreateNewBrowser += createNextBrowser
             self.__browserCreationCallbacks[browserID] = createNextBrowser
-            self.__browsers[browserID].onFailedCreation += failedCreationCallback
+            browser.onFailedCreation += failedCreationCallback
+            browser.onTitleChange += titleUpdateCallback
             if ctx['isAsync']:
-                self.__browsersCallbacks[browserID] = (None, successfulCreationCallback, failedCreationCallback)
-                self.__browsers[browserID].onLoadEnd += successfulCreationCallback
+                self.__browsersCallbacks[browserID] = (None,
+                 successfulCreationCallback,
+                 failedCreationCallback,
+                 titleUpdateCallback)
+                browser.onLoadEnd += successfulCreationCallback
             else:
-                self.__browsersCallbacks[browserID] = (successfulCreationCallback, None, failedCreationCallback)
-                self.__browsers[browserID].onReady += successfulCreationCallback
+                self.__browsersCallbacks[browserID] = (successfulCreationCallback,
+                 None,
+                 failedCreationCallback,
+                 titleUpdateCallback)
+                browser.onReady += successfulCreationCallback
             return
 
     def __stop(self):
@@ -223,7 +229,7 @@ class BrowserController(IBrowserController):
             browser.destroy()
 
     def __clearCallbacks(self, browserID, browser, incDelayedCreation):
-        ready, loadEnd, failed = self.__browsersCallbacks.pop(browserID, (None, None, None))
+        ready, loadEnd, failed, title = self.__browsersCallbacks.pop(browserID, (None, None, None, None))
         if browser is not None:
             if failed is not None:
                 browser.onFailedCreation -= failed
@@ -231,6 +237,8 @@ class BrowserController(IBrowserController):
                 browser.onReady -= ready
             if loadEnd is not None:
                 browser.onLoadEnd -= loadEnd
+            if title is not None:
+                browser.onTitleChange -= title
         if incDelayedCreation:
             creation = self.__browserCreationCallbacks.pop(browserID, None)
             if browser is not None and creation is not None:

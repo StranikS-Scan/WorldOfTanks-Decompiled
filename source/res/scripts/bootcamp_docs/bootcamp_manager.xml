@@ -1,0 +1,74 @@
+<bootcamp_manager.xml>
+  <observers>
+    <item>
+      <name>	personalCaseUI	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	net.wg.gui.bootcamp.lobby.BCPersonalCaseObserver	  <name>	observerClassName	</name>
+        </item>
+        <item>	BCPersonalCaseObserver	  <name>	daapiAlias	</name>
+        </item>
+      </value>
+    </item>
+    <item>
+      <name>	TechnicalMaitenanceUI	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	net.wg.gui.bootcamp.lobby.BCTechnicalMaintenanceObserver	  <name>	observerClassName	</name>
+        </item>
+        <item>	BCTechnicalMaintenanceObserver	  <name>	daapiAlias	</name>
+        </item>
+      </value>
+    </item>
+    <item>
+      <name>	AmmunitionPanelMC	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	net.wg.gui.bootcamp.lobby.BCAmmunitionPanelObserver	  <name>	observerClassName	</name>
+        </item>
+        <item>	BCAmmunitionPanelObserver	  <name>	daapiAlias	</name>
+        </item>
+      </value>
+    </item>
+    <item>
+      <name>	Crew	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	net.wg.gui.bootcamp.lobby.BCCrewObserver	  <name>	observerClassName	</name>
+        </item>
+        <item>	BCCrewObserver	  <name>	daapiAlias	</name>
+        </item>
+      </value>
+    </item>
+    <item>
+      <name>	HangarUI	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	net.wg.gui.bootcamp.lobby.BCHangarObserver	  <name>	observerClassName	</name>
+        </item>
+        <item>	BCHangarObserver	  <name>	daapiAlias	</name>
+        </item>
+      </value>
+    </item>
+    <item>
+      <name>	LobbyHeader_UI	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	net.wg.gui.bootcamp.lobby.BCLobbyHeaderObserver	  <name>	observerClassName	</name>
+        </item>
+        <item>	BCLobbyHeaderObserver	  <name>	daapiAlias	</name>
+        </item>
+      </value>
+    </item>
+    <item>
+      <name>	LobbyPage_UI	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	net.wg.gui.bootcamp.lobby.BCLobbyObserver	  <name>	observerClassName	</name>
+        </item>
+        <item>	BCLobbyObserver	  <name>	daapiAlias	</name>
+        </item>
+      </value>
+    </item>
+  </observers>
+</bootcamp_manager.xml>

@@ -870,7 +870,7 @@ class _DestructiblesAnimator():
         for body in removedBodies:
             self.__bodies.remove(body)
 
-        if len(self.__bodies) == 0:
+        if not self.__bodies:
             self.__stopUpdate()
         for body in self.__bodies:
             self.__positionBodyModel(body)

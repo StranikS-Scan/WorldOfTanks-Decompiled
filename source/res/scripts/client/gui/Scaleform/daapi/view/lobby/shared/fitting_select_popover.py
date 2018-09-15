@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shared/fitting_select_popover.py
 import BigWorld
+from bootcamp.BootCampEvents import g_bootcampEvents
 from gui import g_htmlTemplates
 from constants import MAX_VEHICLE_LEVEL
 from gui.Scaleform.daapi.view.meta.FittingSelectPopoverMeta import FittingSelectPopoverMeta
@@ -15,8 +16,6 @@ from gui.shared.gui_items.processors.vehicle import VehicleAutoBattleBoosterEqui
 from gui.shared.gui_items.fitting_item import FittingItem
 from gui.shared.items_parameters import params_helper
 from gui.shared.items_parameters.formatters import formatModuleParamName, formatParameter
-from gui.shared.money import Currency
-from gui.shared.tooltips.formatters import packItemActionTooltipData
 from gui.shared.utils import decorators, EXTRA_MODULE_INFO, CLIP_ICON_PATH, HYDRAULIC_ICON_PATH
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.event_dispatcher import showBattleBoosterBuyDialog
@@ -30,6 +29,8 @@ from items import getTypeInfoByName
 from skeletons.gui.shared import IItemsCache
 from account_helpers.AccountSettings import AccountSettings, SHOW_OPT_DEVICE_HINT
 from skeletons.gui.game_control import IBootcampController
+from bootcamp.BootcampGarage import g_bootcampGarage
+from bootcamp.Bootcamp import g_bootcamp
 _PARAMS_LISTS = {GUI_ITEM_TYPE.RADIO: ('radioDistance',),
  GUI_ITEM_TYPE.CHASSIS: ('rotationSpeed', 'maxLoad'),
  GUI_ITEM_TYPE.ENGINE: ('enginePower', 'fireStartingChance'),
@@ -110,10 +111,7 @@ def _extendHighlightData(targetData, highlight):
 
 def _getInstallReason(module, vehicle, reason, slotIdx=None):
     _, installReason = module.mayInstall(vehicle, slotIdx)
-    if GUI_ITEM_ECONOMY_CODE.isMoneyError(reason):
-        return installReason or reason
-    else:
-        return installReason
+    return installReason or reason if GUI_ITEM_ECONOMY_CODE.isMoneyError(reason) else installReason
 
 
 def _getStatus(reason):
@@ -138,12 +136,10 @@ def _convertTarget(target, reason):
     if target == FittingItem.TARGETS.IN_INVENTORY:
         if reason in (GUI_ITEM_ECONOMY_CODE.UNDEFINED, GUI_ITEM_ECONOMY_CODE.NOT_ENOUGH_CREDITS):
             return FITTING_TYPES.TARGET_HANGAR
-        elif reason == GUI_ITEM_ECONOMY_CODE.ITEM_IS_DUPLICATED:
+        if reason == GUI_ITEM_ECONOMY_CODE.ITEM_IS_DUPLICATED:
             return FITTING_TYPES.TARGET_HANGAR_DUPLICATE
-        else:
-            return FITTING_TYPES.TARGET_HANGAR_CANT_INSTALL
-    elif target == FittingItem.TARGETS.CURRENT:
-        return FITTING_TYPES.TARGET_VEHICLE
+        return FITTING_TYPES.TARGET_HANGAR_CANT_INSTALL
+    return FITTING_TYPES.TARGET_VEHICLE if target == FittingItem.TARGETS.CURRENT else None
 
 
 class CommonFittingSelectPopover(FittingSelectPopoverMeta):
@@ -302,8 +298,7 @@ class OptionalDeviceSelectPopover(HangarFittingSelectPopover):
             if installedDevice:
                 if installedDevice.isDeluxe():
                     return _POPOVER_SECOND_TAB_IDX
-                else:
-                    return _POPOVER_FIRST_TAB_IDX
+                return _POPOVER_FIRST_TAB_IDX
         return self.__class__._TAB_IDX
 
     def _prepareInitialData(self):
@@ -370,8 +365,7 @@ class BattleBoosterSelectPopover(HangarFittingSelectPopover):
             if battleBooster:
                 if battleBooster.isCrewBooster():
                     return _POPOVER_SECOND_TAB_IDX
-                else:
-                    return _POPOVER_FIRST_TAB_IDX
+                return _POPOVER_FIRST_TAB_IDX
         return self.__class__._TAB_IDX
 
 
@@ -546,14 +540,30 @@ class _HangarLogicProvider(PopoverLogicProvider):
 
 class _BootCampLogicProvider(_HangarLogicProvider):
 
-    def __init__(self, slotType, slotIndex):
-        super(_BootCampLogicProvider, self).__init__(slotType, slotIndex)
-
     def _buildModuleData(self, module, isInstalledInSlot, stats):
         data = super(_BootCampLogicProvider, self)._buildModuleData(module, isInstalledInSlot, stats)
         if self._slotType == FITTING_TYPES.OPTIONAL_DEVICE and isInstalledInSlot:
             data.update({'disabled': True})
         return data
+
+    def _buildList(self):
+        defaultModules = super(_BootCampLogicProvider, self)._buildList()
+        if self._slotType != FITTING_TYPES.OPTIONAL_DEVICE:
+            return defaultModules
+        else:
+            nationData = g_bootcampGarage.getNationData()
+            optionalDeviceId = nationData['equipment']
+            optionalDeviceValue = None
+            for device in defaultModules:
+                if device['id'] == optionalDeviceId:
+                    optionalDeviceValue = device
+
+            if optionalDeviceValue is not None:
+                defaultModules.remove(optionalDeviceValue)
+                defaultModules.insert(0, optionalDeviceValue)
+            scrollCountOptionalDevices = g_bootcamp.getContextIntParameter('scrollCountOptionalDevices')
+            del defaultModules[scrollCountOptionalDevices:]
+            return defaultModules
 
 
 class _PreviewLogicProvider(PopoverLogicProvider):

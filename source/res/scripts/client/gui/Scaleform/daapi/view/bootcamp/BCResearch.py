@@ -3,11 +3,9 @@
 from gui.Scaleform.daapi.view.lobby.techtree.Research import Research
 from gui.Scaleform.daapi.view.lobby.techtree.data import ResearchItemsData
 from gui.Scaleform.genConsts.RESEARCH_ALIASES import RESEARCH_ALIASES
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared import events, EVENT_BUS_SCOPE
 from bootcamp.Bootcamp import g_bootcamp, DISABLED_TANK_LEVELS
 from debug_utils import LOG_ERROR, LOG_DEBUG
-from gui.shared import event_dispatcher as shared_events
 from skeletons.gui.shared import IItemsCache
 from helpers import dependency
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -76,15 +74,6 @@ class BCResearch(Research):
         self._data = BCResearchItemsData(dumper)
         self._resolveLoadCtx(ctx=ctx)
 
-    def _populate(self):
-        super(BCResearch, self)._populate()
-        g_bootcampGarage.closeAllPopUps()
-
-    def _dispose(self):
-        self._listener.stopListen()
-        super(BCResearch, self)._dispose()
-        g_bootcampGarage.closeAllPopUps()
-
     def request4Info(self, itemCD, rootCD):
         LOG_DEBUG('BCResearch.request4Info', itemCD, rootCD)
         super(BCResearch, self).request4Info(itemCD, rootCD)
@@ -96,7 +85,7 @@ class BCResearch(Research):
             super(BCResearch, self).request4Unlock(unlockCD, vehCD, unlockIdx, xpCost)
             g_bootcampGarage.highlightLobbyHint('DialogAccept')
         elif nationData['vehicle_second'] == unlockCD:
-            shared_events.showVehiclePreview(int(unlockCD), VIEW_ALIAS.BOOTCAMP_VEHICLE_PREVIEW)
+            shared_events.showVehiclePreview(int(unlockCD), self.alias)
         else:
             super(BCResearch, self).request4Unlock(unlockCD, vehCD, unlockIdx, xpCost)
 
@@ -107,7 +96,7 @@ class BCResearch(Research):
             super(BCResearch, self).request4Buy(itemCD)
             g_bootcampGarage.highlightLobbyHint('DialogAccept')
         elif nationData['vehicle_second'] == itemCD:
-            shared_events.showVehiclePreview(int(itemCD), VIEW_ALIAS.BOOTCAMP_VEHICLE_PREVIEW)
+            shared_events.showVehiclePreview(int(itemCD), self.alias)
         else:
             super(BCResearch, self).request4Buy(itemCD)
 
@@ -129,7 +118,7 @@ class BCResearch(Research):
             g_bootcampGarage.showNextHint()
 
     def goToTechTree(self, nation):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_LOBBY_TECHTREE, ctx={'nation': nation}), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={'nation': nation}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def as_setRootNodeVehCompareDataS(self, unlocks):
         unlocks['modeAvailable'] = False
@@ -163,6 +152,10 @@ class BCResearch(Research):
 
     def setupContextHints(self, hintID):
         pass
+
+    def _dispose(self):
+        self._listener.stopListen()
+        super(BCResearch, self)._dispose()
 
     def _getExperienceInfoLinkage(self):
         return RESEARCH_ALIASES.BOOTCAMP_EXPERIENCE_INFO

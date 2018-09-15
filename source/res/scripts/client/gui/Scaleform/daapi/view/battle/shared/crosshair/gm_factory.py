@@ -105,16 +105,10 @@ class _DevControlMarkersFactory(_ControlMarkersFactory):
     Other one it is server's gun marker (debug). Its work together to compare their job."""
 
     def _createDefaultMarkers(self, markersInfo, components=None):
-        if markersInfo.isClientMarkerActivated and markersInfo.isServerMarkerActivated:
-            return self._createDebugMarkers(markersInfo, components=components)
-        else:
-            return super(_DevControlMarkersFactory, self)._createDefaultMarkers(markersInfo, components=components)
+        return self._createDebugMarkers(markersInfo, components=components) if markersInfo.isClientMarkerActivated and markersInfo.isServerMarkerActivated else super(_DevControlMarkersFactory, self)._createDefaultMarkers(markersInfo, components=components)
 
     def _createSPGMarkers(self, markersInfo, components=None):
-        if markersInfo.isClientMarkerActivated and markersInfo.isServerMarkerActivated:
-            return self._createSPGDebugMarkers(markersInfo, components=components)
-        else:
-            return super(_DevControlMarkersFactory, self)._createSPGMarkers(markersInfo, components=components)
+        return self._createSPGDebugMarkers(markersInfo, components=components) if markersInfo.isClientMarkerActivated and markersInfo.isServerMarkerActivated else super(_DevControlMarkersFactory, self)._createSPGMarkers(markersInfo, components=components)
 
     def _createDebugMarkers(self, markersInfo, components=None):
         return (self._createArcadeMarker(GUN_MARKER_TYPE.CLIENT, markersInfo.clientMarkerDataProvider, components=components),
@@ -132,10 +126,7 @@ class _DevControlMarkersFactory(_ControlMarkersFactory):
 class _EquipmentMarkersFactory(_GunMarkersFactory):
 
     def create(self, markersInfo, vehicleInfo, components=None):
-        if markersInfo.isArtyHitActivated:
-            return (self._createArtyHitMarker(GUN_MARKER_TYPE.CLIENT, markersInfo.clientSPGMarkerDataProvider, components),)
-        else:
-            return ()
+        return (self._createArtyHitMarker(GUN_MARKER_TYPE.CLIENT, markersInfo.clientSPGMarkerDataProvider, components),) if markersInfo.isArtyHitActivated else ()
 
     def _createArtyHitMarker(self, markerType, dataProvider, components=None, name=_CONSTANTS.ARTY_HIT_MARKER_NAME):
         component = self._findComponent(markerType, dataProvider, components, name)
@@ -147,10 +138,7 @@ class _EquipmentMarkersFactory(_GunMarkersFactory):
 class _OptionalMarkersFactory(_GunMarkersFactory):
 
     def create(self, markersInfo, vehicleInfo, components=None):
-        if markersInfo.isEnabledInVideoMode:
-            return (self._createVideoMarker(GUN_MARKER_TYPE.CLIENT, markersInfo.clientMarkerDataProvider, components),)
-        else:
-            return ()
+        return (self._createVideoMarker(GUN_MARKER_TYPE.CLIENT, markersInfo.clientMarkerDataProvider, components),) if markersInfo.isEnabledInVideoMode else ()
 
     def _createVideoMarker(self, markerType, dataProvider, components=None, name=_CONSTANTS.VIDEO_GUN_MARKER_NAME):
         component = self._findComponent(markerType, dataProvider, components, name)

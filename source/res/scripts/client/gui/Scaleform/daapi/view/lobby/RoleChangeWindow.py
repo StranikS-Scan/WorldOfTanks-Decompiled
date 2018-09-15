@@ -122,7 +122,7 @@ class RoleChangeWindow(RoleChangeMeta):
     @decorators.process('changingRole')
     def changeRole(self, role, vehicleId):
         result = yield TankmanChangeRole(self.__tankman, role, int(vehicleId)).request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
         if result.auxData:
             SystemMessages.pushMessage(result.auxData.userMsg, type=result.auxData.sysMsgType)

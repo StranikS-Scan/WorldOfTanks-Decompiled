@@ -103,6 +103,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
         self.__battleCtx = battleCtx
         self.__arenaVisitor = arenaVisitor
         g_playerEvents.onTeamChanged += self.__onTeamChanged
+        g_playerEvents.onRoundFinished += self.__onRoundFinished
 
     def stopControl(self):
         """Stops to control"""
@@ -120,6 +121,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
         self.__sounds.clear()
         self.__snap.clear()
         g_playerEvents.onTeamChanged -= self.__onTeamChanged
+        g_playerEvents.onRoundFinished -= self.__onRoundFinished
         return
 
     def setViewComponents(self, *components):
@@ -339,6 +341,9 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
             BigWorld.cancelCallback(callbackID)
 
         self.__callbackIDs.clear()
+
+    def __onRoundFinished(self, winningTeam, reason):
+        self.removeTeamsBases()
 
 
 class BattleTeamsBasesPlayer(BattleTeamsBasesController):

@@ -7,6 +7,7 @@ from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import GUI_SETTINGS
 from gui.SystemMessages import SM_TYPE
+from gui.Scaleform.daapi.view.dialogs.SystemMessageMeta import SESSION_CONTROL_TYPE, SessionControlAuxData
 from helpers import i18n, dependency
 from messenger.m_constants import PROTO_TYPE
 from messenger.m_constants import SCH_CLIENT_MSG_TYPE
@@ -99,14 +100,14 @@ class SystemMessagesInterface(ISystemMessages):
         self.pushI18nMessage('#system_messages:memory_critical/%s' % key, type=SM_TYPE.Error if msgType == 1 else SM_TYPE.Warning)
 
     def __AOGAS_onNotifyAccount(self, message):
-        self.proto.serviceChannel.pushClientMessage(message, SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE, isAlert=True, auxData=['AOGAS', message.timeout])
+        self.proto.serviceChannel.pushClientMessage(message, SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE, isAlert=True, auxData=SessionControlAuxData(SESSION_CONTROL_TYPE.AOGAS, message.timeout))
 
     def __gameSession_onClientNotify(self, sessionDuration, timeTillMidnight, playTimeLeft):
         LOG_DEBUG('onGameSessionNotification', sessionDuration, timeTillMidnight, playTimeLeft)
         if getClientLanguage() == 'ko':
             key = '#system_messages:gameSessionControl/korea/{0:>s}'
             msgList = [i18n.makeString(key.format('sessionTime'), sessionTime=time.strftime('%H:%M', time.gmtime(sessionDuration))), i18n.makeString(key.format('note'))]
-            self.proto.serviceChannel.pushClientSysMessage('\n'.join(msgList), SM_TYPE.Warning)
+            self.proto.serviceChannel.pushClientMessage('\n'.join(msgList), SCH_CLIENT_MSG_TYPE.KOREA_PARENTAL_CONTROL_TYPE, auxData=SessionControlAuxData(SESSION_CONTROL_TYPE.KOREA_PARENTAL_CONTROL, timeoutMS=0))
 
     def __onReceiveEventNotification(self, added, removed):
         self.__processNotifications(added, 'Begin')

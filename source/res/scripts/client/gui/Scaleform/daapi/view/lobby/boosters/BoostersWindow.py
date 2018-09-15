@@ -109,14 +109,11 @@ class BoostersWindow(BoostersWindowMeta):
                          'typeFilters': self.__packFiltersData(self.__packTypeFiltersItems())}})
 
     def __packNoInfo(self):
-        if self.__tabsContainer.currentTab.getTotalCount() > 0:
-            return {'title': text_styles.middleTitle(MENU.BOOSTERSWINDOW_BOOSTERSTABLE_NOINFO_NOTFOUND_TITLE),
-             'message': text_styles.main(MENU.BOOSTERSWINDOW_BOOSTERSTABLE_NOINFO_NOTFOUND_MESSAGE),
-             'returnBtnLabel': _ms(MENU.BOOSTERSWINDOW_RETURNBTN_LABEL)}
-        else:
-            return {'title': '',
-             'returnBtnLabel': '',
-             'message': text_styles.alignStandartText(MENU.BOOSTERSWINDOW_BOOSTERSTABLE_NOINFO_EMPTY_MESSAGE, TEXT_ALIGN.CENTER)}
+        return {'title': text_styles.middleTitle(MENU.BOOSTERSWINDOW_BOOSTERSTABLE_NOINFO_NOTFOUND_TITLE),
+         'message': text_styles.main(MENU.BOOSTERSWINDOW_BOOSTERSTABLE_NOINFO_NOTFOUND_MESSAGE),
+         'returnBtnLabel': _ms(MENU.BOOSTERSWINDOW_RETURNBTN_LABEL)} if self.__tabsContainer.currentTab.getTotalCount() > 0 else {'title': '',
+         'returnBtnLabel': '',
+         'message': text_styles.alignStandartText(MENU.BOOSTERSWINDOW_BOOSTERSTABLE_NOINFO_EMPTY_MESSAGE, TEXT_ALIGN.CENTER)}
 
     @staticmethod
     def __packFiltersData(items):

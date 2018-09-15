@@ -28,7 +28,7 @@ class ObserverInTeamIsValid(AbstractTeamIsValid):
         Args:
             accountsInfo: players accounts info
         """
-        if not len(accountsInfo):
+        if not accountsInfo:
             return False
         for accInfo in accountsInfo.itervalues():
             if not accInfo['state'] & PREBATTLE_ACCOUNT_STATE.READY:

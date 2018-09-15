@@ -155,10 +155,7 @@ class RankedBattlesCyclesView(LobbySubView, RankedBattlesCyclesViewMeta):
         cycle = self.__getCycle(int(cycleID))
         if cycle.status == CYCLE_STATUS.CURRENT:
             return self.__getCurrentCycle()
-        elif cycle.points == 0:
-            return self.__getCycleWithoutAchievements(cycle)
-        else:
-            return self.__getPastCycleWithPoints(cycle)
+        return self.__getCycleWithoutAchievements(cycle) if cycle.points == 0 else self.__getPastCycleWithPoints(cycle)
 
     def __getCycleWithoutAchievements(self, cycle):
         if cycle.status == CYCLE_STATUS.PAST:

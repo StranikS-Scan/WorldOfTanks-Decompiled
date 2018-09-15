@@ -32,6 +32,7 @@ from helpers import dependency
 from helpers import i18n, strcmp
 from items import tankmen
 from skeletons.gui.shared import IItemsCache
+from gui.Scaleform.genConsts.PERSONALCASE_CONSTANTS import PERSONALCASE_CONSTANTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 
 class PersonalCase(PersonalCaseMeta, IGlobalListener):
@@ -68,7 +69,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
                 if vehicle.isLocked:
                     return self.destroy()
                 vehsDiff = inventory.get(GUI_ITEM_TYPE.VEHICLE, {})
-                isTankmanVehicleChanged = len(filter(lambda hive: vehicle.invID in hive or (vehicle.invID, '_r') in hive, vehsDiff.itervalues())) > 0
+                isTankmanVehicleChanged = any((vehicle.invID in hive or (vehicle.invID, '_r') in hive for hive in vehsDiff.itervalues()))
         if isTankmanChanged or isTankmanVehicleChanged or isFreeXpChanged:
             self.__setCommonData()
         if isTankmanChanged or isTankmanVehicleChanged:
@@ -127,7 +128,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         tankman = self.itemsCache.items.getTankman(int(tmanInvID))
         proc = TankmanDismiss(tankman)
         result = yield proc.request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
     @decorators.process('retraining')
@@ -136,7 +137,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         vehicleToRecpec = self.itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, tankman.nationID, int(innationID))
         proc = TankmanRetraining(tankman, vehicleToRecpec, tankmanCostTypeIdx)
         result = yield proc.request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     @decorators.process('unloading')
@@ -149,7 +150,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         else:
             unloader = TankmanUnload(tmanVehicle, tankman.vehicleSlotIdx)
             result = yield unloader.request()
-            if len(result.userMsg):
+            if result.userMsg:
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
             return
 
@@ -164,7 +165,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         iconID = checkFlashInt(iconID)
         tankman = self.itemsCache.items.getTankman(int(invengoryID))
         result = yield TankmanChangePassport(tankman, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup).request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     @decorators.process('studying')
@@ -172,7 +173,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         tankman = self.itemsCache.items.getTankman(int(invengoryID))
         processor = TankmanAddSkill(tankman, skillName)
         result = yield processor.request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def openExchangeFreeToTankmanXpWindow(self):
@@ -299,15 +300,15 @@ class PersonalCaseDataProvider(object):
 
     def getTabsButtons(self, showDocumentTab):
         tabs = [{'index': STATS_TAB_INDEX,
-          'info': MENU.TANKMANPERSONALCASE_TABBATTLEINFO,
+          'label': MENU.TANKMANPERSONALCASE_TABBATTLEINFO,
           'linkage': PERSONAL_CASE_STATS}, {'index': TRAINING_TAB_INDEX,
-          'info': MENU.TANKMANPERSONALCASE_TABTRAINING,
+          'label': MENU.TANKMANPERSONALCASE_TABTRAINING,
           'linkage': PERSONAL_CASE_RETRAINING}, {'index': SKILLS_TAB_INDEX,
-          'info': MENU.TANKMANPERSONALCASE_TABSKILLS,
+          'label': MENU.TANKMANPERSONALCASE_TABSKILLS,
           'linkage': PERSONAL_CASE_SKILLS}]
         if showDocumentTab:
             tabs.append({'index': DOCS_TAB_INDEX,
-             'info': MENU.TANKMANPERSONALCASE_TABDOCS,
+             'label': MENU.TANKMANPERSONALCASE_TABDOCS,
              'linkage': PERSONAL_CASE_DOCS})
         return tabs
 

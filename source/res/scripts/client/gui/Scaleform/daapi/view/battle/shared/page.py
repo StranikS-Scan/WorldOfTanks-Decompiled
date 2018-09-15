@@ -119,7 +119,7 @@ class SharedPage(BattlePageMeta):
         self.fireEvent(events.GlobalSpaceEvent(events.GlobalSpaceEvent.GO_NEXT))
 
     def _dispose(self):
-        while len(self._external):
+        while self._external:
             component = self._external.pop()
             component.close()
 
@@ -200,7 +200,7 @@ class SharedPage(BattlePageMeta):
         raise NotImplementedError
 
     def _onBattleLoadingStart(self):
-        if len(self._blToggling) == 0:
+        if not self._blToggling:
             self._blToggling = set(self.as_getComponentsVisibilityS())
         self._blToggling.difference_update([_ALIASES.BATTLE_LOADING])
         self._blToggling.add(_ALIASES.BATTLE_MESSENGER)
@@ -252,7 +252,7 @@ class SharedPage(BattlePageMeta):
         self.as_toggleCtrlPressFlagS(False)
 
     def __onAvatarCtrlModeChanged(self, ctrlMode):
-        if not self._isVisible or len(self._fsToggling) > 0 or len(self._blToggling) > 0:
+        if not self._isVisible or self._fsToggling or self._blToggling:
             return
         self._changeCtrlMode(ctrlMode)
 

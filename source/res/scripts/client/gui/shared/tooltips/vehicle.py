@@ -83,21 +83,21 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         textGap = -2
         items.append(formatters.packBuildUpBlockData(HeaderBlockConstructor(vehicle, statsConfig, leftPadding, rightPadding).construct(), padding=leftRightPadding))
         telecomBlock = TelecomBlockConstructor(vehicle, valueWidth, leftPadding, rightPadding).construct()
-        if len(telecomBlock) > 0:
+        if telecomBlock:
             items.append(formatters.packBuildUpBlockData(telecomBlock, padding=leftRightPadding))
         priceBlock, invalidWidth = PriceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct()
-        if len(priceBlock) > 0:
+        if priceBlock:
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
             items.append(formatters.packBuildUpBlockData(priceBlock, gap=textGap, padding=blockPadding))
         simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
-        if len(simplifiedStatsBlock) > 0:
+        if simplifiedStatsBlock:
             items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=leftRightPadding))
         if not vehicle.isRotationGroupLocked:
             commonStatsBlock = CommonStatsBlockConstructor(vehicle, paramsConfig, valueWidth, leftPadding, rightPadding).construct()
-            if len(commonStatsBlock) > 0:
+            if commonStatsBlock:
                 items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=textGap, padding=blockPadding))
         footnoteBlock = FootnoteBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
-        if len(footnoteBlock):
+        if footnoteBlock:
             items.append(formatters.packBuildUpBlockData(footnoteBlock, gap=textGap, padding=blockPadding))
         if vehicle.isRotationGroupLocked:
             statsBlockConstructor = RotationLockAdditionalStatsBlockConstructor
@@ -110,7 +110,7 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         items.append(formatters.packBuildUpBlockData(statsBlockConstructor(vehicle, paramsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct(), gap=textGap, padding=blockPadding))
         if not vehicle.isRotationGroupLocked:
             statusBlock = StatusBlockConstructor(vehicle, statusConfig).construct()
-            if len(statusBlock) > 0:
+            if statusBlock:
                 items.append(formatters.packBuildUpBlockData(statusBlock, padding=blockPadding))
             else:
                 self._setContentMargin(bottom=bottomPadding)
@@ -158,9 +158,6 @@ class BaseVehicleParametersTooltipData(BlocksTooltipData):
 
 class VehicleSimpleParametersTooltipData(BaseVehicleParametersTooltipData):
 
-    def __init__(self, context):
-        super(VehicleSimpleParametersTooltipData, self).__init__(context)
-
     def _packBlocks(self, paramName):
         blocks = super(VehicleSimpleParametersTooltipData, self)._packBlocks(paramName)
         title = text_styles.highTitle(MENU.tank_params(paramName))
@@ -168,7 +165,7 @@ class VehicleSimpleParametersTooltipData(BaseVehicleParametersTooltipData):
         desc = text_styles.main(_ms(TOOLTIPS.tank_params_desc(paramName)))
         comparator = self.context.getComparator()
         icon = param_formatter.getGroupPenaltyIcon(comparator.getExtendedData(paramName), comparator)
-        valueLeftPadding = -3 if len(icon) > 0 else 6
+        valueLeftPadding = -3 if icon else 6
         blocks.append(formatters.packTitleDescParameterWithIconBlockData(title, text_styles.warning(_ms(TOOLTIPS.VEHICLEPARAMS_TITLE_VALUETEMPLATE, value=value)), icon=icon, desc=desc, valueAtRight=True, iconPadding=formatters.packPadding(left=0, top=6), valuePadding=formatters.packPadding(left=valueLeftPadding, top=4)))
         return blocks
 
@@ -247,7 +244,7 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
         return blocks
 
     def _packListBlock(self, blocks, listBlock, title):
-        if len(listBlock) > 0:
+        if listBlock:
             titlePadding = formatters.packPadding(bottom=15)
             listPadding = formatters.packPadding(left=90)
             blockPadding = formatters.packPadding(left=5, top=15, bottom=5)
@@ -400,9 +397,6 @@ class VehicleTooltipBlockConstructor(object):
 
 class HeaderBlockConstructor(VehicleTooltipBlockConstructor):
 
-    def __init__(self, vehicle, configuration, leftPadding, rightPadding):
-        super(HeaderBlockConstructor, self).__init__(vehicle, configuration, leftPadding, rightPadding)
-
     def construct(self):
         block = []
         headerBlocks = []
@@ -431,10 +425,7 @@ class TelecomBlockConstructor(VehicleTooltipBlockConstructor):
         return
 
     def construct(self):
-        if self.vehicle.isTelecom:
-            return [formatters.packTextBlockData(text=text_styles.main(TOOLTIPS.VEHICLE_DEAL_TELECOM_MAIN))]
-        else:
-            return []
+        return [formatters.packTextBlockData(text=text_styles.main(TOOLTIPS.VEHICLE_DEAL_TELECOM_MAIN))] if self.vehicle.isTelecom else []
 
 
 class PriceBlockConstructor(VehicleTooltipBlockConstructor):
@@ -579,16 +570,13 @@ class CommonStatsBlockConstructor(VehicleTooltipBlockConstructor):
                     if fmtValue is not None:
                         block.append(formatters.packTextParameterBlockData(name=param_formatter.formatVehicleParamName(paramName), value=fmtValue, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-1)))
 
-        if len(block) > 0:
+        if block:
             title = text_styles.middleTitle(TOOLTIPS.VEHICLEPARAMS_COMMON_TITLE)
             block.insert(0, formatters.packTextBlockData(title, padding=formatters.packPadding(bottom=8)))
         return block
 
 
 class SimplifiedStatsBlockConstructor(VehicleTooltipBlockConstructor):
-
-    def __init__(self, vehicle, configuration, leftPadding, rightPadding):
-        super(SimplifiedStatsBlockConstructor, self).__init__(vehicle, configuration, leftPadding, rightPadding)
 
     def construct(self):
         block = []
@@ -604,15 +592,12 @@ class SimplifiedStatsBlockConstructor(VehicleTooltipBlockConstructor):
                         buffIconSrc = param_formatter.getGroupPenaltyIcon(paramInfo, comparator)
                     block.append(formatters.packStatusDeltaBlockData(title=param_formatter.formatVehicleParamName(paramName), valueStr=fmtValue, statusBarData=SimplifiedBarVO(value=paramInfo.value, markerValue=stockParams[paramName]), buffIconSrc=buffIconSrc, padding=formatters.packPadding(left=74, top=8)))
 
-        if len(block) > 0:
+        if block:
             block.insert(0, formatters.packTextBlockData(text_styles.middleTitle(_ms(TOOLTIPS.VEHICLEPARAMS_SIMPLIFIED_TITLE)), padding=formatters.packPadding(top=-4)))
         return block
 
 
 class FootnoteBlockConstructor(VehicleTooltipBlockConstructor):
-
-    def __init__(self, vehicle, configuration, leftPadding, rightPadding):
-        super(FootnoteBlockConstructor, self).__init__(vehicle, configuration, leftPadding, rightPadding)
 
     def construct(self):
         if self.configuration.params and not self.configuration.simplifiedOnly:
@@ -728,7 +713,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                     headerFormatter = text_styles.statInfo
                 header = headerFormatter(result['header'])
                 text = result['text']
-                if text is not None and len(text) > 0:
+                if text:
                     block.append(formatters.packTextBlockData(text=header))
                     block.append(formatters.packTextBlockData(text=text_styles.standard(text)))
                 else:

@@ -1,27 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/cards_formatters.py
 from debug_utils import LOG_ERROR
-from gui.Scaleform.daapi.view.lobby.missions.conditions_formatters import FORMATTER_IDS, FormattableField, CONDITION_ICON, COMPLEX_CONDITION_BLOCK
-from gui.Scaleform.daapi.view.lobby.missions.conditions_formatters.bonus import MissionsBonusConditionsFormatter, BattlesCountFormatter
-from gui.Scaleform.daapi.view.lobby.missions.conditions_formatters.postbattle import MissionsPostBattleConditionsFormatter
-from gui.Scaleform.daapi.view.lobby.missions.conditions_formatters.tokens import TokensConditionFormatter
 from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events import formatters
+from gui.server_events.cond_formatters import CONDITION_ICON, FORMATTER_IDS, FormattableField, CONDITION_SIZE, getCondIconBySize
+from gui.server_events.cond_formatters.formatters import ConditionsFormatter
+from gui.server_events.cond_formatters.mixed_formatters import MissionBonusAndPostBattleCondFormatter, PersonalMissionConditionsFormatter
+from gui.server_events.cond_formatters.tokens import TokensConditionFormatter
 from gui.server_events.formatters import TOKEN_SIZES
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n
 MAX_ACHIEVEMENTS_IN_TOOLTIP = 5
-
-class CONDITION_SIZE:
-    NORMAL = 'normal'
-    MINIMIZED = 'minimized'
-
-
 CARD_FIELDS_FORMATTERS = {FORMATTER_IDS.SIMPLE_TITLE: formatters.minimizedTitleFormat,
  FORMATTER_IDS.CUMULATIVE: formatters.minimizedTitleCumulativeFormat,
  FORMATTER_IDS.COMPLEX: formatters.minimizedTitleComplexFormat,
@@ -47,85 +41,48 @@ def _packNoGuiCondition(event):
     return formatters.packMissionIconCondition(FormattableField(FORMATTER_IDS.SIMPLE_TITLE, titleArgs), MISSIONS_ALIASES.NONE, FormattableField(FORMATTER_IDS.DESCRIPTION, descrArgs), CONDITION_ICON.FOLDER)
 
 
-def _packPlayBattleCondition():
-    titleArgs = (i18n.makeString(QUESTS.DETAILS_CONDITIONS_PLAYBATTLE_TITLE),)
-    descrArgs = (i18n.makeString(QUESTS.MISSIONDETAILS_CONDITIONS_PLAYBATTLE),)
-    return formatters.packMissionIconCondition(FormattableField(FORMATTER_IDS.SIMPLE_TITLE, titleArgs), MISSIONS_ALIASES.NONE, FormattableField(FORMATTER_IDS.DESCRIPTION, descrArgs), CONDITION_ICON.BATTLES)
-
-
-def _get128CondIcon(iconKey):
-    return RES_ICONS.get128ConditionIcon(iconKey)
-
-
-def _get90CondIcon(iconKey):
-    return RES_ICONS.get90ConditionIcon(iconKey)
-
-
-def _getCondIconBySize(size, iconKey):
-    if size == CONDITION_SIZE.NORMAL:
-        return _get128CondIcon(iconKey)
-    else:
-        return _get90CondIcon(iconKey)
-
-
 def _packProgress(preFormattedCondition):
     return {'maxValue': preFormattedCondition.total,
      'value': preFormattedCondition.current}
 
 
-class MixedBonusAndPostBattleCondFormatter(object):
-    """
-    Formatter for 'bonus' and 'postbattle' conditions sections
-    Expand and mix all battle pre formatted conditions data in rows
-    All 'AND' conditions collected in one row
-    'OR' conditions expand in different rows.
-    results represent 'OR' list of rows with 'AND' conditions
-    for example: (damage vehicle and win) or (kill vehicle and survive) looks like
-    [
-        [veh damage data, win data],
-        [veh kill data , survive data]
-    ]
-    """
-
-    def __init__(self):
-        self.bonusCondFormatter = MissionsBonusConditionsFormatter()
-        self.postBattleCondFormatter = MissionsPostBattleConditionsFormatter()
-
-    def format(self, event):
-        result = []
-        bonusConditions = self.bonusCondFormatter.format(event.bonusCond, event)
-        postBattleConditions = self.postBattleCondFormatter.format(event.postBattleCond, event)
-        battleCountCondition = event.bonusCond.getConditions().find('battles')
-        for pCondGroup in postBattleConditions:
-            for bCondGroup in bonusConditions:
-                if battleCountCondition is not None:
-                    conditions = []
-                    conditions.extend(pCondGroup)
-                    conditions.extend(bCondGroup)
-                    conditions.extend(BattlesCountFormatter(bool(pCondGroup)).format(battleCountCondition, event))
-                else:
-                    conditions = pCondGroup + bCondGroup
-                if not conditions:
-                    conditions.append(_packPlayBattleCondition())
-                result.append(conditions)
-
-        return result
-
-    @classmethod
-    def _packSeparator(cls, key):
-        raise NotImplementedError
-
-    def _packCondition(self, *args, **kwargs):
-        raise NotImplementedError
-
-    def _getFormattedField(self, *args, **kwargs):
-        raise NotImplementedError
-
-    def _packConditions(self, *args, **kwargs):
-        raise NotImplementedError
+def _getTooltipData(conditionData):
+    rendererLinkage = conditionData.get('data').get('rendererLinkage')
+    if rendererLinkage == MISSIONS_ALIASES.ACHIEVEMENT_RENDERER:
+        return _packAchievementsTooltipData(conditionData.get('data'))
+    elif rendererLinkage == MISSIONS_ALIASES.VEHICLE_ITEM_RENDERER:
+        return {'isSpecial': True,
+         'tooltip': TOOLTIPS_CONSTANTS.MISSION_VEHICLE,
+         'specialArgs': [conditionData.get('data')],
+         'specialAlias': TOOLTIPS_CONSTANTS.MISSION_VEHICLE}
+    else:
+        return {'isSpecial': True,
+         'tooltip': TOOLTIPS_CONSTANTS.MISSION_VEHICLE_TYPE,
+         'specialArgs': [conditionData.get('data')],
+         'specialAlias': TOOLTIPS_CONSTANTS.MISSION_VEHICLE_TYPE} if rendererLinkage == MISSIONS_ALIASES.VEHICLE_TYPE_RENDERER else None
 
 
-class CardBattleConditionsFormatters(MixedBonusAndPostBattleCondFormatter):
+def _packAchievementsTooltipData(data):
+    achievementsNames = [ i18n.makeString(TOOLTIPS.MISSIONS_CONDITION_ACHIEVEMENT_PATTERN, achievement=item['label']) for item in data.get('list', []) ]
+    header = i18n.makeString(TOOLTIPS.QUESTS_CONDITION_ACHIEVEMENT_HEADER)
+    body = i18n.makeString(TOOLTIPS.QUESTS_CONDITION_ACHIEVEMENTS_DESCR) + '\n'
+    achivementsCount = len(achievementsNames)
+    if achivementsCount > MAX_ACHIEVEMENTS_IN_TOOLTIP:
+        achievementsNames = achievementsNames[:MAX_ACHIEVEMENTS_IN_TOOLTIP]
+        achievementsStr = '\n'.join(achievementsNames)
+        others = '\n' + i18n.makeString(TOOLTIPS.QUESTS_CONDITION_ACHIEVEMENTS_OTHERS, count=achivementsCount - len(achievementsNames))
+        body = '\n'.join((body, achievementsStr, others))
+    else:
+        achievementsNames = achievementsNames[:MAX_ACHIEVEMENTS_IN_TOOLTIP]
+        achievementsStr = '\n'.join(achievementsNames)
+        body = '\n'.join((body, achievementsStr))
+    tooltip = makeTooltip(header, body)
+    return {'tooltip': tooltip,
+     'isSpecial': False,
+     'specialArgs': []}
+
+
+class CardBattleConditionsFormatters(MissionBonusAndPostBattleCondFormatter):
     """
     Formatter for 'bonus' and 'postbattle' conditions sections for mission card in missions view.
     Expand and mix all battle pre formatted conditions data in rows,
@@ -150,16 +107,12 @@ class CardBattleConditionsFormatters(MixedBonusAndPostBattleCondFormatter):
             result = super(CardBattleConditionsFormatters, self).format(event)
             for idx, condList in enumerate(result):
                 if idx == 0:
-                    if len(result) > 1:
-                        maxDescLines = self.ALT_DESCR_LINES
                     if len(condList) > self.MAX_CONDITIONS_IN_CARD:
                         maxDescLines = self.ALT_DESCR_LINES
                         components.append(self._packConditions(condList[:self.MAX_CONDITIONS_IN_CARD], maxDescLines))
                         components.append(self._packSeparator(QUESTS.DETAILS_CONDITIONS_ADDITIONAL))
                     else:
                         components.append(self._packConditions(condList, maxDescLines))
-                components.append(self._packSeparator(QUESTS.DETAILS_CONDITIONS_ALTERNATIVE))
-                break
 
         else:
             components.append(self._packConditions([_packNoGuiCondition(event)]))
@@ -182,8 +135,8 @@ class CardBattleConditionsFormatters(MixedBonusAndPostBattleCondFormatter):
         state = preFormattedCondition.progressType
         tooltipData = None
         if preFormattedCondition.conditionData is not None:
-            tooltipData = self.__getTooltipData(preFormattedCondition.conditionData)
-        return {'icon': _getCondIconBySize(CONDITION_SIZE.MINIMIZED, preFormattedCondition.iconKey),
+            tooltipData = _getTooltipData(preFormattedCondition.conditionData)
+        return {'icon': getCondIconBySize(CONDITION_SIZE.MINIMIZED, preFormattedCondition.iconKey),
          'title': self._getFormattedField(preFormattedCondition.titleData),
          'description': self._getFormattedField(preFormattedCondition.descrData),
          'progress': _packProgress(preFormattedCondition),
@@ -203,42 +156,8 @@ class CardBattleConditionsFormatters(MixedBonusAndPostBattleCondFormatter):
          'data': result,
          'isDetailed': False}
 
-    @classmethod
-    def __getTooltipData(cls, conditionData):
-        rendererLinkage = conditionData.get('data').get('rendererLinkage')
-        if rendererLinkage == MISSIONS_ALIASES.ACHIEVEMENT_RENDERER:
-            return cls.__packAchievementsTooltipData(conditionData.get('data'))
-        elif rendererLinkage == MISSIONS_ALIASES.VEHICLE_ITEM_RENDERER:
-            return {'isSpecial': True,
-             'tooltip': TOOLTIPS_CONSTANTS.MISSION_VEHICLE,
-             'args': [conditionData.get('data')]}
-        else:
-            return {'isSpecial': True,
-             'tooltip': TOOLTIPS_CONSTANTS.MISSION_VEHICLE_TYPE,
-             'args': [conditionData.get('data')]} if rendererLinkage == MISSIONS_ALIASES.VEHICLE_TYPE_RENDERER else None
 
-    @staticmethod
-    def __packAchievementsTooltipData(data):
-        achievementsNames = [ i18n.makeString(TOOLTIPS.MISSIONS_CONDITION_ACHIEVEMENT_PATTERN, achievement=item['label']) for item in data.get('list', []) ]
-        header = i18n.makeString(TOOLTIPS.QUESTS_CONDITION_ACHIEVEMENT_HEADER)
-        body = i18n.makeString(TOOLTIPS.QUESTS_CONDITION_ACHIEVEMENTS_DESCR) + '\n'
-        achivementsCount = len(achievementsNames)
-        if achivementsCount > MAX_ACHIEVEMENTS_IN_TOOLTIP:
-            achievementsNames = achievementsNames[:MAX_ACHIEVEMENTS_IN_TOOLTIP]
-            achievementsStr = '\n'.join(achievementsNames)
-            others = '\n' + i18n.makeString(TOOLTIPS.QUESTS_CONDITION_ACHIEVEMENTS_OTHERS, count=achivementsCount - len(achievementsNames))
-            body = '\n'.join((body, achievementsStr, others))
-        else:
-            achievementsNames = achievementsNames[:MAX_ACHIEVEMENTS_IN_TOOLTIP]
-            achievementsStr = '\n'.join(achievementsNames)
-            body = '\n'.join((body, achievementsStr))
-        tooltip = makeTooltip(header, body)
-        return {'tooltip': tooltip,
-         'isSpecial': False,
-         'args': []}
-
-
-class DetailedCardBattleConditionsFormatters(MixedBonusAndPostBattleCondFormatter):
+class DetailedCardBattleConditionsFormatters(MissionBonusAndPostBattleCondFormatter):
     """
     Formatter for 'bonus' and 'postbattle' conditions sections for detailed mission card in detailed missions view.
     Expand and mix all battle pre formatted conditions data in rows,
@@ -266,8 +185,7 @@ class DetailedCardBattleConditionsFormatters(MixedBonusAndPostBattleCondFormatte
             if len(result) < self.MAX_OR_SECTIONS:
                 return self.__andFormat(result)
             return self.__orFormat(result)
-        else:
-            return [self._packConditions(CONDITION_SIZE.NORMAL, [_packNoGuiCondition(event)])]
+        return [self._packConditions(CONDITION_SIZE.NORMAL, [_packNoGuiCondition(event)])]
 
     def _packConditions(self, size, conditions):
         if len(conditions) > self.MAX_CONDITIONS_IN_CARD:
@@ -288,6 +206,17 @@ class DetailedCardBattleConditionsFormatters(MixedBonusAndPostBattleCondFormatte
          'data': result,
          'isDetailed': True}
 
+    def _packCondition(self, size, preFormattedCondition):
+        iconKey = preFormattedCondition.iconKey
+        progress = _packProgress(preFormattedCondition)
+        return {'icon': getCondIconBySize(size, iconKey),
+         'title': self._getFormattedField(size, preFormattedCondition.titleData),
+         'description': self._getFormattedField(size, preFormattedCondition.descrData),
+         'progress': progress,
+         'state': preFormattedCondition.progressType,
+         'conditionData': preFormattedCondition.conditionData,
+         'maxDescLines': self.MIN_LINES_IN_DESCR if size == CONDITION_SIZE.MINIMIZED else self.MAX_LINES_IN_DESCR}
+
     @classmethod
     def _packSeparator(cls, key):
         return {'linkage': MISSIONS_ALIASES.OR_CONDITIONS_SEPARATOR,
@@ -295,17 +224,6 @@ class DetailedCardBattleConditionsFormatters(MixedBonusAndPostBattleCondFormatte
          'rendererLinkage': None,
          'data': {'label': text_styles.warning(i18n.makeString(key).upper())},
          'isDetailed': True}
-
-    def _packCondition(self, size, preFormattedCondition):
-        iconKey = preFormattedCondition.iconKey
-        progress = _packProgress(preFormattedCondition)
-        return {'icon': _getCondIconBySize(size, iconKey),
-         'title': self._getFormattedField(size, preFormattedCondition.titleData),
-         'description': self._getFormattedField(size, preFormattedCondition.descrData),
-         'progress': progress,
-         'state': preFormattedCondition.progressType,
-         'conditionData': preFormattedCondition.conditionData,
-         'maxDescLines': self.MIN_LINES_IN_DESCR if size == CONDITION_SIZE.MINIMIZED else self.MAX_LINES_IN_DESCR}
 
     def _getFormattedField(self, size, formattableField):
         formatter = self._formatters[size].get(formattableField.formatterID, None)
@@ -332,13 +250,14 @@ class DetailedCardBattleConditionsFormatters(MixedBonusAndPostBattleCondFormatte
         return components
 
 
-class CardTokenConditionFormatter(object):
+class CardTokenConditionFormatter(ConditionsFormatter):
     """
     Formatter for 'token' conditions sections for mission card in missions view.
     """
     MAX_TOKENS_COUNT = 3
 
     def __init__(self):
+        super(CardTokenConditionFormatter, self).__init__()
         self.tokensCondFormatter = TokensConditionFormatter()
 
     def format(self, event):
@@ -365,7 +284,7 @@ class CardTokenConditionFormatter(object):
 
     @classmethod
     def _packBattleCondition(cls, preFormattedCondition):
-        return {'icon': _getCondIconBySize(CONDITION_SIZE.MINIMIZED, preFormattedCondition.iconKey),
+        return {'icon': getCondIconBySize(CONDITION_SIZE.MINIMIZED, preFormattedCondition.iconKey),
          'title': formatters.minimizedTitleFormat(*preFormattedCondition.titleData.args),
          'description': text_styles.standard(*preFormattedCondition.descrData.args),
          'state': preFormattedCondition.progressType}
@@ -413,7 +332,7 @@ class DetailedCardTokenConditionFormatter(CardTokenConditionFormatter):
 
     @classmethod
     def _packBattleCondition(cls, preFormattedCondition):
-        return {'icon': _getCondIconBySize(CONDITION_SIZE.NORMAL, preFormattedCondition.iconKey),
+        return {'icon': getCondIconBySize(CONDITION_SIZE.NORMAL, preFormattedCondition.iconKey),
          'title': formatters.titleFormat(*preFormattedCondition.titleData.args),
          'description': text_styles.middleTitle(*preFormattedCondition.descrData.args),
          'state': preFormattedCondition.progressType}
@@ -437,3 +356,28 @@ class DetailedCardTokenConditionFormatter(CardTokenConditionFormatter):
          'rendererLinkage': MISSIONS_ALIASES.TOKEN_CONDITION,
          'data': result,
          'isDetailed': True}
+
+
+class PMCardConditionsFormatter(PersonalMissionConditionsFormatter):
+    """
+    Conditions formatter for personal mission, which are displayed in detailed personal mission's view
+    """
+
+    def format(self, event, isMain=None):
+        results = super(PMCardConditionsFormatter, self).format(event, isMain)
+        if isMain is not None and not isMain and event.isMainCompleted():
+            results.insert(0, self.__packAdditionalCondition(self._isConditionBlockAvailable(event, isMain)))
+        return results
+
+    def _packCondition(self, preFormattedCondition, isAvailable, isInOrGroup):
+        return {'icon': getCondIconBySize(CONDITION_SIZE.NORMAL, preFormattedCondition.iconKey),
+         'title': self._getFormattedField(preFormattedCondition.titleData),
+         'description': self._getFormattedField(preFormattedCondition.descrData),
+         'isEnabled': isAvailable,
+         'isInOrGroup': isInOrGroup}
+
+    def __packAdditionalCondition(self, isAvailable):
+        return {'icon': getCondIconBySize(CONDITION_SIZE.NORMAL, CONDITION_ICON.FOLDER),
+         'title': self._formatters[FORMATTER_IDS.SIMPLE_TITLE](QUESTS.DETAILS_CONDITIONS_ADDITIONAL_TITLE),
+         'description': '',
+         'isEnabled': isAvailable}

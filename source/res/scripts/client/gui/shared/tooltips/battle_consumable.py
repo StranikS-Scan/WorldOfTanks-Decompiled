@@ -49,9 +49,6 @@ class BattleConsumableTooltipBlockConstructor(object):
 
 class HeaderBlockConstructor(BattleConsumableTooltipBlockConstructor):
 
-    def __init__(self, item, configuration, leftPadding, rightPadding):
-        super(HeaderBlockConstructor, self).__init__(item, configuration, leftPadding, rightPadding)
-
     def construct(self):
         tier = self.item.name.split('tier')
         if len(tier) > 1:

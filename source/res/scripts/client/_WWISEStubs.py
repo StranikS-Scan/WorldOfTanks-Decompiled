@@ -164,6 +164,10 @@ def WW_setRTCPGlobal(*args, **kwargs):
     pass
 
 
+def WW_setRTPCBus(*args, **kwargs):
+    pass
+
+
 def setLanguage(*args, **kwargs):
     pass
 

@@ -52,7 +52,6 @@ class ProfileTechnique(ProfileTechniqueMeta):
 
     def _populate(self):
         super(ProfileTechnique, self)._populate()
-        self.as_setInitDataS(self._getInitData())
         self._setRatingButton()
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
 
@@ -96,9 +95,6 @@ class ProfileTechnique(ProfileTechniqueMeta):
         storedData['selectedColumn'] = index
         storedData['selectedColumnSorting'] = sortDirection
         AccountSettings.setFilter(storedDataId, storedData)
-        if self._dossier is not None:
-            self.as_setInitDataS(self._getInitData(self._dossier, self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT))
-        return
 
     def invokeUpdate(self):
         super(ProfileTechnique, self).invokeUpdate()
@@ -122,7 +118,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
          self._createTableBtnInfo('battlesCount', 74, 3, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_BATTLESCOUNT, 'descending', label=PROFILE.SECTION_SUMMARY_SCORES_TOTALBATTLES),
          self._createTableBtnInfo('winsEfficiency', 74, 4, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_WINS if isFallout else PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_WINRATE, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_TOTALWINS),
          self._createTableBtnInfo('avgExperience', 90, 5, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_AVGEXP, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_AVGEXPERIENCE),
-         self._createTableBtnInfo('markOfMastery', 83, 6, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_MARKSOFMASTERY, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_CLASSINESS, showSeparator=False, enabled=markOfMasteryEnabled))
+         self._createTableBtnInfo('markOfMastery', 83, 6, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_MARKSOFMASTERY, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_CLASSINESS, enabled=markOfMasteryEnabled))
 
     def _createTableBtnInfo(self, iconId, buttonWidth, sortOrder, toolTip, defaultSortDirection, label='', iconSource='', inverted=False, sortType='numeric', showSeparator=True, enabled=True):
         return {'id': iconId,

@@ -83,8 +83,7 @@ class StunAreaManager(object):
              'lineColor': int(configSection.readString('lineColor', _STUN_AREA_DEFAULTS['lineColor']), 0),
              'lineWidth': configSection.readFloat('lineWidth', _STUN_AREA_DEFAULTS['lineWidth']),
              'lineHeight': configSection.readFloat('lineHeight', _STUN_AREA_DEFAULTS['lineHeight'])}
-        else:
-            return _STUN_AREA_DEFAULTS
+        return _STUN_AREA_DEFAULTS
 
     def __onPrereqsLoaded(self, resourceRefs):
         if self.__stunAreaParams['visual'] not in resourceRefs.failedIDs:
@@ -110,8 +109,10 @@ class StunAreaManager(object):
                     areas.append(area)
 
             self.__stunAreas[areaID] = areas
-            if len(areas) > 0:
+            if areas:
                 areas[0].addLine(position, self.__stunAreaParams['lineColor'], self.__stunAreaParams['lineWidth'], self.__stunAreaParams['lineHeight'])
+        else:
+            self.__stunAreas[areaID] = []
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             position.y += self.__stunAreaParams['lineHeight'] * 1.1

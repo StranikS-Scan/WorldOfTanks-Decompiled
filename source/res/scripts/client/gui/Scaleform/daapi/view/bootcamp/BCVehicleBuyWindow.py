@@ -7,16 +7,13 @@ from bootcamp.BootcampGarage import g_bootcampGarage
 
 class BCVehicleBuyWindow(VehicleBuyWindow):
 
-    def __init__(self, ctx=None):
-        super(BCVehicleBuyWindow, self).__init__(ctx)
-
     @property
     def buyComponent(self):
         return self.getComponent(VIEW_ALIAS.BOOTCAMP_VEHICLE_BUY_VIEW)
 
     def onWindowClose(self):
         super(BCVehicleBuyWindow, self).onWindowClose()
-        g_bootcampGarage.runViewAlias('bootcampVehiclePreview')
+        g_bootcampGarage.runViewAlias('vehiclePreview')
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(BCVehicleBuyWindow, self)._onRegisterFlashComponent(viewPy, alias)

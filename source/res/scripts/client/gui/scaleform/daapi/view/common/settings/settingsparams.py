@@ -176,7 +176,7 @@ class SettingsParams(object):
         self.settingsCore.applySettings(diff)
         confirmators = self.settingsCore.applyStorages(restartApproved)
         self.settingsCore.confirmChanges(confirmators)
-        if len(set(graphics.GRAPHICS_SETTINGS.ALL()) & set(diff.keys())):
+        if set(graphics.GRAPHICS_SETTINGS.ALL()) & set(diff.keys()):
             BigWorld.commitPendingGraphicsSettings()
         self.settingsCore.clearStorages()
         return applyMethod == options.APPLY_METHOD.RESTART

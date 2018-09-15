@@ -8,9 +8,6 @@ from bootcamp.BootCampEvents import g_bootcampEvents
 class BootcampController(IArenaVehiclesController):
     gameSession = dependency.descriptor(IGameSessionController)
 
-    def __init__(self):
-        super(BootcampController, self).__init__()
-
     def getControllerID(self):
         return None
 

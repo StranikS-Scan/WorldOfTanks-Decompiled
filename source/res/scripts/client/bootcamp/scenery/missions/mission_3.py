@@ -2,9 +2,9 @@
 # Embedded file name: scripts/client/bootcamp/scenery/missions/mission_3.py
 import BigWorld
 from bootcamp.scenery.AbstractMission import AbstractMission
-from constants import HINT_TYPE
+from bootcamp.BootcampConstants import HINT_TYPE
 from helpers.i18n import makeString
-import SoundGroups
+from debug_utils import LOG_ERROR
 
 class HINT(object):
     PLAYERDETECTED = 0
@@ -23,58 +23,62 @@ class HINT(object):
     CAPTURETOGETHER = 13
     CAPTUREHELP = 14
     CAPTUREINPROGRESS = 15
-    INIT_PARAMS = {PLAYERDETECTED: {'message': makeString('#bootcamp:HINT_MISSION3_PLAYERDETECTED'),
+    FLANKINGFAILS2 = 16
+    INIT_PARAMS = {PLAYERDETECTED: {'message': makeString('#bootcamp:hint/mission3/playerdetected'),
                       'hintTypeId': HINT_TYPE.HINT_B3_YOU_ARE_DETECTED,
                       'timeStartDelay': 2.5,
                       'timeDuration': 8.0,
                       'voiceover': 'vo_bc_you_are_detected'},
-     FINDMOREENEMIES: {'message': makeString('#bootcamp:HINT_MISSION3_FINDMOREENEMIES'),
+     FINDMOREENEMIES: {'message': makeString('#bootcamp:hint/mission3/findmoreenemies'),
                        'timeStartDelay': 1.0,
                        'timeDuration': 4.5,
                        'timeInnerCooldown': 15.0},
-     FALLBACK: {'message': makeString('#bootcamp:HINT_MISSION3_FALLBACK'),
+     FALLBACK: {'message': makeString('#bootcamp:hint/mission3/fallback'),
                 'hintTypeId': HINT_TYPE.HINT_B3_FALL_BACK,
                 'voiceover': 'vo_bc_retreat'},
-     FLANKENEMIES: {'message': makeString('#bootcamp:HINT_MISSION3_FLANKENEMIES'),
+     FLANKENEMIES: {'message': makeString('#bootcamp:hint/mission3/flankenemies'),
                     'hintTypeId': HINT_TYPE.HINT_B3_FLANK,
                     'voiceover': 'vo_bc_get_around_on_flank'},
-     FOLIAGEINTROA: {'message': makeString('#bootcamp:HINT_MISSION3_FOLIAGEINTROA'),
+     FOLIAGEINTROA: {'message': makeString('#bootcamp:hint/mission3/foliageintroa'),
                      'hintTypeId': HINT_TYPE.HINT_B3_FOLIAGE2,
                      'voiceover': 'vo_bc_do_not_shoot'},
-     FOLIAGEINTROB: {'message': makeString('#bootcamp:HINT_MISSION3_FOLIAGEINTROB'),
+     FOLIAGEINTROB: {'message': makeString('#bootcamp:hint/mission3/foliageintrob'),
                      'hintTypeId': HINT_TYPE.HINT_B3_FOLIAGE,
                      'voiceover': 'vo_bc_bushes_hide'},
-     FOLIAGEKEEPMOVING: {'message': makeString('#bootcamp:HINT_MISSION3_FOLIAGEKEEPMOVING'),
+     FOLIAGEKEEPMOVING: {'message': makeString('#bootcamp:hint/mission3/foliagekeepmoving'),
                          'hintTypeId': HINT_TYPE.HINT_B3_FOLIAGE,
                          'voiceover': 'vo_bc_move_forward'},
-     FOLIAGECANTDETECT: {'message': makeString('#bootcamp:HINT_MISSION3_FOLIAGECANTDETECT'),
+     FOLIAGECANTDETECT: {'message': makeString('#bootcamp:hint/mission3/foliagecantdetect'),
                          'timeDuration': 4.5,
                          'timeInnerCooldown': 15.0},
-     FLANKINGFAILS: {'message': makeString('#bootcamp:HINT_MISSION3_FLANKINGFAILS'),
+     FLANKINGFAILS: {'message': makeString('#bootcamp:hint/mission3/flankingfails'),
                      'hintTypeId': HINT_TYPE.HINT_B3_YOU_ARE_DETECTED,
                      'voiceover': 'vo_bc_shooting_unmask'},
-     FLANKINGWAIT: {'message': makeString('#bootcamp:HINT_MISSION3_FLANKINGWAIT'),
+     FLANKINGFAILS2: {'message': makeString('#bootcamp:hint/mission3/flankingfails2'),
+                      'hintTypeId': HINT_TYPE.HINT_B3_YOU_ARE_DETECTED,
+                      'voiceover': 'vo_bc_retreat'},
+     FLANKINGWAIT: {'message': makeString('#bootcamp:hint/mission3/flankingwait'),
                     'timeDuration': -1.0,
                     'timeStartDelay': 3.0},
-     CAPTUREBASE: {'message': makeString('#bootcamp:HINT_MISSION3_CAPTUREBASE'),
+     CAPTUREBASE: {'message': makeString('#bootcamp:hint/mission3/capturebase'),
                    'hintTypeId': HINT_TYPE.HINT_B3_DO_CAPTURE,
                    'voiceover': 'vo_bc_capture_base'},
-     CAPTUREWATCHOUT: {'message': makeString('#bootcamp:HINT_MISSION3_CAPTUREWATCHOUT'),
+     CAPTUREWATCHOUT: {'message': makeString('#bootcamp:hint/mission3/capturewatchout'),
                        'hintTypeId': HINT_TYPE.HINT_B3_ENEMIES_HIDDEN,
                        'timeDuration': 8.0,
                        'voiceover': 'vo_bc_enemy_can_hide_be_careful'},
-     CAPTURELOST: {'message': makeString('#bootcamp:HINT_MISSION3_CAPTURELOST'),
+     CAPTURELOST: {'message': makeString('#bootcamp:hint/mission3/capturelost'),
                    'hintTypeId': HINT_TYPE.HINT_B3_CAPTURE_RESET,
                    'timeDuration': 8.0,
                    'voiceover': 'vo_bc_progress_capturing'},
-     CAPTURETOGETHER: {'message': makeString('#bootcamp:HINT_MISSION3_CAPTURETOGETHER'),
+     CAPTURETOGETHER: {'message': makeString('#bootcamp:hint/mission3/capturetogether'),
                        'hintTypeId': HINT_TYPE.HINT_B3_CAPTURE_TOGETHER,
                        'timeDuration': 8.0,
                        'voiceover': 'vo_bc_capture_speed'},
-     CAPTUREHELP: {'message': makeString('#bootcamp:HINT_MISSION3_CAPTUREHELP'),
+     CAPTUREHELP: {'message': makeString('#bootcamp:hint/mission3/capturehelp'),
                    'hintTypeId': HINT_TYPE.HINT_B3_DO_CAPTURE,
                    'voiceover': 'vo_bc_return_and_help'},
-     CAPTUREINPROGRESS: {'message': makeString('#bootcamp:HINT_MISSION3_CAPTUREINPROGRESS'),
+     CAPTUREINPROGRESS: {'message': makeString('#bootcamp:hint/mission3/captureinprogress'),
                          'hintTypeId': HINT_TYPE.HINT_B3_CAPTURE_IN_PROGRESS,
                          'timeDuration': 8.0,
                          'voiceover': 'vo_bc_capturing_base_in_process'}}
@@ -87,6 +91,7 @@ class PROGRESS(object):
     CAPTURE = 3
     CAPTURE_UNDEFINED = 4
     CAPTURE_FINAL = 5
+    COUNT = 6
 
 
 class MARKER(object):
@@ -106,40 +111,74 @@ class MARKER(object):
      FALLBACK: 'FallbackMarker'}
 
 
+class ZONES(object):
+    FLANKING = 0
+    STEALTH_0 = 1
+    STEALTH_1 = 2
+    STEALTH_2 = 3
+    BASE = 4
+    BASE_DRAFT = 5
+    ALLIED_MAP_PART = 6
+    ENEMIES_MAP_BACK = 7
+    FALLBACK_DONE = 8
+    FALLBACK_HIDDEN = 9
+    ZONE_SIZE = 10
+    PARAMS = {'FlankingZone_0': (FLANKING, True, False),
+     'StealthZone_0': (STEALTH_0, True, False),
+     'StealthZone_1': (STEALTH_1, True, False),
+     'StealthZone_2': (STEALTH_2, True, False),
+     'MapMiddleMarker_Allies': (ALLIED_MAP_PART, True, None),
+     'MapMiddleMarker_Enemies': (ALLIED_MAP_PART, False, None),
+     'MapEnemiesBaseMarker_Allies': (ENEMIES_MAP_BACK, False, None),
+     'MapEnemiesBaseMarker_Enemies': (ENEMIES_MAP_BACK, True, None),
+     'FallbackTrigger_back': (FALLBACK_DONE, True, None),
+     'FallbackTrigger_forth': (FALLBACK_DONE, False, None),
+     'fallbackTrigger_hiddenZone': (FALLBACK_HIDDEN, True, False),
+     'EnemyBaseZone': (BASE_DRAFT, True, False)}
+
+
 class Mission3(AbstractMission):
     _TOO_MANY_ENEMIES_NUM = 3
+    _DETECTION_DELAY = 1.0
 
     def __init__(self, assistant):
         super(Mission3, self).__init__(assistant)
-        self._hints = dict(((v, self.createHint(**HINT.INIT_PARAMS[v])) for k, v in HINT.__dict__.iteritems() if isinstance(v, int)))
-        self._markers = dict(((v, self.createMarker(MARKER.INIT_PARAMS[v])) for k, v in MARKER.__dict__.iteritems() if isinstance(v, int)))
+        self._hints = {v:self.createHint(**HINT.INIT_PARAMS[v]) for k, v in HINT.__dict__.iteritems() if isinstance(v, int)}
+        self._markers = {v:self.createMarker(MARKER.INIT_PARAMS[v]) for k, v in MARKER.__dict__.iteritems() if isinstance(v, int)}
+        self._updaters = ([self.updateStateStart, self.updateStateBeforeAdvance],
+         [self.updateStateFlank_ProcessFallback, self.updateStateFlank_ProcessFlank, self.updateStateBeforeAdvance],
+         [self.updateStateAdvance],
+         [self.updateSateCapture],
+         [self.updateStateCaptureUndefined],
+         [self.updateStateCaptureFinal])
+        if len(self._updaters) != PROGRESS.COUNT:
+            LOG_ERROR('Wrong updaters list size( see PROGRESS class )')
         self._playerVehicle = self.playerVehicle()
         self._vehicleEnemy1stPack = [ self.createVehicle(name) for name in ('Miron Nebaluiev', 'Fridrih Simann', 'Matt Underlay') ]
         self._vehicleEnemy2ndPackMain = [ self.createVehicle(name) for name in ('James Brounge', 'Oda Nisura', 'Gavril Stolbov', 'Fabian Haupt') ]
         self._vehicleEnemy2ndPackSecondary = [ self.createVehicle(name) for name in ('Frank Dimmelton', 'John Dicker') ]
         self._vehicleEnemy2ndPackAll = self._vehicleEnemy2ndPackMain + self._vehicleEnemy2ndPackSecondary
-        self._vehicleEnemyDefendersPack = [ self.createVehicle(name) for name in ('Fabian Haupt', 'Konrad Cerstvy') ]
+        self._vehicleEnemyRepositionToDefendersPack = [self.createVehicle('Fabian Haupt')]
+        self._vehicleEnemyDefendersPack = [self.createVehicle('Konrad Cerstvy')]
         self._vehicleAlliesDefendersPack = [ self.createVehicle(name) for name in ('Richard Bogelber', 'Keiko Simura', 'Sheng En') ]
         self._vehicleAlliesAttackersPack = [self.createVehicle('Siegward Eber')]
         self._enemiesAtFlank = {}
         self._detectedEnemiesList = set()
         self._allyAttackersDead = False
         self._allyAttackerAtEnemiesBase = False
+        self._defendersFromCenterRepos = False
         self._playerDetected = False
         self._progressUndefinedTime = 0.0
-        self._inZoneFlanking = False
-        self._inZoneStealth_0 = False
-        self._inZoneStealth_1 = False
-        self._inZoneStealth_2 = False
-        self._inZoneBase = False
-        self._inZoneAlliedMapPart = True
-        self._inZoneEnemiesMapBack = False
+        self._inZoneData = [False] * ZONES.ZONE_SIZE
+        self._inZoneData[ZONES.ALLIED_MAP_PART] = True
+        self._inZoneData[ZONES.FALLBACK_DONE] = True
+        self._inZoneData[ZONES.FALLBACK_HIDDEN] = True
         self._halfWayToBasePassed = False
-        self._inZoneFallbackDone = True
-        self._inZoneFallbackHidden = True
         self._progress = PROGRESS.START
         self._fallbackStartTime = None
         self._ignoreFallbackTimeToShowMarker = 15.0
+        self._numOfDetectedManyEnemiesPack = 0
+        self._playLastShotTime = None
         return
 
     def start(self):
@@ -151,12 +190,178 @@ class Mission3(AbstractMission):
         self.playSound2D('vo_bc_detect_enemy_vehicles')
         self.playSound2D('bc_main_tips_task_start')
 
+    def destroy(self):
+        super(Mission3, self).destroy()
+        self._updaters = None
+        return
+
+    def updateStateStart(self):
+        if self._hints[HINT.FALLBACK].isNotShown:
+            firstPackKilled = True
+            for vehicle in self._vehicleEnemy1stPack:
+                if vehicle.isAlive:
+                    firstPackKilled = False
+
+            if firstPackKilled:
+                self.showMarker(MARKER.RECON)
+        if self._playerDetected and not self._inZoneData[ZONES.FLANKING]:
+            if self._numOfDetectedManyEnemiesPack >= self._TOO_MANY_ENEMIES_NUM:
+                if not self._hints[HINT.FALLBACK].isActive and not self._hints[HINT.FALLBACK].isDisabled:
+                    self.showHint(HINT.FALLBACK)
+                    self.hideMarker(MARKER.RECON, False)
+                    self._progress = PROGRESS.FLANK
+                    self._fallbackStartTime = BigWorld.serverTime()
+                    self._playCombatMusic()
+        if self._inZoneData[ZONES.STEALTH_1] and not self._playerDetected:
+            self._progress = PROGRESS.FLANK
+            self._playCombatMusic()
+
+    def updateStateFlank_ProcessFallback(self):
+        if self._playerDetected and self._inZoneData[ZONES.ALLIED_MAP_PART] and not self._inZoneData[ZONES.FLANKING]:
+            if not self._hints[HINT.FALLBACK].isActive and self._numOfDetectedManyEnemiesPack >= self._TOO_MANY_ENEMIES_NUM:
+                self.hideAllMarkers(False)
+                self.showHint(HINT.FALLBACK)
+                self._fallbackStartTime = BigWorld.serverTime()
+            if not self._inZoneData[ZONES.FALLBACK_DONE] and not self._inZoneData[ZONES.FALLBACK_HIDDEN]:
+                if self._hints[HINT.FALLBACK].isActive and self._fallbackStartTime is not None:
+                    if BigWorld.serverTime() > self._fallbackStartTime + self._ignoreFallbackTimeToShowMarker:
+                        if not self.isMarkerVisible(MARKER.FALLBACK):
+                            self.showMarker(MARKER.FALLBACK)
+        if self.isMarkerVisible(MARKER.FALLBACK) and self._inZoneData[ZONES.FALLBACK_DONE]:
+            self.hideMarker(MARKER.FALLBACK, False)
+            self._fallbackStartTime = None
+        if not self._playerDetected:
+            if self._hints[HINT.FALLBACK].isActive:
+                self.hideHint(HINT.FALLBACK)
+        return
+
+    def updateStateFlank_ProcessFlank(self):
+        if not self._playerDetected or self._numOfDetectedManyEnemiesPack < self._TOO_MANY_ENEMIES_NUM:
+            if not self._inZoneData[ZONES.FLANKING] and self._inZoneData[ZONES.ALLIED_MAP_PART]:
+                if not self._hints[HINT.FLANKENEMIES].isActive and not self._hints[HINT.FLANKENEMIES].isDisabled:
+                    self.showHint(HINT.FLANKENEMIES)
+                    self.showMarker(MARKER.FLANK_START)
+                    self._fallbackStartTime = None
+        if self._playerDetected and self._inZoneData[ZONES.FLANKING]:
+            if not self._hints[HINT.FLANKINGFAILS].isActive and not self._hints[HINT.FLANKINGFAILS2].isActive:
+                if not self._markers[MARKER.FLANK_START].isVisible or self._inZoneData[ZONES.ENEMIES_MAP_BACK]:
+                    self.hideAllMarkers(False)
+                if not self._inZoneData[ZONES.ENEMIES_MAP_BACK]:
+                    self.showMarker(MARKER.FLANK_START)
+                    self._fallbackStartTime = None
+                if self._playLastShotTime:
+                    if BigWorld.serverTime() < self._playLastShotTime + self._DETECTION_DELAY:
+                        self.showHint(HINT.FLANKINGFAILS)
+                    else:
+                        self.showHint(HINT.FLANKINGFAILS2)
+        if self._playerDetected and self._inZoneData[ZONES.ENEMIES_MAP_BACK]:
+            if self.isMarkerVisible(MARKER.FLANK_START):
+                self.hideMarker(MARKER.FLANK_START, False)
+            if self._hints[HINT.FLANKINGFAILS].isActive:
+                self.hideHint(HINT.FLANKINGFAILS)
+            if self._hints[HINT.FLANKINGFAILS2].isActive:
+                self.hideHint(HINT.FLANKINGFAILS2)
+            if self._hints[HINT.FALLBACK].isActive:
+                self.hideHint(HINT.FALLBACK)
+        if not self._playerDetected and self._inZoneData[ZONES.FLANKING]:
+            if self._hints[HINT.FLANKINGFAILS].isActive:
+                self.hideHint(HINT.FLANKINGFAILS)
+            if self._hints[HINT.FLANKINGFAILS2].isActive:
+                self.hideHint(HINT.FLANKINGFAILS2)
+            if self._inZoneData[ZONES.STEALTH_0] and not self._inZoneData[ZONES.STEALTH_1]:
+                if self._hints[HINT.FLANKENEMIES].isActive:
+                    self.hideHint(HINT.FLANKENEMIES)
+                self.showMarker(MARKER.FLANK_RECON)
+                if not self._hints[HINT.FOLIAGEINTROB].isActive:
+                    self.showHint(HINT.FOLIAGEINTROB)
+            elif not self._inZoneData[ZONES.STEALTH_2]:
+                self.showMarker(MARKER.FLANK_END)
+                if self._numOfDetectedManyEnemiesPack > 0:
+                    if not self._hints[HINT.FOLIAGEINTROA].isActive:
+                        self.showHint(HINT.FOLIAGEINTROA)
+            if self._inZoneData[ZONES.STEALTH_2]:
+                if self._hints[HINT.FOLIAGEINTROA].isActive:
+                    self.hideHint(HINT.FOLIAGEINTROA)
+                if not self._hints[HINT.FLANKINGWAIT].isActive:
+                    self.showHint(HINT.FLANKINGWAIT)
+        return
+
+    def updateStateBeforeAdvance(self):
+        for vehicle in self._vehicleEnemy2ndPackMain:
+            if not vehicle.isAlive:
+                self._enemiesAtFlank[vehicle.name] = False
+
+        for vehicle in self._vehicleEnemy2ndPackMain:
+            if self._enemiesAtFlank[vehicle.name]:
+                break
+        else:
+            if self._progress < PROGRESS.ADVANCE:
+                self._progress = PROGRESS.ADVANCE
+                self.hideAllHints()
+                self.hideAllMarkers(False)
+
+    def updateStateAdvance(self):
+        if self._inZoneData[ZONES.FLANKING]:
+            if self._hints[HINT.FLANKINGWAIT].isActive:
+                self.hideHint(HINT.FLANKINGWAIT)
+        if not self._halfWayToBasePassed:
+            self.showMarker(MARKER.BASE)
+        else:
+            self.showMarker(MARKER.BASE)
+            self.showHint(HINT.CAPTUREBASE)
+            self._progress = PROGRESS.CAPTURE
+
+    def updateSateCapture(self):
+        if self._inZoneData[ZONES.BASE]:
+            if self._hints[HINT.CAPTUREINPROGRESS].isNotShown:
+                self.showHint(HINT.CAPTUREINPROGRESS)
+                self._hints[HINT.CAPTUREINPROGRESS].disable()
+        numOfDetectedDefendersPack = 0
+        for vehicle in self._detectedEnemiesList:
+            if vehicle in self._vehicleEnemyDefendersPack or self._defendersFromCenterRepos and vehicle in self._vehicleEnemyRepositionToDefendersPack:
+                numOfDetectedDefendersPack += 1
+
+        if not self._inZoneData[ZONES.BASE] and numOfDetectedDefendersPack == 0:
+            self.showMarker(MARKER.BASE)
+            if not self._hints[HINT.CAPTUREBASE].isActive:
+                self.showHint(HINT.CAPTUREBASE)
+        else:
+            if self.isMarkerVisible(MARKER.BASE):
+                self.hideMarker(MARKER.BASE, False)
+            if self._hints[HINT.CAPTUREBASE].isActive:
+                self.hideHint(HINT.CAPTUREBASE)
+
+    def updateStateCaptureUndefined(self):
+        if self._progressUndefinedTime <= BigWorld.serverTime():
+            self._progress = PROGRESS.CAPTURE_FINAL
+
+    def updateStateCaptureFinal(self):
+        if not self._hints[HINT.CAPTUREBASE].isDisabled and not self._allyAttackersDead and self._allyAttackerAtEnemiesBase:
+            self._hints[HINT.CAPTUREBASE].disable()
+        if not self._inZoneData[ZONES.BASE]:
+            self.showMarker(MARKER.BASE)
+            if not self._allyAttackersDead and self._allyAttackerAtEnemiesBase:
+                if not self._hints[HINT.CAPTUREHELP].isActive:
+                    self.showHint(HINT.CAPTUREHELP)
+            elif not self._hints[HINT.CAPTUREBASE].isActive:
+                self.showHint(HINT.CAPTUREBASE)
+        else:
+            if self.isMarkerVisible(MARKER.BASE):
+                self.hideMarker(MARKER.BASE, False)
+            if self._hints[HINT.CAPTUREHELP].isActive:
+                self.hideHint(HINT.CAPTUREHELP)
+            if self._hints[HINT.CAPTUREBASE].isActive:
+                self.hideHint(HINT.CAPTUREBASE)
+            if not self._allyAttackersDead and self._allyAttackerAtEnemiesBase:
+                if self._hints[HINT.CAPTURETOGETHER].isNotShown:
+                    self.showHint(HINT.CAPTURETOGETHER)
+
     def update(self):
         super(Mission3, self).update()
-        numOfDetectedManyEnemiesPack = 0
+        self._numOfDetectedManyEnemiesPack = 0
         for vehicle in self._detectedEnemiesList:
             if vehicle in self._vehicleEnemy2ndPackAll:
-                numOfDetectedManyEnemiesPack += 1
+                self._numOfDetectedManyEnemiesPack += 1
 
         if not self._allyAttackersDead:
             for vehicle in self._vehicleAlliesAttackersPack:
@@ -165,156 +370,22 @@ class Mission3(AbstractMission):
             else:
                 self._allyAttackersDead = True
 
-        if self._progress == PROGRESS.START:
-            if self._hints[HINT.FALLBACK].isNotShown:
-                firstPackKilled = True
-                for vehicle in self._vehicleEnemy1stPack:
-                    if vehicle.isAlive:
-                        firstPackKilled = False
+        if self._progress >= PROGRESS.COUNT:
+            LOG_ERROR('Wrong progress index', self._progress)
+            self._progress = PROGRESS.START
+        updaters = self._updaters[self._progress]
+        for updater in updaters:
+            updater()
 
-                if firstPackKilled:
-                    self.showMarker(self._markers[MARKER.RECON])
-            if numOfDetectedManyEnemiesPack >= self._TOO_MANY_ENEMIES_NUM and self._playerDetected and not self._inZoneFlanking:
-                if not self._hints[HINT.FALLBACK].isActive and not self._hints[HINT.FALLBACK].isDisabled:
-                    self.showHint(self._hints[HINT.FALLBACK])
-                    self._markers[MARKER.RECON].hide()
-                    self._progress = PROGRESS.FLANK
-                    self._fallbackStartTime = BigWorld.time()
-                    self._playCombatMusic()
-            if self._inZoneStealth_1 and not self._playerDetected:
-                self._progress = PROGRESS.FLANK
-                self._playCombatMusic()
-        if self._progress == PROGRESS.FLANK:
-            if not self._inZoneFlanking and self._inZoneAlliedMapPart:
-                if not self._playerDetected or numOfDetectedManyEnemiesPack < self._TOO_MANY_ENEMIES_NUM:
-                    if not self._hints[HINT.FLANKENEMIES].isActive and not self._hints[HINT.FLANKENEMIES].isDisabled:
-                        self.showHint(self._hints[HINT.FLANKENEMIES])
-                        self.showMarker(self._markers[MARKER.FLANK_START])
-                        self._fallbackStartTime = None
-            if self._playerDetected:
-                if self._inZoneFlanking:
-                    if not self._hints[HINT.FLANKINGFAILS].isActive:
-                        self.hideAllMarkers(False)
-                        if not self._inZoneEnemiesMapBack:
-                            self.showMarker(self._markers[MARKER.FLANK_START])
-                            self._fallbackStartTime = None
-                        self.showHint(self._hints[HINT.FLANKINGFAILS])
-                elif self._inZoneAlliedMapPart:
-                    if not self._hints[HINT.FALLBACK].isActive and numOfDetectedManyEnemiesPack >= self._TOO_MANY_ENEMIES_NUM:
-                        self.hideAllMarkers(False)
-                        self.showHint(self._hints[HINT.FALLBACK])
-                        self._fallbackStartTime = BigWorld.time()
-                    if self._hints[HINT.FALLBACK].isActive and self._fallbackStartTime is not None:
-                        if BigWorld.time() > self._fallbackStartTime + self._ignoreFallbackTimeToShowMarker:
-                            if not self._markers[MARKER.FALLBACK].isVisible:
-                                if not self._inZoneFallbackDone and not self._inZoneFallbackHidden:
-                                    self.showMarker(self._markers[MARKER.FALLBACK])
-            if self._markers[MARKER.FALLBACK].isVisible and self._inZoneFallbackDone:
-                self._markers[MARKER.FALLBACK].hide()
-                self._fallbackStartTime = None
-            if self._playerDetected and self._inZoneEnemiesMapBack:
-                if self._markers[MARKER.FLANK_START].isVisible:
-                    self._markers[MARKER.FLANK_START].hide()
-                if self._hints[HINT.FLANKINGFAILS].isActive:
-                    self._hints[HINT.FLANKINGFAILS].hide()
-                if self._hints[HINT.FALLBACK].isActive:
-                    self._hints[HINT.FALLBACK].hide()
-            if not self._playerDetected:
-                if self._hints[HINT.FALLBACK].isActive:
-                    self._hints[HINT.FALLBACK].hide()
-            if self._inZoneFlanking and not self._playerDetected:
-                if self._hints[HINT.FLANKINGFAILS].isActive:
-                    self._hints[HINT.FLANKINGFAILS].hide()
-                if self._inZoneStealth_0 and not self._inZoneStealth_1:
-                    if self._hints[HINT.FLANKENEMIES].isActive:
-                        self._hints[HINT.FLANKENEMIES].hide()
-                    self.showMarker(self._markers[MARKER.FLANK_RECON])
-                    if not self._hints[HINT.FOLIAGEINTROB].isActive:
-                        self.showHint(self._hints[HINT.FOLIAGEINTROB])
-                elif not self._inZoneStealth_2:
-                    self.showMarker(self._markers[MARKER.FLANK_END])
-                    if numOfDetectedManyEnemiesPack > 0:
-                        if not self._hints[HINT.FOLIAGEINTROA].isActive:
-                            self.showHint(self._hints[HINT.FOLIAGEINTROA])
-                if self._inZoneStealth_2:
-                    if self._hints[HINT.FOLIAGEINTROA].isActive:
-                        self._hints[HINT.FOLIAGEINTROA].hide()
-                    if not self._hints[HINT.FLANKINGWAIT].isActive:
-                        self.showHint(self._hints[HINT.FLANKINGWAIT])
-        if self._progress < PROGRESS.ADVANCE:
-            for vehicle in self._vehicleEnemy2ndPackMain:
-                if not vehicle.isAlive:
-                    self._enemiesAtFlank[vehicle.name] = False
-
-            for vehicle in self._vehicleEnemy2ndPackMain:
-                if self._enemiesAtFlank[vehicle.name]:
-                    break
-            else:
-                if self._progress < PROGRESS.ADVANCE:
-                    self._progress = PROGRESS.ADVANCE
-                    self.hideAllHints()
-                    self.hideAllMarkers(False)
-        if self._progress == PROGRESS.ADVANCE:
-            if self._inZoneFlanking:
-                if self._hints[HINT.FLANKINGWAIT].isActive:
-                    self._hints[HINT.FLANKINGWAIT].hide()
-            if not self._halfWayToBasePassed:
-                self.showMarker(self._markers[MARKER.BASE])
-            else:
-                self.showMarker(self._markers[MARKER.BASE])
-                self.showHint(self._hints[HINT.CAPTUREBASE])
-                self._progress = PROGRESS.CAPTURE
-        if self._progress == PROGRESS.CAPTURE:
-            if self._inZoneBase:
-                if self._hints[HINT.CAPTUREINPROGRESS].isNotShown:
-                    self.showHint(self._hints[HINT.CAPTUREINPROGRESS])
-                    self._hints[HINT.CAPTUREINPROGRESS].disable()
-            numOfDetectedDefendersPack = 0
-            for vehicle in self._detectedEnemiesList:
-                if vehicle in self._vehicleEnemyDefendersPack:
-                    numOfDetectedDefendersPack += 1
-
-            if not self._inZoneBase and numOfDetectedDefendersPack == 0:
-                self.showMarker(self._markers[MARKER.BASE])
-                if not self._hints[HINT.CAPTUREBASE].isActive:
-                    self.showHint(self._hints[HINT.CAPTUREBASE])
-            else:
-                if self._markers[MARKER.BASE].isVisible:
-                    self._markers[MARKER.BASE].hide()
-                if self._hints[HINT.CAPTUREBASE].isActive:
-                    self._hints[HINT.CAPTUREBASE].hide()
-        if self._progress == PROGRESS.CAPTURE_UNDEFINED:
-            if self._progressUndefinedTime <= BigWorld.time():
-                self._progress = PROGRESS.CAPTURE_FINAL
-        if self._progress == PROGRESS.CAPTURE_FINAL:
-            if not self._hints[HINT.CAPTUREBASE].isDisabled and not self._allyAttackersDead and self._allyAttackerAtEnemiesBase:
-                self._hints[HINT.CAPTUREBASE].disable()
-            if not self._inZoneBase:
-                self.showMarker(self._markers[MARKER.BASE])
-            elif self._markers[MARKER.BASE].isVisible:
-                self._markers[MARKER.BASE].hide()
-            if not self._inZoneBase:
-                if not self._allyAttackersDead and self._allyAttackerAtEnemiesBase:
-                    if not self._hints[HINT.CAPTUREHELP].isActive:
-                        self.showHint(self._hints[HINT.CAPTUREHELP])
-                elif not self._hints[HINT.CAPTUREBASE].isActive:
-                    self.showHint(self._hints[HINT.CAPTUREBASE])
-            else:
-                if self._hints[HINT.CAPTUREHELP].isActive:
-                    self._hints[HINT.CAPTUREHELP].hide()
-                if self._hints[HINT.CAPTUREBASE].isActive:
-                    self._hints[HINT.CAPTUREBASE].hide()
-                if not self._allyAttackersDead and self._allyAttackerAtEnemiesBase:
-                    if self._hints[HINT.CAPTURETOGETHER].isNotShown:
-                        self.showHint(self._hints[HINT.CAPTURETOGETHER])
-        return
-
-    def isAnyHintActive(self):
-        return any((self._hints[hintID].isActive for hintID in self._hints))
-
-    def showHint(self, hint):
+    def showHint(self, hintID):
         self.hideAllHints()
+        hint = self._hints[hintID]
         hint.show()
+
+    def hideHint(self, hintID):
+        hint = self._hints[hintID]
+        if hint.isActive:
+            hint.hide()
 
     def hideAllHints(self):
         for hint in self._hints.itervalues():
@@ -327,20 +398,30 @@ class Mission3(AbstractMission):
                 hint.hide()
             hint.disable()
 
-    def showMarker(self, marker):
+    def showMarker(self, markerID):
+        marker = self._markers[markerID]
         if marker.isVisible:
             return
         self.hideAllMarkers(False)
         marker.show()
 
+    def hideMarker(self, markerID, silently=True):
+        marker = self._markers[markerID]
+        marker.hide(silently)
+
     def hideAllMarkers(self, silently=True):
         for marker in self._markers.itervalues():
             marker.hide(silently)
 
+    def isMarkerVisible(self, markerID):
+        marker = self._markers[markerID]
+        return marker.isVisible
+
     def onReceiveDamage(self, targetVehicle):
-        if self._inZoneBase and self.playerVehicle().health > 0:
-            if not self._hints[HINT.CAPTURELOST].isActive:
-                self.showHint(self._hints[HINT.CAPTURELOST])
+        if self._inZoneData[ZONES.BASE] and self.playerVehicle().health > 0:
+            if targetVehicle and self._playerVehicle.team != targetVehicle.team:
+                if not self._hints[HINT.CAPTURELOST].isActive:
+                    self.showHint(HINT.CAPTURELOST)
         if self.playerVehicle().health <= 0:
             self.disableAllHints()
 
@@ -348,7 +429,7 @@ class Mission3(AbstractMission):
         if isObserved:
             self._playerDetected = True
             if self._hints[HINT.PLAYERDETECTED].isNotShown:
-                self.showHint(self._hints[HINT.PLAYERDETECTED])
+                self.showHint(HINT.PLAYERDETECTED)
         else:
             self._playerDetected = False
 
@@ -369,77 +450,38 @@ class Mission3(AbstractMission):
         if vehicle in self._detectedEnemiesList:
             self._detectedEnemiesList.remove(vehicle)
 
+    def onPlayerShoot(self, aimInfo):
+        self._playLastShotTime = BigWorld.serverTime()
+
     def onSetConstant(self, vehicle, name, value):
         if name == 'EnemiesRepositionStage':
             if value == 2:
                 if vehicle.name in self._enemiesAtFlank.keys():
                     self._enemiesAtFlank[vehicle.name] = False
+        elif name == 'DefendersRepositionStage':
+            if value == 1:
+                self._defendersFromCenterRepos = True
         elif name == 'AllyAttackerRepositionStage':
             if value == 1:
                 self._allyAttackerAtEnemiesBase = True
             elif value == 2:
                 if self._progress < PROGRESS.CAPTURE_UNDEFINED:
                     self._progress = PROGRESS.CAPTURE_UNDEFINED
-                    self._progressUndefinedTime = BigWorld.time() + 5.0
-
-    def onZoneTriggerActivated(self, name):
-        if name == 'FlankingZone_0':
-            self._inZoneFlanking = True
-        elif name == 'StealthZone_0':
-            self._inZoneStealth_0 = True
-        elif name == 'StealthZone_1':
-            self._inZoneStealth_1 = True
-        elif name == 'StealthZone_2':
-            self._inZoneStealth_2 = True
-        elif name == 'AroundBaseZone_0' or name == 'AroundBaseZone_1' or name == 'AroundBaseZone_2' or name == 'AroundBaseZone_3':
-            if self._progress >= PROGRESS.ADVANCE:
-                self._halfWayToBasePassed = True
-        elif name == 'EnemyBaseZone':
-            pass
-        if name == 'MapMiddleMarker_Allies':
-            self._inZoneAlliedMapPart = True
-        elif name == 'MapMiddleMarker_Enemies':
-            self._inZoneAlliedMapPart = False
-        elif name == 'MapEnemiesBaseMarker_Allies':
-            self._inZoneEnemiesMapBack = False
-        elif name == 'MapEnemiesBaseMarker_Enemies':
-            self._inZoneEnemiesMapBack = True
-        elif name == 'FallbackTrigger_back':
-            self._inZoneFallbackDone = True
-        elif name == 'FallbackTrigger_forth':
-            self._inZoneFallbackDone = False
-        elif name == 'fallbackTrigger_hiddenZone':
-            self._inZoneFallbackHidden = True
-
-    def onZoneTriggerDeactivated(self, name):
-        if name == 'FlankingZone_0':
-            self._inZoneFlanking = False
-        elif name == 'StealthZone_0':
-            self._inZoneStealth_0 = False
-        elif name == 'StealthZone_1':
-            self._inZoneStealth_1 = False
-        elif name == 'StealthZone_2':
-            self._inZoneStealth_2 = False
-        elif name == 'AroundBaseZone_0' or name == 'AroundBaseZone_1' or name == 'AroundBaseZone_2' or name == 'AroundBaseZone_3':
-            pass
-        elif name == 'EnemyBaseZone':
-            pass
-        elif name == 'fallbackTrigger_hiddenZone':
-            self._inZoneFallbackHidden = False
+                    self._progressUndefinedTime = BigWorld.serverTime() + 5.0
 
     def onTeamBasePointsUpdate(self, team, baseID, points, timeLeft, invadersCnt, capturingStopped):
         if team == self._playerVehicle.team:
             return
         if capturingStopped or invadersCnt == 0:
-            self._inZoneBase = False
+            self._inZoneData[ZONES.BASE] = False
         elif self._progress == PROGRESS.CAPTURE or self._allyAttackersDead or not self._allyAttackerAtEnemiesBase:
-            self._inZoneBase = True
+            self._inZoneData[ZONES.BASE] = True
         elif self._progress == PROGRESS.CAPTURE_FINAL:
-            if invadersCnt > 1:
-                self._inZoneBase = True
+            if invadersCnt > 1 or self._inZoneData[ZONES.BASE_DRAFT] and invadersCnt > 0:
+                self._inZoneData[ZONES.BASE] = True
             else:
-                self._inZoneBase = False
-        if self._inZoneBase:
+                self._inZoneData[ZONES.BASE] = False
+        if self._inZoneData[ZONES.BASE]:
             if self._progress < PROGRESS.CAPTURE:
                 self.hideAllHints()
                 self.hideAllMarkers(False)
@@ -448,3 +490,22 @@ class Mission3(AbstractMission):
     def onTeamBaseCaptured(self, team, baseID):
         self.hideAllHints()
         self.hideAllMarkers(False)
+
+    def onZoneTriggerActivated(self, name):
+        if name == 'AroundBaseZone_0' or name == 'AroundBaseZone_1' or name == 'AroundBaseZone_2' or name == 'AroundBaseZone_3':
+            if self._progress >= PROGRESS.ADVANCE:
+                self._halfWayToBasePassed = True
+        data = ZONES.PARAMS.get(name, None)
+        if data:
+            idx, value, _ = data
+            if value is not None:
+                self._inZoneData[idx] = value
+        return
+
+    def onZoneTriggerDeactivated(self, name):
+        data = ZONES.PARAMS.get(name, None)
+        if data:
+            idx, _, value = data
+            if value is not None:
+                self._inZoneData[idx] = value
+        return

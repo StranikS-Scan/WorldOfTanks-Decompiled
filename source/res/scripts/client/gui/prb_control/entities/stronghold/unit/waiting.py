@@ -24,7 +24,7 @@ class WaitingManager(object):
 
     def processRequest(self, ctx):
         waitingID = ctx.getWaitingID()
-        if len(waitingID) == 0:
+        if not waitingID:
             return
         else:
             requestType = ctx.getRequestType()
@@ -37,7 +37,7 @@ class WaitingManager(object):
             return
 
     def stopRequest(self):
-        if len(self.__waitingID):
+        if self.__waitingID:
             LOG_DEBUG('Hide waitingID = ' + self.__waitingID)
             Waiting.hide(self.__waitingID)
             self.__waitingID = ''
@@ -51,7 +51,7 @@ class WaitingManager(object):
         self.stopRequest()
 
     def __processResponse(self, requestID):
-        if len(self.__waitingID):
+        if self.__waitingID:
             if self.__waitingRequestID is None:
                 self.__waitingRequestID = requestID
             elif requestID >= self.__waitingRequestID:

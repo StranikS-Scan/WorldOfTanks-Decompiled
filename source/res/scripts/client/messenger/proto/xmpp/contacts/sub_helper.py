@@ -159,12 +159,11 @@ class SubscriptionsRestrictions(object):
         tags = contact.getTags()
         if USER_TAG.SUB_APPROVED in tags:
             return (False, ClientContactError(CONTACT_ERROR_ID.FRIENDSHIP_APPROVED, contact.getFullName()))
-        if contact.getItemType() in XMPP_ITEM_TYPE.ROSTER_ITEMS:
+        elif contact.getItemType() in XMPP_ITEM_TYPE.ROSTER_ITEMS:
             if USER_TAG.SUB_FROM in contact.getTags():
                 return (False, ClientContactError(CONTACT_ERROR_ID.FRIENDSHIP_APPROVED, contact.getFullName()))
-            else:
-                return (True, None)
-        if contact.getItemType() in XMPP_ITEM_TYPE.SUB_PENDING_ITEMS:
+            return (True, None)
+        elif contact.getItemType() in XMPP_ITEM_TYPE.SUB_PENDING_ITEMS:
             if USER_TAG.SUB_IN_PROCESS in tags:
                 return (False, ClientContactError(CONTACT_ERROR_ID.FRIENDSHIP_RQ_PROCESS, contact.getFullName()))
             if USER_TAG.SUB_CANCELED in tags:

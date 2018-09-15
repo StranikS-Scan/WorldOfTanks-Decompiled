@@ -1,22 +1,27 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/__init__.py
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.framework import ViewSettings, ViewTypes, ScopeTemplates
+from gui.Scaleform.framework import ConditionalViewSettings, ViewTypes, ScopeTemplates
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
 from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDLER_TYPE
 from gui.app_loader.settings import APP_NAME_SPACE
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.events import LoadEvent
+from gui.Scaleform.daapi.view.bootcamp.component_override import BootcampComponentOverride
 
 def getContextMenuHandlers():
-    from gui.Scaleform.daapi.view.lobby.techtree import research_cm_handlers
-    return ((CONTEXT_MENU_HANDLER_TYPE.RESEARCH_VEHICLE, research_cm_handlers.ResearchVehicleContextMenuHandler), (CONTEXT_MENU_HANDLER_TYPE.RESEARCH_ITEM, research_cm_handlers.ResearchItemContextMenuHandler))
+    from gui.Scaleform.daapi.view.lobby.techtree.research_cm_handlers import ResearchVehicleContextMenuHandler, ResearchItemContextMenuHandler
+    from gui.Scaleform.daapi.view.bootcamp.bootcamp_cm_handlers import BCResearchVehicleContextMenuHandler
+    from gui.Scaleform.daapi.view.bootcamp.bootcamp_cm_handlers import BCResearchItemContextMenuHandler
+    return ((CONTEXT_MENU_HANDLER_TYPE.RESEARCH_VEHICLE, BootcampComponentOverride(ResearchVehicleContextMenuHandler, BCResearchVehicleContextMenuHandler)), (CONTEXT_MENU_HANDLER_TYPE.RESEARCH_ITEM, BootcampComponentOverride(ResearchItemContextMenuHandler, BCResearchItemContextMenuHandler)))
 
 
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.techtree.Research import Research
     from gui.Scaleform.daapi.view.lobby.techtree.TechTree import TechTree
-    return (ViewSettings(VIEW_ALIAS.LOBBY_TECHTREE, TechTree, 'techtree.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_TECHTREE, ScopeTemplates.DEFAULT_SCOPE, True), ViewSettings(VIEW_ALIAS.LOBBY_RESEARCH, Research, 'research.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_RESEARCH, ScopeTemplates.DEFAULT_SCOPE, True))
+    from gui.Scaleform.daapi.view.bootcamp.BCTechTree import BCTechTree
+    from gui.Scaleform.daapi.view.bootcamp.BCResearch import BCResearch
+    return (ConditionalViewSettings(VIEW_ALIAS.LOBBY_TECHTREE, BootcampComponentOverride(TechTree, BCTechTree), 'techtree.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.LOBBY_TECHTREE, ScopeTemplates.DEFAULT_SCOPE, True), ConditionalViewSettings(VIEW_ALIAS.LOBBY_RESEARCH, BootcampComponentOverride(Research, BCResearch), 'research.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.LOBBY_RESEARCH, ScopeTemplates.DEFAULT_SCOPE, True))
 
 
 def getBusinessHandlers():

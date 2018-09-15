@@ -233,9 +233,6 @@ class TmpBlockItem(ContactItem):
     def getItemType(cls):
         return XMPP_ITEM_TYPE.TMP_BLOCK_ITEM
 
-    def isOnline(self, isOnlineInBW=False):
-        return super(TmpBlockItem, self).isOnline(isOnlineInBW)
-
     def setTrusted(self, value):
         super(TmpBlockItem, self).setTrusted(value)
         if not self._trusted:

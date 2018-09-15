@@ -106,7 +106,7 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         """
         super(StoreComponent, self)._dispose()
         self.__clearTableData()
-        while len(self.__nations):
+        while self.__nations:
             self.__nations.pop()
 
         self.__nations = None
@@ -190,7 +190,7 @@ class StoreComponent(LobbySubView, StoreComponentMeta):
         """
         Set nations into Flash
         """
-        while len(self.__nations):
+        while self.__nations:
             self.__nations.pop()
 
         for name in GUI_NATIONS:

@@ -3,18 +3,18 @@
 import operator
 import BigWorld
 from debug_utils import LOG_DEBUG
-from items import tankmen, ITEM_TYPES
-from helpers import i18n
 from gui.shared.gui_items.processors import Processor, makeI18nError, makeI18nSuccess, plugins
-from potapov_quests import PQ_BRANCH
+from helpers import i18n
+from items import tankmen, ITEM_TYPES
+from personal_missions import PM_BRANCH
 
-class _PotapovQuestsSelect(Processor):
+class _PersonalMissionsSelect(Processor):
 
-    def __init__(self, potapovQuestItems, events_cache, questBranch):
-        self.__quests = potapovQuestItems
+    def __init__(self, personalMissions, events_cache, questBranch):
+        self.__quests = personalMissions
         self.__questBranch = questBranch
-        deselectedQuests = set(events_cache.getSelectedQuests().values()).difference(set(potapovQuestItems))
-        super(_PotapovQuestsSelect, self).__init__((plugins.PotapovQuestValidator(potapovQuestItems), self._getLockedByVehicleValidator(deselectedQuests)))
+        deselectedQuests = set(events_cache.getSelectedQuests().values()).difference(set(personalMissions))
+        super(_PersonalMissionsSelect, self).__init__((plugins.PersonalMissionValidator(personalMissions), self._getLockedByVehicleValidator(deselectedQuests)))
 
     @staticmethod
     def _getLockedByVehicleValidator(quests):
@@ -25,7 +25,7 @@ class _PotapovQuestsSelect(Processor):
 
     def _errorHandler(self, code, errStr='', ctx=None):
         errorI18nKey = '%s/server_error' % self._getMessagePrefix()
-        if len(errStr):
+        if errStr:
             errorI18nKey = '%s/%s' % (errorI18nKey, errStr)
         return makeI18nError(errorI18nKey, questNames=', '.join(self._getQuestsNames()))
 
@@ -34,8 +34,8 @@ class _PotapovQuestsSelect(Processor):
 
     def _request(self, callback):
         questIDs = self._getQuestsData(methodcaller=operator.methodcaller('getID'))
-        LOG_DEBUG('Make server request to select potapov quests', questIDs)
-        BigWorld.player().selectPotapovQuests(questIDs, self.__questBranch, lambda code, errStr: self._response(code, callback, errStr=errStr))
+        LOG_DEBUG('Make server request to select personal mission', questIDs)
+        BigWorld.player().selectPersonalMissions(questIDs, self.__questBranch, lambda code, errStr: self._response(code, callback, errStr=errStr))
 
     def _getQuestsData(self, methodcaller):
         return [ methodcaller(q) for q in self.__quests ]
@@ -44,12 +44,12 @@ class _PotapovQuestsSelect(Processor):
         return self._getQuestsData(methodcaller=operator.methodcaller('getUserName'))
 
 
-class PotapovQuestSelect(_PotapovQuestsSelect):
+class PersonalMissionSelect(_PersonalMissionsSelect):
 
     def __init__(self, quest, events_cache, questsBranch):
         quests, oldQuest = self._removeFromSameChain(events_cache.getSelectedQuests().values(), quest)
-        super(PotapovQuestSelect, self).__init__(quests, events_cache, questsBranch)
-        self.addPlugins([plugins.PotapovQuestSlotsValidator(events_cache.questsProgress, removedCount=int(oldQuest is not None)), plugins.PotapovQuestSelectConfirmator(quest, oldQuest, isEnabled=oldQuest is not None)])
+        super(PersonalMissionSelect, self).__init__(quests, events_cache, questsBranch)
+        self.addPlugins([plugins.PersonalMissionSlotsValidator(events_cache.questsProgress, removedCount=int(oldQuest is not None)), plugins.PersonalMissionSelectConfirmator(quest, oldQuest, isEnabled=oldQuest is not None and oldQuest != quest)])
         return
 
     def _getMessagePrefix(self):
@@ -66,32 +66,32 @@ class PotapovQuestSelect(_PotapovQuestsSelect):
         return (result, removedQuest)
 
 
-class RandomQuestSelect(PotapovQuestSelect):
+class RandomQuestSelect(PersonalMissionSelect):
 
     def __init__(self, quest, events_cache):
-        super(RandomQuestSelect, self).__init__(quest, events_cache, PQ_BRANCH.REGULAR)
+        super(RandomQuestSelect, self).__init__(quest, events_cache, PM_BRANCH.REGULAR)
 
     @staticmethod
     def _getLockedByVehicleValidator(quests):
-        return plugins.PotapovQuestsLockedByVehicle(quests)
+        return plugins.PersonalMissionsLockedByVehicle(quests)
 
 
-class FalloutQuestSelect(PotapovQuestSelect):
+class FalloutQuestSelect(PersonalMissionSelect):
 
     def __init__(self, quest, events_cache):
-        super(FalloutQuestSelect, self).__init__(quest, events_cache, PQ_BRANCH.FALLOUT)
+        super(FalloutQuestSelect, self).__init__(quest, events_cache, PM_BRANCH.FALLOUT)
 
     @staticmethod
     def _getLockedByVehicleValidator(quests):
-        return plugins.PotapovQuestsLockedByVehicle(quests, messageKeyPrefix='fallout/')
+        return plugins.PersonalMissionsLockedByVehicle(quests, messageKeyPrefix='fallout/')
 
 
-class _PotapovQuestRefuse(_PotapovQuestsSelect):
+class _PersonalMissionRefuse(_PersonalMissionsSelect):
 
     def __init__(self, quest, events_cache, questBranch):
         selectedQuests = events_cache.getSelectedQuests()
         selectedQuests.pop(quest.getID(), None)
-        super(_PotapovQuestRefuse, self).__init__(selectedQuests.values(), events_cache, questBranch)
+        super(_PersonalMissionRefuse, self).__init__(selectedQuests.values(), events_cache, questBranch)
         return
 
     def _successHandler(self, code, ctx=None):
@@ -106,34 +106,34 @@ class _PotapovQuestRefuse(_PotapovQuestsSelect):
         pass
 
 
-class RandomQuestRefuse(_PotapovQuestRefuse):
+class RandomQuestRefuse(_PersonalMissionRefuse):
 
     def __init__(self, quest, events_cache):
-        super(RandomQuestRefuse, self).__init__(quest, events_cache, PQ_BRANCH.REGULAR)
+        super(RandomQuestRefuse, self).__init__(quest, events_cache, PM_BRANCH.REGULAR)
 
     @staticmethod
     def _getLockedByVehicleValidator(quests):
-        return plugins.PotapovQuestsLockedByVehicle(quests)
+        return plugins.PersonalMissionsLockedByVehicle(quests)
 
 
-class FalloutQuestRefuse(_PotapovQuestRefuse):
+class FalloutQuestRefuse(_PersonalMissionRefuse):
 
     def __init__(self, quest, events_cache):
-        super(FalloutQuestRefuse, self).__init__(quest, events_cache, PQ_BRANCH.FALLOUT)
+        super(FalloutQuestRefuse, self).__init__(quest, events_cache, PM_BRANCH.FALLOUT)
 
     @staticmethod
     def _getLockedByVehicleValidator(quests):
-        return plugins.PotapovQuestsLockedByVehicle(quests, messageKeyPrefix='fallout/')
+        return plugins.PersonalMissionsLockedByVehicle(quests, messageKeyPrefix='fallout/')
 
 
-class _PotapovQuestsGetReward(Processor):
+class _PersonalMissionsGetReward(Processor):
 
-    def __init__(self, potapovQuestItem, needTankman, nationID, inNationID, role):
-        plugs = [plugins.PotapovQuestValidator([potapovQuestItem]), plugins.PotapovQuestRewardValidator(potapovQuestItem)]
+    def __init__(self, personalMission, needTankman, nationID, inNationID, role):
+        plugs = [plugins.PersonalMissionRewardValidator(personalMission)]
         if needTankman:
             plugs.insert(0, plugins.VehicleCrewLockedValidator(self.itemsCache.items.getItem(ITEM_TYPES.vehicle, nationID, inNationID)))
-        super(_PotapovQuestsGetReward, self).__init__(tuple(plugs))
-        self.__quest = potapovQuestItem
+        super(_PersonalMissionsGetReward, self).__init__(tuple(plugs))
+        self.__quest = personalMission
         self.__nationID = nationID
         self.__inNationID = inNationID
         self.__role = role
@@ -145,24 +145,42 @@ class _PotapovQuestsGetReward(Processor):
     def _errorHandler(self, code, errStr='', ctx=None):
         return makeI18nError('%s/server_error/%s' % (self._getMessagePrefix(), errStr), defaultSysMsgKey='%s/server_error' % self._getMessagePrefix())
 
-    def _successHandler(self, code, ctx=None):
-        return makeI18nSuccess('%s/success' % self._getMessagePrefix())
-
     def _request(self, callback):
         LOG_DEBUG('Make server request to get reward', self.__quest, self.__needTankman, self.__nationID, self.__inNationID, self.__role)
-        BigWorld.player().getPotapovQuestReward(self.__quest.getID(), self.__quest.getQuestBranch(), self.__needTankman, self.__nationID, self.__inNationID, tankmen.SKILL_INDICES[self.__role], lambda code, errStr: self._response(code, callback, errStr=errStr))
+        BigWorld.player().getPersonalMissionReward(self.__quest.getID(), self.__quest.getQuestBranch(), self.__needTankman, self.__nationID, self.__inNationID, tankmen.SKILL_INDICES[self.__role], lambda code, errStr: self._response(code, callback, errStr=errStr))
 
 
-class PotapovQuestsGetTankwomanReward(_PotapovQuestsGetReward):
+class PersonalMissionsGetTankwomanReward(_PersonalMissionsGetReward):
 
-    def __init__(self, potapovQuestItem, nationID, inNationID, role):
-        super(PotapovQuestsGetTankwomanReward, self).__init__(potapovQuestItem, True, nationID, inNationID, role)
+    def __init__(self, personalMission, nationID, inNationID, role):
+        super(PersonalMissionsGetTankwomanReward, self).__init__(personalMission, True, nationID, inNationID, role)
 
     def _getMessagePrefix(self):
         pass
 
 
-class PotapovQuestsGetRegularReward(_PotapovQuestsGetReward):
+class PersonalMissionsGetRegularReward(_PersonalMissionsGetReward):
 
-    def __init__(self, potapovQuestItem):
-        super(PotapovQuestsGetRegularReward, self).__init__(potapovQuestItem, False, 0, 0, 'commander')
+    def __init__(self, personalMission):
+        super(PersonalMissionsGetRegularReward, self).__init__(personalMission, False, 0, 0, 'commander')
+
+
+class PersonalMissionPawn(Processor):
+
+    def __init__(self, personalMission):
+        plugs = (plugins.PersonalMissionPawnConfirmator(personalMission), plugins.PersonalMissionPawnValidator([personalMission]), plugins.PersonalMissionFreeTokensValidator(personalMission))
+        super(PersonalMissionPawn, self).__init__(plugs)
+        self.__quest = personalMission
+
+    def _getMessagePrefix(self):
+        pass
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('%s/server_error/%s' % (self._getMessagePrefix(), errStr), defaultSysMsgKey='%s/server_error' % self._getMessagePrefix())
+
+    def _successHandler(self, code, ctx=None):
+        return makeI18nSuccess('%s/success' % self._getMessagePrefix(), questName=self.__quest.getShortUserName(), count=self.__quest.getPawnCost())
+
+    def _request(self, callback):
+        LOG_DEBUG('Make server request to pawn quest', self.__quest)
+        BigWorld.player().pawnFreeAwardList(self.__quest.getType(), self.__quest.getID(), lambda code: self._response(code, callback))

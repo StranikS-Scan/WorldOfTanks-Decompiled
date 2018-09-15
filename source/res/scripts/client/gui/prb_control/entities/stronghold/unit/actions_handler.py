@@ -22,9 +22,6 @@ class StrongholdActionsHandler(UnitActionsHandler):
             g_eventDispatcher.setUnitProgressInCarousel(prbType, True)
         return FUNCTIONAL_FLAG.LOAD_WINDOW
 
-    def executeFini(self):
-        super(StrongholdActionsHandler, self).executeFini()
-
     def _canDoAutoSearch(self, unit, stats):
         return False
 

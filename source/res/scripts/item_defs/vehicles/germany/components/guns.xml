@@ -111,6 +111,7 @@
     <_30mm_MK103A>	125	</_30mm_MK103A>
     <_128mm_L50P>	127	</_128mm_L50P>
     <_128mm_K44_2_L61_WT>	128	</_128mm_K44_2_L61_WT>
+    <_105mm_BK_L7>	129	</_105mm_BK_L7>
     <_20mm_KwK_30_bot>	244	</_20mm_KwK_30_bot>
     <_37mm_KwK_L46_bot>	245	</_37mm_KwK_L46_bot>
     <Gun_Env_Artillery>	248	</Gun_Env_Artillery>
@@ -5533,6 +5534,64 @@
         </_105mm_HE_M68M2>
       </shots>
     </_105mm_BK_L7A3_L51>
+    <_105mm_BK_L7>
+      <userString>	#germany_vehicles:_105mm_BK_L7	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	290000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.48	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	7.5	</reloadTime>
+      <maxAmmo>	72	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	1282	</weight>
+      <maxHealth>	208	</maxHealth>
+      <maxRegenHealth>	104	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.05	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_105mm_APCR_M68M2>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1478	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	268 258	</piercingPower>
+        </_105mm_APCR_M68M2>
+        <_105mm_HEAT-T_T384E4>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1173	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	330 330	</piercingPower>
+        </_105mm_HEAT-T_T384E4>
+        <_105mm_HE_M68M2>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1173	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	53 53	</piercingPower>
+        </_105mm_HE_M68M2>
+      </shots>
+    </_105mm_BK_L7>
     <_105mm_KwK46_L68>
       <userString>	#germany_vehicles:_105mm_KwK46_L68	</userString>
       <tags></tags>

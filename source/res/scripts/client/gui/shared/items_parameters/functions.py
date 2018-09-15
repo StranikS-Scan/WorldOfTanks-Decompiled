@@ -35,11 +35,7 @@ def extractCrewDescrs(vehicle, replaceNone=True):
             tankmanDescr = createFakeTankmanDescr(role, vehicleDescr.type)
         crewCompactDescrs.append(tankmanDescr)
 
-    if replaceNone:
-        return crewCompactDescrs
-    else:
-        return (crewCompactDescrs, emptySlots, otherVehicleSlots)
-        return
+    return crewCompactDescrs if replaceNone else (crewCompactDescrs, emptySlots, otherVehicleSlots)
 
 
 def createFakeTankmanDescr(role, vehicleType, roleLevel=100):

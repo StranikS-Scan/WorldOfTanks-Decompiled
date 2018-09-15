@@ -19,6 +19,26 @@ _MARKER_FLAG = aih_constants.GUN_MARKER_FLAG
 _SHOT_RESULT = aih_constants.SHOT_RESULT
 _BINDING_ID = aih_global_binding.BINDING_ID
 _IS_EXTENDED_GUN_MARKER_ENABLED = True
+_MIN_PIERCING_DIST = 100.0
+_MAX_PIERCING_DIST = 500.0
+_LERP_RANGE_PIERCING_DIST = _MAX_PIERCING_DIST - _MIN_PIERCING_DIST
+_BASE_PIERCING_PERCENT = 100.0
+
+def _computePiercingPowerAtDistImpl(dist, maxDist, p100, p500):
+    if dist <= _MIN_PIERCING_DIST:
+        return p100
+    if dist < maxDist:
+        power = p100 + (p500 - p100) * (dist - _MIN_PIERCING_DIST) / _LERP_RANGE_PIERCING_DIST
+        if power > 0.0:
+            return power
+        return 0.0
+
+
+def _computePiercingPowerRandomizationImpl(piercingPowerRandomization, min, max):
+    minPP = _BASE_PIERCING_PERCENT * (1.0 - piercingPowerRandomization * min)
+    maxPP = _BASE_PIERCING_PERCENT * (1.0 + piercingPowerRandomization * max)
+    return (minPP, maxPP)
+
 
 def useServerGunMarker():
     """ Is server's gun marker used.
@@ -141,28 +161,13 @@ class _CrosshairShotResults(object):
 
     @classmethod
     def _computePiercingPowerAtDist(cls, ppDesc, dist, maxDist):
-        if constants.IS_BOOTCAMP_ENABLED:
-            from bootcamp.Bootcamp import g_bootcamp
-            if g_bootcamp.isRunning():
-                bootcampPP = g_bootcamp.getPredefinedPiercingPower()
-                if bootcampPP:
-                    return bootcampPP
         p100, p500 = ppDesc
-        if dist <= 100.0:
-            return p100
-        return max(0.0, p100 + (p500 - p100) * (dist - 100.0) / 400.0) if dist < maxDist else 0.0
+        return _computePiercingPowerAtDistImpl(dist, maxDist, p100, p500)
 
     @classmethod
     def _computePiercingPowerRandomization(cls, shell):
-        if constants.IS_BOOTCAMP_ENABLED:
-            from bootcamp.Bootcamp import g_bootcamp
-            if g_bootcamp.isRunning():
-                if g_bootcamp.getPredefinedPiercingPower():
-                    return (100.0, 100.0)
         piercingPowerRandomization = shell.piercingPowerRandomization
-        minPP = 100.0 * (1.0 - piercingPowerRandomization * cls._PP_RANDOM_ADJUSTMENT_MIN)
-        maxPP = 100.0 * (1.0 + piercingPowerRandomization * cls._PP_RANDOM_ADJUSTMENT_MAX)
-        return (minPP, maxPP)
+        return _computePiercingPowerRandomizationImpl(piercingPowerRandomization, cls._PP_RANDOM_ADJUSTMENT_MIN, cls._PP_RANDOM_ADJUSTMENT_MAX)
 
     @classmethod
     def _shouldRicochet(cls, shellKind, hitAngleCos, matInfo, caliber):
@@ -473,11 +478,10 @@ class _GunMarkersDecorator(IGunMarkerController):
     def getPosition(self, markerType=_MARKER_TYPE.CLIENT):
         if markerType == _MARKER_TYPE.CLIENT:
             return self.__clientMarker.getPosition()
-        elif markerType == _MARKER_TYPE.SERVER:
+        if markerType == _MARKER_TYPE.SERVER:
             return self.__serverMarker.getPosition()
-        else:
-            LOG_UNEXPECTED('Gun maker control is not found by type', markerType)
-            return Math.Vector3()
+        LOG_UNEXPECTED('Gun maker control is not found by type', markerType)
+        return Math.Vector3()
 
     def setPosition(self, position, markerType=_MARKER_TYPE.CLIENT):
         if markerType == _MARKER_TYPE.CLIENT:

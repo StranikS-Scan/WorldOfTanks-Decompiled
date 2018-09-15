@@ -23,10 +23,7 @@ def getForbiddenPeriods(hours, formatter=None):
     guiData = []
 
     def _formatPeriod(fromHour, endHour):
-        if formatter:
-            return formatter(fromHour, endHour)
-        else:
-            return (fromHour, endHour)
+        return formatter(fromHour, endHour) if formatter else (fromHour, endHour)
 
     if hours:
         currRange = None

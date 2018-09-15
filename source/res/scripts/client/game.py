@@ -99,8 +99,8 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         ArenaType.init()
         import dossiers2
         dossiers2.init()
-        import potapov_quests
-        potapov_quests.init()
+        import personal_missions
+        personal_missions.init()
         import motivation_quests
         motivation_quests.init()
         BigWorld.worldDrawEnabled(False)
@@ -482,7 +482,8 @@ _PYTHON_MACROS = {'p': 'BigWorld.player()',
  'clan': 'from gui.shared.ClanCache import g_clanCache; clan = g_clanCache',
  'camera': 'BigWorld.player().inputHandler.ctrl',
  'rankedCtrl': 'from helpers import dependency; from skeletons.gui.game_control import IRankedBattlesController;rc = dependency.instance(IRankedBattlesController)',
- 'eventsCache': 'from helpers import dependency; from skeletons.gui.server_events import IEventsCache;ec = dependency.instance(IEventsCache)'}
+ 'eventsCache': 'from helpers import dependency; from skeletons.gui.server_events import IEventsCache;ec = dependency.instance(IEventsCache)',
+ 'items': 'from helpers import dependency; from skeletons.gui.shared import IItemsCache;items = dependency.instance(IItemsCache).items'}
 
 def expandMacros(line):
     import re

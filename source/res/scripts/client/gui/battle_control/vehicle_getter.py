@@ -11,8 +11,8 @@ def hasTurretRotator(vDesc):
     else:
         result = True
         tags = vDesc.type.tags
-        if tags & {'SPG', 'AT-SPG'} and vDesc.gun.turretYawLimits is not None:
-            if len(vDesc.hull.fakeTurrets.get('battle', ())) > 0:
+        if tags & {'SPG', 'AT-SPG'}:
+            if vDesc.gun.turretYawLimits is not None and vDesc.hull.fakeTurrets.get('battle', ()):
                 result = False
         return result
 
@@ -91,7 +91,7 @@ class TankmenStatesIterator(object):
         return self
 
     def next(self):
-        if len(self._rolesEnum):
+        if self._rolesEnum:
             role = self._rolesEnum.pop(0)
             if role in self._mainRoles:
                 state = self._states[role]
@@ -116,16 +116,15 @@ class VehicleDeviceStatesIterator(object):
         return self
 
     def next(self):
-        if len(self._devices):
+        if self._devices:
             name = self._devices.pop(0)
             if name == 'turretRotator' and not self._hasTurret:
                 return (name, None)
-            else:
-                return (name, self._states[name])
+            return (name, self._states[name])
         else:
             self._states.clear()
             raise StopIteration()
-        return None
+            return None
 
     def clear(self):
         self._states.clear()

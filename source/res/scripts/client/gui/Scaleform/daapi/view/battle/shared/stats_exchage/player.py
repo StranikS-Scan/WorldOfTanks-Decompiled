@@ -57,13 +57,9 @@ class UserTagsItemData(broker.VehicleComponent):
             tags = self._ctx.getUserTags(self._accountDBID, self._igrType)
         else:
             tags = self._ctx.addTagByIGRType(self._tags, self._igrType)
-        if forced or tags:
-            return {'isEnemy': self._isEnemy,
-             'vehicleID': self._vehicleID,
-             'userTags': tags}
-        else:
-            return {}
-            return
+        return {'isEnemy': self._isEnemy,
+         'vehicleID': self._vehicleID,
+         'userTags': tags} if forced or tags else {}
 
     def addVehicleInfo(self, vInfoVO):
         playerVO = vInfoVO.player

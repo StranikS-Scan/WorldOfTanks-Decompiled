@@ -62,7 +62,7 @@ class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
     def unloadTankman(self):
         tankman = self.itemsCache.items.getTankman(self._tankmanID)
         result = yield TankmanUnload(g_currentVehicle.item, tankman.vehicleSlotIdx).request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def _generateOptions(self, ctx=None):
@@ -111,12 +111,6 @@ class TechnicalMaintenanceCMHandler(AbstractContextMenuHandler, EventSystemEntit
 
 class SimpleVehicleCMHandler(AbstractContextMenuHandler, EventSystemEntity):
     itemsCache = dependency.descriptor(IItemsCache)
-
-    def __init__(self, cmProxy, ctx=None, handlers=None):
-        super(SimpleVehicleCMHandler, self).__init__(cmProxy, ctx, handlers)
-
-    def fini(self):
-        super(SimpleVehicleCMHandler, self).fini()
 
     def getVehCD(self):
         raise NotImplementedError

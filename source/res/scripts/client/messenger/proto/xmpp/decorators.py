@@ -33,11 +33,7 @@ def _validateGroupName(name):
 
 
 def _validateOptionalGroupName(name):
-    if name is not None:
-        return _validateGroupName(name)
-    else:
-        return
-        return
+    return _validateGroupName(name) if name is not None else None
 
 
 def _validateNoteText(note):
@@ -62,11 +58,10 @@ class local_query(ClientHolder):
 
         def wrapper(*args, **kwargs):
             error = self._validate(*args)
-            if not error:
-                return func(*args, **kwargs)
-            else:
+            if error:
                 LOG_WARNING('Request is invalid', func.__name__, error)
                 return (False, error)
+            return func(*args, **kwargs)
 
         return wrapper
 

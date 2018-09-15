@@ -72,12 +72,12 @@ class UsersInfoController(RequestsController):
         return None
 
     def requestNicknames(self, accountDbIDs, callback):
-        while len(accountDbIDs):
+        while accountDbIDs:
             self.request(_GetNicknamesCtx(accountDbIDs[:_NAMES_MAX_CHUNK_SIZE]), callback, allowDelay=True)
             del accountDbIDs[:_NAMES_MAX_CHUNK_SIZE]
 
     def requestGlobalRatings(self, accountDbIDs, callback):
-        while len(accountDbIDs):
+        while accountDbIDs:
             self.request(_GetGlobalRatingCtx(accountDbIDs[:_GR_MAX_CHUNK_SIZE]), callback, allowDelay=True)
             del accountDbIDs[:_GR_MAX_CHUNK_SIZE]
 

@@ -8,10 +8,19 @@
         <postBattle>
           <and>
             <results>
+              <title>
+                <key>	#personal_missions_details:quest_3_4_11_condition_title_damageDealt	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_common_condition_description_empty	</key>
+              </description>
               <key>	damageDealt	</key>
               <greaterOrEqual>	3000	</greaterOrEqual>
             </results>
             <results>
+              <description>
+                <key>	#personal_missions_details:quest_common_condition_description_total_top_1_damage	</key>
+              </description>
               <key>	damageDealt	</key>
               <max>	1	</max>
               <total></total>
@@ -21,6 +30,36 @@
       </conditions>
       <bonus>
         <freeXP>	2000	</freeXP>
+        <token>
+          <id>	token:pt:final:s1:t3:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_4_11_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_3_4_11_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	2000	</freeXP>
+        <token>
+          <id>	token:pt:final:s1:t3:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
       </bonus>
     </potapovQuest>
     <potapovQuest>
@@ -28,6 +67,55 @@
       <id>	regular_3_4_11_add	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <title>
+                <key>	#personal_missions_details:quest_3_4_11_condition_title_damageDealt	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_common_condition_description_empty	</key>
+              </description>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	3000	</greaterOrEqual>
+            </results>
+            <results>
+              <description>
+                <key>	#personal_missions_details:quest_common_condition_description_total_top_1_damage	</key>
+              </description>
+              <key>	damageDealt	</key>
+              <max>	1	</max>
+              <total></total>
+            </results>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <slots>	1	</slots>
+        <token>
+          <id>	token:pt:final:s1:t3:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_4_11_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_3_4_11_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
         <postBattle>
           <and>
             <results>
@@ -44,7 +132,11 @@
         </postBattle>
       </conditions>
       <bonus>
-        <slots>	1	</slots>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
       </bonus>
     </potapovQuest>
   </quests>

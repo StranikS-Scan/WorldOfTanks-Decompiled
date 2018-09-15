@@ -111,8 +111,11 @@ class ActionModifier(object):
 
         return self.__cachedValue
 
-    def packDiscounts(self):
+    def packDiscounts(self, sorting=True):
         """Grab all discounts obj for current modifier
+        :param sorting: if value equals True than list should be sorted,
+            otherwise - do not sort list of discounts. For example, if user finds
+            max discount, sorting is pointless.
         """
         return {}
 
@@ -231,7 +234,7 @@ class _BuyPriceMul(_PriceOpAbstract):
 class _RentPriceMul(_PriceOpAbstract):
 
     def _getDiscountParams(self, item, value):
-        if len(item.rentPackages) > 0:
+        if item.rentPackages:
             defaultRentPrice = item.rentPackages[0].get('defaultRentPrice', MONEY_UNDEFINED)
             for currency in Currency.BY_WEIGHT:
                 setValue = defaultRentPrice.get(currency)
@@ -248,9 +251,8 @@ class _SellPriceMul(_PriceOpAbstract):
         if item.buyPrices.itemPrice.price.isSet(Currency.GOLD):
             if isForGold:
                 return (int(item.buyPrices.itemPrice.price.gold * float(value)), _DT.GOLD)
-            else:
-                creditsPrice = item.buyPrices.itemPrice.price.gold * self.itemsCache.items.shop.exchangeRate
-                return (int(creditsPrice * float(value)), _DT.CREDITS)
+            creditsPrice = item.buyPrices.itemPrice.price.gold * self.itemsCache.items.shop.exchangeRate
+            return (int(creditsPrice * float(value)), _DT.CREDITS)
         return (int(item.buyPrices.itemPrice.price.getSignValue(Currency.CREDITS) * float(value)), _DT.CREDITS)
 
 
@@ -259,9 +261,12 @@ class _ItemsPrice(_DiscountsListAction, _PriceOpAbstract):
     def __init__(self, name, params, modType=ACTION_MODIFIER_TYPE.DISCOUNT, section=ACTION_SECTION_TYPE.ITEM, itemType=None):
         super(_ItemsPrice, self).__init__(name, params, modType, section, itemType)
 
-    def packDiscounts(self):
+    def packDiscounts(self, sorting=True):
         result = {}
-        for item, value in sorted(self.parse().iteritems(), key=operator.itemgetter(0)):
+        items = self.parse().iteritems()
+        if sorting:
+            items = sorted(items, key=operator.itemgetter(0))
+        for item, value in items:
             dv, dt = self._getDiscountParams(item, value)
             result[item.intCD] = _ActionDiscountValue(discountName=item, discountValue=dv, discountType=_DT.PERCENT)
 
@@ -302,7 +307,6 @@ class _SplitByCurrency(ActionModifier):
             return '/'.join([itemName, self._paramName])
         else:
             return self.getName()
-            return
 
     def getDefaultParamValue(self):
         return None
@@ -316,9 +320,12 @@ class _ItemsPriceAll(ActionModifier):
     def __init__(self, name, params, modType=ACTION_MODIFIER_TYPE.DISCOUNT, section=ACTION_SECTION_TYPE.ALL, itemType=None):
         super(_ItemsPriceAll, self).__init__(name, params, modType, section, itemType)
 
-    def packDiscounts(self):
+    def packDiscounts(self, sorting=True):
         result = {}
-        for (_, item), value in sorted(self.parse().iteritems(), key=operator.itemgetter(0)):
+        items = self.parse().iteritems()
+        if sorting:
+            items = sorted(items, key=operator.itemgetter(0))
+        for (_, item), value in items:
             result[item.intCD] = _ActionDiscountValue(discountName=item, discountValue=int(round((1 - float(value)) * 100)), discountType=_DT.PERCENT)
 
         return result
@@ -375,9 +382,12 @@ class _VehiclePrice(_ItemsPrice):
     def __init__(self, name, params, modType=ACTION_MODIFIER_TYPE.DISCOUNT, section=ACTION_SECTION_TYPE.ITEM):
         super(_VehiclePrice, self).__init__(name, params, modType, section, GUI_ITEM_TYPE.VEHICLE)
 
-    def packDiscounts(self):
+    def packDiscounts(self, sorting=True):
         result = {}
-        for v, value in sorted(self.parse().iteritems(), key=operator.itemgetter(0)):
+        items = self.parse().iteritems()
+        if sorting:
+            items = sorted(items, key=operator.itemgetter(0))
+        for v, value in items:
             dv, dt = self._getDiscountParams(v, value)
             dt = dt if self.getType() == ACTION_MODIFIER_TYPE.SELLING else _DT.PERCENT
             result[v.intCD] = _ActionDiscountValue(discountName=v, discountValue=dv, discountType=dt)
@@ -408,9 +418,12 @@ class _VehicleRentPrice(_VehiclePrice):
     def __init__(self, name, params, modType=ACTION_MODIFIER_TYPE.RENT, section=ACTION_SECTION_TYPE.ITEM):
         super(_VehicleRentPrice, self).__init__(name, params, modType=modType, section=section)
 
-    def packDiscounts(self):
+    def packDiscounts(self, sorting=True):
         res = {}
-        for (vehicle, package), value in sorted(self.parse().iteritems(), key=operator.itemgetter(0)):
+        items = self.parse().iteritems()
+        if sorting:
+            items = sorted(items, key=operator.itemgetter(0))
+        for (vehicle, package), value in items:
             dv, _ = self._getDiscountParams(vehicle, value)
             res[vehicle.intCD, package] = _ActionDiscountValue(discountName=vehicle, discountValue=dv, discountType=_DT.PERCENT)
 
@@ -493,6 +506,9 @@ class _ShellPrice(_ItemsPrice):
         return
 
 
+_ECONOMICS_SET_EXCLUDE_IN_GUI = ('dailyXPFactor', 'exchangeRateForShellsAndEqs')
+_ECONOMICS_SET_EXCLUDE_IN_PARCING = ('tradeInAllowedVehicleLevels', 'tradeInForbiddenVehicles', 'freeXPConversionDiscrecitydailyXPFactor')
+
 class EconomicsSet(ActionModifier):
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -500,7 +516,6 @@ class EconomicsSet(ActionModifier):
         super(EconomicsSet, self).__init__(name, params, ACTION_MODIFIER_TYPE.DISCOUNT)
         self._paramName = paramName
         self._paramValue = paramValue
-        self.__excludeInGui = ('dailyXPFactor', 'exchangeRateForShellsAndEqs')
         self.__handlers = {'premiumPacket1Cost': bwr(self.handlerPremiumPacket1),
          'premiumPacket3Cost': bwr(self.handlerPremiumPacket3),
          'premiumPacket7Cost': bwr(self.handlerPremiumPacket7),
@@ -540,7 +555,7 @@ class EconomicsSet(ActionModifier):
     def getParamValue(self):
         return self._paramValue
 
-    def packDiscounts(self):
+    def packDiscounts(self, sorting=True):
         """Calculate discount for specific step
         :return: _ActionDiscountValue
         """
@@ -564,7 +579,7 @@ class EconomicsSet(ActionModifier):
         """
         res = []
         for k, v in self._params.iteritems():
-            if k not in self.__excludeInGui:
+            if k not in _ECONOMICS_SET_EXCLUDE_IN_GUI:
                 obj = self.__class__(self.getName(), {k: v}, paramName=k, paramValue=v)
                 res.append(obj)
 
@@ -573,6 +588,8 @@ class EconomicsSet(ActionModifier):
     def _parse(self):
         result = {}
         for k, v in self._params.iteritems():
+            if k in _ECONOMICS_SET_EXCLUDE_IN_PARCING:
+                continue
             try:
                 result[k] = float(v)
             except ValueError as ex:
@@ -762,9 +779,12 @@ class CamouflagePriceMul(_VehiclePrice):
     def __init__(self, name, params):
         super(_VehiclePrice, self).__init__(name, params, section=ACTION_SECTION_TYPE.CUSTOMIZATION)
 
-    def packDiscounts(self):
+    def packDiscounts(self, sorting=True):
         result = {}
-        for vehicle, priceMult in sorted(self.parse().iteritems(), key=operator.itemgetter(0)):
+        items = self.parse().iteritems()
+        if sorting:
+            items = sorted(items, key=operator.itemgetter(0))
+        for vehicle, priceMult in items:
             result[vehicle.intCD] = _ActionDiscountValue(discountName=vehicle, discountValue=int(round((1 - priceMult) * 100)), discountType=_DT.PERCENT)
 
         return result
@@ -778,7 +798,7 @@ class EmblemPriceByGroupsMul(_DiscountsListAction):
     def __init__(self, name, params):
         super(EmblemPriceByGroupsMul, self).__init__(name, params, ACTION_MODIFIER_TYPE.DISCOUNT, ACTION_SECTION_TYPE.CUSTOMIZATION)
 
-    def packDiscounts(self):
+    def packDiscounts(self, sorting=True):
         result = {}
         groups, _, _ = vehicles.g_cache.playerEmblems()
         for groupName, priceMult in self.parse().iteritems():
@@ -897,9 +917,12 @@ class VehPriceSet(_VehiclePrice, _BuyPriceSet):
 class VehRentPriceSet(_VehicleRentPrice, _RentPriceSet):
     MAX_RENT_PACKAGES_COUNT = 6
 
-    def packDiscounts(self):
+    def packDiscounts(self, sorting=True):
         result = {}
-        for (vehicle, package), rentCost in sorted(self.parse().iteritems(), key=operator.itemgetter(0)):
+        items = self.parse().iteritems()
+        if sorting:
+            items = sorted(items, key=operator.itemgetter(0))
+        for (vehicle, package), rentCost in items:
             dv, dt = self._getRentDiscountParams(vehicle, package, rentCost)
             result[vehicle.intCD] = _ActionDiscountValue(discountName=vehicle, discountValue=dv, discountType=_DT.PERCENT)
 
@@ -997,9 +1020,12 @@ class VehSellPriceSet(_VehiclePrice, _SellPriceMul):
     def __init__(self, name, params):
         super(VehSellPriceSet, self).__init__(name, params, ACTION_MODIFIER_TYPE.SELLING)
 
-    def packDiscounts(self):
+    def packDiscounts(self, sorting=True):
         results = {}
-        for vehicle, value in sorted(self.parse().iteritems(), key=operator.itemgetter(0)):
+        items = self.parse().iteritems()
+        if sorting:
+            items = sorted(items, key=operator.itemgetter(0))
+        for vehicle, value in items:
             dv, dt = self._getDiscountParams(vehicle, value)
             results[vehicle.intCD] = _ActionDiscountValue(discountName=vehicle, discountValue=dv, discountType=dt)
 
@@ -1023,9 +1049,12 @@ class _BoosterPrice(_DiscountsListAction, _PriceOpAbstract):
     def __init__(self, name, params):
         super(_BoosterPrice, self).__init__(name, params, ACTION_MODIFIER_TYPE.DISCOUNT, ACTION_SECTION_TYPE.BOOSTER)
 
-    def packDiscounts(self):
+    def packDiscounts(self, sorting=True):
         result = {}
-        for item, value in sorted(self.parse().iteritems(), key=operator.itemgetter(0)):
+        items = self.parse().iteritems()
+        if sorting:
+            items = sorted(items, key=operator.itemgetter(0))
+        for item, value in items:
             dv, _ = self._getDiscountParams(item, value)
             result[item.boosterID] = _ActionDiscountValue(discountName=item, discountValue=dv, discountType=_DT.PERCENT)
 
@@ -1084,9 +1113,12 @@ class BoostersPriceAll(_ItemsPriceAll):
         criteria = _COMMON_CRITERIA | REQ_CRITERIA.BOOSTER.ENABLED
         return criteria
 
-    def packDiscounts(self):
+    def packDiscounts(self, sorting=True):
         result = {}
-        for (_, booster), value in sorted(self.parse().iteritems(), key=operator.itemgetter(0)):
+        items = self.parse().iteritems()
+        if sorting:
+            items = sorted(items, key=operator.itemgetter(0))
+        for (_, booster), value in items:
             result[booster.boosterID] = _ActionDiscountValue(discountName=booster, discountValue=int(round((1 - float(value)) * 100)), discountType=_DT.PERCENT)
 
         return result

@@ -9,7 +9,7 @@ from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
-_PLAYERS_PANEL_STATE_RANGE = (PLAYERS_PANEL_STATE.HIDEN,
+_PLAYERS_PANEL_STATE_RANGE = (PLAYERS_PANEL_STATE.HIDDEN,
  PLAYERS_PANEL_STATE.SHORT,
  PLAYERS_PANEL_STATE.MEDIUM,
  PLAYERS_PANEL_STATE.LONG,
@@ -21,19 +21,15 @@ class PlayerPanelStateSetting(object):
     @classmethod
     def read(cls):
         state = cls.settingsCore.getSetting(GAME.PLAYERS_PANELS_STATE)
-        if state in _PLAYERS_PANEL_STATE_RANGE:
-            return state
-        else:
-            return PLAYERS_PANEL_STATE.MEDIUM
+        return state if state in _PLAYERS_PANEL_STATE_RANGE else PLAYERS_PANEL_STATE.MEDIUM
 
     @classmethod
     def write(cls, state):
         if state in _PLAYERS_PANEL_STATE_RANGE:
             cls.settingsCore.applySetting(GAME.PLAYERS_PANELS_STATE, state)
             return True
-        else:
-            LOG_ERROR('State of players panel is invalid', state)
-            return False
+        LOG_ERROR('State of players panel is invalid', state)
+        return False
 
 
 class PlayersPanel(PlayersPanelMeta, IAbstractPeriodView):

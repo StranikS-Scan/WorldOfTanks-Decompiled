@@ -15,7 +15,7 @@ class StrategicAimingSystem(IAimingSystem):
     planePosition = property(lambda self: self._planePosition)
 
     def __init__(self, height, yaw):
-        IAimingSystem.__init__(self)
+        super(StrategicAimingSystem, self).__init__()
         self._matrix = mathUtils.createRotationMatrix((yaw, 0, 0))
         self._planePosition = Vector3(0, 0, 0)
         self.__camDist = 0.0

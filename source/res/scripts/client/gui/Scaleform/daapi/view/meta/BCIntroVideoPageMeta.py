@@ -7,8 +7,11 @@ class BCIntroVideoPageMeta(View):
     def videoFinished(self):
         self._printOverrideError('videoFinished')
 
-    def goNext(self):
-        self._printOverrideError('goNext')
+    def goToBattle(self):
+        self._printOverrideError('goToBattle')
+
+    def skipBootcamp(self):
+        self._printOverrideError('skipBootcamp')
 
     def handleError(self, data):
         self._printOverrideError('handleError')

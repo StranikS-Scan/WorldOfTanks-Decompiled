@@ -8,8 +8,7 @@ import zlib
 import base64
 from functools import partial
 from battle_results_shared import *
-from constants import IS_DEVELOPMENT
-from debug_utils import *
+from debug_utils import LOG_CURRENT_EXCEPTION
 import constants
 BATTLE_RESULTS_VERSION = 1
 CACHE_DIR = os.path.join(os.path.dirname(unicode(BigWorld.wg_getPreferencesFilePath() if not constants.IS_BOT else '.', 'utf-8', errors='ignore')), 'battle_results')

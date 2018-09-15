@@ -56,9 +56,6 @@ class LogInCtx(CommonClanRequestCtx):
 @ReprInjector.withParent()
 class LogOutCtx(CommonClanRequestCtx):
 
-    def __init__(self):
-        super(LogOutCtx, self).__init__()
-
     def getRequestType(self):
         return CLAN_REQUESTED_DATA_TYPE.LOGOUT
 
@@ -110,7 +107,7 @@ class ClanInfoCtx(_ClanRequestBaseCtx):
         return CLAN_REQUESTED_DATA_TYPE.CLAN_INFO
 
     def getDataObj(self, incomeData):
-        return makeTupleByDict(items.ClanExtInfoData, incomeData[0]) if incomeData is not None and len(incomeData) > 0 else items.ClanExtInfoData()
+        return makeTupleByDict(items.ClanExtInfoData, incomeData[0]) if incomeData else items.ClanExtInfoData()
 
     def getDefDataObj(self):
         return items.ClanExtInfoData()
@@ -411,9 +408,6 @@ class PaginatorCtx(CommonClanRequestCtx):
 @ReprInjector.withParent()
 class _BaseSearchClanContext(PaginatorCtx):
 
-    def __init__(self, offset, limit, getTotalCount=False, fields=None, waitingID=''):
-        super(_BaseSearchClanContext, self).__init__(offset, limit, getTotalCount, fields, waitingID)
-
     def getRequestType(self):
         raise NotImplementedError
 
@@ -424,9 +418,6 @@ class _BaseSearchClanContext(PaginatorCtx):
 
 @ReprInjector.withParent()
 class GetRecommendedClansCtx(_BaseSearchClanContext):
-
-    def __init__(self, offset, limit, getTotalCount=False, fields=None, waitingID=''):
-        super(GetRecommendedClansCtx, self).__init__(offset, limit, getTotalCount, fields, waitingID)
 
     def getRequestType(self):
         return CLAN_REQUESTED_DATA_TYPE.GET_RECOMMENDED_CLANS
@@ -841,7 +832,7 @@ class StrongholdRequestCtx(CommonClanRequestCtx):
     """
     Base context for all unit requests.
     """
-    __slots__ = '__unitMgrId'
+    __slots__ = ('__unitMgrId',)
 
     def __init__(self, unitMgrId=None, **kwargs):
         super(StrongholdRequestCtx, self).__init__(**kwargs)
@@ -862,9 +853,6 @@ class StrongholdRequestCtx(CommonClanRequestCtx):
 
 
 class StrongholdLeaveCtx(StrongholdRequestCtx):
-
-    def __init__(self, **kwargs):
-        super(StrongholdLeaveCtx, self).__init__(**kwargs)
 
     @classmethod
     def fromPrbCtx(cls, prbCtx, unitMgrId):
@@ -917,10 +905,7 @@ class StrongholdAssignCtx(StrongholdRequestCtx):
         return cls(pID, isRemove, slotIdx, unitMgrId=unitMgrId, waitingID=waitingID)
 
     def getRequestType(self):
-        if not self.__isRemove:
-            return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_ASSIGN
-        else:
-            return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_UNASSIGN
+        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_ASSIGN if not self.__isRemove else _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_UNASSIGN
 
     def getPlayerID(self):
         """
@@ -1101,7 +1086,7 @@ class StrongholdKickPlayerCtx(StrongholdRequestCtx):
     """
     Context for player's kick
     """
-    __slots__ = '__pID'
+    __slots__ = ('__pID',)
 
     def __init__(self, pID, **kwargs):
         super(StrongholdKickPlayerCtx, self).__init__(**kwargs)
@@ -1140,10 +1125,7 @@ class StrongholdGiveLeadershipCtx(StrongholdRequestCtx):
         return cls(pID, unitMgrId=unitMgrId, waitingID=waitingID)
 
     def getRequestType(self):
-        if self.__pID != getAccountDatabaseID():
-            return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_GIVE_LEADERSHIP
-        else:
-            return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_TAKE_LEADERSHIP
+        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_GIVE_LEADERSHIP if self.__pID != getAccountDatabaseID() else _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_TAKE_LEADERSHIP
 
     def getPlayerID(self):
         """
@@ -1157,9 +1139,6 @@ class StrongholdUpdateCtx(StrongholdRequestCtx):
     Context for update data from wgsh
     """
     __slots__ = ()
-
-    def __init__(self, **kwargs):
-        super(StrongholdUpdateCtx, self).__init__(**kwargs)
 
     def getRequestType(self):
         return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_UPDATE

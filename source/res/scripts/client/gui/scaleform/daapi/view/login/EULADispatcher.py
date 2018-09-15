@@ -37,11 +37,11 @@ class EULADispatcher(EventSystemEntity):
         isShowFullEULA = GUI_SETTINGS.eula.full
         if isShowFullEULA:
             self.__eulaText = self.__readEULAFull()
-            if not len(self.__eulaText):
+            if not self.__eulaText:
                 isShowFullEULA = False
         if not isShowFullEULA:
             self.__eulaText = self.__readEULAShort()
-        if len(self.__eulaText):
+        if self.__eulaText:
             self.addListener(CloseWindowEvent.EULA_CLOSED, self.__onEulaClosed)
             self.fireEvent(LoadViewEvent(VIEW_ALIAS.EULA_FULL if isShowFullEULA else VIEW_ALIAS.EULA, ctx={'text': self.__eulaText}), EVENT_BUS_SCOPE.LOBBY)
 
@@ -93,7 +93,7 @@ class EULADispatcher(EventSystemEntity):
                 processor = _LicenseXMLProcessor()
                 for child in dSection.values():
                     result = processor.execute(child, result=[])
-                    if len(result) > 0:
+                    if result:
                         text.extend(result)
 
             except Exception:
@@ -145,7 +145,7 @@ class _ContentTemplate(_TagTemplate):
 
     def execute(self, section, processor, result):
         values = section.values()
-        if len(values) > 0:
+        if values:
             selfResult = []
             for tSection in values:
                 processor.execute(tSection, processor, selfResult)
@@ -193,7 +193,7 @@ class _LicenseXMLProcessor(object):
             argsSection = child['args'] if child.has_key('args') else []
             for argSection in argsSection.values():
                 arg = argSection.asString
-                if len(arg) > 0:
+                if arg:
                     args.append(arg)
 
             self.__templates[tagName] = clazz(*args)

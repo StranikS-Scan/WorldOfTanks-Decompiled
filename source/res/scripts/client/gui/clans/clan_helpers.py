@@ -297,7 +297,7 @@ class ClanInvitesPaginator(ListPaginator, UsersInfoHelper):
                     invite.setChangerName(name)
                     updatedInvites.add(inviteID)
 
-        if len(updatedInvites):
+        if updatedInvites:
             self.onListItemsUpdated(self, [ self.__invitesCache[self.__cacheMapping[invID]] for invID in updatedInvites ])
         return
 
@@ -308,7 +308,7 @@ class ClanInvitesPaginator(ListPaginator, UsersInfoHelper):
         offset = 0
         count = self._offset + self._count
         if not self.__lastStatus or not self.__allInvitesCached:
-            if len(sort):
+            if sort:
                 yield self.__requestInvites(0, COUNT_THRESHOLD, isReset)
                 self.__allInvitesCached = self.__lastStatus
             else:
@@ -346,7 +346,7 @@ class ClanInvitesPaginator(ListPaginator, UsersInfoHelper):
         if isReset:
             self.__totalCount = ctx.getTotalCount(result.data)
         if result.isSuccess():
-            if len(invites) == 0 and not isReset:
+            if not invites and not isReset:
                 self.revertOffset()
             usrIDs = set()
             for item in invites:
@@ -414,7 +414,7 @@ class ClanInvitesPaginator(ListPaginator, UsersInfoHelper):
         return inviteWrapper
 
     def __checkUserName(self, name):
-        return DATA_UNAVAILABLE_PLACEHOLDER if not len(name) else name
+        return DATA_UNAVAILABLE_PLACEHOLDER if not name else name
 
 
 class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
@@ -520,7 +520,7 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
                     invite.setSenderName(name)
                     updatedInvites.add(inviteID)
 
-        if len(updatedInvites):
+        if updatedInvites:
             self.onListItemsUpdated(self, [ self.__invitesCache[self.__cacheMapping[invID]] for invID in updatedInvites ])
         return
 
@@ -531,7 +531,7 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
         offset = 0
         count = self._offset + self._count
         if not self.__lastStatus or not self.__allInvitesCached:
-            if len(sort):
+            if sort:
                 yield self.__requestInvites(0, PERSONAL_INVITES_COUNT_THRESHOLD, isReset)
                 self.__allInvitesCached = self.__lastStatus
             else:
@@ -567,9 +567,9 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
         if isReset:
             self.__totalCount = ctx.getTotalCount(result.data)
         if result.isSuccess():
-            if len(invites) == 0 and not isReset:
+            if not invites and not isReset:
                 self.revertOffset()
-            if len(invites) > 0:
+            if invites:
                 clansIDs = [ item.getClanDbID() for item in invites ]
                 ctx = ClanRatingsCtx(clansIDs)
                 result = yield self._requester.sendRequest(ctx, allowDelay=True)

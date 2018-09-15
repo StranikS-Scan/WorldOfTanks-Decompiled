@@ -341,7 +341,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_REFSYSTEMQUESTS = '#messenger:serviceChannelMessages/battleResults/refSystemQuests'
     SERVICECHANNELMESSAGES_BATTLERESULTS_REFSYSTEMBOUGHTVEHICLE = '#messenger:serviceChannelMessages/battleResults/refSystemBoughtVehicle'
     SERVICECHANNELMESSAGES_BATTLERESULTS_REFSYSTEMCONTRIBUTEXP = '#messenger:serviceChannelMessages/battleResults/refSystemContributeXp'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_POTAPOVQUESTS = '#messenger:serviceChannelMessages/battleResults/potapovQuests'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_PERSONALMISSIONS = '#messenger:serviceChannelMessages/battleResults/personalMissions'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORTRESOURCE = '#messenger:serviceChannelMessages/battleResults/fortResource'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORTBUILDING = '#messenger:serviceChannelMessages/battleResults/fortBuilding'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORTRESOURCE_CLAN = '#messenger:serviceChannelMessages/battleResults/fortResource/clan'
@@ -358,6 +358,11 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_REASONS_FAILED = '#messenger:serviceChannelMessages/battleTutorial/reasons/failed'
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_REASONS_TIMEOUT = '#messenger:serviceChannelMessages/battleTutorial/reasons/timeout'
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_REASONS_EXTERMINATION = '#messenger:serviceChannelMessages/battleTutorial/reasons/extermination'
+    SERVICECHANNELMESSAGES_BOOTCAMP_FINISHED = '#messenger:serviceChannelMessages/bootcamp/finished'
+    SERVICECHANNELMESSAGES_BOOTCAMP_AWARDS = '#messenger:serviceChannelMessages/bootcamp/awards'
+    SERVICECHANNELMESSAGES_BOOTCAMP_NO_AWARDS = '#messenger:serviceChannelMessages/bootcamp/no_awards'
+    SERVICECHANNELMESSAGES_BOOTCAMP_DEVICES = '#messenger:serviceChannelMessages/bootcamp/devices'
+    SERVICECHANNELMESSAGES_BOOTCAMP_CREW = '#messenger:serviceChannelMessages/bootcamp/crew'
     SERVICECHANNELMESSAGES_GOLDRECEIVED_FINANCIAL_TRANSACTION = '#messenger:serviceChannelMessages/goldReceived/financial_transaction'
     SERVICECHANNELMESSAGES_GOLDRECEIVED_DATE = '#messenger:serviceChannelMessages/goldReceived/date'
     SERVICECHANNELMESSAGES_GOLDRECEIVED_RECEIVED = '#messenger:serviceChannelMessages/goldReceived/received'
@@ -401,6 +406,8 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_INVOICERECEIVED_CREWWITHDRAWN = '#messenger:serviceChannelMessages/invoiceReceived/crewWithdrawn'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_TANKMENFREEXPACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/tankmenFreeXpAccrued'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_TANKMENFREEXPDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/tankmenFreeXpDebited'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_FREEAWARDLISTSACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/freeAwardListsAccrued'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_FREEAWARDLISTSDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/freeAwardListsDebited'
     SERVICECHANNELMESSAGES_DURATIONOFPREMIUMACCOUNEXPIRES = '#messenger:serviceChannelMessages/durationOfPremiumAccounExpires'
     SERVICECHANNELMESSAGES_PREMIUMBOUGHT = '#messenger:serviceChannelMessages/premiumBought'
     SERVICECHANNELMESSAGES_PREMIUMEXTENDED = '#messenger:serviceChannelMessages/premiumExtended'
@@ -742,6 +749,7 @@ class MESSENGER(object):
     CHAT_POSTBATTLESHARING_LABEL = '#messenger:chat/postBattleSharing/label'
     CHAT_TOXICMESSAGES_BLOCKEDMESSAGE = '#messenger:chat/toxicMessages/blockedMessage'
     BATTLE_TOOLTIPS_TOXICMESSAGE = '#messenger:battle/toolTips/toxicMessage'
+    PERSONALMISSIONS_COMPLETIONTOKENGAIN = '#messenger:personalMissions/completionTokenGain'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,
      CLIENT_ERROR_SHARED_NOT_CONNECTED,

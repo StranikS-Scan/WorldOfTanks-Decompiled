@@ -3,7 +3,7 @@
 import time
 import math
 import weakref
-from constants import HINT_TYPE
+from bootcamp.BootcampConstants import HINT_TYPE
 from HintsBase import HintBase, HINT_COMMAND
 from copy import copy
 

@@ -16,7 +16,7 @@ class UserCache(object):
     def requestUsers(self, dbIDs, callback):
         status = True
         missingUser = [ usrID for usrID in dbIDs if usrID not in self.__cache ]
-        if len(missingUser):
+        if missingUser:
             usrCtx = AccountClanRatingsCtx(missingUser)
             result = yield self.__clanCtrl.sendRequest(usrCtx, allowDelay=True)
             if result.isSuccess():

@@ -19,9 +19,6 @@ class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, ctx=None):
-        super(ContactsListPopover, self).__init__(ctx)
-
     @proto_getter(PROTO_TYPE.MIGRATION)
     def proto(self):
         return None
@@ -103,9 +100,6 @@ class ContactsListPopover(ContactsListPopoverMeta, ContactsCMListener):
 
     def as_showWaitingS(self, msg, props):
         return super(ContactsListPopover, self).as_showWaitingS(makeString(WAITING.MESSENGER_SUBSCRIBE), props)
-
-    def as_hideWaitingS(self):
-        return super(ContactsListPopover, self).as_hideWaitingS()
 
     def _populate(self):
         super(ContactsListPopover, self)._populate()

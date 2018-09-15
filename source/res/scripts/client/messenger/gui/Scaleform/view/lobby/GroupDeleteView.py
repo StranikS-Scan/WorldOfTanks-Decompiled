@@ -7,9 +7,6 @@ from messenger.proto import proto_getter
 
 class GroupDeleteView(GroupDeleteViewMeta):
 
-    def __init__(self):
-        super(GroupDeleteView, self).__init__()
-
     @proto_getter(PROTO_TYPE.MIGRATION)
     def proto(self):
         return None

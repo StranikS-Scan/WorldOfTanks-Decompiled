@@ -63,7 +63,7 @@ def getGunCD(item, vehicle, itemsCache=None):
 
 
 def processMsg(result):
-    if result and len(result.userMsg):
+    if result and result.userMsg:
         SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
     if result and result.auxData:
         for m in result.auxData:
@@ -238,7 +238,7 @@ class UnlockItemAction(CachedItemAction):
             costCtx['xpCost'] = BigWorld.wg_getIntegralFormat(costCtx['xpCost'])
             costCtx['freeXP'] = BigWorld.wg_getIntegralFormat(costCtx['freeXP'])
             showUnlockMsg('unlock_success', item, msgType=SystemMessages.SM_TYPE.PowerLevel, **costCtx)
-        elif len(result.userMsg):
+        elif result.userMsg:
             showUnlockMsg(result.userMsg, item)
 
 
@@ -410,7 +410,7 @@ class SetVehicleLayoutAction(IGUIItemAction):
             for m in result.auxData:
                 SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType)
 
-        if result and len(result.userMsg):
+        if result and result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
 

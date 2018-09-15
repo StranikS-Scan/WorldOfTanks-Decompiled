@@ -122,13 +122,9 @@ def isShowStartupVideo():
             if p.readInt(Settings.KEY_SHOW_STARTUP_MOVIE, 1) == 1:
                 if GUI_SETTINGS.compulsoryIntroVideos:
                     return True
-                else:
-                    return isIntroVideoSettingChanged(p)
-            else:
-                return False
-        else:
-            return True
-        return
+                return isIntroVideoSettingChanged(p)
+            return False
+        return True
 
 
 def isIntroVideoSettingChanged(userPrefs=None):

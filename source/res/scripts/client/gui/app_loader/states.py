@@ -77,19 +77,18 @@ class StartState(IGlobalState):
         if spaceID == _SPACE_ID.UNDEFINED:
             if _isBattleReplayAutoStart():
                 return None
-            elif isShowStartupVideo():
+            if isShowStartupVideo():
                 ctx.guiSpaceID = _SPACE_ID.INTRO_VIDEO
                 return IntroVideoState()
-            else:
-                ctx.guiSpaceID = _SPACE_ID.LOGIN
-                return LoginState()
+            ctx.guiSpaceID = _SPACE_ID.LOGIN
+            return LoginState()
+        elif spaceID == _SPACE_ID.LOGIN:
+            return LoginState()
+        elif spaceID == _SPACE_ID.BATTLE_LOADING:
+            return BattleLoadingState(ctx.arenaGuiType)
         else:
-            if spaceID == _SPACE_ID.LOGIN:
-                return LoginState()
-            if spaceID == _SPACE_ID.BATTLE_LOADING:
-                return BattleLoadingState(ctx.arenaGuiType)
             LOG_ERROR('State can not be switched', self, ctx)
-        return None
+            return None
 
 
 @ReprInjector.simple()
@@ -297,10 +296,7 @@ class BattleLoadingState(_ArenaState):
         return newState
 
     def _createBattleState(self):
-        if _isBattleReplayPlaying():
-            return ReplayBattleState(self._arenaGuiType)
-        else:
-            return BattleState(self._arenaGuiType)
+        return ReplayBattleState(self._arenaGuiType) if _isBattleReplayPlaying() else BattleState(self._arenaGuiType)
 
 
 @ReprInjector.simple()

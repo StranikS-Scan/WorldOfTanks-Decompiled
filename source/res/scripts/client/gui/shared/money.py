@@ -113,7 +113,7 @@ class Money(object):
         :param currency: A currency from the Currency enumeration.
         :return: A currency value. Maybe be None if value is not defined for the given currency.
         """
-        return self.__values.get(currency, default)
+        return self.__values[currency] if currency in self.__values else default
 
     def replace(self, currency, value):
         """
@@ -584,10 +584,8 @@ class Money(object):
                         return False
 
                 return True
-            else:
-                return False
-        else:
-            return True
+            return False
+        return True
 
     def __eq__(self, other):
         """

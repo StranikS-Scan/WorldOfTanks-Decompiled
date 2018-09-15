@@ -76,7 +76,7 @@ class BuyBoosterMeta(I18nConfirmDialogMeta):
     @process('buyItem')
     def submit(self, count, currency):
         result = yield BoosterBuyer(self.__booster, count, currency).request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def __onStatsChanged(self, stats):

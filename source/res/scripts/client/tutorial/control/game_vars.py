@@ -16,11 +16,7 @@ __all__ = ('getTutorialsCompleted', 'getRandomBattlesCount', 'getUnlockedItems',
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getTutorialsCompleted(itemsCache=None):
-    if itemsCache is not None:
-        return itemsCache.items.stats.tutorialsCompleted
-    else:
-        return 0
-        return
+    return itemsCache.items.stats.tutorialsCompleted if itemsCache is not None else 0
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -35,40 +31,25 @@ def getRandomBattlesCount(itemsCache=None):
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getUnlockedItems(itemsCache=None):
-    if itemsCache is not None:
-        return itemsCache.items.stats.unlocks
-    else:
-        return ()
-        return
+    return itemsCache.items.stats.unlocks if itemsCache is not None else ()
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getFreeVehiclesSlots(itemsCache=None):
-    if itemsCache is not None:
-        return itemsCache.items.stats.vehicleSlots
-    else:
-        return 0
-        return
+    return itemsCache.items.stats.vehicleSlots if itemsCache is not None else 0
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getFreeXP(itemsCache=None):
-    if itemsCache is not None:
-        return itemsCache.items.stats.actualFreeXP
-    else:
-        return 0
-        return
+    return itemsCache.items.stats.actualFreeXP if itemsCache is not None else 0
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getItemByIntCD(intCD, itemsCache=None):
     if intCD is None or type(intCD) not in (types.IntType, types.LongType, types.FloatType):
         return
-    elif itemsCache is not None:
-        return itemsCache.items.getItemByCD(intCD)
     else:
-        return
-        return
+        return itemsCache.items.getItemByCD(intCD) if itemsCache is not None else None
 
 
 def getVehicleByIntCD(intCD):
@@ -84,28 +65,16 @@ def getVehiclesByLevel(level, researchOnly=True, itemsCache=None):
     criteria = REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVEL(level)
     if researchOnly:
         criteria |= RESEARCH_CRITERIA.VEHICLE_TO_UNLOCK
-    if itemsCache is not None:
-        return itemsCache.items.getVehicles(criteria=criteria)
-    else:
-        return {}
-        return
+    return itemsCache.items.getVehicles(criteria=criteria) if itemsCache is not None else {}
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getPremiumExpiryTime(itemsCache=None):
-    if itemsCache is not None:
-        return itemsCache.items.stats.premiumExpiryTime
-    else:
-        return 0
-        return
+    return itemsCache.items.stats.premiumExpiryTime if itemsCache is not None else 0
 
 
 def getCurrentVehicleLevel():
-    if g_currentVehicle.isPresent():
-        return g_currentVehicle.item.level
-    else:
-        return None
-        return None
+    return g_currentVehicle.item.level if g_currentVehicle.isPresent() else None
 
 
 def getCurrentVehicleState():
@@ -114,23 +83,14 @@ def getCurrentVehicleState():
         return state
     else:
         return None
-        return None
 
 
 def isCurrentVehiclePremium():
-    if g_currentVehicle.isPresent():
-        return g_currentVehicle.item.isPremium
-    else:
-        return None
-        return None
+    return g_currentVehicle.item.isPremium if g_currentVehicle.isPresent() else None
 
 
 def isCurrentVehicleRented():
-    if g_currentVehicle.isPresent():
-        return g_currentVehicle.item.isRented
-    else:
-        return None
-        return None
+    return g_currentVehicle.item.isRented if g_currentVehicle.isPresent() else None
 
 
 def getCurrentVehicleViewState():
@@ -143,28 +103,16 @@ def _getTankmanPrice(index, prices):
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getTankmanCurrentPrice(index, itemsCache=None):
-    if itemsCache is not None:
-        return _getTankmanPrice(index, itemsCache.items.shop.tankmanCostWithGoodyDiscount)
-    else:
-        return MONEY_UNDEFINED
-        return
+    return _getTankmanPrice(index, itemsCache.items.shop.tankmanCostWithGoodyDiscount) if itemsCache is not None else MONEY_UNDEFINED
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getTankmanDefaultPrice(index, itemsCache=None):
-    if itemsCache is not None:
-        return _getTankmanPrice(index, itemsCache.items.shop.defaults.tankmanCost)
-    else:
-        return MONEY_UNDEFINED
-        return
+    return _getTankmanPrice(index, itemsCache.items.shop.defaults.tankmanCost) if itemsCache is not None else MONEY_UNDEFINED
 
 
 def _getCurrentVehicleCD():
-    if g_currentVehicle.isPresent():
-        return g_currentVehicle.item.intCD
-    else:
-        return None
-        return None
+    return g_currentVehicle.item.intCD if g_currentVehicle.isPresent() else None
 
 
 _NOT_FOUND_INDEX = len(RESEARCH_ITEMS)
@@ -285,11 +233,8 @@ def _getInventoryPremiumVehicleCD(itemsCache=None):
 def _isItemSelected(intCD):
     if intCD is None:
         return False
-    elif g_currentVehicle.isPresent():
-        return g_currentVehicle.item.intCD == intCD
     else:
-        return False
-        return
+        return g_currentVehicle.item.intCD == intCD if g_currentVehicle.isPresent() else False
 
 
 def _isItemPremium(intCD):
@@ -297,10 +242,7 @@ def _isItemPremium(intCD):
         return False
     else:
         vehicle = getVehicleByIntCD(intCD)
-        if vehicle is not None:
-            return vehicle.isPremium
-        return False
-        return
+        return vehicle.isPremium if vehicle is not None else False
 
 
 def _isItemUnlocked(intCD):

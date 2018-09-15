@@ -3,9 +3,9 @@
     <id>	0	</id>
     <medals>
       <data>
-        <id>	0	</id>
-        <label>	#bootcamp:RESULT_AWARD_CADET_LABEL	</label>
-        <description>	#bootcamp:RESULT_AWARD_CADET_TEXT	</description>
+        <id>	1	</id>
+        <label>	#bootcamp:result/award/cadet/label	</label>
+        <description>	#bootcamp:result/award/cadet/text	</description>
         <icon>	../maps/icons/bootcamp/rewards/bcMaingun.png	</icon>
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcMaingun.png	</iconTooltip>
       </data>
@@ -13,8 +13,8 @@
     <unlocks>
       <data>
         <id>	0	</id>
-        <label>	#bootcamp:RESULT_AWARD_TANK_LABEL	</label>
-        <description>	#bootcamp:RESULT_AWARD_TANK_TEXT	</description>
+        <label>	#bootcamp:result/award/tank/label	</label>
+        <description>	#bootcamp:result/award/tank/text	</description>
         <icon>	../maps/icons/bootcamp/rewards/bcAwardOptions.png	</icon>
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcAwardOptions.png	</iconTooltip>
       </data>
@@ -25,8 +25,8 @@
     <medals>
       <data>
         <id>	0	</id>
-        <label>	#bootcamp:RESULT_AWARD_SNIPER_LABEL	</label>
-        <description>	#bootcamp:RESULT_AWARD_SNIPER_TEXT	</description>
+        <label>	#bootcamp:result/award/sniper/label	</label>
+        <description>	#bootcamp:result/award/sniper/text	</description>
         <icon>	../maps/icons/bootcamp/rewards/bcSniper.png	</icon>
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcSniper.png	</iconTooltip>
       </data>
@@ -37,9 +37,9 @@
     <id>	2	</id>
     <medals>
       <data>
-        <id>	0	</id>
-        <label>	#bootcamp:RESULT_AWARD_INVADER_LABEL	</label>
-        <description>	#bootcamp:RESULT_AWARD_INVADER_TEXT	</description>
+        <id>	1	</id>
+        <label>	#bootcamp:result/award/invader/label	</label>
+        <description>	#bootcamp:result/award/invader/text	</description>
         <icon>	../maps/icons/bootcamp/rewards/bcInvader.png	</icon>
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcInvader.png	</iconTooltip>
       </data>
@@ -47,8 +47,8 @@
     <unlocks>
       <data>
         <id>	0	</id>
-        <label>	#bootcamp:RESULT_AWARD_CREW_LABEL	</label>
-        <description>	#bootcamp:RESULT_AWARD_CREW_TEXT	</description>
+        <label>	#bootcamp:result/award/crew/label	</label>
+        <description>	#bootcamp:result/award/crew/text	</description>
         <icon>	../maps/icons/bootcamp/rewards/bcCrew.png	</icon>
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcCrew.png	</iconTooltip>
       </data>
@@ -58,23 +58,23 @@
     <id>	3	</id>
     <medals>
       <data>
-        <id>	0	</id>
-        <label>	#bootcamp:RESULT_AWARD_CADET_LABEL	</label>
-        <description>	#bootcamp:RESULT_AWARD_CADET_TEXT	</description>
+        <id>	2	</id>
+        <label>	#bootcamp:result/award/cadet/label	</label>
+        <description>	#bootcamp:result/award/cadet/text	</description>
         <icon>	../maps/icons/bootcamp/rewards/bcMaingun.png	</icon>
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcMaingun.png	</iconTooltip>
       </data>
       <data>
-        <id>	1	</id>
-        <label>	#bootcamp:RESULT_AWARD_DUEL_LABEL	</label>
-        <description>	#bootcamp:RESULT_AWARD_DUEL_TEXT	</description>
+        <id>	3	</id>
+        <label>	#bootcamp:result/award/duel/label	</label>
+        <description>	#bootcamp:result/award/duel/text	</description>
         <icon>	../maps/icons/bootcamp/rewards/bcDuelist.png	</icon>
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcDuelist.png	</iconTooltip>
       </data>
       <data>
-        <id>	2	</id>
-        <label>	#bootcamp:RESULT_AWARD_SHOOT_LABEL	</label>
-        <description>	#bootcamp:RESULT_AWARD_SHOOT_TEXT	</description>
+        <id>	4	</id>
+        <label>	#bootcamp:result/award/shoot/label	</label>
+        <description>	#bootcamp:result/award/shoot/text	</description>
         <icon>	../maps/icons/bootcamp/rewards/bcShoottokill.png	</icon>
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcShoottokill.png	</iconTooltip>
       </data>
@@ -82,31 +82,17 @@
     <unlocks>
       <data>
         <id>	0	</id>
-        <label>	#bootcamp:RESULT_AWARD_TOOLBOX_LABEL	</label>
-        <description>	#bootcamp:RESULT_AWARD_TOOLBOX_TEXT	</description>
+        <label>	#bootcamp:result/award/toolbox/label	</label>
+        <description>	#bootcamp:result/award/toolbox/text	</description>
         <icon>	../maps/icons/bootcamp/rewards/bctoolbox.png	</icon>
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcTools.png	</iconTooltip>
       </data>
       <data>
         <id>	1	</id>
-        <label>	#bootcamp:RESULT_AWARD_EXTINGUISHER_LABEL	</label>
-        <description>	#bootcamp:RESULT_AWARD_EXTINGUISHER_TEXT	</description>
-        <icon>	../maps/icons/bootcamp/rewards/bchandExtinguishers.png	</icon>
-        <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcFireEx.png	</iconTooltip>
-      </data>
-      <data>
-        <id>	2	</id>
-        <label>	#bootcamp:RESULT_AWARD_MEDICALKIT_LABEL	</label>
-        <description>	#bootcamp:RESULT_AWARD_MEDICALKIT_TEXT	</description>
-        <icon>	../maps/icons/bootcamp/rewards/bclargeMedkit.png	</icon>
-        <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcMedBig.png	</iconTooltip>
-      </data>
-      <data>
-        <id>	3	</id>
-        <label>	#bootcamp:RESULT_AWARD_REPAIRKIT_LABEL	</label>
-        <description>	#bootcamp:RESULT_AWARD_REPAIRKIT_TEXT	</description>
-        <icon>	../maps/icons/bootcamp/rewards/bclargeRepairkit.png	</icon>
-        <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcRemBig.png	</iconTooltip>
+        <label>	#bootcamp:message/consumables/label	</label>
+        <description>	#bootcamp:message/consumables/text	</description>
+        <icon>	../maps/icons/bootcamp/rewards/bcConsumables.png	</icon>
+        <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcConsumables.png	</iconTooltip>
       </data>
     </unlocks>
   </lesson>
@@ -114,16 +100,16 @@
     <id>	4	</id>
     <medals>
       <data>
-        <id>	0	</id>
-        <label>	#bootcamp:RESULT_AWARD_CADET_LABEL	</label>
-        <description>	#bootcamp:RESULT_AWARD_CADET_TEXT	</description>
+        <id>	1	</id>
+        <label>	#bootcamp:result/award/cadet/label	</label>
+        <description>	#bootcamp:result/award/cadet/text	</description>
         <icon>	../maps/icons/bootcamp/rewards/bcMaingun.png	</icon>
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcMaingun.png	</iconTooltip>
       </data>
       <data>
-        <id>	1	</id>
-        <label>	#bootcamp:RESULT_AWARD_SNIPER_LABEL	</label>
-        <description>	#bootcamp:RESULT_AWARD_SNIPER_TEXT	</description>
+        <id>	2	</id>
+        <label>	#bootcamp:result/award/sniper/label	</label>
+        <description>	#bootcamp:result/award/sniper/text	</description>
         <icon>	../maps/icons/bootcamp/rewards/bcSniper.png	</icon>
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcSniper.png	</iconTooltip>
       </data>
@@ -131,8 +117,8 @@
     <unlocks>
       <data>
         <id>	0	</id>
-        <label>	#bootcamp:RESULT_AWARD_MISSION_LABEL	</label>
-        <description>	#bootcamp:RESULT_AWARD_MISSION_TEXT	</description>
+        <label>	#bootcamp:result/award/mission/label	</label>
+        <description>	#bootcamp:result/award/mission/text	</description>
         <icon>	../maps/icons/bootcamp/rewards/bcMission.png	</icon>
         <iconTooltip>	../maps/icons/bootcamp/rewards/tooltips/bcMission.png	</iconTooltip>
       </data>

@@ -3,17 +3,18 @@
 import types
 import weakref
 from abc import ABCMeta, abstractmethod
+from collections import defaultdict
 import ArenaType
 import gui.awards.event_dispatcher as shared_events
-import potapov_quests
+import personal_missions
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, AWARDS
 from account_shared import getFairPlayViolationName
 from chat_shared import SYS_MESSAGE_TYPE
-from constants import EVENT_TYPE, QUEUE_TYPE
+from constants import EVENT_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from dossiers2.custom.records import DB_ID_TO_RECORD
-from dossiers2.ui.layouts import POTAPOV_QUESTS_GROUP
+from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
@@ -22,7 +23,6 @@ from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
-from gui.prb_control.storages import prequeue_storage_getter
 from gui.ranked_battles import ranked_helpers
 from gui.server_events import events_dispatcher as quests_events
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
@@ -38,8 +38,6 @@ from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles
 from messenger.formatters import NCContextItemFormatter, TimeFormatter
 from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.proto.events import g_messengerEvents
-from potapov_quests import PQ_BRANCH
-from shared_utils import findFirst
 from skeletons.gui.game_control import IRefSystemController, IAwardController, IRankedBattlesController, IBootcampController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
@@ -55,8 +53,8 @@ class AwardController(IAwardController, IGlobalListener):
          BoosterAfterBattleAwardHandler(self),
          PunishWindowHandler(self),
          RefSystemQuestsWindowHandler(self),
-         PotapovQuestsBonusHandler(self),
-         PotapovWindowAfterBattleHandler(self),
+         PersonalMissionsBonusHandler(self),
+         PMWindowAfterBattleHandler(self),
          TokenQuestsWindowHandler(self),
          MotiveQuestsWindowHandler(self),
          RefSysStatusWindowHandler(self),
@@ -64,9 +62,11 @@ class AwardController(IAwardController, IGlobalListener):
          VictoryHandler(self),
          BattlesCountHandler(self),
          PveBattlesCountHandler(self),
-         PotapovQuestsAutoWindowHandler(self),
+         PersonalMissionsAutoWindowHandler(self),
+         PersonalMissionByAwardListHandler(self),
+         PersonalMissionOperationAwardHandler(self),
+         PersonalMissionOperationUnlockedHandler(self),
          GoldFishHandler(self),
-         FalloutVehiclesBuyHandler(self),
          TelecomHandler(self),
          RankedQuestsHandler(self)]
         super(AwardController, self).__init__()
@@ -99,7 +99,7 @@ class AwardController(IAwardController, IGlobalListener):
     def canShow(self):
         popupsWindowsDisabled = isPopupsWindowsOpenDisabled()
         prbDispatcher = self.prbDispatcher
-        return self.__isLobbyLoaded and not popupsWindowsDisabled if prbDispatcher is None else self.__isLobbyLoaded and not popupsWindowsDisabled and not (prbDispatcher.getFunctionalState().hasLockedState or prbDispatcher.getPlayerInfo().isReady)
+        return self.__isLobbyLoaded and not popupsWindowsDisabled if prbDispatcher is None else self.__isLobbyLoaded and not popupsWindowsDisabled and not prbDispatcher.getFunctionalState().hasLockedState
 
     def onAvatarBecomePlayer(self):
         self.__isLobbyLoaded = False
@@ -230,17 +230,15 @@ class RefSystemQuestsWindowHandler(ServiceChannelHandler):
         self._awardCtrl.refSystem.showCreditsAwardWindow(message.data.get('credits', 0), completedQuestIDs)
 
 
-class PotapovQuestsBonusHandler(ServiceChannelHandler):
+class PersonalMissionsBonusHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(PotapovQuestsBonusHandler, self).__init__(SYS_MESSAGE_TYPE.potapovQuestBonus.index(), awardCtrl)
+        super(PersonalMissionsBonusHandler, self).__init__(SYS_MESSAGE_TYPE.potapovQuestBonus.index(), awardCtrl)
 
     def _showAward(self, ctx):
-        LOG_DEBUG('Show potapov quest bonus award!', ctx)
+        LOG_DEBUG('Show personal mission bonus award!', ctx)
         data = ctx[1].data
-        completedQuestIDs = set(data.get('completedQuestIDs', set()))
         achievements = []
-        tokens = {}
         for recordIdx, value in data.get('popUpRecords', []):
             factory = getAchievementFactory(DB_ID_TO_RECORD[recordIdx])
             if factory is not None:
@@ -248,38 +246,22 @@ class PotapovQuestsBonusHandler(ServiceChannelHandler):
                 if a is not None:
                     achievements.append(a)
 
-        for tokenID, tokenData in (data.get('tokens') or {}).iteritems():
-            tokens[tokenID] = tokenData.get('count', 1)
-
-        if len(achievements):
+        if achievements:
             quests_events.showAchievementsAward(achievements)
-        for tID, tCount in tokens.iteritems():
-            self.__tryToShowTokenAward(tID, tCount, completedQuestIDs)
-
         return
 
-    def __tryToShowTokenAward(self, tID, tCount, completedQuestIDs):
-        for q in self.eventsCache.getQuestsByTokenBonus(tID):
-            if q.getType() == EVENT_TYPE.POTAPOV_QUEST and q.getQuestBranch() == PQ_BRANCH.REGULAR:
-                pqType = q.getPQType()
-                if pqType.mainQuestID in completedQuestIDs or pqType.addQuestID in completedQuestIDs:
-                    quests_events.showTokenAward(q, tID, tCount)
-                    return True
 
-        return False
-
-
-class PotapovWindowAfterBattleHandler(ServiceChannelHandler):
+class PMWindowAfterBattleHandler(ServiceChannelHandler):
 
     def __init__(self, awardCtrl):
-        super(PotapovWindowAfterBattleHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
+        super(PMWindowAfterBattleHandler, self).__init__(SYS_MESSAGE_TYPE.battleResults.index(), awardCtrl)
 
     def _showAward(self, ctx):
         achievements = []
         popUpRecords = ctx[1].data.get('popUpRecords', [])
         for recordIdx, value in popUpRecords:
             recordName = DB_ID_TO_RECORD[recordIdx]
-            if recordName in POTAPOV_QUESTS_GROUP:
+            if recordName in PERSONAL_MISSIONS_GROUP:
                 factory = getAchievementFactory(recordName)
                 if factory is not None:
                     a = factory.create(value=int(value))
@@ -299,23 +281,11 @@ class TokenQuestsWindowHandler(ServiceChannelHandler):
     def _showAward(self, ctx):
         data = ctx[1].data
         completedQuests = {}
-        allQuests = self.eventsCache.getAllQuests(includePotapovQuests=True)
-        needToShowVehAwardWindow = False
+        allQuests = self.eventsCache.getAllQuests(includePersonalMissions=True)
         for qID in data.get('completedQuestIDs', set()):
             if qID in allQuests:
                 if self.isShowCongrats(allQuests[qID]):
                     completedQuests[qID] = (allQuests[qID], {'eventsCache': self.eventsCache})
-                for tokenID, children in allQuests[qID].getChildren().iteritems():
-                    for chID in children:
-                        chQuest = allQuests[chID]
-                        if chQuest.getType() == EVENT_TYPE.POTAPOV_QUEST:
-                            needToShowVehAwardWindow = True
-                            break
-
-        if needToShowVehAwardWindow:
-            for vehiclesData in data.get('vehicles', []):
-                for vehTypeCompDescr in vehiclesData:
-                    quests_events.showVehicleAward(Vehicle(typeCompDescr=abs(vehTypeCompDescr)))
 
         for quest, context in completedQuests.itervalues():
             self._showWindow(quest, context)
@@ -386,7 +356,7 @@ class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
     def _showAward(self, ctx):
         _, message = ctx
         completedQuests = {}
-        allQuests = self.eventsCache.getAllQuests(includePotapovQuests=True, filterFunc=lambda quest: self._isAppropriate(quest))
+        allQuests = self.eventsCache.getAllQuests(includePersonalMissions=True, filterFunc=lambda quest: self._isAppropriate(quest))
         completedQuestUniqueIDs = message.data.get('completedQuestIDs', set())
         for uniqueQuestID in completedQuestUniqueIDs:
             questID, ctx = self._getContext(uniqueQuestID, completedQuests, completedQuestUniqueIDs)
@@ -432,7 +402,7 @@ class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
         return (uniqueQuestID, {})
 
 
-class PotapovQuestsAutoWindowHandler(BattleQuestsAutoWindowHandler):
+class PersonalMissionsAutoWindowHandler(BattleQuestsAutoWindowHandler):
     """ Handler responsible for personal quests awards.
     """
 
@@ -442,17 +412,134 @@ class PotapovQuestsAutoWindowHandler(BattleQuestsAutoWindowHandler):
 
     @staticmethod
     def _isAppropriate(quest):
-        return quest.getType() == EVENT_TYPE.POTAPOV_QUEST
+        return quest.getType() == EVENT_TYPE.PERSONAL_MISSION
 
     @staticmethod
     def _getContext(uniqueQuestID, completedQuests, completedQuestUniqueIDs):
-        if potapov_quests.g_cache.isPotapovQuest(uniqueQuestID):
-            pqType = potapov_quests.g_cache.questByUniqueQuestID(uniqueQuestID)
+        if personal_missions.g_cache.isPersonalMission(uniqueQuestID):
+            pqType = personal_missions.g_cache.questByUniqueQuestID(uniqueQuestID)
             if pqType.id not in completedQuests:
                 ctx = {'isMainReward': pqType.mainQuestID in completedQuestUniqueIDs,
                  'isAddReward': pqType.addQuestID in completedQuestUniqueIDs}
                 return (pqType.id, ctx)
         return (None, {})
+
+
+class PersonalMissionByAwardListHandler(PersonalMissionsAutoWindowHandler):
+    """Personal Mission completed by pawned award list
+    """
+
+    def _needToShowAward(self, ctx):
+        _, msg = ctx
+        if msg is not None and msg.data is not None:
+            completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
+            for uniqueQuestID in completedQuestUniqueIDs:
+                if personal_missions.g_cache.isPersonalMission(uniqueQuestID) and uniqueQuestID.endswith('_main_award_list'):
+                    return True
+
+        return False
+
+    @staticmethod
+    def _showWindow(quest, context):
+        quests_events.showPersonalMissionAward(quest, context)
+
+    @staticmethod
+    def _getContext(uniqueQuestID, completedQuests, completedQuestUniqueIDs):
+        if personal_missions.g_cache.isPersonalMission(uniqueQuestID):
+            pqType = personal_missions.g_cache.questByUniqueQuestID(uniqueQuestID)
+            if pqType.id not in completedQuests:
+                ctx = {'isMainReward': True,
+                 'isAddReward': False}
+                return (pqType.id, ctx)
+        return (None, {})
+
+
+class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
+    """operation complete, show congrats and next operations views
+    """
+    OPERATION_PREFIXES = {'pt_final_s1_t1': 1,
+     'pt_final_s1_t2': 2,
+     'pt_final_s1_t3': 3,
+     'pt_final_s1_t4': 4}
+    BADGE_QUEST_ID = 'pt_final_badge'
+    ATTACH_TO_OPERATION = 4
+
+    def _needToShowAward(self, ctx):
+        _, msg = ctx
+        if msg is not None and msg.data is not None:
+            completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
+            for uniqueQuestID in completedQuestUniqueIDs:
+                if uniqueQuestID == self.BADGE_QUEST_ID:
+                    return True
+                for operationToken in self.OPERATION_PREFIXES:
+                    if uniqueQuestID.startswith(operationToken):
+                        return True
+
+        return False
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        completedQuests = defaultdict(dict)
+        allQuests = self.eventsCache.getHiddenQuests()
+        completedQuestUniqueIDs = message.data.get('completedQuestIDs', set())
+        for uniqueQuestID in (qID for qID in completedQuestUniqueIDs if qID in allQuests):
+            if uniqueQuestID == self.BADGE_QUEST_ID:
+                quest = allQuests[uniqueQuestID]
+                completedQuests[self.ATTACH_TO_OPERATION][uniqueQuestID] = quest
+            for oRewardPrefix, oID in self.OPERATION_PREFIXES.iteritems():
+                if uniqueQuestID.startswith(oRewardPrefix):
+                    quest = allQuests[uniqueQuestID]
+                    completedQuests[oID][uniqueQuestID] = quest
+
+        for operationID, quests in completedQuests.iteritems():
+            ctx = {'operationID': operationID,
+             'quests': quests}
+            self._showWindow(None, ctx)
+
+        return
+
+    @staticmethod
+    def _showWindow(quest, context):
+        quests_events.showPersonalMissionCongratulationAward(context)
+
+
+class PersonalMissionOperationUnlockedHandler(BattleQuestsAutoWindowHandler):
+    """operation complete, show next operations views
+    """
+    OPERATION_COMPLETION_IDS = {'pt_final_s1_t1': 1,
+     'pt_final_s1_t2': 2,
+     'pt_final_s1_t3': 3,
+     'pt_final_s1_t4': 4}
+
+    def _needToShowAward(self, ctx):
+        _, msg = ctx
+        if msg is not None and msg.data is not None:
+            completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
+            for uniqueQuestID in completedQuestUniqueIDs:
+                if uniqueQuestID in self.OPERATION_COMPLETION_IDS:
+                    return True
+
+        return False
+
+    def _showAward(self, ctx):
+        _, message = ctx
+        allQuests = self.eventsCache.getHiddenQuests()
+        operations = self.eventsCache.personalMissions.getOperations()
+        context = {'eventsCache': self.eventsCache}
+        completedQuestUniqueIDs = message.data.get('completedQuestIDs', set())
+        for uniqueQuestID in (qID for qID in completedQuestUniqueIDs if qID in allQuests):
+            for oCompletionID, oID in self.OPERATION_COMPLETION_IDS.iteritems():
+                if uniqueQuestID == oCompletionID:
+                    quest = allQuests[uniqueQuestID]
+                    operation = operations[oID]
+                    nextOperationID = operation.getNextOperationID()
+                    if nextOperationID:
+                        context['nextOperationID'] = nextOperationID
+                        self._showWindow(quest, context)
+
+    @staticmethod
+    def _showWindow(quest, context):
+        quests_events.showOperationUnlockedAward(quest, context)
 
 
 class RefSysStatusWindowHandler(ServiceChannelHandler):
@@ -576,51 +663,6 @@ class VehiclesResearchHandler(SpecialAchievement):
 
     def showAwardWindow(self, achievementCount, messageNumber):
         return shared_events.showResearchAward(achievementCount, messageNumber)
-
-
-class FalloutVehiclesBuyHandler(AwardHandler):
-    eventsCache = dependency.descriptor(IEventsCache)
-
-    def start(self):
-        hasVehicleLvl8 = False
-        hasVehicleLvl10 = False
-        if not self.falloutStorage.hasVehicleLvl8():
-            if self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | REQ_CRITERIA.VEHICLE.LEVELS(range(8, 10))):
-                hasVehicleLvl8 = True
-        if not self.falloutStorage.hasVehicleLvl10():
-            if self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | REQ_CRITERIA.VEHICLE.LEVEL(10)):
-                hasVehicleLvl10 = True
-        if hasVehicleLvl8 or hasVehicleLvl10:
-            self.falloutStorage.setHasVehicleLvls(hasVehicleLvl8, hasVehicleLvl10)
-        g_clientUpdateManager.addCallbacks({'inventory.1': self.__onVehsChanged})
-
-    def stop(self):
-        g_clientUpdateManager.removeObjectCallbacks(self)
-
-    @prequeue_storage_getter(QUEUE_TYPE.FALLOUT)
-    def falloutStorage(self):
-        return None
-
-    def _needToShowAward(self, ctx=None):
-        return self._awardCtrl.canShow() is False or self._shouldBeShown()
-
-    def _shouldBeShown(self):
-        return self.eventsCache.isFalloutEnabled() and (not self.falloutStorage.hasVehicleLvl8() or not self.falloutStorage.hasVehicleLvl10())
-
-    def _showAward(self, ctx=None):
-        if self._shouldBeShown():
-            if not self.falloutStorage.hasVehicleLvl8():
-                for vehicle in self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | REQ_CRITERIA.VEHICLE.LEVELS(range(8, 10))).itervalues():
-                    self.falloutStorage.setHasVehicleLvl8()
-                    shared_events.showFalloutAward((vehicle.level,))
-                    break
-
-            if not self.falloutStorage.hasVehicleLvl10() and self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EXPIRED_RENT | REQ_CRITERIA.VEHICLE.LEVEL(10)):
-                self.falloutStorage.setHasVehicleLvl10()
-                shared_events.showFalloutAward((10,), True)
-
-    def __onVehsChanged(self, *args):
-        self.handle()
 
 
 class VictoryHandler(SpecialAchievement):

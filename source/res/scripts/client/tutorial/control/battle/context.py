@@ -36,7 +36,7 @@ class BattleClientCtx(ClientCtx, namedtuple('BattleClientCtx', BATTLE_RECORDS)):
     @classmethod
     def makeCtx(cls, record):
         result = cls._makeDefault()
-        if record is not None and len(record):
+        if record:
             try:
                 result = cls._make(struct.unpack(BATTLE_RECORDS_FORMAT, record))
             except struct.error:
@@ -99,7 +99,7 @@ class ExtendedBattleClientCtx(ClientCtx, namedtuple('ExtendedBattleClientCtx', A
     @classmethod
     def makeCtx(cls, record):
         result = cls._makeDefault()
-        if record is not None and len(record):
+        if record:
             try:
                 result = cls._make(struct.unpack(ALL_BATTLE_RECORDS_FORMAT, record))
             except struct.error:

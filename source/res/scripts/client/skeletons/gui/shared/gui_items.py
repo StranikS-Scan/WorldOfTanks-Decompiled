@@ -57,3 +57,6 @@ class IGuiItemsFactory(object):
 
     def createVehicleDossier(self, dossier, vehTypeCompDescr, playerDBID=None, rankedCurrentSeason=None):
         raise NotImplementedError
+
+    def createBadge(self, descriptor, proxy=None):
+        raise NotImplementedError

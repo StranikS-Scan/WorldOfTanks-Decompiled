@@ -98,14 +98,14 @@ def _readShotDamageTriggerSection(xmlCtx, section, _, triggerID):
 
 def _readSniperModeTriggerSection(xmlCtx, section, _, triggerID):
     stateFlagID = section.readString('init-state-flag')
-    if not len(stateFlagID):
+    if not stateFlagID:
         stateFlagID = None
     return triggers.SniperModeTrigger(triggerID, stateFlagID=stateFlagID)
 
 
 def _readPlayerVehicleNoAmmoTriggerSection(xmlCtx, section, _, triggerID):
     stateFlagID = section.readString('init-state-flag')
-    if not len(stateFlagID):
+    if not stateFlagID:
         stateFlagID = None
     return triggers.PlayerVehicleNoAmmoTrigger(triggerID, stateFlagID=stateFlagID)
 

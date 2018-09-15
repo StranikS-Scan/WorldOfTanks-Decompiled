@@ -11,18 +11,18 @@
     <backward>	14	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.102	</moving>
-    <still>	0.205	</still>
+    <moving>	0.055	</moving>
+    <still>	0.11	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
-    <firePenalty>	0.308	</firePenalty>
+    <firePenalty>	0.165	</firePenalty>
   </invisibility>
   <repairCost>	65.13	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	2.0	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/french/F38_Bat_Chatillon155_58/Bat_Chatillon155_58_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <fakeTurrets>
@@ -30,16 +30,13 @@
       <battle></battle>
     </fakeTurrets>
     <armor>
-      <armor_1>	50	</armor_1>
-      <armor_2>	50	</armor_2>
-      <armor_3>	30	</armor_3>
-      <armor_4>	20	</armor_4>
-      <armor_5>	50	</armor_5>
-      <armor_6>	20	</armor_6>
-      <armor_7>	30	</armor_7>
-      <armor_8>	10	</armor_8>
-      <armor_9>	10	</armor_9>
-      <armor_10>	10	</armor_10>
+      <armor_1>	16	</armor_1>
+      <armor_2>	12	</armor_2>
+      <armor_3>	16	</armor_3>
+      <armor_4>	12	</armor_4>
+      <armor_5>	10	</armor_5>
+      <armor_6>	12	</armor_6>
+      <armor_8>	0	</armor_8>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	8867	</weight>
@@ -62,11 +59,11 @@
       <sensitivityToImpulse>	0.74	</sensitivityToImpulse>
     </swinging>
     <exhaust>
-      <pixie>	gas_medium	</pixie>
+      <pixie>	gas_large	</pixie>
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.625091 0.216922	</turret>
+      <turret>	0.014032 0.576892 0.312539	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/french/F38_Bat_Chatillon155_58/collision/Hull.model	</collisionModelServer>
@@ -74,21 +71,24 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	0.727905 0.487863 1.99495	</rayStart>
-        <rayEnd>	0.727905 0.105624 1.87708	</rayEnd>
+        <rayStart>	0.703612 0.395586 2.21271	</rayStart>
+        <rayEnd>	0.703615 0.00583996 2.12273	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
+        <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	-0.0555279 0.361746 2.40394	</rayStart>
-        <rayEnd>	-0.0555279 -0.0204922 2.28607	</rayEnd>
-        <rayUp>	0.19868 -0.00615339 -0.980045	</rayUp>
-        <size>	0.8	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
+        <rayStart>	-0.012864 0.155284 2.80912	</rayStart>
+        <rayEnd>	-0.0128623 -0.0395905 2.76413	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.7	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/french/F38_Bat_Chatillon155_58/Bat_Chatillon155_58_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	2 2 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_Bat_Chatillon155>
@@ -130,15 +130,16 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.6	</textureScale>
+        <textureScale>	-0.73	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.2755	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -149,9 +150,10 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.286708	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -165,6 +167,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.2755	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -178,6 +181,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.286708	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -190,16 +194,16 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	mediumTankMud	</mud>
+        <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.786418 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.978849 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/french/F38_Bat_Chatillon155_58/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F38_Bat_Chatillon155_58/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.29826 1.73586	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.34482 1.9983	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -212,24 +216,148 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F38_Bat_Chatillon155_58/track/segment_1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F38_Bat_Chatillon155_58/track/segment_1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/french/F38_Bat_Chatillon155_58/track/segment_2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/french/F38_Bat_Chatillon155_58/track/segment_2.model	</segment2ModelRight>
+        <left>	vehicles/french/F38_Bat_Chatillon155_58/track/left.track	</left>
+        <right>	vehicles/french/F38_Bat_Chatillon155_58/track/right.track	</right>
+        <segmentLength>	0.143	</segmentLength>
+        <segmentOffset>	0.239	</segmentOffset>
+        <segment2Offset>	0.077	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.005	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.032	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.082	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.082	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.082	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.082	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+          <offset>	-0.082	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.7	</backwardElastK>
+          <offset>	-0.082	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.082	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.082	</offset>
+        </node>
+      </trackNodes>
     </Chassis_Bat_Chatillon155>
   </chassis>
   <turrets0>
     <Turret_1_Bat_Chatillon155>
-      <ceilless>	true	</ceilless>
       <userString>	#france_vehicles:Turret_1_Bat_Chatillon155	</userString>
       <tags>	cannotDetach	</tags>
       <level>	10	</level>
-      <price>	120.0	</price>
+      <price>	120	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	30	</armor_1>
-        <armor_2>	50	</armor_2>
-        <armor_3>	20	</armor_3>
-        <armor_4>	10	</armor_4>
-        <armor_5>	15	</armor_5>
-        <armor_6>	10	</armor_6>
-        <armor_7>	10	</armor_7>
+        <armor_1>	16	</armor_1>
+        <armor_2>	12	</armor_2>
+        <armor_3>	16	</armor_3>
+        <armor_4>	12	</armor_4>
+        <armor_5>	10	</armor_5>
+        <armor_6>	12	</armor_6>
         <armor_8>	0	</armor_8>
       </armor>
       <weight>	8000	</weight>
@@ -249,7 +377,6 @@
       <guns>
         <Canon_de_155mm>	shared	  <maxAmmo>	36	</maxAmmo>
           <armor>
-            <armor_1>	15	</armor_1>
             <gun>	25	</gun>
           </armor>
           <shotDispersionRadius>	0.61	</shotDispersionRadius>
@@ -280,16 +407,16 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.000544263 0.147313 4.24269	</rayStart>
+              <rayStart>	0.000956197 0.0266541 4.24269	</rayStart>
               <rayEnd>	0.061866 0.0703084 4.23792	</rayEnd>
-              <rayUp>	0.139 0.129 4	</rayUp>
+              <rayUp>	0.147 0.141 5	</rayUp>
               <size>	0.738	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	1.36 1.36 0.000000 0.000000	</tiling>
+            <tiling>	1 1 0.000000 0.2	</tiling>
           </camouflage>
         </Canon_de_155mm>
       </guns>
@@ -302,34 +429,37 @@
         <collisionModelServer>	vehicles/french/F38_Bat_Chatillon155_58/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F38_Bat_Chatillon155_58/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.472459 -0.029533	</gunPosition>
+      <gunPosition>	0.000868 0.580358 0.623601	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-1.37409 0.938283 -0.158809	</rayStart>
-          <rayEnd>	-1.02635 0.740619 -0.158809	</rayEnd>
+          <rayStart>	-1.34947 0.995991 0.0718384	</rayStart>
+          <rayEnd>	-1.1922 0.872427 0.0718384	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <player>
-          <rayStart>	1.58253 0.81049 -0.0169305	</rayStart>
-          <rayEnd>	1.18253 0.808849 -0.0169305	</rayEnd>
+          <rayStart>	1.74403 0.897884 -0.0499268	</rayStart>
+          <rayEnd>	1.34403 0.897884 -0.0499268	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
         <inscription>
-          <rayStart>	1.58135 0.239084 -0.0090555	</rayStart>
-          <rayEnd>	1.18135 0.239084 -0.0090555	</rayEnd>
+          <rayStart>	1.47942 0.955297 -1.07935	</rayStart>
+          <rayEnd>	1.16635 0.706323 -1.07935	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.8	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <size>	0.86	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.028 0.000 0.960 0.045 0.141 0.000 0.540 0.500 0.105 0.500 0.127 0.000 0.000	</physicsShape>
+      <physicsShape>	1.055 -0.020 1.073 -0.039 0.762 -0.203 0.298 0.521 0.557 0.500 0.211 0.664 0.201 0.600 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	1.5 1.5 0.000000 0.4	</tiling>
+      </camouflage>
     </Turret_1_Bat_Chatillon155>
   </turrets0>
   <engines>
@@ -391,7 +521,7 @@
   </clientAdjustmentFactors>
   <effects>
     <collision></collision>
-    <damagedStateGroup>	medium	</damagedStateGroup>
+    <damagedStateGroup>	large	</damagedStateGroup>
   </effects>
   <emblems>
     <default>	french_rose	</default>

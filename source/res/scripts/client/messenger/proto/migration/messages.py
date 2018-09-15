@@ -25,9 +25,6 @@ class MessagesManagerProxy(MigrationProxy):
 class BWMessagesManagerProxy(MessagesManagerProxy):
     __slots__ = ()
 
-    def __init__(self, proto):
-        super(BWMessagesManagerProxy, self).__init__(proto)
-
     def getSearchUserRoomsProcessor(self):
         from messenger.proto.bw import search_processors
         return search_processors.SearchChannelsProcessor()
@@ -46,9 +43,6 @@ class BWMessagesManagerProxy(MessagesManagerProxy):
 
 class XMPPMessagesManagerProxy(MessagesManagerProxy):
     __slots__ = ()
-
-    def __init__(self, proto):
-        super(XMPPMessagesManagerProxy, self).__init__(proto)
 
     def getSearchUserRoomsProcessor(self):
         from messenger.proto.xmpp import xmpp_search_processors

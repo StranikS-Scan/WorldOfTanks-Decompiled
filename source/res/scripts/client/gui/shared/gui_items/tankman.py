@@ -92,7 +92,7 @@ class Tankman(GUIItem, HasStrCD):
             crewRoles = self.vehicleDescr.type.crewRoles
             if -1 < self.vehicleSlotIdx < len(crewRoles):
                 self._combinedRoles = crewRoles[self.vehicleSlotIdx]
-            self._areClassesCompatible = len(VEHICLE_CLASS_TAGS & self.vehicleDescr.type.tags & self.vehicleNativeDescr.type.tags) > 0
+            self._areClassesCompatible = bool(VEHICLE_CLASS_TAGS & self.vehicleDescr.type.tags & self.vehicleNativeDescr.type.tags)
         self._skills = self._buildSkills(proxy)
         self._skillsMap = self._buildSkillsMap()
         self.__cmp__ = TankmenComparator()
@@ -256,7 +256,7 @@ class Tankman(GUIItem, HasStrCD):
         :return: True/False
         """
         availSkills = self.availableSkills(useCombinedRoles)
-        return self.roleLevel == tankmen.MAX_SKILL_LEVEL and len(availSkills) > 0 and (self.descriptor.lastSkillLevel == tankmen.MAX_SKILL_LEVEL or not len(self.skills))
+        return self.roleLevel == tankmen.MAX_SKILL_LEVEL and bool(availSkills) and (self.descriptor.lastSkillLevel == tankmen.MAX_SKILL_LEVEL or not self.skills)
 
     @property
     def newSkillCount(self):
@@ -265,7 +265,7 @@ class Tankman(GUIItem, HasStrCD):
             i = 0
             skills_list = list(skills_constants.ACTIVE_SKILLS)
             while 1:
-                if tmanDescr.roleLevel == 100 and (tmanDescr.lastSkillLevel == 100 or len(tmanDescr.skills) == 0) and len(skills_list) > 0:
+                if tmanDescr.roleLevel == 100 and (tmanDescr.lastSkillLevel == 100 or not tmanDescr.skills) and skills_list:
                     skillname = skills_list.pop()
                     skillname not in tmanDescr.skills and tmanDescr.addSkill(skillname)
                     i += 1
@@ -284,7 +284,7 @@ class Tankman(GUIItem, HasStrCD):
         :return: integer -> value of xp cost
         """
         descr = self.descriptor
-        if self.roleLevel != tankmen.MAX_SKILL_LEVEL or len(self.skills) and descr.lastSkillLevel != tankmen.MAX_SKILL_LEVEL:
+        if self.roleLevel != tankmen.MAX_SKILL_LEVEL or self.skills and descr.lastSkillLevel != tankmen.MAX_SKILL_LEVEL:
             lastSkillNumValue = descr.lastSkillNumber - descr.freeSkillsNumber
             if lastSkillNumValue == 0 or self.roleLevel != tankmen.MAX_SKILL_LEVEL:
                 nextSkillLevel = self.roleLevel
@@ -300,7 +300,7 @@ class Tankman(GUIItem, HasStrCD):
         :return: integer -> value of xp cost
         """
         descr = self.descriptor
-        if self.roleLevel != tankmen.MAX_SKILL_LEVEL or len(self.skills) and descr.lastSkillLevel != tankmen.MAX_SKILL_LEVEL:
+        if self.roleLevel != tankmen.MAX_SKILL_LEVEL or self.skills and descr.lastSkillLevel != tankmen.MAX_SKILL_LEVEL:
             lastSkillNumValue = descr.lastSkillNumber - descr.freeSkillsNumber
             if lastSkillNumValue == 0 or self.roleLevel != tankmen.MAX_SKILL_LEVEL:
                 nextSkillLevel = self.roleLevel
@@ -432,8 +432,7 @@ class TankmanSkill(GUIItem):
         if self.isPerk:
             if self.name == 'brotherhood':
                 return 'perk_common'
-            else:
-                return 'perk'
+            return 'perk'
 
     @property
     def name(self):
@@ -640,10 +639,7 @@ def isSkillLearnt(skillName, vehicle):
     :return: boolean result
     """
     isCommonSkill = skillName in tankmen.COMMON_SKILLS
-    if isCommonSkill:
-        return __isCommonSkillLearnt(skillName, vehicle)
-    else:
-        return __isPersonalSkillLearnt(skillName, vehicle)
+    return __isCommonSkillLearnt(skillName, vehicle) if isCommonSkill else __isPersonalSkillLearnt(skillName, vehicle)
 
 
 def __isCommonSkillLearnt(skillName, vehicle):

@@ -17,7 +17,7 @@ class ChannelsStorage(SimpleCachedStorage):
         return 'ChannelsStorage(id=0x{0:08X}, len={1:n})'.format(id(self), len(self.__channels))
 
     def clear(self):
-        while len(self.__channels):
+        while self.__channels:
             self.__channels.pop().clear()
 
         super(ChannelsStorage, self).clear()
@@ -37,7 +37,7 @@ class ChannelsStorage(SimpleCachedStorage):
 
     def getChannelByCriteria(self, criteria):
         channels = self.getChannelsByCriteria(criteria)
-        return channels[0] if len(channels) else None
+        return channels[0] if channels else None
 
     def addChannel(self, channel):
         result = True

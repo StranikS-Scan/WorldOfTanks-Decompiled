@@ -117,12 +117,11 @@ class BWChatProvider(object):
 
     def __sendAction(self, actionID, reqID, args=None):
         player = BigWorld.player()
-        if player:
-            player.base.messenger_onActionByClient_chat2(actionID, reqID, args or messageArgs())
-            return True
-        else:
+        if not player:
             LOG_ERROR('Player is not defined')
             return False
+        player.base.messenger_onActionByClient_chat2(actionID, reqID, args or messageArgs())
+        return True
 
     def __addActionToQueue(self, actionID, reqID, args=None):
         self.__queue.append((actionID, reqID, args))

@@ -62,7 +62,7 @@ def getPrebattleOpponents(extraData, escapeHtml=False):
 def getPrebattleOpponentsString(extraData, escapeHtml=False):
     first, second = getPrebattleOpponents(extraData, escapeHtml=escapeHtml)
     result = ''
-    if len(first) and len(second):
+    if first and second:
         result = i18n.makeString('#menu:opponents', firstOpponent=first, secondOpponent=second)
     return result
 

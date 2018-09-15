@@ -159,9 +159,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
 
     def _getOptainHeaderData(self, vehicle):
         from helpers import int2roman
-        from helpers.i18n import makeString as _ms
-        from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-        levelStr = text_styles.concatStylesWithSpace(text_styles.stats(int2roman(vehicle.level)), text_styles.main(_ms(DIALOGS.VEHICLESELLDIALOG_VEHICLE_LEVEL)))
+        levelStr = text_styles.concatStylesWithSpace(text_styles.stats(int2roman(vehicle.level)), text_styles.main(i18n.makeString(DIALOGS.VEHICLESELLDIALOG_VEHICLE_LEVEL)))
         if vehicle.isElite:
             description = TOOLTIPS.tankcaruseltooltip_vehicletype_elite(vehicle.type)
         else:
@@ -205,7 +203,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
             defPrice = defTCost[currency] * tankMenCount
             totalPrice = Money.makeFrom(currency, price)
             totalDefPrice = Money.makeFrom(currency, defPrice)
-            if typeID is 'free':
+            if typeID == 'free':
                 formatedPrice = i18n.makeString(MENU.TANKMANTRAININGWINDOW_FREE_PRICE)
             else:
                 formatedPrice = moneyWithIcon(totalPrice, currType=currency)
@@ -309,14 +307,14 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
                 return
             tradeOffVehicle = self.itemsCache.items.getItemByCD(int(data.tradeOff))
             result = yield VehicleTradeInProcessor(self.vehicle, tradeOffVehicle, data.buySlot, data.buyAmmo, data.crewType).request()
-            if len(result.userMsg):
+            if result.userMsg:
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
             if not result.success:
                 self.onWindowClose()
                 return
         if data.buySlot:
             result = yield VehicleSlotBuyer(showConfirm=False, showWarning=False).request()
-            if len(result.userMsg):
+            if result.userMsg:
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
             if not result.success:
                 return
@@ -325,7 +323,7 @@ class VehicleBuyWindow(VehicleBuyWindowMeta):
                 result = yield VehicleRenter(self.vehicle, data.rentId, data.buyAmmo, data.crewType).request()
             else:
                 result = yield self._getObtainVehicleProcessor(self.vehicle, data).request()
-            if len(result.userMsg):
+            if result.userMsg:
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         if result and result.success:
             self.onWindowClose()

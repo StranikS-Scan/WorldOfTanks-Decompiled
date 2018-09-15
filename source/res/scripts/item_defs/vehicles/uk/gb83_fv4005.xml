@@ -358,7 +358,7 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	4500	</weight>
       <maxHealth>	370	</maxHealth>
-      <rotationSpeed>	12	</rotationSpeed>
+      <rotationSpeed>	16	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
         <maxRegenHealth>	85	</maxRegenHealth>
@@ -371,18 +371,14 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_183mm_AT_Gun>	shared	  <maxAmmo>	12	</maxAmmo>
+        <_183mm_AT_Gun>	shared	  <maxAmmo>	20	</maxAmmo>
           <armor>
-            <armor_1>	14	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	14	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
             <gun>	30	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <reloadTime>	30	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.34	</turretRotation>
+            <turretRotation>	0.3	</turretRotation>
             <afterShot>	6	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -390,9 +386,9 @@
           <invisibilityFactorAtShot>	0.114	</invisibilityFactorAtShot>
           <pitchLimits>
             <minPitch>	0 -8 1 -8	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
-          <turretYawLimits>	-45 45	</turretYawLimits>
+          <turretYawLimits>	-90 90	</turretYawLimits>
           <models>
             <undamaged>	vehicles/british/GB83_FV4005/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/british/GB83_FV4005/crash/lod0/Gun_01.model	</destroyed>
@@ -426,11 +422,11 @@
         <collisionModelServer>	vehicles/british/GB83_FV4005/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB83_FV4005/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.991024 0.774686	</gunPosition>
+      <gunPosition>	-0.000000 1.02488 0.774686	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-1.13878 1.0411 -1.55116	</rayStart>
-          <rayEnd>	-0.938776 1.0411 -1.55116	</rayEnd>
+          <rayStart>	-1.13879 1.03712 -1.54401	</rayStart>
+          <rayEnd>	-0.938784 1.03712 -1.54401	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.3	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
@@ -467,7 +463,7 @@
     </Turret_1_GB83_FV4005>
   </turrets0>
   <engines>
-    <Rolls_Royse_Meteor_MkIV_B>	shared	</Rolls_Royse_Meteor_MkIV_B>
+    <Rolls_Royce_Griffon>	shared	</Rolls_Royce_Griffon>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -478,9 +474,9 @@
   <physics>
     <detailed>
       <engines>
-        <Rolls_Royse_Meteor_MkIV_B>
-          <smplEnginePower>	687.2327	</smplEnginePower>
-        </Rolls_Royse_Meteor_MkIV_B>
+        <Rolls_Royce_Griffon>
+          <smplEnginePower>	950	</smplEnginePower>
+        </Rolls_Royce_Griffon>
       </engines>
       <chassis>
         <Chassis_GB83_FV4005>

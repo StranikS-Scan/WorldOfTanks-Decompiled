@@ -8,6 +8,12 @@
         <postBattle>
           <and>
             <results>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_complexAssist	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_1_1_6_condition_description_damage_complexAssist	</key>
+              </description>
               <plus>
                 <key>	damagedVehicleCntAssistedTrack	</key>
                 <key>	damagedVehicleCntAssistedRadio	</key>
@@ -24,6 +30,41 @@
         </item>
         <item>	507	  <count>	1	</count>
         </item>
+        <token>
+          <id>	token:pt:final:s1:t1:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_1_6_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_1_1_6_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <item>	1531	  <count>	1	</count>
+        </item>
+        <item>	1019	  <count>	1	</count>
+        </item>
+        <item>	507	  <count>	1	</count>
+        </item>
+        <token>
+          <id>	token:pt:final:s1:t1:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
       </bonus>
     </potapovQuest>
     <potapovQuest>
@@ -35,6 +76,67 @@
           <vehicle>
             <or>
               <installedModules>
+                <hideInGui></hideInGui>
+                <optionalDevice>	stereoscope	</optionalDevice>
+              </installedModules>
+              <installedModules>
+                <title>
+                  <key>	#personal_missions_details:quest_common_condition_title_prepare_to_battle	</key>
+                </title>
+                <description>
+                  <key>	#personal_missions_details:quest_1_1_6_condition_description_installedModules	</key>
+                </description>
+                <optionalDevice>	coatedOptics	</optionalDevice>
+              </installedModules>
+            </or>
+          </vehicle>
+        </preBattle>
+        <postBattle>
+          <and>
+            <results>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_complexAssist	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_1_1_6_condition_description_damage_complexAssist	</key>
+              </description>
+              <plus>
+                <key>	damagedVehicleCntAssistedTrack	</key>
+                <key>	damagedVehicleCntAssistedRadio	</key>
+              </plus>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	35000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t1:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_1_6_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_1_1_6_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+          <vehicle>
+            <or>
+              <installedModules>
+                <hideInGui></hideInGui>
                 <optionalDevice>	stereoscope	</optionalDevice>
               </installedModules>
               <installedModules>
@@ -56,7 +158,11 @@
         </postBattle>
       </conditions>
       <bonus>
-        <credits>	35000	</credits>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
       </bonus>
     </potapovQuest>
   </quests>

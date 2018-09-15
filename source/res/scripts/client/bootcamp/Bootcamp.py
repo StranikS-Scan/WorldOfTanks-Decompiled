@@ -1,8 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/Bootcamp.py
 import BigWorld
-from copy import deepcopy
-import constants
 import base64
 import cPickle
 import BattleReplay
@@ -11,34 +9,53 @@ import SoundGroups
 import MusicControllerWWISE as MC
 from account_helpers.AccountSettings import CURRENT_VEHICLE, AccountSettings
 from account_helpers.settings_core import ISettingsCore
-from account_helpers import isPremiumAccount
 from adisp import process, async
-from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
+from debug_utils import LOG_CURRENT_EXCEPTION
+from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP, LOG_ERROR_BOOTCAMP
 from PlayerEvents import g_playerEvents
-from BootCampEvents import g_bootcampEvents
-from BootcampContext import Chapter
-from BootcampTransition import BootcampTransition
-from BootcampPreferences import BootcampPreferences
-from BootcampSettings import getBattleSettings, getGarageDefaults
-from ReloadLobbyHelper import ReloadLobbyHelper
+from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
+from gui import makeHtmlString
+from gui.app_loader import g_appLoader
+from gui.prb_control.dispatcher import g_prbLoader
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.login.EULADispatcher import EULADispatcher
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.prb_control import prbEntityProperty
 from gui.shared.items_cache import CACHE_SYNC_REASON
-from helpers import dependency
-from states import STATE
-from states.StateInGarage import StateInGarage
-from states.StateInitial import StateInitial
-from states.StateOutroVideo import StateOutroVideo
-from states.StateResultScreen import StateResultScreen
+from gui.battle_control.arena_info import player_format
+from helpers import dependency, aop, i18n
+from .BootcampGUI import BootcampGUI
+from .BootcampReplayController import BootcampReplayController
+from .BootcampConstants import BOOTCAMP_BATTLE_RESULT_MESSAGE
+from .BootCampEvents import g_bootcampEvents
+from .BootcampContext import Chapter
+from .BootcampTransition import BootcampTransition
+from .BootcampPreferences import BootcampPreferences
+from .BootcampSettings import getBattleSettings, getGarageDefaults
+from .ReloadLobbyHelper import ReloadLobbyHelper
+from .states import STATE
+from .states.StateInGarage import StateInGarage
+from .states.StateInitial import StateInitial
+from .states.StateOutroVideo import StateOutroVideo
+from .states.StateResultScreen import StateResultScreen
+from .aop.common import weave
 from skeletons.connection_mgr import IConnectionManager
-from BootcampGUI import BootcampGUI
-from BootcampReplayController import BootcampReplayController
-from constants import BOOTCAMP_BATTLE_RESULT_MESSAGE
-from gui.app_loader import g_appLoader
-from gui import makeHtmlString
+from skeletons.gui.battle_session import IBattleSessionProvider
+from collections import namedtuple
 DISABLED_TANK_LEVELS = (1,)
+
+class _BCNameFormatter(player_format.PlayerFullNameFormatter):
+
+    @staticmethod
+    def _normalizePlayerName(name):
+        msgid = '#bootcamp:{0}'.format(name)
+        locname = i18n.makeString(msgid)
+        if locname != msgid:
+            name = locname
+        return name
+
+
+_BattleResults = namedtuple('_BattleResults', ('type', 'typeStr'))
 
 class BOOTCAMP_LESSON(object):
     BATTLE = 0
@@ -48,6 +65,7 @@ class BOOTCAMP_LESSON(object):
 class Bootcamp(EventSystemEntity):
     settingsCore = dependency.descriptor(ISettingsCore)
     connectionMgr = dependency.descriptor(IConnectionManager)
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
     BOOTCAMP_SOUND_BANKS = ('ambient.bnk', 'bootcamp.pck', 'bootcamp_gui.bnk', 'bootcamp_hangar.bnk', 'bootcamp_voiceover.bnk', 'bootcamp_result_screen.bnk')
 
     def __init__(self):
@@ -62,16 +80,11 @@ class Bootcamp(EventSystemEntity):
         self.__chapter = None
         self.__gui = None
         self.__arenaUniqueID = None
-        self.__resultType = 0
-        self.__resultReason = 0
-        self.__resultTypeStr = ''
-        self.__resultReasonStr = ''
-        self.__resultReusableInfo = None
+        self.__battleResults = None
         self.__hangarSpace = None
         self.__hangarSpacePremium = None
         self.__bonuses = None
         self.__isIntroVideoPlayed = False
-        self.__currentLobbySettingsVisibility = None
         self.__requestBootcampFinishFromBattle = False
         self.transitionFlash = None
         self.__isSniperModeUsed = False
@@ -82,8 +95,10 @@ class Bootcamp(EventSystemEntity):
         self.__nationWindowRemovedCallback = None
         self.__preferences = None
         self.__replayController = None
+        self.__minimapSize = 0.0
         self.__p = {'manualStart': False,
          'finished': False}
+        self.__weaver = aop.Weaver()
         return
 
     @async
@@ -98,10 +113,6 @@ class Bootcamp(EventSystemEntity):
 
     def deserializeContext(self, contextBin):
         return cPickle.loads(base64.b64decode(contextBin))
-
-    def onAvatarInit(self):
-        if BattleReplay.g_replayCtrl.isRecording:
-            BattleReplay.g_replayCtrl.serializeCallbackData('bootcamp_setContext', (self.serializeContext(),))
 
     @property
     def requestBootcampFinishFromBattle(self):
@@ -148,8 +159,6 @@ class Bootcamp(EventSystemEntity):
 
     def setBattleResults(self, arenaUniqueID, resultType, resultReason):
         self.__arenaUniqueID = arenaUniqueID
-        self.__resultType = resultType
-        self.__resultReason = resultReason
         from gui.battle_results.components.common import makeRegularFinishResultLabel
         from gui.battle_results.settings import PLAYER_TEAM_RESULT
         if not resultType:
@@ -158,21 +167,10 @@ class Bootcamp(EventSystemEntity):
             teamResult = PLAYER_TEAM_RESULT.WIN
         else:
             teamResult = PLAYER_TEAM_RESULT.DEFEAT
-        self.__resultTypeStr = makeHtmlString('html_templates:bootcamp/battle_results', teamResult)
-        self.__resultReasonStr = makeRegularFinishResultLabel(resultReason, teamResult)
-        self.__resultReusableInfo = None
-        return
-
-    def setBattleResultsReusableInfo(self, reusableInfo):
-        if reusableInfo.arenaUniqueID == self.__arenaUniqueID:
-            self.__resultReusableInfo = reusableInfo
+        self.__battleResults = _BattleResults(resultType, makeHtmlString('html_templates:bootcamp/battle_results', teamResult))
 
     def getBattleResults(self):
-        return (self.__resultType,
-         self.__resultReason,
-         self.__resultTypeStr,
-         self.__resultReasonStr,
-         self.__resultReusableInfo)
+        return self.__battleResults
 
     def getBattleResultsExtra(self, lessonId):
         from BootcampGarage import g_bootcampGarage
@@ -192,9 +190,16 @@ class Bootcamp(EventSystemEntity):
         self.__isSniperModeUsed = False
 
     def isSniperModeUsed(self):
-        result = self.__isSniperModeUsed
-        self.__isSniperModeUsed = True
-        return result
+        return self.__isSniperModeUsed
+
+    def setSniperModeUsed(self, value):
+        """
+        Set sniper mode used flag, used to set max zoom once
+        Must be used only in StateInBattle.py
+        
+        :param value: sniper mode current state
+        """
+        self.__isSniperModeUsed = value
 
     @process
     def start(self, lessonNum, isBattleLesson):
@@ -217,22 +222,24 @@ class Bootcamp(EventSystemEntity):
         ctx = self.getContext()
         isRelogin = ctx['relogin']
         LOG_DEBUG_DEV_BOOTCAMP('IsRelogin', isRelogin)
-        if not BattleReplay.isPlaying():
-            if not isRelogin:
-                self.showActionWaitWindow()
-                yield self.settingsCore.serverSettings.settingsCache.update()
-                self.settingsCore.serverSettings.applySettings()
-                if ctx['isNewbie'] and not ctx['completed'] and ctx['runCount'] == 1:
-                    self.__preferences = BootcampPreferences()
-                    self.__preferences.setup()
-                self.hideActionWaitWindow()
-                eula = EULADispatcher()
-                yield eula.processLicense()
-                eula.fini()
+        autoStartBattle = isRelogin or BattleReplay.isPlaying()
+        if not autoStartBattle:
+            self.showActionWaitWindow()
+            yield self.settingsCore.serverSettings.settingsCache.update()
+            self.settingsCore.serverSettings.applySettings()
+            self.__preferences = BootcampPreferences()
+            isNewbie = False
+            if ctx['isNewbie'] and not ctx['completed'] and ctx['runCount'] == 1:
+                isNewbie = True
+            self.__preferences.setup(isNewbie)
+            self.hideActionWaitWindow()
+            eula = EULADispatcher()
+            yield eula.processLicense()
+            eula.fini()
         self.__running = True
         self.__lessonId = lessonNum
         self.__lessonType = BOOTCAMP_LESSON.BATTLE if isBattleLesson else BOOTCAMP_LESSON.GARAGE
-        if (lessonNum == 0 or not isBattleLesson) and not isRelogin:
+        if (lessonNum == 0 or not isBattleLesson) and not autoStartBattle:
             self.showActionWaitWindow()
             yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI)
             self.hideActionWaitWindow()
@@ -249,9 +256,14 @@ class Bootcamp(EventSystemEntity):
         self.__nationsData = ctx['nationsData']
         self.__p['completed'] = ctx['completed']
         self.__p['needAwarding'] = ctx['needAwarding']
-        from states.StateBattlePreparing import StateBattlePreparing
-        if not BattleReplay.isPlaying():
+        weave(self.__weaver)
+        from BootcampGarage import g_bootcampGarage
+        g_bootcampGarage.initSubscriptions()
+        g_bootcampEvents.onBootcampStarted()
+        if not autoStartBattle:
             if isBattleLesson:
+                g_prbLoader.createBattleDispatcher()
+                g_prbLoader.setEnabled(True)
                 self.enqueueBattleLesson()
             else:
                 self.showActionWaitWindow()
@@ -261,6 +273,7 @@ class Bootcamp(EventSystemEntity):
                 self.hideActionWaitWindow()
                 self.__currentState.activate()
         else:
+            from states.StateBattlePreparing import StateBattlePreparing
             self.__currentState = StateBattlePreparing(self.__lessonId, BigWorld.player())
             self.__currentState.activate()
         BigWorld.overloadBorders(True)
@@ -271,13 +284,12 @@ class Bootcamp(EventSystemEntity):
         for bankName in self.BOOTCAMP_SOUND_BANKS:
             SoundGroups.g_instance.loadSoundBank(bankName)
 
-        g_bootcampEvents.onBootcampStarted()
-        from BootcampGarage import g_bootcampGarage
-        g_bootcampGarage.initSubscriptions()
+        self.sessionProvider.getCtx().setPlayerFullNameFormatter(_BCNameFormatter())
         return
 
     def stop(self, reason):
         g_bootcampEvents.onBootcampFinished()
+        self.__weaver.clear()
         BigWorld.overloadBorders(False)
         if self.__gui is not None:
             self.__gui.clear()
@@ -314,6 +326,7 @@ class Bootcamp(EventSystemEntity):
 
         from BootcampGarage import g_bootcampGarage
         g_bootcampGarage.destroySubscriptions()
+        self.sessionProvider.getCtx().resetPlayerFullNameFormatter()
         return
 
     def isRunning(self):
@@ -352,9 +365,13 @@ class Bootcamp(EventSystemEntity):
         from states.StateInBattle import StateInBattle
         LOG_DEBUG_DEV_BOOTCAMP('onBattleLoaded called')
         self.__currentState.deactivate()
-        self.__avatar = BigWorld.player()
-        self.__currentState = StateInBattle(lessonId, self.__avatar, self.__chapter, self.__gui)
-        self.__currentState.activate()
+        if self.__currentState.skipBootcamp:
+            self.requestBootcampFinishFromBattle = True
+            self.sessionProvider.exit()
+        else:
+            self.__avatar = BigWorld.player()
+            self.__currentState = StateInBattle(lessonId, self.__avatar, self.__chapter, self.__gui)
+            self.__currentState.activate()
 
     def onBattleLessonFinished(self, lessonId, lessonResults):
         self.__lessonId = lessonId
@@ -378,7 +395,7 @@ class Bootcamp(EventSystemEntity):
         self.__currentState.activate()
 
     def onBattleAction(self, actionId, actionArgs):
-        if actionId == constants.BOOTCAMP_BATTLE_ACTION.PLAYER_OBSERVED_ACTION:
+        if actionId == BOOTCAMP_BATTLE_ACTION.PLAYER_OBSERVED_ACTION:
             if actionArgs[0] == 1:
                 TriggersManager.g_manager.activateTrigger(TriggersManager.TRIGGER_TYPE.PLAYER_VEHICLE_OBSERVED)
             else:
@@ -390,12 +407,12 @@ class Bootcamp(EventSystemEntity):
     def isInBattleResultState(self):
         return isinstance(self.__currentState, StateResultScreen)
 
-    def onResultScreenFinished(self, reward):
+    def onResultScreenFinished(self):
         self.__currentState.deactivate()
-        isVictory = self.__resultType == constants.BOOTCAMP_BATTLE_RESULT_MESSAGE.VICTORY
+        isVictory = self.__battleResults.type == BOOTCAMP_BATTLE_RESULT_MESSAGE.VICTORY
         if self.__lessonId == 0:
             if not isVictory:
-                from gui.prb_control.dispatcher import g_prbLoader
+                g_prbLoader.createBattleDispatcher()
                 g_prbLoader.setEnabled(True)
                 g_appLoader.showLobby()
                 self.__currentState = StateInitial()
@@ -413,6 +430,7 @@ class Bootcamp(EventSystemEntity):
 
     def showFinalVideo(self):
         LOG_DEBUG_DEV_BOOTCAMP('showFinalVideo')
+        MC.g_musicController.muteMusic(True)
         self.__currentState.deactivate()
         self.__currentState = StateOutroVideo()
         self.__currentState.activate()
@@ -450,34 +468,6 @@ class Bootcamp(EventSystemEntity):
             g_bootcampGarage.init(self.__lessonId, self.__account)
             g_bootcampGarage.showBootcampGraduateMessage()
 
-    def hookOnEnterWorld(self):
-        return False if self.__currentState is None or self.__currentState.id() != STATE.BATTLE_PREPARING else self.__currentState.hookOnEnterWorld()
-
-    def hookVehicleOnEnterWorld(self):
-        return False if self.__currentState is None or self.__currentState.id() != STATE.BATTLE_PREPARING else self.__currentState.hookVehicleOnEnterWorld()
-
-    def onEnterWorld(self, avatar):
-        self.__currentState.onEnterWorld(avatar)
-
-    def vehicleOnEnterWorld(self, avatar, vehicle):
-        self.__avatar = avatar
-        self.__currentState.vehicleOnEnterWorld(avatar, vehicle)
-
-    def getDefaultLobbySettings(self):
-        return deepcopy(getGarageDefaults()['panels'])
-
-    def getLobbySettings(self):
-        if not self.__currentLobbySettingsVisibility:
-            self.__currentLobbySettingsVisibility = self.getDefaultLobbySettings()
-        return self.__currentLobbySettingsVisibility
-
-    def setLobbySettings(self, value):
-        self.__currentLobbySettingsVisibility = value
-
-    def updateLobbyLobbySettingsVisibility(self, element, value):
-        if element in self.__currentLobbySettingsVisibility:
-            self.__currentLobbySettingsVisibility[element] = value
-
     def getBattleSettings(self):
         settings = getBattleSettings(self.__lessonId)
         return (settings.visiblePanels, settings.hiddenPanels)
@@ -500,42 +490,26 @@ class Bootcamp(EventSystemEntity):
         g_clientHangarSpaceOverride.setPath(hangarSpace, False, False)
 
     def setBootcampHangarSpace(self):
-        BigWorld.wgUpdateTerrainBorders((-127, -237, -37, -157))
+        BigWorld.updateTerrainBorders((-127, -237, -37, -157))
         self.setHangarSpace(self.__hangarSpace, self.__hangarSpacePremium)
 
     def setDefaultHangarSpace(self):
         self.setHangarSpace(None, None)
         return
 
-    def changeNation(self, tankId, removedCallback):
-        self.__nation = tankId
+    def changeNation(self, nationIndex, removedCallback):
+        self.__nation = nationIndex
         self.__nationWindowRemovedCallback = removedCallback
-        from gui.Scaleform.Waiting import Waiting
         Waiting.show('sinhronize')
-        self.__account.base.changeBootcampLessonBonus(tankId)
+        self.__account.base.changeBootcampLessonBonus(nationIndex)
         g_playerEvents.onClientUpdated += self.onNationChanged
 
-    def onNationChanged(self, diff, updateOnlyLobbyCtx):
+    def onNationChanged(self, _, __):
         g_playerEvents.onClientUpdated -= self.onNationChanged
-        from gui.Scaleform.Waiting import Waiting
         Waiting.hide('sinhronize')
         if self.__nationWindowRemovedCallback is not None:
             self.__nationWindowRemovedCallback()
             self.__nationWindowRemovedCallback = None
-        return
-
-    def disableContextMenuItems(self, options, info=None):
-        for option in options:
-            if option['id'] == 'equip' and self.isResearchFreeLesson():
-                continue
-            initData = option.get('initData', None)
-            if initData is not None:
-                isEnabled = initData.get('enabled', False)
-                if isEnabled:
-                    initData['enabled'] = False
-            option['initData'] = {}
-            option['initData']['enabled'] = False
-
         return
 
     def getBonuses(self):
@@ -577,6 +551,27 @@ class Bootcamp(EventSystemEntity):
 
     def getParameters(self):
         return self.__p
+
+    def addPointcut(self, pointcut, *args, **kwargs):
+        """ Manually add a pointcut to the common Bootcamp weaver.
+            This pointcut can then be removed manually by the returned index.
+            Otherwise, it will be removed automatically when leaving Bootcamp for any reason.
+        
+        :param pointcut: pointcut class or object to add
+        :param args: (optional) extra arguments for pointcut class constructor
+        :param kwargs: (optional) extra arguments for pointcut class constructor, or for aop.Weaver.weave
+        :return: index of the added pointcut - can be used to manually remove it later
+        """
+        return self.__weaver.weave(pointcut=pointcut, *args, **kwargs)
+
+    def removePointcut(self, pointcutIndex):
+        """ Manually remove a pointcut previously added with addPointcut.
+        
+        :param pointcutIndex: index of the pointcut to remove (ignored if None)
+        """
+        if pointcutIndex is not None:
+            self.__weaver.clear(pointcutIndex)
+        return
 
 
 g_bootcamp = Bootcamp()

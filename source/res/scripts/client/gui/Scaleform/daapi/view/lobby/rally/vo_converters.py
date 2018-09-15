@@ -214,10 +214,7 @@ def makeCandidateIconPath(pInfo, user):
     tags = user.getTags() if user else {}
     if USER_TAG.PRESENCE_DND in tags:
         return RES_ICONS.MAPS_ICONS_LIBRARY_USERSTATUS_SMALL_BUSY
-    elif USER_TAG.FRIEND in tags and USER_TAG.SUB_PENDING_OUT not in tags and USER_TAG.SUB_NONE not in tags or USER_TAG.CLAN_MEMBER in tags:
-        return RES_ICONS.MAPS_ICONS_LIBRARY_USERSTATUS_SMALL_ONLINE
-    else:
-        return RES_ICONS.MAPS_ICONS_LIBRARY_USERSTATUS_SMALL_OFFLINE
+    return RES_ICONS.MAPS_ICONS_LIBRARY_USERSTATUS_SMALL_ONLINE if USER_TAG.FRIEND in tags and USER_TAG.SUB_PENDING_OUT not in tags and USER_TAG.SUB_NONE not in tags or USER_TAG.CLAN_MEMBER in tags else RES_ICONS.MAPS_ICONS_LIBRARY_USERSTATUS_SMALL_OFFLINE
 
 
 _UNIT_RESTRICTION_TO_LABEL = {UNIT_RESTRICTION.MAX_TOTAL_LEVEL: 'levelError',
@@ -728,10 +725,7 @@ def makeDirectionVO(buildIdx, isAttack, battleIdx):
                 return 'attack0'
             return 'defense0'
         size = len(__defense)
-        if isAttack:
-            return __attack[buildIdx - 1]
-        return __defense[size - buildIdx - 1]
-        return
+        return __attack[buildIdx - 1] if isAttack else __defense[size - buildIdx - 1]
 
 
 def makeOpenRoomButtonVO(isOpen):

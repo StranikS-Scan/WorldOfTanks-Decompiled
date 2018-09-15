@@ -7,6 +7,7 @@ from account_helpers.settings_core.migrations import migrateToVersion
 from account_helpers.settings_core.settings_constants import TUTORIAL, VERSION
 from adisp import process, async
 from debug_utils import LOG_ERROR, LOG_DEBUG
+from gui.server_events.pm_constants import PM_TUTOR_FIELDS
 from helpers import dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCache
@@ -43,6 +44,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     ENCYCLOPEDIA_RECOMMENDATIONS_1 = 'ENCYCLOPEDIA_RECOMMENDATIONS_1'
     ENCYCLOPEDIA_RECOMMENDATIONS_2 = 'ENCYCLOPEDIA_RECOMMENDATIONS_2'
     ENCYCLOPEDIA_RECOMMENDATIONS_3 = 'ENCYCLOPEDIA_RECOMMENDATIONS_3'
+    UI_STORAGE = 'UI_STORAGE'
 
 
 class ServerSettingsManager(object):
@@ -242,7 +244,8 @@ class ServerSettingsManager(object):
      SETTINGS_SECTIONS.ONCE_ONLY_HINTS: Section(masks={'FalloutQuestsTab': 0,
                                          'CustomizationSlotsHint': 1,
                                          'ShopTradeInHint': 2,
-                                         'VehCompareConfigHint': 3}, offsets={}),
+                                         'VehCompareConfigHint': 3,
+                                         'HoldSheetHint': 4}, offsets={}),
      SETTINGS_SECTIONS.DAMAGE_INDICATOR: Section(masks={DAMAGE_INDICATOR.TYPE: 0,
                                           DAMAGE_INDICATOR.PRESETS: 1,
                                           DAMAGE_INDICATOR.DAMAGE_VALUE: 2,
@@ -278,7 +281,10 @@ class ServerSettingsManager(object):
      SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_2: Section(masks={}, offsets={'item_3': Offset(0, 36863),
                                                         'item_4': Offset(16, 2415853568L)}),
      SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_3: Section(masks={}, offsets={'item_5': Offset(0, 36863),
-                                                        'item_6': Offset(16, 2415853568L)})}
+                                                        'item_6': Offset(16, 2415853568L)}),
+     SETTINGS_SECTIONS.UI_STORAGE: Section(masks={PM_TUTOR_FIELDS.ONE_FAL_SHOWN: 7,
+                                    PM_TUTOR_FIELDS.FOUR_FAL_SHOWN: 8}, offsets={PM_TUTOR_FIELDS.FIRST_ENTRY_STATE: Offset(0, 3),
+                                    PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: Offset(2, 124)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -337,6 +343,18 @@ class ServerSettingsManager(object):
 
     def setEncyclopediaRecommendationsSections(self, ids):
         self.setSections([SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1, SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_2, SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_3], ids)
+
+    def getUIStorage(self, defaults=None):
+        return self.getSection(SETTINGS_SECTIONS.UI_STORAGE, defaults)
+
+    def saveInUIStorage(self, fields):
+        return self.setSections([SETTINGS_SECTIONS.UI_STORAGE], fields)
+
+    def getPersonalMissionsFirstEntryState(self):
+        return self.getUIStorage({PM_TUTOR_FIELDS.FIRST_ENTRY_STATE: 0})[PM_TUTOR_FIELDS.FIRST_ENTRY_STATE]
+
+    def setPersonalMissionsFirstEntryState(self, value):
+        return self.saveInUIStorage({PM_TUTOR_FIELDS.FIRST_ENTRY_STATE: value})
 
     def getHasNewEncyclopediaRecommendations(self):
         return self.getSectionSettings(SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1, 'hasNew')
@@ -480,11 +498,10 @@ class ServerSettingsManager(object):
     def _extractValue(self, key, storedValue, default, masks, offsets):
         if key in masks:
             return storedValue >> masks[key] & 1
-        elif key in offsets:
+        if key in offsets:
             return (storedValue & offsets[key].mask) >> offsets[key].offset
-        else:
-            LOG_ERROR('Trying to extract unsupported option: ', key)
-            return default
+        LOG_ERROR('Trying to extract unsupported option: ', key)
+        return default
 
     def _mapValues(self, settings, storingValue, masks, offsets):
         for key, value in settings.iteritems():

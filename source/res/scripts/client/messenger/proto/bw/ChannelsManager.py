@@ -266,9 +266,9 @@ class ChannelsManager(ChatActionsListener):
                 if data[0] == 0:
                     removed.append(dbID)
 
-            if len(added):
+            if added:
                 channel.addMembers(added)
-            if len(removed):
+            if removed:
                 channel.removeMembers(removed)
             return
 

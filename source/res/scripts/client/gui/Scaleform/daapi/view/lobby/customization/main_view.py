@@ -2,11 +2,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/main_view.py
 from CurrentVehicle import g_currentVehicle
 from adisp import process, async
-from constants import IGR_TYPE, EVENT_TYPE
+from constants import IGR_TYPE
 from gui import DialogsInterface, makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
+from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_helpers import applyCamouflage
 from gui.Scaleform.daapi.view.meta.CustomizationMainViewMeta import CustomizationMainViewMeta
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
@@ -14,16 +15,20 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.customization import g_customizationController
-from gui.customization.shared import checkInQuest, formatPriceCredits, formatPriceGold, getSalePriceString, DURATION, CUSTOMIZATION_TYPE, QUALIFIER_TYPE, QUALIFIER_TYPE_INDEX, FILTER_TYPE
+from gui.customization.shared import checkInQuest, formatPriceCredits, formatPriceGold, getSalePriceString, DURATION, CUSTOMIZATION_TYPE, FILTER_TYPE
 from gui.server_events import events_dispatcher
+from gui.server_events.finders import getPersonalMissionDataFromToken
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import LobbySimpleEvent
 from gui.shared.formatters import text_styles, icons
+from gui.shared.items_parameters import params_helper, formatters as params_formatters, bonus_helper
+from gui.shared.items_parameters.params import EXTRAS_CAMOUFLAGE
 from gui.shared.utils.functions import makeTooltip, getAbsoluteUrl
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from shared import getDialogRemoveElement, getDialogReplaceElement
+from shared_utils import first
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
@@ -67,12 +72,9 @@ def _getSlotVO(slotData, cType, slotIdx):
      'removeBtnTooltip': makeTooltip(TOOLTIPS.CUSTOMIZATION_SLOTREMOVE_HEADER, TOOLTIPS.CUSTOMIZATION_SLOTREMOVE_BODY),
      'revertBtnVisible': slotData['isRevertible'],
      'revertBtnTooltip': makeTooltip(TOOLTIPS.CUSTOMIZATION_SLOTREVERT_HEADER, TOOLTIPS.CUSTOMIZATION_SLOTREVERT_BODY),
-     'spot': slotData['spot'],
      'isInDossier': slotData['isInDossier'],
      'img': slotImage}
     if slotData['element'] is not None:
-        slotVO['bonusVisible'] = slotData['element'].qualifier.getValue() > 0
-        slotVO['bonus'] = _getSlotBonusString(slotData['element'].qualifier, slotData['isInDossier'])
         if slotData['isInQuest']:
             purchaseTypeIcon = RES_ICONS.MAPS_ICONS_LIBRARY_QUEST_ICON
         elif slotData['duration'] == DURATION.PERMANENT:
@@ -110,18 +112,6 @@ def _getDurationTypeVO():
     return durationTypeVOs
 
 
-def _createBonusVOList(blData, bonusNameList):
-    result = []
-    for qTypeName in bonusNameList:
-        bonusVO = {'bonusName': blData[qTypeName]['bonusName'],
-         'bonusIcon': blData[qTypeName]['bonusIcon'],
-         'animationPanel': blData[qTypeName]['animationPanel'],
-         'bonusType': qTypeName}
-        result.append(bonusVO)
-
-    return result
-
-
 def _getInvoiceItemDialogMeta(dialogType, cType, carouselItem, l10nExtraParams):
     l10nParams = {'cTypeName': _ms('#vehicle_customization:typeSwitchScreen/typeName/{0}'.format(cType)),
      'itemName': carouselItem.getName()}
@@ -157,6 +147,7 @@ class MainView(CustomizationMainViewMeta):
         self.__isCarouselHidden = True
         self.__setBottomPanelData()
         self.as_showSelectorGroupS()
+        self.__setInitialBonusData()
         self.__controller.events.onBackToSelectorGroup()
 
     def installCustomizationElement(self, idx):
@@ -178,10 +169,7 @@ class MainView(CustomizationMainViewMeta):
         self.__controller.filter.set(FILTER_TYPE.SHOW_IN_DOSSIER, value)
 
     def goToTask(self, idx):
-        item = self.__controller.carousel.items[idx]['element']
-        cType = self.__controller.slots.currentType
-        quests = self.__controller.dataAggregator.getIncompleteQuestItems()
-        questData = quests[cType][item.getID()]
+        questData = self.__getQuestData(self.__controller.carousel.items[idx])
         events_dispatcher.showMission(questData.id)
 
     def _populate(self):
@@ -203,6 +191,7 @@ class MainView(CustomizationMainViewMeta):
         self.__setFooterInitData()
         self.__setCarouselInitData()
         self.__setBottomPanelData()
+        self.__setInitialBonusData()
         self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.HIDE_HANGAR, True))
         self.lobbyContext.addHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
 
@@ -229,15 +218,17 @@ class MainView(CustomizationMainViewMeta):
          'type': cType,
          'idx': slotIdx})
 
-    def __onCustomizationQuestsUpdated(self, incompleteQuestItems):
-        self.__incompleteQuestItems = incompleteQuestItems
-
     def __setBottomPanelData(self, *args):
         if self.__isCarouselHidden:
             occupiedSlotsNum, totalSlotsNum = self.__controller.slots.getSummary()
             label = text_styles.highTitle(_ms(VEHICLE_CUSTOMIZATION.TYPESWITCHSCREEN_SLOTSUMMARY, occupiedSlotsNum=occupiedSlotsNum, totalSlotsNum=totalSlotsNum))
         else:
             label = text_styles.middleTitle(_ms('#vehicle_customization:typeSwitchScreen/typeName/plural/{0}'.format(self.__controller.slots.currentType)))
+            currentSlotData = self.__controller.slots.getCurrentSlotData()
+            if currentSlotData:
+                item = currentSlotData['element']
+                if item and item.qualifier.getValue() > 0:
+                    label = text_styles.middleTitle('%s (+%s%%)' % (label, item.qualifier.getValue()))
         totalGold = self.__controller.cart.totalPriceGold
         totalCredits = self.__controller.cart.totalPriceCredits
         notEnoughGoldTooltip = notEnoughCreditsTooltip = ''
@@ -278,10 +269,42 @@ class MainView(CustomizationMainViewMeta):
         if proceed:
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def __setBonusData(self, blData):
-        visibilityPanelRenderList = _createBonusVOList(blData, [QUALIFIER_TYPE.CAMOUFLAGE])
-        self.as_setBonusPanelDataS({'bonusTitle': text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATIONBONUSPANEL_VISIBILITYTITLE),
-         'bonusRenderersList': visibilityPanelRenderList})
+    def __setBonusData(self, *args):
+        if self.__controller.slots.currentType == CUSTOMIZATION_TYPE.CAMOUFLAGE:
+            currentSlotData = self.__controller.slots.getCurrentSlotData()
+            vehCopy = self.itemsCache.items.getVehicleCopy(g_currentVehicle.item)
+            applyCamouflage(vehCopy, bool(currentSlotData['element']))
+            self.__setBonusDeltaData(vehCopy)
+
+    def __setInitialBonusData(self):
+        vehCopy = self.itemsCache.items.getVehicleCopy(g_currentVehicle.item)
+        hasInstalledCamouflage = False
+        for slotData in self.__controller.slots.currentSlotsData[CUSTOMIZATION_TYPE.CAMOUFLAGE]:
+            if bool(slotData['element']):
+                hasInstalledCamouflage = True
+                break
+
+        applyCamouflage(vehCopy, hasInstalledCamouflage)
+        self.__setBonusDeltaData(vehCopy)
+
+    def __setBonusDeltaData(self, veh):
+        stockParams = params_helper.getParameters(self.itemsCache.items.getStockVehicle(veh.intCD))
+        paramName = 'relativeCamouflage'
+        extendedData = params_helper.idealCrewComparator(veh).getExtendedData(paramName)
+        bonusExtractor = bonus_helper.BonusExtractor(veh, extendedData.bonuses, paramName)
+        pInfo = bonusExtractor.extractBonus('extra', EXTRAS_CAMOUFLAGE)
+        delta = pInfo.state[1]
+        value = pInfo.value
+        if delta > 0:
+            value -= delta
+        self.as_setBonusDeltaDataS({'title': text_styles.middleTitle(MENU.tank_params(pInfo.name)),
+         'valueStr': params_formatters.simlifiedDeltaParameter(pInfo),
+         'statusBarData': {'value': value,
+                           'delta': delta,
+                           'minValue': 0,
+                           'markerValue': stockParams[pInfo.name],
+                           'maxValue': 1000,
+                           'useAnim': False}})
 
     def __setCarouselInitData(self):
         self.as_setCarouselInitS({'icoFilter': RES_ICONS.MAPS_ICONS_BUTTONS_FILTER,
@@ -298,7 +321,9 @@ class MainView(CustomizationMainViewMeta):
         selectedIndex = -1
         for item in blData['items']:
             element = item['element']
+            questData = self.__getQuestData(item)
             isInQuest = checkInQuest(element, self.__controller.filter.purchaseType)
+            isBelongToPM = questData and getPersonalMissionDataFromToken(questData.requiredToken)[0]
             if item['installedInCurrentSlot']:
                 label = text_styles.main(VEHICLE_CUSTOMIZATION.CAROUSEL_ITEMLABEL_APPLIED)
             elif element.isInDossier:
@@ -309,7 +334,10 @@ class MainView(CustomizationMainViewMeta):
                 else:
                     label = icons.premiumIgrSmall()
             elif isInQuest:
-                label = icons.quest()
+                if isBelongToPM:
+                    label = icons.quest()
+                else:
+                    label = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_MISSION_ICON)
             else:
                 if item['duration'] == DURATION.PERMANENT:
                     priceFormatter = text_styles.gold
@@ -322,12 +350,10 @@ class MainView(CustomizationMainViewMeta):
              'icon': element.getTexturePath(),
              'label': label,
              'selected': item['appliedToCurrentSlot'] or item['installedInCurrentSlot'] and not blData['hasAppliedItem'],
-             'goToTaskBtnVisible': isInQuest,
+             'goToTaskBtnVisible': questData and not questData.isHidden,
              'goToTaskBtnText': _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMCAROUSEL_RENDERER_GOTOTASK),
-             'newElementIndicatorVisible': item['isNewElement']}
-            if element.qualifier.getValue() > 0:
-                data['bonusType'] = element.qualifier.getIcon16x16()
-                data['bonusPower'] = text_styles.stats('+{0}%{1}'.format(element.qualifier.getValue(), '*' if element.qualifier.getDescription() is not None else ''))
+             'newElementIndicatorVisible': item['isNewElement'],
+             'rareIcon': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_BRUSH_RARE if isBelongToPM else ''}
             if data['selected']:
                 selectedIndex = blData['items'].index(item)
             if element.isOnSale(item['duration']) and not element.isInDossier and not item['installedInCurrentSlot'] and not isInQuest:
@@ -342,7 +368,19 @@ class MainView(CustomizationMainViewMeta):
          'counterVisible': True,
          'goToIndex': blData['goToIndex'],
          'selectedIndex': selectedIndex})
-        return
+
+    def __getCommonQuestData(self, item):
+        element = item['element']
+        cType = self.__controller.slots.currentType
+        quests = self.__controller.dataAggregator.getIncompleteQuestItems()
+        return first(quests[cType].get(element.getID(), []))
+
+    def __getPersonalMissionsData(self, item):
+        element = item['element']
+        return self.__controller.dataAggregator.getRequiredPMTokensQuestItems().get(element.requiredToken)
+
+    def __getQuestData(self, item):
+        return self.__getCommonQuestData(item) or self.__getPersonalMissionsData(item)
 
     def __onPurchaseProcessed(self):
         self.backToSelectorGroup()
@@ -363,6 +401,10 @@ class MainView(CustomizationMainViewMeta):
         cType = self.__controller.slots.currentType
         installedSlotData = self.__controller.slots.getInstalledSlotData()
         numberOfDaysLeft = installedSlotData['daysLeft']
+        isBelongToPM = False
+        questData = first(self.__controller.dataAggregator.getQuestData(cType, element))
+        if questData:
+            isBelongToPM, _, _ = getPersonalMissionDataFromToken(questData.requiredToken)
         if element.isInDossier:
             if numberOfDaysLeft > 0 and element.getIgrType() != IGR_TYPE.PREMIUM:
                 currentSlotData = self.__controller.slots.getCurrentSlotData()
@@ -372,7 +414,7 @@ class MainView(CustomizationMainViewMeta):
             elif element.numberOfItems is not None:
                 if element.numberOfItems > 1:
                     isContinue = yield DialogsInterface.showDialog(_getInvoiceItemDialogMeta('permanent', cType, element, {'numberLeft': element.numberOfItems - 1}))
-                else:
+                elif not isBelongToPM:
                     isContinue = yield DialogsInterface.showDialog(_getInvoiceItemDialogMeta('permanent_last', cType, element, {}))
         if isContinue:
             self.__controller.carousel.pickElement(idx)

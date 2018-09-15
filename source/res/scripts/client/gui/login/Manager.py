@@ -78,7 +78,11 @@ class Manager(ILoginManager):
         return
 
     def initiateRelogin(self, login, token2, serverName):
-        loginParams = BigWorld.WGC_reloginData()
+        loginParams = None
+        if login == 'wgc':
+            if not BigWorld.WGC_prepareLogin():
+                return
+            loginParams = BigWorld.WGC_loginData()
         if loginParams is None:
             loginParams = {'login': login,
              'token2': token2,
@@ -108,7 +112,7 @@ class Manager(ILoginManager):
     def _onLoggedOn(self, responseData):
         name = responseData.get('name', 'UNKNOWN')
         token2 = responseData.get('token2', '')
-        if BigWorld.WGC_processingState() == constants.WGC_STATE.LOGIN_IN_PROGRESS:
+        if BigWorld.WGC_processingState() == constants.WGC_STATE.LOGGEDIN:
             BigWorld.WGC_storeToken2(responseData['token2'])
         else:
             self.lobbyContext.setCredentials(name, token2)

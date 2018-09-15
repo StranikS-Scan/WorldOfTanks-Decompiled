@@ -27,6 +27,7 @@ class Carousel(object):
     def init(self):
         self.__filter.init()
         self.__events.onFilterUpdated += self.__update
+        self.__events.onQuestsItemsDataChanged += self.__onQuestDataUpdate
         self.__events.onSlotSelected += self.__onSlotSelected
         self.__events.onSlotUpdated += self.__onSlotUpdated
         self.__events.onDisplayedElementsAndGroupsUpdated += self.__saveDisplayedElements
@@ -35,6 +36,7 @@ class Carousel(object):
     def fini(self):
         self.__slots.fini()
         self.__events.onDisplayedElementsAndGroupsUpdated -= self.__saveDisplayedElements
+        self.__events.onQuestsItemsDataChanged -= self.__onQuestDataUpdate
         self.__events.onFilterUpdated -= self.__update
         self.__events.onSlotSelected -= self.__onSlotSelected
         self.__events.onSlotUpdated -= self.__onSlotUpdated
@@ -85,6 +87,9 @@ class Carousel(object):
         if self.__currentType == cType and self.__currentSlotIdx == slotIdx:
             self.__update()
 
+    def __onQuestDataUpdate(self):
+        self.__update()
+
     def __update(self):
         newElements = AccountSettings.getSettings('customization')
         newElementsSubset = newElements[self.__currentType].get(self.__currentVehicle.item.intCD, {})
@@ -122,7 +127,7 @@ class Carousel(object):
                     group = purchasedItems[element.getGroup()]
                 else:
                     group = otherItems[element.getGroup()]
-                if element.isFeatured:
+                if element.isFeatured or element.hasRequiredToken:
                     group.insert(0, carouselItem)
                 else:
                     group.append(carouselItem)

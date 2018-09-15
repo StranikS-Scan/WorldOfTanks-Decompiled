@@ -32,7 +32,6 @@ class QuestsControlsFactory(ControlsFactory):
          EFFECT_TYPE.SAVE_TUTORIAL_SETTING: quests_func.SaveTutorialSettingEffect,
          EFFECT_TYPE.SAVE_ACCOUNT_SETTING: quests_func.SaveAccountSettingEffect,
          EFFECT_TYPE.RUN_TRIGGER: quests_func.QuestsFunctionalRunTriggerEffect,
-         EFFECT_TYPE.SHOW_UNLOCKED_CHAPTER: chains_func.FunctionalShowUnlockedChapter,
          EFFECT_TYPE.SHOW_AWARD_WINDOW: chains_func.FunctionalShowAwardWindow,
          EFFECT_TYPE.ENTER_QUEUE: chains_func.FunctionalSwitchToRandom}
         _queries = {'awardWindow': queries.AwardWindowContentQuery}

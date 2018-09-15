@@ -47,10 +47,7 @@ class PrbCtrlRequestCtx(RequestCtx):
         return self.__ctrlType
 
     def getCtrlTypeName(self):
-        if self.__ctrlType in CTRL_ENTITY_TYPE_NAMES:
-            return CTRL_ENTITY_TYPE_NAMES[self.__ctrlType]
-        else:
-            return 'CTRL_ENTITY_TYPE_{}'.format(self.__ctrlType)
+        return CTRL_ENTITY_TYPE_NAMES[self.__ctrlType] if self.__ctrlType in CTRL_ENTITY_TYPE_NAMES else 'CTRL_ENTITY_TYPE_{}'.format(self.__ctrlType)
 
     def getEntityType(self):
         """
@@ -139,7 +136,7 @@ class LeavePrbAction(object):
     """
     Class for player'r prebattle leave action data.
     """
-    __slots__ = 'isExit'
+    __slots__ = ('isExit',)
 
     def __init__(self, isExit=True):
         self.isExit = isExit

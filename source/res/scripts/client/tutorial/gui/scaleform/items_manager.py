@@ -24,9 +24,6 @@ class AttributeCriteria(ExternalCriteria):
 
 class ItemsManager(object):
 
-    def __init__(self):
-        super(ItemsManager, self).__init__()
-
     @sf_lobby
     def app(self):
         return None

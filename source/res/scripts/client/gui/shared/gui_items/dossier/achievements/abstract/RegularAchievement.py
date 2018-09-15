@@ -104,8 +104,11 @@ class RegularAchievement(GUIItem):
          self.ICON_TYPE.IT_67X71: '%s/%s.png' % (self.ICON_PATH_67X71, iconName),
          self.ICON_TYPE.IT_32X32: '%s/%s.png' % (self.ICON_PATH_32X32, iconName)}
 
-    def getBigIcon(self):
+    def getHugeIcon(self):
         return self.getIcons()[self.ICON_TYPE.IT_180X180]
+
+    def getBigIcon(self):
+        return self.getSmallIcon()
 
     def getSmallIcon(self):
         return self.getIcons()[self.ICON_TYPE.IT_67X71]
@@ -126,6 +129,9 @@ class RegularAchievement(GUIItem):
     def getNotificationInfo(self):
         notificationKey = '#achievements:%s_notification' % self._getActualName()
         return i18n.makeString(notificationKey) if i18n.doesTextExist(notificationKey) else ''
+
+    def getShowCondSeparator(self):
+        return True
 
     def getUserCondition(self):
         condKey = '#achievements:%s_condition' % self._getActualName()

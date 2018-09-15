@@ -61,7 +61,7 @@ class VehCmpCustomizationTooltip(BlocksTooltipData):
             comparator = params_helper.camouflageComparator(vehicle, cmpItem)
             stockParams = params_helper.getParameters(stockVehicle)
             simplifiedBlocks = SimplifiedStatsBlockConstructor(stockParams, comparator).construct()
-            if len(simplifiedBlocks) > 0:
+            if simplifiedBlocks:
                 blocks.extend(simplifiedBlocks)
         return formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
 

@@ -57,12 +57,12 @@ class BattleBoosterBlockTooltipData(BlocksTooltipData):
             stockParams = params_helper.getParameters(stockVehicle)
             comparator = params_helper.artifactComparator(statsConfig.vehicle, module, statsConfig.slotIdx, True)
             simplifiedBlock = SimplifiedStatsBlockConstructor(module, paramsConfig, leftPadding, rightPadding, stockParams, comparator).construct()
-            if len(simplifiedBlock) > 0:
+            if simplifiedBlock:
                 items.append(formatters.packBuildUpBlockData(simplifiedBlock, gap=textGap, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-14, bottom=1), stretchBg=True))
             if statsConfig.vehicle.equipment.battleBoosterConsumables[0] is not None:
                 comparator = params_helper.artifactRemovedComparator(statsConfig.vehicle, module, statsConfig.slotIdx)
                 simplifiedBlock = SimplifiedStatsBlockConstructor(module, paramsConfig, leftPadding, rightPadding, stockParams, comparator).construct()
-                if len(simplifiedBlock) > 0:
+                if simplifiedBlock:
                     replaceBlock = BattleBoosterReplaceBlockConstructor(module, statsConfig, valueWidth, leftPadding).construct()
                     if replaceBlock:
                         items.append(formatters.packBuildUpBlockData(replaceBlock))
@@ -154,10 +154,8 @@ class EffectsBlockConstructor(BattleBoosterTooltipBlockConstructor):
         if applyStyles:
             if skillLearnt:
                 return (text_styles.main(replaceText), text_styles.bonusAppliedText(boostText))
-            else:
-                return (text_styles.bonusAppliedText(replaceText), text_styles.main(boostText))
-        else:
-            return (text_styles.main(replaceText), text_styles.main(boostText))
+            return (text_styles.bonusAppliedText(replaceText), text_styles.main(boostText))
+        return (text_styles.main(replaceText), text_styles.main(boostText))
 
 
 class BattleBoosterReplaceBlockConstructor(BattleBoosterTooltipBlockConstructor):

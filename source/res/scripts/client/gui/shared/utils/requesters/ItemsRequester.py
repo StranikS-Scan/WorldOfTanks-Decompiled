@@ -206,6 +206,13 @@ class REQ_CRITERIA(object):
         SIMPLE = RequestCriteria(PredicateCondition(lambda item: not item.isDeluxe()))
         DELUXE = RequestCriteria(PredicateCondition(lambda item: item.isDeluxe()))
 
+    class BADGE:
+        """
+        Criteria for badges
+        """
+        SELECTED = RequestCriteria(PredicateCondition(lambda item: item.isSelected))
+        ACHIEVED = RequestCriteria(PredicateCondition(lambda item: item.isAchieved))
+
 
 class RESEARCH_CRITERIA(object):
     VEHICLE_TO_UNLOCK = ~REQ_CRITERIA.SECRET | ~REQ_CRITERIA.HIDDEN | ~REQ_CRITERIA.VEHICLE.PREMIUM | ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR | ~REQ_CRITERIA.VEHICLE.EVENT
@@ -222,7 +229,7 @@ class ItemsRequester(IItemsRequester):
     """
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -231,6 +238,7 @@ class ItemsRequester(IItemsRequester):
         self.__vehicleRotation = vehicleRotation
         self.__recycleBin = recycleBin
         self.__ranked = ranked
+        self.__badges = badges
         self.__itemsCache = defaultdict(dict)
         self.__vehCustomStateCache = defaultdict(dict)
 
@@ -266,6 +274,10 @@ class ItemsRequester(IItemsRequester):
     def ranked(self):
         return self.__ranked
 
+    @property
+    def badges(self):
+        return self.__badges
+
     @async
     @process
     def request(self, callback=None):
@@ -288,8 +300,11 @@ class ItemsRequester(IItemsRequester):
         yield self.__recycleBin.request()
         Waiting.hide('download/recycleBin')
         Waiting.show('download/ranked')
-        yield self.ranked.request()
+        yield self.__ranked.request()
         Waiting.hide('download/ranked')
+        Waiting.show('download/badges')
+        yield self.__badges.request()
+        Waiting.hide('download/badges')
         callback(self)
 
     def isSynced(self):
@@ -326,7 +341,7 @@ class ItemsRequester(IItemsRequester):
         callback(userVehDossier)
 
     def clear(self):
-        while len(self.__itemsCache):
+        while self.__itemsCache:
             _, cache = self.__itemsCache.popitem()
             cache.clear()
 
@@ -338,7 +353,8 @@ class ItemsRequester(IItemsRequester):
         self.__goodies.clear()
         self.__vehicleRotation.clear()
         self.__recycleBin.clear()
-        self.ranked.clear()
+        self.__ranked.clear()
+        self.__badges.clear()
 
     def invalidateCache(self, diff=None):
         invalidate = defaultdict(set)
@@ -400,17 +416,19 @@ class ItemsRequester(IItemsRequester):
 
             if itemTypeID == GUI_ITEM_TYPE.SHELL:
                 invalidate[itemTypeID].update(itemsDiff.keys())
-                for shellIntCD in itemsDiff.iterkeys():
-                    for vehicle in self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE).itervalues():
-                        shells = vehicle['shells']
-                        for intCD, _, _ in LayoutIterator(shells):
-                            if shellIntCD == intCD:
-                                vehicleIntCD = vehicles.getVehicleTypeCompactDescr(vehicle['compDescr'])
-                                invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
-                                vehicleData = self.__inventory.getItemData(vehicleIntCD)
-                                if vehicleData is not None:
-                                    gunIntCD = vehicleData.descriptor.gun.compactDescr
-                                    invalidate[GUI_ITEM_TYPE.GUN].add(gunIntCD)
+                vehicleItems = self.__inventory.getItems(GUI_ITEM_TYPE.VEHICLE)
+                if vehicleItems:
+                    for shellIntCD in itemsDiff.iterkeys():
+                        for vehicle in vehicleItems.itervalues():
+                            shells = vehicle['shells']
+                            for intCD, _, _ in LayoutIterator(shells):
+                                if shellIntCD == intCD:
+                                    vehicleIntCD = vehicles.getVehicleTypeCompactDescr(vehicle['compDescr'])
+                                    invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
+                                    vehicleData = self.__inventory.getItemData(vehicleIntCD)
+                                    if vehicleData is not None:
+                                        gunIntCD = vehicleData.descriptor.gun.compactDescr
+                                        invalidate[GUI_ITEM_TYPE.GUN].add(gunIntCD)
 
             invalidate[itemTypeID].update(itemsDiff.keys())
 
@@ -506,6 +524,20 @@ class ItemsRequester(IItemsRequester):
 
     def getVehicles(self, criteria=REQ_CRITERIA.EMPTY):
         return self.getItems(GUI_ITEM_TYPE.VEHICLE, criteria=criteria)
+
+    def getBadges(self, criteria=REQ_CRITERIA.EMPTY):
+        """
+        Returns badges items collection. Unfortunately, no caching is available due to
+        specific storing system.
+        :return: ItemsCollection with badges
+        """
+        result = ItemsCollection()
+        for badgeID, badgeData in self.__badges.available.iteritems():
+            item = self.itemsFactory.createBadge(badgeData, proxy=self)
+            if criteria(item):
+                result[badgeID] = item
+
+        return result
 
     def getItemByCD(self, typeCompDescr):
         """

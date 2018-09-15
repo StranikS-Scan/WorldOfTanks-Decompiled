@@ -8,6 +8,7 @@ Please, don't edit this file manually.
 class VEHICLE_PREVIEW(object):
     HEADER_BACKBTN_LABEL = '#vehicle_preview:header/backBtn/label'
     HEADER_BACKBTN_DESCRLABEL_RESEARCHTREE = '#vehicle_preview:header/backBtn/descrLabel/researchTree'
+    HEADER_BACKBTN_DESCRLABEL_PERSONALAWARDS = '#vehicle_preview:header/backBtn/descrLabel/personalAwards'
     HEADER_BACKBTN_DESCRLABEL_SHOP = '#vehicle_preview:header/backBtn/descrLabel/shop'
     HEADER_BACKBTN_DESCRLABEL_HANGAR = '#vehicle_preview:header/backBtn/descrLabel/hangar'
     HEADER_BACKBTN_DESCRLABEL_VEHICLECOMPARE = '#vehicle_preview:header/backBtn/descrLabel/vehicleCompare'

@@ -186,46 +186,45 @@ class BattleReplay():
     def record(self, fileName=None):
         if self.isPlaying:
             return False
-        else:
-            if self.isRecording:
-                if not self.stop():
-                    LOG_ERROR('Failed to start recording new replay - cannot stop previous record')
-                    return False
-            useAutoFilename = False
-            if fileName is None:
-                useAutoFilename = True
-            try:
-                if not os.path.isdir(self.__replayDir):
-                    os.makedirs(self.__replayDir)
-            except:
-                LOG_ERROR('Failed to create directory for replay files')
+        if self.isRecording:
+            if not self.stop():
+                LOG_ERROR('Failed to start recording new replay - cannot stop previous record')
                 return False
-
-            success = False
-            for i in xrange(100):
-                try:
-                    if useAutoFilename:
-                        fileName = os.path.join(self.__replayDir, AUTO_RECORD_TEMP_FILENAME + ('' if i == 0 else str(i)) + REPLAY_FILE_EXTENSION)
-                    f = open(fileName, 'wb')
-                    f.close()
-                    os.remove(fileName)
-                    success = True
-                    break
-                except:
-                    if useAutoFilename:
-                        continue
-                    else:
-                        break
-
-            if not success:
-                LOG_ERROR('Failed to create replay file, replays folder may be write-protected')
-                return False
-            g_replayEvents.onRecording()
-            if self.__replayCtrl.startRecording(fileName):
-                self.__fileName = fileName
-                return True
+        useAutoFilename = False
+        if fileName is None:
+            useAutoFilename = True
+        try:
+            if not os.path.isdir(self.__replayDir):
+                os.makedirs(self.__replayDir)
+        except:
+            LOG_ERROR('Failed to create directory for replay files')
             return False
-            return
+
+        success = False
+        for i in xrange(100):
+            try:
+                if useAutoFilename:
+                    fileName = os.path.join(self.__replayDir, AUTO_RECORD_TEMP_FILENAME + ('' if i == 0 else str(i)) + REPLAY_FILE_EXTENSION)
+                f = open(fileName, 'wb')
+                f.close()
+                os.remove(fileName)
+                success = True
+                break
+            except:
+                if useAutoFilename:
+                    continue
+                else:
+                    break
+
+        if not success:
+            LOG_ERROR('Failed to create replay file, replays folder may be write-protected')
+            return False
+        g_replayEvents.onRecording()
+        if self.__replayCtrl.startRecording(fileName):
+            self.__fileName = fileName
+            return True
+        else:
+            return False
 
     def play(self, fileName=None):
         if self.isRecording:
@@ -246,11 +245,11 @@ class BattleReplay():
                 pass
 
         if fileName is None:
-            if len(self.__playList) == 0:
+            if not self.__playList:
                 return False
             fileName = self.__playList[0]
             self.__playList.pop(0)
-            self.__quitAfterStop = len(self.__playList) == 0
+            self.__quitAfterStop = not self.__playList
         self.__fileName = fileName
         if self.__replayCtrl.startPlayback(fileName):
             self.__playbackSpeedIdx = self.__playbackSpeedModifiers.index(1.0)
@@ -260,7 +259,6 @@ class BattleReplay():
         else:
             self.__fileName = None
             return False
-            return
 
     def stop(self, rewindToTime=None, delete=False, isDestroyed=False):
         if not self.isPlaying and not self.isRecording:
@@ -599,9 +597,10 @@ class BattleReplay():
                  'regionCode': constants.AUTH_REALM,
                  'serverSettings': self.__serverSettings,
                  'hasMods': self.__replayCtrl.hasMods}
-                if self.isRecording and BigWorld.player().arena.guiType == constants.ARENA_GUI_TYPE.BOOTCAMP:
+                if BigWorld.player().arena.guiType == constants.ARENA_GUI_TYPE.BOOTCAMP:
                     from bootcamp.Bootcamp import g_bootcamp
                     arenaInfo['lessonId'] = g_bootcamp.getLessonNum()
+                    arenaInfo['bootcampCtx'] = g_bootcamp.serializeContext()
                 self.__replayCtrl.recMapName = arenaName
                 self.__replayCtrl.recPlayerVehicleName = vehicleName
                 self.__replayCtrl.setArenaInfoStr(json.dumps(arenaInfo))
@@ -821,7 +820,7 @@ class BattleReplay():
             personals = modifiedResults.get('personal', None)
             if personals is not None:
                 for personal in personals.itervalues():
-                    for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'goldReplay', 'freeXPReplay', 'avatarDamageEventList'):
+                    for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'goldReplay', 'crystalReplay', 'freeXPReplay', 'avatarDamageEventList'):
                         personal[field] = None
 
             modifiedResults = (modifiedResults, self.__getArenaVehiclesInfo(), BigWorld.player().arena.statistics)
@@ -896,14 +895,10 @@ class BattleReplay():
     def setSetting(self, key, value):
         self.__settings.write(key, base64.b64encode(pickle.dumps(value)))
         diff = {key: value}
-        LOG_DEBUG('Applying REPLAY settings: ', diff)
         self.settingsCore.onSettingsChanged(diff)
 
     def isFinished(self):
-        if self.isPlaying or g_replayCtrl.isTimeWarpInProgress:
-            return self.__isFinished
-        else:
-            return False
+        return self.__isFinished if self.isPlaying or g_replayCtrl.isTimeWarpInProgress else False
 
     def isFinishedNoPlayCheck(self):
         return self.__isFinished
@@ -1008,7 +1003,7 @@ def _JSON_Encode(obj):
             newDict[key] = _JSON_Encode(value)
 
         return newDict
-    if isinstance(obj, list) or isinstance(obj, tuple) or isinstance(obj, set):
+    if isinstance(obj, (list, tuple, set)):
         newList = []
         for value in obj:
             newList.append(_JSON_Encode(value))
@@ -1018,11 +1013,7 @@ def _JSON_Encode(obj):
 
 
 def isPlaying():
-    if g_replayCtrl is not None:
-        return g_replayCtrl.isPlaying or g_replayCtrl.isTimeWarpInProgress
-    else:
-        return False
-        return
+    return g_replayCtrl.isPlaying or g_replayCtrl.isTimeWarpInProgress if g_replayCtrl is not None else False
 
 
 def isLoading():

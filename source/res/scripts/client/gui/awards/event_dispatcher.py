@@ -23,10 +23,6 @@ def showBoosterAward(booster):
     showAwardWindow(specialAwards.BoosterAward(booster))
 
 
-def showFalloutAward(lvls, isRequiredVehicle=False):
-    showAwardWindow(specialAwards.FalloutAwardWindow(lvls, isRequiredVehicle))
-
-
 def showClanJoinAward(clanAbbrev, clanName, clanDbID):
     showAwardWindow(specialAwards.ClanJoinAward(clanAbbrev, clanName, clanDbID))
 

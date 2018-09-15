@@ -32,7 +32,7 @@ class BoosterProcessor(Processor):
          'msg': msg}
 
     def _errorHandler(self, code, errStr='', ctx=None):
-        if not len(errStr):
+        if not errStr:
             if code != AccountCommands.RES_CENTER_DISCONNECTED:
                 msg = 'server_error'
             else:

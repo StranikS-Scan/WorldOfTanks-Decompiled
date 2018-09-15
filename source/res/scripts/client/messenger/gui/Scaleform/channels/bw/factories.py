@@ -8,9 +8,6 @@ from messenger.storage import storage_getter
 
 class LobbyControllersFactory(IControllerFactory):
 
-    def __init__(self):
-        super(LobbyControllersFactory, self).__init__()
-
     @storage_getter('channels')
     def channelsStorage(self):
         return None

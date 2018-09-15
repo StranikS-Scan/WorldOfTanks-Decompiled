@@ -25,9 +25,6 @@ class ResearchItemContextMenuHandler(AbstractContextMenuHandler, EventSystemEnti
          MODULE.SELL: 'sellModule'})
         self.__skipConfirm = self.bootcampController.isInBootcamp()
 
-    def fini(self):
-        super(ResearchItemContextMenuHandler, self).fini()
-
     def showModuleInfo(self):
         vehicle = self.itemsCache.items.getItemByCD(self._rootCD)
         if vehicle:

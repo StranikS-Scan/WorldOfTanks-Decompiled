@@ -423,10 +423,7 @@ class DumpSetting(RegularSetting):
 class StorageDumpSetting(StorageSetting, DumpSetting):
 
     def _get(self):
-        if BattleReplay.isPlaying():
-            return self.getDumpedValue()
-        else:
-            return super(StorageDumpSetting, self)._get()
+        return self.getDumpedValue() if BattleReplay.isPlaying() else super(StorageDumpSetting, self)._get()
 
     def _set(self, value):
         if BattleReplay.isPlaying():
@@ -441,10 +438,7 @@ class AccountDumpSetting(AccountSetting, DumpSetting):
         DumpSetting.__init__(self, settingName, isPreview=isPreview)
 
     def _get(self):
-        if BattleReplay.isPlaying():
-            return self.getDumpedValue()
-        else:
-            return super(AccountDumpSetting, self)._get()
+        return self.getDumpedValue() if BattleReplay.isPlaying() else super(AccountDumpSetting, self)._get()
 
     def _save(self, value):
         if BattleReplay.isPlaying():
@@ -641,7 +635,7 @@ class VOIPCaptureDevicesSetting(UserPrefsStringSetting):
 
     def _set(self, value):
         vm = VOIP.getVOIPManager()
-        if len(vm.getCaptureDevices()):
+        if vm.getCaptureDevices():
             device = self.__getDeviceNameByIdx(value)
             vm.setCaptureDevice(device)
             LOG_DEBUG('Selecting new capture device', device)
@@ -884,16 +878,16 @@ class GraphicSetting(SettingAbstract):
         if self._currentValue is not None:
             if self._currentValue.isArray:
                 return self._currentValue.options
-            else:
-                options = []
-                for label, data, advanced, supported in self._currentValue.options:
-                    options.append({'label': '#settings:graphicsSettingsOptions/%s' % str(label),
-                     'data': data,
-                     'advanced': advanced,
-                     'supported': supported})
+            options = []
+            for label, data, advanced, supported in self._currentValue.options:
+                options.append({'label': '#settings:graphicsSettingsOptions/%s' % str(label),
+                 'data': data,
+                 'advanced': advanced,
+                 'supported': supported})
 
-                return sorted(options, key=itemgetter('data'), reverse=True)
-        return
+            return sorted(options, key=itemgetter('data'), reverse=True)
+        else:
+            return
 
     def _set(self, value):
         value = int(value)
@@ -1109,6 +1103,17 @@ class ResolutionSetting(PreferencesSetting):
 
 class BorderlessSizeSetting(ResolutionSetting):
 
+    def _getSuitableResolutions(self):
+        result = []
+        for modes in graphics.getSuitableBorderlessSizes():
+            resolutions = set()
+            for mode in modes:
+                resolutions.add((mode.width, mode.height))
+
+            result.append(sorted(tuple(resolutions)))
+
+        return result
+
     def _get(self):
         resolution = self._storage.borderlessSize
         return self._getResolutionIndex(*resolution) if resolution is not None else None
@@ -1169,7 +1174,7 @@ class VideoModeSettings(PreferencesSetting):
     def _getOptions(self):
         result = []
         allowScreenModes = ((BigWorld.WindowModeWindowed, 'windowed'), (BigWorld.WindowModeExclusiveFullscreen, 'fullscreen'))
-        if len(graphics.getSuitableVideoModes()):
+        if graphics.getSuitableVideoModes():
             allowScreenModes += ((BigWorld.WindowModeBorderless, 'borderless'),)
         for data, label in allowScreenModes:
             result.append({'data': data,
@@ -1331,12 +1336,6 @@ class AimSetting(StorageAccountSetting):
 
 class MinimapSetting(StorageDumpSetting):
 
-    def _get(self):
-        return super(MinimapSetting, self)._get()
-
-    def _set(self, value):
-        return super(MinimapSetting, self)._set(value)
-
     def getDefaultValue(self):
         return True
 
@@ -1401,9 +1400,6 @@ class VehicleCarouselStatsSetting(StorageDumpSetting):
     def _get(self):
         return bool(super(VehicleCarouselStatsSetting, self)._get())
 
-    def _set(self, value):
-        return super(VehicleCarouselStatsSetting, self)._set(value)
-
     def getDefaultValue(self):
         return True
 
@@ -1443,9 +1439,6 @@ class ShowMarksOnGunSetting(StorageAccountSetting):
 
 class ControlSetting(SettingAbstract):
     ControlPackStruct = namedtuple('ControlPackStruct', 'current default')
-
-    def __init__(self, isPreview=False):
-        super(ControlSetting, self).__init__(isPreview)
 
     def _getDefault(self):
         return None
@@ -1897,7 +1890,7 @@ class SoundDevicePresetSetting(_BaseSoundPresetSetting):
     soundsCtrl = dependency.descriptor(ISoundsController)
 
     def __init__(self, settingName, key, subKey=None, isPreview=False):
-        super(SoundDevicePresetSetting, self).__init__(((self.soundsCtrl.system.setSoundSystem, 0), (self.soundsCtrl.system.setSoundSystem, 1), (self.soundsCtrl.system.setSoundSystem, 2)), settingName, key, subKey=subKey, isPreview=isPreview)
+        super(SoundDevicePresetSetting, self).__init__(((self.__setSound, 0), (self.__setSound, 1), (self.__setSound, 2)), settingName, key, subKey=subKey, isPreview=isPreview)
 
     def _getOptions(self):
         options = []
@@ -1927,6 +1920,9 @@ class SoundDevicePresetSetting(_BaseSoundPresetSetting):
 
         return options
 
+    def __setSound(self, value):
+        self.soundsCtrl.system.setSoundSystem(value)
+
 
 class SoundSpeakersPresetSetting(SettingAbstract):
     soundsCtrl = dependency.descriptor(ISoundsController)
@@ -1936,19 +1932,16 @@ class SoundSpeakersPresetSetting(SettingAbstract):
         mapping = _makeSoundPresetIDToGuiID()
         if selectedID in mapping:
             return mapping[selectedID]
-        else:
-            LOG_ERROR('Selected preset is unresolved', selectedID)
-            return ACOUSTICS.TYPE_ACOUSTIC_20
+        LOG_ERROR('Selected preset is unresolved', selectedID)
+        return ACOUSTICS.TYPE_ACOUSTIC_20
 
     def isPresetSupportedByIndex(self, index):
         presetIDs = _makeSoundPresetIDsSeq()
         if index < len(presetIDs):
             if self.soundsCtrl.system.getUserSpeakersPresetID() == SPEAKERS_CONFIG.AUTO_DETECTION:
                 return presetIDs[index] <= self.soundsCtrl.system.getSystemSpeakersPresetID()
-            else:
-                return True
-        else:
-            return False
+            return True
+        return False
 
     def _get(self):
         presetID = self.soundsCtrl.system.getUserSpeakersPresetID()
@@ -1957,7 +1950,6 @@ class SoundSpeakersPresetSetting(SettingAbstract):
             return presetIDs.index(presetID)
         else:
             LOG_ERROR('Index of selected preset is not found', presetID)
-            return None
             return None
 
     def _set(self, value):
@@ -2045,7 +2037,7 @@ class DetectionAlertSound(AccountSetting):
     def playPreviewSound(self, eventIdx):
         eventToPlay = self._WWISE_EVENTS[eventIdx]
         if self.__previewSound is not None:
-            playingEvent = self.__previewSound.name.split(':')[1]
+            playingEvent = self.__previewSound.name
             if self._WWISE_EVENTS.index(playingEvent) != eventIdx:
                 self.clearPreviewSound()
                 self.__previewSound = SoundGroups.g_instance.getSound2D(eventToPlay)
@@ -2154,7 +2146,7 @@ class AltVoicesSetting(StorageDumpSetting):
             return False
 
     def playPreview(self, sound):
-        if len(self.__previewNations) and self.__previewSound == sound:
+        if self.__previewNations and self.__previewSound == sound:
             nation = self.__previewNations.pop()
             genderSwitch = random.choice(SoundGroups.CREW_GENDER_SWITCHES.GENDER_ALL)
             SoundGroups.g_instance.soundModes.setCurrentNation(nation, genderSwitch)

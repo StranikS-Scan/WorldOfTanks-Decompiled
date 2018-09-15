@@ -68,7 +68,7 @@ class ResearchBaseDumper(_BaseDumper):
 
     def clear(self, full=False):
         nodes = self._cache['nodes']
-        while len(nodes):
+        while nodes:
             nodes.pop().clear()
 
         if full:
@@ -116,7 +116,7 @@ class ResearchItemsObjDumper(ResearchBaseDumper):
 
     def clear(self, full=False):
         nodes = self._cache['top']
-        while len(nodes):
+        while nodes:
             nodes.pop().clear()
 
         self._cache['global']['extraInfo'].clear()
@@ -268,7 +268,7 @@ class NationObjDumper(_BaseDumper):
 
     def clear(self, full=False):
         nodes = self._cache['nodes']
-        while len(nodes):
+        while nodes:
             nodes.pop().clear()
 
         if full:

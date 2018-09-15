@@ -24,9 +24,10 @@ class GroupedViewSettings(namedtuple('GroupedViewSettings', 'alias clazz url typ
     :param alias: alias of view
     :param clazz: class of view
     :param url: url to SWF-file
-    :param group: name of group
     :param type: type of view
+    :param group: name of group
     :param event: name of event for loading view
+    :param scope: scope
     :param cacheable: can be cached
     :param containers: list of sub containers
     :param canDrag: is drag & drop enabled
@@ -49,6 +50,15 @@ class GroupedViewSettings(namedtuple('GroupedViewSettings', 'alias clazz url typ
 
     def replaceSettings(self, settings):
         return self._replace(**settings)
+
+    def toImmutableSettings(self):
+        """ Returns object equivalent to self, with all lazy data evaluations (if any) complete.
+            Data in returned object must never change afterwards.
+            Base GroupedViewSettings is already immutable, so this method returns self by default.
+        
+        :return: immutable settings object (self if already immutable, or a copy after lazy evaluations)
+        """
+        return self
 
 
 GroupedViewSettings.__new__.__defaults__ = (None,
@@ -104,10 +114,13 @@ ContainerSettings.__new__.__defaults__ = (None, None)
 class ConditionalViewSettings(GroupedViewSettings):
 
     @staticmethod
-    def __new__(cls, alias, clazzFunc, url, type, event, scope, cacheable, containers):
-        self = GroupedViewSettings.__new__(cls, alias, '', url, type, None, event, scope, cacheable, containers)
+    def __new__(cls, alias, clazzFunc, url, type, group, event, scope, cacheable, containers, canDrag, canClose, isModal, isCentered):
+        self = GroupedViewSettings.__new__(cls, alias, '', url, type, group, event, scope, cacheable, containers, canDrag, canClose, isModal, isCentered)
         self.__clazzFunc = clazzFunc
         self.__url = url
+        self.__type = type
+        self.__scope = scope
+        self.__group = group
         return self
 
     @property
@@ -118,6 +131,21 @@ class ConditionalViewSettings(GroupedViewSettings):
     def url(self):
         return self.__url() if callable(self.__url) else self.__url
 
+    @property
+    def type(self):
+        return self.__type() if callable(self.__type) else self.__type
+
+    @property
+    def scope(self):
+        return self.__scope() if callable(self.__scope) else self.__scope
+
+    @property
+    def group(self):
+        return self.__group() if callable(self.__group) else self.__group
+
+    def toImmutableSettings(self):
+        return GroupedViewSettings(*self._replace(clazz=self.clazz, url=self.url, type=self.type, scope=self.scope, group=self.group))
+
 
 ConditionalViewSettings.__new__.__defaults__ = (None,
  None,
@@ -126,7 +154,11 @@ ConditionalViewSettings.__new__.__defaults__ = (None,
  None,
  None,
  False,
- None)
+ None,
+ True,
+ True,
+ False,
+ True)
 g_entitiesFactories = EntitiesFactories((DAAPIModuleFactory((ViewTypes.COMPONENT,)), ViewFactory((ViewTypes.DEFAULT,
   ViewTypes.LOBBY_SUB,
   ViewTypes.LOBBY_TOP_SUB,

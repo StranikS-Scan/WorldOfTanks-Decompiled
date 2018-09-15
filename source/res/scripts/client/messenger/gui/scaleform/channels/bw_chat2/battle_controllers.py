@@ -20,9 +20,6 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 class _check_arena_in_waiting(object):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
-    def __init__(self):
-        super(_check_arena_in_waiting, self).__init__()
-
     def __call__(self, func):
 
         @functools.wraps(func)

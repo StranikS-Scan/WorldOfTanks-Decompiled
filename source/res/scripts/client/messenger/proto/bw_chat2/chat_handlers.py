@@ -421,9 +421,6 @@ class BattleChatCommandHandler(provider.ResponseDictHandler, IBattleCommandFacto
 
 class AdminChatCommandHandler(provider.ResponseDictHandler):
 
-    def __init__(self, provider):
-        super(AdminChatCommandHandler, self).__init__(provider)
-
     def parseLine(self, text, clientID=0):
         cmd, result = None, admin_chat_cmd.parseCommandLine(text)
         if not result:

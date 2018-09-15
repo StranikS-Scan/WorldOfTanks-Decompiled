@@ -140,7 +140,6 @@ class RankedTipsCriteria(_TipsCriteria):
             return _FoundTip(i18n.makeString(TIPS.getRankedTipTittle(tipNum)), i18n.makeString(TIPS.getRankedTipBody(tipNum)), RES_ICONS.getRankedBattleLoadingTipImage(tipNum))
         else:
             return _FoundTip('', '', '')
-            return
 
 
 def _getEpicRandomTipIterator():
@@ -170,25 +169,21 @@ class EpicRandomTipsCriteria(_TipsCriteria):
             return _FoundTip(i18n.makeString(TIPS.getEpicRandomTipTitle(tipNum)), i18n.makeString(TIPS.getEpicRandomTipBody(tipNum)), RES_ICONS.getEpicRandomBattleLoadingTipImage(tipNum))
         else:
             return _FoundTip('', '', '')
-            return
 
 
 def getTipsCriteria(arenaVisitor):
     if arenaVisitor.gui.isSandboxBattle():
         return SandboxTipsCriteria()
-    elif arenaVisitor.gui.isEventBattle():
+    if arenaVisitor.gui.isEventBattle():
         return EventTipsCriteria()
-    elif arenaVisitor.gui.isRankedBattle():
+    if arenaVisitor.gui.isRankedBattle():
         return RankedTipsCriteria()
-    elif arenaVisitor.gui.isEpicRandomBattle():
-        return EpicRandomTipsCriteria()
-    else:
-        return RandomTipsCriteria()
+    return EpicRandomTipsCriteria() if arenaVisitor.gui.isEpicRandomBattle() else RandomTipsCriteria()
 
 
 def getTipsIterator(arenaGuiType, battlesCount, vehicleType, vehicleNation, vehicleLvl):
     tipsItems = _getConditionedTips(arenaGuiType, battlesCount, vehicleType, vehicleNation, vehicleLvl)
-    return rnd_choice_loop(*tipsItems) if len(tipsItems) > 0 else None
+    return rnd_choice_loop(*tipsItems) if tipsItems else None
 
 
 class _ArenaGuiTypeCondition(namedtuple('_SquadExtra', ('mainPart', 'additionalPart'))):
@@ -196,14 +191,13 @@ class _ArenaGuiTypeCondition(namedtuple('_SquadExtra', ('mainPart', 'additionalP
     def validate(self, arenaGuiType):
         if self.mainPart == ALL:
             return True
-        elif self.mainPart == ANY:
+        if self.mainPart == ANY:
             arenaGuiTypes = map(_getIntValue, self.additionalPart)
             return arenaGuiType in arenaGuiTypes
-        elif self.mainPart == EXCEPT:
+        if self.mainPart == EXCEPT:
             arenaGuiTypes = map(_getIntValue, self.additionalPart)
             return arenaGuiType not in arenaGuiTypes
-        else:
-            return False
+        return False
 
 
 _ArenaGuiTypeCondition.__new__.__defaults__ = (ALL, None)
@@ -218,9 +212,9 @@ def _readTips():
         return result
 
     for key in translator._catalog.iterkeys():
-        if len(key) > 0:
+        if key:
             sreMatch = tipsPattern.match(key)
-            if sreMatch is not None and len(sreMatch.groups()) > 0:
+            if sreMatch is not None and sreMatch.groups():
                 strTipsConditions = key.split('/')
                 if len(strTipsConditions) == TIPS_PATTERN_PARTS_COUNT:
                     tipID, status, group, battlesCountConditions, arenaGuiType, vehicleTypeCondition, nation, vehLevel = strTipsConditions
@@ -255,7 +249,6 @@ def _getIntValue(strCondition):
             LOG_CURRENT_EXCEPTION()
 
         return intValue
-        return
 
 
 _predefinedTips = _readTips()

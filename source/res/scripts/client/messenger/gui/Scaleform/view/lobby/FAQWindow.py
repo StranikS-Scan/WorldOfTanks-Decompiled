@@ -31,7 +31,7 @@ class FAQWindow(FAQWindowMeta):
                 batch = []
             batch.append(formatHtml('nextFAQItem', ctx=item._asdict()))
 
-        if len(batch) > 0:
+        if batch:
             self.as_appendTextS(''.join(batch))
 
     def _populate(self):

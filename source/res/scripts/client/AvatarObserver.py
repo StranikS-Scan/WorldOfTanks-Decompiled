@@ -165,8 +165,7 @@ class AvatarObserver(CallbackDelayer):
             if vehicle is not None:
                 if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
                     return vehicle.filter.bodyMatrix
-                else:
-                    return vehicle.matrix
+                return vehicle.matrix
         return
 
     def getObservedVehicleStabilisedMatrix(self):
@@ -176,8 +175,7 @@ class AvatarObserver(CallbackDelayer):
             if vehicle is not None:
                 if isinstance(vehicle.filter, BigWorld.WGVehicleFilter):
                     return vehicle.filter.stabilisedMatrix
-                else:
-                    return vehicle.matrix
+                return vehicle.matrix
         return
 
     def getVehicleAttached(self):

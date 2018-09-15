@@ -196,7 +196,7 @@ class _StaticObjectMarker3D(_IMarker):
 
             BigWorld.addModel(self.__model)
             action = data.get('action')
-            if action is not None and len(action):
+            if action:
                 try:
                     self.__model.action(action)()
                 except ValueError:
@@ -277,7 +277,7 @@ class _MarkersStorage(object):
 
     @classmethod
     def clear(cls):
-        while len(cls.__markers):
+        while cls.__markers:
             _, marker = cls.__markers.popitem()
             marker.clear()
 
@@ -416,7 +416,7 @@ class FunctionalShowHintEffect(FunctionalEffect):
             data.extend(self._getImagePaths(hint))
             if self._gui.playEffect(GUI_EFFECT_NAME.SHOW_HINT, data):
                 speakID = hint.getSpeakID()
-                if speakID is not None and len(speakID):
+                if speakID:
                     self._sound.play(SOUND_EVENT.SPEAKING, sndID=speakID)
         else:
             LOG_ERROR('Hint not found', self._effect.getTargetID())
@@ -469,11 +469,11 @@ class FunctionalDisableCameraZoomEffect(FunctionalEffect):
 
     def triggerEffect(self):
         weaver = g_tutorialWeaver
-        if weaver.findPointcut(aspects.AltModeTogglePointcut) is -1:
+        if weaver.findPointcut(aspects.AltModeTogglePointcut) == -1:
             weaver.weave(pointcut=aspects.AltModeTogglePointcut, avoid=True)
-        if weaver.findPointcut(aspects.ArcadeCtrlMouseEventsPointcut) is -1:
+        if weaver.findPointcut(aspects.ArcadeCtrlMouseEventsPointcut) == -1:
             weaver.weave(pointcut=aspects.ArcadeCtrlMouseEventsPointcut, aspects=(aspects.MouseScrollIgnoreAspect,))
-        if weaver.findPointcut(aspects.CameraUpdatePointcut) is -1:
+        if weaver.findPointcut(aspects.CameraUpdatePointcut) == -1:
             BigWorld.player().inputHandler.ctrl.camera.setCameraDistance(self.CAMERA_START_DIST)
             self._cameraUpdatePointIdx = weaver.weave(pointcut=aspects.CameraUpdatePointcut, aspects=(aspects.CameraZoomModeIgnoreAspect,))
 
@@ -505,7 +505,7 @@ class FunctionalNextChapterEffect(FunctionalEffect):
         exitEntity = self.getTarget()
         if exitEntity is not None:
             self.__nextChapter = exitEntity.getNextChapter()
-            if self.__nextChapter is None or not len(self.__nextChapter):
+            if not self.__nextChapter:
                 self.__nextChapter = self._descriptor.getNextChapterID(BattleClientCtx.fetch().completed)
             if self.__nextChapter is None:
                 LOG_DEBUG('Next chapter not found')

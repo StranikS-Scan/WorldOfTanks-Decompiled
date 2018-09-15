@@ -152,8 +152,9 @@ class _UserDataStorage(_BaseDataStorage):
     def __onItemsResync(self, updateReason, _):
         if updateReason in (CACHE_SYNC_REASON.INVENTORY_RESYNC, CACHE_SYNC_REASON.CLIENT_UPDATE):
             self.falloutStorage.validateSelectedVehicles()
-        if not (self.isEnabled() and self._proxy.isAvailable()) and self.prbDispatcher.getFunctionalState().isInFallout():
+        if not (self.isEnabled() and self._proxy.isAvailable()) and self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInFallout():
             self.__leave()
+        return
 
     def __onSettingsResync(self, diff):
         if {'falloutBattleType', 'isEnabled'} & set(diff.keys()):

@@ -216,8 +216,8 @@ class Conditions(list):
         return self._eitherBlocks[:]
 
     def clear(self):
-        while len(self._eitherBlocks):
+        while self._eitherBlocks:
             self._eitherBlocks.pop()
 
-        while len(self):
+        while self:
             self.pop()

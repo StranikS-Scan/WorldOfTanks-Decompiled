@@ -29,7 +29,7 @@ class TankmanDismiss(ItemProcessor):
         confirmator = plugins.TankmanOperationConfirmator('protectedDismissTankman', tankman)
         super(TankmanDismiss, self).__init__(tankman, [plugins.TankmanLockedValidator(tankman), confirmator, plugins.VehicleValidator(vehicle, isEnabled=tankman.vehicleInvID > 0)])
         deletedTankmen = self.restore.getTankmenBeingDeleted()
-        if len(deletedTankmen) > 0 and tankman.isRestorable():
+        if deletedTankmen and tankman.isRestorable():
             self.addPlugin(plugins.BufferOverflowConfirmator({'dismissed': tankman,
              'deleted': deletedTankmen[0]}))
         return
@@ -445,8 +445,7 @@ class TankmanRestore(ItemProcessor):
         if restorePrice:
             currency = restorePrice.getCurrency()
             return makeI18nSuccess('restore_tankman/financial_success', type=_getSysMsgType(restorePrice), money=formatPriceForCurrency(restorePrice, currency))
-        else:
-            return makeI18nSuccess('restore_tankman/success', type=SM_TYPE.Information)
+        return makeI18nSuccess('restore_tankman/success', type=SM_TYPE.Information)
 
     def _request(self, callback):
         LOG_DEBUG('Make server request to restore tankman:', self.item)

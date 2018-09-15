@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCMessageWindow.py
 from bootcamp.BootCampEvents import g_bootcampEvents
 from gui.Scaleform.daapi.view.meta.BCMessageWindowMeta import BCMessageWindowMeta
-from debug_utils import LOG_DEBUG
 import SoundGroups
 from gui.Scaleform.genConsts.BOOTCAMP_MESSAGE_ALIASES import BOOTCAMP_MESSAGE_ALIASES
 
@@ -15,15 +14,6 @@ class BCMessageWindow(BCMessageWindowMeta):
         self.__buttonCallback = None
         self.__isButtonClicked = False
         return
-
-    def _populate(self):
-        super(BCMessageWindow, self)._populate()
-        self.as_setMessageDataS(self.__messagesData['messages'])
-        g_bootcampEvents.onRequestBootcampMessageWindowClose += self.onMessageRemoved
-
-    def _dispose(self):
-        super(BCMessageWindow, self)._dispose()
-        g_bootcampEvents.onRequestBootcampMessageWindowClose -= self.onMessageRemoved
 
     def onMessageButtonClicked(self):
         self.__isButtonClicked = True
@@ -54,3 +44,12 @@ class BCMessageWindow(BCMessageWindowMeta):
                 self.__removedCallback = None
         self.destroy()
         return
+
+    def _populate(self):
+        super(BCMessageWindow, self)._populate()
+        self.as_setMessageDataS(self.__messagesData['messages'])
+        g_bootcampEvents.onRequestBootcampMessageWindowClose += self.onMessageRemoved
+
+    def _dispose(self):
+        super(BCMessageWindow, self)._dispose()
+        g_bootcampEvents.onRequestBootcampMessageWindowClose -= self.onMessageRemoved

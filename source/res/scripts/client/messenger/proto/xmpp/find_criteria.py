@@ -78,8 +78,5 @@ class XmppClanChannelCriteria(IEntityFindCriteria):
     """Filter for clan channels
     """
 
-    def __init__(self):
-        super(XmppClanChannelCriteria, self).__init__()
-
     def filter(self, channel):
         return channel.getProtoType() is PROTO_TYPE.XMPP and channel.getMessageType() == MESSAGE_TYPE.GROUPCHAT and channel.isClan()

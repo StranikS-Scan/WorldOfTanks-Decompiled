@@ -269,10 +269,7 @@ class ScopeController(DisposableEntity):
     @classmethod
     def extractScopeFromView(self, pyView):
         scope = pyView.settings.scope
-        if scope.getScopeType() == ScopeTemplates.DYNAMIC_SCOPE.getScopeType():
-            return pyView.getCurrentScope()
-        else:
-            return scope
+        return pyView.getCurrentScope() if scope.getScopeType() == ScopeTemplates.DYNAMIC_SCOPE.getScopeType() else scope
 
     def _dispose(self):
         self.__mainView = None
@@ -335,7 +332,7 @@ class ScopeController(DisposableEntity):
 
     def __searchOwnerAndCreateControllerChain(self, scope):
         ownScopes = ScopeTemplates.GLOBAL_SCOPE.searchOwnersFor(scope)
-        if len(ownScopes) == 0:
+        if not ownScopes:
             raise ScopeControllerError('Could not to construct scopeController for {} - own scopes can not be found'.format(scope))
         newController = None
         for ownScope in ownScopes:

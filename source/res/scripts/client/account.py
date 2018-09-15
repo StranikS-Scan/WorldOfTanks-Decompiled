@@ -9,7 +9,7 @@ import Event
 import AccountCommands
 import ClientPrebattle
 from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_recycle_bin, AccountSettings
-from account_helpers import ClientRanked
+from account_helpers import ClientRanked, ClientBadges
 from account_helpers import ClientInvitations, vehicle_rotation
 from PlayerEvents import g_playerEvents as events
 from account_helpers.AccountSettings import CURRENT_VEHICLE
@@ -85,6 +85,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.vehicleRotation = g_accountRepository.vehicleRotation
         self.recycleBin = g_accountRepository.recycleBin
         self.ranked = g_accountRepository.ranked
+        self.badges = g_accountRepository.badges
         self.customFilesCache = g_accountRepository.customFilesCache
         self.syncData.setAccount(self)
         self.inventory.setAccount(self)
@@ -100,6 +101,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.vehicleRotation.setAccount(self)
         self.recycleBin.setAccount(self)
         self.ranked.setAccount(self)
+        self.badges.setAccount(self)
         self.isLongDisconnectedFromCenter = False
         self.prebattle = None
         self.unitBrowser = ClientUnitBrowser(self)
@@ -110,7 +112,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.eventNotifications = g_accountRepository.eventNotifications
         self.clanMembers = g_accountRepository.clanMembers
         self.eventsData = g_accountRepository.eventsData
-        self.potapovQuestsLock = g_accountRepository.potapovQuestsLock
+        self.personalMissionsLock = g_accountRepository.personalMissionsLock
         self.isInRandomQueue = False
         self.isInTutorialQueue = False
         self.isInBootcampQueue = False
@@ -142,6 +144,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.vehicleRotation.onAccountBecomePlayer()
         self.recycleBin.onAccountBecomePlayer()
         self.ranked.onAccountBecomePlayer()
+        self.badges.onAccountBecomePlayer()
         chatManager.switchPlayerProxy(self)
         events.onAccountBecomePlayer()
         BigWorld.target.source = BigWorld.MouseTargetingMatrix()
@@ -167,6 +170,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.vehicleRotation.onAccountBecomeNonPlayer()
         self.recycleBin.onAccountBecomeNonPlayer()
         self.ranked.onAccountBecomeNonPlayer()
+        self.badges.onAccountBecomeNonPlayer()
         self.__cancelCommands()
         self.syncData.setAccount(None)
         self.inventory.setAccount(None)
@@ -181,6 +185,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.vehicleRotation.setAccount(None)
         self.recycleBin.setAccount(None)
         self.ranked.setAccount(None)
+        self.badges.setAccount(None)
         self.unitMgr.clear()
         self.unitBrowser.clear()
         events.onAccountBecomeNonPlayer()
@@ -538,9 +543,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInRandomQueue = ctx.get('isInRandomQueue', False)
         self.isInTutorialQueue = ctx.get('isInTutorialQueue', False)
         self.isInTutorialQueue = ctx.get('isInUnitAssembler', False)
-        if 'serverUTC' in ctx:
-            import helpers.time_utils as tm
-            tm.setTimeCorrection(ctx['serverUTC'])
+        self._initTimeCorrection(ctx)
         if 'isLongDisconnectedFromCenter' in ctx:
             isLongDisconnectedFromCenter = ctx['isLongDisconnectedFromCenter']
             if self.isLongDisconnectedFromCenter != isLongDisconnectedFromCenter:
@@ -871,14 +874,14 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdStr(AccountCommands.CMD_SET_LANGUAGE, language, None)
         return
 
-    def selectPotapovQuests(self, potapovQuestIDs, questType, callback):
+    def selectPersonalMissions(self, personalMissionsIDs, questType, callback):
         args = [questType]
-        args.extend(potapovQuestIDs)
+        args.extend(personalMissionsIDs)
         self._doCmdIntArr(AccountCommands.CMD_SELECT_POTAPOV_QUESTS, args, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
-    def getPotapovQuestReward(self, potapovQuestID, questType, needTamkman=False, tmanNation=0, tmanInnation=0, roleID=1, callback=None):
+    def getPersonalMissionReward(self, personalMissionsIDs, questType, needTamkman=False, tmanNation=0, tmanInnation=0, roleID=1, callback=None):
         arr = [questType,
-         potapovQuestID,
+         personalMissionsIDs,
          needTamkman,
          tmanNation,
          tmanInnation,
@@ -943,6 +946,10 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def runQuest(self, questType, questID, callback):
         self._doCmdIntStr(AccountCommands.CMD_RUN_QUEST, questType, questID, lambda requestID, resultID, errorStr: callback(resultID))
 
+    def pawnFreeAwardList(self, questType, questID, callback):
+        args = [questType, questID]
+        self._doCmdIntArr(AccountCommands.CMD_PAWN_FREE_AWARD_LIST, args, lambda requestID, resultID, errorStr: callback(resultID))
+
     def messenger_onActionByServer_chat2(self, actionID, reqID, args):
         from messenger_common_chat2 import MESSENGER_ACTION_IDS as actions
         LOG_DEBUG('messenger_onActionByServer', actions.getActionName(actionID), reqID, args)
@@ -987,15 +994,15 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.vehicleRotation.synchronize(isFullSync, diff)
             self.recycleBin.synchronize(isFullSync, diff)
             self.ranked.synchronize(isFullSync, diff)
+            self.badges.synchronize(isFullSync, diff)
             self.__synchronizeServerSettings(diff)
             self.__synchronizeEventNotifications(diff)
             self.__synchronizeCacheDict(self.prebattleAutoInvites, diff.get('account', None), 'prebattleAutoInvites', 'replace', events.onPrebattleAutoInvitesChanged)
             self.__synchronizeCacheDict(self.prebattleInvites, diff, 'prebattleInvites', 'update', lambda : events.onPrebattleInvitesChanged(diff))
             self.__synchronizeCacheDict(self.clanMembers, diff.get('cache', None), 'clanMembers', 'replace', events.onClanMembersListChanged)
             self.__synchronizeCacheDict(self.eventsData, diff, 'eventsData', 'replace', events.onEventsDataChanged)
-            self.__synchronizeCacheDict(self.potapovQuestsLock, diff.get('cache', None), 'potapovQuestIDs', 'replace', events.onPQLocksChanged)
+            self.__synchronizeCacheDict(self.personalMissionsLock, diff.get('cache', None), 'potapovQuestIDs', 'replace', events.onPMLocksChanged)
             self.__synchronizeCacheSimpleValue('globalRating', diff.get('account', None), 'globalRating', events.onAccountGlobalRatingChanged)
-            cacheDiff = diff.get('cache', {})
             events.onClientUpdated(diff, not triggerEvents)
             if triggerEvents and not isFullSync:
                 for vehTypeCompDescr in diff.get('stats', {}).get('eliteVehicles', ()):
@@ -1012,6 +1019,11 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def _subscribeForStream(self, requestID, callback):
         self.__onStreamComplete[requestID] = callback
+
+    def _initTimeCorrection(self, ctx):
+        if 'serverUTC' in ctx:
+            import helpers.time_utils as tm
+            tm.setTimeCorrection(ctx['serverUTC'])
 
     def __getRequestID(self):
         if g_accountRepository is None:
@@ -1191,7 +1203,7 @@ class _AccountRepository(object):
         self.prebattleInvites = {}
         self.clanMembers = {}
         self.eventsData = {}
-        self.potapovQuestsLock = {}
+        self.personalMissionsLock = {}
         self.customFilesCache = CustomFilesCache.CustomFilesCache()
         self.eventNotifications = []
         self.intUserSettings = IntUserSettings.IntUserSettings()
@@ -1200,6 +1212,7 @@ class _AccountRepository(object):
         self.vehicleRotation = vehicle_rotation.VehicleRotation(self.syncData)
         self.recycleBin = client_recycle_bin.ClientRecycleBin(self.syncData)
         self.ranked = ClientRanked.ClientRanked(self.syncData)
+        self.badges = ClientBadges.ClientBadges(self.syncData)
         self.gMap = ClientGlobalMap()
         self.onTokenReceived = Event.Event()
         self.requestID = AccountCommands.REQUEST_ID_UNRESERVED_MIN

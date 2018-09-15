@@ -49,7 +49,7 @@ class FAQList(object):
         faq = []
         for questionKey in I18N_FAQ.QUESTION_ENUM:
             sreMatch = QUESTION_PATTERN.match(questionKey)
-            if sreMatch is not None and len(sreMatch.groups()) > 0:
+            if sreMatch is not None and sreMatch.groups():
                 number = int(sreMatch.groups()[0])
                 answerKey = ANSWER_FORMAT.format(number)
                 if answerKey in I18N_FAQ.ANSWER_ENUM:

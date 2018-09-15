@@ -56,10 +56,7 @@ class ShopItemsTab(StoreItemsTab):
         return requestCriteria
 
     def _getDiscountCriteria(self):
-        if self._actionsSelected:
-            return REQ_CRITERIA.DISCOUNT_BUY
-        else:
-            return REQ_CRITERIA.EMPTY
+        return REQ_CRITERIA.DISCOUNT_BUY if self._actionsSelected else REQ_CRITERIA.EMPTY
 
     def _isItemOnDiscount(self, item):
         return item.buyPrices.itemPrice.isActionPrice()
@@ -79,7 +76,6 @@ class ShopItemsTab(StoreItemsTab):
 
             return comparator
         else:
-            return None
             return None
 
 
@@ -157,10 +153,7 @@ class ShopVehicleTab(ShopItemsTab, StoreVehicleTab):
         return (statusMessage, disabled)
 
     def _getDiscountCriteria(self):
-        if self._actionsSelected:
-            return REQ_CRITERIA.VEHICLE.DISCOUNT_RENT_OR_BUY
-        else:
-            return REQ_CRITERIA.EMPTY
+        return REQ_CRITERIA.VEHICLE.DISCOUNT_RENT_OR_BUY if self._actionsSelected else REQ_CRITERIA.EMPTY
 
     def _isItemOnDiscount(self, item):
         return False if item.isRestorePossible() else super(ShopVehicleTab, self)._isItemOnDiscount(item)

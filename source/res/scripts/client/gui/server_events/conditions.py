@@ -5,18 +5,19 @@ import weakref
 from abc import ABCMeta, abstractmethod
 import account_helpers
 import constants
+from constants import ATTACK_REASON, ATTACK_REASONS
 from debug_utils import LOG_WARNING
 from gui import GUI_NATIONS_ORDER_INDICES
+from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.server_events import formatters
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.requesters.ItemsRequester import RESEARCH_CRITERIA
-from helpers import i18n, dependency
+from helpers import i18n, dependency, getLocalizedData
 from items import vehicles
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.Scaleform.locale.QUESTS import QUESTS
 _AVAILABLE_BONUS_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.CYBERSPORT: 'team7x7'}
 _RELATIONS = formatters.RELATIONS
 _RELATIONS_SCHEME = formatters.RELATIONS_SCHEME
@@ -41,7 +42,7 @@ class GROUP_TYPE(CONST_CONTAINER):
     AND = 'and'
 
 
-_SORT_ORDER = ('igrType', 'premiumAccount', 'inClan', 'GR', 'accountDossier', 'vehiclesUnlocked', 'vehiclesOwned', 'token', 'hasReceivedMultipliedXP', 'vehicleDossier', 'vehicleDescr', 'bonusTypes', 'isSquad', 'mapCamouflageKind', 'geometryNames', 'win', 'isAlive', 'achievements', 'results', 'unitResults', 'vehicleKills', 'vehicleDamage', 'vehicleStun', 'clanKills', 'cumulative', 'vehicleKillsCumulative', 'vehicleDamageCumulative', 'vehicleStunCumulative')
+_SORT_ORDER = ('igrType', 'premiumAccount', 'inClan', 'GR', 'accountDossier', 'vehiclesUnlocked', 'vehiclesOwned', 'token', 'hasReceivedMultipliedXP', 'vehicleDossier', 'vehicleDescr', 'bonusTypes', 'isSquad', 'mapCamouflageKind', 'geometryNames', 'win', 'isAlive', 'achievements', 'results', 'unitResults', 'vehicleKills', 'vehicleDamage', 'vehicleStun', 'clanKills', 'multiStunEventcumulative', 'vehicleKillsCumulative', 'vehicleDamageCumulative', 'vehicleStunCumulative')
 _SORT_ORDER_INDICES = dict(((name, idx) for idx, name in enumerate(_SORT_ORDER)))
 
 def _handleRelation(relation, source, toCompare):
@@ -61,7 +62,7 @@ def _handleRelation(relation, source, toCompare):
 
 def _findRelation(condDataKeys):
     res = set(_RELATIONS.ALL()) & set(condDataKeys)
-    return res.pop() if len(res) else None
+    return res.pop() if res else None
 
 
 def _getNodeValue(node, key, default=None):
@@ -126,6 +127,27 @@ class _Condition(object):
     def getValue(self):
         raise NotImplementedError
 
+    def getCustomTitle(self):
+        titleData = self._data.get('title')
+        if titleData:
+            if 'key' in titleData:
+                return i18n.makeString(titleData['key'])
+            return getLocalizedData(self._data, 'title')
+        else:
+            return None
+
+    def getCustomDescription(self):
+        descrData = self._data.get('description')
+        if descrData:
+            if 'key' in descrData:
+                return i18n.makeString(descrData['key'])
+            return getLocalizedData(self._data, 'description')
+        else:
+            return None
+
+    def isHidden(self):
+        return self._data.get('hideInGui', False)
+
 
 class _ConditionsGroup(_AvailabilityCheckable, _Negatable):
 
@@ -134,6 +156,9 @@ class _ConditionsGroup(_AvailabilityCheckable, _Negatable):
         self.items = []
         self.type = groupType
         self.isNegative = isNegative
+
+    def __repr__(self):
+        return '%s<count=%d>' % (self.__class__.__name__, len(self.items))
 
     def getName(self):
         return self.type
@@ -145,7 +170,7 @@ class _ConditionsGroup(_AvailabilityCheckable, _Negatable):
         return res
 
     def add(self, condition):
-        if isinstance(condition, list) or isinstance(condition, tuple):
+        if isinstance(condition, (list, tuple)):
             for cond in condition:
                 self._addNewCondition(cond)
 
@@ -174,10 +199,13 @@ class _ConditionsGroup(_AvailabilityCheckable, _Negatable):
         self.isNegative = not self.isNegative
 
     def isEmpty(self):
-        return not len(self.items)
+        return not self.items
 
     def getSortedItems(self):
         return sorted(self.items, cmp=self._sortItems, key=operator.methodcaller('getName'))
+
+    def isHidden(self):
+        return False
 
     @classmethod
     def _sortItems(cls, a, b):
@@ -195,9 +223,6 @@ class _ConditionsGroup(_AvailabilityCheckable, _Negatable):
         if cond is not None:
             self.items.append(cond)
         return
-
-    def __repr__(self):
-        return '%s<count=%d>' % (self.__class__.__name__, len(self.items))
 
 
 class _Requirement(_Condition, _AvailabilityCheckable, _Negatable):
@@ -227,21 +252,6 @@ class _VehsListParser(object):
     def isAnyVehicleAcceptable(self):
         return self._isAnyVehicleAcceptable(self._data)
 
-    def _clearItemsCache(self):
-        self.__vehsCache = None
-        return
-
-    def _postProcessCriteria(self, defaultCriteria, criteria):
-        return defaultCriteria | criteria
-
-    def _isAnyVehicleAcceptable(self, data):
-        """ Checks for all vehicles acceptance
-        """
-        return not len(set(data.keys()) & {'types',
-         'nations',
-         'levels',
-         'classes'})
-
     def getFilterCriteria(self, data):
         types, nations, levels, classes = self._parseFilters(data)
         defaultCriteria = self._getDefaultCriteria()
@@ -256,6 +266,21 @@ class _VehsListParser(object):
             if classes:
                 criteria |= REQ_CRITERIA.VEHICLE.CLASSES(classes)
         return self._postProcessCriteria(defaultCriteria, criteria)
+
+    def _clearItemsCache(self):
+        self.__vehsCache = None
+        return
+
+    def _postProcessCriteria(self, defaultCriteria, criteria):
+        return defaultCriteria | criteria
+
+    def _isAnyVehicleAcceptable(self, data):
+        """ Checks for all vehicles acceptance
+        """
+        return not set(data) & {'types',
+         'nations',
+         'levels',
+         'classes'}
 
     def _getDefaultCriteria(self):
         return REQ_CRITERIA.DISCLOSABLE
@@ -328,6 +353,18 @@ class _VehsListCondition(_Condition, _VehsListParser):
     def parseFilters(self):
         return self._parseFilters(self._data)
 
+    def getFireStarted(self):
+        return _getNodeValue(self._data, 'fireStarted', default=False)
+
+    def getAttackReasonIdx(self):
+        return _getNodeValue(self._data, 'attackReason', default=ATTACK_REASON.getIndex(ATTACK_REASON.SHOT))
+
+    def getAttackReason(self):
+        return ATTACK_REASONS[self.getAttackReasonIdx()]
+
+    def getLabelKey(self):
+        raise NotImplementedError
+
 
 class _VehsListRequirement(_VehsListCondition, _AvailabilityCheckable, _Negatable):
 
@@ -338,15 +375,15 @@ class _VehsListRequirement(_VehsListCondition, _AvailabilityCheckable, _Negatabl
             self._relationValue = 1
         return
 
+    def __repr__(self):
+        return '%s<%s=%r>' % (self.__class__.__name__, self._relation, self._relationValue)
+
     def _isAvailable(self):
         vehsList = self._getVehiclesList(self._data)
         return _handleRelation(self._relation, len(filter(self._checkVehicle, vehsList)), self._relationValue) if self._relation is not None else True
 
     def _checkVehicle(self, vehicle):
         return True
-
-    def __repr__(self):
-        return '%s<%s=%r>' % (self.__class__.__name__, self._relation, self._relationValue)
 
 
 class AndGroup(_ConditionsGroup):
@@ -466,9 +503,9 @@ class InClan(_Requirement):
         if self._ids is not None:
             if not self._isNegative:
                 return clanDBID in self._ids
-            else:
-                return clanDBID not in self._ids
-        return bool(clanDBID) != self._isNegative
+            return clanDBID not in self._ids
+        else:
+            return bool(clanDBID) != self._isNegative
 
 
 class Token(_Requirement):
@@ -570,21 +607,18 @@ class PremiumVehicle(_VehicleRequirement):
         super(PremiumVehicle, self).__init__('premiumVehicle', dict(data), path)
         self._needValue = self._data.get('value')
 
+    def __repr__(self):
+        return 'PremiumVehicle<value=%r>' % self._needValue
+
     def negate(self):
         self._needValue = not self._needValue
 
     def getFilterCriteria(self, data):
         criteria = REQ_CRITERIA.DISCLOSABLE
-        if self._needValue:
-            return criteria | REQ_CRITERIA.VEHICLE.PREMIUM
-        else:
-            return criteria | ~REQ_CRITERIA.VEHICLE.PREMIUM
+        return criteria | REQ_CRITERIA.VEHICLE.PREMIUM if self._needValue else criteria | ~REQ_CRITERIA.VEHICLE.PREMIUM
 
     def _isAvailable(self, vehicle):
         return vehicle.isPremium == self._needValue
-
-    def __repr__(self):
-        return 'PremiumVehicle<value=%r>' % self._needValue
 
 
 class XPMultipliedVehicle(_VehicleRequirement):
@@ -592,6 +626,9 @@ class XPMultipliedVehicle(_VehicleRequirement):
     def __init__(self, path, data):
         super(XPMultipliedVehicle, self).__init__('hasReceivedMultipliedXP', dict(data), path)
         self._needValue = self._data.get('value')
+
+    def __repr__(self):
+        return 'XPMultipliedVehicle<value=%r>' % self._needValue
 
     def negate(self):
         self._needValue = not self._needValue
@@ -610,8 +647,65 @@ class XPMultipliedVehicle(_VehicleRequirement):
     def _isAvailable(self, vehicle):
         return (vehicle.dailyXPFactor == -1) == self._needValue
 
+
+class InstalledItemCondition(_VehicleRequirement):
+
+    def __init__(self, path, itemType, data, customData):
+        super(InstalledItemCondition, self).__init__('installedItem', dict(data), path)
+        self._itemType = itemType
+        self._itemsIds = self._data.get('value', set())
+        self._isInstalled = True
+        self._data.update(customData)
+
+    def isNegative(self):
+        return not self._isInstalled
+
+    def getItemType(self):
+        return self._itemType
+
+    def getItemsList(self):
+        return [ self.itemsCache.items.getItemByCD(intCD) for intCD in self._itemsIds ]
+
+    def negate(self):
+        self._isInstalled = not self._isInstalled
+
+    def _isAvailable(self, vehicle):
+        for item in self.getItemsList():
+            if item.isInstalled(vehicle) == self._isInstalled:
+                return True
+
+        return False
+
+
+class InstalledModulesOnVehicle(_VehicleRequirement):
+    MODULES_KEYS = ('guns', 'engines', 'chassis', 'turrets', 'radios', 'optionalDevice')
+
+    def __init__(self, path, data):
+        super(InstalledModulesOnVehicle, self).__init__('installedModules', dict(data), path)
+        self._modulesConditions = []
+        customData = {'title': self._data.get('title'),
+         'description': self._data.get('description')}
+        for key, value in self._data.iteritems():
+            if key in self.MODULES_KEYS:
+                path = '%s.%s' % (path, key)
+                self._modulesConditions.append(InstalledItemCondition(path, key, value, customData))
+
     def __repr__(self):
-        return 'XPMultipliedVehicle<value=%r>' % self._needValue
+        return 'InstalledModulesOnVehicle<value=%r>' % self.getModulesConditions()
+
+    def negate(self):
+        for c in self._modulesConditions:
+            c.negate()
+
+    def getModulesConditions(self):
+        return self._modulesConditions
+
+    def _isAvailable(self, vehicle):
+        for c in self._modulesConditions:
+            if not c.isAvailable(vehicle):
+                return False
+
+        return True
 
 
 class VehicleDescr(_VehicleRequirement, _VehsListParser, _Updatable):
@@ -700,6 +794,9 @@ class BattleBonusType(_Condition, _Negatable):
         super(BattleBonusType, self).__init__('bonusTypes', dict(data), path)
         self._types = self._data.get('value')
 
+    def __repr__(self):
+        return 'BonusType<types=%r>' % self._types
+
     def negate(self):
         newTypes = []
         for bt in constants.ARENA_BONUS_TYPE.RANGE:
@@ -711,9 +808,6 @@ class BattleBonusType(_Condition, _Negatable):
     def getValue(self):
         return self._types
 
-    def __repr__(self):
-        return 'BonusType<types=%r>' % self._types
-
 
 class BattleSquad(_Condition, _Negatable):
 
@@ -721,26 +815,25 @@ class BattleSquad(_Condition, _Negatable):
         super(BattleSquad, self).__init__('isSquad', dict(data), path)
         self._isSquad = self._data.get('value')
 
+    def __repr__(self):
+        return 'BattleSquad<isSquad=%r>' % self._isSquad
+
     def negate(self):
         self._isSquad = not self._isSquad
 
     def getValue(self):
         return self._isSquad
 
-    def __repr__(self):
-        return 'BattleSquad<isSquad=%r>' % self._isSquad
-
 
 class BattleClanMembership(_Condition, _Negatable):
-
-    class VALUES(CONST_CONTAINER):
-        ANY = 'any'
-        SAME = 'same'
 
     def __init__(self, path, data, preBattleCondProxy=None):
         super(BattleClanMembership, self).__init__('clanMembership', dict(data), path)
         self._value = self._data.get('value')
         self.__proxy = weakref.proxy(preBattleCondProxy)
+
+    def __repr__(self):
+        return 'BattleClanMembership<relation=%r; bonusType=%s>' % (self._value, _getArenaBonusType(self.__proxy))
 
     def negate(self):
         pass
@@ -751,15 +844,15 @@ class BattleClanMembership(_Condition, _Negatable):
     def getArenaBonusType(self):
         return _getArenaBonusType(self.__proxy)
 
-    def __repr__(self):
-        return 'BattleClanMembership<relation=%r; bonusType=%s>' % (self._value, _getArenaBonusType(self.__proxy))
-
 
 class BattleCamouflage(_Condition, _Negatable):
 
     def __init__(self, path, data):
         super(BattleCamouflage, self).__init__('camouflageKind', dict(data), path)
         self._camos = self._data.get('value')
+
+    def __repr__(self):
+        return 'BattleCamouflage<camos=%r>' % self._camos
 
     def getValue(self):
         return self._camos
@@ -772,9 +865,6 @@ class BattleCamouflage(_Condition, _Negatable):
 
         self._camos = newCamos
 
-    def __repr__(self):
-        return 'BattleCamouflage<camos=%r>' % self._camos
-
 
 class BattleMap(_Condition, _Negatable):
 
@@ -782,6 +872,9 @@ class BattleMap(_Condition, _Negatable):
         super(BattleMap, self).__init__('geometryNames', dict(data), path)
         self._maps = self._data.get('value')
         self._isNegative = False
+
+    def __repr__(self):
+        return 'BattleMap<maps=%r>' % self._maps
 
     def negate(self):
         self._isNegative = not self._isNegative
@@ -792,15 +885,15 @@ class BattleMap(_Condition, _Negatable):
     def getMaps(self):
         return self._maps
 
-    def __repr__(self):
-        return 'BattleMap<maps=%r>' % self._maps
-
 
 class Win(_Condition, _Negatable):
 
     def __init__(self, path, data):
         super(Win, self).__init__('win', dict(data), path)
-        self._isWin = self._data.get('value')
+        self._isWin = True
+
+    def __repr__(self):
+        return 'Win<value=%r>' % self._isWin
 
     def negate(self):
         self._isWin = not self._isWin
@@ -808,15 +901,15 @@ class Win(_Condition, _Negatable):
     def getValue(self):
         return self._isWin
 
-    def __repr__(self):
-        return 'Win<value=%r>' % self._isWin
-
 
 class Survive(_Condition, _Negatable):
 
     def __init__(self, path, data):
         super(Survive, self).__init__('isAlive', dict(data), path)
-        self._isAlive = self._data.get('value')
+        self._isAlive = True
+
+    def __repr__(self):
+        return 'Survive<value=%r>' % self._isAlive
 
     def negate(self):
         self._isAlive = not self._isAlive
@@ -824,8 +917,21 @@ class Survive(_Condition, _Negatable):
     def getValue(self):
         return self._isAlive
 
+
+class CorrespondedCamouflage(_Condition, _Negatable):
+
+    def __init__(self, path, data):
+        super(CorrespondedCamouflage, self).__init__('correspondedCamouflage', dict(data), path)
+        self._isInstalled = True
+
     def __repr__(self):
-        return 'Survive<value=%r>' % self._isAlive
+        return 'CorrespondedCamouflage<value=%r>' % self._isInstalled
+
+    def negate(self):
+        self._isInstalled = not self._isInstalled
+
+    def getValue(self):
+        return self._isInstalled
 
 
 class Achievements(_Condition, _Negatable, _Updatable):
@@ -834,6 +940,9 @@ class Achievements(_Condition, _Negatable, _Updatable):
         super(Achievements, self).__init__('achievements', dict(data), path)
         self._achieves = set(self._data.get('value'))
         self._isNegative = False
+
+    def __repr__(self):
+        return 'Achievements<idx=%r>' % self._achieves
 
     def negate(self):
         self._isNegative = not self._isNegative
@@ -850,9 +959,6 @@ class Achievements(_Condition, _Negatable, _Updatable):
     def getValue(self):
         return self._achieves
 
-    def __repr__(self):
-        return 'Achievements<idx=%r>' % self._achieves
-
 
 class ClanKills(_Condition, _Negatable):
 
@@ -863,6 +969,9 @@ class ClanKills(_Condition, _Negatable):
         for camoName, ids in data:
             self._camos2ids[camoName] = ids
 
+    def __repr__(self):
+        return 'ClanKills<camos=%r>' % str(self._camos2ids)
+
     def negate(self):
         self._isNegative = not self._isNegative
 
@@ -871,9 +980,6 @@ class ClanKills(_Condition, _Negatable):
 
     def getCamos2ids(self):
         return self._camos2ids
-
-    def __repr__(self):
-        return 'ClanKills<camos=%r>' % str(self._camos2ids)
 
 
 class _Cumulativable(_Condition):
@@ -886,15 +992,15 @@ class _Cumulativable(_Condition):
         pass
 
     @abstractmethod
-    def _getKey(self):
-        pass
-
-    @abstractmethod
     def getTotalValue(self):
         pass
 
     @abstractmethod
     def getBonusData(self):
+        pass
+
+    @abstractmethod
+    def _getKey(self):
         pass
 
     def _parseProgress(self, curProgData, prevProgData):
@@ -950,11 +1056,11 @@ class BattlesCount(_Cumulativable):
         super(BattlesCount, self).__init__('battles', dict(data), path)
         self._bonus = weakref.proxy(bonusCond)
 
+    def __repr__(self):
+        return 'BattlesCount<key=%s; total=%d>' % (self._getKey(), self.getTotalValue())
+
     def getUserString(self, battleTypeName='random'):
         return i18n.makeString(QUESTS.getDetailsDossier(battleTypeName, self._getKey()))
-
-    def _getKey(self):
-        pass
 
     def getTotalValue(self):
         return _getNodeValue(self._data, 'count', 0)
@@ -965,8 +1071,8 @@ class BattlesCount(_Cumulativable):
     def getBonusData(self):
         return self._bonus
 
-    def __repr__(self):
-        return 'BattlesCount<key=%s; total=%d>' % (self._getKey(), self.getTotalValue())
+    def _getKey(self):
+        pass
 
 
 class BattleResults(_Condition, _Negatable, _Updatable):
@@ -983,6 +1089,26 @@ class BattleResults(_Condition, _Negatable, _Updatable):
         self._relationValue = _getNodeValue(self._data, self._relation)
         self._localeKey = localeKey
         self._isNegative = False
+        aggregatedData = self._data.get('plus', [])
+        keys = []
+        for keyData in aggregatedData:
+            keyNode = dict([keyData])
+            key = _getNodeValue(keyNode, 'key')
+            if key:
+                keys.append(key)
+
+        self._aggregatedKeys = tuple(sorted(keys))
+
+    def __repr__(self):
+        return 'BattleResults<key=%s; %s=%r; max=%r; total=%r; avg=%r>' % (self._keyName,
+         self._relation,
+         self._relationValue,
+         self._max,
+         self._isTotal,
+         self._isAvg)
+
+    def getAggregatedKeys(self):
+        return self._aggregatedKeys
 
     @property
     def relationValue(self):
@@ -1027,13 +1153,62 @@ class BattleResults(_Condition, _Negatable, _Updatable):
         self._relation = _RELATIONS.getOppositeRelation(self._relation)
         self._isNegative = not self._isNegative
 
+
+class CritCondition(_Condition, _Negatable):
+
+    def __init__(self, path, critType, data):
+        super(CritCondition, self).__init__('crit', dict(data), path)
+        self._critType = critType
+        self._relation = _findRelation(self._data.keys())
+        self._relationValue = _getNodeValue(self._data, self._relation)
+        self._critName = _getNodeValue(self._data, 'critName')
+        self._isNegative = False
+
+    def isNegative(self):
+        return self._isNegative
+
+    def getCritType(self):
+        return self._critType
+
+    def getCritName(self):
+        return self._critName
+
+    @property
+    def relation(self):
+        return self._relation
+
+    @property
+    def relationValue(self):
+        return self._relationValue
+
+    def negate(self):
+        self._relation = _RELATIONS.getOppositeRelation(self._relation)
+        self._isNegative = not self._isNegative
+
+
+class CritsGroup(_Condition, _Negatable):
+
+    def __init__(self, path, data):
+        super(CritsGroup, self).__init__('crits', dict(data), path)
+        self._isNegative = False
+        self._results = []
+        for critsType, critsList in self.getData().iteritems():
+            for _, critsData in critsList:
+                self._results.append(CritCondition('%s.%s' % (path, critsType), critsType, critsData))
+
     def __repr__(self):
-        return 'BattleResults<key=%s; %s=%r; max=%r; total=%r; avg=%r>' % (self._keyName,
-         self._relation,
-         self._relationValue,
-         self._max,
-         self._isTotal,
-         self._isAvg)
+        return 'Crits<critsCount=%d>' % len(self._results)
+
+    def isNegative(self):
+        return self._isNegative
+
+    def negate(self):
+        self._isNegative = not self._isNegative
+        for result in self._results:
+            result.negate()
+
+    def getCrits(self):
+        return self._results
 
 
 class UnitResults(_Condition, _Negatable):
@@ -1043,19 +1218,34 @@ class UnitResults(_Condition, _Negatable):
         self._isAllAlive = _getNodeValue(self._data, 'allAlive')
         self._unitKey = _getArenaBonusType(preBattleCond)
         self._results = []
+        self._unitVehKills = None
+        self._unitVehDamage = None
         for idx, (keyName, value) in enumerate(data):
             resultData, isNegative = None, False
-            if keyName == 'not' and len(value):
+            if keyName == 'not' and value:
                 (_, resultData), isNegative = value[0], not isNegative
-            elif keyName == 'results':
+            if keyName == 'results':
                 resultData = value
-            if resultData is not None:
-                results = BattleResults('%s.battleResults%d' % (path, idx), resultData, localeKey=self._unitKey)
-                if isNegative:
-                    results.negate()
-                self._results.append(results)
+                if resultData is not None:
+                    results = BattleResults('%s.battleResults%d' % (path, idx), resultData, localeKey=self._unitKey)
+                    if isNegative:
+                        results.negate()
+                    self._results.append(results)
+            if keyName == 'unitVehicleDamage':
+                if value is not None:
+                    self._unitVehDamage = VehicleDamage('%s.unitVehicleDamage%d' % (path, idx), value)
+                    if isNegative:
+                        self._unitVehDamage.negate()
+            if keyName == 'unitVehicleKills':
+                if value is not None:
+                    self._unitVehKills = VehicleKills('%s.unitVehicleKills%d' % (path, idx), value)
+                    if isNegative:
+                        self._unitVehKills.negate()
 
         return
+
+    def __repr__(self):
+        return 'UnitResults<resultsCount=%d>' % len(self._results)
 
     def negate(self):
         self._isAllAlive = not self._isAllAlive
@@ -1065,14 +1255,17 @@ class UnitResults(_Condition, _Negatable):
     def getResults(self):
         return self._results
 
+    def getUnitVehKills(self):
+        return self._unitVehKills
+
+    def getUnitVehDamage(self):
+        return self._unitVehDamage
+
     def getUnitKey(self):
         return self._unitKey
 
     def isAllAlive(self):
         return self._isAllAlive
-
-    def __repr__(self):
-        return 'UnitResults<resultsCount=%d>' % len(self._results)
 
 
 class CumulativeResult(_Cumulativable):
@@ -1085,11 +1278,11 @@ class CumulativeResult(_Cumulativable):
         self._unitName = _getArenaBonusType(preBattleCond)
         return None
 
+    def __repr__(self):
+        return 'CumulativeResult<key=%s; total=%d>' % (self._getKey(), self.getTotalValue())
+
     def getUserString(self, battleTypeName=''):
         return self.__getLabelString()
-
-    def _getKey(self):
-        return 'unit_%s' % self._key if self._isUnit else self._key
 
     @property
     def keyName(self):
@@ -1101,6 +1294,9 @@ class CumulativeResult(_Cumulativable):
     def getBonusData(self):
         return self._bonus
 
+    def _getKey(self):
+        return 'unit_%s' % self._key if self._isUnit else self._key
+
     def __getLabelString(self):
         param = i18n.makeString('#quests:details/conditions/cumulative/%s' % self._key)
         if self._isUnit:
@@ -1108,9 +1304,6 @@ class CumulativeResult(_Cumulativable):
         else:
             label = '#quests:details/conditions/cumulative/single'
         return i18n.makeString(label, param=param)
-
-    def __repr__(self):
-        return 'CumulativeResult<key=%s; total=%d>' % (self._getKey(), self.getTotalValue())
 
 
 class VehicleKills(_VehsListCondition):
@@ -1121,8 +1314,10 @@ class VehicleKills(_VehsListCondition):
     def getVehiclesData(self):
         return _prepareVehData(self._getVehiclesList(self._data))
 
-    def _getLabelKey(self):
-        pass
+    def getLabelKey(self):
+        if self.getFireStarted() or self.getAttackReason() == ATTACK_REASON.FIRE:
+            return QUESTS.DETAILS_CONDITIONS_FIREKILLS
+        return QUESTS.DETAILS_CONDITIONS_RAMKILLS if self.getAttackReason() == ATTACK_REASON.RAM else QUESTS.DETAILS_CONDITIONS_VEHICLESKILLS
 
     def __repr__(self):
         return 'VehicleKills<%s=%d>' % (self._relation, self._relationValue)
@@ -1134,57 +1329,66 @@ class VehicleKillsCumulative(_Cumulativable, VehicleKills):
         super(VehicleKills, self).__init__('vehicleKillsCumulative', dict(data), path)
         self._bonus = weakref.proxy(bonusCond)
 
-    def getUserString(self, battleTypeName=''):
-        return i18n.makeString(self._getLabelKey())
-
-    def _getKey(self):
-        pass
-
-    def getTotalValue(self):
-        return self._relationValue
-
-    def getBonusData(self):
-        return self._bonus
-
     def __repr__(self):
         return 'VehicleKills<key=%s; %s=%d; total=%d>' % (self._getKey(),
          self._relation,
          self._relationValue,
          self.getTotalValue())
 
-
-class VehicleDamage(_VehsListCondition):
-
-    def __init__(self, path, data):
-        super(VehicleDamage, self).__init__('vehicleDamage', dict(data), path)
-
-    def getVehiclesData(self):
-        return _prepareVehData(self._getVehiclesList(self._data))
-
-    def _getLabelKey(self):
-        pass
-
-    def __repr__(self):
-        return 'VehicleDamage<%s=%d>' % (self._relation, self._relationValue)
-
-
-class VehicleDamageCumulative(_Cumulativable, VehicleDamage):
-
-    def __init__(self, path, data, bonusCond):
-        super(VehicleDamage, self).__init__('vehicleDamageCumulative', dict(data), path)
-        self._bonus = weakref.proxy(bonusCond)
-
     def getUserString(self, battleTypeName=''):
-        return i18n.makeString(self._getLabelKey())
-
-    def _getKey(self):
-        pass
+        return i18n.makeString(self.getLabelKey())
 
     def getTotalValue(self):
         return self._relationValue
 
     def getBonusData(self):
         return self._bonus
+
+    def _getKey(self):
+        pass
+
+
+class _CountOrTotalEventsCondition(_VehsListCondition):
+    """
+    Allow to check whether this condition counts number of events (hits, stuns)
+    or total amount of event results (damage dealt, stun duration)
+    """
+
+    def isEventCount(self):
+        return _getNodeValue(self._data, 'eventCount', default=False)
+
+
+class VehicleDamage(_CountOrTotalEventsCondition):
+
+    def __init__(self, path, data):
+        super(VehicleDamage, self).__init__('vehicleDamage', dict(data), path)
+
+    def __repr__(self):
+        return 'VehicleDamage<%s=%d>' % (self._relation, self._relationValue)
+
+    def getVehiclesData(self):
+        return _prepareVehData(self._getVehiclesList(self._data))
+
+    def getLabelKey(self):
+        if self.getFireStarted() or self.getAttackReason() == ATTACK_REASON.FIRE:
+            key = QUESTS.DETAILS_CONDITIONS_FIREDAMAGE
+        elif self.getAttackReason() == ATTACK_REASON.RAM:
+            key = QUESTS.DETAILS_CONDITIONS_RAMDAMAGE
+        else:
+            key = QUESTS.DETAILS_CONDITIONS_VEHICLEDAMAGE
+        if self.isEventCount():
+            key += '/eventCount'
+        return key
+
+    def _getKey(self):
+        pass
+
+
+class VehicleDamageCumulative(VehicleDamage, _Cumulativable):
+
+    def __init__(self, path, data, bonusCond):
+        super(VehicleDamage, self).__init__('vehicleDamageCumulative', dict(data), path)
+        self._bonus = weakref.proxy(bonusCond)
 
     def __repr__(self):
         return 'VehicleDamage<key=%s; %s=%d; total=%d>' % (self._getKey(),
@@ -1192,40 +1396,8 @@ class VehicleDamageCumulative(_Cumulativable, VehicleDamage):
          self._relationValue,
          self.getTotalValue())
 
-
-class VehicleStun(_VehsListCondition):
-
-    def __init__(self, path, data):
-        super(VehicleStun, self).__init__('vehicleStun', dict(data), path)
-
-    def getVehiclesData(self):
-        return _prepareVehData(self._getVehiclesList(self._data))
-
-    def getEventCount(self):
-        return _getNodeValue(self._data, 'eventCount', default=False)
-
-    def _getLabelKey(self):
-        key = 'vehicleStunEventCount' if self.getEventCount() else 'vehicleStun'
-        return '#quests:details/conditions/%s' % key
-
-    def __repr__(self):
-        return 'VehicleStun<%s=%d>' % (self._relation, self._relationValue)
-
-
-class VehicleStunCumulative(_Cumulativable, VehicleStun):
-
-    def __init__(self, path, data, bonusCond):
-        super(VehicleStun, self).__init__('vehicleStunCumulative', dict(data), path)
-        self._bonus = weakref.proxy(bonusCond)
-
     def getUserString(self, battleTypeName=''):
-        return i18n.makeString(self._getLabelKey())
-
-    def _getLabelKey(self):
-        return '#quests:details/conditions/%s/cumulative' % self._getKey()
-
-    def _getKey(self):
-        return 'vehicleStunEventCount' if self.getEventCount() else 'vehicleStun'
+        return i18n.makeString(self.getLabelKey())
 
     def getTotalValue(self):
         return self._relationValue
@@ -1233,11 +1405,79 @@ class VehicleStunCumulative(_Cumulativable, VehicleStun):
     def getBonusData(self):
         return self._bonus
 
+
+class VehicleStun(_CountOrTotalEventsCondition):
+
+    def __init__(self, path, data):
+        super(VehicleStun, self).__init__('vehicleStun', dict(data), path)
+
+    def __repr__(self):
+        return 'VehicleStun<%s=%d>' % (self._relation, self._relationValue)
+
+    def getVehiclesData(self):
+        return _prepareVehData(self._getVehiclesList(self._data))
+
+    def getLabelKey(self):
+        return QUESTS.DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT if self.isEventCount() else QUESTS.DETAILS_CONDITIONS_VEHICLESTUN
+
+    def _getKey(self):
+        pass
+
+
+class VehicleStunCumulative(VehicleStun, _Cumulativable):
+
+    def __init__(self, path, data, bonusCond):
+        super(VehicleStun, self).__init__('vehicleStunCumulative', dict(data), path)
+        self._bonus = weakref.proxy(bonusCond)
+
     def __repr__(self):
         return 'VehicleStun<key=%s; %s=%d; total=%d>' % (self._getKey(),
          self._relation,
          self._relationValue,
          self.getTotalValue())
+
+    def getUserString(self, battleTypeName=''):
+        return i18n.makeString(self.getLabelKey())
+
+    def getTotalValue(self):
+        return self._relationValue
+
+    def getBonusData(self):
+        return self._bonus
+
+    def getLabelKey(self):
+        return super(VehicleStunCumulative, self).getLabelKey() + '/cumulative'
+
+
+class MultiStunEvent(_Condition, _Negatable):
+
+    def __init__(self, path, data):
+        super(MultiStunEvent, self).__init__('multiStunEvent', dict(data), path)
+        self._relation = _findRelation(self._data.keys())
+        self._relationValue = _getNodeValue(self._data, self._relation)
+        self._stunnedByShot = _getNodeValue(self._data, 'stunnedByShot')
+        self._isNegative = False
+
+    def __repr__(self):
+        return 'MultiStunEvent<%d, %s=%d>' % (self.stunnedByShot, self.relation, self.relationValue)
+
+    def isNegative(self):
+        return self._isNegative
+
+    def negate(self):
+        self._isNegative = not self._isNegative
+
+    @property
+    def stunnedByShot(self):
+        return self._stunnedByShot
+
+    @property
+    def relationValue(self):
+        return self._relationValue
+
+    @property
+    def relation(self):
+        return self._relation
 
 
 class RefSystemRalXPPoolCondition(_Requirement):
@@ -1247,14 +1487,14 @@ class RefSystemRalXPPoolCondition(_Requirement):
         self._relation = _findRelation(self._data.keys())
         self._relationValue = float(_getNodeValue(self._data, self._relation))
 
+    def __repr__(self):
+        return 'RefSystemRalXPPoolCondition<%s=%s>' % (self._relation, str(self._relationValue))
+
     def negate(self):
         self._relation = _RELATIONS.getOppositeRelation(self._relation)
 
     def getValue(self):
         return self._relationValue
-
-    def __repr__(self):
-        return 'RefSystemRalXPPoolCondition<%s=%s>' % (self._relation, str(self._relationValue))
 
 
 class RefSystemRalBought10Lvl(_Requirement):
@@ -1263,11 +1503,11 @@ class RefSystemRalBought10Lvl(_Requirement):
         super(RefSystemRalBought10Lvl, self).__init__('refSystemRalBought10Lvl', dict(data), path)
         self._relation = bool(self._data['value'])
 
+    def __repr__(self):
+        return 'RefSystemRalBought10Lvl<value=%r>' % self._relation
+
     def negate(self):
         self._relation = not self._relation
 
     def getValue(self):
         return self._relation
-
-    def __repr__(self):
-        return 'RefSystemRalBought10Lvl<value=%r>' % self._relation

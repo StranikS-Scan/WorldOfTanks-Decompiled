@@ -92,11 +92,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         return
 
     def __isEnemyTeam(self, arenaDP, team):
-        if self.__avatarTeam is not None:
-            return team != self.__avatarTeam
-        else:
-            return arenaDP.isEnemyTeam(team)
-            return
+        return team != self.__avatarTeam if self.__avatarTeam is not None else arenaDP.isEnemyTeam(team)
 
     def invalidateArenaInfo(self):
         """Starts to invalidate information of arena."""
@@ -359,7 +355,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
          'allyTeamName': self._battleCtx.getTeamName(enemy=False),
          'enemyTeamName': self._battleCtx.getTeamName(enemy=True)}
         settings = self.lobbyContext.getServerSettings()
-        if settings is not None and settings.isPotapovQuestEnabled():
+        if settings is not None and settings.isPersonalMissionsEnabled():
             info = self._battleCtx.getQuestInfo()
             if info is not None:
                 arenaInfoData['questsTipStr'] = {'title': info.name,

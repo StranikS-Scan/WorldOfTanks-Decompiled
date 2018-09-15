@@ -76,15 +76,14 @@ class UnitFactory(ControlFactory):
         unitMrg = prb_getters.getClientUnitMgr()
         if unitMrg is None:
             return
+        elif unitMrg.id:
+            entity = prb_getters.getUnit(safe=True)
+            if entity is None:
+                LOG_ERROR('Unit is not found in unit manager', unitMrg.id, unitMrg.unit)
+                unitMrg.leave()
+                return
+            return self._createEntityByType(entity.getPrebattleType(), _SUPPORTED_UNIT_BY_TYPE)
         else:
-            if unitMrg.id:
-                entity = prb_getters.getUnit(safe=True)
-                if entity is not None:
-                    return self._createEntityByType(entity.getPrebattleType(), _SUPPORTED_UNIT_BY_TYPE)
-                else:
-                    LOG_ERROR('Unit is not found in unit manager', unitMrg.id, unitMrg.unit)
-                    unitMrg.leave()
-                    return
             return self.__createByPrbType(ctx)
 
     def __createByFlags(self, ctx):

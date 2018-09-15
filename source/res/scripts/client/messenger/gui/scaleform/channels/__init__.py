@@ -69,7 +69,7 @@ class ControllersCollection(IControllersCollection):
             yield controller
 
     def removeControllers(self):
-        while len(self._controllers):
+        while self._controllers:
             _, controller = self._controllers.popitem()
             controller.clear()
 

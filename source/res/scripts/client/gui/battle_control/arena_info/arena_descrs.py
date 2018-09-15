@@ -16,16 +16,13 @@ from helpers import i18n
 _QuestInfo = namedtuple('_QuestInfo', 'name, condition, additional')
 
 def _makeQuestInfo(quest):
-    condition = '\n'.join((text_styles.middleTitle(INGAME_GUI.POTAPOVQUESTS_TIP_MAINHEADER), text_styles.main(quest.getUserMainCondition())))
-    additional = '\n'.join((text_styles.middleTitle(INGAME_GUI.POTAPOVQUESTS_TIP_ADDITIONALHEADER), text_styles.main(quest.getUserAddCondition())))
+    condition = '\n'.join((text_styles.middleTitle(INGAME_GUI.PERSONALMISSIONS_TIP_MAINHEADER), text_styles.main(quest.getUserMainCondition())))
+    additional = '\n'.join((text_styles.middleTitle(INGAME_GUI.PERSONALMISSIONS_TIP_ADDITIONALHEADER), text_styles.main(quest.getUserAddCondition())))
     return _QuestInfo(quest.getUserName(), condition, additional)
 
 
 def _getDefaultTeamName(isAlly):
-    if isAlly:
-        return i18n.makeString(MENU.LOADING_TEAMS_ALLIES)
-    else:
-        return i18n.makeString(MENU.LOADING_TEAMS_ENEMIES)
+    return i18n.makeString(MENU.LOADING_TEAMS_ALLIES) if isAlly else i18n.makeString(MENU.LOADING_TEAMS_ENEMIES)
 
 
 class IArenaGuiDescription(object):
@@ -180,11 +177,8 @@ class ArenaWithBasesDescription(DefaultArenaGuiDescription):
         return guiVisitor.isRandomBattle() or guiVisitor.isTrainingBattle() and IS_DEVELOPMENT
 
     def makeQuestInfo(self, vo):
-        pQuests = vo.player.getRandomPotapovQuests()
-        if pQuests:
-            return _makeQuestInfo(pQuests[0])
-        else:
-            return _QuestInfo(i18n.makeString(INGAME_GUI.POTAPOVQUESTS_TIP_NOQUESTS_VEHICLETYPE), '', '')
+        pQuests = vo.player.getRandomPersonalMissions()
+        return _makeQuestInfo(pQuests[0]) if pQuests else _QuestInfo(i18n.makeString(INGAME_GUI.PERSONALMISSIONS_TIP_NOQUESTS_VEHICLETYPE), '', '')
 
 
 class ArenaWithLabelDescription(DefaultArenaGuiDescription):
@@ -268,10 +262,7 @@ class FalloutBattlesDescription(ArenaWithLabelDescription):
     __slots__ = ()
 
     def getWinString(self, isInBattle=True):
-        if isInBattle and self._visitor.gui.isFalloutMultiTeam():
-            return i18n.makeString(ARENAS.TYPE_FALLOUTMUTLITEAM_DESCRIPTION)
-        else:
-            return i18n.makeString('#arenas:type/{}/description'.format(functions.getArenaSubTypeName(self._visitor.type.getID())))
+        return i18n.makeString(ARENAS.TYPE_FALLOUTMUTLITEAM_DESCRIPTION) if isInBattle and self._visitor.gui.isFalloutMultiTeam() else i18n.makeString('#arenas:type/{}/description'.format(functions.getArenaSubTypeName(self._visitor.type.getID())))
 
     def getGuiEventType(self):
         pass
@@ -280,11 +271,7 @@ class FalloutBattlesDescription(ArenaWithLabelDescription):
         return True
 
     def makeQuestInfo(self, vo):
-        pQuests = vo.player.getFalloutPotapovQuests()
-        if pQuests:
-            return _makeQuestInfo(pQuests[0])
-        else:
-            return _QuestInfo(i18n.makeString(INGAME_GUI.POTAPOVQUESTS_TIP_NOQUESTS_BATTLETYPE), '', '')
+        return _QuestInfo(i18n.makeString(INGAME_GUI.PERSONALMISSIONS_TIP_NOQUESTS_BATTLETYPE), '', '')
 
 
 class BootcampBattleDescription(ArenaWithLabelDescription):
@@ -293,6 +280,9 @@ class BootcampBattleDescription(ArenaWithLabelDescription):
     def getWinString(self, isInBattle=True):
         lessonId = self._visitor.getArenaExtraData().get('lessonId', 0)
         return i18n.makeString('#arenas:type/{}/description{}'.format(functions.getArenaSubTypeName(self._visitor.type.getID()), lessonId))
+
+    def getScreenIcon(self):
+        pass
 
 
 def createDescription(arenaVisitor):

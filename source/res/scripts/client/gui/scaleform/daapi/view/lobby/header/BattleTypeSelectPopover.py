@@ -11,11 +11,9 @@ from gui.Scaleform.locale.ARENAS import ARENAS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.shared import EVENT_BUS_SCOPE
-from gui.shared.ClanCache import g_clanCache
 from gui.shared.events import LoadViewEvent
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, dependency, time_utils
-from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.server_events import IEventsCache
 
@@ -75,9 +73,6 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
     def _populate(self):
         super(BattleTypeSelectPopover, self)._populate()
         self.update()
-
-    def _dispose(self):
-        super(BattleTypeSelectPopover, self)._dispose()
 
     def __getRankedAvailabilityData(self):
         if self.rankedController.isAvailable():

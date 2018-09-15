@@ -131,10 +131,7 @@ def makeMucInfo(info):
         if 'status_codes' in info:
 
             def __convert(code):
-                if code.isdigit():
-                    return int(code)
-                else:
-                    return 0
+                return int(code) if code.isdigit() else 0
 
             statuses = map(__convert, info['status_codes'])
         else:

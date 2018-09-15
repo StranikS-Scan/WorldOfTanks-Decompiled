@@ -115,7 +115,7 @@ class SelectorDescFactory:
                 groupValues = dict()
                 for constDesc in group[1].items():
                     name = constDesc[1].readString('name', '').strip()
-                    if len(name) > 0:
+                    if name:
                         value = constDesc[1].readString('value', '').strip()
                         try:
                             value = float(value)
@@ -154,7 +154,7 @@ class SelectorDescFactory:
                 if template is not None:
                     selector = copy.deepcopy(template)
                     templateArgsDict = dict()
-                    if len(templateArgs) > 0:
+                    if templateArgs:
                         templateArgsList = templateArgs.split(';')
                         for argument in templateArgsList:
                             argumetSplit = argument.split(':')
@@ -246,9 +246,6 @@ class DiscreteSelectorDesc(SelectorDesc):
 
 class MatkindSelectorDesc(DiscreteSelectorDesc):
     __slots__ = ('_variable',)
-
-    def __init__(self):
-        super(MatkindSelectorDesc, self).__init__()
 
     def read(self, dataSection, effects):
         SelectorDesc.read(self, dataSection, effects)
@@ -381,7 +378,7 @@ class EffectSelectorDesc(SelectorDesc):
         self._variable = args.get(self._variable, self._variable)
         self.__ttl = args.get(self.__ttl, self.__ttl)
         fileDesc = args.get('_fileDescriptor', '')
-        if len(fileDesc) > 0:
+        if fileDesc:
             self._variable = self._variable.format(fileDesc)
         if self.__hardPoint is not None:
             self.__hardPoint = args.get(self.__hardPoint, self.__hardPoint)
@@ -446,12 +443,6 @@ class EffectListSelectorDesc(EffectSelectorDesc):
         super(EffectListSelectorDesc, self).__init__()
         self._effectList = True
 
-    def read(self, dataSection, effects):
-        super(EffectListSelectorDesc, self).read(dataSection, effects)
-
-    def fillTemplate(self, args, effects):
-        super(EffectListSelectorDesc, self).fillTemplate(args, effects)
-
 
 class EffectDescriptorBase(object):
 
@@ -493,11 +484,7 @@ class CustomEffectsDescriptor(EffectDescriptorBase):
         return
 
     def create(self, args):
-        if self._selectorDesc is not None:
-            return MainCustomSelector(self, args)
-        else:
-            return
-            return
+        return MainCustomSelector(self, args) if self._selectorDesc is not None else None
 
     def getActiveEffects(self, effects, args):
         return self._selectorDesc.getActiveEffects(effects, args) if self._selectorDesc is not None else None
@@ -519,11 +506,7 @@ class ExhaustEffectDescriptor(EffectDescriptorBase):
                     effectDescriptor = self.__descriptors[tag]
                     break
 
-        if effectDescriptor is not None:
-            return ExhaustMainSelector(effectDescriptor, args, self.nodes)
-        else:
-            return
-            return
+        return ExhaustMainSelector(effectDescriptor, args, self.nodes) if effectDescriptor is not None else None
 
     def getActiveEffects(self, effects, args):
         raise AssertionError('This function should not be called by hand.')

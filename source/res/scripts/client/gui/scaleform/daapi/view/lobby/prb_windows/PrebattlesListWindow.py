@@ -26,9 +26,6 @@ class PrebattlesListWindow(AbstractWindowView, IGlobalListener):
         self.isMinimising = False
         self.destroy()
 
-    def _dispose(self):
-        super(PrebattlesListWindow, self)._dispose()
-
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias == MESSENGER_VIEW_ALIAS.CHANNEL_COMPONENT:
             events_dispatcher.rqActivateLazyChannel(self._name, viewPy)

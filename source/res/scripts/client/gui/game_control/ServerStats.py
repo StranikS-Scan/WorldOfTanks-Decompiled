@@ -39,7 +39,7 @@ class ServerStats(IServerStatsController):
         """
         clusterUsers, regionUsers, tooltipType = self.getStats()
         if tooltipType == STATS_TYPE.CLUSTER:
-            statsStr = clusterUsers
+            statsStr = text_styles.stats(clusterUsers)
         elif tooltipType == STATS_TYPE.UNAVAILABLE:
             statsStr = text_styles.main(MENU.ONLINECOUNTER_UNAVAILABLE)
         else:

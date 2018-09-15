@@ -106,9 +106,9 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler):
         crosshairType = self.__getCrosshairType(player, target)
         ctrl = self.sessionProvider.shared.crosshair
         if ctrl is not None:
-            position = ctrl.getScaledPosition()
+            position = ctrl.getDisaredPosition()
         else:
-            position = (guiScreenWidth >> 1, guiScreenHeight >> 1)
+            position = (guiScreenWidth * 0.5, guiScreenHeight * 0.5)
         if self.app is not None:
             self.app.registerGuiKeyHandler(self)
         self.as_showS(crosshairType, position, ratio)
@@ -151,12 +151,9 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler):
     def __getCrosshairType(self, player, target):
         if not self.__isTargetCorrect(player, target):
             return SHORTCUT_STATES.DEFAULT
-        elif target.publicInfo.team == player.team:
+        if target.publicInfo.team == player.team:
             return SHORTCUT_STATES.ALLY
-        elif self.__vehicleType == 'SPG':
-            return SHORTCUT_STATES.ENEMY_SPG
-        else:
-            return SHORTCUT_STATES.ENEMY
+        return SHORTCUT_STATES.ENEMY_SPG if self.__vehicleType == 'SPG' else SHORTCUT_STATES.ENEMY
 
     def __isTargetCorrect(self, player, target):
         if target is not None and target.isAlive() and player is not None and isPlayerAvatar():

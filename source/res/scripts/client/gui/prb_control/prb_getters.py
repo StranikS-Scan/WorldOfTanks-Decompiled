@@ -292,7 +292,4 @@ def getTrainingBattleRoundLimits(accountAttrs):
     
     @return: (min_length, max_length)
     """
-    if accountAttrs & ACCOUNT_ATTR.DAILY_BONUS_1:
-        return (60, 14400)
-    else:
-        return (300, 1800)
+    return (60, 14400) if accountAttrs & ACCOUNT_ATTR.DAILY_BONUS_1 else (300, 1800)

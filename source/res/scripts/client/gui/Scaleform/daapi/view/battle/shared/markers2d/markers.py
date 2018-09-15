@@ -24,8 +24,7 @@ class Marker(object):
         if self._active != active:
             self._active = active
             return True
-        else:
-            return False
+        return False
 
     def destroy(self):
         pass
@@ -65,29 +64,17 @@ class VehicleMarker(Marker):
         return self._vehicleID
 
     def isAlive(self):
-        if self._vProxy is not None:
-            return self._vProxy.isAlive()
-        else:
-            return 0
-            return
+        return self._vProxy.isAlive() if self._vProxy is not None else 0
 
     def getHealth(self):
-        if self._vProxy is not None:
-            return self._vProxy.health
-        else:
-            return 0
-            return
+        return self._vProxy.health if self._vProxy is not None else 0
 
     @classmethod
     def fetchMatrixProvider(cls, vProxy):
         return vProxy.model.node('HP_gui')
 
     def getMatrixProvider(self):
-        if self._vProxy is not None:
-            return self.fetchMatrixProvider(self._vProxy)
-        else:
-            return
-            return
+        return self.fetchMatrixProvider(self._vProxy) if self._vProxy is not None else None
 
     def isSpeaking(self):
         return self._speaking
@@ -96,8 +83,7 @@ class VehicleMarker(Marker):
         if self._speaking != speaking:
             self._speaking = speaking
             return True
-        else:
-            return False
+        return False
 
     def __onModelChanged(self):
         self.onVehicleModelChanged(self._markerID, self.getMatrixProvider())

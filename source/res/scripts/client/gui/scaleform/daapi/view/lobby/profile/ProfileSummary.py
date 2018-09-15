@@ -16,12 +16,9 @@ from skeletons.gui.shared import IItemsCache
 class ProfileSummary(ProfileSummaryMeta):
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, *args):
-        super(ProfileSummary, self).__init__(*args)
-
     def _sendAccountData(self, targetData, accountDossier):
         super(ProfileSummary, self)._sendAccountData(targetData, accountDossier)
-        outcome = ProfileUtils.packProfileDossierInfo(targetData)
+        outcome = ProfileUtils.packProfileDossierInfo(targetData, accountDossier)
         outcome['avgDamage'] = ProfileUtils.getValueOrUnavailable(targetData.getAvgDamage())
         outcome['maxDestroyed'] = targetData.getMaxFrags()
         vehicle = self.itemsCache.items.getItemByCD(targetData.getMaxFragsVehicle())

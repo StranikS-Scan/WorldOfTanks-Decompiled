@@ -86,14 +86,14 @@ class RequestsController(object):
         return self._getHandlerByRequestType(requestTypeID) is not None
 
     def _doNextRequest(self, adjustCooldown=None):
-        if len(self._rqQueue) and self._rqCallbackID is None:
+        if self._rqQueue and self._rqCallbackID is None:
             requestType, ctx, request = self._rqQueue.pop(0)
             cooldownLeft = self._cooldowns.getTime(requestType)
             if cooldownLeft:
                 self._loadDelayedRequest(cooldownLeft, ctx, request)
             else:
                 request()
-        elif adjustCooldown and self._rqCallbackID is not None:
+        elif adjustCooldown is not None and self._rqCallbackID is not None:
             self._loadDelayedRequest(adjustCooldown, self._rqCtx, self._rqHandler)
         return
 
@@ -115,7 +115,7 @@ class RequestsController(object):
 
     def _clearWaiters(self):
         if self._waiters is not None:
-            while len(self._waiters):
+            while self._waiters:
                 _, callbackID = self._waiters.popitem()
                 safeCancelCallback(callbackID)
 

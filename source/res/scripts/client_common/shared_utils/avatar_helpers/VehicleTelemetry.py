@@ -6,7 +6,7 @@ import math
 import os.path
 import datetime
 import ResMgr
-from debug_utils import *
+from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CODEPOINT_WARNING
 from constants import ENABLE_DEBUG_DYNAMICS_INFO
 from physics_shared import G
 

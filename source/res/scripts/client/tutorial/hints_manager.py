@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/hints_manager.py
+from debug_utils import LOG_DEBUG
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from tutorial import settings
 from tutorial.control.functional import FunctionalConditions
 from tutorial.data.hints import HintProps
 from tutorial.doc_loader.parsers import HintsParser
-from debug_utils import LOG_DEBUG
 from tutorial.gui.Scaleform.hints.proxy import HintsProxy
 _DESCRIPTOR_PATH = '{0:>s}/once-only-hints.xml'.format(settings.DOC_DIRECTORY)
 
@@ -90,6 +90,9 @@ class HintsManager(object):
 
     def __onItemLost(self, itemID):
         if itemID in self.__activeHints:
+            hint = self.__activeHints[itemID]
+            if hint['equalActions']:
+                self.stopOnceOnlyHint(itemID)
             self.__hideHint(itemID)
 
     def __checkConditions(self, hint):

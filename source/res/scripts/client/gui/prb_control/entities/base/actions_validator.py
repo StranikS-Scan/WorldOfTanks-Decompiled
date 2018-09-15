@@ -92,8 +92,7 @@ class CurrentVehicleActionsValidator(BaseActionsValidator):
             if g_currentVehicle.isDisabledInRent():
                 if g_currentVehicle.isPremiumIGR():
                     return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_IGR_RENTALS_IS_OVER)
-                else:
-                    return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER)
+                return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_RENTALS_IS_OVER)
             if g_currentVehicle.isRotationGroupLocked():
                 return ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_ROTATION_GROUP_LOCKED)
         return super(CurrentVehicleActionsValidator, self)._validate()

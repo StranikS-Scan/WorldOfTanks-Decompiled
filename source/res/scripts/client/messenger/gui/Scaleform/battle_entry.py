@@ -126,11 +126,7 @@ class BattleEntry(IGUIEntry):
 
     def isFocused(self):
         view = self.__view()
-        if view is not None:
-            return view.isFocused()
-        else:
-            return False
-            return
+        return view.isFocused() if view is not None else False
 
     def __setEnable(self):
         if self.__view() is None or not BATTLE_CHANNEL.isInitialized(self.__initialized):

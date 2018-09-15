@@ -384,7 +384,5 @@ class VehicleModulesView(VehicleModulesViewMeta, VehicleCompareConfiguratorBaseV
         if self.__configuredVehModulesIDs == set(getInstalledModulesCDs(targetVeh)):
             if self._container.getBasketVehCmpData().isInInventory():
                 return _MODULES_TYPES.CURRENT
-            else:
-                return _MODULES_TYPES.BASIC
-        else:
-            return _MODULES_TYPES.CUSTOM
+            return _MODULES_TYPES.BASIC
+        return _MODULES_TYPES.CUSTOM

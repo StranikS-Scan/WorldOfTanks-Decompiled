@@ -388,15 +388,14 @@ class ProfileUtils(object):
     VIEW_TYPE_TABLE = 2
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self):
-        super(ProfileUtils, self).__init__()
-
     @classmethod
-    def packProfileDossierInfo(cls, targetData):
+    def packProfileDossierInfo(cls, targetData, accountDossier):
         outcome = ProfileUtils.packProfileCommonInfo(targetData)
+        epicRandomVehicles = set(accountDossier.getEpicRandomStats().getVehicles().keys())
+        totalVehiclesCount = len(epicRandomVehicles.union(set(accountDossier.getRandomStats().getVehicles().keys())))
         vehicle = cls.itemsCache.items.getItemByCD(targetData.getMaxXpVehicle())
         outcome['maxXPByVehicle'] = vehicle.shortUserName if vehicle is not None else ''
-        outcome['marksOfMasteryText'] = style.makeMarksOfMasteryText(BigWorld.wg_getIntegralFormat(targetData.getMarksOfMastery()[3]), len(targetData.getVehicles()))
+        outcome['marksOfMasteryText'] = style.makeMarksOfMasteryText(BigWorld.wg_getIntegralFormat(targetData.getMarksOfMastery()[3]), totalVehiclesCount)
         return outcome
 
     @staticmethod
@@ -429,17 +428,11 @@ class ProfileUtils(object):
 
     @staticmethod
     def formatEfficiency(coeff2, valueReceiveFunction):
-        if coeff2 > 0:
-            return BigWorld.wg_getNiceNumberFormat(valueReceiveFunction())
-        else:
-            return ProfileUtils.UNAVAILABLE_VALUE
+        return BigWorld.wg_getNiceNumberFormat(valueReceiveFunction()) if coeff2 > 0 else ProfileUtils.UNAVAILABLE_VALUE
 
     @staticmethod
     def getEfficiencyPercent(dividend, delimiter, unavailableValue=UNAVAILABLE_VALUE):
-        if delimiter != 0:
-            return BigWorld.wg_getNiceNumberFormat(float(dividend) / delimiter * 100) + ProfileUtils.PERCENT_SYMBOL
-        else:
-            return unavailableValue
+        return BigWorld.wg_getNiceNumberFormat(float(dividend) / delimiter * 100) + ProfileUtils.PERCENT_SYMBOL if delimiter != 0 else unavailableValue
 
     @staticmethod
     def packLditItemData(text, description, tooltip, icon, tooltipData=None):

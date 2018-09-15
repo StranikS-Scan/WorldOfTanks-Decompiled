@@ -214,10 +214,9 @@ class PersonalVehicleDiscount(_PersonalDiscount):
         resoruce = self._goodieDescription.resource
         if resoruce.isPercentage:
             return resoruce.value
-        else:
-            defaultCreditPrice = vehicle.buyPrices.itemPrice.defPrice.getSignValue(Currency.CREDITS)
-            discountCreditPrice = defaultCreditPrice - resoruce.value
-            return getActionPrc(discountCreditPrice, defaultCreditPrice)
+        defaultCreditPrice = vehicle.buyPrices.itemPrice.defPrice.getSignValue(Currency.CREDITS)
+        discountCreditPrice = defaultCreditPrice - resoruce.value
+        return getActionPrc(discountCreditPrice, defaultCreditPrice)
 
 
 class Booster(_Goodie):
@@ -279,10 +278,7 @@ class Booster(_Goodie):
         boosterQualityValues = GUI_SETTINGS.lookup(self.boosterGuiType) or _BOOSTER_QUALITY_VALUES
         if self.effectValue >= boosterQualityValues[BOOSTER_QUALITY_NAMES.BIG]:
             return BOOSTER_QUALITY_NAMES.BIG
-        elif self.effectValue >= boosterQualityValues[BOOSTER_QUALITY_NAMES.MEDIUM]:
-            return BOOSTER_QUALITY_NAMES.MEDIUM
-        else:
-            return BOOSTER_QUALITY_NAMES.SMALL
+        return BOOSTER_QUALITY_NAMES.MEDIUM if self.effectValue >= boosterQualityValues[BOOSTER_QUALITY_NAMES.MEDIUM] else BOOSTER_QUALITY_NAMES.SMALL
 
     @property
     def qualityStr(self):

@@ -3,6 +3,4 @@
 from gui.Scaleform.daapi.view.battle.shared.battle_timers import BattleTimer
 
 class BootcampBattleTimer(BattleTimer):
-
-    def __init__(self):
-        super(BootcampBattleTimer, self).__init__()
+    pass

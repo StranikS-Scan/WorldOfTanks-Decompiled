@@ -3,7 +3,7 @@
 import time
 import BattleReplay
 import SoundGroups
-from constants import HINT_TYPE, HINT_NAMES
+from bootcamp.BootcampConstants import HINT_TYPE, HINT_NAMES
 from debug_utils_bootcamp import LOG_CURRENT_EXCEPTION_BOOTCAMP
 from HintControllers import createPrimaryHintController, createSecondaryHintController, createReplayPlayHintSystem
 from collections import deque, namedtuple
@@ -168,7 +168,7 @@ class HintSystem(object):
             elif self.__hintsNotCompleted:
                 self.__currentHint = self.__hintsNotCompleted.popleft()
                 self.__currentHint.show()
-        elif len(self.__hintsCompleted) > 0 and not self.__currentHint.isComplete():
+        elif self.__hintsCompleted and not self.__currentHint.isComplete():
             self.__currentHint.close()
             self.__hintsNotCompleted.appendleft(self.__currentHint)
             self.__currentHint = self.__hintsCompleted.popleft()

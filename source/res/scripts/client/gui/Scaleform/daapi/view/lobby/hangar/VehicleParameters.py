@@ -66,9 +66,6 @@ class VehicleParameters(VehicleParametersMeta):
 
 class VehiclePreviewParameters(VehicleParameters):
 
-    def __init__(self):
-        super(VehiclePreviewParameters, self).__init__()
-
     def _createDataProvider(self):
         return VehPreviewParamsDataProvider()
 
@@ -116,10 +113,7 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
         return data
 
     def _getAdvancedParamTooltip(self, param):
-        if param.name in self._AVERAGE_PARAMS and self._tooltipType in self._AVERAGE_TOOLTIPS_MAP:
-            return self._AVERAGE_TOOLTIPS_MAP[self._tooltipType]
-        else:
-            return self._tooltipType
+        return self._AVERAGE_TOOLTIPS_MAP[self._tooltipType] if param.name in self._AVERAGE_PARAMS and self._tooltipType in self._AVERAGE_TOOLTIPS_MAP else self._tooltipType
 
     def _makeAdvancedParamVO(self, param):
         if param.value:

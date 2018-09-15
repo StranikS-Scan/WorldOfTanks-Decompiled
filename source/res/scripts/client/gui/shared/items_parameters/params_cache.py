@@ -112,7 +112,7 @@ class _ParamsCache(object):
         for vDescr in self.__getItems(ITEM_TYPES.vehicle, nationIdx):
             components, _ = getVehicleSuitablesByType(vDescr, itemTypeIdx)
             filtered = filter(lambda item: item.compactDescr == typeCompactDescr, components)
-            if len(filtered):
+            if filtered:
                 result.append(vDescr.type.userString)
 
         return result
@@ -146,8 +146,7 @@ class _ParamsCache(object):
         iterator = CACHE_ITERATORS[itemType](idx)
         if itemType == ITEM_TYPES.vehicle:
             return [ vehicles.VehicleDescr(typeID=(idx, cd)) for cd in iterator ]
-        else:
-            return [ vehicles.getItemByCompactDescr(data.compactDescr) for data in iterator ]
+        return [ vehicles.getItemByCompactDescr(data.compactDescr) for data in iterator ]
 
     def __getItems(self, typeIdx, nationIdx=None):
         if nationIdx is None:
@@ -260,7 +259,7 @@ class _ParamsCache(object):
                     deniedVehicles[vehCD] = deniedVehicles.get(vehCD, 0) + 1
 
                 allowedVehicles.update(currentAllowed)
-                if len(currentAllowed) > 0:
+                if currentAllowed:
                     restrictedCamouflages += 1
 
             for vehCD, count in deniedVehicles.iteritems():

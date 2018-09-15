@@ -1253,7 +1253,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainAPCR	</effects>
     <damage>
-      <armor>	360	</armor>
+      <armor>	390	</armor>
       <devices>	150	</devices>
     </damage>
   </_105mm_Exp_APDS>
@@ -1268,7 +1268,7 @@
     <isTracer>	true	</isTracer>
     <effects>	mainHollowCharge	</effects>
     <damage>
-      <armor>	360	</armor>
+      <armor>	390	</armor>
       <devices>	150	</devices>
     </damage>
     <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
@@ -1284,57 +1284,10 @@
     <isTracer>	true	</isTracer>
     <effects>	mainHighExplosive	</effects>
     <damage>
-      <armor>	440	</armor>
+      <armor>	480	</armor>
       <devices>	150	</devices>
     </damage>
   </_105mm_Exp_HE>
-  <_25pdr_HE_Mk_1D>
-    <id>	94	</id>
-    <userString>	#usa_vehicles:_25pdr_HE_Mk_1D	</userString>
-    <icon>	he	</icon>
-    <price>	83	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	87.6	</caliber>
-    <explosionRadius>	1.39	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	mainHighExplosive	</effects>
-    <damage>
-      <armor>	280	</armor>
-      <devices>	115	</devices>
-    </damage>
-  </_25pdr_HE_Mk_1D>
-  <_25pdr_AP_Mk_1T>
-    <id>	95	</id>
-    <userString>	#usa_vehicles:_25pdr_AP_Mk_1T	</userString>
-    <icon>	ap	</icon>
-    <price>	83	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	87.6	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainArmorPiercing	</effects>
-    <damage>
-      <armor>	180	</armor>
-      <devices>	115	</devices>
-    </damage>
-  </_25pdr_AP_Mk_1T>
-  <_25pdr_AP_Mk_1T_SC>
-    <id>	100	</id>
-    <userString>	#usa_vehicles:_25pdr_AP_Mk_1T_SC	</userString>
-    <icon>	ap	</icon>
-    <price>	7	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	87.6	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainArmorPiercing	</effects>
-    <damage>
-      <armor>	180	</armor>
-      <devices>	115	</devices>
-    </damage>
-  </_25pdr_AP_Mk_1T_SC>
   <_120mm_AP_T42>
     <id>	30	</id>
     <userString>	#usa_vehicles:_120mm_AP_T42	</userString>

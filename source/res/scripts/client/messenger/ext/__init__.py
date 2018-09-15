@@ -74,9 +74,8 @@ def isNotFriendSenderIgnored(user, areFriendsOnly):
         if areFriendsOnly:
             if user.isFriend():
                 return False
-            else:
-                LOG_DEBUG('Invite is ignored, shows invites from friends only', user)
-                return True
+            LOG_DEBUG('Invite is ignored, shows invites from friends only', user)
+            return True
         if user.isIgnored():
             LOG_DEBUG('Invite is ignored, there is the contact in ignore list', user)
             return True

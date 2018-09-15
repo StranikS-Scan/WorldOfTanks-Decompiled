@@ -19,17 +19,11 @@ _STATE_ID_TO_ACTIONS = {REPAIR_STATE_ID.DISABLED: (_ACTION.BECOME_DISABLED,),
  REPAIR_STATE_ID.COOLDOWN: (_ACTION.COMPLETE_REPAIR, _ACTION.ENTER_WHILE_CD, _ACTION.ENTER_WHILE_CD)}
 
 def _getActionName(action):
-    if action in _ACTIONS_NAMES:
-        return '{}::{}'.format(_ACTIONS_NAMES[action], action)
-    else:
-        return 'N/A'
+    return '{}::{}'.format(_ACTIONS_NAMES[action], action) if action in _ACTIONS_NAMES else 'N/A'
 
 
 def _getStateName(stateID):
-    if stateID in _STATE_NAMES:
-        return _STATE_NAMES[stateID]
-    else:
-        return 'N/A'
+    return _STATE_NAMES[stateID] if stateID in _STATE_NAMES else 'N/A'
 
 
 class RepairState(object):

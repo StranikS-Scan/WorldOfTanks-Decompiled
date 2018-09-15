@@ -87,8 +87,7 @@ class _Observable(object):
                 subscriber(self.value)
 
             return True
-        else:
-            return False
+        return False
 
     def _isChanged(self, other):
         return self.value != other

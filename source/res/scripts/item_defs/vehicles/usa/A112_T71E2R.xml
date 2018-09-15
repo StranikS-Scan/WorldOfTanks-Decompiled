@@ -1,0 +1,946 @@
+<A112_T71E2R.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <driver></driver>
+    <gunner></gunner>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	64	</forward>
+    <backward>	25	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.231	</moving>
+    <still>	0.231	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.347	</firePenalty>
+  </invisibility>
+  <repairCost>	8.1	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.4	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	25.4	</armor_1>
+      <armor_2>	25.4	</armor_2>
+      <armor_3>	22.2	</armor_3>
+      <armor_4>	19.1	</armor_4>
+      <armor_5>	12.7	</armor_5>
+      <armor_6>	9.5	</armor_6>
+      <armor_7>	25.4	</armor_7>
+      <armor_8>	0	</armor_8>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	7965	</weight>
+    <maxHealth>	672	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/american/A112_T71E2/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A112_T71E2/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A112_T71E2/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.24 36.00 0.40 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.24 36.00 0.40 1.00 0.05 0.32	</rollParams>
+      <sensitivityToImpulse>	0.58	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000334 0.510987 0.099617	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/american/A112_T71E2/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A112_T71E2/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <inscription>
+        <rayStart>	-0.30183 0.387704 2.32047	</rayStart>
+        <rayEnd>	-0.30183 0.0181761 2.10454	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.716	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </inscription>
+      <clan>
+        <rayStart>	0.540716 0.673679 2.39796	</rayStart>
+        <rayEnd>	0.540716 -0.189717 1.89344	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.318	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+        <isMirrored>	true	</isMirrored>
+      </clan>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A112_T71E2/T71E2_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	3.58 3.58 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_A112_T71E2R>
+      <userString>	#usa_vehicles:Chassis_A112_T71E2R	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	15000	</price>
+      <unlocks>
+        <chassis>	Chassis_A112_T71E2R_2	  <cost>	8300	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	4500	</weight>
+      <maxLoad>	19000	</maxLoad>
+      <terrainResistance>	0.8 0.9 1.7	</terrainResistance>
+      <brakeForce>	17000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	60	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	130	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A112_T71E2/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A112_T71E2/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A112_T71E2/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <size>	0.3 0.4	</size>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_a23	</textureSet>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3.03	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.324575	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.0139305	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.43762	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.324575	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.0139305	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.437365	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R2	</name>
+          <radius>	0.435319	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R3	</name>
+          <radius>	0.437719	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0848303	</minOffset>
+          <maxOffset>	0.0808383	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0828343	</minOffset>
+          <maxOffset>	0.0788423	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A112_T71E2/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A112_T71E2/track/segment.model	</segmentModelRight>
+        <left>	vehicles/american/A112_T71E2/track/left.track	</left>
+        <right>	vehicles/american/A112_T71E2/track/right.track	</right>
+        <segmentLength>	0.136	</segmentLength>
+        <segmentOffset>	0.08	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0309	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1109	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+          <rightSibling>	Track_VT_R6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_R5	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+          <rightSibling>	Track_VT_L6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_L5	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+      </trackNodes>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.913232 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A112_T71E2/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A112_T71E2/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.21619 1.47016	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.293230 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.050570 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.248660	</row2>
+            <row3>	-0.003173 -0.000342 0.158264	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_A112_T71E2R>
+    <Chassis_A112_T71E2R_2>
+      <userString>	#usa_vehicles:Chassis_A112_T71E2R_2	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	19000	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	4500	</weight>
+      <maxLoad>	20000	</maxLoad>
+      <terrainResistance>	0.7 0.8 1.5	</terrainResistance>
+      <brakeForce>	17000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	65	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A112_T71E2/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A112_T71E2/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A112_T71E2/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <size>	0.3 0.4	</size>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_a23	</textureSet>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3.03	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.324575	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.0139305	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.43762	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.324575	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.0139305	</radius>
+          <syncAngle>	27.6923	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.437365	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R2	</name>
+          <radius>	0.435319	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R3	</name>
+          <radius>	0.437719	</radius>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.0848303	</minOffset>
+          <maxOffset>	0.0808383	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.0828343	</minOffset>
+          <maxOffset>	0.0788423	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A112_T71E2/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A112_T71E2/track/segment.model	</segmentModelRight>
+        <left>	vehicles/american/A112_T71E2/track/left.track	</left>
+        <right>	vehicles/american/A112_T71E2/track/right.track	</right>
+        <segmentLength>	0.136	</segmentLength>
+        <segmentOffset>	0.08	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0309	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1109	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+          <rightSibling>	Track_VT_R6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_R5	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+          <rightSibling>	Track_VT_L6	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.82	</backwardElastK>
+          <leftSibling>	Track_VT_L5	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+      </trackNodes>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.913232 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A112_T71E2/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A112_T71E2/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.21619 1.47016	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.293230 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.050570 0.000000	</row1>
+            <row2>	0.000000 0.000000 5.248660	</row2>
+            <row3>	-0.003173 -0.000342 0.158264	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+    </Chassis_A112_T71E2R_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_A112_T71E2R>
+      <userString>	#usa_vehicles:Turret_1_A112_T71E2R	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	20000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	22.2	</armor_1>
+        <armor_2>	12.7	</armor_2>
+        <armor_3>	22.2	</armor_3>
+        <armor_4>	22.2	</armor_4>
+        <armor_5>	12.7	</armor_5>
+        <armor_6>	12.7	</armor_6>
+        <armor_7>	22.2	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	12.7	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_3	</primaryArmor>
+      <weight>	3000	</weight>
+      <maxHealth>	168	</maxHealth>
+      <rotationSpeed>	46	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	130	</maxHealth>
+        <maxRegenHealth>	65	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	390	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	90	</maxHealth>
+        <maxRegenHealth>	45	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_76mm_Gun_M1A2L>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <gun>	_76mm_Gun_T185E	  <cost>	11200	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	19.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.394444 10 0.402778 6 0.597222 6 0.605556 10 1 10	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.247	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	4.3	</reloadTime>
+          <aimingTime>	2	</aimingTime>
+          <models>
+            <undamaged>	vehicles/american/A112_T71E2/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/american/A112_T71E2/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/american/A112_T71E2/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A112_T71E2/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A112_T71E2/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000125708 -0.0576991 1.53228	</rayStart>
+              <rayEnd>	-0.00812839 -0.152496 1.53094	</rayEnd>
+              <rayUp>	0.078 0.074 5	</rayUp>
+              <size>	0.421	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.8 0.6 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_Gun_M1A2L>
+        <_76mm_Gun_T185E>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <vehicle>	A97_M41_Bulldog	  <cost>	111700	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	19.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	20	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.394444 10 0.402778 6 0.597222 6 0.605556 10 1 10	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	4.5	</reloadTime>
+          <aimingTime>	1.9	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	3.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/american/A112_T71E2/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A112_T71E2/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A112_T71E2/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A112_T71E2/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A112_T71E2/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000125708 -0.0576991 1.83708	</rayStart>
+              <rayEnd>	-0.139881 -0.0744219 1.83708	</rayEnd>
+              <rayUp>	0.076 0.074 4	</rayUp>
+              <size>	0.421	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1.8 0.3 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_76mm_Gun_T185E>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A112_T71E2/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/american/A112_T71E2/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/american/A112_T71E2/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A112_T71E2/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A112_T71E2/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	-0.000213 0.38257 1.04363	</gunPosition>
+      <emblemSlots>
+        <inscription>
+          <rayStart>	-1.21731 0.362862 0.0253699	</rayStart>
+          <rayEnd>	-0.691632 0.0824749 -0.0260641	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.585	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	-1.02181 0.616839 0.0339778	</rayStart>
+          <rayEnd>	-0.587564 0.385216 -0.00851089	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.307	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.2494 0.533805 0.0241816	</rayStart>
+          <rayEnd>	0.76219 0.465177 -0.0199549	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.307	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.922 -0.086 0.940 0.000 0.630 0.165 0.500 0.500 0.500 0.500 0.526 0.882 0.628 0.309 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	1.84 1.84 0.16 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_A112_T71E2R>
+  </turrets0>
+  <engines>
+    <Continental_AOI-628-1>	shared	  <unlocks>
+        <engine>	Continental_AOI-628-2	  <cost>	10000	</cost>
+        </engine>
+      </unlocks>
+    </Continental_AOI-628-1>
+    <Continental_AOI-628-2>	shared	</Continental_AOI-628-2>
+  </engines>
+  <fuelTanks>
+    <Average>	shared	</Average>
+  </fuelTanks>
+  <radios>
+    <AN-GRC-3>	shared	  <unlocks>
+        <radio>	AN-ARC-27	  <cost>	9000	</cost>
+        </radio>
+      </unlocks>
+    </AN-GRC-3>
+    <AN-ARC-27>	shared	</AN-ARC-27>
+  </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AOI-628-1>
+          <smplEnginePower>	350	</smplEnginePower>
+        </Continental_AOI-628-1>
+        <Continental_AOI-628-2>
+          <smplEnginePower>	420	</smplEnginePower>
+        </Continental_AOI-628-2>
+      </engines>
+      <chassis>
+        <Chassis_A112_T71E2R>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0322	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0322	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0322	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0322	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0322	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0322	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_A112_T71E2R>
+        <Chassis_A112_T71E2R_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0322	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0322	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0322	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0322	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0322	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0322	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_A112_T71E2R_2>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors>
+    <armour>	0.831096254	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision>	collision	</collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+</A112_T71E2R.xml>

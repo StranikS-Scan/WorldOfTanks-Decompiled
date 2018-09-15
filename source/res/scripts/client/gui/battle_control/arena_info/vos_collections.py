@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_control/arena_info/vos_collections.py
 from collections import defaultdict
 from gui.shared.sort_key import SortKey
+from gui.battle_control.arena_info.arena_vos import EPIC_RANDOM_KEYS
 
 class VehicleInfoSortKey(SortKey):
     __slots__ = ('vInfoVO', 'vStatsVO')
@@ -39,6 +40,25 @@ class SquadmanVehicleInfoSortKey(VehicleInfoSortKey):
     def _cmp(self, other):
         result = cmp(other.vInfoVO.isSquadMan(self.prebattleID), self.vInfoVO.isSquadMan(self.prebattleID))
         return result if result else super(SquadmanVehicleInfoSortKey, self)._cmp(other)
+
+
+class SpawnGroupVehicleInfoSortKey(VehicleInfoSortKey):
+
+    def _cmp(self, other):
+        result = cmp(self.vInfoVO.gameModeSpecific.getValue(EPIC_RANDOM_KEYS.PLAYER_GROUP), other.vInfoVO.gameModeSpecific.getValue(EPIC_RANDOM_KEYS.PLAYER_GROUP))
+        return result if result else super(SpawnGroupVehicleInfoSortKey, self)._cmp(other)
+
+
+class SquadmanSpawnGroupVehicleInfoSortKey(SpawnGroupVehicleInfoSortKey):
+    __slots__ = ('prebattleID',)
+
+    def __init__(self, prebattleID, item):
+        super(SquadmanSpawnGroupVehicleInfoSortKey, self).__init__(item)
+        self.prebattleID = prebattleID
+
+    def _cmp(self, other):
+        result = cmp(other.vInfoVO.isSquadMan(self.prebattleID), self.vInfoVO.isSquadMan(self.prebattleID))
+        return result if result else super(SquadmanSpawnGroupVehicleInfoSortKey, self)._cmp(other)
 
 
 class FragCorrelationSortKey(VehicleInfoSortKey):
@@ -99,10 +119,7 @@ class _WinPointsSortKey(SortKey):
 
     def _cmp(self, other):
         result = cmp(other.teamWinPoints, self.teamWinPoints)
-        if result:
-            return result
-        else:
-            return cmp(self.internal, other.internal)
+        return result if result else cmp(self.internal, other.internal)
 
     @classmethod
     def _createInternal(cls, item):

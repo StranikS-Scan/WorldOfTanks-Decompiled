@@ -3,18 +3,30 @@
 import types
 import json
 import gettext
-import BigWorld
+import ResMgr
+from errno import ENOENT
 from collections import defaultdict
 from encodings import utf_8
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
 
-def _getTextPath(baseLoc):
-    locator = baseLoc + '/.text_locator'
-    return convert(BigWorld.wg_resolveFileName(locator)[:-len(locator)])
+class _PyFileWrapper(object):
+    """Class is used to wrap binary data which was read from text MO-file using
+    WG specific ResMgr. Provides only 'read' method which is needed for
+    gettext.GNUTranslations class
+    """
+
+    def __init__(self, bwDataSection):
+        self._ds = bwDataSection
+
+    def read(self):
+        return self._ds.asBinary
 
 
 def _getTranslator(domain):
-    return gettext.translation(domain, _getTextPath('text'), languages=['text'])
+    mofile = ResMgr.openSection('text/LC_MESSAGES/%s.mo' % domain)
+    if mofile is None:
+        raise IOError(ENOENT, 'Translation file is not found', domain)
+    return gettext.GNUTranslations(_PyFileWrapper(mofile))
 
 
 class _TranslatorsCache(defaultdict):

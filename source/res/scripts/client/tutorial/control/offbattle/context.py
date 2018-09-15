@@ -37,10 +37,7 @@ class OffbattleStartReqs(context.StartReqs):
             ctx.cache.setRefused(True).write()
             return False
         self.__validateFinishReason(ctx)
-        if self.__validateTutorialsCompleted(ctx, descriptor):
-            return self.__validateTutorialState(ctx)
-        else:
-            return self.__validateBattleCount(descriptor, ctx)
+        return self.__validateTutorialState(ctx) if self.__validateTutorialsCompleted(ctx, descriptor) else self.__validateBattleCount(descriptor, ctx)
 
     def __validateFinishReason(self, ctx):
         cache = ctx.cache
@@ -64,49 +61,40 @@ class OffbattleStartReqs(context.StartReqs):
             received = battleDesc.areAllBonusesReceived(ctx.bonusCompleted)
             ctx.globalFlags[GLOBAL_FLAG.ALL_BONUSES_RECEIVED] = received
             if not received:
-                if cache.getPlayerXPLevel() == PLAYER_XP_LEVEL.NEWBIE:
-                    return False
-                else:
-                    return True
-            else:
-                cache.setPlayerXPLevel(PLAYER_XP_LEVEL.NORMAL)
-                if cache.wasReset():
-                    cache.setRefused(True)
-                return True
-            return
+                return cache.getPlayerXPLevel() != PLAYER_XP_LEVEL.NEWBIE
+            cache.setPlayerXPLevel(PLAYER_XP_LEVEL.NORMAL)
+            if cache.wasReset():
+                cache.setRefused(True)
+            return True
 
     def __validateBattleCount(self, descriptor, ctx):
         if ctx.battlesCount < ctx.newbieBattlesCount:
             chapter = descriptor.getChapter(descriptor.getInitialChapterID())
             if chapter is None or not chapter.isBonusReceived(ctx.bonusCompleted):
                 return True
-            else:
-                return self.__validateTutorialState(ctx)
+            return self.__validateTutorialState(ctx)
         else:
             ctx.cache.setPlayerXPLevel(PLAYER_XP_LEVEL.NORMAL)
             return self.__validateTutorialState(ctx)
-        return
 
     def __validateTutorialState(self, ctx):
         cache = ctx.cache
         if ctx.restart:
             return True
-        elif not ctx.isFirstStart and not cache.isAfterBattle() and not ctx.restart:
+        if not ctx.isFirstStart and not cache.isAfterBattle() and not ctx.restart:
             cache.setRefused(True).write()
             return False
-        else:
-            if cache.isRefused():
-                received = ctx.globalFlags[GLOBAL_FLAG.ALL_BONUSES_RECEIVED]
-                if not received and not ctx.isAfterBattle and cache.doStartOnNextLogin():
-                    cache.setRefused(False).write()
-                    return True
-                else:
-                    return False
-            if cache.isAfterBattle():
+        if cache.isRefused():
+            received = ctx.globalFlags[GLOBAL_FLAG.ALL_BONUSES_RECEIVED]
+            if not received and not ctx.isAfterBattle and cache.doStartOnNextLogin():
+                cache.setRefused(False).write()
                 return True
-            result = not ctx.isAfterBattle and cache.doStartOnNextLogin()
-            cache.setRefused(not result).write()
-            return result
+            return False
+        if cache.isAfterBattle():
+            return True
+        result = not ctx.isAfterBattle and cache.doStartOnNextLogin()
+        cache.setRefused(not result).write()
+        return result
 
 
 class OffbattleBonusesRequester(LobbyBonusesRequester):

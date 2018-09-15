@@ -10,12 +10,24 @@
             <crits>
               <destroyed>
                 <crit>
+                  <title>
+                    <key>	#personal_missions_details:quest_4_1_4_condition_title_crit_track	</key>
+                  </title>
+                  <description>
+                    <key>	#personal_missions_details:quest_common_condition_description_empty	</key>
+                  </description>
                   <critName>	track	</critName>
                   <greaterOrEqual>	3	</greaterOrEqual>
                 </crit>
               </destroyed>
             </crits>
             <results>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_damageAssistedTrack	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_4_1_4_condition_description_damageAssistedTrack	</key>
+              </description>
               <key>	damageAssistedTrack	</key>
               <greaterOrEqual>	500	</greaterOrEqual>
             </results>
@@ -24,6 +36,36 @@
       </conditions>
       <bonus>
         <credits>	300000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t4:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_1_4_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_4_1_4_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	300000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t4:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
       </bonus>
     </potapovQuest>
     <potapovQuest>
@@ -31,6 +73,70 @@
       <id>	regular_4_1_4_add	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
+        <postBattle>
+          <and>
+            <crits>
+              <destroyed>
+                <crit>
+                  <title>
+                    <key>	#personal_missions_details:quest_4_1_4_condition_title_crit_track	</key>
+                  </title>
+                  <description>
+                    <key>	#personal_missions_details:quest_common_condition_description_empty	</key>
+                  </description>
+                  <critName>	track	</critName>
+                  <greaterOrEqual>	3	</greaterOrEqual>
+                </crit>
+              </destroyed>
+            </crits>
+            <results>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_damageAssistedTrack	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_4_1_4_condition_description_damageAssistedTrack	</key>
+              </description>
+              <key>	damageAssistedTrack	</key>
+              <greaterOrEqual>	500	</greaterOrEqual>
+            </results>
+            <results>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_killsAssistedTrack	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_4_1_4_condition_description_killsAssistedTrack	</key>
+              </description>
+              <key>	killsAssistedTrack	</key>
+              <greaterOrEqual>	2	</greaterOrEqual>
+            </results>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <credits>	150000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t4:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_1_4_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_4_1_4_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
         <postBattle>
           <and>
             <crits>
@@ -53,7 +159,11 @@
         </postBattle>
       </conditions>
       <bonus>
-        <credits>	150000	</credits>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
       </bonus>
     </potapovQuest>
   </quests>

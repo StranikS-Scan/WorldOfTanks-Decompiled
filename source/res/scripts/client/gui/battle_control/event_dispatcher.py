@@ -43,11 +43,6 @@ def showIngameMenu():
 
 
 def toggleFullStats(isDown):
-    from constants import IS_BOOTCAMP_ENABLED
-    if IS_BOOTCAMP_ENABLED:
-        from bootcamp.Bootcamp import g_bootcamp
-        if g_bootcamp.isRunning():
-            return
     g_eventBus.handleEvent(GameEvent(GameEvent.FULL_STATS, _makeKeyCtx(isDown=isDown)), scope=_SCOPE)
 
 

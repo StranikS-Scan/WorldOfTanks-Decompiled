@@ -184,9 +184,9 @@ class TrainingEntity(LegacyEntity):
             accounts = map(lambda accInfo: prb_items.PlayerPrbInfo(accInfo[0], entity=self, roster=key, **accInfo[1]), roster.iteritems())
             team, assigned = decodeRoster(key)
             if assigned:
-                if hasTeam1 and team is 1:
+                if hasTeam1 and team == 1:
                     result[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM1] = accounts
-                elif hasTeam2 and team is 2:
+                elif hasTeam2 and team == 2:
                     result[PREBATTLE_ROSTER.ASSIGNED_IN_TEAM2] = accounts
             if hasUnassigned:
                 result[PREBATTLE_ROSTER.UNASSIGNED].extend(accounts)
@@ -273,7 +273,7 @@ class TrainingEntity(LegacyEntity):
                 if callback is not None:
                     callback(False)
                 return
-            elif not len(self.__settingRecords):
+            elif not self.__settingRecords:
                 if callback is not None:
                     callback(False)
                 return
@@ -286,7 +286,7 @@ class TrainingEntity(LegacyEntity):
                 player.prb_changeArena(ctx.getArenaTypeID(), partial(self.__onSettingChanged, record='arenaTypeID', callback=ctx.stopProcessing))
             if isRoundLenChanged:
                 player.prb_changeRoundLength(ctx.getRoundLen(), partial(self.__onSettingChanged, record='roundLength', callback=ctx.stopProcessing))
-            if not len(self.__settingRecords):
+            if not self.__settingRecords:
                 if callback is not None:
                     callback(False)
             else:

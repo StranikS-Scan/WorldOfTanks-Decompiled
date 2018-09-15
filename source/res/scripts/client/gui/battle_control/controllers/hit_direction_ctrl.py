@@ -366,7 +366,4 @@ class HitDirectionControllerPlayer(HitDirectionController):
 
 
 def createHitDirectionController(setup):
-    if setup.isReplayPlaying:
-        return HitDirectionControllerPlayer(setup)
-    else:
-        return HitDirectionController(setup)
+    return HitDirectionControllerPlayer(setup) if setup.isReplayPlaying else HitDirectionController(setup)

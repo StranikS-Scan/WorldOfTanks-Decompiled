@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rally/__init__.py
-__author__ = 'd_dichkovsky'
+
 
 class NavigationStack(object):
     __stacks = {}
@@ -23,7 +23,7 @@ class NavigationStack(object):
 
     @classmethod
     def current(cls, key):
-        return cls.__stacks[key][-1] if key in cls.__stacks and len(cls.__stacks[key]) else None
+        return cls.__stacks[key][-1] if key in cls.__stacks and cls.__stacks[key] else None
 
     @classmethod
     def prev(cls, key):
@@ -40,4 +40,4 @@ class NavigationStack(object):
 
     @classmethod
     def nav2Prev(cls, key):
-        return cls.__stacks[key].pop() if key in cls.__stacks and len(cls.__stacks[key]) else None
+        return cls.__stacks[key].pop() if key in cls.__stacks and cls.__stacks[key] else None

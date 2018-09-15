@@ -701,7 +701,4 @@ class RibbonsAggregatorPlayer(RibbonsAggregator):
 
 
 def createRibbonsAggregator():
-    if BattleReplay.g_replayCtrl.isPlaying:
-        return RibbonsAggregatorPlayer()
-    else:
-        return RibbonsAggregator()
+    return RibbonsAggregatorPlayer() if BattleReplay.g_replayCtrl.isPlaying else RibbonsAggregator()

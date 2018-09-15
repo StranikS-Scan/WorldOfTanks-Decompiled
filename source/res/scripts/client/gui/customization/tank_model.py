@@ -104,3 +104,4 @@ class TankModel(object):
     def __applyViewModel(self):
         self.__hangarSpace.space.updateVehicleCamouflage(camouflageID=self._currentModelAttributes[0])
         self.__hangarSpace.space.updateVehicleSticker(self._currentModelAttributes[1:3])
+        self.__events.onBonusesUpdated()

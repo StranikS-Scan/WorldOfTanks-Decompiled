@@ -22,7 +22,7 @@ class ArenasCache(object):
                 continue
             try:
                 nameSuffix = '' if arenaType.gameplayName == 'ctf' else i18n.makeString('#arenas:type/%s/name' % arenaType.gameplayName)
-                self.__cache.append({'label': '%s - %s' % (arenaType.name, nameSuffix) if len(nameSuffix) else arenaType.name,
+                self.__cache.append({'label': '%s - %s' % (arenaType.name, nameSuffix) if nameSuffix else arenaType.name,
                  'name': arenaType.name,
                  'arenaType': nameSuffix,
                  'key': arenaTypeID,

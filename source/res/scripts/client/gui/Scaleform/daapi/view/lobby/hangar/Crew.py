@@ -150,7 +150,7 @@ class Crew(CrewMeta):
     def equipTankman(self, tmanInvID, slot):
         tankman = self.itemsCache.items.getTankman(int(tmanInvID))
         result = yield TankmanEquip(tankman, g_currentVehicle.item, int(slot)).request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def unloadAllTankman(self):
@@ -160,7 +160,7 @@ class Crew(CrewMeta):
     @decorators.process('unloading')
     def unloadCrew():
         result = yield TankmanUnload(g_currentVehicle.item).request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def openPersonalCase(self, value, tabNumber):

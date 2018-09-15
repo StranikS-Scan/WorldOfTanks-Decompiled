@@ -158,12 +158,9 @@ class _SummaryPostmortemPanel(_BasePostmortemPanel):
         battleCtx = self.sessionProvider.getCtx()
         if battleCtx.isCurrentPlayer(killerVehID):
             return _ENTITIES_POSTFIX.SELF_SUICIDE
-        elif battleCtx.isAlly(killerVehID):
+        if battleCtx.isAlly(killerVehID):
             return _ENTITIES_POSTFIX.ALLY_SELF
-        elif battleCtx.isEnemy(killerVehID):
-            return _ENTITIES_POSTFIX.ENEMY_SELF
-        else:
-            return _ENTITIES_POSTFIX.UNKNOWN
+        return _ENTITIES_POSTFIX.ENEMY_SELF if battleCtx.isEnemy(killerVehID) else _ENTITIES_POSTFIX.UNKNOWN
 
 
 class PostmortemPanel(_SummaryPostmortemPanel):

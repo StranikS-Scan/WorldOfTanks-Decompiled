@@ -41,12 +41,9 @@ _DEFAULT_PING_DATA = PingData(UNDEFINED_PING_VAL, PING_STATUSES.UNDEFINED)
 def _getPingStatus(pingVal):
     if pingVal < _DEFINED_PING_VAL:
         return PING_STATUSES.UNDEFINED
-    elif pingVal <= _LOW_PING_BOUNDARY_VAL:
+    if pingVal <= _LOW_PING_BOUNDARY_VAL:
         return PING_STATUSES.LOW
-    elif pingVal <= _NORM_PING_BOUNDARY_VAL:
-        return PING_STATUSES.NORM
-    else:
-        return PING_STATUSES.HIGH
+    return PING_STATUSES.NORM if pingVal <= _NORM_PING_BOUNDARY_VAL else PING_STATUSES.HIGH
 
 
 def _isReplay(opType=''):
@@ -150,7 +147,7 @@ class _CSISRequestWorker(threading.Thread):
 
     def _makeUrl(self):
         url = self.__url
-        if self.__params is not None and len(self.__params):
+        if self.__params:
             data = urlencode(map(lambda param: ('periphery', param), self.__params))
             url = '{0:>s}?{1:>s}'.format(self.__url, data)
         return url
@@ -165,7 +162,7 @@ class _LoginAppUrlIterator(list):
     def __init__(self, *args):
         list.__init__(self, *args)
         self.cursor = 0
-        self.primary = self[0] if len(self) > 0 else None
+        self.primary = self[0] if self else None
         self.__lock = False
         random.shuffle(self)
         return
@@ -365,7 +362,7 @@ class _PreDefinedHostList(object):
         elif len(self._hosts) < 2:
             callback(self.first())
             return
-        elif len(self.__recommended):
+        elif self.__recommended:
             LOG_DEBUG('Gets recommended from previous query', self.__recommended)
             host = self.__choiceFromRecommended()
             LOG_DEBUG('Recommended host', host)
@@ -389,11 +386,7 @@ class _PreDefinedHostList(object):
         else:
 
             def _readSvrList(section, nodeName):
-                if section is not None and section.has_key(nodeName):
-                    return section[nodeName].items()
-                else:
-                    return []
-                    return
+                return section[nodeName].items() if section is not None and section.has_key(nodeName) else []
 
             self.__csisUrl = dataSection.readString('csisUrl')
             self._hosts = []
@@ -407,13 +400,13 @@ class _PreDefinedHostList(object):
                 urls = _LoginAppUrlIterator(subSec.readStrings('url'))
                 host = urls.primary
                 if host is not None:
-                    if not len(name):
+                    if not name:
                         name = host
                     keyPath = subSec.readString('public_key_path')
-                    if not len(keyPath):
+                    if not keyPath:
                         keyPath = None
                     areaID = subSec.readString('game_area_id')
-                    if not len(areaID):
+                    if not areaID:
                         areaID = None
                     app = self._makeHostItem(name, shortName, host, urlToken=subSec.readString('url_token'), urlIterator=urls if len(urls) > 1 else None, keyPath=keyPath, areaID=areaID, peripheryID=subSec.readInt('periphery_id', 0))
                     idx = len(self._hosts)
@@ -423,7 +416,7 @@ class _PreDefinedHostList(object):
                         continue
                     self._urlMap[url] = idx
                     urlToken = app.urlToken
-                    if len(urlToken):
+                    if urlToken:
                         if urlToken in self._urlMap:
                             LOG_WARNING('Alternative host url is already added. This url is ignored', app.url)
                         else:
@@ -443,7 +436,7 @@ class _PreDefinedHostList(object):
         return url in [ p.url for p in self.roamingHosts() ]
 
     def first(self):
-        return self._hosts[0] if len(self._hosts) else self._makeHostItem('', '', '')
+        return self._hosts[0] if self._hosts else self._makeHostItem('', '', '')
 
     def byUrl(self, url):
         result = self._makeHostItem('', '', url)
@@ -507,7 +500,7 @@ class _PreDefinedHostList(object):
 
     def getDefaultCSISStatus(self):
         from gui import GUI_SETTINGS
-        if not len(self.__csisUrl):
+        if not self.__csisUrl:
             defAvail = HOST_AVAILABILITY.IGNORED
         elif GUI_SETTINGS.csisRequestRate == REQUEST_RATE.NEVER:
             defAvail = HOST_AVAILABILITY.IGNORED
@@ -561,7 +554,7 @@ class _PreDefinedHostList(object):
         return peripheryID not in [ p.peripheryID for p in self.peripheries() ]
 
     def _makeHostItem(self, name, shortName, url, urlToken='', urlIterator=None, keyPath=None, areaID=None, peripheryID=0):
-        if not len(shortName):
+        if not shortName:
             shortName = name
         return _HostItem(name, shortName, url, urlToken, urlIterator, keyPath, areaID, peripheryID)
 
@@ -570,7 +563,7 @@ class _PreDefinedHostList(object):
         csisResGetter = self.__csisResponse.get
         queryResult = map(lambda host: (host, self.getHostPingData(host.url).value, csisResGetter(host.peripheryID, defAvail)), self.peripheries())
         self.__recommended = filter(lambda item: item[2] == HOST_AVAILABILITY.RECOMMENDED, queryResult)
-        if not len(self.__recommended):
+        if not self.__recommended:
             self.__recommended = filter(lambda item: item[2] == HOST_AVAILABILITY.NOT_RECOMMENDED, queryResult)
         recommendLen = len(self.__recommended)
         if not recommendLen:
@@ -607,7 +600,7 @@ class _PreDefinedHostList(object):
 
     def __sendCsisQuery(self):
         isReplay = _isReplay('CSIS')
-        if not isReplay and len(self.__csisUrl):
+        if not isReplay and self.__csisUrl:
             if not self._isCSISQueryInProgress:
                 timeFromLastUpdate = time.time() - self.__lastCsisUpdateTime
                 if timeFromLastUpdate >= CSIS_REQUEST_TIMER:
@@ -665,7 +658,7 @@ class _PreDefinedHostList(object):
     def __filterRecommendedByPing(self, recommended):
         result = recommended
         filtered = filter(lambda item: item[1] > UNDEFINED_PING_VAL, recommended)
-        if len(filtered):
+        if filtered:
             minPingTime = min(filtered, key=lambda item: item[1])[1]
             maxPingTime = 1.2 * minPingTime
             result = filter(lambda item: item[1] < maxPingTime, filtered)

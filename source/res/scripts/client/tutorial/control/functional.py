@@ -20,30 +20,21 @@ class FunctionalFlagCondition(FunctionalCondition):
 
     def isConditionOk(self, condition):
         result = self._tutorial.getFlags().isActiveFlag(condition.getID())
-        if condition.isPositiveState():
-            return result
-        else:
-            return not result
+        return result if condition.isPositiveState() else not result
 
 
 class FunctionalGlobalFlagCondition(FunctionalCondition):
 
     def isConditionOk(self, condition):
         result = GlobalStorage(condition.getID(), False).value()
-        if condition.isPositiveState():
-            return result
-        else:
-            return not result
+        return result if condition.isPositiveState() else not result
 
 
 class FunctionalWindowOnSceneCondition(FunctionalCondition):
 
     def isConditionOk(self, condition):
         result = self._gui.isTutorialWindowDisplayed(condition.getID())
-        if condition.isPositiveState():
-            return result
-        else:
-            return not result
+        return result if condition.isPositiveState() else not result
 
 
 class FunctionalVarDefinedCondition(FunctionalCondition):
@@ -75,10 +66,7 @@ class FunctionalEffectTriggeredCondition(FunctionalCondition):
 
     def isConditionOk(self, condition):
         result = self._tutorial.isEffectTriggered(condition.getID())
-        if condition.isPositiveState():
-            return result
-        else:
-            return not result
+        return result if condition.isPositiveState() else not result
 
 
 class FunctionalGameItemSimpleStateCondition(FunctionalCondition):
@@ -96,10 +84,8 @@ class FunctionalGameItemSimpleStateCondition(FunctionalCondition):
 
             if condition.isPositiveState():
                 return result
-            else:
-                return not result
-        else:
-            LOG_ERROR('State of item can not be resolved', condition)
+            return not result
+        LOG_ERROR('State of item can not be resolved', condition)
         return False
 
 
@@ -121,10 +107,8 @@ class FunctionalGameItemRelateStateCondition(FunctionalCondition):
 
             if condition.isPositiveState():
                 return result
-            else:
-                return not result
-        else:
-            LOG_ERROR('State of item can not be resolved', condition)
+            return not result
+        LOG_ERROR('State of item can not be resolved', condition)
         return False
 
 
@@ -140,10 +124,7 @@ class FunctionalBonusReceivedCondition(FunctionalCondition):
             return False
         else:
             result = chapter.isBonusReceived(self._bonuses.getCompleted())
-            if condition.isPositiveState():
-                return result
-            return not result
-            return
+            return result if condition.isPositiveState() else not result
 
 
 class FunctionalServiceCondition(FunctionalCondition):
@@ -167,10 +148,7 @@ class FunctionalServiceCondition(FunctionalCondition):
                 LOG_ERROR('Service does not implement isEnabled method!', service)
                 return False
             result = service.isEnabled()
-            if condition.isPositiveState():
-                return result
-            return not result
-            return
+            return result if condition.isPositiveState() else not result
 
 
 _SUPPORTED_CONDITIONS = {CONDITION_TYPE.FLAG: FunctionalFlagCondition,
@@ -334,19 +312,15 @@ class FunctionalNextChapterEffect(FunctionalEffect):
 
     def triggerEffect(self):
         nextChapter = self._effect.getTargetID()
-        if nextChapter is None or not len(nextChapter):
+        if not nextChapter:
             nextChapter = self._descriptor.getInitialChapterID(completed=self._bonuses.getCompleted())
         if self._tutorial._currentChapter != nextChapter:
             self._gui.showWaiting('chapter-loading', isSingle=True)
             self._gui.clear()
             self._tutorial.goToNextChapter(nextChapter)
-        return
 
 
 class FunctionalRunTriggerEffect(FunctionalEffect):
-
-    def __init__(self, effect):
-        super(FunctionalRunTriggerEffect, self).__init__(effect)
 
     def isInstantaneous(self):
         return False

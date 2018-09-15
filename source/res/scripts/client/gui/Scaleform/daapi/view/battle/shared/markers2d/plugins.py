@@ -314,7 +314,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         self.sessionProvider.addArenaCtrl(self)
 
     def stop(self):
-        while len(self._markers):
+        while self._markers:
             _, marker = self._markers.popitem()
             marker.destroy()
 
@@ -571,9 +571,6 @@ class EquipmentsMarkerPlugin(MarkerPlugin):
             ctrl.onEquipmentMarkerShown -= self.__onEquipmentMarkerShown
         super(EquipmentsMarkerPlugin, self).fini()
         return
-
-    def start(self):
-        super(EquipmentsMarkerPlugin, self).start()
 
     def stop(self):
         while self.__callbackIDs:

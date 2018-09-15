@@ -13,7 +13,7 @@
   <action>
     <name>	highlightButton_ResearchNode_LessonII	</name>
     <show_condition>
-      <view>	bootcampLobbyResearch	</view>
+      <view>	research	</view>
       <name>	moduleResearched_LessonII	</name>
       <result>	False	</result>
     </show_condition>
@@ -24,7 +24,7 @@
     <name>	highlightButton_BuyNode_LessonII	</name>
     <element>	ResearchNode	</element>
     <show_condition>
-      <view>	bootcampLobbyResearch	</view>
+      <view>	research	</view>
       <name>	moduleBought_LessonII	</name>
       <result>	False	</result>
     </show_condition>
@@ -33,7 +33,7 @@
   <action>
     <name>	highlightButton_Hangar_LessonII	</name>
     <show_condition>
-      <view>	bootcampLobbyResearch	</view>
+      <view>	research	</view>
       <name>	moduleBought_LessonII	</name>
       <result>	True	</result>
     </show_condition>
@@ -60,7 +60,7 @@
   <action>
     <name>	highlightButton_TechTreeNode_LessonIII	</name>
     <show_condition>
-      <view>	bootcampLobbyTechTree	</view>
+      <view>	techtree	</view>
       <name>	secondTankBought_LessonIII	</name>
       <result>	False	</result>
     </show_condition>
@@ -70,7 +70,7 @@
   <action>
     <name>	highlightButton_Tank_II_Node_LessonIII	</name>
     <show_condition>
-      <view>	bootcampLobbyResearch	</view>
+      <view>	research	</view>
       <name>	secondTankBought_LessonIII	</name>
       <result>	False	</result>
     </show_condition>
@@ -80,7 +80,7 @@
   <action>
     <name>	highlightButton_VehiclePreviewUnlockButton_LessonIII	</name>
     <show_condition>
-      <view>	bootcampVehiclePreview	</view>
+      <view>	vehiclePreview	</view>
       <name>	secondTankResearched_LessonIII	</name>
       <result>	False	</result>
     </show_condition>
@@ -90,7 +90,7 @@
   <action>
     <name>	highlightButton_VehiclePreviewBuyButton_LessonIII	</name>
     <show_condition>
-      <view>	bootcampVehiclePreview	</view>
+      <view>	vehiclePreview	</view>
       <name>	secondTankBought_LessonIII	</name>
       <result>	False	</result>
     </show_condition>
@@ -100,7 +100,7 @@
   <action>
     <name>	highlightButton_VehicleAcademy_LessonIII	</name>
     <show_condition>
-      <view>	bootcampVehicleBuyWindow	</view>
+      <view>	vehicleBuyWindow	</view>
       <name>	secondTankBought_LessonIII	</name>
       <result>	False	</result>
     </show_condition>
@@ -110,7 +110,7 @@
   <action>
     <name>	highlightButton_VehiclePurchase_LessonIII	</name>
     <show_condition>
-      <view>	bootcampVehicleBuyWindow	</view>
+      <view>	vehicleBuyWindow	</view>
       <name>	secondTankBought_LessonIII	</name>
       <result>	False	</result>
     </show_condition>
@@ -202,7 +202,7 @@
   <action>
     <name>	highlightButton_Consumables_Select_LessonIV	</name>
     <show_condition>
-      <view>	bootcampTechnicalMaintenance_Slot	</view>
+      <view>	technicalMaintenance_Slot	</view>
       <name>	hasConsumables_LessonIV	</name>
       <result>	False	</result>
     </show_condition>
@@ -212,7 +212,7 @@
   <action>
     <name>	highlightButton_Consumables_Select_Repair_LessonIV	</name>
     <show_condition>
-      <view>	bootcampTechnicalMaintenance_Popup	</view>
+      <view>	technicalMaintenance_Popup	</view>
       <name>	hasConsumables_LessonIV	</name>
       <result>	False	</result>
     </show_condition>
@@ -222,7 +222,7 @@
   <action>
     <name>	highlightButton_Consumables_Accept_LessonIV	</name>
     <show_condition>
-      <view>	bootcampTechnicalMaintenance_Done	</view>
+      <view>	technicalMaintenance_Done	</view>
       <name>	hasConsumables_LessonIV	</name>
       <result>	False	</result>
     </show_condition>

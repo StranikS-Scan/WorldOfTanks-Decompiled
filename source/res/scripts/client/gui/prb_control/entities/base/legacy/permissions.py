@@ -132,9 +132,9 @@ class LegacyPermissions(ILegacyPermissions):
 
     def canKick(self, team=1):
         result = False
-        if team is 1:
+        if team == 1:
             result = self._roles & PREBATTLE_ROLE.KICK_1 != 0
-        elif team is 2:
+        elif team == 2:
             result = self._roles & PREBATTLE_ROLE.KICK_2 != 0
         return result
 
@@ -142,9 +142,9 @@ class LegacyPermissions(ILegacyPermissions):
         if self._teamState.isInQueue():
             return False
         result = False
-        if team is 1:
+        if team == 1:
             result = self._roles & PREBATTLE_ROLE.ASSIGNMENT_1 != 0
-        elif team is 2:
+        elif team == 2:
             result = self._roles & PREBATTLE_ROLE.ASSIGNMENT_2 != 0
         return result
 
@@ -153,9 +153,9 @@ class LegacyPermissions(ILegacyPermissions):
 
     def canSetTeamState(self, team=1):
         result = False
-        if team is 1:
+        if team == 1:
             result = self._roles & PREBATTLE_ROLE.TEAM_READY_1 != 0
-        elif team is 2:
+        elif team == 2:
             result = self._roles & PREBATTLE_ROLE.TEAM_READY_2 != 0
         return result
 

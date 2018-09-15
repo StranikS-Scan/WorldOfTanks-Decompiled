@@ -64,11 +64,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener):
 
     @property
     def filter(self):
-        if self._carouselDP is not None:
-            return self._carouselDP.filter
-        else:
-            return
-            return
+        return self._carouselDP.filter if self._carouselDP is not None else None
 
     def getTotalVehiclesCount(self):
         return self._carouselDP.getTotalVehiclesCount()

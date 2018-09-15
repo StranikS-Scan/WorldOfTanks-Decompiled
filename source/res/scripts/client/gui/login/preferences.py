@@ -89,14 +89,13 @@ class Preferences(dict):
         except KeyError:
             if key == 'remember_user':
                 return False
-            elif key == 'server_name':
+            if key == 'server_name':
                 return AUTO_LOGIN_QUERY_URL
-            elif key == 'login_type':
+            if key == 'login_type':
                 return 'credentials'
-            elif key == 'password_length':
+            if key == 'password_length':
                 return 0
-            else:
-                return ''
+            return ''
 
     def __repr__(self):
         noNeedToKnow = ('login', 'password_length')

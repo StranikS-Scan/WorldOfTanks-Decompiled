@@ -3,12 +3,4 @@
 from gui.Scaleform.daapi.view.meta.FragCorrelationBarMeta import FragCorrelationBarMeta
 
 class FragCorrelationBar(FragCorrelationBarMeta):
-
-    def __init__(self):
-        super(FragCorrelationBar, self).__init__()
-
-    def _populate(self):
-        super(FragCorrelationBar, self)._populate()
-
-    def _dispose(self):
-        super(FragCorrelationBar, self)._dispose()
+    pass

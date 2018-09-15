@@ -44,12 +44,12 @@ class ArenaSyncObject(object):
         if callback in self.__callbacks:
             if syncEntryID in self.__callbacks[callback]:
                 self.__callbacks[callback].remove(syncEntryID)
-            if not len(self.__callbacks[callback]):
+            if not self.__callbacks[callback]:
                 del self.__callbacks[callback]
 
     def getData(self, key):
         keyList = key.split(self.EVENT_TYPE_DELIMITER)
-        if len(keyList) == 0:
+        if not keyList:
             return None
         else:
             cache = self.__cache

@@ -58,10 +58,7 @@ class Filter(object):
         return self.__isInDossier(item, installedInCurrentSlot) and self.__hasSelectedBonus(item) and self.__isInSelectedGroup(item) and self.__hasPurchaseType(item)
 
     def isDefaultFilterSet(self):
-        if self.__currentType == CUSTOMIZATION_TYPE.CAMOUFLAGE:
-            return self.__purchaseType == PURCHASE_TYPE.PURCHASE
-        else:
-            return not self.__bonusSelected() and self.__currentGroup == DEFAULT_GROUP_VALUE and self.__purchaseType == PURCHASE_TYPE.PURCHASE
+        return self.__purchaseType == PURCHASE_TYPE.PURCHASE if self.__currentType == CUSTOMIZATION_TYPE.CAMOUFLAGE else not self.__bonusSelected() and self.__currentGroup == DEFAULT_GROUP_VALUE and self.__purchaseType == PURCHASE_TYPE.PURCHASE
 
     def isGroupFilterEnabled(self):
         return self.__isGroupFilterEnabled
@@ -110,10 +107,7 @@ class Filter(object):
         return True if item.qualifier.getType() == QUALIFIER_TYPE.CAMOUFLAGE else self.__selectedBonuses[item.qualifier.getType()]
 
     def __isInSelectedGroup(self, item):
-        if self.__currentGroup == DEFAULT_GROUP_VALUE:
-            return True
-        else:
-            return item.getGroup() == self.__currentGroup
+        return True if self.__currentGroup == DEFAULT_GROUP_VALUE else item.getGroup() == self.__currentGroup
 
     def __bonusSelected(self):
         for key in QUALIFIER_TYPE_INDEX:

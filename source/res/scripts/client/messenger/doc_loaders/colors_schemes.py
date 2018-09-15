@@ -15,7 +15,7 @@ def _readColors(xmlCtx, section, colorsNames, defName):
         result[name] = _xml_helpers.readRGB(ctx, subSec, 'rgb', 'Color is invalid.')
         notFound.remove(name)
 
-    if len(notFound):
+    if notFound:
         defColor = 0
         if defName in result:
             defColor = result[defName]

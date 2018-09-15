@@ -32,9 +32,6 @@ class IPrbListRequester(object):
 
 class IUnitRequestProcessor(object):
 
-    def __init__(self):
-        super(IUnitRequestProcessor, self).__init__()
-
     def init(self):
         pass
 

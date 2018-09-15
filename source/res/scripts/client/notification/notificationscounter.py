@@ -95,11 +95,7 @@ class _CounterCollection(object):
         return self.count()
 
     def count(self, group=None):
-        if group is None:
-            return sum((counter.count() for counter in self.__counters.itervalues()))
-        else:
-            return self.__counters[group].count()
-            return
+        return sum((counter.count() for counter in self.__counters.itervalues())) if group is None else self.__counters[group].count()
 
     def reset(self, group=None):
         if group is None:

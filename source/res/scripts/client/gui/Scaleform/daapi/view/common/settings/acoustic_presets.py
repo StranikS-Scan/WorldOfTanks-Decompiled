@@ -54,7 +54,7 @@ class AcousticPresetsPlayer(object):
         """Selects firsts item that can be played at first."""
         self.__cursor = 0
         self.__view.setPauseEnabled(False)
-        if len(self.__items):
+        if self.__items:
             self.__view.setItemsSelected(self.__items[0].speakerIDs)
 
     def play(self):
@@ -138,7 +138,6 @@ class AcousticPresetsPlayer(object):
             return True
         else:
             return False
-            return
 
     def __stopSound(self):
         if self.__sound is not None:
@@ -183,5 +182,4 @@ def createPlayer(view, acousticType):
         return AcousticPresetsPlayer(view, _PRESETS[acousticType])
     else:
         LOG_ERROR('Sound speakers preset is not found', acousticType)
-        return None
         return None

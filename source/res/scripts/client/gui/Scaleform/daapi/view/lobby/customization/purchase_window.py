@@ -214,8 +214,7 @@ class PurchaseDataProvider(SortableDAAPIDataProvider):
              'duplicatePriceText': icons.info() + _ms(VEHICLE_CUSTOMIZATION.BUYWINDOW_BUYTIME_COPY),
              'duplicatePriceTooltip': makeTooltip(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BUYWINDOW_COPY_HEADER), _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BUYWINDOW_COPY_BODY))}
             if element.qualifier.getValue() > 0:
-                dropdownItem['imgBonus'] = element.qualifier.getIcon16x16()
-                dropdownItem['lblBonus'] = text_styles.stats('+{0}%{1}'.format(element.qualifier.getValue(), '*' if element.qualifier.getDescription() is not None else ''))
+                dropdownItem['lblBonus'] = text_styles.stats('+{0}%'.format(element.qualifier.getValue()))
             elementGroups[item['type']].append(dropdownItem)
 
         for elements, title in zip(elementGroups, _CUSTOMIZATION_TYPE_TITLES):
@@ -224,7 +223,6 @@ class PurchaseDataProvider(SortableDAAPIDataProvider):
                  'titleText': _ms(text_styles.middleTitle(title))})
 
         self._list = list(itertools.chain(*elementGroups))
-        return
 
     def clear(self):
         self._list = []

@@ -96,7 +96,7 @@ def wrap(func):
 
 def _restore(ns, wrapper):
     aspects = getattr(wrapper, '__aspects__', [])
-    while len(aspects):
+    while aspects:
         aspects.pop().clear()
 
     if hasattr(wrapper, '__original__'):
@@ -118,6 +118,19 @@ def _search(ns, regexp, match):
     return attrNames
 
 
+def _hasWrappedMethod(clazz, function):
+    attr = getattr(clazz, function.__name__, None)
+    originalFunc = getattr(attr, '__original__', None)
+    if originalFunc is function:
+        return True
+    else:
+        for baseClass in clazz.__bases__:
+            if _hasWrappedMethod(baseClass, function):
+                return True
+
+        return False
+
+
 class CallData(object):
 
     def __init__(self, wrapped, function, args, kwargs):
@@ -127,7 +140,8 @@ class CallData(object):
         self._exception = None
         if wrapped.__ismethod__ is None:
             try:
-                wrapped.__ismethod__ = getattr(args[0], function.__name__).__original__ is function
+                clazz = args[0].__class__
+                wrapped.__ismethod__ = _hasWrappedMethod(clazz, function)
             except BaseException:
                 wrapped.__ismethod__ = False
 
@@ -165,6 +179,38 @@ class CallData(object):
     def kwargs(self):
         return self._kwargs.copy()
 
+    def findArg(self, argIndex, argName):
+        return self._args[argIndex] if len(self._args) > argIndex else self._kwargs.get(argName, None)
+
+    def changeArgs(self, *changes):
+        """ Helper method to easily change wrapped function's arguments without manually checking
+            whether they were provided as positional or keyword args.
+        
+            Usage:
+        
+            def atCall(self, cd):
+                return cd.changeArgs(
+                    (0, 'arg1', 111),     # Change or set first positional argument, named 'arg1', to 111.
+                    (3, 'arg4', 'newVal') # Change or set fourth positional argument, named 'arg4', to 'newVal.
+                )
+        
+            Makes a copy of current args & kwargs, changes them according to the provided arguments,
+            calls change() and returns changed args & kwargs.
+        
+        :param changes: each argument must be a tuple (argIndex, argName, newValue)
+        :return: tuple (newArgs, newKwargs)
+        """
+        if changes:
+            newArgs, newKwargs = list(self.args), self.kwargs
+            for argIndex, argName, newValue in changes:
+                if len(self._args) > argIndex:
+                    newArgs[argIndex] = newValue
+                newKwargs[argName] = newValue
+
+            self.change()
+            return (newArgs, newKwargs)
+        return (self.args, self.kwargs)
+
     @property
     def returned(self):
         return self._returned
@@ -174,18 +220,10 @@ class CallData(object):
         return self._exception
 
     def _packArgs(self):
-        if self._self is None:
-            return self._args
-        else:
-            return (self._self,) + tuple(self._args)
-            return
+        return self._args if self._self is None else (self._self,) + tuple(self._args)
 
     def exceptionIs(self, cls):
-        if self._exception is None:
-            return False
-        else:
-            return isinstance(self._exception, cls)
-            return
+        return False if self._exception is None else isinstance(self._exception, cls)
 
     def avoid(self):
         self._avoid = True
@@ -333,7 +371,7 @@ class Weaver(object):
                 pointcut.clear()
         else:
             pointcuts = self.__pointcuts
-            while len(pointcuts):
+            while pointcuts:
                 pointcuts.pop().clear()
 
         return

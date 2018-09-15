@@ -17,7 +17,7 @@ class EntityFactory(object):
     def validate(self, settings):
         clazz = settings.clazz
         alias = settings.alias
-        if alias is None or not len(alias):
+        if not alias:
             raise Exception('Invalid alias in settings {0}'.format(settings))
         if clazz is None:
             raise Exception('Invalid class in settings {0}'.format(settings))
@@ -61,11 +61,10 @@ class ViewFactory(DAAPIModuleFactory):
     def validate(self, settings):
         super(ViewFactory, self).validate(settings)
         url = settings.url
-        if url is None or not len(url):
+        if not url:
             raise Exception('Invalid url in settings {0}'.format(settings))
         if View not in getattr(settings.clazz, '__mro__', tuple()):
             raise Exception('Class does not extend View in settings {0}'.format(settings))
-        return
 
     def create(self, settings, *args, **kwargs):
         pyEntity = super(ViewFactory, self).create(settings, *args, **kwargs)
@@ -120,7 +119,7 @@ class EntitiesFactories(object):
         if alias in self.__settings:
             raise Exception('Alias {0} is already added to settings'.format(alias))
         self.__settings[alias] = settings
-        if eventType is not None and len(eventType):
+        if eventType:
             self.__eventToAlias[eventType] = alias
             self.__aliasToEvent[alias] = eventType
         return alias
@@ -129,7 +128,7 @@ class EntitiesFactories(object):
         if alias in self.__settings:
             settings = self.__settings.pop(alias)
             eventType = settings.event
-            if eventType is not None and len(eventType):
+            if eventType:
                 self.__eventToAlias.pop(eventType, None)
                 self.__aliasToEvent.pop(alias, None)
         else:

@@ -28,7 +28,7 @@ from shared_utils import findFirst
 from skeletons.gui.lobby_context import ILobbyContext
 MAX_VISION_RADIUS = 500
 MIN_VISION_RADIUS = 150
-PIERCING_DISTANCES = (50, 200, 500)
+PIERCING_DISTANCES = (100, 200, 500)
 ONE_HUNDRED_PERCENTS = 100
 MIN_RELATIVE_VALUE = 1
 EXTRAS_CAMOUFLAGE = 'camouflageExtras'
@@ -73,10 +73,7 @@ def _processExtraBonuses(vehicle):
 
 
 def _universalSum(a, b):
-    if isinstance(a, collections.Sequence):
-        return map(operator.add, a, b)
-    else:
-        return a + b
+    return map(operator.add, a, b) if isinstance(a, collections.Sequence) else a + b
 
 
 def _getInstalledModuleVehicle(vehicleDescr, itemDescr):
@@ -304,10 +301,7 @@ class VehicleParams(_ParameterBase):
     @property
     def explosionRadius(self):
         shotShell = self._itemDescr.shot.shell
-        if shotShell.kind == SHELL_TYPES.HIGH_EXPLOSIVE:
-            return round(shotShell.type.explosionRadius, 2)
-        else:
-            return 0
+        return round(shotShell.type.explosionRadius, 2) if shotShell.kind == SHELL_TYPES.HIGH_EXPLOSIVE else 0
 
     @property
     def aimingTime(self):
@@ -320,11 +314,7 @@ class VehicleParams(_ParameterBase):
 
     @property
     def reloadTimeSecs(self):
-        if self.__hasClipGun():
-            return None
-        else:
-            return round(time_utils.ONE_MINUTE / self.reloadTime, 3)
-            return None
+        return None if self.__hasClipGun() else round(time_utils.ONE_MINUTE / self.reloadTime, 3)
 
     @property
     def relativePower(self):
@@ -372,21 +362,14 @@ class VehicleParams(_ParameterBase):
 
     @property
     def turretYawLimits(self):
-        if not self.__hasTurret():
-            return None
-        else:
-            return self.__getGunYawLimits()
-            return None
+        return None if not self.__hasTurret() else self.__getGunYawLimits()
 
     @property
     def gunYawLimits(self):
         if self._itemDescr.isYawHullAimingAvailable:
             return (0, 0)
-        elif self.__hasTurret():
-            return None
         else:
-            return self.__getGunYawLimits()
-            return None
+            return None if self.__hasTurret() else self.__getGunYawLimits()
 
     @property
     def pitchLimits(self):
@@ -419,41 +402,24 @@ class VehicleParams(_ParameterBase):
             return (reloadTime, clipData[1], clipData[0])
         else:
             return None
-            return None
 
     @property
     def switchOnTime(self):
-        if self._itemDescr.hasSiegeMode:
-            return self._itemDescr.type.siegeModeParams['switchOnTime']
-        else:
-            return None
-            return None
+        return self._itemDescr.type.siegeModeParams['switchOnTime'] if self._itemDescr.hasSiegeMode else None
 
     @property
     def switchOffTime(self):
-        if self._itemDescr.hasSiegeMode:
-            return self._itemDescr.type.siegeModeParams['switchOffTime']
-        else:
-            return None
-            return None
+        return self._itemDescr.type.siegeModeParams['switchOffTime'] if self._itemDescr.hasSiegeMode else None
 
     @property
     def stunMaxDuration(self):
         shell = self._itemDescr.shot.shell
-        if shell.hasStun:
-            return shell.stun.stunDuration
-        else:
-            return None
-            return None
+        return shell.stun.stunDuration if shell.hasStun else None
 
     @property
     def stunMinDuration(self):
         item = self._itemDescr.shot.shell
-        if item.hasStun:
-            return item.stun.guaranteedStunDuration * item.stun.stunDuration
-        else:
-            return None
-            return None
+        return item.stun.guaranteedStunDuration * item.stun.stunDuration if item.hasStun else None
 
     def getParamsDict(self, preload=False):
         conditionalParams = ('turretYawLimits', 'gunYawLimits', 'clipFireRate', 'gunRotationSpeed', 'turretRotationSpeed', 'turretArmor', 'reloadTimeSecs', 'switchOnTime', 'switchOffTime')
@@ -566,16 +532,14 @@ class VehicleParams(_ParameterBase):
             hullAimingPitchMax = wheelsCorrectionAngles['pitchMax']
             if self._itemDescr.gun.staticPitch is not None:
                 return (hullAimingPitchMin, hullAimingPitchMax)
-            else:
-                pitchLimits = self._itemDescr.gun.pitchLimits
-                minPitch = pitchLimits['minPitch']
-                maxPitch = pitchLimits['maxPitch']
-                hullAimingPitchMin = wheelsCorrectionAngles['pitchMin']
-                hullAimingPitchMax = wheelsCorrectionAngles['pitchMax']
-                return (min([ key for _, key in minPitch ]) + hullAimingPitchMin, max([ key for _, key in maxPitch ]) + hullAimingPitchMax)
+            pitchLimits = self._itemDescr.gun.pitchLimits
+            minPitch = pitchLimits['minPitch']
+            maxPitch = pitchLimits['maxPitch']
+            hullAimingPitchMin = wheelsCorrectionAngles['pitchMin']
+            hullAimingPitchMax = wheelsCorrectionAngles['pitchMax']
+            return (min([ key for _, key in minPitch ]) + hullAimingPitchMin, max([ key for _, key in maxPitch ]) + hullAimingPitchMax)
         else:
             return self._itemDescr.gun.pitchLimits['absolute']
-        return
 
     def __hasClipGun(self):
         return self._itemDescr.gun.clip[0] != 1
@@ -706,8 +670,8 @@ class GunParams(WeightedParam):
         clipVehicleNamesList = self.clipVehiclesCompatibles
         curVehicle = _getInstalledModuleVehicle(self._vehicleDescr, self._itemDescr)
         result = []
-        if len(clipVehicleNamesList) != 0:
-            if len(vehiclesNamesList):
+        if clipVehicleNamesList:
+            if vehiclesNamesList:
                 result.append(('uniChargedVehicles', _formatCompatibles(curVehicle, vehiclesNamesList)))
             result.append(('clipVehicles', _formatCompatibles(curVehicle, clipVehicleNamesList)))
         else:
@@ -740,10 +704,7 @@ class ShellParams(CompatibleParams):
 
     @property
     def explosionRadius(self):
-        if self._itemDescr.kind == SHELL_TYPES.HIGH_EXPLOSIVE:
-            return self._itemDescr.type.explosionRadius
-        else:
-            return 0
+        return self._itemDescr.type.explosionRadius if self._itemDescr.kind == SHELL_TYPES.HIGH_EXPLOSIVE else 0
 
     @property
     def piercingPowerTable(self):
@@ -761,7 +722,6 @@ class ShellParams(CompatibleParams):
 
             return result
         else:
-            return
             return
 
     @property
@@ -782,19 +742,11 @@ class ShellParams(CompatibleParams):
 
     @property
     def stunMaxDuration(self):
-        if self._itemDescr.hasStun:
-            return self._itemDescr.stun.stunDuration
-        else:
-            return None
-            return None
+        return self._itemDescr.stun.stunDuration if self._itemDescr.hasStun else None
 
     @property
     def stunMinDuration(self):
-        if self._itemDescr.hasStun:
-            return self._itemDescr.stun.guaranteedStunDuration * self._itemDescr.stun.stunDuration
-        else:
-            return None
-            return None
+        return self._itemDescr.stun.guaranteedStunDuration * self._itemDescr.stun.stunDuration if self._itemDescr.hasStun else None
 
     def getParamsDict(self):
         stunConditionParams = ('stunMaxDuration', 'stunMinDuration')
@@ -884,10 +836,7 @@ class _ParamsDictProxy(dict):
         return value
 
     def get(self, k, default=None):
-        if k in self:
-            return self[k]
-        else:
-            return default
+        return self[k] if k in self else default
 
     def keys(self):
         return list(self.__iter__())

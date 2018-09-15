@@ -232,7 +232,7 @@ class BaseRallyRoomView(BaseRallyRoomViewMeta):
         self._selectVehicles(event.ctx)
 
     def _selectVehicles(self, items):
-        if len(items):
+        if items:
             self.sendRequest(SetVehicleUnitCtx(vTypeCD=items[0], waitingID='prebattle/change_settings'))
 
     def _onUserActionReceived(self, _, user):

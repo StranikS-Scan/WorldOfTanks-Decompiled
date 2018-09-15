@@ -99,7 +99,7 @@ class RetrainCrewWindow(RetrainCrewWindowMeta):
                     crewInvIDs.append(tMan.invID)
 
         result = yield TankmanCrewRetraining(crewInvIDs, vehicle, operationId).request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         return
 

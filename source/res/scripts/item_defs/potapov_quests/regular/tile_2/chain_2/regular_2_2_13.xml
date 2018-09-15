@@ -6,27 +6,65 @@
       <serverOnly>	true	</serverOnly>
       <conditions>
         <postBattle>
-          <or>
-            <unit>
-              <and>
+          <and>
+            <or>
+              <unit>
                 <unitVehicleKills>
+                  <title>
+                    <key>	#personal_missions_details:quest_common_condition_title_squad_vehicleKills	</key>
+                  </title>
+                  <description>
+                    <key>	#personal_missions_details:quest_2_2_13_condition_description_vehicleKills	</key>
+                  </description>
                   <limittedTime>	180	</limittedTime>
                   <greaterOrEqual>	2	</greaterOrEqual>
                 </unitVehicleKills>
+              </unit>
+              <and>
+                <vehicleKills>
+                  <hideInGui></hideInGui>
+                  <limittedTime>	180	</limittedTime>
+                  <greaterOrEqual>	2	</greaterOrEqual>
+                </vehicleKills>
               </and>
-            </unit>
-            <and>
-              <vehicleKills>
-                <limittedTime>	180	</limittedTime>
-                <greaterOrEqual>	2	</greaterOrEqual>
-              </vehicleKills>
-            </and>
-          </or>
+            </or>
+          </and>
         </postBattle>
       </conditions>
       <bonus>
         <freeXP>	750	</freeXP>
         <credits>	50000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t2:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_2_13_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_2_2_13_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	750	</freeXP>
+        <credits>	50000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t2:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
       </bonus>
     </potapovQuest>
     <potapovQuest>
@@ -38,15 +76,20 @@
           <and>
             <or>
               <unit>
-                <and>
-                  <unitVehicleKills>
-                    <limittedTime>	180	</limittedTime>
-                    <greaterOrEqual>	2	</greaterOrEqual>
-                  </unitVehicleKills>
-                </and>
+                <unitVehicleKills>
+                  <title>
+                    <key>	#personal_missions_details:quest_common_condition_title_squad_vehicleKills	</key>
+                  </title>
+                  <description>
+                    <key>	#personal_missions_details:quest_2_2_13_condition_description_vehicleKills	</key>
+                  </description>
+                  <limittedTime>	180	</limittedTime>
+                  <greaterOrEqual>	2	</greaterOrEqual>
+                </unitVehicleKills>
               </unit>
               <and>
                 <vehicleKills>
+                  <hideInGui></hideInGui>
                   <limittedTime>	180	</limittedTime>
                   <greaterOrEqual>	2	</greaterOrEqual>
                 </vehicleKills>
@@ -58,6 +101,56 @@
       </conditions>
       <bonus>
         <freeXP>	750	</freeXP>
+        <token>
+          <id>	token:pt:final:s1:t2:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_2_13_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_2_2_13_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <or>
+              <unit>
+                <unitVehicleKills>
+                  <limittedTime>	180	</limittedTime>
+                  <greaterOrEqual>	2	</greaterOrEqual>
+                </unitVehicleKills>
+              </unit>
+              <and>
+                <vehicleKills>
+                  <hideInGui></hideInGui>
+                  <limittedTime>	180	</limittedTime>
+                  <greaterOrEqual>	2	</greaterOrEqual>
+                </vehicleKills>
+              </and>
+            </or>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
       </bonus>
     </potapovQuest>
   </quests>

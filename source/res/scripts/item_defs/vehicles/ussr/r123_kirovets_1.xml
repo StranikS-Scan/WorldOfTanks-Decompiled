@@ -26,7 +26,7 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	120	</armor_1>
+      <armor_1>	140	</armor_1>
       <armor_2>	90	</armor_2>
       <armor_3>	85	</armor_3>
       <armor_4>	60	</armor_4>
@@ -64,7 +64,7 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.002458 0.654683 0.991546	</turret>
+      <turret>	0.00222 0.650164 1.00228	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/russian/R123_Kirovets_1/collision/Hull.model	</collisionModelServer>
@@ -72,8 +72,8 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.0142227 0.364701 2.91427	</rayStart>
-        <rayEnd>	-0.0142227 0.191224 2.81475	</rayEnd>
+        <rayStart>	-0.010643 0.30692 3.0179	</rayStart>
+        <rayEnd>	-0.010643 0.133476 2.91832	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -81,7 +81,7 @@
     </emblemSlots>
     <hangarShadowTexture>	vehicles/russian/R123_Kirovets_1/Kirovets_1_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
-      <tiling>	0.925 0.925 0.000000 0.000000	</tiling>
+      <tiling>	1.3 1.3 0.000000 0.000000	</tiling>
     </camouflage>
   </hull>
   <chassis>
@@ -133,7 +133,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.274889	</radius>
-          <syncAngle>	25.7142	</syncAngle>
+          <syncAngle>	51.4286	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -147,7 +147,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.405215	</radius>
-          <syncAngle>	25.7142	</syncAngle>
+          <syncAngle>	51.4286	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -161,7 +161,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.274889	</radius>
-          <syncAngle>	25.7142	</syncAngle>
+          <syncAngle>	51.4286	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -175,7 +175,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.405215	</radius>
-          <syncAngle>	25.7142	</syncAngle>
+          <syncAngle>	51.4286	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -192,12 +192,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9251 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.929636 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R123_Kirovets_1/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R123_Kirovets_1/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.3258 2.09367	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.32552 2.10445	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -211,12 +211,15 @@
         </decal>
       </AODecals>
       <splineDesc>
-        <segmentModelLeft>	vehicles/russian/R123_Kirovets_1/track/segment_L.model	</segmentModelLeft>
-        <segmentModelRight>	vehicles/russian/R123_Kirovets_1/track/segment_L.model	</segmentModelRight>
+        <segmentModelLeft>	vehicles/russian/R123_Kirovets_1/track/segment_1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/russian/R123_Kirovets_1/track/segment_1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/russian/R123_Kirovets_1/track/segment_2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/russian/R123_Kirovets_1/track/segment_2.model	</segment2ModelRight>
         <left>	vehicles/russian/R123_Kirovets_1/track/left.track	</left>
         <right>	vehicles/russian/R123_Kirovets_1/track/right.track	</right>
-        <segmentLength>	0.151	</segmentLength>
-        <segmentOffset>	0.11	</segmentOffset>
+        <segmentLength>	0.302	</segmentLength>
+        <segmentOffset>	0.084	</segmentOffset>
+        <segment2Offset>	0.155	</segment2Offset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -227,11 +230,17 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.2	</maxAmplitude>
-        <maxOffset>	0.2	</maxOffset>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
@@ -240,10 +249,9 @@
         </node>
         <node>
           <isLeft>	true	</isLeft>
-          <name>	Track_VT_L0	</name>
-          <forwardElastK>	0.75	</forwardElastK>
-          <backwardElastK>	1.4	</backwardElastK>
-          <offset>	-0.037	</offset>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
@@ -252,65 +260,60 @@
           <backwardElastK>	0.75	</backwardElastK>
         </node>
         <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R0	</name>
-          <forwardElastK>	0.75	</forwardElastK>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.4	</backwardElastK>
           <offset>	-0.037	</offset>
         </node>
         <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R1	</name>
-          <forwardElastK>	0.75	</forwardElastK>
-          <backwardElastK>	1.6	</backwardElastK>
-          <offset>	-0.071	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R2	</name>
-          <forwardElastK>	0.75	</forwardElastK>
-          <backwardElastK>	1.8	</backwardElastK>
-          <offset>	-0.071	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R3	</name>
-          <forwardElastK>	0.75	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
-          <offset>	-0.047	</offset>
-        </node>
-        <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L1	</name>
-          <forwardElastK>	0.75	</forwardElastK>
+          <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
           <offset>	-0.071	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L2	</name>
-          <forwardElastK>	0.75	</forwardElastK>
+          <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	1.8	</backwardElastK>
           <offset>	-0.071	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L3	</name>
-          <forwardElastK>	0.75	</forwardElastK>
+          <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
           <offset>	-0.047	</offset>
         </node>
         <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-          <forwardElastK>	0.75	</forwardElastK>
-          <backwardElastK>	1.5	</backwardElastK>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	1.4	</backwardElastK>
+          <offset>	-0.037	</offset>
         </node>
         <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L1	</name>
-          <forwardElastK>	1.5	</forwardElastK>
-          <backwardElastK>	0.75	</backwardElastK>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.85	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.047	</offset>
         </node>
       </trackNodes>
       <groundNodes>
@@ -353,8 +356,9 @@
         <armor_10>	70	</armor_10>
         <armor_11>	175	</armor_11>
         <armor_12>	110	</armor_12>
+        <armor_13>	195	</armor_13>
       </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <primaryArmor>	armor_13 armor_3 armor_4	</primaryArmor>
       <weight>	11200	</weight>
       <maxHealth>	310	</maxHealth>
       <rotationSpeed>	24	</rotationSpeed>
@@ -372,7 +376,7 @@
       <guns>
         <_122-mm_D-25TA>	shared	  <maxAmmo>	30	</maxAmmo>
           <armor>
-            <armor_1>	175	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	195	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
@@ -405,7 +409,7 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	3.3	</aimingTime>
+          <aimingTime>	3.1	</aimingTime>
           <models>
             <undamaged>	vehicles/russian/R123_Kirovets_1/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R123_Kirovets_1/crash/lod0/Gun_01.model	</destroyed>
@@ -426,7 +430,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.895 0.895 0.000000 0.000000	</tiling>
+            <tiling>	0.6 0.3 0.000000 0.000000	</tiling>
           </camouflage>
         </_122-mm_D-25TA>
       </guns>
@@ -439,7 +443,7 @@
         <collisionModelServer>	vehicles/russian/R123_Kirovets_1/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R123_Kirovets_1/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.010415 0.315972 1.31239	</gunPosition>
+      <gunPosition>	-0.010457 0.315956 1.31244	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	-0.919911 0.420018 1.02394	</rayStart>
@@ -457,30 +461,30 @@
           <isMirrored>	true	</isMirrored>
         </player>
         <inscription>
-          <rayStart>	-1.25405 0.458571 -0.0839043	</rayStart>
-          <rayEnd>	-1.12454 0.306179 -0.0852398	</rayEnd>
-          <rayUp>	0.766297 0.642486 -0.000045	</rayUp>
-          <size>	0.536	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <inscription>
-          <rayStart>	1.25405 0.458571 -0.0839043	</rayStart>
-          <rayEnd>	1.12454 0.306179 -0.0852398	</rayEnd>
-          <rayUp>	-0.766297 0.642487 -0.000045	</rayUp>
+          <rayStart>	-1.33404 0.390312 -0.0849677	</rayStart>
+          <rayEnd>	-1.20199 0.240125 -0.0833063	</rayEnd>
+          <rayUp>	0.745474 0.666535 -0.000069	</rayUp>
           <size>	0.536	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
+        <inscription>
+          <rayStart>	1.33404 0.390312 -0.0849677	</rayStart>
+          <rayEnd>	1.20199 0.240125 -0.0833063	</rayEnd>
+          <rayUp>	-0.745474 0.666535 -0.000069	</rayUp>
+          <size>	0.536	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.977 0.000 0.968 0.000 0.713 0.154 0.614 0.500 0.508 0.500 0.431 0.500 0.303 0.500 0.248	</physicsShape>
+      <physicsShape>	1.055 0.000 1.064 0.000 0.713 0.154 0.614 0.500 0.508 0.500 0.485 0.500 0.303 0.643 0.248	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
-        <tiling>	0.61 0.61 0.000000 0.000000	</tiling>
+        <tiling>	0.8 0.8 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_1_R123_Kirovets_1>
   </turrets0>
   <engines>
-    <V-11-IS-3>	shared	</V-11-IS-3>
+    <V_11_Kirovets_1>	shared	</V_11_Kirovets_1>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
@@ -492,9 +496,9 @@
   <physics>
     <detailed>
       <engines>
-        <V-11-IS-3>
-          <smplEnginePower>	549.7862	</smplEnginePower>
-        </V-11-IS-3>
+        <V_11_Kirovets_1>
+          <smplEnginePower>	721	</smplEnginePower>
+        </V_11_Kirovets_1>
       </engines>
       <chassis>
         <Chassis_R123_Kirovets_1>

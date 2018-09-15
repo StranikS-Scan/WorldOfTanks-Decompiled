@@ -3,7 +3,7 @@
 import SoundGroups
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.ranked_battles.constants import SOUND
-from gui.server_events.bonuses import getBonusObj
+from gui.server_events.bonuses import getBonuses
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
 from gui.shared.money import Currency
@@ -27,8 +27,7 @@ class FinishAwardsView(object):
         result = []
         for name, value in self._awards.iteritems():
             if name not in _INVISIBLE_AWARDS:
-                bonus = getBonusObj(self._quest, name, value)
-                if bonus is not None:
+                for bonus in getBonuses(self._quest, name, value):
                     result.extend(bonus.getRankedAwardVOs('big'))
 
         return result

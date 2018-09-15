@@ -3,12 +3,8 @@
 
 
 class ParseError(Exception):
-
-    def __init__(self, *args, **kwargs):
-        super(ParseError, self).__init__(*args, **kwargs)
+    pass
 
 
 class ValidationError(Exception):
-
-    def __init__(self, *args, **kwargs):
-        super(ValidationError, self).__init__(*args, **kwargs)
+    pass

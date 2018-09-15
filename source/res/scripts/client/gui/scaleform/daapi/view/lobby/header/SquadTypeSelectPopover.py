@@ -38,9 +38,6 @@ class SquadTypeSelectPopover(BattleTypeSelectPopoverMeta, IGlobalListener):
         super(SquadTypeSelectPopover, self)._populate()
         self.update()
 
-    def _dispose(self):
-        super(SquadTypeSelectPopover, self)._dispose()
-
     @process
     def __doSelect(self, prebattleActionName):
         yield self.prbDispatcher.doSelectAction(PrbAction(prebattleActionName))

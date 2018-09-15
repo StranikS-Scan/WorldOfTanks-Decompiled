@@ -56,9 +56,6 @@ class OptionalDevicesController(IBattleController):
         if leave:
             self.__eManager.clear()
             g_playerEvents.onArenaPeriodChange -= self.__pe_onArenaPeriodChange
-        for deviceID in self.__optionalDevices.iterkeys():
-            DevicesSound.playSound(deviceID, False)
-
         self.__optionalDevices.clear()
         self.__order = []
 

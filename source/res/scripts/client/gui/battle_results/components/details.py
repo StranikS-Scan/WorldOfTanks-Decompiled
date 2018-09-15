@@ -441,6 +441,31 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
         self._addStatsRow('total', htmlKey='lightText', **columns)
 
 
+class CrystalDetailsBlock(_EconomicsDetailsBlock):
+    __slots__ = ()
+
+    def setRecord(self, result, reusable):
+        crystalTotal = 0
+        crystalAchive = 0
+        for details in result:
+            achievementName, value = details
+            if achievementName == 'originalCrystal':
+                if value > 0:
+                    crystalTotal += value
+                    self._addRecord(i18n.makeString(BATTLE_RESULTS.DETAILS_CALCULATIONS_CRYSTAL_TOTAL), value)
+            crystalAchive += value
+
+        if crystalAchive > 0:
+            self._addRecord(i18n.makeString(BATTLE_RESULTS.DETAILS_CALCULATIONS_CRYSTAL_ACHIEVEMENT), crystalAchive)
+        crystalTotal += crystalAchive
+        if crystalTotal > 0:
+            self.addNextComponent(style.EmptyStatRow())
+            self._addRecord(i18n.makeString(BATTLE_RESULTS.DETAILS_CALCULATIONS_TOTAL), crystalTotal)
+
+    def _addRecord(self, res, value):
+        self.addNextComponent(style.StatRow(res, res, style.SMALL_STAT_LINE, column1=style.makeCrystalLabel(value)))
+
+
 class _TotalEconomicsDetailsBlock(base.StatsBlock):
     __slots__ = ('__iteratorName', '__blockClass')
 
@@ -477,3 +502,16 @@ class TotalXPDetailsBlock(_TotalEconomicsDetailsBlock):
 
     def __init__(self, meta=None, field='', *path):
         super(TotalXPDetailsBlock, self).__init__('getXPRecords', XPDetailsBlock, meta, field, *path)
+
+
+class TotalCrystalDetailsBlock(base.StatsBlock):
+    """
+    Block, containing 'Crystal' section. It shows info about crystal received for medals, battle, etc.
+    """
+    __slots__ = ()
+
+    def setRecord(self, result, reusable):
+        personal = reusable.personal
+        block = CrystalDetailsBlock(base.ListMeta(registered=True))
+        block.setRecord(personal.getCrystalDetails(), reusable)
+        self.addNextComponent(block)

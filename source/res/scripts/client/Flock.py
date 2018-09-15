@@ -186,7 +186,7 @@ class Flock(BigWorld.Entity, FlockLike):
         if BattleReplay.g_replayCtrl.isPlaying:
             return
         self._loadModels(prereqs)
-        if len(self.models) > 0:
+        if self.models:
             self._addSound(self.models[0])
         self.__decisionStrategy = self.__doUsualFly
         if self.flyAroundCenter != Flock.STRATEGY_USUAL_FLY:

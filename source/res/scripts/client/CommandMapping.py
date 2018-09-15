@@ -103,7 +103,7 @@ class CommandMapping:
             command = int(self.getCommand(commandName))
             for fireKey, listKeyInfo in self.__mapping.iteritems():
                 for keyInfo in listKeyInfo:
-                    if keyInfo[0] == command and len(keyInfo[1]) == 0:
+                    if keyInfo[0] == command and not keyInfo[1]:
                         return fireKey
 
         except:
@@ -140,7 +140,7 @@ class CommandMapping:
             for keyInfo in delListKeyInfo:
                 self.__mapping[fireKey].remove(keyInfo)
 
-            if not len(self.__mapping[fireKey]):
+            if not self.__mapping[fireKey]:
                 delListFireKey.append(fireKey)
 
         for fireKey in delListFireKey:
@@ -205,8 +205,8 @@ class CommandMapping:
                     continue
                 bContinue = False
                 satelliteKeys = keyInfo[1]
-                for key in satelliteKeys:
-                    if not BigWorld.isKeyDown(key):
+                for satelliteKey in satelliteKeys:
+                    if not BigWorld.isKeyDown(satelliteKey):
                         bContinue = True
                         break
 
@@ -241,7 +241,7 @@ class CommandMapping:
             for command, satelliteKeys, isDefault in listKeyInfo:
                 if isDefault:
                     continue
-                if len(satelliteKeys):
+                if satelliteKeys:
                     continue
                 commandName = self.getName(command)
                 listSatelliteKeyNames = []
@@ -256,7 +256,7 @@ class CommandMapping:
                 fireKeyName = 'KEY_' + BigWorld.keyToString(fireKey)
                 tmpList.append((commandName, fireKeyName, strSatelliteKeyNames))
 
-        if len(tmpList):
+        if tmpList:
             section = Settings.g_instance.userPrefs
             section.deleteSection(CommandMapping.__USER_CONFIG_SECTION_NAME)
             section = section.createSection(CommandMapping.__USER_CONFIG_SECTION_NAME)
@@ -308,7 +308,7 @@ class CommandMapping:
             satelliteKeyNames = []
             if subsec.has_key('satelliteKeys'):
                 satelliteKeyNames = subsec.readString('satelliteKeys').split()
-            if len(satelliteKeyNames) == 0:
+            if not satelliteKeyNames:
                 result[self.getCommand(commandName)] = int(Keys.__dict__.get(fireKeyName, 0))
 
         return result

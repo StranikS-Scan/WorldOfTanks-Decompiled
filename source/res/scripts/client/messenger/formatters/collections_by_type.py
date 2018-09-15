@@ -34,7 +34,7 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.refSystemQuests.index(): _sc.RefSystemQuestsFormatter(),
  _SM_TYPE.refSystemReferralBoughtVehicle.index(): _sc.RefSystemReferralBoughtVehicleFormatter(),
  _SM_TYPE.refSystemReferralContributedXP.index(): _sc.RefSystemReferralContributedXPFormatter(),
- _SM_TYPE.potapovQuestBonus.index(): _sc.PotapovQuestsFormatter(),
+ _SM_TYPE.potapovQuestBonus.index(): _sc.PersonalMissionsFormatter(),
  _SM_TYPE.goodieRemoved.index(): _sc.GoodieRemovedFormatter(),
  _SM_TYPE.goodieDisabled.index(): _sc.GoodieDisabledFormatter(),
  _SM_TYPE.telecomOrderCreated.index(): _sc.TelecomReceivedInvoiceFormatter(),
@@ -43,9 +43,11 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.prbVehicleKick.index(): _sc.PrbVehicleKickFormatter(),
  _SM_TYPE.vehicleGroupLocked.index(): _sc.RotationGroupLockFormatter(),
  _SM_TYPE.vehicleGroupUnlocked.index(): _sc.RotationGroupUnlockFormatter(),
- _SM_TYPE.rankedQuests.index(): _sc.RankedQuestFormatter()}
+ _SM_TYPE.rankedQuests.index(): _sc.RankedQuestFormatter(),
+ _SM_TYPE.bootcamp.index(): _sc.BootcampResultsFormatter()}
 CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageFormatter(),
  SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG: _sc.PremiumAccountExpiryFormatter(),
  SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: _sc.AOGASNotifyFormatter(),
  SCH_CLIENT_MSG_TYPE.ACTION_NOTIFY_TYPE: _sc.ActionNotificationFormatter(),
- SCH_CLIENT_MSG_TYPE.BATTLE_TUTORIAL_RESULTS_TYPE: _sc.BattleTutorialResultsFormatter()}
+ SCH_CLIENT_MSG_TYPE.BATTLE_TUTORIAL_RESULTS_TYPE: _sc.BattleTutorialResultsFormatter(),
+ SCH_CLIENT_MSG_TYPE.KOREA_PARENTAL_CONTROL_TYPE: _sc.KoreaParentalControlFormatter()}

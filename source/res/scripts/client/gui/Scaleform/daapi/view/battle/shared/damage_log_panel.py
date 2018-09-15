@@ -651,7 +651,6 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
             return (True, value)
         else:
             return (False, value)
-            return
 
     def _updateTopLog(self, isVisible, isShortMode, records):
         self.as_detailStatsTopS(isVisible, isShortMode, records)

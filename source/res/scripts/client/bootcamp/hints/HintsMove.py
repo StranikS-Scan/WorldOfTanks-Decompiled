@@ -4,8 +4,10 @@ import BigWorld
 import math
 import time
 from bootcamp.BootCampEvents import g_bootcampEvents
-from constants import BOOTCAMP_BATTLE_ACTION, HINT_TYPE
+from bootcamp.BootcampConstants import HINT_TYPE
+from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
 from HintsBase import HintBase, HINT_COMMAND
+from bootcamp.Bootcamp import g_bootcamp
 
 class HintMove(HintBase):
 
@@ -193,7 +195,6 @@ class HintMoveToMarker(HintBase):
         return
 
     def start(self):
-        from bootcamp.Bootcamp import g_bootcamp
         self._timeStart = time.time()
         self._state = HintBase.STATE_DEFAULT
         gui = g_bootcamp.getUI()

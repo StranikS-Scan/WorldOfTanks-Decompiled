@@ -134,7 +134,7 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
     @decorators.process('crewReturning')
     def __processReturnCrew(self):
         result = yield TankmanReturn(g_currentVehicle.item).request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def __getInitCrewOperationObject(self, operationId, errorId=None, warningId='', operationAvailable=False):

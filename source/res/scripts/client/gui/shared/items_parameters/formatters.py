@@ -221,7 +221,7 @@ def _getDeltaSettings():
 
 
 DELTA_PARAMS_SETTING = _getDeltaSettings()
-_SMART_ROUND_PARAMS = ('damage', 'piercingPower', 'bombDamage', 'shellsCount', 'shellReloadingTime', 'reloadMagazineTime', 'reloadTime', 'dispertionRadius', 'aimingTime', 'weight', 'invisibilityStillFactor', 'invisibilityMovingFactor')
+_SMART_ROUND_PARAMS = ('damage', 'piercingPower', 'bombDamage', 'shellsCount', 'shellReloadingTime', 'reloadMagazineTime', 'reloadTime', 'dispertionRadius', 'aimingTime', 'weight')
 _STATES_INDEX_IN_COLOR_MAP = {PARAM_STATE.WORSE: 0,
  PARAM_STATE.NORMAL: 1,
  PARAM_STATE.BETTER: 2}
@@ -247,8 +247,7 @@ def simlifiedDeltaParameter(parameter, isSituational=False):
         scheme = SITUATIONAL_SCHEME if isSituational else SIMPLIFIED_SCHEME
         deltaStr = _colorize('%s%s' % (sign, abs(delta)), parameter.state, scheme)
         return '(%s) %s' % (deltaStr, mainFormatter(paramStr))
-    else:
-        return mainFormatter(paramStr)
+    return mainFormatter(paramStr)
 
 
 def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=None, formatSettings=None, allowSmartRound=True):
@@ -270,23 +269,18 @@ def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=
 
     if paramValue is None:
         return
-    else:
-        if isinstance(paramValue, (tuple, list)):
-            if parameterState is None:
-                parameterState = [None] * len(paramValue)
-            if doSmartRound and len(set(paramValue)) == 1:
-                if paramValue[0] > 0:
-                    return applyFormat(paramValue[0], parameterState[0])
-                return
-            else:
-                separator = settings['separator']
-                paramsList = [ applyFormat(val, parameterState[idx]) for idx, val in enumerate(paramValue) ]
-                return separator.join(paramsList)
-        else:
-            if paramValue != 0:
-                return applyFormat(paramValue, parameterState)
+    elif isinstance(paramValue, (tuple, list)):
+        if parameterState is None:
+            parameterState = [None] * len(paramValue)
+        if doSmartRound and len(set(paramValue)) == 1:
+            if paramValue[0] > 0:
+                return applyFormat(paramValue[0], parameterState[0])
             return
-        return
+        separator = settings['separator']
+        paramsList = [ applyFormat(val, parameterState[idx]) for idx, val in enumerate(paramValue) ]
+        return separator.join(paramsList)
+    else:
+        return applyFormat(paramValue, parameterState) if paramValue != 0 else None
 
 
 def formatParameterDelta(pInfo, deltaScheme=BASE_SCHEME, formatSettings=DELTA_PARAMS_SETTING):
@@ -342,10 +336,7 @@ def packSituationalIcon(text, icon):
 
 
 def getGroupPenaltyIcon(param, comparator):
-    if hasGroupPenalties(param.name, comparator):
-        return RES_ICONS.MAPS_ICONS_VEHPARAMS_ICON_DECREASE
-    else:
-        return ''
+    return RES_ICONS.MAPS_ICONS_VEHPARAMS_ICON_DECREASE if hasGroupPenalties(param.name, comparator) else ''
 
 
 def getAllParametersTitles():
@@ -370,7 +361,4 @@ def getAllParametersTitles():
 def _cutDigits(value):
     if value > 99:
         return round(value)
-    elif value > 9:
-        return round(value, 1)
-    else:
-        return round(value, 2)
+    return round(value, 1) if value > 9 else round(value, 2)

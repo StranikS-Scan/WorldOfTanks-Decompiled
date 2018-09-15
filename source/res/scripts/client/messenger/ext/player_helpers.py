@@ -37,9 +37,6 @@ def isCurrentPlayer(dbID):
 class CurrentPlayerHelper(object):
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self):
-        super(CurrentPlayerHelper, self).__init__()
-
     @storage_getter('playerCtx')
     def playerCtx(self):
         return None

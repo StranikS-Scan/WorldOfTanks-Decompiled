@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/templates/regular.py
+from constants import ARENA_GUI_TYPE
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
@@ -58,7 +59,6 @@ _COMMON_VO_META = base.DictMeta({'iconType': 'tank',
  'regionNameStr': '',
  'playerVehicles': [],
  'playerVehicleNames': [],
- 'playerVehicleTypeIcons': [],
  'falloutMode': '',
  'overtime': {},
  'totalFortResourceStr': '',
@@ -113,9 +113,8 @@ REGULAR_COMMON_STATS_BLOCK.addComponent(9, personal.PersonalVehicleNamesBlock(ba
 REGULAR_COMMON_STATS_BLOCK.addComponent(10, personal.PersonalVehiclesBlock(base.ListMeta(), 'playerVehicles', _RECORD.PERSONAL))
 REGULAR_COMMON_STATS_BLOCK.addComponent(11, _TIME_STATS_BLOCK.clone())
 REGULAR_COMMON_STATS_BLOCK.addComponent(12, shared.ClientIndexItem('clientArenaIdx'))
-REGULAR_COMMON_STATS_BLOCK.addComponent(13, personal.PersonalVehicleTypeIconsBlock(base.ListMeta(), 'playerVehicleTypeIcons'))
-REGULAR_COMMON_STATS_BLOCK.addComponent(14, common.TeamsUiVisibility('uiVisibility'))
-REGULAR_COMMON_STATS_BLOCK.addComponent(15, common.EligibleForCrystalRewards('eligibleForCrystalRewards'))
+REGULAR_COMMON_STATS_BLOCK.addComponent(13, common.TeamsUiVisibility('uiVisibility'))
+REGULAR_COMMON_STATS_BLOCK.addComponent(14, common.EligibleForCrystalRewards('eligibleForCrystalRewards'))
 _PERSONAL_VO_META = base.DictMeta({'isPremium': False,
  'hasGetPremBtn': False,
  'getPremVO': {},
@@ -141,7 +140,8 @@ _PERSONAL_VO_META = base.DictMeta({'isPremium': False,
  'showNoIncomeAlert': False,
  'noIncomeAlert': None,
  'isStunDataEnabled': False,
- 'crystalStr': '0'})
+ 'crystalStr': '0',
+ 'crystalData': []})
 _PREMIUM_BUY_VO_META = base.PropertyMeta((('arenaUniqueID', 0, 'clientIndex'), ('creditsDiff', 0, 'creditsDiff'), ('xpDiff', 0, 'xpDiff')))
 _PREMIUM_BUY_VO_META.bind(personal.PremiumBuyBlock)
 _DAMAGE_DETAILS_VO_META = base.PropertyMeta((('damageTotalItems', 0, 'piercings'), ('damageDealtVals', None, 'damageDealtValues'), ('damageDealtNames', None, 'damageDealtNames')))
@@ -166,9 +166,9 @@ _TEAM_BASES_VO_META = base.PropertyMeta((('baseLabel', '', 'label'),
  ('captureVals', None, 'captureValues'),
  ('captureNames', None, 'captureNames'),
  ('defenceVals', None, 'defenceValues'),
- ('defenceNames', None, 'defenceNames')))
+ ('defenceNames', None, 'defenceNames'),
+ ('isEnemyBase', None, 'isEnemyBase')))
 _TEAM_BASES_VO_META.bind(personal.TeamBaseDetailsBlock)
-_TEAM_BASES_VO_META.bind(personal.DominationTeamBaseDetailBlock)
 _TEAM_BASES_VO_META.bind(personal.AllyTeamBaseDetailBlock)
 _TEAM_BASES_VO_META.bind(personal.EnemyTeamBaseDetailBlock)
 _DETAILS_PLAYER_NAME_VO_META = base.PropertyMeta((('playerName', '', 'nameLabel'),
@@ -199,7 +199,9 @@ _ACHIEVEMENT_VO_META = base.PropertyMeta((('type', '', 'type'),
  ('rareIconId', None, 'rareIconID'),
  ('isEpic', False, 'hasRibbon'),
  ('specialIcon', None, 'specialIcon'),
- ('customData', [], 'customData')))
+ ('customData', [], 'customData'),
+ ('arenaType', ARENA_GUI_TYPE.RANDOM, 'arenaType'),
+ ('vehicleLevel', 0, 'vehicleLevel')))
 _ACHIEVEMENT_VO_META.bind(shared.AchievementBlock)
 _ACHIEVEMENTS_LIST_VO_META = base.DictMeta({'achievementsLeft': [],
  'achievementsRight': []})
@@ -219,7 +221,8 @@ _TOTAL_EFFICIENCY_HEADER_META = base.PropertyMeta(((BATTLE_EFFICIENCY_TYPES.DEST
  ('armorTooltip', None, 'damageBlockedTooltip'),
  ('assistTooltip', None, 'damageAssistedTooltip'),
  ('spottedTooltip', None, 'spottedTooltip'),
- ('stunTooltip', None, 'damageAssistedStunTooltip')))
+ ('stunTooltip', None, 'damageAssistedStunTooltip'),
+ ('hasEfficencyStats', None, 'hasEfficencyStats')))
 _TOTAL_EFFICIENCY_HEADER_META.bind(personal.TotalEfficiencyDetailsHeader)
 REGULAR_PERSONAL_STATS_BLOCK = base.StatsBlock(_PERSONAL_VO_META, 'personal')
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(0, personal.TotalEfficiencyDetailsHeader(_TOTAL_EFFICIENCY_HEADER_META, 'efficiencyHeader', _RECORD.PERSONAL))
@@ -240,6 +243,7 @@ REGULAR_PERSONAL_STATS_BLOCK.addComponent(14, details.TotalXPDetailsBlock(base.L
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(15, vehicles.PersonalVehiclesRegularStatsBlock(base.ListMeta(), 'statValues', _RECORD.PERSONAL))
 (REGULAR_PERSONAL_STATS_BLOCK.addComponent(16, personal.StunDataFlag('isStunDataEnabled')),)
 (REGULAR_PERSONAL_STATS_BLOCK.addComponent(17, details.GainCrystalInBattleItem('crystalStr')),)
+(REGULAR_PERSONAL_STATS_BLOCK.addComponent(18, details.TotalCrystalDetailsBlock(base.ListMeta(), 'crystalData', _RECORD.PERSONAL)),)
 _TEAM_PLAYER_VO_META = base.PropertyMeta((('userName', '', 'nameLabel'),
  ('fullName', '', 'fullNameLabel'),
  ('clanAbbrev', '', 'clanLabel'),

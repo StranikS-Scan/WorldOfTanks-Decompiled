@@ -5,16 +5,13 @@ from constants import TOKEN_TYPE
 from client_request_lib.requester import Requester as WebRequester
 from gui.clans.requests import ClanRequester, ClanRequestsController
 from gui.shared.utils.requesters import TokenRequester, getTokenRequester
-from helpers.ServerSettings import _ClanProfile
+from helpers.server_settings import _ClanProfile
 
 def _webUrlFetcher(url, callback, headers=None, timeout=30.0, method='GET', postData=''):
     return BigWorld.fetchURL(url, callback, headers, timeout, method, postData)
 
 
 class _ClanFactory(object):
-
-    def __init__(self):
-        super(_ClanFactory, self).__init__()
 
     def createWebRequester(self, settings, *args, **kwargs):
         raise NotImplementedError
@@ -31,9 +28,6 @@ class _ClanFactory(object):
 
 class WebClanFactory(_ClanFactory):
 
-    def __init__(self):
-        super(WebClanFactory, self).__init__()
-
     def createWebRequester(self, settings, *args, **kwargs):
         return WebRequester.create_requester(_webUrlFetcher, settings, *args, **kwargs)
 
@@ -48,9 +42,6 @@ class WebClanFactory(_ClanFactory):
 
 
 class FakeClanFactory(_ClanFactory):
-
-    def __init__(self):
-        super(FakeClanFactory, self).__init__()
 
     def createWebRequester(self, settings, *args, **kwargs):
         return WebRequester.create_requester(_webUrlFetcher, _ClanProfile(True, None, 'fake'), *args, **kwargs)

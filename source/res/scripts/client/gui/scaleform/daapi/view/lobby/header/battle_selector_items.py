@@ -291,8 +291,17 @@ class _BattleSelectorItems(object):
     def getVOs(self):
         return (map(lambda item: item.getVO(), filter(lambda item: item.isVisible(), sorted(self.__items.itervalues()))), self.__isDemonstrator, self.__isDemoButtonEnabled)
 
+    def getItems(self):
+        return self.__items
+
     def _getDefaultPAN(self):
         return _DEFAULT_PAN
+
+    def isSelected(self, action):
+        if action in self.__items:
+            return self.__items[action].isSelected()
+        LOG_ERROR('Action not found', action)
+        return False
 
 
 class _SquadSelectorItems(_BattleSelectorItems):

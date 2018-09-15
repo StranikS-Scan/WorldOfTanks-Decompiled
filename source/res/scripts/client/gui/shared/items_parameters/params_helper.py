@@ -35,9 +35,8 @@ PARAMS_GROUPS = {'relativePower': RELATIVE_POWER_PARAMS,
 def _getParamsProvider(item, vehicleDescr=None):
     if vehicles.isVehicleDescr(item.descriptor):
         return _ITEM_TYPE_HANDLERS[ITEM_TYPES.vehicle](item)
-    else:
-        itemTypeIdx, _, _ = vehicles.parseIntCompactDescr(item.descriptor.compactDescr)
-        return _ITEM_TYPE_HANDLERS[itemTypeIdx](item.descriptor, vehicleDescr)
+    itemTypeIdx, _, _ = vehicles.parseIntCompactDescr(item.descriptor.compactDescr)
+    return _ITEM_TYPE_HANDLERS[itemTypeIdx](item.descriptor, vehicleDescr)
 
 
 def get(item, vehicleDescr=None):
@@ -205,7 +204,7 @@ def getGroupBonuses(groupName, comparator):
 
 def hasGroupPenalties(groupName, comparator):
     for paramName in PARAMS_GROUPS[groupName]:
-        if len(comparator.getExtendedData(paramName).penalties):
+        if comparator.getExtendedData(paramName).penalties:
             return True
 
     return False

@@ -3721,7 +3721,7 @@
       <impulse>	0.68	</impulse>
       <recoil>
         <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.2	</amplitude>
+        <amplitude>	0.6	</amplitude>
         <recoilEffect>	huge	</recoilEffect>
       </recoil>
       <effects>	shot_huge	</effects>
@@ -3731,6 +3731,7 @@
         <minPitch>	0.0 -45.0 1.0 -45.0	</minPitch>
         <maxPitch>	0.0 4.0 1.0 4.0	</maxPitch>
       </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	22.75	</rotationSpeed>
       <reloadTime>	17.8285714285714	</reloadTime>
       <maxAmmo>	20	</maxAmmo>

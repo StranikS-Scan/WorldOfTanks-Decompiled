@@ -8,14 +8,25 @@
         <postBattle>
           <and>
             <vehicleDamage>
+              <title>
+                <key>	#personal_missions_details:quest_2_3_8_condition_title_vehicleDamage_count	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_common_condition_description_empty	</key>
+              </description>
               <classes>	mediumTank	</classes>
-              <attackReason>	0	</attackReason>
               <eventCount></eventCount>
               <greaterOrEqual>	5	</greaterOrEqual>
             </vehicleDamage>
             <vehicleDamage>
+              <title>
+                <key>	#personal_missions_details:quest_2_3_8_condition_title_vehicleDamage	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_common_condition_description_empty	</key>
+              </description>
               <classes>	mediumTank	</classes>
-              <greaterOrEqual>	1000	</greaterOrEqual>
+              <greaterOrEqual>	750	</greaterOrEqual>
             </vehicleDamage>
           </and>
         </postBattle>
@@ -27,6 +38,41 @@
         </item>
         <item>	507	  <count>	2	</count>
         </item>
+        <token>
+          <id>	token:pt:final:s1:t2:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_3_8_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_2_3_8_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <item>	1531	  <count>	2	</count>
+        </item>
+        <item>	1019	  <count>	2	</count>
+        </item>
+        <item>	507	  <count>	2	</count>
+        </item>
+        <token>
+          <id>	token:pt:final:s1:t2:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
       </bonus>
     </potapovQuest>
     <potapovQuest>
@@ -37,14 +83,25 @@
         <postBattle>
           <and>
             <vehicleDamage>
+              <title>
+                <key>	#personal_missions_details:quest_2_3_8_condition_title_vehicleDamage_count	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_common_condition_description_empty	</key>
+              </description>
               <classes>	mediumTank	</classes>
-              <attackReason>	0	</attackReason>
               <eventCount></eventCount>
               <greaterOrEqual>	5	</greaterOrEqual>
             </vehicleDamage>
             <vehicleDamage>
+              <title>
+                <key>	#personal_missions_details:quest_2_3_8_condition_title_vehicleDamage	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_common_condition_description_empty	</key>
+              </description>
               <classes>	mediumTank	</classes>
-              <greaterOrEqual>	1000	</greaterOrEqual>
+              <greaterOrEqual>	750	</greaterOrEqual>
             </vehicleDamage>
             <isAlive></isAlive>
             <win></win>
@@ -53,6 +110,51 @@
       </conditions>
       <bonus>
         <credits>	75000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t2:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_2_3_8_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_2_3_8_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <vehicleDamage>
+              <classes>	mediumTank	</classes>
+              <eventCount></eventCount>
+              <greaterOrEqual>	5	</greaterOrEqual>
+            </vehicleDamage>
+            <vehicleDamage>
+              <classes>	mediumTank	</classes>
+              <greaterOrEqual>	750	</greaterOrEqual>
+            </vehicleDamage>
+            <isAlive></isAlive>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
       </bonus>
     </potapovQuest>
   </quests>

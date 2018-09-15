@@ -79,6 +79,22 @@ def getSuitableWindowSizes():
     return tuple(result)
 
 
+def getSuitableBorderlessSizes():
+    result = []
+    for idx, monitorModes in enumerate(getSuitableVideoModes()):
+        maxSize = WindowSize(*BigWorld.wg_getMaxBorderlessResolution(idx))
+        modes = []
+        for mode in monitorModes:
+            if mode.width <= maxSize.width and mode.height <= maxSize.height:
+                modes.append(WindowSize(mode.width, mode.height, mode.refreshRate))
+
+        if maxSize not in modes:
+            modes.append(maxSize)
+        result.append(modes)
+
+    return tuple(result)
+
+
 GraphicSetting = namedtuple('GraphicSetting', 'label value options hint advanced needRestart isArray delayed')
 
 def getCustomAAMode():
@@ -97,11 +113,7 @@ def getMultisamplingType():
 
 def getGraphicsSetting(settingName):
     setting = BigWorld.graphicSetting(settingName)
-    if setting is None:
-        return
-    else:
-        return GraphicSetting(*setting)
-        return
+    return None if setting is None else GraphicSetting(*setting)
 
 
 def getGraphicsPresets(presetIdx=None):
@@ -134,8 +146,8 @@ def getInterfaceScalesList(size, powerOfTwo=True):
     result = [SCALE_PREFIX[0]]
     if powerOfTwo:
         scale = max(min(int(math.log(max(size[0] / getResolution().width, 1.0), 2)), int(math.log(max(size[1] / getResolution().height, 1.0), 2))), 0)
-        for size in xrange(scale + 1):
-            result.append(SCALE_PREFIX[1] % 2 ** size)
+        for i in xrange(scale + 1):
+            result.append(SCALE_PREFIX[1] % 2 ** i)
 
     else:
         scale = min(int(size[0] / MIN_SCREEN_WIDTH), int(size[1] / MIN_SCREEN_HEIGHT))
@@ -167,10 +179,7 @@ class MonitorSettings(object):
 
     @property
     def currentBorderlessSize(self):
-        if self.windowMode == BigWorld.WindowModeBorderless:
-            return BorderlessSize(*map(int, BigWorld.getBorderlessParameters()))
-        else:
-            return VideoMode(*BigWorld.listBorderlessResolutionsAllMonitors()[self.currentMonitor][0])
+        return BorderlessSize(*map(int, BigWorld.getBorderlessParameters())) if self.windowMode == BigWorld.WindowModeBorderless else VideoMode(*BigWorld.listBorderlessResolutionsAllMonitors()[self.currentMonitor][0])
 
     @property
     def videoModes(self):

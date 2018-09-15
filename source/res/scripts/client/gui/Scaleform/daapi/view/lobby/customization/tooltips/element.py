@@ -8,8 +8,11 @@ from gui import makeHtmlString
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.customization import g_customizationController as controller
 from gui.customization.shared import DURATION, CUSTOMIZATION_TYPE, PURCHASE_TYPE
+from gui.server_events.finders import getPersonalMissionDataFromToken
 from gui.shared.formatters import text_styles, icons
 from gui.shared.items_parameters import params_helper, formatters as params_formatters
 from gui.shared.items_parameters.params_helper import SimplifiedBarVO
@@ -18,7 +21,9 @@ from gui.shared.tooltips.common import BlocksTooltipData
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from nations import NONE_INDEX as ANY_NATION
+from shared_utils import first
 from skeletons.gui.game_control import IIGRController
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 
 class STATUS(object):
@@ -28,6 +33,7 @@ class STATUS(object):
     AVAILABLE_FOR_BUY = 3
     DO_MISSION = 4
     DO_IGR = 5
+    DO_OPERATION = 6
 
 
 class BUY_ITEM_TYPE(object):
@@ -64,6 +70,8 @@ class ElementTooltip(BlocksTooltipData):
     """
     itemsCache = dependency.descriptor(IItemsCache)
     igrCtrl = dependency.descriptor(IIGRController)
+    __eventsCache = dependency.descriptor(IEventsCache)
+    __MAX_QUESTS_TO_SHOW = 3
 
     def __init__(self, context):
         super(ElementTooltip, self).__init__(context, TOOLTIP_TYPE.TECH_CUSTOMIZATION)
@@ -95,30 +103,33 @@ class ElementTooltip(BlocksTooltipData):
         else:
             self._slotIdx, self._cType = args[:2]
             self._item = controller.slots.getCurrentSlotData(self._slotIdx, self._cType)['element']
-        data = self._getItemData()
-        if self.__isInQuest():
-            data['itemsCount'] = None
-        items.append(self._packTitleBlock(data))
-        items.append(self._packIconBlock(data))
-        if data['bonus_value'] > 0:
-            items.append(self._packBonusBlock(data))
-            if data['condition'] is not None and data['type'] != CUSTOMIZATION_TYPE.CAMOUFLAGE:
-                items.append(self._packConditionBlock(data))
-        if data['wasBought']:
-            items.append(self._packAlreadyHaveBlock(data))
+        if self._item is None:
+            return []
         else:
-            items.append(self._packWayToBuyBlock(data))
-        if data['description'] is not None:
-            items.append(self._packDescBlock(data))
-        if data['status'] != STATUS.NONE:
-            items.append(self._packStatusBlock(data))
-        return items
+            data = self._getItemData()
+            if self.__isInQuest():
+                data['itemsCount'] = None
+            items.append(self._packTitleBlock(data))
+            items.append(self._packIconBlock(data))
+            if data['bonus_value'] > 0:
+                items.append(self._packBonusBlock(data))
+                if data['condition'] is not None and data['type'] != CUSTOMIZATION_TYPE.CAMOUFLAGE:
+                    items.append(self._packConditionBlock(data))
+            if data['wasBought']:
+                items.append(self._packAlreadyHaveBlock(data))
+            else:
+                items.append(self._packWayToBuyBlock(data))
+            if data['description'] is not None:
+                items.append(self._packDescBlock(data))
+            if data['status'] != STATUS.NONE:
+                items.append(self._packStatusBlock(data))
+            return items
 
     def _packTitleBlock(self, data):
         title = data['title']
         itemsCount = data['itemsCount']
         if itemsCount is not None and itemsCount > 1:
-            title += _ms('#vehicle_customization:customization/tooltip/alreadyHave/count', count=itemsCount)
+            title += _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_ALREADYHAVE_COUNT, count=itemsCount)
         typeText = ''
         if self._cType == CUSTOMIZATION_TYPE.CAMOUFLAGE:
             typeText = _ms('#vehicle_customization:camouflage')
@@ -127,13 +138,25 @@ class ElementTooltip(BlocksTooltipData):
         elif self._cType == CUSTOMIZATION_TYPE.INSCRIPTION:
             typeText = _ms('#vehicle_customization:inscription')
         typeText += ' ' + _ms(data['groupName'])
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(title), padding={'top': -5}, desc=text_styles.main(typeText))
+        title = text_styles.highTitle(title)
+        desc = text_styles.main(typeText)
+        img = RES_ICONS.MAPS_ICONS_LIBRARY_QUALIFIERS_42X42_CAMOUFLAGE
+        imgPadding = formatters.packPadding(7, 5, 0, 20)
+        questListData = controller.dataAggregator.getQuestData(self._cType, self._item)
+        if questListData:
+            questData = first(questListData)
+            if questData and getPersonalMissionDataFromToken(questData.requiredToken)[0]:
+                return formatters.packItemTitleDescBlockData(title=title, desc=desc, img=img, imgPadding=imgPadding, overlayPath=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_BRUSH_RARE, overlayPadding=formatters.packPadding(-13, -17), highlightPath=RES_ICONS.MAPS_ICONS_CUSTOMIZATION_CORNER_RARE, highlightPadding=formatters.packPadding(-22, -25), padding={'top': -5,
+                 'bottom': -19})
+        return formatters.packItemTitleDescBlockData(title=title, desc=desc, img=img, imgPadding=imgPadding, padding={'top': -5,
+         'bottom': -4})
 
     def _packIconBlock(self, data):
         actualWidth = 84
         if self._cType == CUSTOMIZATION_TYPE.INSCRIPTION:
             actualWidth = 176
-        return formatters.packImageBlockData(img=data['icon'], align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=actualWidth, height=84)
+        return formatters.packImageBlockData(img=data['icon'], align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=actualWidth, height=84, padding={'top': 2,
+         'bottom': 4})
 
     def _packBonusBlock(self, data):
         vehicle = g_currentVehicle.item
@@ -148,12 +171,12 @@ class ElementTooltip(BlocksTooltipData):
             comparator = params_helper.camouflageComparator(vehicle, self._item)
             stockParams = params_helper.getParameters(stockVehicle)
             simplifiedBlocks = SimplifiedStatsBlockConstructor(stockParams, comparator).construct()
-            if len(simplifiedBlocks) > 0:
+            if simplifiedBlocks:
                 blocks.extend(simplifiedBlocks)
         return formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
 
     def _packAppliedToVehicles(self, data):
-        subBlocks = [formatters.packTextBlockData(text=text_styles.middleTitle('#vehicle_customization:customization/tooltip/applied/title'))]
+        subBlocks = [formatters.packTextBlockData(text=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_APPLIED_TITLE))]
         allowedVehicles = data['allowedVehicles']
         notAllowedVehicles = data['notAllowedVehicles']
         allowedNations = data['allowedNations']
@@ -163,29 +186,29 @@ class ElementTooltip(BlocksTooltipData):
         allowedVehicles = filter(lambda vehicle: not vehicle.isSecret, allowedVehicles)
         notAllowedVehicles = filter(lambda vehicle: not vehicle.isSecret, notAllowedVehicles)
         if data['boundToCurrentVehicle']:
-            description = _ms('#vehicle_customization:customization/questAward/currentVehicle')
+            description = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_QUESTAWARD_CURRENTVEHICLE)
         elif allowedVehicles:
             description = self._getVehiclesNames(allowedVehicles)
         else:
             if allowedNations:
                 if len(allowedNations) > len(notAllowedNations):
-                    description = _ms('#vehicle_customization:customization/tooltip/applied/allNations')
-                    description += _ms('#vehicle_customization:customization/tooltip/applied/elementsSeparator')
-                    description += _ms('#vehicle_customization:customization/tooltip/applied/excludeNations', nations=self._getNationNames(notAllowedNations))
+                    description = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_APPLIED_ALLNATIONS)
+                    description += _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_APPLIED_ELEMENTSSEPARATOR)
+                    description += _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_APPLIED_EXCLUDENATIONS, nations=self._getNationNames(notAllowedNations))
                 else:
-                    description = _ms('#vehicle_customization:customization/tooltip/applied/vehicleNation', nation=self._getNationNames(allowedNations))
+                    description = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_APPLIED_VEHICLENATION, nation=self._getNationNames(allowedNations))
             elif self._item.getNationID() == ANY_NATION:
-                description = _ms('#vehicle_customization:customization/tooltip/applied/allNations')
+                description = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_APPLIED_ALLNATIONS)
             else:
-                description = _ms('#vehicle_customization:customization/tooltip/applied/vehicleNation', nation=self._getNationNames([self._item.getNationID()]))
+                description = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_APPLIED_VEHICLENATION, nation=self._getNationNames([self._item.getNationID()]))
             if notAllowedVehicles:
-                description += _ms('#vehicle_customization:customization/tooltip/applied/elementsSeparator')
-                description += _ms('#vehicle_customization:customization/tooltip/applied/excludeVehicles', vehicles=self._getVehiclesNames(notAllowedVehicles))
+                description += _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_APPLIED_ELEMENTSSEPARATOR)
+                description += _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_APPLIED_EXCLUDEVEHICLES, vehicles=self._getVehiclesNames(notAllowedVehicles))
         subBlocks.append(formatters.packTextBlockData(text_styles.main(description)))
         return formatters.packBuildUpBlockData(subBlocks, 0, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE)
 
     def _packWayToBuyBlock(self, data):
-        subBlocks = [formatters.packTextBlockData(text=text_styles.middleTitle(_ms('#vehicle_customization:customization/tooltip/wayToBuy/title')), padding={'bottom': 6})]
+        subBlocks = [formatters.packTextBlockData(text=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_WAYTOBUY_TITLE), padding={'bottom': 6})]
         for buyItem in data['buyItems']:
             buyItemDesc = text_styles.main(buyItem['desc'])
             if buyItem['type'] == BUY_ITEM_TYPE.WAYS_TO_BUY_MISSION:
@@ -209,7 +232,7 @@ class ElementTooltip(BlocksTooltipData):
         return formatters.packBuildUpBlockData(subBlocks, 0, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, {'left': 3})
 
     def _packAlreadyHaveBlock(self, data):
-        subBlocks = [formatters.packTextBlockData(text=text_styles.middleTitle(_ms('#vehicle_customization:customization/tooltip/alreadyHave/title')), padding={'bottom': 6})]
+        subBlocks = [formatters.packTextBlockData(text=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_ALREADYHAVE_TITLE), padding={'bottom': 6})]
         padding = {'left': 10}
         for buyItem in data['buyItems']:
             buyItemDesc = text_styles.main(buyItem['desc'])
@@ -220,21 +243,23 @@ class ElementTooltip(BlocksTooltipData):
         return formatters.packBuildUpBlockData(subBlocks, 0, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE, {'left': 3})
 
     def _packDescBlock(self, data):
-        return formatters.packImageTextBlockData(title=text_styles.middleTitle(_ms('#vehicle_customization:customization/tooltip/description/history/title')), desc=text_styles.standard(data['description']), txtGap=8)
+        return formatters.packImageTextBlockData(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_DESCRIPTION_HISTORY_TITLE), desc=text_styles.standard(data['description']), txtGap=8)
 
     def _packConditionBlock(self, data):
-        return formatters.packImageTextBlockData(title=text_styles.middleTitle(_ms('#vehicle_customization:customization/tooltip/description/conditions/title')), desc=text_styles.standard('*{0}'.format(data['condition'])), txtGap=8)
+        return formatters.packImageTextBlockData(title=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_DESCRIPTION_CONDITIONS_TITLE), desc=text_styles.standard('*{0}'.format(data['condition'])), txtGap=8)
 
     def _packStatusBlock(self, data):
         status = ''
         if data['status'] == STATUS.ON_BOARD:
-            status = text_styles.statInfo(_ms('#vehicle_customization:customization/tooltip/status/onBoard'))
+            status = text_styles.statInfo(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_STATUS_ONBOARD)
         elif data['status'] == STATUS.ALREADY_HAVE:
-            status = text_styles.statInfo(_ms('#vehicle_customization:customization/tooltip/status/alreadyHave'))
+            status = text_styles.statInfo(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_STATUS_ALREADYHAVE)
         elif data['status'] == STATUS.AVAILABLE_FOR_BUY:
-            status = text_styles.warning(_ms('#vehicle_customization:customization/tooltip/status/availableForBuy'))
+            status = text_styles.warning(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_STATUS_AVAILABLEFORBUY)
         elif data['status'] == STATUS.DO_MISSION:
-            status = text_styles.warning(_ms('#vehicle_customization:customization/tooltip/status/doMission'))
+            status = text_styles.warning(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_STATUS_DOMISSION)
+        elif data['status'] == STATUS.DO_OPERATION:
+            status = text_styles.warning(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_STATUS_DOOPERATION)
         elif data['status'] == STATUS.DO_IGR:
             status = icons.premiumIgrBig()
         return formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'alignText', {'align': 'center',
@@ -267,11 +292,11 @@ class ElementTooltip(BlocksTooltipData):
 
     def _getNationNames(self, nationIds):
         nationNames = map(lambda id: _ms('#nations:{0}'.format(nations.AVAILABLE_NAMES[id])), nationIds)
-        return _ms('#vehicle_customization:customization/tooltip/applied/elementsSeparator').join(nationNames)
+        return _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_APPLIED_ELEMENTSSEPARATOR).join(nationNames)
 
     def _getVehiclesNames(self, vehicles):
         vehiclesNames = map(lambda vehicle: vehicle.userName, vehicles)
-        return _ms('#vehicle_customization:customization/tooltip/applied/elementsSeparator').join(vehiclesNames)
+        return _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_APPLIED_ELEMENTSSEPARATOR).join(vehiclesNames)
 
     def __isInstalled(self):
         if self._slotIdx < 0:
@@ -279,11 +304,7 @@ class ElementTooltip(BlocksTooltipData):
         else:
             slotIdx = self._slotIdx
         selectedSlotElement = controller.slots.getInstalledSlotData(slotIdx, self._cType)['element']
-        if selectedSlotElement is None:
-            return False
-        else:
-            return selectedSlotElement.getID() == self._item.getID()
-            return
+        return False if selectedSlotElement is None else selectedSlotElement.getID() == self._item.getID()
 
     def __isInQuest(self):
         """Check if item is a quest award in a ~current~ view.
@@ -296,9 +317,8 @@ class ElementTooltip(BlocksTooltipData):
         if self._slotIdx < 0:
             purchaseType = controller.filter.purchaseType
             return purchaseType == PURCHASE_TYPE.QUEST and self._item.isInQuests
-        else:
-            slotsData = controller.slots.currentSlotsData
-            return slotsData[self._cType][self._slotIdx]['isInQuest']
+        slotsData = controller.slots.currentSlotsData
+        return slotsData[self._cType][self._slotIdx]['isInQuest']
 
     def __obtainedFromIgr(self):
         """Check if item can be obtained by IRG.
@@ -313,14 +333,14 @@ class ElementTooltip(BlocksTooltipData):
             buyItems = [{'value': 0,
               'type': BUY_ITEM_TYPE.ALREADY_HAVE_IGR,
               'isSale': False,
-              'desc': _ms('#vehicle_customization:customization/tooltip/alreadyHave/igr')}]
+              'desc': _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_APPLIED_ELEMENTSSEPARATOR)}]
             wasBought = True
             status = STATUS.ON_BOARD if self.__isInstalled() else STATUS.ALREADY_HAVE
         else:
             buyItems = [{'value': 0,
               'type': BUY_ITEM_TYPE.WAYS_TO_BUY_IGR,
               'isSale': False,
-              'desc': _ms('#vehicle_customization:customization/tooltip/wayToBuy/igr')}]
+              'desc': _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_WAYTOBUY_IGR)}]
             wasBought = False
             status = STATUS.DO_IGR
         return (buyItems, wasBought, status)
@@ -343,7 +363,7 @@ class ElementTooltip(BlocksTooltipData):
         buyItems = [{'value': 0,
           'type': BUY_ITEM_TYPE.ALREADY_HAVE_TEMP,
           'isSale': False,
-          'desc': _ms('#vehicle_customization:tooltip/element/purchase/acquired/days', total=days, left=leftDays)}]
+          'desc': _ms(VEHICLE_CUSTOMIZATION.TOOLTIP_ELEMENT_PURCHASE_ACQUIRED_DAYS, total=days, left=leftDays)}]
         return (buyItems, True, STATUS.ON_BOARD)
 
     def __obtainedInDossier(self):
@@ -357,14 +377,27 @@ class ElementTooltip(BlocksTooltipData):
         """
         buyItem = {'value': 0,
          'isSale': False}
+        wasBought = True
         if self._item.numberOfDays is not None:
             buyItem['type'] = BUY_ITEM_TYPE.WAYS_TO_BUY_TEMP
-            buyItem['desc'] = _ms('#vehicle_customization:customization/tooltip/wayToBuy/temp', days=self._item.numberOfDays)
+            buyItem['desc'] = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_WAYTOBUY_TEMP, days=self._item.numberOfDays)
         else:
             buyItem['type'] = BUY_ITEM_TYPE.ALREADY_HAVE_FOREVER
-            buyItem['desc'] = _ms('#vehicle_customization:customization/tooltip/wayToBuy/forever')
+            questData = first(controller.dataAggregator.getQuestData(self._cType, self._item))
+            buyItem['desc'] = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_WAYTOBUY_FOREVER)
+            if questData:
+                isBelongToPM, operationID, isMain = getPersonalMissionDataFromToken(questData.requiredToken)
+                if isBelongToPM:
+                    operation = self.__eventsCache.personalMissions.getOperations()[operationID]
+                    if isMain:
+                        key = TOOLTIPS.PERSONALMISSIONS_RARECAMOUFLAGE_OBTAINED_COMPLETE_MAIN
+                    else:
+                        key = TOOLTIPS.PERSONALMISSIONS_RARECAMOUFLAGE_OBTAINED_COMPLETE_ADD
+                    wasBought = False
+                    buyItem['type'] = BUY_ITEM_TYPE.WAYS_TO_BUY_MISSION
+                    buyItem['desc'] = _ms(key, operationName=operation.getShortUserName())
         status = STATUS.ON_BOARD if self.__isInstalled() else STATUS.ALREADY_HAVE
-        return ([buyItem], True, status)
+        return ([buyItem], wasBought, status)
 
     def __notObtained(self):
         """Check if item is obtainable from quests or from the shop.
@@ -377,11 +410,35 @@ class ElementTooltip(BlocksTooltipData):
         """
         buyItems = []
         if self.__isInQuest():
-            status = STATUS.DO_MISSION
-            incompleteQuestItems = controller.dataAggregator.getIncompleteQuestItems()
-            questName = incompleteQuestItems[self._cType][self._item.getID()].name
-            buyItems.append({'type': BUY_ITEM_TYPE.WAYS_TO_BUY_MISSION,
-             'desc': _ms('#vehicle_customization:customization/tooltip/taskDescription', name=questName)})
+            questsData = controller.dataAggregator.getQuestData(self._cType, self._item)
+            isBelongToPM, operationID, isMain = getPersonalMissionDataFromToken(first(questsData).requiredToken)
+            if isBelongToPM:
+                status = STATUS.DO_OPERATION
+                operation = self.__eventsCache.personalMissions.getOperations()[operationID]
+                if isMain:
+                    label = TOOLTIPS.PERSONALMISSIONS_RARECAMOUFLAGE_NOTOBTAINED_MAININCOMPLETE_TITLE
+                    completedQuestsCount = len(operation.getCompletedQuests())
+                else:
+                    label = TOOLTIPS.PERSONALMISSIONS_RARECAMOUFLAGE_NOTOBTAINED_ADDINCOMPLETE_TITLE
+                    completedQuestsCount = len(operation.getFullCompletedQuests())
+                totalCount = operation.getQuestsCount()
+                countLabel = '%s / %s ' % (text_styles.stats(completedQuestsCount), totalCount)
+                text = text_styles.main(_ms(label, operationName=operation.getShortUserName(), countLabel=text_styles.main(countLabel)))
+                buyItems.append({'type': BUY_ITEM_TYPE.WAYS_TO_BUY_MISSION,
+                 'desc': text})
+            else:
+                status = STATUS.DO_MISSION
+                questsNames = ', '.join(map(lambda q: q.name, questsData[:self.__MAX_QUESTS_TO_SHOW]))
+                questsCount = len(questsData)
+                if questsCount == 1:
+                    descriptionKey = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_ONETASKDESCRIPTION
+                else:
+                    descriptionKey = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_TASKDESCRIPTION
+                description = [_ms(descriptionKey, name=questsNames)]
+                if questsCount > self.__MAX_QUESTS_TO_SHOW:
+                    description.append(text_styles.stats(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_TASKDESCRIPTION_OTHER, count=questsCount - self.__MAX_QUESTS_TO_SHOW)))
+                buyItems.append({'type': BUY_ITEM_TYPE.WAYS_TO_BUY_MISSION,
+                 'desc': ' '.join(description)})
         else:
             status = STATUS.AVAILABLE_FOR_BUY
             for duration in DURATION.ALL:
@@ -413,11 +470,8 @@ class QuestElementTooltip(ElementTooltip):
         return
 
     def _getObtainMethod(self):
-        if self.__isReceived:
-            return ([{'value': 0,
-               'isSale': False}], True, STATUS.NONE)
-        else:
-            return ([], False, STATUS.DO_MISSION)
+        return ([{'value': 0,
+           'isSale': False}], True, STATUS.NONE) if self.__isReceived else ([], False, STATUS.DO_MISSION)
 
     def _getItemData(self):
         data = super(QuestElementTooltip, self)._getItemData()
@@ -453,11 +507,11 @@ class QuestElementTooltip(ElementTooltip):
         return items
 
     def _packDurationBlock(self):
-        subBlocks = [formatters.packTextBlockData(text=text_styles.middleTitle('#vehicle_customization:timeLeft/title'))]
+        subBlocks = [formatters.packTextBlockData(text=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.TIMELEFT_TITLE))]
         if self.__isPermanent:
-            duration = _ms('#vehicle_customization:timeLeft/infinity')
+            duration = _ms(VEHICLE_CUSTOMIZATION.TIMELEFT_INFINITY)
         else:
-            dimension = _ms('#vehicle_customization:timeLeft/temporal/days')
-            duration = _ms('#vehicle_customization:timeLeft/temporal/used', time=self.__duration / 60 / 60 / 24, dimension=dimension)
+            dimension = _ms(VEHICLE_CUSTOMIZATION.TIMELEFT_TEMPORAL_DAYS)
+            duration = _ms(VEHICLE_CUSTOMIZATION.TIMELEFT_TEMPORAL_USED, time=self.__duration / 60 / 60 / 24, dimension=dimension)
         subBlocks.append(formatters.packTextBlockData(text_styles.main(duration)))
         return formatters.packBuildUpBlockData(subBlocks, 0, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE)

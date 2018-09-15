@@ -11,9 +11,6 @@ from helpers import time_utils
 
 class AlertMessageBlock(AlertMessageBlockMeta):
 
-    def __init__(self):
-        super(AlertMessageBlock, self).__init__()
-
     def updateTimeLeft(self, timeLeft):
         self.__update(timeLeft)
 

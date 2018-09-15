@@ -633,11 +633,7 @@ class VehicleStateController(IBattleController):
         :param stateID: id of state, listed within VEHICLE_VIEW_STATE
         :return: None or state value
         """
-        if stateID in self.__cachedStateValues:
-            return self.__cachedStateValues[stateID]
-        else:
-            return None
-            return None
+        return self.__cachedStateValues[stateID] if stateID in self.__cachedStateValues else None
 
     def refreshVehicleStateValue(self, stateID):
         """

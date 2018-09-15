@@ -586,15 +586,6 @@ class IRankedBattlesController(IGameController):
     def setLastRank(self, vehicle=None):
         raise NotImplementedError
 
-    def getAvailableBadges(self):
-        raise NotImplementedError
-
-    def getReceivedBadges(self):
-        raise NotImplementedError
-
-    def selectBadge(self, badgeID):
-        raise NotImplementedError
-
     @async
     @process
     def getLeagueData(self, callback):
@@ -744,4 +735,23 @@ class IBootcampController(IGameController):
         raise NotImplementedError
 
     def getLessonNum(self):
+        raise NotImplementedError
+
+    @property
+    def nation(self):
+        raise NotImplementedError
+
+    def getDefaultLobbySettings(self):
+        raise NotImplementedError
+
+    def getLobbySettings(self):
+        raise NotImplementedError
+
+    def setLobbySettings(self, value):
+        raise NotImplementedError
+
+    def updateLobbySettingsVisibility(self, element, value):
+        raise NotImplementedError
+
+    def getDisabledSettings(self):
         raise NotImplementedError

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/bootcamp/BootcampSettings.py
 import ResMgr
 from copy import deepcopy
-from constants import HINT_NAMES, HINT_TYPE
+from BootcampConstants import HINT_TYPE, HINT_NAMES
 from helpers.i18n import makeString
 from debug_utils_bootcamp import LOG_CURRENT_EXCEPTION_BOOTCAMP, LOG_ERROR_BOOTCAMP
 

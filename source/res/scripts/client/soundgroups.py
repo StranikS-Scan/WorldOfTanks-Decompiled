@@ -281,7 +281,6 @@ class SoundGroups(object):
         self.__enableStatus = SOUND_ENABLE_STATUS_DEFAULT
         self.__volumeByCategory = {}
         self.__masterVolume = 1.0
-        self.__isWindowVisible = BigWorld.isWindowVisible()
         self.__handleInside = None
         self.__handleOutside = None
         self.__activeStinger = None
@@ -353,7 +352,6 @@ class SoundGroups(object):
         else:
             self.__soundModes.setNationalMappingByMode(soundModeName)
         self.applyPreferences()
-        self.__muteCallbackID = BigWorld.callback(0.25, self.__muteByWindowVisibility)
         g_replayEvents.onMuteSound += self.__onReplayMute
         g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
         return
@@ -372,9 +370,6 @@ class SoundGroups(object):
         if player is not None and player.inputHandler is not None:
             player.inputHandler.onCameraChanged -= self.__onCameraChanged
         self.onVolumeChanged.clear()
-        if self.__muteCallbackID is not None:
-            BigWorld.cancelCallback(self.__muteCallbackID)
-            self.__muteCallbackID = None
         return
 
     def enableLobbySounds(self, enable):
@@ -418,7 +413,7 @@ class SoundGroups(object):
     def onEnvStart(self, environment):
         state = _envStateDefs.get(environment, None)
         if state is not None:
-            if len(self.__states) > 0:
+            if self.__states:
                 prev = self.__states[-1]
                 prevState = _envStateDefs[prev]
                 if not prevState[2]:
@@ -437,7 +432,7 @@ class SoundGroups(object):
                     LOG_DEBUG('Set UE state: %s' % prevState[1])
                     WWISE.WW_eventGlobalSync(prevState[1])
                 del self.__states[i]
-                if len(self.__states) > 0:
+                if self.__states:
                     prev = self.__states[-1]
                     prevState = _envStateDefs[prev]
                     if not prevState[2]:
@@ -454,10 +449,7 @@ class SoundGroups(object):
         self.onMusicVolumeChanged('ambient', self.__masterVolume, self.getVolume('ambient'))
 
     def getMasterVolume(self):
-        if self.__isWindowVisible:
-            return self.__masterVolume
-        else:
-            return 0.0
+        return self.__masterVolume if BigWorld.isWindowVisible() else 0.0
 
     def getEnableStatus(self):
         return self.__enableStatus
@@ -468,7 +460,7 @@ class SoundGroups(object):
         self.savePreferences()
 
     def setVolume(self, categoryName, volume, updatePrefs=True):
-        WWISE.WW_setRTCPGlobal('RTPC_ext_menu_volume_{}'.format(categoryName), volume * 100.0)
+        WWISE.WW_setRTPCBus('RTPC_ext_menu_volume_{}'.format(categoryName), volume * 100.0)
         if updatePrefs:
             self.__volumeByCategory[categoryName] = volume
             self.savePreferences()
@@ -506,8 +498,7 @@ class SoundGroups(object):
         return
 
     def applyPreferences(self):
-        if not self.__isWindowVisible:
-            WWISE.WW_setMasterVolume(0.0)
+        if not BigWorld.isWindowVisible():
             return
         self.setMasterVolume(self.__masterVolume)
         for categoryName in self.__volumeByCategory.iterkeys():
@@ -524,13 +515,6 @@ class SoundGroups(object):
     def restoreWWISEVolume(self):
         self.__muffled = False
         self.applyPreferences()
-
-    def __muteByWindowVisibility(self):
-        isWindowVisible = BigWorld.isWindowVisible()
-        if self.__isWindowVisible != isWindowVisible:
-            self.__isWindowVisible = isWindowVisible
-            self.applyPreferences()
-        self.__muteCallbackID = BigWorld.callback(0.25, self.__muteByWindowVisibility)
 
     def onAvatarReady(self):
         BigWorld.player().inputHandler.onCameraChanged += self.__onCameraChanged
@@ -553,12 +537,6 @@ class SoundGroups(object):
         MusicControllerWWISE.destroy()
 
     def preloadSoundGroups(self, arenaName):
-        from Account import PlayerAccount
-        isHangar = isinstance(BigWorld.player(), PlayerAccount)
-        if isHangar:
-            WWISE.WG_loadHangar()
-        else:
-            WWISE.WG_unloadHangar()
         MusicControllerWWISE.init(arenaName)
 
     def loadSoundBank(self, name):

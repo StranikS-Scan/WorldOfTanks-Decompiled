@@ -12,9 +12,6 @@ class StrongholdStorage(LocalStorage):
         super(StrongholdStorage, self).__init__()
         self._animationIdx = 0
 
-    def init(self):
-        super(StrongholdStorage, self).init()
-
     def fini(self):
         super(StrongholdStorage, self).fini()
         self.clear()

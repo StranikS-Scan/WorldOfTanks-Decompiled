@@ -7,8 +7,5 @@ class BCIntroFadeOutMeta(View):
     def finished(self):
         self._printOverrideError('finished')
 
-    def handleError(self, data):
-        self._printOverrideError('handleError')
-
-    def as_StartFadeoutS(self, animationTime):
-        return self.flashObject.as_StartFadeout(animationTime) if self._isDAAPIInited() else None
+    def as_startFadeoutS(self, animationTime):
+        return self.flashObject.as_startFadeout(animationTime) if self._isDAAPIInited() else None

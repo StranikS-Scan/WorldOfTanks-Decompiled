@@ -143,7 +143,7 @@ class Research(ResearchMeta):
         else:
             super(Research, self).invalidateInventory(data)
             result = self._data.invalidateInstalled()
-            if len(result):
+            if result:
                 self.as_setInstalledItemsS(result)
 
     def invalidatePrbState(self):
@@ -194,9 +194,6 @@ class Research(ResearchMeta):
         self.as_setWalletStatusS(self.wallet.componentsStatuses)
         self.setupContextHints(self.__getContextHintsID())
 
-    def _dispose(self):
-        super(Research, self)._dispose()
-
     def _resolveLoadCtx(self, ctx=None):
         rootCD = ctx['rootCD'] if ctx is not None and 'rootCD' in ctx else None
         if rootCD is None:
@@ -221,8 +218,5 @@ class Research(ResearchMeta):
             return RESEARCH_HINT_ID.TOP
         elif hasChildren:
             return RESEARCH_HINT_ID.ROOT
-        elif vehicle is not None and vehicle.isPremium:
-            return RESEARCH_HINT_ID.PREMIUM
         else:
-            return RESEARCH_HINT_ID.IGR_OR_FALLOUT
-            return
+            return RESEARCH_HINT_ID.PREMIUM if vehicle is not None and vehicle.isPremium else RESEARCH_HINT_ID.IGR_OR_FALLOUT

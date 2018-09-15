@@ -7,9 +7,6 @@ from gui.shared.formatters import getItemPricesVO
 
 class IconPriceDialog(IconPriceDialogMeta):
 
-    def __init__(self, meta, handler):
-        super(IconPriceDialog, self).__init__(meta, handler)
-
     def _populate(self):
         super(IconPriceDialog, self)._populate()
         self.as_setPriceLabelS(i18n.makeString(DIALOGS.REMOVECONFIRMATIONNOTREMOVABLEMONEY_MESSAGEPRICE))

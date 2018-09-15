@@ -50,10 +50,9 @@ class PremiumAccountBuyer(Processor):
         if withoutBenefits:
             return plugins.HtmlMessageConfirmator('buyPremWithoutBenefitsConfirmation', 'html_templates:lobby/dialogs', 'confirmBuyPremWithoutBenefeits', {'days': text_styles.stats(period),
              Currency.GOLD: text_styles.concatStylesWithSpace(text_styles.gold(BigWorld.wg_getGoldFormat(price)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))})
-        else:
-            localKey = 'premiumContinueConfirmation' if self.wasPremium else 'premiumBuyConfirmation'
-            return plugins.MessageConfirmator(localKey, ctx={'days': text_styles.stats(period),
-             Currency.GOLD: text_styles.concatStylesWithSpace(text_styles.gold(BigWorld.wg_getGoldFormat(price)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))})
+        localKey = 'premiumContinueConfirmation' if self.wasPremium else 'premiumBuyConfirmation'
+        return plugins.MessageConfirmator(localKey, ctx={'days': text_styles.stats(period),
+         Currency.GOLD: text_styles.concatStylesWithSpace(text_styles.gold(BigWorld.wg_getGoldFormat(price)), icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_2))})
 
 
 class GoldToCreditsExchanger(Processor):
@@ -123,3 +122,30 @@ class BattleResultsGetter(Processor):
     def _request(self, callback):
         LOG_DEBUG('Make server request to get battle results')
         BigWorld.player().battleResultsCache.get(self.__arenaUniqueID, lambda code, battleResults: self._response(code, callback, ctx=battleResults))
+
+
+class BadgesSelector(Processor):
+
+    def __init__(self, badges=None):
+        """
+        Processor that selects or removes badges.
+        :param badges: list of badges IDs (None for removal)
+        """
+        if badges is None:
+            plugs = ()
+            badges = ()
+        else:
+            plugs = (plugins.BadgesValidator(badges),)
+        super(BadgesSelector, self).__init__(plugs)
+        self.__badges = badges
+        return
+
+    def _getMessagePrefix(self):
+        pass
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('%s/server_error/%s' % (self._getMessagePrefix(), errStr), defaultSysMsgKey='%s/server_error' % self._getMessagePrefix())
+
+    def _request(self, callback):
+        LOG_DEBUG('Make server request to select badges', self.__badges)
+        BigWorld.player().badges.selectBadges(self.__badges, lambda resID, code: self._response(code, callback))

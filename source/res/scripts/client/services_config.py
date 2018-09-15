@@ -12,6 +12,6 @@ def getClientServicesConfig(manager):
     import helpers
     from skeletons.connection_mgr import IConnectionManager
     manager.addInstance(IConnectionManager, connection_mgr.ConnectionManager(), finalizer='fini')
-    manager.addConfig(gui.getGuiServicesConfig)
     manager.addConfig(account_helpers.getAccountHelpersConfig)
+    manager.addConfig(gui.getGuiServicesConfig)
     manager.addConfig(helpers.getHelperServicesConfig)

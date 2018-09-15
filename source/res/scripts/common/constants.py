@@ -19,7 +19,7 @@ else:
     IS_BASEAPP = BigWorld.component in ('base', 'service')
     IS_WEB = False
 
-CURRENT_REALM = 'RU'
+CURRENT_REALM = 'CT'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -55,7 +55,6 @@ assert sum([IS_CHINA, IS_KOREA, IS_SINGAPORE]) <= 1
 IS_SHOW_SERVER_STATS = not IS_CHINA
 IS_CAT_LOADED = False
 IS_TUTORIAL_ENABLED = True
-IS_BOOTCAMP_ENABLED = True
 LEAKS_DETECTOR_MAX_EXECUTION_TIME = 2.0
 IS_IGR_ENABLED = IS_KOREA or IS_CHINA
 SERVER_TICK_LENGTH = 0.1
@@ -499,6 +498,26 @@ class ACCOUNT_TYPE2:
     FIRST_FLAG = 1
     LAST_FLAG = 16384
     ACCOUNT_TYPE_DEFAULT = 16777216
+    EXHIBITION = 67108864
+    TOURNAMENT = 83886080
+    DEMONSTRATOR = 100663296
+    DEMONSTRATOR_EXP = 117440512
+    EXHIBITION_CLAN = 134217728
+    BOOTCAMP = 184549376
+    PLAYER_ROAMING = 1677721600
+    MODERATOR = 65536
+    ADMIN = 131072
+    ADMIN_MODERATOR = 196608
+    MODERATOR_500 = 458752
+    MODERATOR_250 = 524288
+    MODERATOR_750 = 589824
+    ADMIN_500 = 655360
+    ADMIN_250 = 720896
+    ADMIN_750 = 786432
+    ADMIN_MODERATOR_500 = 851968
+    ADMIN_MODERATOR_250 = 917504
+    ADMIN_MODERATOR_750 = 983040
+    AOGAS = 1114112
 
     @staticmethod
     def getPrimaryGroup(type):
@@ -794,10 +813,12 @@ class EVENT_TYPE:
     PERSONAL_QUEST = 6
     REF_SYSTEM_QUEST = 7
     POTAPOV_QUEST = 8
+    PERSONAL_MISSION = 8
     GROUP = 9
     TUTORIAL = 11
     MOTIVE_QUEST = 12
     RANKED_QUEST = 13
+    ELEN_QUEST = 14
     NAME_TO_TYPE = {'battleQuest': BATTLE_QUEST,
      'tokenQuest': TOKEN_QUEST,
      'personalQuest': PERSONAL_QUEST,
@@ -806,28 +827,32 @@ class EVENT_TYPE:
      'group': GROUP,
      'tutorial': TUTORIAL,
      'motiveQuest': MOTIVE_QUEST,
-     'rankedQuest': RANKED_QUEST}
+     'rankedQuest': RANKED_QUEST,
+     'elenQuest': ELEN_QUEST}
     TYPE_TO_NAME = dict(zip(NAME_TO_TYPE.values(), NAME_TO_TYPE.keys()))
     QUEST_RANGE = (BATTLE_QUEST,
      TOKEN_QUEST,
      PERSONAL_QUEST,
      REF_SYSTEM_QUEST,
      POTAPOV_QUEST,
+     PERSONAL_MISSION,
      GROUP,
      MOTIVE_QUEST,
      RANKED_QUEST)
     LIKE_BATTLE_QUESTS = (BATTLE_QUEST,
      PERSONAL_QUEST,
      POTAPOV_QUEST,
+     PERSONAL_MISSION,
      MOTIVE_QUEST,
      RANKED_QUEST)
     LIKE_TOKEN_QUESTS = (TOKEN_QUEST, REF_SYSTEM_QUEST)
     ONE_BONUS_QUEST = (TOKEN_QUEST,
      REF_SYSTEM_QUEST,
      POTAPOV_QUEST,
+     PERSONAL_MISSION,
      RANKED_QUEST)
     QUEST_WITH_DYNAMIC_CLIENT_DATA = (PERSONAL_QUEST,)
-    SHARED_QUESTS = (POTAPOV_QUEST, MOTIVE_QUEST)
+    SHARED_QUESTS = (POTAPOV_QUEST, PERSONAL_MISSION, MOTIVE_QUEST)
     QUESTS_WITH_SHOP_BUTTON = (BATTLE_QUEST, TOKEN_QUEST, PERSONAL_QUEST)
 
 
@@ -849,6 +874,11 @@ class QUEST_RUN_FLAGS:
 
 DEFAULT_QUEST_START_TIME = 1
 DEFAULT_QUEST_FINISH_TIME = 4102444800L
+PERSONAL_QUEST_FREE_TOKEN_NAME = 'free_award_list'
+PERSONAL_QUEST_FREE_TOKEN_EXPIRE = 4104777660L
+PERSONAL_QUEST_PAWN_COST = 1
+PERSONAL_QUEST_FINAL_PAWN_COST = 4
+PERSONAL_QUEST_FREE_TOKENS_LIMIT = 21
 DAMAGE_INFO_INDICES = dict(((x[1], x[0]) for x in enumerate(DAMAGE_INFO_CODES)))
 CLIENT_INACTIVITY_TIMEOUT = 40
 
@@ -1048,6 +1078,7 @@ class REQUEST_COOLDOWN:
     GM_KEEP_ALIVE = 60.0
     SEND_INVITATION_COOLDOWN = 1.0
     RUN_QUEST = 1.0
+    PAWN_FREE_AWARD_LIST = 1.0
 
 
 IS_SHOW_INGAME_HELP_FIRST_TIME = False
@@ -1242,6 +1273,14 @@ class USER_SERVER_SETTINGS:
     HIDE_MARKS_ON_GUN = 500
     GAME_EXTENDED = 59
     EULA_VERSION = 54
+    ARCADE_AIM_1 = 43
+    ARCADE_AIM_2 = 44
+    ARCADE_AIM_3 = 45
+    ARCADE_AIM_4 = 63
+    SNIPER_AIM_1 = 46
+    SNIPER_AIM_2 = 47
+    SNIPER_AIM_3 = 48
+    SNIPER_AIM_4 = 64
     _ALL = (HIDE_MARKS_ON_GUN, EULA_VERSION)
 
     @classmethod
@@ -1292,12 +1331,12 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  40: 'Keyboard section settings',
  41: 'Keyboard section settings',
  42: 'Keyboard section settings',
- 43: 'Arcade aim setting',
- 44: 'Arcade aim setting',
- 45: 'Arcade aim setting',
- 46: 'Sniper aim setting',
- 47: 'Sniper aim setting',
- 48: 'Sniper aim setting',
+ USER_SERVER_SETTINGS.ARCADE_AIM_1: 'Arcade aim setting',
+ USER_SERVER_SETTINGS.ARCADE_AIM_2: 'Arcade aim setting',
+ USER_SERVER_SETTINGS.ARCADE_AIM_3: 'Arcade aim setting',
+ USER_SERVER_SETTINGS.SNIPER_AIM_1: 'Sniper aim setting',
+ USER_SERVER_SETTINGS.SNIPER_AIM_2: 'Sniper aim setting',
+ USER_SERVER_SETTINGS.SNIPER_AIM_3: 'Sniper aim setting',
  49: 'Enemy marker setting',
  50: 'Dead marker setting',
  51: 'Ally marker setting',
@@ -1312,8 +1351,8 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  60: 'Fallout',
  61: 'Tutorial',
  62: '[Free]',
- 63: 'Arcade aim setting',
- 64: 'Sniper aim setting',
+ USER_SERVER_SETTINGS.ARCADE_AIM_4: 'Arcade aim setting',
+ USER_SERVER_SETTINGS.SNIPER_AIM_4: 'Sniper aim setting',
  65: '[Free]',
  66: '[Free]',
  67: '[Free]',
@@ -1333,6 +1372,7 @@ INT_USER_SETTINGS_KEYS = {USER_SERVER_SETTINGS.VERSION: 'Settings version',
  82: 'feedback damage indicator',
  83: 'feedback damage log',
  84: 'feedback battle events',
+ 85: 'ui storage, used for preserving first entry flags etc',
  USER_SERVER_SETTINGS.HIDE_MARKS_ON_GUN: 'Hide marks on gun'}
 
 class WG_GAMES:
@@ -1669,158 +1709,6 @@ SHELL_TYPES_LIST = (SHELL_TYPES.HOLLOW_CHARGE,
  SHELL_TYPES.ARMOR_PIERCING,
  SHELL_TYPES.ARMOR_PIERCING_HE,
  SHELL_TYPES.ARMOR_PIERCING_CR)
-
-class BOOTCAMP_BATTLE_ACTION:
-    PLAYER_MOVE = 0
-    PLAYER_SHOOT = 1
-    PLAYER_SPOTTED = 2
-    PLAYER_HIT_VEHICLE = 3
-    PLAYER_OBSERVED_ACTION = 4
-    SET_SCENERY_CONSTANT = 5
-
-
-class HINT_TYPE:
-    HINT_MOVE = 0
-    HINT_MOVE_TURRET = 1
-    HINT_SHOOT = 2
-    HINT_ADVANCED_SNIPER = 3
-    HINT_AIM = 4
-    HINT_SNIPER = 5
-    HINT_WEAK_POINTS = 6
-    HINT_MESSAGE_AVOID = 7
-    HINT_MESSAGE_PLAYER_SPOTTED = 8
-    HINT_SECTOR_CLEAR = 9
-    HINT_START_NARRATIVE = 10
-    HINT_MESSAGE_CAPTURE_THE_BASE = 11
-    HINT_MESSAGE_RESET_PROGRESS = 12
-    HINT_REPAIR_TRACK = 13
-    HINT_HEAL_CREW = 14
-    HINT_USE_EXTINGUISHER = 15
-    HINT_SHOOT_ALLY = 16
-    HINT_PLAYER_DETECT_ENEMIES = 17
-    HINT_EXIT_GAME_AREA = 18
-    HINT_MESSAGE_ENEMY_CAN_HIDE = 19
-    HINT_MESSAGE_SNEAK = 20
-    HINT_SNIPER_ON_DISTANCE = 21
-    HINT_ROTATE_LOBBY = 22
-    HINT_TARGET_LOCK = 23
-    HINT_WAIT_RELOAD = 24
-    HINT_NO_MOVE = 25
-    HINT_NO_MOVE_TURRET = 26
-    HINT_SHOT_WHILE_MOVING = 27
-    HINT_MOVE_TO_MARKER = 28
-    HINT_SECONDARY_SNIPER = 29
-    HINT_USELESS_CONSUMABLE = 30
-    HINT_LOW_HP = 31
-    HINT_UNLOCK_TARGET = 32
-    HINT_B3_YOU_ARE_DETECTED = 33
-    HINT_B3_FALL_BACK = 34
-    HINT_B3_FOLIAGE = 35
-    HINT_B3_DO_CAPTURE = 36
-    HINT_B3_CAPTURE_IN_PROGRESS = 37
-    HINT_B3_ENEMIES_HIDDEN = 38
-    HINT_B3_CAPTURE_RESET = 39
-    HINT_B3_FOLIAGE2 = 40
-    HINT_B3_FLANK = 41
-    HINT_B3_CAPTURE_TOGETHER = 42
-    HINT_SNIPER_LEVEL0 = 43
-    HINT_CUSTOM = 44
-    HINTS_B3_CAPTURE = (HINT_B3_DO_CAPTURE,
-     HINT_B3_CAPTURE_IN_PROGRESS,
-     HINT_B3_CAPTURE_RESET,
-     HINT_B3_CAPTURE_TOGETHER)
-    HINTS_B3_DETECTED = (HINT_B3_YOU_ARE_DETECTED,)
-    HINTS_ON_DETECT = (HINT_MESSAGE_AVOID,
-     HINT_MESSAGE_SNEAK,
-     HINT_MESSAGE_ENEMY_CAN_HIDE,
-     HINT_MESSAGE_RESET_PROGRESS)
-    BATTLE_HINTS = (HINT_MOVE,
-     HINT_MOVE_TURRET,
-     HINT_SHOOT,
-     HINT_SNIPER,
-     HINT_SNIPER_LEVEL0,
-     HINT_ADVANCED_SNIPER,
-     HINT_MESSAGE_AVOID,
-     HINT_MESSAGE_PLAYER_SPOTTED,
-     HINT_MESSAGE_SNEAK,
-     HINT_MESSAGE_ENEMY_CAN_HIDE,
-     HINT_MESSAGE_CAPTURE_THE_BASE,
-     HINT_MESSAGE_RESET_PROGRESS,
-     HINT_WEAK_POINTS,
-     HINT_SHOOT_ALLY,
-     HINT_REPAIR_TRACK,
-     HINT_USE_EXTINGUISHER,
-     HINT_HEAL_CREW,
-     HINT_AIM,
-     HINT_EXIT_GAME_AREA,
-     HINT_START_NARRATIVE,
-     HINT_SECTOR_CLEAR,
-     HINT_PLAYER_DETECT_ENEMIES,
-     HINT_SNIPER_ON_DISTANCE,
-     HINT_TARGET_LOCK,
-     HINT_WAIT_RELOAD,
-     HINT_NO_MOVE,
-     HINT_NO_MOVE_TURRET,
-     HINT_SHOT_WHILE_MOVING,
-     HINT_MOVE_TO_MARKER,
-     HINT_SECONDARY_SNIPER,
-     HINT_USELESS_CONSUMABLE,
-     HINT_CUSTOM,
-     HINT_LOW_HP,
-     HINT_UNLOCK_TARGET,
-     HINT_B3_YOU_ARE_DETECTED,
-     HINT_B3_FALL_BACK,
-     HINT_B3_FOLIAGE,
-     HINT_B3_DO_CAPTURE,
-     HINT_B3_CAPTURE_IN_PROGRESS,
-     HINT_B3_ENEMIES_HIDDEN,
-     HINT_B3_CAPTURE_RESET,
-     HINT_B3_FOLIAGE2,
-     HINT_B3_FLANK,
-     HINT_B3_CAPTURE_TOGETHER)
-    LOBBY_HINTS = (HINT_ROTATE_LOBBY,)
-    HINTS_ON_START = (HINT_START_NARRATIVE,)
-    SECONDARY_HINTS = (HINT_WAIT_RELOAD,
-     HINT_SHOOT_ALLY,
-     HINT_EXIT_GAME_AREA,
-     HINT_AIM,
-     HINT_SECONDARY_SNIPER,
-     HINT_NO_MOVE,
-     HINT_NO_MOVE_TURRET,
-     HINT_SHOT_WHILE_MOVING,
-     HINT_MOVE_TO_MARKER,
-     HINT_USELESS_CONSUMABLE,
-     HINT_LOW_HP,
-     HINT_UNLOCK_TARGET)
-
-
-HINT_NAMES = ('hintMove', 'hintMoveTurret', 'hintShoot', 'hintAdvancedSniper', 'hintAim', 'hintSniper', 'hintWeakPoints', 'hintMessageAvoid', 'hintPlayerSpotted', 'hintSectorClear', 'hintStartNarrative', 'hintCaptureTheBase', 'hintResetProgress', 'hintRepairTrack', 'hintHealCrew', 'hintUseExtinguisher', 'hintAllyShoot', 'hintPlayerDetectEnemies', 'hintExitGameArea', 'hintEnemyCanHide', 'hintSneak', 'hintSniperOnDistance', 'hintRotateLobby', 'hintTargetLock', 'hintWaitReload', 'hintNoMove', 'hintNoMoveTurret', 'hintShootWhileMoving', 'hintMoveToMarker', 'hintSecondarySniper', 'hintUselessConsumable', 'hintLowHP', 'hintTargetUnLock', 'hintB3PlayerDetected', 'hintB3FallBack', 'hintB3Foliage', 'hintB3DoCapture', 'hintB3CaptureInProgress', 'hintB3EnemiesHidden', 'hintB3CaptureReset', 'hintB3Foliage2', 'hintB3Flank', 'hintB3CaptureTogether', 'hintSniperLevel0')
-
-class BOOTCAMP_START_TYPE:
-    AUTOMATICALLY = 0
-    PLAYER_CHOICE = 1
-    PLAYER_MANUAL = 2
-
-
-class PLAYER_COHORT_TYPE:
-    UNDEFINED = 0
-    NEW_PLAYER = 1
-    NEW_PAYING_PLAYER = 2
-    WG_PLAYER = 3
-    WG_PAYING_PLAYER = 4
-    WOT_REFERRALS = 5
-    WOT_PAYING_REFERRALS = 6
-    WOT_PLAYER = 7
-
-
-class BOOTCAMP_BATTLE_RESULT_MESSAGE:
-    DRAW = 0
-    VICTORY = 1
-    DEFEAT = 2
-    FAILURE = 3
-
-
-BOOTCAMP_MESSAGES_NAMES = ('msgTankGarageI', 'msgTankGarageII', 'msgTankGarageIII', 'msgTankGarageIV', 'msgTankGarageV', 'msgTank1', 'msgCredits', 'msgTankExperience', 'msgUnlockModule', 'msgTankCrew', 'msgSkillsPerks', 'msgUnlockNewVehicle', 'msgTank2', 'msgConsumables', 'msgEquipment', 'msgGold', 'msgPremium', 'msgMissionAccomplished', 'msgBootcampGraduate')
 BATTLE_RESULT_WAITING_TIMEOUT = 0.1
 SHELL_TYPES_INDICES = dict(((value, index) for index, value in enumerate(SHELL_TYPES_LIST)))
 
@@ -1877,3 +1765,11 @@ class WGC_STATE:
     WAITING_TOKEN_1 = 3
     DISABLED = 4
     ERROR = 5
+    LOGGEDIN = 6
+
+
+class TARGET_LOST_FLAGS:
+    INVALID = 1
+    KILLED_BY_ME = 2
+    KILLED_BY_OTHERS = 4
+    UNREACHABLE = 8

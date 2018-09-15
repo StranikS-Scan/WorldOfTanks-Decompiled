@@ -18,16 +18,16 @@ class BCLoginQueue(LoginQueueWindowMeta):
     def prbDispatcher(self):
         return None
 
-    def __updateData(self, title, message, cancelLabel):
-        self.__title = title
-        self.__message = message
-        self.__cancelLabel = cancelLabel
+    def onAccountBecomeNonPlayer(self):
+        self.destroy()
 
-    def __updateTexts(self):
-        self.as_setTitleS(self.__title)
-        self.as_setMessageS(self.__message)
-        self.as_setCancelLabelS(self.__cancelLabel)
-        self.as_showAutoLoginBtnS(False)
+    @process
+    def onCancelClick(self):
+        if self.prbDispatcher is not None:
+            yield self.prbDispatcher.doLeaveAction(LeavePrbAction())
+        self.fireEvent(BCLoginEvent(BCLoginEvent.CANCEL_WAITING), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.destroy()
+        return
 
     def _populate(self):
         super(BCLoginQueue, self)._populate()
@@ -42,16 +42,16 @@ class BCLoginQueue(LoginQueueWindowMeta):
         g_playerEvents.onAccountBecomeNonPlayer -= self.onAccountBecomeNonPlayer
         super(BCLoginQueue, self)._dispose()
 
-    def onAccountBecomeNonPlayer(self):
-        self.destroy()
+    def __updateData(self, title, message, cancelLabel):
+        self.__title = title
+        self.__message = message
+        self.__cancelLabel = cancelLabel
 
-    @process
-    def onCancelClick(self):
-        if self.prbDispatcher is not None:
-            yield self.prbDispatcher.doLeaveAction(LeavePrbAction())
-        self.fireEvent(BCLoginEvent(BCLoginEvent.CANCEL_WAITING), scope=EVENT_BUS_SCOPE.LOBBY)
-        self.destroy()
-        return
+    def __updateTexts(self):
+        self.as_setTitleS(self.__title)
+        self.as_setMessageS(self.__message)
+        self.as_setCancelLabelS(self.__cancelLabel)
+        self.as_showAutoLoginBtnS(False)
 
     def __onUpdateArgs(self, event):
         ctx = event.ctx

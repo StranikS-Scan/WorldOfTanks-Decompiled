@@ -19,7 +19,7 @@ class StoreTableDataProvider(DAAPIDataProvider):
         return None
 
     def clearList(self):
-        while len(self.__list):
+        while self.__list:
             self.__list.pop()
 
         self.__list = None

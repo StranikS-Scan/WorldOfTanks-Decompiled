@@ -12,9 +12,6 @@ from skeletons.gui.clans import IClanController
 class StrongholdUnitRequestProcessor(IUnitRequestProcessor):
     clansCtrl = dependency.descriptor(IClanController)
 
-    def __init__(self):
-        super(StrongholdUnitRequestProcessor, self).__init__()
-
     def init(self):
         REQUEST_TYPE = settings.REQUEST_TYPE
         self.__unitContextRemap = {REQUEST_TYPE.LEAVE: StrongholdLeaveCtx,

@@ -106,6 +106,8 @@ def __readBonus_vehicle(bonus, _name, section):
     if section.has_key('vehCompDescr'):
         vehCompDescr = section['vehCompDescr'].asString.decode('base64')
         vehTypeCompDescr = vehicles.VehicleDescr(vehCompDescr).type.compactDescr
+    elif section.has_key('vehTypeCompDescr'):
+        vehTypeCompDescr = section['vehTypeCompDescr'].asInt
     else:
         nationID, innationID = vehicles.g_list.getIDsByName(section.asString)
         vehTypeCompDescr = vehicles.makeIntCompactDescrByID('vehicle', nationID, innationID)
@@ -276,7 +278,8 @@ def __readBonus_dossier(bonus, _name, section):
         operation = section['type'].asString
     if operation not in ('add', 'append', 'set'):
         raise Exception('Invalid dossier record %s' % operation)
-    value = section['value'].asInt
+    strValue = section['value'].asString
+    value = int(strValue) if strValue not in ('timestamp',) else strValue
     unique = False
     if section.has_key('unique'):
         unique = section['unique'].asBool

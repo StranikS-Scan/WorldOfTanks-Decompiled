@@ -547,7 +547,7 @@ class FriendsGroupsConverter(IContactsConverter):
 
     def hasContacts(self):
         for frGroupConverter in self._groups.itervalues():
-            if len(frGroupConverter.getContacts()) > 0:
+            if frGroupConverter.getContacts():
                 return True
 
         return False

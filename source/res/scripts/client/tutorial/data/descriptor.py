@@ -34,10 +34,7 @@ class DescriptorData(object):
         return result
 
     def getChapterIdx(self, chapterID):
-        if chapterID in self.__idMapping.keys():
-            return self.__idMapping[chapterID]
-        else:
-            return -1
+        return self.__idMapping[chapterID] if chapterID in self.__idMapping.keys() else -1
 
     def getNumberOfChapters(self):
         return len(self.__contents)
@@ -112,7 +109,7 @@ class DescriptorData(object):
             if chapter.hasBonus():
                 if chapter.isBonusReceived(completed):
                     bit = ChapterProgress.PROGRESS_FLAG_COMPLETED
-                elif failed is not -1 and chapter.isBonusReceived(failed):
+                elif failed != -1 and chapter.isBonusReceived(failed):
                     bit = ChapterProgress.PROGRESS_FLAG_FAILED
                 else:
                     bit = ChapterProgress.PROGRESS_FLAG_UNDEFINED

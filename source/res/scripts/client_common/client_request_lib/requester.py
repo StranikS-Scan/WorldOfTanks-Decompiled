@@ -1958,6 +1958,262 @@ class RblbAccessor(BaseAccessor):
         return self._data_source.user_ranked_position(callback, fields=fields)
 
 
+class WGElenAccessor(BaseAccessor):
+    """
+    Events Leaderboards accessor
+    
+    Access wgelen data from `data_source` instance
+    
+    :Example:
+    
+    >>> class SomeClass(object):
+    ...     wgelen = RequestDescriptor(WGElenAccessor)
+    ...
+    >>> requester = SomeClass(DataAccessor())
+    >>> requester.wgelen.join_event(1)
+    """
+
+    def join_event(self, callback, event_id, fields=None):
+        """
+        join user to event and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgelen.join_event(callback, 1)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param event_id: event id to join
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type fields: list of strings
+        """
+        return self._data_source.join_event(callback, event_id, fields=fields)
+
+    def leave_event(self, callback, event_id, fields=None):
+        """
+        leave user from event and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgelen.leave_event(callback, 1)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param event_id: leave from event id
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type fields: list of strings
+        """
+        return self._data_source.leave_event(callback, event_id, fields=fields)
+
+    def get_events_data(self, callback, fields=None):
+        """
+        get events static settings and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgelen.get_events_data(callback)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type fields: list of strings
+        """
+        return self._data_source.get_events_data(callback, fields=fields)
+
+    def get_hangar_flag(self, callback, fields=None):
+        """
+        get events state for hangar flag
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgelen.get_hangar_flag(callback)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type fields: list of strings
+        """
+        return self._data_source.get_hangar_flag(callback, fields=fields)
+
+    def get_leaderboard(self, callback, event_id, page_number, leaderboard_id, fields=None):
+        """
+        get leaderboard
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgelen.get_leaderboard(callback, 1, 12, 232)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param event_id: leaderboard event id
+        :param page_number: page number of leaderboard
+        :param leaderboard_id: leaderboard id
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type fields: list of strings
+        """
+        return self._data_source.get_leaderboard(callback, event_id, page_number, leaderboard_id, fields=fields)
+
+    def get_my_event_top(self, callback, event_id, fields=None):
+        """
+        get my events top
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgelen.get_my_event_top(callback, 1)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param event_id: event id for get top
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type fields: list of strings
+        """
+        return self._data_source.get_my_event_top(callback, event_id, fields=fields)
+
+    def get_my_leaderboard_position(self, callback, event_id, leaderboard_id, fields=None):
+        """
+        get my leaderboard position
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgelen.get_my_leaderboard_position(callback, 1)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param event_id: event id for get top
+        :param leaderboard_id: leaderboard id for my info
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type fields: list of strings
+        """
+        return self._data_source.get_my_leaderboard_position(callback, event_id, leaderboard_id, fields=fields)
+
+    def get_player_data(self, callback, fields=None):
+        """
+        get player dynamic data
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgelen.get_my_leaderboard_position(callback)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type fields: list of strings
+        """
+        return self._data_source.get_player_data(callback, fields=fields)
+
+
 class WgrmsAccessor(BaseAccessor):
     """
     Rating Management System accessor
@@ -2076,6 +2332,7 @@ class Requester(object):
     spa = RequestDescriptor(SpaAccessor)
     wgsh = RequestDescriptor(WgshAccessor)
     rblb = RequestDescriptor(RblbAccessor)
+    wgelen = RequestDescriptor(WGElenAccessor)
     wgrms = RequestDescriptor(WgrmsAccessor)
 
     @classmethod

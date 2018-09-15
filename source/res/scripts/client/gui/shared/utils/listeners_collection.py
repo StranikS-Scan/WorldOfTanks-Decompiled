@@ -27,7 +27,7 @@ class ListenersCollection(IListenersCollection):
 
     def clear(self):
         LOG_DEBUG('Listeners collection was cleared: ', self)
-        while len(self._listeners):
+        while self._listeners:
             self._listeners.pop()
 
         self._clazz = None
@@ -67,11 +67,7 @@ class ListenersCollection(IListenersCollection):
             LOG_DEBUG('Listener not found.', listener)
 
     def getListenersIterator(self):
-        if self._mutualListeners is not None:
-            return itertools.chain(iter(self._listeners), self._mutualListeners.getListenersIterator())
-        else:
-            return iter(self._listeners)
-            return
+        return itertools.chain(iter(self._listeners), self._mutualListeners.getListenersIterator()) if self._mutualListeners is not None else iter(self._listeners)
 
     def _setListenerClass(self, listenerClass):
         self._clazz = listenerClass

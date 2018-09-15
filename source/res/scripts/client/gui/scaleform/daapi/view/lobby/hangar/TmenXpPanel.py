@@ -9,9 +9,6 @@ from CurrentVehicle import g_currentVehicle
 
 class TmenXpPanel(TmenXpPanelMeta):
 
-    def __init__(self):
-        super(TmenXpPanel, self).__init__()
-
     def _populate(self):
         super(TmenXpPanel, self)._populate()
         g_currentVehicle.onChanged += self._onVehicleChange
@@ -27,7 +24,7 @@ class TmenXpPanel(TmenXpPanelMeta):
         result = yield VehicleTmenXPAccelerator(vehicle, bool(selected)).request()
         if not result.success:
             self.as_setTankmenXpPanelS(vehicle.isElite, vehicle.isXPToTman)
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def _onVehicleChange(self):

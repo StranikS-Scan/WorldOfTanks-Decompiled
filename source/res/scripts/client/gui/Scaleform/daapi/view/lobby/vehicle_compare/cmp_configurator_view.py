@@ -226,10 +226,7 @@ class _FullCrewSkillsCompletenessChecker(_DefaultSkillCompletenessChecker):
 
     def isCompleted(self, levels, crew):
         isAllSkillsAre100 = super(_FullCrewSkillsCompletenessChecker, self).isCompleted(levels, crew)
-        if isAllSkillsAre100:
-            return len(levels) == len(crew)
-        else:
-            return False
+        return len(levels) == len(crew) if isAllSkillsAre100 else False
 
 
 class _CurrentCrewMonitor(object):

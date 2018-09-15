@@ -42,10 +42,7 @@ class Worker(threading.Thread):
                 LOG_CURRENT_EXCEPTION()
 
     def __repr__(self):
-        if not self._terminated:
-            return '%s(name = %s)' % (self.__class__.__name__, self.name)
-        else:
-            return '%s(terminated)' % self.__class__.__name__
+        return '%s(name = %s)' % (self.__class__.__name__, self.name) if not self._terminated else '%s(terminated)' % self.__class__.__name__
 
 
 class ThreadPool(object):

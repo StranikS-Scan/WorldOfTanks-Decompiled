@@ -3,7 +3,7 @@
 import cPickle
 import Event
 from constants import PREBATTLE_UPDATE, PREBATTLE_ACCOUNT_STATE, PREBATTLE_TEAM_STATE
-from debug_utils import *
+from debug_utils import LOG_DEBUG_DEV
 
 class ClientPrebattle(object):
     __onUpdate = {PREBATTLE_UPDATE.ROSTER: '_ClientPrebattle__onRosterReceived',

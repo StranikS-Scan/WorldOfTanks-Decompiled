@@ -136,7 +136,7 @@ class SettingsWindow(SettingsWindowMeta):
     def _update(self):
         self.as_setDataS(self.__getSettings())
         newSettings = getNewSettings()
-        if len(newSettings):
+        if newSettings:
             self.as_setCountersDataS(newSettings)
         self.as_updateVideoSettingsS(self.__currentSettings)
         self.as_openTabS(_getLastTabIndex())
@@ -238,8 +238,7 @@ class SettingsWindow(SettingsWindowMeta):
 
             DialogsInterface.showI18nConfirmDialog('soundSpeakersPresetDoesNotMatch', callback=apply)
             return False
-        else:
-            return True
+        return True
 
     def startVOIPTest(self, isStart):
         LOG_DEBUG('Vivox test: %s' % str(isStart))

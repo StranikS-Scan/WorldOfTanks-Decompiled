@@ -605,8 +605,6 @@
           <unlocks>
             <turret>	Turret_2_M41_Bulldog	  <cost>	15250	</cost>
             </turret>
-            <gun>	_76mm_Gun_T91E5	  <cost>	11500	</cost>
-            </gun>
           </unlocks>
           <armor>
             <armor_1>	31.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -651,63 +649,6 @@
             <tiling>	0.655 0.655 0.000000 0.000000	</tiling>
           </camouflage>
         </_76mm_Gun_M32>
-        <_76mm_Gun_T91E5>	shared	  <maxAmmo>	60	</maxAmmo>
-          <unlocks>
-            <vehicle>	A89_T54E1	  <cost>	231000	</cost>
-            </vehicle>
-          </unlocks>
-          <armor>
-            <armor_1>	31.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	31.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	20	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
-          </pitchLimits>
-          <clip>
-            <count>	6	</count>
-            <rate>	30	</rate>
-          </clip>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	40	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.2	</aimingTime>
-          <models>
-            <undamaged>	vehicles/american/A97_M41_Bulldog/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/american/A97_M41_Bulldog/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/american/A97_M41_Bulldog/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A97_M41_Bulldog/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A97_M41_Bulldog/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.000165309 0.00810295 1.86104	</rayStart>
-              <rayEnd>	-0.0251966 -0.00532813 1.85998	</rayEnd>
-              <rayUp>	0.079 0.076 4	</rayUp>
-              <size>	0.405	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <camouflage>
-            <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_76mm_Gun_T91E5>
       </guns>
       <models>
         <undamaged>	vehicles/american/A97_M41_Bulldog/normal/lod0/Turret_01.model	</undamaged>
@@ -837,59 +778,6 @@
             <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
           </camouflage>
         </_76mm_Gun_M32>
-        <_76mm_Gun_T91E5>	shared	  <maxAmmo>	72	</maxAmmo>
-          <armor>
-            <armor_1>	31.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	31.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	20	</gun>
-          </armor>
-          <pitchLimits>
-            <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 1 8	</maxPitch>
-          </pitchLimits>
-          <clip>
-            <count>	6	</count>
-            <rate>	30	</rate>
-          </clip>
-          <turretYawLimits>	-180 180	</turretYawLimits>
-          <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.4	</shotDispersionRadius>
-          <reloadTime>	36	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <aimingTime>	2.1	</aimingTime>
-          <models>
-            <undamaged>	vehicles/american/A97_M41_Bulldog/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/american/A97_M41_Bulldog/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/american/A97_M41_Bulldog/crash/lod0/Gun_04.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A97_M41_Bulldog/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A97_M41_Bulldog/collision_client/Gun_04.model	</collisionModelClient>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.00016531 0.00810295 1.90123	</rayStart>
-              <rayEnd>	-0.0267303 0.018309 1.90017	</rayEnd>
-              <rayUp>	0.079 0.076 4	</rayUp>
-              <size>	0.4	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <camouflage>
-            <tiling>	0.7 0.7 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_76mm_Gun_T91E5>
         <_76mm_Gun_M32_late>	shared	  <maxAmmo>	65	</maxAmmo>
           <armor>
             <armor_1>	31.8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -1083,11 +971,6 @@
     </detailed>
   </physics>
   <clientAdjustmentFactors>
-    <guns>
-      <_76mm_Gun_T91E5>
-        <delta>	1.23502	</delta>
-      </_76mm_Gun_T91E5>
-    </guns>
     <armour>	0.817789876	</armour>
   </clientAdjustmentFactors>
   <effects>

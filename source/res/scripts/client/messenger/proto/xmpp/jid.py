@@ -98,9 +98,6 @@ class BareJID(object):
 class JID(BareJID):
     __slots__ = ('_resource',)
 
-    def __init__(self, jid=None):
-        super(JID, self).__init__(jid)
-
     def setJID(self, jid):
         self._resource = super(JID, self).setJID(jid)
 

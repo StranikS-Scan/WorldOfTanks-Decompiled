@@ -125,7 +125,7 @@ class LightManager:
         self.__periodicTimerID = None
         blackLights = LightManager.LOCATIONS_MASKS.keys()
         blackLights.remove(LightManager.ALL_LIGHTS)
-        if len(self.__runningEffects) > 0:
+        if self.__runningEffects:
             lightEffect = self.__runningEffects[-1]
             for oneLightAction in lightEffect.lightActions.values():
                 if oneLightAction.lightDescription in blackLights:

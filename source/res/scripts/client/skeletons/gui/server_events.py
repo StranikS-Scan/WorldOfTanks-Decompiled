@@ -10,6 +10,7 @@ class IEventsCache(object):
     onProgressUpdated = None
     onEventsVisited = None
     onProfileVisited = None
+    onPersonalQuestsVisited = None
 
     def init(self):
         raise NotImplementedError
@@ -31,10 +32,6 @@ class IEventsCache(object):
         raise NotImplementedError
 
     @property
-    def falloutQuestsProgress(self):
-        raise NotImplementedError
-
-    @property
     def randomQuestsProgress(self):
         raise NotImplementedError
 
@@ -43,15 +40,11 @@ class IEventsCache(object):
         raise NotImplementedError
 
     @property
-    def fallout(self):
-        raise NotImplementedError
-
-    @property
     def questsProgress(self):
         raise NotImplementedError
 
     @property
-    def potapov(self):
+    def personalMissions(self):
         raise NotImplementedError
 
     @property
@@ -82,7 +75,7 @@ class IEventsCache(object):
     def getRankedQuests(self, filterFunc=None):
         raise NotImplementedError
 
-    def getAllQuests(self, filterFunc=None, includePotapovQuests=False):
+    def getAllQuests(self, filterFunc=None, includePersonalMissions=False):
         raise NotImplementedError
 
     def getActions(self, filterFunc=None):

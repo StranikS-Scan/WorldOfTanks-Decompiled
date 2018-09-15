@@ -16,10 +16,7 @@ class BCRibbonsPanel(BattleRibbonsPanel):
 
     def _shouldShowRibbon(self, ribbon):
         ribbonName = ribbon.getType()
-        if ribbonName in self._ribbonsSettings:
-            return super(BCRibbonsPanel, self)._shouldShowRibbon(ribbon)
-        else:
-            return False
+        return super(BCRibbonsPanel, self)._shouldShowRibbon(ribbon) if ribbonName in self._ribbonsSettings else False
 
     def _dispose(self):
         super(BCRibbonsPanel, self)._dispose()

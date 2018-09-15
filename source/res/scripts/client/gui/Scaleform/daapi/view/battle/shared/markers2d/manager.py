@@ -142,11 +142,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         :param name: unique name of plugin.
         :return: instance of plugin or None.
         """
-        if self.__plugins is not None:
-            return self.__plugins.getPlugin(name)
-        else:
-            return
-            return
+        return self.__plugins.getPlugin(name) if self.__plugins is not None else None
 
     def startPlugins(self):
         sessionProvider = dependency.instance(IBattleSessionProvider)

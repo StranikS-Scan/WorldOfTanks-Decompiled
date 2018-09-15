@@ -49,9 +49,7 @@ class ViewComponentsController(IViewComponentsController):
 
 
 class ComponentsBridgeError(Exception):
-
-    def __init__(self, message):
-        super(ComponentsBridgeError, self).__init__(message)
+    pass
 
 
 class _ComponentsBridge(object):
@@ -203,10 +201,7 @@ class _ComponentsBridge(object):
             return None
         else:
             indexes = self.__indexes[ctrlID]
-            if componentID in indexes:
-                return indexes.index(componentID)
-            return None
-            return None
+            return indexes.index(componentID) if componentID in indexes else None
 
 
 def createComponentsBridge():

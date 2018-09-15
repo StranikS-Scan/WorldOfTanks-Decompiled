@@ -7,9 +7,6 @@ class GuiDirReader(object):
     SCALEFORM_STARTUP_VIDEO_MASK = 'video/%s'
     VIDEO_EXTENSION = 'usm'
 
-    def __init__(self):
-        super(GuiDirReader, self).__init__()
-
     @staticmethod
     def getAvailableIntroVideoFiles():
         ds = ResMgr.openSection(GuiDirReader.SCALEFORM_STARTUP_VIDEO_PATH)

@@ -19,7 +19,7 @@ def _doResponse(callback, result, status_code, response_code):
 
 
 EXAMPLES = {}
-SUCCESS_STATUSES = [200, 201]
+SUCCESS_STATUSES = [200, 201, 304]
 
 def convert_data(data_mapping, paginated=False):
 

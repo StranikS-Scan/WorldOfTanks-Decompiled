@@ -13,6 +13,7 @@ from gui import makeHtmlString
 from gui.Scaleform.daapi.view.battle.shared.crosshair.settings import SHOT_RESULT_TO_ALT_COLOR
 from gui.Scaleform.daapi.view.battle.shared.crosshair.settings import SHOT_RESULT_TO_DEFAULT_COLOR
 from gui.Scaleform.daapi.view.battle.shared.formatters import getHealthPercent
+from gui.Scaleform.genConsts.CROSSHAIR_CONSTANTS import CROSSHAIR_CONSTANTS
 from gui.Scaleform.genConsts.GUN_MARKER_VIEW_CONSTANTS import GUN_MARKER_VIEW_CONSTANTS as _VIEW_CONSTANTS
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID, CROSSHAIR_VIEW_ID, SHELL_QUANTITY_UNKNOWN
@@ -27,6 +28,7 @@ from gui.shared.utils.plugins import IPlugin
 from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.game_control import IBootcampController
 from PlayerEvents import g_playerEvents
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.shared.utils.key_mapping import getReadableKey
@@ -63,10 +65,7 @@ def chooseSetting(viewID):
     
     If there are no special settings for a view - fall back to arcade settings.
     """
-    if viewID in _SETTINGS_VIEWS:
-        return viewID
-    else:
-        return _SETTINGS_KEY_TO_VIEW_ID[AIM.ARCADE]
+    return viewID if viewID in _SETTINGS_VIEWS else _SETTINGS_KEY_TO_VIEW_ID[AIM.ARCADE]
 
 
 def _makeSettingsVO(settingsCore, *keys):
@@ -243,6 +242,7 @@ class EventBusPlugin(CrosshairPlugin):
 class AmmoPlugin(CrosshairPlugin):
     """Plugins listens all desired changes of ammo and updates UI panel if it needs."""
     __slots__ = ('__guiSettings', '__burstSize')
+    bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self, parentObj):
         super(AmmoPlugin, self).__init__(parentObj)
@@ -278,6 +278,8 @@ class AmmoPlugin(CrosshairPlugin):
             isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
             self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, False)
         self.__setReloadingState(ctrl.getGunReloadingState())
+        if self.bootcampController.isInBootcamp():
+            self._parentObj.as_setNetVisibleS(CROSSHAIR_CONSTANTS.VISIBLE_NET)
 
     def __setReloadingState(self, state):
         valueType = state.getValueType()
@@ -715,7 +717,8 @@ class SiegeModePlugin(CrosshairPlugin):
             self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.SIEGE_MODE)
         elif self.__siegeState == _SIEGE_STATE.DISABLED:
             self._parentObj.as_setNetTypeS(NET_TYPE_OVERRIDE.DISABLED)
-        self._parentObj.as_setNetVisibleS(self.__siegeState not in _SIEGE_STATE.SWITCHING)
+        visibleMask = CROSSHAIR_CONSTANTS.VISIBLE_ALL if self.__siegeState not in _SIEGE_STATE.SWITCHING else 0
+        self._parentObj.as_setNetVisibleS(visibleMask)
 
 
 class TrajectoryViewHintPlugin(CrosshairPlugin):
@@ -851,7 +854,7 @@ class TrajectoryViewHintPlugin(CrosshairPlugin):
     def __getHint():
         hintTextLeft = None
         keyName = getReadableKey(CommandMapping.CMD_CM_TRAJECTORY_VIEW)
-        if keyName is not '':
+        if keyName:
             hintTextLeft = i18n.makeString(INGAME_GUI.TRAJECTORYVIEW_HINT_ALTERNATEMODELEFT)
             hintTextRight = i18n.makeString(INGAME_GUI.TRAJECTORYVIEW_HINT_ALTERNATEMODERIGHT)
         else:

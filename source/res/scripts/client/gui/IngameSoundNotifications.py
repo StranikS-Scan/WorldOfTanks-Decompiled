@@ -174,7 +174,7 @@ class IngameSoundNotifications(object):
         else:
             queue = self.__soundQueues[category]
             time = BigWorld.time()
-            while len(queue) > 0:
+            while queue:
                 soundPath, timeout, minTimeBetweenEvents, vehicleIdToBind, checkFn, sndPos = queue[0]
                 del queue[0]
                 if vehicleIdToBind is not None:

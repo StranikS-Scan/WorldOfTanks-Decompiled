@@ -3,6 +3,4 @@
 from gui.Scaleform.daapi.view.meta.FullStatsMeta import FullStatsMeta
 
 class FullStatsComponent(FullStatsMeta):
-
-    def __init__(self):
-        super(FullStatsComponent, self).__init__()
+    pass

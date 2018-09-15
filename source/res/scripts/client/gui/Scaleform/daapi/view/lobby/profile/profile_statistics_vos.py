@@ -149,16 +149,23 @@ class ProfileAllStatisticsVO(ProfileDictStatisticsVO):
 
     def _getHeaderData(self, data):
         targetData = data[0]
+        accountDossier = data[1]
+        numTotalRandomVehicles = self._getListOfUniqueVehicles(targetData, accountDossier)
         return (PUtils.getTotalBattlesHeaderParam(targetData, PROFILE.SECTION_STATISTICS_SCORES_TOTALBATTLES, PROFILE.PROFILE_PARAMS_TOOLTIP_BATTLESCOUNT),
          PUtils.packLditItemData(self._formattedWinsEfficiency, PROFILE.SECTION_STATISTICS_SCORES_TOTALWINS, PROFILE.PROFILE_PARAMS_TOOLTIP_WINS, 'wins40x32.png'),
          _packAvgDmgLditItemData(self._avgDmg),
          _packAvgXPLditItemData(self._avgXP),
          PUtils.packLditItemData(self._maxXP_formattedStr, PROFILE.SECTION_STATISTICS_SCORES_MAXEXPERIENCE, PROFILE.PROFILE_PARAMS_TOOLTIP_MAXEXP, 'maxExp40x32.png', PUtils.getVehicleRecordTooltipData(targetData.getMaxXpVehicle)),
-         PUtils.packLditItemData(style.makeMarksOfMasteryText(BigWorld.wg_getIntegralFormat(targetData.getMarksOfMastery()[3]), len(targetData.getVehicles())), PROFILE.SECTION_STATISTICS_SCORES_COOLSIGNS, PROFILE.PROFILE_PARAMS_TOOLTIP_MARKOFMASTERY, 'markOfMastery40x32.png'))
+         PUtils.packLditItemData(style.makeMarksOfMasteryText(BigWorld.wg_getIntegralFormat(targetData.getMarksOfMastery()[3]), numTotalRandomVehicles), PROFILE.SECTION_STATISTICS_SCORES_COOLSIGNS, PROFILE.PROFILE_PARAMS_TOOLTIP_MARKOFMASTERY, 'markOfMastery40x32.png'))
 
     def _getDetailedData(self, data):
         targetData = data[0]
         return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser), _getChartsFullData(targetData))
+
+    def _getListOfUniqueVehicles(self, targetData, accountDossier):
+        epicRandomVehicles = set(accountDossier.getEpicRandomStats().getVehicles().keys())
+        randomVehicles = set(targetData.getVehicles().keys())
+        return len(randomVehicles.union(epicRandomVehicles))
 
 
 class ProfileHistoricalStatisticsVO(ProfileDictStatisticsVO):
@@ -330,6 +337,11 @@ class ProfileEpicRandomStatisticsVO(ProfileAllStatisticsVO):
         targetData = data[0]
         stats = targetData.getBattlesStats()
         return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser), _formatChartsData((_getVehStatsByTypes(stats), _getVehStatsByNation(stats), tuple())))
+
+    def _getListOfUniqueVehicles(self, targetData, accountDossier):
+        randomVehicles = set(accountDossier.getRandomStats().getVehicles().keys())
+        epicRandomVehicles = set(targetData.getVehicles().keys())
+        return len(randomVehicles.union(epicRandomVehicles))
 
 
 _VO_MAPPING = {PROFILE_DROPDOWN_KEYS.ALL: ProfileAllStatisticsVO,

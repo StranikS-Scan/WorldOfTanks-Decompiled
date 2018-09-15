@@ -242,12 +242,11 @@ class _ExchangeDialogMeta(I18nConfirmDialogMeta):
         """
         if resToExchange <= 0:
             return (CONFIRM_EXCHANGE_DIALOG_TYPES.EXCHANGE_NOT_NEEED_STATE, text_styles.success(self._makeString(I18N_EXCHANGENONEEDTEXT_KEY)))
-        elif not self.__isEnoughGold(resToExchange):
+        if not self.__isEnoughGold(resToExchange):
             goldToExchange = self.__getGoldToExchange(resToExchange)
             fmtGold = ''.join((text_styles.gold(BigWorld.wg_getGoldFormat(goldToExchange)), icons.gold()))
             return (CONFIRM_EXCHANGE_DIALOG_TYPES.NOT_ENOUGH_GOLD_STATE, text_styles.error(self._makeString(I18N_GOLDNOTENOUGHTEXT_KEY, {'gold': fmtGold})))
-        else:
-            return (CONFIRM_EXCHANGE_DIALOG_TYPES.NORMAL_STATE, '')
+        return (CONFIRM_EXCHANGE_DIALOG_TYPES.NORMAL_STATE, '')
 
     def __isEnoughGold(self, resToExchange):
         """
@@ -540,10 +539,7 @@ class ExchangeXpMeta(_ExchangeDialogMeta):
         item = self.itemsCache.items.getItemByCD(self.getTypeCompDescr())
         stats = self.itemsCache.items.stats
         unlockStats = UnlockStats(stats.unlocks, stats.vehiclesXPs, stats.freeXP)
-        if item.isUnlocked:
-            return 0
-        else:
-            return self._xpCost - unlockStats.getVehTotalXP(self._parentCD)
+        return 0 if item.isUnlocked else self._xpCost - unlockStats.getVehTotalXP(self._parentCD)
 
     def _getCurrencyIconStr(self):
         """

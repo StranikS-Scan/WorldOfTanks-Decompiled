@@ -1,13 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/BootcampGarageLessons.py
 from debug_utils_bootcamp import LOG_CURRENT_EXCEPTION_BOOTCAMP
-from CurrentVehicle import g_currentVehicle
 from helpers import dependency
+from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
-from items import vehicles
-from Bootcamp import g_bootcamp
 from nations import NAMES as NATION_NAMES
+from ResMgr import openSection
 XML_LESSONS_PATH = 'scripts/bootcamp_docs/garage_lessons/lessons.xml'
 XML_CONDITIONS_PATH = 'scripts/bootcamp_docs/garage_lessons/conditions.xml'
 XML_BATTLE_RESULTS_PATH = 'scripts/bootcamp_docs/garage_lessons/battle_results.xml'
@@ -90,8 +89,6 @@ class LESSON_PARAM:
 
 
 def readConfigFile(path):
-    config = None
-    from ResMgr import openSection
     config = openSection(path)
     if config is None:
         raise Exception("Can't open config file (%s)" % path)
@@ -152,6 +149,7 @@ class GarageLessons:
 
 
 class GarageActions:
+    bootcampCtrl = dependency.descriptor(IBootcampController)
 
     def __init__(self):
         self.__conditions = {}
@@ -171,7 +169,7 @@ class GarageActions:
 
     def readMessageNationData(self, nationSection, currentAction):
         currentNation = {}
-        default_nation = NATION_NAMES[g_bootcamp.nation]
+        default_nation = NATION_NAMES[self.bootcampCtrl.nation]
         _FillValue(ACTION_PARAM.NATION_ID, 'asString', default=default_nation)(nationSection, currentNation)
         _FillValue(ACTION_PARAM.PRESET, 'asString', default='')(nationSection, currentNation)
         _FillValue(ACTION_PARAM.ICON, 'asString', default='')(nationSection, currentNation)
@@ -268,9 +266,6 @@ class Condition(object):
 
 class Module(Condition):
 
-    def __init__(self, conditionDict):
-        super(Module, self).__init__(conditionDict)
-
     def checkCondition(self, nationData):
         vehicleAlias = self._conditionDict['vehicle']
         vehicleCD = nationData[vehicleAlias]
@@ -284,25 +279,15 @@ class Module(Condition):
             vehicle = itemsCache.items.getVehicle(vehInvID)
             unlocks = itemsCache.items.stats.unlocks
             unlockedItemsGetter = g_techTreeDP.getUnlockedVehicleItems(vehicle, unlocks)
-            if nationData['module'] in unlockedItemsGetter:
-                return True
-            else:
-                return False
-        elif state == 'inventory':
+            return nationData['module'] in unlockedItemsGetter
+        if state == 'inventory':
             vehicle = itemsCache.items.getVehicle(vehInvID)
             item = itemsCache.items.getItemByCD(nationData['module'])
-            if item.isInstalled(vehicle):
-                return True
-            else:
-                return False
-        else:
-            return False
+            return item.isInstalled(vehicle)
+        return False
 
 
 class Vehicle(Condition):
-
-    def __init__(self, conditionDict):
-        super(Vehicle, self).__init__(conditionDict)
 
     def checkCondition(self, nationData):
         itemsCache = dependency.instance(IItemsCache)
@@ -312,16 +297,10 @@ class Vehicle(Condition):
         vehicle = itemsCache.items.getItemByCD(vehicleCD)
         if state == 'unlock':
             return vehicle.isUnlocked
-        elif state == 'inventory':
-            return vehicle.invID != -1
-        else:
-            return False
+        return vehicle.invID != -1 if state == 'inventory' else False
 
 
 class Perk(Condition):
-
-    def __init__(self, conditionDict):
-        super(Perk, self).__init__(conditionDict)
 
     def checkCondition(self, nationData):
         vehicleAlias = self._conditionDict['vehicle']
@@ -331,7 +310,7 @@ class Perk(Condition):
         vehicle = itemsCache.items.getItemByCD(vehicleCD)
         if vehicle.invID == -1:
             return False
-        elif state == 'skills':
+        if state == 'skills':
             searchPerk = nationData['perk']
             for slotIdx, tman in vehicle.crew:
                 if tman.isInTank and tman.vehicleInvID != vehicle.invID:
@@ -342,14 +321,9 @@ class Perk(Condition):
                             return True
 
             return False
-        else:
-            return False
 
 
 class Consumable(Condition):
-
-    def __init__(self, conditionDict):
-        super(Consumable, self).__init__(conditionDict)
 
     def checkCondition(self, nationData):
         vehicleAlias = self._conditionDict['vehicle']
@@ -359,16 +333,14 @@ class Consumable(Condition):
         vehicle = itemsCache.items.getItemByCD(vehicleCD)
         if vehicle.invID == -1:
             return False
-        elif state == 'inventory':
-            consumables = vehicle.equipment.regularConsumables
-            for eq in consumables:
-                if eq is not None:
-                    return True
+        else:
+            if state == 'inventory':
+                consumables = vehicle.equipment.regularConsumables
+                for eq in consumables:
+                    if eq is not None:
+                        return True
 
             return False
-        else:
-            return False
-            return
 
     def recheckOnItemSync(self):
         return True
@@ -376,9 +348,6 @@ class Consumable(Condition):
 
 class Equipment(Condition):
 
-    def __init__(self, conditionDict):
-        super(Equipment, self).__init__(conditionDict)
-
     def checkCondition(self, nationData):
         vehicleAlias = self._conditionDict['vehicle']
         vehicleCD = nationData[vehicleAlias]
@@ -387,24 +356,19 @@ class Equipment(Condition):
         vehicle = itemsCache.items.getItemByCD(vehicleCD)
         if vehicle.invID == -1:
             return False
-        elif state == 'inventory':
-            optionalDevices = vehicle.descriptor.optionalDevices
-            searchEquipment = nationData['equipment']
-            for device in optionalDevices:
-                if device is not None and device.compactDescr == searchEquipment:
-                    return True
+        else:
+            if state == 'inventory':
+                optionalDevices = vehicle.descriptor.optionalDevices
+                searchEquipment = nationData['equipment']
+                for device in optionalDevices:
+                    if device is not None and device.compactDescr == searchEquipment:
+                        return True
 
             return False
-        else:
-            return False
-            return
 
 
 class BattleType(Condition):
 
-    def __init__(self, conditionDict):
-        super(BattleType, self).__init__(conditionDict)
-
     def checkCondition(self, nationData):
         vehicleAlias = self._conditionDict['vehicle']
         vehicleCD = nationData[vehicleAlias]
@@ -413,24 +377,20 @@ class BattleType(Condition):
         vehicle = itemsCache.items.getItemByCD(vehicleCD)
         if vehicle.invID == -1:
             return False
-        elif state == 'menu':
+        if state == 'menu':
             from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
             try:
                 items = battle_selector_items.getItems()
-                if items._BattleSelectorItems__items['random'].isSelected():
+                if items.isSelected('random'):
                     return True
             except:
                 return False
 
-            return False
-        else:
-            return False
+        return False
 
 
 class HasView(Condition):
-
-    def __init__(self, conditionDict):
-        super(HasView, self).__init__(conditionDict)
+    bootcampCtrl = dependency.descriptor(IBootcampController)
 
     def checkCondition(self, nationData):
         vehicleAlias = self._conditionDict['vehicle']
@@ -440,10 +400,10 @@ class HasView(Condition):
         vehicle = itemsCache.items.getItemByCD(vehicleCD)
         if vehicle.invID == -1:
             return False
-        from Bootcamp import g_bootcamp
         name = 'hide' + state
-        if name in g_bootcamp.getLobbySettings():
-            if not g_bootcamp.getLobbySettings()[name]:
+        settings = self.bootcampCtrl.getLobbySettings()
+        if name in settings:
+            if not settings[name]:
                 return True
         return False
 

@@ -31,9 +31,6 @@ class FeatureElement(PyExtension):
     def getDefaultData(cls):
         return None
 
-    def parseTag(self, pyGlooxTag):
-        super(FeatureElement, self).parseTag(pyGlooxTag)
-
 
 class CreatedByElement(PyExtension):
 

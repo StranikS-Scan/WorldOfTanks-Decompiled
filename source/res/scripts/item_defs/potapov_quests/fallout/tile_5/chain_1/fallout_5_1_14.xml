@@ -2,7 +2,7 @@
   <quests>
     <potapovQuest>
       <enabled>	true	</enabled>
-      <id>	fallout_5_1_14_main	</id>
+      <id>	fallout_5_1_144_main	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
         <postBattle>
@@ -34,7 +34,14 @@
     </potapovQuest>
     <potapovQuest>
       <enabled>	true	</enabled>
-      <id>	fallout_5_1_14_add	</id>
+      <id>	fallout_5_1_14_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions></conditions>
+      <bonus></bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	fallout_5_1_144_add	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
         <postBattle>
@@ -56,6 +63,13 @@
       <bonus>
         <credits>	150000	</credits>
       </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	fallout_5_1_14_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions></conditions>
+      <bonus></bonus>
     </potapovQuest>
   </quests>
 </fallout_5_1_14.xml>

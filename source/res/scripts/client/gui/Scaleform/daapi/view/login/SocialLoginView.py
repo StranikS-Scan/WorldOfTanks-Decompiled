@@ -53,7 +53,7 @@ class SocialLoginView(LoginView):
     def _showForm(self):
         socialList = self.loginManager.getAvailableSocialNetworks()
         if self.__lastLoginType in socialList and self._rememberUser:
-            self.as_showSocialFormS(len(self.loginManager.getPreference('token2')) != 0, self.__userName, makeHtmlString('html_templates:socialNetworkLogin', 'transparentLogo', {'socialNetwork': self.__lastLoginType}), self.__lastLoginType)
+            self.as_showSocialFormS(bool(self.loginManager.getPreference('token2')), self.__userName, makeHtmlString('html_templates:socialNetworkLogin', 'transparentLogo', {'socialNetwork': self.__lastLoginType}), self.__lastLoginType)
         else:
             self.as_showSimpleFormS(True, self.__setSocialDataList(socialList))
 
@@ -107,14 +107,8 @@ class SocialLoginView(LoginView):
 
     @staticmethod
     def __getTooltipHeader(socialNetworkName):
-        if socialNetworkName == SOCIAL_NETWORKS.WGNI:
-            return _ms('#tooltips:login/bySocial/' + SOCIAL_NETWORKS.WGNI + '/header')
-        else:
-            return _ms('#tooltips:login/bySocial/header')
+        return _ms('#tooltips:login/bySocial/' + SOCIAL_NETWORKS.WGNI + '/header') if socialNetworkName == SOCIAL_NETWORKS.WGNI else _ms('#tooltips:login/bySocial/header')
 
     @staticmethod
     def __getTooltipBody(socialNetworkName):
-        if socialNetworkName == SOCIAL_NETWORKS.WGNI:
-            return _ms('#tooltips:login/bySocial/' + SOCIAL_NETWORKS.WGNI + '/body')
-        else:
-            return _ms('#tooltips:login/bySocial/body') % {'social': _ms('#tooltips:login/social/' + socialNetworkName)}
+        return _ms('#tooltips:login/bySocial/' + SOCIAL_NETWORKS.WGNI + '/body') if socialNetworkName == SOCIAL_NETWORKS.WGNI else _ms('#tooltips:login/bySocial/body') % {'social': _ms('#tooltips:login/social/' + socialNetworkName)}

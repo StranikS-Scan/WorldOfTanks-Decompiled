@@ -119,7 +119,7 @@ class ExchangeXPWindow(ExchangeXpWindowMeta):
 
         xpToExchange = min(commonXp, exchangeXP)
         result = yield FreeXPExchanger(xpToExchange, vehTypeCompDescrs, freeConversion=self.__xpForFree).request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
         if result.success:
             self.destroy()

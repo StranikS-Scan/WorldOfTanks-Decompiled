@@ -12,9 +12,6 @@ class SfSalesProxy(SfLobbyProxy):
          GUI_EFFECT_NAME.SET_TRIGGER: effects_player.SetTriggerEffect()}
         super(SfSalesProxy, self).__init__(effects_player.EffectsPlayer(effects))
 
-    def fini(self):
-        super(SfSalesProxy, self).fini()
-
     def getViewSettings(self):
         return {}
 

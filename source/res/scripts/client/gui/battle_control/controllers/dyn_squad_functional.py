@@ -1,12 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/dyn_squad_functional.py
-import BigWorld
 import CommandMapping
 import Keys
 from account_helpers.settings_core.settings_constants import SOUND
 from constants import IS_CHINA
 from debug_utils import LOG_DEBUG
-from gui.Scaleform.locale.READABLE_KEY_NAMES import READABLE_KEY_NAMES
 from gui.app_loader.decorators import sf_battle
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
@@ -29,13 +27,10 @@ def _getVIOPState(key):
     """
     if IS_CHINA:
         return 'withoutVOIP'
-    elif key == Keys.KEY_NONE:
+    if key == Keys.KEY_NONE:
         return 'specifyVOIP'
     settingsCore = dependency.instance(ISettingsCore)
-    if settingsCore.getSetting(SOUND.VOIP_ENABLE):
-        return 'disableVOIP'
-    else:
-        return 'enableVOIP'
+    return 'disableVOIP' if settingsCore.getSetting(SOUND.VOIP_ENABLE) else 'enableVOIP'
 
 
 class DynSquadArenaController(object):
@@ -121,7 +116,7 @@ class DynSquadArenaController(object):
     def __handleModifiedInvitesList(self, added, changed, deleted, inviteDataReceiver, callback):
         allChangedInvites = set(added) | set(changed) | set(deleted)
         arenaUniqueID = avatar_getter.getArenaUniqueID()
-        if len(allChangedInvites) > 0:
+        if allChangedInvites:
             for invite in inviteDataReceiver(allChangedInvites):
                 if invite.isSameBattle(arenaUniqueID) and invite.isActive():
                     callback(invite)
@@ -150,9 +145,6 @@ class _DynSquadActionMessage(ClientActionMessage):
 
 
 class DynSquadMessagesController(DynSquadArenaController):
-
-    def __init__(self):
-        super(DynSquadMessagesController, self).__init__()
 
     def _inviteReceived(self, invite):
         self.__sendMessage('#messenger:client/dynSquad/inviteReceived', creator=invite.creator)
@@ -192,9 +184,6 @@ class DynSquadMessagesController(DynSquadArenaController):
 
     def _someoneJoinedMySquad(self, squadNum, receiver):
         self.__sendMessage('#messenger:client/dynSquad/inviteAccepted/user', squadNum=squadNum, receiver=receiver)
-
-    def destroy(self):
-        super(DynSquadMessagesController, self).destroy()
 
     def __sendMessage(self, key, **kwargs):
         message = makeString(key, **kwargs)

@@ -9,7 +9,7 @@ import BigWorld
 BARREL_DEBUG_ENABLED = False
 
 def _createReloadEffectDesc(type, dataSection):
-    if len(dataSection.values()) == 0:
+    if not dataSection.values():
         return None
     elif type == 'SimpleReload':
         return _SimpleReloadDesc(dataSection)
@@ -210,7 +210,7 @@ class LoopSequence(CallbackDelayer):
         self.__sequence = []
 
     def __start(self):
-        if len(self.__sequence) > 0:
+        if self.__sequence:
             callTime, _ = self.__sequence[0]
             dt = callTime - BigWorld.time()
             if dt < 0.0:
@@ -218,7 +218,7 @@ class LoopSequence(CallbackDelayer):
             self.delayCallback(dt, self.__startCallback)
 
     def __startCallback(self):
-        if len(self.__sequence) == 0:
+        if not self.__sequence:
             return None
         else:
             invokeTime, name = self.__sequence.pop(0)
@@ -227,7 +227,7 @@ class LoopSequence(CallbackDelayer):
             if BARREL_DEBUG_ENABLED:
                 LOG_DEBUG('LoopSequence::__startCallback time = {0} {1}'.format(BigWorld.time(), name))
             playByName(name)
-            if len(self.__sequence) > 0:
+            if self.__sequence:
                 callTime, _ = self.__sequence[0]
                 dt = callTime - BigWorld.time()
                 if dt < 0.0:

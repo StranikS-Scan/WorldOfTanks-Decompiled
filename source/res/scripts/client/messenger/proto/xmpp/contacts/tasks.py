@@ -129,7 +129,7 @@ class SeqTaskQueue(object):
     def init(self, *queue):
         self.__queue = list(queue)
         self.__wait = []
-        if len(self.__queue):
+        if self.__queue:
             for index, task in enumerate(self.__queue):
                 assert isinstance(task, SeqTask), 'Task must be SeqTask'
                 if task.isRequired():
@@ -361,8 +361,8 @@ class ContactTaskQueue(object):
                 toRun.add(jid)
                 self.__queue[jid].append(task)
 
-            for jid in toRun:
-                self._doRunFirstTask(jid)
+            for taskJID in toRun:
+                self._doRunFirstTask(taskJID)
 
     def _handleTasksResult(self, jid, generator):
         tasks = self.__queue[jid]
@@ -392,7 +392,7 @@ class ContactTaskQueue(object):
                 self.removeTasks(jid)
                 break
 
-        for jid in toRun:
-            self._doRunFirstTask(jid)
+        for taskJID in toRun:
+            self._doRunFirstTask(taskJID)
 
         return isHandled

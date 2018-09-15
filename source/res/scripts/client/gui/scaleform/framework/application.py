@@ -19,6 +19,11 @@ class DAAPIRootBridge(object):
     __slots__ = ('__pyScript', '__rootPath', '__initCallback', '__isInited')
 
     def __init__(self, rootPath='root', initCallback='registerApplication'):
+        """
+        :param rootPath: path to flashObject
+        :param initCallback: name of function called from flash after initialization is completed. If string is empty
+        bridge will register flashObject immediately
+        """
         self.__pyScript = None
         self.__rootPath = rootPath
         self.__initCallback = initCallback
@@ -28,14 +33,18 @@ class DAAPIRootBridge(object):
     def clear(self):
         self.__isInited = False
         if self.__pyScript:
-            self.__pyScript.removeExternalCallback(self.__initCallback, self._onSWFInited)
+            if self.__initCallback:
+                self.__pyScript.removeExternalCallback(self.__initCallback, self._onSWFInited)
             self.__pyScript.destroy()
             self.__pyScript = None
         return
 
     def setPyScript(self, pyScript):
         self.__pyScript = pyScript
-        self.__pyScript.addExternalCallback(self.__initCallback, self._onSWFInited)
+        if self.__initCallback:
+            self.__pyScript.addExternalCallback(self.__initCallback, self._onSWFInited)
+        else:
+            self._onSWFInited()
 
     def _onSWFInited(self):
         if self.__isInited:
@@ -76,6 +85,7 @@ class SFApplication(Flash, ApplicationMeta):
         self._gameInputMgr = None
         self._cacheMgr = None
         self._tutorialMgr = None
+        self._bootcampMgr = None
         self._imageManager = None
         self.__initialized = False
         self.__ns = appNS
@@ -141,6 +151,10 @@ class SFApplication(Flash, ApplicationMeta):
         return self._tutorialMgr
 
     @property
+    def bootcampManager(self):
+        return self._bootcampMgr
+
+    @property
     def waitingManager(self):
         return None
 
@@ -192,7 +206,7 @@ class SFApplication(Flash, ApplicationMeta):
         self.as_registerManagersS()
         libraries = self._getRequiredLibraries()
         if libraries:
-            self.as_setLibrariesListS(libraries)
+            self.as_loadLibrariesS(libraries)
         self._addGameCallbacks()
         self.addListener(GameEvent.CHANGE_APP_RESOLUTION, self.__onAppResolutionChanged, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.updateScale()
@@ -250,6 +264,9 @@ class SFApplication(Flash, ApplicationMeta):
         if self._tutorialMgr is not None:
             self._tutorialMgr.destroy()
             self._tutorialMgr = None
+        if self._bootcampMgr is not None:
+            self._bootcampMgr.destroy()
+            self._bootcampMgr = None
         if self.__daapiBridge is not None:
             self.__daapiBridge.clear()
             self.__daapiBridge = None
@@ -352,6 +369,10 @@ class SFApplication(Flash, ApplicationMeta):
     def setTutorialMgr(self, flashObject):
         self._tutorialMgr.setFlashObject(flashObject)
 
+    def setBootcampMgr(self, flashObject):
+        if self._bootcampMgr and flashObject:
+            self._bootcampMgr.setFlashObject(flashObject)
+
     def setImageManager(self, flashObject):
         if self._imageManager and flashObject:
             self._imageManager.setFlashObject(flashObject)
@@ -403,6 +424,7 @@ class SFApplication(Flash, ApplicationMeta):
         self._gameInputMgr = self._createGameInputManager()
         self._cacheMgr = self._createCacheManager()
         self._tutorialMgr = self._createTutorialManager()
+        self._bootcampMgr = self._createBootcampManager()
         self._imageManager = self._createImageManager()
 
     def _addGameCallbacks(self):
@@ -462,6 +484,9 @@ class SFApplication(Flash, ApplicationMeta):
         return None
 
     def _createTutorialManager(self):
+        return None
+
+    def _createBootcampManager(self):
         return None
 
     def _setup(self):

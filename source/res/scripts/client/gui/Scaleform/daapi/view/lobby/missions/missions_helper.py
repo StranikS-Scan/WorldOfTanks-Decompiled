@@ -1,46 +1,59 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/missions_helper.py
+import operator
 import sys
 import BigWorld
 import constants
 from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.view.lobby.missions import cards_formatters
-from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CardAwardComposer, DetailedCardAwardComposer
-from gui.Scaleform.daapi.view.lobby.missions.conditions_formatters.prebattle import MissionsPreBattleConditionsFormatter
-from gui.Scaleform.daapi.view.lobby.missions.conditions_formatters.requirements import AccountRequirementsFormatter, TQAccountRequirementsFormatter
+from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CardAwardComposer, DetailedCardAwardComposer, PersonalMissionsAwardComposer
+from gui.Scaleform.daapi.view.lobby.missions.cards_formatters import PMCardConditionsFormatter
+from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
+from gui.Scaleform.genConsts.PERSONAL_MISSIONS_BUTTONS import PERSONAL_MISSIONS_BUTTONS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.server_events import events_helpers
+from gui.server_events.awards_formatters import AWARDS_SIZES
+from gui.server_events.cond_formatters.prebattle import MissionsPreBattleConditionsFormatter
+from gui.server_events.cond_formatters.requirements import AccountRequirementsFormatter, TQAccountRequirementsFormatter
 from gui.server_events.conditions import GROUP_TYPE
-from gui.server_events.events_helpers import EVENT_STATUS, QuestInfoModel, AWARDS_PER_SINGLE_PAGE
+from gui.server_events.events_helpers import MISSIONS_STATES, QuestInfoModel, AWARDS_PER_SINGLE_PAGE
 from gui.server_events.formatters import isMarathon, DECORATION_SIZES
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from helpers import dependency
+from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
 from quest_xml_source import MAX_BONUS_LIMIT
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
 CARD_AWARDS_COUNT = 6
 DETAILED_CARD_AWARDS_COUNT = 10
-preBattleConditionFormatter = MissionsPreBattleConditionsFormatter()
-accountReqsFormatter = AccountRequirementsFormatter()
-tqAccountReqsFormatter = TQAccountRequirementsFormatter()
-cardCondFormatter = cards_formatters.CardBattleConditionsFormatters()
-detailedCardCondFormatter = cards_formatters.DetailedCardBattleConditionsFormatters()
-cardTokenConditionFormatter = cards_formatters.CardTokenConditionFormatter()
-detailedCardTokenConditionFormatter = cards_formatters.DetailedCardTokenConditionFormatter()
-cardAwardsFormatter = CardAwardComposer(CARD_AWARDS_COUNT)
-detailedCardAwardsFormatter = DetailedCardAwardComposer(DETAILED_CARD_AWARDS_COUNT)
-AwardsWindowBonusFormatter = CardAwardComposer(sys.maxint)
+_preBattleConditionFormatter = MissionsPreBattleConditionsFormatter()
+_accountReqsFormatter = AccountRequirementsFormatter()
+_tqAccountReqsFormatter = TQAccountRequirementsFormatter()
+_cardCondFormatter = cards_formatters.CardBattleConditionsFormatters()
+_detailedCardCondFormatter = cards_formatters.DetailedCardBattleConditionsFormatters()
+_cardTokenConditionFormatter = cards_formatters.CardTokenConditionFormatter()
+_detailedCardTokenConditionFormatter = cards_formatters.DetailedCardTokenConditionFormatter()
+_cardAwardsFormatter = CardAwardComposer(CARD_AWARDS_COUNT)
+_detailedCardAwardsFormatter = DetailedCardAwardComposer(DETAILED_CARD_AWARDS_COUNT)
+_awardsWindowBonusFormatter = CardAwardComposer(sys.maxint)
+_personalMissionsConditionsFormatter = PMCardConditionsFormatter()
+_personalMissionsAwardsFormatter = PersonalMissionsAwardComposer(DETAILED_CARD_AWARDS_COUNT)
 HIDE_DONE = 'hideDone'
 HIDE_UNAVAILABLE = 'hideUnavailable'
+REQUIRED_CAMOUFLAGE_TOKEN_POSTFIX = ':camouflage'
+AWARD_SHEET_ICON = icons.makeImageTag(RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_SHEET_RECEIVED_SMALL, 16, 16, -2, 0)
 
 class BG_STATES(object):
     COMPLETED = 'completed'
     MARATHON = 'marathon'
+    DISABLED = 'disabled'
     DEFAULT = 'default'
 
 
@@ -50,7 +63,7 @@ def getCompletetBonusLimitTooltip():
     """
     return {'tooltip': makeTooltip(body=_ms(TOOLTIPS.QUESTS_COMPLETE_PROGRESS_STATUSTOOLTIP)),
      'isSpecial': False,
-     'args': []}
+     'specialArgs': []}
 
 
 def getCompletetBonusLimitValueTooltip(count):
@@ -59,7 +72,7 @@ def getCompletetBonusLimitValueTooltip(count):
     """
     return {'tooltip': makeTooltip(body=_ms(TOOLTIPS.QUESTS_COMPLETE_PROGRESS_VALUE_STATUSTOOLTIP, count=text_styles.neutral(count))),
      'isSpecial': False,
-     'args': []}
+     'specialArgs': []}
 
 
 def getBonusLimitTooltip(bonusCount, bonusLimit, isDaily):
@@ -76,7 +89,7 @@ def getBonusLimitTooltip(bonusCount, bonusLimit, isDaily):
     body = _ms(key, count=text_styles.neutral(bonusCount), totalCount=text_styles.neutral(bonusLimit))
     return {'tooltip': makeTooltip(header=header, body=body),
      'isSpecial': False,
-     'args': []}
+     'specialArgs': []}
 
 
 def getPersonalBonusLimitDailyTooltip(bonusCount, bonusLimit, maxCompleteCount):
@@ -90,7 +103,7 @@ def getPersonalBonusLimitDailyTooltip(bonusCount, bonusLimit, maxCompleteCount):
     body = _ms(TOOLTIPS.QUESTS_COMPLETE_PERSONAL_PROGRESSDAILY_BODY, count=text_styles.neutral(bonusCount), totalCount=totalLabel, dailyTotalCount=text_styles.neutral(bonusLimit))
     return {'tooltip': makeTooltip(header=header, body=body),
      'isSpecial': False,
-     'args': []}
+     'specialArgs': []}
 
 
 def getPersonalReqularTooltip(bonusCount):
@@ -102,7 +115,7 @@ def getPersonalReqularTooltip(bonusCount):
     body = _ms(TOOLTIPS.QUESTS_COMPLETE_PERSONALREGULAR_BODY, count=text_styles.neutral(bonusCount))
     return {'tooltip': makeTooltip(header=header, body=body),
      'isSpecial': False,
-     'args': []}
+     'specialArgs': []}
 
 
 def getDisabledRequirementTooltip(event):
@@ -111,7 +124,8 @@ def getDisabledRequirementTooltip(event):
     """
     return {'tooltip': TOOLTIPS_CONSTANTS.UNAVAILABLE_QUEST,
      'isSpecial': True,
-     'args': [event.getID()]}
+     'specialArgs': [event.getID()],
+     'specialAlias': TOOLTIPS_CONSTANTS.UNAVAILABLE_QUEST}
 
 
 def getInvalidTimeIntervalsTooltip(event):
@@ -120,7 +134,8 @@ def getInvalidTimeIntervalsTooltip(event):
     """
     return {'tooltip': TOOLTIPS_CONSTANTS.SHEDULE_QUEST,
      'isSpecial': True,
-     'args': [event.getID()]}
+     'specialArgs': [event.getID()],
+     'specialAlias': TOOLTIPS_CONSTANTS.SHEDULE_QUEST}
 
 
 def getScheduleLabel():
@@ -132,11 +147,56 @@ def getScheduleLabel():
     return text_styles.concatStylesToSingleLine(clockIcon, text)
 
 
+def getOperations(currOperationID):
+    """
+    Gets operations list for operations header component
+    """
+    operations = []
+    for oID, o in sorted(events_helpers.getPersonalMissionsCache().getOperations().iteritems(), key=operator.itemgetter(0)):
+        state = PERSONAL_MISSIONS_ALIASES.OPERATION_UNLOCKED_STATE
+        descr = text_styles.stats(PERSONAL_MISSIONS.OPERATIONS_UNLOCKED_DESC)
+        title = text_styles.highTitle(o.getShortUserName())
+        if not o.isUnlocked():
+            state = PERSONAL_MISSIONS_ALIASES.OPERATION_LOCKED_STATE
+            descr = text_styles.error(PERSONAL_MISSIONS.OPERATIONS_LOCKED_DESC)
+        elif o.isFullCompleted():
+            state = PERSONAL_MISSIONS_ALIASES.OPERATION_COMPLETE_FULL_STATE
+            descr = text_styles.bonusAppliedText(PERSONAL_MISSIONS.OPERATIONS_FULLYCOMPLETED_DESC)
+        elif o.isAwardAchieved():
+            state = PERSONAL_MISSIONS_ALIASES.OPERATION_COMPLETE_STATE
+            descr = text_styles.bonusAppliedText(PERSONAL_MISSIONS.OPERATIONS_COMPLETED_DESC)
+        elif o.isInProgress():
+            state = PERSONAL_MISSIONS_ALIASES.OPERATION_CURRENT_STATE
+            descr = text_styles.neutral(PERSONAL_MISSIONS.OPERATIONS_CURRENT_DESC)
+        elif not o.hasRequiredVehicles():
+            state = PERSONAL_MISSIONS_ALIASES.OPERATION_LOCKED_STATE
+            descr = text_styles.error(PERSONAL_MISSIONS.OPERATIONS_LOCKED_DESC)
+        if state != PERSONAL_MISSIONS_ALIASES.OPERATION_UNLOCKED_STATE:
+            iconStateSource = RES_ICONS.getPersonalMissionOperationState(state)
+        else:
+            iconStateSource = None
+        freeSheetIcon = ''
+        freeSheetCounter = ''
+        tokensPawned = o.getTokensPawnedCount()
+        if tokensPawned:
+            freeSheetIcon = RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_SHEET_RECEIVED_SMALL
+            freeSheetCounter = text_styles.counter('x%d' % tokensPawned)
+        operationVO = {'title': title,
+         'desc': descr,
+         'iconSource': RES_ICONS.getPersonalMissionOperationImage(oID),
+         'iconStateSource': iconStateSource,
+         'freeSheetIconSource': freeSheetIcon,
+         'freeSheetCounter': freeSheetCounter,
+         'state': state,
+         'isSelected': oID == currOperationID,
+         'id': oID}
+        operations.append(operationVO)
+
+    return operations
+
+
 def _getDailyLimitedStatusKey(isDaily):
-    if isDaily:
-        return QUESTS.MISSIONDETAILS_MISSIONSCOMPLETE_DAILY
-    else:
-        return QUESTS.MISSIONDETAILS_MISSIONSCOMPLETE
+    return QUESTS.MISSIONDETAILS_MISSIONSCOMPLETE_DAILY if isDaily else QUESTS.MISSIONDETAILS_MISSIONSCOMPLETE
 
 
 class _MissionInfo(QuestInfoModel):
@@ -172,17 +232,20 @@ class _MissionInfo(QuestInfoModel):
 
     def _getInfo(self, statusData, isAvailable, errorMsg, mainQuest=None):
         status = statusData['status']
-        data = {'eventID': self.event.getID(),
+        data = {'eventID': self._getEventID(),
          'title': self._getTitle(self.event.getUserName()),
          'isAvailable': isAvailable,
          'statusLabel': statusData.get('statusLabel'),
-         'statusTooltipData': statusData.get('statusTooltipData'),
-         'awards': self._getAwards(mainQuest),
+         'statusTooltipData': statusData.get('statusTooltipData', ''),
          'status': status,
          'background': self._getBackGround(status),
          'uiDecoration': self._getUIDecoration()}
         data.update(self._getConditions())
+        data.update(self._getAwards(mainQuest))
         return data
+
+    def _getEventID(self):
+        return self.event.getID()
 
     def _getUIDecoration(self):
         """
@@ -204,7 +267,7 @@ class _MissionInfo(QuestInfoModel):
                 note = text_styles.neutral(_ms('#quests:missionDetails/status/notAvailable/nearestTime', time=self._getTillTimeString(startTimeLeft)))
         return {'tooltip': makeTooltip(header, body, note),
          'isSpecial': False,
-         'args': None}
+         'specialArgs': None}
 
     def _getCompleteStatusFields(self, isLimited, bonusCount, bonusLimit):
         """
@@ -213,21 +276,21 @@ class _MissionInfo(QuestInfoModel):
         For completed daily quests return unavailable state fields.
         """
         if self.event.bonusCond.isDaily():
-            status = EVENT_STATUS.NOT_AVAILABLE
+            status = MISSIONS_STATES.NOT_AVAILABLE
             clockIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_TIMERICON, 16, 16, -2, 8)
             statusText = _ms(QUESTS.MISSIONDETAILS_STATUS_NOTAVAILABLE)
             statusLabel = text_styles.concatStylesWithSpace(clockIcon, text_styles.error(statusText))
             statusTooltipData = {'tooltip': makeTooltip(_ms(TOOLTIPS.QUESTS_UNAVAILABLE_TIME_STATUSTOOLTIP), self._getCompleteDailyStatus(QUESTS.MISSIONDETAILS_STATUS_COMPLETED_DAILY)),
              'isSpecial': False,
-             'args': None}
+             'specialArgs': None}
         else:
-            status = EVENT_STATUS.COMPLETED
+            status = MISSIONS_STATES.COMPLETED
             if isLimited and bonusLimit > 1:
                 statusLabel = text_styles.bonusAppliedText(_ms(QUESTS.MISSIONDETAILS_MISSIONSCOMPLETE, count=text_styles.bonusAppliedText(bonusCount), total=text_styles.standard(bonusLimit)))
                 statusTooltipData = getCompletetBonusLimitTooltip()
             else:
                 statusTooltipData = None
-                progressDesc = text_styles.success(_ms(QUESTS.QUESTS_STATUS_DONE))
+                progressDesc = text_styles.bonusAppliedText(_ms(QUESTS.QUESTS_STATUS_DONE))
                 icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_OKICON, 16, 16, -2, 8)
                 statusLabel = text_styles.concatStylesToSingleLine(icon, progressDesc)
         return {'statusLabel': statusLabel,
@@ -240,7 +303,8 @@ class _MissionInfo(QuestInfoModel):
         Data used in mission card to display its unavailable state.
         """
         if errorMsg == 'requirements':
-            isVehAvailable = self.event.vehicleReqs.isAnyVehicleAcceptable() or len(self.event.vehicleReqs.getSuitableVehicles()) > 0
+            vehicleReqs = self.event.vehicleReqs
+            isVehAvailable = vehicleReqs.isAnyVehicleAcceptable() or vehicleReqs.getSuitableVehicles()
             if not isVehAvailable:
                 statusText = _ms(QUESTS.MISSIONDETAILS_STATUS_WRONGVEHICLE)
             else:
@@ -256,7 +320,7 @@ class _MissionInfo(QuestInfoModel):
             else:
                 tooltipData = self._getMissionDurationTooltipData()
         return {'statusLabel': statusMsg,
-         'status': EVENT_STATUS.NOT_AVAILABLE,
+         'status': MISSIONS_STATES.NOT_AVAILABLE,
          'statusTooltipData': tooltipData}
 
     def _getRegularStatusFields(self, isLimited, bonusCount, bonusLimit):
@@ -279,7 +343,7 @@ class _MissionInfo(QuestInfoModel):
             statusTooltipData = getCompletetBonusLimitValueTooltip(self.event.getBonusCount())
             statusLabel = text_styles.standard(_ms(QUESTS.MISSIONDETAILS_MISSIONSCOMPLETECOUNTER, count=text_styles.stats(self.event.getBonusCount())))
         return {'statusLabel': statusLabel,
-         'status': EVENT_STATUS.NONE,
+         'status': MISSIONS_STATES.NONE,
          'statusTooltipData': statusTooltipData}
 
     def _getStatusFields(self, isAvailable, errorMsg):
@@ -291,18 +355,12 @@ class _MissionInfo(QuestInfoModel):
         isLimited = self._isLimited()
         if self.event.isCompleted():
             return self._getCompleteStatusFields(isLimited, bonusCount, bonusLimit)
-        elif not isAvailable:
-            return self._getUnavailableStatusFields(errorMsg)
-        else:
-            return self._getRegularStatusFields(isLimited, bonusCount, bonusLimit)
+        return self._getUnavailableStatusFields(errorMsg) if not isAvailable else self._getRegularStatusFields(isLimited, bonusCount, bonusLimit)
 
     def _getBackGround(self, status):
-        if status == EVENT_STATUS.COMPLETED:
+        if status == MISSIONS_STATES.COMPLETED:
             return BG_STATES.COMPLETED
-        elif isMarathon(self.event.getGroupID()):
-            return BG_STATES.MARATHON
-        else:
-            return BG_STATES.DEFAULT
+        return BG_STATES.MARATHON if isMarathon(self.event.getGroupID()) else BG_STATES.DEFAULT
 
     def _getAwards(self, mainQuest=None):
         """
@@ -310,8 +368,8 @@ class _MissionInfo(QuestInfoModel):
         Awards has minimized scale.
         """
         if self.__formattedBonuses is None:
-            self.__formattedBonuses = cardAwardsFormatter.getFormattedBonuses(self._substituteBonuses(mainQuest))
-        return self.__formattedBonuses
+            self.__formattedBonuses = _cardAwardsFormatter.getFormattedBonuses(self._substituteBonuses(mainQuest))
+        return {'awards': self.__formattedBonuses}
 
     def _getConditions(self):
         """
@@ -334,7 +392,7 @@ class _MissionInfo(QuestInfoModel):
         Conditions has minimized scale in mission card.
         """
         if self._mainFormattedConditions is None:
-            self._mainFormattedConditions = cardCondFormatter.format(self.event)
+            self._mainFormattedConditions = _cardCondFormatter.format(self.event)
         return self._mainFormattedConditions
 
     def _isLimited(self):
@@ -387,14 +445,14 @@ class _TokenMissionInfo(_MissionInfo):
 
     def _getMainConditions(self):
         if self._mainFormattedConditions is None:
-            self._mainFormattedConditions = cardTokenConditionFormatter.format(self.event)
+            self._mainFormattedConditions = _cardTokenConditionFormatter.format(self.event)
         return self._mainFormattedConditions
 
 
-class _PersonalMissionInfo(_MissionInfo):
+class _PrivateMissionInfo(_MissionInfo):
 
     def _getRegularStatusFields(self, isLimited, bonusCount, bonusLimit):
-        statusData = super(_PersonalMissionInfo, self)._getRegularStatusFields(isLimited, bonusCount, bonusLimit)
+        statusData = super(_PrivateMissionInfo, self)._getRegularStatusFields(isLimited, bonusCount, bonusLimit)
         return self._getUpdatedByTokenStatusData(statusData, bonusCount, bonusLimit)
 
     def _getUpdatedByTokenStatusData(self, statusData, bonusCount, bonusLimit):
@@ -473,16 +531,16 @@ class _DetailedMissionInfo(_MissionInfo):
         statusTooltipData = None
         dateLabel = self._getActiveTimeDateLabel()
         resetDateLabel = ''
-        status = EVENT_STATUS.COMPLETED
+        status = MISSIONS_STATES.COMPLETED
         if isLimited and bonusLimit > 1:
             statusLabel = text_styles.bonusAppliedText(_ms(QUESTS.MISSIONDETAILS_MISSIONSCOMPLETE, count=text_styles.bonusAppliedText(bonusCount), total=text_styles.standard(bonusLimit)))
             statusTooltipData = getCompletetBonusLimitTooltip()
         else:
-            progressDesc = text_styles.success(_ms(QUESTS.QUESTS_STATUS_DONE))
+            progressDesc = text_styles.bonusAppliedText(_ms(QUESTS.QUESTS_STATUS_DONE))
             icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_OKICON, 16, 16, -2, 8)
             statusLabel = text_styles.concatStylesToSingleLine(icon, progressDesc)
         if self.event.bonusCond.isDaily():
-            status = EVENT_STATUS.NOT_AVAILABLE
+            status = MISSIONS_STATES.NOT_AVAILABLE
             dateLabel = text_styles.concatStylesWithSpace(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_TIMERICON, 16, 16, -2, 8), text_styles.error(QUESTS.MISSIONDETAILS_STATUS_NOTAVAILABLE), self._getCompleteDailyStatus(QUESTS.MISSIONDETAILS_STATUS_COMPLETED_DAILY))
             resetDateLabel = self._getDailyResetStatusLabel()
         return {'statusLabel': statusLabel,
@@ -510,7 +568,7 @@ class _DetailedMissionInfo(_MissionInfo):
             if errorMsg in ('invalid_weekday', 'invalid_time_interval'):
                 scheduleLabel = getScheduleLabel()
                 scheduleTooltip = getInvalidTimeIntervalsTooltip(self.event)
-        return {'status': EVENT_STATUS.NOT_AVAILABLE,
+        return {'status': MISSIONS_STATES.NOT_AVAILABLE,
          'dateLabel': dateLabel,
          'scheduleOrResetLabel': scheduleLabel,
          'scheduleTooltip': scheduleTooltip}
@@ -524,18 +582,18 @@ class _DetailedMissionInfo(_MissionInfo):
         scheduleTooltip = None
         if isLimited:
             isDaily = self.event.bonusCond.isDaily()
-            statusLabel = text_styles.concatStylesWithSpace(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_INPROGRESSICON, 16, 16, -2, 8), text_styles.standard(_ms(_getDailyLimitedStatusKey(isDaily), count=text_styles.stats(bonusCount), total=text_styles.standard(bonusLimit))))
+            statusLabel = text_styles.concatStylesWithSpace(icons.inProgress(), text_styles.standard(_ms(_getDailyLimitedStatusKey(isDaily), count=text_styles.stats(bonusCount), total=text_styles.standard(bonusLimit))))
             statusTooltipData = getBonusLimitTooltip(bonusCount, bonusLimit, isDaily)
         else:
             statusTooltipData = getCompletetBonusLimitValueTooltip(self.event.getBonusCount())
-            statusLabel = text_styles.concatStylesWithSpace(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_INPROGRESSICON, 16, 16, -2, 8), text_styles.standard(_ms(QUESTS.MISSIONDETAILS_MISSIONSCOMPLETECOUNTER, count=text_styles.stats(self.event.getBonusCount()))))
+            statusLabel = text_styles.concatStylesWithSpace(icons.inProgress(), text_styles.standard(_ms(QUESTS.MISSIONDETAILS_MISSIONSCOMPLETECOUNTER, count=text_styles.stats(self.event.getBonusCount()))))
         if self.event.getWeekDays() or self.event.getActiveTimeIntervals():
             scheduleOrResetLabel = getScheduleLabel()
             scheduleTooltip = getInvalidTimeIntervalsTooltip(self.event)
         elif self.event.bonusCond.isDaily():
             scheduleOrResetLabel = self._getDailyResetStatusLabel()
         return {'statusLabel': statusLabel,
-         'status': EVENT_STATUS.NONE,
+         'status': MISSIONS_STATES.NONE,
          'statusTooltipData': statusTooltipData,
          'dateLabel': self._getActiveTimeDateLabel(),
          'scheduleOrResetLabel': scheduleOrResetLabel,
@@ -561,7 +619,7 @@ class _DetailedMissionInfo(_MissionInfo):
         Gets formatted conditions to display in GUI.
         detailedCardCondFormatter formatter has logic to control condition representation and scale.
         """
-        return detailedCardCondFormatter.format(self.event)
+        return _detailedCardCondFormatter.format(self.event)
 
     def _getPrebattleConditions(self):
         """
@@ -569,7 +627,7 @@ class _DetailedMissionInfo(_MissionInfo):
         Prebattle conditions are placed under main conditions in GUI
         has horizontal layout and looks like label with icon.
         """
-        return preBattleConditionFormatter.format(self.event.preBattleCond, self.event)
+        return _preBattleConditionFormatter.format(self.event.preBattleCond, self.event)
 
     def _getAccountRequirements(self):
         """
@@ -577,14 +635,14 @@ class _DetailedMissionInfo(_MissionInfo):
         account requirements are placed under header in mission detailed view
         Shows completed and not available requirements in GUI to complete mission.
         """
-        return accountReqsFormatter.format(self.event.accountReqs, self.event)
+        return _accountReqsFormatter.format(self.event.accountReqs, self.event)
 
     def _getAwards(self, mainQuest=None):
         """
         Gets formatted awards list to display on awards ribbon in GUI.
         detailedCardAwardsFormatter formatter has logic to control awards scale.
         """
-        return detailedCardAwardsFormatter.getFormattedBonuses(self._substituteBonuses(mainQuest))
+        return {'awards': _detailedCardAwardsFormatter.getFormattedBonuses(self._substituteBonuses(mainQuest))}
 
     def _getTitle(self, title):
         return text_styles.promoSubTitle(title)
@@ -594,10 +652,10 @@ class _DetailedMissionInfo(_MissionInfo):
         return None if not description else makeTooltip(QUESTS.MISSIONDETAILS_DESCRIPTION, description)
 
 
-class _DetailedPersonalMissionInfo(_DetailedMissionInfo, _PersonalMissionInfo):
+class _DetailedPrivateMissionInfo(_DetailedMissionInfo, _PrivateMissionInfo):
 
     def _getRegularStatusFields(self, isLimited, bonusCount, bonusLimit):
-        statusData = super(_DetailedPersonalMissionInfo, self)._getRegularStatusFields(isLimited, bonusCount, bonusLimit)
+        statusData = super(_DetailedPrivateMissionInfo, self)._getRegularStatusFields(isLimited, bonusCount, bonusLimit)
         return self._getUpdatedByTokenStatusData(statusData, bonusCount, bonusLimit)
 
     @classmethod
@@ -614,10 +672,10 @@ class _DetailedTokenMissionInfo(_DetailedMissionInfo):
         return (None, [])
 
     def _getMainConditions(self):
-        return detailedCardTokenConditionFormatter.format(self.event)
+        return _detailedCardTokenConditionFormatter.format(self.event)
 
     def _getAccountRequirements(self):
-        return tqAccountReqsFormatter.format(self.event.accountReqs, self.event)
+        return _tqAccountReqsFormatter.format(self.event.accountReqs, self.event)
 
     def _getRegularStatusFields(self, isLimited, bonusCount, bonusLimit):
         statusData = super(_DetailedTokenMissionInfo, self)._getRegularStatusFields(isLimited, bonusCount, bonusLimit)
@@ -626,7 +684,7 @@ class _DetailedTokenMissionInfo(_DetailedMissionInfo):
         return statusData
 
     def __getTokensCount(self):
-        tokens = detailedCardTokenConditionFormatter.getPreformattedConditions(self.event)
+        tokens = _detailedCardTokenConditionFormatter.getPreformattedConditions(self.event)
         needCount = 0
         gotCount = 0
         for tokenData in tokens:
@@ -637,11 +695,229 @@ class _DetailedTokenMissionInfo(_DetailedMissionInfo):
         return text_styles.middleTitle(_ms(QUESTS.MISSIONDETAILS_BOTTOMSTATUSTOKENS, count=gotCount, total=needCount)) if needCount or gotCount else ''
 
 
+class _DetailedPersonalMissionInfo(_MissionInfo):
+
+    def getVehicleRequirementsCriteria(self):
+        """ Gets criteria to find all suitable vehicles for current quest
+        :return: tuple, list of required vehicles and list of extra conditions
+        """
+        extraConditions = []
+        criteria = REQ_CRITERIA.INVENTORY
+        criteria |= REQ_CRITERIA.VEHICLE.LEVELS(range(self.event.getVehMinLevel(), constants.MAX_VEHICLE_LEVEL + 1))
+        criteria |= REQ_CRITERIA.VEHICLE.CLASSES(self.event.getVehicleClasses())
+        return (criteria, extraConditions)
+
+    def _getStatusFields(self, isAvailable, errorMsg):
+        quest = self.event
+        statusTooltipData = None
+        if quest.isFullCompleted():
+            return self._getFullCompleteStatusFields()
+        elif not isAvailable:
+            return self._getUnavailableStatusFields(errorMsg)
+        elif quest.isInProgress():
+            return self._getProgressStatusFields()
+        elif quest.isCompleted():
+            return self._getCompleteStatusFields()
+        else:
+            statusLabel = None
+            status = MISSIONS_STATES.NONE
+            return {'statusLabel': statusLabel,
+             'status': status,
+             'statusTooltipData': statusTooltipData}
+
+    def _getUnavailableStatusFields(self, errorMsg):
+        """
+        Gets status fields data for unavailable personal mission state.
+        Data used in detailed personal mission view to display its unavailable state.
+        """
+        return self.__getNoVehicleStatusFields() if errorMsg == 'noVehicle' else self.__getUnlockedStatusFields()
+
+    def _getFullCompleteStatusFields(self):
+        quest = self.event
+        statusTooltipData = {'tooltip': makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_FULLDONE_HEADER, body=TOOLTIPS.PERSONALMISSIONS_STATUS_FULLDONE_BODY)}
+        statusLabel = text_styles.bonusAppliedText(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_DOUBLECHECKMARK, vSpace=-2) + ' ' + _ms(QUESTS.PERSONALMISSION_STATUS_FULLDONE))
+        bottomStatusText = ''
+        if quest.isDone():
+            bottomStatusText = text_styles.missionStatusAvailable(QUESTS.PERSONALMISSION_BOTTOMSTATUS_ALLAWARDSRECEIVED)
+        return {'statusLabel': statusLabel,
+         'status': MISSIONS_STATES.FULL_COMPLETED,
+         'statusTooltipData': statusTooltipData,
+         'bottomStatusText': bottomStatusText}
+
+    def _getCompleteStatusFields(self, *args):
+        quest = self.event
+        if quest.areTokensPawned():
+            statusTooltipData = {'tooltip': makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_DONEWITHPAWN_HEADER, body=TOOLTIPS.PERSONALMISSIONS_STATUS_DONEWITHPAWN_BODY)}
+            count = text_styles.stats(str(quest.getPawnCost()) + AWARD_SHEET_ICON)
+            statusLabel = text_styles.bonusAppliedText(icons.checkmark() + _ms(QUESTS.PERSONALMISSION_STATUS_DONEWITHPAWN, count=count))
+        else:
+            statusLabel = text_styles.bonusAppliedText(icons.checkmark() + _ms(QUESTS.PERSONALMISSION_STATUS_MAINDONE))
+            statusTooltipData = {'tooltip': makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_MAINDONE_HEADER, body=TOOLTIPS.PERSONALMISSIONS_STATUS_MAINDONE_BODY)}
+        return {'statusLabel': statusLabel,
+         'status': MISSIONS_STATES.COMPLETED,
+         'statusTooltipData': statusTooltipData}
+
+    def _getProgressStatusFields(self):
+
+        def makeLabel(key):
+            return text_styles.neutral(icons.inProgress() + _ms(key))
+
+        quest = self.event
+        if quest.areTokensPawned():
+            statusLabel = '%s %s' % (makeLabel(QUESTS.PERSONALMISSION_STATUS_SHEETRECOVERYINPROGRESS), AWARD_SHEET_ICON)
+            statusTooltipData = {'tooltip': makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_SHEETRECOVERYINPROGRESS_HEADER, body=TOOLTIPS.PERSONALMISSIONS_STATUS_SHEETRECOVERYINPROGRESS_BODY)}
+        elif quest.isMainCompleted() and not quest.isFullCompleted():
+            statusLabel = makeLabel(QUESTS.PERSONALMISSION_STATUS_ADDINPROGRESS)
+            statusTooltipData = {'tooltip': makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_ADDINPROGRESS_HEADER, body=TOOLTIPS.PERSONALMISSIONS_STATUS_ADDINPROGRESS_BODY)}
+        else:
+            statusLabel = makeLabel(PERSONAL_MISSIONS.DETAILEDVIEW_STATUS_INPROGRESS)
+            statusTooltipData = {'tooltip': makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_INPROGRESS_HEADER, body=TOOLTIPS.PERSONALMISSIONS_STATUS_INPROGRESS_BODY)}
+        status = MISSIONS_STATES.NONE
+        return {'statusLabel': statusLabel,
+         'status': status,
+         'statusTooltipData': statusTooltipData}
+
+    def _getEventID(self):
+        return str(self.event.getID())
+
+    def _getUIDecoration(self):
+        if self.event.isFinal():
+            tile = self.eventsCache.personalMissions.getOperations()[self.event.getOperationID()]
+            vehBonus = tile.getVehicleBonus()
+            if vehBonus is not None:
+                return vehBonus.name
+        return 'Empty'
+
+    def _getBackGround(self, status):
+        if status in (MISSIONS_STATES.COMPLETED, MISSIONS_STATES.FULL_COMPLETED):
+            return BG_STATES.COMPLETED
+        return BG_STATES.DISABLED if status is MISSIONS_STATES.NOT_AVAILABLE else BG_STATES.DEFAULT
+
+    def _getAwards(self, mainQuest=None):
+        """
+        Gets formatted awards list to display on awards ribbon in GUI.
+        """
+        return {'awards': _personalMissionsAwardsFormatter.getFormattedBonuses(self.event.getBonuses(isMain=True), size=AWARDS_SIZES.BIG, isObtained=self.event.isMainCompleted(), obtainedImage=RES_ICONS.MAPS_ICONS_LIBRARY_AWARDOBTAINED, obtainedImageOffset=10),
+         'awardsFullyCompleted': _personalMissionsAwardsFormatter.getFormattedBonuses(self.event.getBonuses(isMain=False), size=AWARDS_SIZES.BIG, isObtained=self.event.isFullCompleted(), areTokensPawned=self.event.areTokensPawned(), pawnCost=self.event.getPawnCost(), obtainedImage=RES_ICONS.MAPS_ICONS_LIBRARY_AWARDOBTAINED, obtainedImageOffset=10)}
+
+    def _getConditions(self):
+        """
+        Gets dict with different types of conditions
+        """
+        return {'conditions': _personalMissionsConditionsFormatter.format(self.event, isMain=True),
+         'conditionsFullyCompleted': _personalMissionsConditionsFormatter.format(self.event, isMain=False)}
+
+    def _getTitle(self, title):
+        return text_styles.promoSubTitle(title)
+
+    def _getInfo(self, statusData, isAvailable, errorMsg, mainQuest=None):
+        data = super(_DetailedPersonalMissionInfo, self)._getInfo(statusData, isAvailable, errorMsg, mainQuest)
+        data.update({'bottomStatusText': statusData.get('bottomStatusText', ''),
+         'addBottomStatusText': statusData.get('addBottomStatusText', ''),
+         'bottomStatusTooltipData': statusData.get('bottomStatusTooltipData', ''),
+         'retryBtnLabel': self.__getRetryBtnLabel(),
+         'retryBtnTooltip': self.__getRetryBtnTooltip(),
+         'completeBtnLabel': _ms(PERSONAL_MISSIONS.DETAILEDVIEW_COMPLETEBTNLABEL, count=self.event.getPawnCost(), icon=AWARD_SHEET_ICON),
+         'titleTooltip': self.__getDescription(),
+         'holdAwardSheetBtnTooltipData': self.__getHoldAwardSheetBtnTooltipData()})
+        data.update({'buttonState': self.__getBtnStates(isAvailable)})
+        return data
+
+    def __getHoldAwardSheetBtnTooltipData(self):
+        if self.__isPawnAvailable(self.event):
+            specialAlias = TOOLTIPS_CONSTANTS.FREE_SHEET
+        else:
+            specialAlias = TOOLTIPS_CONSTANTS.FREE_SHEET_NOT_ENOUGH
+        return {'specialAlias': specialAlias,
+         'isSpecial': True,
+         'specialArgs': []}
+
+    def __getRetryBtnLabel(self):
+        if self.event.areTokensPawned():
+            if self.event.getPawnCost() <= 1:
+                return _ms(PERSONAL_MISSIONS.TASKDETAILSVIEW_BTNLABEL_RETURNAWARDSHEET)
+            return _ms(PERSONAL_MISSIONS.TASKDETAILSVIEW_BTNLABEL_RETURNAWARDSHEETS)
+        return _ms(PERSONAL_MISSIONS.DETAILEDVIEW_RETRYBTNLABEL)
+
+    def __getRetryBtnTooltip(self):
+        return PERSONAL_MISSIONS.DETAILEDVIEW_TOOLTIPS_RETURNAWARDLISTBTN if self.event.areTokensPawned() else PERSONAL_MISSIONS.DETAILEDVIEW_TOOLTIPS_RETRYBTN
+
+    def __getDescription(self):
+        description = '\n'.join([self.event.getUserDescription(), self.event.getUserAdvice()])
+        return None if not description else makeTooltip(PERSONAL_MISSIONS.DETAILEDVIEW_INFOPANEL_HEADER, description)
+
+    def __getBtnStates(self, isAvailable):
+        quest = self.event
+        isPawnAvailable = self.__isPawnAvailable(quest)
+        if not quest.isUnlocked():
+            states = PERSONAL_MISSIONS_BUTTONS.START_BTN_VISIBLE
+        elif quest.isInProgress():
+            states = PERSONAL_MISSIONS_BUTTONS.DECLINE_BTN_VISIBLE
+            if isAvailable:
+                states |= PERSONAL_MISSIONS_BUTTONS.DECLINE_BTN_ENABLED
+            if not quest.isMainCompleted():
+                states |= PERSONAL_MISSIONS_BUTTONS.HOLD_AWARD_SHEET_BTN_VISIBLE
+                if not quest.areTokensPawned() and isPawnAvailable:
+                    states |= PERSONAL_MISSIONS_BUTTONS.HOLD_AWARD_SHEET_BTN_ENABLED
+        elif quest.isFullCompleted():
+            states = PERSONAL_MISSIONS_BUTTONS.NO_BUTTONS
+        elif quest.isMainCompleted():
+            states = PERSONAL_MISSIONS_BUTTONS.RETRY_BTN_VISIBLE
+            if isAvailable:
+                states |= PERSONAL_MISSIONS_BUTTONS.RETRY_BTN_ENABLED
+        else:
+            states = PERSONAL_MISSIONS_BUTTONS.START_BTN_VISIBLE
+            if isAvailable:
+                states |= PERSONAL_MISSIONS_BUTTONS.START_BTN_ENABLED
+        if quest.canBePawned():
+            states |= PERSONAL_MISSIONS_BUTTONS.HOLD_AWARD_SHEET_BTN_VISIBLE
+            if isPawnAvailable:
+                states |= PERSONAL_MISSIONS_BUTTONS.HOLD_AWARD_SHEET_BTN_ENABLED
+        return states
+
+    def __isPawnAvailable(self, quest):
+        return self.eventsCache.random.getFreeTokensCount() >= quest.getPawnCost()
+
+    def __getNoVehicleStatusFields(self):
+        addBottomStatusText = text_styles.error(icons.markerBlocked() + ' ' + _ms(QUESTS.PERSONALMISSION_STATUS_LOCKEDBYVEHICLE))
+        bottomStatusTooltipData = {'tooltip': makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLE_HEADER, body=_ms(TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYVEHICLE_BODY, vehType=', '.join([ _ms(MENU.classesShort(vehType)) for vehType in self.event.getVehicleClasses() ]), minLevel=int2roman(self.event.getVehMinLevel()), maxLevel=int2roman(self.event.getVehMaxLevel())))}
+        if self.event.isInProgress():
+            statusData = self._getProgressStatusFields()
+            statusData.update(addBottomStatusText=addBottomStatusText)
+            statusData.update(bottomStatusTooltipData=bottomStatusTooltipData)
+            return statusData
+        if self.event.isMainCompleted():
+            statusData = self._getCompleteStatusFields()
+            statusData.update(addBottomStatusText=addBottomStatusText)
+            statusData.update(bottomStatusTooltipData=bottomStatusTooltipData)
+            return statusData
+        return {'addBottomStatusText': addBottomStatusText,
+         'status': MISSIONS_STATES.NOT_AVAILABLE,
+         'bottomStatusTooltipData': bottomStatusTooltipData}
+
+    def __getUnlockedStatusFields(self):
+        quest = self.event
+        operations = events_helpers.getPersonalMissionsCache().getOperations()
+        operationID = quest.getOperationID()
+        operation = operations.get(operationID)
+        if not operation.isUnlocked():
+            prevOperationID = max(operationID - 1, 0)
+            prevOperation = operations.get(prevOperationID)
+            statusTooltipData = {'tooltip': makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYPREVOPERATION_HEADER, body=TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYPREVOPERATION_BODY)}
+            statusLabel = text_styles.error(icons.markerBlocked() + ' ' + _ms(QUESTS.PERSONALMISSION_STATUS_LOCKEDBYPREVOPERATION, prevCampaign=prevOperation.getShortUserName()))
+        else:
+            statusTooltipData = {'tooltip': makeTooltip(header=TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYPREVMISSIONS_HEADER, body=TOOLTIPS.PERSONALMISSIONS_STATUS_LOCKEDBYPREVMISSIONS_BODY)}
+            statusLabel = text_styles.error(icons.markerBlocked() + ' ' + _ms(QUESTS.PERSONALMISSION_STATUS_LOCKEDBYPREVMISSIONS))
+        return {'addBottomStatusText': statusLabel,
+         'status': MISSIONS_STATES.NOT_AVAILABLE,
+         'bottomStatusTooltipData': statusTooltipData}
+
+
 def getMissionInfoData(event):
     if event.getType() == constants.EVENT_TYPE.TOKEN_QUEST:
         return _TokenMissionInfo(event)
     elif event.getType() == constants.EVENT_TYPE.PERSONAL_QUEST:
-        return _PersonalMissionInfo(event)
+        return _PrivateMissionInfo(event)
     else:
         return _MissionInfo(event) if event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS else None
 
@@ -650,14 +926,24 @@ def getDetailedMissionData(event):
     if event.getType() == constants.EVENT_TYPE.TOKEN_QUEST:
         return _DetailedTokenMissionInfo(event)
     elif event.getType() == constants.EVENT_TYPE.PERSONAL_QUEST:
+        return _DetailedPrivateMissionInfo(event)
+    elif event.getType() == constants.EVENT_TYPE.PERSONAL_MISSION:
         return _DetailedPersonalMissionInfo(event)
     else:
         return _DetailedMissionInfo(event) if event.getType() in constants.EVENT_TYPE.LIKE_BATTLE_QUESTS else None
 
 
 def getAwardsWindowBonuses(bonuses):
-    result = AwardsWindowBonusFormatter.getFormattedBonuses(bonuses)
+    result = _awardsWindowBonusFormatter.getFormattedBonuses(bonuses, AWARDS_SIZES.BIG)
     while len(result) % AWARDS_PER_SINGLE_PAGE != 0 and len(result) > AWARDS_PER_SINGLE_PAGE:
         result.append({})
 
     return result
+
+
+def getPersonalMissionAwardsFormatter():
+    return _personalMissionsAwardsFormatter
+
+
+def getMissionAwardsFormatter():
+    return _awardsWindowBonusFormatter

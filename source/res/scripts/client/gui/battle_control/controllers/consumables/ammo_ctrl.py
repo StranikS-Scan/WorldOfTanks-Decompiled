@@ -142,16 +142,10 @@ class ReloadingTimeSnapshot(IGunReloadingSnapshot):
         Return time left, considering _updateTime(the last update of actual/base time)
         :return: int value
         """
-        if self.isReloading():
-            return max(0.0, self._actualTime - self.__getTimePassedFrom(self._updateTime))
-        else:
-            return 0.0
+        return max(0.0, self._actualTime - self.__getTimePassedFrom(self._updateTime)) if self.isReloading() else 0.0
 
     def __getTimePassedFrom(self, specifiedTime):
-        if self.isReloading() and self._actualTime:
-            return max(0.0, BigWorld.timeExact() - specifiedTime)
-        else:
-            return 0.0
+        return max(0.0, BigWorld.timeExact() - specifiedTime) if self.isReloading() and self._actualTime else 0.0
 
 
 _TIME_CORRECTION_THRESHOLD = 0.01
@@ -468,11 +462,7 @@ class AmmoController(MethodsRules, IBattleController):
         """Gets quantity of current shells.
         :return: tuple(quantity, quantityInClip) or (-1, -1) if shells is not found.
         """
-        if self.__currShellCD is not None:
-            return self.getShells(self.__currShellCD)
-        else:
-            return (SHELL_QUANTITY_UNKNOWN,) * 2
-            return
+        return self.getShells(self.__currShellCD) if self.__currShellCD is not None else (SHELL_QUANTITY_UNKNOWN,) * 2
 
     def getShellsQuantityLeft(self):
         """Gets quantity of shells that are left before to next clip reloading.

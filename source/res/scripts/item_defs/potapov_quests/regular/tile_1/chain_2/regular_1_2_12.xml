@@ -8,19 +8,61 @@
         <postBattle>
           <and>
             <results>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_damageBlockedByArmor	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_1_2_12_condition_description_damageBlockedByArmor	</key>
+              </description>
               <key>	damageBlockedByArmor	</key>
               <greaterOrEqual>	1	</greaterOrEqual>
               <compareWithMaxHealth></compareWithMaxHealth>
             </results>
             <results>
+              <title>
+                <key>	#personal_missions_details:quest_1_2_12_condition_title_damageDealt	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_common_condition_description_empty	</key>
+              </description>
               <key>	damageDealt	</key>
-              <greaterOrEqual>	1000	</greaterOrEqual>
+              <greaterOrEqual>	500	</greaterOrEqual>
             </results>
           </and>
         </postBattle>
       </conditions>
       <bonus>
         <credits>	75000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t1:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_2_12_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_1_2_12_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <credits>	75000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t1:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
       </bonus>
     </potapovQuest>
     <potapovQuest>
@@ -31,13 +73,25 @@
         <postBattle>
           <and>
             <results>
+              <title>
+                <key>	#personal_missions_details:quest_common_condition_title_damageBlockedByArmor	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_1_2_12_condition_description_damageBlockedByArmor	</key>
+              </description>
               <key>	damageBlockedByArmor	</key>
               <greaterOrEqual>	1	</greaterOrEqual>
               <compareWithMaxHealth></compareWithMaxHealth>
             </results>
             <results>
+              <title>
+                <key>	#personal_missions_details:quest_1_2_12_condition_title_damageDealt	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_common_condition_description_empty	</key>
+              </description>
               <key>	damageDealt	</key>
-              <greaterOrEqual>	1000	</greaterOrEqual>
+              <greaterOrEqual>	500	</greaterOrEqual>
             </results>
             <isAlive></isAlive>
             <win></win>
@@ -46,6 +100,51 @@
       </conditions>
       <bonus>
         <credits>	40000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t1:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_1_2_12_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_1_2_12_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <results>
+              <key>	damageBlockedByArmor	</key>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <compareWithMaxHealth></compareWithMaxHealth>
+            </results>
+            <results>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	500	</greaterOrEqual>
+            </results>
+            <isAlive></isAlive>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
       </bonus>
     </potapovQuest>
   </quests>

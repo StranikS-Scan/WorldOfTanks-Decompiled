@@ -8,4 +8,5 @@ from gui.battle_results.components import progress
 from gui.battle_results.components import shared
 from gui.battle_results.components import style
 from gui.battle_results.components import vehicles
-__all__ = ('base', 'common', 'details', 'personal', 'progress', 'shared', 'style', 'vehicles')
+from gui.battle_results.components import bootcamp
+__all__ = ('base', 'common', 'details', 'personal', 'progress', 'shared', 'style', 'vehicles', 'bootcamp')

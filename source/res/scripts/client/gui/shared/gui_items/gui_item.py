@@ -10,6 +10,7 @@ class GUIItem(object):
     """
     Root gui items class. Provides common interface for serialization and deserialization.
     """
+    __slots__ = ()
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
     def __init__(self, proxy=None):

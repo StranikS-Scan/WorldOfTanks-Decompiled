@@ -35,7 +35,7 @@ class UsersStorage(RevCachedStorage):
         self.__breakers.clear()
         self.__emptyGroups.clear()
         self.__openedGroups = {}
-        while len(self.__contacts):
+        while self.__contacts:
             _, user = self.__contacts.popitem()
             user.clear()
 
@@ -287,7 +287,7 @@ class UsersStorage(RevCachedStorage):
             if categorySet:
                 if name in categorySet:
                     categorySet.remove(name)
-                if len(categorySet) == 0:
+                if not categorySet:
                     del self.__openedGroups[category]
         return
 
@@ -308,7 +308,7 @@ class UsersStorage(RevCachedStorage):
             membersIDs.add(dbID)
 
         removed = self.__clanMembersIDs.difference(membersIDs)
-        if len(removed):
+        if removed:
             for dbID in removed:
                 if dbID in self.__contacts:
                     contact = self.__contacts[dbID]
@@ -359,7 +359,7 @@ class UsersStorage(RevCachedStorage):
             data.append(contacts)
         else:
             data.append(None)
-        if len(self.__openedGroups) > 0:
+        if self.__openedGroups:
             data.append(self.__openedGroups)
         else:
             data.append(None)
@@ -385,7 +385,7 @@ class UsersStorage(RevCachedStorage):
                     yield (dbID, state)
 
             result = stateGenerator
-        if len(record) > 0:
+        if record:
             self.__openedGroups = record.pop(0) or {}
         else:
             self.__openedGroups = {}

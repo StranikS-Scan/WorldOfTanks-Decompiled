@@ -12,7 +12,7 @@ from constants import CHAT_LOG, RESTRICTION_TYPE
 from enumerations import Enumeration, AttributeEnumItem
 __all__ = ['CHAT_ACTIONS']
 NOTIFICATION_GROUP = Enumeration('Group of members for notification', ['All',
- 'None',
+ 'NONE',
  'Originator',
  'ExceptOriginator'])
 
@@ -136,7 +136,7 @@ if constants.IS_BASEAPP:
        'notificationGroup': NOTIFICATION_GROUP.Originator,
        'logLevel': CHAT_LOG.NONE}),
      ('logVivoxLogin', {'notifyFilter': __notifyFilterNone,
-       'notificationGroup': NOTIFICATION_GROUP.None,
+       'notificationGroup': NOTIFICATION_GROUP.NONE,
        'logLevel': CHAT_LOG.NONE})], instance=AttributeEnumItem)
 else:
     CHAT_ACTIONS = Enumeration('chatActions', [('enter', {}),
@@ -1283,7 +1283,8 @@ SYS_MESSAGE_TYPE = Enumeration('systemMessageType', ['serverReboot',
  'goodieDisabled',
  'vehicleGroupLocked',
  'vehicleGroupUnlocked',
- 'rankedQuests'])
+ 'rankedQuests',
+ 'bootcamp'])
 SYS_MESSAGE_IMPORTANCE = Enumeration('systemMessageImportance', ['normal', 'high'])
 SM_REQUEST_PERSONAL_MESSAGES_FLAG = 1
 SM_REQUEST_SYSTEM_MESSAGES_FLAG = 2

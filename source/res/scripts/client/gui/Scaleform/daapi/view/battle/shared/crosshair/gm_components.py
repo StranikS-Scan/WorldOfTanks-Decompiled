@@ -194,7 +194,6 @@ class GunMarkersComponents(object):
             return True
         else:
             return False
-            return
 
     def removeView(self, container, name):
         """ Removes view from appropriate component by name.
@@ -208,7 +207,6 @@ class GunMarkersComponents(object):
             return True
         else:
             return False
-            return
 
     def setScale(self, scale):
         """ Sets scale for all components.
@@ -259,11 +257,7 @@ class GunMarkersComponents(object):
         :param name: string containing unique name of component.
         :return: instance of component or None.
         """
-        if name in self.__components:
-            return self.__components[name]
-        else:
-            return None
-            return None
+        return self.__components[name] if name in self.__components else None
 
     def getComponentByType(self, markerType, isActive=True):
         """ Try to find first component by type of marker and active flag.

@@ -73,7 +73,10 @@ class DebugMonitorView(DebugView):
                         subResult = self.__buildContentItemsBy(itemValue, baseIndent + 1, itemKeyname)
                         if subResult is not None:
                             result += subResult
-                    if isinstance(itemValue, int) or isinstance(itemValue, float) or isinstance(itemValue, bool) or isinstance(itemValue, str) or itemValue is None:
+                    if isinstance(itemValue, (int,
+                     float,
+                     bool,
+                     str)) or itemValue is None:
                         deltaValue = self.__updateContentInfoItem(itemKeyname, itemValue)
                         valueStr1 = '%0.3f' % itemValue if isinstance(itemValue, float) else str(itemValue)
                         valueStr2 = '%0.3f' % deltaValue if isinstance(deltaValue, float) else str(deltaValue)

@@ -90,3 +90,6 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
 
     def as_updateEntityStateS(self, entityName, entityState):
         return self.flashObject.as_updateEntityState(entityName, entityState) if self._isDAAPIInited() else None
+
+    def as_setPanelSettingsS(self, settingsId):
+        return self.flashObject.as_setPanelSettings(settingsId) if self._isDAAPIInited() else None

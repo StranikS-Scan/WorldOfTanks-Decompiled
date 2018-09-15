@@ -65,8 +65,8 @@ class ClanAccountProfile(object):
 
     def isSynced(self, key=None):
         if key is None:
-            for key in self._vitalWebInfo.keys():
-                if not self._syncState & key:
+            for syncKey in self._vitalWebInfo.keys():
+                if not self._syncState & syncKey:
                     return False
 
             return True
@@ -321,11 +321,7 @@ class ClanAccountProfile(object):
                 self.__changeWebInfo(SYNC_KEYS.INVITES, count, 'onAccountInvitesReceived')
 
     def _getClanInfoValue(self, index, default):
-        if self._clanBwInfo is not None:
-            return self._clanBwInfo[index]
-        else:
-            return default
-            return
+        return self._clanBwInfo[index] if self._clanBwInfo is not None else default
 
     def _resyncBwInfo(self, clanDbID=0, clanBwInfo=None):
         needToRaiseEvent = self._clanDbID != clanDbID or self._clanBwInfo != clanBwInfo

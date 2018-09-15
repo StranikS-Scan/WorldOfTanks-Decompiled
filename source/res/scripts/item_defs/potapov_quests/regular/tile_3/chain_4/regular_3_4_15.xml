@@ -8,6 +8,12 @@
         <postBattle>
           <and>
             <results>
+              <title>
+                <key>	#personal_missions_details:quest_3_4_15_condition_title_damageDealt	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_common_condition_description_empty	</key>
+              </description>
               <key>	damageDealt	</key>
               <greaterOrEqual>	6000	</greaterOrEqual>
             </results>
@@ -15,17 +21,25 @@
         </postBattle>
       </conditions>
       <bonus>
+        <token>
+          <id>	token:pt:final:s1:t3	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	5	</limit>
+        </token>
+        <token>
+          <id>	token:pt:final:s1:t3:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+      <bonusDelayed>
         <dossier>
           <name>	achievements:tankwomenProgress	</name>
           <value>	1	</value>
           <type>	add	</type>
         </dossier>
-        <token>
-          <id>	token:pt:final:s1:t3	</id>
-          <expires>	28.01.2100 00:01	</expires>
-          <count>	4	</count>
-          <limit>	25	</limit>
-        </token>
         <berths>	1	</berths>
         <tankmen>
           <tman>
@@ -42,11 +56,109 @@
             <freeSkills>	brotherhood	</freeSkills>
           </tman>
         </tankmen>
+      </bonusDelayed>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_4_15_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_3_4_15_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	token:pt:final:s1:t3	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	5	</limit>
+        </token>
+        <token>
+          <id>	token:pt:final:s1:t3:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
       </bonus>
+      <bonusDelayed>
+        <dossier>
+          <name>	achievements:tankwomenProgress	</name>
+          <value>	1	</value>
+          <type>	add	</type>
+        </dossier>
+        <berths>	1	</berths>
+        <tankmen>
+          <tman>
+            <isPremium>	true	</isPremium>
+            <isFemale>	true	</isFemale>
+            <role>	commander	</role>
+            <roleLevel>	100	</roleLevel>
+            <freeXP>	210063	</freeXP>
+            <fnGroupID>	1	</fnGroupID>
+            <lnGroupID>	1	</lnGroupID>
+            <iGroupID>	1	</iGroupID>
+            <nationID>	0	</nationID>
+            <vehicleTypeID>	0	</vehicleTypeID>
+            <freeSkills>	brotherhood	</freeSkills>
+          </tman>
+        </tankmen>
+      </bonusDelayed>
     </potapovQuest>
     <potapovQuest>
       <enabled>	true	</enabled>
       <id>	regular_3_4_15_add	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <postBattle>
+          <and>
+            <results>
+              <title>
+                <key>	#personal_missions_details:quest_3_4_15_condition_title_damageDealt	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_common_condition_description_empty	</key>
+              </description>
+              <key>	damageDealt	</key>
+              <greaterOrEqual>	6000	</greaterOrEqual>
+            </results>
+            <results>
+              <title>
+                <key>	#personal_missions_details:quest_3_4_15_condition_title_kills	</key>
+              </title>
+              <description>
+                <key>	#personal_missions_details:quest_common_condition_description_empty	</key>
+              </description>
+              <key>	kills	</key>
+              <greaterOrEqual>	5	</greaterOrEqual>
+            </results>
+            <win></win>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
+        <credits>	250000	</credits>
+        <token>
+          <id>	token:pt:final:s1:t3:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_3_4_15_add_award_list	</id>
       <serverOnly>	true	</serverOnly>
       <conditions>
         <postBattle>
@@ -57,19 +169,28 @@
             </results>
             <results>
               <key>	kills	</key>
-              <greaterOrEqual>	3	</greaterOrEqual>
+              <greaterOrEqual>	5	</greaterOrEqual>
             </results>
+            <win></win>
           </and>
         </postBattle>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_3_4_15_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
       </conditions>
       <bonus>
         <token>
-          <id>	token:pt:final:s1:t3	</id>
+          <id>	free_award_list	</id>
           <expires>	28.01.2100 00:01	</expires>
-          <count>	1	</count>
-          <limit>	25	</limit>
+          <count>	4	</count>
         </token>
-        <credits>	250000	</credits>
       </bonus>
     </potapovQuest>
   </quests>

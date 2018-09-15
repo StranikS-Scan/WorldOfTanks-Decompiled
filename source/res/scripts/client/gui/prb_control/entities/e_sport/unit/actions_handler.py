@@ -6,7 +6,6 @@ from debug_utils import LOG_DEBUG
 from gui import DialogsInterface, SystemMessages
 from gui.Scaleform.daapi.view.dialogs import rally_dialog_meta
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.formatters import messages
 from gui.prb_control.entities.base import vehicleAmmoCheck
 from gui.prb_control.entities.base.unit.actions_handler import UnitActionsHandler
 from gui.prb_control.entities.base.unit.ctx import BattleQueueUnitCtx, AutoSearchUnitCtx
@@ -28,9 +27,6 @@ class ESportActionsHandler(UnitActionsHandler):
         if flags.isInIdle():
             g_eventDispatcher.setUnitProgressInCarousel(prbType, True)
         return FUNCTIONAL_FLAG.LOAD_WINDOW
-
-    def executeFini(self):
-        super(ESportActionsHandler, self).executeFini()
 
     @vehicleAmmoCheck
     def execute(self):

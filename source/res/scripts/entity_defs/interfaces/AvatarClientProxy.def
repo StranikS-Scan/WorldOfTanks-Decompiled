@@ -40,7 +40,8 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
-      <Arg>	FLOAT32	</Arg>
+      <Arg>	ARRAY	  <of>	FLOAT32	</of>
+      </Arg>
     </avatarClientProxy_updateVehicleMiscStatus>
     <avatarClientProxy_updateVehicleSetting>
       <Arg>	OBJECT_ID	</Arg>

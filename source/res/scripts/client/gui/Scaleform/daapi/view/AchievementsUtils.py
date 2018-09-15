@@ -8,9 +8,6 @@ from gui.shared.gui_items.dossier.achievements.MarkOnGunAchievement import MarkO
 
 class AchievementsUtils(object):
 
-    def __init__(self):
-        super(AchievementsUtils, self).__init__()
-
     @staticmethod
     def packAchievementList(target, dossierType, dossierCompactDescriptor, isDossierForCurrentUser, defaultShowProgress=True, defaultSeriesCounter=None):
         return [ AchievementsUtils.packAchievement(a, dossierType, dossierCompactDescriptor, isDossierForCurrentUser, defaultShowProgress, defaultSeriesCounter) for a in target ]

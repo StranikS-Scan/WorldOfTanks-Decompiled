@@ -1,0 +1,28 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: scripts/client/gui/Scaleform/genConsts/PERSONAL_MISSIONS_BUTTONS.py
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
+
+class PERSONAL_MISSIONS_BUTTONS(object):
+    NO_BUTTONS = 0
+    START_BTN_VISIBLE = 1
+    START_BTN_ENABLED = 2
+    RETRY_BTN_VISIBLE = 4
+    DECLINE_BTN_VISIBLE = 8
+    DECLINE_BTN_ENABLED = 16
+    HOLD_AWARD_SHEET_BTN_VISIBLE = 32
+    HOLD_AWARD_SHEET_BTN_ENABLED = 64
+    OBTAIN_AWARD_BTN_VISIBLE = 128
+    RETRY_BTN_ENABLED = 256
+    DETAILED_VIEW_BTN_STATES = [NO_BUTTONS,
+     START_BTN_VISIBLE,
+     START_BTN_ENABLED,
+     RETRY_BTN_VISIBLE,
+     DECLINE_BTN_VISIBLE,
+     DECLINE_BTN_ENABLED,
+     HOLD_AWARD_SHEET_BTN_VISIBLE,
+     HOLD_AWARD_SHEET_BTN_ENABLED,
+     OBTAIN_AWARD_BTN_VISIBLE,
+     RETRY_BTN_ENABLED]

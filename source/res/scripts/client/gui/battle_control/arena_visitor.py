@@ -176,10 +176,7 @@ class _ArenaTypeVisitor(IArenaVisitor):
 
     def getFlagSpawnPosition(self, flagID):
         flags = self.getFlagSpawnPoints()
-        if flagID in flags:
-            return flags[flagID]['position']
-        else:
-            return (0.0, 0.0, 0.0)
+        return flags[flagID]['position'] if flagID in flags else (0.0, 0.0, 0.0)
 
     def getWinPointsCosts(self, isSolo=False, forVehicle=True):
         costKill, costFlags, costDamage = 0, set(), set()
@@ -358,10 +355,7 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
         return self._guiType != _GUI_TYPE.UNKNOWN and self._guiType in _GUI_TYPE_LABEL.LABELS
 
     def getLabel(self):
-        if self._guiType in _GUI_TYPE_LABEL.LABELS:
-            return _GUI_TYPE_LABEL.LABELS[self._guiType]
-        else:
-            return ''
+        return _GUI_TYPE_LABEL.LABELS[self._guiType] if self._guiType in _GUI_TYPE_LABEL.LABELS else ''
 
 
 class _ArenaBonusTypeVisitor(IArenaVisitor):
@@ -400,6 +394,9 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
 
     def hasHealthBar(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.TEAM_HEALTH_BAR)
+
+    def hasGameEndMessage(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.VICTORY_DEFEAT_MESSAGE)
 
 
 class _ArenaExtraDataVisitor(IArenaVisitor):
@@ -544,14 +541,14 @@ class _ClientArenaVisitor(IClientArenaVisitor):
     def hasHealthBar(self):
         return self._bonus.hasHealthBar()
 
+    def hasGameEndMessage(self):
+        return self._bonus.hasGameEndMessage()
+
     def hasPlayerGroups(self):
         return self._arena.arenaType.numPlayerGroups > 0
 
     def isSoloTeam(self, team):
-        if self._gui.isFalloutMultiTeam():
-            return self._type.isSoloTeam(team)
-        else:
-            return False
+        return self._type.isSoloTeam(team) if self._gui.isFalloutMultiTeam() else False
 
     def getArenaIconKey(self):
         arenaIcon = self._type.getGeometryName()
@@ -561,11 +558,7 @@ class _ClientArenaVisitor(IClientArenaVisitor):
         return iconKey % self.getArenaIconKey()
 
     def getGasAttackSettings(self):
-        if self.hasGasAttack():
-            return self._type.getGasAttackSettings()
-        else:
-            return None
-            return None
+        return self._type.getGasAttackSettings() if self.hasGasAttack() else None
 
     def getTeamSpawnPoints(self, team):
         other = team - 1
@@ -578,16 +571,12 @@ class _ClientArenaVisitor(IClientArenaVisitor):
         return spawnPoints
 
     def getTeamSpawnPointsIterator(self, team):
-        for team, points in enumerate(self.getTeamSpawnPoints(team), 1):
+        for teamNum, points in enumerate(self.getTeamSpawnPoints(team), 1):
             for number, point in enumerate(points, 1):
-                yield (team, (point[0], 0, point[1]), number)
+                yield (teamNum, (point[0], 0, point[1]), number)
 
     def getArenaSubscription(self):
-        if self._canSubscribe:
-            return self._arena
-        else:
-            return None
-            return None
+        return self._arena if self._canSubscribe else None
 
     def isBattleEndWarningEnabled(self):
         return GUI_SETTINGS.battleEndWarningEnabled and not self._gui.isTutorialBattle()

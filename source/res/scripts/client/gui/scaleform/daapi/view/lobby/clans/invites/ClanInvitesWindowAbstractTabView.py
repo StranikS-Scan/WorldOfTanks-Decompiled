@@ -137,7 +137,7 @@ class ClanInvitesWindowAbstractTabView(ClanInvitesWindowAbstractTabViewMeta, Cla
         paginator = self._getCurrentPaginator()
         status, data = result
         if status is True:
-            if len(data) == 0:
+            if not data:
                 self._updateSortField(None)
                 self._showDummyByFilterName(self.currentFilterName)
                 self.dataProvider.rebuildList(None, False)

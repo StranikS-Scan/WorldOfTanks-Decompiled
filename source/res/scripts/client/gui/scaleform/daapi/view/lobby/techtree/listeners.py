@@ -139,7 +139,7 @@ class _ItemsCacheListener(_Listener):
     def __onCacheUpdate(self, cache):
         if CACHE_VEHS_LOCK_KEY in cache:
             vehLocks = cache.get(CACHE_VEHS_LOCK_KEY)
-            if vehLocks and len(vehLocks):
+            if vehLocks:
                 self._page.invalidateVehLocks(vehLocks)
 
     def __items_onSyncCompleted(self, reason, invalidated):

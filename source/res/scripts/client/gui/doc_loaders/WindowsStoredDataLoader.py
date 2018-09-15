@@ -56,7 +56,7 @@ class WindowsStoredDataLoader(object):
             section.writeInt('mask', mask)
             section.writeInt('rev', self.__rev)
             section.deleteSection('records')
-            if len(records):
+            if records:
                 dataSec = section.createSection('records')
                 records = records[:self.__maxRecordLen]
 

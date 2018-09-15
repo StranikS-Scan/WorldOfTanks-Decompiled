@@ -19,17 +19,11 @@ from skeletons.gui.shared import IItemsCache
 class VehicleCompareCartPopover(VehicleCompareCartPopoverMeta):
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
 
-    def __init__(self, ctx=None):
-        super(VehicleCompareCartPopover, self).__init__(ctx)
-
     def remove(self, vehId):
         self.comparisonBasket.removeVehicleByIdx(int(vehId))
 
     def removeAll(self):
         self.comparisonBasket.removeAllVehicles()
-
-    def _onRegisterFlashComponent(self, viewPy, alias):
-        super(VehicleCompareCartPopover, self)._onRegisterFlashComponent(viewPy, alias)
 
     def onWindowClose(self):
         self.destroy()

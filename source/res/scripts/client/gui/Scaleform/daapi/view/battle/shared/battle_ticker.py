@@ -4,9 +4,6 @@ from gui.Scaleform.daapi.view.common.BaseTicker import BaseTicker
 
 class BattleTicker(BaseTicker):
 
-    def __init__(self):
-        super(BattleTicker, self).__init__()
-
     def _handleBrowserLink(self, link):
         """
         Battle ticker should not display a browser, so we will do nothing

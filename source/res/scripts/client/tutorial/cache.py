@@ -115,7 +115,7 @@ class TutorialCache(FileLocalCache):
 
     def isEmpty(self):
         cache = self.__current()
-        return cache['currentChapter'] is None or not len(cache['flags'])
+        return cache['currentChapter'] is None or not cache['flags']
 
     def _getCache(self):
         return (TUTORIAL_VERSION, self.__cache.copy())

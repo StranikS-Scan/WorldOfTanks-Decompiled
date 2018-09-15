@@ -56,8 +56,7 @@ class MinimapEntry(object):
         if self._isActive != active:
             self._isActive = active
             return True
-        else:
-            return False
+        return False
 
     def clear(self):
         """
@@ -140,8 +139,7 @@ class VehicleEntry(MinimapEntry):
         if self._guiLabel != guiLabel:
             self._guiLabel = guiLabel
             return True
-        else:
-            return False
+        return False
 
     def isAlive(self):
         """
@@ -160,8 +158,7 @@ class VehicleEntry(MinimapEntry):
         if self._isAlive != isAlive:
             self._isAlive = isAlive
             return self._isActive
-        else:
-            return False
+        return False
 
     def getLocation(self):
         """

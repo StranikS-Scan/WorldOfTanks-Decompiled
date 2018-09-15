@@ -9,13 +9,13 @@ import cPickle
 from helpers import dependency
 from account_helpers.settings_core import ISettingsCore
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP, LOG_ERROR_BOOTCAMP
-from debug_utils import LOG_ERROR
 from skeletons.gui.battle_session import IBattleSessionProvider
 from functools import partial
 import TriggersManager
 import BattleReplay
 from BootCampEvents import g_bootcampEvents
 from BootcampConstants import UI_STATE
+from BootcampGUI import getDirectionIndicator
 from skeletons.gui.game_control import IBootcampController
 
 class _IMarker(object):
@@ -80,12 +80,6 @@ class _DirectionIndicatorCtrl(_IMarker):
         self.__indicator = None
         return
 
-    def __as_onSettingsChanged(self, diff):
-        if 'isColorBlind' in diff:
-            if self.__indicator is not None:
-                self.__indicator.setShape(self.getShape())
-        return
-
     def setVisible(self, isVisible):
         if not self.__isMarkerVisible and isVisible:
             self.__isMarkerVisible = True
@@ -98,6 +92,12 @@ class _DirectionIndicatorCtrl(_IMarker):
             self.settingsCore.onSettingsChanged -= self.__as_onSettingsChanged
             if self.__indicator is not None:
                 self.__indicator.setVisibility(False)
+        return
+
+    def __as_onSettingsChanged(self, diff):
+        if 'isColorBlind' in diff:
+            if self.__indicator is not None:
+                self.__indicator.setShape(self.getShape())
         return
 
 
@@ -113,7 +113,6 @@ class _AimMarker(_IMarker):
 
     def attachGUI(self, markers2D, minimap):
         self.__marker2D.attachGUI(markers2D)
-        from BootcampGUI import getDirectionIndicator
         indicator = getDirectionIndicator()
         if indicator is not None:
             self.__dIndicator.attachGUI(indicator)
@@ -295,25 +294,13 @@ class _StaticObjectMarker3D(_IMarker):
             BigWorld.loadResourceListBG((self.__path,), partial(self.__onModelLoaded, modelPosition))
         return
 
-    def __onModelLoaded(self, position, resourceRefs):
-        if self.__destroyed:
-            return
-        if self.__path not in resourceRefs.failedIDs:
-            self.__model = resourceRefs[self.__path]
-            self.__model.position = position
-            self.__model.castsShadow = False
-            if self.__isMarkerVisible:
-                self.addMarkerModel()
-        else:
-            LOG_ERROR_BOOTCAMP('Model not found', self.__path)
-
     def addMarkerModel(self):
         if self.__model is None or self.__modelOwner is not None:
             return
         else:
             self.__modelOwner = BigWorld.player()
             self.__modelOwner.addModel(self.__model)
-            if self.__action is not None and len(self.__action):
+            if self.__action:
                 try:
                     self.__model.action(self.__action)()
                 except ValueError:
@@ -343,6 +330,18 @@ class _StaticObjectMarker3D(_IMarker):
                 self.__modelOwner.delModel(self.__model)
             self.__modelOwner = None
         return
+
+    def __onModelLoaded(self, position, resourceRefs):
+        if self.__destroyed:
+            return
+        if self.__path not in resourceRefs.failedIDs:
+            self.__model = resourceRefs[self.__path]
+            self.__model.position = position
+            self.__model.castsShadow = False
+            if self.__isMarkerVisible:
+                self.addMarkerModel()
+        else:
+            LOG_ERROR_BOOTCAMP('Model not found', self.__path)
 
 
 class BootcampMarkersManager(object):
@@ -392,18 +391,6 @@ class BootcampMarkersManager(object):
             self.__arenaSubscribed = False
         return
 
-    def _onUIStateChanged(self, state):
-        if state == UI_STATE.START:
-            if self.__gui is not None and self.__gui.inited:
-                minimap = self.__gui.getMinimapPlugin()
-                marker2D = self.__gui.getMarkers2DPlugin()
-                for marker in self.__markers.itervalues():
-                    marker.attachGUI(marker2D, minimap)
-
-        elif state == UI_STATE.STOP:
-            self.stop()
-        return
-
     def start(self):
         if self.__markerSoundShow is not None:
             self.__markerSoundShow.stop()
@@ -412,7 +399,7 @@ class BootcampMarkersManager(object):
             for markerParams in self.__markersParams:
                 eventEnable = markerParams['eventEnable']
                 eventDisable = markerParams['eventDisable']
-                if eventEnable is '':
+                if eventEnable == '':
                     self.__createMarker(markerParams)
                 markerName = markerParams['name']
                 if eventEnable.find('vehicleKilled') != -1 or eventDisable.find('vehicleKilled') != -1:
@@ -529,11 +516,41 @@ class BootcampMarkersManager(object):
     def update(self):
         for marker in self.__markers.values():
             pos = marker.position
-            distance = (pos - BigWorld.player().getOwnVehiclePosition()).length
+            distance = int(round((pos - BigWorld.player().getOwnVehiclePosition()).length))
             marker.update(distance)
 
     def getActiveMarkers(self):
         return self.__markers
+
+    def replaySubscribe(self):
+        self.replayMethodSubscribe('bootcampMarkers_onTriggerActivated', self.onTriggerActivated)
+        self.replayMethodSubscribe('bootcampMarkers_onTriggerDeactivated', self.onTriggerDeactivated)
+        self.replayMethodSubscribe('bootcampMarkers_showMarker', self.showMarker)
+        self.replayMethodSubscribe('bootcampMarkers_hideMarker', self.hideMarker)
+
+    def replayMethodSubscribe(self, eventName, method):
+        callback = partial(self.replayMethodCall, method, eventName)
+        self.bootcamp.replayCtrl.setDataCallback(eventName, callback)
+        self.replayCallbacks.append((eventName, callback))
+
+    def replayMethodCall(self, callMethod, eventName, binData):
+        callMethod(*cPickle.loads(base64.b64decode(binData)))
+
+    def serializeMethod(self, eventName, params):
+        if BattleReplay.g_replayCtrl.isRecording:
+            BattleReplay.g_replayCtrl.serializeCallbackData(eventName, (base64.b64encode(cPickle.dumps(params, -1)),))
+
+    def _onUIStateChanged(self, state):
+        if state == UI_STATE.START:
+            if self.__gui is not None and self.__gui.inited:
+                minimap = self.__gui.getMinimapPlugin()
+                marker2D = self.__gui.getMarkers2DPlugin()
+                for marker in self.__markers.itervalues():
+                    marker.attachGUI(marker2D, minimap)
+
+        elif state == UI_STATE.STOP:
+            self.stop()
+        return
 
     def __onVehicleKilled(self, victimID, *args):
         victimVehicle = BigWorld.entities.get(victimID)
@@ -543,14 +560,14 @@ class BootcampMarkersManager(object):
                 for markerParams in self.__markersParams:
                     markerName = markerParams['name']
                     markerEvents = self.__markerEvents[markerName]
-                    if 'eventEnable' in markerEvents and victimName in markerEvents['eventEnable'] and markerName not in self.__markers:
-                        markerEvents['eventEnable'].remove(victimName)
-                        if len(markerEvents['eventEnable']) == 0:
-                            self.__createMarker(markerParams)
-                    if 'eventDisable' in markerEvents and victimName in markerEvents['eventDisable'] and markerName in self.__markers:
-                        markerEvents['eventDisable'].remove(victimName)
-                        if len(markerEvents['eventDisable']) == 0:
-                            self.__markers[markerName].clear()
+                    if 'eventEnable' in markerEvents and victimName in markerEvents['eventEnable']:
+                        if markerName not in self.__markers:
+                            markerEvents['eventEnable'].remove(victimName)
+                            if not markerEvents['eventEnable']:
+                                self.__createMarker(markerParams)
+                        if 'eventDisable' in markerEvents and victimName in markerEvents['eventDisable'] and markerName in self.__markers:
+                            markerEvents['eventDisable'].remove(victimName)
+                            markerEvents['eventDisable'] or self.__markers[markerName].clear()
                             del self.__markers[markerName]
 
         return
@@ -576,21 +593,3 @@ class BootcampMarkersManager(object):
                 areaMarker.attachGUI(marker2D, minimap)
             self.__markers[markerParams['name']] = areaMarker
             return
-
-    def replaySubscribe(self):
-        self.replayMethodSubscribe('bootcampMarkers_onTriggerActivated', self.onTriggerActivated)
-        self.replayMethodSubscribe('bootcampMarkers_onTriggerDeactivated', self.onTriggerDeactivated)
-        self.replayMethodSubscribe('bootcampMarkers_showMarker', self.showMarker)
-        self.replayMethodSubscribe('bootcampMarkers_hideMarker', self.hideMarker)
-
-    def replayMethodSubscribe(self, eventName, method):
-        callback = partial(self.replayMethodCall, method, eventName)
-        self.bootcamp.replayCtrl.setDataCallback(eventName, callback)
-        self.replayCallbacks.append((eventName, callback))
-
-    def replayMethodCall(self, callMethod, eventName, binData):
-        callMethod(*cPickle.loads(base64.b64decode(binData)))
-
-    def serializeMethod(self, eventName, params):
-        if BattleReplay.g_replayCtrl.isRecording:
-            BattleReplay.g_replayCtrl.serializeCallbackData(eventName, (base64.b64encode(cPickle.dumps(params, -1)),))

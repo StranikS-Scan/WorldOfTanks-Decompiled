@@ -51,14 +51,6 @@ class RankedRequester(AbstractSyncDataRequester, IRankedRequester):
         return self.getCacheValue('season', (-1, -1))
 
     @property
-    def badges(self):
-        """
-        List of player badges currently selected for display.
-        :return: (badgeID, ...)
-        """
-        return map(str, self.getCacheValue('badges', ()))
-
-    @property
     def maxRank(self):
         """
         Maximum achieved rank and step

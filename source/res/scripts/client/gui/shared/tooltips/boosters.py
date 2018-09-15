@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/boosters.py
-from gui.Scaleform.daapi.view.lobby.server_events import old_events_helpers
+from gui.server_events import events_helpers
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
 from gui.shared.tooltips import TOOLTIP_TYPE
 from gui.shared.tooltips import formatters
@@ -32,7 +32,7 @@ class BoosterTooltipData(BlocksTooltipData):
         items.append(self.__packDueDate(booster))
         if statsFields.quests:
             questsResult = self.__getBoosterQuestNames(boosterID)
-            if len(questsResult):
+            if questsResult:
                 items.append(self.__packAccessCondition(questsResult))
         if statsFields.buyPrice and booster.buyPrices:
             priceBlock = self.__getBoosterPrice(booster)
@@ -58,7 +58,7 @@ class BoosterTooltipData(BlocksTooltipData):
 
     def __getBoosterQuestNames(self, boosterID):
         questsResult = set()
-        quests = old_events_helpers.getBoosterQuests()
+        quests = events_helpers.getBoosterQuests()
         for q in quests.itervalues():
             bonuses = q.getBonuses('goodies')
             for b in bonuses:
@@ -66,11 +66,6 @@ class BoosterTooltipData(BlocksTooltipData):
                 for qBooster, count in boosters.iteritems():
                     if boosterID == qBooster.boosterID:
                         questsResult.add(q.getUserName())
-
-        for chapter, boosters in old_events_helpers.getTutorialQuestsBoosters().iteritems():
-            for booster, count in boosters:
-                if boosterID == booster.boosterID:
-                    questsResult.add(chapter.getTitle())
 
         return questsResult
 

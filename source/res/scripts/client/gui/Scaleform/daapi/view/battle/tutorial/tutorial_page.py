@@ -14,12 +14,7 @@ from gui.battle_control import minimap_utils
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 
 class TutorialComponent(BattleTutorialMeta):
-
-    def _populate(self):
-        super(TutorialComponent, self)._populate()
-
-    def _dispose(self):
-        super(TutorialComponent, self)._dispose()
+    pass
 
 
 class TutorialMinimapComponent(component.MinimapComponent):
@@ -62,7 +57,6 @@ class TutorialStaticObjectsPlugin(plugins.MarkerPlugin):
             return True
         else:
             return False
-            return
 
     def setupStaticObject(self, objectID, shape, minDistance, maxDistance, distance):
         if objectID in self.__objects:
@@ -81,7 +75,7 @@ class TutorialMarkersManager(MarkersManager):
         return setup
 
 
-_TUTORIAL_COMPONENTS_CONFIG = ComponentsConfig(((BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW_ALIASES.BATTLE_TIMER, BATTLE_VIEW_ALIASES.PREBATTLE_TIMER)),))
+_TUTORIAL_COMPONENTS_CONFIG = ComponentsConfig(((BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW_ALIASES.BATTLE_TIMER, BATTLE_VIEW_ALIASES.PREBATTLE_TIMER)), (BATTLE_CTRL_ID.GAME_MESSAGES_PANEL, (BATTLE_VIEW_ALIASES.GAME_MESSAGES_PANEL,))))
 _TUTORIAL_EXTERNAL_COMPONENTS = (CrosshairPanelContainer, TutorialMarkersManager)
 
 class TutorialPage(SharedPage):

@@ -16,12 +16,9 @@ class VehicleDamageState(object):
             if not isCrewActive:
                 if isUnderWater:
                     return 'submersionDeath'
-                else:
-                    return 'crewDeath'
-            else:
-                return 'alive'
-        else:
-            return VehicleDamageState.__healthToStateMap[health]
+                return 'crewDeath'
+            return 'alive'
+        return VehicleDamageState.__healthToStateMap[health]
 
     __stateToModelEffectsMap = {'ammoBayExplosion': ('exploded', None),
      'ammoBayBurnOff': ('destroyed', None),

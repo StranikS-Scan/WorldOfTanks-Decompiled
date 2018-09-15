@@ -90,5 +90,5 @@ class MethodsRules(object):
             notification(*args, **kwargs)
             delayers.add(notification.__name__)
 
-        for delayerName in delayers:
-            self.processDelayer(delayerName)
+        for delayer in delayers:
+            self.processDelayer(delayer)

@@ -234,7 +234,7 @@ class _TechTreeDataProvider(object):
             result[outPin]['outLiteral'] = outPin
             result[outPin]['inPins'].append(lineInfo)
 
-        if IS_DEVELOPMENT and len(nextLevel):
+        if IS_DEVELOPMENT and nextLevel:
             _, nationID, vTypeID = vehicles.parseIntCompactDescr(parentCD)
             pName = vehicles.g_list.getList(nationID)[vTypeID].name
             for itemCD in nextLevel:
@@ -425,10 +425,10 @@ class _TechTreeDataProvider(object):
         recommended = None
         if xps is not None:
             filtered = filter(lambda item: item[0].xpCost <= item[1] + freeXP, mapping)
-        if len(filtered):
+        if filtered:
             recommended = getMinFreeXPSpent(filtered)
         if recommended is None:
-            if len(filtered):
+            if filtered:
                 mapping = filtered
             recommended = getMinFreeXPSpent(mapping)
         return recommended
@@ -455,7 +455,7 @@ class _TechTreeDataProvider(object):
 
     def getNext2UnlockByItems(self, itemCDs, unlocked=set(), xps=None, freeXP=0):
         filtered = filter(lambda item: item in self.__topItems, itemCDs)
-        if not len(filtered) or not len(unlocked):
+        if not filtered or not unlocked:
             return {}
         available = defaultdict(list)
         parentCDs = set(filter(lambda item: getTypeOfCompactDescr(item) == _VEHICLE, itemCDs))

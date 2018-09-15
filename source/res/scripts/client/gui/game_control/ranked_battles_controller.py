@@ -94,7 +94,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
             return cycleID
         else:
             return None
-            return None
 
     def getSeasonPassed(self):
         now = time_utils.getServerRegionalTime()
@@ -123,7 +122,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
             currPoints = self.itemsCache.items.ranked.ladderPoints
             return RankedSeason(seasonInfo, settings.seasons.get(seasonID, {}), self.__getRankedDossier(), currPoints)
         else:
-            return None
             return None
 
     def getNextSeason(self):
@@ -232,35 +230,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
             lastProgress = self.itemsCache.items.ranked.clientVehRanks.get(vehCD, (0, 0))
             if currentProgress != lastProgress:
                 BigWorld.player().ranked.setClientVehRank(vehCD, *currentProgress)
-        return
-
-    def getAvailableBadges(self):
-        return set(self.__getSettings().clientBadgeIDs)
-
-    def getReceivedBadges(self):
-        result = {}
-        dossierBadges = self.itemsCache.items.getAccountDossier().getDossierDescr()['rankedBadges']
-        for bID in RANKED_BADGES_BLOCK_LAYOUT:
-            if bID in dossierBadges:
-                receivedTimestamp = dossierBadges[bID]
-                if receivedTimestamp > 0:
-                    result[bID] = receivedTimestamp
-
-        return result
-
-    def selectBadge(self, badgeID=None):
-        """ Selects badge which will be used as main icon in the client
-        :param badgeID: int id of desired for selection badge
-        :return: None
-        """
-        if badgeID is not None:
-            receivedBadges = self.getReceivedBadges()
-            if badgeID in receivedBadges:
-                BigWorld.player().ranked.selectBadges([badgeID])
-            else:
-                LOG_WARNING('Attempt to select not received badge {}.\nFrom {}'.format(badgeID, receivedBadges))
-        else:
-            BigWorld.player().ranked.selectBadges([])
         return
 
     @async
@@ -614,10 +583,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
 
     def getRanksChanges(self, isLoser=False):
         settings = self.__getSettings()
-        if isLoser:
-            return settings.loserRankChanges
-        else:
-            return settings.winnerRankChanges
+        return settings.loserRankChanges if isLoser else settings.winnerRankChanges
 
     def getMinXp(self):
         settings = self.__getSettings()
@@ -788,10 +754,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         Gets the prime time update time
         """
         _, timeLeft = self.getPrimeTimeStatus()
-        if timeLeft > 0:
-            return timeLeft + 1
-        else:
-            return time_utils.ONE_MINUTE
+        return timeLeft + 1 if timeLeft > 0 else time_utils.ONE_MINUTE
 
     def __resetTimer(self):
         self.startNotification()

@@ -198,14 +198,14 @@ class TweenManager(TweenManagerMeta):
                 else:
                     self.__clearPlayStackElement(self.__playStack[tweenIdx])
                     del self.__playStack[tweenIdx]
-                    if len(self.__playStack) == 0:
+                    if not self.__playStack:
                         BigWorld.cancelCallback(self.__animCallback)
                         self.__animCallback = None
                 tween.complete()
             if tween.getPaused():
                 self.__clearPlayStackElement(self.__playStack[tweenIdx])
                 del self.__playStack[tweenIdx]
-                if len(self.__playStack):
+                if self.__playStack:
                     tweenIdx -= 1
                 else:
                     BigWorld.cancelCallback(self.__animCallback)
@@ -273,9 +273,6 @@ class _AbstractTween(AbstractTweenMeta):
 
     def setPropToTargetDO(self, props, ratio):
         pass
-
-    def _populate(self):
-        super(_AbstractTween, self)._populate()
 
     def postponedCheckState(self):
         self.__isPostponedStarted = True
@@ -533,9 +530,6 @@ from gui.Scaleform.framework.entities.abstract.PythonTweenMeta import PythonTwee
 
 class _PythonTween(_AbstractTween, PythonTweenMeta):
 
-    def __init__(self, idx):
-        super(_PythonTween, self).__init__(idx)
-
     def setPropToTargetDO(self, data, ratio):
         target = self.getTarget()
         info = target.getDisplayInfo()
@@ -552,7 +546,7 @@ class _PythonTween(_AbstractTween, PythonTweenMeta):
          _AbstractTween.ROTATION,
          _AbstractTween.SCALE_X,
          _AbstractTween.SCALE_Y])
-        if len(set(data.keys()).intersection(matrixProps)) > 0:
+        if set(data.keys()).intersection(matrixProps):
             if _AbstractTween.ROTATION in data:
                 matrixRotation = Math.Matrix()
                 matrixRotation.setRotateZ(-data[_AbstractTween.ROTATION] - matrix.roll)
@@ -581,6 +575,3 @@ class _PythonTween(_AbstractTween, PythonTweenMeta):
         displayInfo.x = translation.x
         displayInfo.y = translation.y
         target.setDisplayInfo(displayInfo)
-
-    def complete(self):
-        super(_PythonTween, self).complete()

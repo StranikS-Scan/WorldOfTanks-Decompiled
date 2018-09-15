@@ -191,7 +191,7 @@ class _FriendsCategory(_Category):
                 data.append(self._woGroup.makeEmptyRow(self.__currentParent, False, False))
         else:
             woList = self._woGroup.makeVO(pattern)
-            if len(woList) > 0:
+            if woList:
                 if not hasWoContacts:
                     lastElement = woList[0]
                     if lastElement['gui']['id'] is None:
@@ -665,9 +665,6 @@ class ContactsDataProvider(DAAPIDataProvider):
     def usersStorage(self):
         return None
 
-    def refresh(self):
-        super(ContactsDataProvider, self).refresh()
-
     @property
     def collection(self):
         return self.__list
@@ -743,8 +740,7 @@ class ContactsDataProvider(DAAPIDataProvider):
         if not self.__isEmpty:
             self.__updateCollection(self.__categories.applySearchFilter(searchCriteria))
             return True
-        else:
-            return False
+        return False
 
     def toggleGroup(self, categoryID, groupName):
         result, data = self.__categories.toggleGroup(categoryID, groupName)
@@ -788,8 +784,7 @@ class ContactsDataProvider(DAAPIDataProvider):
         if self.__isEmpty != isEmpty:
             self.__isEmpty = isEmpty
             return True
-        else:
-            return False
+        return False
 
     def __updateContacts(self, actionID, contacts):
         setAction = self.__categories.setAction
@@ -827,12 +822,12 @@ class ContactsDataProvider(DAAPIDataProvider):
         self.onTotalStatusChanged()
 
     def __me_onUserStatusUpdated(self, contact):
-        isEmpty = len(self.__list) > 0
         result, data = self.__categories.setStatus(contact)
         if result:
+            isEmpty = not self.__list
             self.__updateCollection(data)
             self.refresh()
-            if isEmpty != (len(self.__list) > 0):
+            if isEmpty != (not self.__list):
                 self.onTotalStatusChanged()
 
     def __me_onClanMembersListChanged(self):
@@ -854,10 +849,10 @@ class ContactsDataProvider(DAAPIDataProvider):
             return
         result, data = self.__categories.changeGroups(CONTACTS_ALIASES.GROUP_FRIENDS_CATEGORY_ID, include, exclude, True)
         if result:
-            isEmpty = len(self.__list) > 0
+            isEmpty = not self.__list
             self.__updateCollection(data)
             self.refresh()
-            if isEmpty != (len(self.__list) > 0):
+            if isEmpty != (not self.__list):
                 self.__setEmpty()
                 self.onTotalStatusChanged()
 

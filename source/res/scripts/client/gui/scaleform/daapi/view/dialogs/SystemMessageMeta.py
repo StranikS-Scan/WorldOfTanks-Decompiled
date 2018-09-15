@@ -5,23 +5,35 @@ from gui.Scaleform.locale.AOGAS import AOGAS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.shared import events
 from web_stubs import i18n
+from collections import namedtuple
+
+class SESSION_CONTROL_TYPE:
+    AOGAS = 'AOGAS'
+    KOREA_PARENTAL_CONTROL = 'KOREA_PARENTAL_CONTROL'
+
+
+SessionControlAuxData = namedtuple('SessionControlAuxData', ('type', 'timeoutMS'))
 
 class SystemMessageMeta(IDialogMeta):
-    AOGAS = 'AOGAS'
 
     def __init__(self, notification):
         super(SystemMessageMeta, self).__init__()
         self.__notificationVO = notification.getListVO()
         settings = notification.getSettings()
         auxData = settings.auxData
-        if len(auxData) > 1 and auxData[0] == self.AOGAS:
-            self.__settingsVO = {'timeout': auxData[1]}
+        self.__settingsVO = {}
+        if isinstance(auxData, SessionControlAuxData):
+            sessionControlType = auxData.type
+            self.__settingsVO['timeout'] = auxData.timeoutMS
+        else:
+            sessionControlType = None
+        if sessionControlType == SESSION_CONTROL_TYPE.AOGAS:
             self.__title = i18n.makeString(AOGAS.NOTIFICATION_TITLE)
             self.__cancelLabel = i18n.makeString(AOGAS.NOTIFICATION_CLOSE)
         else:
-            self.__settingsVO = {}
             self.__title = i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_PRIORITYMESSAGETITLE)
             self.__cancelLabel = i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_BUTTONS_CLOSE)
+        return
 
     def getSettings(self):
         return self.__settingsVO

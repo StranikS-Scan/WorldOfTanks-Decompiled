@@ -90,7 +90,7 @@ class Chapter(HasID):
         initialScene = None
         if self.__initialSceneID in self.__sceneMap:
             initialScene = self.__scenes[self.__sceneMap[self.__initialSceneID]]
-        if initialScene is None and len(self.__scenes):
+        if initialScene is None and self.__scenes:
             initialScene = self.__scenes[0]
         return initialScene
 
@@ -121,14 +121,14 @@ class Chapter(HasID):
         self.__flags = []
         self.__varSets = []
         self.__sceneMap.clear()
-        while len(self.__scenes):
+        while self.__scenes:
             self.__scenes.pop().clear()
 
-        while len(self.__hasID):
+        while self.__hasID:
             _, item = self.__hasID.popitem()
             item.clear()
 
-        while len(self.__triggers):
+        while self.__triggers:
             _, item = self.__triggers.popitem()
             item.clear()
 
@@ -179,13 +179,13 @@ class Scene(HasID):
         return item
 
     def clear(self):
-        while len(self.__postEffects):
+        while self.__postEffects:
             self.__postEffects.pop().clear()
 
-        while len(self.__effects):
+        while self.__effects:
             self.__effects.pop().clear()
 
-        while len(self.__guiItems):
+        while self.__guiItems:
             _, item = self.__guiItems.popitem()
             item.clear()
 
@@ -278,7 +278,7 @@ class Action(HasIDAndTarget):
         return self.__effects[:]
 
     def clear(self):
-        while len(self.__effects):
+        while self.__effects:
             self.__effects.pop().clear()
 
 
@@ -297,11 +297,7 @@ class ActionsHolder(HasID):
 
     def getAction(self, event):
         key = event.getActionCriteria()
-        if key in self.__actions:
-            return self.__actions[key]
-        else:
-            return None
-            return None
+        return self.__actions[key] if key in self.__actions else None
 
     def getActionTypes(self):
         return map(operator.itemgetter(0), self.__actions.keys())
@@ -313,7 +309,7 @@ class ActionsHolder(HasID):
         self.__actions = dict(map(lambda action: ((action.getType(), action.getTargetID()), action), actions))
 
     def clear(self):
-        while len(self.__actions):
+        while self.__actions:
             _, action = self.__actions.popitem()
             action.clear()
 
@@ -367,13 +363,13 @@ class VehicleImagePath(SimpleImagePath):
         path = varSummary.get(self._pathRef)
         originPath = []
         altPath = []
-        if path and len(path):
+        if path:
             originPath.append(path)
             altPath.append(path)
         else:
             return (self._image, self._image)
         default = varSummary.get(self._defaultRef)
-        if default and len(default):
+        if default:
             from tutorial.control.context import GLOBAL_VAR, GlobalStorage
             vehTypeName = GlobalStorage(GLOBAL_VAR.PLAYER_VEHICLE_NAME, default).value()
             if vehTypeName and default != vehTypeName:
@@ -511,10 +507,10 @@ class GuiItemRef(HasTargetID):
         self.__props.clear()
         if self.__conditions is not None:
             self.__conditions.clear()
-        while len(self.__notOnSceneEffects):
+        while self.__notOnSceneEffects:
             self.__notOnSceneEffects.pop().clear()
 
-        while len(self.__onSceneEffects):
+        while self.__onSceneEffects:
             self.__onSceneEffects.pop().clear()
 
         return

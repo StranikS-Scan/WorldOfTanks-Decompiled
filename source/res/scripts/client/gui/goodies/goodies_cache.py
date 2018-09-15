@@ -30,7 +30,6 @@ def _createDiscount(discountID, discountDescription, proxy):
     else:
         LOG_WARNING('Current discount with ID: %s and type: %s is not supported by UX' % (discountID, targetType))
         return None
-        return None
 
 
 _GOODIES_VARIETY_MAPPING = {GOODIE_VARIETY.BOOSTER: _createBooster,
@@ -46,7 +45,6 @@ class GoodiesCache(IGoodiesCache):
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
-        self._items = weakref.proxy(self.itemsCache.items)
         self.__goodiesCache = defaultdict(dict)
         self.__activeBoostersTypes = None
         return
@@ -59,7 +57,7 @@ class GoodiesCache(IGoodiesCache):
 
     def clear(self):
         self.__activeBoostersTypes = None
-        while len(self.__goodiesCache):
+        while self.__goodiesCache:
             _, cache = self.__goodiesCache.popitem()
             cache.clear()
 
@@ -118,7 +116,6 @@ class GoodiesCache(IGoodiesCache):
 
             self.__activeBoostersTypes = activeBoosterTypes
             return self.__activeBoostersTypes
-            return
 
     def getBooster(self, boosterID):
         """
@@ -145,6 +142,10 @@ class GoodiesCache(IGoodiesCache):
         Gets personal discounts GUI instances in format: {discountID: discount, ...}
         """
         return self.__getGoodies(self._items.shop.discounts, criteria)
+
+    @property
+    def _items(self):
+        return self.itemsCache.items
 
     def __getGoodies(self, goodies, criteria=REQ_CRITERIA.EMPTY):
         """

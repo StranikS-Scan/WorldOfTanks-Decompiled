@@ -317,8 +317,7 @@ class BattleMessengerView(BattleMessengerMeta, IBattleChannelView, IContactsAndP
             g_settings.battle.lastReceiver = self.__receivers[self.__receiverIndex][1].name
             self.as_changeReceiverS(self.__receiverIndex)
             return True
-        else:
-            return False
+        return False
 
     def invalidateReceivers(self):
         self.__receivers = []

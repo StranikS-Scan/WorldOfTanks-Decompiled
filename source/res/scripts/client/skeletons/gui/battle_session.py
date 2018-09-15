@@ -237,6 +237,9 @@ class IClientArenaVisitor(object):
     def hasArenaFogOfWarHiddenVehicles(self):
         raise NotImplementedError
 
+    def hasGameEndMessage(self):
+        raise NotImplementedError
+
 
 class IBattleClientCache(object):
 

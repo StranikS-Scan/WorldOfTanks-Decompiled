@@ -5,7 +5,7 @@ import weakref
 import itertools
 import types
 import BigWorld
-from debug_utils import LOG_ERROR, LOG_WARNING
+from debug_utils import LOG_ERROR
 ScalarTypes = (types.IntType,
  types.LongType,
  types.FloatType,
@@ -78,9 +78,9 @@ def collapseIntervals(sequence):
     :return: result like list of collapsed paris
     """
     result = []
-    prevElement = None
+    prevElement = []
     for periodStart, periodEnd in sorted(sequence):
-        if prevElement is not None and periodStart <= prevElement[1]:
+        if prevElement and periodStart <= prevElement[1]:
             prevElement[1] = periodEnd
         prevElement = [periodStart, periodEnd]
         result.append(prevElement)

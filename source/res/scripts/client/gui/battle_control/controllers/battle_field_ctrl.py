@@ -19,6 +19,7 @@ class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
 
     def __init__(self):
         super(BattleFieldCtrl, self).__init__()
+        self.__isEnabled = True
         self.__battleCtx = None
         self._aliveAllies = {}
         self._aliveEnemies = {}
@@ -38,6 +39,7 @@ class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
 
     def startControl(self, battleCtx, arenaVisitor):
         self.__battleCtx = battleCtx
+        self.__isEnabled = not arenaVisitor.hasArenaFogOfWarHiddenVehicles()
 
     def stopControl(self):
         super(BattleFieldCtrl, self).stopControl()
@@ -48,25 +50,31 @@ class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
 
     def setViewComponents(self, *components):
         super(BattleFieldCtrl, self).setViewComponents(*components)
-        self.__initializeVehiclesInfo()
+        if self.__isEnabled:
+            self.__initializeVehiclesInfo()
 
     def setVehicleHealth(self, vehicleID, newHealth):
-        self.__changeVehicleHealth(vehicleID, newHealth)
+        if self.__isEnabled:
+            self.__changeVehicleHealth(vehicleID, newHealth)
 
     def setVehicleVisible(self, vehicleID, health):
-        self.__changeVehicleHealth(vehicleID, health)
+        if self.__isEnabled:
+            self.__changeVehicleHealth(vehicleID, health)
 
     def addVehicleInfo(self, vInfoVO, arenaDP):
-        if vInfoVO.isAlive():
+        if self.__isEnabled and vInfoVO.isAlive():
             self.__registerAliveVehicle(vInfoVO, arenaDP)
             self.__updateVehiclesHealth()
 
+    def invalidateFogOfWarHiddenVehiclesFlag(self, flag):
+        self.__isEnabled = not flag
+
     def invalidateArenaInfo(self):
-        if self._viewComponents:
+        if self.__isEnabled and self._viewComponents:
             self.__initializeVehiclesInfo()
 
     def invalidateVehicleStatus(self, flags, vInfoVO, arenaDP):
-        if not vInfoVO.isAlive():
+        if self.__isEnabled and not vInfoVO.isAlive():
             self.__registerDeadVehicle(vInfoVO, arenaDP)
             self.__updateDeadVehicles()
             vehicleId = vInfoVO.vehicleID
@@ -103,15 +111,19 @@ class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
 
     def __registerAliveVehicle(self, vInfoVO, arenaDP):
         maxHealth = vInfoVO.vehicleType.maxHealth
-        if arenaDP.isEnemyTeam(vInfoVO.team):
-            tList = self._aliveEnemies
-            self.__enemiesHealth += maxHealth
-            self.__totalEnemiesHealth += maxHealth
+        if maxHealth is None:
+            return
         else:
-            tList = self._aliveAllies
-            self.__alliesHealth += maxHealth
-            self.__totalAlliesHealth += maxHealth
-        tList[vInfoVO.vehicleID] = [maxHealth, maxHealth]
+            if arenaDP.isEnemyTeam(vInfoVO.team):
+                tList = self._aliveEnemies
+                self.__enemiesHealth += maxHealth
+                self.__totalEnemiesHealth += maxHealth
+            else:
+                tList = self._aliveAllies
+                self.__alliesHealth += maxHealth
+                self.__totalAlliesHealth += maxHealth
+            tList[vInfoVO.vehicleID] = [maxHealth, maxHealth]
+            return
 
     def __updateVehiclesHealth(self):
         for viewCmp in self._viewComponents:

@@ -161,24 +161,6 @@ class Stats(object):
             self.__account.shop.waitForSync(partial(self.__slot_onShopSynced, callback))
             return
 
-    def buyPotapovQuestSlot(self, callback=None):
-        if self.__ignore:
-            if callback is not None:
-                callback(AccountCommands.RES_NON_PLAYER, 0)
-            return
-        else:
-            self.__account.shop.waitForSync(partial(self.__potapovQuestSlot_onShopSynced, callback))
-            return
-
-    def buyPotapovQuestTile(self, tileID, callback=None):
-        if self.__ignore:
-            if callback is not None:
-                callback(AccountCommands.RES_NON_PLAYER, 0)
-            return
-        else:
-            self.__account.shop.waitForSync(partial(self.__potapovQuestTile_onShopSynced, tileID, callback))
-            return
-
     def buyBerths(self, callback=None):
         if self.__ignore:
             if callback is not None:
@@ -320,32 +302,6 @@ class Stats(object):
             else:
                 proxy = None
             self.__account._doCmdInt3(AccountCommands.CMD_BUY_SLOT, shopRev, 0, 0, proxy)
-            return
-
-    def __potapovQuestSlot_onShopSynced(self, callback, resultID, shopRev):
-        if resultID < 0:
-            if callback is not None:
-                callback(resultID)
-            return
-        else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
-            self.__account._doCmdInt3(AccountCommands.CMD_BUY_POTAPOV_QUEST_SLOT, shopRev, 0, 0, proxy)
-            return
-
-    def __potapovQuestTile_onShopSynced(self, tileID, callback, resultID, shopRev):
-        if resultID < 0:
-            if callback is not None:
-                callback(resultID)
-            return
-        else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
-            self.__account._doCmdInt3(AccountCommands.CMD_BUY_POTAPOV_QUEST_TILE, shopRev, tileID, 0, proxy)
             return
 
     def __berths_onShopSynced(self, callback, resultID, shopRev):

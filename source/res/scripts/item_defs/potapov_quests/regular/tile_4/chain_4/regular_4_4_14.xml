@@ -10,15 +10,20 @@
             <win></win>
             <or>
               <unit>
-                <and>
-                  <results>
-                    <key>	percentFromTotalTeamDamage	</key>
-                    <greaterOrEqual>	35	</greaterOrEqual>
-                  </results>
-                </and>
+                <results>
+                  <title>
+                    <key>	#personal_missions_details:quest_common_condition_title_squad_damage	</key>
+                  </title>
+                  <description>
+                    <key>	#personal_missions_details:quest_4_4_14_condition_description_percentFromTotalTeamDamage	</key>
+                  </description>
+                  <key>	percentFromTotalTeamDamage	</key>
+                  <greaterOrEqual>	35	</greaterOrEqual>
+                </results>
               </unit>
               <and>
                 <results>
+                  <hideInGui></hideInGui>
                   <key>	percentFromTotalTeamDamage	</key>
                   <greaterOrEqual>	35	</greaterOrEqual>
                 </results>
@@ -31,6 +36,38 @@
         <freeXP>	4000	</freeXP>
         <item>	1273	  <count>	1	</count>
         </item>
+        <token>
+          <id>	token:pt:final:s1:t4:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_4_14_main_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_4_4_14_main_award_list	</id>
+              <equal>	1	</equal>
+            </token>
+          </account>
+        </preBattle>
+      </conditions>
+      <bonus>
+        <freeXP>	4000	</freeXP>
+        <item>	1273	  <count>	1	</count>
+        </item>
+        <token>
+          <id>	token:pt:final:s1:t4:main	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
       </bonus>
     </potapovQuest>
     <potapovQuest>
@@ -43,15 +80,20 @@
             <win></win>
             <or>
               <unit>
-                <and>
-                  <results>
-                    <key>	percentFromTotalTeamDamage	</key>
-                    <greaterOrEqual>	35	</greaterOrEqual>
-                  </results>
-                </and>
+                <results>
+                  <title>
+                    <key>	#personal_missions_details:quest_common_condition_title_squad_damage	</key>
+                  </title>
+                  <description>
+                    <key>	#personal_missions_details:quest_4_4_14_condition_description_percentFromTotalTeamDamage	</key>
+                  </description>
+                  <key>	percentFromTotalTeamDamage	</key>
+                  <greaterOrEqual>	35	</greaterOrEqual>
+                </results>
               </unit>
               <and>
                 <results>
+                  <hideInGui></hideInGui>
                   <key>	percentFromTotalTeamDamage	</key>
                   <greaterOrEqual>	35	</greaterOrEqual>
                 </results>
@@ -63,6 +105,57 @@
       </conditions>
       <bonus>
         <premium>	2	</premium>
+        <token>
+          <id>	token:pt:final:s1:t4:add	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+          <limit>	75	</limit>
+        </token>
+      </bonus>
+    </potapovQuest>
+    <potapovQuest>
+      <enabled>	true	</enabled>
+      <id>	regular_4_4_14_add_award_list	</id>
+      <serverOnly>	true	</serverOnly>
+      <conditions>
+        <preBattle>
+          <account>
+            <token>
+              <id>	regular_4_4_14_main_award_list	</id>
+              <greaterOrEqual>	1	</greaterOrEqual>
+              <consume>	100	  <force></force>
+              </consume>
+            </token>
+          </account>
+        </preBattle>
+        <postBattle>
+          <and>
+            <win></win>
+            <or>
+              <unit>
+                <results>
+                  <key>	percentFromTotalTeamDamage	</key>
+                  <greaterOrEqual>	35	</greaterOrEqual>
+                </results>
+              </unit>
+              <and>
+                <results>
+                  <hideInGui></hideInGui>
+                  <key>	percentFromTotalTeamDamage	</key>
+                  <greaterOrEqual>	35	</greaterOrEqual>
+                </results>
+              </and>
+            </or>
+            <isAlive></isAlive>
+          </and>
+        </postBattle>
+      </conditions>
+      <bonus>
+        <token>
+          <id>	free_award_list	</id>
+          <expires>	28.01.2100 00:01	</expires>
+          <count>	1	</count>
+        </token>
       </bonus>
     </potapovQuest>
   </quests>

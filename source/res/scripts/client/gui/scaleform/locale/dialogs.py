@@ -863,6 +863,9 @@ class DIALOGS(object):
     FORTDISABLED_TITLE = '#dialogs:fortDisabled/title'
     FORTDISABLED_MESSAGE = '#dialogs:fortDisabled/message'
     FORTDISABLED_CANCEL = '#dialogs:fortDisabled/cancel'
+    ELENDISABLED_TITLE = '#dialogs:elenDisabled/title'
+    ELENDISABLED_MESSAGE = '#dialogs:elenDisabled/message'
+    ELENDISABLED_CANCEL = '#dialogs:elenDisabled/cancel'
     CLAN_DATA_NOT_AVAILABLE_TITLE = '#dialogs:clan_data_not_available/title'
     CLAN_DATA_NOT_AVAILABLE_MESSAGE = '#dialogs:clan_data_not_available/message'
     CLAN_DATA_NOT_AVAILABLE_CANCEL = '#dialogs:clan_data_not_available/cancel'
@@ -925,6 +928,14 @@ class DIALOGS(object):
     HOFDISABLED_TITLE = '#dialogs:hofDisabled/title'
     HOFDISABLED_MESSAGE = '#dialogs:hofDisabled/message'
     HOFDISABLED_CANCEL = '#dialogs:hofDisabled/cancel'
+    LEAVEEVENT_TITLE = '#dialogs:leaveEvent/title'
+    LEAVEEVENT_MESSAGE = '#dialogs:leaveEvent/message'
+    LEAVEEVENT_SUBMIT = '#dialogs:leaveEvent/submit'
+    LEAVEEVENT_CANCEL = '#dialogs:leaveEvent/cancel'
+    LEAVESTARTEDEVENT_TITLE = '#dialogs:leaveStartedEvent/title'
+    LEAVESTARTEDEVENT_MESSAGE = '#dialogs:leaveStartedEvent/message'
+    LEAVESTARTEDEVENT_SUBMIT = '#dialogs:leaveStartedEvent/submit'
+    LEAVESTARTEDEVENT_CANCEL = '#dialogs:leaveStartedEvent/cancel'
     RECRUITWINDOW_VEHICLECLASSDROPDOWN_ENUM = (RECRUITWINDOW_VEHICLECLASSDROPDOWN_ALL,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_LIGHTTANK,
      RECRUITWINDOW_VEHICLECLASSDROPDOWN_MEDIUMTANK,
@@ -1783,6 +1794,9 @@ class DIALOGS(object):
      FORTDISABLED_TITLE,
      FORTDISABLED_MESSAGE,
      FORTDISABLED_CANCEL,
+     ELENDISABLED_TITLE,
+     ELENDISABLED_MESSAGE,
+     ELENDISABLED_CANCEL,
      CLAN_DATA_NOT_AVAILABLE_TITLE,
      CLAN_DATA_NOT_AVAILABLE_MESSAGE,
      CLAN_DATA_NOT_AVAILABLE_CANCEL,
@@ -1844,7 +1858,15 @@ class DIALOGS(object):
      HOF_EXCLUDERATING_CANCEL,
      HOFDISABLED_TITLE,
      HOFDISABLED_MESSAGE,
-     HOFDISABLED_CANCEL)
+     HOFDISABLED_CANCEL,
+     LEAVEEVENT_TITLE,
+     LEAVEEVENT_MESSAGE,
+     LEAVEEVENT_SUBMIT,
+     LEAVEEVENT_CANCEL,
+     LEAVESTARTEDEVENT_TITLE,
+     LEAVESTARTEDEVENT_MESSAGE,
+     LEAVESTARTEDEVENT_SUBMIT,
+     LEAVESTARTEDEVENT_CANCEL)
 
     @classmethod
     def recruitwindow_vehicleclassdropdown(cls, key0):

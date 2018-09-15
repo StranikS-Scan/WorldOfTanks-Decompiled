@@ -9,6 +9,7 @@ from constants import REQUEST_COOLDOWN, TOKEN_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION
 from TokenResponse import TokenResponse
 from ids_generators import SequenceIDGenerator
+from helpers import isPlayerAccount
 
 def _getAccountRepository():
     import Account
@@ -76,6 +77,9 @@ class TokenRequester(object):
     def getReqCoolDown(self):
         return getattr(REQUEST_COOLDOWN, TOKEN_TYPE.COOLDOWNS[self.__tokenType], 10.0)
 
+    def canAllowRequest(self):
+        return self.__tokenType != TOKEN_TYPE.WGNI if not isPlayerAccount() else True
+
     @async
     @process
     def request(self, timeout=None, callback=None, allowDelay=False):
@@ -103,9 +107,11 @@ class TokenRequester(object):
             if timeout:
                 self.__loadTimeout(self.__requestID, self.__tokenType, max(timeout, 0.0))
             repository = _getAccountRepository()
-            if repository:
+            if repository and self.canAllowRequest():
                 repository.onTokenReceived += self.__onTokenReceived
-            requester(self.__requestID, self.__tokenType)
+                requester(self.__requestID, self.__tokenType)
+            elif self.__callback:
+                self.__callback(None)
             return
 
     def __onTokenReceived(self, requestID, tokenType, data):

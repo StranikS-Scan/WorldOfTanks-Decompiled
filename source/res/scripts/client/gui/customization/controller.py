@@ -22,6 +22,7 @@ class _Events(object):
 
     def __init__(self):
         self.onQuestsUpdated = Event()
+        self.onPMRequiredTokensUpdated = Event()
         self.onInventoryUpdated = Event()
         self.onTankModelAttributesUpdated = Event()
         self.onInstalledElementsUpdated = Event()
@@ -43,6 +44,8 @@ class _Events(object):
         self.onBonusesUpdated = Event()
         self.onCustomizationViewClosed = Event()
         self.onBackToSelectorGroup = Event()
+        self.onQuestsItemsChanged = Event()
+        self.onQuestsItemsDataChanged = Event()
 
 
 class Controller(object):

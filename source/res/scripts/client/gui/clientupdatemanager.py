@@ -61,7 +61,7 @@ class _ClientUpdateManager(object):
         if handler in self.__handlers:
             if diffpath in self.__handlers[handler]:
                 self.__handlers[handler].remove(diffpath)
-            if not len(self.__handlers[handler]):
+            if not self.__handlers[handler]:
                 del self.__handlers[handler]
 
     def __processPath(self, diffpath, diff):
@@ -78,7 +78,7 @@ class _ClientUpdateManager(object):
             return (True, diff_ptr)
 
     def __clearRemoved(self):
-        if not len(self.__removedHandlers):
+        if not self.__removedHandlers:
             return
         for item in self.__removedHandlers:
             del self.__handlers[item]

@@ -35,10 +35,7 @@ def formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue
         if isColorBlind and pingStatus == PING_STATUSES.HIGH:
             colorBlindName = '_color_blind'
         pingStatusIcon = formatPingStatusIcon(RES_ICONS.maps_icons_pingstatus_stairs_indicator(str(pingStatus) + colorBlindName + '.png'))
-        if useBigSize:
-            return text_styles.concatStylesToSingleLine(text_styles.main(' '), formattedPing, pingStatusIcon)
-        return text_styles.concatStylesToSingleLine(formattedPing, '', pingStatusIcon)
-        return None
+        return text_styles.concatStylesToSingleLine(text_styles.main(' '), formattedPing, pingStatusIcon) if useBigSize else text_styles.concatStylesToSingleLine(formattedPing, '', pingStatusIcon)
 
 
 def formatPingStatusIcon(icon):

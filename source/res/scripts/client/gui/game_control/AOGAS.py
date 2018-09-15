@@ -162,7 +162,7 @@ class _AOGASNotificator(object):
 
     def __getNextNotifyTime(self, AOND):
         notifyTime = 0
-        while notifyTime < AOND:
+        while notifyTime == 0 or notifyTime < AOND:
             notifyPeriod = self.__getNotifyPeriod(notifyTime)
             notifyTime += notifyPeriod
 

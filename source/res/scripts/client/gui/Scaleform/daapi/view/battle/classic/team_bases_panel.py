@@ -119,7 +119,4 @@ class TeamBasesPanel(TeamBasesPanelMeta, team_bases_ctrl.ITeamBasesListener):
 
     @staticmethod
     def __getInvadersCountStr(count):
-        if count < _MAX_INVADERS_COUNT:
-            return str(count)
-        else:
-            return str(_MAX_INVADERS_COUNT)
+        return str(count) if count < _MAX_INVADERS_COUNT else str(_MAX_INVADERS_COUNT)

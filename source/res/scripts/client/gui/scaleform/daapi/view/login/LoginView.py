@@ -55,6 +55,7 @@ _STATUS_TO_INVALID_FIELDS_MAPPING = defaultdict(lambda : INVALID_FIELDS.ALL_VALI
 _ValidateCredentialsResult = namedtuple('ValidateCredentialsResult', ('isValid', 'errorMessage', 'invalidFields'))
 _BG_MODE_VIDEO, _BG_MODE_WALLPAPER = range(0, 2)
 _LOGIN_VIDEO_FILE = SCALEFORM_STARTUP_VIDEO_MASK % '_login.usm'
+_g__WGCloginEnabled = True
 
 class BackgroundMode(object):
     """
@@ -203,6 +204,7 @@ class LoginView(LoginPageMeta):
         self._rememberUser = rememberUser
 
     def onLogin(self, userName, password, serverName, isSocialToken2Login):
+        BigWorld.WGC_disable()
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.LOGIN, True)
         self._autoSearchVisited = serverName == AUTO_LOGIN_QUERY_URL
         self.__customLoginStatus = None
@@ -215,6 +217,10 @@ class LoginView(LoginPageMeta):
         return
 
     def __tryWGCLogin(self):
+        global _g__WGCloginEnabled
+        if not _g__WGCloginEnabled:
+            return
+        _g__WGCloginEnabled = False
         if not BigWorld.WGC_prepareLogin():
             return
         BigWorld.WGC_printLastError()
@@ -518,7 +524,7 @@ class LoginView(LoginPageMeta):
         isValid = True
         errorMessage = None
         invalidFields = None
-        if isToken2Login and GUI_SETTINGS.rememberPassVisible or constants.IS_DEVELOPMENT and len(userName):
+        if isToken2Login and GUI_SETTINGS.rememberPassVisible or constants.IS_DEVELOPMENT and userName:
             return _ValidateCredentialsResult(isValid, errorMessage, invalidFields)
         else:
             if len(userName) < _LOGIN_NAME_MIN_LENGTH:

@@ -46,14 +46,12 @@ class FrontendMapping(object):
         else:
             LOG_ERROR('Destroy timer is not found by code', code)
             return None
-            return None
 
     def getTimerTypeIDByDeathZoneCode(self, code):
         if code in self.__deathZonesCodes:
             return self.__deathZonesCodes[code]
         else:
             LOG_ERROR('Death zone timer is not found by code', code)
-            return None
             return None
 
     def getDestroyTimersTypesIDs(self):

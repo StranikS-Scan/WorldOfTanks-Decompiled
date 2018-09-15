@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/optional_bonuses.py
 import random
 import copy
+import time
 from constants import EVENT_TYPE
 from items import tankmen
 
@@ -117,10 +118,21 @@ def __mergeDossier(total, key, value, isLeaf=False, count=1, *args):
     for _dossierType, changes in value.iteritems():
         totalDossier = totalDossiers.setdefault(_dossierType, {})
         for record, data in changes.iteritems():
+            block, name = record
+            try:
+                record = (block, int(name))
+            except:
+                pass
+
             total = totalDossier.setdefault(record, {'value': 0,
              'unique': False,
              'type': 'add'})
-            total['value'] += data['value'] * count
+            dataValue = data['value']
+            if isinstance(dataValue, basestring):
+                if dataValue == 'timestamp':
+                    total['value'] = int(time.time())
+            else:
+                total['value'] += dataValue * count
             total['unique'] = data['unique']
             total['type'] = data['type']
 
@@ -268,7 +280,7 @@ class FilterVisitor(object):
         return deeper
 
     def onValue(self, bonus, name, value):
-        if self.__eventType != EVENT_TYPE.POTAPOV_QUEST and name == 'tankmen':
+        if self.__eventType != EVENT_TYPE.PERSONAL_MISSION and name == 'tankmen':
             tankmenList = [ tankmen.makeTmanDescrByTmanData(tmanData) for tmanData in value ]
             bonus['tankmen'] = tankmenList
         if self.__eventType in EVENT_TYPE.LIKE_TOKEN_QUESTS and name == 'customization':

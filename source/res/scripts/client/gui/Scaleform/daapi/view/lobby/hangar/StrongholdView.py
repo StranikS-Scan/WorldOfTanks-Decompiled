@@ -30,7 +30,7 @@ class StrongholdView(LobbySubView, StrongholdViewMeta):
 
     def onFocusChange(self, hasFocus):
         self.__hasFocus = hasFocus
-        self.__updateSkipEscape()
+        self.__updateSkipEscape(not hasFocus)
 
     def viewSize(self, width, height):
         self.__loadBrowser(width, height)
@@ -55,7 +55,7 @@ class StrongholdView(LobbySubView, StrongholdViewMeta):
             if self.__browser:
                 self.__browser.allowRightClick = True
                 self.__browser.useSpecialKeys = False
-            self.__updateSkipEscape()
+            self.__updateSkipEscape(not self.__hasFocus)
         else:
             LOG_ERROR('Setting "StrongholdsTabUrl" missing!')
         return
@@ -71,13 +71,14 @@ class StrongholdView(LobbySubView, StrongholdViewMeta):
     def __close(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def __updateSkipEscape(self):
+    def __updateSkipEscape(self, skipEscape):
         if self.__browser is not None:
-            self.__browser.skipEscape = not self.__hasFocus
-            self.__browser.ignoreKeyEvents = not self.__hasFocus
+            self.__browser.skipEscape = skipEscape
+            self.__browser.ignoreKeyEvents = skipEscape
         return
 
     def __onError(self):
+        self.__updateSkipEscape(True)
         self.fireEvent(events.StrongholdEvent(events.StrongholdEvent.STRONGHOLD_DATA_UNAVAILABLE), scope=EVENT_BUS_SCOPE.STRONGHOLD)
 
     def __showBrowser(self):

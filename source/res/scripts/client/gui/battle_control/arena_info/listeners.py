@@ -63,7 +63,7 @@ class _Listener(object):
         return result
 
     def clear(self):
-        while len(self._controllers):
+        while self._controllers:
             ref = self._controllers.pop()
             ctrl = ref()
             if ctrl is not None:
@@ -116,6 +116,7 @@ class ArenaVehiclesListener(_Listener):
             arena.onTeamKiller += self.__arena_onTeamKiller
             arena.onInteractiveStats += self.__arena_onInteractiveStats
             arena.onGameModeSpecifcStats += self.__arena_onGameModeSpecifcStats
+            arena.onFogOfWarHiddenVehiclesSet += self.__arena_onFogOfWarHiddenVehiclesSet
         return
 
     def stop(self):
@@ -132,6 +133,7 @@ class ArenaVehiclesListener(_Listener):
             arena.onTeamKiller -= self.__arena_onTeamKiller
             arena.onInteractiveStats -= self.__arena_onInteractiveStats
             arena.onGameModeSpecifcStats -= self.__arena_onGameModeSpecifcStats
+            arena.onFogOfWarHiddenVehiclesSet -= self.__arena_onFogOfWarHiddenVehiclesSet
         super(ArenaVehiclesListener, self).stop()
         return
 
@@ -204,6 +206,9 @@ class ArenaVehiclesListener(_Listener):
                 self._invokeListenersMethod('updateVehiclesInfo', [(flags, vo)], self._arenaDP)
             if flags != INVALIDATE_OP.NONE:
                 self._invokeListenersMethod('updateVehiclesStats', [(flags, vo)], self._arenaDP)
+
+    def __arena_onFogOfWarHiddenVehiclesSet(self, flag):
+        self._invokeListenersMethod('invalidateFogOfWarHiddenVehiclesFlag', flag)
 
     def __isRequiredDataExists(self):
         return self._arenaDP is not None and self._arenaDP.isRequiredDataExists()
@@ -431,9 +436,6 @@ class ArenaSpaceLoadListener(_Listener):
 
 class ArenaTeamBasesListener(_Listener):
     __slots__ = ('__baseIDs', '__points')
-
-    def __init__(self):
-        super(ArenaTeamBasesListener, self).__init__()
 
     def start(self, setup):
         super(ArenaTeamBasesListener, self).start(setup)

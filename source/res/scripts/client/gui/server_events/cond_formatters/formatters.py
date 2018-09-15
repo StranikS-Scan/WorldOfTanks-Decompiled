@@ -1,81 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/cond_formatters/formatters.py
+import weakref
 import nations
-from gui.server_events.formatters import RELATIONS_SCHEME, RELATIONS
-from helpers import i18n, int2roman
-TOP_RANGE_HIGHEST = 1
-TOP_RANGE_LOWEST = 15
-
-def getFiltersLabel(labelKey, condition):
-    """
-    Gets localized VehicleKill or VehicleDamage condition's description by filters data
-    """
-    _, fNations, fLevels, fClasses = condition.parseFilters()
-    keys, kwargs = [], {}
-    if fNations:
-        keys.append('nation')
-        kwargs['nation'] = ', '.join((i18n.makeString('#menu:nations/%s' % nations.NAMES[idx]) for idx in fNations))
-    if fClasses:
-        keys.append('type')
-        kwargs['type'] = ', '.join([ i18n.makeString('#menu:classes/%s' % name) for name in fClasses ])
-    if fLevels:
-        keys.append('level')
-        kwargs['level'] = ', '.join([ int2roman(lvl) for lvl in fLevels ])
-    labelKey = '%s/%s' % (labelKey, '_'.join(keys))
-    if condition.relationValue is None and condition.isNegative:
-        labelKey = '%s/not' % labelKey
-    return i18n.makeString(labelKey, **kwargs)
-
-
-def getResultsData(condition):
-    """
-    Gets main values to display BattleResults or UnitResults conditions in GUI
-    :return label - localized condition's description
-            relation - relation type: (more, less, equal, greaterOrEqual, ...)
-            relationI18nType - GUI representation of condition (default or alternative)
-            value - condition's value
-    """
-
-    def _makeStr(i18nKey, *args, **kwargs):
-        if condition.isNegative():
-            i18nKey = '%s/not' % i18nKey
-        return i18n.makeString(i18nKey, *args, **kwargs)
-
-    key = i18n.makeString('#quests:details/conditions/cumulative/%s' % condition.keyName)
-    labelKey = '#quests:details/conditions/results'
-    topRangeUpper, topRangeLower = condition.getMaxRange()
-    if topRangeLower < TOP_RANGE_LOWEST:
-        labelKey = '%s/%s/%s' % (labelKey, condition.localeKey, 'bothTeams' if condition.isTotal() else 'halfTeam')
-        if topRangeUpper == TOP_RANGE_HIGHEST:
-            label = _makeStr('%s/top' % labelKey, param=key, count=topRangeLower)
-        elif topRangeLower == topRangeUpper:
-            label = _makeStr('%s/position' % labelKey, param=key, position=topRangeUpper)
-        else:
-            label = _makeStr('%s/range' % labelKey, param=key, high=topRangeUpper, low=topRangeLower)
-    elif condition.isAvg():
-        label = i18n.makeString('#quests:details/conditions/results/%s/avg' % condition.localeKey, param=key)
-    else:
-        label = i18n.makeString('#quests:details/conditions/results/%s/simple' % condition.localeKey, param=key)
-    value, relation, relationI18nType = condition.relationValue, condition.relation, RELATIONS_SCHEME.DEFAULT
-    if condition.keyName == 'markOfMastery':
-        relationI18nType = RELATIONS_SCHEME.ALTERNATIVE
-        if condition.relationValue == 0:
-            if condition.relation in (RELATIONS.EQ, RELATIONS.LSQ):
-                i18nLabelKey = '#quests:details/conditions/cumulative/markOfMastery0'
-            else:
-                if condition.relation in (RELATIONS.LS,):
-                    raise Exception('Mark of mastery 0 can be used with greater or equal relation types')
-                i18nLabelKey = '#quests:details/conditions/cumulative/markOfMastery0/not'
-            label, value, relation = i18n.makeString(i18nLabelKey), None, None
-        else:
-            i18nValueKey = '#quests:details/conditions/cumulative/markOfMastery%d' % int(condition.relationValue)
-            i18nLabel = i18n.makeString('#quests:details/conditions/cumulative/markOfMastery')
-            label, value, relation = i18nLabel, i18n.makeString(i18nValueKey), condition.relation
-    return (label,
-     relation,
-     relationI18nType,
-     value)
-
+from debug_utils import LOG_ERROR
+from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES
+from gui.Scaleform.locale.NATIONS import NATIONS
+from gui.Scaleform.locale.QUESTS import QUESTS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.server_events import formatters
+from gui.server_events.cond_formatters import FormattableField, FORMATTER_IDS, CONDITION_ICON, VEHICLE_TYPES, MAX_CONDITIONS_IN_OR_SECTION_SUPPORED, packSimpleTitle, packDescriptionField
+from gui.server_events.conditions import GROUP_TYPE
+from gui.shared.formatters import text_styles
+from helpers import i18n
 
 class ConditionsFormatter(object):
     """
@@ -89,11 +25,20 @@ class ConditionsFormatter(object):
         condFormatter = self.__formatters.get(conditionName)
         return condFormatter if condFormatter else None
 
-    def format(self, conditions, event):
+    def format(self, *args, **kwargs):
         return []
 
     def hasFormatter(self, conditionName):
         return conditionName in self.__formatters
+
+    def _packCondition(self, *args, **kwargs):
+        raise NotImplementedError
+
+    def _getFormattedField(self, *args, **kwargs):
+        raise NotImplementedError
+
+    def _packConditions(self, *args, **kwargs):
+        raise NotImplementedError
 
 
 class ConditionFormatter(object):
@@ -110,6 +55,9 @@ class ConditionFormatter(object):
 
     def _format(self, condition, event):
         return []
+
+    def _getSortKey(self, condition):
+        return condition.getName()
 
 
 class CumulativableFormatter(ConditionFormatter):
@@ -132,3 +80,286 @@ class CumulativableFormatter(ConditionFormatter):
     @classmethod
     def _formatByGroup(cls, condition, groupByKey, event):
         return []
+
+
+class MissionFormatter(ConditionFormatter):
+    """
+    Base condition formatter for mission's GUI.
+    Gets pre formatted data list for condition (typing.List[PreFormattedCondition]) ,
+    which later used in cards formatter to get final view
+    """
+
+    def getTitle(self, condition):
+        """
+        Gets condition's custom title if it is defined,
+        else return standard conditions title
+        """
+        customTitle = condition.getCustomTitle()
+        return packSimpleTitle(customTitle) if customTitle is not None else self._getTitle(condition)
+
+    def getDescription(self, condition):
+        """
+        Gets condition's custom description if it is defined,
+        else return standard conditions description
+        """
+        customDescription = condition.getCustomDescription()
+        return packDescriptionField(customDescription) if customDescription is not None else self._getDescription(condition)
+
+    @classmethod
+    def _getTitle(cls, *args, **kwargs):
+        return FormattableField(FORMATTER_IDS.SIMPLE_TITLE, (i18n.makeString(QUESTS.DETAILS_CONDITIONS_TARGET_TITLE),))
+
+    def _getDescription(self, condition):
+        raise NotImplementedError
+
+    @classmethod
+    def _getIconKey(cls, condition=None):
+        return CONDITION_ICON.FOLDER
+
+    def _packGui(self, *args, **kwargs):
+        """
+        Gets pre formatted data object PreFormatted condition, which used as data holder for final formatting.
+        """
+        raise NotImplementedError
+
+
+class SimpleMissionsFormatter(MissionFormatter):
+
+    def _format(self, condition, event):
+        result = []
+        if not event.isGuiDisabled():
+            result.append(self._packGui(condition))
+        return result
+
+    def _packGui(self, condition):
+        return formatters.packMissionIconCondition(self.getTitle(condition), MISSIONS_ALIASES.NONE, self.getDescription(condition), self._getIconKey(condition), sortKey=self._getSortKey(condition))
+
+
+class MissionsVehicleListFormatter(MissionFormatter):
+
+    def _format(self, condition, event):
+        result = []
+        if not event.isGuiDisabled():
+            result.append(self._formatData(self.getTitle(condition), MISSIONS_ALIASES.NONE, condition))
+        return result
+
+    @classmethod
+    def _getLabelKey(cls, condition=None):
+        return condition.getLabelKey()
+
+    @classmethod
+    def _getTitleKey(cls, condition=None):
+        return QUESTS.DETAILS_CONDITIONS_TARGET_TITLE
+
+    @classmethod
+    def _getTitle(cls, condition):
+        return FormattableField(FORMATTER_IDS.RELATION, (condition.relationValue,
+         condition.relation,
+         formatters.RELATIONS_SCHEME.DEFAULT,
+         cls._getTitleKey(condition))) if condition.isAnyVehicleAcceptable() else FormattableField(FORMATTER_IDS.COMPLEX_RELATION, (condition.relationValue, condition.relation, cls._getTitleKey(condition)))
+
+    @classmethod
+    def _getDescription(cls, condition):
+        labelKey = cls._getLabelKey(condition)
+        if condition.isAnyVehicleAcceptable():
+            labelKey = '%s/all' % labelKey
+        if condition.isNegative():
+            labelKey = '%s/not' % labelKey
+        return packDescriptionField(labelKey)
+
+    def _getConditionData(self, condition):
+        """
+        Gets detailed data about vehicle kill or vehicle damage condition description in a specific format,
+        Displayed in detailed card view layout on condition click
+        or in tooltip on card's condition rollover
+        """
+        data = {'description': i18n.makeString(QUESTS.MISSIONDETAILS_VEHICLE_CONDITIONS_HEADER),
+         'list': []}
+        if condition.isAnyVehicleAcceptable():
+            return None
+        elif 'types' not in condition.data:
+            _, fNations, fLevels, fClasses = condition.parseFilters()
+            data['list'].append({'label': text_styles.standard(i18n.makeString(QUESTS.MISSIONDETAILS_VEHICLE_CONDITIONS_NATIONS)),
+             'typeIcon': RES_ICONS.MAPS_ICONS_FILTERS_NATIONS_ALL,
+             'list': self._getConditionNationsList(fNations or []),
+             'def': text_styles.main(i18n.makeString(QUESTS.MISSIONDETAILS_VEHICLE_CONDITIONS_NATIONS_ALL))})
+            data['list'].append({'label': text_styles.standard(i18n.makeString(QUESTS.MISSIONDETAILS_VEHICLE_CONDITIONS_TYPE)),
+             'typeIcon': RES_ICONS.MAPS_ICONS_FILTERS_TANKS_ALL,
+             'list': self._getConditionClassesList(fClasses or []),
+             'def': text_styles.main(i18n.makeString(QUESTS.MISSIONDETAILS_VEHICLE_CONDITIONS_TYPE_ALL))})
+            data['list'].append({'label': text_styles.standard(i18n.makeString(QUESTS.MISSIONDETAILS_VEHICLE_CONDITIONS_LEVEL)),
+             'typeIcon': RES_ICONS.MAPS_ICONS_FILTERS_LEVELS_LEVEL_ALL,
+             'list': self._getConditionLevelsList(fLevels or []),
+             'def': text_styles.main(i18n.makeString(QUESTS.MISSIONDETAILS_VEHICLE_CONDITIONS_LEVEL_ALL))})
+            data['rendererLinkage'] = MISSIONS_ALIASES.VEHICLE_TYPE_RENDERER
+            return {'data': data}
+        else:
+            conditions = [ self.__makeVehicleVO(vehicle) for vehicle, _ in condition.getVehiclesData() ]
+            while len(conditions) < 6:
+                conditions.append({'vehicleName': text_styles.main('---')})
+
+            data['list'] = conditions
+            data['rendererLinkage'] = MISSIONS_ALIASES.VEHICLE_ITEM_RENDERER
+            return {'data': data}
+
+    def _getConditionNationsList(self, nationIds):
+        result = []
+        for idx in nationIds:
+            result.append({'icon': '../maps/icons/filters/nations/%s.png' % nations.NAMES[idx],
+             'tooltip': i18n.makeString(QUESTS.MISSIONDETAILS_VEHICLE_CONDITIONS_NATIONS_TOOLTIP, nation=i18n.makeString(NATIONS.all(nations.NAMES[idx])))})
+
+        return result
+
+    def _getConditionClassesList(self, classNames):
+        result = []
+        for name in classNames:
+            result.append({'icon': '../maps/icons/filters/tanks/%s.png' % name,
+             'tooltip': i18n.makeString(QUESTS.MISSIONDETAILS_VEHICLE_CONDITIONS_TYPE_TOOLTIP, type=i18n.makeString(VEHICLE_TYPES[name]))})
+
+        return result
+
+    def _getConditionLevelsList(self, levelNames):
+        result = []
+        for name in levelNames:
+            result.append({'icon': '../maps/icons/filters/levels/level_%s.png' % name})
+
+        return result
+
+    def _formatData(self, title, progressType, condition, current=None, total=None, progressData=None):
+        return self._packGui(title, progressType, self.getDescription(condition), current=current, total=total, conditionData=self._getConditionData(condition), progressData=progressData, condition=condition)
+
+    def _packGui(self, title, progressType, label, current=None, total=None, conditionData=None, progressData=None, condition=None):
+        return formatters.packMissionIconCondition(title, progressType, label, self._getIconKey(condition), current=current, total=total, conditionData=conditionData, progressData=progressData, sortKey=self._getSortKey(condition))
+
+    @staticmethod
+    def __makeVehicleVO(vehicle):
+        return {'nationIcon': '../maps/icons/filters/nations/%s.png' % vehicle.nationName,
+         'typeIcon': '../maps/icons/filters/tanks/%s.png' % vehicle.type,
+         'levelIcon': '../maps/icons/filters/levels/level_%s.png' % vehicle.level,
+         'vehicleIcon': vehicle.iconSmall,
+         'vehicleName': text_styles.vehicleName(vehicle.shortUserName)}
+
+
+class GroupFormatter(ConditionFormatter):
+    """
+    Base formatter for quests condition's groups ('AND' and 'OR' ).
+    Collect and format conditions from group.
+    May format conditions recursive, has linkage on formatters container.
+    """
+
+    def __init__(self, proxy):
+        super(GroupFormatter, self).__init__()
+        self._proxy = weakref.proxy(proxy)
+
+    def getConditionFormatter(self, conditionName):
+        return self._proxy.getConditionFormatter(conditionName)
+
+
+class OrGroupFormatter(GroupFormatter):
+    """
+    Formatter for quests condition's groups 'OR' for base missions.
+    Collect and format conditions from group.
+    May format conditions recursive. Process only first depth of OR groups. Others ignores.
+    Has UX limit displayed conditions count number.
+    """
+
+    def __init__(self, proxy):
+        super(OrGroupFormatter, self).__init__(proxy)
+        self._andFormatter = _InnerAndGroupFormatter(proxy)
+
+    def _format(self, condition, event):
+        orResults = []
+        conditions = condition.getSortedItems()
+        if len(conditions) == MAX_CONDITIONS_IN_OR_SECTION_SUPPORED:
+            for cond in conditions:
+                if not cond.isHidden():
+                    formatter = self.getConditionFormatter(cond.getName())
+                    if formatter:
+                        result = formatter.format(cond, event)
+                        orResults.append(result)
+
+        else:
+            LOG_ERROR('Unsupported conditions count in quest. SSE Bug. Wrong quest xml')
+        return orResults
+
+    def getConditionFormatter(self, conditionName):
+        if conditionName == GROUP_TYPE.AND:
+            return self._andFormatter
+        elif conditionName == GROUP_TYPE.OR:
+            LOG_ERROR("Unsupported double depth 'OR' in 'OR' in quest conditions. SSE Bug. Wrong quest xml")
+            return None
+        else:
+            return super(OrGroupFormatter, self).getConditionFormatter(conditionName)
+
+
+class AndGroupFormatter(GroupFormatter):
+    """
+    Formatter for quests condition's groups 'AND' for base missions.
+    Collect and format conditions from group. May format conditions recursive.
+    Has UX limit displayed conditions count number.
+    Format only first level of depth by itself, other groups levels formats by inner AND formatter
+    """
+
+    def __init__(self, proxy):
+        super(AndGroupFormatter, self).__init__(proxy)
+        self._andFormatter = _InnerAndGroupFormatter(proxy)
+
+    def _format(self, condition, event):
+        result = []
+        andResults = []
+        orGroups = []
+        conditions = condition.getSortedItems()
+        for cond in conditions:
+            if not cond.isHidden():
+                formatter = self.getConditionFormatter(cond.getName())
+                if formatter:
+                    if cond.getName() == GROUP_TYPE.OR:
+                        orGroups.extend(formatter.format(cond, event))
+                    else:
+                        andResults.extend(formatter.format(cond, event))
+
+        if len(orGroups) == MAX_CONDITIONS_IN_OR_SECTION_SUPPORED:
+            for orList in orGroups:
+                orList.extend(andResults)
+                result.append(orList)
+
+        else:
+            if orGroups:
+                LOG_ERROR("Unsupported double depth 'OR' in 'OR' in quest conditions. SSE Bug. Wrong quest xml")
+            result.append(andResults)
+        return result
+
+    def getConditionFormatter(self, conditionName):
+        return self._andFormatter if conditionName == GROUP_TYPE.AND else super(AndGroupFormatter, self).getConditionFormatter(conditionName)
+
+
+class MissionsBattleConditionsFormatter(ConditionsFormatter):
+
+    def __init__(self, formatters):
+        self.__groupConditionsFormatters = {GROUP_TYPE.AND: AndGroupFormatter(self),
+         GROUP_TYPE.OR: OrGroupFormatter(self)}
+        super(MissionsBattleConditionsFormatter, self).__init__(formatters)
+
+    def getConditionFormatter(self, conditionName):
+        return self.__groupConditionsFormatters[conditionName] if conditionName in self.__groupConditionsFormatters else super(MissionsBattleConditionsFormatter, self).getConditionFormatter(conditionName)
+
+    def format(self, conditions, event):
+        result = []
+        condition = conditions.getConditions()
+        groupFormatter = self.getConditionFormatter(condition.getName())
+        if groupFormatter:
+            result.extend(groupFormatter.format(condition, event))
+        return result
+
+
+class _InnerAndGroupFormatter(GroupFormatter):
+
+    def _format(self, condition, event):
+        andResults = []
+        conditions = condition.getSortedItems()
+        for cond in conditions:
+            if not cond.isHidden():
+                formatter = self.getConditionFormatter(cond.getName())
+                andResults.extend(formatter.format(cond, event))
+
+        return andResults

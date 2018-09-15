@@ -8,13 +8,15 @@ from gui.battle_control.arena_info.interfaces import IViewPointsController
 from gui.battle_control.arena_info.vos_collections import VehicleInfoSortKey, VehiclesItemsCollection
 from gui.battle_control.arena_info.vos_collections import AllyItemsCollection, SquadmanVehicleInfoSortKey
 from gui.battle_control.arena_info.vos_collections import AliveItemsCollection
+from gui.battle_control.arena_info.vos_collections import SpawnGroupVehicleInfoSortKey
+from gui.battle_control.arena_info.vos_collections import SquadmanSpawnGroupVehicleInfoSortKey
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 
 class ViewPointsController(IViewPointsController):
     """
     View points controller that track its changes and allows switching
     """
-    __slots__ = ('__points', '__arenaDP', '__currentViewPointID', '__currentVehicleID')
+    __slots__ = ('__points', '__arenaDP', '__currentViewPointID', '__currentVehicleID', '__normalSortKey', '__squadManSortKey')
 
     def __init__(self, setup):
         super(ViewPointsController, self).__init__()
@@ -22,6 +24,8 @@ class ViewPointsController(IViewPointsController):
         self.__arenaDP = weakref.proxy(setup.arenaDP)
         self.__currentViewPointID = None
         self.__currentVehicleID = None
+        self.__normalSortKey = VehicleInfoSortKey
+        self.__squadManSortKey = SquadmanVehicleInfoSortKey
         return
 
     def getControllerID(self):
@@ -29,6 +33,9 @@ class ViewPointsController(IViewPointsController):
 
     def startControl(self, battleCtx, arenaVisitor):
         self.__points = arenaVisitor.getArenaViewPoints()
+        if arenaVisitor.getArenaType().numPlayerGroups > 0 and arenaVisitor.gui.isEpicRandomBattle():
+            self.__normalSortKey = SpawnGroupVehicleInfoSortKey
+            self.__squadManSortKey = SquadmanSpawnGroupVehicleInfoSortKey
 
     def stopControl(self):
         self.__points = None
@@ -67,9 +74,9 @@ class ViewPointsController(IViewPointsController):
         playerVehicleID = self.__arenaDP.getPlayerVehicleID()
         if self.__arenaDP.isSquadMan(playerVehicleID):
             prebattleID = self.__arenaDP.getVehicleInfo(playerVehicleID).prebattleID
-            sortKey = functools.partial(SquadmanVehicleInfoSortKey, prebattleID)
+            sortKey = functools.partial(self.__squadManSortKey, prebattleID)
         else:
-            sortKey = VehicleInfoSortKey
+            sortKey = self.__normalSortKey
         if self.__arenaDP.isPlayerObserver():
             vehiclesCollection = VehiclesItemsCollection(sortKey=sortKey)
         else:

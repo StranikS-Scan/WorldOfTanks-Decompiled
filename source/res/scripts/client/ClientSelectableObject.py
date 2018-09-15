@@ -73,10 +73,9 @@ class ClientSelectableObject(BigWorld.Entity):
 
     def onClicked(self):
         if self.__clickSound is None:
-            if len(self.clickSoundName) > 0:
+            if self.clickSoundName:
                 self.__clickSound = SoundGroups.g_instance.getSound3D(self.model.root, self.clickSoundName)
                 self.__clickSound.play()
-                return
         elif self.__clickSound.isPlaying:
             self.__clickSound.stop()
         else:

@@ -24,7 +24,7 @@ def buyBerths():
     items = itemsCache.items
     berthPrice, berthsCount = items.shop.getTankmanBerthPrice(items.stats.tankmenBerthsCount)
     result = yield TankmanBerthsBuyer(berthPrice, berthsCount).request()
-    if len(result.userMsg):
+    if result.userMsg:
         SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
 

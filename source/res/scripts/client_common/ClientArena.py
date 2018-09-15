@@ -11,7 +11,7 @@ import zlib
 import Event
 from constants import ARENA_PERIOD, ARENA_UPDATE, FLAG_STATE
 from PlayerEvents import g_playerEvents
-from debug_utils import *
+from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV, LOG_ERROR
 from CTFManager import g_ctfManager
 from helpers.EffectsList import FalloutDestroyEffect
 import arena_component_system.client_arena_component_assembler as assembler
@@ -77,6 +77,7 @@ class ClientArena(object):
         self.onGameModeSpecifcStats = Event.Event(em)
         self.onVehicleWillRespawn = Event.Event(em)
         self.onViewPoints = Event.Event(em)
+        self.onFogOfWarHiddenVehiclesSet = Event.Event(em)
         self.onTeamHealthPercentUpdate = Event.Event(em)
         self.arenaUniqueID = arenaUniqueID
         self.arenaType = ArenaType.g_cache.get(arenaTypeID, None)
@@ -187,6 +188,7 @@ class ClientArena(object):
 
     def __onFogOfWar(self, argStr):
         self.__hasFogOfWarHiddenVehicles = cPickle.loads(argStr)
+        self.onFogOfWarHiddenVehiclesSet(self.__hasFogOfWarHiddenVehicles)
 
     def __onStatisticsUpdate(self, argStr):
         self.__statistics = {}
@@ -310,7 +312,7 @@ class ClientArena(object):
          'forbidInBattleInvitations': bool(info[12]),
          'events': info[13],
          'igrType': info[14],
-         'potapovQuestIDs': info[15],
+         'personalMissionIDs': info[15],
          'crewGroup': info[16],
          'ranked': info[17]}
         return (info[0], infoAsDict)
@@ -354,9 +356,9 @@ class _BBCollider():
 
             if finalPoint is not None:
                 return finalPoint
-            else:
-                return start
-        return
+            return start
+        else:
+            return
 
 
 class Plane():

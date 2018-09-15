@@ -4,6 +4,9 @@ import SoundGroups
 from PlayerEvents import g_playerEvents
 from gui.Scaleform.daapi.view.battle.shared.finish_sound_player import FinishSoundPlayer
 from gui.battle_control.view_components import IViewComponentsCtrlListener
+_SOUND_EVENT_OVERRIDES = {'end_battle_last_kill': 'bc_end_battle_last_kill',
+ 'end_battle_capture_base': 'bc_end_battle_capture_base',
+ 'time_over': 'bc_end_battle_time_over'}
 
 class BCFinishSoundPlayer(FinishSoundPlayer, IViewComponentsCtrlListener):
     """ This is functionality that moved from BootcampFinishSoundController
@@ -12,15 +15,15 @@ class BCFinishSoundPlayer(FinishSoundPlayer, IViewComponentsCtrlListener):
     def __init__(self):
         super(BCFinishSoundPlayer, self).__init__()
         self.__soundID = None
-        g_playerEvents.onBootcampRoundFinished += self.__onBcRoundFinished
+        g_playerEvents.onRoundFinished += self.__onRoundFinished
         return
 
     def detachedFromCtrl(self, ctrlID):
-        g_playerEvents.onBootcampRoundFinished -= self.__onBcRoundFinished
+        g_playerEvents.onRoundFinished -= self.__onRoundFinished
 
     def _playSound(self, soundID):
-        self.__soundID = soundID
+        self.__soundID = _SOUND_EVENT_OVERRIDES.get(soundID, soundID)
 
-    def __onBcRoundFinished(self):
+    def __onRoundFinished(self, winnerTeam, reason):
         if self.__soundID:
             SoundGroups.g_instance.playSound2D(self.__soundID)

@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/scenery/missions/mission_4.py
+import BigWorld
 from bootcamp.scenery.AbstractMission import AbstractMission
 
 class Mission4(AbstractMission):
+    _combatMusicDelayTime = 3.0
 
     def __init__(self, assistant):
         super(Mission4, self).__init__(assistant)
-
-    def destroy(self):
-        super(Mission4, self).destroy()
+        self._combatMusicTriggered = False
+        self._callbackID = None
+        return
 
     def start(self):
         super(Mission4, self).start()
@@ -16,11 +18,20 @@ class Mission4(AbstractMission):
         self.playSound2D('bc_main_tips_task_start')
         self._avatar.muteSounds(('crew_member_contusion', 'track_destroyed', 'fire_started', 'gunner_killed'))
 
-    def update(self):
-        super(Mission4, self).update()
-
-    def onPlayerDetectEnemy(self, new, lost):
-        self._playCombatMusic()
+    def onEnemyObserved(self, isObserved):
+        if not self._combatMusicTriggered and self._callbackID is None:
+            self._combatMusicTriggered = True
+            self._callbackID = BigWorld.callback(self._combatMusicDelayTime, self._playCombatMusic)
+        return
 
     def stop(self):
         self._avatar.muteSounds(())
+        if self._callbackID:
+            BigWorld.cancelCallback(self._callbackID)
+            self._callbackID = None
+        return
+
+    def _playCombatMusic(self):
+        super(Mission4, self)._playCombatMusic()
+        self._callbackID = None
+        return

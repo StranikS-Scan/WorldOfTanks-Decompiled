@@ -41,7 +41,7 @@ class BonusesRequester(TutorialProxyHolder):
 
     def getChapter(self, chapterID=None):
         chapter = self._data
-        if chapterID is not None and len(chapterID):
+        if chapterID:
             chapter = self._descriptor.getChapter(chapterID)
         return chapter
 
@@ -115,11 +115,13 @@ class GLOBAL_FLAG(object):
     MODE_IS_AVAILABLE = '_TutorialModeIsAvailable'
     IN_QUEUE = '_InTutorialQueue'
     ALL_BONUSES_RECEIVED = '_AllBonusesReceived'
+    MAY_PAWN_PERSONAL_MISSION = '_MayPawnPersonalMission'
     ALL = (IS_FLAGS_RESET,
      SHOW_HISTORY,
      HISTORY_NOT_AVAILABLE,
      IN_QUEUE,
-     ALL_BONUSES_RECEIVED)
+     ALL_BONUSES_RECEIVED,
+     MAY_PAWN_PERSONAL_MISSION)
 
 
 class GlobalStorage(object):

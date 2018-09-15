@@ -81,3 +81,6 @@ class SettingsWindowMeta(AbstractWindowView):
 
     def as_onSoundSpeakersPresetApplyS(self, isApply):
         return self.flashObject.as_onSoundSpeakersPresetApply(isApply) if self._isDAAPIInited() else None
+
+    def as_disableControlS(self, tabId, controlID, subTabId):
+        return self.flashObject.as_disableControl(tabId, controlID, subTabId) if self._isDAAPIInited() else None

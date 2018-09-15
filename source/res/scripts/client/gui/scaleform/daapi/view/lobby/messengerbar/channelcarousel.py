@@ -7,9 +7,6 @@ from gui.shared.events import ChannelCarouselEvent
 
 class ChannelCarousel(ChannelCarouselMeta):
 
-    def __init__(self):
-        super(ChannelCarousel, self).__init__()
-
     def __del__(self):
         LOG_DEBUG('Channel carousel deleted:', id(self))
 

@@ -55,11 +55,7 @@ class _ClanState(object):
         return None
 
     def compare(self, state):
-        if state is not None:
-            return self.getStateID() == state.getStateID()
-        else:
-            return False
-            return
+        return self.getStateID() == state.getStateID() if state is not None else False
 
     def update(self):
         self._changeState(self._getNextState())
@@ -165,11 +161,7 @@ class _ClanWebState(_ClanState):
         return self.__gateUrl
 
     def compare(self, state):
-        if state is not None and isinstance(state, _ClanWebState):
-            return super(_ClanWebState, self).compare(state) and state.__gateUrl == self.__gateUrl
-        else:
-            return super(_ClanWebState, self).compare(state)
-            return
+        return super(_ClanWebState, self).compare(state) and state.__gateUrl == self.__gateUrl if state is not None and isinstance(state, _ClanWebState) else super(_ClanWebState, self).compare(state)
 
     @async
     @process
@@ -201,9 +193,6 @@ class ClanUnavailableState(_ClanWebState):
         self.__isPingRunning = False
         self.__backOff = backoff.ExpBackoff(_PING_BACK_OFF_MIN_DELAY, _PING_BACK_OFF_MAX_DELAY, _PING_BACK_OFF_MODIFIER, _PING_BACK_OFF_EXP_RANDOM_FACTOR)
         return
-
-    def init(self):
-        super(ClanUnavailableState, self).init()
 
     def fini(self):
         self._cancelPingCB()
@@ -248,9 +237,6 @@ class ClanUnavailableState(_ClanWebState):
             self.__bwCbId = None
         return
 
-    def _getNextState(self):
-        return super(ClanUnavailableState, self)._getNextState()
-
 
 @ReprInjector.withParent()
 class ClanAvailableState(_ClanWebState):
@@ -266,9 +252,6 @@ class ClanAvailableState(_ClanWebState):
     def init(self):
         super(ClanAvailableState, self).init()
         self._tokenRequester = g_clanFactory.createTokenRequester()
-
-    def fini(self):
-        super(ClanAvailableState, self).fini()
 
     def isAvailable(self):
         return True
@@ -373,12 +356,12 @@ class ClanAvailableState(_ClanWebState):
     @process
     def __processWaitingRequests(self):
         if self.isLoggedOn():
-            while len(self.__waitingRequests):
+            while self.__waitingRequests:
                 ctx, clallback, prevResult, allowDelay = self.__waitingRequests.pop(0)
                 result = yield self._sendRequest(ctx, allowDelay=allowDelay)
                 clallback(result)
 
         else:
-            while len(self.__waitingRequests):
+            while self.__waitingRequests:
                 ctx, clallback, prevResult, allowDelay = self.__waitingRequests.pop(0)
                 clallback(prevResult)

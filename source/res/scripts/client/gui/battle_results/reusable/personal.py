@@ -33,10 +33,7 @@ class _SquadBonusInfo(object):
         getter = self.itemsCache.items.getItemByCD
         levels = [ getter(typeCompDescr).level for typeCompDescr in self.__vehicles ]
         levels.sort()
-        if levels:
-            return levels[-1] - levels[0]
-        else:
-            return -1
+        return levels[-1] - levels[0] if levels else -1
 
     def getSquadFlags(self, vehicleID, intCD):
         """Gets flags to resolve wherever showing squad bonus and squad labels.
@@ -200,7 +197,7 @@ class _FreeXPReplayRecords(records.ReplayRecords):
 
 
 class _EconomicsRecordsChains(object):
-    __slots__ = ('_baseCredits', '_premiumCredits', '_goldRecords', '_autoRecords', '_baseXP', '_premiumXP', '_baseFreeXP', '_premiumFreeXP', '_fortResource', '_crystal')
+    __slots__ = ('_baseCredits', '_premiumCredits', '_goldRecords', '_autoRecords', '_baseXP', '_premiumXP', '_baseFreeXP', '_premiumFreeXP', '_fortResource', '_crystal', '_crystalDetails')
 
     def __init__(self):
         super(_EconomicsRecordsChains, self).__init__()
@@ -213,6 +210,7 @@ class _EconomicsRecordsChains(object):
         self._baseFreeXP = records.RecordsIterator()
         self._premiumFreeXP = records.RecordsIterator()
         self._crystal = records.RecordsIterator()
+        self._crystalDetails = []
 
     def getBaseCreditsRecords(self):
         return self._baseCredits
@@ -234,6 +232,9 @@ class _EconomicsRecordsChains(object):
 
     def getCrystalRecords(self):
         return itertools.izip(self._crystal, self._crystal)
+
+    def getCrystalDetails(self):
+        return self._crystalDetails
 
     def getXPRecords(self):
         return itertools.izip(self._baseXP, self._premiumXP, self._baseFreeXP, self._premiumFreeXP)
@@ -294,9 +295,19 @@ class _EconomicsRecordsChains(object):
         if Currency.CRYSTAL in results and results[Currency.CRYSTAL] is not None:
             replay = ValueReplay(connector, recordName=Currency.CRYSTAL, replay=results['crystalReplay'])
             self._crystal.addRecords(records.ReplayRecords(replay, Currency.CRYSTAL))
+            self._addCrystalDetails(replay)
         else:
             LOG_ERROR('crystal replay is not found', results)
         return
+
+    def _addCrystalDetails(self, replay):
+        medalToken = 'eventCrystalList_'
+        for op, (appliedName, appliedValue), (_, finalValue) in replay:
+            if appliedName == 'originalCrystal' and appliedValue:
+                self._crystalDetails.insert(0, (appliedName, appliedValue))
+            if appliedName.startswith(medalToken):
+                achievementName = appliedName.split(medalToken)[1]
+                self._crystalDetails.append((achievementName, appliedValue))
 
 
 class PersonalInfo(shared.UnpackedInfo):
@@ -435,6 +446,12 @@ class PersonalInfo(shared.UnpackedInfo):
         """Gets difference between record "xp" with premium factor and
         record "xp" without premium factor."""
         return self.__economicsRecords.getXPDiff()
+
+    def getCrystalDetails(self):
+        """Gets info about crystal receiving.
+        :return: list of tuples, where each element is in format: (medal_name, value_in_crystals)
+        """
+        return self.__economicsRecords.getCrystalDetails()
 
     def __collectRequiredData(self, info):
         getItemByCD = self.itemsCache.items.getItemByCD

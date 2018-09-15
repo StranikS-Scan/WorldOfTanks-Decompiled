@@ -2,14 +2,12 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/boosters/booster_tabs.py
 from collections import defaultdict
 from operator import attrgetter
-import constants
 from Event import EventManager, Event
 from adisp import process
 from gui import DialogsInterface, SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.dialogs.ConfirmBoosterMeta import BuyBoosterMeta
-from gui.Scaleform.daapi.view.lobby.server_events import old_events_helpers
 from gui.Scaleform.genConsts.ACTION_PRICE_CONSTANTS import ACTION_PRICE_CONSTANTS
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -17,15 +15,16 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.goodies.goodie_items import BOOSTERS_ORDERS
 from gui.server_events import events_dispatcher as quests_events
+from gui.server_events import events_helpers
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.processors.goodies import BoosterActivator
+from gui.shared.money import Money
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.utils import decorators
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from gui.shared.money import Money
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.goodies import IGoodiesCache
@@ -158,7 +157,7 @@ class InventoryBoostersTab(BoosterTab):
     @decorators.process('loadStats')
     def __activateBoosterRequest(self, booster):
         result = yield BoosterActivator(booster).request()
-        if len(result.userMsg):
+        if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     @classmethod
@@ -239,14 +238,12 @@ class QuestsBoostersTab(BoosterTab):
     def __init__(self):
         super(QuestsBoostersTab, self).__init__()
         self.__boosterQuests = self.__getBoosterQuests()
-        self.__questsDescriptor = old_events_helpers.getTutorialEventsDescriptor()
 
     def getID(self):
         return TABS_IDS.QUESTS
 
     def fini(self):
         self.__boosterQuests = None
-        self.__questsDescriptor = None
         super(QuestsBoostersTab, self).fini()
         return
 
@@ -302,16 +299,13 @@ class QuestsBoostersTab(BoosterTab):
     @staticmethod
     def __getBoosterQuests():
         result = defaultdict(list)
-        quests = old_events_helpers.getBoosterQuests()
+        quests = events_helpers.getBoosterQuests()
         for q in quests.itervalues():
             bonuses = q.getBonuses('goodies')
             for b in bonuses:
                 boosters = b.getBoosters()
                 for booster, count in boosters.iteritems():
                     result[q.getID(), q.getUserName()].append((booster, count))
-
-        for chapter, boosters in old_events_helpers.getTutorialQuestsBoosters().iteritems():
-            result[chapter.getID(), chapter.getTitle()].extend(boosters)
 
         return result
 
@@ -396,10 +390,7 @@ class TabsContainer(object):
 
 
 def getGuiCount(count):
-    if count <= MAX_GUI_COUNT:
-        return str(count)
-    else:
-        return '%s+' % MAX_GUI_COUNT
+    return str(count) if count <= MAX_GUI_COUNT else '%s+' % MAX_GUI_COUNT
 
 
 def _makeBoosterSlotVO(booster, count):

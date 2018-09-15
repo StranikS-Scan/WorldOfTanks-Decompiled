@@ -110,9 +110,7 @@ class BaseAccountClanLimits(object):
 
 
 class DefaultAccountClanLimits(BaseAccountClanLimits):
-
-    def __init__(self):
-        super(DefaultAccountClanLimits, self).__init__()
+    pass
 
 
 class AccountClanLimits(BaseAccountClanLimits):
@@ -128,8 +126,7 @@ class AccountClanLimits(BaseAccountClanLimits):
         if self.__profile.isInClan():
             if self.__profile.getClanDbID() == clan.getDbID():
                 return error(_CCR.OWN_CLAN)
-            else:
-                return error(_CCR.ALREADY_IN_CLAN)
+            return error(_CCR.ALREADY_IN_CLAN)
         if self.__profile.hasClanInvite(clan.getDbID()):
             return error(_CCR.CLAN_INVITE_ALREADY_RECEIVED)
         if self.__profile.isClanApplicationSent(clan.getDbID()):

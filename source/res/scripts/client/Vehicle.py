@@ -129,7 +129,6 @@ class Vehicle(BigWorld.Entity):
             return descr
         else:
             return vehicles.VehicleDescr(compactDescr=_stripVehCompDescrIfRoaming(self.publicInfo.compDescr))
-            return
 
     @staticmethod
     def respawnVehicle(id, compactDescr):
@@ -490,7 +489,6 @@ class Vehicle(BigWorld.Entity):
             res.sort(key=lambda c: c.dist)
             return res
         else:
-            return None
             return None
 
     def isAlive(self):

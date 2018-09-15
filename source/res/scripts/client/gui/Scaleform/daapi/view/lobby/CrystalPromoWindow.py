@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/CrystalPromoWindow.py
-from account_helpers.AccountSettings import AccountSettings
 from gui.Scaleform.daapi.view.meta.CrystalsPromoWindowMeta import CrystalsPromoWindowMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -12,9 +11,6 @@ class CrystalsPromoWindow(CrystalsPromoWindowMeta):
 
     def onWindowClose(self):
         self.destroy()
-
-    def _dispose(self):
-        super(CrystalsPromoWindow, self)._dispose()
 
     def _populate(self):
         super(CrystalsPromoWindow, self)._populate()

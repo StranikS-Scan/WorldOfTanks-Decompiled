@@ -228,8 +228,8 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
             return
         soundNotifications = avatar_getter.getSoundNotifications()
         if soundNotifications and hasattr(soundNotifications, 'play') and hasattr(soundNotifications, 'isPlaying'):
-            for eventName in _SOUNDS:
-                if soundNotifications.isPlaying(eventName):
+            for soundName in _SOUNDS:
+                if soundNotifications.isPlaying(soundName):
                     break
             else:
                 soundNotifications.play(eventName)

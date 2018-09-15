@@ -40,6 +40,7 @@ class _ClanCache(object):
     def __init__(self):
         self.__waitForSync = False
         self.__strongholdProvider = None
+        self.__missionsProvider = None
         self.__clanMembersLen = None
         self.__clanMotto = ''
         self.__clanDescription = ''
@@ -50,22 +51,28 @@ class _ClanCache(object):
     def init(self):
         from gui.shared.stronghold.stronghold_provider import ClientStrongholdProvider
         self.__strongholdProvider = ClientStrongholdProvider()
+        from gui.shared.missions.missions_provider import ClientMissionsProvider
+        self.__missionsProvider = ClientMissionsProvider()
 
     def fini(self):
         self.onSyncStarted.clear()
         self.onSyncCompleted.clear()
         self.clear()
         self.__strongholdProvider = None
+        self.__missionsProvider = None
         return
 
     def onAccountShowGUI(self):
         self.__startStrongholdProvider()
+        self.__startMissionsProvider()
 
     def onAvatarBecomePlayer(self):
         self.__stopStrongholdProvider()
+        self.__stopMissionsProvider()
 
     def onDisconnected(self):
         self.__stopStrongholdProvider()
+        self.__stopMissionsProvider()
 
     @property
     def waitForSync(self):
@@ -78,6 +85,8 @@ class _ClanCache(object):
     def clear(self):
         if self.__strongholdProvider is not None:
             self.__strongholdProvider.stop()
+        if self.__missionsProvider is not None:
+            self.__missionsProvider.stop()
         return
 
     @storage_getter('users')
@@ -209,6 +218,12 @@ class _ClanCache(object):
 
     def __stopStrongholdProvider(self):
         self.__strongholdProvider.stop()
+
+    def __startMissionsProvider(self):
+        self.__missionsProvider.start()
+
+    def __stopMissionsProvider(self):
+        self.__missionsProvider.stop()
 
     def __me_onClanMembersListChanged(self):
         clanMembersLen = len(self.clanMembers)

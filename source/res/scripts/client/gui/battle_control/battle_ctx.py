@@ -125,11 +125,7 @@ class BattleContext(IBattleContext):
         return vID and self.__arenaDP.isTeamKiller(vID)
 
     def isObserver(self, vID):
-        if self.__arenaDP is not None:
-            return self.__arenaDP.isObserver(vID)
-        else:
-            return False
-            return
+        return self.__arenaDP.isObserver(vID) if self.__arenaDP is not None else False
 
     def isPlayerObserver(self):
         return self.__arenaDP.isPlayerObserver()

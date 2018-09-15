@@ -4,7 +4,22 @@ from constants import ARENA_BONUS_TYPE
 from gui.battle_results import templates
 from gui.battle_results.components import base
 
-class StatsComposer(object):
+class IStatsComposer(object):
+
+    def clear(self):
+        raise NotImplementedError
+
+    def setResults(self, results, reusable):
+        raise NotImplementedError
+
+    def getVO(self):
+        raise NotImplementedError
+
+    def popAnimation(self):
+        raise NotImplementedError
+
+
+class StatsComposer(IStatsComposer):
     __slots__ = ('_block', '_animation')
 
     def __init__(self, reusable, common, personal, teams, text, animation=None):
@@ -110,6 +125,26 @@ class RankedBattlesStatsComposer(StatsComposer):
         return self.__resultsTeamsBlock.getVO()
 
 
+class BootcampStatsComposer(IStatsComposer):
+    __slots__ = ('_block',)
+
+    def __init__(self, _):
+        super(BootcampStatsComposer, self).__init__()
+        self._block = templates.BOOTCAMP_RESULTS_BLOCK.clone()
+
+    def clear(self):
+        self._block.clear()
+
+    def setResults(self, results, reusable):
+        self._block.setRecord(results, reusable)
+
+    def getVO(self):
+        return self._block.getVO()
+
+    def popAnimation(self):
+        return None
+
+
 def createComposer(reusable):
     """Create composer to build data by type of bonus.
     :param reusable: instance of _ReusableInfo.
@@ -128,6 +163,8 @@ def createComposer(reusable):
         composer = StrongholdBattleStatsComposer(reusable)
     elif bonusType == ARENA_BONUS_TYPE.RANKED:
         composer = RankedBattlesStatsComposer(reusable)
+    elif bonusType == ARENA_BONUS_TYPE.BOOTCAMP:
+        composer = BootcampStatsComposer(reusable)
     else:
         composer = RegularStatsComposer(reusable)
     return composer

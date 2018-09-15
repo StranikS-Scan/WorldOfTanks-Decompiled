@@ -164,7 +164,7 @@ class PrbInviteWrapper(_PrbInviteData):
         data['state'] = other.state
         if other.count:
             data['count'] = other.count
-        if len(other.comment) or other.isActive():
+        if other.comment or other.isActive():
             data['comment'] = other.comment
         return self._replaceEx(**data)
 
@@ -751,7 +751,7 @@ class AutoInvitesNotifier(object):
             haveInvites = True
             if prbID in self.__notified:
                 continue
-            if not len(invite.description):
+            if not invite.description:
                 continue
             g_eventDispatcher.fireAutoInviteReceived(invite)
             showInvitationInWindowsBar()

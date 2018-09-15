@@ -53,10 +53,7 @@ class DataForm(PyExtension):
         return (FORM_TYPE.UNDEFINED, ())
 
     def getTag(self):
-        if self._isEmpty:
-            return ''
-        else:
-            return super(DataForm, self).getTag()
+        return '' if self._isEmpty else super(DataForm, self).getTag()
 
     def parseTag(self, pyGlooxTag):
         formType = pyGlooxTag.findAttribute('type')

@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/prb_control/events_dispatcher.py
 import weakref
 from collections import namedtuple
-from bootcamp.Bootcamp import g_bootcamp
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS

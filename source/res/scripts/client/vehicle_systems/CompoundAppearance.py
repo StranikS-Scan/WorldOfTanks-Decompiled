@@ -6,7 +6,7 @@ import time
 import BigWorld
 from AvatarInputHandler.aih_constants import ShakeReason
 import Math
-from svarog_script.auto_properties import TypedProperty, AutoProperty
+from svarog_script.auto_properties import AutoProperty
 from vehicle_systems.components import engine_state
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from vehicle_systems.vehicle_damage_state import VehicleDamageState
@@ -31,7 +31,6 @@ from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
 import material_kinds
 import DataLinks
 import Vehicular
-import BigWorld
 _VEHICLE_APPEAR_TIME = 0.2
 _ROOT_NODE_NAME = 'V'
 _GUN_RECOIL_NODE_NAME = 'G'
@@ -81,19 +80,11 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
 
     @property
     def rpm(self):
-        if self.detailedEngineState is not None:
-            return self.detailedEngineState.rpm
-        else:
-            return 0.0
-            return
+        return self.detailedEngineState.rpm if self.detailedEngineState is not None else 0.0
 
     @property
     def gear(self):
-        if self.detailedEngineState is not None:
-            return self.detailedEngineState.gearNum
-        else:
-            return 0.0
-            return
+        return self.detailedEngineState.gearNum if self.detailedEngineState is not None else 0.0
 
     trackScrollController = property(lambda self: self.__trackScrollCtl)
     filter = AutoProperty()

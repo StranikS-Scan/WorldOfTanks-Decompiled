@@ -95,6 +95,7 @@
       <unrecoverable></unrecoverable>
       <siegeMode></siegeMode>
       <lockCrew></lockCrew>
+      <lockOutfit></lockOutfit>
     </tags>
   </vehicle>
   <vehicleChassis>
@@ -178,4 +179,16 @@
       <notForSale></notForSale>
     </tags>
   </equipment>
+  <customizationItem>
+    <userString>	#item_types:customizationItem/name	</userString>
+    <description>	#item_types:customizationItem/name	</description>
+    <tags>
+      <notInShop></notInShop>
+      <vehicleBound></vehicleBound>
+      <locked></locked>
+      <levelBasedPrice></levelBasedPrice>
+      <IGR></IGR>
+      <premiumIGR></premiumIGR>
+    </tags>
+  </customizationItem>
 </item_types.xml>

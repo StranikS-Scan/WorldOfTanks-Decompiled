@@ -382,6 +382,9 @@ class ServerSettings(object):
     def isEpicRandomMarkOfMasteryEnabled(self):
         return self.__getGlobalSetting('isEpicRandomMarkOfMasteryEnabled', False)
 
+    def isEpicRandomMarksOnGunEnabled(self):
+        return self.__getGlobalSetting('isEpicRandomMarksOnGunEnabled', False)
+
     def isPromoAutoViewsEnabled(self):
         if self.isBootcampEnabled():
             from bootcamp.Bootcamp import g_bootcamp
@@ -425,6 +428,9 @@ class ServerSettings(object):
 
     def isVehicleRestoreEnabled(self):
         return self.__getGlobalSetting('isVehicleRestoreEnabled', True)
+
+    def isCustomizationEnabled(self):
+        return self.__getGlobalSetting('isCustomizationEnabled', True)
 
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)

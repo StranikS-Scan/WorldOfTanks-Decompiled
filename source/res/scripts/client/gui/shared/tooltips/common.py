@@ -13,14 +13,12 @@ from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.formatters.servers import formatPingStatus, wrapServerName
 from helpers import dependency
-from shared_utils import findFirst
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.clans import formatters as clans_fmts
 from gui.clans.items import formatField
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.text_styles import concatStylesToMultiLine
 from gui.shared.formatters.time_formatters import getTimeLeftStr
-from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.shared.view_helpers import UsersInfoHelper
 from gui.shared.tooltips import efficiency
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
@@ -39,13 +37,9 @@ from gui.server_events.formatters import TOKEN_SIZES
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM
 from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE, ToolTipParameterField
-from gui.Scaleform.daapi.view.lobby.customization import CAMOUFLAGES_KIND_TEXTS, CAMOUFLAGES_NATIONS_TEXTS
-from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
-from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 from gui.Scaleform.genConsts.BATTLE_EFFICIENCY_TYPES import BATTLE_EFFICIENCY_TYPES
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
-from items import vehicles
 from messenger.storage import storage_getter
 from messenger.m_constants import USER_TAG
 from gui.shared.tooltips import formatters
@@ -573,109 +567,6 @@ class SettingsButtonTooltipData(BlocksTooltipData):
         return PingData(pingData.value, PING_STATUSES.UNDEFINED) if pingData.status == PING_STATUSES.REQUESTED else pingData
 
 
-class CustomizationItemTooltipData(ToolTipBaseData):
-
-    def __init__(self, context):
-        super(CustomizationItemTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
-
-    def _processVehiclesList(self, vehIntCDs):
-        vehStrList = []
-        for intCD in vehIntCDs:
-            vehicle = vehicles.getVehicleType(int(intCD))
-            if vehicle and VEHICLE_TAGS.SECRET not in vehicle.tags:
-                vehStrList.append(vehicle.shortUserString)
-
-        return vehStrList
-
-    def getDisplayableData(self, type, id, nationId, timeLeft, isPermanent=None, value=None, isUsed=False, boundVehicle=None, boundToCurrentVehicle=False):
-        ms = i18n.makeString
-        item = self._context.buildItem(nationId, id, type)
-        headerText = ''
-        typeText = ''
-        descriptionText = ''
-        allow = None
-        deny = None
-        usageStr = None
-        allowStr = None
-        denyStr = None
-        footerStr = ''
-        footerList = []
-        if timeLeft >= 0:
-            timeLeftText = self.__getTimeLeftText(timeLeft, isUsed)
-            timeLeftText = text_styles.main(timeLeftText)
-        else:
-            timeLeftText = ''
-        if isPermanent and value > 1:
-            footerList.append(ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_STORED, quantity=value))
-        if type == CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE:
-            headerText = item['description'] + '/label'
-            allow = item['allow']
-            deny = item['deny']
-            typeText = ms(VEHICLE_CUSTOMIZATION.CAMOUFLAGE) + ' ' + ms(CAMOUFLAGES_KIND_TEXTS[item['kind']])
-            descriptionText = text_styles.standard(ms(item['description'] + '/description'))
-        elif type == CUSTOMIZATION_ITEM_TYPE.EMBLEM:
-            groupName, _, _, _, emblemName, _, _, _, allow, deny = item
-            groups, _, _ = vehicles.g_cache.playerEmblems()
-            _, group, _, _, _, _ = groups.get(groupName)
-            headerText = emblemName
-            typeText = ms(VEHICLE_CUSTOMIZATION.EMBLEM) + ' ' + ms(group)
-            descriptionText = ''
-        elif type == CUSTOMIZATION_ITEM_TYPE.INSCRIPTION:
-            groupName, _, _, _, inscriptionName, _, _, _, allow, deny = item
-            groups = vehicles.g_cache.customization(nationId).get('inscriptionGroups', {})
-            _, group, _, _, _ = groups.get(groupName)
-            headerText = inscriptionName
-            typeText = ms(VEHICLE_CUSTOMIZATION.INSCRIPTION) + ' ' + ms(group)
-            descriptionText = ''
-        allow = self._processVehiclesList(allow)
-        deny = self._processVehiclesList(deny)
-        if boundVehicle is None and allow:
-            allowStr = ms(TOOLTIPS.CUSTOMIZATION_QUESTAWARD_EXACTVEHICLE, vehicle=', '.join(allow))
-        if boundVehicle is None and deny:
-            denyStr = ms(TOOLTIPS.CUSTOMIZATION_QUESTAWARD_DENYVEHICLE, vehicle=', '.join(deny))
-        if boundToCurrentVehicle:
-            usageStr = text_styles.stats(ms(TOOLTIPS.CUSTOMIZATION_QUESTAWARD_CURRENTVEHICLE))
-        elif boundVehicle:
-            vehicle = vehicles.getVehicleType(int(boundVehicle))
-            usageStr = text_styles.stats(ms(TOOLTIPS.CUSTOMIZATION_QUESTAWARD_EXACTVEHICLE, vehicle=vehicle.shortUserString))
-        elif type != CUSTOMIZATION_ITEM_TYPE.EMBLEM and not allowStr:
-            usageStr = text_styles.stats(ms(CAMOUFLAGES_NATIONS_TEXTS[nationId]))
-        if usageStr:
-            footerList.append(usageStr)
-        if allowStr:
-            footerList.append(allowStr)
-        if denyStr:
-            footerList.append(denyStr)
-        if footerList:
-            footerStr = text_styles.stats('\n'.join(footerList))
-        return {'header': text_styles.highTitle(ms(headerText)),
-         'kind': text_styles.main(typeText),
-         'description': descriptionText,
-         'timeLeft': timeLeftText,
-         'vehicleType': footerStr}
-
-    def __getTimeLeftText(self, timeLeft, isUsed):
-        ms = i18n.makeString
-        result = ''
-        if timeLeft > 0:
-            secondsInDay = 86400
-            secondsInHour = 3600
-            secondsInMinute = 60
-            if timeLeft > secondsInDay:
-                timeLeft = int(math.ceil(timeLeft / secondsInDay))
-                dimension = ms(VEHICLE_CUSTOMIZATION.TIMELEFT_TEMPORAL_DAYS)
-            elif timeLeft > secondsInHour:
-                timeLeft = int(math.ceil(timeLeft / secondsInHour))
-                dimension = ms(VEHICLE_CUSTOMIZATION.TIMELEFT_TEMPORAL_HOURS)
-            else:
-                timeLeft = int(math.ceil(timeLeft / secondsInMinute))
-                dimension = ms(VEHICLE_CUSTOMIZATION.TIMELEFT_TEMPORAL_MINUTES)
-            result = ms(VEHICLE_CUSTOMIZATION.TIMELEFT_TEMPORAL_USED if isUsed else VEHICLE_CUSTOMIZATION.TIMELEFT_TEMPORAL, time=timeLeft, dimension=dimension)
-        elif not timeLeft:
-            result = ms(VEHICLE_CUSTOMIZATION.TIMELEFT_INFINITY)
-        return result
-
-
 class ClanCommonInfoTooltipData(ToolTipBaseData):
     clanCtrl = dependency.descriptor(IClanController)
 
@@ -1186,7 +1077,7 @@ def _getCurrencySetting(key):
         return _OPERATIONS_SETTINGS[key]
 
 
-def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, percent=0, valueWidth=-1, leftPadding=61):
+def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, percent=0, valueWidth=-1, leftPadding=61, forcedText=''):
     _int = BigWorld.wg_getIntegralFormat
     needFormatted = ''
     oldPriceText = ''
@@ -1215,10 +1106,10 @@ def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, perc
             else:
                 newPrice = Money(credits=price)
                 oldPrice = Money(credits=oldPrice)
-            return formatters.packSaleTextParameterBlockData(name=text, saleData={'newPrice': newPrice.toMoneyTuple(),
+            return formatters.packSaleTextParameterBlockData(name=text if not forcedText else forcedText, saleData={'newPrice': newPrice.toMoneyTuple(),
              'oldPrice': oldPrice.toMoneyTuple(),
              'valuePadding': -8}, actionStyle='alignTop', padding=formatters.packPadding(left=leftPadding), currency=newPrice.getCurrency())
-        return formatters.packTextParameterWithIconBlockData(name=text, value=valueFormatted, icon=settings.frame, valueWidth=valueWidth, padding=formatters.packPadding(left=-5))
+        return formatters.packTextParameterWithIconBlockData(name=text if not forcedText else forcedText, value=valueFormatted, icon=settings.frame, valueWidth=valueWidth, padding=formatters.packPadding(left=-5))
         return
 
 

@@ -9,7 +9,7 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.server_events.settings import visitEventGUI
 from helpers import i18n
 from shared_utils import findFirst
-__LOWER_BETTER_STEPS = ('set_EconomicsPrices', 'mul_EconomicsPrices', 'mul_GoodiePrice', 'mul_GoodiePriceAll', 'set_GoodiePrice', 'mul_CamouflagePriceFactor', 'mul_EmblemPriceFactorByGroups', 'mul_EquipmentPrice', 'mul_EquipmentPriceAll', 'set_EquipmentPrice', 'mul_HornPrice', 'mul_HornPriceAll', 'set_HornPrice', 'mul_OptionalDevicePrice', 'mul_OptionalDevicePriceAll', 'set_OptionalDevicePrice', 'cond_ShellGoldPrice', 'mul_ShellPrice', 'mul_ShellPriceAll', 'mul_ShellPriceNation', 'set_ShellPrice', 'cond_VehPrice', 'mul_VehPrice', 'mul_VehPriceAll', 'mul_VehPriceNation', 'set_VehPrice', 'cond_VehRentPrice', 'mul_VehRentPrice', 'mul_VehRentPriceAll', 'mul_VehRentPriceNation')
+__LOWER_BETTER_STEPS = ('set_EconomicsPrices', 'mul_EconomicsPrices', 'mul_GoodiePrice', 'mul_GoodiePriceAll', 'set_GoodiePrice', 'mul_EquipmentPrice', 'mul_EquipmentPriceAll', 'set_EquipmentPrice', 'mul_HornPrice', 'mul_HornPriceAll', 'set_HornPrice', 'mul_OptionalDevicePrice', 'mul_OptionalDevicePriceAll', 'set_OptionalDevicePrice', 'cond_ShellGoldPrice', 'mul_ShellPrice', 'mul_ShellPriceAll', 'mul_ShellPriceNation', 'set_ShellPrice', 'cond_VehPrice', 'mul_VehPrice', 'mul_VehPriceAll', 'mul_VehPriceNation', 'set_VehPrice', 'cond_VehRentPrice', 'mul_VehRentPrice', 'mul_VehRentPriceAll', 'mul_VehRentPriceNation')
 __MORE_BETTER_STEPS = ('set_EconomicsParams', 'mul_EconomicsParams')
 _INTERSECTED_ACTIONS_LIST = __LOWER_BETTER_STEPS + __MORE_BETTER_STEPS
 
@@ -111,7 +111,8 @@ class ActionCardFormatter(object):
     def _getTableData(self):
         assert self.discount
         return {'descr': self._getDescription(),
-         'tableOffers': self.discount.getTableData()}
+         'tableOffers': self.discount.getTableData(),
+         'ttcDataVO': self.discount.getExtraData()}
 
     def _getExtras(self):
         return {}
@@ -127,6 +128,10 @@ class HeroCardFormatter(ActionCardFormatter):
 
     def _getDescription(self):
         return self.discount.getAdditionalDescription(useBigIco=False, forHeroCard=True)
+
+    def _packGui(self):
+        data = super(HeroCardFormatter, self)._packGui()
+        return data
 
 
 class NormalCardFormatter(ActionCardFormatter):

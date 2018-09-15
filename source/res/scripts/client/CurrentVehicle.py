@@ -1,18 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/CurrentVehicle.py
-import random
 import BigWorld
+from constants import CustomizationInvData
 from Event import Event, EventManager
 from adisp import process
 from gui.shared.formatters.time_formatters import getTimeLeftStr
 from gui.shared.gui_items.processors.module import getPreviewInstallerProcessor
 from gui.vehicle_view_states import createState4CurrentVehicle
 from helpers import dependency
-from items import vehicles
 from helpers import isPlayerAccount, i18n
+from items import vehicles
 from account_helpers.AccountSettings import AccountSettings, CURRENT_VEHICLE
 from gui.ClientUpdateManager import g_clientUpdateManager
-from gui import g_tankActiveCamouflage
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.formatters import icons
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -145,7 +144,7 @@ class _CurrentVehicle(_CachedVehicle):
             self.selectVehicle()
         else:
             isRepaired = 'repair' in vehsDiff and self.__vehInvID in vehsDiff['repair']
-            isCustomizationChanged = 'igrCustomizationLayout' in vehsDiff and self.__vehInvID in vehsDiff['igrCustomizationLayout']
+            isCustomizationChanged = CustomizationInvData.OUTFITS in invDiff.get(GUI_ITEM_TYPE.CUSTOMIZATION, {})
             isComponentsChanged = GUI_ITEM_TYPE.TURRET in invDiff or GUI_ITEM_TYPE.GUN in invDiff
             isVehicleChanged = any((self.__vehInvID in hive or (self.__vehInvID, '_r') in hive for hive in vehsDiff.itervalues()))
             if isComponentsChanged or isRepaired or isVehicleDescrChanged or isCustomizationChanged:
@@ -171,20 +170,9 @@ class _CurrentVehicle(_CachedVehicle):
     def refreshModel(self):
         if not g_currentPreviewVehicle.isPresent():
             if self.isPresent() and self.isInHangar() and self.item.modelState:
-                if self.item.intCD not in g_tankActiveCamouflage:
-                    availableKinds = []
-                    currKind = 0
-                    for id, startTime, days in self.item.descriptor.camouflages:
-                        if id is not None:
-                            availableKinds.append(currKind)
-                        currKind += 1
-
-                    if availableKinds:
-                        g_tankActiveCamouflage[self.item.intCD] = random.choice(availableKinds)
                 self.hangarSpace.updateVehicle(self.item)
             else:
                 self.hangarSpace.removeVehicle()
-        return
 
     @property
     def invID(self):
@@ -238,6 +226,9 @@ class _CurrentVehicle(_CachedVehicle):
 
     def isOnlyForEventBattles(self):
         return self.isPresent() and self.item.isOnlyForEventBattles
+
+    def isOutfitLocked(self):
+        return self.isPresent() and self.item.isOutfitLocked
 
     def isEvent(self):
         return self.isPresent() and self.item.isEvent

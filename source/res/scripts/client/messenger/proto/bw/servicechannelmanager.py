@@ -113,7 +113,7 @@ class ServiceChannelManager(ChatActionsListener):
                     customEvent = settings.getCustomEvent()
                     if customEvent is not None:
                         serviceChannel.onCustomMessageDataReceived(clientID, customEvent)
-                if IS_DEVELOPMENT:
+                if not formatter.canBeEmpty() and IS_DEVELOPMENT:
                     LOG_WARNING('Not enough data to format. Action data : ', message)
 
         elif IS_DEVELOPMENT:

@@ -288,6 +288,8 @@ class LobbySimpleEvent(HasCtxEvent):
     EVENTS_UPDATED = 'questUpdated'
     HIDE_HANGAR = 'hideHangar'
     NOTIFY_CURSOR_OVER_3DSCENE = 'notifyCursorOver3dScene'
+    NOTIFY_CURSOR_DRAGGING = 'notifyCursorDragging'
+    NOTIFY_SPACE_MOVED = 'notifySpaceMoved'
     PREMIUM_BOUGHT = 'premiumBought'
     WAITING_SHOWN = 'waitingShown'
     BATTLE_RESULTS_POSTED = 'battleResultsPosted'

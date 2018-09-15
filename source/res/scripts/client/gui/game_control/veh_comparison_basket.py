@@ -69,11 +69,7 @@ def getInstalledModulesCDs(vehicle):
 
 
 def _isVehHasCamouflage(vehicle):
-    for camo in vehicle.descriptor.camouflages:
-        if camo[0] is not None:
-            return True
-
-    return False
+    return bool(vehicle.getBonusCamo())
 
 
 def _removeVehicleCamouflages(vehicle):

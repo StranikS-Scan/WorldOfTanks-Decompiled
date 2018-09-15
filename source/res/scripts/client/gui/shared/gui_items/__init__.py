@@ -5,7 +5,7 @@ from items import ITEM_TYPE_NAMES, vehicles, ITEM_TYPE_INDICES, EQUIPMENT_TYPES
 from gui.shared.money import Currency
 CLAN_LOCK = 1
 GUI_ITEM_TYPE_NAMES = tuple(ITEM_TYPE_NAMES) + tuple(['reserved'] * (16 - len(ITEM_TYPE_NAMES)))
-GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge')
+GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription')
 GUI_ITEM_TYPE_INDICES = dict(((n, idx) for idx, n in enumerate(GUI_ITEM_TYPE_NAMES)))
 
 class GUI_ITEM_TYPE(CONST_CONTAINER):
@@ -20,6 +20,15 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
     OPTIONALDEVICE = GUI_ITEM_TYPE_INDICES['optionalDevice']
     SHELL = GUI_ITEM_TYPE_INDICES['shell']
     EQUIPMENT = GUI_ITEM_TYPE_INDICES['equipment']
+    CUSTOMIZATION = GUI_ITEM_TYPE_INDICES['customizationItem']
+    PAINT = GUI_ITEM_TYPE_INDICES['paint']
+    CAMOUFLAGE = GUI_ITEM_TYPE_INDICES['camouflage']
+    MODIFICATION = GUI_ITEM_TYPE_INDICES['modification']
+    DECAL = GUI_ITEM_TYPE_INDICES['decal']
+    EMBLEM = GUI_ITEM_TYPE_INDICES['emblem']
+    INSCRIPTION = GUI_ITEM_TYPE_INDICES['inscription']
+    OUTFIT = GUI_ITEM_TYPE_INDICES['outfit']
+    STYLE = GUI_ITEM_TYPE_INDICES['style']
     COMMON = tuple(ITEM_TYPE_INDICES.keys())
     BATTLE_BOOSTER = GUI_ITEM_TYPE_INDICES['battleBooster']
     ARTEFACTS = (EQUIPMENT, OPTIONALDEVICE, BATTLE_BOOSTER)
@@ -41,6 +50,13 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
      CHASSIS,
      RADIO)
     VEHICLE_COMPONENTS = VEHICLE_MODULES + ARTEFACTS + (SHELL,)
+    CUSTOMIZATIONS = (PAINT,
+     CAMOUFLAGE,
+     MODIFICATION,
+     DECAL,
+     EMBLEM,
+     INSCRIPTION,
+     STYLE)
 
 
 def _formatMoneyError(currency):

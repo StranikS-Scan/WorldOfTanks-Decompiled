@@ -13,7 +13,8 @@ d_cacheInfo = None
 _VehicleInfo = namedtuple('_VehicleInfo', ['typeDescr',
  'health',
  'isCrewActive',
- 'isTurretDetached'])
+ 'isTurretDetached',
+ 'outfitCD'])
 _AssemblerData = namedtuple('_AssemblerData', ['compoundAssembler',
  'assembler',
  'info',
@@ -76,7 +77,7 @@ class _AppearanceCache(object):
             if typeDescriptor is None:
                 return
             isAlive = info['isAlive']
-            self.__cacheApperance(vId, _VehicleInfo(typeDescriptor, 1 if isAlive else 0, True if isAlive else False, False))
+            self.__cacheApperance(vId, _VehicleInfo(typeDescriptor, 1 if isAlive else 0, True if isAlive else False, False, ''))
             return
 
     def createAppearance(self, vId, vInfo, forceReloadingFromCache):
@@ -137,7 +138,7 @@ class _AppearanceCache(object):
             if hitTester.bspModelName is not None and not hitTester.isBspModelLoaded():
                 prereqs.append(hitTester.bspModelName)
 
-        compoundAssembler, assemblerPrereqs = assembler.prerequisites(info.typeDescr, vId, info.health, info.isCrewActive, info.isTurretDetached)
+        compoundAssembler, assemblerPrereqs = assembler.prerequisites(info.typeDescr, vId, info.health, info.isCrewActive, info.isTurretDetached, info.outfitCD)
         prereqs += assemblerPrereqs
         self.__assemblersCache[vId] = _AssemblerData(compoundAssembler, assembler, info, prereqs)
         if self.__spaceLoaded:
@@ -183,8 +184,8 @@ def onSpaceLoaded():
     _g_cache.onSpaceLoaded()
 
 
-def createAppearance(vId, typeDescr, health, isCrewActive, isTurretDetached, forceReloadingFromCache=False):
-    newInfo = _VehicleInfo(typeDescr, health, isCrewActive, isTurretDetached)
+def createAppearance(vId, typeDescr, health, isCrewActive, isTurretDetached, outfitCD, forceReloadingFromCache=False):
+    newInfo = _VehicleInfo(typeDescr, health, isCrewActive, isTurretDetached, outfitCD)
     return _g_cache.createAppearance(vId, newInfo, forceReloadingFromCache)
 
 

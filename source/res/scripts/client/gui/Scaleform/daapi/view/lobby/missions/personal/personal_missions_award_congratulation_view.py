@@ -52,7 +52,7 @@ class PersonalMissionAwardCongratulationView(PersonalMissionsNavigation, Persona
     def __update(self):
         mainAwards, awards = self.__getAwards()
         self.as_updateS({'mainAwardsLinkage': PERSONAL_MISSIONS_ALIASES.OPERATION_MAIN_AWARD_LINKAGE,
-         'awardsLinkage': PERSONAL_MISSIONS_ALIASES.BADGES_CMP_LINKAGES[len(awards) - 1],
+         'awardsLinkage': PERSONAL_MISSIONS_ALIASES.AWARDS_CMP_LINKAGES[len(awards) - 1],
          'mainAwards': mainAwards,
          'awards': awards})
 

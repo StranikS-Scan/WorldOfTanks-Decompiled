@@ -312,36 +312,6 @@ class Inventory(object):
             self.__account._doCmdInt3(AccountCommands.CMD_VEH_SETTINGS, vehInvID, setting, isOn, proxy)
             return
 
-    @async
-    def changeVehicleCamouflage(self, vehInvID, camouflageKind, camouflageID, periodDays, callback):
-        if self.__ignore:
-            if callback is not None:
-                callback(AccountCommands.RES_NON_PLAYER)
-            return
-        else:
-            self.__account.shop.waitForSync(partial(self.__changeVehCamouflage_onShopSynced, vehInvID, camouflageKind, camouflageID, periodDays, callback))
-            return
-
-    @async
-    def changeVehicleEmblem(self, vehInvID, position, emblemID, periodDays, callback):
-        if self.__ignore:
-            if callback is not None:
-                callback(AccountCommands.RES_NON_PLAYER)
-            return
-        else:
-            self.__account.shop.waitForSync(partial(self.__changeVehEmblem_onShopSynced, vehInvID, position, emblemID, periodDays, callback))
-            return
-
-    @async
-    def changeVehicleInscription(self, vehInvID, position, inscriptionID, periodDays, colorID, callback):
-        if self.__ignore:
-            if callback is not None:
-                callback(AccountCommands.RES_NON_PLAYER)
-            return
-        else:
-            self.__account.shop.waitForSync(partial(self.__changeVehInscription_onShopSynced, vehInvID, position, inscriptionID, periodDays, colorID, callback))
-            return
-
     def addTankmanExperience(self, tmanInvID, xp, callback=None):
         if self.__ignore:
             if callback is not None:
@@ -502,24 +472,6 @@ class Inventory(object):
             self.__account._doCmdInt3(AccountCommands.CMD_TRAINING_TMAN, shopRev, tmanInvID, freeXP, proxy)
             return
 
-    def __changeVehCamouflage_onShopSynced(self, vehInvID, camouflageKind, camouflageID, periodDays, callback, resultID, shopRev):
-        if resultID < 0:
-            if callback is not None:
-                callback(resultID)
-            return
-        else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
-            arr = [shopRev,
-             vehInvID,
-             camouflageKind,
-             camouflageID,
-             periodDays]
-            self.__account._doCmdIntArr(AccountCommands.CMD_VEH_CAMOUFLAGE, arr, proxy)
-            return
-
     def __setAndFillLayouts_onShopSynced(self, vehInvID, shellsLayout, equipmentType, eqsLayout, callback, resultID, shopRev):
         if resultID < 0:
             if callback is not None:
@@ -543,43 +495,6 @@ class Inventory(object):
             else:
                 arr.append(0)
             self.__account._doCmdIntArr(AccountCommands.CMD_SET_AND_FILL_LAYOUTS, arr, proxy)
-            return
-
-    def __changeVehEmblem_onShopSynced(self, vehInvID, position, emblemID, periodDays, callback, resultID, shopRev):
-        if resultID < 0:
-            if callback is not None:
-                callback(resultID)
-            return
-        else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
-            arr = [shopRev,
-             vehInvID,
-             position,
-             emblemID,
-             periodDays]
-            self.__account._doCmdIntArr(AccountCommands.CMD_VEH_EMBLEM, arr, proxy)
-            return
-
-    def __changeVehInscription_onShopSynced(self, vehInvID, position, inscriptionID, periodDays, colorID, callback, resultID, shopRev):
-        if resultID < 0:
-            if callback is not None:
-                callback(resultID)
-            return
-        else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
-            arr = [shopRev,
-             vehInvID,
-             position,
-             inscriptionID,
-             periodDays,
-             colorID]
-            self.__account._doCmdIntArr(AccountCommands.CMD_VEH_INSCRIPTION, arr, proxy)
             return
 
     def __equipOptionDevice_onShopSynced(self, vehInvID, deviceCompDescr, slotIdx, isPaidRemoval, callback, resultID, shopRev):

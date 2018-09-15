@@ -218,6 +218,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         navigationPossible = yield self.lobbyContext.isHeaderNavigationPossible()
         if navigationPossible:
             self.__triggerViewLoad(alias)
+        else:
+            self.as_doDeselectHeaderButtonS(alias)
 
     def showExchangeWindow(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.EXCHANGE_WINDOW), EVENT_BUS_SCOPE.LOBBY)

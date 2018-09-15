@@ -336,8 +336,9 @@ class AmmoController(MethodsRules, IBattleController):
         if reloadEffect is not None:
             reloadEffect.stop()
         self.__gunSettings = _GunSettings.default()
-        self._reloadingState.clear()
-        self.__autoShoots.destroy()
+        if leave:
+            self._reloadingState.clear()
+            self.__autoShoots.destroy()
         return
 
     def getGunSettings(self):

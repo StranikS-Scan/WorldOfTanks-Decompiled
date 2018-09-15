@@ -1,0 +1,54 @@
+<usa.xml>
+  <itemGroup>
+    <priceGroup>	historical paint	</priceGroup>
+    <name>	usa colors	</name>
+    <userString>	#vehicle_customization:repaint/color_group_08	</userString>
+    <vehicleFilter>
+      <include>
+        <nations>	usa	</nations>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+      </include>
+      <include>
+        <nations>	usa	</nations>
+        <levels>	10	</levels>
+      </include>
+    </vehicleFilter>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+    <paint>
+      <id>	154	</id>
+      <texture>	gui/maps/vehicles/repaints/usa_color_01.png	</texture>
+      <color>	52 48 33 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/usa_color_01	</userString>
+      <season>	summer	</season>
+      <historical>	true	</historical>
+    </paint>
+    <paint>
+      <id>	157	</id>
+      <texture>	gui/maps/vehicles/repaints/usa_color_04.png	</texture>
+      <color>	57 60 53 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/usa_color_04	</userString>
+      <season>	desert	</season>
+      <historical>	true	</historical>
+    </paint>
+    <paint>
+      <id>	218	</id>
+      <texture>	gui/maps/vehicles/repaints/usa_color_06.png	</texture>
+      <color>	55 55 51 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/usa_color_06	</userString>
+      <season>	winter	</season>
+      <historical>	true	</historical>
+    </paint>
+  </itemGroup>
+</usa.xml>

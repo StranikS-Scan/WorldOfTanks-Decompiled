@@ -345,6 +345,64 @@ class Shop(object):
             self.__account._doCmdInt4(AccountCommands.CMD_BUY_GOODIE, self.__getCacheRevision(), goodieID, count, forGold, proxy)
             return
 
+    def buyAndEquipOutfit(self, vehInvID, season, outfitDescr, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            intArr = [self.__getCacheRevision(), vehInvID, season]
+            strArr = [outfitDescr]
+            self.__account._doCmdIntArrStrArr(AccountCommands.CMD_VEH_APPLY_OUTFIT, intArr, strArr, proxy)
+            return
+
+    def buyAndEquipStyle(self, vehInvID, styleID, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdInt3(AccountCommands.CMD_VEH_APPLY_STYLE, self.__getCacheRevision(), vehInvID, styleID, proxy)
+            return
+
+    def buyCustomizations(self, vehInvID, items, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            intArr = [self.__getCacheRevision(), vehInvID]
+            for intCD, count in items.iteritems():
+                intArr.extend((intCD, count))
+
+            self.__account._doCmdIntArr(AccountCommands.CMD_BUY_C11N_ITEMS, intArr, proxy)
+            return
+
+    def sellCustomizations(self, vehInvID, itemCD, count, callback):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdInt4(AccountCommands.CMD_SELL_C11N_ITEMS, self.__getCacheRevision(), itemCD, count, vehInvID, proxy)
+            return
+
     def __onSyncResponse(self, syncID, resultID, ext={}):
         if resultID == AccountCommands.RES_NON_PLAYER:
             return

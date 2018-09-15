@@ -6,7 +6,10 @@ import re
 import nations
 from items import vehicles, ITEM_TYPES
 from constants import IGR_TYPE, FAIRPLAY_VIOLATIONS_NAMES, FAIRPLAY_VIOLATIONS_MASKS
+from items.components.c11n_constants import CustomizationType
 from debug_utils import *
+if IS_CELLAPP or IS_BASEAPP:
+    from typing import Union, Tuple
 
 class AmmoIterator(object):
 
@@ -180,81 +183,42 @@ def getPlayerEmblemIGRType(emblemID):
 
 
 def validateCustomizationItem(custData):
+    """Check customization data
+    
+    :returns: (False, reason) if validation failed or (True, customizationItem) if success
+    """
     custID = custData.get('id', None)
     custType = custData.get('custType', None)
     value = custData.get('value', None)
-    isPermanent = custData.get('isPermanent', None)
     vehTypeCompDescr = custData.get('vehTypeCompDescr', None)
     if custID is None:
         return (False, 'Cust id is not specified')
-    elif value is None or value == 0 or isPermanent is None:
-        return (False, 'Invalid args')
-    elif custType not in ('emblems', 'camouflages', 'inscriptions'):
-        return (False, 'Invalid customization type')
+    elif not custType:
+        return (False, 'Cust type is not specified')
     else:
-        if custType == 'emblems':
-            nationID = 0
-            innationID = custID
-        else:
-            nationID, innationID = custID
-        if nationID >= len(nations.AVAILABLE_NAMES) or nationID < 0:
-            return (False, 'Invalid customization nation')
+        custTypeId = getattr(CustomizationType, str(custType).upper(), None)
+        if not custTypeId:
+            return (False, 'Invalid customization type')
+        elif value == 0 or not isinstance(value, int):
+            return (False, 'Invalid value')
+        c20cache = vehicles.g_cache.customization20()
+        c11nItems = c20cache.itemTypes[custTypeId]
+        c11nItem = c11nItems.get(custID)
+        if not c11nItem:
+            return (False, 'Invalid customization item id')
         if vehTypeCompDescr is not None:
             itemTypeID, vehNationID, vehInnationID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
             if itemTypeID != ITEM_TYPES.vehicle:
                 return (False, 'Invalid type compact descriptor')
             try:
-                vehDescr = vehicles.VehicleDescr(typeID=(vehNationID, vehInnationID))
+                vehTypeDescr = vehicles.g_cache.vehicle(vehNationID, vehInnationID)
             except:
                 LOG_CURRENT_EXCEPTION()
                 return (False, 'Invalid type compact descriptor')
 
-            if custType == 'camouflages':
-                if nationID != vehDescr.type.customizationNationID:
-                    return (False, 'Camouflage and vehTypeCompDescr mismatch')
-                try:
-                    vehDescr.setCamouflage(None, innationID, time.time(), 0)
-                except:
-                    LOG_CURRENT_EXCEPTION()
-                    return (False, 'Camouflage and vehTypeCompDescr mismatch')
-
-            elif custType == 'inscriptions':
-                if nationID != vehDescr.type.customizationNationID:
-                    return (False, 'Inscription and vehTypeCompDescr mismatch')
-                try:
-                    vehDescr.setPlayerInscription(0, innationID, time.time(), 0, 0)
-                except:
-                    LOG_CURRENT_EXCEPTION()
-                    return (False, 'Inscription and vehTypeCompDescr mismatch')
-
-            elif custType == 'emblems':
-                try:
-                    vehDescr.setPlayerEmblem(0, innationID, time.time(), 0)
-                except:
-                    LOG_CURRENT_EXCEPTION()
-                    return (False, 'Emblem and vehTypeCompDescr mismatch')
-
-        customization = vehicles.g_cache.customization(nationID)
-        if custType == 'camouflages':
-            if innationID not in customization['camouflages']:
-                return (False, 'Unknown camouflage id')
-            igrType = getCamouflageIGRType(nationID, innationID)
-            if igrType != IGR_TYPE.NONE:
-                return (False, 'Unexpected IGR camouflage')
-        elif custType == 'inscriptions':
-            if innationID not in customization['inscriptions']:
-                return (False, 'Unknown inscription id')
-            igrType = getPlayerInscriptionIGRType(nationID, innationID)
-            if igrType != IGR_TYPE.NONE:
-                return (False, 'Unexpected IGR inscription')
-        elif custType == 'emblems':
-            _, emblems, _ = vehicles.g_cache.playerEmblems()
-            if innationID not in emblems:
-                return (False, 'Unknown emblem id')
-            igrType = getPlayerEmblemIGRType(innationID)
-            if igrType != IGR_TYPE.NONE:
-                return (False, 'Unexpected IGR emblem')
-        return (True, '')
+            if not c11nItem.matchVehicleType(vehTypeDescr):
+                return (False, 'Customization item {} and vehTypeCompDescr {} mismatch'.format(c11nItem.id, vehTypeCompDescr))
+        return (True, c11nItem)
 
 
 class NotificationItem(object):

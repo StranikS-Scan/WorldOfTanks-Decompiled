@@ -119,6 +119,7 @@ def getGuiServicesConfig(manager):
     from gui import battle_control
     from gui import battle_results
     from gui import clans
+    from gui import customization
     from gui import event_boards
     from gui import game_control
     from gui import goodies
@@ -140,4 +141,5 @@ def getGuiServicesConfig(manager):
     manager.addConfig(event_boards.getEventServicesConfig)
     manager.addConfig(goodies.getGoodiesCacheConfig)
     manager.addConfig(battle_results.getBattleResultsServiceConfig)
+    manager.addConfig(customization.getCustomizationServiceConfig)
     manager.addInstance(ILobbyContext, lobby_context.LobbyContext(), finalizer='clear')

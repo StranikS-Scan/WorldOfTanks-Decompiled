@@ -3,13 +3,11 @@
 from collections import namedtuple
 from functools import partial
 import BigWorld
-import Math
 from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, PERSONAL_QUEST_FREE_TOKEN_NAME
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from gui import makeHtmlString
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
-from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -19,7 +17,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.settings import getBadgeIconPath, BADGES_ICONS
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES
 from gui.shared.gui_items.Tankman import getRoleUserName, calculateRoleLevel
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.money import Currency, Money
@@ -29,6 +27,7 @@ from helpers import getLocalizedData, i18n
 from helpers import time_utils
 from items import vehicles, tankmen
 from shared_utils import makeTupleByDict
+from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
@@ -824,62 +823,28 @@ class RefSystemTankmenBonus(TankmenBonus):
 
 
 class CustomizationsBonus(SimpleBonus):
-    INFOTIP_ARGS_ORDER = ('type', 'id', 'nationId', 'value', 'isPermanent', 'boundVehicle', 'boundToCurrentVehicle')
+    c11n = dependency.descriptor(ICustomizationService)
+    INFOTIP_ARGS_ORDER = ('intCD', 'value', 'boundVehicle', 'boundToCurrentVehicle')
 
-    def _makeTextureUrl(self, width, height, texture, colors, armorColor):
-        if not texture:
-            return ''
-        weights = Math.Vector4((colors[0] >> 24) / 255.0, (colors[1] >> 24) / 255.0, (colors[2] >> 24) / 255.0, (colors[3] >> 24) / 255.0)
-        return 'img://camouflage,{0:d},{1:d},"{2:>s}",{3[0]:d},{3[1]:d},{3[2]:d},{3[3]:d},{4[0]:n},{4[1]:n},{4[2]:n},{4[3]:n},{5:d}'.format(width, height, texture, colors, weights, armorColor)
-
-    def getList(self, defaultSize=67):
+    def getList(self):
         result = []
-        for item in self.getCustomizations():
-            itemType = item.get('custType')
-            itemId = item.get('id', (-1, -1))
-            boundVehicle = item.get('vehTypeCompDescr', None)
-            boundToCurrentVehicle = item.get('boundToCurrentVehicle', False)
-            nationId = 0
-            texture = ''
-            if itemType == CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE_TYPE:
-                customization = vehicles.g_cache.customization(itemId[0])
-                camouflages = customization.get('camouflages', {})
-                camouflage = camouflages.get(itemId[1], None)
-                if camouflage:
-                    armorColor = customization.get('armorColor', 0)
-                    texture = self._makeTextureUrl(defaultSize, defaultSize, camouflage.get('texture'), camouflage.get('colors', (0, 0, 0, 0)), armorColor)
-                    nationId, itemId = itemId
-            elif itemType == CUSTOMIZATION_ITEM_TYPE.EMBLEM_TYPE:
-                _, emblems, _ = vehicles.g_cache.playerEmblems()
-                emblem = emblems.get(itemId, None)
-                if emblem:
-                    texture = emblem[2]
-            elif itemType == CUSTOMIZATION_ITEM_TYPE.INSCRIPTION_TYPE:
-                customization = vehicles.g_cache.customization(itemId[0])
-                inscriptions = customization.get(CUSTOMIZATION_ITEM_TYPE.INSCRIPTION_TYPE, {})
-                inscription = inscriptions.get(itemId[1], None)
-                if inscription:
-                    texture = inscription[2]
-                    nationId, itemId = itemId
-            if texture.startswith('gui'):
-                texture = texture.replace('gui', '..', 1)
-            isPermanent = item.get('isPermanent', False)
-            value = item.get('value', 0)
+        for itemData in self.getCustomizations():
+            itemTypeName = itemData.get('custType')
+            itemID = itemData.get('id', -1)
+            boundVehicle = itemData.get('vehTypeCompDescr', None)
+            boundToCurrentVehicle = itemData.get('boundToCurrentVehicle', False)
+            itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
+            item = self.c11n.getItemByID(itemTypeID, itemID)
+            value = itemData.get('value', 0)
             valueStr = None
-            if not isPermanent:
-                value *= time_utils.ONE_DAY
-            elif value > 1:
+            if value > 1:
                 valueStr = text_styles.main(i18n.makeString(QUESTS.BONUSES_CUSTOMIZATION_VALUE, count=value))
-            res = {'id': itemId,
-             'type': CUSTOMIZATION_ITEM_TYPE.CI_TYPES.index(itemType),
-             'nationId': nationId,
-             'texture': texture,
-             'isPermanent': isPermanent,
+            result.append({'intCD': item.intCD,
+             'texture': item.icon,
              'value': value,
              'valueStr': valueStr,
              'boundVehicle': boundVehicle,
-             'boundToCurrentVehicle': boundToCurrentVehicle}
-            result.append(res)
+             'boundToCurrentVehicle': boundToCurrentVehicle})
 
         return result
 
@@ -888,7 +853,7 @@ class CustomizationsBonus(SimpleBonus):
 
     def getRankedAwardVOs(self, iconSize='small', withCounts=False, withKey=False):
         result = []
-        for item, data in zip(self.getCustomizations(), self.getList(defaultSize=128)):
+        for item, data in zip(self.getCustomizations(), self.getList()):
             count = item.get('value', 1)
             itemData = {'imgSource': RES_ICONS.getBonusIcon(iconSize, item.get('custType')),
              'label': text_styles.hightlight('x{}'.format(count)),
@@ -904,7 +869,7 @@ class CustomizationsBonus(SimpleBonus):
 
     def __itemTooltip(self, data, isReceived):
         return {'isSpecial': True,
-         'specialAlias': TOOLTIPS_CONSTANTS.CUSTOMIZATION_ITEM,
+         'specialAlias': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM,
          'specialArgs': [ data[o] for o in self.INFOTIP_ARGS_ORDER ] + [isReceived]}
 
 

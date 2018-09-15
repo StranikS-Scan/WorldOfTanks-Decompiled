@@ -1,12 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/Vehicle.py
+import random
 from itertools import izip
 from operator import itemgetter
 import BigWorld
 import math
 import constants
 from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG
-from account_shared import LayoutIterator, getCustomizedVehCompDescr
+from account_shared import LayoutIterator
 from constants import WIN_XP_FACTOR_MODE
 from gui import makeHtmlString
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
@@ -21,10 +22,12 @@ from gui.shared.gui_items.gui_item import HasStrCD
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.money import MONEY_UNDEFINED, Currency, Money
+from gui.shared.gui_items.customization.outfit import Outfit
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_PRICE_EMPTY
 from gui.shared.utils import makeSearchableString
 from helpers import i18n, time_utils, dependency
-from items import vehicles, tankmen, getTypeInfoByName, getTypeOfCompactDescr
+from items import vehicles, tankmen, customizations, getTypeInfoByName, getTypeOfCompactDescr
+from items.components.c11n_constants import SeasonType, CustomizationType
 from shared_utils import findFirst, CONST_CONTAINER
 from skeletons.gui.game_control import IFalloutController, IIGRController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -82,10 +85,11 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     FALLOUT = 'fallout'
     UNRECOVERABLE = 'unrecoverable'
     CREW_LOCKED = 'lockCrew'
+    OUTFIT_LOCKED = 'lockOutfit'
 
 
 class Vehicle(FittingItem, HasStrCD):
-    __slots__ = ('__descriptor', '__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_hasRentPackages', '_isDisabledForBuy', '_isSelected', '_igrCustomizationsLayout', '_restorePrice', '_canTradeIn', '_canTradeOff', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_optDevices', '_shells', '_equipment', '_equipmentLayout', '_bonuses', '_crewIndices', '_crew', '_lastCrew', '_hasModulesToSelect')
+    __slots__ = ('__descriptor', '__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_hasRentPackages', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_canTradeIn', '_canTradeOff', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_optDevices', '_shells', '_equipment', '_equipmentLayout', '_bonuses', '_crewIndices', '_crew', '_lastCrew', '_hasModulesToSelect', '_customOutfits', '_styledOutfits')
     NOT_FULL_AMMO_MULTIPLIER = 0.2
     MAX_RENT_MULTIPLIER = 2
 
@@ -170,12 +174,13 @@ class Vehicle(FittingItem, HasStrCD):
         self._hasRentPackages = False
         self._isDisabledForBuy = False
         self._isSelected = False
-        self._igrCustomizationsLayout = {}
         self._restorePrice = None
         self._canTradeIn = False
         self._canTradeOff = False
         self._tradeOffPriceFactor = 0
         self._tradeOffPrice = MONEY_UNDEFINED
+        self._customOutfits = {}
+        self._styledOutfits = {}
         if self.isPremiumIGR:
             self._searchableUserName = makeSearchableString(self.shortUserName)
         else:
@@ -198,7 +203,8 @@ class Vehicle(FittingItem, HasStrCD):
             self._isDisabledForBuy = self.intCD in proxy.shop.getNotToBuyVehicles()
             self._hasRentPackages = bool(proxy.shop.getVehicleRentPrices().get(self.intCD, {}))
             self._isSelected = bool(self.invID in proxy.stats.oldVehInvIDs)
-            self._igrCustomizationsLayout = proxy.inventory.getIgrCustomizationsLayout().get(self._inventoryID, {})
+            self._customOutfits = self._parseCustomOutfits(self.intCD, proxy)
+            self._styledOutfits = self._parseStyledOutfits(self.intCD, proxy)
             restoreConfig = proxy.shop.vehiclesRestoreConfig
             self._restorePrice = calcVehicleRestorePrice(self.buyPrices.itemPrice.defPrice, proxy.shop)
             self._restoreInfo = proxy.recycleBin.getVehicleRestoreInfo(self.intCD, restoreConfig.restoreDuration, restoreConfig.restoreCooldown)
@@ -375,6 +381,41 @@ class Vehicle(FittingItem, HasStrCD):
         return result
 
     @classmethod
+    def _parseCustomOutfits(cls, compactDescr, proxy):
+        """
+        Custom outfits are the outfits user created thyself.
+        In the inventory these styles are stored under regular seasons (winter, summer, etc.)
+        """
+        outfits = {}
+        for season in SeasonType.SEASONS:
+            outfitData = proxy.inventory.getOutfitData(compactDescr, season)
+            if outfitData:
+                outfits[season] = cls.itemsFactory.createOutfit(outfitData.compDescr, outfitData.isEnabled, proxy)
+            outfits[season] = cls.itemsFactory.createOutfit()
+
+        return outfits
+
+    @classmethod
+    def _parseStyledOutfits(cls, compactDescr, proxy):
+        """
+        Styled outfits are the outfits the comes from styles (i.e. they're predefined).
+        In the inventory these styles are stored under the ALL season since single style
+        contains outfits for all seasons.
+        """
+        outfits = {}
+        outfitData = proxy.inventory.getOutfitData(compactDescr, SeasonType.ALL)
+        if not outfitData or not outfitData.isEnabled:
+            return outfits
+        component = customizations.parseCompDescr(outfitData.compDescr)
+        styleIntCD = vehicles.makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, component.styleId)
+        style = vehicles.getItemByCompactDescr(styleIntCD)
+        for styleSeason in SeasonType.SEASONS:
+            compDescr = style.outfits.get(styleSeason).makeCompDescr()
+            outfits[styleSeason] = cls.itemsFactory.createOutfit(compDescr, outfitData.isEnabled, proxy)
+
+        return outfits
+
+    @classmethod
     def _parserOptDevs(cls, layoutList, proxy):
         result = list()
         for i in xrange(len(layoutList)):
@@ -442,10 +483,6 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def isSelected(self):
         return self._isSelected
-
-    @property
-    def igrCustomizationsLayout(self):
-        return self._igrCustomizationsLayout
 
     @property
     def restorePrice(self):
@@ -791,7 +828,7 @@ class Vehicle(FittingItem, HasStrCD):
         return self.falloutCtrl.isSelected()
 
     def isFalloutOnly(self):
-        return _checkForTags(self.tags, VEHICLE_TAGS.FALLOUT)
+        return checkForTags(self.tags, VEHICLE_TAGS.FALLOUT)
 
     def isRotationApplied(self):
         return self.rotationGroupNum != 0
@@ -832,27 +869,27 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isPremium(self):
-        return _checkForTags(self.tags, VEHICLE_TAGS.PREMIUM)
+        return checkForTags(self.tags, VEHICLE_TAGS.PREMIUM)
 
     @property
     def isPremiumIGR(self):
-        return _checkForTags(self.tags, VEHICLE_TAGS.PREMIUM_IGR)
+        return checkForTags(self.tags, VEHICLE_TAGS.PREMIUM_IGR)
 
     @property
     def isSecret(self):
-        return _checkForTags(self.tags, VEHICLE_TAGS.SECRET)
+        return checkForTags(self.tags, VEHICLE_TAGS.SECRET)
 
     @property
     def isSpecial(self):
-        return _checkForTags(self.tags, VEHICLE_TAGS.SPECIAL)
+        return checkForTags(self.tags, VEHICLE_TAGS.SPECIAL)
 
     @property
     def isExcludedFromSandbox(self):
-        return _checkForTags(self.tags, VEHICLE_TAGS.EXCLUDED_FROM_SANDBOX)
+        return checkForTags(self.tags, VEHICLE_TAGS.EXCLUDED_FROM_SANDBOX)
 
     @property
     def isObserver(self):
-        return _checkForTags(self.tags, VEHICLE_TAGS.OBSERVER)
+        return checkForTags(self.tags, VEHICLE_TAGS.OBSERVER)
 
     @property
     def isEvent(self):
@@ -868,19 +905,23 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isDisabledInRoaming(self):
-        return _checkForTags(self.tags, VEHICLE_TAGS.DISABLED_IN_ROAMING) and self.lobbyContext.getServerSettings().roaming.isInRoaming()
+        return checkForTags(self.tags, VEHICLE_TAGS.DISABLED_IN_ROAMING) and self.lobbyContext.getServerSettings().roaming.isInRoaming()
 
     @property
     def canNotBeSold(self):
-        return _checkForTags(self.tags, VEHICLE_TAGS.CANNOT_BE_SOLD)
+        return checkForTags(self.tags, VEHICLE_TAGS.CANNOT_BE_SOLD)
 
     @property
     def isUnrecoverable(self):
-        return _checkForTags(self.tags, VEHICLE_TAGS.UNRECOVERABLE)
+        return checkForTags(self.tags, VEHICLE_TAGS.UNRECOVERABLE)
 
     @property
     def isCrewLocked(self):
-        return _checkForTags(self.tags, VEHICLE_TAGS.CREW_LOCKED)
+        return checkForTags(self.tags, VEHICLE_TAGS.CREW_LOCKED)
+
+    @property
+    def isOutfitLocked(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.OUTFIT_LOCKED)
 
     @property
     def isDisabledInPremIGR(self):
@@ -930,7 +971,7 @@ class Vehicle(FittingItem, HasStrCD):
                 return False
             if st in (self.VEHICLE_STATE.RENTAL_IS_OVER, self.VEHICLE_STATE.IGR_RENTAL_IS_OVER):
                 st = self.__checkUndamagedState(self.modelState)
-        return st in self.CAN_SELL_STATES and not _checkForTags(self.tags, VEHICLE_TAGS.CANNOT_BE_SOLD)
+        return st in self.CAN_SELL_STATES and not checkForTags(self.tags, VEHICLE_TAGS.CANNOT_BE_SOLD)
 
     @property
     def isLocked(self):
@@ -971,11 +1012,11 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def isOnlyForEventBattles(self):
-        return _checkForTags(self.tags, VEHICLE_TAGS.EVENT)
+        return checkForTags(self.tags, VEHICLE_TAGS.EVENT)
 
     @property
     def isTelecom(self):
-        return _checkForTags(self.tags, VEHICLE_TAGS.TELECOM)
+        return checkForTags(self.tags, VEHICLE_TAGS.TELECOM)
 
     @property
     def isTelecomDealOver(self):
@@ -1038,6 +1079,13 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def isFavorite(self):
         return bool(self.settings & VEHICLE_SETTINGS_FLAG.GROUP_0)
+
+    @property
+    def isAutoRentStyle(self):
+        """
+        Check if the style user put on should be prolonged when expired.
+        """
+        return bool(self.settings & VEHICLE_SETTINGS_FLAG.AUTO_RENT_CUSTOMIZATION)
 
     def isAutoLoadFull(self):
         if self.isAutoLoad:
@@ -1197,20 +1245,73 @@ class Vehicle(FittingItem, HasStrCD):
 
         return _sortCrew(crewItems, crewRoles)
 
-    def getCustomizedDescriptor(self):
-        if self.invID > 0:
-            igrRoomType = self.igrCtrl.getRoomType()
-            igrLayout = {self.invID: self.igrCustomizationsLayout}
-            updatedVehCompactDescr = getCustomizedVehCompDescr(igrLayout, self.invID, igrRoomType, self.descriptor.makeCompactDescr())
-            serverSettings = self.lobbyContext.getServerSettings()
-            if serverSettings is not None and serverSettings.roaming.isInRoaming():
-                updatedVehCompactDescr = vehicles.stripCustomizationFromVehicleCompactDescr(updatedVehCompactDescr, True, True, False)[0]
-            newDescriptor = vehicles.VehicleDescr(compactDescr=updatedVehCompactDescr)
-            newDescriptor.activeGunShotIndex = self.descriptor.activeGunShotIndex
-            return newDescriptor
-        else:
-            return self.descriptor
-            return
+    def getOutfit(self, season):
+        """
+        Get an active outfit for a given season.
+        :param season: one of SeasonType.SEASONS
+        """
+        outfit = self._styledOutfits.get(season) or self._customOutfits.get(season)
+        if outfit and outfit.isEnabled:
+            return outfit
+        outfit = Outfit(isEnabled=True)
+        self.setCustomOutfit(season, outfit)
+        return outfit
+
+    def setCustomOutfit(self, season, outfit):
+        self._customOutfits[season] = outfit
+
+    def getCustomOutfit(self, season):
+        """
+        Get a custom outfit for a given season.
+        :param season: one of SeasonType.SEASONS
+        """
+        return self._customOutfits.get(season)
+
+    def getStyledOutfit(self, season):
+        """
+        Get a styled outfit for a given season.
+        :param season: one of SeasonType.SEASONS
+        """
+        return self._styledOutfits.get(season)
+
+    def hasOutfit(self, season):
+        """
+        Check if vehicle has an outfit for given season.
+        :param season: one of SeasonType.SEASONS
+        """
+        outfit = self.getOutfit(season)
+        return outfit is not None
+
+    def hasOutfitWithItems(self, season):
+        """
+        Check if vehicle has an outfit for given season.
+        :param season: one of SeasonType.SEASONS
+        """
+        outfit = self.getOutfit(season)
+        return outfit is not None and not outfit.isEmpty()
+
+    def getBonusCamo(self):
+        for season in SeasonType.SEASONS:
+            outfit = self.getOutfit(season)
+            if not outfit:
+                continue
+            camo = outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).getItem()
+            if camo:
+                return camo
+
+        return None
+
+    def getAnyOutfitSeason(self):
+        """
+        Get any season of any active outfit.
+        If there's no active outfit, falls back to summer.
+        """
+        activeSeasons = []
+        for season in SeasonType.SEASONS:
+            if self.hasOutfitWithItems(season):
+                activeSeasons.append(season)
+
+        return random.choice(activeSeasons) if activeSeasons else SeasonType.SUMMER
 
     def isRestorePossible(self):
         """
@@ -1353,14 +1454,14 @@ def getShortUserName(vehicleType, textPrefix=False):
 
 
 def _getActualName(name, tags, textPrefix=False):
-    if _checkForTags(tags, VEHICLE_TAGS.PREMIUM_IGR):
+    if checkForTags(tags, VEHICLE_TAGS.PREMIUM_IGR):
         if textPrefix:
             return i18n.makeString(ITEM_TYPES.MARKER_IGR, vehName=name)
         return makeHtmlString('html_templates:igr/premium-vehicle', 'name', {'vehicle': name})
     return name
 
 
-def _checkForTags(vTags, tags):
+def checkForTags(vTags, tags):
     if not hasattr(tags, '__iter__'):
         tags = (tags,)
     return bool(vTags & frozenset(tags))

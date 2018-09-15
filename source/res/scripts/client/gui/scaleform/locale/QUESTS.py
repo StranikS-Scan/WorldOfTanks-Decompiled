@@ -938,15 +938,6 @@ class QUESTS(object):
     DETAILS_MODIFIERS_ECONOMICS_PREMIUMPACKET30 = '#quests:details/modifiers/economics/premiumPacket30'
     DETAILS_MODIFIERS_ECONOMICS_PREMIUMPACKET180 = '#quests:details/modifiers/economics/premiumPacket180'
     DETAILS_MODIFIERS_ECONOMICS_PREMIUMPACKET360 = '#quests:details/modifiers/economics/premiumPacket360'
-    DETAILS_MODIFIERS_ECONOMICS_CAMOUFLAGEPACKETINFCOST = '#quests:details/modifiers/economics/camouflagePacketInfCost'
-    DETAILS_MODIFIERS_ECONOMICS_CAMOUFLAGEPACKET7COST = '#quests:details/modifiers/economics/camouflagePacket7Cost'
-    DETAILS_MODIFIERS_ECONOMICS_CAMOUFLAGEPACKET30COST = '#quests:details/modifiers/economics/camouflagePacket30Cost'
-    DETAILS_MODIFIERS_ECONOMICS_INSCRIPTIONPACKETINFCOST = '#quests:details/modifiers/economics/inscriptionPacketInfCost'
-    DETAILS_MODIFIERS_ECONOMICS_INSCRIPTIONPACKET7COST = '#quests:details/modifiers/economics/inscriptionPacket7Cost'
-    DETAILS_MODIFIERS_ECONOMICS_INSCRIPTIONPACKET30COST = '#quests:details/modifiers/economics/inscriptionPacket30Cost'
-    DETAILS_MODIFIERS_ECONOMICS_EMBLEMPACKETINFCOST = '#quests:details/modifiers/economics/emblemPacketInfCost'
-    DETAILS_MODIFIERS_ECONOMICS_EMBLEMPACKET7COST = '#quests:details/modifiers/economics/emblemPacket7Cost'
-    DETAILS_MODIFIERS_ECONOMICS_EMBLEMPACKET30COST = '#quests:details/modifiers/economics/emblemPacket30Cost'
     DETAILS_MODIFIERS_EQUIPMENT_GOLD = '#quests:details/modifiers/equipment/gold'
     DETAILS_MODIFIERS_EQUIPMENT_CREDITS = '#quests:details/modifiers/equipment/credits'
     DETAILS_MODIFIERS_EQUIPMENT_CRYSTAL = '#quests:details/modifiers/equipment/crystal'
@@ -974,8 +965,6 @@ class QUESTS(object):
     DETAILS_MODIFIERS_VEHICLE_NATION_CREDITSPRICEMULTIPLIER = '#quests:details/modifiers/vehicle/nation/creditsPriceMultiplier'
     DETAILS_MODIFIERS_VEHICLE_RENT_NATION_GOLDPRICEMULTIPLIER = '#quests:details/modifiers/vehicle/rent/nation/goldPriceMultiplier'
     DETAILS_MODIFIERS_VEHICLE_RENT_NATION_CREDITSPRICEMULTIPLIER = '#quests:details/modifiers/vehicle/rent/nation/creditsPriceMultiplier'
-    DETAILS_MODIFIERS_CUSTOMIZATION_VEHCAMOUFLAGE = '#quests:details/modifiers/customization/vehCamouflage'
-    DETAILS_MODIFIERS_CUSTOMIZATION_GROUPEMBLEM = '#quests:details/modifiers/customization/groupEmblem'
     DETAILS_MODIFIERS_BOOSTER = '#quests:details/modifiers/booster'
     DETAILS_MODIFIERS_BOOSTERS_GOLDPRICEMULTIPLIER = '#quests:details/modifiers/boosters/goldPriceMultiplier'
     DETAILS_MODIFIERS_BOOSTERS_CREDITSPRICEMULTIPLIER = '#quests:details/modifiers/boosters/creditsPriceMultiplier'
@@ -1147,9 +1136,13 @@ class QUESTS(object):
     BONUSNAME_PREMIUM = '#quests:bonusName/premium'
     BONUSNAME_TANKMEN_WITH_SKILLS = '#quests:bonusName/tankmen/with_skills'
     BONUSNAME_TANKMEN_NO_SKILLS = '#quests:bonusName/tankmen/no_skills'
-    BONUSNAME_CAMOUFLAGES = '#quests:bonusName/camouflages'
-    BONUSNAME_EMBLEMS = '#quests:bonusName/emblems'
-    BONUSNAME_INSCRIPTIONS = '#quests:bonusName/inscriptions'
+    BONUSNAME_CAMOUFLAGE = '#quests:bonusName/camouflage'
+    BONUSNAME_EMBLEM = '#quests:bonusName/emblem'
+    BONUSNAME_INSCRIPTION = '#quests:bonusName/inscription'
+    BONUSNAME_DECAL = '#quests:bonusName/decal'
+    BONUSNAME_PAINT = '#quests:bonusName/paint'
+    BONUSNAME_STYLE = '#quests:bonusName/style'
+    BONUSNAME_MODIFICATION = '#quests:bonusName/modification'
     BONUSNAME_FREETOKENS = '#quests:bonusName/freeTokens'
     BONUSNAME_COMPLETIONTOKENS = '#quests:bonusName/completionTokens'
     BONUSNAME_COMPLETIONTOKENS_1_1 = '#quests:bonusName/completionTokens_1_1'
@@ -1232,96 +1225,6 @@ class QUESTS(object):
     ACTION_HERO_FULL_DROPSKILLS_MIXED = '#quests:action/hero/full/dropSkills/mixed'
     ACTION_SHORT_DROPSKILLS_MIXED = '#quests:action/short/dropSkills/mixed'
     ACTION_BUTTON_DROPSKILLS_MIXED = '#quests:action/button/dropSkills/mixed'
-    ACTION_AUTO_CAMOUFLAGE_GOLD = '#quests:action/auto/camouflage/gold'
-    ACTION_FULL_CAMOUFLAGE_GOLD = '#quests:action/full/camouflage/gold'
-    ACTION_HERO_FULL_CAMOUFLAGE_GOLD = '#quests:action/hero/full/camouflage/gold'
-    ACTION_SHORT_CAMOUFLAGE_GOLD = '#quests:action/short/camouflage/gold'
-    ACTION_BUTTON_CAMOUFLAGE_GOLD = '#quests:action/button/camouflage/gold'
-    ACTION_AUTO_CAMOUFLAGE_CREDITS = '#quests:action/auto/camouflage/credits'
-    ACTION_FULL_CAMOUFLAGE_CREDITS = '#quests:action/full/camouflage/credits'
-    ACTION_HERO_FULL_CAMOUFLAGE_CREDITS = '#quests:action/hero/full/camouflage/credits'
-    ACTION_SHORT_CAMOUFLAGE_CREDITS = '#quests:action/short/camouflage/credits'
-    ACTION_BUTTON_CAMOUFLAGE_CREDITS = '#quests:action/button/camouflage/credits'
-    ACTION_AUTO_CAMOUFLAGE_MIXED = '#quests:action/auto/camouflage/mixed'
-    ACTION_FULL_CAMOUFLAGE_MIXED = '#quests:action/full/camouflage/mixed'
-    ACTION_HERO_FULL_CAMOUFLAGE_MIXED = '#quests:action/hero/full/camouflage/mixed'
-    ACTION_SHORT_CAMOUFLAGE_MIXED = '#quests:action/short/camouflage/mixed'
-    ACTION_BUTTON_CAMOUFLAGE_MIXED = '#quests:action/button/camouflage/mixed'
-    ACTION_AUTO_CAMOUFLAGEPACKETINFCOST = '#quests:action/auto/camouflagePacketInfCost'
-    ACTION_FULL_CAMOUFLAGEPACKETINFCOST = '#quests:action/full/camouflagePacketInfCost'
-    ACTION_HERO_FULL_CAMOUFLAGEPACKETINFCOST = '#quests:action/hero/full/camouflagePacketInfCost'
-    ACTION_SHORT_CAMOUFLAGEPACKETINFCOST = '#quests:action/short/camouflagePacketInfCost'
-    ACTION_BUTTON_CAMOUFLAGEPACKETINFCOST = '#quests:action/button/camouflagePacketInfCost'
-    ACTION_AUTO_CAMOUFLAGEPACKET30COST = '#quests:action/auto/camouflagePacket30Cost'
-    ACTION_FULL_CAMOUFLAGEPACKET30COST = '#quests:action/full/camouflagePacket30Cost'
-    ACTION_HERO_FULL_CAMOUFLAGEPACKET30COST = '#quests:action/hero/full/camouflagePacket30Cost'
-    ACTION_SHORT_CAMOUFLAGEPACKET30COST = '#quests:action/short/camouflagePacket30Cost'
-    ACTION_BUTTON_CAMOUFLAGEPACKET30COST = '#quests:action/button/camouflagePacket30Cost'
-    ACTION_AUTO_CAMOUFLAGEPACKET7COST = '#quests:action/auto/camouflagePacket7Cost'
-    ACTION_FULL_CAMOUFLAGEPACKET7COST = '#quests:action/full/camouflagePacket7Cost'
-    ACTION_HERO_FULL_CAMOUFLAGEPACKET7COST = '#quests:action/hero/full/camouflagePacket7Cost'
-    ACTION_SHORT_CAMOUFLAGEPACKET7COST = '#quests:action/short/camouflagePacket7Cost'
-    ACTION_BUTTON_CAMOUFLAGEPACKET7COST = '#quests:action/button/camouflagePacket7Cost'
-    ACTION_AUTO_EMBLEM_GOLD = '#quests:action/auto/emblem/gold'
-    ACTION_FULL_EMBLEM_GOLD = '#quests:action/full/emblem/gold'
-    ACTION_HERO_FULL_EMBLEM_GOLD = '#quests:action/hero/full/emblem/gold'
-    ACTION_SHORT_EMBLEM_GOLD = '#quests:action/short/emblem/gold'
-    ACTION_BUTTON_EMBLEM_GOLD = '#quests:action/button/emblem/gold'
-    ACTION_AUTO_EMBLEM_CREDITS = '#quests:action/auto/emblem/credits'
-    ACTION_FULL_EMBLEM_CREDITS = '#quests:action/full/emblem/credits'
-    ACTION_HERO_FULL_EMBLEM_CREDITS = '#quests:action/hero/full/emblem/credits'
-    ACTION_SHORT_EMBLEM_CREDITS = '#quests:action/short/emblem/credits'
-    ACTION_BUTTON_EMBLEM_CREDITS = '#quests:action/button/emblem/credits'
-    ACTION_AUTO_EMBLEM_MIXED = '#quests:action/auto/emblem/mixed'
-    ACTION_FULL_EMBLEM_MIXED = '#quests:action/full/emblem/mixed'
-    ACTION_HERO_FULL_EMBLEM_MIXED = '#quests:action/hero/full/emblem/mixed'
-    ACTION_SHORT_EMBLEM_MIXED = '#quests:action/short/emblem/mixed'
-    ACTION_BUTTON_EMBLEM_MIXED = '#quests:action/button/emblem/mixed'
-    ACTION_AUTO_EMBLEMPACKETINFCOST = '#quests:action/auto/emblemPacketInfCost'
-    ACTION_FULL_EMBLEMPACKETINFCOST = '#quests:action/full/emblemPacketInfCost'
-    ACTION_HERO_FULL_EMBLEMPACKETINFCOST = '#quests:action/hero/full/emblemPacketInfCost'
-    ACTION_SHORT_EMBLEMPACKETINFCOST = '#quests:action/short/emblemPacketInfCost'
-    ACTION_BUTTON_EMBLEMPACKETINFCOST = '#quests:action/button/emblemPacketInfCost'
-    ACTION_AUTO_EMBLEMPACKET7COST = '#quests:action/auto/emblemPacket7Cost'
-    ACTION_FULL_EMBLEMPACKET7COST = '#quests:action/full/emblemPacket7Cost'
-    ACTION_HERO_FULL_EMBLEMPACKET7COST = '#quests:action/hero/full/emblemPacket7Cost'
-    ACTION_SHORT_EMBLEMPACKET7COST = '#quests:action/short/emblemPacket7Cost'
-    ACTION_BUTTON_EMBLEMPACKET7COST = '#quests:action/button/emblemPacket7Cost'
-    ACTION_AUTO_EMBLEMPACKET30COST = '#quests:action/auto/emblemPacket30Cost'
-    ACTION_FULL_EMBLEMPACKET30COST = '#quests:action/full/emblemPacket30Cost'
-    ACTION_HERO_FULL_EMBLEMPACKET30COST = '#quests:action/hero/full/emblemPacket30Cost'
-    ACTION_SHORT_EMBLEMPACKET30COST = '#quests:action/short/emblemPacket30Cost'
-    ACTION_BUTTON_EMBLEMPACKET30COST = '#quests:action/button/emblemPacket30Cost'
-    ACTION_AUTO_INSCRIPTION_GOLD = '#quests:action/auto/inscription/gold'
-    ACTION_FULL_INSCRIPTION_GOLD = '#quests:action/full/inscription/gold'
-    ACTION_HERO_FULL_INSCRIPTION_GOLD = '#quests:action/hero/full/inscription/gold'
-    ACTION_SHORT_INSCRIPTION_GOLD = '#quests:action/short/inscription/gold'
-    ACTION_BUTTON_INSCRIPTION_GOLD = '#quests:action/button/inscription/gold'
-    ACTION_AUTO_INSCRIPTION_CREDITS = '#quests:action/auto/inscription/credits'
-    ACTION_FULL_INSCRIPTION_CREDITS = '#quests:action/full/inscription/credits'
-    ACTION_HERO_FULL_INSCRIPTION_CREDITS = '#quests:action/hero/full/inscription/credits'
-    ACTION_SHORT_INSCRIPTION_CREDITS = '#quests:action/short/inscription/credits'
-    ACTION_BUTTON_INSCRIPTION_CREDITS = '#quests:action/button/inscription/credits'
-    ACTION_AUTO_INSCRIPTION_MIXED = '#quests:action/auto/inscription/mixed'
-    ACTION_FULL_INSCRIPTION_MIXED = '#quests:action/full/inscription/mixed'
-    ACTION_HERO_FULL_INSCRIPTION_MIXED = '#quests:action/hero/full/inscription/mixed'
-    ACTION_SHORT_INSCRIPTION_MIXED = '#quests:action/short/inscription/mixed'
-    ACTION_BUTTON_INSCRIPTION_MIXED = '#quests:action/button/inscription/mixed'
-    ACTION_AUTO_INSCRIPTIONPACKETINFCOST = '#quests:action/auto/inscriptionPacketInfCost'
-    ACTION_FULL_INSCRIPTIONPACKETINFCOST = '#quests:action/full/inscriptionPacketInfCost'
-    ACTION_HERO_FULL_INSCRIPTIONPACKETINFCOST = '#quests:action/hero/full/inscriptionPacketInfCost'
-    ACTION_SHORT_INSCRIPTIONPACKETINFCOST = '#quests:action/short/inscriptionPacketInfCost'
-    ACTION_BUTTON_INSCRIPTIONPACKETINFCOST = '#quests:action/button/inscriptionPacketInfCost'
-    ACTION_AUTO_INSCRIPTIONPACKET7COST = '#quests:action/auto/inscriptionPacket7Cost'
-    ACTION_FULL_INSCRIPTIONPACKET7COST = '#quests:action/full/inscriptionPacket7Cost'
-    ACTION_HERO_FULL_INSCRIPTIONPACKET7COST = '#quests:action/hero/full/inscriptionPacket7Cost'
-    ACTION_SHORT_INSCRIPTIONPACKET7COST = '#quests:action/short/inscriptionPacket7Cost'
-    ACTION_BUTTON_INSCRIPTIONPACKET7COST = '#quests:action/button/inscriptionPacket7Cost'
-    ACTION_AUTO_INSCRIPTIONPACKET30COST = '#quests:action/auto/inscriptionPacket30Cost'
-    ACTION_FULL_INSCRIPTIONPACKET30COST = '#quests:action/full/inscriptionPacket30Cost'
-    ACTION_HERO_FULL_INSCRIPTIONPACKET30COST = '#quests:action/hero/full/inscriptionPacket30Cost'
-    ACTION_SHORT_INSCRIPTIONPACKET30COST = '#quests:action/short/inscriptionPacket30Cost'
-    ACTION_BUTTON_INSCRIPTIONPACKET30COST = '#quests:action/button/inscriptionPacket30Cost'
     ACTION_AUTO_PASSPORTCHANGECOST = '#quests:action/auto/passportChangeCost'
     ACTION_FULL_PASSPORTCHANGECOST = '#quests:action/full/passportChangeCost'
     ACTION_HERO_FULL_PASSPORTCHANGECOST = '#quests:action/hero/full/passportChangeCost'
@@ -1457,11 +1360,18 @@ class QUESTS(object):
     ACTION_AUTO_MUL_GOODIEPRICE = '#quests:action/auto/mul_GoodiePrice'
     ACTION_SHORT_MUL_GOODIEPRICE = '#quests:action/short/mul_GoodiePrice'
     ACTION_BUTTON_MUL_GOODIEPRICE = '#quests:action/button/mul_GoodiePrice'
-    ACTION_AUTO_MUL_CAMOUFLAGEPRICEFACTOR = '#quests:action/auto/mul_CamouflagePriceFactor'
-    ACTION_FULL_MUL_CAMOUFLAGEPRICEFACTOR = '#quests:action/full/mul_CamouflagePriceFactor'
-    ACTION_HERO_FULL_MUL_CAMOUFLAGEPRICEFACTOR = '#quests:action/hero/full/mul_CamouflagePriceFactor'
-    ACTION_SHORT_MUL_CAMOUFLAGEPRICEFACTOR = '#quests:action/short/mul_CamouflagePriceFactor'
-    ACTION_BUTTON_MUL_CAMOUFLAGEPRICEFACTOR = '#quests:action/button/mul_CamouflagePriceFactor'
+    ACTION_AUTO_SET_PRICEGROUPPRICE = '#quests:action/auto/set_PriceGroupPrice'
+    ACTION_SHORT_SET_PRICEGROUPPRICE = '#quests:action/short/set_PriceGroupPrice'
+    ACTION_BUTTON_SET_PRICEGROUPPRICE = '#quests:action/button/set_PriceGroupPrice'
+    ACTION_AUTO_MUL_PRICEGROUPPRICE = '#quests:action/auto/mul_PriceGroupPrice'
+    ACTION_SHORT_MUL_PRICEGROUPPRICE = '#quests:action/short/mul_PriceGroupPrice'
+    ACTION_BUTTON_MUL_PRICEGROUPPRICE = '#quests:action/button/mul_PriceGroupPrice'
+    ACTION_AUTO_MUL_PRICEGROUPPRICEBYTAG = '#quests:action/auto/mul_PriceGroupPriceByTag'
+    ACTION_SHORT_MUL_PRICEGROUPPRICEBYTAG = '#quests:action/short/mul_PriceGroupPriceByTag'
+    ACTION_BUTTON_MUL_PRICEGROUPPRICEBYTAG = '#quests:action/button/mul_PriceGroupPriceByTag'
+    ACTION_AUTO_MUL_PRICEGROUPPRICEALL = '#quests:action/auto/mul_PriceGroupPriceAll'
+    ACTION_SHORT_MUL_PRICEGROUPPRICEALL = '#quests:action/short/mul_PriceGroupPriceAll'
+    ACTION_BUTTON_MUL_PRICEGROUPPRICEALL = '#quests:action/button/mul_PriceGroupPriceAll'
     ACTION_AUTO_TRADEINSELLPRICEFACTOR = '#quests:action/auto/tradeInSellPriceFactor'
     ACTION_FULL_TRADEINSELLPRICEFACTOR = '#quests:action/full/tradeInSellPriceFactor'
     ACTION_HERO_FULL_TRADEINSELLPRICEFACTOR = '#quests:action/hero/full/tradeInSellPriceFactor'
@@ -1498,6 +1408,7 @@ class QUESTS(object):
     ACTION_MORE_TYPE_OPTIONALDEVICES = '#quests:action/more/type/optionalDevices'
     ACTION_MORE_TYPE_GOODIES = '#quests:action/more/type/goodies'
     ACTION_MORE_TYPE_VEHICLES = '#quests:action/more/type/vehicles'
+    ACTION_MORE_TYPE_CUSTOMIZATIONS = '#quests:action/more/type/customizations'
     ACTION_BOOSTER_BOOSTER_XP = '#quests:action/booster/booster_xp'
     ACTION_BOOSTER_BOOSTER_FREE_XP = '#quests:action/booster/booster_free_xp'
     ACTION_BOOSTER_BOOSTER_CREW_XP = '#quests:action/booster/booster_crew_xp'
@@ -1559,9 +1470,13 @@ class QUESTS(object):
      BONUSNAME_PREMIUM,
      BONUSNAME_TANKMEN_WITH_SKILLS,
      BONUSNAME_TANKMEN_NO_SKILLS,
-     BONUSNAME_CAMOUFLAGES,
-     BONUSNAME_EMBLEMS,
-     BONUSNAME_INSCRIPTIONS,
+     BONUSNAME_CAMOUFLAGE,
+     BONUSNAME_EMBLEM,
+     BONUSNAME_INSCRIPTION,
+     BONUSNAME_DECAL,
+     BONUSNAME_PAINT,
+     BONUSNAME_STYLE,
+     BONUSNAME_MODIFICATION,
      BONUSNAME_FREETOKENS,
      BONUSNAME_COMPLETIONTOKENS,
      BONUSNAME_COMPLETIONTOKENS_1_1,
@@ -1644,96 +1559,6 @@ class QUESTS(object):
      ACTION_HERO_FULL_DROPSKILLS_MIXED,
      ACTION_SHORT_DROPSKILLS_MIXED,
      ACTION_BUTTON_DROPSKILLS_MIXED,
-     ACTION_AUTO_CAMOUFLAGE_GOLD,
-     ACTION_FULL_CAMOUFLAGE_GOLD,
-     ACTION_HERO_FULL_CAMOUFLAGE_GOLD,
-     ACTION_SHORT_CAMOUFLAGE_GOLD,
-     ACTION_BUTTON_CAMOUFLAGE_GOLD,
-     ACTION_AUTO_CAMOUFLAGE_CREDITS,
-     ACTION_FULL_CAMOUFLAGE_CREDITS,
-     ACTION_HERO_FULL_CAMOUFLAGE_CREDITS,
-     ACTION_SHORT_CAMOUFLAGE_CREDITS,
-     ACTION_BUTTON_CAMOUFLAGE_CREDITS,
-     ACTION_AUTO_CAMOUFLAGE_MIXED,
-     ACTION_FULL_CAMOUFLAGE_MIXED,
-     ACTION_HERO_FULL_CAMOUFLAGE_MIXED,
-     ACTION_SHORT_CAMOUFLAGE_MIXED,
-     ACTION_BUTTON_CAMOUFLAGE_MIXED,
-     ACTION_AUTO_CAMOUFLAGEPACKETINFCOST,
-     ACTION_FULL_CAMOUFLAGEPACKETINFCOST,
-     ACTION_HERO_FULL_CAMOUFLAGEPACKETINFCOST,
-     ACTION_SHORT_CAMOUFLAGEPACKETINFCOST,
-     ACTION_BUTTON_CAMOUFLAGEPACKETINFCOST,
-     ACTION_AUTO_CAMOUFLAGEPACKET30COST,
-     ACTION_FULL_CAMOUFLAGEPACKET30COST,
-     ACTION_HERO_FULL_CAMOUFLAGEPACKET30COST,
-     ACTION_SHORT_CAMOUFLAGEPACKET30COST,
-     ACTION_BUTTON_CAMOUFLAGEPACKET30COST,
-     ACTION_AUTO_CAMOUFLAGEPACKET7COST,
-     ACTION_FULL_CAMOUFLAGEPACKET7COST,
-     ACTION_HERO_FULL_CAMOUFLAGEPACKET7COST,
-     ACTION_SHORT_CAMOUFLAGEPACKET7COST,
-     ACTION_BUTTON_CAMOUFLAGEPACKET7COST,
-     ACTION_AUTO_EMBLEM_GOLD,
-     ACTION_FULL_EMBLEM_GOLD,
-     ACTION_HERO_FULL_EMBLEM_GOLD,
-     ACTION_SHORT_EMBLEM_GOLD,
-     ACTION_BUTTON_EMBLEM_GOLD,
-     ACTION_AUTO_EMBLEM_CREDITS,
-     ACTION_FULL_EMBLEM_CREDITS,
-     ACTION_HERO_FULL_EMBLEM_CREDITS,
-     ACTION_SHORT_EMBLEM_CREDITS,
-     ACTION_BUTTON_EMBLEM_CREDITS,
-     ACTION_AUTO_EMBLEM_MIXED,
-     ACTION_FULL_EMBLEM_MIXED,
-     ACTION_HERO_FULL_EMBLEM_MIXED,
-     ACTION_SHORT_EMBLEM_MIXED,
-     ACTION_BUTTON_EMBLEM_MIXED,
-     ACTION_AUTO_EMBLEMPACKETINFCOST,
-     ACTION_FULL_EMBLEMPACKETINFCOST,
-     ACTION_HERO_FULL_EMBLEMPACKETINFCOST,
-     ACTION_SHORT_EMBLEMPACKETINFCOST,
-     ACTION_BUTTON_EMBLEMPACKETINFCOST,
-     ACTION_AUTO_EMBLEMPACKET7COST,
-     ACTION_FULL_EMBLEMPACKET7COST,
-     ACTION_HERO_FULL_EMBLEMPACKET7COST,
-     ACTION_SHORT_EMBLEMPACKET7COST,
-     ACTION_BUTTON_EMBLEMPACKET7COST,
-     ACTION_AUTO_EMBLEMPACKET30COST,
-     ACTION_FULL_EMBLEMPACKET30COST,
-     ACTION_HERO_FULL_EMBLEMPACKET30COST,
-     ACTION_SHORT_EMBLEMPACKET30COST,
-     ACTION_BUTTON_EMBLEMPACKET30COST,
-     ACTION_AUTO_INSCRIPTION_GOLD,
-     ACTION_FULL_INSCRIPTION_GOLD,
-     ACTION_HERO_FULL_INSCRIPTION_GOLD,
-     ACTION_SHORT_INSCRIPTION_GOLD,
-     ACTION_BUTTON_INSCRIPTION_GOLD,
-     ACTION_AUTO_INSCRIPTION_CREDITS,
-     ACTION_FULL_INSCRIPTION_CREDITS,
-     ACTION_HERO_FULL_INSCRIPTION_CREDITS,
-     ACTION_SHORT_INSCRIPTION_CREDITS,
-     ACTION_BUTTON_INSCRIPTION_CREDITS,
-     ACTION_AUTO_INSCRIPTION_MIXED,
-     ACTION_FULL_INSCRIPTION_MIXED,
-     ACTION_HERO_FULL_INSCRIPTION_MIXED,
-     ACTION_SHORT_INSCRIPTION_MIXED,
-     ACTION_BUTTON_INSCRIPTION_MIXED,
-     ACTION_AUTO_INSCRIPTIONPACKETINFCOST,
-     ACTION_FULL_INSCRIPTIONPACKETINFCOST,
-     ACTION_HERO_FULL_INSCRIPTIONPACKETINFCOST,
-     ACTION_SHORT_INSCRIPTIONPACKETINFCOST,
-     ACTION_BUTTON_INSCRIPTIONPACKETINFCOST,
-     ACTION_AUTO_INSCRIPTIONPACKET7COST,
-     ACTION_FULL_INSCRIPTIONPACKET7COST,
-     ACTION_HERO_FULL_INSCRIPTIONPACKET7COST,
-     ACTION_SHORT_INSCRIPTIONPACKET7COST,
-     ACTION_BUTTON_INSCRIPTIONPACKET7COST,
-     ACTION_AUTO_INSCRIPTIONPACKET30COST,
-     ACTION_FULL_INSCRIPTIONPACKET30COST,
-     ACTION_HERO_FULL_INSCRIPTIONPACKET30COST,
-     ACTION_SHORT_INSCRIPTIONPACKET30COST,
-     ACTION_BUTTON_INSCRIPTIONPACKET30COST,
      ACTION_AUTO_PASSPORTCHANGECOST,
      ACTION_FULL_PASSPORTCHANGECOST,
      ACTION_HERO_FULL_PASSPORTCHANGECOST,
@@ -1869,11 +1694,18 @@ class QUESTS(object):
      ACTION_AUTO_MUL_GOODIEPRICE,
      ACTION_SHORT_MUL_GOODIEPRICE,
      ACTION_BUTTON_MUL_GOODIEPRICE,
-     ACTION_AUTO_MUL_CAMOUFLAGEPRICEFACTOR,
-     ACTION_FULL_MUL_CAMOUFLAGEPRICEFACTOR,
-     ACTION_HERO_FULL_MUL_CAMOUFLAGEPRICEFACTOR,
-     ACTION_SHORT_MUL_CAMOUFLAGEPRICEFACTOR,
-     ACTION_BUTTON_MUL_CAMOUFLAGEPRICEFACTOR,
+     ACTION_AUTO_SET_PRICEGROUPPRICE,
+     ACTION_SHORT_SET_PRICEGROUPPRICE,
+     ACTION_BUTTON_SET_PRICEGROUPPRICE,
+     ACTION_AUTO_MUL_PRICEGROUPPRICE,
+     ACTION_SHORT_MUL_PRICEGROUPPRICE,
+     ACTION_BUTTON_MUL_PRICEGROUPPRICE,
+     ACTION_AUTO_MUL_PRICEGROUPPRICEBYTAG,
+     ACTION_SHORT_MUL_PRICEGROUPPRICEBYTAG,
+     ACTION_BUTTON_MUL_PRICEGROUPPRICEBYTAG,
+     ACTION_AUTO_MUL_PRICEGROUPPRICEALL,
+     ACTION_SHORT_MUL_PRICEGROUPPRICEALL,
+     ACTION_BUTTON_MUL_PRICEGROUPPRICEALL,
      ACTION_AUTO_TRADEINSELLPRICEFACTOR,
      ACTION_FULL_TRADEINSELLPRICEFACTOR,
      ACTION_HERO_FULL_TRADEINSELLPRICEFACTOR,
@@ -1909,6 +1741,7 @@ class QUESTS(object):
      ACTION_MORE_TYPE_OPTIONALDEVICES,
      ACTION_MORE_TYPE_GOODIES,
      ACTION_MORE_TYPE_VEHICLES,
+     ACTION_MORE_TYPE_CUSTOMIZATIONS,
      ACTION_BOOSTER_BOOSTER_XP,
      ACTION_BOOSTER_BOOSTER_FREE_XP,
      ACTION_BOOSTER_BOOSTER_CREW_XP,

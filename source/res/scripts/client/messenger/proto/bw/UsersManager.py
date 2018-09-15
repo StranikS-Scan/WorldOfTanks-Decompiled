@@ -42,10 +42,8 @@ class UsersManager(ChatActionsListener):
         CHAT_RESPONSES = chat_shared.CHAT_RESPONSES
         ChatActionsListener.__init__(self, {CHAT_RESPONSES.commandInCooldown: '_UsersManager__onCommandInCooldown',
          CHAT_RESPONSES.incorrectCharacter: '_UsersManager__onIncorrectCharacter'})
-        self.__replayCtrl = None
         self.__isPrivateOpen = False
         self.__isRosterReceivedOnce = False
-        return
 
     @storage_getter('users')
     def usersStorage(self):
@@ -181,11 +179,6 @@ class UsersManager(ChatActionsListener):
 
     def __onRosterReceived(self, chatAction):
         self.__isRosterReceivedOnce = True
-        if self.__replayCtrl is None:
-            import BattleReplay
-            self.__replayCtrl = BattleReplay.g_replayCtrl
-        if self.__replayCtrl.isRecording:
-            self.__replayCtrl.cancelSaveCurrMessage()
         data = dict(chatAction)
         result = data.get('data', [])
         flags = data.get('flags', 0)
@@ -202,7 +195,6 @@ class UsersManager(ChatActionsListener):
             setter(entities.BWUserEntity(dbID, name=name, tags=tags))
 
         g_messengerEvents.users.onUsersListReceived({_TAG.FRIEND, _TAG.IGNORED, _TAG.MUTED})
-        return
 
     def __onCommandInCooldown(self, actionResponse, chatAction):
         data = chatAction.get('data', {'command': None,

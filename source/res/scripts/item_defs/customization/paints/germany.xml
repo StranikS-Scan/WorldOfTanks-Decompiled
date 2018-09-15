@@ -1,0 +1,54 @@
+<germany.xml>
+  <itemGroup>
+    <priceGroup>	historical paint	</priceGroup>
+    <name>	germany colors	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <vehicleFilter>
+      <include>
+        <nations>	germany	</nations>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+      </include>
+      <include>
+        <nations>	germany	</nations>
+        <levels>	10	</levels>
+      </include>
+    </vehicleFilter>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+    <paint>
+      <id>	136	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_02.png	</texture>
+      <color>	124 109 88 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/germany_color_02	</userString>
+      <season>	desert	</season>
+      <historical>	true	</historical>
+    </paint>
+    <paint>
+      <id>	138	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_04.png	</texture>
+      <color>	47 50 52 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/germany_color_04	</userString>
+      <season>	winter	</season>
+      <historical>	true	</historical>
+    </paint>
+    <paint>
+      <id>	139	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_05.png	</texture>
+      <color>	52 64 43 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/germany_color_05	</userString>
+      <season>	summer	</season>
+      <historical>	true	</historical>
+    </paint>
+  </itemGroup>
+</germany.xml>

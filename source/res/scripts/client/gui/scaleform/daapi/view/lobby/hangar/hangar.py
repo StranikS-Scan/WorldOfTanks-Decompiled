@@ -64,14 +64,10 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         g_clientUpdateManager.addCallbacks({})
         self.startGlobalListening()
         self.__updateAll()
-        self.addListener(LobbySimpleEvent.HIDE_HANGAR, self._onCustomizationShow)
         self.addListener(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
         self.addListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self._onPopulateEnd()
-
-    def _onCustomizationShow(self, event):
-        self.as_setVisibleS(not event.ctx)
 
     def onEscape(self):
         dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
@@ -101,7 +97,6 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         Dispose method should never be called before populate finish. So, we're delaying
         its invoke til populate load is finished.
         """
-        self.removeListener(LobbySimpleEvent.HIDE_HANGAR, self._onCustomizationShow)
         self.removeListener(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
         self.removeListener(LobbySimpleEvent.WAITING_SHOWN, self.__onWaitingShown, EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -352,7 +347,8 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
             customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_BODY))
         else:
             customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_BODY))
-        self.as_setupAmmunitionPanelS(state.isMaintenanceEnabled(), makeTooltip(_ms(TOOLTIPS.HANGAR_MAINTENANCE_HEADER), _ms(TOOLTIPS.HANGAR_MAINTENANCE_BODY)), state.isCustomizationEnabled(), customizationTooltip)
+        isC11nEnabled = self.lobbyContext.getServerSettings().isCustomizationEnabled() and state.isCustomizationEnabled()
+        self.as_setupAmmunitionPanelS(state.isMaintenanceEnabled(), makeTooltip(_ms(TOOLTIPS.HANGAR_MAINTENANCE_HEADER), _ms(TOOLTIPS.HANGAR_MAINTENANCE_BODY)), isC11nEnabled, customizationTooltip)
         self.as_setControlsVisibleS(state.isUIShown())
 
     def __onEntityChanged(self):
@@ -369,3 +365,5 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
     def __onServerSettingChanged(self, diff):
         if 'isRegularQuestEnabled' in diff:
             self.__updateHeader()
+        if 'isCustomizationEnabled' in diff:
+            self.__updateState()

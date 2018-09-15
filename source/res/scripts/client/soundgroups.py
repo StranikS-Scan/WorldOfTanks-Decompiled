@@ -124,7 +124,6 @@ class SoundModes():
         self.__nationalPresets = {}
         self.__nationToSoundModeMapping = {'default': SoundModes.DEFAULT_MODE_NAME}
         self.__currentNationalPreset = (SoundModes.DEFAULT_MODE_NAME, False)
-        self.modifiedSoundGroups = []
         modesSettingsSection = ResMgr.openSection(SoundModes.__MODES_FOLDER + SoundModes.__MODES_FILENAME)
         if modesSettingsSection is None:
             LOG_ERROR('%s is not found' % SoundModes.__MODES_FILENAME)
@@ -135,9 +134,6 @@ class SoundModes():
             self.__nationalPresets = dict(((preset.name, preset) for preset in nationalPresets))
             if SoundModes.DEFAULT_MODE_NAME not in self.__modes:
                 LOG_ERROR('Default sound mode is not found!')
-            modifiedSoundGroupsSection = modesSettingsSection['modified_sound_groups']
-            if modifiedSoundGroupsSection is not None:
-                self.modifiedSoundGroups = modifiedSoundGroupsSection.readStrings('sound_group')
             folderSection = ResMgr.openSection(SoundModes.__MODES_FOLDER)
             if folderSection is None:
                 LOG_ERROR("Folder for SoundModes: '%s' is not found!" % SoundModes.__MODES_FOLDER)

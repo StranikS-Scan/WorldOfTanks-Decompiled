@@ -7,8 +7,6 @@ from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.customization.data_aggregator import VEHICLE_CAMOUFLAGE_BONUS
-from gui.customization.elements import CamouflageQualifier, Camouflage
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items.Tankman import getSkillSmallIconPath, getRoleWhiteIconPath, Tankman
 from gui.shared.items_parameters import params_helper
@@ -48,63 +46,19 @@ class VehCmpCustomizationTooltip(BlocksTooltipData):
     def __packBonusBlock(self):
         blocks = []
         vehicle = cmp_helpers.getCmpConfiguratorMainView().getCurrentVehicle()
-        itemID, camo = cmp_helpers.getSuitableCamouflage(vehicle)
-        if camo:
-            camo['itemID'] = itemID
-        cmpItem = self.__getItem(camo, VEHICLE_CAMOUFLAGE_BONUS[vehicle.type])
-        bonusTitleLocal = makeHtmlString('html_templates:lobby/textStyle', 'bonusLocalText', {'message': '{0}{1}'.format(cmpItem.qualifier.getFormattedValue(), '')})
-        blocks.append(formatters.packImageTextBlockData(title=text_styles.concatStylesWithSpace(bonusTitleLocal), desc=text_styles.main(cmpItem.qualifier.getExtendedName()), img=cmpItem.qualifier.getIcon42x42(), imgPadding={'left': 11,
+        camo = cmp_helpers.getSuitableCamouflage(vehicle)
+        bonusTitleLocal = makeHtmlString('html_templates:lobby/textStyle', 'bonusLocalText', {'message': '+{}'.format(camo.bonus.getFormattedValue(vehicle))})
+        blocks.append(formatters.packImageTextBlockData(title=text_styles.concatStylesWithSpace(bonusTitleLocal), desc=text_styles.main(camo.bonus.description), img=camo.bonus.icon, imgPadding={'left': 11,
          'top': 3}, txtGap=-4, txtOffset=65, padding={'top': -1,
          'left': 7}))
         if not self._showTTC and vehicle is not None:
             stockVehicle = self.itemsCache.items.getStockVehicle(vehicle.intCD)
-            comparator = params_helper.camouflageComparator(vehicle, cmpItem)
+            comparator = params_helper.camouflageComparator(vehicle, camo)
             stockParams = params_helper.getParameters(stockVehicle)
             simplifiedBlocks = SimplifiedStatsBlockConstructor(stockParams, comparator).construct()
             if simplifiedBlocks:
                 blocks.extend(simplifiedBlocks)
         return formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
-
-    @staticmethod
-    def __getItem(camouflage=None, value=0):
-        params = {'itemID': 12,
-         'nationID': 2,
-         'rawElement': {'kind': 1,
-                        'description': '#vehicle_customization:camouflage/usa/bicolor/GuamBicolor',
-                        'groupName': 'summer',
-                        'isNew': False,
-                        'deny': frozenset([57121]),
-                        'invisibilityFactor': 1.0,
-                        'igrType': 0,
-                        'colors': (2107107828, 1160008016, 410907375, 496544381),
-                        'texture': 'vehicles/american/Camouflage/Cusa_1_1GuamBicolor.dds',
-                        'allow': frozenset([])},
-         'qualifier': CamouflageQualifier('summer', value),
-         'isInDossier': False,
-         'isInQuests': False,
-         'isInShop': True,
-         'allowedVehicles': [],
-         'notAllowedVehicles': frozenset([57121]),
-         'allowedNations': None,
-         'notAllowedNations': None,
-         'isReplacedByIGR': False,
-         'numberOfItems': None,
-         'numberOfDays': None,
-         'readableGroupName': '#vehicle_customization:camouflage/summer',
-         'price': {}}
-        if camouflage is not None:
-            params['itemID'] = camouflage['itemID']
-            params['rawElement']['kind'] = camouflage['kind']
-            params['rawElement']['description'] = camouflage['description']
-            params['rawElement']['groupName'] = camouflage['groupName']
-            params['rawElement']['isNew'] = camouflage['isNew']
-            params['rawElement']['deny'] = camouflage['deny']
-            params['rawElement']['invisibilityFactor'] = camouflage['invisibilityFactor']
-            params['rawElement']['igrType'] = camouflage['igrType']
-            params['rawElement']['colors'] = camouflage['colors']
-            params['rawElement']['texture'] = camouflage['texture']
-            params['rawElement']['allow'] = camouflage['allow']
-        return Camouflage(params)
 
 
 class VehCmpSkillsTooltip(BlocksTooltipData):

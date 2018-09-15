@@ -84,6 +84,9 @@ class BWProtoPlugin(IProtoPlugin):
         self.__provider.setEnable(False)
         g_messengerEvents.onPluginDisconnected(PROTO_TYPE.BW_CHAT2)
 
+    def goToReplay(self):
+        self.__provider.goToReplay()
+
     def setFilters(self, msgFilterChain):
         self.__provider.setFilters(msgFilterChain)
 

@@ -85,39 +85,6 @@ class SimpleMixCollection(ComposedActionsCollection):
         return action1.getMaxDiscountValue() - action2.getMaxDiscountValue()
 
 
-class CustomizationActionsCollection(SimpleMixCollection):
-    _groupMarkers = ('Inf', '7', '30')
-
-    def compose(self):
-        """
-        works the same way as parent's, but in two iterations - first we try to compose 7 days and 30 days packets
-        in one - credits. Then we try to compose it same way as described in parent method
-        """
-        actionsGroups = self._separateActions()
-        if len(self._actions) == 1 or len(actionsGroups) == 1:
-            return [first(self._actions)]
-        else:
-            betterFromGroups = {k:self._findBetter(v) for k, v in actionsGroups.iteritems()}
-            actionsToCompose = []
-            if '7' in betterFromGroups and '30' in betterFromGroups:
-                actionsToCompose = self._composeActions((betterFromGroups['7'], betterFromGroups['30']), 'credits')
-            if 'Inf' in betterFromGroups:
-                actionsToCompose.append(betterFromGroups['Inf'])
-            return self._composeActions(actionsToCompose)
-
-
-class CamouflageActionsCollection(CustomizationActionsCollection):
-    _localizationKey = 'camouflage'
-
-
-class InscriptionActionsCollection(CustomizationActionsCollection):
-    _localizationKey = 'inscription'
-
-
-class EmblemActionsCollection(CustomizationActionsCollection):
-    _localizationKey = 'emblem'
-
-
 class TankmenActionsCollection(SimpleMixCollection):
     _localizationKey = 'tankmen'
 
@@ -179,21 +146,6 @@ class ChangePassportRule(CompositionRule):
     _applicableParamsNames = ('femalePassportChangeCost', 'passportChangeCost')
 
 
-class CamouflagesRule(CompositionRule):
-    collectionClass = CamouflageActionsCollection
-    _applicableParamsNames = ('camouflagePacketInfCost', 'camouflagePacket7Cost', 'camouflagePacket30Cost')
-
-
-class InscriptionsRule(CompositionRule):
-    collectionClass = InscriptionActionsCollection
-    _applicableParamsNames = ('inscriptionPacketInfCost', 'inscriptionPacket7Cost', 'inscriptionPacket30Cost')
-
-
-class EmblemsRule(CompositionRule):
-    collectionClass = EmblemActionsCollection
-    _applicableParamsNames = ('emblemPacketInfCost', 'emblemPacket7Cost', 'emblemPacket30Cost')
-
-
 class TankmenRule(CompositionRule):
     collectionClass = TankmenActionsCollection
     _applicableParamsNames = ('creditsTankmanCost', 'goldTankmanCost')
@@ -221,9 +173,6 @@ class PremiumRule(CompositionRule):
 
 class ActionComposer(object):
     __compositionRules = (ChangePassportRule,
-     CamouflagesRule,
-     EmblemsRule,
-     InscriptionsRule,
      TankmenRule,
      DropSkillsRule,
      ShellsRule,

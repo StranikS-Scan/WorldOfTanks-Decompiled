@@ -92,6 +92,7 @@ class GAME(CONST_CONTAINER):
     CAROUSEL_TYPE = 'carouselType'
     DOUBLE_CAROUSEL_TYPE = 'doubleCarouselType'
     VEHICLE_CAROUSEL_STATS = 'vehicleCarouselStats'
+    C11N_HISTORICALLY_ACCURATE = 'c11nHistoricallyAccurate'
 
 
 class TUTORIAL(CONST_CONTAINER):

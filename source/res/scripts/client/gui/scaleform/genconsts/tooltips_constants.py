@@ -8,6 +8,7 @@ Please, don't edit this file manually.
 class TOOLTIPS_CONSTANTS(object):
     DEFAULT = 'default'
     TANKMAN = 'tankman'
+    SEASONS = 'seasons'
     CONTACT = 'contact'
     BATTLE_STATS_ACHIEVS = 'battleStatsAchievementData'
     ACHIEVEMENT = 'achievement'
@@ -147,6 +148,7 @@ class TOOLTIPS_CONSTANTS(object):
     RANKED_CALENDAR_STEPS_INFO = 'rankedCalendarStepsInfo'
     BLOCKS_DEFAULT_UI = 'ToolTipInblocksDefaultUI'
     TANKMEN_UI = 'ToolTipTankmenUI'
+    SEASONS_UI = 'ToolTipSeasonsUI'
     TANKMEN_SKILL_UI = 'ToolTipSkillUI'
     TANKMEN_BUY_SKILL_UI = 'ToolTipBuySkillUI'
     ACHIEVEMENT_UI = 'ToolTipAchievementUI'

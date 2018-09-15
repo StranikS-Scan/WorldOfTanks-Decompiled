@@ -99,6 +99,10 @@ class MessengerEntry(object):
         self.__gui.switch(scope)
 
     def __pe_onAvatarBecomePlayer(self):
+        import BattleReplay
+        if BattleReplay.g_replayCtrl.isPlaying:
+            self.__protoPlugins.goToReplay()
+            return
         scope = MESSENGER_SCOPE.BATTLE
         g_settings.update()
         self.__storage.switch(scope)

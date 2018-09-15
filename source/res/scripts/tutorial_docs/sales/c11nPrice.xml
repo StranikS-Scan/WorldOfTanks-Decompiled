@@ -1,0 +1,65 @@
+<c11nPrice.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	Hangar	</initial-scene>
+  <scenes>
+    <scene>	Hangar	  <post-effects></post-effects>
+      <runtime-effects>
+        <show-hint>	TuningBtnHint	  <condition>
+            <active>	TuningBtnOnScene	</active>
+          </condition>
+        </show-hint>
+        <refuse-training>
+          <condition>
+            <effect-triggered>	CustomizationGroupHint	</effect-triggered>
+          </condition>
+        </refuse-training>
+      </runtime-effects>
+      <gui-items>
+        <gui-item>	TuningBtn	  <on-scene-effects>
+            <activate>	TuningBtnOnScene	</activate>
+          </on-scene-effects>
+          <not-on-scene-effects>
+            <inactivate>	TuningBtnOnScene	</inactivate>
+          </not-on-scene-effects>
+        </gui-item>
+      </gui-items>
+    </scene>
+    <scene>	DefaultScene	  <post-effects>
+        <refuse-training></refuse-training>
+      </post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <has-id>
+    <hint>	TuningBtnHint	  <item-id>	TuningBtn	</item-id>
+      <text>	#quests:action/chain/hint/customization	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <padding>
+        <left>	-5	</left>
+        <top>	-5	</top>
+        <right>	-3	</right>
+        <bottom>	-3	</bottom>
+      </padding>
+      <actions>
+        <click>	TuningBtn	  <effects>
+            <activate>	TuningBtnClicked	</activate>
+          </effects>
+        </click>
+        <click-outside>	TuningBtn	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </click-outside>
+        <esc>	TuningBtn	  <effects>
+            <refuse-training></refuse-training>
+          </effects>
+        </esc>
+      </actions>
+    </hint>
+  </has-id>
+  <triggers></triggers>
+  <vars></vars>
+</c11nPrice.xml>

@@ -20,6 +20,7 @@ from gui.battle_control.battle_ctx import BattleContext
 from gui.battle_control.hit_data import HitData
 from gui.battle_control.requests import AvatarRequestsController
 from gui.battle_control.view_components import createComponentsBridge
+from items.components.c11n_constants import SeasonType
 from skeletons.gui.battle_session import IBattleSessionProvider
 BattleExitResult = namedtuple('BattleExitResult', 'isDeserter playerInfo')
 
@@ -118,7 +119,8 @@ class BattleSessionProvider(IBattleSessionProvider):
         ctrl = self.__dynamicRepo.respawn
         if ctrl is not None:
             ctrl.spawnVehicle(vID)
-        g_tankActiveCamouflage[vDesc.type.compactDescr] = self.__arenaVisitor.type.getVehicleCamouflageKind()
+        mapKind = self.__arenaVisitor.type.getVehicleCamouflageKind()
+        g_tankActiveCamouflage[vDesc.type.compactDescr] = SeasonType.fromArenaKind(mapKind)
         return
 
     def switchVehicle(self, vehicleID):

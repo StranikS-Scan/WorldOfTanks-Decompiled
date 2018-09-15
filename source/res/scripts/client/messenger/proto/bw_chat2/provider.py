@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/provider.py
 from collections import defaultdict, deque
+import BattleReplay
 from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
 import weakref
 import BigWorld
@@ -9,6 +10,7 @@ from ids_generators import SequenceIDGenerator
 from messenger.proto.bw_chat2.errors import createCoolDownError
 from messenger.proto.events import g_messengerEvents
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS, messageArgs
+_REPLAY_ACTION_RECEIVED_CALLBACK = 'bw_chat2.onActionReceived'
 
 class _ChatCooldownManager(RequestCooldownManager):
 
@@ -37,6 +39,10 @@ class BWChatProvider(object):
 
     def clear(self):
         self.__handlers.clear()
+        BattleReplay.g_replayCtrl.delDataCallback(_REPLAY_ACTION_RECEIVED_CALLBACK, self.__onActionReceivedFromReplay)
+
+    def goToReplay(self):
+        BattleReplay.g_replayCtrl.setDataCallback(_REPLAY_ACTION_RECEIVED_CALLBACK, self.__onActionReceivedFromReplay)
 
     def setEnable(self, value):
         if self.__isEnabled == value:
@@ -62,6 +68,8 @@ class BWChatProvider(object):
         return (success, reqID)
 
     def onActionReceived(self, actionID, reqID, args):
+        if BattleReplay.g_replayCtrl.isRecording and self.__isActionWrittenToReplay(actionID):
+            BattleReplay.g_replayCtrl.serializeCallbackData(_REPLAY_ACTION_RECEIVED_CALLBACK, (actionID, reqID, args))
         handlers = self.__handlers[actionID]
         for handler in handlers:
             try:
@@ -136,6 +144,13 @@ class BWChatProvider(object):
                 continue
             self.__sendAction(actionID, reqID, args)
             invokedIDs.add(actionID)
+
+    @staticmethod
+    def __isActionWrittenToReplay(actionID):
+        return actionID == _ACTIONS.INIT_BATTLE_CHAT or _ACTIONS.battleChatCommandFromActionID(actionID) is not None
+
+    def __onActionReceivedFromReplay(self, actionID, reqID, args):
+        self.onActionReceived(actionID, reqID, args)
 
 
 class ActionsHandler(object):

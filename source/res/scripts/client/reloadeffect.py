@@ -207,6 +207,7 @@ class LoopSequence(CallbackDelayer):
 
     def stop(self):
         self.stopCallback(self.__start)
+        playByName(self.__stopLoop)
         self.__sequence = []
 
     def __start(self):

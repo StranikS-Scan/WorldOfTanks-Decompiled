@@ -200,7 +200,7 @@
         <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
-      <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 1.18826 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB13_FV215b/collision/Chassis.model	</collisionModelServer>
@@ -249,12 +249,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VT_R0	</name>
-          <forwardElastK>	0.8	</forwardElastK>
-          <backwardElastK>	2.51	</backwardElastK>
-        </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -421,7 +415,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.856 0.398 0.956 0.011 0.547 -0.641 0.420 0.646 0.522 0.500 0.373 0.500 0.127 0.334 0.492	</physicsShape>
+      <physicsShape>	0.974 0.004 1.049 0.011 0.643 0.533 0.501 0.646 0.522 0.500 0.373 0.500 0.008 0.334 0.492	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
         <tiling>	1 0.5 0.000000 0.000000	</tiling>

@@ -169,6 +169,7 @@ class SETTINGS(object):
     GAME_MINIMAPMAXVIEWRANGE = '#settings:game/minimapMaxViewRange'
     GAME_MINIMAPDRAWRANGE = '#settings:game/minimapDrawRange'
     GAME_DYNAMICCAMERA = '#settings:game/dynamicCamera'
+    GAME_C11NHISTORICALLYACCURATE = '#settings:game/c11nHistoricallyAccurate'
     MONITOR = '#settings:monitor'
     MONITOR_DESCRIPTION = '#settings:monitor/description'
     WINDOWSIZE = '#settings:windowSize'

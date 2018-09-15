@@ -505,7 +505,7 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
     def _init(self):
         super(VehicleCompareConfiguratorView, self)._init()
         currentVehicle = self._container.getCurrentVehicle()
-        enableCamo = bool(getSuitableCamouflage(currentVehicle)[0])
+        enableCamo = bool(getSuitableCamouflage(currentVehicle))
         topModulesFromStock = self._container.isTopModulesFromStock()
         enableTopModules = not (currentVehicle.isPremium or topModulesFromStock)
         isInInventory = self._container.getBasketVehCmpData().isInInventory()

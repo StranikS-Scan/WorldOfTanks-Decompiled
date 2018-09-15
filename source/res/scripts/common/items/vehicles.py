@@ -11,13 +11,13 @@ from Math import Vector2, Vector3
 import nations
 import items
 from items import _xml, makeIntCompactDescrByID, parseIntCompactDescr, ITEM_TYPES
-from items import vehicle_items
 from items.components import component_constants, shell_components, chassis_components, skills_constants
 from items.components import shared_components
 from items.readers import chassis_readers
 from items.readers import gun_readers
 from items.readers import shared_readers
 from items.readers import sound_readers
+from items import vehicle_items
 from constants import IS_BOT, IS_WEB, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE, IS_DEVELOPMENT
 from constants import IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT
 from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
@@ -85,6 +85,7 @@ g_cache = None
 _VEHICLE_TYPE_XML_PATH = ITEM_DEFS_PATH + 'vehicles/'
 _DEFAULT_HEALTH_BURN_PER_SEC_LOSS_FRACTION = 0.0875
 _CUSTOMIZATION_EPOCH = 1306886400
+_CUSTOMIZATION_XML_PATH = ITEM_DEFS_PATH + 'customization/'
 EmblemSlot = namedtuple('EmblemSlot', ['rayStart',
  'rayEnd',
  'rayUp',
@@ -139,17 +140,18 @@ def init(preloadEverything, pricesToCollect):
             for vehicleTypeID in g_list.getList(nationID).iterkeys():
                 g_cache.vehicle(nationID, vehicleTypeID)
 
+        g_cache.customization20()
         _g_prices = None
     return
 
 
-def reload():
+def reload(full=True):
     import vehicle_extras
     vehicle_extras.reload()
     from sys import modules
     import __builtin__
     __builtin__.reload(modules[reload.__module__])
-    init(True, None)
+    init(full, None)
     return
 
 
@@ -731,13 +733,11 @@ class VehicleDescriptor(object):
                 self.type._prereqs = _extractNeededPrereqs(prereqs, resourceNames)
             return
 
-    def computeBaseInvisibility(self, crewFactor, arenaCamouflageKind):
-        camID = self.camouflages[arenaCamouflageKind][0]
-        if camID is None:
+    def computeBaseInvisibility(self, crewFactor, camouflageId):
+        if not camouflageId:
             camouflageBonus = 0.0
         else:
-            nationID = self.type.customizationNationID
-            camouflageBonus = self.type.invisibilityDeltas['camouflageBonus'] * g_cache.customization(nationID)['camouflages'][camID]['invisibilityFactor']
+            camouflageBonus = self.type.invisibilityDeltas['camouflageBonus'] * g_cache.customization20().camouflages[camouflageId].invisibilityFactor
         vehicleFactor = self.miscAttrs['invisibilityFactor']
         invMoving, invStill = self.type.invisibility
         return (invMoving * crewFactor * vehicleFactor + camouflageBonus, invStill * crewFactor * vehicleFactor + camouflageBonus)
@@ -1244,6 +1244,10 @@ class VehicleType(object):
     def description(self):
         return self.i18nInfo.description
 
+    @property
+    def isCustomizationLocked(self):
+        return 'lockOutfit' in self.tags
+
     def __convertAndValidateUnlocksDescrs(self, srcList):
         nationID = self.id[0]
         destList = []
@@ -1305,7 +1309,7 @@ class VehicleType(object):
 
 
 class Cache(object):
-    __slots__ = ('__vehicles', '__commonConfig', '__chassis', '__engines', '__fuelTanks', '__radios', '__turrets', '__guns', '__shells', '__optionalDevices', '__optionalDeviceIDs', '__equipments', '__equipmentIDs', '__chassisIDs', '__engineIDs', '__fuelTankIDs', '__radioIDs', '__turretIDs', '__gunIDs', '__shellIDs', '__customization', '__playerEmblems', '__shotEffects', '__shotEffectsIndexes', '__damageStickers', '__vehicleEffects', '__gunEffects', '__gunReloadEffects', '__gunRecoilEffects', '__turretDetachmentEffects', '__customEffects', '__requestOncePrereqs')
+    __slots__ = ('__vehicles', '__commonConfig', '__chassis', '__engines', '__fuelTanks', '__radios', '__turrets', '__guns', '__shells', '__optionalDevices', '__optionalDeviceIDs', '__equipments', '__equipmentIDs', '__chassisIDs', '__engineIDs', '__fuelTankIDs', '__radioIDs', '__turretIDs', '__gunIDs', '__shellIDs', '__customization', '__playerEmblems', '__shotEffects', '__shotEffectsIndexes', '__damageStickers', '__vehicleEffects', '__gunEffects', '__gunReloadEffects', '__gunRecoilEffects', '__turretDetachmentEffects', '__customEffects', '__requestOncePrereqs', '__customization20')
 
     def __init__(self):
         self.__vehicles = {}
@@ -1328,6 +1332,7 @@ class Cache(object):
         self.__turretIDs = [ None for i in nations.NAMES ]
         self.__gunIDs = [ None for i in nations.NAMES ]
         self.__shellIDs = [ None for i in nations.NAMES ]
+        self.__customization20 = None
         self.__customization = [ None for i in nations.NAMES ]
         self.__playerEmblems = None
         self.__shotEffects = None
@@ -1424,6 +1429,18 @@ class Cache(object):
 
     def shellIDs(self, nationID):
         return self.__getList(nationID, 'shellIDs')
+
+    def customization20(self):
+        """
+        Lazy initialization of CustomizationCache instance.
+        :return:
+        """
+        if self.__customization20 is None:
+            from items.components.c11n_components import CustomizationCache
+            from items.readers.c11n_readers import readCustomizationCacheFromXml
+            self.__customization20 = CustomizationCache()
+            readCustomizationCacheFromXml(self.__customization20, _CUSTOMIZATION_XML_PATH)
+        return self.__customization20
 
     def customization(self, nationID):
         descr = self.__customization[nationID]
@@ -1694,9 +1711,7 @@ def makeVehicleTypeCompDescrByName(name):
 
 def getItemByCompactDescr(compactDescr):
     try:
-        itemTypeID = compactDescr & 15
-        nationID = compactDescr >> 4 & 15
-        compTypeID = compactDescr >> 8 & 65535
+        itemTypeID, nationID, compTypeID = parseIntCompactDescr(compactDescr)
         return _itemGetters[itemTypeID](nationID, compTypeID)
     except Exception:
         LOG_CURRENT_EXCEPTION()
@@ -1712,7 +1727,8 @@ _itemGetters = {ITEM_TYPES.shell: lambda nationID, compTypeID: g_cache.shells(na
  ITEM_TYPES.vehicleEngine: lambda nationID, compTypeID: g_cache.engines(nationID)[compTypeID],
  ITEM_TYPES.vehicleRadio: lambda nationID, compTypeID: g_cache.radios(nationID)[compTypeID],
  ITEM_TYPES.vehicleChassis: lambda nationID, compTypeID: g_cache.chassis(nationID)[compTypeID],
- ITEM_TYPES.vehicleFuelTank: lambda nationID, compTypeID: g_cache.fuelTanks(nationID)[compTypeID]}
+ ITEM_TYPES.vehicleFuelTank: lambda nationID, compTypeID: g_cache.fuelTanks(nationID)[compTypeID],
+ ITEM_TYPES.customizationItem: lambda cType, compTypeID: g_cache.customization20().itemTypes[cType][compTypeID]}
 
 def getVehicleType(compactDescr):
     cdType = type(compactDescr)
@@ -2586,6 +2602,7 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
     else:
         item.invisibilityFactor = component_constants.DEFAULT_INVISIBILITY_FACTOR
     _readPriceForItem(xmlCtx, section, item.compactDescr)
+    item.showEmblemsOnGun = section.readBool('showEmblemsOnGun', False)
     if IS_CLIENT or IS_WEB:
         item.i18n = shared_readers.readUserText(section)
     if IS_CLIENT or IS_WEB or IS_CELLAPP:
@@ -2595,7 +2612,6 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
     if IS_CLIENT:
         item.ceilless = section.readBool('ceilless', False)
         item.models = shared_readers.readModels(xmlCtx, section, 'models')
-        item.showEmblemsOnGun = section.readBool('showEmblemsOnGun', False)
         if section.has_key('camouflage'):
             item.camouflage = shared_readers.readCamouflage(xmlCtx, section, 'camouflage', default=shared_components.DEFAULT_CAMOUFLAGE)
         item.turretRotatorSoundManual = section.readString('wwturretRotatorSoundManual')
@@ -3267,6 +3283,15 @@ def _readPriceForItem(xmlCtx, section, compactDescr):
     return
 
 
+def _copyPriceForItem(sourceCompactDescr, destCompactDescr, itemNotInShop):
+    pricesDest = _g_prices
+    if pricesDest is not None:
+        pricesDest['itemPrices'][destCompactDescr] = pricesDest['itemPrices'].getPrices(sourceCompactDescr)
+        if itemNotInShop or sourceCompactDescr in pricesDest['notInShopItems']:
+            pricesDest['notInShopItems'].add(destCompactDescr)
+    return
+
+
 def _readUnlocks(xmlCtx, section, subsectionName, unlocksDescrs, *requiredItems):
     if unlocksDescrs is None or IS_CELLAPP:
         return []
@@ -3915,7 +3940,7 @@ def _readCamouflage(xmlCtx, section, ids, groups, nationID, priceFactors, notInS
     return (id, camouflage)
 
 
-def _readColors(xmlCtx, section, sectionName, requiredSize):
+def _readColors(xmlCtx, section, sectionName, requiredSize=None):
     res = []
     if not IS_CLIENT and not IS_BOT:
         for sname, subsection in _xml.getChildren(xmlCtx, section, sectionName):
@@ -3925,7 +3950,7 @@ def _readColors(xmlCtx, section, sectionName, requiredSize):
         for sname, subsection in _xml.getChildren(xmlCtx, section, sectionName):
             res.append(_readColor((xmlCtx, sectionName + '/' + sname), subsection, ''))
 
-    if len(res) != requiredSize:
+    if requiredSize is not None and len(res) != requiredSize:
         _xml.raiseWrongXml(xmlCtx, sectionName, 'wrong number of items; required %d' % requiredSize)
     return tuple(res)
 

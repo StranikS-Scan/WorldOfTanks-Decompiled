@@ -31,6 +31,10 @@ from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
 import material_kinds
 import DataLinks
 import Vehicular
+from gui.shared.gui_items.customization.outfit import Outfit
+from helpers import dependency
+from skeletons.account_helpers.settings_core import ISettingsCore
+from account_helpers.settings_core import settings_constants
 _VEHICLE_APPEAR_TIME = 0.2
 _ROOT_NODE_NAME = 'V'
 _GUN_RECOIL_NODE_NAME = 'G'
@@ -151,10 +155,10 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__inSpeedTreeCollision = False
         return
 
-    def prerequisites(self, typeDescriptor, vID, health, isCrewActive, isTurretDetached):
+    def prerequisites(self, typeDescriptor, vID, health, isCrewActive, isTurretDetached, outfitCD):
         self.__currentDamageState.update(health, isCrewActive, False)
-        out = []
-        out.append(typeDescriptor.type.camouflage.exclusionMask)
+        outfit = Outfit(outfitCD)
+        out = camouflages.getCamoPrereqs(outfit, typeDescriptor)
         splineDesc = typeDescriptor.chassis.splineDesc
         if splineDesc is not None:
             out.append(splineDesc.segmentModelLeft)
@@ -163,18 +167,6 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
                 out.append(splineDesc.segment2ModelLeft)
             if splineDesc.segment2ModelRight is not None:
                 out.append(splineDesc.segment2ModelRight)
-        customization = items.vehicles.g_cache.customization(typeDescriptor.type.customizationNationID)
-        camouflageParams = self.__getCamouflageParams(typeDescriptor, vID)
-        if camouflageParams is not None and customization is not None:
-            camouflageId = camouflageParams[0]
-            camouflageDesc = customization['camouflages'].get(camouflageId)
-            if camouflageDesc is not None and camouflageDesc['texture'] != '':
-                out.append(camouflageDesc['texture'])
-                for tgDesc in (typeDescriptor.turret, typeDescriptor.gun):
-                    exclMask = tgDesc.camouflage.exclusionMask
-                    if exclMask is not None and exclMask != '':
-                        out.append(exclMask)
-
         self.__vID = vID
         self.__typeDesc = typeDescriptor
         self.__isTurretDetached = isTurretDetached
@@ -189,6 +181,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         if self.frictionAudition is not None:
             self.frictionAudition.setVehicleMatrix(vehicle.matrix)
         self.highlighter.setVehicle(vehicle)
+        self.__applyVehicleOutfit()
         return
 
     def __arenaPeriodChanged(self, period, *otherArgs):
@@ -394,12 +387,9 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__compoundModel = prereqs[self.__typeDesc.name]
         self.__boundEffects = bound_effects.ModelBoundEffects(self.__compoundModel)
         isCurrentModelDamaged = self.__currentDamageState.isCurrentModelDamaged
-        fashions = camouflages.prepareFashions(self.__typeDesc, isCurrentModelDamaged, self.__getCamouflageParams(self.__typeDesc, self.__vID)[0])
+        fashions = camouflages.prepareFashions(isCurrentModelDamaged)
         if not isCurrentModelDamaged:
-            model_assembler.setupVehicleFashion(fashions[0], self.__typeDesc)
-        self.__compoundModel.setupFashions(fashions)
-        fashions = camouflages.applyCamouflage(self.__typeDesc, fashions, isCurrentModelDamaged, self.__getCamouflageParams(self.__typeDesc, self.__vID)[0])
-        fashions = camouflages.applyRepaint(self.__typeDesc, fashions)
+            model_assembler.setupVehicleFashion(fashions.chassis, self.__typeDesc)
         self.__setFashions(fashions, self.__isTurretDetached)
         self.__setupModels()
         if not isCurrentModelDamaged:
@@ -528,6 +518,21 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         if not self.__vehicle.isEnteringWorld and self.trackCrashAudition and self.__vehicle.isPlayerVehicle:
             self.trackCrashAudition.playCrashSound(isLeft, True)
         return
+
+    def __getVehicleOutfit(self):
+        if not self.__vehicle:
+            return Outfit()
+        outfitCD = self.__vehicle.publicInfo['outfit']
+        outfit = Outfit(outfitCD)
+        if not (self.__vehicle.isPlayerVehicle or outfit.isHistorical()):
+            settingsCore = dependency.instance(ISettingsCore)
+            if settingsCore.getSetting(settings_constants.GAME.C11N_HISTORICALLY_ACCURATE):
+                outfit = Outfit()
+        return outfit
+
+    def __applyVehicleOutfit(self):
+        outfit = self.__getVehicleOutfit()
+        camouflages.updateFashions(self.__fashions, self.__typeDesc, self.__currentDamageState.isCurrentModelDamaged, outfit)
 
     def __requestModelsRefresh(self):
         currentModelState = self.__currentDamageState.modelState
@@ -808,7 +813,8 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             return
         else:
             insigniaRank = self.__vehicle.publicInfo['marksOnGun']
-            self.__vehicleStickers = VehicleStickers(self.__typeDesc, insigniaRank)
+            outfit = self.__getVehicleOutfit()
+            self.__vehicleStickers = VehicleStickers(self.__typeDesc, insigniaRank, outfit)
             clanID = BigWorld.player().arena.vehicles[self.__vehicle.id]['clanDBID']
             self.__vehicleStickers.setClanID(clanID)
             return

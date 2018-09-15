@@ -38,6 +38,9 @@ class ProtoPluginsDecorator(IProtoPlugin):
     def view(self, scope):
         self._invoke('view', scope)
 
+    def goToReplay(self):
+        self._invoke('goToReplay')
+
     def setFilters(self, msgFilterChain):
         self._invoke('setFilters', weakref.proxy(msgFilterChain))
 

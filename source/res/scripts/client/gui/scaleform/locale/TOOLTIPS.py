@@ -14,6 +14,8 @@ class TOOLTIPS(object):
     BARRACKS_TANKMEN_DISMISS = '#tooltips:barracks/tankmen/dismiss'
     TANKS_CAROUSEL_BUY_SLOT = '#tooltips:tanks_carousel/buy_slot'
     TANKS_CAROUSEL_BUY_VEHICLE = '#tooltips:tanks_carousel/buy_vehicle'
+    FILTER_POPOVER_SHOWONLYFILTERS_HISTORIC = '#tooltips:filter/popover/showonlyfilters/historic'
+    FILTER_POPOVER_SHOWONLYFILTERS_ACQUIRED = '#tooltips:filter/popover/showonlyfilters/acquired'
     BATTLERESULTS_FORTRESOURCE_RESULTSSHAREBTN = '#tooltips:battleResults/FortResource/resultsShareBtn'
     PRIVATEQUESTS_AWARDSBUTTON = '#tooltips:privateQuests/awardsButton'
     PRIVATEQUESTS_BACKBUTTON = '#tooltips:privateQuests/backButton'
@@ -128,6 +130,7 @@ class TOOLTIPS(object):
     HANGAR_ELEN_BOTTOM_NOEVENTS = '#tooltips:hangar/elen/bottom/noevents'
     ELEN_BUTTON_REGISTRATION_STARTED = '#tooltips:elen/button/registration/started'
     ELEN_BUTTON_REGISTRATION_NOTSTARTED = '#tooltips:elen/button/registration/notStarted'
+    CUSTOMIZATION_NONHISTORICINDICATOR = '#tooltips:customization/nonHistoricIndicator'
     TEMPLATE_DAYS_SHORT = '#tooltips:template/days/short'
     TEMPLATE_HOURS_SHORT = '#tooltips:template/hours/short'
     TEMPLATE_MINUTES_SHORT = '#tooltips:template/minutes/short'
@@ -332,6 +335,8 @@ class TOOLTIPS(object):
     ENABLEPOSTMORTEMEFFECT_BODY = '#tooltips:enablePostMortemEffect/body'
     SHOWMARKSONGUN_HEADER = '#tooltips:showMarksOnGun/header'
     SHOWMARKSONGUN_BODY = '#tooltips:showMarksOnGun/body'
+    C11NHISTORICALLYACCURATE_HEADER = '#tooltips:c11nHistoricallyAccurate/header'
+    C11NHISTORICALLYACCURATE_BODY = '#tooltips:c11nHistoricallyAccurate/body'
     SHOWVEHMODELSONMAP_HEADER = '#tooltips:showVehModelsOnMap/header'
     SHOWVEHMODELSONMAP_BODY = '#tooltips:showVehModelsOnMap/body'
     SHOWVEHMODELSONMAP_ATTENTION = '#tooltips:showVehModelsOnMap/attention'
@@ -878,6 +883,11 @@ class TOOLTIPS(object):
     CUSTOMIZATION_QUESTAWARD_CURRENTVEHICLE = '#tooltips:customization/questAward/currentVehicle'
     CUSTOMIZATION_QUESTAWARD_EXACTVEHICLE = '#tooltips:customization/questAward/exactVehicle'
     CUSTOMIZATION_QUESTAWARD_DENYVEHICLE = '#tooltips:customization/questAward/denyVehicle'
+    CUSTOMIZATIONBUYWINDOW_FROMSTORAGE = '#tooltips:customizationBuyWindow/fromStorage'
+    CUSTOMIZATION_FILTER_COUNTER_CLOSE_HEADER = '#tooltips:customization/filter/counter/close/header'
+    CUSTOMIZATION_FILTER_COUNTER_CLOSE_BODY = '#tooltips:customization/filter/counter/close/body'
+    CUSTOMIZATION_FILTER_COUNTER_HEADER = '#tooltips:customization/filter/counter/header'
+    CUSTOMIZATION_FILTER_COUNTER_BODY = '#tooltips:customization/filter/counter/body'
     VEHICLEPARAMS_SPEEDLIMITS = '#tooltips:vehicleParams/speedLimits'
     VEHICLEPARAMS_ENGINEPOWER = '#tooltips:vehicleParams/enginePower'
     VEHICLEPARAMS_CHASSISROTATIONSPEED = '#tooltips:vehicleParams/chassisRotationSpeed'
@@ -1613,26 +1623,15 @@ class TOOLTIPS(object):
     CUSTOMIZATION_NOTENOUGHRESOURCES_HEADER = '#tooltips:customization/notEnoughResources/header'
     CUSTOMIZATION_NOTENOUGHRESOURCES_BODY = '#tooltips:customization/notEnoughResources/body'
     CUSTOMIZATION_BUYDISABLED_BODY = '#tooltips:customization/buyDisabled/body'
-    CUSTOMIZATION_SLOT_HEADER = '#tooltips:customization/slot/header'
-    CUSTOMIZATION_SLOT_BODY = '#tooltips:customization/slot/body'
-    CUSTOMIZATION_SLOTREMOVE_HEADER = '#tooltips:customization/slotRemove/header'
-    CUSTOMIZATION_SLOTREMOVE_BODY = '#tooltips:customization/slotRemove/body'
+    CUSTOMIZATION_TABS_PAINT_BODY = '#tooltips:customization/tabs/paint/body'
+    CUSTOMIZATION_TABS_CAMOUFLAGE_BODY = '#tooltips:customization/tabs/camouflage/body'
+    CUSTOMIZATION_TABS_EMBLEM_BODY = '#tooltips:customization/tabs/emblem/body'
+    CUSTOMIZATION_TABS_INSCRIPTION_BODY = '#tooltips:customization/tabs/inscription/body'
+    CUSTOMIZATION_TABS_MODIFICATION_BODY = '#tooltips:customization/tabs/modification/body'
     CUSTOMIZATION_CAROUSEL_FILTER_HEADER = '#tooltips:customization/carousel/filter/header'
     CUSTOMIZATION_CAROUSEL_FILTER_BODY = '#tooltips:customization/carousel/filter/body'
-    CUSTOMIZATION_CAROUSEL_CHBPURCHASED_HEADER = '#tooltips:customization/carousel/chbPurchased/header'
-    CUSTOMIZATION_CAROUSEL_CHBPURCHASED_BODY = '#tooltips:customization/carousel/chbPurchased/body'
-    CUSTOMIZATION_CAROUSEL_DURATIONTYPE_HEADER = '#tooltips:customization/carousel/durationType/header'
-    CUSTOMIZATION_CAROUSEL_DURATIONTYPE_BODY = '#tooltips:customization/carousel/durationType/body'
-    CUSTOMIZATION_CAROUSEL_SLOT_SELECT_HEADER = '#tooltips:customization/carousel/slot/select/header'
-    CUSTOMIZATION_CAROUSEL_SLOT_SELECT_BODY = '#tooltips:customization/carousel/slot/select/body'
-    CUSTOMIZATION_CAROUSEL_SLOT_REMOVE_HEADER = '#tooltips:customization/carousel/slot/remove/header'
-    CUSTOMIZATION_CAROUSEL_SLOT_REMOVE_BODY = '#tooltips:customization/carousel/slot/remove/body'
-    CUSTOMIZATION_CAROUSEL_SLOT_CHALLENGE_HEADER = '#tooltips:customization/carousel/slot/challenge/header'
-    CUSTOMIZATION_CAROUSEL_SLOT_CHALLENGE_BODY = '#tooltips:customization/carousel/slot/challenge/body'
     CUSTOMIZATION_FILTERPOPOVER_REFRESH_HEADER = '#tooltips:customization/filterPopover/refresh/header'
     CUSTOMIZATION_FILTERPOPOVER_REFRESH_BODY = '#tooltips:customization/filterPopover/refresh/body'
-    CUSTOMIZATION_FILTERPOPOVER_BONUSDESCRIPTION_HEADER = '#tooltips:customization/filterPopover/bonusDescription/header'
-    CUSTOMIZATION_FILTERPOPOVER_BONUSDESCRIPTION_BODY = '#tooltips:customization/filterPopover/bonusDescription/body'
     EVENT_SQUAD_DISABLE_HEADER = '#tooltips:event/squad/disable/header'
     EVENT_SQUAD_DISABLE_BODY = '#tooltips:event/squad/disable/body'
     CUSTOMIZATION_BUYWINDOW_COPY_HEADER = '#tooltips:customization/buyWindow/copy/header'
@@ -2216,6 +2215,17 @@ class TOOLTIPS(object):
     ELEN_AWARDSOVERLAY_GROUP_HEADER = '#tooltips:elen/awardsOverlay/group/header'
     ELEN_CONDITION_BATTLETYPE_RANDOM = '#tooltips:elen/condition/battletype/random'
     ELEN_CONDITION_BATTLETYPE_NOTRANDOM = '#tooltips:elen/condition/battletype/notrandom'
+    ACTIONPRICE_BUYPRICE_DEFAULTPRICE = '#tooltips:actionPrice/buyPrice/defaultPrice'
+    ACTIONPRICE_BUYPRICE_ACTIONPRICE = '#tooltips:actionPrice/buyPrice/actionPrice'
+    CUSTOMIZATION_SCROLLBAR_BOOKMARK_HEADER = '#tooltips:customization/scrollbar/bookmark/header'
+    CUSTOMIZATION_NONHISTORICINDICATOR_HEADER = '#tooltips:customization/nonHistoricIndicator/header'
+    CUSTOMIZATION_NONHISTORICINDICATOR_BODY = '#tooltips:customization/nonHistoricIndicator/body'
+    FILTER_POPOVER_SHOWONLYFILTERS_HISTORIC_BODY = '#tooltips:filter/popover/showonlyfilters/historic/body'
+    FILTER_POPOVER_SHOWONLYFILTERS_ACQUIRED_BODY = '#tooltips:filter/popover/showonlyfilters/acquired/body'
+    ACTIONPRICE_RENTPRICE_DEFAULTPRICE = '#tooltips:actionPrice/rentPrice/defaultPrice'
+    ACTIONPRICE_RENTPRICE_1DAY = '#tooltips:actionPrice/rentPrice/1day'
+    ACTIONPRICE_RENTPRICE_3DAY = '#tooltips:actionPrice/rentPrice/3day'
+    ACTIONPRICE_RENTPRICE_DAYS = '#tooltips:actionPrice/rentPrice/days'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -2594,6 +2604,11 @@ class TOOLTIPS(object):
      ELEN_EXCEL_INFOPARAM_WINS_NATION_BODY,
      ELEN_EXCEL_INFOPARAM_WINS_LEVEL_BODY,
      ELEN_EXCEL_INFOPARAM_WINS_CLASS_BODY)
+    CUSTOMIZATION_TABS_ALL_BODY_ENUM = (CUSTOMIZATION_TABS_PAINT_BODY,
+     CUSTOMIZATION_TABS_CAMOUFLAGE_BODY,
+     CUSTOMIZATION_TABS_EMBLEM_BODY,
+     CUSTOMIZATION_TABS_INSCRIPTION_BODY,
+     CUSTOMIZATION_TABS_MODIFICATION_BODY)
 
     @classmethod
     def elen_summary_rank(cls, key0):
@@ -2878,6 +2893,15 @@ class TOOLTIPS(object):
     def elen_excel_infoparam_wins_all_body(cls, key0):
         outcome = '#tooltips:elen/excel/infoParam/wins/{}/body'.format(key0)
         if outcome not in cls.ELEN_EXCEL_INFOPARAM_WINS_ALL_BODY_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def customizationItemTab(cls, typeName):
+        outcome = '#tooltips:customization/tabs/{}/body'.format(typeName)
+        if outcome not in cls.CUSTOMIZATION_TABS_ALL_BODY_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

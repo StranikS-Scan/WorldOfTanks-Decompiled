@@ -4,31 +4,18 @@ import time
 from collections import namedtuple, defaultdict
 import BigWorld
 from adisp import async
-from items import vehicles, tankmen, getTypeOfCompactDescr
+from constants import CustomizationInvData
+from items import vehicles, tankmen, getTypeOfCompactDescr, parseIntCompactDescr
 from debug_utils import LOG_DEBUG
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import IInventoryRequester
 
 class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
-    VEH_DATA = namedtuple('VEH_DATA', ','.join(['compDescr',
-     'descriptor',
-     'invID',
-     'repair',
-     'customizationExpiryTime',
-     'igrCustomizationLayout',
-     'crew',
-     'lock',
-     'settings',
-     'shells',
-     'shellsLayout',
-     'eqs',
-     'eqsLayout']))
-    ITEM_DATA = namedtuple('ITEM_DATA', ','.join(['compDescr', 'descriptor', 'count']))
-    TMAN_DATA = namedtuple('TMAN_DATA', ','.join(['compDescr',
-     'descriptor',
-     'vehicle',
-     'invID']))
+    VEH_DATA = namedtuple('VEH_DATA', ('compDescr', 'descriptor', 'invID', 'repair', 'crew', 'lock', 'settings', 'shells', 'shellsLayout', 'eqs', 'eqsLayout'))
+    ITEM_DATA = namedtuple('ITEM_DATA', ('compDescr', 'descriptor', 'count'))
+    TMAN_DATA = namedtuple('TMAN_DATA', ('compDescr', 'descriptor', 'vehicle', 'invID'))
+    OUTFIT_DATA = namedtuple('OUTFIT_DATA', ('compDescr', 'isEnabled'))
 
     def __init__(self):
         super(InventoryRequester, self).__init__()
@@ -54,12 +41,9 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
 
     def getItemsData(self, itemTypeID):
         invData = self.getCacheValue(itemTypeID, {})
-        if itemTypeID != 'customizations':
-            for invID in invData.get('compDescr', {}).iterkeys():
-                self.__makeItem(itemTypeID, invID)
+        for invID in invData.get('compDescr', {}).iterkeys():
+            self.__makeItem(itemTypeID, invID)
 
-        else:
-            return invData
         return self.__itemsCache[itemTypeID]
 
     def getItemData(self, typeCompDescr):
@@ -71,6 +55,14 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
 
     def getVehicleData(self, vehInvID):
         return self.__makeVehicle(vehInvID)
+
+    def getOutfitData(self, intCD, season):
+        """ Get an outfit data for the given vehicle intCD.
+        
+        :param intCD: int compact descr of a vehicle.
+        :param season: season of outfit
+        """
+        return self.__makeOutfit(intCD, season)
 
     def getPreviousItem(self, itemTypeID, invDataIdx):
         return self.__itemsPreviousCache[itemTypeID].get(invDataIdx)
@@ -90,33 +82,9 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         """
         if itemTypeIdx == GUI_ITEM_TYPE.VEHICLE:
             return self.__getVehiclesData(dataIdx)
-        return self.__getTankmenData(dataIdx) if itemTypeIdx == GUI_ITEM_TYPE.TANKMAN else self.__getItemsData(itemTypeIdx, dataIdx)
-
-    def isInInventory(self, intCompactDescr):
-        """
-        Check whether item is in inventory or not.
-        
-        @param intCompactDescr: item int compact descriptor to check
-        @return: bool flag of item inventory existence
-        """
-        itemTypeIdx, _, _ = vehicles.parseIntCompactDescr(intCompactDescr)
-        itemsData = self.__getItemsData(itemTypeIdx)
-        return intCompactDescr in self.__itemsCache[GUI_ITEM_TYPE.VEHICLE] if itemTypeIdx == GUI_ITEM_TYPE.VEHICLE else intCompactDescr in itemsData
-
-    def isItemInInventory(self, itemTypeID, invDataIdx):
-        if itemTypeID == GUI_ITEM_TYPE.VEHICLE:
-            placeToSearch = self.__vehsIDsByCD
-        else:
-            placeToSearch = self.__itemsCache[itemTypeID]
-        return invDataIdx in placeToSearch
-
-    def getIgrCustomizationsLayout(self):
-        """
-        Extracting igr customizations layout
-        
-        @return: layout or empty dict
-        """
-        return self.getCacheValue(GUI_ITEM_TYPE.VEHICLE, {}).get('igrCustomizationLayout', {})
+        if itemTypeIdx == GUI_ITEM_TYPE.TANKMAN:
+            return self.__getTankmenData(dataIdx)
+        return self.__getCustomizationsData(dataIdx) if itemTypeIdx == GUI_ITEM_TYPE.CUSTOMIZATION else self.__getItemsData(itemTypeIdx, dataIdx)
 
     def getFreeSlots(self, vehiclesSlots):
         return vehiclesSlots - len(self.__getVehiclesData())
@@ -172,7 +140,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             if compactDescr is None:
                 return
             try:
-                item = cache[typeCompDescr] = self.VEH_DATA(value('compDescr'), vehicles.VehicleDescr(compactDescr=compactDescr), vehInvID, value('repair', 0), value('customizationExpiryTime', time.time()), value('igrCustomizationLayout', time.time()), value('crew', []), value('lock', 0), value('settings', 0), value('shells', []), value('shellsLayout', []), value('eqs', []), value('eqsLayout', []))
+                item = cache[typeCompDescr] = self.VEH_DATA(value('compDescr'), vehicles.VehicleDescr(compactDescr=compactDescr), vehInvID, value('repair', 0), value('crew', []), value('lock', 0), value('settings', 0), value('shells', []), value('shellsLayout', []), value('eqs', []), value('eqsLayout', []))
             except Exception:
                 LOG_DEBUG('Error while building vehicle from inventory', vehInvID, typeCompDescr)
                 return
@@ -206,6 +174,20 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
                 return None
             data = self.ITEM_DATA(typeCompDescr, vehicles.getItemByCompactDescr(typeCompDescr), itemsInvData[typeCompDescr])
             item = cache[typeCompDescr] = data
+            return item
+
+    def __makeOutfit(self, intCD, season):
+        cache = self.__itemsCache[GUI_ITEM_TYPE.OUTFIT]
+        if (intCD, season) in cache:
+            return cache[intCD, season]
+        else:
+            invData = self.getCacheValue(GUI_ITEM_TYPE.CUSTOMIZATION, {})
+            outfitsData = invData.get(CustomizationInvData.OUTFITS, {})
+            vehicleOutfits = outfitsData.get(intCD, {})
+            if season not in vehicleOutfits:
+                return None
+            compDescr, isEnabled = vehicleOutfits.get(season)
+            item = cache[intCD, season] = self.OUTFIT_DATA(compDescr, isEnabled)
             return item
 
     def __getTankmenData(self, inventoryID=None):
@@ -287,3 +269,10 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
                     result[key] = value
 
             return result
+
+    def __getCustomizationsData(self, intCD):
+        _, cType, idx = parseIntCompactDescr(intCD)
+        customizationInvData = self.getCacheValue(GUI_ITEM_TYPE.CUSTOMIZATION, {})
+        itemsInvData = customizationInvData.get(CustomizationInvData.ITEMS, {})
+        typeInvData = itemsInvData.get(cType, {})
+        return typeInvData.get(idx, {})

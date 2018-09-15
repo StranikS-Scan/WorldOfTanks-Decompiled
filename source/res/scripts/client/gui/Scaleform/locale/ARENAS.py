@@ -140,3 +140,5 @@ class ARENAS(object):
     C_1001_RESPAWN_TEST_DESCRIPTION = '#arenas:1001_respawn_test/description'
     C_217_ER_ALASKA_NAME = '#arenas:217_er_alaska/name'
     C_217_ER_ALASKA_DESCRIPTION = '#arenas:217_er_alaska/description'
+    TYPE_CTF30X30_217_ER_ALASKA_NAME = '#arenas:type/ctf30x30/217_er_alaska/name'
+    TYPE_DOMINATION30X30_217_ER_ALASKA_NAME = '#arenas:type/domination30x30/217_er_alaska/name'

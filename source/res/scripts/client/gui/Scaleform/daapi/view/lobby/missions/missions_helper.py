@@ -47,7 +47,6 @@ _personalMissionsConditionsFormatter = PMCardConditionsFormatter()
 _personalMissionsAwardsFormatter = PersonalMissionsAwardComposer(DETAILED_CARD_AWARDS_COUNT)
 HIDE_DONE = 'hideDone'
 HIDE_UNAVAILABLE = 'hideUnavailable'
-REQUIRED_CAMOUFLAGE_TOKEN_POSTFIX = ':camouflage'
 AWARD_SHEET_ICON = icons.makeImageTag(RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_SHEET_RECEIVED_SMALL, 16, 16, -2, 0)
 
 class BG_STATES(object):

@@ -390,9 +390,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'siegeModeHintCounter': 10,
                 NEW_SETTINGS_COUNTER: {'FeedbackSettings': {'feedbackDamageLog': {'damageLogAssistStun': True},
                                                             'feedbackBattleEvents': {'battleEventsEnemyAssistStun': True}},
-                                       'GameSettings': {'gameplay_epicStandard': True}},
+                                       'GameSettings': {'gameplay_epicStandard': True,
+                                                        'c11nHistoricallyAccurate': True}},
                 TRAJECTORY_VIEW_HINT_COUNTER: 10,
-                SHOW_OPT_DEVICE_HINT: True},
+                SHOW_OPT_DEVICE_HINT: True,
+                'c11nHistoricallyAccurate': True},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},
@@ -661,29 +663,7 @@ class AccountSettings(object):
                 SoundGroups.g_instance.setVolume('ambient', 1.0)
                 SoundGroups.g_instance.savePreferences()
             if currVersion < 22:
-                from gui.customization.shared import TYPE_NAME
-                from gui.customization.shared import CUSTOMIZATION_TYPE
-                for key, section in _filterAccountSection(ads):
-                    accSettings = AccountSettings.__readSection(section, KEY_SETTINGS)
-                    oldFormatItems = {}
-                    newFormatItems = ({}, {}, {})
-                    if 'customization' in accSettings.keys():
-                        oldFormatItems = _unpack(accSettings['customization'].asString)
-                        if not isinstance(oldFormatItems, dict):
-                            oldFormatItems = {}
-                    for cTypeName, vehiclesData in oldFormatItems.items():
-                        cType = TYPE_NAME[cTypeName]
-                        for data in vehiclesData:
-                            if cType == CUSTOMIZATION_TYPE.EMBLEM:
-                                vehicleID, itemID = data
-                            else:
-                                vehicleID, _, itemID = data
-                            if vehicleID not in newFormatItems[cType]:
-                                newFormatItems[cType][vehicleID] = {}
-                            newFormatItems[cType][vehicleID][itemID] = False
-
-                    accSettings.write('customization', _pack(newFormatItems))
-
+                pass
             if currVersion < 23:
                 for key, section in _filterAccountSection(ads):
                     AccountSettings.__readSection(section, KEY_SETTINGS).deleteSection('FootballVehSelectedOnce')

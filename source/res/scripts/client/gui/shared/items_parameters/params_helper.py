@@ -6,12 +6,15 @@ import time
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_parameters import params, RELATIVE_PARAMS, MAX_RELATIVE_VALUE
 from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator
 from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params_cache import g_paramsCache
+from helpers import dependency
 from items import vehicles, ITEM_TYPES
 from shared_utils import findFirst
+from skeletons.gui.shared.gui_items import IGuiItemsFactory
 _ITEM_TYPE_HANDLERS = {ITEM_TYPES.vehicleRadio: params.RadioParams,
  ITEM_TYPES.vehicleEngine: params.EngineParams,
  ITEM_TYPES.vehicleChassis: params.ChassisParams,
@@ -150,22 +153,27 @@ def itemsComparator(currentItem, otherItem, vehicleDescr=None):
     return ItemsComparator(getParameters(currentItem, vehicleDescr), getParameters(otherItem, vehicleDescr))
 
 
-def camouflageComparator(vehicle, camouflage):
+@dependency.replace_none_kwargs(factory=IGuiItemsFactory)
+def camouflageComparator(vehicle, camo, factory=None):
     """
     :param vehicle: instance of  gui.shared.gui_items.Vehicle.Vehicle
-    :param camouflage: instance of  gui.customization.elements.Camouflage
+    :param camo: instance of gui.shared.gui_items.customization.c11n_items.Camouflage
     :return: instance of VehiclesComparator
     """
-    vDescr = vehicle.descriptor
     currParams = params.VehicleParams(vehicle).getParamsDict()
-    camouflageID = camouflage.getID()
-    camouflageInfo = vehicles.g_cache.customization(vDescr.type.customizationNationID)['camouflages'].get(camouflageID)
-    if camouflageInfo is not None:
-        pos = camouflageInfo['kind']
-        oldCamouflageData = vDescr.camouflages[pos]
-        vDescr.setCamouflage(pos, camouflageID, int(time.time()), 0)
+    if camo:
+        outfit = vehicle.getOutfit(camo.season)
+        if not outfit:
+            outfit = factory.createOutfit(isEnabled=True)
+            vehicle.setCustomOutfit(camo.season, outfit)
+        slot = outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
+        oldCamo = slot.getItem()
+        slot.set(camo)
         newParams = params.VehicleParams(vehicle).getParamsDict(preload=True)
-        vDescr.setCamouflage(pos, *oldCamouflageData)
+        if oldCamo:
+            slot.set(oldCamo)
+        else:
+            slot.clear()
     else:
         newParams = currParams.copy()
     return VehiclesComparator(newParams, currParams)

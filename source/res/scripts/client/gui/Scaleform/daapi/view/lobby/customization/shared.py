@@ -1,46 +1,212 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/shared.py
-from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID
+from collections import namedtuple, Counter
+from CurrentVehicle import g_currentVehicle
+from gui.customization.shared import HighlightingMode
+from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
+from gui.Scaleform.genConsts.SEASONS_CONSTANTS import SEASONS_CONSTANTS
+from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
-from gui.shared.formatters import text_styles
-from helpers.i18n import makeString as _ms
-from gui.customization.shared import CUSTOMIZATION_TYPE
+from helpers import dependency
+from items.components.c11n_constants import SeasonType
+from shared_utils import CONST_CONTAINER
+from skeletons.gui.shared import IItemsCache
 
-def getDialogRemoveElement(itemName, cType):
-    deleteStr = text_styles.error(VEHICLE_CUSTOMIZATION.DIALOG_REMOVE_ELEMENT_DELETE)
-    description = text_styles.main(_ms(VEHICLE_CUSTOMIZATION.DIALOG_REMOVE_ELEMENT_DESCRIPTION, elementName='{0} {1}'.format(__formatTypeName(cType, 1), text_styles.main(itemName)), delete=deleteStr))
-    return I18nConfirmDialogMeta('customization/remove_element', messageCtx={'description': description}, focusedID=DIALOG_BUTTON_ID.CLOSE)
-
-
-def getDialogReplaceElement(itemName, cType):
-    deleteStr = text_styles.error(VEHICLE_CUSTOMIZATION.DIALOG_REMOVE_ELEMENT_DELETE)
-    description = text_styles.main(_ms(VEHICLE_CUSTOMIZATION.DIALOG_REPLACE_ELEMENT_DESCRIPTION, elementName='{0} {1}'.format(__formatTypeName(cType, 1), text_styles.main(itemName)), delete=deleteStr))
-    return I18nConfirmDialogMeta('customization/replace_element', messageCtx={'description': description}, focusedID=DIALOG_BUTTON_ID.CLOSE)
+class C11N_MODE(CONST_CONTAINER):
+    """ Customization mode.
+    """
+    STYLE, CUSTOM = range(2)
 
 
-def getDialogReplaceElements(elementGroups):
-    elementsCount = sum([ len(x) for x in elementGroups ])
-    if elementsCount > 1:
-        deleteStr = text_styles.error(VEHICLE_CUSTOMIZATION.DIALOG_REMOVE_ELEMENTS_DELETE)
-        description = text_styles.main(_ms(VEHICLE_CUSTOMIZATION.DIALOG_REPLACE_ELEMENTS_DESCRIPTION, elementsName=__formatReplaceElements(elementGroups), delete=deleteStr))
-        return I18nConfirmDialogMeta('customization/replace_elements', messageCtx={'description': description}, focusedID=DIALOG_BUTTON_ID.CLOSE)
-    for elements, cType in zip(elementGroups, CUSTOMIZATION_TYPE.ALL):
-        if elements:
-            return getDialogReplaceElement(elements[0], cType)
+class CUSTOMIZATION_TABS(CONST_CONTAINER):
+    """
+    Enumeration of customization item browser tabs.
+    The order of the ALL property corresponds to the order the tab names will appear in.
+    """
+    STYLE, PAINT, CAMOUFLAGE, EMBLEM, INSCRIPTION, EFFECT = range(6)
+    AVAILABLE_REGIONS = (PAINT,
+     CAMOUFLAGE,
+     EMBLEM,
+     INSCRIPTION)
+    ALL = (STYLE,
+     PAINT,
+     CAMOUFLAGE,
+     EMBLEM,
+     INSCRIPTION,
+     EFFECT)
+    VISIBLE = (PAINT,
+     CAMOUFLAGE,
+     EMBLEM,
+     INSCRIPTION,
+     EFFECT)
+    REGIONS = {STYLE: HighlightingMode.WHOLE_VEHICLE,
+     PAINT: HighlightingMode.REPAINT_REGIONS_MERGED,
+     CAMOUFLAGE: HighlightingMode.CAMO_REGIONS,
+     EFFECT: HighlightingMode.WHOLE_VEHICLE}
 
 
-def __formatReplaceElements(elementGroups):
-    result = []
-    for elements, cType in zip(elementGroups, CUSTOMIZATION_TYPE.ALL):
-        if elements:
-            result.append('{0} {1}'.format(__formatTypeName(cType, len(elements)), _ms(VEHICLE_CUSTOMIZATION.DIALOG_REMOVE_ELEMENT_ELEMENTS_SEPARATOR).join(elements)))
+TABS_ITEM_MAPPING = {CUSTOMIZATION_TABS.STYLE: GUI_ITEM_TYPE.STYLE,
+ CUSTOMIZATION_TABS.PAINT: GUI_ITEM_TYPE.PAINT,
+ CUSTOMIZATION_TABS.CAMOUFLAGE: GUI_ITEM_TYPE.CAMOUFLAGE,
+ CUSTOMIZATION_TABS.EMBLEM: GUI_ITEM_TYPE.EMBLEM,
+ CUSTOMIZATION_TABS.INSCRIPTION: GUI_ITEM_TYPE.INSCRIPTION,
+ CUSTOMIZATION_TABS.EFFECT: GUI_ITEM_TYPE.MODIFICATION}
+TYPE_TO_TAB_IDX = {v:k for k, v in TABS_ITEM_MAPPING.iteritems()}
+SEASON_IDX_TO_TYPE = {SEASONS_CONSTANTS.SUMMER_INDEX: SeasonType.SUMMER,
+ SEASONS_CONSTANTS.WINTER_INDEX: SeasonType.WINTER,
+ SEASONS_CONSTANTS.DESERT_INDEX: SeasonType.DESERT}
+SEASON_TYPE_TO_NAME = {SeasonType.SUMMER: SEASONS_CONSTANTS.SUMMER,
+ SeasonType.WINTER: SEASONS_CONSTANTS.WINTER,
+ SeasonType.DESERT: SEASONS_CONSTANTS.DESERT}
+SEASON_TYPE_TO_IDX = {SeasonType.SUMMER: SEASONS_CONSTANTS.SUMMER_INDEX,
+ SeasonType.WINTER: SEASONS_CONSTANTS.WINTER_INDEX,
+ SeasonType.DESERT: SEASONS_CONSTANTS.DESERT_INDEX}
+CAMO_SCALE_SIZE = (VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_CAMO_SCALE_SMALL, VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_CAMO_SCALE_NORMAL, VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_CAMO_SCALE_LARGE)
+CUSTOMIZATION_POPOVER_ALIASES = {GUI_ITEM_TYPE.STYLE: CUSTOMIZATION_ALIASES.CUSTOMIZATION_STYLE_POPOVER,
+ GUI_ITEM_TYPE.PAINT: CUSTOMIZATION_ALIASES.CUSTOMIZATION_PAINT_POPOVER,
+ GUI_ITEM_TYPE.CAMOUFLAGE: CUSTOMIZATION_ALIASES.CUSTOMIZATION_CAMO_POPOVER,
+ GUI_ITEM_TYPE.EMBLEM: CUSTOMIZATION_ALIASES.CUSTOMIZATION_DECAL_POPOVER,
+ GUI_ITEM_TYPE.INSCRIPTION: CUSTOMIZATION_ALIASES.CUSTOMIZATION_DECAL_POPOVER,
+ GUI_ITEM_TYPE.MODIFICATION: CUSTOMIZATION_ALIASES.CUSTOMIZATION_EFFECT_POPOVER}
+SEASONS_ORDER = (SeasonType.SUMMER, SeasonType.WINTER, SeasonType.DESERT)
 
-    return '{0}{1}'.format(_ms(VEHICLE_CUSTOMIZATION.DIALOG_REMOVE_ELEMENT_GROUPS_SEPARATOR).join(result), _ms(VEHICLE_CUSTOMIZATION.DIALOG_REMOVE_ELEMENT_GROUPS_END))
+class PurchaseItem(object):
+    __slots__ = ('item', 'price', 'areaID', 'slot', 'regionID', 'selected', 'group', 'isFromInventory', 'isDismantling')
+
+    def __init__(self, item, price, areaID, slot, regionID, selected, group, isFromInventory=False, isDismantling=False):
+        self.item = item
+        self.price = price
+        self.areaID = areaID
+        self.slot = slot
+        self.regionID = regionID
+        self.selected = selected
+        self.group = group
+        self.isFromInventory = isFromInventory
+        self.isDismantling = isDismantling
 
 
-def __formatTypeName(cType, count):
-    if count > 1:
-        formatter = '#vehicle_customization:dialog/remove_elements/typeName/{0}'
-    else:
-        formatter = '#vehicle_customization:dialog/remove_element/typeName/{0}'
-    return text_styles.standard(formatter.format(cType))
+Cart = namedtuple('Cart', 'totalPrice numSelected numApplying numTotal')
+
+class AdditionalPurchaseGroups(object):
+    STYLES_GROUP_ID = -1
+    UNASSIGNED_GROUP_ID = -2
+
+
+OutfitInfo = namedtuple('OutfitInfo', ('original', 'modified'))
+
+def getCustomPurchaseItems(outfitsInfo, cartItems):
+    """ Builds and returns a list of PurchaseItems.  This list will only contain items that would be newly purchased.
+    This takes into account current inventory and what items are already available.
+    :return: list of PurcahseItem entries containing items that would require a new purchase.
+    """
+    itemsCache = dependency.instance(IItemsCache)
+    purchaseItems = getCartPurchaseItems(cartItems)
+    inventoryCount = Counter()
+    for season, outfitCompare in outfitsInfo.iteritems():
+        inventoryCount.update({i.intCD:0 for i in outfitCompare.modified.items()})
+
+    for intCD in inventoryCount.keys():
+        item = itemsCache.items.getItemByCD(intCD)
+        inventoryCount[intCD] += item.fullInventoryCount(g_currentVehicle.item)
+
+    for season, outfitCompare in outfitsInfo.iteritems():
+        backward = outfitCompare.modified.diff(outfitCompare.original)
+        for container in backward.containers():
+            for slot in container.slots():
+                for idx in range(slot.capacity()):
+                    item = slot.getItem(idx)
+                    if item:
+                        purchaseItems.append(PurchaseItem(item, price=item.getBuyPrice(), areaID=container.getAreaID(), slot=slot.getType(), regionID=idx, selected=True, group=season, isFromInventory=False, isDismantling=True))
+                        inventoryCount[item.intCD] += 1
+
+    for season, outfitCompare in outfitsInfo.iteritems():
+        forward = outfitCompare.original.diff(outfitCompare.modified)
+        for container in forward.containers():
+            for slot in container.slots():
+                for idx in range(slot.capacity()):
+                    item = slot.getItem(idx)
+                    if item:
+                        isFromInventory = inventoryCount[item.intCD] > 0
+                        purchaseItems.append(PurchaseItem(item, price=item.getBuyPrice(), areaID=container.getAreaID(), slot=slot.getType(), regionID=idx, selected=True, group=season, isFromInventory=isFromInventory, isDismantling=False))
+                        inventoryCount[item.intCD] -= 1
+
+    return purchaseItems
+
+
+def getStylePurchaseItems(styleInfo, cartItems):
+    """ Get purchase items for the styles mode.
+    """
+    purchaseItems = getCartPurchaseItems(cartItems)
+    original = styleInfo.original
+    modified = styleInfo.modified
+    if modified and not original or modified and original.id != modified.id:
+        inventoryCount = styleInfo.modified.fullInventoryCount(g_currentVehicle.item)
+        isFromInventory = inventoryCount > 0
+        purchaseItems.append(PurchaseItem(modified, modified.getBuyPrice(), areaID=None, slot=None, regionID=None, selected=True, group=AdditionalPurchaseGroups.STYLES_GROUP_ID, isFromInventory=isFromInventory, isDismantling=False))
+    elif original and not modified:
+        purchaseItems.append(PurchaseItem(original, original.getBuyPrice(), areaID=None, slot=None, regionID=None, selected=True, group=AdditionalPurchaseGroups.STYLES_GROUP_ID, isFromInventory=False, isDismantling=True))
+    return purchaseItems
+
+
+def getCartPurchaseItems(cartItems):
+    """ Get purchase items from the given cart.
+    """
+    purchaseItems = []
+    for item in cartItems:
+        purchaseItems.append(PurchaseItem(item, price=item.getBuyPrice(), areaID=None, slot=None, regionID=None, selected=True, group=AdditionalPurchaseGroups.UNASSIGNED_GROUP_ID))
+
+    return purchaseItems
+
+
+def getItemInventoryCount(item, outfitsInfo=None):
+    """ Gets the actual available inventory count of an item.
+    (including the items that had been put off but haven't been committed yet)
+    """
+    inventoryCount = item.fullInventoryCount(g_currentVehicle.item)
+    if not outfitsInfo:
+        return inventoryCount
+    intCD = item.intCD
+    for season, outfitCompare in outfitsInfo.iteritems():
+        old = Counter((i.intCD for i in outfitCompare.original.items()))
+        new = Counter((i.intCD for i in outfitCompare.modified.items()))
+        inventoryCount += old[intCD] - new[intCD]
+
+    return max(0, inventoryCount)
+
+
+def getStyleInventoryCount(item, styleInfo=None):
+    """ Gets the actual available inventory count of a style.
+    """
+    inventoryCount = item.fullInventoryCount(g_currentVehicle.item)
+    if not styleInfo:
+        return inventoryCount
+    original = styleInfo.original
+    modified = styleInfo.modified
+    if modified and modified.intCD == item.intCD:
+        if not item.isRentable:
+            inventoryCount -= 1
+    if original and original.intCD == item.intCD:
+        if not item.isRentable:
+            inventoryCount -= 1
+        elif g_currentVehicle.item.getStyledOutfit(SeasonType.SUMMER).isEnabled():
+            inventoryCount += 1
+    return max(0, inventoryCount)
+
+
+def getTotalPurchaseInfo(purchaseItems):
+    """ Get purchase info (total price that needs to be paid,
+    number of actually selected items and total number of items.
+    """
+    totalPrice = ITEM_PRICE_EMPTY
+    numSelectedItems = 0
+    numApplyingItems = 0
+    for purchaseItem in purchaseItems:
+        if not purchaseItem.isDismantling:
+            numApplyingItems += 1
+        if purchaseItem.selected and not purchaseItem.isDismantling:
+            numSelectedItems += 1
+            if not purchaseItem.isFromInventory:
+                totalPrice += purchaseItem.price
+
+    return Cart(totalPrice, numSelectedItems, numApplyingItems, len(purchaseItems))

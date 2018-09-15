@@ -2,125 +2,170 @@
 # Embedded file name: scripts/client/vehicle_systems/camouflages.py
 import BigWorld
 import Math
+import items.vehicles
+from collections import namedtuple
+from constants import C11N_MASK_REGION
 from vehicle_systems.tankStructure import VehiclePartsTuple
-from debug_utils import LOG_ERROR
-import items
-from vehicle_systems.tankStructure import TankPartNames
+from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
+from items.components.c11n_constants import ModificationType
+from gui.shared.gui_items import GUI_ITEM_TYPE
+RepaintParams = namedtuple('PaintParams', ('enabled', 'baseColor', 'color', 'metallic', 'gloss', 'fading', 'strength'))
+RepaintParams.__new__.__defaults__ = (False,
+ 0,
+ (0, 0, 0),
+ Math.Vector4(0.0),
+ Math.Vector4(0.0),
+ 0.0,
+ 0.0)
+CamoParams = namedtuple('CamoParams', ('mask', 'excludeMap', 'tiling', 'weights', 'c0', 'c1', 'c2', 'c3'))
+CamoParams.__new__.__defaults__ = ('',
+ '',
+ Math.Vector4(0.0),
+ Math.Vector4(0.0),
+ 0,
+ 0,
+ 0,
+ 0)
+_DEFAULT_GLOSS = 0.509
+_DEFAULT_METALLIC = 0.23
 
-def prepareFashions(vDesc, isCurrentModelDamaged, camouflageId=None):
-    if isCurrentModelDamaged:
+def prepareFashions(isDamaged):
+    if isDamaged:
         fashions = [None,
          None,
          None,
          None]
     else:
         fashions = [BigWorld.WGVehicleFashion(False),
-         None,
-         None,
-         None]
-    camouflagePresent = False
-    texture = ''
-    customization = items.vehicles.g_cache.customization(vDesc.type.customizationNationID)
-    if camouflageId is not None and customization is not None:
-        camouflage = customization['camouflages'].get(camouflageId)
-        if camouflage is not None:
-            camouflagePresent = True
-            texture = camouflage['texture']
-    useCamouflage = camouflagePresent and texture
-    for fashionIdx, descId in enumerate(TankPartNames.ALL):
-        fashion = fashions[fashionIdx]
-        forceFashion = not isCurrentModelDamaged and fashion is None and (useCamouflage or hasattr(vDesc.type, 'repaintParameters'))
-        if forceFashion:
-            fashions[fashionIdx] = BigWorld.WGBaseFashion()
-
-    return fashions
-
-
-def applyCamouflage(vDesc, fashions, isCurrentModelDamaged, camouflageId=None):
-    fashions = list(fashions)
-    texture = ''
-    colors = [0,
-     0,
-     0,
-     0]
-    weights = Math.Vector4(1, 0, 0, 0)
-    camouflagePresent = False
-    customization = items.vehicles.g_cache.customization(vDesc.type.customizationNationID)
-    defaultTiling = None
-    if camouflageId is not None and customization is not None:
-        camouflage = customization['camouflages'].get(camouflageId)
-        if camouflage is not None:
-            camouflagePresent = True
-            texture = camouflage['texture']
-            colors = camouflage['colors']
-            weights = Math.Vector4(*[ (c >> 24) / 255.0 for c in colors ])
-            defaultTiling = camouflage['tiling'].get(vDesc.type.compactDescr)
-    if isCurrentModelDamaged:
-        weights *= 0.1
-    for fashionIdx, descId in enumerate(TankPartNames.ALL):
-        exclusionMap = vDesc.type.camouflage.exclusionMask
-        tiling = defaultTiling
-        if tiling is None:
-            tiling = vDesc.type.camouflage.tiling
-        if descId == 'chassis':
-            compDesc = vDesc.chassis
-        elif descId == 'hull':
-            compDesc = vDesc.hull
-        elif descId == 'turret':
-            compDesc = vDesc.turret
-        elif descId == 'gun':
-            compDesc = vDesc.gun
-        else:
-            compDesc = None
-        if compDesc is not None:
-            coeff = compDesc.camouflage.tiling
-            if coeff is not None:
-                if tiling is not None:
-                    tiling = (tiling[0] * coeff[0],
-                     tiling[1] * coeff[1],
-                     tiling[2] + coeff[2],
-                     tiling[3] + coeff[3])
-                else:
-                    tiling = coeff
-            if compDesc.camouflage.exclusionMask:
-                exclusionMap = compDesc.camouflage.exclusionMask
-        useCamouflage = camouflagePresent and texture
-        fashion = fashions[fashionIdx]
-        if fashion is not None:
-            if useCamouflage:
-                fashion.setCamouflage(texture, exclusionMap, tiling, colors[0], colors[1], colors[2], colors[3], weights)
-            else:
-                fashion.removeCamouflage()
-        if useCamouflage:
-            LOG_ERROR('Unexpected lack of fashion, but camouflage is being applied. Use prepareFashions function!')
-
+         BigWorld.WGBaseFashion(),
+         BigWorld.WGBaseFashion(),
+         BigWorld.WGBaseFashion()]
     return VehiclePartsTuple(*fashions)
 
 
-def _getRepaintParams(vDesc):
-    tintGroups = items.vehicles.g_cache.customization(vDesc.type.customizationNationID)['tintGroups']
-    for i in tintGroups.keys():
-        grp = tintGroups[i]
-        repaintReplaceColor = Math.Vector4(grp.x, grp.y, grp.z, 0.0) / 255.0
+def updateFashions(fashions, vDesc, isDamaged, outfit):
+    fashions = list(fashions)
+    for fashionIdx, descId in enumerate(TankPartNames.ALL):
+        fashion = fashions[fashionIdx]
+        if fashion is None:
+            continue
+        camo = getCamo(outfit, fashionIdx, vDesc, descId, isDamaged)
+        if camo:
+            camoHandler = BigWorld.PyCamoHandler()
+            fashion.setCamouflage()
+            fashion.addMaterialHandler(camoHandler)
+            camoHandler.setCamoParams(camo)
+        repaint = getRepaint(outfit, fashionIdx, vDesc)
+        if repaint:
+            repaintHandler = BigWorld.PyRepaintHandler()
+            fashion.addMaterialHandler(repaintHandler)
+            repaintHandler.setRepaintParams(repaint)
 
-    refColor = vDesc.type.repaintParameters['refColor'] / 255.0
-    repaintReferenceGloss = vDesc.type.repaintParameters['refGloss'] / 255.0
-    repaintColorRangeScale = vDesc.type.repaintParameters['refColorMult']
-    repaintGlossRangeScale = vDesc.type.repaintParameters['refGlossMult']
-    repaintReferenceColor = Math.Vector4(refColor.x, refColor.y, refColor.z, repaintReferenceGloss)
-    repaintReplaceColor.w = repaintColorRangeScale
-    return (repaintReferenceColor, repaintReplaceColor, repaintGlossRangeScale)
+    return
 
 
-def applyRepaint(vDesc, fashions):
-    if not hasattr(vDesc.type, 'repaintParameters'):
-        return fashions
+def getCamoPrereqs(outfit, vDesc):
+    result = []
+    for partIdx, descId in enumerate(TankPartNames.ALL):
+        container = outfit.getContainer(partIdx)
+        slot = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
+        if not slot:
+            continue
+        camouflage = slot.getItem()
+        if camouflage:
+            result.append(camouflage.texture)
+            exclusionMap = vDesc.type.camouflage.exclusionMask
+            compDesc = getattr(vDesc, descId, None)
+            if compDesc is not None:
+                if compDesc.camouflage.exclusionMask:
+                    exclusionMap = compDesc.camouflage.exclusionMask
+            result.append(exclusionMap)
+
+    return result
+
+
+def getCamo(outfit, containerId, vDesc, descId, isDamaged, default=None):
+    result = default
+    container = outfit.getContainer(containerId)
+    slot = container.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
+    if not slot:
+        return result
     else:
-        repaintReferenceColor, repaintReplaceColor, repaintGlossRangeScale = _getRepaintParams(vDesc)
-        fashions = list(fashions)
-        for fashionIdx, fashion in enumerate(fashions):
-            if fashion is not None:
-                fashion.setRepaint(repaintReferenceColor, repaintReplaceColor, repaintGlossRangeScale)
-            LOG_ERROR('Unexpected lack of fashion, but repaint is being applied. Use prepareFashions function!')
+        camouflage = slot.getItem()
+        component = slot.getComponent()
+        if camouflage:
+            try:
+                palette = camouflage.palettes[component.palette]
+            except IndexError:
+                palette = camouflage.palettes[0]
 
-        return VehiclePartsTuple(*fashions)
+            weights = Math.Vector4(*[ (c >> 24) / 255.0 for c in palette ])
+            if isDamaged:
+                weights *= 0.1
+            tiling = camouflage.tiling.get(vDesc.type.compactDescr)
+            if tiling is None:
+                tiling = vDesc.type.camouflage.tiling
+            if tiling:
+                try:
+                    scale = camouflage.scales[component.patternSize]
+                except IndexError:
+                    scale = 0
+
+                tiling = (tiling[0] * scale,
+                 tiling[1] * scale,
+                 tiling[2],
+                 tiling[3])
+            exclusionMap = vDesc.type.camouflage.exclusionMask
+            compDesc = getattr(vDesc, descId, None)
+            if compDesc is not None:
+                coeff = compDesc.camouflage.tiling
+                if coeff is not None:
+                    if tiling is not None:
+                        tiling = (tiling[0] * coeff[0],
+                         tiling[1] * coeff[1],
+                         tiling[2] + coeff[2],
+                         tiling[3] + coeff[3])
+                    else:
+                        tiling = coeff
+                if compDesc.camouflage.exclusionMask:
+                    exclusionMap = compDesc.camouflage.exclusionMask
+            result = CamoParams(camouflage.texture, exclusionMap or '', tiling, weights, palette[0], palette[1], palette[2], palette[3])
+        return result
+
+
+def getRepaint(outfit, containerId, vDesc):
+    enabled = False
+    quality = fading = 0.0
+    overlap_metallic = overlap_gloss = None
+    nationID = vDesc.type.customizationNationID
+    defaultColors = items.vehicles.g_cache.customization20().defaultColors
+    defaultColor = defaultColors[nationID]
+    mod = outfit.misc.slotFor(GUI_ITEM_TYPE.MODIFICATION).getItem()
+    if mod:
+        enabled = True
+        quality = mod.modValue(ModificationType.PAINT_AGE, quality)
+        fading = mod.modValue(ModificationType.PAINT_FADING, fading)
+        overlap_metallic = mod.modValue(ModificationType.METALLIC, overlap_metallic)
+        overlap_gloss = mod.modValue(ModificationType.GLOSS, overlap_gloss)
+    container = outfit.getContainer(containerId)
+    paintSlot = container.slotFor(GUI_ITEM_TYPE.PAINT)
+    capacity = paintSlot.capacity()
+    colors = [defaultColor] * capacity
+    metallics = [overlap_metallic or _DEFAULT_METALLIC] * (capacity + 1)
+    glosses = [overlap_gloss or _DEFAULT_GLOSS] * (capacity + 1)
+    for idx in range(capacity):
+        paint = paintSlot.getItem(idx)
+        if paint:
+            enabled = True
+            colors[idx] = paint.color
+            metallics[idx] = overlap_metallic or paint.metallic
+            glosses[idx] = overlap_gloss or paint.gloss
+        if not (containerId == TankPartIndexes.GUN and idx == C11N_MASK_REGION):
+            colors[idx] = colors[0]
+            metallics[idx] = overlap_metallic or metallics[0]
+            glosses[idx] = overlap_gloss or glosses[0]
+
+    colors = tuple(colors)
+    metallics = tuple(metallics)
+    glosses = tuple(glosses)
+    return RepaintParams(enabled, defaultColor, colors, metallics, glosses, fading, quality) if enabled else RepaintParams(enabled, defaultColor)

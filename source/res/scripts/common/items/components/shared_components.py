@@ -63,6 +63,28 @@ class I18nComponent(object):
         return self.__description
 
 
+class I18nExposedComponent(I18nComponent):
+    __slots__ = ('__userKey', '__shortKey', '__descriptionKey')
+
+    def __init__(self, userStringKey, descriptionKey, shortStringKey=''):
+        super(I18nExposedComponent, self).__init__(userStringKey, descriptionKey, shortStringKey='')
+        self.__userKey = userStringKey
+        self.__descriptionKey = descriptionKey
+        self.__shortKey = shortStringKey
+
+    @property
+    def userKey(self):
+        return self.__userKey
+
+    @property
+    def descriptionKey(self):
+        return self.__descriptionKey
+
+    @property
+    def shortKey(self):
+        return self.__shortKey
+
+
 class DeviceHealth(object):
     __slots__ = ('maxHealth', 'repairCost', 'maxRegenHealth', 'healthRegenPerSec', 'healthBurnPerSec', 'chanceToHit', 'hysteresisHealth')
 

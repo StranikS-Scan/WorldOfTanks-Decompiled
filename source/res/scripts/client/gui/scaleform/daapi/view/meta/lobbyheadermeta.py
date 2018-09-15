@@ -49,6 +49,9 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def as_doDisableHeaderButtonS(self, btnId, isEnabled):
         return self.flashObject.as_doDisableHeaderButton(btnId, isEnabled) if self._isDAAPIInited() else None
 
+    def as_doDeselectHeaderButtonS(self, alias):
+        return self.flashObject.as_doDeselectHeaderButton(alias) if self._isDAAPIInited() else None
+
     def as_setGoldFishEnabledS(self, isEnabled, playAnimation, tooltip, tooltipType):
         return self.flashObject.as_setGoldFishEnabled(isEnabled, playAnimation, tooltip, tooltipType) if self._isDAAPIInited() else None
 

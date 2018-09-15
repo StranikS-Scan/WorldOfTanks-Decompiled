@@ -6,7 +6,7 @@ from CurrentVehicle import g_currentVehicle
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.missions import missions_helper
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
-from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
+from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -58,12 +58,10 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
                     bonusFormat = bonus.format()
                     if bonusFormat:
                         if isinstance(bonus, CustomizationsBonus):
-                            formatStr = '#vehicle_customization:typeSwitchScreen/typeName/{0}'
                             for item in bonus.getCustomizations():
                                 itemType = item.get('custType')
-                                cType = CUSTOMIZATION_ITEM_TYPE.CI_TYPES.index(itemType)
-                                bonusForamt = _ms(formatStr.format(cType))
-                                bonusNames.append(bonusForamt)
+                                bonusFmt = _ms(ITEM_TYPES.customization(itemType))
+                                bonusNames.append(bonusFmt)
 
                         else:
                             bonusNames.extend(bonusFormat.split(', '))

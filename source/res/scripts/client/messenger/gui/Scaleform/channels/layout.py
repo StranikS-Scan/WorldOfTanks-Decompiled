@@ -8,7 +8,6 @@ from messenger.ext import isBattleChatEnabled
 from messenger.formatters.chat_message import LobbyMessageBuilder
 from messenger.gui.Scaleform import FILL_COLORS
 from messenger.gui.Scaleform.data.MembersDataProvider import MembersDataProvider
-from messenger.gui.Scaleform.view.lobby.ChannelComponent import ChannelComponent
 from messenger.gui.interfaces import IChannelController, IBattleChannelView
 
 class LobbyLayout(IChannelController):

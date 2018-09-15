@@ -638,6 +638,9 @@ class MENU(object):
     HEADERBUTTONS_PERSONALMISSIONS = '#menu:headerButtons/personalMissions'
     HEADER_ACCOUNT_PREMIUM_DAYS = '#menu:header/account/premium/days'
     HEADER_ACCOUNT_PREMIUM_HOURS = '#menu:header/account/premium/hours'
+    HEADER_CUSTOMIZATION_SEASON_WINTER = '#menu:header/customization/season/winter'
+    HEADER_CUSTOMIZATION_SEASON_SUMMER = '#menu:header/customization/season/summer'
+    HEADER_CUSTOMIZATION_SEASON_DESERT = '#menu:header/customization/season/desert'
     HEADER_SERVERINFO = '#menu:header/serverInfo'
     HEADER_LEVEL = '#menu:header/level'
     HEADER_LEVEL_1 = '#menu:header/level/1'
@@ -1233,70 +1236,6 @@ class MENU(object):
     SHELLLISTITEMRENDERER_REPLACE = '#menu:shellListItemRenderer/replace'
     SHELLLISTITEMRENDERER_SETASDEFAULT = '#menu:shellListItemRenderer/setAsDefault'
     CUSTOMIZATION_TITLE = '#menu:customization/title'
-    CUSTOMIZATION_ITEMS_CAMOUFLAGE = '#menu:customization/items/camouflage'
-    CUSTOMIZATION_ITEMS_EMBLEMLEFT = '#menu:customization/items/emblemLeft'
-    CUSTOMIZATION_ITEMS_EMBLEMRIGHT = '#menu:customization/items/emblemRight'
-    CUSTOMIZATION_ITEMS_INSCRIPTIONLEFT = '#menu:customization/items/inscriptionLeft'
-    CUSTOMIZATION_ITEMS_INSCRIPTIONRIGHT = '#menu:customization/items/inscriptionRight'
-    CUSTOMIZATION_CHANGE_CAMOUFLAGE = '#menu:customization/change/camouflage'
-    CUSTOMIZATION_CHANGE_EMBLEMLEFT = '#menu:customization/change/emblemLeft'
-    CUSTOMIZATION_CHANGE_EMBLEMRIGHT = '#menu:customization/change/emblemRight'
-    CUSTOMIZATION_CHANGE_INSCRIPTIONLEFT = '#menu:customization/change/inscriptionLeft'
-    CUSTOMIZATION_CHANGE_INSCRIPTIONRIGHT = '#menu:customization/change/inscriptionRight'
-    CUSTOMIZATION_REMOVE_CAMOUFLAGE_SIDE_01 = '#menu:customization/remove/camouflage/side-01'
-    CUSTOMIZATION_REMOVE_CAMOUFLAGE0_SIDE_01 = '#menu:customization/remove/camouflage0/side-01'
-    CUSTOMIZATION_REMOVE_CAMOUFLAGE1_SIDE_01 = '#menu:customization/remove/camouflage1/side-01'
-    CUSTOMIZATION_REMOVE_CAMOUFLAGE2_SIDE_01 = '#menu:customization/remove/camouflage2/side-01'
-    CUSTOMIZATION_REMOVE_CAMOUFLAGE_SIDE_02 = '#menu:customization/remove/camouflage/side-02'
-    CUSTOMIZATION_STORE_CAMOUFLAGE_SIDE_02 = '#menu:customization/store/camouflage/side-02'
-    CUSTOMIZATION_REMOVE_EMBLEMLEFT_SIDE_01 = '#menu:customization/remove/emblemLeft/side-01'
-    CUSTOMIZATION_REMOVE_EMBLEMLEFT_SIDE_02 = '#menu:customization/remove/emblemLeft/side-02'
-    CUSTOMIZATION_STORE_EMBLEMLEFT_SIDE_02 = '#menu:customization/store/emblemLeft/side-02'
-    CUSTOMIZATION_REMOVE_EMBLEMRIGHT_SIDE_01 = '#menu:customization/remove/emblemRight/side-01'
-    CUSTOMIZATION_REMOVE_EMBLEMRIGHT_SIDE_02 = '#menu:customization/remove/emblemRight/side-02'
-    CUSTOMIZATION_STORE_EMBLEMRIGHT_SIDE_02 = '#menu:customization/store/emblemRight/side-02'
-    CUSTOMIZATION_REMOVE_INSCRIPTIONLEFT_SIDE_01 = '#menu:customization/remove/inscriptionLeft/side-01'
-    CUSTOMIZATION_REMOVE_INSCRIPTIONLEFT_SIDE_02 = '#menu:customization/remove/inscriptionLeft/side-02'
-    CUSTOMIZATION_STORE_INSCRIPTIONLEFT_SIDE_02 = '#menu:customization/store/inscriptionLeft/side-02'
-    CUSTOMIZATION_REMOVE_INSCRIPTIONRIGHT_SIDE_01 = '#menu:customization/remove/inscriptionRight/side-01'
-    CUSTOMIZATION_REMOVE_INSCRIPTIONRIGHT_SIDE_02 = '#menu:customization/remove/inscriptionRight/side-02'
-    CUSTOMIZATION_STORE_INSCRIPTIONRIGHT_SIDE_02 = '#menu:customization/store/inscriptionRight/side-02'
-    CUSTOMIZATION_LABELS_CAMOUFLAGE_SECTION = '#menu:customization/labels/camouflage/section'
-    CUSTOMIZATION_LABELS_CAMOUFLAGE_PRICE = '#menu:customization/labels/camouflage/price'
-    CUSTOMIZATION_LABELS_CAMOUFLAGE_CURRENT = '#menu:customization/labels/camouflage/current'
-    CUSTOMIZATION_LABELS_CAMOUFLAGE_NEW = '#menu:customization/labels/camouflage/new'
-    CUSTOMIZATION_MARKER_CAMOUFLAGE_NEW = '#menu:customization/marker/camouflage/new'
-    CUSTOMIZATION_MARKER_CAMOUFLAGE_DEFAULTHINT = '#menu:customization/marker/camouflage/defaultHint'
-    CUSTOMIZATION_MARKER_CAMOUFLAGE_WINTERHINT = '#menu:customization/marker/camouflage/winterHint'
-    CUSTOMIZATION_MARKER_CAMOUFLAGE_SUMMERHINT = '#menu:customization/marker/camouflage/summerHint'
-    CUSTOMIZATION_MARKER_CAMOUFLAGE_DESERTHINT = '#menu:customization/marker/camouflage/desertHint'
-    CUSTOMIZATION_LABELS_EMBLEMLEFT_SECTION = '#menu:customization/labels/emblemLeft/section'
-    CUSTOMIZATION_LABELS_EMBLEMLEFT_PRICE = '#menu:customization/labels/emblemLeft/price'
-    CUSTOMIZATION_LABELS_EMBLEMRIGHT_SECTION = '#menu:customization/labels/emblemRight/section'
-    CUSTOMIZATION_LABELS_EMBLEMRIGHT_PRICE = '#menu:customization/labels/emblemRight/price'
-    CUSTOMIZATION_LABELS_INSCRIPTIONLEFT_SECTION = '#menu:customization/labels/inscriptionLeft/section'
-    CUSTOMIZATION_LABELS_INSCRIPTIONLEFT_PRICE = '#menu:customization/labels/inscriptionLeft/price'
-    CUSTOMIZATION_LABELS_INSCRIPTIONRIGHT_SECTION = '#menu:customization/labels/inscriptionRight/section'
-    CUSTOMIZATION_LABELS_INSCRIPTIONRIGHT_PRICE = '#menu:customization/labels/inscriptionRight/price'
-    CUSTOMIZATION_LABELS_EMBLEM_CURRENT = '#menu:customization/labels/emblem/current'
-    CUSTOMIZATION_LABELS_EMBLEM_NEW = '#menu:customization/labels/emblem/new'
-    CUSTOMIZATION_LABELS_TOTALPRICE = '#menu:customization/labels/totalPrice'
-    CUSTOMIZATION_LABELS_CAMOUFLAGE_PERIOD = '#menu:customization/labels/camouflage/period'
-    CUSTOMIZATION_LABELS_EMBLEM_PERIOD = '#menu:customization/labels/emblem/period'
-    CUSTOMIZATION_LABELS_INSCRIPTION_PERIOD = '#menu:customization/labels/inscription/period'
-    CUSTOMIZATION_LABELS_TIMELEFT_DAYS = '#menu:customization/labels/timeLeft/days'
-    CUSTOMIZATION_LABELS_TIMELEFT_HOURS = '#menu:customization/labels/timeLeft/hours'
-    CUSTOMIZATION_LABELS_TIMELEFT_LASTMINUTE = '#menu:customization/labels/timeLeft/lastMinute'
-    CUSTOMIZATION_LABELS_TIMELEFT_TITLE = '#menu:customization/labels/timeLeft/title'
-    CUSTOMIZATION_LABELS_CAMOUFLAGE_TIMELEFT_DAYS = '#menu:customization/labels/camouflage/timeLeft/days'
-    CUSTOMIZATION_LABELS_CAMOUFLAGE_TIMELEFT_HOURS = '#menu:customization/labels/camouflage/timeLeft/hours'
-    CUSTOMIZATION_BUTTONS_APPLY = '#menu:customization/buttons/apply'
-    CUSTOMIZATION_BUTTONS_CLOSE = '#menu:customization/buttons/close'
-    CUSTOMIZATION_PERIOD_INFINITY = '#menu:customization/period/infinity'
-    CUSTOMIZATION_PERIOD_DAY = '#menu:customization/period/day'
-    CUSTOMIZATION_PERIOD_DAYS = '#menu:customization/period/days'
-    CUSTOMIZATION_PERIOD_IGR = '#menu:customization/period/igr'
-    CUSTOMIZATION_GROUP_IGR = '#menu:customization/group/igr'
     SCREENSHOT_SAVE = '#menu:screenshot/save'
     TECHNICALMAINTENANCE_AMMOTITLEEX = '#menu:technicalMaintenance/ammoTitleEx'
     CONTEXTMENU_VEHICLEINFO = '#menu:contextMenu/vehicleInfo'
@@ -1740,6 +1679,9 @@ class MENU(object):
     FITTINGSELECTPOPOVER_DESCTEXT = '#menu:fittingSelectPopover/descText'
     FITTINGSELECTPOPOVER_DESCTEXT_CRYSTAL = '#menu:fittingSelectPopover/descText/crystal'
     QUOTE = '#menu:quote'
+    CST_ITEM_CTX_MENU_ADDTOCART = '#menu:cst_item_ctx_menu/addToCart'
+    CST_ITEM_CTX_MENU_SELL = '#menu:cst_item_ctx_menu/sell'
+    CST_ITEM_CTX_MENU_REMOVEFROMTANK = '#menu:cst_item_ctx_menu/removeFromTank'
     CONTEXTMENU_ENUM = (CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,
      CONTEXTMENU_GOTONATIONTREE,
@@ -2119,6 +2061,7 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_19,
      LOADING_BATTLETYPES_20,
      LOADING_BATTLETYPES_DESC_20)
+    CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_ADDTOCART, CST_ITEM_CTX_MENU_SELL, CST_ITEM_CTX_MENU_REMOVEFROMTANK)
 
     @classmethod
     def contextmenu(cls, key0):
@@ -2313,6 +2256,15 @@ class MENU(object):
     def loading_battletypes(cls, key0):
         outcome = '#menu:loading/battleTypes/{}'.format(key0)
         if outcome not in cls.LOADING_BATTLETYPES_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def cst_item_ctx_menu(cls, key0):
+        outcome = '#menu:cst_item_ctx_menu/{}'.format(key0)
+        if outcome not in cls.CST_ITEM_CTX_MENU_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

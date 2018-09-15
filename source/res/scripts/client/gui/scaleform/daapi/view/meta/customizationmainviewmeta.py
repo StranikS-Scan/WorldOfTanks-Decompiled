@@ -10,35 +10,62 @@ class CustomizationMainViewMeta(View):
     def closeWindow(self):
         self._printOverrideError('closeWindow')
 
-    def installCustomizationElement(self, id):
+    def installCustomizationElement(self, itemIntCD, areaId, slotId, regionId, season):
         self._printOverrideError('installCustomizationElement')
 
-    def goToTask(self, id):
-        self._printOverrideError('goToTask')
+    def switchToCustom(self):
+        self._printOverrideError('switchToCustom')
 
-    def removeFromShoppingBasket(self, slotId, groupId, id):
-        self._printOverrideError('removeFromShoppingBasket')
+    def switchToStyle(self):
+        self._printOverrideError('switchToStyle')
 
-    def changeCarouselFilter(self):
-        self._printOverrideError('changeCarouselFilter')
+    def showGroupFromTab(self, groupId):
+        self._printOverrideError('showGroupFromTab')
 
-    def setDurationType(self, id):
-        self._printOverrideError('setDurationType')
+    def fadeOutAnchors(self, value):
+        self._printOverrideError('fadeOutAnchors')
 
-    def showPurchased(self, value):
-        self._printOverrideError('showPurchased')
+    def getPropertySheetData(self, itemID):
+        self._printOverrideError('getPropertySheetData')
 
-    def removeSlot(self, groupId, id):
-        self._printOverrideError('removeSlot')
+    def clearFilter(self):
+        self._printOverrideError('clearFilter')
 
-    def revertSlot(self, groupId, id):
-        self._printOverrideError('revertSlot')
+    def refreshFilterData(self):
+        self._printOverrideError('refreshFilterData')
 
-    def showGroup(self, groupId, id):
-        self._printOverrideError('showGroup')
+    def clearCustomizationItem(self, areaId, slotId, regionId, season):
+        self._printOverrideError('clearCustomizationItem')
 
-    def backToSelectorGroup(self):
-        self._printOverrideError('backToSelectorGroup')
+    def changeSeason(self, season):
+        self._printOverrideError('changeSeason')
+
+    def itemContextMenuDisplayed(self):
+        self._printOverrideError('itemContextMenuDisplayed')
+
+    def onPropertySheetLoaded(self):
+        self._printOverrideError('onPropertySheetLoaded')
+
+    def getHistoricalPopoverData(self):
+        self._printOverrideError('getHistoricalPopoverData')
+
+    def updatePropertySheetButtons(self, areOaId, slotId, regionId):
+        self._printOverrideError('updatePropertySheetButtons')
+
+    def onLobbyClick(self):
+        self._printOverrideError('onLobbyClick')
+
+    def setEnableMultiselectRegions(self, value):
+        self._printOverrideError('setEnableMultiselectRegions')
+
+    def onSelectItem(self, index):
+        self._printOverrideError('onSelectItem')
+
+    def resetFilter(self):
+        self._printOverrideError('resetFilter')
+
+    def onChangeSize(self):
+        self._printOverrideError('onChangeSize')
 
     def as_showBuyingPanelS(self):
         return self.flashObject.as_showBuyingPanel() if self._isDAAPIInited() else None
@@ -52,29 +79,41 @@ class CustomizationMainViewMeta(View):
         """
         return self.flashObject.as_setHeaderData(data) if self._isDAAPIInited() else None
 
-    def as_setBonusDeltaDataS(self, data):
+    def as_setSeasonPanelDataS(self, data):
         """
-        :param data: Represented by CustomizationBonusDeltaVO (AS)
+        :param data: Represented by CustomizationSeasonPanelVO (AS)
         """
-        return self.flashObject.as_setBonusDeltaData(data) if self._isDAAPIInited() else None
+        return self.flashObject.as_setSeasonPanelData(data) if self._isDAAPIInited() else None
+
+    def as_setAnchorPositionsS(self, data):
+        """
+        :param data: Represented by CustomizationAnchorsSetVO (AS)
+        """
+        return self.flashObject.as_setAnchorPositions(data) if self._isDAAPIInited() else None
+
+    def as_setAnchorInitS(self, data):
+        """
+        :param data: Represented by CustomizationAnchorInitVO (AS)
+        """
+        return self.flashObject.as_setAnchorInit(data) if self._isDAAPIInited() else None
+
+    def as_updateAnchorDataS(self, data):
+        """
+        :param data: Represented by CustomizationAnchorInitVO (AS)
+        """
+        return self.flashObject.as_updateAnchorData(data) if self._isDAAPIInited() else None
 
     def as_setCarouselDataS(self, data):
         """
-        :param data: Represented by CarouselDataVO (AS)
+        :param data: Represented by CustomizationCarouselDataVO (AS)
         """
         return self.flashObject.as_setCarouselData(data) if self._isDAAPIInited() else None
 
-    def as_setCarouselInitS(self, data):
-        """
-        :param data: Represented by CarouselInitVO (AS)
-        """
-        return self.flashObject.as_setCarouselInit(data) if self._isDAAPIInited() else None
-
-    def as_setCarouselFilterDataS(self, data):
+    def as_setFilterDataS(self, data):
         """
         :param data: Represented by CustomizationCarouselFilterVO (AS)
         """
-        return self.flashObject.as_setCarouselFilterData(data) if self._isDAAPIInited() else None
+        return self.flashObject.as_setFilterData(data) if self._isDAAPIInited() else None
 
     def as_setBottomPanelHeaderS(self, data):
         """
@@ -82,26 +121,41 @@ class CustomizationMainViewMeta(View):
         """
         return self.flashObject.as_setBottomPanelHeader(data) if self._isDAAPIInited() else None
 
-    def as_setSlotsPanelDataS(self, data):
-        """
-        :param data: Represented by CustomizationSlotsPanelVO (AS)
-        """
-        return self.flashObject.as_setSlotsPanelData(data) if self._isDAAPIInited() else None
-
-    def as_showSelectorItemS(self, id):
-        return self.flashObject.as_showSelectorItem(id) if self._isDAAPIInited() else None
-
-    def as_showSelectorGroupS(self):
-        return self.flashObject.as_showSelectorGroup() if self._isDAAPIInited() else None
-
-    def as_updateSlotS(self, data):
-        """
-        :param data: Represented by CustomizationSlotUpdateVO (AS)
-        """
-        return self.flashObject.as_updateSlot(data) if self._isDAAPIInited() else None
-
     def as_setBottomPanelInitDataS(self, data):
         """
         :param data: Represented by CustomizationBottomPanelInitVO (AS)
         """
         return self.flashObject.as_setBottomPanelInitData(data) if self._isDAAPIInited() else None
+
+    def as_setBottomPanelTabsDataS(self, data):
+        """
+        :param data: Represented by CustomizationTabNavigatorVO (AS)
+        """
+        return self.flashObject.as_setBottomPanelTabsData(data) if self._isDAAPIInited() else None
+
+    def as_getDataProviderS(self):
+        return self.flashObject.as_getDataProvider() if self._isDAAPIInited() else None
+
+    def as_onRegionHighlightedS(self, slotId):
+        """
+        :param slotId: Represented by CustomizationSlotIdVO (AS)
+        """
+        return self.flashObject.as_onRegionHighlighted(slotId) if self._isDAAPIInited() else None
+
+    def as_refreshAnchorPropertySheetS(self):
+        return self.flashObject.as_refreshAnchorPropertySheet() if self._isDAAPIInited() else None
+
+    def as_hideAnchorPropertySheetS(self):
+        return self.flashObject.as_hideAnchorPropertySheet() if self._isDAAPIInited() else None
+
+    def as_updateHistoricStatusS(self, data):
+        """
+        :param data: Represented by HistoricIndicatorVO (AS)
+        """
+        return self.flashObject.as_updateHistoricStatus(data) if self._isDAAPIInited() else None
+
+    def as_updateSelectedRegionsS(self, slotId):
+        """
+        :param slotId: Represented by CustomizationSlotIdVO (AS)
+        """
+        return self.flashObject.as_updateSelectedRegions(slotId) if self._isDAAPIInited() else None

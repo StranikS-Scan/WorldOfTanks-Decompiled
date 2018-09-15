@@ -499,11 +499,14 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
                         player.positionControl.bindToVehicle(False, -1)
                     else:
                         player.positionControl.bindToVehicle(False)
-                if prevCtrl.isManualBind() and not self.__curCtrl.isManualBind():
+                elif prevCtrl.isManualBind() and not self.__curCtrl.isManualBind():
                     if isObserverMode:
                         player.positionControl.followCamera(False)
                         player.positionControl.bindToVehicle(True, self.__observerVehicle)
                     else:
+                        player.positionControl.bindToVehicle(True)
+                elif not prevCtrl.isManualBind() and not self.__curCtrl.isManualBind():
+                    if isObserverMode and not self.isObserverFPV:
                         player.positionControl.bindToVehicle(True)
                 newAutoRotationMode = self.__curCtrl.getPreferredAutorotationMode()
                 if newAutoRotationMode is not None:

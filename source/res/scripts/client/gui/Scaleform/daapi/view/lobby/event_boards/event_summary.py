@@ -251,6 +251,7 @@ class _SummaryTable(_Summary):
         items = self.itemsCache.items
         params = self.__getSortedParams()
         infos = self._excelItem.getInfo()
+        infos = sorted(infos, key=lambda info: info.getBattleTs())
         for info in infos:
             vehicleCd = info.getVehicleCd()
             vehicle = items.getItemByCD(vehicleCd)

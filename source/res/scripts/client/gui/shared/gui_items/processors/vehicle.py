@@ -560,6 +560,12 @@ class VehicleAutoBattleBoosterEquipProcessor(VehicleSettingsProcessor):
         super(VehicleAutoBattleBoosterEquipProcessor, self).__init__(vehicle, VEHICLE_SETTINGS_FLAG.AUTO_EQUIP_BOOSTER, value)
 
 
+class VehicleAutoStyleEquipProcessor(VehicleSettingsProcessor):
+
+    def __init__(self, vehicle, value):
+        super(VehicleAutoStyleEquipProcessor, self).__init__(vehicle, VEHICLE_SETTINGS_FLAG.AUTO_RENT_CUSTOMIZATION, value)
+
+
 class VehicleLayoutProcessor(Processor):
     """
     Apply equipments and shells layout

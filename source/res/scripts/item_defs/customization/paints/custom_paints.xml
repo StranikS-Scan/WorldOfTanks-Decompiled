@@ -1,0 +1,42 @@
+<custom_paints.xml>
+  <itemGroup>
+    <priceGroup>	custom paint	</priceGroup>
+    <name>	custom paints	</name>
+    <userString>	#vehicle_customization:repaint/color_group_11	</userString>
+    <vehicleFilter>
+      <include>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+      </include>
+      <include>
+        <levels>	10	</levels>
+      </include>
+    </vehicleFilter>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+    <paint>
+      <id>	200	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_01.png	</texture>
+      <color>	75 47 79 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/custom_color_01	</userString>
+      <season>	ALL	</season>
+      <historical>	false	</historical>
+    </paint>
+    <paint>
+      <id>	226	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_09.png	</texture>
+      <color>	50 101 152 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/custom_color_09	</userString>
+      <season>	ALL	</season>
+      <historical>	false	</historical>
+    </paint>
+  </itemGroup>
+</custom_paints.xml>

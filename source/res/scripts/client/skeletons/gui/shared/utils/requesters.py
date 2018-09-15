@@ -38,6 +38,9 @@ class IInventoryRequester(IRequester):
         """Gets raw data of vehicle by specified inventory ID."""
         raise NotImplementedError
 
+    def getOutfitData(self, intCompactDescr, season):
+        raise NotImplementedError
+
     def getPreviousItem(self, itemTypeID, invDataIdx):
         """Gets data of item that was removed from cache when method 'invalidateItem' is invoked."""
         raise NotImplementedError
@@ -54,20 +57,6 @@ class IInventoryRequester(IRequester):
                                         - for the rest types: type compact descriptor (int)
         @return: dict of items data or specific item data
         """
-        raise NotImplementedError
-
-    def isInInventory(self, intCompactDescr):
-        """ Check whether item is in inventory or not.
-        
-        @param intCompactDescr: item int compact descriptor to check
-        @return: bool flag of item inventory existence
-        """
-        raise NotImplementedError
-
-    def isItemInInventory(self, itemTypeID, invDataIdx):
-        raise NotImplementedError
-
-    def getIgrCustomizationsLayout(self):
         raise NotImplementedError
 
     def getFreeSlots(self, vehiclesSlots):

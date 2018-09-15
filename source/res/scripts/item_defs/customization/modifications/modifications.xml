@@ -1,0 +1,40 @@
+<modifications.xml>
+  <itemGroup>
+    <priceGroup>	effect gold	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+      </include>
+      <include>
+        <levels>	10	</levels>
+      </include>
+    </vehicleFilter>
+    <modification>
+      <id>	1	</id>
+      <texture>	gui/maps/vehicles/modifications/effect.png	</texture>
+      <userString>	#vehicle_customization:modifications/age_effect_01	</userString>
+      <description>	#vehicle_customization:modifications/age_effect_01/description	</description>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+      <effects>
+        <effect>
+          <type>	paint_age	</type>
+          <value>	0.4	</value>
+        </effect>
+        <effect>
+          <type>	paint_fading	</type>
+          <value>	0.05	</value>
+        </effect>
+        <effect>
+          <type>	gloss	</type>
+          <value>	0.45	</value>
+        </effect>
+        <effect>
+          <type>	metallic	</type>
+          <value>	0.230	</value>
+        </effect>
+      </effects>
+    </modification>
+  </itemGroup>
+</modifications.xml>

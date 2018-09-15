@@ -137,6 +137,11 @@ class BattleReplay():
         self.onCommandReceived = Event.Event()
         self.onAmmoSettingChanged = Event.Event()
         self.onStopped = Event.Event()
+        if hasattr(self.__replayCtrl, 'setupStreamExcludeFilter'):
+            import streamIDs
+            self.__replayCtrl.setupStreamExcludeFilter(streamIDs.STREAM_ID_CHAT_MIN, streamIDs.STREAM_ID_CHAT_MAX)
+        if hasattr(self.__replayCtrl, 'setupAvatarMethodExcludeFilter'):
+            self.__replayCtrl.setupAvatarMethodExcludeFilter('messenger_onActionByServer_chat2')
         if constants.IS_DEVELOPMENT:
             try:
                 import development.replay_override
@@ -722,10 +727,6 @@ class BattleReplay():
             if self.__isChatPlaybackEnabled:
                 MessengerEntry.g_instance.gui.addClientMessage(messageText, isCurrentPlayer)
 
-    def onChatAction(self, chatAction):
-        if self.isPlaying:
-            pass
-
     def setFpsPingLag(self, fps, ping, isLaggingNow):
         if self.isPlaying:
             return
@@ -780,12 +781,6 @@ class BattleReplay():
 
     def setResultingFileName(self, fileName, overwriteExisting=False):
         self.__replayCtrl.setResultingFileName(fileName or '', overwriteExisting)
-
-    def cancelSaveCurrMessage(self):
-        self.__replayCtrl.saveCurrMessage(False)
-
-    def saveCurrMessage(self):
-        self.__replayCtrl.saveCurrMessage(True)
 
     def __showInfoMessage(self, msg, args=None):
         if not self.isTimeWarpInProgress:
@@ -882,7 +877,7 @@ class BattleReplay():
             if topWindowContainer is not None:
                 pyView = topWindowContainer.getView({POP_UP_CRITERIA.VIEW_ALIAS: 'simpleDialog'}) or topWindowContainer.getView({POP_UP_CRITERIA.VIEW_ALIAS: 'bootcampSimpleDialog'})
                 if pyView is not None:
-                    topWindowContainer.remove(pyView)
+                    topWindowContainer.removeView(pyView)
                     pyView.destroy()
         return
 

@@ -259,7 +259,7 @@ class Stats(object):
             self.__account._doCmdIntArr(AccountCommands.CMD_DRAW_FREE_AWARD_LISTS, [count], proxy)
             return
 
-    def completePersinalMission(self, questID, withAdditional=False, callback=None):
+    def completePersonalMission(self, questID, withAdditional=False, callback=None):
         if self.__ignore:
             if callback is not None:
                 callback(AccountCommands.RES_NON_PLAYER)

@@ -13,6 +13,9 @@ class LobbyPageMeta(View):
     def notifyCursorOver3dScene(self, isOver3dScene):
         self._printOverrideError('notifyCursorOver3dScene')
 
+    def notifyCursorDragging(self, isDragging):
+        self._printOverrideError('notifyCursorDragging')
+
     def as_showHelpLayoutS(self):
         return self.flashObject.as_showHelpLayout() if self._isDAAPIInited() else None
 

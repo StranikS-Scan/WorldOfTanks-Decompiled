@@ -2,7 +2,10 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/factories.py
 from debug_utils import LOG_WARNING
 from items import vehicles, EQUIPMENT_TYPES, getTypeOfCompactDescr
+from items.components.c11n_constants import CustomizationType, DecalType
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.customization.c11n_items import Customization, Paint, Camouflage, Modification, Decal, Emblem, Inscription, Style
+from gui.shared.gui_items.customization.outfit import Outfit
 from gui.shared.gui_items.dossier import TankmanDossier, AccountDossier, VehicleDossier
 from gui.shared.gui_items.vehicle_modules import Shell, VehicleGun, VehicleChassis, VehicleEngine, VehicleRadio, VehicleTurret, VehicleFuelTank
 from gui.shared.gui_items.artefacts import Equipment, BattleBooster, OptionalDevice
@@ -74,10 +77,10 @@ class GuiItemFactory(IGuiItemsFactory):
         """
         descriptor = vehicles.getItemByCompactDescr(intCompactDescr)
         if descriptor.equipmentType == EQUIPMENT_TYPES.battleBoosters:
-            classType = BattleBooster
+            cls = BattleBooster
         else:
-            classType = Equipment
-        return classType(intCompactDescr, proxy, isBoughtForCredits)
+            cls = Equipment
+        return cls(intCompactDescr, proxy, isBoughtForCredits)
 
     def createOptionalDevice(self, intCompactDescr, proxy=None):
         """
@@ -232,6 +235,49 @@ class GuiItemFactory(IGuiItemsFactory):
         """
         return Badge(descriptor, proxy)
 
+    def createCustomization(self, intCompactDescr, proxy=None):
+        """
+        Creates customization items by the given arguments.
+        
+        :param intCompactDescr: item int compact descriptor
+        :param proxy: instance of ItemsRequester
+        
+        :return: an instance of one of customizations
+        """
+        descriptor = vehicles.getItemByCompactDescr(intCompactDescr)
+        if descriptor.itemType == CustomizationType.CAMOUFLAGE:
+            cls = Camouflage
+        elif descriptor.itemType == CustomizationType.PAINT:
+            cls = Paint
+        elif descriptor.itemType == CustomizationType.MODIFICATION:
+            cls = Modification
+        elif descriptor.itemType == CustomizationType.STYLE:
+            cls = Style
+        elif descriptor.itemType == CustomizationType.DECAL:
+            if descriptor.type == DecalType.EMBLEM:
+                cls = Emblem
+            elif descriptor.type == DecalType.INSCRIPTION:
+                cls = Inscription
+            else:
+                LOG_WARNING('Unknown decal type', descriptor.type)
+                cls = Decal
+        else:
+            LOG_WARNING('Unknown customization type', descriptor.itemType)
+            cls = Customization
+        return cls(intCompactDescr, proxy)
+
+    def createOutfit(self, strCompactDescr=None, isEnabled=False, proxy=None):
+        """
+        Creates an outfit item by the given arguments.
+        
+        :param strCompactDescr: cmSet's string compact descriptor
+        :parma isEnabled: determines whether outfit can be used in battle
+        :param proxy: instance of ItemsRequester
+        
+        :return: an instance of Outfit
+        """
+        return Outfit(strCompactDescr, isEnabled, proxy)
+
 
 _ITEM_TYPES_MAPPING = {_NONE_GUI_ITEM_TYPE: lambda *args, **kwargs: None,
  GUI_ITEM_TYPE.SHELL: GuiItemFactory.createShell,
@@ -249,4 +295,11 @@ _ITEM_TYPES_MAPPING = {_NONE_GUI_ITEM_TYPE: lambda *args, **kwargs: None,
  GUI_ITEM_TYPE.TANKMAN_DOSSIER: GuiItemFactory.createTankmanDossier,
  GUI_ITEM_TYPE.ACCOUNT_DOSSIER: GuiItemFactory.createAccountDossier,
  GUI_ITEM_TYPE.VEHICLE_DOSSIER: GuiItemFactory.createVehicleDossier,
- GUI_ITEM_TYPE.BADGE: GuiItemFactory.createBadge}
+ GUI_ITEM_TYPE.BADGE: GuiItemFactory.createBadge,
+ GUI_ITEM_TYPE.CUSTOMIZATION: GuiItemFactory.createCustomization,
+ GUI_ITEM_TYPE.PAINT: GuiItemFactory.createCustomization,
+ GUI_ITEM_TYPE.CAMOUFLAGE: GuiItemFactory.createCustomization,
+ GUI_ITEM_TYPE.MODIFICATION: GuiItemFactory.createCustomization,
+ GUI_ITEM_TYPE.DECAL: GuiItemFactory.createCustomization,
+ GUI_ITEM_TYPE.STYLE: GuiItemFactory.createCustomization,
+ GUI_ITEM_TYPE.OUTFIT: GuiItemFactory.createOutfit}

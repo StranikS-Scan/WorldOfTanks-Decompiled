@@ -176,11 +176,18 @@ class LobbyView(LobbyPageMeta):
         return
 
     def moveSpace(self, dx, dy, dz):
+        dx, dy, dz = int(dx), int(dy), int(dz)
         if g_hangarSpace.space:
-            g_hangarSpace.space.handleMouseEvent(int(dx), int(dy), int(dz))
+            g_hangarSpace.space.handleMouseEvent(dx, dy, dz)
+        self.fireEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.NOTIFY_SPACE_MOVED, ctx={'dx': dx,
+         'dy': dy,
+         'dz': dz}))
 
     def notifyCursorOver3dScene(self, isOver3dScene):
         self.fireEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, ctx={'isOver3dScene': isOver3dScene}))
+
+    def notifyCursorDragging(self, isDragging):
+        self.fireEvent(events.LobbySimpleEvent(events.LobbySimpleEvent.NOTIFY_CURSOR_DRAGGING, ctx={'isDragging': isDragging}))
 
     def __onIgrTypeChanged(self, roomType, xpFactor):
         icon = gui.makeHtmlString('html_templates:igr/iconSmall', 'premium')

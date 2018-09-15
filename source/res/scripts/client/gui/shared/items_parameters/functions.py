@@ -21,8 +21,8 @@ def extractCrewDescrs(vehicle, replaceNone=True):
     vehicleDescr = vehicle.descriptor
     for idx, tankman in sorted(vehicle.crew, key=itemgetter(0)):
         if tankman is not None:
-            if hasattr(tankman, 'strCompactDescr'):
-                tankmanDescr = tankman.strCompactDescr
+            if hasattr(tankman, 'strCD'):
+                tankmanDescr = tankman.strCD
                 if tankman.efficiencyRoleLevel < tankman.roleLevel:
                     otherVehicleSlots.append(idx)
             else:

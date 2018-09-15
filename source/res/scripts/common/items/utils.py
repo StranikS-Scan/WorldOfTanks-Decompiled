@@ -153,14 +153,12 @@ if IS_CLIENT:
         return vehicleDescr.gun.shotDispersionAngle * shotDispersionFactor
 
 
-    def getClientInvisibility(vehicleDescr, camouflageFactor, factors):
-        camouflageKind = 0
-        for camouflageIndex, camouflageName in CAMOUFLAGE_KIND_INDICES.iteritems():
-            if vehicleDescr.camouflages[camouflageIndex][0] is not None:
-                camouflageKind = camouflageIndex
-                break
-
-        baseInvisibility = vehicleDescr.computeBaseInvisibility(camouflageFactor, camouflageKind)
+    def getClientInvisibility(vehicleDescr, vehicle, camouflageFactor, factors):
+        camouflageId = None
+        camouflage = vehicle.getBonusCamo()
+        if camouflage is not None:
+            camouflageId = camouflage.id
+        baseInvisibility = vehicleDescr.computeBaseInvisibility(camouflageFactor, camouflageId)
         invisibilityFactors = factors['invisibility']
         factors['invisibility'] = invisibilityFactors[VEHICLE_TTC_ASPECTS.DEFAULT]
         moving = getInvisibility(factors, baseInvisibility, True)

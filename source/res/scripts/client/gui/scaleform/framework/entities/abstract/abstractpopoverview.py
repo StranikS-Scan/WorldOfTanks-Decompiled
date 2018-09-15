@@ -10,12 +10,12 @@ class AbstractPopOverView(PopOverViewMeta):
 
     def _populate(self):
         super(AbstractPopOverView, self)._populate()
-        self.addListener(HidePopoverEvent.HIDE_POPOVER, self.__handlerHidePopover)
+        self.addListener(HidePopoverEvent.HIDE_POPOVER, self._handlerHidePopover)
 
-    def __handlerHidePopover(self, event):
+    def _handlerHidePopover(self, event):
         self.destroy()
 
     def _dispose(self):
-        self.removeListener(HidePopoverEvent.HIDE_POPOVER, self.__handlerHidePopover)
+        self.removeListener(HidePopoverEvent.HIDE_POPOVER, self._handlerHidePopover)
         super(AbstractPopOverView, self)._dispose()
         self.fireEvent(HidePopoverEvent(HidePopoverEvent.POPOVER_DESTROYED))

@@ -67,7 +67,8 @@ _AUTOCANNON_SHOT_DISTANCE = 400
 def _processExtraBonuses(vehicle):
     result = []
     withRareCamouflage = vehicle.intCD in g_paramsCache.getVehiclesWithoutCamouflage()
-    if withRareCamouflage or any(map(itemgetter(0), vehicle.descriptor.camouflages)):
+    hasCamo = bool(vehicle.getBonusCamo())
+    if withRareCamouflage or hasCamo:
         result.append((EXTRAS_CAMOUFLAGE, 'extra'))
     return result
 
@@ -214,6 +215,7 @@ class VehicleParams(_ParameterBase):
         super(VehicleParams, self).__init__(self._getVehicleDescriptor(vehicle))
         self.__factors = functions.getVehicleFactors(vehicle)
         self.__coefficients = g_paramsCache.getSimplifiedCoefficients()
+        self.__vehicle = vehicle
 
     @property
     def maxHealth(self):
@@ -495,7 +497,7 @@ class VehicleParams(_ParameterBase):
         return {k:v for k, v in result.iteritems() if v}
 
     def _getVehicleDescriptor(self, vehicle):
-        return vehicle.getCustomizedDescriptor()
+        return vehicle.descriptor
 
     def __adjustmentCoefficient(self, paramName):
         return self._itemDescr.type.clientAdjustmentFactors[paramName]
@@ -517,7 +519,7 @@ class VehicleParams(_ParameterBase):
 
     def __getInvisibilityValues(self):
         camouflageFactor = self.__factors.get('camouflage', 1)
-        moving, still = items_utils.getClientInvisibility(self._itemDescr, camouflageFactor, self.__factors)
+        moving, still = items_utils.getClientInvisibility(self._itemDescr, self.__vehicle, camouflageFactor, self.__factors)
         moving *= ONE_HUNDRED_PERCENTS
         still *= ONE_HUNDRED_PERCENTS
         movingAtShot = moving * self.invisibilityFactorAtShot

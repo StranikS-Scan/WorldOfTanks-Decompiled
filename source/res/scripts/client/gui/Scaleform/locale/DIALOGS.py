@@ -839,14 +839,6 @@ class DIALOGS(object):
     CUSTOMIZATION_REMOVE_ELEMENT_MESSAGE = '#dialogs:customization/remove_element/message'
     CUSTOMIZATION_REMOVE_ELEMENT_SUBMIT = '#dialogs:customization/remove_element/submit'
     CUSTOMIZATION_REMOVE_ELEMENT_CANCEL = '#dialogs:customization/remove_element/cancel'
-    CUSTOMIZATION_REPLACE_ELEMENT_TITLE = '#dialogs:customization/replace_element/title'
-    CUSTOMIZATION_REPLACE_ELEMENT_MESSAGE = '#dialogs:customization/replace_element/message'
-    CUSTOMIZATION_REPLACE_ELEMENT_SUBMIT = '#dialogs:customization/replace_element/submit'
-    CUSTOMIZATION_REPLACE_ELEMENT_CANCEL = '#dialogs:customization/replace_element/cancel'
-    CUSTOMIZATION_REPLACE_ELEMENTS_TITLE = '#dialogs:customization/replace_elements/title'
-    CUSTOMIZATION_REPLACE_ELEMENTS_MESSAGE = '#dialogs:customization/replace_elements/message'
-    CUSTOMIZATION_REPLACE_ELEMENTS_SUBMIT = '#dialogs:customization/replace_elements/submit'
-    CUSTOMIZATION_REPLACE_ELEMENTS_CANCEL = '#dialogs:customization/replace_elements/cancel'
     CUSTOMIZATION_INSTALL_INVOICE_ITEM_WILL_BE_DELETED = '#dialogs:customization/install_invoice_item/will_be_deleted'
     CUSTOMIZATION_INSTALL_INVOICE_ITEM_TEMPORARY_TITLE = '#dialogs:customization/install_invoice_item/temporary/title'
     CUSTOMIZATION_INSTALL_INVOICE_ITEM_TEMPORARY_MESSAGE = '#dialogs:customization/install_invoice_item/temporary/message'
@@ -928,6 +920,10 @@ class DIALOGS(object):
     HOFDISABLED_TITLE = '#dialogs:hofDisabled/title'
     HOFDISABLED_MESSAGE = '#dialogs:hofDisabled/message'
     HOFDISABLED_CANCEL = '#dialogs:hofDisabled/cancel'
+    CUSTOMIZATIONCONFIRMSELL_TITLE = '#dialogs:customizationConfirmSell/title'
+    CUSTOMIZATIONCONFIRMSELL_MESSAGE = '#dialogs:customizationConfirmSell/message'
+    CUSTOMIZATIONCONFIRMSELL_SUBMIT = '#dialogs:customizationConfirmSell/submit'
+    CUSTOMIZATIONCONFIRMSELL_CANCEL = '#dialogs:customizationConfirmSell/cancel'
     LEAVEEVENT_TITLE = '#dialogs:leaveEvent/title'
     LEAVEEVENT_MESSAGE = '#dialogs:leaveEvent/message'
     LEAVEEVENT_SUBMIT = '#dialogs:leaveEvent/submit'
@@ -1770,14 +1766,6 @@ class DIALOGS(object):
      CUSTOMIZATION_REMOVE_ELEMENT_MESSAGE,
      CUSTOMIZATION_REMOVE_ELEMENT_SUBMIT,
      CUSTOMIZATION_REMOVE_ELEMENT_CANCEL,
-     CUSTOMIZATION_REPLACE_ELEMENT_TITLE,
-     CUSTOMIZATION_REPLACE_ELEMENT_MESSAGE,
-     CUSTOMIZATION_REPLACE_ELEMENT_SUBMIT,
-     CUSTOMIZATION_REPLACE_ELEMENT_CANCEL,
-     CUSTOMIZATION_REPLACE_ELEMENTS_TITLE,
-     CUSTOMIZATION_REPLACE_ELEMENTS_MESSAGE,
-     CUSTOMIZATION_REPLACE_ELEMENTS_SUBMIT,
-     CUSTOMIZATION_REPLACE_ELEMENTS_CANCEL,
      CUSTOMIZATION_INSTALL_INVOICE_ITEM_WILL_BE_DELETED,
      CUSTOMIZATION_INSTALL_INVOICE_ITEM_TEMPORARY_TITLE,
      CUSTOMIZATION_INSTALL_INVOICE_ITEM_TEMPORARY_MESSAGE,
@@ -1859,6 +1847,10 @@ class DIALOGS(object):
      HOFDISABLED_TITLE,
      HOFDISABLED_MESSAGE,
      HOFDISABLED_CANCEL,
+     CUSTOMIZATIONCONFIRMSELL_TITLE,
+     CUSTOMIZATIONCONFIRMSELL_MESSAGE,
+     CUSTOMIZATIONCONFIRMSELL_SUBMIT,
+     CUSTOMIZATIONCONFIRMSELL_CANCEL,
      LEAVEEVENT_TITLE,
      LEAVEEVENT_MESSAGE,
      LEAVEEVENT_SUBMIT,

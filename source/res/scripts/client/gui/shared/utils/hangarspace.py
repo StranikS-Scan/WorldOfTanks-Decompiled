@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/HangarSpace.py
 import BigWorld
+import Math
 import Event
 import Keys
 import ResMgr
@@ -94,6 +95,7 @@ class _HangarSpace(object):
         self.__spaceDestroyedDuringLoad = False
         self.__lastUpdatedVehicle = None
         self.onSpaceCreate = Event.Event()
+        self.onSpaceDestroy = Event.Event()
         self.onObjectSelected = Event.Event()
         self.onObjectUnselected = Event.Event()
         self.onObjectClicked = Event.Event()
@@ -113,6 +115,9 @@ class _HangarSpace(object):
 
     def spaceLoading(self):
         return self.__space.spaceLoading()
+
+    def getSlotPositions(self):
+        return self.__space.getSlotPositions()
 
     def init(self, isPremium):
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.START_LOADING_SPACE)
@@ -165,6 +170,7 @@ class _HangarSpace(object):
         if self.__delayedRefreshCallback is not None:
             BigWorld.cancelCallback(self.__delayedRefreshCallback)
             self.__delayedRefreshCallback = None
+        self.onSpaceDestroy()
         self.gameSession.onPremiumNotify -= self.onPremiumChanged
         return
 
@@ -172,7 +178,7 @@ class _HangarSpace(object):
         if self.__inited:
             Waiting.show('loadHangarSpaceVehicle', True)
             self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.START_LOADING_VEHICLE)
-            self.__space.recreateVehicle(vehicle.getCustomizedDescriptor(), vehicle.modelState, self.__changeDone)
+            self.__space.recreateVehicle(vehicle.descriptor, vehicle.modelState, self.__changeDone)
             self.__lastUpdatedVehicle = vehicle
 
     def updatePreviewVehicle(self, vehicle):
@@ -180,6 +186,20 @@ class _HangarSpace(object):
             Waiting.show('loadHangarSpaceVehicle', True)
             self.__space.recreateVehicle(vehicle.descriptor, vehicle.modelState, self.__changeDone)
             self.__lastUpdatedVehicle = vehicle
+
+    def getVehicleEntity(self):
+        """ Get BigWorld entity of the current hangar vehicle.
+        """
+        return self.__space.getVehicleEntity() if self.__inited else None
+
+    def updateVehicleOutfit(self, outfit):
+        """ Updates outfit of the current vehicle.
+        """
+        if self.__inited:
+            self.__space.updateVehicleCustomization(outfit)
+
+    def getCentralPointForArea(self, areaId):
+        return self.__space.getCentralPointForArea(areaId) if self.__inited else Math.Vector3(0.0)
 
     def removeVehicle(self):
         if self.__inited:

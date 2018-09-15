@@ -501,9 +501,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         isCorrupted, origPacketLen, packetLen, origCrc32, crc32 = desc
         if isCorrupted:
             self.base.logStreamCorruption(id, origPacketLen, packetLen, origCrc32, crc32)
-        if BattleReplay.g_replayCtrl.isRecording:
-            if id >= STREAM_ID_CHAT_MIN and id <= STREAM_ID_CHAT_MAX:
-                BattleReplay.g_replayCtrl.cancelSaveCurrMessage()
         callback = self.__rangeStreamIDCallbacks.getCallbackForStreamID(id)
         if callback is not None:
             getattr(self, callback)(id, data)
@@ -1866,12 +1863,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def messenger_onActionByServer_chat2(self, actionID, reqID, args):
         from messenger_common_chat2 import MESSENGER_ACTION_IDS as actions
-        g_replayCtrl = BattleReplay.g_replayCtrl
-        if g_replayCtrl.isRecording and actionID != actions.INIT_BATTLE_CHAT and actions.battleChatCommandFromActionID(actionID) is None:
-            g_replayCtrl.cancelSaveCurrMessage()
         LOG_DEBUG('messenger_onActionByServer', actions.getActionName(actionID), reqID, args)
         MessengerEntry.g_instance.protos.BW_CHAT2.onActionReceived(actionID, reqID, args)
-        return
 
     def processInvitations(self, invitations):
         self.prebattleInvitations.processInvitations(invitations)

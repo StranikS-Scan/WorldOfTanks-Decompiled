@@ -5,7 +5,8 @@ import time
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_top_modules import TopModulesChecker
 from gui.game_control.veh_comparison_basket import PARAMS_AFFECTED_TANKMEN_SKILLS
 from helpers import dependency
-from items import tankmen, vehicles
+from items import tankmen
+from items.components.c11n_components import SeasonType
 from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
@@ -13,7 +14,10 @@ from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.app_loader.loader import g_appLoader
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import Tankman
+from shared_utils import first
+from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.shared.gui_items import IGuiItemsFactory
 MODULES_INSTALLING_ORDER = (GUI_ITEM_TYPE.CHASSIS,
  GUI_ITEM_TYPE.TURRET,
  GUI_ITEM_TYPE.GUN,
@@ -170,44 +174,33 @@ def getCmpConfiguratorMainView():
     return cmpConfiguratorMain
 
 
-def getSuitableCamouflage(vehicle):
-    descr = vehicle.descriptor
-    assert descr is not None
-    assert descr.type is not None
-    camos = vehicles.g_cache.customization(descr.type.customizationNationID)['camouflages']
-    for camoId, camo in camos.iteritems():
-        cd = descr.type.compactDescr
-        if cd in camo['deny'] or camo['allow'] and cd not in camo['allow']:
-            continue
-        return (camoId, camo)
-
-    return (0, None)
+@dependency.replace_none_kwargs(c11nService=ICustomizationService)
+def getSuitableCamouflage(vehicle, c11nService=None):
+    return first(c11nService.getCamouflages(vehicle=vehicle).itervalues())
 
 
 def isCamouflageSet(vehicle):
-    for camo in vehicle.descriptor.camouflages:
-        if camo[0] is not None:
-            return True
-
-    return False
+    return bool(vehicle.getBonusCamo())
 
 
-def applyCamouflage(vehicle, select):
-    descr = vehicle.descriptor
+@dependency.replace_none_kwargs(factory=IGuiItemsFactory)
+def applyCamouflage(vehicle, select, factory=None):
     if select:
-        camoId, camo = getSuitableCamouflage(vehicle)
-        if camoId and camo:
-            descr.setCamouflage(camo['kind'], camoId, time.time(), 0)
+        camo = getSuitableCamouflage(vehicle)
+        if camo:
+            outfit = vehicle.getCustomOutfit(camo.season)
+            outfit = outfit or factory.createOutfit()
+            outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).set(camo)
+            vehicle.setCustomOutfit(camo.season, outfit)
     else:
         removeVehicleCamouflages(vehicle)
 
 
 def removeVehicleCamouflages(vehicle):
-    descr = vehicle.descriptor
-    for i in xrange(len(descr.camouflages)):
-        descr.setCamouflage(i, None, 0, 0)
-
-    return
+    for season in SeasonType.SEASONS:
+        outfit = vehicle.getOutfit(season)
+        if outfit:
+            outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).clear()
 
 
 def getVehicleModules(vehicle):

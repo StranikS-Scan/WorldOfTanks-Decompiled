@@ -36,16 +36,3 @@ class contacts(_profile):
 
     def log(self, name):
         LOG_NOTE('Routine {0} is blocked. Client can not send request on changing contacts by {1} protocol'.format(name, PROTO_TYPE_NAMES[self._protoType]))
-
-
-def cancel_replay_record(func):
-
-    def wrapper(*args, **kwargs):
-        import BattleReplay
-        ctrl = BattleReplay.g_replayCtrl
-        if ctrl.isRecording:
-            ctrl.cancelSaveCurrMessage()
-        else:
-            func(*args, **kwargs)
-
-    return wrapper

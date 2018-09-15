@@ -219,7 +219,8 @@ class ProfileTechnique(ProfileTechniqueMeta):
             if achievementsEnabled:
                 achievementsList = self.__getAchievementsList(stats, vehDossier)
             if self.__showMarksOnGun(vehicleIntCD):
-                specialMarksStats.append(self.__packAchievement(stats, vehDossier, MARK_ON_GUN_RECORD))
+                if self._battlesType != PROFILE_DROPDOWN_KEYS.EPIC_RANDOM or self.lobbyContext.getServerSettings().isEpicRandomMarksOnGunEnabled():
+                    specialMarksStats.append(self.__packAchievement(stats, vehDossier, MARK_ON_GUN_RECORD))
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.TEAM:
             stats = vehDossier.getTeam7x7Stats()
             achievementsList = self.__getAchievementsList(stats, vehDossier)

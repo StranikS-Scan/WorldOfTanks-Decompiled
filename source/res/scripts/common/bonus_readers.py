@@ -197,38 +197,16 @@ def __readBonus_rent(bonus, _name, section):
 def __readBonus_customizations(bonus, _name, section):
     lst = []
     for subsection in section.values():
-        custData = {'isPermanent': subsection.readBool('isPermanent', False),
-         'value': subsection.readInt('value', 0),
+        custData = {'value': subsection.readInt('value', 0),
          'custType': subsection.readString('custType', ''),
-         'id': (subsection.readInt('nationID', -1), subsection.readInt('innationID', -1))}
+         'id': subsection.readInt('id', -1)}
         if subsection.has_key('boundVehicle'):
             custData['vehTypeCompDescr'] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.g_list.getIDsByName(subsection.readString('boundVehicle', '')))
         elif subsection.has_key('boundToCurrentVehicle'):
             custData['boundToCurrentVehicle'] = True
-        if custData['custType'] == 'emblems':
-            custData['id'] = custData['id'][1]
-        isValid, reason = validateCustomizationItem(custData)
+        isValid, item = validateCustomizationItem(custData)
         if not isValid:
-            raise Exception(reason)
-        if 'boundToCurrentVehicle' in custData:
-            customization = vehicles.g_cache.customization
-            if custData['custType'] == 'camouflages':
-                nationID, innationID = custData['id']
-                descr = customization(nationID)['camouflages'][innationID]
-                if descr['allow'] or descr['deny']:
-                    raise Exception('Unsupported camouflage because allow and deny tags %s, %s, %s' % (custData, descr['allow'], descr['deny']))
-            elif custData['custType'] == 'inscriptions':
-                nationID, innationID = custData['id']
-                groupName = customization(nationID)['inscriptions'][innationID][0]
-                allow, deny = customization(nationID)['inscriptionGroups'][groupName][3:5]
-                if allow or deny:
-                    raise Exception('Unsupported inscription because allow and deny tags %s, %s, %s' % (custData, allow, deny))
-            elif custData['custType'] == 'emblems':
-                innationID = custData['id']
-                groups, emblems, _ = vehicles.g_cache.playerEmblems()
-                allow, deny = groups[emblems[innationID][0]][4:6]
-                if allow or deny:
-                    raise Exception('Unsupported inscription because allow and deny tags %s, %s, %s' % (custData, allow, deny))
+            raise Exception(item)
         lst.append(custData)
 
     bonus['customizations'] = lst

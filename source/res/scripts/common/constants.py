@@ -1044,6 +1044,7 @@ class AUTO_MAINTENANCE_TYPE:
     LOAD_AMMO = 2
     EQUIP = 3
     EQUIP_BOOSTER = 4
+    CUSTOMIZATION = 5
 
 
 class AUTO_MAINTENANCE_RESULT:
@@ -1279,7 +1280,7 @@ class USER_SERVER_SETTINGS:
     SNIPER_AIM_2 = 47
     SNIPER_AIM_3 = 48
     SNIPER_AIM_4 = 64
-    _ALL = (HIDE_MARKS_ON_GUN, EULA_VERSION)
+    _ALL = (HIDE_MARKS_ON_GUN, EULA_VERSION, GAME_EXTENDED)
 
     @classmethod
     def isBattleInvitesForbidden(cls, settings):
@@ -1487,6 +1488,15 @@ class EQUIP_TMAN_CODE:
     VEHICLE_LOCKED = 2
     NO_FREE_SLOT = 3
 
+
+class CustomizationInvData(object):
+    ITEMS = 1
+    OUTFITS = 2
+    UNLOCKS = 3
+
+
+C11N_MAX_REGION_NUM = 3
+C11N_MASK_REGION = 2
 
 class EVENT_CLIENT_DATA:
     ACTION = 1
@@ -1771,3 +1781,6 @@ class TARGET_LOST_FLAGS:
     KILLED_BY_ME = 2
     KILLED_BY_OTHERS = 4
     UNREACHABLE = 8
+
+
+GIFT_TANKMAN_TOKEN_NAME = 'WOTD-95479_gift_tankman'

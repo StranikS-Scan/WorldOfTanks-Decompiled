@@ -24,3 +24,4 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     PROFILE_VEHICLE = 'profileVehicle'
     VEH_COMPARE = 'vehCompare'
     CUSTOM_USER = 'customUser'
+    CUSTOMIZATION_ITEM = 'customizationItem'

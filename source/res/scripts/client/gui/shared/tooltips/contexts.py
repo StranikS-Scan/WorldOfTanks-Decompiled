@@ -7,7 +7,8 @@ import gui
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
-from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
+from gui.Scaleform.genConsts.SEASONS_CONSTANTS import SEASONS_CONSTANTS
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events import events_helpers
 from gui.shared.formatters import text_styles
@@ -19,7 +20,7 @@ from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
 from gui.shared.tooltips import TOOLTIP_COMPONENT
 from helpers import dependency
 from helpers.i18n import makeString
-from items import vehicles
+from items.components.c11n_constants import SeasonType
 from shared_utils import findFirst
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.goodies import IGoodiesCache
@@ -411,6 +412,21 @@ class TankmanHangarContext(HangarContext):
         return self.itemsCache.items.getTankman(int(invID))
 
 
+class SeasonsHangarContext(HangarContext):
+
+    def buildItem(self, season):
+        seasonImage = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_SEASON_SUMMER
+        if season == SeasonType.WINTER:
+            seasonImage = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_SEASON_WINTER
+        elif season == SeasonType.DESERT:
+            seasonImage = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_SEASON_DESERT
+        elif season == SeasonType.EVENT:
+            pass
+        return {'seasonImage': seasonImage,
+         'header': TOOLTIPS.seasonHeader(SEASONS_CONSTANTS.SEASONS[season]),
+         'body': TOOLTIPS.seasonBody(SEASONS_CONSTANTS.SEASONS[season])}
+
+
 class TechTreeContext(ShopContext):
 
     def __init__(self, fieldsToExclude=None):
@@ -641,34 +657,6 @@ class ClanProfileFortBuildingContext(ToolTipContext):
 
     def __init__(self, fieldsToExclude=None):
         super(ClanProfileFortBuildingContext, self).__init__(TOOLTIP_COMPONENT.CLAN_PROFILE, fieldsToExclude)
-
-
-class CustomizationContext(ToolTipContext):
-    """ Customization class for tool tip context
-    """
-
-    def __init__(self, fieldsToExclude=None):
-        super(CustomizationContext, self).__init__(TOOLTIP_COMPONENT.CUSTOMIZATION, fieldsToExclude)
-
-    def buildItem(self, nationId, itemId, customizationType):
-        if customizationType == CUSTOMIZATION_ITEM_TYPE.CAMOUFLAGE:
-            result = vehicles.g_cache.customization(nationId)['camouflages'][itemId]
-        elif customizationType == CUSTOMIZATION_ITEM_TYPE.EMBLEM:
-            emblemGroups, emblems, _ = vehicles.g_cache.playerEmblems()
-            emblem = emblems[itemId]
-            allow, deny = emblemGroups.get(emblem[0])[4:]
-            result = list(emblem)
-            result.extend([allow, deny])
-        elif customizationType == CUSTOMIZATION_ITEM_TYPE.INSCRIPTION:
-            customizationData = vehicles.g_cache.customization(nationId)
-            inscriptionGroups = customizationData.get('inscriptionGroups', {})
-            inscription = customizationData.get('inscriptions', {}).get(itemId)
-            allow, deny = inscriptionGroups.get(inscription[0])[3:]
-            result = list(inscription)
-            result.extend([allow, deny])
-        else:
-            result = None
-        return result
 
 
 class ContactContext(ToolTipContext):

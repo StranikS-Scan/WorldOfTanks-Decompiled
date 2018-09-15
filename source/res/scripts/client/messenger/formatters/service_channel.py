@@ -6,12 +6,11 @@ import time
 import types
 from Queue import Queue
 from collections import namedtuple
-import BigWorld
 import ArenaType
+import BigWorld
 import account_helpers
 import constants
 import personal_missions
-from account_helpers import rare_achievements
 from adisp import async, process
 from chat_shared import decompressSysMessage
 from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, ARENA_GUI_TYPE, SYS_MESSAGE_FORT_EVENT_NAMES, EVENT_TYPE
@@ -42,7 +41,7 @@ from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings
 from gui.shared.utils.transport import z_loads
 from helpers import dependency
-from helpers import i18n, html, getClientLanguage, getLocalizedData
+from helpers import i18n, html, getLocalizedData
 from helpers import time_utils
 from items import getTypeInfoByIndex, getTypeInfoByName, vehicles as vehicles_core
 from messenger import g_settings
@@ -83,26 +82,31 @@ def _extendCustomizationData(newData, extendable):
         return
 
 
-@async
-def _getRareTitle(rareID, callback):
-    rare_achievements.getRareAchievementText(getClientLanguage(), rareID, lambda rID, text: callback(text.get('title')))
-
-
-@async
-@process
-def _processRareAchievements(rares, callback):
+def _processRareAchievements(rares):
     unknownAchieves = 0
     achievements = []
     for rareID in rares:
-        title = yield _getRareTitle(rareID)
-        if title is None:
+        achieve = getAchievementFactory((ACHIEVEMENT_BLOCK.RARE, rareID)).create()
+        if achieve is None:
             unknownAchieves += 1
-        achievements.append(title)
+        achievements.append(achieve.getUserName())
 
     if unknownAchieves:
         achievements.append(i18n.makeString('#system_messages:%s/title' % ('actionAchievements' if unknownAchieves > 1 else 'actionAchievement')))
-    callback(achievements)
-    return
+    return achievements
+
+
+def _getRaresAchievementsStirngs(battleResults):
+    dossiers = battleResults.get('dossier', {})
+    rares = []
+    for d in dossiers.itervalues():
+        for (blck, _), rec in d.iteritems():
+            if blck == ACHIEVEMENT_BLOCK.RARE:
+                value = rec['value']
+                if value > 0:
+                    rares.append(value)
+
+    return _processRareAchievements(rares) if rares else None
 
 
 def _getDefaultMessage(normal='', bold=''):
@@ -132,6 +136,9 @@ class ServiceChannelFormatter(object):
         if priorityLevel is None:
             priorityLevel = g_settings.msgTemplates.priority(key)
         return NotificationGuiSettings(self.isNotify(), priorityLevel, isAlert)
+
+    def canBeEmpty(self):
+        return False
 
 
 class WaitItemsSyncFormatter(ServiceChannelFormatter):
@@ -323,8 +330,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
         formatter = getBWFormatter(currency)
         return formatter(credits)
 
-    @classmethod
-    def __makeAchievementsAndBadgesStrings(cls, battleResults):
+    def __makeAchievementsAndBadgesStrings(self, battleResults):
         popUpRecords = []
         badges = []
         for vehIntCD, vehBattleResults in battleResults.get('playerVehicles', {}).iteritems():
@@ -343,6 +349,9 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                 popUpRecords.append(getAchievementFactory((ACHIEVEMENT_BLOCK.TOTAL, 'markOfMastery')).create(value=vehBattleResults['markOfMastery']))
 
         achievementsStrings = map(lambda a: a.getUserName(), sorted(popUpRecords))
+        raresStrings = _getRaresAchievementsStirngs(battleResults)
+        if raresStrings:
+            achievementsStrings.extend(raresStrings)
         if battleResults.get('guiType', 0) == ARENA_GUI_TYPE.RANKED:
             rankedController = dependency.instance(IRankedBattlesController)
             stateChange = rankedController.getRankChangeStatus(PostBattleRankInfo.fromDict(battleResults))
@@ -362,23 +371,28 @@ class AutoMaintenanceFormatter(ServiceChannelFormatter):
     __messages = {AUTO_MAINTENANCE_RESULT.NOT_ENOUGH_ASSETS: {AUTO_MAINTENANCE_TYPE.REPAIR: '#messenger:serviceChannelMessages/autoRepairError',
                                                  AUTO_MAINTENANCE_TYPE.LOAD_AMMO: '#messenger:serviceChannelMessages/autoLoadError',
                                                  AUTO_MAINTENANCE_TYPE.EQUIP: '#messenger:serviceChannelMessages/autoEquipError',
-                                                 AUTO_MAINTENANCE_TYPE.EQUIP_BOOSTER: '#messenger:serviceChannelMessages/autoEquipBoosterError'},
+                                                 AUTO_MAINTENANCE_TYPE.EQUIP_BOOSTER: '#messenger:serviceChannelMessages/autoEquipBoosterError',
+                                                 AUTO_MAINTENANCE_TYPE.CUSTOMIZATION: '#messenger:serviceChannelMessages/autoRentStyleError'},
      AUTO_MAINTENANCE_RESULT.OK: {AUTO_MAINTENANCE_TYPE.REPAIR: '#messenger:serviceChannelMessages/autoRepairSuccess',
                                   AUTO_MAINTENANCE_TYPE.LOAD_AMMO: '#messenger:serviceChannelMessages/autoLoadSuccess',
                                   AUTO_MAINTENANCE_TYPE.EQUIP: '#messenger:serviceChannelMessages/autoEquipSuccess',
-                                  AUTO_MAINTENANCE_TYPE.EQUIP_BOOSTER: '#messenger:serviceChannelMessages/autoEquipBoosterSuccess'},
+                                  AUTO_MAINTENANCE_TYPE.EQUIP_BOOSTER: '#messenger:serviceChannelMessages/autoEquipBoosterSuccess',
+                                  AUTO_MAINTENANCE_TYPE.CUSTOMIZATION: '#messenger:serviceChannelMessages/autoRentStyleSuccess'},
      AUTO_MAINTENANCE_RESULT.NOT_PERFORMED: {AUTO_MAINTENANCE_TYPE.REPAIR: '#messenger:serviceChannelMessages/autoRepairSkipped',
                                              AUTO_MAINTENANCE_TYPE.LOAD_AMMO: '#messenger:serviceChannelMessages/autoLoadSkipped',
                                              AUTO_MAINTENANCE_TYPE.EQUIP: '#messenger:serviceChannelMessages/autoEquipSkipped',
-                                             AUTO_MAINTENANCE_TYPE.EQUIP_BOOSTER: '#messenger:serviceChannelMessages/autoEquipBoosterSkipped'},
+                                             AUTO_MAINTENANCE_TYPE.EQUIP_BOOSTER: '#messenger:serviceChannelMessages/autoEquipBoosterSkipped',
+                                             AUTO_MAINTENANCE_TYPE.CUSTOMIZATION: '#messenger:serviceChannelMessages/autoRentStyleSkipped'},
      AUTO_MAINTENANCE_RESULT.DISABLED_OPTION: {AUTO_MAINTENANCE_TYPE.REPAIR: '#messenger:serviceChannelMessages/autoRepairDisabledOption',
                                                AUTO_MAINTENANCE_TYPE.LOAD_AMMO: '#messenger:serviceChannelMessages/autoLoadDisabledOption',
                                                AUTO_MAINTENANCE_TYPE.EQUIP: '#messenger:serviceChannelMessages/autoEquipDisabledOption',
-                                               AUTO_MAINTENANCE_TYPE.EQUIP_BOOSTER: '#messenger:serviceChannelMessages/autoEquipBoosterDisabledOption'},
+                                               AUTO_MAINTENANCE_TYPE.EQUIP_BOOSTER: '#messenger:serviceChannelMessages/autoEquipBoosterDisabledOption',
+                                               AUTO_MAINTENANCE_TYPE.CUSTOMIZATION: '#messenger:serviceChannelMessages/autoRentStyleDisabledOption'},
      AUTO_MAINTENANCE_RESULT.NO_WALLET_SESSION: {AUTO_MAINTENANCE_TYPE.REPAIR: '#messenger:serviceChannelMessages/autoRepairErrorNoWallet',
                                                  AUTO_MAINTENANCE_TYPE.LOAD_AMMO: '#messenger:serviceChannelMessages/autoLoadErrorNoWallet',
                                                  AUTO_MAINTENANCE_TYPE.EQUIP: '#messenger:serviceChannelMessages/autoEquipErrorNoWallet',
-                                                 AUTO_MAINTENANCE_TYPE.EQUIP_BOOSTER: '#messenger:serviceChannelMessages/autoBoosterErrorNoWallet'}}
+                                                 AUTO_MAINTENANCE_TYPE.EQUIP_BOOSTER: '#messenger:serviceChannelMessages/autoBoosterErrorNoWallet',
+                                                 AUTO_MAINTENANCE_TYPE.CUSTOMIZATION: '#messenger:serviceChannelMessages/autoRentStyleErrorNoWallet'}}
     __currencyTemplates = {Currency.CREDITS: 'PurchaseForCreditsSysMessage',
      Currency.GOLD: 'PurchaseForGoldSysMessage',
      Currency.CRYSTAL: 'PurchaseForCrystalSysMessage'}
@@ -439,7 +453,7 @@ class AchievementFormatter(ServiceChannelFormatter):
                 achievesList.append(i18n.makeString('#achievements:{0:s}'.format(name)))
 
         rares = [ rareID for rareID in message.data.get('rareAchievements', []) if rareID > 0 ]
-        raresList = yield _processRareAchievements(rares)
+        raresList = _processRareAchievements(rares)
         achievesList.extend(raresList)
         if not achievesList:
             callback([_MessageData(None, None)])
@@ -576,7 +590,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         formatted, settings = (None, None)
         if isSynced:
             data = message.data
-            yield self.__prerocessRareAchievements(data)
+            self.__prerocessRareAchievements(data)
             assetType = data.get('assetType', -1)
             handler = self.__assetHandlers.get(assetType)
             if handler is not None:
@@ -812,10 +826,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             template = 'berthsDebitedInvoiceReceived'
         return g_settings.htmlTemplates.format(template, {'amount': BigWorld.wg_getIntegralFormat(abs(berths))})
 
-    @async
-    @process
-    def __prerocessRareAchievements(self, data, callback):
-        yield lambda callback: callback(True)
+    def __prerocessRareAchievements(self, data):
         dossiers = data.get('data', {}).get('dossier', {})
         if dossiers:
             self.__dossierResult = []
@@ -830,23 +841,22 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                                 removedBadgesStrings.append(ms(BADGE.badgeName(name)))
                             else:
                                 addBadgesStrings.append(ms(BADGE.badgeName(name)))
-                        else:
+                        elif block != ACHIEVEMENT_BLOCK.RARE:
                             addDossierStrings.append(ms('#achievements:{0:s}'.format(name)))
 
             addDossiers = [ rare for rare in rares if rare > 0 ]
             if addDossiers:
-                addDossierStrings += (yield _processRareAchievements(addDossiers))
+                addDossierStrings += _processRareAchievements(addDossiers)
             if addDossierStrings:
                 self.__dossierResult.append(g_settings.htmlTemplates.format('dossiersAccruedInvoiceReceived', ctx={'dossiers': ', '.join(addDossierStrings)}))
             delDossiers = [ abs(rare) for rare in rares if rare < 0 ]
             if delDossiers:
-                delDossierStrings = yield _processRareAchievements(delDossiers)
+                delDossierStrings = _processRareAchievements(delDossiers)
                 self.__dossierResult.append(g_settings.htmlTemplates.format('dossiersDebitedInvoiceReceived', ctx={'dossiers': ', '.join(delDossierStrings)}))
             if addBadgesStrings:
                 self.__dossierResult.append(g_settings.htmlTemplates.format('badgeAchievement', ctx={'badges': ', '.join(addBadgesStrings)}))
             if removedBadgesStrings:
                 self.__dossierResult.append(g_settings.htmlTemplates.format('removedBadgeAchievement', ctx={'badges': ', '.join(removedBadgesStrings)}))
-        callback(True)
 
     def __getDossierString(self):
         return '<br/>'.join(self.__dossierResult)
@@ -2024,6 +2034,9 @@ class GoodieFormatter(WaitItemsSyncFormatter):
 
     def _getTemplateName(self):
         raise NotImplementedError
+
+    def canBeEmpty(self):
+        return True
 
 
 class GoodieRemovedFormatter(GoodieFormatter):

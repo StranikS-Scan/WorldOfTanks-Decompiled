@@ -369,6 +369,22 @@ def _migrateTo37(core, data, initialized):
     data['delete'].extend((75, 76))
 
 
+def _migrateTo38(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, 0)
+    currentGameplayMask = storedValue & 65535
+    import ArenaType
+    epicCtfEnabled = bool(currentGameplayMask & 1 << ArenaType.getGameplayIDForName('ctf30x30'))
+    dominationEnabled = bool(currentGameplayMask & 1 << ArenaType.getGameplayIDForName('domination'))
+    if not epicCtfEnabled or not dominationEnabled:
+        currentGameplayMask &= ~ArenaType.getVisibilityMask(ArenaType.getGameplayIDForName('domination30x30'))
+    data['gameplayData'][GAME.GAMEPLAY_MASK] = currentGameplayMask
+
+
+def _migrateTo39(core, data, initialized):
+    data['gameExtData'][GAME.C11N_HISTORICALLY_ACCURATE] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -511,6 +527,14 @@ _versions = ((1,
   False),
  (37,
   _migrateTo37,
+  False,
+  False),
+ (38,
+  _migrateTo38,
+  False,
+  False),
+ (39,
+  _migrateTo39,
   False,
   False))
 

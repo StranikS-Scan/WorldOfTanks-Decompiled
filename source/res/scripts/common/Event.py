@@ -38,6 +38,7 @@ class Event(object):
                 delegate(*args, **kwargs)
             except:
                 LOG_CURRENT_EXCEPTION()
+                raise
 
     def __iadd__(self, delegate):
         if not callable(delegate):

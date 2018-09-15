@@ -16,6 +16,7 @@ elif IS_WEB:
     from web_stubs import *
 if IS_CELLAPP or IS_BASEAPP:
     from server_constants import ARENA_ESTIMATED_LOAD_DEFAULT
+    from typing import Dict
 g_cache = {}
 g_geometryCache = {}
 g_geometryNamesToIDs = {}

@@ -60,3 +60,9 @@ class IGuiItemsFactory(object):
 
     def createBadge(self, descriptor, proxy=None):
         raise NotImplementedError
+
+    def createCustomization(self, intCompactDescr, proxy=None):
+        raise NotImplementedError
+
+    def createOutfit(self, strCompactDescr=None, isEnabled=False, proxy=None):
+        raise NotImplementedError

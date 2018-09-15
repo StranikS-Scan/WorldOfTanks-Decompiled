@@ -128,7 +128,7 @@ def packResultBlockData(title, text):
     return packBuildUpBlockData([packTextBlockData(title, True, BATTLE_RESULT_TYPES.TOOLTIP_RESULT_TTILE_LEFT_LINKAGE), packTextBlockData(text, True, BATTLE_RESULT_TYPES.TOOLTIP_ICON_TEXT_PARAMETER_LINKAGE)])
 
 
-def packImageTextBlockData(title=None, desc=None, img=None, imgPadding=None, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', ignoreImageSize=False, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding=None):
+def packImageTextBlockData(title=None, desc=None, img=None, imgPadding=None, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', ignoreImageSize=False, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding=None, descPadding=None):
     data = {'spriteAtLeft': imgAtLeft,
      'textsAlign': txtAlign,
      'ignoreImageSize': ignoreImageSize}
@@ -146,10 +146,12 @@ def packImageTextBlockData(title=None, desc=None, img=None, imgPadding=None, img
         data['textsGap'] = txtGap
     if txtOffset != 0:
         data['textsOffset'] = txtOffset
+    if descPadding is not None:
+        data['descPadding'] = descPadding
     return packBlockDataItem(linkage, data, padding)
 
 
-def packItemTitleDescBlockData(title=None, desc=None, img=None, imgPadding=None, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ITEM_TITLE_DESC_BLOCK_LANKAGE, padding=None, overlayPath=None, overlayPadding=None, highlightPath=None, highlightPadding=None):
+def packItemTitleDescBlockData(title=None, desc=None, img=None, imgPadding=None, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ITEM_TITLE_DESC_BLOCK_LANKAGE, padding=None, overlayPath=None, overlayPadding=None, highlightPath=None, highlightPadding=None, descPadding=None):
     data = {'spriteAtLeft': imgAtLeft,
      'textsAlign': txtAlign}
     if title is not None:
@@ -166,6 +168,8 @@ def packItemTitleDescBlockData(title=None, desc=None, img=None, imgPadding=None,
         data['textsGap'] = txtGap
     if txtOffset != 0:
         data['textsOffset'] = txtOffset
+    if descPadding is not None:
+        data['descPadding'] = descPadding
     if overlayPath is not None:
         data['overlayPath'] = overlayPath
         if overlayPadding is not None:
@@ -217,11 +221,21 @@ def packSaleTextParameterBlockData(name, saleData, actionStyle=ACTION_PRICE_CONS
     return packBlockDataItem(linkage, data, padding)
 
 
-def packStatusDeltaBlockData(title, valueStr, statusBarData, buffIconSrc='', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_STATUS_DELTA_PARAMETER_BLOCK_LINKAGE, padding=None):
+def packActionTextParameterBlockData(name, value, icon, actionStyle=ACTION_PRICE_CONSTANTS.STATE_ALIGN_TOP, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ACTION_TEXT_PARAMETER_BLOCK_LINKAGE, padding=None, currency=None):
+    data = {'name': name,
+     'value': value,
+     'icon': icon,
+     'actionStyle': actionStyle,
+     'currency': currency}
+    return packBlockDataItem(linkage, data, padding)
+
+
+def packStatusDeltaBlockData(title, valueStr, statusBarData, buffIconSrc='', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_STATUS_DELTA_PARAMETER_BLOCK_LINKAGE, padding=None, deltaBlockGap=5):
     data = {'title': title,
      'valueStr': valueStr,
      'statusBarData': statusBarData,
-     'buffIconSrc': buffIconSrc}
+     'buffIconSrc': buffIconSrc,
+     'deltaBlockGap': deltaBlockGap}
     return packBlockDataItem(linkage, data, padding)
 
 

@@ -97,25 +97,6 @@ class AccountValidator(object):
             except Exception as e:
                 raise ValidateException(e.message, errorCode, self.__packItemData(itemTypeID, itemData))
 
-    def __validateCustomization(self):
-        for intCD, dossier in self.itemsCache.items.getVehicleDossiersIterator():
-            _, nationID, _ = parseIntCompactDescr(intCD)
-            customization = vehicles.g_cache.customization(nationID)
-            camouflages = customization['camouflages']
-            inscriptions = customization['inscriptions']
-            emblems = vehicles.g_cache.playerEmblems()[1]
-            for camoID in list(dossier['camouflages']):
-                if camoID not in camouflages:
-                    raise ValidateException('Invalid camounflage for vehicle %s' % intCD, self.CODES.DOSSIER_CAMOUFLAGES_ERROR, ('camouflage', camoID))
-
-            for insID in list(dossier['inscriptions']):
-                if insID not in inscriptions:
-                    raise ValidateException('Invalid insription for vehicle %s' % intCD, self.CODES.DOSSIER_INSCRIPTIONS_ERROR, ('inscription', insID))
-
-            for emblemID in list(dossier['emblems']):
-                if emblemID not in emblems:
-                    raise ValidateException('Invalid emblem for vehicle %s' % intCD, self.CODES.DOSSIER_EMBLEMS_ERROR, ('emblem', emblemID))
-
     @async
     @process
     def validate(self, callback):

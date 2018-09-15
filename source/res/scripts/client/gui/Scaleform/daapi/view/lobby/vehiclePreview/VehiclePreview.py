@@ -22,7 +22,6 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.customization.shared import getBonusIcon42x42
 from gui.shared import event_dispatcher, events, event_bus_handlers
 from gui.shared.economics import getGUIPrice
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -286,7 +285,7 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         crewData = []
         for idx, tankman in g_currentPreviewVehicle.item.crew:
             role = tankman.descriptor.role
-            crewData.append({'icon': getBonusIcon42x42(role),
+            crewData.append({'icon': RES_ICONS.getItemBonus42x42(role),
              'name': text_styles.middleTitle(ITEM_TYPES.tankman_roles(role)),
              'tooltip': TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER,
              'role': role})

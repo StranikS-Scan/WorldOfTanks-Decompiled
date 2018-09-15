@@ -132,6 +132,22 @@ class ITEM_TYPES(object):
     SHELL_DIMENSION_INCH = '#item_types:shell/dimension/inch'
     SHELL_DIMENSION_MM = '#item_types:shell/dimension/mm'
     MARKER_IGR = '#item_types:marker/igr'
+    CUSTOMIZATION_PAINT = '#item_types:customization/paint'
+    CUSTOMIZATION_CAMOUFLAGE = '#item_types:customization/camouflage'
+    CUSTOMIZATION_MODIFICATION = '#item_types:customization/modification'
+    CUSTOMIZATION_OUTFIT = '#item_types:customization/outfit'
+    CUSTOMIZATION_STYLE = '#item_types:customization/style'
+    CUSTOMIZATION_DECAL = '#item_types:customization/decal'
+    CUSTOMIZATION_EMBLEM = '#item_types:customization/emblem'
+    CUSTOMIZATION_INSCRIPTION = '#item_types:customization/inscription'
+    CUSTOMIZATION_PLURAL_PAINT = '#item_types:customization/plural/paint'
+    CUSTOMIZATION_PLURAL_CAMOUFLAGE = '#item_types:customization/plural/camouflage'
+    CUSTOMIZATION_PLURAL_MODIFICATION = '#item_types:customization/plural/modification'
+    CUSTOMIZATION_PLURAL_OUTFIT = '#item_types:customization/plural/outfit'
+    CUSTOMIZATION_PLURAL_STYLE = '#item_types:customization/plural/style'
+    CUSTOMIZATION_PLURAL_DECAL = '#item_types:customization/plural/decal'
+    CUSTOMIZATION_PLURAL_EMBLEM = '#item_types:customization/plural/emblem'
+    CUSTOMIZATION_PLURAL_INSCRIPTION = '#item_types:customization/plural/inscription'
     SHELL_KINDSABBREVIATION_ENUM = (SHELL_KINDSABBREVIATION_ARMOR_PIERCING,
      SHELL_KINDSABBREVIATION_ARMOR_PIERCING_CR,
      SHELL_KINDSABBREVIATION_ARMOR_PIERCING_HE,
@@ -201,6 +217,30 @@ class ITEM_TYPES(object):
      TANKMAN_ROLES_RADIOMAN,
      TANKMAN_ROLES_GUNNER,
      TANKMAN_ROLES_LOADER)
+    CUSTOMIZATION_ENUM = (CUSTOMIZATION_PAINT,
+     CUSTOMIZATION_CAMOUFLAGE,
+     CUSTOMIZATION_MODIFICATION,
+     CUSTOMIZATION_OUTFIT,
+     CUSTOMIZATION_STYLE,
+     CUSTOMIZATION_DECAL,
+     CUSTOMIZATION_EMBLEM,
+     CUSTOMIZATION_INSCRIPTION,
+     CUSTOMIZATION_PLURAL_PAINT,
+     CUSTOMIZATION_PLURAL_CAMOUFLAGE,
+     CUSTOMIZATION_PLURAL_MODIFICATION,
+     CUSTOMIZATION_PLURAL_OUTFIT,
+     CUSTOMIZATION_PLURAL_STYLE,
+     CUSTOMIZATION_PLURAL_DECAL,
+     CUSTOMIZATION_PLURAL_EMBLEM,
+     CUSTOMIZATION_PLURAL_INSCRIPTION)
+    CUSTOMIZATION_PLURAL_ENUM = (CUSTOMIZATION_PLURAL_PAINT,
+     CUSTOMIZATION_PLURAL_CAMOUFLAGE,
+     CUSTOMIZATION_PLURAL_MODIFICATION,
+     CUSTOMIZATION_PLURAL_OUTFIT,
+     CUSTOMIZATION_PLURAL_STYLE,
+     CUSTOMIZATION_PLURAL_DECAL,
+     CUSTOMIZATION_PLURAL_EMBLEM,
+     CUSTOMIZATION_PLURAL_INSCRIPTION)
 
     @classmethod
     def shell_kindsabbreviation(cls, key0):
@@ -224,6 +264,24 @@ class ITEM_TYPES(object):
     def tankman_roles(cls, key0):
         outcome = '#item_types:tankman/roles/{}'.format(key0)
         if outcome not in cls.TANKMAN_ROLES_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def customization(cls, key0):
+        outcome = '#item_types:customization/{}'.format(key0)
+        if outcome not in cls.CUSTOMIZATION_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def customizationPlural(cls, key0):
+        outcome = '#item_types:customization/plural/{}'.format(key0)
+        if outcome not in cls.CUSTOMIZATION_PLURAL_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

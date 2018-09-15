@@ -120,7 +120,7 @@ class Vehicle(BigWorld.Entity):
         else:
             self.typeDescriptor = self.getDescr(respawnCompactDescr)
             forceReloading = respawnCompactDescr is not None
-            self.appearance, compoundAssembler, prereqs = appearance_cache.createAppearance(self.id, self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, forceReloading)
+            self.appearance, compoundAssembler, prereqs = appearance_cache.createAppearance(self.id, self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, self.publicInfo['outfit'], forceReloading)
             return prereqs
 
     def getDescr(self, respawnCompactDescr):

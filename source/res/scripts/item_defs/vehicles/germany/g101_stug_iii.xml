@@ -285,29 +285,37 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.094	</maxAmplitude>
-        <maxOffset>	0.094	</maxOffset>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
         <gravity>	-8.6	</gravity>
-        <elasticity>	1300	</elasticity>
+        <elasticity>	1100	</elasticity>
         <damping>	2	</damping>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
           <offset>	0.01	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
           <offset>	0.01	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
           <offset>	-0.002	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
           <offset>	-0.002	</offset>
         </node>
         <node>

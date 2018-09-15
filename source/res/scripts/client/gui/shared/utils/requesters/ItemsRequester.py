@@ -7,13 +7,15 @@ import dossiers2
 import nations
 from account_shared import LayoutIterator
 from adisp import async, process
-from constants import ARENA_BONUS_TYPE
+from constants import ARENA_BONUS_TYPE, CustomizationInvData
 from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
 from goodies.goodie_constants import GOODIE_STATE
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES, ItemsCollection, getVehicleSuitablesByType
+from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.utils.requesters.parsers.ShopDataParser import ShopDataParser
 from helpers import dependency
 from items import vehicles, tankmen, getTypeOfCompactDescr
+from items.components.c11n_constants import SeasonType
 from skeletons.gui.shared import IItemsRequester
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 
@@ -212,6 +214,22 @@ class REQ_CRITERIA(object):
         """
         SELECTED = RequestCriteria(PredicateCondition(lambda item: item.isSelected))
         ACHIEVED = RequestCriteria(PredicateCondition(lambda item: item.isAchieved))
+
+    class CUSTOMIZATION:
+        SUMMER = RequestCriteria(PredicateCondition(lambda item: item.isSummer()))
+        WINTER = RequestCriteria(PredicateCondition(lambda item: item.isWinter()))
+        DESERT = RequestCriteria(PredicateCondition(lambda item: item.isDesert()))
+        ALL_SEASON = RequestCriteria(PredicateCondition(lambda item: item.isAllSeason()))
+        SEASON = staticmethod(lambda season: RequestCriteria(PredicateCondition(lambda item: item.season & season)))
+        HISTORICAL = RequestCriteria(PredicateCondition(lambda item: item.isHistorical()))
+        FOR_VEHICLE = staticmethod(lambda vehicle: RequestCriteria(PredicateCondition(lambda item: item.mayInstall(vehicle))))
+        UNLOCKED_BY = staticmethod(lambda token: RequestCriteria(PredicateCondition(lambda item: item.requiredToken == token)))
+        IS_UNLOCKED = staticmethod(lambda progress: RequestCriteria(PredicateCondition(lambda item: not item.requiredToken or item.requiredToken and progress.getTokenCount(item.requiredToken) > 0)))
+        PRICE_GROUP = staticmethod(lambda priceGroup: RequestCriteria(PredicateCondition(lambda item: item.priceGroup == priceGroup)))
+        PRICE_GROUP_TAG = staticmethod(lambda tag: RequestCriteria(PredicateCondition(lambda item: tag in item.priceGroupTags)))
+        FREE_OR_IN_INVENTORY = RequestCriteria(PredicateCondition(lambda item: item.isInInventory or item.getBuyPrice() == ITEM_PRICE_EMPTY))
+        ONLY_IN_GROUP = staticmethod(lambda group: RequestCriteria(PredicateCondition(lambda item: item.groupUserName == group)))
+        DISCLOSABLE = staticmethod(lambda vehicle: RequestCriteria(PredicateCondition(lambda item: item.fullInventoryCount(vehicle) or not item.isHidden)))
 
 
 class RESEARCH_CRITERIA(object):
@@ -429,6 +447,18 @@ class ItemsRequester(IItemsRequester):
                                     if vehicleData is not None:
                                         gunIntCD = vehicleData.descriptor.gun.compactDescr
                                         invalidate[GUI_ITEM_TYPE.GUN].add(gunIntCD)
+
+            if itemTypeID == GUI_ITEM_TYPE.CUSTOMIZATION:
+                for vehicleIntCD, outfitsData in itemsDiff.get(CustomizationInvData.OUTFITS, {}).iteritems():
+                    invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
+                    seasons = (outfitsData or {}).keys() or SeasonType.RANGE
+                    for season in seasons:
+                        invalidate[GUI_ITEM_TYPE.OUTFIT].add((vehicleIntCD, season))
+
+                for cType, items in itemsDiff.get(CustomizationInvData.ITEMS, {}).iteritems():
+                    for idx in items.iterkeys():
+                        intCD = vehicles.makeIntCompactDescrByID('customizationItem', cType, idx)
+                        invalidate[GUI_ITEM_TYPE.CUSTOMIZATION].add(intCD)
 
             invalidate[itemTypeID].update(itemsDiff.keys())
 

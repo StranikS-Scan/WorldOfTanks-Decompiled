@@ -228,6 +228,9 @@
       <compDescr>
         <Type>	STRING	</Type>
       </compDescr>
+      <outfit>
+        <Type>	STRING	</Type>
+      </outfit>
       <index>
         <Type>	UINT8	</Type>
       </index>
@@ -508,6 +511,9 @@
       <vehCompDescr>
         <Type>	STRING	</Type>
       </vehCompDescr>
+      <vehOutfit>
+        <Type>	STRING	</Type>
+      </vehOutfit>
       <vehAmmo>
         <Type>	ARRAY	  <of>	INT32	</of>
         </Type>
@@ -599,6 +605,9 @@
       <group>
         <Type>	UINT8	</Type>
       </group>
+      <historicallyAccurate>
+        <Type>	BOOL	</Type>
+      </historicallyAccurate>
     </Properties>
   </ARENA_ADDPLAYER_INFO>
   <AVATAR_VEHICLE_ROSTER>	FIXED_DICT	  <Properties>

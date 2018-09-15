@@ -14,7 +14,6 @@ from chat_shared import CHAT_RESPONSES, CHAT_ACTIONS, CHAT_COMMANDS, parseComman
 from ids_generators import SequenceIDGenerator
 from messenger import MessengerEntry
 from constants import USER_SEARCH_MODE
-g_replayCtrl = None
 
 class ClientChat(object):
     __dataProcessors = ['_ClientChat__dataTimeProcessor', '_ClientChat__inviteDataTimeProcessor', '_ClientChat__systemMessageTimeProcessor']
@@ -89,15 +88,6 @@ class ClientChat(object):
         MessengerEntry.g_instance.protos.BW.onChatActionFailure(actionData)
 
     def onChatAction(self, chatActionData):
-        global g_replayCtrl
-        if g_replayCtrl is None:
-            import BattleReplay
-            g_replayCtrl = BattleReplay.g_replayCtrl
-        if g_replayCtrl.isRecording:
-            g_replayCtrl.cancelSaveCurrMessage()
-        elif g_replayCtrl.isPlaying:
-            g_replayCtrl.onChatAction(chatActionData)
-            return
         for processor in self.__dataProcessors:
             getattr(self, processor)(chatActionData)
 

@@ -485,7 +485,7 @@ class PersonalMissionByAwardListHandler(PersonalMissionsAutoWindowHandler):
 
     def _needToShowAward(self, ctx):
         _, msg = ctx
-        if msg is not None and msg.data is not None:
+        if msg is not None and isinstance(msg.data, types.DictType):
             completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
             for uniqueQuestID in completedQuestUniqueIDs:
                 if personal_missions.g_cache.isPersonalMission(uniqueQuestID) and uniqueQuestID.endswith('_main_award_list'):
@@ -520,7 +520,7 @@ class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
 
     def _needToShowAward(self, ctx):
         _, msg = ctx
-        if msg is not None and msg.data is not None:
+        if msg is not None and isinstance(msg.data, types.DictType):
             completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
             for uniqueQuestID in completedQuestUniqueIDs:
                 if uniqueQuestID == self.BADGE_QUEST_ID:
@@ -567,7 +567,7 @@ class PersonalMissionOperationUnlockedHandler(BattleQuestsAutoWindowHandler):
 
     def _needToShowAward(self, ctx):
         _, msg = ctx
-        if msg is not None and msg.data is not None:
+        if msg is not None and isinstance(msg.data, types.DictType):
             completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
             for uniqueQuestID in completedQuestUniqueIDs:
                 if uniqueQuestID in self.OPERATION_COMPLETION_IDS:

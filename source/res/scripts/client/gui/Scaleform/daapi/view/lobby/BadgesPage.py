@@ -61,9 +61,10 @@ class BadgesPage(BadgesPageMeta):
     def __updateBadges(self):
         receivedBadgesData = []
         notReceivedBadgesData = []
-        for badge in self.__preprocessBadges():
-            if badge.isSelected:
-                self.as_setSelectedBadgeImgS(badge.getSmallIcon())
+        selected, badges = self.__preprocessBadges()
+        if selected is not None:
+            self.as_setSelectedBadgeImgS(selected.getSmallIcon())
+        for badge in badges:
             badgeVO = _makeBadgeVO(badge)
             if badge.isAchieved:
                 receivedBadgesData.append(badgeVO)
@@ -72,6 +73,7 @@ class BadgesPage(BadgesPageMeta):
         self.as_setReceivedBadgesS({'badgesData': receivedBadgesData})
         self.as_setNotReceivedBadgesS({'title': text_styles.highTitle(BADGE.BADGESPAGE_BODY_UNCOLLECTED_TITLE),
          'badgesData': notReceivedBadgesData})
+        return
 
     @decorators.process('updating')
     def __selectBadges(self, badges=None):
@@ -80,15 +82,17 @@ class BadgesPage(BadgesPageMeta):
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
     def __preprocessBadges(self):
+        selected = None
         result = []
         cache = defaultdict(list)
         for badge in self.itemsCache.items.getBadges().itervalues():
-            if not badge.isSelected:
-                if badge.isObsolete() and not badge.isAchieved:
-                    continue
-                if badge.isCollapsible():
-                    cache[badge.group].append(badge)
-                    continue
+            if badge.isSelected:
+                selected = badge
+            if badge.isObsolete() and not badge.isAchieved:
+                continue
+            if badge.isCollapsible():
+                cache[badge.group].append(badge)
+                continue
             result.append(badge)
 
         for badges in cache.itervalues():
@@ -98,4 +102,4 @@ class BadgesPage(BadgesPageMeta):
                 if badge.isAchieved:
                     break
 
-        return sorted(result)
+        return (selected, sorted(result))

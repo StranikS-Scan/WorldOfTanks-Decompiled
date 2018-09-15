@@ -1,0 +1,54 @@
+<ussr.xml>
+  <itemGroup>
+    <priceGroup>	historical paint	</priceGroup>
+    <name>	ussr colors	</name>
+    <userString>	#vehicle_customization:repaint/color_group_09	</userString>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+      </include>
+      <include>
+        <nations>	ussr	</nations>
+        <levels>	10	</levels>
+      </include>
+    </vehicleFilter>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+    <paint>
+      <id>	130	</id>
+      <texture>	gui/maps/vehicles/repaints/ussr_color_02.png	</texture>
+      <color>	39 43 38 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/ussr_color_02	</userString>
+      <season>	winter	</season>
+      <historical>	true	</historical>
+    </paint>
+    <paint>
+      <id>	131	</id>
+      <texture>	gui/maps/vehicles/repaints/ussr_color_03.png	</texture>
+      <color>	95 91 65 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/ussr_color_03	</userString>
+      <season>	desert	</season>
+      <historical>	true	</historical>
+    </paint>
+    <paint>
+      <id>	214	</id>
+      <texture>	gui/maps/vehicles/repaints/ussr_color_06.png	</texture>
+      <color>	48 58 48 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/ussr_color_06	</userString>
+      <season>	summer	</season>
+      <historical>	true	</historical>
+    </paint>
+  </itemGroup>
+</ussr.xml>

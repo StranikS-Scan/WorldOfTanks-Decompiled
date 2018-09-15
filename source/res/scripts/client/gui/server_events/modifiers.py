@@ -14,6 +14,7 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.money import Currency, MONEY_UNDEFINED
 from gui.server_events import formatters
+from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
 _VEH_TYPE_IDX = 1
@@ -538,15 +539,6 @@ class EconomicsSet(ActionModifier):
          'passportChangeCost': bwr(self.handlerPassportChangeCost),
          'femalePassportChangeCost': bwr(self.handlerFemalePassportChangeCost),
          'freeXPToTManXPRate': bwr(self.handlerFreeXPToTManXPRate),
-         'camouflagePacketInfCost': bwr(self.handlerCamouflagePacketInfCost),
-         'camouflagePacket7Cost': bwr(self.handlerCamouflagePacket7Cost),
-         'camouflagePacket30Cost': bwr(self.handlerCamouflagePacket30Cost),
-         'inscriptionPacketInfCost': bwr(self.handlerInscriptionPacketInfCost),
-         'inscriptionPacket7Cost': bwr(self.handlerInscriptionPacket7Cost),
-         'inscriptionPacket30Cost': bwr(self.handlerInscriptionPacket30Cost),
-         'emblemPacketInfCost': bwr(self.handlerEmblemPacketInfCost),
-         'emblemPacket7Cost': bwr(self.handlerEmblemPacket7Cost),
-         'emblemPacket30Cost': bwr(self.handlerEmblemPacket30Cost),
          'tradeInSellPriceFactor': bwr(self.handlerTradeInSellPriceFactor)}
 
     def getParamName(self):
@@ -695,42 +687,6 @@ class EconomicsSet(ActionModifier):
         default = self.itemsCache.items.shop.defaults.getPremiumPacketCost(360)
         return self._calculateDiscount('premiumPacket360', value, default, _DT.PERCENT)
 
-    def handlerCamouflagePacketInfCost(self, value):
-        default = self.itemsCache.items.shop.defaults.getCamouflageCost()
-        return self._calculateDiscount('camouflagePacketInfCost', value, default[0], _DT.PERCENT, self._calcCustomizationDiscountValue)
-
-    def handlerCamouflagePacket7Cost(self, value):
-        default = self.itemsCache.items.shop.defaults.getCamouflageCost(7)
-        return self._calculateDiscount('camouflagePacket7Cost', value, default[0], _DT.PERCENT, self._calcCustomizationDiscountValue)
-
-    def handlerCamouflagePacket30Cost(self, value):
-        default = self.itemsCache.items.shop.defaults.getCamouflageCost(30)
-        return self._calculateDiscount('camouflagePacket30Cost', value, default[0], _DT.PERCENT, self._calcCustomizationDiscountValue)
-
-    def handlerInscriptionPacketInfCost(self, value):
-        default = self.itemsCache.items.shop.defaults.getInscriptionCost()
-        return self._calculateDiscount('inscriptionPacketInfCost', value, default[0], _DT.PERCENT, self._calcCustomizationDiscountValue)
-
-    def handlerInscriptionPacket7Cost(self, value):
-        default = self.itemsCache.items.shop.defaults.getInscriptionCost(7)
-        return self._calculateDiscount('inscriptionPacket7Cost', value, default[0], _DT.PERCENT, self._calcCustomizationDiscountValue)
-
-    def handlerInscriptionPacket30Cost(self, value):
-        default = self.itemsCache.items.shop.defaults.getInscriptionCost(30)
-        return self._calculateDiscount('inscriptionPacket30Cost', value, default[0], _DT.PERCENT, self._calcCustomizationDiscountValue)
-
-    def handlerEmblemPacketInfCost(self, value):
-        default = self.itemsCache.items.shop.defaults.getEmblemCost()
-        return self._calculateDiscount('emblemPacketInfCost', value, default[0], _DT.PERCENT, self._calcCustomizationDiscountValue)
-
-    def handlerEmblemPacket7Cost(self, value):
-        default = self.itemsCache.items.shop.defaults.getEmblemCost(7)
-        return self._calculateDiscount('emblemPacket7Cost', value, default[0], _DT.PERCENT, self._calcCustomizationDiscountValue)
-
-    def handlerEmblemPacket30Cost(self, value):
-        default = self.itemsCache.items.shop.defaults.getEmblemCost(30)
-        return self._calculateDiscount('emblemPacket30Cost', value, default[0], _DT.PERCENT, self._calcCustomizationDiscountValue)
-
     def handlerTradeInSellPriceFactor(self, value):
         return self._calculateDiscount('tradeInSellPriceFactor', value, 1, _DT.TRADE_IN_PERCENT, discountValueCalculator=lambda v, _: int(v * 100))
 
@@ -772,57 +728,6 @@ class EconomicsMul(EconomicsSet):
 
     def _calcCustomizationDiscountValue(self, value, default):
         return _getDiscountByMultiplier(float(value), 100)
-
-
-class CamouflagePriceMul(_VehiclePrice):
-
-    def __init__(self, name, params):
-        super(_VehiclePrice, self).__init__(name, params, section=ACTION_SECTION_TYPE.CUSTOMIZATION)
-
-    def packDiscounts(self, sorting=True):
-        result = {}
-        items = self.parse().iteritems()
-        if sorting:
-            items = sorted(items, key=operator.itemgetter(0))
-        for vehicle, priceMult in items:
-            result[vehicle.intCD] = _ActionDiscountValue(discountName=vehicle, discountValue=int(round((1 - priceMult) * 100)), discountType=_DT.PERCENT)
-
-        return result
-
-    def _getMultName(self, idx):
-        return 'priceFactorMultiplier%d' % idx
-
-
-class EmblemPriceByGroupsMul(_DiscountsListAction):
-
-    def __init__(self, name, params):
-        super(EmblemPriceByGroupsMul, self).__init__(name, params, ACTION_MODIFIER_TYPE.DISCOUNT, ACTION_SECTION_TYPE.CUSTOMIZATION)
-
-    def packDiscounts(self, sorting=True):
-        result = {}
-        groups, _, _ = vehicles.g_cache.playerEmblems()
-        for groupName, priceMult in self.parse().iteritems():
-            if groupName in groups:
-                result[groupName] = _ActionDiscountValue(discountName=groupName, discountValue=int(round((1 - priceMult) * 100)), discountType=_DT.PERCENT)
-            LOG_ERROR('Given group name is not available: ', groupName)
-
-        return result
-
-    def _makeResultItem(self, paramValue):
-        return str(paramValue)
-
-    def _getParamName(self, idx):
-        return 'name%d' % idx
-
-    def _getMultName(self, idx):
-        return 'priceFactorMultiplier%d' % idx
-
-    def getValues(self, action):
-        result = {}
-        for group, value in self.parse().iteritems():
-            result[group] = [(value, action.getID())]
-
-        return result
 
 
 class EquipmentPriceSet(_EquipmentPrice, _BuyPriceSet):
@@ -1135,6 +1040,69 @@ class BoostersPriceAll(_ItemsPriceAll):
         return result
 
 
+class _C11nPrice(_ItemsPrice):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def _getParamName(self, idx):
+        return 'name%d' % idx
+
+    def _parse(self):
+        result = {}
+        for idx in xrange(self.MAX_VEH_COUNT):
+            paramName = self._getParamName(idx)
+            if paramName in self._params:
+                priceGroup = self._params[paramName]
+                items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CUSTOMIZATIONS, REQ_CRITERIA.CUSTOMIZATION.PRICE_GROUP(priceGroup))
+                for item in items.itervalues():
+                    result[item] = float(self._params.get(self._getMultName(idx), self.DEFAULT_PRICE_MULT))
+
+        return result
+
+
+class C11nPriceGroupPriceSet(_C11nPrice, _BuyPriceSet):
+    pass
+
+
+class C11nPriceGroupPriceMul(_C11nPrice, _BuyPriceMul):
+
+    def _getMultName(self, idx):
+        return 'priceFactorMultiplier%d' % idx
+
+
+class C11nPriceGroupPriceByTagMul(C11nPriceGroupPriceMul):
+
+    def _getParamName(self, idx):
+        return 'tag%d' % idx
+
+    def _parse(self):
+        result = {}
+        for idx in xrange(self.MAX_VEH_COUNT):
+            paramName = self._getParamName(idx)
+            if paramName in self._params:
+                tag = self._params[paramName]
+                items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CUSTOMIZATIONS, REQ_CRITERIA.CUSTOMIZATION.PRICE_GROUP_TAG(tag))
+                for item in items.itervalues():
+                    result[item] = float(self._params.get(self._getMultName(idx), self.DEFAULT_PRICE_MULT))
+
+        return result
+
+
+class C11nPriceGroupPriceAll(_ItemsPriceAll):
+
+    def __init__(self, name, params):
+        super(C11nPriceGroupPriceAll, self).__init__(name, params, modType=ACTION_MODIFIER_TYPE.DISCOUNT, section=ACTION_SECTION_TYPE.CUSTOMIZATION, itemType=GUI_ITEM_TYPE.CUSTOMIZATIONS)
+
+    def packDiscounts(self, sorting=True):
+        result = {}
+        items = self.parse().iteritems()
+        if sorting:
+            items = sorted(items, key=operator.itemgetter(0))
+        for (_, item), value in items:
+            result[item.itemTypeID, item.id] = _ActionDiscountValue(discountName=item, discountValue=int(round((1 - float(value)) * 100)), discountType=_DT.PERCENT)
+
+        return result
+
+
 _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('set_EconomicsParams', EconomicsSet),
  ('mul_EconomicsPrices', EconomicsMul),
@@ -1161,8 +1129,10 @@ _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('mul_ShellPriceNation', ShellPriceNation),
  ('mul_ShellPrice', ShellPriceMul),
  ('set_ShellPrice', ShellPriceSet),
- ('mul_CamouflagePriceFactor', CamouflagePriceMul),
- ('mul_EmblemPriceFactorByGroups', EmblemPriceByGroupsMul),
+ ('set_PriceGroupPrice', C11nPriceGroupPriceSet),
+ ('mul_PriceGroupPrice', C11nPriceGroupPriceMul),
+ ('mul_PriceGroupPriceByTag', C11nPriceGroupPriceByTagMul),
+ ('mul_PriceGroupPriceAll', C11nPriceGroupPriceAll),
  ('set_GoodiePrice', BoosterPriceSet),
  ('mul_GoodiePrice', BoosterPriceMul),
  ('mul_GoodiePriceAll', BoostersPriceAll))

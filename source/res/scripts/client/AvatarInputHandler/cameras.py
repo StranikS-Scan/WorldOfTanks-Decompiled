@@ -205,6 +205,25 @@ def overrideCameraMatrix(position, direction):
     freeCamera.enable(overridenCameraMatrix)
 
 
+def get2DAngleFromCamera(vector):
+    """
+    Calculates the angle between the provided vector and the camera vector in the x-z plane
+    
+    :param vector: Vector to measure with the camera angle
+    :return: The angle in radians between the provided vector and the camera vector
+    """
+    modifiedVector = Math.Vector3(vector.x, 0, vector.z)
+    dir = Math.Vector3(BigWorld.camera().direction)
+    dir.y = 0
+    if dir.length and modifiedVector.length:
+        dir.normalise()
+        modifiedVector.normalise()
+    else:
+        return math.pi
+    dot = max(min(dir.dot(modifiedVector), 1), -1)
+    return math.acos(dot)
+
+
 class FovExtended(object):
     __instance = None
     __HOR_TO_VERT_RATIO = 60.0 / 95.0

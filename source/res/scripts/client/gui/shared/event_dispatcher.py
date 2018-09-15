@@ -11,10 +11,8 @@ from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils.functions import getViewName, getUniqueViewName
 from gui.shared.utils import isPopupsWindowsOpenDisabled
-from CurrentVehicle import HeroTankPreviewAppearance
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
-import constants
 
 class SETTINGS_TAB_INDEX(object):
     GAME = 0

@@ -16,6 +16,9 @@ class CustomizationBuyWindowMeta(AbstractWindowView):
     def changePriceItem(self, id, priceMode):
         self._printOverrideError('changePriceItem')
 
+    def applyToTankChanged(self, selected):
+        self._printOverrideError('applyToTankChanged')
+
     def as_getPurchaseDPS(self):
         return self.flashObject.as_getPurchaseDP() if self._isDAAPIInited() else None
 

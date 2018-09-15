@@ -1,18 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/settings/tooltips.py
-from gui.Scaleform.daapi.view.lobby.customization.tooltips import ElementTooltip as CustomizationElementTooltip, QuestElementTooltip as CustomizationQuestElementTooltip
+from gui.Scaleform.daapi.view.lobby.customization.tooltips import ElementTooltip as CustomizationElementTooltip
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_calendar_day_tooltip import RankedCalendarDayTooltip
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_calendar_steps_tooltip import RankedCalendarStepsTooltip
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_selector_tooltip import RankedSelectorTooltip
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_step_tooltip import RankedStepTooltip
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.tooltips import vehicle, tankman, skill, shell, module, achievement, cybersport, common, contexts, battle_consumable, tutorial, fortifications, boosters, veh_cmp, quests, ranked, battle_booster, bootcamp, personal_missions, elen
+from gui.shared.tooltips import vehicle, tankman, seasons, skill, shell, module, achievement, cybersport, common, contexts, battle_consumable, tutorial, fortifications, boosters, veh_cmp, quests, ranked, battle_booster, bootcamp, personal_missions, elen
 from gui.shared.tooltips.filter import VehicleFilterTooltip
 from gui.shared.tooltips.wgm_currency import WGMGoldCurrencyTooltip, WGMCreditsCurrencyTooltip
 DYNAMIC_TOOLTIPS = {TOOLTIPS_CONSTANTS.GOLD_STATS: WGMGoldCurrencyTooltip(contexts.ToolTipContext(None)),
  TOOLTIPS_CONSTANTS.CREDITS_STATS: WGMCreditsCurrencyTooltip(contexts.ToolTipContext(None))}
 TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_UI,
                               'method': lambda invID, isCurrentVehicle=None: tankman.TankmanTooltipData(contexts.TankmanHangarContext()).buildToolTip(invID),
+                              'complex': None},
+ TOOLTIPS_CONSTANTS.SEASONS: {'tooltip': TOOLTIPS_CONSTANTS.SEASONS_UI,
+                              'method': lambda season: seasons.SeasonsTooltipData(contexts.SeasonsHangarContext()).buildToolTip(season),
                               'complex': None},
  TOOLTIPS_CONSTANTS.TANKMAN_SKILL: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_SKILL_UI,
                                     'method': skill.SkillTooltipData(contexts.PersonalCaseContext(fieldsToExclude=('count',))).buildToolTip,
@@ -251,9 +254,6 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.SETTINGS_BUTTON: {'tooltip': TOOLTIPS_CONSTANTS.SETTINGS_BUTTON_UI,
                                       'method': common.SettingsButtonTooltipData(contexts.HangarServerStatusContext()).buildToolTip,
                                       'complex': None},
- TOOLTIPS_CONSTANTS.CUSTOMIZATION_ITEM: {'tooltip': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI,
-                                         'method': CustomizationQuestElementTooltip(contexts.TechCustomizationContext()).buildToolTip,
-                                         'complex': None},
  TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM: {'tooltip': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM_UI,
                                               'method': CustomizationElementTooltip(contexts.TechCustomizationContext()).buildToolTip,
                                               'complex': None},

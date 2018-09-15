@@ -232,7 +232,7 @@ class PurchaseDataProvider(SortableDAAPIDataProvider):
     def fini(self):
         self.clear()
         self._cart = None
-        self._dispose()
+        self.destroy()
         return
 
     def setSelected(self, itemIdx, selected):

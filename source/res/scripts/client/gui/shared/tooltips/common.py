@@ -548,7 +548,7 @@ class SettingsButtonTooltipData(BlocksTooltipData):
         :return:
         """
         pingValue, pingStatus = pingData
-        pintStr = formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue)
+        pintStr = formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue, useBigSize=True)
         return formatters.packTextParameterBlockData(cls.__formatServerName(name, isSelected), pintStr, valueWidth=55, gap=2, padding=formatters.packPadding(left=40))
 
     @classmethod
@@ -561,7 +561,7 @@ class SettingsButtonTooltipData(BlocksTooltipData):
         for key, name, csisStatus, peripheryID in simpleHostList:
             pingValue, pingStatus = cls.__getPingData(key)
             isSelected = currServUrl == key
-            pintStr = formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue)
+            pintStr = formatPingStatus(csisStatus, isColorBlind, isSelected, pingStatus, pingValue, useBigSize=True)
             serverNames.append(cls.__formatServerName(name, isSelected))
             pingTexts.append(pintStr)
 

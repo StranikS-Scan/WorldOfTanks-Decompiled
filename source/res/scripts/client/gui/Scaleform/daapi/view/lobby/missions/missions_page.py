@@ -270,7 +270,7 @@ class MissionView(MissionsViewBaseMeta):
         self.eventsCache.onSyncCompleted -= self.__onEventsUptate
         g_clientUpdateManager.removeObjectCallbacks(self)
         self._builder.clear()
-        self._questsDP.clear()
+        self._questsDP.fini()
         self._builder = None
         self._questsDP = None
         if self.__updateDataCallback is not None:
@@ -365,6 +365,10 @@ class _GroupedQuestsProvider(ListDAAPIDataProvider):
     @property
     def collection(self):
         return self.__list
+
+    def fini(self):
+        self.clear()
+        self.destroy()
 
     def buildList(self, dpList):
         self.__list = dpList

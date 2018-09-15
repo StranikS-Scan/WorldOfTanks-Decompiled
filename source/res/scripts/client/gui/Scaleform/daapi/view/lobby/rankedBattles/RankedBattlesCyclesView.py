@@ -223,7 +223,11 @@ class RankedBattlesCyclesView(LobbySubView, RankedBattlesCyclesViewMeta):
          'cycleAwards': rank.getAwardsVOs(forCycleFinish=True)}
 
     def __getCurrentCycleVehicleRankRow(self):
-        vehicleRank = first(self.rankedController.getVehicleRanksChain(g_currentVehicle.item))
+        isMaxRank = self.rankedController.getCurrentRank(g_currentVehicle.item) == self.rankedController.getMaxRank()
+        if self.rankedController.isAccountMastered() and not isMaxRank:
+            vehicleRank = self.rankedController.getCurrentRank(g_currentVehicle.item)
+        else:
+            vehicleRank = first(self.rankedController.getVehicleRanksChain(g_currentVehicle.item))
         rankIcon = {'imageSrc': vehicleRank.getIcon('small'),
          'isEnabled': vehicleRank.isAcquired(),
          'rankID': str(vehicleRank.getID())}

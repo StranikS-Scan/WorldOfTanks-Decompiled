@@ -9,6 +9,7 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.Scaleform.daapi.view.lobby.vehiclePreview.vehicle_preview_dp import DefaultVehPreviewDataProvider
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
 from gui.Scaleform.daapi.view.meta.VehiclePreviewMeta import VehiclePreviewMeta
 from gui.Scaleform.framework import g_entitiesFactories
@@ -21,11 +22,10 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.customization.shared import getBonusIcon42x42
-from gui.shared import event_dispatcher
+from gui.shared import event_dispatcher, events, event_bus_handlers
 from gui.shared.economics import getGUIPrice
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, icons
-from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared.money import Currency
 from gui.shared.tooltips.formatters import getActionPriceData
 from gui.shared.utils.functions import makeTooltip
@@ -33,12 +33,13 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IVehicleComparisonBasket, ITradeInController, IRestoreController
 from skeletons.gui.shared import IItemsCache
+from gui.shared.utils.HangarSpace import g_hangarSpace
 CREW_INFO_TAB_ID = 'crewInfoTab'
 FACT_SHEET_TAB_ID = 'factSheetTab'
 TAB_ORDER = [FACT_SHEET_TAB_ID, CREW_INFO_TAB_ID]
 TAB_DATA_MAP = {FACT_SHEET_TAB_ID: (VEHPREVIEW_CONSTANTS.FACT_SHEET_LINKAGE, VEHICLE_PREVIEW.INFOPANEL_TAB_FACTSHEET_NAME),
  CREW_INFO_TAB_ID: (VEHPREVIEW_CONSTANTS.CREW_INFO_LINKAGE, VEHICLE_PREVIEW.INFOPANEL_TAB_CREWINFO_NAME)}
-_ButtonState = namedtuple('_ButtonState', 'enabled, price, label, isAction, currencyIcon, actionType, action, tooltip')
+_ButtonState = namedtuple('_ButtonState', 'enabled, price, label, isAction, currencyIcon, action, tooltip')
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
  VIEW_ALIAS.LOBBY_RESEARCH: 'researchTree',
@@ -51,6 +52,7 @@ def _buildBuyButtonTooltip(key):
 
 class VehiclePreview(LobbySubView, VehiclePreviewMeta):
     __background_alpha__ = 0.0
+    __metaclass__ = event_bus_handlers.EventBusListener
     itemsCache = dependency.descriptor(IItemsCache)
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
     tradeIn = dependency.descriptor(ITradeInController)
@@ -61,9 +63,15 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         self._actionType = None
         self._showVehInfoPanel = True
         self._showHeaderCloseBtn = True
-        self.__vehicleCD = ctx.get('itemCD')
+        self.__vehicleCD = ctx['itemCD']
         self.__vehicleStrCD = ctx.get('vehicleStrCD')
         self.__backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
+        if 'previewAppearance' in ctx:
+            self.__vehAppearanceChanged = True
+            g_currentPreviewVehicle.resetAppearance(ctx['previewAppearance'])
+        else:
+            self.__vehAppearanceChanged = False
+        self.__previewDP = ctx.get('previewDP', DefaultVehPreviewDataProvider())
         self._skipConfirm = skipConfirm
         self._disableBuyButton = False
         return
@@ -80,8 +88,8 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         self.comparisonBasket.onChange += self.__onCompareBasketChanged
         self.comparisonBasket.onSwitchChange += self.__updateHeaderData
         self.restores.onRestoreChangeNotify += self.__onRestoreChanged
+        g_hangarSpace.onSpaceCreate += self.__onHangarCreateOrRefresh
         if g_currentPreviewVehicle.isPresent():
-            self.__updateHeaderData()
             self.__fullUpdate()
         else:
             event_dispatcher.showHangar()
@@ -96,7 +104,12 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         self.comparisonBasket.onChange -= self.__onCompareBasketChanged
         self.comparisonBasket.onSwitchChange -= self.__updateHeaderData
         self.restores.onRestoreChangeNotify -= self.__onRestoreChanged
+        g_hangarSpace.onSpaceCreate -= self.__onHangarCreateOrRefresh
         g_currentPreviewVehicle.selectNoVehicle()
+        self.__previewDP = None
+        if self.__vehAppearanceChanged:
+            g_currentPreviewVehicle.resetAppearance()
+        return
 
     def closeView(self):
         self.onBackClick()
@@ -112,11 +125,7 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         AccountSettings.setSettings(PREVIEW_INFO_PANEL_IDX, index)
 
     def onBuyOrResearchClick(self):
-        if self._actionType == ItemsActionsFactory.UNLOCK_ITEM:
-            unlockProps = g_techTreeDP.getUnlockProps(self.__vehicleCD)
-            ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, self.__vehicleCD, unlockProps.parentID, unlockProps.unlockIdx, unlockProps.xpCost, skipConfirm=self._skipConfirm)
-        else:
-            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, self.__vehicleCD, skipConfirm=self._skipConfirm)
+        self.__previewDP.buyAction(self._actionType, self.__vehicleCD, self._skipConfirm)
 
     def onCompareClick(self):
         """
@@ -125,19 +134,14 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
         self.comparisonBasket.addVehicle(self.__vehicleCD, initParameters={'strCD': g_currentPreviewVehicle.item.descriptor.makeCompactDescr()})
 
     def _updateBtnState(self, *args):
-        if g_currentPreviewVehicle.isPresent():
+        if g_currentPreviewVehicle.item is None:
+            return
+        else:
             btnData = self.__getBtnData()
-            isAction = btnData.isAction
-            self._actionType = btnData.actionType
-            self.as_updateBuyButtonS({'enabled': btnData.enabled,
-             'label': btnData.label,
-             'tooltip': btnData.tooltip})
-            self.as_updatePriceS({'value': btnData.price,
-             'icon': btnData.currencyIcon,
-             'showAction': isAction,
-             'actionTooltipType': TOOLTIPS_CONSTANTS.ACTION_PRICE if isAction else None,
-             'actionData': btnData.action})
-        return
+            self._actionType = self.__previewDP.getBuyType(g_currentPreviewVehicle.item)
+            self.as_updateBuyButtonS(self.__previewDP.getBuyButtonState(btnData))
+            self.as_updatePriceS(self.__previewDP.getPriceInfo(btnData))
+            return
 
     def __fullUpdate(self):
         selectedTabInd = AccountSettings.getSettings(PREVIEW_INFO_PANEL_IDX)
@@ -221,7 +225,7 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
                     tooltip = _buildBuyButtonTooltip('notEnoughCredits')
             if self._disableBuyButton:
                 mayObtainForMoney = False
-            return _ButtonState(mayObtainForMoney, formatter(BigWorld.wg_getIntegralFormat(price.getSignValue(currency))), VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_RESTORE if vehicle.isRestorePossible() else VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_BUY, action is not None, currencyIcon, ItemsActionsFactory.BUY_VEHICLE, action, tooltip)
+            return _ButtonState(mayObtainForMoney, formatter(BigWorld.wg_getIntegralFormat(price.getSignValue(currency))), VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_RESTORE if vehicle.isRestorePossible() else VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_BUY, action is not None, currencyIcon, action, tooltip)
         else:
             nodeCD = vehicle.intCD
             currencyIcon = RES_ICONS.MAPS_ICONS_LIBRARY_XPCOSTICONBIG
@@ -236,19 +240,23 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
                     tooltip = _buildBuyButtonTooltip('parentModuleIsLocked')
                 else:
                     tooltip = _buildBuyButtonTooltip('parentVehicleIsLocked')
-            return _ButtonState(isAvailableToUnlock, formatter(BigWorld.wg_getIntegralFormat(xpCost)), VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_RESEARCH, False, currencyIcon, ItemsActionsFactory.UNLOCK_ITEM, None, tooltip)
+            return _ButtonState(isAvailableToUnlock, formatter(BigWorld.wg_getIntegralFormat(xpCost)), VEHICLE_PREVIEW.BUYINGPANEL_BUYBTN_LABEL_RESEARCH, False, currencyIcon, None, tooltip)
             return None
 
     def __getStaticData(self):
-        return {'header': self.__getHeaderData(),
+        """Return left panel with crew for preview
+        :return:
+        """
+        result = {'header': self.__getHeaderData(),
          'bottomPanel': self.__getBottomPanelData(),
-         'tabButtonsData': self.__packTabButtonsData(),
          'vehicleInfo': self.__getVehiclePanelData()}
+        result.update(self.__previewDP.getCrewInfo())
+        return result
 
     def __getHeaderData(self):
         vehicle = g_currentPreviewVehicle.item
         return {'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
-         'tankInfo': text_styles.concatStylesToMultiLine(text_styles.promoSubTitle(vehicle.shortUserName), text_styles.stats(MENU.levels_roman(vehicle.level))),
+         'tankInfo': text_styles.concatStylesToMultiLine(text_styles.promoSubTitle(vehicle.userName), text_styles.stats(MENU.levels_roman(vehicle.level))),
          'closeBtnLabel': VEHICLE_PREVIEW.HEADER_CLOSEBTN_LABEL,
          'backBtnLabel': VEHICLE_PREVIEW.HEADER_BACKBTN_LABEL,
          'backBtnDescrLabel': self.__getBackBtnLabel(),
@@ -262,37 +270,12 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
 
     def __getBottomPanelData(self):
         item = g_currentPreviewVehicle.item
-        isBuyingAvailable = not item.isHidden or item.isRentable or item.isRestorePossible()
-        if isBuyingAvailable:
-            if item.canTradeIn:
-                buyingLabel = text_styles.main(VEHICLE_PREVIEW.BUYINGPANEL_TRADEINLABEL)
-            else:
-                buyingLabel = text_styles.main(VEHICLE_PREVIEW.BUYINGPANEL_LABEL)
-        else:
-            buyingLabel = text_styles.alert(VEHICLE_PREVIEW.BUYINGPANEL_ALERTLABEL)
-        if item.hasModulesToSelect:
-            modulesLabel = VEHICLE_PREVIEW.MODULESPANEL_TITLE
-        else:
-            modulesLabel = VEHICLE_PREVIEW.MODULESPANEL_NOMODULESOPTIONS
-        return {'buyingLabel': buyingLabel,
-         'modulesLabel': text_styles.middleTitle(modulesLabel),
-         'isBuyingAvailable': isBuyingAvailable,
-         'isCanTrade': item.canTradeIn,
-         'vehicleId': item.intCD}
+        return self.__previewDP.getBottomPanelData(item)
 
     def __getInfoData(self, selectedTabInd):
         return {'selectedTab': selectedTabInd,
          'tabData': self.__packTabData(),
          'nation': g_currentPreviewVehicle.item.nationName}
-
-    def __packTabButtonsData(self):
-        data = []
-        for id in TAB_ORDER:
-            linkage, label = TAB_DATA_MAP[id]
-            data.append({'label': label,
-             'linkage': linkage})
-
-        return data
 
     def __packTabData(self):
         return [self.__packDataItem(VEHPREVIEW_CONSTANTS.FACT_SHEET_DATA_CLASS_NAME, self.__packFactSheetData()), self.__packDataItem(VEHPREVIEW_CONSTANTS.CREW_INFO_DATA_CLASS_NAME, self.__packCrewInfoData())]
@@ -317,3 +300,12 @@ class VehiclePreview(LobbySubView, VehiclePreviewMeta):
     def __packDataItem(self, className, data):
         return {'voClassName': className,
          'voData': data}
+
+    def __onHangarCreateOrRefresh(self):
+        self.__handleWindowClose(None)
+        return
+
+    @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_VEHICLE_PREVIEW, EVENT_BUS_SCOPE.LOBBY)
+    def __handleWindowClose(self, _):
+        self.onBackClick()
+        self.destroy()

@@ -9,7 +9,7 @@ class GROUP_TAG(object):
     """Class contains all available tags in group configuration."""
     PASSPORT_REPLACEMENT_FORBIDDEN = 'passportReplacementForbidden'
     RESTRICTIONS = (PASSPORT_REPLACEMENT_FORBIDDEN,)
-    RANGE = RESTRICTIONS
+    RANGE = RESTRICTIONS + tuple(skills_constants.ROLES)
 
 
 class Rank(legacy_stuff.LegacyStuff):
@@ -176,10 +176,11 @@ class RoleRanks(legacy_stuff.LegacyStuff):
 
 class NationGroup(legacy_stuff.LegacyStuff):
     """Class contains information about group of tankmen."""
-    __slots__ = ('__isFemales', '__notInShop', '__firstNamesIDs', '__lastNamesIDs', '__iconsIDs', '__weight', '__tags')
+    __slots__ = ('__name', '__isFemales', '__notInShop', '__firstNamesIDs', '__lastNamesIDs', '__iconsIDs', '__weight', '__tags', '__roles')
 
-    def __init__(self, isFemales, notInShop, firstNamesIDs, lastNamesIDs, iconsIDs, weight, tags):
+    def __init__(self, name, isFemales, notInShop, firstNamesIDs, lastNamesIDs, iconsIDs, weight, tags, roles):
         super(NationGroup, self).__init__()
+        self.__name = name
         self.__isFemales = isFemales
         self.__notInShop = notInShop
         self.__firstNamesIDs = firstNamesIDs
@@ -187,9 +188,14 @@ class NationGroup(legacy_stuff.LegacyStuff):
         self.__iconsIDs = iconsIDs
         self.__weight = weight
         self.__tags = tags
+        self.__roles = roles
 
     def __repr__(self):
         return 'NationGroup(isFemales={}, notInShop={}, weight={})'.format(self.__isFemales, self.__notInShop, self.__weight)
+
+    @property
+    def name(self):
+        return self.__name
 
     @property
     def isFemales(self):
@@ -234,6 +240,14 @@ class NationGroup(legacy_stuff.LegacyStuff):
     @property
     def tags(self):
         return self.__tags
+
+    @property
+    def roles(self):
+        return self.__roles
+
+    @property
+    def isUnique(self):
+        return 1 == len(self.__firstNamesIDs) * len(self.__lastNamesIDs) * len(self.__iconsIDs)
 
 
 class NationConfig(legacy_stuff.LegacyStuff):

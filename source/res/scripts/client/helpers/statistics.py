@@ -20,8 +20,9 @@ class _STATISTICS_STATE:
     STOPPED = 2
 
 
-class _HARDWARE_SCORE_PARAMS:
+class HARDWARE_SCORE_PARAMS:
     PARAM_GPU_SCORE = 1
+    PARAM_VIRTUAL_MEMORY = 3
     PARAM_CPU_SCORE = 4
 
 
@@ -136,8 +137,8 @@ class StatisticsCollector(IStatisticsCollector):
             ret = BigWorld.wg_getClientStatistics()
             proceed = ret is not None
             if proceed:
-                ret['cpuScore'] = BigWorld.getAutoDetectGraphicsSettingsScore(_HARDWARE_SCORE_PARAMS.PARAM_CPU_SCORE)
-                ret['gpuScore'] = BigWorld.getAutoDetectGraphicsSettingsScore(_HARDWARE_SCORE_PARAMS.PARAM_GPU_SCORE)
+                ret['cpuScore'] = BigWorld.getAutoDetectGraphicsSettingsScore(HARDWARE_SCORE_PARAMS.PARAM_CPU_SCORE)
+                ret['gpuScore'] = BigWorld.getAutoDetectGraphicsSettingsScore(HARDWARE_SCORE_PARAMS.PARAM_GPU_SCORE)
                 ret['graphicsEngine'] = self.settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE)
                 if not self.__hangarLoaded:
                     self.__invalidStats |= INVALID_CLIENT_STATS.CLIENT_STRAIGHT_INTO_BATTLE

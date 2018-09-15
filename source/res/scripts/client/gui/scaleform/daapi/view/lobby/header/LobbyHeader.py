@@ -327,6 +327,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         g_currentPreviewVehicle.onChanged -= self.__onVehicleChanged
         self.eventsCache.onSyncCompleted -= self.__onEventsCacheResync
         self.eventsCache.onEventsVisited -= self.__onEventsVisited
+        self.eventsCache.onProfileVisited -= self.__onProfileVisited
         self.itemsCache.onSyncCompleted -= self.__onItemsChanged
         self.rankedController.onUpdated -= self.__updateRanked
         self.falloutCtrl.onVehiclesChanged -= self.__updateFalloutSettings
@@ -487,9 +488,21 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             canUpdatePremium = True
             premiumBtnLbl = makeHtmlString('html_templates:lobby/header', 'base-account-label')
             buyPremiumLabel = self._getPremiumLabelText(False, False)
-        hasPersonalDiscount = len(self.itemsCache.items.shop.personalPremiumPacketsDiscounts) > 0
+        hasPersonalDiscount = self.__hasPremiumPacketDiscount()
         tooltip = self._getPremiumTooltipText(isPremiumAccount, canUpdatePremium)
         self.as_setPremiumParamsS(premiumBtnLbl, buyPremiumLabel, hasPersonalDiscount, tooltip, TOOLTIP_TYPES.COMPLEX)
+
+    def __hasPremiumPacketDiscount(self):
+        hasPersonalDiscount = len(self.itemsCache.items.shop.personalPremiumPacketsDiscounts) > 0
+        if hasPersonalDiscount:
+            return True
+        premiumCost = self.itemsCache.items.shop.getPremiumCostWithDiscount()
+        defaultPremiumCost = self.itemsCache.items.shop.defaults.premiumCost
+        for days, price in premiumCost.iteritems():
+            if defaultPremiumCost[days] != price:
+                return True
+
+        return False
 
     def __triggerViewLoad(self, alias):
         if alias == self.TABS.BROWSER:

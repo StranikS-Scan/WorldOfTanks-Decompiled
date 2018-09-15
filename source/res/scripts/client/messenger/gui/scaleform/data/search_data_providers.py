@@ -39,7 +39,7 @@ class SearchDataProvider(DAAPIDataProvider, ISearchHandler):
         return
 
     def fini(self):
-        self._dispose()
+        self.destroy()
         if self._processor is not None:
             self._processor.fini()
             self._processor = None

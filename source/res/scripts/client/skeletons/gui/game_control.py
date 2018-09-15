@@ -169,6 +169,10 @@ class INotifyController(IGameController):
     pass
 
 
+class IEpicModeController(IGameController):
+    pass
+
+
 class IExternalLinksController(IGameController):
 
     def open(self, url):
@@ -675,6 +679,12 @@ class IRankedBattlesController(IGameController):
     def getRanksChanges(self, isLoser=False):
         """
         returns ranks changes depends on team match result (win or lose)
+        """
+        pass
+
+    def getRanksTops(self, isLoser=False, earned=False, notRecieved=False, lost=False):
+        """
+        returns ranks changes top values depends on team match result (win or lose)
         """
         pass
 

@@ -171,4 +171,4 @@ class VehiclesDataProvider(ListDAAPIDataProvider, IVehCompareView):
 
     def fini(self):
         self.clear()
-        self._dispose()
+        self.destroy()

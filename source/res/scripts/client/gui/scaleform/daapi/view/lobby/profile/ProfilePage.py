@@ -81,11 +81,12 @@ class ProfilePage(LobbySubView, ProfileMeta):
          (PROFILE.SECTION_TECHNIQUE_TITLE,
           PROFILE.PROFILE_TABS_TOOLTIP_TECHNIQUE,
           VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE,
-          True),
-         (PROFILE.SECTION_HOF_TITLE,
-          PROFILE.PROFILE_TABS_TOOLTIP_HOF if isHofEnabled else PROFILE.PROFILE_TABS_TOOLTIP_HOFDISABLED,
-          VIEW_ALIAS.PROFILE_HOF,
-          isHofEnabled)]
+          True)]
+        if isHofEnabled:
+            sectionsData.append((PROFILE.SECTION_HOF_TITLE,
+             PROFILE.PROFILE_TABS_TOOLTIP_HOF,
+             VIEW_ALIAS.PROFILE_HOF,
+             True))
         return {'sectionsData': [ {'label': makeString(label),
                           'tooltip': tooltip,
                           'alias': alias,

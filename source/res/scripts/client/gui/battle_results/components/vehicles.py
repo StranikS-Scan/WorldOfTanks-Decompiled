@@ -14,6 +14,7 @@ from gui.battle_results.reusable import sort_keys
 from gui.shared.gui_items.Vehicle import getSmallIconPath, getIconPath
 from gui.shared.formatters import text_styles
 from helpers import dependency, i18n
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
 _STAT_VALUES_VO_REPLACER = {'damageAssisted': 'damageAssistedSelf',
  'damageAssistedStun': 'damageAssistedStunSelf'}
@@ -293,7 +294,7 @@ class RankedResultsTeamDataStatsBlock(base.StatsBlock):
         winTeam = reusable.common.winnerTeam
         teamId = None
         topBound = helper.getLoserBounds(True)
-        xpAtBorder = 0
+        xpAtBorder = None
         topList = RankedResultsTeamPartDataStatsBlock()
         bottomList = RankedResultsTeamPartDataStatsBlock()
         personalDBID = reusable.personal.avatar.accountDBID
@@ -350,7 +351,8 @@ class RankedResultsTeamDataStatsBlock(base.StatsBlock):
 
 class RankedResultsTeamPartDataStatsBlock(base.StatsBlock):
     """Block contains one part of team data: Tops or Bottoms."""
-    __slots__ = ('listData', 'backgroundType', 'backgroundBlink', 'icon', 'capacity')
+    __slots__ = ('listData', 'backgroundType', 'backgroundBlink', 'icon', 'capacity', 'isColorBlind')
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, meta=None, field='', *path):
         super(RankedResultsTeamPartDataStatsBlock, self).__init__(meta, field, *path)
@@ -359,6 +361,7 @@ class RankedResultsTeamPartDataStatsBlock(base.StatsBlock):
         self.backgroundBlink = False
         self.icon = ''
         self.capacity = 0
+        self.isColorBlind = False
 
     def appendPlayer(self, playerItem):
         self.listData.append(playerItem)
@@ -369,6 +372,8 @@ class RankedResultsTeamPartDataStatsBlock(base.StatsBlock):
     def setResources(self, isWon, isTopList, isBlink, rankInfoHelper):
         self.backgroundBlink = isBlink
         self.capacity, self.icon, self.backgroundType = rankInfoHelper.getCapacityWithResources(not isWon, isTopList)
+        if self.backgroundType == RANKEDBATTLES_ALIASES.BACKGROUND_STATE_LOSE:
+            self.isColorBlind = self.settingsCore.getSetting('isColorBlind')
 
 
 class RankedResultsListItemStatsBlock(base.StatsBlock):

@@ -767,6 +767,8 @@ class TOOLTIPS(object):
     BARRACKS_TANKMEN_RECOVERY_FREE_BODY = '#tooltips:barracks/tankmen/recovery/free/body'
     BARRACKS_TANKMEN_RECOVERY_GOLD_BODY = '#tooltips:barracks/tankmen/recovery/gold/body'
     BARRACKS_PLACESCOUNT_DISMISS_HEADER = '#tooltips:barracks/placesCount/dismiss/header'
+    CREW_LOCK_HEADER = '#tooltips:crew/lock/header'
+    CREW_LOCK_BODY = '#tooltips:crew/lock/body'
     BARRACKS_PLACESCOUNT_DISMISS_BODY = '#tooltips:barracks/placesCount/dismiss/body'
     BARRACKS_TANKMEN_RECOVERY_NEWSKILL = '#tooltips:barracks/tankmen/recovery/newSkill'
     HEADER_INFO_PLAYERS_UNAVAILABLE_HEADER = '#tooltips:header/info/players_unavailable/header'
@@ -1342,6 +1344,8 @@ class TOOLTIPS(object):
     CONTACT_UNITS_GROUPS = '#tooltips:Contact/units/groups'
     ROLECHANGE_CURRENTROLEWARNING_HEADER = '#tooltips:RoleChange/currentRoleWarning/header'
     ROLECHANGE_CURRENTROLEWARNING_BODY = '#tooltips:RoleChange/currentRoleWarning/body'
+    ROLECHANGE_ROLECHANGEFORBIDDEN_HEADER = '#tooltips:RoleChange/roleChangeForbidden/header'
+    ROLECHANGE_ROLECHANGEFORBIDDEN_BODY = '#tooltips:RoleChange/roleChangeForbidden/body'
     ROLECHANGE_ROLETAKEN_HEADER = '#tooltips:RoleChange/roleTaken/header'
     ROLECHANGE_ROLETAKEN_BODY = '#tooltips:RoleChange/roleTaken/body'
     ROLECHANGE_ROLEANDVEHICLETAKEN_HEADER = '#tooltips:RoleChange/roleAndVehicleTaken/header'
@@ -1829,6 +1833,8 @@ class TOOLTIPS(object):
     QUESTS_VEHICLES_HEADER = '#tooltips:quests/vehicles/header'
     QUESTS_VEHICLES_DESCRIPTION = '#tooltips:quests/vehicles/description'
     QUESTS_VEHICLES_BOTTOM = '#tooltips:quests/vehicles/bottom'
+    CREW_ROLECHANGEFORBID_HEADER = '#tooltips:crew/roleChangeForbid/header'
+    CREW_ROLECHANGEFORBID_TEXT = '#tooltips:crew/roleChangeForbid/text'
     TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_ENUM = (TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_LIGHTTANK,
      TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_MEDIUMTANK,
      TANKCARUSELTOOLTIP_VEHICLETYPE_NORMAL_HEAVYTANK,

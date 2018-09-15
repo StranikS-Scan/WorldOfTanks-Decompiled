@@ -146,7 +146,7 @@ class _ReusableInfo(object):
     @property
     def canUpgradeToPremium(self):
         """Can player buy premium by given battle result?"""
-        return self.__premiumState & PREMIUM_STATE.BUY_ENABLED > 0 and self.__premiumState & PREMIUM_STATE.HAS_ALREADY == 0 and not self.isPostBattlePremium and self.__common.arenaBonusType == ARENA_BONUS_TYPE.REGULAR and self.__personal.getXPDiff() > 0 and self.__personal.getCreditsDiff() > 0
+        return self.__premiumState & PREMIUM_STATE.BUY_ENABLED > 0 and self.__premiumState & PREMIUM_STATE.HAS_ALREADY == 0 and not self.isPostBattlePremium and self.__common.arenaBonusType in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_RANDOM) and self.__personal.getXPDiff() > 0 and self.__personal.getCreditsDiff() > 0
 
     @property
     def canResourceBeFaded(self):

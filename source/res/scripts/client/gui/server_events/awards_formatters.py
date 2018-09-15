@@ -5,6 +5,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.server_events.formatters import parseComplexToken, TOKEN_SIZES
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -109,7 +110,7 @@ def _formatCountLabel(count):
     return 'x{}'.format(count) if count > 1 else ''
 
 
-_PreformattedBonus = namedtuple('_PreformattedBonus', 'label userName images tooltip labelFormatter specialArgs specialAlias isSpecial isCompensation align')
+_PreformattedBonus = namedtuple('_PreformattedBonus', 'label userName images tooltip labelFormatter specialArgs specialAlias isSpecial isCompensation align highlightType overlayType')
 
 class PreformattedBonus(_PreformattedBonus):
 
@@ -130,7 +131,9 @@ PreformattedBonus.__new__.__defaults__ = (None,
  None,
  False,
  False,
- LABEL_ALIGN.CENTER)
+ LABEL_ALIGN.CENTER,
+ None,
+ None)
 
 class QuestsBonusComposer(object):
 
@@ -472,7 +475,12 @@ class ItemsBonusFormatter(SimpleBonusFormatter):
                     alias = TOOLTIPS_CONSTANTS.AWARD_SHELL
                 else:
                     alias = TOOLTIPS_CONSTANTS.AWARD_MODULE
-                result.append(PreformattedBonus(images=self._getImages(item), isSpecial=True, label=_formatCountLabel(count), labelFormatter=self._getLabelFormatter(bonus), userName=self._getUserName(item), specialAlias=alias, specialArgs=[item.intCD], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus)))
+                highlightType = None
+                overlayType = None
+                if item.itemTypeName == 'optionalDevice' and item.isDeluxe():
+                    highlightType = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+                    overlayType = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
+                result.append(PreformattedBonus(images=self._getImages(item), isSpecial=True, label=_formatCountLabel(count), labelFormatter=self._getLabelFormatter(bonus), userName=self._getUserName(item), specialAlias=alias, specialArgs=[item.intCD], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), highlightType=highlightType, overlayType=overlayType))
 
         return result
 

@@ -66,16 +66,16 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.494919 0.537871 1.75425	</rayStart>
-        <rayEnd>	-0.494919 0.352526 1.6791	</rayEnd>
+        <rayStart>	0.647 0.524153 1.7881	</rayStart>
+        <rayEnd>	0.647 0.338808 1.71295	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	0.330276 0.45147 2.23349	</rayStart>
-        <rayEnd>	0.330276 0.0807821 2.08319	</rayEnd>
-        <rayUp>	0.68869 -0.115212 -0.715844	</rayUp>
+        <rayStart>	0.374811 0.441128 2.259	</rayStart>
+        <rayEnd>	0.374811 0.0704407 2.1087	</rayEnd>
+        <rayUp>	0.160924 -0.00529012 -0.986953	</rayUp>
         <size>	0.656	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
@@ -218,7 +218,7 @@
           <count>	6	</count>
           <isLeft>	true	</isLeft>
           <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.000000	</maxOffset>
+          <maxOffset>	0.03	</maxOffset>
         </group>
         <group>
           <template>	Track_R	</template>
@@ -226,7 +226,7 @@
           <count>	6	</count>
           <isLeft>	false	</isLeft>
           <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.000000	</maxOffset>
+          <maxOffset>	0.03	</maxOffset>
         </group>
       </groundNodes>
       <splineDesc>
@@ -414,10 +414,10 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.00210497 0.0171946 3.18549	</rayStart>
+              <rayStart>	-0.00421142 0.0165037 3.5	</rayStart>
               <rayEnd>	0.00793971 -0.0284059 3.18401	</rayEnd>
-              <rayUp>	0.075 0.065 5	</rayUp>
-              <size>	0.558	</size>
+              <rayUp>	0.094 0.09 5	</rayUp>
+              <size>	0.438	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
@@ -438,6 +438,13 @@
       </hitTester>
       <gunPosition>	-0.002258 0.494202 0.029392	</gunPosition>
       <emblemSlots>
+        <inscription>
+          <rayStart>	1.19461 0.0895254 -0.900221	</rayStart>
+          <rayEnd>	0.79462 0.0895253 -0.900221	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.556	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
         <player>
           <rayStart>	-1.19506 0.0955622 -0.497894	</rayStart>
           <rayEnd>	-0.795055 0.0955622 -0.497894	</rayEnd>
@@ -445,13 +452,6 @@
           <size>	0.24	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </player>
-        <inscription>
-          <rayStart>	1.19464 0.102114 -0.908257	</rayStart>
-          <rayEnd>	0.794645 0.102114 -0.908257	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.569	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
         <player>
           <rayStart>	1.19506 0.0955622 -0.497894	</rayStart>
           <rayEnd>	0.795055 0.0955622 -0.497894	</rayEnd>

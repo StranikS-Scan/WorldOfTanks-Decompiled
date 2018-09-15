@@ -88,8 +88,9 @@ class RankedBattlesCalendarPopover(RankedBattlesCalendarPopoverMeta):
 
             else:
                 periodsStr = i18n.makeString(COMMON.COMMON_DASH)
-            items.append({'serverNameText': text_styles.highlightText(serverName),
-             'primeTimeText': '\n'.join(periodsStr)})
+            if dayPeriods:
+                items.append({'serverNameText': text_styles.highlightText(serverName),
+                 'primeTimeText': '\n'.join(periodsStr)})
 
         return items
 

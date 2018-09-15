@@ -89,10 +89,11 @@ def _readRoleRanks(xmlCtx, section, ranks):
 def _readGroupTags(xmlCtx, section, subsectionName):
     source = _xml.readStringOrNone(xmlCtx, section, subsectionName)
     if source is not None:
+        from items import vehicles
         tags = source.split()
         restrictions = []
         for tag in tags:
-            if tag not in tankmen_components.GROUP_TAG.RANGE:
+            if not (tag in tankmen_components.GROUP_TAG.RANGE or vehicles.g_list.isVehicleExisting(tag)):
                 _xml.raiseWrongXml(xmlCtx, subsectionName, 'unknown tag "{}"'.format(tag))
             if tag in tankmen_components.GROUP_TAG.RESTRICTIONS:
                 restrictions.append(tag)
@@ -101,6 +102,28 @@ def _readGroupTags(xmlCtx, section, subsectionName):
             _xml.raiseWrongXml(xmlCtx, subsectionName, 'Group contains tags of restrictions {}, so tag "{}" is mandatory'.format(restrictions, tankmen_components.GROUP_TAG.PASSPORT_REPLACEMENT_FORBIDDEN))
     else:
         tags = []
+    return frozenset(tags)
+
+
+def _readGroupRoles(xmlCtx, section, subsectionName):
+    """
+    Returns contents of roles tag group as an immutable subset of ROLES
+    :param xmlCtx: xml context for reporting and error handling purposes.
+    :param section: group section to read roles section.
+    :param subsectionName: name of roles section inside group section.
+    :return: subset of ROLES.
+    """
+    source = _xml.readStringOrNone(xmlCtx, section, subsectionName)
+    if source is not None:
+        tags = source.split()
+        roles = []
+        for tag in tags:
+            if tag not in skills_constants.ROLES:
+                _xml.raiseWrongXml(xmlCtx, subsectionName, 'unknown tag "{}"'.format(tag))
+            roles.append(tag)
+
+    else:
+        tags = skills_constants.ROLES
     return frozenset(tags)
 
 
@@ -118,7 +141,7 @@ def _readTankmenGroup(xmlCtx, subsection, firstNames, lastNames, icons):
         parseIcon = _parseIcon
     else:
         parseName = parseIcon = None
-    return tankmen_components.NationGroup('female' == _xml.readNonEmptyString(xmlCtx, subsection, 'sex'), subsection.readBool('notInShop', False), _readIDs((xmlCtx, 'firstNames'), _xml.getChildren(xmlCtx, subsection, 'firstNames'), firstNames, parseName), _readIDs((xmlCtx, 'lastNames'), _xml.getChildren(xmlCtx, subsection, 'lastNames'), lastNames, parseName), _readIDs((xmlCtx, 'icons'), _xml.getChildren(xmlCtx, subsection, 'icons'), icons, parseIcon), _xml.readNonNegativeFloat(xmlCtx, subsection, 'weight'), _readGroupTags((xmlCtx, 'tags'), subsection, 'tags'))
+    return tankmen_components.NationGroup(subsection.asString, 'female' == _xml.readNonEmptyString(xmlCtx, subsection, 'sex'), subsection.readBool('notInShop', False), _readIDs((xmlCtx, 'firstNames'), _xml.getChildren(xmlCtx, subsection, 'firstNames'), firstNames, parseName), _readIDs((xmlCtx, 'lastNames'), _xml.getChildren(xmlCtx, subsection, 'lastNames'), lastNames, parseName), _readIDs((xmlCtx, 'icons'), _xml.getChildren(xmlCtx, subsection, 'icons'), icons, parseIcon), _xml.readNonNegativeFloat(xmlCtx, subsection, 'weight'), _readGroupTags((xmlCtx, 'tags'), subsection, 'tags'), _readGroupRoles((xmlCtx, 'roles'), subsection, 'roles'))
 
 
 def _readNationConfigSection(xmlCtx, section):

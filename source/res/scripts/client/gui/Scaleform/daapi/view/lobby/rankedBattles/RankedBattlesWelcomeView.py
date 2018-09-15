@@ -14,9 +14,11 @@ from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IRankedBattlesController
 
 class RankedBattlesWelcomeView(LobbySubView, RankedBattlesWelcomeViewMeta):
     settingsCore = dependency.descriptor(ISettingsCore)
+    rankedController = dependency.descriptor(IRankedBattlesController)
     __background_alpha__ = 0.5
 
     def __init__(self, ctx=None):
@@ -50,8 +52,7 @@ class RankedBattlesWelcomeView(LobbySubView, RankedBattlesWelcomeViewMeta):
         isCompleted = filters['isRankedWelcomeViewStarted']
         filters['isRankedWelcomeViewStarted'] = True
         self.__setFilters(filters)
-        positiveTeamStr = text_styles.bonusAppliedText(RANKED_BATTLES.WELCOMESCREEN_POSITIVE_TEAM)
-        negativeTeamStr = text_styles.error(RANKED_BATTLES.WELCOMESCREEN_NEGATIVE_TEAM)
+        rulePositive, ruleNegative = self.__getRules()
         ranks = [ RES_ICONS.getRankIcon('114x160', i) for i in xrange(1, 6) ]
         ranks.append(RES_ICONS.MAPS_ICONS_RANKEDBATTLES_RANKS_114X160_RANKVEHMASTER)
         return {'header': text_styles.superPromoTitle(RANKED_BATTLES.WELCOMESCREEN_HEADER),
@@ -63,10 +64,8 @@ class RankedBattlesWelcomeView(LobbySubView, RankedBattlesWelcomeViewMeta):
                     'description': text_styles.hightlight(RANKED_BATTLES.WELCOMESCREEN_RIGHTRULE),
                     'tooltip': makeTooltip(RANKED_BATTLES.WELCOMESCREEN_RIGHTRULETOOLTIP_HEADER, RANKED_BATTLES.WELCOMESCREEN_RIGHTRULETOOLTIP_BODY)}],
          'ranks': ranks,
-         'rulePositive': {'image': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_RANKEDBATTESVIEW_ICON_TOP12_106X98,
-                          'description': text_styles.hightlight(RANKED_BATTLES.WELCOMESCREEN_POSITIVE_BODY) % {'team': positiveTeamStr}},
-         'ruleNegative': {'image': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_RANKEDBATTESVIEW_ICON_TOP3_106X98,
-                          'description': text_styles.hightlight(RANKED_BATTLES.WELCOMESCREEN_NEGATIVE_BODY) % {'team': negativeTeamStr}},
+         'rulePositive': rulePositive,
+         'ruleNegative': ruleNegative,
          'ranksDescription': text_styles.promoSubTitle(RANKED_BATTLES.WELCOMESCREEN_RANKSDESCR),
          'equalityText': RANKED_BATTLES.WELCOMESCREEN_EQUALITYTEXT,
          'rulesDelimeterText': text_styles.promoSubTitle(RANKED_BATTLES.WELCOMESCREEN_RULESDELIMETER),
@@ -76,6 +75,22 @@ class RankedBattlesWelcomeView(LobbySubView, RankedBattlesWelcomeViewMeta):
          'closeBtnTooltip': makeTooltip(RANKED_BATTLES.WELCOMESCREEN_CLOSEBTNTOOLTIP_HEADER, RANKED_BATTLES.WELCOMESCREEN_CLOSEBTNTOOLTIP_BODY),
          'bgImage': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_BG_RANK_BLUR,
          'isComplete': bool(isCompleted)}
+
+    def __getRules(self):
+        topWinNum = self.rankedController.getRanksChanges(isLoser=False).count(1)
+        topLoserNum = self.rankedController.getRanksChanges(isLoser=True).count(1)
+        teamStr = text_styles.bonusAppliedText(RANKED_BATTLES.WELCOMESCREEN_POSITIVE_TEAM)
+        descr = text_styles.hightlight(RANKED_BATTLES.WELCOMESCREEN_POSITIVE_BODY)
+        rulePositive = {'image': RES_ICONS.getRankedPostBattleTopIcon(topWinNum),
+         'description': descr.format(team=teamStr, topNumber=topWinNum)}
+        if topLoserNum:
+            teamStr = text_styles.error(RANKED_BATTLES.WELCOMESCREEN_NEGATIVE_TEAM)
+            descr = text_styles.hightlight(RANKED_BATTLES.WELCOMESCREEN_NEGATIVE_BODY)
+            ruleNegative = {'image': RES_ICONS.getRankedPostBattleLoseIcon(topLoserNum),
+             'description': descr.format(team=teamStr, topNumber=topLoserNum)}
+        else:
+            ruleNegative = None
+        return (rulePositive, ruleNegative)
 
     def __close(self):
         self.onAnimationFinished(False)

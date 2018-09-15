@@ -83,7 +83,7 @@ class LobbyLayout(IChannelController):
 
     def removeMembersDP(self):
         if self._membersDP is not None:
-            self._membersDP._dispose()
+            self._membersDP.destroy()
             self._membersDP = None
         return
 

@@ -392,6 +392,9 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
                 stepsCount = vehStepsToProgress[rankIdx]
             else:
                 stepsCount = vehStepsToProgress[-1]
+            if rankID > settings.vehRanks and settings.vehRanks in settings.unburnableVehRanks:
+                unburnableRanks = set(settings.unburnableVehRanks)
+                unburnableRanks.add(rankID)
             result.append(VehicleRank(vehicle, accTopRankID, quest=quest, *self.__buildRank(rankID, stepsCount, currentProgress, maxProgress, lastProgress, unburnableRanks, unburnableVehStepRanks, points)))
 
         return result
@@ -508,13 +511,13 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
                 continue
             dayPeriods = primeTimes[peripheryID].getPeriodsBetween(dayStart, dayEnd)
             if groupIdentical and dayPeriods in serversPeriodsMapping.values():
-                serverInMapping = None
                 for name, period in serversPeriodsMapping.iteritems():
                     serverInMapping = name if period == dayPeriods else None
+                    if serverInMapping:
+                        newName = '{0}, {1}'.format(serverInMapping, serverShortName)
+                        serversPeriodsMapping[newName] = serversPeriodsMapping.pop(serverInMapping)
+                        break
 
-                if serverInMapping:
-                    newName = '{0}, {1}'.format(serverInMapping, serverShortName)
-                    serversPeriodsMapping[newName] = serversPeriodsMapping.pop(serverInMapping)
             serversPeriodsMapping[serverShortName] = dayPeriods
 
         return serversPeriodsMapping
@@ -797,3 +800,15 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
     def __timerUpdate(self):
         status, _ = self.getPrimeTimeStatus()
         self.onPrimeTimeStatusUpdated(status)
+
+    def getRanksTops(self, isLoser=False, earned=False, notRecieved=False, lost=False):
+        _STEP_EARNED = 1
+        _STEP_NOT_CHANGED = 0
+        _STEP_LOST = -1
+        settings = self.__getSettings()
+        rankChanges = settings.loserRankChanges if isLoser else settings.winnerRankChanges
+        if earned:
+            return rankChanges.count(_STEP_EARNED)
+        if notRecieved:
+            return rankChanges.count(_STEP_NOT_CHANGED)
+        return rankChanges.count(_STEP_LOST) if lost else len(rankChanges)

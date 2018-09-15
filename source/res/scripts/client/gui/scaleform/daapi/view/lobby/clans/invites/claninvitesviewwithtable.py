@@ -127,7 +127,7 @@ class ClanInvitesAbstractDataProvider(SortableDAAPIDataProvider):
 
     def fini(self):
         self.clear()
-        self._dispose()
+        self.destroy()
 
     def getSelectedIdx(self):
         return self.__listMapping[self.__selectedID] if self.__selectedID in self.__listMapping else -1

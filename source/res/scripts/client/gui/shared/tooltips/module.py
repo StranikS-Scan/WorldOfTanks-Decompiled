@@ -60,6 +60,8 @@ class ModuleBlockTooltipData(BlocksTooltipData):
         textGap = -2
         valueWidth = 110
         items.append(formatters.packBuildUpBlockData(HeaderBlockConstructor(module, statsConfig, leftPadding, rightPadding).construct(), padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=topPadding)))
+        effectsItems = []
+        replaceItems = []
         if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
             if module.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
                 cooldownSeconds = module.descriptor.cooldownSeconds
@@ -67,7 +69,7 @@ class ModuleBlockTooltipData(BlocksTooltipData):
                     items.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName('cooldownSeconds'), value=text_styles.stats(int(cooldownSeconds)), valueWidth=valueWidth, padding=formatters.packPadding(left=leftPadding)))
             effectsBlock = EffectsBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
             if len(effectsBlock) > 0:
-                items.append(formatters.packBuildUpBlockData(effectsBlock, padding=blockPadding, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
+                effectsItems.append(formatters.packBuildUpBlockData(effectsBlock))
         if statsConfig.vehicle is not None and not module.isInstalled(statsConfig.vehicle):
             if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
                 comparator = params_helper.artifactComparator(statsConfig.vehicle, module, statsConfig.slotIdx, True)
@@ -77,7 +79,7 @@ class ModuleBlockTooltipData(BlocksTooltipData):
             if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not module.hasSimilarDevicesInstalled(statsConfig.vehicle) or module.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
                 simplifiedBlock = SimplifiedStatsBlockConstructor(module, paramsConfig, leftPadding, rightPadding, stockParams, comparator).construct()
                 if len(simplifiedBlock) > 0:
-                    items.append(formatters.packBuildUpBlockData(simplifiedBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-14, bottom=1), stretchBg=True))
+                    effectsItems.append(formatters.packBuildUpBlockData(simplifiedBlock, gap=-4, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-3, bottom=1)))
             if statsConfig.vehicle.optDevices[statsConfig.slotIdx]:
                 if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
                     comparator = params_helper.artifactRemovedComparator(statsConfig.vehicle, module, statsConfig.slotIdx)
@@ -85,8 +87,12 @@ class ModuleBlockTooltipData(BlocksTooltipData):
                 if len(simplifiedBlock) > 0:
                     replaceBlock = ModuleReplaceBlockConstructor(module, statsConfig, valueWidth, leftPadding).construct()
                     if replaceBlock:
-                        items.append(formatters.packBuildUpBlockData(replaceBlock))
-                    items.append(formatters.packBuildUpBlockData(simplifiedBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-14, bottom=1), stretchBg=True))
+                        replaceItems.append(formatters.packBuildUpBlockData(replaceBlock))
+                    replaceItems.append(formatters.packBuildUpBlockData(simplifiedBlock, gap=-4, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=2, bottom=1)))
+        if len(effectsItems) > 0:
+            items.append(formatters.packBuildUpBlockData(effectsItems, padding=blockPadding, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, stretchBg=True))
+        if len(replaceItems) > 0:
+            items.append(formatters.packBuildUpBlockData(replaceItems, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=blockPadding, stretchBg=True))
         priceBlock, invalidWidth = PriceBlockConstructor(module, statsConfig, valueWidth, leftPadding, rightPadding).construct()
         if len(priceBlock) > 0:
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
@@ -200,7 +206,7 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
         txtOffset = 130 - self.leftPadding
         desc = ''
         if module.itemTypeName in VEHICLE_COMPONENT_TYPE_NAMES:
-            desc = text_styles.stats(_ms(TOOLTIPS.level(str(module.level)))) + ' ' + _ms(TOOLTIPS.VEHICLE_LEVEL)
+            desc = text_styles.concatStylesWithSpace(text_styles.stats(_ms(TOOLTIPS.level(str(module.level)))), text_styles.standard(_ms(TOOLTIPS.VEHICLE_LEVEL)))
             imgPaddingLeft = 22
         elif module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
             imgPaddingLeft = 7
@@ -403,7 +409,7 @@ class ModuleReplaceBlockConstructor(ModuleTooltipBlockConstructor):
         optionalDevice = vehicle.optDevices[self.configuration.slotIdx]
         if optionalDevice is not None:
             replaceModuleText = text_styles.main(TOOLTIPS.MODULEFITS_REPLACE)
-            block.append(formatters.packImageTextBlockData(title=replaceModuleText.format(moduleName=optionalDevice.userName), txtOffset=20))
+            block.append(formatters.packImageTextBlockData(title=replaceModuleText.format(moduleName=optionalDevice.userName)))
         return block
 
 

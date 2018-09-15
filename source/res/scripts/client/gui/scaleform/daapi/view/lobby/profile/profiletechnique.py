@@ -78,13 +78,17 @@ class ProfileTechnique(ProfileTechniqueMeta):
          'selectedColumnSorting': storedData['selectedColumnSorting']}
 
     def _setRatingButton(self):
-        self.as_setRatingButtonS({'enabled': self.lobbyContext.getServerSettings().isHofEnabled(),
-         'visible': self._battlesType == PROFILE_DROPDOWN_KEYS.ALL})
-        if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL and self.lobbyContext.getServerSettings().isHofEnabled() and isHofButtonNew(PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON):
-            self.as_setBtnCountersS([{'componentId': PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON,
-              'count': '1'}])
+        if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL and self.lobbyContext.getServerSettings().isHofEnabled():
+            self.as_setRatingButtonS({'enabled': True,
+             'visible': True})
+            if isHofButtonNew(PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON):
+                self.as_setBtnCountersS([{'componentId': PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON,
+                  'count': '1'}])
+            else:
+                self.as_setBtnCountersS([])
         else:
-            self.as_setBtnCountersS([])
+            self.as_setRatingButtonS({'enabled': False,
+             'visible': False})
 
     def setSelectedTableColumn(self, index, sortDirection):
         storedDataId = self._getStorageId()
@@ -241,8 +245,6 @@ class ProfileTechnique(ProfileTechniqueMeta):
             stats = vehDossier.getRankedStats()
             achievementsList = self.__getAchievementsList(stats, vehDossier)
             specialRankedStats.append(self.__packAchievement(stats, vehDossier, HONORED_RANK_RECORD))
-            if self.__showMarksOnGun(vehicleIntCD):
-                specialMarksStats.append(self.__packAchievement(vehDossier.getRandomStats(), vehDossier, MARK_ON_GUN_RECORD))
         else:
             raise ValueError('Profile Technique: Unknown battle type: ' + self._battlesType)
         if achievementsList is not None:

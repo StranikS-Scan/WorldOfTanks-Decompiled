@@ -115,6 +115,7 @@ class RANKED_BATTLES(object):
     RANKEDBATTLEHEADER_TOOLTIP_DATE = '#ranked_battles:rankedBattleHeader/tooltip/date'
     BATTLERESULT_STAGEEARNED = '#ranked_battles:battleresult/stageEarned'
     BATTLERESULT_STAGENOTEARNED = '#ranked_battles:battleresult/stageNotEarned'
+    BATTLERESULT_STAGESAVED = '#ranked_battles:battleresult/stageSaved'
     BATTLERESULT_STAGELOST = '#ranked_battles:battleresult/stageLost'
     BATTLERESULT_RANKEARNED = '#ranked_battles:battleresult/rankEarned'
     BATTLERESULT_RANKLOST = '#ranked_battles:battleresult/rankLost'
@@ -122,11 +123,14 @@ class RANKED_BATTLES(object):
     BATTLERESULT_INTOP_WIN = '#ranked_battles:battleresult/inTop/win'
     BATTLERESULT_NOTINTOP_LOSE = '#ranked_battles:battleresult/notInTop/lose'
     BATTLERESULT_NOTINTOP_WIN = '#ranked_battles:battleresult/notInTop/win'
+    BATTLERESULT_NOTINTOP_STAGESAVED = '#ranked_battles:battleresult/notInTop/stageSaved'
+    BATTLERESULT_NOTINTOP_MINXP = '#ranked_battles:battleresult/notInTop/minXP'
     TOOLTIP_STEP_HEADER = '#ranked_battles:tooltip/step/header'
     TOOLTIP_STEP_DESCRIPTION = '#ranked_battles:tooltip/step/description'
     TOOLTIP_STEP_CONDITIONS_HEADER = '#ranked_battles:tooltip/step/conditions/header'
     TOOLTIP_STEP_NOTCHARGED_HEADER = '#ranked_battles:tooltip/step/notCharged/header'
     TOOLTIP_STEP_NOTCHARGED_DESCRIPTION = '#ranked_battles:tooltip/step/notCharged/description'
+    TOOLTIP_STEP_NOTCHARGEDLOSE_DESCRIPTION = '#ranked_battles:tooltip/step/notChargedLose/description'
     TOOLTIP_STEP_DECOMMISSION_HEADER = '#ranked_battles:tooltip/step/decommission/header'
     TOOLTIP_STEP_DECOMMISSION_DESCRIPTION = '#ranked_battles:tooltip/step/decommission/description'
     TOOLTIP_STEP_OR = '#ranked_battles:tooltip/step/or'
@@ -206,7 +210,10 @@ class RANKED_BATTLES(object):
      RANK_NAME_5)
     SEASON_NAME_ENUM = (SEASON_NAME_1, SEASON_NAME_2)
     BATTLERESULT_INTOP_ENUM = (BATTLERESULT_INTOP_LOSE, BATTLERESULT_INTOP_WIN)
-    BATTLERESULT_NOTINTOP_ENUM = (BATTLERESULT_NOTINTOP_LOSE, BATTLERESULT_NOTINTOP_WIN)
+    BATTLERESULT_NOTINTOP_ENUM = (BATTLERESULT_NOTINTOP_LOSE,
+     BATTLERESULT_NOTINTOP_WIN,
+     BATTLERESULT_NOTINTOP_STAGESAVED,
+     BATTLERESULT_NOTINTOP_MINXP)
 
     @classmethod
     def rank_name(cls, key0):

@@ -136,7 +136,7 @@ class _ClanProfileProvinceDataProvider(SortableDAAPIDataProvider):
 
     def fini(self):
         self.clear()
-        self._dispose()
+        self.destroy()
 
     def getSelectedIdx(self):
         return self.__mapping[self.__selectedID] if self.__selectedID in self.__mapping else -1

@@ -2,18 +2,23 @@
 # Embedded file name: scripts/client/bootcamp/hints/HintsSystem.py
 import time
 import BattleReplay
+import SoundGroups
 from constants import HINT_TYPE, HINT_NAMES
 from debug_utils_bootcamp import LOG_CURRENT_EXCEPTION_BOOTCAMP
 from HintControllers import createPrimaryHintController, createSecondaryHintController, createReplayPlayHintSystem
-from collections import deque
+from collections import deque, namedtuple
 from HintsBase import HINT_COMMAND
 from HintsMove import HintMove, HintMoveTurret, HintNoMove, HintNoMoveTurret, HintMoveToMarker
 from HintsScenario import HintAllyShoot, HintUselessConsumable, HintExitGameArea, HintAvoidAndDestroy, HintStartNarrative, HintSectorClear, HintSniperOnDistance, HintLowHP
 from HintsDamage import HintCompositeDetrack, HintCompositeHealCommander, HintCompositeBurn
 from HintsLobby import HintLobbyRotate
 from HintsShoot import HintSniper, HintSniperLevel0, HintShoot, HintAdvancedSniper, HintAim, HintTargetLock, HintWaitReload, HintShootWhileMoving, HintSecondarySniper, HintTargetUnLock
+_Voiceover = namedtuple('_Voiceover', ('name', 'sound'))
 
 class HintSystem(object):
+    """
+    The class provides functionality to manage Big displayable hints in battle(primary) and lobby
+    """
     hintsBattleClasses = {HINT_TYPE.HINT_MOVE: HintMove,
      HINT_TYPE.HINT_NO_MOVE: HintNoMove,
      HINT_TYPE.HINT_MOVE_TURRET: HintMoveTurret,
@@ -41,6 +46,7 @@ class HintSystem(object):
      HINT_TYPE.HINT_UNLOCK_TARGET: HintTargetUnLock,
      HINT_TYPE.HINT_SNIPER_LEVEL0: HintSniperLevel0}
     hintsLobbyClasses = {HINT_TYPE.HINT_ROTATE_LOBBY: HintLobbyRotate}
+    highPriorityVoiceovers = ('vo_bc_weakness_in_armor',)
 
     def __init__(self, avatar=None, hintsInfo={}):
         super(HintSystem, self).__init__()
@@ -53,9 +59,11 @@ class HintSystem(object):
         self.__timeCooldownStart = 0
         self.__timeCooldown = 3.0
         self._hints = []
+        self.__currentVoiceover = None
+        self.__voiceoverSchedule = []
         replayPlaying = BattleReplay.g_replayCtrl.isPlaying
         replaySafeHints = (HINT_TYPE.HINT_MESSAGE_AVOID,)
-        self.__replayPlayer = createReplayPlayHintSystem()
+        self.__replayPlayer = createReplayPlayHintSystem(self)
         for hintName, hintParams in hintsInfo.iteritems():
             try:
                 hintTypeId = HINT_NAMES.index(hintName)
@@ -87,20 +95,31 @@ class HintSystem(object):
         return
 
     def onAction(self, actionId, actionParams):
+        """
+        Called when Battle Action occurs
+        
+        :param actionId: id from BOOTCAMP_BATTLE_ACTION.
+        :param actionParams: list of action argument
+        """
         for hint in self._hints:
             hint.onAction(actionId, actionParams)
 
     def addHint(self, hint):
+        """
+        Register hint class in the system witch derived from HintBase
+        
+        :param hint: hint class
+        """
         hint.id = len(self._hints)
         self._hints.append(hint)
 
     def __processPrimaryHintCommands(self, commandsQueue):
         for hintId, typeId, commandId, timeCompleted, cooldownTimeout, message, voiceover in commandsQueue:
             if commandId == HINT_COMMAND.SHOW:
-                hintController = createPrimaryHintController(hintId, typeId, False, timeCompleted, cooldownTimeout, message, voiceover)
+                hintController = createPrimaryHintController(self, hintId, typeId, False, timeCompleted, cooldownTimeout, message, voiceover)
                 self.__hintsNotCompleted.append(hintController)
             if commandId == HINT_COMMAND.SHOW_COMPLETED:
-                hintController = createPrimaryHintController(hintId, typeId, True, timeCompleted, cooldownTimeout, message, voiceover)
+                hintController = createPrimaryHintController(self, hintId, typeId, True, timeCompleted, cooldownTimeout, message, voiceover)
                 self.__hintsCompleted.append(hintController)
             if commandId == HINT_COMMAND.SHOW_COMPLETED_WITH_HINT:
                 if self.__currentHint is not None and self.__currentHint.id == hintId:
@@ -115,7 +134,7 @@ class HintSystem(object):
                         assert 'Not found corresponded hint' is None
 
                     self.__hintsNotCompleted.remove(correspondedHint)
-                    self.__hintsCompleted.append(createPrimaryHintController(hintId, typeId, True, timeCompleted, cooldownTimeout, message, voiceover))
+                    self.__hintsCompleted.append(createPrimaryHintController(self, hintId, typeId, True, timeCompleted, cooldownTimeout, message, voiceover))
             if commandId == HINT_COMMAND.HIDE:
                 if self.__currentHint is not None and self.__currentHint.id == hintId:
                     self.__currentHint.close()
@@ -165,7 +184,7 @@ class HintSystem(object):
     def __processSecondaryHintCommands(self, commandsQueue):
         for commandId, hintId, typeId, message in commandsQueue:
             if commandId == HINT_COMMAND.SHOW:
-                hintController = createSecondaryHintController(hintId, typeId, message)
+                hintController = createSecondaryHintController(self, hintId, typeId, message)
                 self.__secondaryHintQueue.append(hintController)
             if commandId == HINT_COMMAND.HIDE:
                 if self.__currentSecondaryHint and self.__currentSecondaryHint.id == hintId:
@@ -183,6 +202,9 @@ class HintSystem(object):
         return
 
     def update(self):
+        """
+        Updates all registered hint classes
+        """
         primaryCommandsQueue = []
         secondaryCommandsQueue = []
         for hint in self._hints:
@@ -206,13 +228,24 @@ class HintSystem(object):
         self.__processSecondaryHintCommands(secondaryCommandsQueue)
         if self.__replayPlayer:
             self.__replayPlayer.update()
+        if self.__currentVoiceover and not self.__currentVoiceover.sound.isPlaying:
+            self.__currentVoiceover = None
+        if self.__currentVoiceover is None and self.__voiceoverSchedule:
+            self.playVoiceover(self.__voiceoverSchedule.pop(0))
         return
 
     def start(self):
+        """
+        Start all registered hints
+        
+        """
         for hint in self._hints:
             hint.start()
 
     def stop(self):
+        """
+        Stop and destroy all hints and current hint controller
+        """
         if self.__currentHint is not None:
             self.__currentHint.close()
             self.__currentHint = None
@@ -227,3 +260,29 @@ class HintSystem(object):
         self.__hintsCompleted.clear()
         self.__hintsNotCompleted.clear()
         return
+
+    def playVoiceover(self, soundEvent):
+        """
+        Play voiceover or schedule if more important voiceover is playing
+        
+        :param soundEvent: sound event name
+        """
+        if self.__currentVoiceover:
+            if self.__currentVoiceover.name == soundEvent:
+                return
+            if self.__currentVoiceover.name in HintSystem.highPriorityVoiceovers:
+                if soundEvent not in self.__voiceoverSchedule:
+                    self.__voiceoverSchedule.append(soundEvent)
+                return
+            self.__currentVoiceover.sound.stop()
+        self.__currentVoiceover = _Voiceover(soundEvent, SoundGroups.g_instance.getSound2D(soundEvent))
+        self.__currentVoiceover.sound.play()
+
+    def unscheduleVoiceover(self, soundEvent):
+        """
+        Cancel voiceover schedule if it is not playing yet
+        
+        :param soundEvent: sound event name
+        """
+        if soundEvent in self.__voiceoverSchedule:
+            self.__voiceoverSchedule.remove(soundEvent)

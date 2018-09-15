@@ -327,6 +327,7 @@ class RES_ICONS(object):
     MAPS_ICONS_BATTLETYPES_64X64_HISTORICAL = '../maps/icons/battleTypes/64x64/historical.png'
     MAPS_ICONS_BATTLETYPES_64X64_RANDOM = '../maps/icons/battleTypes/64x64/random.png'
     MAPS_ICONS_BATTLETYPES_64X64_RANKED = '../maps/icons/battleTypes/64x64/ranked.png'
+    MAPS_ICONS_BATTLETYPES_64X64_RANKED_EPICRANDOM = '../maps/icons/battleTypes/64x64/ranked_epicRandom.png'
     MAPS_ICONS_BATTLETYPES_64X64_SPECBATTLESLIST = '../maps/icons/battleTypes/64x64/specBattlesList.png'
     MAPS_ICONS_BATTLETYPES_64X64_SQUAD = '../maps/icons/battleTypes/64x64/squad.png'
     MAPS_ICONS_BATTLETYPES_64X64_STRONGHOLDSBATTLESLIST = '../maps/icons/battleTypes/64x64/strongholdsBattlesList.png'
@@ -1915,6 +1916,20 @@ class RES_ICONS(object):
     MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_106X98_TOP7 = '../maps/icons/rankedBattles/tops/lose/106x98/top7.png'
     MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_106X98_TOP8 = '../maps/icons/rankedBattles/tops/lose/106x98/top8.png'
     MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_106X98_TOP9 = '../maps/icons/rankedBattles/tops/lose/106x98/top9.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP1 = '../maps/icons/rankedBattles/tops/lose/54x50/top1.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP10 = '../maps/icons/rankedBattles/tops/lose/54x50/top10.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP11 = '../maps/icons/rankedBattles/tops/lose/54x50/top11.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP12 = '../maps/icons/rankedBattles/tops/lose/54x50/top12.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP13 = '../maps/icons/rankedBattles/tops/lose/54x50/top13.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP14 = '../maps/icons/rankedBattles/tops/lose/54x50/top14.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP2 = '../maps/icons/rankedBattles/tops/lose/54x50/top2.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP3 = '../maps/icons/rankedBattles/tops/lose/54x50/top3.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP4 = '../maps/icons/rankedBattles/tops/lose/54x50/top4.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP5 = '../maps/icons/rankedBattles/tops/lose/54x50/top5.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP6 = '../maps/icons/rankedBattles/tops/lose/54x50/top6.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP7 = '../maps/icons/rankedBattles/tops/lose/54x50/top7.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP8 = '../maps/icons/rankedBattles/tops/lose/54x50/top8.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP9 = '../maps/icons/rankedBattles/tops/lose/54x50/top9.png'
     MAPS_ICONS_RANKEDBATTLES_TOPS_NOTEFFECTIVE_106X98_TOP1 = '../maps/icons/rankedBattles/tops/notEffective/106x98/top1.png'
     MAPS_ICONS_RANKEDBATTLES_TOPS_NOTEFFECTIVE_106X98_TOP10 = '../maps/icons/rankedBattles/tops/notEffective/106x98/top10.png'
     MAPS_ICONS_RANKEDBATTLES_TOPS_NOTEFFECTIVE_106X98_TOP11 = '../maps/icons/rankedBattles/tops/notEffective/106x98/top11.png'
@@ -1943,6 +1958,20 @@ class RES_ICONS(object):
     MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_106X98_TOP7 = '../maps/icons/rankedBattles/tops/top/106x98/top7.png'
     MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_106X98_TOP8 = '../maps/icons/rankedBattles/tops/top/106x98/top8.png'
     MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_106X98_TOP9 = '../maps/icons/rankedBattles/tops/top/106x98/top9.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP1 = '../maps/icons/rankedBattles/tops/top/54x50/top1.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP10 = '../maps/icons/rankedBattles/tops/top/54x50/top10.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP11 = '../maps/icons/rankedBattles/tops/top/54x50/top11.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP12 = '../maps/icons/rankedBattles/tops/top/54x50/top12.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP13 = '../maps/icons/rankedBattles/tops/top/54x50/top13.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP14 = '../maps/icons/rankedBattles/tops/top/54x50/top14.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP2 = '../maps/icons/rankedBattles/tops/top/54x50/top2.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP3 = '../maps/icons/rankedBattles/tops/top/54x50/top3.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP4 = '../maps/icons/rankedBattles/tops/top/54x50/top4.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP5 = '../maps/icons/rankedBattles/tops/top/54x50/top5.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP6 = '../maps/icons/rankedBattles/tops/top/54x50/top6.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP7 = '../maps/icons/rankedBattles/tops/top/54x50/top7.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP8 = '../maps/icons/rankedBattles/tops/top/54x50/top8.png'
+    MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP9 = '../maps/icons/rankedBattles/tops/top/54x50/top9.png'
     MAPS_ICONS_RANKEDBATTLES_WEBLEAGUE_COHORT1 = '../maps/icons/rankedBattles/webLeague/cohort1.png'
     MAPS_ICONS_RANKEDBATTLES_WEBLEAGUE_COHORT2 = '../maps/icons/rankedBattles/webLeague/cohort2.png'
     MAPS_ICONS_RANKEDBATTLES_WEBLEAGUE_COHORT3 = '../maps/icons/rankedBattles/webLeague/cohort3.png'
@@ -2289,6 +2318,11 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_30 = '../maps/icons/tankmen/icons/barracks/sweden-30.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_31 = '../maps/icons/tankmen/icons/barracks/sweden-31.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_32 = '../maps/icons/tankmen/icons/barracks/sweden-32.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_33 = '../maps/icons/tankmen/icons/barracks/sweden-33.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_34 = '../maps/icons/tankmen/icons/barracks/sweden-34.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_35 = '../maps/icons/tankmen/icons/barracks/sweden-35.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_36 = '../maps/icons/tankmen/icons/barracks/sweden-36.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_37 = '../maps/icons/tankmen/icons/barracks/sweden-37.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_4 = '../maps/icons/tankmen/icons/barracks/sweden-4.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_5 = '../maps/icons/tankmen/icons/barracks/sweden-5.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_SWEDEN_6 = '../maps/icons/tankmen/icons/barracks/sweden-6.png'
@@ -2767,6 +2801,11 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_30 = '../maps/icons/tankmen/icons/big/sweden-30.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_31 = '../maps/icons/tankmen/icons/big/sweden-31.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_32 = '../maps/icons/tankmen/icons/big/sweden-32.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_33 = '../maps/icons/tankmen/icons/big/sweden-33.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_34 = '../maps/icons/tankmen/icons/big/sweden-34.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_35 = '../maps/icons/tankmen/icons/big/sweden-35.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_36 = '../maps/icons/tankmen/icons/big/sweden-36.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_37 = '../maps/icons/tankmen/icons/big/sweden-37.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_4 = '../maps/icons/tankmen/icons/big/sweden-4.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_5 = '../maps/icons/tankmen/icons/big/sweden-5.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_SWEDEN_6 = '../maps/icons/tankmen/icons/big/sweden-6.png'
@@ -3246,6 +3285,11 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_30 = '../maps/icons/tankmen/icons/small/sweden-30.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_31 = '../maps/icons/tankmen/icons/small/sweden-31.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_32 = '../maps/icons/tankmen/icons/small/sweden-32.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_33 = '../maps/icons/tankmen/icons/small/sweden-33.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_34 = '../maps/icons/tankmen/icons/small/sweden-34.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_35 = '../maps/icons/tankmen/icons/small/sweden-35.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_36 = '../maps/icons/tankmen/icons/small/sweden-36.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_37 = '../maps/icons/tankmen/icons/small/sweden-37.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_4 = '../maps/icons/tankmen/icons/small/sweden-4.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_5 = '../maps/icons/tankmen/icons/small/sweden-5.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_SWEDEN_6 = '../maps/icons/tankmen/icons/small/sweden-6.png'
@@ -4476,6 +4520,34 @@ class RES_ICONS(object):
      MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_106X98_TOP7,
      MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_106X98_TOP8,
      MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_106X98_TOP9)
+    MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP_ENUM = (MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP1,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP10,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP11,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP12,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP13,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP14,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP2,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP3,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP4,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP5,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP6,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP7,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP8,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP9)
+    MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP_ENUM = (MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP1,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP10,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP11,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP12,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP13,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP14,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP2,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP3,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP4,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP5,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP6,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP7,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP8,
+     MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP9)
     MAPS_ICONS_RANKEDBATTLES_TOPS_NOTEFFECTIVE_106X98_TOP_ENUM = (MAPS_ICONS_RANKEDBATTLES_TOPS_NOTEFFECTIVE_106X98_TOP1,
      MAPS_ICONS_RANKEDBATTLES_TOPS_NOTEFFECTIVE_106X98_TOP10,
      MAPS_ICONS_RANKEDBATTLES_TOPS_NOTEFFECTIVE_106X98_TOP11,
@@ -4774,6 +4846,24 @@ class RES_ICONS(object):
     def getRankedPostBattleLoseIcon(cls, topNumber):
         outcome = '../maps/icons/rankedBattles/tops/lose/106x98/top{}.png'.format(topNumber)
         if outcome not in cls.MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_106X98_TOP_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getRankedTooltipTopIcon(cls, topNumber):
+        outcome = '../maps/icons/rankedBattles/tops/top/54x50/top{}.png'.format(topNumber)
+        if outcome not in cls.MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_54X50_TOP_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getRankedTooltipLoseIcon(cls, topNumber):
+        outcome = '../maps/icons/rankedBattles/tops/lose/54x50/top{}.png'.format(topNumber)
+        if outcome not in cls.MAPS_ICONS_RANKEDBATTLES_TOPS_LOSE_54X50_TOP_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

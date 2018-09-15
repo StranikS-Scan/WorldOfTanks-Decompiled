@@ -189,7 +189,7 @@ class VehiclesDataProvider(SortableDAAPIDataProvider):
 
     def fini(self):
         self.clear()
-        self._dispose()
+        self.destroy()
 
     def __sortingMethod(self, item, field):
         valueGetter = self.__sortMapping[field]

@@ -51,11 +51,16 @@ class RankInfoHelper(object):
     Helper class for filling RankChangesBlock.
     """
     rankedController = dependency.descriptor(IRankedBattlesController)
-    __TITLE_LABEL_MAP = {RANK_CHANGE_STATES.RANK_EARNED: RANKED_BATTLES.BATTLERESULT_RANKEARNED,
-     RANK_CHANGE_STATES.RANK_LOST: RANKED_BATTLES.BATTLERESULT_RANKLOST,
-     RANK_CHANGE_STATES.STEP_EARNED: RANKED_BATTLES.BATTLERESULT_STAGEEARNED,
-     RANK_CHANGE_STATES.STEP_LOST: RANKED_BATTLES.BATTLERESULT_STAGELOST,
-     RANK_CHANGE_STATES.NOTHING_CHANGED: RANKED_BATTLES.BATTLERESULT_STAGENOTEARNED}
+    __TITLE_LABEL_MAP = {(RANK_CHANGE_STATES.RANK_EARNED, True): RANKED_BATTLES.BATTLERESULT_RANKEARNED,
+     (RANK_CHANGE_STATES.RANK_EARNED, False): RANKED_BATTLES.BATTLERESULT_RANKEARNED,
+     (RANK_CHANGE_STATES.RANK_LOST, True): RANKED_BATTLES.BATTLERESULT_RANKLOST,
+     (RANK_CHANGE_STATES.RANK_LOST, False): RANKED_BATTLES.BATTLERESULT_RANKLOST,
+     (RANK_CHANGE_STATES.STEP_EARNED, True): RANKED_BATTLES.BATTLERESULT_STAGEEARNED,
+     (RANK_CHANGE_STATES.STEP_EARNED, False): RANKED_BATTLES.BATTLERESULT_STAGEEARNED,
+     (RANK_CHANGE_STATES.STEP_LOST, True): RANKED_BATTLES.BATTLERESULT_STAGELOST,
+     (RANK_CHANGE_STATES.STEP_LOST, False): RANKED_BATTLES.BATTLERESULT_STAGELOST,
+     (RANK_CHANGE_STATES.NOTHING_CHANGED, True): RANKED_BATTLES.BATTLERESULT_STAGENOTEARNED,
+     (RANK_CHANGE_STATES.NOTHING_CHANGED, False): RANKED_BATTLES.BATTLERESULT_STAGESAVED}
     __DESCRIPTION_LABEL_MAP = {RANK_CHANGE_STATES.RANK_EARNED: RANKED_BATTLES.getBattleResultsInTop,
      RANK_CHANGE_STATES.RANK_LOST: RANKED_BATTLES.getBattleResultsNotInTop,
      RANK_CHANGE_STATES.STEP_EARNED: RANKED_BATTLES.getBattleResultsInTop,
@@ -107,16 +112,30 @@ class RankInfoHelper(object):
         Returns 'title' field for RankChangesBlock
         :return: string, one from RANKED_BATTLES constants
         """
-        return self.__TITLE_LABEL_MAP[self.getState()]
+        isWin = self.__reusable.getPersonalTeam() == self.__reusable.common.winnerTeam
+        return self.__TITLE_LABEL_MAP[self.getState(), isWin]
 
-    def makeDescriptionLabel(self):
+    def makeDescriptionLabel(self, vehicles, reusable):
         """
         Returns 'description' field for RankChangesBlock
         :return: string, one from RANKED_BATTLES constants
         """
-        descriptionMethod = self.__DESCRIPTION_LABEL_MAP[self.getState()]
+        state = self.getState()
+        descriptionMethod = self.__DESCRIPTION_LABEL_MAP[state]
         isWin = self.__reusable.getPersonalTeam() == self.__reusable.common.winnerTeam
-        resKey = descriptionMethod('win' if isWin else 'lose')
+        accountDBID = reusable.personal.avatar.accountDBID
+        if isWin:
+            result = 'win'
+        elif state == RANK_CHANGE_STATES.NOTHING_CHANGED:
+            result = 'stageSaved'
+        else:
+            result = 'lose'
+        for vehId in vehicles:
+            for item in vehicles[vehId]:
+                if item['accountDBID'] == accountDBID and item['xp'] < self.getMinXp():
+                    result = 'minXP'
+
+        resKey = descriptionMethod(result)
         return i18n.makeString(resKey).format(topNumber=self.__getTopBoundForPersonalTeam())
 
     def makeTopIcon(self):
@@ -177,8 +196,10 @@ class RankInfoHelper(object):
             rankChanges = self.rankedController.getRanksChanges(isLoser=isLoser)
             if rankChanges and rankChanges[0] == 0 and xp == xpToCompare:
                 standoff = self._STANDOFF_CROSS
+            elif xp == xpToCompare and xp >= self.getMinXp():
+                standoff = self._STANDOFF_PLUS
             else:
-                standoff = self._STANDOFF_PLUS if xp == xpToCompare else self._STANDOFF_INVISIBLE
+                standoff = self._STANDOFF_INVISIBLE
         return standoff
 
     def getCapacityWithResources(self, isLoser, isTopList):
@@ -448,7 +469,7 @@ class RankChangesBlock(base.StatsBlock):
         self.rankIcon = helper.makeRankIcon()
         self.linkage = RANKEDBATTLES_ALIASES.BATTLE_RESULTS_SUB_TASK_UI
         self.title = helper.makeTitleLabel()
-        self.description = helper.makeDescriptionLabel()
+        self.description = helper.makeDescriptionLabel(result.get('vehicles', {}), reusable)
 
 
 class RankedResultsBlockTitle(base.StatsItem):

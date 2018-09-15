@@ -120,7 +120,7 @@ class ExchangeFreeToTankmanXpWindow(ExchangeFreeToTankmanXpWindowMeta):
                 nextSkillLevel += 1
 
         data = {'tankmanID': self.__tankManId,
-         'currentSkill': packTankmanSkill(tankman.skills[len(tankman.skills) - 1]),
+         'currentSkill': packTankmanSkill(tankman.skills[len(tankman.skills) - 1], tankman),
          'lastSkillLevel': tDescr.lastSkillLevel,
          'nextSkillLevel': nextSkillLevel}
         self.as_setInitDataS(data)

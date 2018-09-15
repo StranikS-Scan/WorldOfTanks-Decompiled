@@ -285,7 +285,7 @@ def _set_RANKED_STATS_DEPENDENCIES():
 
 def _updateMedalCarius(dossierDescr, dossierBlockDescr, key, value, prevValue):
     frags = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30', 'ranked'):
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30'):
         if dossierDescr.isBlockInLayout(block):
             if block in dossierDescr:
                 frags += dossierDescr[block]['frags']
@@ -305,7 +305,7 @@ def _updateMedalCarius(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 def _updateMedalKnispel(dossierDescr, dossierBlockDescr, key, value, prevValue):
     damage = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30', 'ranked'):
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30'):
         if dossierDescr.isBlockInLayout(block):
             if block in dossierDescr:
                 damage += dossierDescr[block]['damageDealt']
@@ -326,7 +326,7 @@ def _updateMedalKnispel(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 def _updateMedalPoppel(dossierDescr, dossierBlockDescr, key, value, prevValue):
     spotted = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30', 'ranked'):
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30'):
         if dossierDescr.isBlockInLayout(block):
             if block in dossierDescr:
                 spotted += dossierDescr[block]['spotted']
@@ -346,7 +346,7 @@ def _updateMedalPoppel(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 def _updateMedalLeClerc(dossierDescr, dossierBlockDescr, key, value, prevValue):
     capturePoints = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30', 'ranked'):
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30'):
         if dossierDescr.isBlockInLayout(block):
             if block in dossierDescr:
                 capturePoints += dossierDescr[block]['capturePoints']
@@ -366,7 +366,7 @@ def _updateMedalLeClerc(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 def _updateMedalLavrinenko(dossierDescr, dossierBlockDescr, key, value, prevValue):
     droppedCapturePoints = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30', 'ranked'):
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30'):
         if dossierDescr.isBlockInLayout(block):
             if block in dossierDescr:
                 droppedCapturePoints += dossierDescr[block]['droppedCapturePoints']
@@ -411,7 +411,7 @@ def _updateMedalKay(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 def _updateMedalAbrams(dossierDescr, dossierBlockDescr, key, value, prevValue):
     winAndSurvived = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30', 'ranked'):
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30'):
         if dossierDescr.isBlockInLayout(block):
             if block in dossierDescr:
                 winAndSurvived += dossierDescr[block]['winAndSurvived']
@@ -431,7 +431,7 @@ def _updateMedalAbrams(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 def _updateMedalEkins(dossierDescr, dossierBlockDescr, key, value, prevValue):
     frags8p = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30', 'ranked'):
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30'):
         if dossierDescr.isBlockInLayout(block):
             if block in dossierDescr:
                 frags8p += dossierDescr[block]['frags8p']

@@ -8,8 +8,8 @@ from adisp import async
 from constants import WIN_XP_FACTOR_MODE, IS_CHINA
 from items import ItemsPrices
 from debug_utils import LOG_DEBUG
-from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE
-from goodies.goodie_helpers import getPremiumCost, getPriceWithDiscount, GoodieData, getPriceTupleWithDiscount
+from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE, GOODIE_RESOURCE_TYPE
+from goodies.goodie_helpers import getPremiumCost, getPriceWithDiscount, GoodieData
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from items.item_price import getNextSlotPrice, getNextBerthPackPrice
@@ -574,8 +574,8 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
         personalVehicleDiscountPrice = None
         for discountID, discount in self.personalVehicleDiscounts.iteritems():
             if discount.getTargetValue() == typeCompDescr:
-                discountPrice = Money.makeFromMoneyTuple(getPriceTupleWithDiscount(defaultPrice, discount.resource))
-                if discountPrice is not None and (personalVehicleDiscountPrice is None or discountPrice.get(currency) < personalVehicleDiscountPrice.get(currency)):
+                discountPrice = self.__getPriceWithDiscount(defaultPrice, discount.resource)
+                if discountPrice.isDefined() and (personalVehicleDiscountPrice is None or discountPrice.get(currency) < personalVehicleDiscountPrice.get(currency)):
                     personalVehicleDiscountPrice = discountPrice
 
         return personalVehicleDiscountPrice
@@ -610,6 +610,16 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
         """
         discounts = self.__getDiscountsDescriptionsByTarget(targetType)
         return dict(filter(lambda (discountID, item): discountID in self._goodies.goodies, discounts.iteritems()))
+
+    @staticmethod
+    def __getPriceWithDiscount(price, resourceData):
+        """
+        Translates goodie value into the final price in Money
+        """
+        resourceType, _, _ = resourceData
+        if resourceType == GOODIE_RESOURCE_TYPE.CREDITS:
+            return Money(credits=getPriceWithDiscount(price.credits, resourceData))
+        return Money(gold=getPriceWithDiscount(price.gold, resourceData)) if resourceType == GOODIE_RESOURCE_TYPE.GOLD else MONEY_UNDEFINED
 
 
 class DefaultShopRequester(ShopCommonStats):

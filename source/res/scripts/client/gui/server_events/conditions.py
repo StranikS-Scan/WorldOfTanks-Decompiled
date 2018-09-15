@@ -1017,7 +1017,7 @@ class BattleResults(_Condition, _Negatable, _Updatable):
 
     def update(self, other, groupType):
         if groupType == GROUP_TYPE.AND:
-            if other.getName() == 'results' and self._keyName == other._keyName:
+            if other.getName() == 'results' and self.keyName == other.keyName and self.relation == other.relation:
                 topRange, otherTopRange = self.getTopRange(), other.getTopRange()
                 self._max = (max(topRange[0], otherTopRange[0]), min(topRange[1], otherTopRange[1]))
                 return True

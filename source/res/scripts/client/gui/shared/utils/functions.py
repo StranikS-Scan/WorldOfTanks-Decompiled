@@ -218,7 +218,7 @@ def getArenaShortName(arenaTypeID):
 def getArenaFullName(arenaTypeID):
     arenaType = ArenaType.g_cache[arenaTypeID]
     arenaName = arenaType.name
-    if arenaType.gameplayName not in ('ctf', 'ctf30x30'):
+    if arenaType.gameplayName != 'ctf':
         arenaName = '%s - %s' % (arenaName, makeString('#arenas:type/%s/name' % arenaType.gameplayName))
     return arenaName
 

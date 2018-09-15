@@ -18,7 +18,7 @@ class StoreTable(StoreTableMeta):
     def _dispose(self):
         if self._storeTableDataProvider is not None:
             self._storeTableDataProvider.clearList()
-            self._storeTableDataProvider._dispose()
+            self._storeTableDataProvider.destroy()
             self._storeTableDataProvider = None
         super(StoreTable, self)._dispose()
         return

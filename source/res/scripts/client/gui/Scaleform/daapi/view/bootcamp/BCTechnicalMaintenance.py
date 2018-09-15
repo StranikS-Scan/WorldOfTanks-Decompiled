@@ -60,7 +60,7 @@ class BCTechnicalMaintenance(BCTechnicalMaintenanceMeta):
         if isBlock and self.__isLesson:
             for module in modules:
                 if module['inventoryCount'] == 0:
-                    module['enabled'] = False
+                    module['disabled'] = True
 
         super(BCTechnicalMaintenanceMeta, self).as_setEquipmentS(installed, setup, modules)
         return

@@ -33,7 +33,7 @@ class CandidatesDataProvider(DAAPIDataProvider):
 
     def fini(self):
         self.clear()
-        self._dispose()
+        self.destroy()
 
     def clear(self):
         self._list = []

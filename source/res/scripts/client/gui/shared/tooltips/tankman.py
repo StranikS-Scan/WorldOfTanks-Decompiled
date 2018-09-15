@@ -1,13 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/tankman.py
 import math
+from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.shared.tooltips import ToolTipDataField, ToolTipAttrField, ToolTipData, TOOLTIP_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
 from helpers import time_utils
 from helpers.i18n import makeString
-from items.tankmen import SKILLS_BY_ROLES, getSkillsConfig
+from items.tankmen import SKILLS_BY_ROLES, getSkillsConfig, hasTagInTankmenGroup
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles, moneyWithIcon
 from shared_utils import findFirst
@@ -19,8 +20,9 @@ class TankmanRoleLevelField(ToolTipDataField):
 
     def _getValue(self):
         tankman = self._tooltip.item
-        roleLevel, _ = tankman.realRoleLevel
-        return roleLevel
+        if tankman:
+            roleLevel, _ = tankman.realRoleLevel
+            return roleLevel
 
 
 class TankmanRoleBonusesField(ToolTipDataField):
@@ -39,9 +41,10 @@ class TankmanRoleBonusesField(ToolTipDataField):
     def _getValue(self):
         tankman = self._tooltip.item
         result = 0
-        _, roleBonuses = tankman.realRoleLevel
-        for idx in self.__ids:
-            result += roleBonuses[idx]
+        if tankman:
+            _, roleBonuses = tankman.realRoleLevel
+            for idx in self.__ids:
+                result += roleBonuses[idx]
 
         return result
 
@@ -52,7 +55,7 @@ class TankmanCurrentVehicleAttrField(ToolTipAttrField):
 
     def _getItem(self):
         tankman = self._tooltip.item
-        return self.itemsCache.items.getVehicle(tankman.vehicleInvID) if tankman.isInTank else None
+        return self.itemsCache.items.getVehicle(tankman.vehicleInvID) if tankman and tankman.isInTank else None
 
 
 class TankmanNativeVehicleAttrField(ToolTipAttrField):

@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shared/fitting_select_popover.py
 import BigWorld
-from debug_utils import LOG_DEBUG
 from gui import g_htmlTemplates
 from constants import MAX_VEHICLE_LEVEL
 from gui.Scaleform.daapi.view.meta.FittingSelectPopoverMeta import FittingSelectPopoverMeta
@@ -524,7 +523,9 @@ class _HangarLogicProvider(PopoverLogicProvider):
         if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not isInstalled and module.hasSimilarDevicesInstalled(self._vehicle):
             isFit, reason = False, GUI_ITEM_ECONOMY_CODE.ITEM_IS_DUPLICATED
         elif isBought:
-            isFit, reason = True, GUI_ITEM_ECONOMY_CODE.UNDEFINED
+            isFit, reason = module.mayInstall(self._vehicle, self._slotIndex)
+            if reason == 'already installed' or isFit:
+                isFit, reason = True, GUI_ITEM_ECONOMY_CODE.UNDEFINED
         else:
             isFit, reason = module.mayPurchase(stats['money'])
             if not isFit:
@@ -565,12 +566,12 @@ class _PreviewLogicProvider(PopoverLogicProvider):
         g_currentPreviewVehicle.installComponent(int(newId))
 
     def _buildModuleData(self, module, isInstalled, _):
-        reason = _getInstallReason(module, self._vehicle, '', 0)
+        isFit, reason = module.mayInstall(self._vehicle, 0)
         moduleData = self._buildCommonModuleData(module, reason)
         moduleData.update({'targetVisible': isInstalled,
          'showPrice': False,
          'isSelected': isInstalled,
-         'disabled': reason == '',
+         'disabled': not isFit,
          'removeButtonLabel': MENU.MODULEFITS_REMOVENAME,
          'removeButtonTooltip': MENU.MODULEFITS_REMOVETOOLTIP})
         return moduleData

@@ -26,7 +26,7 @@ class PrimaryHintController(object):
     HINT_IDS_TO_MUTE = (HINT_TYPE.HINT_ROTATE_LOBBY,)
     HINT_IDS_TO_COMPLETE = (HINT_TYPE.HINT_MOVE, HINT_TYPE.HINT_MOVE_TURRET, HINT_TYPE.HINT_SHOOT)
 
-    def __init__(self, hintId, typeId, completed, timeCompleted, timeCooldown, message, voiceover):
+    def __init__(self, system, hintId, typeId, completed, timeCompleted, timeCooldown, message, voiceover):
         super(PrimaryHintController, self).__init__()
         self.id = hintId
         self.typeId = typeId
@@ -38,6 +38,7 @@ class PrimaryHintController(object):
         self._timeout = timeCompleted
         self.message = message
         self.muted = False
+        self._hintSystem = system
         if self.typeId in HINT_TYPE.BATTLE_HINTS:
             self._scope = EVENT_BUS_SCOPE.BATTLE
             self._viewAlias = VIEW_ALIAS.BOOTCAMP_BATTLE_TOP_HINT
@@ -67,7 +68,7 @@ class PrimaryHintController(object):
             g_eventBus.handleEvent(events.LoadViewEvent(BootcampEvent.ADD_HIGHLIGHT, None, PrimaryHintController.HINT_HIGHLIGHTS[self.typeId]), EVENT_BUS_SCOPE.BATTLE)
         self._isOnScreen = True
         if self.voiceover and not self.muted:
-            SoundGroups.g_instance.playSound2D(self.voiceover)
+            self._hintSystem.playVoiceover(self.voiceover)
         return
 
     def hideWithTimeout(self):
@@ -114,6 +115,8 @@ class PrimaryHintController(object):
         g_eventBus.handleEvent(events.BootcampEvent(BootcampEvent.HINT_CLOSE), self._scope)
         if self.typeId in PrimaryHintController.HINT_HIGHLIGHTS:
             g_eventBus.handleEvent(events.LoadViewEvent(BootcampEvent.REMOVE_HIGHLIGHT, None, PrimaryHintController.HINT_HIGHLIGHTS[self.typeId]), EVENT_BUS_SCOPE.BATTLE)
+        if self.voiceover and not self.muted:
+            self._hintSystem.unscheduleVoiceover(self.voiceover)
         if self._hideCallbackId:
             BigWorld.cancelCallback(self._hideCallbackId)
             self._hideCallbackId = None
@@ -127,7 +130,7 @@ class PrimaryHintController(object):
 class SecondaryHintController(object):
     HINT_HIGHLIGHTS = {HINT_TYPE.HINT_LOW_HP: 'DamagePanelHealthbar'}
 
-    def __init__(self, hintId, typeId, message):
+    def __init__(self, system, hintId, typeId, message):
         super(SecondaryHintController, self).__init__()
         self.id = hintId
         self._typeId = typeId
@@ -156,8 +159,8 @@ class SecondaryHintController(object):
 
 class PrimaryHintControllerReplayRecorder(PrimaryHintController):
 
-    def __init__(self, hintId, typeId, completed, timeCompleted, timeCooldown, message, voiceover):
-        super(PrimaryHintControllerReplayRecorder, self).__init__(hintId, typeId, completed, timeCompleted, timeCooldown, message, voiceover)
+    def __init__(self, system, hintId, typeId, completed, timeCompleted, timeCooldown, message, voiceover):
+        super(PrimaryHintControllerReplayRecorder, self).__init__(system, hintId, typeId, completed, timeCompleted, timeCooldown, message, voiceover)
 
     def show(self):
         super(PrimaryHintControllerReplayRecorder, self).show()
@@ -211,10 +214,11 @@ class ReplayHintPlaySystem:
     COMMAND_CLOSE = 4
     COMMAND_HIDED = 5
 
-    def __init__(self):
+    def __init__(self, hintSystem):
         self.replayCallbacks = []
         self.__commandBuffer = []
         self.__hints = {}
+        self.__hintSystem = hintSystem
         self.replaySubscribe()
 
     def destroy(self):
@@ -226,12 +230,14 @@ class ReplayHintPlaySystem:
             self.bootcamp.replayCtrl.delDataCallback(eventName, callback)
 
         self.replayCallbacks = []
+        self.__hintSystem = None
+        return
 
     def update(self):
         while len(self.__commandBuffer):
             command, id, typeId, completed, message, voiceover, muted = self.__commandBuffer[0]
             if command == ReplayHintPlaySystem.COMMAND_SHOW:
-                self.__hints[id] = PrimaryHintController(id, typeId, completed, 0, 0, message, voiceover)
+                self.__hints[id] = PrimaryHintController(self.__hintSystem, id, typeId, completed, 0, 0, message, voiceover)
                 self.__hints[id].muted = muted
                 self.__hints[id].show()
             elif command == ReplayHintPlaySystem.COMMAND_HIDE:
@@ -277,13 +283,13 @@ class ReplayHintPlaySystem:
         self.appendCommandBuffer(command, *cPickle.loads(base64.b64decode(binData)))
 
 
-def createPrimaryHintController(hintId, typeId, completed, timeCompleted, timeCooldown, message, voiceover):
-    return PrimaryHintControllerReplayRecorder(hintId, typeId, completed, timeCompleted, timeCooldown, message, voiceover) if BattleReplay.g_replayCtrl.isRecording else PrimaryHintController(hintId, typeId, completed, timeCompleted, timeCooldown, message, voiceover)
+def createPrimaryHintController(system, hintId, typeId, completed, timeCompleted, timeCooldown, message, voiceover):
+    return PrimaryHintControllerReplayRecorder(system, hintId, typeId, completed, timeCompleted, timeCooldown, message, voiceover) if BattleReplay.g_replayCtrl.isRecording else PrimaryHintController(system, hintId, typeId, completed, timeCompleted, timeCooldown, message, voiceover)
 
 
-def createSecondaryHintController(hintId, typeId, message):
-    return SecondaryHintController(hintId, typeId, message)
+def createSecondaryHintController(system, hintId, typeId, message):
+    return SecondaryHintController(system, hintId, typeId, message)
 
 
-def createReplayPlayHintSystem():
-    return ReplayHintPlaySystem() if BattleReplay.g_replayCtrl.isPlaying else None
+def createReplayPlayHintSystem(hintSystem):
+    return ReplayHintPlaySystem(hintSystem) if BattleReplay.g_replayCtrl.isPlaying else None

@@ -1771,6 +1771,7 @@ class RefSystemReferralContributedXPFormatter(WaitItemsSyncFormatter):
                 callback((None, None))
         else:
             callback((None, None))
+        return None
 
 
 class RefSystemQuestsFormatter(TokenQuestsFormatter):

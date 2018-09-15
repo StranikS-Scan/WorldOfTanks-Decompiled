@@ -125,7 +125,7 @@ class _VehicleCompareCartDataProvider(SortableDAAPIDataProvider):
         self.comparisonBasket.onChange -= self.__basketChanged
         self.comparisonBasket.onSwitchChange -= self.__basketChanged
         self.clear()
-        self._dispose()
+        self.destroy()
 
     def getSelectedIdx(self):
         return self.__mapping[self.__selectedID] if self.__selectedID in self.__mapping else -1

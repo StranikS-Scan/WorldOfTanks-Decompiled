@@ -185,7 +185,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
 
     def fini(self):
         self.clear()
-        self._dispose()
+        self.destroy()
 
     def selectVehicle(self, filteredIdx):
         """ Select one of vehicles.

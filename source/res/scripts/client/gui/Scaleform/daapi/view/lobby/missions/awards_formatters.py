@@ -54,7 +54,9 @@ class CardAwardComposer(QuestsBonusComposer):
          'specialArgs': bonus.specialArgs,
          'compensationTooltip': QUESTS.BONUSES_COMPENSATION,
          'hasCompensation': bonus.isCompensation,
-         'align': bonus.align}
+         'align': bonus.align,
+         'highlightType': bonus.highlightType,
+         'overlayType': bonus.overlayType}
 
     def _packMergedBonuses(self, mergedBonuses, size=AWARDS_SIZES.SMALL):
         mergedBonusCount = len(mergedBonuses)

@@ -84,17 +84,6 @@ def getPriceWithDiscount(price, resourceData):
         return max(price - value, 0)
 
 
-def getPriceTupleWithDiscount(price, resourceData):
-    """
-    Translates goodie value into the final price tuple
-    """
-    resourceType, _, _ = resourceData
-    if resourceType == GOODIE_RESOURCE_TYPE.CREDITS:
-        return (getPriceWithDiscount(price[0], resourceData), 0)
-    else:
-        return (0, getPriceWithDiscount(price[1], resourceData)) if resourceType == GOODIE_RESOURCE_TYPE.GOLD else None
-
-
 def getPremiumCost(premiumCosts, goodie):
     if goodie.target[0] == GOODIE_TARGET_TYPE.ON_BUY_PREMIUM:
         price = premiumCosts.get(goodie.getTargetValue(), None)

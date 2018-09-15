@@ -33,7 +33,8 @@ _RANKED_RESULTS_TEAM_PART_DATA_VO_META = base.PropertyMeta((('listData', [], 'li
  ('backgroundType', '', 'backgroundType'),
  ('backgroundBlink', False, 'backgroundBlink'),
  ('topIcon', '', 'icon'),
- ('topCapacity', 0, 'capacity')))
+ ('topCapacity', 0, 'capacity'),
+ ('isColorBlind', False, 'isColorBlind')))
 _RANKED_RESULTS_TEAM_PART_DATA_VO_META.bind(vehicles.RankedResultsTeamPartDataStatsBlock)
 RANKED_RESULTS_TEAMS_STATS_BLOCK = vehicles.RankedResultsTeamStatsBlock(_RANKED_RESULTS_TEAMS_VO_META.clone(), '', _RECORD.VEHICLES)
 RANKED_RESULTS_TEAMS_STATS_BLOCK.addNextComponent(vehicles.RankedResultsTeamDataStatsBlock(field='leftData'))

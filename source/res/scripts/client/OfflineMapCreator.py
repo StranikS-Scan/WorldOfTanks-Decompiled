@@ -5,6 +5,7 @@ import MapActivities
 import Math
 import Keys
 import GUI
+from ArenaType import g_cache
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from functools import partial
 from gui.app_loader import g_appLoader
@@ -57,7 +58,6 @@ class OfflineMapCreator:
         self.__spaceMappingId = None
         self.__vEntityId = None
         self.__isActive = False
-        self._loadListArenaNames()
         self.__arenaTypeID = 0
         return
 
@@ -73,7 +73,7 @@ class OfflineMapCreator:
             BigWorld.setWatcher('Visibility/GUI', False)
             self.__spaceId = BigWorld.createSpace()
             self.__isActive = True
-            self.__arenaTypeID = self._arenaTypeIDByArenaName.get(mapName)
+            self.__arenaTypeID = self.__getArenaTypeId(mapName)
             self.__spaceMappingId = BigWorld.addSpaceGeometryMapping(self.__spaceId, None, 'spaces/' + mapName)
             self.__vEntityId = BigWorld.createEntity('Avatar', self.__spaceId, 0, _V_START_POS, (_V_START_ANGLES[2], _V_START_ANGLES[1], _V_START_ANGLES[0]), {})
             avatar = BigWorld.entities[self.__vEntityId]
@@ -150,16 +150,19 @@ class OfflineMapCreator:
     def arenaId(self):
         return self.__arenaTypeID
 
-    def _loadListArenaNames(self):
-        self._arenaTypeIDByArenaName = {}
-        ds = ResMgr.openSection(constants.ARENA_TYPE_XML_PATH + '_list_.xml')
-        if ds is not None:
-            for sec in ds.values():
-                __arenaTypeID = sec.readInt('id')
-                arenaName = sec.readString('name')
-                self._arenaTypeIDByArenaName[arenaName] = __arenaTypeID
+    @staticmethod
+    def __getArenaTypeId(mapName):
+        """
+        get default arena type id (ctf) or any other if map doesn't have ctf
+        """
+        info = {arenaType.gameplayName:arenaTypeId for arenaTypeId, arenaType in g_cache.iteritems() if mapName == arenaType.geometryName}
+        priority = ('ctf',)
+        for p in priority:
+            if p in info:
+                return info[p]
 
-        return
+        assert bool(info), 'Unknown map: {}'.format(mapName)
+        return next(iter(info.itervalues()))
 
     def __setupCamera(self):
         global _CAM_START_TARGET_POS

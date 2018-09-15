@@ -46,7 +46,9 @@ class ConsistentMatrices(object):
         bindMatrix = Math.Matrix(self.attachedVehicleMatrix)
         vehicle = avatar.getVehicleAttached()
         useStatic = True
-        if vehicle is not None and vehicle.id == targetVehicleID:
+        alreadyBound = vehicle is not None and vehicle.id == targetVehicleID
+        previousWasPlayer = vehicle is not None and vehicle.isPlayerVehicle
+        if alreadyBound or previousWasPlayer:
             bindMatrix = vehicle.matrix
             useStatic = False
         self.__setTarget(bindMatrix, useStatic)

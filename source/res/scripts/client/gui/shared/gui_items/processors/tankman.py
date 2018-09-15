@@ -335,7 +335,7 @@ class TankmanChangeRole(ItemProcessor):
          plugins.VehicleCrewLockedValidator(vehicle),
          plugins.MessageConfirmator('tankmanChageRole/unknownVehicle', ctx={'tankname': vehicle.userName}, isEnabled=not vehicle.isInInventory),
          plugins.VehicleValidator(vehicle, False),
-         plugins.VehicleRoleValidator(vehicle, role),
+         plugins.VehicleRoleValidator(vehicle, role, tankman),
          plugins.MoneyValidator(Money(gold=self.__changeRoleCost))))
 
     def _errorHandler(self, code, errStr='', ctx=None):

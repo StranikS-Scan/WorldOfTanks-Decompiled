@@ -601,7 +601,7 @@ class EquipmentsMarkerPlugin(MarkerPlugin):
     def __handleCallback(self, markerID, finishTime):
         self.__callbackIDs[markerID] = None
         delay = round(finishTime - BigWorld.serverTime())
-        if delay < 0:
+        if delay <= 0:
             self._destroyMarker(markerID)
         else:
             self._invokeMarker(markerID, 'updateTimer', _EQUIPMENT_DELAY_FORMAT.format(delay))

@@ -197,7 +197,7 @@ class _VehParamsDataProvider(SortableDAAPIDataProvider):
 
     def fini(self):
         self.clear()
-        self._dispose()
+        self.destroy()
 
     def setUseAnim(self, useAnim):
         self._paramsGenerator.useAnim = useAnim

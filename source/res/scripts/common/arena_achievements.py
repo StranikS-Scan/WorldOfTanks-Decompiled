@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/arena_achievements.py
 from dossiers2.custom.records import RECORD_DB_IDS
+from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
 ACHIEVEMENTS = ('warrior', 'invader', 'sniper', 'sniper2', 'mainGun', 'defender', 'steelwall', 'supporter', 'scout', 'evileye', 'medalWittmann', 'medalOrlik', 'medalOskin', 'medalHalonen', 'medalBurda', 'medalBillotte', 'medalKolobanov', 'medalFadin', 'medalRadleyWalters', 'medalLafayettePool', 'medalLehvaslaiho', 'medalNikolas', 'medalPascucci', 'medalDumitru', 'medalBrunoPietro', 'medalTarczay', 'heroesOfRassenay', 'medalDeLanglade', 'medalTamadaYoshio', 'raider', 'kamikaze', 'huntsman', 'bombardier', 'luckyDevil', 'ironMan', 'sturdy', 'alaric', 'lumberjack', 'medalBrothersInArms', 'medalCrucialContribution', 'armoredFist', 'kingOfTheHill', 'willToWinSpirit', 'shoulderToShoulder', 'aloneInTheField', 'fallenFlags', 'effectiveSupport', 'falloutDieHard', 'stormLord', 'winnerLaurels', 'predator', 'unreachable', 'champion', 'bannerman', 'markIProtector', 'markIBaseProtector', 'markIBomberman', 'markIRepairer')
 ACHIEVEMENTS_WITH_REWARD = set([ RECORD_DB_IDS['achievements', name] for name in ('warrior', 'invader', 'sniper', 'sniper2', 'mainGun', 'defender', 'steelwall', 'supporter', 'scout', 'evileye', 'heroesOfRassenay', 'medalFadin', 'medalNikolas', 'medalPascucci', 'medalLehvaslaiho', 'medalRadleyWalters', 'medalHalonen', 'medalDumitru', 'medalDeLanglade', 'medalOrlik', 'medalOskin', 'medalLafayettePool', 'medalBurda', 'medalTamadaYoshio', 'medalBrothersInArms', 'medalCrucialContribution', 'huntsman', 'medalStark', 'medalGore') ] + [ RECORD_DB_IDS['falloutAchievements', name] for name in ('shoulderToShoulder', 'falloutDieHard', 'champion', 'bannerman') ])
 INBATTLE_SERIES = ('sniper', 'killing', 'piercing')
@@ -113,3 +114,21 @@ ACHIEVEMENT_CONDITIONS = {'warrior': {'minFrags': 6},
               'minDamageDealt': 10000,
               'minFlagsCapture': 3},
  'bannerman': {'minFlagsCapture': 4}}
+ACHIEVEMENT_CONDITIONS_EXT = {'warrior': {'minFrags': 8},
+ 'heroesOfRassenay': {'minKills': 21,
+                      'maxKills': 255},
+ 'medalLafayettePool': {'minLevel': 5,
+                        'minKills': 13,
+                        'maxKills': 20},
+ 'medalRadleyWalters': {'minLevel': 5,
+                        'minKills': 10,
+                        'maxKills': 12}}
+
+def getAchievementCondition(arenaBonusType, medal):
+    """
+    Returns condition for medal depending on arena bonus type.
+    :param arenaBonusType: arena bonus type.
+    :param medal: medal name.
+    :return: dict with medal conditions. See ACHIEVEMENT_CONDITIONS and other conditions.
+    """
+    return ACHIEVEMENT_CONDITIONS_EXT.get(medal, ACHIEVEMENT_CONDITIONS[medal]) if BONUS_CAPS.checkAny(arenaBonusType, BONUS_CAPS.ACHIEVEMENT_CONDITIONS_EXT) else ACHIEVEMENT_CONDITIONS[medal]

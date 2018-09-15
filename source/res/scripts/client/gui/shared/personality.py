@@ -140,7 +140,7 @@ def onAvatarBecomePlayer():
     yield ServicesLocator.settingsCache.update()
     ServicesLocator.settingsCore.serverSettings.applySettings()
     ServicesLocator.soundCtrl.stop()
-    ServicesLocator.clanCtrl.stop()
+    ServicesLocator.clanCtrl.stop(False)
     ServicesLocator.eventsCache.stop()
     g_prbLoader.onAvatarBecomePlayer()
     ServicesLocator.gameState.onAvatarBecomePlayer()

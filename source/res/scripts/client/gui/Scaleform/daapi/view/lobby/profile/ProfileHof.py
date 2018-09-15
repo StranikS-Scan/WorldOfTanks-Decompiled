@@ -64,13 +64,17 @@ class ProfileHof(ProfileHofMeta):
             self.__getRatingStatus()
 
     def onSectionActivated(self):
-        if self.__requestProcessing:
-            LOG_WARNING('ProfileHof request canceled: another request is processing')
+        if self.lobbyContext.getServerSettings().bwHallOfFame.isStatusEnabled:
+            if self.__requestProcessing:
+                LOG_WARNING('ProfileHof request canceled: another request is processing')
+            else:
+                self.__getRatingStatus()
         else:
-            self.__getRatingStatus()
+            self.as_setStatusS(PROFILE_CONSTANTS.HOF_SPECIAL_CASES)
 
     def _populate(self):
         super(ProfileHof, self)._populate()
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         self.as_setBackgroundS(self._bgPath)
         self.as_setBtnCountersS(self.__getCountersList())
 
@@ -79,6 +83,7 @@ class ProfileHof(ProfileHofMeta):
             LOG_WARNING('ProfileHof request canceled: ProfileHof view was disposed')
             BigWorld.cancelCallback(self.__retryCallback)
         self.__viewDisposed = True
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         super(ProfileHof, self)._dispose()
 
     def __getCountersList(self):
@@ -155,3 +160,7 @@ class ProfileHof(ProfileHofMeta):
          'selectedAlias': VIEW_ALIAS.PROFILE_HOF,
          'disabledKeys': getHofDisabledKeys(),
          'onServerSettingsChange': onServerSettingsChange}), EVENT_BUS_SCOPE.LOBBY)
+
+    def __onServerSettingChanged(self, diff):
+        if 'hallOfFame' in diff:
+            self.onSectionActivated()

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/carousels/basic/tank_carousel.py
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core import settings_constants
+from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform import getButtonsAssetPath

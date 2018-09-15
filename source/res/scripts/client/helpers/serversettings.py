@@ -180,8 +180,8 @@ class _SpgRedesignFeatures(namedtuple('_SpgRedesignFeatures', ['stunEnabled', 'm
 
 _BwRankedBattles = namedtuple('_BwRankedBattles', ('rblbHostUrl',))
 _BwRankedBattles.__new__.__defaults__ = (None,)
-_BwHallOfFame = namedtuple('_BwHallOfFame', ('hofHostUrl',))
-_BwHallOfFame.__new__.__defaults__ = (None,)
+_BwHallOfFame = namedtuple('_BwHallOfFame', ('hofHostUrl', 'isHofEnabled', 'isStatusEnabled'))
+_BwHallOfFame.__new__.__defaults__ = (None, False, False)
 
 class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ['isEnabled',
  'peripheryIDs',
@@ -295,6 +295,8 @@ class ServerSettings(object):
             self.__spgRedesignFeatures = makeTupleByDict(_SpgRedesignFeatures, self.__serverSettings['spgRedesignFeatures'])
         if 'ranked_config' in serverSettingsDiff:
             self.__updateRanked(serverSettingsDiff)
+        if 'hallOfFame' in serverSettingsDiff:
+            self.__bwHallOfFame = makeTupleByDict(_BwHallOfFame, serverSettingsDiff['hallOfFame'])
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):

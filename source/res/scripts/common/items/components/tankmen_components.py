@@ -253,20 +253,18 @@ class NationGroup(legacy_stuff.LegacyStuff):
 class NationConfig(legacy_stuff.LegacyStuff):
     """Class to holds nation-specific configuration of tankmen that are read
     from item_def/tankmen/<nation_name>.xml."""
-    __slots__ = ('__name', '__normalGroups', '__premiumGroups', '__eventGroups', '__roleRanks', '__firstNames', '__lastNames', '__icons', '__ranks', '__eventRanks')
+    __slots__ = ('__name', '__normalGroups', '__premiumGroups', '__roleRanks', '__firstNames', '__lastNames', '__icons', '__ranks')
 
-    def __init__(self, name, normalGroups=None, premiumGroups=None, eventGroups=None, roleRanks=None, firstNames=None, lastNames=None, icons=None, ranks=None, eventRanks=None):
+    def __init__(self, name, normalGroups=None, premiumGroups=None, roleRanks=None, firstNames=None, lastNames=None, icons=None, ranks=None):
         super(NationConfig, self).__init__()
         self.__name = name
         self.__normalGroups = normalGroups or component_constants.EMPTY_TUPLE
         self.__premiumGroups = premiumGroups or component_constants.EMPTY_TUPLE
-        self.__eventGroups = eventGroups or component_constants.EMPTY_TUPLE
         self.__roleRanks = roleRanks
         self.__firstNames = firstNames or {}
         self.__lastNames = lastNames or {}
         self.__icons = icons or {}
         self.__ranks = ranks
-        self.__eventRanks = eventRanks
 
     def __repr__(self):
         return 'NationConfig({})'.format(self.__name)
@@ -278,10 +276,6 @@ class NationConfig(legacy_stuff.LegacyStuff):
     @property
     def premiumGroups(self):
         return self.__premiumGroups
-
-    @property
-    def eventGroups(self):
-        return self.__eventGroups
 
     @property
     def roleRanks(self):
@@ -303,10 +297,6 @@ class NationConfig(legacy_stuff.LegacyStuff):
     def ranks(self):
         return self.__ranks
 
-    @property
-    def eventRanks(self):
-        return self.__eventRanks
-
     def hasFirstName(self, nameID):
         """Does config have first name by ID of name (index)."""
         return nameID in self.__firstNames
@@ -319,11 +309,9 @@ class NationConfig(legacy_stuff.LegacyStuff):
         """Does config have icon by ID (index)."""
         return iconID in self.__icons
 
-    def getGroups(self, isPremium, isEvent=False):
+    def getGroups(self, isPremium):
         """Gets tuple of groups by premium flag."""
-        if isEvent:
-            return self.__eventGroups
-        elif isPremium:
+        if isPremium:
             return self.__premiumGroups
         else:
             return self.__normalGroups
@@ -360,11 +348,9 @@ class NationConfig(legacy_stuff.LegacyStuff):
         else:
             return component_constants.EMPTY_STRING
 
-    def getRank(self, rankID, isEvent=False):
+    def getRank(self, rankID):
         """Gets instance of Rank containing information about rank (user-friendly name, icon, ...) or None."""
-        if isEvent:
-            return self.__eventRanks.getRankByID(rankID)
-        elif self.__ranks is not None:
+        if self.__ranks is not None:
             return self.__ranks.getRankByID(rankID)
         else:
             return

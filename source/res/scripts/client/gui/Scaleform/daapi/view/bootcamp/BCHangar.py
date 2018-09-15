@@ -36,7 +36,7 @@ class BCHangar(Hangar):
 
     def onEscape(self):
         dialogsContainer = self.app.containerManager.getContainer(ViewTypes.TOP_WINDOW)
-        if not dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MENU}) and not dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.BOOTCAMP_OUTRO_VIDEO}) and not dialogsContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG}):
+        if not self.__isViewOpenOrLoading(dialogsContainer, VIEW_ALIAS.LOBBY_MENU) and not self.__isViewOpenOrLoading(dialogsContainer, VIEW_ALIAS.BOOTCAMP_OUTRO_VIDEO) and not self.__isViewOpenOrLoading(dialogsContainer, VIEW_ALIAS.BOOTCAMP_QUEUE_DIALOG):
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def showHelpLayout(self):
@@ -58,3 +58,14 @@ class BCHangar(Hangar):
         self._observer = None
         super(BCHangar, self)._dispose()
         return
+
+    def __isViewOpenOrLoading(self, container, viewAlias):
+        openView = container.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: viewAlias})
+        if openView is not None:
+            return True
+        else:
+            for loadingView in container.getAllLoadingViews():
+                if loadingView.settings.alias == viewAlias:
+                    return True
+
+            return False

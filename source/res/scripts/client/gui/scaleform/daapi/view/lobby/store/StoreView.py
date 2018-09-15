@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/StoreView.py
 from account_helpers import AccountSettings
+from gui.Scaleform.daapi.view.lobby.store.actions_formatters import getActiveActions, getNewActiveActions
 from gui.Scaleform.daapi.view.meta.StoreViewMeta import StoreViewMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -23,14 +24,6 @@ _TABS = ({'id': STORE_CONSTANTS.STORE_ACTIONS,
 def _getTabIndex(tabId):
     index, _ = findFirst(lambda (i, e): e['id'] == tabId, enumerate(_TABS), (0, None))
     return index
-
-
-def _filterOutOfDate(info):
-    return not info.isOutOfDate()
-
-
-def _filterNewActions(info):
-    return info.getIsNew()
 
 
 class StoreView(StoreViewMeta):
@@ -74,7 +67,7 @@ class StoreView(StoreViewMeta):
         self.__updateActionsCounter()
 
     def __updateActionsCounter(self):
-        newActions = filter(_filterNewActions, self.__checkForActiveActions())
+        newActions = getNewActiveActions(self.eventsCache)
         if newActions:
             self.as_setBtnTabCountersS(({'componentId': STORE_CONSTANTS.STORE_ACTIONS,
               'count': str(len(newActions))},))
@@ -90,7 +83,7 @@ class StoreView(StoreViewMeta):
         if tabId is not None:
             self.__currentTabIdx = _getTabIndex(tabId)
         elif self.__currentTabIdx is None:
-            if self.__checkForActiveActions():
+            if getActiveActions(self.eventsCache):
                 self.__currentTabIdx = _getTabIndex(STORE_CONSTANTS.STORE_ACTIONS)
             else:
                 self.__currentTabIdx = _getTabIndex(STORE_CONSTANTS.SHOP)
@@ -124,14 +117,6 @@ class StoreView(StoreViewMeta):
         else:
             self.as_hideBackButtonS()
         self.__showBackButton = False
-
-    def __checkForActiveActions(self):
-        from gui.Scaleform.daapi.view.lobby.store.actions_formatters import _VISIBLE_CARDS
-        from gui.Scaleform.daapi.view.lobby.store.actions_formatters import ActionsBuilder
-        actions = self.eventsCache.getActions(filterFunc=_filterOutOfDate).values()
-        entities = self.eventsCache.getActionEntities()
-        visible = ActionsBuilder.getAllVisibleDiscounts(actions, entities, []).get(_VISIBLE_CARDS.ACTIONS, [])
-        return visible
 
     def _dispose(self):
         self.__removeHandlers()

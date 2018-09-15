@@ -277,6 +277,13 @@ class ArenaDataProvider(IArenaDataProvider):
     def getVehiclesCountInPrebattle(self, team, prebattleID):
         return self.__squadFinder.getNumberOfSquadmen(team, prebattleID)
 
+    def getSquadSizes(self):
+        result = {teamID:{} for teamID in self.__teamsOnArena}
+        for squadSizeDescription in self.__squadFinder.findSquadSizes():
+            result[squadSizeDescription.teamID][squadSizeDescription.squadID] = squadSizeDescription.squadSize
+
+        return result
+
     def getPlayerGuiProps(self, vID, team):
         if team in self.getAllyTeams():
             if self.isSquadMan(vID=vID):

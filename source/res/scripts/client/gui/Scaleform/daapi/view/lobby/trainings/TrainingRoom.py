@@ -3,7 +3,9 @@
 import BigWorld
 import ArenaType
 from adisp import process
+from debug_utils import LOG_DEBUG
 from gui import SystemMessages, GUI_SETTINGS
+from gui.Scaleform import settings
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.trainings import formatters
@@ -12,7 +14,9 @@ from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.battle_results.components.style import makeBadgeIcon
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.ctx import LeavePrbAction
 from gui.prb_control.entities.base.legacy.ctx import SetTeamStateCtx, AssignLegacyCtx, SwapTeamsCtx
@@ -23,6 +27,7 @@ from gui.prb_control.settings import PREBATTLE_ROSTER, PREBATTLE_SETTING_NAME
 from gui.prb_control.settings import REQUEST_TYPE, CTRL_ENTITY_TYPE
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.events import CoolDownEvent
+from gui.shared.formatters import icons
 from gui.shared.formatters import text_styles
 from gui.sounds.ambients import LobbySubViewEnv
 from helpers import dependency
@@ -281,27 +286,31 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, ILegacyListener):
         self._closeWindow(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY)
 
     def __showSettings(self, entity):
-        settings = entity.getSettings()
-        if settings is None:
+        entitySettings = entity.getSettings()
+        if entitySettings is None:
             return
         else:
             isCreator = entity.isCommander()
             permissions = entity.getPermissions()
-            arenaTypeID = settings['arenaTypeID']
+            arenaTypeID = entitySettings['arenaTypeID']
             arenaType = ArenaType.g_cache.get(arenaTypeID)
             if isCreator:
-                comment = settings['comment']
+                comment = entitySettings['comment']
             else:
-                comment = passCensor(settings['comment'])
+                comment = passCensor(entitySettings['comment'])
             creatorFullName, creatorClan, creatorRegion, creatorIgrType = (None, None, None, 0)
             creator = self.__getCreatorFromRosters()
+            badgeID = 0
+            badgeIcon = ''
             if creator:
                 creatorFullName = creator.getFullName()
                 creatorClan = creator.clanAbbrev
                 creatorRegion = self.lobbyContext.getRegionCode(creator.dbID)
                 creatorIgrType = creator.igrType
+                badgeID = creator.getBadgeID()
+                badgeIcon = creator.getBadgeImgStr()
             self.as_setInfoS({'isCreator': isCreator,
-             'creator': settings[PREBATTLE_SETTING_NAME.CREATOR],
+             'creator': entitySettings[PREBATTLE_SETTING_NAME.CREATOR],
              'creatorFullName': creatorFullName,
              'creatorClan': creatorClan,
              'creatorRegion': creatorRegion,
@@ -312,11 +321,13 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, ILegacyListener):
              'arenaSubType': formatters.getArenaSubTypeString(arenaTypeID),
              'description': arenaType.description,
              'maxPlayersCount': entity.getTeamLimits()['maxCount'][0] * 2,
-             'roundLenString': formatters.getRoundLenString(settings['roundLength']),
+             'roundLenString': formatters.getRoundLenString(entitySettings['roundLength']),
              'comment': comment,
-             'arenaVoipChannels': settings[PREBATTLE_SETTING_NAME.ARENA_VOIP_CHANNELS],
+             'arenaVoipChannels': entitySettings[PREBATTLE_SETTING_NAME.ARENA_VOIP_CHANNELS],
              'canChangeArenaVOIP': permissions.canChangeArenaVOIP(),
-             'isObserverModeEnabled': self.__isObserverModeEnabled()})
+             'isObserverModeEnabled': self.__isObserverModeEnabled(),
+             'badge': badgeID,
+             'badgeImgStr': badgeIcon})
             return
 
     def __getCreatorFromRosters(self):
@@ -385,7 +396,9 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, ILegacyListener):
              'isPlayerSpeaking': bool(isPlayerSpeaking(account.dbID)),
              'clanAbbrev': account.clanAbbrev,
              'region': self.lobbyContext.getRegionCode(account.dbID),
-             'igrType': account.igrType})
+             'igrType': account.igrType,
+             'badge': account.getBadgeID(),
+             'badgeImgStr': account.getBadgeImgStr()})
 
         if label is not None:
             label = text_styles.main(i18n.makeString(label, total=text_styles.stats(str(len(listData)))))

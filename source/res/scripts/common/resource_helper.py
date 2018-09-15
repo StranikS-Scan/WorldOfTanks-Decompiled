@@ -79,6 +79,10 @@ def getRoot(filePath, msg='', safe=False):
     return (ctx, section)
 
 
+def purgeResource(filePath):
+    ResMgr.purge(filePath, True)
+
+
 @contextmanager
 def root_generator(filePath):
     """

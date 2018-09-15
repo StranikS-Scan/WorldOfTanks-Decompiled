@@ -82,9 +82,6 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     FALLOUT = 'fallout'
     UNRECOVERABLE = 'unrecoverable'
     CREW_LOCKED = 'lockCrew'
-    LEVIATHAN = 'leviathan'
-    MULTI_TURRET = 'multi_turret'
-    CANNOT_BE_RESEARCHED = 'cannot_be_researched'
 
 
 class Vehicle(FittingItem, HasStrCD):
@@ -217,17 +214,12 @@ class Vehicle(FittingItem, HasStrCD):
         self._settings = invData.get('settings', 0)
         self._lock = invData.get('lock', (0, 0))
         self._repairCost, self._health = invData.get('repair', (0, 0))
-        itemsFactory = self.itemsFactory
-        turretIndex = 0
-        turretDescr = vehDescr.turrets[turretIndex]
-        gun = turretDescr.gun
-        self.gun = itemsFactory.createVehicleGun(gun.compactDescr, proxy, gun)
-        turret = turretDescr.turret
-        self.turret = itemsFactory.createVehicleTurret(turret.compactDescr, proxy, turret)
-        self.engine = itemsFactory.createVehicleEngine(vehDescr.engine.compactDescr, proxy, vehDescr.engine)
-        self.chassis = itemsFactory.createVehicleChassis(vehDescr.chassis.compactDescr, proxy, vehDescr.chassis)
-        self.radio = itemsFactory.createVehicleRadio(vehDescr.radio.compactDescr, proxy, vehDescr.radio)
-        self.fuelTank = itemsFactory.createVehicleFuelTank(vehDescr.fuelTank.compactDescr, proxy, vehDescr.fuelTank)
+        self._gun = self.itemsFactory.createVehicleGun(vehDescr.gun.compactDescr, proxy, vehDescr.gun)
+        self._turret = self.itemsFactory.createVehicleTurret(vehDescr.turret.compactDescr, proxy, vehDescr.turret)
+        self._engine = self.itemsFactory.createVehicleEngine(vehDescr.engine.compactDescr, proxy, vehDescr.engine)
+        self._chassis = self.itemsFactory.createVehicleChassis(vehDescr.chassis.compactDescr, proxy, vehDescr.chassis)
+        self._radio = self.itemsFactory.createVehicleRadio(vehDescr.radio.compactDescr, proxy, vehDescr.radio)
+        self._fuelTank = self.itemsFactory.createVehicleFuelTank(vehDescr.fuelTank.compactDescr, proxy, vehDescr.fuelTank)
         sellPrice = self._calcSellPrice(proxy)
         defaultSellPrice = self._calcDefaultSellPrice(proxy)
         self._sellPrices = ItemPrices(itemPrice=ItemPrice(price=sellPrice, defPrice=defaultSellPrice), itemAltPrice=ITEM_PRICE_EMPTY)
@@ -370,7 +362,7 @@ class Vehicle(FittingItem, HasStrCD):
         shellsDict = dict(((cd, count) for cd, count, _ in LayoutIterator(layoutList)))
         defaultsDict = dict(((cd, (count, isBoughtForCredits)) for cd, count, isBoughtForCredits in LayoutIterator(defaultLayoutList)))
         layoutList = list(layoutList)
-        for shot in self.descriptor.turrets[0].gun.shots:
+        for shot in self.descriptor.gun.shots:
             cd = shot.shell.compactDescr
             if cd not in shellsDict:
                 layoutList.extend([cd, 0])
@@ -700,7 +692,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def ammoMaxSize(self):
-        return self.descriptor.turrets[0].gun.maxAmmo
+        return self.descriptor.gun.maxAmmo
 
     @property
     def isAmmoFull(self):
@@ -893,18 +885,6 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def isDisabledInPremIGR(self):
         return self.isPremiumIGR and self.igrCtrl.getRoomType() != constants.IGR_TYPE.PREMIUM
-
-    @property
-    def isMultiTurret(self):
-        return _checkForTags(self.tags, VEHICLE_TAGS.MULTI_TURRET)
-
-    @property
-    def isLeviathan(self):
-        return _checkForTags(self.tags, VEHICLE_TAGS.LEVIATHAN)
-
-    @property
-    def canNotBeResearched(self):
-        return _checkForTags(self.tags, VEHICLE_TAGS.CANNOT_BE_RESEARCHED)
 
     @property
     def name(self):
@@ -1284,9 +1264,12 @@ class Vehicle(FittingItem, HasStrCD):
          self.nationID,
          self.lock)
 
+    def _mayPurchase(self, price, money):
+        return (False, GUI_ITEM_ECONOMY_CODE.CENTER_UNAVAILABLE) if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False) else super(Vehicle, self)._mayPurchase(price, money)
+
     def _getShortInfo(self, vehicle=None, expanded=False):
         description = i18n.makeString('#menu:descriptions/' + self.itemTypeName)
-        caliber = self.descriptor.turrets[0].gun.shots[0].shell.caliber
+        caliber = self.descriptor.gun.shots[0].shell.caliber
         armor = findVehicleArmorMinMax(self.descriptor)
         return description % {'weight': BigWorld.wg_getNiceNumberFormat(float(self.descriptor.physics['weight']) / 1000),
          'hullArmor': BigWorld.wg_getIntegralFormat(armor[1]),

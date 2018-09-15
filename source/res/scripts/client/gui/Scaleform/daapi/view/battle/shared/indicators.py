@@ -567,6 +567,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             vStateCtrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
             vStateCtrl.onVehicleControlling += self.__onVehicleControlling
             vStateCtrl.onPostMortemSwitched += self.__onPostMortemSwitched
+            vStateCtrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
             vehicle = vStateCtrl.getControllingVehicle()
             if vehicle is not None:
                 self.__onVehicleControlling(vehicle)
@@ -585,6 +586,7 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             vStateCtrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
             vStateCtrl.onVehicleControlling -= self.__onVehicleControlling
             vStateCtrl.onPostMortemSwitched -= self.__onPostMortemSwitched
+            vStateCtrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
         self._switchTimeTable.clear()
         self._siegeComponent.clear()
         self._siegeComponent = None
@@ -658,11 +660,13 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             self.__onCrosshairPositionChanged()
             self.__updateDevicesView()
         else:
-            self._isEnabled = False
             self._siegeState = _SIEGE_STATE.DISABLED
             for deviceName in self._devices:
                 self._devices[deviceName] = 'normal'
 
+            if self._isEnabled:
+                self.as_hideHintS()
+            self._isEnabled = False
         self.as_setVisibleS(self._isEnabled)
         return
 
@@ -677,9 +681,16 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             self.__updateDestroyed(value)
         elif state == VEHICLE_VIEW_STATE.CREW_DEACTIVATED:
             self.__updateDestroyed(value)
+        elif state == VEHICLE_VIEW_STATE.SWITCHING:
+            self._devices = {'engine': 'normal',
+             'leftTrack': 'normal',
+             'rightTrack': 'normal'}
 
-    def __onPostMortemSwitched(self):
+    def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         self._isInPostmortem = True
+
+    def __onRespawnBaseMoving(self):
+        self._isInPostmortem = False
 
     def __onCrosshairPositionChanged(self, *args):
         if not self._isEnabled:
@@ -759,6 +770,7 @@ class _DirectionIndicator(Flash, IDirectionIndicator):
         self.__isVisible = True
         self.component.relativeRadius = 0.5
         self._dObject = getattr(self.movie, _DIRECT_INDICATOR_MC_NAME, None)
+        self._dObject.init(i18n.makeString(INGAME_GUI.MARKER_METERS))
         return
 
     def __del__(self):

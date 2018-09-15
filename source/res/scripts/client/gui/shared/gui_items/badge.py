@@ -5,6 +5,12 @@ from gui.Scaleform.locale.BADGE import BADGE
 from gui.Scaleform.settings import getBadgeIconPath, getBadgeHighlightIconPath, BADGES_ICONS, BADGES_HIGHLIGHTS
 from gui.shared.gui_items.gui_item import GUIItem
 from helpers import i18n
+from shared_utils import CONST_CONTAINER
+
+class BADGE_TYPES(CONST_CONTAINER):
+    OBSOLETE = 1
+    COLLAPSIBLE = 2
+
 
 class Badge(GUIItem):
     """
@@ -33,7 +39,7 @@ class Badge(GUIItem):
         """
         Standard comparision method that compares two badges by:
         - is it achieved
-        - if both - by achievement date
+        - if both - by achievement date (latest first)
         - otherwise by weight
         """
         if self.achievedAt == other.achievedAt:
@@ -41,7 +47,7 @@ class Badge(GUIItem):
         elif self.achievedAt is None:
             return 1
         else:
-            return -1 if other.achievedAt is None else cmp(self.achievedAt, other.achievedAt)
+            return -1 if other.achievedAt is None else cmp(other.achievedAt, self.achievedAt)
 
     def getBadgeClass(self):
         return self.data.get('class', 0)
@@ -55,6 +61,12 @@ class Badge(GUIItem):
 
     def getWeight(self):
         return self.data['weight']
+
+    def isObsolete(self):
+        return self.__checkType(BADGE_TYPES.OBSOLETE)
+
+    def isCollapsible(self):
+        return self.__checkType(BADGE_TYPES.COLLAPSIBLE)
 
     def getHugeIcon(self):
         return getBadgeIconPath(BADGES_ICONS.X220, self.badgeID)
@@ -85,4 +97,9 @@ class Badge(GUIItem):
             return getBadgeHighlightIconPath(BADGES_HIGHLIGHTS.RED)
         if self.getName().startswith('personal_missions'):
             return getBadgeHighlightIconPath(BADGES_HIGHLIGHTS.VIOLET)
-        return getBadgeHighlightIconPath(BADGES_HIGHLIGHTS.GREEN) if self.getName().startswith('event_boards') else ''
+        if self.getName().startswith('event_boards'):
+            return getBadgeHighlightIconPath(BADGES_HIGHLIGHTS.GREEN)
+        return getBadgeHighlightIconPath(BADGES_HIGHLIGHTS.GOLD) if self.getName().startswith('global_map') else ''
+
+    def __checkType(self, badgeType):
+        return self.data['type'] & badgeType > 0

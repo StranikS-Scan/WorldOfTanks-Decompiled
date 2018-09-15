@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/page.py
-import BigWorld
 import BattleReplay
 from AvatarInputHandler import aih_constants, aih_global_binding
 from debug_utils import LOG_DEBUG
@@ -17,7 +16,6 @@ from gui.battle_control.battle_constants import VIEW_COMPONENT_RULE, BATTLE_CTRL
 from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-from multi_turret_hint_panel import MultiTurretHintPanel
 
 class IComponentsConfig(object):
 
@@ -175,6 +173,7 @@ class SharedPage(BattlePageMeta):
             if ctrl.isInPostmortem:
                 self.__onPostMortemSwitched()
             ctrl.onPostMortemSwitched += self.__onPostMortemSwitched
+            ctrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
         aih_global_binding.subscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self.__onAvatarCtrlModeChanged)
         return
 
@@ -183,6 +182,7 @@ class SharedPage(BattlePageMeta):
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onPostMortemSwitched -= self.__onPostMortemSwitched
+            ctrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
         aih_global_binding.unsubscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self.__onAvatarCtrlModeChanged)
         for alias, _ in self.__componentsConfig.getViewsConfig():
             self.sessionProvider.removeViewComponent(alias)
@@ -211,7 +211,6 @@ class SharedPage(BattlePageMeta):
     def _onBattleLoadingFinish(self):
         self._setComponentsVisibility(visible=self._blToggling, hidden={_ALIASES.BATTLE_LOADING})
         self._blToggling.clear()
-        self.as_onBattleLoadCompletedS()
         for component in self._external:
             component.active(True)
 
@@ -237,12 +236,17 @@ class SharedPage(BattlePageMeta):
         if not self.as_isComponentVisibleS(alias):
             self._setComponentsVisibility(visible={alias})
 
-    def __onPostMortemSwitched(self):
+    def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         if not self.sessionProvider.getCtx().isPlayerObserver() and not BattleReplay.g_replayCtrl.isPlaying:
             self.as_setPostmortemTipsVisibleS(True)
         if not self.sessionProvider.getCtx().isPlayerObserver():
             self._isInPostmortem = True
             self._switchToPostmortem()
+
+    def __onRespawnBaseMoving(self):
+        if not self.sessionProvider.getCtx().isPlayerObserver() and not BattleReplay.g_replayCtrl.isPlaying:
+            self.as_setPostmortemTipsVisibleS(False)
+            self._isInPostmortem = False
 
     def __onPostMortemReload(self):
         self._isInPostmortem = False

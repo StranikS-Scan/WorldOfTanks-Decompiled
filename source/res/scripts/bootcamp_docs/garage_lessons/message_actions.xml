@@ -8,6 +8,7 @@
       <preset>	BLUE	</preset>
       <label>	#bootcamp:message/vehicle/awarded/label	</label>
       <text>	#bootcamp:message/vehicle/awarded/text	</text>
+      <voiceover>	vo_bc_hangar_first_tank_received	</voiceover>
       <bottom_renderer>	1	</bottom_renderer>
       <bottom>
         <data>
@@ -22,6 +23,7 @@
       <preset>	BLUE	</preset>
       <label>	#bootcamp:message/vehicle/awarded/label	</label>
       <text>	#bootcamp:message/vehicle/awarded/text	</text>
+      <voiceover>	vo_bc_hangar_first_tank_received	</voiceover>
       <bottom_renderer>	1	</bottom_renderer>
       <bottom>
         <data>
@@ -36,6 +38,7 @@
       <preset>	BLUE	</preset>
       <label>	#bootcamp:message/vehicle/awarded/label	</label>
       <text>	#bootcamp:message/vehicle/awarded/text	</text>
+      <voiceover>	vo_bc_hangar_first_tank_received	</voiceover>
       <bottom_renderer>	1	</bottom_renderer>
       <bottom>
         <data>
@@ -52,6 +55,7 @@
     <icon>	../maps/icons/bootcamp/lines/logo.png	</icon>
     <preset>	INTRO	</preset>
     <label>	#bootcamp:message/intro/lesson/ii/label	</label>
+    <voiceover>	vo_bc_hangar_tank_improvement	</voiceover>
     <next_hint>	msgTankExperience	</next_hint>
   </action>
   <action>
@@ -60,6 +64,7 @@
     <preset>	BLUE	</preset>
     <label>	#bootcamp:message/credits/label	</label>
     <text>	#bootcamp:message/credits/text	</text>
+    <voiceover>	vo_bc_hangar_silver	</voiceover>
     <bottom_renderer>	0	</bottom_renderer>
     <bottom>
       <data>
@@ -79,6 +84,7 @@
     <preset>	BLUE	</preset>
     <label>	#bootcamp:message/experience/label	</label>
     <text>	#bootcamp:message/experience/text	</text>
+    <voiceover>	vo_bc_hangar_experience	</voiceover>
     <bottom_renderer>	0	</bottom_renderer>
     <bottom>
       <data>
@@ -101,6 +107,7 @@
       <preset>	BLUE	</preset>
       <label>	#bootcamp:message/unlock/module/label	</label>
       <text>	#bootcamp:message/unlock/module/text	</text>
+      <voiceover>	vo_bc_hangar_module_investigated	</voiceover>
     </nation>
     <nation>
       <nation_id>	germany	</nation_id>
@@ -108,6 +115,7 @@
       <preset>	BLUE	</preset>
       <label>	#bootcamp:message/unlock/module/label	</label>
       <text>	#bootcamp:message/unlock/module/text	</text>
+      <voiceover>	vo_bc_hangar_module_investigated	</voiceover>
     </nation>
     <nation>
       <nation_id>	ussr	</nation_id>
@@ -115,6 +123,7 @@
       <preset>	BLUE	</preset>
       <label>	#bootcamp:message/unlock/module/label	</label>
       <text>	#bootcamp:message/unlock/module/text	</text>
+      <voiceover>	vo_bc_hangar_module_investigated	</voiceover>
     </nation>
     <next_hint>	highlightButton_BuyNode_LessonII	</next_hint>
   </action>
@@ -124,6 +133,7 @@
     <preset>	GOLD	</preset>
     <label>	#bootcamp:message/new/module/label	</label>
     <text>	#bootcamp:message/new/module/text	</text>
+    <voiceover>	vo_bc_hangar_module_purchased	</voiceover>
     <next_hint>	highlightButton_Hangar_LessonII	</next_hint>
   </action>
   <action>
@@ -131,6 +141,7 @@
     <icon>	../maps/icons/bootcamp/lines/logo.png	</icon>
     <preset>	INTRO	</preset>
     <label>	#bootcamp:message/intro/lesson/iii/label	</label>
+    <voiceover>	vo_bc_hangar_new_tank_received	</voiceover>
     <next_hint>	showElementsLessonIII_Step1	</next_hint>
   </action>
   <action>
@@ -139,6 +150,7 @@
     <preset>	BLUE	</preset>
     <label>	#bootcamp:message/unlock/vehicle/label	</label>
     <text>	#bootcamp:message/unlock/vehicle/text	</text>
+    <voiceover>	vo_bc_hangar_tank_investigated	</voiceover>
     <next_hint>	callbackEnableVehiclePreviewBuyButton	</next_hint>
   </action>
   <action>
@@ -151,6 +163,7 @@
       <preset>	GOLD	</preset>
       <label>	M2 Medium Tank	</label>
       <text>	#bootcamp:message/second/vehicle/text/nation/0	</text>
+      <voiceover>	vo_bc_hangar_tank_in_garage	</voiceover>
     </nation>
     <nation>
       <nation_id>	germany	</nation_id>
@@ -158,6 +171,7 @@
       <preset>	GOLD	</preset>
       <label>	Pz.Kpfw. 38 (t)	</label>
       <text>	#bootcamp:message/second/vehicle/text/nation/1	</text>
+      <voiceover>	vo_bc_hangar_tank_in_garage	</voiceover>
     </nation>
     <nation>
       <nation_id>	ussr	</nation_id>
@@ -165,6 +179,7 @@
       <preset>	GOLD	</preset>
       <label>	Т-46	</label>
       <text>	#bootcamp:message/second/vehicle/text/nation/2	</text>
+      <voiceover>	vo_bc_hangar_tank_in_garage	</voiceover>
     </nation>
     <next_hint>	msgIntro_Crew_LessonIII	</next_hint>
   </action>
@@ -173,6 +188,7 @@
     <icon>	../maps/icons/bootcamp/lines/logo.png	</icon>
     <preset>	INTRO	</preset>
     <label>	#bootcamp:message/intro/lesson/iii/crew/label	</label>
+    <voiceover>	vo_bc_hangar_team	</voiceover>
     <next_hint>	showElementsLessonIII_Step2	</next_hint>
   </action>
   <action>
@@ -181,6 +197,7 @@
     <preset>	BLUE	</preset>
     <label>	#bootcamp:message/skills/and/perks/label	</label>
     <text>	#bootcamp:message/skills/and/perks/text	</text>
+    <voiceover>	vo_bc_hangar_skills_abilities	</voiceover>
     <next_hint>	highlightButton_SkillSlot_LessonIII	</next_hint>
   </action>
   <action>
@@ -188,6 +205,7 @@
     <icon>	../maps/icons/bootcamp/lines/logo.png	</icon>
     <preset>	INTRO	</preset>
     <label>	#bootcamp:message/intro/lesson/iv/label	</label>
+    <voiceover>	vo_bc_hangar_equipment_and_kit	</voiceover>
     <next_hint>	showElementsLessonIV_Step1	</next_hint>
   </action>
   <action>
@@ -201,6 +219,7 @@
     <preset>	BLUE	</preset>
     <label>	#bootcamp:message/consumables/label	</label>
     <text>	#bootcamp:message/consumables/text	</text>
+    <voiceover>	vo_bc_hangar_kit	</voiceover>
     <bottom_renderer>	0	</bottom_renderer>
     <bottom>
       <data>
@@ -241,6 +260,7 @@
     <preset>	BLUE	</preset>
     <label>	#bootcamp:message/equipment/label	</label>
     <text>	#bootcamp:message/equipment/text	</text>
+    <voiceover>	vo_bc_hangar_equipment	</voiceover>
     <bottom_renderer>	0	</bottom_renderer>
     <bottom>
       <data>
@@ -257,6 +277,7 @@
     <icon>	../maps/icons/bootcamp/lines/logo.png	</icon>
     <preset>	INTRO	</preset>
     <label>	#bootcamp:message/intro/lesson/v/label	</label>
+    <voiceover>	vo_bc_hangar_gold_premium	</voiceover>
     <next_hint>	msgGold	</next_hint>
     <only_first_bootcamp>	False	</only_first_bootcamp>
   </action>
@@ -266,6 +287,7 @@
     <preset>	BLUE	</preset>
     <label>	#bootcamp:message/gold/label	</label>
     <text>	#bootcamp:message/gold/text	</text>
+    <voiceover>	vo_bc_hangar_gold	</voiceover>
     <only_first_bootcamp>	False	</only_first_bootcamp>
     <next_hint>	msgPremium	</next_hint>
   </action>
@@ -275,6 +297,7 @@
     <preset>	BLUE	</preset>
     <label>	#bootcamp:message/premium/label	</label>
     <text>	#bootcamp:message/premium/text	</text>
+    <voiceover>	vo_bc_hangar_premium	</voiceover>
     <only_first_bootcamp>	False	</only_first_bootcamp>
     <next_hint>	msgMissionAccomplished	</next_hint>
   </action>
@@ -284,6 +307,7 @@
     <preset>	ORANGE	</preset>
     <label>	#bootcamp:message/mission/accomplished/label	</label>
     <text>	#bootcamp:message/mission/accomplished/text	</text>
+    <voiceover>	vo_bc_hangar_mission_accomplished	</voiceover>
     <bottom_renderer>	0	</bottom_renderer>
     <bottom>
       <data>
@@ -313,6 +337,7 @@
     <preset>	FINISH	</preset>
     <label>	#bootcamp:message/bootcamp/graduate/label	</label>
     <text>	#bootcamp:message/bootcamp/graduate/text	</text>
+    <voiceover>	vo_bc_hangar_congratulations	</voiceover>
     <background>	../maps/bootcamp/message/bgFinishBC.png	</background>
     <save>	True	</save>
     <next_hint>	callbackOnBootcampFinished	</next_hint>

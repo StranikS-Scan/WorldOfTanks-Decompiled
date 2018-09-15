@@ -98,6 +98,7 @@ class Browser(BrowserMeta):
             self.__browser = None
         if self.__webCommandHandler:
             self.__webCommandHandler.onCallback -= self.__onWebCommandCallback
+            self.__webCommandHandler.fini()
             self.__webCommandHandler = None
         self.browserCtrl.delBrowser(self.__browserID)
         self.removeListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)

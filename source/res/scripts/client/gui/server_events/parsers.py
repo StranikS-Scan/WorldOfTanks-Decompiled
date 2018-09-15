@@ -157,9 +157,7 @@ class VehicleRequirements(ConditionsParser):
 
     def isAvailable(self, vehicle):
         conds = self.getConditions()
-        if not conds.isEmpty():
-            return conds.isAvailable(vehicle)
-        return False if vehicle.isOnlyForEventBattles else True
+        return conds.isAvailable(vehicle) if not conds.isEmpty() else True
 
     def isAnyVehicleAcceptable(self):
         results = set()
@@ -285,7 +283,7 @@ class BonusConditions(ConditionsParser):
 
     def _handleCondition(self, name, data, uniqueName, group):
         if name == 'battles':
-            return conditions.BattlesCount(uniqueName, data, self)
+            return conditions.BattlesCount(uniqueName, data, self, preBattleCond=self.__preBattleCond)
         if name == 'vehicleKills':
             return conditions.VehicleKillsCumulative(uniqueName, data, self)
         if name == 'vehicleDamage':

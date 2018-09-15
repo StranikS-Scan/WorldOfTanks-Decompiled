@@ -14,7 +14,7 @@ from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from helpers import dependency
 from items import _xml, vehicles, getTypeOfCompactDescr
 import nations
-from realm_utils import ResMgr
+import ResMgr
 from skeletons.gui.shared import IItemsCache
 
 class _ConfigError(Exception):

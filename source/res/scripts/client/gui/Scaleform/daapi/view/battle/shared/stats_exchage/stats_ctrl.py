@@ -136,7 +136,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             with exchange.getCollectedComponent(isEnemy) as item:
                 item.addStats(vStatsVO)
 
-        exchange.addTotalStats(self._statsCollector.getTotalStats(arenaDP))
+        exchange.addTotalStats(self._statsCollector.getTotalStats(self._arenaVisitor, self.sessionProvider))
         exchange.addSortIDs(arenaDP, False, True)
         data = exchange.get(forced=True)
         if data:
@@ -204,7 +204,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             exchange.addSortIDs(arenaDP)
         if not vo.isObserver():
             self._statsCollector.addVehicleStatusUpdate(vo)
-        exchange.addTotalStats(self._statsCollector.getTotalStats(arenaDP))
+        exchange.addTotalStats(self._statsCollector.getTotalStats(self._arenaVisitor, self.sessionProvider))
         data = exchange.get()
         if data:
             self.as_updateVehicleStatusS(data)
@@ -232,7 +232,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
 
         if reusable:
             exchange.addSortIDs(arenaDP, *reusable)
-        exchange.addTotalStats(self._statsCollector.getTotalStats(arenaDP))
+        exchange.addTotalStats(self._statsCollector.getTotalStats(self._arenaVisitor, self.sessionProvider))
         data = exchange.get()
         if data:
             self.as_updateVehiclesStatsS(data)
@@ -394,7 +394,7 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
         :param state: integer containing code of state.
         :param value: updated value.
         """
-        if state == VEHICLE_VIEW_STATE.SWITCHING:
+        if state == VEHICLE_VIEW_STATE.PLAYER_INFO:
             arenaDP = self._battleCtx.getArenaDP()
             previousID = self._personalInfo.changeSelected(value)
             self.invalidatePlayerStatus(0, arenaDP.getVehicleInfo(previousID), arenaDP)

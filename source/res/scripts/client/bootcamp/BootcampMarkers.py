@@ -6,7 +6,8 @@ import BigWorld
 import SoundGroups
 import base64
 import cPickle
-from helpers import dependency
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
+from helpers import dependency, i18n
 from account_helpers.settings_core import ISettingsCore
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP, LOG_ERROR_BOOTCAMP
 from skeletons.gui.battle_session import IBattleSessionProvider

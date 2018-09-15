@@ -80,6 +80,8 @@
     <_32_pounder_AT_Gun_OQF_Mk_II>	86	</_32_pounder_AT_Gun_OQF_Mk_II>
     <_5_5inch_AT_Gun>	87	</_5_5inch_AT_Gun>
     <_120mm_Gun_L1A1_A>	88	</_120mm_Gun_L1A1_A>
+    <_123mm_OQF_Mk_1>	89	</_123mm_OQF_Mk_1>
+    <_183mm_L4>	90	</_183mm_L4>
     <_20pdr_Gun_Type_A_IGR>	60001	</_20pdr_Gun_Type_A_IGR>
     <_20pdr_Gun_Type_B_IGR>	60002	</_20pdr_Gun_Type_B_IGR>
     <_75mm_Gun_Vickers_HV_IGR>	60003	</_75mm_Gun_Vickers_HV_IGR>
@@ -3677,21 +3679,21 @@
       </shotDispersionFactors>
       <shots>
         <_32pdr_AP_MkI>
-          <defaultPortion>	0.8	</defaultPortion>
+          <defaultPortion>	0.95	</defaultPortion>
           <speed>	878	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	214 201	</piercingPower>
+          <piercingPower>	220 206	</piercingPower>
         </_32pdr_AP_MkI>
         <_32pdr_APCR_MkII>
           <defaultPortion>	0.0	</defaultPortion>
           <speed>	1098	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	246 236	</piercingPower>
+          <piercingPower>	252 241	</piercingPower>
         </_32pdr_APCR_MkII>
         <_32pdr_HE_MkI>
-          <defaultPortion>	0.2	</defaultPortion>
+          <defaultPortion>	0.05	</defaultPortion>
           <speed>	878	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
@@ -4135,6 +4137,64 @@
         </_120mm_HESH_L31>
       </shots>
     </_120mm_Gun_L11A1>
+    <_123mm_OQF_Mk_1>
+      <userString>	#gb_vehicles:_123mm_OQF_Mk_1	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	320000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.68	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.24	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 11.0 1.0 11.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	20	</rotationSpeed>
+      <reloadTime>	10	</reloadTime>
+      <maxAmmo>	35	</maxAmmo>
+      <aimingTime>	2	</aimingTime>
+      <weight>	3175	</weight>
+      <maxHealth>	210	</maxHealth>
+      <maxRegenHealth>	105	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_123mm_AP_Mk_1>
+          <defaultPortion>	0.95	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	272 253	</piercingPower>
+        </_123mm_AP_Mk_1>
+        <_123mm_APDS_Mk_2>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	1250	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	320 300	</piercingPower>
+        </_123mm_APDS_Mk_2>
+        <_123mm_HESH_Mk_1>
+          <defaultPortion>	0.05	</defaultPortion>
+          <speed>	1000	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	130 130	</piercingPower>
+        </_123mm_HESH_Mk_1>
+      </shots>
+    </_123mm_OQF_Mk_1>
     <_5_5inch_AT_Gun>
       <userString>	#gb_vehicles:_5_5inch_AT_Gun	</userString>
       <tags></tags>
@@ -4405,6 +4465,64 @@
         </_183mm_HE_Mk1>
       </shots>
     </_183mm_AT_Gun>
+    <_183mm_L4>
+      <userString>	#gb_vehicles:_183mm_L4	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	335000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.68	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.4	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_superhuge	</effects>
+      <reloadEffect>	reload155_170	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -15.0 1.0 -15.0	</minPitch>
+        <maxPitch>	0.0 10.0 1.0 10.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	23.625	</rotationSpeed>
+      <reloadTime>	18	</reloadTime>
+      <maxAmmo>	30	</maxAmmo>
+      <aimingTime>	2.5	</aimingTime>
+      <weight>	5400	</weight>
+      <maxHealth>	280	</maxHealth>
+      <maxRegenHealth>	140	</maxRegenHealth>
+      <repairCost>	12	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_183mm_AP_Mk1>
+          <defaultPortion>	0.20	</defaultPortion>
+          <speed>	830	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	310 300	</piercingPower>
+        </_183mm_AP_Mk1>
+        <_183mm_HESH>
+          <defaultPortion>	0.00	</defaultPortion>
+          <speed>	830	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	230 230	</piercingPower>
+        </_183mm_HESH>
+        <_183mm_HE_Mk1>
+          <defaultPortion>	0.80	</defaultPortion>
+          <speed>	830	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	92 92	</piercingPower>
+        </_183mm_HE_Mk1>
+      </shots>
+    </_183mm_L4>
     <_9.2inch_SPG_Howitzer>
       <userString>	#gb_vehicles:_9.2inch_SPG_Howitzer	</userString>
       <tags></tags>

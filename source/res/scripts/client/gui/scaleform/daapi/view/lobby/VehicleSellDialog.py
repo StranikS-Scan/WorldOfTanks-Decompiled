@@ -76,7 +76,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         otherVehsShells = set()
         for invVeh in invVehs.itervalues():
             if invVeh.invID != self.vehInvID:
-                for shot in invVeh.descriptor.turrets[0].gun.shots:
+                for shot in invVeh.descriptor.gun.shots:
                     otherVehsShells.add(shot.shell.compactDescr)
 
         vehicleAction = None

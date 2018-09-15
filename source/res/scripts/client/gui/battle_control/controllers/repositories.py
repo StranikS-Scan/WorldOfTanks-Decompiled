@@ -13,14 +13,12 @@ from gui.battle_control.controllers import debug_ctrl
 from gui.battle_control.controllers import drr_scale_ctrl
 from gui.battle_control.controllers import dyn_squad_functional
 from gui.battle_control.controllers import feedback_adaptor
-from gui.battle_control.controllers import flag_nots_ctrl
 from gui.battle_control.controllers import gas_attack_ctrl
 from gui.battle_control.controllers import hit_direction_ctrl
 from gui.battle_control.controllers import interfaces
 from gui.battle_control.controllers import msgs_ctrl
 from gui.battle_control.controllers import period_ctrl
 from gui.battle_control.controllers import personal_efficiency_ctrl
-from gui.battle_control.controllers import repair_ctrl
 from gui.battle_control.controllers import respawn_ctrl
 from gui.battle_control.controllers import team_bases_ctrl
 from gui.battle_control.controllers import tmp_ignore_list_ctrl
@@ -180,10 +178,6 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
         return self._repository.getController(BATTLE_CTRL_ID.TEAM_BASES)
 
     @property
-    def repair(self):
-        return self._repository.getController(BATTLE_CTRL_ID.REPAIR)
-
-    @property
     def respawn(self):
         return self._repository.getController(BATTLE_CTRL_ID.RESPAWN)
 
@@ -314,12 +308,8 @@ class _ControllersRepositoryByBonuses(_ControllersRepository):
         repository = super(_ControllersRepositoryByBonuses, cls).create(setup)
         gasAttackMgr = setup.gasAttackMgr
         arenaVisitor = setup.arenaVisitor
-        if arenaVisitor.hasRepairPoints():
-            repository.addController(repair_ctrl.RepairController())
         if arenaVisitor.hasRespawns():
-            repository.addArenaViewController(respawn_ctrl.RespawnsController(setup), setup)
-        if arenaVisitor.hasFlags():
-            repository.addViewController(flag_nots_ctrl.NotificationsController(setup), setup)
+            repository.addViewController(respawn_ctrl.RespawnsController(setup), setup)
         if arenaVisitor.hasGasAttack() and gasAttackMgr is not None:
             repository.addViewController(gas_attack_ctrl.GasAttackController(setup), setup)
         if arenaVisitor.hasHealthBar():

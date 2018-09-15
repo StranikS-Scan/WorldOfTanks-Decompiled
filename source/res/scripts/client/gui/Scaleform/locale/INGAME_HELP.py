@@ -88,7 +88,3 @@ class INGAME_HELP(object):
     SETTINGS_HELP = '#ingame_help:settings/help'
     SETTINGS_BUTTON = '#ingame_help:settings/button'
     RETURNTOGAME = '#ingame_help:returnToGame'
-    HALLOWEEN_TURRET_HINT_FIRINGSECONDTURRET = '#ingame_help:halloween_turret_hint/FiringSecondTurret'
-    HALLOWEEN_TURRET_HINT_DOUBLECLICKFIRING = '#ingame_help:halloween_turret_hint/DoubleClickFiring'
-    HALLOWEEN_TURRET_HINT_NOBINDINGFIRINGSECONDTURRET = '#ingame_help:halloween_turret_hint/noBindingFiringSecondTurret'
-    HALLOWEEN_TURRET_HINT_NOBINDINGDOUBLECLICKFIRING = '#ingame_help:halloween_turret_hint/noBindingDoubleClickFiring'

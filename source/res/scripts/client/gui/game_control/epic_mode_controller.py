@@ -37,21 +37,25 @@ class EpicModeController(IEpicModeController):
         self.settingsCore.onSettingsApplied -= self.__onSettingsApplied
 
     def __onSettingsApplied(self, diff):
-        if not self.__checkForEpicRandomValidation():
-            return
-        else:
-            containsEpic = diff.get(GAME.GAMEPLAY_EPIC_STANDARD)
-            containsEpicDomination = diff.get(GAME.GAMEPLAY_EPIC_DOMINATION)
-            if containsEpic is not None or containsEpicDomination is not None:
+        containsEpic = GAME.GAMEPLAY_EPIC_STANDARD in diff
+        containsDomination = GAME.GAMEPLAY_DOMINATION in diff
+        if containsDomination or containsEpic:
+            self.__checkForEpicDominationValidation()
+        if self.__checkForEpicRandomValidation():
+            if containsEpic:
                 filters = self.__getFilters()
                 filters['isEpicRandomCheckboxClicked'] = True
                 self.__setFilters(filters)
-            return
 
     def __checkForEpicRandomValidation(self):
         filters = self.__getFilters()
         isEpicRandomCheckboxClicked = filters['isEpicRandomCheckboxClicked']
         return not isEpicRandomCheckboxClicked
+
+    def __checkForEpicDominationValidation(self):
+        epicCtfEnabled = self.settingsCore.getSetting(GAME.GAMEPLAY_EPIC_STANDARD)
+        dominationEnabled = self.settingsCore.getSetting(GAME.GAMEPLAY_DOMINATION)
+        self.settingsCore.applySetting(GAME.GAMEPLAY_EPIC_DOMINATION, epicCtfEnabled and dominationEnabled)
 
     def __getFilters(self):
         defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
@@ -78,7 +82,8 @@ class EpicModeController(IEpicModeController):
                 settingsChanged = True
         elif not epicCtfEnabled:
             self.settingsCore.applySetting(GAME.GAMEPLAY_EPIC_STANDARD, True)
-            self.settingsCore.applySetting(GAME.GAMEPLAY_EPIC_DOMINATION, True)
+            dominationEnabled = self.settingsCore.getSetting(GAME.GAMEPLAY_DOMINATION)
+            self.settingsCore.applySetting(GAME.GAMEPLAY_EPIC_DOMINATION, dominationEnabled)
             settingsChanged = True
         LOG_DEBUG('epicCtfEnabled ', epicCtfEnabled, 'recomPreset = ', recomPreset, ' virtualMemory = ', currentVirtualMemory, 'settingsShouldChanged ', settingsChanged)
         if settingsChanged:

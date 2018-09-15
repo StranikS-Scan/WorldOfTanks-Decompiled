@@ -48,6 +48,9 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
         self.__cleanUp()
         return
 
+    def getEventID(self):
+        return self.__eventID
+
     def changeLeaderboard(self, leaderboardID):
         """
         Clean up current leaderboard and get data for new
@@ -98,13 +101,10 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
         self.__fetchMyLeaderboardInfo(self.__moveToMyPlace)
 
     def showNextAward(self, visible):
-        stripesLen = len(self.__stripes['tableDP'])
-        if stripesLen > 0:
-            if visible:
-                stripesID = self.__stripes['tableDP'][1]['id']
-            else:
-                stripesID = self.__stripes['tableDP'][0]['id']
-            self.__awardGroup.setActiveRewardGroup(stripesID)
+        stripes = self.__stripes
+        if stripes and stripes['tableDP']:
+            groupID = stripes['tableDP'][1 if visible else 0]['id']
+            self.__awardGroup.setActiveRewardGroup(groupID)
 
     def playerClick(self, playerID):
         """
@@ -330,13 +330,19 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
                 self.__updatePage()
                 self.__scrollToRank(rank)
                 enabledAncors = []
-                for categoryIdx in range(self.MIN_CATEGORY, self.MAX_CATEGORY):
+                for categoryIdx in range(self.MIN_CATEGORY, self.MAX_CATEGORY + 1):
                     if categoryIdx in self.__rewardCategories:
                         enable = self.__rewardCategories[categoryIdx].get('page_number') is not None
                         self.__awardGroup.as_setEnabledS(categoryIdx - 1, enable)
-                        enabledAncors.append(enable)
+                    else:
+                        enable = False
+                    enabledAncors.append(enable)
 
-                self.__awardGroup.as_setDataS([ idx < len(enabledAncors) for idx in range(self.MAX_AWARD_GROUPS) ])
+                group = []
+                for idx in range(self.MAX_AWARD_GROUPS + 1):
+                    group.append(enabledAncors[idx])
+
+                self.__awardGroup.as_setDataS(group)
                 self.__awardGroup.as_setTooltipsS(makeAwardGroupDataTooltipVO(self.__rewardCategories, enabledAncors))
                 self.as_setMyPlaceTooltipS(makeTooltip(TOOLTIPS.ELEN_ANCOR_MYPOSITION_HEADER, TOOLTIPS.ELEN_ANCOR_MYPOSITION_BODY))
             else:
@@ -369,10 +375,9 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
             self.__fetchLeaderboardPageData(1, self.TOP_POSITION_RANK)
 
     def __onViewLoaded(self, view, *args, **kwargs):
-        if view.settings.alias == EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_ALIAS:
-            view.setData(self.__eventData, self.changeLeaderboard, self.__leaderboardID)
-        elif view.settings.alias == EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_VEHICLES_ALIAS:
-            view.setOpener(self)
+        if view.settings.alias in (EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_ALIAS, EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_VEHICLES_ALIAS):
+            if view.caller == 'excel':
+                view.setData(self.__eventData, self.changeLeaderboard, self.__leaderboardID)
 
     def __updateHeader(self):
         event = self.__eventData
@@ -389,7 +394,7 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
             recalculationInterval = leaderboard.getRecalculationInterval()
             interval = int(recalculationInterval / ONE_MINUTE)
             status = text_styles.main(formatUpdateTime(recalculationTS))
-            statusTooltip = _ms(EVENT_BOARDS.SUMMARY_STATUS_TOOLTIP, interval=interval)
+            statusTooltip = _ms(TOOLTIPS.SUMMARY_STATUS_TOOLTIP, interval=interval)
         else:
             status = None
             statusTooltip = None

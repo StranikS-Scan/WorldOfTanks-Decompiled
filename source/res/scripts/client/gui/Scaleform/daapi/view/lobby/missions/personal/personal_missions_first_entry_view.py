@@ -4,6 +4,7 @@ from adisp import process
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.shared.web_handlers import handleHangarSoundCommand, handleHangarSoundCommandFini
 from gui.Scaleform.daapi.view.meta.PersonalMissionFirstEntryViewMeta import PersonalMissionFirstEntryViewMeta
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -16,6 +17,7 @@ from gui.shared.formatters import text_styles, icons
 from helpers import i18n, dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBrowserController
+from web_client_api.commands import createHangarSoundHandler
 
 class PersonalMissionFirstEntryView(LobbySubView, PersonalMissionFirstEntryViewMeta):
     browserCtrl = dependency.descriptor(IBrowserController)
@@ -60,7 +62,7 @@ class PersonalMissionFirstEntryView(LobbySubView, PersonalMissionFirstEntryViewM
         webBrowser = self.__getCurrentBrowser()
         if not webBrowser or url != webBrowser.url:
             title = i18n.makeString(PERSONAL_MISSIONS.PERSONALMISSIONS_VIDEO_TITLE)
-            self.__currentVersionBrowserID = yield self.browserCtrl.load(url, title, showActionBtn=False, browserID=self.__currentVersionBrowserID, browserSize=gc_constants.BROWSER.VIDEO_SIZE, isDefault=False, showCloseBtn=True)
+            self.__currentVersionBrowserID = yield self.browserCtrl.load(url, title, showActionBtn=False, browserID=self.__currentVersionBrowserID, browserSize=gc_constants.BROWSER.VIDEO_SIZE, isDefault=False, showCloseBtn=True, handlers=self.__createWebHandlers())
 
     @staticmethod
     def __makeTileData(iconSource, titleLabel, descriptionLabel):
@@ -70,3 +72,6 @@ class PersonalMissionFirstEntryView(LobbySubView, PersonalMissionFirstEntryViewM
 
     def __getCurrentBrowser(self):
         return self.browserCtrl.getBrowser(self.__currentVersionBrowserID)
+
+    def __createWebHandlers(self):
+        return [createHangarSoundHandler(handleHangarSoundCommand, handleHangarSoundCommandFini)]

@@ -26,6 +26,7 @@ class EVENT_BOARDS(object):
     TASK_OBJECTIVE_SUM_XP = '#event_boards:task/objective/sum/xp'
     TASK_OBJECTIVE_SUM_DAMAGEDEALT = '#event_boards:task/objective/sum/damageDealt'
     TASK_OBJECTIVE_SUM_DAMAGEASSISTED = '#event_boards:task/objective/sum/damageAssisted'
+    TASK_OBJECTIVE_SUM_WINS = '#event_boards:task/objective/sum/wins'
     TASK_OBJPARAM_ORIGINALXP = '#event_boards:task/objparam/originalXP'
     TASK_OBJPARAM_XP = '#event_boards:task/objparam/xp'
     TASK_OBJPARAM_DAMAGEDEALT = '#event_boards:task/objparam/damageDealt'
@@ -35,6 +36,7 @@ class EVENT_BOARDS(object):
     TASK_SELECTION_SUMN = '#event_boards:task/selection/sumN'
     TASK_SELECTION_SUMALL = '#event_boards:task/selection/sumAll'
     TASK_SELECTION_SUMSEQN = '#event_boards:task/selection/sumSeqN'
+    TASK_SELECTION_SUMMSEQN = '#event_boards:task/selection/sumMSeqN'
     TASK_EVENTTYPE_VEHICLE = '#event_boards:task/eventtype/vehicle'
     TASK_EVENTTYPE_LEVEL = '#event_boards:task/eventtype/level'
     TASK_EVENTTYPE_CLASS = '#event_boards:task/eventtype/class'
@@ -56,6 +58,7 @@ class EVENT_BOARDS(object):
     TOP_OBJECTIVEPARAMETER_DAMAGEASSISTED = '#event_boards:top/objectiveParameter/damageAssisted'
     TOP_OBJECTIVEPARAMETER_WINS = '#event_boards:top/objectiveParameter/wins'
     TOP_PARTICIPATION_NOTFULL = '#event_boards:top/participation/notfull'
+    TOP_PARTICIPATION_NOTPARTICIPATED = '#event_boards:top/participation/notParticipated'
     TOP_PARTICIPATION_NOTINTOP = '#event_boards:top/participation/notintop'
     TOP_REASON_NOTFULL = '#event_boards:top/reason/notfull'
     TOP_POSITION = '#event_boards:top/position'
@@ -88,9 +91,13 @@ class EVENT_BOARDS(object):
     SUMMARY_DESCRIPTION_SUMN_CLASS = '#event_boards:summary/description/sumN/class'
     SUMMARY_DESCRIPTION_SUMN_VEHICLE = '#event_boards:summary/description/sumN/vehicle'
     SUMMARY_DESCRIPTION_SUMSEQN_NATION = '#event_boards:summary/description/sumSeqN/nation'
+    SUMMARY_DESCRIPTION_SUMMSEQN_NATION = '#event_boards:summary/description/sumMSeqN/nation'
     SUMMARY_DESCRIPTION_SUMSEQN_LEVEL = '#event_boards:summary/description/sumSeqN/level'
+    SUMMARY_DESCRIPTION_SUMMSEQN_LEVEL = '#event_boards:summary/description/sumMSeqN/level'
     SUMMARY_DESCRIPTION_SUMSEQN_CLASS = '#event_boards:summary/description/sumSeqN/class'
+    SUMMARY_DESCRIPTION_SUMMSEQN_CLASS = '#event_boards:summary/description/sumMSeqN/class'
     SUMMARY_DESCRIPTION_SUMSEQN_VEHICLE = '#event_boards:summary/description/sumSeqN/vehicle'
+    SUMMARY_DESCRIPTION_SUMMSEQN_VEHICLE = '#event_boards:summary/description/sumMSeqN/vehicle'
     SUMMARY_DAMAGE = '#event_boards:summary/damage'
     SUMMARY_DAMAGEASSIST = '#event_boards:summary/damageassist'
     SUMMARY_DAMAGEBLOCKED = '#event_boards:summary/damageblocked'
@@ -101,7 +108,6 @@ class EVENT_BOARDS(object):
     SUMMARY_AVERAGEDAMAGEASSISTED = '#event_boards:summary/averagedamageassisted'
     SUMMARY_BATTLES = '#event_boards:summary/battles'
     SUMMARY_STATUS = '#event_boards:summary/status'
-    SUMMARY_STATUS_TOOLTIP = '#event_boards:summary/status/tooltip'
     SUMMARY_DESTROYEDVEHICLES = '#event_boards:summary/destroyedvehicles'
     SUMMARY_PARAM_MAX_ORIGINALXP = '#event_boards:summary/param/max/originalXP'
     SUMMARY_PARAM_MAX_XP = '#event_boards:summary/param/max/xp'
@@ -116,9 +122,13 @@ class EVENT_BOARDS(object):
     SUMMARY_PARAM_SUMN_DAMAGEDEALT = '#event_boards:summary/param/sumN/damageDealt'
     SUMMARY_PARAM_SUMN_DAMAGEASSISTED = '#event_boards:summary/param/sumN/damageAssisted'
     SUMMARY_PARAM_SUMSEQN_ORIGINALXP = '#event_boards:summary/param/sumSeqN/originalXP'
+    SUMMARY_PARAM_SUMMSEQN_ORIGINALXP = '#event_boards:summary/param/sumMSeqN/originalXP'
     SUMMARY_PARAM_SUMSEQN_XP = '#event_boards:summary/param/sumSeqN/xp'
+    SUMMARY_PARAM_SUMMSEQN_XP = '#event_boards:summary/param/sumMSeqN/xp'
     SUMMARY_PARAM_SUMSEQN_DAMAGEDEALT = '#event_boards:summary/param/sumSeqN/damageDealt'
+    SUMMARY_PARAM_SUMMSEQN_DAMAGEDEALT = '#event_boards:summary/param/sumMSeqN/damageDealt'
     SUMMARY_PARAM_SUMSEQN_DAMAGEASSISTED = '#event_boards:summary/param/sumSeqN/damageAssisted'
+    SUMMARY_PARAM_SUMMSEQN_DAMAGEASSISTED = '#event_boards:summary/param/sumMSeqN/damageAssisted'
     SUMMARY_POSITION = '#event_boards:summary/position'
     SUMMARY_RESULT_WIN = '#event_boards:summary/result/win'
     SUMMARY_RESULT_LOSS = '#event_boards:summary/result/loss'
@@ -149,7 +159,11 @@ class EVENT_BOARDS(object):
     TIME_EVENTFINISHED = '#event_boards:time/eventFinished'
     POPOVER_BUTTONS_CANCEL = '#event_boards:popover/buttons/cancel'
     POPOVER_BUTTONS_RATING = '#event_boards:popover/buttons/rating'
+    POPOVER_BUTTONS_SELECT = '#event_boards:popover/buttons/select'
     POPOVER_TITLE = '#event_boards:popover/title'
+    POPOVER_TITLE_VEHICLE = '#event_boards:popover/title/vehicle'
+    POPOVER_NOVEHICLES = '#event_boards:popover/noVehicles'
+    POPOVER_RESETFILTER = '#event_boards:popover/resetFilter'
     POPOVER_TOOLTIP_NATION = '#event_boards:popover/tooltip/nation'
     POPOVER_TOOLTIP_LEVEL = '#event_boards:popover/tooltip/level'
     POPOVER_TOOLTIP_CLASS = '#event_boards:popover/tooltip/class'
@@ -181,6 +195,8 @@ class EVENT_BOARDS(object):
     EXCEL_PARTICIPATE_JOIN = '#event_boards:excel/participate/join'
     EXCEL_PARTICIPATE_NOTPARTICIPATED = '#event_boards:excel/participate/notParticipated'
     EXCEL_NODATA = '#event_boards:excel/noData'
+    EXCEL_AWARD_TITLE = '#event_boards:excel/award/title'
+    EXCEL_GROUP_TITLE = '#event_boards:excel/group/title'
     MAINTENANCE_TITLE = '#event_boards:maintenance/title'
     MAINTENANCE_BODY = '#event_boards:maintenance/body'
     MAINTENANCE_UPDATE = '#event_boards:maintenance/update'
@@ -269,9 +285,13 @@ class EVENT_BOARDS(object):
      SUMMARY_PARAM_SUMN_DAMAGEDEALT,
      SUMMARY_PARAM_SUMN_DAMAGEASSISTED,
      SUMMARY_PARAM_SUMSEQN_ORIGINALXP,
+     SUMMARY_PARAM_SUMMSEQN_ORIGINALXP,
      SUMMARY_PARAM_SUMSEQN_XP,
+     SUMMARY_PARAM_SUMMSEQN_XP,
      SUMMARY_PARAM_SUMSEQN_DAMAGEDEALT,
-     SUMMARY_PARAM_SUMSEQN_DAMAGEASSISTED)
+     SUMMARY_PARAM_SUMMSEQN_DAMAGEDEALT,
+     SUMMARY_PARAM_SUMSEQN_DAMAGEASSISTED,
+     SUMMARY_PARAM_SUMMSEQN_DAMAGEASSISTED)
     SUMMARY_DESCRIPTION_SUM_ENUM = (SUMMARY_DESCRIPTION_SUM_NATION,
      SUMMARY_DESCRIPTION_SUM_LEVEL,
      SUMMARY_DESCRIPTION_SUM_CLASS,
@@ -295,11 +315,13 @@ class EVENT_BOARDS(object):
      TASK_OBJECTIVE_SUM_ORIGINALXP,
      TASK_OBJECTIVE_SUM_XP,
      TASK_OBJECTIVE_SUM_DAMAGEDEALT,
-     TASK_OBJECTIVE_SUM_DAMAGEASSISTED)
+     TASK_OBJECTIVE_SUM_DAMAGEASSISTED,
+     TASK_OBJECTIVE_SUM_WINS)
     TASK_SELECTION_ENUM = (TASK_SELECTION_MAX,
      TASK_SELECTION_SUMN,
      TASK_SELECTION_SUMALL,
-     TASK_SELECTION_SUMSEQN)
+     TASK_SELECTION_SUMSEQN,
+     TASK_SELECTION_SUMMSEQN)
     TASK_EVENTTYPE_ENUM = (TASK_EVENTTYPE_VEHICLE,
      TASK_EVENTTYPE_LEVEL,
      TASK_EVENTTYPE_CLASS,

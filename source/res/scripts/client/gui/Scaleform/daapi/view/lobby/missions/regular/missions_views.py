@@ -190,28 +190,28 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
          'leaderboardID': int(leaderboardsID)}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __onViewLoaded(self, view, *args, **kwargs):
-        if view.settings.alias == EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_ALIAS:
-            eventID = view.eventID
-            if eventID is not None:
+        if view.settings.alias in (EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_ALIAS, EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_VEHICLES_ALIAS):
+            if view.caller == 'missions':
+                eventID = view.eventID
                 eventData = self.__eventsData.getEvent(eventID)
                 if eventData is not None:
                     view.setData(eventData, partial(self.__onFilterApply, eventID))
                 else:
                     view.destroy()
                     self._setMaintenance(True)
-        elif view.settings.alias == EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_VEHICLES_ALIAS:
-            view.setOpener(self)
         elif view.settings.alias == VIEW_ALIAS.LOBBY_EVENT_BOARDS_TABLE:
             self.__tableView = view
             view.onDisposed += self.__tableViewDisposed
         return
 
+    @process
     def __tableViewDisposed(self, view):
         self.as_setPlayFadeInTweenEnabledS(False)
         view.onDisposed -= self.__tableViewDisposed
         self.__tableView = None
         hideMissionDetails()
-        self._onEventsUpdate()
+        yield self._onEventsUpdateAsync()
+        self.as_scrollToItemS('blockId', view.getEventID())
         return
 
     def __openDetailsContainer(self, viewAlias, ctx=None):
@@ -234,8 +234,8 @@ class CurrentVehicleMissionsView(CurrentVehicleMissionsViewMeta):
     """ Missions tab for all quests from the other tabs that can be completed on the current vihicle.
     """
 
-    def setBuilder(self, builder, filters):
-        super(CurrentVehicleMissionsView, self).setBuilder(builder, filters)
+    def setBuilder(self, builder, filters, eventId):
+        super(CurrentVehicleMissionsView, self).setBuilder(builder, filters, eventId)
         self._builder.onBlocksDataChanged += self.__onBlocksDataChanged
 
     @staticmethod

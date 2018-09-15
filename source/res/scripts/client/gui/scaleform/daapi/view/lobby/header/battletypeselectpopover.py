@@ -75,7 +75,8 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
         self.update()
 
     def __getRankedAvailabilityData(self):
-        if self.rankedController.isAvailable():
+        hasSuitableVehicles = self.rankedController.hasSuitableVehicles()
+        if self.rankedController.isAvailable() and hasSuitableVehicles:
             return (TOOLTIPS_CONSTANTS.RANKED_SELECTOR_INFO, True)
         else:
             tooltipData = TOOLTIPS.BATTLETYPES_RANKED
@@ -83,11 +84,13 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
             bodyKey = tooltipData + '/body'
             body = i18n.makeString(bodyKey)
             nextSeason = self.rankedController.getNextSeason()
-            if self.rankedController.isFrozen():
-                additionalInfo = i18n.makeString(bodyKey + '/frozen')
-            elif nextSeason is not None:
-                additionalInfo = i18n.makeString(bodyKey + '/coming', date=BigWorld.wg_getShortDateFormat(time_utils.makeLocalServerTime(nextSeason.getStartDate())))
-            else:
-                additionalInfo = i18n.makeString(bodyKey + '/disabled')
-            res = makeTooltip(header, '%s\n\n%s' % (body, additionalInfo))
+            if hasSuitableVehicles:
+                if self.rankedController.isFrozen():
+                    additionalInfo = i18n.makeString(bodyKey + '/frozen')
+                elif nextSeason is not None:
+                    additionalInfo = i18n.makeString(bodyKey + '/coming', date=BigWorld.wg_getShortDateFormat(time_utils.makeLocalServerTime(nextSeason.getStartDate())))
+                else:
+                    additionalInfo = i18n.makeString(bodyKey + '/disabled')
+                body = '%s\n\n%s' % (body, additionalInfo)
+            res = makeTooltip(header, body)
             return (res, False)

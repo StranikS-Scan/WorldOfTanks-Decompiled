@@ -4,7 +4,7 @@ import math
 from collections import defaultdict
 import BigWorld
 import CommandMapping
-from AvatarInputHandler import gun_marker_ctrl, aih_constants
+from AvatarInputHandler import gun_marker_ctrl
 from account_helpers.settings_core.settings_constants import GRAPHICS, AIM
 from constants import VEHICLE_SIEGE_STATE as _SIEGE_STATE
 from account_helpers.AccountSettings import AccountSettings, TRAJECTORY_VIEW_HINT_COUNTER
@@ -91,10 +91,9 @@ def _makeSettingsVO(settingsCore, *keys):
     return data
 
 
-def _createAmmoSettings(gunSettingsList):
-    primaryTurretGunSettings = gunSettingsList[0]
-    capacity = primaryTurretGunSettings.clip.size
-    burst = primaryTurretGunSettings.burst.size
+def _createAmmoSettings(gunSettings):
+    capacity = gunSettings.clip.size
+    burst = gunSettings.burst.size
     if capacity > 1:
         state = _CassetteSettings(capacity, burst)
     else:
@@ -254,7 +253,7 @@ class AmmoPlugin(CrosshairPlugin):
         ctrl = self.sessionProvider.shared.ammo
         assert ctrl is not None, 'Ammo controller is not found'
         self.__setup(ctrl, self.sessionProvider.isReplayPlaying)
-        ctrl.onGunSettingsListSet += self.__onGunSettingsListSet
+        ctrl.onGunSettingsSet += self.__onGunSettingsSet
         ctrl.onGunReloadTimeSet += self.__onGunReloadTimeSet
         ctrl.onShellsUpdated += self.__onShellsUpdated
         ctrl.onCurrentShellChanged += self.__onCurrentShellChanged
@@ -263,7 +262,7 @@ class AmmoPlugin(CrosshairPlugin):
     def stop(self):
         ctrl = self.sessionProvider.shared.ammo
         if ctrl is not None:
-            ctrl.onGunSettingsListSet -= self.__onGunSettingsListSet
+            ctrl.onGunSettingsSet -= self.__onGunSettingsSet
             ctrl.onGunReloadTimeSet -= self.__onGunReloadTimeSet
             ctrl.onShellsUpdated -= self.__onShellsUpdated
             ctrl.onCurrentShellChanged -= self.__onCurrentShellChanged
@@ -272,41 +271,30 @@ class AmmoPlugin(CrosshairPlugin):
     def __setup(self, ctrl, isReplayPlaying=False):
         if isReplayPlaying:
             self._parentObj.as_setReloadingCounterShownS(False)
-        self.__guiSettings = _createAmmoSettings(ctrl.getGunSettingsList())
+        self.__guiSettings = _createAmmoSettings(ctrl.getGunSettings())
         self._parentObj.as_setClipParamsS(self.__guiSettings.getClipCapacity(), self.__guiSettings.getBurstSize())
-        turretIndex = 0
-        quantity, quantityInClip = ctrl.getCurrentShells(turretIndex)
+        quantity, quantityInClip = ctrl.getCurrentShells()
         if (quantity, quantityInClip) != (SHELL_QUANTITY_UNKNOWN,) * 2:
             isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
             self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, False)
-        for i in range(1 + ctrl.getSubGunsCount()):
-            self.__setReloadingState(i, ctrl.getGunReloadingState(i))
-
-        self._parentObj.as_setSubGunsS(ctrl.getSubGunsCount())
+        self.__setReloadingState(ctrl.getGunReloadingState())
         if self.bootcampController.isInBootcamp():
             self._parentObj.as_setNetVisibleS(CROSSHAIR_CONSTANTS.VISIBLE_NET)
 
-    def __setReloadingState(self, gunIdx, state):
-        actualValue = state.getActualValue()
-        baseValue = state.getBaseValue()
+    def __setReloadingState(self, state):
         valueType = state.getValueType()
         if valueType == GUN_RELOADING_VALUE_TYPE.PERCENT:
-            if gunIdx == 0:
-                self._parentObj.as_setReloadingAsPercentS(actualValue, False)
-            else:
-                self._parentObj.as_setSubGunReloadingAsPercentS(actualValue, False)
+            self._parentObj.as_setReloadingAsPercentS(state.getActualValue(), False)
         elif valueType == GUN_RELOADING_VALUE_TYPE.TIME:
-            if gunIdx == 0:
-                self._parentObj.as_setReloadingS(actualValue, baseValue, state.getTimePassed(), state.isReloading())
-            else:
-                self._parentObj.as_setSubGunReloadingS(gunIdx - 1, actualValue, baseValue, state.getTimePassed(), state.isReloading())
+            LOG_DEBUG('Set reloading state', state)
+            self._parentObj.as_setReloadingS(state.getActualValue(), state.getBaseValue(), state.getTimePassed(), state.isReloading())
 
-    def __onGunSettingsListSet(self, gunSettingsList):
-        self.__guiSettings = _createAmmoSettings(gunSettingsList)
+    def __onGunSettingsSet(self, gunSettings):
+        self.__guiSettings = _createAmmoSettings(gunSettings)
         self._parentObj.as_setClipParamsS(self.__guiSettings.getClipCapacity(), self.__guiSettings.getBurstSize())
 
-    def __onGunReloadTimeSet(self, gunIdx, _, state):
-        self.__setReloadingState(gunIdx, state)
+    def __onGunReloadTimeSet(self, _, state):
+        self.__setReloadingState(state)
 
     def __onShellsUpdated(self, _, quantity, quantityInClip, result):
         if not result & SHELL_SET_RESULT.CURRENT:
@@ -317,8 +305,7 @@ class AmmoPlugin(CrosshairPlugin):
     def __onCurrentShellChanged(self, _):
         ctrl = self.sessionProvider.shared.ammo
         if ctrl is not None:
-            turretIndex = 0
-            quantity, quantityInClip = ctrl.getCurrentShells(turretIndex)
+            quantity, quantityInClip = ctrl.getCurrentShells()
             isLow, state = self.__guiSettings.getState(quantity, quantityInClip)
             self._parentObj.as_setAmmoStockS(quantity, quantityInClip, isLow, state, False)
         return
@@ -364,7 +351,7 @@ class VehicleStatePlugin(CrosshairPlugin):
         return
 
     def __setHealth(self, health):
-        if self.__maxHealth != 0:
+        if self.__maxHealth != 0 and self.__maxHealth >= health:
             self.__healthPercent = getHealthPercent(health, self.__maxHealth)
 
     def __setPlayerInfo(self, vehicleID):
@@ -397,8 +384,11 @@ class VehicleStatePlugin(CrosshairPlugin):
             self.__updateVehicleInfo()
         elif state == VEHICLE_VIEW_STATE.PLAYER_INFO:
             self.__setPlayerInfo(value)
+        elif state == VEHICLE_VIEW_STATE.SWITCHING:
+            self.__maxHealth = 0
+            self.__healthPercent = 0
 
-    def __onPostMortemSwitched(self):
+    def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         self.__updateVehicleInfo()
 
     def __onVehicleFeedbackReceived(self, eventID, _, value):
@@ -535,7 +525,6 @@ class GunMarkersInvalidatePlugin(CrosshairPlugin):
     __slots__ = ()
 
     def start(self):
-        LOG_DEBUG('GunMarkersInvalidatePlugin:', 'start')
         ctrl = self.sessionProvider.shared.crosshair
         assert ctrl is not None, 'Crosshair controller is not found'
         self.__setup(ctrl)
@@ -545,7 +534,7 @@ class GunMarkersInvalidatePlugin(CrosshairPlugin):
         ctrl.onVehicleControlling += self.__onVehicleControlling
         ctrl = self.sessionProvider.shared.ammo
         if ctrl is not None:
-            ctrl.onGunSettingsListSet += self.__onGunSettingsListSet
+            ctrl.onGunSettingsSet += self.__onGunSettingsSet
         return
 
     def stop(self):
@@ -557,7 +546,7 @@ class GunMarkersInvalidatePlugin(CrosshairPlugin):
             ctrl.onVehicleControlling -= self.__onVehicleControlling
         ctrl = self.sessionProvider.shared.ammo
         if ctrl is not None:
-            ctrl.onGunSettingsListSet -= self.__onGunSettingsListSet
+            ctrl.onGunSettingsSet -= self.__onGunSettingsSet
         return
 
     def __getVehicleInfo(self):
@@ -577,7 +566,7 @@ class GunMarkersInvalidatePlugin(CrosshairPlugin):
         if not repository.vehicleState.isInPostmortem and vehicle.isPlayerVehicle:
             self._parentObj.invalidateGunMarkers(repository.crosshair.getGunMarkersSetInfo(), self.__getVehicleInfo())
 
-    def __onGunSettingsListSet(self, gunSettingsList):
+    def __onGunSettingsSet(self, gunSettings):
         ctrl = self.sessionProvider.shared.crosshair
         if ctrl is not None:
             markersInfo = ctrl.getGunMarkersSetInfo()
@@ -638,8 +627,7 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
                 self.__mapping[_SETTINGS_KEY_TO_VIEW_ID[key]] = value
 
     def __updateColor(self, markerType, position, collision, dir):
-        turretIndex = 1 if markerType == aih_constants.GUN_MARKER_TYPE.SUB else 0
-        result = self.__shotResultResolver.getShotResult(position, collision, dir, turretIndex, excludeTeam=self.__playerTeam)
+        result = self.__shotResultResolver.getShotResult(position, collision, dir, excludeTeam=self.__playerTeam)
         if result in self.__colors:
             color = self.__colors[result]
             if self.__cache[markerType] != result and self._parentObj.setGunMarkerColor(markerType, color):
@@ -708,16 +696,19 @@ class SiegeModePlugin(CrosshairPlugin):
     def __onVehicleControlling(self, vehicle):
         ctrl = self.sessionProvider.shared.vehicleState
         vTypeDesc = vehicle.typeDescriptor
-        if not ctrl.isInPostmortem and vTypeDesc.hasSiegeMode:
-            value = ctrl.getStateValue(VEHICLE_VIEW_STATE.SIEGE_MODE)
-            if value is not None:
-                self.__onVehicleStateUpdated(VEHICLE_VIEW_STATE.SIEGE_MODE, value)
-            else:
-                self.__updateView()
+        if ctrl.isInPostmortem:
+            return
         else:
-            self.__siegeState = _SIEGE_STATE.DISABLED
-            self.__updateView()
-        return
+            if vTypeDesc.hasSiegeMode:
+                value = ctrl.getStateValue(VEHICLE_VIEW_STATE.SIEGE_MODE)
+                if value is not None:
+                    self.__onVehicleStateUpdated(VEHICLE_VIEW_STATE.SIEGE_MODE, value)
+                else:
+                    self.__updateView()
+            else:
+                self.__siegeState = _SIEGE_STATE.DISABLED
+                self.__updateView()
+            return
 
     def __onVehicleStateUpdated(self, stateID, value):
         if stateID == VEHICLE_VIEW_STATE.SIEGE_MODE:

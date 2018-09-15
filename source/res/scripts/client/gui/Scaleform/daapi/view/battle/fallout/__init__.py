@@ -12,9 +12,7 @@ def getContextMenuHandlers():
 def getViewSettings():
     from gui.Scaleform.daapi.view.battle.fallout import consumables_panel
     from gui.Scaleform.daapi.view.battle.fallout import destroy_timers_panel
-    from gui.Scaleform.daapi.view.battle.fallout import flag_nots
     from gui.Scaleform.daapi.view.battle.fallout import full_stats
-    from gui.Scaleform.daapi.view.battle.fallout import repair_timer
     from gui.Scaleform.daapi.view.battle.fallout import respawn
     from gui.Scaleform.daapi.view.battle.fallout import page
     from gui.Scaleform.daapi.view.battle.fallout import score_panel
@@ -32,9 +30,7 @@ def getViewSettings():
      ViewSettings(BATTLE_VIEW_ALIASES.FALLOUT_CONSUMABLES_PANEL, consumables_panel.FalloutConsumablesPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.FALLOUT_DESTROY_TIMERS_PANEL, destroy_timers_panel.FalloutDestroyTimersPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.FALLOUT_RESPAWN_VIEW, respawn.FalloutRespawn, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.FLAG_NOTIFICATION, flag_nots.FlagNotification, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.MINIMAP, minimap.FalloutMinimapComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(BATTLE_VIEW_ALIASES.REPAIR_POINT_TIMER, repair_timer.RepairPointTimer, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.FALLOUT_SCORE_PANEL, score_panel.FalloutScorePanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.BATTLE_TIMER, battle_timer.FalloutBattleTimer, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(BATTLE_VIEW_ALIASES.RIBBONS_PANEL, ribbons_panel.BattleRibbonsPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))

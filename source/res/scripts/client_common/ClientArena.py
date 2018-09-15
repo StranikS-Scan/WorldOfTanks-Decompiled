@@ -2,17 +2,14 @@
 # Embedded file name: scripts/client_common/ClientArena.py
 import Math
 import BigWorld
-import ResMgr
 import ArenaType
 from items import vehicles
-import constants
 import cPickle
 import zlib
 import Event
-from constants import ARENA_PERIOD, ARENA_UPDATE, FLAG_STATE
+from constants import ARENA_PERIOD, ARENA_UPDATE
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV, LOG_ERROR
-from CTFManager import g_ctfManager
 from helpers.EffectsList import FalloutDestroyEffect
 import arena_component_system.client_arena_component_assembler as assembler
 
@@ -29,20 +26,14 @@ class ClientArena(object):
      ARENA_UPDATE.TEAM_KILLER: '_ClientArena__onTeamKiller',
      ARENA_UPDATE.VEHICLE_UPDATED: '_ClientArena__onVehicleUpdatedUpdate',
      ARENA_UPDATE.COMBAT_EQUIPMENT_USED: '_ClientArena__onCombatEquipmentUsed',
-     ARENA_UPDATE.RESPAWN_AVAILABLE_VEHICLES: '_ClientArena__onRespawnAvailableVehicles',
-     ARENA_UPDATE.RESPAWN_COOLDOWNS: '_ClientArena__onRespawnCooldowns',
-     ARENA_UPDATE.RESPAWN_RANDOM_VEHICLE: '_ClientArena__onRespawnRandomVehicle',
-     ARENA_UPDATE.RESPAWN_RESURRECTED: '_ClientArena__onRespawnResurrected',
      ARENA_UPDATE.FLAG_TEAMS: '_ClientArena__onFlagTeamsReceived',
      ARENA_UPDATE.FLAG_STATE_CHANGED: '_ClientArena__onFlagStateChanged',
      ARENA_UPDATE.INTERACTIVE_STATS: '_ClientArena__onInteractiveStats',
-     ARENA_UPDATE.DISAPPEAR_BEFORE_RESPAWN: '_ClientArena__onDisappearVehicleBeforeRespawn',
      ARENA_UPDATE.RESOURCE_POINT_STATE_CHANGED: '_ClientArena__onResourcePointStateChanged',
      ARENA_UPDATE.OWN_VEHICLE_INSIDE_RP: '_ClientArena__onOwnVehicleInsideRP',
      ARENA_UPDATE.OWN_VEHICLE_LOCKED_FOR_RP: '_ClientArena__onOwnVehicleLockedForRP',
      ARENA_UPDATE.VIEW_POINTS: '_ClientArena__onViewPoints',
-     ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar',
-     ARENA_UPDATE.DISAPPEAR: '_ClientArena__onDisappearVehicle'}
+     ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar'}
 
     def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData, weatherPresetID):
         self.__vehicles = {}
@@ -70,15 +61,9 @@ class ClientArena(object):
         self.onTeamBaseCaptured = Event.Event(em)
         self.onTeamKiller = Event.Event(em)
         self.onCombatEquipmentUsed = Event.Event(em)
-        self.onRespawnAvailableVehicles = Event.Event(em)
-        self.onRespawnCooldowns = Event.Event(em)
-        self.onRespawnRandomVehicle = Event.Event(em)
-        self.onRespawnResurrected = Event.Event(em)
         self.onInteractiveStats = Event.Event(em)
         self.onGameModeSpecifcStats = Event.Event(em)
-        self.onVehicleWillRespawn = Event.Event(em)
         self.onViewPoints = Event.Event(em)
-        self.onDisappearVehicle = Event.Event(em)
         self.onFogOfWarHiddenVehiclesSet = Event.Event(em)
         self.onTeamHealthPercentUpdate = Event.Event(em)
         self.arenaUniqueID = arenaUniqueID
@@ -88,7 +73,6 @@ class ClientArena(object):
         self.bonusType = arenaBonusType
         self.guiType = arenaGuiType
         self.extraData = arenaExtraData
-        self.effectsPlayersList = []
         self.__arenaBBCollider = None
         self.__spaceBBCollider = None
         self.componentSystem = assembler.createComponentSystem(self.bonusType, self.arenaType)
@@ -107,10 +91,6 @@ class ClientArena(object):
 
     def destroy(self):
         self.__eventManager.clear()
-        for effectsPlayer in self.effectsPlayersList:
-            effectsPlayer.stop(forceCallback=True)
-
-        self.effectsPlayersList[:] = []
         assembler.destroyComponentSystem(self.componentSystem)
 
     def update(self, updateType, argStr):
@@ -247,56 +227,20 @@ class ClientArena(object):
         shooterID, equipmentID = cPickle.loads(argStr)
         self.onCombatEquipmentUsed(shooterID, equipmentID)
 
-    def __onRespawnAvailableVehicles(self, argStr):
-        vehsList = cPickle.loads(zlib.decompress(argStr))
-        self.onRespawnAvailableVehicles(vehsList)
-        LOG_DEBUG_DEV('[RESPAWN] onRespawnAvailableVehicles', vehsList)
-
-    def __onRespawnCooldowns(self, argStr):
-        cooldowns = cPickle.loads(zlib.decompress(argStr))
-        self.onRespawnCooldowns(cooldowns)
-
-    def __onRespawnRandomVehicle(self, argStr):
-        respawnInfo = cPickle.loads(zlib.decompress(argStr))
-        self.onRespawnRandomVehicle(respawnInfo)
-
-    def __onRespawnResurrected(self, argStr):
-        respawnInfo = cPickle.loads(zlib.decompress(argStr))
-        self.onRespawnResurrected(respawnInfo)
-
-    def __onDisappearVehicleBeforeRespawn(self, argStr):
-        vehID = cPickle.loads(argStr)
-        self.effectsPlayersList.append(FalloutDestroyEffect.play(vehID))
-        self.onVehicleWillRespawn(vehID)
-
-    def __onDisappearVehicle(self, argStr):
-        vehID = cPickle.loads(argStr)
-        self.onDisappearVehicle(vehID)
-
     def __onFlagTeamsReceived(self, argStr):
-        data = cPickle.loads(argStr)
-        LOG_DEBUG('[FLAGS] flag teams', data)
-        g_ctfManager.onFlagTeamsReceived(data)
+        pass
 
     def __onFlagStateChanged(self, argStr):
-        data = cPickle.loads(argStr)
-        LOG_DEBUG('[FLAGS] flag state changed', data)
-        g_ctfManager.onFlagStateChanged(data)
+        pass
 
     def __onResourcePointStateChanged(self, argStr):
-        data = cPickle.loads(argStr)
-        LOG_DEBUG('[RESOURCE POINTS] state changed', data)
-        g_ctfManager.onResourcePointStateChanged(data)
+        pass
 
     def __onOwnVehicleInsideRP(self, argStr):
-        pointInfo = cPickle.loads(argStr)
-        LOG_DEBUG('[RESOURCE POINTS] own vehicle inside point', pointInfo)
-        g_ctfManager.onOwnVehicleInsideRP(pointInfo)
+        pass
 
     def __onOwnVehicleLockedForRP(self, argStr):
-        unlockTime = cPickle.loads(argStr)
-        LOG_DEBUG('[RESOURCE POINTS] own vehicle is locked', unlockTime)
-        g_ctfManager.onOwnVehicleLockedForRP(unlockTime)
+        pass
 
     def __onInteractiveStats(self, argStr):
         stats = cPickle.loads(zlib.decompress(argStr))

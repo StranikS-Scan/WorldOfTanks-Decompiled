@@ -164,7 +164,6 @@ class UNIT_ERROR:
     BAD_ARENA_BONUS_TYPE = 99
     UNIT_CHANGED_LEADER = 100
     FAIL_EXT_UNIT_QUEUE_START = 101
-    BAD_EVENT_TYPE = 102
 
 
 OK = UNIT_ERROR.OK
@@ -203,7 +202,6 @@ class UNIT_OP:
     SET_VEHICLE_LIST = 21
     CHANGE_FALLOUT_TYPE = 22
     ARENA_TYPE = 23
-    CHANGE_EVENT_TYPE = 24
 
 
 class UNIT_ROLE:
@@ -217,6 +215,7 @@ class UNIT_ROLE:
     OFFLINE = 128
     CAN_LEAD = 256
     AUTO_SEARCH = 512
+    CAN_USE_EXTRA_EQUIPMENTS = 1024
     START_STOP_BATTLE = CHANGE_ROSTER
     ADD_REMOVE_MEMBERS = CHANGE_ROSTER
     INVITE_KICK_PLAYERS = CHANGE_ROSTER
@@ -268,7 +267,6 @@ class UNIT_NOTIFY_CMD:
     SET_MEMBER_READY = 5
     KICK_ALL = 6
     EXTRAS_UPDATED = 7
-    EVENT_TYPE_CHANGE = 9
     FALLOUT_TYPE_CHANGE = 10
     AUTO_ASSEMBLED_MEMBER_ADDED = 11
     APPROVED_VEHICLE_LIST = 12
@@ -302,7 +300,6 @@ class CLIENT_UNIT_CMD:
     CHANGE_FALLOUT_TYPE = 24
     SET_UNIT_VEHICLE_TYPE = 25
     SET_ARENA_TYPE = 26
-    CHANGE_EVENT_TYPE = 27
 
 
 CMD_NAMES = dict([ (v, k) for k, v in CLIENT_UNIT_CMD.__dict__.items() if not k.startswith('__') ])
@@ -415,8 +412,7 @@ class UnitBase(OpsUnpacker):
                                 'N',
                                 [('H', 'iH')]),
      UNIT_OP.CHANGE_FALLOUT_TYPE: ('i', '_changeFalloutQueueType'),
-     UNIT_OP.ARENA_TYPE: ('i', '_setArenaType'),
-     UNIT_OP.CHANGE_EVENT_TYPE: ('i', '_changeEventQueueType')})
+     UNIT_OP.ARENA_TYPE: ('i', '_setArenaType')})
     MAX_PLAYERS = 250
 
     def __init__(self, limitsDefs={}, slotDefs={}, slotCount=0, packedRoster='', extrasInit=None, packedUnit='', rosterTypeID=ROSTER_TYPE.UNIT_ROSTER, extrasHandlerID=EXTRAS_HANDLER_TYPE.EMPTY, prebattleTypeID=PREBATTLE_TYPE.UNIT):
@@ -525,9 +521,7 @@ class UnitBase(OpsUnpacker):
     def _addPlayer(self, accountDBID, **kwargs):
         self._players[accountDBID] = kwargs
         self._dirty = 1
-        packed = struct.pack(self._PLAYER_DATA, accountDBID, kwargs.get('accountID', 0), kwargs.get('timeJoin', 0), kwargs.get('role', 0), kwargs.get('igrType', 0), kwargs.get('rating', 0), kwargs.get('peripheryID', 0), kwargs.get('clanDBID', 0))
-        packed += packPascalString(kwargs.get('nickName', ''))
-        packed += packPascalString(kwargs.get('clanAbbrev', ''))
+        packed = self.__packPlayerData(accountDBID, **kwargs)
         self._appendOp(UNIT_OP.ADD_PLAYER, packed)
 
     def _removePlayer(self, accountDBID):
@@ -620,9 +614,7 @@ class UnitBase(OpsUnpacker):
             packed += struct.pack(self._SLOT_PLAYERS, slotIdx, member['accountDBID'])
 
         for accountDBID, playerData in players.iteritems():
-            packed += struct.pack(self._PLAYER_DATA, accountDBID, playerData.get('accountID', 0), playerData.get('timeJoin', 0), playerData.get('role', 0), playerData.get('igrType', 0), playerData.get('rating', 0), playerData.get('peripheryID', 0), playerData.get('clanDBID', 0))
-            packed += packPascalString(playerData.get('nickName', ''))
-            packed += packPascalString(playerData.get('clanAbbrev', ''))
+            packed += self.__packPlayerData(accountDBID, **playerData)
 
         packed += extrasStr
         packed += packPascalString(self._strComment)
@@ -658,13 +650,10 @@ class UnitBase(OpsUnpacker):
             self._setMember(accountDBID, slotIdx)
             unpacking = unpacking[self._SLOT_PLAYERS_SIZE:]
 
-        sz = self._PLAYER_DATA_SIZE
         for i in xrange(0, playerCount):
-            accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID = struct.unpack_from(self._PLAYER_DATA, unpacking)
-            nickName, lenNickBytes = unpackPascalString(unpacking, sz)
-            clanAbbrev, lenClanBytes = unpackPascalString(unpacking, sz + lenNickBytes)
-            unpacking = unpacking[sz + lenNickBytes + lenClanBytes:]
-            self._addPlayer(accountDBID, accountID=accountID, timeJoin=timeJoin, role=role, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID)
+            blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, nickName, clanAbbrev, badges = self.__unpackPlayerData(unpacking)
+            unpacking = unpacking[blockLength:]
+            self._addPlayer(accountDBID, accountID=accountID, timeJoin=timeJoin, role=role, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID, badges=badges)
 
         self._extras = self._extrasHandler.unpack(unpacking[:extrasLen])
         unpacking = unpacking[extrasLen:]
@@ -1025,13 +1014,10 @@ class UnitBase(OpsUnpacker):
         return packedOps[opLen:]
 
     def _unpackPlayer(self, packedOps):
-        sz = self._PLAYER_DATA_SIZE
-        accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID = struct.unpack_from(self._PLAYER_DATA, packedOps)
-        nickName, lenNickBytes = unpackPascalString(packedOps, sz)
-        clanAbbrev, lenClanBytes = unpackPascalString(packedOps, sz + lenNickBytes)
-        playerInfo = dict(accountID=accountID, role=role, timeJoin=timeJoin, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID)
+        blockLength, accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID, nickName, clanAbbrev, badges = self.__unpackPlayerData(packedOps)
+        playerInfo = dict(accountID=accountID, role=role, timeJoin=timeJoin, rating=rating, nickName=nickName, clanAbbrev=clanAbbrev, peripheryID=peripheryID, igrType=igrType, clanDBID=clanDBID, badges=badges)
         self._addPlayer(accountDBID, **playerInfo)
-        return packedOps[sz + lenNickBytes + lenClanBytes:]
+        return packedOps[blockLength:]
 
     def _giveLeadership(self, newLeaderDBID):
         swapSlotIdx = self._playerSlots.get(newLeaderDBID)
@@ -1090,10 +1076,6 @@ class UnitBase(OpsUnpacker):
             self.storeOp(UNIT_OP.CHANGE_FALLOUT_TYPE, queueType)
             return True
 
-    def _changeEventQueueType(self, queueType):
-        self.storeOp(UNIT_OP.CHANGE_EVENT_TYPE, queueType)
-        return True
-
     def _getLeaderDBID(self):
         return self._members.get(LEADER_SLOT, {}).get('accountDBID', 0)
 
@@ -1111,3 +1093,40 @@ class UnitBase(OpsUnpacker):
                 return False
 
         return True
+
+    def __packPlayerData(self, accountDBID, **kwargs):
+        packed = struct.pack(self._PLAYER_DATA, accountDBID, kwargs.get('accountID', 0), kwargs.get('timeJoin', 0), kwargs.get('role', 0), kwargs.get('igrType', 0), kwargs.get('rating', 0), kwargs.get('peripheryID', 0), kwargs.get('clanDBID', 0))
+        packed += packPascalString(kwargs.get('nickName', ''))
+        packed += packPascalString(kwargs.get('clanAbbrev', ''))
+        badges = kwargs.get('badges', [])
+        packed += struct.pack('<B', len(badges))
+        if badges:
+            packed += struct.pack(('<%dI' % len(badges)), *badges)
+        return packed
+
+    def __unpackPlayerData(self, packedData):
+        sz = self._PLAYER_DATA_SIZE
+        accountDBID, accountID, timeJoin, role, igrType, rating, peripheryID, clanDBID = struct.unpack_from(self._PLAYER_DATA, packedData)
+        nickName, lenNickBytes = unpackPascalString(packedData, sz)
+        clanAbbrev, lenClanBytes = unpackPascalString(packedData, sz + lenNickBytes)
+        blockLength = sz + lenNickBytes + lenClanBytes
+        badgesLength = struct.unpack_from('<B', packedData, blockLength)[0]
+        blockLength += struct.calcsize('<B')
+        if badgesLength:
+            fmt = '<%dI' % badgesLength
+            badges = list(struct.unpack_from(fmt, packedData, blockLength))
+            blockLength += struct.calcsize(fmt)
+        else:
+            badges = list()
+        return (blockLength,
+         accountDBID,
+         accountID,
+         timeJoin,
+         role,
+         igrType,
+         rating,
+         peripheryID,
+         clanDBID,
+         nickName,
+         clanAbbrev,
+         badges)

@@ -132,6 +132,7 @@ class ServersDataProvider(SortableDAAPIDataProvider):
         if 'isColorBlind' in diff:
             self.__isColorBlind = diff['isColorBlind']
             for item in self._list:
+                item['colorBlind'] = self.__isColorBlind
                 pingValue, pingStatus = g_preDefinedHosts.getHostPingData(item['data'])
                 pingValueStr = formatPingStatus(item['csisStatus'], self.__isColorBlind, False, pingStatus, pingValue)
                 item['pingValue'] = pingValueStr

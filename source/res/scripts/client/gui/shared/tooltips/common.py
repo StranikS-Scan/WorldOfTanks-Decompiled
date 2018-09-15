@@ -884,18 +884,18 @@ class ActionTooltipData(ToolTipBaseData):
     def getDisplayableData(self, type, key, newPrice, oldPrice, isBuying, forCredits=False, rentPackage=None):
         descr = ''
         newPrice = Money.makeFromMoneyTuple(newPrice)
+        if not newPrice.isDefined():
+            newPrice = Money(credits=0)
         oldPrice = Money.makeFromMoneyTuple(oldPrice)
+        if not oldPrice.isDefined():
+            oldPrice = Money(credits=0)
         hasRentCompensation = False
         hasPersonalDiscount = False
         rentCompensation = None
-        defaultCurrencyType = Currency.GOLD
         itemName = ''
         deviceNameType = None
         deviceName = None
-        if type == ACTION_TOOLTIPS_TYPE.ECONOMICS:
-            if key == 'freeXPToTManXPRate':
-                defaultCurrencyType = 'freeXp'
-        elif type == ACTION_TOOLTIPS_TYPE.RENT:
+        if type == ACTION_TOOLTIPS_TYPE.RENT:
             item = self.itemsCache.items.getItemByCD(int(key))
             itemName = '%s/rent/price' % item.name.split(':')[-1]
             deviceNameType = item.itemTypeID
@@ -910,19 +910,8 @@ class ActionTooltipData(ToolTipBaseData):
                 shop = self.itemsCache.items.shop
                 shopPrice = shop.getItemPrice(item.intCD)
                 personalPrice = shop.getPersonalVehicleDiscountPrice(item.intCD)
-                if personalPrice is not None and personalPrice.getSignValue(defaultCurrencyType) <= shopPrice.getSignValue(defaultCurrencyType):
+                if personalPrice is not None and personalPrice.getShortage(shopPrice).isDefined():
                     hasPersonalDiscount = True
-            if not isBuying:
-                sellingActions = self.eventsCache.getItemAction(item, False, forCredits)
-                if sellingActions:
-
-                    def filterFunc(item):
-                        (forGold, _), _ = item
-                        return forGold
-
-                    sellForGoldAction = findFirst(filterFunc, sellingActions)
-                    if sellForGoldAction:
-                        defaultCurrencyType = Currency.GOLD
             if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE and isBuying:
                 if item.isRented and not item.rentalIsOver and item.rentCompensation.gold > 0:
                     hasRentCompensation = True
@@ -945,12 +934,12 @@ class ActionTooltipData(ToolTipBaseData):
         _ms = makeHtmlString
         _template = 'html_templates:lobby/quests/actions'
         _format = BigWorld.wg_getGoldFormat
-        fmtNewGold = _ms(_template, defaultCurrencyType, {'value': _format(newPrice.gold)}) if newPrice.gold else ''
-        fmtNewCredits = _ms(_template, Currency.CREDITS, {'value': _format(newPrice.credits)}) if newPrice.credits else ''
-        fmtNewCrystal = _ms(_template, Currency.CRYSTAL, {'value': _format(newPrice.crystal)}) if newPrice.crystal else ''
-        fmtOldGold = _ms(_template, defaultCurrencyType, {'value': _format(oldPrice.gold)}) if oldPrice.gold else ''
-        fmtOldCredits = _ms(_template, Currency.CREDITS, {'value': _format(oldPrice.credits)}) if oldPrice.credits else ''
-        fmtOldCrystal = _ms(_template, Currency.CRYSTAL, {'value': _format(oldPrice.crystal)}) if oldPrice.crystal else ''
+        fmtNewGold = _ms(_template, Currency.GOLD, {'value': _format(newPrice.gold)}) if newPrice.gold is not None else ''
+        fmtNewCredits = _ms(_template, Currency.CREDITS, {'value': _format(newPrice.credits)}) if newPrice.credits is not None else ''
+        fmtNewCrystal = _ms(_template, Currency.CRYSTAL, {'value': _format(newPrice.crystal)}) if newPrice.crystal is not None else ''
+        fmtOldGold = _ms(_template, Currency.GOLD, {'value': _format(oldPrice.gold)}) if oldPrice.gold is not None else ''
+        fmtOldCredits = _ms(_template, Currency.CREDITS, {'value': _format(oldPrice.credits)}) if oldPrice.credits is not None else ''
+        fmtOldCrystal = _ms(_template, Currency.CRYSTAL, {'value': _format(oldPrice.crystal)}) if oldPrice.crystal is not None else ''
         if newPrice.isSet(Currency.GOLD) and newPrice.isSet(Currency.CREDITS):
             formatedNewPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtNewCredits, gold=fmtNewGold)
         elif newPrice.isSet(Currency.GOLD) and newPrice.isSet(Currency.CRYSTAL):
@@ -984,13 +973,15 @@ class ActionTooltipData(ToolTipBaseData):
                 if action:
                     actionUserName = i18n.makeString(TOOLTIPS.ACTIONPRICE_ACTIONNAME, actionName=action.getUserName())
                 deviceName = _ITEM_TYPE_TO_TOOLTIP_DICT.get(deviceNameType, '')
-                hasAffectedActions = affectedAction[2]
+                hasAffectedActions = affectedAction[ACTION_ENTITY_ITEM.AFFECTED_ACTIONS_IDX]
                 if hasAffectedActions or hasPersonalDiscount:
-                    descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_SEVERALACTIONS, deviceName=deviceName, actionName=actionUserName)
+                    if hasPersonalDiscount:
+                        action = i18n.makeString(TOOLTIPS.ACTIONPRICE_SEVERALACTIONS_PERSONAL)
+                    else:
+                        action = i18n.makeString(TOOLTIPS.ACTIONPRICE_SEVERALACTIONS_ACTION, actionName=actionUserName)
+                    descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_SEVERALACTIONS, deviceName=deviceName, action=action)
                 else:
                     descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_FORACTION, actionName=actionUserName)
-        if hasPersonalDiscount:
-            descr = i18n.makeString(TOOLTIPS.ACTIONPRICE_FORPERSONALDISCOUNT)
         if hasRentCompensation:
             formattedRentCompensation = makeHtmlString('html_templates:lobby/quests/actions', Currency.GOLD, {'value': BigWorld.wg_getGoldFormat(rentCompensation)})
             descr += '\n' + i18n.makeString(TOOLTIPS.ACTIONPRICE_RENTCOMPENSATION, rentCompensation=formattedRentCompensation)
@@ -1336,7 +1327,7 @@ class HeaderCrystalInfo(BlocksTooltipData):
         titleBlocks.append(formatters.packTitleDescBlock(text_styles.middleTitle(TOOLTIPS.HEADER_BUTTONS_CRYSTAL_TITLE), text_styles.standard(TOOLTIPS.HEADER_BUTTONS_CRYSTAL_CURRENCYDESC), padding=formatters.packPadding(bottom=15)))
         tooltipBlocks.append(formatters.packBuildUpBlockData(titleBlocks))
         valueBlocks = list()
-        valueBlock = formatters.packTextParameterWithIconBlockData(text_styles.crystal(TOOLTIPS.HEADER_BUTTONS_CRYSTAL_AVAILABLE), text_styles.crystal(BigWorld.wg_getIntegralFormat(self.itemsCache.items.stats.money.crystal)), RES_ICONS.MAPS_ICONS_LIBRARY_CRYSTALICONBIG, padding=formatters.packPadding(bottom=15), valueWidth=84)
+        valueBlock = formatters.packTextParameterWithIconBlockData(text_styles.crystal(TOOLTIPS.HEADER_BUTTONS_CRYSTAL_AVAILABLE), text_styles.crystal(BigWorld.wg_getIntegralFormat(self.itemsCache.items.stats.money.crystal)), Currency.CRYSTAL, padding=formatters.packPadding(bottom=15), valueWidth=84)
         valueBlocks.append(valueBlock)
         tooltipBlocks.append(formatters.packBuildUpBlockData(valueBlocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
         decsBlocks = list()

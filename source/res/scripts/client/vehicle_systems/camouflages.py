@@ -67,9 +67,9 @@ def applyCamouflage(vDesc, fashions, isCurrentModelDamaged, camouflageId=None):
         elif descId == 'hull':
             compDesc = vDesc.hull
         elif descId == 'turret':
-            compDesc = vDesc.turrets[0].turret
+            compDesc = vDesc.turret
         elif descId == 'gun':
-            compDesc = vDesc.turrets[0].gun
+            compDesc = vDesc.gun
         else:
             compDesc = None
         if compDesc is not None:

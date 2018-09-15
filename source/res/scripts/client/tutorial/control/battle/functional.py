@@ -7,8 +7,9 @@ import Math
 import TriggersManager
 from constants import ARENA_PERIOD
 from PlayerEvents import g_playerEvents
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import avatar_getter
-from helpers import dependency
+from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
 from tutorial.control import g_tutorialWeaver
@@ -127,7 +128,7 @@ class _StaticWorldMarker2D(_IMarker):
         super(_StaticWorldMarker2D, self).__init__()
         offset = data.get('offset', Math.Vector3(0, 0, 0))
         if markers2D.addStaticObject(objectID, Math.Vector3(position[:]) + offset):
-            markers2D.setupStaticObject(objectID, data.get('shape', 'arrow'), data.get('min-distance', 0), data.get('max-distance', 0), distance)
+            markers2D.setupStaticObject(objectID, data.get('shape', 'arrow'), data.get('min-distance', 0), data.get('max-distance', 0), distance, data.get('color', 'green'))
             self.__objectID = objectID
             self.__markers2D = weakref.ref(markers2D)
         else:

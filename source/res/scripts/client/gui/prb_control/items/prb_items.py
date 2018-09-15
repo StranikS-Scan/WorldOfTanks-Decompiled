@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/items/prb_items.py
 from collections import namedtuple
 from account_helpers import getAccountDatabaseID, getPlayerID
+from gui.prb_control.prb_helpers import BadgesHelper
 from helpers import dependency
 from constants import PREBATTLE_ACCOUNT_STATE, PREBATTLE_TEAM_STATE
 from gui.prb_control.settings import PREBATTLE_PLAYERS_COMPARATORS
@@ -9,10 +10,10 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from skeletons.gui.lobby_context import ILobbyContext
 
 class PlayerPrbInfo(object):
-    __slots__ = ('accID', 'name', 'dbID', 'state', 'time', 'vehCompDescr', 'igrType', 'clanDBID', 'clanAbbrev', 'roster', 'isCreator', 'regionCode')
+    __slots__ = ('accID', 'name', 'dbID', 'state', 'time', 'vehCompDescr', 'igrType', 'clanDBID', 'clanAbbrev', 'roster', 'isCreator', 'regionCode', 'badges')
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, accID, name='', dbID=0, state=PREBATTLE_ACCOUNT_STATE.UNKNOWN, time=0.0, vehCompDescr=0, igrType=0, clanDBID=0, clanAbbrev='', roster=0, entity=None):
+    def __init__(self, accID, name='', dbID=0, state=PREBATTLE_ACCOUNT_STATE.UNKNOWN, time=0.0, vehCompDescr=0, igrType=0, clanDBID=0, clanAbbrev='', roster=0, entity=None, badges=[]):
         self.accID = accID
         self.name = name
         self.dbID = dbID
@@ -23,6 +24,7 @@ class PlayerPrbInfo(object):
         self.clanDBID = clanDBID
         self.clanAbbrev = clanAbbrev
         self.roster = roster
+        self.badges = BadgesHelper(badges)
         if entity is not None:
             self.isCreator = entity.isCommander(pDatabaseID=self.dbID)
         else:
@@ -64,6 +66,12 @@ class PlayerPrbInfo(object):
 
     def isOffline(self):
         return self.state & PREBATTLE_ACCOUNT_STATE.OFFLINE != 0
+
+    def getBadgeID(self):
+        return self.badges.getBadgeID()
+
+    def getBadgeImgStr(self, size=24, vspace=-7):
+        return self.badges.getBadgeImgStr(size, vspace)
 
 
 class TeamStateInfo(object):

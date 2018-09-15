@@ -6,6 +6,7 @@ import BigWorld
 import Event
 import SoundGroups
 from constants import VEHICLE_SETTING, EQUIPMENT_STAGES
+from debug_utils import LOG_ERROR
 from gui.battle_control import avatar_getter, vehicle_getter
 from gui.battle_control.battle_constants import makeExtraName, VEHICLE_COMPLEX_ITEMS, BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
@@ -13,7 +14,6 @@ from gui.shared.utils.decorators import ReprInjector
 from helpers import i18n
 from items import vehicles, EQUIPMENT_TYPES
 from shared_utils import findFirst, forEach
-from debug_utils import LOG_ERROR
 _ActivationError = namedtuple('_ActivationError', 'key ctx')
 
 class NotApplyingError(_ActivationError):

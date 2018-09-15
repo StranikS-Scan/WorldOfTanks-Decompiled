@@ -60,9 +60,10 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
     def __init__(self, ctx):
         super(MissionsPage, self).__init__(ctx)
         self.__filterData = AccountSettings.getFilter(MISSIONS_PAGE)
-        self.__eventID = None
-        self.__groupID = None
+        self._eventID = None
+        self._groupID = None
         self.__needToScroll = False
+        self._showMissionDetails = True
         self.__builders = {QUESTS_ALIASES.MISSIONS_MARATHONS_VIEW_PY_ALIAS: group_packers.MarathonsGroupsFinder(),
          QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS: group_packers.QuestsGroupsFinder(),
          QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS: group_packers.VehicleGroupFinder(),
@@ -112,6 +113,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
     def _invalidate(self, ctx=None):
         super(MissionsPage, self)._invalidate(ctx)
         self._initialize(ctx)
+        if self.currentTab:
+            self.__updateFilterLabel()
         self.__updateHeader()
         self.__tryOpenMissionDetails()
 
@@ -126,7 +129,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias in QUESTS_ALIASES.MISSIONS_VIEW_PY_ALIASES:
-            viewPy.setBuilder(self.__builders.get(alias), self.__filterData)
+            viewPy.setBuilder(self.__builders.get(alias), self.__filterData, self._eventID)
 
     def _initialize(self, ctx=None):
         ctx = ctx or {}
@@ -142,17 +145,18 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
                 self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_MARATHONS_VIEW_PY_ALIAS
             else:
                 self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS
-        self.__eventID = ctx.get('eventID')
-        self.__groupID = ctx.get('groupID')
-        self.__needToScroll = self.__groupID is not None
+        self._eventID = ctx.get('eventID')
+        self._groupID = ctx.get('groupID')
+        self._showMissionDetails = ctx.get('showMissionDetails', True)
+        self.__needToScroll = self._groupID is not None
         self.__scrollToGroup()
         caches.getNavInfo().setMissionsTab(self.__currentTabAlias)
         self.fireEvent(events.MissionsEvent(events.MissionsEvent.ON_TAB_CHANGED, ctx=self.__currentTabAlias), EVENT_BUS_SCOPE.LOBBY)
         return
 
     def __scrollToGroup(self):
-        if self.__eventID and self.__groupID and self.__needToScroll and self.currentTab is not None:
-            self.currentTab.as_scrollToItemS('blockId', self.__groupID)
+        if self._eventID and self._groupID and self.__needToScroll and self.currentTab is not None:
+            self.currentTab.as_scrollToItemS('blockId', self._groupID)
             self.__needToScroll = False
         return
 
@@ -171,6 +175,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         countText = '{} / {}'.format(style(currentQuests), text_styles.standard(totalQuests))
         filterApplied = self.__filterApplied()
         self.as_showFilterCounterS(countText, filterApplied)
+        self.as_showFilterS(self.__currentTabAlias != QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS)
         if filterApplied:
             self.as_blinkFilterCounterS()
 
@@ -188,6 +193,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
     def __updateHeader(self):
         data = []
         tabs = []
+        isElenEnabled = self.lobbyContext.getServerSettings().isElenEnabled()
         for tabData in TABS_DATA_ORDERED:
             alias = tabData.alias
             tab = {'label': tabData.label,
@@ -195,12 +201,13 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             header_tab = {'alias': alias,
              'linkage': tabData.linkage,
              'tooltip': tabData.tooltip}
-            if alias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and not self.eventsController.hasEvents():
+            if alias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and (not self.eventsController.hasEvents() or not isElenEnabled):
+                if alias == self.__currentTabAlias:
+                    self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS
                 continue
             if alias == self.__currentTabAlias:
                 header_tab['selected'] = True
             if alias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS:
-                isElenEnabled = self.lobbyContext.getServerSettings().isElenEnabled()
                 if not isElenEnabled:
                     header_tab['tooltip'] = tabData.tooltipDisabled
                     header_tab['enabled'] = False
@@ -224,6 +231,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
 
         self.as_setTabsDataProviderS(tabs)
         self.as_setTabsCounterDataS(data)
+        self.as_showFilterS(self.__currentTabAlias != QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS)
         return
 
     def __filterApplied(self):
@@ -236,8 +244,8 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
     def __tryOpenMissionDetails(self):
         """ Depending on the open context, we may need to open missions details or close them.
         """
-        if self.__eventID and self.__groupID:
-            showMissionDetails(self.__eventID, self.__groupID)
+        if self._eventID and self._groupID and self._showMissionDetails:
+            showMissionDetails(self._eventID, self._groupID)
         else:
             hideMissionDetails()
 
@@ -252,15 +260,17 @@ class MissionViewBase(MissionsViewBaseMeta):
         self.__updateDataCallback = None
         self._totalQuestsCount = 0
         self._filteredQuestsCount = 0
+        self._eventID = None
         return
 
-    def setBuilder(self, builder, filterData):
+    def setBuilder(self, builder, filterData, eventID):
         """ Set a builder that propagates view with data.
         """
         self._builder = builder
         self._filterData = filterData
         self._totalQuestsCount = 0
         self._filteredQuestsCount = 0
+        self._eventID = eventID
         self._onEventsUpdate()
 
     def getTotalQuestsCount(self):
@@ -416,6 +426,17 @@ class MissionView(MissionViewBase):
 class ElenMissionView(MissionViewBase):
     eventsController = dependency.descriptor(IEventBoardController)
 
+    def _populate(self):
+        super(ElenMissionView, self)._populate()
+        g_clientUpdateManager.addCallbacks({'inventory': self.onInventoryUpdate})
+
+    def _dispose(self):
+        g_clientUpdateManager.removeObjectCallbacks(self)
+        super(ElenMissionView, self)._dispose()
+
+    def onInventoryUpdate(self, _):
+        self._onEventsUpdate()
+
     @checkEventExist
     def openMissionDetailsView(self, eventID, blockID):
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_EVENT_BOARDS_TABLE, ctx={'eventID': eventID,
@@ -453,7 +474,7 @@ class ElenMissionView(MissionViewBase):
         result = []
         totalQuestsCount = 0
         filteredQuestsCount = 0
-        self._builder.setEventsData(eventsData, playerData, myEventsTop)
+        self._builder.setEventsData(eventsData, playerData, myEventsTop, self._eventID)
         for data in self._builder.getBlocksData(None, None):
             result.append(data.blockData)
             totalQuestsCount += data.totalCount

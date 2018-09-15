@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/vehicle.py
 import collections
-import constants
 from BigWorld import wg_getIntegralFormat as _int
+import constants
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
@@ -14,16 +14,16 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles, moneyWithIcon, icons
 from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeftInfo
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE
-from gui.shared.gui_items.fitting_item import RentalInfoProvider
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.shared.gui_items.Vehicle import Vehicle, getBattlesLeft, getTypeBigIconPath
+from gui.shared.gui_items.fitting_item import RentalInfoProvider
 from gui.shared.items_parameters import RELATIVE_PARAMS, formatters as param_formatter, params_helper, bonus_helper
 from gui.shared.items_parameters.bonus_helper import isSituationalBonus
 from gui.shared.items_parameters.comparator import PARAM_STATE
-from gui.shared.items_parameters.formatters import isRelativeParameter, BASE_SCHEME, SITUATIONAL_SCHEME
+from gui.shared.items_parameters.formatters import isRelativeParameter, SITUATIONAL_SCHEME, EXTRACTED_BONUS_SCHEME
 from gui.shared.items_parameters.params_helper import SimplifiedBarVO
-from gui.shared.money import Money, Currency
+from gui.shared.money import Currency
 from gui.shared.tooltips import formatters, ToolTipBaseData
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
@@ -269,7 +269,7 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
         hasSituational = False
         for bnsType, bnsId, pInfo in bonusExtractor.getBonusInfo():
             isSituational = isSituationalBonus(bnsId)
-            scheme = SITUATIONAL_SCHEME if isSituational else BASE_SCHEME
+            scheme = SITUATIONAL_SCHEME if isSituational else EXTRACTED_BONUS_SCHEME
             valueStr = param_formatter.formatParameterDelta(pInfo, scheme)
             if valueStr is not None:
                 hasSituational = hasSituational or isSituational

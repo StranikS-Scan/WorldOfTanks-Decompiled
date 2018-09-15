@@ -71,8 +71,8 @@ class UnitClientAPI(object):
     def createFalloutSquad(self, queueType):
         return self._doCreate(PREBATTLE_TYPE.FALLOUT, queueType)
 
-    def createEventSquad(self, queueType):
-        return self._doCreate(PREBATTLE_TYPE.EVENT, queueType)
+    def createEventSquad(self):
+        return self._doCreate(PREBATTLE_TYPE.EVENT)
 
     def join(self, unitMgrID, slotIdx=UNIT_SLOT.ANY):
         self._callAPI('join', unitMgrID, slotIdx)
@@ -170,6 +170,3 @@ class UnitClientAPI(object):
 
     def changeFalloutType(self, newQueueType):
         return self._doUnitCmd(CLIENT_UNIT_CMD.CHANGE_FALLOUT_TYPE, newQueueType)
-
-    def changeEventType(self, newQueueType):
-        return self._doUnitCmd(CLIENT_UNIT_CMD.CHANGE_EVENT_TYPE, newQueueType)

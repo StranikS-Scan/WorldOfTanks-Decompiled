@@ -40,10 +40,6 @@ def isInRankedQueue():
     return getattr(BigWorld.player(), 'isInRankedQueue', False)
 
 
-def isInEventBattlesTwoQueue():
-    return getattr(BigWorld.player(), 'isInEventBattlesTwoQueue', False)
-
-
 @dependency.replace_none_kwargs(bootcampController=IBootcampController)
 def isInBootcampAccount(bootcampController=None):
     return bootcampController is not None and bootcampController.isInBootcampAccount()
@@ -55,8 +51,6 @@ def getQueueType():
         queueType = QUEUE_TYPE.RANDOMS
     elif isInEventBattlesQueue():
         queueType = QUEUE_TYPE.EVENT_BATTLES
-    elif isInEventBattlesTwoQueue():
-        queueType = QUEUE_TYPE.EVENT_BATTLES_2
     elif isInFalloutClassic():
         queueType = QUEUE_TYPE.FALLOUT_CLASSIC
     elif isInFalloutMultiteam():
@@ -150,7 +144,6 @@ _ARENA_GUI_TYPE_BY_PRB_TYPE = {PREBATTLE_TYPE.SQUAD: ARENA_GUI_TYPE.RANDOM,
  PREBATTLE_TYPE.EVENT: ARENA_GUI_TYPE.EVENT_BATTLES}
 _ARENA_GUI_TYPE_BY_QUEUE_TYPE = {QUEUE_TYPE.RANDOMS: ARENA_GUI_TYPE.RANDOM,
  QUEUE_TYPE.EVENT_BATTLES: ARENA_GUI_TYPE.EVENT_BATTLES,
- QUEUE_TYPE.EVENT_BATTLES_2: ARENA_GUI_TYPE.EVENT_BATTLES_2,
  QUEUE_TYPE.FALLOUT_CLASSIC: ARENA_GUI_TYPE.FALLOUT_CLASSIC,
  QUEUE_TYPE.FALLOUT_MULTITEAM: ARENA_GUI_TYPE.FALLOUT_MULTITEAM,
  QUEUE_TYPE.RANKED: ARENA_GUI_TYPE.RANKED}

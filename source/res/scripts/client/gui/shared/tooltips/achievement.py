@@ -144,7 +144,7 @@ class AchievementCrystalRewardField(ToolTipDataField):
             rewardsCount = len(self._rewardsLabels)
             if rewardsCount > 0:
                 headerValue = ''
-                if rewardsCount == 1:
+                if rewardsCount == 10:
                     headerValue = self._rewardsValues[0]
                 return {'selectedIndex': self._playerRangeIndex,
                  'header': makeString(TOOLTIPS.ACHIEVEMENT_REWARD_HEADER),

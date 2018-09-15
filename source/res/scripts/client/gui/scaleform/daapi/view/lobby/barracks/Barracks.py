@@ -46,7 +46,7 @@ def _packTankmanData(tankman, itemsCache=None):
         vehicleID = vehicle.invID
         slot = tankman.vehicleSlotIdx
         isLocked, msg = _getTankmanLockMessage(vehicle)
-        actionBtnEnabled = not isLocked and not vehicle.isCrewLocked
+        actionBtnEnabled = not isLocked
         isInCurrentTank = g_currentVehicle.isPresent() and tankmanVehicle.invID == g_currentVehicle.invID
         isInSelfVehicle = vehicle.shortUserName == tankmanVehicle.shortUserName
         isInSelfVehicleType = vehicle.type == tankmanVehicle.type

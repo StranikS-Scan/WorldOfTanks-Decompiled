@@ -44,7 +44,6 @@ class BCResearchItemsData(ResearchItemsData):
                         return -1
                 if not NODE_STATE.inInventory(state) and not NODE_STATE.isInstalled(state) and nodeCD != self.__moduleNodeCD and nodeCD != self.__secondVehicleNode:
                     return -1
-        state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.ELITE)
         item = self._items.getItemByCD(nodeCD)
         if item.level in DISABLED_TANK_LEVELS and NODE_STATE.isAvailable2Buy(state):
             state = NODE_STATE.add(state, NODE_STATE_FLAGS.PURCHASE_DISABLED)
@@ -56,7 +55,6 @@ class BCResearchItemsData(ResearchItemsData):
         if self.__overrideResearch:
             if not NODE_STATE.inInventory(state):
                 state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.NOT_CLICKABLE)
-                state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.ELITE)
         if nodeCD != self.__firstVehicleNode:
             state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.LOCKED)
         node['state'] = state

@@ -9,6 +9,7 @@ from gui import GUI_SETTINGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.prb_control.dispatcher import g_prbLoader
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.prb_getters import areSpecBattlesHidden
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
@@ -360,15 +361,20 @@ class _RankedItem(_SelectorItem):
 
     def getFormattedLabel(self):
         battleTypeName = super(_RankedItem, self).getFormattedLabel()
-        availabilityStr = self.__getAvailabilityStr()
+        availabilityStr = None
+        if self.rankedController.hasSuitableVehicles():
+            availabilityStr = self.__getAvailabilityStr()
         return battleTypeName if availabilityStr is None else '%s\n%s' % (battleTypeName, availabilityStr)
 
     def select(self):
-        if self.rankedController.isAvailable():
-            super(_RankedItem, self).select()
-        elif self.__hasPastSeason:
-            self.rankedController.openWebLeaguePage()
-        selectorUtils.setBattleTypeAsKnown(self._selectorType)
+        if not self.rankedController.hasSuitableVehicles():
+            g_eventDispatcher.loadRankedUnreachable()
+        else:
+            if self.rankedController.isAvailable():
+                super(_RankedItem, self).select()
+            elif self.__hasPastSeason:
+                self.rankedController.openWebLeaguePage()
+            selectorUtils.setBattleTypeAsKnown(self._selectorType)
 
     def _update(self, state):
         self._isSelected = state.isInPreQueue(QUEUE_TYPE.RANKED)

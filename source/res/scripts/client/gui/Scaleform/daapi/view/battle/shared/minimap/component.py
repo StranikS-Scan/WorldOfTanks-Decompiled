@@ -180,7 +180,6 @@ class MinimapPluginsCollection(PluginsCollection):
         if handler is not None:
             if isinstance(handler, AvatarInputHandler):
                 handler.onCameraChanged += self.__onCameraChanged
-                handler.onPostmortemVehicleChanged += self.__onPostmortemVehicleChanged
             self._invoke('initControlMode', handler.ctrlModeName, handler.ctrls.keys())
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         self._invoke('setSettings')
@@ -191,7 +190,6 @@ class MinimapPluginsCollection(PluginsCollection):
         if handler is not None:
             if isinstance(handler, AvatarInputHandler):
                 handler.onCameraChanged -= self.__onCameraChanged
-                handler.onPostmortemVehicleChanged -= self.__onPostmortemVehicleChanged
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         super(MinimapPluginsCollection, self).stop()
         return
@@ -208,18 +206,6 @@ class MinimapPluginsCollection(PluginsCollection):
         :param diff: dict containing pairs key-value that are changed.
         """
         self._invoke('updateSettings', diff)
-
-    def __onPostmortemVehicleChanged(self, _):
-        """
-        Listener of event "AvatarInputHandler.onPostmortemVehicleChanged".
-        
-        That event is invoked at first time, after that should be invoke event
-        "AvatarInputHandler.onPostmortemVehicleChanged" when avatar is moved
-        to desired vehicle.
-        
-        :param _: long containing unique ID of vehicle's entity.
-        """
-        self._invoke('clearCamera')
 
     def __onCameraChanged(self, mode, vehicleID=0):
         """

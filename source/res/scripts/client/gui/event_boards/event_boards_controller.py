@@ -33,6 +33,9 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
         self.__eventBoardsSettings = EventBoardsSettings()
         self.__hangarFlagData = HangarFlagData()
 
+    def fini(self):
+        self.__eventBoardsSettings.fini()
+
     def getPlayerEventsData(self):
         return self.__eventBoardsSettings.getPlayerEventsData() if self.__eventBoardsSettings else None
 

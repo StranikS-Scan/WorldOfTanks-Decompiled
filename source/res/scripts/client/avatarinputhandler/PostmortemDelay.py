@@ -11,8 +11,7 @@ import math
 class PostmortemDelay:
     FADE_DELAY_TIME = 2.0
     KILLER_VISION_TIME = 5.0
-    KILLER_VEHICLE_MIN_CAMERA_DISTANCE = 15.0
-    KILLER_VEHICLE_MIN_BOUNDING_RADIUS_MULTIPLIER = 2.0
+    KILLER_VEHICLE_CAMERA_DISTANCE = 15.0
     KILLER_VEHICLE_CAMERA_PIVOT_SETTINGS = (1.5, 3.0)
     KILLER_VEHICLE_PITCH_OFFSET = -0.3
 
@@ -105,8 +104,6 @@ class PostmortemDelay:
             if sourceVehicleID is not None:
                 sourceVehicle = BigWorld.entity(sourceVehicleID)
                 if sourceVehicle is not None:
-                    boundingRadius = vehicle.typeDescriptor.boundingRadius
-                    cameraDistance = max(self.KILLER_VEHICLE_MIN_BOUNDING_RADIUS_MULTIPLIER * boundingRadius, self.KILLER_VEHICLE_MIN_CAMERA_DISTANCE)
                     self.__savedPivotSettings = self.__arcadeCamera.getPivotSettings()
                     self.__savedCameraDistance = self.__arcadeCamera.getCameraDistance()
                     self.__savedYawPitch = self.__arcadeCamera.angles
@@ -117,7 +114,7 @@ class PostmortemDelay:
                         pitch = math.pi * 0.5
                     if pitch < -math.pi * 0.5:
                         pitch = -math.pi * 0.5
-                    self.__setCameraSettings(pivotSettings=self.KILLER_VEHICLE_CAMERA_PIVOT_SETTINGS, cameraDistance=cameraDistance, yawPitch=(yaw, pitch))
+                    self.__setCameraSettings(pivotSettings=self.KILLER_VEHICLE_CAMERA_PIVOT_SETTINGS, cameraDistance=self.KILLER_VEHICLE_CAMERA_DISTANCE, yawPitch=(yaw, pitch))
             return True
 
     def __setCameraSettings(self, targetMP=None, pivotSettings=None, cameraDistance=None, yawPitch=None):

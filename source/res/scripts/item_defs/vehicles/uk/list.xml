@@ -288,8 +288,10 @@
     <userString>	#gb_vehicles:GB48_FV215b_183	</userString>
     <description>	#gb_vehicles:GB48_FV215b_183_descr	</description>
     <shortUserString>	#gb_vehicles:GB48_FV215b_183_short	</shortUserString>
-    <price>	6100000	</price>
-    <tags>	AT-SPG heavyAT-SPG AT-SPG2 improvedVentilation_class3_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedHorizontal_springs_class3_user HD	</tags>
+    <price>	5	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG heavyAT-SPG AT-SPG2 improvedVentilation_class3_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedHorizontal_springs_class3_user HD special	</tags>
     <level>	10	</level>
   </GB48_FV215b_183>
   <GB74_AT8>
@@ -377,7 +379,7 @@
     <description>	#gb_vehicles:GB79_FV206_descr	</description>
     <shortUserString>	#gb_vehicles:GB79_FV206_short	</shortUserString>
     <price>	2730000	</price>
-    <tags>	SPG heavySPG mediumCaliberHowitzerRammer_user improvedVentilation_class3_user wetCombatPack_class2_user enhancedHorizontal_springs_class3_user	</tags>
+    <tags>	SPG heavySPG mediumCaliberHowitzerRammer_user improvedVentilation_class3_user wetCombatPack_class2_user enhancedHorizontal_springs_class3_user HD	</tags>
     <level>	8	</level>
   </GB79_FV206>
   <GB31_Conqueror_Gun>
@@ -478,6 +480,15 @@
     <tags>	heavyTank improvedVentilation_class3_user antifragmentationLining_superheavy_user aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedHorizontal_springs_class3_user HD	</tags>
     <level>	10	</level>
   </GB91_Super_Conqueror>
+  <GB92_FV217>
+    <id>	62	</id>
+    <userString>	#gb_vehicles:GB92_FV217	</userString>
+    <description>	#gb_vehicles:GB92_FV217_descr	</description>
+    <shortUserString>	#gb_vehicles:GB92_FV217_short	</shortUserString>
+    <price>	6100000	</price>
+    <tags>	AT-SPG heavyAT-SPG improvedVentilation_class3_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedHorizontal_springs_class3_user HD	</tags>
+    <level>	10	</level>
+  </GB92_FV217>
   <GB84_Chieftain_Mk6>
     <id>	59	</id>
     <userString>	#gb_vehicles:GB84_Chieftain_Mk6	</userString>
@@ -567,7 +578,7 @@
     <price>	750	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank improvedVentilation_class1_user	</tags>
+    <tags>	lightTank improvedVentilation_class1_user HD	</tags>
     <level>	2	</level>
   </GB76_Mk_VIC>
   <GB52_A45>
@@ -624,6 +635,17 @@
     <tags>	heavyTank improvedVentilation_class3_user special aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD secret	</tags>
     <level>	10	</level>
   </GB88_T95_Chieftain_turret>
+  <GB93_Caernarvon_AX>
+    <id>	221	</id>
+    <userString>	#gb_vehicles:GB93_Caernarvon_AX	</userString>
+    <description>	#gb_vehicles:GB93_Caernarvon_AX_descr	</description>
+    <shortUserString>	#gb_vehicles:GB93_Caernarvon_AX_short	</shortUserString>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank improvedVentilation_class3_user aimingStabilizer_Mk2_user mediumCaliberTankRammer_user wetCombatPack_class2_user enhancedHorizontal_springs_class3_user HD	</tags>
+    <level>	8	</level>
+  </GB93_Caernarvon_AX>
   <GB23_Centurion_IGR>
     <id>	151	</id>
     <userString>	#igr_vehicles:GB23_Centurion_IGR	</userString>

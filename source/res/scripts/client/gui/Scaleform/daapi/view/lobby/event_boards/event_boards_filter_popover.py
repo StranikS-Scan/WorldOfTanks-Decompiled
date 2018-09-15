@@ -9,7 +9,9 @@ class EventBoardsFilterPopover(EventBoardsResultFilterPopoverViewMeta):
 
     def __init__(self, ctx=None):
         super(EventBoardsFilterPopover, self).__init__(ctx)
-        self.eventID = ctx.get('data')
+        data = ctx.get('data')
+        self.caller = data.caller if data else None
+        self.eventID = data.eventID if data else None
         self.__onChangeFilter = None
         return
 

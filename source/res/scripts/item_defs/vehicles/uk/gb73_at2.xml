@@ -29,25 +29,22 @@
       <battle>	0	</battle>
     </fakeTurrets>
     <armor>
-      <armor_1>	203.2	</armor_1>
-      <armor_2>	139.7	</armor_2>
-      <armor_3>	25.4	</armor_3>
+      <armor_1>	152.4	</armor_1>
+      <armor_2>	114.3	</armor_2>
+      <armor_3>	76.2	</armor_3>
       <armor_4>	50.8	</armor_4>
-      <armor_5>	76.2	</armor_5>
-      <armor_6>	101.6	</armor_6>
-      <armor_7>	152.4	</armor_7>
-      <armor_8>	101.6	</armor_8>
-      <armor_9>	50.8	</armor_9>
-      <armor_10>	19.1	</armor_10>
-      <armor_11>	38.1	</armor_11>
-      <armor_12>	76.2	</armor_12>
-      <armor_13>	0	</armor_13>
-      <armor_14>	19.1	</armor_14>
-      <armor_15>	101.6	</armor_15>
-      <armor_16>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-      </armor_16>
+      <armor_5>	19.1	</armor_5>
+      <armor_6>	38.1	</armor_6>
+      <armor_7>	38.1	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_9>
+      <armor_10>	101.6	</armor_10>
+      <armor_11>	63.5	</armor_11>
+      <armor_12>	139.7	</armor_12>
+      <armor_13>	127	</armor_13>
     </armor>
-    <primaryArmor>	armor_1 armor_6 armor_6	</primaryArmor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	28777	</weight>
     <maxHealth>	360	</maxHealth>
     <ammoBayHealth>
@@ -485,14 +482,7 @@
       <price>	100	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	18	</armor_1>
-        <armor_2>	16	</armor_2>
-        <armor_3>	16	</armor_3>
-        <armor_4>	16	</armor_4>
-        <armor_5>	16	</armor_5>
-        <armor_6>	16	</armor_6>
-        <armor_7>	8	</armor_7>
-        <armor_8>	0	</armor_8>
+        <armor_1>	0	</armor_1>
       </armor>
       <weight>	100	</weight>
       <maxHealth>	90	</maxHealth>
@@ -521,12 +511,18 @@
             </gun>
           </unlocks>
           <armor>
-            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
             <gun>	15	</gun>
           </armor>
           <shotDispersionRadius>	0.41	</shotDispersionRadius>
@@ -568,12 +564,24 @@
             <maxPitch>	0 5 1 5	</maxPitch>
           </pitchLimits>
           <armor>
-            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	139.7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_7>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_7>
+            <armor_8>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <armor_9>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
             <gun>	30	</gun>
           </armor>
           <shotDispersionRadius>	0.49	</shotDispersionRadius>
@@ -619,12 +627,18 @@
             </vehicle>
           </unlocks>
           <armor>
-            <armor_1>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	101.6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	38.1	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
             <gun>	15	</gun>
           </armor>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>

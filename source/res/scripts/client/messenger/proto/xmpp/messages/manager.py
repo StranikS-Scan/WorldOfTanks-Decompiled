@@ -9,6 +9,7 @@ from messenger.proto.xmpp import find_criteria
 from messenger.proto.xmpp import jid as jid_entity
 from messenger.proto.xmpp.XmppCooldownManager import XmppCooldownManager
 from messenger.proto.xmpp.decorators import xmpp_query, QUERY_SIGN
+from messenger.proto.xmpp.errors import createServerActionMessageError
 from messenger.proto.xmpp.extensions import chat as chat_ext
 from messenger.proto.xmpp.gloox_constants import GLOOX_EVENT as _EVENT, MESSAGE_TYPE, MESSAGE_TYPE_TO_ATTR
 from messenger.proto.xmpp.gloox_wrapper import ClientEventsHandler
@@ -51,6 +52,7 @@ class MessagesManager(ClientEventsHandler):
         register(_EVENT.PRESENCE_ERROR, self.__handlePresenceError)
         register(_EVENT.IQ, self.__handleIQ)
         register(_EVENT.MESSAGE, self.__handleMessage)
+        register(_EVENT.MESSAGE_ERROR, self.__handleMessageError)
         events = g_messengerEvents.users
         events.onUsersListReceived += self.__me_onUsersListReceived
         events.onUserActionReceived += self.__me_onUserActionReceived
@@ -64,6 +66,7 @@ class MessagesManager(ClientEventsHandler):
         unregister(_EVENT.PRESENCE_ERROR, self.__handlePresenceError)
         unregister(_EVENT.IQ, self.__handleIQ)
         unregister(_EVENT.MESSAGE, self.__handleMessage)
+        unregister(_EVENT.MESSAGE_ERROR, self.__handleMessageError)
         events = g_messengerEvents.users
         events.onUsersListReceived -= self.__me_onUsersListReceived
         events.onUserActionReceived -= self.__me_onUserActionReceived
@@ -172,6 +175,9 @@ class MessagesManager(ClientEventsHandler):
             self.__muc.addMessage(jid, message)
         elif msgType == MESSAGE_TYPE.CHAT or msgType == MESSAGE_TYPE.NORMAL and message.isHistory():
             self.__chatSessions.addMessage(jid, message)
+
+    def __handleMessageError(self, _, __, ___, pyGlooxTag):
+        g_messengerEvents.onErrorReceived(createServerActionMessageError(CLIENT_ACTION_ID.SEND_MESSAGE, pyGlooxTag))
 
     def __me_onUsersListReceived(self, tags):
         self.__receivedTags.update(tags)

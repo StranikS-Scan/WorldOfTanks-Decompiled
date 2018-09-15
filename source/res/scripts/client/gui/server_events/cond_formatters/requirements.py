@@ -6,7 +6,7 @@ import nations
 from constants import EVENT_TYPE, IGR_TYPE, IS_CHINA
 from gui import makeHtmlString
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.server_events.cond_formatters import packText, intersperse, getSeparator, packTokenProgress
+from gui.server_events.cond_formatters import packText, getSeparator, packTokenProgress, getSeparatorBlock
 from gui.server_events.cond_formatters.formatters import ConditionFormatter, ConditionsFormatter
 from gui.server_events.conditions import GROUP_TYPE, AndGroup
 from gui.server_events.formatters import TOKEN_SIZES
@@ -159,9 +159,18 @@ class AccountRequirementsFormatter(ConditionsFormatter):
         group = prepareAccountConditionsGroup(conditions, event)
         formatter = self._getGroupFormatter(group)
         requirements, passed, total = formatter.format(group, event)
-        conclusion = formatter.conclusion(group, event, passed, total)
+        conclusion = formatter.conclusion(group, event, requirements, passed, total)
         return {} if not requirements and not conclusion else {'header': conclusion,
-         'requirements': requirements}
+         'requirements': self._processRequirements(requirements)}
+
+    @staticmethod
+    def _processRequirements(requirements):
+        for item in requirements:
+            for key in ('isAvailable', 'isSeparator'):
+                if key in item:
+                    del item[key]
+
+        return requirements
 
     def _getGroupFormatter(self, group):
         return self.getConditionFormatter('single') if len(group.items) == 1 and first(group.items).getName() not in ('token', 'and', 'or') else self.getConditionFormatter(group.getName())
@@ -198,7 +207,7 @@ class SingleGroupFormatter(ConditionsFormatter):
          'vehiclesOwned': VehiclesRequirementFormatter(),
          'hasReceivedMultipliedXP': HasReceivedMultipliedXPFormatter()})
 
-    def conclusion(self, group, event, passed, total):
+    def conclusion(self, group, event, requirements, passed, total):
         """ Format the requirement header.
         """
         if group.isAvailable():
@@ -249,7 +258,7 @@ class RecursiveGroupFormatter(RecursiveFormatter):
          'vehiclesOwned': VehiclesRequirementFormatter(),
          'hasReceivedMultipliedXP': HasReceivedMultipliedXPFormatter()}, gatheringFormatters={'token': TokenGatheringRequirementFormatter})
 
-    def conclusion(self, group, event, passed, total):
+    def conclusion(self, group, event, requirements, passed, total):
         """ Format the requirement header.
         """
         if not total:
@@ -266,51 +275,75 @@ class RecursiveGroupFormatter(RecursiveFormatter):
             headerStyle = text_styles.error
             reasonStyle = text_styles.main
             header = '#quests:missionDetails/requirements/header/unavailable'
-            reason = '#quests:missionDetails/requirements/conclusion/unavailable'
+            if len(requirements) == 1:
+                reason = requirements[0]['text']
+            else:
+                reason = '#quests:missionDetails/requirements/conclusion/unavailable'
             count = total - passed
         return text_styles.concatStylesWithSpace(icon, headerStyle(header), reasonStyle(ms(reason, count=count)))
 
-    def format(self, group, event, isNested=False):
+    def format(self, group, event, isNested=False, topHasOrGroup=False):
         """ Format the requirement body.
         """
         result = []
         total, passed = (0, 0)
-        separator = getSeparator(group.getName())
+        separator = getSeparatorBlock(group.getName())
         gatheringFmts = self.createGatheringFormatters()
         for condition in group.getSortedItems():
             conditionName = condition.getName()
             if conditionName in GROUP_TYPE.ALL():
-                branch, bpassed, btotal = self.format(condition, event, isNested=True)
+                isInOrGroup = topHasOrGroup or conditionName == GROUP_TYPE.OR
+                branch, bpassed, btotal = self.format(condition, event, isNested=True, topHasOrGroup=isInOrGroup)
                 total += btotal
                 passed += bpassed
-            else:
-                if conditionName in gatheringFmts:
-                    fmt = gatheringFmts.get(conditionName)
-                    fmt.gather(condition, event)
-                    branch = []
-                elif self.hasFormatter(conditionName):
-                    fmt = self.getConditionFormatter(conditionName)
-                    branch = fmt.format(condition, event, self._styler)
-                else:
-                    branch = []
-                if branch:
-                    total += 1
-                    if condition.isAvailable():
-                        passed += 1
-            if branch:
-                self._iconize(condition.isAvailable(), isNested, branch)
+                if branch and isInOrGroup and not isNested:
+                    branch[0].update(icon=self._getIcon(condition.isAvailable()))
                 result.extend(branch)
+                if separator:
+                    result.append(separator)
+            if conditionName in gatheringFmts:
+                fmt = gatheringFmts.get(conditionName)
+                fmt.gather(condition, event)
+                branch = []
+            elif self.hasFormatter(conditionName):
+                fmt = self.getConditionFormatter(conditionName)
+                branch = fmt.format(condition, event, self._styler)
+            else:
+                branch = []
+            if branch:
+                total += 1
+                if condition.isAvailable():
+                    passed += 1
+            if branch:
+                isAvailable = condition.isAvailable()
+                result.extend(self._processNonGroupConidtions(branch, isNested, isAvailable, separator, topHasOrGroup))
 
         for fmt in gatheringFmts.itervalues():
             branch = fmt.format(self._styler)
             if branch:
                 total += 1
-                self._iconize(fmt.isAvailable(), isNested, branch)
-                result.extend(branch)
+                isAvailable = fmt.isAvailable()
+                result.extend(self._processNonGroupConidtions(branch, isNested, isAvailable, separator, topHasOrGroup))
+
+        if result and result[-1].get('isSeparator'):
+            result.pop()
+        return (result, passed, total)
+
+    @classmethod
+    def _processNonGroupConidtions(cls, branch, isNested, isAvailable, separator, isInOrGroup):
+        formattedBranch = []
+        for item in branch:
+            if not isNested or not isInOrGroup:
+                item.update(icon=cls._getIcon(isAvailable))
+            formattedBranch.append(item)
 
         if separator:
-            result = intersperse(result, packText(separator))
-        return (result, passed, total)
+            formattedBranch.append(separator)
+        return formattedBranch
+
+    @staticmethod
+    def _getIcon(isAvailable):
+        return RES_ICONS.MAPS_ICONS_LIBRARY_OKICON if isAvailable else RES_ICONS.MAPS_ICONS_LIBRARY_CYBERSPORT_NOTAVAILABLEICON
 
     @staticmethod
     def _styler(isRequirementMet):

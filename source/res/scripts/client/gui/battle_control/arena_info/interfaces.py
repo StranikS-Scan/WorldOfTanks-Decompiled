@@ -195,49 +195,6 @@ class IArenaPeriodController(IArenaController):
         pass
 
 
-class IArenaRespawnController(IArenaController):
-    __slots__ = ()
-
-    def getCtrlScope(self):
-        return _SCOPE.RESPAWN
-
-    def updateSpaceLoadProgress(self, progress):
-        """Arena space loading progress has been changed.
-        :param progress: [float] progress value.
-        """
-        pass
-
-    def arenaLoadCompleted(self):
-        """Arena space loading completed and influx draw enabled. This event
-        means arena is ready to be shown.
-        """
-        pass
-
-    def updateRespawnVehicles(self, vehsList):
-        """Arena received list of vehicles, available for respawns.
-        :param vehsList: list of vehicles.
-        """
-        pass
-
-    def updateRespawnCooldowns(self, cooldowns):
-        """Arena received list of cooldowns for respawns.
-        :param cooldowns: list of cooldowns
-        """
-        pass
-
-    def updateRespawnInfo(self, respawnInfo):
-        """Arena received respawn info.
-        :param respawnInfo:
-        """
-        pass
-
-    def updateRespawnRessurectedInfo(self, respawnInfo):
-        """Arena received respawn ressurected info.
-        :param respawnInfo:
-        """
-        pass
-
-
 class IPersonalInvitationsController(IArenaController):
     __slots__ = ()
 

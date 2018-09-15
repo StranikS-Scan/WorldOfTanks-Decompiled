@@ -8,6 +8,7 @@
     <Interface>	AvatarClientProxy	</Interface>
     <Interface>	AvatarObserver	</Interface>
     <Interface>	TeamHealthBar_Avatar	</Interface>
+    <Interface>	RespawnController_Avatar	</Interface>
   </Implements>
   <Volatile>
     <position></position>
@@ -189,16 +190,13 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
-      <Arg>	UINT8	</Arg>
     </updateVehicleGunReloadTime>
     <updateVehicleAmmo>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	UINT16	</Arg>
       <Arg>	UINT8	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	FLOAT32	</Arg>
-      <Arg>	UINT8	</Arg>
+      <Arg>	INT16	</Arg>
     </updateVehicleAmmo>
     <onSwitchViewpoint>
       <Arg>	OBJECT_ID	</Arg>
@@ -224,7 +222,6 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
-      <Arg>	UINT8	</Arg>
     </updateVehicleSetting>
     <updateTargetingInfo>
       <Arg>	FLOAT32	</Arg>
@@ -236,18 +233,12 @@
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
-      <Arg>	UINT8	</Arg>
     </updateTargetingInfo>
-    <redrawVehicleOnRespawn>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	STRING	</Arg>
-    </redrawVehicleOnRespawn>
     <updateGunMarker>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	VECTOR3	</Arg>
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT32	</Arg>
-      <Arg>	UINT8	</Arg>
     </updateGunMarker>
     <updateOwnVehiclePosition>
       <Arg>	VECTOR3	</Arg>
@@ -255,14 +246,6 @@
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
     </updateOwnVehiclePosition>
-    <updateLeviathanProgress>
-      <Arg>	UINT32	</Arg>
-    </updateLeviathanProgress>
-    <updateEvilEyeStatus>
-      <Arg>	BOOL	</Arg>
-      <Arg>	BOOL	</Arg>
-      <Arg>	UINT8	</Arg>
-    </updateEvilEyeStatus>
     <showOwnVehicleHitDirection>
       <Arg>	FLOAT32	</Arg>
       <Arg>	OBJECT_ID	</Arg>
@@ -326,7 +309,6 @@
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
-      <Arg>	UINT8	</Arg>
     </showTracer>
     <stopTracer>
       <Arg>	SHOT_ID	</Arg>
@@ -499,7 +481,6 @@
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
-      <Arg>	UINT8	</Arg>
     </showTracer>
     <stopTracer>
       <Arg>	SHOT_ID	</Arg>
@@ -537,9 +518,6 @@
       <Arg>	UINT8	</Arg>
       <Arg>	FLOAT32	</Arg>
     </grantRagePoints>
-    <updateLeviathanProgress>
-      <Arg>	UINT32	</Arg>
-    </updateLeviathanProgress>
     <receiveAttackResults>
       <Arg>	ATTACK_RESULTS	</Arg>
     </receiveAttackResults>
@@ -560,10 +538,6 @@
       <Arg>	BOOL	</Arg>
       <Arg>	FLOAT32	</Arg>
     </kickSelf>
-    <chooseVehicleForRespawn>
-      <Exposed></Exposed>
-      <Arg>	UINT16	</Arg>
-    </chooseVehicleForRespawn>
     <setClientReady>
       <Exposed></Exposed>
     </setClientReady>
@@ -571,6 +545,10 @@
       <Exposed></Exposed>
       <Arg>	CLIENT_STATISTICS	</Arg>
     </leaveArena>
+    <unlockUnusedVehicles>
+      <Arg>	ARRAY	  <of>	INT32	</of>
+      </Arg>
+    </unlockUnusedVehicles>
     <confirmBattleResultsReceiving>
       <Exposed></Exposed>
     </confirmBattleResultsReceiving>
@@ -616,10 +594,6 @@
       <Arg>	ARRAY	  <of>	FLOAT32	</of>
       </Arg>
     </updatePositions>
-    <redrawVehicleOnRespawn>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	STRING	</Arg>
-    </redrawVehicleOnRespawn>
     <showVehicleDamageInfo>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
@@ -633,28 +607,24 @@
     </vehicle_moveWith>
     <vehicle_shoot>
       <Exposed></Exposed>
-      <Arg>	UINT8	</Arg>
     </vehicle_shoot>
     <vehicle_trackWorldPointWithGun>
       <Exposed></Exposed>
       <Arg>	VECTOR3	</Arg>
-      <Arg>	UINT8	</Arg>
     </vehicle_trackWorldPointWithGun>
     <vehicle_trackRelativePointWithGun>
       <Exposed></Exposed>
       <Arg>	VECTOR3	</Arg>
-      <Arg>	UINT8	</Arg>
     </vehicle_trackRelativePointWithGun>
     <vehicle_stopTrackingWithGun>
       <Exposed></Exposed>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
-      <Arg>	UINT8	</Arg>
     </vehicle_stopTrackingWithGun>
     <vehicle_changeSetting>
       <Exposed></Exposed>
       <Arg>	UINT8	</Arg>
-      <Arg>	INT64	</Arg>
+      <Arg>	INT32	</Arg>
     </vehicle_changeSetting>
     <vehicle_teleport>
       <Exposed></Exposed>
@@ -679,13 +649,13 @@
       <Arg>	INT8	</Arg>
       <Arg>	UINT8	</Arg>
     </onRoundFinished>
-    <setVehicleDevFeature>
+    <setVehicleDevelopmentFeature>
       <Exposed></Exposed>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	STRING	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	STRING	</Arg>
-    </setVehicleDevFeature>
+    </setVehicleDevelopmentFeature>
     <setDevelopmentFeature>
       <Exposed></Exposed>
       <Arg>	STRING	</Arg>

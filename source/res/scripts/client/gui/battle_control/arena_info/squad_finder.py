@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/squad_finder.py
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 from gui.battle_control.arena_info import settings
 
 class ISquadFinder(object):
@@ -21,6 +21,9 @@ class ISquadFinder(object):
     def findSquads(self):
         raise NotImplementedError
 
+    def findSquadSizes(self):
+        raise NotImplementedError
+
 
 class EmptySquadFinder(ISquadFinder):
     __slots__ = ()
@@ -38,6 +41,9 @@ class EmptySquadFinder(ISquadFinder):
         pass
 
     def findSquads(self):
+        return []
+
+    def findSquadSizes(self):
         return []
 
 
@@ -66,6 +72,11 @@ class _SquadFinder(ISquadFinder):
     def findSquads(self):
         raise NotImplementedError
 
+    def findSquadSizes(self):
+        raise NotImplementedError
+
+
+SquadSizeDescription = namedtuple('SquadSizeDescription', ('teamID', 'squadID', 'squadSize'))
 
 class TeamScopeNumberingFinder(_SquadFinder):
     __slots__ = ('_teamsSquadIndices',)
@@ -83,10 +94,27 @@ class TeamScopeNumberingFinder(_SquadFinder):
     def getNumberOfSquads(self):
         return sum((max(indices.itervalues()) for indices in self._teamsSquadIndices.itervalues() if indices))
 
-    def findSquads(self):
+    def findSquadSizes(self):
+        squadRange = settings.SQUAD_RANGE_TO_SHOW
         for teamID, team in self._prbStats.iteritems():
             squadIndices = self._teamsSquadIndices[teamID]
-            squads = filter(lambda item: len(item[1]) in settings.SQUAD_RANGE_TO_SHOW, team.iteritems())
+            squads = filter(lambda item: len(item[1]) in squadRange, team.iteritems())
+            if not squads:
+                continue
+            squads = sorted(squads, key=lambda item: item[0])
+            for prebattleID, vehiclesIDs in squads:
+                if prebattleID not in squadIndices:
+                    if squadIndices:
+                        squadIndices[prebattleID] = max(squadIndices.itervalues()) + 1
+                    else:
+                        squadIndices[prebattleID] = 1
+                yield SquadSizeDescription(teamID, squadIndices[prebattleID], len(vehiclesIDs))
+
+    def findSquads(self):
+        squadRange = settings.SQUAD_RANGE_TO_SHOW
+        for teamID, team in self._prbStats.iteritems():
+            squadIndices = self._teamsSquadIndices[teamID]
+            squads = filter(lambda item: len(item[1]) in squadRange, team.iteritems())
             if not squads:
                 continue
             squads = sorted(squads, key=lambda item: item[0])
@@ -115,9 +143,10 @@ class ContinuousNumberingFinder(_SquadFinder):
         return max(self._squadIndices.itervalues()) if self._squadIndices else 0
 
     def findSquads(self):
+        squadRange = settings.SQUAD_RANGE_TO_SHOW
         for teamID, team in self._prbStats.iteritems():
             for prebattleID, vehiclesIDs in team.iteritems():
-                if not vehiclesIDs or len(vehiclesIDs) not in settings.SQUAD_RANGE_TO_SHOW:
+                if not vehiclesIDs or len(vehiclesIDs) not in squadRange:
                     continue
                 if prebattleID not in self._squadIndices:
                     if self._squadIndices:
@@ -131,7 +160,7 @@ class ContinuousNumberingFinder(_SquadFinder):
 def createSquadFinder(arenaVisitor):
     teams = arenaVisitor.type.getTeamsOnArenaRange()
     guiVisitor = arenaVisitor.gui
-    if guiVisitor.isRandomBattle() or guiVisitor.isEventBattle() or guiVisitor.isFalloutClassic() or guiVisitor.isEventBattlesTwo():
+    if guiVisitor.isRandomBattle() or guiVisitor.isEventBattle() or guiVisitor.isFalloutClassic():
         finder = TeamScopeNumberingFinder(teams)
     elif guiVisitor.isFalloutMultiTeam():
         finder = ContinuousNumberingFinder(teams)

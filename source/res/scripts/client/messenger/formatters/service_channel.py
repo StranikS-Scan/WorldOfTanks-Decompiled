@@ -10,7 +10,6 @@ import BigWorld
 import ArenaType
 import account_helpers
 import constants
-import nations
 import personal_missions
 from account_helpers import rare_achievements
 from adisp import async, process
@@ -199,7 +198,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
      1: 'battleVictoryResult'}
     __eventBattleResultKeys = {-1: 'battleEndedGameResult',
      0: 'battleEndedGameResult',
-     1: 'battleEndedGameResult'}
+     1: 'battleVictoryResult'}
     __goldTemplateKey = 'battleResultGold'
     __questsTemplateKey = 'battleQuests'
     __i18n_penalty = i18n.makeString('#%s:serviceChannelMessages/battleResults/penaltyForDamageAllies' % MESSENGER_I18N_FILE)
@@ -252,7 +251,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                         winnerIfDraw = battleResults.get('winnerIfDraw')
                         if winnerIfDraw:
                             battleResKey = 1 if winnerIfDraw == team else -1
-                if guiType == ARENA_GUI_TYPE.FALLOUT_MULTITEAM or guiType in ARENA_GUI_TYPE.EVENT_RANGE:
+                if guiType == ARENA_GUI_TYPE.FALLOUT_MULTITEAM:
                     templateName = self.__eventBattleResultKeys[battleResKey]
                 else:
                     templateName = self.__battleResultKeys[battleResKey]
@@ -397,7 +396,7 @@ class AutoMaintenanceFormatter(ServiceChannelFormatter):
             if typeID == AUTO_MAINTENANCE_TYPE.REPAIR:
                 formatMsgType = 'RepairSysMessage'
             else:
-                formatMsgType = self._getTemplateByCurrency(cost.getCurrency())
+                formatMsgType = self._getTemplateByCurrency(cost.getCurrency(byWeight=False))
             msg = i18n.makeString(self.__messages[result][typeID]) % getUserName(vt)
             priorityLevel = NotificationPriorityLevel.MEDIUM
             if result == AUTO_MAINTENANCE_RESULT.OK:
@@ -573,7 +572,6 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
     @async
     @process
     def format(self, message, callback):
-        yield lambda callback: callback(True)
         isSynced = yield self._waitForSyncItems()
         formatted, settings = (None, None)
         if isSynced:
@@ -723,7 +721,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                     comp += Money.makeFromMoneyTuple(value['customCompensation'])
 
         for currency in cls.__currencyToInvoiceAsset:
-            if currency in data and comp.isDefined():
+            if currency in data and comp.isSet(currency):
                 data[currency] -= comp.get(currency)
                 if data[currency] == 0:
                     del data[currency]
@@ -823,12 +821,15 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             self.__dossierResult = []
             rares = [ rec['value'] for d in dossiers.itervalues() for (blck, _), rec in d.iteritems() if blck == ACHIEVEMENT_BLOCK.RARE ]
             ms = i18n.makeString
-            addDossierStrings, addBadgesStrings = [], []
+            addDossierStrings, addBadgesStrings, removedBadgesStrings = [], [], []
             for rec in dossiers.itervalues():
-                for block, name in rec:
+                for (block, name), recData in rec.iteritems():
                     if name != '':
                         if block == BADGES_BLOCK:
-                            addBadgesStrings.append(ms(BADGE.badgeName(name)))
+                            if recData['value'] < 0:
+                                removedBadgesStrings.append(ms(BADGE.badgeName(name)))
+                            else:
+                                addBadgesStrings.append(ms(BADGE.badgeName(name)))
                         else:
                             addDossierStrings.append(ms('#achievements:{0:s}'.format(name)))
 
@@ -843,6 +844,8 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                 self.__dossierResult.append(g_settings.htmlTemplates.format('dossiersDebitedInvoiceReceived', ctx={'dossiers': ', '.join(delDossierStrings)}))
             if addBadgesStrings:
                 self.__dossierResult.append(g_settings.htmlTemplates.format('badgeAchievement', ctx={'badges': ', '.join(addBadgesStrings)}))
+            if removedBadgesStrings:
+                self.__dossierResult.append(g_settings.htmlTemplates.format('removedBadgeAchievement', ctx={'badges': ', '.join(removedBadgesStrings)}))
         callback(True)
 
     def __getDossierString(self):
@@ -1574,7 +1577,7 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
         completedQuestIDs = data.get('completedQuestIDs', set())
         completedQuestIDs.update(data.get('rewardsGottenQuestIDs', set()))
         if isSynced:
-            if ranked_helpers.isRankedQuestID(first(completedQuestIDs)):
+            if ranked_helpers.isRankedQuestID(first(completedQuestIDs, '')):
                 result = yield RankedQuestFormatter(forToken=True).format(message)
                 callback(result)
                 return
@@ -2178,7 +2181,6 @@ class PrbVehicleMaxSpgKickFormatter(ServiceChannelFormatter):
         formatted = None
         data = message.data
         vehInvID = data.get('vehInvID', None)
-        self.itemsCache.items.getVehicle(vehInvID)
         if vehInvID:
             vehicle = self.itemsCache.items.getVehicle(vehInvID)
             if vehicle:

@@ -19,6 +19,9 @@ from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_messages import ClientActionMessage
 from messenger.proto.shared_messages import ACTION_MESSAGE_TYPE
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.shared import g_eventBus
+from gui.shared import EVENT_BUS_SCOPE, events
 SQUAD_MEMBERS_COUNT = 2
 FULL_SQUAD_MEMBERS_COUNT = 3
 
@@ -40,42 +43,84 @@ class DynSquadArenaController(object):
         invitesManager = self.prbInvites
         invitesManager.onReceivedInviteListModified += self.__onReceivedInviteModified
         invitesManager.onSentInviteListModified += self.__onSentInviteListModified
+        self.__sentOwnJoinMessage = False
+        self.__sentOwnCreateMessage = False
+        self.__sentEnemyCreatePlatoons = []
+        self.__sentAllyCreatePlatoons = []
+        self.__squadMembersAlly = {}
+        self.__squadMembersEnemy = {}
+        g_eventBus.addListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, EVENT_BUS_SCOPE.BATTLE)
 
     @prbInvitesProperty
     def prbInvites(self):
         return None
 
+    def __handleBattleLoading(self, event):
+        if not event.ctx['isShown']:
+            guiSessionProvider = dependency.instance(IBattleSessionProvider)
+            arenaDP = guiSessionProvider.getArenaDP()
+            mySquad = arenaDP.getVehicleInfo(avatar_getter.getPlayerVehicleID()).squadIndex
+            myTeams = arenaDP.getAllyTeams()
+            if mySquad > 0:
+                self.__sentOwnJoinMessage = True
+                self.__sentOwnCreateMessage = True
+            squadSizes = arenaDP.getSquadSizes()
+            otherTeams = arenaDP.getEnemyTeams()
+            for myTeam in myTeams:
+                for squadIdx, squadSize in squadSizes[myTeam].iteritems():
+                    self.__squadMembersAlly[squadIdx] = squadSize
+
+            for otherTeam in otherTeams:
+                for squadIdx, squadSize in squadSizes[otherTeam].iteritems():
+                    self.__squadMembersEnemy[squadIdx] = squadSize
+
     def process(self, playerVehVO, arenaDP):
         voSquadIndex = playerVehVO.squadIndex
+        if voSquadIndex == 0:
+            return
         squadMembersCount = arenaDP.getVehiclesCountInPrebattle(playerVehVO.team, playerVehVO.prebattleID)
+        myAvatarVehicle = arenaDP.getVehicleInfo(avatar_getter.getPlayerVehicleID())
+        isAlly = arenaDP.isAllyTeam(playerVehVO.team)
         if squadMembersCount == SQUAD_MEMBERS_COUNT:
-            myAvatarVehicle = arenaDP.getVehicleInfo(avatar_getter.getPlayerVehicleID())
             if playerVehVO.prebattleID == myAvatarVehicle.prebattleID:
                 if myAvatarVehicle.player.isPrebattleCreator:
-                    self._squadCreatedImOwner(squadNum=voSquadIndex)
-                else:
+                    if not self.__sentOwnCreateMessage:
+                        self._squadCreatedImOwner(squadNum=voSquadIndex)
+                        self.__sentOwnCreateMessage = True
+                        self.__squadMembersAlly[voSquadIndex] = squadMembersCount
+                elif not self.__sentOwnJoinMessage:
                     self._squadCreatedImRecruit(squadNum=voSquadIndex)
-            elif myAvatarVehicle.team == playerVehVO.team:
-                self._squadCreatedByAllies(squadNum=voSquadIndex)
-            else:
+                    self.__sentOwnJoinMessage = True
+                    self.__squadMembersAlly[voSquadIndex] = squadMembersCount
+            elif isAlly:
+                if voSquadIndex in self.__sentAllyCreatePlatoons:
+                    self._squadCreatedByAllies(squadNum=voSquadIndex)
+                    self.__sentAllyCreatePlatoons.append(voSquadIndex)
+                    self.__squadMembersAlly[voSquadIndex] = squadMembersCount
+            elif voSquadIndex in self.__sentEnemyCreatePlatoons:
                 self._squadCreatedByEnemies(squadNum=voSquadIndex)
-        elif squadMembersCount == FULL_SQUAD_MEMBERS_COUNT:
-            myAvatarVehicle = arenaDP.getVehicleInfo(avatar_getter.getPlayerVehicleID())
+                self.__sentEnemyCreatePlatoons.append(voSquadIndex)
+                self.__squadMembersEnemy[voSquadIndex] = squadMembersCount
+        elif isAlly and squadMembersCount != self.__squadMembersAlly.get(voSquadIndex, 0) or not isAlly and squadMembersCount != self.__squadMembersEnemy.get(voSquadIndex, 0):
             playerVO = playerVehVO.player
             if playerVO.accountDBID == myAvatarVehicle.player.accountDBID:
                 self._iAmJoinedSquad(squadNum=voSquadIndex)
+                self.__squadMembersAlly[voSquadIndex] = squadMembersCount
             elif myAvatarVehicle.team == playerVehVO.team:
                 if myAvatarVehicle.squadIndex == voSquadIndex:
                     self._someoneJoinedMySquad(squadNum=voSquadIndex, receiver=playerVO.name)
                 else:
                     self._someoneJoinedAlliedSquad(squadNum=voSquadIndex, receiver=playerVO.name)
+                self.__squadMembersAlly[voSquadIndex] = squadMembersCount
             else:
                 self._someoneJoinedEnemySquad(squadNum=voSquadIndex, receiver=playerVO.name)
+                self.__squadMembersEnemy[voSquadIndex] = squadMembersCount
 
     def destroy(self):
         invitesManager = self.prbInvites
         invitesManager.onReceivedInviteListModified -= self.__onReceivedInviteModified
         invitesManager.onSentInviteListModified -= self.__onSentInviteListModified
+        g_eventBus.removeListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, EVENT_BUS_SCOPE.BATTLE)
 
     def _inviteReceived(self, invite):
         LOG_DEBUG('Handler: Invite received', invite)

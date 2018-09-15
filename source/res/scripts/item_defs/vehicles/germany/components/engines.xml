@@ -128,6 +128,7 @@
     <Maybach_HL_210_TRM_P45M>	142	</Maybach_HL_210_TRM_P45M>
     <Porsche_Typ_205_2>	143	</Porsche_Typ_205_2>
     <Maybach_HL_234P60_WT>	144	</Maybach_HL_234P60_WT>
+    <Maybach_HL_234_TRM_P45_Leicht>	145	</Maybach_HL_234_TRM_P45_Leicht>
     <Development_Engine>	65535	</Development_Engine>
     <Maybach_HL57TR_bot>	247	</Maybach_HL57TR_bot>
     <Krupp_M301_bot>	248	</Krupp_M301_bot>
@@ -147,7 +148,6 @@
     <Maybach_HL_120_TR_bootcamp>	64005	</Maybach_HL_120_TR_bootcamp>
     <Maybach_HL_108TR_bootcamp>	64006	</Maybach_HL_108TR_bootcamp>
     <Ganz_VIII_VGT_107_bootcamp>	64007	</Ganz_VIII_VGT_107_bootcamp>
-    <Leviathan_Mk1_Engine>	252	</Leviathan_Mk1_Engine>
   </ids>
   <shared>
     <Maybach_HL_120_TR>
@@ -1251,8 +1251,8 @@
       <level>	7	</level>
       <price>	39850	</price>
       <notInShop>	true	</notInShop>
-      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
       <power>	700	</power>
       <weight>	720	</weight>
       <maxHealth>	255	</maxHealth>
@@ -1939,6 +1939,24 @@
       <rpm_min>	488	</rpm_min>
       <rpm_max>	2035	</rpm_max>
     </Maybach_HL_234_TRM_P45>
+    <Maybach_HL_234_TRM_P45_Leicht>
+      <userString>	#germany_vehicles:Maybach_HL_234_TRM_P45_Leicht	</userString>
+      <shortUserString>	#germany_vehicles:Maybach_HL_234_TRM_P45_Leicht_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	9	</level>
+      <price>	88000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1200	</power>
+      <weight>	1300	</weight>
+      <maxHealth>	320	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	404	</rpm_min>
+      <rpm_max>	2305	</rpm_max>
+    </Maybach_HL_234_TRM_P45_Leicht>
     <Maybach_HL_234_TRM_P45_1>
       <userString>	#germany_vehicles:Maybach_HL_234_TRM_P45_1	</userString>
       <shortUserString>	#germany_vehicles:Maybach_HL_234_TRM_P45_1_short	</shortUserString>
@@ -2607,23 +2625,5 @@
       <rpm_min>	250	</rpm_min>
       <rpm_max>	2800	</rpm_max>
     </MB507_IGR>
-    <Leviathan_Mk1_Engine>
-      <userString>	#germany_vehicles:Leviathan_Mk1_Engine	</userString>
-      <shortUserString>	#germany_vehicles:Leviathan_Mk1_Engine_short	</shortUserString>
-      <tags>	gasoline	</tags>
-      <level>	8	</level>
-      <price>	35500	</price>
-      <notInShop>	true	</notInShop>
-      <wwsoundPC>	ev_halloween_leviathan_eng	</wwsoundPC>
-      <wwsoundNPC>	ev_halloween_leviathan_eng	</wwsoundNPC>
-      <power>	1250	</power>
-      <weight>	2850	</weight>
-      <maxHealth>	2000	</maxHealth>
-      <maxRegenHealth>	100	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.0	</fireStartingChance>
-      <rpm_min>	500	</rpm_min>
-      <rpm_max>	2500	</rpm_max>
-    </Leviathan_Mk1_Engine>
   </shared>
 </engines.xml>

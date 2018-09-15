@@ -4,7 +4,7 @@ from collections import namedtuple
 from constants import EVENT_TYPE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.server_events.cond_formatters import packText, intersperse, getSeparator, requirements
+from gui.server_events.cond_formatters import packText, getSeparator, requirements
 from gui.server_events.cond_formatters.formatters import ConditionFormatter, ConditionsFormatter
 from gui.server_events.cond_formatters.mixed_formatters import PersonalMissionConditionsFormatter, sortConditionsFunc
 from gui.server_events.cond_formatters.requirements import prepareAccountConditionsGroup
@@ -16,6 +16,18 @@ from skeletons.gui.server_events import IEventsCache
 
 def reqStyle(_):
     return text_styles.main
+
+
+def getSeparatorBlock(groupType=GROUP_TYPE.AND):
+    """
+    Create a separator block data
+    """
+    label = getSeparator(groupType)
+    if label:
+        item = packText(text_styles.standard(label))
+        return item
+    else:
+        return None
 
 
 class MissionsAccountRequirementsFormatter(ConditionsFormatter):
@@ -40,28 +52,46 @@ class MissionsAccountRequirementsFormatter(ConditionsFormatter):
         requirements = self._format(group, event)
         return requirements
 
-    def _format(self, group, event, isNested=False):
+    def _format(self, group, event, isNested=False, topHasOrGroup=False):
         """ Recursive format method that should be called for each condition group.
         """
         result = []
-        separator = getSeparator(group.getName())
-        for condition in group.getSortedItems():
+        separator = getSeparatorBlock(group.getName())
+        sortedItems = group.getSortedItems()
+        itemsCount = len(sortedItems)
+        for idx, condition in enumerate(sortedItems, 1):
             branch = []
             if not condition.isAvailable():
                 conditionName = condition.getName()
+                isNotLast = idx < itemsCount
                 if conditionName in GROUP_TYPE.ALL():
-                    branch = self._format(condition, event, isNested=True)
+                    isInOrGroup = topHasOrGroup or conditionName == GROUP_TYPE.OR
+                    branch = self._format(condition, event, isNested=True, topHasOrGroup=isInOrGroup)
+                    if branch and isInOrGroup and not isNested:
+                        branch[0].update(bullet=TOOLTIPS.QUESTS_UNAVAILABLE_BULLET)
+                    result.extend(branch)
+                    if separator and isNotLast:
+                        result.append(separator)
                 else:
                     fmt = self.getConditionFormatter(conditionName)
                     if fmt:
                         branch = fmt.format(condition, event, reqStyle)
-                result.extend(branch)
-                if not isNested and branch:
-                    branch[0].update(bullet=TOOLTIPS.QUESTS_UNAVAILABLE_BULLET)
+                    if branch:
+                        result.extend(self._processNonGroupConidtions(branch, isNested, separator, topHasOrGroup, isNotLast))
 
-        if separator:
-            result = intersperse(result, packText(text_styles.standard(separator)))
         return result
+
+    @classmethod
+    def _processNonGroupConidtions(cls, branch, isNested, separator, isInOrGroup, isNotLast):
+        formattedBranch = []
+        for item in branch:
+            if not isNested or not isInOrGroup:
+                item.update(bullet=TOOLTIPS.QUESTS_UNAVAILABLE_BULLET)
+            formattedBranch.append(item)
+
+        if separator and isNotLast:
+            formattedBranch.append(separator)
+        return formattedBranch
 
 
 class _TokenRequirementFormatter(ConditionFormatter):

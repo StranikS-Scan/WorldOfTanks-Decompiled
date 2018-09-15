@@ -220,16 +220,16 @@ class IngameSoundNotifications(object):
 class ComplexSoundNotifications(object):
 
     def __init__(self, ingameSoundNotifications):
-        self.__isAimingEnded = {}
+        self.__isAimingEnded = False
         self.__ingameSoundNotifications = ingameSoundNotifications
 
     def destroy(self):
         pass
 
-    def setAimingEnded(self, turretIdx, isEnded, isReloading):
-        if not isReloading and not self.__isAimingEnded.get(turretIdx, False) and isEnded:
+    def setAimingEnded(self, isEnded, isReloading):
+        if not self.__isAimingEnded and isEnded and not isReloading:
             self.__ingameSoundNotifications.play('sight_convergence')
-        self.__isAimingEnded[turretIdx] = isEnded
+        self.__isAimingEnded = isEnded
 
     def notifyEnemySpotted(self, isPlural):
         self.__ingameSoundNotifications.cancel('`p`p', True)

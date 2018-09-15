@@ -174,7 +174,7 @@ class HitDirectionController(IViewComponentsController):
         if handler is not None:
             from AvatarInputHandler import AvatarInputHandler
             if isinstance(handler, AvatarInputHandler):
-                handler.onPostmortemKillerVision -= self.__onPostmortemKillerVision
+                handler.onPostmortemKillerVisionEnter -= self.__onPostmortemKillerVision
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleControlling -= self.__onVehicleControlling
@@ -210,7 +210,7 @@ class HitDirectionController(IViewComponentsController):
         if handler is not None:
             from AvatarInputHandler import AvatarInputHandler
             if isinstance(handler, AvatarInputHandler):
-                handler.onPostmortemKillerVision += self.__onPostmortemKillerVision
+                handler.onPostmortemKillerVisionEnter += self.__onPostmortemKillerVision
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleControlling += self.__onVehicleControlling

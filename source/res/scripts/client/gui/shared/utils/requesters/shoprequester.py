@@ -5,7 +5,8 @@ from collections import namedtuple
 from abc import ABCMeta, abstractmethod
 import BigWorld
 from adisp import async
-from constants import WIN_XP_FACTOR_MODE, IS_CHINA, ARENA_GUI_TYPE
+from arena_achievements import getAchievementCondition
+from constants import WIN_XP_FACTOR_MODE, IS_CHINA, ARENA_BONUS_TYPE
 from dossiers2.custom.records import RECORD_DB_IDS
 from items import ItemsPrices
 from debug_utils import LOG_DEBUG, LOG_WARNING
@@ -123,7 +124,7 @@ class ShopCommonStats(IShopCommonStats):
     def getItem(self, intCD):
         return (self.getItemPrice(intCD), intCD in self.getHiddens())
 
-    def getAchievementReward(self, achievement, arenaType=ARENA_GUI_TYPE.RANDOM):
+    def getAchievementReward(self, achievement, arenaType=ARENA_BONUS_TYPE.REGULAR):
         result = None
         rewards = self.getValue('achievementsReward', None)
         if rewards is None:
@@ -142,6 +143,14 @@ class ShopCommonStats(IShopCommonStats):
                         if group is not None and arenaType in group['arenaTypes']:
                             result = group
                             break
+
+            if result is not None:
+                result = dict(result)
+                achievementCond = getAchievementCondition(arenaType, achievement.getName())
+                if 'minLevel' in achievementCond:
+                    vehs = result['vehicleMultipliers']
+                    for i in range(achievementCond['minLevel'] - 1):
+                        vehs[i] = 0.0
 
             return result
 

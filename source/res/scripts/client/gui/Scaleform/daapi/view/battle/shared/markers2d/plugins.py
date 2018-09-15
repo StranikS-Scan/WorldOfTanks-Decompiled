@@ -332,7 +332,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             if vehicleID == self.__playerVehicleID or vInfo.isObserver():
                 continue
             if vehicleID not in self._markers:
-                marker = self.__addMarkerToPool(vInfo=vInfo, vProxy=feedback.getVehicleProxy(vehicleID))
+                marker = self.__addMarkerToPool(vehicleID, vProxy=feedback.getVehicleProxy(vehicleID))
             else:
                 marker = self._markers[vehicleID]
             self.__setVehicleInfo(marker, vInfo, getProps(vehicleID, vInfo.team), getParts(vehicleID))
@@ -346,7 +346,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             return
         ctx = self.sessionProvider.getCtx()
         feedback = self.sessionProvider.shared.feedback
-        marker = self.__addMarkerToPool(vInfo=vInfo, vProxy=feedback.getVehicleProxy(vehicleID))
+        marker = self.__addMarkerToPool(vehicleID, vProxy=feedback.getVehicleProxy(vehicleID))
         self.__setVehicleInfo(marker, vInfo, ctx.getPlayerGuiProps(vehicleID, vInfo.team), ctx.getPlayerFullNameParts(vehicleID))
         self._setMarkerInitialState(marker, accountDBID=vInfo.player.accountDBID)
 
@@ -384,19 +384,14 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             self._destroyMarker(marker.getMarkerID())
             marker.destroy()
 
-    def __addMarkerToPool(self, vInfo, vProxy=None):
-        vehicleID = vInfo.vehicleID
+    def __addMarkerToPool(self, vehicleID, vProxy=None):
         if vProxy is not None:
             matrixProvider = self._clazz.fetchMatrixProvider(vProxy)
             active = True
         else:
             matrixProvider = None
             active = False
-        isBossMarker = vInfo.vehicleType.isLeviathan
-        markerLnk = settings.MARKER_SYMBOL_NAME.VEHICLE_MARKER
-        if isBossMarker:
-            markerLnk = settings.MARKER_SYMBOL_NAME.VEHICLE_MARKER_BOSS
-        markerID = self._createMarkerWithMatrix(markerLnk, matrixProvider=matrixProvider, active=active)
+        markerID = self._createMarkerWithMatrix(settings.MARKER_SYMBOL_NAME.VEHICLE_MARKER, matrixProvider=matrixProvider, active=active)
         marker = self._clazz(markerID, vehicleID, vProxy=vProxy, active=active)
         marker.onVehicleModelChanged += self.__onVehicleModelChanged
         self._markers[vehicleID] = marker
@@ -451,7 +446,7 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         else:
             if vInfo.isObserver():
                 return
-            marker = self.__addMarkerToPool(vInfo=vInfo, vProxy=vProxy)
+            marker = self.__addMarkerToPool(vehicleID, vProxy)
             self.__setVehicleInfo(marker, vInfo, guiProps, self.sessionProvider.getCtx().getPlayerFullNameParts(vehicleID))
             self._setMarkerInitialState(marker, accountDBID=accountDBID)
 
@@ -547,6 +542,16 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         if entityName == PLAYER_GUI_PROPS.ally:
             return settings.DAMAGE_TYPE.FROM_ALLY
         return settings.DAMAGE_TYPE.FROM_ENEMY if entityName == PLAYER_GUI_PROPS.enemy else settings.DAMAGE_TYPE.FROM_UNKNOWN
+
+
+class RespawnableVehicleMarkerPlugin(VehicleMarkerPlugin):
+
+    def start(self):
+        super(RespawnableVehicleMarkerPlugin, self).start()
+        self._isSquadIndicatorEnabled = self.sessionProvider.arenaVisitor.gui.isFalloutMultiTeam()
+
+    def _hideVehicleMarker(self, vehicleID):
+        self._destroyVehicleMarker(vehicleID)
 
 
 _EQUIPMENT_DEFAULT_INTERVAL = 1.0

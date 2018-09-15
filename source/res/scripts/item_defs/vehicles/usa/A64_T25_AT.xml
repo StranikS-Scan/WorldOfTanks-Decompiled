@@ -21,7 +21,7 @@
   <camouflage>
     <priceFactor>	1.4	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/american/A64_T25_AT/T25_AT_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <fakeTurrets>
@@ -40,10 +40,9 @@
       <armor_9>	12.7	</armor_9>
       <armor_10>	19.1	</armor_10>
       <armor_11>	0	</armor_11>
-      <armor_12>	63.5	</armor_12>
-      <armor_15>	19.1	</armor_15>
-      <armor_16>	63.5	</armor_16>
-      <surveyingDevice>	25.4	</surveyingDevice>
+      <armor_12>	38.1	</armor_12>
+      <armor_13>	63.5	</armor_13>
+      <armor_14>	127	</armor_14>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	25500	</weight>
@@ -69,7 +68,7 @@
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.224231 0.742372 1.67022	</turret>
+      <turret>	0.2242 0.643718 1.6132	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/american/A64_T25_AT/collision/Hull.model	</collisionModelServer>
@@ -77,36 +76,36 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.536081 0.273026 2.70264	</rayStart>
-        <rayEnd>	-0.536081 -0.0181893 2.42843	</rayEnd>
+        <rayStart>	-0.656616 0.511444 2.1266	</rayStart>
+        <rayEnd>	-0.656616 0.365246 1.99013	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	1.37407 1.0902 0.0784229	</rayStart>
-        <rayEnd>	0.985833 1.07698 0.173812	</rayEnd>
+        <rayStart>	1.37067 0.770985 0.779087	</rayStart>
+        <rayEnd>	1.17535 0.753363 0.818325	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.82	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
       <player>
-        <rayStart>	-1.42837 1.14394 1.02688	</rayStart>
-        <rayEnd>	-1.05565 1.0526 0.914003	</rayEnd>
+        <rayStart>	-1.33395 0.78383 1.39905	</rayStart>
+        <rayEnd>	-1.16263 0.704309 1.33328	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </player>
       <inscription>
-        <rayStart>	-1.37407 1.0902 0.0784229	</rayStart>
-        <rayEnd>	-0.985833 1.07698 0.173812	</rayEnd>
+        <rayStart>	-1.38274 0.764496 0.788012	</rayStart>
+        <rayEnd>	-1.18757 0.747846 0.828405	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.82	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
       <player>
-        <rayStart>	1.42837 1.14394 1.02688	</rayStart>
-        <rayEnd>	1.05565 1.0526 0.914003	</rayEnd>
+        <rayStart>	1.41961 0.823591 1.43194	</rayStart>
+        <rayEnd>	1.07697 0.664547 1.30039	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
@@ -152,15 +151,15 @@
         <lodDist>	FAR	</lodDist>
         <decalGroup>	trace	</decalGroup>
         <decalTexture>	trace	</decalTexture>
-        <size>	0.4 0.48	</size>
+        <size>	0.4 0.44	</size>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	germany_01	</textureSet>
+        <textureSet>	usa_a23	</textureSet>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.96	</textureScale>
+        <textureScale>	-2	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -169,6 +168,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.288618	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -182,6 +182,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.35468	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -195,6 +196,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.288618	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -208,6 +210,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.35468	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -220,16 +223,16 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	mediumTankMud	</mud>
+        <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.998682 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/american/A64_T25_AT/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/american/A64_T25_AT/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.30855 1.88969	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.29985 1.93857	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -242,6 +245,130 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A64_T25_AT/track/segment_1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A64_T25_AT/track/segment_1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A64_T25_AT/track/segment_2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A64_T25_AT/track/segment_2.model	</segment2ModelRight>
+        <left>	vehicles/american/A64_T25_AT/track/left.track	</left>
+        <right>	vehicles/american/A64_T25_AT/track/right.track	</right>
+        <segmentLength>	0.138	</segmentLength>
+        <segmentOffset>	0.221	</segmentOffset>
+        <segment2Offset>	0.078	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0297	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.129	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.129	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+      </trackNodes>
     </Chassis_T25_AT>
     <Chassis_T25_AT_2>
       <userString>	#usa_vehicles:Chassis_T25_AT_2	</userString>
@@ -275,15 +402,15 @@
         <lodDist>	FAR	</lodDist>
         <decalGroup>	trace	</decalGroup>
         <decalTexture>	trace	</decalTexture>
-        <size>	0.4 0.48	</size>
+        <size>	0.4 0.44	</size>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	germany_01	</textureSet>
+        <textureSet>	usa_a23	</textureSet>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.96	</textureScale>
+        <textureScale>	-2	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -292,6 +419,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.288618	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -305,6 +433,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.35468	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -318,6 +447,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.288618	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -331,6 +461,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.35468	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -343,16 +474,16 @@
       <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	mediumTankMud	</mud>
+        <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.998682 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/american/A64_T25_AT/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/american/A64_T25_AT/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.30855 1.88969	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.29985 1.93857	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -365,6 +496,130 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A64_T25_AT/track/segment_1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A64_T25_AT/track/segment_1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A64_T25_AT/track/segment_2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A64_T25_AT/track/segment_2.model	</segment2ModelRight>
+        <left>	vehicles/american/A64_T25_AT/track/left.track	</left>
+        <right>	vehicles/american/A64_T25_AT/track/right.track	</right>
+        <segmentLength>	0.138	</segmentLength>
+        <segmentOffset>	0.221	</segmentOffset>
+        <segment2Offset>	0.078	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0297	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.129	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.129	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.6	</forwardElastK>
+          <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.071	</offset>
+        </node>
+      </trackNodes>
     </Chassis_T25_AT_2>
   </chassis>
   <turrets0>
@@ -375,14 +630,7 @@
       <price>	120.0	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	18	</armor_1>
-        <armor_2>	16	</armor_2>
-        <armor_3>	16	</armor_3>
-        <armor_4>	16	</armor_4>
-        <armor_5>	16	</armor_5>
-        <armor_6>	16	</armor_6>
-        <armor_7>	8	</armor_7>
-        <armor_8>	0	</armor_8>
+        <armor_1>	0	</armor_1>
       </armor>
       <weight>	50	</weight>
       <maxHealth>	168	</maxHealth>
@@ -411,10 +659,14 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
+            <armor_3>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	35	</gun>
           </armor>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
@@ -426,26 +678,27 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <models>
-            <undamaged>	vehicles/american/A64_T25_AT/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/american/A64_T25_AT/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/american/A64_T25_AT/crash/lod0/Gun_03.model	</exploded>
+            <undamaged>	vehicles/american/A64_T25_AT/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/american/A64_T25_AT/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/american/A64_T25_AT/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/american/A64_T25_AT/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A64_T25_AT/collision_client/Gun_03.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/american/A64_T25_AT/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A64_T25_AT/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.00671329 0.153974 2.61387	</rayStart>
-              <rayEnd>	-0.403508 -0.00958918 2.61387	</rayEnd>
-              <rayUp>	0.083 0.083 2	</rayUp>
+              <rayStart>	0.000205165 0.154511 2.51229	</rayStart>
+              <rayEnd>	0.0151096 0.153805 2.51227	</rayEnd>
+              <rayUp>	0.076 0.075 5	</rayUp>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_main	</effects>
           <camouflage>
-            <tiling>	0.67 0.67 0.000000 0.000000	</tiling>
+            <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
         </_90mm_AT_Gun_M3>
         <_90mm_AT_Gun_T15E2>	shared	  <maxAmmo>	56	</maxAmmo>
@@ -462,10 +715,14 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
+            <armor_3>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	35	</gun>
           </armor>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
@@ -487,16 +744,16 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.00227935 0.153973 3.16782	</rayStart>
+              <rayStart>	-0.000794882 0.154511 3.16782	</rayStart>
               <rayEnd>	-0.414138 0.132207 3.15805	</rayEnd>
-              <rayUp>	0.095 0.087 1	</rayUp>
+              <rayUp>	0.087 0.081 5	</rayUp>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+            <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
         </_90mm_AT_Gun_T15E2>
         <_105mm_AT_Gun_T5E1>	shared	  <maxAmmo>	40	</maxAmmo>
@@ -507,10 +764,14 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	127	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	88.9	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
+            <armor_3>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
@@ -522,26 +783,27 @@
             <maxPitch>	0 10 1 10	</maxPitch>
           </pitchLimits>
           <models>
-            <undamaged>	vehicles/american/A64_T25_AT/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/american/A64_T25_AT/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/american/A64_T25_AT/crash/lod0/Gun_01.model	</exploded>
+            <undamaged>	vehicles/american/A64_T25_AT/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/american/A64_T25_AT/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/american/A64_T25_AT/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/american/A64_T25_AT/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A64_T25_AT/collision_client/Gun_01.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/american/A64_T25_AT/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A64_T25_AT/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.00222755 0.153973 3.44635	</rayStart>
-              <rayEnd>	-0.408248 0.133468 3.43772	</rayEnd>
-              <rayUp>	0.099 0.094 1	</rayUp>
+              <rayStart>	-0.000794882 0.154511 2.51437	</rayStart>
+              <rayEnd>	0.123974 0.0471162 2.51429	</rayEnd>
+              <rayUp>	0.111 0.105 5	</rayUp>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_large_mb	</effects>
           <camouflage>
-            <tiling>	0.925 0.925 0.000000 0.000000	</tiling>
+            <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
         </_105mm_AT_Gun_T5E1>
       </guns>
@@ -554,7 +816,7 @@
         <collisionModelServer>	vehicles/american/A64_T25_AT/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/american/A64_T25_AT/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
+      <gunPosition>	0.000000 0.000000 -0.0125	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
@@ -670,7 +932,7 @@
   </clientAdjustmentFactors>
   <effects>
     <collision></collision>
-    <damagedStateGroup>	large	</damagedStateGroup>
+    <damagedStateGroup>	medium	</damagedStateGroup>
   </effects>
   <emblems>
     <default>	usa_star	</default>

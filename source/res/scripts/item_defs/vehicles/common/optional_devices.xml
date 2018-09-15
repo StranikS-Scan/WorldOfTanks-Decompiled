@@ -875,13 +875,6 @@
     <incompatibleTags>
       <installed>	toolbox	</installed>
     </incompatibleTags>
-    <vehicleFilter>
-      <exclude>
-        <vehicle>
-          <tags>	event_battles	</tags>
-        </vehicle>
-      </exclude>
-    </vehicleFilter>
     <script>	StaticFactorDevice	  <weight>	100	</weight>
       <attribute>	miscAttrs/repairSpeedFactor	</attribute>
       <factor>	1.4	</factor>
@@ -947,13 +940,6 @@
     <incompatibleTags>
       <installed>	coatedOptics	</installed>
     </incompatibleTags>
-    <vehicleFilter>
-      <exclude>
-        <vehicle>
-          <tags>	event_battles	</tags>
-        </vehicle>
-      </exclude>
-    </vehicleFilter>
     <script>	StaticFactorDevice	  <attribute>	miscAttrs/circularVisionRadiusFactor	</attribute>
       <factor>	1.125	</factor>
     </script>
@@ -994,13 +980,6 @@
     <incompatibleTags>
       <installed>	enhancedAimDrives	</installed>
     </incompatibleTags>
-    <vehicleFilter>
-      <exclude>
-        <vehicle>
-          <tags>	event_battles	</tags>
-        </vehicle>
-      </exclude>
-    </vehicleFilter>
     <script>	StaticFactorDevice	  <weight>	100	</weight>
       <attribute>	miscAttrs/gunAimingTimeFactor	</attribute>
       <factor>	0.89	</factor>

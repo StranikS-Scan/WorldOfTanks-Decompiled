@@ -17,10 +17,13 @@ class UseAwardSheetWindow(UseAwardSheetWindowMeta):
         self.as_setSettingsS({'title': self.meta.getTitle(),
          'submitBtnLabel': self.meta.getSubmitButtonLabel(),
          'cancelBtnLabel': self.meta.getCancelButtonLabel()})
-        statusText = text_styles.neutral(self.meta.getInfoText()) if self.meta.isAvailable() else text_styles.concatStylesWithSpace(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON, 16, 16, -4, 0), text_styles.alert(self.meta.getWarningText()))
-        self.as_setDataS({'descrText': self.meta.getDescrText(),
-         'footerText': self.meta.getFooterText(),
-         'counterText': self.meta.getCounterText(),
+        icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, 16, 16, -3, 0) if self.meta.isAvailable() else icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ALERTICON, 16, 16, -4, 0)
+        text = text_styles.neutral(self.meta.getInfoText()) if self.meta.isAvailable() else text_styles.alert(self.meta.getWarningText())
+        statusText = text_styles.concatStylesWithSpace(icon, text)
+        self.as_setDataS({'neededLabel': text_styles.highlightText(self.meta.getNeededText()),
+         'neededValue': text_styles.highlightText(self.meta.getPawnCost()),
+         'totalLabel': text_styles.main(self.meta.getTotalText()),
+         'totalValue': text_styles.main(self.meta.getFreeSheets()),
          'statusText': statusText,
          'icon': self.meta.getIcon()})
 

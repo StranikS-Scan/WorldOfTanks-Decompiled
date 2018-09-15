@@ -461,5 +461,41 @@
       <deny>	Pl03_PzV_Poland	</deny>
       <notInShop>	true	</notInShop>
     </summer_camo>
+    <Clan_camuflage_04_winter>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter	</description>
+      <id>	160	</id>
+      <group>	winter	</group>
+      <kind>	winter	</kind>
+      <colors>
+        <c0>	0 67 140 174	</c0>
+        <c1>	255 255 255 139	</c1>
+        <c2>	5 17 35 210	</c2>
+        <c3>	201 192 133 0	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+    </Clan_camuflage_04_winter>
+    <Clan_camuflage_04_desert>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_04.DDS	</texture>
+      <priceFactor>	0.000000	</priceFactor>
+      <invisibilityFactor>	1.0	</invisibilityFactor>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert	</description>
+      <id>	159	</id>
+      <group>	desert	</group>
+      <kind>	desert	</kind>
+      <colors>
+        <c0>	112 79 1 177	</c0>
+        <c1>	237 215 88 142	</c1>
+        <c2>	29 21 3 210	</c2>
+        <c3>	255 255 255 130	</c3>
+      </colors>
+      <notInShop>	true	</notInShop>
+      <tiling></tiling>
+      <deny>	Pl03_PzV_Poland	</deny>
+    </Clan_camuflage_04_desert>
   </camouflages>
 </customization.xml>

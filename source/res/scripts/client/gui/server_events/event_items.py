@@ -90,9 +90,6 @@ class ServerEventAbstract(object):
     def getType(self):
         return self._data.get('type', 0)
 
-    def getBattleTypeName(self):
-        pass
-
     def getStartTime(self):
         return time_utils.makeLocalServerTime(self._data['startTime']) if 'startTime' in self._data else time.time()
 
@@ -423,7 +420,7 @@ class Quest(ServerEventAbstract):
         return True
 
     def _checkConditions(self):
-        return False if not self.accountReqs.isAvailable() else self.vehicleReqs.getSuitableVehicles()
+        return False if not self.accountReqs.isAvailable() else self.vehicleReqs.isAnyVehicleAcceptable() or self.vehicleReqs.getSuitableVehicles()
 
     def _checkVehicleConditions(self, vehicle):
         return self.vehicleReqs.isAnyVehicleAcceptable() or vehicle in self.vehicleReqs.getSuitableVehicles()
@@ -485,9 +482,6 @@ class RankedQuest(Quest):
 
     def isBooby(self):
         return self.__rankedData['subtype'] == 'booby'
-
-    def getBattleTypeName(self):
-        pass
 
     def _bonusDecorator(self, bonus):
         if bonus.getName() == 'oneof':

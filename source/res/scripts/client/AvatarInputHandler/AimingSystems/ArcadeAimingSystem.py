@@ -223,8 +223,7 @@ class ShotPointCalculatorPlanar(object):
         self.__vehicleMat = player.inputHandler.steadyVehicleMatrixCalculator.outputMProv
         self.__vehicleDesc = player.vehicleTypeDescriptor
         self.__aimPlane = _AimPlane()
-        turretIndex = 0
-        self.__getTurretMat = functools.partial(AimingSystems.getTurretJointMat, self.__vehicleDesc, turretIndex, self.__vehicleMat)
+        self.__getTurretMat = functools.partial(AimingSystems.getTurretJointMat, self.__vehicleDesc, self.__vehicleMat)
 
     def update(self, scanStart, scanDir):
         point, isPointConvenient = self.__testMouseTargetPoint(scanStart, scanDir)
@@ -236,8 +235,7 @@ class ShotPointCalculatorPlanar(object):
         if not isPointConvenient:
             if yawPitch is not None:
                 turretYaw, gunPitch = yawPitch
-                turretIndex = 0
-                gunMat = AimingSystems.getGunJointMat(self.__vehicleDesc, turretIndex, self.__getTurretMat(turretYaw), gunPitch)
+                gunMat = AimingSystems.getGunJointMat(self.__vehicleDesc, self.__getTurretMat(turretYaw), gunPitch)
                 planePos = self.__aimPlane.intersectRay(gunMat.translation, gunMat.applyVector(Vector3(0, 0, 1)), False, False)
             else:
                 planePos = self.__aimPlane.intersectRay(scanStart, scanDir, False)
@@ -255,9 +253,8 @@ class ShotPointCalculatorPlanar(object):
         planePos = self.__aimPlane.intersectRay(scanStart, scanDir)
         if scanStart.distSqrTo(planePos) < scanStart.distSqrTo(scanPos):
             return scanPos
-        turretIndex = 0
-        turretYaw, gunPitch = AimingSystems.getTurretYawGunPitch(self.__vehicleDesc, turretIndex, self.__vehicleMat, planePos, True)
-        gunMat = AimingSystems.getGunJointMat(self.__vehicleDesc, turretIndex, self.__getTurretMat(turretYaw), gunPitch)
+        turretYaw, gunPitch = AimingSystems.getTurretYawGunPitch(self.__vehicleDesc, self.__vehicleMat, planePos, True)
+        gunMat = AimingSystems.getGunJointMat(self.__vehicleDesc, self.__getTurretMat(turretYaw), gunPitch)
         aimDir = gunMat.applyVector(Vector3(0.0, 0.0, 1.0))
         return AimingSystems.getDesiredShotPoint(gunMat.translation, aimDir)
 
@@ -296,11 +293,9 @@ class ShotPointCalculatorPlanar(object):
 
     def __testMouseTargetPoint(self, start, dir):
         closestPoint, isPointConvenient = self.__calculateClosestPoint(start, dir)
-        turretIndex = 0
-        turretYaw, gunPitch = AimingSystems.getTurretYawGunPitch(self.__vehicleDesc, turretIndex, self.__vehicleMat, closestPoint, True)
+        turretYaw, gunPitch = AimingSystems.getTurretYawGunPitch(self.__vehicleDesc, self.__vehicleMat, closestPoint, True)
         if not isPointConvenient:
-            mainTurretPitchLimits = self.__vehicleDesc.turrets[0].gun.pitchLimits
-            minPitch, maxPitch = gun_rotation_shared.calcPitchLimitsFromDesc(turretYaw, mainTurretPitchLimits)
+            minPitch, maxPitch = gun_rotation_shared.calcPitchLimitsFromDesc(turretYaw, self.__vehicleDesc.gun.pitchLimits)
             pitchInBorders = gunPitch <= maxPitch + 0.001
             isPointConvenient = not pitchInBorders
         if isPointConvenient:
@@ -310,8 +305,7 @@ class ShotPointCalculatorPlanar(object):
     def __isTurretTurnRequired(self, viewDir, turretYawOnPoint, targetPoint):
         turretMat = self.__getTurretMat(turretYawOnPoint)
         turretPos = turretMat.translation
-        turretIndex = 0
-        gunPos = AimingSystems.getGunJointMat(self.__vehicleDesc, turretIndex, turretMat, 0.0).translation
+        gunPos = AimingSystems.getGunJointMat(self.__vehicleDesc, turretMat, 0.0).translation
         dirFromTurretPos = targetPoint - turretPos
         dirFromSniperPos = targetPoint - gunPos
         viewDir = Math.Vector3(viewDir)

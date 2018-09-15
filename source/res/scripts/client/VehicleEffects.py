@@ -29,20 +29,15 @@ class DamageFromShotDecoder(object):
     def decodeHitPoints(encodedPoints, vehicleDescr):
         resultPoints = []
         maxHitEffectCode = None
+        maxDamagedComponentName = None
         for encodedPoint in encodedPoints:
             compName, hitEffectCode, startPoint, endPoint = DamageFromShotDecoder.decodeSegment(encodedPoint, vehicleDescr)
             if startPoint == endPoint:
                 continue
-            maxHitEffectCode = max(hitEffectCode, maxHitEffectCode)
-            if compName.find('additional') != -1:
-                lastUnderscore = compName.rfind('_') + 1
-                addlComponentIndex = int(compName[lastUnderscore:])
-                if compName.find('turret') != -1:
-                    hitTester = vehicleDescr.turrets[addlComponentIndex].turret.hitTester
-                else:
-                    hitTester = vehicleDescr.turrets[addlComponentIndex].gun.hitTester
-            else:
-                hitTester = getattr(vehicleDescr, compName).hitTester
+            if hitEffectCode > maxHitEffectCode:
+                maxHitEffectCode = hitEffectCode
+                maxDamagedComponentName = compName
+            hitTester = getattr(vehicleDescr, compName).hitTester
             hitTestRes = hitTester.localHitTest(startPoint, endPoint)
             if not hitTestRes:
                 width, height, depth = (hitTester.bbox[1] - hitTester.bbox[0]) / 256.0
@@ -75,7 +70,7 @@ class DamageFromShotDecoder(object):
             effectGroup = DamageFromShotDecoder.__hitEffectCodeToEffectGroup[hitEffectCode]
             resultPoints.append(DamageFromShotDecoder.ShotPoint(compName, matrix, effectGroup))
 
-        return (maxHitEffectCode, resultPoints)
+        return (maxHitEffectCode, resultPoints, maxDamagedComponentName)
 
     @staticmethod
     def decodeSegment(segment, vehicleDescr):
@@ -88,18 +83,16 @@ class DamageFromShotDecoder(object):
             bbox = vehicleDescr.hull.hitTester.bbox
         elif compIdx == 2:
             componentName = TankPartNames.TURRET
-            bbox = vehicleDescr.turrets[0].turret.hitTester.bbox
+            bbox = vehicleDescr.turret.hitTester.bbox
         elif compIdx == 3:
             componentName = TankPartNames.GUN
-            bbox = vehicleDescr.turrets[0].gun.hitTester.bbox
+            bbox = vehicleDescr.gun.hitTester.bbox
         else:
-            secondaryIndex = compIdx / 2 - 1
-            if compIdx % 2 == 0:
-                componentName = '%s%d' % (TankPartNames.ADDITIONAL_TURRET, secondaryIndex)
-                bbox = vehicleDescr.turrets[secondaryIndex].turret.hitTester.bbox
-            else:
-                componentName = '%s%d' % (TankPartNames.ADDITIONAL_GUN, secondaryIndex)
-                bbox = vehicleDescr.turrets[secondaryIndex].gun.hitTester.bbox
+            LOG_CODEPOINT_WARNING(compIdx)
+            return ('',
+             int(segment & 255),
+             None,
+             None)
         min = Math.Vector3(bbox[0])
         delta = (bbox[1] - min).scale(1.0 / 255.0)
         segStart = min + Math.Vector3(delta[0] * (segment >> 16 & 255), delta[1] * (segment >> 24 & 255), delta[2] * (segment >> 32 & 255))

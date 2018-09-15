@@ -30,8 +30,7 @@ class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
         self.__vehicleIds = [ vehId for vehId, vehInfo in allVehicles if vehInfo['name'] in names ]
         self.__enemyWasKilled = False
         self.__avatar = avatar
-        modName = 'angle_marker_purple.model' if self.settingsCore.getSetting('isColorBlind') else 'angle_marker.model'
-        self.__modelName = 'content/Interface/CheckPoint/' + modName
+        self.__modelName = self.__getModelName()
         self.__models = []
         self.__active = False
 
@@ -40,6 +39,7 @@ class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
         self._state = HintBase.STATE_DEFAULT
         self._vehicleKilledTrigger = TriggersManager.g_manager.addTrigger(TriggersManager.TRIGGER_TYPE.VEHICLE_DESTROYED)
         TriggersManager.g_manager.addListener(self)
+        self.settingsCore.onSettingsChanged += self.onSettingsChanged
 
     def stop(self):
         self.__active = False
@@ -48,6 +48,7 @@ class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
         if TriggersManager.g_manager is not None:
             TriggersManager.g_manager.delTrigger(self._vehicleKilledTrigger)
             TriggersManager.g_manager.delListener(self)
+        self.settingsCore.onSettingsChanged -= self.onSettingsChanged
         return
 
     def __onModelLoaded(self, attachNode, scaleMatrix, translationMatrix, resourceRefs):
@@ -81,7 +82,7 @@ class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
     def update(self):
         resultCommand = None
         if self._state == HintBase.STATE_DEFAULT:
-            if self.__detectedEnemy:
+            if self.__detectedEnemy and not self.__enemyWasKilled:
                 self._timeStart = time.time()
                 self._state = HintBase.STATE_HINT
                 resultCommand = HINT_COMMAND.SHOW
@@ -90,7 +91,6 @@ class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
             if self.__enemyWasKilled:
                 self._state = HintBase.STATE_INACTIVE
                 resultCommand = HINT_COMMAND.HIDE
-                self.__enemyWasKilled = False
                 self.detachModels()
             elif not self.__detectedEnemy:
                 self._state = HintBase.STATE_DEFAULT
@@ -99,6 +99,20 @@ class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
         if BattleReplay.g_replayCtrl.isPlaying:
             resultCommand = None
         return resultCommand
+
+    def onSettingsChanged(self, diff):
+        if 'isColorBlind' in diff:
+            self.__resetModel()
+
+    def __getModelName(self):
+        modPath = 'content/Interface/CheckPoint/'
+        modName = 'angle_marker_purple.model' if self.settingsCore.getSetting('isColorBlind') else 'angle_marker.model'
+        return modPath + modName
+
+    def __resetModel(self):
+        self.__modelName = self.__getModelName()
+        self._state = HintBase.STATE_DEFAULT
+        self.detachModels()
 
     def attachModels(self):
         from vehicle_systems.tankStructure import TankPartNames

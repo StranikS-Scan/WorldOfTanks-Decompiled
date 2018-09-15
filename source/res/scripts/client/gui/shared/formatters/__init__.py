@@ -6,6 +6,7 @@ from gui.shared.formatters import icons
 from gui.shared.formatters import text_styles
 from gui.shared.formatters import time_formatters
 from gui.shared.formatters.currency import getBWFormatter
+from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE
 from gui.shared.money import Money, Currency
 from helpers.i18n import makeString
 __all__ = ('icons', 'text_styles', 'time_formatters')
@@ -61,6 +62,19 @@ def getMoneyVO(moneyObj):
     return tuple(((c, v) for c, v in moneyObj.iteritems()))
 
 
+def getMoneyVOWithReason(errorMsg, moneyObj):
+    """
+    Same as getMoneyVO but includes currency reason error
+    """
+    result = []
+    for c, v in moneyObj.iteritems():
+        if errorMsg == GUI_ITEM_ECONOMY_CODE.getMoneyError(c):
+            result.append(('%sError' % c, v))
+        result.append((c, v))
+
+    return tuple(result)
+
+
 def getItemPricesVO(*itemPrices):
     """
     Builds ItemPricesVO, it is a list of dicts (for each price). The dict can be in two forms:
@@ -84,5 +98,24 @@ def getItemPricesVO(*itemPrices):
              'action': getMoneyVO(action)}
             resultVO.append(vo)
         resultVO.append({'price': getMoneyVO(itemPrice.price)})
+
+    return resultVO
+
+
+def getItemPricesVOWithReason(reason, *itemPrices):
+    """
+    Same as getItemPricesVO but includes currency reason error
+    :param itemPrices: ItemPrice instances
+    :return: tuple of itemPrice VO
+    """
+    resultVO = []
+    for itemPrice in itemPrices:
+        action = itemPrice.getActionPrcAsMoney()
+        if action.isDefined():
+            vo = {'price': getMoneyVOWithReason(reason, itemPrice.price),
+             'defPrice': getMoneyVO(itemPrice.defPrice),
+             'action': getMoneyVO(action)}
+            resultVO.append(vo)
+        resultVO.append({'price': getMoneyVOWithReason(reason, itemPrice.price)})
 
     return resultVO

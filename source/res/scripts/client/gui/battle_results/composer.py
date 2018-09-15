@@ -145,12 +145,6 @@ class BootcampStatsComposer(IStatsComposer):
         return None
 
 
-class HalloweenStatsComposer(StatsComposer):
-
-    def __init__(self, reusable):
-        super(HalloweenStatsComposer, self).__init__(reusable, templates.REGULAR_COMMON_STATS_BLOCK.clone(), templates.HALLOWEEN_PERSONAL_STATS_BLOCK.clone(), templates.HALLOWEEN_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
-
-
 def createComposer(reusable):
     """Create composer to build data by type of bonus.
     :param reusable: instance of _ReusableInfo.
@@ -171,8 +165,6 @@ def createComposer(reusable):
         composer = RankedBattlesStatsComposer(reusable)
     elif bonusType == ARENA_BONUS_TYPE.BOOTCAMP:
         composer = BootcampStatsComposer(reusable)
-    elif bonusType == ARENA_BONUS_TYPE.EVENT_BATTLES_2:
-        composer = HalloweenStatsComposer(reusable)
     else:
         composer = RegularStatsComposer(reusable)
     return composer

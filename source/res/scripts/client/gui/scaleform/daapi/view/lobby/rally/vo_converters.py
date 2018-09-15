@@ -4,6 +4,8 @@ import BigWorld
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
 from constants import VEHICLE_CLASS_INDICES, VEHICLE_CLASSES, QUEUE_TYPE
 from gui import makeHtmlString
+from gui.Scaleform.settings import getBadgeIconPathByDimension
+from gui.shared.formatters.icons import makeImageTag
 from helpers import dependency
 from gui.shared.utils.functions import getArenaShortName
 from gui.Scaleform.daapi.view.lobby.cyberSport import PLAYER_GUI_STATUS, SLOT_LABEL
@@ -110,7 +112,6 @@ def makeVehicleVO(vehicle, levelsRange=None, vehicleTypes=None, isCurrentPlayer=
                 vehicleVO['state'] = makeHtmlString('html_templates:lobby', 'inPremiumIgrOnly')
             else:
                 vehicleVO['state'] = i18n.makeString('#menu:tankCarousel/vehicleStates/%s' % vState)
-        vehicleVO['isEvent'] = True if 'event_battles' in vehicle.tags else False
         if not vehicleVO['isReadyToFight']:
             vehicleVO['enabled'], vehicleVO['tooltip'] = False, makeTooltip('#tooltips:vehicleStatus/%s/header' % vState, '#tooltips:vehicleStatus/body')
         return vehicleVO
@@ -185,7 +186,9 @@ def makePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking=False):
      'isPlayerSpeaking': isPlayerSpeaking,
      'isOffline': pInfo.isOffline(),
      'igrType': pInfo.igrType,
-     'isRatingAvailable': True}
+     'isRatingAvailable': True,
+     'badge': pInfo.getBadgeID(),
+     'badgeImgStr': pInfo.getBadgeImgStr()}
 
 
 def makeSortiePlayerVO(pInfo, user, colorGetter, isPlayerSpeaking=False):

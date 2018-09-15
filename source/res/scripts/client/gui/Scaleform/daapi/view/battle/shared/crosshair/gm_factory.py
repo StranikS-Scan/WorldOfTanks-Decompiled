@@ -5,7 +5,6 @@ from AvatarInputHandler.gun_marker_ctrl import useDefaultGunMarkers
 from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID as _VIEW_ID
 from gui.Scaleform.daapi.view.battle.shared.crosshair import gm_components as _components
 from gui.Scaleform.genConsts.GUN_MARKER_VIEW_CONSTANTS import GUN_MARKER_VIEW_CONSTANTS as _CONSTANTS
-from debug_utils import LOG_DEBUG, LOG_ERROR
 
 class _GunMarkersFactories(object):
 
@@ -14,8 +13,7 @@ class _GunMarkersFactories(object):
         self.__factories = factories
 
     def create(self, markersInfo, vehicleInfo):
-        result = self._create(markersInfo, vehicleInfo, components=None)
-        return result
+        return self._create(markersInfo, vehicleInfo, components=None)
 
     def override(self, components, markersInfo, vehicleInfo):
         return self._create(markersInfo, vehicleInfo, components=components)
@@ -55,8 +53,6 @@ class _ControlMarkersFactory(_GunMarkersFactory):
         return markers
 
     def _createDefaultMarkers(self, markersInfo, components=None):
-        subGunMarkerType = GUN_MARKER_TYPE.SUB
-        subMarkerDataProvider = markersInfo.clientSubMarkerDataProvider
         if markersInfo.isServerMarkerActivated:
             dataProvider = markersInfo.serverMarkerDataProvider
             markerType = GUN_MARKER_TYPE.SERVER
@@ -64,12 +60,9 @@ class _ControlMarkersFactory(_GunMarkersFactory):
             dataProvider = markersInfo.clientMarkerDataProvider
             markerType = GUN_MARKER_TYPE.CLIENT
         else:
-            dataProvider = subMarkerDataProvider = None
-            markerType = subGunMarkerType = GUN_MARKER_TYPE.UNDEFINED
-        return (self._createArcadeMarker(markerType, dataProvider, components=components),
-         self._createSniperMarker(markerType, dataProvider, components=components),
-         self._createSubArcadeMarker(subGunMarkerType, subMarkerDataProvider, components=components, name=_CONSTANTS.ARCADE_SUB_GUN_MARKER_NAME, linkage=_CONSTANTS.SUB_GUN_MARKER_LINKAGE),
-         self._createSubSniperMarker(subGunMarkerType, subMarkerDataProvider, components=components, name=_CONSTANTS.SNIPER_SUB_GUN_MARKER_NAME, linkage=_CONSTANTS.SUB_GUN_MARKER_LINKAGE))
+            dataProvider = None
+            markerType = GUN_MARKER_TYPE.UNDEFINED
+        return (self._createArcadeMarker(markerType, dataProvider, components=components), self._createSniperMarker(markerType, dataProvider, components=components))
 
     def _createSPGMarkers(self, markersInfo, components=None):
         if markersInfo.isServerMarkerActivated:
@@ -86,31 +79,19 @@ class _ControlMarkersFactory(_GunMarkersFactory):
             markerType = GUN_MARKER_TYPE.UNDEFINED
         return (self._createArcadeMarker(markerType, dataProvider, components=components), self._createSPGMarker(markerType, spgDataProvider, components=components))
 
-    def _createArcadeMarker(self, markerType, dataProvider, components=None, name=_CONSTANTS.ARCADE_GUN_MARKER_NAME, linkage=_CONSTANTS.DEFAULT_GUN_MARKER_LINKAGE):
+    def _createArcadeMarker(self, markerType, dataProvider, components=None, name=_CONSTANTS.ARCADE_GUN_MARKER_NAME, linkage=_CONSTANTS.GUN_MARKER_LINKAGE):
         component = self._findComponent(markerType, dataProvider, components, name)
         if component is None:
             component = _components.DefaultGunMarkerComponent(markerType, _VIEW_ID.ARCADE, name, linkage, dataProvider)
         return component
 
-    def _createSubArcadeMarker(self, markerType, dataProvider, components=None, name=_CONSTANTS.ARCADE_SUB_GUN_MARKER_NAME, linkage=_CONSTANTS.DEFAULT_SUB_GUN_MARKER_LINKAGE, subGun=True, id=_CONSTANTS.SUB_GUN_MARKER_ID_FIRST):
-        component = self._findComponent(markerType, dataProvider, components, name)
-        if component is None:
-            component = _components.SubGunMarkerComponent(markerType, _VIEW_ID.ARCADE, name, linkage, dataProvider, False, subGun, id, True)
-        return component
-
-    def _createSniperMarker(self, markerType, dataProvider, components=None, name=_CONSTANTS.SNIPER_GUN_MARKER_NAME, linkage=_CONSTANTS.DEFAULT_GUN_MARKER_LINKAGE):
+    def _createSniperMarker(self, markerType, dataProvider, components=None, name=_CONSTANTS.SNIPER_GUN_MARKER_NAME, linkage=_CONSTANTS.GUN_MARKER_LINKAGE):
         component = self._findComponent(markerType, dataProvider, components, name)
         if component is None:
             component = _components.DefaultGunMarkerComponent(markerType, _VIEW_ID.SNIPER, name, linkage, dataProvider)
         return component
 
-    def _createSubSniperMarker(self, markerType, dataProvider, components=None, name=_CONSTANTS.SNIPER_SUB_GUN_MARKER_NAME, linkage=_CONSTANTS.DEFAULT_SUB_GUN_MARKER_LINKAGE, subGun=True, id=_CONSTANTS.SUB_GUN_MARKER_ID_FIRST):
-        component = self._findComponent(markerType, dataProvider, components, name)
-        if component is None:
-            component = _components.SubGunMarkerComponent(markerType, _VIEW_ID.SNIPER, name, linkage, dataProvider, False, subGun, id)
-        return component
-
-    def _createSPGMarker(self, markerType, dataProvider, components=None, name=_CONSTANTS.SPG_GUN_MARKER_NAME, linkage=_CONSTANTS.SPG_GUN_MARKER_LINKAGE):
+    def _createSPGMarker(self, markerType, dataProvider, components=None, name=_CONSTANTS.SPG_GUN_MARKER_NAME, linkage=_CONSTANTS.GUN_MARKER_SPG_LINKAGE):
         component = self._findComponent(markerType, dataProvider, components, name)
         if component is None:
             component = _components.SPGGunMarkerComponent(markerType, _VIEW_ID.STRATEGIC, name, linkage, dataProvider)
@@ -124,24 +105,22 @@ class _DevControlMarkersFactory(_ControlMarkersFactory):
     Other one it is server's gun marker (debug). Its work together to compare their job."""
 
     def _createDefaultMarkers(self, markersInfo, components=None):
-        return self._createServerDebugMarkers(markersInfo, components=components) if markersInfo.isClientMarkerActivated and markersInfo.isServerMarkerActivated else super(_DevControlMarkersFactory, self)._createDefaultMarkers(markersInfo, components=components)
+        return self._createDebugMarkers(markersInfo, components=components) if markersInfo.isClientMarkerActivated and markersInfo.isServerMarkerActivated else super(_DevControlMarkersFactory, self)._createDefaultMarkers(markersInfo, components=components)
 
     def _createSPGMarkers(self, markersInfo, components=None):
         return self._createSPGDebugMarkers(markersInfo, components=components) if markersInfo.isClientMarkerActivated and markersInfo.isServerMarkerActivated else super(_DevControlMarkersFactory, self)._createSPGMarkers(markersInfo, components=components)
 
-    def _createServerDebugMarkers(self, markersInfo, components=None):
-        return (self._createArcadeMarker(GUN_MARKER_TYPE.SERVER, markersInfo.serverMarkerDataProvider, components=components, name=_CONSTANTS.DEBUG_ARCADE_GUN_MARKER_NAME, linkage=_CONSTANTS.DEBUG_GUN_MARKER_LINKAGE),
-         self._createSniperMarker(GUN_MARKER_TYPE.SERVER, markersInfo.serverMarkerDataProvider, components=components, name=_CONSTANTS.DEBUG_SNIPER_GUN_MARKER_NAME, linkage=_CONSTANTS.DEBUG_GUN_MARKER_LINKAGE),
-         self._createArcadeMarker(GUN_MARKER_TYPE.CLIENT, markersInfo.clientMarkerDataProvider, components=components),
+    def _createDebugMarkers(self, markersInfo, components=None):
+        return (self._createArcadeMarker(GUN_MARKER_TYPE.CLIENT, markersInfo.clientMarkerDataProvider, components=components),
+         self._createArcadeMarker(GUN_MARKER_TYPE.SERVER, markersInfo.serverMarkerDataProvider, components=components, name=_CONSTANTS.DEBUG_ARCADE_GUN_MARKER_NAME, linkage=_CONSTANTS.GUN_MARKER_DEBUG_LINKAGE),
          self._createSniperMarker(GUN_MARKER_TYPE.CLIENT, markersInfo.clientMarkerDataProvider, components=components),
-         self._createSubArcadeMarker(GUN_MARKER_TYPE.SUB, markersInfo.clientSubMarkerDataProvider, components=components, name=_CONSTANTS.ARCADE_SUB_GUN_MARKER_NAME, linkage=_CONSTANTS.SUB_GUN_MARKER_LINKAGE),
-         self._createSubSniperMarker(GUN_MARKER_TYPE.SUB, markersInfo.clientSubMarkerDataProvider, components=components, name=_CONSTANTS.SNIPER_SUB_GUN_MARKER_NAME, linkage=_CONSTANTS.SUB_GUN_MARKER_LINKAGE))
+         self._createSniperMarker(GUN_MARKER_TYPE.SERVER, markersInfo.serverMarkerDataProvider, components=components, name=_CONSTANTS.DEBUG_SNIPER_GUN_MARKER_NAME, linkage=_CONSTANTS.GUN_MARKER_DEBUG_LINKAGE))
 
     def _createSPGDebugMarkers(self, markersInfo, components):
         return (self._createArcadeMarker(GUN_MARKER_TYPE.CLIENT, markersInfo.clientMarkerDataProvider, components=components),
-         self._createArcadeMarker(GUN_MARKER_TYPE.SERVER, markersInfo.serverMarkerDataProvider, components=components, name=_CONSTANTS.DEBUG_ARCADE_GUN_MARKER_NAME, linkage=_CONSTANTS.DEBUG_GUN_MARKER_LINKAGE),
+         self._createArcadeMarker(GUN_MARKER_TYPE.SERVER, markersInfo.serverMarkerDataProvider, components=components, name=_CONSTANTS.DEBUG_ARCADE_GUN_MARKER_NAME, linkage=_CONSTANTS.GUN_MARKER_DEBUG_LINKAGE),
          self._createSPGMarker(GUN_MARKER_TYPE.CLIENT, markersInfo.clientSPGMarkerDataProvider, components=components),
-         self._createSPGMarker(GUN_MARKER_TYPE.SERVER, markersInfo.serverSPGMarkerDataProvider, components=components, name=_CONSTANTS.DEBUG_SPG_GUN_MARKER_NAME, linkage=_CONSTANTS.DEBUG_SPG_GUN_MARKER_LINKAGE))
+         self._createSPGMarker(GUN_MARKER_TYPE.SERVER, markersInfo.serverSPGMarkerDataProvider, components=components, name=_CONSTANTS.DEBUG_SPG_GUN_MARKER_NAME, linkage=_CONSTANTS.GUN_MARKER_SPG_DEBUG_LINKAGE))
 
 
 class _EquipmentMarkersFactory(_GunMarkersFactory):
@@ -164,7 +143,7 @@ class _OptionalMarkersFactory(_GunMarkersFactory):
     def _createVideoMarker(self, markerType, dataProvider, components=None, name=_CONSTANTS.VIDEO_GUN_MARKER_NAME):
         component = self._findComponent(markerType, dataProvider, components, name)
         if component is None:
-            component = _components.VideoGunMarkerComponent(markerType, _VIEW_ID.UNDEFINED, name, _CONSTANTS.DEFAULT_GUN_MARKER_LINKAGE, dataProvider, isActive=True)
+            component = _components.VideoGunMarkerComponent(markerType, _VIEW_ID.UNDEFINED, name, _CONSTANTS.GUN_MARKER_LINKAGE, dataProvider, isActive=True)
         return component
 
 

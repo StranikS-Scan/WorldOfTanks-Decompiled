@@ -5,6 +5,7 @@ from constants import PREBATTLE_CACHE_KEY
 from constants import PREBATTLE_TYPE
 from gui.prb_control.prb_getters import getPrebattleAutoInvites
 from gui.prb_control.items.prb_items import PlayerPrbInfo
+from gui.prb_control.prb_helpers import BadgesHelper
 from helpers.time_utils import makeLocalServerTime
 from messenger.ext import passCensor
 
@@ -30,7 +31,7 @@ def AutoInvitesIterator():
 
 
 class PrbListItem(object):
-    __slots__ = ('prbID', 'time', 'arenaTypeID', 'creator', 'clanAbbrev', 'playersCount', 'isOpened', 'comment', 'creatorIgrType', 'creatorDbId')
+    __slots__ = ('prbID', 'time', 'arenaTypeID', 'creator', 'clanAbbrev', 'playersCount', 'isOpened', 'comment', 'creatorIgrType', 'creatorDbId', 'badges')
 
     def __init__(self, time, prbID, info):
         super(PrbListItem, self).__init__()
@@ -60,6 +61,10 @@ class PrbListItem(object):
         self.creatorDbId = 0
         if PREBATTLE_CACHE_KEY.CREATOR_DB_ID in info:
             self.creatorDbId = info[PREBATTLE_CACHE_KEY.CREATOR_DB_ID]
+        creatorBadges = []
+        if PREBATTLE_CACHE_KEY.CREATOR_BADGES in info:
+            creatorBadges = info[PREBATTLE_CACHE_KEY.CREATOR_BADGES]
+        self.badges = BadgesHelper(creatorBadges)
 
     def __repr__(self):
         return 'PrbListItem(prbID = {0:n}, arenaTypeID = {1:n}, creator = {2:>s}, playersCount = {3:n}, isOpened = {4!r:s}, time = {5:n}, creatorIgrType = {6:n}, creatorDbId = {7:n})'.format(self.prbID, self.arenaTypeID, self.getCreatorFullName(), self.playersCount, self.isOpened, self.time, self.creatorIgrType, self.creatorDbId)
@@ -73,6 +78,12 @@ class PrbListItem(object):
 
     def getCensoredComment(self):
         return passCensor(self.comment) if self.comment else ''
+
+    def getBadgeID(self):
+        return self.badges.getBadgeID()
+
+    def getBadgeImgStr(self, size=24, vspace=-6):
+        return self.badges.getBadgeImgStr(size, vspace)
 
 
 class AutoInviteItem(object):

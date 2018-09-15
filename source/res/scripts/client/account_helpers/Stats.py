@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/Stats.py
 import AccountCommands
 import items
+import cPickle
 from functools import partial
 from debug_utils import LOG_DEBUG_DEV, LOG_WARNING, LOG_ERROR
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
@@ -197,6 +198,14 @@ class Stats(object):
             self.__account._doCmdInt3(AccountCommands.CMD_ADD_XP, vehTypeCompDescr, xp, 0, proxy)
             return
 
+    def setDossierField(self, path, value, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+        else:
+            proxy = None
+        self.__account._doCmdIntStr(AccountCommands.CMD_SET_DOSSIER_FIELD, value, path, proxy)
+        return
+
     def unlockAll(self, callback):
         if self.__ignore:
             if callback is not None:
@@ -208,6 +217,59 @@ class Stats(object):
             else:
                 proxy = None
             self.__account._doCmdInt3(AccountCommands.CMD_UNLOCK_ALL, 0, 0, 0, proxy)
+            return
+
+    def setRankedInfo(self, data, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            data = cPickle.dumps(data)
+            self.__account._doCmdStr(AccountCommands.CMD_SET_RANKED_INFO, data, proxy)
+            return
+
+    def addFreeAwardLists(self, count, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdIntArr(AccountCommands.CMD_ADD_FREE_AWARD_LISTS, [count], proxy)
+            return
+
+    def drawFreeAwardLists(self, count, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdIntArr(AccountCommands.CMD_DRAW_FREE_AWARD_LISTS, [count], proxy)
+            return
+
+    def completePersinalMission(self, questID, withAdditional=False, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdIntArr(AccountCommands.CMD_COMPLETE_PERSONAL_MISSION, [questID, int(withAdditional)], proxy)
             return
 
     def __onGetResponse(self, statName, callback, resultID):

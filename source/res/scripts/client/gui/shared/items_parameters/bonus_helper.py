@@ -87,14 +87,10 @@ class _BonusSorter(object):
 
     def __opticsSorter(self, bonuses):
         if self.__paramName == 'circularVisionRadius':
-            optics = ('coatedOptics', 'optionalDevice')
             stereoscope = ('stereoscope', 'optionalDevice')
-            if stereoscope in bonuses and optics in bonuses:
-                stereoscopeIdx = bonuses.index(stereoscope)
-                opticsIdx = bonuses.index(optics)
-                if stereoscopeIdx > opticsIdx:
-                    bonuses[stereoscopeIdx] = optics
-                    bonuses[opticsIdx] = stereoscope
+            if stereoscope in bonuses:
+                bonuses.remove(stereoscope)
+                bonuses.insert(0, stereoscope)
         return bonuses
 
 

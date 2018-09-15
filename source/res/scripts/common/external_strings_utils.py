@@ -67,12 +67,23 @@ class TextRestrictionsKorea(TextRestrictionsChinese):
         self.ACCOUNT_NAME_RE = re.compile(u'^[a-zA-Z0-9_\uac00-\ud79d]+$')
 
 
+class TextRestrictionsSandbox(TextRestrictionsBasic):
+    __slots__ = TextRestrictionsBasic.__slots__
+    SANDBOX_POSTFIX_LENGTH = 5
+
+    def __init__(self):
+        super(TextRestrictionsSandbox, self).__init__()
+        self.ACCOUNT_NAME_MAX_LENGTH += self.SANDBOX_POSTFIX_LENGTH
+
+
 if CREDENTIALS_RESTRICTION_SET == CREDENTIALS_RESTRICTION.BASIC:
     textRestrictions = TextRestrictionsBasic()
 elif CREDENTIALS_RESTRICTION_SET == CREDENTIALS_RESTRICTION.CHINESE:
     textRestrictions = TextRestrictionsChinese()
 elif CREDENTIALS_RESTRICTION_SET == CREDENTIALS_RESTRICTION.KOREA:
     textRestrictions = TextRestrictionsKorea()
+elif CREDENTIALS_RESTRICTION_SET == CREDENTIALS_RESTRICTION.SANDBOX:
+    textRestrictions = TextRestrictionsSandbox()
 else:
     assert False, 'Unknown credential restrictions set'
 _ACCOUNT_NAME_RE = textRestrictions.ACCOUNT_NAME_RE

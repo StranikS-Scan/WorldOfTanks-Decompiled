@@ -14,9 +14,8 @@ import TriggersManager
 import VideoCamera
 import cameras
 import constants
-import math
 from AvatarInputHandler import mathUtils, AimingSystems, aih_global_binding, gun_marker_ctrl
-from AvatarInputHandler.aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, STRATEGIC_CAMERA
+from AvatarInputHandler.aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, STRATEGIC_CAMERA, CTRL_MODES
 from AvatarInputHandler.StrategicCamerasInterpolator import StrategicCamerasInterpolator
 from DynamicCameras import SniperCamera, StrategicCamera, ArcadeCamera, ArtyCamera
 from PostmortemDelay import PostmortemDelay
@@ -31,8 +30,6 @@ from constants import VEHICLE_SIEGE_STATE
 from gui import GUI_SETTINGS
 from gui.battle_control import avatar_getter
 _ARCADE_CAM_PIVOT_POS = Math.Vector3(0, 4, 3)
-DBL_CLICK_SHOOT_THRESHOLD = 0.2
-SECONDARY_SHOOTING_ANGLE = 90.0 * (math.pi / 180.0)
 
 class IControlMode(object):
 
@@ -60,7 +57,7 @@ class IControlMode(object):
     def setGunMarkerFlag(self, positive, bit):
         pass
 
-    def updateGunMarker(self, markerType, pos, dir, size, relaxTime, collData, index=0):
+    def updateGunMarker(self, markerType, pos, dir, size, relaxTime, collData):
         pass
 
     def resetGunMarkers(self):
@@ -121,59 +118,15 @@ class IControlMode(object):
         pass
 
 
-class _DblClickCheker(object):
-
-    def __init__(self):
-        super(_DblClickCheker, self).__init__()
-        self.__delay = 0.3
-        self.__lastClickTime = 0.0
-
-    def isDblClicked(self):
-        result = False
-        currentTime = BigWorld.time()
-        if self.__lastClickTime > 0 and currentTime - self.__lastClickTime < self.__delay:
-            result = True
-        self.__lastClickTime = currentTime
-        return result
-
-
-class _ShootModes(object):
-
-    def __init__(self):
-        super(_ShootModes, self).__init__()
-        self.__dblClickChecker = _DblClickCheker()
-        self.__player = BigWorld.player()
-        self.__gunCount = -1
-
-    def init(self):
-        ownVehicle = BigWorld.entity(self.__player.playerVehicleID)
-        self.__gunCount = len(ownVehicle.typeDescriptor.turrets)
-
-    def shootPressed(self):
-        self.__playerShoot(0)
-        if self.__gunCount > 0 and self.__dblClickChecker.isDblClicked() and self.__player.inputHandler.ctrl.areGunMarkersCloseToMain(DBL_CLICK_SHOOT_THRESHOLD):
-            for i in range(1, self.__gunCount):
-                self.__playerShoot(i)
-
-    def shootPressedForAdditionalGuns(self):
-        for i in range(1, self.__gunCount):
-            if self.__player.gunRotator.isTurretCloseToShotPoint(i, SECONDARY_SHOOTING_ANGLE):
-                self.__playerShoot(i)
-
-    def __playerShoot(self, index):
-        self.__player.shoot(False, index)
-
-
 class _GunControlMode(IControlMode):
     aimingMode = property(lambda self: self._aimingMode)
     camera = property(lambda self: self._cam)
     _aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
 
     def __init__(self, dataSection, avatarInputHandler, mode=CTRL_MODE_NAME.ARCADE, isStrategic=False):
-        self.__isStrategic = isStrategic
         self._aih = weakref.proxy(avatarInputHandler)
         self._defaultOffset = dataSection.readVector2('defaultOffset')
-        self._gunMarkers = [gun_marker_ctrl.createGunMarker(isStrategic, 0)]
+        self._gunMarker = gun_marker_ctrl.createGunMarker(isStrategic)
         self._isEnabled = False
         self._cam = None
         self._aimingMode = 0
@@ -189,51 +142,33 @@ class _GunControlMode(IControlMode):
         return []
 
     def create(self):
-        self.__initAdditionalTurretsMarkers()
-        for gunMarker in self._gunMarkers:
-            gunMarker.create()
-
+        self._gunMarker.create()
         self.disable()
 
     def enable(self, **args):
         self._isEnabled = True
         self._aimOffset = self._defaultOffset
         self._aimingMode = args.get('aimingMode', self._aimingMode)
-        for gunMarker in self._gunMarkers:
-            gunMarker.enable()
+        self._gunMarker.enable()
 
     def disable(self):
         self._isEnabled = False
         self._cam.disable()
-        for gunMarker in self._gunMarkers:
-            gunMarker.disable()
+        self._gunMarker.disable()
 
     def destroy(self):
-        for gunMarker in self._gunMarkers:
-            gunMarker.destroy()
-
+        self._gunMarker.destroy()
         self._aih = None
         self._cam.destroy()
         self._cam = None
         return
 
-    def areGunMarkersCloseToMain(self, threshold):
-        if len(self._gunMarkers) < 2:
-            return False
-        mainGunMarker = self._gunMarkers[0]
-        for gunMarker in self._gunMarkers[1:]:
-            if mainGunMarker.getPosition().distSqrTo(gunMarker.getPosition()) > threshold:
-                return False
-
-        return True
-
     def setGunMarkerFlag(self, positive, bit):
-        for gunMarker in self._gunMarkers:
-            gunMarker.setFlag(positive, bit)
+        self._gunMarker.setFlag(positive, bit)
 
-    def updateGunMarker(self, markerType, pos, dir, size, relaxTime, collData, index=0):
+    def updateGunMarker(self, markerType, pos, dir, size, relaxTime, collData):
         assert self._isEnabled
-        self._gunMarkers[index].update(markerType, pos, dir, size, relaxTime, collData)
+        self._gunMarker.update(markerType, pos, dir, size, relaxTime, collData)
 
     def setAimingMode(self, enable, mode):
         if enable:
@@ -252,21 +187,11 @@ class _GunControlMode(IControlMode):
         return self._aimingMode & mode == mode
 
     def onRecreateDevice(self):
-        for gunMarker in self._gunMarkers:
-            gunMarker.onRecreateDevice()
+        self._gunMarker.onRecreateDevice()
 
     def updateShootingStatus(self, canShot):
         assert self._isEnabled
         self._canShot = canShot
-
-    def getGunMarkerSize(self, turretIndex):
-        return self._gunMarkers[turretIndex].getSize()
-
-    def __initAdditionalTurretsMarkers(self):
-        descr = BigWorld.player().vehicleTypeDescriptor
-        turretCount = len(descr.turrets)
-        for i in range(1, turretCount):
-            self._gunMarkers.append(gun_marker_ctrl.createGunMarker(self.__isStrategic, i))
 
 
 class CameraLocationPoint(object):
@@ -287,10 +212,11 @@ class VideoCameraControlMode(_GunControlMode):
     def __init__(self, dataSection, avatarInputHandler):
         super(VideoCameraControlMode, self).__init__(dataSection, avatarInputHandler)
         self.__prevModeName = None
+        self.__previousArgs = None
         self.__isGunMarkerEnabled = False
         cameraDataSection = dataSection['camera'] if dataSection is not None else ResMgr.DataSection('camera')
         self.__showGunMarkerKey = getattr(Keys, cameraDataSection.readString('keyShowGunMarker', ''), None)
-        self._cam = VideoCamera.VideoCamera(cameraDataSection)
+        self._createCamera(cameraDataSection)
         self.__curVehicleID = None
         locationXmlPath = 'spaces/' + BigWorld.player().arena.arenaType.geometryName + '/locations.xml'
         xmlSec = ResMgr.openSection(locationXmlPath)
@@ -306,6 +232,7 @@ class VideoCameraControlMode(_GunControlMode):
 
     def enable(self, **args):
         super(VideoCameraControlMode, self).enable(**args)
+        self.__previousArgs = args
         self.__prevModeName = args.get('prevModeName')
         self._cam.enable(**args)
         self.__curVehicleID = args.get('curVehicleID')
@@ -317,7 +244,7 @@ class VideoCameraControlMode(_GunControlMode):
         return None
 
     def setForcedGuiControlMode(self, enable):
-        if not enable:
+        if enable:
             self._cam.resetMovement()
 
     def isSelfVehicle(self):
@@ -327,15 +254,13 @@ class VideoCameraControlMode(_GunControlMode):
         if self._cam.handleKeyEvent(key, isDown):
             return True
         elif BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and isDown and key == Keys.KEY_F3 and self.__prevModeName is not None:
-            self._aih.onControlModeChanged(self.__prevModeName)
+            self._aih.onControlModeChanged(self.__prevModeName, **self.__previousArgs)
             return True
         else:
             if isDown:
                 if self.__showGunMarkerKey is not None and self.__showGunMarkerKey == key:
                     self.__isGunMarkerEnabled = not self.__isGunMarkerEnabled
-                    for gunMarker in self._gunMarkers:
-                        gunMarker.setFlag(self.__isGunMarkerEnabled, GUN_MARKER_FLAG.VIDEO_MODE_ENABLED)
-
+                    self._gunMarker.setFlag(self.__isGunMarkerEnabled, GUN_MARKER_FLAG.VIDEO_MODE_ENABLED)
                     return True
             return False
 
@@ -355,8 +280,12 @@ class VideoCameraControlMode(_GunControlMode):
         self._cam.handleMouseEvent(dx, dy, dz)
         return True
 
-    def onPostmortemActivation(self):
-        self.__prevModeName = 'postmortem'
+    def onPostmortemActivation(self, eMode, **kwargs):
+        self.__prevModeName = eMode
+        self.__previousArgs = kwargs
+
+    def _createCamera(self, cameraDataSection):
+        self._cam = VideoCamera.VideoCamera(cameraDataSection)
 
 
 class DebugControlMode(IControlMode):
@@ -479,7 +408,7 @@ class CatControlMode(IControlMode):
         self.__isEnabled = True
 
     def setForcedGuiControlMode(self, enable):
-        if not enable:
+        if enable:
             self.__cam.resetMovement()
 
     def isSelfVehicle(self):
@@ -539,7 +468,6 @@ class ArcadeControlMode(_GunControlMode):
         self.__mouseVehicleRotator = _MouseVehicleRotator()
         self.__videoControlModeAvailable = dataSection.readBool('videoModeAvailable', constants.HAS_DEV_RESOURCES)
         self.__videoControlModeAvailable &= BattleReplay.g_replayCtrl.isPlaying or constants.HAS_DEV_RESOURCES
-        self.__shootModes = _ShootModes()
 
     @property
     def curVehicleID(self):
@@ -565,7 +493,6 @@ class ArcadeControlMode(_GunControlMode):
         player = BigWorld.player()
         if player.isObserver():
             player.updateObservedVehicleData()
-        self.__shootModes.init()
 
     def disable(self):
         super(ArcadeControlMode, self).disable()
@@ -585,21 +512,15 @@ class ArcadeControlMode(_GunControlMode):
         elif BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and isDown and key == Keys.KEY_F3 and self.__videoControlModeAvailable:
             self._aih.onControlModeChanged(CTRL_MODE_NAME.VIDEO, prevModeName=CTRL_MODE_NAME.ARCADE, camMatrix=self._cam.camera.matrix)
             return True
-        desc = BigWorld.player().vehicleTypeDescriptor
         isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
         isFiredLockTarget = cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and isDown
         if isFiredFreeCamera or isFiredLockTarget:
             if isFiredFreeCamera:
-                flags = AIMING_MODE.USER_DISABLED
-                if desc.isMultiTurret:
-                    flags |= AIMING_MODE.AIM_SECONDARY_ONLY
-                self.setAimingMode(isDown, flags)
+                self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
             if isFiredLockTarget:
                 BigWorld.player().autoAim(BigWorld.target())
-        if desc.isMultiTurret and cmdMap.isFired(CommandMapping.CMD_SHOOT_SECONDARY, key) and isDown:
-            self.__shootModes.shootPressedForAdditionalGuns()
         if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
-            self.__shootModes.shootPressed()
+            BigWorld.player().shoot()
             return True
         elif cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET_OFF, key) and isDown:
             BigWorld.player().autoAim(None)
@@ -657,7 +578,7 @@ class ArcadeControlMode(_GunControlMode):
             return
 
     def setForcedGuiControlMode(self, enable):
-        if not enable:
+        if enable:
             self._cam.update(0, 0, 0, False, False)
 
     def __activateAlternateMode(self, pos=None, bByScroll=False):
@@ -669,23 +590,21 @@ class ArcadeControlMode(_GunControlMode):
             equipmentID = None
             if BattleReplay.isPlaying():
                 mode = BattleReplay.g_replayCtrl.getControlMode()
-                turretIndex = 0
-                pos = BattleReplay.g_replayCtrl.getGunMarkerPos(turretIndex)
+                pos = BattleReplay.g_replayCtrl.getGunMarkerPos()
                 equipmentID = BattleReplay.g_replayCtrl.getEquipmentId()
             else:
                 mode = ArcadeControlMode.strategicControlMode
                 if pos is None:
                     pos = self.camera.aimingSystem.getDesiredShotPoint()
                     if pos is None:
-                        pos = self._gunMarkers[0].getPosition()
+                        pos = self._gunMarker.getPosition()
             self._aih.onControlModeChanged(mode, preferredPos=pos, aimingMode=self._aimingMode, saveDist=True, equipmentID=equipmentID)
             return
         elif not self._aih.isSPG:
             self._cam.update(0, 0, 0, False, False)
             if BattleReplay.isPlaying() and BigWorld.player().isGunLocked:
                 mode = BattleReplay.g_replayCtrl.getControlMode()
-                turretIndex = 0
-                desiredShotPoint = BattleReplay.g_replayCtrl.getGunMarkerPos(turretIndex)
+                desiredShotPoint = BattleReplay.g_replayCtrl.getGunMarkerPos()
                 equipmentID = BattleReplay.g_replayCtrl.getEquipmentId()
             else:
                 mode = CTRL_MODE_NAME.SNIPER
@@ -695,16 +614,6 @@ class ArcadeControlMode(_GunControlMode):
             return
         else:
             return
-
-    def getPreferredAutorotationMode(self):
-        vehicle = BigWorld.entities.get(BigWorld.player().playerVehicleID)
-        if vehicle is None:
-            return
-        else:
-            return False if vehicle.typeDescriptor.isMultiTurret else None
-
-    def enableSwitchAutorotationMode(self):
-        return self.getPreferredAutorotationMode() is not False
 
 
 class _TrajectoryControlMode(_GunControlMode):
@@ -775,7 +684,7 @@ class _TrajectoryControlMode(_GunControlMode):
             self.__interpolator.disable()
             pos = self._cam.aimingSystem.getDesiredShotPoint()
             if pos is None:
-                pos = self._gunMarkers[0].getPosition()
+                pos = self._gunMarker.getPosition()
             self._aih.onControlModeChanged(CTRL_MODE_NAME.ARCADE, preferredPos=pos, aimingMode=self._aimingMode, closesDist=False)
             return True
         if cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key):
@@ -825,8 +734,7 @@ class _TrajectoryControlMode(_GunControlMode):
         self._cam.teleport(worldPos)
 
     def resetGunMarkers(self):
-        for gunMarker in self._gunMarkers:
-            gunMarker.reset()
+        self._gunMarker.reset()
 
     def setGUIVisible(self, isVisible):
         self.__trajectoryDrawer.visible = isVisible
@@ -838,7 +746,7 @@ class _TrajectoryControlMode(_GunControlMode):
         if GUI_SETTINGS.spgAlternativeAimingCameraEnabled:
             pos = self._cam.aimingSystem.planePosition
             if pos is None:
-                pos = self._gunMarkers[0].getPosition()
+                pos = self._gunMarker.getPosition()
             source = self._cam.camera
             sourceFov = BigWorld.projection().fov
             self._aih.onControlModeChanged(self._nextControlMode, preferredPos=pos, aimingMode=self._aimingMode, saveDist=True)
@@ -864,7 +772,7 @@ class _TrajectoryControlMode(_GunControlMode):
         return
 
     def __onGunShotChanged(self):
-        shotDescr = BigWorld.player().getVehicleDescriptor().turrets[0].shot
+        shotDescr = BigWorld.player().getVehicleDescriptor().shot
         self.__trajectoryDrawer.setParams(shotDescr.maxDistance, Math.Vector3(0, -shotDescr.gravity, 0), self._aimOffset)
 
     def __initTrajectoryDrawer(self):
@@ -944,8 +852,6 @@ class SniperControlMode(_GunControlMode):
             modeDesc = SniperControlMode.BinocularsModeDesc(dataSection.readString(prefPath + '/background'), dataSection.readString(prefPath + '/distortion'), dataSection.readString(prefPath + '/rgbCube'), dataSection.readFloat(prefPath + '/greenOffset'), dataSection.readFloat(prefPath + '/blueOffset'), dataSection.readFloat(prefPath + '/aberrationRadius'), dataSection.readFloat(prefPath + '/distortionAmount'))
             self.__binocularsModes[suffix] = modeDesc
 
-        self.__shootModes = _ShootModes()
-
     def create(self):
         self._cam.create(self.onChangeControlModeByScroll)
         super(SniperControlMode, self).create()
@@ -975,13 +881,11 @@ class SniperControlMode(_GunControlMode):
             BattleReplay.g_replayCtrl.onSniperModeChanged(True)
         g_postProcessing.enable('sniper')
         desc = BigWorld.player().getVehicleDescriptor()
-        turretIndex = self._cam.aimingSystem.getTurretIndex()
-        isHorizontalStabilizerAllowed = desc.turrets[turretIndex].gun.turretYawLimits is None
+        isHorizontalStabilizerAllowed = desc.gun.turretYawLimits is None
         self._cam.aimingSystem.enableHorizontalStabilizerRuntime(isHorizontalStabilizerAllowed)
         self._cam.aimingSystem.forceFullStabilization(self.__isFullStabilizationRequired())
         if self._aih.siegeModeControl is not None:
             self._aih.siegeModeControl.onSiegeStateChanged += self.__siegeModeStateChanged
-        self.__shootModes.init()
         return
 
     def disable(self, isDestroy=False):
@@ -1008,30 +912,23 @@ class SniperControlMode(_GunControlMode):
             vehicleDescr = vehicle.typeDescriptor
             from items.vehicles import g_cache
             self.__setupBinoculars(g_cache.optionalDevices()[5] in vehicleDescr.optionalDevices)
+            isHorizontalStabilizerAllowed = vehicleDescr.gun.turretYawLimits is None
             if self._cam.aimingSystem is not None:
-                turretIndex = self._cam.aimingSystem.getTurretIndex()
-                isHorizontalStabilizerAllowed = vehicleDescr.turrets[turretIndex].gun.turretYawLimits is None
                 self._cam.aimingSystem.enableHorizontalStabilizerRuntime(isHorizontalStabilizerAllowed)
             return
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
         assert self._isEnabled
         cmdMap = CommandMapping.g_instance
-        desc = BigWorld.player().getVehicleDescriptor()
         isFiredFreeCamera = cmdMap.isFired(CommandMapping.CMD_CM_FREE_CAMERA, key)
         isFiredLockTarget = cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key) and isDown
         if isFiredFreeCamera or isFiredLockTarget:
             if isFiredFreeCamera:
-                flags = AIMING_MODE.USER_DISABLED
-                if desc.isMultiTurret:
-                    flags |= AIMING_MODE.AIM_SECONDARY_ONLY
-                self.setAimingMode(isDown, flags)
+                self.setAimingMode(isDown, AIMING_MODE.USER_DISABLED)
             if isFiredLockTarget:
                 BigWorld.player().autoAim(BigWorld.target())
-        if cmdMap.isFired(CommandMapping.CMD_SHOOT_SECONDARY, key) and isDown:
-            self.__shootModes.shootPressedForAdditionalGuns()
         if cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key) and isDown:
-            self.__shootModes.shootPressed()
+            BigWorld.player().shoot()
             return True
         elif cmdMap.isFired(CommandMapping.CMD_CM_LOCK_TARGET_OFF, key) and isDown:
             BigWorld.player().autoAim(None)
@@ -1086,10 +983,8 @@ class SniperControlMode(_GunControlMode):
             return
         else:
             desc = vehicle.typeDescriptor
-            if desc.isMultiTurret:
-                return False
             isRotationAroundCenter = desc.chassis.rotationIsAroundCenter
-            turretHasYawLimits = desc.turrets[self._cam.aimingSystem.getTurretIndex()].gun.turretYawLimits is not None
+            turretHasYawLimits = desc.gun.turretYawLimits is not None
             yawHullAimingAvailable = desc.isYawHullAimingAvailable
             return yawHullAimingAvailable or isRotationAroundCenter and not turretHasYawLimits
 
@@ -1108,7 +1003,7 @@ class SniperControlMode(_GunControlMode):
         self._cam.enable(preferredPos, True)
 
     def setForcedGuiControlMode(self, enable):
-        if not enable:
+        if enable:
             self._cam.update(0, 0, 0, False)
 
     def __setupBinoculars(self, isCoatedOptics):
@@ -1129,7 +1024,6 @@ class SniperControlMode(_GunControlMode):
 
 class PostMortemControlMode(IControlMode):
     _POSTMORTEM_DELAY_ENABLED = True
-    camera = property(lambda self: self.__cam)
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     __aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
 
@@ -1160,6 +1054,8 @@ class PostMortemControlMode(IControlMode):
         self.__postmortemDelay = None
         self.__isObserverMode = False
         self.__videoControlModeAvailable = dataSection.readBool('videoModeAvailable', constants.HAS_DEV_RESOURCES)
+        self._targetCtrlModeAfterDelay = None
+        self.__altTargetMode = None
         return
 
     def prerequisites(self):
@@ -1197,16 +1093,34 @@ class PostMortemControlMode(IControlMode):
                     self.__fakeSwitchToVehicle(vehicleID)
                 return
             if PostMortemControlMode.getIsPostmortemDelayEnabled() and bool(args.get('bPostmortemDelay')):
-                self.__postmortemDelay = PostmortemDelay(self.__cam, self.__aih.onPostmortemKillerVision, self.__onPostmortemDelayStop)
+                self.__postmortemDelay = PostmortemDelay(self.__cam, self._onPostmortemDelayStart, self._onPostmortemDelayStop)
                 self.__postmortemDelay.start()
             else:
                 self.__switchToVehicle(None)
         g_postProcessing.enable('postmortem')
+        arena = BigWorld.player().arena
+        if arena is not None:
+            arena.onVehicleKilled += self.__onArenaVehicleKilled
+        if bool(args.get('respawn', False)):
+            respawnCtrl = self.guiSessionProvider.dynamic.respawn
+            assert respawnCtrl is not None, 'When using respawn, the respawn controller must exist'
+            self._targetCtrlModeAfterDelay = None if respawnCtrl.respawnInfo is None else CTRL_MODE_NAME.RESPAWN_DEATH
+            respawnCtrl.onRespawnInfoUpdated += self.__onRespawnInfoUpdated
+            if respawnCtrl.respawnInfo is not None:
+                self.__onRespawnInfoUpdated(respawnCtrl.respawnInfo)
         return
 
     def disable(self):
+        ctrl = self.guiSessionProvider.dynamic.respawn
+        if ctrl is not None:
+            ctrl.onRespawnInfoUpdated -= self.__onRespawnInfoUpdated
+        self._targetCtrlModeAfterDelay = None
+        self.__altTargetMode = None
+        arena = BigWorld.player().arena
+        if arena is not None:
+            arena.onVehicleKilled -= self.__onArenaVehicleKilled
         BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged -= self.__onMatrixBound
-        self.__destroyPostmortemDelay()
+        self._destroyPostmortemDelay()
         self.__isEnabled = False
         self.__disconnectFromArena()
         self.__cam.disable()
@@ -1275,16 +1189,47 @@ class PostMortemControlMode(IControlMode):
     def setGUIVisible(self, isVisible):
         pass
 
-    def __destroyPostmortemDelay(self):
+    def _switchToCtrlMode(self, targetMode):
+        if self.curPostmortemDelay is not None or targetMode is None:
+            return
+        else:
+            self.selectPlayer(None)
+            BigWorld.player().inputHandler.onControlModeChanged(targetMode, prevModeName=CTRL_MODE_NAME.POSTMORTEM, camMatrix=Math.Matrix(self.camera.camera.invViewMatrix), curVehicleID=self.__curVehicleID)
+            return
+
+    def _destroyPostmortemDelay(self):
         if self.__postmortemDelay is not None:
             self.__postmortemDelay.destroy()
             self.__postmortemDelay = None
         return
 
-    def __onPostmortemDelayStop(self):
+    def _onPostmortemDelayStart(self, killerVehicleID):
+        self.__aih.onPostmortemKillerVisionEnter(killerVehicleID)
+
+    def _onPostmortemDelayStop(self):
         self.__cam.vehicleMProv = BigWorld.player().consistentMatrices.attachedVehicleMatrix
-        self.__destroyPostmortemDelay()
-        self.__switchToVehicle(None)
+        self.__aih.onPostmortemKillerVisionExit()
+        self._destroyPostmortemDelay()
+        if self._targetCtrlModeAfterDelay is None:
+            self._switchToCtrlMode(self.altTargetMode)
+        else:
+            self._switchToCtrlMode(self._targetCtrlModeAfterDelay)
+        return
+
+    def __onArenaVehicleKilled(self, targetID, attackerID, equipmentID, reason):
+        if self.curPostmortemDelay is not None or self.__altTargetMode is None:
+            return
+        else:
+            if targetID == self.__curVehicleID:
+                LOG_DEBUG('target vehicle killed, switch to alternative mode')
+                self._switchToCtrlMode(self.__altTargetMode)
+            return
+
+    def __onRespawnInfoUpdated(self, respawnInfo):
+        if respawnInfo is not None:
+            self._targetCtrlModeAfterDelay = CTRL_MODE_NAME.RESPAWN_DEATH
+        if self.curPostmortemDelay is None:
+            self._switchToCtrlMode(self._targetCtrlModeAfterDelay)
         return
 
     def __fakeSwitchToVehicle(self, vehicleID):
@@ -1391,7 +1336,8 @@ class PostMortemControlMode(IControlMode):
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording:
                 replayCtrl.setPlayerVehicleID(self.__curVehicleID)
-            self.__cam.vehicleMProv = BigWorld.player().consistentMatrices.attachedVehicleMatrix
+            if self.__cam.vehicleMProv is not BigWorld.player().consistentMatrices.attachedVehicleMatrix:
+                self.__cam.vehicleMProv = BigWorld.player().consistentMatrices.attachedVehicleMatrix
             self.__aih.onCameraChanged(CTRL_MODE_NAME.POSTMORTEM, self.__curVehicleID)
             return
 
@@ -1401,6 +1347,28 @@ class PostMortemControlMode(IControlMode):
     @property
     def curVehicleID(self):
         return self.__curVehicleID
+
+    @property
+    def curPostmortemDelay(self):
+        return self.__postmortemDelay
+
+    @property
+    def camera(self):
+        return self.__cam
+
+    @property
+    def isEnabled(self):
+        return self.__isEnabled
+
+    @property
+    def altTargetMode(self):
+        return self.__altTargetMode
+
+    @altTargetMode.setter
+    def altTargetMode(self, mode):
+        assert mode in CTRL_MODES or mode is None, 'Invalid control mode set as alternative target control mode.'
+        self.__altTargetMode = mode
+        return
 
 
 class _ShellingControl():
@@ -1556,9 +1524,8 @@ class _PlayerGunInformation(object):
     def getCurrentShotInfo():
         player = BigWorld.player()
         gunRotator = player.gunRotator
-        turretIndex = 0
-        shotDesc = player.getVehicleDescriptor().turrets[turretIndex].shot
-        gunMat = AimingSystems.getPlayerGunMat(gunRotator.turretYaw, gunRotator.gunPitch, turretIndex)
+        shotDesc = player.getVehicleDescriptor().shot
+        gunMat = AimingSystems.getPlayerGunMat(gunRotator.turretYaw, gunRotator.gunPitch)
         position = gunMat.translation
         velocity = gunMat.applyVector(Math.Vector3(0, 0, shotDesc.speed))
         return (position, velocity, Math.Vector3(0, -shotDesc.gravity, 0))

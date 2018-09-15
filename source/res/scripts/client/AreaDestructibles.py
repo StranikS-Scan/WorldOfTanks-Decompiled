@@ -349,6 +349,7 @@ class DestructiblesManager():
         if rewind:
             self.__savedLoadedChunkIDs = self.__loadedChunkIDs
             self.__savedSpaceID = self.__spaceID
+            BigWorld.wg_restoreDestructibles(self.__spaceID)
             for (chunkID, destrIndex), m in self.__destrInitialMatrices.iteritems():
                 BigWorld.wg_setDestructibleMatrix(self.__spaceID, chunkID, destrIndex, m, 1.0)
 

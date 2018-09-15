@@ -92,11 +92,6 @@ class CommonInfo(shared.UnpackedInfo):
         """There was more than two team in the battle."""
         return self.__arenaVisitor.gui.isFalloutMultiTeam()
 
-    @property
-    def hasResourcePoints(self):
-        """Has arena resource points."""
-        return self.__arenaVisitor.bonus.hasResourcePoints()
-
     def isSquadSupported(self):
         """Can some squad take part in the specified battle?"""
         return self.__arenaVisitor.bonus.isSquadSupported()

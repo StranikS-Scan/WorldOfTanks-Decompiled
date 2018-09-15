@@ -42,8 +42,6 @@ class IntSettingsRequester(object):
      'ONCE_ONLY_HINTS': 70,
      'CAROUSEL_FILTER_1': 73,
      'CAROUSEL_FILTER_2': 74,
-     'FALLOUT_CAROUSEL_FILTER_1': 75,
-     'FALLOUT_CAROUSEL_FILTER_2': 76,
      'ENCYCLOPEDIA_RECOMMENDATIONS_1': 77,
      'ENCYCLOPEDIA_RECOMMENDATIONS_2': 78,
      'ENCYCLOPEDIA_RECOMMENDATIONS_3': 79,
@@ -56,32 +54,6 @@ class IntSettingsRequester(object):
 
     def __init__(self):
         self.__cache = dict()
-
-    def _response(self, resID, value, callback):
-        """
-        Common server response method. Must be called ANYWAY after
-        server operation will complete.
-        
-        @param resID: request result id
-        @param value: requested value
-        @param callback: function to be called after operation will complete
-        """
-        if resID < 0:
-            LOG_ERROR('[class %s] There is error while getting data from cache: %s[%d]' % (self.__class__.__name__, code2str(resID), resID))
-            return callback(dict())
-        callback(value)
-
-    @async
-    def _requestCache(self, callback=None):
-        """
-        Request data from server
-        """
-        player = BigWorld.player()
-        if player is not None and player.intUserSettings is not None:
-            player.intUserSettings.getCache(lambda resID, value: self._response(resID, value, callback))
-        else:
-            LOG_WARNING('Player or intUserSettings is not defined', player, player.intUserSettings if player is not None else None)
-        return
 
     @async
     @process
@@ -115,9 +87,45 @@ class IntSettingsRequester(object):
     def getSetting(self, key, defaultValue=None):
         return self.getCacheValue(self.__SETTINGS[key], defaultValue)
 
+    @process
+    def delSettings(self, settings):
+        yield self._delIntSettings(settings)
+
+    def _response(self, resID, value, callback):
+        """
+        Common server response method. Must be called ANYWAY after
+        server operation will complete.
+        
+        @param resID: request result id
+        @param value: requested value
+        @param callback: function to be called after operation will complete
+        """
+        if resID < 0:
+            LOG_ERROR('[class %s] There is error while getting data from cache: %s[%d]' % (self.__class__.__name__, code2str(resID), resID))
+            return callback(dict())
+        callback(value)
+
+    @async
+    def _requestCache(self, callback=None):
+        """
+        Request data from server
+        """
+        player = BigWorld.player()
+        if player is not None and player.intUserSettings is not None:
+            player.intUserSettings.getCache(lambda resID, value: self._response(resID, value, callback))
+        else:
+            LOG_WARNING('Player or intUserSettings is not defined', player, player.intUserSettings if player is not None else None)
+        return
+
     @async
     def _addIntSettings(self, settings, callback=None):
         import BattleReplay
         if not BattleReplay.g_replayCtrl.isPlaying:
             self.__cache.update(settings)
             BigWorld.player().intUserSettings.addIntSettings(settings, callback)
+
+    @async
+    def _delIntSettings(self, settings, callback=None):
+        import BattleReplay
+        if not BattleReplay.g_replayCtrl.isPlaying:
+            BigWorld.player().intUserSettings.delIntSettings(settings, callback)

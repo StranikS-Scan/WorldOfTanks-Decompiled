@@ -97,7 +97,6 @@ class _HangarSpace(object):
         self.onObjectSelected = Event.Event()
         self.onObjectUnselected = Event.Event()
         self.onObjectClicked = Event.Event()
-        self.onRequestOpenWindowsUpdate = Event.Event()
         return
 
     @property
@@ -190,6 +189,10 @@ class _HangarSpace(object):
             Waiting.hide('loadHangarSpaceVehicle')
             self.__lastUpdatedVehicle = None
         return
+
+    def setVehicleSelectable(self, flag):
+        """See comment in HangarVehicle."""
+        self.__space.setVehicleSelectable(flag)
 
     def onPremiumChanged(self, isPremium, attrs, premiumExpiryTime):
         self.refreshSpace(isPremium)

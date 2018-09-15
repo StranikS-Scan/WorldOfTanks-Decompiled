@@ -125,8 +125,8 @@ class WebCommand(_WebCommand, SchemeValidator):
         super(WebCommand, self).__init__(_WebCommandScheme)
 
 
-_CommandHandler = namedtuple('_CommandHandler', 'name, cls, handler')
-_CommandHandler.__new__.__defaults__ = (None, None, None)
+_CommandHandler = namedtuple('_CommandHandler', 'name, cls, handler, finiHandler')
+_CommandHandler.__new__.__defaults__ = (None, None, None, None)
 _CommandHandlerScheme = {'required': (('name', basestring), ('cls', type), ('handler', (MethodType, FunctionType, partial)))}
 
 class CommandHandler(_CommandHandler, SchemeValidator):

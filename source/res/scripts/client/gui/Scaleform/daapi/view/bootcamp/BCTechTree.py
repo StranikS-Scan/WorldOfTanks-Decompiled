@@ -31,7 +31,6 @@ class BCTechTree(TechTree):
         dataNodes = data.get('nodes', None)
         if dataNodes is not None:
             for node in dataNodes:
-                node['state'] = NODE_STATE.removeIfHas(node['state'], NODE_STATE_FLAGS.ELITE)
                 if 'vehCompareTreeNodeData' in node:
                     node['vehCompareTreeNodeData']['modeAvailable'] = False
                 nodeState = node['state']

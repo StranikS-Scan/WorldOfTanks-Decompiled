@@ -365,6 +365,10 @@ def _migrateTo36(core, data, initialized):
     data['gameplayData'][GAME.GAMEPLAY_MASK] = newnewMask
 
 
+def _migrateTo37(core, data, initialized):
+    data['delete'].extend((75, 76))
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -504,6 +508,10 @@ _versions = ((1,
  (36,
   _migrateTo36,
   True,
+  False),
+ (37,
+  _migrateTo37,
+  False,
   False))
 
 @async

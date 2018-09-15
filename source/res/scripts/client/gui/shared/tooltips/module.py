@@ -24,12 +24,14 @@ from helpers.i18n import makeString as _ms
 from items import VEHICLE_COMPONENT_TYPE_NAMES, ITEM_TYPES
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared.gui_items import IGuiItemsFactory
 _TOOLTIP_MIN_WIDTH = 420
 _TOOLTIP_MAX_WIDTH = 480
 _AUTOCANNON_SHOT_DISTANCE = 400
 
 class ModuleBlockTooltipData(BlocksTooltipData):
     itemsCache = dependency.descriptor(IItemsCache)
+    itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
     def __init__(self, context):
         super(ModuleBlockTooltipData, self).__init__(context, TOOLTIP_TYPE.MODULE)
@@ -73,13 +75,21 @@ class ModuleBlockTooltipData(BlocksTooltipData):
             else:
                 comparator = params_helper.itemOnVehicleComparator(statsConfig.vehicle, module)
             stockParams = params_helper.getParameters(self.itemsCache.items.getStockVehicle(statsConfig.vehicle.intCD))
-            if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not module.hasSimilarDevicesInstalled(statsConfig.vehicle) or module.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
+            currentOptDev = None
+            if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
+                if statsConfig.vehicle.descriptor.optionalDevices[statsConfig.slotIdx] is not None:
+                    compactDescr = statsConfig.vehicle.descriptor.optionalDevices[statsConfig.slotIdx].compactDescr
+                    currentOptDev = self.itemsFactory.createOptionalDevice(compactDescr)
+            if currentOptDev is not None and not module.isSimilarDevice(currentOptDev) or currentOptDev is None and module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE or module.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
                 simplifiedBlock = SimplifiedStatsBlockConstructor(module, paramsConfig, leftPadding, rightPadding, stockParams, comparator).construct()
                 if simplifiedBlock:
                     effectsItems.append(formatters.packBuildUpBlockData(simplifiedBlock, gap=-4, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-3, bottom=1)))
             if statsConfig.vehicle.optDevices[statsConfig.slotIdx]:
                 if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
-                    comparator = params_helper.artifactRemovedComparator(statsConfig.vehicle, module, statsConfig.slotIdx)
+                    if currentOptDev is not None and module.isSimilarDevice(currentOptDev):
+                        comparator = params_helper.artifactComparator(statsConfig.vehicle, module, statsConfig.slotIdx, False)
+                    else:
+                        comparator = params_helper.artifactRemovedComparator(statsConfig.vehicle, self.item, statsConfig.slotIdx)
                 simplifiedBlock = SimplifiedStatsBlockConstructor(module, paramsConfig, leftPadding, rightPadding, stockParams, comparator).construct()
                 if simplifiedBlock:
                     replaceBlock = ModuleReplaceBlockConstructor(module, statsConfig, valueWidth, leftPadding).construct()
@@ -96,13 +106,7 @@ class ModuleBlockTooltipData(BlocksTooltipData):
             items.append(formatters.packBuildUpBlockData(priceBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-1, bottom=-3), gap=textGap))
         statsModules = GUI_ITEM_TYPE.VEHICLE_MODULES + (GUI_ITEM_TYPE.OPTIONALDEVICE,)
         if module.itemTypeID in statsModules:
-            positionIndex = 0
-            if statsConfig.vehicle is not None and statsConfig.vehicle.isMultiTurret:
-                if module.itemTypeID == GUI_ITEM_TYPE.TURRET and statsConfig.vehicle.turret.intCD is not module.intCD:
-                    positionIndex = 1
-                elif module.itemTypeID == GUI_ITEM_TYPE.GUN and statsConfig.vehicle.gun.intCD is not module.intCD:
-                    positionIndex = 1
-            commonStatsBlock = CommonStatsBlockConstructor(module, paramsConfig, statsConfig.slotIdx, valueWidth, leftPadding, rightPadding, params_formatters.BASE_SCHEME).construct(positionIndex)
+            commonStatsBlock = CommonStatsBlockConstructor(module, paramsConfig, statsConfig.slotIdx, valueWidth, leftPadding, rightPadding, params_formatters.BASE_SCHEME).construct()
             if commonStatsBlock:
                 items.append(formatters.packBuildUpBlockData(commonStatsBlock, padding=blockPadding, gap=textGap))
         statusBlock = StatusBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
@@ -113,62 +117,6 @@ class ModuleBlockTooltipData(BlocksTooltipData):
         if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and statsConfig.vehicle is not None and not module.isInstalled(statsConfig.vehicle) and module.hasSimilarDevicesInstalled(statsConfig.vehicle):
             items.append(formatters.packBuildUpBlockData(SimilarOptionalDeviceBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct(), gap=-4, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding, bottom=2), stretchBg=False))
         return items
-
-
-class ModuleBlockTooltipData_MultiTurret(BlocksTooltipData):
-    itemsCache = dependency.descriptor(IItemsCache)
-
-    def __init__(self, context):
-        super(ModuleBlockTooltipData_MultiTurret, self).__init__(context, TOOLTIP_TYPE.MODULE)
-        self._setContentMargin(top=0, left=0, bottom=20, right=20)
-        self._setMargins(10, 15)
-        self._setWidth(_TOOLTIP_MIN_WIDTH)
-
-    def _getHighLightType(self):
-        return SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
-
-    def _packBlocks(self, *args, **kwargs):
-        items = self.context.buildItemMultiTurret(*args, **kwargs)
-        tooltipContent = []
-        for index, item in enumerate(items):
-            module = item
-            statsConfig = self.context.getStatsConfiguration(module)
-            paramsConfig = self.context.getParamsConfiguration(module)
-            statusConfig = self.context.getStatusConfiguration(module, index)
-            leftPadding = 20
-            rightPadding = 20
-            topPadding = 20
-            blockTopPadding = -4
-            blockPadding = formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding)
-            textGap = -2
-            valueWidth = 110
-            gunTurretTypeBlock = GunTurretTypeBlockConstructor(module, statsConfig, leftPadding, rightPadding).construct(index)
-            headerBlock = HeaderBlockConstructor(module, statsConfig, leftPadding, rightPadding).construct()
-            headerTop = topPadding
-            if gunTurretTypeBlock:
-                tooltipContent.append(formatters.packBuildUpBlockData(gunTurretTypeBlock, gap=-4, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=abs(index - 1) * 14, bottom=0)))
-                headerTop = 0
-            tooltipContent.append(formatters.packBuildUpBlockData(headerBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=headerTop)))
-            replaceItems = []
-            if statsConfig.vehicle is not None and not module.isInstalled(statsConfig.vehicle):
-                comparator = params_helper.itemOnVehicleComparator(statsConfig.vehicle, module, index)
-                stockParams = params_helper.getParameters(self.itemsCache.items.getStockVehicle(statsConfig.vehicle.intCD))
-                if statsConfig.vehicle.optDevices[statsConfig.slotIdx]:
-                    simplifiedBlock = SimplifiedStatsBlockConstructor(module, paramsConfig, leftPadding, rightPadding, stockParams, comparator).construct()
-                    if simplifiedBlock:
-                        replaceBlock = ModuleReplaceBlockConstructor(module, statsConfig, valueWidth, leftPadding).construct()
-                        if replaceBlock:
-                            replaceItems.append(formatters.packBuildUpBlockData(replaceBlock))
-                        replaceItems.append(formatters.packBuildUpBlockData(simplifiedBlock, gap=-4, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=2, bottom=1)))
-            if replaceItems:
-                tooltipContent.append(formatters.packBuildUpBlockData(replaceItems, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=blockPadding, stretchBg=True))
-            statsModules = GUI_ITEM_TYPE.VEHICLE_MODULES + (GUI_ITEM_TYPE.OPTIONALDEVICE,)
-            if module.itemTypeID in statsModules:
-                commonStatsBlock = CommonStatsBlockConstructor(module, paramsConfig, statsConfig.slotIdx, valueWidth, leftPadding, rightPadding, params_formatters.BASE_SCHEME).construct(index, showSpecsText=False)
-                if commonStatsBlock:
-                    tooltipContent.append(formatters.packBuildUpBlockData(commonStatsBlock, padding=blockPadding, gap=textGap))
-
-        return tooltipContent
 
 
 class VehCompareModuleBlockTooltipData(BlocksTooltipData):
@@ -238,12 +186,6 @@ class ModuleTooltipBlockConstructor(object):
                              'maxShotDistance',
                              AIMING_TIME_PROP_NAME,
                              'weight')}
-    MODULE_PARAMS_MULTITURRET = {GUI_ITEM_TYPE.TURRET: ('armor', 'rotationSpeed', 'circularVisionRadius'),
-     GUI_ITEM_TYPE.GUN: ('avgDamageList', 'avgPiercingPower', RELOAD_TIME_PROP_NAME),
-     CLIP_GUN_MODULE_PARAM: (SHELLS_COUNT_PROP_NAME,
-                             'avgDamageList',
-                             'avgPiercingPower',
-                             RELOAD_TIME_PROP_NAME)}
     EXTRA_MODULE_PARAMS = {CLIP_GUN_MODULE_PARAM: (SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME)}
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -423,7 +365,7 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
         self._slotIdx = slotIdx
         self.__colorScheme = colorScheme or params_formatters.COLORLESS_SCHEME
 
-    def construct(self, positionIndex=0, showSpecsText=True):
+    def construct(self):
         module = self.module
         vehicle = self.configuration.vehicle
         params = self.configuration.params
@@ -437,15 +379,12 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                 reloadingType = module.getReloadingType(vehicle.descriptor if vehicle is not None else None)
             if reloadingType == GUN_CLIP:
                 paramsKeyName = self.CLIP_GUN_MODULE_PARAM
-            if vehicle is not None and vehicle.isMultiTurret:
-                paramsList = self.MODULE_PARAMS_MULTITURRET.get(paramsKeyName, [])
-            else:
-                paramsList = self.MODULE_PARAMS.get(paramsKeyName, [])
+            paramsList = self.MODULE_PARAMS.get(paramsKeyName, [])
             if vehicle is not None:
                 if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
                     currModule = module
                 else:
-                    currModuleDescr, _ = vehicle.descriptor.getComponentsByType(module.itemTypeName, positionIndex)
+                    currModuleDescr, _ = vehicle.descriptor.getComponentsByType(module.itemTypeName)
                     currModule = self.itemsCache.items.getItemByCD(currModuleDescr.compactDescr)
                 comparator = params_helper.itemsComparator(module, currModule, vehicle.descriptor)
                 for paramName in paramsList:
@@ -461,7 +400,7 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                     if paramName in paramsList and paramValue is not None:
                         block.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName(paramName), value=paramValue, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5)))
 
-        if block and showSpecsText:
+        if block:
             block.insert(0, formatters.packTextBlockData(text_styles.middleTitle(_ms(TOOLTIPS.TANKCARUSEL_MAINPROPERTY)), padding=formatters.packPadding(bottom=8)))
         return block
 
@@ -475,26 +414,6 @@ class ModuleReplaceBlockConstructor(ModuleTooltipBlockConstructor):
         if optionalDevice is not None:
             replaceModuleText = text_styles.main(TOOLTIPS.MODULEFITS_REPLACE)
             block.append(formatters.packImageTextBlockData(title=replaceModuleText.format(moduleName=optionalDevice.userName)))
-        return block
-
-
-class GunTurretTypeBlockConstructor(ModuleTooltipBlockConstructor):
-
-    def construct(self, position=0):
-        block = []
-        text = None
-        if self.module.itemTypeID == GUI_ITEM_TYPE.GUN:
-            if position is 0:
-                text = text_styles.main(TOOLTIPS.MODULEFITS_CANNON_PRIMARY)
-            else:
-                text = text_styles.main(TOOLTIPS.MODULEFITS_CANNON_SECONDARY)
-        elif self.module.itemTypeID == GUI_ITEM_TYPE.TURRET:
-            if position is 0:
-                text = text_styles.main(TOOLTIPS.MODULEFITS_TURRET_PRIMARY)
-            else:
-                text = text_styles.main(TOOLTIPS.MODULEFITS_TURRET_SECONDARY)
-        if text is not None:
-            block.append(formatters.packImageTextBlockData(title=text))
         return block
 
 
@@ -574,12 +493,12 @@ class EffectsBlockConstructor(ModuleTooltipBlockConstructor):
 
 class StatusBlockConstructor(ModuleTooltipBlockConstructor):
 
-    def construct(self, position=0):
+    def construct(self):
         if self.configuration.isResearchPage:
             return self._getResearchPageStatus()
-        return [] if self.configuration.isAwardWindow else self._getStatus(position)
+        return [] if self.configuration.isAwardWindow else self._getStatus()
 
-    def _getStatus(self, position=0):
+    def _getStatus(self):
         block = []
         module = self.module
         configuration = self.configuration
@@ -605,13 +524,7 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
                             cachedEqs[i] = eq
 
                     vehicle.equipment.setRegularConsumables(cachedEqs)
-            if module.itemTypeID == GUI_ITEM_TYPE.TURRET:
-                if vehicle.descriptor.turrets[position].gun is not None:
-                    isFit, reason = module.mayInstall(vehicle, slotIdx, vehicle.descriptor.turrets[position].gun.compactDescr, position)
-                else:
-                    isFit, reason = module.mayInstall(vehicle, slotIdx, 0, position)
-            else:
-                isFit, reason = module.mayInstall(vehicle, slotIdx, position)
+            isFit, reason = module.mayInstall(vehicle, slotIdx)
             vehicle.equipment.setRegularConsumables(currentVehicleEqs)
         inventoryVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).itervalues()
         totalInstalledVehicles = map(lambda x: x.shortUserName, module.getInstalledVehicles(inventoryVehicles))
@@ -638,8 +551,7 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
                 hiddenVehicleCount = len(totalInstalledVehicles) - self.MAX_INSTALLED_LIST_LEN
                 hiddenTxt = '%s %s' % (text_styles.main(TOOLTIPS.SUITABLEVEHICLE_HIDDENVEHICLECOUNT), text_styles.stats(hiddenVehicleCount))
                 tooltipText = '%s\n%s' % (tooltipText, hiddenTxt)
-            if not (vehicle.isMultiTurret and position is 0 and (module.itemTypeID == GUI_ITEM_TYPE.TURRET or module.itemTypeID == GUI_ITEM_TYPE.GUN)):
-                block.append(self._packStatusBlock(tooltipHeader, tooltipText, titleFormatter))
+            block.append(self._packStatusBlock(tooltipHeader, tooltipText, titleFormatter))
         if checkBuying:
             isFit, reason = module.mayPurchase(self.itemsCache.items.stats.money)
             if not isFit:

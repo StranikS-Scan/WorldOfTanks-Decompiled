@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/BadgesPage.py
+from collections import defaultdict
 import BigWorld
+import operator
 from gui import SystemMessages
 from gui.Scaleform import settings
 from gui.Scaleform.daapi.view.meta.BadgesPageMeta import BadgesPageMeta
@@ -59,12 +61,12 @@ class BadgesPage(BadgesPageMeta):
     def __updateBadges(self):
         receivedBadgesData = []
         notReceivedBadgesData = []
-        for badge in sorted(self.itemsCache.items.getBadges().itervalues()):
+        for badge in self.__preprocessBadges():
+            if badge.isSelected:
+                self.as_setSelectedBadgeImgS(badge.getSmallIcon())
             badgeVO = _makeBadgeVO(badge)
             if badge.isAchieved:
                 receivedBadgesData.append(badgeVO)
-                if badgeVO['selected']:
-                    self.as_setSelectedBadgeImgS(settings.getBadgeIconPath(settings.BADGES_ICONS.X48, badgeVO['id']))
             notReceivedBadgesData.append(badgeVO)
 
         self.as_setReceivedBadgesS({'badgesData': receivedBadgesData})
@@ -76,3 +78,24 @@ class BadgesPage(BadgesPageMeta):
         result = yield BadgesSelector(badges).request()
         if result and result.userMsg:
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+
+    def __preprocessBadges(self):
+        result = []
+        cache = defaultdict(list)
+        for badge in self.itemsCache.items.getBadges().itervalues():
+            if not badge.isSelected:
+                if badge.isObsolete() and not badge.isAchieved:
+                    continue
+                if badge.isCollapsible():
+                    cache[badge.group].append(badge)
+                    continue
+            result.append(badge)
+
+        for badges in cache.itervalues():
+            byClass = sorted(badges, key=operator.methodcaller('getBadgeClass'), reverse=True)
+            for badge in byClass:
+                result.append(badge)
+                if badge.isAchieved:
+                    break
+
+        return sorted(result)

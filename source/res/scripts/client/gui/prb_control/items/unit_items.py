@@ -8,6 +8,7 @@ from account_helpers import getAccountDatabaseID
 from constants import MAX_VEHICLE_LEVEL, MIN_VEHICLE_LEVEL
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
+from gui.prb_control.prb_helpers import BadgesHelper
 from helpers import dependency
 from gui.prb_control.settings import CREATOR_SLOT_INDEX
 from gui.shared.utils.decorators import ReprInjector
@@ -16,11 +17,11 @@ from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
 class PlayerUnitInfo(object):
-    __slots__ = ('dbID', 'unitMgrID', 'unit', 'name', 'rating', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType')
+    __slots__ = ('dbID', 'unitMgrID', 'unit', 'name', 'rating', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType', 'badges')
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, dbID, unitMgrID, unit, nickName='', rating=0, role=0, accountID=0, vehDict=None, isReady=False, isInSlot=False, slotIdx=-1, clanAbbrev=None, timeJoin=0, igrType=0, clanDBID=None, **kwargs):
+    def __init__(self, dbID, unitMgrID, unit, nickName='', rating=0, role=0, accountID=0, vehDict=None, isReady=False, isInSlot=False, slotIdx=-1, clanAbbrev=None, timeJoin=0, igrType=0, clanDBID=None, badges=[], **kwargs):
         self.dbID = dbID
         self.unitMgrID = unitMgrID
         if unit is not None:
@@ -39,6 +40,7 @@ class PlayerUnitInfo(object):
         self.clanAbbrev = clanAbbrev
         self.timeJoin = timeJoin
         self.igrType = igrType
+        self.badges = BadgesHelper(badges)
         return
 
     def __repr__(self):
@@ -125,6 +127,12 @@ class PlayerUnitInfo(object):
             result[slot] = list(itertools.ifilter(lambda v, s=slot: s in matches[v], matches.iterkeys()))
 
         return result
+
+    def getBadgeID(self):
+        return self.badges.getBadgeID()
+
+    def getBadgeImgStr(self, size=24, vspace=-7):
+        return self.badges.getBadgeImgStr(size, vspace)
 
 
 class VehicleInfo(object):

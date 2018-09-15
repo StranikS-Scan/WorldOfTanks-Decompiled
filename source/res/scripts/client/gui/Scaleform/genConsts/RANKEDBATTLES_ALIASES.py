@@ -8,6 +8,7 @@ Please, don't edit this file manually.
 class RANKEDBATTLES_ALIASES(object):
     RANKED_BATTLES_VIEW_ALIAS = 'rankedBattlesViewAlias'
     RANKED_BATTLES_WELCOME_VIEW_ALIAS = 'rankedBattlesWelcomeView'
+    RANKED_BATTLES_UNREACHABLE_VIEW_ALIAS = 'rankedBattlesUnreachableView'
     RANKED_BATTLES_CYCLES_VIEW_ALIAS = 'rankedBattlesCyclesView'
     RANKED_BATTLES_CALENDAR_POPOVER = 'rankedBattlesCalendarPopoverAlias'
     RANKED_BATTLES_BATTLE_RESULTS = 'rankedBattlesBattleResults'
@@ -24,6 +25,7 @@ class RANKEDBATTLES_ALIASES(object):
     SOUND_WIDGET_CENTER_LEFT_LOST = 'gui_rb_rank_back2'
     RANKED_BATTLES_VIEW_UI = 'rankedBattlesView.swf'
     RANKED_BATTLES_WELCOME_VIEW_UI = 'rankedBattlesWelcomeView.swf'
+    RANKED_BATTLES_UNREACHABLE_VIEW_UI = 'rankedBattlesUnreachableView.swf'
     RANKED_BATTLES_CYCLES_VIEW_UI = 'rankedBattlesCyclesView.swf'
     RANKED_BATTLES_CALENDAR_POPOVER_UI = 'rankedBattlesCalendarPopover.swf'
     RANKED_BATTLES_BATTLE_RESULTS_UI = 'rankedBattlesBattleResults.swf'

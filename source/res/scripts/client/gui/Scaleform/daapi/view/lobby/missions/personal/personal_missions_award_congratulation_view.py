@@ -9,13 +9,13 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.settings import getPersonalMissionVehicleAwardImage, ICONS_SIZES, getBadgeIconPath
 from gui.server_events.personal_missions_navigation import PersonalMissionsNavigation
-from gui.server_events.pm_constants import SOUNDS, PERSONAL_MISSIONS_SILENT_SOUND_SPACE
+from gui.server_events.pm_constants import SOUNDS, PERSONAL_MISSIONS_SOUND_SPACE
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
 from helpers.i18n import makeString as _ms
 
 class PersonalMissionAwardCongratulationView(PersonalMissionsNavigation, PersonalMissionAwardCongratulationViewMeta):
-    _COMMON_SOUND_SPACE = PERSONAL_MISSIONS_SILENT_SOUND_SPACE
+    _COMMON_SOUND_SPACE = PERSONAL_MISSIONS_SOUND_SPACE
 
     def __init__(self, ctx=None):
         super(PersonalMissionAwardCongratulationView, self).__init__(ctx)
@@ -39,6 +39,11 @@ class PersonalMissionAwardCongratulationView(PersonalMissionsNavigation, Persona
          'bigBtnLabel': PERSONAL_MISSIONS.AWARDCONGRATULATIONVIEW_BUTTON_LABEL})
         self.__update()
         self.soundManager.playSound(SOUNDS.TANK_AWARD_WINDOW)
+        self.soundManager.setRTPC(SOUNDS.RTCP_OVERLAY, SOUNDS.MAX_MISSIONS_ZOOM)
+
+    def _destroy(self):
+        self.soundManager.setRTPC(SOUNDS.RTCP_OVERLAY, SOUNDS.MIN_MISSIONS_ZOOM)
+        super(PersonalMissionAwardCongratulationView, self)._destroy()
 
     def _invalidate(self, ctx=None):
         self.__quests.update(ctx['quests'])

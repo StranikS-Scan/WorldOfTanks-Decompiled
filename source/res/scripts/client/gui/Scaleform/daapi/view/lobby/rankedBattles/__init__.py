@@ -14,6 +14,7 @@ def getContextMenuHandlers():
 def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.rankedBattles.RankedBattlesView import RankedBattlesView
     from gui.Scaleform.daapi.view.lobby.rankedBattles.RankedBattlesWelcomeView import RankedBattlesWelcomeView
+    from gui.Scaleform.daapi.view.lobby.rankedBattles.RankedBattlesUnreachableView import RankedBattlesUnreachableView
     from gui.Scaleform.daapi.view.lobby.rankedBattles.RankedBattlesCyclesView import RankedBattlesCyclesView
     from gui.Scaleform.daapi.view.lobby.rankedBattles.RankedBattlesCalendarPopover import RankedBattlesCalendarPopover
     from gui.Scaleform.daapi.view.lobby.rankedBattles.RankedBattlesBattleResults import RankedBattlesBattleResults
@@ -28,6 +29,7 @@ def getViewSettings():
      ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS, RankedBattlesView, RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_UI, ViewTypes.LOBBY_SUB, RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_BROWSER_VIEW, RankedBattlesBrowserView, RANKEDBATTLES_ALIASES.RANKED_BATTLES_BROWSER_VIEW_UI, ViewTypes.LOBBY_SUB, RANKEDBATTLES_ALIASES.RANKED_BATTLES_BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_WELCOME_VIEW_ALIAS, RankedBattlesWelcomeView, RANKEDBATTLES_ALIASES.RANKED_BATTLES_WELCOME_VIEW_UI, ViewTypes.LOBBY_SUB, RANKEDBATTLES_ALIASES.RANKED_BATTLES_WELCOME_VIEW_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE, True),
+     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_UNREACHABLE_VIEW_ALIAS, RankedBattlesUnreachableView, RANKEDBATTLES_ALIASES.RANKED_BATTLES_UNREACHABLE_VIEW_UI, ViewTypes.LOBBY_SUB, RANKEDBATTLES_ALIASES.RANKED_BATTLES_UNREACHABLE_VIEW_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_CYCLES_VIEW_ALIAS, RankedBattlesCyclesView, RANKEDBATTLES_ALIASES.RANKED_BATTLES_CYCLES_VIEW_UI, ViewTypes.LOBBY_SUB, RANKEDBATTLES_ALIASES.RANKED_BATTLES_CYCLES_VIEW_ALIAS, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_BATTLE_RESULTS, RankedBattlesBattleResults, RANKEDBATTLES_ALIASES.RANKED_BATTLES_BATTLE_RESULTS_UI, ViewTypes.OVERLAY, RANKEDBATTLES_ALIASES.RANKED_BATTLES_BATTLE_RESULTS, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
      ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD, RankedBattlesAwardsView, RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD_UI, ViewTypes.OVERLAY, RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
@@ -49,6 +51,7 @@ class RankedBattlesPackageBusinessHandler(PackageBusinessHandler):
          (RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS, self.loadViewByCtxEvent),
          (RANKEDBATTLES_ALIASES.RANKED_BATTLES_BROWSER_VIEW, self.loadViewByCtxEvent),
          (RANKEDBATTLES_ALIASES.RANKED_BATTLES_WELCOME_VIEW_ALIAS, self.loadViewByCtxEvent),
+         (RANKEDBATTLES_ALIASES.RANKED_BATTLES_UNREACHABLE_VIEW_ALIAS, self.loadViewByCtxEvent),
          (RANKEDBATTLES_ALIASES.RANKED_BATTLES_CYCLES_VIEW_ALIAS, self.loadViewByCtxEvent),
          (RANKEDBATTLES_ALIASES.RANKED_BATTLES_BATTLE_RESULTS, self.loadViewByCtxEvent),
          (RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD, self.loadViewByCtxEvent),

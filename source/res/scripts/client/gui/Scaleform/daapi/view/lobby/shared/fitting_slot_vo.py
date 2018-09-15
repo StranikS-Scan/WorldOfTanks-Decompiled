@@ -38,35 +38,23 @@ class FittingSlotVO(dict):
         self['tooltipType'] = ttType
         self['slotType'] = slotType
         self['removable'] = True
-        if vehicle.descriptor.isMultiTurret and slotType in ('vehicleGun', 'vehicleTurret'):
-            self['tooltipType'] = TOOLTIPS_CONSTANTS.HANGAR_MODULE_MULTITURRET
-            if slotType == 'vehicleGun':
-                self['id'] = vehicle.descriptor.turrets[0].gun.compactDescr
-                self['id2'] = vehicle.descriptor.turrets[1].gun.compactDescr
+        module = self._prepareModule(modulesData, vehicle, slotType, slotId)
+        if module is None:
+            self['id'] = _SlotVOConstants.UNRESOLVED_LIST_INDEX
+            self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
+            if slotType == FITTING_TYPES.OPTIONAL_DEVICE:
+                self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_DEVICE_EMPTY
+                self['moduleLabel'] = _SlotVOConstants.MODULE_LABEL_EMPTY
+            elif slotType == FITTING_TYPES.BOOSTER:
+                self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_BATTLEBOOSTER_EMPTY
+                self['moduleLabel'] = _SlotVOConstants.MODULE_LABEL_EMPTY_BOOSTER
             else:
-                self['id'] = vehicle.descriptor.turrets[0].turret.compactDescr
-                self['id2'] = vehicle.descriptor.turrets[1].turret.compactDescr
-            self['removable'] = False
-            self['moduleLabel'] = slotType + '_MultiTurret'
-            self['level'] = modulesData[0].level
+                self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY
+                self['moduleLabel'] = _SlotVOConstants.MODULE_LABEL_EMPTY
         else:
-            module = self._prepareModule(modulesData, vehicle, slotType, slotId)
-            if module is None:
-                self['id'] = _SlotVOConstants.UNRESOLVED_LIST_INDEX
-                self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
-                if slotType == FITTING_TYPES.OPTIONAL_DEVICE:
-                    self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_DEVICE_EMPTY
-                    self['moduleLabel'] = _SlotVOConstants.MODULE_LABEL_EMPTY
-                elif slotType == FITTING_TYPES.BOOSTER:
-                    self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_BATTLEBOOSTER_EMPTY
-                    self['moduleLabel'] = _SlotVOConstants.MODULE_LABEL_EMPTY_BOOSTER
-                else:
-                    self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY
-                    self['moduleLabel'] = _SlotVOConstants.MODULE_LABEL_EMPTY
-            else:
-                self['id'] = module.intCD
-                self['removable'] = module.isRemovable
-                self['moduleLabel'] = module.getGUIEmblemID()
+            self['id'] = module.intCD
+            self['removable'] = module.isRemovable
+            self['moduleLabel'] = module.getGUIEmblemID()
         return
 
     def _prepareModule(self, modulesData, vehicle, slotType, slotId):

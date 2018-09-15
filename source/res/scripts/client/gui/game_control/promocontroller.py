@@ -7,6 +7,7 @@ from account_shared import getClientMainVersion
 from adisp import async, process
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui import GUI_SETTINGS
+from gui.Scaleform.daapi.view.lobby.shared.web_handlers import handleHangarSoundCommand, handleHangarSoundCommandFini
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control import gc_constants
@@ -17,6 +18,7 @@ from helpers import i18n, isPlayerAccount, dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IPromoController, IBrowserController, IEventsNotificationsController
 from skeletons.gui.lobby_context import ILobbyContext
+from web_client_api.commands.sound import createHangarSoundHandler
 _PromoData = namedtuple('_PromoData', ['url', 'title', 'guiActionHandlers'])
 
 class PromoController(IPromoController):
@@ -90,6 +92,7 @@ class PromoController(IPromoController):
         """
         if forced:
             self.__registerAndShowPromoBrowser(url, title, handlers)
+            self._isPromoShown = True
         elif self.__isLobbyInited:
             if not self._isPromoShown:
                 self.__registerAndShowPromoBrowser(url, title, handlers)
@@ -227,5 +230,8 @@ class PromoController(IPromoController):
     @async
     @process
     def __showPromoBrowser(self, promoUrl, promoTitle, browserID=None, isAsync=True, showWaiting=False, callback=None):
-        browserID = yield self.browserCtrl.load(promoUrl, promoTitle, showActionBtn=False, isAsync=isAsync, browserID=browserID, browserSize=gc_constants.BROWSER.PROMO_SIZE, isDefault=False, showCloseBtn=True, showWaiting=showWaiting)
+        browserID = yield self.browserCtrl.load(promoUrl, promoTitle, showActionBtn=False, isAsync=isAsync, browserID=browserID, browserSize=gc_constants.BROWSER.PROMO_SIZE, isDefault=False, showCloseBtn=True, showWaiting=showWaiting, handlers=self.__createPromoWebHandlers())
         callback(browserID)
+
+    def __createPromoWebHandlers(self):
+        return [createHangarSoundHandler(handleHangarSoundCommand, handleHangarSoundCommandFini)]

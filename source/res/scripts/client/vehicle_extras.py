@@ -6,7 +6,7 @@ import random
 from functools import partial
 import weakref
 from helpers.EffectsList import EffectsListPlayer
-from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
 from helpers import i18n
 from helpers.EntityExtra import EntityExtra
 
@@ -29,34 +29,14 @@ class NoneExtra(EntityExtra):
 
 class ShowShooting(EntityExtra):
 
-    class __ModelNodeReplacer(object):
-
-        def __init__(self, compoundModel, nodeToReplace, nodeReplacement):
-            setattr(self, 'compoundModel', compoundModel)
-            setattr(self, 'nodeToReplace', nodeToReplace)
-            setattr(self, 'nodeReplacement', nodeReplacement)
-
-        def node(self, nodeName):
-            if nodeName == self.nodeToReplace:
-                nodeName = self.nodeReplacement
-            return self.compoundModel.node(nodeName)
-
-        def __getattr__(self, item):
-            return getattr(self.compoundModel, item)
-
-    def _start(self, data, args):
-        burstCount, gunFireNodeName, gunIndex = args
+    def _start(self, data, burstCount):
         vehicle = data['entity']
-        gunDescr = vehicle.typeDescriptor.turrets[gunIndex].gun
+        gunDescr = vehicle.typeDescriptor.gun
         stages, effects, _ = gunDescr.effects
-        data['gun_index'] = gunIndex
         data['entity_id'] = vehicle.id
         data['_effectsListPlayer'] = EffectsListPlayer(effects, stages, **data)
         data['_burst'] = (burstCount, gunDescr.burst[1])
-        modelAdapter = vehicle.appearance.compoundModel
-        if gunFireNodeName != 'HP_gunFire':
-            modelAdapter = ShowShooting.__ModelNodeReplacer(modelAdapter, 'HP_gunFire', gunFireNodeName)
-        data['_gunModel'] = modelAdapter
+        data['_gunModel'] = vehicle.appearance.compoundModel
         self.__doShot(data)
 
     def _cleanup(self, data):
@@ -88,26 +68,25 @@ class ShowShooting(EntityExtra):
                 effPlayer.play(gunModel)
                 withShot = 2
             avatar = BigWorld.player()
-            gunIndex = data['gun_index']
             if data['entity'].isPlayerVehicle or vehicle is avatar.getVehicleAttached():
-                avatar.getOwnVehicleShotDispersionAngle(avatar.gunRotator.getTurretRotationSpeed(gunIndex), gunIndex, withShot)
+                avatar.getOwnVehicleShotDispersionAngle(avatar.gunRotator.turretRotationSpeed, withShot)
             if not vehicle.appearance.isInWater:
                 groundWaveEff = effPlayer.effectsList.relatedEffects.get('groundWave')
                 if groundWaveEff is not None:
                     self.__doGroundWaveEffect(data['entity'], groundWaveEff, gunModel)
-            self.__doRecoil(vehicle, gunModel, gunIndex)
+            self.__doRecoil(vehicle, gunModel)
             if vehicle.isPlayerVehicle:
                 appearance = vehicle.appearance
-                appearance.executeShootingVibrations(vehicle.typeDescriptor.turrets[gunIndex].shot.shell.caliber)
+                appearance.executeShootingVibrations(vehicle.typeDescriptor.shot.shell.caliber)
         except Exception:
             LOG_CURRENT_EXCEPTION()
             self.stop(data)
 
         return
 
-    def __doRecoil(self, vehicle, gunModel, gunIndex=0):
+    def __doRecoil(self, vehicle, gunModel):
         appearance = vehicle.appearance
-        appearance.recoil(gunIndex)
+        appearance.recoil()
 
     def __doGroundWaveEffect(self, vehicle, groundWaveEff, gunModel):
         node = gunModel.node('HP_gunFire')

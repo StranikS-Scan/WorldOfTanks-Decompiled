@@ -7,8 +7,8 @@ from gui.shared.items_parameters import calcGunParams, calcShellParams, getEquip
 from gui.shared.items_parameters.xml_reader import ParamsXMLReader
 from gui.shared.utils.decorators import debugTime
 import nations
-from debug_utils import LOG_CURRENT_EXCEPTION
-from items import vehicles, ITEM_TYPES
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from items import vehicles, ITEM_TYPES, EQUIPMENT_TYPES
 from items.vehicles import getVehicleType
 from gui.shared.utils import GUN_NORMAL, GUN_CAN_BE_CLIP, GUN_CLIP
 CACHE_ITERATORS = {ITEM_TYPES.vehicle: lambda idx: vehicles.g_list.getList(idx).iterkeys(),
@@ -122,7 +122,11 @@ class _ParamsCache(object):
         for itemsList in self.__xmlItems[nations.NONE_INDEX].values():
             for item in itemsList:
                 if item.checkCompatibilityWithVehicle(vehicleDescr)[0]:
-                    compatibles.append((item.name, item.itemTypeName))
+                    itemTypeName = item.itemTypeName
+                    if itemTypeName == 'equipment':
+                        if item.equipmentType == EQUIPMENT_TYPES.battleBoosters:
+                            itemTypeName = 'battleBooster'
+                    compatibles.append((item.name, itemTypeName))
 
         return compatibles
 

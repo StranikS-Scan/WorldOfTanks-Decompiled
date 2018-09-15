@@ -20,6 +20,7 @@ from gui.ranked_battles.ranked_models import PrimeTime, RANK_CHANGE_STATES
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from gui.shared import event_dispatcher, events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.gui_items.Vehicle import Vehicle
+from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency, time_utils
 from items import vehicles
 from optional_bonuses import TrackVisitor, BONUS_MERGERS, walkBonuses
@@ -588,6 +589,16 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
     def getMinXp(self):
         settings = self.__getSettings()
         return settings.minXP
+
+    def hasSuitableVehicles(self):
+        minLevel, maxLevel = self.getSuitableVehicleLevels()
+        vehLevels = range(minLevel, maxLevel + 1)
+        vehs = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY | REQ_CRITERIA.VEHICLE.LEVELS(vehLevels))
+        return len(vehs) > 0
+
+    def getSuitableVehicleLevels(self):
+        rankedConfigData = self.__getSettings()
+        return (rankedConfigData.minLevel, rankedConfigData.maxLevel)
 
     def __clear(self):
         lobbyContext = dependency.instance(ILobbyContext)

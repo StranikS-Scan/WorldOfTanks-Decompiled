@@ -35,14 +35,11 @@ class UseAwardSheetDialogMeta(IDialogMeta):
     def getViewScopeType(self):
         return ScopeTemplates.DEFAULT_SCOPE
 
-    def getDescrText(self):
-        return _ms(PERSONAL_MISSIONS.USEAWARDSHEETWINDOW_DESCR)
+    def getTotalText(self):
+        return _ms(PERSONAL_MISSIONS.USEAWARDSHEETWINDOW_SHEETSTOTAL)
 
-    def getFooterText(self):
-        return _ms(PERSONAL_MISSIONS.USEAWARDSHEETWINDOW_SHEETSTOTAL, count=str(self.__freeSheets))
-
-    def getCounterText(self):
-        return _ms(PERSONAL_MISSIONS.USEAWARDSHEETWINDOW_NEEDAMOUNT, count=str(self.__quest.getPawnCost()))
+    def getNeededText(self):
+        return _ms(PERSONAL_MISSIONS.USEAWARDSHEETWINDOW_NEEDAMOUNT)
 
     def getIcon(self):
         return RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_FREE_SHEET_MID
@@ -58,3 +55,9 @@ class UseAwardSheetDialogMeta(IDialogMeta):
             vehClass = first(self.__quest.getVehicleClasses())
             return _ms(PERSONAL_MISSIONS.USEAWARDSHEETWINDOW_NOVEHICLE, vehicleClass=_ms('#menu:classes/short/' + vehClass))
         return _ms(PERSONAL_MISSIONS.USEAWARDSHEETWINDOW_LOCKED) if not self.__quest.isUnlocked() else ''
+
+    def getFreeSheets(self):
+        return self.__freeSheets
+
+    def getPawnCost(self):
+        return self.__quest.getPawnCost()

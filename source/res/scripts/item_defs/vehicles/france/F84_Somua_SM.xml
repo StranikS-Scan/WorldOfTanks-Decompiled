@@ -6,7 +6,7 @@
     <radioman>	loader	</radioman>
   </crew>
   <speedLimits>
-    <forward>	50	</forward>
+    <forward>	37	</forward>
     <backward>	20	</backward>
   </speedLimits>
   <invisibility>
@@ -26,20 +26,19 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	120	</armor_1>
+      <armor_1>	140	</armor_1>
       <armor_2>	90	</armor_2>
-      <armor_3>	50	</armor_3>
+      <armor_3>	90	</armor_3>
       <armor_4>	70	</armor_4>
       <armor_5>	20	</armor_5>
       <armor_6>	30	</armor_6>
-      <armor_7>	70	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	20	</armor_9>
-      <armor_10>	40	</armor_10>
+      <armor_10>	80	</armor_10>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	26450	</weight>
-    <maxHealth>	1120	</maxHealth>
+    <maxHealth>	1160	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	240	</maxHealth>
       <maxRegenHealth>	160	</maxRegenHealth>
@@ -375,18 +374,18 @@
         <armor_7>	90	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	80	</armor_9>
-        <armor_10>	70	</armor_10>
+        <armor_10>	120	</armor_10>
       </armor>
       <primaryArmor>	armor_10 armor_5 armor_6	</primaryArmor>
       <weight>	12400	</weight>
-      <maxHealth>	280	</maxHealth>
-      <rotationSpeed>	32	</rotationSpeed>
+      <maxHealth>	290	</maxHealth>
+      <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
         <maxRegenHealth>	70	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	350	</circularVisionRadius>
+      <circularVisionRadius>	370	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -395,18 +394,20 @@
       <guns>
         <_100mm_SA_47_A>	shared	  <maxAmmo>	60	</maxAmmo>
           <armor>
-            <armor_1>	130	</armor_1>
-            <armor_2>	100	</armor_2>
+            <armor_1>	210	</armor_1>
+            <armor_2>	200	</armor_2>
             <armor_4>	60	</armor_4>
             <armor_5>	30	</armor_5>
             <armor_6>	20	</armor_6>
             <armor_7>	50	</armor_7>
             <armor_8>	0	</armor_8>
-            <armor_9>	70	</armor_9>
+            <armor_9>	120	</armor_9>
             <armor_10>	35	</armor_10>
             <armor_11>	85	</armor_11>
             <armor_12>	90	</armor_12>
-            <gun>	10	</gun>
+            <armor_13>	170	</armor_13>
+            <armor_14>	130	</armor_14>
+            <gun>	40	</gun>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <pitchLimits>
@@ -415,10 +416,10 @@
           </pitchLimits>
           <clip>
             <count>	5	</count>
-            <rate>	16	</rate>
+            <rate>	26.66667	</rate>
           </clip>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	43	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	37	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	4	</afterShot>
@@ -497,7 +498,7 @@
     <detailed>
       <engines>
         <Maybach_HL_295_003_Somua>
-          <smplEnginePower>	1014.99	</smplEnginePower>
+          <smplEnginePower>	720	</smplEnginePower>
         </Maybach_HL_295_003_Somua>
       </engines>
       <chassis>

@@ -397,45 +397,6 @@ class IFalloutController(IGameController):
         raise NotImplementedError
 
 
-class IEventBattlesController(IGameController):
-    onSettingsChanged = None
-    onVehicleChanged = None
-    onSquadStatusChanged = None
-
-    def isAvailable(self):
-        raise NotImplementedError
-
-    def isEnabled(self):
-        raise NotImplementedError
-
-    def isSelected(self):
-        raise NotImplementedError
-
-    def setEnabled(self, isEnabled):
-        raise NotImplementedError
-
-    def getBattleType(self):
-        raise NotImplementedError
-
-    def setBattleType(self, battleType):
-        raise NotImplementedError
-
-    def getSelectedVehicle(self):
-        raise NotImplementedError
-
-    def getConfig(self):
-        raise NotImplementedError
-
-    def carouselSelectionButtonTooltip(self):
-        raise NotImplementedError
-
-    def canChangeBattleType(self):
-        raise NotImplementedError
-
-    def isSuitableVeh(self, vehicle):
-        raise NotImplementedError
-
-
 class IScreenCastController(IGameController):
     pass
 
@@ -734,6 +695,18 @@ class IRankedBattlesController(IGameController):
         pass
 
     def getAllAwardsForCycle(self, cycleID):
+        raise NotImplementedError
+
+    def hasSuitableVehicles(self):
+        """
+        :return: bool, are player have suitable vehicles
+        """
+        raise NotImplementedError
+
+    def getSuitableVehicleLevels(self):
+        """
+        :return: tuple, contains minLevel and maxLevel of suitable vehicle
+        """
         raise NotImplementedError
 
 

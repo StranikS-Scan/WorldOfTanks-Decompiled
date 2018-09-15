@@ -267,7 +267,7 @@
     <shortUserString>	#germany_vehicles:VK4502P_short	</shortUserString>
     <description>	#germany_vehicles:VK4502P_descr	</description>
     <price>	3598000	</price>
-    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user antifragmentationLining_superheavy_user enhancedLongitudinalTorsions_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user	</tags>
+    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user antifragmentationLining_superheavy_user enhancedLongitudinalTorsions_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD	</tags>
     <level>	9	</level>
   </G58_VK4502P>
   <G37_Ferdinand>
@@ -509,7 +509,7 @@
     <description>	#germany_vehicles:Auf_Panther_descr	</description>
     <price>	1360000	</price>
     <notInShop>	true	</notInShop>
-    <tags>	lightTank improvedVentilation_class1_user scout beast enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user secret unrecoverable	</tags>
+    <tags>	lightTank improvedVentilation_class1_user scout beast enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user secret unrecoverable HD	</tags>
     <level>	7	</level>
   </G85_Auf_Panther>
   <G89_Leopard1>
@@ -627,7 +627,7 @@
     <shortUserString>	#germany_vehicles:G101_StuG_III_short	</shortUserString>
     <description>	#germany_vehicles:G101_StuG_III_descr	</description>
     <price>	130000	</price>
-    <tags>	AT-SPG mediumAT-SPG improvedVentilation_class2_user enhancedTorsions3t_user grousers_user wetCombatPack_class1_user mediumCaliberTankRammer_user	</tags>
+    <tags>	AT-SPG mediumAT-SPG improvedVentilation_class2_user enhancedTorsions3t_user grousers_user wetCombatPack_class1_user mediumCaliberTankRammer_user HD	</tags>
     <level>	4	</level>
   </G101_StuG_III>
   <G81_Pz_IV_AusfH>
@@ -711,6 +711,17 @@
     <tags>	lightTank improvedVentilation_class1_user scout enhancedTorsions1t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	8	</level>
   </G126_HWK_12>
+  <G85_Aufklarungspanzer_V>
+    <id>	187	</id>
+    <userString>	#germany_vehicles:G85_Aufklarungspanzer_V	</userString>
+    <shortUserString>	#germany_vehicles:G85_Aufklarungspanzer_V_short	</shortUserString>
+    <description>	#germany_vehicles:G85_Aufklarungspanzer_V_descr	</description>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank improvedVentilation_class1_user scout beast enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD secret testTank	</tags>
+    <level>	8	</level>
+  </G85_Aufklarungspanzer_V>
   <G112_KanonenJagdPanzer_105>
     <id>	189	</id>
     <userString>	#germany_vehicles:G112_KanonenJagdPanzer_105	</userString>
@@ -719,7 +730,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG mediumAT-SPG AT-SPG1 improvedVentilation_class2_user enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD secret testTank	</tags>
+    <tags>	AT-SPG mediumAT-SPG AT-SPG1 improvedVentilation_class2_user enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD secret	</tags>
     <level>	8	</level>
   </G112_KanonenJagdPanzer_105>
   <G98_Waffentrager_E100_P>
@@ -1147,6 +1158,17 @@
     <tags>	AT-SPG mediumAT-SPG AT-SPG1 improvedVentilation_class2_user enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user HD	</tags>
     <level>	8	</level>
   </G112_KanonenJagdPanzer>
+  <G58_VK4502P7>
+    <id>	243	</id>
+    <userString>	#germany_vehicles:G58_VK4502P	</userString>
+    <shortUserString>	#germany_vehicles:G58_VK4502P_short	</shortUserString>
+    <description>	#germany_vehicles:G58_VK4502P_descr	</description>
+    <price>	6250	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	heavyTank secret improvedVentilation_class3_user enhancedLongitudinalTorsions_user mediumCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
+    <level>	7	</level>
+  </G58_VK4502P7>
   <G114_Skorpian>
     <id>	244	</id>
     <userString>	#germany_vehicles:G114_Skorpian	</userString>
@@ -1242,17 +1264,6 @@
     <tags>	SPG secret unrecoverable	</tags>
     <level>	1	</level>
   </Env_Artillery>
-  <G58_VK4502P7>
-    <id>	243	</id>
-    <userString>	#germany_vehicles:G58_VK4502P	</userString>
-    <shortUserString>	#germany_vehicles:G58_VK4502P_short	</shortUserString>
-    <description>	#germany_vehicles:G58_VK4502P_descr	</description>
-    <price>	6250	  <gold></gold>
-    </price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank improvedVentilation_class3_user enhancedLongitudinalTorsions_user mediumCaliberTankRammer_user wetCombatPack_class2_user secret	</tags>
-    <level>	7	</level>
-  </G58_VK4502P7>
   <G65_JagdTiger_SdKfz_185_IGR>
     <id>	151	</id>
     <userString>	#igr_vehicles:JagdTiger_SdKfz_185_IGR	</userString>
@@ -1414,13 +1425,4 @@
     <tags>	lightTank wetCombatPack_class1_user HD secret	</tags>
     <level>	2	</level>
   </G117_Toldi_III_bootcamp>
-  <G150_Leviathan>
-    <id>	255	</id>
-    <userString>	#germany_vehicles:G150_Leviathan	</userString>
-    <description>	#germany_vehicles:G150_Leviathan_descr	</description>
-    <tags>	heavyTank secret HD leviathan multi_turret event_battles	</tags>
-    <price>	100	</price>
-    <notInShop>	true	</notInShop>
-    <level>	10	</level>
-  </G150_Leviathan>
 </list.xml>

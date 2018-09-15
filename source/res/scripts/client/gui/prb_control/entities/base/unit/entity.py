@@ -1414,7 +1414,6 @@ class UnitEntity(_UnitEntity):
         else:
             timeLeftInIdle = 0
             g_eventDispatcher.setUnitProgressInCarousel(self._prbType, False)
-        LOG_DEBUG('onUnitFlagsChanged', flags, timeLeftInIdle)
         if not flags.isInIdle() and self._deferredReset:
             self._deferredReset = False
             self.resetPlayerState()
@@ -1455,7 +1454,6 @@ class UnitEntity(_UnitEntity):
             vehLevel = 0
             vehClassIdx = 0
         vInfo = unit_items.VehicleInfo(vehInvID, vehTypeCD, vehLevel, vehClassIdx)
-        LOG_DEBUG('onUnitVehicleChanged', dbID, vInfo)
         if dbID == account_helpers.getAccountDatabaseID() and not vInfo.isEmpty():
             vehicle = self.itemsCache.items.getItemByCD(vInfo.vehTypeCD)
             if vehicle is not None:
@@ -1489,7 +1487,6 @@ class UnitEntity(_UnitEntity):
                     g_currentVehicle.selectVehicle(vehicle.invID)
             vInfos.append(vInfo)
 
-        LOG_DEBUG('onUnitVehiclesChanged', dbID, vInfos)
         self._invokeListeners('onUnitVehiclesChanged', dbID, vInfos)
         g_eventDispatcher.updateUI()
         return
@@ -1517,7 +1514,6 @@ class UnitEntity(_UnitEntity):
                 pInfo = unit_items.PlayerUnitInfo(dbID, unitMgrID, unit, isReady=nextValue, isInSlot=True, slotIdx=slotIdx, **data)
                 diff.append(pInfo)
 
-        LOG_DEBUG('onUnitPlayerStateChanged', diff)
         for listener in self.getListenersIterator():
             for pInfo in diff:
                 listener.onUnitPlayerStateChanged(pInfo)
@@ -1539,7 +1535,6 @@ class UnitEntity(_UnitEntity):
         isOnlineChanged = diff & UNIT_ROLE.OFFLINE > 0
         isCreatorChanged = diff & UNIT_ROLE.CREATOR > 0
         inArenaChanged = diff & UNIT_ROLE.IN_ARENA > 0
-        LOG_DEBUG('onUnitPlayerRolesChanged', pInfo, pPermissions)
         for listener in self.getListenersIterator():
             if isOnlineChanged:
                 listener.onUnitPlayerOnlineStatusChanged(pInfo)

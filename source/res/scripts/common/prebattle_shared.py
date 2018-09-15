@@ -183,6 +183,7 @@ SETTING_DEFAULTS = {'ver': 1,
  'accountsToInvite': [],
  'clansToInvite': [],
  'creator': '',
+ 'creatorBadges': [],
  'creatorClanDBID': 0,
  'creatorClanAbbrev': '',
  'creatorIGRType': IGR_TYPE.NONE,
@@ -231,10 +232,8 @@ def _collectCurrentReplaceableVehicleComponents(vehicleDescr):
         res.append(vehicleDescr.engine.compactDescr)
     if len(vehicleType.radios) > 1:
         res.append(vehicleDescr.radio.compactDescr)
-    for turretIndex, turretSlot in enumerate(vehicleDescr.turrets):
-        turretDescr = turretSlot.turret
-        gunDescr = turretSlot.gun
-        if len(vehicleType.turrets[turretIndex]) > 1:
+    for posIdx, (turretDescr, gunDescr) in enumerate(vehicleDescr.turrets):
+        if len(vehicleType.turrets[posIdx]) > 1:
             res.append(turretDescr.compactDescr)
         if len(turretDescr.guns) > 1:
             res.append(gunDescr.compactDescr)

@@ -37,8 +37,7 @@ class BCHangarHeader(HangarHeader):
         return {'commonQuestsLabel': '',
          'commonQuestsIcon': RES_ICONS.questsStateIconOutline('available'),
          'commonQuestsTooltip': '',
-         'commonQuestsEnable': True,
-         'commonQuestsUseEventFlag': False}
+         'commonQuestsEnable': True}
 
     def update(self, *args):
         self._personalQuestID = None

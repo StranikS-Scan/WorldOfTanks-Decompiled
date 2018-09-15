@@ -890,6 +890,34 @@
       <devices>	100	</devices>
     </damage>
   </APCNR.erz>
+  <APCNR1945>
+    <id>	193	</id>
+    <userString>	#germany_vehicles:APCNR1945	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	270	</price>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumAPCR	</effects>
+    <damage>
+      <armor>	165	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </APCNR1945>
+  <APCNRHE1945>
+    <id>	194	</id>
+    <userString>	#germany_vehicles:APCNRHE1945	</userString>
+    <icon>	he	</icon>
+    <price>	160	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	280	</armor>
+      <devices>	115	</devices>
+    </damage>
+  </APCNRHE1945>
   <_76mm_Pzgr39r>
     <id>	29	</id>
     <userString>	#germany_vehicles:_76mm_Pzgr39r	</userString>
@@ -2427,72 +2455,4 @@
       <devices>	135	</devices>
     </damage>
   </bomber_shell>
-  <_128mm_LevMk1>
-    <id>	512	</id>
-    <userString>	#germany_vehicles:_128mm_PzGr39K	</userString>
-    <icon>	he	</icon>
-    <price>	1070	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	150	</caliber>
-    <explosionRadius>	12	</explosionRadius>
-    <isTracer>	true	</isTracer>
-    <effects>	hugeHighExplosive_HE2017	</effects>
-    <damage>
-      <armor>	900	</armor>
-      <devices>	200	</devices>
-    </damage>
-  </_128mm_LevMk1>
-  <_105mm_LevMk1_A>
-    <id>	513	</id>
-    <userString>	#germany_vehicles:_128mm_PzGr39K	</userString>
-    <icon>	ap	</icon>
-    <price>	1070	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	230	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	largeArmorPiercing_HE2017	</effects>
-    <damage>
-      <armor>	350	</armor>
-      <devices>	50	</devices>
-    </damage>
-  </_105mm_LevMk1_A>
-  <_60mm_LevMk1_B>
-    <id>	514	</id>
-    <userString>	#germany_vehicles:_90mm_AP_T_33	</userString>
-    <icon>	ap	</icon>
-    <price>	280	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	ARMOR_PIERCING	</kind>
-    <caliber>	230	</caliber>
-    <isTracer>	true	</isTracer>
-    <effects>	mainArmorPiercing_HE2017	</effects>
-    <damage>
-      <armor>	100	</armor>
-      <devices>	15	</devices>
-    </damage>
-  </_60mm_LevMk1_B>
-  <_150mm_LevMk1_Mortar>
-    <id>	515	</id>
-    <userString>	#germany_vehicles:_150mm_Sprg	</userString>
-    <icon>	he	</icon>
-    <price>	505	</price>
-    <notInShop>	true	</notInShop>
-    <kind>	HIGH_EXPLOSIVE	</kind>
-    <caliber>	250	</caliber>
-    <explosionRadius>	6.5	</explosionRadius>
-    <explosionEdgeDamageFactor>	1.0	</explosionEdgeDamageFactor>
-    <hasStun>	true	</hasStun>
-    <stunDuration>	7	</stunDuration>
-    <minStunDuration>	3	</minStunDuration>
-    <guaranteedStunDuration>	1.0	</guaranteedStunDuration>
-    <damageEffectCoeff>	1.0	</damageEffectCoeff>
-    <guaranteedStunEffect>	4.5	</guaranteedStunEffect>
-    <effects>	largeHighExplosive	</effects>
-    <damage>
-      <armor>	540	</armor>
-      <devices>	1	</devices>
-    </damage>
-  </_150mm_LevMk1_Mortar>
 </shells.xml>

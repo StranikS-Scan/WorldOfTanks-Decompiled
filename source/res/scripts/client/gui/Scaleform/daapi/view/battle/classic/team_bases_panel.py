@@ -37,41 +37,42 @@ class _TeamBaseSettingItem(object):
         return self._color
 
     def getCapturingString(self, points):
-        try:
-            result = self._capturing % (self._subTypeBaseID, points)
-        except:
-            result = 'ERROR: %s' % self._capturing
-
-        return result
+        return self._capturing % (self._subTypeBaseID, points)
 
     def getCapturedString(self):
-        try:
-            result = self._captured % self._subTypeBaseID
-        except:
-            result = 'ERROR: %s' % self._captured
-
-        return result
+        return self._captured % self._subTypeBaseID
 
     def getBattleSubTypeBaseNumber(self):
         return getBattleSubTypeBaseNumber(self._arenaTypeID, self._team, self._baseID)
 
 
-_SETTINGS_TO_TEAM = {0: _TeamBaseSettingItem(2, 'red', i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_ALLY_BASE_CAPTURED_BY_NOTIFICATION), i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_ALLY_BASE_CAPTURED_NOTIFICATION)),
- 3: _TeamBaseSettingItem(1, 'green', i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_ENEMY_BASE_CAPTURED_BY_NOTIFICATION), i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_ENEMY_BASE_CAPTURED_NOTIFICATION))}
-_SETTINGS_TO_CONTROL_POINT = {0: _TeamBaseSettingItem(4, 'red', i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURED_BY_NOTIFICATION), i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURED_NOTIFICATION)),
- 3: _TeamBaseSettingItem(3, 'green', i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURED_BY_NOTIFICATION), i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURED_NOTIFICATION))}
+_SETTINGS_TO_TEAM = {0: (2,
+     'red',
+     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_ALLY_BASE_CAPTURED_BY_NOTIFICATION),
+     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_ALLY_BASE_CAPTURED_NOTIFICATION)),
+ 3: (1,
+     'green',
+     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_ENEMY_BASE_CAPTURED_BY_NOTIFICATION),
+     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_ENEMY_BASE_CAPTURED_NOTIFICATION))}
+_SETTINGS_TO_CONTROL_POINT = {0: (4,
+     'red',
+     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURED_BY_NOTIFICATION),
+     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURED_NOTIFICATION)),
+ 3: (3,
+     'green',
+     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURED_BY_NOTIFICATION),
+     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURED_NOTIFICATION))}
 
 def _getSettingItem(clientID, ownTeam, arenaTypeID):
     baseTeam, baseID = team_bases_ctrl.parseClientTeamBaseID(clientID)
-    item = None
+    itemSettings = (0, 'green', '%s %s', '%s %s')
     key = baseTeam ^ ownTeam
     if isControlPointExists(arenaTypeID):
         if key in _SETTINGS_TO_CONTROL_POINT:
-            item = _SETTINGS_TO_CONTROL_POINT[key]
+            itemSettings = _SETTINGS_TO_CONTROL_POINT[key]
     elif key in _SETTINGS_TO_TEAM:
-        item = _SETTINGS_TO_TEAM[key]
-    if item is None:
-        item = _TeamBaseSettingItem(0, 'green', '%s', '%s')
+        itemSettings = _SETTINGS_TO_TEAM[key]
+    item = _TeamBaseSettingItem(*itemSettings)
     item.setup(arenaTypeID, baseID, baseTeam)
     return item
 

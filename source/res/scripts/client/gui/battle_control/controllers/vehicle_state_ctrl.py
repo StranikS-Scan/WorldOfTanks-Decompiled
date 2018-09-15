@@ -663,9 +663,10 @@ class VehicleStateController(IBattleController):
                 self.notifyStateChanged(state, value)
             return
 
-    def switchToPostmortem(self):
+    def switchToPostmortem(self, noRespawnPossible, respawnAvailable):
         """
         Switches to postmortem mode.
+        :param leave:
         """
         self.__isRqToSwitch = False
         if avatar_getter.getPlayerVehicleID() == self.__vehicleID:
@@ -673,7 +674,7 @@ class VehicleStateController(IBattleController):
                 self.__updater.stop()
                 self.__updater.updateOnce()
         self.__isInPostmortem = True
-        self.onPostMortemSwitched()
+        self.onPostMortemSwitched(noRespawnPossible, respawnAvailable)
         return
 
     def switchToOther(self, vehicleID):
@@ -702,8 +703,10 @@ class VehicleStateController(IBattleController):
         when the vehicle is moved to respawn.
         :return:
         """
+        self.__isInPostmortem = False
         self.notifyStateChanged(VEHICLE_VIEW_STATE.SWITCHING, 0)
         self.onRespawnBaseMoving()
+        self.__cachedStateValues.clear()
 
     def _waiting(self):
         """

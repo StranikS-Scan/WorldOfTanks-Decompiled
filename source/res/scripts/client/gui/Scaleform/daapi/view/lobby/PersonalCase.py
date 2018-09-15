@@ -33,7 +33,6 @@ from helpers import i18n, strcmp
 from items import tankmen
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.genConsts.PERSONALCASE_CONSTANTS import PERSONALCASE_CONSTANTS
-from gui.shared.gui_items.processors.tankman import TankmanDropSkills
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 
 class PersonalCase(PersonalCaseMeta, IGlobalListener):
@@ -181,18 +180,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, getViewName(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, self.tmanInvID), {'tankManId': self.tmanInvID}), EVENT_BUS_SCOPE.LOBBY)
 
     def dropSkills(self):
-        tankman = self.itemsCache.items.getTankman(self.tmanInvID)
-        if tankman.isEvent:
-            self._eventCrewDropFromPersonalCase(tankman)
-        else:
-            self.fireEvent(LoadViewEvent(VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, getViewName(VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, self.tmanInvID), {'tankmanID': self.tmanInvID}), EVENT_BUS_SCOPE.LOBBY)
-
-    @decorators.process('deleting')
-    def _eventCrewDropFromPersonalCase(self, tankman):
-        proc = TankmanDropSkills(tankman, 2)
-        result = yield proc.request()
-        if result.success:
-            self.fireEvent(events.SkillDropEvent(events.SkillDropEvent.SKILL_DROPPED_SUCCESSFULLY))
+        self.fireEvent(LoadViewEvent(VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, getViewName(VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, self.tmanInvID), {'tankmanID': self.tmanInvID}), EVENT_BUS_SCOPE.LOBBY)
 
     def _populate(self):
         super(PersonalCase, self)._populate()
@@ -262,10 +250,7 @@ class PersonalCaseDataProvider(object):
     def getCommonData(self, callback):
         items = self.itemsCache.items
         tankman = items.getTankman(self.tmanInvID)
-        if tankman.isEvent:
-            rate = 0
-        else:
-            rate = items.shop.freeXPToTManXPRate
+        rate = items.shop.freeXPToTManXPRate
         if rate:
             toNextPrcLeft = roundByModulo(tankman.getNextLevelXpCost(), rate)
             enoughFreeXPForTeaching = items.stats.freeXP - max(1, toNextPrcLeft / rate) >= 0
@@ -284,7 +269,6 @@ class PersonalCaseDataProvider(object):
             tooltipChangeRole = makeTooltip(TOOLTIPS.CREW_ROLECHANGEFORBID_HEADER, TOOLTIPS.CREW_ROLECHANGEFORBID_TEXT)
         showDocumentTab = not td.getRestrictions().isPassportReplacementForbidden()
         bonuses = tankman.realRoleLevel[1]
-        isCrewLocked = tankman.isEvent
         modifiers = []
         if bonuses[0]:
             modifiers.append({'id': 'fromCommander',
@@ -305,30 +289,27 @@ class PersonalCaseDataProvider(object):
          'lockMessage': reason,
          'modifiers': modifiers,
          'enoughFreeXPForTeaching': enoughFreeXPForTeaching,
-         'tabsData': self.getTabsButtons(showDocumentTab, isCrewLocked),
+         'tabsData': self.getTabsButtons(showDocumentTab),
          'tooltipDismiss': TOOLTIPS.BARRACKS_TANKMEN_DISMISS,
          'tooltipUnload': TOOLTIPS.BARRACKS_TANKMEN_UNLOAD,
-         'dismissEnabled': False if isCrewLocked else True,
-         'unloadEnabled': False if isCrewLocked else True,
-         'changeRoleEnabled': False if isCrewLocked else changeRoleEnabled,
+         'dismissEnabled': True,
+         'unloadEnabled': True,
+         'changeRoleEnabled': changeRoleEnabled,
          'tooltipChangeRole': tooltipChangeRole})
         return
 
-    def getTabsButtons(self, showDocumentTab, isCrewLocked):
+    def getTabsButtons(self, showDocumentTab):
         tabs = [{'index': STATS_TAB_INDEX,
           'label': MENU.TANKMANPERSONALCASE_TABBATTLEINFO,
-          'linkage': PERSONAL_CASE_STATS,
-          'enabled': False if isCrewLocked else True}, {'index': TRAINING_TAB_INDEX,
+          'linkage': PERSONAL_CASE_STATS}, {'index': TRAINING_TAB_INDEX,
           'label': MENU.TANKMANPERSONALCASE_TABTRAINING,
-          'linkage': PERSONAL_CASE_RETRAINING,
-          'enabled': False if isCrewLocked else True}, {'index': SKILLS_TAB_INDEX,
+          'linkage': PERSONAL_CASE_RETRAINING}, {'index': SKILLS_TAB_INDEX,
           'label': MENU.TANKMANPERSONALCASE_TABSKILLS,
           'linkage': PERSONAL_CASE_SKILLS}]
         if showDocumentTab:
             tabs.append({'index': DOCS_TAB_INDEX,
              'label': MENU.TANKMANPERSONALCASE_TABDOCS,
-             'linkage': PERSONAL_CASE_DOCS,
-             'enabled': False if isCrewLocked else True})
+             'linkage': PERSONAL_CASE_DOCS})
         return tabs
 
     @async

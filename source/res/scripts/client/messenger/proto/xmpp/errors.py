@@ -2,10 +2,11 @@
 # Embedded file name: scripts/client/messenger/proto/xmpp/errors.py
 from gui.Scaleform.locale.MESSENGER import MESSENGER as I18N_MESSENGER
 from helpers import i18n, time_utils
-from messenger.m_constants import CLIENT_ACTION_ID
+from messenger.m_constants import CLIENT_ACTION_ID, CLIENT_ERROR_ID
 from messenger.proto.interfaces import IChatError
 from messenger.proto import shared_errors
-from messenger.proto.xmpp.extensions.error import StanzaErrorExtension, WgErrorExtension
+from messenger.proto.shared_errors import ClientActionError
+from messenger.proto.xmpp.extensions.error import StanzaErrorExtension, WgErrorExtension, DEF_STANZA_ERROR_CONDITION
 from messenger.proto.xmpp.extensions.shared_handlers import IQHandler, ProxyHandler
 from messenger.proto.xmpp import xmpp_constants
 
@@ -166,6 +167,15 @@ def createServerPresenceError(pyGlooxTag):
 
 def createServerActionPresenceError(actionID, pyGlooxTag):
     return ServerActionError(actionID, *ProxyHandler(StanzaErrorExtension()).handleTag(pyGlooxTag))
+
+
+def createServerMessageError(pyGlooxTag):
+    return StanzaConditionError(*ProxyHandler(StanzaErrorExtension()).handleTag(pyGlooxTag))
+
+
+def createServerActionMessageError(actionID, pyGlooxTag):
+    errorType, condition = ProxyHandler(StanzaErrorExtension()).handleTag(pyGlooxTag)
+    return ServerActionError(actionID, errorType, condition) if condition != DEF_STANZA_ERROR_CONDITION else ClientActionError(actionID, CLIENT_ERROR_ID.GENERIC)
 
 
 def createChatBanError(banInfo):

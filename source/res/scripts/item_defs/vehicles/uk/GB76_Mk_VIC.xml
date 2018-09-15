@@ -23,7 +23,7 @@
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/british/GB76_Mk_VIC/Mk_VIC_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -65,7 +65,7 @@
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	-0.01411 0.728701 -0.43524	</turret>
+      <turret>	0.010376 0.639483 -0.460457	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/british/GB76_Mk_VIC/collision/Hull.model	</collisionModelServer>
@@ -73,21 +73,24 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	0.540882 0.568577 1.84532	</rayStart>
-        <rayEnd>	0.540882 0.235111 1.62441	</rayEnd>
+        <rayStart>	0.503906 0.44123 1.75085	</rayStart>
+        <rayEnd>	0.503906 0.273668 1.64166	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	0.449146 0.900458 1.36656	</rayStart>
-        <rayEnd>	0.449146 0.529236 1.21759	</rayEnd>
+        <rayStart>	0.511877 0.701151 1.39374	</rayStart>
+        <rayEnd>	0.511866 0.514313 1.32238	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.58	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <size>	0.46	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/british/GB76_Mk_VIC/Mk_VIC_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	2.2 1.1 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_GB76_Mk_VIC>
@@ -129,15 +132,16 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.56	</textureScale>
+        <textureScale>	-3.8	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.311044	</radius>
+          <syncAngle>	9	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
@@ -154,9 +158,10 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.311044	</radius>
+          <syncAngle>	9	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
@@ -179,12 +184,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.617166 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.715835 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB76_Mk_VIC/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB76_Mk_VIC/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.895306 1.01086	</topRightCarryingPoint>
+      <topRightCarryingPoint>	0.898821 1.11871	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -197,6 +202,91 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB76_Mk_VIC/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB76_Mk_VIC/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB76_Mk_VIC/track/left.track	</left>
+        <right>	vehicles/british/GB76_Mk_VIC/track/right.track	</right>
+        <segmentLength>	0.043	</segmentLength>
+        <segmentOffset>	0.099	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0093	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1500	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	3	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	0.6	</backwardElastK>
+          <offset>	-0.108	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.041	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	0.6	</backwardElastK>
+          <offset>	-0.108	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.041	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+        </node>
+      </trackNodes>
     </Chassis_GB76_Mk_VIC>
   </chassis>
   <turrets0>
@@ -274,6 +364,9 @@
             <collisionModelServer>	vehicles/british/GB76_Mk_VIC/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/british/GB76_Mk_VIC/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
+          </camouflage>
         </_15mm_Machine_gun_BESA_>
       </guns>
       <models>
@@ -285,33 +378,33 @@
         <collisionModelServer>	vehicles/british/GB76_Mk_VIC/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB76_Mk_VIC/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.01411 0.360525 0.502194	</gunPosition>
+      <gunPosition>	-0.061055 0.353109 0.496276	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.822972 0.381955 -0.583788	</rayStart>
-          <rayEnd>	-0.430061 0.371105 -0.509605	</rayEnd>
+          <rayStart>	-0.724744 0.379243 -0.565242	</rayStart>
+          <rayEnd>	-0.528289 0.373817 -0.528151	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	0.865731 0.226243 0.315189	</rayStart>
-          <rayEnd>	0.509332 0.226243 0.133594	</rayEnd>
+          <rayStart>	0.860267 0.204325 0.326159	</rayStart>
+          <rayEnd>	0.48684 0.204325 0.182813	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.52	</size>
+          <size>	0.46	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
         <player>
-          <rayStart>	0.822972 0.381955 -0.583788	</rayStart>
-          <rayEnd>	0.430061 0.371105 -0.509605	</rayEnd>
+          <rayStart>	0.724744 0.379243 -0.565242	</rayStart>
+          <rayEnd>	0.528289 0.373817 -0.528151	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.956 -0.033 1.029 0.000 0.502 0.180 1.000 0.585 0.167 0.500 0.000 0.500 0.142 0.000 0.000	</physicsShape>
+      <physicsShape>	0.956 -0.054 0.988 0.000 0.510 0.189 0.761 0.710 0.167 0.500 0.000 0.500 0.142 0.000 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
     </Turret_1_GB76_Mk_VIC>
   </turrets0>

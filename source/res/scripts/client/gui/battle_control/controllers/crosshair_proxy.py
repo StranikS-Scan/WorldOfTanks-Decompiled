@@ -17,13 +17,12 @@ _CTRL_MODE_TO_VIEW_ID = {_CTRL_MODE.ARCADE: CROSSHAIR_VIEW_ID.ARCADE,
  _CTRL_MODE.ARTY: CROSSHAIR_VIEW_ID.STRATEGIC,
  _CTRL_MODE.SNIPER: CROSSHAIR_VIEW_ID.SNIPER,
  _CTRL_MODE.POSTMORTEM: CROSSHAIR_VIEW_ID.POSTMORTEM,
- _CTRL_MODE.FALLOUT_DEATH: CROSSHAIR_VIEW_ID.POSTMORTEM}
+ _CTRL_MODE.RESPAWN_DEATH: CROSSHAIR_VIEW_ID.POSTMORTEM}
 _GUN_MARKERS_SET_IDS = (_BINDING_ID.GUN_MARKERS_FLAGS,
  _BINDING_ID.CLIENT_GUN_MARKER_DATA_PROVIDER,
  _BINDING_ID.SERVER_GUN_MARKER_DATA_PROVIDER,
  _BINDING_ID.CLIENT_SPG_GUN_MARKER_DATA_PROVIDER,
- _BINDING_ID.SERVER_SPG_GUN_MARKER_DATA_PROVIDER,
- _BINDING_ID.CLIENT_SUB_GUN_MARKER_DATA_PROVIDER)
+ _BINDING_ID.SERVER_SPG_GUN_MARKER_DATA_PROVIDER)
 _STRATEGIC_CAMERA_TO_ID = {_STRATEGIC_CAMERA.AERIAL: STRATEGIC_CAMERA_ID.AERIAL,
  _STRATEGIC_CAMERA.TRAJECTORY: STRATEGIC_CAMERA_ID.TRAJECTORY}
 
@@ -42,7 +41,6 @@ def getCrosshairViewIDByCtrlMode(ctrlMode):
 
 class GunMarkersSetInfo(object):
     clientMarkerDataProvider = aih_global_binding.bindRO(_BINDING_ID.CLIENT_GUN_MARKER_DATA_PROVIDER)
-    clientSubMarkerDataProvider = aih_global_binding.bindRO(_BINDING_ID.CLIENT_SUB_GUN_MARKER_DATA_PROVIDER)
     clientSPGMarkerDataProvider = aih_global_binding.bindRO(_BINDING_ID.CLIENT_SPG_GUN_MARKER_DATA_PROVIDER)
     serverMarkerDataProvider = aih_global_binding.bindRO(_BINDING_ID.SERVER_GUN_MARKER_DATA_PROVIDER)
     serverSPGMarkerDataProvider = aih_global_binding.bindRO(_BINDING_ID.SERVER_SPG_GUN_MARKER_DATA_PROVIDER)
@@ -110,7 +108,6 @@ class CrosshairDataProxy(IBattleController):
         aih_global_binding.subscribe(_BINDING_ID.CTRL_MODE_NAME, self.__onAvatarControlModeChanged)
         aih_global_binding.subscribe(_BINDING_ID.AIM_OFFSET, self.__onAimOffsetChanged)
         aih_global_binding.subscribe(_BINDING_ID.CLIENT_GUN_MARKER_STATE, self.__onClientGunMarkerStateChanged)
-        aih_global_binding.subscribe(_BINDING_ID.SUB_GUN_MARKER_STATE, self.__onSubGunMarkerStateChanged)
         aih_global_binding.subscribe(_BINDING_ID.SERVER_GUN_MARKER_STATE, self.__onServerGunMarkerStateChanged)
         aih_global_binding.subscribe(_BINDING_ID.ZOOM_FACTOR, self.__onZoomFactorChanged)
         aih_global_binding.subscribe(_BINDING_ID.STRATEGIC_CAMERA, self.__onStrategicCameraChanged)
@@ -129,7 +126,6 @@ class CrosshairDataProxy(IBattleController):
         aih_global_binding.unsubscribe(_BINDING_ID.CTRL_MODE_NAME, self.__onAvatarControlModeChanged)
         aih_global_binding.unsubscribe(_BINDING_ID.AIM_OFFSET, self.__onAimOffsetChanged)
         aih_global_binding.unsubscribe(_BINDING_ID.CLIENT_GUN_MARKER_STATE, self.__onClientGunMarkerStateChanged)
-        aih_global_binding.unsubscribe(_BINDING_ID.SUB_GUN_MARKER_STATE, self.__onSubGunMarkerStateChanged)
         aih_global_binding.unsubscribe(_BINDING_ID.SERVER_GUN_MARKER_STATE, self.__onServerGunMarkerStateChanged)
         aih_global_binding.unsubscribe(_BINDING_ID.ZOOM_FACTOR, self.__onZoomFactorChanged)
         aih_global_binding.unsubscribe(_BINDING_ID.STRATEGIC_CAMERA, self.__onStrategicCameraChanged)
@@ -257,9 +253,6 @@ class CrosshairDataProxy(IBattleController):
 
     def __onClientGunMarkerStateChanged(self, value):
         self.__setGunMarkerState(_MARKER_TYPE.CLIENT, value)
-
-    def __onSubGunMarkerStateChanged(self, value):
-        self.__setGunMarkerState(_MARKER_TYPE.SUB, value)
 
     def __onServerGunMarkerStateChanged(self, value):
         self.__setGunMarkerState(_MARKER_TYPE.SERVER, value)

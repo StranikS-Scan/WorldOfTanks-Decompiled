@@ -719,10 +719,11 @@ class _SoundEffectDesc(_EffectDesc, object):
         soundName = 'EMPTY_EVENT'
         entityID = args.get('entity_id', None)
         playerID = BigWorld.player().playerVehicleID
-        attackedVehicle = BigWorld.player().getVehicleAttached()
+        observedVehicleID = BigWorld.player().observedVehicleID
+        attachedVehicle = BigWorld.player().getVehicleAttached()
         attackerID = args.get('attackerID')
         if entityID is not None:
-            isPlayerVehicle = playerID == entityID or not BigWorld.entity(playerID).isAlive() and attackedVehicle.id == entityID
+            isPlayerVehicle = playerID == entityID or not BigWorld.entity(playerID).isAlive() and entityID == observedVehicleID
         else:
             isPlayerVehicle = args.get('isPlayerVehicle')
             if isPlayerVehicle is None:
@@ -730,10 +731,10 @@ class _SoundEffectDesc(_EffectDesc, object):
                     isPlayerVehicle = args['entity'].isPlayerVehicle
                 else:
                     isPlayerVehicle = False
-        if attackerID is None or attackedVehicle is None:
+        if attackerID is None or attachedVehicle is None:
             fromPC = False
         else:
-            fromPC = attackerID == playerID or not BigWorld.entity(playerID).isAlive() and attackedVehicle.id == attackerID
+            fromPC = attackerID == playerID or not BigWorld.entity(playerID).isAlive() and attachedVehicle.id == attackerID
         if not fromPC:
             soundName = self._soundNames[0 if isPlayerVehicle else 1] if self._soundNames is not None else self._soundName
         if entityID is not None:
@@ -1254,16 +1255,15 @@ class FalloutDestroyEffect:
         vehicle = BigWorld.entity(vehicle_id)
         if vehicle is None:
             return
-        effects = vehicle.typeDescriptor.type.effects['fullDestruction']
-        if not effects:
-            return
-        vehicle.appearance.hide()
-        if vehicle.model is not None:
-            fakeModel = helpers.newFakeModel()
-            BigWorld.addModel(fakeModel)
-            fakeModel.position = vehicle.model.position
-            effectsPlayer = EffectsListPlayer(effects[0][1], effects[0][0])
-            effectsPlayer.play(fakeModel, SpecialKeyPointNames.START, partial(BigWorld.delModel, fakeModel))
-            return effectsPlayer
         else:
+            effects = vehicle.typeDescriptor.type.effects['fullDestruction']
+            if not effects:
+                return
+            vehicle.show(False)
+            if vehicle.model is not None:
+                fakeModel = helpers.newFakeModel()
+                BigWorld.addModel(fakeModel)
+                fakeModel.position = vehicle.model.position
+                effectsPlayer = EffectsListPlayer(effects[0][1], effects[0][0])
+                effectsPlayer.play(fakeModel, SpecialKeyPointNames.START, partial(BigWorld.delModel, fakeModel))
             return

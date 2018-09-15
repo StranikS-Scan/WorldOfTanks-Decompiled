@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/battle_control/battle_session.py
 import weakref
 from collections import namedtuple
-import operator
 import BattleReplay
 from PlayerEvents import g_playerEvents
 from adisp import async
@@ -112,7 +111,7 @@ class BattleSessionProvider(IBattleSessionProvider):
     def setPlayerVehicle(self, vID, vDesc):
         ctrl = self.__sharedRepo.ammo
         if ctrl is not None:
-            ctrl.setGunSettings(map(operator.attrgetter('gun'), vDesc.turrets))
+            ctrl.setGunSettings(vDesc.gun)
         ctrl = self.__sharedRepo.vehicleState
         if ctrl is not None:
             ctrl.setPlayerVehicle(vID)
@@ -135,13 +134,13 @@ class BattleSessionProvider(IBattleSessionProvider):
         ctrl = self.__sharedRepo.ammo
         if ctrl is not None:
             ctrl.clear(False)
-            ctrl.setGunSettings((extraData.gunSettings,))
+            ctrl.setGunSettings(extraData.gunSettings)
             for intCD, quantity, quantityInClip in extraData.orderedAmmo:
                 ctrl.setShells(intCD, quantity, quantityInClip)
 
             ctrl.setCurrentShellCD(extraData.currentShellCD)
             ctrl.setNextShellCD(extraData.nextShellCD)
-            ctrl.setGunReloadTime(0, extraData.reloadTimeLeft, extraData.reloadBaseTime)
+            ctrl.setGunReloadTime(extraData.reloadTimeLeft, extraData.reloadBaseTime)
         ctrl = self.__sharedRepo.equipments
         if ctrl is not None:
             ctrl.clear(False)
@@ -290,20 +289,23 @@ class BattleSessionProvider(IBattleSessionProvider):
         self.__ctx.stop()
         return
 
-    def switchToPostmortem(self):
-        """Player's vehicle is destroyed, switchers GUI to postmortem mode."""
+    def switchToPostmortem(self, noRespawnPossible=True, respawnAvailable=False):
+        """Player's vehicle is destroyed, switchers GUI to postmortem mode.
+        :param noRespawnPossible: whether the player can respawn or not during the game.
+        :param respawnAvailable: if the player can respawn directly after being dead (move to respawn ctrl mode)
+        """
         ctrl = self.__sharedRepo.ammo
         if ctrl is not None:
             ctrl.clear(False)
         ctrl = self.__sharedRepo.equipments
         if ctrl is not None:
-            ctrl.clear()
+            ctrl.clear(noRespawnPossible)
         ctrl = self.__sharedRepo.optionalDevices
         if ctrl is not None:
             ctrl.clear(False)
         ctrl = self.__sharedRepo.vehicleState
         if ctrl is not None:
-            ctrl.switchToPostmortem()
+            ctrl.switchToPostmortem(noRespawnPossible, respawnAvailable)
         return
 
     def useLoaderIntuition(self):

@@ -29,11 +29,11 @@
     <Interface>	AccountDebugger	</Interface>
   </Implements>
   <Properties>
-    <requiredVersion_92010>
+    <requiredVersion_92100>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_0.9.20.1_6	</Default>
-    </requiredVersion_92010>
+      <Default>	ct_0.9.21	</Default>
+    </requiredVersion_92100>
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -119,6 +119,11 @@
       <Flags>	BASE	</Flags>
       <Persistent>	true	</Persistent>
     </vhID>
+    <incarnationID>
+      <Type>	UINT64	</Type>
+      <Flags>	BASE	</Flags>
+      <Persistent>	true	</Persistent>
+    </incarnationID>
     <peripheryID>
       <Type>	INT32	</Type>
       <Flags>	BASE	</Flags>
@@ -415,7 +420,6 @@
       <Arg>	BOOL	</Arg>
       <Arg>	UINT32	</Arg>
     </kickSelf>
-    <isNewbie></isNewbie>
     <destroyIfNoKeepers></destroyIfNoKeepers>
     <destroySelfForPeriphery>
       <Arg>	INT32	</Arg>

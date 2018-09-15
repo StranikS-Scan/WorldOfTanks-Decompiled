@@ -24,6 +24,7 @@ class BADGES_HIGHLIGHTS(CONST_CONTAINER):
     RED = 'red'
     VIOLET = 'violet'
     GREEN = 'green'
+    GOLD = 'gold'
 
 
 def getBadgeIconPath(size, badgeID):
@@ -36,3 +37,7 @@ def getBadgeHighlightIconPath(value):
 
 def getPersonalMissionVehicleAwardImage(size, vehicleName):
     return RES_ICONS.getPersonalMissionVehicleAwardImage(size, vehicleName)
+
+
+def getBadgeIconPathByDimension(dimension, badgeID):
+    return RES_ICONS.getBadgeIconBySize(dimension, dimension, badgeID)

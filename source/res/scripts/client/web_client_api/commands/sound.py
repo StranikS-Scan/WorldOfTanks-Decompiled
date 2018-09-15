@@ -20,3 +20,24 @@ def createSoundHandler(handlerFunc):
      'cls': SoundCommand,
      'handler': handlerFunc}
     return instantiateObject(CommandHandler, data)
+
+
+_HangarSoundCommand = namedtuple('_HangarSoundCommand', ('mute',))
+_HangarSoundCommand.__new__.__defaults__ = (False,)
+_HangarSoundCommandScheme = {'required': (('mute', bool),)}
+
+class HangarSoundCommand(_HangarSoundCommand, SchemeValidator):
+    """
+    Represents web command for controlling hangar sound
+    """
+
+    def __init__(self, *args, **kwargs):
+        super(HangarSoundCommand, self).__init__(_HangarSoundCommandScheme)
+
+
+def createHangarSoundHandler(handlerFunc, finiHandlerFunc=None):
+    data = {'name': 'hangar_sound',
+     'cls': HangarSoundCommand,
+     'handler': handlerFunc,
+     'finiHandler': finiHandlerFunc}
+    return instantiateObject(CommandHandler, data)

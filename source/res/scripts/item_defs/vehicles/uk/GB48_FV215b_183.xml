@@ -18,7 +18,8 @@
     <firePenalty>	0.17	</firePenalty>
   </invisibility>
   <repairCost>	11	</repairCost>
-  <crewXpFactor>	1.0	</crewXpFactor>
+  <premiumVehicleXPFactor>	0.05	</premiumVehicleXPFactor>
+  <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
     <priceFactor>	2.0	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
@@ -375,7 +376,7 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_183mm_AT_Gun>	shared	  <maxAmmo>	12	</maxAmmo>
+        <_183mm_L4>	shared	  <maxAmmo>	20	</maxAmmo>
           <armor>
             <gun>	80	</gun>
           </armor>
@@ -415,7 +416,7 @@
           <camouflage>
             <tiling>	0.46 0.46 0.000000 0.000000	</tiling>
           </camouflage>
-        </_183mm_AT_Gun>
+        </_183mm_L4>
       </guns>
       <models>
         <undamaged>	vehicles/british/GB48_FV215b_183/normal/lod0/Turret_01.model	</undamaged>

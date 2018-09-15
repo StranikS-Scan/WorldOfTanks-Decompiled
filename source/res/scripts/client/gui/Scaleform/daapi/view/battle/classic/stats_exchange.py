@@ -24,7 +24,8 @@ class FragsCollectableStats(broker.CollectableStats):
         if not vInfoVO.isAlive():
             self.__teamsDeaths[vInfoVO.team].add(vInfoVO.vehicleID)
 
-    def getTotalStats(self, arenaDP):
+    def getTotalStats(self, arenaVisitor, sessionProvider):
+        arenaDP = sessionProvider.getArenaDP()
         isEnemyTeam = arenaDP.isEnemyTeam
         allyScope, enemyScope = (0, 0)
         for teamIdx, vehicleIDs in self.__teamsDeaths.iteritems():

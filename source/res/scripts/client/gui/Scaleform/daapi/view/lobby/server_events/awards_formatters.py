@@ -66,16 +66,6 @@ class VehiclesFormatter(OldStyleBonusFormatter):
             self._result.append(formatters.packVehiclesBonusBlock(vehiclesLbl, self.__eventID))
 
 
-class HalloweenBonusFormatter(OldStyleBonusFormatter):
-
-    @classmethod
-    def getOrder(cls):
-        pass
-
-    def accumulateBonuses(self, bonus):
-        self._result.append(formatters.packHalloweenBonusesBlock(bonus))
-
-
 class SimpleBonusFormatter(OldStyleBonusFormatter):
 
     def accumulateBonuses(self, bonus, event=None):
@@ -94,8 +84,7 @@ class SimpleBonusFormatter(OldStyleBonusFormatter):
 def getFormattersMap(event):
     return {'dossier': DossierFormatter(),
      'customizations': CustomizationsFormatter(),
-     'vehicles': VehiclesFormatter(event),
-     'halloween2017': HalloweenBonusFormatter()}
+     'vehicles': VehiclesFormatter(event)}
 
 
 class OldStyleAwardsPacker(AwardsPacker):

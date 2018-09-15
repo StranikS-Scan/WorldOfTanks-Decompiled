@@ -113,9 +113,26 @@ def makeDefaultCameraMatrix():
 
 
 def makePostmortemCameraMatrix():
+    """Makes a camera matrix for postmortem mode, which position component is inferred from active vehicle and rotation
+    component matches the 3D camera orientation. If the active vehicle changes (for example, during a view switch, the
+    matrix is updated accordingly.
+    """
     matrix = Math.WGCombinedMP()
     translationSrc = Math.WGTranslationOnlyMP()
     translationSrc.source = BigWorld.player().consistentMatrices.attachedVehicleMatrix
     matrix.translationSrc = translationSrc
     matrix.rotationSrc = BigWorld.camera().invViewMatrix
     return matrix
+
+
+def makeAttachedVehicleMatrix():
+    """Makes a matrix which is consistent with active vehicle, if the vehicle changes (for example, during a view
+    switch), the matrix is updated accordingly.
+    """
+    return BigWorld.player().consistentMatrices.attachedVehicleMatrix
+
+
+def makeOwnVehicleMatrix():
+    """Makes a matrix which is consistent with player vehicle, even if the vehicle itself is destroyed.
+    """
+    return BigWorld.player().consistentMatrices.ownVehicleMatrix

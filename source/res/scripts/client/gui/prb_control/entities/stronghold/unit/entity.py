@@ -554,22 +554,13 @@ class StrongholdEntity(UnitEntity):
         _, unit = self.getUnit(unitMgrID=None)
         playerInfo = self.getPlayerInfo()
         myClanRole = self.__g_clanCache.clanRole
-        canStealLeadership = not self.getFlags().isInIdle()
-        commanderDBID = unit.getCreatorDBID()
-        if playerInfo.dbID != commanderDBID:
-            clanMembers = self.__g_clanCache.clanMembers
-            commanderClanRole = CLAN_MEMBER_FLAGS.RESERVIST
-            for member in clanMembers:
-                if member.getID() == commanderDBID:
-                    commanderClanRole = member.getClanRole()
-                    break
-
-            if myClanRole >= commanderClanRole:
-                canStealLeadership = False
-        strongholdRoles = None
+        strongholdManageReservesRoles = None
+        strongholdStealLeadershipRoles = None
         if self.isStrongholdSettingsValid():
-            strongholdRoles = self.__strongholdSettings.getReserve().getPermissions().get('manage_reserves')
-        return StrongholdPermissions(roles, flags, isCurrentPlayer, isPlayerReady, clanRoles=myClanRole, strongholdRoles=strongholdRoles, isLegionary=playerInfo.isLegionary(), isInSlot=playerInfo.isInSlot, canStealLeadership=canStealLeadership, isFreezed=self.isStrongholdUnitFreezed())
+            strongholdPermissions = self.__strongholdSettings.getReserve().getPermissions()
+            strongholdManageReservesRoles = strongholdPermissions.get('manage_reserves')
+            strongholdStealLeadershipRoles = strongholdPermissions.get('take_away_leadership')
+        return StrongholdPermissions(roles, flags, isCurrentPlayer, isPlayerReady, clanRoles=myClanRole, strongholdManageReservesRoles=strongholdManageReservesRoles, strongholdStealLeadershipRoles=strongholdStealLeadershipRoles, isLegionary=playerInfo.isLegionary(), isInSlot=playerInfo.isInSlot, isFreezed=self.isStrongholdUnitFreezed(), isInIdle=self.getFlags().isInIdle())
 
     def _getRequestHandlers(self):
         RQ_TYPE = settings.REQUEST_TYPE

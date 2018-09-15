@@ -64,40 +64,33 @@ def _findPersonalQuestsState(eventsCache, vehicle):
     state = WIDGET_PQ_STATE.DISABLED
     vehicleLvl = vehicle.level
     vehicleType = vehicle.type
-    vehicleIsEvent = True if 'event_battles' in vehicle.tags else False
-    if vehicleIsEvent:
-        return (state,
-         None,
-         None,
-         None)
-    else:
-        for tile in eventsCache.personalMissions.getOperations().itervalues():
-            for chainID, chain in tile.getQuests().iteritems():
-                if tile.getChainVehicleClass(chainID) != vehicleType:
+    for tile in eventsCache.personalMissions.getOperations().itervalues():
+        for chainID, chain in tile.getQuests().iteritems():
+            if tile.getChainVehicleClass(chainID) != vehicleType:
+                continue
+            for quest in chain.itervalues():
+                if vehicleLvl < quest.getVehMinLevel():
                     continue
-                for quest in chain.itervalues():
-                    if vehicleLvl < quest.getVehMinLevel():
+                if quest.isFullCompleted():
+                    state |= WIDGET_PQ_STATE.DONE
+                    continue
+                if quest.isMainCompleted():
+                    state |= WIDGET_PQ_STATE.COMPLETED
+                    if not quest.isInProgress():
                         continue
-                    if quest.isFullCompleted():
-                        state |= WIDGET_PQ_STATE.DONE
-                        continue
-                    if quest.isMainCompleted():
-                        state |= WIDGET_PQ_STATE.COMPLETED
-                        if not quest.isInProgress():
-                            continue
-                    state |= WIDGET_PQ_STATE.UNAVAILABLE
-                    if quest.canBeSelected():
-                        state |= WIDGET_PQ_STATE.AVAILABLE
-                    if quest.isInProgress():
-                        return (state | WIDGET_PQ_STATE.IN_PROGRESS,
-                         quest,
-                         chain,
-                         tile)
+                state |= WIDGET_PQ_STATE.UNAVAILABLE
+                if quest.canBeSelected():
+                    state |= WIDGET_PQ_STATE.AVAILABLE
+                if quest.isInProgress():
+                    return (state | WIDGET_PQ_STATE.IN_PROGRESS,
+                     quest,
+                     chain,
+                     tile)
 
-        return (state,
-         None,
-         None,
-         None)
+    return (state,
+     None,
+     None,
+     None)
 
 
 class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
@@ -124,8 +117,8 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         missions_page.setHideDoneFilter()
         showMissionsForCurrentVehicle()
 
-    def showEventQuests(self):
-        showMissionsElen()
+    def showEventQuests(self, eventQuestsID):
+        showMissionsElen(eventQuestsID)
 
     def onUpdateHangarFlag(self):
         self.update()
@@ -134,16 +127,14 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         self._personalQuestID = None
         if self._currentVehicle.isPresent():
             vehicle = self._currentVehicle.item
-            isHalloweenVehicle = 'event_battles' in vehicle.tags and self._eventsCache.isEventEnabled()
             headerVO = {'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
              'tankInfo': text_styles.concatStylesToMultiLine(text_styles.promoSubTitle(vehicle.shortUserName), text_styles.stats(MENU.levels_roman(vehicle.level))),
              'isPremIGR': vehicle.isPremiumIGR,
              'isVisible': True,
-             'isBeginner': False,
-             'hideTankInfo': isHalloweenVehicle}
-            headerVO.update(self.__getBattleQuestsVO(vehicle, isHalloweenVehicle))
+             'isBeginner': False}
+            headerVO.update(self.__getBattleQuestsVO(vehicle))
             headerVO.update(self.__getPersonalQuestsVO(vehicle))
-            headerVO.update(self.__getElenQuestsVO(vehicle, 'event_battles' in vehicle.tags))
+            headerVO.update(self.__getElenQuestsVO(vehicle))
         else:
             headerVO = {'isVisible': False}
         self.as_setDataS(headerVO)
@@ -176,7 +167,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         if 'elenSettings' in diff:
             self.update()
 
-    def __getBattleQuestsVO(self, vehicle, isHalloweenVehicle):
+    def __getBattleQuestsVO(self, vehicle):
         """ Get part of VO responsible for battle quests flag.
         """
         quests = self._questController.getQuestForVehicle(vehicle)
@@ -187,22 +178,15 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                 label = _ms(MENU.hangarHeaderBattleQuestsLabel(LABEL_STATE.ACTIVE), total=totalCount - completedQuests)
             else:
                 label = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ALL_DONE)
-            if isHalloweenVehicle:
-                commonQuestsIcon = RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE_HALLOWEEN
-            else:
-                commonQuestsIcon = RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE
+            commonQuestsIcon = RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE
         else:
-            if isHalloweenVehicle:
-                commonQuestsIcon = RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED_HALLOWEEN
-            else:
-                commonQuestsIcon = RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED
+            commonQuestsIcon = RES_ICONS.MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED
             label = ''
         return {'commonQuestsLabel': label,
          'commonQuestsIcon': commonQuestsIcon,
          'commonQuestsTooltip': TOOLTIPS_CONSTANTS.QUESTS_PREVIEW,
          'commonQuestsEnable': totalCount > 0,
-         'commonQuestsVisible': True,
-         'commonQuestsUseEventFlag': isHalloweenVehicle}
+         'commonQuestsVisible': True}
 
     def __getPersonalQuestsVO(self, vehicle):
         """ Get part of VO responsible for personal quests flag.
@@ -256,25 +240,38 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
             return {'personalQuestsLabel': _ms(MENU.hangarHeaderPersonalQuestsLabel(labelState), **ctx),
              'personalQuestsIcon': icon,
              'personalQuestsEnable': enable,
-             'personalQuestsVisible': 'event_battles' not in vehicle.tags,
+             'personalQuestsVisible': True,
              'isPersonalReward': bool(pqState & WIDGET_PQ_STATE.AWARD),
              'personalQuestsTooltip': tooltip,
              'personalQuestsTooltipIsSpecial': bool(pqState & WIDGET_PQ_STATE.IN_PROGRESS)}
 
-    def __getElenQuestsVO(self, vehicle, isHalloweenTank=False):
+    def __getElenQuestsVO(self, vehicle):
         eventsData = self._eventsController.getEventsSettingsData()
         hangarFlagData = self._eventsController.getHangarFlagData()
         isElenEnabled = ServicesLocator.lobbyContext.getServerSettings().isElenEnabled()
-        if isHalloweenTank or eventsData is None or hangarFlagData is None or not eventsData.hasActiveEvents() or not isElenEnabled:
+        dataError = eventsData is None or hangarFlagData is None
+        if dataError or not isElenEnabled or not eventsData.hasActiveEvents() or hangarFlagData.isSpecialAccount():
             return {'isEvent': False}
         else:
             currentEvent = eventsData.getEventForVehicle(vehicle.intCD)
-            enable = currentEvent is not None and currentEvent.isStarted() and not currentEvent.isFinished()
-            if enable:
+            if currentEvent is not None and currentEvent.isStarted() and not currentEvent.isFinished():
                 eventId = currentEvent.getEventID()
                 isRegistered = hangarFlagData.isRegistered(eventId)
-                if not isRegistered and currentEvent.isRegistrationFinished():
+                hasAnotherActiveEvents = eventsData.hasAnotherActiveEvents(eventId)
+                regIsFinished = currentEvent.isRegistrationFinished()
+                notValidEvent = regIsFinished and not isRegistered or hangarFlagData.wasCanceled(eventId)
+                if notValidEvent and not hasAnotherActiveEvents:
                     return {'isEvent': False}
+                if notValidEvent and hasAnotherActiveEvents:
+                    enable = False
+                else:
+                    enable = True
+            else:
+                if not eventsData.hasActiveEventsByState(hangarFlagData.getHangarFlags()):
+                    return {'isEvent': False}
+                eventId = None
+                enable = False
+            if enable:
                 eventQuestsTooltip = TOOLTIPS_CONSTANTS.EVENT_QUESTS_PREVIEW
                 eventQuestsTooltipIsSpecial = True
                 battleType = currentEvent.getBattleType()
@@ -311,5 +308,6 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
              'eventQuestsIcon': eventQuestsIcon,
              'eventQuestsLabel': eventQuestsLabel,
              'eventQuestsTooltip': eventQuestsTooltip,
-             'eventQuestsTooltipIsSpecial': eventQuestsTooltipIsSpecial}
+             'eventQuestsTooltipIsSpecial': eventQuestsTooltipIsSpecial,
+             'eventQuestsID': eventId}
             return res

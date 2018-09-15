@@ -129,7 +129,8 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'spgAlternativeAimingCameraEnabled': False,
  'tokenShopAvailabilityURL': '',
  'tokenShopAPIKey': '',
- 'personalMissions': {}}
+ 'personalMissions': {},
+ 'rankedBattles': {}}
 
 class GuiSettings(object):
 

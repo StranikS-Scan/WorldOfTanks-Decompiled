@@ -150,15 +150,6 @@ class IClientArenaVisitor(object):
     def isArenaInWaiting(self):
         raise NotImplementedError
 
-    def hasFlags(self):
-        raise NotImplementedError
-
-    def hasResourcePoints(self):
-        raise NotImplementedError
-
-    def hasRepairPoints(self):
-        raise NotImplementedError
-
     def hasRage(self):
         raise NotImplementedError
 
@@ -566,7 +557,7 @@ class IBattleSessionProvider(object):
     def stop(self):
         raise NotImplementedError
 
-    def switchToPostmortem(self):
+    def switchToPostmortem(self, noRespawnPossible=True, respawnAvailable=False):
         raise NotImplementedError
 
     def useLoaderIntuition(self):

@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/MemoryCriticalController.py
 import BigWorld
-from debug_utils import LOG_NOTE
+from debug_utils import LOG_NOTE, LOG_CURRENT_EXCEPTION, LOG_ERROR
 import Event
 
 class MemoryCriticalController:
@@ -18,12 +18,14 @@ class MemoryCriticalController:
         self.__originFloraQuality = -1
         self.__originTerrainQuality = -1
         self.__needReboot = False
+        self.__loweredSettings = []
         self.__event = Event.Event()
 
     def destroy(self):
         if self.__event is not None:
             self.__event.clear()
             self.__event = None
+        del self.__loweredSettings[:]
         return
 
     def __call__(self):
@@ -87,25 +89,50 @@ class MemoryCriticalController:
         BigWorld.commitPendingGraphicsSettings()
 
     def restore(self):
-        if self.__originTexQuality != -1 or self.__originFloraQuality != -1 or self.__originTerrainQuality != -1:
-            if self.__originTexQuality != -1:
-                BigWorld.setGraphicsSetting('TEXTURE_QUALITY', self.__originTexQuality)
-                textureSettings = [ t for t in self.__loweredSettings if t[0] == 'TEXTURE_QUALITY' ][0][2]
-                LOG_NOTE('The texture quality setting was restored to the original value <%s>.' % textureSettings[self.__originTexQuality][0])
-            if self.__originFloraQuality != -1:
-                BigWorld.setGraphicsSetting('FLORA_QUALITY', self.__originFloraQuality)
-                floraSettings = [ t for t in self.__loweredSettings if t[0] == 'FLORA_QUALITY' ][0][2]
-                LOG_NOTE('The flora quality setting was restored to the original value <%s>.' % floraSettings[self.__originFloraQuality][0])
-            if self.__originTerrainQuality != -1:
-                BigWorld.setGraphicsSetting('TERRAIN_QUALITY', self.__originTerrainQuality)
-                terrainSettings = [ t for t in self.__loweredSettings if t[0] == 'TERRAIN_QUALITY' ][0][2]
-                LOG_NOTE('The terrain quality setting was restored to the original value <%s>.' % terrainSettings[self.__originTerrainQuality][0])
+        toRestore = []
+        if self.__originTexQuality != -1:
+            toRestore.append(('TEXTURE_QUALITY', self.__originTexQuality))
+        if self.__originFloraQuality != -1:
+            toRestore.append(('FLORA_QUALITY', self.__originFloraQuality))
+        if self.__originTerrainQuality != -1:
+            toRestore.append(('TERRAIN_QUALITY', self.__originTerrainQuality))
+        commit = False
+        for label, originalIndex in toRestore:
+            if self.__setGraphicsSetting(label, self.__originTexQuality):
+                commit = True
+                LOG_NOTE('The setting was restored to the original value.', label, self.__getLoweredOptionLabel(label, originalIndex))
+            LOG_ERROR('The setting was not restored to the original value.', label, self.__getLoweredOptionLabel(label, originalIndex), BigWorld.getGraphicsSetting(label), self.__getLoweredOption(label))
+
+        if commit:
             BigWorld.commitPendingGraphicsSettings()
             self.__originTexQuality = -1
             self.__originFloraQuality = -1
             self.__originTerrainQuality = -1
             self.__needReboot = False
             self.__messages = []
+
+    @staticmethod
+    def __setGraphicsSetting(label, index):
+        isSet = True
+        try:
+            BigWorld.setGraphicsSetting(label, index)
+        except ValueError:
+            isSet = False
+            LOG_CURRENT_EXCEPTION()
+
+        return isSet
+
+    def __getLoweredOption(self, token):
+        for setting in self.__loweredSettings:
+            label, _, options = setting[:3]
+            if label == token:
+                return options
+
+        return []
+
+    def __getLoweredOptionLabel(self, token, index):
+        options = self.__getLoweredOption(token)
+        return options[index][0] if -1 < index < len(options) else str(index)
 
 
 g_critMemHandler = MemoryCriticalController()

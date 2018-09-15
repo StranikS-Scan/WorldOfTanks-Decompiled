@@ -37,15 +37,7 @@ class ENTRY_SYMBOL_NAME(object):
     VIEW_RANGE_CIRCLES = 'ViewRangeCirclesEntry'
     ANIMATION = 'AnimationEntry'
     MARK_CELL = 'CellFlashEntry'
-    ALLY_REPAIR_POINT = 'AllyRepairEntry'
-    ENEMY_REPAIR_POINT = 'EnemyRepairEntry'
-    FLAG_ENTRY = 'FlagEntry'
-    ALLY_ABSORPTION_FLAG = 'AllyAbsorptionFlagEntry'
-    ENEMY_ABSORPTION_FLAG = 'EnemyAbsorptionFlagEntry'
-    RESOURCE_POINT = 'ResourcePointEntry'
     ARTY_MARKER = 'ArtyMarkerMinimapEntry'
-    LEVIATHAN_HEALTH_MARKER = 'LeviathanHealthPowerupMinimapEntry'
-    LEVIATHAN_PORTAL_MARKER = 'LeviathanPortalIconMinimapEntry'
 
 
 class TRANSFORM_FLAG(object):
@@ -94,26 +86,6 @@ class VIEW_RANGE_CIRCLES_AS3_DESCR(object):
 
 EQ_MARKER_TO_SYMBOL = {'artillery': ENTRY_SYMBOL_NAME.ARTILLERY_ENTRY,
  'bomber': ENTRY_SYMBOL_NAME.BOMBER_ENTRY}
-
-class RESOURCE_ENTRY_STATE(object):
-    CONFLICT = 'conflict'
-    COOLDOWN = 'cooldown'
-    READY = 'ready'
-    OWN_MINING = 'own_mining'
-    ENEMY_MINING = 'enemy_mining'
-
-
-class FLAG_ENTRY_STATE(object):
-    NEUTRAL = 'neutral'
-    ALLY = 'ally'
-    ENEMY = 'enemy'
-    COOLDOWN = 'cooldown'
-
-
-CAPTURE_STATE_BY_TEAMS = {True: RESOURCE_ENTRY_STATE.OWN_MINING,
- False: RESOURCE_ENTRY_STATE.ENEMY_MINING}
-CAPTURE_FROZEN_STATE_BY_TEAMS = {True: RESOURCE_ENTRY_STATE.OWN_MINING,
- False: RESOURCE_ENTRY_STATE.ENEMY_MINING}
 
 class ADDITIONAL_FEATURES(BitmaskHelper):
     OFF = 0

@@ -35,9 +35,9 @@ try:
 except AttributeError:
     pass
 
-def getShotAngles(vehTypeDescr, vehMatrix, curShotAngles, point, adjust=True, turretIndex=0):
-    turretOffs = vehTypeDescr.hull.turretPositions[turretIndex] + vehTypeDescr.chassis.hullPosition
-    gunOffs = vehTypeDescr.turrets[turretIndex].turret.gunPosition
-    speed = vehTypeDescr.turrets[turretIndex].shot.speed
-    gravity = vehTypeDescr.turrets[turretIndex].shot.gravity
+def getShotAngles(vehTypeDescr, vehMatrix, curShotAngles, point, adjust=True):
+    turretOffs = vehTypeDescr.hull.turretPositions[0] + vehTypeDescr.chassis.hullPosition
+    gunOffs = vehTypeDescr.turret.gunPosition
+    speed = vehTypeDescr.shot.speed
+    gravity = vehTypeDescr.shot.gravity
     return BigWorld.wg_getShotAngles(turretOffs, gunOffs, vehMatrix, speed, gravity, curShotAngles[0], curShotAngles[1], point, adjust)

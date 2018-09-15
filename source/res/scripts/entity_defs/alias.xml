@@ -186,26 +186,15 @@
   </FALLOUT_QUEUE_INFO>
   <EVENT_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
-      <vehDescr>
+      <classes>
         <Type>	ARRAY	  <of>	UINT32	</of>
         </Type>
-      </vehDescr>
+      </classes>
       <players>
         <Type>	UINT32	</Type>
       </players>
     </Properties>
   </EVENT_QUEUE_INFO>
-  <EVENT_2_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
-    <Properties>
-      <vehDescr>
-        <Type>	ARRAY	  <of>	UINT32	</of>
-        </Type>
-      </vehDescr>
-      <players>
-        <Type>	UINT32	</Type>
-      </players>
-    </Properties>
-  </EVENT_2_QUEUE_INFO>
   <RANKED_BATTLES_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <classes>
@@ -302,9 +291,6 @@
       <shotID>
         <Type>	SHOT_ID	</Type>
       </shotID>
-      <turretIndex>
-        <Type>	UINT8	</Type>
-      </turretIndex>
       <numVehiclesAffected>
         <Type>	INT16	</Type>
       </numVehiclesAffected>
@@ -373,9 +359,6 @@
       <targetWithFlag>
         <Type>	BOOL	</Type>
       </targetWithFlag>
-      <isHazard>
-        <Type>	UINT8	</Type>
-      </isHazard>
     </Properties>
   </ATTACK_RESULTS>
   <PREBATTLE_INVITE>	FIXED_DICT	  <Properties>
@@ -391,6 +374,10 @@
       <creator>
         <Type>	STRING	</Type>
       </creator>
+      <creatorBadges>
+        <Type>	ARRAY	  <of>	UINT32	</of>
+        </Type>
+      </creatorBadges>
       <creatorDBID>
         <Type>	DB_ID	</Type>
       </creatorDBID>
@@ -666,9 +653,6 @@
       <attackerGunBurstCount>
         <Type>	UINT8	</Type>
       </attackerGunBurstCount>
-      <isHazard>
-        <Type>	UINT8	</Type>
-      </isHazard>
       <equipmentID>
         <Type>	UINT16	</Type>
       </equipmentID>
@@ -775,4 +759,89 @@
     </Properties>
   </REMOTE_CAMERA_DATA>
   <STUN_INFO>	FLOAT64	</STUN_INFO>
+  <RESPAWN_AVAILABLE_VEHICLE>	FIXED_DICT	  <Properties>
+      <compDescr>
+        <Type>	STRING	</Type>
+      </compDescr>
+      <crewCompactDescrs>
+        <Type>	ARRAY	  <of>	STRING	</of>
+        </Type>
+      </crewCompactDescrs>
+      <marksOnGun>
+        <Type>	UINT8	</Type>
+      </marksOnGun>
+    </Properties>
+  </RESPAWN_AVAILABLE_VEHICLE>
+  <RESPAWN_COOLDOWN_ITEM>	FIXED_DICT	  <Properties>
+      <vehTypeCompDescr>
+        <Type>	UINT16	</Type>
+      </vehTypeCompDescr>
+      <endOfCooldownPiT>
+        <Type>	FLOAT32	</Type>
+      </endOfCooldownPiT>
+    </Properties>
+  </RESPAWN_COOLDOWN_ITEM>
+  <RESPAWN_INFO>	FIXED_DICT	  <Properties>
+      <compDescr>
+        <Type>	STRING	</Type>
+      </compDescr>
+      <respawnType>
+        <Type>	UINT8	</Type>
+      </respawnType>
+      <autoRespawnPiT>
+        <Type>	FLOAT32	</Type>
+      </autoRespawnPiT>
+      <manualRespawnPiT>
+        <Type>	FLOAT32	</Type>
+      </manualRespawnPiT>
+    </Properties>
+  </RESPAWN_INFO>
+  <RESPAWN_LIMITED_VEHICLES>	FIXED_DICT	  <Properties>
+      <group>
+        <Type>	UINT8	</Type>
+      </group>
+      <vehTypeCompDescrs>
+        <Type>	ARRAY	  <of>	UINT16	</of>
+        </Type>
+      </vehTypeCompDescrs>
+    </Properties>
+  </RESPAWN_LIMITED_VEHICLES>
+  <RESPAWN_INFO_VEHICLE>	FIXED_DICT	  <Properties>
+      <compDescr>
+        <Type>	STRING	</Type>
+      </compDescr>
+      <crewCompactDescrs>
+        <Type>	ARRAY	  <of>	STRING	</of>
+        </Type>
+      </crewCompactDescrs>
+      <marksOnGun>
+        <Type>	UINT8	</Type>
+      </marksOnGun>
+      <index>
+        <Type>	UINT16	</Type>
+      </index>
+      <position>
+        <Type>	VECTOR3	</Type>
+      </position>
+      <yaw>
+        <Type>	FLOAT32	</Type>
+      </yaw>
+      <prevGroup>
+        <Type>	UINT8	</Type>
+      </prevGroup>
+      <group>
+        <Type>	UINT8	</Type>
+      </group>
+      <policyID>
+        <Type>	UINT8	</Type>
+      </policyID>
+      <onRespawnSettings>
+        <Type>	PYTHON	</Type>
+      </onRespawnSettings>
+      <ammo>
+        <Type>	ARRAY	  <of>	INT32	</of>
+        </Type>
+      </ammo>
+    </Properties>
+  </RESPAWN_INFO_VEHICLE>
 </alias.xml>

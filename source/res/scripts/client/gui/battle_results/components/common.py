@@ -274,9 +274,7 @@ class FalloutArenaFullNameItem(base.StatsItem):
         common = reusable.common
         arenaType = common.arenaType
         i18nKey = _ARENA_TYPE_EXT_FORMAT.format(common.arenaGuiType)
-        if common.hasResourcePoints:
-            i18nKey += '/resource'
-        elif common.isMultiTeamMode:
+        if common.isMultiTeamMode:
             i18nKey += '/multiteam'
         return makeArenaFullName(arenaType.getName(), i18nKey)
 

@@ -114,13 +114,10 @@ class BoosterAward(ExplosionBackAward):
     def getAdditionalText(self):
         return text_styles.main(MENU.AWARDWINDOW_BOOSTERAWARD_ADDITIONAL)
 
-    def getBodyButtonText(self):
+    def getOkButtonText(self):
         return i18n.makeString(MENU.AWARDWINDOW_BOOSTERAWARD_ACTIVATEBTN_LABEL)
 
-    def getButtonStates(self):
-        return (False, True, True)
-
-    def handleBodyButton(self):
+    def handleOkButton(self):
         shared_events.showBoostersWindow()
 
     def clear(self):

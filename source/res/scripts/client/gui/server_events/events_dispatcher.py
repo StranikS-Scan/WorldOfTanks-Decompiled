@@ -8,19 +8,17 @@ from gui.server_events import awards, formatters
 from gui.shared import g_eventBus, events, event_dispatcher as shared_events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
-from halloween_shared import HALLOWEEN_QUEST_PREFIX, HALLOWEEN_REWARD_QUEST_PREFIX, HALLOWEEN_ACHIEVEMENT_PREFIX
-import BigWorld
-from HalloweenSupplyDrop import HalloweenSupplyDrop
 
 def showPQSeasonAwardsWindow(questsType):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW, ctx={'questsType': questsType}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showMissions(tab=None, missionID=None, groupID=None, anchor=None):
+def showMissions(tab=None, missionID=None, groupID=None, anchor=None, showMissionDetails=True):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MISSIONS, ctx={'tab': tab,
      'eventID': missionID,
      'groupID': groupID,
-     'anchor': anchor}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'anchor': anchor,
+     'showMissionDetails': showMissionDetails}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def showPersonalMission(missionID=None):
@@ -44,29 +42,8 @@ def showMissionsForCurrentVehicle(missionID=None, groupID=None, anchor=None):
     showMissions(tab=QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS, missionID=missionID, groupID=groupID, anchor=anchor)
 
 
-def showDossier(eventID=None, groupID=None, anchor=None):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_PROFILE), EVENT_BUS_SCOPE.LOBBY)
-
-
-def goToHalloweenMissionRewardBox(eventID=None, groupID=None, anchor=None):
-    g_eventBus.handleEvent(events.DestroyViewEvent(VIEW_ALIAS.MISSION_AWARD_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
-    g_eventBus.handleEvent(events.DestroyViewEvent(VIEW_ALIAS.BATTLE_RESULTS), scope=EVENT_BUS_SCOPE.LOBBY)
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), EVENT_BUS_SCOPE.LOBBY)
-    for e in BigWorld.entities.values():
-        if isinstance(e, HalloweenSupplyDrop):
-            e.remote_requestUIStateValidation()
-            e.delayClick()
-
-
-def closeHalloweenMissionRewardBox(eventID=None, groupID=None, anchor=None):
-    g_eventBus.handleEvent(events.DestroyViewEvent(VIEW_ALIAS.MISSION_AWARD_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
-    for e in BigWorld.entities.values():
-        if isinstance(e, HalloweenSupplyDrop):
-            e.receivedSupplyDrop(True)
-
-
-def showMissionsElen():
-    showMissions(tab=QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS)
+def showMissionsElen(eventQuestsID):
+    showMissions(tab=QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, missionID=eventQuestsID, groupID=eventQuestsID, showMissionDetails=False)
 
 
 def showMissionDetails(missionID, groupID):
@@ -135,27 +112,10 @@ def showTankwomanAward(questID, tankmanData):
      'iGroupID': tankmanData.iGroupID}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showGiftAward():
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.GIFT_RECRUIT_WINDOW), EVENT_BUS_SCOPE.LOBBY)
-
-
-def showMissionAward(quest, ctx, bonus_data):
-    qID = quest.getID()
-    if qID.startswith(HALLOWEEN_REWARD_QUEST_PREFIX):
-        missionAward = awards.HalloweenMissionAward(quest, ctx, bonus_data, None)
-        for e in BigWorld.entities.values():
-            if isinstance(e, HalloweenSupplyDrop):
-                e.shownAwardPopup()
-
-    elif qID.startswith(HALLOWEEN_QUEST_PREFIX):
-        missionAward = awards.HalloweenMissionAward(quest, ctx, bonus_data, goToHalloweenMissionRewardBox)
-    elif qID.startswith(HALLOWEEN_ACHIEVEMENT_PREFIX):
-        missionAward = awards.HalloweenAchievementMissionAward(quest, ctx, showDossier)
-    else:
-        missionAward = awards.MissionAward(quest, ctx, showMissionsForCurrentVehicle)
-    if missionAward.getAwards() or qID.startswith(HALLOWEEN_REWARD_QUEST_PREFIX):
+def showMissionAward(quest, ctx):
+    missionAward = awards.MissionAward(quest, ctx, showMissionsForCurrentVehicle)
+    if missionAward.getAwards():
         shared_events.showMissionAwardWindow(missionAward)
-    return
 
 
 def showPersonalMissionAward(quest, ctx):

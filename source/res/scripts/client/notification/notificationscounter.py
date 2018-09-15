@@ -3,7 +3,7 @@
 from gui.prb_control import prbInvitesProperty
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
-from notification.settings import NOTIFICATION_GROUP, NOTIFICATION_TYPE
+from notification.settings import NOTIFICATION_GROUP
 
 class _GroupCounter(object):
     """
@@ -66,25 +66,6 @@ class _InviteGroupCounter(_GroupCounter):
 
 
 class _OfferGroupCounter(_GroupCounter):
-
-    def __init__(self):
-        super(_OfferGroupCounter, self).__init__()
-        self.__giftNotifications = set()
-
-    def addNotification(self, typeID, entityID):
-        if typeID == NOTIFICATION_TYPE.GIFT:
-            self.__giftNotifications.add((typeID, entityID))
-        else:
-            super(_OfferGroupCounter, self).addNotification(typeID, entityID)
-
-    def removeNotification(self, typeID, entityID):
-        if typeID == NOTIFICATION_TYPE.GIFT:
-            self.__giftNotifications.discard((typeID, entityID))
-        else:
-            super(_OfferGroupCounter, self).removeNotification(typeID, entityID)
-
-    def count(self):
-        return super(_OfferGroupCounter, self).count() + len(self.__giftNotifications)
 
     @classmethod
     def getGroupID(cls):

@@ -170,11 +170,15 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
         return GUI.WGVehicleMarkersCanvasFlashAS3(self.movie)
 
     def _setupPlugins(self, arenaVisitor):
-        return {'settings': plugins.SettingsPlugin,
+        setup = {'settings': plugins.SettingsPlugin,
          'eventBus': plugins.EventBusPlugin,
-         'vehicles': plugins.VehicleMarkerPlugin,
          'equipments': plugins.EquipmentsMarkerPlugin,
          'area': plugins.AreaStaticMarkerPlugin}
+        if arenaVisitor.hasRespawns():
+            setup['vehicles'] = plugins.RespawnableVehicleMarkerPlugin
+        else:
+            setup['vehicles'] = plugins.VehicleMarkerPlugin
+        return setup
 
     def __addCanvas(self, arenaVisitor):
         self.__canvas = self._createCanvas(arenaVisitor)

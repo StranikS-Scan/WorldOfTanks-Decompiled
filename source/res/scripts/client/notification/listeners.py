@@ -3,11 +3,9 @@
 import collections
 from collections import defaultdict
 import weakref
-from PlayerEvents import g_playerEvents
 from adisp import process
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.locale.CLANS import CLANS
-from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.clans.clan_account_profile import SYNC_KEYS
 from gui.clans.clan_helpers import ClanListener, isInClanEnterCooldown
 from gui.clans.contexts import GetClanInfoCtx
@@ -24,7 +22,7 @@ from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification import tutorial_helper
-from notification.decorators import MessageDecorator, PrbInviteDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator, GiftDecorator
+from notification.decorators import MessageDecorator, PrbInviteDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 
 class _NotificationListener(object):
@@ -65,12 +63,8 @@ class ServiceChannelListener(_NotificationListener):
             serviceChannel = self.proto.serviceChannel
             messages = serviceChannel.getReadMessages()
             addNotification = model.collection.addItem
-            from gui.SystemMessages import SM_TYPE
             for clientID, (_, formatted, settings) in messages:
-                decorator = MessageDecorator
-                if settings.auxData and settings.auxData[0] == SM_TYPE.OpenGift.name():
-                    decorator = GiftDecorator
-                addNotification(decorator(clientID, formatted, settings))
+                addNotification(MessageDecorator(clientID, formatted, settings))
 
             serviceChannel.handleUnreadMessages()
         return result
@@ -84,11 +78,7 @@ class ServiceChannelListener(_NotificationListener):
     def __onMessageReceived(self, clientID, formatted, settings):
         model = self._model()
         if model:
-            from gui.SystemMessages import SM_TYPE
-            decorator = MessageDecorator
-            if settings.auxData and settings.auxData[0] == SM_TYPE.OpenGift.name():
-                decorator = GiftDecorator
-            model.addNotification(decorator(clientID, formatted, settings))
+            model.addNotification(MessageDecorator(clientID, formatted, settings))
 
 
 class PrbInvitesListener(_NotificationListener, IGlobalListener):
@@ -693,31 +683,6 @@ class BattleTutorialListener(_NotificationListener, IGlobalListener):
             return
 
 
-class GiftListener(_NotificationListener):
-
-    def start(self, model):
-        g_playerEvents.onGiftReceived += self.__onGiftReceived
-        g_playerEvents.onGiftClaimed += self.__onGiftClaimed
-        return super(GiftListener, self).start(model)
-
-    def stop(self):
-        super(GiftListener, self).stop()
-        g_playerEvents.onGiftReceived -= self.__onGiftReceived
-        g_playerEvents.onGiftClaimed -= self.__onGiftClaimed
-
-    def __onGiftReceived(self, msgID):
-        pass
-
-    def __onGiftClaimed(self, msgID):
-        self.__removeGiftMessage(msgID)
-
-    def __removeGiftMessage(self, msgID):
-        model = self._model()
-        if not model:
-            return
-        model.removeNotification(NOTIFICATION_TYPE.GIFT, msgID)
-
-
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
@@ -726,8 +691,7 @@ class NotificationsListeners(_NotificationListener):
          PrbInvitesListener(),
          FriendshipRqsListener(),
          _WGNCListenersContainer(),
-         BattleTutorialListener(),
-         GiftListener())
+         BattleTutorialListener())
 
     def start(self, model):
         for listener in self.__listeners:

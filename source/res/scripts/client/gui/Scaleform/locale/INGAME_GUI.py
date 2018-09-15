@@ -94,6 +94,7 @@ class INGAME_GUI(object):
     CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING = '#ingame_gui:chat_shortcuts/spg_aim_area_reloading'
     CHAT_SHORTCUTS_ATTACK_ENEMY = '#ingame_gui:chat_shortcuts/attack_enemy'
     CHAT_SHORTCUTS_ATTACK_ENEMY_RELOADING = '#ingame_gui:chat_shortcuts/attack_enemy_reloading'
+    MARKER_METERS = '#ingame_gui:marker/meters'
     CHAT_EXAMPLE_SUPPORT_ME_WITH_FIRE = '#ingame_gui:chat_example/support_me_with_fire'
     CHAT_EXAMPLE_RELOADING_GUN = '#ingame_gui:chat_example/reloading_gun'
     CHAT_EXAMPLE_RELOADING_CASSETTE = '#ingame_gui:chat_example/reloading_cassette'
@@ -454,9 +455,6 @@ class INGAME_GUI(object):
     EFFICIENCYRIBBONS_DEFENCE = '#ingame_gui:efficiencyRibbons/defence'
     EFFICIENCYRIBBONS_KILL = '#ingame_gui:efficiencyRibbons/kill'
     EFFICIENCYRIBBONS_SPOTTED = '#ingame_gui:efficiencyRibbons/spotted'
-    EFFICIENCYRIBBONS_HEALED = '#ingame_gui:efficiencyRibbons/healed'
-    EFFICIENCYRIBBONS_HEALTHPACKPICKUP = '#ingame_gui:efficiencyRibbons/healthpackPickup'
-    EFFICIENCYRIBBONS_HEALTHPACKWASTED = '#ingame_gui:efficiencyRibbons/healthpackWasted'
     EFFICIENCYRIBBONS_ASSISTTRACK = '#ingame_gui:efficiencyRibbons/assistTrack'
     EFFICIENCYRIBBONS_ASSISTSPOT = '#ingame_gui:efficiencyRibbons/assistSpot'
     EFFICIENCYRIBBONS_CRITS = '#ingame_gui:efficiencyRibbons/crits'
@@ -526,34 +524,6 @@ class INGAME_GUI(object):
     TRAJECTORYVIEW_HINT_ALTERNATEMODERIGHT = '#ingame_gui:trajectoryView/hint/alternateModeRight'
     STUN_INDICATOR = '#ingame_gui:stun/indicator'
     STUN_SECONDS = '#ingame_gui:stun/seconds'
-    HALLOWEEN_EYE_MAINLABEL = '#ingame_gui:halloween_eye/mainLabel'
-    HALLOWEEN_EYE_SECONDARYLABEL = '#ingame_gui:halloween_eye/secondaryLabel'
-    HALLOWEEN_PVE_GOAL_HINT_KILLLEVIATHANTITLE = '#ingame_gui:halloween_pve_goal_hint/KillLeviathanTitle'
-    HALLOWEEN_PVE_GOAL_HINT_KILLLEVIATHANMSG = '#ingame_gui:halloween_pve_goal_hint/KillLeviathanMsg'
-    HALLOWEEN_PVE_GOAL_HINT_ENRAGEDLEVIATHANTITLE = '#ingame_gui:halloween_pve_goal_hint/EnragedLeviathanTitle'
-    HALLOWEEN_PVE_GOAL_HINT_ENGRAGEDLEVIATHANMSG = '#ingame_gui:halloween_pve_goal_hint/EngragedLeviathanMsg'
-    HALLOWEEN_PVE_GOAL_HINT_HALFWAYLEVIATHANTITLE = '#ingame_gui:halloween_pve_goal_hint/HalfwayLeviathanTitle'
-    HALLOWEEN_PVE_GOAL_HINT_HALFWAYLEVIATHANMSG = '#ingame_gui:halloween_pve_goal_hint/HalfwayLeviathanMsg'
-    HALLOWEEN_PVE_GOAL_HINT_LEVIATHANCLOSETITLE = '#ingame_gui:halloween_pve_goal_hint/LeviathanCloseTitle'
-    HALLOWEEN_PVE_GOAL_HINT_LEVIATHANCLOSEMSG = '#ingame_gui:halloween_pve_goal_hint/LeviathanCloseMsg'
-    HALLOWEEN_PVE_GOAL_HINT_ENTERSCAPTURETITLE = '#ingame_gui:halloween_pve_goal_hint/EntersCaptureTitle'
-    HALLOWEEN_PVE_GOAL_HINT_ENTERSCAPTUREMSG = '#ingame_gui:halloween_pve_goal_hint/EntersCaptureMsg'
-    HALLOWEEN_LOBBY_BATTLETYPE_PVE_TITLE = '#ingame_gui:halloween_lobby/BattleType_PvE_Title'
-    HALLOWEEN_LOBBY_BATTLETYPE_PVE_MESSAGE = '#ingame_gui:halloween_lobby/BattleType_PvE_Message'
-    HALLOWEEN_LOBBY_BATTLETYPE_PVP_TITLE = '#ingame_gui:halloween_lobby/BattleType_PvP_Title'
-    HALLOWEEN_LOBBY_BATTLETYPE_PVP_MESSAGE = '#ingame_gui:halloween_lobby/BattleType_PvP_Message'
-    HALLOWEEN_PVE_GATE_CAPTURE_LEVIATHANCAPTUREMSG = '#ingame_gui:halloween_pve_gate_capture/LeviathanCaptureMsg'
-    HALLOWEEN_PVE_VICTORY_PANEL_TITLE = '#ingame_gui:halloween_pve_victory_panel/title'
-    HALLOWEEN_PVE_VICTORY_PANEL_ICONMESSAGE = '#ingame_gui:halloween_pve_victory_panel/iconMessage'
-    HALLOWEEN_PVE_VICTORY_PANEL_COMMENTARY = '#ingame_gui:halloween_pve_victory_panel/commentary'
-    HALLOWEEN_PVE_DEFEAT_PANEL_TITLE = '#ingame_gui:halloween_pve_defeat_panel/title'
-    HALLOWEEN_PVE_DEFEAT_PANEL_ICONMESSAGE = '#ingame_gui:halloween_pve_defeat_panel/iconMessage'
-    HALLOWEEN_PVE_DEFEAT_PANEL_COMMENTARY = '#ingame_gui:halloween_pve_defeat_panel/commentary'
-    HALLOWEEN_MINION_DEATH_PANEL_TITLE = '#ingame_gui:halloween_minion_death_panel/title'
-    HALLOWEEN_MINION_DEATH_PANEL_HINT = '#ingame_gui:halloween_minion_death_panel/hint'
-    HALLOWEEN_MINION_DEATH_PANEL_PREPOSITION = '#ingame_gui:halloween_minion_death_panel/preposition'
-    HALLOWEEN_MINION_DEATH_PANEL_COUNTLABEL = '#ingame_gui:halloween_minion_death_panel/countLabel'
-    HALLOWEEN_BRIEFING_BANNER = '#ingame_gui:halloween/briefing_banner'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_TURN_BACK,
      CHAT_SHORTCUTS_SUPPORT_ME_WITH_FIRE,
      CHAT_SHORTCUTS_RELOADING_GUN,
@@ -600,9 +570,6 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_DEFENCE,
      EFFICIENCYRIBBONS_KILL,
      EFFICIENCYRIBBONS_SPOTTED,
-     EFFICIENCYRIBBONS_HEALED,
-     EFFICIENCYRIBBONS_HEALTHPACKPICKUP,
-     EFFICIENCYRIBBONS_HEALTHPACKWASTED,
      EFFICIENCYRIBBONS_ASSISTTRACK,
      EFFICIENCYRIBBONS_ASSISTSPOT,
      EFFICIENCYRIBBONS_CRITS,

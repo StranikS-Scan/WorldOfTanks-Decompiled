@@ -6,11 +6,11 @@ from functools import partial
 import BigWorld
 import Math
 import BattleReplay
-from AvatarInputHandler import aih_constants
+from AvatarInputHandler import aih_constants, AvatarInputHandler
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core import settings_constants
 from battleground.StunAreaManager import STUN_AREA_STATIC_MARKER
-from constants import VISIBILITY, AOI, HALLOWEEN_BOSS_NAME
+from constants import VISIBILITY, AOI
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.view.battle.shared.minimap import common
@@ -29,7 +29,7 @@ _CTRL_MODE = aih_constants.CTRL_MODE_NAME
 _TO_FLASH_SYMBOL_NAME_MAPPING = {STUN_AREA_STATIC_MARKER: settings.ENTRY_SYMBOL_NAME.ARTY_MARKER}
 
 class PersonalEntriesPlugin(common.SimplePlugin):
-    __slots__ = ('__isAlive', '__isObserver', '__playerVehicleID', '__viewPointID', '__animationID', '__deadPointID', '__cameraID', '__cameraIDs', '__yawLimits', '__circlesID', '__circlesVisibilityState')
+    __slots__ = ('__isAlive', '__isObserver', '__playerVehicleID', '__viewPointID', '__animationID', '__deadPointID', '__cameraID', '__cameraIDs', '__yawLimits', '__circlesID', '__circlesVisibilityState', '__killerVehicleID')
 
     def __init__(self, parentObj):
         super(PersonalEntriesPlugin, self).__init__(parentObj)
@@ -44,6 +44,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         self.__yawLimits = None
         self.__circlesID = None
         self.__circlesVisibilityState = 0
+        self.__killerVehicleID = 0
         return
 
     def start(self):
@@ -57,11 +58,16 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onPostMortemSwitched += self.__onPostMortemSwitched
-            ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
+            ctrl.onVehicleStateUpdated += self._onVehicleStateUpdated
+            ctrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onMinimapFeedbackReceived += self.__onMinimapFeedbackReceived
             ctrl.onVehicleFeedbackReceived += self.__onVehicleFeedbackReceived
+        handler = avatar_getter.getInputHandler()
+        if isinstance(handler, AvatarInputHandler):
+            handler.onPostmortemKillerVisionEnter += self.__onKillerVisionEnter
+            handler.onPostmortemKillerVisionExit += self.__onKillerVisionExit
         super(PersonalEntriesPlugin, self).start()
         return
 
@@ -69,17 +75,20 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onPostMortemSwitched -= self.__onPostMortemSwitched
-            ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
+            ctrl.onVehicleStateUpdated -= self._onVehicleStateUpdated
+            ctrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
         ctrl = self.sessionProvider.shared.feedback
         if ctrl is not None:
             ctrl.onMinimapFeedbackReceived -= self.__onMinimapFeedbackReceived
             ctrl.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
+        handler = avatar_getter.getInputHandler()
+        if isinstance(handler, AvatarInputHandler):
+            handler.onPostmortemKillerVisionEnter -= self.__onKillerVisionEnter
+            handler.onPostmortemKillerVisionExit -= self.__onKillerVisionExit
         super(PersonalEntriesPlugin, self).stop()
         return
 
     def initControlMode(self, mode, available):
-        avatar = BigWorld.player()
-        assert avatar is not None, 'Player must be defined'
         super(PersonalEntriesPlugin, self).initControlMode(mode, available)
         self.__cameraIDs.clear()
         iterator = self.__createCameraEntries(*available)
@@ -89,57 +98,16 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                 assert not self.__cameraID, 'One camera is activated at one time'
                 self.__cameraID = entryID
 
-        self.__updateViewPointEntry(avatar)
-        if not self.__isObserver and self.__isAlive:
-            self.__updateViewRangeCircle(avatar)
-        if not self.__isObserver and not self.__isAlive:
-            self.__updateDeadPointEntry()
-        return
+        self.__updateViewPointEntry()
+        self.__updateViewRangeCircle()
+        self._updateDeadPointEntry()
 
     def updateControlMode(self, mode, vehicleID):
         super(PersonalEntriesPlugin, self).updateControlMode(mode, vehicleID)
-        activateID = self.__cameraIDs[_S_NAME.ARCADE_CAMERA]
-        if self._isInArtyMode():
-            activateID = self.__cameraIDs[_S_NAME.STRATEGIC_CAMERA]
-            matrix = matrix_factory.makeArtyAimPointMatrix()
-        elif self._isInStrategicMode():
-            activateID = self.__cameraIDs[_S_NAME.STRATEGIC_CAMERA]
-            matrix = matrix_factory.makeStrategicCameraMatrix()
-        elif self._isInArcadeMode():
-            matrix = matrix_factory.makeArcadeCameraMatrix()
-        elif self._isInPostmortemMode():
-            matrix = matrix_factory.makePostmortemCameraMatrix()
-        elif self._isInVideoMode():
-            activateID = self.__cameraIDs[_S_NAME.VIDEO_CAMERA]
-            matrix = matrix_factory.makeDefaultCameraMatrix()
-        else:
-            matrix = matrix_factory.makeDefaultCameraMatrix()
-        for entryID in self.__cameraIDs.itervalues():
-            if activateID == entryID:
-                self._setMatrix(entryID, matrix)
-                if self.__cameraID != entryID:
-                    self._setActive(entryID, True)
-                    self.__cameraID = entryID
-            self._setActive(entryID, False)
-
-        if self._isInPostmortemMode() or self._isInVideoMode():
-            if vehicleID and vehicleID != self.__playerVehicleID:
-                if self.__viewPointID:
-                    matrix = matrix_factory.getEntityMatrix(vehicleID)
-                    self._setMatrix(self.__viewPointID, matrix)
-                    self._setActive(self.__viewPointID, True)
-            elif self.__viewPointID:
-                self._setActive(self.__viewPointID, False)
-            if not self.__isObserver and self._isInPostmortemMode():
-                self.__updateDeadPointEntry()
-        self.__invalidateMarkup()
-
-    def clearCamera(self):
-        if self.__cameraID:
-            self._setActive(self.__cameraID, False)
-            self.__cameraID = 0
-        if self.__viewPointID:
-            self._setActive(self.__viewPointID, False)
+        self.__updateCameraEntries()
+        self.__updateViewPointEntry(vehicleID)
+        self._updateDeadPointEntry()
+        self._invalidateMarkup()
 
     def setSettings(self):
         if not self.__isAlive:
@@ -155,14 +123,16 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                 value = getter(settings_constants.GAME.SHOW_SECTOR_ON_MAP)
                 if value and self.__viewPointID:
                     self._invoke(self.__viewPointID, 'setYawLimit', *self.__yawLimits)
-            if not self.__isObserver:
+            if not self.__isObserver and self.__isAlive:
+                if self.__circlesID is None:
+                    self.__updateViewRangeCircle()
                 if getter(settings_constants.GAME.MINIMAP_DRAW_RANGE):
                     self.__addDrawRangeCircle()
                 if getter(settings_constants.GAME.MINIMAP_MAX_VIEW_RANGE):
                     self.__addMaxViewRangeCircle()
                 if getter(settings_constants.GAME.MINIMAP_VIEW_RANGE):
                     self.__addViewRangeCircle()
-                self.__updateCirlcesState()
+                self._updateCirlcesState()
             return
 
     def updateSettings(self, diff):
@@ -199,7 +169,35 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                     self.__addViewRangeCircle()
                 else:
                     self.__removeViewRangeCircle()
-            self.__updateCirlcesState()
+            self._updateCirlcesState()
+
+    def __onKillerVisionEnter(self, killerVehicleID):
+        self.__killerVehicleID = killerVehicleID
+        self.updateControlMode(_CTRL_MODE.POSTMORTEM, killerVehicleID)
+
+    def __onKillerVisionExit(self):
+        self.__killerVehicleID = 0
+        self.updateControlMode(_CTRL_MODE.POSTMORTEM, 0)
+
+    def _updateDirectionLine(self, active):
+        if active:
+            self.__showDirectionLine()
+        else:
+            self.__hideDirectionLine()
+
+    def _updateYawLimits(self, active):
+        if active:
+            self.__setupYawLimit()
+        else:
+            self.__clearYawLimit()
+
+    def _updateDeadPointEntry(self, active=True):
+        isActive = not self.__isObserver and (not self.__isAlive or self._isInPostmortemMode())
+        if self.__deadPointID:
+            self._setActive(self.__deadPointID, active=isActive)
+            return
+        matrix = matrix_factory.makeOwnVehicleMatrix()
+        self.__deadPointID = self._addEntry(_S_NAME.DEAD_POINT, _C_NAME.PERSONAL, matrix=matrix, active=isActive)
 
     def __createCameraEntries(self, *modes):
         self.__cameraIDs.clear()
@@ -240,29 +238,62 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                 yield (entryID, name, active)
         return
 
-    def __updateViewPointEntry(self, avatar):
-        ownMatrix = avatar.getOwnVehicleMatrix()
+    def __updateCameraEntries(self):
+        activateID = self.__cameraIDs[_S_NAME.ARCADE_CAMERA]
+        if self._isInArtyMode():
+            activateID = self.__cameraIDs[_S_NAME.STRATEGIC_CAMERA]
+            matrix = matrix_factory.makeArtyAimPointMatrix()
+        elif self._isInStrategicMode():
+            activateID = self.__cameraIDs[_S_NAME.STRATEGIC_CAMERA]
+            matrix = matrix_factory.makeStrategicCameraMatrix()
+        elif self._isInArcadeMode():
+            matrix = matrix_factory.makeArcadeCameraMatrix()
+        elif self._isInPostmortemMode():
+            if self.__killerVehicleID:
+                matrix = matrix_factory.getEntityMatrix(self.__killerVehicleID)
+            else:
+                matrix = matrix_factory.makePostmortemCameraMatrix()
+        elif self._isInVideoMode():
+            activateID = self.__cameraIDs[_S_NAME.VIDEO_CAMERA]
+            matrix = matrix_factory.makeDefaultCameraMatrix()
+        else:
+            matrix = matrix_factory.makeDefaultCameraMatrix()
+        for entryID in self.__cameraIDs.itervalues():
+            if activateID == entryID:
+                self._setMatrix(entryID, matrix)
+                if self.__cameraID != entryID:
+                    self._setActive(entryID, True)
+                    self.__cameraID = entryID
+            self._setActive(entryID, False)
+
+    def __updateViewPointEntry(self, vehicleID=0):
+        isActive = self._isInPostmortemMode() and vehicleID and vehicleID != self.__playerVehicleID or self._isInVideoMode() and self.__isAlive or not (self._isInPostmortemMode() or self._isInVideoMode() or self.__isObserver)
+        if self.__killerVehicleID:
+            ownMatrix = matrix_factory.getEntityMatrix(self.__killerVehicleID)
+        else:
+            ownMatrix = matrix_factory.makeAttachedVehicleMatrix()
         if self.__viewPointID:
+            self._setActive(self.__viewPointID, active=isActive)
             self._setMatrix(self.__viewPointID, ownMatrix)
-            self._setActive(self.__viewPointID, active=self.__isAlive)
+            self._setActive(self.__animationID, active=isActive)
             self._setMatrix(self.__animationID, ownMatrix)
-            self._setActive(self.__animationID, active=self.__isAlive)
             return
-        self.__viewPointID = self._addEntry(_S_NAME.VIEW_POINT, _C_NAME.PERSONAL, matrix=ownMatrix, active=self.__isAlive)
+        self.__viewPointID = self._addEntry(_S_NAME.VIEW_POINT, _C_NAME.PERSONAL, matrix=ownMatrix, active=isActive)
         transformProps = settings.TRANSFORM_FLAG.DEFAULT
         transformProps ^= settings.TRANSFORM_FLAG.NO_ROTATION
-        self.__animationID = self._addEntry(_S_NAME.ANIMATION, _C_NAME.PERSONAL, matrix=ownMatrix, active=self.__isAlive, transformProps=transformProps)
+        self.__animationID = self._addEntry(_S_NAME.ANIMATION, _C_NAME.PERSONAL, matrix=ownMatrix, active=isActive, transformProps=transformProps)
 
-    def __updateViewRangeCircle(self, avatar):
-        ownMatrix = avatar.getOwnVehicleMatrix()
+    def __updateViewRangeCircle(self):
+        ownMatrix = matrix_factory.makeAttachedVehicleMatrix()
+        isActive = not self.__isObserver and self.__isAlive
         if self.__circlesID:
+            self._setActive(self.__circlesID, isActive)
             self._setMatrix(self.__circlesID, ownMatrix)
-            self._setActive(self.__circlesID, self.__isAlive)
             return
         transformProps = settings.TRANSFORM_FLAG.DEFAULT
         transformProps ^= settings.TRANSFORM_FLAG.NO_ROTATION
         self.__circlesVisibilityState = 0
-        self.__circlesID = self._addEntry(_S_NAME.VIEW_RANGE_CIRCLES, _C_NAME.PERSONAL, matrix=ownMatrix, active=self.__isAlive, transformProps=transformProps)
+        self.__circlesID = self._addEntry(_S_NAME.VIEW_RANGE_CIRCLES, _C_NAME.PERSONAL, matrix=ownMatrix, active=isActive, transformProps=transformProps)
         bottomLeft, upperRight = self._arenaVisitor.type.getBoundingBox()
         arenaWidth = upperRight[0] - bottomLeft[0]
         arenaHeight = upperRight[1] - bottomLeft[1]
@@ -274,28 +305,26 @@ class PersonalEntriesPlugin(common.SimplePlugin):
     def _getAnimationID(self):
         return self.__animationID
 
+    def _getDeadPointID(self):
+        return self.__deadPointID
+
     def _getPlayerVehicleID(self):
         return self.__playerVehicleID
 
-    def __updateDeadPointEntry(self):
-        vehicle = BigWorld.entities.get(self.__playerVehicleID)
-        if vehicle is None:
-            LOG_ERROR("Player's vehicle is not found", self.__playerVehicleID)
-            return
-        else:
-            provider = matrix_factory.makeVehicleEntityMPCopy(vehicle)
-            if self.__deadPointID:
-                self._setMatrix(self.__deadPointID, provider)
-                self._setActive(self.__deadPointID, active=True)
-                return
-            self.__deadPointID = self._addEntry(_S_NAME.DEAD_POINT, _C_NAME.PERSONAL, matrix=provider, active=True)
-            return
+    def _getViewRangeCirclesID(self):
+        return self.__circlesID
 
-    def __onVehicleStateUpdated(self, state, value):
-        if state == VEHICLE_VIEW_STATE.SWITCHING:
-            self.__hideMarkup()
+    def _getCameraIDs(self):
+        return self.__cameraIDs
 
-    def __hideMarkup(self):
+    def _isAlive(self):
+        return self.__isAlive
+
+    def _onVehicleStateUpdated(self, state, value):
+        if state in (VEHICLE_VIEW_STATE.SWITCHING, VEHICLE_VIEW_STATE.RESPAWNING):
+            self._hideMarkup()
+
+    def _hideMarkup(self):
         self.__hideDirectionLine()
         self.__clearYawLimit()
         if self.__viewPointID:
@@ -304,15 +333,14 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         if self.__circlesID:
             self._setActive(self.__circlesID, False)
 
-    def __invalidateMarkup(self):
-        if not self.__isObserver:
+    def _invalidateMarkup(self, forceInvalidate=False):
+        if not self.__isObserver and not forceInvalidate:
             return
-        elif self._ctrlVehicleID is None or not BigWorld.entities.has_key(self._ctrlVehicleID):
-            self.__hideMarkup()
+        elif (self._ctrlVehicleID is None or not BigWorld.entities.has_key(self._ctrlVehicleID)) and not forceInvalidate:
+            self._hideMarkup()
             return
         else:
-            avatar = BigWorld.player()
-            self.__updateViewPointEntry(avatar)
+            self.__updateViewPointEntry()
             self._setActive(self.__viewPointID, True)
             getter = self.settingsCore.getSetting
             showDirectionLine = GUI_SETTINGS.showDirectionLine and getter(settings_constants.GAME.SHOW_VECTOR_ON_MAP)
@@ -326,34 +354,50 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                 if yawLimits is not None and vInfo.isSPG():
                     self.__yawLimits = (math.degrees(yawLimits[0]), math.degrees(yawLimits[1]))
                     self.__setupYawLimit()
-            if showCircles:
-                self.__updateViewRangeCircle(avatar)
-                if getter(settings_constants.GAME.MINIMAP_DRAW_RANGE):
-                    self.__addDrawRangeCircle()
-                else:
-                    self.__removeDrawRangeCircle()
-                if getter(settings_constants.GAME.MINIMAP_MAX_VIEW_RANGE):
-                    self.__addMaxViewRangeCircle()
-                else:
-                    self.__removeMaxViewRangeCircle()
-                if getter(settings_constants.GAME.MINIMAP_VIEW_RANGE):
-                    self.__addViewRangeCircle()
-                else:
-                    self.__removeViewRangeCircle()
-                self._setActive(self.__circlesID, True)
-            elif self.__circlesID is not None:
-                self._setActive(self.__circlesID, False)
+            self._showCircles(showCircles)
             return
 
-    def __onPostMortemSwitched(self):
+    def _showCircles(self, showCircles):
+        getter = self.settingsCore.getSetting
+        if showCircles:
+            self.__updateViewRangeCircle()
+            if getter(settings_constants.GAME.MINIMAP_DRAW_RANGE):
+                self.__addDrawRangeCircle()
+            else:
+                self.__removeDrawRangeCircle()
+            if getter(settings_constants.GAME.MINIMAP_MAX_VIEW_RANGE):
+                self.__addMaxViewRangeCircle()
+            else:
+                self.__removeMaxViewRangeCircle()
+            if getter(settings_constants.GAME.MINIMAP_VIEW_RANGE):
+                self.__addViewRangeCircle()
+            else:
+                self.__removeViewRangeCircle()
+            self._setActive(self.__circlesID, True)
+        elif self.__circlesID is not None:
+            self._setActive(self.__circlesID, False)
+        return
+
+    def _enableCameraEntryInCtrlMode(self, ctrlMode):
+        return True
+
+    def _updateCirlcesState(self):
+        isActive = self.__circlesVisibilityState > 0
+        self._setActive(self.__circlesID, isActive)
+
+    def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         self.__isAlive = False
         self.__hideDirectionLine()
         self.__clearYawLimit()
-        if not self.__isObserver:
-            self.__circlesVisibilityState = 0
-            if self.__circlesID is not None:
-                self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_REMOVE_ALL_CIRCLES)
-        return
+        self.__updateViewPointEntry()
+        self._updateDeadPointEntry()
+        if not self.__isObserver and self.__circlesID:
+            self.__removeAllCircles()
+
+    def __onRespawnBaseMoving(self):
+        vInfo = self._arenaDP.getVehicleInfo()
+        self.__isAlive = vInfo.isAlive()
+        self._invalidateMarkup(True)
 
     def __onMinimapFeedbackReceived(self, eventID, entityID, value):
         if eventID == FEEDBACK_EVENT_ID.MINIMAP_SHOW_MARKER and entityID == self.__playerVehicleID and self.__animationID:
@@ -362,11 +406,6 @@ class PersonalEntriesPlugin(common.SimplePlugin):
     def __onVehicleFeedbackReceived(self, eventID, _, value):
         if not self.__isObserver and self.__isAlive and eventID == FEEDBACK_EVENT_ID.VEHICLE_ATTRS_CHANGED and self.__circlesVisibilityState & settings.CIRCLE_TYPE.VIEW_RANGE:
             self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_UPDATE_DYN_CIRCLE, min(value.get('circularVisionRadius', VISIBILITY.MIN_RADIUS), VISIBILITY.MAX_RADIUS))
-
-    def __updateCirlcesState(self):
-        isActive = self.__circlesVisibilityState > 0
-        self._setActive(self.__circlesID, isActive)
-        LOG_DEBUG('Minimap circles state was changed: ', isActive)
 
     def __addDrawRangeCircle(self):
         if self.__circlesVisibilityState & settings.CIRCLE_TYPE.DRAW_RANGE:
@@ -588,6 +627,7 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             self.__clearAoIToFarCallback(vehicleID)
             if location == VEHICLE_LOCATION.FAR:
                 entry.updatePosition(position)
+                self.__setActive(entry, True)
             if location in (VEHICLE_LOCATION.UNDEFINED, VEHICLE_LOCATION.AOI_TO_FAR):
                 self.__setInAoI(entry, True)
                 self.__setLocationAndMatrix(entry, VEHICLE_LOCATION.FAR, matrix_factory.makePositionMP(position))
@@ -633,8 +673,6 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             if animation:
                 self.__playSpottedSound(entry)
             self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, classTag, name, guiProps.name(), animation)
-            if vehicleType.isLeviathan:
-                self._invoke(entry.getID(), 'setOverrideAtlasTankName', HALLOWEEN_BOSS_NAME)
         return
 
     def __setGUILabel(self, entry, guiLabel):
@@ -897,7 +935,7 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
         super(AreaStaticMarkerPlugin, self).fini()
         return
 
-    def __addStaticMarker(self, objectID, position, markerSymbolName, show3DMarker=True):
+    def __addStaticMarker(self, objectID, position, markerSymbolName, show3DMarker):
         if markerSymbolName in _TO_FLASH_SYMBOL_NAME_MAPPING:
             self._addEntryEx(objectID, _TO_FLASH_SYMBOL_NAME_MAPPING[markerSymbolName], _C_NAME.EQUIPMENTS, matrix=minimap_utils.makePositionMatrix(position), active=True)
 

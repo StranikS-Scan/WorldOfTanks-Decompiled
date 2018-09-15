@@ -5,6 +5,8 @@ import types
 import chat_shared
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
+from gui.Scaleform.settings import getBadgeIconPathByDimension
+from gui.shared.formatters.icons import makeImageTag
 from gui.shared.utils import getPlayerDatabaseID
 from messenger.ext import passCensor
 from messenger.proto.entities import ChannelEntity, MemberEntity, ChatEntity

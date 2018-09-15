@@ -14,11 +14,7 @@ BACKWARD_QUALITY_PARAMS = ['aimingTime',
  'reloadMagazineTime',
  'weight',
  'switchOnTime',
- 'switchOffTime',
- 'aimingTime_Secondary',
- 'shotDispersionAngle_Secondary',
- 'reloadTimeSecs_Secondary',
- 'clipFireRate_Secondary']
+ 'switchOffTime']
 NEGATIVE_PARAMS = ['switchOnTime', 'switchOffTime']
 CUSTOM_QUALITY_PARAMS = {'vehicleWeight': (True, False),
  'clipFireRate': (True, True, False),
@@ -106,7 +102,7 @@ class VehiclesComparator(ItemsComparator):
         paramBonuses = set(params_cache.g_paramsCache.getBonuses().get(paramName, []))
         allPossibleParamBonuses = set()
         for bonusName, bonusGroup in paramBonuses:
-            if (bonusName, bonusGroup) in self.__suitableArtefacts or bonusGroup in ('skill', 'role', 'extra', 'battleBooster'):
+            if (bonusName, bonusGroup) in self.__suitableArtefacts or bonusGroup in ('skill', 'role', 'extra'):
                 allPossibleParamBonuses.add((bonusName, bonusGroup))
 
         return allPossibleParamBonuses
@@ -147,9 +143,9 @@ class _ParameterInfo(collections.namedtuple('_ParamInfo', ('name', 'value', 'sta
                 return diff
         else:
             _, diff = self.state
-            if bool(diff):
+            if diff is not None:
                 return diff
-        return None
+        return
 
 
 CONDITIONAL_BONUSES = {'invisibilityMovingFactor': (('camouflage', 'skill'), [('brotherhood', 'skill'),

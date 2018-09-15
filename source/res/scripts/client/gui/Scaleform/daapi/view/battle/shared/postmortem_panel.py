@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/postmortem_panel.py
+from gui.Scaleform import settings
 from gui.Scaleform.daapi.view.battle.shared.formatters import normalizeHealthPercent
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID
 from gui.doc_loaders import messages_panel_reader
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.meta.PostmortemPanelMeta import PostmortemPanelMeta
+from gui.shared.formatters import icons
 from gui.shared.gui_items import Vehicle
 from constants import ATTACK_REASON_INDICES
 from account_helpers.settings_core.settings_constants import GRAPHICS
@@ -52,6 +54,10 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
 
     def getDeathInfo(self):
         return self.__deathInfo
+
+    def resetDeathInfo(self):
+        self.__deathInfo = None
+        return
 
     def _populate(self):
         super(_BasePostmortemPanel, self)._populate()
@@ -190,6 +196,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             ctrl.onVehicleStateUpdated += self.__onVehicleStateUpdated
             ctrl.onVehicleControlling += self.__onVehicleControlling
             ctrl.onPostMortemSwitched += self.__onPostMortemSwitched
+            ctrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
             self.__isInPostmortem = ctrl.isInPostmortem
             vehicle = ctrl.getControllingVehicle()
             if vehicle is not None:
@@ -204,6 +211,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
             ctrl.onVehicleStateUpdated -= self.__onVehicleStateUpdated
             ctrl.onVehicleControlling -= self.__onVehicleControlling
             ctrl.onPostMortemSwitched -= self.__onPostMortemSwitched
+            ctrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         super(PostmortemPanel, self)._removeGameListeners()
         return
@@ -225,15 +233,23 @@ class PostmortemPanel(_SummaryPostmortemPanel):
 
     def __onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.HEALTH:
-            if self.__maxHealth != 0:
+            if self.__maxHealth != 0 and self.__maxHealth > value:
                 self.__setHealthPercent(value)
                 self.__updateVehicleInfo()
         elif state == VEHICLE_VIEW_STATE.PLAYER_INFO:
             self.__setPlayerInfo(value)
+        elif state == VEHICLE_VIEW_STATE.SWITCHING:
+            self.__maxHealth = 0
+            self.__healthPercent = 0
 
-    def __onPostMortemSwitched(self):
+    def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         self.__isInPostmortem = True
         self.__updateVehicleInfo()
+
+    def __onRespawnBaseMoving(self):
+        self.__isInPostmortem = False
+        self.__deathAlreadySet = False
+        self.resetDeathInfo()
 
     def __updateVehicleInfo(self):
         if not self.__isInPostmortem:
@@ -249,7 +265,6 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         else:
             deathInfo = self.getDeathInfo()
             if deathInfo:
-                reason = self.__makeReasonInfo(deathInfo)
                 killerVehID = deathInfo['killerVehicle']
                 battleCtx = self.sessionProvider.getCtx()
                 if killerVehID and not battleCtx.isCurrentPlayer(killerVehID) and battleCtx.getArenaDP().getVehicleInfo(killerVehID).vehicleType.compactDescr:
@@ -263,6 +278,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
                 else:
                     showVehicle = False
                     vehLvl = vehImg = vehClass = vehName = None
+                reason = self.__makeReasonInfo(deathInfo)
                 self.as_setDeadReasonInfoS(reason, showVehicle, vehLvl, vehImg, vehClass, vehName)
                 self.__deathAlreadySet = True
             else:
@@ -281,7 +297,13 @@ class PostmortemPanel(_SummaryPostmortemPanel):
          'color': color}
         entityID = deathInfo['killerVehicle']
         if entityID:
-            names['killer'] = self.sessionProvider.getCtx().getPlayerFullName(entityID, showVehShortName=False)
+            context = self.sessionProvider.getCtx()
+            vInfoVO = context.getArenaDP().getVehicleInfo(entityID)
+            badgeID = vInfoVO.ranked.selectedBadge
+            icon = ''
+            if badgeID > 0:
+                icon = icons.makeImageTag(settings.getBadgeIconPath(settings.BADGES_ICONS.X24, badgeID), 24, 24, -5, 0)
+            names['killer'] = '{0}{1}'.format(icon, context.getPlayerFullName(entityID, showVehShortName=False))
         device = deathInfo['device']
         if device:
             names['device'] = device

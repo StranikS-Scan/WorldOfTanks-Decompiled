@@ -94,7 +94,7 @@ class FreeSheetNotEnoughTooltip(FreeSheetTooltip):
 class FreeSheetUsedTooltip(BasicFreeSheetTooltip):
 
     def _getDescriptionBlock(self):
-        return (formatters.packBuildUpBlockData([formatters.packTextParameterWithIconBlockData(text_styles.concatStylesToMultiLine(text_styles.middleTitle(TOOLTIPS.PERSONALMISSIONS_FREESHEET_USED_HEADER), text_styles.main(TOOLTIPS.PERSONALMISSIONS_FREESHEET_USED_TEXT)), '', ICON_TEXT_FRAMES.GREEN_STAR, padding=formatters.packPadding(left=-60, bottom=-2))]),)
+        return (formatters.packBuildUpBlockData([formatters.packTextParameterWithIconBlockData(text_styles.concatStylesToMultiLine(text_styles.middleTitle(TOOLTIPS.PERSONALMISSIONS_FREESHEET_USED_HEADER), text_styles.main(TOOLTIPS.PERSONALMISSIONS_FREESHEET_USED_TEXT)), '', ICON_TEXT_FRAMES.LOCK, padding=formatters.packPadding(left=-60, bottom=-2))]),)
 
 
 class BadgeTooltipData(BlocksTooltipData):
@@ -362,13 +362,13 @@ class TankwomanTooltipData(BlocksTooltipData):
 
     def _packBlocks(self, *args, **kwargs):
         blocks = [formatters.packImageTextBlockData(title=text_styles.highTitle(PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_TITLE), desc=text_styles.standard(PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_SUBTITLE), img=RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_TANKWOMAN), formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.middleTitle(PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_DESC_TITLE), padding=formatters.packPadding(bottom=4)), formatters.packTextBlockData(text_styles.main(PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_DESC_BODY), padding=formatters.packPadding(bottom=7))], linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(top=-7, bottom=-3)), formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.middleTitle(PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_ADVANTAGES_TITLE), padding=formatters.packPadding(bottom=20)),
-          self.__makeImageBlock(RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_MAIN_100, PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_ADVANTAGES_NATION, 0, 20),
-          self.__makeImageBlock('../maps/icons/tankmen/skills/big/brotherhood.png', PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_ADVANTAGES_BROTHERHOOD, 15, 30),
-          self.__makeImageBlock('../maps/icons/tankmen/skills/big/new_skill.png', PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_ADVANTAGES_NEWPERK, 15, 30)])]
+          self.__makeImageBlock(RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_MAIN_100, PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_ADVANTAGES_NATION, 4, 16, 10),
+          self.__makeImageBlock('../maps/icons/tankmen/skills/big/new_skill.png', PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_ADVANTAGES_NEWPERK),
+          self.__makeImageBlock('../maps/icons/tankmen/skills/big/brotherhood.png', PERSONAL_MISSIONS.TANKWOMANTOOLTIPDATA_ADVANTAGES_BROTHERHOOD)])]
         return blocks
 
-    def __makeImageBlock(self, icon, text, imagePaddingLeft=0, imagePaddingRight=0):
-        return formatters.packImageTextBlockData(title=text_styles.main(text), desc='', img=icon, imgPadding=formatters.packPadding(left=imagePaddingLeft, right=imagePaddingRight), padding=formatters.packPadding(bottom=20))
+    def __makeImageBlock(self, icon, text, imgPaddingLeft=15, imgPaddingRight=30, imgPaddingTop=0):
+        return formatters.packImageTextBlockData(title=text_styles.main(text), desc='', img=icon, imgPadding=formatters.packPadding(left=imgPaddingLeft, right=imgPaddingRight, top=imgPaddingTop), padding=formatters.packPadding(bottom=20))
 
 
 class TankModuleTooltipData(BlocksTooltipData):

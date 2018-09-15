@@ -7,7 +7,7 @@ from messenger import g_settings
 from messenger.formatters import TimeFormatter
 from notification import NotificationMVC
 from notification.BaseNotificationView import BaseNotificationView
-from notification.settings import NOTIFICATION_STATE, NOTIFICATION_GROUP, NOTIFICATION_TYPE
+from notification.settings import NOTIFICATION_STATE, NOTIFICATION_GROUP
 from skeletons.connection_mgr import IConnectionManager
 
 class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView):
@@ -32,7 +32,7 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
         NotificationMVC.g_instance.handleAction(typeID, self._getNotificationID(entityID), action)
 
     def onMessageHidden(self, byTimeout, wasNotified, typeID, entityID):
-        if self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS and typeID != NOTIFICATION_TYPE.GIFT:
+        if self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS:
             if not byTimeout and wasNotified:
                 notification = self._model.getNotification(typeID, self._getNotificationID(entityID))
                 self._model.decrementNotifiedMessagesCount(*notification.getCounterInfo())

@@ -10,8 +10,10 @@ from gui.Scaleform.daapi.view.battle.shared.minimap import settings as _minimap_
 from gui.Scaleform.daapi.view.battle.shared.page import ComponentsConfig
 from gui.Scaleform.daapi.view.meta.BattleTutorialMeta import BattleTutorialMeta
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control import minimap_utils
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
+from helpers import i18n
 
 class TutorialComponent(BattleTutorialMeta):
     pass
@@ -58,9 +60,9 @@ class TutorialStaticObjectsPlugin(plugins.MarkerPlugin):
         else:
             return False
 
-    def setupStaticObject(self, objectID, shape, minDistance, maxDistance, distance):
+    def setupStaticObject(self, objectID, shape, minDistance, maxDistance, distance, color):
         if objectID in self.__objects:
-            self._invokeMarker(self.__objects[objectID], 'init', shape, minDistance, maxDistance, distance)
+            self._invokeMarker(self.__objects[objectID], 'init', shape, minDistance, maxDistance, distance, i18n.makeString(INGAME_GUI.MARKER_METERS), color)
 
     def setDistanceToObject(self, objectID, distance):
         if objectID in self.__objects:

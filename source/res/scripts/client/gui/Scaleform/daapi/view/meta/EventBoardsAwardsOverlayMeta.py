@@ -13,6 +13,12 @@ class EventBoardsAwardsOverlayMeta(BaseDAAPIComponent):
         """
         return self.flashObject.as_setHeader(data) if self._isDAAPIInited() else None
 
+    def as_setVehicleS(self, data):
+        """
+        :param data: Represented by VehicleVO (AS)
+        """
+        return self.flashObject.as_setVehicle(data) if self._isDAAPIInited() else None
+
     def as_setDataS(self, data):
         """
         :param data: Represented by EventBoardsAwardsOverlayVO (AS)

@@ -12,7 +12,6 @@ from gui.prb_control.storages.prb_storage import TrainingStorage
 from gui.prb_control.storages.ranked_storage import RankedStorage
 from gui.prb_control.storages.sandbox_storage import SandboxStorage
 from gui.prb_control.storages.stronghold_storage import StrongholdStorage
-from gui.prb_control.storages.event_storage import EventBattlesStorage
 from helpers.ro_property import ROPropertyMeta
 __all__ = ('legacy_storage_getter', 'prequeue_storage_getter', 'PrbStorageDecorator')
 
@@ -36,8 +35,7 @@ _PRB_STORAGE = {_makeLegacyName(_P_TYPE.TRAINING): TrainingStorage(),
  _makeQueueName(_Q_TYPE.FALLOUT): FalloutLocalStorage(),
  _makeQueueName(_Q_TYPE.SANDBOX): SandboxStorage(),
  _makeQueueName(_Q_TYPE.RANKED): RankedStorage(),
- _makeQueueName(_Q_TYPE.EXTERNAL_UNITS): StrongholdStorage(),
- _makeQueueName(_Q_TYPE.EVENT): EventBattlesStorage()}
+ _makeQueueName(_Q_TYPE.EXTERNAL_UNITS): StrongholdStorage()}
 
 class _storage_getter(object):
 

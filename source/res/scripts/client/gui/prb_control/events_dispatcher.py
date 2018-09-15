@@ -112,6 +112,9 @@ class EventDispatcher(object):
     def loadRanked(self):
         self.__fireShowEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_WELCOME_VIEW_ALIAS)
 
+    def loadRankedUnreachable(self):
+        self.__fireShowEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_UNREACHABLE_VIEW_ALIAS)
+
     def startOffbattleTutorial(self):
         self.__fireEvent(events.TutorialEvent(events.TutorialEvent.START_TRAINING, settingsID='OFFBATTLE', reloadIfRun=True, restoreIfRun=True, isStopForced=True), scope=EVENT_BUS_SCOPE.GLOBAL)
 

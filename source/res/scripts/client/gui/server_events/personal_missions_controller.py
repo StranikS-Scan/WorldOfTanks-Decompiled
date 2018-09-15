@@ -262,7 +262,7 @@ class PersonalMissionsController(object):
 
     def __hasVehicle(self, vehTypes, level, invVehicles):
         for veh in invVehicles:
-            if veh.level >= level and veh.type in vehTypes and not veh.isOnlyForEventBattles:
+            if veh.level >= level and veh.type in vehTypes:
                 return True
 
         return False

@@ -26,7 +26,6 @@ class VehicleSelectorBase(object):
         criteria = REQ_CRITERIA.EMPTY
         criteria |= ~REQ_CRITERIA.VEHICLE.EXPIRED_IGR_RENT
         criteria |= ~REQ_CRITERIA.VEHICLE.DISABLED_IN_PREM_IGR
-        criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
         if not self.showNotReadyVehicles:
             criteria |= REQ_CRITERIA.VEHICLE.READY
         if self.__filters:

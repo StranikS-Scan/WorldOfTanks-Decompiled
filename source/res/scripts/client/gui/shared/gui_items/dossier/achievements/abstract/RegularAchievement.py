@@ -137,6 +137,9 @@ class RegularAchievement(GUIItem):
         condKey = '#achievements:%s_condition' % self._getActualName()
         return i18n.makeString(condKey) if i18n.doesTextExist(condKey) else ''
 
+    def isAvailableInQuest(self):
+        return True
+
     @classmethod
     def checkIsInDossier(cls, block, name, dossier):
         if dossier is not None:

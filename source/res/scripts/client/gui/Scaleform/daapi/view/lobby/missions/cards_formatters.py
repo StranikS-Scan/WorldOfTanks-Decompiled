@@ -286,7 +286,7 @@ class CardTokenConditionFormatter(ConditionsFormatter):
     def _packBattleCondition(cls, preFormattedCondition):
         return {'icon': getCondIconBySize(CONDITION_SIZE.MINIMIZED, preFormattedCondition.iconKey),
          'title': formatters.minimizedTitleFormat(*preFormattedCondition.titleData.args),
-         'description': text_styles.main(*preFormattedCondition.descrData.args),
+         'description': text_styles.standard(*preFormattedCondition.descrData.args),
          'state': preFormattedCondition.progressType}
 
     def _packConditions(self, preFormattedConditions):
@@ -320,15 +320,9 @@ class CardTokenConditionFormatter(ConditionsFormatter):
     def __packConditionFromDescription(self, event):
         return {'linkage': MISSIONS_ALIASES.ANG_GROUP_LINKAGE,
          'linkageBig': MISSIONS_ALIASES.ANG_GROUP_BIG_LINKAGE,
-         'rendererLinkage': self._getRendererLinkage(),
+         'rendererLinkage': MISSIONS_ALIASES.MINIMIZED_BATTLE_CONDITION,
          'data': [self._packBattleCondition(_packNoGuiCondition(event))],
-         'isDetailed': self._getIsDetailed()}
-
-    def _getRendererLinkage(self):
-        return MISSIONS_ALIASES.MINIMIZED_BATTLE_CONDITION
-
-    def _getIsDetailed(self):
-        return False
+         'isDetailed': False}
 
 
 class DetailedCardTokenConditionFormatter(CardTokenConditionFormatter):
@@ -340,7 +334,7 @@ class DetailedCardTokenConditionFormatter(CardTokenConditionFormatter):
     def _packBattleCondition(cls, preFormattedCondition):
         return {'icon': getCondIconBySize(CONDITION_SIZE.NORMAL, preFormattedCondition.iconKey),
          'title': formatters.titleFormat(*preFormattedCondition.titleData.args),
-         'description': text_styles.highlightText(*preFormattedCondition.descrData.args),
+         'description': text_styles.middleTitle(*preFormattedCondition.descrData.args),
          'state': preFormattedCondition.progressType}
 
     @classmethod
@@ -362,12 +356,6 @@ class DetailedCardTokenConditionFormatter(CardTokenConditionFormatter):
          'rendererLinkage': MISSIONS_ALIASES.TOKEN_CONDITION,
          'data': result,
          'isDetailed': True}
-
-    def _getRendererLinkage(self):
-        return MISSIONS_ALIASES.BATTLE_CONDITION
-
-    def _getIsDetailed(self):
-        return True
 
 
 class PMCardConditionsFormatter(PersonalMissionConditionsFormatter):

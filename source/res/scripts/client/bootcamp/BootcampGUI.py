@@ -4,10 +4,12 @@ from gui.Scaleform.daapi.view.battle.shared.markers2d import MarkersManager, plu
 from gui.Scaleform.daapi.view.battle.shared.markers2d import settings as _markers2d_settings
 from gui.Scaleform.daapi.view.battle.shared import indicators
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from debug_utils_bootcamp import LOG_CURRENT_EXCEPTION_BOOTCAMP
 from BootCampEvents import g_bootcampEvents
 from BootcampConstants import UI_STATE
+from helpers import i18n
 _Event = events.ComponentEvent
 
 def getDirectionIndicator():
@@ -59,7 +61,7 @@ class BootcampStaticObjectsPlugin(plugins.MarkerPlugin):
 
     def setupStaticObject(self, objectID, shape, minDistance, maxDistance, distance, color):
         if objectID in self.__objects:
-            self._invokeMarker(self.__objects[objectID], 'init', shape, minDistance, maxDistance, distance, color)
+            self._invokeMarker(self.__objects[objectID], 'init', shape, minDistance, maxDistance, distance, i18n.makeString(INGAME_GUI.MARKER_METERS), color)
 
     def setDistanceToObject(self, objectID, distance):
         if objectID in self.__objects:

@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/artefacts.py
+import math
+from functools import partial
 import items
 import nations
-import math
-from items import _xml, vehicles
 from constants import IS_CLIENT, IS_CELLAPP, IS_WEB, VEHICLE_TTC_ASPECTS
-from functools import partial
+from items import _xml, vehicles
 from items.basic_item import BasicItem
 from items.components import shared_components, component_constants
 from tankmen import MAX_SKILL_LEVEL
@@ -104,13 +104,6 @@ class Artefact(BasicItem):
             self.__artefactFilter = _ArtefactFilter((xmlCtx, 'incompatibleTags'), section['incompatibleTags'], self.itemTypeName)
         self.removable = section.readBool('removable', False)
         return
-
-    @staticmethod
-    def findActualAttribute(factors, attribute):
-        if attribute not in factors:
-            if attribute.startswith('gun/'):
-                return 'turrets/0/{}'.format(attribute)
-        return attribute
 
 
 class OptionalDevice(Artefact):
@@ -360,7 +353,7 @@ class Fuel(Equipment):
     def updateVehicleAttrFactors(self, vehicleDescr, factors, aspect):
         try:
             factors['engine/power'] *= self.enginePowerFactor
-            factors['turrets/0/rotationSpeed'] *= self.turretRotationSpeedFactor
+            factors['turret/rotationSpeed'] *= self.turretRotationSpeedFactor
         except:
             pass
 
@@ -591,7 +584,6 @@ class FactorBattleBooster(DynamicEquipment):
 
     def _updateVehicleAttrFactorsImpl(self, factors, levelParams):
         attribute, factor = levelParams
-        attribute = self.findActualAttribute(factors, attribute)
         factors[attribute] *= factor
 
 
@@ -606,7 +598,6 @@ class AdditiveBattleBooster(DynamicEquipment):
 
     def _updateVehicleAttrFactorsImpl(self, factors, levelParams):
         attribute, value = levelParams
-        attribute = self.findActualAttribute(factors, attribute)
         factors[attribute] += value
 
 

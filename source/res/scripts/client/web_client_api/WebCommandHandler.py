@@ -19,6 +19,14 @@ class WebCommandHandler(object):
         self.__browserView = browserView
         self.onCallback = Event()
 
+    def fini(self):
+        for handler in self.__handlers:
+            finiHandler = handler.finiHandler
+            if callable(finiHandler):
+                finiHandler()
+
+        self.__handlers = []
+
     def handleCommand(self, data):
         LOG_DEBUG('Web2Client handle: %s' % data)
         try:

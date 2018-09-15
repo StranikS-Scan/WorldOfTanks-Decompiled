@@ -292,9 +292,3 @@ class ClientUnit(UnitBase):
         self.onUnitRosterChanged()
         self.onUnitMembersListChanged()
         self.onUnitSettingChanged(UNIT_OP.CHANGE_FALLOUT_TYPE, queueType)
-
-    def _changeEventQueueType(self, queueType):
-        UnitBase._changeEventQueueType(self, queueType)
-        self.onUnitRosterChanged()
-        self.onUnitMembersListChanged()
-        self.onUnitSettingChanged(UNIT_OP.CHANGE_EVENT_TYPE, queueType)

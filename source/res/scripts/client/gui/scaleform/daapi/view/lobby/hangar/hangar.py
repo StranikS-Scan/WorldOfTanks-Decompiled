@@ -29,7 +29,6 @@ from skeletons.gui.game_control import IIGRController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.ranked_battles.constants import PRIME_TIME_STATUS
-from halloween_shared import HALLOWEEN_SUPPLY_DROP_SELECTIONID_PREFIX
 
 class Hangar(LobbySubView, HangarMeta, IGlobalListener):
     __background_alpha__ = 0.0
@@ -58,8 +57,8 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         g_hangarSpace.onObjectSelected += self.__on3DObjectSelected
         g_hangarSpace.onObjectUnselected += self.__on3DObjectUnSelected
         g_hangarSpace.onObjectClicked += self.__on3DObjectClicked
+        g_hangarSpace.setVehicleSelectable(True)
         g_prbCtrlEvents.onVehicleClientStateChanged += self.__onVehicleClientStateChanged
-        g_hangarSpace.onRequestOpenWindowsUpdate += self.__processRequestOpenWindowsUpdate
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         g_clientUpdateManager.addMoneyCallback(self.onMoneyUpdate)
         g_clientUpdateManager.addCallbacks({})
@@ -116,7 +115,7 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         g_hangarSpace.onObjectSelected -= self.__on3DObjectSelected
         g_hangarSpace.onObjectUnselected -= self.__on3DObjectUnSelected
         g_hangarSpace.onObjectClicked -= self.__on3DObjectClicked
-        g_hangarSpace.onRequestOpenWindowsUpdate -= self.__processRequestOpenWindowsUpdate
+        g_hangarSpace.setVehicleSelectable(False)
         g_prbCtrlEvents.onVehicleClientStateChanged -= self.__onVehicleClientStateChanged
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         if self.__selected3DEntity is not None:
@@ -199,10 +198,7 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         entity.highlight(True)
         itemId = entity.selectionId
         if itemId:
-            if itemId.startswith(HALLOWEEN_SUPPLY_DROP_SELECTIONID_PREFIX):
-                self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.SUPPLYDROP, [itemId])
-            else:
-                self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.ENVIRONMENT, [itemId])
+            self.as_show3DSceneTooltipS(TOOLTIPS_CONSTANTS.ENVIRONMENT, [itemId])
 
     def __fade3DEntityAndHideTT(self, entity):
         entity.highlight(False)
@@ -228,15 +224,7 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         if self.__isCursorOver3dScene:
             self.__highlight3DEntityAndShowTT(entity)
             if entity.mouseOverSoundName:
-                sound = entity.mouseOverSound
-                if sound is None:
-                    entity.mouseOverSound = SoundGroups.g_instance.getSound2D(entity.mouseOverSoundName)
-                    sound = entity.mouseOverSound
-                if sound is not None:
-                    if sound.isPlaying:
-                        sound.stop()
-                    sound.play()
-        return
+                SoundGroups.g_instance.playSound3D(entity.model.root, entity.mouseOverSoundName)
 
     def __on3DObjectUnSelected(self, entity):
         self.__selected3DEntity = None
@@ -321,7 +309,7 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         pass
 
     def __onRankedPrimeStatusUpdate(self, status):
-        if self.prbDispatcher and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
+        if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
             self.as_setAlertMessageBlockVisibleS(status != PRIME_TIME_STATUS.AVAILABLE)
 
     def __updateAll(self):
@@ -381,12 +369,3 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
     def __onServerSettingChanged(self, diff):
         if 'isRegularQuestEnabled' in diff:
             self.__updateHeader()
-
-    def __processRequestOpenWindowsUpdate(self, stateResponseFunction):
-        containerManager = self.app.containerManager
-        battleResultsWindow = containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.BATTLE_RESULTS})
-        missionAwardWindows = containerManager.getView(ViewTypes.WINDOW, criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.MISSION_AWARD_WINDOW})
-        if battleResultsWindow or missionAwardWindows:
-            stateResponseFunction(False)
-            return
-        stateResponseFunction(True)

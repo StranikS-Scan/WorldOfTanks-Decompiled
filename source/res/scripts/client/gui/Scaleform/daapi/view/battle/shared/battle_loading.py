@@ -109,7 +109,7 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
     def __makeVisualTipVO(self, arenaDP, tip=None):
         loadingInfo = settings_constants.GAME.BATTLE_LOADING_RANKED_INFO if self._arenaVisitor.gui.isRankedBattle() else settings_constants.GAME.BATTLE_LOADING_INFO
         setting = self.settingsCore.options.getSetting(loadingInfo)
-        settingID = setting.getSettingID(isVisualOnly=self._arenaVisitor.gui.isSandboxBattle() or self._arenaVisitor.gui.isEventBattle() or self._arenaVisitor.gui.isRankedBattle(), isEventTwo=self._arenaVisitor.gui.isEventBattlesTwo())
+        settingID = setting.getSettingID(isVisualOnly=self._arenaVisitor.gui.isSandboxBattle() or self._arenaVisitor.gui.isEventBattle(), isFallout=self.isFalloutMode())
         vo = {'settingID': settingID,
          'tipIcon': tip.icon if settingID == BattleLoadingTipSetting.OPTIONS.VISUAL else None,
          'arenaTypeID': self._arenaVisitor.type.getID(),
@@ -125,16 +125,7 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
         :return:
         """
         result = {}
-        if settingID == BattleLoadingTipSetting.OPTIONS.EVENT_TWO:
-            result.update({'leftTeamTitleLeft': -410,
-             'rightTeamTitleLeft': 204,
-             'tipTitleTop': 536,
-             'tipBodyTop': 562,
-             'showTableBackground': False,
-             'showTipsBackground': False,
-             'loadingOffsetX': 200,
-             'hideRightTeam': True})
-        elif settingID == BattleLoadingTipSetting.OPTIONS.TEXT:
+        if settingID == BattleLoadingTipSetting.OPTIONS.TEXT:
             result.update({'leftTeamTitleLeft': -410,
              'rightTeamTitleLeft': 204,
              'tipTitleTop': 536,

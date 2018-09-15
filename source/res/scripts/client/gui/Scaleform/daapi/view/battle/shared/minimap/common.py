@@ -42,9 +42,6 @@ class SimplePlugin(IPlugin):
         self._ctrlMode = mode
         self._ctrlVehicleID = vehicleID
 
-    def clearCamera(self):
-        pass
-
     def setSettings(self):
         pass
 
@@ -92,6 +89,9 @@ class SimplePlugin(IPlugin):
 
     def _isInVideoMode(self):
         return self._ctrlMode == CTRL_MODE_NAME.VIDEO
+
+    def _isInRespawnDeath(self):
+        return self._ctrlMode == CTRL_MODE_NAME.RESPAWN_DEATH
 
 
 class EntriesPlugin(SimplePlugin):

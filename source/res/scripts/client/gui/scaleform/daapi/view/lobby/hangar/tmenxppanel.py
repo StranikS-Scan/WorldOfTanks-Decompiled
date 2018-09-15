@@ -29,7 +29,7 @@ class TmenXpPanel(TmenXpPanelMeta):
 
     def _onVehicleChange(self):
         vehicle = g_currentVehicle.item
-        if vehicle is None or vehicle.isEvent:
+        if vehicle is None:
             self.as_setTankmenXpPanelS(False, False)
             LOG_DEBUG('Do not show TMenXPPanel: No current vehicle')
             return

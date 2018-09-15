@@ -64,7 +64,6 @@ CMD_CHAT_SHORTCUT_RELOAD = 56
 CMD_VOICECHAT_ENABLE = 57
 CMD_BLOCK_TRACKS = 58
 CMD_CM_TRAJECTORY_VIEW = 59
-CMD_SHOOT_SECONDARY = 60
 
 class CommandMapping:
     __DEFAULT_CONFIG_FILE_NAME = 'scripts/command_mapping.xml'
@@ -312,11 +311,13 @@ class CommandMapping:
             if not satelliteKeyNames:
                 result[self.getCommand(commandName)] = int(Keys.__dict__.get(fireKeyName, 0))
 
+        ResMgr.purge(CommandMapping.__DEFAULT_CONFIG_FILE_NAME, True)
         return result
 
     def __loadDefault(self):
         section = ResMgr.openSection(CommandMapping.__DEFAULT_CONFIG_FILE_NAME)
         self.__loadFromSection(section, bDelOldCmds=True, asDefault=True)
+        ResMgr.purge(CommandMapping.__DEFAULT_CONFIG_FILE_NAME, True)
 
     def __loadUserConfig(self):
         section = Settings.g_instance.userPrefs

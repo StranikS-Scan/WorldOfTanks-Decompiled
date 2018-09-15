@@ -215,8 +215,6 @@ def makeEntityI18nKey(ctrlType, entityType, prefix):
             name = 'rally'
     elif ctrlType == CTRL_ENTITY_TYPE.PREQUEUE and entityType == QUEUE_TYPE.SANDBOX:
         name = 'sandBox'
-    elif ctrlType == CTRL_ENTITY_TYPE.PREQUEUE and entityType in QUEUE_TYPE.EVENT:
-        name = 'event'
     else:
         name = 'rally'
     return '{0}/{1}'.format(name, prefix)

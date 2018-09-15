@@ -4,6 +4,7 @@ from bootcamp.BootCampEvents import g_bootcampEvents
 from gui.Scaleform.daapi.view.meta.BCMessageWindowMeta import BCMessageWindowMeta
 import SoundGroups
 from gui.Scaleform.genConsts.BOOTCAMP_MESSAGE_ALIASES import BOOTCAMP_MESSAGE_ALIASES
+from bootcamp.BootcampGarageLessons import ACTION_PARAM as AP
 
 class BCMessageWindow(BCMessageWindowMeta):
 
@@ -27,6 +28,9 @@ class BCMessageWindow(BCMessageWindowMeta):
             SoundGroups.g_instance.playSound2D('bc_info_line_graduate')
         elif type != BOOTCAMP_MESSAGE_ALIASES.RENDERER_INTRO:
             SoundGroups.g_instance.playSound2D('bc_info_line_universal')
+        voiceover = self.__messagesData[AP.VOICEOVERS].pop(0)
+        if voiceover:
+            SoundGroups.g_instance.playSound2D(voiceover)
 
     def onMessageDisappear(self, type):
         if type != BOOTCAMP_MESSAGE_ALIASES.RENDERER_INTRO:

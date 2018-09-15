@@ -384,7 +384,7 @@ class IShopCommonStats(object):
         tuple(price of item, item is hidden)."""
         raise NotImplementedError
 
-    def getAchievementReward(self, achievement, arenaType=1):
+    def getAchievementReward(self, achievement, arenaType=0):
         """Get information about achievement rewards"""
         raise NotImplementedError
 

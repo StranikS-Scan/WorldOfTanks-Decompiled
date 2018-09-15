@@ -49,7 +49,6 @@ class QUESTS(object):
     BONUSES_ITEM_SLOTS = '#quests:bonuses/item/slots'
     BONUSES_ITEM_BERTHS = '#quests:bonuses/item/berths'
     BONUSES_ITEM_PREMIUM = '#quests:bonuses/item/premium'
-    BONUSES_ITEM_TASK = '#quests:bonuses/item/task'
     BONUSES_CREDITS_DESCRIPTION = '#quests:bonuses/credits/description'
     BONUSES_GOLD_DESCRIPTION = '#quests:bonuses/gold/description'
     BONUSES_CRYSTAL_DESCRIPTION = '#quests:bonuses/crystal/description'
@@ -59,10 +58,6 @@ class QUESTS(object):
     BONUSES_ITEM_TANKMEN_NO_SKILLS = '#quests:bonuses/item/tankmen/no_skills'
     BONUSES_ITEM_TANKMEN_WITH_SKILLS = '#quests:bonuses/item/tankmen/with_skills'
     BONUSES_NOTAVAILABLE = '#quests:bonuses/notAvailable'
-    BONUSES_HALLOWEEN_DROP_1 = '#quests:bonuses/halloween/drop/1'
-    BONUSES_HALLOWEEN_DROP_2 = '#quests:bonuses/halloween/drop/2'
-    BONUSES_HALLOWEEN_DROP_3 = '#quests:bonuses/halloween/drop/3'
-    BONUSES_HALLOWEEN_DROP_4 = '#quests:bonuses/halloween/drop/4'
     QUESTS_TITLE = '#quests:quests/title'
     QUESTS_TITLE_MANEUVERSQUESTS = '#quests:quests/title/maneuversQuests'
     QUESTS_TITLE_CURRENTLYAVAILABLE = '#quests:quests/title/currentlyAvailable'
@@ -361,8 +356,6 @@ class QUESTS(object):
     DETAILS_CONDITIONS_RESULTS_TEAM7X7_SIMPLE = '#quests:details/conditions/results/team7x7/simple'
     DETAILS_CONDITIONS_RESULTS_TEAM7X7_AVG = '#quests:details/conditions/results/team7x7/avg'
     DETAILS_CONDITIONS_CUMULATIVE_SINGLE = '#quests:details/conditions/cumulative/single'
-    DETAILS_CONDITIONS_CUMULATIVE_BOSSDAMAGERECEIVED = '#quests:details/conditions/cumulative/bossDamageReceived'
-    DETAILS_CONDITIONS_CUMULATIVE_BOSSSECONDARYTURRETKILL = '#quests:details/conditions/cumulative/bossSecondaryTurretKill'
     DETAILS_CONDITIONS_CUMULATIVE_FORMATION = '#quests:details/conditions/cumulative/formation'
     DETAILS_CONDITIONS_CUMULATIVE_SQUAD = '#quests:details/conditions/cumulative/squad'
     DETAILS_CONDITIONS_CUMULATIVE_TEAM7X7 = '#quests:details/conditions/cumulative/team7x7'
@@ -388,6 +381,7 @@ class QUESTS(object):
     DETAILS_CONDITIONS_VEHICLESKILLS_NATION_TYPE_LEVEL_NOT = '#quests:details/conditions/vehiclesKills/nation_type_level/not'
     DETAILS_CONDITIONS_FIREKILLS = '#quests:details/conditions/fireKills'
     DETAILS_CONDITIONS_FIREKILLS_NOT = '#quests:details/conditions/fireKills/not'
+    DETAILS_CONDITIONS_FIREKILLS_ALL_NOT = '#quests:details/conditions/fireKills/all/not'
     DETAILS_CONDITIONS_FIREKILLS_ALL = '#quests:details/conditions/fireKills/all'
     DETAILS_CONDITIONS_FIREKILLS_LIST = '#quests:details/conditions/fireKills/list'
     DETAILS_CONDITIONS_FIREKILLS_LIST_NOT = '#quests:details/conditions/fireKills/list/not'
@@ -407,6 +401,7 @@ class QUESTS(object):
     DETAILS_CONDITIONS_FIREKILLS_NATION_TYPE_LEVEL_NOT = '#quests:details/conditions/fireKills/nation_type_level/not'
     DETAILS_CONDITIONS_RAMKILLS = '#quests:details/conditions/ramKills'
     DETAILS_CONDITIONS_RAMKILLS_NOT = '#quests:details/conditions/ramKills/not'
+    DETAILS_CONDITIONS_RAMKILLS_ALL_NOT = '#quests:details/conditions/ramKills/all/not'
     DETAILS_CONDITIONS_RAMKILLS_ALL = '#quests:details/conditions/ramKills/all'
     DETAILS_CONDITIONS_RAMKILLS_LIST = '#quests:details/conditions/ramKills/list'
     DETAILS_CONDITIONS_RAMKILLS_LIST_NOT = '#quests:details/conditions/ramKills/list/not'
@@ -585,6 +580,7 @@ class QUESTS(object):
     DETAILS_CONDITIONS_INSTALLEDMODULE_RADIOS_NOT = '#quests:details/conditions/installedModule/radios/not'
     DETAILS_CONDITIONS_INSTALLEDMODULE_OPTIONALDEVICE_NOT = '#quests:details/conditions/installedModule/optionalDevice/not'
     DETAILS_CONDITIONS_MULTISTUNEVENT = '#quests:details/conditions/multiStunEvent'
+    DETAILS_CONDITIONS_MULTISTUNEVENT_NOT = '#quests:details/conditions/multiStunEvent/not'
     DETAILS_CONDITIONS_VEHICLESTUN = '#quests:details/conditions/vehicleStun'
     DETAILS_CONDITIONS_VEHICLESTUN_NOT = '#quests:details/conditions/vehicleStun/not'
     DETAILS_CONDITIONS_VEHICLESTUN_CUMULATIVE = '#quests:details/conditions/vehicleStun/cumulative'
@@ -708,11 +704,6 @@ class QUESTS(object):
     DETAILS_CONDITIONS_CUMULATIVE_ISANYOURCRITTEDINNERMODULES = '#quests:details/conditions/cumulative/isAnyOurCrittedInnerModules'
     DETAILS_CONDITIONS_CUMULATIVE_ISENEMYBASECAPTURED = '#quests:details/conditions/cumulative/isEnemyBaseCaptured'
     DETAILS_CONDITIONS_CUMULATIVE_AGGREGATED = '#quests:details/conditions/cumulative/aggregated'
-    DETAILS_CONDITIONS_CUMULATIVE_BOSSHAZARDDAMAGERECEIVED = '#quests:details/conditions/cumulative/bossHazardDamageReceived'
-    DETAILS_CONDITIONS_CUMULATIVE_PRIMARYTURRETKILLS = '#quests:details/conditions/cumulative/primaryTurretKills'
-    DETAILS_CONDITIONS_CUMULATIVE_SECONDARYTURRETKILLS = '#quests:details/conditions/cumulative/secondaryTurretKills'
-    DETAILS_CONDITIONS_CUMULATIVE_SECONDARYDIRECTHITS = '#quests:details/conditions/cumulative/secondaryDirectHits'
-    DETAILS_CONDITIONS_CUMULATIVE_HEALTHPICKUPS = '#quests:details/conditions/cumulative/healthPickups'
     DETAILS_DOSSIER_SNIPERSERIES = '#quests:details/dossier/sniperSeries'
     DETAILS_DOSSIER_MAXSNIPERSERIES = '#quests:details/dossier/maxSniperSeries'
     DETAILS_DOSSIER_INVINCIBLESERIES = '#quests:details/dossier/invincibleSeries'
@@ -794,7 +785,6 @@ class QUESTS(object):
     DETAILS_DOSSIER_PATTONVALLEY = '#quests:details/dossier/pattonValley'
     DETAILS_DOSSIER_RANDOM_XP = '#quests:details/dossier/random/xp'
     DETAILS_DOSSIER_RANDOM_MAXXP = '#quests:details/dossier/random/maxXP'
-    DETAILS_DOSSIER_RANDOM_BATTLESCOUNT = '#quests:details/dossier/random/battlesCount'
     DETAILS_DOSSIER_RANDOM_WINS = '#quests:details/dossier/random/wins'
     DETAILS_DOSSIER_RANDOM_LOSSES = '#quests:details/dossier/random/losses'
     DETAILS_DOSSIER_RANDOM_SURVIVEDBATTLES = '#quests:details/dossier/random/survivedBattles'
@@ -907,7 +897,23 @@ class QUESTS(object):
     DETAILS_DOSSIER_LADDER_ORIGINALXP = '#quests:details/dossier/ladder/originalXP'
     DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDTRACK = '#quests:details/dossier/ladder/damageAssistedTrack'
     DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDRADIO = '#quests:details/dossier/ladder/damageAssistedRadio'
-    DETAILS_DOSSIER_RANKED_BATTLESCOUNT = '#quests:details/dossier/ranked/battlesCount'
+    DETAILS_DOSSIER_BATTLESCOUNT = '#quests:details/dossier/battlesCount'
+    DETAILS_DOSSIER_0_BATTLESCOUNT = '#quests:details/dossier/0/battlesCount'
+    DETAILS_DOSSIER_1_BATTLESCOUNT = '#quests:details/dossier/1/battlesCount'
+    DETAILS_DOSSIER_2_BATTLESCOUNT = '#quests:details/dossier/2/battlesCount'
+    DETAILS_DOSSIER_4_BATTLESCOUNT = '#quests:details/dossier/4/battlesCount'
+    DETAILS_DOSSIER_5_BATTLESCOUNT = '#quests:details/dossier/5/battlesCount'
+    DETAILS_DOSSIER_6_BATTLESCOUNT = '#quests:details/dossier/6/battlesCount'
+    DETAILS_DOSSIER_7_BATTLESCOUNT = '#quests:details/dossier/7/battlesCount'
+    DETAILS_DOSSIER_9_BATTLESCOUNT = '#quests:details/dossier/9/battlesCount'
+    DETAILS_DOSSIER_13_BATTLESCOUNT = '#quests:details/dossier/13/battlesCount'
+    DETAILS_DOSSIER_16_BATTLESCOUNT = '#quests:details/dossier/16/battlesCount'
+    DETAILS_DOSSIER_18_BATTLESCOUNT = '#quests:details/dossier/18/battlesCount'
+    DETAILS_DOSSIER_19_BATTLESCOUNT = '#quests:details/dossier/19/battlesCount'
+    DETAILS_DOSSIER_20_BATTLESCOUNT = '#quests:details/dossier/20/battlesCount'
+    DETAILS_DOSSIER_21_BATTLESCOUNT = '#quests:details/dossier/21/battlesCount'
+    DETAILS_DOSSIER_22_BATTLESCOUNT = '#quests:details/dossier/22/battlesCount'
+    DETAILS_DOSSIER_24_BATTLESCOUNT = '#quests:details/dossier/24/battlesCount'
     DETAILS_MODIFIERS_TITLE_DISCOUNT = '#quests:details/modifiers/title/discount'
     DETAILS_MODIFIERS_TITLE_SELLING = '#quests:details/modifiers/title/selling'
     DETAILS_MODIFIERS_TITLE_AVAILABILITY = '#quests:details/modifiers/title/availability'
@@ -1083,6 +1089,8 @@ class QUESTS(object):
     MISSIONDETAILS_BOTTOMSTATUSCOMPLETE = '#quests:missionDetails/bottomStatusComplete'
     MISSIONDETAILS_BOTTOMSTATUSTOKENS = '#quests:missionDetails/bottomStatusTokens'
     MISSIONDETAILS_BOTTOMSTATUSNEXTTRY = '#quests:missionDetails/bottomStatusNextTry'
+    MISSIONDETAILS_NEXTPAGEBTN_LABEL = '#quests:missionDetails/nextPageBtn/label'
+    MISSIONDETAILS_PREVPAGEBTN_LABEL = '#quests:missionDetails/prevPageBtn/label'
     MISSIONS_TOKENPOPOVER_HEADER = '#quests:missions/tokenPopover/header'
     MISSIONS_TOKENPOPOVER_DESCR = '#quests:missions/tokenPopover/descr'
     MISSIONS_TOKENPOPOVER_DESCR_SHOP = '#quests:missions/tokenPopover/descr/shop'
@@ -1112,6 +1120,17 @@ class QUESTS(object):
     TOKEN_DEFAULT_HEAVYTANK = '#quests:token/default/heavyTank'
     TOKEN_DEFAULT_AT_SPG = '#quests:token/default/at-spg'
     TOKEN_DEFAULT_SPG = '#quests:token/default/spg'
+    TOKEN_DEFAULT_SHELL = '#quests:token/default/shell'
+    TOKEN_DEFAULT_RICOCHET = '#quests:token/default/ricochet'
+    TOKEN_DEFAULT_PENETRATION = '#quests:token/default/penetration'
+    TOKEN_DEFAULT_AIM = '#quests:token/default/aim'
+    TOKEN_DEFAULT_FIRE = '#quests:token/default/fire'
+    TOKEN_DEFAULT_TURRET = '#quests:token/default/turret'
+    TOKEN_DEFAULT_TRACK = '#quests:token/default/track'
+    TOKEN_DEFAULT_FOLDER = '#quests:token/default/folder'
+    TOKEN_DEFAULT_LEAFLET = '#quests:token/default/leaflet'
+    TOKEN_DEFAULT_WHEEL = '#quests:token/default/wheel'
+    TOKEN_DEFAULT_BOX = '#quests:token/default/box'
     BONUSNAME_CREDITS = '#quests:bonusName/credits'
     BONUSNAME_GOLD = '#quests:bonusName/gold'
     BONUSNAME_CRYSTAL = '#quests:bonusName/crystal'
@@ -1498,39 +1517,6 @@ class QUESTS(object):
     PERSONALMISSION_VEHICLESELECTOR_TITLE = '#quests:personalMission/vehicleSelector/title'
     QUEST_CONDITION_DOT = '#quests:quest/condition/dot'
     QUEST_CONDITION_OR = '#quests:quest/condition/or'
-    QUEST_HALLOWEEN_HE17_WIN_PVE_1 = '#quests:quest/halloween/HE17_WIN_PVE/1'
-    QUEST_HALLOWEEN_HE17_WIN_PVP_1 = '#quests:quest/halloween/HE17_WIN_PVP/1'
-    QUEST_HALLOWEEN_HE17_D_PVP_1_1 = '#quests:quest/halloween/HE17_D_PVP_1/1'
-    QUEST_HALLOWEEN_HE17_D_PVE_1_1 = '#quests:quest/halloween/HE17_D_PVE_1/1'
-    QUEST_HALLOWEEN_HE17_D_PVE_2_1 = '#quests:quest/halloween/HE17_D_PVE_2/1'
-    QUEST_HALLOWEEN_HE17_D_PVP_2_1 = '#quests:quest/halloween/HE17_D_PVP_2/1'
-    QUEST_HALLOWEEN_HE17_D_PVE_3_1 = '#quests:quest/halloween/HE17_D_PVE_3/1'
-    QUEST_HALLOWEEN_HE17_D_PVP_3_1 = '#quests:quest/halloween/HE17_D_PVP_3/1'
-    QUEST_HALLOWEEN_HE17_D_PVE_4_1 = '#quests:quest/halloween/HE17_D_PVE_4/1'
-    QUEST_HALLOWEEN_HE17_D_PVP_4_1 = '#quests:quest/halloween/HE17_D_PVP_4/1'
-    QUEST_HALLOWEEN_HE17_D_PVE_5_1 = '#quests:quest/halloween/HE17_D_PVE_5/1'
-    QUEST_HALLOWEEN_HE17_D_PVP_5_1 = '#quests:quest/halloween/HE17_D_PVP_5/1'
-    QUEST_HALLOWEEN_HE17_D_PVE_6_1 = '#quests:quest/halloween/HE17_D_PVE_6/1'
-    QUEST_HALLOWEEN_HE17_D_PVE_6_2 = '#quests:quest/halloween/HE17_D_PVE_6/2'
-    QUEST_HALLOWEEN_HE17_D_PVP_6_1 = '#quests:quest/halloween/HE17_D_PVP_6/1'
-    QUEST_HALLOWEEN_HE17_D_PVE_7_1 = '#quests:quest/halloween/HE17_D_PVE_7/1'
-    QUEST_HALLOWEEN_HE17_W_PVE_1_1 = '#quests:quest/halloween/HE17_W_PVE_1/1'
-    QUEST_HALLOWEEN_HE17_W_PVE_2_1 = '#quests:quest/halloween/HE17_W_PVE_2/1'
-    QUEST_HALLOWEEN_HE17_W_PVP_1_1 = '#quests:quest/halloween/HE17_W_PVP_1/1'
-    QUEST_HALLOWEEN_HE17_W_PVP_2_1 = '#quests:quest/halloween/HE17_W_PVP_2/1'
-    QUEST_HALLOWEEN_HE17_W_PVP_3_1 = '#quests:quest/halloween/HE17_W_PVP_3/1'
-    QUEST_HALLOWEEN_HE17_W_PVE_5_1 = '#quests:quest/halloween/HE17_W_PVE_5/1'
-    QUEST_HALLOWEEN_HE17_W_PVE_6_1 = '#quests:quest/halloween/HE17_W_PVE_6/1'
-    QUEST_HALLOWEEN_HE17_W_PVE_7_1 = '#quests:quest/halloween/HE17_W_PVE_7/1'
-    QUEST_HALLOWEEN_HE17_W_PVE_8_1 = '#quests:quest/halloween/HE17_W_PVE_8/1'
-    QUEST_HALLOWEEN_HE17_W_PVE_9_1 = '#quests:quest/halloween/HE17_W_PVE_9/1'
-    QUEST_HALLOWEEN_HE17_W_PVE_10_1 = '#quests:quest/halloween/HE17_W_PVE_10/1'
-    QUEST_HALLOWEEN_HE17_W_PVP_4_1 = '#quests:quest/halloween/HE17_W_PVP_4/1'
-    QUEST_HALLOWEEN_HE17_W_PVP_5_1 = '#quests:quest/halloween/HE17_W_PVP_5/1'
-    QUEST_HALLOWEEN_HE17_PVE_1_S_1 = '#quests:quest/halloween/HE17_PVE_1_S/1'
-    QUEST_HALLOWEEN_HE17_D_PVE_10_1 = '#quests:quest/halloween/HE17_D_PVE_10/1'
-    QUEST_HALLOWEEN_HE17_D_PVE_11_1 = '#quests:quest/halloween/HE17_D_PVE_11/1'
-    QUEST_HALLOWEEN_HE17_D_PVE_12_1 = '#quests:quest/halloween/HE17_D_PVE_12/1'
     TOKEN_DEFAULT_ENUM = (TOKEN_DEFAULT_USSR,
      TOKEN_DEFAULT_GERMANY,
      TOKEN_DEFAULT_USA,
@@ -1545,7 +1531,18 @@ class QUESTS(object):
      TOKEN_DEFAULT_MEDIUMTANK,
      TOKEN_DEFAULT_HEAVYTANK,
      TOKEN_DEFAULT_AT_SPG,
-     TOKEN_DEFAULT_SPG)
+     TOKEN_DEFAULT_SPG,
+     TOKEN_DEFAULT_SHELL,
+     TOKEN_DEFAULT_RICOCHET,
+     TOKEN_DEFAULT_PENETRATION,
+     TOKEN_DEFAULT_AIM,
+     TOKEN_DEFAULT_FIRE,
+     TOKEN_DEFAULT_TURRET,
+     TOKEN_DEFAULT_TRACK,
+     TOKEN_DEFAULT_FOLDER,
+     TOKEN_DEFAULT_LEAFLET,
+     TOKEN_DEFAULT_WHEEL,
+     TOKEN_DEFAULT_BOX)
     BONUSNAME_ENUM = (BONUSNAME_CREDITS,
      BONUSNAME_GOLD,
      BONUSNAME_CRYSTAL,
@@ -1920,7 +1917,6 @@ class QUESTS(object):
      ACTION_EXCHANGERATE_GOLD2CREDIT)
     DETAILS_DOSSIER_ALL_ENUM = (DETAILS_DOSSIER_RANDOM_XP,
      DETAILS_DOSSIER_RANDOM_MAXXP,
-     DETAILS_DOSSIER_RANDOM_BATTLESCOUNT,
      DETAILS_DOSSIER_RANDOM_WINS,
      DETAILS_DOSSIER_RANDOM_LOSSES,
      DETAILS_DOSSIER_RANDOM_SURVIVEDBATTLES,
@@ -2033,11 +2029,22 @@ class QUESTS(object):
      DETAILS_DOSSIER_LADDER_ORIGINALXP,
      DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDTRACK,
      DETAILS_DOSSIER_LADDER_DAMAGEASSISTEDRADIO,
-     DETAILS_DOSSIER_RANKED_BATTLESCOUNT)
-    BONUSES_HALLOWEEN_DROP_ENUM = (BONUSES_HALLOWEEN_DROP_1,
-     BONUSES_HALLOWEEN_DROP_2,
-     BONUSES_HALLOWEEN_DROP_3,
-     BONUSES_HALLOWEEN_DROP_4)
+     DETAILS_DOSSIER_0_BATTLESCOUNT,
+     DETAILS_DOSSIER_1_BATTLESCOUNT,
+     DETAILS_DOSSIER_2_BATTLESCOUNT,
+     DETAILS_DOSSIER_4_BATTLESCOUNT,
+     DETAILS_DOSSIER_5_BATTLESCOUNT,
+     DETAILS_DOSSIER_6_BATTLESCOUNT,
+     DETAILS_DOSSIER_7_BATTLESCOUNT,
+     DETAILS_DOSSIER_9_BATTLESCOUNT,
+     DETAILS_DOSSIER_13_BATTLESCOUNT,
+     DETAILS_DOSSIER_16_BATTLESCOUNT,
+     DETAILS_DOSSIER_18_BATTLESCOUNT,
+     DETAILS_DOSSIER_19_BATTLESCOUNT,
+     DETAILS_DOSSIER_20_BATTLESCOUNT,
+     DETAILS_DOSSIER_21_BATTLESCOUNT,
+     DETAILS_DOSSIER_22_BATTLESCOUNT,
+     DETAILS_DOSSIER_24_BATTLESCOUNT)
 
     @classmethod
     def getTokenTitle(cls, style):
@@ -2070,15 +2077,6 @@ class QUESTS(object):
     def getDetailsDossier(cls, battleTypeName, keyName):
         outcome = '#quests:details/dossier/{}/{}'.format(battleTypeName, keyName)
         if outcome not in cls.DETAILS_DOSSIER_ALL_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def bonuses_halloween_drop(cls, tier):
-        outcome = '#quests:bonuses/halloween/drop/{}'.format(tier)
-        if outcome not in cls.BONUSES_HALLOWEEN_DROP_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

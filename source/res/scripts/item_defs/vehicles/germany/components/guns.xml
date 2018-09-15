@@ -112,6 +112,7 @@
     <_128mm_L50P>	127	</_128mm_L50P>
     <_128mm_K44_2_L61_WT>	128	</_128mm_K44_2_L61_WT>
     <_105mm_BK_L7>	129	</_105mm_BK_L7>
+    <_75mm_Waffe0725_1944>	131	</_75mm_Waffe0725_1944>
     <_20mm_KwK_30_bot>	244	</_20mm_KwK_30_bot>
     <_37mm_KwK_L46_bot>	245	</_37mm_KwK_L46_bot>
     <Gun_Env_Artillery>	248	</Gun_Env_Artillery>
@@ -135,18 +136,6 @@
     <_50mm_KwK_38_L42_bootcamp>	64005	</_50mm_KwK_38_L42_bootcamp>
     <_37mm_KwK_L46_bootcamp>	64006	</_37mm_KwK_L46_bootcamp>
     <_40mm_37_42_M_L45_A_bootcamp>	64007	</_40mm_37_42_M_L45_A_bootcamp>
-    <Gun_1_G150_Leviathan_Mk1>	60009	</Gun_1_G150_Leviathan_Mk1>
-    <Gun_2_G150_Leviathan_Mk1>	60010	</Gun_2_G150_Leviathan_Mk1>
-    <Gun_3_G150_Leviathan_Mk1>	60011	</Gun_3_G150_Leviathan_Mk1>
-    <Gun_4_G150_Leviathan_Mk1>	60012	</Gun_4_G150_Leviathan_Mk1>
-    <Gun_5_G150_Leviathan_Mk1>	60013	</Gun_5_G150_Leviathan_Mk1>
-    <Gun_6_G150_Leviathan_Mk1>	60014	</Gun_6_G150_Leviathan_Mk1>
-    <Gun_7_G150_Leviathan_Mk1>	60015	</Gun_7_G150_Leviathan_Mk1>
-    <Gun_8_G150_Leviathan_Mk1>	60016	</Gun_8_G150_Leviathan_Mk1>
-    <Gun_9_G150_Leviathan_Mk1>	60017	</Gun_9_G150_Leviathan_Mk1>
-    <Gun_10_G150_Leviathan_Mk1>	60018	</Gun_10_G150_Leviathan_Mk1>
-    <Gun_11_G150_Leviathan_Mk1>	60019	</Gun_11_G150_Leviathan_Mk1>
-    <Gun_12_G150_Leviathan_Mk1>	60020	</Gun_12_G150_Leviathan_Mk1>
   </ids>
   <shared>
     <_7.92mm_Mauser_EW_141>
@@ -3675,6 +3664,57 @@
         </APCNR>
       </shots>
     </_75mm_KwK41_L58_conic>
+    <_75mm_Waffe0725_1944>
+      <userString>	#germany_vehicles:_75mm_Waffe0725_1944	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	120000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.38	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.48	</amplitude>
+        <recoilEffect>	medium	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium	</effects>
+      <reloadEffect>	reload50_75	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -16.0 1.0 -16.0	</minPitch>
+        <maxPitch>	0.0 6.0 1.0 6.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	35.0	</rotationSpeed>
+      <reloadTime>	5.14285714285714	</reloadTime>
+      <maxAmmo>	68	</maxAmmo>
+      <aimingTime>	2.28571428571429	</aimingTime>
+      <weight>	720	</weight>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	70	</maxRegenHealth>
+      <repairCost>	7.5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.342857142857143	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.14	</turretRotation>
+        <afterShot>	3.5	</afterShot>
+        <whileGunDamaged>	3.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <APCNR1945>
+          <defaultPortion>	0.9	</defaultPortion>
+          <speed>	1260	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	221 197	</piercingPower>
+        </APCNR1945>
+        <APCNRHE1945>
+          <defaultPortion>	0.1	</defaultPortion>
+          <speed>	925	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	38 38	</piercingPower>
+        </APCNRHE1945>
+      </shots>
+    </_75mm_Waffe0725_1944>
     <_88mm_Flak_37_L56>
       <userString>	#germany_vehicles:_88mm_Flak_37_L56	</userString>
       <tags></tags>
@@ -7778,593 +7818,5 @@
         </_128mm_SprG18>
       </shots>
     </_128mm_KwK44_L55_IGR>
-    <Gun_1_G150_Leviathan_Mk1>
-      <userString>	#germany_vehicles:Gun_1_G150_Leviathan_Mk1	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	2750.0	</price>
-      <notInShop>	true	</notInShop>
-      <models>
-        <undamaged>	vehicles/german/G150_Leviathan/normal/lod0/Gun_01.model	</undamaged>
-        <destroyed>	vehicles/german/G150_Leviathan/crash/lod0/Gun_01.model	</destroyed>
-        <exploded>	vehicles/german/G150_Leviathan/crash/lod0/Gun_01.model	</exploded>
-      </models>
-      <impulse>	0.56	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.46	</amplitude>
-        <recoilEffect>	large	</recoilEffect>
-      </recoil>
-      <effects>	lev_shot_huge	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
-        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	6	</reloadTime>
-      <maxAmmo>	62	</maxAmmo>
-      <aimingTime>	0.5	</aimingTime>
-      <weight>	3480	</weight>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	110	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.35	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.01	</turretRotation>
-        <afterShot>	1.0	</afterShot>
-        <whileGunDamaged>	1.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_128mm_LevMk1>
-          <defaultPortion>	0.60	</defaultPortion>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	600	</maxDistance>
-          <piercingPower>	230 180	</piercingPower>
-          <speed>	800	</speed>
-        </_128mm_LevMk1>
-      </shots>
-    </Gun_1_G150_Leviathan_Mk1>
-    <Gun_2_G150_Leviathan_Mk1>
-      <userString>	#germany_vehicles:Gun_9_G150_Leviathan_Mk1	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	2750.0	</price>
-      <notInShop>	true	</notInShop>
-      <models>
-        <undamaged>	vehicles/german/G150_Leviathan/normal/lod0/Gun_09.model	</undamaged>
-        <destroyed>	vehicles/german/G150_Leviathan/crash/lod0/Gun_09.model	</destroyed>
-        <exploded>	vehicles/german/G150_Leviathan/crash/lod0/Gun_09.model	</exploded>
-      </models>
-      <impulse>	0.01	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.46	</amplitude>
-        <recoilEffect>	large	</recoilEffect>
-      </recoil>
-      <effects>	lev_shot_small	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
-        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	1	</reloadTime>
-      <maxAmmo>	62	</maxAmmo>
-      <aimingTime>	0.1	</aimingTime>
-      <weight>	3480	</weight>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	110	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.5	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.01	</turretRotation>
-        <afterShot>	1.0	</afterShot>
-        <whileGunDamaged>	1.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_60mm_LevMk1_B>
-          <defaultPortion>	0.60	</defaultPortion>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	350	</maxDistance>
-          <piercingPower>	230 190	</piercingPower>
-          <speed>	920	</speed>
-        </_60mm_LevMk1_B>
-      </shots>
-    </Gun_2_G150_Leviathan_Mk1>
-    <Gun_3_G150_Leviathan_Mk1>
-      <userString>	#germany_vehicles:Gun_9_G150_Leviathan_Mk1	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	2750.0	</price>
-      <notInShop>	true	</notInShop>
-      <models>
-        <undamaged>	vehicles/german/G150_Leviathan/normal/lod0/Gun_09.model	</undamaged>
-        <destroyed>	vehicles/german/G150_Leviathan/crash/lod0/Gun_09.model	</destroyed>
-        <exploded>	vehicles/german/G150_Leviathan/crash/lod0/Gun_09.model	</exploded>
-      </models>
-      <impulse>	0.01	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.46	</amplitude>
-        <recoilEffect>	large	</recoilEffect>
-      </recoil>
-      <effects>	lev_shot_small	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
-        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	1	</reloadTime>
-      <maxAmmo>	62	</maxAmmo>
-      <aimingTime>	0.1	</aimingTime>
-      <weight>	3480	</weight>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	110	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.5	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.01	</turretRotation>
-        <afterShot>	1.0	</afterShot>
-        <whileGunDamaged>	1.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_60mm_LevMk1_B>
-          <defaultPortion>	0.60	</defaultPortion>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	350	</maxDistance>
-          <piercingPower>	230 140	</piercingPower>
-          <speed>	920	</speed>
-        </_60mm_LevMk1_B>
-      </shots>
-    </Gun_3_G150_Leviathan_Mk1>
-    <Gun_4_G150_Leviathan_Mk1>
-      <userString>	#germany_vehicles:Gun_5_G150_Leviathan_Mk1	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	2750.0	</price>
-      <notInShop>	true	</notInShop>
-      <models>
-        <undamaged>	vehicles/german/G150_Leviathan/normal/lod0/Gun_05.model	</undamaged>
-        <destroyed>	vehicles/german/G150_Leviathan/crash/lod0/Gun_05.model	</destroyed>
-        <exploded>	vehicles/german/G150_Leviathan/crash/lod0/Gun_05.model	</exploded>
-      </models>
-      <impulse>	0.56	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.46	</amplitude>
-        <recoilEffect>	large	</recoilEffect>
-      </recoil>
-      <effects>	lev_shot_medium	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
-        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	2.5	</reloadTime>
-      <maxAmmo>	62	</maxAmmo>
-      <aimingTime>	1	</aimingTime>
-      <weight>	3480	</weight>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	110	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.15	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.01	</turretRotation>
-        <afterShot>	1.0	</afterShot>
-        <whileGunDamaged>	1.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_105mm_LevMk1_A>
-          <defaultPortion>	0.60	</defaultPortion>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	450	</maxDistance>
-          <speed>	920	</speed>
-          <piercingPower>	230 180	</piercingPower>
-        </_105mm_LevMk1_A>
-      </shots>
-    </Gun_4_G150_Leviathan_Mk1>
-    <Gun_5_G150_Leviathan_Mk1>
-      <userString>	#germany_vehicles:Gun_9_G150_Leviathan_Mk1	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	2750.0	</price>
-      <notInShop>	true	</notInShop>
-      <models>
-        <undamaged>	vehicles/german/G150_Leviathan/normal/lod0/Gun_09.model	</undamaged>
-        <destroyed>	vehicles/german/G150_Leviathan/crash/lod0/Gun_09.model	</destroyed>
-        <exploded>	vehicles/german/G150_Leviathan/crash/lod0/Gun_09.model	</exploded>
-      </models>
-      <impulse>	0.01	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.46	</amplitude>
-        <recoilEffect>	large	</recoilEffect>
-      </recoil>
-      <effects>	lev_shot_small	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
-        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	1	</reloadTime>
-      <maxAmmo>	62	</maxAmmo>
-      <aimingTime>	0.1	</aimingTime>
-      <weight>	3480	</weight>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	110	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.5	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.03	</turretRotation>
-        <afterShot>	1.0	</afterShot>
-        <whileGunDamaged>	1.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_60mm_LevMk1_B>
-          <defaultPortion>	0.60	</defaultPortion>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	350	</maxDistance>
-          <piercingPower>	230 140	</piercingPower>
-          <speed>	920	</speed>
-        </_60mm_LevMk1_B>
-      </shots>
-    </Gun_5_G150_Leviathan_Mk1>
-    <Gun_6_G150_Leviathan_Mk1>
-      <userString>	#germany_vehicles:Gun_9_G150_Leviathan_Mk1	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	2750.0	</price>
-      <notInShop>	true	</notInShop>
-      <models>
-        <undamaged>	vehicles/german/G150_Leviathan/normal/lod0/Gun_09.model	</undamaged>
-        <destroyed>	vehicles/german/G150_Leviathan/crash/lod0/Gun_09.model	</destroyed>
-        <exploded>	vehicles/german/G150_Leviathan/crash/lod0/Gun_09.model	</exploded>
-      </models>
-      <impulse>	0.01	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.46	</amplitude>
-        <recoilEffect>	large	</recoilEffect>
-      </recoil>
-      <effects>	lev_shot_small	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
-        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	1	</reloadTime>
-      <maxAmmo>	62	</maxAmmo>
-      <aimingTime>	0.1	</aimingTime>
-      <weight>	3480	</weight>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	110	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.5	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.03	</turretRotation>
-        <afterShot>	1.0	</afterShot>
-        <whileGunDamaged>	1.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_60mm_LevMk1_B>
-          <defaultPortion>	0.60	</defaultPortion>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	350	</maxDistance>
-          <piercingPower>	230 140	</piercingPower>
-          <speed>	920	</speed>
-        </_60mm_LevMk1_B>
-      </shots>
-    </Gun_6_G150_Leviathan_Mk1>
-    <Gun_7_G150_Leviathan_Mk1>
-      <userString>	#germany_vehicles:Gun_9_G150_Leviathan_Mk1	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	2750.0	</price>
-      <notInShop>	true	</notInShop>
-      <models>
-        <undamaged>	vehicles/german/G150_Leviathan/normal/lod0/Gun_09.model	</undamaged>
-        <destroyed>	vehicles/german/G150_Leviathan/crash/lod0/Gun_09.model	</destroyed>
-        <exploded>	vehicles/german/G150_Leviathan/crash/lod0/Gun_09.model	</exploded>
-      </models>
-      <impulse>	0.01	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.46	</amplitude>
-        <recoilEffect>	large	</recoilEffect>
-      </recoil>
-      <effects>	lev_shot_small	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
-        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	1	</reloadTime>
-      <maxAmmo>	62	</maxAmmo>
-      <aimingTime>	0.1	</aimingTime>
-      <weight>	3480	</weight>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	110	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.5	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.03	</turretRotation>
-        <afterShot>	1.0	</afterShot>
-        <whileGunDamaged>	1.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_60mm_LevMk1_B>
-          <defaultPortion>	0.60	</defaultPortion>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	350	</maxDistance>
-          <piercingPower>	230 140	</piercingPower>
-          <speed>	920	</speed>
-        </_60mm_LevMk1_B>
-      </shots>
-    </Gun_7_G150_Leviathan_Mk1>
-    <Gun_8_G150_Leviathan_Mk1>
-      <userString>	#germany_vehicles:Gun_5_G150_Leviathan_Mk1	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	2750.0	</price>
-      <notInShop>	true	</notInShop>
-      <models>
-        <undamaged>	vehicles/german/G150_Leviathan/normal/lod0/Gun_05.model	</undamaged>
-        <destroyed>	vehicles/german/G150_Leviathan/crash/lod0/Gun_05.model	</destroyed>
-        <exploded>	vehicles/german/G150_Leviathan/crash/lod0/Gun_05.model	</exploded>
-      </models>
-      <impulse>	0.56	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.46	</amplitude>
-        <recoilEffect>	large	</recoilEffect>
-      </recoil>
-      <effects>	lev_shot_medium	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
-        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	2.5	</reloadTime>
-      <maxAmmo>	62	</maxAmmo>
-      <aimingTime>	1	</aimingTime>
-      <weight>	3480	</weight>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	110	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.3	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.03	</turretRotation>
-        <afterShot>	1.0	</afterShot>
-        <whileGunDamaged>	1.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_105mm_LevMk1_A>
-          <defaultPortion>	0.60	</defaultPortion>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	450	</maxDistance>
-          <speed>	920	</speed>
-          <piercingPower>	230 180	</piercingPower>
-        </_105mm_LevMk1_A>
-      </shots>
-    </Gun_8_G150_Leviathan_Mk1>
-    <Gun_9_G150_Leviathan_Mk1>
-      <userString>	#germany_vehicles:Gun_9_G150_Leviathan_Mk1	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	2750.0	</price>
-      <notInShop>	true	</notInShop>
-      <models>
-        <undamaged>	vehicles/german/G150_Leviathan/normal/lod0/Gun_09.model	</undamaged>
-        <destroyed>	vehicles/german/G150_Leviathan/crash/lod0/Gun_09.model	</destroyed>
-        <exploded>	vehicles/german/G150_Leviathan/crash/lod0/Gun_09.model	</exploded>
-      </models>
-      <impulse>	0.01	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.46	</amplitude>
-        <recoilEffect>	large	</recoilEffect>
-      </recoil>
-      <effects>	lev_shot_small	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
-        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	1	</reloadTime>
-      <maxAmmo>	62	</maxAmmo>
-      <aimingTime>	0.1	</aimingTime>
-      <weight>	3480	</weight>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	110	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.5	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.03	</turretRotation>
-        <afterShot>	1.0	</afterShot>
-        <whileGunDamaged>	1.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_60mm_LevMk1_B>
-          <defaultPortion>	0.60	</defaultPortion>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	350	</maxDistance>
-          <piercingPower>	230 140	</piercingPower>
-          <speed>	920	</speed>
-        </_60mm_LevMk1_B>
-      </shots>
-    </Gun_9_G150_Leviathan_Mk1>
-    <Gun_10_G150_Leviathan_Mk1>
-      <userString>	#germany_vehicles:Gun_10_G150_Leviathan_Mk1	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	2750.0	</price>
-      <notInShop>	true	</notInShop>
-      <models>
-        <undamaged>	vehicles/german/G150_Leviathan/normal/lod0/Gun_10.model	</undamaged>
-        <destroyed>	vehicles/german/G150_Leviathan/crash/lod0/Gun_10.model	</destroyed>
-        <exploded>	vehicles/german/G150_Leviathan/crash/lod0/Gun_10.model	</exploded>
-      </models>
-      <impulse>	0.56	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.46	</amplitude>
-        <recoilEffect>	large	</recoilEffect>
-      </recoil>
-      <effects>	lev_shot_mine	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
-        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	0.1	</reloadTime>
-      <maxAmmo>	62	</maxAmmo>
-      <aimingTime>	1.0	</aimingTime>
-      <weight>	3480	</weight>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	110	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.03	</turretRotation>
-        <afterShot>	1.0	</afterShot>
-        <whileGunDamaged>	1.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_150mm_LevMk1_Mortar>
-          <defaultPortion>	0.60	</defaultPortion>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	150 110	</piercingPower>
-          <speed>	920	</speed>
-        </_150mm_LevMk1_Mortar>
-      </shots>
-    </Gun_10_G150_Leviathan_Mk1>
-    <Gun_11_G150_Leviathan_Mk1>
-      <userString>	#germany_vehicles:Gun_11_G150_Leviathan_Mk1	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	2750.0	</price>
-      <notInShop>	true	</notInShop>
-      <models>
-        <undamaged>	vehicles/german/G150_Leviathan/normal/lod0/Gun_11.model	</undamaged>
-        <destroyed>	vehicles/german/G150_Leviathan/crash/lod0/Gun_11.model	</destroyed>
-        <exploded>	vehicles/german/G150_Leviathan/crash/lod0/Gun_11.model	</exploded>
-      </models>
-      <impulse>	0.56	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.46	</amplitude>
-        <recoilEffect>	large	</recoilEffect>
-      </recoil>
-      <effects>	lev_shot_mine	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
-        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	0.1	</reloadTime>
-      <maxAmmo>	62	</maxAmmo>
-      <aimingTime>	1.0	</aimingTime>
-      <weight>	3480	</weight>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	110	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.03	</turretRotation>
-        <afterShot>	1.0	</afterShot>
-        <whileGunDamaged>	1.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_150mm_LevMk1_Mortar>
-          <defaultPortion>	0.60	</defaultPortion>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	150 110	</piercingPower>
-          <speed>	920	</speed>
-        </_150mm_LevMk1_Mortar>
-      </shots>
-    </Gun_11_G150_Leviathan_Mk1>
-    <Gun_12_G150_Leviathan_Mk1>
-      <userString>	#germany_vehicles:Gun_12_G150_Leviathan_Mk1	</userString>
-      <tags></tags>
-      <level>	8	</level>
-      <price>	2750.0	</price>
-      <notInShop>	true	</notInShop>
-      <models>
-        <undamaged>	vehicles/german/G150_Leviathan/normal/lod0/Gun_12.model	</undamaged>
-        <destroyed>	vehicles/german/G150_Leviathan/crash/lod0/Gun_12.model	</destroyed>
-        <exploded>	vehicles/german/G150_Leviathan/crash/lod0/Gun_12.model	</exploded>
-      </models>
-      <impulse>	0.56	</impulse>
-      <recoil>
-        <lodDist>	MEDIUM	</lodDist>
-        <amplitude>	0.46	</amplitude>
-        <recoilEffect>	large	</recoilEffect>
-      </recoil>
-      <effects>	lev_shot_large	</effects>
-      <reloadEffect>	reload115_152	</reloadEffect>
-      <pitchLimits>
-        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
-        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
-      </pitchLimits>
-      <turretYawLimits>	-180 180	</turretYawLimits>
-      <rotationSpeed>	26.25	</rotationSpeed>
-      <reloadTime>	2.5	</reloadTime>
-      <maxAmmo>	62	</maxAmmo>
-      <aimingTime>	1	</aimingTime>
-      <weight>	3480	</weight>
-      <maxHealth>	220	</maxHealth>
-      <maxRegenHealth>	110	</maxRegenHealth>
-      <repairCost>	10	</repairCost>
-      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
-      <shotDispersionRadius>	0.1	</shotDispersionRadius>
-      <shotDispersionFactors>
-        <turretRotation>	0.03	</turretRotation>
-        <afterShot>	1.0	</afterShot>
-        <whileGunDamaged>	1.0	</whileGunDamaged>
-      </shotDispersionFactors>
-      <shots>
-        <_105mm_LevMk1_A>
-          <defaultPortion>	0.60	</defaultPortion>
-          <gravity>	9.81	</gravity>
-          <maxDistance>	720	</maxDistance>
-          <piercingPower>	230 180	</piercingPower>
-          <speed>	800	</speed>
-        </_105mm_LevMk1_A>
-      </shots>
-    </Gun_12_G150_Leviathan_Mk1>
   </shared>
 </guns.xml>

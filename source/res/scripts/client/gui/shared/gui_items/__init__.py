@@ -139,7 +139,7 @@ def getVehicleComponentsByType(vehicle, itemTypeIdx):
     return ItemsCollection()
 
 
-def getVehicleSuitablesByType(vehDescr, itemTypeId, turretPID=0, onlySpecificTurretPID=False):
+def getVehicleSuitablesByType(vehDescr, itemTypeId, turretPID=0):
     """
     Returns all suitable items for given @vehicle.
     
@@ -180,19 +180,13 @@ def getVehicleSuitablesByType(vehDescr, itemTypeId, turretPID=0, onlySpecificTur
         descriptorsList = [ eq for eq in eqs.itervalues() if eq.equipmentType == EQUIPMENT_TYPES.battleBoosters and eq.checkCompatibilityWithVehicle(vehDescr)[0] ]
     elif itemTypeId == vehicles._GUN:
         current = [vehDescr.gun.compactDescr]
-        if onlySpecificTurretPID:
-            for turret in vehDescr.type.turrets[turretPID]:
+        for gun in vehDescr.turret.guns:
+            descriptorsList.append(gun)
+
+        for turret in vehDescr.type.turrets[turretPID]:
+            if turret is not vehDescr.turret:
                 for gun in turret.guns:
                     descriptorsList.append(gun)
-
-        else:
-            for gun in vehDescr.turret.guns:
-                descriptorsList.append(gun)
-
-            for turret in vehDescr.type.turrets[turretPID]:
-                if turret is not vehDescr.turret:
-                    for gun in turret.guns:
-                        descriptorsList.append(gun)
 
     elif itemTypeId == vehicles._SHELL:
         for shot in vehDescr.gun.shots:

@@ -117,7 +117,7 @@ class RecruitWindow(RecruitWindowMeta):
         return
 
     def __getNationsCriteria(self):
-        return REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.OBSERVER | ~REQ_CRITERIA.VEHICLE.CREW_LOCKED
+        return REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.OBSERVER
 
     def updateNationDropdown(self):
         vehsItems = self.itemsCache.items.getVehicles(self.__getNationsCriteria())

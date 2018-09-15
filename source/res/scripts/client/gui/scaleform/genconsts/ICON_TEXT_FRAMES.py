@@ -37,4 +37,4 @@ class ICON_TEXT_FRAMES(object):
     ALERT = 'alert'
     TRADE = 'trade'
     ATTENTION = 'attention'
-    GREEN_STAR = 'greenStar'
+    LOCK = 'lock'

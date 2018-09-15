@@ -10,7 +10,7 @@ import AreaDestructibles
 import BigWorld
 import constants
 import CommandMapping
-from helpers import dependency
+from helpers import dependency, log
 from post_processing import g_postProcessing
 import GUI
 from gui import CLIENT_ENCODING, onRepeatKeyEvent, g_keyEventHandlers, g_mouseEventHandlers, InputHandler, GUI_SETTINGS
@@ -63,8 +63,11 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
     global g_replayCtrl
     global g_onBeforeSendEvent
     try:
+        log.config.setupFromXML()
         if constants.IS_DEVELOPMENT:
             autoFlushPythonLog()
+            from development_features import initDevBonusTypes
+            initDevBonusTypes()
         import Event
         g_onBeforeSendEvent = Event.Event()
         BigWorld.wg_initCustomSettings()

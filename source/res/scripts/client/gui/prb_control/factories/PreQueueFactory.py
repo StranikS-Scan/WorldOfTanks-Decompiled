@@ -64,13 +64,6 @@ class PreQueueFactory(ControlFactory):
         """
         return None
 
-    @prequeue_storage_getter(QUEUE_TYPE.EVENT)
-    def eventBattlesStorage(self):
-        """
-        Decorated property getter for halloween storage.
-        """
-        return None
-
     def createEntry(self, ctx):
         """
         Routine can not be invoke, i.e. preQueue entity has not any entries.

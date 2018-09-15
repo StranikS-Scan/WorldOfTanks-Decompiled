@@ -111,7 +111,6 @@ class BCCarouselDataProvider(CarouselDataProvider):
         for vehicleItem in self._vehicleItems:
             vehicleItem['infoText'] = ''
             vehicleItem['smallInfoText'] = ''
-            vehicleItem['tankType'] = vehicleItem['tankType'].replace('_elite', '')
 
     def setShowStats(self, showVehicleStats):
         pass

@@ -49,9 +49,10 @@ class ClientPrebattle(object):
         return
 
     def __accInfoAsDict(self, accInfoAsTuple):
-        id, name, dbID, roster, state, time, vehCompDescr, igrType, clanDBID, clanAbbrev = accInfoAsTuple
+        id, name, dbID, badges, roster, state, time, vehCompDescr, igrType, clanDBID, clanAbbrev = accInfoAsTuple
         return (roster, id, {'name': name,
           'dbID': dbID,
+          'badges': badges,
           'state': state,
           'time': time,
           'vehCompDescr': vehCompDescr,

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shared/web_handlers.py
 from functools import partial
+import SoundGroups
 import nations
 from adisp import process
 from constants import TOKEN_TYPE
@@ -65,6 +66,23 @@ def handleSoundCommand(command, ctx):
     app = g_appLoader.getApp()
     if app and app.soundManager:
         app.soundManager.playEffectSound(command.sound_id)
+
+
+def handleHangarSoundCommand(command, ctx):
+    """
+    Mutes/unmutes hangar sound
+    """
+    if command.mute:
+        SoundGroups.g_instance.playSound2D('ue_master_mute')
+    else:
+        SoundGroups.g_instance.playSound2D('ue_master_unmute')
+
+
+def handleHangarSoundCommandFini():
+    """
+    Reverts handler
+    """
+    SoundGroups.g_instance.playSound2D('ue_master_unmute')
 
 
 def createOpenWindowCommandHandler(subCommands):

@@ -79,22 +79,25 @@ class _AppearanceCache(object):
             self.__cacheApperance(vId, _VehicleInfo(typeDescriptor, 1 if isAlive else 0, True if isAlive else False, False))
             return
 
-    def createAppearance(self, vId, vInfo):
-        appearance = self.__appearanceCache.get(vId, None)
+    def createAppearance(self, vId, vInfo, forceReloadingFromCache):
+        appearanceInfo = self.__appearanceCache.get(vId, None)
+        appearance = None
         compoundAssembler = None
         prereqsNames = []
-        if appearance is None or not self.__validate(appearance[1], vInfo):
+        if appearanceInfo is None or not self.__validate(appearanceInfo[1], vInfo) or not self.__validateAppearanceWithInfo(appearanceInfo[0], vInfo) or forceReloadingFromCache:
             assemblerData = self.__assemblersCache.get(vId, None)
-            if assemblerData is None or not self.__validate(assemblerData.info, vInfo):
+            if assemblerData is None or not self.__validate(assemblerData.info, vInfo) or forceReloadingFromCache:
                 compoundAssembler, prereqsNames = self.__cacheApperance(vId, vInfo)
             else:
                 compoundAssembler = assemblerData.compoundAssembler
                 prereqsNames = assemblerData.prereqsNames
         else:
-            appearance, info = appearance
+            appearance, info = appearanceInfo
         return (appearance, compoundAssembler, prereqsNames)
 
     def getAppearance(self, vId, resourceRefs):
+        if _ENABLE_CACHE_TRACKER:
+            LOG_DEBUG('Appearance cache. Get appearance vID = {0}'.format(vId))
         appearance, info = self.__appearanceCache.get(vId, (None, None))
         return self.constructAppearance(vId, resourceRefs) if appearance is None else appearance
 
@@ -114,6 +117,12 @@ class _AppearanceCache(object):
             assembler.appearance.start(resourceRefs)
             assembler.constructAppearance(BigWorld.player().playerVehicleID == vId)
             appearance = assembler.appearance
+            oldAppearance = self.__appearanceCache.get(vId, None)
+            if oldAppearance is not None:
+                oldAppearance[0].destroy()
+                self.__appearanceCache[vId] = None
+                if _ENABLE_CACHE_TRACKER:
+                    LOG_DEBUG('Appearance cache. Deleting old appearance vID = {0}'.format(vId))
             self.__appearanceCache[vId] = (appearance, assemblerData.info)
             del self.__assemblersCache[vId]
             del assembler
@@ -134,6 +143,10 @@ class _AppearanceCache(object):
         if self.__spaceLoaded:
             BigWorld.loadResourceListBG(prereqs, partial(_resourceLoaded, prereqs, vId))
         return (compoundAssembler, prereqs)
+
+    def __validateAppearanceWithInfo(self, appearance, info):
+        isAlive = 1 if info.health > 0 else 0
+        return appearance and appearance.isAlive == isAlive
 
     def __validate(self, cachedInfo, newInfo):
         valid = cachedInfo.typeDescr.type.name == newInfo.typeDescr.type.name
@@ -170,9 +183,9 @@ def onSpaceLoaded():
     _g_cache.onSpaceLoaded()
 
 
-def createAppearance(vId, typeDescr, health, isCrewActive, isTurretDetached):
+def createAppearance(vId, typeDescr, health, isCrewActive, isTurretDetached, forceReloadingFromCache=False):
     newInfo = _VehicleInfo(typeDescr, health, isCrewActive, isTurretDetached)
-    return _g_cache.createAppearance(vId, newInfo)
+    return _g_cache.createAppearance(vId, newInfo, forceReloadingFromCache)
 
 
 def getAppearance(vId, resourceRefs):

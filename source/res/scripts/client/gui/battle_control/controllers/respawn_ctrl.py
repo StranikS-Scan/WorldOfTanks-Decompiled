@@ -1,109 +1,114 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/respawn_ctrl.py
-import weakref
 import BigWorld
 import Event
 from collections import namedtuple
 from constants import RESPAWN_TYPES
-from GasAttackSettings import GasAttackState
-from gui.battle_control.arena_info.interfaces import IArenaRespawnController
 from gui.battle_control.avatar_getter import getSoundNotifications
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
-from gui.battle_control.view_components import IViewComponentsController
 from items import vehicles
-_SHOW_UI_COOLDOWN = 3.0
-_Vehicle = namedtuple('_Vehicle', ('intCD', 'type', 'vehAmmo'))
-_RespawnInfo = namedtuple('_RespawnInfo', ('vehicleID', 'respawnTime', 'respawnType'))
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.battle_control.view_components import ViewComponentsController
+_Vehicle = namedtuple('_Vehicle', ('intCD', 'type'))
+_RespawnInfo = namedtuple('_RespawnInfo', ('vehicleID', 'respawnTime', 'respawnType', 'autoRespawnTime'))
 
 class IRespawnView(object):
 
     def start(self, vehsList, isLimited):
         raise NotImplementedError
 
-    def show(self, selectedID, vehsList, cooldowns):
+    def show(self, selectedID, vehsList, cooldowns, limits=0):
         raise NotImplementedError
 
     def hide(self):
         raise NotImplementedError
 
-    def setSelectedVehicle(self, vehicleID, vehsList, cooldowns):
+    def setSelectedVehicle(self, vehicleID, vehsList, cooldowns, limits=0):
         raise NotImplementedError
 
-    def updateTimer(self, timeLeft, vehsList, cooldowns):
+    def updateTimer(self, timeLeft, vehsList, cooldowns, limits=0):
         raise NotImplementedError
 
-    def showGasAttackInfo(self, vehsList, cooldowns):
-        raise NotImplementedError
+    def setLimits(self, respawnLimits):
+        pass
 
 
-_RESPAWN_SOUND_ID = 'respawn'
+_RESPAWN_SOUND_ID = 'start_battle'
 
-class RespawnsController(IArenaRespawnController, IViewComponentsController):
-    __slots__ = ('__ui', '__isUIInited', '__vehicles', '__cooldowns', '__respawnInfo', '__timerCallback', '__showUICallback', '__soundNotifications', '__gasAttackMgr', '__eManager', 'onRespawnVisibilityChanged')
+class RespawnsController(ViewComponentsController):
+    __slots__ = ('__weakref__', '__isUIInited', '__vehicles', '__cooldowns', '__respawnInfo', '__timerCallback', '__eManager', 'onRespawnVisibilityChanged', 'onVehicleDeployed', 'onRespawnInfoUpdated', 'onPlayerRespawnLivesUpdated', 'onTeamRespawnLivesRestored', '__isUiShown', '__isShowUiAllowed', '__limits', '__playerRespawnLives', '__respawnSoundNotificationRequest')
+    showUiAllowed = property(lambda self: self.__isShowUiAllowed, lambda self, value: self.__setShowUiAllowed(value))
+    respawnInfo = property(lambda self: self.__respawnInfo)
+    playerLives = property(lambda self: self.__playerRespawnLives)
+    vehicles = property(lambda self: self.__vehicles)
 
     def __init__(self, setup):
         super(RespawnsController, self).__init__()
-        self.__ui = None
         self.__isUIInited = False
         self.__vehicles = []
         self.__cooldowns = {}
+        self.__limits = {}
         self.__respawnInfo = None
         self.__timerCallback = None
-        self.__showUICallback = None
-        if setup.gasAttackMgr is not None:
-            self.__gasAttackMgr = weakref.proxy(setup.gasAttackMgr)
-        else:
-            self.__gasAttackMgr = None
+        self.__isUiShown = False
+        self.__isShowUiAllowed = False
+        self.__playerRespawnLives = -1
+        self.__respawnSoundNotificationRequest = False
         self.__eManager = Event.EventManager()
         self.onRespawnVisibilityChanged = Event.Event(self.__eManager)
+        self.onVehicleDeployed = Event.Event(self.__eManager)
+        self.onRespawnInfoUpdated = Event.Event(self.__eManager)
+        self.onPlayerRespawnLivesUpdated = Event.Event(self.__eManager)
+        self.onTeamRespawnLivesRestored = Event.Event(self.__eManager)
         return
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.RESPAWN
 
-    def startControl(self, battleCtx, _):
-        pass
+    def startControl(self, *args):
+        sessionProvider = dependency.instance(IBattleSessionProvider)
+        feedback = sessionProvider.shared.feedback
+        feedback.onRoundFinished += self.__onRoundFinished
 
     def stopControl(self):
-        if self.__showUICallback is not None:
-            BigWorld.cancelCallback(self.__showUICallback)
-            self.__showUICallback = None
         self.__stopTimer()
-        if self.__gasAttackMgr is not None:
-            self.__gasAttackMgr.onAttackPreparing -= self.__onGasAttack
-            self.__gasAttackMgr.onAttackStarted -= self.__onGasAttack
-            self.__gasAttackMgr = None
         self.clearViewComponents()
         self.__vehicles = None
         self.__cooldowns = None
         self.__respawnInfo = None
+        self.__limits = None
         return
 
     def setViewComponents(self, *components):
-        self.__ui = components[0]
-        self.__start()
+        """
+        Sets view component.
+        :param panel: instance of view component.
+        """
+        super(RespawnsController, self).setViewComponents(*components)
+        if not self._viewComponents:
+            return
+        self.__refresh()
 
-    def clearViewComponents(self):
-        self.__ui = None
-        return
+    def respawnPlayer(self):
+        BigWorld.player().base.respawnController_performRespawn()
 
     def chooseVehicleForRespawn(self, vehicleID):
-        BigWorld.player().base.chooseVehicleForRespawn(vehicleID)
-        self.__ui.setSelectedVehicle(vehicleID, self.__vehicles, self.__cooldowns)
-
-    def startPostmortem(self):
-        self.__hide()
+        BigWorld.player().base.respawnController_chooseVehicleForRespawn(vehicleID)
 
     def movingToRespawn(self):
         self.__respawnInfo = None
         self.__stopTimer()
-        self.__cancelDelayedShow()
-        getSoundNotifications().play(_RESPAWN_SOUND_ID)
+        self.__respawnSoundNotificationRequest = True
         return
 
     def spawnVehicle(self, _):
         if BigWorld.player().isVehicleAlive:
             self.__respawnInfo = None
+            self.onVehicleDeployed()
+        if self.__respawnSoundNotificationRequest:
+            BigWorld.callback(1.0, self.__triggerRespawnSoundNotification)
+            self.__respawnSoundNotificationRequest = False
         self.__hide()
         return
 
@@ -111,89 +116,105 @@ class RespawnsController(IArenaRespawnController, IViewComponentsController):
         self.__vehicles = []
         for v in vehsList:
             descr = vehicles.getVehicleType(v['compDescr'])
-            self.__vehicles.append(_Vehicle(descr.compactDescr, descr, v['vehAmmo']))
+            self.__vehicles.append(_Vehicle(descr.compactDescr, descr))
 
     def updateRespawnCooldowns(self, cooldowns):
         self.__cooldowns = cooldowns
 
     def updateRespawnInfo(self, respawnInfo):
         intCD = vehicles.getVehicleTypeCompactDescr(respawnInfo['compDescr'])
-        self.__respawnInfo = _RespawnInfo(intCD, respawnInfo['expiryRespawnDelay'], respawnInfo['respawnType'])
-        needCooldown = respawnInfo.get('afterDeath', False)
-        self.__showIfReady(needCooldown)
+        self.__respawnInfo = _RespawnInfo(intCD, respawnInfo['manualRespawnPiT'], respawnInfo['respawnType'], respawnInfo['autoRespawnPiT'])
+        self.__refresh()
+        self.onRespawnInfoUpdated(self.__respawnInfo)
 
-    def __start(self):
-        if self.__gasAttackMgr is not None:
-            self.__gasAttackMgr.onAttackPreparing += self.__onGasAttack
-            self.__gasAttackMgr.onAttackStarted += self.__onGasAttack
-        self.__showIfReady(needCooldown=False)
-        return
+    def updateVehicleLimits(self, respawnLimits):
+        self.__limits = respawnLimits
+        if not self._viewComponents:
+            return
+        for viewCmp in self._viewComponents:
+            viewCmp.setLimits(respawnLimits)
 
-    def __showIfReady(self, needCooldown):
-        if self.__respawnInfo is None or self.__ui is None:
+    def updatePlayerRespawnLives(self, respawnLives):
+        self.__playerRespawnLives = respawnLives
+        self.onPlayerRespawnLivesUpdated(respawnLives)
+
+    def restoredTeamRespawnLives(self, teams):
+        self.onTeamRespawnLivesRestored(teams)
+
+    def isRespawnVisible(self):
+        return self.__isUiShown
+
+    def getLimits(self):
+        return self.__limits
+
+    def __setShowUiAllowed(self, value):
+        self.__isShowUiAllowed = value
+        self.__refresh()
+
+    def __triggerRespawnSoundNotification(self):
+        getSoundNotifications().play(_RESPAWN_SOUND_ID)
+
+    def __onRoundFinished(self, *args):
+        self.__hide()
+
+    def __refresh(self):
+        if self.__respawnInfo is None or self._viewComponents is None:
             return
         else:
-            if self.__respawnInfo.respawnTime > BigWorld.serverTime():
-                if needCooldown:
-                    self.__showUICallback = BigWorld.callback(_SHOW_UI_COOLDOWN, self.__show)
-                else:
-                    self.__show()
-            else:
-                self.__respawnInfo = None
+            if self.__respawnInfo is not None and not self.__isUiShown and self.__isShowUiAllowed:
+                self.__show()
+            elif self.__isUiShown and not self.__isShowUiAllowed:
+                self.__hide()
+            elif self.__isUiShown:
+                self.__stopTimer()
+                self.__startTimer()
             return
-
-    def __cancelDelayedShow(self):
-        if self.__showUICallback is not None:
-            BigWorld.cancelCallback(self.__showUICallback)
-            self.__showUICallback = None
-        return
 
     def __show(self):
-        self.__cancelDelayedShow()
-        if self.__ui is None:
+        if not self._viewComponents:
             return
-        else:
-            if not self.__isUIInited:
-                self.__isUIInited = True
-                isLimited = self.__respawnInfo.respawnType == RESPAWN_TYPES.LIMITED
-                self.__ui.start(self.__vehicles, isLimited)
-            self.__ui.show(self.__respawnInfo.vehicleID, self.__vehicles, self.__cooldowns)
-            if self.__gasAttackMgr is not None and self.__gasAttackMgr.state in (GasAttackState.ATTACK, GasAttackState.PREPARE):
-                self.__ui.showGasAttackInfo(self.__vehicles, self.__cooldowns)
-            else:
-                self.__startTimer()
-            self.onRespawnVisibilityChanged(True)
-            return
+        if not self.__isUIInited:
+            self.__isUIInited = True
+            isLimited = self.__respawnInfo.respawnType == RESPAWN_TYPES.LIMITED
+            for viewCmp in self._viewComponents:
+                viewCmp.start(self.__vehicles, isLimited)
+
+        for viewCmp in self._viewComponents:
+            viewCmp.show(self.__respawnInfo.vehicleID, self.__vehicles, self.__cooldowns, self.__limits)
+
+        self.__isUiShown = True
+        self.__startTimer()
+        self.onRespawnVisibilityChanged(True)
+        self.__startTimer()
+        self.__isUiShown = True
 
     def __hide(self):
         self.__stopTimer()
-        self.__cancelDelayedShow()
-        if self.__ui is not None:
-            self.__ui.hide()
+        if not self._viewComponents:
+            return
+        for viewCmp in self._viewComponents:
+            viewCmp.hide()
+            self.__isUiShown = False
             self.onRespawnVisibilityChanged(False)
-        return
 
     def __startTimer(self):
         self.__timerCallback = None
-        respawnTime = self.__respawnInfo.respawnTime
-        timeLeft = max(0, respawnTime - BigWorld.serverTime())
-        self.__ui.updateTimer(timeLeft, self.__vehicles, self.__cooldowns)
-        if timeLeft > 0:
-            self.__timerCallback = BigWorld.callback(1, self.__startTimer)
-        return
+        if self.__respawnInfo is None:
+            return
+        else:
+            respawnTime = self.__respawnInfo.respawnTime
+            timeLeft = max(0, respawnTime - BigWorld.serverTime())
+            autoRespawnTime = self.__respawnInfo.autoRespawnTime
+            autoTimeLeft = max(0, autoRespawnTime - BigWorld.serverTime())
+            for viewCmp in self._viewComponents:
+                viewCmp.updateTimer([timeLeft, autoTimeLeft], self.__vehicles, self.__cooldowns, self.__limits)
+
+            if timeLeft > 0 or autoTimeLeft > 0:
+                self.__timerCallback = BigWorld.callback(1, self.__startTimer)
+            return
 
     def __stopTimer(self):
         if self.__timerCallback is not None:
             BigWorld.cancelCallback(self.__timerCallback)
             self.__timerCallback = None
-        return
-
-    def __onGasAttack(self):
-        if self.__respawnInfo is not None:
-            if self.__showUICallback is not None:
-                self.__show()
-            else:
-                self.__stopTimer()
-                self.__ui.showGasAttackInfo(self.__vehicles, self.__cooldowns)
-            self.__respawnInfo = None
         return

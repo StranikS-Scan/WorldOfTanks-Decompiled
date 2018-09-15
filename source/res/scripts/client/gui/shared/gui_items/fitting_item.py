@@ -381,14 +381,14 @@ class FittingItem(GUIItem, HasIntCD):
         """
         return False
 
-    def mayInstall(self, vehicle, slotIdx=None, position=0):
+    def mayInstall(self, vehicle, slotIdx=None):
         """
         Item can be installed on @vehicle. Can be overridden by inherited classes.
         :param vehicle: installation vehicle
         :param slotIdx: slot index to install. Used for equipments and optional devices.
         :return: tuple(can be installed <bool>, error msg <str>)
         """
-        return vehicle.descriptor.mayInstallComponent(self.intCD, position)
+        return vehicle.descriptor.mayInstallComponent(self.intCD)
 
     def mayRemove(self, vehicle):
         """
@@ -500,14 +500,6 @@ class FittingItem(GUIItem, HasIntCD):
         return False
 
     def _mayPurchase(self, price, money):
-        currency = price.getCurrency(byWeight=False)
-        wallet = BigWorld.player().serverSettings['wallet']
-        useGold = bool(wallet[0])
-        if currency == Currency.GOLD and useGold:
-            if not self._mayConsumeWalletResources:
-                return (False, GUI_ITEM_ECONOMY_CODE.WALLET_NOT_AVAILABLE)
-        elif getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
-            return (False, GUI_ITEM_ECONOMY_CODE.CENTER_UNAVAILABLE)
         if self.itemTypeID not in (GUI_ITEM_TYPE.EQUIPMENT,
          GUI_ITEM_TYPE.OPTIONALDEVICE,
          GUI_ITEM_TYPE.SHELL,

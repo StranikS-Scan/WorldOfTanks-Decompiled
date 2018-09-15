@@ -22,6 +22,7 @@ _GLOOX_EVENTS_LISTENERS = (('onConnect', 'onConnected'),
  ('onHandleIq', 'onHandleIq'),
  ('onRosterQuerySend', 'onRosterQuerySend'),
  ('onHandleMsg', 'onHandleMsg'),
+ ('onHandleMsgError', 'onHandleMsgError'),
  ('onHandlePresence', 'onHandlePresence'),
  ('onHandlePresenceError', 'onHandlePresenceError'))
 
@@ -224,6 +225,9 @@ class ClientDecorator(object):
             LOG_CURRENT_EXCEPTION()
 
         self.__handleEvent(GLOOX_EVENT.MESSAGE, msgID, msgType, body, ContactBareJID(jidFrom), pyGlooxTag)
+
+    def onHandleMsgError(self, msgID, msgType, jidFrom, pyGlooxTag):
+        self.__handleEvent(GLOOX_EVENT.MESSAGE_ERROR, msgID, msgType, ContactBareJID(jidFrom), pyGlooxTag)
 
     def onHandleIq(self, iqID, iqType, pyGlooxTag):
         self.__handleEvent(GLOOX_EVENT.IQ, iqID, iqType, pyGlooxTag)

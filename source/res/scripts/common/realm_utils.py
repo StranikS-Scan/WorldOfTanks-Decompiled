@@ -3,7 +3,7 @@
 import BigWorld
 import string
 import ResMgr as rmgr
-from constants import CURRENT_REALM
+from constants import CURRENT_REALM, IS_CLIENT
 
 class ResMgr(object):
     """
@@ -19,7 +19,7 @@ class ResMgr(object):
     class __metaclass__(type):
 
         def __getattr__(self, item):
-            return getattr(self if item in ('openSection', 'purge') else rmgr, item)
+            return getattr(rmgr, item) if IS_CLIENT else getattr(self if item in ('openSection', 'purge') else rmgr, item)
 
     @staticmethod
     def openSection(filepath, createIfMissing=False):

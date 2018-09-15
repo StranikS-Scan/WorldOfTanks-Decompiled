@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	1.8	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/german/G58_VK4502P/VK4502P_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -34,9 +34,7 @@
       <armor_6>	60	</armor_6>
       <armor_7>	50	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	120	</armor_9>
-      <armor_11>	200	</armor_11>
-      <armor_12>	50	</armor_12>
+      <armor_9>	220	</armor_9>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	36400	</weight>
@@ -46,6 +44,20 @@
       <maxRegenHealth>	160	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
+    <variants>
+      <hull2>
+        <turret0>	VK4502P_Eliteturm	</turret0>
+        <turretPositions>
+          <turret>	0.000000 0.885043 -1.553670	</turret>
+        </turretPositions>
+        <turretHardPoints>
+          <hardPoint>	HP_turretJoint_2	</hardPoint>
+        </turretHardPoints>
+        <camouflage>
+          <tiling>	1.7 1.7 0.000000 0.000000	</tiling>
+        </camouflage>
+      </hull2>
+    </variants>
     <models>
       <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Hull.model	</destroyed>
@@ -60,10 +72,16 @@
     <exhaust>
       <pixie>	gas_large	</pixie>
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <tags>
+        <diesel>	diesel_large	</diesel>
+      </tags>
     </exhaust>
     <turretPositions>
-      <turret>	-0.010441 0.904588 -1.5514	</turret>
+      <turret>	0.000000 0.786025 -1.61366	</turret>
     </turretPositions>
+    <turretHardPoints>
+      <hardPoint>	HP_turretJoint_1	</hardPoint>
+    </turretHardPoints>
     <hitTester>
       <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Hull.model	</collisionModelServer>
       <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Hull.model	</collisionModelClient>
@@ -78,6 +96,9 @@
       </clan>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/german/G58_VK4502P/VK4502P_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1.7 1.7 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <VK4502P_Standardketten>
@@ -117,68 +138,72 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	germany_01	</textureSet>
-        <size>	0.44 0.6	</size>
+        <size>	0.44 0.64	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.84	</textureScale>
+        <textureScale>	-1.7	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	W_L	</template>
-          <radius>	0.35788	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	6	</count>
-        </group>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.35788	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	6	</count>
-        </group>
         <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
-          <radius>	0.408303	</radius>
+          <radius>	0.432238	</radius>
+          <syncAngle>	37.89	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L1	</name>
-          <radius>	0.409381	</radius>
+          <radius>	0.432239	</radius>
+          <syncAngle>	37.89	</syncAngle>
         </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.357433	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
-          <radius>	0.408303	</radius>
+          <radius>	0.432238	</radius>
+          <syncAngle>	37.89	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R1	</name>
-          <radius>	0.409381	</radius>
+          <radius>	0.432239	</radius>
+          <syncAngle>	37.89	</syncAngle>
         </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.357433	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
       </wheels>
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	mediumTankMud	</mud>
+        <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.05581 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.32677 1.98117	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.39272 2.0548	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -191,6 +216,148 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G58_VK4502P/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G58_VK4502P/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/german/G58_VK4502P/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/german/G58_VK4502P/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/german/G58_VK4502P/track/left.track	</left>
+        <right>	vehicles/german/G58_VK4502P/track/right.track	</right>
+        <segmentLength>	0.236	</segmentLength>
+        <segmentOffset>	0.053	</segmentOffset>
+        <segment2Offset>	0.12	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	0.000000	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-9	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <offset>	-0.216	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <offset>	-0.255	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <offset>	-0.255	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <offset>	-0.239	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <offset>	-0.213	</offset>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <offset>	-0.186	</offset>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <offset>	0.000000	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <offset>	0.000000	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <offset>	-0.216	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <offset>	-0.255	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <offset>	-0.255	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <offset>	-0.239	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <offset>	-0.213	</offset>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <offset>	-0.186	</offset>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
     </VK4502P_Standardketten>
     <VK4502P_Vetstaerktketten>
       <userString>	#germany_vehicles:VK4502P_Vetstaerktketten	</userString>
@@ -203,7 +370,7 @@
         <rightTrack>	25	</rightTrack>
       </armor>
       <weight>	19000	</weight>
-      <maxLoad>	80800	</maxLoad>
+      <maxLoad>	81400	</maxLoad>
       <terrainResistance>	1.1 1.7 2.5	</terrainResistance>
       <brakeForce>	36500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
@@ -225,68 +392,72 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	germany_01	</textureSet>
-        <size>	0.44 0.6	</size>
+        <size>	0.44 0.64	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.84	</textureScale>
+        <textureScale>	-1.7	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	W_L	</template>
-          <radius>	0.35788	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	6	</count>
-        </group>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.35788	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	6	</count>
-        </group>
         <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
-          <radius>	0.408303	</radius>
+          <radius>	0.432238	</radius>
+          <syncAngle>	37.89	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L1	</name>
-          <radius>	0.409381	</radius>
+          <radius>	0.432239	</radius>
+          <syncAngle>	37.89	</syncAngle>
         </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.357433	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
-          <radius>	0.408303	</radius>
+          <radius>	0.432238	</radius>
+          <syncAngle>	37.89	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R1	</name>
-          <radius>	0.409381	</radius>
+          <radius>	0.432239	</radius>
+          <syncAngle>	37.89	</syncAngle>
         </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.357433	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
       </wheels>
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	mediumTankMud	</mud>
+        <mud>	largeTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.05581 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.32677 1.98117	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.39272 2.0548	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -299,6 +470,148 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G58_VK4502P/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G58_VK4502P/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/german/G58_VK4502P/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/german/G58_VK4502P/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/german/G58_VK4502P/track/left.track	</left>
+        <right>	vehicles/german/G58_VK4502P/track/right.track	</right>
+        <segmentLength>	0.236	</segmentLength>
+        <segmentOffset>	0.053	</segmentOffset>
+        <segment2Offset>	0.12	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	0.000000	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-9	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <offset>	-0.216	</offset>
+          <rightSibling>	Track_VT_L1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <offset>	-0.255	</offset>
+          <leftSibling>	Track_VT_L0	</leftSibling>
+          <rightSibling>	Track_VT_L2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <offset>	-0.255	</offset>
+          <leftSibling>	Track_VT_L1	</leftSibling>
+          <rightSibling>	Track_VT_L3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <offset>	-0.239	</offset>
+          <leftSibling>	Track_VT_L2	</leftSibling>
+          <rightSibling>	Track_VT_L4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <offset>	-0.213	</offset>
+          <leftSibling>	Track_VT_L3	</leftSibling>
+          <rightSibling>	Track_VT_L5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <offset>	-0.186	</offset>
+          <leftSibling>	Track_VT_L4	</leftSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <offset>	0.000000	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <offset>	0.000000	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <offset>	-0.216	</offset>
+          <rightSibling>	Track_VT_R1	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <offset>	-0.255	</offset>
+          <leftSibling>	Track_VT_R0	</leftSibling>
+          <rightSibling>	Track_VT_R2	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <offset>	-0.255	</offset>
+          <leftSibling>	Track_VT_R1	</leftSibling>
+          <rightSibling>	Track_VT_R3	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <offset>	-0.239	</offset>
+          <leftSibling>	Track_VT_R2	</leftSibling>
+          <rightSibling>	Track_VT_R4	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <offset>	-0.213	</offset>
+          <leftSibling>	Track_VT_R3	</leftSibling>
+          <rightSibling>	Track_VT_R5	</rightSibling>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <offset>	-0.186	</offset>
+          <leftSibling>	Track_VT_R4	</leftSibling>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
     </VK4502P_Vetstaerktketten>
   </chassis>
   <turrets0>
@@ -314,17 +627,15 @@
       </unlocks>
       <armor>
         <armor_1>	220	</armor_1>
-        <armor_2>	180	</armor_2>
         <armor_3>	150	</armor_3>
         <armor_4>	150	</armor_4>
-        <armor_5>	0	</armor_5>
         <armor_6>	100	</armor_6>
-        <armor_7>	140	</armor_7>
-        <armor_8>	40	</armor_8>
-        <armor_9>	0	</armor_9>
+        <armor_8>	0	</armor_8>
+        <armor_9>	40	</armor_9>
         <armor_10>	40	</armor_10>
-        <armor_11>	30	</armor_11>
-        <armor_12>	80	</armor_12>
+        <armor_15>	150	</armor_15>
+        <armor_16>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_16>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	13500	</weight>
@@ -358,20 +669,14 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	220	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	210	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
@@ -388,16 +693,16 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.00013855 -0.00238367 4.20031	</rayStart>
+              <rayStart>	0.0436456 -0.0643809 4.20031	</rayStart>
               <rayEnd>	-0.0257796 -0.150781 4.1962	</rayEnd>
-              <rayUp>	0.074 0.068 2	</rayUp>
+              <rayUp>	0.074 0.07 5	</rayUp>
               <size>	0.46	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
+            <tiling>	1.1 1.1 0.000000 0.000000	</tiling>
           </camouflage>
         </_88mm_KwK_43_L71>
         <_105mm_KwK45_L52>	shared	  <maxAmmo>	56	</maxAmmo>
@@ -416,44 +721,39 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	220	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	210	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_06.model	</undamaged>
-            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_06.model	</destroyed>
-            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_06.model	</exploded>
+            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_06.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_06.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.000549107 0.000552906 4.2301	</rayStart>
-              <rayEnd>	0.027042 -0.132786 4.22271	</rayEnd>
-              <rayUp>	0.089 0.081 2	</rayUp>
+              <rayStart>	0.0436421 -0.0644163 3.89241	</rayStart>
+              <rayEnd>	0.0966857 -0.0472586 3.89165	</rayEnd>
+              <rayUp>	0.084 0.076 5	</rayUp>
               <size>	0.46	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_large_mb	</effects>
           <camouflage>
             <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
           </camouflage>
@@ -470,46 +770,41 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	220	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	210	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_07.model	</undamaged>
-            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_07.model	</destroyed>
-            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_07.model	</exploded>
+            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_07.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_07.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.000549107 0.000552906 5.44874	</rayStart>
-              <rayEnd>	0.0977876 -0.0964935 5.4433	</rayEnd>
-              <rayUp>	0.087 0.081 2	</rayUp>
+              <rayStart>	0.0436456 -0.0623809 5.04736	</rayStart>
+              <rayEnd>	0.0200312 -0.0489241 5.04601	</rayEnd>
+              <rayUp>	0.081 0.074 5	</rayUp>
               <size>	0.46	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_large	</effects>
           <camouflage>
-            <tiling>	1.24 1.24 0.000000 0.000000	</tiling>
+            <tiling>	1.1 1.1 0.000000 0.000000	</tiling>
           </camouflage>
         </_105mm_KwK46_L68>
       </guns>
@@ -522,7 +817,7 @@
         <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.032003 0.350083 1.22245	</gunPosition>
+      <gunPosition>	0.000000 0.4625 1.58327	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	-0.994154 0.551787 0.729172	</rayStart>
@@ -555,7 +850,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 -0.046 1.025 0.000 0.579 0.144 0.928 0.592 0.322 0.500 0.408 0.500 0.223 0.603 0.000	</physicsShape>
+      <physicsShape>	1.093 -0.052 1.138 0.000 0.662 0.186 0.848 0.500 0.398 0.500 0.405 0.500 0.156 0.770 0.037	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
     </VK4502P_Standardturm>
     <VK4502P_Eliteturm>
@@ -570,19 +865,15 @@
       </unlocks>
       <armor>
         <armor_1>	265	</armor_1>
-        <armor_2>	120	</armor_2>
+        <armor_2>	265	</armor_2>
         <armor_3>	160	</armor_3>
         <armor_4>	160	</armor_4>
-        <armor_5>	265	</armor_5>
         <armor_6>	160	</armor_6>
         <armor_7>	100	</armor_7>
-        <armor_8>	200	</armor_8>
-        <armor_9>	140	</armor_9>
-        <armor_10>	60	</armor_10>
+        <armor_8>	0	</armor_8>
+        <armor_9>	60	</armor_9>
+        <armor_10>	140	</armor_10>
         <armor_11>	40	</armor_11>
-        <armor_13>	0	</armor_13>
-        <armor_14>	30	</armor_14>
-        <armor_15>	130	</armor_15>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	18520	</weight>
@@ -613,44 +904,42 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	265	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	252	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <aimingTime>	2.9	</aimingTime>
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_03.model	</exploded>
+            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_03.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.0120195 -0.0148757 3.91445	</rayStart>
-              <rayEnd>	0.106037 -0.109402 3.91034	</rayEnd>
-              <rayUp>	0.073 0.069 2	</rayUp>
+              <rayStart>	0.000001 -0.0709051 3.9867	</rayStart>
+              <rayEnd>	0.0646735 -0.0895576 3.98665	</rayEnd>
+              <rayUp>	0.077 0.069 5	</rayUp>
               <size>	0.46	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_main_mb	</effects>
+          <camouflage>
+            <tiling>	1.1 1.1 0.000000 0.000000	</tiling>
+          </camouflage>
         </_88mm_KwK_43_L71>
         <_105mm_KwK45_L52>	shared	  <maxAmmo>	56	</maxAmmo>
           <pitchLimits>
@@ -660,46 +949,40 @@
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
           <reloadTime>	8.9	</reloadTime>
           <armor>
-            <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	265	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	252	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
-          <effects>	shot_large	</effects>
+          <effects>	shot_large_mb	</effects>
           <models>
-            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_08.model	</undamaged>
-            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_08.model	</destroyed>
-            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_08.model	</exploded>
+            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_05.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_08.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_08.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.0124261 -0.0121604 3.87314	</rayStart>
-              <rayEnd>	0.0302991 -0.142227 3.86571	</rayEnd>
-              <rayUp>	0.089 0.081 2	</rayUp>
+              <rayStart>	0.000001 -0.0709051 3.67415	</rayStart>
+              <rayEnd>	0.0727911 -0.0821269 3.67402	</rayEnd>
+              <rayUp>	0.084 0.074 5	</rayUp>
               <size>	0.46	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
+            <tiling>	1.1 1.1 0.000000 0.000000	</tiling>
           </camouflage>
         </_105mm_KwK45_L52>
         <_105mm_KwK46_L68>	shared	  <maxAmmo>	42	</maxAmmo>
@@ -710,39 +993,33 @@
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <reloadTime>	9.1	</reloadTime>
           <armor>
-            <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	265	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	252	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <aimingTime>	2.3	</aimingTime>
           <effects>	shot_large	</effects>
           <models>
-            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_09.model	</undamaged>
-            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_09.model	</destroyed>
-            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_09.model	</exploded>
+            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_06.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_09.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_09.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.0119318 -0.0127953 5.08449	</rayStart>
-              <rayEnd>	-0.0428238 -0.147073 5.07907	</rayEnd>
-              <rayUp>	0.086 0.08 2	</rayUp>
+              <rayStart>	0.000435114 -0.0718701 4.88843	</rayStart>
+              <rayEnd>	0.0129623 -0.0641337 4.88678	</rayEnd>
+              <rayUp>	0.081 0.076 5	</rayUp>
               <size>	0.46	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -769,43 +1046,38 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <armor>
-            <armor_1>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	265	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_2>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	252	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <armor_6>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_6>
-            <armor_7>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_7>
             <gun>	60	</gun>
           </armor>
           <shotDispersionRadius>	0.37	</shotDispersionRadius>
           <aimingTime>	2.6	</aimingTime>
           <models>
-            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_05.model	</exploded>
+            <undamaged>	vehicles/german/G58_VK4502P/normal/lod0/Gun_07.model	</undamaged>
+            <destroyed>	vehicles/german/G58_VK4502P/crash/lod0/Gun_07.model	</destroyed>
+            <exploded>	vehicles/german/G58_VK4502P/crash/lod0/Gun_07.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_05.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Gun_07.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.0120629 -0.0105802 4.47803	</rayStart>
-              <rayEnd>	0.0172287 -0.136543 4.47435	</rayEnd>
-              <rayUp>	0.096 0.092 3	</rayUp>
+              <rayStart>	0.000001 -0.0709051 4.08042	</rayStart>
+              <rayEnd>	0.0508468 0.00749577 4.08042	</rayEnd>
+              <rayUp>	0.103 0.102 5	</rayUp>
               <size>	0.46	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_largeext	</effects>
           <camouflage>
             <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
           </camouflage>
@@ -820,7 +1092,7 @@
         <collisionModelServer>	vehicles/german/G58_VK4502P/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G58_VK4502P/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.062704 0.397337 1.43271	</gunPosition>
+      <gunPosition>	0.000000 0.446848 1.60867	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	-1.20896 0.581034 0.246526	</rayStart>
@@ -853,7 +1125,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.030 -0.042 1.025 0.000 0.622 0.096 0.882 0.488 0.391 0.500 0.267 0.500 0.152 0.581 0.000	</physicsShape>
+      <physicsShape>	1.063 -0.112 1.063 0.000 0.699 0.082 0.781 0.472 0.349 0.500 0.331 0.500 0.152 0.498 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
     </VK4502P_Eliteturm>
   </turrets0>

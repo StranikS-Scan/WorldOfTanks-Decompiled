@@ -10,6 +10,7 @@ from debug_utils import LOG_WARNING
 from gui import GUI_NATIONS_ORDER_INDICES
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.server_events import formatters
+from gui.server_events.formatters import getUniqueBonusTypes
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.requesters.ItemsRequester import RESEARCH_CRITERIA
 from helpers import i18n, dependency, getLocalizedData
@@ -18,6 +19,9 @@ from shared_utils import CONST_CONTAINER
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+_AVAILABLE_GUI_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.REGULAR: constants.ARENA_GUI_TYPE.RANDOM,
+ constants.ARENA_BONUS_TYPE.TRAINING: constants.ARENA_GUI_TYPE.TRAINING,
+ constants.ARENA_BONUS_TYPE.TOURNAMENT_REGULAR: constants.ARENA_GUI_TYPE.TRAINING}
 _AVAILABLE_BONUS_TYPES_LABELS = {constants.ARENA_BONUS_TYPE.CYBERSPORT: 'team7x7'}
 _RELATIONS = formatters.RELATIONS
 _RELATIONS_SCHEME = formatters.RELATIONS_SCHEME
@@ -25,6 +29,14 @@ _ET = constants.EVENT_TYPE
 _TOKEN_REQUIREMENT_QUESTS = set(_ET.LIKE_BATTLE_QUESTS + _ET.LIKE_TOKEN_QUESTS)
 
 def _getArenaBonusType(preBattleCond):
+    if preBattleCond is not None:
+        bonusTypeNode = preBattleCond.getConditions().find('bonusTypes')
+        if bonusTypeNode is not None:
+            return getUniqueBonusTypes(bonusTypeNode.getValue())
+    return {constants.ARENA_BONUS_TYPE.UNKNOWN}
+
+
+def _getArenaBonusTypeForUnit(preBattleCond):
     if preBattleCond is not None:
         squadNode = preBattleCond.getConditions().find('isSquad')
         if squadNode is not None and squadNode.getValue():
@@ -258,7 +270,7 @@ class _VehsListParser(object):
         if types:
             criteria = REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(types)
         else:
-            criteria = ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
+            criteria = REQ_CRITERIA.EMPTY
             if nations:
                 criteria |= REQ_CRITERIA.NATIONS(nations)
             if levels:
@@ -283,7 +295,7 @@ class _VehsListParser(object):
          'classes'}
 
     def _getDefaultCriteria(self):
-        return REQ_CRITERIA.CUSTOM(lambda v: v.inventoryCount > 0 or not v.isSecret or v.isOnlyForEventBattles)
+        return REQ_CRITERIA.DISCLOSABLE
 
     def _getVehiclesCache(self, data):
         if self.__vehsCache is None:
@@ -833,7 +845,7 @@ class BattleClanMembership(_Condition, _Negatable):
         self.__proxy = weakref.proxy(preBattleCondProxy)
 
     def __repr__(self):
-        return 'BattleClanMembership<relation=%r; bonusType=%s>' % (self._value, _getArenaBonusType(self.__proxy))
+        return 'BattleClanMembership<relation=%r; bonusType=%s>' % (self._value, _getArenaBonusTypeForUnit(self.__proxy))
 
     def negate(self):
         pass
@@ -842,7 +854,7 @@ class BattleClanMembership(_Condition, _Negatable):
         return self._value
 
     def getArenaBonusType(self):
-        return _getArenaBonusType(self.__proxy)
+        return _getArenaBonusTypeForUnit(self.__proxy)
 
 
 class BattleCamouflage(_Condition, _Negatable):
@@ -988,7 +1000,7 @@ class _Cumulativable(_Condition):
     def getProgressPerGroup(self, curProgData=None, prevProgData=None):
         return self._parseProgress(curProgData, prevProgData)
 
-    def getUserString(self, battleTypeName=''):
+    def getUserString(self):
         pass
 
     @abstractmethod
@@ -1052,15 +1064,20 @@ class _Cumulativable(_Condition):
 
 class BattlesCount(_Cumulativable):
 
-    def __init__(self, path, data, bonusCond):
+    def __init__(self, path, data, bonusCond, preBattleCond=None):
         super(BattlesCount, self).__init__('battles', dict(data), path)
         self._bonus = weakref.proxy(bonusCond)
+        self._bonusTypes = _getArenaBonusType(preBattleCond)
 
     def __repr__(self):
         return 'BattlesCount<key=%s; total=%d>' % (self._getKey(), self.getTotalValue())
 
-    def getUserString(self, battleTypeName='random'):
-        return i18n.makeString(QUESTS.getDetailsDossier(battleTypeName, self._getKey()))
+    def getUserString(self):
+        result = []
+        for bType in self._bonusTypes:
+            result.append(i18n.makeString(QUESTS.getDetailsDossier(bType, self._getKey())))
+
+        return ', '.join(result)
 
     def getTotalValue(self):
         return _getNodeValue(self._data, 'count', 0)
@@ -1216,7 +1233,7 @@ class UnitResults(_Condition, _Negatable):
     def __init__(self, path, data, preBattleCond=None):
         super(UnitResults, self).__init__('unitResults', dict(data), path)
         self._isAllAlive = _getNodeValue(self._data, 'allAlive')
-        self._unitKey = _getArenaBonusType(preBattleCond)
+        self._unitKey = _getArenaBonusTypeForUnit(preBattleCond)
         self._results = []
         self._unitVehKills = None
         self._unitVehDamage = None
@@ -1275,13 +1292,13 @@ class CumulativeResult(_Cumulativable):
         self._bonus = weakref.proxy(bonusCond)
         self._key, self._total = self._data.get('value', (None, 0))
         self._isUnit = isUnit
-        self._unitName = _getArenaBonusType(preBattleCond)
+        self._unitName = _getArenaBonusTypeForUnit(preBattleCond)
         return None
 
     def __repr__(self):
         return 'CumulativeResult<key=%s; total=%d>' % (self._getKey(), self.getTotalValue())
 
-    def getUserString(self, battleTypeName=''):
+    def getUserString(self):
         return self.__getLabelString()
 
     @property
@@ -1335,7 +1352,7 @@ class VehicleKillsCumulative(_Cumulativable, VehicleKills):
          self._relationValue,
          self.getTotalValue())
 
-    def getUserString(self, battleTypeName=''):
+    def getUserString(self):
         return i18n.makeString(self.getLabelKey())
 
     def getTotalValue(self):
@@ -1396,7 +1413,7 @@ class VehicleDamageCumulative(VehicleDamage, _Cumulativable):
          self._relationValue,
          self.getTotalValue())
 
-    def getUserString(self, battleTypeName=''):
+    def getUserString(self):
         return i18n.makeString(self.getLabelKey())
 
     def getTotalValue(self):
@@ -1436,7 +1453,7 @@ class VehicleStunCumulative(VehicleStun, _Cumulativable):
          self._relationValue,
          self.getTotalValue())
 
-    def getUserString(self, battleTypeName=''):
+    def getUserString(self):
         return i18n.makeString(self.getLabelKey())
 
     def getTotalValue(self):

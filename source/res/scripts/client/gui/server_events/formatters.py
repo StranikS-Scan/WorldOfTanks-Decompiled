@@ -98,6 +98,7 @@ class DECORATION_SIZES(CONST_CONTAINER):
     CARDS = '482x222'
     BONUS = '300x110'
     DISCOUNT = '480x280'
+    DETAILS = '750x250'
 
 
 class UiElement(object):
@@ -253,16 +254,6 @@ def packSimpleBonusesBlock(bonusesList):
     return UiElement(data)
 
 
-def packHalloweenBonusesBlock(bonus):
-    itemText = bonus.format()
-    items = itemText.split(', ')
-    data = {'linkage': 'QuestTextAwardBlockUI',
-     'items': items,
-     'separator': ', ',
-     'ellipsis': '..'}
-    return UiElement(data)
-
-
 def packVehiclesBonusBlock(label, questID):
     blockData = {'linkage': 'VehiclesBonusTextElement_UI',
      'label': label,
@@ -328,6 +319,10 @@ def getUniqueBonusTypes(bonusTypes):
             bonusType = ARENA_BONUS_TYPE.RATED_SANDBOX
         if bonusType in (ARENA_BONUS_TYPE.TOURNAMENT_REGULAR, ARENA_BONUS_TYPE.TOURNAMENT_CLAN):
             bonusType = ARENA_BONUS_TYPE.TOURNAMENT
+        if bonusType in (ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING,):
+            bonusType = ARENA_BONUS_TYPE.EPIC_RANDOM
+        if bonusType in (ARENA_BONUS_TYPE.BOOTCAMP,):
+            bonusType = ARENA_BONUS_TYPE.REGULAR
         uniqueTypes.add(bonusType)
 
     return uniqueTypes

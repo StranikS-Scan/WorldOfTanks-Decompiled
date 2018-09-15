@@ -2,12 +2,11 @@
 # Embedded file name: scripts/client/vehicle_systems/model_assembler.py
 from AvatarInputHandler import mathUtils
 import BigWorld
-import Math
 from CustomEffectManager import CustomEffectManager
 from vehicle_systems.vehicle_damage_state import VehicleDamageState
 import constants
 from helpers import gEffectsDisabled
-from vehicle_systems.tankStructure import getPartModelsFromDesc, getAdditionalTurretsModelsFromDesc, TankNodeNames, TankPartNames
+from vehicle_systems.tankStructure import getPartModelsFromDesc, TankNodeNames, TankPartNames
 import Vehicular
 import DataLinks
 import WWISE
@@ -17,6 +16,7 @@ from items.components import shared_components, component_constants
 import debug_utils
 import material_kinds
 from collections import namedtuple
+import Math
 from helpers import DecalMap
 import math
 import WoT
@@ -29,38 +29,14 @@ def prepareCompoundAssembler(vehicleDesc, modelStateName, spaceID, isTurretDetac
         spaceID = BigWorld.player().spaceID
     partModels = getPartModelsFromDesc(vehicleDesc, modelStateName)
     chassis, hull, turret, gun = partModels
-    additionalTurrets = getAdditionalTurretsModelsFromDesc(vehicleDesc, modelStateName)
     assembler = BigWorld.CompoundAssembler()
     assembler.addRootPart(chassis, TankPartNames.CHASSIS)
     assembler.emplacePart(hull, 'V', TankPartNames.HULL)
     turretJointName = vehicleDesc.hull.turretHardPoints[0]
     assembler.addNodeAlias(turretJointName, TankNodeNames.TURRET_JOINT)
     if not isTurretDetached:
-        initialRotation = vehicleDesc.hull.turretRotations[0]
-        mTransform = Math.Matrix()
-        m = mathUtils.createRotationMatrix(Math.Vector3(initialRotation[1], initialRotation[2], initialRotation[0]))
-        mTransform.postMultiply(m)
-        assembler.addPart(turret, turretJointName, TankPartNames.TURRET, mTransform)
-        mTransform = Math.Matrix()
-        assembler.addPart(gun, TankNodeNames.GUN_JOINT, TankPartNames.GUN, mTransform)
-        if additionalTurrets:
-            turretHardPoints = vehicleDesc.hull.turretHardPoints
-            for i, turretInfo in enumerate(additionalTurrets, start=1):
-                initialRotation = vehicleDesc.hull.turretRotations[i]
-                mTransform = Math.Matrix()
-                mTransform.setIdentity()
-                m = mathUtils.createRotationMatrix(Math.Vector3(initialRotation[1], initialRotation[2], initialRotation[0]))
-                mTransform.postMultiply(m)
-                turretModelName = turretInfo[0]
-                turretName = '%s%d' % (TankPartNames.ADDITIONAL_TURRET, i)
-                turretPrefix = '%s.' % turretName
-                assembler.addPart(turretModelName, turretHardPoints[i], turretName, mTransform, turretPrefix)
-                mTransform = Math.Matrix()
-                gunModelName = turretInfo[1]
-                gunName = '%s%d' % (TankPartNames.ADDITIONAL_GUN, i)
-                gunPrefix = '%s.' % gunName
-                assembler.addPart(gunModelName, '%s%s' % (turretPrefix, 'HP_gunJoint'), gunName, mTransform, gunPrefix)
-
+        assembler.addPart(turret, turretJointName, TankPartNames.TURRET)
+        assembler.addPart(gun, TankNodeNames.GUN_JOINT, TankPartNames.GUN)
     cornerPoint = vehicleDesc.chassis.topRightCarryingPoint
     assembler.addNode(TankNodeNames.TRACK_LEFT_MID, TankPartNames.CHASSIS, mathUtils.createTranslationMatrix((-cornerPoint[0], 0, 0)))
     assembler.addNode(TankNodeNames.TRACK_RIGHT_MID, TankPartNames.CHASSIS, mathUtils.createTranslationMatrix((cornerPoint[0], 0, 0)))
@@ -71,7 +47,7 @@ def prepareCompoundAssembler(vehicleDesc, modelStateName, spaceID, isTurretDetac
 
 
 def createGunAnimator(vehicleDesc, basisMatrix=None, lodLink=None):
-    recoilDescr = vehicleDesc.turrets[0].gun.recoil
+    recoilDescr = vehicleDesc.gun.recoil
     gunAnimator = Vehicular.RecoilAnimator(recoilDescr.backoffTime, recoilDescr.returnTime, recoilDescr.amplitude, recoilDescr.lodDist)
     if basisMatrix is not None:
         gunAnimator.basisMatrix = basisMatrix
@@ -204,8 +180,6 @@ def assembleRecoil(appearance, lodLink):
     appearance.gunRecoil = gunRecoil = createGunAnimator(appearance.typeDescriptor, localGunMatrix, lodLink)
     gunRecoilMProv = gunRecoil.animatedMProv
     appearance.compoundModel.node(TankNodeNames.GUN_RECOIL, gunRecoilMProv)
-    if len(appearance.typeDescriptor.turrets) > 1:
-        assembleAdditionalRecoils(appearance, lodLink)
 
 
 def assembleGunLinkedNodesAnimator(appearance):
@@ -213,21 +187,6 @@ def assembleGunLinkedNodesAnimator(appearance):
     if drivingJoints is not None:
         appearance.gunLinkedNodesAnimator = Vehicular.LinkedNodesPitchAnimator(appearance.compoundModel, drivingJoints)
     return
-
-
-def assembleAdditionalRecoils(appearance, lodLink):
-    turretCount = len(appearance.typeDescriptor.turrets)
-    for i in range(1, turretCount):
-        gunName = '%s%d' % (TankPartNames.ADDITIONAL_GUN, i)
-        gunNodeName = '%s.G' % gunName
-        gunAnimatorNode = appearance.compoundModel.node(gunNodeName)
-        localGunMatrix = gunAnimatorNode.localMatrix
-        gunRecoil = createGunAnimator(appearance.typeDescriptor, localGunMatrix, lodLink)
-        gunRecoilName = 'additionalGunRecoil_%d' % i
-        appearance.addComponent(gunRecoil, gunRecoilName)
-        appearance.additionalGunRecoils.append(gunRecoil)
-        gunRecoilMProv = gunRecoil.animatedMProv
-        appearance.compoundModel.node(gunNodeName, gunRecoilMProv)
 
 
 def assembleSuspensionController(appearance):

@@ -261,7 +261,7 @@
     <shortUserString>	#france_vehicles:Somua_Sau_40_short	</shortUserString>
     <description>	#france_vehicles:Somua_Sau_40_descr	</description>
     <price>	110000	</price>
-    <tags>	AT-SPG lightAT-SPG wetCombatPack_class1_user mediumCaliberTankRammer_user improvedVentilation_class1_user enhancedSprings_user	</tags>
+    <tags>	AT-SPG lightAT-SPG wetCombatPack_class1_user mediumCaliberTankRammer_user improvedVentilation_class1_user enhancedSprings_user HD	</tags>
     <level>	4	</level>
   </F32_Somua_Sau_40>
   <F33_S_35CA>
@@ -270,7 +270,7 @@
     <shortUserString>	#france_vehicles:S_35CA_short	</shortUserString>
     <description>	#france_vehicles:S_35CA_descr	</description>
     <price>	403000	</price>
-    <tags>	AT-SPG lightAT-SPG wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedSprings_user	</tags>
+    <tags>	AT-SPG lightAT-SPG wetCombatPack_class1_user mediumCaliberTankRammer_user enhancedSprings_user HD	</tags>
     <level>	5	</level>
   </F33_S_35CA>
   <F35_AMX_AC_Mle1946>
@@ -419,6 +419,33 @@
     <tags>	mediumTank mediumTank2 improvedVentilation_class2_user wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD	</tags>
     <level>	9	</level>
   </F75_Char_de_25t>
+  <F81_Char_de_65t>
+    <id>	64	</id>
+    <userString>	#france_vehicles:F81_Char_de_65t	</userString>
+    <shortUserString>	#france_vehicles:F81_Char_de_65t_short	</shortUserString>
+    <description>	#france_vehicles:F81_Char_de_65t_descr	</description>
+    <price>	2500000	</price>
+    <tags>	heavyTank improvedVentilation_class3_user aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
+    <level>	8	</level>
+  </F81_Char_de_65t>
+  <F83_AMX_M4_Mle1949_Bis>
+    <id>	65	</id>
+    <userString>	#france_vehicles:F83_AMX_M4_Mle1949_Bis	</userString>
+    <shortUserString>	#france_vehicles:F83_AMX_M4_Mle1949_Bis_short	</shortUserString>
+    <description>	#france_vehicles:F83_AMX_M4_Mle1949_Bis_descr	</description>
+    <price>	3580000	</price>
+    <tags>	heavyTank improvedVentilation_class3_user aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
+    <level>	9	</level>
+  </F83_AMX_M4_Mle1949_Bis>
+  <F82_AMX_M4_Mle1949_Ter>
+    <id>	66	</id>
+    <userString>	#france_vehicles:F82_AMX_M4_Mle1949_Ter	</userString>
+    <shortUserString>	#france_vehicles:F82_AMX_M4_Mle1949_Ter_short	</shortUserString>
+    <description>	#france_vehicles:F82_AMX_M4_Mle1949_Ter_descr	</description>
+    <price>	6100000	</price>
+    <tags>	heavyTank improvedVentilation_class3_user aimingStabilizer_Mk2_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
+    <level>	10	</level>
+  </F82_AMX_M4_Mle1949_Ter>
   <F88_AMX_13_105>
     <id>	67	</id>
     <userString>	#france_vehicles:F88_AMX_13_105	</userString>
@@ -446,6 +473,17 @@
     <tags>	AT-SPG heavyAT-SPG AT-SPG2 improvedVentilation_class3_user enhancedLongitudinalTorsions_user wetCombatPack_class2_user HD	</tags>
     <level>	10	</level>
   </F64_AMX_50Fosh_B>
+  <F97_ELC_EVEN_90>
+    <id>	240	</id>
+    <userString>	#france_vehicles:F97_ELC_EVEN_90	</userString>
+    <shortUserString>	#france_vehicles:F97_ELC_EVEN_90_short	</shortUserString>
+    <description>	#france_vehicles:F97_ELC_EVEN_90_descr	</description>
+    <price>	100	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
+    <tags>	lightTank improvedVentilation_class1_user scout wetCombatPack_class1_user enhancedTorsions1t_user aimingStabilizer_Mk1_user HD secret testTank	</tags>
+    <level>	8	</level>
+  </F97_ELC_EVEN_90>
   <F89_Canon_dassaut_de_105>
     <id>	241	</id>
     <userString>	#france_vehicles:F89_Canon_dassaut_de_105	</userString>
@@ -647,44 +685,4 @@
     <tags>	heavyTank wetCombatPack_class2_user enhancedSprings_class3_user HD secret	</tags>
     <level>	2	</level>
   </F04_B1_bootcamp>
-  <F80_FCM_F1_Mle1940_HE2017>
-    <id>	165	</id>
-    <userString>	#france_vehicles:F80_FCM_F1_Mle1940_HE2017	</userString>
-    <shortUserString>	#france_vehicles:F80_FCM_F1_Mle1940_HE2017_short	</shortUserString>
-    <description>	#france_vehicles:F80_FCM_F1_Mle1940_HE2017_descr	</description>
-    <price>	100	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank HD multi_turret cannot_be_sold secret event_battles lockCrew cannot_be_researched	</tags>
-    <level>	8	</level>
-  </F80_FCM_F1_Mle1940_HE2017>
-  <F77_FCM_2C_HE2017>
-    <id>	254	</id>
-    <userString>	#france_vehicles:F77_FCM_2C_HE2017	</userString>
-    <shortUserString>	#france_vehicles:F77_FCM_2C_HE2017_short	</shortUserString>
-    <description>	#france_vehicles:F77_FCM_2C_HE2017_descr	</description>
-    <price>	100	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank HD multi_turret cannot_be_sold secret event_battles lockCrew cannot_be_researched	</tags>
-    <level>	8	</level>
-  </F77_FCM_2C_HE2017>
-  <F80_FCM_F1_Mle1940_HE2017_Minion>
-    <id>	180	</id>
-    <userString>	#france_vehicles:F80_FCM_F1_Mle1940_HE2017_Minion	</userString>
-    <shortUserString>	#france_vehicles:F80_FCM_F1_Mle1940_HE2017_short	</shortUserString>
-    <description>	#france_vehicles:F80_FCM_F1_Mle1940_HE2017_descr	</description>
-    <price>	100	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank HD multi_turret secret event_battles	</tags>
-    <level>	8	</level>
-  </F80_FCM_F1_Mle1940_HE2017_Minion>
-  <F77_FCM_2C_HE2017_Minion>
-    <id>	181	</id>
-    <userString>	#france_vehicles:F77_FCM_2C_HE2017_Minion	</userString>
-    <shortUserString>	#france_vehicles:F77_FCM_2C_HE2017_short	</shortUserString>
-    <description>	#france_vehicles:F77_FCM_2C_HE2017_descr	</description>
-    <price>	100	</price>
-    <notInShop>	true	</notInShop>
-    <tags>	heavyTank HD multi_turret secret event_battles	</tags>
-    <level>	8	</level>
-  </F77_FCM_2C_HE2017_Minion>
 </list.xml>

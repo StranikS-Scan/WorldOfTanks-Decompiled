@@ -820,12 +820,15 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
     def __init__(self, loader, *containers):
         super(ContainerManager, self).__init__()
         self.onViewAddedToContainer = Event()
+        self.onViewLoading = Event()
+        self.onViewLoaded = Event()
         self.__globalContainer = _GlobalViewContainer(weakref.proxy(self))
         for container in containers:
             assert isinstance(container, ViewContainer)
             self.__globalContainer.addChildContainer(container)
 
         self.__loader = loader
+        self.__loader.onViewLoadInit += self.__onViewLoadInit
         self.__loader.onViewLoaded += self.__onViewLoaded
         self.__scopeController = GlobalScopeController()
         self.__scopeController.create()
@@ -837,6 +840,7 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
         self.__chainMng.destroy()
         if self.__loader is not None:
             self.__loader.onViewLoaded -= self.__onViewLoaded
+            self.__loader.onViewLoadInit -= self.__onViewLoadInit
             self.__loader = None
         for viewType in _CONTAINERS_DESTROY_ORDER:
             container = self.__globalContainer.findContainer(viewType)
@@ -956,6 +960,38 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
         :param viewType: viewType: View type. @see ViewTypes.
         """
         return self.__globalContainer.findContainer(viewType)
+
+    def getViewByKey(self, viewKey):
+        """
+        Returns view object by view key if is view already exists
+        :param viewKey: view key (@see ViewKey)
+        :return: view object (@see View)
+        """
+        if self.__loader is not None:
+            loadingItem = self.__loader.getViewLoadingItem(viewKey)
+            if loadingItem is not None:
+                return loadingItem.pyEntity
+        sources = (self.__globalContainer.findView, self.__viewCache.getView)
+        for source in sources:
+            view = source(viewKey)
+            if view is not None:
+                return view
+
+        return
+
+    def isViewCreated(self, viewKey):
+        """
+        Return True view is loaded and visible
+        :param viewKey: view key (@see ViewKey)
+        """
+        return self.__globalContainer.findView(viewKey) is not None
+
+    def isViewInCache(self, viewKey):
+        """
+        Return True view is loaded and is in cache
+        :param viewKey: view key (@see ViewKey)
+        """
+        return self.__viewCache.getView(viewKey) is not None
 
     def isModalViewsIsExists(self):
         """
@@ -1098,6 +1134,7 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
         return
 
     def __onViewLoaded(self, pyView, loadParams):
+        self.onViewLoaded(pyView)
         loadMode = loadParams.loadMode
         if loadMode == ViewLoadMode.DEFAULT:
             if self.__scopeController.isViewLoading(pyView=pyView):
@@ -1110,3 +1147,6 @@ class ContainerManager(ContainerManagerMeta, IContainerManager):
         else:
             LOG_WARNING('Unsupported load mode {}. View {} will be destroyed.'.format(loadMode, pyView))
             pyView.destroy()
+
+    def __onViewLoadInit(self, view, *args, **kwargs):
+        self.onViewLoading(view)

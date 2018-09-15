@@ -72,6 +72,10 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
         self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onTutorialAcceptBtnClicked(self):
+        if self.__lastTutorState == _PTF.FOUR_FAL_SHOWN:
+            self.soundManager.playSound(SOUNDS.FOUR_AWARD_LISTS_RECEIVED_CONFIRM)
+        elif self.__lastTutorState == _PTF.ONE_FAL_SHOWN:
+            self.soundManager.playSound(SOUNDS.ONE_AWARD_LIST_RECEIVED_CONFIRM)
         self.__resetToIncomplete()
         if self.__lastTutorState == _PTF.FOUR_FAL_SHOWN:
             if self.__PMController.getFreeTokensCount() >= PERSONAL_QUEST_FINAL_PAWN_COST:
@@ -90,6 +94,10 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
         self.__checkTutorState()
 
     def _dispose(self):
+        self.soundManager.stopSound(SOUNDS.ONE_AWARD_LIST_RECEIVED)
+        self.soundManager.stopSound(SOUNDS.FOUR_AWARD_LISTS_RECEIVED)
+        self.soundManager.stopSound(SOUNDS.FOUR_AWARD_LISTS_RECEIVED_CONFIRM)
+        self.soundManager.stopSound(SOUNDS.ONE_AWARD_LIST_RECEIVED_CONFIRM)
         self._eventsCache.onSyncCompleted -= self.__onQuestsUpdated
         self._eventsCache.onProgressUpdated -= self.__onQuestsUpdated
         super(PersonalMissionsPage, self)._dispose()
@@ -376,8 +384,10 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
     def __showTutor(self, tutorState, showPawned=False):
         self.__resetToIncomplete()
         if tutorState == _PTF.ONE_FAL_SHOWN:
+            self.soundManager.playSound(SOUNDS.ONE_AWARD_LIST_RECEIVED)
             self.as_showFirstAwardSheetObtainedPopupS(True)
         else:
+            self.soundManager.playSound(SOUNDS.FOUR_AWARD_LISTS_RECEIVED)
             self.as_showFourAwardSheetsObtainedPopupS(True, self.__packTutorData(showPawned))
         self.__lastTutorState = tutorState
         self.__settingsCore.serverSettings.saveInUIStorage({self.__lastTutorState: True})

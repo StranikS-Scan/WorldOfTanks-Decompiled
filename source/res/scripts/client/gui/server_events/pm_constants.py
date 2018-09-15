@@ -23,6 +23,11 @@ class SOUNDS(CONST_CONTAINER):
     AWARD_LIST_AWARD_WINDOW = 'pm_special_greeting'
     WOMAN_AWARD_WINDOW = 'pm_special_greeting_woman'
     TANK_AWARD_WINDOW = 'pm_special_greeting_tank'
+    RTCP_OVERLAY = 'RTPC_ext_greeting_overlay'
+    ONE_AWARD_LIST_RECEIVED = 'pm_greeting_order_form'
+    ONE_AWARD_LIST_RECEIVED_CONFIRM = 'pm_greeting_order_form_confirm'
+    FOUR_AWARD_LISTS_RECEIVED = 'pm_conversion_order_form'
+    FOUR_AWARD_LISTS_RECEIVED_CONFIRM = 'pm_conversion_order_form_confirm'
     MIN_MISSIONS_ZOOM = 0
     MAX_MISSIONS_ZOOM = 100
 

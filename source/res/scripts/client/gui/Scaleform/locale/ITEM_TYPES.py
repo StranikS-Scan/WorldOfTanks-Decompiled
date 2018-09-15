@@ -19,8 +19,6 @@ class ITEM_TYPES(object):
     VEHICLE_TAGS_SPG_DESC = '#item_types:vehicle/tags/spg/desc'
     VEHICLE_TAGS_AT_SPG_NAME = '#item_types:vehicle/tags/at-spg/name'
     VEHICLE_TAGS_AT_SPG_DESC = '#item_types:vehicle/tags/at-spg/desc'
-    VEHICLE_TAGS_HE2017_2C_NAME = '#item_types:vehicle/tags/HE2017_2C/name'
-    VEHICLE_TAGS_HE2017_F1_NAME = '#item_types:vehicle/tags/HE2017_F1/name'
     CHASSIS_NAME = '#item_types:chassis/name'
     CHASSIS_DESC = '#item_types:chassis/desc'
     CHASSIS_TAGS = '#item_types:chassis/tags'

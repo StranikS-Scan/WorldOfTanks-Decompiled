@@ -188,7 +188,7 @@ class DamageInfoPanel(DamageInfoPanelMeta):
         elif eventID == _EVENT_ID.HIDE_VEHICLE_DAMAGES_DEVICES:
             self.__hide()
 
-    def __onPostMortemSwitched(self):
+    def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         self.__hide()
 
     def __onVehicleControlling(self, vehicle):

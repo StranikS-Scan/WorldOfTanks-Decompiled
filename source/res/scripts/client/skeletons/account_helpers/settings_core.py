@@ -41,6 +41,9 @@ class ISettingsCache(object):
     def setVersion(self, value):
         raise NotImplementedError
 
+    def delSettings(self, settings):
+        raise NotImplementedError
+
 
 class ISettingsCore(object):
     onSettingsChanged = None

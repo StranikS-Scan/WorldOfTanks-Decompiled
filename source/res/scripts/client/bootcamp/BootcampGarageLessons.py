@@ -58,6 +58,8 @@ class ACTION_PARAM:
     ICON = 'icon'
     LABEL = 'label'
     TEXT = 'text'
+    VOICEOVER = 'voiceover'
+    VOICEOVERS = 'voiceovers'
     NATIONS = 'nations'
     NATIONS_DATA = 'nations_data'
     NATION = 'nation'
@@ -175,6 +177,7 @@ class GarageActions:
         _FillValue(ACTION_PARAM.ICON, 'asString', default='')(nationSection, currentNation)
         _FillValue(ACTION_PARAM.LABEL, 'asString', default='')(nationSection, currentNation)
         _FillValue(ACTION_PARAM.TEXT, 'asString', default='')(nationSection, currentNation)
+        _FillValue(ACTION_PARAM.VOICEOVER, 'asString')(nationSection, currentNation)
         _FillValue(ACTION_PARAM.BACKGROUND, 'asString', default='')(nationSection, currentNation)
         _FillValue(ACTION_PARAM.BOTTOM_RENDERER, 'asInt', default=-1)(nationSection, currentNation)
         currentNation['bottom'] = []
@@ -215,6 +218,7 @@ class GarageActions:
                     else:
                         self.readMessageNationData(actionSection, currentAction)
                 _FillValue(ACTION_PARAM.SHOW, 'asString')(actionSection, currentAction)
+                _FillValue(ACTION_PARAM.VOICEOVER, 'asString')(actionSection, currentAction)
                 _FillValue(ACTION_PARAM.ELEMENT, 'asString')(actionSection, currentAction)
                 _FillValue(ACTION_PARAM.PREV_HINT, 'asString')(actionSection, currentAction)
                 _FillValue(ACTION_PARAM.NEXT_HINT, 'asString')(actionSection, currentAction)

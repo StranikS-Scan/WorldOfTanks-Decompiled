@@ -20,8 +20,8 @@
   <crewXpFactor>	1.0	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
-    <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/french/F33_S_35CA/S_35CA_CM.dds	</exclusionMask>
+    <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <fakeTurrets>
@@ -64,10 +64,10 @@
     </swinging>
     <exhaust>
       <pixie>	gas_medium	</pixie>
-      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.183851 0.507093 1.85295	</turret>
+      <turret>	0.173985 0.659912 1.81235	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/french/F33_S_35CA/collision/Hull.model	</collisionModelServer>
@@ -75,40 +75,40 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	0.113223 0.150111 2.35431	</rayStart>
-        <rayEnd>	0.113223 0.0430769 2.13951	</rayEnd>
+        <rayStart>	0.0407003 0.372059 2.05879	</rayStart>
+        <rayEnd>	0.0421082 0.328567 2.00395	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.24	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
+        <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
       <player>
-        <rayStart>	-1.01336 1.19703 0.123052	</rayStart>
-        <rayEnd>	-0.774391 1.1749 0.121034	</rayEnd>
+        <rayStart>	-1.0104 1.18156 0.0454108	</rayStart>
+        <rayEnd>	-0.771233 1.16159 0.0454705	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </player>
+      <inscription>
+        <rayStart>	-0.929196 1.19621 0.545567	</rayStart>
+        <rayEnd>	-0.849481 1.18946 0.545681	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.7	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
       <player>
-        <rayStart>	1.01336 1.19703 0.123052	</rayStart>
-        <rayEnd>	0.774391 1.1749 0.121034	</rayEnd>
+        <rayStart>	1.0104 1.18156 0.0454108	</rayStart>
+        <rayEnd>	0.771233 1.16159 0.0454705	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
       </player>
       <inscription>
-        <rayStart>	-0.946778 1.13988 0.696203	</rayStart>
-        <rayEnd>	-0.86722 1.13152 0.697102	</rayEnd>
+        <rayStart>	0.929196 1.19621 0.545567	</rayStart>
+        <rayEnd>	0.849481 1.18946 0.545681	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.78	</size>
+        <size>	0.7	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
-      </inscription>
-      <inscription>
-        <rayStart>	0.946778 1.13988 0.696203	</rayStart>
-        <rayEnd>	0.86722 1.13152 0.697102	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.78	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/french/F33_S_35CA/S_35CA_HangarShadowMap.dds	</hangarShadowTexture>
@@ -118,7 +118,7 @@
       <userString>	#france_vehicles:Chassis_S_35CA	</userString>
       <tags></tags>
       <level>	4	</level>
-      <price>	4660.0	</price>
+      <price>	4660	</price>
       <unlocks>
         <chassis>	Chassis_S_35CA_2	  <cost>	2115	</cost>
         </chassis>
@@ -149,14 +149,14 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	usa_02	</textureSet>
-        <size>	0.25 0.34	</size>
+        <textureSet>	usa_03	</textureSet>
+        <size>	0.3 0.38	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.1	</textureScale>
+        <textureScale>	-2.3	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -165,10 +165,11 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.285906	</radius>
+          <syncAngle>	16.3636	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_R1	</name>
           <radius>	0.122104	</radius>
         </wheel>
@@ -177,6 +178,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R2	</name>
           <radius>	0.352404	</radius>
+          <syncAngle>	16.3636	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -190,10 +192,11 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.285906	</radius>
+          <syncAngle>	16.3636	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_L1	</name>
           <radius>	0.122104	</radius>
         </wheel>
@@ -202,6 +205,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L2	</name>
           <radius>	0.352404	</radius>
+          <syncAngle>	16.3636	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -218,12 +222,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.785968 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.780193 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/french/F33_S_35CA/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F33_S_35CA/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.823186 1.59053	</topRightCarryingPoint>
+      <topRightCarryingPoint>	0.836502 1.57803	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -236,12 +240,101 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F33_S_35CA/track/segment_l.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F33_S_35CA/track/segment_r.model	</segmentModelRight>
+        <left>	vehicles/french/F33_S_35CA/track/left.track	</left>
+        <right>	vehicles/french/F33_S_35CA/track/right.track	</right>
+        <segmentLength>	0.103	</segmentLength>
+        <segmentOffset>	0.074	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.045	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+        </node>
+      </trackNodes>
     </Chassis_S_35CA>
     <Chassis_S_35CA_2>
       <userString>	#france_vehicles:Chassis_S_35CA_2	</userString>
       <tags></tags>
       <level>	5	</level>
-      <price>	7660.0	</price>
+      <price>	7660	</price>
       <unlocks>
         <vehicle>	F34_ARL_V39	  <cost>	20000	</cost>
         </vehicle>
@@ -272,14 +365,14 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	usa_02	</textureSet>
-        <size>	0.25 0.34	</size>
+        <textureSet>	usa_03	</textureSet>
+        <size>	0.3 0.38	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.1	</textureScale>
+        <textureScale>	-2.3	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -288,10 +381,11 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.285906	</radius>
+          <syncAngle>	16.3636	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_R1	</name>
           <radius>	0.122104	</radius>
         </wheel>
@@ -300,6 +394,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R2	</name>
           <radius>	0.352404	</radius>
+          <syncAngle>	16.3636	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -313,10 +408,11 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.285906	</radius>
+          <syncAngle>	16.3636	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
+          <isLeading>	false	</isLeading>
           <name>	WD_L1	</name>
           <radius>	0.122104	</radius>
         </wheel>
@@ -325,6 +421,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L2	</name>
           <radius>	0.352404	</radius>
+          <syncAngle>	16.3636	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -341,24 +438,113 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.785968 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.780193 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/french/F33_S_35CA/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F33_S_35CA/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.823186 1.59053	</topRightCarryingPoint>
+      <topRightCarryingPoint>	0.836502 1.57803	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
         <decal>
           <transform>
-            <row0>	2.806510 0.000000 0.000000	</row0>
+            <row0>	2.814180 0.000000 0.000000	</row0>
             <row1>	0.000000 1.178950 0.000000	</row1>
             <row2>	0.000000 0.000000 6.044010	</row2>
-            <row3>	0.000000 0.000000 -0.000001	</row3>
+            <row3>	0.000000 0.000000 0.000000	</row3>
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	9	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F33_S_35CA/track/segment_l.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F33_S_35CA/track/segment_r.model	</segmentModelRight>
+        <left>	vehicles/french/F33_S_35CA/track/left.track	</left>
+        <right>	vehicles/french/F33_S_35CA/track/right.track	</right>
+        <segmentLength>	0.103	</segmentLength>
+        <segmentOffset>	0.074	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.045	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	3	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.7	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+        </node>
+      </trackNodes>
     </Chassis_S_35CA_2>
   </chassis>
   <turrets0>
@@ -367,7 +553,7 @@
       <userString>	#france_vehicles:Turret_1_S_35CA	</userString>
       <tags>	cannotDetach	</tags>
       <level>	5	</level>
-      <price>	120.0	</price>
+      <price>	120	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	55	</armor_1>
@@ -408,6 +594,8 @@
             </armor_2>
             <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
@@ -437,14 +625,17 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.00108148 0.0554834 2.48225	</rayStart>
-              <rayEnd>	0.0358331 0.0230766 2.48192	</rayEnd>
-              <rayUp>	0.047 0.047 0.000000	</rayUp>
+              <rayStart>	0.00493745 0.0749147 2.18529	</rayStart>
+              <rayEnd>	-0.0236662 0.0364956 2.18501	</rayEnd>
+              <rayUp>	0.057 0.056 5	</rayUp>
               <size>	0.416	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.6 0.3 0.000000 0.000000	</tiling>
+          </camouflage>
         </_17_pdr_Gan_MK.II>
         <Canon_de_105_mle_1930_Schneider_AC>	shared	  <maxAmmo>	42	</maxAmmo>
           <armor>
@@ -454,6 +645,8 @@
             </armor_2>
             <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
@@ -482,16 +675,16 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.000000 0.041406 3.23304	</rayStart>
-              <rayEnd>	0.731149 -0.280399 3.22333	</rayEnd>
-              <rayUp>	0.074 0.07 0.000000	</rayUp>
+              <rayStart>	0.0049253 0.0800971 2.55424	</rayStart>
+              <rayEnd>	0.28105 -0.0187155 2.54781	</rayEnd>
+              <rayUp>	0.11 0.107 5	</rayUp>
               <size>	0.645	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.91 0.91 0.000000 0.000000	</tiling>
+            <tiling>	0.8 0.4 0.000000 0.000000	</tiling>
           </camouflage>
         </Canon_de_105_mle_1930_Schneider_AC>
         <_90mm_canon_DCA_30_CA>	shared	  <maxAmmo>	65	</maxAmmo>
@@ -502,6 +695,8 @@
             </armor_2>
             <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	20	</gun>
             <gunBreech>	0	</gunBreech>
           </armor>
@@ -531,14 +726,17 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.000000 0.0414061 2.30354	</rayStart>
+              <rayStart>	0.00493779 0.0830801 2.30354	</rayStart>
               <rayEnd>	0.31245 -0.157809 2.28948	</rayEnd>
-              <rayUp>	0.079 0.067 0.000000	</rayUp>
+              <rayUp>	0.094 0.085 5	</rayUp>
               <size>	0.634	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.9 0.5 0.000000 0.000000	</tiling>
+          </camouflage>
         </_90mm_canon_DCA_30_CA>
       </guns>
       <models>
@@ -550,11 +748,14 @@
         <collisionModelServer>	vehicles/french/F33_S_35CA/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F33_S_35CA/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.447971 -0.000266	</gunPosition>
+      <gunPosition>	0.003715 0.321644 0.003668	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.316 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.774 0.500 0.000 0.500 0.600 0.410 0.000	</physicsShape>
+      <physicsShape>	1.182 -0.275 1.542 0.000 0.952 -0.125 0.000 0.100 0.000 0.500 0.000 0.500 0.813 1.000 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_03	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	1 0.5 0.000000 0.000000	</tiling>
+      </camouflage>
     </Turret_1_S_35CA>
   </turrets0>
   <engines>

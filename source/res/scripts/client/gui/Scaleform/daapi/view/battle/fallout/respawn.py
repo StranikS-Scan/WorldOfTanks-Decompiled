@@ -132,16 +132,10 @@ class FalloutRespawn(FalloutRespawnViewMeta, IRespawnView):
         visitor = self.sessionProvider.arenaVisitor
         isSolo = visitor.isSoloTeam(avatar_getter.getPlayerTeam())
         plusStr = makeString(FALLOUT.INFOPANEL_SINGLEHELPTEXT_PLUS)
-        isMultiteam = visitor.gui.isFalloutMultiTeam()
         headerStr = makeHtmlString(_HTML_TEMPLATE_FALLOUT_INFO_KEY, 'header', makeString(FALLOUT.INFOPANEL_SECRETWIN_HEAD))
         additionalBlockTemplate = makeHtmlString(_HTML_TEMPLATE_FALLOUT_INFO_KEY, 'winPoints')
         costKill, costFlags, costDamage = visitor.type.getWinPointsCosts(isSolo=isSolo, forVehicle=True)
         helpStr = ''
-        if visitor.hasFlags() and costFlags:
-            costFlags = list(costFlags)[0]
-            helpStr = self.__getAdditionalBlockStr(additionalBlockTemplate, FALLOUT.INFOPANEL_SINGLEHELPTEXT_WINPOINTS_FLAGCAPTURE, warning(plusStr + str(costFlags)))
-            if isMultiteam and isSolo:
-                helpStr = self.__getAdditionalBlockStr(additionalBlockTemplate, FALLOUT.INFOPANEL_SINGLEHELPTEXT_WINPOINTS_FLAGDESTROY, warning(plusStr + str(costFlags)))
         helpStr += self.__getAdditionalBlockStr(additionalBlockTemplate, FALLOUT.INFOPANEL_SINGLEHELPTEXT_WINPOINTS_KILL, warning(plusStr + str(costKill)))
         damageDealt, points = costDamage
         points = warning(plusStr + str(points))

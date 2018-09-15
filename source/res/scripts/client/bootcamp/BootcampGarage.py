@@ -28,6 +28,7 @@ from gui.Scaleform.Waiting import Waiting
 from shared_utils import BoundMethodWeakref
 from aop.in_garage import PointcutBattleSelectorHintText
 from adisp import process, async
+import SoundGroups
 
 class MakeSandboxSelectedAspect(aop.Aspect):
 
@@ -469,7 +470,8 @@ class BootcampGarageLesson(object):
         if actionName is None:
             return
         else:
-            ctx = {'messages': []}
+            ctx = {'messages': [],
+             'voiceovers': []}
             actionType = ACTION_TYPE.SHOW_MESSAGE
             cyclicController = CyclicController()
             cyclicError = 'showMessage, lessonId - {0}, currentAction - {1}'
@@ -478,6 +480,11 @@ class BootcampGarageLesson(object):
                 message = self.__bootcampGarageActions.getActionByName(actionName)
                 hextHint = message[ACTION_PARAM.NEXT_HINT]
                 hextHintType = getActionType(hextHint)
+                nation = NATION_NAMES[self.getNation()]
+                voiceover = message[ACTION_PARAM.NATIONS_DATA][nation].get(ACTION_PARAM.VOICEOVER, None)
+                if not voiceover:
+                    voiceover = message.get(ACTION_PARAM.VOICEOVER, None)
+                ctx[ACTION_PARAM.VOICEOVERS].append(voiceover)
                 callback = None
                 if hextHintType != ACTION_TYPE.SHOW_MESSAGE:
                     actionType = hextHintType
@@ -507,6 +514,9 @@ class BootcampGarageLesson(object):
         else:
             self.__showActionsHistory.append(actionName)
             showAction = self.__bootcampGarageActions.getActionByName(actionName)
+            voiceover = showAction.get(ACTION_PARAM.VOICEOVER, '')
+            if voiceover:
+                SoundGroups.g_instance.playSound2D(voiceover)
             hextHint = showAction[ACTION_PARAM.NEXT_HINT]
             callback = None
             if hextHint:

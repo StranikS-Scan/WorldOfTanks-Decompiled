@@ -1,35 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/event_boards/event_boards_items.py
+import BigWorld
 import itertools
 from gui import GUI_NATIONS
-from shared_utils import findFirst
+from gui.shared.utils import mapTextureToTheMemory, removeTextureFromMemory
+from shared_utils import findFirst, CONST_CONTAINER
 from collections import defaultdict
 from debug_utils import LOG_ERROR, LOG_WARNING
 from items import parseIntCompactDescr
-from shared_utils import CONST_CONTAINER
 from gui.event_boards import event_boards_timer
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
 from helpers import time_utils
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-AWARD_IMG_BY_EVENT_ID = {'event_1': RES_ICONS.MAPS_ICONS_EVENTBOARDS_LANDINGAWARDS_EVENT_1_AWARD_IMG,
- 'event_2': RES_ICONS.MAPS_ICONS_EVENTBOARDS_LANDINGAWARDS_EVENT_2_AWARD_IMG,
- 'event_3': RES_ICONS.MAPS_ICONS_EVENTBOARDS_LANDINGAWARDS_EVENT_3_AWARD_IMG,
- 'event_4': RES_ICONS.MAPS_ICONS_EVENTBOARDS_LANDINGAWARDS_EVENT_4_AWARD_IMG}
-BGR_LANDING_BY_EVENT_ID = {'event_1': RES_ICONS.MAPS_ICONS_EVENTBOARDS_LANDINGBACKGROUNDS_EVENT_1_BGR_LANDING,
- 'event_2': RES_ICONS.MAPS_ICONS_EVENTBOARDS_LANDINGBACKGROUNDS_EVENT_2_BGR_LANDING,
- 'event_3': RES_ICONS.MAPS_ICONS_EVENTBOARDS_LANDINGBACKGROUNDS_EVENT_3_BGR_LANDING,
- 'event_4': RES_ICONS.MAPS_ICONS_EVENTBOARDS_LANDINGBACKGROUNDS_EVENT_4_BGR_LANDING}
-FLAG_TOOLTIP_BY_EVENT_ID = {'event_1': RES_ICONS.MAPS_ICONS_EVENTBOARDS_TOOLTIPBACKGROUNDS_EVENT_1_FLAG_TOOLTIP,
- 'event_2': RES_ICONS.MAPS_ICONS_EVENTBOARDS_TOOLTIPBACKGROUNDS_EVENT_2_FLAG_TOOLTIP,
- 'event_3': RES_ICONS.MAPS_ICONS_EVENTBOARDS_TOOLTIPBACKGROUNDS_EVENT_3_FLAG_TOOLTIP,
- 'event_4': RES_ICONS.MAPS_ICONS_EVENTBOARDS_TOOLTIPBACKGROUNDS_EVENT_4_FLAG_TOOLTIP}
 
 class CALCULATION_METHODS(CONST_CONTAINER):
     MAX = 'max'
     SUMN = 'sumN'
     SUMSEQN = 'sumSeqN'
     SUMALL = 'sumAll'
+    SUMMSEQN = 'sumMSeqN'
 
 
 class OBJECTIVE_PARAMETERS(CONST_CONTAINER):
@@ -105,6 +95,9 @@ class EventBoardsSettings(object):
         eventsSettings = self.__eventsSettings.getEvents()
         return eventsSettings and len(eventsSettings)
 
+    def fini(self):
+        self.__eventsSettings.fini()
+
 
 class EventsSettings(object):
     EXPECTED_FIELDS = ['battle_type',
@@ -120,12 +113,12 @@ class EventsSettings(object):
      'objective_parameter',
      'participants_freeze_deadline',
      'prime_times',
-     'promo_bonuses',
      'publish_date',
      'rewarding_date',
      'rewards_by_rank',
      'start_date',
-     'type']
+     'type',
+     'distance']
     EXPECTED_FIELDS_PRIME_TIMES = ['server', 'start_time', 'end_time']
     EXPECTED_FIELDS_LIMITS = ['win_rate_min',
      'win_rate_max',
@@ -147,18 +140,29 @@ class EventsSettings(object):
     def __init__(self):
         self.__events = []
 
+    def fini(self):
+        for event in self.__events:
+            event.removeImages()
+
     def setData(self, rawData):
+        oldEvents = {event.getEventID():event for event in self.__events}
         self.__events = []
         if not self.__isDataStructureValid(rawData):
             if rawData:
                 LOG_WARNING('EventsSettings setData error: data structure error')
             return SET_DATA_STATUS_CODE.ERROR
-        for event in rawData:
-            eventSettings = EventSettings()
-            eventSettings.setData(event)
-            self.__events.append(eventSettings)
+        else:
+            for event in rawData:
+                eventSettings = EventSettings()
+                eventSettings.setData(event)
+                oldEvent = oldEvents.pop(eventSettings.getEventID(), None)
+                eventSettings.setImages(oldEvent.getImages() if oldEvent else {})
+                self.__events.append(eventSettings)
 
-        return SET_DATA_STATUS_CODE.OK
+            for event in oldEvents.values():
+                event.removeImages()
+
+            return SET_DATA_STATUS_CODE.OK
 
     def getEvents(self):
         return self.__events
@@ -181,6 +185,24 @@ class EventsSettings(object):
         for event in self.__events:
             if event.isActive():
                 return True
+
+        return False
+
+    def hasAnotherActiveEvents(self, eventID):
+        for event in self.__events:
+            if event.isActive() and event.getEventID() != eventID:
+                return True
+
+        return False
+
+    def hasActiveEventsByState(self, hangarFlagData):
+        if hangarFlagData is not None:
+            for eID, eState in hangarFlagData.items():
+                event = self.getEvent(eID)
+                if event is not None:
+                    regIsFailed = event.isRegistrationFinished() and eState != EVENT_STATE.JOINED
+                    if event.isActive() and eState != EVENT_STATE.CANCELED and not regIsFailed:
+                        return True
 
         return False
 
@@ -228,16 +250,32 @@ class EventSettings(object):
         self.__endDate = None
         self.__rewardingDate = None
         self.__cardinality = None
+        self.__distance = None
         self.__manual = None
         self.__battleType = None
         self.__isSquadAllowed = None
         self.__leaderboardViewSize = None
         self.__primeTimes = PrimeTimes()
         self.__limits = Limits()
-        self.__promoBonuses = None
         self.__rewardsByRank = RewardsByRank()
+        self.__keyArtBig = None
+        self.__keyArtSmall = None
+        self.__promoBonuses = None
         self.__leaderboards = {}
+        self.__leaderboardsIndex = {}
+        self.__images = {}
         return
+
+    def setImages(self, images):
+        self.__images = images
+        self.__prefetchImages()
+
+    def getImages(self):
+        return self.__images
+
+    def removeImages(self):
+        for image in self.__images.values():
+            removeTextureFromMemory(image)
 
     def setData(self, rawData):
         self.__eventID = rawData['event_id']
@@ -251,26 +289,32 @@ class EventSettings(object):
         self.__endDate = rawData['end_date']
         self.__rewardingDate = rawData['rewarding_date']
         self.__cardinality = rawData['cardinality']
+        self.__distance = rawData['distance']
         self.__manual = rawData['manual']
         self.__battleType = rawData['battle_type']
         self.__isSquadAllowed = rawData['is_squad_allowed']
         self.__leaderboardViewSize = rawData['leaderboard_view_size']
         self.__limits.setData(rawData['limits'])
         self.__primeTimes.setData(rawData['prime_times'])
-        self.__promoBonuses = rawData['promo_bonuses']
         self.__rewardsByRank.setData(rawData['rewards_by_rank'])
+        self.__keyArtBig = rawData.get('key_art_big')
+        self.__keyArtSmall = rawData.get('key_art_small')
+        self.__promoBonuses = rawData.get('promo_bonuses')
         self.__makeLeaderboards(rawData['limits'])
 
     def getLeaderboards(self):
         if self.__type in self.__mapping:
             _, _, order = self.__mapping[self.__type]
             if order:
-                inversed = {v:k for k, v in self.__leaderboards.iteritems()}
+                inversed = self.__leaderboardsIndex
                 return [ (inversed[value], value) for value in order if value in inversed ]
-        return self.__leaderboards.iteritems()
+        return self.__leaderboards.items()
 
-    def getLeaderboard(self, leaderboardId):
-        return self.__leaderboards.get(leaderboardId)
+    def getLeaderboard(self, leaderboardID):
+        return self.__leaderboards.get(leaderboardID)
+
+    def getLeaderboardID(self, value):
+        return self.__leaderboardsIndex.get(value)
 
     def getEventID(self):
         return self.__eventID
@@ -364,6 +408,9 @@ class EventSettings(object):
     def getCardinality(self):
         return self.__cardinality
 
+    def getDistance(self):
+        return self.__distance
+
     def getManual(self):
         return self.__manual
 
@@ -382,9 +429,6 @@ class EventSettings(object):
     def getPrimeTimes(self):
         return self.__primeTimes
 
-    def getPromoBonuses(self):
-        return self.__promoBonuses
-
     def getRewardsByRank(self):
         return self.__rewardsByRank
 
@@ -394,13 +438,49 @@ class EventSettings(object):
     def getAvailableServers(self):
         return filter(lambda pt: pt.isActive(), self.__primeTimes.getPrimeTimes())
 
+    def getKeyArtBig(self):
+        return self.__getImage(self.__keyArtBig, RES_ICONS.MAPS_ICONS_EVENTBOARDS_LANDINGBACKGROUNDS_EVENT_1_BGR_LANDING)
+
+    def getKeyArtSmall(self):
+        return self.__getImage(self.__keyArtSmall, RES_ICONS.MAPS_ICONS_EVENTBOARDS_TOOLTIPBACKGROUNDS_EVENT_1_FLAG_TOOLTIP)
+
+    def getPromoBonuses(self):
+        return self.__getImage(self.__promoBonuses, RES_ICONS.MAPS_ICONS_EVENTBOARDS_LANDINGAWARDS_EVENT_1_AWARD_IMG)
+
+    def __requestImage(self, url):
+        if url:
+            BigWorld.player().customFilesCache.get(url, self.__onImageReceive)
+
+    def __onImageReceive(self, url, img):
+        if img:
+            self.__images[url] = mapTextureToTheMemory(img, temp=False)
+
+    def __getImage(self, url, default):
+        if url not in self.__images:
+            self.__requestImage(url)
+            return default
+        return 'img://{}'.format(self.__images[url])
+
+    def __prefetchImages(self):
+        self.getKeyArtBig()
+        self.getKeyArtSmall()
+        self.getPromoBonuses()
+
     def __makeLeaderboards(self, rawData):
+        self.__leaderboards = {}
+        self.__leaderboardsIndex = {}
         if self.__type in self.__mapping:
             listKey, itemKey, _ = self.__mapping[self.__type]
-            self.__leaderboards = {int(leaderboard['leaderboard_id']):leaderboard[itemKey] for leaderboard in rawData[listKey]}
+            for leaderboard in rawData[listKey]:
+                key = int(leaderboard['leaderboard_id'])
+                val = leaderboard[itemKey]
+                if isinstance(val, list):
+                    val = val[0]
+                self.__leaderboards[key] = val
+                self.__leaderboardsIndex[val] = key
+
         else:
             LOG_WARNING('__makeLeaderboards: Unknown event type')
-            self.__leaderboards = {}
 
 
 class PrimeTimes(object):
@@ -521,8 +601,8 @@ class Limits(object):
     def getBattlesCountMin(self):
         return self.__battlesCountMin
 
-    def getVehicles(self, leaderboardId):
-        return self.__vehicles.get(leaderboardId)
+    def getVehicles(self, leaderboardID):
+        return self.__vehicles.get(leaderboardID)
 
     def getNations(self):
         return self.__nations
@@ -539,44 +619,6 @@ class Limits(object):
     def __doesVehicleExist(self, vehIntCD):
         itemTypeID, _, _ = parseIntCompactDescr(vehIntCD)
         return True if itemTypeID == GUI_ITEM_TYPE.VEHICLE else False
-
-
-class PromoBonuses(object):
-
-    def __init__(self):
-        self.__promoBonuses = None
-        return
-
-    def setData(self, data):
-        if data is not None:
-            self.__promoBonuses = []
-            for promo in data:
-                promoBonus = PromoBonus()
-                promoBonus.setData(promo)
-                self.__promoBonuses.append(promoBonus)
-
-        return
-
-    def getPromoBonuses(self):
-        return self.__promoBonuses
-
-
-class PromoBonus(object):
-
-    def __init__(self):
-        self.__rewardType = None
-        self.__rewardsAmount = None
-        return
-
-    def setData(self, data):
-        self.__rewardType = data['reward_type']
-        self.__rewardsAmount = data['rewards_amount']
-
-    def getRewardType(self):
-        return self.__rewardType
-
-    def getRewardsAmount(self):
-        return self.__rewardsAmount
 
 
 class RewardsByRank(object):
@@ -598,11 +640,11 @@ class RewardsByRank(object):
     def getRewardsByRank(self):
         return self.__rewardsByRank
 
-    def getRewardByRank(self, leaderboardId):
+    def getRewardByRank(self, leaderboardID):
         try:
-            return next(itertools.ifilter(lambda l: l.getLeaderboardID() is leaderboardId, self.__rewardsByRank))
+            return next(itertools.ifilter(lambda l: l.getLeaderboardID() is leaderboardID, self.__rewardsByRank))
         except StopIteration:
-            LOG_ERROR('leaderboardId not found in data. leaderboardId=', leaderboardId)
+            LOG_ERROR('leaderboardID not found in data. leaderboardID=', leaderboardID)
             return None
 
         return None
@@ -1067,7 +1109,16 @@ class LeaderBoard(object):
      CALCULATION_METHODS.SUMALL: ['avg_exp',
                                   'avg_damage_dealt',
                                   'avg_damage_assisted',
-                                  'win_rate']}
+                                  'win_rate'],
+     CALCULATION_METHODS.SUMMSEQN: ['battle_ts',
+                                    'vehicle_cd',
+                                    'battle_result',
+                                    'is_in_squad',
+                                    'exp',
+                                    'damage',
+                                    'assisted_damage',
+                                    'frags',
+                                    'used_in_calculations']}
 
     def __init__(self):
         self.__infoByType = {}
@@ -1082,34 +1133,43 @@ class LeaderBoard(object):
         self.__excelItems = []
         return
 
-    def setData(self, rawData, leaderboardId, infoType, leaderboardType):
+    def setData(self, rawData, leaderboardID, infoType, leaderboardType):
         if not self.__isDataStructureValid(rawData, infoType):
             if rawData:
                 LOG_WARNING('LeaderBoard setData error: data structure error')
             return SET_DATA_STATUS_CODE.ERROR
-        meta = rawData['meta']
-        data = rawData['data']
-        self.__infoByType = {}
-        self.__leaderboardID = leaderboardId
-        self.__leaderboardType = leaderboardType
-        self.__pageNumber = meta['page_number']
-        self.__pagesAmount = meta['pages_amount']
-        self.__recalculationInterval = meta['recalculation_interval']
-        self.__lastLeaderboardRecalculationTS = meta['last_leaderboard_recalculation_ts']
-        self.__nextLeaderboardRecalculationTS = meta['next_leaderboard_recalculation_ts']
-        self.__rewards = []
-        for reward in meta['rewards']:
-            rewardItem = RewardItem()
-            rewardItem.setData(reward)
-            self.__rewards.append(rewardItem)
+        else:
+            meta = rawData['meta']
+            data = rawData['data']
+            self.__infoByType = {}
+            self.__leaderboardID = leaderboardID
+            self.__leaderboardType = leaderboardType
+            self.__pageNumber = meta['page_number']
+            self.__pagesAmount = meta['pages_amount']
+            self.__recalculationInterval = meta['recalculation_interval']
+            self.__lastLeaderboardRecalculationTS = meta['last_leaderboard_recalculation_ts']
+            self.__nextLeaderboardRecalculationTS = meta['next_leaderboard_recalculation_ts']
+            rewardCategoryPage = 1
+            self.__rewards = []
+            for reward in meta['rewards']:
+                rewardItem = RewardItem()
+                rewardItem.setData(reward, rewardCategoryPage)
+                rewardCategoryPage = reward['page_number']
+                self.__rewards.append(rewardItem)
 
-        self.__excelItems = []
-        for item in data:
-            excelItem = ExcelItem()
-            excelItem.setData(item, infoType)
-            self.__excelItems.append(excelItem)
+            if rewardCategoryPage is not None:
+                rewardItem = RewardItem()
+                rewardCat = defaultdict()
+                rewardCat['reward_category_number'] = 5
+                rewardItem.setData(rewardCat, rewardCategoryPage)
+                self.__rewards.append(rewardItem)
+            self.__excelItems = []
+            for item in data:
+                excelItem = ExcelItem()
+                excelItem.setData(item, infoType)
+                self.__excelItems.append(excelItem)
 
-        return SET_DATA_STATUS_CODE.OK
+            return SET_DATA_STATUS_CODE.OK
 
     def getLeaderboardID(self):
         return self.__leaderboardID
@@ -1308,10 +1368,53 @@ class InfoSumAll(InfoItem):
         return self.__winRate
 
 
+class InfoSumMSeqN(InfoItem):
+
+    def __init__(self, methodType, data):
+        super(InfoSumMSeqN, self).__init__(methodType)
+        self.__battleTs = data['battle_ts']
+        self.__vehicleCd = data['vehicle_cd']
+        self.__battleResult = data['battle_result']
+        self.__isInSquad = data['is_in_squad']
+        self.__exp = data['exp']
+        self.__damage = data['damage']
+        self.__assistedDamage = data['assisted_damage']
+        self.__frags = data['frags']
+        self.__usedInCalculations = data['used_in_calculations']
+
+    def getBattleTs(self):
+        return self.__battleTs
+
+    def getVehicleCd(self):
+        return self.__vehicleCd
+
+    def getBattleResult(self):
+        return self.__battleResult
+
+    def getIsInSquad(self):
+        return self.__isInSquad
+
+    def getExp(self):
+        return self.__exp
+
+    def getDamage(self):
+        return self.__damage
+
+    def getAssistedDamage(self):
+        return self.__assistedDamage
+
+    def getFrags(self):
+        return self.__frags
+
+    def getUsedInCalculations(self):
+        return self.__usedInCalculations
+
+
 CALCULATION_METHODS_TYPE = {CALCULATION_METHODS.MAX: InfoMax,
  CALCULATION_METHODS.SUMN: InfoSumM,
  CALCULATION_METHODS.SUMSEQN: InfoSumSeqN,
- CALCULATION_METHODS.SUMALL: InfoSumAll}
+ CALCULATION_METHODS.SUMALL: InfoSumAll,
+ CALCULATION_METHODS.SUMMSEQN: InfoSumMSeqN}
 
 class ExcelItem(object):
 
@@ -1383,8 +1486,8 @@ class RewardItem(object):
         self.__rewardCategoryNumber = None
         return
 
-    def setData(self, data):
-        self.__pageNumber = data['page_number']
+    def setData(self, data, pageNumber):
+        self.__pageNumber = pageNumber
         self.__rewardCategoryNumber = data['reward_category_number']
 
     def getPageNumber(self):
@@ -1395,29 +1498,52 @@ class RewardItem(object):
 
 
 class HangarFlagData(object):
-    EXPECTED_FIELDS = ['event_id', 'is_registered']
+    EXPECTED_FIELDS = ['meta', 'data']
+    EXPECTED_FIELDS_META = ['is_special_account']
+    EXPECTED_FIELDS_DATA = ['event_id', 'player_state']
 
     def __init__(self):
+        self.__isSpecialAccount = False
         self.__hangarFlags = defaultdict()
 
-    def setData(self, data):
-        if not self.__isDataStructureValid(data):
-            if data:
+    def setData(self, rawData):
+        if not self.__isDataStructureValid(rawData):
+            if rawData:
                 LOG_WARNING('HangarFlagData setData error: data structure error')
             return SET_DATA_STATUS_CODE.ERROR
+        self.__isSpecialAccount = rawData['meta']['is_special_account']
         self.__hangarFlags.clear()
-        for event in data:
-            self.__hangarFlags[event['event_id']] = event['is_registered']
+        for event in rawData['data']:
+            self.__hangarFlags[event['event_id']] = event['player_state']
 
         return SET_DATA_STATUS_CODE.OK
 
-    def isRegistered(self, eventID):
-        return self.__hangarFlags.get(eventID, False)
+    def getHangarFlags(self):
+        return self.__hangarFlags
 
-    def __isDataStructureValid(self, data):
-        if data:
-            for event in data:
-                if not isDataSchemaValid(self.EXPECTED_FIELDS, event):
+    def isSpecialAccount(self):
+        return self.__isSpecialAccount
+
+    def isRegistered(self, eventID):
+        playerEventState = self.__hangarFlags.get(eventID, None)
+        return playerEventState == EVENT_STATE.JOINED if playerEventState is not None else False
+
+    def canJoin(self, eventID):
+        playerEventState = self.__hangarFlags.get(eventID, None)
+        return playerEventState == EVENT_STATE.UNDEFINED if playerEventState is not None else False
+
+    def wasCanceled(self, eventID):
+        playerEventState = self.__hangarFlags.get(eventID, None)
+        return playerEventState == EVENT_STATE.CANCELED if playerEventState is not None else False
+
+    def __isDataStructureValid(self, rawData):
+        if rawData:
+            if not isDataSchemaValid(self.EXPECTED_FIELDS, rawData):
+                return False
+            if not isDataSchemaValid(self.EXPECTED_FIELDS_META, rawData['meta']):
+                return False
+            for event in rawData['data']:
+                if not isDataSchemaValid(self.EXPECTED_FIELDS_DATA, event):
                     return False
 
             return True

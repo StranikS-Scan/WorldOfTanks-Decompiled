@@ -7,11 +7,20 @@ class EventBoardsVehiclesOverlayMeta(BaseDAAPIComponent):
     def changeFilter(self, id):
         self._printOverrideError('changeFilter')
 
+    def applyFilters(self, nation, vehicleType, level, isMain, hangarOnly):
+        self._printOverrideError('applyFilters')
+
     def as_setHeaderS(self, data):
         """
         :param data: Represented by EventBoardTableFilterVO (AS)
         """
         return self.flashObject.as_setHeader(data) if self._isDAAPIInited() else None
+
+    def as_setFiltersS(self, data):
+        """
+        :param data: Represented by VehicleSelectorFilterVO (AS)
+        """
+        return self.flashObject.as_setFilters(data) if self._isDAAPIInited() else None
 
     def as_setVehiclesS(self, data):
         """

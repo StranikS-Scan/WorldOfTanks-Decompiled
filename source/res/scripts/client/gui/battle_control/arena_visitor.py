@@ -166,18 +166,6 @@ class _ArenaTypeVisitor(IArenaVisitor):
                 number = 0
             yield ((point[0], 0, point[1]), number)
 
-    def getRepairPointIterator(self):
-        for index, point in self.getRepairPoints().iteritems():
-            yield (index, (point['team'], point['position']))
-
-    def getFlagAbsorptionPointsIterator(self):
-        for index, point in enumerate(self.getFlagAbsorptionPoints()):
-            yield (index, (point['team'], point['position']))
-
-    def getFlagSpawnPosition(self, flagID):
-        flags = self.getFlagSpawnPoints()
-        return flags[flagID]['position'] if flagID in flags else (0.0, 0.0, 0.0)
-
     def getWinPointsCosts(self, isSolo=False, forVehicle=True):
         costKill, costFlags, costDamage = 0, set(), set()
         settings = self.getWinPointsSettings()
@@ -229,22 +217,6 @@ class _ArenaTypeVisitor(IArenaVisitor):
     @catch_attribute_exception(default=_ArenaTypeSkeleton.controlPoints)
     def getControlPoints(self):
         return self._arenaType.controlPoints
-
-    @catch_attribute_exception(default=_ArenaTypeSkeleton.flagSpawnPoints)
-    def getFlagSpawnPoints(self):
-        return self._arenaType.flagSpawnPoints
-
-    @catch_attribute_exception(default=_ArenaTypeSkeleton.flagAbsorptionPoints)
-    def getFlagAbsorptionPoints(self):
-        return self._arenaType.flagAbsorptionPoints
-
-    @catch_attribute_exception(default=_ArenaTypeSkeleton.resourcePoints)
-    def getResourcePoints(self):
-        return self._arenaType.resourcePoints
-
-    @catch_attribute_exception(default=_ArenaTypeSkeleton.repairPoints)
-    def getRepairPoints(self):
-        return self._arenaType.repairPoints
 
     @catch_attribute_exception(default=_ArenaTypeSkeleton.maxTeamsInArena)
     def getMaxTeamsOnArena(self):
@@ -318,9 +290,6 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isEventBattle(self):
         return self._guiType == _GUI_TYPE.EVENT_BATTLES
 
-    def isEventBattlesTwo(self):
-        return self._guiType == _GUI_TYPE.EVENT_BATTLES_2
-
     def isFalloutBattle(self):
         return self._guiType in _GUI_TYPE.FALLOUT_RANGE
 
@@ -370,15 +339,6 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
 
     def clear(self):
         self._bonusType = _BONUS_TYPE.UNKNOWN
-
-    def hasFlags(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.FLAG_MECHANICS)
-
-    def hasResourcePoints(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.RESOURCE_POINTS)
-
-    def hasRepairPoints(self):
-        return _CAPS.checkAny(self._bonusType, _CAPS.REPAIR_MECHANICS)
 
     def hasRage(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.RAGE_MECHANICS)
@@ -522,15 +482,6 @@ class _ClientArenaVisitor(IClientArenaVisitor):
 
     def isArenaInWaiting(self):
         return self.getArenaPeriod() == _PERIOD.WAITING
-
-    def hasFlags(self):
-        return self._bonus.hasFlags() and self._type.getFlagSpawnPoints()
-
-    def hasResourcePoints(self):
-        return self._bonus.hasResourcePoints() and self._type.getResourcePoints()
-
-    def hasRepairPoints(self):
-        return self._bonus.hasRepairPoints() and self._type.getRepairPoints()
 
     def hasRage(self):
         return self._bonus.hasRage()

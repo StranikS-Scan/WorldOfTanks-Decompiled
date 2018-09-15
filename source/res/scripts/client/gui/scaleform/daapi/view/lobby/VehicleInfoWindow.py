@@ -49,7 +49,6 @@ class VehicleInfoWindow(VehicleInfoMeta):
              'vehicleLevel': vehicle.level,
              'vehicleNation': vehicle.nationID,
              'vehicleElite': vehicle.isElite,
-             'vehicleEvent': True if 'event_battles' in vehicle.tags else False,
              'vehicleType': vehicle.type,
              'propsData': [ {'name': n,
                            'value': v} for n, v in paramsList ],

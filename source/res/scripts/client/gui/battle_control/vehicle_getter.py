@@ -12,24 +12,13 @@ def hasTurretRotator(vDesc):
         result = True
         tags = vDesc.type.tags
         if tags & {'SPG', 'AT-SPG'}:
-            if vDesc.turrets[0].gun.turretYawLimits is not None and vDesc.hull.fakeTurrets.get('battle', ()):
+            if vDesc.gun.turretYawLimits is not None and vDesc.hull.fakeTurrets.get('battle', ()):
                 result = False
         return result
 
 
-def hasSecondaryTurretRotator(vDesc):
-    if vDesc is None:
-        return False
-    else:
-        tags = vDesc.type.tags
-        return True if tags & {'multi_turret'} else False
-
-
-def getYawLimits(vDesc, turretIndex=0):
-    if vDesc is None:
-        return
-    else:
-        return vDesc.turrets[turretIndex].gun.turretYawLimits if len(vDesc.turrets) > turretIndex else None
+def getYawLimits(vDesc):
+    return None if vDesc is None else vDesc.gun.turretYawLimits
 
 
 def hasYawLimits(vDesc):
@@ -37,9 +26,7 @@ def hasYawLimits(vDesc):
 
 
 def getVehicleIndicatorType(vDesc):
-    if vDesc.type.id == (4, 4):
-        return 'B1TANK'
-    elif vDesc is None:
+    if vDesc is None:
         return VEHICLE_INDICATOR_TYPE.DEFAULT
     else:
         iType = VEHICLE_INDICATOR_TYPE.DEFAULT
@@ -58,7 +45,7 @@ def getAutoRotationFlag(vDesc):
     :return: one of AUTO_ROTATION_FLAG.*.
     """
     flag = AUTO_ROTATION_FLAG.IGNORE_IN_UI
-    if hasYawLimits(vDesc) and not vDesc.isMultiTurret:
+    if hasYawLimits(vDesc):
         aih = avatar_getter.getInputHandler()
         if aih is None or aih.getAutorotation():
             flag = AUTO_ROTATION_FLAG.TURN_ON

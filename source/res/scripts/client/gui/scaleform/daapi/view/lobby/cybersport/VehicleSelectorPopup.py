@@ -69,11 +69,10 @@ class VehicleSelectorPopup(VehicleSelectorPopupMeta, VehicleSelectorBase):
         self.as_setFiltersDataS(filters)
 
     def updateData(self):
-        compatiblePredicate = lambda vo: vo.get('enabled') and 'event_battles' not in self.itemsCache.items.getItemByCD(vo['intCD']).tags
         if not self.getFilters().get('compatibleOnly', True) or self.__vehicles is None:
-            vehicleVOs = self._updateData(self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY), compatiblePredicate)
+            vehicleVOs = self._updateData(self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY))
         else:
-            vehicleVOs = self._updateData(self.__vehicles, compatiblePredicate)
+            vehicleVOs = self._updateData(self.__vehicles)
         if self.__selectedVehicles is not None:
             vehicleGetter = self.itemsCache.items.getItemByCD
             selected = [ makeVehicleVO(vehicleGetter(int(item))) for item in self.__selectedVehicles ]

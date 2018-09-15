@@ -60,7 +60,7 @@ class BattleBoosterBlockTooltipData(BlocksTooltipData):
             if simplifiedBlock:
                 items.append(formatters.packBuildUpBlockData(simplifiedBlock, gap=textGap, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-14, bottom=1), stretchBg=True))
             if statsConfig.vehicle.equipment.battleBoosterConsumables[0] is not None:
-                comparator = params_helper.artifactRemovedComparator(statsConfig.vehicle, module, statsConfig.slotIdx)
+                comparator = params_helper.artifactRemovedComparator(statsConfig.vehicle, self.item, statsConfig.slotIdx)
                 simplifiedBlock = SimplifiedStatsBlockConstructor(module, paramsConfig, leftPadding, rightPadding, stockParams, comparator).construct()
                 if simplifiedBlock:
                     replaceBlock = BattleBoosterReplaceBlockConstructor(module, statsConfig, valueWidth, leftPadding).construct()

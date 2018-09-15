@@ -27,8 +27,6 @@ from items.components.shared_components import i18n
 from shared_utils import findFirst
 from skeletons.gui.server_events import IEventsCache
 from gui.server_events.awards_formatters import AWARDS_SIZES
-from halloween_shared import HALLOWEEN_QUEST_PREFIX, HALLOWEEN_REWARD_QUEST_PREFIX, HALLOWEEN_ACHIEVEMENT_PREFIX
-import operator
 AwardsRibbonInfo = namedtuple('AwardsRibbonInfo', ['awardForCompleteText',
  'isAwardForCompleteVisible',
  'awardReceivedText',
@@ -183,9 +181,6 @@ class MissionAwardAbstract(AwardAbstract):
         return False
 
     def isPersonal(self):
-        return False
-
-    def isHalloweenQuest(self):
         return False
 
     def getAwards(self):
@@ -452,82 +447,10 @@ class MissionAward(MissionAwardAbstract):
         return getAwardsWindowBonuses(bonuses)
 
     def handleNextButton(self):
-        if self._proxyEvent is not None:
-            self._proxyEvent()
-        return
+        self._proxyEvent()
 
     def __getMissionsCount(self):
         return len(self._eventsCache.getQuests(lambda q: q.isAvailable()[0] and q.getType() not in constants.EVENT_TYPE.SHARED_QUESTS and not q.isCompleted()))
-
-
-class HalloweenAchievementMissionAward(MissionAward):
-
-    def getWindowTitle(self):
-        return _ms('#menu:awardWindow/title/specialAchievement')
-
-    def getBackgroundImage(self):
-        pass
-
-    def getDescription(self):
-        return text_styles.promoTitle('#menu:awardWindow/specialAchievement/header')
-
-    def getMainStatusText(self):
-        return text_styles.success('#achievements:' + self._quest.getID() + '_notification')
-
-    def getNextButtonText(self):
-        return _ms('#battle_results:team/medalHeader/header')
-
-    def getNextButtonTooltip(self):
-        return None
-
-
-class HalloweenMissionAward(MissionAward):
-
-    def __init__(self, quest, ctx, bonus_data, proxyEvent):
-        super(HalloweenMissionAward, self).__init__(quest, ctx, proxyEvent)
-        self._bonus_data = bonus_data
-        self.isHalloweenRewardBox = self._quest.getID().startswith(HALLOWEEN_REWARD_QUEST_PREFIX)
-
-    def getWindowTitle(self):
-        return _ms('#menu:awardWindow/title/taskComplete')
-
-    def getBackgroundImage(self):
-        return '../maps/icons/quests/awards/halloween_reward_box_bg.png' if self.isHalloweenRewardBox else '../maps/icons/quests/awards/halloween_mission_success_bg.png'
-
-    def getRibbonImage(self):
-        pass
-
-    def getDescription(self):
-        return text_styles.promoTitle('#menu:awardWindow/halloweenMission/rewardOpened') if self.isHalloweenRewardBox else text_styles.promoTitle('#menu:awardWindow/mission/complete')
-
-    def getMainStatusText(self):
-        return text_styles.success('#menu:awardWindow/halloweenMission/awardsGranted') if self.isHalloweenRewardBox or not self._quest.getDescription() else text_styles.success(self._quest.getDescription())
-
-    def getNextButtonText(self):
-        return _ms('#menu:awardWindow/halloweenMission/closeButton') if self.isHalloweenRewardBox else _ms('#menu:awardWindow/halloweenMission/nextButton')
-
-    def getNextButtonTooltip(self):
-        return None if self.isHalloweenRewardBox else makeTooltip('#menu:awardWindow/halloweenMission/awardsGranted', '#menu:awardWindow/halloweenMission/nextButton')
-
-    def getAwards(self):
-        if self.isHalloweenRewardBox:
-            bonuses = self.getHalloweenBonuses()
-        else:
-            bonuses = getMissionInfoData(self._quest).getSubstituteBonuses()
-        return getAwardsWindowBonuses(bonuses)
-
-    def isHalloweenQuest(self):
-        return not self.isHalloweenRewardBox
-
-    def getHalloweenBonuses(self):
-        from bonuses import getBonuses, compareBonuses
-        result = []
-        for name, value in self._bonus_data.iteritems():
-            bonus = getBonuses(self._quest, name, value, False)
-            if bonus is not None and bonus:
-                result.append(bonus[0])
-
-        return sorted(result, cmp=compareBonuses, key=operator.methodcaller('getName'))
 
 
 class PersonalMissionAward(MissionAward):

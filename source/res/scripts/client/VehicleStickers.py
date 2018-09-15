@@ -261,27 +261,19 @@ class VehicleStickers(object):
             componentStickers.stickers.setAlpha(alpha)
 
     show = property(lambda self: self.__show, __setShow)
+    COMPONENT_NAMES = ((TankPartNames.HULL, TankPartNames.HULL), (TankPartNames.TURRET, TankPartNames.TURRET), (TankPartNames.GUN, TankNodeNames.GUN_INCLINATION))
     __INSIGNIA_NODE_NAME = 'G'
 
     def __init__(self, vehicleDesc, insigniaRank=0):
-        self.__showEmblemsOnGun = vehicleDesc.turrets[0].turret.showEmblemsOnGun
+        self.__showEmblemsOnGun = vehicleDesc.turret.showEmblemsOnGun
         self.__defaultAlpha = vehicleDesc.type.emblemsAlpha
         self.__show = True
-        self.__animateGunInsignia = vehicleDesc.turrets[0].gun.animateEmblemSlots
+        self.__animateGunInsignia = vehicleDesc.gun.animateEmblemSlots
         self.__currentInsigniaRank = insigniaRank
-        self.componentNames = [(TankPartNames.HULL, TankPartNames.HULL), (TankPartNames.TURRET, TankPartNames.TURRET), (TankPartNames.GUN, TankNodeNames.GUN_INCLINATION)]
-        componentSlots = [(TankPartNames.HULL, vehicleDesc.hull.emblemSlots),
-         (TankPartNames.GUN if self.__showEmblemsOnGun else TankPartNames.TURRET, vehicleDesc.turrets[0].turret.emblemSlots),
+        componentSlots = ((TankPartNames.HULL, vehicleDesc.hull.emblemSlots),
+         (TankPartNames.GUN if self.__showEmblemsOnGun else TankPartNames.TURRET, vehicleDesc.turret.emblemSlots),
          (TankPartNames.TURRET if self.__showEmblemsOnGun else TankPartNames.GUN, []),
-         ('gunInsignia', vehicleDesc.turrets[0].gun.emblemSlots)]
-        for turretIndex in xrange(1, len(vehicleDesc.turrets)):
-            turretName = '%s%d' % (TankPartNames.ADDITIONAL_TURRET, turretIndex)
-            gunName = '%s%d' % (TankPartNames.ADDITIONAL_GUN, turretIndex)
-            componentSlots.append((gunName if self.__showEmblemsOnGun else turretName, vehicleDesc.turrets[turretIndex].turret.emblemSlots))
-            self.componentNames.append((turretName, turretName))
-            componentSlots.append((turretName if self.__showEmblemsOnGun else gunName, []))
-            self.componentNames.append((gunName, TankNodeNames.GUN_INCLINATION))
-
+         ('gunInsignia', vehicleDesc.gun.emblemSlots))
         self.__stickers = {}
         for componentName, emblemSlots in componentSlots:
             modelStickers = ModelStickers(vehicleDesc, emblemSlots, componentName == TankPartNames.HULL, self.__currentInsigniaRank)
@@ -291,7 +283,7 @@ class VehicleStickers(object):
         return self.__currentInsigniaRank
 
     def attach(self, compoundModel, isDamaged, showDamageStickers, isDetachedTurret=False):
-        for componentName, attachNodeName in self.componentNames:
+        for componentName, attachNodeName in VehicleStickers.COMPONENT_NAMES:
             idx = DetachedTurretPartNames.getIdx(componentName) if isDetachedTurret else TankPartNames.getIdx(componentName)
             node = compoundModel.node(attachNodeName)
             if node is None:

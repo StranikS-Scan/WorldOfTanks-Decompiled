@@ -22,6 +22,8 @@ def _readBadges(xmlPath):
             value = dict(item.value)
             if 'weight' not in value:
                 value['weight'] = -1.0
+            if 'type' not in value:
+                value['type'] = 0
             value['name'] = item.name
             result[value['id']] = value
         except:

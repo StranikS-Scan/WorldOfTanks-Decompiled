@@ -8,7 +8,8 @@ from gui import SystemMessages
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.LobbyPageMeta import LobbyPageMeta
-from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.framework.entities.View import View, ViewKey
+from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
@@ -26,7 +27,7 @@ from skeletons.gui.game_control import IIGRController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 
-class _LobbySubViewsCtrl(object):
+class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
     """
     The class encapsulate the logic related to controlling of lobby subviews loading.
     It's responsible for showing the Waiting pop-up when lobby subviews are being loaded.
@@ -53,66 +54,27 @@ class _LobbySubViewsCtrl(object):
      VIEW_ALIAS.BATTLE_QUEUE,
      VIEW_ALIAS.LOBBY_ACADEMY,
      RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS,
-     RANKEDBATTLES_ALIASES.RANKED_BATTLES_BROWSER_VIEW,
-     VIEW_ALIAS.LEVIATHAN_PREVIEW,
-     VIEW_ALIAS.HALLOWEEN_BATTLE_SELECTOR)
+     RANKEDBATTLES_ALIASES.RANKED_BATTLES_BROWSER_VIEW)
 
     def __init__(self):
-        super(_LobbySubViewsCtrl, self).__init__()
-        self.__loaderManager = None
+        super(_LobbySubViewsLifecycleHandler, self).__init__([ ViewKey(alias) for alias in self.__SUB_VIEWS ])
         self.__loadingSubViews = set()
         self.__isWaitingVisible = False
-        return
 
-    def start(self, loaderManager):
-        self.__loaderManager = weakref.proxy(loaderManager)
-        self.__loaderManager.onViewLoadInit += self.__onViewLoadInit
-        self.__loaderManager.onViewLoaded += self.__onViewLoaded
-        self.__loaderManager.onViewLoadCanceled += self.__onViewLoadCanceled
-        self.__loaderManager.onViewLoadError += self.__onViewLoadError
+    def onViewLoading(self, view):
+        if view.key not in self.__loadingSubViews:
+            self.__loadingSubViews.add(view.key)
+            self.__invalidateWaitingStatus()
 
-    def stop(self):
-        if self.__loaderManager is not None:
-            self.__loaderManager.onViewLoadInit -= self.__onViewLoadInit
-            self.__loaderManager.onViewLoaded -= self.__onViewLoaded
-            self.__loaderManager.onViewLoadCanceled -= self.__onViewLoadCanceled
-            self.__loaderManager.onViewLoadError -= self.__onViewLoadError
-            self.__loaderManager = None
-        self.__loadingSubViews.clear()
-        self.__invalidateWaitingStatus()
-        return
+    def onViewCreated(self, view):
+        if view.key in self.__loadingSubViews:
+            self.__loadingSubViews.remove(view.key)
+            self.__invalidateWaitingStatus()
 
-    def __onViewLoadInit(self, view):
-        if view is not None and view.settings is not None:
-            alias = view.settings.alias
-            if alias in self.__SUB_VIEWS and alias not in self.__loadingSubViews:
-                self.__loadingSubViews.add(alias)
-                self.__invalidateWaitingStatus()
-        return
-
-    def __onViewLoaded(self, view, *args, **kwargs):
-        if view is not None and view.settings is not None:
-            alias = view.settings.alias
-            if alias in self.__SUB_VIEWS and alias in self.__loadingSubViews:
-                self.__loadingSubViews.remove(alias)
-                self.__invalidateWaitingStatus()
-        return
-
-    def __onViewLoadCanceled(self, key, item):
-        if item is not None and item.pyEntity is not None:
-            alias = item.pyEntity.alias
-            if alias in self.__SUB_VIEWS and alias in self.__loadingSubViews:
-                self.__loadingSubViews.remove(alias)
-                self.__invalidateWaitingStatus()
-        return
-
-    def __onViewLoadError(self, key, msg, item):
-        if item is not None and item.pyEntity is not None:
-            alias = item.pyEntity.settings.alias
-            if alias in self.__SUB_VIEWS and alias in self.__loadingSubViews:
-                self.__loadingSubViews.remove(alias)
-                self.__invalidateWaitingStatus()
-        return
+    def onViewDestroyed(self, view):
+        if view.key in self.__loadingSubViews:
+            self.__loadingSubViews.remove(view.key)
+            self.__invalidateWaitingStatus()
 
     def __invalidateWaitingStatus(self):
         if self.__loadingSubViews:
@@ -136,7 +98,7 @@ class LobbyView(LobbyPageMeta):
     def __init__(self, ctx=None):
         super(LobbyView, self).__init__(ctx)
         self.__currIgrType = constants.IGR_TYPE.NONE
-        self.__subViesCtrl = _LobbySubViewsCtrl()
+        self.__viewLifecycleWatcher = ViewLifecycleWatcher()
         self._entityEnqueueCancelCallback = None
         return
 
@@ -154,7 +116,8 @@ class LobbyView(LobbyPageMeta):
         g_playerEvents.onVehicleBecomeElite += self._onVehicleBecomeElite
         g_playerEvents.onEntityCheckOutEnqueued += self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer += self._onAccountBecomeNonPlayer
-        self.__subViesCtrl.start(self.app.loaderManager)
+        viewLifecycleHandler = _LobbySubViewsLifecycleHandler()
+        self.__viewLifecycleWatcher.start(self.app.containerManager, [viewLifecycleHandler])
         self.igrCtrl.onIgrTypeChanged += self.__onIgrTypeChanged
         battlesCount = self.itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
         self.lobbyContext.updateBattlesCount(battlesCount)
@@ -167,7 +130,7 @@ class LobbyView(LobbyPageMeta):
 
     def _dispose(self):
         self.igrCtrl.onIgrTypeChanged -= self.__onIgrTypeChanged
-        self.__subViesCtrl.stop()
+        self.__viewLifecycleWatcher.stop()
         g_playerEvents.onVehicleBecomeElite -= self._onVehicleBecomeElite
         g_playerEvents.onEntityCheckOutEnqueued -= self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer -= self._onAccountBecomeNonPlayer

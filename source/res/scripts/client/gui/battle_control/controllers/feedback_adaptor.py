@@ -46,7 +46,7 @@ class BattleFeedbackAdaptor(IBattleController):
     Class adapts some events from Avatar, Vehicle, ... to GUI event (FEEDBACK_EVENT_ID) to display
     response on player actions.
     """
-    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleMarkerUpdateDistance', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onMinimapFeedbackReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache')
+    __slots__ = ('onPlayerFeedbackReceived', 'onPlayerSummaryFeedbackReceived', 'onPostmortemSummaryReceived', 'onVehicleMarkerAdded', 'onVehicleMarkerRemoved', 'onVehicleFeedbackReceived', 'onMinimapVehicleAdded', 'onMinimapVehicleRemoved', 'onRoundFinished', 'onDevelopmentInfoSet', 'onStaticMarkerAdded', 'onStaticMarkerRemoved', 'onMinimapFeedbackReceived', '__arenaDP', '__visible', '__pending', '__attrs', '__weakref__', '__arenaVisitor', '__devInfo', '__eventsCache')
 
     def __init__(self, setup):
         super(BattleFeedbackAdaptor, self).__init__()
@@ -62,7 +62,6 @@ class BattleFeedbackAdaptor(IBattleController):
         self.onPostmortemSummaryReceived = Event.Event()
         self.onVehicleMarkerAdded = Event.Event()
         self.onVehicleMarkerRemoved = Event.Event()
-        self.onVehicleMarkerUpdateDistance = Event.Event()
         self.onVehicleFeedbackReceived = Event.Event()
         self.onMinimapVehicleAdded = Event.Event()
         self.onMinimapVehicleRemoved = Event.Event()
@@ -70,6 +69,7 @@ class BattleFeedbackAdaptor(IBattleController):
         self.onDevelopmentInfoSet = Event.Event()
         self.onStaticMarkerAdded = Event.Event()
         self.onStaticMarkerRemoved = Event.Event()
+        self.onRoundFinished = Event.Event()
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.FEEDBACK
@@ -198,6 +198,9 @@ class BattleFeedbackAdaptor(IBattleController):
             self.onVehicleMarkerRemoved(vehicleID)
         self.onMinimapVehicleRemoved(vehicleID)
         return
+
+    def setRoundFinished(self, winningTeam, reason):
+        self.onRoundFinished(winningTeam, reason)
 
     def setVehicleState(self, vehicleID, eventID, isImmediate=False):
         if vehicleID != avatar_getter.getPlayerVehicleID():

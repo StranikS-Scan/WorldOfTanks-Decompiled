@@ -99,18 +99,19 @@ class PersonalMissionsAwardComposer(CardAwardComposer):
     def getFormattedBonuses(self, bonuses, size=AWARDS_SIZES.SMALL, gap=0, isObtained=False, areTokensPawned=False, pawnCost=0, obtainedImage='', obtainedImageOffset=0):
         if areTokensPawned:
             newBonuses = []
-            context = {'pawnCost': pawnCost}
+            context = {'pawnCost': pawnCost,
+             'areTokensPawned': True}
             hasFreeTokens = False
             for bonus in bonuses:
                 if bonus.getName() == 'freeTokens':
                     value = {PERSONAL_QUEST_FREE_TOKEN_NAME: {'count': bonus.getCount() + pawnCost}}
-                    newBonuses.append(FreeTokensBonus(value, True, ctx=context))
+                    newBonuses.append(FreeTokensBonus(value, ctx=context))
                     hasFreeTokens = True
                 newBonuses.append(bonus)
 
             if not hasFreeTokens:
                 value = {PERSONAL_QUEST_FREE_TOKEN_NAME: {'count': pawnCost}}
-                newBonuses.append(FreeTokensBonus(value, True, ctx=context))
+                newBonuses.append(FreeTokensBonus(value, ctx=context))
             bonuses = newBonuses
         preformattedBonuses = self.getPreformattedBonuses(bonuses)
         return self._packBonuses(preformattedBonuses, size, gap, isObtained, obtainedImage, obtainedImageOffset)
@@ -128,6 +129,8 @@ class PersonalMissionsAwardComposer(CardAwardComposer):
         data.update(isObtained=isObtained)
         data.update(obtainedImage=obtainedImage)
         data.update(obtainedImageOffset=obtainedImageOffset)
+        data.update(areTokensPawned=bonus.areTokensPawned)
+        data.update(tokensPawnedImage=RES_ICONS.MAPS_ICONS_LIBRARY_LOCKINDICATOR if bonus.areTokensPawned else '')
         return data
 
 

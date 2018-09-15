@@ -643,7 +643,7 @@ class SoundGroups(object):
         else:
             vehicleTypeDescriptor = BigWorld.player().vehicleTypeDescriptor
         if vehicleTypeDescriptor is not None:
-            __ceilLess = vehicleTypeDescriptor.turrets[0].turret.ceilless
+            __ceilLess = vehicleTypeDescriptor.turret.ceilless
         if mode == 0:
             WWISE.WW_setRTCPGlobal('RTPC_ext_viewPlayMode', 1)
             if __ceilLess is True:

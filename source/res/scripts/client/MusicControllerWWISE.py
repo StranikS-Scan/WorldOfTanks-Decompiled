@@ -105,7 +105,7 @@ class MusicController(object):
 
         def replace(self, event, eventId, playNew):
             if self.__event is not None:
-                if self.__event.name == event.name:
+                if self.__event.name == event.name and self.__event.isPlaying:
                     playNew = False
                 else:
                     self.stop()

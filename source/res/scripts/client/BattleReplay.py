@@ -380,7 +380,6 @@ class BattleReplay():
          CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE,
          CommandMapping.CMD_CM_POSTMORTEM_SELF_VEHICLE,
          CommandMapping.CMD_RADIAL_MENU_SHOW,
-         CommandMapping.CMD_SHOOT_SECONDARY,
          CommandMapping.CMD_RELOAD_PARTIAL_CLIP), key) and isDown and not isCursorVisible:
             suppressCommand = True
         elif cmdMap.isFiredList((CommandMapping.CMD_STOP_UNTIL_FIRE,
@@ -419,54 +418,37 @@ class BattleReplay():
     def getGunRotatorTargetPoint(self):
         return self.__replayCtrl.gunRotatorTargetPoint
 
-    def setConsumablesPosition(self, turretIndex, pos, dir=Math.Vector3(1, 1, 1)):
-        if turretIndex == 0:
-            self.__replayCtrl.gunMarkerPosition = pos
-            self.__replayCtrl.gunMarkerDirection = dir
-        else:
-            self.__replayCtrl.secondaryGunMarkerPosition = pos
-            self.__replayCtrl.secondaryGunMarkerDirection = dir
+    def setConsumablesPosition(self, pos, dir=Math.Vector3(1, 1, 1)):
+        self.__replayCtrl.gunMarkerPosition = pos
+        self.__replayCtrl.gunMarkerDirection = dir
 
-    def setGunMarkerParams(self, diameter, pos, dir, turretIndex):
+    def setGunMarkerParams(self, diameter, pos, dir):
         controlMode = self.getControlMode()
         if controlMode != 'mapcase':
-            if turretIndex == 0:
-                self.__replayCtrl.gunMarkerDiameter = diameter
-                self.__replayCtrl.gunMarkerPosition = pos
-                self.__replayCtrl.gunMarkerDirection = dir
-            else:
-                self.__replayCtrl.secondaryGunMarkerDiameter = diameter
-                self.__replayCtrl.secondaryGunMarkerPosition = pos
-                self.__replayCtrl.secondaryGunMarkerDirection = dir
+            self.__replayCtrl.gunMarkerDiameter = diameter
+            self.__replayCtrl.gunMarkerPosition = pos
+            self.__replayCtrl.gunMarkerDirection = dir
 
-    def getGunMarkerParams(self, defaultPos, defaultDir, turretIndex):
-        if turretIndex == 0:
-            diameter = self.__replayCtrl.gunMarkerDiameter
-            dir = self.__replayCtrl.gunMarkerDirection
-            pos = self.__replayCtrl.gunMarkerPosition
-        else:
-            diameter = self.__replayCtrl.secondaryGunMarkerDiameter
-            dir = self.__replayCtrl.secondaryGunMarkerDirection
-            pos = self.__replayCtrl.secondaryGunMarkerPosition
+    def getGunMarkerParams(self, defaultPos, defaultDir):
+        diameter = self.__replayCtrl.gunMarkerDiameter
+        dir = self.__replayCtrl.gunMarkerDirection
+        pos = self.__replayCtrl.gunMarkerPosition
         if dir == Math.Vector3(0, 0, 0):
             pos = defaultPos
             dir = defaultDir
         return (diameter, pos, dir)
 
-    def getGunMarkerPos(self, turretIndex):
-        return self.__replayCtrl.gunMarkerPosition if turretIndex == 0 else self.__replayCtrl.secondaryGunMarkerPosition
+    def getGunMarkerPos(self):
+        return self.__replayCtrl.gunMarkerPosition
 
     def getEquipmentId(self):
         return self.__equipmentId
 
-    def setArcadeGunMarkerSize(self, size, turretIndex):
-        if turretIndex == 0:
-            self.__replayCtrl.setArcadeGunMarkerSize(size)
-        else:
-            self.__replayCtrl.setSecondaryArcadeGunMarkerSize(size)
+    def setArcadeGunMarkerSize(self, size):
+        self.__replayCtrl.setArcadeGunMarkerSize(size)
 
-    def getArcadeGunMarkerSize(self, turretIndex):
-        return self.__replayCtrl.getArcadeGunMarkerSize() if turretIndex == 0 else self.__replayCtrl.getSecondaryArcadeGunMarkerSize()
+    def getArcadeGunMarkerSize(self):
+        return self.__replayCtrl.getArcadeGunMarkerSize()
 
     def setSPGGunMarkerParams(self, dispersionAngle, size):
         self.__replayCtrl.setSPGGunMarkerParams((dispersionAngle, size))
@@ -480,32 +462,23 @@ class BattleReplay():
     def getAimClipPosition(self):
         return self.__replayCtrl.getAimClipPosition()
 
-    def setTurretYaw(self, value, turretIndex):
-        if turretIndex == 0:
-            self.__replayCtrl.turretYaw = value
-        else:
-            self.__replayCtrl.secondaryTurretYaw = value
+    def setTurretYaw(self, value):
+        self.__replayCtrl.turretYaw = value
 
-    def getTurretYaw(self, turretIndex):
-        return self.__replayCtrl.turretYaw if turretIndex == 0 else self.__replayCtrl.secondaryTurretYaw
+    def getTurretYaw(self):
+        return self.__replayCtrl.turretYaw
 
-    def setGunPitch(self, value, turretIndex):
-        if turretIndex == 0:
-            self.__replayCtrl.gunPitch = value
-        else:
-            self.__replayCtrl.secondaryGunPitch = value
+    def setGunPitch(self, value):
+        self.__replayCtrl.gunPitch = value
 
-    def getGunPitch(self, turretIndex):
-        return self.__replayCtrl.gunPitch if turretIndex == 0 else self.__replayCtrl.secondaryGunPitch
+    def getGunPitch(self):
+        return self.__replayCtrl.gunPitch
 
-    def getGunReloadAmountLeft(self, turretIndex):
-        return self.__replayCtrl.getGunReloadAmountLeft() if turretIndex == 0 else self.__replayCtrl.getSecondaryGunReloadAmountLeft()
+    def getGunReloadAmountLeft(self):
+        return self.__replayCtrl.getGunReloadAmountLeft()
 
-    def setGunReloadTime(self, turretIndex, startTime, duration):
-        if turretIndex == 0:
-            self.__replayCtrl.setGunReloadTime(startTime, duration)
-        else:
-            self.__replayCtrl.setSecondaryGunReloadTime(startTime, duration)
+    def setGunReloadTime(self, startTime, duration):
+        self.__replayCtrl.setGunReloadTime(startTime, duration)
 
     def resetArenaPeriod(self):
         if not self.isRecording:
@@ -552,15 +525,13 @@ class BattleReplay():
             if newSpeed != self.__replayCtrl.playbackSpeed:
                 if newSpeed == 0:
                     if player.gunRotator is not None:
-                        turretIndex = 0
-                        self.__gunWasLockedBeforePause = player.gunRotator.isLocked(turretIndex)
-                        player.gunRotator.lock(True, turretIndex)
+                        self.__gunWasLockedBeforePause = player.gunRotator._VehicleGunRotator__isLocked
+                        player.gunRotator.lock(True)
                     self.__showInfoMessage('replayPaused')
                     isPaused = True
                 else:
                     if player.gunRotator is not None:
-                        turretIndex = 0
-                        player.gunRotator.lock(self.__gunWasLockedBeforePause, turretIndex)
+                        player.gunRotator.lock(self.__gunWasLockedBeforePause)
                     newSpeedStr = self.__playbackSpeedModifiersStr[self.__playbackSpeedIdx]
                     self.__showInfoMessage('replaySpeedChange', {'speed': newSpeedStr})
                     isPaused = False
@@ -708,8 +679,7 @@ class BattleReplay():
             controlMode = self.getControlMode() if forceControlMode is None else forceControlMode
             preferredPos = self.getGunRotatorTargetPoint()
             if controlMode == 'mapcase':
-                turretIndex = 0
-                _, preferredPos, _ = self.getGunMarkerParams(preferredPos, Math.Vector3(0.0, 0.0, 1.0), turretIndex)
+                _, preferredPos, _ = self.getGunMarkerParams(preferredPos, Math.Vector3(0.0, 0.0, 1.0))
             player.inputHandler.onControlModeChanged(controlMode, camMatrix=BigWorld.camera().matrix, preferredPos=preferredPos, saveZoom=False, saveDist=False, equipmentID=self.__equipmentId)
             return
 
@@ -850,7 +820,7 @@ class BattleReplay():
             personals = modifiedResults.get('personal', None)
             if personals is not None:
                 for personal in personals.itervalues():
-                    for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'goldReplay', 'freeXPReplay', 'avatarDamageEventList', 'crystalReplay'):
+                    for field in ('damageEventList', 'xpReplay', 'creditsReplay', 'tmenXPReplay', 'goldReplay', 'crystalReplay', 'freeXPReplay', 'avatarDamageEventList'):
                         personal[field] = None
 
             modifiedResults = (modifiedResults, self.__getArenaVehiclesInfo(), BigWorld.player().arena.statistics)

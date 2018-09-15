@@ -10,6 +10,9 @@ class TeamHealthbarMechanic(object):
         self.__lastTeamHealthPercentage = None
         return
 
+    def handleKey(self, isDown, key, mods):
+        pass
+
     def onBecomePlayer(self):
         self.__enabled = BONUS_CAPS.checkAny(self.arenaBonusType, BONUS_CAPS.TEAM_HEALTH_BAR)
         if not self.__enabled:

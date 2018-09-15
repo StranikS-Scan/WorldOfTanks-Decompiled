@@ -265,5 +265,5 @@ class BattlesCountFormatter(_CumulativeResultFormatter):
         elif self.__hasPostBattleConditions:
             descr = i18n.makeString(QUESTS.MISSIONDETAILS_CONDITIONS_BATTLES, total=condition.getTotalValue())
         else:
-            descr = condition.getUserString()
+            descr = i18n.makeString(QUESTS.DETAILS_DOSSIER_BATTLESCOUNT)
         return packDescriptionField(descr)

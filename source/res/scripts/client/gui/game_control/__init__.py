@@ -25,7 +25,6 @@ def getGameControllersConfig(manager):
     from gui.game_control.clan_lock_controller import ClanLockController as _ClanLocks
     from gui.game_control.events_notifications import EventsNotificationsController as _EventNotifications
     from gui.game_control.fallout_controller import FalloutController as _Fallout
-    from gui.game_control.event_battles_controller import EventBattlesController as _EventBattles
     from gui.game_control.prmp_controller import EncyclopediaController as _Exncyclopedia
     from gui.game_control.relogin_controller import ReloginController as _Relogin
     from gui.game_control.restore_contoller import RestoreController as _Restore
@@ -67,7 +66,6 @@ def getGameControllersConfig(manager):
     _config(_interface.IAwardController, _Awards())
     _config(_interface.IBoostersController, _Boosters())
     _config(_interface.IFalloutController, _Fallout())
-    _config(_interface.IEventBattlesController, _EventBattles())
     _config(_interface.IScreenCastController, _ScreenCast())
     _config(_interface.IClanLockController, _ClanLocks())
     _config(_interface.IVehicleComparisonBasket, _VehComparison())

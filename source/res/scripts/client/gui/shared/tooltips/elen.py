@@ -17,7 +17,7 @@ from gui.prb_control.entities.listener import IGlobalListener
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from gui.event_boards.event_boards_items import EVENT_DATE_TYPE, FLAG_TOOLTIP_BY_EVENT_ID
+from gui.event_boards.event_boards_items import EVENT_DATE_TYPE
 from gui.prb_control import prb_getters
 from skeletons.gui.shared import IItemsCache
 
@@ -73,7 +73,7 @@ class ElenPreviewTooltipData(BlocksTooltipData, IGlobalListener):
             else:
                 flagIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_FLAG_ICON)
                 text = '{} {} {} {}'.format(flagIcon, text_styles.main(_ms(msgText)), text_styles.stats(time), text_styles.stats(timeName))
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(_ms(TOOLTIPS.HANGAR_ELEN_HEADER_NAME, name=currentEvent.getName())), img=FLAG_TOOLTIP_BY_EVENT_ID.get(eventID, FLAG_TOOLTIP_BY_EVENT_ID['event_1']), txtPadding=formatters.packPadding(top=22), txtOffset=20, txtGap=-8, desc=text)
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(_ms(TOOLTIPS.HANGAR_ELEN_HEADER_NAME, name=currentEvent.getName())), img=currentEvent.getKeyArtSmall(), txtPadding=formatters.packPadding(top=22), txtOffset=20, txtGap=-8, desc=text)
 
     def _getPrimeTimes(self, primeTimes):
 
@@ -114,10 +114,13 @@ class ElenPreviewTooltipData(BlocksTooltipData, IGlobalListener):
         wrongBattleType = self.prbEntity.getEntityType() != battleType
         if battleType == constants.ARENA_GUI_TYPE.RANDOM:
             battleTypeText = TOOLTIPS.HANGAR_ELEN_BOTTOM_WRONGBATTLETYPE_RANDOM
+            battleTypeBodyText = TOOLTIPS.HANGAR_ELEN_BOTTOM_ALLPERIPHERY_BODY
         elif battleType == constants.ARENA_GUI_TYPE.RANKED:
             battleTypeText = TOOLTIPS.HANGAR_ELEN_BOTTOM_WRONGBATTLETYPE_RANKED
+            battleTypeBodyText = TOOLTIPS.HANGAR_ELEN_BOTTOM_ALLPERIPHERY_NOTRANDOM_BODY
         else:
             battleTypeText = ''
+            battleTypeBodyText = ''
         inSquadState = self.prbDispatcher.getFunctionalState().isInUnit(constants.PREBATTLE_TYPE.SQUAD)
         if inSquadState:
             unit = prb_getters.getUnit(safe=True)
@@ -133,7 +136,7 @@ class ElenPreviewTooltipData(BlocksTooltipData, IGlobalListener):
             return formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'alignText', {'align': 'center',
              'message': text_styles.critical(_ms(battleTypeText))}), padding=formatters.packPadding(top=3, bottom=16))
         return formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'alignText', {'align': 'center',
-         'message': text_styles.critical(_ms(TOOLTIPS.HANGAR_ELEN_BOTTOM_WRONGSQUADSTATE))}), padding=formatters.packPadding(top=3, bottom=16)) if wrongSquadState else formatters.packImageTextBlockData(title=text_styles.neutral(_ms(TOOLTIPS.HANGAR_ELEN_BOTTOM_ALLPERIPHERY_HEADER)), desc=text_styles.standard(_ms(TOOLTIPS.HANGAR_ELEN_BOTTOM_ALLPERIPHERY_BODY)), padding=formatters.packPadding(left=20, right=20, top=3, bottom=16))
+         'message': text_styles.critical(_ms(TOOLTIPS.HANGAR_ELEN_BOTTOM_WRONGSQUADSTATE))}), padding=formatters.packPadding(top=3, bottom=16)) if wrongSquadState else formatters.packImageTextBlockData(title='', desc=text_styles.standard(_ms(battleTypeBodyText)), padding=formatters.packPadding(left=20, right=20, top=3, bottom=16))
 
 
 class BadgeTooltipData(BlocksTooltipData):

@@ -10,6 +10,7 @@ from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING
 from gui import SystemMessages
 from gui.app_loader import g_appLoader
 from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
+from gui.prb_control.prb_helpers import BadgesHelper
 from gui.prb_control import prb_getters
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.items import prb_seqs
@@ -48,6 +49,7 @@ _PrbInviteData = namedtuple('_PrbInviteData', ' '.join(['clientID',
  'creator',
  'creatorDBID',
  'creatorClanAbbrev',
+ 'creatorBadges',
  'receiver',
  'receiverDBID',
  'receiverClanAbbrev',
@@ -66,16 +68,20 @@ class PrbInviteWrapper(_PrbInviteData):
     connectionMgr = dependency.descriptor(IConnectionManager)
 
     @staticmethod
-    def __new__(cls, clientID=-1, createTime=None, type=0, comment=str(), creator=str(), creatorDBID=-1, creatorClanAbbrev=None, receiver=str(), receiverDBID=-1, receiverClanAbbrev=None, state=None, count=0, peripheryID=0, prebattleID=0, extraData=None, alwaysAvailable=None, ownerDBID=-1, expiryTime=None, id=-1, **kwargs):
+    def __new__(cls, clientID=-1, createTime=None, type=0, comment=str(), creator=str(), creatorDBID=-1, creatorClanAbbrev=None, creatorBadges=None, receiver=str(), receiverDBID=-1, receiverClanAbbrev=None, state=None, count=0, peripheryID=0, prebattleID=0, extraData=None, alwaysAvailable=None, ownerDBID=-1, expiryTime=None, id=-1, **kwargs):
         if ownerDBID < 0:
             ownerDBID = creatorDBID
-        result = _PrbInviteData.__new__(cls, clientID, createTime, type, comment, creator, creatorDBID, creatorClanAbbrev, receiver, receiverDBID, receiverClanAbbrev, state, count, peripheryID, prebattleID, extraData or {}, alwaysAvailable, ownerDBID, expiryTime, id)
+        bagdesHelper = BadgesHelper(creatorBadges)
+        result = _PrbInviteData.__new__(cls, clientID, createTime, type, comment, creator, creatorDBID, creatorClanAbbrev, bagdesHelper, receiver, receiverDBID, receiverClanAbbrev, state, count, peripheryID, prebattleID, extraData or {}, alwaysAvailable, ownerDBID, expiryTime, id)
         result.showAt = 0
         return result
 
     @property
     def senderFullName(self):
-        return self.lobbyContext.getPlayerFullName(self.creator, clanAbbrev=self.creatorClanAbbrev, pDBID=self.creatorDBID, regionCode=self.lobbyContext.getRegionCode(self.creatorDBID))
+        fullName = self.lobbyContext.getPlayerFullName(self.creator, clanAbbrev=self.creatorClanAbbrev, pDBID=self.creatorDBID, regionCode=self.lobbyContext.getRegionCode(self.creatorDBID))
+        if fullName != '':
+            fullName = '{0}{1}'.format(self.getCreatorBadgeImgStr(), fullName)
+        return fullName
 
     @property
     def receiverFullName(self):
@@ -93,6 +99,12 @@ class PrbInviteWrapper(_PrbInviteData):
             if self._isCurrentPrebattle(dispatcher.getEntity()):
                 return True
         return False
+
+    def getCreatorBadgeID(self):
+        return self.creatorBadges.getBadgeID()
+
+    def getCreatorBadgeImgStr(self, size=24, vspace=-6):
+        return self.creatorBadges.getBadgeImgStr(size, vspace)
 
     def getCreateTime(self):
         return int(time_utils.makeLocalServerTime(self.createTime)) if self.createTime is not None else None
@@ -177,10 +189,10 @@ class PrbInviteWrapper(_PrbInviteData):
 class PrbInvitationWrapper(PrbInviteWrapper):
 
     @staticmethod
-    def __new__(cls, clientID=-1, id=-1, type=0, status=None, sentAt=None, expiresAt=None, ownerID=-1, senderDBID=-1, receiverDBID=-1, info=None, sender=str(), senderClanAbbrev=None, receiver=str(), receiverClanAbbrev=None, **kwargs):
+    def __new__(cls, clientID=-1, id=-1, type=0, status=None, sentAt=None, expiresAt=None, ownerID=-1, senderDBID=-1, receiverDBID=-1, info=None, sender=str(), senderBadges=None, senderClanAbbrev=None, receiver=str(), receiverClanAbbrev=None, **kwargs):
         info = info or {}
         peripheryID, prbID = cls.getPrbInfo(info)
-        result = PrbInviteWrapper.__new__(cls, clientID, sentAt, type, info.get('comment', ''), sender, senderDBID, senderClanAbbrev, receiver, receiverDBID, receiverClanAbbrev, status, 1, peripheryID, prbID, info, False, ownerID, expiresAt, id, **kwargs)
+        result = PrbInviteWrapper.__new__(cls, clientID, sentAt, type, info.get('comment', ''), sender, senderDBID, senderClanAbbrev, senderBadges, receiver, receiverDBID, receiverClanAbbrev, status, 1, peripheryID, prbID, info, False, ownerID, expiresAt, id, **kwargs)
         return result
 
     @classmethod

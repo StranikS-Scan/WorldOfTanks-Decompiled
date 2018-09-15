@@ -74,6 +74,9 @@ class CombatEquipmentManager(object):
     def onBecomePlayer(self):
         pass
 
+    def handleKey(self, isDown, key, mods):
+        pass
+
     def onBecomeNonPlayer(self):
         for area in self.__selectedAreas.itervalues():
             area.destroy()

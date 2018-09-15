@@ -31,12 +31,21 @@ from items import vehicles, tankmen
 from shared_utils import makeTupleByDict
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
-from halloween_shared import SUPPLY_DROP_LEVELS, SUPPLY_DROP_TOKEN_PREFIX, HALLOWEEN_QUEST_PREFIX, HALLOWEEN_MARATHON_QUEST_PREFIX
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
 
 def _getAchievement(block, record, value):
-    factory = getAchievementFactory((block, record))
-    return factory.create(value=value)
+    if block == ACHIEVEMENT_BLOCK.RARE:
+        record = value
+        value = 0
+    try:
+        achieve = getAchievementFactory((block, record)).create(value=value)
+        if achieve.isAvailableInQuest():
+            return achieve
+    except Exception:
+        LOG_ERROR('There is error while getting bonus dossier record name')
+        LOG_CURRENT_EXCEPTION()
+
+    return None
 
 
 def _isAchievement(block):
@@ -327,6 +336,9 @@ class FreeTokensBonus(TokensBonus):
     def format(self):
         return makeHtmlString('html_templates:lobby/quests/bonuses', self._name, {'value': self.formatValue()})
 
+    def areTokensPawned(self):
+        return self.getContext()['areTokensPawned']
+
 
 class CompletionTokensBonus(TokensBonus):
 
@@ -490,49 +502,6 @@ class GoodiesBonus(SimpleBonus):
          'specialArgs': [booster.boosterID]}
 
 
-class SupplyDropBonus(TokensBonus):
-
-    def format(self):
-        from gui.shared.tooltips.quests import _StringTokenBonusFormatter
-        dropLevel = self.__getDropLevel()
-        text = makeHtmlString('html_templates:lobby/quests/{}'.format('bonuses'), 'halloween2017_drop_' + str(dropLevel))
-        otherTokens = _StringTokenBonusFormatter().format(self)
-        for t in otherTokens:
-            text = text + ', ' + t
-
-        return text
-
-    def tier(self):
-        return self.__getDropLevel()
-
-    def getList(self):
-        dropLevel = self.__getDropLevel()
-        return [{'value': '',
-          'itemSource': '../maps/icons/halloween/supplydrops/%i.png' % dropLevel,
-          'valueAtLeft': False,
-          'tooltip': makeTooltip(header=i18n.makeString(TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_TOKENS_AWARD), body=TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_TOKENS_AWARD)}] if dropLevel in SUPPLY_DROP_LEVELS else []
-
-    def hasIconFormat(self):
-        return True
-
-    def isVisualOnly(self):
-        return True
-
-    def isShowInGUI(self):
-        return True
-
-    def getCarouselList(self, isReceived=False, isChristmasFormat=False):
-        dropLevel = self.__getDropLevel()
-        return [{'counter': '',
-          'imgSource': '../maps/icons/halloween/supplydrops/%i.png' % dropLevel,
-          'tooltip': makeTooltip(header=i18n.makeString(TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_TOKENS_AWARD), body=TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_TOKENS_AWARD)}] if dropLevel in SUPPLY_DROP_LEVELS else []
-
-    def __getDropLevel(self):
-        for id, _ in self._value.iteritems():
-            if id.startswith(SUPPLY_DROP_TOKEN_PREFIX):
-                return int(id[len(SUPPLY_DROP_TOKEN_PREFIX):])
-
-
 class VehiclesBonus(SimpleBonus):
     DEFAULT_CREW_LVL = 50
 
@@ -617,7 +586,10 @@ class VehiclesBonus(SimpleBonus):
 
     @classmethod
     def getTmanRoleLevel(cls, vehInfo):
-        return calculateRoleLevel(vehInfo.get('crewLvl', cls.DEFAULT_CREW_LVL), vehInfo.get('crewFreeXP', 0)) if 'noCrew' not in vehInfo else None
+        if 'noCrew' not in vehInfo:
+            if 'crewLvl' in vehInfo:
+                return calculateRoleLevel(vehInfo.get('crewLvl', cls.DEFAULT_CREW_LVL), vehInfo.get('crewFreeXP', 0))
+        return None
 
     @staticmethod
     def getRentDays(vehInfo):
@@ -737,13 +709,9 @@ class DossierBonus(SimpleBonus):
         result = []
         for (block, record), value in self.getRecords().iteritems():
             if filterFunc(block):
-                if block == ACHIEVEMENT_BLOCK.RARE:
-                    continue
-                try:
-                    result.append(_getAchievement(block, record, value))
-                except Exception:
-                    LOG_ERROR('There is error while getting bonus dossier record name')
-                    LOG_CURRENT_EXCEPTION()
+                achieve = _getAchievement(block, record, value)
+                if achieve is not None:
+                    result.append(achieve)
 
         return result
 
@@ -1002,8 +970,7 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
             _ET.TOKEN_QUEST: BattleTokensBonus,
             _ET.PERSONAL_QUEST: BattleTokensBonus,
             _ET.PERSONAL_MISSION: personalMissionsTokensFactory,
-            _ET.ELEN_QUEST: BattleTokensBonus,
-            'halloween2017': SupplyDropBonus},
+            _ET.ELEN_QUEST: BattleTokensBonus},
  'dossier': {'default': DossierBonus,
              _ET.PERSONAL_MISSION: PersonalMissionDossierBonus},
  'tankmen': {'default': TankmenBonus,
@@ -1060,9 +1027,6 @@ def getBonuses(quest, name, value, isCompensation=False):
     key = [name, questType]
     ctx = {}
     if questType in (_ET.BATTLE_QUEST, _ET.TOKEN_QUEST, _ET.PERSONAL_QUEST) and name == 'tokens':
-        qID = quest.getID()
-        if qID.startswith(HALLOWEEN_QUEST_PREFIX) or qID.startswith(HALLOWEEN_MARATHON_QUEST_PREFIX):
-            return [SupplyDropBonus('halloween2017', value, isCompensation)]
         parentsName = quest.getParentsName()
         for n, v in value.iteritems():
             if n in parentsName:
@@ -1072,7 +1036,8 @@ def getBonuses(quest, name, value, isCompensation=False):
 
     elif questType == _ET.PERSONAL_MISSION:
         ctx.update({'operationID': quest.getOperationID(),
-         'chainID': quest.getChainID()})
+         'chainID': quest.getChainID(),
+         'areTokensPawned': False})
     return _initFromTree(key, name, value, isCompensation, ctx)
 
 

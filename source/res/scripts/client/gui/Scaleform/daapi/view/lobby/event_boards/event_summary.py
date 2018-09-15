@@ -35,6 +35,8 @@ _ICON_BY_PARAMETER = {_op.ORIGINALXP: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICON
  _op.XP: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_EXP2_POPUP,
  _op.DAMAGEDEALT: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_DAMAG2_POPUP,
  _op.DAMAGEASSISTED: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_ASSIST2_POPUP}
+ICON_ALPHA_USED_IN_CALCULATION = 1.0
+ICON_ALPHA_NOT_USED_IN_CALCULATION = 0.2
 
 def _getParameterValue(op, info):
     methodName = _PARAMETER_VALUE_GETTER[op]
@@ -67,6 +69,7 @@ class _Summary(object):
          'description2': self._getDescription2(),
          'status': status,
          'isTable': self.isTable(),
+         'isSquad': self._event.getIsSquadAllowed(),
          'statusTooltip': self._getStatusTooltip()}
 
     def getExperienceBlock(self):
@@ -113,12 +116,12 @@ class _Summary(object):
         eventType = self._event.getType()
         items = self.itemsCache.items
         desc = self._descriptionByType(eventType)
-        if eventType is _et.VEHICLE:
+        if eventType == _et.VEHICLE:
             vehicle = items.getItemByCD(self._value)
             value = formatVehicleNameWithTypeIcon(vehicle, 'html_templates:lobby/elen/summary')
-        elif eventType is _et.LEVEL:
+        elif eventType == _et.LEVEL:
             value = int2roman(self._value)
-        elif eventType is _et.CLASS:
+        elif eventType == _et.CLASS:
             value = vehicleTypeText(self._value)
         else:
             value = getNationTextWithIcon(self._value)
@@ -140,8 +143,10 @@ class _Summary(object):
     def _getStatusTooltip(self):
         leaderboard = self._leaderboard
         recalculationInterval = leaderboard.getRecalculationInterval()
+        if recalculationInterval is None:
+            recalculationInterval = 0
         interval = int(recalculationInterval / ONE_MINUTE)
-        return makeTooltip(body=_ms(EVENT_BOARDS.SUMMARY_STATUS_TOOLTIP, interval=interval))
+        return makeTooltip(body=_ms(TOOLTIPS.SUMMARY_STATUS_TOOLTIP, interval=interval))
 
 
 class _SummaryMax(_Summary):
@@ -251,19 +256,36 @@ class _SummaryTable(_Summary):
             vehicle = items.getItemByCD(vehicleCd)
             timeValue = info.getBattleTs()
             date = formatTimeAndDate(timeValue)
-            icon = RES_ICONS.MAPS_ICONS_EVENTBOARDS_BATTLE_TYPE_PLATOON if info.getIsInSquad() else None
+            methodType = info.getMethodType()
+            if methodType != _cm.SUMMSEQN or methodType == _cm.SUMMSEQN and info.getUsedInCalculations():
+                isEnable = True
+                iconAlpha = ICON_ALPHA_USED_IN_CALCULATION
+                date = text_styles.main(date)
+                technicsName = text_styles.main(vehicle.shortUserName)
+                result = text_styles.main(EVENT_BOARDS.summary_result(info.getBattleResult()))
+                platoonIcon = RES_ICONS.MAPS_ICONS_EVENTBOARDS_BATTLE_TYPE_PLATOON
+            else:
+                isEnable = False
+                iconAlpha = ICON_ALPHA_NOT_USED_IN_CALCULATION
+                date = text_styles.disabled(date)
+                technicsName = text_styles.disabled(vehicle.shortUserName)
+                result = text_styles.disabled(EVENT_BOARDS.summary_result(info.getBattleResult()))
+                platoonIcon = RES_ICONS.MAPS_ICONS_EVENTBOARDS_BATTLE_TYPE_PLATOON_DARK
+            icon = platoonIcon if info.getIsInSquad() else None
             technics = formatVehicleNationAndTypeIcon(vehicle, 'html_templates:lobby/elen/summary')
             player = {'icon': icon,
              'date': date,
              'technics': technics,
              'vehicle': vehicle.iconSmall,
-             'technicsName': vehicle.shortUserName,
-             'result': EVENT_BOARDS.summary_result(info.getBattleResult()),
+             'technicsName': technicsName,
+             'result': result,
              'value1': str(_getParameterValue(params[0], info)),
              'value2': str(_getParameterValue(params[1], info)),
              'value3': str(_getParameterValue(params[2], info)),
              'value4': str(info.getFrags()),
-             'rendererLinkage': EVENTBOARDS_ALIASES.BASE_PLAYER_BATTLE_RENDERER}
+             'rendererLinkage': EVENTBOARDS_ALIASES.BASE_PLAYER_BATTLE_RENDERER,
+             'isEnable': isEnable,
+             'iconAlpha': iconAlpha}
             data.append(player)
 
         return {'tableDP': data}
@@ -288,10 +310,17 @@ class _SummarySumSeqN(_SummaryTable):
         super(_SummarySumSeqN, self).__init__(event, leaderboard, excelItem, EVENT_BOARDS.summary_description_sumseqn, _SUM_ICON_BY_PARAMETER)
 
 
+class _SummarySumMSeqN(_SummaryTable):
+
+    def __init__(self, event, leaderboard, excelItem):
+        super(_SummarySumMSeqN, self).__init__(event, leaderboard, excelItem, EVENT_BOARDS.summary_description_sumseqn, _SUM_ICON_BY_PARAMETER)
+
+
 summaryByMethod = {_cm.MAX: _SummaryMax,
  _cm.SUMN: _SummarySumN,
  _cm.SUMSEQN: _SummarySumSeqN,
- _cm.SUMALL: _SummarySumAll}
+ _cm.SUMALL: _SummarySumAll,
+ _cm.SUMMSEQN: _SummarySumMSeqN}
 
 def getSummaryInfoData(event, leaderboard, data):
     method = event.getMethod()

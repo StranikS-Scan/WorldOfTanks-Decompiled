@@ -56,6 +56,9 @@ class SettingsCache(ISettingsCache):
     def setVersion(self, value):
         self.__intSettings.setSetting(VERSION, value)
 
+    def delSettings(self, settings):
+        self.__intSettings.delSettings(settings)
+
     def __invalidateData(self, callback=lambda *args: None):
 
         def cbWrapper(*args):

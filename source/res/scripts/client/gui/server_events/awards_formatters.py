@@ -23,6 +23,12 @@ class AWARDS_SIZES(CONST_CONTAINER):
     BIG = 'big'
 
 
+class COMPLETION_TOKENS_SIZES(CONST_CONTAINER):
+    SMALL = 'small'
+    BIG = 'big'
+    HUGE = 'huge'
+
+
 class LABEL_ALIGN(CONST_CONTAINER):
     RIGHT = 'right'
     CENTER = 'center'
@@ -101,8 +107,7 @@ def getDefaultFormattersMap():
      'customizations': CustomizationsBonusFormatter(),
      'goodies': GoodiesBonusFormatter(),
      'items': ItemsBonusFormatter(),
-     'dossier': DossierBonusFormatter(),
-     'halloween2017': SupplyDropBonusFormatter()}
+     'dossier': DossierBonusFormatter()}
 
 
 def getMisssionsFormattersMap():
@@ -154,7 +159,7 @@ def formatCountLabel(count):
     return 'x{}'.format(count) if count > 1 else ''
 
 
-_PreformattedBonus = namedtuple('_PreformattedBonus', 'bonusName, label userName images tooltip labelFormatter specialArgs specialAlias isSpecial isCompensation align highlightType overlayType')
+_PreformattedBonus = namedtuple('_PreformattedBonus', 'bonusName, label userName images tooltip labelFormatter areTokensPawned specialArgs specialAlias isSpecial isCompensation align highlightType overlayType')
 
 class PreformattedBonus(_PreformattedBonus):
 
@@ -172,6 +177,7 @@ PreformattedBonus.__new__.__defaults__ = (None,
  None,
  None,
  None,
+ False,
  None,
  None,
  False,
@@ -305,7 +311,7 @@ class CompletionTokensBonusFormatter(SimpleBonusFormatter):
     @classmethod
     def _getImages(cls, imageID):
         result = {}
-        for size in AWARDS_SIZES.ALL():
+        for size in COMPLETION_TOKENS_SIZES.ALL():
             result[size] = RES_ICONS.getBonusIcon(size, imageID)
 
         return result
@@ -327,13 +333,14 @@ class CompletionTokensBonusFormatter(SimpleBonusFormatter):
 class FreeTokensBonusFormatter(SimpleBonusFormatter):
 
     def _format(self, bonus):
-        if bonus.isCompensation():
+        areTokensPawned = bonus.areTokensPawned()
+        if areTokensPawned:
             specialAlias = TOOLTIPS_CONSTANTS.FREE_SHEET_USED
             specialArgs = []
         else:
             specialAlias = TOOLTIPS_CONSTANTS.FREE_SHEET
             specialArgs = []
-        return [PreformattedBonus(bonusName=bonus.getName(), userName=self._getUserName(bonus), label=formatCountLabel(bonus.getCount()), images=self._getImages(bonus.getName()), labelFormatter=self._getLabelFormatter(bonus), align=LABEL_ALIGN.RIGHT, isCompensation=bonus.isCompensation(), isSpecial=True, specialAlias=specialAlias, specialArgs=specialArgs)]
+        return [PreformattedBonus(bonusName=bonus.getName(), userName=self._getUserName(bonus), label=formatCountLabel(bonus.getCount()), images=self._getImages(bonus.getName()), labelFormatter=self._getLabelFormatter(bonus), align=LABEL_ALIGN.RIGHT, isCompensation=bonus.isCompensation(), isSpecial=True, specialAlias=specialAlias, specialArgs=specialArgs, areTokensPawned=areTokensPawned)]
 
     @classmethod
     def _getImages(cls, imageID):
@@ -466,38 +473,6 @@ class VehiclesBonusFormatter(SimpleBonusFormatter):
                 return True
 
         return False
-
-
-class SupplyDropBonusFormatter(TokenBonusFormatter):
-
-    def format(self, bonus):
-        result = []
-        tier = bonus.tier()
-        tooltip = self._buildSupplyDropBonusTooltip(tier)
-        result.append(PreformattedBonus(images=self._getImages(tier), tooltip=tooltip, isSpecial=False, isCompensation=False))
-        furtherTokens = super(SupplyDropBonusFormatter, self).format(bonus)
-        for t in furtherTokens:
-            result.append(t)
-
-        return result
-
-    @classmethod
-    def _buildSupplyDropBonusTooltip(cls, tier):
-        return makeTooltip(TOOLTIPS.quests_bonuses_halloween_all(tier, 'header'), TOOLTIPS.quests_bonuses_halloween_all(tier, 'body'))
-
-    @classmethod
-    def _getImages(cls, tier):
-        result = {}
-        for size in AWARDS_SIZES.ALL():
-            image = SupplyDropBonusFormatter.getHalloweenSupplyDropIcon(size, tier)
-            result[size] = image
-
-        return result
-
-    @classmethod
-    def getHalloweenSupplyDropIcon(cls, size, tier):
-        outcome = '../maps/icons/quests/bonuses/{}/halloween_drop_{}.png'.format(size, tier)
-        return outcome
 
 
 class DossierBonusFormatter(SimpleBonusFormatter):

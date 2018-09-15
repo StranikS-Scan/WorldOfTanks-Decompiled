@@ -31,7 +31,6 @@ from helpers.EffectMaterialCalculation import calcEffectMaterialIndex
 import material_kinds
 import DataLinks
 import Vehicular
-from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CODEPOINT_WARNING, LOG_DEBUG, LOG_CURRENT_EXCEPTION
 _VEHICLE_APPEAR_TIME = 0.2
 _ROOT_NODE_NAME = 'V'
 _GUN_RECOIL_NODE_NAME = 'G'
@@ -70,7 +69,6 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     isUnderwater = property(lambda self: self.waterSensor.isUnderWater)
     waterHeight = property(lambda self: self.waterSensor.waterHeight)
     damageState = property(lambda self: self.__currentDamageState)
-    hidden = False
     frameTimeStamp = 0
     rightTrackScroll = property(lambda self: self.__rightTrackScroll)
     leftTrackScroll = property(lambda self: self.__leftTrackScroll)
@@ -112,15 +110,12 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     terrainMatKindSensor = ComponentDescriptor()
     waterSensor = ComponentDescriptor()
     peripheralsController = ComponentDescriptor()
-    additionalTurretsRotator = ComponentDescriptor()
 
     def __init__(self):
         CallbackDelayer.__init__(self)
         ComponentSystem.__init__(self)
         self.turretMatrix = Math.WGAdaptiveMatrixProvider()
-        self.turretMatrixList = [self.turretMatrix]
         self.gunMatrix = Math.WGAdaptiveMatrixProvider()
-        self.additionalGunRecoils = []
         self.__vehicle = None
         self.__filter = None
         self.__originalFilter = None
@@ -175,7 +170,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             camouflageDesc = customization['camouflages'].get(camouflageId)
             if camouflageDesc is not None and camouflageDesc['texture'] != '':
                 out.append(camouflageDesc['texture'])
-                for tgDesc in (typeDescriptor.turrets[0].turret, typeDescriptor.turrets[0].gun):
+                for tgDesc in (typeDescriptor.turret, typeDescriptor.gun):
                     exclMask = tgDesc.camouflage.exclusionMask
                     if exclMask is not None and exclMask != '':
                         out.append(exclMask)
@@ -183,9 +178,6 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__vID = vID
         self.__typeDesc = typeDescriptor
         self.__isTurretDetached = isTurretDetached
-        for _ in range(1, len(typeDescriptor.turrets)):
-            self.turretMatrixList.append(Math.WGAdaptiveMatrixProvider())
-
         return out
 
     def setVehicle(self, vehicle):
@@ -380,15 +372,11 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         return
 
     def destroy(self):
-        self.additionalGunRecoils = []
-        self.__trackScrollCtl = None
         if self.__vehicle is not None:
             self.deactivate()
         self.__destroySystems()
         ComponentSystem.destroy(self)
         self.__typeDesc = None
-        if self.additionalTurretsRotator is not None:
-            self.additionalTurretsRotator.destroy()
         if self.__boundEffects is not None:
             self.__boundEffects.destroy()
         self.__vehicleStickers = None
@@ -400,10 +388,6 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         return
 
     def start(self, prereqs=None):
-        if prereqs is None:
-            self.__typeDesc.chassis.hitTester.loadBspModel()
-            self.__typeDesc.hull.hitTester.loadBspModel()
-            self.__typeDesc.turrets[0].turret.hitTester.loadBspModel()
         for hitTester in self.__typeDesc.getHitTesters():
             hitTester.loadBspModel()
 
@@ -518,21 +502,15 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
                     self.__crashedTracksCtrl.receiveShotImpulse(dir, impulse)
             return
 
-    def recoil(self, gunIndex=0):
+    def recoil(self):
         gunNode = self.compoundModel.node(TankNodeNames.GUN_INCLINATION)
         impulseDir = Math.Matrix(gunNode).applyVector(Math.Vector3(0, 0, -1))
-        impulseValue = self.__typeDesc.turrets[gunIndex].gun.impulse
+        impulseValue = self.__typeDesc.gun.impulse
         self.receiveShotImpulse(impulseDir, impulseValue)
-        if gunIndex == 0:
-            self.__gunRecoil.recoil()
-        else:
-            additionalGunIndex = gunIndex - 1
-            if 0 <= additionalGunIndex < len(self.additionalGunRecoils):
-                gunRecoil = self.additionalGunRecoils[additionalGunIndex]
-                gunRecoil.recoil()
+        self.gunRecoil.recoil()
         node = self.compoundModel.node('HP_gunFire')
         gunPos = Math.Matrix(node).translation
-        BigWorld.player().inputHandler.onVehicleShaken(self.__vehicle, gunPos, impulseDir, self.__typeDesc.turrets[gunIndex].shot.shell.caliber, ShakeReason.OWN_SHOT_DELAYED)
+        BigWorld.player().inputHandler.onVehicleShaken(self.__vehicle, gunPos, impulseDir, self.__typeDesc.shot.shell.caliber, ShakeReason.OWN_SHOT_DELAYED)
 
     def addCrashedTrack(self, isLeft):
         if not self.__vehicle.isAlive():
@@ -558,7 +536,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
 
     def __onModelsRefresh(self, modelState, resourceList):
         assert self.damageState.isCurrentModelDamaged
-        if BattleReplay.isFinished() or self.hidden:
+        if BattleReplay.isFinished():
             return
         else:
             assert modelState == self.__currentDamageState.modelState
@@ -572,21 +550,10 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.__compoundModel = newCompoundModel
             self.__isTurretDetached = vehicle.isTurretDetached
             self.__prepareSystemsForDamagedVehicle(vehicle, self.__isTurretDetached)
-            if self.__currentDamageState.isCurrentModelDamaged:
-                fashions = VehiclePartsTuple(None, None, None, None)
-                self.suspensionSound = None
-                self.swingingAnimator = None
-                self.gunRecoil = None
-                if self.additionalTurretsRotator is not None:
-                    self.additionalTurretsRotator.destroy()
-                    self.additionalTurretsRotator = None
-                self.leveredSuspension = None
-                self.__setFashions(fashions, self.__isTurretDetached)
-                self.__destroySystems()
             self.__setupModels()
             self.setVehicle(vehicle)
             self.activate()
-            self.__reattachComponents(self.__compoundModel)
+            self.__reattachComponents(self.__compoundModel, self.__weaponEnergy)
             self.__filter.syncGunAngles(prevTurretYaw, prevGunPitch)
             model_assembler.setupTurretRotations(self)
             return
@@ -595,7 +562,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__isAlive = not self.__currentDamageState.isCurrentModelDamaged
         if self.__isAlive:
             _, gunLength = self.__computeVehicleHeight()
-            self.__weaponEnergy = gunLength * self.__typeDesc.turrets[0].shot.shell.caliber
+            self.__weaponEnergy = gunLength * self.__typeDesc.shot.shell.caliber
             self.__setupHavok()
         if MAX_DISTANCE > 0:
             transform = self.__typeDesc.chassis.AODecals[0]
@@ -608,7 +575,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         if hkm is not None:
             node.attach(hkm)
         node = self.compoundModel.node(TankPartNames.TURRET)
-        hkm = BigWorld.wg_createHKAttachment(node, vDesc.turrets[0].turret.hitTester.getBspModel())
+        hkm = BigWorld.wg_createHKAttachment(node, vDesc.turret.hitTester.getBspModel())
         if hkm is not None:
             node.attach(hkm)
         node = self.compoundModel.node(TankPartNames.CHASSIS)
@@ -616,21 +583,19 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         if hkm is not None:
             node.attach(hkm)
         node = self.compoundModel.node(TankPartNames.GUN)
-        hkm = BigWorld.wg_createHKAttachment(node, vDesc.turrets[0].gun.hitTester.getBspModel())
+        hkm = BigWorld.wg_createHKAttachment(node, vDesc.gun.hitTester.getBspModel())
         if hkm is not None:
             node.attach(hkm)
         return
 
-    def __reattachComponents(self, model):
+    def __reattachComponents(self, model, weaponEnergy):
         self.__boundEffects.reattachTo(model)
         if self.__effectsPlayer is not None:
             self.__effectsPlayer.reattachTo(model)
         if self.engineAudition is not None:
+            self.engineAudition.setWeaponEnergy(weaponEnergy)
             self.engineAudition.attachToModel(model)
         return
-
-    def getTurretMatrix(self, turretIndex):
-        return self.turretMatrixList[turretIndex] if turretIndex < len(self.turretMatrixList) else None
 
     def __playEffect(self, kind, *modifs):
         self.__stopEffects()
@@ -709,17 +674,9 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         camouflageKind = arenaType.vehicleCamouflageKind
         return vDesc.camouflages[camouflageKind]
 
-    def hide(self):
-        self.changeDrawPassVisibility(False)
-        self.__stopEffects()
-        self.hidden = True
-
     def __stopEffects(self):
         if self.__effectsPlayer is not None:
             self.__effectsPlayer.stop()
-        if self.customEffectManager is not None:
-            self.customEffectManager.enable(False, EffectSettings.SETTING_DUST)
-            self.customEffectManager.enable(False, EffectSettings.SETTING_EXHAUST)
         self.__effectsPlayer = None
         return
 
@@ -882,23 +839,19 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
 
     def __computeVehicleHeight(self):
         desc = self.__typeDesc
-        turretBBox = desc.turrets[0].turret.hitTester.bbox
-        gunBBox = desc.turrets[0].gun.hitTester.bbox
+        turretBBox = desc.turret.hitTester.bbox
+        gunBBox = desc.gun.hitTester.bbox
         hullBBox = desc.hull.hitTester.bbox
         hullTopY = desc.chassis.hullPosition[1] + hullBBox[1][1]
         turretTopY = desc.chassis.hullPosition[1] + desc.hull.turretPositions[0][1] + turretBBox[1][1]
-        gunTopY = desc.chassis.hullPosition[1] + desc.hull.turretPositions[0][1] + desc.turrets[0].turret.gunPosition[1] + gunBBox[1][1]
+        gunTopY = desc.chassis.hullPosition[1] + desc.hull.turretPositions[0][1] + desc.turret.gunPosition[1] + gunBBox[1][1]
         return (max(hullTopY, max(turretTopY, gunTopY)), math.fabs(gunBBox[1][2] - gunBBox[0][2]))
 
-    def setupGunMatrixTargets(self, target=None, turretIndex=0):
+    def setupGunMatrixTargets(self, target=None):
         if target is None:
             target = self.__filter
-        if turretIndex < len(self.turretMatrixList) and self.turretMatrixList[turretIndex] is not None:
-            if not isinstance(target, BigWorld.WGVehicleFilter):
-                self.turretMatrixList[turretIndex].target = target.getTurretMatrix(turretIndex)
-        if turretIndex == 0:
-            self.turretMatrix.target = target.turretMatrix
-            self.gunMatrix.target = target.gunMatrix
+        self.turretMatrix.target = target.turretMatrix
+        self.gunMatrix.target = target.gunMatrix
         return
 
     def onFriction(self, otherID, frictionPoint, state):

@@ -25,8 +25,6 @@ CAROUSEL_FILTER_2 = 'CAROUSEL_FILTER_2'
 CAROUSEL_FILTER_CLIENT_1 = 'CAROUSEL_FILTER_CLIENT_1'
 MISSION_SELECTOR_FILTER = 'MISSION_SELECTOR_FILTER'
 PM_SELECTOR_FILTER = 'PM_SELECTOR_FILTER'
-FALLOUT_CAROUSEL_FILTER_1 = 'FALLOUT_CAROUSEL_FILTER_1'
-FALLOUT_CAROUSEL_FILTER_2 = 'FALLOUT_CAROUSEL_FILTER_2'
 RANKED_CAROUSEL_FILTER_1 = 'RANKED_CAROUSEL_FILTER_1'
 RANKED_CAROUSEL_FILTER_2 = 'RANKED_CAROUSEL_FILTER_2'
 RANKED_CAROUSEL_FILTER_CLIENT_1 = 'RANKED_CAROUSEL_FILTER_CLIENT_1'
@@ -192,39 +190,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'favorite': False,
                                           'bonus': False},
                RANKED_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
-               FALLOUT_CAROUSEL_FILTER_1: {'ussr': False,
-                                           'germany': False,
-                                           'usa': False,
-                                           'china': False,
-                                           'france': False,
-                                           'uk': False,
-                                           'japan': False,
-                                           'czech': False,
-                                           'sweden': False,
-                                           'poland': False,
-                                           'lightTank': False,
-                                           'mediumTank': False,
-                                           'heavyTank': False,
-                                           'SPG': False,
-                                           'AT-SPG': False,
-                                           'level_1': False,
-                                           'level_2': False,
-                                           'level_3': False,
-                                           'level_4': False,
-                                           'level_5': False,
-                                           'level_6': False,
-                                           'level_7': False,
-                                           'level_8': False,
-                                           'level_9': False,
-                                           'level_10': False},
-               FALLOUT_CAROUSEL_FILTER_2: {'premium': False,
-                                           'elite': False,
-                                           'igr': False,
-                                           'rented': True,
-                                           'event': True,
-                                           'gameMode': False,
-                                           'favorite': False,
-                                           'bonus': False},
                MISSION_SELECTOR_FILTER: {'inventory': False},
                PM_SELECTOR_FILTER: {'inventory': False},
                BARRACKS_FILTER: {'nation': -1,

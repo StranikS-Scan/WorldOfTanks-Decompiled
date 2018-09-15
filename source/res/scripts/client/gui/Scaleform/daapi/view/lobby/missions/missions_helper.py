@@ -508,9 +508,9 @@ class _DetailedMissionInfo(_MissionInfo):
 
     def _getUIDecoration(self):
         """
-        No back decoration for detailed card view, only for simplified card
+        Gets background decoration for mission's detailed view from web
         """
-        pass
+        return self.eventsCache.prefetcher.getMissionDecoration(self.event.getIconID(), DECORATION_SIZES.DETAILS)
 
     def _getInfo(self, statusData, isAvailable, errorMsg, mainQuest=None):
         data = super(_DetailedMissionInfo, self)._getInfo(statusData, isAvailable, errorMsg, mainQuest)
@@ -520,6 +520,20 @@ class _DetailedMissionInfo(_MissionInfo):
          'titleTooltip': self.__getDescription(),
          'dateLabel': statusData.get('dateLabel', ''),
          'bottomStatusText': statusData.get('bottomStatusText', '')})
+        return data
+
+    def _getStatusFields(self, isAvailable, errorMsg):
+        """
+        Gets GUI data for all fields that relates to status
+        """
+        bonusLimit = self.event.bonusCond.getBonusLimit()
+        bonusCount = min(self.event.getBonusCount(), bonusLimit)
+        isLimited = self._isLimited()
+        if self.event.isCompleted():
+            return self._getCompleteStatusFields(isLimited, bonusCount, bonusLimit)
+        data = self._getRegularStatusFields(isLimited, bonusCount, bonusLimit)
+        if not isAvailable:
+            data.update(self._getUnavailableStatusFields(errorMsg))
         return data
 
     def _getCompleteStatusFields(self, isLimited, bonusCount, bonusLimit):
@@ -555,23 +569,18 @@ class _DetailedMissionInfo(_MissionInfo):
         Gets status fields data for unavailable mission state.
         Data used in detailed mission view to display its unavailable state.
         """
-        scheduleLabel = ''
-        dateLabel = ''
-        scheduleTooltip = None
+        result = {'status': MISSIONS_STATES.NOT_AVAILABLE}
         if errorMsg != 'requirement':
-            clockIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_TIMERICON, 16, 16, -2, 8)
             timeLeft = self.event.getNearestActivityTimeLeft()
             if timeLeft is not None:
+                clockIcon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_TIMERICON, 16, 16, -2, 8)
                 startTimeLeft = timeLeft[0]
                 timeStatusText = text_styles.standard(_ms('#quests:missionDetails/status/notAvailable/%s' % errorMsg, time=self._getTillTimeString(startTimeLeft)))
-                dateLabel = text_styles.concatStylesWithSpace(clockIcon, text_styles.error(QUESTS.MISSIONDETAILS_STATUS_WRONGTIME), timeStatusText)
+                result['dateLabel'] = text_styles.concatStylesWithSpace(clockIcon, text_styles.error(QUESTS.MISSIONDETAILS_STATUS_WRONGTIME), timeStatusText)
             if errorMsg in ('invalid_weekday', 'invalid_time_interval'):
-                scheduleLabel = getScheduleLabel()
-                scheduleTooltip = getInvalidTimeIntervalsTooltip(self.event)
-        return {'status': MISSIONS_STATES.NOT_AVAILABLE,
-         'dateLabel': dateLabel,
-         'scheduleOrResetLabel': scheduleLabel,
-         'scheduleTooltip': scheduleTooltip}
+                result['scheduleOrResetLabel'] = getScheduleLabel()
+                result['scheduleTooltip'] = getInvalidTimeIntervalsTooltip(self.event)
+        return result
 
     def _getRegularStatusFields(self, isLimited, bonusCount, bonusLimit):
         """
@@ -703,7 +712,6 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         """
         extraConditions = []
         criteria = REQ_CRITERIA.INVENTORY
-        criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
         criteria |= REQ_CRITERIA.VEHICLE.LEVELS(range(self.event.getVehMinLevel(), constants.MAX_VEHICLE_LEVEL + 1))
         criteria |= REQ_CRITERIA.VEHICLE.CLASSES(self.event.getVehicleClasses())
         return (criteria, extraConditions)

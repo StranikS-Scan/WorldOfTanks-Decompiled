@@ -21,7 +21,7 @@ from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.event_dispatcher import showBattleBoosterBuyDialog
 from helpers import dependency, i18n
 from helpers.i18n import makeString as _ms
-from gui.shared.formatters import text_styles, getItemPricesVO
+from gui.shared.formatters import text_styles, getItemPricesVO, getItemPricesVOWithReason
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared import event_dispatcher as shared_events
@@ -208,12 +208,11 @@ class CommonFittingSelectPopover(FittingSelectPopoverMeta):
 
     def _getTabsData(self):
         return {'tabData': self._TABS,
-         'selectedTab': self._getInitialTabIndex()} if self._TABS is not None and not (self._slotType == FITTING_TYPES.OPTIONAL_DEVICE and self.__vehicle.isEvent) else {}
+         'selectedTab': self._getInitialTabIndex()} if self._TABS is not None else {}
 
     def _getDescText(self):
-        battleType = text_styles.neutral(MENU.FITTINGSELECTPOPOVER_BATTLETYPE)
         currencyName = text_styles.main(MENU.FITTINGSELECTPOPOVER_DESCTEXT_CRYSTAL)
-        result = text_styles.main(i18n.makeString(MENU.FITTINGSELECTPOPOVER_DESCTEXT, currencyName=currencyName, battleType=battleType))
+        result = text_styles.main(i18n.makeString(MENU.FITTINGSELECTPOPOVER_DESCTEXT, currencyName=currencyName))
         return result
 
     def _getCommonData(self):
@@ -256,29 +255,6 @@ class HangarFittingSelectPopover(CommonFittingSelectPopover):
             else:
                 _logicProvider = _HangarLogicProvider(slotType, self.__slotIndex)
             vehicle = g_currentVehicle.item
-        if logicProvider is None:
-            logicProvider = _logicProvider
-        super(HangarFittingSelectPopover, self).__init__(vehicle, logicProvider, ctx)
-        return
-
-    def _getSlotIndex(self):
-        return self.__slotIndex
-
-
-class HangarFittingSelectPopoverMultiTurret(HangarFittingSelectPopover):
-    """
-    Multi-turret-specific implementation of the Fitting Select Popover. Uses multi-turret-specific logic provider.
-    """
-    _TABS = [{'label': MENU.FITTINGSELECTPOPOVERMULTI_MAIN,
-      'id': 'main'}, {'label': MENU.FITTINGSELECTPOPOVERMULTI_SECONDARY,
-      'id': 'secondary'}]
-
-    def __init__(self, ctx=None, logicProvider=None):
-        data_ = ctx['data']
-        slotType = data_.slotType
-        self.__slotIndex = data_.slotIndex
-        _logicProvider = _HangarLogicProviderMultiTurret(slotType, self.__slotIndex)
-        vehicle = g_currentVehicle.item
         if logicProvider is None:
             logicProvider = _logicProvider
         super(HangarFittingSelectPopover, self).__init__(vehicle, logicProvider, ctx)
@@ -537,6 +513,7 @@ class _HangarLogicProvider(PopoverLogicProvider):
         inInventory = module.isInInventory
         isInstalled = module.isInstalled(self._vehicle)
         isBought = inInventory or isInstalled
+        reason = ''
         if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not isInstalled and module.hasSimilarDevicesInstalled(self._vehicle):
             isFit, reason = False, GUI_ITEM_ECONOMY_CODE.ITEM_IS_DUPLICATED
         elif isBought:
@@ -557,104 +534,8 @@ class _HangarLogicProvider(PopoverLogicProvider):
          'disabled': not isFit or isInstalled and not isInstalledInSlot,
          'removeButtonLabel': MENU.MODULEFITS_REMOVENAME,
          'removeButtonTooltip': MENU.MODULEFITS_REMOVETOOLTIP,
-         'itemPrices': getItemPricesVO(itemPrice)})
+         'itemPrices': getItemPricesVOWithReason(reason, itemPrice)})
         return moduleData
-
-
-class _HangarLogicProviderMultiTurret(_HangarLogicProvider):
-
-    def __init__(self, slotType, slotIndex):
-        self.__modulesList = None
-        super(_HangarLogicProviderMultiTurret, self).__init__(slotType, slotIndex)
-        return
-
-    def getSelectedIdx(self):
-        if self.__modulesList is None:
-            self.__modulesList = self._buildList(self._tabIndex)
-        return self._selectedIdx
-
-    def getDevices(self):
-        if self.__modulesList is None:
-            self.__modulesList = self._buildList(self._tabIndex)
-        return self.__modulesList
-
-    def setTab(self, tabIndex):
-        self._tabIndex = tabIndex
-        self._selectedIdx = -1
-        if self.__modulesList is not None:
-            self.__modulesList = self._buildList(tabIndex)
-        return
-
-    def _buildModuleData(self, module, isInstalledInSlot, stats, position=0):
-        itemPrice = module.buyPrices.itemPrice
-        inInventory = module.isInInventory
-        isInstalled = module.isInstalled(self._vehicle)
-        isBought = inInventory or isInstalled
-        if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not isInstalled and module.hasSimilarDevicesInstalled(self._vehicle):
-            isFit, reason = False, GUI_ITEM_ECONOMY_CODE.ITEM_IS_DUPLICATED
-        elif isBought:
-            if module.itemTypeID == GUI_ITEM_TYPE.TURRET:
-                isFit, reason = module.mayInstall(self._vehicle, self._slotIndex, 0, position)
-            else:
-                isFit, reason = module.mayInstall(self._vehicle, self._slotIndex, position)
-            if reason == 'already installed' or isFit:
-                isFit, reason = True, GUI_ITEM_ECONOMY_CODE.UNDEFINED
-        else:
-            isFit, reason = module.mayPurchase(stats['money'])
-            if not isFit:
-                if GUI_ITEM_ECONOMY_CODE.isMoneyError(reason):
-                    isFit = module.mayPurchaseWithExchange(stats['money'], stats['exchangeRate'])
-        if isFit and reason != GUI_ITEM_ECONOMY_CODE.UNLOCK_ERROR:
-            reason = _getInstallReason(module, self._vehicle, reason, self._slotIndex)
-        moduleData = self._buildCommonModuleData(module, reason)
-        moduleData.update({'targetVisible': isBought,
-         'showPrice': not isBought,
-         'isSelected': isInstalledInSlot,
-         'disabled': not isFit or isInstalled and not isInstalledInSlot,
-         'removeButtonLabel': MENU.MODULEFITS_REMOVENAME,
-         'removeButtonTooltip': MENU.MODULEFITS_REMOVETOOLTIP,
-         'itemPrices': getItemPricesVO(itemPrice)})
-        return moduleData
-
-    def _buildList(self, tabIndex=0):
-        modulesList = []
-        typeId = GUI_ITEM_TYPE_INDICES[self._slotType]
-        data = self._getSuitableItems(typeId, tabIndex)
-        currXp = self.itemsCache.items.stats.vehiclesXPs.get(self._vehicle.intCD, 0)
-        stats = {'money': self.itemsCache.items.stats.money,
-         'exchangeRate': self.itemsCache.items.shop.exchangeRate,
-         'currXP': currXp,
-         'totalXP': currXp + self.itemsCache.items.stats.freeXP}
-        for idx, module in enumerate(data):
-            isInstalled = module.isInstalled(self._vehicle, self._slotIndex)
-            if isInstalled:
-                self._selectedIdx = idx
-            moduleData = self._buildModuleData(module, isInstalled, stats, tabIndex)
-            self.__extendByTypeSpecificData(moduleData, module)
-            modulesList.append(moduleData)
-
-        return modulesList
-
-    def __extendByTypeSpecificData(self, moduleData, module):
-        if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
-            _extendByArtefactData(moduleData, module, self._slotIndex)
-        elif module.itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES:
-            _extendByModuleData(moduleData, module, self._vehicle.descriptor)
-        if self._slotType == FITTING_TYPES.OPTIONAL_DEVICE:
-            _extendByOptionalDeviceData(moduleData, module)
-        elif self._slotType == FITTING_TYPES.BOOSTER:
-            _extendByBattleBoosterData(moduleData, module, self._vehicle)
-
-    def _getSuitableItems(self, typeId, tabIndex=0):
-        """
-        Provides required data items by criteria
-        :param typeId: typeId of required items *.GUI_ITEM_TYPE
-        :return: list - [{moduleId: gui.shared.gui_items.FittingItem}, ...]
-        """
-        criteria = REQ_CRITERIA.VEHICLE.SUITABLE([self._vehicle], [typeId], True, tabIndex) | self._getSpecificCriteria(typeId)
-        data = self.itemsCache.items.getItems(typeId, criteria).values()
-        data.sort(reverse=True)
-        return data
 
 
 class _BootCampLogicProvider(_HangarLogicProvider):

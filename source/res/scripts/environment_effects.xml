@@ -1,26 +1,6 @@
 <environment_effects.xml>
   <lightSounds>
     <model>
-      <modelName>	particles/Environment/afterlife_fire_01.xml	</modelName>
-      <offset>	0 0.2 0	</offset>
-      <wwsound>	ev_halloween_map_burn_small	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/Environment/afterlife_fire_sm.xml	</modelName>
-      <offset>	0 0.2 0	</offset>
-      <wwsound>	ev_halloween_map_burn_small	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/Environment/afterlife_fire_smk_01.xml	</modelName>
-      <offset>	0 0.2 0	</offset>
-      <wwsound>	ev_halloween_map_burn_med	</wwsound>
-    </model>
-    <model>
-      <modelName>	particles/Environment/afterlife_fire_smk_02.xml	</modelName>
-      <offset>	0 0.2 0	</offset>
-      <wwsound>	ev_halloween_map_burn_med	</wwsound>
-    </model>
-    <model>
       <modelName>	particles/Environment/interior/28_desert_fire.xml	</modelName>
       <offset>	0 0 0	</offset>
       <wwsound>	ambient_burn_static_small	</wwsound>
@@ -2230,6 +2210,61 @@
       <offset>	0 6 0	</offset>
       <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
     </model>
+    <model>
+      <modelName>	speedtree/217_er_alaska/Betula_papyrifera_1.spt	</modelName>
+      <offset>	0 7 0	</offset>
+      <wwsound>	ambient_trees_without_foliage_tree_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/217_er_alaska/Betula_papyrifera_2.spt	</modelName>
+      <offset>	0 7 0	</offset>
+      <wwsound>	ambient_trees_without_foliage_tree_big_02	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/217_er_alaska/Picea_mariana_1.spt	</modelName>
+      <offset>	0 7 0	</offset>
+      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/217_er_alaska/Picea_mariana_3.spt	</modelName>
+      <offset>	0 7 0	</offset>
+      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/217_er_alaska/Picea_mariana_4.spt	</modelName>
+      <offset>	0 7 0	</offset>
+      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/217_er_alaska/Abies_balsamea_3.spt	</modelName>
+      <offset>	0 7 0	</offset>
+      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/217_er_alaska/Abies_balsamea_4.spt	</modelName>
+      <offset>	0 7 0	</offset>
+      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/217_er_alaska/Pinus_contorta_1.spt	</modelName>
+      <offset>	0 7 0	</offset>
+      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/217_er_alaska/Pinus_contorta_2.spt	</modelName>
+      <offset>	0 7 0	</offset>
+      <wwsound>	ambient_trees_without_foliage_tree_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/217_er_alaska/Bush_1.spt	</modelName>
+      <offset>	0 3 0	</offset>
+      <wwsound>	ambient_bush_yellow_dry_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/217_er_alaska/CedarOfLebanon.spt	</modelName>
+      <offset>	0 4 0	</offset>
+      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
+    </model>
   </lightSounds>
   <birds>
     <seagull>
@@ -3482,172 +3517,6 @@
         <animAction></animAction>
       </point>
     </Dday_air_defence>
-    <hangar_halloween_v2_skull_flying_1>
-      <channel0>
-        <modelName>	content/Environment/hangar_v2_hall/environment/normal/lod0/s_skull_flying.model	</modelName>
-        <rollMagnitude>	2.000000	</rollMagnitude>
-        <rollRelaxation>	1.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	10.000000 10.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/hangar/halloween_v2_sparks.xml	</effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <wwsoundName>	hangar_halloween_gost	</wwsoundName>
-      </channel0>
-      <point>
-        <position>	45.702789 -0.919968 48.605957	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	11.433475 -0.235730 51.665600	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	7.228230 1.373222 49.419250	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	3.483747 2.693992 43.292667	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	4.639388 3.380373 31.143427	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	19.996311 5.821226 17.782581	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	27.591047 1.324647 5.518445	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	14.614244 5.208436 -21.447435	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	7.590205 4.442739 -29.358040	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	3.261448 2.325481 -44.145611	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-1.622201 4.612988 -51.310791	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-6.505852 3.393247 -52.413513	</position>
-        <speed0>	11.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </hangar_halloween_v2_skull_flying_1>
-    <hangar_halloween_v2_ghost_3>
-      <channel0>
-        <modelName>	particles/content_deferred/GFX_models/environment/Hangar_halloween_v2/ghost.model	</modelName>
-        <rollMagnitude>	0.000000	</rollMagnitude>
-        <rollRelaxation>	0.000000	</rollRelaxation>
-        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
-        <tesselationFactor>	2	</tesselationFactor>
-        <alphaFadeDistances>	10.000000 10.000000	</alphaFadeDistances>
-        <effectName>	particles/Environment/hangar/halloween_ghost_smoke.xml	</effectName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <wwsoundName>	hangar_halloween_gost2	</wwsoundName>
-      </channel0>
-      <point>
-        <position>	-23.481297 0.866160 -58.039093	</position>
-        <speed0>	3.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-22.654097 1.268240 -52.360592	</position>
-        <speed0>	3.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-25.296276 0.878493 -46.682167	</position>
-        <speed0>	1.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-23.025990 1.229528 -25.509390	</position>
-        <speed0>	1.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-25.481857 2.251624 -15.784400	</position>
-        <speed0>	1.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-27.036726 1.676709 11.707571	</position>
-        <speed0>	1.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-27.531250 0.772197 19.846298	</position>
-        <speed0>	1.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-23.258171 0.954695 27.441231	</position>
-        <speed0>	1.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-18.927744 1.137192 28.823332	</position>
-        <speed0>	1.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-26.413506 -3.171484 35.080116	</position>
-        <speed0>	1.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-33.899261 -7.480161 41.336906	</position>
-        <speed0>	1.000000	</speed0>
-        <oscillation0>	0.000000 0.000000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </hangar_halloween_v2_ghost_3>
     <show_waypoint_Plane_1>
       <channel0>
         <modelName>	content/Environment/env713_BF109G/normal/lod0/env713_BF109G.model	</modelName>

@@ -6,6 +6,7 @@
     <Interface>	VehicleObserver	</Interface>
     <Interface>	BattleFeedback	</Interface>
     <Interface>	Harm	</Interface>
+    <Interface>	RespawnController_Vehicle	</Interface>
   </Implements>
   <LoDLevels>
     <level>	20	  <hyst>	4	</hyst>
@@ -43,8 +44,7 @@
       <Flags>	ALL_CLIENTS	</Flags>
     </siegeState>
     <gunAnglesPacked>
-      <Type>	ARRAY	  <of>	UINT16	</of>
-      </Type>
+      <Type>	UINT16	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
       <IsReliable>	false	</IsReliable>
       <SendLatestOnly>	true	</SendLatestOnly>
@@ -61,10 +61,6 @@
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </isCrewActive>
-    <isDisappeared>
-      <Type>	BOOL	</Type>
-      <Flags>	ALL_CLIENTS	</Flags>
-    </isDisappeared>
     <engineMode>
       <Type>	TUPLE	  <of>	UINT8	</of>
         <size>	2	</size>
@@ -212,7 +208,6 @@
     </onHealthChanged>
     <showShooting>
       <Arg>	UINT8	</Arg>
-      <Arg>	UINT8	</Arg>
     </showShooting>
     <showDamageFromShot>
       <Arg>	OBJECT_ID	</Arg>
@@ -255,11 +250,6 @@
     </showRammingEffect>
   </ClientMethods>
   <CellMethods>
-    <updateRespawnInfo>
-      <Arg>	PYTHON	</Arg>
-      <Arg>	ARRAY	  <of>	MAILBOX	</of>
-      </Arg>
-    </updateRespawnInfo>
     <updatePrebattleID>
       <Arg>	OBJECT_ID	</Arg>
     </updatePrebattleID>
@@ -270,23 +260,18 @@
     <trackWorldPointWithGun>
       <Exposed></Exposed>
       <Arg>	VECTOR3	</Arg>
-      <Arg>	UINT8	</Arg>
     </trackWorldPointWithGun>
     <trackRelativePointWithGun>
       <Exposed></Exposed>
       <Arg>	VECTOR3	</Arg>
-      <Arg>	UINT8	</Arg>
     </trackRelativePointWithGun>
-    <vehicleExplode></vehicleExplode>
     <stopTrackingWithGun>
       <Exposed></Exposed>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
-      <Arg>	UINT8	</Arg>
     </stopTrackingWithGun>
     <trackVehicleWithGun>
       <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT8	</Arg>
     </trackVehicleWithGun>
     <changeSetting>
       <Exposed></Exposed>
@@ -300,7 +285,6 @@
     </sendVisibilityDevelopmentInfo>
     <shoot>
       <Arg>	FLOAT32	</Arg>
-      <Arg>	UINT8	</Arg>
     </shoot>
     <teleportTo>
       <Arg>	VECTOR3	</Arg>
@@ -308,7 +292,6 @@
     </teleportTo>
     <replenishAmmo></replenishAmmo>
     <repair>
-      <Arg>	INT32	</Arg>
       <Arg>	INT32	</Arg>
     </repair>
     <setDevelopmentFeature>
@@ -340,6 +323,9 @@
       <Arg>	BOOL	</Arg>
       <Arg>	BOOL	</Arg>
     </onBattleRunning>
+    <sendStateToOwnClient>
+      <Exposed></Exposed>
+    </sendStateToOwnClient>
     <receiveHitAssistBonus>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	SHOT_ID	</Arg>
@@ -372,6 +358,9 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	BOOL	</Arg>
     </onDetectedByEnemy>
+    <onConcealedFromEnemy>
+      <Arg>	OBJECT_ID	</Arg>
+    </onConcealedFromEnemy>
     <onStopObservationByEnemy></onStopObservationByEnemy>
     <onCombatEquipmentShootingStarted>
       <Arg>	UINT16	</Arg>

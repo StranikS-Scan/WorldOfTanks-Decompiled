@@ -328,3 +328,14 @@ class ActionsBuilder(object):
             item.visualPriority = priority
 
         return items
+
+
+def getActiveActions(eventsCache):
+    actions = eventsCache.getActions(filterFunc=lambda aInfo: not aInfo.isOutOfDate()).values()
+    entities = eventsCache.getActionEntities()
+    visible = ActionsBuilder.getAllVisibleDiscounts(actions, entities, []).get(_VISIBLE_CARDS.ACTIONS, [])
+    return visible
+
+
+def getNewActiveActions(eventsCache):
+    return filter(lambda info: info.getIsNew(), getActiveActions(eventsCache))

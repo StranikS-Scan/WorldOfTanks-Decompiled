@@ -205,11 +205,6 @@ class _VehicleInfo(object):
         raise NotImplementedError
 
     @property
-    def secondaryPiercings(self):
-        """Gets direct hits vehicle made from secondary turret that caused damage to target's health or devices."""
-        raise NotImplementedError
-
-    @property
     def piercingsReceived(self):
         """Gets number of direct hits received that caused damage to vehicle's health or devices."""
         raise NotImplementedError
@@ -217,16 +212,6 @@ class _VehicleInfo(object):
     @property
     def damageDealt(self):
         """Gets total damage dealt to the target by vehicle."""
-        raise NotImplementedError
-
-    @property
-    def primaryTurretDamage(self):
-        """Gets primary turret damage dealt to the target by vehicle."""
-        raise NotImplementedError
-
-    @property
-    def secondaryTurretDamage(self):
-        """Gets secondary turret damage dealt to the target by vehicle."""
         raise NotImplementedError
 
     @property
@@ -242,16 +227,6 @@ class _VehicleInfo(object):
     @property
     def kills(self):
         """Gets total number of kills that vehicle made."""
-        raise NotImplementedError
-
-    @property
-    def primaryTurretKills(self):
-        """Gets total number of kills that vehicle made with primary turret."""
-        raise NotImplementedError
-
-    @property
-    def secondaryTurretKills(self):
-        """Gets total number of kills that vehicle made with secondary turret."""
         raise NotImplementedError
 
     @property
@@ -325,16 +300,6 @@ class _VehicleInfo(object):
         raise NotImplementedError
 
     @property
-    def primaryTurretShots(self):
-        """ Gets number of shots made by primary turret (may lead to direct hit, explosion hit, or miss)."""
-        raise NotImplementedError
-
-    @property
-    def secondaryTurretShots(self):
-        """ Gets number of shots made by secondary turret (may lead to direct hit, explosion hit, or miss)."""
-        raise NotImplementedError
-
-    @property
     def explosionHits(self):
         """Gets number of explosion hits received (with and without damage)."""
         raise NotImplementedError
@@ -342,11 +307,6 @@ class _VehicleInfo(object):
     @property
     def directHits(self):
         """Gets number of direct hits made to another vehicles (with and without damage)."""
-        raise NotImplementedError
-
-    @property
-    def secondaryDirectHits(self):
-        """Gets number of direct hits made to another vehicles from secondary turret (with and without damage)."""
         raise NotImplementedError
 
     @property
@@ -384,51 +344,6 @@ class _VehicleInfo(object):
         """Gets value of total XP according to vehicles without achievements XP."""
         raise NotImplementedError
 
-    @property
-    def bossDamageDealt(self):
-        """Gets bossDamageDealt for the battle."""
-        raise NotImplementedError
-
-    @property
-    def bossDirectHits(self):
-        """Gets bossDirectHits for the battle."""
-        raise NotImplementedError
-
-    @property
-    def bossDamageReceived(self):
-        """Gets bossDamageReceived for the battle."""
-        raise NotImplementedError
-
-    @property
-    def bossTurretDamageReceived(self):
-        """Gets bossTurretDamageReceived for the battle."""
-        raise NotImplementedError
-
-    @property
-    def bossHazardDamageReceived(self):
-        """Gets bossHazardDamageReceived for the battle."""
-        raise NotImplementedError
-
-    @property
-    def bossHazardHits(self):
-        """Gets bossHazardHits for the battle."""
-        raise NotImplementedError
-
-    @property
-    def bossSecondaryTurretKill(self):
-        """Gets bossSecondaryTurretKill for the battle."""
-        raise NotImplementedError
-
-    @property
-    def totalHealed(self):
-        """Gets totalHealed for the battle."""
-        raise NotImplementedError
-
-    @property
-    def healthPickups(self):
-        """Gets healthPickups for the battle."""
-        raise NotImplementedError
-
     def getOrderByClass(self):
         return Vehicle.getOrderByVehicleClass(Vehicle.getVehicleClassTag(self.vehicle.descriptor.type.tags))
 
@@ -438,7 +353,7 @@ class VehicleDetailedInfo(_VehicleInfo):
     This class can be used for vehicle and comments of properties related to this vehicle.
     Also this class can be used for enemies in the efficiency block and
     comments of properties related to some personal vehicle."""
-    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_secondaryPiercings', '_piercingsReceived', '_damageDealt', '_primaryTurretDamage', '_secondaryTurretDamage', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_secondaryDirectHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_primaryTurretShots', '_secondaryTurretShots', '_kills', '_primaryTurretKills', '_secondaryTurretKills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire', '_bossDamageDealt', '_bossDirectHits', '_bossDamageReceived', '_bossTurretDamageReceived', '_bossHazardDamageReceived', '_bossHazardHits', '_bossSecondaryTurretKill', '_healthPickups', '_totalHealed')
+    __slots__ = ('_vehicle', '_killerID', '_achievementsIDs', '_critsInfo', '_spotted', '_piercings', '_piercingsReceived', '_damageDealt', '_tdamageDealt', '_sniperDamageDealt', '_damageBlockedByArmor', '_damageAssistedTrack', '_damageAssistedRadio', '_damageAssistedStun', '_stunNum', '_stunDuration', '_rickochetsReceived', '_noDamageDirectHitsReceived', '_targetKills', '_directHits', '_directHitsReceived', '_explosionHits', '_explosionHitsReceived', '_shots', '_kills', '_tkills', '_damaged', '_mileage', '_capturePoints', '_droppedCapturePoints', '_xp', '_fire')
 
     def __init__(self, vehicleID, vehicle, player, deathReason=DEATH_REASON_ALIVE):
         super(VehicleDetailedInfo, self).__init__(vehicleID, player, deathReason)
@@ -448,15 +363,12 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._critsInfo = makeCritsInfo(0)
         self._spotted = 0
         self._piercings = 0
-        self._secondaryPiercings = 0
         self._piercingsReceived = 0
         self._damageBlockedByArmor = 0
         self._rickochetsReceived = 0
         self._noDamageDirectHitsReceived = 0
         self._targetKills = 0
         self._damageDealt = 0
-        self._primaryTurretDamage = 0
-        self._secondaryTurretDamage = 0
         self._tdamageDealt = 0
         self._sniperDamageDealt = 0
         self._damageAssistedTrack = 0
@@ -465,16 +377,11 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._stunNum = 0
         self._stunDuration = 0
         self._directHits = 0
-        self._secondaryDirectHits = 0
         self._directHitsReceived = 0
         self._explosionHits = 0
         self._explosionHitsReceived = 0
         self._shots = 0
-        self._primaryTurretShots = 0
-        self._secondaryTurretShots = 0
         self._kills = 0
-        self._primaryTurretKills = 0
-        self._secondaryTurretKills = 0
         self._tkills = 0
         self._damaged = 0
         self._mileage = 0
@@ -482,15 +389,6 @@ class VehicleDetailedInfo(_VehicleInfo):
         self._droppedCapturePoints = 0
         self._xp = 0
         self._fire = 0
-        self._bossDamageDealt = 0
-        self._bossDirectHits = 0
-        self._bossDamageReceived = 0
-        self._bossTurretDamageReceived = 0
-        self._bossHazardDamageReceived = 0
-        self._bossHazardHits = 0
-        self._bossSecondaryTurretKill = 0
-        self._healthPickups = 0
-        self._totalHealed = 0
 
     @property
     def vehicle(self):
@@ -513,24 +411,12 @@ class VehicleDetailedInfo(_VehicleInfo):
         return self._piercings
 
     @property
-    def secondaryPiercings(self):
-        return self._secondaryPiercings
-
-    @property
     def piercingsReceived(self):
         return self._piercingsReceived
 
     @property
     def damageDealt(self):
         return self._damageDealt
-
-    @property
-    def primaryTurretDamage(self):
-        return self._primaryTurretDamage
-
-    @property
-    def secondaryTurretDamage(self):
-        return self._secondaryTurretDamage
 
     @property
     def tdamageDealt(self):
@@ -593,24 +479,12 @@ class VehicleDetailedInfo(_VehicleInfo):
         return self._shots
 
     @property
-    def primaryTurretShots(self):
-        return self._primaryTurretShots
-
-    @property
-    def secondaryTurretShots(self):
-        return self._secondaryTurretShots
-
-    @property
     def explosionHits(self):
         return self._explosionHits
 
     @property
     def directHits(self):
         return self._directHits
-
-    @property
-    def secondaryDirectHits(self):
-        return self._secondaryDirectHits
 
     @property
     def directHitsReceived(self):
@@ -623,14 +497,6 @@ class VehicleDetailedInfo(_VehicleInfo):
     @property
     def kills(self):
         return self._kills
-
-    @property
-    def primaryTurretKills(self):
-        return self._primaryTurretKills
-
-    @property
-    def secondaryTurretKills(self):
-        return self._secondaryTurretKills
 
     @property
     def tkills(self):
@@ -656,44 +522,8 @@ class VehicleDetailedInfo(_VehicleInfo):
     def xp(self):
         return self._xp
 
-    @property
-    def bossDamageDealt(self):
-        return self._bossDamageDealt
-
-    @property
-    def bossDirectHits(self):
-        return self._bossDirectHits
-
-    @property
-    def bossDamageReceived(self):
-        return self._bossDamageReceived
-
-    @property
-    def bossTurretDamageReceived(self):
-        return self._bossTurretDamageReceived
-
-    @property
-    def bossHazardDamageReceived(self):
-        return self._bossHazardDamageReceived
-
-    @property
-    def bossHazardHits(self):
-        return self._bossHazardHits
-
-    @property
-    def bossSecondaryTurretKill(self):
-        return self._bossSecondaryTurretKill
-
-    @property
-    def healthPickups(self):
-        return self._healthPickups
-
-    @property
-    def totalHealed(self):
-        return self._totalHealed
-
     def haveInteractionDetails(self):
-        return self._spotted != 0 or self._deathReason > DEATH_REASON_ALIVE or self._directHits != 0 or self._secondaryDirectHits != 0 or self._explosionHits != 0 or self._piercings != 0 or self._secondaryPiercings != 0 or self._damageDealt != 0 or self.damageAssisted != 0 or self.damageAssistedStun != 0 or self.stunNum != 0 or self.critsCount != 0 or self._fire != 0 or self._targetKills != 0 or self.stunDuration != 0
+        return self._spotted != 0 or self._deathReason > DEATH_REASON_ALIVE or self._directHits != 0 or self._explosionHits != 0 or self._piercings != 0 or self._damageDealt != 0 or self.damageAssisted != 0 or self.damageAssistedStun != 0 or self.stunNum != 0 or self.critsCount != 0 or self._fire != 0 or self._targetKills != 0 or self.stunDuration != 0
 
     @classmethod
     @no_key_error
@@ -720,32 +550,17 @@ class VehicleDetailedInfo(_VehicleInfo):
         info._achievementsIDs = set(vehicleRecords['achievements'])
         info._piercingsReceived = vehicleRecords['piercingsReceived']
         info._tdamageDealt = vehicleRecords['tdamageDealt']
-        info._primaryTurretDamage = vehicleRecords['primaryTurretDamage']
-        info._secondaryTurretDamage = vehicleRecords['secondaryTurretDamage']
         info._sniperDamageDealt = vehicleRecords['sniperDamageDealt']
         info._shots = vehicleRecords['shots']
-        info._primaryTurretShots = vehicleRecords['primaryTurretShots']
-        info._secondaryTurretShots = vehicleRecords['secondaryTurretShots']
         info._directHitsReceived = vehicleRecords['directHitsReceived']
         info._explosionHitsReceived = vehicleRecords['explosionHitsReceived']
         info._kills = vehicleRecords['kills']
-        info._primaryTurretKills = vehicleRecords['primaryTurretKills']
-        info._secondaryTurretKills = vehicleRecords['secondaryTurretKills']
         info._tkills = vehicleRecords['tkills']
         info._damaged = vehicleRecords['damaged']
         info._mileage = vehicleRecords['mileage']
         info._capturePoints = vehicleRecords['capturePoints']
         info._droppedCapturePoints = vehicleRecords['droppedCapturePoints']
         info._xp = vehicleRecords['xp'] - vehicleRecords['achievementXP']
-        info._bossDamageDealt = vehicleRecords['bossDamageDealt']
-        info._bossDirectHits = vehicleRecords['bossDirectHits']
-        info._bossDamageReceived = vehicleRecords['bossDamageReceived']
-        info._bossTurretDamageReceived = vehicleRecords['bossTurretDamageReceived']
-        info._bossHazardDamageReceived = vehicleRecords['bossHazardDamageReceived']
-        info._bossHazardHits = vehicleRecords['bossHazardHits']
-        info._bossSecondaryTurretKill = vehicleRecords['bossSecondaryTurretKill']
-        info._healthPickups = vehicleRecords['healthPickups']
-        info._totalHealed = vehicleRecords['totalHealed']
         cls._setSharedRecords(info, vehicleRecords)
         return info
 
@@ -754,14 +569,12 @@ class VehicleDetailedInfo(_VehicleInfo):
         info._deathReason = max(info._deathReason, records['deathReason'])
         info._spotted = records['spotted']
         info._piercings = records['piercings']
-        info._secondaryPiercings = records['secondaryPiercings']
         info._damageDealt = records['damageDealt']
         info._damageBlockedByArmor = records['damageBlockedByArmor']
         info._noDamageDirectHitsReceived = records['noDamageDirectHitsReceived']
         info._damageAssistedTrack = records['damageAssistedTrack']
         info._damageAssistedRadio = records['damageAssistedRadio']
         info._directHits = records['directHits']
-        info._secondaryDirectHits = records['secondaryDirectHits']
         info._explosionHits = records['explosionHits']
         info._damageAssistedStun = records['damageAssistedStun']
         info._stunNum = records['stunNum']
@@ -803,10 +616,6 @@ class VehicleSummarizeInfo(_VehicleInfo):
         return self.__accumulate('piercings')
 
     @property
-    def secondaryPiercings(self):
-        return self.__accumulate('secondaryPiercings')
-
-    @property
     def piercingsReceived(self):
         return self.__accumulate('piercingsReceived')
 
@@ -816,14 +625,6 @@ class VehicleSummarizeInfo(_VehicleInfo):
         if self.__avatar is not None:
             value += self.__avatar.avatarDamageDealt
         return value
-
-    @property
-    def primaryTurretDamage(self):
-        return self.__accumulate('primaryTurretDamage')
-
-    @property
-    def secondaryTurretDamage(self):
-        return self.__accumulate('secondaryTurretDamage')
 
     @property
     def tdamageDealt(self):
@@ -890,24 +691,12 @@ class VehicleSummarizeInfo(_VehicleInfo):
         return self.__accumulate('shots')
 
     @property
-    def primaryTurretShots(self):
-        return self.__accumulate('primaryTurretShots')
-
-    @property
-    def secondaryTurretShots(self):
-        return self.__accumulate('secondaryTurretShots')
-
-    @property
     def explosionHits(self):
         return self.__accumulate('explosionHits')
 
     @property
     def directHits(self):
         return self.__accumulate('directHits')
-
-    @property
-    def secondaryDirectHits(self):
-        return self.__accumulate('secondaryDirectHits')
 
     @property
     def directHitsReceived(self):
@@ -923,14 +712,6 @@ class VehicleSummarizeInfo(_VehicleInfo):
         if self.__avatar is not None:
             value += self.__avatar.avatarKills
         return value
-
-    @property
-    def primaryTurretKills(self):
-        return self.__accumulate('primaryTurretKills')
-
-    @property
-    def secondaryTurretKills(self):
-        return self.__accumulate('secondaryTurretKills')
 
     @property
     def tkills(self):
@@ -955,42 +736,6 @@ class VehicleSummarizeInfo(_VehicleInfo):
     @property
     def xp(self):
         return self.__accumulate('xp')
-
-    @property
-    def bossDamageDealt(self):
-        return self.__accumulate('bossDamageDealt')
-
-    @property
-    def bossDirectHits(self):
-        return self.__accumulate('bossDirectHits')
-
-    @property
-    def bossDamageReceived(self):
-        return self.__accumulate('bossDamageReceived')
-
-    @property
-    def bossTurretDamageReceived(self):
-        return self.__accumulate('bossTurretDamageReceived')
-
-    @property
-    def bossHazardDamageReceived(self):
-        return self.__accumulate('bossHazardDamageReceived')
-
-    @property
-    def bossHazardHits(self):
-        return self.__accumulate('bossHazardHits')
-
-    @property
-    def bossSecondaryTurretKill(self):
-        return self.__accumulate('bossSecondaryTurretKill')
-
-    @property
-    def healthPickups(self):
-        return self.__accumulate('healthPickups')
-
-    @property
-    def totalHealed(self):
-        return self.__accumulate('totalHealed')
 
     def addVehicleInfo(self, info):
         """Adds detailed information about vehicle.

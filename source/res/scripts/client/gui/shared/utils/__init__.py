@@ -188,14 +188,24 @@ class SettingRootRecord(SettingRecord):
         raise NotImplemented
 
 
-def mapTextureToTheMemory(textureData, uniqueID=None):
+def mapTextureToTheMemory(textureData, uniqueID=None, temp=True):
     if textureData and imghdr.what(None, textureData) is not None:
         uniqueID = str(uniqueID or uuid.uuid4())
-        BigWorld.wg_addTempScaleformTexture(uniqueID, textureData)
+        if temp:
+            BigWorld.wg_addTempScaleformTexture(uniqueID, textureData)
+        else:
+            BigWorld.wg_addScaleformTexture(uniqueID, textureData)
         return uniqueID
     else:
         LOG_WARNING('There is invalid data for the memory mapping', textureData, uniqueID)
         return
+
+
+def removeTextureFromMemory(textureID):
+    """
+    Removes texture from memory by id
+    """
+    BigWorld.wg_eraseScaleformTexture(textureID)
 
 
 def getImageSize(imageData):

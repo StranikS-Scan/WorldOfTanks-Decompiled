@@ -214,7 +214,8 @@ class _MultiStunEventFormatter(SimpleMissionsFormatter):
 
     @classmethod
     def _getDescription(cls, condition):
-        return packDescriptionField(i18n.makeString(QUESTS.DETAILS_CONDITIONS_MULTISTUNEVENT, count=condition.stunnedByShot))
+        key = _makeKeyNegativeIf(QUESTS.DETAILS_CONDITIONS_MULTISTUNEVENT, condition.isNegative())
+        return packDescriptionField(i18n.makeString(key, count=condition.stunnedByShot))
 
     @classmethod
     def _getIconKey(cls, condition=None):

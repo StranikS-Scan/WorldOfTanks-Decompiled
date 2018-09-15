@@ -106,9 +106,6 @@ class CyberSportIntroView(CyberSportIntroMeta):
             elif vehicle.type not in _ACCEPTED_VEH_TYPES:
                 isReadyVehicle = False
                 warnTooltip = TOOLTIPS.CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLETYPE
-            elif 'event_battles' in vehicle.tags:
-                isReadyVehicle = False
-                warnTooltip = TOOLTIPS.CYBERSPORT_INTRO_SELECTEDVEHICLEWARN_INCOMPATIBLETYPE
             else:
                 warnTooltip, isReadyVehicle = '', vehicle.isReadyToPrebattle()
             self.as_setSelectedVehicleS(makeIntroVehicleVO(vehicle, isReadyVehicle, warnTooltip))

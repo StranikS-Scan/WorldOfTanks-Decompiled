@@ -3,6 +3,7 @@
 import operator
 import BigWorld
 from constants import IGR_TYPE
+from gui import makeHtmlString
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.battle_results.components import base
@@ -460,7 +461,9 @@ class CrystalDetailsBlock(_EconomicsDetailsBlock):
         crystalTotal += crystalAchive
         if crystalTotal > 0:
             self.addNextComponent(style.EmptyStatRow())
-            self._addRecord(i18n.makeString(BATTLE_RESULTS.DETAILS_CALCULATIONS_TOTAL), crystalTotal)
+            i18nText = i18n.makeString(BATTLE_RESULTS.DETAILS_CALCULATIONS_TOTAL)
+            totalStr = makeHtmlString('html_templates:lobby/battle_results', 'lightText', {'value': i18nText})
+            self._addRecord(totalStr, crystalTotal)
 
     def _addRecord(self, res, value):
         self.addNextComponent(style.StatRow(res, res, style.SMALL_STAT_LINE, column1=style.makeCrystalLabel(value)))

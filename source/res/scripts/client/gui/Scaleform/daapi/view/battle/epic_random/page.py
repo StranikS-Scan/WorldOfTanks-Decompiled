@@ -32,3 +32,10 @@ class EpicRandomPage(ClassicPage):
         super(EpicRandomPage, self)._onBattleLoadingFinish()
         if not self.sessionProvider.isReplayPlaying:
             self.app.leaveGuiControlMode(BATTLE_VIEW_ALIASES.BATTLE_LOADING)
+
+    def _toggleFullStats(self, isShown, permanent=None):
+        super(EpicRandomPage, self)._toggleFullStats(isShown, permanent)
+        if isShown:
+            self.app.enterGuiControlMode(BATTLE_VIEW_ALIASES.FULL_STATS, cursorVisible=True, enableAiming=True)
+        else:
+            self.app.leaveGuiControlMode(BATTLE_VIEW_ALIASES.FULL_STATS)

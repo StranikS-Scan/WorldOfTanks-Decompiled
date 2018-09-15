@@ -596,7 +596,7 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         if GRAPHICS.COLOR_BLIND in diff:
             self._setSettings(self.__isVisible, bool(diff[GRAPHICS.COLOR_BLIND]))
 
-    def _onPostMortemSwitched(self):
+    def _onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         """
         Callback to handle switching to postmortem mode. The panel should not be displayed if the
         player observes another vehicle.

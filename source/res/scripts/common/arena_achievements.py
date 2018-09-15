@@ -131,4 +131,7 @@ def getAchievementCondition(arenaBonusType, medal):
     :param medal: medal name.
     :return: dict with medal conditions. See ACHIEVEMENT_CONDITIONS and other conditions.
     """
-    return ACHIEVEMENT_CONDITIONS_EXT.get(medal, ACHIEVEMENT_CONDITIONS[medal]) if BONUS_CAPS.checkAny(arenaBonusType, BONUS_CAPS.ACHIEVEMENT_CONDITIONS_EXT) else ACHIEVEMENT_CONDITIONS[medal]
+    if BONUS_CAPS.checkAny(arenaBonusType, BONUS_CAPS.ACHIEVEMENT_CONDITIONS_EXT):
+        if medal in ACHIEVEMENT_CONDITIONS_EXT:
+            return ACHIEVEMENT_CONDITIONS_EXT[medal]
+    return ACHIEVEMENT_CONDITIONS[medal] if medal in ACHIEVEMENT_CONDITIONS else {}

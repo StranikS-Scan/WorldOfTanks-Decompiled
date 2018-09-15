@@ -257,8 +257,6 @@ class PQCache(object):
                 basicInfo['shortUserString'] = i18n.makeString(qsection.readString('shortUserString'))
                 basicInfo['description'] = i18n.makeString(qsection.readString('description'))
                 basicInfo['advice'] = i18n.makeString(qsection.readString('advice'))
-                basicInfo['condition_main'] = i18n.makeString(qsection.readString('condition_main'))
-                basicInfo['condition_add'] = i18n.makeString(qsection.readString('condition_add'))
             questPath = ''.join([POTAPOV_QUEST_XML_PATH,
              '/',
              questBranchName,
@@ -326,7 +324,7 @@ class PQCache(object):
 
 
 class PQType(object):
-    __slots__ = ('id', 'tags', 'isInitial', 'isFinal', 'branch', 'vehClasses', 'falloutTypes', 'tileID', 'chainID', 'internalID', 'requiredUnlocks', 'mainQuestID', 'mainAwardListQuestID', 'addQuestID', 'addAwardListQuestID', 'mainQuestInfo', 'addQuestInfo', 'userString', 'shortUserString', 'description', 'advice', 'conditionMain', 'conditionAdd', 'minLevel', 'maxLevel', 'rewardByDemand', 'mainAwardListQuestInfo', 'addAwardListQuestInfo')
+    __slots__ = ('id', 'tags', 'isInitial', 'isFinal', 'branch', 'vehClasses', 'falloutTypes', 'tileID', 'chainID', 'internalID', 'requiredUnlocks', 'mainQuestID', 'mainAwardListQuestID', 'addQuestID', 'addAwardListQuestID', 'mainQuestInfo', 'addQuestInfo', 'userString', 'shortUserString', 'description', 'advice', 'minLevel', 'maxLevel', 'rewardByDemand', 'mainAwardListQuestInfo', 'addAwardListQuestInfo')
 
     def __init__(self, basicInfo):
         self.id = basicInfo['id']
@@ -360,8 +358,6 @@ class PQType(object):
             self.shortUserString = basicInfo['shortUserString']
             self.description = basicInfo['description']
             self.advice = basicInfo['advice']
-            self.conditionMain = basicInfo['condition_main']
-            self.conditionAdd = basicInfo['condition_add']
 
     def getMajorTag(self):
         if self.branch == PQ_BRANCH.REGULAR:

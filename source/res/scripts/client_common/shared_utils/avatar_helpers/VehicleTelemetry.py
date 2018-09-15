@@ -104,8 +104,8 @@ class VehicleTelemetry:
         descr = self.avatar.getVehicleAttached().typeDescriptor
         parts = name.split(VehicleTelemetry.NAME_DELIMITER)
         header = VehicleTelemetry.HEADER_TMPL % {'Veh': descr.name,
-         'Eng': descr.engine.name,
-         'Css': descr.chassis.name,
+         'Eng': descr.engine['name'],
+         'Css': descr.chassis['name'],
          'Scn': parts[2],
          'Sec': parts[-2],
          'Phy': parts[-1]}

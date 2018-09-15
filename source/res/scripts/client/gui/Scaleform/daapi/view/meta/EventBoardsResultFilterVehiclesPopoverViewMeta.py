@@ -10,6 +10,9 @@ class EventBoardsResultFilterVehiclesPopoverViewMeta(SmartPopOverView):
     def applyFilters(self, nation, vehicleType, level, isMain, hangarOnly):
         self._printOverrideError('applyFilters')
 
+    def resetFilters(self):
+        self._printOverrideError('resetFilters')
+
     def as_setInitDataS(self, data):
         """
         :param data: Represented by EventBoardTableFilterVehiclesVO (AS)

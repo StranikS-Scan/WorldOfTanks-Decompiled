@@ -130,7 +130,12 @@ g_defaultTankXPhysicsCfg = {'vehicleType': VEHICLE_TYPE_TANK,
             'smplFwMaxSpeed': 15.0,
             'smplBkMaxSpeed': 10.0,
             'powerFactor': 1.0,
-            'rotationFactor': 1.0},
+            'rotationFactor': 1.0,
+            'engineLoses': (0.5, 0.8),
+            'engineInertia': 0.02,
+            'idleChoker': 0.2,
+            'idleRPM': 800.0,
+            'startRPM': 1000.0},
  'chassis': {'wheelRadius': 0.4,
              'wheelRestitution': 0.9,
              'wheelPenetration': 0.02,
@@ -168,8 +173,44 @@ g_defaultTankXPhysicsCfg = {'vehicleType': VEHICLE_TYPE_TANK,
                                            1.0,
                                            _cosDeg(25),
                                            0.1),
-             'roadWheelPositions': (0.0, 0.0),
-             'stiffnessFactors': (1.0, 1.0, 1.0, 1.0, 1.0)},
+             'stiffnessFactors': (1.0, 1.0, 1.0, 1.0, 1.0),
+             'angVelocityFactor': 1.0,
+             'angVelocityFactor0': 1.0,
+             'gimletGoalWOnSpot': 1.0,
+             'gimletGoalWOnMove': 1.0,
+             'isRotationAroundCenter': False,
+             'centerRotationFwdSpeed': 1.0,
+             'movementRevertSpeed': 1.0,
+             'fwLagRatio': 1.0,
+             'bkLagRatio': 1.0,
+             'rotFritionFactor': 1.0,
+             'comFrictionYOffs': 1.0,
+             'comSideFriction': 1.0,
+             'pushStop': 1.0,
+             'gimletPushOnSpotInit': 1.0,
+             'gimletPushOnSpotFinal': 1.0,
+             'gimletPushOnMoveInit': 1.0,
+             'gimletPushOnMoveFinal': 1.0,
+             'gimletVelScaleMin': 1.0,
+             'gimletVelScaleMax': 1.0,
+             'pushRotOnSpotFixedPeriod': 1.0,
+             'pushRotOnMoveFixedPeriod': 1.0,
+             'pushRotOnSpotGrowPeriod': 1.0,
+             'pushRotOnMoveGrowPeriod': 1.0,
+             'bodyHeight': 2.5,
+             'hullCOMShiftY': -0.25,
+             'hullInertiaFactors': (1.0, 1.0, 1.0),
+             'clearance': 0.25,
+             'rotationByLockChoker': 1.0,
+             'chassisMassFraction': 0.3,
+             'wheelSinkageResistFactor': 0.2,
+             'wheelInertiaFactor': 1.5,
+             'stiffness0': 1.0,
+             'stiffness1': 1.0,
+             'damping': 0.2,
+             'brake': 1000.0,
+             'rotationBrake': 1000.0,
+             'roadWheelPositions': (-2.5, -1.25, 0.0, 1.25, 2.5)},
  'comFrictionYOffs': 0.7,
  'smplFwMaxSpeed': 10.0,
  'smplBkMaxSpeed': 5.5,
@@ -295,7 +336,14 @@ def configurePhysics(physics, baseCfg, typeDesc, gravityFactor):
     try:
         cfg['fakegearbox'] = typeDesc.type.xphysics['detailed']['fakegearbox']
     except:
-        cfg['fakegearbox'] = None
+        cfg['fakegearbox'] = {'fwdgears': {'switchSpeed': (2, 5, 15),
+                      'switchHysteresis': (1, 2, 3),
+                      'lowRpm': (0.2, 0.2, 0.2),
+                      'highRpm': (0.9, 0.9, 0.9)},
+         'bkwdgears': {'switchSpeed': (2, 5, 15),
+                       'switchHysteresis': (1, 2, 3),
+                       'lowRpm': (0.2, 0.2, 0.2),
+                       'highRpm': (0.9, 0.9, 0.9)}}
 
     if baseCfg:
         updatePhysicsCfg(baseCfg, defaultVehicleDescr, cfg)
@@ -371,7 +419,7 @@ def configurePhysicsMode(cfg, typeDesc, gravityFactor):
     cfg['engine']['engineTorque'] = tuple(((arg, val * gravityFactor) for arg, val in cfg['engine']['engineTorque']))
     offsZ = hullCenter[2]
     cfg['hullBoxOffsetZ'] = offsZ
-    turretMin, turretMax, _ = typeDesc.turrets[0].turret.hitTester.bbox
+    turretMin, turretMax, _ = typeDesc.turret.hitTester.bbox
     hullPos = typeDesc.chassis.hullPosition
     turretPos = typeDesc.hull.turretPositions[0]
     topPos = hullPos + turretPos
@@ -446,7 +494,7 @@ def initVehiclePhysicsForced(physics, typeDesc, forcedCfg):
 
 
 def initVehiclePhysicsEditor(physics, typeDesc):
-    baseCfg = typeDesc.type.xphysics['detailed']
+    baseCfg = typeDesc.type.xphysics.get('detailed')
     gravityFactor = 1.0
     configurePhysics(physics, baseCfg, typeDesc, gravityFactor)
 
@@ -475,9 +523,9 @@ def initVehiclePhysicsClient(physics, typeDesc):
     hullPosY = typeDesc.chassis.hullPosition[1]
     hullMaxY = hullPosY + hullMax[1]
     turretPosY = typeDesc.hull.turretPositions[0][1]
-    turretMaxY = hullPosY + turretPosY + typeDesc.turrets[0].turret.hitTester.bbox[1][1]
+    turretMaxY = hullPosY + turretPosY + typeDesc.turret.hitTester.bbox[1][1]
     commonBoxMaxY = max(chassisMaxY, hullMaxY, turretMaxY)
-    gunPosY = hullPosY + turretPosY + typeDesc.turrets[0].turret.gunPosition[1]
+    gunPosY = hullPosY + turretPosY + typeDesc.turret.gunPosition[1]
     hullUpperBound = typeDesc.chassis.hullPosition.y + hullMax.y
     boxHeight = min(commonBoxMaxY, gunPosY, hullUpperBound * BODY_HEIGHT) - clearance
     boxHeight = max(chassisMaxY * 0.7, boxHeight, VEHICLE_ON_OBSTACLE_COLLISION_BOX_MIN_HEIGHT)
@@ -539,14 +587,14 @@ def initVehiclePhysicsClient(physics, typeDesc):
     return
 
 
-def computeBarrelLocalPoint(vehDescr, turretYaw, gunPitch, turretIndex):
-    maxGunZ = vehDescr.turrets[turretIndex].gun.hitTester.bbox[1][2]
+def computeBarrelLocalPoint(vehDescr, turretYaw, gunPitch):
+    maxGunZ = vehDescr.gun.hitTester.bbox[1][2]
     m = Math.Matrix()
     m.setRotateX(gunPitch)
-    pt = m.applyVector((0.0, 0.0, maxGunZ)) + vehDescr.turrets[turretIndex].turret.gunPosition
+    pt = m.applyVector((0.0, 0.0, maxGunZ)) + vehDescr.turret.gunPosition
     m.setRotateY(turretYaw)
     pt = m.applyVector(pt)
-    pt += vehDescr.hull.turretPositions[turretIndex]
+    pt += vehDescr.hull.turretPositions[vehDescr.activeTurretPosition]
     pt += vehDescr.chassis.hullPosition
     return pt
 
@@ -624,13 +672,10 @@ def initVehiclePhysicsFromParams(physics, params, xmlPath):
     typeDesc.type = _SimpleObject()
     typeDesc.type.name = ''
     section = ResMgr.openSection(xmlPath)
-    try:
-        xphysics = vehicles._readXPhysics((None, xmlPath), section, 'physics')
-        typeDesc.type.xphysics = xphysics
-    except:
-        xphysics = False
+    xphysics = vehicles._readXPhysics((None, xmlPath), section, 'physics')
+    typeDesc.type.xphysics = xphysics
+    if xphysics is None:
         typeDesc.type.xphysics = {}
-
     if xphysics:
         chassisName = xphysics['detailed']['chassis'].keys()[0]
         engineName = xphysics['detailed']['engines'].keys()[0]
@@ -645,9 +690,6 @@ def initVehiclePhysicsFromParams(physics, params, xmlPath):
     typeDesc.shot = gun_components.GunShot(None, 1.0, (10.0, 10.0), 100.0, 9.8, 500.0, 1000000.0)
     typeDesc.gun = vehicle_items.createGun(0, 0, 'Gun')
     typeDesc.gun.staticTurretYaw = None
-    typeDesc.turrets = [_SimpleObject()]
-    typeDesc.turrets[0].turret = typeDesc.turret
-    typeDesc.turrets[0].gun = typeDesc.gun
     typeDesc.hasSiegeMode = False
     typeDesc.type.isRotationStill = False
     typeDesc.type.useHullZ = False
@@ -673,6 +715,8 @@ def decodeTrackScrolling(code):
 
 
 def __deepUpdate(orig_dict, new_dict):
+    if orig_dict is new_dict:
+        return
     for key, val in new_dict.iteritems():
         if isinstance(val, collections.Mapping):
             tmp = __deepUpdate(orig_dict.get(key, {}), val)

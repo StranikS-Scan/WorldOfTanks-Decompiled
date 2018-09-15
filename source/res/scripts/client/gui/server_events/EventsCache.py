@@ -12,7 +12,7 @@ from Event import Event, EventManager
 from PlayerEvents import g_playerEvents
 from adisp import async, process
 from constants import EVENT_TYPE, EVENT_CLIENT_DATA, QUEUE_TYPE, ARENA_BONUS_TYPE
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
 from gui.server_events.personal_missions_controller import PersonalMissionsController
@@ -141,29 +141,35 @@ class EventsCache(IEventsCache):
     @process
     def update(self, diff=None, callback=None):
         yield self.randomQuestsProgress.request()
-        yield self.__questsProgress.request()
-        isNeedToInvalidate = True
-        isNeedToClearItemsCaches = False
-
-        def _cbWrapper(*args):
-            self.__personalMissions.update(self, diff)
-            callback(*args)
-
-        if diff is not None:
-            isQPUpdated = 'quests' in diff or 'tokens' in diff
-            isEventsDataUpdated = ('eventsData', '_r') in diff or diff.get('eventsData', {})
-            isNeedToInvalidate = isQPUpdated or isEventsDataUpdated
-            hasVehicleUnlocks = False
-            for intCD in diff.get('stats', {}).get('unlocks', set()):
-                if getTypeOfCompactDescr(intCD) == GUI_ITEM_TYPE.VEHICLE:
-                    hasVehicleUnlocks = True
-                    break
-
-            isNeedToClearItemsCaches = hasVehicleUnlocks or 'inventory' in diff and GUI_ITEM_TYPE.VEHICLE in diff['inventory']
-        if isNeedToInvalidate:
-            self.__invalidateData(_cbWrapper)
+        if not self.randomQuestsProgress.isSynced():
+            callback(False)
             return
         else:
+            yield self.__questsProgress.request()
+            if not self.__questsProgress.isSynced():
+                callback(False)
+                return
+            isNeedToInvalidate = True
+            isNeedToClearItemsCaches = False
+
+            def _cbWrapper(*args):
+                self.__personalMissions.update(self, diff)
+                callback(*args)
+
+            if diff is not None:
+                isQPUpdated = 'quests' in diff or 'tokens' in diff
+                isEventsDataUpdated = ('eventsData', '_r') in diff or diff.get('eventsData', {})
+                isNeedToInvalidate = isQPUpdated or isEventsDataUpdated
+                hasVehicleUnlocks = False
+                for intCD in diff.get('stats', {}).get('unlocks', set()):
+                    if getTypeOfCompactDescr(intCD) == GUI_ITEM_TYPE.VEHICLE:
+                        hasVehicleUnlocks = True
+                        break
+
+                isNeedToClearItemsCaches = hasVehicleUnlocks or 'inventory' in diff and GUI_ITEM_TYPE.VEHICLE in diff['inventory']
+            if isNeedToInvalidate:
+                self.__invalidateData(_cbWrapper)
+                return
             if isNeedToClearItemsCaches:
                 self.__clearQuestsItemsCache()
             _cbWrapper(True)

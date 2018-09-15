@@ -9,6 +9,7 @@ from debug_utils import LOG_WARNING
 class RES_ICONS(object):
     MAPS_ICONS_VEHPARAMS_BIG = '../maps/icons/vehParams/big'
     MAPS_ICONS_VEHPARAMS_SMALL = '../maps/icons/vehParams/small'
+    MAPS_ICONS_ACTIONS_480X280_CALENDAR = '../maps/icons/actions/480x280/calendar.png'
     MAPS_ICONS_ACTIONS_480X280_CLAN = '../maps/icons/actions/480x280/clan.png'
     MAPS_ICONS_ACTIONS_480X280_CONSUMABLES = '../maps/icons/actions/480x280/consumables.png'
     MAPS_ICONS_ACTIONS_480X280_CONVERT_EXP = '../maps/icons/actions/480x280/convert_exp.png'

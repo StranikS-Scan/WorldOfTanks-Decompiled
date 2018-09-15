@@ -794,3 +794,7 @@ class IBootcampController(IGameController):
 
     def getDisabledSettings(self):
         raise NotImplementedError
+
+
+class ICalendarController(IGameController):
+    pass

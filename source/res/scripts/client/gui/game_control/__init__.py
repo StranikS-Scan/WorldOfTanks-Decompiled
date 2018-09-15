@@ -10,6 +10,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.AwardController import AwardController as _Awards
     from gui.game_control.BoostersController import BoostersController as _Boosters
     from gui.game_control.BrowserController import BrowserController as _Browser
+    from gui.game_control.CalendarController import CalendarController as _Calendar
     from gui.game_control.ChinaController import ChinaController as _China
     from gui.game_control.ChinaController import NoChinaController as _NoChina
     from gui.game_control.ExternalLinksHandler import ExternalLinksHandler as _ExternalLinks
@@ -77,6 +78,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IBootcampController, _Bootcamp())
     _config(_interface.IRankedBattlesController, _Ranked())
     _config(_interface.IEpicModeController, _Epic())
+    _config(_interface.ICalendarController, _Calendar())
     if constants.IS_CHINA:
         _config(_interface.IChinaController, _China())
     else:

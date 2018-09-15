@@ -557,6 +557,12 @@ class ClanController(ClansListeners, IClanController):
     def isLoggedOn(self):
         return self.__state.isLoggedOn()
 
+    @async
+    @process
+    def getAccessTokenData(self, force, callback):
+        accessToken = yield self.__state.getAccessTokenData(force)
+        callback(accessToken)
+
     def updateClanCommonDataCache(self, cache):
         for item in cache or {}:
             self.__searchDataCache[item.getDbID()] = item

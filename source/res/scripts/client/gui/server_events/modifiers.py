@@ -1135,6 +1135,20 @@ class BoostersPriceAll(_ItemsPriceAll):
         return result
 
 
+class CalendarModifier(ActionModifier):
+    """A modifier which does absolutely nothing, just shows the advent calendar action."""
+
+    def __init__(self, name, params):
+        super(CalendarModifier, self).__init__('calendar', params, modType=ACTION_MODIFIER_TYPE.DISCOUNT, section=ACTION_SECTION_TYPE.ALL, itemType=GUI_ITEM_TYPE.ACHIEVEMENT)
+
+
+class CalendarSplashModifier(ActionModifier):
+    """A modifier which does not map into any actions in the store, but toggles calendar splash on lobby startup."""
+
+    def __init__(self, name, params):
+        super(CalendarSplashModifier, self).__init__('calendarSplash', params, modType=ACTION_MODIFIER_TYPE.AVAILABILITY)
+
+
 _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('set_EconomicsParams', EconomicsSet),
  ('mul_EconomicsPrices', EconomicsMul),
@@ -1165,7 +1179,9 @@ _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('mul_EmblemPriceFactorByGroups', EmblemPriceByGroupsMul),
  ('set_GoodiePrice', BoosterPriceSet),
  ('mul_GoodiePrice', BoosterPriceMul),
- ('mul_GoodiePriceAll', BoostersPriceAll))
+ ('mul_GoodiePriceAll', BoostersPriceAll),
+ ('NewYearCalendarEnabled', CalendarModifier),
+ ('NewYearCalendarForced', CalendarSplashModifier))
 _MODIFIERS_DICT = dict(_MODIFIERS)
 _MODIFIERS_ORDER = dict(((n, idx) for idx, (n, _) in enumerate(_MODIFIERS)))
 

@@ -2,13 +2,14 @@
 # Embedded file name: scripts/client/gui/clans/states.py
 from adisp import process, async
 import BigWorld
+from helpers import time_utils
 from client_request_lib.exceptions import ResponseCodes
 from helpers import dependency
 from helpers import getClientLanguage
 from gui.clans.restrictions import AccountClanLimits, DefaultAccountClanLimits
 from gui.clans import contexts
 from gui.clans.factory import g_clanFactory
-from gui.clans.settings import CLAN_CONTROLLER_STATES, LOGIN_STATE, CLAN_REQUESTED_DATA_TYPE
+from gui.clans.settings import CLAN_CONTROLLER_STATES, LOGIN_STATE, CLAN_REQUESTED_DATA_TYPE, AccessTokenData
 from gui.clans.requests import ClanRequestResponse
 from gui.shared.utils.decorators import ReprInjector
 from gui.shared.utils import getPlayerDatabaseID, backoff
@@ -66,6 +67,13 @@ class _ClanState(object):
 
     def login(self):
         pass
+
+    @async
+    @process
+    def getAccessTokenData(self, force, callback):
+        yield lambda callback: callback(True)
+        callback(None)
+        return
 
     def logout(self):
         pass
@@ -247,6 +255,8 @@ class ClanAvailableState(_ClanWebState):
         self._tokenRequester = None
         self.__waitingRequests = list()
         self.__clanSync = False
+        self.__accessTokenData = None
+        self.__accessTokenCallbacks = list()
         return
 
     def init(self):
@@ -303,6 +313,20 @@ class ClanAvailableState(_ClanWebState):
     def login(self):
         yield self.__doLogin()
 
+    @async
+    @process
+    def getAccessTokenData(self, force, callback):
+        yield lambda callback: callback(True)
+        timeOut = self.__accessTokenData is None or time_utils.getCurrentTimestamp() > self.__accessTokenData.expiresAt
+        if force or timeOut:
+            if self.__loginState is LOGIN_STATE.LOGGING_IN:
+                self.__accessTokenCallbacks.append(callback)
+                return
+            self.__loginState = LOGIN_STATE.LOGGED_OFF
+            yield self.__doLogin()
+        callback(self.__accessTokenData)
+        return
+
     @process
     def logout(self):
         if self.isLoggedOn():
@@ -321,26 +345,32 @@ class ClanAvailableState(_ClanWebState):
         if not LOGIN_STATE.canDoLogin(self.__loginState):
             callback(self.isLoggedOn())
             return
-        LOG_DEBUG('Clan gate login processing...')
-        self.__loginState = LOGIN_STATE.LOGGING_IN
-        nextLoginState = LOGIN_STATE.LOGGED_OFF
-        LOG_DEBUG('Requesting spa token...')
-        response = yield self._tokenRequester.request(allowDelay=True)
-        if response and response.isValid():
-            pDbID = getPlayerDatabaseID()
-            if response.getDatabaseID() == pDbID:
-                LOG_DEBUG('Trying to login to the clan lib...')
-                result = yield self.sendRequest(contexts.LogInCtx(pDbID, response.getToken()))
-                if result.isSuccess():
-                    nextLoginState = LOGIN_STATE.LOGGED_ON
-                else:
-                    nextLoginState = LOGIN_STATE.LOGGED_OFF
         else:
-            LOG_WARNING('There is error while getting spa token for clan gate', response)
-        self.__loginState = nextLoginState
-        self.__clanSync = False
-        self.__processWaitingRequests()
-        callback(self.isLoggedOn())
+            self.__accessTokenData = None
+            LOG_DEBUG('Clan gate login processing...')
+            self.__loginState = LOGIN_STATE.LOGGING_IN
+            nextLoginState = LOGIN_STATE.LOGGED_OFF
+            LOG_DEBUG('Requesting spa token...')
+            response = yield self._tokenRequester.request(allowDelay=True)
+            if response and response.isValid():
+                pDbID = getPlayerDatabaseID()
+                if response.getDatabaseID() == pDbID:
+                    LOG_DEBUG('Trying to login to the clan lib...')
+                    responseTime = time_utils.getCurrentTimestamp()
+                    result = yield self.sendRequest(contexts.LogInCtx(pDbID, response.getToken()))
+                    if result.isSuccess():
+                        nextLoginState = LOGIN_STATE.LOGGED_ON
+                        data = result.getData()
+                        self.__accessTokenData = AccessTokenData(data['access_token'], responseTime + float(data['expires_in']))
+                    else:
+                        nextLoginState = LOGIN_STATE.LOGGED_OFF
+            else:
+                LOG_WARNING('There is error while getting spa token for clan gate', response)
+            self.__loginState = nextLoginState
+            self.__clanSync = False
+            self.__processWaitingRequests()
+            callback(self.isLoggedOn())
+            return
 
     @async
     @process
@@ -355,6 +385,10 @@ class ClanAvailableState(_ClanWebState):
 
     @process
     def __processWaitingRequests(self):
+        for callback in self.__accessTokenCallbacks:
+            callback(self.__accessTokenData)
+
+        del self.__accessTokenCallbacks[:]
         if self.isLoggedOn():
             while self.__waitingRequests:
                 ctx, clallback, prevResult, allowDelay = self.__waitingRequests.pop(0)

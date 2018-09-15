@@ -21,8 +21,7 @@ from gui.server_events.event_items import DEFAULTS_GROUPS
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.formatters import text_styles
-from gui.shared.formatters.time_formatters import formatDate
-from helpers import dependency, time_utils
+from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.server_events import IEventsCache
 _EventsBlockData = namedtuple('EventsBlockData', 'filteredCount totalCount blockData')
@@ -377,14 +376,7 @@ class _GroupedEventsBlockInfo(_MinimizableEventsBlockInfo):
     def _getDescrBlock(self):
         minStartTime = min([ q.getStartTime() for q in self._suitableEvents ])
         maxFinishTime = max([ q.getFinishTime() for q in self._suitableEvents ])
-        startDate = time_utils.getDateTimeInLocal(minStartTime)
-        finishDate = time_utils.getDateTimeInLocal(maxFinishTime)
-        startDateFormat = finishDateFormat = '%d %B %Y'
-        if startDate.year == finishDate.year:
-            startDateFormat = '%d %B'
-            if startDate.month == finishDate.month:
-                startDateFormat = '%d'
-        return {'period': text_styles.middleTitle(_ms(QUESTS.MISSIONS_TAB_MARATHONS_HEADER_PERIOD, startDate=formatDate(startDateFormat, minStartTime), endDate=formatDate(finishDateFormat, maxFinishTime))),
+        return {'period': text_styles.middleTitle(_ms(QUESTS.MISSIONS_TAB_MARATHONS_HEADER_PERIOD, startDate=BigWorld.wg_getLongDateFormat(minStartTime), endDate=BigWorld.wg_getLongDateFormat(maxFinishTime))),
          'isMultiline': True,
          'hasCalendarIcon': True}
 

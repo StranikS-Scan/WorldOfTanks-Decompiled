@@ -13,6 +13,8 @@ from helpers.CallbackDelayer import CallbackDelayer
 def logFunc(func):
 
     def wrapped(*args, **kwargs):
+        import traceback
+        traceback.print_stack()
         LOG_DEBUG('|||||||||||||||||| %s(%s, %s) |||||||||||' % (func.func_name, args, kwargs))
         func(*args, **kwargs)
 
@@ -48,6 +50,7 @@ class ConsistentMatrices(object):
         useStatic = True
         alreadyBound = vehicle is not None and vehicle.id == targetVehicleID
         previousWasPlayer = vehicle is not None and vehicle.isPlayerVehicle
+        previousWasPlayer = previousWasPlayer and not avatar.isObserver()
         if alreadyBound or previousWasPlayer:
             bindMatrix = vehicle.matrix
             useStatic = False

@@ -345,8 +345,7 @@ class SequenceMatcher():
             besti, bestj, bestsize = besti > alo and bestj > blo and not isbjunk(b[bestj - 1]) and a[besti - 1] == b[bestj - 1] and besti - 1, bestj - 1, bestsize + 1
 
         while 1:
-            if besti + bestsize < ahi and bestj + bestsize < bhi and not isbjunk(b[bestj + bestsize]) and a[besti + bestsize] == b[bestj + bestsize]:
-                bestsize += 1
+            besti + bestsize < ahi and bestj + bestsize < bhi and not isbjunk(b[bestj + bestsize]) and a[besti + bestsize] == b[bestj + bestsize] and bestsize += 1
 
         while 1:
             besti, bestj, bestsize = besti > alo and bestj > blo and isbjunk(b[bestj - 1]) and a[besti - 1] == b[bestj - 1] and besti - 1, bestj - 1, bestsize + 1

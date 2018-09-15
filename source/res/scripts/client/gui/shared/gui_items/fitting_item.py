@@ -466,27 +466,22 @@ class FittingItem(GUIItem, HasIntCD):
 
     def mayPurchase(self, money):
         """
-        Item can be bought. If center is not available, than disables purchase.
+        Item can be bought. If center is not available, than disables purchase for gold.
+        We should check two prices: one is default price and other is alternative if it exists.
         Can be overridden by inherited classes.
         
         :param money: <Money>, player money
         :return: tuple(can be installed <bool>, error msg <str>)
         """
-        price = self.getBuyPrice().price
-        currency = price.getCurrency(byWeight=False)
-        wallet = BigWorld.player().serverSettings['wallet']
-        useGold = bool(wallet[0])
-        if currency == Currency.GOLD and useGold:
-            if not self._mayConsumeWalletResources:
-                return (False, GUI_ITEM_ECONOMY_CODE.WALLET_NOT_AVAILABLE)
-        elif getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
-            return (False, GUI_ITEM_ECONOMY_CODE.CENTER_UNAVAILABLE)
-        if self.itemTypeID not in (GUI_ITEM_TYPE.EQUIPMENT,
-         GUI_ITEM_TYPE.OPTIONALDEVICE,
-         GUI_ITEM_TYPE.SHELL,
-         GUI_ITEM_TYPE.BATTLE_BOOSTER) and not self.isUnlocked:
-            return (False, GUI_ITEM_ECONOMY_CODE.UNLOCK_ERROR)
-        return (False, GUI_ITEM_ECONOMY_CODE.ITEM_IS_HIDDEN) if self.isHidden else self._isEnoughMoney(price, money)
+        buyPrice = self.getBuyPrice(preferred=True).price
+        result, code = self._mayPurchase(buyPrice, money)
+        if not result:
+            altPrice = self.getBuyPrice(preferred=False).price
+            if buyPrice != altPrice:
+                altResult, altCode = self._mayPurchase(altPrice, money)
+                if altResult:
+                    result, code = altResult, altCode
+        return (result, code)
 
     def getTarget(self, vehicle):
         """
@@ -507,6 +502,22 @@ class FittingItem(GUIItem, HasIntCD):
 
     def isRestoreAvailable(self):
         return False
+
+    def _mayPurchase(self, price, money):
+        currency = price.getCurrency(byWeight=False)
+        wallet = BigWorld.player().serverSettings['wallet']
+        useGold = bool(wallet[0])
+        if currency == Currency.GOLD and useGold:
+            if not self._mayConsumeWalletResources:
+                return (False, GUI_ITEM_ECONOMY_CODE.WALLET_NOT_AVAILABLE)
+        elif getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
+            return (False, GUI_ITEM_ECONOMY_CODE.CENTER_UNAVAILABLE)
+        if self.itemTypeID not in (GUI_ITEM_TYPE.EQUIPMENT,
+         GUI_ITEM_TYPE.OPTIONALDEVICE,
+         GUI_ITEM_TYPE.SHELL,
+         GUI_ITEM_TYPE.BATTLE_BOOSTER) and not self.isUnlocked:
+            return (False, GUI_ITEM_ECONOMY_CODE.UNLOCK_ERROR)
+        return (False, GUI_ITEM_ECONOMY_CODE.ITEM_IS_HIDDEN) if self.isHidden else self._isEnoughMoney(price, money)
 
     @classmethod
     def _isEnoughMoney(cls, price, money):

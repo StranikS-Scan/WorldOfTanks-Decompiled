@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/shared/formatters/time_formatters.py
 import math
 import time
-import locale
 from gui.Scaleform.locale.MENU import MENU
 from helpers import i18n, time_utils
 
@@ -18,8 +17,7 @@ def formatDate(dateFormat, timestamp):
     @param timestamp: timestamp
     @return: formated date as string
     """
-    prefEnc = locale.getpreferredencoding()
-    return time.strftime(i18n.makeString(dateFormat), time_utils.getTimeStructInLocal(timestamp)).decode(prefEnc)
+    return time.strftime(i18n.makeString(dateFormat), time_utils.getTimeStructInLocal(timestamp))
 
 
 def formatTime(timeLeft, divisor, timeStyle=None):

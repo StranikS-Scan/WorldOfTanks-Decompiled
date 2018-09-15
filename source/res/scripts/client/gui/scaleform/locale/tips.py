@@ -230,8 +230,6 @@ class TIPS(object):
     RANKED_11_BODY = '#tips:ranked/11/body'
     RANKED_12_TITLE = '#tips:ranked/12/title'
     RANKED_12_BODY = '#tips:ranked/12/body'
-    RANKED_13_TITLE = '#tips:ranked/13/title'
-    RANKED_13_BODY = '#tips:ranked/13/body'
     RANKED_ALL_TITLE_ENUM = (RANKED_0_TITLE,
      RANKED_1_TITLE,
      RANKED_2_TITLE,
@@ -244,8 +242,7 @@ class TIPS(object):
      RANKED_9_TITLE,
      RANKED_10_TITLE,
      RANKED_11_TITLE,
-     RANKED_12_TITLE,
-     RANKED_13_TITLE)
+     RANKED_12_TITLE)
     RANKED_ALL_BODY_ENUM = (RANKED_0_BODY,
      RANKED_1_BODY,
      RANKED_2_BODY,
@@ -258,8 +255,7 @@ class TIPS(object):
      RANKED_9_BODY,
      RANKED_10_BODY,
      RANKED_11_BODY,
-     RANKED_12_BODY,
-     RANKED_13_BODY)
+     RANKED_12_BODY)
     EPICRANDOM_ALL_TITLE_ENUM = (EPICRANDOM_0_TITLE,)
     EPICRANDOM_ALL_BODY_ENUM = (EPICRANDOM_0_BODY,)
 

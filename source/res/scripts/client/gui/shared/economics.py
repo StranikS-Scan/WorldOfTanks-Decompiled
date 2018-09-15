@@ -25,13 +25,12 @@ def calcRentPackages(vehicle, proxy):
     if proxy is not None and vehicle.isRentable:
         rentCost = proxy.shop.getVehicleRentPrices().get(vehicle.intCD, {})
         defaultRentCost = proxy.shop.defaults.getVehicleRentPrices().get(vehicle.intCD, {})
-        if len(rentCost) and len(defaultRentCost) is not None:
-            for key in sorted(rentCost.keys()):
-                rentPrice = Money.makeFromMoneyTuple(rentCost[key].get('cost', ()))
-                defaultRentPrice = Money.makeFromMoneyTuple(defaultRentCost.get(key, {}).get('cost', rentPrice))
-                result.append({'days': key,
-                 'rentPrice': rentPrice,
-                 'defaultRentPrice': defaultRentPrice})
+        for key in sorted(rentCost.keys()):
+            rentPrice = Money.makeFromMoneyTuple(rentCost[key].get('cost', ()))
+            defaultRentPrice = Money.makeFromMoneyTuple(defaultRentCost.get(key, {}).get('cost', rentPrice.toMoneyTuple()))
+            result.append({'days': key,
+             'rentPrice': rentPrice,
+             'defaultRentPrice': defaultRentPrice})
 
     return result
 

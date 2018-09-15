@@ -40,9 +40,12 @@ class ClassicPage(SharedPage):
     def __init__(self, components=None, external=None, fullStatsAlias=BATTLE_VIEW_ALIASES.FULL_STATS):
         self._fullStatsAlias = fullStatsAlias
         if components is None:
-            components = COMMON_CLASSIC_CONFIG if self.sessionProvider.isReplayPlaying else EXTENDED_CLASSIC_CONFIG
+            components = self._getDefaultComponentsConfig()
         super(ClassicPage, self).__init__(components=components, external=external)
         return
+
+    def _getDefaultComponentsConfig(self):
+        return COMMON_CLASSIC_CONFIG if self.sessionProvider.isReplayPlaying else EXTENDED_CLASSIC_CONFIG
 
     def __del__(self):
         LOG_DEBUG('ClassicPage is deleted')

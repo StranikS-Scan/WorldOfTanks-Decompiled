@@ -1254,15 +1254,16 @@ class FalloutDestroyEffect:
         vehicle = BigWorld.entity(vehicle_id)
         if vehicle is None:
             return
+        effects = vehicle.typeDescriptor.type.effects['fullDestruction']
+        if not effects:
+            return
+        vehicle.appearance.hide()
+        if vehicle.model is not None:
+            fakeModel = helpers.newFakeModel()
+            BigWorld.addModel(fakeModel)
+            fakeModel.position = vehicle.model.position
+            effectsPlayer = EffectsListPlayer(effects[0][1], effects[0][0])
+            effectsPlayer.play(fakeModel, SpecialKeyPointNames.START, partial(BigWorld.delModel, fakeModel))
+            return effectsPlayer
         else:
-            effects = vehicle.typeDescriptor.type.effects['fullDestruction']
-            if not effects:
-                return
-            vehicle.show(False)
-            if vehicle.model is not None:
-                fakeModel = helpers.newFakeModel()
-                BigWorld.addModel(fakeModel)
-                fakeModel.position = vehicle.model.position
-                effectsPlayer = EffectsListPlayer(effects[0][1], effects[0][0])
-                effectsPlayer.play(fakeModel, SpecialKeyPointNames.START, partial(BigWorld.delModel, fakeModel))
             return

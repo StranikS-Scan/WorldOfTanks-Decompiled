@@ -157,7 +157,9 @@ class VehicleRequirements(ConditionsParser):
 
     def isAvailable(self, vehicle):
         conds = self.getConditions()
-        return conds.isAvailable(vehicle) if not conds.isEmpty() else True
+        if not conds.isEmpty():
+            return conds.isAvailable(vehicle)
+        return False if vehicle.isOnlyForEventBattles else True
 
     def isAnyVehicleAcceptable(self):
         results = set()

@@ -46,7 +46,7 @@ class VehicleChassis(VehicleModule):
     def isInstalled(self, vehicle, slotIdx=None):
         return self.intCD == vehicle.chassis.intCD
 
-    def mayInstall(self, vehicle, slotIdx=None):
+    def mayInstall(self, vehicle, slotIdx=None, position=0):
         installPossible, reason = FittingItem.mayInstall(self, vehicle, slotIdx)
         return (False, 'too heavy chassis') if not installPossible and reason == 'too heavy' else (installPossible, reason)
 
@@ -70,16 +70,16 @@ class VehicleTurret(VehicleModule):
     __slots__ = ()
 
     def isInstalled(self, vehicle, slotIdx=None):
-        return self.intCD == vehicle.turret.intCD
+        return self.intCD == vehicle.turret.intCD or vehicle.isMultiTurret and self.intCD == vehicle.descriptor.turrets[1].turret.compactDescr
 
-    def mayInstall(self, vehicle, slotIdx=None, gunCD=0):
-        installPossible, reason = vehicle.descriptor.mayInstallTurret(self.intCD, gunCD)
+    def mayInstall(self, vehicle, slotIdx=None, gunCD=0, position=0):
+        installPossible, reason = vehicle.descriptor.mayInstallTurret(self.intCD, gunCD, position)
         return (False, 'need gun') if not installPossible and reason == 'not for this vehicle type' else (installPossible, reason)
 
     def getInstalledVehicles(self, vehicles):
         result = set()
         for vehicle in vehicles:
-            if self.intCD == vehicle.turret.intCD:
+            if self.isInstalled(vehicle, None):
                 result.add(vehicle)
 
         return result
@@ -98,10 +98,10 @@ class VehicleGun(VehicleModule):
         self._maxAmmo = self._getMaxAmmo(proxy)
 
     def isInstalled(self, vehicle, slotIdx=None):
-        return self.intCD == vehicle.gun.intCD
+        return self.intCD == vehicle.gun.intCD or vehicle.isMultiTurret and self.intCD == vehicle.descriptor.turrets[1].gun.compactDescr
 
-    def mayInstall(self, vehicle, slotIdx=None):
-        installPossible, reason = FittingItem.mayInstall(self, vehicle)
+    def mayInstall(self, vehicle, slotIdx=None, position=0):
+        installPossible, reason = FittingItem.mayInstall(self, vehicle, slotIdx, position)
         return (False, 'need turret') if not installPossible and reason == 'not for current vehicle' else (installPossible, reason)
 
     def getReloadingType(self, vehicleDescr=None):
@@ -125,7 +125,7 @@ class VehicleGun(VehicleModule):
     def getInstalledVehicles(self, vehicles):
         result = set()
         for vehicle in vehicles:
-            if self.intCD == vehicle.gun.intCD:
+            if self.isInstalled(vehicle, None):
                 result.add(vehicle)
 
         return result

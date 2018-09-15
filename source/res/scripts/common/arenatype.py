@@ -6,9 +6,10 @@ from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH, ARENA_GUI_
 from constants import ARENA_GAMEPLAY_IDS, TEAMS_IN_ARENA, ARENA_GAMEPLAY_NAMES
 from constants import IS_CELLAPP, IS_BASEAPP
 from items.vehicles import CAMOUFLAGE_KINDS
-from debug_utils import LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG_DEV
 from GasAttackSettings import GasAttackSettings
 from items import _xml
+from BossModeSettings import BossModeSettings
 if IS_CLIENT:
     from helpers import i18n
     import WWISE
@@ -85,7 +86,7 @@ class ArenaType(object):
             raise Exception("'maxPlayersInTeam' value < 'minPlayersInTeam' value")
 
     def __getattr__(self, name):
-        return self.__gameplayCfg[name] if name in self.__gameplayCfg else self.__geometryCfg[name]
+        return self.__gameplayCfg[name] if name in self.__gameplayCfg else self.__geometryCfg.get(name, None)
 
 
 class GeometryType(object):
@@ -178,6 +179,10 @@ def __readGameplayCfg(gameplayName, section, defaultXml, geometryCfg):
 
         if gameplayName == 'nations':
             raise Exception('national battles are disabled')
+        if __hasKey('bossModes', section, defaultXml):
+            cfg['bossModes'] = __readBossModes(section['bossModes'])
+        else:
+            cfg['bossModes'] = None
         cfg.update(__readCommonCfg(section, defaultXml, False, geometryCfg))
     except Exception as e:
         LOG_CURRENT_EXCEPTION()
@@ -635,3 +640,79 @@ def __readGasAttackSettings(section):
 
 def __readWinPoints(section):
     return {'winPointsSettings': section.readString('winPoints', 'DEFAULT')}
+
+
+def __readBossModes(section):
+    settings = BossModeSettings(section.readString('botName'))
+    if section.has_key('team'):
+        settings.setTeamNum(section.readInt('team'))
+    if section.has_key('mineRadius'):
+        settings.setMineRadius(section.readFloat('mineRadius'))
+    if section.has_key('mineDamage'):
+        settings.setMineDamage(section.readInt('mineDamage'))
+    if section.has_key('mineDuration'):
+        settings.setMineDuration(section.readFloat('mineDuration'))
+    if section.has_key('mineActivationDelay'):
+        settings.setMineActivationDelay(section.readFloat('mineActivationDelay'))
+    if section.has_key('mineModelActivationDelay'):
+        settings.setMineModelActivationDelay(section.readFloat('mineModelActivationDelay'))
+    if section.has_key('mineEffects'):
+        settings.setMineEffects(section['mineEffects'])
+    if section.has_key('healthPowerupRadius'):
+        settings.setHealthPowerupRadius(section.readFloat('healthPowerupRadius'))
+    if section.has_key('healthPowerupDuration'):
+        settings.setHealthPowerupDuration(section.readFloat('healthPowerupDuration'))
+    if section.has_key('healthPowerupHealAmount'):
+        settings.setHealthPowerupHealAmount(section.readInt('healthPowerupHealAmount'))
+    if section.has_key('healthPowerupEffects'):
+        settings.setHealthPowerupEffects(section['healthPowerupEffects'])
+    for name, value in section.items():
+        if name == 'phase':
+            events = []
+            for phaseKey, phaseValue in value.items():
+                if phaseKey == 'health':
+                    health = phaseValue.readFloat('')
+                if phaseKey == 'event':
+                    event = {'name': phaseValue.readString('')}
+                    for eventKey, eventValue in phaseValue.items():
+                        event[eventKey] = eventValue.readFloat('')
+
+                    events.append(event)
+
+            settings.addPhase(health, events)
+        if name == 'minionEvent':
+            minionEvents = []
+            for phaseKey, phaseValue in value.items():
+                if phaseKey == 'health':
+                    health = phaseValue.readFloat('')
+                if phaseKey == 'event':
+                    event = {'name': phaseValue.readString('')}
+                    for eventKey, eventValue in phaseValue.items():
+                        event[eventKey] = eventValue.readFloat('')
+
+                    minionEvents.append(event)
+
+            settings.addMinionEvent(health, minionEvents)
+        if name == 'mineModels':
+            for key, modelData in value.items():
+                for tagKey, model in modelData.items():
+                    modelName = model.readString('')
+                    actionName = model.readString('action')
+                    settings.addMineModels(key, modelName, actionName)
+
+        if name == 'healthPowerupModels':
+            for key, modelData in value.items():
+                for tagKey, model in modelData.items():
+                    modelName = model.readString('')
+                    actionName = model.readString('action')
+                    settings.addHealthPowerupModels(key, modelName, actionName)
+
+        if name == 'pathProgressData':
+            for key, segment in value.items():
+                segmentName = segment.readString('')
+                startingProgressFraction = segment.readFloat('startingProgressFraction')
+                endingProgressFraction = segment.readFloat('endingProgressFraction')
+                segmentLength = segment.readFloat('segmentLength')
+                settings.addPathProgressSegment(segmentName, startingProgressFraction, endingProgressFraction, segmentLength)
+
+    return settings

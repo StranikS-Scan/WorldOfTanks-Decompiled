@@ -8,6 +8,7 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntryPoint, PreQueueEntity
 from gui.prb_control.prb_getters import isInEventBattlesQueue
 from gui.prb_control.settings import FUNCTIONAL_FLAG
+from gui.prb_control.entities.base import vehicleAmmoCheck
 
 class EventBattleSubscriber(PreQueueSubscriber):
     """
@@ -48,11 +49,15 @@ class EventBattleEntity(PreQueueEntity):
     def __init__(self):
         super(EventBattleEntity, self).__init__(FUNCTIONAL_FLAG.EVENT, QUEUE_TYPE.EVENT_BATTLES, EventBattleSubscriber())
 
+    @vehicleAmmoCheck
+    def queue(self, ctx, callback=None):
+        super(EventBattleEntity, self).queue(ctx, callback=callback)
+
     def isInQueue(self):
         return isInEventBattlesQueue()
 
     def _doQueue(self, ctx):
-        BigWorld.player().enqueueEventBattles(ctx.getVehicleInventoryIDs(), ctx.getBattleType(), canAddToSquad=ctx.canAddToSquad())
+        BigWorld.player().enqueueEventBattles(ctx.getVehicleInventoryID(), ctx.getBattleType(), canAddToSquad=ctx.canAddToSquad())
         LOG_DEBUG('Sends request on queuing to the event battles', ctx)
 
     def _doDequeue(self, ctx):

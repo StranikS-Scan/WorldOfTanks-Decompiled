@@ -318,6 +318,9 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isEventBattle(self):
         return self._guiType == _GUI_TYPE.EVENT_BATTLES
 
+    def isEventBattlesTwo(self):
+        return self._guiType == _GUI_TYPE.EVENT_BATTLES_2
+
     def isFalloutBattle(self):
         return self._guiType in _GUI_TYPE.FALLOUT_RANGE
 

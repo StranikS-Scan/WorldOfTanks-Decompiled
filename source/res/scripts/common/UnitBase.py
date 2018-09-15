@@ -164,6 +164,7 @@ class UNIT_ERROR:
     BAD_ARENA_BONUS_TYPE = 99
     UNIT_CHANGED_LEADER = 100
     FAIL_EXT_UNIT_QUEUE_START = 101
+    BAD_EVENT_TYPE = 102
 
 
 OK = UNIT_ERROR.OK
@@ -202,6 +203,7 @@ class UNIT_OP:
     SET_VEHICLE_LIST = 21
     CHANGE_FALLOUT_TYPE = 22
     ARENA_TYPE = 23
+    CHANGE_EVENT_TYPE = 24
 
 
 class UNIT_ROLE:
@@ -266,6 +268,7 @@ class UNIT_NOTIFY_CMD:
     SET_MEMBER_READY = 5
     KICK_ALL = 6
     EXTRAS_UPDATED = 7
+    EVENT_TYPE_CHANGE = 9
     FALLOUT_TYPE_CHANGE = 10
     AUTO_ASSEMBLED_MEMBER_ADDED = 11
     APPROVED_VEHICLE_LIST = 12
@@ -299,6 +302,7 @@ class CLIENT_UNIT_CMD:
     CHANGE_FALLOUT_TYPE = 24
     SET_UNIT_VEHICLE_TYPE = 25
     SET_ARENA_TYPE = 26
+    CHANGE_EVENT_TYPE = 27
 
 
 CMD_NAMES = dict([ (v, k) for k, v in CLIENT_UNIT_CMD.__dict__.items() if not k.startswith('__') ])
@@ -411,7 +415,8 @@ class UnitBase(OpsUnpacker):
                                 'N',
                                 [('H', 'iH')]),
      UNIT_OP.CHANGE_FALLOUT_TYPE: ('i', '_changeFalloutQueueType'),
-     UNIT_OP.ARENA_TYPE: ('i', '_setArenaType')})
+     UNIT_OP.ARENA_TYPE: ('i', '_setArenaType'),
+     UNIT_OP.CHANGE_EVENT_TYPE: ('i', '_changeEventQueueType')})
     MAX_PLAYERS = 250
 
     def __init__(self, limitsDefs={}, slotDefs={}, slotCount=0, packedRoster='', extrasInit=None, packedUnit='', rosterTypeID=ROSTER_TYPE.UNIT_ROSTER, extrasHandlerID=EXTRAS_HANDLER_TYPE.EMPTY, prebattleTypeID=PREBATTLE_TYPE.UNIT):
@@ -1084,6 +1089,10 @@ class UnitBase(OpsUnpacker):
             self._refreshFreeSlots(prevRoster.MAX_SLOTS, self._roster.MAX_SLOTS)
             self.storeOp(UNIT_OP.CHANGE_FALLOUT_TYPE, queueType)
             return True
+
+    def _changeEventQueueType(self, queueType):
+        self.storeOp(UNIT_OP.CHANGE_EVENT_TYPE, queueType)
+        return True
 
     def _getLeaderDBID(self):
         return self._members.get(LEADER_SLOT, {}).get('accountDBID', 0)

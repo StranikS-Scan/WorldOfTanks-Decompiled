@@ -140,10 +140,8 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_16 = '#menu:loading/battleTypes/desc/16'
     LOADING_BATTLETYPES_17 = '#menu:loading/battleTypes/17'
     LOADING_BATTLETYPES_DESC_17 = '#menu:loading/battleTypes/desc/17'
-    LOADING_BATTLETYPES_19 = '#menu:loading/battleTypes/19'
-    LOADING_BATTLETYPES_DESC_19 = '#menu:loading/battleTypes/desc/19'
-    LOADING_BATTLETYPES_20 = '#menu:loading/battleTypes/20'
-    LOADING_BATTLETYPES_DESC_20 = '#menu:loading/battleTypes/desc/20'
+    LOADING_BATTLETYPES_21 = '#menu:loading/battleTypes/21'
+    LOADING_BATTLETYPES_DESC_21 = '#menu:loading/battleTypes/desc/21'
     LOADING_TEAM1 = '#menu:loading/team1'
     LOADING_TEAM2 = '#menu:loading/team2'
     LOADING_TEAMS_ALLIES = '#menu:loading/teams/allies'
@@ -456,6 +454,10 @@ class MENU(object):
     TANK_PARAMS_HULLARMOR = '#menu:tank_params/hullArmor'
     TANK_PARAMS_FACEFRONTBOARDINMM = '#menu:tank_params/faceFrontBoardInMM'
     TANK_PARAMS_TURRETARMOR = '#menu:tank_params/turretArmor'
+    TANK_PARAMS_TURRETARMOR_PRIMARY = '#menu:tank_params/turretArmor_Primary'
+    TANK_PARAMS_TURRETARMOR_SECONDARY = '#menu:tank_params/turretArmor_Secondary'
+    TANK_PARAMS_PARAMTITLE_SECONDARYTURRET = '#menu:tank_params/paramTitle_SecondaryTurret'
+    TANK_PARAMS_PARAMTITLE_PRIMARYTURRET = '#menu:tank_params/paramTitle_PrimaryTurret'
     TANK_PARAMS_RELOADTIME = '#menu:tank_params/reloadTime'
     TANK_PARAMS_RELOADTIMESECS = '#menu:tank_params/reloadTimeSecs'
     TANK_PARAMS_PIERCINGPOWER = '#menu:tank_params/piercingPower'
@@ -515,6 +517,18 @@ class MENU(object):
     TANK_PARAMS_CLIPSEC = '#menu:tank_params/clipSec'
     TANK_PARAMS_STUNMAXDURATION = '#menu:tank_params/stunMaxDuration'
     TANK_PARAMS_STUNMINDURATION = '#menu:tank_params/stunMinDuration'
+    TANK_PARAMS_AVGDAMAGE_SECONDARY = '#menu:tank_params/avgDamage_Secondary'
+    TANK_PARAMS_AVGPIERCINGPOWER_SECONDARY = '#menu:tank_params/avgPiercingPower_Secondary'
+    TANK_PARAMS_RELOADTIME_SECONDARY = '#menu:tank_params/reloadTime_Secondary'
+    TANK_PARAMS_RELOADTIMESECS_SECONDARY = '#menu:tank_params/reloadTimeSecs_Secondary'
+    TANK_PARAMS_TURRETROTATIONSPEED_SECONDARY = '#menu:tank_params/turretRotationSpeed_Secondary'
+    TANK_PARAMS_TURRETYAWLIMITS_SECONDARY = '#menu:tank_params/turretYawLimits_Secondary'
+    TANK_PARAMS_PITCHLIMITS_SECONDARY = '#menu:tank_params/pitchLimits_Secondary'
+    TANK_PARAMS_GUNYAWLIMITS_SECONDARY = '#menu:tank_params/gunYawLimits_Secondary'
+    TANK_PARAMS_CLIPFIRERATE_SECONDARY = '#menu:tank_params/clipFireRate_Secondary'
+    TANK_PARAMS_AIMINGTIME_SECONDARY = '#menu:tank_params/aimingTime_Secondary'
+    TANK_PARAMS_SHOTDISPERSIONANGLE_SECONDARY = '#menu:tank_params/shotDispersionAngle_Secondary'
+    TANK_PARAMS_AVGDAMAGEPERMINUTE_SECONDARY = '#menu:tank_params/avgDamagePerMinute_Secondary'
     DESCRIPTIONS_VEHICLE = '#menu:descriptions/vehicle'
     DESCRIPTIONS_VEHICLEGUN = '#menu:descriptions/vehicleGun'
     DESCRIPTIONS_VEHICLETURRET = '#menu:descriptions/vehicleTurret'
@@ -614,11 +628,17 @@ class MENU(object):
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDVEHLEVELREQUIRED_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedVehLevelRequired/body'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_HEADER = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/header'
     HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDDISABLED_BODY = '#menu:headerButtons/fightBtn/tooltip/rankedDisabled/body'
+    HEADERBUTTONS_FIGHTBTN_TOOLTIP_HALLOWEEN_INVALID_LEVEL_BODY = '#menu:headerButtons/fightBtn/tooltip/halloween/invalid/level/body'
     PVESANDBOX_QUEUE_TITLE = '#menu:pveSandbox/queue/title'
+    PVEHALLOWEEN_QUEUE_TITLE = '#menu:pveHalloween/queue/title'
     PVESANDBOX_QUEUE_UNITS = '#menu:pveSandbox/queue/units'
+    PVEHALLOWEEN_QUEUE_UNITS = '#menu:pveHalloween/queue/units'
     PVESANDBOX_QUEUE_MESSAGE = '#menu:pveSandbox/queue/message'
+    PVEHALLOWEEN_QUEUE_MESSAGE = '#menu:pveHalloween/queue/message'
     PVESANDBOX_QUEUE_MORE_N_MINUTES = '#menu:pveSandbox/queue/more_n_minutes'
+    PVEHALLOWEEN_QUEUE_MORE_N_MINUTES = '#menu:pveHalloween/queue/more_n_minutes'
     PVESANDBOX_QUEUE_PLAYER_WAITING_TIME = '#menu:pveSandbox/queue/player-waiting-time'
+    PVEHALLOWEEN_QUEUE_PLAYER_WAITING_TIME = '#menu:pveHalloween/queue/player-waiting-time'
     HEADERBUTTONS_RATING = '#menu:headerButtons/rating'
     HEADERBUTTONS_PROFILE = '#menu:headerButtons/profile'
     STORETAB_INVENTORY = '#menu:storeTab/inventory'
@@ -1454,6 +1474,7 @@ class MENU(object):
     BONUSTYPE_21 = '#menu:bonusType/21'
     BONUSTYPE_22 = '#menu:bonusType/22'
     BONUSTYPE_24 = '#menu:bonusType/24'
+    BONUSTYPE_26 = '#menu:bonusType/26'
     FORTIFICATIONCTX_ASSIGNEDPLAYERS = '#menu:fortificationCtx/assignedPlayers'
     FORTIFICATIONCTX_PREPAREORDER = '#menu:fortificationCtx/prepareOrder'
     FORTIFICATIONCTX_CLANDESCRIPTION_OPENCLANCARD = '#menu:fortificationCtx/clanDescription/openClanCard'
@@ -1588,6 +1609,10 @@ class MENU(object):
     AWARDWINDOW_MISSION_MAINCONDITIONCOMPLETE = '#menu:awardWindow/mission/mainConditionComplete'
     AWARDWINDOW_MISSION_AVAILABLE = '#menu:awardWindow/mission/available'
     AWARDWINDOW_MISSION_NEXTBUTTON = '#menu:awardWindow/mission/nextButton'
+    AWARDWINDOW_HALLOWEENMISSION_REWARDOPENED = '#menu:awardWindow/halloweenMission/rewardOpened'
+    AWARDWINDOW_HALLOWEENMISSION_NEXTBUTTON = '#menu:awardWindow/halloweenMission/nextButton'
+    AWARDWINDOW_HALLOWEENMISSION_CLOSEBUTTON = '#menu:awardWindow/halloweenMission/closeButton'
+    AWARDWINDOW_HALLOWEENMISSION_AWARDSGRANTED = '#menu:awardWindow/halloweenMission/awardsGranted'
     AWARDWINDOW_MISSION_NEXTBUTTON_TOOLTIP_HEADER = '#menu:awardWindow/mission/nextButton/tooltip/header'
     AWARDWINDOW_MISSION_NEXTBUTTON_TOOLTIP_BODY = '#menu:awardWindow/mission/nextButton/tooltip/body'
     AWARDWINDOW_MISSION_ADDITIONALCOMPLETE = '#menu:awardWindow/mission/additionalComplete'
@@ -1740,7 +1765,20 @@ class MENU(object):
     FITTINGSELECTPOPOVER_DESCTEXT = '#menu:fittingSelectPopover/descText'
     FITTINGSELECTPOPOVER_DESCTEXT_CRYSTAL = '#menu:fittingSelectPopover/descText/crystal'
     FITTINGSELECTPOPOVER_BATTLETYPE = '#menu:fittingSelectPopover/battleType'
+    FITTINGSELECTPOPOVERMULTI_MAIN = '#menu:fittingSelectPopoverMulti/main'
+    FITTINGSELECTPOPOVERMULTI_SECONDARY = '#menu:fittingSelectPopoverMulti/secondary'
     QUOTE = '#menu:quote'
+    HANGAR_LEVIATHANPREVIEW_HEADERTITLE = '#menu:hangar/leviathanPreview/headerTitle'
+    HANGAR_LEVIATHANPREVIEW_CLOSE = '#menu:hangar/leviathanPreview/close'
+    HANGAR_LEVIATHANPREVIEW_HEADERDESC = '#menu:hangar/leviathanPreview/headerDesc'
+    HANGAR_LEVIATHANPREVIEW_VEHICLEINFO = '#menu:hangar/leviathanPreview/vehicleInfo'
+    HANGAR_LEVIATHANPREVIEW_INFOBUTTON = '#menu:hangar/leviathanPreview/infoButton'
+    HANGAR_LEVIATHANPREVIEW_SUMMARY = '#menu:hangar/leviathanPreview/summary'
+    TANK_PARAMS_LEVIATHAN_MONSTROUS = '#menu:tank_params/leviathan/monstrous'
+    TANK_PARAMS_LEVIATHAN_UNBELIEVABLE = '#menu:tank_params/leviathan/unbelievable'
+    TANK_PARAMS_LEVIATHAN_UNSTOPPABLE = '#menu:tank_params/leviathan/unstoppable'
+    TANK_PARAMS_LEVIATHAN_UNKNOWN = '#menu:tank_params/leviathan/unknown'
+    HANGAR_LEVIATHANPREVIEW_BACKDESCR = '#menu:hangar/leviathanPreview/backDescr'
     CONTEXTMENU_ENUM = (CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,
      CONTEXTMENU_GOTONATIONTREE,
@@ -2003,6 +2041,10 @@ class MENU(object):
      TANK_PARAMS_HULLARMOR,
      TANK_PARAMS_FACEFRONTBOARDINMM,
      TANK_PARAMS_TURRETARMOR,
+     TANK_PARAMS_TURRETARMOR_PRIMARY,
+     TANK_PARAMS_TURRETARMOR_SECONDARY,
+     TANK_PARAMS_PARAMTITLE_SECONDARYTURRET,
+     TANK_PARAMS_PARAMTITLE_PRIMARYTURRET,
      TANK_PARAMS_RELOADTIME,
      TANK_PARAMS_RELOADTIMESECS,
      TANK_PARAMS_PIERCINGPOWER,
@@ -2061,7 +2103,23 @@ class MENU(object):
      TANK_PARAMS_KG,
      TANK_PARAMS_CLIPSEC,
      TANK_PARAMS_STUNMAXDURATION,
-     TANK_PARAMS_STUNMINDURATION)
+     TANK_PARAMS_STUNMINDURATION,
+     TANK_PARAMS_AVGDAMAGE_SECONDARY,
+     TANK_PARAMS_AVGPIERCINGPOWER_SECONDARY,
+     TANK_PARAMS_RELOADTIME_SECONDARY,
+     TANK_PARAMS_RELOADTIMESECS_SECONDARY,
+     TANK_PARAMS_TURRETROTATIONSPEED_SECONDARY,
+     TANK_PARAMS_TURRETYAWLIMITS_SECONDARY,
+     TANK_PARAMS_PITCHLIMITS_SECONDARY,
+     TANK_PARAMS_GUNYAWLIMITS_SECONDARY,
+     TANK_PARAMS_CLIPFIRERATE_SECONDARY,
+     TANK_PARAMS_AIMINGTIME_SECONDARY,
+     TANK_PARAMS_SHOTDISPERSIONANGLE_SECONDARY,
+     TANK_PARAMS_AVGDAMAGEPERMINUTE_SECONDARY,
+     TANK_PARAMS_LEVIATHAN_MONSTROUS,
+     TANK_PARAMS_LEVIATHAN_UNBELIEVABLE,
+     TANK_PARAMS_LEVIATHAN_UNSTOPPABLE,
+     TANK_PARAMS_LEVIATHAN_UNKNOWN)
     BROWSER_CUSTOMTITLE_ENUM = (BROWSER_CUSTOMTITLE_FORT_OFFENSIVERESULT, BROWSER_CUSTOMTITLE_FORT_CONGRATULATION)
     LOADING_BATTLETYPES_DESC_ENUM = (LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_DESC_1,
@@ -2080,8 +2138,7 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_15,
      LOADING_BATTLETYPES_DESC_16,
      LOADING_BATTLETYPES_DESC_17,
-     LOADING_BATTLETYPES_DESC_19,
-     LOADING_BATTLETYPES_DESC_20)
+     LOADING_BATTLETYPES_DESC_21)
     LOADING_BATTLETYPES_ENUM = (LOADING_BATTLETYPES_0,
      LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_1,
@@ -2116,10 +2173,8 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_16,
      LOADING_BATTLETYPES_17,
      LOADING_BATTLETYPES_DESC_17,
-     LOADING_BATTLETYPES_19,
-     LOADING_BATTLETYPES_DESC_19,
-     LOADING_BATTLETYPES_20,
-     LOADING_BATTLETYPES_DESC_20)
+     LOADING_BATTLETYPES_21,
+     LOADING_BATTLETYPES_DESC_21)
 
     @classmethod
     def contextmenu(cls, key0):

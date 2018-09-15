@@ -44,6 +44,7 @@ class GUN_MARKER_TYPE(int):
     UNDEFINED = 0
     CLIENT = 1
     SERVER = 2
+    SUB = 3
 
 
 class GUN_MARKER_FLAG(int):

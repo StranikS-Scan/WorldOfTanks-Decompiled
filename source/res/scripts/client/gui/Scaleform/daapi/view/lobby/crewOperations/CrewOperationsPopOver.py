@@ -39,8 +39,13 @@ class CrewOperationsPopOver(CrewOperationsPopOverMeta):
 
     def __update(self):
         vehicle = g_currentVehicle.item
-        dataForUpdate = {'operationsArray': (self.__getRetrainOperationData(vehicle), self.__getReturnOperationData(vehicle), self.__getDropInBarrackOperationData(vehicle))}
+        dataForUpdate = None
+        if not vehicle.isCrewLocked:
+            dataForUpdate = {'operationsArray': (self.__getRetrainOperationData(vehicle), self.__getReturnOperationData(vehicle), self.__getDropInBarrackOperationData(vehicle))}
+        else:
+            dataForUpdate = {'operationsArray': (self.__getRetrainOperationData(vehicle), self.__getReturnOperationData(vehicle))}
         self.as_updateS(dataForUpdate)
+        return
 
     def __getRetrainOperationData(self, vehicle):
         crew = vehicle.crew

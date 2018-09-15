@@ -118,7 +118,7 @@ class Crew(CrewMeta):
                 tankmenData.append(tankmanData)
 
             self.as_tankmenResponseS({'showPersonalCase': self._showPersonalCase,
-             'showRecruit': self._showRecruit,
+             'showRecruit': self._showRecruit and not vehicle.isCrewLocked,
              'roles': roles,
              'tankmen': tankmenData})
             dogName = ''

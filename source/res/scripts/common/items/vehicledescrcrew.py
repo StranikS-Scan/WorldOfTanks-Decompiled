@@ -10,7 +10,7 @@ class VehicleDescrCrew(object):
     def __init__(self, vehicleDescr, crewCompactDescrs, mainSkillQualifiersApplier, activityFlags=None, isFire=False, stunFactors=None):
         if activityFlags is None:
             activityFlags = [True] * len(crewCompactDescrs)
-        self._vehicleDescr = vehicleDescr
+        self.vehicleDescr = vehicleDescr
         self._crewCompactDescrs = crewCompactDescrs
         self._activityFlags = activityFlags
         self._isFire = isFire
@@ -229,25 +229,29 @@ class VehicleDescrCrew(object):
             LOG_DEBUG("Factor/baseAvgLevel of skill '%s': (%s, %s)" % ('driver', factor, baseAvgLevel))
 
     def _updateLoaderFactors(self, factor, baseAvgLevel):
-        self._factors['gun/reloadTime'] = 1.0 / factor
-        if self._stunFactors is not None:
-            self._factors['gun/reloadTime'] *= self._stunFactors['reloadTime']
+        for turretIndex in xrange(len(self.vehicleDescr.type.turrets)):
+            self._factors['turrets/{}/gun/reloadTime'.format(turretIndex)] = 1.0 / factor
+            if self._stunFactors is not None:
+                self._factors['turrets/{}/gun/reloadTime'.format(turretIndex)] *= self._stunFactors['reloadTime']
+
         if _DO_DEBUG_LOG:
             LOG_DEBUG("Factor/baseAvgLevel of skill '%s': (%s, %s)" % ('loader', factor, baseAvgLevel))
         return
 
     def _updateGunnerFactors(self, factor, baseAvgLevel):
         factors = self._factors
-        factors['turret/rotationSpeed'] = factor
-        factors['gun/rotationSpeed'] = factor
-        factors['gun/aimingTime'] = 1.0 / factor
-        self._shotDispFactor = 1.0 / factor
-        if self._stunFactors is not None:
-            sf = self._stunFactors
-            factors['turret/rotationSpeed'] *= sf['turretRotationSpeed']
-            factors['gun/rotationSpeed'] *= sf['gunRotationSpeed']
-            factors['gun/aimingTime'] *= sf['aimingTime']
-            self._shotDispFactor *= sf['shotDispersion']
+        for turretIndex in xrange(len(self.vehicleDescr.type.turrets)):
+            factors['turrets/{}/rotationSpeed'.format(turretIndex)] = factor
+            factors['turrets/{}/gun/rotationSpeed'.format(turretIndex)] = factor
+            factors['turrets/{}/gun/aimingTime'.format(turretIndex)] = 1.0 / factor
+            self._shotDispFactor = 1.0 / factor
+            if self._stunFactors is not None:
+                sf = self._stunFactors
+                factors['turrets/{}/rotationSpeed'.format(turretIndex)] *= sf['turretRotationSpeed']
+                factors['turrets/{}/gun/rotationSpeed'.format(turretIndex)] *= sf['gunRotationSpeed']
+                factors['turrets/{}/gun/aimingTime'.format(turretIndex)] *= sf['aimingTime']
+                self._shotDispFactor *= sf['shotDispersion']
+
         if _DO_DEBUG_LOG:
             LOG_DEBUG("Factor/baseAvgLevel of skill '%s': (%s, %s)" % ('gunner', factor, baseAvgLevel))
         return
@@ -349,7 +353,7 @@ class VehicleDescrCrew(object):
             return '%s: %s, %s' % (err, repr(crewCompactDescrs), repr(vehicleDescr.name))
 
         crewCompactDescrs = self._crewCompactDescrs
-        vehicleDescr = self._vehicleDescr
+        vehicleDescr = self.vehicleDescr
         vehicleType = vehicleDescr.type
         crewRoles = vehicleType.crewRoles
         vehicleNationID = vehicleType.id[0]

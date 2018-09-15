@@ -107,7 +107,7 @@ def getEquipmentParameters(eqpDescr):
 
 def getGunDescriptors(gunDescr, vehicleDescr):
     descriptors = []
-    for gun in vehicleDescr.turret.guns:
+    for gun in vehicleDescr.turrets[0].turret.guns:
         if gun.id[1] == gunDescr.id[1]:
             descriptors.append(gun)
 
@@ -124,7 +124,7 @@ def getGunDescriptors(gunDescr, vehicleDescr):
 def getShellDescriptors(shellDescriptor, vehicleDescr):
     descriptors = []
     shellInNationID = shellDescriptor.id[1]
-    for shot in vehicleDescr.gun.shots:
+    for shot in vehicleDescr.turrets[0].gun.shots:
         if shot.shell.id[1] == shellInNationID:
             descriptors.append(shot)
 

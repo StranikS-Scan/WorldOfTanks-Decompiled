@@ -45,10 +45,10 @@ class ResearchPanel(ResearchPanelMeta):
             self.__isNavigationEnabled = isEnabled
 
     def goToResearch(self):
-        if g_currentVehicle.isPresent() and self.__isNavigationEnabled:
+        if g_currentVehicle.isPresent() and self.__isNavigationEnabled and not g_currentVehicle.item.canNotBeResearched:
             shared_events.showResearchView(g_currentVehicle.item.intCD)
         else:
-            LOG_ERROR('Current vehicle is not preset or navigation is disabled')
+            LOG_ERROR('Current vehicle is not preset or navigation is disabled or has canNotBeResearched tag')
 
     def addVehToCompare(self):
         if g_currentVehicle.isPresent():
@@ -60,6 +60,11 @@ class ResearchPanel(ResearchPanelMeta):
             xps = self.itemsCache.items.stats.vehiclesXPs
             vehicle = g_currentVehicle.item
             xp = xps.get(vehicle.intCD, 0)
+            if g_currentVehicle.item.canNotBeResearched:
+                isEnabled = False
+            else:
+                isEnabled = True and self.__isNavigationEnabled
+            self.as_setNavigationEnabledS(isEnabled)
             self.as_updateCurrentVehicleS({'earnedXP': xp,
              'isElite': vehicle.isElite,
              'vehCompareData': self.__getVehCompareData(vehicle)})

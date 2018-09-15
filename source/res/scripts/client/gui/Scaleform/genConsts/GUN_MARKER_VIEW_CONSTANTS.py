@@ -6,10 +6,12 @@ Please, don't edit this file manually.
 """
 
 class GUN_MARKER_VIEW_CONSTANTS(object):
-    GUN_MARKER_LINKAGE = 'GunMarkerUI'
-    GUN_MARKER_DEBUG_LINKAGE = 'GunMarkerDebugUI'
-    GUN_MARKER_SPG_LINKAGE = 'GunMarkerSPGUI'
-    GUN_MARKER_SPG_DEBUG_LINKAGE = 'GunMarkerSPGDebugUI'
+    DEFAULT_GUN_MARKER_LINKAGE = 'GunMarkerUI'
+    DEFAULT_SUB_GUN_MARKER_LINKAGE = 'GunSubMarkerUI'
+    DEBUG_GUN_MARKER_LINKAGE = 'GunMarkerDebugUI'
+    SPG_GUN_MARKER_LINKAGE = 'GunMarkerSPGUI'
+    SUB_GUN_MARKER_LINKAGE = 'GunMarkerSubGunUI'
+    DEBUG_SPG_GUN_MARKER_LINKAGE = 'GunMarkerSPGDebugUI'
     ARTY_HIT_MARKER_LINKAGE = 'ArtyHitMarkerUI'
     ARCADE_GUN_MARKER_NAME = 'arcadeGunMarker'
     SNIPER_GUN_MARKER_NAME = 'sniperGunMarker'
@@ -19,6 +21,7 @@ class GUN_MARKER_VIEW_CONSTANTS(object):
     DEBUG_ARCADE_GUN_MARKER_NAME = 'arcadeDebugGunMarker'
     DEBUG_SNIPER_GUN_MARKER_NAME = 'sniperGunDebugMarker'
     DEBUG_SPG_GUN_MARKER_NAME = 'spgDebugGunMarker'
+    DEBUG_SUB_GUN_MARKER_NAME = 'subDebugGunMarker'
     GUN_TAG_RELOADING_TYPES = [1,
      4,
      7,
@@ -31,3 +34,7 @@ class GUN_MARKER_VIEW_CONSTANTS(object):
      9,
      12]
     DISPERSION_CIRCLE_RELOADING_TYPES = [0, 1, 2]
+    ARCADE_SUB_GUN_MARKER_NAME = 'subGunMarker'
+    SNIPER_SUB_GUN_MARKER_NAME = 'subGunSniperMarker'
+    SUB_GUN_MARKER_ID_FIRST = 'subGunMarkerFirstId'
+    MAIN_GUN_MARKER_ID = 'mainGunMarkerId'

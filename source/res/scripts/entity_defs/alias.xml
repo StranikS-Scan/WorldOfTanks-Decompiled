@@ -186,15 +186,26 @@
   </FALLOUT_QUEUE_INFO>
   <EVENT_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
-      <classes>
+      <vehDescr>
         <Type>	ARRAY	  <of>	UINT32	</of>
         </Type>
-      </classes>
+      </vehDescr>
       <players>
         <Type>	UINT32	</Type>
       </players>
     </Properties>
   </EVENT_QUEUE_INFO>
+  <EVENT_2_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>
+      <vehDescr>
+        <Type>	ARRAY	  <of>	UINT32	</of>
+        </Type>
+      </vehDescr>
+      <players>
+        <Type>	UINT32	</Type>
+      </players>
+    </Properties>
+  </EVENT_2_QUEUE_INFO>
   <RANKED_BATTLES_QUEUE_INFO>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <classes>
@@ -291,6 +302,9 @@
       <shotID>
         <Type>	SHOT_ID	</Type>
       </shotID>
+      <turretIndex>
+        <Type>	UINT8	</Type>
+      </turretIndex>
       <numVehiclesAffected>
         <Type>	INT16	</Type>
       </numVehiclesAffected>
@@ -359,6 +373,9 @@
       <targetWithFlag>
         <Type>	BOOL	</Type>
       </targetWithFlag>
+      <isHazard>
+        <Type>	UINT8	</Type>
+      </isHazard>
     </Properties>
   </ATTACK_RESULTS>
   <PREBATTLE_INVITE>	FIXED_DICT	  <Properties>
@@ -649,6 +666,9 @@
       <attackerGunBurstCount>
         <Type>	UINT8	</Type>
       </attackerGunBurstCount>
+      <isHazard>
+        <Type>	UINT8	</Type>
+      </isHazard>
       <equipmentID>
         <Type>	UINT16	</Type>
       </equipmentID>

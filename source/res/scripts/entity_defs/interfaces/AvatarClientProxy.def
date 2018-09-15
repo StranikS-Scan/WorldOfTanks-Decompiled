@@ -6,11 +6,17 @@
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
     </avatarClientProxy_updateOwnVehiclePosition>
+    <avatarClientProxy_updateEvilEyeStatus>
+      <Arg>	BOOL	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	UINT8	</Arg>
+    </avatarClientProxy_updateEvilEyeStatus>
     <avatarClientProxy_updateGunMarker>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	VECTOR3	</Arg>
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </avatarClientProxy_updateGunMarker>
     <avatarClientProxy_updateVehicleHealth>
       <Arg>	OBJECT_ID	</Arg>
@@ -23,13 +29,16 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </avatarClientProxy_updateVehicleGunReloadTime>
     <avatarClientProxy_updateVehicleAmmo>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	UINT16	</Arg>
       <Arg>	UINT16	</Arg>
-      <Arg>	INT16	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </avatarClientProxy_updateVehicleAmmo>
     <avatarClientProxy_updateVehicleOptionalDeviceStatus>
       <Arg>	OBJECT_ID	</Arg>
@@ -47,6 +56,7 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </avatarClientProxy_updateVehicleSetting>
     <avatarClientProxy_updateTargetingInfo>
       <Arg>	FLOAT32	</Arg>
@@ -58,6 +68,7 @@
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </avatarClientProxy_updateTargetingInfo>
     <avatarClientProxy_showOwnVehicleHitDirection>
       <Arg>	FLOAT32	</Arg>

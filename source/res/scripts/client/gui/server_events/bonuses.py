@@ -31,6 +31,7 @@ from items import vehicles, tankmen
 from shared_utils import makeTupleByDict
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
+from halloween_shared import SUPPLY_DROP_LEVELS, SUPPLY_DROP_TOKEN_PREFIX, HALLOWEEN_QUEST_PREFIX, HALLOWEEN_MARATHON_QUEST_PREFIX
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
 
 def _getAchievement(block, record, value):
@@ -487,6 +488,49 @@ class GoodiesBonus(SimpleBonus):
         return {'isSpecial': True,
          'specialAlias': TOOLTIPS_CONSTANTS.BOOSTERS_BOOSTER_INFO,
          'specialArgs': [booster.boosterID]}
+
+
+class SupplyDropBonus(TokensBonus):
+
+    def format(self):
+        from gui.shared.tooltips.quests import _StringTokenBonusFormatter
+        dropLevel = self.__getDropLevel()
+        text = makeHtmlString('html_templates:lobby/quests/{}'.format('bonuses'), 'halloween2017_drop_' + str(dropLevel))
+        otherTokens = _StringTokenBonusFormatter().format(self)
+        for t in otherTokens:
+            text = text + ', ' + t
+
+        return text
+
+    def tier(self):
+        return self.__getDropLevel()
+
+    def getList(self):
+        dropLevel = self.__getDropLevel()
+        return [{'value': '',
+          'itemSource': '../maps/icons/halloween/supplydrops/%i.png' % dropLevel,
+          'valueAtLeft': False,
+          'tooltip': makeTooltip(header=i18n.makeString(TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_TOKENS_AWARD), body=TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_TOKENS_AWARD)}] if dropLevel in SUPPLY_DROP_LEVELS else []
+
+    def hasIconFormat(self):
+        return True
+
+    def isVisualOnly(self):
+        return True
+
+    def isShowInGUI(self):
+        return True
+
+    def getCarouselList(self, isReceived=False, isChristmasFormat=False):
+        dropLevel = self.__getDropLevel()
+        return [{'counter': '',
+          'imgSource': '../maps/icons/halloween/supplydrops/%i.png' % dropLevel,
+          'tooltip': makeTooltip(header=i18n.makeString(TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_TOKENS_AWARD), body=TOOLTIPS_CONSTANTS.PRIVATE_QUESTS_TOKENS_AWARD)}] if dropLevel in SUPPLY_DROP_LEVELS else []
+
+    def __getDropLevel(self):
+        for id, _ in self._value.iteritems():
+            if id.startswith(SUPPLY_DROP_TOKEN_PREFIX):
+                return int(id[len(SUPPLY_DROP_TOKEN_PREFIX):])
 
 
 class VehiclesBonus(SimpleBonus):
@@ -958,7 +1002,8 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
             _ET.TOKEN_QUEST: BattleTokensBonus,
             _ET.PERSONAL_QUEST: BattleTokensBonus,
             _ET.PERSONAL_MISSION: personalMissionsTokensFactory,
-            _ET.ELEN_QUEST: BattleTokensBonus},
+            _ET.ELEN_QUEST: BattleTokensBonus,
+            'halloween2017': SupplyDropBonus},
  'dossier': {'default': DossierBonus,
              _ET.PERSONAL_MISSION: PersonalMissionDossierBonus},
  'tankmen': {'default': TankmenBonus,
@@ -1015,6 +1060,9 @@ def getBonuses(quest, name, value, isCompensation=False):
     key = [name, questType]
     ctx = {}
     if questType in (_ET.BATTLE_QUEST, _ET.TOKEN_QUEST, _ET.PERSONAL_QUEST) and name == 'tokens':
+        qID = quest.getID()
+        if qID.startswith(HALLOWEEN_QUEST_PREFIX) or qID.startswith(HALLOWEEN_MARATHON_QUEST_PREFIX):
+            return [SupplyDropBonus('halloween2017', value, isCompensation)]
         parentsName = quest.getParentsName()
         for n, v in value.iteritems():
             if n in parentsName:

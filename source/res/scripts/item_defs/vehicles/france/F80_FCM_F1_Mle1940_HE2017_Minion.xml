@@ -1,0 +1,574 @@
+<F80_FCM_F1_Mle1940_HE2017_Minion.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <driver></driver>
+    <gunner></gunner>
+    <gunner></gunner>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	40	</forward>
+    <backward>	22	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.198	</moving>
+    <still>	0.263	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.395	</firePenalty>
+  </invisibility>
+  <repairCost>	0	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.0	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	150	</armor_1>
+      <armor_2>	120	</armor_2>
+      <armor_3>	80	</armor_3>
+      <armor_4>	75	</armor_4>
+      <armor_5>	80	</armor_5>
+      <armor_6>	20	</armor_6>
+      <armor_7>	40	</armor_7>
+      <armor_8>	0	</armor_8>
+      <armor_9>	70	</armor_9>
+      <armor_10>	150	</armor_10>
+      <armor_11>	100	</armor_11>
+      <armor_12>	140	</armor_12>
+      <armor_13>	70	</armor_13>
+      <armor_14>	70	</armor_14>
+      <armor_15>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_15>
+      <armor_16>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_16>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <mediumArmor>	13 16 16	</mediumArmor>
+    <weight>	80000	</weight>
+    <maxHealth>	1250	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	150	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <variants></variants>
+    <turretPositions>
+      <turret0>	0.000000 0.773406 -2.392570	</turret0>
+      <turret1>	0.000000 0.411013 2.829826	</turret1>
+    </turretPositions>
+    <models>
+      <undamaged>	vehicles/french/F80_FCM_F1_Mle1940_HE2017_Minion/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.30 36.00 0.34 1.00 0.04 0.26	</pitchParams>
+      <rollParams>	1.00 0.30 36.00 0.34 1.00 0.04 0.26	</rollParams>
+      <sensitivityToImpulse>	0.7	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2 HP_Track_Exhaus_3 HP_Track_Exhaus_4	</nodes>
+    </exhaust>
+    <turretPositions></turretPositions>
+    <turretHardPoints>
+      <hardPoint>	HP_turretJoint_1	</hardPoint>
+      <hardPoint>	HP_turretJoint_2	</hardPoint>
+    </turretHardPoints>
+    <hitTester>
+      <collisionModelServer>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots></emblemSlots>
+    <hangarShadowTexture>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/FCM_F1_Mle1940_HangarShadowMap.dds	</hangarShadowTexture>
+  </hull>
+  <chassis>
+    <Chassis_F80_FCM_F1_Mle1940_HE2017_Minion>
+      <userString>	#france_vehicles:Chassis_F80_FCM_F1_Mle1940_HE2017	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	240	</price>
+      <notInShop>	true	</notInShop>
+      <unlocks></unlocks>
+      <armor>
+        <leftTrack>	30	</leftTrack>
+        <rightTrack>	30	</rightTrack>
+      </armor>
+      <weight>	20000	</weight>
+      <maxLoad>	200000	</maxLoad>
+      <terrainResistance>	1.0 1.35 1.95	</terrainResistance>
+      <brakeForce>	35500	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	34	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.42	</vehicleMovement>
+        <vehicleRotation>	0.42	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/french/F80_FCM_F1_Mle1940_HE2017_Minion/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.3 0.8	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-1.1	</textureScale>
+      </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.430480 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.342020 0.000000	</row1>
+            <row2>	0.000000 0.000000 3.652850	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.406767	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.71207	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.153999	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	3	</count>
+        </group>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.187157	</radius>
+          <startIndex>	3	</startIndex>
+          <count>	17	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.406767	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.71207	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.153999	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	3	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.187157	</radius>
+          <startIndex>	3	</startIndex>
+          <count>	17	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.5946 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.17692 3.18054	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/track/segment.model	</segmentModelRight>
+        <left>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/track/left.track	</left>
+        <right>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/track/right.track	</right>
+        <segmentLength>	0.292	</segmentLength>
+        <segmentOffset>	0.148	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0154	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1200	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	20	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	20	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+      </groundNodes>
+    </Chassis_F80_FCM_F1_Mle1940_HE2017_Minion>
+  </chassis>
+  <turrets0>
+    <Turret_1_F80_FCM_F1_Mle1940_HE2017_Minion>
+      <userString>	#france_vehicles:Turret_1_F80_FCM_F1_Mle1940_HE2017	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	120.0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	120	</armor_1>
+        <armor_2>	100	</armor_2>
+        <armor_3>	80	</armor_3>
+        <armor_4>	80	</armor_4>
+        <armor_5>	40	</armor_5>
+        <armor_6>	75	</armor_6>
+        <armor_7>	80	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	55	</armor_9>
+        <armor_10>	120	</armor_10>
+        <armor_11>	55	</armor_11>
+        <armor_12>	110	</armor_12>
+        <armor_16>	120	</armor_16>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <mediumArmor>	16 15 16	</mediumArmor>
+      <weight>	30000	</weight>
+      <maxHealth>	300	</maxHealth>
+      <rotationSpeed>	35	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	19	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_90mm_canon_DCA_45_HE2017_Minion>	shared	  <maxAmmo>	74	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 0.75 0.0255625 0.75 0.0522222 10 0.947791 10 0.974444 0.75 1 0.75	</maxPitch>
+          </pitchLimits>
+          <unlocks></unlocks>
+          <armor>
+            <armor_1>	210	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.15	</shotDispersionRadius>
+          <reloadTime>	11.3	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.9	</aimingTime>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/french/F80_FCM_F1_Mle1940_HE2017_Minion/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00157897 0.00689931 4.15466	</rayStart>
+              <rayEnd>	0.0563999 0.000790834 4.1542	</rayEnd>
+              <rayUp>	0.091 0.084 4	</rayUp>
+              <size>	0.793	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_90mm_canon_DCA_45_HE2017_Minion>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F80_FCM_F1_Mle1940_HE2017_Minion/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.224681 0.627961 1.32333	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.000 0.500 0.000 0.000 0.000	</physicsShape>
+    </Turret_1_F80_FCM_F1_Mle1940_HE2017_Minion>
+  </turrets0>
+  <turrets1>
+    <Turret_2_F80_FCM_F1_Mle1940_HE2017_Minion>
+      <userString>	#france_vehicles:Turret_2_F80_FCM_F1_Mle1940_HE2017	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	120.0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	110	</armor_1>
+        <armor_2>	100	</armor_2>
+        <armor_3>	80	</armor_3>
+        <armor_4>	80	</armor_4>
+        <armor_5>	40	</armor_5>
+        <armor_8>	0	</armor_8>
+        <armor_9>	100	</armor_9>
+        <armor_10>	110	</armor_10>
+        <armor_13>	55	</armor_13>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <mediumArmor>	16 15 16	</mediumArmor>
+      <weight>	10000	</weight>
+      <maxHealth>	300	</maxHealth>
+      <rotationSpeed>	50	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	270	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	130	</maxHealth>
+        <maxRegenHealth>	19	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_47mm_SA37_F1_HE2017_Minion>	shared	  <maxAmmo>	200	</maxAmmo>
+          <armor>
+            <armor_1>	210	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <armor_5>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_8>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_8>
+            <gun>	10	</gun>
+          </armor>
+          <pitchLimits>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 13 0.430556 13 0.444444 8 0.555556 8 0.569445 13 1 13	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
+          <shotDispersionRadius>	0.3	</shotDispersionRadius>
+          <reloadTime>	3.2	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	1.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	1.9	</aimingTime>
+          <turretYawLimits>	-140 140	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/french/F80_FCM_F1_Mle1940_HE2017_Minion/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.00157897 0.00689931 4.15466	</rayStart>
+              <rayEnd>	0.0563999 0.000790834 4.1542	</rayEnd>
+              <rayUp>	0.091 0.084 4	</rayUp>
+              <size>	0.793	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+        </_47mm_SA37_F1_HE2017_Minion>
+      </guns>
+      <models>
+        <undamaged>	vehicles/french/F80_FCM_F1_Mle1940_HE2017_Minion/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/french/F80_FCM_F1_Mle1940_HE2017/collision_client/Turret_02.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.273715 0.350409 0.693226	</gunPosition>
+      <emblemSlots></emblemSlots>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.000 0.500 0.000 0.000 0.000	</physicsShape>
+    </Turret_2_F80_FCM_F1_Mle1940_HE2017_Minion>
+  </turrets1>
+  <engines>
+    <Hispano_219CV_V8>	shared	</Hispano_219CV_V8>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <ER_28>	shared	</ER_28>
+  </radios>
+  <clientAdjustmentFactors>
+    <chassis>
+      <Chassis_F80_FCM_F1_Mle1940_HE2017>
+        <alpha>	0.1208	</alpha>
+      </Chassis_F80_FCM_F1_Mle1940_HE2017>
+    </chassis>
+    <engines>
+      <Hispano_219CV_V8>
+        <bravo>	437.5	</bravo>
+      </Hispano_219CV_V8>
+    </engines>
+  </clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Hispano_219CV_V8>
+          <smplEnginePower>	1250	</smplEnginePower>
+        </Hispano_219CV_V8>
+      </engines>
+      <chassis>
+        <Chassis_F80_FCM_F1_Mle1940_HE2017_Minion>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.1208	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.1208	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.1208	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.1208	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.1208	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.1208	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_F80_FCM_F1_Mle1940_HE2017_Minion>
+      </chassis>
+    </detailed>
+  </physics>
+  <effects>
+    <collision></collision>
+    <explosionCandle1>	explosionCandle1_HalloweenMinion	</explosionCandle1>
+    <explosionCandle2>	explosionCandle2_HalloweenMinion	</explosionCandle2>
+    <explosionCandle3>	explosionCandle3_HalloweenMinion	</explosionCandle3>
+    <explosionCandle4>	explosionCandle4_HalloweenMinion	</explosionCandle4>
+    <fullDestruction>	fullDestruction_HalloweenMinion	</fullDestruction>
+    <damagedStateGroup>	halloweenMinion	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	ussr_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1	</alpha>
+  </emblems>
+  <horns>
+    <priceFactor>	1	</priceFactor>
+    <distanceFactor>	1	</distanceFactor>
+    <volumeFactor>	1	</volumeFactor>
+  </horns>
+</F80_FCM_F1_Mle1940_HE2017_Minion.xml>

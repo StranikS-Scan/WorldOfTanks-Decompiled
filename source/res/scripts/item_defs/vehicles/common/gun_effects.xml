@@ -1712,4 +1712,730 @@
       </shotSound>
     </effects>
   </shot_env_artillery>
+  <lev_shot_huge>
+    <timeline>
+      <lighting2>	0.075	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	0.5	</endpixie>
+      <soundplaystop>	5	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/lev_shot_huge.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	0.125	</innerRadius>
+        <outerRadius>	3	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	4	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.15	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	6	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.65	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	4	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	2	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_huge_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_huge_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+  </lev_shot_huge>
+  <lev_shot_large>
+    <timeline>
+      <lighting2>	0.075	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	0.5	</endpixie>
+      <soundplaystop>	5	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/lev_shot_large.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	0.125	</innerRadius>
+        <outerRadius>	3	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	4	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.15	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	6	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.65	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	4	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	2	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	ev_halloween_leviathan_wpn_large	</wwsoundPC>
+        <wwsoundNPC>	ev_halloween_leviathan_wpn_large	</wwsoundNPC>
+      </shotSound>
+    </effects>
+  </lev_shot_large>
+  <lev_shot_medium>
+    <timeline>
+      <lighting2>	0.075	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	0.5	</endpixie>
+      <soundplaystop>	5	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/lev_shot_medium.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	0.125	</innerRadius>
+        <outerRadius>	3	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	4	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.15	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	6	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.65	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	4	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	2	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_meduim_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_meduim_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+  </lev_shot_medium>
+  <lev_shot_small>
+    <timeline>
+      <lighting2>	0.075	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	0.5	</endpixie>
+      <soundplaystop>	5	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/lev_shot_small.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	0.125	</innerRadius>
+        <outerRadius>	3	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	4	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.15	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	6	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.65	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	4	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	2	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_small_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_small_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+  </lev_shot_small>
+  <lev_shot_mine>
+    <timeline>
+      <lighting2>	0.075	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	0.5	</endpixie>
+      <soundplaystop>	5	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/lev_shot_mines.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	0.125	</innerRadius>
+        <outerRadius>	3	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	4	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.15	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	6	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.65	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	4	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	2	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	ev_halloween_landmine_shot	</wwsoundPC>
+        <wwsoundNPC>	ev_halloween_landmine_shot	</wwsoundNPC>
+      </shotSound>
+    </effects>
+  </lev_shot_mine>
+  <shot_small_HE2017>
+    <timeline>
+      <lighting2>	0.075	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	0.5	</endpixie>
+      <soundplaystop>	5	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/shot_small_01_HE2017.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	0.125	</innerRadius>
+        <outerRadius>	3	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	4	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.15	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	6	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.65	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	4	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	2	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_small_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_small_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+  </shot_small_HE2017>
+  <shot_main_mb_HE2017>
+    <timeline>
+      <lighting2>	0.085	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	1	</endpixie>
+      <soundplaystop>	4	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/shot_main_02_HE2017.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	1	</innerRadius>
+        <outerRadius>	6	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	10	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.25	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	15	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.75	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	10	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	5	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_main_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_main_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+    <relatedEffects>
+      <groundWave>
+        <timeline>
+          <shooting>	1	</shooting>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	default	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_ground_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	ground	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_ground_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	stone	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_stone_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	sand	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_sand_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	snow	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_snow_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+        </effects>
+      </groundWave>
+    </relatedEffects>
+  </shot_main_mb_HE2017>
+  <shot_main_HE2017>
+    <timeline>
+      <lighting2>	0.085	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	1	</endpixie>
+      <soundplaystop>	4	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/shot_main_01_HE2017.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	1	</innerRadius>
+        <outerRadius>	6	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	10	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.25	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	15	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.75	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	10	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	5	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_main_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_main_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+    <relatedEffects>
+      <groundWave>
+        <timeline>
+          <shooting>	1	</shooting>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	default	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_ground_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	ground	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_ground_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	stone	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_stone_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	sand	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_sand_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	snow	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_snow_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+        </effects>
+      </groundWave>
+    </relatedEffects>
+  </shot_main_HE2017>
+  <shot_small_minion_HE2017>
+    <timeline>
+      <lighting2>	0.075	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	0.5	</endpixie>
+      <soundplaystop>	5	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/shot_small_01_minion_HE2017.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	0.125	</innerRadius>
+        <outerRadius>	3	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	4	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.15	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	6	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.65	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	4	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	2	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_small_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_small_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+  </shot_small_minion_HE2017>
+  <shot_main_mb_minion_HE2017>
+    <timeline>
+      <lighting2>	0.085	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	1	</endpixie>
+      <soundplaystop>	4	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/shot_main_02_minion_HE2017.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	1	</innerRadius>
+        <outerRadius>	6	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	10	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.25	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	15	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.75	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	10	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	5	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_main_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_main_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+    <relatedEffects>
+      <groundWave>
+        <timeline>
+          <shooting>	1	</shooting>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	default	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_ground_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	ground	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_ground_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	stone	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_stone_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	sand	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_sand_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	snow	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_snow_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+        </effects>
+      </groundWave>
+    </relatedEffects>
+  </shot_main_mb_minion_HE2017>
+  <shot_main_minion_HE2017>
+    <timeline>
+      <lighting2>	0.085	</lighting2>
+      <end>	0.4	</end>
+      <endpixie>	1	</endpixie>
+      <soundplaystop>	4	</soundplaystop>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <endKey>	endpixie	</endKey>
+        <file>	particles/Tank/shots/shot_main_01_minion_HE2017.xml	</file>
+        <force>	1	</force>
+        <position>	HP_gunFire	</position>
+      </pixie>
+      <light>
+        <startKey>	start	</startKey>
+        <endKey>	lighting2	</endKey>
+        <innerRadius>	1	</innerRadius>
+        <outerRadius>	6	</outerRadius>
+        <castShadows>	false	</castShadows>
+        <position>	HP_gunFire	</position>
+        <animation>
+          <time>	0.0	</time>
+          <color>	255 150 0	</color>
+          <multiplier>	10	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.25	</time>
+          <color>	255 200 100	</color>
+          <multiplier>	15	</multiplier>
+        </animation>
+        <animation>
+          <time>	0.75	</time>
+          <color>	170 65 25	</color>
+          <multiplier>	10	</multiplier>
+        </animation>
+        <animation>
+          <time>	1.0	</time>
+          <color>	0 0 0 0	</color>
+          <multiplier>	5	</multiplier>
+        </animation>
+      </light>
+      <shotSound>
+        <startKey>	start	</startKey>
+        <wwsoundPC>	wpn_main_PC	</wwsoundPC>
+        <wwsoundNPC>	wpn_main_NPC	</wwsoundNPC>
+      </shotSound>
+    </effects>
+    <relatedEffects>
+      <groundWave>
+        <timeline>
+          <shooting>	1	</shooting>
+        </timeline>
+        <effects>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	default	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_ground_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	ground	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_ground_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	stone	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_stone_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	sand	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_sand_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+          <pixie>
+            <startKey>	start	</startKey>
+            <surfaceMatKind>	snow	</surfaceMatKind>
+            <file>	particles/Tank/shots/groundwave_main_snow_mb.xml	</file>
+            <force>	1	</force>
+            <position>	Scene Root	</position>
+          </pixie>
+        </effects>
+      </groundWave>
+    </relatedEffects>
+  </shot_main_minion_HE2017>
 </gun_effects.xml>

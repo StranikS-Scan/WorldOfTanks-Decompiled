@@ -110,6 +110,7 @@ def getVehicleDataVO(vehicle):
      'level': vehicle.level,
      'premium': vehicle.isPremium,
      'favorite': vehicle.isFavorite,
+     'isEvent': True if 'event_battles' in vehicle.tags else False,
      'nation': vehicle.nationID,
      'xpImgSource': bonusImage,
      'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,

@@ -48,6 +48,7 @@ PERSONAL_MISSIONS_GROUP = [_single('firstMerit'),
  _total('readyForBattleALL'),
  _total('tankwomenProgress')]
 CHRISTMAS_QUESTS_GROUP = [_single('xmasTreeBronze'), _single('xmasTreeSilver'), _single('xmasTreeGold')]
+HE17_QUESTS_GROUP = [_single('HE17A1'), _single('HE17A2'), _single('HE17A3')]
 IGNORED_BY_BATTLE_RESULTS = [achievements.MARK_OF_MASTERY_RECORD, _single7x7('victoryMarch')]
 for record in records.RECORD_DB_IDS:
     if record[1] in ('maxXP', 'maxFrags', 'maxDamage', 'maxWinPoints', 'maxCoins'):

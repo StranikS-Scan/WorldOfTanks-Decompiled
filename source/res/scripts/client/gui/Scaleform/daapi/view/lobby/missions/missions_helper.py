@@ -703,6 +703,7 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
         """
         extraConditions = []
         criteria = REQ_CRITERIA.INVENTORY
+        criteria |= ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
         criteria |= REQ_CRITERIA.VEHICLE.LEVELS(range(self.event.getVehMinLevel(), constants.MAX_VEHICLE_LEVEL + 1))
         criteria |= REQ_CRITERIA.VEHICLE.CLASSES(self.event.getVehicleClasses())
         return (criteria, extraConditions)

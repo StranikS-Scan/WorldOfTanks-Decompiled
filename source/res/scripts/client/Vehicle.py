@@ -26,7 +26,7 @@ from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _GUI_EVENT_
 from gun_rotation_shared import decodeGunAngles
 from helpers import dependency
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
-from helpers.EffectsList import SoundStartParam
+from helpers.EffectsList import SoundStartParam, FalloutDestroyEffect
 from items import vehicles, sabaton_crew
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -159,19 +159,21 @@ class Vehicle(BigWorld.Entity):
         BigWorld.player().vehicle_onLeaveWorld(self)
         assert not self.isStarted
 
-    def showShooting(self, burstCount, isPredictedShot=False):
+    def showShooting(self, burstCount, turretIndex, isPredictedShot=False):
         blockShooting = self.siegeState is not None and self.siegeState != VEHICLE_SIEGE_STATE.ENABLED and self.siegeState != VEHICLE_SIEGE_STATE.DISABLED
         if not self.isStarted or blockShooting:
             return
         else:
-            if not isPredictedShot and self.isPlayerVehicle and not BigWorld.player().isWaitingForShot:
+            if not isPredictedShot and self.isPlayerVehicle and not BigWorld.player().isWaitingForShot(turretIndex):
                 if not BattleReplay.g_replayCtrl.isPlaying:
                     return
-            extra = self.typeDescriptor.extrasDict['shoot']
+            extraName = 'shoot%d' % turretIndex
+            extra = self.typeDescriptor.extrasDict[extraName]
+            gunFireNodeName = 'HP_gunFire' if turretIndex == 0 else '%s%d.%s' % (TankPartNames.ADDITIONAL_GUN, turretIndex, 'HP_gunFire')
             extra.stopFor(self)
-            extra.startFor(self, burstCount)
+            extra.startFor(self, (burstCount, gunFireNodeName, turretIndex))
             if not isPredictedShot and self.isPlayerVehicle:
-                BigWorld.player().cancelWaitingForShot()
+                BigWorld.player().cancelWaitingForShot(turretIndex)
             return
 
     def showDamageFromShot(self, attackerID, points, effectsIndex, damageFactor):
@@ -253,33 +255,51 @@ class Vehicle(BigWorld.Entity):
             return
 
     def showCollisionEffect(self, hitPos, collisionEffectName='collisionVehicle', collisionNormal=None, isTracks=False, damageFactor=0, impulse=None, pcEnergy=None):
-        invWorldMatrix = Math.Matrix(self.matrix)
-        invWorldMatrix.invert()
-        rot = Math.Matrix()
-        if collisionNormal is None:
-            rot.setRotateYPR((random.uniform(-3.14, 3.14), random.uniform(-1.5, 1.5), 0.0))
+        if not self.isStarted:
+            return
         else:
-            rot.setRotateYPR((0, 0, 0))
-        mat = Math.Matrix()
-        mat.setTranslate(hitPos)
-        mat.preMultiply(rot)
-        mat.postMultiply(invWorldMatrix)
-        if pcEnergy is not None:
-            collisionEnergy = [SoundStartParam('RTPC_ext_collision_impulse_tank', pcEnergy)]
-        else:
-            collisionEnergy = []
-        effectsList = self.typeDescriptor.type.effects.get(collisionEffectName, [])
-        if effectsList:
-            keyPoints, effects, _ = random.choice(effectsList)
-            self.appearance.boundEffects.addNewToNode(TankPartNames.HULL, mat, effects, keyPoints, entity=self, surfaceNormal=collisionNormal, isTracks=isTracks, impulse=impulse, damageFactor=damageFactor, hitPoint=hitPos, soundParams=collisionEnergy)
-        return
+            invWorldMatrix = Math.Matrix(self.matrix)
+            invWorldMatrix.invert()
+            rot = Math.Matrix()
+            if collisionNormal is None:
+                rot.setRotateYPR((random.uniform(-3.14, 3.14), random.uniform(-1.5, 1.5), 0.0))
+            else:
+                rot.setRotateYPR((0, 0, 0))
+            mat = Math.Matrix()
+            mat.setTranslate(hitPos)
+            mat.preMultiply(rot)
+            mat.postMultiply(invWorldMatrix)
+            if pcEnergy is not None:
+                collisionEnergy = [SoundStartParam('RTPC_ext_collision_impulse_tank', pcEnergy)]
+            else:
+                collisionEnergy = []
+            effectsList = self.typeDescriptor.type.effects.get(collisionEffectName, [])
+            if effectsList:
+                keyPoints, effects, _ = random.choice(effectsList)
+                self.appearance.boundEffects.addNewToNode(TankPartNames.HULL, mat, effects, keyPoints, entity=self, surfaceNormal=collisionNormal, isTracks=isTracks, impulse=impulse, damageFactor=damageFactor, hitPoint=hitPos, soundParams=collisionEnergy)
+            return
 
     def showSplashHitEffect(self, effectsIndex, damageFactor):
-        effectsList = vehicles.g_cache.shotEffects[effectsIndex].get('armorSplashHit', None)
-        if effectsList:
-            mat = Math.Matrix()
-            mat.setTranslate((0.0, 0.0, 0.0))
-            self.appearance.boundEffects.addNewToNode(TankPartNames.HULL, mat, effectsList[1], effectsList[0], entity=self, damageFactor=damageFactor)
+        if not self.isStarted:
+            return
+        else:
+            effectsList = vehicles.g_cache.shotEffects[effectsIndex].get('armorSplashHit', None)
+            if effectsList:
+                mat = Math.Matrix()
+                mat.setTranslate((0.0, 0.0, 0.0))
+                self.appearance.boundEffects.addNewToNode(TankPartNames.HULL, mat, effectsList[1], effectsList[0], entity=self, damageFactor=damageFactor)
+            return
+
+    def set_isDisappeared(self, prev):
+        if self.isDisappeared:
+            player = BigWorld.player()
+            if player is not None:
+                arena = getattr(player, 'arena', None)
+                if arena is not None:
+                    arena.effectsPlayersList.append(FalloutDestroyEffect.play(self.id))
+            self.stopVisual()
+        else:
+            self.startVisual()
         return
 
     def set_damageStickers(self, prev=None):
@@ -312,8 +332,16 @@ class Vehicle(BigWorld.Entity):
     def set_gunAnglesPacked(self, prev):
         syncGunAngles = getattr(self.filter, 'syncGunAngles', None)
         if syncGunAngles:
-            yaw, pitch = decodeGunAngles(self.gunAnglesPacked, self.typeDescriptor.gun.pitchLimits['absolute'])
+            yaw, pitch = decodeGunAngles(self.gunAnglesPacked[0], self.typeDescriptor.turrets[0].gun.pitchLimits['absolute'])
             syncGunAngles(yaw, pitch)
+        for i, anglesPacked in enumerate(self.gunAnglesPacked):
+            if i == 0:
+                continue
+            pitchLimits = self.typeDescriptor.turrets[i].gun.pitchLimits['absolute']
+            yaw, pitch = decodeGunAngles(anglesPacked, pitchLimits)
+            if self.isStarted and not self.isPlayerVehicle:
+                self.appearance.additionalTurretsRotator.updateGunAngles(yaw, pitch, i)
+
         return
 
     def set_health(self, prev):
@@ -427,54 +455,71 @@ class Vehicle(BigWorld.Entity):
             return (0.0, 0.0)
 
     def onSiegeStateUpdated(self, newState, timeToNextMode):
-        if self.typeDescriptor is not None and self.typeDescriptor.hasSiegeMode:
-            self.typeDescriptor.onSiegeStateChanged(newState)
-            self.appearance.onSiegeStateChanged(newState)
-            if self.isPlayerVehicle:
-                inputHandler = BigWorld.player().inputHandler
-                inputHandler.siegeModeControl.notifySiegeModeChanged(self, newState, timeToNextMode)
+        if not self.isStarted:
+            return
         else:
-            LOG_ERROR('Wrong usage! Should be called only on vehicle with validtypeDescriptor and siege mode')
-        return
+            if self.typeDescriptor is not None and self.typeDescriptor.hasSiegeMode:
+                self.typeDescriptor.onSiegeStateChanged(newState)
+                self.appearance.onSiegeStateChanged(newState)
+                if self.isPlayerVehicle:
+                    inputHandler = BigWorld.player().inputHandler
+                    inputHandler.siegeModeControl.notifySiegeModeChanged(self, newState, timeToNextMode)
+            else:
+                LOG_ERROR('Wrong usage! Should be called only on vehicle with validtypeDescriptor and siege mode')
+            return
 
     def getComponents(self):
         res = []
-        vehicleDescr = self.typeDescriptor
-        m = Math.Matrix()
-        m.setIdentity()
-        res.append((vehicleDescr.chassis, m, True))
-        hullOffset = vehicleDescr.chassis.hullPosition
-        m = Math.Matrix()
-        m.setTranslate(-hullOffset)
-        res.append((vehicleDescr.hull, m, True))
-        turretYaw = Math.Matrix(self.appearance.turretMatrix).yaw
-        turretMatrix = Math.Matrix()
-        turretMatrix.setTranslate(-hullOffset - vehicleDescr.hull.turretPositions[0])
-        m = Math.Matrix()
-        m.setRotateY(-turretYaw)
-        turretMatrix.postMultiply(m)
-        res.append((vehicleDescr.turret, turretMatrix, not self.isTurretDetached))
-        gunPitch = Math.Matrix(self.appearance.gunMatrix).pitch
-        gunMatrix = Math.Matrix()
-        gunMatrix.setTranslate(-vehicleDescr.turret.gunPosition)
-        m = Math.Matrix()
-        m.setRotateX(-gunPitch)
-        gunMatrix.postMultiply(m)
-        gunMatrix.preMultiply(turretMatrix)
-        res.append((vehicleDescr.gun, gunMatrix, not self.isTurretDetached))
-        invertedLocalBodyMatrix = Math.Matrix(self.filter.bodyMatrix)
-        invertedLocalBodyMatrix.invert()
-        invertedLocalBodyMatrix.preMultiply(self.model.matrix)
-        chassisMatrixInverted = invertedLocalBodyMatrix
-        if self.isPitchHullAimingAvailable():
-            chassisMatrixInverted = Math.Matrix(self.filter.groundPlacingMatrix)
-            chassisMatrixInverted.invert()
-            chassisMatrixInverted.preMultiply(self.model.matrix)
-        res[0][1].preMultiply(chassisMatrixInverted)
-        for _, toPartMat, _ in res[1:]:
-            toPartMat.preMultiply(invertedLocalBodyMatrix)
+        if not self.isStarted:
+            return res
+        else:
+            vehicleDescr = self.typeDescriptor
+            m = Math.Matrix()
+            m.setIdentity()
+            res.append((vehicleDescr.chassis, m, True))
+            hullOffset = vehicleDescr.chassis.hullPosition
+            m = Math.Matrix()
+            m.setTranslate(-hullOffset)
+            res.append((vehicleDescr.hull, m, True))
+            gunRotator = BigWorld.player().gunRotator
+            if not self.isPlayerVehicle:
+                gunRotator = self.appearance.additionalTurretsRotator
+            for turretAndGunIndex in range(len(vehicleDescr.turrets)):
+                if turretAndGunIndex == 0:
+                    turretYaw = Math.Matrix(self.appearance.turretMatrix).yaw
+                    gunPitch = Math.Matrix(self.appearance.gunMatrix).pitch
+                elif gunRotator is not None:
+                    turretYaw = gunRotator.getTurretYaw(turretAndGunIndex)
+                    gunPitch = gunRotator.getGunPitch(turretAndGunIndex)
+                else:
+                    continue
+                turretMatrix = Math.Matrix()
+                turretMatrix.setTranslate(-hullOffset - vehicleDescr.hull.turretPositions[turretAndGunIndex])
+                m = Math.Matrix()
+                m.setRotateY(-turretYaw)
+                turretMatrix.postMultiply(m)
+                res.append((vehicleDescr.turrets[turretAndGunIndex].turret, turretMatrix, not self.isTurretDetached))
+                gunMatrix = Math.Matrix()
+                gunMatrix.setTranslate(-vehicleDescr.turrets[turretAndGunIndex].turret.gunPosition)
+                m = Math.Matrix()
+                m.setRotateX(-gunPitch)
+                gunMatrix.postMultiply(m)
+                gunMatrix.preMultiply(turretMatrix)
+                res.append((vehicleDescr.turrets[turretAndGunIndex].gun, gunMatrix, not self.isTurretDetached))
 
-        return res
+            invertedLocalBodyMatrix = Math.Matrix(self.filter.bodyMatrix)
+            invertedLocalBodyMatrix.invert()
+            invertedLocalBodyMatrix.preMultiply(self.model.matrix)
+            chassisMatrixInverted = invertedLocalBodyMatrix
+            if self.isPitchHullAimingAvailable():
+                chassisMatrixInverted = Math.Matrix(self.filter.groundPlacingMatrix)
+                chassisMatrixInverted.invert()
+                chassisMatrixInverted.preMultiply(self.model.matrix)
+            res[0][1].preMultiply(chassisMatrixInverted)
+            for _, toPartMat, _ in res[1:]:
+                toPartMat.preMultiply(invertedLocalBodyMatrix)
+
+            return res
 
     def segmentMayHitVehicle(self, startPoint, endPoint):
         return segmentMayHitVehicle(self.typeDescriptor, startPoint, endPoint, self.position)
@@ -497,42 +542,51 @@ class Vehicle(BigWorld.Entity):
     def isPitchHullAimingAvailable(self):
         return self.typeDescriptor is not None and self.typeDescriptor.isPitchHullAimingAvailable
 
-    def getServerGunAngles(self):
+    def getServerGunAngles(self, turretIndex):
         """Gets approximate gun angles obtained from self.gunAnglesPacked (see vehicle.def).
         :return: (turretYaw, gunPitch)
         """
-        return decodeGunAngles(self.gunAnglesPacked, self.typeDescriptor.gun.pitchLimits['absolute'])
+        return decodeGunAngles(self.gunAnglesPacked[turretIndex], self.typeDescriptor.turrets[turretIndex].gun.pitchLimits['absolute'])
 
     def startVisual(self):
         assert not self.isStarted
-        avatar = BigWorld.player()
-        self.appearance = appearance_cache.getAppearance(self.id, self.__prereqs)
-        self.appearance.setVehicle(self)
-        self.appearance.activate()
-        self.appearance.changeEngineMode(self.engineMode)
-        self.appearance.onVehicleHealthChanged(self.isPlayerVehicle)
-        if self.isPlayerVehicle:
-            if self.isAlive():
-                self.appearance.setupGunMatrixTargets(avatar.gunRotator)
-        if hasattr(self.filter, 'allowStrafeCompensation'):
-            self.filter.allowStrafeCompensation = not self.isPlayerVehicle
-        self.isStarted = True
-        self.set_publicStateModifiers()
-        self.set_damageStickers()
-        if TriggersManager.g_manager:
-            TriggersManager.g_manager.activateTrigger(TriggersManager.TRIGGER_TYPE.VEHICLE_VISUAL_VISIBILITY_CHANGED, vehicleId=self.id, isVisible=True)
-        self.guiSessionProvider.startVehicleVisual(self.proxy, True)
-        if self.stunInfo > 0.0:
-            self.updateStunInfo()
-        if not self.isAlive():
-            self.__onVehicleDeath(True)
-        if self.isTurretMarkedForDetachment:
-            self.confirmTurretDetachment()
-        self.__startWGPhysics()
-        self.refreshNationalVoice()
-        self.__prereqs = None
-        self.appearance.highlighter.setVehicleOwnership()
-        return
+        if self.isDisappeared:
+            return
+        else:
+            avatar = BigWorld.player()
+            self.appearance = appearance_cache.getAppearance(self.id, self.__prereqs)
+            self.appearance.setVehicle(self)
+            self.appearance.activate()
+            self.appearance.changeEngineMode(self.engineMode)
+            self.appearance.onVehicleHealthChanged(self.isPlayerVehicle)
+            if self.isPlayerVehicle:
+                if self.isAlive():
+                    for turretIndex in range(len(self.typeDescriptor.turrets)):
+                        self.appearance.setupGunMatrixTargets(avatar.gunRotator, turretIndex)
+
+            elif self.isAlive():
+                for turretIndex in range(1, len(self.typeDescriptor.turrets)):
+                    self.appearance.setupGunMatrixTargets(self.appearance.additionalTurretsRotator, turretIndex)
+
+            if hasattr(self.filter, 'allowStrafeCompensation'):
+                self.filter.allowStrafeCompensation = not self.isPlayerVehicle
+            self.isStarted = True
+            self.set_publicStateModifiers()
+            self.set_damageStickers()
+            if TriggersManager.g_manager:
+                TriggersManager.g_manager.activateTrigger(TriggersManager.TRIGGER_TYPE.VEHICLE_VISUAL_VISIBILITY_CHANGED, vehicleId=self.id, isVisible=True)
+            self.guiSessionProvider.startVehicleVisual(self.proxy, True)
+            if self.stunInfo > 0.0:
+                self.updateStunInfo()
+            if not self.isAlive():
+                self.__onVehicleDeath(True)
+            if self.isTurretMarkedForDetachment:
+                self.confirmTurretDetachment()
+            self.__startWGPhysics()
+            self.refreshNationalVoice()
+            self.__prereqs = None
+            self.appearance.highlighter.setVehicleOwnership()
+            return
 
     def refreshNationalVoice(self):
         player = BigWorld.player()
@@ -636,7 +690,7 @@ class Vehicle(BigWorld.Entity):
         physics.movementSignals = 0
         self.filter.setVehiclePhysics(physics)
         physics.visibilityMask = ArenaType.getVisibilityMask(BigWorld.player().arenaTypeID >> 16)
-        yaw, pitch = decodeGunAngles(self.gunAnglesPacked, typeDescr.gun.pitchLimits['absolute'])
+        yaw, pitch = decodeGunAngles(self.gunAnglesPacked[0], typeDescr.turrets[0].gun.pitchLimits['absolute'])
         self.filter.syncGunAngles(yaw, pitch)
         self.__speedInfo.set(self.filter.speedInfo)
 
@@ -685,25 +739,33 @@ class Vehicle(BigWorld.Entity):
         self.appearance.updateTurretVisibility()
 
     def drawEdge(self, forceSimpleEdge=False):
-        self.appearance.highlighter.highlight(True, forceSimpleEdge)
+        if self.appearance is not None:
+            self.appearance.highlighter.highlight(True, forceSimpleEdge)
+        return
 
     def removeEdge(self, forceSimpleEdge=False):
-        self.appearance.highlighter.highlight(False, forceSimpleEdge)
+        if self.appearance is not None:
+            self.appearance.highlighter.highlight(False, forceSimpleEdge)
+        return
 
     def addModel(self, model):
-        super(Vehicle, self).addModel(model)
-        highlighter = self.appearance.highlighter
-        if highlighter.enabled:
-            highlighter.highlight(True)
+        if self.appearance is not None:
+            super(Vehicle, self).addModel(model)
+            highlighter = self.appearance.highlighter
+            if highlighter.enabled:
+                highlighter.highlight(True)
+        return
 
     def delModel(self, model):
-        highlighter = self.appearance.highlighter
-        hlEnabled = highlighter.enabled
-        if hlEnabled:
-            highlighter.highlight(False)
-        super(Vehicle, self).delModel(model)
-        if hlEnabled:
-            highlighter.highlight(True)
+        if self.appearance is not None:
+            highlighter = self.appearance.highlighter
+            hlEnabled = highlighter.enabled
+            if hlEnabled:
+                highlighter.highlight(False)
+            super(Vehicle, self).delModel(model)
+            if hlEnabled:
+                highlighter.highlight(True)
+        return
 
     def __debugDrawCollisionMatrices(self):
         if not constants.IS_DEVELOPMENT:
@@ -735,10 +797,12 @@ class Vehicle(BigWorld.Entity):
         self.__debugServerChassis.motors[0].signal = chassisMatrix
 
     def __collideSegment(self, startPoint, endPoint, skipGun=False, onlyNearest=False):
-        filterMethod = getattr(self.filter, 'segmentMayHitEntity', self.segmentMayHitVehicle)
-        if not filterMethod(startPoint, endPoint, 0):
+        if self.isDisappeared:
             return
         else:
+            filterMethod = getattr(self.filter, 'segmentMayHitEntity', self.segmentMayHitVehicle)
+            if not filterMethod(startPoint, endPoint, 0):
+                return
             res = []
             worldToVehMatrix = Math.Matrix(self.model.matrix)
             worldToVehMatrix.invert()

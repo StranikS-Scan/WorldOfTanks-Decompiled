@@ -41,8 +41,7 @@ _BATTLE_EVENTS_SETTINGS_TO_BATTLE_EFFICIENCY_TYPES = {BATTLE_EVENTS.ENEMY_HP_DAM
                                  _BET.RECEIVED_BURN,
                                  _BET.RECEIVED_RAM,
                                  _BET.RECEIVED_WORLD_COLLISION),
- BATTLE_EVENTS.RECEIVED_CRITS: (_BET.RECEIVED_CRITS,),
- BATTLE_EVENTS.ENEMY_ASSIST_STUN: (_BET.STUN,)}
+ BATTLE_EVENTS.RECEIVED_CRITS: (_BET.RECEIVED_CRITS,)}
 
 def _getVehicleData(arenaDP, vehArenaID):
     vTypeInfoVO = arenaDP.getVehicleInfo(vehArenaID).vehicleType
@@ -142,6 +141,37 @@ def _killRibbonFormatter(ribbon, arenaDP, updater):
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=leftFieldStr)
 
 
+def _healRibbonFormatter(ribbon, arenaDP, updater):
+    """
+    Proxy to show  BATTLE_EFFICIENCY_TYPES.HEAL ribbon.
+    :param ribbon: An instance of _VehicleHealRibbon class.
+    :param updater: Reference to view update method.
+    """
+    vehInfo = BigWorld.player().arena.vehicles[ribbon.getVehicleID()]
+    accountName = vehInfo['name']
+    valueString = '+' + BigWorld.wg_getIntegralFormat(ribbon.getExtraValue())
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName='', vehType='', leftFieldStr=valueString, rightFieldStr=accountName)
+
+
+def _healthpackPickupRibbonFormatter(ribbon, arenaDP, updater):
+    """
+    Proxy to show  BATTLE_EFFICIENCY_TYPES.HEALTHPACK_PICKUP ribbon.
+    :param ribbon: An instance of _VehicleHealthpackPickupRibbon class.
+    :param updater: Reference to view update method.
+    """
+    valueString = '+' + BigWorld.wg_getIntegralFormat(ribbon.getExtraValue())
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName='', vehType='', leftFieldStr=valueString)
+
+
+def _healthpackWastedRibbonFormatter(ribbon, arenaDP, updater):
+    """
+    Proxy to show  BATTLE_EFFICIENCY_TYPES.HEALTHPACK_WASTED ribbon.
+    :param ribbon: An instance of _VehicleHealthpackWastedRibbon class.
+    :param updater: Reference to view update method.
+    """
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName='', vehType='', leftFieldStr='')
+
+
 _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.DEFENCE: _baseRibbonFormatter,
  _BET.DETECTION: _enemyDetectionRibbonFormatter,
@@ -159,7 +189,10 @@ _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.RECEIVED_RAM: _receivedRamRibbonFormatter,
  _BET.RECEIVED_BURN: _singleVehRibbonFormatter,
  _BET.RECEIVED_WORLD_COLLISION: _singleVehRibbonFormatter,
- _BET.STUN: _singleVehRibbonFormatter}
+ _BET.STUN: _singleVehRibbonFormatter,
+ _BET.HEAL: _healRibbonFormatter,
+ _BET.HEALTHPACK_PICKUP: _healthpackPickupRibbonFormatter,
+ _BET.HEALTHPACK_WASTED: _healthpackWastedRibbonFormatter}
 
 class BattleRibbonsPanel(RibbonsPanelMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -249,7 +282,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
         self.__invalidateRibbon(ribbon, self._updateRibbon)
 
     def __invalidateRibbon(self, ribbon, method):
-        if self._shouldShowRibbon(ribbon):
+        if self._shouldShowRibbon(ribbon) or ribbon.getType() == _BET.HEAL or ribbon.getType() == _BET.HEALTHPACK_PICKUP:
             if ribbon.getType() in _RIBBONS_FMTS:
                 updater = _RIBBONS_FMTS[ribbon.getType()]
                 updater(ribbon, self.__arenaDP, method)
@@ -314,4 +347,7 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
          [_BET.RECEIVED_BURN, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.RECEIVED_BURN))],
          [_BET.RECEIVED_RAM, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.RECEIVED_RAM))],
          [_BET.RECEIVED_WORLD_COLLISION, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.RECEIVED_WORLD_COLLISION))],
-         [_BET.STUN, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.STUN))]], self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName)
+         [_BET.STUN, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.STUN))],
+         [_BET.HEAL, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.HEAL))],
+         [_BET.HEALTHPACK_PICKUP, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.HEALTHPACK_PICKUP))],
+         [_BET.HEALTHPACK_WASTED, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.HEALTHPACK_WASTED))]], self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName)

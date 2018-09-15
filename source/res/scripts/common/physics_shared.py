@@ -371,7 +371,7 @@ def configurePhysicsMode(cfg, typeDesc, gravityFactor):
     cfg['engine']['engineTorque'] = tuple(((arg, val * gravityFactor) for arg, val in cfg['engine']['engineTorque']))
     offsZ = hullCenter[2]
     cfg['hullBoxOffsetZ'] = offsZ
-    turretMin, turretMax, _ = typeDesc.turret.hitTester.bbox
+    turretMin, turretMax, _ = typeDesc.turrets[0].turret.hitTester.bbox
     hullPos = typeDesc.chassis.hullPosition
     turretPos = typeDesc.hull.turretPositions[0]
     topPos = hullPos + turretPos
@@ -475,9 +475,9 @@ def initVehiclePhysicsClient(physics, typeDesc):
     hullPosY = typeDesc.chassis.hullPosition[1]
     hullMaxY = hullPosY + hullMax[1]
     turretPosY = typeDesc.hull.turretPositions[0][1]
-    turretMaxY = hullPosY + turretPosY + typeDesc.turret.hitTester.bbox[1][1]
+    turretMaxY = hullPosY + turretPosY + typeDesc.turrets[0].turret.hitTester.bbox[1][1]
     commonBoxMaxY = max(chassisMaxY, hullMaxY, turretMaxY)
-    gunPosY = hullPosY + turretPosY + typeDesc.turret.gunPosition[1]
+    gunPosY = hullPosY + turretPosY + typeDesc.turrets[0].turret.gunPosition[1]
     hullUpperBound = typeDesc.chassis.hullPosition.y + hullMax.y
     boxHeight = min(commonBoxMaxY, gunPosY, hullUpperBound * BODY_HEIGHT) - clearance
     boxHeight = max(chassisMaxY * 0.7, boxHeight, VEHICLE_ON_OBSTACLE_COLLISION_BOX_MIN_HEIGHT)
@@ -539,14 +539,14 @@ def initVehiclePhysicsClient(physics, typeDesc):
     return
 
 
-def computeBarrelLocalPoint(vehDescr, turretYaw, gunPitch):
-    maxGunZ = vehDescr.gun.hitTester.bbox[1][2]
+def computeBarrelLocalPoint(vehDescr, turretYaw, gunPitch, turretIndex):
+    maxGunZ = vehDescr.turrets[turretIndex].gun.hitTester.bbox[1][2]
     m = Math.Matrix()
     m.setRotateX(gunPitch)
-    pt = m.applyVector((0.0, 0.0, maxGunZ)) + vehDescr.turret.gunPosition
+    pt = m.applyVector((0.0, 0.0, maxGunZ)) + vehDescr.turrets[turretIndex].turret.gunPosition
     m.setRotateY(turretYaw)
     pt = m.applyVector(pt)
-    pt += vehDescr.hull.turretPositions[vehDescr.activeTurretPosition]
+    pt += vehDescr.hull.turretPositions[turretIndex]
     pt += vehDescr.chassis.hullPosition
     return pt
 
@@ -645,6 +645,9 @@ def initVehiclePhysicsFromParams(physics, params, xmlPath):
     typeDesc.shot = gun_components.GunShot(None, 1.0, (10.0, 10.0), 100.0, 9.8, 500.0, 1000000.0)
     typeDesc.gun = vehicle_items.createGun(0, 0, 'Gun')
     typeDesc.gun.staticTurretYaw = None
+    typeDesc.turrets = [_SimpleObject()]
+    typeDesc.turrets[0].turret = typeDesc.turret
+    typeDesc.turrets[0].gun = typeDesc.gun
     typeDesc.hasSiegeMode = False
     typeDesc.type.isRotationStill = False
     typeDesc.type.useHullZ = False

@@ -287,17 +287,19 @@ class TokenQuestsWindowHandler(ServiceChannelHandler):
                 if self.isShowCongrats(allQuests[qID]):
                     completedQuests[qID] = (allQuests[qID], {'eventsCache': self.eventsCache})
 
+        bonus_data = dict(data)
+        del bonus_data['completedQuestIDs']
         for quest, context in completedQuests.itervalues():
-            self._showWindow(quest, context)
+            self._showWindow(quest, context, bonus_data)
 
     @staticmethod
-    def _showWindow(quest, context):
+    def _showWindow(quest, context, bonus_data):
         """Fire an actual show event to display an award window.
         
         :param quest: instance of event_items.Quest (or derived)
         :param context: dict with required data
         """
-        quests_events.showMissionAward(quest, context)
+        quests_events.showMissionAward(quest, context, bonus_data)
 
 
 class MotiveQuestsWindowHandler(ServiceChannelHandler):
@@ -367,16 +369,16 @@ class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
                     completedQuests[questID] = (quest, ctx)
 
         for quest, context in completedQuests.itervalues():
-            self._showWindow(quest, context)
+            self._showWindow(quest, context, message.data)
 
     @staticmethod
-    def _showWindow(quest, context):
+    def _showWindow(quest, context, data):
         """Fire an actual show event to display an award window.
         
         :param quest: instance of event_items.Quest (or derived)
         :param context: dict with required data
         """
-        quests_events.showMissionAward(quest, context)
+        quests_events.showMissionAward(quest, context, data)
 
     @staticmethod
     def _isAppropriate(quest):
@@ -407,7 +409,7 @@ class PersonalMissionsAutoWindowHandler(BattleQuestsAutoWindowHandler):
     """
 
     @staticmethod
-    def _showWindow(quest, context):
+    def _showWindow(quest, context, _ignoredBonusData):
         quests_events.showPersonalMissionAward(quest, context)
 
     @staticmethod
@@ -440,7 +442,7 @@ class PersonalMissionByAwardListHandler(PersonalMissionsAutoWindowHandler):
         return False
 
     @staticmethod
-    def _showWindow(quest, context):
+    def _showWindow(quest, context, _ignoredBonusData):
         quests_events.showPersonalMissionAward(quest, context)
 
     @staticmethod

@@ -97,6 +97,7 @@ class _HangarSpace(object):
         self.onObjectSelected = Event.Event()
         self.onObjectUnselected = Event.Event()
         self.onObjectClicked = Event.Event()
+        self.onRequestOpenWindowsUpdate = Event.Event()
         return
 
     @property

@@ -37,10 +37,20 @@ class _TeamBaseSettingItem(object):
         return self._color
 
     def getCapturingString(self, points):
-        return self._capturing % (self._subTypeBaseID, points)
+        try:
+            result = self._capturing % (self._subTypeBaseID, points)
+        except:
+            result = 'ERROR: %s' % self._capturing
+
+        return result
 
     def getCapturedString(self):
-        return self._captured % self._subTypeBaseID
+        try:
+            result = self._captured % self._subTypeBaseID
+        except:
+            result = 'ERROR: %s' % self._captured
+
+        return result
 
     def getBattleSubTypeBaseNumber(self):
         return getBattleSubTypeBaseNumber(self._arenaTypeID, self._team, self._baseID)

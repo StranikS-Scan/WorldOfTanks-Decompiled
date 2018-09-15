@@ -171,7 +171,7 @@ class RoleChangeWindow(RoleChangeMeta):
 
     def __getVehiclesData(self, nationID, nativeVehicleCD):
         items = []
-        criteria = REQ_CRITERIA.NATIONS([nationID]) | REQ_CRITERIA.UNLOCKED
+        criteria = REQ_CRITERIA.NATIONS([nationID]) | REQ_CRITERIA.UNLOCKED | ~REQ_CRITERIA.VEHICLE.CREW_LOCKED
         vehicles = self.itemsCache.items.getVehicles(criteria)
         vehiclesData = vehicles.values()
         if nativeVehicleCD not in vehicles:

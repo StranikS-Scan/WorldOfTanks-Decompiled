@@ -41,7 +41,8 @@ class ClientArena(object):
      ARENA_UPDATE.OWN_VEHICLE_INSIDE_RP: '_ClientArena__onOwnVehicleInsideRP',
      ARENA_UPDATE.OWN_VEHICLE_LOCKED_FOR_RP: '_ClientArena__onOwnVehicleLockedForRP',
      ARENA_UPDATE.VIEW_POINTS: '_ClientArena__onViewPoints',
-     ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar'}
+     ARENA_UPDATE.FOG_OF_WAR: '_ClientArena__onFogOfWar',
+     ARENA_UPDATE.DISAPPEAR: '_ClientArena__onDisappearVehicle'}
 
     def __init__(self, arenaUniqueID, arenaTypeID, arenaBonusType, arenaGuiType, arenaExtraData, weatherPresetID):
         self.__vehicles = {}
@@ -77,6 +78,7 @@ class ClientArena(object):
         self.onGameModeSpecifcStats = Event.Event(em)
         self.onVehicleWillRespawn = Event.Event(em)
         self.onViewPoints = Event.Event(em)
+        self.onDisappearVehicle = Event.Event(em)
         self.onFogOfWarHiddenVehiclesSet = Event.Event(em)
         self.onTeamHealthPercentUpdate = Event.Event(em)
         self.arenaUniqueID = arenaUniqueID
@@ -86,6 +88,7 @@ class ClientArena(object):
         self.bonusType = arenaBonusType
         self.guiType = arenaGuiType
         self.extraData = arenaExtraData
+        self.effectsPlayersList = []
         self.__arenaBBCollider = None
         self.__spaceBBCollider = None
         self.componentSystem = assembler.createComponentSystem(self.bonusType, self.arenaType)
@@ -104,6 +107,10 @@ class ClientArena(object):
 
     def destroy(self):
         self.__eventManager.clear()
+        for effectsPlayer in self.effectsPlayersList:
+            effectsPlayer.stop(forceCallback=True)
+
+        self.effectsPlayersList[:] = []
         assembler.destroyComponentSystem(self.componentSystem)
 
     def update(self, updateType, argStr):
@@ -259,8 +266,12 @@ class ClientArena(object):
 
     def __onDisappearVehicleBeforeRespawn(self, argStr):
         vehID = cPickle.loads(argStr)
-        FalloutDestroyEffect.play(vehID)
+        self.effectsPlayersList.append(FalloutDestroyEffect.play(vehID))
         self.onVehicleWillRespawn(vehID)
+
+    def __onDisappearVehicle(self, argStr):
+        vehID = cPickle.loads(argStr)
+        self.onDisappearVehicle(vehID)
 
     def __onFlagTeamsReceived(self, argStr):
         data = cPickle.loads(argStr)

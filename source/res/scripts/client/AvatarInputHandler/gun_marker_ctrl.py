@@ -10,7 +10,7 @@ import constants
 from AvatarInputHandler import AimingSystems
 from AvatarInputHandler import aih_constants, aih_global_binding
 from ProjectileMover import getCollidableEntities
-from debug_utils import LOG_UNEXPECTED
+from debug_utils import LOG_UNEXPECTED, LOG_WARNING, LOG_DEBUG, LOG_ERROR, LOG_DEBUG_DEV
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -68,7 +68,7 @@ def useDefaultGunMarkers():
     return not constants.HAS_DEV_RESOURCES or GUI_SETTINGS.useDefaultGunMarkers
 
 
-def createGunMarker(isStrategic):
+def createGunMarker(isStrategic, turretIndex=0):
     """ Create gun marker controller.
     :param isStrategic: is strategic gun marker.
     :return: instance of gun marker that implements IGunMarkerController.
@@ -78,7 +78,10 @@ def createGunMarker(isStrategic):
         clientMarker = _SPGGunMarkerController(_MARKER_TYPE.CLIENT, factory.getClientSPGProvider())
         serverMarker = _SPGGunMarkerController(_MARKER_TYPE.SERVER, factory.getServerSPGProvider())
     else:
-        clientMarker = _DefaultGunMarkerController(_MARKER_TYPE.CLIENT, factory.getClientProvider())
+        if turretIndex == 0:
+            clientMarker = _DefaultGunMarkerController(_MARKER_TYPE.CLIENT, factory.getClientProvider())
+        else:
+            clientMarker = _DefaultGunMarkerController(_MARKER_TYPE.SUB, factory.getSubGunProvider())
         serverMarker = _DefaultGunMarkerController(_MARKER_TYPE.SERVER, factory.getServerProvider())
     return _GunMarkersDecorator(clientMarker, serverMarker)
 
@@ -103,7 +106,7 @@ else:
 class _StandardShotResult(object):
 
     @classmethod
-    def getShotResult(cls, hitPoint, collision, _, excludeTeam=0):
+    def getShotResult(cls, hitPoint, collision, _, turretIndex, excludeTeam=0):
         """ Gets shot result by present state of gun marker.
         :param hitPoint: Vector3 containing shot position.
         :param collision: instance of EntityCollisionData.
@@ -120,8 +123,8 @@ class _StandardShotResult(object):
             if player is None:
                 return _SHOT_RESULT.UNDEFINED
             vDesc = player.getVehicleDescriptor()
-            ppDesc = vDesc.shot.piercingPower
-            maxDist = vDesc.shot.maxDistance
+            ppDesc = vDesc.turrets[turretIndex].gun.shots[vDesc.activeGunShotIndex].piercingPower
+            maxDist = vDesc.turrets[turretIndex].gun.shots[vDesc.activeGunShotIndex].maxDistance
             dist = (hitPoint - player.getOwnVehiclePosition()).length
             if dist <= 100.0:
                 piercingPower = ppDesc[0]
@@ -214,7 +217,7 @@ class _CrosshairShotResults(object):
         return entity.collideSegmentExt(startPoint, endPoint)
 
     @classmethod
-    def getShotResult(cls, hitPoint, collision, dir, excludeTeam=0):
+    def getShotResult(cls, hitPoint, collision, dir, turretIndex, excludeTeam=0):
         """ Gets shot result by present state of gun marker.
         :param hitPoint: Vector3 containing shot position.
         :param collision: instance of EntityCollisionData.
@@ -233,11 +236,12 @@ class _CrosshairShotResults(object):
             if player is None:
                 return _SHOT_RESULT.UNDEFINED
             vDesc = player.getVehicleDescriptor()
-            shell = vDesc.shot.shell
+            shot = vDesc.turrets[turretIndex].gun.shots[vDesc.activeGunShotIndex]
+            shell = shot.shell
             caliber = shell.caliber
             shellKind = shell.kind
-            ppDesc = vDesc.shot.piercingPower
-            maxDist = vDesc.shot.maxDistance
+            ppDesc = shot.piercingPower
+            maxDist = shot.maxDistance
             dist = (hitPoint - player.getOwnVehiclePosition()).length
             piercingPower = cls._computePiercingPowerAtDist(ppDesc, dist, maxDist)
             fullPiercingPower = piercingPower
@@ -395,6 +399,7 @@ class IGunMarkerController(object):
 class _GunMarkersDPFactory(object):
     """Class creates/gets required data provider and configures it."""
     __clientDataProvider = aih_global_binding.bindRW(_BINDING_ID.CLIENT_GUN_MARKER_DATA_PROVIDER)
+    __subGunClientDataProvider = aih_global_binding.bindRW(_BINDING_ID.CLIENT_SUB_GUN_MARKER_DATA_PROVIDER)
     __serverDataProvider = aih_global_binding.bindRW(_BINDING_ID.SERVER_GUN_MARKER_DATA_PROVIDER)
     __clientSPGDataProvider = aih_global_binding.bindRW(_BINDING_ID.CLIENT_SPG_GUN_MARKER_DATA_PROVIDER)
     __serverSPGDataProvider = aih_global_binding.bindRW(_BINDING_ID.SERVER_SPG_GUN_MARKER_DATA_PROVIDER)
@@ -403,6 +408,11 @@ class _GunMarkersDPFactory(object):
         if self.__clientDataProvider is None:
             self.__clientDataProvider = self._makeDefaultProvider()
         return self.__clientDataProvider
+
+    def getSubGunProvider(self):
+        if self.__subGunClientDataProvider is None:
+            self.__subGunClientDataProvider = self._makeDefaultProvider()
+        return self.__subGunClientDataProvider
 
     def getServerProvider(self):
         if self.__serverDataProvider is None:
@@ -442,6 +452,7 @@ class _GunMarkersDecorator(IGunMarkerController):
     """Decorator that contains implementation of markers on client-side and server-side."""
     __gunMarkersFlags = aih_global_binding.bindRW(_BINDING_ID.GUN_MARKERS_FLAGS)
     __clientState = aih_global_binding.bindRW(_BINDING_ID.CLIENT_GUN_MARKER_STATE)
+    __subGunState = aih_global_binding.bindRW(_BINDING_ID.SUB_GUN_MARKER_STATE)
     __serverState = aih_global_binding.bindRW(_BINDING_ID.SERVER_GUN_MARKER_STATE)
 
     def __init__(self, clientMarker, serverMarker):
@@ -459,7 +470,8 @@ class _GunMarkersDecorator(IGunMarkerController):
 
     def enable(self):
         self.__clientMarker.enable()
-        self.__clientMarker.setPosition(self.__clientState[0])
+        pos = self.__clientState[0] if self.__clientMarker.getMarkerType() == _MARKER_TYPE.CLIENT else self.__subGunState[0]
+        self.__clientMarker.setPosition(pos)
         self.__serverMarker.enable()
         self.__serverMarker.setPosition(self.__serverState[0])
 
@@ -476,20 +488,20 @@ class _GunMarkersDecorator(IGunMarkerController):
         self.__serverMarker.onRecreateDevice()
 
     def getPosition(self, markerType=_MARKER_TYPE.CLIENT):
-        if markerType == _MARKER_TYPE.CLIENT:
+        if markerType == _MARKER_TYPE.CLIENT or markerType == _MARKER_TYPE.SUB:
             return self.__clientMarker.getPosition()
         if markerType == _MARKER_TYPE.SERVER:
             return self.__serverMarker.getPosition()
-        LOG_UNEXPECTED('Gun maker control is not found by type', markerType)
+        LOG_UNEXPECTED('Gun marker control is not found by type', markerType)
         return Math.Vector3()
 
     def setPosition(self, position, markerType=_MARKER_TYPE.CLIENT):
-        if markerType == _MARKER_TYPE.CLIENT:
+        if markerType == _MARKER_TYPE.CLIENT or markerType == _MARKER_TYPE.SUB:
             self.__clientMarker.setPosition(position)
         elif markerType == _MARKER_TYPE.SERVER:
             self.__serverMarker.setPosition(position)
         else:
-            LOG_UNEXPECTED('Gun maker control is not found by type', markerType)
+            LOG_UNEXPECTED('Gun marker control is not found by type', markerType)
 
     def setFlag(self, positive, bit):
         if positive:
@@ -500,8 +512,11 @@ class _GunMarkersDecorator(IGunMarkerController):
             self.__gunMarkersFlags &= ~bit
 
     def update(self, markerType, position, dir, size, relaxTime, collData):
-        if markerType == _MARKER_TYPE.CLIENT:
-            self.__clientState = (position, dir, collData)
+        if markerType == _MARKER_TYPE.CLIENT or markerType == _MARKER_TYPE.SUB:
+            if markerType == _MARKER_TYPE.SUB:
+                self.__subGunState = (position, dir, collData)
+            else:
+                self.__clientState = (position, dir, collData)
             if self.__gunMarkersFlags & _MARKER_FLAG.CLIENT_MODE_ENABLED:
                 self.__clientMarker.update(markerType, position, dir, size, relaxTime, collData)
         elif markerType == _MARKER_TYPE.SERVER:
@@ -509,7 +524,14 @@ class _GunMarkersDecorator(IGunMarkerController):
             if self.__gunMarkersFlags & _MARKER_FLAG.SERVER_MODE_ENABLED:
                 self.__serverMarker.update(markerType, position, dir, size, relaxTime, collData)
         else:
-            LOG_UNEXPECTED('Gun maker control is not found by type', markerType)
+            LOG_UNEXPECTED('Gun marker control is not found by type', markerType)
+
+    def getSize(self, markerType=_MARKER_TYPE.CLIENT):
+        if markerType == _MARKER_TYPE.CLIENT or markerType == _MARKER_TYPE.SUB:
+            return self.__clientMarker.getSize()
+        if markerType == _MARKER_TYPE.SERVER:
+            return self.__serverMarker.getSize()
+        LOG_UNEXPECTED('Gun marker control is not found by type', markerType)
 
 
 class _GunMarkerController(IGunMarkerController):
@@ -553,6 +575,9 @@ class _GunMarkerController(IGunMarkerController):
     def onRecreateDevice(self):
         pass
 
+    def getMarkerType(self):
+        return self._gunMarkerType
+
     def getPosition(self):
         return self._position
 
@@ -569,6 +594,9 @@ class _GunMarkerController(IGunMarkerController):
         animationMatrix = self._dataProvider.positionMatrixProvider
         animationMatrix.keyframes = ((0.0, Math.Matrix(animationMatrix)), (relaxTime, positionMatrix))
         animationMatrix.time = 0.0
+
+    def getSize(self):
+        pass
 
 
 class _DefaultGunMarkerController(_GunMarkerController):
@@ -607,15 +635,16 @@ class _DefaultGunMarkerController(_GunMarkerController):
         size = sizeVector[0]
         idealSize = sizeVector[1]
         replayCtrl = BattleReplay.g_replayCtrl
+        turretIndex = 1 if self._gunMarkerType == _MARKER_TYPE.SUB else 0
         if replayCtrl.isPlaying and replayCtrl.isClientReady:
-            s = replayCtrl.getArcadeGunMarkerSize()
+            s = replayCtrl.getArcadeGunMarkerSize(turretIndex)
             if s != -1.0:
                 size = s
         elif replayCtrl.isRecording:
             if replayCtrl.isServerAim and self._gunMarkerType == _MARKER_TYPE.SERVER:
-                replayCtrl.setArcadeGunMarkerSize(size)
-            elif self._gunMarkerType == _MARKER_TYPE.CLIENT:
-                replayCtrl.setArcadeGunMarkerSize(size)
+                replayCtrl.setArcadeGunMarkerSize(size, turretIndex)
+            elif self._gunMarkerType == _MARKER_TYPE.CLIENT or self._gunMarkerType == _MARKER_TYPE.SUB:
+                replayCtrl.setArcadeGunMarkerSize(size, turretIndex)
         worldMatrix = _makeWorldMatrix(positionMatrix)
         currentSize = _calcScale(worldMatrix, size) * self.__screenRatio
         idealSize = _calcScale(worldMatrix, idealSize) * self.__screenRatio
@@ -636,6 +665,9 @@ class _DefaultGunMarkerController(_GunMarkerController):
     def __onScaleChanged(self, scale):
         _setupGunMarkerSizeLimits(self._dataProvider, scale=scale)
 
+    def getSize(self):
+        return self.__curSize
+
 
 class _SPGGunMarkerController(_GunMarkerController):
     """Class of controller that is used in strategic mode."""
@@ -653,7 +685,7 @@ class _SPGGunMarkerController(_GunMarkerController):
         player = BigWorld.player()
         assert player is not None
         self._gunRotator = player.gunRotator
-        shotDescr = player.getVehicleDescriptor().shot
+        shotDescr = player.getVehicleDescriptor().turrets[0].shot
         self._shotSpeed = shotDescr.speed
         self._shotGravity = shotDescr.gravity
         return
@@ -678,7 +710,8 @@ class _SPGGunMarkerController(_GunMarkerController):
         self._update()
 
     def _getCurrentShotInfo(self):
-        gunMat = AimingSystems.getPlayerGunMat(self._gunRotator.turretYaw, self._gunRotator.gunPitch)
+        turretIndex = 0
+        gunMat = AimingSystems.getPlayerGunMat(self._gunRotator.turretYaw, self._gunRotator.gunPitch, turretIndex)
         position = gunMat.translation
         velocity = gunMat.applyVector(Math.Vector3(0, 0, self._shotSpeed))
         return (position, velocity, Math.Vector3(0, -self._shotGravity, 0))

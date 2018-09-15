@@ -211,6 +211,8 @@ class PersonalEfficiencyController(IBattleController):
                 eventsCount += 1
                 if info.getType() in _AGGREGATED_DAMAGE_EFFICIENCY_TYPES:
                     totals[info.getType()] = totals[info.getType()] + info.getDamage()
+                elif info.getType() == _FET.VEHICLE_HEAL or info.getType() == _FET.VEHICLE_HEALTHPACK_PICKUP:
+                    totals[info.getType()] += event['details']
                 self.__efficiencyLog.appendleft(info)
 
         if eventsCount > 0:

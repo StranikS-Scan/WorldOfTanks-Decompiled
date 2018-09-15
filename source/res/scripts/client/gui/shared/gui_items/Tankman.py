@@ -79,6 +79,7 @@ class Tankman(GUIItem, HasStrCD):
         self._dismissedAt = dismissedAt
         self._isDismissed = self.dismissedAt is not None
         self._areClassesCompatible = False
+        self._isEvent = False
         self._vehicleNativeDescr = vehicles.VehicleDescr(typeID=(self.nationID, self.descriptor.vehicleTypeID))
         self._vehicleInvID = -1
         self._vehicleDescr = None
@@ -90,6 +91,7 @@ class Tankman(GUIItem, HasStrCD):
             self._vehicleBonuses = dict(vehicle.bonuses)
             self._vehicleSlotIdx = vehicle.crewIndices.get(inventoryID, -1)
             crewRoles = self.vehicleDescr.type.crewRoles
+            self._isEvent = True if 'event_battles' in self.vehicleDescr.type.tags else False
             if -1 < self.vehicleSlotIdx < len(crewRoles):
                 self._combinedRoles = crewRoles[self.vehicleSlotIdx]
             self._areClassesCompatible = bool(VEHICLE_CLASS_TAGS & self.vehicleDescr.type.tags & self.vehicleNativeDescr.type.tags)
@@ -192,6 +194,10 @@ class Tankman(GUIItem, HasStrCD):
         return self.vehicleDescr is not None
 
     @property
+    def isEvent(self):
+        return self._isEvent
+
+    @property
     def role(self):
         return self.descriptor.role
 
@@ -209,7 +215,7 @@ class Tankman(GUIItem, HasStrCD):
 
     @property
     def iconRank(self):
-        return getRankIconName(self.nationID, self.descriptor.rankID)
+        return getRankIconName(self.nationID, self.descriptor.rankID, self._isEvent)
 
     @property
     def iconRole(self):
@@ -229,7 +235,7 @@ class Tankman(GUIItem, HasStrCD):
 
     @property
     def rankUserName(self):
-        return getRankUserName(self.nationID, self.descriptor.rankID)
+        return getRankUserName(self.nationID, self.descriptor.rankID, self._isEvent)
 
     @property
     def roleUserName(self):
@@ -570,8 +576,8 @@ def getRoleWhiteIconPath(role):
     return '../maps/icons/tankmen/roles/white/{}'.format(getRoleIconName(role))
 
 
-def getRankUserName(nationID, rankID):
-    return i18n.convert(tankmen.getNationConfig(nationID).getRank(rankID).userString)
+def getRankUserName(nationID, rankID, isEvent=False):
+    return i18n.convert(tankmen.getNationConfig(nationID).getRank(rankID, isEvent).userString)
 
 
 def getIconName(nationID, iconID):
@@ -590,16 +596,16 @@ def getSmallIconPath(nationID, iconID):
     return '../maps/icons/tankmen/icons/small/%s' % getIconName(nationID, iconID)
 
 
-def getRankIconName(nationID, rankID):
-    return tankmen.getNationConfig(nationID).getRank(rankID).icon
+def getRankIconName(nationID, rankID, isEvent=False):
+    return tankmen.getNationConfig(nationID).getRank(rankID, isEvent).icon
 
 
-def getRankBigIconPath(nationID, rankID):
-    return '../maps/icons/tankmen/ranks/big/%s' % getRankIconName(nationID, rankID)
+def getRankBigIconPath(nationID, rankID, isEvent=False):
+    return '../maps/icons/tankmen/ranks/big/%s' % getRankIconName(nationID, rankID, isEvent)
 
 
-def getRankSmallIconPath(nationID, rankID):
-    return '../maps/icons/tankmen/ranks/small/%s' % getRankIconName(nationID, rankID)
+def getRankSmallIconPath(nationID, rankID, isEvent=False):
+    return '../maps/icons/tankmen/ranks/small/%s' % getRankIconName(nationID, rankID, isEvent)
 
 
 def getSkillIconName(skillName):

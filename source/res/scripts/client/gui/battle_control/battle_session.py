@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_control/battle_session.py
 import weakref
 from collections import namedtuple
+import operator
 import BattleReplay
 from PlayerEvents import g_playerEvents
 from adisp import async
@@ -111,7 +112,7 @@ class BattleSessionProvider(IBattleSessionProvider):
     def setPlayerVehicle(self, vID, vDesc):
         ctrl = self.__sharedRepo.ammo
         if ctrl is not None:
-            ctrl.setGunSettings(vDesc.gun)
+            ctrl.setGunSettings(map(operator.attrgetter('gun'), vDesc.turrets))
         ctrl = self.__sharedRepo.vehicleState
         if ctrl is not None:
             ctrl.setPlayerVehicle(vID)
@@ -134,13 +135,13 @@ class BattleSessionProvider(IBattleSessionProvider):
         ctrl = self.__sharedRepo.ammo
         if ctrl is not None:
             ctrl.clear(False)
-            ctrl.setGunSettings(extraData.gunSettings)
+            ctrl.setGunSettings((extraData.gunSettings,))
             for intCD, quantity, quantityInClip in extraData.orderedAmmo:
                 ctrl.setShells(intCD, quantity, quantityInClip)
 
             ctrl.setCurrentShellCD(extraData.currentShellCD)
             ctrl.setNextShellCD(extraData.nextShellCD)
-            ctrl.setGunReloadTime(extraData.reloadTimeLeft, extraData.reloadBaseTime)
+            ctrl.setGunReloadTime(0, extraData.reloadTimeLeft, extraData.reloadBaseTime)
         ctrl = self.__sharedRepo.equipments
         if ctrl is not None:
             ctrl.clear(False)

@@ -4,7 +4,7 @@ import weakref
 import operator
 from collections import namedtuple
 import BigWorld
-from constants import ARENA_PERIOD, FINISH_REASON
+from constants import ARENA_PERIOD, FINISH_REASON, ARENA_GUI_TYPE
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.battle_control.arena_info.invitations import SquadInvitationsFilter
 from gui.battle_control.battle_constants import WinStatus
@@ -440,7 +440,7 @@ class ArenaTeamBasesListener(_Listener):
     def start(self, setup):
         super(ArenaTeamBasesListener, self).start(setup)
         arena = self._visitor.getArenaSubscription()
-        if arena is not None:
+        if arena is not None and self._visitor.getArenaGuiType() != ARENA_GUI_TYPE.EVENT_BATTLES_2:
             arena.onTeamBasePointsUpdate += self.__arena_onTeamBasePointsUpdate
             arena.onTeamBaseCaptured += self.__arena_onTeamBaseCaptured
             arena.onPeriodChange += self.__arena_onPeriodChange

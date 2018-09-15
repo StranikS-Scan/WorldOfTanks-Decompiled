@@ -11,6 +11,7 @@ from vehicle_systems.components.vehicle_audition_wwise import TrackCrashAudition
 from vehicle_systems.components.tutorial_mat_kinds_controller import TutorialMatKindsController
 import BigWorld
 from vehicle_systems.components.highlighter import Highlighter
+from vehicle_systems.components.additional_turrets_rotator import AdditionalTurretsRotator
 from helpers import gEffectsDisabled
 import Vehicular
 import DataLinks
@@ -126,6 +127,8 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
             tutorialMatKindsController.terrainMatKindsLink = lambda : appearance.terrainMatKind
             appearance.addComponent(tutorialMatKindsController)
         self.__postSetupFilter(appearance)
+        if len(appearance.typeDescriptor.turrets) > 1:
+            _setupAdditionalTurrets(appearance, isPlayer)
         return
 
 
@@ -135,3 +138,21 @@ def _assembleSwinging(appearance, lodLink):
     compoundModel.node(TankPartNames.HULL, swingingAnimator)
     if hasattr(appearance.filter, 'placingCompensationMatrix'):
         swingingAnimator.placingCompensationMatrix = appearance.filter.placingCompensationMatrix
+
+
+def _setupAdditionalTurrets(appearance, isPlayer):
+    turretCount = len(appearance.typeDescriptor.turrets)
+    compoundModel = appearance.compoundModel
+    rotator = BigWorld.player().gunRotator
+    if not isPlayer:
+        appearance.additionalTurretsRotator = AdditionalTurretsRotator(turretCount)
+        rotator = appearance.additionalTurretsRotator
+    for i in range(1, turretCount):
+        turretName = '%s%d' % (TankPartNames.ADDITIONAL_TURRET, i)
+        turretMatrix = rotator.getTurretMatrix(i)
+        compoundModel.node(turretName, turretMatrix)
+        gunName = '%s%d' % (TankPartNames.ADDITIONAL_GUN, i)
+        gunMatrix = rotator.getGunMatrix(i)
+        compoundModel.node(gunName, gunMatrix)
+        initialRotation = appearance.typeDescriptor.hull.turretRotations[i]
+        rotator.updateGunAngles(initialRotation[1], initialRotation[0], i)

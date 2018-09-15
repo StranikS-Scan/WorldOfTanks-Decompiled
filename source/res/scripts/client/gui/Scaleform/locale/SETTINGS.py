@@ -449,6 +449,7 @@ class SETTINGS(object):
     KEYBOARD_KEYSBLOCKS_COMMAND_STOP_FIRE = '#settings:keyboard/keysBlocks/command/stop_fire'
     KEYBOARD_KEYSBLOCKS_GROUP_FIRING = '#settings:keyboard/keysBlocks/group/firing'
     KEYBOARD_KEYSBLOCKS_COMMAND_FIRE = '#settings:keyboard/keysBlocks/command/fire'
+    KEYBOARD_KEYSBLOCKS_COMMAND_FIRE_SECONDARY = '#settings:keyboard/keysBlocks/command/fire_secondary'
     KEYBOARD_KEYSBLOCKS_COMMAND_LOCK_TARGET = '#settings:keyboard/keysBlocks/command/lock_target'
     KEYBOARD_KEYSBLOCKS_COMMAND_LOCK_TARGET_OFF = '#settings:keyboard/keysBlocks/command/lock_target_off'
     KEYBOARD_KEYSBLOCKS_COMMAND_ALTERNATE_MODE = '#settings:keyboard/keysBlocks/command/alternate_mode'

@@ -9,6 +9,7 @@ MARKERS_COLOR_SCHEME_PREFIX = 'vm_'
 
 class MARKER_SYMBOL_NAME(object):
     VEHICLE_MARKER = 'VehicleMarker'
+    VEHICLE_MARKER_BOSS = 'VehicleMarkerBoss'
     EQUIPMENT_MARKER = 'FortConsumablesMarker'
     FLAG_MARKER = 'FlagIndicatorUI'
     FLAG_CAPTURE_MARKER = 'CaptureIndicatorUI'

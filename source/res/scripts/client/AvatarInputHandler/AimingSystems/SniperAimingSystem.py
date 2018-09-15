@@ -8,6 +8,7 @@ from AvatarInputHandler import mathUtils
 from AvatarInputHandler import AimingSystems
 from AvatarInputHandler.AimingSystems import IAimingSystem
 from gun_rotation_shared import calcPitchLimitsFromDesc
+from debug_utils import LOG_DEBUG
 
 class SniperAimingSystem(IAimingSystem):
     turretYaw = property(lambda self: self.__idealTurretYaw + self.__oscillator.deviation.x)
@@ -32,6 +33,7 @@ class SniperAimingSystem(IAimingSystem):
     def __init__(self):
         IAimingSystem.__init__(self)
         self.__zoom = None
+        self.__turretIndex = 0
         self.__idealTurretYaw = 0.0
         self.__idealGunPitch = 0.0
         self.__worldYaw = 0.0
@@ -61,7 +63,7 @@ class SniperAimingSystem(IAimingSystem):
         self.__forceFullStabilization = enable
 
     def getPitchLimits(self):
-        return self.__vehicleTypeDescriptor.gun.combinedPitchLimits
+        return self.__vehicleTypeDescriptor.turrets[self.__turretIndex].gun.combinedPitchLimits
 
     def enable(self, targetPos, playerGunMatFunction=AimingSystems.getPlayerGunMat):
         player = BigWorld.player()
@@ -80,8 +82,8 @@ class SniperAimingSystem(IAimingSystem):
         return
 
     def focusOnPos(self, preferredPos):
-        self.__yawLimits = self.__vehicleTypeDescriptor.gun.turretYawLimits
-        if self.__isTurretHasStaticYaw():
+        self.__yawLimits = self.__vehicleTypeDescriptor.turrets[self.__turretIndex].gun.turretYawLimits
+        if self.__isTurretHasStaticYaw() or self.__vehicleTypeDescriptor.isMultiTurret:
             self.__yawLimits = None
         if self.__yawLimits is not None and abs(self.__yawLimits[0] - self.__yawLimits[1]) < 1e-05:
             self.__yawLimits = None
@@ -129,7 +131,13 @@ class SniperAimingSystem(IAimingSystem):
 
     def __clampToLimits(self, turretYaw, gunPitch):
         if self.__yawLimits is not None:
-            turretYaw = mathUtils.clamp(self.__yawLimits[0], self.__yawLimits[1], turretYaw)
+            if self.__yawLimits[0] <= self.__yawLimits[1]:
+                turretYaw = mathUtils.clamp(self.__yawLimits[0], self.__yawLimits[1], turretYaw)
+            elif not (turretYaw >= self.__yawLimits[0] or turretYaw <= self.__yawLimits[1]):
+                if math.fabs(turretYaw - self.__yawLimits[0]) < math.fabs(turretYaw - self.__yawLimits[1]):
+                    turretYaw = self.__yawLimits[0]
+                else:
+                    turretYaw = self.__yawLimits[1]
         pitchLimits = calcPitchLimitsFromDesc(turretYaw, self.getPitchLimits())
         adjustment = max(0, self.__returningOscillator.deviation.y)
         pitchLimits[0] -= adjustment
@@ -202,13 +210,19 @@ class SniperAimingSystem(IAimingSystem):
         self.__zoom = zoom
         return zoom
 
+    def setTurretIndex(self, turretIndex):
+        self.__turretIndex = turretIndex
+
+    def getTurretIndex(self):
+        return self.__turretIndex
+
     def __getPlayerGunMat(self, turretYaw, gunPitch):
-        return self.__playerGunMatFunction(turretYaw, gunPitch)
+        return self.__playerGunMatFunction(turretYaw, gunPitch, self.__turretIndex)
 
     def __getTurretYawGunPitch(self, targetPos, compensateGravity=False):
         player = BigWorld.player()
         stabilisedMatrix = Math.Matrix(player.inputHandler.steadyVehicleMatrixCalculator.stabilisedMProv)
-        turretYaw, gunPitch = AimingSystems.getTurretYawGunPitch(self.__vehicleTypeDescriptor, stabilisedMatrix, targetPos, compensateGravity)
+        turretYaw, gunPitch = AimingSystems.getTurretYawGunPitch(self.__vehicleTypeDescriptor, self.__turretIndex, stabilisedMatrix, targetPos, compensateGravity)
         rotation = mathUtils.createRotationMatrix((turretYaw, gunPitch, 0.0))
         rotation.postMultiply(stabilisedMatrix)
         invertSteady = Math.Matrix(self.__vehicleMProv)
@@ -217,4 +231,4 @@ class SniperAimingSystem(IAimingSystem):
         return (rotation.yaw, rotation.pitch)
 
     def __isTurretHasStaticYaw(self):
-        return self.__vehicleTypeDescriptor.gun.staticTurretYaw is not None
+        return self.__vehicleTypeDescriptor.turrets[self.__turretIndex].gun.staticTurretYaw is not None

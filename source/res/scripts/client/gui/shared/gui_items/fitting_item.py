@@ -381,14 +381,14 @@ class FittingItem(GUIItem, HasIntCD):
         """
         return False
 
-    def mayInstall(self, vehicle, slotIdx=None):
+    def mayInstall(self, vehicle, slotIdx=None, position=0):
         """
         Item can be installed on @vehicle. Can be overridden by inherited classes.
         :param vehicle: installation vehicle
         :param slotIdx: slot index to install. Used for equipments and optional devices.
         :return: tuple(can be installed <bool>, error msg <str>)
         """
-        return vehicle.descriptor.mayInstallComponent(self.intCD)
+        return vehicle.descriptor.mayInstallComponent(self.intCD, position)
 
     def mayRemove(self, vehicle):
         """

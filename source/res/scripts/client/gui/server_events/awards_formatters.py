@@ -101,7 +101,8 @@ def getDefaultFormattersMap():
      'customizations': CustomizationsBonusFormatter(),
      'goodies': GoodiesBonusFormatter(),
      'items': ItemsBonusFormatter(),
-     'dossier': DossierBonusFormatter()}
+     'dossier': DossierBonusFormatter(),
+     'halloween2017': SupplyDropBonusFormatter()}
 
 
 def getMisssionsFormattersMap():
@@ -465,6 +466,38 @@ class VehiclesBonusFormatter(SimpleBonusFormatter):
                 return True
 
         return False
+
+
+class SupplyDropBonusFormatter(TokenBonusFormatter):
+
+    def format(self, bonus):
+        result = []
+        tier = bonus.tier()
+        tooltip = self._buildSupplyDropBonusTooltip(tier)
+        result.append(PreformattedBonus(images=self._getImages(tier), tooltip=tooltip, isSpecial=False, isCompensation=False))
+        furtherTokens = super(SupplyDropBonusFormatter, self).format(bonus)
+        for t in furtherTokens:
+            result.append(t)
+
+        return result
+
+    @classmethod
+    def _buildSupplyDropBonusTooltip(cls, tier):
+        return makeTooltip(TOOLTIPS.quests_bonuses_halloween_all(tier, 'header'), TOOLTIPS.quests_bonuses_halloween_all(tier, 'body'))
+
+    @classmethod
+    def _getImages(cls, tier):
+        result = {}
+        for size in AWARDS_SIZES.ALL():
+            image = SupplyDropBonusFormatter.getHalloweenSupplyDropIcon(size, tier)
+            result[size] = image
+
+        return result
+
+    @classmethod
+    def getHalloweenSupplyDropIcon(cls, size, tier):
+        outcome = '../maps/icons/quests/bonuses/{}/halloween_drop_{}.png'.format(size, tier)
+        return outcome
 
 
 class DossierBonusFormatter(SimpleBonusFormatter):

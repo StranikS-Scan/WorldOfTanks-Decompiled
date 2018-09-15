@@ -1,0 +1,15 @@
+<HalloweenHealthPowerup.def>
+  <Volatile></Volatile>
+  <Properties></Properties>
+  <CellMethods>
+    <onVehicleTriggered>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	ARRAY	  <of>	OBJECT_ID	</of>
+      </Arg>
+      <Arg>	INT32	</Arg>
+    </onVehicleTriggered>
+  </CellMethods>
+  <ClientMethods>
+    <onConsume></onConsume>
+  </ClientMethods>
+</HalloweenHealthPowerup.def>

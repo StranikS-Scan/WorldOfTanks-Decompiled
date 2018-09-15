@@ -25,6 +25,7 @@ from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.event_boards.settings import isGroupMinimized
 from gui.shared.formatters import text_styles
+from halloween_shared import HALLOWEEN_QUEST_PREFIX
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.server_events import IEventsCache
@@ -615,11 +616,18 @@ class _VehicleQuestsBlockInfo(_EventsBlockInfo):
          'bodyLinkage': QUESTS_ALIASES.MISSION_PACK_MARATHON_BODY_LINKAGE}
 
     def __applyFilter(self, quest):
+        vehicle = g_currentVehicle.item
         if quest.getType() in (EVENT_TYPE.TOKEN_QUEST, EVENT_TYPE.REF_SYSTEM_QUEST):
             return False
         if not quest.getFinishTimeLeft():
             return False
-        return quest.isValidVehicleCondition(g_currentVehicle.item) if quest.getType() != EVENT_TYPE.MOTIVE_QUEST else quest.isValidVehicleCondition(g_currentVehicle.item) and not quest.isCompleted() and quest.isAvailable()[0]
+        if quest.getType() != EVENT_TYPE.MOTIVE_QUEST:
+            if vehicle.isOnlyForEventBattles:
+                if quest.getID().startswith(HALLOWEEN_QUEST_PREFIX):
+                    return quest.isValidVehicleCondition(vehicle)
+                return False
+            return quest.isValidVehicleCondition(vehicle)
+        return not vehicle.isOnlyForEventBattles and quest.isValidVehicleCondition(vehicle) and not quest.isCompleted() and quest.isAvailable()[0]
 
 
 class _ElenBlockInfo(_EventsBlockInfo):

@@ -42,8 +42,8 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
 
     def __prepareModelAssembler(self):
         assembler = BigWorld.CompoundAssembler(self.__vehDescr.name, self.spaceID)
-        turretModel = self.__vehDescr.turret.models.exploded
-        gunModel = self.__vehDescr.gun.models.exploded
+        turretModel = self.__vehDescr.turrets[0].turret.models.exploded
+        gunModel = self.__vehDescr.turrets[0].gun.models.exploded
         assembler.addRootPart(turretModel, TankPartNames.TURRET)
         assembler.emplacePart(gunModel, TankNodeNames.GUN_JOINT, TankPartNames.GUN)
         return assembler
@@ -58,7 +58,7 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
         self.model.matrix = self.matrix
         self.__detachConfirmationTimer.onEnterWorld()
         self.__vehDescr.keepPrereqs(prereqs)
-        turretDescr = self.__vehDescr.turret
+        turretDescr = self.__vehDescr.turrets[0].turret
         if self.isUnderWater == 0:
             self.__detachmentEffects = _TurretDetachmentEffects(self.model, turretDescr.turretDetachmentEffects, self.isCollidingWithWorld == 1)
             self.addComponent(self.__detachmentEffects)
@@ -66,7 +66,7 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
             self.__detachmentEffects = None
         self.__hitEffects = _HitEffects(self.model)
         self.addComponent(self.__hitEffects)
-        self.__componentsDesc = (self.__vehDescr.turret, self.__vehDescr.gun)
+        self.__componentsDesc = (self.__vehDescr.turrets[0].turret, self.__vehDescr.turrets[0].gun)
         for desc in self.__componentsDesc:
             desc.hitTester.loadBspModel()
 

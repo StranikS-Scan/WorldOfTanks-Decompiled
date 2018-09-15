@@ -58,7 +58,7 @@ class DebugLine(object):
         self.end = end
         direction = end - start
         m = mathUtils.createSRTMatrix((self.__thickness, self.__thickness, direction.length), (direction.yaw, direction.pitch, 0), start + direction)
-        m.preMultiply(mathUtils.createTranslationMatrix(Vector3(0.0, 0.0, -0.5)))
+        m.preMultiply(mathUtils.createTranslationMatrix(Vector3(-0.5, -0.5, -0.5)))
         self.motor.signal = m
 
 

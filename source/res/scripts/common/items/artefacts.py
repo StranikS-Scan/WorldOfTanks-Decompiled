@@ -105,6 +105,13 @@ class Artefact(BasicItem):
         self.removable = section.readBool('removable', False)
         return
 
+    @staticmethod
+    def findActualAttribute(factors, attribute):
+        if attribute not in factors:
+            if attribute.startswith('gun/'):
+                return 'turrets/0/{}'.format(attribute)
+        return attribute
+
 
 class OptionalDevice(Artefact):
     __slots__ = ()
@@ -353,7 +360,7 @@ class Fuel(Equipment):
     def updateVehicleAttrFactors(self, vehicleDescr, factors, aspect):
         try:
             factors['engine/power'] *= self.enginePowerFactor
-            factors['turret/rotationSpeed'] *= self.turretRotationSpeedFactor
+            factors['turrets/0/rotationSpeed'] *= self.turretRotationSpeedFactor
         except:
             pass
 
@@ -584,6 +591,7 @@ class FactorBattleBooster(DynamicEquipment):
 
     def _updateVehicleAttrFactorsImpl(self, factors, levelParams):
         attribute, factor = levelParams
+        attribute = self.findActualAttribute(factors, attribute)
         factors[attribute] *= factor
 
 
@@ -598,6 +606,7 @@ class AdditiveBattleBooster(DynamicEquipment):
 
     def _updateVehicleAttrFactorsImpl(self, factors, levelParams):
         attribute, value = levelParams
+        attribute = self.findActualAttribute(factors, attribute)
         factors[attribute] += value
 
 

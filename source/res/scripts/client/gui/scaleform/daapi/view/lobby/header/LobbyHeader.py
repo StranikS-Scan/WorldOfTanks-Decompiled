@@ -54,6 +54,7 @@ from skeletons.gui.game_control import IWalletController, IGameSessionController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from ClientSelectableCameraObject import ClientSelectableCameraObject
 _MAX_BOOSTERS_TO_DISPLAY = 99
 _MAX_HEADER_SERVER_NAME_LEN = 6
 _SERVER_NAME_PREFIX = '%s..'
@@ -124,6 +125,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         super(LobbyHeader, self).__init__()
         self.__currentScreen = None
         self.__shownCounters = set()
+        self.__leviathanPreviewOpened = False
+        self.__supplyDropClicked = False
         return
 
     def onClanEmblem16x16Received(self, clanDbID, emblem):
@@ -283,6 +286,10 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.CloseWindowEvent.GOLD_FISH_CLOSED, self.__onGoldFishWindowClosed, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.LeviathanPreviewEvent.LEVIATHAN_WINDOW_OPENED, self.__onLeviathanPreviewOpened, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.LeviathanPreviewEvent.LEVIATHAN_WINDOW_CLOSED, self.__onLeviathanPreviewClosed, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.SupplyDropEvent.SUPPLY_DROP_CLICKED, self.__onSupplyDropClicked, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.SupplyDropEvent.SUPPLY_DROP_LEAVING, self.__onSupplyDropLeaving, scope=EVENT_BUS_SCOPE.LOBBY)
         g_clientUpdateManager.addCurrencyCallback(Currency.CREDITS, self.__setCredits)
         g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self.__setGold)
         g_clientUpdateManager.addCurrencyCallback(Currency.CRYSTAL, self.__setCrystal)
@@ -318,6 +325,10 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.removeListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.CloseWindowEvent.GOLD_FISH_CLOSED, self.__onGoldFishWindowClosed, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.LeviathanPreviewEvent.LEVIATHAN_WINDOW_OPENED, self.__onLeviathanPreviewOpened, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.LeviathanPreviewEvent.LEVIATHAN_WINDOW_CLOSED, self.__onLeviathanPreviewClosed, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.SupplyDropEvent.SUPPLY_DROP_CLICKED, self.__onSupplyDropClicked, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.SupplyDropEvent.SUPPLY_DROP_LEAVING, self.__onSupplyDropLeaving, scope=EVENT_BUS_SCOPE.LOBBY)
         self.gameSession.onPremiumNotify -= self.__onPremiumTimeChanged
         self.wallet.onWalletStatusChanged -= self.__onWalletChanged
         self.igrCtrl.onIgrTypeChanged -= self.__onIGRChanged
@@ -696,6 +707,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                 self.as_setFightBtnTooltipS(self.__getSquadFightBtnTooltipData(canDoMsg))
             elif isRanked:
                 self.as_setFightBtnTooltipS(self.__getRankedFightBtnTooltipData(result))
+            elif isEvent and self.__leviathanPreviewOpened:
+                self.as_setFightBtnTooltipS(self.__getLeviathanPreviewTooltipData())
             else:
                 self.as_setFightBtnTooltipS('')
         else:
@@ -725,7 +738,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         return True
 
     def _checkFightButtonDisabled(self, canDo, isFightButtonForcedDisabled):
-        return not canDo or isFightButtonForcedDisabled
+        isEvent = self.eventsCache.isEventEnabled()
+        return not canDo or isFightButtonForcedDisabled or isEvent and self.__leviathanPreviewOpened or isEvent and self.__supplyDropClicked
 
     def _updateTabCounters(self):
         self.__onEventsVisited()
@@ -870,7 +884,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if 'isBootcampEnabled' in diff:
             battle_selector_items.clear()
             battle_selector_items.create()
-            self._updatePrebattleControls()
         if 'strongholdSettings' in diff:
             self._updateHangarMenuData()
             self._updatePrebattleControls()
@@ -975,3 +988,26 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         header = '{}/header'.format(tooltip)
         isAvailable = tooltipType != STATS_TYPE.UNAVAILABLE
         self.as_updateOnlineCounterS(clusterStats, regionStats, makeTooltip(header, body), isAvailable)
+
+    def __onLeviathanPreviewOpened(self, _):
+        self.__leviathanPreviewOpened = True
+        self._updatePrebattleControls()
+
+    def __onLeviathanPreviewClosed(self, _):
+        self.__leviathanPreviewOpened = False
+        ClientSelectableCameraObject.switchCamera(None)
+        self._updatePrebattleControls()
+        return
+
+    def __onSupplyDropClicked(self, _):
+        self.__supplyDropClicked = True
+        self._updatePrebattleControls()
+
+    def __onSupplyDropLeaving(self, _):
+        self.__supplyDropClicked = False
+        self._updatePrebattleControls()
+
+    def __getLeviathanPreviewTooltipData(self):
+        header = i18n.makeString(TOOLTIPS.HANGAR_LEVIATHANPREVIEW_REDBUTTONDISABLED_HEADER)
+        body = i18n.makeString(TOOLTIPS.HANGAR_LEVIATHANPREVIEW_REDBUTTONDISABLED_DESCRIPTION)
+        return makeTooltip(header, body)

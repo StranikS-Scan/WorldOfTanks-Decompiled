@@ -171,14 +171,74 @@ class EpicRandomTipsCriteria(_TipsCriteria):
             return _FoundTip('', '', '')
 
 
+def _getHalloweenPVPRandomTipIterator():
+    tipSize = len(RES_ICONS.MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP_ENUM)
+    assert tipSize == len(TIPS.HALLOWEENPVP_ALL_BODY_ENUM)
+    assert tipSize == len(TIPS.HALLOWEENPVP_ALL_TITLE_ENUM)
+    if tipSize > 0:
+        items = range(tipSize)
+        return rnd_choice_loop(*items)
+    else:
+        return None
+
+
+class HalloweenPVPTipsCriteria(_TipsCriteria):
+    __tipIterator = None
+
+    def __init__(self):
+        super(HalloweenPVPTipsCriteria, self).__init__()
+        if HalloweenPVPTipsCriteria.__tipIterator is None:
+            HalloweenPVPTipsCriteria.__tipIterator = _getHalloweenPVPRandomTipIterator()
+        return
+
+    def find(self):
+        iterator = HalloweenPVPTipsCriteria.__tipIterator
+        if iterator is not None:
+            tipNum = next(iterator)
+            return _FoundTip(i18n.makeString(TIPS.getHalloweenPVPRandomTipTitle(tipNum)), i18n.makeString(TIPS.getHalloweenPVPRandomTipBody(tipNum)), RES_ICONS.getHalloweenPVPRandomBattleLoadingTipImage(tipNum))
+        else:
+            return _FoundTip('', '', '')
+
+
+def _getHalloweenPVERandomTipIterator():
+    tipSize = len(RES_ICONS.MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE_ENUM)
+    assert tipSize == len(TIPS.HALLOWEENPVE_ALL_BODY_ENUM)
+    assert tipSize == len(TIPS.HALLOWEENPVE_ALL_TITLE_ENUM)
+    if tipSize > 0:
+        items = range(tipSize)
+        return rnd_choice_loop(*items)
+    else:
+        return None
+
+
+class HalloweenPVETipsCriteria(_TipsCriteria):
+    __tipIterator = None
+
+    def __init__(self):
+        super(HalloweenPVETipsCriteria, self).__init__()
+        if HalloweenPVETipsCriteria.__tipIterator is None:
+            HalloweenPVETipsCriteria.__tipIterator = _getHalloweenPVERandomTipIterator()
+        return
+
+    def find(self):
+        iterator = HalloweenPVETipsCriteria.__tipIterator
+        if iterator is not None:
+            tipNum = next(iterator)
+            return _FoundTip(i18n.makeString(TIPS.getHalloweenPVERandomTipTitle(tipNum)), i18n.makeString(TIPS.getHalloweenPVERandomTipBody(tipNum)), RES_ICONS.getHalloweenPVERandomBattleLoadingTipImage(tipNum))
+        else:
+            return _FoundTip('', '', '')
+
+
 def getTipsCriteria(arenaVisitor):
     if arenaVisitor.gui.isSandboxBattle():
         return SandboxTipsCriteria()
     if arenaVisitor.gui.isEventBattle():
-        return EventTipsCriteria()
+        return HalloweenPVPTipsCriteria()
     if arenaVisitor.gui.isRankedBattle():
         return RankedTipsCriteria()
-    return EpicRandomTipsCriteria() if arenaVisitor.gui.isEpicRandomBattle() else RandomTipsCriteria()
+    if arenaVisitor.gui.isEpicRandomBattle():
+        return EpicRandomTipsCriteria()
+    return HalloweenPVETipsCriteria() if arenaVisitor.gui.isEventBattlesTwo() else RandomTipsCriteria()
 
 
 def getTipsIterator(arenaGuiType, battlesCount, vehicleType, vehicleNation, vehicleLvl):

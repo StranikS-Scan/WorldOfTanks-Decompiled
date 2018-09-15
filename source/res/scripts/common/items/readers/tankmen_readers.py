@@ -166,6 +166,10 @@ def _readNationConfigSection(xmlCtx, section):
 
     ranks = _readRanks((xmlCtx, 'ranks'), _xml.getChildren(xmlCtx, section, 'ranks'))
     config['roleRanks'] = _readRoleRanks((xmlCtx, 'roleRanks'), _xml.getSubsection(xmlCtx, section, 'roleRanks'), ranks)
+    if section.readBool('isEvent', False):
+        eventRanks = _readRanks((xmlCtx, 'eventRanks'), _xml.getChildren(xmlCtx, section, 'eventRanks'))
+        if IS_CLIENT or IS_WEB:
+            config['eventRanks'] = eventRanks
     if IS_CLIENT or IS_WEB:
         config['firstNames'] = firstNames
         config['lastNames'] = lastNames

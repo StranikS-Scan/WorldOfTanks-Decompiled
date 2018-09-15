@@ -8,6 +8,9 @@ from gui.server_events import awards, formatters
 from gui.shared import g_eventBus, events, event_dispatcher as shared_events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
+from halloween_shared import HALLOWEEN_QUEST_PREFIX, HALLOWEEN_REWARD_QUEST_PREFIX, HALLOWEEN_ACHIEVEMENT_PREFIX
+import BigWorld
+from HalloweenSupplyDrop import HalloweenSupplyDrop
 
 def showPQSeasonAwardsWindow(questsType):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW, ctx={'questsType': questsType}), EVENT_BUS_SCOPE.LOBBY)
@@ -39,6 +42,27 @@ def showMissionsCategories(missionID=None, groupID=None, anchor=None):
 
 def showMissionsForCurrentVehicle(missionID=None, groupID=None, anchor=None):
     showMissions(tab=QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS, missionID=missionID, groupID=groupID, anchor=anchor)
+
+
+def showDossier(eventID=None, groupID=None, anchor=None):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_PROFILE), EVENT_BUS_SCOPE.LOBBY)
+
+
+def goToHalloweenMissionRewardBox(eventID=None, groupID=None, anchor=None):
+    g_eventBus.handleEvent(events.DestroyViewEvent(VIEW_ALIAS.MISSION_AWARD_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.DestroyViewEvent(VIEW_ALIAS.BATTLE_RESULTS), scope=EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), EVENT_BUS_SCOPE.LOBBY)
+    for e in BigWorld.entities.values():
+        if isinstance(e, HalloweenSupplyDrop):
+            e.remote_requestUIStateValidation()
+            e.delayClick()
+
+
+def closeHalloweenMissionRewardBox(eventID=None, groupID=None, anchor=None):
+    g_eventBus.handleEvent(events.DestroyViewEvent(VIEW_ALIAS.MISSION_AWARD_WINDOW), scope=EVENT_BUS_SCOPE.LOBBY)
+    for e in BigWorld.entities.values():
+        if isinstance(e, HalloweenSupplyDrop):
+            e.receivedSupplyDrop(True)
 
 
 def showMissionsElen():
@@ -111,10 +135,23 @@ def showTankwomanAward(questID, tankmanData):
      'iGroupID': tankmanData.iGroupID}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showMissionAward(quest, ctx):
-    missionAward = awards.MissionAward(quest, ctx, showMissionsForCurrentVehicle)
-    if missionAward.getAwards():
+def showMissionAward(quest, ctx, bonus_data):
+    qID = quest.getID()
+    if qID.startswith(HALLOWEEN_REWARD_QUEST_PREFIX):
+        missionAward = awards.HalloweenMissionAward(quest, ctx, bonus_data, None)
+        for e in BigWorld.entities.values():
+            if isinstance(e, HalloweenSupplyDrop):
+                e.shownAwardPopup()
+
+    elif qID.startswith(HALLOWEEN_QUEST_PREFIX):
+        missionAward = awards.HalloweenMissionAward(quest, ctx, bonus_data, goToHalloweenMissionRewardBox)
+    elif qID.startswith(HALLOWEEN_ACHIEVEMENT_PREFIX):
+        missionAward = awards.HalloweenAchievementMissionAward(quest, ctx, showDossier)
+    else:
+        missionAward = awards.MissionAward(quest, ctx, showMissionsForCurrentVehicle)
+    if missionAward.getAwards() or qID.startswith(HALLOWEEN_REWARD_QUEST_PREFIX):
         shared_events.showMissionAwardWindow(missionAward)
+    return
 
 
 def showPersonalMissionAward(quest, ctx):

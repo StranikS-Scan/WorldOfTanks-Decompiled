@@ -253,6 +253,16 @@ def packSimpleBonusesBlock(bonusesList):
     return UiElement(data)
 
 
+def packHalloweenBonusesBlock(bonus):
+    itemText = bonus.format()
+    items = itemText.split(', ')
+    data = {'linkage': 'QuestTextAwardBlockUI',
+     'items': items,
+     'separator': ', ',
+     'ellipsis': '..'}
+    return UiElement(data)
+
+
 def packVehiclesBonusBlock(label, questID):
     blockData = {'linkage': 'VehiclesBonusTextElement_UI',
      'label': label,

@@ -43,7 +43,8 @@
       <Flags>	ALL_CLIENTS	</Flags>
     </siegeState>
     <gunAnglesPacked>
-      <Type>	UINT16	</Type>
+      <Type>	ARRAY	  <of>	UINT16	</of>
+      </Type>
       <Flags>	ALL_CLIENTS	</Flags>
       <IsReliable>	false	</IsReliable>
       <SendLatestOnly>	true	</SendLatestOnly>
@@ -60,6 +61,10 @@
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
     </isCrewActive>
+    <isDisappeared>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </isDisappeared>
     <engineMode>
       <Type>	TUPLE	  <of>	UINT8	</of>
         <size>	2	</size>
@@ -207,6 +212,7 @@
     </onHealthChanged>
     <showShooting>
       <Arg>	UINT8	</Arg>
+      <Arg>	UINT8	</Arg>
     </showShooting>
     <showDamageFromShot>
       <Arg>	OBJECT_ID	</Arg>
@@ -264,18 +270,23 @@
     <trackWorldPointWithGun>
       <Exposed></Exposed>
       <Arg>	VECTOR3	</Arg>
+      <Arg>	UINT8	</Arg>
     </trackWorldPointWithGun>
     <trackRelativePointWithGun>
       <Exposed></Exposed>
       <Arg>	VECTOR3	</Arg>
+      <Arg>	UINT8	</Arg>
     </trackRelativePointWithGun>
+    <vehicleExplode></vehicleExplode>
     <stopTrackingWithGun>
       <Exposed></Exposed>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </stopTrackingWithGun>
     <trackVehicleWithGun>
       <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
     </trackVehicleWithGun>
     <changeSetting>
       <Exposed></Exposed>
@@ -289,6 +300,7 @@
     </sendVisibilityDevelopmentInfo>
     <shoot>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </shoot>
     <teleportTo>
       <Arg>	VECTOR3	</Arg>
@@ -296,6 +308,7 @@
     </teleportTo>
     <replenishAmmo></replenishAmmo>
     <repair>
+      <Arg>	INT32	</Arg>
       <Arg>	INT32	</Arg>
     </repair>
     <setDevelopmentFeature>

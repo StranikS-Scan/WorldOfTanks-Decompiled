@@ -132,9 +132,9 @@ class AvatarObserver(CallbackDelayer):
                 self.gunRotator.forceGunParams(turretYaw, gunPitch, extraData.dispAngle)
             self.guiSessionProvider.updateObservedVehicleData(self.__observedVehicleID, extraData)
             ammoCtrl = self.guiSessionProvider.shared.ammo
-            shotIdx = ammoCtrl.getGunSettings().getShotIndex(extraData.currentShellCD)
+            shotIdx = ammoCtrl.getGunSettings(0).getShotIndex(extraData.currentShellCD)
             if shotIdx > -1:
-                self.vehicle.typeDescriptor.activeGunShotIndex = shotIdx
+                self.vehicle.typeDescriptor.turrets[0].shotIndex = shotIdx
         return
 
     def vehicle_onEnterWorld(self, vehicle):
@@ -143,14 +143,14 @@ class AvatarObserver(CallbackDelayer):
                 extraData = self.observedVehicleData[self.__observedVehicleID]
                 extraData.gunSettings = vehicle.typeDescriptor.gun
 
-    def updateVehicleGunReloadTime(self, vehicleID, timeLeft, baseTime):
+    def updateVehicleGunReloadTime(self, vehicleID, timeLeft, baseTime, index):
         if self.isObserver():
             self.observedVehicleData[vehicleID].setReload(timeLeft, baseTime)
 
     def updateVehicleOptionalDeviceStatus(self, vehicleID, deviceID, isOn):
         self.observedVehicleData[vehicleID].setOptionalDevice(deviceID, isOn)
 
-    def updateVehicleSetting(self, vehicleID, code, value):
+    def updateVehicleSetting(self, vehicleID, code, value, index):
         if code == VEHICLE_SETTING.CURRENT_SHELLS:
             self.__observedVehicleData[vehicleID].currentShellCD = value
             return

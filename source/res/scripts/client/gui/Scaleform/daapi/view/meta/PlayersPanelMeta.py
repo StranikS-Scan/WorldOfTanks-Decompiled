@@ -12,3 +12,6 @@ class PlayersPanelMeta(StatsBase):
 
     def as_setPanelModeS(self, value):
         return self.flashObject.as_setPanelMode(value) if self._isDAAPIInited() else None
+
+    def as_setEnemyHideStatusS(self, hidden):
+        return self.flashObject.as_setEnemyHideStatus(hidden) if self._isDAAPIInited() else None

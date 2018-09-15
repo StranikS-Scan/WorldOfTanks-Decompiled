@@ -258,7 +258,7 @@ class _VehsListParser(object):
         if types:
             criteria = REQ_CRITERIA.VEHICLE.SPECIFIC_BY_CD(types)
         else:
-            criteria = REQ_CRITERIA.EMPTY
+            criteria = ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE
             if nations:
                 criteria |= REQ_CRITERIA.NATIONS(nations)
             if levels:
@@ -283,7 +283,7 @@ class _VehsListParser(object):
          'classes'}
 
     def _getDefaultCriteria(self):
-        return REQ_CRITERIA.DISCLOSABLE
+        return REQ_CRITERIA.CUSTOM(lambda v: v.inventoryCount > 0 or not v.isSecret or v.isOnlyForEventBattles)
 
     def _getVehiclesCache(self, data):
         if self.__vehsCache is None:

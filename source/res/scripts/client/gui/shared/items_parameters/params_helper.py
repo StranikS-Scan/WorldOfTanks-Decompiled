@@ -21,8 +21,16 @@ _ITEM_TYPE_HANDLERS = {ITEM_TYPES.vehicleRadio: params.RadioParams,
  ITEM_TYPES.equipment: params.EquipmentParams,
  ITEM_TYPES.optionalDevice: params.OptionalDeviceParams,
  ITEM_TYPES.vehicle: params.VehicleParams}
+RELATIVE_POWER_PARAMS_PRIMARY = ('paramTitle_PrimaryTurret',)
 RELATIVE_POWER_PARAMS = ('avgDamage', 'avgPiercingPower', 'stunMinDuration', 'stunMaxDuration', 'reloadTime', 'reloadTimeSecs', 'gunRotationSpeed', 'turretRotationSpeed', 'turretYawLimits', 'pitchLimits', 'gunYawLimits', 'clipFireRate', 'aimingTime', 'shotDispersionAngle', 'avgDamagePerMinute')
+RELATIVE_POWER_PARAMS_VEHICLEINFO = ('avgDamage', 'avgPiercingPower', 'reloadTime', 'reloadTimeSecs', 'clipFireRate', 'aimingTime', 'shotDispersionAngle', 'avgDamagePerMinute')
+RELATIVE_POWER_PARAMS_SECONDARY = ('paramTitle_SecondaryTurret', 'avgDamage_Secondary', 'avgPiercingPower_Secondary', 'stunMinDuration_Secondary', 'stunMaxDuration_Secondary', 'reloadTime_Secondary', 'reloadTimeSecs_Secondary', 'turretRotationSpeed_Secondary', 'turretYawLimits_Secondary', 'pitchLimits_Secondary', 'gunYawLimits_Secondary', 'clipFireRate_Secondary', 'aimingTime_Secondary', 'shotDispersionAngle_Secondary', 'avgDamagePerMinute_Secondary')
+RELATIVE_POWER_PARAMS_SECONDARY_VEHICLEINFO = ('paramTitle_SecondaryTurret', 'avgDamage_Secondary', 'avgPiercingPower_Secondary', 'reloadTime_Secondary')
+RELATIVE_POWER_PARAMS_WITH_SECONDARY = RELATIVE_POWER_PARAMS_PRIMARY + RELATIVE_POWER_PARAMS + RELATIVE_POWER_PARAMS_SECONDARY
+RELATIVE_POWER_PARAMS_WITH_SECONDARY_VEHICLEINFO = RELATIVE_POWER_PARAMS_PRIMARY + RELATIVE_POWER_PARAMS_VEHICLEINFO + RELATIVE_POWER_PARAMS_SECONDARY_VEHICLEINFO
 RELATIVE_ARMOR_PARAMS = ('maxHealth', 'hullArmor', 'turretArmor')
+RELATIVE_ARMOR_PARAMS_SECONDARY = ('turretArmor_Primary', 'turretArmor_Secondary')
+RELATIVE_ARMOR_PARAMS_WITH_SECONDARY = RELATIVE_ARMOR_PARAMS[:-1] + RELATIVE_ARMOR_PARAMS_SECONDARY
 RELATIVE_MOBILITY_PARAMS = ('vehicleWeight', 'enginePower', 'enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed', 'switchOnTime', 'switchOffTime')
 RELATIVE_CAMOUFLAGE_PARAMS = ('invisibilityStillFactor', 'invisibilityMovingFactor')
 RELATIVE_VISIBILITY_PARAMS = ('circularVisionRadius', 'radioDistance')
@@ -31,6 +39,21 @@ PARAMS_GROUPS = {'relativePower': RELATIVE_POWER_PARAMS,
  'relativeMobility': RELATIVE_MOBILITY_PARAMS,
  'relativeCamouflage': RELATIVE_CAMOUFLAGE_PARAMS,
  'relativeVisibility': RELATIVE_VISIBILITY_PARAMS}
+PARAMS_GROUPS_MULTITURRET = {'relativePower': RELATIVE_POWER_PARAMS_WITH_SECONDARY,
+ 'relativeArmor': RELATIVE_ARMOR_PARAMS_WITH_SECONDARY,
+ 'relativeMobility': RELATIVE_MOBILITY_PARAMS,
+ 'relativeCamouflage': RELATIVE_CAMOUFLAGE_PARAMS,
+ 'relativeVisibility': RELATIVE_VISIBILITY_PARAMS}
+PARAMS_GROUPS_MULTITURRET_FOR_VEHICLEINFO = {'relativePower': RELATIVE_POWER_PARAMS_WITH_SECONDARY_VEHICLEINFO,
+ 'relativeArmor': RELATIVE_ARMOR_PARAMS,
+ 'relativeMobility': RELATIVE_MOBILITY_PARAMS,
+ 'relativeCamouflage': RELATIVE_CAMOUFLAGE_PARAMS,
+ 'relativeVisibility': RELATIVE_VISIBILITY_PARAMS}
+SUBTITLE_PARAMS = ('paramTitle_PrimaryTurret', 'paramTitle_SecondaryTurret')
+
+def isSubtitleParameter(paramName):
+    return paramName in SUBTITLE_PARAMS
+
 
 def _getParamsProvider(item, vehicleDescr=None):
     if vehicles.isVehicleDescr(item.descriptor):
@@ -69,35 +92,35 @@ def idealCrewComparator(vehicle):
     return VehiclesComparator(vehicleParams, perfectVehicleParams, compatibleArtefacts, bonuses, penalties)
 
 
-def itemOnVehicleComparator(vehicle, item):
+def itemOnVehicleComparator(vehicle, item, positionIndex=0):
     vehicleParams = params.VehicleParams(vehicle).getParamsDict()
     withItemParams = vehicleParams
-    mayInstall, reason = vehicle.descriptor.mayInstallComponent(item.intCD)
+    mayInstall, reason = vehicle.descriptor.mayInstallComponent(item.intCD, positionIndex)
     if item.itemTypeID == ITEM_TYPES.vehicleTurret:
-        mayInstall, reason = vehicle.descriptor.mayInstallTurret(item.intCD, vehicle.gun.intCD)
+        mayInstall, reason = vehicle.descriptor.mayInstallTurret(item.intCD, vehicle.gun.intCD, positionIndex)
         if not mayInstall:
-            properGun = findFirst(lambda gun: vehicle.descriptor.mayInstallComponent(gun.compactDescr)[0], item.descriptor.guns)
+            properGun = findFirst(lambda gun: vehicle.descriptor.mayInstallComponent(gun.compactDescr, positionIndex)[0], item.descriptor.guns)
             if properGun is not None:
-                removedModules = vehicle.descriptor.installTurret(item.intCD, properGun.compactDescr)
+                removedModules = vehicle.descriptor.installTurret(item.intCD, properGun.compactDescr, positionIndex)
                 withItemParams = params.VehicleParams(vehicle).getParamsDict()
                 vehicle.descriptor.installTurret(*removedModules)
             else:
                 LOG_ERROR('not possible to install turret', item, reason)
         else:
-            removedModules = vehicle.descriptor.installTurret(item.intCD, vehicle.gun.intCD)
+            removedModules = vehicle.descriptor.installTurret(item.intCD, vehicle.gun.intCD, positionIndex)
             withItemParams = params.VehicleParams(vehicle).getParamsDict()
             vehicle.descriptor.installTurret(*removedModules)
     elif not mayInstall and reason == 'not for current vehicle' and item.itemTypeID == ITEM_TYPES.vehicleGun:
         turret = g_paramsCache.getPrecachedParameters(item.intCD).getTurretsForVehicle(vehicle.intCD)[0]
-        removedModules = vehicle.descriptor.installTurret(turret, vehicle.gun.intCD)
+        removedModules = vehicle.descriptor.installTurret(turret, vehicle.gun.intCD, positionIndex)
         vehicleParams = params.VehicleParams(vehicle).getParamsDict()
-        vehicle.descriptor.installTurret(turret, item.intCD)
+        vehicle.descriptor.installTurret(turret, item.intCD, positionIndex)
         withItemParams = params.VehicleParams(vehicle).getParamsDict()
         vehicle.descriptor.installTurret(*removedModules)
     else:
-        removedModule = vehicle.descriptor.installComponent(item.intCD)
+        removedModule = vehicle.descriptor.installComponent(item.intCD, positionIndex)
         withItemParams = params.VehicleParams(vehicle).getParamsDict()
-        vehicle.descriptor.installComponent(removedModule[0])
+        vehicle.descriptor.installComponent(removedModule[0], positionIndex)
     return VehiclesComparator(withItemParams, vehicleParams)
 
 
@@ -242,6 +265,10 @@ class VehParamsBaseGenerator(object):
         :return: list of formatted parameters
         """
         result = []
+        if vehIntCD is not None and vehicles.getVehicleType(vehIntCD) is not None and vehicles.getVehicleType(vehIntCD).isMultiTurret:
+            USE_PARAM_GROUPS = PARAMS_GROUPS_MULTITURRET
+        else:
+            USE_PARAM_GROUPS = PARAMS_GROUPS
         if GUI_SETTINGS.technicalInfo:
             for groupIdx, groupName in enumerate(RELATIVE_PARAMS):
                 hasParams = False
@@ -252,10 +279,18 @@ class VehParamsBaseGenerator(object):
                 if bottomVo:
                     result.append(bottomVo)
                 if isOpened:
-                    for paramName in PARAMS_GROUPS[groupName]:
+                    for paramIdx, paramName in enumerate(USE_PARAM_GROUPS[groupName]):
                         param = comparator.getExtendedData(paramName)
-                        formattedParam = self._makeAdvancedParamVO(param)
+                        spacer = None
+                        if isSubtitleParameter(paramName):
+                            formattedParam = self._makeSubtitleVO(param)
+                            if paramIdx > 1:
+                                spacer = self._makeSpacer()
+                        else:
+                            formattedParam = self._makeAdvancedParamVO(param)
                         if formattedParam:
+                            if spacer:
+                                result.append(spacer)
                             result.append(formattedParam)
                             hasParams = True
 
@@ -275,5 +310,11 @@ class VehParamsBaseGenerator(object):
     def _makeSimpleParamBottomVO(self, param, vehIntCD=None):
         return None
 
+    def _makeSubtitleVO(self, param):
+        return getCommonParam(HANGAR_ALIASES.VEH_PARAM_RENDERER_STATE_SUBTITLE, param.name)
+
     def _makeSeparator(self):
+        return None
+
+    def _makeSpacer(self):
         return None

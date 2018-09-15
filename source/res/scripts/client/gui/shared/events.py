@@ -3,7 +3,7 @@
 from collections import namedtuple
 from gui.shared.event_bus import SharedEvent
 from shared_utils import CONST_CONTAINER
-__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent')
+__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'LeviathanPreviewEvent')
 
 class HasCtxEvent(SharedEvent):
 
@@ -578,3 +578,13 @@ class MarkersManagerEvent(SharedEvent):
 
 class VehicleBuyEvent(HasCtxEvent):
     VEHICLE_SELECTED = 'vehicleBuyEvent/vehicleSelected'
+
+
+class LeviathanPreviewEvent(SharedEvent):
+    LEVIATHAN_WINDOW_OPENED = 'LeviathanWindowOpened'
+    LEVIATHAN_WINDOW_CLOSED = 'LeviathanWindowClosed'
+
+
+class SupplyDropEvent(SharedEvent):
+    SUPPLY_DROP_CLICKED = 'SupplyDropClicked'
+    SUPPLY_DROP_LEAVING = 'SupplyDropLeaving'

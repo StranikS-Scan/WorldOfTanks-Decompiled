@@ -393,6 +393,7 @@ class ScriptDriver(object):
             except BaseException:
                 status = TASK_STATUS.RUNNING
                 exc_info = sys.exc_info()
+                LOG_CURRENT_EXCEPTION()
 
             if status == TASK_STATUS.SUCCESS:
                 self.__removeTask(task, False)

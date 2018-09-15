@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/crosshair/container.py
-from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
+from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR, LOG_DEBUG_DEV
 from gui import DEPTH_OF_Aim
 from gui.Scaleform.daapi.view.battle.shared.crosshair import gm_factory, plugins, settings
 from gui.Scaleform.daapi.view.external_components import ExternalFlashComponent
@@ -11,13 +11,30 @@ from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID
 from gui.shared.utils.plugins import PluginsCollection
 from helpers import i18n
+from gui.shared.utils.TimeInterval import TimeInterval
+from AvatarInputHandler import aih_constants
+import math
+import BigWorld
+CHECK_LEN = 2.2
+CONSTANT_MERGE_OFFSET = 2
+UNZOOMED_RADIUS_COEFF = 0.1
+FULLY_ZOOMED_RADIUS_COEFF = 0.08
+UNZOOMED_ZOOM_FACTOR = 1.0
+FULLY_ZOOMED_ZOOM_FACTOR = 25.0
+DISTANCE_COEFF = 0.9
+SECONDARY_RADIUS_COEFF = 1.5
+HYSTERESIS_TIMEOUT_CONSTANT = 0.7
+HYSTERESIS_DISTANCE_CONSTANT_FULL_ZOOM = 50
+HYSTERESIS_DISTANCE_CONSTANT_NO_ZOOM = 10
 
 class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMeta):
     """ Class is UI component that contains gun markers and crosshair panels.
     It provides access to Action Script."""
 
     def __init__(self):
-        super(CrosshairPanelContainer, self).__init__(ExternalFlashSettings(BATTLE_VIEW_ALIASES.CROSSHAIR_PANEL, settings.CROSSHAIR_CONTAINER_SWF, settings.CROSSHAIR_ROOT_PATH, settings.CROSSHAIR_INIT_CALLBACK))
+        LOG_DEBUG('CrosshairPanelContainer:', '__init__')
+        flashSettings = ExternalFlashSettings(BATTLE_VIEW_ALIASES.CROSSHAIR_PANEL, settings.CROSSHAIR_CONTAINER_SWF, settings.CROSSHAIR_ROOT_PATH, settings.CROSSHAIR_INIT_CALLBACK)
+        super(CrosshairPanelContainer, self).__init__(flashSettings)
         self.__plugins = PluginsCollection(self)
         self.__plugins.addPlugins(plugins.createPlugins())
         self.__gunMarkers = None
@@ -27,6 +44,57 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
         self.__distance = 0
         self.__hasAmmo = True
         self.__configure()
+        self.__isMerged = False
+        self.__mergeTime = 0.0
+        self.__vehMoveAnimTimer = TimeInterval(0.3, self, '_checkAims')
+        self.__vehMoveAnimTimer.start()
+        return
+
+    def _checkAims(self):
+        if self.__gunMarkers:
+            viewSettings = self.__gunMarkers.getViewSettings()
+            mainGun = None
+            subGun = None
+            for item in viewSettings:
+                if not item.hasView:
+                    continue
+                if self.getViewID() == item.viewID:
+                    if item.subGun:
+                        subGun = item
+                        self.as_setVerticalDeviationLowS(item.verticalDeviation < CHECK_LEN)
+                    else:
+                        mainGun = item
+
+            hasMainGun = mainGun is not None and mainGun.hasView
+            hasSubGun = subGun is not None and subGun.hasView
+            avatar = BigWorld.player()
+            if hasMainGun and hasSubGun and avatar.vehicleTypeDescriptor.isMultiTurret:
+                mainRadius = avatar.inputHandler.ctrl.getGunMarkerSize(0)
+                subRadius = avatar.inputHandler.ctrl.getGunMarkerSize(1)
+                inSniperMode = avatar.inputHandler.ctrlModeName == aih_constants.CTRL_MODE_NAME.SNIPER
+                zoomFactor = self.getZoom() if inSniperMode else 1.0
+                distance = math.fabs(math.sqrt(math.pow(mainGun.screenPosition[0] - subGun.screenPosition[0], 2) + math.pow(mainGun.screenPosition[1] - subGun.screenPosition[1], 2)))
+                rise = FULLY_ZOOMED_RADIUS_COEFF - UNZOOMED_RADIUS_COEFF
+                run = FULLY_ZOOMED_ZOOM_FACTOR - UNZOOMED_ZOOM_FACTOR
+                slope = rise / run
+                yOffset = UNZOOMED_RADIUS_COEFF - slope * UNZOOMED_ZOOM_FACTOR
+                radiusCoeff = slope * zoomFactor + yOffset
+                mergeThreshold = CONSTANT_MERGE_OFFSET + radiusCoeff * mainRadius + DISTANCE_COEFF * distance
+                shouldMerge = distance < mergeThreshold and subRadius < SECONDARY_RADIUS_COEFF * mainRadius
+                if self.__isMerged and not shouldMerge:
+                    if self.__mergeTime == 0.0:
+                        self.__mergeTime = BigWorld.time()
+                    rise = HYSTERESIS_DISTANCE_CONSTANT_FULL_ZOOM - HYSTERESIS_DISTANCE_CONSTANT_NO_ZOOM
+                    run = FULLY_ZOOMED_ZOOM_FACTOR - UNZOOMED_ZOOM_FACTOR
+                    slope = rise / run
+                    yOffset = HYSTERESIS_DISTANCE_CONSTANT_NO_ZOOM - slope * UNZOOMED_ZOOM_FACTOR
+                    hysteresisDistance = slope * zoomFactor + yOffset
+                    if abs(distance - mergeThreshold) < hysteresisDistance and BigWorld.time() - self.__mergeTime < HYSTERESIS_TIMEOUT_CONSTANT:
+                        shouldMerge = True
+                else:
+                    self.__mergeTime = 0.0
+                self.__isMerged = shouldMerge
+                self.as_setMergeS(shouldMerge)
         return
 
     def getViewID(self):
@@ -39,6 +107,7 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
         """Sets view ID of panel to change view presentation.
         :param viewID:
         """
+        LOG_DEBUG(self, 'setViewID', viewID)
         if viewID != self.__viewID:
             self.__viewID = viewID
             if self.__gunMarkers is not None:
@@ -136,6 +205,7 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
         :param markersInfo: instance of GunMarkersSetInfo.
         :param vehicleInfo: instance of VehicleArenaInfoVO.
         """
+        LOG_DEBUG('container:', 'createGunMarkers', markersInfo, vehicleInfo)
         if self.__gunMarkers is not None:
             LOG_WARNING('Set of gun markers is already created.')
             return
@@ -206,7 +276,7 @@ class CrosshairPanelContainer(ExternalFlashComponent, CrosshairPanelContainerMet
         for item in viewSettings:
             if item.hasView:
                 continue
-            if self.as_createGunMarkerS(item.viewID, item.linkage, item.name):
+            if self.as_createGunMarkerS(item.viewID, item.linkage, item.name, item.subGun, item.id):
                 self.__gunMarkers.addView(self.component, item.name)
                 LOG_DEBUG('Gun marker has been created', item)
             LOG_ERROR('Gun marker can not be created', item)

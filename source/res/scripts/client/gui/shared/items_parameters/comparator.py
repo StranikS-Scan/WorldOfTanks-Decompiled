@@ -14,7 +14,11 @@ BACKWARD_QUALITY_PARAMS = ['aimingTime',
  'reloadMagazineTime',
  'weight',
  'switchOnTime',
- 'switchOffTime']
+ 'switchOffTime',
+ 'aimingTime_Secondary',
+ 'shotDispersionAngle_Secondary',
+ 'reloadTimeSecs_Secondary',
+ 'clipFireRate_Secondary']
 NEGATIVE_PARAMS = ['switchOnTime', 'switchOffTime']
 CUSTOM_QUALITY_PARAMS = {'vehicleWeight': (True, False),
  'clipFireRate': (True, True, False),

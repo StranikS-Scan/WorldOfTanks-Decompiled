@@ -49,8 +49,8 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
     def as_setZoomS(self, zoomStr):
         return self.flashObject.as_setZoom(zoomStr) if self._isDAAPIInited() else None
 
-    def as_createGunMarkerS(self, viewID, linkage, name):
-        return self.flashObject.as_createGunMarker(viewID, linkage, name) if self._isDAAPIInited() else None
+    def as_createGunMarkerS(self, viewID, linkage, name, subGun, id):
+        return self.flashObject.as_createGunMarker(viewID, linkage, name, subGun, id) if self._isDAAPIInited() else None
 
     def as_destroyGunMarkerS(self, name):
         return self.flashObject.as_destroyGunMarker(name) if self._isDAAPIInited() else None
@@ -69,3 +69,18 @@ class CrosshairPanelContainerMeta(DAAPISimpleContainerMeta):
 
     def as_hideHintS(self):
         return self.flashObject.as_hideHint() if self._isDAAPIInited() else None
+
+    def as_setSubGunsS(self, value):
+        return self.flashObject.as_setSubGuns(value) if self._isDAAPIInited() else None
+
+    def as_setSubGunReloadingS(self, id, duration, baseTime, startTime, isReloading):
+        return self.flashObject.as_setSubGunReloading(id, duration, baseTime, startTime, isReloading) if self._isDAAPIInited() else None
+
+    def as_setSubGunReloadingAsPercentS(self, percent, isReloading):
+        return self.flashObject.as_setSubGunReloadingAsPercent(percent, isReloading) if self._isDAAPIInited() else None
+
+    def as_setVerticalDeviationLowS(self, value):
+        return self.flashObject.as_setVerticalDeviationLow(value) if self._isDAAPIInited() else None
+
+    def as_setMergeS(self, value):
+        return self.flashObject.as_setMerge(value) if self._isDAAPIInited() else None

@@ -1,0 +1,79 @@
+<hangar_halloween.xml>
+  <name>	#arenas:83_kharkiv/name	</name>
+  <description>	#arenas:83_kharkiv/description	</description>
+  <geometry>	spaces/83_kharkiv	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-400.0 -400.0	</bottomLeft>
+    <upperRight>	400.0 400.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/83_kharkiv/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	winter	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-199.049789 -264.756134	</position1>
+        </team1>
+        <team2>
+          <position1>	249.117920 193.813950	</position1>
+        </team2>
+      </teamBasePositions>
+      <artilleryPreparationChance>	0.7	</artilleryPreparationChance>
+    </ctf>
+    <assault2>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	309.927 -326.182	</position>
+        </team1>
+        <team2>
+          <position>	-87.194 125.21	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	7.447 -296.809	</position1>
+          <position2>	287.047 -19.499	</position2>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault2>
+  </gameplayTypes>
+  <wwloadingMusic>	music_kharkov	</wwloadingMusic>
+  <wwambientSound>	ambient_wind_winter_01	</wwambientSound>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <mapActivities>
+    <warplane>
+      <preset>	kharkiv_lightning_01	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	0.000000 0.000000	</startTime>
+      <period>	100.000000	</period>
+    </warplane>
+    <warplane>
+      <preset>	kharkiv_lightning_02	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	35.000000 35.000000	</startTime>
+      <period>	80.000000	</period>
+    </warplane>
+    <warplane>
+      <preset>	kharkiv_lightning_03	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	55.000000 55.000000	</startTime>
+      <period>	95.000000	</period>
+    </warplane>
+  </mapActivities>
+</hangar_halloween.xml>

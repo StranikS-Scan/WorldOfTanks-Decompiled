@@ -55,7 +55,7 @@ _WGNC_BG_TO_LOCAL = {'battle_defeat': ('BgBattleResultIconDefeat', (288, 167)),
  'sh_sally_result': ('SallyResultBg', (312, 170)),
  'poll': ('BgPoll', (288, 110)),
  'offer': ('OfferIconBg', (288, 110)),
- 'event': ('EventIconBg', (288, 110))}
+ 'event': ('EventIconBg', (288, 166))}
 
 def convertToLocalBG(icon):
     result = ('', (0, 0))

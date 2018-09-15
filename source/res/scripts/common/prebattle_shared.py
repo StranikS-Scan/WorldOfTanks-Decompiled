@@ -231,8 +231,10 @@ def _collectCurrentReplaceableVehicleComponents(vehicleDescr):
         res.append(vehicleDescr.engine.compactDescr)
     if len(vehicleType.radios) > 1:
         res.append(vehicleDescr.radio.compactDescr)
-    for posIdx, (turretDescr, gunDescr) in enumerate(vehicleDescr.turrets):
-        if len(vehicleType.turrets[posIdx]) > 1:
+    for turretIndex, turretSlot in enumerate(vehicleDescr.turrets):
+        turretDescr = turretSlot.turret
+        gunDescr = turretSlot.gun
+        if len(vehicleType.turrets[turretIndex]) > 1:
             res.append(turretDescr.compactDescr)
         if len(turretDescr.guns) > 1:
             res.append(gunDescr.compactDescr)

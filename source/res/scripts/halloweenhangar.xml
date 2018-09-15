@@ -1,0 +1,97 @@
+<halloweenhangar.xml>
+  <boxEffects>
+    <halloween_2017_box_come>
+      <timeline>
+        <effectEnd>	55000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Environment/hangar/halloween_2017_box_rise.xml	</file>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </halloween_2017_box_come>
+    <halloween_2017_box_wait>
+      <timeline>
+        <effectEnd>	55000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Environment/hangar/halloween_2017_box_rise_hold.xml	</file>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </halloween_2017_box_wait>
+    <halloween_2017_box_open>
+      <timeline>
+        <effectEnd>	55000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Environment/hangar/halloween_2017_box_rise_open.xml	</file>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </halloween_2017_box_open>
+    <halloween_2017_box_open_hold>
+      <timeline>
+        <effectEnd>	55000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Environment/hangar/halloween_2017_box_rise_open_hold.xml	</file>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </halloween_2017_box_open_hold>
+    <halloween_2017_box_on_scene>
+      <timeline>
+        <effectEnd>	55000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Environment/hangar/halloween_2017_box_rise_hold.xml	</file>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </halloween_2017_box_on_scene>
+    <halloween_2017_box_sink>
+      <timeline>
+        <effectEnd>	55000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Environment/hangar/halloween_2017_box_sink.xml	</file>
+          <force>	1	</force>
+        </pixie>
+      </effects>
+    </halloween_2017_box_sink>
+  </boxEffects>
+  <sounds>
+    <supply_drop_mouseover>	ev_halloween_ui_supplyDrop_mouseover	</supply_drop_mouseover>
+    <supply_drop_appears>	ev_halloween_ui_supplyDrop_appearance_basic	</supply_drop_appears>
+    <supply_drop_appears_elite>	ev_halloween_ui_supplyDrop_appearance_elite	</supply_drop_appears_elite>
+    <supply_drop_appears_redemption>	ev_halloween_ui_supplyDrop_appearance_redemption	</supply_drop_appears_redemption>
+    <supply_drop_claim>	ev_halloween_ui_supplyDrop_claim	</supply_drop_claim>
+    <supply_drop_opening>	ev_halloween_ui_supplyDrop_opening	</supply_drop_opening>
+    <supply_drop_disappearing>	ev_halloween_ui_supplyDrop_disappearance	</supply_drop_disappearing>
+  </sounds>
+  <otherModels>
+    <supply_drop_vfx_model>	particles\content_deferred\GFX_models\environment\120_afterlife\120_afterlife_supply_box_fx.model	</supply_drop_vfx_model>
+    <custom_bsp_model>	content\Hangars\hangar_halloween_2017\supply_drop\normal\lod0\supply_drop_01.model	</custom_bsp_model>
+  </otherModels>
+  <boxAnims>
+    <rise>
+      <length>	4.1	</length>
+    </rise>
+    <open>
+      <length>	2.5	</length>
+    </open>
+  </boxAnims>
+</halloweenhangar.xml>

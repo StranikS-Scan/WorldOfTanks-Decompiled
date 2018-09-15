@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/functions.py
 from operator import itemgetter
+from items.vehicles import VEHICLE_ATTRIBUTE_FACTORS
 from items import utils, tankmen
 
 def getVehicleFactors(vehicle):
-    factors = utils.makeDefaultVehicleAttributeFactors()
     vehicleDescr = vehicle.descriptor
+    factors = vehicleDescr.type.createAttributeFactors()
     eqs = [ eq.descriptor for eq in vehicle.equipment.regularConsumables if eq is not None ]
     if vehicle.equipment.battleBoosterConsumables[0] is not None:
         eqs.append(vehicle.equipment.battleBoosterConsumables[0].descriptor)

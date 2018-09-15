@@ -13,7 +13,12 @@ class GunRotatorConnector(svarog_script.py_component.Component):
     def activate(self):
         soundEffect = BigWorld.player().gunRotator.soundEffect
         if soundEffect is not None:
-            soundEffect.connectSoundToMatrix(self.__appearance.compoundModel.node(TankPartNames.TURRET))
+            matrixProviders = [self.__appearance.compoundModel.node(TankPartNames.TURRET)]
+            for i in range(1, len(BigWorld.player().vehicleTypeDescriptor.turrets)):
+                turretName = '%s%d' % (TankPartNames.ADDITIONAL_TURRET, i)
+                matrixProviders.append(self.__appearance.compoundModel.node(turretName))
+
+            soundEffect.connectSoundToMatrix(matrixProviders)
         return
 
     def deactivate(self):

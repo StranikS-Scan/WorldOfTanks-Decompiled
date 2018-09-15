@@ -116,7 +116,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
          Currency.GOLD: money.getSignValue(Currency.GOLD)}
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
-            casseteCount = vehicle.descriptor.gun.clip[0]
+            casseteCount = vehicle.descriptor.turrets[0].gun.clip[0]
             casseteText = makeString('#menu:technicalMaintenance/ammoTitleEx') % casseteCount
             data.update({'vehicleId': str(vehicle.intCD),
              'repairCost': vehicle.repairCost,

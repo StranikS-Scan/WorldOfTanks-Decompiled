@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/ribbons_aggregator.py
+import BigWorld
 import Event
 import BattleReplay
 from ids_generators import SequenceIDGenerator
@@ -326,6 +327,39 @@ class _EnemyDetectionRibbon(_MultiVehicleRibbon):
         pass
 
 
+class _VehicleHealRibbon(_SingleVehicleRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.HEAL
+
+    @classmethod
+    def _extractExtraValue(cls, event):
+        return event.getExtra()
+
+
+class _VehicleHealthpackPickupRibbon(_SingleVehicleRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.HEALTHPACK_PICKUP
+
+    @classmethod
+    def _extractExtraValue(cls, event):
+        return event.getExtra()
+
+
+class _VehicleHealthpackWastedRibbon(_SingleVehicleRibbon):
+    __slots__ = ()
+
+    def getType(self):
+        return BATTLE_EFFICIENCY_TYPES.HEALTHPACK_WASTED
+
+    @classmethod
+    def _extractExtraValue(cls, event):
+        return event.getExtra()
+
+
 class _RibbonClassFactory(object):
     __slots__ = ()
 
@@ -403,7 +437,10 @@ _FEEDBACK_EVENT_TO_RIBBON_CLS_FACTORY = {FEEDBACK_EVENT_ID.PLAYER_CAPTURED_BASE:
  FEEDBACK_EVENT_ID.PLAYER_DAMAGED_HP_ENEMY: _DamageRibbonClassFactory(damageCls=_CausedDamageRibbon, fireCls=_FireHitRibbon, ramCls=_RamHitRibbon, wcCls=_WorldCollisionHitRibbon),
  FEEDBACK_EVENT_ID.ENEMY_DAMAGED_HP_PLAYER: _DamageRibbonClassFactory(damageCls=_ReceivedDamageHitRibbon, fireCls=_ReceivedFireHitRibbon, ramCls=_ReceivedRamHitRibbon, wcCls=_ReceivedWorldCollisionHitRibbon),
  FEEDBACK_EVENT_ID.PLAYER_ASSIST_TO_KILL_ENEMY: _AssistRibbonClassFactory(trackAssistCls=_TrackAssistRibbon, radioAssistCls=_RadioAssistRibbon, stunAssistCls=_StunAssistRibbon),
- FEEDBACK_EVENT_ID.PLAYER_ASSIST_TO_STUN_ENEMY: _AssistRibbonClassFactory(trackAssistCls=_TrackAssistRibbon, radioAssistCls=_RadioAssistRibbon, stunAssistCls=_StunAssistRibbon)}
+ FEEDBACK_EVENT_ID.PLAYER_ASSIST_TO_STUN_ENEMY: _AssistRibbonClassFactory(trackAssistCls=_TrackAssistRibbon, radioAssistCls=_RadioAssistRibbon, stunAssistCls=_StunAssistRibbon),
+ FEEDBACK_EVENT_ID.VEHICLE_HEAL: _RibbonSingleClassFactory(_VehicleHealRibbon),
+ FEEDBACK_EVENT_ID.VEHICLE_HEALTHPACK_PICKUP: _RibbonSingleClassFactory(_VehicleHealthpackPickupRibbon),
+ FEEDBACK_EVENT_ID.VEHICLE_HEALTHPACK_WASTED: _RibbonSingleClassFactory(_VehicleHealthpackWastedRibbon)}
 
 def _createRibbonFromPlayerFeedbackEvent(ribbonID, event):
     etype = event.getType()

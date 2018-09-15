@@ -423,7 +423,7 @@ class Quest(ServerEventAbstract):
         return True
 
     def _checkConditions(self):
-        return False if not self.accountReqs.isAvailable() else self.vehicleReqs.isAnyVehicleAcceptable() or self.vehicleReqs.getSuitableVehicles()
+        return False if not self.accountReqs.isAvailable() else self.vehicleReqs.getSuitableVehicles()
 
     def _checkVehicleConditions(self, vehicle):
         return self.vehicleReqs.isAnyVehicleAcceptable() or vehicle in self.vehicleReqs.getSuitableVehicles()

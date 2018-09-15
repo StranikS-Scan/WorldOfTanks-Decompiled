@@ -111,18 +111,23 @@ class _TankIndicatorCtrl(object):
         self.__component = None
         return
 
-    def setup(self, vehicle, yawLimits):
+    def setup(self, vehicle, yawLimits, secondaryYawLimits):
         if vehicle.isPlayerVehicle:
             hullMat = BigWorld.player().getOwnVehicleMatrix()
         else:
             hullMat = vehicle.matrix
-        turretMat = vehicle.appearance.turretMatrix
         if yawLimits:
             self.__component.wg_turretYawConstraints = yawLimits
         else:
             self.__component.wg_turretYawConstraints = Math.Vector2(0.0, 0.0)
+        if secondaryYawLimits:
+            self.__component.wg_secondaryTurretYawConstraints = secondaryYawLimits
+        else:
+            self.__component.wg_secondaryTurretYawConstraints = Math.Vector2(0.0, 0.0)
         self.__component.wg_hullMatProv = hullMat
-        self.__component.wg_turretMatProv = turretMat
+        self.__component.wg_turretMatProv = vehicle.appearance.getTurretMatrix(0)
+        if vehicle.typeDescriptor.isMultiTurret:
+            self.__component.wg_secondaryTurretMatProv = vehicle.appearance.getTurretMatrix(1)
 
 
 class DamagePanel(DamagePanelMeta):
@@ -293,6 +298,11 @@ class DamagePanel(DamagePanelMeta):
             inDegrees = (math.degrees(-yawLimits[0]), math.degrees(yawLimits[1]))
         else:
             inDegrees = None
+        secondaryYawLimits = vehicle_getter.getYawLimits(vTypeDesc, 1)
+        if secondaryYawLimits:
+            secondaryInDegrees = (math.degrees(-secondaryYawLimits[0]), math.degrees(secondaryYawLimits[1]))
+        else:
+            secondaryInDegrees = None
         self.__isAutoRotationOn = True
         self.__isAutoRotationShown = False
         if vehicle.isPlayerVehicle or BigWorld.player().isObserver():
@@ -304,9 +314,9 @@ class DamagePanel(DamagePanelMeta):
         health = vehicle.health
         healthStr = formatHealthProgress(health, self.__maxHealth)
         healthProgress = normalizeHealthPercent(health, self.__maxHealth)
-        self.as_setupS(healthStr, healthProgress, vehicle_getter.getVehicleIndicatorType(vTypeDesc), vehicle_getter.getCrewMainRolesWithIndexes(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), self.__isAutoRotationOn)
+        self.as_setupS(healthStr, healthProgress, vehicle_getter.getVehicleIndicatorType(vTypeDesc), vehicle_getter.getCrewMainRolesWithIndexes(vType.crewRoles), inDegrees, vehicle_getter.hasTurretRotator(vTypeDesc), vehicle_getter.hasSecondaryTurretRotator(vTypeDesc), secondaryInDegrees, self.__isAutoRotationOn)
         if self.__tankIndicator is not None:
-            self.__tankIndicator.setup(vehicle, yawLimits)
+            self.__tankIndicator.setup(vehicle, yawLimits, secondaryYawLimits)
         self.__setupDevicesStates()
         return
 

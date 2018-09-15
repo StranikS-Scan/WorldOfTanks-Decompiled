@@ -186,13 +186,14 @@ class _VehicleBounder(object):
         else:
             self.__placement = placement
             self.__lookAtProvider = None
+            turretIndex = 0
             if placement == _VehicleBounder.SELECT_CHASSIS:
                 self.matrix = self.__vehicle.matrix
             elif placement == _VehicleBounder.SELECT_TURRET:
-                self.matrix = AimingSystems.getTurretMatrixProvider(self.__vehicle.typeDescriptor, self.__vehicle.matrix, self.__vehicle.appearance.turretMatrix)
+                self.matrix = AimingSystems.getTurretMatrixProvider(self.__vehicle.typeDescriptor, turretIndex, self.__vehicle.matrix, self.__vehicle.appearance.turretMatrix)
             elif placement == _VehicleBounder.SELECT_GUN:
-                turretMatrixProv = AimingSystems.getTurretMatrixProvider(self.__vehicle.typeDescriptor, self.__vehicle.matrix, self.__vehicle.appearance.turretMatrix)
-                self.matrix = AimingSystems.getGunMatrixProvider(self.__vehicle.typeDescriptor, turretMatrixProv, self.__vehicle.appearance.gunMatrix)
+                turretMatrixProv = AimingSystems.getTurretMatrixProvider(self.__vehicle.typeDescriptor, turretIndex, self.__vehicle.matrix, self.__vehicle.appearance.turretMatrix)
+                self.matrix = AimingSystems.getGunMatrixProvider(self.__vehicle.typeDescriptor, turretIndex, turretMatrixProv, self.__vehicle.appearance.gunMatrix)
             elif placement == _VehicleBounder.SELECT_LOOK_AT:
                 self.matrix = mathUtils.createIdentityMatrix()
                 self.__lookAtProvider = mathUtils.MatrixProviders.product(mathUtils.createTranslationMatrix(self.__boundLocalPos), self.__vehicle.matrix)

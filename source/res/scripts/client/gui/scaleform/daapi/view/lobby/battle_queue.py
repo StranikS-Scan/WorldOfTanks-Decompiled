@@ -30,6 +30,7 @@ TYPES_ORDERED = (('heavyTank', ITEM_TYPES.VEHICLE_TAGS_HEAVY_TANK_NAME),
  ('lightTank', ITEM_TYPES.VEHICLE_TAGS_LIGHT_TANK_NAME),
  ('AT-SPG', ITEM_TYPES.VEHICLE_TAGS_AT_SPG_NAME),
  ('SPG', ITEM_TYPES.VEHICLE_TAGS_SPG_NAME))
+EVENT_VEHICLE_TYPES_ORDERED = (('france:F80_FCM_F1_Mle1940_HE2017', '#item_types:vehicle/tags/HE2017_F1/name'), ('france:F77_FCM_2C_HE2017', '#item_types:vehicle/tags/HE2017_2C/name'))
 _LONG_WAITING_LEVELS = (9, 10)
 _HTMLTEMP_PLAYERSLABEL = 'html_templates:lobby/queue/playersLabel'
 
@@ -72,7 +73,7 @@ class _QueueProvider(object):
         self._queueCallback = None
         currPlayer = BigWorld.player()
         if currPlayer is not None and hasattr(currPlayer, 'requestQueueInfo'):
-            LOG_DEBUG('Requestion queue info: ', self._queueType)
+            LOG_DEBUG('Request queue info: ', self._queueType)
             currPlayer.requestQueueInfo(self._queueType)
             self._queueCallback = BigWorld.callback(5, self.requestQueueInfo)
         return
@@ -160,10 +161,35 @@ class _RankedQueueProvider(_RandomQueueProvider):
     pass
 
 
+class _EventBattlesTwoQueueProvider(_QueueProvider):
+
+    def processQueueInfo(self, qInfo):
+        info = dict(qInfo)
+        if 'vehDescr' in info:
+            vehDescr = info['vehDescr']
+            vehDescrLen = len(vehDescr)
+        else:
+            vehDescr = []
+            vehDescrLen = 0
+        self._proxy.flashObject.as_setPlayers(makeHtmlString('html_templates:lobby/queue/playersLabel', 'players', {'count': sum(vehDescr)}))
+        if vehDescrLen:
+            data = {'title': '#menu:prebattle/tankDescTitle',
+             'data': []}
+            vehDescrData = data['data']
+            for vehDescrs, message in EVENT_VEHICLE_TYPES_ORDERED:
+                idx = constants.EVENT_VEHICLE_INDICES[vehDescrs]
+                vehDescrData.append({'type': message,
+                 'count': vehDescr[idx] if idx < vehDescrLen else 0})
+
+            self._proxy.as_setDPS(vehDescrData)
+        self._proxy.as_showStartS(constants.IS_DEVELOPMENT and sum(vehDescr) > 1)
+
+
 _PROVIDER_BY_QUEUE_TYPE = {constants.QUEUE_TYPE.RANDOMS: _RandomQueueProvider,
  constants.QUEUE_TYPE.FALLOUT_MULTITEAM: _FalloutQueueProvider,
  constants.QUEUE_TYPE.FALLOUT_CLASSIC: _FalloutQueueProvider,
- constants.QUEUE_TYPE.EVENT_BATTLES: _EventQueueProvider,
+ constants.QUEUE_TYPE.EVENT_BATTLES: _EventBattlesTwoQueueProvider,
+ constants.QUEUE_TYPE.EVENT_BATTLES_2: _EventBattlesTwoQueueProvider,
  constants.QUEUE_TYPE.RANKED: _RankedQueueProvider}
 
 def _providerFactory(proxy, qType):

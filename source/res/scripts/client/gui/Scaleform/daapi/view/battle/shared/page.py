@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/page.py
+import BigWorld
 import BattleReplay
 from AvatarInputHandler import aih_constants, aih_global_binding
 from debug_utils import LOG_DEBUG
@@ -16,6 +17,7 @@ from gui.battle_control.battle_constants import VIEW_COMPONENT_RULE, BATTLE_CTRL
 from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+from multi_turret_hint_panel import MultiTurretHintPanel
 
 class IComponentsConfig(object):
 
@@ -209,6 +211,7 @@ class SharedPage(BattlePageMeta):
     def _onBattleLoadingFinish(self):
         self._setComponentsVisibility(visible=self._blToggling, hidden={_ALIASES.BATTLE_LOADING})
         self._blToggling.clear()
+        self.as_onBattleLoadCompletedS()
         for component in self._external:
             component.active(True)
 

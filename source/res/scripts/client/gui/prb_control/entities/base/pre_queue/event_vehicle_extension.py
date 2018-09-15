@@ -22,13 +22,18 @@ import weakref
 from functools import partial
 import BigWorld
 from CurrentVehicle import g_currentVehicle
-from debug_utils import LOG_DEBUG
-from gui.prb_control.prb_getters import isInEventBattlesQueue
+from debug_utils import LOG_DEBUG_DEV
+from gui.prb_control.prb_getters import isInEventBattlesQueue, isInEventBattlesTwoQueue
+import random
+from constants import QUEUE_TYPE
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 from helpers import dependency
+from skeletons.gui.game_control import IEventBattlesController
 from skeletons.gui.server_events import IEventsCache
-_SUPPORTED_ENTITIES = ()
+_SUPPORTED_ENTITIES = ('RandomEntity',)
 _PATCHED_METHODS = ('init', 'fini')
 _SWITCHED_METHODS = ('isInQueue', '_doQueue', '_doDequeue', '_makeQueueCtxByAction')
+_GAME_MODE = ('EventBattlesTwo', 'EventBattles')
 
 class EventVehicleMeta(type):
     """
@@ -73,6 +78,7 @@ class _EventVehicleEntityExtension(object):
     methods.
     """
     eventsCache = dependency.descriptor(IEventsCache)
+    eventBattlesCtrl = dependency.descriptor(IEventBattlesController)
 
     def __init__(self):
         """
@@ -82,6 +88,7 @@ class _EventVehicleEntityExtension(object):
         super(_EventVehicleEntityExtension, self).__init__()
         self.__entity = None
         self.__patchedMethods = {}
+        self.__gameplayMode = QUEUE_TYPE.EVENT_BATTLES
         self.__originalSubscriber = None
         self.__isActivated = False
         self.__isEventsEnabled = False
@@ -143,6 +150,7 @@ class _EventVehicleEntityExtension(object):
         if self.__isEventsEnabled:
             g_currentVehicle.onChanged -= self._onCurrentVehicleChanged
         self.__isEventsEnabled = False
+        self._getGameplayMode()
         self._invalidate(resetSubscription=True)
         rv = self._callOriginalMethod('fini', *args, **kwargs)
         return rv
@@ -154,7 +162,9 @@ class _EventVehicleEntityExtension(object):
         
         :return: True if the vehicle is queued, otherwise False.
         """
-        return isInEventBattlesQueue()
+        if self.__gameplayMode == QUEUE_TYPE.EVENT_BATTLES_2:
+            return isInEventBattlesTwoQueue()
+        return isInEventBattlesQueue() if self.__gameplayMode == QUEUE_TYPE.EVENT_BATTLES else None
 
     def _doQueue(self, ctx):
         """
@@ -163,8 +173,14 @@ class _EventVehicleEntityExtension(object):
         
         :param ctx: An instance of EventVehicleQueueCtx class.
         """
-        BigWorld.player().enqueueEventBattles(ctx.getVehicleInventoryIDs())
-        LOG_DEBUG('Sends request on queuing to the event battles', ctx)
+        vehID = ctx.getVehicleInventoryID()
+        self._getGameplayMode()
+        if self.__gameplayMode == QUEUE_TYPE.EVENT_BATTLES_2:
+            self.__entity._queueType = QUEUE_TYPE.EVENT_BATTLES_2
+            BigWorld.player().enqueueEventBattlesTwo(vehID)
+        elif self.__gameplayMode == QUEUE_TYPE.EVENT_BATTLES:
+            self.__entity._queueType = QUEUE_TYPE.EVENT_BATTLES
+            BigWorld.player().enqueueEventBattles(vehID)
 
     def _doDequeue(self, ctx):
         """
@@ -173,8 +189,12 @@ class _EventVehicleEntityExtension(object):
         
         :param ctx: Unused.
         """
-        BigWorld.player().dequeueEventBattles()
-        LOG_DEBUG('Sends request on dequeuing from the event battles')
+        self._getGameplayMode()
+        if self.__gameplayMode == QUEUE_TYPE.EVENT_BATTLES_2:
+            BigWorld.player().dequeueEventBattlesTwo()
+        elif self.__gameplayMode == QUEUE_TYPE.EVENT_BATTLES:
+            BigWorld.player().dequeueEventBattles()
+        self.__entity._queueType = QUEUE_TYPE.RANDOMS
 
     def _makeQueueCtxByAction(self, action=None):
         """
@@ -184,8 +204,11 @@ class _EventVehicleEntityExtension(object):
         :param action: Unused.
         :return: Instance of EventVehicleQueueCtx class.
         """
+        from gui.prb_control.entities.event_two.pre_queue.ctx import EventBattlesTwoQueueCtx
         from gui.prb_control.entities.event.pre_queue.ctx import EventBattleQueueCtx
-        return EventBattleQueueCtx(vehInvIDs=[g_currentVehicle.item.invID], waitingID='prebattle/join')
+        if self.__gameplayMode == QUEUE_TYPE.EVENT_BATTLES_2:
+            return EventBattlesTwoQueueCtx(vInventoryID=g_currentVehicle.invID, waitingID='prebattle/join')
+        return EventBattleQueueCtx(vInventoryID=g_currentVehicle.invID, waitingID='prebattle/join') if self.__gameplayMode == QUEUE_TYPE.EVENT_BATTLES else None
 
     def _onEventsCacheResync(self):
         """
@@ -206,31 +229,47 @@ class _EventVehicleEntityExtension(object):
         """
         self._invalidate(resetSubscription=True)
 
+    def _getGameplayMode(self):
+        """
+        Determines mode to play
+        """
+        gameplayMode = self.eventBattlesCtrl.getBattleType()
+        if gameplayMode in QUEUE_TYPE.EVENT:
+            self.__gameplayMode = gameplayMode
+        else:
+            LOG_DEBUG_DEV('Gameplay mode not set', gameplayMode)
+
     def _invalidate(self, resetSubscription=False):
         """
         Invalidates _SWITCHED_METHODS mapping: for the event vehicle switch the appropriate
         entity's method to the extension methods. For all other vehicles, restore original
         methods.
         """
+        from gui.prb_control.entities.event_two.pre_queue.entity import EventBattlesTwoSubscriber
         from gui.prb_control.entities.event.pre_queue.entity import EventBattleSubscriber
-        activate = self.__isEventsEnabled and g_currentVehicle.isEvent()
-        if self.__isActivated != activate:
+        self.__isActivated = self.__isEventsEnabled and g_currentVehicle.isEvent()
+        if resetSubscription:
+            self._getGameplayMode()
             prevSubscriber = self.__getSubscriber()
-            if activate:
+            if self.__isActivated:
                 method = self._patchMethod
-                newSubscriber = EventBattleSubscriber()
+                if self.__gameplayMode == QUEUE_TYPE.EVENT_BATTLES_2:
+                    newSubscriber = EventBattlesTwoSubscriber()
+                elif self.__gameplayMode == QUEUE_TYPE.EVENT_BATTLES:
+                    newSubscriber = EventBattleSubscriber()
+                else:
+                    LOG_DEBUG_DEV('Gameplay mode not set', self.__gameplayMode)
             else:
                 method = self._unpatchMethod
                 newSubscriber = self.__originalSubscriber
             for name in _SWITCHED_METHODS:
                 method(name)
 
-            if resetSubscription:
+            if resetSubscription and prevSubscriber != newSubscriber:
                 prevSubscriber.unsubscribe(self.__entity)
                 newSubscriber.subscribe(self.__entity)
             self.__setSubscriber(newSubscriber)
-            self.__isActivated = activate
-        LOG_DEBUG('Event Vehicle Entity is {} to entity {}'.format('set' if self.__isActivated else 'unset', self.__entity))
+        LOG_DEBUG_DEV('Event Vehicle Entity is {} to entity {}'.format('set' if self.__isActivated else 'unset', self.__entity))
 
     def _patchMethod(self, name, method=None):
         """

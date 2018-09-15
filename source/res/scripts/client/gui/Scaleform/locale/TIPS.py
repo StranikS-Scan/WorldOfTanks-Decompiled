@@ -204,6 +204,48 @@ class TIPS(object):
     EVENTMESSAGE = '#tips:eventMessage'
     EPICRANDOM_0_TITLE = '#tips:epicRandom/0/title'
     EPICRANDOM_0_BODY = '#tips:epicRandom/0/body'
+    HALLOWEENPVP_0_TITLE = '#tips:halloweenPVP/0/title'
+    HALLOWEENPVP_0_BODY = '#tips:halloweenPVP/0/body'
+    HALLOWEENPVP_1_TITLE = '#tips:halloweenPVP/1/title'
+    HALLOWEENPVP_1_BODY = '#tips:halloweenPVP/1/body'
+    HALLOWEENPVP_2_TITLE = '#tips:halloweenPVP/2/title'
+    HALLOWEENPVP_2_BODY = '#tips:halloweenPVP/2/body'
+    HALLOWEENPVP_3_TITLE = '#tips:halloweenPVP/3/title'
+    HALLOWEENPVP_3_BODY = '#tips:halloweenPVP/3/body'
+    HALLOWEENPVP_4_TITLE = '#tips:halloweenPVP/4/title'
+    HALLOWEENPVP_4_BODY = '#tips:halloweenPVP/4/body'
+    HALLOWEENPVP_5_TITLE = '#tips:halloweenPVP/5/title'
+    HALLOWEENPVP_5_BODY = '#tips:halloweenPVP/5/body'
+    HALLOWEENPVP_6_TITLE = '#tips:halloweenPVP/6/title'
+    HALLOWEENPVP_6_BODY = '#tips:halloweenPVP/6/body'
+    HALLOWEENPVP_7_TITLE = '#tips:halloweenPVP/7/title'
+    HALLOWEENPVP_7_BODY = '#tips:halloweenPVP/7/body'
+    HALLOWEENPVP_8_TITLE = '#tips:halloweenPVP/8/title'
+    HALLOWEENPVP_8_BODY = '#tips:halloweenPVP/8/body'
+    HALLOWEENPVP_9_TITLE = '#tips:halloweenPVP/9/title'
+    HALLOWEENPVP_9_BODY = '#tips:halloweenPVP/9/body'
+    HALLOWEENPVP_10_TITLE = '#tips:halloweenPVP/10/title'
+    HALLOWEENPVP_10_BODY = '#tips:halloweenPVP/10/body'
+    HALLOWEENPVE_0_TITLE = '#tips:halloweenPVE/0/title'
+    HALLOWEENPVE_0_BODY = '#tips:halloweenPVE/0/body'
+    HALLOWEENPVE_1_TITLE = '#tips:halloweenPVE/1/title'
+    HALLOWEENPVE_1_BODY = '#tips:halloweenPVE/1/body'
+    HALLOWEENPVE_2_TITLE = '#tips:halloweenPVE/2/title'
+    HALLOWEENPVE_2_BODY = '#tips:halloweenPVE/2/body'
+    HALLOWEENPVE_3_TITLE = '#tips:halloweenPVE/3/title'
+    HALLOWEENPVE_3_BODY = '#tips:halloweenPVE/3/body'
+    HALLOWEENPVE_4_TITLE = '#tips:halloweenPVE/4/title'
+    HALLOWEENPVE_4_BODY = '#tips:halloweenPVE/4/body'
+    HALLOWEENPVE_5_TITLE = '#tips:halloweenPVE/5/title'
+    HALLOWEENPVE_5_BODY = '#tips:halloweenPVE/5/body'
+    HALLOWEENPVE_6_TITLE = '#tips:halloweenPVE/6/title'
+    HALLOWEENPVE_6_BODY = '#tips:halloweenPVE/6/body'
+    HALLOWEENPVE_7_TITLE = '#tips:halloweenPVE/7/title'
+    HALLOWEENPVE_7_BODY = '#tips:halloweenPVE/7/body'
+    HALLOWEENPVE_8_TITLE = '#tips:halloweenPVE/8/title'
+    HALLOWEENPVE_8_BODY = '#tips:halloweenPVE/8/body'
+    HALLOWEENPVE_9_TITLE = '#tips:halloweenPVE/9/title'
+    HALLOWEENPVE_9_BODY = '#tips:halloweenPVE/9/body'
     RANKED_0_TITLE = '#tips:ranked/0/title'
     RANKED_0_BODY = '#tips:ranked/0/body'
     RANKED_1_TITLE = '#tips:ranked/1/title'
@@ -258,6 +300,48 @@ class TIPS(object):
      RANKED_12_BODY)
     EPICRANDOM_ALL_TITLE_ENUM = (EPICRANDOM_0_TITLE,)
     EPICRANDOM_ALL_BODY_ENUM = (EPICRANDOM_0_BODY,)
+    HALLOWEENPVE_ALL_TITLE_ENUM = (HALLOWEENPVE_0_TITLE,
+     HALLOWEENPVE_1_TITLE,
+     HALLOWEENPVE_2_TITLE,
+     HALLOWEENPVE_3_TITLE,
+     HALLOWEENPVE_4_TITLE,
+     HALLOWEENPVE_5_TITLE,
+     HALLOWEENPVE_6_TITLE,
+     HALLOWEENPVE_7_TITLE,
+     HALLOWEENPVE_8_TITLE,
+     HALLOWEENPVE_9_TITLE)
+    HALLOWEENPVE_ALL_BODY_ENUM = (HALLOWEENPVE_0_BODY,
+     HALLOWEENPVE_1_BODY,
+     HALLOWEENPVE_2_BODY,
+     HALLOWEENPVE_3_BODY,
+     HALLOWEENPVE_4_BODY,
+     HALLOWEENPVE_5_BODY,
+     HALLOWEENPVE_6_BODY,
+     HALLOWEENPVE_7_BODY,
+     HALLOWEENPVE_8_BODY,
+     HALLOWEENPVE_9_BODY)
+    HALLOWEENPVP_ALL_TITLE_ENUM = (HALLOWEENPVP_0_TITLE,
+     HALLOWEENPVP_1_TITLE,
+     HALLOWEENPVP_2_TITLE,
+     HALLOWEENPVP_3_TITLE,
+     HALLOWEENPVP_4_TITLE,
+     HALLOWEENPVP_5_TITLE,
+     HALLOWEENPVP_6_TITLE,
+     HALLOWEENPVP_7_TITLE,
+     HALLOWEENPVP_8_TITLE,
+     HALLOWEENPVP_9_TITLE,
+     HALLOWEENPVP_10_TITLE)
+    HALLOWEENPVP_ALL_BODY_ENUM = (HALLOWEENPVP_0_BODY,
+     HALLOWEENPVP_1_BODY,
+     HALLOWEENPVP_2_BODY,
+     HALLOWEENPVP_3_BODY,
+     HALLOWEENPVP_4_BODY,
+     HALLOWEENPVP_5_BODY,
+     HALLOWEENPVP_6_BODY,
+     HALLOWEENPVP_7_BODY,
+     HALLOWEENPVP_8_BODY,
+     HALLOWEENPVP_9_BODY,
+     HALLOWEENPVP_10_BODY)
 
     @classmethod
     def getRankedTipTittle(cls, tipNum):
@@ -290,6 +374,42 @@ class TIPS(object):
     def getEpicRandomTipBody(cls, tipNum):
         outcome = '#tips:epicRandom/{}/body'.format(tipNum)
         if outcome not in cls.EPICRANDOM_ALL_BODY_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getHalloweenPVERandomTipTitle(cls, tipNum):
+        outcome = '#tips:halloweenPVE/{}/title'.format(tipNum)
+        if outcome not in cls.HALLOWEENPVE_ALL_TITLE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getHalloweenPVERandomTipBody(cls, tipNum):
+        outcome = '#tips:halloweenPVE/{}/body'.format(tipNum)
+        if outcome not in cls.HALLOWEENPVE_ALL_BODY_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getHalloweenPVPRandomTipTitle(cls, tipNum):
+        outcome = '#tips:halloweenPVP/{}/title'.format(tipNum)
+        if outcome not in cls.HALLOWEENPVP_ALL_TITLE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getHalloweenPVPRandomTipBody(cls, tipNum):
+        outcome = '#tips:halloweenPVP/{}/body'.format(tipNum)
+        if outcome not in cls.HALLOWEENPVP_ALL_BODY_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

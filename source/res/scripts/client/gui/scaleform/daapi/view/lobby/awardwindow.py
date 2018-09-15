@@ -2,6 +2,8 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/AwardWindow.py
 from gui.Scaleform.daapi.view.meta.MissionAwardWindowMeta import MissionAwardWindowMeta
 from gui.Scaleform.daapi.view.meta.AwardWindowMeta import AwardWindowMeta
+import BigWorld
+from HalloweenSupplyDrop import HalloweenSupplyDrop
 from gui.server_events.pm_constants import PERSONAL_MISSIONS_SILENT_SOUND_SPACE
 
 class AwardWindow(AwardWindowMeta):
@@ -44,6 +46,15 @@ class AwardWindow(AwardWindowMeta):
 class MissionAwardWindow(MissionAwardWindowMeta):
     _COMMON_SOUND_SPACE = PERSONAL_MISSIONS_SILENT_SOUND_SPACE
 
+    def onWindowClose(self):
+        from gui.server_events.awards import HalloweenMissionAward
+        if isinstance(self._award, HalloweenMissionAward) and self._award.isHalloweenRewardBox:
+            for e in BigWorld.entities.values():
+                if isinstance(e, HalloweenSupplyDrop):
+                    e.receivedSupplyDrop(True)
+
+        self.destroy()
+
     def onCurrentQuestClick(self):
         self._award.handleNextButton()
         self.onWindowClose()
@@ -70,4 +81,5 @@ class MissionAwardWindow(MissionAwardWindowMeta):
          'conditions': None,
          'isPersonalQuest': self._award.isPersonal(),
          'availableNextQuest': self._award.isNextAvailable(),
-         'isLastQuest': self._award.isLast()}
+         'isLastQuest': self._award.isLast(),
+         'isHalloween': self._award.isHalloweenQuest()}

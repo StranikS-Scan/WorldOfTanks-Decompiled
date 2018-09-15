@@ -184,6 +184,27 @@ class RES_ICONS(object):
     MAPS_ICONS_BATTLELOADING_GROUPS_TECHPROBLEMS = '../maps/icons/battleLoading/groups/techProblems.png'
     MAPS_ICONS_BATTLELOADING_TIPS_EPICRANDOM0 = '../maps/icons/battleLoading/tips/epicRandom0.png'
     MAPS_ICONS_BATTLELOADING_TIPS_EVENT = '../maps/icons/battleLoading/tips/event.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE0 = '../maps/icons/battleLoading/tips/halloweenPVE0.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE1 = '../maps/icons/battleLoading/tips/halloweenPVE1.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE2 = '../maps/icons/battleLoading/tips/halloweenPVE2.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE3 = '../maps/icons/battleLoading/tips/halloweenPVE3.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE4 = '../maps/icons/battleLoading/tips/halloweenPVE4.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE5 = '../maps/icons/battleLoading/tips/halloweenPVE5.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE6 = '../maps/icons/battleLoading/tips/halloweenPVE6.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE7 = '../maps/icons/battleLoading/tips/halloweenPVE7.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE8 = '../maps/icons/battleLoading/tips/halloweenPVE8.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE9 = '../maps/icons/battleLoading/tips/halloweenPVE9.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP0 = '../maps/icons/battleLoading/tips/halloweenPVP0.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP1 = '../maps/icons/battleLoading/tips/halloweenPVP1.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP10 = '../maps/icons/battleLoading/tips/halloweenPVP10.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP2 = '../maps/icons/battleLoading/tips/halloweenPVP2.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP3 = '../maps/icons/battleLoading/tips/halloweenPVP3.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP4 = '../maps/icons/battleLoading/tips/halloweenPVP4.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP5 = '../maps/icons/battleLoading/tips/halloweenPVP5.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP6 = '../maps/icons/battleLoading/tips/halloweenPVP6.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP7 = '../maps/icons/battleLoading/tips/halloweenPVP7.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP8 = '../maps/icons/battleLoading/tips/halloweenPVP8.png'
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP9 = '../maps/icons/battleLoading/tips/halloweenPVP9.png'
     MAPS_ICONS_BATTLELOADING_TIPS_RANKED0 = '../maps/icons/battleLoading/tips/ranked0.png'
     MAPS_ICONS_BATTLELOADING_TIPS_RANKED1 = '../maps/icons/battleLoading/tips/ranked1.png'
     MAPS_ICONS_BATTLELOADING_TIPS_RANKED10 = '../maps/icons/battleLoading/tips/ranked10.png'
@@ -275,16 +296,22 @@ class RES_ICONS(object):
     MAPS_ICONS_BATTLETYPES_136X136_ASSAULT1 = '../maps/icons/battleTypes/136x136/assault1.png'
     MAPS_ICONS_BATTLETYPES_136X136_ASSAULT2 = '../maps/icons/battleTypes/136x136/assault2.png'
     MAPS_ICONS_BATTLETYPES_136X136_BOOTCAMP = '../maps/icons/battleTypes/136x136/bootcamp.png'
+    MAPS_ICONS_BATTLETYPES_136X136_BOSSMODE = '../maps/icons/battleTypes/136x136/bossMode.png'
+    MAPS_ICONS_BATTLETYPES_136X136_BOSS_MODE = '../maps/icons/battleTypes/136x136/boss_Mode.png'
     MAPS_ICONS_BATTLETYPES_136X136_CLAN = '../maps/icons/battleTypes/136x136/clan.png'
     MAPS_ICONS_BATTLETYPES_136X136_CTF = '../maps/icons/battleTypes/136x136/ctf.png'
     MAPS_ICONS_BATTLETYPES_136X136_CTF30X30 = '../maps/icons/battleTypes/136x136/ctf30x30.png'
     MAPS_ICONS_BATTLETYPES_136X136_DOMINATION = '../maps/icons/battleTypes/136x136/domination.png'
     MAPS_ICONS_BATTLETYPES_136X136_DOMINATION30X30 = '../maps/icons/battleTypes/136x136/domination30x30.png'
     MAPS_ICONS_BATTLETYPES_136X136_ESCORT = '../maps/icons/battleTypes/136x136/escort.png'
+    MAPS_ICONS_BATTLETYPES_136X136_EVENT = '../maps/icons/battleTypes/136x136/event.png'
+    MAPS_ICONS_BATTLETYPES_136X136_EVENT2 = '../maps/icons/battleTypes/136x136/event2.png'
     MAPS_ICONS_BATTLETYPES_136X136_FALLOUT = '../maps/icons/battleTypes/136x136/fallout.png'
     MAPS_ICONS_BATTLETYPES_136X136_FALLOUT_CLASSIC = '../maps/icons/battleTypes/136x136/fallout_classic.png'
     MAPS_ICONS_BATTLETYPES_136X136_FALLOUT_MULTITEAM = '../maps/icons/battleTypes/136x136/fallout_multiteam.png'
     MAPS_ICONS_BATTLETYPES_136X136_FORTIFICATIONS = '../maps/icons/battleTypes/136x136/fortifications.png'
+    MAPS_ICONS_BATTLETYPES_136X136_HALLOWEEN = '../maps/icons/battleTypes/136x136/halloween.png'
+    MAPS_ICONS_BATTLETYPES_136X136_HALLOWEENPVP = '../maps/icons/battleTypes/136x136/halloweenPVP.png'
     MAPS_ICONS_BATTLETYPES_136X136_HISTORICAL = '../maps/icons/battleTypes/136x136/historical.png'
     MAPS_ICONS_BATTLETYPES_136X136_NATIONS = '../maps/icons/battleTypes/136x136/nations.png'
     MAPS_ICONS_BATTLETYPES_136X136_NEUTRAL = '../maps/icons/battleTypes/136x136/neutral.png'
@@ -300,6 +327,7 @@ class RES_ICONS(object):
     MAPS_ICONS_BATTLETYPES_136X136_TRAINING = '../maps/icons/battleTypes/136x136/training.png'
     MAPS_ICONS_BATTLETYPES_136X136_TUTORIAL = '../maps/icons/battleTypes/136x136/tutorial.png'
     MAPS_ICONS_BATTLETYPES_40X40_BATTLETEACHING = '../maps/icons/battleTypes/40x40/battleTeaching.png'
+    MAPS_ICONS_BATTLETYPES_40X40_BOSSMODE = '../maps/icons/battleTypes/40x40/bossMode.png'
     MAPS_ICONS_BATTLETYPES_40X40_ESPORT = '../maps/icons/battleTypes/40x40/eSport.png'
     MAPS_ICONS_BATTLETYPES_40X40_EVENT = '../maps/icons/battleTypes/40x40/event.png'
     MAPS_ICONS_BATTLETYPES_40X40_EVENTSQUAD = '../maps/icons/battleTypes/40x40/eventSquad.png'
@@ -307,6 +335,7 @@ class RES_ICONS(object):
     MAPS_ICONS_BATTLETYPES_40X40_FALLOUT_CLASSIC = '../maps/icons/battleTypes/40x40/fallout_classic.png'
     MAPS_ICONS_BATTLETYPES_40X40_FALLOUT_MULTITEAM = '../maps/icons/battleTypes/40x40/fallout_multiteam.png'
     MAPS_ICONS_BATTLETYPES_40X40_FORT = '../maps/icons/battleTypes/40x40/fort.png'
+    MAPS_ICONS_BATTLETYPES_40X40_HALLOWEENPVP = '../maps/icons/battleTypes/40x40/halloweenPVP.png'
     MAPS_ICONS_BATTLETYPES_40X40_HISTORICAL = '../maps/icons/battleTypes/40x40/historical.png'
     MAPS_ICONS_BATTLETYPES_40X40_RANDOM = '../maps/icons/battleTypes/40x40/random.png'
     MAPS_ICONS_BATTLETYPES_40X40_RANKED = '../maps/icons/battleTypes/40x40/ranked.png'
@@ -316,6 +345,7 @@ class RES_ICONS(object):
     MAPS_ICONS_BATTLETYPES_40X40_TRAININGSLIST = '../maps/icons/battleTypes/40x40/trainingsList.png'
     MAPS_ICONS_BATTLETYPES_40X40_TUTORIAL = '../maps/icons/battleTypes/40x40/tutorial.png'
     MAPS_ICONS_BATTLETYPES_64X64_BATTLETEACHING = '../maps/icons/battleTypes/64x64/battleTeaching.png'
+    MAPS_ICONS_BATTLETYPES_64X64_BOSSMODE = '../maps/icons/battleTypes/64x64/bossMode.png'
     MAPS_ICONS_BATTLETYPES_64X64_ESPORT = '../maps/icons/battleTypes/64x64/eSport.png'
     MAPS_ICONS_BATTLETYPES_64X64_EVENT = '../maps/icons/battleTypes/64x64/event.png'
     MAPS_ICONS_BATTLETYPES_64X64_EVENTSQUAD = '../maps/icons/battleTypes/64x64/eventSquad.png'
@@ -323,6 +353,7 @@ class RES_ICONS(object):
     MAPS_ICONS_BATTLETYPES_64X64_FALLOUT_CLASSIC = '../maps/icons/battleTypes/64x64/fallout_classic.png'
     MAPS_ICONS_BATTLETYPES_64X64_FALLOUT_MULTITEAM = '../maps/icons/battleTypes/64x64/fallout_multiteam.png'
     MAPS_ICONS_BATTLETYPES_64X64_FORT = '../maps/icons/battleTypes/64x64/fort.png'
+    MAPS_ICONS_BATTLETYPES_64X64_HALLOWEENPVP = '../maps/icons/battleTypes/64x64/halloweenPVP.png'
     MAPS_ICONS_BATTLETYPES_64X64_HISTORICAL = '../maps/icons/battleTypes/64x64/historical.png'
     MAPS_ICONS_BATTLETYPES_64X64_RANDOM = '../maps/icons/battleTypes/64x64/random.png'
     MAPS_ICONS_BATTLETYPES_64X64_RANKED = '../maps/icons/battleTypes/64x64/ranked.png'
@@ -818,6 +849,7 @@ class RES_ICONS(object):
     MAPS_ICONS_FILTERS_NATIONS_ALL = '../maps/icons/filters/nations/all.png'
     MAPS_ICONS_FILTERS_NATIONS_CHINA = '../maps/icons/filters/nations/china.png'
     MAPS_ICONS_FILTERS_NATIONS_CZECH = '../maps/icons/filters/nations/czech.png'
+    MAPS_ICONS_FILTERS_NATIONS_EVENT = '../maps/icons/filters/nations/event.png'
     MAPS_ICONS_FILTERS_NATIONS_FRANCE = '../maps/icons/filters/nations/france.png'
     MAPS_ICONS_FILTERS_NATIONS_GERMANY = '../maps/icons/filters/nations/germany.png'
     MAPS_ICONS_FILTERS_NATIONS_IGR = '../maps/icons/filters/nations/igr.png'
@@ -846,6 +878,10 @@ class RES_ICONS(object):
     MAPS_ICONS_FILTERS_TANKS_SPG = '../maps/icons/filters/tanks/SPG.png'
     MAPS_ICONS_FORMATION_CLAN = '../maps/icons/formation/clan.png'
     MAPS_ICONS_FORMATION_SQUAD = '../maps/icons/formation/squad.png'
+    MAPS_ICONS_HALLOWEEN_SUPPLYDROPS_1 = '../maps/icons/halloween/supplydrops/1.png'
+    MAPS_ICONS_HALLOWEEN_SUPPLYDROPS_2 = '../maps/icons/halloween/supplydrops/2.png'
+    MAPS_ICONS_HALLOWEEN_SUPPLYDROPS_3 = '../maps/icons/halloween/supplydrops/3.png'
+    MAPS_ICONS_HALLOWEEN_SUPPLYDROPS_4 = '../maps/icons/halloween/supplydrops/4.png'
     MAPS_ICONS_HANGARTUTORIAL_AMMOSLIDER = '../maps/icons/hangarTutorial/ammoSlider.png'
     MAPS_ICONS_HANGARTUTORIAL_BUYBUTTON = '../maps/icons/hangarTutorial/buyButton.png'
     MAPS_ICONS_HANGARTUTORIAL_COMMONTANK = '../maps/icons/hangarTutorial/commonTank.png'
@@ -1424,7 +1460,9 @@ class RES_ICONS(object):
     MAPS_ICONS_LIBRARY_OUTLINE_PLUS = '../maps/icons/library/outline/plus.png'
     MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ALL_DONE = '../maps/icons/library/outline/quests_all_done.png'
     MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE = '../maps/icons/library/outline/quests_available.png'
+    MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE_HALLOWEEN = '../maps/icons/library/outline/quests_available_halloween.png'
     MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED = '../maps/icons/library/outline/quests_disabled.png'
+    MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED_HALLOWEEN = '../maps/icons/library/outline/quests_disabled_halloween.png'
     MAPS_ICONS_LIBRARY_OUTLINE_REWARD = '../maps/icons/library/outline/reward.png'
     MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_1 = '../maps/icons/library/proficiency/class_icons_1.png'
     MAPS_ICONS_LIBRARY_PROFICIENCY_CLASS_ICONS_1_SMALL = '../maps/icons/library/proficiency/class_icons_1_small.png'
@@ -1490,6 +1528,7 @@ class RES_ICONS(object):
     MAPS_ICONS_MAP_112_EIFFEL_TOWER_CTF = '../maps/icons/map/112_eiffel_tower_ctf.png'
     MAPS_ICONS_MAP_114_CZECH = '../maps/icons/map/114_czech.png'
     MAPS_ICONS_MAP_11_MUROVANKA = '../maps/icons/map/11_murovanka.png'
+    MAPS_ICONS_MAP_120_KHARKIV_HALLOWEEN = '../maps/icons/map/120_kharkiv_halloween.png'
     MAPS_ICONS_MAP_13_ERLENBERG = '../maps/icons/map/13_erlenberg.png'
     MAPS_ICONS_MAP_14_SIEGFRIED_LINE = '../maps/icons/map/14_siegfried_line.png'
     MAPS_ICONS_MAP_17_MUNCHEN = '../maps/icons/map/17_munchen.png'
@@ -1534,6 +1573,7 @@ class RES_ICONS(object):
     MAPS_ICONS_MAP_BATTLELOADING_112_EIFFEL_TOWER_CTF = '../maps/icons/map/battleLoading/112_eiffel_tower_ctf.png'
     MAPS_ICONS_MAP_BATTLELOADING_114_CZECH = '../maps/icons/map/battleLoading/114_czech.png'
     MAPS_ICONS_MAP_BATTLELOADING_11_MUROVANKA = '../maps/icons/map/battleLoading/11_murovanka.png'
+    MAPS_ICONS_MAP_BATTLELOADING_120_KHARKIV_HALLOWEEN = '../maps/icons/map/battleLoading/120_kharkiv_halloween.png'
     MAPS_ICONS_MAP_BATTLELOADING_13_ERLENBERG = '../maps/icons/map/battleLoading/13_erlenberg.png'
     MAPS_ICONS_MAP_BATTLELOADING_14_SIEGFRIED_LINE = '../maps/icons/map/battleLoading/14_siegfried_line.png'
     MAPS_ICONS_MAP_BATTLELOADING_17_MUNCHEN = '../maps/icons/map/battleLoading/17_munchen.png'
@@ -1626,6 +1666,7 @@ class RES_ICONS(object):
     MAPS_ICONS_MAP_STATS_112_EIFFEL_TOWER_CTF = '../maps/icons/map/stats/112_eiffel_tower_ctf.png'
     MAPS_ICONS_MAP_STATS_114_CZECH = '../maps/icons/map/stats/114_czech.png'
     MAPS_ICONS_MAP_STATS_11_MUROVANKA = '../maps/icons/map/stats/11_murovanka.png'
+    MAPS_ICONS_MAP_STATS_120_KHARKIV_HALLOWEEN = '../maps/icons/map/stats/120_kharkiv_halloween.png'
     MAPS_ICONS_MAP_STATS_13_ERLENBERG = '../maps/icons/map/stats/13_erlenberg.png'
     MAPS_ICONS_MAP_STATS_14_SIEGFRIED_LINE = '../maps/icons/map/stats/14_siegfried_line.png'
     MAPS_ICONS_MAP_STATS_17_MUNCHEN = '../maps/icons/map/stats/17_munchen.png'
@@ -1909,6 +1950,8 @@ class RES_ICONS(object):
     MAPS_ICONS_QUESTS_TANKMANFEMALEORANGE = '../maps/icons/quests/tankmanFemaleOrange.png'
     MAPS_ICONS_QUESTS_TOKEN128 = '../maps/icons/quests/token128.png'
     MAPS_ICONS_QUESTS_TOKEN16 = '../maps/icons/quests/token16.png'
+    MAPS_ICONS_QUESTS_AWARDS_HALLOWEEN_MISSION_SUCCESS_BG = '../maps/icons/quests/awards/halloween_mission_success_bg.png'
+    MAPS_ICONS_QUESTS_AWARDS_HALLOWEEN_REWARD_BOX_BG = '../maps/icons/quests/awards/halloween_reward_box_bg.png'
     MAPS_ICONS_QUESTS_AWARDS_MISSION_AWARD_BG = '../maps/icons/quests/awards/mission_award_bg.png'
     MAPS_ICONS_QUESTS_AWARDS_TILE_1_1_AWARD_BG = '../maps/icons/quests/awards/tile_1_1_award_bg.png'
     MAPS_ICONS_QUESTS_AWARDS_TILE_1_2_AWARD_BG = '../maps/icons/quests/awards/tile_1_2_award_bg.png'
@@ -1935,6 +1978,7 @@ class RES_ICONS(object):
     MAPS_ICONS_QUESTS_BATTLECONDITION_128_ICON_BATTLE_CONDITION_FOLDER_128X128 = '../maps/icons/quests/battleCondition/128/icon_battle_condition_folder_128x128.png'
     MAPS_ICONS_QUESTS_BATTLECONDITION_128_ICON_BATTLE_CONDITION_GET_DAMAGE_128X128 = '../maps/icons/quests/battleCondition/128/icon_battle_condition_get_damage_128x128.png'
     MAPS_ICONS_QUESTS_BATTLECONDITION_128_ICON_BATTLE_CONDITION_GET_HIT_128X128 = '../maps/icons/quests/battleCondition/128/icon_battle_condition_get_hit_128x128.png'
+    MAPS_ICONS_QUESTS_BATTLECONDITION_128_ICON_BATTLE_CONDITION_HEALTH_128X128 = '../maps/icons/quests/battleCondition/128/icon_battle_condition_health_128x128.png'
     MAPS_ICONS_QUESTS_BATTLECONDITION_128_ICON_BATTLE_CONDITION_HIT_128X128 = '../maps/icons/quests/battleCondition/128/icon_battle_condition_hit_128x128.png'
     MAPS_ICONS_QUESTS_BATTLECONDITION_128_ICON_BATTLE_CONDITION_HURT_1SHOT_128X128 = '../maps/icons/quests/battleCondition/128/icon_battle_condition_hurt_1shot_128x128.png'
     MAPS_ICONS_QUESTS_BATTLECONDITION_128_ICON_BATTLE_CONDITION_HURT_VEHICLES_128X128 = '../maps/icons/quests/battleCondition/128/icon_battle_condition_hurt_vehicles_128x128.png'
@@ -1971,6 +2015,7 @@ class RES_ICONS(object):
     MAPS_ICONS_QUESTS_BATTLECONDITION_90_ICON_BATTLE_CONDITION_FOLDER_90X90 = '../maps/icons/quests/battleCondition/90/icon_battle_condition_folder_90x90.png'
     MAPS_ICONS_QUESTS_BATTLECONDITION_90_ICON_BATTLE_CONDITION_GET_DAMAGE_90X90 = '../maps/icons/quests/battleCondition/90/icon_battle_condition_get_damage_90x90.png'
     MAPS_ICONS_QUESTS_BATTLECONDITION_90_ICON_BATTLE_CONDITION_GET_HIT_90X90 = '../maps/icons/quests/battleCondition/90/icon_battle_condition_get_hit_90x90.png'
+    MAPS_ICONS_QUESTS_BATTLECONDITION_90_ICON_BATTLE_CONDITION_HEALTH_90X90 = '../maps/icons/quests/battleCondition/90/icon_battle_condition_health_90x90.png'
     MAPS_ICONS_QUESTS_BATTLECONDITION_90_ICON_BATTLE_CONDITION_HIT_90X90 = '../maps/icons/quests/battleCondition/90/icon_battle_condition_hit_90x90.png'
     MAPS_ICONS_QUESTS_BATTLECONDITION_90_ICON_BATTLE_CONDITION_HURT_1SHOT_90X90 = '../maps/icons/quests/battleCondition/90/icon_battle_condition_hurt_1shot_90x90.png'
     MAPS_ICONS_QUESTS_BATTLECONDITION_90_ICON_BATTLE_CONDITION_HURT_VEHICLES_90X90 = '../maps/icons/quests/battleCondition/90/icon_battle_condition_hurt_vehicles_90x90.png'
@@ -2041,6 +2086,10 @@ class RES_ICONS(object):
     MAPS_ICONS_QUESTS_BONUSES_BIG_GERMANY_G105_T_55_NVA_DDR = '../maps/icons/quests/bonuses/big/germany-G105_T-55_NVA_DDR.png'
     MAPS_ICONS_QUESTS_BONUSES_BIG_GOLD = '../maps/icons/quests/bonuses/big/gold.png'
     MAPS_ICONS_QUESTS_BONUSES_BIG_GROUSERS = '../maps/icons/quests/bonuses/big/grousers.png'
+    MAPS_ICONS_QUESTS_BONUSES_BIG_HALLOWEEN_DROP_1 = '../maps/icons/quests/bonuses/big/halloween_drop_1.png'
+    MAPS_ICONS_QUESTS_BONUSES_BIG_HALLOWEEN_DROP_2 = '../maps/icons/quests/bonuses/big/halloween_drop_2.png'
+    MAPS_ICONS_QUESTS_BONUSES_BIG_HALLOWEEN_DROP_3 = '../maps/icons/quests/bonuses/big/halloween_drop_3.png'
+    MAPS_ICONS_QUESTS_BONUSES_BIG_HALLOWEEN_DROP_4 = '../maps/icons/quests/bonuses/big/halloween_drop_4.png'
     MAPS_ICONS_QUESTS_BONUSES_BIG_HANDEXTINGUISHERS = '../maps/icons/quests/bonuses/big/handExtinguishers.png'
     MAPS_ICONS_QUESTS_BONUSES_BIG_HOTCOFFEE = '../maps/icons/quests/bonuses/big/hotCoffee.png'
     MAPS_ICONS_QUESTS_BONUSES_BIG_IMPROVEDVENTILATION = '../maps/icons/quests/bonuses/big/improvedVentilation.png'
@@ -2136,6 +2185,10 @@ class RES_ICONS(object):
     MAPS_ICONS_QUESTS_BONUSES_SMALL_GASOLINE105 = '../maps/icons/quests/bonuses/small/gasoline105.png'
     MAPS_ICONS_QUESTS_BONUSES_SMALL_GOLD = '../maps/icons/quests/bonuses/small/gold.png'
     MAPS_ICONS_QUESTS_BONUSES_SMALL_GROUSERS = '../maps/icons/quests/bonuses/small/grousers.png'
+    MAPS_ICONS_QUESTS_BONUSES_SMALL_HALLOWEEN_DROP_1 = '../maps/icons/quests/bonuses/small/halloween_drop_1.png'
+    MAPS_ICONS_QUESTS_BONUSES_SMALL_HALLOWEEN_DROP_2 = '../maps/icons/quests/bonuses/small/halloween_drop_2.png'
+    MAPS_ICONS_QUESTS_BONUSES_SMALL_HALLOWEEN_DROP_3 = '../maps/icons/quests/bonuses/small/halloween_drop_3.png'
+    MAPS_ICONS_QUESTS_BONUSES_SMALL_HALLOWEEN_DROP_4 = '../maps/icons/quests/bonuses/small/halloween_drop_4.png'
     MAPS_ICONS_QUESTS_BONUSES_SMALL_HANDEXTINGUISHERS = '../maps/icons/quests/bonuses/small/handExtinguishers.png'
     MAPS_ICONS_QUESTS_BONUSES_SMALL_HOTCOFFEE = '../maps/icons/quests/bonuses/small/hotCoffee.png'
     MAPS_ICONS_QUESTS_BONUSES_SMALL_IMPROVEDVENTILATION = '../maps/icons/quests/bonuses/small/improvedVentilation.png'
@@ -2204,6 +2257,7 @@ class RES_ICONS(object):
     MAPS_ICONS_QUESTS_PREBATTLECONDITIONS_21 = '../maps/icons/quests/prebattleConditions/21.png'
     MAPS_ICONS_QUESTS_PREBATTLECONDITIONS_22 = '../maps/icons/quests/prebattleConditions/22.png'
     MAPS_ICONS_QUESTS_PREBATTLECONDITIONS_24 = '../maps/icons/quests/prebattleConditions/24.png'
+    MAPS_ICONS_QUESTS_PREBATTLECONDITIONS_26 = '../maps/icons/quests/prebattleConditions/26.png'
     MAPS_ICONS_QUESTS_PREBATTLECONDITIONS_3 = '../maps/icons/quests/prebattleConditions/3.png'
     MAPS_ICONS_QUESTS_PREBATTLECONDITIONS_4 = '../maps/icons/quests/prebattleConditions/4.png'
     MAPS_ICONS_QUESTS_PREBATTLECONDITIONS_5 = '../maps/icons/quests/prebattleConditions/5.png'
@@ -2653,6 +2707,16 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_GERMANY_FEMALE_7 = '../maps/icons/tankmen/icons/barracks/germany-female-7.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_GERMANY_FEMALE_8 = '../maps/icons/tankmen/icons/barracks/germany-female-8.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_GERMANY_FEMALE_9 = '../maps/icons/tankmen/icons/barracks/germany-female-9.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_HALLOWEEN_1 = '../maps/icons/tankmen/icons/barracks/halloween-1.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_HALLOWEEN_10 = '../maps/icons/tankmen/icons/barracks/halloween-10.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_HALLOWEEN_2 = '../maps/icons/tankmen/icons/barracks/halloween-2.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_HALLOWEEN_3 = '../maps/icons/tankmen/icons/barracks/halloween-3.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_HALLOWEEN_4 = '../maps/icons/tankmen/icons/barracks/halloween-4.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_HALLOWEEN_5 = '../maps/icons/tankmen/icons/barracks/halloween-5.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_HALLOWEEN_6 = '../maps/icons/tankmen/icons/barracks/halloween-6.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_HALLOWEEN_7 = '../maps/icons/tankmen/icons/barracks/halloween-7.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_HALLOWEEN_8 = '../maps/icons/tankmen/icons/barracks/halloween-8.png'
+    MAPS_ICONS_TANKMEN_ICONS_BARRACKS_HALLOWEEN_9 = '../maps/icons/tankmen/icons/barracks/halloween-9.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_JAPAN_1 = '../maps/icons/tankmen/icons/barracks/japan-1.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_JAPAN_10 = '../maps/icons/tankmen/icons/barracks/japan-10.png'
     MAPS_ICONS_TANKMEN_ICONS_BARRACKS_JAPAN_11 = '../maps/icons/tankmen/icons/barracks/japan-11.png'
@@ -3137,6 +3201,16 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_BIG_GERMANY_FEMALE_7 = '../maps/icons/tankmen/icons/big/germany-female-7.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_GERMANY_FEMALE_8 = '../maps/icons/tankmen/icons/big/germany-female-8.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_GERMANY_FEMALE_9 = '../maps/icons/tankmen/icons/big/germany-female-9.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_HALLOWEEN_1 = '../maps/icons/tankmen/icons/big/halloween-1.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_HALLOWEEN_10 = '../maps/icons/tankmen/icons/big/halloween-10.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_HALLOWEEN_2 = '../maps/icons/tankmen/icons/big/halloween-2.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_HALLOWEEN_3 = '../maps/icons/tankmen/icons/big/halloween-3.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_HALLOWEEN_4 = '../maps/icons/tankmen/icons/big/halloween-4.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_HALLOWEEN_5 = '../maps/icons/tankmen/icons/big/halloween-5.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_HALLOWEEN_6 = '../maps/icons/tankmen/icons/big/halloween-6.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_HALLOWEEN_7 = '../maps/icons/tankmen/icons/big/halloween-7.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_HALLOWEEN_8 = '../maps/icons/tankmen/icons/big/halloween-8.png'
+    MAPS_ICONS_TANKMEN_ICONS_BIG_HALLOWEEN_9 = '../maps/icons/tankmen/icons/big/halloween-9.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_JAPAN_1 = '../maps/icons/tankmen/icons/big/japan-1.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_JAPAN_10 = '../maps/icons/tankmen/icons/big/japan-10.png'
     MAPS_ICONS_TANKMEN_ICONS_BIG_JAPAN_11 = '../maps/icons/tankmen/icons/big/japan-11.png'
@@ -3622,6 +3696,16 @@ class RES_ICONS(object):
     MAPS_ICONS_TANKMEN_ICONS_SMALL_GERMANY_FEMALE_7 = '../maps/icons/tankmen/icons/small/germany-female-7.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_GERMANY_FEMALE_8 = '../maps/icons/tankmen/icons/small/germany-female-8.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_GERMANY_FEMALE_9 = '../maps/icons/tankmen/icons/small/germany-female-9.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_HALLOWEEN_1 = '../maps/icons/tankmen/icons/small/halloween-1.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_HALLOWEEN_10 = '../maps/icons/tankmen/icons/small/halloween-10.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_HALLOWEEN_2 = '../maps/icons/tankmen/icons/small/halloween-2.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_HALLOWEEN_3 = '../maps/icons/tankmen/icons/small/halloween-3.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_HALLOWEEN_4 = '../maps/icons/tankmen/icons/small/halloween-4.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_HALLOWEEN_5 = '../maps/icons/tankmen/icons/small/halloween-5.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_HALLOWEEN_6 = '../maps/icons/tankmen/icons/small/halloween-6.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_HALLOWEEN_7 = '../maps/icons/tankmen/icons/small/halloween-7.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_HALLOWEEN_8 = '../maps/icons/tankmen/icons/small/halloween-8.png'
+    MAPS_ICONS_TANKMEN_ICONS_SMALL_HALLOWEEN_9 = '../maps/icons/tankmen/icons/small/halloween-9.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_JAPAN_1 = '../maps/icons/tankmen/icons/small/japan-1.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_JAPAN_10 = '../maps/icons/tankmen/icons/small/japan-10.png'
     MAPS_ICONS_TANKMEN_ICONS_SMALL_JAPAN_11 = '../maps/icons/tankmen/icons/small/japan-11.png'
@@ -4003,62 +4087,90 @@ class RES_ICONS(object):
     MAPS_ICONS_VEHICLETYPES_RED_SPG = '../maps/icons/vehicleTypes/red/spg.png'
     MAPS_ICONS_VEHPARAMS_ICON_DECREASE = '../maps/icons/vehParams/icon_decrease.png'
     MAPS_ICONS_VEHPARAMS_BIG_AIMINGTIME = '../maps/icons/vehParams/big/aimingTime.png'
+    MAPS_ICONS_VEHPARAMS_BIG_AIMINGTIME_SECONDARY = '../maps/icons/vehParams/big/aimingTime_Secondary.png'
     MAPS_ICONS_VEHPARAMS_BIG_AVGDAMAGE = '../maps/icons/vehParams/big/avgDamage.png'
     MAPS_ICONS_VEHPARAMS_BIG_AVGDAMAGEPERMINUTE = '../maps/icons/vehParams/big/avgDamagePerMinute.png'
+    MAPS_ICONS_VEHPARAMS_BIG_AVGDAMAGEPERMINUTE_SECONDARY = '../maps/icons/vehParams/big/avgDamagePerMinute_Secondary.png'
+    MAPS_ICONS_VEHPARAMS_BIG_AVGDAMAGE_SECONDARY = '../maps/icons/vehParams/big/avgDamage_Secondary.png'
     MAPS_ICONS_VEHPARAMS_BIG_AVGPIERCINGPOWER = '../maps/icons/vehParams/big/avgPiercingPower.png'
+    MAPS_ICONS_VEHPARAMS_BIG_AVGPIERCINGPOWER_SECONDARY = '../maps/icons/vehParams/big/avgPiercingPower_Secondary.png'
     MAPS_ICONS_VEHPARAMS_BIG_CHASSISROTATIONSPEED = '../maps/icons/vehParams/big/chassisRotationSpeed.png'
     MAPS_ICONS_VEHPARAMS_BIG_CIRCULARVISIONRADIUS = '../maps/icons/vehParams/big/circularVisionRadius.png'
     MAPS_ICONS_VEHPARAMS_BIG_CLIPFIRERATE = '../maps/icons/vehParams/big/clipFireRate.png'
+    MAPS_ICONS_VEHPARAMS_BIG_CLIPFIRERATE_SECONDARY = '../maps/icons/vehParams/big/clipFireRate_Secondary.png'
     MAPS_ICONS_VEHPARAMS_BIG_ENGINEPOWER = '../maps/icons/vehParams/big/enginePower.png'
     MAPS_ICONS_VEHPARAMS_BIG_ENGINEPOWERPERTON = '../maps/icons/vehParams/big/enginePowerPerTon.png'
     MAPS_ICONS_VEHPARAMS_BIG_GUNROTATIONSPEED = '../maps/icons/vehParams/big/gunRotationSpeed.png'
     MAPS_ICONS_VEHPARAMS_BIG_GUNYAWLIMITS = '../maps/icons/vehParams/big/gunYawLimits.png'
+    MAPS_ICONS_VEHPARAMS_BIG_GUNYAWLIMITS_SECONDARY = '../maps/icons/vehParams/big/gunYawLimits_Secondary.png'
     MAPS_ICONS_VEHPARAMS_BIG_HULLARMOR = '../maps/icons/vehParams/big/hullArmor.png'
     MAPS_ICONS_VEHPARAMS_BIG_INVISIBILITYMOVINGFACTOR = '../maps/icons/vehParams/big/invisibilityMovingFactor.png'
     MAPS_ICONS_VEHPARAMS_BIG_INVISIBILITYSTILLFACTOR = '../maps/icons/vehParams/big/invisibilityStillFactor.png'
     MAPS_ICONS_VEHPARAMS_BIG_MAXHEALTH = '../maps/icons/vehParams/big/maxHealth.png'
     MAPS_ICONS_VEHPARAMS_BIG_PITCHLIMITS = '../maps/icons/vehParams/big/pitchLimits.png'
+    MAPS_ICONS_VEHPARAMS_BIG_PITCHLIMITS_SECONDARY = '../maps/icons/vehParams/big/pitchLimits_Secondary.png'
     MAPS_ICONS_VEHPARAMS_BIG_RADIODISTANCE = '../maps/icons/vehParams/big/radioDistance.png'
     MAPS_ICONS_VEHPARAMS_BIG_RELOADTIME = '../maps/icons/vehParams/big/reloadTime.png'
     MAPS_ICONS_VEHPARAMS_BIG_RELOADTIMESECS = '../maps/icons/vehParams/big/reloadTimeSecs.png'
+    MAPS_ICONS_VEHPARAMS_BIG_RELOADTIMESECS_SECONDARY = '../maps/icons/vehParams/big/reloadTimeSecs_Secondary.png'
+    MAPS_ICONS_VEHPARAMS_BIG_RELOADTIME_SECONDARY = '../maps/icons/vehParams/big/reloadTime_Secondary.png'
     MAPS_ICONS_VEHPARAMS_BIG_SHOTDISPERSIONANGLE = '../maps/icons/vehParams/big/shotDispersionAngle.png'
+    MAPS_ICONS_VEHPARAMS_BIG_SHOTDISPERSIONANGLE_SECONDARY = '../maps/icons/vehParams/big/shotDispersionAngle_Secondary.png'
     MAPS_ICONS_VEHPARAMS_BIG_SPEEDLIMITS = '../maps/icons/vehParams/big/speedLimits.png'
     MAPS_ICONS_VEHPARAMS_BIG_STUNMAXDURATION = '../maps/icons/vehParams/big/stunMaxDuration.png'
     MAPS_ICONS_VEHPARAMS_BIG_STUNMINDURATION = '../maps/icons/vehParams/big/stunMinDuration.png'
     MAPS_ICONS_VEHPARAMS_BIG_SWITCHOFFTIME = '../maps/icons/vehParams/big/switchOffTime.png'
     MAPS_ICONS_VEHPARAMS_BIG_SWITCHONTIME = '../maps/icons/vehParams/big/switchOnTime.png'
     MAPS_ICONS_VEHPARAMS_BIG_TURRETARMOR = '../maps/icons/vehParams/big/turretArmor.png'
+    MAPS_ICONS_VEHPARAMS_BIG_TURRETARMOR_PRIMARY = '../maps/icons/vehParams/big/turretArmor_Primary.png'
+    MAPS_ICONS_VEHPARAMS_BIG_TURRETARMOR_SECONDARY = '../maps/icons/vehParams/big/turretArmor_Secondary.png'
     MAPS_ICONS_VEHPARAMS_BIG_TURRETROTATIONSPEED = '../maps/icons/vehParams/big/turretRotationSpeed.png'
+    MAPS_ICONS_VEHPARAMS_BIG_TURRETROTATIONSPEED_SECONDARY = '../maps/icons/vehParams/big/turretRotationSpeed_Secondary.png'
     MAPS_ICONS_VEHPARAMS_BIG_TURRETYAWLIMITS = '../maps/icons/vehParams/big/turretYawLimits.png'
+    MAPS_ICONS_VEHPARAMS_BIG_TURRETYAWLIMITS_SECONDARY = '../maps/icons/vehParams/big/turretYawLimits_Secondary.png'
     MAPS_ICONS_VEHPARAMS_BIG_VEHICLEWEIGHT = '../maps/icons/vehParams/big/vehicleWeight.png'
     MAPS_ICONS_VEHPARAMS_SMALL_AIMINGTIME = '../maps/icons/vehParams/small/aimingTime.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_AIMINGTIME_SECONDARY = '../maps/icons/vehParams/small/aimingTime_Secondary.png'
     MAPS_ICONS_VEHPARAMS_SMALL_AVGDAMAGE = '../maps/icons/vehParams/small/avgDamage.png'
     MAPS_ICONS_VEHPARAMS_SMALL_AVGDAMAGEPERMINUTE = '../maps/icons/vehParams/small/avgDamagePerMinute.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_AVGDAMAGEPERMINUTE_SECONDARY = '../maps/icons/vehParams/small/avgDamagePerMinute_Secondary.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_AVGDAMAGE_SECONDARY = '../maps/icons/vehParams/small/avgDamage_Secondary.png'
     MAPS_ICONS_VEHPARAMS_SMALL_AVGPIERCINGPOWER = '../maps/icons/vehParams/small/avgPiercingPower.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_AVGPIERCINGPOWER_SECONDARY = '../maps/icons/vehParams/small/avgPiercingPower_Secondary.png'
     MAPS_ICONS_VEHPARAMS_SMALL_CHASSISROTATIONSPEED = '../maps/icons/vehParams/small/chassisRotationSpeed.png'
     MAPS_ICONS_VEHPARAMS_SMALL_CIRCULARVISIONRADIUS = '../maps/icons/vehParams/small/circularVisionRadius.png'
     MAPS_ICONS_VEHPARAMS_SMALL_CLIPFIRERATE = '../maps/icons/vehParams/small/clipFireRate.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_CLIPFIRERATE_SECONDARY = '../maps/icons/vehParams/small/clipFireRate_Secondary.png'
     MAPS_ICONS_VEHPARAMS_SMALL_ENGINEPOWER = '../maps/icons/vehParams/small/enginePower.png'
     MAPS_ICONS_VEHPARAMS_SMALL_ENGINEPOWERPERTON = '../maps/icons/vehParams/small/enginePowerPerTon.png'
     MAPS_ICONS_VEHPARAMS_SMALL_GUNROTATIONSPEED = '../maps/icons/vehParams/small/gunRotationSpeed.png'
     MAPS_ICONS_VEHPARAMS_SMALL_GUNYAWLIMITS = '../maps/icons/vehParams/small/gunYawLimits.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_GUNYAWLIMITS_SECONDARY = '../maps/icons/vehParams/small/gunYawLimits_Secondary.png'
     MAPS_ICONS_VEHPARAMS_SMALL_HULLARMOR = '../maps/icons/vehParams/small/hullArmor.png'
     MAPS_ICONS_VEHPARAMS_SMALL_INVISIBILITYMOVINGFACTOR = '../maps/icons/vehParams/small/invisibilityMovingFactor.png'
     MAPS_ICONS_VEHPARAMS_SMALL_INVISIBILITYSTILLFACTOR = '../maps/icons/vehParams/small/invisibilityStillFactor.png'
     MAPS_ICONS_VEHPARAMS_SMALL_MAXHEALTH = '../maps/icons/vehParams/small/maxHealth.png'
     MAPS_ICONS_VEHPARAMS_SMALL_PITCHLIMITS = '../maps/icons/vehParams/small/pitchLimits.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_PITCHLIMITS_SECONDARY = '../maps/icons/vehParams/small/pitchLimits_Secondary.png'
     MAPS_ICONS_VEHPARAMS_SMALL_RADIODISTANCE = '../maps/icons/vehParams/small/radioDistance.png'
     MAPS_ICONS_VEHPARAMS_SMALL_RELOADTIME = '../maps/icons/vehParams/small/reloadTime.png'
     MAPS_ICONS_VEHPARAMS_SMALL_RELOADTIMESECS = '../maps/icons/vehParams/small/reloadTimeSecs.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_RELOADTIMESECS_SECONDARY = '../maps/icons/vehParams/small/reloadTimeSecs_Secondary.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_RELOADTIME_SECONDARY = '../maps/icons/vehParams/small/reloadTime_Secondary.png'
     MAPS_ICONS_VEHPARAMS_SMALL_SHOTDISPERSIONANGLE = '../maps/icons/vehParams/small/shotDispersionAngle.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_SHOTDISPERSIONANGLE_SECONDARY = '../maps/icons/vehParams/small/shotDispersionAngle_Secondary.png'
     MAPS_ICONS_VEHPARAMS_SMALL_SPEEDLIMITS = '../maps/icons/vehParams/small/speedLimits.png'
     MAPS_ICONS_VEHPARAMS_SMALL_STUNMAXDURATION = '../maps/icons/vehParams/small/stunMaxDuration.png'
     MAPS_ICONS_VEHPARAMS_SMALL_STUNMINDURATION = '../maps/icons/vehParams/small/stunMinDuration.png'
     MAPS_ICONS_VEHPARAMS_SMALL_SWITCHOFFTIME = '../maps/icons/vehParams/small/switchOffTime.png'
     MAPS_ICONS_VEHPARAMS_SMALL_SWITCHONTIME = '../maps/icons/vehParams/small/switchOnTime.png'
     MAPS_ICONS_VEHPARAMS_SMALL_TURRETARMOR = '../maps/icons/vehParams/small/turretArmor.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_TURRETARMOR_PRIMARY = '../maps/icons/vehParams/small/turretArmor_Primary.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_TURRETARMOR_SECONDARY = '../maps/icons/vehParams/small/turretArmor_Secondary.png'
     MAPS_ICONS_VEHPARAMS_SMALL_TURRETROTATIONSPEED = '../maps/icons/vehParams/small/turretRotationSpeed.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_TURRETROTATIONSPEED_SECONDARY = '../maps/icons/vehParams/small/turretRotationSpeed_Secondary.png'
     MAPS_ICONS_VEHPARAMS_SMALL_TURRETYAWLIMITS = '../maps/icons/vehParams/small/turretYawLimits.png'
+    MAPS_ICONS_VEHPARAMS_SMALL_TURRETYAWLIMITS_SECONDARY = '../maps/icons/vehParams/small/turretYawLimits_Secondary.png'
     MAPS_ICONS_VEHPARAMS_SMALL_VEHICLEWEIGHT = '../maps/icons/vehParams/small/vehicleWeight.png'
     MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_BROTHERHOOD = '../maps/icons/vehParams/tooltips/bonuses/brotherhood.png'
     MAPS_ICONS_VEHPARAMS_TOOLTIPS_BONUSES_BUCHTY = '../maps/icons/vehParams/tooltips/bonuses/buchty.png'
@@ -4121,6 +4233,27 @@ class RES_ICONS(object):
     MAPS_ICONS_WINDOWS_PREM_PREMHEADER = '../maps/icons/windows/prem/premHeader.png'
     MAPS_ICONS_BATTLELOADING_TIPS_ENUM = (MAPS_ICONS_BATTLELOADING_TIPS_EPICRANDOM0,
      MAPS_ICONS_BATTLELOADING_TIPS_EVENT,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE0,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE1,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE2,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE3,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE4,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE5,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE6,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE7,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE8,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE9,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP0,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP1,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP10,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP2,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP3,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP4,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP5,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP6,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP7,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP8,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP9,
      MAPS_ICONS_BATTLELOADING_TIPS_RANKED0,
      MAPS_ICONS_BATTLELOADING_TIPS_RANKED1,
      MAPS_ICONS_BATTLELOADING_TIPS_RANKED10,
@@ -4312,7 +4445,11 @@ class RES_ICONS(object):
      MAPS_ICONS_QUESTS_BONUSES_SMALL_PREMIUM_360,
      MAPS_ICONS_QUESTS_BONUSES_SMALL_PREMIUM_7,
      MAPS_ICONS_QUESTS_BONUSES_SMALL_PREMIUM_90)
-    MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ENUM = (MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ALL_DONE, MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE, MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED)
+    MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ENUM = (MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_ALL_DONE,
+     MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE,
+     MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_AVAILABLE_HALLOWEEN,
+     MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED,
+     MAPS_ICONS_LIBRARY_OUTLINE_QUESTS_DISABLED_HALLOWEEN)
     MAPS_ICONS_MESSENGER_STATUS_ALL_CHAT_ICON_ENUM = (MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_MOB,
      MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_UNKNOWN,
      MAPS_ICONS_MESSENGER_STATUS_24X24_CHAT_ICON_USER_IS_BUSY,
@@ -4468,6 +4605,7 @@ class RES_ICONS(object):
      MAPS_ICONS_QUESTS_BATTLECONDITION_128_ICON_BATTLE_CONDITION_FOLDER_128X128,
      MAPS_ICONS_QUESTS_BATTLECONDITION_128_ICON_BATTLE_CONDITION_GET_DAMAGE_128X128,
      MAPS_ICONS_QUESTS_BATTLECONDITION_128_ICON_BATTLE_CONDITION_GET_HIT_128X128,
+     MAPS_ICONS_QUESTS_BATTLECONDITION_128_ICON_BATTLE_CONDITION_HEALTH_128X128,
      MAPS_ICONS_QUESTS_BATTLECONDITION_128_ICON_BATTLE_CONDITION_HIT_128X128,
      MAPS_ICONS_QUESTS_BATTLECONDITION_128_ICON_BATTLE_CONDITION_HURT_1SHOT_128X128,
      MAPS_ICONS_QUESTS_BATTLECONDITION_128_ICON_BATTLE_CONDITION_HURT_VEHICLES_128X128,
@@ -4504,6 +4642,7 @@ class RES_ICONS(object):
      MAPS_ICONS_QUESTS_BATTLECONDITION_90_ICON_BATTLE_CONDITION_FOLDER_90X90,
      MAPS_ICONS_QUESTS_BATTLECONDITION_90_ICON_BATTLE_CONDITION_GET_DAMAGE_90X90,
      MAPS_ICONS_QUESTS_BATTLECONDITION_90_ICON_BATTLE_CONDITION_GET_HIT_90X90,
+     MAPS_ICONS_QUESTS_BATTLECONDITION_90_ICON_BATTLE_CONDITION_HEALTH_90X90,
      MAPS_ICONS_QUESTS_BATTLECONDITION_90_ICON_BATTLE_CONDITION_HIT_90X90,
      MAPS_ICONS_QUESTS_BATTLECONDITION_90_ICON_BATTLE_CONDITION_HURT_1SHOT_90X90,
      MAPS_ICONS_QUESTS_BATTLECONDITION_90_ICON_BATTLE_CONDITION_HURT_VEHICLES_90X90,
@@ -4582,6 +4721,7 @@ class RES_ICONS(object):
      MAPS_ICONS_MAP_112_EIFFEL_TOWER_CTF,
      MAPS_ICONS_MAP_114_CZECH,
      MAPS_ICONS_MAP_11_MUROVANKA,
+     MAPS_ICONS_MAP_120_KHARKIV_HALLOWEEN,
      MAPS_ICONS_MAP_13_ERLENBERG,
      MAPS_ICONS_MAP_14_SIEGFRIED_LINE,
      MAPS_ICONS_MAP_17_MUNCHEN,
@@ -4626,6 +4766,7 @@ class RES_ICONS(object):
      MAPS_ICONS_MAP_BATTLELOADING_112_EIFFEL_TOWER_CTF,
      MAPS_ICONS_MAP_BATTLELOADING_114_CZECH,
      MAPS_ICONS_MAP_BATTLELOADING_11_MUROVANKA,
+     MAPS_ICONS_MAP_BATTLELOADING_120_KHARKIV_HALLOWEEN,
      MAPS_ICONS_MAP_BATTLELOADING_13_ERLENBERG,
      MAPS_ICONS_MAP_BATTLELOADING_14_SIEGFRIED_LINE,
      MAPS_ICONS_MAP_BATTLELOADING_17_MUNCHEN,
@@ -4718,6 +4859,7 @@ class RES_ICONS(object):
      MAPS_ICONS_MAP_STATS_112_EIFFEL_TOWER_CTF,
      MAPS_ICONS_MAP_STATS_114_CZECH,
      MAPS_ICONS_MAP_STATS_11_MUROVANKA,
+     MAPS_ICONS_MAP_STATS_120_KHARKIV_HALLOWEEN,
      MAPS_ICONS_MAP_STATS_13_ERLENBERG,
      MAPS_ICONS_MAP_STATS_14_SIEGFRIED_LINE,
      MAPS_ICONS_MAP_STATS_17_MUNCHEN,
@@ -4880,6 +5022,10 @@ class RES_ICONS(object):
      MAPS_ICONS_QUESTS_BONUSES_BIG_GERMANY_G105_T_55_NVA_DDR,
      MAPS_ICONS_QUESTS_BONUSES_BIG_GOLD,
      MAPS_ICONS_QUESTS_BONUSES_BIG_GROUSERS,
+     MAPS_ICONS_QUESTS_BONUSES_BIG_HALLOWEEN_DROP_1,
+     MAPS_ICONS_QUESTS_BONUSES_BIG_HALLOWEEN_DROP_2,
+     MAPS_ICONS_QUESTS_BONUSES_BIG_HALLOWEEN_DROP_3,
+     MAPS_ICONS_QUESTS_BONUSES_BIG_HALLOWEEN_DROP_4,
      MAPS_ICONS_QUESTS_BONUSES_BIG_HANDEXTINGUISHERS,
      MAPS_ICONS_QUESTS_BONUSES_BIG_HOTCOFFEE,
      MAPS_ICONS_QUESTS_BONUSES_BIG_IMPROVEDVENTILATION,
@@ -4975,6 +5121,10 @@ class RES_ICONS(object):
      MAPS_ICONS_QUESTS_BONUSES_SMALL_GASOLINE105,
      MAPS_ICONS_QUESTS_BONUSES_SMALL_GOLD,
      MAPS_ICONS_QUESTS_BONUSES_SMALL_GROUSERS,
+     MAPS_ICONS_QUESTS_BONUSES_SMALL_HALLOWEEN_DROP_1,
+     MAPS_ICONS_QUESTS_BONUSES_SMALL_HALLOWEEN_DROP_2,
+     MAPS_ICONS_QUESTS_BONUSES_SMALL_HALLOWEEN_DROP_3,
+     MAPS_ICONS_QUESTS_BONUSES_SMALL_HALLOWEEN_DROP_4,
      MAPS_ICONS_QUESTS_BONUSES_SMALL_HANDEXTINGUISHERS,
      MAPS_ICONS_QUESTS_BONUSES_SMALL_HOTCOFFEE,
      MAPS_ICONS_QUESTS_BONUSES_SMALL_IMPROVEDVENTILATION,
@@ -5090,6 +5240,10 @@ class RES_ICONS(object):
      MAPS_ICONS_QUESTS_BONUSES_BIG_GERMANY_G105_T_55_NVA_DDR,
      MAPS_ICONS_QUESTS_BONUSES_BIG_GOLD,
      MAPS_ICONS_QUESTS_BONUSES_BIG_GROUSERS,
+     MAPS_ICONS_QUESTS_BONUSES_BIG_HALLOWEEN_DROP_1,
+     MAPS_ICONS_QUESTS_BONUSES_BIG_HALLOWEEN_DROP_2,
+     MAPS_ICONS_QUESTS_BONUSES_BIG_HALLOWEEN_DROP_3,
+     MAPS_ICONS_QUESTS_BONUSES_BIG_HALLOWEEN_DROP_4,
      MAPS_ICONS_QUESTS_BONUSES_BIG_HANDEXTINGUISHERS,
      MAPS_ICONS_QUESTS_BONUSES_BIG_HOTCOFFEE,
      MAPS_ICONS_QUESTS_BONUSES_BIG_IMPROVEDVENTILATION,
@@ -5185,6 +5339,10 @@ class RES_ICONS(object):
      MAPS_ICONS_QUESTS_BONUSES_SMALL_GASOLINE105,
      MAPS_ICONS_QUESTS_BONUSES_SMALL_GOLD,
      MAPS_ICONS_QUESTS_BONUSES_SMALL_GROUSERS,
+     MAPS_ICONS_QUESTS_BONUSES_SMALL_HALLOWEEN_DROP_1,
+     MAPS_ICONS_QUESTS_BONUSES_SMALL_HALLOWEEN_DROP_2,
+     MAPS_ICONS_QUESTS_BONUSES_SMALL_HALLOWEEN_DROP_3,
+     MAPS_ICONS_QUESTS_BONUSES_SMALL_HALLOWEEN_DROP_4,
      MAPS_ICONS_QUESTS_BONUSES_SMALL_HANDEXTINGUISHERS,
      MAPS_ICONS_QUESTS_BONUSES_SMALL_HOTCOFFEE,
      MAPS_ICONS_QUESTS_BONUSES_SMALL_IMPROVEDVENTILATION,
@@ -5242,6 +5400,7 @@ class RES_ICONS(object):
      MAPS_ICONS_QUESTS_PREBATTLECONDITIONS_21,
      MAPS_ICONS_QUESTS_PREBATTLECONDITIONS_22,
      MAPS_ICONS_QUESTS_PREBATTLECONDITIONS_24,
+     MAPS_ICONS_QUESTS_PREBATTLECONDITIONS_26,
      MAPS_ICONS_QUESTS_PREBATTLECONDITIONS_3,
      MAPS_ICONS_QUESTS_PREBATTLECONDITIONS_4,
      MAPS_ICONS_QUESTS_PREBATTLECONDITIONS_5,
@@ -5268,6 +5427,27 @@ class RES_ICONS(object):
      MAPS_ICONS_BATTLELOADING_TIPS_RANKED8,
      MAPS_ICONS_BATTLELOADING_TIPS_RANKED9)
     MAPS_ICONS_BATTLELOADING_TIPS_EPICRANDOM_ENUM = (MAPS_ICONS_BATTLELOADING_TIPS_EPICRANDOM0,)
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE_ENUM = (MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE0,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE1,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE2,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE3,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE4,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE5,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE6,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE7,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE8,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE9)
+    MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP_ENUM = (MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP0,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP1,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP10,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP2,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP3,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP4,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP5,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP6,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP7,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP8,
+     MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP9)
     MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_106X98_TOP_ENUM = (MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_106X98_TOP1,
      MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_106X98_TOP10,
      MAPS_ICONS_RANKEDBATTLES_TOPS_TOP_106X98_TOP11,
@@ -5612,6 +5792,7 @@ class RES_ICONS(object):
     MAPS_ICONS_FILTERS_NATIONS_ENUM = (MAPS_ICONS_FILTERS_NATIONS_ALL,
      MAPS_ICONS_FILTERS_NATIONS_CHINA,
      MAPS_ICONS_FILTERS_NATIONS_CZECH,
+     MAPS_ICONS_FILTERS_NATIONS_EVENT,
      MAPS_ICONS_FILTERS_NATIONS_FRANCE,
      MAPS_ICONS_FILTERS_NATIONS_GERMANY,
      MAPS_ICONS_FILTERS_NATIONS_IGR,
@@ -5976,6 +6157,24 @@ class RES_ICONS(object):
     def getEpicRandomBattleLoadingTipImage(cls, tipNum):
         outcome = '../maps/icons/battleLoading/tips/epicRandom{}.png'.format(tipNum)
         if outcome not in cls.MAPS_ICONS_BATTLELOADING_TIPS_EPICRANDOM_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getHalloweenPVERandomBattleLoadingTipImage(cls, tipNum):
+        outcome = '../maps/icons/battleLoading/tips/halloweenPVE{}.png'.format(tipNum)
+        if outcome not in cls.MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getHalloweenPVPRandomBattleLoadingTipImage(cls, tipNum):
+        outcome = '../maps/icons/battleLoading/tips/halloweenPVP{}.png'.format(tipNum)
+        if outcome not in cls.MAPS_ICONS_BATTLELOADING_TIPS_HALLOWEENPVP_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

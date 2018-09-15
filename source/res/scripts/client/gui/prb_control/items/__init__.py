@@ -90,6 +90,14 @@ class FunctionalState(object):
         """
         return self.funcFlags & FUNCTIONAL_FLAG.FALLOUT > 0
 
+    def isInEventEntity(self):
+        """
+        Are we in event entity of any kind.
+        Returns:
+            are in event entity
+        """
+        return self.funcFlags & FUNCTIONAL_FLAG.EVENT > 0 or self.funcFlags & FUNCTIONAL_FLAG.EVENT_BATTLES_2 > 0
+
     def isQueueSelected(self, queueType):
         """
         Are we in checked queue.
@@ -104,6 +112,8 @@ class FunctionalState(object):
         if self.isInUnit(PREBATTLE_TYPE.SQUAD) and queueType == QUEUE_TYPE.RANDOMS:
             return True
         if self.isInUnit(PREBATTLE_TYPE.EVENT) and queueType == QUEUE_TYPE.EVENT_BATTLES:
+            return True
+        if self.isInUnit(PREBATTLE_TYPE.EVENT_2) and queueType == QUEUE_TYPE.EVENT_BATTLES_2:
             return True
         return True if self.isInUnit(PREBATTLE_TYPE.FALLOUT) and (queueType == QUEUE_TYPE.FALLOUT_CLASSIC and self.rosterType == ROSTER_TYPE.FALLOUT_CLASSIC_ROSTER or queueType == QUEUE_TYPE.FALLOUT_MULTITEAM and self.rosterType == ROSTER_TYPE.FALLOUT_MULTITEAM_ROSTER) else False
 

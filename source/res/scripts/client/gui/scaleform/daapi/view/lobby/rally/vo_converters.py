@@ -110,6 +110,7 @@ def makeVehicleVO(vehicle, levelsRange=None, vehicleTypes=None, isCurrentPlayer=
                 vehicleVO['state'] = makeHtmlString('html_templates:lobby', 'inPremiumIgrOnly')
             else:
                 vehicleVO['state'] = i18n.makeString('#menu:tankCarousel/vehicleStates/%s' % vState)
+        vehicleVO['isEvent'] = True if 'event_battles' in vehicle.tags else False
         if not vehicleVO['isReadyToFight']:
             vehicleVO['enabled'], vehicleVO['tooltip'] = False, makeTooltip('#tooltips:vehicleStatus/%s/header' % vState, '#tooltips:vehicleStatus/body')
         return vehicleVO

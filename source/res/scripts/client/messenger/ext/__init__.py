@@ -42,7 +42,11 @@ def isBattleChatEnabled(common=False):
         guiType = arena.guiType
         if guiType is None:
             return result
-        if guiType in (constants.ARENA_GUI_TYPE.RANDOM, constants.ARENA_GUI_TYPE.RANKED, constants.ARENA_GUI_TYPE.EPIC_RANDOM):
+        if guiType in (constants.ARENA_GUI_TYPE.RANDOM,
+         constants.ARENA_GUI_TYPE.RANKED,
+         constants.ARENA_GUI_TYPE.EPIC_RANDOM,
+         constants.ARENA_GUI_TYPE.EVENT_BATTLES,
+         constants.ARENA_GUI_TYPE.EVENT_BATTLES_2):
             result = not g_settings.userPrefs.disableBattleChat
         if result and common:
             result = arena.bonusType == constants.ARENA_BONUS_TYPE.TRAINING

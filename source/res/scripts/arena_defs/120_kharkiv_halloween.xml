@@ -1,0 +1,593 @@
+<120_kharkiv_halloween.xml>
+  <name>	#arenas:120_kharkiv_halloween/name	</name>
+  <description>	#arenas:120_kharkiv_halloween/description	</description>
+  <geometry>	spaces/120_kharkiv_halloween	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-400.0 -400.0	</bottomLeft>
+    <upperRight>	400.0 400.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/120_kharkiv_halloween/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	winter	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-199.049789 -264.756134	</position1>
+        </team1>
+        <team2>
+          <position1>	249.117920 193.813950	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <leviathan>
+      <winnerIfExtermination>	1	</winnerIfExtermination>
+      <maxPlayersInTeam>	7	</maxPlayersInTeam>
+      <teamSpawnPoints>
+        <team1></team1>
+        <team2></team2>
+      </teamSpawnPoints>
+      <controlPoint>	304.6 -316.4	</controlPoint>
+      <battleScenarios>
+        <level>
+          <id>	1	</id>
+          <scenario>	spaces/120_kharkiv_halloween/bot_scenarios_leviathan.xml	</scenario>
+        </level>
+      </battleScenarios>
+      <bossModes>
+        <botName>	Leviathan	</botName>
+        <team>	2	</team>
+        <phase>
+          <health>	0	</health>
+          <event>	KillCreeps	</event>
+        </phase>
+        <minionEvent>
+          <health>	0	</health>
+          <event>	SpawnHealthPowerup	</event>
+        </minionEvent>
+        <pathProgressData>
+          <pathSegment>	LeviathanPath	  <startingProgressFraction>	0.0	</startingProgressFraction>
+            <endingProgressFraction>	0.05	</endingProgressFraction>
+            <segmentLength>	60	</segmentLength>
+          </pathSegment>
+          <pathSegment>	LeviathanPath2	  <startingProgressFraction>	0.05	</startingProgressFraction>
+            <endingProgressFraction>	0.27	</endingProgressFraction>
+            <segmentLength>	290	</segmentLength>
+          </pathSegment>
+          <pathSegment>	LeviathanPath3	  <startingProgressFraction>	0.05	</startingProgressFraction>
+            <endingProgressFraction>	0.33	</endingProgressFraction>
+            <segmentLength>	290	</segmentLength>
+          </pathSegment>
+          <pathSegment>	LeviathanPath4	  <startingProgressFraction>	0.33	</startingProgressFraction>
+            <endingProgressFraction>	0.94	</endingProgressFraction>
+            <segmentLength>	810	</segmentLength>
+          </pathSegment>
+          <pathSegment>	LeviathanPath5	  <startingProgressFraction>	0.33	</startingProgressFraction>
+            <endingProgressFraction>	0.94	</endingProgressFraction>
+            <segmentLength>	751	</segmentLength>
+          </pathSegment>
+          <pathSegment>	LeviathanPath6	  <startingProgressFraction>	0.27	</startingProgressFraction>
+            <endingProgressFraction>	0.94	</endingProgressFraction>
+            <segmentLength>	840	</segmentLength>
+          </pathSegment>
+          <pathSegment>	LeviathanPath7	  <startingProgressFraction>	0.27	</startingProgressFraction>
+            <endingProgressFraction>	0.94	</endingProgressFraction>
+            <segmentLength>	1105	</segmentLength>
+          </pathSegment>
+          <pathSegment>	LeviathanPath8	  <startingProgressFraction>	0.94	</startingProgressFraction>
+            <endingProgressFraction>	1.00	</endingProgressFraction>
+            <segmentLength>	84	</segmentLength>
+          </pathSegment>
+        </pathProgressData>
+        <mineRadius>	6.5	</mineRadius>
+        <mineDamage>	550	</mineDamage>
+        <mineActivationDelay>	3.3	</mineActivationDelay>
+        <mineModelActivationDelay>	0.4	</mineModelActivationDelay>
+        <mineDuration>	10	</mineDuration>
+        <mineModels>
+          <mineEnter>
+            <model>	particles\content_deferred\GFX_models\environment\120_afterlife\120_afterlife_aoe_crosshair.model	  <action>	MineAction	</action>
+            </model>
+          </mineEnter>
+          <mineActive>
+            <model>	particles\content_deferred\GFX_models\environment\120_afterlife\120_afterlife_aoe_ring.model	</model>
+          </mineActive>
+        </mineModels>
+        <mineEffects>
+          <mineActiveEffect>
+            <timeline>
+              <effectEnd>	55000	</effectEnd>
+            </timeline>
+            <effects>
+              <pixie>
+                <startKey>	start	</startKey>
+                <file>	particles\Strike_Eff\afterlife_grenade_aoe_spawn_idle.xml	</file>
+                <force>	1	</force>
+              </pixie>
+              <sound>
+                <startKey>	start	</startKey>
+                <wwsound>	ev_halloween_landmine_idle	</wwsound>
+                <dynamic>	True	</dynamic>
+              </sound>
+            </effects>
+          </mineActiveEffect>
+          <mineActivationEffect>
+            <timeline>
+              <effectEnd>	1.0	</effectEnd>
+            </timeline>
+            <effects>
+              <pixie>
+                <startKey>	start	</startKey>
+                <file>	particles\Strike_Eff\afterlife_grenade_aoe_activate.xml	</file>
+                <force>	1	</force>
+              </pixie>
+              <sound>
+                <startKey>	start	</startKey>
+                <wwsound>	ev_halloween_landmine_passby	</wwsound>
+                <dynamic>	True	</dynamic>
+              </sound>
+            </effects>
+          </mineActivationEffect>
+          <mineEnterEffect>
+            <timeline>
+              <effectEnd>	55000.0	</effectEnd>
+            </timeline>
+            <effects>
+              <pixie>
+                <startKey>	start	</startKey>
+                <file>	particles\Strike_Eff\afterlife_grenade_aoe_spawn_in.xml	</file>
+                <force>	1	</force>
+              </pixie>
+              <sound>
+                <startKey>	start	</startKey>
+                <wwsound>	ev_halloween_landmine_circle	</wwsound>
+              </sound>
+            </effects>
+          </mineEnterEffect>
+          <mineExitEffect>
+            <timeline>
+              <effectEnd>	1.0	</effectEnd>
+            </timeline>
+            <effects>
+              <pixie>
+                <startKey>	start	</startKey>
+                <file>	particles\Strike_Eff\afterlife_grenade_aoe_spawn_out.xml	</file>
+                <force>	1	</force>
+              </pixie>
+              <sound>
+                <startKey>	start	</startKey>
+                <wwsound>	ev_halloween_landmine_expl	</wwsound>
+              </sound>
+            </effects>
+          </mineExitEffect>
+        </mineEffects>
+        <healthPowerupRadius>	6	</healthPowerupRadius>
+        <healthPowerupDuration>	9000	</healthPowerupDuration>
+        <healthPowerupHealAmount>	350	</healthPowerupHealAmount>
+        <healthPowerupModels>
+          <powerupEnterAndActive>
+            <model>	particles\content_deferred\GFX_models\environment\120_kharkiv\120_kharkiv_health_pickup.model	  <action>	HealthPickupAction	</action>
+            </model>
+          </powerupEnterAndActive>
+        </healthPowerupModels>
+        <healthPowerupEffects>
+          <powerupActiveEffect>
+            <timeline>
+              <effectEnd>	55000	</effectEnd>
+            </timeline>
+            <effects>
+              <pixie>
+                <startKey>	start	</startKey>
+                <file>	particles\Tank\halloween_kharkiv_health_pickup_idle.xml	</file>
+                <force>	1	</force>
+              </pixie>
+              <sound>
+                <startKey>	start	</startKey>
+                <wwsound>	ev_halloween_ui_healing_idle	</wwsound>
+                <dynamic>	True	</dynamic>
+              </sound>
+            </effects>
+          </powerupActiveEffect>
+          <powerupEnterEffect>
+            <timeline>
+              <effectEnd>	55000.0	</effectEnd>
+            </timeline>
+            <effects>
+              <pixie>
+                <startKey>	start	</startKey>
+                <file>	particles\Tank\halloween_kharkiv_health_pickup_in.xml	</file>
+                <force>	1	</force>
+              </pixie>
+            </effects>
+          </powerupEnterEffect>
+          <powerupConsumeEffect>
+            <timeline>
+              <effectEnd>	1.0	</effectEnd>
+            </timeline>
+            <effects>
+              <pixie>
+                <startKey>	start	</startKey>
+                <file>	particles\Tank\halloween_kharkiv_health_pickup_out.xml	</file>
+                <force>	1	</force>
+              </pixie>
+              <sound>
+                <startKey>	start	</startKey>
+                <wwsound>	ev_halloween_ui_healing	</wwsound>
+              </sound>
+            </effects>
+          </powerupConsumeEffect>
+        </healthPowerupEffects>
+      </bossModes>
+    </leviathan>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-248.56 -209.00	</position>
+        </team1>
+        <team2>
+          <position>	314.12 216.83	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1></team1>
+        <team2></team2>
+      </teamBasePositions>
+      <controlPoint>	94.83 -93.51	</controlPoint>
+    </domination>
+  </gameplayTypes>
+  <wwmusicSetup>
+    <wwmusicLoading>	ev_halloween_music_intro	</wwmusicLoading>
+    <wwmusicIntensive>	ev_halloween_music_gameplay	</wwmusicIntensive>
+    <wwmusicRelaxed>	ev_halloween_music_gameplay	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	ev_halloween_music_drawn	</wwmusicResultWin>
+    <wwmusicResultDrawn>	ev_halloween_music_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	ev_halloween_music_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ev_halloween_map_ambient	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	ev_halloween_gameplay.bnk	</bank>
+      <bank>	eng_V2K.bnk	</bank>
+      <bank>	ev_halloween_gameplay_post.bnk	</bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	combat_atmosphere.bnk	</bank>
+      <bank>	plane.bnk	</bank>
+    </unloadBanks>
+    <events>
+      <event>
+        <name>	eng_V2K_pc	</name>
+        <mod>	eng_V2K_pc	</mod>
+        <modAUX>	ev_halloween_player_eng	</modAUX>
+      </event>
+      <event>
+        <name>	eng_Hetzer_npc	</name>
+        <mod>	eng_Hetzer_npc	</mod>
+        <modAUX>	ev_halloween_enemy_eng	</modAUX>
+      </event>
+      <event>
+        <name>	wpn_main_PC	</name>
+        <mod>	wpn_main_PC	</mod>
+        <modAUX>	ev_halloween_wpn_main_pc	</modAUX>
+      </event>
+      <event>
+        <name>	wpn_small_PC	</name>
+        <mod>	wpn_small_PC	</mod>
+        <modAUX>	ev_halloween_wpn_small_pc	</modAUX>
+      </event>
+      <event>
+        <name>	wpn_huge_NPC	</name>
+        <mod>	wpn_huge_NPC	</mod>
+        <modAUX>	ev_halloween_wpn_huge_npc	</modAUX>
+      </event>
+      <event>
+        <name>	ev_halloween_expl_ammo_enemy	</name>
+        <mod>	expl_ammo_NPC	</mod>
+        <modAUX>	ev_halloween_expl_ammo_enemy	</modAUX>
+      </event>
+      <event>
+        <name>	expl_ammo_PC	</name>
+        <mod>	expl_ammo_PC	</mod>
+        <modAUX>	ev_halloween_expl_ammo_pc	</modAUX>
+      </event>
+      <event>
+        <name>	expl_ammo_NPC	</name>
+        <mod>	expl_ammo_NPC	</mod>
+        <modAUX>	ev_halloween_expl_ammo_npc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_huge_pierce_HE_NPC_PC	</name>
+        <mod>	imp_huge_pierce_HE_NPC_PC	</mod>
+        <modAUX>	ev_halloween_imp_leviathan_pc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_huge_critical_HE_NPC_PC	</name>
+        <mod>	imp_huge_critical_HE_NPC_PC	</mod>
+        <modAUX>	ev_halloween_imp_leviathan_pc	</modAUX>
+      </event>
+      <event>
+        <name>	psb_large_NPC	</name>
+        <mod>	psb_large_NPC	</mod>
+        <modAUX>	ev_halloween_psb	</modAUX>
+      </event>
+      <event>
+        <name>	psb_main_NPC	</name>
+        <mod>	psb_main_NPC	</mod>
+        <modAUX>	ev_halloween_psb	</modAUX>
+      </event>
+      <event>
+        <name>	psb_small_NPC	</name>
+        <mod>	psb_small_NPC	</mod>
+        <modAUX>	ev_halloween_psb	</modAUX>
+      </event>
+      <event>
+        <name>	imp_main_critical_AP_NPC_PC	</name>
+        <mod>	imp_main_critical_AP_NPC_PC	</mod>
+        <modAUX>	ev_halloween_imp_npc_pc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_main_pierce_AP_NPC_PC	</name>
+        <mod>	imp_main_pierce_AP_NPC_PC	</mod>
+        <modAUX>	ev_halloween_imp_npc_pc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_small_critical_AP_NPC_PC	</name>
+        <mod>	imp_small_critical_AP_NPC_PC	</mod>
+        <modAUX>	ev_halloween_imp_npc_pc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_small_pierce_AP_NPC_PC	</name>
+        <mod>	imp_small_pierce_AP_NPC_PC	</mod>
+        <modAUX>	ev_halloween_imp_npc_pc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_large_critical_AP_NPC_PC	</name>
+        <mod>	imp_large_critical_AP_NPC_PC	</mod>
+        <modAUX>	ev_halloween_imp_npc_pc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_large_pierce_AP_NPC_PC	</name>
+        <mod>	imp_large_pierce_AP_NPC_PC	</mod>
+        <modAUX>	ev_halloween_imp_npc_pc	</modAUX>
+      </event>
+      <event>
+        <name>	vo_ally_killed_by_player	</name>
+        <mod>	ev_halloween_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_ammo_bay_damaged	</name>
+        <mod>	ev_halloween_vo_munitionum_crates_laesa	</mod>
+      </event>
+      <event>
+        <name>	vo_armor_not_pierced_by_player	</name>
+        <mod>	ev_halloween_vo_sine_penetratione	</mod>
+      </event>
+      <event>
+        <name>	vo_armor_ricochet_by_player	</name>
+        <mod>	ev_halloween_vo_recussus	</mod>
+      </event>
+      <event>
+        <name>	vo_commander_killed	</name>
+        <mod>	ev_halloween_vo_dux_vulnere_affectus	</mod>
+      </event>
+      <event>
+        <name>	vo_crew_deactivated	</name>
+        <mod>	ev_halloween_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_damage_by_near_explosion_by_enemy	</name>
+        <mod>	ev_halloween_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_damage_by_near_explosion_by_player	</name>
+        <mod>	ev_halloween_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_driver_killed	</name>
+        <mod>	ev_halloween_vo_ductor_vulnere_affectus	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_fire_started_by_player	</name>
+        <mod>	ev_halloween_vo_vehiculum_hostile_incensum	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_hp_damaged_by_explosion_at_direct_hit_by_player	</name>
+        <mod>	ev_halloween_vo_ictus	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player	</name>
+        <mod>	ev_halloween_vo_penetratio	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_hp_damaged_by_projectile_and_gun_damaged_by_player	</name>
+        <mod>	ev_halloween_vo_penetratio	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_hp_damaged_by_projectile_by_player	</name>
+        <mod>	ev_halloween_vo_penetratio	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_killed	</name>
+        <mod>	ev_halloween_vo_deletum	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_killed_by_player	</name>
+        <mod>	ev_halloween_vo_deletum	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player	</name>
+        <mod>	ev_halloween_vo_sine_penetratione	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player	</name>
+        <mod>	ev_halloween_vo_sine_penetratione	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player	</name>
+        <mod>	ev_halloween_vo_ictus	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player	</name>
+        <mod>	ev_halloween_vo_ictus	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_no_attempt_by_player	</name>
+        <mod>	ev_halloween_vo_ictus	</mod>
+      </event>
+      <event>
+        <name>	vo_engine_damaged	</name>
+        <mod>	ev_halloween_vo_machinatio_laesa	</mod>
+      </event>
+      <event>
+        <name>	vo_engine_destroyed	</name>
+        <mod>	ev_halloween_vo_machinatio_laesa	</mod>
+      </event>
+      <event>
+        <name>	vo_engine_functional	</name>
+        <mod>	ev_halloween_vo_machinatio_restituta	</mod>
+      </event>
+      <event>
+        <name>	vo_fire_started	</name>
+        <mod>	ev_halloween_vo_vehiculum_nostrum_incensum	</mod>
+      </event>
+      <event>
+        <name>	vo_fire_stopped	</name>
+        <mod>	ev_halloween_vo_incendium_exstinctum	</mod>
+      </event>
+      <event>
+        <name>	vo_fuel_tank_damaged	</name>
+        <mod>	ev_halloween_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_gun_damaged	</name>
+        <mod>	ev_halloween_vo_tormentum_laesum	</mod>
+      </event>
+      <event>
+        <name>	vo_gun_destroyed	</name>
+        <mod>	ev_halloween_vo_tormentum_laesum	</mod>
+      </event>
+      <event>
+        <name>	vo_gun_functional	</name>
+        <mod>	ev_halloween_vo_tormentum_restitutum	</mod>
+      </event>
+      <event>
+        <name>	vo_gunner_killed	</name>
+        <mod>	ev_halloween_vo_iaculator_vulnere_ictus	</mod>
+      </event>
+      <event>
+        <name>	vo_loader_killed	</name>
+        <mod>	ev_halloween_vo_gestator_vulnere_ictus	</mod>
+      </event>
+      <event>
+        <name>	vo_radio_damaged	</name>
+        <mod>	ev_halloween_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_radioman_killed	</name>
+        <mod>	ev_halloween_vo_comunicationis_peritus_vulnere_affectus	</mod>
+      </event>
+      <event>
+        <name>	vo_start_battle	</name>
+        <mod>	ev_halloween_vo_pugnamus	</mod>
+      </event>
+      <event>
+        <name>	vo_surveying_devices_crit_damaged	</name>
+        <mod>	ev_halloween_vo_observationis_machinae_lesae	</mod>
+      </event>
+      <event>
+        <name>	vo_surveying_devices_damaged	</name>
+        <mod>	ev_halloween_vo_observationis_machinae_lesae	</mod>
+      </event>
+      <event>
+        <name>	vo_surveying_devices_destroyed	</name>
+        <mod>	ev_halloween_vo_observationis_machinae_lesae	</mod>
+      </event>
+      <event>
+        <name>	vo_surveying_devices_functional	</name>
+        <mod>	ev_halloween_vo_observationis_machinae_restitutae	</mod>
+      </event>
+      <event>
+        <name>	vo_target_captured	</name>
+        <mod>	ev_halloween_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_target_lost	</name>
+        <mod>	ev_halloween_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_target_unlocked	</name>
+        <mod>	ev_halloween_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_track_damaged	</name>
+        <mod>	ev_halloween_vo_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_track_destroyed	</name>
+        <mod>	ev_halloween_vo_cingulum_laesum	</mod>
+      </event>
+      <event>
+        <name>	vo_track_functional	</name>
+        <mod>	ev_halloween_vo_cingulum_nostrum_restitutum	</mod>
+      </event>
+      <event>
+        <name>	vo_track_functional_can_move	</name>
+        <mod>	ev_halloween_vo_cingulum_nostrum_restitutum	</mod>
+      </event>
+      <event>
+        <name>	vo_turret_rotator_damaged	</name>
+        <mod>	ev_halloween_vo_turricula_reducta_velocitate	</mod>
+      </event>
+      <event>
+        <name>	vo_turret_rotator_destroyed	</name>
+        <mod>	ev_halloween_vo_turricula_impedita	</mod>
+      </event>
+      <event>
+        <name>	vo_turret_rotator_functional	</name>
+        <mod>	ev_halloween_vo_turricula_nostra_restituta	</mod>
+      </event>
+      <event>
+        <name>	vo_vehicle_destroyed	</name>
+        <mod>	ev_halloween_vo_vehiculum_deletum	</mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <roadMap></roadMap>
+  <waypoints>	spaces/120_kharkiv_halloween/paths.xml	</waypoints>
+  <mapActivities>
+    <warplane>
+      <preset>	kharkiv_lightning_01	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	0.000000 0.000000	</startTime>
+      <period>	100.000000	</period>
+    </warplane>
+    <warplane>
+      <preset>	kharkiv_lightning_02	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	35.000000 35.000000	</startTime>
+      <period>	80.000000	</period>
+    </warplane>
+    <warplane>
+      <preset>	kharkiv_lightning_03	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	55.000000 55.000000	</startTime>
+      <period>	95.000000	</period>
+    </warplane>
+  </mapActivities>
+</120_kharkiv_halloween.xml>

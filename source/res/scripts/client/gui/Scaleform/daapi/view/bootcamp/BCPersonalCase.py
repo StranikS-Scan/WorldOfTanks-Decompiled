@@ -48,7 +48,7 @@ class BCPersonalCaseDataProvider(PersonalCaseDataProvider):
         callback(data)
         return
 
-    def getTabsButtons(self, _):
+    def getTabsButtons(self, _, __):
         return [{'index': SKILLS_TAB_INDEX,
           'label': MENU.TANKMANPERSONALCASE_TABSKILLS,
           'linkage': PERSONAL_CASE_SKILLS}]

@@ -387,7 +387,7 @@ class PreviewVehicleTurretInstaller(TurretInstaller):
     def _request(self, callback):
         vehDescr = self.vehicle.descriptor
         vehDescr.installTurret(self.item.intCD, self.gunCD)
-        self.vehicle.turret = VehicleTurret(vehDescr.turret.compactDescr, descriptor=vehDescr.turret)
+        self.vehicle.turret = VehicleTurret(vehDescr.turrets[0].turret.compactDescr, descriptor=vehDescr.turrets[0].turret)
         if self.gunCD:
             self.vehicle.descriptor.installComponent(self.gunCD)
             self.vehicle.gun = VehicleGun(self.gunCD, descriptor=self.vehicle.descriptor.gun)

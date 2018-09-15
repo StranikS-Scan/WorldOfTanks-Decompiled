@@ -157,7 +157,8 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
 
     def processReplayHover(self):
         replayCtrl = BattleReplay.g_replayCtrl
-        _, self.hitPosition, direction = replayCtrl.getGunMarkerParams(self.hitPosition, Math.Vector3(0.0, 0.0, 0.0))
+        turretIndex = 0
+        _, self.hitPosition, direction = replayCtrl.getGunMarkerParams(self.hitPosition, Math.Vector3(0.0, 0.0, 0.0), turretIndex)
         self.__marker.update(GUN_MARKER_TYPE.CLIENT, self.hitPosition, Vector3(0.0, 0.0, 1.0), (10.0, 10.0), SERVER_TICK_LENGTH, None)
         return
 
@@ -165,7 +166,8 @@ class _ArtilleryStrikeSelector(_DefaultStrikeSelector, _VehiclesSelector):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isRecording:
             if self.hitPosition is not None:
-                replayCtrl.setConsumablesPosition(self.hitPosition)
+                turretIndex = 0
+                replayCtrl.setConsumablesPosition(turretIndex, self.hitPosition)
         return
 
     def __intersected(self, vehicles):
@@ -220,7 +222,8 @@ class _AreaStrikeSelector(_DefaultStrikeSelector):
 
     def processReplayHover(self):
         replayCtrl = BattleReplay.g_replayCtrl
-        _, hitPosition, direction = replayCtrl.getGunMarkerParams(self.area.position, self.direction)
+        turretIndex = 0
+        _, hitPosition, direction = replayCtrl.getGunMarkerParams(self.area.position, self.direction, turretIndex)
         self.area.setNextPosition(hitPosition, direction)
 
     def __areaUpdate(self):
@@ -233,7 +236,8 @@ class _AreaStrikeSelector(_DefaultStrikeSelector):
     def writeStateToReplay(self):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isRecording:
-            replayCtrl.setConsumablesPosition(self.area.position, self.direction)
+            turretIndex = 0
+            replayCtrl.setConsumablesPosition(turretIndex, self.area.position, self.direction)
 
 
 class _BomberStrikeSelector(_AreaStrikeSelector, _VehiclesSelector):
@@ -262,7 +266,8 @@ class _BomberStrikeSelector(_AreaStrikeSelector, _VehiclesSelector):
             replayCtrl = BattleReplay.g_replayCtrl
             if replayCtrl.isRecording:
                 if position is not None:
-                    replayCtrl.setConsumablesPosition(self.area.position, self.direction)
+                    turretIndex = 0
+                    replayCtrl.setConsumablesPosition(turretIndex, self.area.position, self.direction)
             self.selectingPosition = False
             self.area.setSelectingDirection(True)
             return False
@@ -454,13 +459,14 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
 
     def getDesiredShotPoint(self, ignoreAimingMode=False):
         assert self.__isEnabled
-        return self.__getDesiredShotPoint() if self.__aimingMode == 0 else None
+        return self.__getDesiredShotPoint() if self.__aimingMode == 0 or ignoreAimingMode else None
 
     def __getDesiredShotPoint(self):
         defaultPoint = self.__cam.aimingSystem.getDesiredShotPoint(True)
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying:
-            _, hitPosition, _ = replayCtrl.getGunMarkerParams(defaultPoint, Math.Vector3(0.0, 0.0, 1.0))
+            turretIndex = 0
+            _, hitPosition, _ = replayCtrl.getGunMarkerParams(defaultPoint, Math.Vector3(0.0, 0.0, 1.0), turretIndex)
             return hitPosition
         return defaultPoint
 
@@ -473,7 +479,7 @@ class MapCaseControlMode(IControlMode, CallbackDelayer):
     def isManualBind(self):
         return True
 
-    def updateGunMarker(self, markerType, pos, dir, size, relaxTime, collData):
+    def updateGunMarker(self, markerType, pos, dir, size, relaxTime, collData, index=0):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying:
             assert self.__isEnabled

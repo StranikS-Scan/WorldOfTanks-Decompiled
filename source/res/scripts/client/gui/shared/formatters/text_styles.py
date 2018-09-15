@@ -91,6 +91,10 @@ def middleBonusTitle(text):
     return _formatText('middleBonusTitle', text)
 
 
+def tankParamsSubtitle(text):
+    return _formatText('tankParamsSubtitle', text)
+
+
 def highTitle(text):
     return _formatText('highTitle', text)
 

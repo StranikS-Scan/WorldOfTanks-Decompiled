@@ -107,11 +107,15 @@ class RequestCriteria(object):
 
 class VehsSuitableCriteria(RequestCriteria):
 
-    def __init__(self, vehsItems, itemTypeIDs=None):
+    def __init__(self, vehsItems, itemTypeIDs=None, isMultiTurret=False, tabIndex=0):
         itemTypeIDs = itemTypeIDs or GUI_ITEM_TYPE.VEHICLE_MODULES
         suitableCompDescrs = set()
         for vehicle in vehsItems:
             for itemTypeID in itemTypeIDs:
+                if isMultiTurret:
+                    for descr in getVehicleSuitablesByType(vehicle.descriptor, itemTypeID, tabIndex, onlySpecificTurretPID=True)[0]:
+                        suitableCompDescrs.add(descr.compactDescr)
+
                 for descr in getVehicleSuitablesByType(vehicle.descriptor, itemTypeID)[0]:
                     suitableCompDescrs.add(descr.compactDescr)
 
@@ -123,7 +127,7 @@ class REQ_CRITERIA(object):
     CUSTOM = staticmethod(lambda predicate: RequestCriteria(PredicateCondition(predicate)))
     HIDDEN = RequestCriteria(PredicateCondition(lambda item: item.isHidden))
     SECRET = RequestCriteria(PredicateCondition(lambda item: item.isSecret))
-    DISCLOSABLE = RequestCriteria(PredicateCondition(lambda item: item.inventoryCount > 0 or not item.isSecret))
+    DISCLOSABLE = RequestCriteria(PredicateCondition(lambda item: (item.inventoryCount > 0 or not item.isSecret) and not item.isOnlyForEventBattles))
     UNLOCKED = RequestCriteria(PredicateCondition(lambda item: item.isUnlocked))
     REMOVABLE = RequestCriteria(PredicateCondition(lambda item: item.isRemovable))
     INVENTORY = RequestCriteria(InventoryPredicateCondition(lambda item: item.inventoryCount > 0))
@@ -148,7 +152,7 @@ class REQ_CRITERIA(object):
         SPECIFIC_BY_CD = staticmethod(lambda typeCompDescrs: RequestCriteria(PredicateCondition(lambda item: item.intCD in typeCompDescrs)))
         SPECIFIC_BY_NAME = staticmethod(lambda typeNames: RequestCriteria(PredicateCondition(lambda item: item.name in typeNames)))
         SPECIFIC_BY_INV_ID = staticmethod(lambda invIDs: RequestCriteria(PredicateCondition(lambda item: item.invID in invIDs)))
-        SUITABLE = staticmethod(lambda vehsItems, itemTypeIDs=None: VehsSuitableCriteria(vehsItems, itemTypeIDs))
+        SUITABLE = staticmethod(lambda vehsItems, itemTypeIDs=None, isMultiTurret=False, tabIndex=0: VehsSuitableCriteria(vehsItems, itemTypeIDs, isMultiTurret, tabIndex))
         RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented))
         ACTIVE_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and not item.rentalIsOver))
         EXPIRED_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver))
@@ -160,6 +164,7 @@ class REQ_CRITERIA(object):
         FULLY_ELITE = RequestCriteria(PredicateCondition(lambda item: item.isFullyElite))
         EVENT = RequestCriteria(PredicateCondition(lambda item: item.isEvent))
         EVENT_BATTLE = RequestCriteria(PredicateCondition(lambda item: item.isOnlyForEventBattles))
+        CREW_LOCKED = RequestCriteria(PredicateCondition(lambda item: item.isCrewLocked))
         LOCKED_BY_FALLOUT = RequestCriteria(PredicateCondition(lambda item: item.isLocked and item.typeOfLockingArena in ARENA_BONUS_TYPE.FALLOUT_RANGE))
         ONLY_FOR_FALLOUT = RequestCriteria(PredicateCondition(lambda item: item.isFalloutOnly()))
         HAS_XP_FACTOR = RequestCriteria(PredicateCondition(lambda item: item.dailyXPFactor != -1))
@@ -427,7 +432,7 @@ class ItemsRequester(IItemsRequester):
                                     invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
                                     vehicleData = self.__inventory.getItemData(vehicleIntCD)
                                     if vehicleData is not None:
-                                        gunIntCD = vehicleData.descriptor.gun.compactDescr
+                                        gunIntCD = vehicleData.descriptor.turrets[0].gun.compactDescr
                                         invalidate[GUI_ITEM_TYPE.GUN].add(gunIntCD)
 
             invalidate[itemTypeID].update(itemsDiff.keys())

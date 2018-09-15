@@ -10,7 +10,7 @@ from AvatarInputHandler import aih_constants
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core import settings_constants
 from battleground.StunAreaManager import STUN_AREA_STATIC_MARKER
-from constants import VISIBILITY, AOI
+from constants import VISIBILITY, AOI, HALLOWEEN_BOSS_NAME
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.view.battle.shared.minimap import common
@@ -633,6 +633,8 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             if animation:
                 self.__playSpottedSound(entry)
             self._invoke(entry.getID(), 'setVehicleInfo', vehicleID, classTag, name, guiProps.name(), animation)
+            if vehicleType.isLeviathan:
+                self._invoke(entry.getID(), 'setOverrideAtlasTankName', HALLOWEEN_BOSS_NAME)
         return
 
     def __setGUILabel(self, entry, guiLabel):
@@ -895,7 +897,7 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
         super(AreaStaticMarkerPlugin, self).fini()
         return
 
-    def __addStaticMarker(self, objectID, position, markerSymbolName, show3DMarker):
+    def __addStaticMarker(self, objectID, position, markerSymbolName, show3DMarker=True):
         if markerSymbolName in _TO_FLASH_SYMBOL_NAME_MAPPING:
             self._addEntryEx(objectID, _TO_FLASH_SYMBOL_NAME_MAPPING[markerSymbolName], _C_NAME.EQUIPMENTS, matrix=minimap_utils.makePositionMatrix(position), active=True)
 

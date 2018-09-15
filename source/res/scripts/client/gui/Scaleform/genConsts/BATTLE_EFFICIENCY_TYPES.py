@@ -26,3 +26,6 @@ class BATTLE_EFFICIENCY_TYPES(object):
     RECEIVED_RAM = 'receivedRam'
     RECEIVED_WORLD_COLLISION = 'receivedWorldCollision'
     STUN = 'stun'
+    HEAL = 'healed'
+    HEALTHPACK_PICKUP = 'healthpackPickup'
+    HEALTHPACK_WASTED = 'healthpackWasted'

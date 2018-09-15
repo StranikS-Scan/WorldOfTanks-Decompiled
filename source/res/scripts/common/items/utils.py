@@ -6,37 +6,11 @@ from constants import IS_CLIENT, VEHICLE_TTC_ASPECTS
 from items import tankmen
 from items.qualifiers import QUALIFIER_TYPE
 from items.tankmen import MAX_SKILL_LEVEL, MIN_ROLE_LEVEL
-from items.vehicles import VEHICLE_ATTRIBUTE_FACTORS, CAMOUFLAGE_KIND_INDICES
+from items.vehicles import CAMOUFLAGE_KIND_INDICES, __createAttributeFactors
 from VehicleDescrCrew import VehicleDescrCrew
 from VehicleQualifiersApplier import VehicleQualifiersApplier
 from debug_utils import *
-
-def _makeDefaultVehicleFactors(sample):
-    """It's a simple analog of copy.deepcopy to make copy of default factors,
-    but too faster than copy.deepcopy.
-    :param sample: dict containing sample that should be copy.
-    :return: dict containing copy of sample.
-    """
-    default = {}
-    for key, value in sample.iteritems():
-        if value is None:
-            default[key] = value
-        if isinstance(value, (float,
-         int,
-         long,
-         str)):
-            default[key] = value
-        if isinstance(value, (list, tuple)):
-            default[key] = value[:]
-        LOG_ERROR('Default value of vehicle attribute can not be resolved', key, value)
-
-    return default
-
-
-def makeDefaultVehicleAttributeFactors():
-    """Make copy of VEHICLE_ATTRIBUTE_FACTORS."""
-    return _makeDefaultVehicleFactors(VEHICLE_ATTRIBUTE_FACTORS)
-
+import copy
 
 def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
     return abs(a - b) <= max(rel_tol * max(abs(a), abs(b)), abs_tol)
@@ -87,23 +61,23 @@ def getRadioDistance(vehicleDescr, factors):
 
 
 def getCircularVisionRadius(vehicleDescr, factors):
-    return vehicleDescr.turret.circularVisionRadius * vehicleDescr.miscAttrs['circularVisionRadiusFactor'] * max(factors['circularVisionRadius'], 0.0)
+    return vehicleDescr.turrets[0].turret.circularVisionRadius * vehicleDescr.miscAttrs['circularVisionRadiusFactor'] * max(factors['circularVisionRadius'], 0.0)
 
 
-def getReloadTime(vehicleDescr, factors):
-    return vehicleDescr.gun.reloadTime * vehicleDescr.miscAttrs['gunReloadTimeFactor'] * max(factors['gun/reloadTime'], 0.0)
+def getReloadTime(vehicleDescr, factors, index=0):
+    return vehicleDescr.turrets[index].gun.reloadTime * vehicleDescr.miscAttrs['gunReloadTimeFactor'] * max(factors['turrets/{}/gun/reloadTime'.format(index)], 0.0)
 
 
-def getTurretRotationSpeed(vehicleDescr, factors):
-    return vehicleDescr.turret.rotationSpeed * max(factors['turret/rotationSpeed'], 0.0)
+def getTurretRotationSpeed(vehicleDescr, factors, index=0):
+    return vehicleDescr.turrets[index].turret.rotationSpeed * max(factors['turrets/{}/rotationSpeed'.format(index)], 0.0)
 
 
-def getGunRotationSpeed(vehicleDescr, factors):
-    return vehicleDescr.gun.rotationSpeed * max(factors['gun/rotationSpeed'], 0.0)
+def getGunRotationSpeed(vehicleDescr, factors, index=0):
+    return vehicleDescr.turrets[index].gun.rotationSpeed * max(factors['turrets/{}/gun/rotationSpeed'.format(index)], 0.0)
 
 
-def getGunAimingTime(vehicleDescr, factors):
-    return vehicleDescr.gun.aimingTime * vehicleDescr.miscAttrs['gunAimingTimeFactor'] * max(factors['gun/aimingTime'], 0.0)
+def getGunAimingTime(vehicleDescr, factors, index=0):
+    return vehicleDescr.turrets[index].gun.aimingTime * vehicleDescr.miscAttrs['gunAimingTimeFactor'] * max(factors['turrets/{}/gun/aimingTime'.format(index)], 0.0)
 
 
 def getChassisRotationSpeed(vehicleDescr, factors):
@@ -115,13 +89,13 @@ def getInvisibility(factors, baseInvisibility, isMoving):
 
 
 if IS_CLIENT:
-    CLIENT_VEHICLE_ATTRIBUTE_FACTORS = {'camouflage': 1.0,
+    CLIENT_SPECIFIC_VEHICLE_ATTRIBUTE_FACTORS = {'camouflage': 1.0,
      'shotDispersion': 1.0}
-    CLIENT_VEHICLE_ATTRIBUTE_FACTORS.update(VEHICLE_ATTRIBUTE_FACTORS)
 
-    def makeDefaultClientVehicleAttributeFactors():
-        """Make copy of CLIENT_VEHICLE_ATTRIBUTE_FACTORS."""
-        return _makeDefaultVehicleFactors(CLIENT_VEHICLE_ATTRIBUTE_FACTORS)
+    def _clientsVehicleAttributeFactors(defaultFactors):
+        ret = copy.deepcopy(CLIENT_SPECIFIC_VEHICLE_ATTRIBUTE_FACTORS)
+        ret.update(defaultFactors)
+        return ret
 
 
     def _isFactor(a):
@@ -138,19 +112,25 @@ if IS_CLIENT:
     def _compareFactors(original, changed):
         result = {}
         for factor in original.iterkeys():
-            if not _comparableFactors(original[factor], changed[factor]):
+            originalFactor = original[factor]
+            changedFactor = changed[factor]
+            if not _comparableFactors(originalFactor, changedFactor):
                 continue
-            if all((isinstance(x, list) for x in (original[factor], changed[factor]))):
-                if not all(map(isclose, original[factor], changed[factor])):
-                    result[factor] = map(sub, original[factor], changed[factor])
-            if not isclose(original[factor], changed[factor]):
-                result[factor] = original.get(factor, CLIENT_VEHICLE_ATTRIBUTE_FACTORS[factor]) - changed[factor]
+            if all((isinstance(x, list) for x in (originalFactor, changedFactor))):
+                if not all(map(isclose, originalFactor, changedFactor)):
+                    result[factor] = map(sub, originalFactor, changedFactor)
+            if not isclose(originalFactor, changedFactor):
+                result[factor] = originalFactor - changedFactor
 
         return result
 
 
     def getClientShotDispersion(vehicleDescr, shotDispersionFactor):
-        return vehicleDescr.gun.shotDispersionAngle * shotDispersionFactor
+        return vehicleDescr.turrets[0].gun.shotDispersionAngle * shotDispersionFactor
+
+
+    def getClientShotDispersion_Secondary(vehicleDescr, shotDispersionFactor):
+        return vehicleDescr.turrets[1].gun.shotDispersionAngle * shotDispersionFactor
 
 
     def getClientInvisibility(vehicleDescr, camouflageFactor, factors):
@@ -178,7 +158,8 @@ if IS_CLIENT:
             currFactors = copy.deepcopy(factors)
             updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, currFactors, aspect)
             for coefficient in extraAspects[aspect]:
-                extras.setdefault(coefficient, {})[aspect] = currFactors[coefficient]
+                if coefficient in currFactors:
+                    extras.setdefault(coefficient, {})[aspect] = currFactors[coefficient]
 
         for coefficientName, coefficientValue in extras.iteritems():
             coefficientValue[VEHICLE_TTC_ASPECTS.DEFAULT] = factors[coefficientName]
@@ -186,14 +167,16 @@ if IS_CLIENT:
 
 
     def getCrewAffectedFactors(vehicleDescr, crewCompactDescrs):
+        turretCount = len(vehicleDescr.turrets)
         defaultCrewCompactDescrs = _replaceMissingTankmenWithDefaultOnes(vehicleDescr, crewCompactDescrs)
-        defaultFactors = makeDefaultClientVehicleAttributeFactors()
+        defaultVehicleFactors = _clientsVehicleAttributeFactors(vehicleDescr.type.createAttributeFactors())
+        defaultFactors = copy.deepcopy(defaultVehicleFactors)
         updateAttrFactorsWithSplit(vehicleDescr, defaultCrewCompactDescrs, [], defaultFactors)
         result = {}
         for i, (tankmanCompactDescr, roles) in enumerate(zip(crewCompactDescrs, vehicleDescr.type.crewRoles)):
             backupedtankmanCompactDescr = defaultCrewCompactDescrs[i]
             defaultCrewCompactDescrs[i] = _generateTankman(vehicleDescr, roles, MIN_ROLE_LEVEL if tankmanCompactDescr is None else MAX_SKILL_LEVEL)
-            tankmanAffectedFactors = makeDefaultClientVehicleAttributeFactors()
+            tankmanAffectedFactors = copy.deepcopy(defaultVehicleFactors)
             updateAttrFactorsWithSplit(vehicleDescr, defaultCrewCompactDescrs, [], tankmanAffectedFactors)
             changedFactors = _compareFactors(tankmanAffectedFactors, defaultFactors)
             if changedFactors:
@@ -227,5 +210,7 @@ if IS_CLIENT:
         factors['camouflage'] = vehicleDescrCrew.camouflageFactor
         shotDispersionFactors = [1.0, 0.0]
         vehicleDescrCrew.onCollectShotDispersionFactors(shotDispersionFactors)
-        factors['shotDispersion'] = shotDispersionFactors
+        for i in range(len(vehicleDescr.turrets)):
+            factors['turrets/{}/shotDispersion'.format(i)] = shotDispersionFactors
+
         return

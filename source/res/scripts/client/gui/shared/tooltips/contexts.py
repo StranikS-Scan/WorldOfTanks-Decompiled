@@ -361,7 +361,13 @@ class HangarContext(ToolTipContext):
         self._historicalBattleID = historicalBattleID
         return self.itemsCache.items.getItemByCD(int(intCD))
 
-    def getStatusConfiguration(self, item):
+    def buildItemMultiTurret(self, intCD, slotIdx=0, intCD2=-1):
+        self._slotIdx = int(slotIdx)
+        self._vehicle = self.getVehicle()
+        self._historicalBattleID = -1
+        return (self.itemsCache.items.getItemByCD(int(intCD)), self.itemsCache.items.getItemByCD(int(intCD2)))
+
+    def getStatusConfiguration(self, item, position=0):
         value = super(HangarContext, self).getStatusConfiguration(item)
         inventoryCheck = item.itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES
         isInInventory = inventoryCheck and item.isInInventory

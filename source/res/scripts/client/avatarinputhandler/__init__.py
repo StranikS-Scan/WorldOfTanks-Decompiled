@@ -173,6 +173,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         self.onCameraChanged = Event()
         self.onPostmortemVehicleChanged = Event()
         self.onPostmortemKillerVision = Event()
+        self.onTurretIndexChanged = Event()
         self.__isArenaStarted = False
         self.__isStarted = False
         self.__targeting = _Targeting()
@@ -272,18 +273,18 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
     def updateShootingStatus(self, canShoot):
         return None if self.__isDetached else self.__curCtrl.updateShootingStatus(canShoot)
 
-    def getDesiredShotPoint(self, ignoreAimingMode=False):
+    def getDesiredShotPoint(self, ignoreCurrentAimingMode=False):
         if self.__isDetached:
             return None
         else:
             g_postProcessingEvents.onFocalPlaneChanged()
-            return self.__curCtrl.getDesiredShotPoint(ignoreAimingMode)
+            return self.__curCtrl.getDesiredShotPoint(ignoreCurrentAimingMode)
 
     def getMarkerPoint(self):
         point = None
         if self.__ctrlModeName in (_CTRL_MODE.ARCADE, _CTRL_MODE.STRATEGIC, _CTRL_MODE.ARTY):
             AimingSystems.shootInSkyPoint.has_been_called = False
-            point = self.getDesiredShotPoint(ignoreAimingMode=True)
+            point = self.getDesiredShotPoint(ignoreCurrentAimingMode=True)
             if AimingSystems.shootInSkyPoint.has_been_called:
                 point = None
         return point
@@ -299,13 +300,14 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
             replayCtrl = BattleReplay.g_replayCtrl
             replayCtrl.setUseServerAim(isShown)
 
-    def updateGunMarker(self, pos, dir, size, relaxTime, collData):
+    def updateGunMarker(self, pos, dir, size, relaxTime, collData, index=0):
         """ Updates client's gun marker."""
-        self.__curCtrl.updateGunMarker(_GUN_MARKER_TYPE.CLIENT, pos, dir, size, relaxTime, collData)
+        markerType = _GUN_MARKER_TYPE.SUB if index > 0 else _GUN_MARKER_TYPE.CLIENT
+        self.__curCtrl.updateGunMarker(markerType, pos, dir, size, relaxTime, collData, index)
 
     def updateGunMarker2(self, pos, dir, size, relaxTime, collData):
         """ Updates server's gun marker."""
-        self.__curCtrl.updateGunMarker(_GUN_MARKER_TYPE.SERVER, pos, dir, size, relaxTime, collData)
+        self.__curCtrl.updateGunMarker(_GUN_MARKER_TYPE.SERVER, pos, dir, size, relaxTime, collData, 0)
 
     def setAimingMode(self, enable, mode):
         self.__curCtrl.setAimingMode(enable, mode)
@@ -437,6 +439,8 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         self.onPostmortemVehicleChanged = None
         self.onPostmortemKillerVision.clear()
         self.onPostmortemKillerVision = None
+        self.onTurretIndexChanged.clear()
+        self.onTurretIndexChanged = None
         self.__targeting.enable(False)
         self.__killerVehicleID = None
         if self.__onRecreateDevice in g_guiResetters:
@@ -630,7 +634,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
             avatarVehicle = BigWorld.player().getVehicleAttached()
             if avatarVehicle is None or avatarVehicle is vehicle:
                 return
-            caliber = vehicle.typeDescriptor.shot.shell.caliber
+            caliber = vehicle.typeDescriptor.turrets[0].shot.shell.caliber
             impulseValue = self.__dynamicCameraSettings.getGunImpulse(caliber)
             avatarVehicleWeightInTons = avatarVehicle.typeDescriptor.physics['weight'] / 1000.0
             vehicleSensitivity = self.__dynamicCameraSettings.getSensitivityToImpulse(avatarVehicleWeightInTons)

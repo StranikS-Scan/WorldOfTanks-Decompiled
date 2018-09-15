@@ -37,8 +37,8 @@ class _CmpCacheWrapper(object):
 class VehicleCompareParameters(VehicleParameters):
 
     def __init__(self):
-        super(VehicleCompareParameters, self).__init__()
         self.__vehWrapper = _CmpCacheWrapper()
+        super(VehicleCompareParameters, self).__init__()
 
     def init(self, vehicle, initialVehicle=None):
         self.__vehWrapper.setVehicle(vehicle)

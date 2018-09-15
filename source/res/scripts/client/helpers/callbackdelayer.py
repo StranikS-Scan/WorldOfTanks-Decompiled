@@ -101,3 +101,6 @@ class TimeDeltaMeter(object):
         deltaTime = time - self.__prevTime
         self.__prevTime = time
         return deltaTime
+
+    def resetTime(self):
+        self.__prevTime = self.__timeFunc()

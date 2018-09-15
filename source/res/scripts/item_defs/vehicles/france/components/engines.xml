@@ -81,6 +81,7 @@
     <Sovam_de_250cv_IGR>	60005	</Sovam_de_250cv_IGR>
     <Hispano-Suiza_HS110_IGR>	60006	</Hispano-Suiza_HS110_IGR>
     <Renault_S6Bis_bootcamp>	64001	</Renault_S6Bis_bootcamp>
+    <Hispano_219CV_V8_HE2017>	64002	</Hispano_219CV_V8_HE2017>
   </ids>
   <shared>
     <Somua_S-40>
@@ -1418,5 +1419,22 @@
       <rpm_min>	328	</rpm_min>
       <rpm_max>	2216	</rpm_max>
     </Hispano-Suiza_HS110_IGR>
+    <Hispano_219CV_V8_HE2017>
+      <userString>	#france_vehicles:Hispano_219CV_V8_HE2017	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	9800	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_V2K_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_V2K_npc	</wwsoundNPC>
+      <power>	219	</power>
+      <weight>	400	</weight>
+      <maxHealth>	140	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	302	</rpm_min>
+      <rpm_max>	2095	</rpm_max>
+    </Hispano_219CV_V8_HE2017>
   </shared>
 </engines.xml>

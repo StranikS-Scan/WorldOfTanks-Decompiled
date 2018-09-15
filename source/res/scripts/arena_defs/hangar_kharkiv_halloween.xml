@@ -1,0 +1,46 @@
+<hangar_kharkiv_halloween.xml>
+  <wwmusic>	ev_halloween_hangar_music	</wwmusic>
+  <wwambientSound>	ev_halloween_hangar_ambient	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	ev_halloween_hangar_amb.bnk	</bank>
+      <bank>	ev_halloween_hangar_ui.bnk	</bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	hangar_v2.bnk	</bank>
+    </unloadBanks>
+    <events>
+      <event>
+        <name>	ambient_trees_without_foliage_tree_big_01	</name>
+        <mod>	ev_halloween_hangar_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_dry_comb_mid_01	</name>
+        <mod>	ev_halloween_hangar_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_yellow_dry_comb_small_01	</name>
+        <mod>	ev_halloween_hangar_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_yellow_tree_few_foliage_01	</name>
+        <mod>	ev_halloween_hangar_silence	</mod>
+      </event>
+      <event>
+        <name>	ambient_trees_dry_comb_big_01	</name>
+        <mod>	ev_halloween_hangar_silence	</mod>
+      </event>
+      <event>
+        <name>	ev_halloween_map_burn_med	</name>
+        <mod>	ev_halloween_hangar_silence	</mod>
+      </event>
+      <event>
+        <name>	ev_halloween_map_burn_small	</name>
+        <mod>	ev_halloween_hangar_silence	</mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <roadMap></roadMap>
+  <mapActivities></mapActivities>
+  <isTemporaryOrEventSpace>	true	</isTemporaryOrEventSpace>
+</hangar_kharkiv_halloween.xml>

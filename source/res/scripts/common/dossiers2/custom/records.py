@@ -482,6 +482,9 @@ RECORDS = (('total', 'creationTime', 'p', 'I', 4000000001L),
  ('singleAchievements', 'xmasTreeBronze', 'p', 'B', 1),
  ('singleAchievements', 'xmasTreeSilver', 'p', 'B', 1),
  ('singleAchievements', 'xmasTreeGold', 'p', 'B', 1),
+ ('singleAchievements', 'HE17A1', 'p', 'B', 1),
+ ('singleAchievements', 'HE17A2', 'p', 'B', 1),
+ ('singleAchievements', 'HE17A3', 'p', 'B', 1),
  ('achievements', 'beasthunter', 'p', 'H', 60001),
  ('achievements', 'sinai', 'p', 'H', 60001),
  ('achievements', 'mousebane', 'p', 'H', 60001),
@@ -2012,7 +2015,10 @@ RECORD_DB_IDS = {('total', 'creationTime'): 68,
  ('max30x30', 'maxFrags'): 1141,
  ('max30x30', 'maxFragsVehicle'): 1142,
  ('max30x30', 'maxDamage'): 1143,
- ('max30x30', 'maxDamageVehicle'): 1144}
+ ('max30x30', 'maxDamageVehicle'): 1144,
+ ('singleAchievements', 'HE17A1'): 1150,
+ ('singleAchievements', 'HE17A2'): 1151,
+ ('singleAchievements', 'HE17A3'): 1152}
 DB_ID_TO_RECORD = dict([ (value, key) for key, value in RECORD_DB_IDS.iteritems() ])
 assert len(RECORD_DB_IDS) == len(DB_ID_TO_RECORD)
 assert len(RECORD_DB_IDS) == len(RECORDS)

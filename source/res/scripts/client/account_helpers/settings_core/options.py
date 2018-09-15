@@ -1410,14 +1410,17 @@ class BattleLoadingTipSetting(AccountDumpSetting):
         TEXT = 'textTip'
         VISUAL = 'visualTip'
         MINIMAP = 'minimap'
+        EVENT_TWO = 'event'
         TIPS_TYPES = (TEXT, VISUAL, MINIMAP)
 
-    def getSettingID(self, isVisualOnly=False, isFallout=False):
+    def getSettingID(self, isVisualOnly=False, isFallout=False, isEventTwo=False):
         if isVisualOnly:
             return self.OPTIONS.VISUAL
         settingID = self.OPTIONS.TIPS_TYPES[self._get()]
         if isFallout and settingID == BattleLoadingTipSetting.OPTIONS.VISUAL:
             settingID = BattleLoadingTipSetting.OPTIONS.TEXT
+        if isEventTwo:
+            settingID = BattleLoadingTipSetting.OPTIONS.EVENT_TWO
         return settingID
 
     def _getOptions(self):
@@ -1691,6 +1694,7 @@ class KeyboardSettings(SettingsContainer):
        ('block_tracks', 'CMD_BLOCK_TRACKS'))),
      ('cruis_control', (('forward_cruise', 'CMD_INCREMENT_CRUISE_MODE'), ('backward_cruise', 'CMD_DECREMENT_CRUISE_MODE'), ('stop_fire', 'CMD_STOP_UNTIL_FIRE'))),
      ('firing', (('fire', 'CMD_CM_SHOOT'),
+       ('fire_secondary', 'CMD_SHOOT_SECONDARY'),
        ('lock_target', 'CMD_CM_LOCK_TARGET'),
        ('lock_target_off', 'CMD_CM_LOCK_TARGET_OFF'),
        ('alternate_mode', 'CMD_CM_ALTERNATE_MODE'),

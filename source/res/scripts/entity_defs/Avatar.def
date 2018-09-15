@@ -189,13 +189,16 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </updateVehicleGunReloadTime>
     <updateVehicleAmmo>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	INT32	</Arg>
       <Arg>	UINT16	</Arg>
       <Arg>	UINT8	</Arg>
-      <Arg>	INT16	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </updateVehicleAmmo>
     <onSwitchViewpoint>
       <Arg>	OBJECT_ID	</Arg>
@@ -221,6 +224,7 @@
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	INT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </updateVehicleSetting>
     <updateTargetingInfo>
       <Arg>	FLOAT32	</Arg>
@@ -232,6 +236,7 @@
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </updateTargetingInfo>
     <redrawVehicleOnRespawn>
       <Arg>	OBJECT_ID	</Arg>
@@ -242,6 +247,7 @@
       <Arg>	VECTOR3	</Arg>
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </updateGunMarker>
     <updateOwnVehiclePosition>
       <Arg>	VECTOR3	</Arg>
@@ -249,6 +255,14 @@
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
     </updateOwnVehiclePosition>
+    <updateLeviathanProgress>
+      <Arg>	UINT32	</Arg>
+    </updateLeviathanProgress>
+    <updateEvilEyeStatus>
+      <Arg>	BOOL	</Arg>
+      <Arg>	BOOL	</Arg>
+      <Arg>	UINT8	</Arg>
+    </updateEvilEyeStatus>
     <showOwnVehicleHitDirection>
       <Arg>	FLOAT32	</Arg>
       <Arg>	OBJECT_ID	</Arg>
@@ -312,6 +326,7 @@
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </showTracer>
     <stopTracer>
       <Arg>	SHOT_ID	</Arg>
@@ -484,6 +499,7 @@
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </showTracer>
     <stopTracer>
       <Arg>	SHOT_ID	</Arg>
@@ -521,6 +537,9 @@
       <Arg>	UINT8	</Arg>
       <Arg>	FLOAT32	</Arg>
     </grantRagePoints>
+    <updateLeviathanProgress>
+      <Arg>	UINT32	</Arg>
+    </updateLeviathanProgress>
     <receiveAttackResults>
       <Arg>	ATTACK_RESULTS	</Arg>
     </receiveAttackResults>
@@ -614,24 +633,28 @@
     </vehicle_moveWith>
     <vehicle_shoot>
       <Exposed></Exposed>
+      <Arg>	UINT8	</Arg>
     </vehicle_shoot>
     <vehicle_trackWorldPointWithGun>
       <Exposed></Exposed>
       <Arg>	VECTOR3	</Arg>
+      <Arg>	UINT8	</Arg>
     </vehicle_trackWorldPointWithGun>
     <vehicle_trackRelativePointWithGun>
       <Exposed></Exposed>
       <Arg>	VECTOR3	</Arg>
+      <Arg>	UINT8	</Arg>
     </vehicle_trackRelativePointWithGun>
     <vehicle_stopTrackingWithGun>
       <Exposed></Exposed>
       <Arg>	FLOAT32	</Arg>
       <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
     </vehicle_stopTrackingWithGun>
     <vehicle_changeSetting>
       <Exposed></Exposed>
       <Arg>	UINT8	</Arg>
-      <Arg>	INT32	</Arg>
+      <Arg>	INT64	</Arg>
     </vehicle_changeSetting>
     <vehicle_teleport>
       <Exposed></Exposed>

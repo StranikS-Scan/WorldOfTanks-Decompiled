@@ -199,7 +199,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
      1: 'battleVictoryResult'}
     __eventBattleResultKeys = {-1: 'battleEndedGameResult',
      0: 'battleEndedGameResult',
-     1: 'battleVictoryResult'}
+     1: 'battleEndedGameResult'}
     __goldTemplateKey = 'battleResultGold'
     __questsTemplateKey = 'battleQuests'
     __i18n_penalty = i18n.makeString('#%s:serviceChannelMessages/battleResults/penaltyForDamageAllies' % MESSENGER_I18N_FILE)
@@ -252,7 +252,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                         winnerIfDraw = battleResults.get('winnerIfDraw')
                         if winnerIfDraw:
                             battleResKey = 1 if winnerIfDraw == team else -1
-                if guiType == ARENA_GUI_TYPE.FALLOUT_MULTITEAM:
+                if guiType == ARENA_GUI_TYPE.FALLOUT_MULTITEAM or guiType in ARENA_GUI_TYPE.EVENT_RANGE:
                     templateName = self.__eventBattleResultKeys[battleResKey]
                 else:
                     templateName = self.__battleResultKeys[battleResKey]

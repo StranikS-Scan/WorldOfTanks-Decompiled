@@ -66,7 +66,10 @@ class CrewContextMenuHandler(AbstractContextMenuHandler, EventSystemEntity):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
     def _generateOptions(self, ctx=None):
-        return [self._makeItem(CREW.PERSONAL_CASE, MENU.contextmenu('personalCase')), self._makeSeparator(), self._makeItem(CREW.UNLOAD, MENU.contextmenu('tankmanUnload'), {'enabled': True})]
+        allowUnload = True
+        if g_currentVehicle.item is not None and g_currentVehicle.item.isCrewLocked:
+            allowUnload = False
+        return [self._makeItem(CREW.PERSONAL_CASE, MENU.contextmenu('personalCase')), self._makeSeparator(), self._makeItem(CREW.UNLOAD, MENU.contextmenu('tankmanUnload'), {'enabled': allowUnload})]
 
     def _initFlashValues(self, ctx):
         self._tankmanID = int(ctx.tankmanID)
@@ -161,10 +164,10 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
 
     def toResearch(self):
         vehicle = self.itemsCache.items.getVehicle(self.getVehInvID())
-        if vehicle is not None:
-            shared_events.showResearchView(vehicle.intCD)
+        if vehicle is None or vehicle.canNotBeResearched:
+            LOG_ERROR("Can't go to Research because id for current vehicle is None or is not researchable")
         else:
-            LOG_ERROR("Can't go to Research because id for current vehicle is None")
+            shared_events.showResearchView(vehicle.intCD)
         return
 
     def checkFavoriteVehicle(self):
@@ -207,7 +210,11 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
                     isNavigationEnabled = not self.prbDispatcher.getFunctionalState().isNavigationDisabled()
                 else:
                     isNavigationEnabled = True
-                options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH), {'enabled': isNavigationEnabled}))
+                if vehicle.canNotBeResearched:
+                    canBeResearched = False
+                else:
+                    canBeResearched = True
+                options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH), {'enabled': isNavigationEnabled and canBeResearched}))
                 if vehicle.isRented:
                     if not vehicle.isPremiumIGR:
                         items = self.itemsCache.items

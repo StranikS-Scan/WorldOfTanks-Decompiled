@@ -44,6 +44,8 @@ class ENTRY_SYMBOL_NAME(object):
     ENEMY_ABSORPTION_FLAG = 'EnemyAbsorptionFlagEntry'
     RESOURCE_POINT = 'ResourcePointEntry'
     ARTY_MARKER = 'ArtyMarkerMinimapEntry'
+    LEVIATHAN_HEALTH_MARKER = 'LeviathanHealthPowerupMinimapEntry'
+    LEVIATHAN_PORTAL_MARKER = 'LeviathanPortalIconMinimapEntry'
 
 
 class TRANSFORM_FLAG(object):

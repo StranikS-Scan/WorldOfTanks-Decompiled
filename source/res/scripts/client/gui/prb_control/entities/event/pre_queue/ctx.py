@@ -4,18 +4,18 @@ from constants import QUEUE_TYPE
 from gui.prb_control.entities.base.pre_queue.ctx import QueueCtx
 from gui.shared.utils.decorators import ReprInjector
 
-@ReprInjector.withParent(('getVehicleInventoryIDs', 'vInvIDs'))
+@ReprInjector.withParent(('getVehicleInventoryID', 'vInvID'))
 class EventBattleQueueCtx(QueueCtx):
     """
     Context to enqueue event battles
     """
 
-    def __init__(self, vehInvIDs, waitingID=''):
+    def __init__(self, vInventoryID, waitingID=''):
         super(EventBattleQueueCtx, self).__init__(entityType=QUEUE_TYPE.EVENT_BATTLES, waitingID=waitingID)
-        self.__vehInvIDs = vehInvIDs
+        self.__vehInvID = vInventoryID
 
-    def getVehicleInventoryIDs(self):
+    def getVehicleInventoryID(self):
         """
         Getter for selected vehicles inventory IDs
         """
-        return self.__vehInvIDs
+        return self.__vehInvID

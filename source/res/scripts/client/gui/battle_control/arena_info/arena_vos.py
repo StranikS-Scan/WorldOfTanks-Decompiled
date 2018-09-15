@@ -70,6 +70,14 @@ def isPremiumIGR(tags):
     return VEHICLE_TAGS.PREMIUM_IGR in tags
 
 
+def isMultiTurret(tags):
+    return VEHICLE_TAGS.MULTI_TURRET in tags
+
+
+def isLeviathan(tags):
+    return VEHICLE_TAGS.LEVIATHAN in tags
+
+
 class PlayerInfoVO(object):
     __slots__ = ('accountDBID', 'name', 'clanAbbrev', 'igrType', 'personaMissionIDs', 'isPrebattleCreator', 'forbidInBattleInvitations')
     eventsCache = dependency.descriptor(IEventsCache)
@@ -117,7 +125,7 @@ class PlayerInfoVO(object):
 
 
 class VehicleTypeInfoVO(object):
-    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth')
+    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth', 'isLeviathan', 'isMultiTurret')
 
     def __init__(self, vehicleType=None, **kwargs):
         super(VehicleTypeInfoVO, self).__init__()
@@ -155,6 +163,8 @@ class VehicleTypeInfoVO(object):
             self.nationID = vehicleType.id[0]
             self.level = vehicleType.level
             self.maxHealth = vehicleDescr.maxHealth
+            self.isLeviathan = isLeviathan(tags)
+            self.isMultiTurret = isMultiTurret(tags)
             vName = vehicleType.name
             self.iconName = settings.makeVehicleIconName(vName)
             self.iconPath = settings.makeContourIconSFPath(vName)
@@ -174,6 +184,8 @@ class VehicleTypeInfoVO(object):
             self.iconPath = settings.UNKNOWN_CONTOUR_ICON_SF_PATH
             self.shortNameWithPrefix = settings.UNKNOWN_VEHICLE_NAME
             self.maxHealth = None
+            self.isLeviathan = False
+            self.isMultiTurret = False
         return
 
     def getClassName(self):

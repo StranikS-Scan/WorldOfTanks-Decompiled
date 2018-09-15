@@ -674,6 +674,10 @@ class TOOLTIPS(object):
     MODULEFITS_UNLOCK_ERROR_HEADER = '#tooltips:moduleFits/unlock_error/header'
     MODULEFITS_UNLOCK_ERROR_TEXT = '#tooltips:moduleFits/unlock_error/text'
     MODULEFITS_WRONG_SLOT_BODY = '#tooltips:moduleFits/wrong_slot/body'
+    MODULEFITS_CANNON_PRIMARY = '#tooltips:moduleFits/cannon/primary'
+    MODULEFITS_CANNON_SECONDARY = '#tooltips:moduleFits/cannon/secondary'
+    MODULEFITS_TURRET_PRIMARY = '#tooltips:moduleFits/turret/primary'
+    MODULEFITS_TURRET_SECONDARY = '#tooltips:moduleFits/turret/secondary'
     MODULEFITS_REPLACE = '#tooltips:moduleFits/replace'
     MODULEFITS_NOT_WITH_INSTALLED_EQUIPMENT_HEADER = '#tooltips:moduleFits/not_with_installed_equipment/header'
     MODULEFITS_NOT_WITH_INSTALLED_EQUIPMENT_TEXT = '#tooltips:moduleFits/not_with_installed_equipment/text'
@@ -1652,30 +1656,46 @@ class TOOLTIPS(object):
     TANK_PARAMS_DESC_ATTAINABLESPEED = '#tooltips:tank_params/desc/attainableSpeed'
     TANK_PARAMS_DESC_HULLARMOR = '#tooltips:tank_params/desc/hullArmor'
     TANK_PARAMS_DESC_TURRETARMOR = '#tooltips:tank_params/desc/turretArmor'
+    TANK_PARAMS_DESC_TURRETARMOR_PRIMARY = '#tooltips:tank_params/desc/turretArmor_Primary'
+    TANK_PARAMS_DESC_TURRETARMOR_SECONDARY = '#tooltips:tank_params/desc/turretArmor_Secondary'
+    TANK_PARAMS_DESC_PARAMTITLE_PRIMARYTURRET = '#tooltips:tank_params/desc/paramTitle_PrimaryTurret'
+    TANK_PARAMS_DESC_PARAMTITLE_SECONDARYTURRET = '#tooltips:tank_params/desc/paramTitle_SecondaryTurret'
     TANK_PARAMS_DESC_RELOADTIME = '#tooltips:tank_params/desc/reloadTime'
+    TANK_PARAMS_DESC_RELOADTIME_SECONDARY = '#tooltips:tank_params/desc/reloadTime_Secondary'
     TANK_PARAMS_DESC_RELOADTIMESECS = '#tooltips:tank_params/desc/reloadTimeSecs'
+    TANK_PARAMS_DESC_RELOADTIMESECS_SECONDARY = '#tooltips:tank_params/desc/reloadTimeSecs_Secondary'
     TANK_PARAMS_DESC_PIERCINGPOWER = '#tooltips:tank_params/desc/piercingPower'
     TANK_PARAMS_DESC_AVGPIERCINGPOWER = '#tooltips:tank_params/desc/avgPiercingPower'
+    TANK_PARAMS_DESC_AVGPIERCINGPOWER_SECONDARY = '#tooltips:tank_params/desc/avgPiercingPower_Secondary'
     TANK_PARAMS_DESC_DAMAGE = '#tooltips:tank_params/desc/damage'
     TANK_PARAMS_DESC_AVGDAMAGE = '#tooltips:tank_params/desc/avgDamage'
+    TANK_PARAMS_DESC_AVGDAMAGE_SECONDARY = '#tooltips:tank_params/desc/avgDamage_Secondary'
     TANK_PARAMS_AVGPARAMCOMMENT_DAMAGE = '#tooltips:tank_params/avgParamComment/damage'
     TANK_PARAMS_AVGPARAMCOMMENT_PIERCINGPOWER = '#tooltips:tank_params/avgParamComment/piercingPower'
     TANK_PARAMS_DESC_AVGDAMAGEPERMINUTE = '#tooltips:tank_params/desc/avgDamagePerMinute'
+    TANK_PARAMS_DESC_AVGDAMAGEPERMINUTE_SECONDARY = '#tooltips:tank_params/desc/avgDamagePerMinute_Secondary'
     TANK_PARAMS_DESC_TURRETROTATIONSPEED = '#tooltips:tank_params/desc/turretRotationSpeed'
+    TANK_PARAMS_DESC_TURRETROTATIONSPEED_SECONDARY = '#tooltips:tank_params/desc/turretRotationSpeed_Secondary'
     TANK_PARAMS_DESC_GUNROTATIONSPEED = '#tooltips:tank_params/desc/gunRotationSpeed'
     TANK_PARAMS_DESC_CIRCULARVISIONRADIUS = '#tooltips:tank_params/desc/circularVisionRadius'
     TANK_PARAMS_DESC_RADIODISTANCE = '#tooltips:tank_params/desc/radioDistance'
     TANK_PARAMS_DESC_TURRETYAWLIMITS = '#tooltips:tank_params/desc/turretYawLimits'
+    TANK_PARAMS_DESC_TURRETYAWLIMITS_SECONDARY = '#tooltips:tank_params/desc/turretYawLimits_Secondary'
     TANK_PARAMS_DESC_PITCHLIMITS = '#tooltips:tank_params/desc/pitchLimits'
+    TANK_PARAMS_DESC_PITCHLIMITS_SECONDARY = '#tooltips:tank_params/desc/pitchLimits_Secondary'
     TANK_PARAMS_DESC_GUNYAWLIMITS = '#tooltips:tank_params/desc/gunYawLimits'
     TANK_PARAMS_DESC_CLIPFIRERATE = '#tooltips:tank_params/desc/clipFireRate'
+    TANK_PARAMS_DESC_CLIPFIRERATE_SECONDARY = '#tooltips:tank_params/desc/clipFireRate_Secondary'
     TANK_PARAMS_DESC_RELATIVEPOWER = '#tooltips:tank_params/desc/relativePower'
+    TANK_PARAMS_DESC_RELATIVEPOWER_SECONDARY = '#tooltips:tank_params/desc/relativePower_Secondary'
     TANK_PARAMS_DESC_RELATIVEARMOR = '#tooltips:tank_params/desc/relativeArmor'
     TANK_PARAMS_DESC_RELATIVEMOBILITY = '#tooltips:tank_params/desc/relativeMobility'
     TANK_PARAMS_DESC_RELATIVEVISIBILITY = '#tooltips:tank_params/desc/relativeVisibility'
     TANK_PARAMS_DESC_RELATIVECAMOUFLAGE = '#tooltips:tank_params/desc/relativeCamouflage'
     TANK_PARAMS_DESC_SHOTDISPERSIONANGLE = '#tooltips:tank_params/desc/shotDispersionAngle'
+    TANK_PARAMS_DESC_SHOTDISPERSIONANGLE_SECONDARY = '#tooltips:tank_params/desc/shotDispersionAngle_Secondary'
     TANK_PARAMS_DESC_AIMINGTIME = '#tooltips:tank_params/desc/aimingTime'
+    TANK_PARAMS_DESC_AIMINGTIME_SECONDARY = '#tooltips:tank_params/desc/aimingTime_Secondary'
     TANK_PARAMS_DESC_EXPLOSIONRADIUS = '#tooltips:tank_params/desc/explosionRadius'
     TANK_PARAMS_DESC_INVISIBILITYSTILLFACTOR = '#tooltips:tank_params/desc/invisibilityStillFactor'
     TANK_PARAMS_DESC_INVISIBILITYMOVINGFACTOR = '#tooltips:tank_params/desc/invisibilityMovingFactor'
@@ -1869,6 +1889,14 @@ class TOOLTIPS(object):
     QUESTS_CONDITION_ACHIEVEMENTS_OTHERS = '#tooltips:quests/condition/achievements/others'
     QUESTS_BONUSES_TOKEN_HEADER = '#tooltips:quests/bonuses/token/header'
     QUESTS_BONUSES_TOKEN_BODY = '#tooltips:quests/bonuses/token/body'
+    QUESTS_BONUSES_HALLOWEEN_1_HEADER = '#tooltips:quests/bonuses/halloween/1/header'
+    QUESTS_BONUSES_HALLOWEEN_1_BODY = '#tooltips:quests/bonuses/halloween/1/body'
+    QUESTS_BONUSES_HALLOWEEN_2_HEADER = '#tooltips:quests/bonuses/halloween/2/header'
+    QUESTS_BONUSES_HALLOWEEN_2_BODY = '#tooltips:quests/bonuses/halloween/2/body'
+    QUESTS_BONUSES_HALLOWEEN_3_HEADER = '#tooltips:quests/bonuses/halloween/3/header'
+    QUESTS_BONUSES_HALLOWEEN_3_BODY = '#tooltips:quests/bonuses/halloween/3/body'
+    QUESTS_BONUSES_HALLOWEEN_4_HEADER = '#tooltips:quests/bonuses/halloween/4/header'
+    QUESTS_BONUSES_HALLOWEEN_4_BODY = '#tooltips:quests/bonuses/halloween/4/body'
     HANGAR_HEADER_WGMONEYTOOLTIP_GOLDNAME = '#tooltips:hangar/header/wgmoneyTooltip/goldName'
     HANGAR_HEADER_WGMONEYTOOLTIP_CREDITSNAME = '#tooltips:hangar/header/wgmoneyTooltip/creditsName'
     HANGAR_HEADER_WGMONEYTOOLTIP_PURCHASEDVALUE = '#tooltips:hangar/header/wgmoneyTooltip/purchasedValue'
@@ -2186,6 +2214,10 @@ class TOOLTIPS(object):
     ELEN_EXCEL_PLAYER_BODY = '#tooltips:elen/excel/player/body'
     ELEN_AWARDSOVERLAY_GROUP_HEADER = '#tooltips:elen/awardsOverlay/group/header'
     ELEN_CONDITION_BATTLETYPE_RANDOM = '#tooltips:elen/condition/battletype/random'
+    HANGAR_LEVIATHANPREVIEW_REDBUTTONDISABLED_HEADER = '#tooltips:hangar/leviathanPreview/redButtonDisabled/header'
+    HANGAR_LEVIATHANPREVIEW_REDBUTTONDISABLED_DESCRIPTION = '#tooltips:hangar/leviathanPreview/redButtonDisabled/description'
+    HANGAR_LEVIATHANPREVIEW_CLOSEBUTTON_HEADER = '#tooltips:hangar/leviathanPreview/closeButton/header'
+    HANGAR_LEVIATHANPREVIEW_CLOSEBUTTON_DESCRIPTION = '#tooltips:hangar/leviathanPreview/closeButton/description'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -2308,28 +2340,44 @@ class TOOLTIPS(object):
      TANK_PARAMS_DESC_ATTAINABLESPEED,
      TANK_PARAMS_DESC_HULLARMOR,
      TANK_PARAMS_DESC_TURRETARMOR,
+     TANK_PARAMS_DESC_TURRETARMOR_PRIMARY,
+     TANK_PARAMS_DESC_TURRETARMOR_SECONDARY,
+     TANK_PARAMS_DESC_PARAMTITLE_PRIMARYTURRET,
+     TANK_PARAMS_DESC_PARAMTITLE_SECONDARYTURRET,
      TANK_PARAMS_DESC_RELOADTIME,
+     TANK_PARAMS_DESC_RELOADTIME_SECONDARY,
      TANK_PARAMS_DESC_RELOADTIMESECS,
+     TANK_PARAMS_DESC_RELOADTIMESECS_SECONDARY,
      TANK_PARAMS_DESC_PIERCINGPOWER,
      TANK_PARAMS_DESC_AVGPIERCINGPOWER,
+     TANK_PARAMS_DESC_AVGPIERCINGPOWER_SECONDARY,
      TANK_PARAMS_DESC_DAMAGE,
      TANK_PARAMS_DESC_AVGDAMAGE,
+     TANK_PARAMS_DESC_AVGDAMAGE_SECONDARY,
      TANK_PARAMS_DESC_AVGDAMAGEPERMINUTE,
+     TANK_PARAMS_DESC_AVGDAMAGEPERMINUTE_SECONDARY,
      TANK_PARAMS_DESC_TURRETROTATIONSPEED,
+     TANK_PARAMS_DESC_TURRETROTATIONSPEED_SECONDARY,
      TANK_PARAMS_DESC_GUNROTATIONSPEED,
      TANK_PARAMS_DESC_CIRCULARVISIONRADIUS,
      TANK_PARAMS_DESC_RADIODISTANCE,
      TANK_PARAMS_DESC_TURRETYAWLIMITS,
+     TANK_PARAMS_DESC_TURRETYAWLIMITS_SECONDARY,
      TANK_PARAMS_DESC_PITCHLIMITS,
+     TANK_PARAMS_DESC_PITCHLIMITS_SECONDARY,
      TANK_PARAMS_DESC_GUNYAWLIMITS,
      TANK_PARAMS_DESC_CLIPFIRERATE,
+     TANK_PARAMS_DESC_CLIPFIRERATE_SECONDARY,
      TANK_PARAMS_DESC_RELATIVEPOWER,
+     TANK_PARAMS_DESC_RELATIVEPOWER_SECONDARY,
      TANK_PARAMS_DESC_RELATIVEARMOR,
      TANK_PARAMS_DESC_RELATIVEMOBILITY,
      TANK_PARAMS_DESC_RELATIVEVISIBILITY,
      TANK_PARAMS_DESC_RELATIVECAMOUFLAGE,
      TANK_PARAMS_DESC_SHOTDISPERSIONANGLE,
+     TANK_PARAMS_DESC_SHOTDISPERSIONANGLE_SECONDARY,
      TANK_PARAMS_DESC_AIMINGTIME,
+     TANK_PARAMS_DESC_AIMINGTIME_SECONDARY,
      TANK_PARAMS_DESC_EXPLOSIONRADIUS,
      TANK_PARAMS_DESC_INVISIBILITYSTILLFACTOR,
      TANK_PARAMS_DESC_INVISIBILITYMOVINGFACTOR,
@@ -2446,6 +2494,14 @@ class TOOLTIPS(object):
      VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHCREDITS_BODY,
      VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHGOLD_HEADER,
      VEHICLEPREVIEW_BUYBUTTON_NOTENOUGHGOLD_BODY)
+    QUESTS_BONUSES_HALLOWEEN_ALL_ENUM = (QUESTS_BONUSES_HALLOWEEN_1_HEADER,
+     QUESTS_BONUSES_HALLOWEEN_1_BODY,
+     QUESTS_BONUSES_HALLOWEEN_2_HEADER,
+     QUESTS_BONUSES_HALLOWEEN_2_BODY,
+     QUESTS_BONUSES_HALLOWEEN_3_HEADER,
+     QUESTS_BONUSES_HALLOWEEN_3_BODY,
+     QUESTS_BONUSES_HALLOWEEN_4_HEADER,
+     QUESTS_BONUSES_HALLOWEEN_4_BODY)
     TANK_PARAMS_AVGPARAMCOMMENT_ENUM = (TANK_PARAMS_AVGPARAMCOMMENT_DAMAGE, TANK_PARAMS_AVGPARAMCOMMENT_PIERCINGPOWER)
     SKILLS_ALL_HEADER_ENUM = (SKILLS_CAMOUFLAGE_HEADER,
      SKILLS_BROTHERHOOD_HEADER,
@@ -2742,6 +2798,15 @@ class TOOLTIPS(object):
     def vehiclepreview_buybutton_all(cls, key0, part):
         outcome = '#tooltips:vehiclePreview/buyButton/{}/{}'.format(key0, part)
         if outcome not in cls.VEHICLEPREVIEW_BUYBUTTON_ALL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def quests_bonuses_halloween_all(cls, key0, part):
+        outcome = '#tooltips:quests/bonuses/halloween/{}/{}'.format(key0, part)
+        if outcome not in cls.QUESTS_BONUSES_HALLOWEEN_ALL_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

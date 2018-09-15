@@ -27,7 +27,9 @@ class IGoodiesCache(object):
 
     def getBoosterPriceData(self, boosterID):
         """
-        Gets tuple of Booster price, Booster default price, is booster hidden
+        Gets tuple of booster price-related data: (buy price, def price, alt price, def alt price, is booster hidden).
+        :param boosterID: booster id, represented by long
+        :return: tuple(Money, Money, Money, Money, bool)
         """
         raise NotImplementedError
 

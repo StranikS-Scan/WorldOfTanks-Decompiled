@@ -81,7 +81,7 @@ class RandomSquadEntity(SquadEntity):
     def init(self, ctx=None):
         rv = super(RandomSquadEntity, self).init(ctx)
         self._isBalancedSquad = self.isBalancedSquadEnabled()
-        self._maxSpgCount = self._getMaxSPGCount()
+        self._maxSpgCount = self.getMaxSPGCount()
         self._switchActionsValidator()
         self._switchRosterSettings()
         self.invalidateVehicleStates()
@@ -138,7 +138,7 @@ class RandomSquadEntity(SquadEntity):
 
     def hasSlotForSPG(self):
         accountDbID = account_helpers.getAccountDatabaseID()
-        return self._getMaxSPGCount() > 0 and (self.getCurrentSPGCount() < self._getMaxSPGCount() or self.isCommander(accountDbID))
+        return self.getMaxSPGCount() > 0 and (self.getCurrentSPGCount() < self.getMaxSPGCount() or self.isCommander(accountDbID))
 
     def getCurrentSPGCount(self):
         enableSPGCount = 0
@@ -169,7 +169,7 @@ class RandomSquadEntity(SquadEntity):
         if self._isBalancedSquad and playerID == account_helpers.getAccountDatabaseID():
             self.unit_onUnitRosterChanged()
 
-    def _getMaxSPGCount(self):
+    def getMaxSPGCount(self):
         return self.lobbyContext.getServerSettings().getMaxSPGinSquads()
 
     def _createRosterSettings(self):
@@ -197,8 +197,8 @@ class RandomSquadEntity(SquadEntity):
         if self._isUseSPGValidateRule and v.type == VEHICLE_CLASS_NAME.SPG:
             isHaveSPG = False
             accountDbID = account_helpers.getAccountDatabaseID()
-            spgDifferenceCount = self._getMaxSPGCount() - self.getCurrentSPGCount()
-            if self._getMaxSPGCount() == 0:
+            spgDifferenceCount = self.getMaxSPGCount() - self.getCurrentSPGCount()
+            if self.getMaxSPGCount() == 0:
                 return False
             elif self.isCommander(accountDbID):
                 return result
@@ -223,11 +223,11 @@ class RandomSquadEntity(SquadEntity):
         Listener for events cache/server settings updates
         """
         balancedEnabled = self.isBalancedSquadEnabled()
-        spgForbiddenChanged = self._getMaxSPGCount() != self._maxSpgCount
+        spgForbiddenChanged = self.getMaxSPGCount() != self._maxSpgCount
         if spgForbiddenChanged:
             self.invalidateVehicleStates()
         self._isBalancedSquad = balancedEnabled
-        self._maxSpgCount = self._getMaxSPGCount()
+        self._maxSpgCount = self.getMaxSPGCount()
         self._switchActionsValidator()
         self.unit_onUnitRosterChanged()
 

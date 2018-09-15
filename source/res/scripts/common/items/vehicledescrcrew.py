@@ -30,7 +30,7 @@ class VehicleDescrCrew(object):
         if skillData is None or len(skillData) != len(crewCompactDescrs):
             self._levelIncreaseByBrotherhood = 0.0
         else:
-            self._levelIncreaseByBrotherhood = tankmen.getSkillsConfig()['brotherhood']['crewLevelIncrease']
+            self._levelIncreaseByBrotherhood = tankmen.getSkillsConfig().getSkill('brotherhood').crewLevelIncrease
         self._camouflageFactor = 1.0
         self._boostedSkills = {}
         return
@@ -153,7 +153,7 @@ class VehicleDescrCrew(object):
             if level is not None:
                 level = level[0][1]
                 universalistAddition = (level + commonLevelIncrease) / numInactive
-                universalistAddition *= skillsConfig['commander_universalist']['efficiency']
+                universalistAddition *= skillsConfig.getSkill('commander_universalist').efficiency
         applier = self._mainSkillQualifiersApplier
         for skillName in tankmen.ROLES:
             if isFire:
@@ -202,10 +202,10 @@ class VehicleDescrCrew(object):
                 continue
             skillToBoost.discard(skillName)
             idxInCrew, level, levelIncrease, isActive = bestTankman
-            self.callSkillProcessor(skillName, idxInCrew, level, levelIncrease, isActive, isFire, skillsConfig[skillName])
+            self.callSkillProcessor(skillName, idxInCrew, level, levelIncrease, isActive, isFire, skillsConfig.getSkill(skillName))
 
         for skillName in skillToBoost:
-            self.callSkillProcessor(skillName, None, 0, 0, True, False, skillsConfig[skillName])
+            self.callSkillProcessor(skillName, None, 0, 0, True, False, skillsConfig.getSkill(skillName))
 
         return
 
@@ -272,7 +272,7 @@ class VehicleDescrCrew(object):
             return
         else:
             if factorPerLevel is None:
-                factorPerLevel = skillConfig['distanceFactorPerLevelWhenDeviceWorking']
+                factorPerLevel = skillConfig.distanceFactorPerLevelWhenDeviceWorking
             self._setFactor('circularVisionRadius', 1.0 + (level + levelIncrease) * factorPerLevel)
             if _DO_DEBUG_LOG:
                 LOG_DEBUG("commander_eagleEye: factors['circularVisionRadius']: %s" % self._factors['circularVisionRadius'])
@@ -281,7 +281,7 @@ class VehicleDescrCrew(object):
     def _process_driver_virtuoso(self, idxInCrew, level, levelIncrease, isActive, isFire, skillConfig):
         if not isActive or isFire:
             return
-        self._setFactor('vehicle/rotationSpeed', 1.0 + (level + levelIncrease) * skillConfig['rotationSpeedFactorPerLevel'])
+        self._setFactor('vehicle/rotationSpeed', 1.0 + (level + levelIncrease) * skillConfig.rotationSpeedFactorPerLevel)
         if _DO_DEBUG_LOG:
             LOG_DEBUG("driver_virtuoso: factors['vehicle/rotationSpeed']: %s" % self._factors['vehicle/rotationSpeed'])
 
@@ -290,22 +290,22 @@ class VehicleDescrCrew(object):
             return
         level = level + levelIncrease
         r = self._terrainResistanceFactors
-        r[1] *= max(0.001, 1.0 - level * skillConfig['mediumGroundResistanceFactorPerLevel'])
-        r[2] *= max(0.001, 1.0 - level * skillConfig['softGroundResistanceFactorPerLevel'])
+        r[1] *= max(0.001, 1.0 - level * skillConfig.mediumGroundResistanceFactorPerLevel)
+        r[2] *= max(0.001, 1.0 - level * skillConfig.softGroundResistanceFactorPerLevel)
         if _DO_DEBUG_LOG:
             LOG_DEBUG('driver_badRoadsKing: terrainResistanceFactors: %s' % str(self._terrainResistanceFactors))
 
     def _process_radioman_finder(self, idxInCrew, level, levelIncrease, isActive, isFire, skillConfig):
         if not isActive or isFire:
             return
-        self._setFactor('circularVisionRadius', 1.0 + (level + levelIncrease) * skillConfig['visionRadiusFactorPerLevel'])
+        self._setFactor('circularVisionRadius', 1.0 + (level + levelIncrease) * skillConfig.visionRadiusFactorPerLevel)
         if _DO_DEBUG_LOG:
             LOG_DEBUG("radioman_finder: factors['circularVisionRadius']: %s" % self._factors['circularVisionRadius'])
 
     def _process_radioman_inventor(self, idxInCrew, level, levelIncrease, isActive, isFire, skillConfig):
         if not isActive or isFire:
             return
-        self._setFactor('radio/distance', 1.0 + (level + levelIncrease) * skillConfig['radioDistanceFactorPerLevel'])
+        self._setFactor('radio/distance', 1.0 + (level + levelIncrease) * skillConfig.radioDistanceFactorPerLevel)
         if _DO_DEBUG_LOG:
             LOG_DEBUG("radioman_inventor: factors['radio/distance']: %s" % self._factors['radio/distance'])
 

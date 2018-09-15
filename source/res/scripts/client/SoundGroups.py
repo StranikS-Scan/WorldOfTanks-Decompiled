@@ -11,7 +11,6 @@ import MusicControllerWWISE
 from ReplayEvents import g_replayEvents
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from helpers import i18n
-from constants import ARENA_PERIOD
 from vehicle_systems.tankStructure import TankPartNames
 ENABLE_LS = True
 ENABLE_ENGINE_N_TRACKS = True
@@ -25,9 +24,6 @@ DSP_SEEKSPEED = 200000
 SOUND_ENABLE_STATUS_DEFAULT = 0
 SOUND_ENABLE_STATUS_VALUES = range(3)
 MASTER_VOLUME_DEFAULT = 0.5
-_arenaPeriodState = {ARENA_PERIOD.WAITING: 'STATE_arenastate_waiting',
- ARENA_PERIOD.PREBATTLE: 'STATE_arenastate_counter',
- ARENA_PERIOD.BATTLE: 'STATE_arenastate_battle'}
 _envStateDefs = {'login': ('ue_01_loginscreen_enter', 'ue_01_loginscreen_exit', 0),
  'lobby': ('ue_02_hangar_enter', 'ue_02_hangar_exit', 1),
  'queue': ('ue_03_lobby_enter', 'ue_03_lobby_exit', 0),
@@ -417,18 +413,7 @@ class SoundGroups(object):
         if WWISE.enabled:
             if spaceID == GUI_GLOBAL_SPACE_ID.LOGIN:
                 WWISE.WG_loadLogin()
-        if spaceID == GUI_GLOBAL_SPACE_ID.BATTLE:
-            BigWorld.player().arena.onPeriodChange += self.__arenaPeriodChanged
-        elif self.__spaceID == GUI_GLOBAL_SPACE_ID.BATTLE:
-            BigWorld.player().arena.onPeriodChange -= self.__arenaPeriodChanged
         self.__spaceID = spaceID
-
-    def __arenaPeriodChanged(self, *args):
-        period = BigWorld.player().arena.period
-        state = _arenaPeriodState.get(period, None)
-        if state is not None:
-            WWISE.WW_setState('STATE_arenastate', state)
-        return
 
     def onEnvStart(self, environment):
         state = _envStateDefs.get(environment, None)
@@ -680,7 +665,7 @@ class SoundGroups(object):
         else:
             vehicleTypeDescriptor = BigWorld.player().vehicleTypeDescriptor
         if vehicleTypeDescriptor is not None:
-            __ceilLess = vehicleTypeDescriptor.turret['ceilless']
+            __ceilLess = vehicleTypeDescriptor.turret.ceilless
         if mode == 0:
             WWISE.WW_setRTCPGlobal('RTPC_ext_viewPlayMode', 1)
             if __ceilLess is True:

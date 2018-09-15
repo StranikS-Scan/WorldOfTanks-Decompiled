@@ -41,7 +41,7 @@ class DebugController(IViewComponentsController):
     def stopControl(self):
         self._timeInterval.stop()
         self._timeInterval = None
-        self._debugPanelUI = None
+        self.clearViewComponents()
         return
 
     def setViewComponents(self, debugPanelUI):

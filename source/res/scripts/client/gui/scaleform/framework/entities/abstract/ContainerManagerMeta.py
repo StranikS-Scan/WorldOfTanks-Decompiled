@@ -7,20 +7,17 @@ class ContainerManagerMeta(BaseDAAPIComponent):
     def isModalViewsIsExists(self):
         self._printOverrideError('isModalViewsIsExists')
 
-    def canCancelPreviousLoading(self, containerType):
-        self._printOverrideError('canCancelPreviousLoading')
-
     def as_getViewS(self, name):
         return self.flashObject.as_getView(name) if self._isDAAPIInited() else None
 
     def as_showS(self, name, x=0, y=0):
         return self.flashObject.as_show(name, x, y) if self._isDAAPIInited() else None
 
-    def as_registerContainerS(self, type, name):
-        return self.flashObject.as_registerContainer(type, name) if self._isDAAPIInited() else None
+    def as_registerContainerS(self, containerType, name):
+        return self.flashObject.as_registerContainer(containerType, name) if self._isDAAPIInited() else None
 
-    def as_unregisterContainerS(self, type):
-        return self.flashObject.as_unregisterContainer(type) if self._isDAAPIInited() else None
+    def as_unregisterContainerS(self, containerType):
+        return self.flashObject.as_unregisterContainer(containerType) if self._isDAAPIInited() else None
 
     def as_closePopUpsS(self):
         return self.flashObject.as_closePopUps() if self._isDAAPIInited() else None

@@ -39,6 +39,13 @@ class ProfileSection(ProfileSectionMeta):
         self._battlesType = bType
         self.invokeUpdate()
 
+    def onSectionActivated(self):
+        """
+        Calls when current section was activated.
+        Override in child classes.
+        """
+        pass
+
     def _dataProviderEntryAutoTranslate(self, key):
         return self._dataProviderEntry(key, i18n.makeString(PROFILE.profile_dropdown_labels(key)))
 
@@ -82,6 +89,8 @@ class ProfileSection(ProfileSectionMeta):
             data = accountDossier.getFalloutStats()
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED:
             data = accountDossier.getRankedStats()
+        elif self._battlesType == PROFILE_DROPDOWN_KEYS.EPIC_RANDOM:
+            data = accountDossier.getEpicRandomStats()
         else:
             raise ValueError('ProfileSection: Unknown battle type: ' + self._battlesType)
         return data

@@ -133,7 +133,10 @@ class ClanRequestsController(RequestsController):
          CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_UPDATE: self.__updateStronghold,
          CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_STATISTICS: self.__getStrongholdStatistics,
          CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_JOIN_BATTLE: self.__joinBattle,
-         CLAN_REQUESTED_DATA_TYPE.RANKED_LEAGUE_POSITION: self.__getRankedPosition}
+         CLAN_REQUESTED_DATA_TYPE.RANKED_LEAGUE_POSITION: self.__getRankedPosition,
+         CLAN_REQUESTED_DATA_TYPE.HOF_USER_INFO: self.__hofUserInfo,
+         CLAN_REQUESTED_DATA_TYPE.HOF_USER_EXCLUDE: self.__hofUserExclude,
+         CLAN_REQUESTED_DATA_TYPE.HOF_USER_RESTORE: self.__hofUserRestore}
 
     def fini(self):
         super(ClanRequestsController, self).fini()
@@ -363,3 +366,12 @@ class ClanRequestsController(RequestsController):
 
     def __getRankedPosition(self, ctx, callback):
         return self._requester.doRequestEx(ctx, callback, ('rblb', 'user_ranked_position'))
+
+    def __hofUserInfo(self, ctx, callback):
+        return self._requester.doRequestEx(ctx, callback, ('wgrms', 'hof_user_info'))
+
+    def __hofUserExclude(self, ctx, callback):
+        return self._requester.doRequestEx(ctx, callback, ('wgrms', 'hof_user_exclude'))
+
+    def __hofUserRestore(self, ctx, callback):
+        return self._requester.doRequestEx(ctx, callback, ('wgrms', 'hof_user_restore'))

@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	2.0	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/french/F18_Bat_Chatillon25t/Bat_Chatillon25t_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -30,19 +30,10 @@
       <armor_2>	50	</armor_2>
       <armor_3>	40	</armor_3>
       <armor_4>	30	</armor_4>
-      <armor_5>	50	</armor_5>
-      <armor_6>	40	</armor_6>
-      <armor_7>	15	</armor_7>
-      <armor_8>	15	</armor_8>
-      <armor_9>	25	</armor_9>
-      <armor_10>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-      </armor_10>
-      <armor_11>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-      </armor_11>
-      <armor_12>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-      </armor_12>
-      <armor_13>	0	</armor_13>
-      <armor_14>	25	</armor_14>
+      <armor_5>	15	</armor_5>
+      <armor_6>	15	</armor_6>
+      <armor_7>	50	</armor_7>
+      <armor_8>	0	</armor_8>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	10674	</weight>
@@ -65,10 +56,10 @@
     </swinging>
     <exhaust>
       <pixie>	gas_medium	</pixie>
-      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.641886 -0.486852	</turret>
+      <turret>	0.004414 0.514815 -0.545761	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/french/F18_Bat_Chatillon25t/collision/Hull.model	</collisionModelServer>
@@ -76,21 +67,24 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.639287 0.724051 1.70748	</rayStart>
-        <rayEnd>	-0.639287 0.361395 1.53872	</rayEnd>
+        <rayStart>	0.647 0.524153 1.7881	</rayStart>
+        <rayEnd>	0.647 0.338808 1.71295	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	0.479185 0.626629 1.91683	</rayStart>
-        <rayEnd>	0.479185 0.263974 1.74807	</rayEnd>
-        <rayUp>	0.704593 -0.14179 -0.695302	</rayUp>
-        <size>	0.75	</size>
+        <rayStart>	0.374811 0.441128 2.259	</rayStart>
+        <rayEnd>	0.374811 0.0704407 2.1087	</rayEnd>
+        <rayUp>	0.160924 -0.00529012 -0.986953	</rayUp>
+        <size>	0.656	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/french/F18_Bat_Chatillon25t/Bat_Chatillon25t_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1.7 1.7 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_Bat_Chatillon25t_2>
@@ -131,15 +125,16 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.765	</textureScale>
+        <textureScale>	-2.8	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.354692	</radius>
+          <syncAngle>	24	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -150,9 +145,10 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.299655	</radius>
+          <syncAngle>	24	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -166,6 +162,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.354692	</radius>
+          <syncAngle>	24	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -179,6 +176,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.299655	</radius>
+          <syncAngle>	24	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -195,12 +193,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.763199 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.894876 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/french/F18_Bat_Chatillon25t/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.26626 1.72671	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.27722 1.85249	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -213,6 +211,127 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.000000	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.000000	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F18_Bat_Chatillon25t/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F18_Bat_Chatillon25t/track/segment.model	</segmentModelRight>
+        <left>	vehicles/french/F18_Bat_Chatillon25t/track/left.track	</left>
+        <right>	vehicles/french/F18_Bat_Chatillon25t/track/right.track	</right>
+        <segmentLength>	0.132	</segmentLength>
+        <segmentOffset>	0.149	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0018	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.099	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2.2	</forwardElastK>
+          <backwardElastK>	0.55	</backwardElastK>
+          <offset>	-0.099	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.55	</backwardElastK>
+          <offset>	-0.099	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.099	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.099	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	2.2	</forwardElastK>
+          <backwardElastK>	0.55	</backwardElastK>
+          <offset>	-0.099	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.55	</backwardElastK>
+          <offset>	-0.099	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+          <offset>	-0.099	</offset>
+        </node>
+      </trackNodes>
     </Chassis_Bat_Chatillon25t_2>
   </chassis>
   <turrets0>
@@ -225,15 +344,18 @@
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	70	</armor_1>
-        <armor_2>	50	</armor_2>
-        <armor_3>	0	</armor_3>
-        <armor_4>	0	</armor_4>
-        <armor_5>	0	</armor_5>
-        <armor_6>	50	</armor_6>
-        <armor_7>	30	</armor_7>
-        <armor_8>	15	</armor_8>
+        <armor_3>	50	</armor_3>
+        <armor_4>	30	</armor_4>
+        <armor_5>	30	</armor_5>
+        <armor_6>	25	</armor_6>
+        <armor_7>	100	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	15	</armor_9>
+        <armor_10>	50	</armor_10>
+        <armor_11>	30	</armor_11>
+        <armor_12>	15	</armor_12>
       </armor>
-      <primaryArmor>	armor_6 armor_7 armor_8	</primaryArmor>
+      <primaryArmor>	armor_10 armor_11 armor_12	</primaryArmor>
       <weight>	5700	</weight>
       <maxHealth>	360	</maxHealth>
       <rotationSpeed>	38	</rotationSpeed>
@@ -260,17 +382,16 @@
           </unlocks>
           <armor>
             <armor_1>	50	</armor_1>
-            <armor_2>	30	</armor_2>
+            <armor_2>	70	</armor_2>
             <armor_3>	30	</armor_3>
             <armor_4>	15	</armor_4>
-            <armor_5>	45	</armor_5>
+            <armor_5>	15	</armor_5>
             <armor_6>	15	</armor_6>
-            <armor_7>	0	</armor_7>
-            <armor_8>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	25	</armor_9>
-            <armor_10>	25	</armor_10>
-            <armor_11>	25	</armor_11>
+            <armor_7>	45	</armor_7>
+            <armor_8>	0	</armor_8>
+            <armor_9>	40	</armor_9>
+            <armor_10>	70	</armor_10>
+            <armor_11>	30	</armor_11>
             <gun>	35	</gun>
           </armor>
           <reloadTime>	24	</reloadTime>
@@ -287,27 +408,58 @@
           <aimingTime>	2.3	</aimingTime>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
           <models>
-            <undamaged>	vehicles/french/F18_Bat_Chatillon25t/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/french/F18_Bat_Chatillon25t/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/french/F18_Bat_Chatillon25t/crash/lod0/Gun_02.model	</exploded>
+            <undamaged>	vehicles/french/F18_Bat_Chatillon25t/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/french/F18_Bat_Chatillon25t/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/french/F18_Bat_Chatillon25t/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/french/F18_Bat_Chatillon25t/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t/collision_client/Gun_02.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/french/F18_Bat_Chatillon25t/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.000500841 0.04321 2.87647	</rayStart>
-              <rayEnd>	0.10883 -0.0162623 2.87101	</rayEnd>
-              <rayUp>	0.087 0.08 0.000000	</rayUp>
+              <rayStart>	-0.00210497 0.0171946 3.61	</rayStart>
+              <rayEnd>	0.0208608 0.00434583 4.48914	</rayEnd>
+              <rayUp>	0.069 0.061 5	</rayUp>
               <size>	0.492	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-11.0	</row>
+                <row>	0.0	</row>
+                <row>	6.0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	Joint_01	</node>
+                  <table>
+                    <row>	1.342	</row>
+                    <row>	0.0	</row>
+                    <row>	-10.434	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	Joint_03	</node>
+                  <table>
+                    <row>	12.132	</row>
+                    <row>	0.0	</row>
+                    <row>	-3.174	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
+          <camouflage>
+            <tiling>	2 1 0.000000 0.000000	</tiling>
+          </camouflage>
         </_90mm_F3>
-        <_100mm_SA_47>	shared	  <maxAmmo>	30	</maxAmmo>
+        <_100mm_SA_47>	shared	  <maxAmmo>	42	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -11 0.269671 -11 0.333333 -8 0.666667 -8 0.730329 -11 1 -11	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
@@ -318,17 +470,16 @@
           </unlocks>
           <armor>
             <armor_1>	50	</armor_1>
-            <armor_2>	30	</armor_2>
+            <armor_2>	70	</armor_2>
             <armor_3>	30	</armor_3>
             <armor_4>	15	</armor_4>
-            <armor_5>	45	</armor_5>
+            <armor_5>	15	</armor_5>
             <armor_6>	15	</armor_6>
-            <armor_7>	0	</armor_7>
-            <armor_8>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	25	</armor_9>
-            <armor_10>	25	</armor_10>
-            <armor_11>	25	</armor_11>
+            <armor_7>	45	</armor_7>
+            <armor_8>	0	</armor_8>
+            <armor_9>	40	</armor_9>
+            <armor_10>	70	</armor_10>
+            <armor_11>	30	</armor_11>
             <gun>	40	</gun>
           </armor>
           <shotDispersionRadius>	0.36	</shotDispersionRadius>
@@ -345,25 +496,56 @@
           </clip>
           <aimingTime>	2.5	</aimingTime>
           <models>
-            <undamaged>	vehicles/french/F18_Bat_Chatillon25t/normal/lod0/Gun_04.model	</undamaged>
-            <destroyed>	vehicles/french/F18_Bat_Chatillon25t/crash/lod0/Gun_04.model	</destroyed>
-            <exploded>	vehicles/french/F18_Bat_Chatillon25t/crash/lod0/Gun_04.model	</exploded>
+            <undamaged>	vehicles/french/F18_Bat_Chatillon25t/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/french/F18_Bat_Chatillon25t/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/french/F18_Bat_Chatillon25t/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/french/F18_Bat_Chatillon25t/collision/Gun_04.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t/collision_client/Gun_04.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/french/F18_Bat_Chatillon25t/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <reloadEffect>	reload_automat_reloading_85_107	</reloadEffect>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.000000 0.0472202 4.40437	</rayStart>
-              <rayEnd>	0.100736 -0.0286573 4.40163	</rayEnd>
-              <rayUp>	0.087 0.082 0.000000	</rayUp>
+              <rayStart>	-0.00421142 0.0163037 4.48	</rayStart>
+              <rayEnd>	-0.0603312 0.0267817 2.97924	</rayEnd>
+              <rayUp>	0.091 0.088 5	</rayUp>
               <size>	0.705	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-11.0	</row>
+                <row>	0.0	</row>
+                <row>	6.0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	Joint_01	</node>
+                  <table>
+                    <row>	1.342	</row>
+                    <row>	0.0	</row>
+                    <row>	-10.434	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	Joint_03	</node>
+                  <table>
+                    <row>	12.132	</row>
+                    <row>	0.0	</row>
+                    <row>	-3.174	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
+          <camouflage>
+            <tiling>	2 1 0.000000 0.000000	</tiling>
+          </camouflage>
         </_100mm_SA_47>
         <_105mm_CN_105_57>	shared	  <maxAmmo>	30	</maxAmmo>
           <pitchLimits>
@@ -372,17 +554,16 @@
           </pitchLimits>
           <armor>
             <armor_1>	50	</armor_1>
-            <armor_2>	30	</armor_2>
+            <armor_2>	70	</armor_2>
             <armor_3>	30	</armor_3>
             <armor_4>	15	</armor_4>
-            <armor_5>	45	</armor_5>
+            <armor_5>	15	</armor_5>
             <armor_6>	15	</armor_6>
-            <armor_7>	0	</armor_7>
-            <armor_8>	45	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_8>
-            <armor_9>	25	</armor_9>
-            <armor_10>	25	</armor_10>
-            <armor_11>	25	</armor_11>
+            <armor_7>	45	</armor_7>
+            <armor_8>	0	</armor_8>
+            <armor_9>	40	</armor_9>
+            <armor_10>	70	</armor_10>
+            <armor_11>	30	</armor_11>
             <gun>	35	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
@@ -399,26 +580,54 @@
           </clip>
           <aimingTime>	2.7	</aimingTime>
           <models>
-            <undamaged>	vehicles/french/F18_Bat_Chatillon25t/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/french/F18_Bat_Chatillon25t/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/french/F18_Bat_Chatillon25t/crash/lod0/Gun_05.model	</exploded>
+            <undamaged>	vehicles/french/F18_Bat_Chatillon25t/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/french/F18_Bat_Chatillon25t/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/french/F18_Bat_Chatillon25t/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/french/F18_Bat_Chatillon25t/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t/collision_client/Gun_05.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/french/F18_Bat_Chatillon25t/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	-0.00215324 0.0452344 3.43328	</rayStart>
-              <rayEnd>	-0.103926 -0.0119952 3.43091	</rayEnd>
-              <rayUp>	0.095 0.0918 2	</rayUp>
-              <size>	0.558	</size>
+              <rayStart>	-0.00221138 0.0164914 3.5	</rayStart>
+              <rayEnd>	0.00793971 -0.0284059 3.18401	</rayEnd>
+              <rayUp>	0.072 0.062 5	</rayUp>
+              <size>	0.438	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <drivenJoints>
+            <master>
+              <node>	Gun	</node>
+              <table>
+                <row>	-11.0	</row>
+                <row>	0.0	</row>
+                <row>	6.0	</row>
+              </table>
+              <slaves>
+                <slave>
+                  <node>	Joint_01	</node>
+                  <table>
+                    <row>	1.342	</row>
+                    <row>	0.0	</row>
+                    <row>	-10.434	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	Joint_03	</node>
+                  <table>
+                    <row>	12.132	</row>
+                    <row>	0.0	</row>
+                    <row>	-3.174	</row>
+                  </table>
+                </slave>
+              </slaves>
+            </master>
+          </drivenJoints>
           <camouflage>
-            <tiling>	1.06 1.06 0.000000 0.000000	</tiling>
+            <tiling>	2 1 0.000000 0.000000	</tiling>
           </camouflage>
         </_105mm_CN_105_57>
       </guns>
@@ -431,34 +640,37 @@
         <collisionModelServer>	vehicles/french/F18_Bat_Chatillon25t/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F18_Bat_Chatillon25t/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.461964 0.02317	</gunPosition>
+      <gunPosition>	-0.002258 0.494202 0.029392	</gunPosition>
       <emblemSlots>
+        <inscription>
+          <rayStart>	1.19461 0.0895254 -0.900221	</rayStart>
+          <rayEnd>	0.79462 0.0895253 -0.900221	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.556	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
         <player>
-          <rayStart>	1.06871 0.0208187 -1.22352	</rayStart>
-          <rayEnd>	0.668705 0.0208187 -1.22352	</rayEnd>
+          <rayStart>	-1.19506 0.0955622 -0.497894	</rayStart>
+          <rayEnd>	-0.795055 0.0955622 -0.497894	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.24	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.19506 0.0955622 -0.497894	</rayStart>
+          <rayEnd>	0.795055 0.0955622 -0.497894	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
-        <inscription>
-          <rayStart>	-1.06871 0.0365738 -0.760173	</rayStart>
-          <rayEnd>	-0.668705 0.0365738 -0.760173	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.7	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <player>
-          <rayStart>	-1.06871 0.0219177 -1.2482	</rayStart>
-          <rayEnd>	-0.668705 0.0219177 -1.2482	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.24	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
       </emblemSlots>
       <showEmblemsOnGun>	true	</showEmblemsOnGun>
-      <physicsShape>	1.215 -0.045 0.893 0.000 1.226 0.056 0.249 0.000 0.500 0.500 0.000 0.500 0.367 0.000 0.014	</physicsShape>
+      <physicsShape>	1.318 -0.105 1.190 0.000 1.353 0.100 0.249 0.000 0.500 0.500 0.094 0.500 0.424 0.000 0.014	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	1 0.5 0.000000 0.000000	</tiling>
+      </camouflage>
     </Turret_1_Bat_Chatillon25t>
   </turrets0>
   <engines>
@@ -525,11 +737,6 @@
   <emblems>
     <default>	french_rose	</default>
     <lodDist>	MEDIUM	</lodDist>
-    <alpha>	0.86	</alpha>
+    <alpha>	0.956863	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </F18_Bat_Chatillon25t.xml>

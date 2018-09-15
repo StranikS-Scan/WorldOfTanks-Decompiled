@@ -10,13 +10,13 @@ from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.vehicle import VehicleSeller
 from gui.shared.gui_items.vehicle_modules import Shell
-from gui.shared.money import Money, Currency
+from gui.shared.items_cache import CACHE_SYNC_REASON
+from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.tooltips.formatters import packItemActionTooltipData
@@ -59,10 +59,11 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         self.itemsCache.onSyncCompleted += self.__shopResyncHandler
         items = self.itemsCache.items
         vehicle = items.getVehicle(self.vehInvID)
-        sellPrice = vehicle.sellPrice
-        sellForGold = sellPrice.gold > 0
+        sellPrice = vehicle.sellPrices.itemPrice.price
+        sellCurrency = sellPrice.getCurrency(byWeight=True)
+        sellForGold = sellCurrency == Currency.GOLD
         priceTextColor = CURRENCIES_CONSTANTS.GOLD_COLOR if sellForGold else CURRENCIES_CONSTANTS.CREDITS_COLOR
-        priceTextValue = _ms(DIALOGS.VEHICLESELLDIALOG_PRICE_SIGN_ADD) + _ms(BigWorld.wg_getIntegralFormat(sellPrice.gold if sellForGold else sellPrice.credits))
+        priceTextValue = _ms(DIALOGS.VEHICLESELLDIALOG_PRICE_SIGN_ADD) + _ms(BigWorld.wg_getIntegralFormat(sellPrice.getSignValue(sellCurrency)))
         currencyIcon = CURRENCIES_CONSTANTS.GOLD if sellForGold else CURRENCIES_CONSTANTS.CREDITS
         invVehs = items.getVehicles(REQ_CRITERIA.INVENTORY)
         if vehicle.isPremium or vehicle.level >= 3:
@@ -75,11 +76,11 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         otherVehsShells = set()
         for invVeh in invVehs.itervalues():
             if invVeh.invID != self.vehInvID:
-                for shot in invVeh.descriptor.gun['shots']:
-                    otherVehsShells.add(shot['shell']['compactDescr'])
+                for shot in invVeh.descriptor.gun.shots:
+                    otherVehsShells.add(shot.shell.compactDescr)
 
         vehicleAction = None
-        if sellPrice != vehicle.defaultSellPrice:
+        if vehicle.sellPrices.itemPrice.isActionPrice():
             vehicleAction = packItemActionTooltipData(vehicle, False)
         if vehicle.isElite:
             description = TOOLTIPS.tankcaruseltooltip_vehicletype_elite(vehicle.type)
@@ -111,7 +112,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
          'isPremium': vehicle.isPremium,
          'type': vehicle.type,
          'nationID': vehicle.nationID,
-         'sellPrice': sellPrice,
+         'sellPrice': sellPrice.toMoneyTuple(),
          'priceTextValue': priceTextValue,
          'priceTextColor': priceTextColor,
          'currencyIcon': currencyIcon,
@@ -127,26 +128,34 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         onVehicleOptionalDevices = []
         for o in vehicle.optDevices:
             if o is not None:
+                itemPrice = o.sellPrices.itemPrice
                 action = None
-                if o.sellPrice != o.defaultSellPrice:
+                if itemPrice.isActionPrice():
                     action = packItemActionTooltipData(o, False)
+                removalPrice = o.getRemovalPrice(items)
+                removeAction = None
+                if removalPrice.isActionPrice():
+                    removeAction = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'paidRemovalCost', True, removalPrice.price, removalPrice.defPrice)
                 data = {'intCD': o.intCD,
                  'isRemovable': o.isRemovable,
                  'userName': o.userName,
-                 'sellPrice': o.sellPrice,
+                 'sellPrice': itemPrice.price.toMoneyTuple(),
                  'toInventory': True,
-                 'action': action}
+                 'action': action,
+                 'removePrice': removalPrice.price.toMoneyTuple(),
+                 'removeActionPrice': removeAction}
                 onVehicleOptionalDevices.append(data)
 
         onVehicleoShells = []
         for shell in vehicle.shells:
             if shell is not None:
+                itemPrice = shell.sellPrices.itemPrice
                 action = None
-                if shell.sellPrice != shell.defaultSellPrice:
+                if itemPrice.isActionPrice():
                     action = packItemActionTooltipData(shell, False)
                 data = {'intCD': shell.intCD,
                  'count': shell.count,
-                 'sellPrice': shell.sellPrice,
+                 'sellPrice': itemPrice.price.toMoneyTuple(),
                  'userName': shell.userName,
                  'kind': shell.type,
                  'toInventory': shell in otherVehsShells or shell.isPremium,
@@ -154,56 +163,57 @@ class VehicleSellDialog(VehicleSellDialogMeta):
                 onVehicleoShells.append(data)
 
         onVehicleEquipments = []
-        for equipmnent in vehicle.eqs:
-            if equipmnent is not None:
-                action = None
-                if equipmnent.sellPrice != equipmnent.defaultSellPrice:
-                    action = packItemActionTooltipData(equipmnent, False)
-                data = {'intCD': equipmnent.intCD,
-                 'userName': equipmnent.userName,
-                 'sellPrice': equipmnent.sellPrice,
-                 'toInventory': True,
-                 'action': action}
-                onVehicleEquipments.append(data)
+        for equipmnent in vehicle.equipment.regularConsumables.getInstalledItems():
+            action = None
+            if equipmnent.sellPrices.itemPrice.isActionPrice():
+                action = packItemActionTooltipData(equipmnent, False)
+            data = {'intCD': equipmnent.intCD,
+             'userName': equipmnent.userName,
+             'sellPrice': equipmnent.sellPrices.itemPrice.price.toMoneyTuple(),
+             'toInventory': True,
+             'action': action}
+            onVehicleEquipments.append(data)
+
+        onVehicleBattleBoosters = []
+        for booster in vehicle.equipment.battleBoosterConsumables.getInstalledItems():
+            data = {'intCD': booster.intCD,
+             'userName': booster.userName,
+             'sellPrice': MONEY_UNDEFINED.toMoneyTuple(),
+             'onlyToInventory': True}
+            onVehicleBattleBoosters.append(data)
 
         inInventoryModules = []
         for m in modules:
             inInventoryModules.append({'intCD': m.intCD,
              'inventoryCount': m.inventoryCount,
              'toInventory': True,
-             'sellPrice': m.sellPrice})
+             'sellPrice': m.sellPrices.itemPrice.price.toMoneyTuple()})
 
         inInventoryShells = []
         for s in shells:
             action = None
-            if s.sellPrice != s.defaultSellPrice:
+            itemPrice = s.sellPrices.itemPrice
+            if itemPrice.isActionPrice():
                 action = packItemActionTooltipData(s, False)
             inInventoryShells.append({'intCD': s.intCD,
              'count': s.inventoryCount,
-             'sellPrice': s.sellPrice,
+             'sellPrice': itemPrice.price.toMoneyTuple(),
              'userName': s.userName,
              'kind': s.type,
              'toInventory': s in otherVehsShells or s.isPremium,
              'action': action})
 
-        removePrice = items.shop.paidRemovalCost
-        removePrices = Money(gold=removePrice)
-        defRemovePrice = Money(gold=items.shop.defaults.paidRemovalCost)
-        removeAction = None
-        if removePrices != defRemovePrice:
-            removeAction = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'paidRemovalCost', True, removePrices, defRemovePrice)
         settings = self.getDialogSettings()
         isSlidingComponentOpened = settings['isOpened']
-        self.as_setDataS({'accountGold': items.stats.gold,
+        self.as_setDataS({'accountMoney': items.stats.money.toMoneyTuple(),
          'sellVehicleVO': sellVehicleData,
          'optionalDevicesOnVehicle': onVehicleOptionalDevices,
          'shellsOnVehicle': onVehicleoShells,
          'equipmentsOnVehicle': onVehicleEquipments,
          'modulesInInventory': inInventoryModules,
          'shellsInInventory': inInventoryShells,
-         'removeActionPrice': removeAction,
-         'removePrice': removePrice,
-         'isSlidingComponentOpened': isSlidingComponentOpened})
+         'isSlidingComponentOpened': isSlidingComponentOpened,
+         'battleBoostersOnVehicle': onVehicleBattleBoosters})
         return
 
     def setUserInput(self, value):
@@ -243,8 +253,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
 
     @decorators.process('sellVehicle')
     def __doSellVehicle(self, vehicle, shells, eqs, optDevs, inventory, isDismissCrew):
-        removalCost = self.itemsCache.items.shop.paidRemovalCost
-        result = yield VehicleSeller(vehicle, removalCost, shells, eqs, optDevs, inventory, isDismissCrew).request()
+        result = yield VehicleSeller(vehicle, shells, eqs, optDevs, inventory, isDismissCrew).request()
         if len(result.userMsg):
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 

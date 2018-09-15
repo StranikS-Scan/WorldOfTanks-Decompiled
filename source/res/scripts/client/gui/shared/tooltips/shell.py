@@ -8,8 +8,9 @@ from gui.shared.items_parameters import params_helper, formatters as params_form
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips import getComplexStatus, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
+from gui.shared.gui_items.gui_item_economics import isItemBuyPriceAvailable
 from gui.shared.formatters import text_styles
-from gui.shared.money import ZERO_MONEY
+from gui.shared.money import Currency
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.shared import IItemsCache
@@ -112,31 +113,34 @@ class PriceBlockConstructor(ShellTooltipBlockConstructor):
             LOG_ERROR('You are not allowed to use buyPrice and sellPrice at the same time')
             return
         else:
-            need = ZERO_MONEY
-            if buyPrice:
-                money = self.itemsCache.items.stats.money
-                price = shell.altPrice or shell.buyPrice
-                need = price - money
-                need = need.toNonNegative()
-                defPrice = shell.defaultAltPrice or shell.defaultPrice
-                addCreditPrice = price.credits > 0
-                if price.isAllSet() and not self.itemsCache.items.shop.isEnabledBuyingGoldShellsForCredits:
-                    addCreditPrice = False
-                addGoldPrice = price.gold > 0
-                addDelimeter = addCreditPrice and addGoldPrice
-                if addCreditPrice:
-                    block.append(makePriceBlock(price.credits, CURRENCY_SETTINGS.BUY_CREDITS_PRICE, need.credits if need.credits > 0 else None, defPrice.credits if defPrice.credits > 0 else None, percent=shell.actionPrc, valueWidth=self._valueWidth))
-                if addDelimeter:
-                    block.append(formatters.packTextBlockData(text=text_styles.standard(TOOLTIPS.VEHICLE_TEXTDELIMITER_OR), padding=formatters.packPadding(left=81 + self.leftPadding)))
-                if addGoldPrice:
-                    block.append(makePriceBlock(price.gold, CURRENCY_SETTINGS.BUY_GOLD_PRICE, need.gold if need.gold > 0 else None, defPrice.gold if defPrice.gold > 0 else None, percent=shell.actionPrc, valueWidth=self._valueWidth))
-            if sellPrice:
-                block.append(makePriceBlock(shell.sellPrice.credits, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=shell.defaultSellPrice.credits, percent=shell.sellActionPrc, valueWidth=self._valueWidth))
+            notEnoughMoney = False
+            showDelimiter = False
+            shop = self.itemsCache.items.shop
+            money = self.itemsCache.items.stats.money
+            if buyPrice and shell.buyPrices:
+                for itemPrice in shell.buyPrices.iteritems(directOrder=False):
+                    if not isItemBuyPriceAvailable(shell, itemPrice, shop) or not itemPrice.price:
+                        continue
+                    currency = itemPrice.getCurrency()
+                    value = itemPrice.price.getSignValue(currency)
+                    defValue = itemPrice.defPrice.getSignValue(currency)
+                    actionPercent = itemPrice.getActionPrc()
+                    needValue = value - money.getSignValue(currency)
+                    if needValue > 0:
+                        notEnoughMoney = True
+                    else:
+                        needValue = None
+                    if showDelimiter:
+                        block.append(formatters.packTextBlockData(text=text_styles.standard(TOOLTIPS.VEHICLE_TEXTDELIMITER_OR), padding=formatters.packPadding(left=81 + self.leftPadding)))
+                    block.append(makePriceBlock(value, CURRENCY_SETTINGS.getBuySetting(currency), needValue, defValue if defValue > 0 else None, actionPercent, valueWidth=self._valueWidth))
+                    showDelimiter = True
+
+            if sellPrice and shell.sellPrices:
+                block.append(makePriceBlock(shell.sellPrices.itemPrice.price.credits, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=shell.sellPrices.itemPrice.defPrice.credits, percent=shell.sellPrices.itemPrice.getActionPrc(), valueWidth=self._valueWidth))
             inventoryCount = shell.inventoryCount
             if inventoryCount:
                 block.append(formatters.packTextParameterBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_INVENTORYCOUNT), value=text_styles.stats(inventoryCount), valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5)))
-            notEnoughMoney = need.credits > 0 or need.gold > 0
-            hasAction = shell.actionPrc > 0 or shell.sellActionPrc > 0
+            hasAction = shell.buyPrices.itemPrice.isActionPrice() or shell.sellPrices.itemPrice.isActionPrice()
             return (block, notEnoughMoney or hasAction)
 
 

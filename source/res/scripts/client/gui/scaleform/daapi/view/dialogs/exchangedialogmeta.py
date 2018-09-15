@@ -408,8 +408,7 @@ class ExchangeCreditsMeta(_ExchangeDialogMeta):
         :return: <int>
         """
         item = self.itemsCache.items.getItemByCD(self.getTypeCompDescr())
-        price = item.altPrice or item.buyPrice
-        return price.credits - self.itemsCache.items.stats.credits
+        return item.buyPrices.itemPrice.price.getSignValue(Currency.CREDITS) - self.itemsCache.items.stats.credits
 
     def _getRateToColorScheme(self):
         """
@@ -464,8 +463,8 @@ class RestoreExchangeCreditsMeta(ExchangeCreditsMeta):
         :return: <int> credits
         """
         item = self.itemsCache.items.getItemByCD(self.getTypeCompDescr())
-        price = item.restorePrice
-        return price.credits - self.itemsCache.items.stats.credits
+        credits = item.restorePrice.getSignValue(Currency.CREDITS)
+        return credits - self.itemsCache.items.stats.credits
 
 
 class ExchangeXpMeta(_ExchangeDialogMeta):

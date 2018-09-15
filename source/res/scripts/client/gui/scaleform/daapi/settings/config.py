@@ -15,7 +15,9 @@ BATTLE_PACKAGES_BY_ARENA_TYPE = {ARENA_GUI_TYPE.FALLOUT_CLASSIC: ('gui.Scaleform
  ARENA_GUI_TYPE.TUTORIAL: ('gui.Scaleform.daapi.view.battle.tutorial',),
  ARENA_GUI_TYPE.EVENT_BATTLES: ('gui.Scaleform.daapi.view.battle.event',),
  ARENA_GUI_TYPE.RANKED: ('gui.Scaleform.daapi.view.battle.ranked',),
- ARENA_GUI_TYPE.BOOTCAMP: ('gui.Scaleform.daapi.view.bootcamp.battle',)}
+ ARENA_GUI_TYPE.BOOTCAMP: ('gui.Scaleform.daapi.view.bootcamp.battle',),
+ ARENA_GUI_TYPE.EPIC_RANDOM: ('gui.Scaleform.daapi.view.battle.epic_random',),
+ ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: ('gui.Scaleform.daapi.view.battle.epic_random',)}
 BATTLE_PACKAGES_BY_DEFAULT = ('gui.Scaleform.daapi.view.battle.classic',)
 if HAS_DEV_RESOURCES:
     LOBBY_PACKAGES += _LOBBY_DEBUG_PACKAGES

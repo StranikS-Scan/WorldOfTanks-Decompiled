@@ -2170,6 +2170,46 @@
       <offset>	0 7 0	</offset>
       <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
     </model>
+    <model>
+      <modelName>	speedtree/212_epic_random_valley/AppleTree.spt	</modelName>
+      <offset>	0 3.5 0	</offset>
+      <wwsound>	ambient_trees_green_comb_mid_02	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/212_epic_random_valley/BirchFall_1.spt	</modelName>
+      <offset>	0 7.5 0	</offset>
+      <wwsound>	ambient_trees_yellow_soft_comb_mid_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/212_epic_random_valley/Bush.spt	</modelName>
+      <offset>	0 1 0	</offset>
+      <wwsound>	ambient_trees_green_comb_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/212_epic_random_valley/Fir.spt	</modelName>
+      <offset>	0 10 0	</offset>
+      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/212_epic_random_valley/Linden.spt	</modelName>
+      <offset>	0 7.5 0	</offset>
+      <wwsound>	ambient_trees_green_comb_big_02	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/212_epic_random_valley/Maple.spt	</modelName>
+      <offset>	0 12 0	</offset>
+      <wwsound>	ambient_trees_yellow_soft_comb_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/212_epic_random_valley/Shrub_1.spt	</modelName>
+      <offset>	0 1.5 0	</offset>
+      <wwsound>	ambient_trees_yellow_dry_comb_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	speedtree/212_epic_random_valley/Spruce.spt	</modelName>
+      <offset>	0 6 0	</offset>
+      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
+    </model>
   </lightSounds>
   <birds>
     <seagull>
@@ -3052,173 +3092,92 @@
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
     </prohorovka_defense_sc4_a3>
-    <wg_bday_plane_landing>
+    <NatDay_CN_plane_flying>
       <channel0>
-        <modelName>	content/Hangars/h16_WG_bday_2016/environment/airplane/normal/lod0/han16_WG_bday_2016_il2_02.model	</modelName>
-        <rollMagnitude>	0.000000	</rollMagnitude>
-        <rollRelaxation>	0.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <modelName>	content/Environment/hangar_NatDay_CN/environment/airplanes/normal/lod0/fly_airplane.model	</modelName>
+        <rollMagnitude>	2.000000	</rollMagnitude>
+        <rollRelaxation>	2.000000	</rollRelaxation>
+        <oscillationFreqHorz>	0.500000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.500000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	20.000000 2.000000	</alphaFadeDistances>
-        <wwsoundName>	hangar_h16_plane	</wwsoundName>
+        <alphaFadeDistances>	100.000000 200.000000	</alphaFadeDistances>
+        <wwsoundName>	hangar_NatDay_CN_plane	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName></effectName>
+        <effectName>	particles/Environment/scenarios/cn_plane_flying.xml	</effectName>
       </channel0>
       <point>
-        <position>	98.143326 14.743860 19.268608	</position>
-        <speed0>	40.000000	</speed0>
+        <position>	54.290058 19.518660 229.253632	</position>
+        <speed0>	50.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
+        <animAction>	flag	</animAction>
       </point>
       <point>
-        <position>	83.920891 7.371940 121.721085	</position>
-        <speed0>	40.000000	</speed0>
+        <position>	220.749252 30.566456 269.378937	</position>
+        <speed0>	50.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
+        <animAction>	flag	</animAction>
       </point>
       <point>
-        <position>	43.953835 1.254570 147.860031	</position>
-        <speed0>	30.000000	</speed0>
+        <position>	271.347748 30.355074 225.877792	</position>
+        <speed0>	50.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
+        <animAction>	flag	</animAction>
       </point>
       <point>
-        <position>	-37.568699 -0.032000 158.621994	</position>
-        <speed0>	20.000000	</speed0>
+        <position>	282.947906 26.960182 74.606781	</position>
+        <speed0>	50.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
+        <animAction>	flag	</animAction>
       </point>
       <point>
-        <position>	-118.243179 -0.031992 140.444077	</position>
-        <speed0>	6.000000	</speed0>
+        <position>	237.917419 30.581692 -42.622292	</position>
+        <speed0>	50.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
+        <animAction>	flag	</animAction>
       </point>
       <point>
-        <position>	-154.016617 -0.031992 144.862793	</position>
-        <speed0>	6.000000	</speed0>
+        <position>	143.734177 35.225113 -116.984375	</position>
+        <speed0>	50.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
+        <animAction>	flag	</animAction>
       </point>
       <point>
-        <position>	-171.720886 -0.031985 161.408401	</position>
-        <speed0>	6.000000	</speed0>
+        <position>	74.389709 35.551582 -135.760162	</position>
+        <speed0>	50.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
+        <animAction>	flag	</animAction>
       </point>
       <point>
-        <position>	-175.817993 -0.013129 192.948212	</position>
-        <speed0>	6.000000	</speed0>
+        <position>	-8.777863 34.136650 -117.591011	</position>
+        <speed0>	50.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
+        <animAction>	flag	</animAction>
       </point>
       <point>
-        <position>	-176.402267 0.022290 197.870514	</position>
-        <speed0>	0.001000	</speed0>
+        <position>	-69.592880 29.356125 -52.912437	</position>
+        <speed0>	50.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
+        <animAction>	flag	</animAction>
       </point>
       <point>
-        <position>	-176.613968 0.132898 243.722961	</position>
-        <speed0>	0.001000	</speed0>
+        <position>	-94.770744 25.792444 32.098576	</position>
+        <speed0>	50.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </wg_bday_plane_landing>
-    <wg_bday_jeep_moving>
-      <channel0>
-        <modelName>	content/Environment/hangar_premium_WG_Bday/environment/Willys/normal/lod0/willys2.model	</modelName>
-        <rollMagnitude>	0.000000	</rollMagnitude>
-        <rollRelaxation>	0.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <wwsoundName>	hangar_h16_jeep	</wwsoundName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName></effectName>
-      </channel0>
-      <point>
-        <position>	-248.968979 -0.032000 45.798946	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	flag	</animAction>
       </point>
       <point>
-        <position>	-241.313339 -0.032000 113.713783	</position>
-        <speed0>	10.000000	</speed0>
+        <position>	-55.102146 14.750563 132.728043	</position>
+        <speed0>	50.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	flag	</animAction>
       </point>
       <point>
-        <position>	-233.299713 -0.057000 128.373215	</position>
-        <speed0>	10.000000	</speed0>
+        <position>	16.784475 6.192860 173.914368	</position>
+        <speed0>	50.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction>	flag	</animAction>
       </point>
-      <point>
-        <position>	-184.906693 -0.032625 134.536850	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	-52.380589 -0.031162 132.903290	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	102.467506 -0.032000 132.988052	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-    </wg_bday_jeep_moving>
-    <wg_bday_lorry_moving>
-      <channel0>
-        <modelName>	content/Environment/hangar_premium_WG_Bday/environment/ZIS_151/normal/lod0/ZIS_151_01.model	</modelName>
-        <rollMagnitude>	0.000000	</rollMagnitude>
-        <rollRelaxation>	0.000000	</rollRelaxation>
-        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
-        <wwsoundName>	hangar_h16_lorry	</wwsoundName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName></effectName>
-      </channel0>
-      <point>
-        <position>	-205.259430 -0.032000 219.951965	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	-205.393860 -0.032000 219.372543	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	-208.358795 -0.032000 173.045990	</position>
-        <speed0>	6.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	-212.584976 -0.032000 153.719864	</position>
-        <speed0>	5.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	-239.625732 -0.032000 132.285980	</position>
-        <speed0>	6.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	-253.012314 -0.031994 41.984501	</position>
-        <speed0>	10.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-      <point>
-        <position>	-252.084000 -0.031992 27.547182	</position>
-        <speed0>	0.200000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-      </point>
-    </wg_bday_lorry_moving>
+    </NatDay_CN_plane_flying>
     <stalingrad_2_ju87>
       <channel0>
         <modelName>	content/Environment/env713_BF109G/normal/lod0/env713_BF109G.model	</modelName>
@@ -4477,6 +4436,307 @@
         <animAction></animAction>
       </point>
     </victory_day_is3_7_right_h19>
+    <h02_tmday_soldier_marching_left>
+      <channel0>
+        <modelName>	content/Hangars/han02_tmday_2015/Tankmen/normal/h02_tmday_2015_tanksman.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	20	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 30.000000	</alphaFadeDistances>
+        <effectName></effectName>
+        <effectHardpoint>	HP_0	</effectHardpoint>
+      </channel0>
+      <point>
+        <position>	95.722244 2.117369 111.660591	</position>
+        <speed0>	2.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	95.722244 2.117369 108.877731	</position>
+        <speed0>	2.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	95.722244 2.117369 -149.989990	</position>
+        <speed0>	2.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+    </h02_tmday_soldier_marching_left>
+    <h02_tmday_soldier_marching_right>
+      <channel0>
+        <modelName>	content/Hangars/han02_tmday_2015/Tankmen/normal/h02_tmday_2015_tanksman.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	20	</tesselationFactor>
+        <wwsoundName>	h02_soldier_marching	</wwsoundName>
+        <alphaFadeDistances>	0.000000 30.000000	</alphaFadeDistances>
+        <effectName></effectName>
+        <effectHardpoint>	HP_0	</effectHardpoint>
+      </channel0>
+      <point>
+        <position>	93.559059 2.117369 111.652298	</position>
+        <speed0>	2.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	93.559059 2.117369 108.866241	</position>
+        <speed0>	2.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	93.559059 2.117369 -149.971130	</position>
+        <speed0>	2.000000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+    </h02_tmday_soldier_marching_right>
+    <h02_tmday_soldier_eat_left>
+      <channel0>
+        <modelName>	content/Hangars/han02_tmday_2015/Tankmen/normal/h02_tmday_2015_tanksman.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	20	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 15.000000	</alphaFadeDistances>
+        <effectName></effectName>
+        <effectHardpoint>	HP_0	</effectHardpoint>
+      </channel0>
+      <point>
+        <position>	-94.257126 0.027086 17.856890	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-94.5729 0.033634 14.9322	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-94.415695 0.040181 -12.425603	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-94.688774 0.009432 -17.959764	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-96.159416 0.017017 -20.196907	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-100.147514 0.013534 -21.408207	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-103.806168 0.010052 -21.447241	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-134.371536 0.063308 -21.309780	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-137.005508 0.065281 -21.277481	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-138.896957 0.586197 -21.258774	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-140.732132 1.322730 -21.274111	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-142.567307 1.549484 -21.289450	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-147.080841 1.282481 -20.980461	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+    </h02_tmday_soldier_eat_left>
+    <h02_tmday_soldier_eat_right>
+      <channel0>
+        <modelName>	content/Hangars/han02_tmday_2015/Tankmen/normal/h02_tmday_2015_tanksman.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	20	</tesselationFactor>
+        <wwsoundName>	h02_soldier_eat	</wwsoundName>
+        <alphaFadeDistances>	0.000000 15.000000	</alphaFadeDistances>
+        <effectName></effectName>
+        <effectHardpoint>	HP_0	</effectHardpoint>
+      </channel0>
+      <point>
+        <position>	-95.703461 0.027086 17.856890	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-95.7395 0.033634 14.9322	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-95.831871 0.040181 -12.425603	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-96.143311 0.009432 -17.413269	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-97.355461 0.017017 -19.085732	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-100.147514 0.013534 -19.934772	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-103.806168 0.010052 -19.983131	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-134.371536 0.063308 -20.261690	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-137.005508 0.065281 -20.383209	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-138.896957 0.586197 -20.804907	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-140.732132 1.322730 -21.274111	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-142.567307 1.549484 -21.289450	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+      <point>
+        <position>	-147.080841 1.282481 -20.980461	</position>
+        <speed0>	1.500000	</speed0>
+        <oscillation0>	0.000000 0.000000	</oscillation0>
+        <animAction>	walking_03	</animAction>
+      </point>
+    </h02_tmday_soldier_eat_right>
+    <h02_tmday_car_moving>
+      <channel0>
+        <modelName>	content/Hangars/han02_tmday_2015/Cars/normal/lod0/car6.model	</modelName>
+        <rollMagnitude>	0.000000	</rollMagnitude>
+        <rollRelaxation>	0.000000	</rollRelaxation>
+        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <wwsoundName>	h02_jeep	</wwsoundName>
+        <alphaFadeDistances>	15.000000 40.000000	</alphaFadeDistances>
+        <effectName></effectName>
+      </channel0>
+      <point>
+        <position>	133.567123 2.208959 -134.607315	</position>
+        <speed0>	8.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	91.179482 2.195628 -134.395187	</position>
+        <speed0>	8.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	62.921059 1.829007 -134.253769	</position>
+        <speed0>	8.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	48.791843 1.173519 -134.183060	</position>
+        <speed0>	8.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	41.371250 0.656993 -134.112350	</position>
+        <speed0>	8.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	20.533419 0.593077 -134.041626	</position>
+        <speed0>	8.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+      <point>
+        <position>	-92.500290 0.354403 -133.475937	</position>
+        <speed0>	8.000000	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+        <animAction></animAction>
+      </point>
+    </h02_tmday_car_moving>
     <show_waypoint_Plane_1>
       <channel0>
         <modelName>	content/Environment/env713_BF109G/normal/lod0/env713_BF109G.model	</modelName>
@@ -6215,205 +6475,5 @@
         <animAction></animAction>
       </point>
     </paris_fire_storm_4>
-    <h15_gamescom_2016_tram_1>
-      <channel0>
-        <modelName>	content/Hangars/h15_gamescom_2016/environment/normal/lod0/han15_gamescom_tram.model	</modelName>
-        <rollMagnitude>	0.000000	</rollMagnitude>
-        <rollRelaxation>	0.000000	</rollRelaxation>
-        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	15.000000 100.000000	</alphaFadeDistances>
-        <wwsoundName>	hangar_h15_tram_01	</wwsoundName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName></effectName>
-      </channel0>
-      <point>
-        <position>	-56.553875 -1.376992 202.792099	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-81.160950 -1.442879 123.711838	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-85.490990 -1.377149 110.104012	</position>
-        <speed0>	0.050000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-89.987007 -1.377150 96.577553	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-110.446228 -1.377150 33.807480	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </h15_gamescom_2016_tram_1>
-    <h15_gamescom_2016_tram_2>
-      <channel0>
-        <modelName>	content/Hangars/h15_gamescom_2016/environment/normal/lod0/han15_gamescom_tram.model	</modelName>
-        <rollMagnitude>	0.000000	</rollMagnitude>
-        <rollRelaxation>	0.000000	</rollRelaxation>
-        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	15.000000 100.000000	</alphaFadeDistances>
-        <wwsoundName>	hangar_h15_tram_02	</wwsoundName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName></effectName>
-      </channel0>
-      <point>
-        <position>	-108.077011 -1.306530 30.678545	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-97.533691 -1.442876 63.200455	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-91.437172 -1.377155 82.134521	</position>
-        <speed0>	0.050000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-88.192482 -1.377157 92.108849	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-52.203781 -1.377150 201.832596	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </h15_gamescom_2016_tram_2>
-    <h15_gamescom_2016_tram_3>
-      <channel0>
-        <modelName>	content/Hangars/h15_gamescom_2016/environment/normal/lod0/han15_gamescom_2016_train.model	</modelName>
-        <rollMagnitude>	0.000000	</rollMagnitude>
-        <rollRelaxation>	0.000000	</rollRelaxation>
-        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	15.000000 100.000000	</alphaFadeDistances>
-        <wwsoundName>	hangar_h15_train_01	</wwsoundName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName></effectName>
-      </channel0>
-      <point>
-        <position>	-129.476685 6.784117 174.215164	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-51.548691 6.399995 180.340759	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	30.570778 6.399994 180.580521	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	71.630501 6.399993 180.794083	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	112.690239 6.399993 181.007690	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	155.900574 5.865787 181.002441	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	202.779282 5.400676 181.364914	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </h15_gamescom_2016_tram_3>
-    <h15_gamescom_2016_tram_4>
-      <channel0>
-        <modelName>	content/Hangars/h15_gamescom_2016/environment/normal/lod0/han15_gamescom_2016_train.model	</modelName>
-        <rollMagnitude>	0.000000	</rollMagnitude>
-        <rollRelaxation>	0.000000	</rollRelaxation>
-        <oscillationFreqHorz>	0.000000	</oscillationFreqHorz>
-        <oscillationFreqVert>	0.000000	</oscillationFreqVert>
-        <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	15.000000 100.000000	</alphaFadeDistances>
-        <wwsoundName>	hangar_h15_train_01	</wwsoundName>
-        <effectHardpoint>	HP_module_0	</effectHardpoint>
-        <effectName></effectName>
-      </channel0>
-      <point>
-        <position>	203.126160 5.324144 186.162125	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	156.698318 5.855324 186.657684	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	113.015320 6.399993 185.102875	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	71.363808 6.399992 185.516876	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	30.417717 6.400026 185.402725	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-51.492748 6.407467 185.360825	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-      <point>
-        <position>	-130.587662 6.414942 179.677399	</position>
-        <speed0>	7.000000	</speed0>
-        <oscillation0>	0.500000 0.500000	</oscillation0>
-        <animAction></animAction>
-      </point>
-    </h15_gamescom_2016_tram_4>
   </mapActivities>
 </environment_effects.xml>

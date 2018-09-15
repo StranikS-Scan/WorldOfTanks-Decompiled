@@ -167,6 +167,16 @@ class ArenaDataProvider(IArenaDataProvider):
 
         return (updatedStats, updatedStatuses)
 
+    def updateGameModeSpecificStats(self, vehicleID, isStatic, stats):
+        if not isStatic:
+            vStatsVO = self.__vStatsVOs[vehicleID]
+            flags = vStatsVO.updateGameModeSpecificStats(stats)
+            return (flags, vStatsVO)
+        else:
+            vInfoVO = self.__vInfoVOs[vehicleID]
+            flags = vInfoVO.updateGameModeSpecificStats(stats)
+            return (flags, vInfoVO)
+
     def updateInvitationStatus(self, accountDBID, include, exclude=_INVITATION_STATUS.NONE):
         """Invitations states has been changed.
         :param accountDBID: long containing account database ID.

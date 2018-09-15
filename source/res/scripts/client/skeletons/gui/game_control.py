@@ -661,16 +661,40 @@ class IRankedBattlesController(IGameController):
         raise NotImplementedError
 
     def openWebLeaguePage(self, ctx=None):
-        raise NotImplemented
+        raise NotImplementedError
 
     def getPrevRanks(self, accRank, vehRank, rankChange):
-        raise NotImplemented
+        raise NotImplementedError
 
     def getCycleRewards(self, cycleID):
         """
         returns reward for max rank achieved in current season for given cycle ID
         """
-        raise NotImplemented
+        raise NotImplementedError
+
+    def getRanksChanges(self, isLoser=False):
+        """
+        returns ranks changes depends on team match result (win or lose)
+        """
+        pass
+
+    def getMinXp(self):
+        """
+        returns minXP value
+        """
+        pass
+
+    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
+        """
+        :return: dict, contains prime times in day based on periphery id
+        (peripheries are keys, primes are values)
+        :param groupIdentical: grouping peripheries with identical prime times in one key (exmp. 'RU1, RU2' etc.)
+        :param selectedTime: returns prime times for this day
+        """
+        pass
+
+    def getAllAwardsForCycle(self, cycleID):
+        raise NotImplementedError
 
 
 class IBootcampController(IGameController):

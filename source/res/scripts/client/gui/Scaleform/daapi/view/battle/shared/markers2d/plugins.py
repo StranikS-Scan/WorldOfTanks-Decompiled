@@ -247,7 +247,7 @@ class AreaStaticMarkerPlugin(MarkerPlugin):
         super(AreaStaticMarkerPlugin, self).fini()
         return
 
-    def __addStaticMarker(self, areaID, position, markerSymbolName):
+    def __addStaticMarker(self, areaID, position, markerSymbolName, show3DMarker=True):
         """
         Arguments:
         
@@ -256,6 +256,8 @@ class AreaStaticMarkerPlugin(MarkerPlugin):
             markerSymbolName: some string to map to flash object (MARKER_SYMBOL_NAME).
         
         """
+        if not show3DMarker:
+            return
         if areaID in self.__objects or markerSymbolName not in _TO_FLASH_SYMBOL_NAME_MAPPING:
             return
         markerID = self._createMarkerWithPosition(_TO_FLASH_SYMBOL_NAME_MAPPING[markerSymbolName], position, active=True)

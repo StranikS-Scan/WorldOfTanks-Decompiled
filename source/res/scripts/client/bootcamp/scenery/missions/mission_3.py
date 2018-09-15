@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/scenery/missions/mission_3.py
 import BigWorld
-import MusicControllerWWISE as MC
 from bootcamp.scenery.AbstractMission import AbstractMission
 from constants import HINT_TYPE
 from helpers.i18n import makeString
@@ -181,12 +180,10 @@ class Mission3(AbstractMission):
                     self._markers[MARKER.RECON].hide()
                     self._progress = PROGRESS.FLANK
                     self._fallbackStartTime = BigWorld.time()
-                    if not MC.g_musicController.isPlaying(MC.MUSIC_EVENT_COMBAT):
-                        MC.g_musicController.muteMusic(False)
+                    self._playCombatMusic()
             if self._inZoneStealth_1 and not self._playerDetected:
                 self._progress = PROGRESS.FLANK
-                if not MC.g_musicController.isPlaying(MC.MUSIC_EVENT_COMBAT):
-                    MC.g_musicController.muteMusic(False)
+                self._playCombatMusic()
         if self._progress == PROGRESS.FLANK:
             if not self._inZoneFlanking and self._inZoneAlliedMapPart:
                 if not self._playerDetected or numOfDetectedManyEnemiesPack < self._TOO_MANY_ENEMIES_NUM:

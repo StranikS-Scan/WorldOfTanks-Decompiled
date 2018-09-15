@@ -3,7 +3,7 @@
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.app_loader.decorators import sf_lobby
 from gui.shared.SoundEffectsId import SoundEffectsId
-from gui.shared.money import Money, Currency, ZERO_MONEY
+from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from helpers import dependency
 from skeletons.gui.game_control import ISoundEventChecker
 from skeletons.gui.shared import IItemsCache
@@ -22,7 +22,7 @@ class SoundEventChecker(ISoundEventChecker):
 
     def __init__(self):
         super(SoundEventChecker, self).__init__()
-        self.__currentMoney = ZERO_MONEY
+        self.__currentMoney = MONEY_UNDEFINED
 
     @sf_lobby
     def app(self):
@@ -60,9 +60,9 @@ class SoundEventChecker(ISoundEventChecker):
             spendCurrencies = []
             earnCurrencies = []
             for currency, value in newValues.iteritems():
-                if value < self.__currentMoney.get(currency):
+                if value < self.__currentMoney.get(currency, 0):
                     spendCurrencies.append(currency)
-                if value > self.__currentMoney.get(currency):
+                if value > self.__currentMoney.get(currency, 0):
                     earnCurrencies.append(currency)
 
             if spendCurrencies:

@@ -17,7 +17,7 @@ from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP
 import TriggersManager
 import MusicControllerWWISE as MC
 from gui.sounds.filters import WWISEFilteredBootcampArenaFilter as BCFilter
-from helpers import dependency
+from helpers import dependency, isPlayerAvatar
 from skeletons.gui.battle_session import IBattleSessionProvider
 
 class AbstractMission(object):
@@ -40,6 +40,7 @@ class AbstractMission(object):
          BOOTCAMP_BATTLE_ACTION.PLAYER_HIT_VEHICLE: self.__onActionPlayerHitVehicle,
          BOOTCAMP_BATTLE_ACTION.SET_SCENERY_CONSTANT: self.__onActionSetSceneryConstant}
         self._soundFilter = BCFilter()
+        self.__combatMusic = None
         BigWorld.player().arena.onPeriodChange += self._onPeriodChange
         return
 
@@ -110,7 +111,6 @@ class AbstractMission(object):
             BigWorld.cancelCallback(self.__callbackID)
             self.__callbackID = None
         MC.g_musicController.skipArenaChanges = False
-        MC.g_musicController.muteMusic(False)
         LOG_DEBUG_DEV_BOOTCAMP('Mission {0} stop'.format(self.__class__.__name__))
         return
 
@@ -239,9 +239,31 @@ class AbstractMission(object):
         pass
 
     def _onPeriodChange(self, *args):
-        controller = MC.g_musicController
-        if BigWorld.player().arena.period == ARENA_PERIOD.BATTLE and controller.isPlaying(MC.MUSIC_EVENT_COMBAT):
-            controller.muteMusic(True)
+        if args[0] == ARENA_PERIOD.BATTLE and self.__combatMusic is None:
+            player = BigWorld.player()
+            if not isPlayerAvatar():
+                return
+            if player.arena is None:
+                return
+            arenaType = player.arena.arenaType
+            soundEventName = None
+            if arenaType.wwmusicSetup is not None:
+                soundEventName = arenaType.wwmusicSetup.get('wwmusicRelaxed', None)
+            if soundEventName:
+                self.__combatMusic = SoundGroups.g_instance.getSound2D(soundEventName)
+        return
+
+    def _muteCombatMusic(self):
+        if self.__combatMusic is not None and self.__combatMusic.isPlaying:
+            print '!!!!!!!!!!!!!!!!!! STOP!'
+            self.__combatMusic.stop()
+        return
+
+    def _playCombatMusic(self):
+        if self.__combatMusic is not None and not self.__combatMusic.isPlaying and not BattleReplay.g_replayCtrl.isTimeWarpInProgress:
+            print '!!!!!!!!!!!!!!!!!! PLAY!'
+            self.__combatMusic.play()
+        return
 
     def __getVehLink(self, vehId):
         for vehLink in self.__vehicles:

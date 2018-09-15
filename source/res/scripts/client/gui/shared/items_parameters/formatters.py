@@ -301,10 +301,10 @@ def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
     if vehicles.isVehicleDescr(descriptor):
         compactDescr = descriptor.type.compactDescr
     else:
-        compactDescr = descriptor['compactDescr']
+        compactDescr = descriptor.compactDescr
     itemTypeIdx = getTypeOfCompactDescr(compactDescr)
     if itemTypeIdx == ITEM_TYPES.equipment:
-        eqDescr = vehicles.getDictDescr(compactDescr)
+        eqDescr = vehicles.getItemByCompactDescr(compactDescr)
         paramsList = ITEMS_PARAMS_LIST[itemTypeIdx].get(type(eqDescr), [])
     else:
         paramsList = ITEMS_PARAMS_LIST[itemTypeIdx]
@@ -316,7 +316,7 @@ def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
         if paramValue:
             fmtValue = formatParameter(paramName, paramValue)
             if fmtValue:
-                params.append((paramName, formatParameter(paramName, paramValue)))
+                params.append((paramName, fmtValue))
 
     return params
 
@@ -324,9 +324,9 @@ def getFormattedParamsList(descriptor, parameters, excludeRelative=False):
 _ICON_LIB_PATH = '../maps/icons/vehParams/tooltips'
 
 def getBonusIcon(bonusId):
-    if bonusId.find('Rammer') >= 0:
+    if bonusId.find('Rammer') >= 0 and bonusId != 'deluxRammer':
         iconStr = 'rammer'
-    elif bonusId.find('enhanced') >= 0 and bonusId != 'enhancedAimDrives':
+    elif bonusId.find('enhanced') >= 0 and bonusId not in ('enhancedAimDrives', 'enhancedAimDrivesBattleBooster'):
         iconStr = 'enhancedSuspension'
     else:
         iconStr = bonusId.split('_class')[0]

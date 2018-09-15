@@ -256,6 +256,8 @@ class AS3_AppFactory(IAppFactory):
             event = events.LoadViewEvent(VIEW_ALIAS.TUTORIAL_BATTLE_PAGE)
         elif arenaGuiType == ARENA_GUI_TYPE.FALLOUT_CLASSIC:
             event = events.LoadViewEvent(VIEW_ALIAS.FALLOUT_CLASSIC_PAGE)
+        elif arenaGuiType in (ARENA_GUI_TYPE.EPIC_RANDOM, ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING):
+            event = events.LoadViewEvent(VIEW_ALIAS.EPIC_RANDOM_PAGE)
         elif arenaGuiType == ARENA_GUI_TYPE.FALLOUT_MULTITEAM:
             event = events.LoadViewEvent(VIEW_ALIAS.FALLOUT_MULTITEAM_PAGE)
         elif arenaGuiType == ARENA_GUI_TYPE.RANKED:

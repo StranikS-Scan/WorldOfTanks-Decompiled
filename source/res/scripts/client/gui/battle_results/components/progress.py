@@ -3,7 +3,6 @@
 import operator
 import BigWorld
 import math
-from operator import attrgetter
 from constants import EVENT_TYPE
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
@@ -12,6 +11,7 @@ from gui.battle_results.settings import PROGRESS_ACTION
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman, getVehicleComponentsByType
 from gui.shared.gui_items.Vehicle import getLevelIconPath
+from gui.shared.money import Currency
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 import potapov_quests
@@ -54,7 +54,7 @@ class VehicleProgressHelper(object):
         vehiclesStats = self.itemsCache.items.getAccountDossier().getRandomStats().getVehicles()
         vehicleStats = vehiclesStats.get(vehTypeCompDescr, None)
         if vehicleStats is not None:
-            battlesCount, wins, markOfMastery, xp = vehicleStats
+            battlesCount, wins, xp = vehicleStats
             if battlesCount:
                 return xp / battlesCount
             return 0
@@ -86,16 +86,18 @@ class VehicleProgressHelper(object):
         getter = self.itemsCache.items.getItemByCD
         for itemTypeCD, unlockProps in unlockedVehicleItems.iteritems():
             item = getter(itemTypeCD)
-            price = item.altPrice or item.buyPrice
-            if price is not None and not item.isInInventory and creditsValue - price.credits <= pureCreditsReceived and creditsValue > price.credits:
-                if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
-                    ready2BuyVehicles.append(self.__makeVehiclePurchaseVO(item, unlockProps, price.credits))
-                elif not item.isInstalled(self.__vehicle):
-                    items = getVehicleComponentsByType(self.__vehicle, item.itemTypeID).values()
-                    if len(items) > 0:
-                        installedModule = max(items, key=attrgetter('level'))
-                        if item.level > installedModule.level:
-                            ready2BuyModules.append(self.__makeModulePurchaseVO(item, unlockProps, price.credits))
+            price = item.getBuyPrice(preferred=False).price
+            if price.isCurrencyDefined(Currency.CREDITS) and not item.isInInventory:
+                priceCredits = price.credits
+                if creditsValue - priceCredits <= pureCreditsReceived and creditsValue > priceCredits:
+                    if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE:
+                        ready2BuyVehicles.append(self.__makeVehiclePurchaseVO(item, unlockProps, price.credits))
+                    elif not item.isInstalled(self.__vehicle):
+                        items = getVehicleComponentsByType(self.__vehicle, item.itemTypeID).values()
+                        if len(items) > 0:
+                            installedModule = max(items, key=operator.itemgetter('level'))
+                            if item.level > installedModule.level:
+                                ready2BuyModules.append(self.__makeModulePurchaseVO(item, unlockProps, price.credits))
 
         return (ready2BuyVehicles, ready2BuyModules)
 

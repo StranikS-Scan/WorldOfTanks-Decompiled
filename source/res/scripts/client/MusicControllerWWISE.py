@@ -268,23 +268,32 @@ class MusicController(object):
     def __onArenaStateChanged(self, *args):
         if self._skipArenaChanges:
             return
-        arena = BigWorld.player().arena
-        period = arena.period
-        if (period == ARENA_PERIOD.PREBATTLE or period == ARENA_PERIOD.BATTLE) and self.__isOnArena:
-            if not self.isPlaying(AMBIENT_EVENT_COMBAT):
-                self.play(AMBIENT_EVENT_COMBAT)
-        if period == ARENA_PERIOD.BATTLE and self.__isOnArena:
-            self.play(MUSIC_EVENT_COMBAT)
-        elif period == ARENA_PERIOD.AFTERBATTLE:
-            self.stopAmbient()
-            MusicController.__lastBattleResultEventName = ''
-            winnerTeam = arena.periodAdditionalInfo[0]
-            if winnerTeam == BigWorld.player().team:
-                MusicController.__lastBattleResultEventName = arena.arenaType.battleVictoryMusic if hasattr(arena.arenaType, 'battleVictoryMusic') else ''
-            elif winnerTeam == 0:
-                MusicController.__lastBattleResultEventName = arena.arenaType.battleDrawMusic if hasattr(arena.arenaType, 'battleDrawMusic') else ''
-            else:
-                MusicController.__lastBattleResultEventName = arena.arenaType.battleLoseMusic if hasattr(arena.arenaType, 'battleLoseMusic') else ''
+        else:
+            arena = BigWorld.player().arena
+            period = arena.period
+            if (period == ARENA_PERIOD.PREBATTLE or period == ARENA_PERIOD.BATTLE) and self.__isOnArena:
+                if not self.isPlaying(AMBIENT_EVENT_COMBAT):
+                    self.play(AMBIENT_EVENT_COMBAT)
+            if period == ARENA_PERIOD.BATTLE and self.__isOnArena:
+                self.play(MUSIC_EVENT_COMBAT)
+            elif period == ARENA_PERIOD.AFTERBATTLE:
+                wwSetup = arena.arenaType.wwmusicSetup
+                self.stopAmbient()
+                MusicController.__lastBattleResultEventName = ''
+                if wwSetup is not None:
+                    SoundGroups.g_instance.playSound2D(wwSetup.get('wwmusicEndbattleStop', ''))
+                winnerTeam = arena.periodAdditionalInfo[0]
+                if winnerTeam == BigWorld.player().team:
+                    if wwSetup is not None:
+                        MusicController.__lastBattleResultEventName = wwSetup.get('wwmusicResultWin', '')
+                elif winnerTeam == 0:
+                    if wwSetup is not None:
+                        MusicController.__lastBattleResultEventName = wwSetup.get('wwmusicResultDrawn', '')
+                elif wwSetup is not None:
+                    MusicController.__lastBattleResultEventName = wwSetup.get('wwmusicResultDefeat', '')
+                else:
+                    MusicController.__lastBattleResultEventName = arena.arenaType.battleLoseMusic if hasattr(arena.arenaType, 'battleLoseMusic') else ''
+            return
 
     def __getArenaSoundEvent(self, eventId):
         soundEventName = None
@@ -297,10 +306,9 @@ class MusicController(object):
             if player.arena is None:
                 return
             arenaType = player.arena.arenaType
-            if eventId == MUSIC_EVENT_COMBAT:
-                soundEventName = arenaType.music
-            elif eventId == MUSIC_EVENT_COMBAT_LOADING:
-                soundEventName = arenaType.loadingMusic
+            if eventId == MUSIC_EVENT_COMBAT_LOADING:
+                if arenaType.wwmusicSetup is not None:
+                    soundEventName = arenaType.wwmusicSetup.get('wwmusicLoading', None)
             elif eventId == AMBIENT_EVENT_COMBAT:
                 soundEventName = arenaType.ambientSound
         return SoundGroups.g_instance.getSound2D(soundEventName) if soundEventName else None

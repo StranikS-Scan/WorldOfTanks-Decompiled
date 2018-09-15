@@ -44,11 +44,8 @@ class TutorialManager(TutorialManagerMeta):
     def getFoundComponentsIDs(self):
         return self._components
 
-    def setCriteria(self, name, value, noCached):
-        self.as_setCriteriaS(name, value, noCached)
-
-    def requestCriteriaValue(self, criteriaName):
-        LOG_DEBUG('TutorialManager.requestCriteriaValue(criteriaName)', criteriaName)
+    def setCriteria(self, name, value):
+        self.as_setCriteriaS(name, value)
 
     def setTriggers(self, componentID, triggers):
         if not self._validate(componentID):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/scenery/missions/mission_5.py
+from constants import ARENA_PERIOD
 from helpers.CallbackDelayer import CallbackDelayer
 from bootcamp.scenery.AbstractMission import AbstractMission
 
@@ -21,4 +22,6 @@ class Mission5(AbstractMission):
         super(Mission5, self).update()
 
     def _onPeriodChange(self, *args):
-        pass
+        super(Mission5, self)._onPeriodChange(*args)
+        if args[0] == ARENA_PERIOD.BATTLE:
+            self._playCombatMusic()

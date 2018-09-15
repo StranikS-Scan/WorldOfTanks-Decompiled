@@ -233,7 +233,7 @@ class ActionsBuilder(object):
             cards[_ltf.COLUMNLEFT] = [actionCards[0]]
             cards[_ltf.COLUMNRIGHT] = [actionCards[1]]
             return template
-        priorities = {k:[] for k in _ACTIONS_PRIORITY_MAPPING.keys()}
+        priorities = {k:[] for k in _ACTIONS_PRIORITY_MAPPING}
         for item in actionCards:
             if item.visualPriority in priorities:
                 priorities[item.visualPriority].append(item)

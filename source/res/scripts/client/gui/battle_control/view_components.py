@@ -1,9 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/view_components.py
 import weakref
+from collections import defaultdict
 from debug_utils import LOG_WARNING, LOG_ERROR
 from gui.battle_control.battle_constants import VIEW_COMPONENT_RULE
 from gui.battle_control.controllers.interfaces import IBattleController
+
+class IViewComponentsCtrlListener(object):
+
+    def detachedFromCtrl(self, ctrlID):
+        pass
+
 
 class IViewComponentsController(IBattleController):
     __slots__ = ()
@@ -22,6 +29,23 @@ class IViewComponentsController(IBattleController):
 
     def clearViewComponents(self):
         raise NotImplementedError
+
+
+class ViewComponentsController(IViewComponentsController):
+    """
+    Container for view components related to current controller
+    """
+    __slots__ = ('_viewComponents',)
+
+    def __init__(self):
+        super(ViewComponentsController, self).__init__()
+        self._viewComponents = []
+
+    def setViewComponents(self, *components):
+        self._viewComponents = components
+
+    def clearViewComponents(self):
+        self._viewComponents = []
 
 
 class ComponentsBridgeError(Exception):
@@ -58,7 +82,7 @@ class _ComponentsBridge(object):
         self.__components = {}
         self.__ctrls = {}
         self.__indexes = {}
-        self.__componentToCrl = {}
+        self.__componentToCrl = defaultdict(list)
 
     def clear(self):
         """
@@ -79,16 +103,20 @@ class _ComponentsBridge(object):
             if len(item) < 2:
                 raise ComponentsBridgeError('Item is invalid: {}'.format(item))
             ctrlID, componentsIDs = item[:2]
-            if not isinstance(componentsIDs, tuple):
+            if not isinstance(componentsIDs, (tuple, list)):
                 raise ComponentsBridgeError('Item is invalid: {}'.format(item))
             if ctrlID in self.__components:
-                raise ComponentsBridgeError('Item already is exists: {}'.format(item))
-            self.__components[ctrlID] = [None] * len(componentsIDs)
-            self.__indexes[ctrlID] = componentsIDs
+                sameViewAliases = set(componentsIDs).intersection(self.__indexes[ctrlID])
+                if sameViewAliases:
+                    raise ComponentsBridgeError('Linkage of controller ID to view alias have to be defined only once! ' + 'Controller ID: {}, same view aliases: {}'.format(ctrlID, sameViewAliases))
+                else:
+                    self.__components[ctrlID].extend([None] * len(componentsIDs))
+                    self.__indexes[ctrlID].extend(componentsIDs)
+            else:
+                self.__components[ctrlID] = [None] * len(componentsIDs)
+                self.__indexes[ctrlID] = list(componentsIDs)
             for componentID in componentsIDs:
-                if componentID in self.__componentToCrl:
-                    raise ComponentsBridgeError('View component can be added to controller once: {} {}'.format(componentID, ctrlID))
-                self.__componentToCrl[componentID] = ctrlID
+                self.__componentToCrl[componentID].append(ctrlID)
 
         return
 
@@ -103,23 +131,24 @@ class _ComponentsBridge(object):
         if componentID not in self.__componentToCrl:
             return
         else:
-            ctrlID = self.__componentToCrl[componentID]
-            index = self.__getIndexByComponentID(ctrlID, componentID)
-            if index is None:
-                LOG_ERROR('View component data is broken', ctrlID, componentID, self.__indexes)
-                return
-            components = self.__components[ctrlID]
-            if rule == VIEW_COMPONENT_RULE.PROXY:
-                components[index] = weakref.proxy(component)
-            else:
-                components[index] = component
-            if filter(lambda item: item is None, components):
-                return
-            if ctrlID in self.__ctrls:
-                ctrl = self.__ctrls[ctrlID]
-                ctrl.setViewComponents(*components)
-            else:
+            ctrlsIDs = self.__componentToCrl[componentID]
+            for ctrlID in ctrlsIDs:
+                index = self.__getIndexByComponentID(ctrlID, componentID)
+                if index is None:
+                    LOG_ERROR('View component data is broken', ctrlID, componentID, self.__indexes)
+                    continue
+                components = self.__components[ctrlID]
+                if rule == VIEW_COMPONENT_RULE.PROXY:
+                    components[index] = weakref.proxy(component)
+                else:
+                    components[index] = component
+                if filter(lambda item: item is None, components):
+                    continue
+                if ctrlID in self.__ctrls:
+                    ctrl = self.__ctrls[ctrlID]
+                    ctrl.setViewComponents(*components)
                 LOG_WARNING('Controller is not found', ctrlID)
+
             return
 
     def removeViewComponent(self, componentID):
@@ -130,20 +159,25 @@ class _ComponentsBridge(object):
         if componentID not in self.__componentToCrl:
             return
         else:
-            ctrlID = self.__componentToCrl[componentID]
-            index = self.__getIndexByComponentID(ctrlID, componentID)
-            if index is None:
-                LOG_ERROR('View component data is broken', ctrlID, componentID, self.__indexes)
-                return
-            if ctrlID not in self.__components:
-                return
-            components = self.__components[ctrlID]
-            components[index] = None
-            if filter(lambda item: item is not None, components):
-                return
-            if ctrlID in self.__ctrls:
-                ctrl = self.__ctrls[ctrlID]
-                ctrl.clearViewComponents()
+            ctrlsIDs = self.__componentToCrl[componentID]
+            for ctrlID in ctrlsIDs:
+                index = self.__getIndexByComponentID(ctrlID, componentID)
+                if index is None:
+                    LOG_ERROR('View component data is broken', ctrlID, componentID, self.__indexes)
+                    continue
+                if ctrlID not in self.__components:
+                    continue
+                components = self.__components[ctrlID]
+                viewComponent = components[index]
+                if isinstance(viewComponent, IViewComponentsCtrlListener):
+                    viewComponent.detachedFromCtrl(ctrlID)
+                components[index] = None
+                if filter(lambda item: item is not None, components):
+                    continue
+                if ctrlID in self.__ctrls:
+                    ctrl = self.__ctrls[ctrlID]
+                    ctrl.clearViewComponents()
+
             return
 
     def registerController(self, ctrl):

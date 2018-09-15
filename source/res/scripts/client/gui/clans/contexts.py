@@ -1222,3 +1222,40 @@ class RankedPositionCtx(CommonClanRequestCtx):
     @staticmethod
     def getDefDataObj():
         return None
+
+
+class _BaseHofRequestCtx(CommonClanRequestCtx):
+
+    def isAuthorizationRequired(self):
+        return True
+
+    def isClanSyncRequired(self):
+        return False
+
+    def getDataObj(self, incomeData):
+        incomeData = incomeData or {}
+        return makeTupleByDict(items.HofAttrs, incomeData)
+
+    def getDefDataObj(self):
+        return None
+
+    def isCaching(self):
+        return False
+
+
+class HofUserInfoCtx(_BaseHofRequestCtx):
+
+    def getRequestType(self):
+        return CLAN_REQUESTED_DATA_TYPE.HOF_USER_INFO
+
+
+class HofUserExcludeCtx(_BaseHofRequestCtx):
+
+    def getRequestType(self):
+        return CLAN_REQUESTED_DATA_TYPE.HOF_USER_EXCLUDE
+
+
+class HofUserRestoreCtx(_BaseHofRequestCtx):
+
+    def getRequestType(self):
+        return CLAN_REQUESTED_DATA_TYPE.HOF_USER_RESTORE

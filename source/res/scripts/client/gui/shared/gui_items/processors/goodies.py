@@ -3,10 +3,11 @@
 import BigWorld
 import AccountCommands
 from debug_utils import LOG_DEBUG, LOG_ERROR
-from gui.SystemMessages import SM_TYPE
+from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.shared.formatters import formatPrice
 from gui.shared.gui_items.processors import Processor, makeI18nError, makeI18nSuccess, plugins
-from gui.shared.money import Money
+from gui.shared.gui_items.gui_item_economics import ItemPrice
+from gui.shared.money import Currency
 from gui.shared.utils import code2str
 
 class BoosterProcessor(Processor):
@@ -67,36 +68,46 @@ class BoosterTradeProcessor(BoosterProcessor):
     def _getMsgCtx(self):
         return {'boosterName': self.booster.userName,
          'count': BigWorld.wg_getIntegralFormat(int(self.count)),
-         'money': formatPrice(self._getOpPrice())}
+         'money': formatPrice(self._getOpPrice().price)}
 
     def _getOpPrice(self):
+        """
+        Returns specific price in ItemPrice.
+        :return: instance of ItemPrice
+        """
         raise NotImplemented
 
 
 class BoosterBuyer(BoosterTradeProcessor):
     """
-    Booster buy processor
-    :param booster: booster <Booster>
-    :param count: count of boosters <int>
-    :param buyForGold: is booster buying for gold or credits <bool>
+    Booster buy processor/
     """
 
-    def __init__(self, booster, count, buyForGold):
+    def __init__(self, booster, count, currency):
+        """
+        Ctr.
+        :param booster: booster <Booster>.
+        :param count: count of boosters <int>.
+        :param currency: desired currency for buying <string>, see Currency enum.
+        """
         super(BoosterBuyer, self).__init__(booster, count, 'buy')
-        self.buyForGold = buyForGold
-        self.addPlugins((plugins.MoneyValidator(self._getOpPrice()),))
+        self.buyCurrency = currency
+        self.addPlugins((plugins.MoneyValidator(self._getOpPrice().price),))
 
     def _getOpPrice(self):
-        price = self.booster.buyPrice
-        return self.count * Money(gold=price.gold) if self.buyForGold else self.count * Money(credits=price.credits)
+        minItemPrice = self.booster.buyPrices.getMinItemPriceByCurrency(self.buyCurrency)
+        if minItemPrice is None:
+            LOG_ERROR('Attempt to buy booster {} for the invalid currency {}.'.format(self.booster, self.buyCurrency))
+            minItemPrice = self.booster.buyPrices.itemPrice
+        return minItemPrice * self.count
 
     def _successHandler(self, code, ctx=None):
-        sysMsgType = SM_TYPE.PurchaseForGold if self.buyForGold else SM_TYPE.PurchaseForCredits
+        sysMsgType = CURRENCY_TO_SM_TYPE.get(self.buyCurrency, SM_TYPE.PurchaseForCredits)
         return makeI18nSuccess(self._formMessage('success'), type=sysMsgType, **self._getMsgCtx())
 
     def _request(self, callback):
-        LOG_DEBUG('Make server request to buy booster', self.booster.boosterID, self.booster.buyPrice, self.count, self.buyForGold)
-        BigWorld.player().shop.buyGoodie(self.booster.boosterID, self.count, self.buyForGold, lambda code: self._response(code, callback))
+        LOG_DEBUG('Make server request to buy booster', self.booster.boosterID, self.booster.buyPrices, self.count, self.buyCurrency)
+        BigWorld.player().shop.buyGoodie(self.booster.boosterID, self.count, self.buyCurrency == Currency.GOLD, lambda code: self._response(code, callback))
 
 
 class BoosterSeller(BoosterTradeProcessor):
@@ -105,7 +116,10 @@ class BoosterSeller(BoosterTradeProcessor):
         super(BoosterSeller, self).__init__(booster, count, 'sell')
 
     def _getOpPrice(self):
-        return (self.booster.sellPrice[0] * self.count, self.booster.sellPrice[1] * self.count)
+        sellPrice = self.booster.sellPrices.itemPrice
+        if not sellPrice:
+            LOG_ERROR('Attempt to sell booster {} that is not sold.'.format(self.booster))
+        return sellPrice * self.count
 
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess(self._formMessage('success'), type=SM_TYPE.Selling, **self._getMsgCtx())

@@ -32,9 +32,10 @@ _CloseWindowCommand = namedtuple('_CloseWindowCommand', ('window_id',))
 _CloseWindowCommand.__new__.__defaults__ = (None,)
 _CloseWindowCommandScheme = {'required': (('window_id', basestring),)}
 _CloseBrowserScheme = {}
-_OpenTabCommand = namedtuple('_OpenTabCommand', ('tab_id',))
-_OpenTabCommand.__new__.__defaults__ = (None,)
-_OpenTabCommandScheme = {'required': (('tab_id', basestring),)}
+_OpenTabCommand = namedtuple('_OpenTabCommand', ('tab_id', 'selected_id'))
+_OpenTabCommand.__new__.__defaults__ = (None, None)
+_OpenTabCommandScheme = {'required': (('tab_id', basestring),),
+ 'optional': (('selected_id', basestring),)}
 
 class OpenWindowCommand(_OpenWindowCommand, SchemeValidator):
     """

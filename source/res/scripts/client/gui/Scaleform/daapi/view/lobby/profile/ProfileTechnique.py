@@ -5,33 +5,63 @@ from account_helpers import AccountSettings
 from account_helpers.AccountSettings import PROFILE_TECHNIQUE_MEMBER
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, MARK_ON_GUN_RECORD, HONORED_RANK_RECORD
 from gui import GUI_NATIONS_ORDER_INDEX
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
+from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getHofRatingUrlForVehicle, getHofDisabledKeys, onServerSettingsChange, isHofButtonNew, setHofButtonOld
+from gui.Scaleform.daapi.view.lobby.hof.web_handlers import createHofWebHandlers
 from gui.Scaleform.daapi.view.lobby.profile.ProfileUtils import ProfileUtils, DetailedStatisticsUtils, STATISTICS_LAYOUT, FORT_STATISTICS_LAYOUT, FALLOUT_STATISTICS_LAYOUT
 from gui.Scaleform.daapi.view.meta.ProfileTechniqueMeta import ProfileTechniqueMeta
 from gui.Scaleform.genConsts.ACHIEVEMENTS_ALIASES import ACHIEVEMENTS_ALIASES
+from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED
 from gui.shared.gui_items.dossier import dumpDossier
+from gui.shared.gui_items.dossier.achievements.MarkOfMasteryAchievement import isMarkOfMasteryAchieved
+from gui.shared.gui_items.dossier.stats import UNAVAILABLE_MARKS_OF_MASTERY
 from helpers import i18n, dependency
 from nations import NAMES
 from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.server_events import IEventsCache
+_MARK_ON_GUN_MIN_LVL = 5
 
 class ProfileTechnique(ProfileTechniqueMeta):
     comparisonBasket = dependency.descriptor(IVehicleComparisonBasket)
+    lobbyContext = dependency.descriptor(ILobbyContext)
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, *args):
         super(ProfileTechnique, self).__init__(*args)
-        self._selectedVehicleIntCD = None
+        selectedData = self._selectedData
+        self._selectedVehicleIntCD = selectedData.get('itemCD') if selectedData else None
         return
+
+    def showVehiclesRating(self):
+        setHofButtonOld(PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON)
+        self.eventsCache.onProfileVisited()
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BROWSER_VIEW, ctx={'url': getHofRatingUrlForVehicle(self._selectedVehicleIntCD),
+         'returnAlias': VIEW_ALIAS.LOBBY_PROFILE,
+         'allowRightClick': True,
+         'webHandlers': createHofWebHandlers(),
+         'itemCD': self._selectedVehicleIntCD,
+         'disabledKeys': getHofDisabledKeys(),
+         'onServerSettingsChange': onServerSettingsChange}), EVENT_BUS_SCOPE.LOBBY)
 
     def _populate(self):
         super(ProfileTechnique, self)._populate()
         self.as_setInitDataS(self._getInitData())
+        self._setRatingButton()
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+
+    def _dispose(self):
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        super(ProfileTechnique, self)._dispose()
 
     def _getInitData(self, accountDossier=None, isFallout=False):
-        dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.RANKED)]
+        dropDownProvider = [self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.ALL), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.EPIC_RANDOM), self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.RANKED)]
         self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.FALLOUT)
         if accountDossier is not None and accountDossier.getHistoricalStats().getVehicles():
             dropDownProvider.append(self._dataProviderEntryAutoTranslate(PROFILE_DROPDOWN_KEYS.HISTORICAL))
@@ -47,6 +77,15 @@ class ProfileTechnique(ProfileTechniqueMeta):
          'selectedColumn': storedData['selectedColumn'],
          'selectedColumnSorting': storedData['selectedColumnSorting']}
 
+    def _setRatingButton(self):
+        self.as_setRatingButtonS({'enabled': self.lobbyContext.getServerSettings().isHofEnabled(),
+         'visible': self._battlesType == PROFILE_DROPDOWN_KEYS.ALL})
+        if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL and self.lobbyContext.getServerSettings().isHofEnabled() and isHofButtonNew(PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON):
+            self.as_setBtnCountersS([{'componentId': PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON,
+              'count': '1'}])
+        else:
+            self.as_setBtnCountersS([])
+
     def setSelectedTableColumn(self, index, sortDirection):
         storedDataId = self._getStorageId()
         storedData = AccountSettings.getFilter(storedDataId)
@@ -57,6 +96,10 @@ class ProfileTechnique(ProfileTechniqueMeta):
             self.as_setInitDataS(self._getInitData(self._dossier, self._battlesType == PROFILE_DROPDOWN_KEYS.FALLOUT))
         return
 
+    def invokeUpdate(self):
+        super(ProfileTechnique, self).invokeUpdate()
+        self._setRatingButton()
+
     def _getStorageId(self):
         return PROFILE_TECHNIQUE_MEMBER
 
@@ -64,6 +107,10 @@ class ProfileTechnique(ProfileTechniqueMeta):
         return AccountSettings.getFilter(self._getStorageId())
 
     def _getTableHeader(self, isFallout=False):
+        if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL or self._battlesType == PROFILE_DROPDOWN_KEYS.EPIC_RANDOM or self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED:
+            markOfMasteryEnabled = True
+        else:
+            markOfMasteryEnabled = False
         return (self._createTableBtnInfo('nationIndex', 36, 0, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_NATION, 'ascending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_NATIONS_ALL, inverted=True),
          self._createTableBtnInfo('typeIndex', 34, 1, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_TECHNIQUE, 'descending', iconSource=RES_ICONS.MAPS_ICONS_FILTERS_TANKS_ALL),
          self._createTableBtnInfo('level', 32, 2, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_LVL, 'descending', iconSource=RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_LEVEL),
@@ -71,9 +118,9 @@ class ProfileTechnique(ProfileTechniqueMeta):
          self._createTableBtnInfo('battlesCount', 74, 3, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_BATTLESCOUNT, 'descending', label=PROFILE.SECTION_SUMMARY_SCORES_TOTALBATTLES),
          self._createTableBtnInfo('winsEfficiency', 74, 4, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_WINS if isFallout else PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_WINRATE, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_TOTALWINS),
          self._createTableBtnInfo('avgExperience', 90, 5, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_AVGEXP, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_AVGEXPERIENCE),
-         self._createTableBtnInfo('markOfMastery', 83, 6, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_MARKSOFMASTERY, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_CLASSINESS, showSeparator=False))
+         self._createTableBtnInfo('markOfMastery', 83, 6, PROFILE.SECTION_TECHNIQUE_SORT_TOOLTIP_MARKSOFMASTERY, 'descending', label=PROFILE.SECTION_TECHNIQUE_BUTTONBAR_CLASSINESS, showSeparator=False, enabled=markOfMasteryEnabled))
 
-    def _createTableBtnInfo(self, iconId, buttonWidth, sortOrder, toolTip, defaultSortDirection, label='', iconSource='', inverted=False, sortType='numeric', showSeparator=True):
+    def _createTableBtnInfo(self, iconId, buttonWidth, sortOrder, toolTip, defaultSortDirection, label='', iconSource='', inverted=False, sortType='numeric', showSeparator=True, enabled=True):
         return {'id': iconId,
          'buttonWidth': buttonWidth,
          'sortOrder': sortOrder,
@@ -86,7 +133,8 @@ class ProfileTechnique(ProfileTechniqueMeta):
          'showSeparator': showSeparator,
          'ascendingIconSource': RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_ASCPROFILESORTARROW,
          'descendingIconSource': RES_ICONS.MAPS_ICONS_BUTTONS_TAB_SORT_BUTTON_DESCPROFILESORTARROW,
-         'buttonHeight': 40}
+         'buttonHeight': 40,
+         'enabled': enabled}
 
     def getEmptyScreenLabel(self):
         emptyScreenLabelsDictionary = {PROFILE_DROPDOWN_KEYS.ALL: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_ALL,
@@ -97,7 +145,8 @@ class ProfileTechnique(ProfileTechniqueMeta):
          PROFILE_DROPDOWN_KEYS.CLAN: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_GLOBALMAP,
          PROFILE_DROPDOWN_KEYS.RANKED: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_RANKED,
          PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_FORTBATTLES,
-         PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_FORTSORTIES}
+         PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_FORTSORTIES,
+         PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: PROFILE.SECTION_TECHNIQUE_EMPTYSCREENLABEL_BATTLETYPE_EPICRANDOM}
         return i18n.makeString(emptyScreenLabelsDictionary[self._battlesType])
 
     def _sendAccountData(self, targetData, accountDossier):
@@ -107,7 +156,12 @@ class ProfileTechnique(ProfileTechniqueMeta):
 
     def _getTechniqueListVehicles(self, targetData, addVehiclesThatInHangarOnly=False):
         result = []
-        for intCD, (battlesCount, wins, markOfMastery, xp) in targetData.getVehicles().iteritems():
+        if self.lobbyContext.getServerSettings().isEpicRandomMarkOfMasteryEnabled():
+            __markOfMasteryBattles = (PROFILE_DROPDOWN_KEYS.ALL, PROFILE_DROPDOWN_KEYS.EPIC_RANDOM, PROFILE_DROPDOWN_KEYS.RANKED)
+        else:
+            __markOfMasteryBattles = (PROFILE_DROPDOWN_KEYS.ALL, PROFILE_DROPDOWN_KEYS.RANKED)
+        showMarkOfMastery = self._battlesType in __markOfMasteryBattles and targetData.getMarksOfMastery() != UNAVAILABLE_MARKS_OF_MASTERY
+        for intCD, (battlesCount, wins, xp) in targetData.getVehicles().iteritems():
             avgXP = xp / battlesCount if battlesCount else 0
             vehicle = self.itemsCache.items.getItemByCD(intCD)
             if vehicle is not None:
@@ -120,6 +174,12 @@ class ProfileTechnique(ProfileTechniqueMeta):
                 else:
                     winsEfficiency = 100.0 * wins / battlesCount if battlesCount else 0
                     winsEfficiencyStr = BigWorld.wg_getIntegralFormat(round(winsEfficiency)) + '%'
+                if showMarkOfMastery:
+                    markOfMastery = targetData.getMarkOfMasteryForVehicle(intCD)
+                    if not isMarkOfMasteryAchieved(markOfMastery):
+                        markOfMastery = ProfileUtils.UNAVAILABLE_VALUE
+                else:
+                    markOfMastery = ProfileUtils.UNAVAILABLE_VALUE
                 result.append({'id': intCD,
                  'inventoryID': vehicle.invID,
                  'shortUserName': vehicle.shortUserName,
@@ -132,7 +192,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
                  'nationIndex': GUI_NATIONS_ORDER_INDEX[NAMES[vehicle.nationID]],
                  'nationID': vehicle.nationID,
                  'level': vehicle.level,
-                 'markOfMastery': self.__getMarkOfMasteryVal(markOfMastery),
+                 'markOfMastery': markOfMastery,
                  'markOfMasteryBlock': ACHIEVEMENT_BLOCK.TOTAL,
                  'tankIconPath': vehicle.iconSmall,
                  'typeIconPath': '../maps/icons/filters/tanks/%s.png' % vehicle.type,
@@ -144,19 +204,22 @@ class ProfileTechnique(ProfileTechniqueMeta):
     def requestData(self, data):
         pass
 
-    def __getMarkOfMasteryVal(self, markOfMastery):
-        return markOfMastery if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL else ProfileUtils.UNAVAILABLE_VALUE
-
     def _receiveVehicleDossier(self, vehicleIntCD, databaseId):
         vehDossier = self.itemsCache.items.getVehicleDossier(vehicleIntCD, databaseId)
         achievementsList = None
         specialMarksStats = []
         specialRankedStats = []
-        if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL:
-            stats = vehDossier.getRandomStats()
-            achievementsList = self.__getAchievementsList(stats, vehDossier)
-            if self.itemsCache.items.getItemByCD(int(vehicleIntCD)).level > 4:
-                specialMarksStats.append(AchievementsUtils.packAchievement(stats.getAchievement(MARK_ON_GUN_RECORD), vehDossier.getDossierType(), dumpDossier(vehDossier), self._userID is None))
+        if self._battlesType in (PROFILE_DROPDOWN_KEYS.ALL, PROFILE_DROPDOWN_KEYS.EPIC_RANDOM):
+            achievementsEnabled = True
+            if self._battlesType == PROFILE_DROPDOWN_KEYS.ALL:
+                stats = vehDossier.getRandomStats()
+            elif self._battlesType == PROFILE_DROPDOWN_KEYS.EPIC_RANDOM:
+                stats = vehDossier.getEpicRandomStats()
+                achievementsEnabled = self.lobbyContext.getServerSettings().isEpicRandomAchievementsEnabled()
+            if achievementsEnabled:
+                achievementsList = self.__getAchievementsList(stats, vehDossier)
+            if self.__showMarksOnGun(vehicleIntCD):
+                specialMarksStats.append(self.__packAchievement(stats, vehDossier, MARK_ON_GUN_RECORD))
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.TEAM:
             stats = vehDossier.getTeam7x7Stats()
             achievementsList = self.__getAchievementsList(stats, vehDossier)
@@ -177,7 +240,9 @@ class ProfileTechnique(ProfileTechniqueMeta):
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.RANKED:
             stats = vehDossier.getRankedStats()
             achievementsList = self.__getAchievementsList(stats, vehDossier)
-            specialRankedStats.append(AchievementsUtils.packAchievement(stats.getAchievement(HONORED_RANK_RECORD), vehDossier.getDossierType(), dumpDossier(vehDossier), self._userID is None))
+            specialRankedStats.append(self.__packAchievement(stats, vehDossier, HONORED_RANK_RECORD))
+            if self.__showMarksOnGun(vehicleIntCD):
+                specialMarksStats.append(self.__packAchievement(vehDossier.getRandomStats(), vehDossier, MARK_ON_GUN_RECORD))
         else:
             raise ValueError('Profile Technique: Unknown battle type: ' + self._battlesType)
         if achievementsList is not None:
@@ -202,3 +267,25 @@ class ProfileTechnique(ProfileTechniqueMeta):
             packedList.append(AchievementsUtils.packAchievementList(achievementBlockList, vehDossier.getDossierType(), dumpDossier(vehDossier), self._userID is None, True, ACHIEVEMENTS_ALIASES.GREY_COUNTER))
 
         return packedList
+
+    def __onServerSettingChanged(self, diff):
+        if 'hallOfFame' in diff:
+            self._setRatingButton()
+
+    def __packAchievement(self, stats, vehDossier, record):
+        """
+        The method packs desired achievement record for the provided vehicle dossier.
+        :param stats: vehicle's stats block (_VehiclesStatsBlock instance)
+        :param vehDossier: VehicleDossier instance
+        :param record: one from dossiers2/ui/achievements.py
+        :return: dict
+        """
+        return AchievementsUtils.packAchievement(stats.getAchievement(record), vehDossier.getDossierType(), dumpDossier(vehDossier), self._userID is None)
+
+    def __showMarksOnGun(self, vehicleIntCD):
+        """
+        Checks whether mark on gun should be shown
+        :param vehicleIntCD: vehicle's int compact descriptor
+        :return: bool
+        """
+        return self.itemsCache.items.getItemByCD(int(vehicleIntCD)).level >= _MARK_ON_GUN_MIN_LVL

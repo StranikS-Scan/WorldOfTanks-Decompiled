@@ -366,3 +366,19 @@ def isVehicleStunned():
     """
     attachedVehicle = BigWorld.player().getVehicleAttached()
     return attachedVehicle.stunInfo > 0.0 if attachedVehicle is not None else False
+
+
+def getHealthPercentage(avatar=None):
+    """Gets percentages from team_healthbar_mechanic.
+    :param avatar: instance of player entity (avatar).
+    :return: health percentages.
+    """
+    if avatar is None:
+        avatar = BigWorld.player()
+    try:
+        hp = avatar.getHealthPercentage()
+    except AttributeError:
+        LOG_WARNING('Attribute "getHealthPercentage" is not found')
+        return [0.0, 0.0]
+
+    return hp

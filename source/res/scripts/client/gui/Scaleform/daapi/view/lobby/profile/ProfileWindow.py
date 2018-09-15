@@ -112,7 +112,8 @@ class ProfileWindow(ProfileWindowMeta, ClanListener):
     def __getSectionDataObject(self, label, tooltip, alias):
         return {'label': makeString(label),
          'alias': alias,
-         'tooltip': tooltip}
+         'tooltip': tooltip,
+         'enabled': True}
 
     def userAddFriend(self):
         self.proto.contacts.addFriend(self.__databaseID, self.__userName)

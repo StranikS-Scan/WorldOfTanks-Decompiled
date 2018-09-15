@@ -11,26 +11,27 @@ class ProfileTechniquePage(ProfileTechniquePageMeta):
 
     def _populate(self):
         super(ProfileTechniquePage, self)._populate()
-        if self._selectedData is not None:
-            intVehCD = int(self._selectedData.get('itemCD'))
-            accountDossier = self.itemsCache.items.getAccountDossier(None)
-            if intVehCD in accountDossier.getRandomStats().getVehicles():
-                self._battlesType = PROFILE_DROPDOWN_KEYS.ALL
-            elif intVehCD in accountDossier.getTeam7x7Stats().getVehicles():
-                self._battlesType = PROFILE_DROPDOWN_KEYS.TEAM
-            elif intVehCD in accountDossier.getHistoricalStats().getVehicles():
-                self._battlesType = PROFILE_DROPDOWN_KEYS.HISTORICAL
-            elif intVehCD in accountDossier.getFortBattlesStats().getVehicles():
-                self._battlesType = PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES
-            elif intVehCD in accountDossier.getFortSortiesStats().getVehicles():
-                self._battlesType = PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES
-            elif intVehCD in accountDossier.getRated7x7Stats().getVehicles():
-                self._battlesType = PROFILE_DROPDOWN_KEYS.STATICTEAM
-            elif intVehCD in accountDossier.getFalloutStats().getVehicles():
-                self._battlesType = PROFILE_DROPDOWN_KEYS.FALLOUT
-            elif intVehCD in accountDossier.getRankedStats().getVehicles():
-                self._battlesType = PROFILE_DROPDOWN_KEYS.RANKED
-        self.as_setSelectedVehicleIntCDS(int(self._selectedData.get('itemCD')) if self._selectedData else -1)
+        vehCD = int(self._selectedData.get('itemCD', -1)) if self._selectedData else -1
+        accountDossier = self.itemsCache.items.getAccountDossier(None)
+        if vehCD in accountDossier.getRandomStats().getVehicles():
+            self._battlesType = PROFILE_DROPDOWN_KEYS.ALL
+        elif vehCD in accountDossier.getTeam7x7Stats().getVehicles():
+            self._battlesType = PROFILE_DROPDOWN_KEYS.TEAM
+        elif vehCD in accountDossier.getHistoricalStats().getVehicles():
+            self._battlesType = PROFILE_DROPDOWN_KEYS.HISTORICAL
+        elif vehCD in accountDossier.getFortBattlesStats().getVehicles():
+            self._battlesType = PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_BATTLES
+        elif vehCD in accountDossier.getFortSortiesStats().getVehicles():
+            self._battlesType = PROFILE_DROPDOWN_KEYS.FORTIFICATIONS_SORTIES
+        elif vehCD in accountDossier.getRated7x7Stats().getVehicles():
+            self._battlesType = PROFILE_DROPDOWN_KEYS.STATICTEAM
+        elif vehCD in accountDossier.getFalloutStats().getVehicles():
+            self._battlesType = PROFILE_DROPDOWN_KEYS.FALLOUT
+        elif vehCD in accountDossier.getRankedStats().getVehicles():
+            self._battlesType = PROFILE_DROPDOWN_KEYS.RANKED
+        elif vehCD in accountDossier.getEpicRandomStats().getVehicles():
+            self._battlesType = PROFILE_DROPDOWN_KEYS.EPIC_RANDOM
+        self.as_setSelectedVehicleIntCDS(vehCD)
         return
 
     def _getInitData(self, accountDossier=None, isFallout=False):

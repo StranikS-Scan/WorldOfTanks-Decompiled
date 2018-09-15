@@ -8,7 +8,7 @@ from tutorial.control.context import GlobalStorage, GLOBAL_FLAG
 from tutorial.control.offbattle.context import OffBattleClientCtx
 from tutorial.control.offbattle.functional import ContentChangedEvent
 from tutorial.control.triggers import Trigger
-__all__ = ['TutorialModeTrigger', 'TutorialQueueTrigger', 'AllBonusesTrigger']
+__all__ = ('TutorialModeTrigger', 'TutorialQueueTrigger', 'AllBonusesTrigger')
 
 class TutorialModeTrigger(Trigger, IGlobalListener):
     _inAvailable = GlobalStorage(GLOBAL_FLAG.MODE_IS_AVAILABLE, False)

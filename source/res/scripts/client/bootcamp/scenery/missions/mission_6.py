@@ -20,3 +20,6 @@ class Mission6(AbstractMission):
 
     def update(self):
         super(Mission6, self).update()
+
+    def _onPeriodChange(self, *args):
+        pass

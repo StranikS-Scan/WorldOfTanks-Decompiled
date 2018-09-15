@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/scenery/missions/mission_4.py
-import MusicControllerWWISE as MC
 from bootcamp.scenery.AbstractMission import AbstractMission
 
 class Mission4(AbstractMission):
@@ -21,8 +20,7 @@ class Mission4(AbstractMission):
         super(Mission4, self).update()
 
     def onPlayerDetectEnemy(self, new, lost):
-        if not MC.g_musicController.isPlaying(MC.MUSIC_EVENT_COMBAT):
-            MC.g_musicController.muteMusic(False)
+        self._playCombatMusic()
 
     def stop(self):
         self._avatar.muteSounds(())

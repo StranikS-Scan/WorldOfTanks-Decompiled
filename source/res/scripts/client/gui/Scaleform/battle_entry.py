@@ -34,17 +34,17 @@ class TopWindowContainer(PopUpContainer):
         super(TopWindowContainer, self).clear()
         return
 
-    def add(self, pyView):
-        result = super(TopWindowContainer, self).add(pyView)
+    def addView(self, pyView):
+        result = super(TopWindowContainer, self).addView(pyView)
         if result and self.__app is not None:
             self.__app.enterGuiControlMode(pyView.uniqueName)
         return result
 
-    def remove(self, pyView):
-        super(TopWindowContainer, self).remove(pyView)
+    def removeView(self, pyView):
+        result = super(TopWindowContainer, self).removeView(pyView)
         if self.__app is not None:
             self.__app.leaveGuiControlMode(pyView.uniqueName)
-        return
+        return result
 
 
 class BattleEntry(SFApplication):

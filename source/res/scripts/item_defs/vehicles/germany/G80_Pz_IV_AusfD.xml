@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/german/G80_Pz_IV_AusfD/Pz_IV_AusfD_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -67,7 +67,7 @@
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	-0.047921 0.7347 -0.175446	</turret>
+      <turret>	-0.0521 0.728108 -0.2103	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/german/G80_Pz_IV_AusfD/collision/Hull.model	</collisionModelServer>
@@ -90,6 +90,9 @@
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/german/G80_Pz_IV_AusfD/Pz_IV_AusfD_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	2.5 2.5 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_Pz_IV_AusfD>
@@ -134,59 +137,63 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.86	</textureScale>
+        <textureScale>	-2.6	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R0	</name>
-          <radius>	0.39746	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	WD_R	</template>
-          <radius>	0.13477	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	4	</count>
-        </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R5	</name>
-          <radius>	0.339355	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.249499	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	8	</count>
-        </group>
-        <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
-          <radius>	0.39746	</radius>
+          <radius>	0.391037	</radius>
+          <syncAngle>	18.9474	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	WD_L	</template>
-          <radius>	0.13477	</radius>
+          <radius>	0.125452	</radius>
           <startIndex>	1	</startIndex>
           <count>	4	</count>
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L5	</name>
-          <radius>	0.339355	</radius>
+          <radius>	0.339241	</radius>
+          <syncAngle>	18.9474	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	W_L	</template>
-          <radius>	0.249499	</radius>
+          <radius>	0.235	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.391037	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.125452	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.339241	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.235	</radius>
           <startIndex>	0	</startIndex>
           <count>	8	</count>
         </group>
@@ -198,12 +205,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.968848 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.958992 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/german/G80_Pz_IV_AusfD/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G80_Pz_IV_AusfD/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.20923 1.76242	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.20314 1.75961	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -216,6 +223,141 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.01	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.01	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G80_Pz_IV_AusfD/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G80_Pz_IV_AusfD/track/segment.model	</segmentModelRight>
+        <left>	vehicles/german/G80_Pz_IV_AusfD/track/left.track	</left>
+        <right>	vehicles/german/G80_Pz_IV_AusfD/track/right.track	</right>
+        <segmentLength>	0.114	</segmentLength>
+        <segmentOffset>	0.103	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.004	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+      </trackNodes>
     </Chassis_Pz_IV_AusfD>
     <Chassis_Pz_IV_AusfD_2>
       <userString>	#germany_vehicles:Chassis_Pz_IV_AusfD_2	</userString>
@@ -255,59 +397,63 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.86	</textureScale>
+        <textureScale>	-2.6	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R0	</name>
-          <radius>	0.39746	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	WD_R	</template>
-          <radius>	0.13477	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	4	</count>
-        </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R5	</name>
-          <radius>	0.339355	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.249499	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	8	</count>
-        </group>
-        <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
-          <radius>	0.39746	</radius>
+          <radius>	0.391037	</radius>
+          <syncAngle>	18.9474	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	WD_L	</template>
-          <radius>	0.13477	</radius>
+          <radius>	0.125452	</radius>
           <startIndex>	1	</startIndex>
           <count>	4	</count>
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L5	</name>
-          <radius>	0.339355	</radius>
+          <radius>	0.339241	</radius>
+          <syncAngle>	18.9474	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	W_L	</template>
-          <radius>	0.249499	</radius>
+          <radius>	0.235	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.391037	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.125452	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.339241	</radius>
+          <syncAngle>	18.9474	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.235	</radius>
           <startIndex>	0	</startIndex>
           <count>	8	</count>
         </group>
@@ -319,12 +465,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.968848 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.958992 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/german/G80_Pz_IV_AusfD/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G80_Pz_IV_AusfD/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.20923 1.76242	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.20314 1.75961	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -337,6 +483,141 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.01	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.01	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/german/G80_Pz_IV_AusfD/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/german/G80_Pz_IV_AusfD/track/segment.model	</segmentModelRight>
+        <left>	vehicles/german/G80_Pz_IV_AusfD/track/left.track	</left>
+        <right>	vehicles/german/G80_Pz_IV_AusfD/track/right.track	</right>
+        <segmentLength>	0.114	</segmentLength>
+        <segmentOffset>	0.103	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.004	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1300	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1.4	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.05	</offset>
+        </node>
+      </trackNodes>
     </Chassis_Pz_IV_AusfD_2>
   </chassis>
   <turrets0>
@@ -361,7 +642,7 @@
         <armor_13>	0	</armor_13>
         <armor_14>	10	</armor_14>
         <armor_15>	14.5	</armor_15>
-        <armor_16>	8	</armor_16>
+        <armor_16>	30	</armor_16>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1800	</weight>
@@ -387,9 +668,9 @@
             </gun>
           </unlocks>
           <armor>
-            <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	14.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
             <gun>	10	</gun>
           </armor>
@@ -411,12 +692,15 @@
             <collisionModelServer>	vehicles/german/G80_Pz_IV_AusfD/collision/Gun_01.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G80_Pz_IV_AusfD/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	1.4 0.7 0.000000 0.000000	</tiling>
+          </camouflage>
         </_50mm_KwK_38_L42>
         <_50mm_KwK_39_L60>	shared	  <maxAmmo>	96	</maxAmmo>
           <armor>
-            <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	14.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
             <gun>	10	</gun>
           </armor>
@@ -438,7 +722,7 @@
             <collisionModelClient>	vehicles/german/G80_Pz_IV_AusfD/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.94 0.94 0.000000 0.000000	</tiling>
+            <tiling>	1.4 0.7 0.000000 0.000000	</tiling>
           </camouflage>
         </_50mm_KwK_39_L60>
         <_75mm_KwK_37_L24>	shared	  <maxAmmo>	80	</maxAmmo>
@@ -447,9 +731,9 @@
             </turret>
           </unlocks>
           <armor>
-            <armor_1>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	14.5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	5	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
             <gun>	10	</gun>
           </armor>
@@ -471,7 +755,7 @@
             <collisionModelClient>	vehicles/german/G80_Pz_IV_AusfD/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.985 0.985 0.000000 0.000000	</tiling>
+            <tiling>	1.4 0.7 0.000000 0.000000	</tiling>
           </camouflage>
         </_75mm_KwK_37_L24>
       </guns>
@@ -484,7 +768,7 @@
         <collisionModelServer>	vehicles/german/G80_Pz_IV_AusfD/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G80_Pz_IV_AusfD/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.036318 0.273505 0.798213	</gunPosition>
+      <gunPosition>	0.04609 0.3621 0.904955	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	-1.02298 0.432471 0.681424	</rayStart>
@@ -503,7 +787,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.000 0.000 0.451 0.109 0.758 0.529 0.258 0.500 0.297 0.500 0.148 0.887 0.154	</physicsShape>
+      <physicsShape>	0.967 -0.013 1.000 0.000 0.545 0.179 0.758 0.529 0.125 0.500 0.332 0.500 0.130 0.558 0.233	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
         <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
@@ -582,6 +866,9 @@
             <collisionModelServer>	vehicles/german/G80_Pz_IV_AusfD/collision/Gun_04.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G80_Pz_IV_AusfD/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	1.4 0.7 0.000000 0.000000	</tiling>
+          </camouflage>
         </_50mm_KwK_38_L42>
         <_50mm_KwK_39_L60>	shared	  <maxAmmo>	96	</maxAmmo>
           <armor>
@@ -613,6 +900,9 @@
             <collisionModelServer>	vehicles/german/G80_Pz_IV_AusfD/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G80_Pz_IV_AusfD/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	1.4 0.7 0.000000 0.000000	</tiling>
+          </camouflage>
         </_50mm_KwK_39_L60>
         <_75mm_KwK_37_L24>	shared	  <maxAmmo>	80	</maxAmmo>
           <armor>
@@ -643,6 +933,9 @@
             <collisionModelServer>	vehicles/german/G80_Pz_IV_AusfD/collision/Gun_06.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G80_Pz_IV_AusfD/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	1.4 0.7 0.000000 0.000000	</tiling>
+          </camouflage>
         </_75mm_KwK_37_L24>
         <_75mm_KwK_40_L43>	shared	  <maxAmmo>	75	</maxAmmo>
           <unlocks>
@@ -677,6 +970,9 @@
             <collisionModelServer>	vehicles/german/G80_Pz_IV_AusfD/collision/Gun_07.model	</collisionModelServer>
             <collisionModelClient>	vehicles/german/G80_Pz_IV_AusfD/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	1.4 0.7 0.000000 0.000000	</tiling>
+          </camouflage>
         </_75mm_KwK_40_L43>
       </guns>
       <models>
@@ -688,7 +984,7 @@
         <collisionModelServer>	vehicles/german/G80_Pz_IV_AusfD/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/german/G80_Pz_IV_AusfD/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.000026 0.3168 0.852175	</gunPosition>
+      <gunPosition>	0.04609 0.3619 0.9003	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	-1.02342 0.431939 0.677507	</rayStart>
@@ -714,7 +1010,7 @@
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.227 -0.266 1.000 0.000 0.462 0.096 0.560 1.000 0.500 0.500 0.302 0.500 0.000 0.100 0.133	</physicsShape>
+      <physicsShape>	0.985 -0.004 1.000 0.000 0.554 0.197 0.686 0.598 0.121 0.500 0.342 0.500 0.139 0.521 0.275	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
         <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
@@ -839,9 +1135,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.92	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </G80_Pz_IV_AusfD.xml>

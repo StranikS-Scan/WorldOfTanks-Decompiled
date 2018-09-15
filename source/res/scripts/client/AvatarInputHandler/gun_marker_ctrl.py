@@ -14,7 +14,6 @@ from debug_utils import LOG_UNEXPECTED
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.lobby_context import ILobbyContext
 _MARKER_TYPE = aih_constants.GUN_MARKER_TYPE
 _MARKER_FLAG = aih_constants.GUN_MARKER_FLAG
 _SHOT_RESULT = aih_constants.SHOT_RESULT
@@ -101,8 +100,8 @@ class _StandardShotResult(object):
             if player is None:
                 return _SHOT_RESULT.UNDEFINED
             vDesc = player.getVehicleDescriptor()
-            ppDesc = vDesc.shot['piercingPower']
-            maxDist = vDesc.shot['maxDistance']
+            ppDesc = vDesc.shot.piercingPower
+            maxDist = vDesc.shot.maxDistance
             dist = (hitPoint - player.getOwnVehiclePosition()).length
             if dist <= 100.0:
                 piercingPower = ppDesc[0]
@@ -160,7 +159,7 @@ class _CrosshairShotResults(object):
             if g_bootcamp.isRunning():
                 if g_bootcamp.getPredefinedPiercingPower():
                     return (100.0, 100.0)
-        piercingPowerRandomization = shell['piercingPowerRandomization']
+        piercingPowerRandomization = shell.piercingPowerRandomization
         minPP = 100.0 * (1.0 - piercingPowerRandomization * cls._PP_RANDOM_ADJUSTMENT_MIN)
         maxPP = 100.0 * (1.0 + piercingPowerRandomization * cls._PP_RANDOM_ADJUSTMENT_MAX)
         return (minPP, maxPP)
@@ -229,11 +228,11 @@ class _CrosshairShotResults(object):
             if player is None:
                 return _SHOT_RESULT.UNDEFINED
             vDesc = player.getVehicleDescriptor()
-            shell = vDesc.shot['shell']
-            caliber = shell['caliber']
-            shellKind = shell['kind']
-            ppDesc = vDesc.shot['piercingPower']
-            maxDist = vDesc.shot['maxDistance']
+            shell = vDesc.shot.shell
+            caliber = shell.caliber
+            shellKind = shell.kind
+            ppDesc = vDesc.shot.piercingPower
+            maxDist = vDesc.shot.maxDistance
             dist = (hitPoint - player.getOwnVehiclePosition()).length
             piercingPower = cls._computePiercingPowerAtDist(ppDesc, dist, maxDist)
             fullPiercingPower = piercingPower
@@ -651,8 +650,8 @@ class _SPGGunMarkerController(_GunMarkerController):
         assert player is not None
         self._gunRotator = player.gunRotator
         shotDescr = player.getVehicleDescriptor().shot
-        self._shotSpeed = shotDescr['speed']
-        self._shotGravity = shotDescr['gravity']
+        self._shotSpeed = shotDescr.speed
+        self._shotGravity = shotDescr.gravity
         return
 
     def disable(self):

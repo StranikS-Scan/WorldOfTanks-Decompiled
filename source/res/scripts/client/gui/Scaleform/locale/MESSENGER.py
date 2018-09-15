@@ -7,27 +7,16 @@ Please, don't edit this file manually.
 from debug_utils import LOG_WARNING
 
 class MESSENGER(object):
-    CONTACTS_TOOLTIPS_BTNS_SEARCH = '#messenger:contacts/tooltips/btns/search'
-    CONTACTS_TOOLTIPS_BTNS_ADDGROUP = '#messenger:contacts/tooltips/btns/addGroup'
-    CONTACTS_TOOLTIPS_BTNS_SETTINGS = '#messenger:contacts/tooltips/btns/settings'
-    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_SEARCH = '#messenger:contacts/searchView/tooltips/btns/search'
-    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_ADD = '#messenger:contacts/searchView/tooltips/btns/add'
-    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_CLOSE = '#messenger:contacts/searchView/tooltips/btns/close'
-    CONTACTS_TOOLTIPS_BTNS_EXTERNALSEARCH = '#messenger:contacts/tooltips/btns/externalSearch'
     CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_APPLY = '#messenger:contacts/settingsView/tooltips/btns/apply'
     CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_CLOSE = '#messenger:contacts/settingsView/tooltips/btns/close'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_ADD = '#messenger:contacts/searchView/tooltips/btns/add'
+    CONTACTS_SEARCHVIEW_TOOLTIPS_BTNS_CLOSE = '#messenger:contacts/searchView/tooltips/btns/close'
     CONTACTS_CREATEGROUPVIEW_TOOLTIPS_BTNS_APPLY = '#messenger:contacts/createGroupView/tooltips/btns/apply'
     CONTACTS_CREATEGROUPVIEW_TOOLTIPS_BTNS_CLOSE = '#messenger:contacts/createGroupView/tooltips/btns/close'
     CONTACTS_GROUPRENAMEVIEW_TOOLTIPS_BTNS_APPLY = '#messenger:contacts/groupRenameView/tooltips/btns/apply'
     CONTACTS_GROUPRENAMEVIEW_TOOLTIPS_BTNS_CLOSE = '#messenger:contacts/groupRenameView/tooltips/btns/close'
     CONTACTS_GROUPDELETEVIEW_TOOLTIPS_BTNS_APPLY = '#messenger:contacts/groupDeleteView/tooltips/btns/apply'
     CONTACTS_GROUPDELETEVIEW_TOOLTIPS_BTNS_CLOSE = '#messenger:contacts/groupDeleteView/tooltips/btns/close'
-    PREBATTLE_ADDALLBTN_TOOLTIP = '#messenger:prebattle/addAllBtn/tooltip'
-    PREBATTLE_ADDBTN_TOOLTIP = '#messenger:prebattle/addBtn/tooltip'
-    PREBATTLE_REMOVEALLBTN_TOOLTIP = '#messenger:prebattle/removeAllBtn/tooltip'
-    PREBATTLE_REMOVEBTN_TOOLTIP = '#messenger:prebattle/removeBtn/tooltip'
-    CONTACTS_SEARCHVIEW_TOOLTIPS_SEARCHDISABLED = '#messenger:contacts/searchView/tooltips/searchDisabled'
-    CONTACTS_SEARCHVIEW_TOOLTIPS_SEARCHCREDENTIALS = '#messenger:contacts/searchView/tooltips/searchCredentials'
     MESSENGER_CONTACTS_EDITNOTE_TOOLTIPS_BTNS_CLOSE = '#messenger:messenger/contacts/editNote/tooltips/btns/close'
     MESSENGER_CONTACTS_EDITNOTE_TOOLTIPS_BTNS_OK = '#messenger:messenger/contacts/editNote/tooltips/btns/ok'
     MESSENGER_CONTACTS_CREATENOTE_TOOLTIPS_BTNS_OK = '#messenger:messenger/contacts/createNote/tooltips/btns/ok'
@@ -149,6 +138,7 @@ class MESSENGER(object):
     DIALOGS_SQUAD_EVENT_VEHICLE = '#messenger:dialogs/squad/event/vehicle'
     DIALOGS_SQUAD_MESSAGE_INVALIDVEHICLELEVEL = '#messenger:dialogs/squad/message/invalidVehicleLevel'
     DIALOGS_SQUAD_MESSAGE_SPGFORBIDDEN = '#messenger:dialogs/squad/message/spgForbidden'
+    DIALOGS_SQUAD_MESSAGE_SPGFULL = '#messenger:dialogs/squad/message/spgFull'
     DIALOGS_SQUAD_MESSAGE_VEHICLES_DIFFERENTLEVELS = '#messenger:dialogs/squad/message/vehicles/differentLevels'
     DIALOGS_FALLOUTSQUADCHANNEL_VEHICLES = '#messenger:dialogs/falloutSquadChannel/vehicles'
     DIALOGS_FALLOUTSQUADCHANNEL_VEHICLES_STEELHUNTING = '#messenger:dialogs/falloutSquadChannel/vehicles/steelHunting'
@@ -834,11 +824,6 @@ class MESSENGER(object):
      LISTVIEW_EMPTYLIST_INFO,
      LISTVIEW_EMPTYLIST_INVITE,
      LISTVIEW_EMPTYLIST_OFFER)
-    DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_ENUM = (DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_OFFLINE,
-     DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_NOTREADY,
-     DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_READY,
-     DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_INBATTLE,
-     DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_AFK)
     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_ENUM = (SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_RANKEARNED,
      SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_RANKLOST,
      SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_STEPEARNED,
@@ -930,15 +915,6 @@ class MESSENGER(object):
     def listview_emptylist(cls, key0):
         outcome = '#messenger:listView/emptyList/{}'.format(key0)
         if outcome not in cls.LISTVIEW_EMPTYLIST_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def dialogs_squadchannel_tooltips_status(cls, key0):
-        outcome = '#messenger:dialogs/squadChannel/tooltips/status/{}'.format(key0)
-        if outcome not in cls.DIALOGS_SQUADCHANNEL_TOOLTIPS_STATUS_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

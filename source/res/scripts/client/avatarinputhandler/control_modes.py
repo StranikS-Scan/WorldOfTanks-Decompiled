@@ -767,7 +767,7 @@ class _TrajectoryControlMode(_GunControlMode):
 
     def __onGunShotChanged(self):
         shotDescr = BigWorld.player().getVehicleDescriptor().shot
-        self.__trajectoryDrawer.setParams(shotDescr['maxDistance'], Math.Vector3(0, -shotDescr['gravity'], 0), self._aimOffset)
+        self.__trajectoryDrawer.setParams(shotDescr.maxDistance, Math.Vector3(0, -shotDescr.gravity, 0), self._aimOffset)
 
     def __initTrajectoryDrawer(self):
         player = BigWorld.player()
@@ -875,7 +875,7 @@ class SniperControlMode(_GunControlMode):
             BattleReplay.g_replayCtrl.onSniperModeChanged(True)
         g_postProcessing.enable('sniper')
         desc = BigWorld.player().getVehicleDescriptor()
-        isHorizontalStabilizerAllowed = desc.gun['turretYawLimits'] is None
+        isHorizontalStabilizerAllowed = desc.gun.turretYawLimits is None
         self._cam.aimingSystem.enableHorizontalStabilizerRuntime(isHorizontalStabilizerAllowed)
         self._cam.aimingSystem.forceFullStabilization(self.__isFullStabilizationRequired())
         if self._aih.siegeModeControl is not None:
@@ -906,7 +906,7 @@ class SniperControlMode(_GunControlMode):
             vehicleDescr = vehicle.typeDescriptor
             from items.vehicles import g_cache
             self.__setupBinoculars(g_cache.optionalDevices()[5] in vehicleDescr.optionalDevices)
-            isHorizontalStabilizerAllowed = vehicleDescr.gun['turretYawLimits'] is None
+            isHorizontalStabilizerAllowed = vehicleDescr.gun.turretYawLimits is None
             if self._cam.aimingSystem is not None:
                 self._cam.aimingSystem.enableHorizontalStabilizerRuntime(isHorizontalStabilizerAllowed)
             return
@@ -977,8 +977,8 @@ class SniperControlMode(_GunControlMode):
             return
         else:
             desc = vehicle.typeDescriptor
-            isRotationAroundCenter = desc.chassis['rotationIsAroundCenter']
-            turretHasYawLimits = desc.gun['turretYawLimits'] is not None
+            isRotationAroundCenter = desc.chassis.rotationIsAroundCenter
+            turretHasYawLimits = desc.gun.turretYawLimits is not None
             yawHullAimingAvailable = desc.isYawHullAimingAvailable
             return isRotationAroundCenter and not turretHasYawLimits or yawHullAimingAvailable
 
@@ -1107,16 +1107,17 @@ class PostMortemControlMode(IControlMode):
     def handleKeyEvent(self, isDown, key, mods, event=None):
         assert self.__isEnabled
         cmdMap = CommandMapping.g_instance
+        guiCtrlEnabled = BigWorld.player().isForcedGuiControlMode()
         if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and constants.HAS_DEV_RESOURCES and isDown and key == Keys.KEY_F1:
             self.__aih.onControlModeChanged(CTRL_MODE_NAME.DEBUG, prevModeName=CTRL_MODE_NAME.POSTMORTEM, camMatrix=self.__cam.camera.matrix)
             return True
         if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and isDown and key == Keys.KEY_F3 and (self.__videoControlModeAvailable or self.guiSessionProvider.getCtx().isPlayerObserver()):
             self.__aih.onControlModeChanged(CTRL_MODE_NAME.VIDEO, prevModeName=CTRL_MODE_NAME.POSTMORTEM, camMatrix=self.__cam.camera.matrix, curVehicleID=self.__curVehicleID)
             return True
-        if cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE, key) and isDown:
+        if cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_NEXT_VEHICLE, key) and isDown and not guiCtrlEnabled:
             self.__switch()
             return True
-        if cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_SELF_VEHICLE, key) and isDown:
+        if cmdMap.isFired(CommandMapping.CMD_CM_POSTMORTEM_SELF_VEHICLE, key) and isDown and not guiCtrlEnabled:
             self.__switch(False)
             return True
         if cmdMap.isFiredList((CommandMapping.CMD_CM_CAMERA_ROTATE_LEFT,
@@ -1447,8 +1448,8 @@ class _PlayerGunInformation(object):
         shotDesc = player.getVehicleDescriptor().shot
         gunMat = AimingSystems.getPlayerGunMat(gunRotator.turretYaw, gunRotator.gunPitch)
         position = gunMat.translation
-        velocity = gunMat.applyVector(Math.Vector3(0, 0, shotDesc['speed']))
-        return (position, velocity, Math.Vector3(0, -shotDesc['gravity'], 0))
+        velocity = gunMat.applyVector(Math.Vector3(0, 0, shotDesc.speed))
+        return (position, velocity, Math.Vector3(0, -shotDesc.gravity, 0))
 
     @staticmethod
     def updateMarkerDispersion(spgMarkerComponent, isServerAim=False):

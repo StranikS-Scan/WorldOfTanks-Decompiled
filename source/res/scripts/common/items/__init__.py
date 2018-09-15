@@ -126,8 +126,6 @@ def init(preloadEverything, pricesToCollect=None):
         pricesToCollect['vehiclesToSellForGold'] = set()
         pricesToCollect['vehicleSellPriceFactors'] = {}
         pricesToCollect['vehicleCamouflagePriceFactors'] = {}
-        pricesToCollect['vehicleHornPriceFactors'] = {}
-        pricesToCollect['hornPrices'] = {}
         pricesToCollect['camouflagePriceFactors'] = [ {} for x in nations.NAMES ]
         pricesToCollect['notInShopCamouflages'] = [ set() for x in nations.NAMES ]
         pricesToCollect['inscriptionGroupPriceFactors'] = [ {} for x in nations.NAMES ]
@@ -217,13 +215,13 @@ def _readItemTypes():
                 tags[tagName] = tagDescr
                 tagNames.append(tagName)
 
-        descr = {'index': index,
+        itemType = {'index': index,
          'tags': tags,
          'tagNames': tuple(tagNames)}
         if IS_CLIENT:
-            descr['userString'] = i18n.makeString(itemSection.readString('userString'))
-            descr['description'] = i18n.makeString(itemSection.readString('description'))
-        res[name] = descr
+            itemType['userString'] = i18n.makeString(itemSection.readString('userString'))
+            itemType['description'] = i18n.makeString(itemSection.readString('description'))
+        res[name] = itemType
 
     section = None
     itemSection = None

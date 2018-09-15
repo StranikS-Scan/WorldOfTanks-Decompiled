@@ -937,6 +937,7 @@
     <userString>	#japan_vehicles:_105mm_HE_Type14	</userString>
     <icon>	he	</icon>
     <price>	185	</price>
+    <notInShop>	true	</notInShop>
     <kind>	HIGH_EXPLOSIVE	</kind>
     <caliber>	105	</caliber>
     <explosionRadius>	1.91	</explosionRadius>
@@ -1005,6 +1006,21 @@
       <devices>	150	</devices>
     </damage>
   </_105mm_AP_Experimental_Type2_TKK>
+  <_105mm_AP_Experimental_Type2_TS>
+    <id>	89	</id>
+    <userString>	#japan_vehicles:_105mm_AP_Experimental_Type2_TS	</userString>
+    <icon>	ap	</icon>
+    <price>	11	  <gold></gold>
+    </price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	105	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	330	</armor>
+      <devices>	150	</devices>
+    </damage>
+  </_105mm_AP_Experimental_Type2_TS>
   <_105mm_HE_Type91>
     <id>	59	</id>
     <userString>	#japan_vehicles:_105mm_HE_Type91	</userString>

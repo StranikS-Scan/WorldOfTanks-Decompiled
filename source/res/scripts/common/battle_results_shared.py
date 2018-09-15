@@ -28,6 +28,7 @@ VEH_INTERACTION_DETAILS_MAX_VALUES = dict(((x[0], x[2]) for x in VEH_INTERACTION
 VEH_INTERACTION_DETAILS_INIT_VALUES = [ x[3] for x in VEH_INTERACTION_DETAILS ]
 VEH_INTERACTION_DETAILS_LAYOUT = ''.join([ x[1] for x in VEH_INTERACTION_DETAILS ])
 VEH_INTERACTION_DETAILS_INDICES = dict(((x[1][0], x[0]) for x in enumerate(VEH_INTERACTION_DETAILS)))
+VEH_INTERACTION_DETAILS_TYPES = dict(((x[0], x[1]) for x in VEH_INTERACTION_DETAILS))
 
 def _buildMapsForExt(*fields):
     return (Meta(*fields), tuple(((v[0], v[2]) for v in fields)), {v[0]:i for i, v in enumerate(fields)})
@@ -523,7 +524,11 @@ _VEH_BASE_RESULTS_PRIVATE = Meta(('xpPenalty',
  bool,
  False,
  None,
- 'max'))
+ 'max'), ('crystal',
+ int,
+ 0,
+ None,
+ 'sum'))
 _VEH_BASE_RESULTS_SERVER = Meta(('spottedBeforeWeBecameSpotted',
  int,
  0,
@@ -625,6 +630,10 @@ _AVATAR_BASE_PRIVATE_RESULTS = Meta(('accountDBID',
  tuple,
  (0, 0),
  None,
+ 'skip'), ('eligibleForCrystalRewards',
+ bool,
+ False,
+ None,
  'skip'))
 _AVATAR_BASE_PUBLIC_RESULTS = Meta(('avatarDamaged',
  int,
@@ -686,6 +695,10 @@ _AVATAR_DELETE_ME = Meta(('credits',
  0,
  None,
  'skip'), ('freeXP',
+ int,
+ 0,
+ None,
+ 'skip'), ('crystal',
  int,
  0,
  None,
@@ -751,11 +764,7 @@ VEH_FULL_RESULTS_UPDATE = Meta(('originalCredits',
  str,
  '',
  ValueReplayPacker(),
- 'skip'), ('crystal',
- int,
- 0,
- None,
- 'sum'), ('factualXP',
+ 'skip'), ('factualXP',
  int,
  0,
  None,
@@ -1131,6 +1140,10 @@ def listToDict(names, l):
 
 class _VehicleInteractionDetailsItem(object):
 
+    @staticmethod
+    def __fmt2py(format):
+        return float if format in ('f',) else int
+
     def __init__(self, values, offset):
         self.__values = values
         self.__offset = offset
@@ -1139,7 +1152,7 @@ class _VehicleInteractionDetailsItem(object):
         return self.__values[self.__offset + VEH_INTERACTION_DETAILS_INDICES[key]]
 
     def __setitem__(self, key, value):
-        self.__values[self.__offset + VEH_INTERACTION_DETAILS_INDICES[key]] = min(int(value), VEH_INTERACTION_DETAILS_MAX_VALUES[key])
+        self.__values[self.__offset + VEH_INTERACTION_DETAILS_INDICES[key]] = min(self.__fmt2py(VEH_INTERACTION_DETAILS_TYPES[key])(value), VEH_INTERACTION_DETAILS_MAX_VALUES[key])
 
     def __str__(self):
         return str(dict(self))

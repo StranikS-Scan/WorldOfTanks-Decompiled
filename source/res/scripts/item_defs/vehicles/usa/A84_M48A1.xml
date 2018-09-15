@@ -83,7 +83,7 @@
     </emblemSlots>
     <hangarShadowTexture>	vehicles/american/A84_M48A1/M48A1_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
-      <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+      <tiling>	1.1 1.1 0.000000 0.000000	</tiling>
     </camouflage>
   </hull>
   <chassis>
@@ -122,7 +122,7 @@
         <decalTexture>	trace	</decalTexture>
         <size>	0.72 0.78	</size>
         <bufferPrefs>	largeTank	</bufferPrefs>
-        <textureSet>	t97	</textureSet>
+        <textureSet>	usa_01	</textureSet>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -254,10 +254,10 @@
       <AODecals>
         <decal>
           <transform>
-            <row0>	5.151100 0.000000 0.000000	</row0>
+            <row0>	4.719220 0.000000 0.000000	</row0>
             <row1>	0.000000 1.885690 0.000000	</row1>
-            <row2>	0.000000 0.000000 7.703930	</row2>
-            <row3>	0.000000 0.000000 0.000001	</row3>
+            <row2>	0.000000 0.000000 7.799600	</row2>
+            <row3>	0.000000 0.000000 -0.000007	</row3>
           </transform>
         </decal>
       </AODecals>
@@ -427,12 +427,12 @@
       <price>	66000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	177.8	</armor_1>
-        <armor_2>	139.7	</armor_2>
+        <armor_1>	254	</armor_1>
+        <armor_2>	203.2	</armor_2>
         <armor_3>	76.2	</armor_3>
         <armor_4>	50.8	</armor_4>
-        <armor_5>	127	</armor_5>
-        <armor_6>	114.3	</armor_6>
+        <armor_5>	139.7	</armor_5>
+        <armor_6>	127	</armor_6>
         <armor_7>	101.6	</armor_7>
         <armor_8>	88.9	</armor_8>
         <armor_9>	63.5	</armor_9>
@@ -441,7 +441,7 @@
         <armor_12>	25.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
         </armor_12>
         <armor_13>	0	</armor_13>
-        <armor_14>	76.2	</armor_14>
+        <armor_14>	50.8	</armor_14>
         <armor_15>	76.2	</armor_15>
         <armor_16>	50.8	</armor_16>
       </armor>
@@ -461,129 +461,19 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_90mm_Gun_M41>	shared	  <maxAmmo>	60	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -19 1 -19	</minPitch>
-            <maxPitch>	0 9 0.353005 9 0.444444 2.9 0.461111 4.8 0.613889 4.8 0.65 9 1 9	</maxPitch>
-          </pitchLimits>
-          <unlocks>
-            <gun>	_105mm_Gun_T5E1M2	  <cost>	68000	</cost>
-            </gun>
-          </unlocks>
-          <armor>
-            <armor_1>	114.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	57.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	57.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	57.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	35	</gun>
-          </armor>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
-          <reloadTime>	6.3	</reloadTime>
-          <aimingTime>	2	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
-            <afterShot>	3.5	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <invisibilityFactorAtShot>	0.238	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/american/A84_M48A1/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/american/A84_M48A1/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/american/A84_M48A1/crash/lod0/Gun_01.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A84_M48A1/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A84_M48A1/collision_client/Gun_01.model	</collisionModelClient>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.000002 -0.113673 1.75	</rayStart>
-              <rayEnd>	0.0247606 -0.175162 1.78944	</rayEnd>
-              <rayUp>	0.092 0.089 4	</rayUp>
-              <size>	0.65	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <camouflage>
-            <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_90mm_Gun_M41>
-        <_105mm_Gun_T5E1M2>	shared	  <maxAmmo>	57	</maxAmmo>
-          <unlocks>
-            <gun>	_105mm_Gun_M68	  <cost>	45000	</cost>
-            </gun>
-          </unlocks>
-          <reloadTime>	8.8	</reloadTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
-            <afterShot>	4	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <pitchLimits>
-            <minPitch>	0 -19 1 -19	</minPitch>
-            <maxPitch>	0 9 0.388889 9 0.444444 2.8 0.455556 4.1 0.608333 3.6 0.694444 9 1 9	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	114.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	57.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	57.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	57.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
-            <gun>	45	</gun>
-          </armor>
-          <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <aimingTime>	2	</aimingTime>
-          <invisibilityFactorAtShot>	0.198	</invisibilityFactorAtShot>
-          <models>
-            <undamaged>	vehicles/american/A84_M48A1/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/american/A84_M48A1/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/american/A84_M48A1/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/american/A84_M48A1/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A84_M48A1/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.000000 -0.113925 2.53383	</rayStart>
-              <rayEnd>	0.00568735 -0.182329 2.53223	</rayEnd>
-              <rayUp>	0.116 0.112 5	</rayUp>
-              <size>	0.58	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <camouflage>
-            <tiling>	0.565 0.565 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_105mm_Gun_T5E1M2>
         <_105mm_Gun_M68>	shared	  <maxAmmo>	57	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -19 1 -19	</minPitch>
             <maxPitch>	0 9 0.4 9 0.444444 3.4 0.605556 4.6 0.652778 9 1 9	</maxPitch>
           </pitchLimits>
           <armor>
-            <armor_1>	114.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	241.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	57.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
             <armor_3>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	57.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	57.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	114.3	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
             <gun>	45	</gun>
           </armor>
@@ -617,7 +507,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.64 0.64 0.000000 0.000000	</tiling>
+            <tiling>	0.4 0.4 0.000000 0.000000	</tiling>
           </camouflage>
         </_105mm_Gun_M68>
       </guns>
@@ -633,40 +523,41 @@
       <gunPosition>	-0.001963 0.394561 1.18558	</gunPosition>
       <emblemSlots>
         <inscription>
-          <rayStart>	1.4015 0.336574 -0.223192	</rayStart>
-          <rayEnd>	1.01075 0.261192 -0.263501	</rayEnd>
+          <rayStart>	1.10146 0.323397 0.795404	</rayStart>
+          <rayEnd>	0.783018 0.219517 0.57679	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.76	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <size>	0.68	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
         <player>
-          <rayStart>	1.30729 0.399753 0.593648	</rayStart>
-          <rayEnd>	0.795691 0.183852 0.366434	</rayEnd>
+          <rayStart>	1.2971 0.788601 0.192542	</rayStart>
+          <rayEnd>	0.768012 0.57944 0.00211164	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.28	</size>
+          <size>	0.26	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
-        <inscription>
-          <rayStart>	-1.34006 0.359253 0.0281764	</rayStart>
-          <rayEnd>	-0.973639 0.204362 -0.0136079	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.76	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
         <player>
-          <rayStart>	-1.20856 0.387788 0.782046	</rayStart>
-          <rayEnd>	-0.750251 0.174082 0.459158	</rayEnd>
+          <rayStart>	-1.04839 0.589541 -1.95536	</rayStart>
+          <rayEnd>	-0.627482 0.566994 -1.52844	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
         </player>
+        <inscription>
+          <rayStart>	-1.10146 0.323397 0.795404	</rayStart>
+          <rayEnd>	-0.783018 0.219517 0.57679	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.68	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 0.452 0.169 0.319 0.593 0.590 0.500 0.263 0.500 0.287 0.378 0.003	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
-        <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
+        <tiling>	1.5 0.5 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_1_M48A1>
   </turrets0>
@@ -736,9 +627,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.88	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </A84_M48A1.xml>

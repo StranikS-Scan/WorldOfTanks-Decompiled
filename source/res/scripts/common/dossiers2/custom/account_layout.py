@@ -10,6 +10,7 @@ from dossiers2.custom.dependencies import FORT_ACHIEVEMENTS_DEPENDENCIES
 from dossiers2.custom.dependencies import GLOBAL_MAP_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import RANKED_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import RANKED_BADGES_DEPENDENCIES
+from dossiers2.custom.dependencies import A30X30_STATS_DEPENDENCIES
 from battle_statistics_layouts import *
 TOTAL_BLOCK_LAYOUT = ['creationTime',
  'lastBattleTime',
@@ -39,6 +40,7 @@ _rankedCurrentBlockBuilder = StaticSizeBlockBuilder('rankedCurrent', RANKED_BLOC
 _rankedPreviousBlockBuilder = StaticSizeBlockBuilder('rankedPrevious', RANKED_BLOCK_LAYOUT, {}, [])
 _rankedCurrentCycleBlockBuilder = StaticSizeBlockBuilder('rankedCurrentCycle', RANKED_BLOCK_LAYOUT, {}, [])
 _rankedPreviousCycleBlockBuilder = StaticSizeBlockBuilder('rankedPreviousCycle', RANKED_BLOCK_LAYOUT, {}, [])
+_a30x30BlockBuilder = StaticSizeBlockBuilder('a30x30', A30X30_BLOCK_LAYOUT, A30X30_STATS_DEPENDENCIES, [])
 _max15x15BlockBuilder = StaticSizeBlockBuilder('max15x15', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _max7x7BlockBuilder = StaticSizeBlockBuilder('max7x7', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxRated7x7BlockBuilder = StaticSizeBlockBuilder('maxRated7x7', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
@@ -54,8 +56,9 @@ _maxFalloutBlockBuilder = StaticSizeBlockBuilder('maxFallout', MAX_FALLOUT_BLOCK
 _maxRankedBlockBuilder = StaticSizeBlockBuilder('maxRanked', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxRankedCurrentBlockBuilder = StaticSizeBlockBuilder('maxRankedCurrent', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxRankedPreviousBlockBuilder = StaticSizeBlockBuilder('maxRankedPrevious', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
+_max30x30BlockBuilder = StaticSizeBlockBuilder('max30x30', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _vehTypeFragsBlockBuilder = DictBlockBuilder('vehTypeFrags', 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
-_a15x15CutBlockBuilder = DictBlockBuilder('a15x15Cut', 'I', 'IIII', {})
+_a15x15CutBlockBuilder = DictBlockBuilder('a15x15Cut', 'I', 'III', {})
 _a7x7CutBlockBuilder = DictBlockBuilder('a7x7Cut', 'I', 'IIIIIII', {})
 _rated7x7CutBlockBuilder = DictBlockBuilder('rated7x7Cut', 'I', 'IIIIIII', {})
 _historicalCutBlockBuilder = DictBlockBuilder('historicalCut', 'I', 'III', {})
@@ -66,6 +69,8 @@ _falloutCutBlockBuilder = DictBlockBuilder('falloutCut', 'I', 'IIII', {})
 _rankedCutBlockBuilder = DictBlockBuilder('rankedCut', 'I', 'III', {})
 _rankedCurrentCutBlockBuilder = DictBlockBuilder('rankedCurrentCut', 'I', 'III', {})
 _rankedPreviousCutBlockBuilder = DictBlockBuilder('rankedPreviousCut', 'I', 'III', {})
+_a30x30CutBlockBuilder = DictBlockBuilder('a30x30Cut', 'I', 'III', {})
+_markOfMasteryCut = DictBlockBuilder('markOfMasteryCut', 'I', 'B', {})
 _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'sniperSeries',
  'maxSniperSeries',
@@ -553,7 +558,11 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _rankedCurrentCutBlockBuilder,
  _rankedPreviousCutBlockBuilder,
  _rankedCurrentCycleBlockBuilder,
- _rankedPreviousCycleBlockBuilder)
+ _rankedPreviousCycleBlockBuilder,
+ _a30x30BlockBuilder,
+ _a30x30CutBlockBuilder,
+ _max30x30BlockBuilder,
+ _markOfMasteryCut)
 ACCOUNT_DOSSIER_BLOCKS = {b.name:b for b in accountDossierLayout}
 ACCOUNT_DOSSIER_STATIC_BLOCKS = frozenset((b.name for b in accountDossierLayout if type(b) == StaticSizeBlockBuilder))
 ACCOUNT_DOSSIER_BINARY_SET_BLOCKS = [ b.name for b in accountDossierLayout if type(b) == BinarySetDossierBlockBuilder ]

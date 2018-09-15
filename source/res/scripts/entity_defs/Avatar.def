@@ -7,6 +7,7 @@
     <Interface>	AccountAuthTokenProviderClient	</Interface>
     <Interface>	AvatarClientProxy	</Interface>
     <Interface>	AvatarObserver	</Interface>
+    <Interface>	TeamHealthBar_Avatar	</Interface>
   </Implements>
   <Volatile>
     <position></position>
@@ -171,11 +172,6 @@
       <Arg>	STRING	</Arg>
     </onIGRTypeChanged>
     <onAutoAimVehicleLost></onAutoAimVehicleLost>
-    <receiveHorn>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	BOOL	</Arg>
-    </receiveHorn>
     <receiveAccountStats>
       <Arg>	UINT32	</Arg>
       <Arg>	STRING	</Arg>
@@ -352,6 +348,8 @@
       </Arg>
       <Arg>	ARRAY	  <of>	INT16	</of>
       </Arg>
+      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
+      </VariableLengthHeaderSize>
     </updatePositions>
     <receivePhysicsDebugInfo>
       <Arg>	STRING	</Arg>
@@ -414,11 +412,6 @@
       <Exposed>	OWN_CLIENT	</Exposed>
       <Arg>	OBJECT_ID	</Arg>
     </monitorVehicleDamagedDevices>
-    <receiveHorn>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	BOOL	</Arg>
-    </receiveHorn>
     <onOwnVehicleStatusChanged>
       <Arg>	INT8	</Arg>
       <Arg>	INT8	</Arg>
@@ -645,10 +638,6 @@
     <vehicle_replenishAmmo>
       <Exposed></Exposed>
     </vehicle_replenishAmmo>
-    <vehicle_useHorn>
-      <Exposed></Exposed>
-      <Arg>	BOOL	</Arg>
-    </vehicle_useHorn>
     <createCellNearHere>
       <Arg>	MAILBOX	</Arg>
     </createCellNearHere>

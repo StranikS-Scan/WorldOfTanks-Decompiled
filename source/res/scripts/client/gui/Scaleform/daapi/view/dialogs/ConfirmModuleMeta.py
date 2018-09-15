@@ -11,7 +11,7 @@ from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.utils.decorators import process
 from gui.shared.gui_items.processors.module import ModuleBuyer, ModuleSeller
-from gui.shared.money import ZERO_MONEY, Currency, Money
+from gui.shared.money import MONEY_UNDEFINED, Currency, Money, CurrencyCollection
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui import SystemMessages
 MAX_ITEMS_FOR_OPERATION = 1000000
@@ -47,25 +47,39 @@ class ConfirmModuleMeta(IDialogMeta):
         return self.__typeCompactDescr
 
     def getMaxAvailableItemsCount(self, module):
-        pass
+        return CurrencyCollection(*(1 for _ in Currency.ALL))
 
     def getDefaultValue(self, module):
         pass
 
-    def getActualPrice(self, module):
-        return ZERO_MONEY
+    def getActualPrices(self, module):
+        """
+        Get store module prices. Since currently compound prices are not supported, all item prices (original or
+        alternative) are defined for only one currency. Therefore if an item has an alternative price, the method
+        should return the original price + the alternative price to have all set currencies in one place.
+        :param module:<FittingItem>
+        :return:<Money>
+        """
+        return MONEY_UNDEFINED
 
-    def getDefaultPrice(self, module):
-        return ZERO_MONEY
+    def getDefaultPrices(self, module):
+        """
+        Get default module prices. Since currently compound prices are not supported, all item prices (original or
+        alternative) are defined for only one currency. Therefore if an item has an alternative price, the method
+        should return the original price + the alternative price to have all set currencies in one place.
+        :param module:<FittingItem>
+        :return:<Money>
+        """
+        return MONEY_UNDEFINED
 
     def getCurrency(self, module):
-        return None
+        return self.getActualPrices(module).getCurrency(byWeight=True)
 
     def getActionVO(self, module):
         return None
 
     def getViewScopeType(self):
-        return ScopeTemplates.DEFAULT
+        return ScopeTemplates.DEFAULT_SCOPE
 
 
 class SellModuleMeta(ConfirmModuleMeta):
@@ -79,7 +93,7 @@ class SellModuleMeta(ConfirmModuleMeta):
         @param module: current item
         @return:
         """
-        return (min(module.inventoryCount, MAX_ITEMS_FOR_OPERATION), min(module.inventoryCount, MAX_ITEMS_FOR_OPERATION))
+        return CurrencyCollection(*(min(module.inventoryCount, MAX_ITEMS_FOR_OPERATION) for _ in Currency.ALL))
 
     def getDefaultValue(self, module):
         return module.inventoryCount
@@ -90,19 +104,16 @@ class SellModuleMeta(ConfirmModuleMeta):
         if len(result.userMsg):
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
-    def getActualPrice(self, module):
-        return module.sellPrice
+    def getActualPrices(self, module):
+        return module.sellPrices.itemPrice.price
 
-    def getDefaultPrice(self, module):
-        return module.defaultSellPrice
+    def getDefaultPrices(self, module):
+        return module.sellPrices.itemPrice.defPrice
 
     def getActionVO(self, module):
-        price = self.getActualPrice(module)
-        defaultPrice = self.getDefaultPrice(module)
-        return packActionTooltipData(ACTION_TOOLTIPS_TYPE.ITEM, str(module.intCD), False, price, defaultPrice)
-
-    def getCurrency(self, module):
-        return module.getSellPriceCurrency()
+        prices = self.getActualPrices(module)
+        defaultPrices = self.getDefaultPrices(module)
+        return packActionTooltipData(ACTION_TOOLTIPS_TYPE.ITEM, str(module.intCD), False, prices, defaultPrices)
 
 
 class LocalSellModuleMeta(SellModuleMeta):
@@ -126,9 +137,9 @@ class BuyModuleMeta(ConfirmModuleMeta):
 
     def __getMaxCount(self, module, currency):
         result = 0
-        modulePrice = self.getActualPrice(module)
-        if modulePrice.get(currency) > 0:
-            result = math.floor(self.__balance.get(currency) / modulePrice.get(currency))
+        modulePrice = self.getActualPrices(module)
+        if modulePrice.get(currency, 0) > 0:
+            result = math.floor(self.__balance.get(currency, 0) / modulePrice.get(currency))
         return min(result, MAX_ITEMS_FOR_OPERATION)
 
     def destroy(self):
@@ -136,24 +147,21 @@ class BuyModuleMeta(ConfirmModuleMeta):
         super(BuyModuleMeta, self).destroy()
 
     def getMaxAvailableItemsCount(self, module):
-        return (self.__getMaxCount(module, Currency.CREDITS), self.__getMaxCount(module, Currency.GOLD))
+        return CurrencyCollection(*(self.__getMaxCount(module, currency) for currency in Currency.ALL))
 
     def getDefaultValue(self, module):
         pass
 
-    def getActualPrice(self, module):
-        return module.altPrice or module.buyPrice
+    def getActualPrices(self, module):
+        return module.buyPrices.getSum().price
 
-    def getDefaultPrice(self, module):
-        return module.defaultAltPrice or module.defaultPrice
+    def getDefaultPrices(self, module):
+        return module.buyPrices.getSum().defPrice
 
     def getActionVO(self, module):
-        price = self.getActualPrice(module)
-        defaultPrice = self.getDefaultPrice(module)
-        return packActionTooltipData(ACTION_TOOLTIPS_TYPE.ITEM, str(module.intCD), True, price, defaultPrice)
-
-    def getCurrency(self, module):
-        return module.getBuyPriceCurrency()
+        prices = self.getActualPrices(module)
+        defaultPrices = self.getDefaultPrices(module)
+        return packActionTooltipData(ACTION_TOOLTIPS_TYPE.ITEM, str(module.intCD), True, prices, defaultPrices)
 
     @process('buyItem')
     def submit(self, item, count, currency):

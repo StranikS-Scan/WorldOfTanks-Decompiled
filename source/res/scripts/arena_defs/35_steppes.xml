@@ -10,7 +10,16 @@
   <minimap>	spaces/35_steppes/mmap.dds	</minimap>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <umbraEnabled>	1	</umbraEnabled>
-  <wwloadingMusic>	music_rus_vilage	</wwloadingMusic>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_rus_vilage	</wwmusicLoading>
+    <wwmusicIntensive>	music_combat	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_combat	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_victory	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
   <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
   <gameplayTypes>
     <ctf>

@@ -12,7 +12,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.processors.module import getInstallerProcessor, BuyAndInstallItemProcessor
 from gui.shared.gui_items.processors.vehicle import tryToLoadDefaultShellsLayout, VehicleLayoutProcessor, VehicleBattleBoosterLayoutProcessor, BuyAndInstallBattleBoosterProcessor
-from gui.shared.gui_items.vehicle_layout import ShellVehicleLayout, EquipmentVehicleLayout
+from gui.shared.gui_items.vehicle_equipment import ShellLayoutHelper, EquipmentLayoutHelper
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.lobby.techtree import unlock
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats, RequestState
@@ -52,12 +52,12 @@ def showShopMsg(msg, item, msgType=SystemMessages.SM_TYPE.Error, **kwargs):
 def getGunCD(item, vehicle, itemsCache=None):
     if item.itemTypeID == GUI_ITEM_TYPE.TURRET and itemsCache is not None:
         if not item.mayInstall(vehicle, gunCD=0)[0]:
-            for gun in item.descriptor['guns']:
-                gunItem = itemsCache.items.getItemByCD(gun['compactDescr'])
+            for gun in item.descriptor.guns:
+                gunItem = itemsCache.items.getItemByCD(gun.compactDescr)
                 if gunItem.isInInventory:
-                    mayInstall = item.mayInstall(vehicle, slotIdx=0, gunCD=gun['compactDescr'])
+                    mayInstall = item.mayInstall(vehicle, slotIdx=0, gunCD=gun.compactDescr)
                     if mayInstall[0]:
-                        return gun['compactDescr']
+                        return gun.compactDescr
 
     return 0
 
@@ -328,8 +328,8 @@ class SetVehicleModuleAction(BuyAction):
         if vehicle is None:
             return
         else:
-            isUseGold = self.__isRemove and self.__oldItemCD is not None
-            LOG_DEBUG('isUseGold, self.__isRemove, self.__oldItemCD', isUseGold, self.__isRemove, self.__oldItemCD)
+            isUseMoney = self.__isRemove and self.__oldItemCD is not None
+            LOG_DEBUG('isUseMoney, self.__isRemove, self.__oldItemCD', isUseMoney, self.__isRemove, self.__oldItemCD)
             newComponentItem = self.itemsCache.items.getItemByCD(int(self.__newItemCD))
             if newComponentItem is None:
                 return
@@ -367,7 +367,7 @@ class SetVehicleModuleAction(BuyAction):
             else:
                 Waiting.show('applyModule')
                 conflictedEqs = newComponentItem.getConflictedEquipments(vehicle)
-                result = yield getInstallerProcessor(vehicle, newComponentItem, self.__slotIdx, not self.__isRemove, isUseGold, conflictedEqs, self.skipConfirm).request()
+                result = yield getInstallerProcessor(vehicle, newComponentItem, self.__slotIdx, not self.__isRemove, isUseMoney, conflictedEqs, self.skipConfirm).request()
                 processMsg(result)
                 if result.success and newComponentItem.itemTypeID in (GUI_ITEM_TYPE.TURRET, GUI_ITEM_TYPE.GUN):
                     newComponentItem = self.itemsCache.items.getItemByCD(int(self.__newItemCD))
@@ -395,12 +395,12 @@ class SetVehicleLayoutAction(IGUIItemAction):
     def doAction(self):
         if self._battleBooster is not None:
             boosterLayout = (self._battleBooster.intCD, 1) if self._battleBooster else (0, 0)
-            eqsLayout = EquipmentVehicleLayout(self._vehicle, self._eqsLayout, boosterLayout)
+            eqsLayout = EquipmentLayoutHelper(self._vehicle, self._eqsLayout, boosterLayout)
             result = yield VehicleBattleBoosterLayoutProcessor(self._vehicle, self._battleBooster, eqsLayout, self.skipConfirm).request()
         else:
-            shellsLayout = ShellVehicleLayout(self._vehicle, self._shellsLayout)
-            eqsLayout = EquipmentVehicleLayout(self._vehicle, self._eqsLayout)
-            result = yield VehicleLayoutProcessor(self._vehicle, shellsLayout, eqsLayout, self.skipConfirm).request()
+            shellsHelper = ShellLayoutHelper(self._vehicle, self._shellsLayout)
+            eqsHelper = EquipmentLayoutHelper(self._vehicle, self._eqsLayout)
+            result = yield VehicleLayoutProcessor(self._vehicle, shellsHelper, eqsHelper, self.skipConfirm).request()
         self._showResult(result)
         return
 
@@ -429,8 +429,8 @@ class BuyAndInstallItemVehicleLayout(SetVehicleLayoutAction):
     def doAction(self):
         if self._battleBooster is not None:
             boosterLayout = (self._battleBooster.intCD, 1)
-            eqsLayout = EquipmentVehicleLayout(self._vehicle, self._eqsLayout, boosterLayout)
-            result = yield BuyAndInstallBattleBoosterProcessor(self._vehicle, self._battleBooster, eqsLayout, self._count, self.skipConfirm).request()
+            helper = EquipmentLayoutHelper(self._vehicle, self._eqsLayout, boosterLayout)
+            result = yield BuyAndInstallBattleBoosterProcessor(self._vehicle, self._battleBooster, helper, self._count, self.skipConfirm).request()
             self._showResult(result)
         else:
             LOG_ERROR('Extend BuyAndInstallItemVehicleLayout action to support a new type of item!')

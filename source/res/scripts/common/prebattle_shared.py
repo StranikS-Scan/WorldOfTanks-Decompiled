@@ -226,16 +226,16 @@ def _collectCurrentReplaceableVehicleComponents(vehicleDescr):
     res = []
     vehicleType = vehicleDescr.type
     if len(vehicleType.chassis) > 1:
-        res.append(vehicleDescr.chassis['compactDescr'])
+        res.append(vehicleDescr.chassis.compactDescr)
     if len(vehicleType.engines) > 1:
-        res.append(vehicleDescr.engine['compactDescr'])
+        res.append(vehicleDescr.engine.compactDescr)
     if len(vehicleType.radios) > 1:
-        res.append(vehicleDescr.radio['compactDescr'])
+        res.append(vehicleDescr.radio.compactDescr)
     for posIdx, (turretDescr, gunDescr) in enumerate(vehicleDescr.turrets):
         if len(vehicleType.turrets[posIdx]) > 1:
-            res.append(turretDescr['compactDescr'])
-        if len(turretDescr['guns']) > 1:
-            res.append(gunDescr['compactDescr'])
+            res.append(turretDescr.compactDescr)
+        if len(turretDescr.guns) > 1:
+            res.append(gunDescr.compactDescr)
 
     return res
 

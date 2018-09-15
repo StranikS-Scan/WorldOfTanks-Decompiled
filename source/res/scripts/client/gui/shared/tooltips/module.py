@@ -2,18 +2,18 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/module.py
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
-from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.economics import getActionPrc
 from gui.shared.formatters import text_styles, icons
-from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_PURCHASE_CODE
+from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
+from gui.shared.gui_items.vehicle_equipment import RegularEquipmentConsumables
+from gui.shared.gui_items.gui_item_economics import isItemBuyPriceAvailable
 from gui.shared.items_parameters import params_helper, formatters as params_formatters, bonus_helper
 from gui.shared.items_parameters.params_helper import SimplifiedBarVO
-from gui.shared.money import ZERO_MONEY
+from gui.shared.money import MONEY_UNDEFINED, Currency
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
@@ -68,26 +68,34 @@ class ModuleBlockTooltipData(BlocksTooltipData):
             effectsBlock = EffectsBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
             if len(effectsBlock) > 0:
                 items.append(formatters.packBuildUpBlockData(effectsBlock, padding=blockPadding, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
-        priceBlock, invalidWidth = PriceBlockConstructor(module, statsConfig, valueWidth, leftPadding, rightPadding).construct()
-        if len(priceBlock) > 0:
-            self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
-            items.append(formatters.packBuildUpBlockData(priceBlock, padding=blockPadding, gap=textGap))
         if statsConfig.vehicle is not None and not module.isInstalled(statsConfig.vehicle):
             if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
-                comparator = params_helper.artifactComparator(statsConfig.vehicle, module, statsConfig.slotIdx)
+                comparator = params_helper.artifactComparator(statsConfig.vehicle, module, statsConfig.slotIdx, True)
             else:
                 comparator = params_helper.itemOnVehicleComparator(statsConfig.vehicle, module)
             stockParams = params_helper.getParameters(self.itemsCache.items.getStockVehicle(statsConfig.vehicle.intCD))
-            simplifiedBlock = SimplifiedStatsBlockConstructor(module, paramsConfig, leftPadding, rightPadding, stockParams, comparator).construct()
-            if len(simplifiedBlock) > 0:
-                items.append(formatters.packBuildUpBlockData(simplifiedBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-14, bottom=1), stretchBg=True))
+            if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not module.hasSimilarDevicesInstalled(statsConfig.vehicle) or module.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
+                simplifiedBlock = SimplifiedStatsBlockConstructor(module, paramsConfig, leftPadding, rightPadding, stockParams, comparator).construct()
+                if len(simplifiedBlock) > 0:
+                    items.append(formatters.packBuildUpBlockData(simplifiedBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-14, bottom=1), stretchBg=True))
+            if statsConfig.vehicle.optDevices[statsConfig.slotIdx]:
+                if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
+                    comparator = params_helper.artifactRemovedComparator(statsConfig.vehicle, module, statsConfig.slotIdx)
+                simplifiedBlock = SimplifiedStatsBlockConstructor(module, paramsConfig, leftPadding, rightPadding, stockParams, comparator).construct()
+                if len(simplifiedBlock) > 0:
+                    replaceBlock = ModuleReplaceBlockConstructor(module, statsConfig, valueWidth, leftPadding).construct()
+                    if replaceBlock:
+                        items.append(formatters.packBuildUpBlockData(replaceBlock))
+                    items.append(formatters.packBuildUpBlockData(simplifiedBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-14, bottom=1), stretchBg=True))
+        priceBlock, invalidWidth = PriceBlockConstructor(module, statsConfig, valueWidth, leftPadding, rightPadding).construct()
+        if len(priceBlock) > 0:
+            self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
+            items.append(formatters.packBuildUpBlockData(priceBlock, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-1, bottom=-3), gap=textGap))
         statsModules = GUI_ITEM_TYPE.VEHICLE_MODULES + (GUI_ITEM_TYPE.OPTIONALDEVICE,)
         if module.itemTypeID in statsModules:
             commonStatsBlock = CommonStatsBlockConstructor(module, paramsConfig, statsConfig.slotIdx, valueWidth, leftPadding, rightPadding, params_formatters.BASE_SCHEME).construct()
             if len(commonStatsBlock) > 0:
                 items.append(formatters.packBuildUpBlockData(commonStatsBlock, padding=blockPadding, gap=textGap))
-        if not module.isRemovable and not statusConfig.isAwardWindow:
-            items.append(formatters.packBuildUpBlockData(ArtefactBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct(), gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_COMPLEX_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=blockTopPadding, bottom=2), stretchBg=False))
         statusBlock = StatusBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
         if len(statusBlock) > 0:
             items.append(formatters.packBuildUpBlockData(statusBlock, padding=blockPadding))
@@ -139,6 +147,7 @@ class VehCompareModuleBlockTooltipData(BlocksTooltipData):
 class ModuleTooltipBlockConstructor(object):
     MAX_INSTALLED_LIST_LEN = 10
     CLIP_GUN_MODULE_PARAM = 'vehicleClipGun'
+    WEIGHT_MODULE_PARAM = 'weight'
     MODULE_PARAMS = {GUI_ITEM_TYPE.CHASSIS: ('maxLoad', 'rotationSpeed', 'weight'),
      GUI_ITEM_TYPE.TURRET: ('armor', 'rotationSpeed', 'circularVisionRadius', 'weight'),
      GUI_ITEM_TYPE.GUN: (RELOAD_TIME_PROP_NAME,
@@ -153,7 +162,7 @@ class ModuleTooltipBlockConstructor(object):
                          'weight'),
      GUI_ITEM_TYPE.ENGINE: ('enginePower', 'fireStartingChance', 'weight'),
      GUI_ITEM_TYPE.RADIO: ('radioDistance', 'weight'),
-     GUI_ITEM_TYPE.OPTIONALDEVICE: ('weight',),
+     GUI_ITEM_TYPE.OPTIONALDEVICE: (),
      CLIP_GUN_MODULE_PARAM: (SHELLS_COUNT_PROP_NAME,
                              SHELL_RELOADING_TIME_PROP_NAME,
                              RELOAD_MAGAZINE_TIME_PROP_NAME,
@@ -197,8 +206,16 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
             imgPaddingLeft = 7
             imgPaddingTop = 5
             txtOffset = 90 - self.leftPadding
-        overlayPath, highlightPath, padding = self.__getOverlayAndHighlight()
-        block.append(formatters.packItemTitleDescBlockData(title=text_styles.highTitle(title), desc=text_styles.standard(desc), img=module.icon, imgPadding=formatters.packPadding(left=imgPaddingLeft, top=imgPaddingTop), txtGap=-3, txtOffset=txtOffset, padding=formatters.packPadding(top=-6), overlayPath=overlayPath, overlayPadding=padding, highlightPath=highlightPath, highlightPadding=padding))
+            moduleParams = params_helper.getParameters(module)
+            weightUnits = text_styles.standard(TOOLTIPS.PARAMETER_WEIGHTUNITS)
+            paramName = ModuleTooltipBlockConstructor.WEIGHT_MODULE_PARAM
+            paramValue = params_formatters.formatParameter(paramName, moduleParams[paramName]) if paramName in moduleParams else None
+            if paramValue is not None:
+                desc = text_styles.main(TOOLTIPS.PARAMETER_WEIGHT) + text_styles.credits(paramValue) + weightUnits
+        else:
+            desc = text_styles.standard(desc)
+        overlayPath, overlayPadding, blockPadding = self.__getOverlayData()
+        block.append(formatters.packItemTitleDescBlockData(title=text_styles.highTitle(title), desc=desc, img=module.icon, imgPadding=formatters.packPadding(left=imgPaddingLeft, top=imgPaddingTop), txtGap=-3, txtOffset=txtOffset, padding=blockPadding, overlayPath=overlayPath, overlayPadding=overlayPadding))
         if module.itemTypeID == GUI_ITEM_TYPE.GUN:
             vehicle = self.configuration.vehicle
             vDescr = vehicle.descriptor if vehicle is not None else None
@@ -209,17 +226,15 @@ class HeaderBlockConstructor(ModuleTooltipBlockConstructor):
                 block.append(formatters.packImageTextBlockData(title=text_styles.standard(MENU.MODULEINFO_HYDRAULICCHASSISLABEL), desc='', img=RES_ICONS.MAPS_ICONS_MODULES_HYDRAULICCHASSISICON, imgPadding=formatters.packPadding(top=3), padding=formatters.packPadding(left=108, top=9)))
         return block
 
-    def __getOverlayAndHighlight(self):
-        """
-        Special highlight for equipment+(deluxe)
-        """
-        highlightPath = None
+    def __getOverlayData(self):
+        blockPadding = formatters.packPadding(top=-6)
         if self.module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and self.module.isDeluxe():
             overlayPath = RES_ICONS.MAPS_ICONS_ARTEFACT_EQUIPMENTPLUS_OVERLAY
             padding = formatters.packPadding(top=SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS_PADDING_TOP, left=SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS_PADDING_LEFT)
+            blockPadding['bottom'] = -12
         else:
             overlayPath = padding = None
-        return (overlayPath, highlightPath, padding)
+        return (overlayPath, padding, blockPadding)
 
 
 class PriceBlockConstructor(ModuleTooltipBlockConstructor):
@@ -255,9 +270,9 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
             isAutoUnlock = checkState(NODE_STATE_FLAGS.AUTO_UNLOCKED)
             items = self.itemsCache.items
             money = items.stats.money
-            itemPrice = ZERO_MONEY
+            itemPrice = MONEY_UNDEFINED
             if module is not None:
-                itemPrice = module.buyPrice
+                itemPrice = module.buyPrices.itemPrice.price
             isMoneyEnough = money >= itemPrice
             leftPadding = 92
             if unlockPrice and not isEqOrDev:
@@ -268,11 +283,11 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                     neededValue = need
                 if cost > 0:
                     block.append(makePriceBlock(cost, CURRENCY_SETTINGS.UNLOCK_PRICE, neededValue, leftPadding=leftPadding, valueWidth=self._valueWidth))
-            creditsActionPercent, goldActionPercent, crystalActionPercent = (0, 0, 0)
-            need = ZERO_MONEY
+            notEnoughMoney = False
+            hasAction = False
             if buyPrice and not isAutoUnlock:
-                price = module.altPrice or module.buyPrice
-                defPrice = module.defaultAltPrice or module.defaultPrice
+                shop = self.itemsCache.items.shop
+                money = self.itemsCache.items.stats.money
                 rootInInv = vehicle is not None and vehicle.isInInventory
                 if researchNode:
                     showNeeded = rootInInv and not isMoneyEnough and (isNextToUnlock or isUnlocked) and not (isInstalled or isInInventory)
@@ -280,23 +295,36 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                     isModuleUnlocked = module.isUnlocked
                     isModuleInInventory = module.isInInventory
                     showNeeded = not isModuleInInventory and isModuleUnlocked
-                if isEqOrDev or showNeeded:
-                    need = price - money
-                    need = need.toNonNegative()
-                useGoldAndCredits = items.shop.isEnabledBuyingGoldEqsForCredits
-                if price.credits > 0 and (useGoldAndCredits or price.gold <= 0):
-                    creditsActionPercent = getActionPrc(price.credits, defPrice.credits)
-                    block.append(makePriceBlock(price.credits, CURRENCY_SETTINGS.BUY_CREDITS_PRICE, need.credits if need.credits > 0 else None, defPrice.credits if defPrice.credits > 0 else None, creditsActionPercent, self._valueWidth, leftPadding))
-                if price.gold > 0:
-                    goldActionPercent = getActionPrc(price.gold, defPrice.gold)
-                    if useGoldAndCredits:
-                        block.append(formatters.packTextBlockData(text=text_styles.standard(TOOLTIPS.VEHICLE_TEXTDELIMITER_OR), padding=formatters.packPadding(left=(101 if goldActionPercent > 0 else 81) + self.leftPadding)))
-                    block.append(makePriceBlock(price.gold, CURRENCY_SETTINGS.BUY_GOLD_PRICE, need.gold if need.gold > 0 else None, defPrice.gold if defPrice.gold > 0 else None, goldActionPercent, self._valueWidth, leftPadding))
-                if price.crystal > 0:
-                    crystalActionPercent = getActionPrc(price.crystal, defPrice.crystal)
-                    block.append(makePriceBlock(price.crystal, CURRENCY_SETTINGS.BUY_CRYSTAL_PRICE, need.crystal if need.crystal > 0 else None, defPrice.crystal if defPrice.crystal > 0 else None, crystalActionPercent, self._valueWidth, leftPadding))
-            if sellPrice:
-                block.append(makePriceBlock(module.sellPrice.credits, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=module.defaultSellPrice.credits, percent=module.sellActionPrc, valueWidth=self._valueWidth, leftPadding=leftPadding))
+                showDelimiter = False
+                leftPadding = 92
+                for itemPrice in module.buyPrices.iteritems(directOrder=False):
+                    if not isItemBuyPriceAvailable(module, itemPrice, shop):
+                        continue
+                    currency = itemPrice.getCurrency()
+                    value = itemPrice.price.getSignValue(currency)
+                    defValue = itemPrice.defPrice.getSignValue(currency)
+                    actionPercent = itemPrice.getActionPrc()
+                    if isEqOrDev or showNeeded:
+                        needValue = value - money.getSignValue(currency)
+                        if needValue > 0:
+                            notEnoughMoney = True
+                        else:
+                            needValue = None
+                    else:
+                        needValue = None
+                    if currency == Currency.GOLD and actionPercent > 0:
+                        leftActionPadding = 101 + self.leftPadding
+                    else:
+                        leftActionPadding = 81 + self.leftPadding
+                    if actionPercent > 0:
+                        hasAction = True
+                    if showDelimiter:
+                        block.append(formatters.packTextBlockData(text=text_styles.standard(TOOLTIPS.VEHICLE_TEXTDELIMITER_OR), padding=formatters.packPadding(left=leftActionPadding)))
+                    block.append(makePriceBlock(value, CURRENCY_SETTINGS.getBuySetting(currency), needValue, defValue if defValue > 0 else None, actionPercent, valueWidth=self._valueWidth, leftPadding=leftPadding))
+                    showDelimiter = True
+
+            if sellPrice and module.sellPrices:
+                block.append(makePriceBlock(module.sellPrices.itemPrice.price.credits, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=module.sellPrices.itemPrice.defPrice.credits, percent=module.sellPrices.itemPrice.getActionPrc(), valueWidth=self._valueWidth, leftPadding=leftPadding))
             if inventoryCount:
                 count = module.inventoryCount
                 if count > 0:
@@ -306,8 +334,13 @@ class PriceBlockConstructor(ModuleTooltipBlockConstructor):
                 count = len(module.getInstalledVehicles(inventoryVehicles.itervalues()))
                 if count > 0:
                     block.append(formatters.packTextParameterBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_VEHICLECOUNT), value=text_styles.stats(count), valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5)))
-            notEnoughMoney = need > ZERO_MONEY
-            hasAction = creditsActionPercent > 0 or goldActionPercent > 0 or crystalActionPercent > 0 or module.sellActionPrc > 0
+            isOptionalDevice = module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE
+            if isOptionalDevice and not module.isRemovable and not self.configuration.isAwardWindow:
+                removalPrice = module.getRemovalPrice(self.itemsCache.items)
+                removalPriceCurrency = removalPrice.getCurrency()
+                currencyTextFormatter = getattr(text_styles, removalPriceCurrency, text_styles.gold)
+                block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_DISMANTLING_PRICE), value=currencyTextFormatter(removalPrice.price.get(removalPriceCurrency)), icon=removalPriceCurrency, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5)))
+            hasAction |= module.sellPrices.itemPrice.isActionPrice()
             return (block, notEnoughMoney or hasAction)
 
     def _getInventoryBlock(self, count):
@@ -342,7 +375,7 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                     currModule = module
                 else:
                     currModuleDescr, _ = vehicle.descriptor.getComponentsByType(module.itemTypeName)
-                    currModule = self.itemsCache.items.getItemByCD(currModuleDescr['compactDescr'])
+                    currModule = self.itemsCache.items.getItemByCD(currModuleDescr.compactDescr)
                 comparator = params_helper.itemsComparator(module, currModule, vehicle.descriptor)
                 for paramName in paramsList:
                     if paramName in moduleParams:
@@ -359,6 +392,18 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
 
         if len(block) > 0:
             block.insert(0, formatters.packTextBlockData(text_styles.middleTitle(_ms(TOOLTIPS.TANKCARUSEL_MAINPROPERTY)), padding=formatters.packPadding(bottom=8)))
+        return block
+
+
+class ModuleReplaceBlockConstructor(ModuleTooltipBlockConstructor):
+
+    def construct(self):
+        block = []
+        vehicle = self.configuration.vehicle
+        optionalDevice = vehicle.optDevices[self.configuration.slotIdx]
+        if optionalDevice is not None:
+            replaceModuleText = text_styles.main(TOOLTIPS.MODULEFITS_REPLACE)
+            block.append(formatters.packImageTextBlockData(title=replaceModuleText.format(moduleName=optionalDevice.userName), txtOffset=20))
         return block
 
 
@@ -380,20 +425,6 @@ class SimplifiedStatsBlockConstructor(ModuleTooltipBlockConstructor):
                     value -= delta
                 block.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simlifiedDeltaParameter(parameter, self.__isSituational), statusBarData=SimplifiedBarVO(value=value, delta=delta, markerValue=self.__stockParams[parameter.name], isOptional=self.__isSituational), padding=formatters.packPadding(left=105, top=8)))
 
-        return block
-
-
-class ArtefactBlockConstructor(ModuleTooltipBlockConstructor):
-
-    def __init__(self, module, configuration, leftPadding, rightPadding):
-        super(ArtefactBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
-
-    def construct(self):
-        block = []
-        paddingTop = 8
-        block.append(formatters.packImageTextBlockData(title=text_styles.alert(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_BODY), img=RES_ICONS.MAPS_ICONS_TOOLTIP_COMPLEX_EQUIPMENT, imgPadding=formatters.packPadding(left=2, top=3), txtOffset=20))
-        block.append(formatters.packTextBlockData(text=text_styles.main(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_NOTE), padding=formatters.packPadding(top=paddingTop)))
-        block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.MODULEFITS_NOT_REMOVABLE_DISMANTLING_PRICE), value=text_styles.gold(self.itemsCache.items.shop.paidRemovalCost), icon=ICON_TEXT_FRAMES.GOLD, valueWidth=60, padding=formatters.packPadding(left=43, top=paddingTop)))
         return block
 
 
@@ -432,9 +463,9 @@ class EffectsBlockConstructor(ModuleTooltipBlockConstructor):
         else:
             isRemovingStun = False
         onUseStr = '%s/removingStun/onUse' if isRemovingStun else '%s/onUse'
-        onUse = checkLocalization(onUseStr % module.descriptor['name'])
-        always = checkLocalization('%s/always' % module.descriptor['name'])
-        restriction = checkLocalization('%s/restriction' % module.descriptor['name'])
+        onUse = checkLocalization(onUseStr % module.descriptor.name)
+        always = checkLocalization('%s/always' % module.descriptor.name)
+        restriction = checkLocalization('%s/restriction' % module.descriptor.name)
         if bonus_helper.isSituationalBonus(module.name):
             effectDesc = text_styles.bonusPreviewText(_ms(module.shortDescription))
             icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_TOOLTIP_ASTERISK_OPTIONAL, 16, 16, 0, 4)
@@ -481,12 +512,12 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
         isFit = True
         reason = ''
         titleFormatter = text_styles.middleTitle
-        cachedEqs = [None, None, None]
-        currentVehicleEqs = [None, None, None]
+        cachedEqs = RegularEquipmentConsumables()
+        currentVehicleEqs = RegularEquipmentConsumables()
         if vehicle is not None and vehicle.isInInventory:
             if vehicle is not None and vehicle.isInInventory:
-                currentVehicleEqs = list(vehicle.eqs)
-                vehicle.eqs = [None, None, None]
+                currentVehicleEqs = vehicle.equipment.regularConsumables
+                vehicle.equipment.setRegularConsumables(RegularEquipmentConsumables())
                 if eqs:
                     for i, e in enumerate(eqs):
                         if e is not None:
@@ -494,9 +525,9 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
                             eq = self.itemsCache.items.getItemByCD(intCD)
                             cachedEqs[i] = eq
 
-                    vehicle.eqs = cachedEqs
+                    vehicle.equipment.setRegularConsumables(cachedEqs)
             isFit, reason = module.mayInstall(vehicle, slotIdx)
-            vehicle.eqs = currentVehicleEqs
+            vehicle.equipment.setRegularConsumables(currentVehicleEqs)
         inventoryVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).itervalues()
         totalInstalledVehicles = map(lambda x: x.shortUserName, module.getInstalledVehicles(inventoryVehicles))
         installedVehicles = totalInstalledVehicles[:self.MAX_INSTALLED_LIST_LEN]
@@ -507,10 +538,10 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
             tooltipHeader, tooltipText = getComplexStatus('#tooltips:moduleFits/%s' % reason)
             if reason == 'not_with_installed_equipment':
                 if vehicle is not None:
-                    vehicle.eqs = cachedEqs
+                    vehicle.equipment.setRegularConsumables(cachedEqs)
                     conflictEqs = module.getConflictedEquipments(vehicle)
                     tooltipText %= {'eqs': ', '.join([ _ms(e.userName) for e in conflictEqs ])}
-                    vehicle.eqs = currentVehicleEqs
+                    vehicle.equipment.setRegularConsumables(currentVehicleEqs)
             elif reason == 'already_installed' and isEqOrDev and len(installedVehicles):
                 tooltipHeader, _ = getComplexStatus('#tooltips:deviceFits/already_installed' if module.itemTypeName == GUI_ITEM_TYPE.OPTIONALDEVICE else '#tooltips:moduleFits/already_installed')
                 tooltipText = ', '.join(installedVehicles)
@@ -527,7 +558,7 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
             isFit, reason = module.mayPurchase(self.itemsCache.items.stats.money)
             if not isFit:
                 reason = reason.replace(' ', '_')
-                if GUI_ITEM_PURCHASE_CODE.isMoneyError(reason):
+                if GUI_ITEM_ECONOMY_CODE.isMoneyError(reason):
                     titleFormatter = text_styles.critical
                 tooltipHeader, tooltipText = getComplexStatus('#tooltips:moduleFits/%s' % reason)
                 if tooltipHeader is not None or tooltipText is not None:
@@ -565,6 +596,7 @@ class StatusBlockConstructor(ModuleTooltipBlockConstructor):
                 header, text = getComplexStatus(statusTemplate % 'parentModuleIsLocked')
             elif need > 0:
                 header, text = getComplexStatus(statusTemplate % 'notEnoughXP')
+                header = text_styles.critical(header)
             return status(header, text)
         elif not vehicle.isInInventory:
             header, text = getComplexStatus(statusTemplate % 'needToBuyTank')

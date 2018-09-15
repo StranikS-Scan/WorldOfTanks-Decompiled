@@ -259,6 +259,16 @@ class IVehiclesAndPositionsController(IArenaVehiclesController):
         pass
 
 
+class IBattleFieldController(IArenaVehiclesController):
+    __slots__ = ()
+
+    def setVehicleHealth(self, vehicleID, newHealth):
+        pass
+
+    def setVehicleVisible(self, vehicleID, health):
+        pass
+
+
 class IContactsAndPersonalInvitationsController(IContactsController, IPersonalInvitationsController):
     __slots__ = ()
 

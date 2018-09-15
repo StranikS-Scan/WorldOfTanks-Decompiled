@@ -4,6 +4,7 @@ from collections import namedtuple
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.shared import IItemsCache
@@ -112,7 +113,7 @@ class TradeInController(ITradeInController):
                     self.__cache[level] = None
 
                 def goldGetter(item):
-                    return item.tradeOffPrice.gold
+                    return item.tradeOffPrice.getSignValue(Currency.GOLD)
 
                 minVehicle = min(vehicles.itervalues(), key=goldGetter)
                 maxVehicle = max(vehicles.itervalues(), key=goldGetter)

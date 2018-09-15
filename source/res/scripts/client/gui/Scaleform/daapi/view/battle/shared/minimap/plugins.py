@@ -895,7 +895,7 @@ class AreaStaticMarkerPlugin(common.EntriesPlugin):
         super(AreaStaticMarkerPlugin, self).fini()
         return
 
-    def __addStaticMarker(self, objectID, position, markerSymbolName):
+    def __addStaticMarker(self, objectID, position, markerSymbolName, show3DMarker):
         if markerSymbolName in _TO_FLASH_SYMBOL_NAME_MAPPING:
             self._addEntryEx(objectID, _TO_FLASH_SYMBOL_NAME_MAPPING[markerSymbolName], _C_NAME.EQUIPMENTS, matrix=minimap_utils.makePositionMatrix(position), active=True)
 

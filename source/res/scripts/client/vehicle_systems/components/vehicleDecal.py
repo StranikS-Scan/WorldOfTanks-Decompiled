@@ -107,15 +107,15 @@ class VehicleDecal:
             self.__turretDecals = []
             if decalType == VehicleDecal.DECALS_OFF:
                 return
-            for transform in typeDesc.chassis['AODecals']:
+            for transform in typeDesc.chassis.AODecals:
                 decal = self.__createDecal(transform, False, decalType)
                 self.__chassisDecals.append(decal)
 
-            for transform in typeDesc.hull['AODecals']:
+            for transform in typeDesc.hull.AODecals:
                 decal = self.__createDecal(transform, True, decalType)
                 self.__hullDecals.append(decal)
 
-            for transform in typeDesc.turret['AODecals']:
+            for transform in typeDesc.turret.AODecals:
                 decal = self.__createDecal(transform, True, decalType)
                 self.__turretDecals.append(decal)
 

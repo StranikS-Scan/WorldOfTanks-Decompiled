@@ -313,7 +313,18 @@ class ProfileRankedStatisticsVO(ProfileDictStatisticsVO):
          PUtils.packLditItemData(avgPointsPercent, PROFILE.SECTION_STATISTICS_SCORES_RANKED_AVGPOINTS, PROFILE.PROFILE_PARAMS_TOOLTIP_RANKED_AVGPOINTS, 'rankStageFactor40x32.png', PUtils.createToolTipData(avgPointsTooltipData)),
          _packAvgDmgLditItemData(self._avgDmg),
          _packAvgXPLditItemData(self._avgXP),
-         PUtils.packLditItemData(BigWorld.wg_getNiceNumberFormat(PUtils.getValueOrUnavailable(targetData.getAvgFrags())), PROFILE.SECTION_STATISTICS_SCORES_RANKED_AVGFRAGS, PROFILE.PROFILE_PARAMS_TOOLTIP_RANKED_AVGFRAGS, 'maxFrags40x32.png'))
+         PUtils.packLditItemData(BigWorld.wg_getNiceNumberFormat(PUtils.getValueOrUnavailable(targetData.getAvgFrags())), PROFILE.SECTION_STATISTICS_SCORES_RANKED_AVGFRAGS, PROFILE.PROFILE_PARAMS_TOOLTIP_RANKED_AVGFRAGS, 'icon_statistics_average_frags_40x32.png'))
+
+    def _getDetailedData(self, data):
+        targetData = data[0]
+        stats = targetData.getBattlesStats()
+        return (_getDetailedStatisticsData(PROFILE.SECTION_STATISTICS_BODYBAR_LABEL_DETAILED, targetData, self._isCurrentUser), _formatChartsData((_getVehStatsByTypes(stats), _getVehStatsByNation(stats), tuple())))
+
+
+class ProfileEpicRandomStatisticsVO(ProfileAllStatisticsVO):
+
+    def _getHeaderText(self, data):
+        return i18n.makeString(PROFILE.SECTION_STATISTICS_HEADERTEXT_EPICRANDOM)
 
     def _getDetailedData(self, data):
         targetData = data[0]
@@ -329,7 +340,8 @@ _VO_MAPPING = {PROFILE_DROPDOWN_KEYS.ALL: ProfileAllStatisticsVO,
  PROFILE_DROPDOWN_KEYS.STATICTEAM_SEASON: StaticProfile7x7StatisticsVO,
  PROFILE_DROPDOWN_KEYS.CLAN: ProfileGlobalMapStatisticsVO,
  PROFILE_DROPDOWN_KEYS.FORTIFICATIONS: ProfileFortStatisticsVO,
- PROFILE_DROPDOWN_KEYS.RANKED: ProfileRankedStatisticsVO}
+ PROFILE_DROPDOWN_KEYS.RANKED: ProfileRankedStatisticsVO,
+ PROFILE_DROPDOWN_KEYS.EPIC_RANDOM: ProfileEpicRandomStatisticsVO}
 
 def getStatisticsVO(battlesType, targetData, accountDossier, isCurrentUser):
     return _VO_MAPPING[battlesType](targetData=targetData, accountDossier=accountDossier, isCurrentUser=isCurrentUser)

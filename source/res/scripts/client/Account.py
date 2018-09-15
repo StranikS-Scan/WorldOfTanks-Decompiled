@@ -8,10 +8,11 @@ import BigWorld
 import Event
 import AccountCommands
 import ClientPrebattle
-from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_recycle_bin
+from account_helpers import AccountSyncData, Inventory, DossierCache, Shop, Stats, QuestProgress, CustomFilesCache, BattleResultsCache, ClientGoodies, client_recycle_bin, AccountSettings
 from account_helpers import ClientRanked
 from account_helpers import ClientInvitations, vehicle_rotation
 from PlayerEvents import g_playerEvents as events
+from account_helpers.AccountSettings import CURRENT_VEHICLE
 from account_helpers.settings_core import IntUserSettings
 from account_helpers.settings_core import ISettingsCore
 from adisp import process
@@ -466,6 +467,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
     def onUnitError(self, *args):
         self.unitMgr.onUnitError(*args)
 
+    def onUnitNotify(self, *args):
+        self.unitMgr.onUnitNotify(*args)
+
     def onUnitCallOk(self, *args):
         self.unitMgr.onUnitCallOk(*args)
 
@@ -545,6 +549,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         g_bootcamp.setBootcampParams({'completed': ctx.get('bootcampCompletedCount', 0),
          'runCount': ctx.get('bootcampRunCount', 0),
          'needAwarding': ctx.get('bootcampNeedAwarding', False)})
+        currentVehInvID = ctx.get('currentVehInvID', 0)
+        if currentVehInvID > 0:
+            AccountSettings.setFavorites(CURRENT_VEHICLE, currentVehInvID)
         events.isPlayerEntityChanging = False
         events.onAccountShowGUI(ctx)
 

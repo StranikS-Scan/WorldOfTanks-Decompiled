@@ -15,6 +15,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.tooltips.formatters import packItemActionTooltipData
 from gui.shared.tooltips.formatters import packItemRentActionTooltipData
+from gui.shared.money import Currency
 from gui.shared.tooltips.formatters import getActionPriceData
 from gui.shared.utils import CLIP_ICON_PATH, HYDRAULIC_ICON_PATH
 from helpers import i18n, html
@@ -195,7 +196,7 @@ class ResearchItemsObjDumper(ResearchBaseDumper):
         data = {'longName': item.longUserName,
          'smallIconPath': item.iconSmall,
          'earnedXP': node['earnedXP'],
-         'shopPrice': (price.credits, price.gold, getActionPriceData(item)),
+         'shopPrice': (price.getSignValue(Currency.CREDITS), price.getSignValue(Currency.GOLD), getActionPriceData(item)),
          'unlockProps': node['unlockProps']._makeTuple(),
          'status': status,
          'statusLevel': statusLevel,
@@ -298,7 +299,7 @@ class NationObjDumper(_BaseDumper):
          'iconPath': item.icon,
          'smallIconPath': item.iconSmall,
          'earnedXP': node['earnedXP'],
-         'shopPrice': (price.credits, price.gold, getActionPriceData(item)),
+         'shopPrice': (price.getSignValue(Currency.CREDITS), price.getSignValue(Currency.GOLD), getActionPriceData(item)),
          'displayInfo': node['displayInfo'],
          'unlockProps': node['unlockProps']._makeTuple(),
          'status': status,

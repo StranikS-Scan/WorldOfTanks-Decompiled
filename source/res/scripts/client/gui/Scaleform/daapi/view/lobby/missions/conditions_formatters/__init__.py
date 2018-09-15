@@ -137,7 +137,7 @@ class FORMATTER_IDS:
 
 class COMPLEX_CONDITION_BLOCK:
     ACHIEVEMENT = 'achievement'
-    VEHICLES_LIST = 'vehicles_list'
+    VEHICLES_LIST = 'vehicleIDs'
     VEHICLES_FILTERS = 'vehicles_filters'
 
 

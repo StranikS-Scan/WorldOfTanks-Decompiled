@@ -53,11 +53,17 @@ def getIntegralFormatIfNoEmpty(value):
     return BigWorld.wg_getIntegralFormat(value) if value else markValueAsEmpty(value)
 
 
+def getFractionalFormatIfNoEmpty(value):
+    return BigWorld.wg_getFractionalFormat(value) if value else markValueAsEmpty(value)
+
+
 _SPLASH_CHAR_NO_EMPTY_STAT = '/'
 _SPLASH_CHAR_EMPTY_STAT = markValueAsEmpty(_SPLASH_CHAR_NO_EMPTY_STAT)
 
-def getTooltipParamsStyle():
-    return makeHtmlString('html_templates:lobby/battle_results', 'tooltip_params_style', {'text': i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_PARAMS_VAL)})
+def getTooltipParamsStyle(paramKey=None):
+    if paramKey is None:
+        paramKey = BATTLE_RESULTS.COMMON_TOOLTIP_PARAMS_VAL
+    return makeHtmlString('html_templates:lobby/battle_results', 'tooltip_params_style', {'text': i18n.makeString(paramKey)})
 
 
 def _makeModuleTooltipLabel(module, suffix):
@@ -254,8 +260,16 @@ def makeRankedPointValue(pointsValue):
     return makeHtmlString('html_templates:lobby/battle_results', 'xp_small_label', {'value': text_styles.playerOnline(pointsValue)})
 
 
+def makeRankedPointHugeValue(pointsValue):
+    return makeHtmlString('html_templates:lobby/battle_results', 'xp_small_label', {'value': text_styles.hightlight(pointsValue)})
+
+
 def makeRankedNickNameValue(name):
     return text_styles.playerOnline(name)
+
+
+def makeRankedNickNameHugeValue(name):
+    return text_styles.hightlight(name)
 
 
 class GroupMiddleLabelBlock(base.DirectStatsItem):

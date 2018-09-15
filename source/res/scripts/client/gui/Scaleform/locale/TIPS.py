@@ -4,6 +4,7 @@
 This file was generated using the wgpygen.
 Please, don't edit this file manually.
 """
+from debug_utils import LOG_WARNING
 
 class TIPS(object):
     PAYATTENTION = '#tips:payAttention'
@@ -201,3 +202,99 @@ class TIPS(object):
     SANDBOX1 = '#tips:sandbox1'
     EVENTTITLE = '#tips:eventTitle'
     EVENTMESSAGE = '#tips:eventMessage'
+    EPICRANDOM_0_TITLE = '#tips:epicRandom/0/title'
+    EPICRANDOM_0_BODY = '#tips:epicRandom/0/body'
+    RANKED_0_TITLE = '#tips:ranked/0/title'
+    RANKED_0_BODY = '#tips:ranked/0/body'
+    RANKED_1_TITLE = '#tips:ranked/1/title'
+    RANKED_1_BODY = '#tips:ranked/1/body'
+    RANKED_2_TITLE = '#tips:ranked/2/title'
+    RANKED_2_BODY = '#tips:ranked/2/body'
+    RANKED_3_TITLE = '#tips:ranked/3/title'
+    RANKED_3_BODY = '#tips:ranked/3/body'
+    RANKED_4_TITLE = '#tips:ranked/4/title'
+    RANKED_4_BODY = '#tips:ranked/4/body'
+    RANKED_5_TITLE = '#tips:ranked/5/title'
+    RANKED_5_BODY = '#tips:ranked/5/body'
+    RANKED_6_TITLE = '#tips:ranked/6/title'
+    RANKED_6_BODY = '#tips:ranked/6/body'
+    RANKED_7_TITLE = '#tips:ranked/7/title'
+    RANKED_7_BODY = '#tips:ranked/7/body'
+    RANKED_8_TITLE = '#tips:ranked/8/title'
+    RANKED_8_BODY = '#tips:ranked/8/body'
+    RANKED_9_TITLE = '#tips:ranked/9/title'
+    RANKED_9_BODY = '#tips:ranked/9/body'
+    RANKED_10_TITLE = '#tips:ranked/10/title'
+    RANKED_10_BODY = '#tips:ranked/10/body'
+    RANKED_11_TITLE = '#tips:ranked/11/title'
+    RANKED_11_BODY = '#tips:ranked/11/body'
+    RANKED_12_TITLE = '#tips:ranked/12/title'
+    RANKED_12_BODY = '#tips:ranked/12/body'
+    RANKED_13_TITLE = '#tips:ranked/13/title'
+    RANKED_13_BODY = '#tips:ranked/13/body'
+    RANKED_ALL_TITLE_ENUM = (RANKED_0_TITLE,
+     RANKED_1_TITLE,
+     RANKED_2_TITLE,
+     RANKED_3_TITLE,
+     RANKED_4_TITLE,
+     RANKED_5_TITLE,
+     RANKED_6_TITLE,
+     RANKED_7_TITLE,
+     RANKED_8_TITLE,
+     RANKED_9_TITLE,
+     RANKED_10_TITLE,
+     RANKED_11_TITLE,
+     RANKED_12_TITLE,
+     RANKED_13_TITLE)
+    RANKED_ALL_BODY_ENUM = (RANKED_0_BODY,
+     RANKED_1_BODY,
+     RANKED_2_BODY,
+     RANKED_3_BODY,
+     RANKED_4_BODY,
+     RANKED_5_BODY,
+     RANKED_6_BODY,
+     RANKED_7_BODY,
+     RANKED_8_BODY,
+     RANKED_9_BODY,
+     RANKED_10_BODY,
+     RANKED_11_BODY,
+     RANKED_12_BODY,
+     RANKED_13_BODY)
+    EPICRANDOM_ALL_TITLE_ENUM = (EPICRANDOM_0_TITLE,)
+    EPICRANDOM_ALL_BODY_ENUM = (EPICRANDOM_0_BODY,)
+
+    @classmethod
+    def getRankedTipTittle(cls, tipNum):
+        outcome = '#tips:ranked/{}/title'.format(tipNum)
+        if outcome not in cls.RANKED_ALL_TITLE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getRankedTipBody(cls, tipNum):
+        outcome = '#tips:ranked/{}/body'.format(tipNum)
+        if outcome not in cls.RANKED_ALL_BODY_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getEpicRandomTipTitle(cls, tipNum):
+        outcome = '#tips:epicRandom/{}/title'.format(tipNum)
+        if outcome not in cls.EPICRANDOM_ALL_TITLE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getEpicRandomTipBody(cls, tipNum):
+        outcome = '#tips:epicRandom/{}/body'.format(tipNum)
+        if outcome not in cls.EPICRANDOM_ALL_BODY_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome

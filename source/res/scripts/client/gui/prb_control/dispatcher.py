@@ -386,6 +386,11 @@ class _PreBattleDispatcher(ListenersCollection):
             elif self.__entity.canKeepMode():
                 flags = self.__entity.getModeFlags()
             ctx = factory.createLeaveCtx(flags, entityType=self.__entity.getEntityType())
+            if self.__entity.isInCoolDown(ctx.getRequestType()):
+                if callback is not None:
+                    callback(True)
+                return
+            self.__entity.setCoolDown(ctx.getRequestType(), ctx.getCooldown())
             result = yield self.leave(ctx)
             if callback is not None:
                 callback(result)
@@ -896,8 +901,9 @@ class _PreBattleDispatcher(ListenersCollection):
             ctx.addFlags(flag | created.getFunctionalFlags())
         LOG_DEBUG('Entity have been updated', ctx.getFlagsToStrings())
         ctx.clear()
-        self.__requestCtx.stopProcessing(result=True)
+        currentCtx = self.__requestCtx
         self.__requestCtx = PrbCtrlRequestCtx()
+        currentCtx.stopProcessing(result=True)
         g_eventDispatcher.updateUI()
         return ctx.getFlags()
 

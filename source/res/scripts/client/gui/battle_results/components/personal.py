@@ -221,23 +221,25 @@ class AssistDetailsBlock(base.StatsBlock):
 
 class StunDetailsBlock(base.StatsBlock):
     """The block contains information about stun for one enemy."""
-    __slots__ = ('stunNum', 'stunValues', 'stunNames')
+    __slots__ = ('stunNum', 'stunValues', 'stunNames', 'stunDuration')
 
     def __init__(self, meta=None, field='', *path):
         super(StunDetailsBlock, self).__init__(meta, field, *path)
         self.stunNum = None
         self.stunValues = None
         self.stunNames = None
+        self.stunDuration = None
         return
 
     def setRecord(self, result, _):
         count = result.stunNum
         assisted = result.damageAssistedStun
+        duration = result.stunDuration
         self.stunNum = count
-        if count > 0 or assisted > 0:
-            self.stunValues = [BigWorld.wg_getIntegralFormat(assisted), BigWorld.wg_getIntegralFormat(count)]
-            tooltipStyle = style.getTooltipParamsStyle()
-            self.stunNames = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART1, vals=tooltipStyle), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART2)]
+        self.stunDuration = duration
+        if count > 0 or assisted > 0 or duration > 0:
+            self.stunValues = [BigWorld.wg_getIntegralFormat(assisted), BigWorld.wg_getIntegralFormat(count), BigWorld.wg_getFractionalFormat(duration)]
+            self.stunNames = [i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART1, vals=style.getTooltipParamsStyle()), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART2), i18n.makeString(BATTLE_RESULTS.COMMON_TOOLTIP_STUN_PART3, vals=style.getTooltipParamsStyle(BATTLE_RESULTS.COMMON_TOOLTIP_PARAMS_VAL_SECONDS))]
 
 
 class CritsDetailsBlock(base.StatsBlock):
@@ -445,7 +447,7 @@ class TotalEfficiencyDetailsBlock(base.StatsBlock):
             for info in bases:
                 if info.capturePoints > 0 or info.droppedCapturePoints > 0:
                     components.append(style.GroupMiddleLabelBlock(BATTLE_RESULTS.COMMON_BATTLEEFFICIENCY_BASES))
-                    if arenaSubType == 'domination':
+                    if arenaSubType.startswith('domination'):
                         component = DominationTeamBaseDetailBlock()
                         component.setRecord(info, reusable)
                         components.append(component)

@@ -10,7 +10,7 @@ from helpers.i18n import makeString
 from gui import GUI_SETTINGS, SystemMessages
 from items import ITEM_TYPE_INDICES, vehicles
 from debug_utils import LOG_DEBUG
-from gui.shared.money import Currency, ZERO_MONEY
+from gui.shared.money import Currency, MONEY_UNDEFINED
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 
 def rnd_choice(*args):
@@ -111,18 +111,18 @@ def checkAmmoLevel(vehicles, callback):
 
     def _validateMoneyForLayouts(vehicle):
         from gui.shared.gui_items.processors.plugins import MoneyValidator
-        shellsPrice = ZERO_MONEY
-        eqsPrice = ZERO_MONEY
+        shellsPrice = MONEY_UNDEFINED
+        eqsPrice = MONEY_UNDEFINED
         for shell in vehicle.shells:
             if shell.defaultCount:
-                shellPrice = shell.getBuyPrice()
+                shellPrice = shell.getBuyPrice().price
                 shellsPrice += shellPrice * (shell.defaultCount - shell.inventoryCount - shell.count)
 
-        for idx, eq in enumerate(vehicle.eqsLayout):
+        for idx, eq in enumerate(vehicle.equipmentLayout.regularConsumables):
             if eq is not None:
-                vehEquipment = vehicle.eqs[idx]
+                vehEquipment = vehicle.equipment.regularConsumables[idx]
                 if vehEquipment:
-                    eqPrice = eq.getBuyPrice()
+                    eqPrice = eq.getBuyPrice().price
                     eqsPrice += eqPrice
 
         return MoneyValidator(shellsPrice + eqsPrice).validate()
@@ -134,7 +134,7 @@ def checkAmmoLevel(vehicles, callback):
         for shell in vehicle.shells:
             shellsLayout.extend(shell.defaultLayoutValue)
 
-        for eq in vehicle.eqsLayout:
+        for eq in vehicle.equipmentLayout.regularConsumables:
             if eq is not None:
                 eqsLayout.extend(eq.defaultLayoutValue)
             eqsLayout.extend((0, 0))
@@ -186,7 +186,7 @@ def findConflictedEquipments(itemCompactDescr, itemTypeID, vehicle):
     oldModule = vehicle.descriptor.installComponent(itemCompactDescr)
     for equipmentDescr in vehicle.equipments:
         if equipmentDescr:
-            equipment = vehicles.getDictDescr(equipmentDescr)
+            equipment = vehicles.getItemByCompactDescr(equipmentDescr)
             installPossible, reason = equipment.checkCompatibilityWithVehicle(vehicle.descriptor)
             if not installPossible:
                 conflictEqs.append(equipment)
@@ -218,7 +218,7 @@ def getArenaShortName(arenaTypeID):
 def getArenaFullName(arenaTypeID):
     arenaType = ArenaType.g_cache[arenaTypeID]
     arenaName = arenaType.name
-    if arenaType.gameplayName != 'ctf':
+    if arenaType.gameplayName not in ('ctf', 'ctf30x30'):
         arenaName = '%s - %s' % (arenaName, makeString('#arenas:type/%s/name' % arenaType.gameplayName))
     return arenaName
 
@@ -229,7 +229,7 @@ def getBattleSubTypeWinText(arenaTypeID, teamID):
     return i18n.makeString('#arenas:%s%d' % (key, teamID)) if winText == key else winText
 
 
-def getBattleSubTypeBaseNumder(arenaTypeID, team, baseID):
+def getBattleSubTypeBaseNumber(arenaTypeID, team, baseID):
     teamBasePositions = ArenaType.g_cache[arenaTypeID].teamBasePositions
     if len(teamBasePositions) >= team:
         points = teamBasePositions[team - 1]

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/battle_end_warning_panel.py
 import WWISE
 from gui.Scaleform.daapi.view.meta.BattleEndWarningPanelMeta import BattleEndWarningPanelMeta
+from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from helpers.time_utils import ONE_MINUTE
@@ -15,7 +16,10 @@ _WARNING_TEXT_KEY = '#ingame_gui:battleEndWarning/text'
 _SWF_FILE_NAME = 'BattleEndWarningPanel.swf'
 _CALLBACK_NAME = 'battle.onLoadEndWarningPanel'
 
-class BattleEndWarningPanel(BattleEndWarningPanelMeta):
+class BattleEndWarningPanel(BattleEndWarningPanelMeta, IAbstractPeriodView):
+    """
+    Component which is responsible for showing large red warning that battle is ending (WOTD-62093).
+    """
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
@@ -30,7 +34,9 @@ class BattleEndWarningPanel(BattleEndWarningPanelMeta):
     def isLoaded(self):
         return True
 
-    def setCurrentTimeLeft(self, totalTime):
+    def setTotalTime(self, totalTime):
+        if not self.isLoaded():
+            return
         minutes, seconds = divmod(int(totalTime), ONE_MINUTE)
         minutesStr = '{:02d}'.format(minutes)
         secondsStr = '{:02d}'.format(seconds)

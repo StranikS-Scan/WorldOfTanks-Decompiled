@@ -16,7 +16,57 @@ from gui.battle_control.battle_constants import VIEW_COMPONENT_RULE, BATTLE_CTRL
 from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
-_SHARED_COMPONENTS_TO_CTRLS = ((BATTLE_CTRL_ID.HIT_DIRECTION, (_ALIASES.HIT_DIRECTION,)),)
+
+class IComponentsConfig(object):
+
+    def getConfig(self):
+        """
+        Binding views to controller config.
+        It is the list where each element contains binding of controller to views
+        :return: list: (BATTLE_CTRL_ID.*, (BATTLE_VIEW_ALIASES, ...)), ...).
+        """
+        raise NotImplementedError
+
+    def getViewsConfig(self):
+        """
+        Returns config which contains information about views which have to be added dynamically.
+        It is the list where each element contains information about view ID and view instance.
+        :return: list: ((viewAlias, viewInstance), ...)
+        """
+        return None
+
+
+class ComponentsConfig(IComponentsConfig):
+
+    def __init__(self, config=None, viewsConfig=None):
+        super(ComponentsConfig, self).__init__()
+        self.__config = config or tuple()
+        self.__viewsConfig = viewsConfig or tuple()
+
+    def getConfig(self):
+        return self.__config
+
+    def getViewsConfig(self):
+        return self.__viewsConfig
+
+    def __iadd__(self, other):
+        return self.__doAdd(other)
+
+    def __add__(self, other):
+        return self.__doAdd(other)
+
+    def __doAdd(self, other):
+        assert isinstance(other, ComponentsConfig), 'Invalid item Addition!'
+        return ComponentsConfig(self.__config + other.getConfig(), self.__viewsConfig + other.getViewsConfig())
+
+
+class _SharedComponentsConfig(ComponentsConfig):
+
+    def __init__(self):
+        super(_SharedComponentsConfig, self).__init__(((BATTLE_CTRL_ID.HIT_DIRECTION, (_ALIASES.HIT_DIRECTION,)),), ((_ALIASES.HIT_DIRECTION, indicators.createDamageIndicator),))
+
+
+_SHARED_COMPONENTS_CONFIG = _SharedComponentsConfig()
 
 class SharedPage(BattlePageMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -31,10 +81,10 @@ class SharedPage(BattlePageMeta):
             external = (crosshair.CrosshairPanelContainer, markers2d.MarkersManager)
         self._external = [ item() for item in external ]
         if components is None:
-            components = _SHARED_COMPONENTS_TO_CTRLS
+            components = _SHARED_COMPONENTS_CONFIG
         else:
-            components += _SHARED_COMPONENTS_TO_CTRLS
-        self.__components = components
+            components += _SHARED_COMPONENTS_CONFIG
+        self.__componentsConfig = components
         return
 
     def __del__(self):
@@ -114,8 +164,10 @@ class SharedPage(BattlePageMeta):
     def _startBattleSession(self):
         """This method is invoked when battle starts, because method _populate
         is not invoked in replay when player rewinds replay back."""
-        self.sessionProvider.registerViewComponents(*self.__components)
-        self.sessionProvider.addViewComponent(_ALIASES.HIT_DIRECTION, indicators.createDamageIndicator(), rule=VIEW_COMPONENT_RULE.NONE)
+        self.sessionProvider.registerViewComponents(*self.__componentsConfig.getConfig())
+        for alias, objFactory in self.__componentsConfig.getViewsConfig():
+            self.sessionProvider.addViewComponent(alias, objFactory(), rule=VIEW_COMPONENT_RULE.NONE)
+
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             if ctrl.isInPostmortem:
@@ -130,7 +182,9 @@ class SharedPage(BattlePageMeta):
         if ctrl is not None:
             ctrl.onPostMortemSwitched -= self.__onPostMortemSwitched
         aih_global_binding.unsubscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self.__onAvatarCtrlModeChanged)
-        self.sessionProvider.removeViewComponent(_ALIASES.HIT_DIRECTION)
+        for alias, _ in self.__componentsConfig.getViewsConfig():
+            self.sessionProvider.removeViewComponent(alias)
+
         for component in self._external:
             component.stopPlugins()
 

@@ -11,14 +11,14 @@ def hasTurretRotator(vDesc):
     else:
         result = True
         tags = vDesc.type.tags
-        if tags & {'SPG', 'AT-SPG'} and vDesc.gun['turretYawLimits'] is not None:
-            if len(vDesc.hull.get('fakeTurrets', {}).get('battle', ())) > 0:
+        if tags & {'SPG', 'AT-SPG'} and vDesc.gun.turretYawLimits is not None:
+            if len(vDesc.hull.fakeTurrets.get('battle', ())) > 0:
                 result = False
         return result
 
 
 def getYawLimits(vDesc):
-    return None if vDesc is None else vDesc.gun['turretYawLimits']
+    return None if vDesc is None else vDesc.gun.turretYawLimits
 
 
 def hasYawLimits(vDesc):

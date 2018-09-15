@@ -5,7 +5,7 @@ from gui.shared.event_bus import EventBus, EVENT_BUS_SCOPE
 from gui.shared.gui_items.factories import GuiItemFactory
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
-__all__ = ['g_eventBus', 'getSharedServices', 'EVENT_BUS_SCOPE']
+__all__ = ('g_eventBus', 'getSharedServices', 'EVENT_BUS_SCOPE')
 g_eventBus = EventBus()
 
 def getSharedServices(manager):

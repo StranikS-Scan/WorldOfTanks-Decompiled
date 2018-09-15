@@ -31,7 +31,7 @@ from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiS
 from gui.shared.utils import getPlayerDatabaseID, getPlayerName
 from gui.shared.utils.transport import z_loads
 from gui.shared.gui_items.Vehicle import getUserName, getShortUserName
-from gui.shared.money import Money, ZERO_MONEY, Currency
+from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from gui.shared.formatters.currency import getBWFormatter
 from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.prb_control import prbInvitesProperty
@@ -46,7 +46,7 @@ from messenger import g_settings
 from messenger.ext import passCensor
 from messenger.m_constants import MESSENGER_I18N_FILE
 from predefined_hosts import g_preDefinedHosts
-from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, ARENA_GUI_TYPE, SYS_MESSAGE_FORT_EVENT, SYS_MESSAGE_FORT_EVENT_NAMES, EVENT_TYPE, DOSSIER_TYPE
+from constants import INVOICE_ASSET, AUTO_MAINTENANCE_TYPE, AUTO_MAINTENANCE_RESULT, PREBATTLE_TYPE, FINISH_REASON, KICK_REASON_NAMES, KICK_REASON, NC_MESSAGE_TYPE, NC_MESSAGE_PRIORITY, SYS_MESSAGE_CLAN_EVENT, SYS_MESSAGE_CLAN_EVENT_NAMES, ARENA_GUI_TYPE, SYS_MESSAGE_FORT_EVENT, SYS_MESSAGE_FORT_EVENT_NAMES, EVENT_TYPE
 from messenger.formatters import TimeFormatter, NCContextItemFormatter
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.goodies import IGoodiesCache
@@ -229,8 +229,10 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                 if accCredits:
                     ctx[Currency.CREDITS] = self.__makeCurrencyString(Currency.CREDITS, accCredits)
                 accCrystal = battleResults.get(Currency.CRYSTAL)
+                ctx['crystalStr'] = ''
                 if accCrystal:
                     ctx[Currency.CRYSTAL] = self.__makeCurrencyString(Currency.CRYSTAL, accCrystal)
+                    ctx['crystalStr'] = g_settings.htmlTemplates.format('battleResultCrystal', {Currency.CRYSTAL: ctx[Currency.CRYSTAL]})
                 ctx['creditsEx'] = self.__makeCreditsExString(accCredits, battleResults.get('creditsPenalty', 0), battleResults.get('creditsContributionIn', 0), battleResults.get('creditsContributionOut', 0))
                 guiType = battleResults.get('guiType', 0)
                 ctx['achieves'], ctx['badges'] = self.__makeAchievementsAndBadgesStrings(battleResults)
@@ -483,7 +485,7 @@ class GiftReceivedFormatter(ServiceChannelFormatter):
         result = (None, '')
         ctx = {}
         idx = 0
-        for i, currency in enumerate((Currency.CREDITS, Currency.GOLD)):
+        for i, currency in enumerate(Currency.ALL):
             value = data.get(currency, 0)
             if value > 0:
                 formatter = getBWFormatter(currency)
@@ -516,7 +518,7 @@ class GiftReceivedFormatter(ServiceChannelFormatter):
         itemCompactDesc = data.get('itemCD')
         if amount > 0 and itemTypeIdx is not None and itemCompactDesc is not None:
             result = g_settings.msgTemplates.format(key, ctx={'typeName': getTypeInfoByIndex(itemTypeIdx)['userString'],
-             'itemName': vehicles_core.getDictDescr(itemCompactDesc)['userString'],
+             'itemName': vehicles_core.getItemByCompactDescr(itemCompactDesc).i18n.userString,
              'amount': amount})
         return (result, key)
 
@@ -588,8 +590,8 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         for itemCompactDescr, count in items.iteritems():
             if count:
                 try:
-                    item = vehicles_core.getDictDescr(itemCompactDescr)
-                    itemString = '{0:s} "{1:s}" - {2:d} {3:s}'.format(getTypeInfoByName(item['itemTypeName'])['userString'], item['userString'], abs(count), self.__i18nPiecesString)
+                    item = vehicles_core.getItemByCompactDescr(itemCompactDescr)
+                    itemString = '{0:s} "{1:s}" - {2:d} {3:s}'.format(getTypeInfoByName(item.itemTypeName)['userString'], item.i18n.userString, abs(count), self.__i18nPiecesString)
                     if count > 0:
                         accrued.append(itemString)
                     else:
@@ -695,7 +697,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             if vehicleName is None:
                 continue
             if 'rentCompensation' in vehData:
-                comp = Money(*vehData['rentCompensation'])
+                comp = Money.makeFromMoneyTuple(vehData['rentCompensation'])
                 currency = comp.getCurrency(byWeight=True)
                 formatter = getBWFormatter(currency)
                 key = '{}RentCompensationReceived'.format(currency)
@@ -704,7 +706,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                 result.append(html.format(key, ctx=ctx))
             if 'customCompensation' in vehData:
                 itemNames = [vehicleName]
-                comp = Money(*vehData['customCompensation'])
+                comp = Money.makeFromMoneyTuple(vehData['customCompensation'])
                 values = []
                 currencies = comp.getSetCurrencies(byWeight=True)
                 for currency in currencies:
@@ -839,16 +841,16 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
     @classmethod
     def _processCompensations(cls, data):
         vehicles = data.get('vehicles')
-        comp = ZERO_MONEY
+        comp = MONEY_UNDEFINED
         if vehicles is not None:
             for value in vehicles.itervalues():
                 if 'rentCompensation' in value:
-                    comp += Money(*value['rentCompensation'])
+                    comp += Money.makeFromMoneyTuple(value['rentCompensation'])
                 if 'customCompensation' in value:
-                    comp += Money(*value['customCompensation'])
+                    comp += Money.makeFromMoneyTuple(value['customCompensation'])
 
         for currency in cls.__currencyToInvoiceAsset:
-            if currency in data:
+            if currency in data and comp.isDefined():
                 data[currency] -= comp.get(currency)
                 if data[currency] == 0:
                     del data[currency]
@@ -1512,8 +1514,8 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
         items = data.get('items', {})
         itemsNames = []
         for intCD, count in items.iteritems():
-            itemDescr = vehicles_core.getDictDescr(intCD)
-            itemsNames.append(i18n.makeString('#messenger:serviceChannelMessages/battleResults/quests/items/name', name=itemDescr['userString'], count=BigWorld.wg_getIntegralFormat(count)))
+            itemDescr = vehicles_core.getItemByCompactDescr(intCD)
+            itemsNames.append(i18n.makeString('#messenger:serviceChannelMessages/battleResults/quests/items/name', name=itemDescr.i18n.userString, count=BigWorld.wg_getIntegralFormat(count)))
 
         if len(itemsNames):
             result.append(cls.__makeQuestsAchieve('battleQuestsItems', names=', '.join(itemsNames)))
@@ -1769,7 +1771,6 @@ class RefSystemReferralContributedXPFormatter(WaitItemsSyncFormatter):
                 callback((None, None))
         else:
             callback((None, None))
-        return None
 
 
 class RefSystemQuestsFormatter(TokenQuestsFormatter):

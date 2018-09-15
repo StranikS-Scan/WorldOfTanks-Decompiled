@@ -12,16 +12,7 @@ from tutorial.control import game_vars, g_tutorialWeaver
 from tutorial.control.lobby import aspects
 from tutorial.control.triggers import Trigger, TriggerWithValidateVar, TriggerWithSubscription
 from tutorial.logger import LOG_ERROR
-__all__ = ['BonusTrigger',
- 'BattleCountRequester',
- 'ItemUnlockedTrigger',
- 'ItemInInventoryTrigger',
- 'ItemInstalledTrigger',
- 'EquipmentInstalledTrigger',
- 'CurrentVehicleChangedTrigger',
- 'FreeVehicleSlotChangedTrigger',
- 'PremiumPeriodChangedTrigger',
- 'PremiumDiscountUseTrigger']
+__all__ = ('BonusTrigger', 'BattleCountRequester', 'ItemUnlockedTrigger', 'ItemInInventoryTrigger', 'ItemInstalledTrigger', 'EquipmentInstalledTrigger', 'CurrentVehicleChangedTrigger', 'FreeVehicleSlotChangedTrigger', 'PremiumPeriodChangedTrigger', 'PremiumDiscountUseTrigger')
 
 class BonusTrigger(Trigger):
 
@@ -154,7 +145,7 @@ class ItemInstalledTrigger(_VehicleTrigger):
     def __onVehiclesUpdated(self, descrs):
         if descrs is not None:
             vehicle = self._getVehicle()
-            if vehicle is not None and vehicle.inventoryID in descrs:
+            if vehicle is not None and vehicle.invID in descrs:
                 self.toggle(isOn=self.isOn(vehicle=vehicle))
         return
 
@@ -171,7 +162,7 @@ class EquipmentInstalledTrigger(ItemInstalledTrigger):
     def __onEquipmentUpdated(self, eqs):
         if eqs is not None:
             vehicle = self._getVehicle()
-            if vehicle is not None and vehicle.inventoryID in eqs:
+            if vehicle is not None and vehicle.invID in eqs:
                 self.toggle(isOn=self.isOn(vehicle=vehicle))
         return
 

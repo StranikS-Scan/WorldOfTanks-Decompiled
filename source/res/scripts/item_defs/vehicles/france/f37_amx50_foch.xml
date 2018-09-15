@@ -31,7 +31,7 @@
     <armor>
       <armor_1>	180	</armor_1>
       <armor_2>	100	</armor_2>
-      <armor_3>	40	</armor_3>
+      <armor_3>	70	</armor_3>
       <armor_4>	40	</armor_4>
       <armor_5>	30	</armor_5>
       <armor_6>	30	</armor_6>
@@ -39,14 +39,14 @@
       <armor_8>	0	</armor_8>
       <armor_9>	50	</armor_9>
       <armor_10>	180	</armor_10>
-      <armor_11>	40	</armor_11>
+      <armor_11>	70	</armor_11>
       <armor_12>	30	</armor_12>
       <armor_13>	150	</armor_13>
       <armor_14>	175	</armor_14>
       <armor_15>	140	</armor_15>
       <armor_16>	200	</armor_16>
       <armor_17>	130	</armor_17>
-      <armor_20>	50	</armor_20>
+      <armor_20>	80	</armor_20>
       <armor_21>	170	</armor_21>
       <armor_25>	40	</armor_25>
       <armor_26>	100	</armor_26>
@@ -155,8 +155,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	26	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.22	</vehicleMovement>
-        <vehicleRotation>	0.22	</vehicleRotation>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	220	</maxHealth>
@@ -537,8 +537,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	240	</maxHealth>
@@ -929,9 +929,9 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
-        <_120mm_SA_46_AC>	shared	  <maxAmmo>	64	</maxAmmo>
+        <_120mm_SA_46_AC>	shared	  <maxAmmo>	68	</maxAmmo>
           <unlocks>
-            <vehicle>	F64_AMX_50Fosh_155	  <cost>	290000	</cost>
+            <vehicle>	F64_AMX_50Fosh_B	  <cost>	290000	</cost>
             </vehicle>
           </unlocks>
           <armor>
@@ -949,12 +949,12 @@
             </armor_6>
             <gun>	50	</gun>
           </armor>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	9.3	</reloadTime>
-          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	34	</reloadTime>
+          <aimingTime>	2.5	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.2	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -963,6 +963,10 @@
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
+          <clip>
+            <count>	4	</count>
+            <rate>	25	</rate>
+          </clip>
           <models>
             <undamaged>	vehicles/french/F37_AMX50_Foch/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/french/F37_AMX50_Foch/crash/lod0/Gun_01.model	</destroyed>
@@ -1116,9 +1120,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.9	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </F37_AMX50_Foch.xml>

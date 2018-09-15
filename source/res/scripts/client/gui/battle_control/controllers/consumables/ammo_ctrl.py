@@ -26,17 +26,17 @@ class _GunSettings(namedtuple('_GunSettings', 'clip burst shots reloadEffect')):
 
     @classmethod
     def make(cls, gun):
-        clip = _ClipBurstSettings(*gun['clip'])
-        burst = _ClipBurstSettings(*gun['burst'])
+        clip = _ClipBurstSettings(*gun.clip)
+        burst = _ClipBurstSettings(*gun.burst)
         shots = {}
         reloadEffect = None
-        reloadEffectDesc = gun.get('reloadEffect', None)
+        reloadEffectDesc = gun.reloadEffect
         if reloadEffectDesc is not None:
             reloadEffect = reloadEffectDesc.create()
-        for shotIdx, shotDescr in enumerate(gun['shots']):
-            nationID, itemID = shotDescr['shell']['id']
+        for shotIdx, shotDescr in enumerate(gun.shots):
+            nationID, itemID = shotDescr.shell.id
             intCD = vehicles.makeIntCompactDescrByID('shell', nationID, itemID)
-            shots[intCD] = (shotIdx, shotDescr['piercingPower'][0])
+            shots[intCD] = (shotIdx, shotDescr.piercingPower[0])
 
         return cls.__new__(cls, clip, burst, shots, reloadEffect)
 
@@ -448,7 +448,7 @@ class AmmoController(MethodsRules, IBattleController):
         """
         result = []
         for intCD in self._order:
-            descriptor = vehicles.getDictDescr(intCD)
+            descriptor = vehicles.getItemByCompactDescr(intCD)
             quantity, quantityInClip = self.__ammo[intCD]
             result.append((intCD,
              descriptor,
@@ -507,7 +507,7 @@ class AmmoController(MethodsRules, IBattleController):
             self.__ammo[intCD] = (quantity, quantityInClip)
             self._order.append(intCD)
             result |= SHELL_SET_RESULT.ADDED
-            descriptor = vehicles.getDictDescr(intCD)
+            descriptor = vehicles.getItemByCompactDescr(intCD)
             self.onShellsAdded(intCD, descriptor, quantity, quantityInClip, self.__gunSettings)
         return result
 

@@ -16,7 +16,8 @@ def getCrewNotFullTooltip():
     skillsConfig = getSkillsConfig()
     for slotIdx, tman in vehicle.crew:
         if tman is None:
-            userString = i18n.makeString(skillsConfig[crewRoles[slotIdx][0]]['userString']).lower()
+            skill = skillsConfig.getSkill(crewRoles[slotIdx][0])
+            userString = i18n.makeString(skill.userString).lower()
             crew_list += (', ' if len(crew_list) != 0 else '') + userString
 
     return makeTooltip('#tooltips:redButton/disabled/crew/notFull/header', i18n.makeString('#tooltips:redButton/disabled/crew/notFull/body') % crew_list)

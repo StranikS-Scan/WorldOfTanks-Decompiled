@@ -73,7 +73,7 @@ class RespawnsController(IArenaRespawnController, IViewComponentsController):
             self.__gasAttackMgr.onAttackPreparing -= self.__onGasAttack
             self.__gasAttackMgr.onAttackStarted -= self.__onGasAttack
             self.__gasAttackMgr = None
-        self.__ui = None
+        self.clearViewComponents()
         self.__vehicles = None
         self.__cooldowns = None
         self.__respawnInfo = None

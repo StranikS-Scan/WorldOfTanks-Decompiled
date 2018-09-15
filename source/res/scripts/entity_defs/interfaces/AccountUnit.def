@@ -54,5 +54,10 @@
       <Arg>	INT32	</Arg>
       <Arg>	PYTHON	</Arg>
     </accountUnit_onUnitNotify>
+    <accountUnit_sendExternalNotify>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </accountUnit_sendExternalNotify>
   </BaseMethods>
 </AccountUnit.def>

@@ -5,7 +5,7 @@ from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.ConfirmItemWindowMeta import ConfirmItemWindowMeta
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.CONFIRM_DIALOG_ALIASES import CONFIRM_DIALOG_ALIASES
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, getMoneyVO
 DEFAULT_VALUE = 1
 
 class ConfirmBoosterDialog(ConfirmItemWindowMeta):
@@ -59,16 +59,17 @@ class ConfirmBoosterDialog(ConfirmItemWindowMeta):
         booster = self.meta.getBooster()
         if booster is not None:
             action = self.meta.getActionVO()
-            price = self.meta.getPrice()
+            itemPrices = self.meta.getPrices()
+            price = itemPrices.getMaxValuesAsMoney()
             self.as_setDataS({'id': self.meta.getBoosterID(),
-             'price': price,
+             'price': getMoneyVO(price),
              'actionPriceData': action,
              'name': booster.userName,
              'description': text_styles.concatStylesToMultiLine(booster.description, booster.getExpiryDateStr()),
              'currency': self.meta.getCurrency(),
              'defaultValue': DEFAULT_VALUE,
              'maxAvailableCount': self.meta.getMaxAvailableItemsCount(),
-             'isActionNow': price.isAllSet(),
+             'isActionNow': itemPrices.hasAltPrice(),
              'boosterData': self.__makeBoosterVO(booster),
              'linkage': CONFIRM_DIALOG_ALIASES.BOOSTER_ICON})
         else:

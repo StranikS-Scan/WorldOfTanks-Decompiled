@@ -28,6 +28,7 @@ from gui.prb_control.entities.stronghold.unit.waiting import WaitingManager
 from gui.prb_control.entities.stronghold.unit.actions_validator import StrongholdActionsValidator
 from gui.prb_control.items.stronghold_items import StrongholdSettings
 from gui.prb_control.entities.stronghold.unit.permissions import StrongholdPermissions
+from gui.prb_control.storages import prequeue_storage_getter
 from gui.prb_control.formatters import messages
 from gui.shared.ClanCache import _ClanCache
 from gui.Scaleform.daapi.view.dialogs.rally_dialog_meta import StrongholdConfirmDialogMeta
@@ -35,13 +36,11 @@ from gui.SystemMessages import SM_TYPE
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES as I18N_SYSTEM_MESSAGES
+from UnitBase import UNIT_ERROR
 from functools import partial
 _CREATION_TIMEOUT = 30
 ERROR_MAX_RETRY_COUNT = 3
 SUCCESS_STATUSES = (200, 201, 403, 409)
-MATCHMAKING_BATTLE_BUTTON_BATTLE = 10 * time_utils.ONE_MINUTE
-MATCHMAKING_BATTLE_BUTTON_SORTIE = 10 * time_utils.ONE_MINUTE
-MATCHMAKING_ZERO_TIME_WAITING_FOR_DATA = 5
 
 class StrongholdDynamicRosterSettings(DynamicRosterSettings):
 
@@ -162,6 +161,17 @@ class StrongholdEntity(UnitEntity):
     """
     StrongholdEntity entity
     """
+    MATCHMAKING_BATTLE_BUTTON_BATTLE = 10 * time_utils.ONE_MINUTE
+    MATCHMAKING_BATTLE_BUTTON_SORTIE = 10 * time_utils.ONE_MINUTE
+    MATCHMAKING_ZERO_TIME_WAITING_FOR_DATA = 5
+    CWL_REGULAR_MODE = 1
+    CWL_RETURN_MATCHING_BUTTON_STATUS = 16
+    CWL_RETURN_MATCHMAKER_NEXT_TICK = 256
+    CWL_INVOKE_LISTENERS = 4096
+    CWL_FORCE_UPDATE_BUILDINGS = 65536
+
+    class SH_REQUEST_COOLDOWN:
+        PREBATTLE_ASSIGN = 0.6
 
     def __init__(self):
         super(StrongholdEntity, self).__init__(FUNCTIONAL_FLAG.STRONGHOLD, PREBATTLE_TYPE.EXTERNAL)
@@ -172,13 +182,15 @@ class StrongholdEntity(UnitEntity):
         self.__waitingManager = WaitingManager()
         self.__errorCount = 0
         self.__timerID = None
+        self.__leaveInitiator = False
+        self.__isInSlot = False
         self.__isInactiveMatchingButton = True
         self.__prevMatchmakingTimerState = None
-        self.__showedBattleIdx = 0
         self.__strongholdUpdateEventsMapping = {}
         return
 
     def init(self, ctx=None):
+        self.storage.release()
         ret = super(StrongholdEntity, self).init(ctx)
         _, unit = self.getUnit()
         if unit._extras.get('rev', 0) > 1:
@@ -186,12 +198,15 @@ class StrongholdEntity(UnitEntity):
         unitMgr = prb_getters.getClientUnitMgr()
         if unitMgr:
             unitMgr.onUnitResponseReceived += self.onUnitResponseReceived
+            unitMgr.onUnitNotifyReceived += self.onUnitNotifyReceived
         g_eventDispatcher.loadHangar()
         self.__strongholdSettings.init()
         self.__strongholdUpdateEventsMapping = {'header': self.__onUpdateHeader,
          'timer': self.__onUpdateTimer,
          'state': self.__onUpdateState,
          'reserve': self.__onUpdateReserve}
+        playerInfo = self.getPlayerInfo()
+        self.__isInSlot = playerInfo.isInSlot
         return ret
 
     def fini(self, ctx=None, woEvents=False):
@@ -199,6 +214,7 @@ class StrongholdEntity(UnitEntity):
         unitMgr = prb_getters.getClientUnitMgr()
         if unitMgr:
             unitMgr.onUnitResponseReceived -= self.onUnitResponseReceived
+            unitMgr.onUnitNotifyReceived -= self.onUnitNotifyReceived
         self.__strongholdSettings.fini()
         self.__strongholdUpdateEventsMapping = {}
         super(StrongholdEntity, self).fini(ctx, woEvents)
@@ -208,9 +224,22 @@ class StrongholdEntity(UnitEntity):
         if self.canShowMaintenance():
             self._invokeListeners('onStrongholdMaintenance', True)
 
+    @prequeue_storage_getter(QUEUE_TYPE.EXTERNAL_UNITS)
+    def storage(self):
+        """
+        Prebattle storage getter property
+        """
+        return None
+
     def onUnitResponseReceived(self, requestID):
         LOG_DEBUG('Unit response requestID = ' + str(requestID))
         self.__waitingManager.onResponseWebReqID(requestID)
+
+    def onUnitNotifyReceived(self, unitMgrID, notifyCode, notifyString, argsList):
+        if notifyCode == UNIT_ERROR.NO_CLAN_MEMBERS and not self.__leaveInitiator:
+            SystemMessages.pushMessage(i18n.makeString(TOOLTIPS.STRONGHOLD_PREBATTLE_NOCLANMEMBERS), type=SM_TYPE.Warning)
+        elif notifyCode == UNIT_ERROR.FAIL_EXT_UNIT_QUEUE_START and not self.getFlags().isInQueue():
+            self.__waitingManager.onResponseError()
 
     def canShowMaintenance(self):
         return self.__errorCount >= ERROR_MAX_RETRY_COUNT
@@ -253,19 +282,21 @@ class StrongholdEntity(UnitEntity):
         flags = unit_items.UnitFlags(nextFlags, prevFlags, isReady)
         isInQueue = flags.isInQueue()
         if isInQueue:
-            matchmakerNextTick = self.forceTimerEvent(invokeListeners=False)
+            matchmakerNextTick = self.__doClockworkLogic(self.CWL_RETURN_MATCHMAKER_NEXT_TICK)
             if matchmakerNextTick is not None:
                 unit.setModalTimestamp(matchmakerNextTick)
-        regularBattleEnd = flags.isInArenaChanged() and flags.isExternalLocked()
+        regularBattleEnd = flags.isArenaFinishedChanged() and flags.isArenaFinished() and flags.isExternalLocked()
         wgshBattleEnd = flags.isExternalLockedStateChanged() and not flags.isExternalLocked()
         if regularBattleEnd or wgshBattleEnd:
             LOG_DEBUG('force wgsh request on end of battle (r,x):', regularBattleEnd, wgshBattleEnd)
             self.__strongholdSettings.forceCleanData()
             self.requestUpdateStronghold()
         super(StrongholdEntity, self).unit_onUnitFlagsChanged(prevFlags, nextFlags)
-        if self.isStrongholdSettingsValid():
-            self.__isInactiveMatchingButton = True
-            self.__updateMatchmakingData(invokeListeners=True, forceUpdateBuildings=True)
+        self.__doClockworkLogic(self.CWL_INVOKE_LISTENERS | self.CWL_FORCE_UPDATE_BUILDINGS)
+        if not self.hasLockedState():
+            self.resetCoolDown(settings.REQUEST_TYPE.BATTLE_QUEUE)
+            self.resetCoolDown(settings.REQUEST_TYPE.DECLINE_SEARCH)
+            self.resetCoolDown(settings.REQUEST_TYPE.AUTO_SEARCH)
         if isInQueue:
             self._invokeListeners('onCommanderIsReady', True)
         elif prevFlags != nextFlags and nextFlags == 0:
@@ -288,6 +319,11 @@ class StrongholdEntity(UnitEntity):
             if not pInfo.isCommander() and pInfo.isCurrentPlayer():
                 SystemMessages.pushMessage(i18n.makeString(I18N_SYSTEM_MESSAGES.UNIT_WARNINGS_ANOTHER_PLAYER_BECOME_COMMANDER), type=SM_TYPE.Warning)
 
+    def unit_onUnitMembersListChanged(self):
+        playerInfo = self.getPlayerInfo()
+        self.__isInSlot = playerInfo.isInSlot
+        super(StrongholdEntity, self).unit_onUnitMembersListChanged()
+
     def request(self, ctx, callback=None):
         self.__waitingManager.processRequest(ctx)
 
@@ -304,6 +340,8 @@ class StrongholdEntity(UnitEntity):
         super(StrongholdEntity, self).request(ctx, wrapper)
 
     def leave(self, ctx, callback=None):
+        self.storage.suspend()
+        self.__leaveInitiator = True
 
         def callbackWrapper(response):
             if not self.__processResponseMessage(response):
@@ -317,7 +355,11 @@ class StrongholdEntity(UnitEntity):
 
     def doBattleQueue(self, ctx, callback=None):
         if ctx.isRequestToStart():
-            self._cooldown.process(settings.REQUEST_TYPE.SET_PLAYER_STATE, ctx.getCooldown())
+            self.setCoolDown(settings.REQUEST_TYPE.SET_PLAYER_STATE, ctx.getCooldown())
+        else:
+            if self.isInCoolDown(ctx.getRequestType()):
+                return
+            self.setCoolDown(ctx.getRequestType(), ctx.getCooldown())
         self._invokeListeners('onStrongholdDoBattleQueue', self.isFirstBattle(), False, self.__strongholdSettings.getReserveOrder())
         super(StrongholdEntity, self).doBattleQueue(ctx, callback)
 
@@ -329,7 +371,7 @@ class StrongholdEntity(UnitEntity):
                 callback(False)
             return
         self._requestsProcessor.doRequest(ctx, 'activateReserve', callback=callback)
-        self._cooldown.process(settings.REQUEST_TYPE.SET_RESERVE, coolDown=ctx.getCooldown())
+        self.setCoolDown(settings.REQUEST_TYPE.SET_RESERVE, coolDown=ctx.getCooldown())
 
     def unsetReserve(self, ctx, callback=None):
         pPermissions = self.getPermissions()
@@ -339,14 +381,20 @@ class StrongholdEntity(UnitEntity):
                 callback(False)
             return
         self._requestsProcessor.doRequest(ctx, 'deactivateReserve', callback=callback)
-        self._cooldown.process(settings.REQUEST_TYPE.UNSET_RESERVE, coolDown=ctx.getCooldown())
+        self.setCoolDown(settings.REQUEST_TYPE.UNSET_RESERVE, coolDown=ctx.getCooldown())
+
+    def assign(self, ctx, callback=None):
+        if self.isInCoolDown(settings.REQUEST_TYPE.ASSIGN):
+            return
+        super(StrongholdEntity, self).assign(ctx, callback)
+        self.setCoolDown(settings.REQUEST_TYPE.ASSIGN, coolDown=self.SH_REQUEST_COOLDOWN.PREBATTLE_ASSIGN)
 
     def canKeepMode(self):
         return False if not isStrongholdsEnabled() else super(StrongholdEntity, self).canKeepMode()
 
     def changeOpened(self, ctx, callback=None):
         self._requestsProcessor.doRequest(ctx, 'openUnit', isOpen=ctx.isOpened(), callback=callback)
-        self._cooldown.process(settings.REQUEST_TYPE.CHANGE_UNIT_STATE, coolDown=ctx.getCooldown())
+        self.setCoolDown(settings.REQUEST_TYPE.CHANGE_UNIT_STATE, coolDown=ctx.getCooldown())
 
     def canPlayerDoAction(self):
         """
@@ -358,7 +406,7 @@ class StrongholdEntity(UnitEntity):
         if self.__errorCount > 0:
             return ValidationResult(False, UNIT_RESTRICTION.UNIT_MAINTENANCE)
         else:
-            if self.isStrongholdUnitFreezed():
+            if self.isStrongholdUnitFreezed() or self.isStrongholdUnitWaitingForData():
                 isPlayerInSlot = self._isPlayerInSlot()
                 if isPlayerInSlot and self.isStrongholdUnitWaitingForData():
                     return ValidationResult(False, UNIT_RESTRICTION.UNIT_WAITINGFORDATA)
@@ -369,7 +417,8 @@ class StrongholdEntity(UnitEntity):
                     return ValidationResult(False, result.restriction, result.ctx)
             else:
                 isStrongholdSettingsValid = self.isStrongholdSettingsValid()
-                if isStrongholdSettingsValid and self.__isInactiveMatchingButton and self.isCommander() and not self.getFlags().isInArena():
+                self.__isInactiveMatchingButton = self.__doClockworkLogic(self.CWL_RETURN_MATCHING_BUTTON_STATUS)
+                if isStrongholdSettingsValid and self.__isInactiveMatchingButton and self.isCommander() and not self.getFlags().isInIdle():
                     resultId = UNIT_RESTRICTION.UNIT_INACTIVE_PERIPHERY_UNDEF
                     if isStrongholdSettingsValid:
                         if self.isSortie():
@@ -435,7 +484,7 @@ class StrongholdEntity(UnitEntity):
         else:
             readyButtonEnabled = True
         flags = self.getFlags()
-        return self.canShowMaintenance() or not flags.isInIdle() and not self.getFlags().isInArena() and not self.isStrongholdUnitFreezed() and not readyButtonEnabled
+        return self.canShowMaintenance() or flags.isArenaFinished() and flags.isExternalLocked() or not flags.isInIdle() and not self.getFlags().isInArena() and not flags.isExternalLocked() and not readyButtonEnabled
 
     def isFirstBattle(self):
         return self.__strongholdSettings.isFirstBattle()
@@ -451,8 +500,8 @@ class StrongholdEntity(UnitEntity):
 
     def animationNotAvailable(self):
         battleIdx = self.__strongholdSettings.getHeader().getBattleIdx()
-        if self.__showedBattleIdx != battleIdx and battleIdx != 0:
-            self.__showedBattleIdx = battleIdx
+        if self.storage.getActiveAnimationIdx() != battleIdx and battleIdx != 0:
+            self.storage.setActiveAnimationIdx(battleIdx)
             return False
         else:
             return True
@@ -464,34 +513,30 @@ class StrongholdEntity(UnitEntity):
             self.__onUpdateReserve()
             self.__onUpdateState()
 
-    def forceTimerEvent(self, invokeListeners=True):
-        if self.isStrongholdSettingsValid():
-            tempIsInactiveMatchingButton = self.__isInactiveMatchingButton
-            res = self.__updateMatchmakingData(invokeListeners=invokeListeners)
-            if not invokeListeners:
-                self.__isInactiveMatchingButton = tempIsInactiveMatchingButton
-            return res
+    def forceTimerEvent(self):
+        return self.__doClockworkLogic(self.CWL_INVOKE_LISTENERS | self.CWL_RETURN_MATCHMAKER_NEXT_TICK)
 
     def _createActionsValidator(self):
         return StrongholdActionsValidator(self)
 
     def _isPlayerInSlot(self):
-        playerInfo = self.getPlayerInfo()
-        if playerInfo is not None:
-            return playerInfo.isInSlot
-        else:
-            return False
-            return
+        return self.__isInSlot
 
     def _hasInArenaMembers(self):
-        return self.isStrongholdUnitFreezed() and not self._isInQueue() or self.getFlags().isInArena()
+        flags = self.getFlags()
+        return not flags.isArenaFinished() and flags.isExternalLocked() and not self._isInQueue() or flags.isInArena()
 
     def _isInQueue(self):
         return self.getFlags().isInIdle() and not self.getFlags().isInArena()
 
     def _updateMatchmakingTimer(self):
-        self.__isInactiveMatchingButton = True
-        self.__updateMatchmakingData()
+        self.__cancelMatchmakingTimer()
+        tempInactiveMatchingButton = self.__isInactiveMatchingButton
+        mode = self.CWL_REGULAR_MODE | self.CWL_RETURN_MATCHING_BUTTON_STATUS | self.CWL_INVOKE_LISTENERS
+        self.__isInactiveMatchingButton = self.__doClockworkLogic(mode)
+        if tempInactiveMatchingButton != self.__isInactiveMatchingButton:
+            self._invokeListeners('onStrongholdOnReadyStateChanged')
+        self.__timerID = BigWorld.callback(1.0, self._updateMatchmakingTimer)
 
     def _createActionsHandler(self):
         return StrongholdActionsHandler(self)
@@ -581,7 +626,9 @@ class StrongholdEntity(UnitEntity):
                 self._invokeListeners('onStrongholdMaintenance', True)
                 return
             LOG_DEBUG('onStrongholdUpdate, timer data (r,m): ', self.__strongholdSettings.getTimer().getTimeToReady(), self.__strongholdSettings.getTimer().getMatchmakerNextTick())
-            self._updateMatchmakingTimer()
+            if not self.__isMatchmakingTimerLoopExist():
+                self._updateMatchmakingTimer()
+            self.__doClockworkLogic(self.CWL_INVOKE_LISTENERS | self.CWL_FORCE_UPDATE_BUILDINGS)
             if self.isStrongholdSettingsValid():
                 header = self.__strongholdSettings.getHeader()
                 isFirstBattle = self.isFirstBattle()
@@ -619,6 +666,10 @@ class StrongholdEntity(UnitEntity):
     def __onUpdateHeader(self):
         header = self.__strongholdSettings.getHeader()
         isFirstBattle = self.isFirstBattle()
+        battleIdx = header.getBattleIdx()
+        flags = self.getFlags()
+        if battleIdx == 0 or flags.isInArena() or flags.isInQueue():
+            self.storage.setActiveAnimationIdx(battleIdx)
         self.__checkBattleMode(header, isFirstBattle)
         self._invokeListeners('onUpdateHeader', header, isFirstBattle, self.isStrongholdUnitFreezed())
 
@@ -669,6 +720,9 @@ class StrongholdEntity(UnitEntity):
     def __onReadyButtonEnabled(self):
         self._invokeListeners('onStrongholdOnReadyStateChanged')
 
+    def __isMatchmakingTimerLoopExist(self):
+        return self.__timerID is not None
+
     def __cancelMatchmakingTimer(self):
         if self.__timerID is not None:
             BigWorld.cancelCallback(self.__timerID)
@@ -696,134 +750,140 @@ class StrongholdEntity(UnitEntity):
             peripheryStartTimeUTC += datetime.timedelta(days=1)
         return (peripheryStartTimeUTC, peripheryEndTimeUTC)
 
-    def __updateMatchmakingData(self, invokeListeners=True, forceUpdateBuildings=False):
-        self.__cancelMatchmakingTimer()
+    def __doClockworkLogic(self, mode):
         if not self.isStrongholdSettingsValid():
-            return
-        else:
-            isInBattle = self._hasInArenaMembers()
-            isInQueue = self._isInQueue()
-            dtime = None
-            peripheryStartTimestampUTC = 0
-            currentTimestampUTC = 0
-            matchmakerNextTick = None
-            tempIsInactiveMatchingButton = self.__isInactiveMatchingButton
-            currentTimeUTC, clientTimeUTC = self._getCurrentUTCTime()
-            timer = self.__strongholdSettings.getTimer()
-            peripheryStartTimeUTC = currentTimeUTC.replace(hour=0, minute=0, second=0, microsecond=0)
-            peripheryEndTimeUTC = currentTimeUTC.replace(hour=0, minute=0, second=0, microsecond=0)
-            if timer.getBattlesStartTime() and timer.getBattlesEndTime():
-                isInactivePeriphery = False
-                peripheryStartTimeUTC, peripheryEndTimeUTC = self.__calculatePeripheryTimeHelper(currentTimeUTC)
-                peripheryStartTimestampUTC = int(time_utils.getTimestampFromUTC(peripheryStartTimeUTC.timetuple()))
-                currentTimestampUTC = int(time_utils.getTimestampFromUTC(currentTimeUTC.timetuple()))
+            if mode & self.CWL_RETURN_MATCHING_BUTTON_STATUS == self.CWL_RETURN_MATCHING_BUTTON_STATUS:
+                return True
             else:
-                peripheryEndTimeUTC -= datetime.timedelta(days=1)
-                peripheryStartTimeUTC -= datetime.timedelta(days=1)
-                isInactivePeriphery = True
+                return
+        isInBattle = self._hasInArenaMembers()
+        isInQueue = self._isInQueue()
+        dtime = None
+        peripheryStartTimestampUTC = 0
+        currentTimestampUTC = 0
+        matchmakerNextTick = None
+        inactiveMatchingButton = True
+        forceUpdateBuildings = mode & self.CWL_FORCE_UPDATE_BUILDINGS == self.CWL_FORCE_UPDATE_BUILDINGS
+        currentTimeUTC, clientTimeUTC = self._getCurrentUTCTime()
+        timer = self.__strongholdSettings.getTimer()
+        peripheryStartTimeUTC = currentTimeUTC.replace(hour=0, minute=0, second=0, microsecond=0)
+        peripheryEndTimeUTC = currentTimeUTC.replace(hour=0, minute=0, second=0, microsecond=0)
+        if timer.getBattlesStartTime() and timer.getBattlesEndTime():
+            isInactivePeriphery = False
+            peripheryStartTimeUTC, peripheryEndTimeUTC = self.__calculatePeripheryTimeHelper(currentTimeUTC)
+            peripheryStartTimestampUTC = int(time_utils.getTimestampFromUTC(peripheryStartTimeUTC.timetuple()))
+            currentTimestampUTC = int(time_utils.getTimestampFromUTC(currentTimeUTC.timetuple()))
+        else:
+            peripheryEndTimeUTC -= datetime.timedelta(days=1)
+            peripheryStartTimeUTC -= datetime.timedelta(days=1)
+            isInactivePeriphery = True
+            dtime = 0
+        if self.__strongholdSettings.isSortie():
+            textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_UNAVAILABLE
+            if isInQueue:
+                textid = TOOLTIPS.STRONGHOLDS_TIMER_SQUADINQUEUE
+                dtime = peripheryStartTimestampUTC - currentTimestampUTC
+                if dtime < 0 or dtime > timer.getSortiesBeforeStartLag():
+                    dtime = 0
+            elif isInBattle:
+                textid = TOOLTIPS.STRONGHOLDS_TIMER_SQUADINBATTLE
+            elif self.isStrongholdUnitWaitingForData():
+                textid = TOOLTIPS.STRONGHOLDS_TIMER_WAITINGFORDATA
+            elif peripheryStartTimeUTC <= currentTimeUTC <= peripheryEndTimeUTC:
+                dtime = int((peripheryEndTimeUTC - currentTimeUTC).total_seconds())
+                inactiveMatchingButton = False
+                if dtime <= timer.getSortiesBeforeEndLag():
+                    textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_ENDOFBATTLESOON
+                else:
+                    textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_AVAILABLE
+            elif isInactivePeriphery:
                 dtime = 0
-            if self.__strongholdSettings.isSortie():
-                textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_UNAVAILABLE
+            else:
+                dtime = peripheryStartTimestampUTC - currentTimestampUTC
+                if dtime <= timer.getSortiesBeforeStartLag():
+                    if dtime < 0:
+                        dtime = 0
+                    textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLESOON
+                    if dtime <= self.MATCHMAKING_BATTLE_BUTTON_SORTIE:
+                        inactiveMatchingButton = False
+                else:
+                    peripheryStartTimeUTC, _ = self.__calculatePeripheryTimeHelper(clientTimeUTC)
+                    peripheryStartTimestampUTC = int(time_utils.getTimestampFromUTC(peripheryStartTimeUTC.timetuple()))
+                    currentTimestampUTC = int(time_utils.getTimestampFromUTC(clientTimeUTC.timetuple()))
+                    peripheryStartTimestamp = self._convertUTCStructToLocalTimestamp(peripheryStartTimeUTC)
+                    currentTimestamp = self._convertUTCStructToLocalTimestamp(clientTimeUTC)
+                    dtime = peripheryStartTimestampUTC - currentTimestampUTC
+                    currDayStart, currDayEnd = time_utils.getDayTimeBoundsForLocal(peripheryStartTimestamp)
+                    if currDayStart - time_utils.ONE_DAY <= currentTimestamp <= currDayEnd - time_utils.ONE_DAY:
+                        textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETOMORROW
+                    elif currDayStart <= currentTimestamp <= currDayEnd:
+                        textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETODAY
+        else:
+            textid = FORTIFICATIONS.ROSTERINTROWINDOW_INTROVIEW_FORTBATTLES_UNAVAILABLE
+            if not isInactivePeriphery:
+                dtime = time_utils.ONE_YEAR
+                matchmakerNextTick = timer.getTimeToReady()
+                dtime = matchmakerNextTick is not None and int(matchmakerNextTick - currentTimestampUTC)
+            else:
+                matchmakerNextTick = timer.getMatchmakerNextTick()
+                if matchmakerNextTick is not None:
+                    dtime = int(matchmakerNextTick - currentTimestampUTC)
+            battlesBeforeStartLag = timer.getFortBattlesBeforeStartLag()
+            if self.__prevMatchmakingTimerState == FORTIFICATIONS.ROSTERINTROWINDOW_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLESOON:
+                if 0 <= int(dtime - battlesBeforeStartLag) < self.MATCHMAKING_ZERO_TIME_WAITING_FOR_DATA and mode & self.CWL_REGULAR_MODE == self.CWL_REGULAR_MODE:
+                    dtime = battlesBeforeStartLag
                 if isInQueue:
                     textid = TOOLTIPS.STRONGHOLDS_TIMER_SQUADINQUEUE
-                    dtime = peripheryStartTimestampUTC - currentTimestampUTC
-                    if dtime < 0 or dtime > timer.getSortiesBeforeStartLag():
+                    if dtime < 0 or dtime > battlesBeforeStartLag:
                         dtime = 0
                 elif isInBattle:
                     textid = TOOLTIPS.STRONGHOLDS_TIMER_SQUADINBATTLE
                 elif self.isStrongholdUnitWaitingForData():
                     textid = TOOLTIPS.STRONGHOLDS_TIMER_WAITINGFORDATA
-                elif peripheryStartTimeUTC <= currentTimeUTC <= peripheryEndTimeUTC:
-                    dtime = int((peripheryEndTimeUTC - currentTimeUTC).total_seconds())
-                    self.__isInactiveMatchingButton = False
-                    if dtime <= timer.getSortiesBeforeEndLag():
-                        textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_ENDOFBATTLESOON
-                    else:
-                        textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_AVAILABLE
-                elif isInactivePeriphery:
-                    dtime = 0
-                else:
-                    dtime = peripheryStartTimestampUTC - currentTimestampUTC
-                    if dtime <= timer.getSortiesBeforeStartLag():
-                        if dtime < 0:
-                            dtime = 0
-                        textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLESOON
-                        if dtime <= MATCHMAKING_BATTLE_BUTTON_SORTIE:
-                            self.__isInactiveMatchingButton = False
-                    else:
+                elif dtime > battlesBeforeStartLag:
+                    textid = FORTIFICATIONS.ROSTERINTROWINDOW_INTROVIEW_FORTBATTLES_UNAVAILABLE
+                    if matchmakerNextTick is not None:
                         peripheryStartTimeUTC, _ = self.__calculatePeripheryTimeHelper(clientTimeUTC)
                         peripheryStartTimestampUTC = int(time_utils.getTimestampFromUTC(peripheryStartTimeUTC.timetuple()))
                         currentTimestampUTC = int(time_utils.getTimestampFromUTC(clientTimeUTC.timetuple()))
-                        peripheryStartTimestamp = self._convertUTCStructToLocalTimestamp(peripheryStartTimeUTC)
                         currentTimestamp = self._convertUTCStructToLocalTimestamp(clientTimeUTC)
-                        dtime = peripheryStartTimestampUTC - currentTimestampUTC
-                        currDayStart, currDayEnd = time_utils.getDayTimeBoundsForLocal(peripheryStartTimestamp)
+                        dtime = int(matchmakerNextTick - currentTimestampUTC)
+                        matchmakerNextTickLocal = time_utils.getDateTimeInUTC(matchmakerNextTick)
+                        matchmakerNextTickLocal = self._convertUTCStructToLocalTimestamp(matchmakerNextTickLocal)
+                        currDayStart, currDayEnd = time_utils.getDayTimeBoundsForLocal(matchmakerNextTickLocal)
                         if currDayStart - time_utils.ONE_DAY <= currentTimestamp <= currDayEnd - time_utils.ONE_DAY:
                             textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETOMORROW
                         elif currDayStart <= currentTimestamp <= currDayEnd:
                             textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETODAY
-            else:
-                textid = FORTIFICATIONS.ROSTERINTROWINDOW_INTROVIEW_FORTBATTLES_UNAVAILABLE
-                if not isInactivePeriphery:
-                    dtime = time_utils.ONE_YEAR
-                    matchmakerNextTick = timer.getTimeToReady()
-                    dtime = matchmakerNextTick is not None and int(matchmakerNextTick - currentTimestampUTC)
+                elif dtime >= 0:
+                    textid = FORTIFICATIONS.ROSTERINTROWINDOW_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLESOON
+                    if dtime <= self.MATCHMAKING_BATTLE_BUTTON_BATTLE or not self.__strongholdSettings.isFirstBattle():
+                        inactiveMatchingButton = False
                 else:
-                    matchmakerNextTick = timer.getMatchmakerNextTick()
-                    if matchmakerNextTick is not None:
-                        dtime = int(matchmakerNextTick - currentTimestampUTC)
-                battlesBeforeStartLag = timer.getFortBattlesBeforeStartLag()
-                if self.__prevMatchmakingTimerState == FORTIFICATIONS.ROSTERINTROWINDOW_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLESOON:
-                    if 0 <= int(dtime - battlesBeforeStartLag) < MATCHMAKING_ZERO_TIME_WAITING_FOR_DATA:
-                        dtime = battlesBeforeStartLag
-                    if isInQueue:
-                        textid = TOOLTIPS.STRONGHOLDS_TIMER_SQUADINQUEUE
-                        if dtime < 0 or dtime > battlesBeforeStartLag:
-                            dtime = 0
-                    elif isInBattle:
-                        textid = TOOLTIPS.STRONGHOLDS_TIMER_SQUADINBATTLE
-                    elif self.isStrongholdUnitWaitingForData():
-                        textid = TOOLTIPS.STRONGHOLDS_TIMER_WAITINGFORDATA
-                    elif dtime > battlesBeforeStartLag:
-                        textid = FORTIFICATIONS.ROSTERINTROWINDOW_INTROVIEW_FORTBATTLES_UNAVAILABLE
-                        if matchmakerNextTick is not None:
-                            peripheryStartTimeUTC, _ = self.__calculatePeripheryTimeHelper(clientTimeUTC)
-                            peripheryStartTimestampUTC = int(time_utils.getTimestampFromUTC(peripheryStartTimeUTC.timetuple()))
-                            currentTimestampUTC = int(time_utils.getTimestampFromUTC(clientTimeUTC.timetuple()))
-                            currentTimestamp = self._convertUTCStructToLocalTimestamp(clientTimeUTC)
-                            dtime = int(matchmakerNextTick - currentTimestampUTC)
-                            matchmakerNextTickLocal = time_utils.getDateTimeInUTC(matchmakerNextTick)
-                            matchmakerNextTickLocal = self._convertUTCStructToLocalTimestamp(matchmakerNextTickLocal)
-                            currDayStart, currDayEnd = time_utils.getDayTimeBoundsForLocal(matchmakerNextTickLocal)
-                            if currDayStart - time_utils.ONE_DAY <= currentTimestamp <= currDayEnd - time_utils.ONE_DAY:
-                                textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETOMORROW
-                            elif currDayStart <= currentTimestamp <= currDayEnd:
-                                textid = FORTIFICATIONS.SORTIE_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLETODAY
-                    elif dtime >= 0:
+                    dtimeWD = dtime + self.MATCHMAKING_ZERO_TIME_WAITING_FOR_DATA
+                    if dtimeWD >= 0:
                         textid = FORTIFICATIONS.ROSTERINTROWINDOW_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLESOON
-                        if dtime <= MATCHMAKING_BATTLE_BUTTON_BATTLE:
-                            self.__isInactiveMatchingButton = False
-                    else:
-                        dtimeWD = dtime + MATCHMAKING_ZERO_TIME_WAITING_FOR_DATA
-                        if dtimeWD >= 0:
-                            textid = FORTIFICATIONS.ROSTERINTROWINDOW_INTROVIEW_FORTBATTLES_NEXTTIMEOFBATTLESOON
-                        dtime = 0
+                    dtime = 0
+        if mode & self.CWL_REGULAR_MODE == self.CWL_REGULAR_MODE:
             self.__prevMatchmakingTimerState = textid
-            if invokeListeners:
-                header = self.__strongholdSettings.getHeader()
-                g_eventDispatcher.strongholdsOnTimer({'peripheryStartTimestamp': peripheryStartTimestampUTC,
-                 'matchmakerNextTick': matchmakerNextTick,
-                 'clan': header.getClan(),
-                 'enemyClan': header.getEnemyClan(),
-                 'textid': textid,
-                 'dtime': dtime,
-                 'isSortie': self.__strongholdSettings.isSortie(),
-                 'isFirstBattle': self.__strongholdSettings.isFirstBattle(),
-                 'currentBattle': header.getCurrentBattle(),
-                 'maxLevel': header.getMaxLevel(),
-                 'direction': header.getDirection(),
-                 'forceUpdateBuildings': forceUpdateBuildings})
-                if tempIsInactiveMatchingButton != self.__isInactiveMatchingButton:
-                    self._invokeListeners('onStrongholdOnReadyStateChanged')
-            self.__timerID = BigWorld.callback(1.0, self.__updateMatchmakingData)
+        if mode & self.CWL_INVOKE_LISTENERS == self.CWL_INVOKE_LISTENERS:
+            header = self.__strongholdSettings.getHeader()
+            g_eventDispatcher.strongholdsOnTimer({'peripheryStartTimestamp': peripheryStartTimestampUTC,
+             'matchmakerNextTick': matchmakerNextTick,
+             'clan': header.getClan(),
+             'enemyClan': header.getEnemyClan(),
+             'textid': textid,
+             'dtime': dtime,
+             'isSortie': self.__strongholdSettings.isSortie(),
+             'isFirstBattle': self.__strongholdSettings.isFirstBattle(),
+             'currentBattle': header.getCurrentBattle(),
+             'maxLevel': header.getMaxLevel(),
+             'direction': header.getDirection(),
+             'forceUpdateBuildings': forceUpdateBuildings})
+        if mode & self.CWL_RETURN_MATCHING_BUTTON_STATUS == self.CWL_RETURN_MATCHING_BUTTON_STATUS:
+            return inactiveMatchingButton
+        elif mode & self.CWL_RETURN_MATCHMAKER_NEXT_TICK == self.CWL_RETURN_MATCHMAKER_NEXT_TICK:
             return matchmakerNextTick
+        else:
+            return
+            return

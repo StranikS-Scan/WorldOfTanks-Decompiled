@@ -71,7 +71,6 @@ class ITEM_TYPES(object):
     TANKMAN_SKILLS_BROTHERHOOD_PERMANENT = '#item_types:tankman/skills/brotherhood_permanent'
     TANKMAN_SKILLS_BROTHERHOOD_PERMANENT_DESCR = '#item_types:tankman/skills/brotherhood_permanent_descr'
     TANKMAN_SKILLS_BROTHERHOOD_FEMALE_DESCR = '#item_types:tankman/skills/brotherhood_female_descr'
-    TANKMAN_SKILLS_BROTHERHOOD_SABATON = '#item_types:tankman/skills/brotherhood_sabaton'
     TANKMAN_SKILLS_COMMANDER_TUTOR = '#item_types:tankman/skills/commander_tutor'
     TANKMAN_SKILLS_COMMANDER_TUTOR_DESCR = '#item_types:tankman/skills/commander_tutor_descr'
     TANKMAN_SKILLS_COMMANDER_EXPERT = '#item_types:tankman/skills/commander_expert'
@@ -137,12 +136,6 @@ class ITEM_TYPES(object):
      SHELL_KINDSABBREVIATION_ARMOR_PIERCING_HE,
      SHELL_KINDSABBREVIATION_HOLLOW_CHARGE,
      SHELL_KINDSABBREVIATION_HIGH_EXPLOSIVE)
-    SHELL_KINDS_ENUM = (SHELL_KINDS_ARMOR_PIERCING,
-     SHELL_KINDS_ARMOR_PIERCING_CR,
-     SHELL_KINDS_ARMOR_PIERCING_HE,
-     SHELL_KINDS_HOLLOW_CHARGE,
-     SHELL_KINDS_HIGH_EXPLOSIVE)
-    TANKMAN_SKILLS_TYPE_ENUM = (TANKMAN_SKILLS_TYPE_SKILL, TANKMAN_SKILLS_TYPE_PERK, TANKMAN_SKILLS_TYPE_PERK_COMMON)
     TANKMAN_SKILLS_ENUM = (TANKMAN_SKILLS_MAIN,
      TANKMAN_SKILLS_REPAIR,
      TANKMAN_SKILLS_REPAIR_DESCR,
@@ -156,7 +149,6 @@ class ITEM_TYPES(object):
      TANKMAN_SKILLS_BROTHERHOOD_PERMANENT,
      TANKMAN_SKILLS_BROTHERHOOD_PERMANENT_DESCR,
      TANKMAN_SKILLS_BROTHERHOOD_FEMALE_DESCR,
-     TANKMAN_SKILLS_BROTHERHOOD_SABATON,
      TANKMAN_SKILLS_COMMANDER_TUTOR,
      TANKMAN_SKILLS_COMMANDER_TUTOR_DESCR,
      TANKMAN_SKILLS_COMMANDER_EXPERT,
@@ -212,24 +204,6 @@ class ITEM_TYPES(object):
     def shell_kindsabbreviation(cls, key0):
         outcome = '#item_types:shell/kindsAbbreviation/{}'.format(key0)
         if outcome not in cls.SHELL_KINDSABBREVIATION_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def shell_kinds(cls, key0):
-        outcome = '#item_types:shell/kinds/{}'.format(key0)
-        if outcome not in cls.SHELL_KINDS_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def tankman_skills_type(cls, key0):
-        outcome = '#item_types:tankman/skills/type/{}'.format(key0)
-        if outcome not in cls.TANKMAN_SKILLS_TYPE_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

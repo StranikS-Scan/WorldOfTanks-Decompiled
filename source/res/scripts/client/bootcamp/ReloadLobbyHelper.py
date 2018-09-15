@@ -22,7 +22,7 @@ class ReloadLobbyHelper(EventSystemEntity):
         g_prbLoader.onAccountShowGUI({})
         BootcampTransition.start()
 
-    def __onViewLoaded(self, view):
+    def __onViewLoaded(self, view, loadParams):
         view.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         BootcampTransition.stop()
         if self.__callback is not None:

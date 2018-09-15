@@ -13,8 +13,8 @@ class BattleQueueMeta(View):
     def onEscape(self):
         self._printOverrideError('onEscape')
 
-    def as_setTimerS(self, text):
-        return self.flashObject.as_setTimer(text) if self._isDAAPIInited() else None
+    def as_setTimerS(self, textLabel, timeLabel):
+        return self.flashObject.as_setTimer(textLabel, timeLabel) if self._isDAAPIInited() else None
 
     def as_setTypeInfoS(self, data):
         """
@@ -25,11 +25,11 @@ class BattleQueueMeta(View):
     def as_setPlayersS(self, text):
         return self.flashObject.as_setPlayers(text) if self._isDAAPIInited() else None
 
-    def as_setListByTypeS(self, data):
+    def as_setDPS(self, dataProvider):
         """
-        :param data: Represented by BattleQueueListDataVO (AS)
+        :param dataProvider: Represented by DataProvider.<BattleQueueItemVO> (AS)
         """
-        return self.flashObject.as_setListByType(data) if self._isDAAPIInited() else None
+        return self.flashObject.as_setDP(dataProvider) if self._isDAAPIInited() else None
 
     def as_showStartS(self, vis):
         return self.flashObject.as_showStart(vis) if self._isDAAPIInited() else None

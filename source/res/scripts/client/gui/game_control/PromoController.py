@@ -72,8 +72,10 @@ class PromoController(IPromoController):
     @process
     def showVersionsPatchPromo(self):
         promoUrl = yield self.__urlMacros.parse(GUI_SETTINGS.promoscreens)
-        promoTitle = i18n.makeString(MENU.PROMO_PATCH_TITLE)
-        self.__currentVersionBrowserID = yield self.__showPromoBrowser(promoUrl, promoTitle, browserID=self.__currentVersionBrowserID, isAsync=False, showWaiting=True)
+        webBrowser = self.__getCurrentBrowser()
+        if not webBrowser or promoUrl != webBrowser.url:
+            promoTitle = i18n.makeString(MENU.PROMO_PATCH_TITLE)
+            self.__currentVersionBrowserID = yield self.__showPromoBrowser(promoUrl, promoTitle, browserID=self.__currentVersionBrowserID, isAsync=False, showWaiting=True)
 
     def showPromo(self, url, title, forced=False, handlers=None):
         """
@@ -97,6 +99,10 @@ class PromoController(IPromoController):
 
     def getCurrentVersionBrowserID(self):
         return self.__currentVersionBrowserID
+
+    @classmethod
+    def isPromoAutoViewsEnabled(cls):
+        return getAccountDatabaseID() % cls.PROMO_AUTO_VIEWS_TEST_VALUE != 0 and cls.lobbyContext.getServerSettings().isPromoAutoViewsEnabled()
 
     def isPatchPromoAvailable(self):
         return self.__currentVersionPromoUrl is not None and GUI_SETTINGS.isPatchPromoEnabled
@@ -171,6 +177,7 @@ class PromoController(IPromoController):
 
     def __onUserRequestToClose(self):
         self.__guiActionsHandlers[self.GUI_EVENTS.CLOSE_GUI_EVENT]()
+        self.__cleanupGuiActionHandlers()
 
     def __savePromoShown(self):
         AccountSettings.setFilter(PROMO, self.__promoShown)
@@ -190,42 +197,35 @@ class PromoController(IPromoController):
     def __registerGuiActionHandlers(self, handlers):
         self.__guiActionsHandlers = handlers
         if handlers:
-            webBrowser = self.browserCtrl.getBrowser(self.__currentVersionBrowserID)
+            webBrowser = self.__getCurrentBrowser()
             if webBrowser is not None:
-                for evtName in handlers.iterkeys():
-                    if evtName == self.GUI_EVENTS.CLOSE_GUI_EVENT:
-                        webBrowser.onUserRequestToClose += self.__onUserRequestToClose
-                    LOG_WARNING('Attempt to register Unsupported gui event = "{}"'.format(evtName))
-
+                webBrowser.onUserRequestToClose += self.__onUserRequestToClose
             else:
                 LOG_WARNING('Browser with id = "{}" has not been found'.format(self.__currentVersionBrowserID))
         return
 
     def __cleanupGuiActionHandlers(self):
-        webBrowser = self.browserCtrl.getBrowser(self.__currentVersionBrowserID)
+        webBrowser = self.__getCurrentBrowser()
         if self.__guiActionsHandlers is not None and webBrowser:
-            for evtName in self.__guiActionsHandlers.iterkeys():
-                if evtName == self.GUI_EVENTS.CLOSE_GUI_EVENT:
-                    webBrowser.onUserRequestToClose -= self.__onUserRequestToClose
-                LOG_WARNING('Attempt to clear Unsupported gui event = "{}"'.format(evtName))
-
+            webBrowser.onUserRequestToClose -= self.__onUserRequestToClose
             self.__guiActionsHandlers = None
         return
 
     @process
     def __registerAndShowPromoBrowser(self, url, title, handlers):
-        self.__cleanupGuiActionHandlers()
         promoUrl = yield self.__urlMacros.parse(url)
         LOG_DEBUG('Showing promo:', promoUrl)
-        self.__currentVersionBrowserID = yield self.__showPromoBrowser(promoUrl, title, browserID=self.__currentVersionBrowserID, isAsync=False, showWaiting=True)
-        self.__registerGuiActionHandlers(handlers)
+        webBrowser = self.__getCurrentBrowser()
+        if not webBrowser or promoUrl != webBrowser.url:
+            self.__cleanupGuiActionHandlers()
+            self.__currentVersionBrowserID = yield self.__showPromoBrowser(promoUrl, title, browserID=self.__currentVersionBrowserID, isAsync=False, showWaiting=True)
+            self.__registerGuiActionHandlers(handlers)
+
+    def __getCurrentBrowser(self):
+        return self.browserCtrl.getBrowser(self.__currentVersionBrowserID)
 
     @async
     @process
     def __showPromoBrowser(self, promoUrl, promoTitle, browserID=None, isAsync=True, showWaiting=False, callback=None):
         browserID = yield self.browserCtrl.load(promoUrl, promoTitle, showActionBtn=False, isAsync=isAsync, browserID=browserID, browserSize=gc_constants.BROWSER.PROMO_SIZE, isDefault=False, showCloseBtn=True, showWaiting=showWaiting)
         callback(browserID)
-
-    @classmethod
-    def isPromoAutoViewsEnabled(cls):
-        return getAccountDatabaseID() % cls.PROMO_AUTO_VIEWS_TEST_VALUE != 0 and cls.lobbyContext.getServerSettings().isPromoAutoViewsEnabled()

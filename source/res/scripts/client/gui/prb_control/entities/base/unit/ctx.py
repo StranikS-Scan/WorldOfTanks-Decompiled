@@ -106,6 +106,9 @@ class LeaveUnitCtx(UnitRequestCtx):
     def getRequestType(self):
         return _REQUEST_TYPE.LEAVE
 
+    def getCooldown(self):
+        pass
+
 
 @ReprInjector.withParent(('__isLocked', 'isLocked'))
 class LockUnitCtx(UnitRequestCtx):

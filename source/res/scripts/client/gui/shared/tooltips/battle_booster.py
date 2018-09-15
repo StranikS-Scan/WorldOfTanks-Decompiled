@@ -1,8 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/battle_booster.py
 from gui.shared.utils.requesters import REQ_CRITERIA
+from gui.shared.items_parameters import formatters as params_formatters, bonus_helper
+from gui.shared.items_parameters.params_helper import SimplifiedBarVO
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
+from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
@@ -10,6 +13,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.tooltips import formatters, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData
 from gui.shared.tooltips.module import PriceBlockConstructor
+from gui.shared.items_parameters import params_helper
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.shared import IItemsCache
@@ -35,6 +39,7 @@ class BattleBoosterBlockTooltipData(BlocksTooltipData):
         module = self.item
         statsConfig = self.context.getStatsConfiguration(module)
         statusConfig = self.context.getStatusConfiguration(module)
+        paramsConfig = self.context.getParamsConfiguration(module)
         leftPadding = 20
         rightPadding = 20
         topPadding = 20
@@ -47,6 +52,21 @@ class BattleBoosterBlockTooltipData(BlocksTooltipData):
         effectsBlock = EffectsBlockConstructor(module, statusConfig, leftPadding, rightPadding).construct()
         if effectsBlock:
             items.append(formatters.packBuildUpBlockData(effectsBlock, padding=blockPadding, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
+        if statsConfig.vehicle is not None and not module.isInstalled(statsConfig.vehicle):
+            stockVehicle = self.itemsCache.items.getStockVehicle(statsConfig.vehicle.intCD)
+            stockParams = params_helper.getParameters(stockVehicle)
+            comparator = params_helper.artifactComparator(statsConfig.vehicle, module, statsConfig.slotIdx, True)
+            simplifiedBlock = SimplifiedStatsBlockConstructor(module, paramsConfig, leftPadding, rightPadding, stockParams, comparator).construct()
+            if len(simplifiedBlock) > 0:
+                items.append(formatters.packBuildUpBlockData(simplifiedBlock, gap=textGap, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-14, bottom=1), stretchBg=True))
+            if statsConfig.vehicle.equipment.battleBoosterConsumables[0] is not None:
+                comparator = params_helper.artifactRemovedComparator(statsConfig.vehicle, module, statsConfig.slotIdx)
+                simplifiedBlock = SimplifiedStatsBlockConstructor(module, paramsConfig, leftPadding, rightPadding, stockParams, comparator).construct()
+                if len(simplifiedBlock) > 0:
+                    replaceBlock = BattleBoosterReplaceBlockConstructor(module, statsConfig, valueWidth, leftPadding).construct()
+                    if replaceBlock:
+                        items.append(formatters.packBuildUpBlockData(replaceBlock))
+                    items.append(formatters.packBuildUpBlockData(simplifiedBlock, gap=textGap, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=formatters.packPadding(left=leftPadding, right=rightPadding, top=-14, bottom=1), stretchBg=True))
         priceBlock, invalidWidth = BattleBoosterPriceBlockConstructor(module, statsConfig, valueWidth, leftPadding, rightPadding).construct()
         if priceBlock:
             self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
@@ -90,7 +110,8 @@ class HeaderBlockConstructor(BattleBoosterTooltipBlockConstructor):
     def __getOverlayAndHighlight(self):
         module = self.module
         if module.isCrewBooster():
-            isLearnt = module.isAffectedSkillLearnt(self.configuration.vehicle)
+            currentVehicle = self.configuration.vehicle
+            isLearnt = currentVehicle is None or module.isAffectedSkillLearnt(self.configuration.vehicle)
             overlayPath = RES_ICONS.MAPS_ICONS_ARTEFACT_BATTLEBOOSTER_OVERLAY if isLearnt else RES_ICONS.MAPS_ICONS_ARTEFACT_BATTLEBOOSTER_REPLACE_OVERLAY
         else:
             overlayPath = RES_ICONS.MAPS_ICONS_ARTEFACT_BATTLEBOOSTER_OVERLAY
@@ -117,10 +138,11 @@ class EffectsBlockConstructor(BattleBoosterTooltipBlockConstructor):
             boostText = module.getCrewBoosterAction(False)
             skillNotLearntText = text_styles.standard(TOOLTIPS.BATTLEBOOSTER_SKILL_NOT_LEARNT)
             skillLearntText = text_styles.standard(TOOLTIPS.BATTLEBOOSTER_SKILL_LEARNT)
-            replaceText, boostText = self.__getSkillTexts(skillLearnt, replaceText, boostText)
-            block.append(formatters.packImageTextBlockData(title=replaceText, img=RES_ICONS.MAPS_ICONS_BUTTONS_CHECKMARK if not skillLearnt else None, imgPadding=formatters.packPadding(left=2, top=3), txtOffset=20))
+            applyStyles = vehicle is not None
+            replaceText, boostText = self.__getSkillTexts(skillLearnt, replaceText, boostText, applyStyles)
+            block.append(formatters.packImageTextBlockData(title=replaceText, img=RES_ICONS.MAPS_ICONS_BUTTONS_CHECKMARK if not skillLearnt and applyStyles else None, imgPadding=formatters.packPadding(left=2, top=3), txtOffset=20))
             block.append(formatters.packImageTextBlockData(title=skillNotLearntText % skillName, txtOffset=20))
-            block.append(formatters.packImageTextBlockData(title=boostText, img=RES_ICONS.MAPS_ICONS_BUTTONS_CHECKMARK if skillLearnt else None, imgPadding=formatters.packPadding(left=2, top=3), txtOffset=20, padding=formatters.packPadding(top=15)))
+            block.append(formatters.packImageTextBlockData(title=boostText, img=RES_ICONS.MAPS_ICONS_BUTTONS_CHECKMARK if skillLearnt and applyStyles else None, imgPadding=formatters.packPadding(left=2, top=3), txtOffset=20, padding=formatters.packPadding(top=15)))
             block.append(formatters.packImageTextBlockData(title=skillLearntText % skillName, txtOffset=20))
         else:
             desc = text_styles.bonusAppliedText(module.getOptDeviceBoosterDescription(vehicle))
@@ -128,11 +150,25 @@ class EffectsBlockConstructor(BattleBoosterTooltipBlockConstructor):
         return block
 
     @staticmethod
-    def __getSkillTexts(skillLearnt, replaceText, boostText):
-        if skillLearnt:
-            return (text_styles.main(replaceText), text_styles.bonusAppliedText(boostText))
+    def __getSkillTexts(skillLearnt, replaceText, boostText, applyStyles):
+        if applyStyles:
+            if skillLearnt:
+                return (text_styles.main(replaceText), text_styles.bonusAppliedText(boostText))
+            else:
+                return (text_styles.bonusAppliedText(replaceText), text_styles.main(boostText))
         else:
-            return (text_styles.bonusAppliedText(replaceText), text_styles.main(boostText))
+            return (text_styles.main(replaceText), text_styles.main(boostText))
+
+
+class BattleBoosterReplaceBlockConstructor(BattleBoosterTooltipBlockConstructor):
+
+    def construct(self):
+        block = []
+        vehicle = self.configuration.vehicle
+        if vehicle.equipment.battleBoosterConsumables[0] is not None:
+            replaceBoosterText = text_styles.main(TOOLTIPS.BATTLEBOOSTER_REPLACE)
+            block.append(formatters.packImageTextBlockData(title=replaceBoosterText.format(boosterName=vehicle.equipment.battleBoosterConsumables[0].userName), txtOffset=20))
+        return block
 
 
 class StatusBlockConstructor(BattleBoosterTooltipBlockConstructor):
@@ -165,4 +201,25 @@ class BoosterHasNoEffectBlockConstructor(BattleBoosterTooltipBlockConstructor):
         if vehicle is not None and not module.isAffectsOnVehicle(vehicle):
             block.append(formatters.packImageTextBlockData(title=text_styles.alert(TOOLTIPS.BATTLEBOOSTER_USELESS_HEADER), img=RES_ICONS.MAPS_ICONS_TOOLTIP_ALERTICON, imgPadding=formatters.packPadding(left=2, top=3), txtOffset=20))
             block.append(formatters.packTextBlockData(text=text_styles.main(TOOLTIPS.BATTLEBOOSTER_USELESS_BODY), padding=formatters.packPadding(top=8)))
+        return block
+
+
+class SimplifiedStatsBlockConstructor(BattleBoosterTooltipBlockConstructor):
+
+    def __init__(self, module, configuration, leftPadding, rightPadding, stockParams, comparator):
+        self.__stockParams = stockParams
+        self.__comparator = comparator
+        self.__isSituational = bonus_helper.isSituationalBonus(module.name)
+        super(SimplifiedStatsBlockConstructor, self).__init__(module, configuration, leftPadding, rightPadding)
+
+    def construct(self):
+        block = []
+        if self.configuration.params:
+            for parameter in params_formatters.getRelativeDiffParams(self.__comparator):
+                delta = parameter.state[1]
+                value = parameter.value
+                if delta > 0:
+                    value -= delta
+                block.append(formatters.packStatusDeltaBlockData(title=text_styles.middleTitle(MENU.tank_params(parameter.name)), valueStr=params_formatters.simlifiedDeltaParameter(parameter, self.__isSituational), statusBarData=SimplifiedBarVO(value=value, delta=delta, markerValue=self.__stockParams[parameter.name], isOptional=self.__isSituational), padding=formatters.packPadding(left=105, top=8)))
+
         return block

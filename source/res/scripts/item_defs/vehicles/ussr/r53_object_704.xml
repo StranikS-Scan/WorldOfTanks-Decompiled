@@ -87,9 +87,9 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	-1.33946 1.12934 0.249737	</rayStart>
-        <rayEnd>	-1.05753 0.853181 0.314922	</rayEnd>
-        <rayUp>	-0.0274155 0.994907 0.0969995	</rayUp>
+        <rayStart>	-1.31595 1.1554 0.258546	</rayStart>
+        <rayEnd>	-1.03402 0.879244 0.32373	</rayEnd>
+        <rayUp>	-0.024807 0.995711 0.0891261	</rayUp>
         <size>	0.78	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
@@ -161,7 +161,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-2.8	</textureScale>
+        <textureScale>	-1.6	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -419,7 +419,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-2.8	</textureScale>
+        <textureScale>	-1.6	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -667,7 +667,7 @@
       <guns>
         <_152mm_ML-20CM_obr1944>	shared	  <maxAmmo>	34	</maxAmmo>
           <unlocks>
-            <gun>	_152mm_BL-10	  <cost>	63500	</cost>
+            <gun>	_152mm_D_4S	  <cost>	62000	</cost>
             </gun>
           </unlocks>
           <armor>
@@ -713,13 +713,13 @@
             <tiling>	0.385 0.385 0.000000 0.000000	</tiling>
           </camouflage>
         </_152mm_ML-20CM_obr1944>
-        <_152mm_BL-10>	shared	  <maxAmmo>	30	</maxAmmo>
-          <reloadTime>	17.1	</reloadTime>
-          <shotDispersionRadius>	0.39	</shotDispersionRadius>
-          <aimingTime>	2.9	</aimingTime>
+        <_152mm_D_4S>	shared	  <maxAmmo>	30	</maxAmmo>
+          <reloadTime>	17.4	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <aimingTime>	3	</aimingTime>
           <unlocks>
-            <vehicle>	R88_Object268	  <cost>	301000	</cost>
-            </vehicle>
+            <gun>	_152mm_BL-10	  <cost>	63500	</cost>
+            </gun>
           </unlocks>
           <armor>
             <armor_1>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -749,9 +749,9 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.00112403 -0.0165432 1.37	</rayStart>
-              <rayEnd>	0.0911523 -0.135134 1.25103	</rayEnd>
-              <rayUp>	0.136 0.13 4	</rayUp>
+              <rayStart>	-0.000892864 -0.0144498 1.34991	</rayStart>
+              <rayEnd>	-0.0608257 0.00508447 1.34914	</rayEnd>
+              <rayUp>	0.163 0.159 5	</rayUp>
               <size>	0.733	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -759,7 +759,56 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_huge_mb	</effects>
           <camouflage>
-            <tiling>	0.535 0.535 0.000000 0.000000	</tiling>
+            <tiling>	0.6 0.6 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_152mm_D_4S>
+        <_152mm_BL-10>	shared	  <maxAmmo>	30	</maxAmmo>
+          <reloadTime>	17.1	</reloadTime>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
+          <aimingTime>	2.9	</aimingTime>
+          <unlocks>
+            <vehicle>	R88_Object268	  <cost>	239000	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <armor_1>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	130	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
+            <gun>	70	</gun>
+          </armor>
+          <invisibilityFactorAtShot>	0.135	</invisibilityFactorAtShot>
+          <turretYawLimits>	-11 11	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/russian/R53_Object_704/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/russian/R53_Object_704/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/russian/R53_Object_704/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R53_Object_704/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R53_Object_704/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.000124029 -0.0165432 1.34991	</rayStart>
+              <rayEnd>	-0.0608257 0.00508447 1.34914	</rayEnd>
+              <rayUp>	0.133 0.127 5	</rayUp>
+              <size>	0.733	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <effects>	shot_huge_mb	</effects>
+          <camouflage>
+            <tiling>	0.6 0.6 0.000000 0.000000	</tiling>
           </camouflage>
         </_152mm_BL-10>
       </guns>
@@ -897,9 +946,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.82	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </R53_Object_704.xml>

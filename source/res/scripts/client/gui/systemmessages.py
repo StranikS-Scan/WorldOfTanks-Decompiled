@@ -27,10 +27,15 @@ SM_TYPE = Enumeration('System message type', ['Error',
  'Restore',
  'PurchaseForCrystal',
  'PrimeTime',
- 'RankedBattlesAvailable'])
+ 'RankedBattlesAvailable',
+ 'DismantlingForCredits',
+ 'DismantlingForCrystal'])
 CURRENCY_TO_SM_TYPE = {Currency.CREDITS: SM_TYPE.PurchaseForCredits,
  Currency.GOLD: SM_TYPE.PurchaseForGold,
  Currency.CRYSTAL: SM_TYPE.PurchaseForCrystal}
+CURRENCY_TO_SM_TYPE_DISMANTLING = {Currency.CREDITS: SM_TYPE.DismantlingForCredits,
+ Currency.GOLD: SM_TYPE.DismantlingForGold,
+ Currency.CRYSTAL: SM_TYPE.DismantlingForCrystal}
 
 def _getSystemMessages():
     return dependency.instance(ISystemMessages)

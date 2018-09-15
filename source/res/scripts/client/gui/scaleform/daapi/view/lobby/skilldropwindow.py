@@ -46,10 +46,10 @@ class SkillDropWindow(SkillDropMeta):
                 skillCost['action'] = action
                 dropSkillsCost.append(skillCost)
 
-            skills_count = list(tankmen.ACTIVE_SKILLS)
-            availableSkillsCount = len(skills_count) - len(tankman.skills)
+            skills_count = tankmen.getSkillsConfig().getNumberOfActiveSkills()
+            availableSkillsCount = skills_count - len(tankman.skills)
             hasNewSkills = tankman.roleLevel == tankmen.MAX_SKILL_LEVEL and availableSkillsCount and (tankman.descriptor.lastSkillLevel == tankmen.MAX_SKILL_LEVEL or not len(tankman.skills))
-            self.as_setDataS({'money': items.stats.money,
+            self.as_setDataS({'money': items.stats.money.toMoneyTuple(),
              'tankman': packTankman(tankman, isCountPermanentSkills=False),
              'dropSkillsCost': dropSkillsCost,
              'hasNewSkills': hasNewSkills,

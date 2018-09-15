@@ -27,13 +27,12 @@ from gun_rotation_shared import decodeGunAngles
 from helpers import dependency
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import SoundStartParam
-from items import vehicles, sabaton_crew
+from items import vehicles
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from vehicle_systems import appearance_cache
 from vehicle_systems.tankStructure import TankPartNames
-from items.tankmen import hasTagInTankmenGroup, unpackCrewParams
 LOW_ENERGY_COLLISION_D = 0.3
 HIGH_ENERGY_COLLISION_D = 0.6
 _g_waitingVehicle = dict()
@@ -313,7 +312,7 @@ class Vehicle(BigWorld.Entity):
     def set_gunAnglesPacked(self, prev):
         syncGunAngles = getattr(self.filter, 'syncGunAngles', None)
         if syncGunAngles:
-            yaw, pitch = decodeGunAngles(self.gunAnglesPacked, self.typeDescriptor.gun['pitchLimits']['absolute'])
+            yaw, pitch = decodeGunAngles(self.gunAnglesPacked, self.typeDescriptor.gun.pitchLimits['absolute'])
             syncGunAngles(yaw, pitch)
         return
 
@@ -339,20 +338,15 @@ class Vehicle(BigWorld.Entity):
         if newHealth > 0 and self.health <= 0:
             self.health = newHealth
             return
-        elif not self.isStarted:
+        if not self.isStarted:
             return
-        else:
-            if not self.isPlayerVehicle:
-                ctrl = self.guiSessionProvider.shared.feedback
-                if ctrl is not None:
-                    ctrl.setVehicleNewHealth(self.id, newHealth, attackerID, attackReasonID)
-            if not self.appearance.damageState.isCurrentModelDamaged:
-                self.appearance.onVehicleHealthChanged()
-            if self.health <= 0 and self.isCrewActive:
-                self.__onVehicleDeath()
-            if self.isPlayerVehicle:
-                TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_RECEIVE_DAMAGE, attackerId=attackerID)
-            return
+        self.guiSessionProvider.setVehicleHealth(self.isPlayerVehicle, self.id, newHealth, attackerID, attackReasonID)
+        if not self.appearance.damageState.isCurrentModelDamaged:
+            self.appearance.onVehicleHealthChanged()
+        if self.health <= 0 and self.isCrewActive:
+            self.__onVehicleDeath()
+        if self.isPlayerVehicle:
+            TriggersManager.g_manager.activateTrigger(TRIGGER_TYPE.PLAYER_RECEIVE_DAMAGE, attackerId=attackerID)
 
     def set_stunInfo(self, prev):
         LOG_DEBUG('Set stun info(curr,~ prev): ', self.stunInfo, prev)
@@ -449,20 +443,20 @@ class Vehicle(BigWorld.Entity):
         m = Math.Matrix()
         m.setIdentity()
         res.append((vehicleDescr.chassis, m, True))
-        hullOffset = vehicleDescr.chassis['hullPosition']
+        hullOffset = vehicleDescr.chassis.hullPosition
         m = Math.Matrix()
         m.setTranslate(-hullOffset)
         res.append((vehicleDescr.hull, m, True))
         turretYaw = Math.Matrix(self.appearance.turretMatrix).yaw
         turretMatrix = Math.Matrix()
-        turretMatrix.setTranslate(-hullOffset - vehicleDescr.hull['turretPositions'][0])
+        turretMatrix.setTranslate(-hullOffset - vehicleDescr.hull.turretPositions[0])
         m = Math.Matrix()
         m.setRotateY(-turretYaw)
         turretMatrix.postMultiply(m)
         res.append((vehicleDescr.turret, turretMatrix, not self.isTurretDetached))
         gunPitch = Math.Matrix(self.appearance.gunMatrix).pitch
         gunMatrix = Math.Matrix()
-        gunMatrix.setTranslate(-vehicleDescr.turret['gunPosition'])
+        gunMatrix.setTranslate(-vehicleDescr.turret.gunPosition)
         m = Math.Matrix()
         m.setRotateX(-gunPitch)
         gunMatrix.postMultiply(m)
@@ -508,7 +502,7 @@ class Vehicle(BigWorld.Entity):
         """Gets approximate gun angles obtained from self.gunAnglesPacked (see vehicle.def).
         :return: (turretYaw, gunPitch)
         """
-        return decodeGunAngles(self.gunAnglesPacked, self.typeDescriptor.gun['pitchLimits']['absolute'])
+        return decodeGunAngles(self.gunAnglesPacked, self.typeDescriptor.gun.pitchLimits['absolute'])
 
     def startVisual(self):
         assert not self.isStarted
@@ -546,26 +540,21 @@ class Vehicle(BigWorld.Entity):
         if self is not player.getVehicleAttached():
             return
         else:
-            crewGroup = 0
-            arena = getattr(player, 'arena', None)
-            if arena is not None:
-                crewGroup = arena.vehicles[self.id]['crewGroup']
             vehicleTypeID = self.typeDescriptor.type.id
-            nationID, _ = vehicleTypeID
-            LOG_DEBUG("Refreshing current vehicle's national voices", nationID)
-            groupID, isFemaleCrewCommander, isPremium = unpackCrewParams(crewGroup)
-            if nationID == nations.INDICES['sweden'] and hasTagInTankmenGroup(nationID, groupID, isPremium, sabaton_crew.SABATON_VEH_NAME):
-                SoundGroups.g_instance.setSwitch(CREW_GENDER_SWITCHES.GROUP, CREW_GENDER_SWITCHES.MALE)
-                SoundGroups.g_instance.soundModes.setMode('sabaton')
-                return
             if vehicleTypeID in _VALKYRIE_SOUND_MODES and self.id == player.playerVehicleID:
                 SoundGroups.g_instance.soundModes.setMode(_VALKYRIE_SOUND_MODES[vehicleTypeID])
                 return
             genderSwitch = CREW_GENDER_SWITCHES.DEFAULT
             if SoundGroups.g_instance.soundModes.currentNationalPreset[1]:
-                if isFemaleCrewCommander:
-                    genderSwitch = CREW_GENDER_SWITCHES.FEMALE
-            nation = nations.NAMES[nationID]
+                arena = getattr(player, 'arena', None)
+                if arena is not None:
+                    vehicleData = arena.vehicles[self.id]
+                    isFemaleCrewCommander = vehicleData['crewGroup'] == 1
+                    if isFemaleCrewCommander:
+                        genderSwitch = CREW_GENDER_SWITCHES.FEMALE
+            nationId, _ = vehicleTypeID
+            LOG_DEBUG("Refreshing current vehicle's national voices", nationId)
+            nation = nations.NAMES[nationId]
             SoundGroups.g_instance.soundModes.setCurrentNation(nation, genderSwitch)
             return
 
@@ -633,22 +622,19 @@ class Vehicle(BigWorld.Entity):
     def __startWGPhysics(self):
         if not hasattr(self.filter, 'setVehiclePhysics'):
             return
-        else:
-            typeDescr = self.typeDescriptor
-            physics = BigWorld.WGVehiclePhysics()
-            physics_shared.initVehiclePhysics(physics, typeDescr, None, False)
-            arenaMinBound, arenaMaxBound = (-10000, -10000), (10000, 10000)
-            physics.setArenaBounds(arenaMinBound, arenaMaxBound)
-            physics.enginePower = typeDescr.physics['enginePower'] / 1000.0
-            physics.owner = weakref.ref(self)
-            physics.staticMode = False
-            physics.movementSignals = 0
-            self.filter.setVehiclePhysics(physics)
-            physics.visibilityMask = ArenaType.getVisibilityMask(BigWorld.player().arenaTypeID >> 16)
-            yaw, pitch = decodeGunAngles(self.gunAnglesPacked, typeDescr.gun['pitchLimits']['absolute'])
-            self.filter.syncGunAngles(yaw, pitch)
-            self.__speedInfo.set(self.filter.speedInfo)
-            return
+        typeDescr = self.typeDescriptor
+        physics = BigWorld.WGVehiclePhysics()
+        physics_shared.initVehiclePhysicsClient(physics, typeDescr)
+        arenaMinBound, arenaMaxBound = (-10000, -10000), (10000, 10000)
+        physics.setArenaBounds(arenaMinBound, arenaMaxBound)
+        physics.owner = weakref.ref(self)
+        physics.staticMode = False
+        physics.movementSignals = 0
+        self.filter.setVehiclePhysics(physics)
+        physics.visibilityMask = ArenaType.getVisibilityMask(BigWorld.player().arenaTypeID >> 16)
+        yaw, pitch = decodeGunAngles(self.gunAnglesPacked, typeDescr.gun.pitchLimits['absolute'])
+        self.filter.syncGunAngles(yaw, pitch)
+        self.__speedInfo.set(self.filter.speedInfo)
 
     def __stopWGPhysics(self):
         self.__speedInfo.reset()
@@ -734,7 +720,7 @@ class Vehicle(BigWorld.Entity):
         if not constants.IS_DEVELOPMENT:
             return
         if not hasattr(self, '_Vehicle__debugServerChassis'):
-            chassisModel = BigWorld.Model(self.typeDescriptor.chassis['hitTester'].bspModelName)
+            chassisModel = BigWorld.Model(self.typeDescriptor.chassis.hitTester.bspModelName)
             BigWorld.player().addModel(chassisModel)
             motor = BigWorld.Servo(Math.Matrix())
             chassisModel.addMotor(motor)
@@ -757,17 +743,17 @@ class Vehicle(BigWorld.Entity):
             for compDescr, compMatrix, isAttached in self.getComponents():
                 if not isAttached:
                     continue
-                if skipGun and compDescr.get('itemTypeName') == 'vehicleGun':
+                if skipGun and compDescr.itemTypeName == 'vehicleGun':
                     continue
-                collisions = compDescr['hitTester'].localHitTest(compMatrix.applyPoint(startPoint), compMatrix.applyPoint(endPoint))
+                collisions = compDescr.hitTester.localHitTest(compMatrix.applyPoint(startPoint), compMatrix.applyPoint(endPoint))
                 if collisions is None:
                     continue
                 for dist, _, hitAngleCos, matKind in collisions:
-                    matInfo = compDescr['materials'].get(matKind)
+                    matInfo = compDescr.materials.get(matKind)
                     if onlyNearest:
                         if not res or res and res[-1][0] >= dist:
                             res.append(SegmentCollisionResult(dist, hitAngleCos, matInfo.armor if matInfo is not None else 0))
-                    res.append(SegmentCollisionResultExt(dist, hitAngleCos, matInfo, compDescr.get('itemTypeName')))
+                    res.append(SegmentCollisionResultExt(dist, hitAngleCos, matInfo, compDescr.itemTypeName))
 
             return res
 

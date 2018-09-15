@@ -75,6 +75,7 @@ class BasicOLDictionary(ObsceneLanguageDictionary):
                     except sre_compile.error:
                         LOG_CURRENT_EXCEPTION()
 
+            ResMgr.purge(resourceId, True)
             return obj
 
     def searchAndReplace(self, text):
@@ -128,6 +129,7 @@ class SpecialOLDictionary(ObsceneLanguageDictionary):
                     except sre_compile.error:
                         LOG_CURRENT_EXCEPTION()
 
+            ResMgr.purge(resourceId, True)
             return obj
 
     def searchAndReplace(self, text):
@@ -181,6 +183,7 @@ class DomainNameDictionary(object):
                     except sre_compile.error:
                         LOG_CURRENT_EXCEPTION()
 
+            ResMgr.purge(resourceId, True)
             return obj
 
     @staticmethod

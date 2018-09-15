@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/custom/dependencies.py
 import time
+from functools import partial
 from dossiers2.custom.config import RECORD_CONFIGS
 from dossiers2.custom.cache import getCache
 from dossiers2.custom.utils import getVehicleNationID
@@ -10,6 +11,20 @@ A15X15_STATS_DEPENDENCIES = {}
 def _set_A15X15_STATS_DEPENDENCIES():
     global A15X15_STATS_DEPENDENCIES
     A15X15_STATS_DEPENDENCIES.update({'winAndSurvived': [_updateMedalAbrams],
+     'frags': [_updateMedalCarius],
+     'frags8p': [_updateMedalEkins],
+     'damageDealt': [_updateMedalKnispel],
+     'damageReceived': [_updateMedalKnispel],
+     'spotted': [_updateMedalPoppel],
+     'capturePoints': [_updateMedalLeClerc],
+     'droppedCapturePoints': [_updateMedalLavrinenko]})
+
+
+A30X30_STATS_DEPENDENCIES = {}
+
+def _set_A30X30_STATS_DEPENDENCIES():
+    global A30X30_STATS_DEPENDENCIES
+    A30X30_STATS_DEPENDENCIES.update({'winAndSurvived': [_updateMedalAbrams],
      'frags': [_updateMedalCarius],
      'frags8p': [_updateMedalEkins],
      'damageDealt': [_updateMedalKnispel],
@@ -60,7 +75,7 @@ def _set_ACHIEVEMENT15X15_DEPENDENCIES():
      'maxKillingSeries': [_updateHandOfDeath],
      'piercingSeries': [_updateMaxPiercingSeries],
      'maxPiercingSeries': [_updateArmorPiercer],
-     'maxAimerSeries': [_updateAimerSeries],
+     'maxAimerSeries': [_updateAimer],
      'sniper2': [_updateBattleHeroes],
      'mainGun': [_updateBattleHeroes],
      'WFC2014WinSeries': [_updateMaxWFC2014WinSeries],
@@ -90,8 +105,8 @@ def _set_ACHIEVEMENT7X7_DEPENDENCIES():
      'prematureDetonation': [_updatePrematureDetonationMedal],
      'sentinel': [_updateSentinelMedal],
      'infiltrator': [_updateInfiltratorMedal],
-     'wolfAmongSheepMedal': [_updateAwardCount, _updateBattleHeroesWith7x7Medals],
-     'geniusForWarMedal': [_updateAwardCount, _updateBattleHeroesWith7x7Medals],
+     'wolfAmongSheepMedal': [_updateAwardCount, _updateBattleHeroes],
+     'geniusForWarMedal': [_updateAwardCount, _updateBattleHeroes],
      'fightingReconnaissanceMedal': [_updateAwardCount],
      'crucialShotMedal': [_updateAwardCount],
      'promisingFighterMedal': [_updateAwardCount],
@@ -270,7 +285,7 @@ def _set_RANKED_STATS_DEPENDENCIES():
 
 def _updateMedalCarius(dossierDescr, dossierBlockDescr, key, value, prevValue):
     frags = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute'):
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30', 'ranked'):
         if dossierDescr.isBlockInLayout(block):
             if block in dossierDescr:
                 frags += dossierDescr[block]['frags']
@@ -290,7 +305,7 @@ def _updateMedalCarius(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 def _updateMedalKnispel(dossierDescr, dossierBlockDescr, key, value, prevValue):
     damage = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute'):
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30', 'ranked'):
         if dossierDescr.isBlockInLayout(block):
             if block in dossierDescr:
                 damage += dossierDescr[block]['damageDealt']
@@ -311,7 +326,7 @@ def _updateMedalKnispel(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 def _updateMedalPoppel(dossierDescr, dossierBlockDescr, key, value, prevValue):
     spotted = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute'):
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30', 'ranked'):
         if dossierDescr.isBlockInLayout(block):
             if block in dossierDescr:
                 spotted += dossierDescr[block]['spotted']
@@ -331,7 +346,7 @@ def _updateMedalPoppel(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 def _updateMedalLeClerc(dossierDescr, dossierBlockDescr, key, value, prevValue):
     capturePoints = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute'):
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30', 'ranked'):
         if dossierDescr.isBlockInLayout(block):
             if block in dossierDescr:
                 capturePoints += dossierDescr[block]['capturePoints']
@@ -351,7 +366,7 @@ def _updateMedalLeClerc(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 def _updateMedalLavrinenko(dossierDescr, dossierBlockDescr, key, value, prevValue):
     droppedCapturePoints = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute'):
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30', 'ranked'):
         if dossierDescr.isBlockInLayout(block):
             if block in dossierDescr:
                 droppedCapturePoints += dossierDescr[block]['droppedCapturePoints']
@@ -370,10 +385,6 @@ def _updateMedalLavrinenko(dossierDescr, dossierBlockDescr, key, value, prevValu
 
 
 def _updateBattleHeroes(dossierDescr, dossierBlockDescr, key, value, prevValue):
-    dossierBlockDescr['battleHeroes'] += value - prevValue
-
-
-def _updateBattleHeroesWith7x7Medals(dossierDescr, dossierBlockDescr, key, value, prevValue):
     dossierDescr['achievements']['battleHeroes'] += value - prevValue
 
 
@@ -400,7 +411,7 @@ def _updateMedalKay(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 def _updateMedalAbrams(dossierDescr, dossierBlockDescr, key, value, prevValue):
     winAndSurvived = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute'):
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30', 'ranked'):
         if dossierDescr.isBlockInLayout(block):
             if block in dossierDescr:
                 winAndSurvived += dossierDescr[block]['winAndSurvived']
@@ -420,7 +431,7 @@ def _updateMedalAbrams(dossierDescr, dossierBlockDescr, key, value, prevValue):
 
 def _updateMedalEkins(dossierDescr, dossierBlockDescr, key, value, prevValue):
     frags8p = 0
-    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute'):
+    for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30', 'ranked'):
         if dossierDescr.isBlockInLayout(block):
             if block in dossierDescr:
                 frags8p += dossierDescr[block]['frags8p']
@@ -461,10 +472,10 @@ def _updateMaxSniperSeries(dossierDescr, dossierBlockDescr, key, value, prevValu
         dossierBlockDescr['maxSniperSeries'] = value
 
 
-def _updateTitleSniper(dossierDescr, dossierBlockDescr, key, value, prevValue):
+def _updateTitleSniper(dossierDescr, dossierBlockDescr, key, value, prevValue, block='singleAchievements'):
     if value >= RECORD_CONFIGS['titleSniper']:
-        dossierDescr['singleAchievements']['titleSniper'] = 1
-        dossierDescr.addPopUp('singleAchievements', 'titleSniper', 1)
+        dossierDescr[block]['titleSniper'] = 1
+        dossierDescr.addPopUp(block, 'titleSniper', 1)
 
 
 def _updateMaxInvincibleSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):
@@ -472,10 +483,10 @@ def _updateMaxInvincibleSeries(dossierDescr, dossierBlockDescr, key, value, prev
         dossierBlockDescr['maxInvincibleSeries'] = value
 
 
-def _updateInvincible(dossierDescr, dossierBlockDescr, key, value, prevValue):
+def _updateInvincible(dossierDescr, dossierBlockDescr, key, value, prevValue, block='singleAchievements'):
     if value >= RECORD_CONFIGS['invincible']:
-        dossierDescr['singleAchievements']['invincible'] = 1
-        dossierDescr.addPopUp('singleAchievements', 'invincible', 1)
+        dossierDescr[block]['invincible'] = 1
+        dossierDescr.addPopUp(block, 'invincible', 1)
 
 
 def _updateMaxDiehardSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):
@@ -483,10 +494,10 @@ def _updateMaxDiehardSeries(dossierDescr, dossierBlockDescr, key, value, prevVal
         dossierBlockDescr['maxDiehardSeries'] = value
 
 
-def _updateDiehard(dossierDescr, dossierBlockDescr, key, value, prevValue):
+def _updateDiehard(dossierDescr, dossierBlockDescr, key, value, prevValue, block='singleAchievements'):
     if value >= RECORD_CONFIGS['diehard']:
-        dossierDescr['singleAchievements']['diehard'] = 1
-        dossierDescr.addPopUp('singleAchievements', 'diehard', 1)
+        dossierDescr[block]['diehard'] = 1
+        dossierDescr.addPopUp(block, 'diehard', 1)
 
 
 def _updateMaxKillingSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):
@@ -494,10 +505,10 @@ def _updateMaxKillingSeries(dossierDescr, dossierBlockDescr, key, value, prevVal
         dossierBlockDescr['maxKillingSeries'] = value
 
 
-def _updateHandOfDeath(dossierDescr, dossierBlockDescr, key, value, prevValue):
+def _updateHandOfDeath(dossierDescr, dossierBlockDescr, key, value, prevValue, block='singleAchievements'):
     if value >= RECORD_CONFIGS['handOfDeath']:
-        dossierDescr['singleAchievements']['handOfDeath'] = 1
-        dossierDescr.addPopUp('singleAchievements', 'handOfDeath', 1)
+        dossierDescr[block]['handOfDeath'] = 1
+        dossierDescr.addPopUp(block, 'handOfDeath', 1)
 
 
 def _updateMaxPiercingSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):
@@ -505,17 +516,15 @@ def _updateMaxPiercingSeries(dossierDescr, dossierBlockDescr, key, value, prevVa
         dossierBlockDescr['maxPiercingSeries'] = value
 
 
-def _updateArmorPiercer(dossierDescr, dossierBlockDescr, key, value, prevValue):
+def _updateArmorPiercer(dossierDescr, dossierBlockDescr, key, value, prevValue, block='singleAchievements'):
     if value >= RECORD_CONFIGS['armorPiercer']:
-        dossierDescr['singleAchievements']['armorPiercer'] = 1
-        dossierDescr.addPopUp('singleAchievements', 'armorPiercer', 1)
+        dossierDescr[block]['armorPiercer'] = 1
+        dossierDescr.addPopUp(block, 'armorPiercer', 1)
 
 
-def _updateAimerSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):
+def _updateAimer(dossierDescr, dossierBlockDescr, key, value, prevValue, block='singleAchievements'):
     assert value > prevValue, 'Try to store wrong value as max record'
-    achievementName = 'aimer'
-    block = 'singleAchievements'
-    dossierDescr[block][achievementName] = 1
+    dossierDescr[block]['aimer'] = 1
 
 
 def _updateMaxWFC2014WinSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):

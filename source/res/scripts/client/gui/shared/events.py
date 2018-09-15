@@ -3,19 +3,7 @@
 from collections import namedtuple
 from gui.shared.event_bus import SharedEvent
 from shared_utils import CONST_CONTAINER
-__all__ = ['ArgsEvent',
- 'LoadEvent',
- 'ComponentEvent',
- 'LoadViewEvent',
- 'ShowDialogEvent',
- 'LoginEvent',
- 'LoginCreateEvent',
- 'LoginEventEx',
- 'LobbySimpleEvent',
- 'FightButtonDisablingEvent',
- 'FightButtonEvent',
- 'CloseWindowEvent',
- 'BrowserEvent']
+__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent')
 
 class HasCtxEvent(SharedEvent):
 
@@ -121,6 +109,88 @@ class LoadViewEvent(HasCtxEvent):
         return
 
 
+class ViewEventType(CONST_CONTAINER):
+    LOAD_VIEW = 'viewEventLoadView'
+    LOAD_VIEWS_CHAIN = 'viewEventLoadViewChain'
+    PRELOAD_VIEW = 'viewEventPreLoadView'
+    DESTROY_VIEW = 'viewEventDestroyView'
+
+
+class _ViewEvent(HasCtxEvent):
+
+    def __init__(self, eventType, alias, name=None, ctx=None):
+        super(_ViewEvent, self).__init__(eventType, ctx)
+        self.alias = alias
+        self.name = name
+
+
+class DirectLoadViewEvent(_ViewEvent):
+    """
+    Event to load, initialize and show a view by the given params. Alternative to LoadViewEvent.
+    """
+
+    def __init__(self, loadParams, *args, **kwargs):
+        """
+        Ctr.
+        :param loadParams: load params, see ViewLoadParams
+        :param args: args to be passed to view constructor
+        :param kwargs: kwargs to be passed to view constructor
+        """
+        super(DirectLoadViewEvent, self).__init__(ViewEventType.LOAD_VIEW, loadParams.viewKey.alias, loadParams.viewKey.name)
+        self.loadParams = loadParams
+        self.args = args
+        self.kwargs = kwargs
+
+
+class LoadViewsChainEvent(_ViewEvent):
+    """
+    Event to load, initialize and show a view by the given params. Alternative to LoadViewEvent.
+    """
+
+    def __init__(self, viewLoadEvents):
+        """
+        Ctr.
+        :param viewLoadEvents: a list of DirectLoadViewEvent instances.
+        """
+        super(LoadViewsChainEvent, self).__init__(ViewEventType.LOAD_VIEWS_CHAIN, None, None)
+        self.viewLoadEvents = viewLoadEvents
+        return
+
+
+class PreLoadViewEvent(_ViewEvent):
+    """
+    Event to load view in memory without showing it to the user. Be aware that pre-loaded view is not coupled
+    with existing views, container and scopes and should be destroyed via DestroyViewEvent if it is not been
+    showed for the user.
+    To show pre-loaded view later use LoadViewEvent or DirectLoadViewEvent. If pre-loaded view has been showed
+    for the user via these events, there is no need to destroy it manually (you should not do that!), the
+    containers manager takes care of that.
+    """
+
+    def __init__(self, alias, name=None, ctx=None):
+        """
+        Ctr.
+        :param alias: string, alias of the view to be destroyed
+        :param name: string, name of the view to be destroyed (can be None, see class description above)
+        """
+        super(PreLoadViewEvent, self).__init__(ViewEventType.PRELOAD_VIEW, alias, name, ctx)
+
+
+class DestroyViewEvent(_ViewEvent):
+    """
+    Event to destroy a view by its alias and name. To destroy a particular view it is required to specify
+    both alias and name. To destroy several view with the same alias (like awards windows) name should be set to None.
+    """
+
+    def __init__(self, alias, name=None):
+        """
+        Ctr.
+        :param alias: string, alias of the view to be destroyed
+        :param name: string, name of the view to be destroyed (can be None, see class description above)
+        """
+        super(DestroyViewEvent, self).__init__(ViewEventType.DESTROY_VIEW, alias, name)
+
+
 class BrowserEvent(HasCtxEvent):
     BROWSER_CREATED = 'onBrowserCreated'
 
@@ -216,7 +286,6 @@ class HideWindowEvent(HasCtxEvent):
     HIDE_MISSION_DETAILS_VIEW = 'hideMissionDetailsView'
     HIDE_BROWSER_WINDOW = 'hideBrowserWindow'
     HIDE_BOOSTERS_WINDOW = 'hideBoostersWindow'
-    HIDE_VEHICLE_PREVIEW = 'hideVehiclePreview'
 
 
 class HidePopoverEvent(HasCtxEvent):
@@ -467,7 +536,6 @@ class OpenLinkEvent(SharedEvent):
     GLOBAL_MAP_PROMO = 'globalMapPromo'
     PREM_SHOP = 'premShopURL'
     TOKEN_SHOP = 'tokenShopUrl'
-    SABATON_SHOP = 'sabatonShopURL'
 
     def __init__(self, eventType, url='', title='', params=None):
         super(OpenLinkEvent, self).__init__(eventType)

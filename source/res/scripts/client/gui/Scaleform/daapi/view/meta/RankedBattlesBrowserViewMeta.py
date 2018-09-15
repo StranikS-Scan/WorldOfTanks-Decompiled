@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/RankedBattlesBrowserViewMeta.py
-from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.daapi.view.meta.WrapperViewMeta import WrapperViewMeta
 
-class RankedBattlesBrowserViewMeta(View):
+class RankedBattlesBrowserViewMeta(WrapperViewMeta):
 
     def onEscapePress(self):
         self._printOverrideError('onEscapePress')

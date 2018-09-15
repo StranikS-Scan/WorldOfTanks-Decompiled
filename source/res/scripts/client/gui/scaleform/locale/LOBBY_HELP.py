@@ -19,6 +19,7 @@ class LOBBY_HELP(object):
     HANGAR_OPTIONAL_DEVICES = '#lobby_help:hangar/optional-devices'
     HANGAR_SHELLS = '#lobby_help:hangar/shells'
     HANGAR_EQUIPMENT = '#lobby_help:hangar/equipment'
+    HANGAR_BOOSTER = '#lobby_help:hangar/booster'
     HANGAR_CREW = '#lobby_help:hangar/crew'
     HANGAR_VEHICLE_PARAMETERS = '#lobby_help:hangar/vehicle-parameters'
     HANGAR_VEHICLE_CAROUSEL = '#lobby_help:hangar/vehicle-carousel'

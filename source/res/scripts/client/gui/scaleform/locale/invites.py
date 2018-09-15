@@ -111,20 +111,6 @@ class INVITES(object):
     CLANS_STATE_INVITE_DECLINED = '#invites:clans/state/invite/declined'
     CLANS_STATE_INVITE_ERROR_INCLANENTERCOOLDOWN = '#invites:clans/state/invite/error/inClanEnterCooldown'
     STRONGHOLD_INVITE_SENDINVITETOUSERNAME = '#invites:stronghold/invite/sendInviteToUsername'
-    INVITES_TEXT_ENUM = (INVITES_TEXT_CREATORNAME,
-     INVITES_TEXT_SQUAD,
-     INVITES_TEXT_EVENT,
-     INVITES_TEXT_FALLOUT,
-     INVITES_TEXT_FALLOUT_FALLOUT_CLASSIC,
-     INVITES_TEXT_FALLOUT_FALLOUT_MULTITEAM,
-     INVITES_TEXT_TRAINING,
-     INVITES_TEXT_UNIT,
-     INVITES_TEXT_SORTIE,
-     INVITES_TEXT_FORT_BATTLE,
-     INVITES_TEXT_EXTERNAL,
-     INVITES_TEXT_FORT_OFFENCE,
-     INVITES_TEXT_FORT_DEFENCE,
-     INVITES_TEXT_FORT_DIRECTION)
     INVITES_STATE_ENUM = (INVITES_STATE_PENDING,
      INVITES_STATE_ACCEPTED,
      INVITES_STATE_DECLINED,
@@ -168,15 +154,6 @@ class INVITES(object):
      INVITES_PREBATTLE_ALREADYJOINED_TOURNAMENT,
      INVITES_PREBATTLE_ALREADYJOINED_UNIT,
      INVITES_PREBATTLE_ALREADYJOINED_SORTIE)
-
-    @classmethod
-    def invites_text(cls, key0):
-        outcome = '#invites:invites/text/{}'.format(key0)
-        if outcome not in cls.INVITES_TEXT_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
 
     @classmethod
     def invites_state(cls, key0):

@@ -10,7 +10,6 @@ import AreaDestructibles
 import BigWorld
 import constants
 import CommandMapping
-import ResMgr
 from helpers import dependency
 from post_processing import g_postProcessing
 import GUI

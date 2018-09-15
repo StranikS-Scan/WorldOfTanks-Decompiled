@@ -1,0 +1,59 @@
+<212_epic_random_valley.xml>
+  <name>	#arenas:212_epic_random_valley/name	</name>
+  <description>	#arenas:212_epic_random_valley/description	</description>
+  <geometry>	spaces/212_epic_random_valley	</geometry>
+  <boundingBox>
+    <bottomLeft>	-700.000000 -700.000000	</bottomLeft>
+    <upperRight>	700.000000 700.000000	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/212_epic_random_valley/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <maxPlayersInTeam>	30	</maxPlayersInTeam>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_euro_vilage	</wwmusicLoading>
+    <wwmusicIntensive>	music_combat	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_combat	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_victory	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_spring_01	</wwambientSound>
+  <umbraEnabled>	1	</umbraEnabled>
+  <batchingEnabled>	0	</batchingEnabled>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <numPlayerGroups>	3	</numPlayerGroups>
+  <playerGroupLimit>	10	</playerGroupLimit>
+  <estimatedLoad>	0.91	</estimatedLoad>
+  <gameplayTypes>
+    <ctf30x30>
+      <teamSpawnPoints>
+        <team1>
+          <position>	137.550000 511.200000	</position>
+          <position>	265.840000 304.520000	</position>
+          <position>	536.780000 145.170000	</position>
+        </team1>
+        <team2>
+          <position>	-563.290000 -155.830000	</position>
+          <position>	-287.650000 -296.600000	</position>
+          <position>	-96.730000 -500.360000	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	210.635071 257.220917	</position1>
+        </team1>
+        <team2>
+          <position2>	-238.273926 -238.990707	</position2>
+        </team2>
+      </teamBasePositions>
+    </ctf30x30>
+  </gameplayTypes>
+  <roadMap></roadMap>
+  <mapActivities></mapActivities>
+</212_epic_random_valley.xml>

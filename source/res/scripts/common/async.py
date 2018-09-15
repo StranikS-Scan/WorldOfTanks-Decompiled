@@ -31,7 +31,7 @@ import BigWorld
 from BWUtil import AsyncReturn
 from functools import wraps
 from constants import IS_DEVELOPMENT
-from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_DEBUG
+from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_DEBUG, LOG_DEBUG_DEV
 
 def async(func):
     """
@@ -159,6 +159,35 @@ def delay(timeout):
 
     BigWorld.addTimer(onTimer, timeout)
     return promise.get_future()
+
+
+def _isNextTickPending():
+    return BigWorld.isNextTickPending()
+
+
+def delayable(maxTicksToDelay=1, timeout=0.1):
+
+    def decorator(func):
+        """
+        Wrapper for functions that can be delayed up to maxTicksDelay ticks if process is currently under heavy load.
+        """
+
+        @wraps(func)
+        @async
+        def wrapper(*args, **kwargs):
+            for n in xrange(maxTicksToDelay):
+                if not _isNextTickPending():
+                    break
+                LOG_DEBUG_DEV('DELAYABLE isNextTickPending', func, n + 1)
+                yield await(delay(timeout))
+            else:
+                LOG_DEBUG('DELAYABLE reached maxTicksToDelay', func, maxTicksToDelay)
+
+            func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
 
 
 class TimeoutError(Exception):

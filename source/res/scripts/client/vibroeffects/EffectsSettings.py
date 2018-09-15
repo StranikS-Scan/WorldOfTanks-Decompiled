@@ -36,7 +36,8 @@ class EffectsSettings:
 
     @staticmethod
     def loadSettings():
-        root = ResMgr.openSection(EffectsSettings.CFG_FOLDER + 'effects_settings.xml')
+        path = EffectsSettings.CFG_FOLDER + 'effects_settings.xml'
+        root = ResMgr.openSection(path)
         EffectsSettings.__loadGuiButtonsSettings(root['buttons'])
         effectsSection = root['effects']
         if effectsSection is not None:
@@ -58,6 +59,7 @@ class EffectsSettings:
             EffectsSettings.__overlappedGainMultiplier = 1.0
         EffectsSettings.AccelerationThreshold = root.readFloat('acceleration_threshold', 0.0)
         EffectsSettings.DecelerationThreshold = root.readFloat('deceleration_threshold', 0.0)
+        ResMgr.purge(path, True)
         return
 
     @staticmethod

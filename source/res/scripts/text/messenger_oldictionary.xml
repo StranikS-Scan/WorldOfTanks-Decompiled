@@ -1,0 +1,236 @@
+<messenger_oldictionary.xml>
+  <equivalents>
+    <equivalent>
+      <find>	a	</find>
+      <replace>	а	</replace>
+    </equivalent>
+    <equivalent>
+      <find>	l	</find>
+      <replace>	и	</replace>
+    </equivalent>
+    <equivalent>
+      <find>	b	</find>
+      <replace>	ь	</replace>
+    </equivalent>
+    <equivalent>
+      <letter>	с	</letter>
+      <replace>	с	</replace>
+    </equivalent>
+    <equivalent>
+      <find>	e	</find>
+      <replace>	е	</replace>
+    </equivalent>
+    <equivalent>
+      <find>	k	</find>
+      <replace>	к	</replace>
+    </equivalent>
+    <equivalent>
+      <find>	m	</find>
+      <replace>	м	</replace>
+    </equivalent>
+    <equivalent>
+      <find>	n	</find>
+      <replace>	п	</replace>
+    </equivalent>
+    <equivalent>
+      <find>	o	</find>
+      <replace>	о	</replace>
+    </equivalent>
+    <equivalent>
+      <find>	p	</find>
+      <replace>	р	</replace>
+    </equivalent>
+    <equivalent>
+      <find>	r	</find>
+      <replace>	г	</replace>
+    </equivalent>
+    <equivalent>
+      <find>	u	</find>
+      <replace>	и	</replace>
+    </equivalent>
+    <equivalent>
+      <find>	w	</find>
+      <replace>	ш	</replace>
+    </equivalent>
+    <equivalent>
+      <find>	x	</find>
+      <replace>	х	</replace>
+    </equivalent>
+    <equivalent>
+      <find>	y	</find>
+      <replace>	у	</replace>
+    </equivalent>
+    <equivalent>
+      <find>	ё	</find>
+      <replace>	е	</replace>
+    </equivalent>
+    <equivalent>
+      <find>	й	</find>
+      <replace>	и	</replace>
+    </equivalent>
+    <equivalent>
+      <find>	6	</find>
+      <replace>	б	</replace>
+    </equivalent>
+    <equivalent>
+      <find>	jl	</find>
+      <replace>	л	</replace>
+    </equivalent>
+  </equivalents>
+  <nonAlphanumericCharacter>	[^a-zA-Zа-яА-Яё0-9]	</nonAlphanumericCharacter>
+  <badWords>
+    <badWordSet>	^(н[аи]|до|о)?(к|ф|х)у([яи]|(еть)).*	</badWordSet>
+    <badWordSet>	^(у(е|и)ц(а)?).*	</badWordSet>
+    <badWordSet>	^(уин).*	</badWordSet>
+    <badWordSet>
+      <include>	.*(х)(у)+(и|я|е|ю|(л|н)(и|е|я|еи)|ней).*	</include>
+      <exclude>	^(застра|перестра|подстра|(за)?штри|глу|сух|пло|пси|хулиган|хулио).*	</exclude>
+    </badWordSet>
+    <badWordSet>	^хн(е(и)?|и|я).*	</badWordSet>
+    <badWordSet>	.*поху.*	</badWordSet>
+    <badWordSet>	.*п(и|е|я)*?(з|с)(д|ато|тец|жу|ту).*	</badWordSet>
+    <badWordSet>	^(314|пи)(з)?д(ец|юк|ы).*	</badWordSet>
+    <badWordSet>	^[еи]?бл([яи]|[аое])$	</badWordSet>
+    <badWordSet>	^([бмп]л(и)*(я)+)$	</badWordSet>
+    <badWordSet>
+      <include>	.*([бмп]л(и|е)+(я|а))(д|т|ц).*	</include>
+      <exclude>	^(оскор|истре|употре).*	</exclude>
+    </badWordSet>
+    <badWordSet>	бялть	</badWordSet>
+    <badWordSet>	бльдь	</badWordSet>
+    <badWordSet>
+      <include>	.*[бмп](и)?ля(т|д).*	</include>
+      <exclude>	^(оскор|истре|укре|употре|це).*	</exclude>
+    </badWordSet>
+    <badWordSet>
+      <include>	(с|сц)[уы](к|ч)(а|о|и).*	</include>
+      <exclude>	^(бонус).*	</exclude>
+    </badWordSet>
+    <badWordSet>	^(вы|на|под|за|пере|про|осло|коне|да(л)?ба|при)еб+.*	</badWordSet>
+    <badWordSet>	^у([еи]|ои|ио)б.*	</badWordSet>
+    <badWordSet>
+      <include>	^(въ|вь|вы|за|на|с|сь|съ|объ|обь|отъ|оть|раз[ъь]*)еб(а|ы|е|у|и|ос).*	</include>
+      <exclude>	^себе$	</exclude>
+    </badWordSet>
+    <badWordSet>	^ебеш.*	</badWordSet>
+    <badWordSet>
+      <include>	(е|ио)(п|б)а*?(ть|шу|[лн]|рь|ет|гые|еитесь)$	</include>
+      <exclude>	.*(хр|д|щ)ебет.*|степан|.*(шл|тр)еп.*	</exclude>
+    </badWordSet>
+    <badWordSet>
+      <include>	.*(о|а)еб.*	</include>
+      <exclude>	.*(о|а)ебел.*	</exclude>
+    </badWordSet>
+    <badWordSet>
+      <include>	^(за|по|на)?(е|и|ю)(б|п)+(а|и)?(л|н|с|т|ч|щ|ц).*	</include>
+      <exclude>	^юбил.*	</exclude>
+    </badWordSet>
+    <badWordSet>
+      <include>	^(за|по|на)?(е|и|ю)(б|п)+(у|та|а|ошит|ыш|ет).*	</include>
+      <exclude>	^(за|по|на)?(е|и|ю)(б|п)+а[0-9|б].*	</exclude>
+    </badWordSet>
+    <badWordSet>
+      <include>	.*е(б|п)(уч|ущ|тв|ем|ары|цы|ись).*	</include>
+      <exclude>	(у)?кре|(у)?потре|епем	</exclude>
+    </badWordSet>
+    <badWordSet>	.*п(и|е)д(р|ик|ор|ар|ер|рило|уи).*	</badWordSet>
+    <badWordSet>
+      <include>	.*хер.*	</include>
+      <exclude>	^((по-)?пари(х|к)ма|манли|мо|шу(ма)?).*|(мохер|херес|херсон|херувим|бехеровк|херши).*	</exclude>
+    </badWordSet>
+    <badWordSet>	^г(а|о)ндон	</badWordSet>
+    <badWordSet>	.*залуп.*	</badWordSet>
+    <badWordSet>	му(д)+[аеио]	</badWordSet>
+    <badWordSet>	^муд(а|о|и)?(звон|к|л|ч).*	</badWordSet>
+    <badWordSet>	.*жоп(о|а|у).*	</badWordSet>
+    <badWordSet>	рукожоп	</badWordSet>
+    <badWordSet>	.*г(о|а)вн(о|и)*.*	</badWordSet>
+    <badWordSet>	г[оа]в[ёе]н	</badWordSet>
+    <badWordSet>	.*ср(а)+(т|к|л|н).*	</badWordSet>
+    <badWordSet>
+      <include>	^с(с|ц)?(и|ы)к.*	</include>
+      <exclude>	^(сик(с|у|р)).*|^(сыктывкар).*	</exclude>
+    </badWordSet>
+    <badWordSet>	^с(с|ц)а(т|л).*	</badWordSet>
+    <badWordSet>	^(с|сц)у(л|ч).*	</badWordSet>
+    <badWordSet>
+      <include>	.*(ч)+(м)+(о)+.*	</include>
+      <exclude>	^(чмок).*	</exclude>
+    </badWordSet>
+    <badWordSet>	.*п(е|и)р(дел|дет|ди|дун).*	</badWordSet>
+    <badWordSet>	^(мпх|по(х)+|н(а|е)(х)+т*|пп(ц)+|пипе(ц)+|задрот|п(е|и)довки|еб(и|у)?|манда|иопт)$	</badWordSet>
+    <badWordSet>	д(е|и)бил	</badWordSet>
+    <badWordSet>	^ид[ие]от.*	</badWordSet>
+    <badWordSet>	^анус	</badWordSet>
+    <badWordSet>	хач	</badWordSet>
+    <badWordSet>	х(о|а|и)х(о)?л(ы)?	</badWordSet>
+    <badWordSet>	трах[ан]	</badWordSet>
+    <badWordSet>	козлина	</badWordSet>
+    <badWordSet>
+      <include>	^(члено|от)?с(о|а)с(и)?$	</include>
+      <exclude>	^сос$	</exclude>
+    </badWordSet>
+    <badWordSet>	^[ао]нал$	</badWordSet>
+    <badWordSet>	^с[еи]кель$	</badWordSet>
+    <badWordSet>	^манда$	</badWordSet>
+    <badWordSet>	^мандень$	</badWordSet>
+    <badWordSet>	^херня$	</badWordSet>
+    <badWordSet>	^херли$	</badWordSet>
+    <badWordSet>	^пнх$	</badWordSet>
+    <badWordSet>	^мраз(ь|и|ота)?$	</badWordSet>
+    <badWordSet>	^[ао]нал$	</badWordSet>
+    <badWordSet>	^иух$	</badWordSet>
+    <badWordSet>	^л(о|я)х	</badWordSet>
+    <badWordSet>	^л[оа]шар[оа]$	</badWordSet>
+    <badWordSet>	^[дб][ао]лб[ао][еи](о)[бп].*	</badWordSet>
+    <badWordSet>	^др[оа]ч	</badWordSet>
+    <badWordSet>	^гнид	</badWordSet>
+    <badWordSet>	^чурк[ауеи]$	</badWordSet>
+    <badWordSet>	^нигер$	</badWordSet>
+    <badWordSet>	^рizdа$	</badWordSet>
+    <badWordSet>	^ьиiаdi$	</badWordSet>
+    <badWordSet>	абъебос	</badWordSet>
+    <badWordSet>	ахрененныи	</badWordSet>
+    <badWordSet>	б(а|е)ндеров	</badWordSet>
+    <badWordSet>	бульбаш	</badWordSet>
+    <badWordSet>	взъеб(о)*к(а)*	</badWordSet>
+    <badWordSet>	даун	</badWordSet>
+    <badWordSet>	додик	</badWordSet>
+    <badWordSet>
+      <include>	^жид.*	</include>
+      <exclude>	^жидк.*	</exclude>
+    </badWordSet>
+    <badWordSet>	чухан	</badWordSet>
+    <badWordSet>	шоблаебла	</badWordSet>
+    <badWordSet>	шалав(к)?(а|ы|ье)	</badWordSet>
+    <badWordSet>	шлюх(а|и)	</badWordSet>
+    <badWordSet>	чмыр(ь|и)	</badWordSet>
+    <badWordSet>	маидан	</badWordSet>
+    <badWordSet>	м(а|о)скал(ь)*	</badWordSet>
+    <badWordSet>	кацап	</badWordSet>
+    <badWordSet>	кр(е|и)тин	</badWordSet>
+    <badWordSet>	курва	</badWordSet>
+    <badWordSet>	(от|при)пи(з)?жен.*	</badWordSet>
+    <badWordSet>	имб(е|и)цил	</badWordSet>
+    <badWordSet>	елд(а|е)	</badWordSet>
+    <badWordSet>	(при)?дур(ак|ень|ок)	</badWordSet>
+    <badWordSet>	обоссаныи	</badWordSet>
+    <badWordSet>	падла	</badWordSet>
+    <badWordSet>	пшек	</badWordSet>
+    <badWordSet>	^поц$	</badWordSet>
+    <badWordSet>	титушк	</badWordSet>
+    <badWordSet>	хульева	</badWordSet>
+    <badWordSet>	тупо(и|рылыи)	</badWordSet>
+    <badWordSet>	ублюдок	</badWordSet>
+    <badWordSet>	урод	</badWordSet>
+    <badWordSet>	ф(а|о)ш(и|ы)ст	</badWordSet>
+    <badWordSet>	^твар(ь|и)?$	</badWordSet>
+    <badWordSet>	^суку$	</badWordSet>
+    <badWordSet>	п(е|и)добир	</badWordSet>
+    <badWordSet>	^пис(те|ечка|юн)	</badWordSet>
+    <badWordSet>	^сперм(а|о)?(х|г)?.*	</badWordSet>
+    <badWordSet>	^варт(а|у)нд.*	</badWordSet>
+    <badWordSet>	^гаид(з|ж)ин.*	</badWordSet>
+    <badWordSet>	^(тундр|улитк)офан.*	</badWordSet>
+  </badWords>
+</messenger_oldictionary.xml>

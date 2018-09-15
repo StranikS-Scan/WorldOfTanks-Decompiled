@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/clans/web_handlers.py
 from gui.shared.ClanCache import g_clanCache
-from gui.shared.event_dispatcher import showClanProfileWindow, showClanInvitesWindow
+from gui.shared.event_dispatcher import showClanProfileWindow, showClanInvitesWindow, showClanSearchWindow
 from messenger.m_constants import USER_TAG
 from messenger.proto.shared_find_criteria import MutualFriendsFindCriteria
 from web_client_api import WebCommandException
@@ -91,5 +91,13 @@ def _openClanInvites():
     showClanInvitesWindow()
 
 
+def _openClanSearch():
+    """
+    Opens clan search window
+    """
+    showClanSearchWindow()
+
+
 OPEN_WINDOW_CLAN_SUB_COMMANDS = {'clan_card_window': (OpenClanCardCommand, _openClanCard),
- 'clan_invites_window': (None, _openClanInvites)}
+ 'clan_invites_window': (None, _openClanInvites),
+ 'clan_search_window': (None, _openClanSearch)}

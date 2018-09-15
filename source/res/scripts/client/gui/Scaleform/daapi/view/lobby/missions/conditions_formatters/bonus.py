@@ -233,7 +233,14 @@ class _VehicleStunCumulativeFormatter(_VehicleCumulativeFormatter, _VehiclesStun
     """
     Cumulative vehicle stun condition formatter. Shows how many stun player must shot to complete quest.
     """
-    pass
+
+    @classmethod
+    def _getLabelKey(cls, condition=None):
+        if condition.getEventCount():
+            key = QUESTS.DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT_CUMULATIVE
+        else:
+            key = QUESTS.DETAILS_CONDITIONS_VEHICLESTUN_CUMULATIVE
+        return key
 
 
 class BattlesCountFormatter(_CumulativeResultFormatter):

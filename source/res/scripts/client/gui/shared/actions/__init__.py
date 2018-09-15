@@ -15,11 +15,7 @@ from predefined_hosts import g_preDefinedHosts, getHostURL
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
-__all__ = ['LeavePrbModalEntity',
- 'DisconnectFromPeriphery',
- 'ConnectToPeriphery',
- 'PrbInvitesInit',
- 'ActionsChain']
+__all__ = ('LeavePrbModalEntity', 'DisconnectFromPeriphery', 'ConnectToPeriphery', 'PrbInvitesInit', 'ActionsChain')
 
 class Action(object):
 

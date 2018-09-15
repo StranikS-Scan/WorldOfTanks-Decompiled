@@ -5,17 +5,17 @@ from adisp import process, async
 from debug_utils import LOG_WARNING
 from account_helpers import isLongDisconnectedFromCenter
 from account_helpers.AccountSettings import AccountSettings
-from items import tankmen as tmen_core, tankmen
-from items.qualifiers import CREW_ROLE
+from items import tankmen as tmen_core
 from gui import DialogsInterface
 from gui.game_control import restore_contoller
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.utils.requesters import REQ_CRITERIA
-from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_PURCHASE_CODE
+from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.shared.money import Currency
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, I18nInfoDialogMeta, DIALOG_BUTTON_ID, IconPriceDialogMeta, IconDialogMeta, DemountDeviceDialogMeta, DestroyDeviceDialogMeta, TankmanOperationDialogMeta, HtmlMessageDialogMeta, HtmlMessageLocalDialogMeta, CheckBoxDialogMeta
 from helpers import dependency
+from items.components import skills_constants
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 _SHELLS_MONEY_ERRORS = {Currency.CREDITS: 'SHELLS_NO_CREDITS',
@@ -47,7 +47,7 @@ class ProcessorPlugin(object):
         """
         Ctor.
         
-        @param type: <ProcessorPlugin.TYPE.*> plugin type
+        @param pluginType: <ProcessorPlugin.TYPE.*> plugin type
         @param isAsync: <bool> asynchronous or not
         @param isEnabled: <bool> plugin enabled or not
         """
@@ -123,11 +123,10 @@ class VehicleValidator(SyncValidator):
 
 class VehicleRoleValidator(SyncValidator):
 
-    def __init__(self, vehicle, role, tankman, isEnabled=True):
+    def __init__(self, vehicle, role, isEnabled=True):
         super(VehicleRoleValidator, self).__init__(isEnabled)
         self.vehicle = vehicle
         self.role = role
-        self.tankman = tankman
 
     def _validate(self):
         if self.vehicle is None:
@@ -136,9 +135,6 @@ class VehicleRoleValidator(SyncValidator):
             if self.vehicle is not None:
                 mainRoles = set(map(lambda r: r[0], self.vehicle.descriptor.type.crewRoles))
                 if self.role not in mainRoles:
-                    return makeError('invalid_role')
-                td = self.tankman.descriptor
-                if not tankmen.tankmenGroupHasRole(td.nationID, td.gid, td.isPremium, self.role):
                     return makeError('invalid_role')
             return makeSuccess()
 
@@ -284,7 +280,7 @@ class CompatibilityRemoveValidator(CompatibilityValidator):
 
 class MoneyValidator(SyncValidator):
     """
-    Validates money. Possible errors: not_enough_credits, not_enough_gold, not_enough_crystal (see Currency enum)
+    Validates money. Possible errors: see GUI_ITEM_ECONOMY_CODE._NOT_ENOUGH_MONEY list.
     """
 
     def __init__(self, price):
@@ -293,14 +289,13 @@ class MoneyValidator(SyncValidator):
 
     def _validate(self):
         stats = self.itemsCache.items.stats
-        delta = self.price - stats.money
-        delta = delta.toNonNegative()
-        if delta:
-            currency = delta.getCurrency(byWeight=False)
+        shortage = stats.money.getShortage(self.price)
+        if shortage:
+            currency = shortage.getCurrency(byWeight=False)
             if currency == Currency.GOLD and not stats.mayConsumeWalletResources:
-                error = GUI_ITEM_PURCHASE_CODE.WALLET_NOT_AVAILABLE
+                error = GUI_ITEM_ECONOMY_CODE.WALLET_NOT_AVAILABLE
             else:
-                error = GUI_ITEM_PURCHASE_CODE.getMoneyError(currency)
+                error = GUI_ITEM_ECONOMY_CODE.getMoneyError(currency)
             return makeError(error)
         return makeSuccess()
 
@@ -312,7 +307,7 @@ class WalletValidator(SyncValidator):
 
     def _validate(self):
         stats = self.itemsCache.items.stats
-        return makeError(GUI_ITEM_PURCHASE_CODE.WALLET_NOT_AVAILABLE) if not stats.mayConsumeWalletResources else makeSuccess()
+        return makeError(GUI_ITEM_ECONOMY_CODE.WALLET_NOT_AVAILABLE) if not stats.mayConsumeWalletResources else makeSuccess()
 
 
 class VehicleSellsLeftValidator(SyncValidator):
@@ -345,7 +340,7 @@ class VehicleLayoutValidator(SyncValidator):
     def __checkMoney(self, money, price, errors):
         shortage = money.getShortage(price)
         if shortage:
-            currency, value = shortage[0]
+            currency = shortage.getCurrency(byWeight=True)
             if currency in errors:
                 return makeError(errors[currency])
             else:
@@ -579,7 +574,7 @@ class VehicleFreeLimitConfirmator(MessageInformator):
         self.crewType = crewType
 
     def _activeHandler(self):
-        return not self.vehicle.buyPrice and self.crewType < 1 and not self.itemsCache.items.stats.freeVehiclesLeft
+        return not self.vehicle.buyPrices.itemPrice.isDefined() and self.crewType < 1 and not self.itemsCache.items.stats.freeVehiclesLeft
 
 
 class PotapovQuestValidator(SyncValidator):
@@ -734,8 +729,7 @@ class TankmanAddSkillValidator(SyncValidator):
     def _validate(self):
         if self.skillName in self.tankmanDscr.skills:
             return makeError()
-        from items.tankmen import ACTIVE_SKILLS
-        if self.skillName not in ACTIVE_SKILLS:
+        if self.skillName not in skills_constants.ACTIVE_SKILLS:
             return makeError()
         from items.tankmen import MAX_SKILL_LEVEL
         if self.tankmanDscr.roleLevel != MAX_SKILL_LEVEL:

@@ -4,30 +4,29 @@ from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.battle_control.arena_info.interfaces import IArenaController
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, REUSABLE_BATTLE_CTRL_IDS
 from gui.battle_control.battle_constants import getBattleCtrlName
-from gui.battle_control.controllers import arena_load_ctrl
+from gui.battle_control.controllers import arena_load_ctrl, battle_field_ctrl
 from gui.battle_control.controllers import avatar_stats_ctrl
+from gui.battle_control.controllers import bootcamp_ctrl
 from gui.battle_control.controllers import chat_cmd_ctrl
 from gui.battle_control.controllers import consumables
 from gui.battle_control.controllers import debug_ctrl
 from gui.battle_control.controllers import drr_scale_ctrl
 from gui.battle_control.controllers import dyn_squad_functional
 from gui.battle_control.controllers import feedback_adaptor
-from gui.battle_control.controllers import finish_sound_ctrl
-from gui.battle_control.controllers import bootcamp_finish_sound_ctrl
 from gui.battle_control.controllers import flag_nots_ctrl
 from gui.battle_control.controllers import gas_attack_ctrl
 from gui.battle_control.controllers import hit_direction_ctrl
+from gui.battle_control.controllers import interfaces
 from gui.battle_control.controllers import msgs_ctrl
 from gui.battle_control.controllers import period_ctrl
+from gui.battle_control.controllers import personal_efficiency_ctrl
 from gui.battle_control.controllers import repair_ctrl
 from gui.battle_control.controllers import respawn_ctrl
 from gui.battle_control.controllers import team_bases_ctrl
-from gui.battle_control.controllers import vehicle_state_ctrl
-from gui.battle_control.controllers import personal_efficiency_ctrl
-from gui.battle_control.controllers import interfaces
 from gui.battle_control.controllers import tmp_ignore_list_ctrl
+from gui.battle_control.controllers import vehicle_state_ctrl
 from gui.battle_control.controllers import view_points_ctrl
-from gui.battle_control.controllers import bootcamp_ctrl
+from gui.battle_control.controllers import team_health_bar_ctrl
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 
 class BattleSessionSetup(object):
@@ -204,8 +203,16 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
         return self._repository.getController(BATTLE_CTRL_ID.GAS_ATTACK)
 
     @property
-    def finishSound(self):
-        return self._repository.getController(BATTLE_CTRL_ID.FINISH_SOUND)
+    def battleField(self):
+        return self._repository.getController(BATTLE_CTRL_ID.BATTLE_FIELD_CTRL)
+
+    @property
+    def playerGameModeData(self):
+        return self._repository.getController(BATTLE_CTRL_ID.PLAYER_GAME_MODE_DATA)
+
+    @property
+    def teamHealthBar(self):
+        return self._repository.getController(BATTLE_CTRL_ID.TEAM_HEALTH_BAR)
 
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
@@ -303,7 +310,7 @@ class SharedControllersRepository(_ControllersRepository):
             repository.addController(tmpIgnoreListCtrl)
         repository.addArenaController(bootcamp_ctrl.BootcampController(), setup)
         repository.addArenaController(view_points_ctrl.ViewPointsController(setup), setup)
-        repository.addArenaController(arena_load_ctrl.ArenaLoadController(), setup)
+        repository.addArenaViewController(arena_load_ctrl.ArenaLoadController(), setup)
         repository.addArenaViewController(period_ctrl.createPeriodCtrl(setup), setup)
         repository.addViewController(hit_direction_ctrl.createHitDirectionController(setup), setup)
         return repository
@@ -325,6 +332,8 @@ class _ControllersRepositoryByBonuses(_ControllersRepository):
             repository.addViewController(flag_nots_ctrl.NotificationsController(setup), setup)
         if arenaVisitor.hasGasAttack() and gasAttackMgr is not None:
             repository.addViewController(gas_attack_ctrl.GasAttackController(setup), setup)
+        if arenaVisitor.hasHealthBar():
+            repository.addViewController(team_health_bar_ctrl.TeamHealthBarController(setup), setup)
         return repository
 
 
@@ -337,12 +346,8 @@ class ClassicControllersRepository(_ControllersRepositoryByBonuses):
         repository.addArenaViewController(team_bases_ctrl.createTeamsBasesCtrl(setup), setup)
         repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
         repository.addViewController(debug_ctrl.DebugController(), setup)
-        if not setup.isReplayPlaying:
-            if setup.arenaVisitor.gui.isBootcampBattle():
-                controller = bootcamp_finish_sound_ctrl.BootcampFinishSoundController()
-            else:
-                controller = finish_sound_ctrl.FinishSoundController()
-            repository.addArenaController(controller, setup)
+        if not setup.arenaEntity.hasFogOfWarHiddenVehicles:
+            repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
         return repository
 
 

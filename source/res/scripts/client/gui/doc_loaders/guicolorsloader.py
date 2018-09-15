@@ -153,6 +153,7 @@ class _GuiColorsLoader(object):
         if xmlCtx is None:
             _xml.raiseWrongXml(None, self.XML_PATH, 'can not open or read')
         self.__readXML(xmlCtx)
+        ResMgr.purge(self.XML_PATH, True)
         return
 
     def items(self):

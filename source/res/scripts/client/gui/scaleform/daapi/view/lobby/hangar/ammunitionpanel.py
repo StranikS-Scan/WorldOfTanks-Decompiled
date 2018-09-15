@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/AmmunitionPanel.py
+from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS
 from CurrentVehicle import g_currentVehicle
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
@@ -13,11 +14,11 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import LoadViewEvent
 from gui.shared.gui_items import GUI_ITEM_TYPE_INDICES, GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.Vehicle import Vehicle
+from gui.shared.gui_items.vehicle_equipment import BATTLE_BOOSTER_LAYOUT_SIZE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import i18n, dependency
 from skeletons.gui.game_control import IFalloutController
 from skeletons.gui.shared import IItemsCache
-OPTIONAL_DEVICE_SLOTS_COUNT = 3
 ARTEFACTS_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.OPTIONALDEVICE], GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.EQUIPMENT])
 _BOOSTERS_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_BOOSTER],)
 FITTING_MODULES = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.CHASSIS],
@@ -26,7 +27,7 @@ FITTING_MODULES = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.CHASSIS],
  GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.ENGINE],
  GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.RADIO])
 FITTING_SLOTS = FITTING_MODULES + ARTEFACTS_SLOTS
-_HANGAR_FITTING_SLOTS = FITTING_SLOTS + _BOOSTERS_SLOTS
+HANGAR_FITTING_SLOTS = FITTING_SLOTS + _BOOSTERS_SLOTS
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getFittingSlotsData(vehicle, slotsRange, VoClass=None, itemsCache=None):
@@ -35,11 +36,13 @@ def getFittingSlotsData(vehicle, slotsRange, VoClass=None, itemsCache=None):
     for slotType in slotsRange:
         data = itemsCache.items.getItems(GUI_ITEM_TYPE_INDICES[slotType], REQ_CRITERIA.CUSTOM(lambda item: item.isInstalled(vehicle))).values()
         if slotType in ARTEFACTS_SLOTS:
-            for slotId in xrange(OPTIONAL_DEVICE_SLOTS_COUNT):
+            for slotId in xrange(NUM_OPTIONAL_DEVICE_SLOTS):
                 devices.append(VoClass(data, vehicle, slotType, slotId, TOOLTIPS_CONSTANTS.HANGAR_MODULE))
 
         if slotType in _BOOSTERS_SLOTS:
-            devices.append(VoClass(data, vehicle, slotType, tooltipType=TOOLTIPS_CONSTANTS.BATTLE_BOOSTER))
+            for slotId in xrange(BATTLE_BOOSTER_LAYOUT_SIZE):
+                devices.append(VoClass(data, vehicle, slotType, slotId, tooltipType=TOOLTIPS_CONSTANTS.BATTLE_BOOSTER))
+
         devices.append(VoClass(data, vehicle, slotType, tooltipType=TOOLTIPS_CONSTANTS.HANGAR_MODULE))
 
     return devices
@@ -53,7 +56,7 @@ def getAmmo(shells):
         outcome.append({'id': str(shell.intCD),
          'type': shell.type,
          'label': ITEM_TYPES.shell_kindsabbreviation(shell.type),
-         'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor['icon'][0],
+         'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor.icon[0],
          'count': shell.count,
          'tooltip': '',
          'tooltipType': TOOLTIPS_CONSTANTS.HANGAR_SHELL})
@@ -127,4 +130,4 @@ class AmmunitionPanel(AmmunitionPanelMeta):
         self.as_setAmmoS(shells, stateWarning)
         self.as_setModulesEnabledS(True)
         self.as_setVehicleHasTurretS(vehicle.hasTurrets)
-        self.as_setDataS({'devices': getFittingSlotsData(vehicle, _HANGAR_FITTING_SLOTS, VoClass=HangarFittingSlotVO)})
+        self.as_setDataS({'devices': getFittingSlotsData(vehicle, HANGAR_FITTING_SLOTS, VoClass=HangarFittingSlotVO)})

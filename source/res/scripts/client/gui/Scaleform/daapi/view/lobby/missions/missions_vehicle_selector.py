@@ -140,7 +140,7 @@ class VehicleSelectorCarousel(VehicleSelectorCarouselMeta):
         self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
         super(VehicleSelectorCarousel, self)._dispose()
 
-    def __onViewLoaded(self, view):
+    def __onViewLoaded(self, view, *args, **kwargs):
         if view.settings.alias == VIEW_ALIAS.VEHICLES_FILTER_POPOVER:
             view.setTankCarousel(self)
 

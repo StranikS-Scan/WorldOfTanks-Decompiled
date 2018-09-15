@@ -36,8 +36,6 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         self.__itemsPreviousCache = defaultdict(dict)
         self.__vehsCDsByID = {}
         self.__vehsIDsByCD = {}
-        self.__makers = {GUI_ITEM_TYPE.VEHICLE: self.__makeVehicle,
-         GUI_ITEM_TYPE.TANKMAN: self.__makeTankman}
 
     def clear(self):
         self.__itemsCache.clear()
@@ -153,7 +151,12 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
         return self.__getMaker(itemTypeID)(invDataIdx)
 
     def __getMaker(self, itemTypeID):
-        return self.__makers.get(itemTypeID, self.__makeSimpleItem)
+        if itemTypeID == GUI_ITEM_TYPE.VEHICLE:
+            return self.__makeVehicle
+        elif itemTypeID == GUI_ITEM_TYPE.TANKMAN:
+            return self.__makeTankman
+        else:
+            return self.__makeSimpleItem
 
     def __makeVehicle(self, vehInvID):
         if vehInvID not in self.__vehsCDsByID:
@@ -204,7 +207,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             itemsInvData = self.getCacheValue(itemTypeID, {})
             if typeCompDescr not in itemsInvData:
                 return None
-            data = self.ITEM_DATA(typeCompDescr, vehicles.getDictDescr(typeCompDescr), itemsInvData[typeCompDescr])
+            data = self.ITEM_DATA(typeCompDescr, vehicles.getItemByCompactDescr(typeCompDescr), itemsInvData[typeCompDescr])
             item = cache[typeCompDescr] = data
             return item
 

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/ranked/pre_queue/entity.py
 import BigWorld
+import constants
 import SoundGroups
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
@@ -69,7 +70,7 @@ class RankedEntryPoint(PreQueueEntryPoint):
                 callback(False)
             g_prbCtrlEvents.onPreQueueJoinFailure(PRE_QUEUE_JOIN_ERRORS.DISABLED)
             return
-        elif status in self._getFilterStates():
+        elif status in self._getFilterStates() and not constants.IS_CHINA:
             showRankedPrimeTimeWindow()
             if callback is not None:
                 callback(False)

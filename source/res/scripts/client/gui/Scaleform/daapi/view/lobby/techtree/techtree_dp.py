@@ -211,7 +211,7 @@ class _TechTreeDataProvider(object):
             if IS_DEVELOPMENT:
                 if nodeCD not in nextLevel:
                     _, nationID, vTypeID = vehicles.parseIntCompactDescr(parentCD)
-                    pName = vehicles.g_list.getList(nationID)[vTypeID]['name']
+                    pName = vehicles.g_list.getList(nationID)[vTypeID].name
                     LOG_ERROR('{0:>s} does not have relation with {1:>s}'.format(pName, uName))
                 else:
                     nextLevel.remove(nodeCD)
@@ -236,10 +236,10 @@ class _TechTreeDataProvider(object):
 
         if IS_DEVELOPMENT and len(nextLevel):
             _, nationID, vTypeID = vehicles.parseIntCompactDescr(parentCD)
-            pName = vehicles.g_list.getList(nationID)[vTypeID]['name']
+            pName = vehicles.g_list.getList(nationID)[vTypeID].name
             for itemCD in nextLevel:
                 _, nationID, vTypeID = vehicles.parseIntCompactDescr(itemCD)
-                uName = vehicles.g_list.getList(nationID)[vTypeID]['name']
+                uName = vehicles.g_list.getList(nationID)[vTypeID].name
                 LOG_ERROR('Relation between {0:>s} and {1:>s} are not defined'.format(pName, uName))
 
         return result.values()

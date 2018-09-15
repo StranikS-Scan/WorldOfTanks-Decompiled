@@ -384,8 +384,7 @@ class BattleReplay():
          CommandMapping.CMD_RADIAL_MENU_SHOW,
          CommandMapping.CMD_RELOAD_PARTIAL_CLIP), key) and isDown and not isCursorVisible:
             suppressCommand = True
-        elif cmdMap.isFiredList((CommandMapping.CMD_USE_HORN,
-         CommandMapping.CMD_STOP_UNTIL_FIRE,
+        elif cmdMap.isFiredList((CommandMapping.CMD_STOP_UNTIL_FIRE,
          CommandMapping.CMD_INCREMENT_CRUISE_MODE,
          CommandMapping.CMD_DECREMENT_CRUISE_MODE,
          CommandMapping.CMD_MOVE_FORWARD,

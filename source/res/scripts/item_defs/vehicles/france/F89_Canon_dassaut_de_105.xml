@@ -76,7 +76,7 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	-0.000000 0.5863 1.39467	</turret>
+      <turret>	0.000214 0.585329 1.39699	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/french/F89_Canon_dassaut_de_105/collision/Hull.model	</collisionModelServer>
@@ -84,43 +84,46 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.306335 0.340426 2.27162	</rayStart>
-        <rayEnd>	-0.306336 0.153039 2.20172	</rayEnd>
+        <rayStart>	0.553463 0.388762 2.14197	</rayStart>
+        <rayEnd>	0.553463 0.201374 2.07208	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <player>
-        <rayStart>	-1.50905 0.956206 -0.109395	</rayStart>
-        <rayEnd>	-1.34093 0.847872 -0.1096	</rayEnd>
+        <rayStart>	-1.48289 0.996462 0.0731854	</rayStart>
+        <rayEnd>	-1.31477 0.888127 0.0729804	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.3	</size>
+        <size>	0.244	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </player>
       <player>
-        <rayStart>	1.50905 0.956206 -0.109395	</rayStart>
-        <rayEnd>	1.34093 0.847872 -0.1096	</rayEnd>
+        <rayStart>	1.48289 0.996462 0.0731854	</rayStart>
+        <rayEnd>	1.31477 0.888127 0.0729804	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.3	</size>
+        <size>	0.244	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
       </player>
       <inscription>
-        <rayStart>	-1.43521 0.654919 0.619013	</rayStart>
-        <rayEnd>	-1.24692 0.654886 0.551573	</rayEnd>
+        <rayStart>	-1.49652 0.976305 -0.395974	</rayStart>
+        <rayEnd>	-1.32841 0.86796 -0.396179	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.683	</size>
+        <size>	0.57	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
       <inscription>
-        <rayStart>	1.43521 0.654919 0.619013	</rayStart>
-        <rayEnd>	1.24692 0.654886 0.551573	</rayEnd>
+        <rayStart>	1.49652 0.976305 -0.395974	</rayStart>
+        <rayEnd>	1.32841 0.86796 -0.396179	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.683	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <size>	0.57	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/french/F89_Canon_dassaut_de_105/Canon_dassaut_de_105_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	5 5 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_F89_Canon_dassaut_de_105>
@@ -470,6 +473,9 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_large	</effects>
+          <camouflage>
+            <tiling>	1.1 1.1 0.000000 0.000000	</tiling>
+          </camouflage>
         </_105mm_CN_105>
       </guns>
       <models>
@@ -481,7 +487,7 @@
         <collisionModelServer>	vehicles/french/F89_Canon_dassaut_de_105/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F89_Canon_dassaut_de_105/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.000095 -0.012603 0.103197	</gunPosition>
+      <gunPosition>	-0.000314 -0.011629 0.100906	</gunPosition>
       <emblemSlots></emblemSlots>
       <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
@@ -552,9 +558,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.88	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </F89_Canon_dassaut_de_105.xml>

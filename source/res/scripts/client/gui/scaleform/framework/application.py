@@ -7,8 +7,10 @@ from gui import g_guiResetters, g_repeatKeyHandlers, GUI_CTRL_MODE_FLAG
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.Scaleform.Flash import Flash
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.framework.view_events_listener import ViewEventsListener
 from gui.Scaleform.framework.entities.abstract.ApplicationMeta import ApplicationMeta
-from gui.shared.events import AppLifeCycleEvent, GameEvent
+from gui.Scaleform.framework.managers.loaders import ViewLoadParams
+from gui.shared.events import AppLifeCycleEvent, GameEvent, DirectLoadViewEvent
 from gui.shared import EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -48,6 +50,12 @@ class DAAPIRootBridge(object):
 
 
 class SFApplication(Flash, ApplicationMeta):
+    """
+    Note: Global application class.
+    Key points:
+    1. Initializes application.
+    2. Initializes DA API.
+    """
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, swfName, appNS, daapiBridge=None):
@@ -71,9 +79,10 @@ class SFApplication(Flash, ApplicationMeta):
         self._imageManager = None
         self.__initialized = False
         self.__ns = appNS
+        self.__viewEventsListener = ViewEventsListener(weakref.proxy(self))
+        self.__viewEventsListener.create()
         self.__firingsAfterInit = {}
         self.__guiCtrlModeFlags = GUI_CTRL_MODE_FLAG.CURSOR_DETACHED
-        self.__aliasToLoad = []
         self.__daapiBridge = daapiBridge or DAAPIRootBridge()
         self.__daapiBridge.setPyScript(self.proxy)
         self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.CREATING))
@@ -187,15 +196,13 @@ class SFApplication(Flash, ApplicationMeta):
         self._addGameCallbacks()
         self.addListener(GameEvent.CHANGE_APP_RESOLUTION, self.__onAppResolutionChanged, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.updateScale()
-        while len(self.__aliasToLoad):
-            alias, name, args, kwargs = self.__aliasToLoad.pop(0)
-            self.loadView(alias, name, *args, **kwargs)
-
+        self.__viewEventsListener.handleWaitingEvents()
         self._loadCursor()
         self._loadWaiting()
 
     def beforeDelete(self):
         LOG_DEBUG('[SFApplication] beforeDelete', self.__ns)
+        self.__viewEventsListener.destroy()
         self.removeListener(GameEvent.CHANGE_APP_RESOLUTION, self.__onAppResolutionChanged, scope=EVENT_BUS_SCOPE.GLOBAL)
         self._removeGameCallbacks()
         if self._containerMgr is not None:
@@ -254,14 +261,11 @@ class SFApplication(Flash, ApplicationMeta):
         self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.DESTROYED))
         return
 
-    def loadView(self, newViewAlias, name=None, *args, **kwargs):
+    def loadView(self, loadParams, *args, **kwargs):
         if self._containerMgr:
-            self._containerMgr.load(newViewAlias, name, *args, **kwargs)
+            self._containerMgr.load(loadParams, *args, **kwargs)
         else:
-            self.__aliasToLoad.append((newViewAlias,
-             name,
-             args,
-             kwargs))
+            self.__viewEventsListener.addWaitingEvent(DirectLoadViewEvent(loadParams, *args, **kwargs))
 
     def attachCursor(self, flags=GUI_CTRL_MODE_FLAG.GUI_ENABLED):
         if self.__guiCtrlModeFlags == flags:
@@ -464,7 +468,7 @@ class SFApplication(Flash, ApplicationMeta):
         raise NotImplementedError('App._setup must be overridden')
 
     def _loadCursor(self):
-        self._containerMgr.load(VIEW_ALIAS.CURSOR)
+        self._containerMgr.load(ViewLoadParams(VIEW_ALIAS.CURSOR))
 
     def _loadWaiting(self):
         raise NotImplementedError('App._loadWaiting must be overridden')

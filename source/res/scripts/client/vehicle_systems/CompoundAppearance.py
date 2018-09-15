@@ -163,15 +163,15 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     def prerequisites(self, typeDescriptor, vID, health, isCrewActive, isTurretDetached):
         self.__currentDamageState.update(health, isCrewActive, False)
         out = []
-        out.append(typeDescriptor.type.camouflageExclusionMask)
-        splineDesc = typeDescriptor.chassis['splineDesc']
+        out.append(typeDescriptor.type.camouflage.exclusionMask)
+        splineDesc = typeDescriptor.chassis.splineDesc
         if splineDesc is not None:
-            out.append(splineDesc['segmentModelLeft'])
-            out.append(splineDesc['segmentModelRight'])
-            if splineDesc['segment2ModelLeft'] is not None:
-                out.append(splineDesc['segment2ModelLeft'])
-            if splineDesc['segment2ModelRight'] is not None:
-                out.append(splineDesc['segment2ModelRight'])
+            out.append(splineDesc.segmentModelLeft)
+            out.append(splineDesc.segmentModelRight)
+            if splineDesc.segment2ModelLeft is not None:
+                out.append(splineDesc.segment2ModelLeft)
+            if splineDesc.segment2ModelRight is not None:
+                out.append(splineDesc.segment2ModelRight)
         customization = items.vehicles.g_cache.customization(typeDescriptor.type.customizationNationID)
         camouflageParams = self.__getCamouflageParams(typeDescriptor, vID)
         if camouflageParams is not None and customization is not None:
@@ -180,7 +180,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             if camouflageDesc is not None and camouflageDesc['texture'] != '':
                 out.append(camouflageDesc['texture'])
                 for tgDesc in (typeDescriptor.turret, typeDescriptor.gun):
-                    exclMask = tgDesc.get('camouflageExclusionMask')
+                    exclMask = tgDesc.camouflage.exclusionMask
                     if exclMask is not None and exclMask != '':
                         out.append(exclMask)
 
@@ -514,12 +514,12 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     def recoil(self):
         gunNode = self.compoundModel.node(TankNodeNames.GUN_INCLINATION)
         impulseDir = Math.Matrix(gunNode).applyVector(Math.Vector3(0, 0, -1))
-        impulseValue = self.__typeDesc.gun['impulse']
+        impulseValue = self.__typeDesc.gun.impulse
         self.receiveShotImpulse(impulseDir, impulseValue)
         self.gunRecoil.recoil()
         node = self.compoundModel.node('HP_gunFire')
         gunPos = Math.Matrix(node).translation
-        BigWorld.player().inputHandler.onVehicleShaken(self.__vehicle, gunPos, impulseDir, self.__typeDesc.shot['shell']['caliber'], ShakeReason.OWN_SHOT_DELAYED)
+        BigWorld.player().inputHandler.onVehicleShaken(self.__vehicle, gunPos, impulseDir, self.__typeDesc.shot.shell.caliber, ShakeReason.OWN_SHOT_DELAYED)
 
     def addCrashedTrack(self, isLeft):
         if not self.__vehicle.isAlive():
@@ -571,28 +571,28 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__isAlive = not self.__currentDamageState.isCurrentModelDamaged
         if self.__isAlive:
             _, gunLength = self.__computeVehicleHeight()
-            self.__weaponEnergy = gunLength * self.__typeDesc.shot['shell']['caliber']
+            self.__weaponEnergy = gunLength * self.__typeDesc.shot.shell.caliber
             self.__setupHavok()
         if MAX_DISTANCE > 0:
-            transform = self.__typeDesc.chassis['AODecals'][0]
-            self.__attachSplodge(BigWorld.Splodge(transform, MAX_DISTANCE, self.__typeDesc.chassis['hullPosition'].y))
+            transform = self.__typeDesc.chassis.AODecals[0]
+            self.__attachSplodge(BigWorld.Splodge(transform, MAX_DISTANCE, self.__typeDesc.chassis.hullPosition.y))
 
     def __setupHavok(self):
         vDesc = self.__typeDesc
         node = self.compoundModel.node(TankPartNames.HULL)
-        hkm = BigWorld.wg_createHKAttachment(node, vDesc.hull['hitTester'].getBspModel())
+        hkm = BigWorld.wg_createHKAttachment(node, vDesc.hull.hitTester.getBspModel())
         if hkm is not None:
             node.attach(hkm)
         node = self.compoundModel.node(TankPartNames.TURRET)
-        hkm = BigWorld.wg_createHKAttachment(node, vDesc.turret['hitTester'].getBspModel())
+        hkm = BigWorld.wg_createHKAttachment(node, vDesc.turret.hitTester.getBspModel())
         if hkm is not None:
             node.attach(hkm)
         node = self.compoundModel.node(TankPartNames.CHASSIS)
-        hkm = BigWorld.wg_createHKAttachment(node, vDesc.chassis['hitTester'].getBspModel())
+        hkm = BigWorld.wg_createHKAttachment(node, vDesc.chassis.hitTester.getBspModel())
         if hkm is not None:
             node.attach(hkm)
         node = self.compoundModel.node(TankPartNames.GUN)
-        hkm = BigWorld.wg_createHKAttachment(node, vDesc.gun['hitTester'].getBspModel())
+        hkm = BigWorld.wg_createHKAttachment(node, vDesc.gun.hitTester.getBspModel())
         if hkm is not None:
             node.attach(hkm)
         return
@@ -847,12 +847,12 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
 
     def __computeVehicleHeight(self):
         desc = self.__typeDesc
-        turretBBox = desc.turret['hitTester'].bbox
-        gunBBox = desc.gun['hitTester'].bbox
-        hullBBox = desc.hull['hitTester'].bbox
-        hullTopY = desc.chassis['hullPosition'][1] + hullBBox[1][1]
-        turretTopY = desc.chassis['hullPosition'][1] + desc.hull['turretPositions'][0][1] + turretBBox[1][1]
-        gunTopY = desc.chassis['hullPosition'][1] + desc.hull['turretPositions'][0][1] + desc.turret['gunPosition'][1] + gunBBox[1][1]
+        turretBBox = desc.turret.hitTester.bbox
+        gunBBox = desc.gun.hitTester.bbox
+        hullBBox = desc.hull.hitTester.bbox
+        hullTopY = desc.chassis.hullPosition[1] + hullBBox[1][1]
+        turretTopY = desc.chassis.hullPosition[1] + desc.hull.turretPositions[0][1] + turretBBox[1][1]
+        gunTopY = desc.chassis.hullPosition[1] + desc.hull.turretPositions[0][1] + desc.turret.gunPosition[1] + gunBBox[1][1]
         return (max(hullTopY, max(turretTopY, gunTopY)), math.fabs(gunBBox[1][2] - gunBBox[0][2]))
 
     def setupGunMatrixTargets(self, target=None):

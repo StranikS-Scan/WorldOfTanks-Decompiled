@@ -90,6 +90,7 @@ class FontConfigMap(object):
 
                 self.__configs[configName] = FontConfig(configName, fontlib, aliases)
 
+        ResMgr.purge(SCALEFORM_FONT_CONFIG_PATH, True)
         return
 
     def loadFonts(self, configName):

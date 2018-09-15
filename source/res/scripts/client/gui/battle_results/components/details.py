@@ -10,6 +10,7 @@ from gui.battle_results.components import style
 from gui.shared.formatters import icons
 from helpers import i18n
 from shared_utils import findFirst
+from gui.shared.money import Currency
 
 class _GainResourceInBattleItem(base.StatsItem):
     __slots__ = ('__records', '__method')
@@ -41,6 +42,13 @@ class GainCreditsInBattleItem(_GainResourceInBattleItem):
 
     def __init__(self, field, *path):
         super(GainCreditsInBattleItem, self).__init__(((True, 'credits'), (True, 'originalCreditsToDraw')), 'getMoneyRecords', field, *path)
+
+
+class GainCrystalInBattleItem(_GainResourceInBattleItem):
+    __slots__ = ()
+
+    def __init__(self, field, *path):
+        super(GainCrystalInBattleItem, self).__init__(((True, Currency.CRYSTAL),), 'getCrystalRecords', field, *path)
 
 
 class GainXPInBattleItem(_GainResourceInBattleItem):

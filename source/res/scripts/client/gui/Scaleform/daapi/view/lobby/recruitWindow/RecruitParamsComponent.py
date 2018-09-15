@@ -97,13 +97,14 @@ class RecruitParamsComponent(RecruitParametersMeta):
         modulesAll.sort()
         selectedIndex = 0
         counter = 0
+        skillsConfig = getSkillsConfig()
         for module in modulesAll:
             for role in module.descriptor.type.crewRoles:
                 if role[0] in roles:
                     continue
                 roles.append(role[0])
                 data.append({'id': role[0],
-                 'label': convert(getSkillsConfig()[role[0]]['userString'])})
+                 'label': convert(skillsConfig.getSkill(role[0]).userString)})
                 if self.__selectedTmanRole == role[0]:
                     selectedIndex = counter
                 counter = counter + 1

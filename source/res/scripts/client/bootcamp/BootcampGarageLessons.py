@@ -360,7 +360,7 @@ class Consumable(Condition):
         if vehicle.invID == -1:
             return False
         elif state == 'inventory':
-            consumables = vehicle.eqs
+            consumables = vehicle.equipment.regularConsumables
             for eq in consumables:
                 if eq is not None:
                     return True

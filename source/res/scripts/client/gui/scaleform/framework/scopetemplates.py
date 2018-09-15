@@ -30,6 +30,9 @@ class SimpleScope(object):
             self.__parentScope.addDependencedScope(self)
         return
 
+    def __repr__(self):
+        return '{}[{}]=[scopeType={}, parentScope={}]'.format(self.__class__.__name__, hex(id(self)), self.__scopeType, self.__parentScope)
+
     def _setParentScope(self, parentScope):
         if self.__parentScope is not None:
             raise Exception('parent scope can be set at one time only!')

@@ -89,8 +89,8 @@ def __readBonus_optionalDevice(bonus, _name, section):
 def __readBonus_item(bonus, _name, section):
     compDescr = section.asInt
     try:
-        descr = vehicles.getDictDescr(compDescr)
-        if descr['itemTypeName'] not in items.SIMPLE_ITEM_TYPE_NAMES:
+        descr = vehicles.getItemByCompactDescr(compDescr)
+        if descr.itemTypeName not in items.SIMPLE_ITEM_TYPE_NAMES:
             raise Exception('Wrong compact descriptor (%d). Not simple item.' % compDescr)
     except:
         raise Exception('Wrong compact descriptor (%d)' % compDescr)

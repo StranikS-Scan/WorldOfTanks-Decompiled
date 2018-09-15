@@ -25,7 +25,7 @@ from gui.shared.formatters.time_formatters import getTimeLeftStr
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS
 from gui.shared.view_helpers import UsersInfoHelper
 from gui.shared.tooltips import efficiency
-from gui.shared.money import Money, Currency
+from gui.shared.money import Money, Currency, MONEY_UNDEFINED
 from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter, makeClanFullName, makeContactStatusDescription
 from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY, PING_STATUSES, PingData
 from constants import PREBATTLE_TYPE, WG_GAMES, VISIBILITY
@@ -226,7 +226,7 @@ class EfficiencyTooltipData(BlocksTooltipData):
 
     def __init__(self, context):
         super(EfficiencyTooltipData, self).__init__(context, TOOLTIP_TYPE.EFFICIENCY)
-        self._setWidth(290)
+        self._setWidth(300)
 
     def _packBlocks(self, data):
         if data is not None and data.type in self._packers:
@@ -894,8 +894,8 @@ class ActionTooltipData(ToolTipBaseData):
 
     def getDisplayableData(self, type, key, newPrice, oldPrice, isBuying, forCredits=False, rentPackage=None):
         descr = ''
-        newPrice = Money(*newPrice)
-        oldPrice = Money(*oldPrice)
+        newPrice = Money.makeFromMoneyTuple(newPrice)
+        oldPrice = Money.makeFromMoneyTuple(oldPrice)
         hasRentCompensation = False
         hasPersonalDiscount = False
         rentCompensation = None
@@ -921,7 +921,7 @@ class ActionTooltipData(ToolTipBaseData):
                 shop = self.itemsCache.items.shop
                 shopPrice = shop.getItemPrice(item.intCD)
                 personalPrice = shop.getPersonalVehicleDiscountPrice(item.intCD)
-                if personalPrice is not None and personalPrice.get(defaultCurrencyType) <= shopPrice.get(defaultCurrencyType):
+                if personalPrice is not None and personalPrice.getSignValue(defaultCurrencyType) <= shopPrice.getSignValue(defaultCurrencyType):
                     hasPersonalDiscount = True
             if not isBuying:
                 sellingActions = self.eventsCache.getItemAction(item, False, forCredits)
@@ -958,18 +958,32 @@ class ActionTooltipData(ToolTipBaseData):
         _format = BigWorld.wg_getGoldFormat
         fmtNewGold = _ms(_template, defaultCurrencyType, {'value': _format(newPrice.gold)}) if newPrice.gold else ''
         fmtNewCredits = _ms(_template, Currency.CREDITS, {'value': _format(newPrice.credits)}) if newPrice.credits else ''
+        fmtNewCrystal = _ms(_template, Currency.CRYSTAL, {'value': _format(newPrice.crystal)}) if newPrice.crystal else ''
         fmtOldGold = _ms(_template, defaultCurrencyType, {'value': _format(oldPrice.gold)}) if oldPrice.gold else ''
         fmtOldCredits = _ms(_template, Currency.CREDITS, {'value': _format(oldPrice.credits)}) if oldPrice.credits else ''
+        fmtOldCrystal = _ms(_template, Currency.CRYSTAL, {'value': _format(oldPrice.crystal)}) if oldPrice.crystal else ''
         if newPrice.isSet(Currency.GOLD) and newPrice.isSet(Currency.CREDITS):
             formatedNewPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtNewCredits, gold=fmtNewGold)
+        elif newPrice.isSet(Currency.GOLD) and newPrice.isSet(Currency.CRYSTAL):
+            formatedNewPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtNewCrystal, gold=fmtNewGold)
+        elif newPrice.isSet(Currency.CREDITS) and newPrice.isSet(Currency.CRYSTAL):
+            formatedNewPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtNewCredits, gold=fmtNewCrystal)
         elif newPrice.isSet(Currency.GOLD):
             formatedNewPrice = fmtNewGold
+        elif newPrice.isSet(Currency.CRYSTAL):
+            formatedNewPrice = fmtNewCrystal
         else:
             formatedNewPrice = fmtNewCredits
         if oldPrice.isSet(Currency.GOLD) and oldPrice.isSet(Currency.CREDITS):
             formatedOldPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtOldCredits, gold=fmtOldGold)
+        elif oldPrice.isSet(Currency.GOLD) and oldPrice.isSet(Currency.CRYSTAL):
+            formatedOldPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtOldCrystal, gold=fmtOldGold)
+        elif oldPrice.isSet(Currency.CRYSTAL) and oldPrice.isSet(Currency.CREDITS):
+            formatedOldPrice = i18n.makeString(TOOLTIPS.ACTIONPRICE_EXCHANGE_CURRENCYOR, credits=fmtOldCredits, gold=fmtOldCrystal)
         elif oldPrice.isSet(Currency.GOLD):
             formatedOldPrice = fmtOldGold
+        elif oldPrice.isSet(Currency.CRYSTAL):
+            formatedOldPrice = fmtOldCrystal
         else:
             formatedOldPrice = fmtOldCredits
         body = i18n.makeString(TOOLTIPS.ACTIONPRICE_BODY, oldPrice=formatedOldPrice, newPrice=formatedNewPrice)
@@ -1160,14 +1174,19 @@ class CURRENCY_SETTINGS(object):
     RENT_GOLD_PRICE = 'rentGoldPrice'
     SELL_PRICE = 'sellPrice'
     UNLOCK_PRICE = 'unlockPrice'
+    __BUY_SETTINGS = {Currency.CREDITS: BUY_CREDITS_PRICE,
+     Currency.GOLD: BUY_GOLD_PRICE,
+     Currency.CRYSTAL: BUY_CRYSTAL_PRICE}
+    __RENT_SETTINGS = {Currency.CREDITS: RENT_CREDITS_PRICE,
+     Currency.GOLD: RENT_GOLD_PRICE}
 
     @classmethod
     def getRentSetting(cls, currency):
-        return cls.RENT_CREDITS_PRICE if currency == Currency.CREDITS else cls.RENT_GOLD_PRICE
+        return cls.__RENT_SETTINGS.get(currency, cls.RENT_CREDITS_PRICE)
 
     @classmethod
     def getBuySetting(cls, currency):
-        return cls.BUY_CREDITS_PRICE if currency == Currency.CREDITS else cls.BUY_GOLD_PRICE
+        return cls.__BUY_SETTINGS.get(currency, cls.BUY_CREDITS_PRICE)
 
 
 _OPERATIONS_SETTINGS = {CURRENCY_SETTINGS.BUY_CREDITS_PRICE: _CurrencySetting(TOOLTIPS.VEHICLE_BUY_PRICE, icons.credits(), text_styles.credits, ICON_TEXT_FRAMES.CREDITS),
@@ -1210,10 +1229,15 @@ def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, perc
         if hasAction:
             actionText = text_styles.main(ms(TOOLTIPS.VEHICLE_ACTION_PRC, actionPrc=text_styles.stats(str(percent) + '%'), oldPrice=oldPriceText))
             text = text_styles.concatStylesToMultiLine(text, actionText)
-            newPrice = Money(gold=price) if settings.frame == ICON_TEXT_FRAMES.GOLD else Money(credits=price)
-            oldPrice = Money(gold=oldPrice) if settings.frame == ICON_TEXT_FRAMES.GOLD else Money(credits=oldPrice)
-            return formatters.packSaleTextParameterBlockData(name=text, saleData={'newPrice': newPrice,
-             'oldPrice': oldPrice,
+            settingsFrame = settings.frame
+            if settingsFrame in Currency.ALL:
+                newPrice = MONEY_UNDEFINED.replace(settingsFrame, price)
+                oldPrice = MONEY_UNDEFINED.replace(settingsFrame, oldPrice)
+            else:
+                newPrice = Money(credits=price)
+                oldPrice = Money(credits=oldPrice)
+            return formatters.packSaleTextParameterBlockData(name=text, saleData={'newPrice': newPrice.toMoneyTuple(),
+             'oldPrice': oldPrice.toMoneyTuple(),
              'valuePadding': -8}, actionStyle='alignTop', padding=formatters.packPadding(left=leftPadding), currency=newPrice.getCurrency())
         return formatters.packTextParameterWithIconBlockData(name=text, value=valueFormatted, icon=settings.frame, valueWidth=valueWidth, padding=formatters.packPadding(left=-5))
         return

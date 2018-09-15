@@ -31,7 +31,7 @@
     <armor>
       <armor_1>	180	</armor_1>
       <armor_2>	100	</armor_2>
-      <armor_3>	40	</armor_3>
+      <armor_3>	80	</armor_3>
       <armor_4>	40	</armor_4>
       <armor_5>	30	</armor_5>
       <armor_6>	30	</armor_6>
@@ -39,14 +39,14 @@
       <armor_8>	0	</armor_8>
       <armor_9>	50	</armor_9>
       <armor_10>	180	</armor_10>
-      <armor_11>	40	</armor_11>
+      <armor_11>	80	</armor_11>
       <armor_12>	30	</armor_12>
       <armor_13>	150	</armor_13>
       <armor_14>	175	</armor_14>
       <armor_15>	140	</armor_15>
       <armor_16>	200	</armor_16>
       <armor_17>	130	</armor_17>
-      <armor_20>	50	</armor_20>
+      <armor_20>	90	</armor_20>
       <armor_21>	170	</armor_21>
       <armor_25>	40	</armor_25>
       <armor_26>	100	</armor_26>
@@ -137,6 +137,7 @@
       <tags></tags>
       <level>	10	</level>
       <price>	82500	</price>
+      <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	30	</leftTrack>
         <rightTrack>	30	</rightTrack>
@@ -516,8 +517,8 @@
       <guns>
         <_155mm_SA_58_AC>	shared	  <maxAmmo>	30	</maxAmmo>
           <pitchLimits>
-            <minPitch>	0 -12 1 -12	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
+            <minPitch>	0 -18 1 -18	</minPitch>
+            <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <clip>
             <count>	3	</count>
@@ -547,7 +548,7 @@
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.135	</invisibilityFactorAtShot>
-          <turretYawLimits>	-6 6	</turretYawLimits>
+          <turretYawLimits>	-10 10	</turretYawLimits>
           <models>
             <undamaged>	vehicles/french/F64_AMX_50Fosh_155/normal/lod0/Gun_02.model	</undamaged>
             <destroyed>	vehicles/french/F64_AMX_50Fosh_155/crash/lod0/Gun_02.model	</destroyed>
@@ -590,20 +591,20 @@
     </Turret_1_AMX_50Fosh_155>
   </turrets0>
   <engines>
-    <Saurer>	shared	</Saurer>
+    <Saurer_F155>	shared	</Saurer_F155>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
   </fuelTanks>
   <radios>
-    <SCR_619>	shared	</SCR_619>
+    <SCR_619_F155>	shared	</SCR_619_F155>
   </radios>
   <physics>
     <detailed>
       <engines>
-        <Saurer>
+        <Saurer_F155>
           <smplEnginePower>	1057.281	</smplEnginePower>
-        </Saurer>
+        </Saurer_F155>
       </engines>
       <chassis>
         <Chassis_AMX_50Fosh_155_2>
@@ -660,9 +661,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.9	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </F64_AMX_50Fosh_155.xml>

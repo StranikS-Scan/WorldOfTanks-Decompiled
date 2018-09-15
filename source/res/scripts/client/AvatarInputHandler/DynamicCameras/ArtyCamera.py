@@ -260,7 +260,7 @@ class ArtyCamera(ICamera, CallbackDelayer):
 
     def __updateTrajectoryDrawer(self):
         shotDescr = BigWorld.player().getVehicleDescriptor().shot
-        BigWorld.wg_trajectory_drawer().setParams(shotDescr['maxDistance'], Vector3(0, -shotDescr['gravity'], 0), self.__aimOffset)
+        BigWorld.wg_trajectory_drawer().setParams(shotDescr.maxDistance, Vector3(0, -shotDescr.gravity, 0), self.__aimOffset)
 
     def __updateTime(self):
         curTime = BigWorld.timeExact()

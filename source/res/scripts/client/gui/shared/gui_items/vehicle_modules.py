@@ -19,9 +19,7 @@ SHELL_TYPES_ORDER = (SHELL_TYPES.ARMOR_PIERCING,
 SHELL_TYPES_ORDER_INDICES = dict(((n, i) for i, n in enumerate(SHELL_TYPES_ORDER)))
 
 class VehicleModule(FittingItem):
-    """
-    Root vehicle module class.
-    """
+    __slots__ = ('_vehicleModuleDescriptor',)
 
     def __init__(self, intCompactDescr, proxy=None, descriptor=None):
         super(VehicleModule, self).__init__(intCompactDescr, proxy)
@@ -43,9 +41,7 @@ class VehicleModule(FittingItem):
 
 
 class VehicleChassis(VehicleModule):
-    """
-    Vehicle chassis class.
-    """
+    __slots__ = ()
 
     def isInstalled(self, vehicle, slotIdx=None):
         return self.intCD == vehicle.chassis.intCD
@@ -71,9 +67,7 @@ class VehicleChassis(VehicleModule):
 
 
 class VehicleTurret(VehicleModule):
-    """
-    Vehicle turret class.
-    """
+    __slots__ = ()
 
     def isInstalled(self, vehicle, slotIdx=None):
         return self.intCD == vehicle.turret.intCD
@@ -96,14 +90,12 @@ class VehicleTurret(VehicleModule):
 
 
 class VehicleGun(VehicleModule):
-    """
-    Vehicle gun class.
-    """
+    __slots__ = ('_defaultAmmo', '_maxAmmo')
 
     def __init__(self, intCompactDescr, proxy=None, descriptor=None):
         super(VehicleGun, self).__init__(intCompactDescr, proxy, descriptor)
-        self.defaultAmmo = self._getDefaultAmmo(proxy)
-        self.maxAmmo = self._getMaxAmmo(proxy)
+        self._defaultAmmo = self._getDefaultAmmo(proxy)
+        self._maxAmmo = self._getMaxAmmo(proxy)
 
     def isInstalled(self, vehicle, slotIdx=None):
         return self.intCD == vehicle.gun.intCD
@@ -128,7 +120,7 @@ class VehicleGun(VehicleModule):
         return result
 
     def _getMaxAmmo(self, proxy):
-        return self.descriptor['maxAmmo']
+        return self.descriptor.maxAmmo
 
     def getInstalledVehicles(self, vehicles):
         result = set()
@@ -139,14 +131,20 @@ class VehicleGun(VehicleModule):
         return result
 
     @property
+    def defaultAmmo(self):
+        return self._defaultAmmo
+
+    @property
+    def maxAmmo(self):
+        return self._maxAmmo
+
+    @property
     def icon(self):
         return RES_ICONS.MAPS_ICONS_MODULES_GUN
 
 
 class VehicleEngine(VehicleModule):
-    """
-    Vehicle engine class.
-    """
+    __slots__ = ()
 
     def isInstalled(self, vehicle, slotIdx=None):
         return self.intCD == vehicle.engine.intCD
@@ -163,11 +161,10 @@ class VehicleEngine(VehicleModule):
         conflictEqs = list()
         oldModuleId = vehicle.engine.intCD
         vehicle.descriptor.installComponent(self.intCD)
-        for eq in vehicle.eqs:
-            if eq is not None:
-                installPossible, reason = eq.descriptor.checkCompatibilityWithVehicle(vehicle.descriptor)
-                if not installPossible:
-                    conflictEqs.append(eq)
+        for eq in vehicle.equipment.regularConsumables.getInstalledItems():
+            installPossible, reason = eq.descriptor.checkCompatibilityWithVehicle(vehicle.descriptor)
+            if not installPossible:
+                conflictEqs.append(eq)
 
         vehicle.descriptor.installComponent(oldModuleId)
         return conflictEqs
@@ -178,9 +175,7 @@ class VehicleEngine(VehicleModule):
 
 
 class VehicleFuelTank(VehicleModule):
-    """
-    Vehicle fuel tank class.
-    """
+    __slots__ = ()
 
     def isInstalled(self, vehicle, slotIdx=None):
         return self.intCD == vehicle.fuelTank.intCD
@@ -195,9 +190,7 @@ class VehicleFuelTank(VehicleModule):
 
 
 class VehicleRadio(VehicleModule):
-    """
-    Vehicle radio class.
-    """
+    __slots__ = ()
 
     def isInstalled(self, vehicle, slotIdx=None):
         return self.intCD == vehicle.radio.intCD
@@ -216,9 +209,7 @@ class VehicleRadio(VehicleModule):
 
 
 class Shell(FittingItem):
-    """
-    Vehicle shells class.
-    """
+    __slots__ = ('_count', '_defaultCount')
 
     def __init__(self, intCompactDescr, count=0, defaultCount=0, proxy=None, isBoughtForCredits=False):
         """
@@ -230,37 +221,52 @@ class Shell(FittingItem):
         @param proxy: instance of ItemsRequester
         """
         FittingItem.__init__(self, intCompactDescr, proxy, isBoughtForCredits)
-        self.count = count
-        self.defaultCount = defaultCount
+        self._count = count
+        self._defaultCount = defaultCount
+
+    @property
+    def level(self):
+        """Return 0 because shell has no level."""
+        pass
 
     def _getAltPrice(self, buyPrice, proxy):
-        """ Overridden method for receiving special action price value for shells
-        @param buyPrice:
-        @param proxy:
-        @return:
         """
-        creditsPrice = buyPrice.exchange(Currency.GOLD, Currency.CREDITS, proxy.exchangeRateForShellsAndEqs)
-        return buyPrice.replace(Currency.CREDITS, creditsPrice.credits)
+        Returns an alternative price (right now in Currency.CREDITS) based on the original buy price and shells
+        gold-credits exchange rate defined in the shop.
+        
+        @param buyPrice: buy price in Money
+        @param proxy: shop stats proxy, see IShopCommonStats
+        @return: alternative price in Money (right now in credits)
+        """
+        return buyPrice.exchange(Currency.GOLD, Currency.CREDITS, proxy.exchangeRateForShellsAndEqs) if Currency.GOLD in buyPrice else super(Shell, self)._getAltPrice(buyPrice, proxy)
 
     def _getFormatLongUserName(self, kind):
         if self.nationID == nations.INDICES['germany']:
-            caliber = float(self.descriptor['caliber']) / 10
+            caliber = float(self.descriptor.caliber) / 10
             dimension = i18n.makeString('#item_types:shell/dimension/sm')
         elif self.nationID == nations.INDICES['usa']:
-            caliber = float(self.descriptor['caliber']) / 25.4
+            caliber = float(self.descriptor.caliber) / 25.4
             dimension = i18n.makeString('#item_types:shell/dimension/inch')
         else:
-            caliber = self.descriptor['caliber']
+            caliber = self.descriptor.caliber
             dimension = i18n.makeString('#item_types:shell/dimension/mm')
-        return i18n.makeString('#item_types:shell/name') % {'kind': i18n.makeString('#item_types:shell/%s/%s' % (kind, self.descriptor['kind'])),
+        return i18n.makeString('#item_types:shell/name') % {'kind': i18n.makeString('#item_types:shell/%s/%s' % (kind, self.descriptor.kind)),
          'name': self.userName,
          'caliber': BigWorld.wg_getNiceNumberFormat(caliber),
          'dimension': dimension}
 
     @property
+    def count(self):
+        return self._count
+
+    @property
+    def defaultCount(self):
+        return self._defaultCount
+
+    @property
     def type(self):
         """ Returns shells type string (`HOLLOW_CHARGE` etc.). """
-        return self.descriptor['kind']
+        return self.descriptor.kind
 
     @property
     def longUserName(self):
@@ -274,14 +280,14 @@ class Shell(FittingItem):
     def icon(self):
         return ICONS_MASK[:-4] % {'type': self.itemTypeName,
          'subtype': '',
-         'unicName': self.descriptor['icon'][0]}
+         'unicName': self.descriptor.icon[0]}
 
     def getGUIEmblemID(self):
         return self.type
 
     @property
     def defaultLayoutValue(self):
-        return (self.intCD if not self.isBoughtForCredits else -self.intCD, self.defaultCount)
+        return (self.intCD if not self.isBoughtForAltPrice else -self.intCD, self.defaultCount)
 
     def isInstalled(self, vehicle, slotIdx=None):
         for shell in vehicle.shells:

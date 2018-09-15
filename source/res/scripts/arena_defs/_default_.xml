@@ -8,8 +8,16 @@
   <winnerIfTimeout>	0	</winnerIfTimeout>
   <winnerIfExtermination>	0	</winnerIfExtermination>
   <artilleryPreparationChance>	0.0	</artilleryPreparationChance>
-  <wwmusic>	music_combat	</wwmusic>
-  <wwloadingMusic>	music_main_menu	</wwloadingMusic>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_main_menu	</wwmusicLoading>
+    <wwmusicIntensive>	music_combat	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_combat	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_victory	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
   <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
@@ -19,6 +27,24 @@
   <wwbattleCountdownTimerSound>	timer	</wwbattleCountdownTimerSound>
   <waypoints></waypoints>
   <battleScenarios></battleScenarios>
+  <wwmusicSetup></wwmusicSetup>
+  <wwmusicDroneSetup>
+    <timeRemained>
+      <value>	180	</value>
+    </timeRemained>
+    <hpPercentRemained>
+      <value>	99	</value>
+    </hpPercentRemained>
+    <vehiclesRemained>
+      <value>	15	</value>
+    </vehiclesRemained>
+    <capturedPoints>
+      <value>	99	</value>
+    </capturedPoints>
+    <musicStopPredelay>
+      <value>	10	</value>
+    </musicStopPredelay>
+  </wwmusicDroneSetup>
   <gameplayTypes>
     <ctf>
       <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
@@ -56,10 +82,6 @@
       <winnerIfExtermination>	1	</winnerIfExtermination>
     </assault2>
     <bootcamp>
-      <wwmusic></wwmusic>
-      <wwcombatVictory></wwcombatVictory>
-      <wwcombatLose></wwcombatLose>
-      <wwcombatDraw></wwcombatDraw>
       <roundLength>	900	</roundLength>
       <battleEndWarningDuration>	5	</battleEndWarningDuration>
       <battleEndingSoonTime>	60	</battleEndingSoonTime>
@@ -69,6 +91,18 @@
       <battleEndWarningDuration>	5	</battleEndWarningDuration>
       <battleEndingSoonTime>	60	</battleEndingSoonTime>
     </sandbox>
+    <ctf30x30>
+      <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
+      <battleEndWarningDuration>	5	</battleEndWarningDuration>
+      <battleEndingSoonTime>	60	</battleEndingSoonTime>
+      <crystalRewardFactor>	1.	</crystalRewardFactor>
+    </ctf30x30>
+    <domination30x30>
+      <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
+      <battleEndWarningDuration>	5	</battleEndWarningDuration>
+      <battleEndingSoonTime>	60	</battleEndingSoonTime>
+      <crystalRewardFactor>	1.	</crystalRewardFactor>
+    </domination30x30>
   </gameplayTypes>
   <preloadSoundBanks>	fort_area.bnk ; hangar_v2.bnk	</preloadSoundBanks>
 </_default_.xml>

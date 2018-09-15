@@ -117,7 +117,7 @@
     <shortUserString>	#france_vehicles:Bat_Chatillon25t_short	</shortUserString>
     <description>	#france_vehicles:Bat_Chatillon25t_descr	</description>
     <price>	6100000	</price>
-    <tags>	mediumTank improvedVentilation_class2_user wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD	</tags>
     <level>	10	</level>
   </F18_Bat_Chatillon25t>
   <F09_AMX_50_120>
@@ -288,7 +288,7 @@
     <description>	#france_vehicles:AMX50_Foch_descr	</description>
     <shortUserString>	#france_vehicles:AMX50_Foch_short	</shortUserString>
     <price>	3670000	</price>
-    <tags>	AT-SPG heavyAT-SPG improvedVentilation_class3_user enhancedLongitudinalTorsions_user largeCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
+    <tags>	AT-SPG heavyAT-SPG improvedVentilation_class3_user enhancedLongitudinalTorsions_user wetCombatPack_class2_user HD	</tags>
     <level>	9	</level>
   </F37_AMX50_Foch>
   <F34_ARL_V39>
@@ -315,7 +315,7 @@
     <description>	#france_vehicles:AMX_AC_Mle1948_descr	</description>
     <shortUserString>	#france_vehicles:AMX_AC_Mle1948_short	</shortUserString>
     <price>	2570000	</price>
-    <tags>	AT-SPG heavyAT-SPG improvedVentilation_class3_user largeCaliberTankRammer_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
+    <tags>	AT-SPG heavyAT-SPG improvedVentilation_class3_user wetCombatPack_class2_user enhancedTorsions5t_user HD	</tags>
     <level>	8	</level>
   </F36_AMX_AC_Mle1948>
   <F44_Somua_S35>
@@ -332,7 +332,9 @@
     <userString>	#france_vehicles:AMX_50Fosh_155	</userString>
     <description>	#france_vehicles:AMX_50Fosh_155_descr	</description>
     <shortUserString>	#france_vehicles:AMX_50Fosh_155_short	</shortUserString>
-    <price>	6100000	</price>
+    <price>	5	  <gold></gold>
+    </price>
+    <notInShop>	true	</notInShop>
     <tags>	AT-SPG heavyAT-SPG improvedVentilation_class3_user enhancedLongitudinalTorsions_user wetCombatPack_class2_user HD	</tags>
     <level>	10	</level>
   </F64_AMX_50Fosh_155>
@@ -435,6 +437,15 @@
     <tags>	lightTank improvedVentilation_class1_user scout wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions1t_user HD	</tags>
     <level>	8	</level>
   </F87_Batignolles-Chatillon_12t>
+  <F64_AMX_50Fosh_B>
+    <id>	69	</id>
+    <userString>	#france_vehicles:F64_AMX_50Fosh_B	</userString>
+    <description>	#france_vehicles:F64_AMX_50Fosh_B_descr	</description>
+    <shortUserString>	#france_vehicles:F64_AMX_50Fosh_B_short	</shortUserString>
+    <price>	6100000	</price>
+    <tags>	AT-SPG heavyAT-SPG improvedVentilation_class3_user enhancedLongitudinalTorsions_user wetCombatPack_class2_user HD	</tags>
+    <level>	10	</level>
+  </F64_AMX_50Fosh_B>
   <F89_Canon_dassaut_de_105>
     <id>	241	</id>
     <userString>	#france_vehicles:F89_Canon_dassaut_de_105	</userString>
@@ -443,7 +454,7 @@
     <price>	100	  <gold></gold>
     </price>
     <notInShop>	true	</notInShop>
-    <tags>	AT-SPG mediumAT-SPG improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions3t_user HD secret testTank	</tags>
+    <tags>	AT-SPG mediumAT-SPG improvedVentilation_class2_user mediumCaliberTankRammer_user wetCombatPack_class1_user enhancedTorsions3t_user HD	</tags>
     <level>	8	</level>
   </F89_Canon_dassaut_de_105>
   <F74_AMX_M4_1949_Liberte>
@@ -613,7 +624,7 @@
     <shortUserString>	#igr_vehicles:Bat_Chatillon25t_IGR_short	</shortUserString>
     <description>	#igr_vehicles:Bat_Chatillon25t_IGR_descr	</description>
     <price>	1	</price>
-    <tags>	mediumTank improvedVentilation_class2_user wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user premiumIGR secret	</tags>
+    <tags>	mediumTank improvedVentilation_class2_user wetCombatPack_class1_user aimingStabilizer_Mk1_user enhancedTorsions3t_user HD premiumIGR secret	</tags>
     <level>	10	</level>
   </F18_Bat_Chatillon25t_IGR>
   <F01_RenaultFT_bot>

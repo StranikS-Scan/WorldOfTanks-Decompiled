@@ -101,6 +101,7 @@
     <V-4M>	131	</V-4M>
     <MH_1>	132	</MH_1>
     <BAMM_V12>	134	</BAMM_V12>
+    <M_50TI>	135	</M_50TI>
     <Engine_01_KV>	200	</Engine_01_KV>
     <V-54K_T>	201	</V-54K_T>
     <Engine_T-50-2>	202	</Engine_T-50-2>
@@ -876,6 +877,22 @@
       <rpm_min>	336	</rpm_min>
       <rpm_max>	2522	</rpm_max>
     </T-26F>
+    <V-11>
+      <userString>	#ussr_vehicles:V-11	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	55270	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	650	</power>
+      <weight>	750	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	130	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	346	</rpm_min>
+      <rpm_max>	2160	</rpm_max>
+    </V-11>
     <V-11-IS-3>
       <userString>	#ussr_vehicles:V-11-IS-3	</userString>
       <tags>	diesel	</tags>
@@ -910,22 +927,6 @@
       <rpm_min>	333	</rpm_min>
       <rpm_max>	2200	</rpm_max>
     </V-11_700>
-    <V-11>
-      <userString>	#ussr_vehicles:V-11	</userString>
-      <tags>	diesel	</tags>
-      <level>	8	</level>
-      <price>	55270	</price>
-      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
-      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	650	</power>
-      <weight>	750	</weight>
-      <maxHealth>	260	</maxHealth>
-      <maxRegenHealth>	130	</maxRegenHealth>
-      <repairCost>	8	</repairCost>
-      <fireStartingChance>	0.15	</fireStartingChance>
-      <rpm_min>	346	</rpm_min>
-      <rpm_max>	2160	</rpm_max>
-    </V-11>
     <V-12>
       <userString>	#ussr_vehicles:V-12	</userString>
       <tags>	diesel	</tags>
@@ -1242,6 +1243,23 @@
       <rpm_min>	240	</rpm_min>
       <rpm_max>	2480	</rpm_max>
     </M-50T>
+    <M_50TI>
+      <userString>	#ussr_vehicles:M_50TI	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	132000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1200	</power>
+      <weight>	700	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	240	</rpm_min>
+      <rpm_max>	2480	</rpm_max>
+    </M_50TI>
     <M-50T_fallout>
       <userString>	#ussr_vehicles:M-50T_fallout	</userString>
       <tags>	diesel	</tags>
@@ -1553,7 +1571,7 @@
       <notInShop>	true	</notInShop>
       <wwsoundPC>	eng_v55_pc	</wwsoundPC>
       <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
-      <power>	1000	</power>
+      <power>	900	</power>
       <weight>	1300	</weight>
       <maxHealth>	260	</maxHealth>
       <maxRegenHealth>	130	</maxRegenHealth>

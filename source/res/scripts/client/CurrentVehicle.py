@@ -357,30 +357,6 @@ class _CurrentVehicle(_CachedVehicle):
 
 g_currentVehicle = _CurrentVehicle()
 
-class PreviewAppearance(object):
-
-    def refreshVehicle(self, item):
-        return NotImplementedError
-
-
-class _RegularPreviewAppearance(PreviewAppearance):
-
-    def refreshVehicle(self, item):
-        if item:
-            _getHangarSpace().updatePreviewVehicle(item)
-        else:
-            g_currentVehicle.refreshModel()
-
-
-class HeroTankPreviewAppearance(PreviewAppearance):
-
-    def refreshVehicle(self, item):
-        if item is None:
-            from ClientSelectableCameraObject import ClientSelectableCameraObject
-            ClientSelectableCameraObject.switchCamera()
-        return
-
-
 class _CurrentPreviewVehicle(_CachedVehicle):
 
     def __init__(self):
@@ -390,19 +366,13 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         self.onComponentInstalled = Event(self._eManager)
         self.onVehicleUnlocked = Event(self._eManager)
         self.onVehicleInventoryChanged = Event(self._eManager)
-        self.__vehAppearance = _RegularPreviewAppearance()
         return
 
     def destroy(self):
         super(_CurrentPreviewVehicle, self).destroy()
         self.__item = None
         self.__defaultItem = None
-        self.__vehAppearance = None
         return
-
-    def init(self):
-        super(_CurrentPreviewVehicle, self).init()
-        self.resetAppearance()
 
     def selectVehicle(self, vehicleCD=None, vehicleStrCD=None):
         self._selectVehicle(vehicleCD, vehicleStrCD)
@@ -410,9 +380,6 @@ class _CurrentPreviewVehicle(_CachedVehicle):
     def selectNoVehicle(self):
         self._selectVehicle(None)
         return
-
-    def resetAppearance(self, appearance=None):
-        self.__vehAppearance = appearance or _RegularPreviewAppearance()
 
     @property
     def item(self):
@@ -428,6 +395,12 @@ class _CurrentPreviewVehicle(_CachedVehicle):
             vehicle = self.itemsCache.items.getItemByCD(self.item.intCD)
             return vehicle.invID
 
+    def refreshModel(self):
+        if self.isPresent():
+            self.hangarSpace.updatePreviewVehicle(self.item)
+        else:
+            g_currentVehicle.refreshModel()
+
     def onInventoryUpdate(self, invDiff):
         if self.isPresent():
             vehicle = self.itemsCache.items.getItemByCD(self.item.intCD)
@@ -438,8 +411,8 @@ class _CurrentPreviewVehicle(_CachedVehicle):
     def isModified(self):
         if self.isPresent():
             for module in _MODULES_NAMES:
-                currentModule = getattr(self.item.descriptor, module)['compactDescr']
-                defaultModule = getattr(self.__defaultItem.descriptor, module)['compactDescr']
+                currentModule = getattr(self.item.descriptor, module).compactDescr
+                defaultModule = getattr(self.__defaultItem.descriptor, module).compactDescr
                 if currentModule != defaultModule:
                     return True
 
@@ -455,7 +428,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
         processMsg(result)
         Waiting.hide('applyModule')
         if result.success:
-            self.__vehAppearance.refreshVehicle(self.item)
+            self.refreshModel()
             self.onComponentInstalled()
 
     def hasModulesToSelect(self):
@@ -476,8 +449,7 @@ class _CurrentPreviewVehicle(_CachedVehicle):
                 self.__item = self.__makePreviewVehicleFromStrCD(vehicleStrCD)
             else:
                 self.__item = self.__getPreviewVehicle(vehicleCD)
-            if self.__vehAppearance:
-                self.__vehAppearance.refreshVehicle(self.__item)
+            self.refreshModel()
             self._setChangeCallback()
             return
 

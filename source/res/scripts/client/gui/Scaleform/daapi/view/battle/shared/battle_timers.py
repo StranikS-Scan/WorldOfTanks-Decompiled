@@ -4,49 +4,44 @@ import SoundGroups
 from gui.Scaleform.daapi.view.meta.BattleTimerMeta import BattleTimerMeta
 from gui.Scaleform.daapi.view.meta.PrebattleTimerMeta import PrebattleTimerMeta
 from gui.battle_control.battle_constants import COUNTDOWN_STATE
+from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from helpers import dependency
 from helpers import i18n
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IBootcampController
-from BattleReplay import g_replayCtrl
 
 class _WWISE_EVENTS:
     BATTLE_ENDING_SOON = 'time_buzzer_02'
     COUNTDOWN_TICKING = 'time_countdown'
-    BATTLE_END = 'time_over'
     STOP_TICKING = 'time_countdown_stop'
 
 
-_BATTLE_END_SOUND_TIME = 2
 _BATTLE_END_TIME = 0
 _STATE_TO_MESSAGE = {COUNTDOWN_STATE.WAIT: i18n.makeString('#ingame_gui:timer/waiting'),
  COUNTDOWN_STATE.START: i18n.makeString('#ingame_gui:timer/starting'),
  COUNTDOWN_STATE.STOP: i18n.makeString('#ingame_gui:timer/started')}
 
-class PreBattleTimer(PrebattleTimerMeta):
+class PreBattleTimer(PrebattleTimerMeta, IAbstractPeriodView):
 
     def __init__(self):
         super(PreBattleTimer, self).__init__()
-        self.showStateMessage = True
 
-    def setWinConditionText(self, text):
-        self.as_setWinConditionTextS(text)
+    def updateBattleCtx(self, battleCtx):
+        self.as_setWinConditionTextS(battleCtx.getArenaWinString())
 
     def setCountdown(self, state, timeLeft):
-        if self.showStateMessage:
-            self.as_setMessageS(_STATE_TO_MESSAGE[state])
+        self.as_setMessageS(_STATE_TO_MESSAGE[state])
         if state == COUNTDOWN_STATE.WAIT:
             self.as_hideTimerS()
         else:
             self.as_setTimerS(timeLeft)
 
     def hideCountdown(self, state, speed):
-        if self.showStateMessage:
-            self.as_setMessageS(_STATE_TO_MESSAGE[state])
+        self.as_setMessageS(_STATE_TO_MESSAGE[state])
         self.as_hideAllS(speed)
 
 
-class BattleTimer(BattleTimerMeta):
+class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
 
     def __init__(self):
@@ -79,11 +74,7 @@ class BattleTimer(BattleTimerMeta):
                     self._callWWISE(_WWISE_EVENTS.BATTLE_ENDING_SOON)
             elif self.__isTicking:
                 self.__stopTicking()
-            playBattleEnd = not g_replayCtrl.isPlaying if g_replayCtrl is not None else True
-            if totalTime == _BATTLE_END_SOUND_TIME and playBattleEnd:
-                self._callWWISE(_WWISE_EVENTS.BATTLE_END)
         self.as_setTotalTimeS('{:02d}'.format(minutes), '{:02d}'.format(seconds))
-        return
 
     def setState(self, state):
         self.__state = state

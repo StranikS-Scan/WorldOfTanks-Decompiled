@@ -127,11 +127,11 @@ def isSegmentCollideWithVehicle(vehicle, startPoint, endPoint):
     vehStartPoint = toVehSpace.applyPoint(startPoint)
     vehEndPoint = toVehSpace.applyPoint(endPoint)
     for compDescr, toCompSpace, isAttached in getVehicleComponents(vehicle):
-        if not isAttached or compDescr.get('itemTypeName') == 'vehicleGun':
+        if not isAttached or compDescr.itemTypeName == 'vehicleGun':
             continue
         compStartPoint = toCompSpace.applyPoint(vehStartPoint)
         compEndPoint = toCompSpace.applyPoint(vehEndPoint)
-        collisions = compDescr['hitTester'].localAnyHitTest(compStartPoint, compEndPoint)
+        collisions = compDescr.hitTester.localAnyHitTest(compStartPoint, compEndPoint)
         if collisions is not None:
             return True
 
@@ -142,12 +142,12 @@ def getLocalAimPoint(vehicleDescriptor):
     if vehicleDescriptor is None:
         return Math.Vector3(0.0, 0.0, 0.0)
     else:
-        hullBox = vehicleDescriptor.hull['hitTester'].bbox
-        hullPosition = vehicleDescriptor.chassis['hullPosition']
+        hullBox = vehicleDescriptor.hull.hitTester.bbox
+        hullPosition = vehicleDescriptor.chassis.hullPosition
         middleX = (hullBox[0].x + hullBox[1].x) * 0.5 + hullPosition.x
         middleZ = (hullBox[0].z + hullBox[1].z) * 0.5 + hullPosition.z
         calculatedHullPosition = (middleX, hullPosition.y, middleZ)
-        turretPosition = vehicleDescriptor.hull['turretPositions'][0] * 0.5
+        turretPosition = vehicleDescriptor.hull.turretPositions[0] * 0.5
         maxZOffset = abs(hullBox[1].z - hullBox[0].z) * 0.2
         turretPosition.z = max(-maxZOffset, min(maxZOffset, turretPosition.z))
         localAimPoint = calculatedHullPosition + turretPosition

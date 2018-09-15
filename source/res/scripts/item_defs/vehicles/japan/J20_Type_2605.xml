@@ -28,7 +28,7 @@
   <hull>
     <armor>
       <armor_1>	270	</armor_1>
-      <armor_2>	270	</armor_2>
+      <armor_2>	260	</armor_2>
       <armor_3>	160	</armor_3>
       <armor_4>	150	</armor_4>
       <armor_5>	75	</armor_5>
@@ -37,7 +37,7 @@
       </armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	140	</armor_9>
-      <armor_10>	270	</armor_10>
+      <armor_10>	250	</armor_10>
       <armor_11>	160	</armor_11>
       <armor_12>	115	</armor_12>
       <armor_13>	250	</armor_13>
@@ -102,7 +102,7 @@
       <terrainResistance>	1.1 1.2 2	</terrainResistance>
       <brakeForce>	50200	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	22	</rotationSpeed>
+      <rotationSpeed>	17	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.18	</vehicleMovement>
         <vehicleRotation>	0.2	</vehicleRotation>
@@ -415,7 +415,7 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	36000	</weight>
       <maxHealth>	580	</maxHealth>
-      <rotationSpeed>	20	</rotationSpeed>
+      <rotationSpeed>	18	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	180	</maxHealth>
         <maxRegenHealth>	90	</maxRegenHealth>
@@ -629,9 +629,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.88	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </J20_Type_2605.xml>

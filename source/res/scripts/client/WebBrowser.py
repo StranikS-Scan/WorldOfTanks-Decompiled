@@ -196,7 +196,18 @@ class WebBrowser(object):
               None,
               None,
               lambda me, e: injectKeyUp(me, e)))
+            self.__disableKeyHandlers = []
             return True
+
+    def setDisabledKeys(self, keys):
+        self.__disableKeyHandlers = []
+        for key, isKeyDown, isAltDown, isShiftDown, isCtrlDown in keys:
+            self.__disableKeyHandlers.append((key,
+             isKeyDown,
+             isAltDown,
+             isShiftDown,
+             isCtrlDown,
+             lambda me, e: None))
 
     def ready(self, success):
         LOG_BROWSER('READY ', success, self.__baseUrl, self.__browserID)
@@ -321,7 +332,7 @@ class WebBrowser(object):
          isShiftDown,
          isCtrlDown)
         matches = lambda t: t[0] is None or t[0] == t[1]
-        browserKeyHandlers = self.__browserKeyHandlers
+        browserKeyHandlers = tuple(self.__disableKeyHandlers) + self.__browserKeyHandlers
         if self.useSpecialKeys:
             browserKeyHandlers = self.__specialKeyHandlers + browserKeyHandlers
         for values in browserKeyHandlers:

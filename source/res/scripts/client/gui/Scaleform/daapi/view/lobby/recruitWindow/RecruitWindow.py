@@ -78,8 +78,8 @@ class RecruitWindow(RecruitWindowMeta):
         academyUpgradeAction = None
         if academyUpgradePrice != academyUpgradeDefPrice:
             academyUpgradeAction = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'goldTankmanCost', True, Money(gold=academyUpgradePrice), Money(gold=academyUpgradeDefPrice))
-        data = {'credits': money.credits,
-         'gold': money.gold,
+        data = {Currency.CREDITS: money.getSignValue(Currency.CREDITS),
+         Currency.GOLD: money.getSignValue(Currency.GOLD),
          'schoolUpgradePrice': schoolUpgradePrice,
          'schoolUpgradeActionPriceData': schoolUpgradeAction,
          'academyUpgradePrice': academyUpgradePrice,
@@ -105,10 +105,11 @@ class RecruitWindow(RecruitWindowMeta):
         for module in modulesAll:
             typesDP.append({'id': module.innationID,
              'label': module.shortUserName})
+            skillsConfig = getSkillsConfig()
             for role in module.descriptor.type.crewRoles:
                 if role[0] == roleType:
                     rolesDP.append({'id': role[0],
-                     'label': convert(getSkillsConfig()[role[0]]['userString'])})
+                     'label': convert(skillsConfig.getSkill(role[0]).userString)})
 
             break
 
@@ -185,13 +186,14 @@ class RecruitWindow(RecruitWindowMeta):
         data = [{'id': None,
           'label': DIALOGS.RECRUITWINDOW_MENUEMPTYROW}]
         modulesAll.sort()
+        skillsConfig = getSkillsConfig()
         for module in modulesAll:
             for role in module.descriptor.type.crewRoles:
                 if role[0] in roles:
                     continue
                 roles.append(role[0])
                 data.append({'id': role[0],
-                 'label': convert(getSkillsConfig()[role[0]]['userString'])})
+                 'label': convert(skillsConfig.getSkill(role[0]).userString)})
 
         self.flashObject.as_setRoleDropdown(data)
         Waiting.hide('updating')

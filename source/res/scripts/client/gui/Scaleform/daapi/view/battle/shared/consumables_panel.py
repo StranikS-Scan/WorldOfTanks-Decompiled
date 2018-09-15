@@ -191,16 +191,17 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         return (bwKey, sfKey)
 
     def __makeShellTooltip(self, descriptor, piercingPower):
-        kind = descriptor['kind']
-        header = i18n.makeString('#ingame_gui:shells_kinds/{0:>s}'.format(kind), caliber=BigWorld.wg_getNiceNumberFormat(descriptor['caliber']), userString=descriptor['userString'])
+        kind = descriptor.kind
+        header = i18n.makeString('#ingame_gui:shells_kinds/{0:>s}'.format(kind), caliber=BigWorld.wg_getNiceNumberFormat(descriptor.caliber), userString=descriptor.userString)
         if GUI_SETTINGS.technicalInfo:
             tooltipStr = INGAME_GUI.SHELLS_KINDS_PARAMS
-            paramsDict = {'damage': str(int(descriptor['damage'][0])),
+            paramsDict = {'damage': str(int(descriptor.damage[0])),
              'piercingPower': str(piercingPower)}
-            if descriptor['hasStun'] and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
+            if descriptor.hasStun and self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
+                stun = descriptor.stun
                 tooltipStr = INGAME_GUI.SHELLS_KINDS_STUNPARAMS
-                paramsDict['stunMinDuration'] = BigWorld.wg_getNiceNumberFormat(descriptor['guaranteedStunDuration'] * descriptor['stunDuration'])
-                paramsDict['stunMaxDuration'] = BigWorld.wg_getNiceNumberFormat(descriptor['stunDuration'])
+                paramsDict['stunMinDuration'] = BigWorld.wg_getNiceNumberFormat(stun.guaranteedStunDuration * stun.stunDuration)
+                paramsDict['stunMaxDuration'] = BigWorld.wg_getNiceNumberFormat(stun.stunDuration)
             body = i18n.makeString(tooltipStr, **paramsDict)
             fmt = TOOLTIP_FORMAT
         else:
@@ -316,7 +317,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
 
     def __onShellsAdded(self, intCD, descriptor, quantity, _, gunSettings):
         toolTip = self.__makeShellTooltip(descriptor, int(gunSettings.getPiercingPower(intCD)))
-        icon = descriptor['icon'][0]
+        icon = descriptor.icon[0]
         shellIconPath = AMMO_ICON_PATH % icon
         noShellIconPath = NO_AMMO_ICON_PATH % icon
         idx = self.__genNextIdx(AMMO_FULL_MASK, AMMO_START_IDX)
@@ -417,7 +418,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         body = descriptor.description
         if item.getTotalTime() > 0:
             tooltipStr = INGAME_GUI.CONSUMABLES_PANEL_EQUIPMENT_COOLDOWNSECONDS
-            cooldownSeconds = str(int(descriptor['cooldownSeconds']))
+            cooldownSeconds = str(int(descriptor.cooldownSeconds))
             paramsString = i18n.makeString(tooltipStr, cooldownSeconds=cooldownSeconds)
             body = body + '\n\n' + paramsString
         toolTip = TOOLTIP_FORMAT.format(descriptor.userString, body)

@@ -5,7 +5,7 @@ import items
 import collections
 from functools import partial
 from adisp import async
-from diff_utils import synchronizeDicts
+from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from items import vehicles, tankmen
 _VEHICLE = items.ITEM_TYPE_INDICES['vehicle']
 _CHASSIS = items.ITEM_TYPE_INDICES['vehicleChassis']
@@ -342,15 +342,6 @@ class Inventory(object):
             self.__account.shop.waitForSync(partial(self.__changeVehInscription_onShopSynced, vehInvID, position, inscriptionID, periodDays, colorID, callback))
             return
 
-    def changeVehicleHorn(self, vehInvID, hornID, callback):
-        if self.__ignore:
-            if callback is not None:
-                callback(AccountCommands.RES_NON_PLAYER)
-            return
-        else:
-            self.__account.shop.waitForSync(partial(self.__changeVehHorn_onShopSynced, vehInvID, hornID, callback))
-            return
-
     def addTankmanExperience(self, tmanInvID, xp, callback=None):
         if self.__ignore:
             if callback is not None:
@@ -607,17 +598,4 @@ class Inventory(object):
              slotIdx,
              int(isPaidRemoval)]
             self.__account._doCmdIntArr(AccountCommands.CMD_EQUIP_OPTDEV, arr, proxy)
-            return
-
-    def __changeVehHorn_onShopSynced(self, vehInvID, hornID, callback, resultID, shopRev):
-        if resultID < 0:
-            if callback is not None:
-                callback(resultID)
-            return
-        else:
-            if callback is not None:
-                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
-            else:
-                proxy = None
-            self.__account._doCmdInt3(AccountCommands.CMD_VEH_HORN, shopRev, vehInvID, hornID, proxy)
             return

@@ -8,7 +8,6 @@ import Math
 from GasAttackSettings import GasAttackState, gasAttackStateFor
 from Math import Vector3
 from constants import DEATH_ZONES
-from gui.Scaleform.locale.FALLOUT import FALLOUT
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID, GAS_ATTACK_STATE
 from gui.battle_control.view_components import IViewComponentsController
 from helpers import time_utils
@@ -57,8 +56,7 @@ class GasAttackController(IViewComponentsController):
 
     def stopControl(self):
         self.__state = None
-        self.__battleUI = None
-        self.__falloutItems = None
+        self.clearViewComponents()
         self.__settings = None
         self.__stopTimer()
         self.__finiIndicator()

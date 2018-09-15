@@ -4,12 +4,6 @@ from shared_utils import CONST_CONTAINER
 from items import ITEM_TYPE_NAMES, vehicles, ITEM_TYPE_INDICES, EQUIPMENT_TYPES
 from gui.shared.money import Currency
 CLAN_LOCK = 1
-BATTLE_BOOSTER_SLOT_IDX = vehicles.NUM_EQUIPMENT_SLOTS_BY_TYPE[EQUIPMENT_TYPES.regular]
-EQUIPMENT_LAYOUT_SIZE = vehicles.NUM_EQUIPMENT_SLOTS
-DEFAULT_EQUIPMENT_LAYOUT = [0] * EQUIPMENT_LAYOUT_SIZE
-REGULAR_EQUIPMENT_LAYOUT_SIZE = vehicles.NUM_EQUIPMENT_SLOTS_BY_TYPE[EQUIPMENT_TYPES.regular]
-BATTLE_BOOSTER_LAYOUT_SIZE = vehicles.NUM_EQUIPMENT_SLOTS_BY_TYPE[EQUIPMENT_TYPES.battleBoosters]
-LAYOUT_ITEM_SIZE = 2
 GUI_ITEM_TYPE_NAMES = tuple(ITEM_TYPE_NAMES) + tuple(['reserved'] * (16 - len(ITEM_TYPE_NAMES)))
 GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster')
 GUI_ITEM_TYPE_INDICES = dict(((n, idx) for idx, n in enumerate(GUI_ITEM_TYPE_NAMES)))
@@ -51,14 +45,18 @@ def _formatMoneyError(currency):
     return '{}_error'.format(currency)
 
 
-class GUI_ITEM_PURCHASE_CODE(CONST_CONTAINER):
-    OK = ''
+class GUI_ITEM_ECONOMY_CODE(CONST_CONTAINER):
+    UNDEFINED = ''
     CENTER_UNAVAILABLE = 'center_unavailable'
     UNLOCK_ERROR = 'unlock_error'
     ITEM_IS_HIDDEN = 'isHidden'
     ITEM_NO_PRICE = 'noPrice'
     ITEM_IS_DUPLICATED = 'duplicatedItem'
     WALLET_NOT_AVAILABLE = 'wallet_not_available'
+    RESTORE_DISABLED = 'restore_disabled'
+    NO_RENT_PRICE = 'no_rent_price'
+    RENTAL_TIME_EXCEEDED = 'rental_time_exceeded'
+    RENTAL_DISABLED = 'rental_disabled'
     NOT_ENOUGH_GOLD = _formatMoneyError(Currency.GOLD)
     NOT_ENOUGH_CREDITS = _formatMoneyError(Currency.CREDITS)
     NOT_ENOUGH_CRYSTAL = _formatMoneyError(Currency.CRYSTAL)
@@ -70,7 +68,7 @@ class GUI_ITEM_PURCHASE_CODE(CONST_CONTAINER):
 
     @classmethod
     def isMoneyError(cls, errCode):
-        return errCode in GUI_ITEM_PURCHASE_CODE._NOT_ENOUGH_MONEY
+        return errCode in GUI_ITEM_ECONOMY_CODE._NOT_ENOUGH_MONEY
 
 
 class ItemsCollection(dict):
@@ -134,7 +132,9 @@ def getVehicleComponentsByType(vehicle, itemTypeIdx):
         return packModules(vehicle.optDevices)
     if itemTypeIdx == vehicles._SHELL:
         return packModules(vehicle.shells)
-    return packModules(vehicle.eqs) if itemTypeIdx == vehicles._EQUIPMENT else ItemsCollection()
+    if itemTypeIdx == vehicles._EQUIPMENT:
+        return ItemsCollection([ (eq.intCD, eq) for eq in vehicle.equipment.regularConsumables.getInstalledItems() ])
+    return ItemsCollection()
 
 
 def getVehicleSuitablesByType(vehDescr, itemTypeId, turretPID=0):
@@ -150,19 +150,19 @@ def getVehicleSuitablesByType(vehDescr, itemTypeId, turretPID=0):
     descriptorsList = list()
     current = list()
     if itemTypeId == vehicles._CHASSIS:
-        current = [vehDescr.chassis['compactDescr']]
+        current = [vehDescr.chassis.compactDescr]
         descriptorsList = vehDescr.type.chassis
     elif itemTypeId == vehicles._ENGINE:
-        current = [vehDescr.engine['compactDescr']]
+        current = [vehDescr.engine.compactDescr]
         descriptorsList = vehDescr.type.engines
     elif itemTypeId == vehicles._RADIO:
-        current = [vehDescr.radio['compactDescr']]
+        current = [vehDescr.radio.compactDescr]
         descriptorsList = vehDescr.type.radios
     elif itemTypeId == vehicles._FUEL_TANK:
-        current = [vehDescr.fuelTank['compactDescr']]
+        current = [vehDescr.fuelTank.compactDescr]
         descriptorsList = vehDescr.type.fuelTanks
     elif itemTypeId == vehicles._TURRET:
-        current = [vehDescr.turret['compactDescr']]
+        current = [vehDescr.turret.compactDescr]
         descriptorsList = vehDescr.type.turrets[turretPID]
     elif itemTypeId == vehicles._OPTIONALDEVICE:
         devs = vehicles.g_cache.optionalDevices()
@@ -177,28 +177,28 @@ def getVehicleSuitablesByType(vehDescr, itemTypeId, turretPID=0):
         current = list()
         descriptorsList = [ eq for eq in eqs.itervalues() if eq.equipmentType == EQUIPMENT_TYPES.battleBoosters and eq.checkCompatibilityWithVehicle(vehDescr)[0] ]
     elif itemTypeId == vehicles._GUN:
-        current = [vehDescr.gun['compactDescr']]
-        for gun in vehDescr.turret['guns']:
+        current = [vehDescr.gun.compactDescr]
+        for gun in vehDescr.turret.guns:
             descriptorsList.append(gun)
 
         for turret in vehDescr.type.turrets[turretPID]:
             if turret is not vehDescr.turret:
-                for gun in turret['guns']:
+                for gun in turret.guns:
                     descriptorsList.append(gun)
 
     elif itemTypeId == vehicles._SHELL:
-        for shot in vehDescr.gun['shots']:
-            current.append(shot['shell']['compactDescr'])
+        for shot in vehDescr.gun.shots:
+            current.append(shot.shell.compactDescr)
 
-        for gun in vehDescr.turret['guns']:
-            for shot in gun['shots']:
-                descriptorsList.append(shot['shell'])
+        for gun in vehDescr.turret.guns:
+            for shot in gun.shots:
+                descriptorsList.append(shot.shell)
 
         for turret in vehDescr.type.turrets[turretPID]:
             if turret is not vehDescr.turret:
-                for gun in turret['guns']:
-                    for shot in gun['shots']:
-                        descriptorsList.append(shot['shell'])
+                for gun in turret.guns:
+                    for shot in gun.shots:
+                        descriptorsList.append(shot.shell)
 
     return (descriptorsList, current)
 

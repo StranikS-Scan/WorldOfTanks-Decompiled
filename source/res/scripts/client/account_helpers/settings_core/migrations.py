@@ -355,6 +355,16 @@ def __migrateMaskValue(currentVal, mask, offset):
     return currentVal >> offset & mask
 
 
+def _migrateTo36(core, data, initialized):
+    from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
+    storedValue = _getSettingsCache().getSectionSettings(SETTINGS_SECTIONS.GAMEPLAY, 0)
+    currentMask = storedValue & 65535
+    import ArenaType
+    newMask = currentMask | ArenaType.getVisibilityMask(ArenaType.getGameplayIDForName('ctf30x30'))
+    newnewMask = newMask | ArenaType.getVisibilityMask(ArenaType.getGameplayIDForName('domination30x30'))
+    data['gameplayData'][GAME.GAMEPLAY_MASK] = newnewMask
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -490,6 +500,10 @@ _versions = ((1,
  (35,
   _migrateTo35,
   False,
+  False),
+ (36,
+  _migrateTo36,
+  True,
   False))
 
 @async

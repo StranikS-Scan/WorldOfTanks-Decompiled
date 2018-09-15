@@ -554,8 +554,12 @@ class PreferencesSetting(SettingAbstract):
     def __init__(self, isPreview=False):
         super(PreferencesSetting, self).__init__(isPreview)
         BigWorld.wg_subscribeToSavePreferences(self._savePrefsCallback)
+        BigWorld.wg_subscribeToReadPreferences(self._readPrefsCallback)
 
     def _savePrefsCallback(self, prefsRoot):
+        pass
+
+    def _readPrefsCallback(self, key, value):
         pass
 
 
@@ -717,16 +721,23 @@ class ClansSetting(MessengerSetting):
 
 class GameplaySetting(StorageAccountSetting):
 
-    def __init__(self, settingName, gameplayName, storage):
+    def __init__(self, settingName, gameplayName, storage, callable=lambda : True):
         super(GameplaySetting, self).__init__(settingName, storage)
         self.gameplayName = gameplayName
         self.bit = ArenaType.getVisibilityMask(ArenaType.getGameplayIDForName(self.gameplayName))
+        self.__callable = callable
 
     def _get(self):
-        settingValue = super(GameplaySetting, self)._get()
-        return settingValue & self.bit > 0
+        if not self.__callable():
+            return None
+        else:
+            settingValue = super(GameplaySetting, self)._get()
+            return settingValue & self.bit > 0
 
     def _set(self, value):
+        if not self.__callable():
+            LOG_WARNING('GameplaySetting is disabled', self.gameplayName)
+            return
         settingValue = super(GameplaySetting, self)._get()
         settingValue ^= self.bit
         if value:
@@ -1155,18 +1166,6 @@ class VideoModeSettings(PreferencesSetting):
         self._storage = weakref.proxy(storage)
         self.__videoMode = self._get()
 
-    def isFullscreen(self):
-        return self.__videoMode == BigWorld.WindowModeExclusiveFullscreen
-
-    def isWindowed(self):
-        return self.__videoMode == BigWorld.WindowModeWindowed
-
-    def isBorderless(self):
-        return self.__videoMode == BigWorld.WindowModeBorderless
-
-    def getInt(self):
-        return self.__videoMode
-
     def _getOptions(self):
         result = []
         allowScreenModes = ((BigWorld.WindowModeWindowed, 'windowed'), (BigWorld.WindowModeExclusiveFullscreen, 'fullscreen'))
@@ -1183,12 +1182,14 @@ class VideoModeSettings(PreferencesSetting):
 
     def _set(self, value):
         self._storage.windowMode = value
-
-    def _save(self, value):
         self.__videoMode = value
 
     def _savePrefsCallback(self, prefsRoot):
         prefsRoot['devicePreferences'].writeInt('windowMode', self.__videoMode)
+
+    def _readPrefsCallback(self, key, value):
+        if key == 'windowMode':
+            self.__videoMode = value
 
 
 class VehicleMarkerSetting(StorageAccountSetting):

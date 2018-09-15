@@ -115,6 +115,7 @@ class ArenaVehiclesListener(_Listener):
             arena.onVehicleStatisticsUpdate += self.__arena_onVehicleStatisticsUpdate
             arena.onTeamKiller += self.__arena_onTeamKiller
             arena.onInteractiveStats += self.__arena_onInteractiveStats
+            arena.onGameModeSpecifcStats += self.__arena_onGameModeSpecifcStats
         return
 
     def stop(self):
@@ -130,6 +131,7 @@ class ArenaVehiclesListener(_Listener):
             arena.onVehicleStatisticsUpdate -= self.__arena_onVehicleStatisticsUpdate
             arena.onTeamKiller -= self.__arena_onTeamKiller
             arena.onInteractiveStats -= self.__arena_onInteractiveStats
+            arena.onGameModeSpecifcStats -= self.__arena_onGameModeSpecifcStats
         super(ArenaVehiclesListener, self).stop()
         return
 
@@ -194,6 +196,14 @@ class ArenaVehiclesListener(_Listener):
 
         if stats:
             self._invokeListenersMethod('updateVehiclesStats', stats, self._arenaDP)
+
+    def __arena_onGameModeSpecifcStats(self, isStatic, stats):
+        for vehicleID, vehicleStats in stats.iteritems():
+            flags, vo = self._arenaDP.updateGameModeSpecificStats(vehicleID, isStatic, vehicleStats)
+            if isStatic:
+                self._invokeListenersMethod('updateVehiclesInfo', [(flags, vo)], self._arenaDP)
+            if flags != INVALIDATE_OP.NONE:
+                self._invokeListenersMethod('updateVehiclesStats', [(flags, vo)], self._arenaDP)
 
     def __isRequiredDataExists(self):
         return self._arenaDP is not None and self._arenaDP.isRequiredDataExists()

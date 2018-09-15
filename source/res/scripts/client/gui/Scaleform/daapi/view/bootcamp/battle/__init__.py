@@ -5,6 +5,7 @@ from gui.shared import EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewSettings, ViewTypes, ScopeTemplates
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
+from gui.Scaleform.framework.managers.loaders import ViewLoadParams
 from gui.Scaleform.daapi.view.bootcamp.BCBattlePage import BootcampMinimapComponent
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.shared.events import BootcampEvent
@@ -84,7 +85,7 @@ class BootcampPackageBusinessHandler(PackageBusinessHandler):
 
     def onShowIntro(self, event):
         LOG_DEBUG_DEV_BOOTCAMP('onShowIntro', event.name, event.ctx)
-        self._app.loadView(event.eventType, event.name, event.ctx)
+        self._app.loadView(ViewLoadParams(event.eventType, event.name), event.ctx)
 
     def onShowHint(self, event):
         if not self.__hideHints:
@@ -142,7 +143,7 @@ class BootcampPackageBusinessHandler(PackageBusinessHandler):
     def onShowBattleFinished(self, event):
         self.onCloseHint(event)
         self.__hideHints = True
-        self._app.loadView(event.eventType, event.name, event.ctx)
+        self._app.loadView(ViewLoadParams(event.eventType, event.name), event.ctx)
 
     def __loadPage(self, event):
         page = self.findViewByAlias(ViewTypes.DEFAULT, event.name)

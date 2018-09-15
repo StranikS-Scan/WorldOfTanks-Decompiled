@@ -10,7 +10,16 @@
   <minimap>	spaces/86_himmelsdorf_winter/mmap.dds	</minimap>
   <vehicleCamouflageKind>	winter	</vehicleCamouflageKind>
   <defaultGroundEffect>	None	</defaultGroundEffect>
-  <wwloadingMusic>	music_himmelsdorf	</wwloadingMusic>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_himmelsdorf	</wwmusicLoading>
+    <wwmusicIntensive>	music_combat	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_combat	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_victory	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
   <wwambientSound>	ambient_wind_winter_01	</wwambientSound>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>

@@ -38,6 +38,7 @@ from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.login_manager import ILoginManager
 from skeletons.helpers.statistics import IStatisticsCollector
+from shared_utils import nextTick
 
 class INVALID_FIELDS:
     ALL_VALID = 0
@@ -168,6 +169,7 @@ class BackgroundMode(object):
             if filename[-4:] == '.png' and filename[0:2] != '__':
                 files.append(filename[0:-4])
 
+        ResMgr.purge(Scaleform.SCALEFORM_WALLPAPER_PATH, True)
         return files
 
 
@@ -211,6 +213,35 @@ class LoginView(LoginPageMeta):
         else:
             self.as_setErrorMessageS(result.errorMessage, result.invalidFields)
         return
+
+    def __tryWGCLogin(self):
+        if not BigWorld.WGC_prepareLogin():
+            return
+        BigWorld.WGC_printLastError()
+        if BigWorld.WGC_processingState() != constants.WGC_STATE.ERROR:
+            Waiting.show('login')
+            self.__wgcCheck()
+
+    def __wgcCheck(self):
+        if BigWorld.WGC_processingState() == constants.WGC_STATE.WAITING_TOKEN_1:
+            nextTick(lambda : self.__wgcCheck())()
+        elif BigWorld.WGC_processingState() == constants.WGC_STATE.LOGIN_IN_PROGRESS:
+            self.__wgcConnect()
+        else:
+            BigWorld.WGC_printLastError()
+            Waiting.hide('login')
+
+    def __wgcConnect(self):
+        serverName = self._servers.selectedServer
+        if serverName is None:
+            return
+        else:
+            serverName = serverName['data']
+            self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.LOGIN, True)
+            self._autoSearchVisited = serverName == AUTO_LOGIN_QUERY_URL
+            self.__customLoginStatus = None
+            self.loginManager.initiateLogin('', '', serverName, False, False)
+            return
 
     def resetToken(self):
         self.loginManager.clearToken2Preference()
@@ -509,3 +540,4 @@ class LoginView(LoginPageMeta):
         if not self.__isListInitialized and self._servers.serverList:
             self.__isListInitialized = True
             self.as_setSelectedServerIndexS(self._servers.selectedServerIdx)
+        self.__tryWGCLogin()

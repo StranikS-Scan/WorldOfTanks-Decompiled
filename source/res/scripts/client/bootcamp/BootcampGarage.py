@@ -351,7 +351,7 @@ class BootcampGarageLesson(object):
         g_eventBus.handleEvent(events.LoadViewEvent(events.BootcampEvent.REMOVE_ALL_HIGHLIGHTS, None, None), EVENT_BUS_SCOPE.LOBBY)
         return
 
-    def onViewLoaded(self, view):
+    def onViewLoaded(self, view, loadParams):
         if view is not None and view.settings is not None:
             alias = view.settings.alias
             doStart = False

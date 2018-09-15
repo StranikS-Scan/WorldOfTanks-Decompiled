@@ -79,15 +79,16 @@ class HangarFittingSlotVO(FittingSlotVO):
             module = findFirst(lambda item: item.isInstalled(vehicle, slotId), modulesData)
             self['slotIndex'] = slotId
             if slotType == FITTING_TYPES.OPTIONAL_DEVICE:
-                if vehicle.battleBooster is not None and vehicle.battleBooster.isOptionalDeviceCompatible(module):
-                    self['highlight'] = True
+                for battleBooster in vehicle.equipment.battleBoosterConsumables:
+                    if battleBooster is not None and battleBooster.isOptionalDeviceCompatible(module):
+                        self['highlight'] = True
+                        break
+
                 if module is not None and module.isDeluxe():
                     self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
                 else:
                     self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
-        elif slotType == FITTING_TYPES.BOOSTER:
-            module = vehicle.battleBooster
-            if module is not None:
+            elif slotType == FITTING_TYPES.BOOSTER and module is not None:
                 affectsAtTTC = module.isAffectsOnVehicle(vehicle)
                 self['affectsAtTTC'] = affectsAtTTC
                 if affectsAtTTC:

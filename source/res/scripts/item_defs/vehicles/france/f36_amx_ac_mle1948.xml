@@ -32,7 +32,7 @@
     <armor>
       <armor_1>	150	</armor_1>
       <armor_2>	100	</armor_2>
-      <armor_3>	40	</armor_3>
+      <armor_3>	55	</armor_3>
       <armor_4>	40	</armor_4>
       <armor_5>	30	</armor_5>
       <armor_6>	30	</armor_6>
@@ -40,7 +40,7 @@
       <armor_8>	0	</armor_8>
       <armor_9>	50	</armor_9>
       <armor_10>	180	</armor_10>
-      <armor_11>	40	</armor_11>
+      <armor_11>	55	</armor_11>
       <armor_12>	30	</armor_12>
       <armor_13>	150	</armor_13>
       <armor_14>	130	</armor_14>
@@ -1039,7 +1039,7 @@
             <tiling>	0.46 0.46 0.000000 0.000000	</tiling>
           </camouflage>
         </_100mm_SA_47_AC>
-        <_120mm_SA_46_AC>	shared	  <maxAmmo>	64	</maxAmmo>
+        <_120mm_SA_46_AC>	shared	  <maxAmmo>	66	</maxAmmo>
           <unlocks>
             <vehicle>	F37_AMX50_Foch	  <cost>	178250	</cost>
             </vehicle>
@@ -1059,12 +1059,12 @@
             </armor_6>
             <gun>	50	</gun>
           </armor>
-          <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	10.4	</reloadTime>
-          <aimingTime>	2.9	</aimingTime>
+          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	34	</reloadTime>
+          <aimingTime>	2.7	</aimingTime>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
           <shotDispersionFactors>
-            <turretRotation>	0.24	</turretRotation>
+            <turretRotation>	0.14	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -1073,6 +1073,10 @@
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
+          <clip>
+            <count>	3	</count>
+            <rate>	22.2	</rate>
+          </clip>
           <models>
             <undamaged>	vehicles/french/F36_AMX_AC_Mle1948/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/french/F36_AMX_AC_Mle1948/crash/lod0/Gun_03.model	</destroyed>
@@ -1238,9 +1242,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.86	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </F36_AMX_AC_Mle1948.xml>

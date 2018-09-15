@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/constants.py
 import math
+from time import time as timestamp
 try:
     import BigWorld
     if BigWorld.component in ('web', 'Unknown'):
@@ -18,7 +19,7 @@ else:
     IS_BASEAPP = BigWorld.component in ('base', 'service')
     IS_WEB = False
 
-CURRENT_REALM = 'RU'
+CURRENT_REALM = 'CT'
 DEFAULT_LANGUAGE = 'ru'
 AUTH_REALM = 'RU'
 IS_DEVELOPMENT = CURRENT_REALM == 'DEV'
@@ -96,7 +97,7 @@ class DOSSIER_TYPE:
     CLAN = 64
 
 
-ARENA_GAMEPLAY_NAMES = ('ctf', 'domination', 'assault', 'nations', 'ctf2', 'domination2', 'assault2', 'fallout', 'fallout2', 'fallout3', 'fallout4', 'fallout5', 'fallout6', 'sandbox', 'bootcamp')
+ARENA_GAMEPLAY_NAMES = ('ctf', 'domination', 'assault', 'nations', 'ctf2', 'domination2', 'assault2', 'fallout', 'fallout2', 'fallout3', 'fallout4', 'ctf30x30', 'domination30x30', 'sandbox', 'bootcamp')
 ARENA_GAMEPLAY_IDS = dict(((value, index) for index, value in enumerate(ARENA_GAMEPLAY_NAMES)))
 
 class ARENA_GUI_TYPE:
@@ -115,6 +116,8 @@ class ARENA_GUI_TYPE:
     FORT_BATTLE_2 = 16
     RANKED = 17
     BOOTCAMP = 18
+    EPIC_RANDOM = 19
+    EPIC_RANDOM_TRAINING = 20
     RANGE = (UNKNOWN,
      RANDOM,
      TRAINING,
@@ -129,7 +132,9 @@ class ARENA_GUI_TYPE:
      SORTIE_2,
      FORT_BATTLE_2,
      RANKED,
-     BOOTCAMP)
+     BOOTCAMP,
+     EPIC_RANDOM,
+     EPIC_RANDOM_TRAINING)
     SANDBOX_RANGE = (SANDBOX, RATED_SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
 
@@ -148,7 +153,9 @@ class ARENA_GUI_TYPE_LABEL:
      ARENA_GUI_TYPE.BOOTCAMP: 'bootcamp',
      ARENA_GUI_TYPE.SORTIE_2: 'fortifications',
      ARENA_GUI_TYPE.FORT_BATTLE_2: 'fortifications',
-     ARENA_GUI_TYPE.RANKED: 'ranked'}
+     ARENA_GUI_TYPE.RANKED: 'ranked',
+     ARENA_GUI_TYPE.EPIC_RANDOM: 'epic_random',
+     ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: 'epic_random_training'}
 
 
 class ARENA_BONUS_TYPE:
@@ -171,6 +178,8 @@ class ARENA_BONUS_TYPE:
     FORT_BATTLE_2 = 21
     RANKED = 22
     BOOTCAMP = 23
+    EPIC_RANDOM = 24
+    EPIC_RANDOM_TRAINING = 25
     RANGE = (UNKNOWN,
      REGULAR,
      TRAINING,
@@ -189,7 +198,10 @@ class ARENA_BONUS_TYPE:
      BOOTCAMP,
      SORTIE_2,
      FORT_BATTLE_2,
-     RANKED)
+     RANKED,
+     EPIC_RANDOM,
+     EPIC_RANDOM_TRAINING)
+    RANDOM_RANGE = (REGULAR, EPIC_RANDOM)
     SANDBOX_RANGE = (RATED_SANDBOX, SANDBOX)
     FALLOUT_RANGE = (FALLOUT_CLASSIC, FALLOUT_MULTITEAM)
     EXTERNAL_RANGE = (SORTIE_2,
@@ -426,7 +438,8 @@ PREBATTLE_MAX_OBSERVERS_IN_TEAM = 5
 OBSERVERS_BONUS_TYPES = (ARENA_BONUS_TYPE.TRAINING,
  ARENA_BONUS_TYPE.TOURNAMENT,
  ARENA_BONUS_TYPE.TOURNAMENT_CLAN,
- ARENA_BONUS_TYPE.TOURNAMENT_REGULAR)
+ ARENA_BONUS_TYPE.TOURNAMENT_REGULAR,
+ ARENA_BONUS_TYPE.EPIC_RANDOM_TRAINING)
 
 class PREBATTLE_ERRORS:
     ROSTER_LIMIT = 'ROSTER_LIMIT'
@@ -623,7 +636,6 @@ class VEHICLE_MISC_STATUS:
     VEHICLE_IS_OVERTURNED = 3
     VEHICLE_DROWN_WARNING = 4
     IN_DEATH_ZONE = 5
-    HORN_BANNED = 6
     DESTROYED_DEVICE_IS_REPAIRING = 7
     SIEGE_MODE_STATE_CHANGED = 9
 
@@ -1837,6 +1849,10 @@ def getArenaStartTime(arenaUniqueID):
     return arenaUniqueID & 4294967295L
 
 
+def getTimeOnArena(arenaUniqueID):
+    return int(timestamp() - getArenaStartTime(arenaUniqueID))
+
+
 class PIERCING_POWER(object):
     PIERCING_POWER_LAW_POINT = 100.0
     PIERCING_POWER_LAW_DIST = 400.0
@@ -1847,3 +1863,17 @@ class PIERCING_POWER(object):
         if dist <= PIERCING_POWER.PIERCING_POWER_LAW_POINT:
             return pFirst
         return max(0.0, pFirst + (pLast - pFirst) * (dist - PIERCING_POWER.PIERCING_POWER_LAW_POINT) / PIERCING_POWER.PIERCING_POWER_LAW_DIST) if dist < maxDist + 4.0 else 0.0
+
+
+EPIC_RANDOM_GROUPS = 3
+EPIC_RANDOM_GAMEPLAY_NAMES = ('ctf30x30', 'domination30x30')
+EPIC_RANDOM_GAMEPLAY_IDS = tuple((ARENA_GAMEPLAY_IDS[name] for name in EPIC_RANDOM_GAMEPLAY_NAMES))
+EPIC_RANDOM_GAMEPLAY_MASK = reduce(lambda a, b: a | b, map(lambda x: 1 << x, EPIC_RANDOM_GAMEPLAY_IDS))
+
+class WGC_STATE:
+    OFF = 0
+    READY_TO_LOGIN = 1
+    LOGIN_IN_PROGRESS = 2
+    WAITING_TOKEN_1 = 3
+    DISABLED = 4
+    ERROR = 5

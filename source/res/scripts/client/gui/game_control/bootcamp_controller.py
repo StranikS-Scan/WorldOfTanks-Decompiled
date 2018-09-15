@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/bootcamp_controller.py
 import BigWorld
+from account_helpers.AccountSettings import CURRENT_VEHICLE, AccountSettings
 from helpers import dependency
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.battle_session import IBattleSessionProvider
@@ -109,7 +110,7 @@ class BootcampController(IBootcampController):
         BigWorld.player().startBootcampCmd()
 
     def __doStopBootcamp(self):
-        BigWorld.player().base.requestBootcampQuit()
+        BigWorld.player().base.requestBootcampQuit(AccountSettings.getFavorites(CURRENT_VEHICLE))
 
     def __onBootcampBecomePlayer(self):
         self.__inBootcampAccount = True

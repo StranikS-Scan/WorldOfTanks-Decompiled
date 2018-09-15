@@ -3,6 +3,7 @@
 import BigWorld
 from bootcamp.scenery.AbstractMission import AbstractMission
 import SoundGroups
+from constants import ARENA_PERIOD
 
 class Mission1(AbstractMission):
 
@@ -39,4 +40,6 @@ class Mission1(AbstractMission):
             self.firstMarker.hide()
 
     def _onPeriodChange(self, *args):
-        pass
+        super(Mission1, self)._onPeriodChange(*args)
+        if args[0] == ARENA_PERIOD.BATTLE:
+            self._playCombatMusic()

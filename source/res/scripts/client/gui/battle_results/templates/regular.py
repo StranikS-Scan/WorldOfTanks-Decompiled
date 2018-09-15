@@ -66,6 +66,7 @@ _COMMON_VO_META = base.DictMeta({'iconType': 'tank',
  'timeStats': [],
  'clientArenaIdx': 0,
  'uiVisibility': 0,
+ 'eligibleForCrystalRewards': False,
  'rank': None})
 _CLAN_COMMON_VO_META = base.PropertyMeta((('clanDBID', -1, 'clanDBID'), ('clanAbbrev', '', 'clanAbbrev')))
 _CLAN_COMMON_VO_META.bind(common.ClanInfoBlock)
@@ -114,6 +115,7 @@ REGULAR_COMMON_STATS_BLOCK.addComponent(11, _TIME_STATS_BLOCK.clone())
 REGULAR_COMMON_STATS_BLOCK.addComponent(12, shared.ClientIndexItem('clientArenaIdx'))
 REGULAR_COMMON_STATS_BLOCK.addComponent(13, personal.PersonalVehicleTypeIconsBlock(base.ListMeta(), 'playerVehicleTypeIcons'))
 REGULAR_COMMON_STATS_BLOCK.addComponent(14, common.TeamsUiVisibility('uiVisibility'))
+REGULAR_COMMON_STATS_BLOCK.addComponent(15, common.EligibleForCrystalRewards('eligibleForCrystalRewards'))
 _PERSONAL_VO_META = base.DictMeta({'isPremium': False,
  'hasGetPremBtn': False,
  'getPremVO': {},
@@ -138,7 +140,8 @@ _PERSONAL_VO_META = base.DictMeta({'isPremium': False,
  'achievementsRight': [],
  'showNoIncomeAlert': False,
  'noIncomeAlert': None,
- 'isStunDataEnabled': False})
+ 'isStunDataEnabled': False,
+ 'crystalStr': '0'})
 _PREMIUM_BUY_VO_META = base.PropertyMeta((('arenaUniqueID', 0, 'clientIndex'), ('creditsDiff', 0, 'creditsDiff'), ('xpDiff', 0, 'xpDiff')))
 _PREMIUM_BUY_VO_META.bind(personal.PremiumBuyBlock)
 _DAMAGE_DETAILS_VO_META = base.PropertyMeta((('damageTotalItems', 0, 'piercings'), ('damageDealtVals', None, 'damageDealtValues'), ('damageDealtNames', None, 'damageDealtNames')))
@@ -147,7 +150,10 @@ _ARMOR_USING_DETAILS_VO_META = base.PropertyMeta((('armorTotalItems', 0, 'usedAr
 _ARMOR_USING_DETAILS_VO_META.bind(personal.ArmorUsingDetailsBlock)
 _ASSIST_USING_DETAILS_VO_META = base.PropertyMeta((('damageAssisted', 0, 'damageAssisted'), ('damageAssistedVals', None, 'damageAssistedValues'), ('damageAssistedNames', None, 'damageAssistedNames')))
 _ASSIST_USING_DETAILS_VO_META.bind(personal.AssistDetailsBlock)
-_STUN_DETAILS_VO_META = base.PropertyMeta((('stunTotalItems', 0, 'stunNum'), ('stunVals', None, 'stunValues'), ('stunNames', None, 'stunNames')))
+_STUN_DETAILS_VO_META = base.PropertyMeta((('stunTotalItems', 0, 'stunNum'),
+ ('stunVals', None, 'stunValues'),
+ ('stunNames', None, 'stunNames'),
+ ('stunDuration', 0.0, 'stunDuration')))
 _STUN_DETAILS_VO_META.bind(personal.StunDetailsBlock)
 _CRITS_DETAILS_VO_META = base.PropertyMeta((('critsCount', 0, 'critsCount'),
  ('criticalDevices', [], 'criticalDevices'),
@@ -233,6 +239,7 @@ REGULAR_PERSONAL_STATS_BLOCK.addComponent(13, details.PremiumXPBlock(base.ListMe
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(14, details.TotalXPDetailsBlock(base.ListMeta(), 'xpData', _RECORD.PERSONAL))
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(15, vehicles.PersonalVehiclesRegularStatsBlock(base.ListMeta(), 'statValues', _RECORD.PERSONAL))
 (REGULAR_PERSONAL_STATS_BLOCK.addComponent(16, personal.StunDataFlag('isStunDataEnabled')),)
+(REGULAR_PERSONAL_STATS_BLOCK.addComponent(17, details.GainCrystalInBattleItem('crystalStr')),)
 _TEAM_PLAYER_VO_META = base.PropertyMeta((('userName', '', 'nameLabel'),
  ('fullName', '', 'fullNameLabel'),
  ('clanAbbrev', '', 'clanLabel'),
@@ -253,6 +260,7 @@ VEHICLE_STATS_BLOCK_VO_META = base.PropertyMeta((('shots', 0, 'shots'),
  ('spotted', 0, 'spotted'),
  ('damagedKilled', style.SlashedValuesBlock('damagedKilled'), 'damagedKilled'),
  ('damageAssisted', 0, 'damageAssisted'),
+ ('stunDuration', 0.0, 'stunDuration'),
  ('damageAssistedStun', 0, 'damageAssistedStun'),
  ('stunNum', 0, 'stunNum'),
  ('capturePointsVal', style.SlashedValuesBlock('capturePointsVal'), 'capturePoints'),

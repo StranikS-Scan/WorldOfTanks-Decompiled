@@ -43,7 +43,16 @@
       </teamBasePositions>
     </assault2>
   </gameplayTypes>
-  <wwloadingMusic>	music_kharkov	</wwloadingMusic>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_kharkov	</wwmusicLoading>
+    <wwmusicIntensive>	music_combat	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_combat	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_victory	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
   <wwambientSound>	ambient_wind_winter_01	</wwambientSound>
   <water>
     <texScale>	0	</texScale>

@@ -4,7 +4,6 @@
 This file was generated using the wgpygen.
 Please, don't edit this file manually.
 """
-from debug_utils import LOG_WARNING
 
 class RANKEDBATTLES_ALIASES(object):
     RANKED_BATTLES_VIEW_ALIAS = 'rankedBattlesViewAlias'
@@ -57,30 +56,11 @@ class RANKEDBATTLES_ALIASES(object):
     CURRENT = 'current'
     FUTURE = 'future'
     FINAL = 'final'
-    STATE_STAGE_EARNED_TOP12 = 'stage_earned_top12'
-    STATE_STAGE_EARNED_TOP3 = 'stage_earned_top3'
-    STATE_STAGE_LOST = 'stage_lost'
-    STATE_STAGE_NOT_EARNED_TOP3 = 'stage_not_earned_top3'
-    STATE_STAGE_NOT_EARNED_TOP12 = 'stage_not_earned_top12'
-    STATE_RANK1_EARNED_TOP12 = 'rank1_earned_top12'
-    STATE_RANK2_EARNED_TOP12 = 'rank2_earned_top12'
-    STATE_RANK3_EARNED_TOP12 = 'rank3_earned_top12'
-    STATE_RANK4_EARNED_TOP12 = 'rank4_earned_top12'
-    STATE_RANK5_EARNED_TOP12 = 'rank5_earned_top12'
-    STATE_RANK6_EARNED_TOP12 = 'rank6_earned_top12'
-    STATE_RANK1_EARNED_TOP3 = 'rank1_earned_top3'
-    STATE_RANK2_EARNED_TOP3 = 'rank2_earned_top3'
-    STATE_RANK3_EARNED_TOP3 = 'rank3_earned_top3'
-    STATE_RANK4_EARNED_TOP3 = 'rank4_earned_top3'
-    STATE_RANK5_EARNED_TOP3 = 'rank5_earned_top3'
-    STATE_RANK6_EARNED_TOP3 = 'rank6_earned_top3'
-    STATE_RANK2_LOST = 'rank2_lost'
-    STATE_RANK3_LOST = 'rank3_lost'
-    STATE_RANK4_LOST = 'rank4_lost'
-    BACKGROUND_STATE_TOP3 = 'top3'
-    BACKGROUND_STATE_TOP12 = 'top12'
-    BACKGROUND_STATE_LOSE12 = 'lose12'
+    BATTLE_RESULTS_SUB_TASK_UI = 'RankedBattleSubTaskUI'
+    BACKGROUND_STATE_TOP = 'top'
+    BACKGROUND_STATE_LOSE = 'lose'
     BACKGROUND_STATE_NOTEFFECTIVE = 'notEffective'
+    BACKGROUNDS = [BACKGROUND_STATE_TOP, BACKGROUND_STATE_LOSE, BACKGROUND_STATE_NOTEFFECTIVE]
     GUI_RB_INPUT_ANIMATION_01 = 'gui_rb_input_animation_01'
     GUI_RB_INPUT_ANIMATION_02 = 'gui_rb_input_animation_02'
     GUI_RB_INPUT_ANIMATION_03 = 'gui_rb_input_animation_03'
@@ -93,35 +73,6 @@ class RANKEDBATTLES_ALIASES(object):
     SOUND_BOX_ANIMATION_START = 'sound_box_animation_start'
     SOUND_AWARD_ANIMATION_START = 'sound_award_animation_start'
     SOUND_BTN_ANIMATION_START = 'sound_btn_animation_start'
-
-    @classmethod
-    def getStateStageEarned(cls, top):
-        name = 'STATE_STAGE_EARNED_TOP{}'.format(top)
-        outcome = getattr(cls, name, None)
-        if outcome is None:
-            LOG_WARNING('Class constant "{}" not found'.format(name))
-        return outcome
-
-    @classmethod
-    def getStateRankEarned(cls, rank, top):
-        name = 'STATE_RANK{}_EARNED_TOP{}'.format(rank, top)
-        outcome = getattr(cls, name, None)
-        if outcome is None:
-            LOG_WARNING('Class constant "{}" not found'.format(name))
-        return outcome
-
-    @classmethod
-    def getStateRankLost(cls, rank):
-        name = 'STATE_RANK{}_LOST'.format(rank)
-        outcome = getattr(cls, name, None)
-        if outcome is None:
-            LOG_WARNING('Class constant "{}" not found'.format(name))
-        return outcome
-
-    @classmethod
-    def getStateStageNotEarned(cls, top):
-        name = 'STATE_STAGE_NOT_EARNED_TOP{}'.format(top)
-        outcome = getattr(cls, name, None)
-        if outcome is None:
-            LOG_WARNING('Class constant "{}" not found'.format(name))
-        return outcome
+    SUBTASK_STATE_STAGE = 'stage'
+    SUBTASK_STATE_RANK = 'rank'
+    SUBTASK_STATE_MASTER = 'master'

@@ -4,11 +4,12 @@ from PlayerEvents import g_playerEvents
 from debug_utils import LOG_ERROR
 from gui.Scaleform.daapi.view.meta.ConfirmItemWindowMeta import ConfirmItemWindowMeta
 from gui.Scaleform.genConsts.CONFIRM_DIALOG_ALIASES import CONFIRM_DIALOG_ALIASES
-from gui.shared.utils import CLIP_ICON_PATH, EXTRA_MODULE_INFO
+from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
+from gui.shared.formatters import getMoneyVO
+from gui.shared.utils import CLIP_ICON_PATH, EXTRA_MODULE_INFO, FIELD_HIGHLIGHT_TYPE
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Currency
 from helpers import dependency
-from items import vehicles
 from skeletons.gui.shared import IItemsCache
 
 class ConfirmModuleDialog(ConfirmItemWindowMeta):
@@ -55,62 +56,73 @@ class ConfirmModuleDialog(ConfirmItemWindowMeta):
         pass it through DAAPI
         """
         items = self.itemsCache.items
-        module = items.getItemByCD(self.meta.getTypeCompDescr())
-        if module is not None:
+        item = items.getItemByCD(self.meta.getTypeCompDescr())
+        if item is not None:
             shop = self.itemsCache.items.shop
-            actualPrice = self.meta.getActualPrice(module)
-            defaultPrice = self.meta.getDefaultPrice(module)
-            currency = self.meta.getCurrency(module)
-            setCurrencies = actualPrice.toSignDict()
+            actualPrices = self.meta.getActualPrices(item)
+            defaultPrices = self.meta.getDefaultPrices(item)
+            currency = self.meta.getCurrency(item)
+            setCurrencies = actualPrices.toSignDict()
             hasAlternativePrice = len(setCurrencies) > 1
             if hasAlternativePrice and Currency.CREDITS in setCurrencies:
-                if module.itemTypeID == GUI_ITEM_TYPE.SHELL:
+                if item.itemTypeID == GUI_ITEM_TYPE.SHELL:
                     hasAlternativePrice = shop.isEnabledBuyingGoldShellsForCredits
-                elif module.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
+                elif item.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
                     hasAlternativePrice = shop.isEnabledBuyingGoldEqsForCredits
-            icon = self.__getIcon(module)
+            icon = self.__getIcon(item)
             extraData = None
-            if module.itemTypeID == vehicles._GUN and module.isClipGun():
+            if item.itemTypeID == GUI_ITEM_TYPE.GUN and item.isClipGun():
                 extraData = CLIP_ICON_PATH
             action = None
-            if actualPrice != defaultPrice:
-                action = self.meta.getActionVO(module)
+            if actualPrices != defaultPrices:
+                action = self.meta.getActionVO(item)
             resultData = {'id': self.meta.getTypeCompDescr(),
-             'price': actualPrice,
+             'price': getMoneyVO(actualPrices),
              'actionPriceData': action,
              'icon': icon,
-             'name': module.userName,
-             'description': module.getShortInfo(),
+             'name': item.userName,
+             'description': item.getShortInfo(),
              'currency': currency,
-             'defaultValue': self.meta.getDefaultValue(module),
-             'maxAvailableCount': self.meta.getMaxAvailableItemsCount(module),
+             'defaultValue': self.meta.getDefaultValue(item),
+             'maxAvailableCount': self.meta.getMaxAvailableItemsCount(item),
              'isActionNow': hasAlternativePrice,
-             'moduleLabel': module.getGUIEmblemID(),
-             'level': module.level,
+             'moduleLabel': item.getGUIEmblemID(),
+             'level': item.level,
              'linkage': CONFIRM_DIALOG_ALIASES.MODULE_ICON,
-             EXTRA_MODULE_INFO: extraData}
+             EXTRA_MODULE_INFO: extraData,
+             FIELD_HIGHLIGHT_TYPE: self.__getHighlightType(item)}
             self.as_setDataS(resultData)
         else:
             LOG_ERROR("Couldn't find module with given compact:", self.meta.getTypeCompDescr())
             self.onWindowClose()
         return
 
-    def __getIcon(self, module):
+    @staticmethod
+    def __getIcon(item):
         """
-        @param module: target module received by int compact descriptor
+        @param item: target module received by int compact descriptor
         @return: For shells, option devices, equipment the value of icon
                                 is the path to an icon file in the directory,
                                 for vehicle modules the value of icon is the level of
                                 particular module
         """
-        return str(module.level) if module.itemTypeID not in (vehicles._OPTIONALDEVICE, vehicles._SHELL, vehicles._EQUIPMENT) else module.icon
+        return str(item.level) if item.itemTypeID not in (GUI_ITEM_TYPE.OPTIONALDEVICE, GUI_ITEM_TYPE.SHELL, GUI_ITEM_TYPE.EQUIPMENT) else item.icon
+
+    @staticmethod
+    def __getHighlightType(item):
+        if item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
+            return SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
+        elif item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and item.isDeluxe():
+            return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
+        else:
+            return SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
 
     def onWindowClose(self):
         self._callHandler(False)
         self.destroy()
 
     def submit(self, count, currency):
-        module = self.itemsCache.items.getItemByCD(self.meta.getTypeCompDescr())
-        self.meta.submit(module, count, currency)
+        item = self.itemsCache.items.getItemByCD(self.meta.getTypeCompDescr())
+        self.meta.submit(item, count, currency)
         self._callHandler(True, self.meta.getTypeCompDescr(), count, currency)
         self.destroy()

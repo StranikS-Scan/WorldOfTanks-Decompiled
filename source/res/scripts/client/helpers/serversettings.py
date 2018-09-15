@@ -180,6 +180,8 @@ class _SpgRedesignFeatures(namedtuple('_SpgRedesignFeatures', ['stunEnabled', 'm
 
 _BwRankedBattles = namedtuple('_BwRankedBattles', ('rblbHostUrl',))
 _BwRankedBattles.__new__.__defaults__ = (None,)
+_BwHallOfFame = namedtuple('_BwHallOfFame', ('hofHostUrl',))
+_BwHallOfFame.__new__.__defaults__ = (None,)
 
 class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ['isEnabled',
  'peripheryIDs',
@@ -276,6 +278,10 @@ class ServerSettings(object):
             self.__bwRankedBattles = makeTupleByDict(_BwRankedBattles, self.__serverSettings['rankedBattles'])
         else:
             self.__bwRankedBattles = _BwRankedBattles()
+        if 'hallOfFame' in self.__serverSettings:
+            self.__bwHallOfFame = makeTupleByDict(_BwHallOfFame, self.__serverSettings['hallOfFame'])
+        else:
+            self.__bwHallOfFame = _BwHallOfFame()
         if 'ranked_config' in self.__serverSettings:
             self.__rankedBattlesSettings = makeTupleByDict(_RankedBattlesConfig, self.__serverSettings['ranked_config'])
         else:
@@ -330,6 +336,10 @@ class ServerSettings(object):
         return self.__bwRankedBattles
 
     @property
+    def bwHallOfFame(self):
+        return self.__bwHallOfFame
+
+    @property
     def rankedBattles(self):
         return self.__rankedBattlesSettings
 
@@ -349,8 +359,7 @@ class ServerSettings(object):
         return self.__getGlobalSetting('isBuyPotapovQuestSlotEnabled', False)
 
     def isStrongholdsEnabled(self):
-        settings = self.__getGlobalSetting('strongholdSettings', {'isStrongholdsEnabled': False})
-        return settings.get('isStrongholdsEnabled', False)
+        return self.__getGlobalSetting('strongholdSettings', {}).get('isStrongholdsEnabled', False)
 
     def isGoldFishEnabled(self):
         return self.__getGlobalSetting('isGoldFishEnabled', False)
@@ -364,12 +373,24 @@ class ServerSettings(object):
     def isBootcampEnabled(self):
         return self.__getGlobalSetting('isBootcampEnabled', False)
 
+    def isEpicRandomEnabled(self):
+        return self.__getGlobalSetting('isEpicRandomEnabled', False)
+
+    def isEpicRandomAchievementsEnabled(self):
+        return self.__getGlobalSetting('isEpicRandomAchievementsEnabled', False)
+
+    def isEpicRandomMarkOfMasteryEnabled(self):
+        return self.__getGlobalSetting('isEpicRandomMarkOfMasteryEnabled', False)
+
     def isPromoAutoViewsEnabled(self):
         if self.isBootcampEnabled():
             from bootcamp.Bootcamp import g_bootcamp
             if g_bootcamp.isRunning():
                 return False
         return True
+
+    def isHofEnabled(self):
+        return self.__getGlobalSetting('hallOfFame', {}).get('isHofEnabled', False)
 
     def getMaxSPGinSquads(self):
         return self.__getGlobalSetting('maxSPGinSquads', 0)

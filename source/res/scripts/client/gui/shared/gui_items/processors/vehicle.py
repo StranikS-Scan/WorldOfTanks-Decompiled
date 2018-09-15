@@ -15,8 +15,8 @@ from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles
 from gui.shared.formatters import icons
 from gui.shared.formatters.time_formatters import formatTime, getTimeLeftInfo
 from gui.shared.gui_items.processors import ItemProcessor, Processor, makeI18nSuccess, makeI18nError, plugins, makeSuccess
-from gui.shared.gui_items.vehicle_layout import ShellVehicleLayout
-from gui.shared.money import Money, ZERO_MONEY, Currency
+from gui.shared.gui_items.vehicle_equipment import ShellLayoutHelper
+from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from helpers import time_utils, dependency
 from helpers.i18n import makeString
 from shared_utils import findFirst
@@ -29,10 +29,10 @@ def getCrewAndShellsSumPrice(result, vehicle, crewType, buyShells):
         tankmenCount = len(vehicle.crew)
         itemsCache = dependency.instance(IItemsCache)
         tankmanCost = itemsCache.items.shop.tankmanCostWithGoodyDiscount[crewType]
-        result += Money(tankmanCost[Currency.CREDITS] * tankmenCount, tankmanCost[Currency.GOLD] * tankmenCount)
+        result += Money(**tankmanCost) * tankmenCount
     if buyShells:
         for shell in vehicle.gun.defaultAmmo:
-            result += shell.buyPrice * shell.defaultCount
+            result += shell.buyPrices.itemPrice.price * shell.defaultCount
 
     return result
 
@@ -101,7 +101,7 @@ class VehicleBuyer(VehicleReceiveProcessor):
         Gets common buy price with shells, slot, crew
         :return: <Money>
         """
-        return getCrewAndShellsSumPrice(self.item.buyPrice, self.item, self.crewType, self.buyShell)
+        return getCrewAndShellsSumPrice(self.item.buyPrices.itemPrice.price, self.item, self.crewType, self.buyShell)
 
     def _errorHandler(self, code, errStr='', ctx=None):
         """
@@ -128,7 +128,7 @@ class VehicleBuyer(VehicleReceiveProcessor):
         """
         :return: <str> system message type
         """
-        return CURRENCY_TO_SM_TYPE.get(self.item.buyPrice.getCurrency(byWeight=False), SM_TYPE.Information)
+        return CURRENCY_TO_SM_TYPE.get(self.item.buyPrices.itemPrice.getCurrency(byWeight=False), SM_TYPE.Information)
 
     def _request(self, callback):
         """
@@ -210,9 +210,9 @@ class VehicleRenter(VehicleReceiveProcessor):
         """
         for package in vehicle.rentPackages:
             if package['days'] == rentPackage:
-                return Money(*package['rentPrice'])
+                return package['rentPrice']
 
-        return ZERO_MONEY
+        return MONEY_UNDEFINED
 
 
 class VehicleRestoreProcessor(VehicleBuyer):
@@ -321,7 +321,7 @@ class VehicleTradeInProcessor(VehicleBuyer):
         """
         :return: <str> system message type
         """
-        return CURRENCY_TO_SM_TYPE.get(self.item.buyPrice.getCurrency(byWeight=False), SM_TYPE.Information)
+        return CURRENCY_TO_SM_TYPE.get(self.item.buyPrices.itemPrice.getCurrency(byWeight=False), SM_TYPE.Information)
 
     def _request(self, callback):
         """
@@ -352,10 +352,10 @@ class VehicleSlotBuyer(Processor):
 
     def _successHandler(self, code, ctx=None):
         price = self.__getSlotPrice()
-        if price == ZERO_MONEY:
-            money = formatGoldPrice(price.gold)
-        else:
+        if price:
             money = formatPrice(price)
+        else:
+            money = formatGoldPrice(price.gold)
         return makeI18nSuccess('vehicle_slot_buy/success', money=money, type=SM_TYPE.FinancialTransactionWithGold)
 
     def _request(self, callback):
@@ -376,8 +376,12 @@ class VehicleSeller(ItemProcessor):
     restore = dependency.descriptor(IRestoreController)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, vehicle, dismantlingGoldCost, shells=[], eqs=[], optDevs=[], inventory=[], isCrewDismiss=False):
-        self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, shells, eqs, optDevs, inventory, dismantlingGoldCost)
+    def __init__(self, vehicle, shells=None, eqs=None, optDevs=None, inventory=None, isCrewDismiss=False):
+        shells = shells or []
+        eqs = eqs or []
+        optDevs = optDevs or []
+        inventory = inventory or []
+        self.gainMoney, self.spendMoney = self.__getGainSpendMoney(vehicle, shells, eqs, optDevs, inventory)
         barracksBerthsNeeded = len(filter(lambda (idx, item): item is not None, vehicle.crew))
         bufferOverflowCtx = {}
         isBufferOverflowed = False
@@ -405,7 +409,7 @@ class VehicleSeller(ItemProcessor):
         self.optDevs = optDevs
         self.inventory = inventory
         self.isCrewDismiss = isCrewDismiss
-        self.isDismantlingForGold = self.__dismantlingForGoldDevicesCount(vehicle, optDevs) > 0
+        self.isDismantlingForMoney = len(self.__dismantlingForMoneyDevices(vehicle, optDevs)) > 0
         self.isRemovedAfterRent = vehicle.isRented
 
     def _errorHandler(self, code, errStr='', ctx=None):
@@ -418,10 +422,11 @@ class VehicleSeller(ItemProcessor):
 
     def _successHandler(self, code, ctx=None):
         restoreInfo = ''
-        if self.vehicle.isPremium and not self.vehicle.isUnique and not self.vehicle.isUnrecoverable and self.lobbyContext.getServerSettings().isVehicleRestoreEnabled() and not self.vehicle.sellForGold:
+        sellForGold = self.vehicle.getSellPrice(preferred=True).getCurrency(byWeight=True) == Currency.GOLD
+        if self.vehicle.isPremium and not self.vehicle.isUnique and not self.vehicle.isUnrecoverable and self.lobbyContext.getServerSettings().isVehicleRestoreEnabled() and not sellForGold:
             timeKey, formattedTime = getTimeLeftInfo(self.itemsCache.items.shop.vehiclesRestoreConfig.restoreDuration)
             restoreInfo = makeString('#system_messages:vehicle/restoreDuration/%s' % timeKey, time=formattedTime)
-        if self.isDismantlingForGold:
+        if self.isDismantlingForMoney:
             localKey = 'vehicle_sell/success_dismantling'
             smType = SM_TYPE.Selling
             if self.isRemovedAfterRent:
@@ -455,11 +460,17 @@ class VehicleSeller(ItemProcessor):
         for dev in self.optDevs:
             itemsFromVehicle.append(dev.intCD)
 
-        LOG_DEBUG('Make server request:', self.vehicle.invID, isSellShells, isSellEqs, isSellFromInv, isSellOptDevs, self.isDismantlingForGold, self.isCrewDismiss, itemsFromVehicle, itemsFromInventory)
+        LOG_DEBUG('Make server request:', self.vehicle.invID, isSellShells, isSellEqs, isSellFromInv, isSellOptDevs, self.isDismantlingForMoney, self.isCrewDismiss, itemsFromVehicle, itemsFromInventory)
         BigWorld.player().inventory.sellVehicle(self.vehicle.invID, self.isCrewDismiss, itemsFromVehicle, itemsFromInventory, lambda code: self._response(code, callback))
 
-    def __dismantlingForGoldDevicesCount(self, vehicle, optDevicesToSell):
-        result = 0
+    def __dismantlingForMoneyDevices(self, vehicle, optDevicesToSell):
+        """
+        Return list of opt. devices which user wants to dismantle for Money(for gold, crystal or any other currency)
+        :param vehicle: gui_items.Vehicle
+        :param optDevicesToSell: list of opt.devices to sell
+        :return: list of opt. devices
+        """
+        result = []
         if vehicle is None:
             return result
         else:
@@ -468,22 +479,26 @@ class VehicleSeller(ItemProcessor):
                 if dev is None:
                     continue
                 if not dev.isRemovable and dev.intCD not in optDevicesToSell:
-                    result += 1
+                    result.append(dev)
 
             return result
 
-    def __getGainSpendMoney(self, vehicle, vehShells, vehEqs, vehOptDevs, inventory, dismantlingGoldCost):
-        moneyGain = vehicle.sellPrice
+    def __getGainSpendMoney(self, vehicle, vehShells, vehEqs, vehOptDevs, inventory):
+        moneyGain = vehicle.sellPrices.itemPrice.price
         for shell in vehShells:
-            moneyGain += shell.sellPrice * shell.count
+            moneyGain += shell.sellPrices.itemPrice.price * shell.count
 
         for module in vehEqs + vehOptDevs:
-            moneyGain += module.sellPrice
+            moneyGain += module.sellPrices.itemPrice.price
 
         for module in inventory:
-            moneyGain += module.sellPrice * module.inventoryCount
+            moneyGain += module.sellPrices.itemPrice.price * module.inventoryCount
 
-        moneySpend = dismantlingGoldCost * Money(gold=self.__dismantlingForGoldDevicesCount(vehicle, vehOptDevs))
+        dismantlingDevices = self.__dismantlingForMoneyDevices(vehicle, vehOptDevs)
+        moneySpend = MONEY_UNDEFINED
+        for dev in dismantlingDevices:
+            moneySpend += dev.getRemovalPrice(self.itemsCache.items).price
+
         return (moneyGain, moneySpend)
 
     def __accumulatePrice(self, result, price, count=1):
@@ -550,18 +565,18 @@ class VehicleLayoutProcessor(Processor):
     Apply equipments and shells layout
     """
 
-    def __init__(self, vehicle, shellsLayout=None, eqsLayout=None, skipConfirm=False):
+    def __init__(self, vehicle, shellsLayoutHelper=None, eqsLayoutHelper=None, skipConfirm=False):
         """
         Ctor.
         
         @param vehicle: gui_item.vehicle.Vehicle
-        @param shellsLayout: instance of ShellVehicleLayout
-        @param eqsLayout: instance of EquipmentVehicleLayout
+        @param shellsLayoutHelper: instance of ShellLayoutHelper
+        @param eqsLayoutHelper: instance of EquipmentLayoutHelper
         """
         super(VehicleLayoutProcessor, self).__init__()
         self.vehicle = vehicle
-        self.shellsLayout = shellsLayout
-        self.eqsLayout = eqsLayout
+        self.shellsLayoutHelper = shellsLayoutHelper
+        self.eqsLayoutHelper = eqsLayoutHelper
         self._setupPlugins(skipConfirm)
 
     def _setupPlugins(self, skipConfirm):
@@ -571,8 +586,8 @@ class VehicleLayoutProcessor(Processor):
         self.addPlugins((plugins.VehicleLockValidator(self.vehicle), plugins.WalletValidator(isWalletValidatorEnabled), plugins.VehicleLayoutValidator(shellsPrice, eqsPrice)))
 
     def _request(self, callback):
-        shellsRaw = self.shellsLayout.getRawLayout() if self.shellsLayout else None
-        eqsRaw = self.eqsLayout.getRawLayout() if self.eqsLayout else None
+        shellsRaw = self.shellsLayoutHelper.getRawLayout() if self.shellsLayoutHelper else None
+        eqsRaw = self.eqsLayoutHelper.getRawLayout() if self.eqsLayoutHelper else None
         BigWorld.player().inventory.setAndFillLayouts(self.vehicle.invID, shellsRaw, eqsRaw, self._getEquipmentType(), lambda code, errStr, ext: self._response(code, callback, errStr=errStr, ctx=ext))
         return
 
@@ -585,9 +600,9 @@ class VehicleLayoutProcessor(Processor):
     def _successHandler(self, code, ctx=None):
         additionalMessages = []
         if len(ctx.get('shells', [])):
-            totalPrice = ZERO_MONEY
+            totalPrice = MONEY_UNDEFINED
             for shellCompDescr, price, count in ctx.get('shells', []):
-                price = Money(*price)
+                price = Money.makeFromMoneyTuple(price)
                 shell = self.itemsCache.items.getItemByCD(shellCompDescr)
                 additionalMessages.append(makeI18nSuccess('shell_buy/success', name=shell.userName, count=count, money=formatPrice(price), type=self._getSysMsgType(price)))
                 totalPrice += price
@@ -595,7 +610,7 @@ class VehicleLayoutProcessor(Processor):
             additionalMessages.append(makeI18nSuccess('layout_apply/success_money_spent', money=formatPrice(totalPrice), type=self._getSysMsgType(totalPrice)))
         if len(ctx.get('eqs', [])):
             for eqCompDescr, price, count in ctx.get('eqs', []):
-                price = Money(*price)
+                price = Money.makeFromMoneyTuple(price)
                 equipment = self.itemsCache.items.getItemByCD(eqCompDescr)
                 additionalMessages.append(makeI18nSuccess('artefact_buy/success', kind=equipment.userType, name=equipment.userName, count=count, money=formatPrice(price), type=self._getSysMsgType(price)))
 
@@ -612,13 +627,13 @@ class VehicleLayoutProcessor(Processor):
         """
         @return: price that should be paid to fill layout
         """
-        if self.shellsLayout is None:
-            return ZERO_MONEY
+        if self.shellsLayoutHelper is None:
+            return MONEY_UNDEFINED
         else:
-            price = ZERO_MONEY
+            price = MONEY_UNDEFINED
             if g_bootcamp.isRunning():
                 return price
-            for shellCompDescr, count, isBoughtForCredits in LayoutIterator(self.shellsLayout.getRawLayout()):
+            for shellCompDescr, count, isBuyingForAltPrice in LayoutIterator(self.shellsLayoutHelper.getRawLayout()):
                 if not shellCompDescr or not count:
                     continue
                 shell = self.itemsCache.items.getItemByCD(int(shellCompDescr))
@@ -626,9 +641,8 @@ class VehicleLayoutProcessor(Processor):
                 vehCount = vehShell.count if vehShell is not None else 0
                 buyCount = count - shell.inventoryCount - vehCount
                 if buyCount:
-                    buyPrice = buyCount * shell.buyPrice
-                    if isBoughtForCredits:
-                        buyPrice = buyPrice.exchange(Currency.GOLD, Currency.CREDITS, self.itemsCache.items.shop.exchangeRateForShellsAndEqs)
+                    itemPrice = shell.buyPrices.itemAltPrice if isBuyingForAltPrice else shell.buyPrices.itemPrice
+                    buyPrice = buyCount * itemPrice.price
                     price += buyPrice
 
             return price
@@ -637,22 +651,21 @@ class VehicleLayoutProcessor(Processor):
         """
         @return: price that should be paid to fill layout
         """
-        if self.eqsLayout is None:
-            return ZERO_MONEY
+        if self.eqsLayoutHelper is None:
+            return MONEY_UNDEFINED
         else:
-            price = ZERO_MONEY
-            regularEqsLayout = self.eqsLayout.getRegularRawLayout()
-            for idx, (eqCompDescr, count, isBoughtForCredits) in enumerate(LayoutIterator(regularEqsLayout)):
+            price = MONEY_UNDEFINED
+            regularEqsLayout = self.eqsLayoutHelper.getRegularRawLayout()
+            for idx, (eqCompDescr, count, isBuyingForAltPrice) in enumerate(LayoutIterator(regularEqsLayout)):
                 if not eqCompDescr or not count:
                     continue
                 equipment = self.itemsCache.items.getItemByCD(int(eqCompDescr))
-                vehEquipment = self.vehicle.eqs[idx]
+                vehEquipment = self.vehicle.equipment.regularConsumables[idx]
                 vehCount = 1 if vehEquipment is not None else 0
                 buyCount = count - equipment.inventoryCount - vehCount
                 if buyCount:
-                    buyPrice = buyCount * equipment.buyPrice
-                    if isBoughtForCredits:
-                        buyPrice = buyPrice.exchange(Currency.GOLD, Currency.CREDITS, self.itemsCache.items.shop.exchangeRateForShellsAndEqs)
+                    itemPrice = equipment.buyPrices.itemAltPrice if isBuyingForAltPrice else equipment.buyPrices.itemPrice
+                    buyPrice = buyCount * itemPrice.price
                     price += buyPrice
 
             return price
@@ -666,7 +679,7 @@ class VehicleBattleBoosterLayoutProcessor(VehicleLayoutProcessor):
         
         @param vehicle: gui_item.vehicle.Vehicle
         @param battleBooster: instance of gui_items.artefacts.BattleBooster
-        @param eqsLayout: instance of EquipmentVehicleLayout
+        @param eqsLayout: instance of EquipmentLayoutHelper
         """
         self.battleBooster = battleBooster
         super(VehicleBattleBoosterLayoutProcessor, self).__init__(vehicle, None, eqsLayout, skipConfirm)
@@ -687,7 +700,7 @@ class BuyAndInstallBattleBoosterProcessor(VehicleBattleBoosterLayoutProcessor):
         super(BuyAndInstallBattleBoosterProcessor, self).__init__(vehicle, battleBooster, eqsLayout, skipConfirm)
 
     def _setupPlugins(self, skipConfirm):
-        itemPrice = self.battleBooster.altPrice or self.battleBooster.buyPrice
+        itemPrice = self.battleBooster.buyPrices.getSum().price
         self.addPlugins((plugins.MoneyValidator(itemPrice * self.count), plugins.BattleBoosterConfirmator('confirmBattleBoosterBuyAndInstall', 'confirmBattleBoosterInstallNotSuitable', self.vehicle, self.battleBooster, isEnabled=not skipConfirm)))
 
     def _request(self, callback):
@@ -697,7 +710,7 @@ class BuyAndInstallBattleBoosterProcessor(VehicleBattleBoosterLayoutProcessor):
         LOG_DEBUG('Server response on buy battle booster', code)
         if code < 0:
             return callback(self._errorHandler(code))
-        price = self.battleBooster.altPrice or self.battleBooster.buyPrice
+        price = self.battleBooster.getBuyPrice().price
         price *= self.count
         message = makeI18nSuccess('battleBooster_buy/success', kind=self.battleBooster.userType, name=self.battleBooster.userName, count=self.count, money=formatPrice(price), type=self._getSysMsgType(price))
         SystemMessages.pushI18nMessage(message.userMsg, type=message.sysMsgType)
@@ -732,8 +745,8 @@ def tryToLoadDefaultShellsLayout(vehicle, callback=None):
             break
         defaultLayout.extend(shell.defaultLayoutValue)
     else:
-        shellsLayout = ShellVehicleLayout(vehicle, defaultLayout)
-        result = yield VehicleLayoutProcessor(vehicle, shellsLayout).request()
+        shellsLayoutHelper = ShellLayoutHelper(vehicle, defaultLayout)
+        result = yield VehicleLayoutProcessor(vehicle, shellsLayoutHelper).request()
         if result and result.auxData:
             for m in result.auxData:
                 SystemMessages.pushI18nMessage(m.userMsg, type=m.sysMsgType)
@@ -756,8 +769,9 @@ def _getUniqueVehicleSellConfirmator(vehicle, lobbyContext=None):
     :param vehicle: <Vehicle>
     :return: <MessageConfirmator>
     """
+    sellForGold = vehicle.getSellPrice(preferred=True).getCurrency(byWeight=True) == Currency.GOLD
     if lobbyContext is not None and lobbyContext.getServerSettings().isVehicleRestoreEnabled():
-        if not vehicle.sellForGold and not vehicle.isUnrecoverable:
+        if not sellForGold and not vehicle.isUnrecoverable:
             if vehicle.isRecentlyRestored():
                 return plugins.MessageConfirmator('vehicleSell/restoreCooldown', ctx={'cooldown': formatTime(vehicle.restoreInfo.getRestoreCooldownTimeLeft(), time_utils.ONE_DAY)}, isEnabled=vehicle.isUnique)
             if vehicle.isPurchased:

@@ -42,6 +42,8 @@
       <armor_12>	105	</armor_12>
       <armor_13>	240	</armor_13>
       <armor_14>	75	</armor_14>
+      <armor_15>	240	</armor_15>
+      <armor_16>	230	</armor_16>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	78030	</weight>
@@ -103,7 +105,7 @@
       <terrainResistance>	1.4 1.5 2.2	</terrainResistance>
       <brakeForce>	72000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	20	</rotationSpeed>
+      <rotationSpeed>	15	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.24	</vehicleMovement>
         <vehicleRotation>	0.24	</vehicleRotation>
@@ -377,7 +379,7 @@
       <terrainResistance>	1.1 1.2 1.8	</terrainResistance>
       <brakeForce>	72000	</brakeForce>
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
-      <rotationSpeed>	22	</rotationSpeed>
+      <rotationSpeed>	17	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.22	</vehicleMovement>
         <vehicleRotation>	0.22	</vehicleRotation>
@@ -667,7 +669,7 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	35000	</weight>
       <maxHealth>	410	</maxHealth>
-      <rotationSpeed>	18	</rotationSpeed>
+      <rotationSpeed>	17	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
         <maxRegenHealth>	85	</maxRegenHealth>
@@ -981,9 +983,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.88	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </J25_Type_4.xml>

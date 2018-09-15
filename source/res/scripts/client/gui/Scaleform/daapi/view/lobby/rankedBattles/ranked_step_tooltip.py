@@ -8,7 +8,7 @@ from gui.shared.tooltips import TOOLTIP_TYPE
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers.i18n import makeString as _ms
-_TOOLTIP_MIN_WIDTH = 280
+_TOOLTIP_MIN_WIDTH = 320
 
 class RankedStepTooltip(BlocksTooltipData):
 
@@ -27,7 +27,7 @@ class RankedStepTooltip(BlocksTooltipData):
         return items
 
     def _packHeaderBlock(self):
-        return formatters.packImageTextBlockData(title=text_styles.highTitle(RANKED_BATTLES.TOOLTIP_STEP_HEADER), desc=text_styles.standard(RANKED_BATTLES.TOOLTIP_STEP_DESCRIPTION), img=RES_ICONS.MAPS_ICONS_RANKEDBATTLES_RANKS_STAGE_ICON_RANKS_STAGE_98X120, imgPadding=formatters.packPadding(left=-18, top=-28), txtGap=-4, txtOffset=70, padding=formatters.packPadding(bottom=-60))
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(RANKED_BATTLES.TOOLTIP_STEP_HEADER), desc=text_styles.standard(RANKED_BATTLES.TOOLTIP_STEP_DESCRIPTION), img=RES_ICONS.MAPS_ICONS_RANKEDBATTLES_RANKS_STAGE_STAGE_GREY_94X120, imgPadding=formatters.packPadding(left=-18, top=-28), txtGap=-4, txtOffset=70, padding=formatters.packPadding(bottom=-60))
 
     def _packCondutionsBlock(self, *args, **kwargs):
         block = []

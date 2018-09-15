@@ -602,7 +602,7 @@ class ShotResultIndicatorPlugin(CrosshairPlugin):
         if ctrl is not None:
             ctrl.onCrosshairViewChanged -= self.__onCrosshairViewChanged
             ctrl.onGunMarkerStateChanged -= self.__onGunMarkerStateChanged
-            g_playerEvents.onTeamChanged -= self.__onTeamChanged
+        g_playerEvents.onTeamChanged -= self.__onTeamChanged
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.__colors = None
         return

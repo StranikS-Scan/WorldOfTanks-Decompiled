@@ -247,8 +247,6 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
 
     def setForcedGuiControlMode(self, flags):
         result = False
-        if not self.__isStarted:
-            return result
         detached = flags & GUI_CTRL_MODE_FLAG.CURSOR_ATTACHED > 0
         if detached ^ self.__isDetached:
             self.__isDetached = detached
@@ -577,7 +575,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
             if avatarVehicleTypeDesc is not None:
                 avatarVehWeightTons = avatarVehicleTypeDesc.physics['weight'] / 1000.0
                 vehicleSensitivity = self.__dynamicCameraSettings.getSensitivityToImpulse(avatarVehWeightTons)
-                vehicleSensitivity *= avatarVehicleTypeDesc.hull['swinging']['sensitivityToImpulse']
+                vehicleSensitivity *= avatarVehicleTypeDesc.hull.swinging.sensitivityToImpulse
             impulseReason = None
             isDistant = False
             if shakeReason == _ShakeReason.OWN_SHOT:
@@ -627,11 +625,11 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
             avatarVehicle = BigWorld.player().getVehicleAttached()
             if avatarVehicle is None or avatarVehicle is vehicle:
                 return
-            caliber = vehicle.typeDescriptor.shot['shell']['caliber']
+            caliber = vehicle.typeDescriptor.shot.shell.caliber
             impulseValue = self.__dynamicCameraSettings.getGunImpulse(caliber)
             avatarVehicleWeightInTons = avatarVehicle.typeDescriptor.physics['weight'] / 1000.0
             vehicleSensitivity = self.__dynamicCameraSettings.getSensitivityToImpulse(avatarVehicleWeightInTons)
-            vehicleSensitivity *= avatarVehicle.typeDescriptor.hull['swinging']['sensitivityToImpulse']
+            vehicleSensitivity *= avatarVehicle.typeDescriptor.hull.swinging.sensitivityToImpulse
             _, impulseValue = self.__adjustImpulse(Math.Vector3(0, 0, 0), impulseValue, camera, vehicle.position, vehicleSensitivity, cameras.ImpulseReason.VEHICLE_EXPLOSION)
             camera.applyDistantImpulse(vehicle.position, impulseValue, cameras.ImpulseReason.VEHICLE_EXPLOSION)
             return
@@ -646,7 +644,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
                 return
             avatarVehicleWeightInTons = avatarVehicle.typeDescriptor.physics['weight'] / 1000.0
             vehicleSensitivity = self.__dynamicCameraSettings.getSensitivityToImpulse(avatarVehicleWeightInTons)
-            vehicleSensitivity *= avatarVehicle.typeDescriptor.hull['swinging']['sensitivityToImpulse']
+            vehicleSensitivity *= avatarVehicle.typeDescriptor.hull.swinging.sensitivityToImpulse
             _, impulseValue = self.__adjustImpulse(Math.Vector3(0, 0, 0), impulseValue, camera, position, vehicleSensitivity, cameras.ImpulseReason.HE_EXPLOSION)
             camera.applyDistantImpulse(position, impulseValue, cameras.ImpulseReason.HE_EXPLOSION)
             return
@@ -664,7 +662,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
             if avatarVehicle is not None:
                 avatarVehicleWeightInTons = avatarVehicle.typeDescriptor.physics['weight'] / 1000.0
                 vehicleSensitivity = self.__dynamicCameraSettings.getSensitivityToImpulse(avatarVehicleWeightInTons)
-                vehicleSensitivity *= avatarVehicle.typeDescriptor.hull['swinging']['sensitivityToImpulse']
+                vehicleSensitivity *= avatarVehicle.typeDescriptor.hull.swinging.sensitivityToImpulse
             _, impulseValue = self.__adjustImpulse(Math.Vector3(0, 0, 0), impulseValue, camera, position, vehicleSensitivity, cameras.ImpulseReason.VEHICLE_EXPLOSION)
             camera.applyDistantImpulse(position, impulseValue, cameras.ImpulseReason.PROJECTILE_HIT)
             return

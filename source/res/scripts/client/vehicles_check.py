@@ -22,13 +22,13 @@ def _vehicleCheck(vehType):
     tank = vehType.name
     for state in ('undamaged', 'destroyed', 'exploded'):
         for chassis in vehType.chassis:
-            _parameterCheck(chassis['hullPosition'], chassis['models'][state], ('Scene Root', 'Tank', 'V'), 'hullPosition', tank, chassis['name'])
+            _parameterCheck(chassis.hullPosition, chassis.models[state], ('Scene Root', 'Tank', 'V'), 'hullPosition', tank, chassis.name)
 
         for hull in vehType.hulls:
-            _parameterCheck(hull['turretPositions'][0], hull['models'][state], ('Scene Root', hull['turretHardPoints'][0]), 'turretPosition', tank, 'hull')
+            _parameterCheck(hull.turretPositions[0], hull.models[state], ('Scene Root', hull.turretHardPoints[0]), 'turretPosition', tank, 'hull')
 
         for turret in vehType.turrets[0]:
-            _parameterCheck(turret['gunPosition'], turret['models'][state], ('Scene Root', 'HP_gunJoint'), 'gunPosition', tank, turret['name'])
+            _parameterCheck(turret.gunPosition, turret.models[state], ('Scene Root', 'HP_gunJoint'), 'gunPosition', tank, turret.name)
 
 
 def _parameterCheck(pos, modelPath, nodes, parameter, tank, comp):

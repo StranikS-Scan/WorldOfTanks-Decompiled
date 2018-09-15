@@ -186,11 +186,9 @@
     </game-attribute>
     <gui-item-criteria>	ResearchRootNodeCriteria	  <item-id>	ResearchRootNodeID	</item-id>
       <value>	id=$SelectedVehicleID$	</value>
-      <cached>	False	</cached>
     </gui-item-criteria>
     <gui-item-criteria>	NextToFindItemCriteria	  <item-id>	ResearchItemNodeID	</item-id>
       <value>	id=$NextToFindItemID$	</value>
-      <cached>	False	</cached>
     </gui-item-criteria>
     <hint>	BuyVehicleHint	  <item-id>	TankCarousel	</item-id>
       <text>	BuyVehicleText	</text>

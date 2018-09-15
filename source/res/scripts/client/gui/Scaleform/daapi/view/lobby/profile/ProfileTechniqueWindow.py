@@ -28,3 +28,7 @@ class ProfileTechniqueWindow(ProfileTechnique):
         self.__dataReceiver = None
         super(ProfileTechniqueWindow, self)._dispose()
         return
+
+    def _setRatingButton(self):
+        self.as_setRatingButtonS({'enabled': False,
+         'visible': False})

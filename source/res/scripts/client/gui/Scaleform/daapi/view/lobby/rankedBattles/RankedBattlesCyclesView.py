@@ -10,6 +10,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.ranked_battles.ranked_models import CYCLE_STATUS
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, time_formatters
+from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
@@ -123,17 +124,30 @@ class RankedBattlesCyclesView(LobbySubView, RankedBattlesCyclesViewMeta):
 
     def __getAwardsRibbonBlock(self, cycle):
         rank = self.rankedController.getMaxRankForCycle(cycle.ID)
-        awards = self.__packAwards(cycle, rank)
-        return {'descriptionTxt': text_styles.promoSubTitle(_ms(RANKED_BATTLES.RANKEDAWARDS_AWARDSBLOCK_DESCRIPTION, cycleNumber=cycle.ordinalNumber)),
-         'pointsTxt': text_styles.hightlight(_ms(RANKED_BATTLES.RANKEDAWARDS_AWARDSBLOCK_POINTS, points=cycle.points)),
+        awardsForTheLastRankVO = self.__packAwards(cycle)
+        titleTxtStr = _ms(RANKED_BATTLES.RANKEDAWARDS_AWARDSBLOCK_TITLE, cycleNumber=cycle.ordinalNumber)
+        allAwardsForCycleDict = self.rankedController.getAllAwardsForCycle(cycleID=cycle.ID)
+        crystalCount = allAwardsForCycleDict.pop(Currency.CRYSTAL, {'count': 0}).get('count')
+        allAwardsForCycleVO = self.__formatBonusVO(allAwardsForCycleDict)
+        return {'descriptionTxt': text_styles.stats(RANKED_BATTLES.RANKEDAWARDS_AWARDSBLOCK_DESCRIPTION),
+         'titleTxt': text_styles.promoSubTitle(titleTxtStr),
+         'pointsTxt': text_styles.superPromoTitle(str(cycle.points)),
+         'crystalsTxt': text_styles.superPromoTitle(str(crystalCount)),
          'rankIcon': {'imageSrc': rank.getIcon('medium'),
                       'smallImageSrc': rank.getIcon('small'),
                       'isEnabled': True,
-                      'isMaster': True,
+                      'isMaster': rank.isMax(),
                       'rankID': str(rank.getID()),
                       'rankCount': str(getattr(rank, 'getSerialID', lambda : '')()),
                       'hasTooltip': False},
-         'awards': awards}
+         'awards': awardsForTheLastRankVO,
+         'awardsHeaderTxt': text_styles.highTitle(RANKED_BATTLES.RANKEDAWARDS_AWARDSBLOCK_AWARDSHEADERTXT),
+         'crystalsImage': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_ICON_RANK_FINAL_PROXY_80X80,
+         'pointsImage': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_ICON_FINAL_CUP_80X80,
+         'pointsLabelTxt': text_styles.stats(RANKED_BATTLES.RANKEDAWARDS_AWARDSBLOCK_POINTS),
+         'crystalsLabelTxt': text_styles.stats(RANKED_BATTLES.RANKEDAWARDS_AWARDSBLOCK_CRYSTAL),
+         'boxImage': rank.getBoxIcon(size='120x100', isOpened=False),
+         'ribbonAwards': allAwardsForCycleVO}
 
     def __buildCycleData(self, cycleID):
         if cycleID == FINAL_TAB:
@@ -266,7 +280,7 @@ class RankedBattlesCyclesView(LobbySubView, RankedBattlesCyclesViewMeta):
     def __getCycle(self, cycleID):
         return self.__getCycles().get(cycleID)
 
-    def __packAwards(self, cycle, rank):
+    def __packAwards(self, cycle):
         quests = self.rankedController.getQuestsForCycle(cycle.ID, completedOnly=True).values()
         bonusesDict = self.__extractBonusesForAwardRibbon(quests)
         vehicleQuest = self.rankedController.getVehicleQuestForCycle(cycle.ID)
@@ -275,9 +289,13 @@ class RankedBattlesCyclesView(LobbySubView, RankedBattlesCyclesViewMeta):
         for imgSource, bonusInfo in vehBonuses.iteritems():
             if imgSource not in bonusesDict:
                 bonusesDict[imgSource] = bonusInfo
-            bonusesDict[imgSource]['count'] += bonusInfo['count'] * mastersCount
+            bonusesDict[imgSource]['count'] = bonusInfo['count'] * mastersCount
 
-        result = self.rankedController.getCycleRewards(cycle.ID)
+        return self.__formatBonusVO(bonusesDict)
+
+    @staticmethod
+    def __formatBonusVO(bonusesDict):
+        result = []
         for bonusVO in bonusesDict.values():
             bonusVO['label'] = text_styles.hightlight('x{}'.format(bonusVO.pop('count')))
             bonusVO['align'] = TEXT_ALIGN.RIGHT

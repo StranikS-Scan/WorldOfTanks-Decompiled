@@ -47,7 +47,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	38850	</weight>
-    <maxHealth>	1720	</maxHealth>
+    <maxHealth>	1920	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	210	</maxHealth>
       <maxRegenHealth>	140	</maxRegenHealth>
@@ -104,8 +104,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	28	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.19	</vehicleMovement>
-        <vehicleRotation>	0.19	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -554,7 +554,7 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	14200	</weight>
-      <maxHealth>	430	</maxHealth>
+      <maxHealth>	480	</maxHealth>
       <rotationSpeed>	25	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
@@ -583,8 +583,13 @@
             <minPitch>	0 -18 1 -18	</minPitch>
             <maxPitch>	0 6 0.311338 6 0.375 1 0.625 1 0.688662 6 1 6	</maxPitch>
           </pitchLimits>
-          <aimingTime>	3.1	</aimingTime>
+          <aimingTime>	2.9	</aimingTime>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
+          <shotDispersionFactors>
+            <turretRotation>	0.06	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
           <models>
             <undamaged>	vehicles/russian/R45_IS-7/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R45_IS-7/crash/lod0/Gun_01.model	</destroyed>
@@ -659,7 +664,7 @@
     </IS-7>
   </turrets0>
   <engines>
-    <M-50T>	shared	</M-50T>
+    <M_50TI>	shared	</M_50TI>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -670,9 +675,9 @@
   <physics>
     <detailed>
       <engines>
-        <M-50T>
-          <smplEnginePower>	1110.145	</smplEnginePower>
-        </M-50T>
+        <M_50TI>
+          <smplEnginePower>	1200	</smplEnginePower>
+        </M_50TI>
       </engines>
       <chassis>
         <IS-7>
@@ -724,9 +729,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.88	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </R45_IS-7.xml>

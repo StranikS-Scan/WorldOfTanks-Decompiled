@@ -3,7 +3,6 @@
 from debug_utils import LOG_WARNING, LOG_ERROR
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from gui.Scaleform.daapi.view.lobby.missions.conditions_formatters import CONDITION_ICON, POSSIBLE_BATTLE_RESUTLS_KEYS, BATTLE_RESULTS_KEYS, SimpleMissionsFormatter, MissionsVehicleListFormatter, MissionsBattleConditionsFormatter, FormattableField, FORMATTER_IDS, packDescriptionField
-from gui.Scaleform.daapi.view.lobby.missions.conditions_formatters.requirements import relate
 from gui.Scaleform.genConsts.MISSIONS_ALIASES import MISSIONS_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS

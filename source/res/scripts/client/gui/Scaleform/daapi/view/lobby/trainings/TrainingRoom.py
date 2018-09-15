@@ -221,9 +221,13 @@ class TrainingRoom(LobbySubView, TrainingRoomMeta, ILegacyListener):
             self.__showActionErrorMessage()
 
     def onSettingUpdated(self, entity, settingName, settingValue):
-        if settingName == PREBATTLE_SETTING_NAME.ARENA_TYPE_ID:
-            arenaType = ArenaType.g_cache.get(settingValue)
-            self.as_updateMapS(settingValue, entity.getTeamLimits()['maxCount'][0] * 2, arenaType.name, formatters.getTrainingRoomTitle(arenaType), formatters.getArenaSubTypeString(settingValue), arenaType.description)
+        if settingName in (PREBATTLE_SETTING_NAME.ARENA_TYPE_ID, PREBATTLE_SETTING_NAME.LIMITS):
+            if settingName == PREBATTLE_SETTING_NAME.ARENA_TYPE_ID:
+                arenaTypeID = settingValue
+            else:
+                arenaTypeID = entity.getSettings()[PREBATTLE_SETTING_NAME.ARENA_TYPE_ID]
+            arenaType = ArenaType.g_cache.get(arenaTypeID)
+            self.as_updateMapS(arenaTypeID, entity.getTeamLimits()['maxCount'][0] * 2, arenaType.name, formatters.getTrainingRoomTitle(arenaType), formatters.getArenaSubTypeString(arenaTypeID), arenaType.description)
         elif settingName == PREBATTLE_SETTING_NAME.ROUND_LENGTH:
             self.as_updateTimeoutS(formatters.getRoundLenString(settingValue))
         elif settingName == PREBATTLE_SETTING_NAME.COMMENT:

@@ -71,14 +71,14 @@ class GuiItemFactory(IGuiItemsFactory):
         :param isBoughtForCredits: is item has been bought for credits
         :return: an instance of Equipment or BattleBooster class.
         """
-        descriptor = vehicles.getDictDescr(intCompactDescr)
+        descriptor = vehicles.getItemByCompactDescr(intCompactDescr)
         if descriptor.equipmentType == EQUIPMENT_TYPES.battleBoosters:
             classType = BattleBooster
         else:
             classType = Equipment
         return classType(intCompactDescr, proxy, isBoughtForCredits)
 
-    def createOptionalDevice(self, intCompactDescr, proxy=None, isBoughtForCredits=False):
+    def createOptionalDevice(self, intCompactDescr, proxy=None):
         """
         Creates OptionalDevice item by the given arguments.
         
@@ -87,7 +87,7 @@ class GuiItemFactory(IGuiItemsFactory):
         :param isBoughtForCredits: is item has been bought for credits
         :return: an instance of OptionalDevice class.
         """
-        return OptionalDevice(intCompactDescr, proxy, isBoughtForCredits)
+        return OptionalDevice(intCompactDescr, proxy)
 
     def createVehicleGun(self, intCompactDescr, proxy=None, descriptor=None):
         """

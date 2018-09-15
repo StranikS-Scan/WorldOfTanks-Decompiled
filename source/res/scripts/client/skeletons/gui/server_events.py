@@ -9,6 +9,7 @@ class IEventsCache(object):
     onSlotsCountChanged = None
     onProgressUpdated = None
     onEventsVisited = None
+    onProfileVisited = None
 
     def init(self):
         raise NotImplementedError

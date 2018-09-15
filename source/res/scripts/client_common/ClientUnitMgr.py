@@ -17,6 +17,7 @@ class ClientUnitMgr(UnitClientAPI):
         self.onUnitLeft = Event.Event(self.__eManager)
         self.onUnitRestored = Event.Event(self.__eManager)
         self.onUnitErrorReceived = Event.Event(self.__eManager)
+        self.onUnitNotifyReceived = Event.Event(self.__eManager)
         self.onUnitResponseReceived = Event.Event(self.__eManager)
         self.id = 0
         self.battleID = None
@@ -70,6 +71,13 @@ class ClientUnitMgr(UnitClientAPI):
         if errorCode == UNIT_ERROR.UNIT_RESTORED:
             self._restore()
         self.onUnitErrorReceived(requestID, unitMgrID, errorCode, errorString)
+
+    def onUnitNotify(self, unitMgrID, notifyCode, notifyString='', argsList=[]):
+        LOG_DEBUG('onUnitNotify: unitMgr=%s, errorCode=%s, notifyString=%r argsList=%r' % (unitMgrID,
+         notifyCode,
+         notifyString,
+         argsList))
+        self.onUnitNotifyReceived(unitMgrID, notifyCode, notifyString, argsList)
 
     def onUnitCallOk(self, requestID):
         LOG_DEBUG('onUnitCallOk: requestID=%s OK' % requestID)

@@ -6,9 +6,7 @@ Please, don't edit this file manually.
 """
 
 class CREW_OPERATIONS(object):
-    CREWOPERATIONS_BTN_TOOLTIP = '#crew_operations:crewOperations/btn/tooltip'
     RETURN_WARNING_MEMBERSINBATTLE_TOOLTIP = '#crew_operations:return/warning/membersInBattle/tooltip'
-    RETURN_WARNING_NOSPACE_TOOLTIP = '#crew_operations:return/warning/noSpace/tooltip'
     RETURN_WARNING_MEMBERDEMOBILIZED_TOOLTIP = '#crew_operations:return/warning/memberDemobilized/tooltip'
     DROPINBARRACK_WARNING_NOSPACE_TOOLTIP = '#crew_operations:dropInBarrack/warning/noSpace/tooltip'
     WINDOW_TITLE = '#crew_operations:window/title'

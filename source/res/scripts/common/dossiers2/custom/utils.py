@@ -9,7 +9,7 @@ def getVehicleNationID(vehTypeCompDescr):
 
 def isVehicleSPG(vehTypeCompDescr):
     itemTypeID, nationID, vehicleID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
-    return 'SPG' in vehicles.g_list.getList(nationID)[vehicleID]['tags']
+    return 'SPG' in vehicles.g_list.getList(nationID)[vehicleID].tags
 
 
 def getInBattleSeriesIndex(seriesName):

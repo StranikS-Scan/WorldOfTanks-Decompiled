@@ -357,6 +357,23 @@ class BattleSessionProvider(IBattleSessionProvider):
                 ctrl.clear(leave=False)
         return
 
+    def setVehicleHealth(self, isPlayerVehicle, vehicleID, newHealth, attackerID, attackReasonID):
+        """New vehicle health value is changed, notifies GUI about it.
+        :param isPlayerVehicle: (bool) determine is player vehicle
+        :param vehicleID: (int) vehicle id
+        :param newHealth: (int) vehicle health
+        :param attackerID: (int) vehicle which dealt damage
+        :param attackReasonID: (str) ATTACK_REASON.*
+        """
+        if not isPlayerVehicle:
+            ctrl = self.__sharedRepo.feedback
+            if ctrl is not None:
+                ctrl.setVehicleNewHealth(vehicleID, newHealth, attackerID, attackReasonID)
+        ctrl = self.__dynamicRepo.battleField
+        if ctrl is not None:
+            ctrl.setVehicleHealth(vehicleID, newHealth)
+        return
+
     def repairPointAction(self, repairPointIndex, action, nextActionTime):
         ctrl = self.__dynamicRepo.repair
         if ctrl is not None:
@@ -383,6 +400,9 @@ class BattleSessionProvider(IBattleSessionProvider):
         ctrl = self.__sharedRepo.feedback
         if ctrl is not None:
             ctrl.startVehicleVisual(vProxy, isImmediate)
+        ctrl = self.__dynamicRepo.battleField
+        if ctrl is not None:
+            ctrl.setVehicleVisible(vProxy.id, vProxy.health)
         return
 
     def stopVehicleVisual(self, vehicleID, isPlayerVehicle):

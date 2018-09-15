@@ -1459,3 +1459,17 @@ class ClanFavouriteAttrs(_ClanFavouriteAttrs, FieldsCheckerMixin):
     @fmtUnavailableValue(fields=('favorite_primetime',))
     def getFavoritePrimetime(self):
         return self.favorite_primetime
+
+
+_HofAttrs = namedtuple('_HofAttrs', ['status', 'errors'])
+_HofAttrs.__new__.__defaults__ = (None, {})
+
+class HofAttrs(_HofAttrs, FieldsCheckerMixin):
+
+    @fmtUnavailableValue(fields=('status',))
+    def getStatus(self):
+        return self.status
+
+    @fmtUnavailableValue(fields=('errors',))
+    def getErrors(self):
+        return self.errors.keys()

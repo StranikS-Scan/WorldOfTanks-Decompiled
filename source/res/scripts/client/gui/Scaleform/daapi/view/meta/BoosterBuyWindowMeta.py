@@ -7,14 +7,17 @@ class BoosterBuyWindowMeta(AbstractWindowView):
     def buy(self, count):
         self._printOverrideError('buy')
 
+    def setAutoRearm(self, autoRearm):
+        self._printOverrideError('setAutoRearm')
+
     def as_setInitDataS(self, data):
         """
         :param data: Represented by BoosterBuyWindowVO (AS)
         """
         return self.flashObject.as_setInitData(data) if self._isDAAPIInited() else None
 
-    def as_updateItemPriceDataS(self, data):
+    def as_updateDataS(self, data):
         """
-        :param data: Represented by ItemPriceDataVO (AS)
+        :param data: Represented by BoosterBuyWindowUpdateVO (AS)
         """
-        return self.flashObject.as_updateItemPriceData(data) if self._isDAAPIInited() else None
+        return self.flashObject.as_updateData(data) if self._isDAAPIInited() else None

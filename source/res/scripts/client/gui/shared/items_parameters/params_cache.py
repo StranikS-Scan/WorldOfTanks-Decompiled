@@ -32,7 +32,7 @@ PrecachedEquipment = namedtuple('PrecachedEquipment', 'nations params')
 PrecachedOptionalDevice = namedtuple('PrecachedOptionalDevice', 'weight nations')
 PrecachedChassis = namedtuple('PrecachedChassis', 'isHydraulic')
 
-class PrecachedGun(namedtuple('PrecachedOptionalDevice', 'turrets clipVehicles params turretsByVehicles')):
+class PrecachedGun(namedtuple('PrecachedGun', 'clipVehicles params turretsByVehicles')):
 
     @property
     def clipVehiclesNames(self):
@@ -53,14 +53,16 @@ class PrecachedGun(namedtuple('PrecachedOptionalDevice', 'turrets clipVehicles p
 
 
 class _ParamsCache(object):
+    __slots__ = ('__xmlItems', '__cache', '__init', '__simplifiedParamsCoefficients', '__bonuses', '__noCamouflageVehicles')
 
     def __init__(self):
+        super(_ParamsCache, self).__init__()
         self.__xmlItems = {}
         self.__cache = {}
         self.__init = False
         self.__simplifiedParamsCoefficients = {}
         self.__bonuses = {}
-        self.__noCamouflageVehicles = []
+        self.__noCamouflageVehicles = ()
 
     @property
     def initialized(self):
@@ -109,7 +111,7 @@ class _ParamsCache(object):
         result = list()
         for vDescr in self.__getItems(ITEM_TYPES.vehicle, nationIdx):
             components, _ = getVehicleSuitablesByType(vDescr, itemTypeIdx)
-            filtered = filter(lambda item: item['compactDescr'] == typeCompactDescr, components)
+            filtered = filter(lambda item: item.compactDescr == typeCompactDescr, components)
             if len(filtered):
                 result.append(vDescr.type.userString)
 
@@ -145,17 +147,17 @@ class _ParamsCache(object):
         if itemType == ITEM_TYPES.vehicle:
             return [ vehicles.VehicleDescr(typeID=(idx, cd)) for cd in iterator ]
         else:
-            return [ vehicles.getDictDescr(data['compactDescr']) for data in iterator ]
+            return [ vehicles.getItemByCompactDescr(data.compactDescr) for data in iterator ]
 
     def __getItems(self, typeIdx, nationIdx=None):
         if nationIdx is None:
-            result = list()
+            result = []
             for idx in nations.INDICES.itervalues():
                 result.extend(self.__getItems(typeIdx, idx))
 
             return result
         else:
-            return self.__xmlItems.get(nationIdx, {}).get(typeIdx, list())
+            return self.__xmlItems.get(nationIdx, {}).get(typeIdx, [])
 
     def __precacheEquipments(self):
         self.__cache.setdefault(nations.NONE_INDEX, {})[ITEM_TYPES.equipment] = {}
@@ -193,24 +195,24 @@ class _ParamsCache(object):
             vcls = self.__getItems(ITEM_TYPES.vehicle, nationIdx)
             guns = self.__getItems(ITEM_TYPES.vehicleGun, nationIdx)
             for g in guns:
-                descriptors = list()
-                turretsList = list()
-                turretsIntCDs = dict()
+                descriptors = []
+                turretsIntCDs = {}
                 clipVehiclesList = set()
                 for vDescr in vcls:
-                    turretsIntCDs[vDescr.type.compactDescr] = curVehicleTurretsCDs = list()
+                    curVehicleTurretsCDs = []
                     for vTurrets in vDescr.type.turrets:
                         for turret in vTurrets:
-                            for gun in turret['guns']:
-                                if gun['id'][1] == g['id'][1]:
+                            for gun in turret.guns:
+                                if gun.id[1] == g.id[1]:
                                     descriptors.append(gun)
-                                    if len(vDescr.hull['fakeTurrets']['lobby']) != len(vDescr.turrets):
-                                        curVehicleTurretsCDs.append(turret['compactDescr'])
-                                        turretsList.append(turret['userString'])
-                                    if gun['clip'][0] > 1:
+                                    if len(vDescr.hull.fakeTurrets['lobby']) != len(vDescr.turrets):
+                                        curVehicleTurretsCDs.append(turret.compactDescr)
+                                    if gun.clip[0] > 1:
                                         clipVehiclesList.add(vDescr.type.compactDescr)
 
-                self.__cache[nationIdx][ITEM_TYPES.vehicleGun][g['compactDescr']] = PrecachedGun(turrets=tuple(turretsList), clipVehicles=clipVehiclesList, params=calcGunParams(g, descriptors), turretsByVehicles=turretsIntCDs)
+                    turretsIntCDs[vDescr.type.compactDescr] = tuple(curVehicleTurretsCDs)
+
+                self.__cache[nationIdx][ITEM_TYPES.vehicleGun][g.compactDescr] = PrecachedGun(clipVehicles=clipVehiclesList, params=calcGunParams(g, descriptors), turretsByVehicles=turretsIntCDs)
 
     def __precacheShells(self):
         for nationIdx in nations.INDICES.values():
@@ -219,16 +221,15 @@ class _ParamsCache(object):
             shells = self.__getItems(ITEM_TYPES.shell, nationIdx)
             for sDescr in shells:
                 descriptors = list()
-                gNames = list()
+                gunsCDs = []
                 for gDescr in guns:
-                    if 'shots' in gDescr:
-                        for shot in gDescr['shots']:
-                            if shot['shell']['id'][1] == sDescr['id'][1]:
-                                if gDescr['userString'] not in gNames:
-                                    gNames.append(gDescr['userString'])
-                                    descriptors.append(shot)
+                    for shot in gDescr.shots:
+                        if shot.shell.id[1] == sDescr.id[1]:
+                            if gDescr.compactDescr not in gunsCDs:
+                                gunsCDs.append(gDescr.compactDescr)
+                                descriptors.append(shot)
 
-                self.__cache[nationIdx][ITEM_TYPES.shell][sDescr['compactDescr']] = PrecachedShell(guns=tuple(gNames), params=calcShellParams(descriptors))
+                self.__cache[nationIdx][ITEM_TYPES.shell][sDescr.compactDescr] = PrecachedShell(guns=tuple(gunsCDs), params=calcShellParams(descriptors))
 
     def __precacheChassis(self):
         for nationIdx in nations.INDICES.itervalues():
@@ -240,12 +241,13 @@ class _ParamsCache(object):
                 isHydraulic = False
                 for vDescr in siegeVcls:
                     for vChs in vDescr.type.chassis:
-                        if chs['compactDescr'] == vChs['compactDescr']:
+                        if chs.compactDescr == vChs.compactDescr:
                             isHydraulic = True
 
-                self.__cache[nationIdx][ITEM_TYPES.vehicleChassis][chs['compactDescr']] = PrecachedChassis(isHydraulic=isHydraulic)
+                self.__cache[nationIdx][ITEM_TYPES.vehicleChassis][chs.compactDescr] = PrecachedChassis(isHydraulic=isHydraulic)
 
     def __cacheVehiclesWithoutCamouflage(self):
+        vehicleCDs = []
         for nationID in nations.INDICES.itervalues():
             deniedVehicles = {}
             allowedVehicles = set()
@@ -263,7 +265,9 @@ class _ParamsCache(object):
 
             for vehCD, count in deniedVehicles.iteritems():
                 if vehCD not in allowedVehicles and count + restrictedCamouflages >= totalCount:
-                    self.__noCamouflageVehicles.append(vehCD)
+                    vehicleCDs.append(vehCD)
+
+        self.__noCamouflageVehicles = tuple(vehicleCDs)
 
 
 g_paramsCache = _ParamsCache()

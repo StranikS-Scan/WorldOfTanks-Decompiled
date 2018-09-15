@@ -6,10 +6,11 @@ import WWISE
 import constants
 import account_helpers
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
-from account_helpers.AccountSettings import AccountSettings, BOOSTERS, KNOWN_SELECTOR_BATTLES, SHOW_CRYSTAL_HEADER_BAND
+from account_helpers.AccountSettings import AccountSettings, BOOSTERS, KNOWN_SELECTOR_BATTLES
 from adisp import process
 from gui.Scaleform import settings
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
+from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getAchievementsTabCounter
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -274,6 +275,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
         self.eventsCache.onSyncCompleted += self.__onEventsCacheResync
         self.eventsCache.onEventsVisited += self.__onEventsVisited
+        self.eventsCache.onProfileVisited += self.__onProfileVisited
         self.itemsCache.onSyncCompleted += self.__onItemsChanged
         self.boosters.onBoosterChangeNotify += self.__onUpdateGoodies
         self.falloutCtrl.onVehiclesChanged += self.__updateFalloutSettings
@@ -438,8 +440,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     def __setCrystal(self, crystals):
         btnType = LobbyHeader.BUTTONS.CRYSTAL
-        isNew = AccountSettings.getSettings(SHOW_CRYSTAL_HEADER_BAND)
-        btnData = self._getWalletBtnData(btnType, crystals, getBWFormatter(Currency.CRYSTAL), False, False, isNew)
+        btnData = self._getWalletBtnData(btnType, crystals, getBWFormatter(Currency.CRYSTAL), False, False, False)
         self.as_updateWalletBtnS(btnType, btnData)
 
     def __setFreeXP(self, freeXP):
@@ -573,7 +574,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         elif state == UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL:
             header = i18n.makeString(TOOLTIPS.HANGAR_TANKCARUSEL_WRONGSQUADVEHICLE_HEADER)
             body = i18n.makeString(TOOLTIPS.HANGAR_TANKCARUSEL_WRONGSQUADVEHICLE_BODY)
-        elif state == UNIT_RESTRICTION.SPG_IS_FORBIDDEN:
+        elif state == UNIT_RESTRICTION.SPG_IS_FULL or state == UNIT_RESTRICTION.SPG_IS_FORBIDDEN:
             header = i18n.makeString(TOOLTIPS.HANGAR_TANKCARUSEL_WRONGSQUADSPGVEHICLE_HEADER)
             body = i18n.makeString(TOOLTIPS.HANGAR_TANKCARUSEL_WRONGSQUADSPGVEHICLE_BODY)
         else:
@@ -727,6 +728,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def __onEventsCacheResync(self):
         self._updatePrebattleControls()
         self.__onEventsVisited()
+        self.__onProfileVisited()
         self.updateMoneyStats()
         self.updateXPInfo()
 
@@ -737,6 +739,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.__setCounter(self.TABS.MISSIONS, len(newQuests))
         else:
             self.__hideCounter(self.TABS.MISSIONS)
+
+    def __onProfileVisited(self):
+        self.__updateProfileTabCounter()
 
     def __updateFalloutSettings(self, *args):
         self._updatePrebattleControls()
@@ -800,6 +805,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if self.encyclopedia.isActivated() and self.encyclopedia.hasNewRecommendations():
             self.__onNewEncyclopediaRecommendation()
         self.__onEventsVisited()
+        self.__onProfileVisited()
 
     def __onSPAUpdated(self, _):
         self.__updateGoldFishState(False)
@@ -814,6 +820,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
 
     def __onItemsChanged(self, updateReason, invalidItems):
         self.__onEventsVisited()
+        self.__onProfileVisited()
         vehiclesDiff = invalidItems.get(GUI_ITEM_TYPE.VEHICLE)
         if vehiclesDiff is not None:
             falloutVehicle = findFirst(lambda v: v.intCD in vehiclesDiff, self.falloutCtrl.getSelectedVehicles())
@@ -833,6 +840,21 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self._updatePrebattleControls()
         if 'ranked_config' in diff:
             self._updatePrebattleControls()
+        if 'hallOfFame' in diff:
+            self.__updateProfileTabCounter()
+        if 'isEpicRandomEnabled' in diff:
+            self.__updateHangarMenuData()
+            self.__updatePrebattleControls()
+
+    def __updateProfileTabCounter(self):
+        if self.lobbyContext.getServerSettings().isHofEnabled():
+            hofCounter = getAchievementsTabCounter()
+            if hofCounter:
+                self.__setCounter(self.TABS.PROFILE, hofCounter)
+            else:
+                self.__hideCounter(self.TABS.PROFILE)
+        else:
+            self.__hideCounter(self.TABS.PROFILE)
 
     def __onUpdateGoodies(self, *args):
         self.__setClanInfo(g_clanCache.clanInfo)
@@ -849,8 +871,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.__updatePing()
         if KNOWN_SELECTOR_BATTLES in diff:
             self._updatePrebattleControls()
-        if SHOW_CRYSTAL_HEADER_BAND in diff:
-            self.updateMoneyStats()
 
     def __updatePing(self):
         pingData = g_preDefinedHosts.getHostPingData(self.connectionMgr.url)

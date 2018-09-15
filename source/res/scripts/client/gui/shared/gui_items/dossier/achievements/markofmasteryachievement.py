@@ -4,6 +4,11 @@ from helpers import i18n
 from abstract import ClassProgressAchievement
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 from shared_utils import CONST_CONTAINER
+MASTERY_IS_NOT_ACHIEVED = 0
+
+def isMarkOfMasteryAchieved(markOfMasterVal):
+    return markOfMasterVal > MASTERY_IS_NOT_ACHIEVED
+
 
 class MarkOfMasteryAchievement(ClassProgressAchievement):
 

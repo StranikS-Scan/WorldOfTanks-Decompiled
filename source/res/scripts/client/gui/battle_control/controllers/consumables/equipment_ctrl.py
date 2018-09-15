@@ -486,7 +486,7 @@ class EquipmentsController(IBattleController):
             if item.becomeReady:
                 EquipmentSound.playReady(item)
         else:
-            descriptor = vehicles.getDictDescr(intCD)
+            descriptor = vehicles.getItemByCompactDescr(intCD)
             if descriptor.equipmentType == EQUIPMENT_TYPES.regular:
                 item = self.createItem(descriptor, quantity, stage, timeRemaining)
                 self._equipments[intCD] = item

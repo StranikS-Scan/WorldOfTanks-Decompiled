@@ -6,6 +6,7 @@ from gui.Scaleform.daapi.view.lobby.server_events.conditions_formatters import _
 from gui.Scaleform.daapi.view.lobby.server_events.conditions_formatters.postbattle import _VehiclesKillFormatter
 from gui.Scaleform.daapi.view.lobby.server_events.conditions_formatters.postbattle import _VehiclesDamageFormatter
 from gui.Scaleform.daapi.view.lobby.server_events.conditions_formatters.postbattle import _VehiclesStunFormatter
+from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.server_events import formatters
 from gui.server_events.cond_formatters.formatters import CumulativableFormatter
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER_INDICES
@@ -47,7 +48,14 @@ class _VehicleDamageCumulativeFormatter(_VehicleCumulativeFormatter, _VehiclesDa
 
 
 class _VehicleStunCumulativeFormatter(_VehicleCumulativeFormatter, _VehiclesStunFormatter):
-    pass
+
+    @classmethod
+    def _getLabelKey(cls, condition=None):
+        if condition.getEventCount():
+            key = QUESTS.DETAILS_CONDITIONS_VEHICLESTUNEVENTCOUNT_CUMULATIVE
+        else:
+            key = QUESTS.DETAILS_CONDITIONS_VEHICLESTUN_CUMULATIVE
+        return key
 
 
 class _CumulativeResultFormatter(CumulativableFormatter):

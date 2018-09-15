@@ -15,6 +15,7 @@ from gui.ranked_battles.ranked_models import PostBattleRankInfo
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from gui.shared.money import Currency
 _LifeTimeInfo = namedtuple('_LifeTimeInfo', ('isKilled', 'lifeTime'))
 
 class _SquadBonusInfo(object):
@@ -62,14 +63,15 @@ class _SquadBonusInfo(object):
 
 class _PersonalAvatarInfo(object):
     """Class contains information about personal avatar."""
-    __slots__ = ('__accountDBID', '__clanDBID', '__team', '__isPrematureLeave', '__fairplayViolations', '__squadBonusInfo', '__winnerIfDraw')
+    __slots__ = ('__accountDBID', '__clanDBID', '__team', '__isPrematureLeave', '__fairplayViolations', '__squadBonusInfo', '__winnerIfDraw', '__eligibleForCrystalRewards')
 
-    def __init__(self, accountDBID=0, clanDBID=0, team=0, isPrematureLeave=False, fairplayViolations=None, squadBonusInfo=None, winnerIfDraw=0, **kwargs):
+    def __init__(self, accountDBID=0, clanDBID=0, team=0, isPrematureLeave=False, fairplayViolations=None, squadBonusInfo=None, winnerIfDraw=0, eligibleForCrystalRewards=False, **kwargs):
         super(_PersonalAvatarInfo, self).__init__()
         self.__accountDBID = accountDBID
         self.__clanDBID = clanDBID
         self.__team = team
         self.__isPrematureLeave = isPrematureLeave
+        self.__eligibleForCrystalRewards = eligibleForCrystalRewards
         self.__fairplayViolations = shared.FairplayViolationsInfo(*(fairplayViolations or ()))
         self.__squadBonusInfo = _SquadBonusInfo(**(squadBonusInfo or {}))
         self.__winnerIfDraw = winnerIfDraw
@@ -98,6 +100,11 @@ class _PersonalAvatarInfo(object):
     def winnerIfDraw(self):
         """Get winner id if draw."""
         return self.__winnerIfDraw
+
+    @property
+    def eligibleForCrystalRewards(self):
+        """Gets if crystals are awarded in this battle."""
+        return self.__eligibleForCrystalRewards
 
     def getPersonalSquadFlags(self, vehicles):
         """Gets flags to resolve wherever showing squad bonus and squad labels.
@@ -193,7 +200,7 @@ class _FreeXPReplayRecords(records.ReplayRecords):
 
 
 class _EconomicsRecordsChains(object):
-    __slots__ = ('_baseCredits', '_premiumCredits', '_goldRecords', '_autoRecords', '_baseXP', '_premiumXP', '_baseFreeXP', '_premiumFreeXP', '_fortResource')
+    __slots__ = ('_baseCredits', '_premiumCredits', '_goldRecords', '_autoRecords', '_baseXP', '_premiumXP', '_baseFreeXP', '_premiumFreeXP', '_fortResource', '_crystal')
 
     def __init__(self):
         super(_EconomicsRecordsChains, self).__init__()
@@ -205,6 +212,7 @@ class _EconomicsRecordsChains(object):
         self._premiumXP = records.RecordsIterator()
         self._baseFreeXP = records.RecordsIterator()
         self._premiumFreeXP = records.RecordsIterator()
+        self._crystal = records.RecordsIterator()
 
     def getBaseCreditsRecords(self):
         return self._baseCredits
@@ -224,6 +232,9 @@ class _EconomicsRecordsChains(object):
     def getMoneyRecords(self):
         return itertools.izip(self._baseCredits, self._premiumCredits, self._goldRecords, self._autoRecords)
 
+    def getCrystalRecords(self):
+        return itertools.izip(self._crystal, self._crystal)
+
     def getXPRecords(self):
         return itertools.izip(self._baseXP, self._premiumXP, self._baseFreeXP, self._premiumFreeXP)
 
@@ -234,6 +245,7 @@ class _EconomicsRecordsChains(object):
         connector = ValueReplayConnector(VEH_FULL_RESULTS, results)
         self._addMoneyResults(connector, results)
         self._addXPResults(connector, results)
+        self._addCrystalResults(connector, results)
 
     def _addMoneyResults(self, connector, results):
         if 'creditsReplay' in results and results['creditsReplay'] is not None:
@@ -276,6 +288,14 @@ class _EconomicsRecordsChains(object):
             self._premiumFreeXP.addRecords(_FreeXPReplayRecords(replay, results['achievementFreeXP']))
         else:
             LOG_ERROR('Free XP replay is not found', results)
+        return
+
+    def _addCrystalResults(self, connector, results):
+        if Currency.CRYSTAL in results and results[Currency.CRYSTAL] is not None:
+            replay = ValueReplay(connector, recordName=Currency.CRYSTAL, replay=results['crystalReplay'])
+            self._crystal.addRecords(records.ReplayRecords(replay, Currency.CRYSTAL))
+        else:
+            LOG_ERROR('crystal replay is not found', results)
         return
 
 
@@ -394,6 +414,10 @@ class PersonalInfo(shared.UnpackedInfo):
     def getMoneyRecords(self):
         """Gets money (credits and gold) records without/with premium factor."""
         return self.__economicsRecords.getMoneyRecords()
+
+    def getCrystalRecords(self):
+        """Gets crystal records without premium factor."""
+        return self.__economicsRecords.getCrystalRecords()
 
     def getBaseXPRecords(self):
         """Gets XPs records without premium factor."""

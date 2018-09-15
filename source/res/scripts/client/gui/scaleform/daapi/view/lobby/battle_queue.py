@@ -23,12 +23,19 @@ from gui.sounds.ambients import BattleQueueEnv
 from helpers import dependency
 from helpers.i18n import makeString
 from skeletons.gui.lobby_context import ILobbyContext
-TYPES_ORDERED = (('heavyTank', '#item_types:vehicle/tags/heavy_tank/name'),
- ('mediumTank', '#item_types:vehicle/tags/medium_tank/name'),
- ('lightTank', '#item_types:vehicle/tags/light_tank/name'),
- ('AT-SPG', '#item_types:vehicle/tags/at-spg/name'),
- ('SPG', '#item_types:vehicle/tags/spg/name'))
+from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+TYPES_ORDERED = (('heavyTank', ITEM_TYPES.VEHICLE_TAGS_HEAVY_TANK_NAME),
+ ('mediumTank', ITEM_TYPES.VEHICLE_TAGS_MEDIUM_TANK_NAME),
+ ('lightTank', ITEM_TYPES.VEHICLE_TAGS_LIGHT_TANK_NAME),
+ ('AT-SPG', ITEM_TYPES.VEHICLE_TAGS_AT_SPG_NAME),
+ ('SPG', ITEM_TYPES.VEHICLE_TAGS_SPG_NAME))
 _LONG_WAITING_LEVELS = (9, 10)
+_HTMLTEMP_PLAYERSLABEL = 'html_templates:lobby/queue/playersLabel'
+
+def _getVehicleIconPath(vClass):
+    return RES_ICONS.maps_icons_vehicletypes('big/{}.png'.format(vClass))
+
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
 def _needShowLongWaitingWarning(lobbyContext=None):
@@ -101,17 +108,16 @@ class _RandomQueueProvider(_QueueProvider):
         else:
             vClasses = []
             vClassesLen = 0
-        self._proxy.flashObject.as_setPlayers(makeHtmlString('html_templates:lobby/queue/playersLabel', 'players', {'count': sum(vClasses)}))
+        self._proxy.flashObject.as_setPlayers(makeHtmlString(_HTMLTEMP_PLAYERSLABEL, 'players', {'count': sum(vClasses)}))
         if vClassesLen:
-            data = {'title': '#menu:prebattle/typesTitle',
-             'data': []}
-            vClassesData = data['data']
+            vClassesData = []
             for vClass, message in TYPES_ORDERED:
                 idx = constants.VEHICLE_CLASS_INDICES[vClass]
                 vClassesData.append({'type': message,
+                 'icon': _getVehicleIconPath(vClass),
                  'count': vClasses[idx] if idx < vClassesLen else 0})
 
-            self._proxy.as_setListByTypeS(data)
+            self._proxy.as_setDPS(vClassesData)
         self._proxy.as_showStartS(constants.IS_DEVELOPMENT and sum(vClasses) > 1)
 
     def needAdditionalInfo(self):
@@ -133,17 +139,16 @@ class _FalloutQueueProvider(_QueueProvider):
         vClasses = info.get('classes', [])
         vClassesLen = len(vClasses)
         totalPlayers = info.get('players', 0)
-        self._proxy.flashObject.as_setPlayers(makeHtmlString('html_templates:lobby/queue/playersLabel', 'players', {'count': totalPlayers}))
+        self._proxy.flashObject.as_setPlayers(makeHtmlString(_HTMLTEMP_PLAYERSLABEL, 'players', {'count': totalPlayers}))
         if vClassesLen:
-            data = {'title': '#menu:prebattle/typesTitle',
-             'data': []}
-            vClassesData = data['data']
+            vClassesData = []
             for vClass, message in TYPES_ORDERED:
                 idx = constants.VEHICLE_CLASS_INDICES[vClass]
                 vClassesData.append({'type': message,
+                 'icon': _getVehicleIconPath(vClass),
                  'count': vClasses[idx] if idx < vClassesLen else 0})
 
-            self._proxy.as_setListByTypeS(data)
+            self._proxy.as_setDPS(vClassesData)
         self._proxy.as_showStartS(constants.IS_DEVELOPMENT and sum(vClasses) > 1)
 
 
@@ -215,8 +220,8 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         if not permissions.canExitFromQueue():
             self.as_showExitS(False)
         guiType = prb_getters.getArenaGUIType(queueType=self.__provider.getQueueType())
-        title = '#menu:loading/battleTypes/%d' % guiType
-        description = '#menu:loading/battleTypes/desc/%d' % guiType
+        title = MENU.loading_battletypes(guiType)
+        description = MENU.loading_battletypes_desc(guiType)
         if guiType != constants.ARENA_GUI_TYPE.UNKNOWN and guiType in constants.ARENA_GUI_TYPE_LABEL.LABELS:
             iconlabel = constants.ARENA_GUI_TYPE_LABEL.LABELS[guiType]
         else:
@@ -225,10 +230,17 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
             additional = self.__provider.additionalInfo()
         else:
             additional = ''
+        vehicle = g_currentVehicle.item
+        textLabel = makeString(MENU.PREBATTLE_TANKLABEL)
+        tankName = vehicle.shortUserName
+        iconPath = _getVehicleIconPath(vehicle.type)
         self.as_setTypeInfoS({'iconLabel': iconlabel,
          'title': title,
          'description': description,
-         'additional': additional})
+         'additional': additional,
+         'tankLabel': text_styles.main(textLabel),
+         'tankIcon': iconPath,
+         'tankName': tankName})
 
     def __stopUpdateScreen(self):
         if self.__timerCallback is not None:
@@ -247,11 +259,10 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
     def __updateTimer(self):
         self.__timerCallback = None
         self.__timerCallback = BigWorld.callback(1, self.__updateTimer)
-        textLabel = makeString('#menu:prebattle/timerLabel')
+        textLabel = text_styles.main(makeString(MENU.PREBATTLE_TIMERLABEL))
         timeLabel = '%d:%02d' % divmod(self.__createTime, 60)
-        result = text_styles.concatStylesWithSpace(text_styles.main(textLabel), timeLabel)
         if self.__provider.needAdditionalInfo():
-            result = text_styles.concatStylesToSingleLine(result, text_styles.main('*'))
-        self.as_setTimerS(result)
+            timeLabel = text_styles.concatStylesToSingleLine(timeLabel, '*')
+        self.as_setTimerS(textLabel, timeLabel)
         self.__createTime += 1
         return

@@ -96,6 +96,10 @@ def updateAccountDossier(dossierDescr, battleResults, dossierXP, vehDossiers, ma
         for record in maxValuesChanged:
             dossierDescr['max15x15'][record] = maxVehResults[record]
 
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_MAX30X30):
+        for record in maxValuesChanged:
+            dossierDescr['max30x30'][record] = maxVehResults[record]
+
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_MAX7X7):
         for record in maxValuesChanged:
             dossierDescr['max7x7'][record] = maxVehResults[record]
@@ -149,46 +153,6 @@ def updateRated7x7Dossier(dossierDescr, battleResults, dossierXP):
         __updateAggregatedValues(dossierDescr.expand('rated7x7'), dossierDescr.expand('rated7x7'), battleResults, dossierXP, frags8p=0)
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_MAXRATED7X7):
         __updateMaxValues(dossierDescr.expand('maxRated7x7'), battleResults, dossierXP)
-
-
-def updateClubDossier(dossierDescr, battleResults, geometryID, teamInDefence):
-    bonusType = battleResults['bonusType']
-    if not BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_CLUB):
-        return
-    block = dossierDescr['total']
-    block['lastBattleTime'] = int(time.time())
-    block = dossierDescr.expand('clubBattles')
-    block['battlesCount'] += 1
-    team = battleResults['team']
-    winnerTeam = battleResults['winnerTeam']
-    if team == winnerTeam:
-        block['wins'] += 1
-    else:
-        if winnerTeam == 0:
-            LOG_ERROR('[EXCEPTION] updateClubDossier(dossierDescr, battleResults, geometryID): draw is not allowed for cybersport rated battles.')
-        block['losses'] += 1
-    for record in ('killedVehicles', 'lostVehicles', 'damageDealt', 'damageReceived', 'capturePoints', 'droppedCapturePoints'):
-        block[record] += battleResults['club'][record]
-
-    isInAttack = team != teamInDefence
-    if isInAttack:
-        block['battlesCountInAttack'] += 1
-        block['damageDealtInAttack'] += battleResults['club']['damageDealt']
-    else:
-        block['damageDealtInDefence'] += battleResults['club']['damageDealt']
-    block = dossierDescr['vehicles']
-    for typeCompDescr, xp in battleResults['club']['vehicles']:
-        battlesCount, experience = block.get(typeCompDescr, (0, 0))
-        block[typeCompDescr] = (battlesCount + 1, experience + xp)
-
-    block = dossierDescr['maps']
-    battlesCount, wins = block.get(geometryID, (0, 0))
-    block[geometryID] = (battlesCount + 1, wins + 1 if team == winnerTeam else 0)
-    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_ACHIEVEMENTS_RATED7X7):
-        for recordDBID in battleResults['club']['achievements']:
-            __processArenaAchievement(dossierDescr, recordDBID)
-
-        _updatePerBattleSeries(dossierDescr['achievementsRated7x7'], 'victoryMarchSeries', team == winnerTeam)
 
 
 def updateTankmanDossier(dossierDescr, battleResults):
@@ -245,6 +209,8 @@ def __updateDossierCommonPart(dossierType, dossierDescr, results, dossierXP, win
         frags8p = __processKillList(dossierDescr, results['killList'])
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_15X15):
         __updateAggregatedValues(dossierDescr.expand('a15x15'), dossierDescr.expand('a15x15_2'), results, dossierXP, frags8p)
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_30X30):
+        __updateAggregatedValues(dossierDescr.expand('a30x30'), dossierDescr.expand('a30x30'), results, dossierXP, frags8p)
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_7X7):
         __updateAggregatedValues(dossierDescr.expand('a7x7'), dossierDescr.expand('a7x7'), results, dossierXP, frags8p)
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_RATED7X7):
@@ -275,6 +241,8 @@ def __updateDossierCommonPart(dossierType, dossierDescr, results, dossierXP, win
 
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_MAX15X15):
         maxValuesChanged = __updateMaxValues(dossierDescr.expand('max15x15'), results, dossierXP)
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_MAX30X30):
+        maxValuesChanged = __updateMaxValues(dossierDescr.expand('max30x30'), results, dossierXP)
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_MAX7X7):
         maxValuesChanged = __updateMaxValues(dossierDescr.expand('max7x7'), results, dossierXP)
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_MAXRATED7X7):
@@ -407,23 +375,47 @@ def __updateMaxValuesWithAvatar(block, results):
             block['maxDamageWithAvatar'] = damageDealt
 
 
-def __updateVehicleDossierImpl(vehTypeCompDescr, dossierDescr, results):
-    bonusType = results['bonusType']
-    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_ACHIEVEMENTS_7X7):
-        _updatePerBattleSeries(dossierDescr['achievements7x7'], 'tacticalBreakthroughSeries', results['winnerTeam'] == results['team'])
-    if not BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_ACHIEVEMENTS_15X15):
+def __updateMarksOnGun(dossierDescr, results):
+    """
+    Updates marksOnGun medal for vehicle and related statistics.
+    :param dossierDescr: vehicle dossier.
+    :param results: battle results.
+    """
+    if not BONUS_CAPS.checkAny(results['bonusType'], BONUS_CAPS.DOSSIER_MARKS_ON_GUN):
         return
     achievements = dossierDescr['achievements']
-    if achievements['markOfMastery'] < results['markOfMastery']:
-        achievements['markOfMastery'] = results['markOfMastery']
     damageRating = int(results['damageRating'] * 100)
     if damageRating != 0:
         achievements['damageRating'] = damageRating
     achievements['movingAvgDamage'] = results['movingAvgDamage']
     if achievements['marksOnGun'] < results['marksOnGun']:
         achievements['marksOnGun'] = results['marksOnGun']
+
+
+def __updateMarkOfMastery(dossierDescr, results):
+    """
+    Updates markOfMastery medal for vehicle.
+    :param dossierDescr: vehicle dossier.
+    :param results: battle results.
+    """
+    if not BONUS_CAPS.checkAny(results['bonusType'], BONUS_CAPS.DOSSIER_MARK_OF_MASTERY):
+        return
+    achievements = dossierDescr['achievements']
+    if achievements['markOfMastery'] < results['markOfMastery']:
+        achievements['markOfMastery'] = results['markOfMastery']
+
+
+def __updateVehicleDossierImpl(vehTypeCompDescr, dossierDescr, results):
+    bonusType = results['bonusType']
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_ACHIEVEMENTS_7X7):
+        _updatePerBattleSeries(dossierDescr['achievements7x7'], 'tacticalBreakthroughSeries', results['winnerTeam'] == results['team'])
+        return
+    __updateMarksOnGun(dossierDescr, results)
+    __updateMarkOfMastery(dossierDescr, results)
+    if not BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_ACHIEVEMENTS_15X15):
+        return
+    achievements = dossierDescr['achievements']
     if results['winnerTeam'] == results['team'] and results['aimerSeries'] > 0:
-        dossierDescr['singleAchievements']['aimer'] = 1
         if achievements['maxAimerSeries'] < results['aimerSeries']:
             achievements['maxAimerSeries'] = results['aimerSeries']
     isSPG = isVehicleSPG(vehTypeCompDescr)
@@ -457,10 +449,11 @@ def __updateAccountDossierCuts(dossierDescr, results, dossierXP, vehTypeCompDesc
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_15X15):
         a15x15Cut = dossierDescr['a15x15Cut']
         vehA15x15 = vehDossierDescr['a15x15']
-        a15x15Cut[vehTypeCompDescr] = (vehA15x15['battlesCount'],
-         vehA15x15['wins'],
-         vehDossierDescr['achievements']['markOfMastery'],
-         vehA15x15['xp'])
+        a15x15Cut[vehTypeCompDescr] = (vehA15x15['battlesCount'], vehA15x15['wins'], vehA15x15['xp'])
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_30X30):
+        a30x30Cut = dossierDescr['a30x30Cut']
+        vehA30x30 = vehDossierDescr['a30x30']
+        a30x30Cut[vehTypeCompDescr] = (vehA30x30['battlesCount'], vehA30x30['wins'], vehA30x30['xp'])
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_7X7):
         a7x7Cut = dossierDescr['a7x7Cut']
         vehA7x7 = vehDossierDescr['a7x7']
@@ -508,6 +501,10 @@ def __updateAccountDossierCuts(dossierDescr, results, dossierXP, vehTypeCompDesc
          falloutVehicleDossier['wins'],
          falloutVehicleDossier['xp'],
          falloutVehicleDossier['winPoints'])
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_MARK_OF_MASTERY):
+        if vehDossierDescr['achievements']['markOfMastery'] != 0:
+            markOfMasteryCut = dossierDescr['markOfMasteryCut']
+            markOfMasteryCut[vehTypeCompDescr] = vehDossierDescr['achievements']['markOfMastery']
     return
 
 

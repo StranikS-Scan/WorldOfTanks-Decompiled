@@ -22,7 +22,7 @@ from gui.shared.gui_items import Tankman, GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import TankmenComparator
 from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRestore
-from gui.shared.money import ZERO_MONEY, Currency
+from gui.shared.money import MONEY_UNDEFINED, Currency
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.tooltips.tankman import getRecoveryStatusText, formatRecoveryLeftValue
@@ -109,7 +109,7 @@ def _packBuyBerthsSlot(itemsCache=None):
         action = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'berthsPrices', True, berthPrice, defaultBerthPrice)
     enoughGold = berthPrice.gold <= gold
     return {'buy': True,
-     'price': BigWorld.wg_getGoldFormat(berthPrice.gold),
+     'price': BigWorld.wg_getGoldFormat(berthPrice.getSignValue(Currency.GOLD)),
      'enoughGold': enoughGold,
      'actionPriceData': action,
      'count': berthCount}
@@ -118,7 +118,7 @@ def _packBuyBerthsSlot(itemsCache=None):
 def _makeRecoveryPeriodText(restoreInfo):
     price, timeLeft = restoreInfo
     timeStr = formatRecoveryLeftValue(timeLeft)
-    if price == ZERO_MONEY:
+    if not price.isDefined():
         textStyle = text_styles.main
     elif price.getCurrency() == Currency.GOLD:
         textStyle = text_styles.gold

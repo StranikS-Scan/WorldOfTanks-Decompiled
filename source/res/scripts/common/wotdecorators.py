@@ -71,3 +71,20 @@ def decorator(dec):
         return decorate(func, dec(func))
 
     return wrapper
+
+
+def condition(attributeName, logFunc=None, logStack=True):
+
+    def decorator(func):
+
+        def wrapper(*args, **kwargs):
+            attribute = getattr(args[0], attributeName)
+            if not bool(attribute):
+                if logFunc:
+                    logFunc('Method condition failed', args, kwargs, stack=logStack)
+                return
+            return func(*args, **kwargs)
+
+        return decorate(func, wrapper)
+
+    return decorator

@@ -3,7 +3,7 @@
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.shared.formatters import text_styles, icons
+from gui.shared.formatters import icons
 from gui.shared.formatters.servers import formatPingStatus
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -38,6 +38,10 @@ class ServersDataProvider(SortableDAAPIDataProvider):
     @property
     def collection(self):
         return self._list
+
+    @property
+    def isColorBlind(self):
+        return self.__isColorBlind
 
     def emptyItem(self):
         return None

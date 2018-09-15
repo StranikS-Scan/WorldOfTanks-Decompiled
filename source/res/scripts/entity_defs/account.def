@@ -29,11 +29,11 @@
     <Interface>	AccountDebugger	</Interface>
   </Implements>
   <Properties>
-    <requiredVersion_91910>
+    <requiredVersion_92000>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_0.9.19.1_5	</Default>
-    </requiredVersion_91910>
+      <Default>	ct_0.9.20	</Default>
+    </requiredVersion_92000>
     <name>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
@@ -267,6 +267,14 @@
     <onUnitCallOk>
       <Arg>	INT32	</Arg>
     </onUnitCallOk>
+    <onUnitNotify>
+      <Arg>	UINT64	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	STRING	</Arg>
+      <VariableLengthHeaderSize>	1	  <WarnLevel>	none	</WarnLevel>
+      </VariableLengthHeaderSize>
+      <Arg>	PYTHON	</Arg>
+    </onUnitNotify>
     <onUnitError>
       <Arg>	INT32	</Arg>
       <Arg>	UINT64	</Arg>

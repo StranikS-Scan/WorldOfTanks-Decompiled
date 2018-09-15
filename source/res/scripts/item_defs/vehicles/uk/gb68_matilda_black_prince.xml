@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/british/GB68_Matilda_Black_Prince/Matilda_Black_Prince_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -36,13 +36,15 @@
       <armor_8>	20	</armor_8>
       <armor_9>	13	</armor_9>
       <armor_10>	0	</armor_10>
-      <armor_11>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      <armor_11>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       </armor_11>
-      <armor_12>	13	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      <armor_12>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       </armor_12>
       <armor_13>	55	</armor_13>
-      <armor_14>	70	</armor_14>
+      <armor_14>	13	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_14>
       <armor_15>	47	</armor_15>
+      <armor_16>	88.8	</armor_16>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	16770	</weight>
@@ -68,7 +70,7 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.697081 0.586117	</turret>
+      <turret>	0.000000 0.63719 0.62646	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/british/GB68_Matilda_Black_Prince/collision/Hull.model	</collisionModelServer>
@@ -76,21 +78,24 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.352247 0.252773 2.28765	</rayStart>
-        <rayEnd>	-0.352247 0.251586 1.88768	</rayEnd>
+        <rayStart>	-0.0548886 0.246613 2.29966	</rayStart>
+        <rayEnd>	-0.0552453 0.224486 1.90031	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.24	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <size>	0.23	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	-1.21549 0.460882 0.457236	</rayStart>
-        <rayEnd>	-1.17873 0.445117 0.457236	</rayEnd>
+        <rayStart>	-1.20097 0.400725 0.342832	</rayStart>
+        <rayEnd>	-1.16519 0.38284 0.342832	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.6	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/british/GB68_Matilda_Black_Prince/Matilda_Black_Prince_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1.7 1.7 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_GB68_Matilda_Black_Prince>
@@ -125,65 +130,69 @@
       <traces>
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	germany_01	</textureSet>
-        <size>	0.28 0.28	</size>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.28 0.38	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.35	</textureScale>
+        <textureScale>	-2.1	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_R0	</name>
-          <radius>	0.262319	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_R1	</name>
-          <radius>	0.152948	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_R2	</name>
-          <radius>	0.31392	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.112891	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	10	</count>
-        </group>
-        <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
-          <radius>	0.262319	</radius>
+          <radius>	0.278458	</radius>
+          <syncAngle>	35	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L1	</name>
-          <radius>	0.151167	</radius>
+          <radius>	0.376002	</radius>
+          <syncAngle>	30	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	true	</isLeading>
-          <name>	WD_L2	</name>
-          <radius>	0.31392	</radius>
+          <isLeading>	false	</isLeading>
+          <name>	W_L0	</name>
+          <radius>	0.159717	</radius>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	W_L	</template>
-          <radius>	0.112891	</radius>
-          <startIndex>	0	</startIndex>
+          <radius>	0.111411	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	10	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.278458	</radius>
+          <syncAngle>	30	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.376002	</radius>
+          <syncAngle>	30	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	false	</isLeading>
+          <name>	W_R0	</name>
+          <radius>	0.159717	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.111411	</radius>
+          <startIndex>	1	</startIndex>
           <count>	10	</count>
         </group>
       </wheels>
@@ -194,12 +203,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.932506 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.94351 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB68_Matilda_Black_Prince/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB68_Matilda_Black_Prince/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.01763 1.73786	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.03952 1.79094	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -212,6 +221,67 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/british/GB68_Matilda_Black_Prince/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/british/GB68_Matilda_Black_Prince/track/segment.model	</segmentModelRight>
+        <left>	vehicles/british/GB68_Matilda_Black_Prince/track/left.track	</left>
+        <right>	vehicles/british/GB68_Matilda_Black_Prince/track/right.track	</right>
+        <segmentLength>	0.183	</segmentLength>
+        <segmentOffset>	0.127	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0103	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.02	</maxAmplitude>
+        <maxOffset>	0.02	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+        </node>
+      </trackNodes>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	1	</startIndex>
+          <count>	10	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	1	</startIndex>
+          <count>	10	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
     </Chassis_GB68_Matilda_Black_Prince>
   </chassis>
   <turrets0>
@@ -273,16 +343,16 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.159783 -0.0417794 1.30887	</rayStart>
+              <rayStart>	0.0638426 -0.0202059 1.30887	</rayStart>
               <rayEnd>	0.269015 -0.144363 1.30887	</rayEnd>
-              <rayUp>	0.053 0.052 2	</rayUp>
+              <rayUp>	0.047 0.047 4	</rayUp>
               <size>	0.394	</size>
-              <hideIfDamaged>	true	</hideIfDamaged>
+              <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.91 0.91 0.000000 0.000000	</tiling>
+            <tiling>	0.3 0.3 0.000000 0.000000	</tiling>
           </camouflage>
         </QF_6_pounder_Mk_VA>
       </guns>
@@ -295,33 +365,33 @@
         <collisionModelServer>	vehicles/british/GB68_Matilda_Black_Prince/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB68_Matilda_Black_Prince/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.102857 0.326654 0.660666	</gunPosition>
+      <gunPosition>	0.000000 0.337509 0.696132	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-1.00674 0.374249 0.465201	</rayStart>
-          <rayEnd>	-0.612372 0.374249 0.398299	</rayEnd>
+          <rayStart>	-0.95408 0.358964 0.616035	</rayStart>
+          <rayEnd>	-0.563957 0.358959 0.527697	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.28	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-        </player>
-        <player>
-          <rayStart>	1.00457 0.386951 0.477948	</rayStart>
-          <rayEnd>	0.61021 0.386951 0.411046	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.28	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	1.08643 0.383862 -0.00463513	</rayStart>
-          <rayEnd>	0.692092 0.383862 -0.0715321	</rayEnd>
+          <rayStart>	1.0602 0.379848 0.125479	</rayStart>
+          <rayEnd>	0.670021 0.379846 0.0375345	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.64	</size>
+          <size>	0.569	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
+        <player>
+          <rayStart>	0.95408 0.358964 0.616035	</rayStart>
+          <rayEnd>	0.563957 0.358959 0.527697	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.28	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.158 -0.139 1.000 0.000 0.649 0.136 1.000 0.454 0.303 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <physicsShape>	0.975 0.122 1.000 0.000 0.629 0.133 1.000 0.390 0.299 0.482 0.000 0.213 0.000 0.000 0.018	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
         <tiling>	0.955 0.955 0.000000 0.000000	</tiling>
@@ -394,9 +464,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.88	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </GB68_Matilda_Black_Prince.xml>

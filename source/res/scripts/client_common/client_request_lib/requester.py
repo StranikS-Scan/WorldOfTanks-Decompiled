@@ -1958,13 +1958,110 @@ class RblbAccessor(BaseAccessor):
         return self._data_source.user_ranked_position(callback, fields=fields)
 
 
+class WgrmsAccessor(BaseAccessor):
+    """
+    Rating Management System accessor
+    
+    Access wgrms data from `data_source` instance
+    
+    :Example:
+    
+    >>> class SomeClass(object):
+    ...     wgrms = RequestDescriptor(WgrmsAccessor)
+    ...
+    >>> requester = SomeClass(DataAccessor())
+    >>> requester.wgrms.hof_user_info()
+    """
+
+    def hof_user_info(self, callback):
+        """
+        request user's status in HoF and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgrms.hof_user_info(printer)
+        (
+            {'status': 'ok', 'errors': {'1006': 'Applied for Hall of fame ban'}},
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :type callback: function
+        """
+        return self._data_source.hof_user_info(callback)
+
+    def hof_user_exclude(self, callback):
+        """
+        exclude user from HoF and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgrms.hof_user_exclude(printer)
+        (
+            {'status': 'ok'},
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :type callback: function
+        """
+        return self._data_source.hof_user_exclude(callback)
+
+    def hof_user_restore(self, callback):
+        """
+        restore user to HoF and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgrms.hof_user_restore(printer)
+        (
+            {'status': 'error', 'errors': {'1013': 'Account can not remove ban added the same day'}},
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :type callback: function
+        """
+        return self._data_source.hof_user_restore(callback)
+
+
 class Requester(object):
     """
     request all clan related information using data accessor provided
     
     :Example:
     
-    >>> requester=Requester(DataAccessor())
+    >>> requester = Requester(DataAccessor())
     >>> requester.strongholds.get_info(str, 12312)
     >>> requester.clans.get_clans_info(str, [12312, 344])
     """
@@ -1979,6 +2076,7 @@ class Requester(object):
     spa = RequestDescriptor(SpaAccessor)
     wgsh = RequestDescriptor(WgshAccessor)
     rblb = RequestDescriptor(RblbAccessor)
+    wgrms = RequestDescriptor(WgrmsAccessor)
 
     @classmethod
     def create_requester(cls, url_fetcher, config, client_lang=None, user_agent=None):
@@ -2007,8 +2105,6 @@ class Requester(object):
         >>> staging_requester = Requester.create_requester(
         ...     None, '{"type": "stagings", "accessor_config": {"clans": "http://wgccbe.iv"}}'
         ... )
-        
-        
         """
         assert config.type in cls.available_data_sources, '%s data source is unknown' % config.type
         data_accessor = cls.available_data_sources[config.type](url_fetcher, config.url, client_lang=client_lang, user_agent=user_agent)

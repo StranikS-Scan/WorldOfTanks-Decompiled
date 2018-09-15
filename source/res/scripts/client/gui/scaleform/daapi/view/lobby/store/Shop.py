@@ -17,7 +17,8 @@ _SHOP_TABS = {STORE_CONSTANTS.SHELL: shop.ShopShellTab,
  STORE_CONSTANTS.RESTORE_VEHICLE: shop.ShopRestoreVehicleTab,
  STORE_CONSTANTS.TRADE_IN_VEHICLE: shop.ShopTradeInVehicleTab,
  STORE_CONSTANTS.OPTIONAL_DEVICE: shop.ShopOptionalDeviceTab,
- STORE_CONSTANTS.EQUIPMENT: shop.ShopEquipmentTab}
+ STORE_CONSTANTS.EQUIPMENT: shop.ShopEquipmentTab,
+ STORE_CONSTANTS.BATTLE_BOOSTER: shop.ShopBattleBoosterTab}
 
 class Shop(ShopMeta):
 

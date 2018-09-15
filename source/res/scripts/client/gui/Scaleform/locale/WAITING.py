@@ -153,6 +153,7 @@ class WAITING(object):
     FORT_RETURNCONSUMABLE = '#waiting:fort/returnConsumable'
     MESSENGER_SUBSCRIBE = '#waiting:messenger/subscribe'
     CLANS_INVITES_SEND = '#waiting:clans/invites/send'
+    HOF_LOADING = '#waiting:hof/loading'
     TITLES_ENUM = (TITLES_QUEUE,
      TITLES_REGISTERING,
      TITLES_ANOTHER_PERIPHERY,

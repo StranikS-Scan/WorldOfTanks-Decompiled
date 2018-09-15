@@ -113,7 +113,7 @@ class VehsSuitableCriteria(RequestCriteria):
         for vehicle in vehsItems:
             for itemTypeID in itemTypeIDs:
                 for descr in getVehicleSuitablesByType(vehicle.descriptor, itemTypeID)[0]:
-                    suitableCompDescrs.add(descr['compactDescr'])
+                    suitableCompDescrs.add(descr.compactDescr)
 
         super(VehsSuitableCriteria, self).__init__(PredicateCondition(lambda item: item.intCD in suitableCompDescrs))
 
@@ -133,8 +133,8 @@ class REQ_CRITERIA(object):
     ITEM_TYPES_NAMES = staticmethod(lambda *args: RequestCriteria(PredicateCondition(lambda item: item.itemTypeName in args)))
     IN_CD_LIST = staticmethod(lambda itemsList: RequestCriteria(PredicateCondition(lambda item: item.intCD in itemsList)))
     INVENTORY_OR_UNLOCKED = RequestCriteria(InventoryPredicateCondition(lambda item: item.inventoryCount > 0 or item.isUnlocked and not item.isInitiallyUnlocked))
-    DISCOUNT_BUY = RequestCriteria(PredicateCondition(lambda item: item.actionPrc != 0 and not item.isRestoreAvailable()))
-    DISCOUNT_SELL = RequestCriteria(PredicateCondition(lambda item: not item.isRented and item.sellActionPrc != 0))
+    DISCOUNT_BUY = RequestCriteria(PredicateCondition(lambda item: item.buyPrices.itemPrice.isActionPrice() and not item.isRestoreAvailable()))
+    DISCOUNT_SELL = RequestCriteria(PredicateCondition(lambda item: not item.isRented and item.sellPrices.itemPrice.isActionPrice()))
 
     class VEHICLE:
         FAVORITE = RequestCriteria(PredicateCondition(lambda item: item.isFavorite))
@@ -167,7 +167,7 @@ class REQ_CRITERIA(object):
         CAN_TRADE_IN = RequestCriteria(PredicateCondition(lambda item: item.canTradeIn))
         CAN_TRADE_OFF = RequestCriteria(PredicateCondition(lambda item: item.canTradeOff))
         NAME_VEHICLE = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableUserName)))
-        DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.actionPrc != 0 or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
+        DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
 
         class FALLOUT:
             SELECTED = RequestCriteria(PredicateCondition(lambda item: item.isFalloutSelected))
@@ -192,6 +192,7 @@ class REQ_CRITERIA(object):
         """
         BattleBooster is subtype of Equipment. It does not have any relations with BOOSTER.
         """
+        ALL = RequestCriteria(PredicateCondition(lambda item: item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER))
         CREW_EFFECT = RequestCriteria(PredicateCondition(lambda item: item.isCrewBooster()))
         OPTIONAL_DEVICE_EFFECT = RequestCriteria(PredicateCondition(lambda item: not item.isCrewBooster()))
 
@@ -408,7 +409,7 @@ class ItemsRequester(IItemsRequester):
                                 invalidate[GUI_ITEM_TYPE.VEHICLE].add(vehicleIntCD)
                                 vehicleData = self.__inventory.getItemData(vehicleIntCD)
                                 if vehicleData is not None:
-                                    gunIntCD = vehicleData.descriptor.gun['compactDescr']
+                                    gunIntCD = vehicleData.descriptor.gun.compactDescr
                                     invalidate[GUI_ITEM_TYPE.GUN].add(gunIntCD)
 
             invalidate[itemTypeID].update(itemsDiff.keys())

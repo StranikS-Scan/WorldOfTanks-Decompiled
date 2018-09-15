@@ -60,6 +60,7 @@ class GuiSoundsLoader(object):
             _xml.raiseWrongXml(None, self.XML_PATH, 'can not open or read')
         self.__readControlsSounds(xmlCtx)
         self.__readEffectsSounds(xmlCtx)
+        ResMgr.purge(self.XML_PATH, True)
         return
 
     def getControlSound(self, controlType, state, controlID=None):

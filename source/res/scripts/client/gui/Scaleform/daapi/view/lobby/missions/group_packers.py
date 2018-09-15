@@ -608,4 +608,4 @@ class _VehicleQuestsBlockInfo(_EventsBlockInfo):
         elif quest.getType() != EVENT_TYPE.MOTIVE_QUEST:
             return quest.isValidVehicleCondition(g_currentVehicle.item)
         else:
-            return not quest.isCompleted() and quest.isAvailable()[0]
+            return quest.isValidVehicleCondition(g_currentVehicle.item) and not quest.isCompleted() and quest.isAvailable()[0]

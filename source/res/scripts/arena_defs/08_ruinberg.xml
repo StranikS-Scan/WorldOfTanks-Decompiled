@@ -12,7 +12,16 @@
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
   <defaultGroundEffect>	None	</defaultGroundEffect>
-  <wwloadingMusic>	music_euro_city	</wwloadingMusic>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_euro_city	</wwmusicLoading>
+    <wwmusicIntensive>	music_combat	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_combat	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_victory	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
   <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
   <gameplayTypes>
     <ctf>
@@ -56,7 +65,16 @@
       </teamBasePositions>
     </assault2>
     <bootcamp>
-      <wwmusic>	bc_music_mission_04	</wwmusic>
+      <wwmusicSetup>
+        <wwmusicLoading>	music_euro_city	</wwmusicLoading>
+        <wwmusicIntensive>	bc_music_mission_04	</wwmusicIntensive>
+        <wwmusicRelaxed>	bc_music_mission_04	</wwmusicRelaxed>
+        <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
+        <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
+        <wwmusicResultWin>	music_victory	</wwmusicResultWin>
+        <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
+        <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+      </wwmusicSetup>
       <teamBasePositions>
         <team1>
           <position1>	-66.399994 306.100006	</position1>

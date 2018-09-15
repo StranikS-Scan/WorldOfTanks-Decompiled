@@ -447,13 +447,13 @@ class Source(object):
                 nationModules = vehicles.g_cache.radios(nationID)
             elif node.name == 'optionalDevice':
                 idx = vehicles.g_cache.optionalDeviceIDs()[name]
-                modules.add(vehicles.g_cache.optionalDevices()[idx]['compactDescr'])
+                modules.add(vehicles.g_cache.optionalDevices()[idx].compactDescr)
                 break
             else:
                 raise Exception('Unknown tag %s' % node.name)
             for descr in nationModules.itervalues():
-                if descr['name'] == name:
-                    modules.add(descr['compactDescr'])
+                if descr.name == name:
+                    modules.add(descr.compactDescr)
                     break
             else:
                 raise Exception('Unknown module(%s) %s' % (node.name, module))

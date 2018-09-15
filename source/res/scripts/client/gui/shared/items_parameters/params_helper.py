@@ -36,7 +36,7 @@ def _getParamsProvider(item, vehicleDescr=None):
     if vehicles.isVehicleDescr(item.descriptor):
         return _ITEM_TYPE_HANDLERS[ITEM_TYPES.vehicle](item)
     else:
-        itemTypeIdx, _, _ = vehicles.parseIntCompactDescr(item.descriptor['compactDescr'])
+        itemTypeIdx, _, _ = vehicles.parseIntCompactDescr(item.descriptor.compactDescr)
         return _ITEM_TYPE_HANDLERS[itemTypeIdx](item.descriptor, vehicleDescr)
 
 
@@ -77,9 +77,9 @@ def itemOnVehicleComparator(vehicle, item):
     if item.itemTypeID == ITEM_TYPES.vehicleTurret:
         mayInstall, reason = vehicle.descriptor.mayInstallTurret(item.intCD, vehicle.gun.intCD)
         if not mayInstall:
-            properGun = findFirst(lambda gun: vehicle.descriptor.mayInstallComponent(gun['compactDescr'])[0], item.descriptor['guns'])
+            properGun = findFirst(lambda gun: vehicle.descriptor.mayInstallComponent(gun.compactDescr)[0], item.descriptor.guns)
             if properGun is not None:
-                removedModules = vehicle.descriptor.installTurret(item.intCD, properGun['compactDescr'])
+                removedModules = vehicle.descriptor.installTurret(item.intCD, properGun.compactDescr)
                 withItemParams = params.VehicleParams(vehicle).getParamsDict()
                 vehicle.descriptor.installTurret(*removedModules)
             else:
@@ -102,21 +102,44 @@ def itemOnVehicleComparator(vehicle, item):
     return VehiclesComparator(withItemParams, vehicleParams)
 
 
-def artifactComparator(vehicle, item, slotIdx):
+def artifactComparator(vehicle, item, slotIdx, compareWithEmptySlot=False):
     vehicleParams = params.VehicleParams(vehicle).getParamsDict()
     if item.itemTypeID == ITEM_TYPES.optionalDevice:
         removable, notRemovable = vehicle.descriptor.installOptionalDevice(item.intCD, slotIdx)
         withItemParams = params.VehicleParams(vehicle).getParamsDict()
         removed = removable or notRemovable
         if removed:
+            if compareWithEmptySlot:
+                vehicle.descriptor.removeOptionalDevice(slotIdx)
+                vehicleParams = params.VehicleParams(vehicle).getParamsDict()
             vehicle.descriptor.installOptionalDevice(removed[0], slotIdx)
         else:
             vehicle.descriptor.removeOptionalDevice(slotIdx)
     else:
-        oldEq = vehicle.eqs[slotIdx]
-        vehicle.eqs[slotIdx] = item
+        consumables = vehicle.equipment.regularConsumables if item.itemTypeID == ITEM_TYPES.equipment else vehicle.equipment.battleBoosterConsumables
+        oldEq = consumables[slotIdx]
+        if compareWithEmptySlot:
+            consumables[slotIdx] = None
+            vehicleParams = params.VehicleParams(vehicle).getParamsDict()
+        consumables[slotIdx] = item
         withItemParams = params.VehicleParams(vehicle).getParamsDict()
-        vehicle.eqs[slotIdx] = oldEq
+        consumables[slotIdx] = oldEq
+    return VehiclesComparator(withItemParams, vehicleParams)
+
+
+def artifactRemovedComparator(vehicle, item, slotIdx):
+    vehicleParams = params.VehicleParams(vehicle).getParamsDict()
+    if item.itemTypeID == ITEM_TYPES.optionalDevice:
+        oldOptDevice = vehicle.optDevices[slotIdx]
+        vehicle.descriptor.removeOptionalDevice(slotIdx)
+        withItemParams = params.VehicleParams(vehicle).getParamsDict()
+        vehicle.descriptor.installOptionalDevice(oldOptDevice.intCD, slotIdx)
+    else:
+        consumables = vehicle.equipment.regularConsumables if item.itemTypeID == ITEM_TYPES.equipment else vehicle.equipment.battleBoosterConsumables
+        oldEq = consumables[slotIdx]
+        consumables[slotIdx] = None
+        withItemParams = params.VehicleParams(vehicle).getParamsDict()
+        consumables[slotIdx] = oldEq
     return VehiclesComparator(withItemParams, vehicleParams)
 
 
@@ -153,7 +176,7 @@ def shellOnVehicleComparator(shell, vehicle):
     vDescriptor = vehicle.descriptor
     oldIdx = vDescriptor.activeGunShotIndex
     vehicleParams = params.VehicleParams(vehicle).getParamsDict()
-    idx, _ = findFirst(lambda (i, s): s['shell']['compactDescr'] == shell.intCD, enumerate(vDescriptor.gun['shots']), (0, None))
+    idx, _ = findFirst(lambda (i, s): s.shell.compactDescr == shell.intCD, enumerate(vDescriptor.gun.shots), (0, None))
     vDescriptor.activeGunShotIndex = idx
     newParams = params.VehicleParams(vehicle).getParamsDict(preload=True)
     vDescriptor.activeGunShotIndex = oldIdx

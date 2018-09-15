@@ -11,7 +11,16 @@
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <umbraEnabled>	1	</umbraEnabled>
   <batchingEnabled>	0	</batchingEnabled>
-  <wwloadingMusic>	music_euro_vilage	</wwloadingMusic>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_euro_vilage	</wwmusicLoading>
+    <wwmusicIntensive>	music_combat	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_combat	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_victory	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
   <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
   <soundRemapping>
     <loadBanks>
@@ -36,7 +45,16 @@
       <artilleryPreparationChance>	0.6	</artilleryPreparationChance>
     </ctf>
     <bootcamp>
-      <wwmusic>	bc_music_mission_02	</wwmusic>
+      <wwmusicSetup>
+        <wwmusicLoading>	music_euro_vilage	</wwmusicLoading>
+        <wwmusicIntensive>	bc_music_mission_02	</wwmusicIntensive>
+        <wwmusicRelaxed>	bc_music_mission_02	</wwmusicRelaxed>
+        <wwmusicStop>	music_dron_stop_temporary	</wwmusicStop>
+        <wwmusicEndbattleStop>	music_dron_endbattle_stop_temporary	</wwmusicEndbattleStop>
+        <wwmusicResultWin>	music_victory	</wwmusicResultWin>
+        <wwmusicResultDrawn>	music_drawn_game	</wwmusicResultDrawn>
+        <wwmusicResultDefeat>	music_defeat	</wwmusicResultDefeat>
+      </wwmusicSetup>
       <boundingBox>
         <bottomLeft>	-50.000000 -500.000000	</bottomLeft>
         <upperRight>	150.000000 500.000000	</upperRight>

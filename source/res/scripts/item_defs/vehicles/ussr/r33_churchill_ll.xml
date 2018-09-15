@@ -23,7 +23,7 @@
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/russian/R33_Churchill_LL/Churchill_LL_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -71,7 +71,7 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.364959 0.41676	</turret>
+      <turret>	0.00091 0.235043 0.260581	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/russian/R33_Churchill_LL/collision/Hull.model	</collisionModelServer>
@@ -79,14 +79,17 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	1.03892 0.640199 2.81966	</rayStart>
-        <rayEnd>	1.03892 0.240276 2.82749	</rayEnd>
+        <rayStart>	1.05819 0.436837 2.75327	</rayStart>
+        <rayEnd>	1.05591 0.236982 2.76053	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.32	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/russian/R33_Churchill_LL/Churchill_LL_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	2.6 2.6 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Churchll>
@@ -122,82 +125,72 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	germany_01	</textureSet>
-        <size>	0.42 0.48	</size>
+        <size>	0.42 0.56	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-0.96	</textureScale>
+        <textureScale>	-2.3	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	W_L	</template>
-          <radius>	0.16704	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	8	</count>
-        </group>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.16704	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	8	</count>
-        </group>
         <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
-          <radius>	0.368134	</radius>
+          <radius>	0.409587	</radius>
+          <syncAngle>	31.3043	</syncAngle>
         </wheel>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	WD_L	</template>
-          <radius>	0.16704	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	3	</count>
-        </group>
         <wheel>
           <isLeft>	true	</isLeft>
           <isLeading>	true	</isLeading>
-          <name>	WD_L4	</name>
-          <radius>	0.368134	</radius>
+          <name>	WD_L1	</name>
+          <radius>	0.409416	</radius>
+          <syncAngle>	31.3043	</syncAngle>
         </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.178834	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	11	</count>
+        </group>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
-          <radius>	0.368134	</radius>
+          <radius>	0.409587	</radius>
+          <syncAngle>	31.3043	</syncAngle>
         </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	WD_R	</template>
-          <radius>	0.16704	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	3	</count>
-        </group>
         <wheel>
           <isLeft>	false	</isLeft>
           <isLeading>	true	</isLeading>
-          <name>	WD_R4	</name>
-          <radius>	0.368134	</radius>
+          <name>	WD_R1	</name>
+          <radius>	0.409252	</radius>
+          <syncAngle>	31.3043	</syncAngle>
         </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.178834	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	11	</count>
+        </group>
       </wheels>
-      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 1.15966 0.000000	</hullPosition>
+      <hullPosition>	0.000000 1.35658 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R33_Churchill_LL/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R33_Churchill_LL/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.05597 1.57548	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.09095 2.00137	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -210,6 +203,79 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/russian/R33_Churchill_LL/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/russian/R33_Churchill_LL/track/segment.model	</segmentModelRight>
+        <left>	vehicles/russian/R33_Churchill_LL/track/left.track	</left>
+        <right>	vehicles/russian/R33_Churchill_LL/track/right.track	</right>
+        <segmentLength>	0.195	</segmentLength>
+        <segmentOffset>	0.152	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	11	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	11	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	-0.0019	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+        </node>
+      </trackNodes>
     </Churchll>
   </chassis>
   <turrets0>
@@ -270,14 +336,17 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.120179 0.000098 1.04	</rayStart>
-              <rayEnd>	0.164268 -0.0147788 1.10711	</rayEnd>
-              <rayUp>	0.05 0.05 2	</rayUp>
+              <rayStart>	-0.000001 -0.00209032 0.914147	</rayStart>
+              <rayEnd>	-0.00257903 -0.0244873 0.914161	</rayEnd>
+              <rayUp>	0.042 0.041 5	</rayUp>
               <size>	0.372	</size>
               <hideIfDamaged>	true	</hideIfDamaged>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
+          </camouflage>
         </QF_6_pounder_Mk_III>
       </guns>
       <models>
@@ -289,40 +358,40 @@
         <collisionModelServer>	vehicles/russian/R33_Churchill_LL/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R33_Churchill_LL/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.097831 0.401167 0.671695	</gunPosition>
+      <gunPosition>	0.023541 0.360765 0.640064	</gunPosition>
       <emblemSlots>
+        <inscription>
+          <rayStart>	0.831496 0.606669 -0.653996	</rayStart>
+          <rayEnd>	0.647993 0.606669 -0.574455	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.54	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
         <player>
-          <rayStart>	1.03357 0.452614 0.42022	</rayStart>
-          <rayEnd>	0.6389 0.451599 0.355151	</rayEnd>
+          <rayStart>	0.893621 0.378529 0.583063	</rayStart>
+          <rayEnd>	0.694751 0.378513 0.561835	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.32	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
         <player>
-          <rayStart>	-0.999646 0.407676 0.625278	</rayStart>
-          <rayEnd>	-0.604976 0.406661 0.560209	</rayEnd>
+          <rayStart>	-0.893621 0.378529 0.583063	</rayStart>
+          <rayEnd>	-0.694751 0.378513 0.561835	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.32	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	0.90473 0.627039 -0.72801	</rayStart>
-          <rayEnd>	0.53854 0.627039 -0.567062	</rayEnd>
+          <rayStart>	-0.999341 0.376844 -0.00330674	</rayStart>
+          <rayEnd>	-0.801981 0.376241 -0.0356947	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.74	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
-        </inscription>
-        <inscription>
-          <rayStart>	-1.09763 0.407792 0.0309681	</rayStart>
-          <rayEnd>	-0.702959 0.406776 -0.0341008	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.74	</size>
+          <size>	0.64	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.030 0.015 1.022 0.000 0.708 0.175 0.967 0.376 0.296 0.595 0.000 0.500 0.000 0.000 0.172	</physicsShape>
+      <physicsShape>	1.003 0.006 0.991 0.005 0.550 0.236 0.967 0.408 0.305 0.574 0.000 0.500 0.000 0.000 0.190	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
     </Churchll_mk_III>
   </turrets0>
@@ -392,9 +461,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.86	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </R33_Churchill_LL.xml>

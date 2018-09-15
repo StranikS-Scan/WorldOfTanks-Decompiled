@@ -1,7 +1,7 @@
 <root>
   <Paths>
-    <Path>./res_mods/0.9.19.1.2</Path>
-    <Path mode="recursive" mask="*.wotmod" root="res">./mods/0.9.19.1.2</Path>
+    <Path>./res_mods/0.9.20</Path>
+    <Path mode="recursive" mask="*.wotmod" root="res">./mods/0.9.20</Path>
     <Path type="sd,hd">./res/packages/shared_content.pkg</Path>
     <Path type="hd">./res/packages/shared_content_hd.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/shared_content_sandbox.pkg</Path>
@@ -32,6 +32,7 @@
     <Path type="sd,hd">./res/packages/114_czech.pkg</Path>
     <Path type="hd">./res/packages/114_czech_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/11_murovanka.pkg</Path>
+    <Path type="sd,hd">./res/packages/120_kharkiv_halloween.pkg</Path>
     <Path type="sd,hd">./res/packages/13_erlenberg.pkg</Path>
     <Path type="hd">./res/packages/13_erlenberg_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/14_siegfried_line.pkg</Path>
@@ -42,6 +43,8 @@
     <Path type="hd">./res/packages/18_cliff_hd.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/19_monastery.pkg</Path>
     <Path type="hd">./res/packages/19_monastery_hd.pkg</Path>
+    <Path type="sd,hd">./res/packages/212_epic_random_valley.pkg</Path>
+    <Path type="hd">./res/packages/212_epic_random_valley_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/22_slough.pkg</Path>
     <Path type="hd">./res/packages/22_slough_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/23_westfeld.pkg</Path>
@@ -53,7 +56,6 @@
     <Path type="sd,hd">./res/packages/33_fjord.pkg</Path>
     <Path type="hd">./res/packages/33_fjord_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/34_redshire.pkg</Path>
-    <Path type="hd">./res/packages/34_redshire_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/35_steppes.pkg</Path>
     <Path type="hd">./res/packages/35_steppes_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/36_fishing_bay.pkg</Path>
@@ -73,7 +75,6 @@
     <Path type="sd,hd">./res/packages/73_asia_korea.pkg</Path>
     <Path type="hd">./res/packages/73_asia_korea_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/83_kharkiv.pkg</Path>
-    <Path type="hd">./res/packages/83_kharkiv_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/84_winter.pkg</Path>
     <Path type="hd">./res/packages/84_winter_hd.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/86_himmelsdorf_winter.pkg</Path>
@@ -84,11 +85,12 @@
     <Path type="hd">./res/packages/95_lost_city_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/96_prohorovka_defense.pkg</Path>
     <Path type="hd">./res/packages/96_prohorovka_defense_hd.pkg</Path>
-    <Path type="sd,hd">./res/packages/h15_gamescom_2016.pkg</Path>
-    <Path type="hd">./res/packages/h15_gamescom_2016_hd.pkg</Path>
-    <Path type="sd,hd">./res/packages/h16_WG_bday_2016.pkg</Path>
-    <Path type="hd">./res/packages/h16_WG_bday_2016_hd.pkg</Path>
+    <Path type="sd,hd">./res/packages/h03_shopfest_2015.pkg</Path>
+    <Path type="hd">./res/packages/h03_shopfest_2015_hd.pkg</Path>
+    <Path type="sd,hd">./res/packages/hangar_Halloween_v2.pkg</Path>
+    <Path type="hd">./res/packages/hangar_Halloween_v2_hd.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/hangar_bootcamp.pkg</Path>
+    <Path type="sd,hd">./res/packages/hangar_kharkiv_halloween.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/hangar_premium_v2.pkg</Path>
     <Path type="hd">./res/packages/hangar_premium_v2_hd.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/hangar_v2.pkg</Path>
@@ -98,6 +100,7 @@
     <Path type="sandbox,sd,hd">./res/packages/misc.pkg</Path>
     <Path type="hd">./res/packages/misc_hd.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/particles.pkg</Path>
+    <Path type="hd">./res/packages/particles_hd.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/scripts.pkg</Path>
     <Path type="sandbox,sd,hd">./res/packages/vehicles_level_01.pkg</Path>
     <Path type="hd">./res/packages/vehicles_level_01_hd.pkg</Path>
@@ -114,6 +117,7 @@
     <Path type="sd,hd">./res/packages/vehicles_level_07.pkg</Path>
     <Path type="hd">./res/packages/vehicles_level_07_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/vehicles_level_08.pkg</Path>
+    <Path type="sd,hd">./res/packages/vehicles_level_08_1.pkg</Path>
     <Path type="hd">./res/packages/vehicles_level_08_hd.pkg</Path>
     <Path type="sd,hd">./res/packages/vehicles_level_09.pkg</Path>
     <Path type="hd">./res/packages/vehicles_level_09_hd.pkg</Path>

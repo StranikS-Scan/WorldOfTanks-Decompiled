@@ -7,7 +7,7 @@ from UnitBase import UNIT_OP
 from adisp import process
 from constants import PREBATTLE_TYPE_NAMES, PREBATTLE_TYPE
 from debug_utils import LOG_CURRENT_EXCEPTION
-from gui import GUI_SETTINGS, SystemMessages
+from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.MinimapLobby import MinimapLobby
 from gui.Scaleform.daapi.view.lobby.MinimapGrid import MinimapGrid
@@ -62,6 +62,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         self.__changeModeBrowserId = 0
         self.__firstShowMainForm = False
         self.__maintenanceWindowVisible = False
+        self.__enemyReadyIndicator = False
         return
 
     def onUnitFlagsChanged(self, flags, timeLeft):
@@ -185,6 +186,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
             self.__firstShowMainForm = True
             self.as_setBattleRoomDataS(vo_converters.makeFortClanBattleRoomVO(0, '', '', '', '', False, False, header.isSortie()))
             self.addListener(events.StrongholdEvent.STRONGHOLD_ON_TIMER, self._onMatchmakingTimerChanged, scope=EVENT_BUS_SCOPE.STRONGHOLD)
+            self.prbEntity.forceTimerEvent()
 
     def onUpdateTimer(self, timer):
         pass
@@ -229,6 +231,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         self.addListener(events.CSReserveSelectEvent.RESERVE_SELECTED, self.__onReserveSelectHandler)
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__onFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.prbEntity.updateStrongholdData()
+        self.prbEntity.forceTimerEvent()
 
     def _dispose(self):
         self.__proxy = None
@@ -267,6 +270,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         unitPermissions = entity.getPermissions()
         havePermissions = unitPermissions.canChangeUnitState()
         canInvite = unitPermissions.canSendInvite()
+        unitFreezed = entity.isStrongholdUnitFreezed() or entity.isStrongholdUnitWaitingForData()
         if entity.isStrongholdSettingsValid():
             maxPlayerCount = entity.getStrongholdSettings().getHeader().getMaxPlayersCount()
         else:
@@ -275,7 +279,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         if self.__changeModeBrowserId and not havePermissions:
             self.__destroyChangeModeWindow()
         if self.__minimapGrid:
-            self.__minimapGrid.as_clickEnabledS(havePermissions)
+            self.__minimapGrid.as_clickEnabledS(havePermissions and not unitFreezed)
         try:
             for slot in data['slots']:
                 if slot['selectedVehicle'] and not slot['isFreezed'] and not slot['isCommanderState']:
@@ -437,6 +441,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
                     clColor = '#%06x' % clColor if clColor else '#ffffff'
                     playerClanName = "<b><font face='$FieldFont' color='{0}'>[{1}]</font></b>".format(clColor, clan.getTag())
                 self.as_setTimerDeltaS(vo_converters.makeClanBattleTimerVO(data['dtime'] if not isInBattle else 0, "<font face='$FieldFont' size='18' color='{0}'>###</font>".format(colorRegular), "<font face='$FieldFont' size='18' color='{0}'>###</font>".format(colorAlarm), self.TIMER_GLOW_COLORS.NORMAL, self.TIMER_GLOW_COLORS.ALERT, '00', 0 if data['isFirstBattle'] else 1))
+                self.as_updateReadyStatusS(self.prbEntity.getFlags().isInQueue(), self.__enemyReadyIndicator)
         self.as_setBattleRoomDataS(vo_converters.makeFortClanBattleRoomVO(mapId, headerDescr, playerClanName, enemyClanName, wfbDescr, enemyVisible, isBattleTimerVisible, data['isSortie']))
         if data['forceUpdateBuildings']:
             self.__forceUpdateBuildings()
@@ -494,11 +499,11 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         return (vo, enabled)
 
     def __setReadyStatus(self):
-        enemyReady = False
+        self.__enemyReadyIndicator = False
         data = self.prbEntity.getStrongholdSettings()
         if data.isValid() and data.getHeader().getEnemyClan():
-            enemyReady = data.getHeader().getEnemyClan().getReadyStatus()
-        self.as_updateReadyStatusS(self.prbEntity.getFlags().isInQueue(), enemyReady)
+            self.__enemyReadyIndicator = data.getHeader().getEnemyClan().getReadyStatus()
+        self.as_updateReadyStatusS(self.prbEntity.getFlags().isInQueue(), self.__enemyReadyIndicator)
 
     def __onUserDataChanged(self, _, user):
         if self._candidatesDP:

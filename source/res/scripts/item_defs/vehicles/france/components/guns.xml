@@ -2321,7 +2321,6 @@
         <recoilEffect>	main	</recoilEffect>
       </recoil>
       <effects>	shot_mainext_mb	</effects>
-      <reloadEffect>	reload85_107	</reloadEffect>
       <pitchLimits>
         <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
         <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
@@ -2500,6 +2499,7 @@
         <minPitch>	0.0 -17.0 1.0 -17.0	</minPitch>
         <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
       </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
       <rotationSpeed>	21.875	</rotationSpeed>
       <reloadTime>	10.28571428571430	</reloadTime>
       <maxAmmo>	50	</maxAmmo>
@@ -2575,17 +2575,17 @@
       <shots>
         <_105mm_OFL_105_F1>
           <defaultPortion>	0.6	</defaultPortion>
-          <speed>	1525	</speed>
+          <speed>	1100	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	260 250	</piercingPower>
+          <piercingPower>	248 232	</piercingPower>
         </_105mm_OFL_105_F1>
         <_105mm_OCC_105_F1>
           <defaultPortion>	0.0	</defaultPortion>
-          <speed>	1000	</speed>
+          <speed>	800	</speed>
           <gravity>	9.81	</gravity>
           <maxDistance>	720	</maxDistance>
-          <piercingPower>	320 320	</piercingPower>
+          <piercingPower>	300 300	</piercingPower>
         </_105mm_OCC_105_F1>
         <_105mm_OE_105_Mle_60>
           <defaultPortion>	0.4	</defaultPortion>

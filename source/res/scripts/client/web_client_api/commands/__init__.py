@@ -8,5 +8,6 @@ from request import createRequestHandler
 from context_menu import createContextMenuHandler
 from clan_management import createClanManagementHandler
 from ranked_battles import createRankedBattlesHandler
+from vehicles import createVehiclesHandler
 from command import SchemeValidator, WebCommand, instantiateObject, CommandHandler
-__all__ = ('createNotificationHandler', 'createSoundHandler', 'createOpenWindowHandler', 'createCloseWindowHandler', 'createOpenTabHandler', 'createStrongholdsBattleHandler', 'createRequestHandler', 'createContextMenuHandler', 'createClanManagementHandler', 'createRankedBattlesHandler', 'SchemeValidator', 'WebCommand', 'instantiateObject', 'CommandHandler')
+__all__ = ('createNotificationHandler', 'createSoundHandler', 'createOpenWindowHandler', 'createCloseWindowHandler', 'createOpenTabHandler', 'createStrongholdsBattleHandler', 'createRequestHandler', 'createContextMenuHandler', 'createClanManagementHandler', 'createRankedBattlesHandler', 'createVehiclesHandler', 'SchemeValidator', 'WebCommand', 'instantiateObject', 'CommandHandler')

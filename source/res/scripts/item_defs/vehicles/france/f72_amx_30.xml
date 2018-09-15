@@ -107,8 +107,8 @@
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
       <rotationSpeed>	48	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.12	</vehicleMovement>
+        <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	250	</maxHealth>
@@ -384,24 +384,20 @@
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	80	</armor_1>
-        <armor_2>	30	</armor_2>
+        <armor_2>	45	</armor_2>
         <armor_3>	40	</armor_3>
         <armor_4>	30	</armor_4>
-        <armor_5>	40	</armor_5>
         <armor_6>	20	</armor_6>
-        <armor_7>	20	</armor_7>
+        <armor_7>	150	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	20	</armor_9>
+        <armor_9>	120	</armor_9>
         <armor_10>	15	</armor_10>
-        <armor_11>	40	</armor_11>
-        <armor_12>	40	</armor_12>
-        <armor_13>	40	</armor_13>
-        <armor_14>	30	</armor_14>
-        <armor_15>	30	</armor_15>
+        <armor_12>	100	</armor_12>
+        <armor_14>	100	</armor_14>
         <armor_16>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
         </armor_16>
       </armor>
-      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <primaryArmor>	armor_7 armor_3 armor_4	</primaryArmor>
       <weight>	7000	</weight>
       <maxHealth>	380	</maxHealth>
       <rotationSpeed>	38	</rotationSpeed>
@@ -419,19 +415,19 @@
       <guns>
         <_105mm_mle_F1>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
-            <armor_1>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	240	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
             <armor_5>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_6>	300	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_6>
-            <armor_8>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_8>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_8>
             <gun>	40	</gun>
           </armor>
@@ -440,11 +436,11 @@
             <maxPitch>	0 8 0.388889 8 0.402778 1 0.597222 1 0.611111 8 1 8	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.3	</shotDispersionRadius>
-          <reloadTime>	8.9	</reloadTime>
-          <aimingTime>	2.1	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <reloadTime>	7.8	</reloadTime>
+          <aimingTime>	2	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.06	</turretRotation>
+            <turretRotation>	0.04	</turretRotation>
             <afterShot>	3.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -581,9 +577,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.88	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </F72_AMX_30.xml>

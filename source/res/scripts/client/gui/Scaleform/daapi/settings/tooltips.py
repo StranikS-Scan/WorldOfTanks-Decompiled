@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/settings/tooltips.py
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_calendar_day_tooltip import RankedCalendarDayTooltip
+from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_calendar_steps_tooltip import RankedCalendarStepsTooltip
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_selector_tooltip import RankedSelectorTooltip
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_step_tooltip import RankedStepTooltip
 from gui.shared.tooltips import vehicle, tankman, skill, shell, module, achievement, cybersport, common, contexts, battle_consumable, potapovquests, tutorial, fortifications, clans, boosters, veh_cmp, quests, ranked, battle_booster, bootcamp
@@ -65,6 +66,9 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.INVENTORY_MODULE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                        'method': lambda intCD, sellPrice=0, sellCurrency=0, inventoryCount=0, vehicleCount=0: module.ModuleBlockTooltipData(contexts.InventoryContext()).buildToolTip(intCD),
                                        'complex': None},
+ TOOLTIPS_CONSTANTS.INVENTORY_BATTLE_BOOSTER: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                               'method': battle_booster.BattleBoosterBlockTooltipData(contexts.InventoryBattleBoosterContext()).buildToolTip,
+                                               'complex': None},
  TOOLTIPS_CONSTANTS.TECH_MAIN_MODULE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                        'method': lambda intCD, buyPrice=None, inventoryCount=0, vehicleCount=0, slotIdx=0, eqs=None: module.ModuleBlockTooltipData(contexts.TechMainContext()).buildToolTip(intCD, slotIdx, eqs),
                                        'complex': None},
@@ -74,6 +78,9 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.BATTLE_BOOSTER: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                      'method': battle_booster.BattleBoosterBlockTooltipData(contexts.HangarContext()).buildToolTip,
                                      'complex': None},
+ TOOLTIPS_CONSTANTS.BATTLE_BOOSTER_COMPARE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                             'method': battle_booster.BattleBoosterBlockTooltipData(contexts.VehCmpConfigurationContext()).buildToolTip,
+                                             'complex': None},
  TOOLTIPS_CONSTANTS.COMPARE_MODULE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                      'method': module.ModuleBlockTooltipData(contexts.VehCmpConfigurationContext()).buildToolTip,
                                      'complex': None},
@@ -89,6 +96,9 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.SHOP_MODULE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                   'method': lambda intCD, inventoryCount=0, vehicleCount=0: module.ModuleBlockTooltipData(contexts.ShopContext()).buildToolTip(intCD),
                                   'complex': None},
+ TOOLTIPS_CONSTANTS.SHOP_BATTLE_BOOSTER: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                          'method': battle_booster.BattleBoosterBlockTooltipData(contexts.ShopBattleBoosterContext()).buildToolTip,
+                                          'complex': None},
  TOOLTIPS_CONSTANTS.AWARD_MODULE: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                    'method': module.ModuleBlockTooltipData(contexts.AwardContext()).buildToolTip,
                                    'complex': None},
@@ -365,6 +375,9 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.RANKED_CALENDAR_DAY_INFO: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                                'method': RankedCalendarDayTooltip(contexts.ToolTipContext(None)).buildToolTip,
                                                'complex': None},
+ TOOLTIPS_CONSTANTS.RANKED_CALENDAR_STEPS_INFO: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                                 'method': RankedCalendarStepsTooltip(contexts.ToolTipContext(None)).buildToolTip,
+                                                 'complex': None},
  TOOLTIPS_CONSTANTS.RANKED_SELECTOR_INFO: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                            'method': RankedSelectorTooltip(contexts.ToolTipContext(None)).buildToolTip,
                                            'complex': None},

@@ -15,7 +15,7 @@ from gui.Scaleform.daapi.view.meta.CrewMeta import CrewMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.Waiting import Waiting
 from helpers import dependency
-from items.tankmen import getSkillsConfig, compareMastery, ACTIVE_SKILLS
+from items.tankmen import getSkillsConfig, compareMastery
 from helpers.i18n import convert
 from gui.ClientUpdateManager import g_clientUpdateManager
 from skeletons.gui.shared import IItemsCache
@@ -51,13 +51,15 @@ class Crew(CrewMeta):
             roles = []
             lessMastered = 0
             tankmenDescrs = dict(vehicle.crew)
+            skillsConfig = getSkillsConfig()
             for slotIdx, tman in vehicle.crew:
                 if slotIdx > 0 and tman is not None and (tankmenDescrs[lessMastered] is None or compareMastery(tankmenDescrs[lessMastered].descriptor, tman.descriptor) > 0):
                     lessMastered = slotIdx
                 role = vehicle.descriptor.type.crewRoles[slotIdx][0]
+                self._showPersonalCase = bool(tman.invID) if tman is not None else False
                 roles.append({'tankmanID': tman.invID if tman is not None else None,
                  'roleType': role,
-                 'role': convert(getSkillsConfig()[role]['userString']),
+                 'role': convert(skillsConfig.getSkill(role).userString),
                  'roleIcon': Tankman.getRoleBigIconPath(role),
                  'nationID': vehicle.nationID,
                  'typeID': vehicle.innationID,
@@ -73,7 +75,7 @@ class Crew(CrewMeta):
                     continue
                 tankmanVehicle = self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
                 bonus_role_level = commander_bonus if tankman.descriptor.role != 'commander' else 0.0
-                skills_count = len(list(ACTIVE_SKILLS))
+                skills_count = skillsConfig.getNumberOfActiveSkills()
                 skillsList = []
                 for skill in tankman.skills:
                     skillsList.append({'tankmanID': tankman.invID,

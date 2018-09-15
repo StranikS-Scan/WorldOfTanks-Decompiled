@@ -36,7 +36,12 @@ class SPGForbiddenSquadVehiclesValidator(BaseActionsValidator):
 
     def _validate(self):
         pInfo = self._entity.getPlayerInfo()
-        return ValidationResult(False, UNIT_RESTRICTION.SPG_IS_FORBIDDEN) if not pInfo.isReady and g_currentVehicle.isPresent() and g_currentVehicle.item.type == VEHICLE_CLASS_NAME.SPG and not self._entity.hasSlotForSPG() else super(SPGForbiddenSquadVehiclesValidator, self)._validate()
+        if not pInfo.isReady and g_currentVehicle.isPresent():
+            if g_currentVehicle.item.type == VEHICLE_CLASS_NAME.SPG:
+                if self._entity.getMaxSPGCount() <= 0:
+                    return ValidationResult(False, UNIT_RESTRICTION.SPG_IS_FORBIDDEN)
+                return self._entity.hasSlotForSPG() or ValidationResult(False, UNIT_RESTRICTION.SPG_IS_FULL)
+        return super(SPGForbiddenSquadVehiclesValidator, self)._validate()
 
 
 class RandomSquadActionsValidator(SquadActionsValidator):

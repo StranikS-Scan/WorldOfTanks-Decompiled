@@ -5,6 +5,7 @@ from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
 from gui.Scaleform.framework.managers import context_menu
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from gui.Scaleform.framework.managers.loaders import ViewLoadParams
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from ids_generators import SequenceIDGenerator
 _addListener = g_eventBus.addListener
@@ -43,17 +44,17 @@ class PackageBusinessHandler(object):
         self._listeners = ()
         return
 
-    def loadViewWithDefName(self, alias, *args, **kwargs):
-        self._app.loadView(alias, *args, **kwargs)
+    def loadViewWithDefName(self, alias, name=None, *args, **kwargs):
+        self._app.loadView(ViewLoadParams(alias, name), *args, **kwargs)
 
     def loadViewWithGenName(self, alias, *args, **kwargs):
-        self._app.loadView(alias, 'rw{0}'.format(self.__counter.next()), *args, **kwargs)
+        self._app.loadView(ViewLoadParams(alias, 'rw{0}'.format(self.__counter.next())), *args, **kwargs)
 
     def loadViewBySharedEvent(self, event):
-        self._app.loadView(event.eventType, event.name)
+        self._app.loadView(ViewLoadParams(event.eventType, event.name))
 
     def loadViewByCtxEvent(self, event):
-        self._app.loadView(event.eventType, event.name, event.ctx)
+        self._app.loadView(ViewLoadParams(event.eventType, event.name), event.ctx)
 
     def findViewByAlias(self, viewType, alias):
         container = self.__getContainer(viewType)

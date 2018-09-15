@@ -92,4 +92,4 @@ class GUICommandsFactory(object):
         return
 
 
-__all__ = ['GUICommand', 'GUICommandsFactory']
+__all__ = ('GUICommand', 'GUICommandsFactory')

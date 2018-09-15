@@ -1,9 +1,30 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/client_request_lib/data_sources/gateway.py
 """
-Created on Jul 1, 2015
+Module that contains GatewayDataAccessor which can be used to access
+resources from WGCG service. Should be used on production.
 
-@author: oleg
+Additional documentation on used methods for different backend can be found here:
+
+**Ratings**: https://rtd.wargaming.net/docs/wgrs-api/en/latest/clans.html
+
+**Clans**: https://rtd.wargaming.net/docs/wgccbe/en/latest/v2/api-common/index.html
+
+**SPA**: https://rtd.wargaming.net/docs/spa/en/latest/api/index.html
+
+**Exporter**: https://rtd.wargaming.net/docs/exporter/en/latest/api_wot.html
+
+**Global Map**: https://rtd.wargaming.net/docs/wgcwx-global-map/en/latest/api/wgapi.html
+
+**Strongholds (old)**: https://rtd.wargaming.net/docs/wgccfe/en/latest/rst/strongholds.html
+
+**WGSH Unit API**: https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
+
+**WGSH External API**: https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/external_api/api.md
+
+**WGELEN External API**: https://rtd.wargaming.net/docs/wgelen/en/latest/wgcg_autogen.html
+
+**WGRMS External API**: https://rtd.wargaming.net/docs/wgrms/en/develop/api/index.html
 """
 import json
 from urllib import urlencode
@@ -188,7 +209,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         """
         return data from ratings backend using `bulks API method`_
         
-                .. _bulks API method: http://rtd.wargaming.net/docs/wgrs-api/en/latest/clans.html#bulks
         """
         get_params = {'clan_ids': clan_ids,
          'fields': fields}
@@ -199,7 +219,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         """
         return data from WGCCBE backend using `clans API method`_
         
-                .. _clans API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/api-common/clans.html
         """
         get_params = {'clan_ids': clan_ids,
          'fields': fields}
@@ -210,8 +229,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         """
         return data from SPA backend using `account id/name mappings API method`_
         
-                .. _account id/name mappings API method: https://confluence.wargaming.net/display/WEBDEV/%5BWGNSPA%5D+-
-                +SPA+HTTP+API+Examples#id-[WGNSPA]-SPAHTTPAPIExamples-Byids
         """
         get_params = {'id': account_ids,
          'fields': fields}
@@ -222,8 +239,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         """
         return data from WGCCBE backend using `clan members API method`_
         
-                .. _clan members API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/api-common/
-                clans_id_members.html
         """
         get_params = {'fields': fields}
         url = '/clans/%s/members/' % clan_id
@@ -233,8 +248,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         """
         return data from WGCCBE backend using `favorite_attributes API method`_
         
-                .. _favorite_attributes API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/
-                statistics/favorite_attributes.html
         """
         url = '/clans/%s/favorite_attributes/' % clan_id
         return self._request_data(callback, url, converters={'favorite_primetime': lambda x: x and datetime.strptime(x, '%H:%M').time(),
@@ -246,7 +259,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         """
         return data from WGCCBE backend using `accounts API method`_
         
-                .. _accounts API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/api-common/accounts.html
         """
         get_params = {'fields': fields,
          'account_ids': account_ids}
@@ -258,7 +270,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         """
         return data from WGCCBE backend using `applications API method`_
         
-                .. _applications API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/applications.html
         """
         since = since or datetime.utcnow() - DEFAULT_SINCE_DELAY
         get_params = {'created_after': since.isoformat()}
@@ -269,7 +280,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         """
         return data from WGCCBE backend using `invites API method`_
         
-                .. _invites API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/invites.html
         """
         since = since or datetime.utcnow() - DEFAULT_SINCE_DELAY
         get_params = {'created_after': since.isoformat()}
@@ -284,7 +294,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         """
         return data from WGCCBE backend using `applications API method`_
         
-                .. _applications API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/applications.html
         """
         get_params = {'fields': fields,
          'statuses': statuses}
@@ -302,7 +311,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         """
         return data from WGCCBE backend using `applications API method`_
         
-                .. _applications API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/applications.html
         """
         get_params = {'fields': fields,
          'statuses': statuses}
@@ -319,8 +327,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def create_applications(self, callback, clan_ids, comment, fields=None):
         """
         create applications for accounts into clan using `create applications API method`_
-                .. _create applications API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/
-                applications.html
         """
         url = '/clans/applications/'
         data = {'clan_ids': clan_ids,
@@ -330,8 +336,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def accept_application(self, callback, application_id, fields=None):
         """
         accept application for accounts into clan using `accept applications API method`_
-                .. _accept applications API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/
-                applications_id.html
         """
         url = '/clans/applications/%s/' % application_id
         data = {'status': 'accepted'}
@@ -340,8 +344,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def decline_application(self, callback, application_id, fields=None):
         """
         decline application for accounts into clan using `decline applications API method`_
-                .. _decline applications API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/
-                applications_id.html
         """
         url = '/clans/applications/%s/' % application_id
         data = {'status': 'declined'}
@@ -350,7 +352,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def create_invites(self, callback, clan_id, account_ids, comment, fields=None):
         """
         create applications for accounts into clan using `create invites API method`_
-                .. _create invites API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/invites.html
         """
         url = '/clans/%s/invites/' % clan_id
         data = {'account_ids': account_ids,
@@ -360,7 +361,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def accept_invite(self, callback, invite_id, fields=None):
         """
         accept application for accounts into clan using `accept invite API method`_
-                .. _accept invite API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/invites_id.html
         """
         url = '/clans/invites/%s/' % invite_id
         data = {'status': 'accepted'}
@@ -369,7 +369,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def decline_invite(self, callback, invite_id, fields=None):
         """
         decline application for accounts into clan using `decline invites API method`_
-                .. _decline invites API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/invites_id.html
         """
         url = '/clans/invites/%s/' % invite_id
         data = {'status': 'declined'}
@@ -378,7 +377,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def bulk_decline_invites(self, callback, invite_ids, fields=None):
         """
         decline application for accounts into clan using `decline invites API method`_
-                .. _decline invites API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wgcc/invites.html#patch
         """
         url = '/clans/decline_invites/'
         data = {'invite_ids': invite_ids}
@@ -387,8 +385,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def search_clans(self, callback, search, get_total_count=False, fields=None, offset=None, limit=None):
         """
         return data from WGCCBE backend using `clans API method`_
-        
-                .. _clans API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/api-common/clans.html
         """
         get_params = {'search': search.encode('utf-8'),
          'fields': fields}
@@ -404,8 +400,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def get_recommended_clans(self, callback, get_total_count=False, fields=None, offset=None, limit=None):
         """
         return data from WGCCBE backend using `clans API method`_
-        
-                .. _clans API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/api-common/clans.html
         """
         get_params = {'fields': fields}
         if get_total_count:
@@ -420,8 +414,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def get_clan_invites(self, callback, clan_id, fields=None, statuses=None, get_total_count=False, limit=None, offset=None):
         """
         return data from WGCCBE backend using `invites API method`_
-        
-                .. _invites API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/invites.html
         """
         get_params = {'fields': fields,
          'statuses': statuses}
@@ -438,8 +430,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def get_account_invites(self, callback, fields=None, statuses=None, get_total_count=False, limit=None, offset=None):
         """
         return data from WGCCBE backend using `invites API method`_
-        
-                .. _invites API method: http://rtd.wargaming.net/docs/wgccbe/en/latest/wotx/invites.html
         """
         statuses = statuses or ['active',
          'declined',
@@ -462,9 +452,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def get_accounts_info(self, callback, account_ids, fields=None):
         """
         return data from exporter backend using `accounts detailed information`_
-        
-                .. _accounts detailed information: http://rtd.wargaming.net/docs/exporter/en/latest/
-                api_wot.html#accounts-detailed-information
         """
         get_params = {'account_ids': account_ids,
          'fields': fields}
@@ -474,9 +461,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def get_clan_provinces(self, callback, clan_id, fields=None):
         """
         return data from WGCW backend using `clans provinces API method`_
-        
-                .. _clans provinces API method: http://rtd.wargaming.net/docs/wgcw/en/latest/api/
-                wgapi.html?highlight=stats#clans-provinces
         """
         get_params = {'clan_id': [clan_id],
          'fields': fields}
@@ -488,9 +472,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def get_clan_globalmap_stats(self, callback, clan_id, fields=None):
         """
         return data from WGCW backend using `clans stats API method`_
-        
-                .. _clans stats API method: http://rtd.wargaming.net/docs/wgcw/en/latest/api/
-                wgapi.html?highlight=stats#clans-stats
         """
         url = '/clans/global_map/stats/'
         get_params = {'clan_id': clan_id}
@@ -501,9 +482,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def get_fronts_info(self, callback, front_names=None, fields=None):
         """
         return data from WGCW backend using `fronts info API method`_
-        
-                .. _fronts info API method: http://rtd.wargaming.net/docs/wgcw/en/latest/api/
-                wgapi.html?highlight=stats#id1
         """
         url = '/global_map/fronts/'
         get_params = {'fields': fields,
@@ -513,9 +491,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def get_stronghold_info(self, callback, clan_id=None, fields=None):
         """
         return data from WGCCFE backend using `stronghold info API method`_
-        
-                .. _stronghold info API method: http://rtd.wargaming.net/docs/wgccfe/en/latest/rst/
-                strongholds.html#strongholds-clan-id
         """
         url = '/strongholds/info/'
         get_params = {'clan_id': clan_id}
@@ -527,9 +502,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def get_strongholds_statistics(self, callback, clan_id, fields=None):
         """
         return data from WGCCFE backend using `stronghold statistics API method`_
-        
-                .. _stronghold statistics API method: http://rtd.wargaming.net/docs/wgccfe/en/latest/
-                rst/strongholds.html#strongholds-statistics-clan-id
         """
         url = '/strongholds/statistics/'
         get_params = {'clan_id': clan_id}
@@ -541,9 +513,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def get_strongholds_state(self, callback, clan_id, fields=None):
         """
         return data from WGCCFE backend using `stronghold state API method`_
-        
-                .. _stronghold state API method: http://rtd.wargaming.net/docs/wgccfe/en/latest/rst/
-                strongholds.html#strongholds-state
         """
         url = '/strongholds/state/'
         get_params = {'clan_id': clan_id}
@@ -553,9 +522,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def get_wgsh_unit_info(self, callback, periphery_id, unit_server_id, fields=None):
         """
         return data from WGSH backend with info needed for prebattle window header
-        
-            .. _prebattle info API method:
-            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
         """
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
         return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
@@ -564,9 +530,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def set_vehicle(self, callback, periphery_id, unit_server_id, vehicle_cd, fields=None):
         """
         request WGSH to change player vehicle
-        
-            .. _prebattle info API method:
-            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
         """
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/vehicles/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
         post_data = {'vehicle_cd': vehicle_cd}
@@ -576,9 +539,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def set_readiness(self, callback, periphery_id, unit_server_id, is_ready, reset_vehicle, fields=None):
         """
         request WGSH to change player readiness
-        
-            .. _prebattle info API method:
-            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
         """
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/readiness/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
         patch_data = {'is_ready': is_ready,
@@ -589,9 +549,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def invite_players(self, callback, periphery_id, unit_server_id, accounts_to_invite, comment, fields=None):
         """
         request WGSH to send invites to players
-        
-            .. _prebattle info API method:
-            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
         """
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/invite/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
         post_data = {'accounts_to_invite': accounts_to_invite,
@@ -602,9 +559,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def assign_player(self, callback, periphery_id, unit_server_id, account_to_assign, slot_id_to_assign, fields=None):
         """
         request WGSH to assign given player to battle
-        
-            .. _prebattle info API method:
-            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
         """
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/assign/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
         post_data = {'account_to_assign': account_to_assign,
@@ -615,9 +569,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def unassign_player(self, callback, periphery_id, unit_server_id, account_to_unassign, fields=None):
         """
         request WGSH to unassign given player from battle
-        
-            .. _prebattle info API method:
-            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
         """
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/unassign/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
         post_data = {'account_to_unassign': account_to_unassign}
@@ -627,9 +578,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def give_leadership(self, callback, periphery_id, unit_server_id, target_account_id, fields=None):
         """
         request WGSH to make player a leader
-        
-            .. _prebattle info API method:
-            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
         """
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/give_leadership/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
         post_data = {'target_account_id': target_account_id}
@@ -639,9 +587,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def leave_room(self, callback, periphery_id, unit_server_id, fields=None):
         """
         request WGSH to leave current user from room
-        
-            .. _prebattle info API method:
-            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
         """
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/leave/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
         return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
@@ -650,9 +595,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def take_away_leadership(self, callback, periphery_id, unit_server_id, fields=None):
         """
         request WGSH to take leadership on room if current user have rights
-        
-            .. _prebattle info API method:
-            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
         """
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/take_away_leadership/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
         return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
@@ -661,9 +603,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def kick_player(self, callback, periphery_id, unit_server_id, account_to_kick, fields=None):
         """
         request WGSH to kick player from unit
-        
-            .. _prebattle info API method:
-            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
         """
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/kick/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
         post_data = {'account_to_kick': account_to_kick}
@@ -673,9 +612,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def set_open(self, callback, periphery_id, unit_server_id, is_open, fields=None):
         """
         request WGSH to set unit to open
-        
-            .. _prebattle info API method:
-            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
         """
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/set_open/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
         post_data = {'is_open': is_open}
@@ -685,9 +621,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def lock_reserve(self, callback, periphery_id, unit_server_id, reserve_id, fields=None):
         """
         request WGSH to lock given reserve
-        
-            .. _prebattle info API method:
-            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
         """
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/lock_reserve/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
         post_data = {'reserve_id': reserve_id}
@@ -697,9 +630,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def unlock_reserve(self, callback, periphery_id, unit_server_id, reserve_id, fields=None):
         """
         request WGSH to unlock given reserve
-        
-            .. _prebattle info API method:
-            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
         """
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/unlock_reserve/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
         post_data = {'reserve_id': reserve_id}
@@ -709,9 +639,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def clan_statistics(self, callback, clan_id, fields=None):
         """
         request WGSH to get clan statistics
-        
-            .. _prebattle info API method:
-            https://confluence.wargaming.net/display/WEBDEV/WGSH+-+API+for+WoT+client+dialogs
         """
         url = '/wgsh/clans/{clan_id}/'.format(clan_id=clan_id)
         return self._request_data(callback, url, get_data={}, converters={}, method='GET')
@@ -719,9 +646,6 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def join_room(self, callback, periphery_id, unit_server_id, fields=None):
         """
         request WGSH to join current user to room
-        
-            .. _prebattle info API method:
-            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
         """
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/join/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
         return self._request_data(callback, url, get_data={}, method='POST')
@@ -743,9 +667,27 @@ class GatewayDataAccessor(base.BaseDataAccessor):
     def account_statistics(self, callback, account_id, fields=None):
         """
         request WGSH to get account statistics
-        
-            .. _prebattle info API method:
-            https://confluence.wargaming.net/display/WEBDEV/WGSH+-+API+for+WoT+client+dialogs
         """
         url = '/wgsh/accounts/{account_id}/'.format(account_id=account_id)
         return self._request_data(callback, url, get_data={}, converters={}, method='GET')
+
+    def hof_user_info(self, callback):
+        """
+        request WGRMS to return user's status in HoF
+        """
+        url = '/hof/user/info/'
+        return self._request_data(callback, url, method='GET')
+
+    def hof_user_exclude(self, callback):
+        """
+        request WGRMS to exclude user from HoF
+        """
+        url = '/hof/user/exclude/'
+        return self._request_data(callback, url, method='POST')
+
+    def hof_user_restore(self, callback):
+        """
+        request WGRMS to restore user to HoF
+        """
+        url = '/hof/user/restore/'
+        return self._request_data(callback, url, method='POST')

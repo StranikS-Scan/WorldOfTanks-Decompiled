@@ -421,7 +421,7 @@
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <turretYawLimits>	-6 6	</turretYawLimits>
+          <turretYawLimits>	-11 11	</turretYawLimits>
           <models>
             <undamaged>	vehicles/russian/R88_Object268/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R88_Object268/crash/lod0/Gun_01.model	</destroyed>
@@ -529,9 +529,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.84	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </R88_Object268.xml>

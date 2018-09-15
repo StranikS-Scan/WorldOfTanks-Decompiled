@@ -102,7 +102,7 @@ class VehiclesComparator(ItemsComparator):
         paramBonuses = set(params_cache.g_paramsCache.getBonuses().get(paramName, []))
         allPossibleParamBonuses = set()
         for bonusName, bonusGroup in paramBonuses:
-            if (bonusName, bonusGroup) in self.__suitableArtefacts or bonusGroup in ('skill', 'role', 'extra'):
+            if (bonusName, bonusGroup) in self.__suitableArtefacts or bonusGroup in ('skill', 'role', 'extra', 'battleBooster'):
                 allPossibleParamBonuses.add((bonusName, bonusGroup))
 
         return allPossibleParamBonuses

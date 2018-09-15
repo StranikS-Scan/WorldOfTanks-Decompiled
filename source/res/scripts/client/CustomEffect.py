@@ -180,6 +180,7 @@ class SelectorDescFactory:
 
 
 class SelectorDesc(object):
+    __slots__ = ('_variable', '_isPC')
 
     def __init__(self):
         self._variable = None
@@ -199,6 +200,7 @@ class SelectorDesc(object):
 
 
 class DiscreteSelectorDesc(SelectorDesc):
+    __slots__ = ('_selectors', '_variable')
 
     @property
     def selectors(self):
@@ -206,7 +208,7 @@ class DiscreteSelectorDesc(SelectorDesc):
 
     def __init__(self):
         super(DiscreteSelectorDesc, self).__init__()
-        self._selectors = dict()
+        self._selectors = {}
 
     def read(self, dataSection, effects):
         super(DiscreteSelectorDesc, self).read(dataSection, effects)
@@ -243,6 +245,7 @@ class DiscreteSelectorDesc(SelectorDesc):
 
 
 class MatkindSelectorDesc(DiscreteSelectorDesc):
+    __slots__ = ('_variable',)
 
     def __init__(self):
         super(MatkindSelectorDesc, self).__init__()
@@ -260,6 +263,7 @@ class MatkindSelectorDesc(DiscreteSelectorDesc):
 
 
 class RangeSelectorDesc(SelectorDesc):
+    __slots__ = ('_selectors', '_variable', '__keys')
 
     def __init__(self):
         super(RangeSelectorDesc, self).__init__()
@@ -310,6 +314,7 @@ class RangeSelectorDesc(SelectorDesc):
 
 
 class UnionSelectorDesc(SelectorDesc):
+    __slots__ = ('_selectors',)
 
     def __init__(self):
         super(UnionSelectorDesc, self).__init__()
@@ -339,6 +344,7 @@ class UnionSelectorDesc(SelectorDesc):
 
 
 class EffectSelectorDesc(SelectorDesc):
+    __slots__ = ('__hardPoint', '_id', '__ttl', '_effectList', '_variable')
 
     @property
     def isEffectList(self):
@@ -434,6 +440,7 @@ class EffectSelectorDesc(SelectorDesc):
 
 
 class EffectListSelectorDesc(EffectSelectorDesc):
+    __slots__ = ('_effectList',)
 
     def __init__(self):
         super(EffectListSelectorDesc, self).__init__()

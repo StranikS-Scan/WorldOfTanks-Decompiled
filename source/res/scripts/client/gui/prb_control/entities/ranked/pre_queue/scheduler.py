@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/ranked/pre_queue/scheduler.py
+import constants
 from gui import SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control.entities.base.pre_queue.ctx import LeavePreQueueCtx
@@ -47,7 +48,7 @@ class RankedScheduler(BaseScheduler):
         """
         if not self.__isPrimeTime:
             SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.RANKED_NOTIFICATION_PRIMETIME), type=SystemMessages.SM_TYPE.PrimeTime)
-            if self.rankedController.hasAnyPeripheryWithPrimeTime():
+            if self.rankedController.hasAnyPeripheryWithPrimeTime() and not constants.IS_CHINA:
                 g_eventDispatcher.showSwitchPeripheryWindow(ctx=SwitchPeripheryRankedCtx(), isModal=False)
         elif not isInit:
             SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.RANKED_NOTIFICATION_AVAILABLE), type=SystemMessages.SM_TYPE.RankedBattlesAvailable)

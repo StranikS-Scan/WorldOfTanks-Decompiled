@@ -106,6 +106,7 @@ class EventsCache(IEventsCache):
         self.onSlotsCountChanged = Event(self.__em)
         self.onProgressUpdated = Event(self.__em)
         self.onEventsVisited = Event(self.__em)
+        self.onProfileVisited = Event(self.__em)
         self.__lockedQuestIds = {}
         return
 

@@ -345,15 +345,16 @@ class Quest(ServerEventAbstract):
     def getProgressData(self):
         return self._progress or {}
 
-    def getBonuses(self, bonusName=None, isCompensation=False):
+    def getBonuses(self, bonusName=None, isCompensation=False, bonusData=None):
         """ Get quest's bonuses.
         
         :param bonusName: str, bonus name to be find
         :param isCompensation: bool, treat returned bonuses as compensation
+        :param bonusData: dict, formed quest bonus dict section, wrap bonus data for existing bonus dict
         :return: list with found bonuses
         """
         result = []
-        bonusData = self._data.get('bonus', {})
+        bonusData = bonusData or self._data.get('bonus', {})
         if bonusName is None:
             for name, value in bonusData.iteritems():
                 bonus = getBonusObj(self, name, value, isCompensation)

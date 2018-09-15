@@ -34,7 +34,7 @@ class DamageFromShotDecoder(object):
             if startPoint == endPoint:
                 continue
             maxHitEffectCode = max(hitEffectCode, maxHitEffectCode)
-            hitTester = getattr(vehicleDescr, compName)['hitTester']
+            hitTester = getattr(vehicleDescr, compName).hitTester
             hitTestRes = hitTester.localHitTest(startPoint, endPoint)
             if not hitTestRes:
                 width, height, depth = (hitTester.bbox[1] - hitTester.bbox[0]) / 256.0
@@ -74,16 +74,16 @@ class DamageFromShotDecoder(object):
         compIdx = segment >> 8 & 255
         if compIdx == 0:
             componentName = TankPartNames.CHASSIS
-            bbox = vehicleDescr.chassis['hitTester'].bbox
+            bbox = vehicleDescr.chassis.hitTester.bbox
         elif compIdx == 1:
             componentName = TankPartNames.HULL
-            bbox = vehicleDescr.hull['hitTester'].bbox
+            bbox = vehicleDescr.hull.hitTester.bbox
         elif compIdx == 2:
             componentName = TankPartNames.TURRET
-            bbox = vehicleDescr.turret['hitTester'].bbox
+            bbox = vehicleDescr.turret.hitTester.bbox
         elif compIdx == 3:
             componentName = TankPartNames.GUN
-            bbox = vehicleDescr.gun['hitTester'].bbox
+            bbox = vehicleDescr.gun.hitTester.bbox
         else:
             LOG_CODEPOINT_WARNING(compIdx)
             return ('',

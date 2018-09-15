@@ -6,6 +6,7 @@ from collections import defaultdict, namedtuple
 from constants import ARENA_GUI_TYPE
 import constants
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.TIPS import TIPS
 from gui.shared.utils.functions import rnd_choice_loop
 from helpers import dependency
 from helpers import i18n
@@ -112,11 +113,75 @@ class EventTipsCriteria(_TipsCriteria):
         return _FoundTip(i18n.makeString('#tips:eventTitle'), i18n.makeString('#tips:eventMessage'), TIPS_IMAGE_SOURCE % 'event')
 
 
+def _getRankedTipIterator():
+    tipSize = len(RES_ICONS.MAPS_ICONS_BATTLELOADING_TIPS_RANKED_ENUM)
+    assert tipSize == len(TIPS.RANKED_ALL_BODY_ENUM)
+    assert tipSize == len(TIPS.RANKED_ALL_TITLE_ENUM)
+    if tipSize > 0:
+        items = range(tipSize)
+        return rnd_choice_loop(*items)
+    else:
+        return None
+
+
+class RankedTipsCriteria(_TipsCriteria):
+    __tipIterator = None
+
+    def __init__(self):
+        super(RankedTipsCriteria, self).__init__()
+        if RankedTipsCriteria.__tipIterator is None:
+            RankedTipsCriteria.__tipIterator = _getRankedTipIterator()
+        return
+
+    def find(self):
+        iterator = RankedTipsCriteria.__tipIterator
+        if iterator is not None:
+            tipNum = next(iterator)
+            return _FoundTip(i18n.makeString(TIPS.getRankedTipTittle(tipNum)), i18n.makeString(TIPS.getRankedTipBody(tipNum)), RES_ICONS.getRankedBattleLoadingTipImage(tipNum))
+        else:
+            return _FoundTip('', '', '')
+            return
+
+
+def _getEpicRandomTipIterator():
+    tipSize = len(RES_ICONS.MAPS_ICONS_BATTLELOADING_TIPS_EPICRANDOM_ENUM)
+    assert tipSize == len(TIPS.EPICRANDOM_ALL_BODY_ENUM)
+    assert tipSize == len(TIPS.EPICRANDOM_ALL_TITLE_ENUM)
+    if tipSize > 0:
+        items = range(tipSize)
+        return rnd_choice_loop(*items)
+    else:
+        return None
+
+
+class EpicRandomTipsCriteria(_TipsCriteria):
+    __tipIterator = None
+
+    def __init__(self):
+        super(EpicRandomTipsCriteria, self).__init__()
+        if EpicRandomTipsCriteria.__tipIterator is None:
+            EpicRandomTipsCriteria.__tipIterator = _getEpicRandomTipIterator()
+        return
+
+    def find(self):
+        iterator = EpicRandomTipsCriteria.__tipIterator
+        if iterator is not None:
+            tipNum = next(iterator)
+            return _FoundTip(i18n.makeString(TIPS.getEpicRandomTipTitle(tipNum)), i18n.makeString(TIPS.getEpicRandomTipBody(tipNum)), RES_ICONS.getEpicRandomBattleLoadingTipImage(tipNum))
+        else:
+            return _FoundTip('', '', '')
+            return
+
+
 def getTipsCriteria(arenaVisitor):
     if arenaVisitor.gui.isSandboxBattle():
         return SandboxTipsCriteria()
     elif arenaVisitor.gui.isEventBattle():
         return EventTipsCriteria()
+    elif arenaVisitor.gui.isRankedBattle():
+        return RankedTipsCriteria()
+    elif arenaVisitor.gui.isEpicRandomBattle():
+        return EpicRandomTipsCriteria()
     else:
         return RandomTipsCriteria()
 

@@ -7,6 +7,7 @@ from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
 from gui.shared.utils.functions import makeTooltip
+from gui.shared.money import MONEY_UNDEFINED
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from helpers import i18n, time_utils
 TXT_GAP_FOR_BIG_TITLE = 2
@@ -255,15 +256,15 @@ def packItemActionTooltipData(item, isBuying=True):
     :return: action data dict
     """
     if isBuying:
-        price = item.altPrice or item.buyPrice
-        defaultPrice = item.defaultAltPrice or item.defaultPrice
+        itemPrice = item.buyPrices.itemPrice
+        itemAltPrice = item.buyPrices.itemAltPrice
     else:
-        price = item.sellPrice
-        defaultPrice = item.defaultSellPrice
-    return packActionTooltipData(ACTION_TOOLTIPS_TYPE.ITEM, str(item.intCD), isBuying, price, defaultPrice)
+        itemPrice = item.sellPrices.itemPrice
+        itemAltPrice = item.sellPrices.itemAltPrice
+    return packActionTooltipData(ACTION_TOOLTIPS_TYPE.ITEM, str(item.intCD), isBuying, itemPrice.price, itemPrice.defPrice, itemAltPrice.price, itemAltPrice.defPrice)
 
 
-def packActionTooltipData(type, key, isBuying, price, oldPrice):
+def packActionTooltipData(type, key, isBuying, price, oldPrice, altPrice=MONEY_UNDEFINED, oldAltPrice=MONEY_UNDEFINED):
     """
     Packs data into action tooltip VO.
     
@@ -272,11 +273,17 @@ def packActionTooltipData(type, key, isBuying, price, oldPrice):
     :param isBuying: True if tooltip is for buying, otherwise False
     :param price: current price
     :param oldPrice: old price
+    :param altPrice: current alternative price
+    :param oldAltPrice: old alternative price
     :return: VO
     """
     states = list()
-    for currency, oldValue in oldPrice.iteritems():
-        priceValue = price.get(currency)
+    if altPrice.isDefined():
+        price = price + altPrice
+    if oldAltPrice.isDefined():
+        oldPrice = oldPrice + oldAltPrice
+    for currency, oldValue in oldPrice.iterallitems():
+        priceValue = price.getSignValue(currency)
         if priceValue < oldValue:
             state = ACTION_TOOLTIPS_STATE.DISCOUNT if isBuying else ACTION_TOOLTIPS_STATE.PENALTY
         elif priceValue > oldValue:
@@ -289,8 +296,8 @@ def packActionTooltipData(type, key, isBuying, price, oldPrice):
      'key': key,
      'isBuying': isBuying,
      'state': states,
-     'newPrice': price,
-     'oldPrice': oldPrice,
+     'newPrice': price.toMoneyTuple(),
+     'oldPrice': oldPrice.toMoneyTuple(),
      'ico': price.getCurrency()}
 
 
@@ -302,9 +309,9 @@ def packItemRentActionTooltipData(item, rentPackage):
     :param rentPackage:
     :return: action data dict
     """
-    defaultPrice = rentPackage['defaultRentPrice']
-    price = rentPackage['rentPrice']
-    states = [ ACTION_TOOLTIPS_STATE.DISCOUNT for _ in price ]
+    defaultPrice = rentPackage['defaultRentPrice'].toMoneyTuple()
+    price = rentPackage['rentPrice'].toMoneyTuple()
+    states = len(price) * (ACTION_TOOLTIPS_STATE.DISCOUNT,)
     return {'type': ACTION_TOOLTIPS_TYPE.RENT,
      'key': str(item.intCD),
      'state': states,
@@ -352,14 +359,12 @@ def packMissionVehiclesTypeBlockData(listData, linkage=BLOCKS_TOOLTIP_TYPES.TOOL
 
 
 def getActionPriceData(item):
-    price = item.altPrice or item.buyPrice
-    defaultPrice = item.defaultAltPrice or item.defaultPrice
     minRentPricePackage = item.getRentPackage()
     action = None
     if minRentPricePackage and minRentPricePackage['rentPrice'] != minRentPricePackage['defaultRentPrice']:
         action = packItemRentActionTooltipData(item, minRentPricePackage)
     elif not item.isRestoreAvailable():
-        if price != defaultPrice:
+        if item.buyPrices.getSum().isActionPrice():
             action = packItemActionTooltipData(item)
     return action
 

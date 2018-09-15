@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/vehicle_rotation.py
 import AccountCommands
 from functools import partial
-from diff_utils import synchronizeDicts
+from shared_utils.account_helpers.diff_utils import synchronizeDicts
 
 class VehicleRotation(object):
 

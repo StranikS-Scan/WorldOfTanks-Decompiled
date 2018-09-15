@@ -13,6 +13,9 @@ class RankedBattlesViewMeta(WrapperViewMeta):
     def onAwardClick(self, awardID):
         self._printOverrideError('onAwardClick')
 
+    def onPlayBtnClick(self):
+        self._printOverrideError('onPlayBtnClick')
+
     def as_setDataS(self, data):
         """
         :param data: Represented by RankedBattlesViewVO (AS)

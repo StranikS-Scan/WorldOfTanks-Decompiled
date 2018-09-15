@@ -24,7 +24,7 @@ class ClientSelectableObject(BigWorld.Entity):
         return [self.modelName]
 
     def onEnterWorld(self, prereqs):
-        if self.modelName and self.modelName not in prereqs.failedIDs:
+        if self.modelName not in prereqs.failedIDs:
             model = prereqs[self.modelName]
             self.model = model
             self.filter = BigWorld.DumbFilter()
@@ -74,7 +74,7 @@ class ClientSelectableObject(BigWorld.Entity):
     def onClicked(self):
         if self.__clickSound is None:
             if len(self.clickSoundName) > 0:
-                self.__clickSound = SoundGroups.g_instance.getSound2D(self.clickSoundName)
+                self.__clickSound = SoundGroups.g_instance.getSound3D(self.model.root, self.clickSoundName)
                 self.__clickSound.play()
                 return
         elif self.__clickSound.isPlaying:
@@ -82,6 +82,3 @@ class ClientSelectableObject(BigWorld.Entity):
         else:
             self.__clickSound.play()
         return
-
-    def onReleased(self):
-        pass

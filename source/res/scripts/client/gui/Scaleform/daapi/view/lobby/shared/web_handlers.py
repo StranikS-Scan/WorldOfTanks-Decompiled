@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shared/web_handlers.py
 from functools import partial
+import nations
 from adisp import process
 from constants import TOKEN_TYPE
 from debug_utils import LOG_DEBUG
 from helpers import dependency
+from items import vehicles
 from skeletons.gui.game_control import IBrowserController
 from gui.SystemMessages import SM_TYPE
 from gui.SystemMessages import pushI18nMessage, pushMessage
@@ -84,16 +86,17 @@ def createOpenWindowCommandHandler(subCommands):
     return handleOpenWindowCommand
 
 
-def handleCloseWindowCommand(onBrowserClose, command, ctx):
+def handleCloseWindowCommand(onBrowserClose, command, ctx, isWindow=True):
     """
     Closes window by id
     """
-    closeWindowSubCommands = {'browser': (CloseWindowCommand, partial(_closeBrowser, onBrowserClose))}
+    if isWindow:
+        closeWindowSubCommands = {'browser': partial(_closeBrowserWindow, onBrowserClose)}
+    else:
+        closeWindowSubCommands = {'browser': _closeBrowserView}
     if command.window_id in closeWindowSubCommands:
-        cls, handler = closeWindowSubCommands[command.window_id]
-        command.custom_parameters = {'window_id': command.window_id}
-        subCommand = instantiateObject(cls, command.custom_parameters)
-        handler(subCommand, ctx)
+        handler = closeWindowSubCommands[command.window_id]
+        handler(ctx)
     else:
         raise WebCommandException('Unknown window: %s!' % command.window_id)
 
@@ -103,10 +106,12 @@ def handleOpenTabCommand(command, ctx):
     Opens tab by id
     """
     if command.tab_id in OPEN_TAB_INFO:
-        tabId = OPEN_TAB_INFO[command.tab_id]
-        g_eventBus.handleEvent(events.LoadViewEvent(tabId), scope=EVENT_BUS_SCOPE.LOBBY)
+        tabId, elementsList = OPEN_TAB_INFO[command.tab_id]
+        ctx = None if not elementsList else elementsList.get(command.selected_id)
+        g_eventBus.handleEvent(events.LoadViewEvent(tabId, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
     else:
         raise WebCommandException('Unknown tab id: %s!' % command.tab_id)
+    return
 
 
 def handleRequestCommand(command, ctx):
@@ -146,6 +151,17 @@ def handleContextMenuCommand(command, ctx):
         raise WebCommandException('Unknown context menu type: %s!' % command.menu_type)
 
 
+def handleVehiclesCommand(command, ctx):
+    """
+    Returns vehicles info
+    """
+    if command.action in VEHICLES_ACTIONS:
+        handler = VEHICLES_ACTIONS[command.action]
+        handler(command, ctx.get('callback'))
+    else:
+        raise WebCommandException('Unknown vehicles action: %s!' % command.action)
+
+
 def _openBrowser(onBrowserOpen, handlersCreator, command):
     """
     Opens browser window
@@ -174,7 +190,7 @@ def createOpenBrowserSubCommands(onBrowserOpen, handlersCreator):
     return {'browser': (OpenBrowserCommand, partial(_openBrowser, onBrowserOpen, handlersCreator))}
 
 
-def _closeBrowser(onBrowserClose, command, ctx):
+def _closeBrowserWindow(onBrowserClose, ctx):
     """
     Closes current browser window
     """
@@ -192,7 +208,24 @@ def _closeBrowser(onBrowserClose, command, ctx):
     return
 
 
-OPEN_TAB_INFO = {'hangar': VIEW_ALIAS.LOBBY_HANGAR}
+def _closeBrowserView(ctx):
+    """
+    Closes current browser view
+    """
+    app = g_appLoader.getApp()
+    if app is not None and app.containerManager is not None:
+        browserView = app.containerManager.getView(ViewTypes.LOBBY_SUB, criteria={POP_UP_CRITERIA.VIEW_ALIAS: ctx.get('browser_alias')})
+        if browserView is not None:
+            browserView.onCloseView()
+            return
+    raise WebCommandException('Unable to find BrowserView!')
+    return
+
+
+OPEN_TAB_INFO = {'hangar': (VIEW_ALIAS.LOBBY_HANGAR, None),
+ 'profile': (VIEW_ALIAS.LOBBY_PROFILE, {'hof': {'selectedAlias': VIEW_ALIAS.PROFILE_HOF},
+              'technique': {'selectedAlias': VIEW_ALIAS.PROFILE_TECHNIQUE_PAGE},
+              'summary': {'selectedAlias': VIEW_ALIAS.PROFILE_SUMMARY_PAGE}})}
 
 def _requestWgniToken(callback):
     tokenRqs = getTokenRequester(TOKEN_TYPE.WGNI)
@@ -260,3 +293,23 @@ def _showUserContextMenu(command, ctx, callback):
 
 
 CONTEXT_MENU_TYPES = {'user_menu': (UserContextMenuCommand, _showUserContextMenu)}
+
+def _getVehicleInfo(command, callback):
+    try:
+        vehicle = vehicles.getVehicleType(command.vehicle_id)
+    except:
+        res = {'error': 'vehicle_id is invalid.'}
+    else:
+        res = {'vehicle': {'vehicle_id': vehicle.compactDescr,
+                     'tag': vehicle.name,
+                     'name': vehicle.userString,
+                     'short_name': vehicle.shortUserString,
+                     'nation': nations.NAMES[vehicle.id[0]],
+                     'type': vehicles.getVehicleClassFromVehicleType(vehicle),
+                     'tier': vehicle.level,
+                     'is_premium': bool('premium' in vehicle.tags)}}
+
+    callback(res)
+
+
+VEHICLES_ACTIONS = {'vehicle_info': _getVehicleInfo}

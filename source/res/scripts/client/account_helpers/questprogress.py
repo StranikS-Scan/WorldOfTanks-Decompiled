@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/account_helpers/QuestProgress.py
 import AccountCommands
 from functools import partial
-from diff_utils import synchronizeDicts
+from shared_utils.account_helpers.diff_utils import synchronizeDicts
 
 class QuestProgress(object):
 

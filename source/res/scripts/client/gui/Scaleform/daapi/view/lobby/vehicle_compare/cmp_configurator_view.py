@@ -5,7 +5,7 @@ from adisp import process
 from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.hangar.AmmunitionPanel import getFittingSlotsData, getAmmo, FITTING_SLOTS, ARTEFACTS_SLOTS, OPTIONAL_DEVICE_SLOTS_COUNT, FITTING_MODULES
+from gui.Scaleform.daapi.view.lobby.hangar.AmmunitionPanel import getFittingSlotsData, getAmmo, HANGAR_FITTING_SLOTS, ARTEFACTS_SLOTS, FITTING_MODULES
 from gui.Scaleform.daapi.view.lobby.shared.fitting_slot_vo import FittingSlotVO
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_base import VehicleCompareConfiguratorBaseView
@@ -19,6 +19,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.VEHICLE_COMPARE_CONSTANTS import VEHICLE_COMPARE_CONSTANTS
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.veh_comparison_basket import CREW_TYPES, PARAMS_AFFECTED_TANKMEN_SKILLS
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles
@@ -31,6 +32,7 @@ from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import tankmen
+from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS
 from shared_utils import findFirst
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.shared import IItemsCache
@@ -109,15 +111,15 @@ def _getSlotDataIndexes(slots):
     indexes = []
     for slot in slots:
         if slot in ARTEFACTS_SLOTS:
-            indexes.append(range(index, index + OPTIONAL_DEVICE_SLOTS_COUNT))
-            index += OPTIONAL_DEVICE_SLOTS_COUNT
+            indexes.append(range(index, index + NUM_OPTIONAL_DEVICE_SLOTS))
+            index += NUM_OPTIONAL_DEVICE_SLOTS
         indexes.append((index,))
         index += 1
 
     return indexes
 
 
-_SLOT_DATA_INDEXES = _getSlotDataIndexes(FITTING_SLOTS)
+_SLOT_DATA_INDEXES = _getSlotDataIndexes(HANGAR_FITTING_SLOTS)
 
 class _CmpOptDeviceRemover(ModuleProcessor):
 
@@ -155,7 +157,12 @@ class _ConfigFittingSlotVO(FittingSlotVO):
         self['showRemoveBtn'] = not slotEmpty
         if slotEmpty:
             self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPLEX
-            self['tooltip'] = VEH_COMPARE.VEHCONF_TOOLTIPS_EMPTYEQSLOT if slotType == 'equipment' else VEH_COMPARE.VEHCONF_TOOLTIPS_EMPTYOPTDEVICESLOT
+            if slotType == 'equipment':
+                self['tooltip'] = VEH_COMPARE.VEHCONF_TOOLTIPS_EMPTYEQSLOT
+            elif slotType == 'battleBooster':
+                self['tooltip'] = TOOLTIPS.HANGAR_AMMO_PANEL_BATTLEBOOSTER_EMPTY
+            else:
+                self['tooltip'] = VEH_COMPARE.VEHCONF_TOOLTIPS_EMPTYOPTDEVICESLOT
         else:
             if slotType == FITTING_TYPES.VEHICLE_TURRET and not vehicle.hasTurrets:
                 self['tooltipType'] = ''
@@ -165,9 +172,38 @@ class _ConfigFittingSlotVO(FittingSlotVO):
                     self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
                 else:
                     self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+                self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPARE_MODULE
+            elif slotType == FITTING_TYPES.BOOSTER:
+                self['tooltipType'] = TOOLTIPS_CONSTANTS.BATTLE_BOOSTER_COMPARE
             else:
                 self['tooltipType'] = TOOLTIPS_CONSTANTS.COMPARE_MODULE
         return
+
+    def _prepareModule(self, modulesData, vehicle, slotType, slotId):
+        if slotType == FITTING_TYPES.BOOSTER:
+            module = vehicle.equipment.battleBoosterConsumables[0]
+            if module is not None:
+                affectsAtTTC = module.isAffectsOnVehicle(vehicle)
+                self['affectsAtTTC'] = affectsAtTTC
+                if affectsAtTTC:
+                    if module.isCrewBooster():
+                        isPerkReplace = not module.isAffectedSkillLearnt(vehicle)
+                        bgType = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER_CREW_REPLACE if isPerkReplace else SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
+                        self['bgHighlightType'] = bgType
+                    else:
+                        self['highlight'] = affectsAtTTC
+                        self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
+        elif slotType == FITTING_TYPES.OPTIONAL_DEVICE:
+            module = findFirst(lambda item: item.isInstalled(vehicle, slotId), modulesData)
+            for battleBooster in vehicle.equipment.battleBoosterConsumables:
+                if battleBooster is not None and battleBooster.isOptionalDeviceCompatible(module):
+                    self['highlight'] = True
+                    break
+
+            module = super(_ConfigFittingSlotVO, self)._prepareModule(modulesData, vehicle, slotType, slotId)
+        else:
+            module = super(_ConfigFittingSlotVO, self)._prepareModule(modulesData, vehicle, slotType, slotId)
+        return module
 
 
 class _DefaultSkillCompletenessChecker(object):
@@ -381,6 +417,9 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
     def onEquipmentUpdated(self):
         self.__updateEquipmentData()
 
+    def onBattleBoosterUpdated(self):
+        self.__updateBattleBoosterData()
+
     def onModulesUpdated(self):
         self.__updateSlotsData(FITTING_MODULES)
         self.__updateParametersView()
@@ -389,6 +428,7 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
     def onCrewSkillUpdated(self):
         self.__updateParametersView()
         self.__updateCrewAttentionIcon()
+        self.__updateBattleBoosterData()
 
     def onCrewLevelUpdated(self, newLvl):
         self.__updateParametersView()
@@ -398,7 +438,7 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
     def onResetToDefault(self):
         self.__updateSkillsData()
         self.__parametersView.init(self._container.getCurrentVehicle())
-        self.__updateSlotsData(FITTING_SLOTS)
+        self.__updateSlotsData(HANGAR_FITTING_SLOTS)
         self.as_setTopModulesSelectedS(self._container.isTopModulesSelected())
         self.__updateCrewLvl()
         self.__updateCrewAttentionIcon()
@@ -442,6 +482,8 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
             self._container.removeOptionalDevice(slotIndex)
         elif slotType == cmp_helpers.EQUIPMENT_TYPE_NAME:
             self._container.removeEquipment(slotIndex)
+        elif slotType == cmp_helpers.BATTLE_BOOSTER_TYPE_NAME:
+            self._container.removeBattleBooster()
         else:
             LOG_ERROR('{} removeDevice. Unsupported slotType: {}'.format(self, slotType))
 
@@ -490,7 +532,7 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
         self.as_setTopModulesSelectedS(topModulesSelected)
         self.__updateCrewAttentionIcon()
         self.__updateSkillsData()
-        self.__updateSlotsData(FITTING_SLOTS)
+        self.__updateSlotsData(HANGAR_FITTING_SLOTS)
         initialVehicle, _ = self._container.getInitialVehicleData()
         self.__parametersView.init(currentVehicle, initialVehicle)
 
@@ -507,6 +549,9 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
     def __updateEquipmentData(self):
         self.__updateSlotsData((cmp_helpers.EQUIPMENT_TYPE_NAME,))
 
+    def __updateBattleBoosterData(self):
+        self.__updateSlotsData((cmp_helpers.BATTLE_BOOSTER_TYPE_NAME, cmp_helpers.OPTIONAL_DEVICE_TYPE_NAME))
+
     def __updateSlotsData(self, slotsTypes):
         """
         Creates VO data only for provided slot types
@@ -514,7 +559,7 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
         """
         newVoData = getFittingSlotsData(self._container.getCurrentVehicle(), slotsTypes, _ConfigFittingSlotVO)
         for slotType in slotsTypes:
-            indexesRange = _SLOT_DATA_INDEXES[FITTING_SLOTS.index(slotType)]
+            indexesRange = _SLOT_DATA_INDEXES[HANGAR_FITTING_SLOTS.index(slotType)]
             for idx in indexesRange:
                 newSlotData = newVoData.pop(0)
                 slotDataID = newSlotData.get('id', 0)
@@ -572,7 +617,7 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
         self.__updateCrewSelectionAvailability(crewLevel)
 
     def __updateShellSlots(self):
-        shells = map(lambda shot: self.itemsCache.items.getItemByCD(shot['shell']['compactDescr']), self._container.getCurrentVehicle().descriptor.gun['shots'])
+        shells = map(lambda shot: self.itemsCache.items.getItemByCD(shot.shell.compactDescr), self._container.getCurrentVehicle().descriptor.gun.shots)
         self.as_setAmmoS(getAmmo(shells))
 
     def __updateCrewAttentionIcon(self):
@@ -682,25 +727,28 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
             basketVehCrewSkills = basketVehicle.getStockCrewSkills()
             equipment = basketVehicle.getStockEquipment()
             strCD = basketVehicle.getStockVehStrCD()
-        return self.__isHasDifferences(strCD, equipment, basketVehCrewLvl, basketVehCrewSkills, basketVehicle.getInventoryShellIndex(), basketVehicle.invHasCamouflage())
+        return self.__isHasDifferences(strCD, equipment, basketVehCrewLvl, basketVehCrewSkills, basketVehicle.getInventoryShellIndex(), basketVehicle.invHasCamouflage(), basketVehicle.getBattleBooster())
 
     def isCurrentVehicleModified(self):
         basketVehicle = self.getBasketVehCmpData()
         crewLvl, crewSkills = basketVehicle.getCrewData()
-        return self.__isHasDifferences(basketVehicle.getVehicleStrCD(), basketVehicle.getEquipment(), crewLvl, crewSkills, basketVehicle.getSelectedShellIndex(), basketVehicle.hasCamouflage())
+        return self.__isHasDifferences(basketVehicle.getVehicleStrCD(), basketVehicle.getEquipment(), crewLvl, crewSkills, basketVehicle.getSelectedShellIndex(), basketVehicle.hasCamouflage(), basketVehicle.getBattleBooster())
 
-    def __isHasDifferences(self, strCD, equipment, basketVehCrewLvl, basketVehCrewSkills, selShellIndex, hasCamouflage):
+    def __isHasDifferences(self, strCD, equipment, basketVehCrewLvl, basketVehCrewSkills, selShellIndex, hasCamouflage, battleBooster):
         if basketVehCrewLvl != self.getCurrentCrewSkillLevel():
             return True
         elif basketVehCrewSkills != self.getCurrentCrewSkills():
             return True
-        elif not cmp_helpers.isEquipmentSame(equipment, [ (eq.intCD if eq else None) for eq in self.__vehicle.eqs ]):
+        elif not cmp_helpers.isEquipmentSame(equipment, self.__vehicle.equipment.regularConsumables.getIntCDs(default=None)):
             return True
         elif selShellIndex != self.__selectedShellIndex:
             return True
         else:
             currVehHasCamouflage = cmp_helpers.isCamouflageSet(self.__vehicle)
             if hasCamouflage != currVehHasCamouflage:
+                return True
+            currVehBattleBooster = self.__vehicle.equipment.battleBoosterConsumables[0]
+            if not battleBooster == currVehBattleBooster:
                 return True
             if currVehHasCamouflage:
                 targetVehicle = Vehicle(self.__vehicle.descriptor.makeCompactDescr())
@@ -765,6 +813,7 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
             self.__vehicle.descriptor.installOptionalDevice(optDev.intCD, slotIndex)
             self.__vehicle.optDevices[slotIndex] = optDev
             self.__notifyViews('onOptDeviceUpdated')
+            self.__notifyViews('onBattleBoosterUpdated')
         else:
             LOG_WARNING('Component "{}" has not been installed. Reason: {}.'.format(itemTypeID, reason))
 
@@ -772,6 +821,7 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
         installedDevice = self.__vehicle.optDevices[slotIndex]
         if installedDevice is not None:
             self.__launchOptDeviceRemoving(installedDevice, slotIndex)
+            self.__notifyViews('onBattleBoosterUpdated')
         else:
             LOG_WARNING("Couldn't remove optional device from slot {} because slot is already empty!".format(slotIndex))
         return
@@ -783,6 +833,15 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
     def removeEquipment(self, slotIndex):
         self.__installEquipment(None, slotIndex)
         self.__notifyViews('onEquipmentUpdated')
+        return
+
+    def installBattleBooster(self, newId):
+        self.__installBattleBooster(newId)
+        self.__notifyViews('onBattleBoosterUpdated')
+
+    def removeBattleBooster(self):
+        self.__installBattleBooster(None)
+        self.__notifyViews('onBattleBoosterUpdated')
         return
 
     def selectCrewSkill(self, skillType, selected):
@@ -805,8 +864,8 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
     def _getCurrentVehicleCopy(self):
         vehicle = Vehicle(strCompactDescr=self.__vehicle.descriptor.makeCompactDescr())
         vehicle.crew = self.__vehicle.crew[:]
-        for i, equipment in enumerate(self.__vehicle.eqs):
-            cmp_helpers.installEquipmentOnVehicle(vehicle, equipment.intCD if equipment else None, i)
+        for i, equipmentIntCD in enumerate(self.__vehicle.equipment.regularConsumables.getIntCDs(default=None)):
+            cmp_helpers.installEquipmentOnVehicle(vehicle, equipmentIntCD, i)
 
         vehicle.descriptor.activeGunShotIndex = self.__vehicle.descriptor.activeGunShotIndex
         return vehicle
@@ -823,9 +882,13 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
             self.__installEquipment(equipment[slotIndex], slotIndex)
 
         cmp_helpers.applyCamouflage(self.__vehicle, basketVehcileData.hasCamouflage())
+        battleBooster = basketVehcileData.getBattleBooster()
+        if battleBooster is not None:
+            cmp_helpers.installBattleBoosterOnVehicle(self.__vehicle, battleBooster.intCD)
         self.__updateSelectedShell(basketVehcileData.getSelectedShellIndex())
         self.as_showViewS(VEHICLE_COMPARE_CONSTANTS.VEHICLE_CONFIGURATOR_VIEW)
         self.comparisonBasket.isLocked = True
+        return
 
     def _dispose(self):
         self.comparisonBasket.onSwitchChange -= self.__onBasketStateChanged
@@ -864,6 +927,9 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
     def __installEquipment(self, intCD, slotIndex):
         cmp_helpers.installEquipmentOnVehicle(self.__vehicle, intCD, slotIndex)
 
+    def __installBattleBooster(self, intCD):
+        cmp_helpers.installBattleBoosterOnVehicle(self.__vehicle, intCD)
+
     def __updateSelectedShell(self, slotIndex):
         """
         Updates vehicle and interanal selectedShellIndex property
@@ -883,7 +949,8 @@ class VehicleCompareConfiguratorMain(LobbySubView, VehicleCompareConfiguratorMai
 
     def __notifyViews(self, event, *args, **kwargs):
         for component in self.__views.itervalues():
-            notifier = getattr(component, event)
+            notifier = getattr(component, event, None)
             if notifier and callable(notifier):
                 notifier(*args, **kwargs)
-            self.closeView(VIEW_ALIAS.LOBBY_HANGAR)
+
+        return

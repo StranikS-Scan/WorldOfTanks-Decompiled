@@ -8,12 +8,12 @@ from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.prb_control.settings import VEHICLE_LEVELS
-from gui.shared.economics import getActionPrc
 from gui.shared.formatters import text_styles, icons
 from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeftInfo
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
-from gui.shared.money import ZERO_MONEY, Money
+from gui.shared.gui_items.gui_item_economics import ITEM_PRICES_EMPTY
+from gui.shared.money import MONEY_UNDEFINED, Currency, Money
 from gui.shared.utils import CLIP_ICON_PATH, HYDRAULIC_ICON_PATH, EXTRA_MODULE_INFO
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import i18n, time_utils, dependency
@@ -105,21 +105,21 @@ class StoreItemsTab(object):
         """
         item, extraModuleInfo, installedVehiclesCount = packedItem
         statusMessage, disabled, statusImgSrc, isCritLvl = self.__getStatusInfo(item)
-        stats = self._items.stats
+        money = self._items.stats.money
         shop = self._items.shop
-        price = self._getItemPrice(item)
-        creditsActionPrc, goldActionPrc = self._getActionAllPercents(item)
-        showActionGoldAndCredits = creditsActionPrc != 0 and goldActionPrc != 0 and creditsActionPrc != goldActionPrc
+        prices = self._getItemPrices(item)
+        actionPrcs = self._getActionAllPercents(item)
         return {'id': str(item.intCD),
          'name': self._getItemName(item),
          'desc': item.getShortInfo(),
          'inventoryId': self._getItemInventoryID(item),
          'inventoryCount': item.inventoryCount,
          'vehicleCount': installedVehiclesCount,
-         'credits': stats.credits,
-         'gold': stats.gold,
-         'price': price,
-         'currency': self._getCurrency(item),
+         Currency.CREDITS: money.getSignValue(Currency.CREDITS),
+         Currency.GOLD: money.getSignValue(Currency.GOLD),
+         Currency.CRYSTAL: money.getSignValue(Currency.CRYSTAL),
+         'price': prices.getSum().price.toMoneyTuple(),
+         'currency': prices.itemPrice.getCurrency(byWeight=False),
          'level': item.level,
          'nation': item.nationID,
          'type': self._getItemTypeIcon(item),
@@ -135,10 +135,10 @@ class StoreItemsTab(object):
          'moduleLabel': item.getGUIEmblemID(),
          EXTRA_MODULE_INFO: extraModuleInfo,
          'vehCompareData': _getBtnVehCompareData(item) if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE else {},
-         'highlightType': SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT,
-         'showActionGoldAndCredits': showActionGoldAndCredits,
-         'actionCreditsPercent': '-{}'.format(creditsActionPrc),
-         'actionGoldPercent': '-{}'.format(goldActionPrc)}
+         'highlightType': self._getItemHighlightType(item),
+         'showActionGoldAndCredits': actionPrcs.isDefined(),
+         'actionPercent': [ '-{}'.format(actionPrcs.get(currency, 0)) for currency in Currency.ALL ],
+         'notForSaleText': '' if item.isForSale else MENU.SHOP_TABLE_NOTFORSALE}
 
     def _getItemTypeIcon(self, item):
         """
@@ -147,6 +147,15 @@ class StoreItemsTab(object):
         :return: <str>
         """
         return item.icon
+
+    def _getItemHighlightType(self, item):
+        """
+        Get item highlight type, see SLOT_HIGHLIGHT_TYPES constants.
+        Used for some optional devices and battle boosters.
+        :param item: <FittingItem>
+        :return: <str>
+        """
+        return SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
 
     def _getItemInventoryID(self, item):
         """
@@ -196,29 +205,14 @@ class StoreItemsTab(object):
         """
         pass
 
-    def _getItemPrice(self, item):
+    def _getItemPrices(self, item):
         """
-        Get store item price
+        Get store item prices. Since currently compound prices are not supported, all item prices (original or
+        alternative) are defined for only one currency.
         :param item:<FittingItem>
-        :return:<Money>
+        :return:<ItemPrices>
         """
-        return ZERO_MONEY
-
-    def _getItemDefaultPrice(self, item):
-        """
-        Get store item default price
-        :param item:<FittingItem>
-        :return:<Money>
-        """
-        return ZERO_MONEY
-
-    def _getCurrency(self, item):
-        """
-        Get item price currency
-        :param item:<FittingItem>
-        :return:<str>
-        """
-        return self._getItemPrice(item).getCurrency()
+        return ITEM_PRICES_EMPTY
 
     def _getComparator(self):
         """
@@ -311,20 +305,23 @@ class StoreItemsTab(object):
 
     def _getActionAllPercents(self, item):
         """
-        Returns tuple with values of percent credits and golds discount
-        :param item:
-        :return: tuple
+        Returns Money object with values of percent discount for each component (credits, golds and crystals)
+        :param item: FittingItem
+        :return: Money
         """
+        rentPrcs = self._getRentPercents(item)
+        if rentPrcs.isDefined():
+            return rentPrcs
+        itemPrice = self._getItemPrices(item).getSum()
+        return itemPrice.getActionPrcAsMoney()
+
+    def _getRentPercents(self, item):
         if item.isRentable and item.isRentAvailable:
             minRentPricePackage = item.getRentPackage()
             if minRentPricePackage:
                 actionPrc = item.getRentPackageActionPrc(minRentPricePackage['days'])
-                return (0, actionPrc)
-        price = self._getItemPrice(item)
-        defPrice = self._getItemDefaultPrice(item)
-        creditsActionPrc = abs(getActionPrc(price.credits, defPrice.credits))
-        goldActionPrc = abs(getActionPrc(price.gold, defPrice.gold))
-        return (creditsActionPrc, goldActionPrc)
+                return Money(gold=actionPrc)
+        return MONEY_UNDEFINED
 
 
 class StoreModuleTab(StoreItemsTab):
@@ -430,10 +427,10 @@ class StoreVehicleTab(StoreItemsTab):
             priceText = ''
             discountText = ''
             if minRentPricePackage:
-                minRentPriceValue = Money(*minRentPricePackage['rentPrice'])
+                minRentPriceValue = minRentPricePackage['rentPrice']
                 actionPrc = item.getRentPackageActionPrc(minRentPricePackage['days'])
                 currency = minRentPriceValue.getCurrency()
-                price = minRentPriceValue.get(currency)
+                price = minRentPriceValue.getSignValue(currency)
                 priceText = makeHtmlString('html_templates:lobby/quests/actions', currency, {'value': price})
                 if actionPrc != 0:
                     discountText = makeString('#menu:shop/menu/vehicle/rent/discount', discount=text_styles.gold('{} %'.format(actionPrc)))
@@ -480,13 +477,6 @@ class StoreArtefactTab(StoreItemsTab):
 
 class StoreOptionalDeviceTab(StoreArtefactTab):
 
-    def itemWrapper(self, packedItem):
-        vo = super(StoreArtefactTab, self).itemWrapper(packedItem)
-        item = packedItem[0]
-        if item.isDeluxe():
-            vo['highlightType'] = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
-        return vo
-
     @classmethod
     def getTableType(cls):
         return STORE_CONSTANTS.OPTIONAL_DEVICE
@@ -497,6 +487,9 @@ class StoreOptionalDeviceTab(StoreArtefactTab):
     def _isItemRemovable(self, item):
         return item.isRemovable
 
+    def _getItemHighlightType(self, item):
+        return SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS if item.isDeluxe() else super(StoreOptionalDeviceTab, self)._getItemHighlightType(item)
+
 
 class StoreEquipmentTab(StoreArtefactTab):
 
@@ -506,3 +499,33 @@ class StoreEquipmentTab(StoreArtefactTab):
 
     def _getItemTypeID(self):
         return GUI_ITEM_TYPE.EQUIPMENT
+
+
+class StoreBattleBoosterTab(StoreArtefactTab):
+
+    @classmethod
+    def getFilterInitData(cls):
+        return (STORE_CONSTANTS.BATTLE_BOOSTER_FILTER_VO_CLASS, False)
+
+    @classmethod
+    def getTableType(cls):
+        return STORE_CONSTANTS.BATTLE_BOOSTER
+
+    def _getItemTypeID(self):
+        return GUI_ITEM_TYPE.BATTLE_BOOSTER
+
+    def _getItemHighlightType(self, item):
+        return SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
+
+    def _parseFilter(self, filtersList):
+        extra = filtersList
+        return {'extra': extra}
+
+    def _getRequestCriteria(self, invVehicles):
+        targetType = self._filterData['targetType']
+        if targetType == STORE_CONSTANTS.FOR_EQUIPMENT_FIT:
+            return REQ_CRITERIA.BATTLE_BOOSTER.OPTIONAL_DEVICE_EFFECT
+        elif targetType == STORE_CONSTANTS.FOR_CREW_FIT:
+            return REQ_CRITERIA.BATTLE_BOOSTER.CREW_EFFECT
+        else:
+            return REQ_CRITERIA.BATTLE_BOOSTER.ALL

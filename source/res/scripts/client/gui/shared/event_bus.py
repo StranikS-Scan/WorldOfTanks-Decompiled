@@ -10,6 +10,11 @@ class EVENT_BUS_SCOPE(object):
     BATTLE = 3
     STRONGHOLD = 4
     DEFAULT = GLOBAL
+    ALL = (GLOBAL,
+     LOBBY,
+     STATS,
+     BATTLE,
+     STRONGHOLD)
 
 
 class EventBus(object):

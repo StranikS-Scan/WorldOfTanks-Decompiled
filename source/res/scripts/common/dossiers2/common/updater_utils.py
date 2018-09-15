@@ -154,3 +154,38 @@ def getBlockSize(updateCtx, block):
     blockIndex = updateCtx['blocksLayout'].index(block)
     blockSize = header[blockIndex + 1]
     return blockSize
+
+
+def getBlockCompDescr(updateCtx, block):
+    """
+    Gets block compact descriptor.
+    :param updateCtx: context with general info.
+    :param block: block name.
+    :return: compact descriptor
+    """
+    header = updateCtx['header']
+    compDescr = updateCtx['dossierCompDescr']
+    blockIndex = updateCtx['blocksLayout'].index(block)
+    blockSize = header[blockIndex + 1]
+    if blockSize == 0:
+        return []
+    headerLength = updateCtx['headerLength']
+    blockOffset = headerLength + sum(header[1:blockIndex + 1])
+    return compDescr[blockOffset:blockOffset + blockSize]
+
+
+def setBlockCompDescr(updateCtx, block, blockCompDescr):
+    """
+    Sets block compact descriptor.
+    :param updateCtx: context with general info.
+    :param block: block name.
+    :param blockCompDescr: compact descriptor.
+    """
+    header = updateCtx['header']
+    compDescr = updateCtx['dossierCompDescr']
+    blockIndex = updateCtx['blocksLayout'].index(block)
+    blockSize = header[blockIndex + 1]
+    headerLength = updateCtx['headerLength']
+    blockOffset = headerLength + sum(header[1:blockIndex + 1])
+    header[blockIndex + 1] = len(blockCompDescr)
+    updateCtx['dossierCompDescr'] = struct.pack(updateCtx['headerFormat'], *header) + compDescr[headerLength:blockOffset] + blockCompDescr + compDescr[blockOffset + blockSize:]

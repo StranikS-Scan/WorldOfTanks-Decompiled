@@ -3,6 +3,7 @@
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
+from gui.Scaleform.framework.managers.loaders import ViewLoadParams
 from tutorial.data.events import GUI_EVENT_TYPE
 from tutorial.logger import LOG_ERROR, LOG_DEBUG
 
@@ -108,7 +109,7 @@ class ShowDialogEffect(ApplicationEffect):
             if dialogType in self._aliasMap:
                 alias = self._aliasMap[dialogType]
                 self._dialogID = dialogID
-                self._app.loadView(alias, dialogID, effectData)
+                self._app.loadView(ViewLoadParams(alias, dialogID), effectData)
                 result = True
             else:
                 LOG_ERROR('Alias of dialog not found', effectData, self._aliasMap)
@@ -159,7 +160,7 @@ class ShowWindowEffect(ApplicationEffect):
         if windowType in self._aliasMap:
             alias = self._aliasMap[windowType]
             self._windowIDs.add(windowID)
-            self._app.loadView(alias, windowID, content)
+            self._app.loadView(ViewLoadParams(alias, windowID), content)
             result = True
         else:
             LOG_ERROR('Alias of window not found', windowType, self._aliasMap)
@@ -310,10 +311,10 @@ class SetCriteriaEffect(ApplicationEffect):
     __slots__ = ()
 
     def play(self, effectData):
-        itemID, value, noCached = effectData
+        itemID, value = effectData
         layout = self._getTutorialLayout()
         if layout is not None:
-            layout.setCriteria(itemID, value, noCached)
+            layout.setCriteria(itemID, value)
         return
 
 

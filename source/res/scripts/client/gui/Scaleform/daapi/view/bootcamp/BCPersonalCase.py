@@ -9,9 +9,6 @@ from debug_utils import LOG_DEBUG
 from skeletons.gui.game_control import IBootcampController
 from bootcamp.Bootcamp import g_bootcamp
 from bootcamp.BootcampGarage import g_bootcampGarage
-from gui.Scaleform.locale.MENU import MENU
-SKILLS_TAB_INDEX = 2
-PERSONAL_CASE_SKILLS = 'PersonalCaseSkills'
 
 class BCPersonalCaseDataProvider(PersonalCaseDataProvider):
 
@@ -52,11 +49,6 @@ class BCPersonalCaseDataProvider(PersonalCaseDataProvider):
 
         callback(data)
         return
-
-    def getTabsButtons(self, _):
-        return [{'index': SKILLS_TAB_INDEX,
-          'info': MENU.TANKMANPERSONALCASE_TABSKILLS,
-          'linkage': PERSONAL_CASE_SKILLS}]
 
 
 class BCPersonalCase(BCPersonalCaseMeta):

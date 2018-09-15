@@ -77,7 +77,7 @@ class _CompareBasketListener(object):
         if settings.type == ViewTypes.WINDOW and settings.alias == VEHICLE_COMPARE_CONSTANTS.VEHICLE_COMPARE_CART_POPOVER:
             assert self.__currentCartPopover is None, 'Attempt to initialize object 2nd time!'
             self.__currentCartPopover = pyEntity
-            self.__currentCartPopover.onModuleDispose += self.__onCartPopoverDisposed
+            self.__currentCartPopover.onDispose += self.__onCartPopoverDisposed
         return
 
     def __onCartPopoverDisposed(self, _):
@@ -86,7 +86,7 @@ class _CompareBasketListener(object):
 
     def __clearCartPopover(self):
         if self.__currentCartPopover is not None:
-            self.__currentCartPopover.onModuleDispose -= self.__onCartPopoverDisposed
+            self.__currentCartPopover.onDispose -= self.__onCartPopoverDisposed
             self.__currentCartPopover = None
         return
 

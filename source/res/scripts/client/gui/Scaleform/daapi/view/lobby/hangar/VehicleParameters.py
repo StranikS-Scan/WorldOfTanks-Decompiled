@@ -109,7 +109,7 @@ class _VehParamsGenerator(VehParamsBaseGenerator):
         delta = 0
         state, diff = param.state
         if state == PARAM_STATE.WORSE:
-            delta = abs(diff)
+            delta = -abs(diff)
         data.update({'isEnabled': True,
          'tooltip': self._tooltipType,
          'indicatorVO': SimplifiedBarVO(value=param.value, delta=delta, markerValue=stockParams[param.name], useAnim=self.useAnim)})

@@ -12,7 +12,7 @@ class DemonstratorWindow(DemonstratorWindowMeta):
 
     def _populate(self):
         super(DemonstratorWindow, self)._populate()
-        maps = dict(ctf=[], assault=[], domination=[], nations=[])
+        maps = dict(ctf=[], assault=[], domination=[], nations=[], ctf30x30=[], domination30x30=[])
         serverSettings = self.lobbyContext.getServerSettings()
         availableRandomMaps = serverSettings.getRandomMapsForDemonstrator()
         for arenaTypeID, arenaType in ArenaType.g_cache.iteritems():
@@ -28,9 +28,9 @@ class DemonstratorWindow(DemonstratorWindowMeta):
                  'type': arenaType.gameplayName})
 
         sorting = lambda item: item['name']
-        self.as_setDataS({'standard': sorted(maps['ctf'], key=sorting),
+        self.as_setDataS({'standard': sorted(maps['ctf'] + maps['ctf30x30'], key=sorting),
          'assault': sorted(maps['assault'], key=sorting),
-         'encounter': sorted(maps['domination'], key=sorting),
+         'encounter': sorted(maps['domination'] + maps['domination30x30'], key=sorting),
          'nations': sorted(maps['nations'], key=sorting)})
 
     def onMapSelected(self, mapID):

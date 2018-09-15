@@ -79,12 +79,13 @@ class RankedTooltipData(BlocksTooltipData):
     def _packAwardsBlock(self, quest):
         subBlocks = []
         if quest.isCompleted():
-            subBlocks.append(formatters.packAlignedTextBlockData(text_styles.middleTitle(TOOLTIPS.BATTLETYPES_RANKED_RANK_AWARD_RECEIVED), BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
+            middleTitle = formatters.packImageTextBlockData(title=text_styles.statInfo(TOOLTIPS.BATTLETYPES_RANKED_RANK_AWARD_RECEIVED), img=RES_ICONS.MAPS_ICONS_BUTTONS_CHECKMARK, imgPadding=formatters.packPadding(left=2, top=3), txtOffset=20)
         else:
-            listData = self.item.getAwardsVOs()
-            awardsWidth = len(listData) * _AWARD_STEP
-            if awardsWidth > _TOOLTIP_MIN_WIDTH:
-                self._setWidth(awardsWidth + _AWARDS_RIGHT_PADDING)
-            subBlocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.BATTLETYPES_RANKED_RANK_REWARD)))
-            subBlocks.append(formatters.packGroupBlockData(listData, padding=formatters.packPadding(bottom=5)))
+            middleTitle = formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.BATTLETYPES_RANKED_RANK_REWARD))
+        listData = self.item.getAwardsVOs()
+        awardsWidth = len(listData) * _AWARD_STEP
+        if awardsWidth > _TOOLTIP_MIN_WIDTH:
+            self._setWidth(awardsWidth + _AWARDS_RIGHT_PADDING)
+        subBlocks.append(middleTitle)
+        subBlocks.append(formatters.packGroupBlockData(listData, padding=formatters.packPadding(top=15)))
         return subBlocks

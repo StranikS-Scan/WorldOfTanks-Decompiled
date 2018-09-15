@@ -42,8 +42,8 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
 
     def __prepareModelAssembler(self):
         assembler = BigWorld.CompoundAssembler(self.__vehDescr.name, self.spaceID)
-        turretModel = self.__vehDescr.turret['models']['exploded']
-        gunModel = self.__vehDescr.gun['models']['exploded']
+        turretModel = self.__vehDescr.turret.models.exploded
+        gunModel = self.__vehDescr.gun.models.exploded
         assembler.addRootPart(turretModel, TankPartNames.TURRET)
         assembler.emplacePart(gunModel, TankNodeNames.GUN_JOINT, TankPartNames.GUN)
         return assembler
@@ -60,7 +60,7 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
         self.__vehDescr.keepPrereqs(prereqs)
         turretDescr = self.__vehDescr.turret
         if self.isUnderWater == 0:
-            self.__detachmentEffects = _TurretDetachmentEffects(self.model, turretDescr['turretDetachmentEffects'], self.isCollidingWithWorld == 1)
+            self.__detachmentEffects = _TurretDetachmentEffects(self.model, turretDescr.turretDetachmentEffects, self.isCollidingWithWorld == 1)
             self.addComponent(self.__detachmentEffects)
         else:
             self.__detachmentEffects = None
@@ -68,7 +68,7 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
         self.addComponent(self.__hitEffects)
         self.__componentsDesc = (self.__vehDescr.turret, self.__vehDescr.gun)
         for desc in self.__componentsDesc:
-            desc['hitTester'].loadBspModel()
+            desc.hitTester.loadBspModel()
 
         from helpers.CallbackDelayer import CallbackDelayer
         self.__isBeingPulledCallback = CallbackDelayer()
@@ -136,12 +136,12 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
             for matrix, desc in zip(matricesToCheck, self.__componentsDesc):
                 toModel = matrix
                 toModel.invert()
-                collisions = desc['hitTester'].localHitTest(toModel.applyPoint(startPoint), toModel.applyPoint(endPoint))
+                collisions = desc.hitTester.localHitTest(toModel.applyPoint(startPoint), toModel.applyPoint(endPoint))
                 if collisions is None:
                     continue
                 for dist, _, hitAngleCos, matKind in collisions:
                     if res is None or res.dist >= dist:
-                        matInfo = desc['materials'].get(matKind)
+                        matInfo = desc.materials.get(matKind)
                         res = SegmentCollisionResult(dist, hitAngleCos, matInfo.armor if matInfo is not None else 0)
 
             return res
@@ -408,8 +408,8 @@ class SynchronousDetachment(VehicleEnterTimer):
     @staticmethod
     def transferInputs(vehicle, turret):
         vehicleDescriptor = vehicle.typeDescriptor
-        hullOffset = vehicleDescriptor.chassis['hullPosition']
+        hullOffset = vehicleDescriptor.chassis.hullPosition
         turretMatrix = Math.Matrix()
-        turretMatrix.setTranslate(hullOffset + vehicleDescriptor.hull['turretPositions'][0])
+        turretMatrix.setTranslate(hullOffset + vehicleDescriptor.hull.turretPositions[0])
         turretMatrix.preMultiply(vehicle.appearance.turretMatrix)
         turret.filter.transferInputAsVehicle(vehicle.filter, turretMatrix)

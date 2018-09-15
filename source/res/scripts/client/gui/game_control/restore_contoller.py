@@ -8,7 +8,7 @@ import Event
 from account_helpers.AccountSettings import AccountSettings, LAST_RESTORE_NOTIFICATION
 from gui import SystemMessages
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.money import Money
+from gui.shared.money import MONEY_UNDEFINED
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency
@@ -21,7 +21,7 @@ DEFAULT_MAX_TANKMEN_BUFFER_LENGTH = 100
 def getTankmenRestoreInfo(tankman, itemsCache=None):
     config = itemsCache.items.shop.tankmenRestoreConfig
     dismissalLength = time_utils.getTimeDeltaTilNow(tankman.dismissedAt)
-    price = config.cost if dismissalLength >= config.freeDuration else Money()
+    price = config.cost if dismissalLength >= config.freeDuration else MONEY_UNDEFINED
     return (price, config.billableDuration - dismissalLength)
 
 

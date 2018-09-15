@@ -6,7 +6,7 @@ from gui.Scaleform.daapi.view.lobby.techtree.settings import RESEARCH_ITEMS
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.money import Money, ZERO_MONEY
+from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from gui.shared.utils.requesters.ItemsRequester import RESEARCH_CRITERIA
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
@@ -138,7 +138,7 @@ def getCurrentVehicleViewState():
 
 
 def _getTankmanPrice(index, prices):
-    return Money(**prices[index]) if index < len(prices) else ZERO_MONEY
+    return Money(**prices[index]) if index < len(prices) else MONEY_UNDEFINED
 
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
@@ -146,7 +146,7 @@ def getTankmanCurrentPrice(index, itemsCache=None):
     if itemsCache is not None:
         return _getTankmanPrice(index, itemsCache.items.shop.tankmanCostWithGoodyDiscount)
     else:
-        return ZERO_MONEY
+        return MONEY_UNDEFINED
         return
 
 
@@ -155,7 +155,7 @@ def getTankmanDefaultPrice(index, itemsCache=None):
     if itemsCache is not None:
         return _getTankmanPrice(index, itemsCache.items.shop.defaults.tankmanCost)
     else:
-        return ZERO_MONEY
+        return MONEY_UNDEFINED
         return
 
 
@@ -239,7 +239,7 @@ def _getEquipmentForCreditsCD(tag, itemsCache=None):
     if tag is None or itemsCache is None:
         return
     else:
-        equipments = itemsCache.items.getItems(GUI_ITEM_TYPE.EQUIPMENT, REQ_CRITERIA.CUSTOM(lambda eq: tag in eq.tags and eq.buyPrice.credits > 0))
+        equipments = itemsCache.items.getItems(GUI_ITEM_TYPE.EQUIPMENT, REQ_CRITERIA.CUSTOM(lambda eq: tag in eq.tags and eq.buyPrices.hasPriceIn(Currency.CREDITS)))
         if equipments:
             result, _ = equipments.popitem()
         else:

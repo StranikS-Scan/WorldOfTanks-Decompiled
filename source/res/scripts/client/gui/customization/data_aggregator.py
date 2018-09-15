@@ -134,7 +134,7 @@ class DataAggregator(object):
         installedRawItems = self._getInstalledRawItems(curVehDescr)
         notMigratedElements = self.__getNotMigratedElements(rawElementGroups, installedRawItems)
         self.__updateTankModelAttributes(curVehDescr, installedRawItems)
-        installedElements = self.__getInstalledElements(curVehDescr.hull['emblemSlots'], curVehDescr.turret['emblemSlots'], installedRawItems)
+        installedElements = self.__getInstalledElements(curVehDescr.hull.emblemSlots, curVehDescr.turret.emblemSlots, installedRawItems)
         self.__updateInstalledElements(installedElements, isNewVehicle)
         self.__updateDisplayedElementsAndGroups(rawElementGroups, curVehDescr, cNationID, notMigratedElements, installedElements)
         self.__currentVehicleInventoryID = self._currentVehicle.item.invID

@@ -61,7 +61,7 @@ class SniperAimingSystem(IAimingSystem):
         self.__forceFullStabilization = enable
 
     def getPitchLimits(self):
-        return self.__vehicleTypeDescriptor.gun['combinedPitchLimits']
+        return self.__vehicleTypeDescriptor.gun.combinedPitchLimits
 
     def enable(self, targetPos, playerGunMatFunction=AimingSystems.getPlayerGunMat):
         player = BigWorld.player()
@@ -80,7 +80,7 @@ class SniperAimingSystem(IAimingSystem):
         return
 
     def focusOnPos(self, preferredPos):
-        self.__yawLimits = self.__vehicleTypeDescriptor.gun['turretYawLimits']
+        self.__yawLimits = self.__vehicleTypeDescriptor.gun.turretYawLimits
         if self.__isTurretHasStaticYaw():
             self.__yawLimits = None
         if self.__yawLimits is not None and abs(self.__yawLimits[0] - self.__yawLimits[1]) < 1e-05:
@@ -217,4 +217,4 @@ class SniperAimingSystem(IAimingSystem):
         return (rotation.yaw, rotation.pitch)
 
     def __isTurretHasStaticYaw(self):
-        return self.__vehicleTypeDescriptor.gun['staticTurretYaw'] is not None
+        return self.__vehicleTypeDescriptor.gun.staticTurretYaw is not None

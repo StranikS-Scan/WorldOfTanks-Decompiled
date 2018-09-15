@@ -87,6 +87,8 @@ class StatisticsCollector(IStatisticsCollector):
         self.connectionMgr.onDisconnected -= self.__onClientDisconnected
         from gui.shared.utils.HangarSpace import g_hangarSpace
         g_hangarSpace.onSpaceCreate -= self.__onHangarSpaceLoaded
+        self.__updateFunc = None
+        return
 
     def start(self):
         self.stop()

@@ -13,6 +13,7 @@ from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.processors.vehicle import VehicleRepairer, VehicleAutoRepairProcessor, VehicleAutoLoadProcessor, VehicleAutoEquipProcessor
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
+from gui.shared.gui_items.vehicle_equipment import RegularEquipmentConsumables
 from gui.shared.money import Currency
 from gui.shared.utils import decorators
 from gui.shared.utils.requesters import REQ_CRITERIA as _RC
@@ -111,11 +112,11 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
     def populateTechnicalMaintenance(self):
         money = self.itemsCache.items.stats.money
         goldShellsForCredits = self.itemsCache.items.shop.isEnabledBuyingGoldShellsForCredits
-        data = {'gold': money.gold,
-         'credits': money.credits}
+        data = {Currency.CREDITS: money.getSignValue(Currency.CREDITS),
+         Currency.GOLD: money.getSignValue(Currency.GOLD)}
         if g_currentVehicle.isPresent():
             vehicle = g_currentVehicle.item
-            casseteCount = vehicle.descriptor.gun['clip'][0]
+            casseteCount = vehicle.descriptor.gun.clip[0]
             casseteText = makeString('#menu:technicalMaintenance/ammoTitleEx') % casseteCount
             data.update({'vehicleId': str(vehicle.intCD),
              'repairCost': vehicle.repairCost,
@@ -132,21 +133,21 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
             for shell in vehicle.shells:
                 if shell.isHidden:
                     continue
-                price = shell.altPrice
-                defaultPrice = shell.defaultAltPrice
+                buyPrice = shell.getBuyPrice()
+                prices = shell.buyPrices.getSum().price
                 action = None
-                if price != defaultPrice:
+                if buyPrice.isActionPrice():
                     action = packItemActionTooltipData(shell)
                 shells.append({'id': str(shell.intCD),
                  'type': shell.type,
-                 'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor['icon'][0],
+                 'icon': '../maps/icons/ammopanel/ammo/%s' % shell.descriptor.icon[0],
                  'count': shell.count,
                  'userCount': shell.defaultCount,
                  'step': casseteCount,
                  'inventoryCount': shell.inventoryCount,
                  'goldShellsForCredits': goldShellsForCredits,
-                 'prices': shell.altPrice,
-                 'currency': shell.getBuyPriceCurrency(),
+                 'prices': prices.toMoneyTuple(),
+                 'currency': buyPrice.getCurrency(byWeight=True),
                  'ammoName': shell.longUserNameAbbr,
                  'tableName': shell.getShortInfo(vehicle, True),
                  'maxAmmo': vehicle.gun.maxAmmo,
@@ -162,9 +163,9 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         Loads layout and sets equipment according to it as a default
         """
         params = {}
-        for i, e in enumerate(g_currentVehicle.item.eqsLayout):
+        for i, e in enumerate(g_currentVehicle.item.equipmentLayout.regularConsumables):
             params['eId%s' % (i + 1)] = e.intCD if e else None
-            params['currency%s' % (i + 1)] = e.getBuyPriceCurrency() if e else None
+            params['currency%s' % (i + 1)] = e.getBuyPrice(preferred=True).getCurrency(byWeight=True) if e else None
 
         self.populateTechnicalMaintenanceEquipment(**params)
         return
@@ -174,7 +175,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         goldEqsForCredits = items.shop.isEnabledBuyingGoldEqsForCredits
         vehicle = g_currentVehicle.item
         money = self.itemsCache.items.stats.money
-        installedItems = list(vehicle.eqs)
+        installedItems = vehicle.equipment.regularConsumables
         currencies = [None, None, None]
         selectedItems = [None, None, None]
         if eId1 is not None or eId2 is not None or eId3 is not None or slotIndex is not None:
@@ -183,15 +184,15 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         inventoryVehicles = items.getVehicles(_RC.INVENTORY).values()
         itemsCriteria = ~_RC.HIDDEN | _RC.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE.EQUIPMENT])
         data = sorted(self.itemsCache.items.getItems(GUI_ITEM_TYPE.EQUIPMENT, itemsCriteria).values(), reverse=True)
-        vehicle.eqs = list(selectedItems)
+        vehicle.equipment.setRegularConsumables(RegularEquipmentConsumables(*selectedItems))
         modules = []
         for module in data:
             fits = []
             for i in xrange(3):
                 fits.append(self.__getStatus(module.mayInstall(vehicle, i)[1]))
 
-            price = module.altPrice
-            defaultPrice = module.defaultAltPrice
+            buyPrice = module.getBuyPrice()
+            prices = module.buyPrices.getSum().price
             inventoryCount = module.inventoryCount
             index = None
             if module in selectedItems:
@@ -200,16 +201,16 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
                 if inventoryCount and module not in installedItems:
                     inventoryCount -= 1
             else:
-                priceCurrency = module.getBuyPriceCurrency()
+                priceCurrency = buyPrice.getCurrency(byWeight=True)
             action = None
-            if price != defaultPrice:
+            if buyPrice.isActionPrice():
                 action = packItemActionTooltipData(module)
             modules.append({'id': str(module.intCD),
              'name': module.userName,
              'desc': module.fullDescription,
              'target': module.getTarget(vehicle),
              'compactDescr': module.intCD,
-             'prices': price,
+             'prices': prices.toMoneyTuple(),
              'currency': priceCurrency,
              'icon': module.icon,
              'index': index,
@@ -222,7 +223,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
              'actionPriceData': action,
              'moduleLabel': module.getGUIEmblemID()})
 
-        vehicle.eqs = list(installedItems)
+        vehicle.equipment.setRegularConsumables(installedItems)
         installed = map(lambda e: e.intCD if e is not None else None, installedItems)
         setup = map(lambda e: e.intCD if e is not None else None, selectedItems)
         self.__seveCurrentLayout(eId1=eId1, currency1=currency1, eId2=eId2, currency2=currency2, eId3=eId3, currency3=currency3)

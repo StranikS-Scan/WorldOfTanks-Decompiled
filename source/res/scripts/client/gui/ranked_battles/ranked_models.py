@@ -205,7 +205,8 @@ class RankProgress(object):
 
 
 class Rank(object):
-    _ICON_SIZES = {'small': '58x80',
+    _ICON_SIZES = {'tiny': '24x24',
+     'small': '58x80',
      'medium': '80x110',
      'big': '114x160',
      'huge': '190x260'}
@@ -391,9 +392,9 @@ class PrimeTime(object):
             if currentPeriod is not None:
                 _, currentPeriodEnd = currentPeriod
                 return (True, currentPeriodEnd - forTime)
-            nextPeriod = first(periodsIter)
+            nextPeriod = first(periods)
             if nextPeriod is not None:
-                nextPeriodStart, _ = currentPeriod
+                nextPeriodStart, _ = nextPeriod
                 return (False, nextPeriodStart - forTime)
         return (False, 0)
 

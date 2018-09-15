@@ -62,7 +62,7 @@
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.74568 0.161	</turret>
+      <turret>	0.01368 0.759472 0.17239	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/russian/R67_M3_LL/collision/Hull.model	</collisionModelServer>
@@ -204,12 +204,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.98632 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.947591 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R67_M3_LL/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R67_M3_LL/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.951526 1.52017	</topRightCarryingPoint>
+      <topRightCarryingPoint>	0.933481 1.50665	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -229,7 +229,7 @@
         <segment2ModelRight>	vehicles/russian/R67_M3_LL/track/segment2.model	</segment2ModelRight>
         <left>	vehicles/russian/R67_M3_LL/track/left.track	</left>
         <right>	vehicles/russian/R67_M3_LL/track/right.track	</right>
-        <segmentLength>	0.122	</segmentLength>
+        <segmentLength>	0.143	</segmentLength>
         <segmentOffset>	0.085	</segmentOffset>
         <segment2Offset>	0.089	</segment2Offset>
         <lodDist>	MEDIUM	</lodDist>
@@ -271,18 +271,21 @@
           <name>	Track_VT_R1	</name>
           <forwardElastK>	1.6	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.074	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R2	</name>
           <forwardElastK>	1.6	</forwardElastK>
           <backwardElastK>	1	</backwardElastK>
+          <offset>	-0.074	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R3	</name>
           <forwardElastK>	1.2	</forwardElastK>
           <backwardElastK>	0.8	</backwardElastK>
+          <offset>	-0.033	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -379,10 +382,6 @@
             </armor_2>
             <armor_3>	25	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	10	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <armor_5>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_5>
             <gun>	0	</gun>
           </armor>
           <reloadTime>	2.5	</reloadTime>
@@ -411,7 +410,7 @@
         <collisionModelServer>	vehicles/russian/R67_M3_LL/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R67_M3_LL/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.2844 0.7797	</gunPosition>
+      <gunPosition>	-0.00345 0.2844 0.779731	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	-0.716859 0.324399 -0.0623101	</rayStart>
@@ -430,7 +429,7 @@
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.931 -0.046 1.049 0.000 0.675 0.331 0.745 0.466 0.434 0.500 0.086 0.500 0.178 0.255 0.472	</physicsShape>
+      <physicsShape>	0.931 -0.021 1.049 0.000 0.675 0.351 0.745 0.466 0.434 0.500 0.086 0.500 0.178 0.255 0.472	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
     </D37812_LL>
   </turrets0>
@@ -500,9 +499,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.82	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </R67_M3_LL.xml>

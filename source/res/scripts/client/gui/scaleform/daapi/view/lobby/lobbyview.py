@@ -84,7 +84,7 @@ class _LobbySubViewsCtrl(object):
                 self.__invalidateWaitingStatus()
         return
 
-    def __onViewLoaded(self, view):
+    def __onViewLoaded(self, view, *args, **kwargs):
         if view is not None and view.settings is not None:
             alias = view.settings.alias
             if alias in self.__SUB_VIEWS and alias in self.__loadingSubViews:

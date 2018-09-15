@@ -5,7 +5,7 @@ from SyncController import SyncController
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from persistent_caches import SimpleCache
 from live_crc_accountdata import accountDataPersistentHash, accountDataExtractPersistent, accountDataGetDiffForPersistent, accountDataMergePersistent
-from diff_utils import synchronizeDicts
+from shared_utils.account_helpers.diff_utils import synchronizeDicts
 
 class AccountSyncData(object):
 

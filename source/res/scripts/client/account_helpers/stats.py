@@ -4,7 +4,7 @@ import AccountCommands
 import items
 from functools import partial
 from debug_utils import LOG_DEBUG_DEV, LOG_WARNING, LOG_ERROR
-from diff_utils import synchronizeDicts
+from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from items import vehicles
 from gui.shared.money import Currency
 _VEHICLE = items.ITEM_TYPE_INDICES['vehicle']

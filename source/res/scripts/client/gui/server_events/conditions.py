@@ -1221,6 +1221,9 @@ class VehicleStunCumulative(_Cumulativable, VehicleStun):
     def getUserString(self, battleTypeName=''):
         return i18n.makeString(self._getLabelKey())
 
+    def _getLabelKey(self):
+        return '#quests:details/conditions/%s/cumulative' % self._getKey()
+
     def _getKey(self):
         return 'vehicleStunEventCount' if self.getEventCount() else 'vehicleStun'
 

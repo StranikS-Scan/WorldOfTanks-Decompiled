@@ -51,15 +51,4 @@ def getCompletedPotapovQuestsCount(seasonID, vehClasses):
     return result
 
 
-__all__ = ['ClassProgressAchievement',
- 'HistoricalAchievement',
- 'NationSpecificAchievement',
- 'RareAchievement',
- 'RegularAchievement',
- 'SeriesAchievement',
- 'SimpleProgressAchievement',
- 'DeprecatedAchievement',
- 'QuestAchievement',
- 'isRareAchievement',
- 'isSeriesAchievement',
- 'achievementHasVehiclesList']
+__all__ = ('ClassProgressAchievement', 'HistoricalAchievement', 'NationSpecificAchievement', 'RareAchievement', 'RegularAchievement', 'SeriesAchievement', 'SimpleProgressAchievement', 'DeprecatedAchievement', 'QuestAchievement', 'isRareAchievement', 'isSeriesAchievement', 'achievementHasVehiclesList')

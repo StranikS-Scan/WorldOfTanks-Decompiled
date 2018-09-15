@@ -256,6 +256,7 @@ class IconPriceDialogMeta(IconDialogMeta):
         super(IconPriceDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID)
         self._operationPrice = self.__calcMessagePrice()
         self._action = self.__calcAction()
+        self._item = messageCtx.get('item')
 
     def __calcMessagePrice(self):
         result = None
@@ -295,15 +296,14 @@ class DestroyDeviceDialogMeta(IconDialogMeta):
 class DemountDeviceDialogMeta(IconPriceDialogMeta):
     DISMANTLE_DEVICE_PATH = '../maps/icons/modules/dismantleDevice.png'
 
-    @dependency.replace_none_kwargs(itemsCache=IItemsCache)
-    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None, itemsCache=None):
+    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, focusedID=None):
         super(DemountDeviceDialogMeta, self).__init__(key, titleCtx, messageCtx, meta, focusedID)
         self.onConfirmationStatusChnaged = Event.Event()
-        self.__userGoldAmount = itemsCache.items.stats.gold
         self.__isOperationAllowed = False
         self.__checkIsOperationAllowed()
-        g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self.__goldChangeHandler)
-        g_clientUpdateManager.addCallbacks({'shop.paidRemovalCost': self.__paidRemovalCostChangeHandler})
+        g_clientUpdateManager.addMoneyCallback(self.__moneyChangeHandler)
+        g_clientUpdateManager.addCallbacks({'shop.paidRemovalCost': self.__paidRemovalCostChangeHandler,
+         'shop.paidDeluxeRemovalCost': self.__paidRemovalCostChangeHandler})
 
     @property
     def isOperationAllowed(self):
@@ -312,17 +312,20 @@ class DemountDeviceDialogMeta(IconPriceDialogMeta):
     def getIcon(self):
         return self.DISMANTLE_DEVICE_PATH
 
-    def __goldChangeHandler(self, gold):
-        self.__userGoldAmount = gold
+    def __moneyChangeHandler(self, *args):
         self.__checkIsOperationAllowed()
 
-    def __paidRemovalCostChangeHandler(self, paidRemovalCost):
-        self._operationPrice = paidRemovalCost
+    def __paidRemovalCostChangeHandler(self, *args):
         self.__checkIsOperationAllowed()
 
-    def __checkIsOperationAllowed(self):
-        self.__isOperationAllowed = self.__userGoldAmount >= self._operationPrice
-        self.onConfirmationStatusChnaged(self.__isOperationAllowed)
+    @dependency.replace_none_kwargs(itemsCache=IItemsCache)
+    def __checkIsOperationAllowed(self, itemsCache=None):
+        userMoney = itemsCache.items.stats.money
+        itemRemovalPrice = self._item.getRemovalPrice(itemsCache.items)
+        operationAllowed = userMoney >= itemRemovalPrice.price
+        if self.__isOperationAllowed != operationAllowed:
+            self.__isOperationAllowed = operationAllowed
+            self.onConfirmationStatusChnaged(operationAllowed)
 
     def getEventType(self):
         return events.ShowDialogEvent.SHOW_DEMOUNT_DEVICE_DIALOG

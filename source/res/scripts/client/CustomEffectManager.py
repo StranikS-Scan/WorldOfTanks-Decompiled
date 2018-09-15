@@ -40,15 +40,15 @@ class CustomEffectManager(Component):
         args['chassis']['model'] = appearance.compoundModel
         args['hull'] = {}
         args['hull']['model'] = appearance.compoundModel
-        args['engineTags'] = appearance.typeDescriptor.engine['tags']
+        args['engineTags'] = appearance.typeDescriptor.engine.tags
         args['drawOrderBase'] = CustomEffectManager._DRAW_ORDER_IDX
-        for desc in appearance.typeDescriptor.hull['customEffects']:
+        for desc in appearance.typeDescriptor.hull.customEffects:
             if desc is not None:
                 selector = desc.create(args)
                 if selector is not None:
                     self.__selectors.append(selector)
 
-        for desc in appearance.typeDescriptor.chassis['customEffects']:
+        for desc in appearance.typeDescriptor.chassis.customEffects:
             if desc is not None:
                 selector = desc.create(args)
                 if selector is not None:

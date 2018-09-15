@@ -59,11 +59,11 @@ def getTurretJointMat(vehicleTypeDescriptor, vehicleMatrix, turretYaw=0.0, overr
 
 
 def getTurretJointOffset(vehicleTypeDescriptor):
-    return vehicleTypeDescriptor.chassis['hullPosition'] + vehicleTypeDescriptor.hull['turretPositions'][0]
+    return vehicleTypeDescriptor.chassis.hullPosition + vehicleTypeDescriptor.hull.turretPositions[0]
 
 
 def getGunJointMat(vehicleTypeDescriptor, turretMatrix, gunPitch, overrideTurretLocalZ=None):
-    gunOffset = Vector3(vehicleTypeDescriptor.turret['gunPosition'])
+    gunOffset = Vector3(vehicleTypeDescriptor.turret.gunPosition)
     if overrideTurretLocalZ is not None:
         offset = getTurretJointOffset(vehicleTypeDescriptor)
         yOffset = math.tan(gunPitch) * offset.z
@@ -111,20 +111,20 @@ def getCenteredPlayerGunMat(turretYaw=0.0, gunPitch=0.0):
 
 
 def getTurretMatrixProvider(vehicleTypeDescriptor, vehicleMatrixProvider, turretYawMatrixProvider):
-    turretOffset = vehicleTypeDescriptor.chassis['hullPosition'] + vehicleTypeDescriptor.hull['turretPositions'][0]
+    turretOffset = vehicleTypeDescriptor.chassis.hullPosition + vehicleTypeDescriptor.hull.turretPositions[0]
     return MatrixProviders.product(turretYawMatrixProvider, MatrixProviders.product(mathUtils.createTranslationMatrix(turretOffset), vehicleMatrixProvider))
 
 
 def getGunMatrixProvider(vehicleTypeDescriptor, turretMatrixProvider, gunPitchMatrixProvider):
-    gunOffset = vehicleTypeDescriptor.turret['gunPosition']
+    gunOffset = vehicleTypeDescriptor.turret.gunPosition
     return MatrixProviders.product(gunPitchMatrixProvider, MatrixProviders.product(mathUtils.createTranslationMatrix(gunOffset), turretMatrixProvider))
 
 
 def getTurretYawGunPitch(vehTypeDescr, vehicleMatrix, targetPos, compensateGravity=False):
-    turretOffs = vehTypeDescr.hull['turretPositions'][0] + vehTypeDescr.chassis['hullPosition']
-    gunOffs = vehTypeDescr.turret['gunPosition']
-    speed = vehTypeDescr.shot['speed']
-    gravity = vehTypeDescr.shot['gravity'] if not compensateGravity else 0.0
+    turretOffs = vehTypeDescr.hull.turretPositions[0] + vehTypeDescr.chassis.hullPosition
+    gunOffs = vehTypeDescr.turret.gunPosition
+    speed = vehTypeDescr.shot.speed
+    gravity = vehTypeDescr.shot.gravity if not compensateGravity else 0.0
     return BigWorld.wg_getShotAngles(turretOffs, gunOffs, vehicleMatrix, speed, gravity, 0.0, 0.0, targetPos, False)
 
 
@@ -198,21 +198,21 @@ def shootInSkyPoint(startPos, dir):
     else:
         type = BigWorld.player().arena.vehicles[BigWorld.player().playerVehicleID]['vehicleType']
         shotPos = BigWorld.player().getOwnVehiclePosition()
-        shotPos += type.hull['turretPositions'][0] + type.turret['gunPosition']
+        shotPos += type.hull.turretPositions[0] + type.turret.gunPosition
         shotDesc = type.shot
     dirAtCam = shotPos - start
     dirAtCam.normalise()
     cosAngle = dirAtCam.dot(dirFromCam)
-    a = shotDesc['maxDistance']
+    a = shotDesc.maxDistance
     b = shotPos.distTo(start)
     try:
         dist = b * cosAngle + math.sqrt(b * b * (cosAngle * cosAngle - 1) + a * a)
     except:
-        dist = shotDesc['maxDistance']
+        dist = shotDesc.maxDistance
         LOG_CODEPOINT_WARNING()
 
     if dist < 0.0:
-        dist = shotDesc['maxDistance']
+        dist = shotDesc.maxDistance
     finalPoint = start + dirFromCam.scale(dist)
     intersecPoint = BigWorld.player().arena.collideWithSpaceBB(start, finalPoint)
     if intersecPoint is not None:

@@ -7,7 +7,6 @@ Please, don't edit this file manually.
 from debug_utils import LOG_WARNING
 
 class BADGE(object):
-    ACCOUNTPOPOVER_BADGE_TOOLTIP = '#badge:accountPopover/badge/tooltip'
     ACCOUNTPOPOVER_BADGE_TOOLTIP_BODY = '#badge:accountPopover/badge/tooltip/body'
     ACCOUNTPOPOVER_BADGE_TOOLTIP_HEADER = '#badge:accountPopover/badge/tooltip/header'
     BADGESPAGE_HEADER_CLOSEBTN_LABEL = '#badge:badgesPage/header/closeBtn/label'

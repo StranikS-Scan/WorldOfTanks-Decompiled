@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/RankedBattlesPrimeTimeMeta.py
-from gui.Scaleform.framework.entities.View import View
+from gui.Scaleform.daapi.view.meta.WrapperViewMeta import WrapperViewMeta
 
-class RankedBattlesPrimeTimeMeta(View):
+class RankedBattlesPrimeTimeMeta(WrapperViewMeta):
 
     def closeView(self):
         self._printOverrideError('closeView')
@@ -18,9 +18,6 @@ class RankedBattlesPrimeTimeMeta(View):
         :param data: Represented by PrimeTimeVO (AS)
         """
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
-
-    def as_setSelectedServerIndexS(self, index):
-        return self.flashObject.as_setSelectedServerIndex(index) if self._isDAAPIInited() else None
 
     def as_getServersDPS(self):
         return self.flashObject.as_getServersDP() if self._isDAAPIInited() else None

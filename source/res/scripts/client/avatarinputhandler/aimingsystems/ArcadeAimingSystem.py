@@ -303,7 +303,7 @@ class ShotPointCalculatorPlanar(object):
         closestPoint, isPointConvenient = self.__calculateClosestPoint(start, dir)
         turretYaw, gunPitch = AimingSystems.getTurretYawGunPitch(self.__vehicleDesc, self.__vehicleMat, closestPoint, True)
         if not isPointConvenient:
-            minPitch, maxPitch = gun_rotation_shared.calcPitchLimitsFromDesc(turretYaw, self.__vehicleDesc.gun['pitchLimits'])
+            minPitch, maxPitch = gun_rotation_shared.calcPitchLimitsFromDesc(turretYaw, self.__vehicleDesc.gun.pitchLimits)
             pitchInBorders = gunPitch <= maxPitch + 0.001
             isPointConvenient = not pitchInBorders
         if isPointConvenient:

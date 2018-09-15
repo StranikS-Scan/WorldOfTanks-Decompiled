@@ -22,6 +22,7 @@ from gui.shared import event_dispatcher, events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency, time_utils
 from items import vehicles
+from optional_bonuses import TrackVisitor, BONUS_MERGERS, walkBonuses
 from shared_utils import first, findFirst, collapseIntervals
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.connection_mgr import IConnectionManager
@@ -31,6 +32,7 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
+from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY
 
 class RankedBattlesController(IRankedBattlesController, Notifiable):
     eventsCache = dependency.descriptor(IEventsCache)
@@ -489,6 +491,34 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
 
         return {pID:PrimeTime(pID, {wDay:collapseIntervals(periods) for wDay, periods in pPeriods.iteritems()}) for pID, pPeriods in primeTimesPeriods.iteritems()}
 
+    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
+        hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming(), withShortName=True)
+        if self.connectionMgr.peripheryID == 0:
+            hostsList.insert(0, (self.connectionMgr.url,
+             self.connectionMgr.serverUserName,
+             self.connectionMgr.serverUserNameShort,
+             HOST_AVAILABILITY.IGNORED,
+             0))
+        primeTimes = self.getPrimeTimes()
+        dayStart, dayEnd = time_utils.getDayTimeBoundsForLocal(selectedTime)
+        dayEnd += 1
+        serversPeriodsMapping = {}
+        for _, _, serverShortName, _, peripheryID in hostsList:
+            if peripheryID not in primeTimes:
+                continue
+            dayPeriods = primeTimes[peripheryID].getPeriodsBetween(dayStart, dayEnd)
+            if groupIdentical and dayPeriods in serversPeriodsMapping.values():
+                serverInMapping = None
+                for name, period in serversPeriodsMapping.iteritems():
+                    serverInMapping = name if period == dayPeriods else None
+
+                if serverInMapping:
+                    newName = '{0}, {1}'.format(serverInMapping, serverShortName)
+                    serversPeriodsMapping[newName] = serversPeriodsMapping.pop(serverInMapping)
+            serversPeriodsMapping[serverShortName] = dayPeriods
+
+        return serversPeriodsMapping
+
     def getPrimeTimeStatus(self, peripheryID=None):
         """
         Is this periphery (or current by default) has the prime time now.
@@ -556,6 +586,39 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
                 result.extend(bonus.getRankedAwardVOs())
 
         return result
+
+    def getAllAwardsForCycle(self, cycleID):
+        """
+        return all rewards received in a cycle. Is supposed to be used for past cycles only
+        """
+        resultDict = {}
+        maxRank = self.__getDossierForCycle(cycleID).rank
+        questsIterator = self.eventsCache.getRankedQuests(lambda q: q.getRank() == maxRank and q.getCycleID() == cycleID and q.isProcessedAtCycleEnd()).itervalues()
+        for quest in questsIterator:
+            qProgress = self.eventsCache.questsProgress.getQuestProgress(quest.getID()) or {}
+            if qProgress:
+                bonusTrack = qProgress.get(None, {}).get('bonusTracks', [''])[0]
+                trackReplay = TrackVisitor(BONUS_MERGERS, bonusTrack, 1, None)
+                trackResult = walkBonuses(quest.getData().get('bonus', {}), trackReplay)
+                for bonus in quest.getBonuses(bonusData=trackResult):
+                    for awardVO in bonus.getRankedAwardVOs(iconSize='big', withCounts=True, withKey=True):
+                        itemKey = awardVO.pop('itemKey')
+                        if itemKey in resultDict:
+                            resultDict[itemKey]['count'] += awardVO['count']
+                        resultDict[itemKey] = awardVO
+
+        return resultDict
+
+    def getRanksChanges(self, isLoser=False):
+        settings = self.__getSettings()
+        if isLoser:
+            return settings.loserRankChanges
+        else:
+            return settings.winnerRankChanges
+
+    def getMinXp(self):
+        settings = self.__getSettings()
+        return settings.minXP
 
     def __clear(self):
         lobbyContext = dependency.instance(ILobbyContext)

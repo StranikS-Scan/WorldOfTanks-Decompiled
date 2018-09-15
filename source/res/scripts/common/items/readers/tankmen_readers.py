@@ -1,0 +1,168 @@
+# Python bytecode 2.7 (decompiled from Python 2.7)
+# Embedded file name: scripts/common/items/readers/tankmen_readers.py
+import ResMgr
+from constants import IS_CLIENT, IS_WEB
+from items import _xml
+from items.components import component_constants, skills_constants
+from items.components import shared_components
+from items.components import tankmen_components
+
+def _parseName(xmlCtx, section):
+    return shared_components.I18nString(_xml.readNonEmptyString(xmlCtx, section, component_constants.EMPTY_STRING)).value
+
+
+def _parseIcon(xmlCtx, section):
+    return _xml.readNonEmptyString(xmlCtx, section, component_constants.EMPTY_STRING)
+
+
+def _readIDs(xmlCtx, subsections, accumulator, parser=None):
+    """Parses sequence of "<_id> content </_id>". Adds items to 'accumulator' dict.
+    Raises exception if the sequence is empty.
+    :param xmlCtx: tuple(root ctx or None, path to section).
+    :param subsections: instance of DataSection.
+    :param accumulator: dictionary to store pair (ID, name).
+    :param parser: additional parser to fetch specific data or None.
+    :return: Returns set of IDs.
+    """
+    res = set()
+    for sname, subsection in subsections:
+        try:
+            contentID = int(sname[1:])
+        except ValueError:
+            contentID = -1
+
+        if sname[0] != '_' or not 0 <= contentID <= 65535:
+            _xml.raiseWrongSection(xmlCtx, sname)
+        if contentID in accumulator:
+            _xml.raiseWrongXml(xmlCtx, sname, 'ID is not unique')
+        if parser is not None:
+            accumulator[contentID] = parser((xmlCtx, sname), subsection)
+        else:
+            accumulator[contentID] = component_constants.EMPTY_STRING
+        res.add(contentID)
+
+    if not res:
+        _xml.raiseWrongXml(xmlCtx, '', 'is empty')
+    return res
+
+
+def _readRanks(xmlCtx, subsections):
+    """Reads section containing ranks and stores data to RanksSet.
+    :param xmlCtx: tuple(root ctx or None, path to section).
+    :param subsections: instance of DataSection.
+    :return: instance of RanksSet.
+    """
+    ranks = tankmen_components.RanksSet()
+    for sname, subsection in subsections:
+        if ranks.getRankByName(sname) is not None:
+            _xml.raiseWrongXml(xmlCtx, sname, 'is not unique')
+        ctx = (xmlCtx, sname)
+        if IS_CLIENT or IS_WEB:
+            i18n = shared_components.I18nString(_xml.readNonEmptyString(ctx, subsection, 'userString'))
+            icon = _parseIcon((ctx, 'icon'), _xml.getSubsection(ctx, subsection, 'icon'))
+            rank = tankmen_components.Rank(sname, i18n=i18n, icon=icon)
+        else:
+            rank = tankmen_components.Rank(sname)
+        ranks.add(rank)
+
+    return ranks
+
+
+def _readRoleRanks(xmlCtx, section, ranks):
+    """Reads section containing mapping role -> ranks and stores it to RoleRanks.
+    :param xmlCtx: tuple(root ctx or None, path to section).
+    :param section: instance of DataSection.
+    :param ranks: instance of RanksSet.
+    :return: instance of RoleRanks.
+    """
+    roleRanks = tankmen_components.RoleRanks()
+    for roleName in skills_constants.ROLES:
+        rankIDs = []
+        for rankName in _xml.readNonEmptyString(xmlCtx, section, roleName).split():
+            rankIDs.append(ranks.getIDByName(rankName))
+
+        roleRanks.setRanksIDs(roleName, tuple(rankIDs))
+
+    return roleRanks
+
+
+def _readGroupTags(xmlCtx, section, subsectionName):
+    source = _xml.readStringOrNone(xmlCtx, section, subsectionName)
+    if source is not None:
+        tags = source.split()
+        restrictions = []
+        for tag in tags:
+            if tag not in tankmen_components.GROUP_TAG.RANGE:
+                _xml.raiseWrongXml(xmlCtx, subsectionName, 'unknown tag "{}"'.format(tag))
+            if tag in tankmen_components.GROUP_TAG.RESTRICTIONS:
+                restrictions.append(tag)
+
+        if restrictions and tankmen_components.GROUP_TAG.PASSPORT_REPLACEMENT_FORBIDDEN not in restrictions:
+            _xml.raiseWrongXml(xmlCtx, subsectionName, 'Group contains tags of restrictions {}, so tag "{}" is mandatory'.format(restrictions, tankmen_components.GROUP_TAG.PASSPORT_REPLACEMENT_FORBIDDEN))
+    else:
+        tags = []
+    return frozenset(tags)
+
+
+def _readTankmenGroup(xmlCtx, subsection, firstNames, lastNames, icons):
+    """Reads section containing data of tankmen group and stores it to NationGroup.
+    :param xmlCtx: tuple(root ctx or None, path to section).
+    :param subsection: instance of DataSection.
+    :param firstNames: dict(ID of first name: string or None)
+    :param lastNames: dict(ID of last name: string or None)
+    :param icons: dict(ID of icon: string or None)
+    :return: instance of NationGroup.
+    """
+    if IS_CLIENT or IS_WEB:
+        parseName = _parseName
+        parseIcon = _parseIcon
+    else:
+        parseName = parseIcon = None
+    return tankmen_components.NationGroup('female' == _xml.readNonEmptyString(xmlCtx, subsection, 'sex'), subsection.readBool('notInShop', False), _readIDs((xmlCtx, 'firstNames'), _xml.getChildren(xmlCtx, subsection, 'firstNames'), firstNames, parseName), _readIDs((xmlCtx, 'lastNames'), _xml.getChildren(xmlCtx, subsection, 'lastNames'), lastNames, parseName), _readIDs((xmlCtx, 'icons'), _xml.getChildren(xmlCtx, subsection, 'icons'), icons, parseIcon), _xml.readNonNegativeFloat(xmlCtx, subsection, 'weight'), _readGroupTags((xmlCtx, 'tags'), subsection, 'tags'))
+
+
+def _readNationConfigSection(xmlCtx, section):
+    config = {}
+    firstNames = {}
+    lastNames = {}
+    icons = {}
+    for kindName in component_constants.TANKMEN_GROUPS:
+        groups = []
+        totalWeight = 0.0
+        for sname, subsection in _xml.getChildren(xmlCtx, section, kindName):
+            ctx = (xmlCtx, kindName + '/' + sname)
+            group = _readTankmenGroup(ctx, subsection, firstNames, lastNames, icons)
+            totalWeight += group.weight
+            groups.append(group)
+
+        totalWeight = max(0.001, totalWeight)
+        for group in groups:
+            group.weight /= totalWeight
+
+        config[kindName] = tuple(groups)
+
+    ranks = _readRanks((xmlCtx, 'ranks'), _xml.getChildren(xmlCtx, section, 'ranks'))
+    config['roleRanks'] = _readRoleRanks((xmlCtx, 'roleRanks'), _xml.getSubsection(xmlCtx, section, 'roleRanks'), ranks)
+    if IS_CLIENT or IS_WEB:
+        config['firstNames'] = firstNames
+        config['lastNames'] = lastNames
+        config['icons'] = icons
+        config['ranks'] = ranks
+    else:
+        config['firstNames'] = frozenset(firstNames)
+        config['lastNames'] = frozenset(lastNames)
+        config['icons'] = frozenset(icons)
+    return tankmen_components.NationConfig(xmlCtx[1], **config)
+
+
+def readNationConfig(xmlPath):
+    """Reads xml file containing nation-specific configuration of tankmen.
+    :param xmlPath: string containing relative path to xml file.
+    :return: instance of NationConfig.
+    """
+    section = ResMgr.openSection(xmlPath)
+    if section is None:
+        _xml.raiseWrongXml(None, xmlPath, 'can not open or read')
+    config = _readNationConfigSection((None, xmlPath), section)
+    ResMgr.purge(xmlPath, True)
+    return config

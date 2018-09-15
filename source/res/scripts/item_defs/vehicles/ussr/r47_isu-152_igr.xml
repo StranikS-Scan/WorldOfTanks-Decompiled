@@ -69,7 +69,7 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.2299 0.851027 2.31209	</turret>
+      <turret>	0.2299 0.850054 2.22379	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/russian/R47_ISU-152/collision/Hull.model	</collisionModelServer>
@@ -77,45 +77,45 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.806372 1.10721 2.13089	</rayStart>
-        <rayEnd>	-0.806372 0.907191 1.7845	</rayEnd>
+        <rayStart>	-0.796183 1.16471 2.08856	</rayStart>
+        <rayEnd>	-0.796183 0.964697 1.74216	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.34	</size>
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	-1.36437 1.08017 0.416526	</rayStart>
-        <rayEnd>	-0.980807 0.973082 0.453915	</rayEnd>
+        <rayStart>	-1.26848 1.0534 0.425873	</rayStart>
+        <rayEnd>	-1.07669 0.999853 0.444568	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.74	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
-      <inscription>
-        <rayStart>	1.39486 0.950075 0.692103	</rayStart>
-        <rayEnd>	1.01129 0.842985 0.729493	</rayEnd>
-        <rayUp>	0.000000 1 0.000000	</rayUp>
-        <size>	0.76	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
-      </inscription>
       <player>
-        <rayStart>	-1.31137 0.947923 -0.171441	</rayStart>
-        <rayEnd>	-0.927811 0.840744 -0.134052	</rayEnd>
+        <rayStart>	-1.22238 1.01727 -0.252435	</rayStart>
+        <rayEnd>	-1.03059 0.963728 -0.23374	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.34	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </player>
+      <inscription>
+        <rayStart>	1.26848 1.0534 0.425873	</rayStart>
+        <rayEnd>	1.07669 0.999853 0.444568	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.74	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
       <player>
-        <rayStart>	1.31137 0.947923 -0.171441	</rayStart>
-        <rayEnd>	0.927811 0.840744 -0.134052	</rayEnd>
+        <rayStart>	1.22238 1.01727 -0.252435	</rayStart>
+        <rayEnd>	1.03059 0.963728 -0.23374	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.34	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
+        <hideIfDamaged>	true	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
       </player>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/russian/R47_ISU-152/ISU-152_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
-      <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
+      <tiling>	1.4 1.4 0.000000 0.000000	</tiling>
     </camouflage>
   </hull>
   <chassis>
@@ -149,12 +149,15 @@
         <exploded>	vehicles/russian/R47_ISU-152/crash/lod0/Chassis.model	</exploded>
       </models>
       <splineDesc>
-        <segmentModelLeft>	vehicles/russian/R47_ISU-152/track/segment.model	</segmentModelLeft>
-        <segmentModelRight>	vehicles/russian/R47_ISU-152/track/segment.model	</segmentModelRight>
+        <segmentModelLeft>	vehicles/russian/R47_ISU-152/track/segment_1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/russian/R47_ISU-152/track/segment_1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/russian/R47_ISU-152/track/segment_2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/russian/R47_ISU-152/track/segment_2.model	</segment2ModelRight>
         <left>	vehicles/russian/R47_ISU-152/track/left.track	</left>
         <right>	vehicles/russian/R47_ISU-152/track/right.track	</right>
-        <segmentLength>	0.156	</segmentLength>
-        <segmentOffset>	0.072	</segmentOffset>
+        <segmentLength>	0.307	</segmentLength>
+        <segmentOffset>	0.103	</segmentOffset>
+        <segment2Offset>	0.154	</segment2Offset>
         <lodDist>	MEDIUM	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -185,9 +188,10 @@
         </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.275099	</radius>
+          <syncAngle>	51.4286	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -201,7 +205,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_L4	</name>
           <radius>	0.405917	</radius>
-          <syncAngle>	25.7143	</syncAngle>
+          <syncAngle>	51.4286	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -212,9 +216,10 @@
         </group>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.275099	</radius>
+          <syncAngle>	51.4286	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -228,7 +233,7 @@
           <isLeading>	true	</isLeading>
           <name>	WD_R4	</name>
           <radius>	0.405917	</radius>
-          <syncAngle>	25.7143	</syncAngle>
+          <syncAngle>	51.4286	</syncAngle>
         </wheel>
       </wheels>
       <groundNodes>
@@ -358,12 +363,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.981013 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.963746 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R47_ISU-152/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R47_ISU-152/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.20331 2.22833	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.20331 2.20809	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -376,7 +381,7 @@
           </transform>
         </decal>
       </AODecals>
-      <trackThickness>	0.000000	</trackThickness>
+      <trackThickness>	0.012	</trackThickness>
     </ISU-152_mod_1945_IGR>
   </chassis>
   <turrets0>
@@ -424,19 +429,19 @@
             <maxPitch>	0 6 1 6	</maxPitch>
           </pitchLimits>
           <models>
-            <undamaged>	vehicles/russian/R47_ISU-152/normal/lod0/Gun_06.model	</undamaged>
-            <destroyed>	vehicles/russian/R47_ISU-152/crash/lod0/Gun_06.model	</destroyed>
-            <exploded>	vehicles/russian/R47_ISU-152/crash/lod0/Gun_06.model	</exploded>
+            <undamaged>	vehicles/russian/R47_ISU-152/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R47_ISU-152/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R47_ISU-152/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/russian/R47_ISU-152/collision/Gun_06.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R47_ISU-152/collision_client/Gun_06.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/russian/R47_ISU-152/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R47_ISU-152/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.0182105 -0.00880292 1.58	</rayStart>
-              <rayEnd>	0.0935469 -0.0563706 1.66842	</rayEnd>
-              <rayUp>	0.129 0.124 5	</rayUp>
+              <rayStart>	0.0264194 -0.00925501 1.75217	</rayStart>
+              <rayEnd>	-0.00162107 -0.0289426 1.75042	</rayEnd>
+              <rayUp>	0.121 0.114 5	</rayUp>
               <size>	0.645	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
             </insigniaOnGun>
@@ -444,7 +449,7 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <effects>	shot_huge_mb	</effects>
           <camouflage>
-            <tiling>	0.76 0.55 0.000000 0.000000	</tiling>
+            <tiling>	0.5 0.5 0.000000 0.000000	</tiling>
           </camouflage>
         </_152mm_BL-10_IGR>
       </guns>
@@ -457,7 +462,7 @@
         <collisionModelServer>	vehicles/russian/R47_ISU-152/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R47_ISU-152/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.000000 0.000000	</gunPosition>
+      <gunPosition>	-0.003733 -0.002294 -0.0125	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
@@ -530,9 +535,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.88	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </R47_ISU-152_IGR.xml>

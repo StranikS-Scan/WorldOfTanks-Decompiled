@@ -21,7 +21,7 @@
   <camouflage>
     <priceFactor>	0.8	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/chinese/Ch09_M5/M5_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -34,8 +34,6 @@
       <armor_7>	9.5	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	12.7	</armor_9>
-      <armor_10>	12.7	</armor_10>
-      <armor_11>	28.6	</armor_11>
       <armor_12>	28.6	</armor_12>
     </armor>
     <primaryArmor>	armor_1 armor_12 armor_4	</primaryArmor>
@@ -62,7 +60,7 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.0229 0.760675 0.197	</turret>
+      <turret>	0.014195 0.73152 0.128688	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/chinese/Ch09_M5/collision/Hull.model	</collisionModelServer>
@@ -85,6 +83,9 @@
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/chinese/Ch09_M5/M5_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	2.4 2.4 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_Ch09_M5>
@@ -129,15 +130,16 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.32	</textureScale>
+        <textureScale>	-2	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.316701	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -167,9 +169,10 @@
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.316701	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -205,12 +208,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.92 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/chinese/Ch09_M5/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/chinese/Ch09_M5/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.945108 1.50202	</topRightCarryingPoint>
+      <topRightCarryingPoint>	0.92886 1.4321	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -223,6 +226,118 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/chinese/Ch09_M5/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/chinese/Ch09_M5/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/chinese/Ch09_M5/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/chinese/Ch09_M5/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/chinese/Ch09_M5/track/left.track	</left>
+        <right>	vehicles/chinese/Ch09_M5/track/right.track	</right>
+        <segmentLength>	0.119	</segmentLength>
+        <segmentOffset>	0.158	</segmentOffset>
+        <segment2Offset>	0.06	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0028	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1161	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	1.91	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.017	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	1.31	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.017	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.017	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.017	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	1.31	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	1.91	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.017	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.017	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.017	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.017	</offset>
+        </node>
+      </trackNodes>
     </Chassis_Ch09_M5>
     <Chassis_Ch09_M5_2>
       <userString>	#china_vehicles:Chassis_Ch09_M5_2	</userString>
@@ -262,15 +377,16 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.3	</textureScale>
+        <textureScale>	-2	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.316701	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	false	</isLeft>
@@ -300,9 +416,10 @@
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.316701	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -338,12 +455,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.92 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/chinese/Ch09_M5/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/chinese/Ch09_M5/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.945108 1.50202	</topRightCarryingPoint>
+      <topRightCarryingPoint>	0.92886 1.4321	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -356,6 +473,118 @@
           </transform>
         </decal>
       </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.03	</minOffset>
+          <maxOffset>	0.03	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/chinese/Ch09_M5/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/chinese/Ch09_M5/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/chinese/Ch09_M5/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/chinese/Ch09_M5/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/chinese/Ch09_M5/track/left.track	</left>
+        <right>	vehicles/chinese/Ch09_M5/track/right.track	</right>
+        <segmentLength>	0.119	</segmentLength>
+        <segmentOffset>	0.158	</segmentOffset>
+        <segment2Offset>	0.06	</segment2Offset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.0028	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1161	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	1.91	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.017	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	1.31	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.017	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.017	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.017	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.89	</forwardElastK>
+          <backwardElastK>	1.31	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	1.91	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.017	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.8	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.017	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.017	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.9	</backwardElastK>
+          <offset>	-0.017	</offset>
+        </node>
+      </trackNodes>
     </Chassis_Ch09_M5_2>
   </chassis>
   <turrets0>
@@ -363,7 +592,7 @@
       <userString>	#china_vehicles:Turret_1_Ch09_M5	</userString>
       <tags></tags>
       <level>	3	</level>
-      <price>	1890.0	</price>
+      <price>	1890	</price>
       <armor>
         <armor_1>	38.1	</armor_1>
         <armor_2>	0	</armor_2>
@@ -372,8 +601,6 @@
         <armor_5>	12.7	</armor_5>
         <armor_6>	12.7	</armor_6>
         <armor_7>	12.7	</armor_7>
-        <armor_8>	0	</armor_8>
-        <armor_9>	12.7	</armor_9>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	1020	</weight>
@@ -421,14 +648,17 @@
           <aimingTime>	1.7	</aimingTime>
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/chinese/Ch09_M5/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/chinese/Ch09_M5/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/chinese/Ch09_M5/crash/lod0/Gun_02.model	</exploded>
+            <undamaged>	vehicles/chinese/Ch09_M5/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch09_M5/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch09_M5/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/chinese/Ch09_M5/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/chinese/Ch09_M5/collision_client/Gun_02.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/chinese/Ch09_M5/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch09_M5/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	0.6 0.3 0.000000 0.000000	</tiling>
+          </camouflage>
         </_37mm_M-6_L53>
         <_47mm_Gun_Type_1>	shared	  <maxAmmo>	61	</maxAmmo>
           <pitchLimits>
@@ -460,16 +690,16 @@
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.276	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/chinese/Ch09_M5/normal/lod0/Gun_03.model	</undamaged>
-            <destroyed>	vehicles/chinese/Ch09_M5/crash/lod0/Gun_03.model	</destroyed>
-            <exploded>	vehicles/chinese/Ch09_M5/crash/lod0/Gun_03.model	</exploded>
+            <undamaged>	vehicles/chinese/Ch09_M5/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch09_M5/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch09_M5/crash/lod0/Gun_02.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/chinese/Ch09_M5/collision/Gun_03.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/chinese/Ch09_M5/collision_client/Gun_03.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/chinese/Ch09_M5/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch09_M5/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.97 0.97 0.000000 0.000000	</tiling>
+            <tiling>	0.6 0.3 0.000000 0.000000	</tiling>
           </camouflage>
         </_47mm_Gun_Type_1>
       </guns>
@@ -482,26 +712,26 @@
         <collisionModelServer>	vehicles/chinese/Ch09_M5/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/chinese/Ch09_M5/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.0028 0.2533 0.698	</gunPosition>
+      <gunPosition>	0.011495 0.25728 0.808192	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	0.788807 0.405901 0.289148	</rayStart>
-          <rayEnd>	0.396493 0.405901 0.211113	</rayEnd>
+          <rayStart>	0.690729 0.405901 0.269639	</rayStart>
+          <rayEnd>	0.494571 0.405901 0.230622	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.22	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
         <inscription>
-          <rayStart>	-0.793273 0.227382 0.289161	</rayStart>
-          <rayEnd>	-0.40096 0.227382 0.211125	</rayEnd>
+          <rayStart>	-0.748149 0.335535 0.279792	</rayStart>
+          <rayEnd>	-0.377357 0.334399 0.129754	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.54	</size>
+          <size>	0.427	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.924 -0.079 0.943 0.000 0.508 0.248 0.819 0.607 0.269 0.500 0.082 0.500 0.080 0.090 0.000	</physicsShape>
+      <physicsShape>	0.882 -0.066 0.943 0.000 0.508 0.248 0.819 0.607 0.269 0.500 0.082 0.500 0.080 0.090 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
     </Turret_1_Ch09_M5>
     <Turret_2_Ch09_M5>
@@ -518,13 +748,11 @@
         <armor_2>	44.5	</armor_2>
         <armor_3>	31.8	</armor_3>
         <armor_4>	31.8	</armor_4>
-        <armor_5>	25.4	</armor_5>
         <armor_6>	12.7	</armor_6>
         <armor_7>	12.7	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	12.7	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
         </armor_9>
-        <armor_10>	12.7	</armor_10>
       </armor>
       <primaryArmor>	armor_2 armor_3 armor_4	</primaryArmor>
       <weight>	1200	</weight>
@@ -568,16 +796,16 @@
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/chinese/Ch09_M5/normal/lod0/Gun_05.model	</undamaged>
-            <destroyed>	vehicles/chinese/Ch09_M5/crash/lod0/Gun_05.model	</destroyed>
-            <exploded>	vehicles/chinese/Ch09_M5/crash/lod0/Gun_05.model	</exploded>
+            <undamaged>	vehicles/chinese/Ch09_M5/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch09_M5/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch09_M5/crash/lod0/Gun_03.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/chinese/Ch09_M5/collision/Gun_05.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/chinese/Ch09_M5/collision_client/Gun_05.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/chinese/Ch09_M5/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch09_M5/collision_client/Gun_03.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.925 0.925 0.000000 0.000000	</tiling>
+            <tiling>	0.6 0.3 0.000000 0.000000	</tiling>
           </camouflage>
         </_37mm_M-6_L53>
         <_47mm_Gun_Type_1>	shared	  <maxAmmo>	73	</maxAmmo>
@@ -606,14 +834,17 @@
           <aimingTime>	2.3	</aimingTime>
           <invisibilityFactorAtShot>	0.276	</invisibilityFactorAtShot>
           <models>
-            <undamaged>	vehicles/chinese/Ch09_M5/normal/lod0/Gun_06.model	</undamaged>
-            <destroyed>	vehicles/chinese/Ch09_M5/crash/lod0/Gun_06.model	</destroyed>
-            <exploded>	vehicles/chinese/Ch09_M5/crash/lod0/Gun_06.model	</exploded>
+            <undamaged>	vehicles/chinese/Ch09_M5/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/chinese/Ch09_M5/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/chinese/Ch09_M5/crash/lod0/Gun_04.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/chinese/Ch09_M5/collision/Gun_06.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/chinese/Ch09_M5/collision_client/Gun_06.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/chinese/Ch09_M5/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/chinese/Ch09_M5/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
+          <camouflage>
+            <tiling>	0.6 0.3 0.000000 0.000000	</tiling>
+          </camouflage>
         </_47mm_Gun_Type_1>
       </guns>
       <models>
@@ -625,7 +856,7 @@
         <collisionModelServer>	vehicles/chinese/Ch09_M5/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/chinese/Ch09_M5/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.0028 0.2533 0.698	</gunPosition>
+      <gunPosition>	0.011495 0.25728 0.808192	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	0.667102 0.411725 0.51567	</rayStart>
@@ -636,15 +867,15 @@
           <isMirrored>	true	</isMirrored>
         </player>
         <inscription>
-          <rayStart>	0.841359 0.293437 -0.245709	</rayStart>
-          <rayEnd>	0.802037 0.293437 -0.238377	</rayEnd>
+          <rayStart>	0.964387 0.31603 -0.242351	</rayStart>
+          <rayEnd>	0.766189 0.31603 -0.215596	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.54	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <size>	0.563	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 0.935 0.000 0.549 0.250 0.869 0.606 0.458 0.534 0.000 0.500 0.075 0.100 0.000	</physicsShape>
+      <physicsShape>	1.024 -0.061 0.864 -0.070 0.525 0.250 0.869 0.606 0.279 0.534 0.059 0.500 0.075 0.100 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
     </Turret_2_Ch09_M5>
   </turrets0>
@@ -761,9 +992,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.82	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </Ch09_M5.xml>

@@ -10,7 +10,7 @@ from items import ItemsPrices
 from debug_utils import LOG_DEBUG
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_TARGET_TYPE
 from goodies.goodie_helpers import getPremiumCost, getPriceWithDiscount, GoodieData, getPriceTupleWithDiscount
-from gui.shared.money import Money, ZERO_MONEY, Currency
+from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from items.item_price import getNextSlotPrice, getNextBerthPackPrice
 from skeletons.gui.shared.utils.requesters import IShopCommonStats, IShopRequester
@@ -117,14 +117,13 @@ class ShopCommonStats(IShopCommonStats):
 
     def getItemPrice(self, intCD):
         prices = self.getPrices()
-        return Money(**prices.getPrices(intCD)) if intCD in prices else ZERO_MONEY
+        return Money(**prices.getPrices(intCD)) if intCD in prices else MONEY_UNDEFINED
 
-    def getBoosterPrice(self, boosterID):
-        asTuple = self.getBoosterPrices().get(boosterID, tuple())
-        return Money(*asTuple)
+    def getBoosterPricesTuple(self, boosterID):
+        return self.getBoosterPrices().get(boosterID, tuple())
 
     def getItem(self, intCD):
-        return (self.getItemPrice(intCD), intCD in self.getHiddens(), intCD in self.getVehiclesForGold())
+        return (self.getItemPrice(intCD), intCD in self.getHiddens())
 
     @property
     def revision(self):
@@ -139,7 +138,17 @@ class ShopCommonStats(IShopCommonStats):
         @return: cost of dismantling of non-removable optional
                                 devices for gold
         """
-        return self.getValue('paidRemovalCost', 10)
+        cost = self.getValue('paidRemovalCost', {})
+        return cost.get(Currency.GOLD, 10)
+
+    @property
+    def paidDeluxeRemovalCost(self):
+        """
+        @return: cost of dismantling of non-removable Deluxe optional devices. It can be in any currency.
+        by default in crystals.
+        """
+        cost = self.getValue('paidDeluxeRemovalCost', defaultValue={Currency.CRYSTAL: 100})
+        return Money(**cost)
 
     @property
     def exchangeRate(self):
@@ -317,9 +326,6 @@ class ShopCommonStats(IShopCommonStats):
     def getVehCamouflagePriceFactor(self, typeCompDescr):
         return self.getItemsData().get('vehicleCamouflagePriceFactors', {}).get(typeCompDescr)
 
-    def getHornPriceFactor(self, hornID):
-        return self.getItemsData().get('vehicleHornPriceFactors', {}).get(hornID)
-
     def getEmblemsGroupPriceFactors(self):
         return self.getItemsData().get('playerEmblemGroupPriceFactors', {})
 
@@ -337,9 +343,6 @@ class ShopCommonStats(IShopCommonStats):
 
     def getCamouflagesHiddens(self, nationID):
         return self.getItemsData().get('notInShopCamouflages', [])[nationID]
-
-    def getHornPrice(self, hornID):
-        return self.getItemsData().get('hornPrices', {}).get(hornID)
 
     @property
     def premiumCost(self):
@@ -571,11 +574,9 @@ class ShopRequester(AbstractSyncDataRequester, ShopCommonStats, IShopRequester):
         personalVehicleDiscountPrice = None
         for discountID, discount in self.personalVehicleDiscounts.iteritems():
             if discount.getTargetValue() == typeCompDescr:
-                discountPrice = getPriceTupleWithDiscount(defaultPrice, discount.resource)
-                if discountPrice is not None:
-                    tempPrice = Money(*discountPrice)
-                    if personalVehicleDiscountPrice is None or tempPrice.get(currency) <= personalVehicleDiscountPrice.get(currency):
-                        personalVehicleDiscountPrice = tempPrice
+                discountPrice = Money.makeFromMoneyTuple(getPriceTupleWithDiscount(defaultPrice, discount.resource))
+                if discountPrice is not None and (personalVehicleDiscountPrice is None or discountPrice.get(currency) < personalVehicleDiscountPrice.get(currency)):
+                    personalVehicleDiscountPrice = discountPrice
 
         return personalVehicleDiscountPrice
 
@@ -663,8 +664,8 @@ class DefaultShopRequester(ShopCommonStats):
         prices = self.getPrices()
         return Money(**prices.getPrices(intCD)) if intCD in prices else self.__proxy.getItemPrice(intCD)
 
-    def getBoosterPrice(self, boosterID):
-        return Money(*self.getBoosterPrices().get(boosterID, self.__proxy.getBoosterPrice(boosterID)))
+    def getBoosterPricesTuple(self, boosterID):
+        return self.getBoosterPrices().get(boosterID, self.__proxy.getBoosterPricesTuple(boosterID))
 
     @property
     def paidRemovalCost(self):
@@ -672,7 +673,25 @@ class DefaultShopRequester(ShopCommonStats):
         @return: cost of dismantling of non-removable optional
                                 devices for gold
         """
-        return self.getValue('paidRemovalCost', self.__proxy.paidRemovalCost)
+        cost = self.getValue('paidRemovalCost')
+        if cost is None:
+            return self.__proxy.paidRemovalCost
+        else:
+            return cost.get(Currency.GOLD, 10)
+            return
+
+    @property
+    def paidDeluxeRemovalCost(self):
+        """
+        @return: cost of dismantling of non-removable Deluxe optional devices. It can be in any currency.
+        by default in crystals.
+        """
+        cost = self.getValue('paidDeluxeRemovalCost')
+        if cost is None:
+            return self.__proxy.paidDeluxeRemovalCost
+        else:
+            return Money(**cost)
+            return
 
     @property
     def exchangeRate(self):
@@ -825,10 +844,6 @@ class DefaultShopRequester(ShopCommonStats):
         value = self.getItemsData().get('vehicleCamouflagePriceFactors', {}).get(typeCompDescr)
         return self.__proxy.getVehCamouflagePriceFactor(typeCompDescr) if value is None else value
 
-    def getHornPriceFactor(self, hornID):
-        value = self.getItemsData().get('vehicleHornPriceFactors', {}).get(hornID)
-        return self.__proxy.getVehCamouflagePriceFactor(hornID) if value is None else value
-
     def getEmblemsGroupPriceFactors(self):
         return self.getItemsData().get('playerEmblemGroupPriceFactors', self.__proxy.getEmblemsGroupPriceFactors())
 
@@ -850,10 +865,6 @@ class DefaultShopRequester(ShopCommonStats):
     def getCamouflagesHiddens(self, nationID):
         value = self.getItemsData().get('notInShopCamouflages', [])
         return self.__proxy.getCamouflagesHiddens(nationID) if len(value) <= nationID else value[nationID]
-
-    def getHornPrice(self, hornID):
-        value = self.getItemsData().get('hornPrices', {}).get(hornID)
-        return self.__proxy.getHornPrice(hornID) if value is None else value
 
     @property
     def premiumCost(self):

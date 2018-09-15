@@ -9,7 +9,7 @@ from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.shared.formatters import formatPrice, formatPriceForCurrency, text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman
 from gui.shared.gui_items.processors import Processor, ItemProcessor, makeI18nSuccess, makeI18nError, plugins
-from gui.shared.money import Money, ZERO_MONEY, Currency
+from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from helpers import dependency
 from items import tankmen, makeIntCompactDescrByID
 from items.tankmen import SKILL_INDICES, SKILL_NAMES
@@ -73,7 +73,7 @@ class TankmanRecruit(Processor):
         upgradeCost = self.itemsCache.items.shop.tankmanCost[tmanCostTypeIdx]
         if tmanCostTypeIdx == 1:
             return Money(credits=upgradeCost[Currency.CREDITS])
-        return Money(gold=upgradeCost[Currency.GOLD]) if tmanCostTypeIdx == 2 else ZERO_MONEY
+        return Money(gold=upgradeCost[Currency.GOLD]) if tmanCostTypeIdx == 2 else MONEY_UNDEFINED
 
     def __getSysMsgType(self):
         tmanCost = self.__getRecruitPrice(self.tmanCostTypeIdx)
@@ -150,7 +150,7 @@ class TankmanRecruitAndEquip(Processor):
         upgradeCost = self.itemsCache.items.shop.tankmanCost[tmanCostTypeIdx]
         if tmanCostTypeIdx == 1:
             return Money(credits=upgradeCost[Currency.CREDITS])
-        return Money(gold=upgradeCost[Currency.GOLD]) if tmanCostTypeIdx == 2 else ZERO_MONEY
+        return Money(gold=upgradeCost[Currency.GOLD]) if tmanCostTypeIdx == 2 else MONEY_UNDEFINED
 
     def __getSysMsgPrefix(self):
         return 'buy_and_equip_tankman' if not self.isReplace else 'buy_and_reequip_tankman'
@@ -232,7 +232,7 @@ class TankmanRetraining(ItemProcessor):
         upgradeCost = self.itemsCache.items.shop.tankmanCost[tmanCostTypeIdx]
         if tmanCostTypeIdx == 1:
             return Money(credits=upgradeCost[Currency.CREDITS])
-        return Money(gold=upgradeCost[Currency.GOLD]) if tmanCostTypeIdx == 2 else ZERO_MONEY
+        return Money(gold=upgradeCost[Currency.GOLD]) if tmanCostTypeIdx == 2 else MONEY_UNDEFINED
 
     def _request(self, callback):
         LOG_DEBUG('Make server request to retrain Crew:', self.item, self.vehicle, self.tmanCostTypeIdx)
@@ -335,7 +335,7 @@ class TankmanChangeRole(ItemProcessor):
          plugins.VehicleCrewLockedValidator(vehicle),
          plugins.MessageConfirmator('tankmanChageRole/unknownVehicle', ctx={'tankname': vehicle.userName}, isEnabled=not vehicle.isInInventory),
          plugins.VehicleValidator(vehicle, False),
-         plugins.VehicleRoleValidator(vehicle, role, tankman),
+         plugins.VehicleRoleValidator(vehicle, role),
          plugins.MoneyValidator(Money(gold=self.__changeRoleCost))))
 
     def _errorHandler(self, code, errStr='', ctx=None):
@@ -416,9 +416,9 @@ class TankmanChangePassport(ItemProcessor):
     def __hasUniqueData(cls, tankman, firstNameID, lastNameID, iconID):
         tDescr = tankman.descriptor
         nationConfig = tankmen.getNationConfig(tankman.nationID)
-        for group in nationConfig['normalGroups']:
-            if group.get('notInShop'):
-                if tDescr.firstNameID != firstNameID and firstNameID is not None and tDescr.firstNameID in group['firstNamesList'] or tDescr.lastNameID != lastNameID and lastNameID is not None and tDescr.lastNameID in group['lastNamesList'] or tDescr.iconID != iconID and iconID is not None and tDescr.iconID in group['iconsList']:
+        for group in nationConfig.normalGroups:
+            if group.notInShop:
+                if tDescr.firstNameID != firstNameID and firstNameID is not None and tDescr.firstNameID in group.firstNamesList or tDescr.lastNameID != lastNameID and lastNameID is not None and tDescr.lastNameID in group.lastNamesList or tDescr.iconID != iconID and iconID is not None and tDescr.iconID in group.iconsList:
                     return True
 
         return False

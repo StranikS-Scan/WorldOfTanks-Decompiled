@@ -1,18 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/web_handlers.py
+from gui.Scaleform.daapi.view.lobby.clans.web_handlers import handleClanManagementCommand
 from gui.Scaleform.daapi.view.lobby.shared.web_handlers import handleNotificationCommand, handleSoundCommand, handleRequestCommand, handleContextMenuCommand
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.app_loader import g_appLoader
 from web_client_api import WebCommandException
-from web_client_api.commands import createNotificationHandler, createSoundHandler, createRequestHandler, createContextMenuHandler, createRankedBattlesHandler
+from web_client_api.commands import createNotificationHandler, createSoundHandler, createRequestHandler, createContextMenuHandler, createRankedBattlesHandler, createClanManagementHandler
 
 def createRankedBattlesWebHandlers():
     handlers = [createNotificationHandler(handleNotificationCommand),
      createSoundHandler(handleSoundCommand),
      createRequestHandler(handleRequestCommand),
      createContextMenuHandler(handleContextMenuCommand),
-     createRankedBattlesHandler(handleRankedBattlesCommand)]
+     createRankedBattlesHandler(handleRankedBattlesCommand),
+     createClanManagementHandler(handleClanManagementCommand)]
     return handlers
 
 

@@ -297,9 +297,7 @@ class EventDispatcher(object):
 
     def __returnToTrainingRoom(self):
         if self.__prbDispatcher is not None:
-            entity = self.__prbDispatcher.getEntity()
-            if entity:
-                entity.doAction()
+            self.__prbDispatcher.doAction()
         return
 
     def __fireEvent(self, event, scope=EVENT_BUS_SCOPE.LOBBY):

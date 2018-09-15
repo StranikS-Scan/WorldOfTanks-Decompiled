@@ -45,35 +45,49 @@ class Manager(ILoginManager):
         return
 
     def initiateLogin(self, email, password, serverName, isSocialToken2Login, rememberUser):
-        isToken2Login = isSocialToken2Login or self._preferences['token2']
-        if isToken2Login:
-            authMethod = CONNECTION_METHOD.TOKEN2
+        isWgcLogin = BigWorld.WGC_processingState() == constants.WGC_STATE.LOGIN_IN_PROGRESS
+        if not isWgcLogin:
+            isToken2Login = isSocialToken2Login or self._preferences['token2']
+            if isToken2Login:
+                authMethod = CONNECTION_METHOD.TOKEN2
+            else:
+                authMethod = CONNECTION_METHOD.BASIC
+            serverName = self._getHost(authMethod, serverName)
+            self._preferences['session'] = BigWorld.wg_cpsalt(self._preferences['session'])
+            self._preferences['password_length'] = len(password)
+            self._preferences['remember_user'] = rememberUser
+            self._preferences['login'] = email
+            self._preferences['server_name'] = serverName
+            loginParams = {'login': self._preferences['login'],
+             'session': self._preferences['session'],
+             'temporary': str(int(not rememberUser)),
+             'auth_method': authMethod}
+            if isToken2Login:
+                loginParams['token2'] = self._preferences['token2']
+            if not isSocialToken2Login:
+                self._preferences['login_type'] = 'credentials'
         else:
-            authMethod = CONNECTION_METHOD.BASIC
-        serverName = self._getHost(authMethod, serverName)
-        self._preferences['session'] = BigWorld.wg_cpsalt(self._preferences['session'])
-        self._preferences['password_length'] = len(password)
-        self._preferences['remember_user'] = rememberUser
-        self._preferences['login'] = email
-        self._preferences['server_name'] = serverName
-        loginParams = {'login': self._preferences['login'],
-         'session': self._preferences['session'],
-         'temporary': str(int(not rememberUser)),
-         'auth_method': authMethod}
-        if isToken2Login:
-            loginParams['token2'] = self._preferences['token2']
-        if not isSocialToken2Login:
-            self._preferences['login_type'] = 'credentials'
+            loginParams = BigWorld.WGC_loginData()
+            if loginParams is None:
+                return
+            authMethod = loginParams.get('auth_method', None)
+            if authMethod is None:
+                return
+            serverName = self._getHost(authMethod, serverName)
         self.connectionMgr.initiateConnection(loginParams, password, serverName)
+        return
 
     def initiateRelogin(self, login, token2, serverName):
-        loginParams = {'login': login,
-         'token2': token2,
-         'session': BigWorld.wg_cpsalt(self._preferences['session']),
-         'temporary': str(int(not self._preferences['remember_user'])),
-         'auth_method': CONNECTION_METHOD.TOKEN2}
+        loginParams = BigWorld.WGC_reloginData()
+        if loginParams is None:
+            loginParams = {'login': login,
+             'token2': token2,
+             'session': BigWorld.wg_cpsalt(self._preferences['session']),
+             'temporary': str(int(not self._preferences['remember_user'])),
+             'auth_method': CONNECTION_METHOD.TOKEN2}
         self._preferences['server_name'] = serverName
         self.connectionMgr.initiateConnection(loginParams, '', serverName)
+        return
 
     def getPreference(self, key):
         return self._preferences[key]
@@ -94,24 +108,27 @@ class Manager(ILoginManager):
     def _onLoggedOn(self, responseData):
         name = responseData.get('name', 'UNKNOWN')
         token2 = responseData.get('token2', '')
-        self.lobbyContext.setCredentials(name, token2)
-        if self._preferences['remember_user']:
-            self._preferences['name'] = name
-            self._preferences['token2'] = token2
-            if 'server_name' in self._preferences and AUTO_LOGIN_QUERY_ENABLED:
-                del self._preferences['server_name']
+        if BigWorld.WGC_processingState() == constants.WGC_STATE.LOGIN_IN_PROGRESS:
+            BigWorld.WGC_storeToken2(responseData['token2'])
         else:
-            email = self._preferences['login']
-            serverName = self._preferences['server_name']
-            session = self._preferences['session']
-            self._preferences.clear()
-            if not constants.IS_SINGAPORE and not GUI_SETTINGS.igrCredentialsReset:
-                self._preferences['login'] = email
-            if not AUTO_LOGIN_QUERY_ENABLED:
-                self._preferences['server_name'] = serverName
-            self._preferences['session'] = session
-        self._preferences.writeLoginInfo()
-        self.__dumpUserName(name)
+            self.lobbyContext.setCredentials(name, token2)
+            if self._preferences['remember_user']:
+                self._preferences['name'] = name
+                self._preferences['token2'] = token2
+                if 'server_name' in self._preferences and AUTO_LOGIN_QUERY_ENABLED:
+                    del self._preferences['server_name']
+            else:
+                email = self._preferences['login']
+                serverName = self._preferences['server_name']
+                session = self._preferences['session']
+                self._preferences.clear()
+                if not constants.IS_SINGAPORE and not GUI_SETTINGS.igrCredentialsReset:
+                    self._preferences['login'] = email
+                if not AUTO_LOGIN_QUERY_ENABLED:
+                    self._preferences['server_name'] = serverName
+                self._preferences['session'] = session
+            self._preferences.writeLoginInfo()
+            self.__dumpUserName(name)
         self._showSecurityMessage(responseData)
 
     def _showSecurityMessage(self, responseData):

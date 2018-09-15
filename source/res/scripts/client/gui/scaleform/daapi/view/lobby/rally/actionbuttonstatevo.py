@@ -59,6 +59,7 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.FORT_DISABLED: (CYBERSPORT.WINDOW_UNIT_MESSAGE_FORTIFICATIONNOTAVAILABLE, {}),
          UNIT_RESTRICTION.VEHICLE_INVALID_LEVEL: (self.__getNotAvailableIcon() + i18n.makeString(MESSENGER.DIALOGS_SQUAD_MESSAGE_INVALIDVEHICLELEVEL), {}),
          UNIT_RESTRICTION.SPG_IS_FORBIDDEN: (self.__getNotAvailableIcon() + i18n.makeString(MESSENGER.DIALOGS_SQUAD_MESSAGE_SPGFORBIDDEN), {}),
+         UNIT_RESTRICTION.SPG_IS_FULL: (self.__getNotAvailableIcon() + i18n.makeString(MESSENGER.DIALOGS_SQUAD_MESSAGE_SPGFULL), {}),
          UNIT_RESTRICTION.ROTATION_GROUP_LOCKED: BoundMethodWeakref(self._rotationGroupBlockMessage),
          UNIT_RESTRICTION.UNIT_MAINTENANCE: (CYBERSPORT.WINDOW_UNIT_MESSAGE_MAINTENANCE, {}),
          UNIT_RESTRICTION.UNIT_INACTIVE_PERIPHERY_UNDEF: (CYBERSPORT.WINDOW_UNIT_MESSAGE_INACTIVEPERIPHERY, {}),
@@ -132,6 +133,7 @@ class ActionButtonStateVO(dict):
             else:
                 return (CYBERSPORT.WINDOW_UNIT_MESSAGE_UNITISFULL, {})
         else:
+            print self.__restrictionType
             if callable(self.__INVALID_UNIT_MESSAGES[self.__restrictionType]):
                 return self.__INVALID_UNIT_MESSAGES[self.__restrictionType]()
             return self.__INVALID_UNIT_MESSAGES[self.__restrictionType]

@@ -258,18 +258,19 @@ class ActionInfo(EventInfoModel):
         :param useBigIco: show small or big icon format
         :return: formatted price
         """
-        if hasattr(item, 'buyPrice'):
-            sellPrice = item.buyPrice.toDict()
-            if sellPrice[Currency.GOLD]:
+        if hasattr(item, 'buyPrices'):
+            sellGold = item.buyPrices.itemPrice.price.gold
+            sellCredits = item.buyPrices.itemPrice.price.credits
+            if sellGold:
                 if useBigIco:
-                    return formatGoldPriceBig(sellPrice[Currency.GOLD])
+                    return formatGoldPriceBig(sellGold)
                 else:
-                    return formatGoldPrice(sellPrice[Currency.GOLD])
-            if sellPrice[Currency.CREDITS]:
+                    return formatGoldPrice(sellGold)
+            if sellCredits:
                 if useBigIco:
-                    return formatCreditPriceBig(sellPrice[Currency.CREDITS])
+                    return formatCreditPriceBig(sellCredits)
                 else:
-                    return formatCreditPrice(sellPrice[Currency.CREDITS])
+                    return formatCreditPrice(sellCredits)
 
     @classmethod
     def _formatRentPriceIcon(cls, item, useBigIco):
@@ -533,12 +534,12 @@ class VehPriceActionInfo(ActionInfo):
 
         def __sortByVehicleParams(item):
             assert item.discountName
-            assert item.discountName.buyPrice
+            assert item.discountName.buyPrices.itemPrice.price
             assert item.discountName.level
             assert item.discountValue
             veh = item.discountName
             dscnt = item.discountValue
-            return (dscnt, (veh.buyPrice.gold, veh.buyPrice.credits), veh.level)
+            return (dscnt, (veh.buyPrices.itemPrice.price.gold, veh.buyPrices.itemPrice.price.credits), veh.level)
 
         discountItems = self._getPackedDiscounts()
         return sorted(sorted(discountItems.values(), key=__sortByNameFunc), key=__sortByVehicleParams, reverse=True)[:3]
@@ -777,8 +778,9 @@ class BoosterPriceActionInfo(ActionInfo):
 
         def __sortByParams(item):
             booster = item.discountName
+            maxValues = booster.buyPrices.getMaxValuesAsMoney()
             discount = item.discountValue
-            return (discount, (booster.buyPrice.gold, booster.buyPrice.credits))
+            return (discount, tuple(maxValues.iterallitems(byWeight=True)))
 
         discountItems = self._getPackedDiscounts()
         return sorted(sorted(discountItems.values(), key=__sortByNameFunc), key=__sortByParams, reverse=True)[:3]

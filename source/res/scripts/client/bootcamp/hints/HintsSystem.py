@@ -54,13 +54,13 @@ class HintSystem(object):
         self.__timeCooldown = 3.0
         self._hints = []
         replayPlaying = BattleReplay.g_replayCtrl.isPlaying
-        replaySaveHints = (HINT_TYPE.HINT_MESSAGE_AVOID,) + HINT_TYPE.SECONDARY_HINTS
+        replaySafeHints = (HINT_TYPE.HINT_MESSAGE_AVOID,)
         self.__replayPlayer = createReplayPlayHintSystem()
         for hintName, hintParams in hintsInfo.iteritems():
             try:
                 hintTypeId = HINT_NAMES.index(hintName)
                 if hintTypeId in HINT_TYPE.BATTLE_HINTS:
-                    if replayPlaying and hintTypeId not in replaySaveHints:
+                    if replayPlaying and hintTypeId not in replaySafeHints:
                         continue
                     cls = HintSystem.hintsBattleClasses.get(hintTypeId, None)
                     if cls is None:

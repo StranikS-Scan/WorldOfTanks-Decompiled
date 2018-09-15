@@ -9,8 +9,6 @@ from helpers.EffectsList import EffectsListPlayer
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_CURRENT_EXCEPTION
 from helpers import i18n
 from helpers.EntityExtra import EntityExtra
-from items import vehicles
-from operator import xor
 
 def reload():
     modNames = (reload.__module__,)
@@ -34,10 +32,10 @@ class ShowShooting(EntityExtra):
     def _start(self, data, burstCount):
         vehicle = data['entity']
         gunDescr = vehicle.typeDescriptor.gun
-        stages, effects, _ = gunDescr['effects']
+        stages, effects, _ = gunDescr.effects
         data['entity_id'] = vehicle.id
         data['_effectsListPlayer'] = EffectsListPlayer(effects, stages, **data)
-        data['_burst'] = (burstCount, gunDescr['burst'][1])
+        data['_burst'] = (burstCount, gunDescr.burst[1])
         data['_gunModel'] = vehicle.appearance.compoundModel
         self.__doShot(data)
 
@@ -79,7 +77,7 @@ class ShowShooting(EntityExtra):
             self.__doRecoil(vehicle, gunModel)
             if vehicle.isPlayerVehicle:
                 appearance = vehicle.appearance
-                appearance.executeShootingVibrations(vehicle.typeDescriptor.shot['shell']['caliber'])
+                appearance.executeShootingVibrations(vehicle.typeDescriptor.shot.shell.caliber)
         except Exception:
             LOG_CURRENT_EXCEPTION()
             self.stop(data)

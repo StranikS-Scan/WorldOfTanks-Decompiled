@@ -1,13 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/serializers.py
 import cPickle
-from gui.shared.gui_items.Tankman import getSkillBigIconPath, getSkillSmallIconPath
-from items import tankmen, sabaton_crew
+from items.components import skills_constants
 from gui.shared.gui_items.fitting_item import ICONS_MASK
 from gui.shared.gui_items import Tankman, Vehicle
 
-def packTankmanSkill(skill, isPermanent=False, tankman=None):
-    if skill.roleType in tankmen.getSkillsConfig():
+def packTankmanSkill(skill, isPermanent=False):
+    if skill.roleType in skills_constants.ACTIVE_SKILLS or skill.roleType in skills_constants.ROLES:
         roleIconPath = Tankman.getRoleSmallIconPath(skill.roleType)
     else:
         roleIconPath = ''
@@ -16,8 +15,8 @@ def packTankmanSkill(skill, isPermanent=False, tankman=None):
      'userName': skill.userName,
      'description': skill.description,
      'shortDescription': skill.shortDescription,
-     'icon': {'big': skill.bigIconPath,
-              'small': skill.smallIconPath,
+     'icon': {'big': Tankman.getSkillBigIconPath(skill.name),
+              'small': Tankman.getSkillSmallIconPath(skill.name),
               'role': roleIconPath},
      'isActive': skill.isActive,
      'isEnable': skill.isEnable,
@@ -45,12 +44,11 @@ def packTankman(tankman, isCountPermanentSkills=True):
          'icon': vehicleIcon(tankman.vehicleDescr),
          'iconContour': vehicleIcon(tankman.vehicleDescr, 'contour/')}
     skills = []
-    td = tankman.descriptor
-    tManFreeSkillsNum = td.freeSkillsNumber
+    tManFreeSkillsNum = tankman.descriptor.freeSkillsNumber
     startSkillNumber = 0 if isCountPermanentSkills else tManFreeSkillsNum
     tManSkills = tankman.skills
     for i in range(startSkillNumber, len(tManSkills)):
-        skills.append(packTankmanSkill(tManSkills[i], isPermanent=True if i < tManFreeSkillsNum else False, tankman=tankman))
+        skills.append(packTankmanSkill(tManSkills[i], isPermanent=True if i < tManFreeSkillsNum else False))
 
     return {'strCD': cPickle.dumps(tankman.strCD),
      'inventoryID': tankman.invID,
@@ -79,12 +77,12 @@ def packTankman(tankman, isCountPermanentSkills=True):
 
 
 def packFittingItem(item):
-    return {'buyPrice': item.buyPrice,
-     'defBuyPrice': item.defaultPrice,
-     'actionPrc': item.actionPrc,
-     'sellPrice': item.sellPrice,
-     'defSellPrice': item.defaultSellPrice,
-     'sellActionPrc': item.sellActionPrc,
+    return {'buyPrice': item.buyPrices.itemPrice.price,
+     'defBuyPrice': item.buyPrices.itemPrice.defPrice,
+     'actionPrc': item.buyPrices.itemPrice.getActionPrc(),
+     'sellPrice': item.sellPrices.itemPrice.price,
+     'defSellPrice': item.sellPrices.itemPrice.defPrice,
+     'sellActionPrc': item.sellPrices.itemPrice.getActionPrc(),
      'inventoryCount': item.inventoryCount,
      'isHidden': item.isHidden,
      'isRemovable': item.isRemovable,
@@ -108,12 +106,12 @@ def packShell(shell):
 
 def packVehicle(vehicle):
     result = packFittingItem(vehicle)
-    result.update({'buyPrice': vehicle.buyPrice,
-     'defBuyPrice': vehicle.defaultPrice,
-     'actionPrc': vehicle.actionPrc,
-     'sellPrice': vehicle.sellPrice,
-     'defSellPrice': vehicle.defaultSellPrice,
-     'sellActionPrc': vehicle.sellActionPrc,
+    result.update({'buyPrice': vehicle.buyPrices.itemPrice.price,
+     'defBuyPrice': vehicle.buyPrices.itemPrice.defPrice,
+     'actionPrc': vehicle.buyPrices.itemPrice.getActionPrc(),
+     'sellPrice': vehicle.sellPrices.itemPrice.price,
+     'defSellPrice': vehicle.sellPrices.itemPrice.defPrice,
+     'sellActionPrc': vehicle.sellPrices.itemPrice.getActionPrc(),
      'inventoryCount': vehicle.inventoryCount,
      'isHidden': vehicle.isHidden,
      'isRemovable': vehicle.isRemovable,
@@ -125,7 +123,7 @@ def packVehicle(vehicle):
      'level': vehicle.level,
      'nationID': vehicle.nationID,
      'innationID': vehicle.innationID,
-     'inventoryID': vehicle.inventoryID,
+     'inventoryID': vehicle.invID,
      'xp': vehicle.xp,
      'dailyXPFactor': vehicle.dailyXPFactor,
      'clanLock': vehicle.clanLock,
@@ -143,8 +141,8 @@ def packVehicle(vehicle):
      'fuelTank': packFittingItem(vehicle.fuelTank),
      'optDevices': [ (packFittingItem(dev) if dev else None) for dev in vehicle.optDevices ],
      'shells': [ (packShell(shell) if shell else None) for shell in vehicle.shells ],
-     'eqs': [ (packFittingItem(eq) if eq else None) for eq in vehicle.eqs ],
-     'eqsLayout': [ (packFittingItem(eq) if eq else None) for eq in vehicle.eqsLayout ],
+     'eqs': [ (packFittingItem(eq) if eq else None) for eq in vehicle.equipment.regularConsumables ],
+     'eqsLayout': [ (packFittingItem(eq) if eq else None) for eq in vehicle.equipmentLayout.regularConsumables ],
      'type': vehicle.type,
      'isPremium': vehicle.isPremium,
      'isElite': vehicle.isElite,

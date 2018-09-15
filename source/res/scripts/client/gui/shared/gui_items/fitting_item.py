@@ -3,15 +3,15 @@
 from collections import namedtuple
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION
+from gui import GUI_SETTINGS
+from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
+from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_PRICE_EMPTY, ITEM_PRICES_EMPTY
+from gui.shared.gui_items.gui_item import GUIItem, HasIntCD
+from gui.shared.items_parameters import params_helper, formatters
+from gui.shared.money import Money, Currency, MONEY_UNDEFINED
+from gui.shared.utils.functions import getShortDescr, stripShortDescrTags
 from helpers import i18n, time_utils
 from items import vehicles, getTypeInfoByName
-from gui import GUI_SETTINGS
-from gui.shared.items_parameters import params_helper, formatters
-from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_PURCHASE_CODE
-from gui.shared.gui_items.gui_item import GUIItem, HasIntCD
-from gui.shared.money import Money, ZERO_MONEY, Currency
-from gui.shared.economics import getActionPrc
-from gui.shared.utils.functions import getShortDescr, stripShortDescrTags
 ICONS_MASK = '../maps/icons/%(type)s/%(subtype)s%(unicName)s.png'
 _RentalInfoProvider = namedtuple('RentalInfoProvider', ('rentExpiryTime', 'compensations', 'battlesLeft', 'winsLeft', 'isRented'))
 
@@ -21,9 +21,9 @@ class RentalInfoProvider(_RentalInfoProvider):
     def __new__(cls, additionalData=None, time=0, battles=0, wins=0, isRented=False, *args, **kwargs):
         additionalData = additionalData or {}
         if 'compensation' in additionalData:
-            compensations = Money(*additionalData['compensation'])
+            compensations = Money.makeFromMoneyTuple(additionalData['compensation'])
         else:
-            compensations = ZERO_MONEY
+            compensations = MONEY_UNDEFINED
         result = _RentalInfoProvider.__new__(cls, time, compensations, battles, wins, isRented)
         return result
 
@@ -35,59 +35,56 @@ class RentalInfoProvider(_RentalInfoProvider):
 
 
 class FittingItem(GUIItem, HasIntCD):
-    """
-    Root item which can be bought and installed.
-    """
+    __slots__ = ('_buyPrices', '_sellPrices', '_mayConsumeWalletResources', '_personalDiscountPrice', '_isHidden', '_inventoryCount', '_isUnlocked', '_isBoughtForAltPrice', '_rentInfo', '_restoreInfo', '_fullyConfigured', '_isInitiallyUnlocked')
 
     class TARGETS(object):
         CURRENT = 1
         IN_INVENTORY = 2
         OTHER = 3
 
-    def __init__(self, intCompactDescr, proxy=None, isBoughtForCredits=False):
+    def __init__(self, intCompactDescr, proxy=None, isBoughtForAltPrice=False):
         """
         Ctr.
         
         :param intCompactDescr: item's int compact descriptor
         :param proxy: instance of ItemsRequester
-        :param isBoughtForCredits: indicates whether the item has been bought for credits
+        :param isBoughtForAltPrice: indicates whether the item has been bought for credits(alt price)
         """
         GUIItem.__init__(self, proxy)
         HasIntCD.__init__(self, intCompactDescr)
-        self.defaultPrice = ZERO_MONEY
-        self._buyPrice = ZERO_MONEY
-        self.sellPrice = ZERO_MONEY
-        self.defaultSellPrice = ZERO_MONEY
-        self.altPrice = None
-        self.defaultAltPrice = None
-        self.sellActionPrc = 0
-        self.isHidden = False
-        self.inventoryCount = 0
-        self.sellForGold = False
-        self.isUnlocked = False
-        self.isBoughtForCredits = isBoughtForCredits
-        self.rentInfo = RentalInfoProvider()
-        self.restoreInfo = None
-        self.fullyConfigured = False
+        self._isBoughtForAltPrice = isBoughtForAltPrice
+        self._rentInfo = RentalInfoProvider()
+        self._restoreInfo = None
         self._personalDiscountPrice = None
         if proxy is not None and proxy.isSynced():
-            self.defaultPrice = proxy.shop.defaults.getItemPrice(self.intCompactDescr)
-            if self.defaultPrice is None:
-                self.defaultPrice = ZERO_MONEY
-            self._buyPrice, self.isHidden, self.sellForGold = proxy.shop.getItem(self.intCompactDescr)
-            if self._buyPrice is None:
-                self._buyPrice = ZERO_MONEY
-            self.defaultSellPrice = Money(*BigWorld.player().shop.getSellPrice(self.defaultPrice, proxy.shop.defaults.sellPriceModifiers(intCompactDescr), self.itemTypeID))
-            self.sellPrice = Money(*BigWorld.player().shop.getSellPrice(self._buyPrice, proxy.shop.sellPriceModifiers(intCompactDescr), self.itemTypeID))
-            self.inventoryCount = proxy.inventory.getItems(self.itemTypeID, self.intCompactDescr)
-            if self.inventoryCount is None:
-                self.inventoryCount = 0
-            self.isUnlocked = self.intCD in proxy.stats.unlocks
-            self.isInitiallyUnlocked = self.intCD in proxy.stats.initialUnlocks
-            self.altPrice = self._getAltPrice(self._buyPrice, proxy.shop)
-            self.defaultAltPrice = self._getAltPrice(self.defaultPrice, proxy.shop.defaults)
-            self.sellActionPrc = -1 * getActionPrc(self.sellPrice, self.defaultSellPrice)
-            self.fullyConfigured = True
+            self._mayConsumeWalletResources = proxy.stats.mayConsumeWalletResources
+            defaultPrice = proxy.shop.defaults.getItemPrice(self.intCD)
+            if defaultPrice is None:
+                defaultPrice = MONEY_UNDEFINED
+            buyPrice, self._isHidden = proxy.shop.getItem(self.intCD)
+            if buyPrice is None:
+                buyPrice = MONEY_UNDEFINED
+            altPrice = self._getAltPrice(buyPrice, proxy.shop)
+            defaultAltPrice = self._getAltPrice(defaultPrice, proxy.shop.defaults)
+            self._buyPrices = ItemPrices(itemPrice=ItemPrice(price=buyPrice, defPrice=defaultPrice), itemAltPrice=ItemPrice(price=altPrice, defPrice=defaultAltPrice))
+            defaultSellPrice = Money.makeFromMoneyTuple(BigWorld.player().shop.getSellPrice(defaultPrice, proxy.shop.defaults.sellPriceModifiers(intCompactDescr), self.itemTypeID))
+            sellPrice = Money.makeFromMoneyTuple(BigWorld.player().shop.getSellPrice(buyPrice, proxy.shop.sellPriceModifiers(intCompactDescr), self.itemTypeID))
+            self._sellPrices = ItemPrices(itemPrice=ItemPrice(price=sellPrice, defPrice=defaultSellPrice), itemAltPrice=ITEM_PRICE_EMPTY)
+            self._inventoryCount = proxy.inventory.getItems(self.itemTypeID, self.intCD)
+            if self._inventoryCount is None:
+                self._inventoryCount = 0
+            self._isUnlocked = self.intCD in proxy.stats.unlocks
+            self._isInitiallyUnlocked = self.intCD in proxy.stats.initialUnlocks
+            self._fullyConfigured = True
+        else:
+            self._buyPrices = ITEM_PRICES_EMPTY
+            self._sellPrices = ITEM_PRICES_EMPTY
+            self._isHidden = False
+            self._inventoryCount = 0
+            self._isUnlocked = False
+            self._mayConsumeWalletResources = False
+            self._isInitiallyUnlocked = False
+            self._fullyConfigured = False
         return
 
     def _getAltPrice(self, buyPrice, proxy):
@@ -97,27 +94,74 @@ class FittingItem(GUIItem, HasIntCD):
         :param buyPrice: a buy price of the item
         :param proxy: an instance of ShopRequester
         
-        :return: an alternative buy price in Money or None (by default)
+        :return: an alternative buy price in Money or MONEY_UNDEFINED (by default)
         """
-        return None
+        return MONEY_UNDEFINED
 
     @property
-    def buyPrice(self):
+    def buyPrices(self):
         """
-        Returns the current buy price.
-        
-        :return: the current buy price in Money or None (by default)
+        Return available buy prices, including a regular price and alternative price.
+        :return: ItemPrices object
         """
-        return self._buyPrice
+        return self._buyPrices
 
     @property
-    def actionPrc(self):
+    def sellPrices(self):
         """
-        Returns the buy price with discount.
-        
-        :return: action buy price in Money or None (by default)
+        Return available sell prices, including a regular sell price and alternative sell price.
+        :return: ItemPrices object
         """
-        return getActionPrc(self.altPrice or self.buyPrice, self.defaultAltPrice or self.defaultPrice)
+        return self._sellPrices
+
+    @property
+    def isForSale(self):
+        """
+        Some items can not be sold, they will have 'notForSale' tag in xml file.
+        After moving to Money 2.0 concept this property can be removed and sellPrice.isDefined() will
+        be used to replace this property.
+        :return: bool, True if the item can be sold, False otherwise
+        """
+        return True
+
+    @property
+    def inventoryCount(self):
+        return self._inventoryCount
+
+    @property
+    def isHidden(self):
+        return self._isHidden
+
+    @property
+    def isUnlocked(self):
+        return self._isUnlocked
+
+    @isUnlocked.setter
+    def isUnlocked(self, value):
+        """
+        This property is set from g_CurrentVehicle
+        """
+        self._isUnlocked = value
+
+    @property
+    def isBoughtForAltPrice(self):
+        return self._isBoughtForAltPrice
+
+    @property
+    def rentInfo(self):
+        return self._rentInfo
+
+    @property
+    def restoreInfo(self):
+        return self._restoreInfo
+
+    @property
+    def fullyConfigured(self):
+        return self._fullyConfigured
+
+    @property
+    def isInitiallyUnlocked(self):
+        return self._isInitiallyUnlocked
 
     @property
     def isSecret(self):
@@ -125,7 +169,7 @@ class FittingItem(GUIItem, HasIntCD):
 
     @property
     def isPremium(self):
-        return self.buyPrice.isSet(Currency.GOLD)
+        return self.buyPrices.hasPriceIn(Currency.GOLD)
 
     @property
     def isPremiumIGR(self):
@@ -141,7 +185,7 @@ class FittingItem(GUIItem, HasIntCD):
 
     @property
     def descriptor(self):
-        return vehicles.getDictDescr(self.intCompactDescr)
+        return vehicles.getItemByCompactDescr(self.intCD)
 
     @property
     def isRemovable(self):
@@ -186,7 +230,7 @@ class FittingItem(GUIItem, HasIntCD):
         """
         Returns item's name represented as user-friendly string.
         """
-        return self.descriptor.get('userString', '')
+        return self.descriptor.userString
 
     @property
     def longUserName(self):
@@ -200,14 +244,14 @@ class FittingItem(GUIItem, HasIntCD):
         """
         Returns item's short name represented as user-friendly string
         """
-        return self.descriptor.get('shortUserString', '')
+        return self.descriptor.shortUserString
 
     @property
     def shortDescription(self):
         """
         Return the first occurrence of short description from string.
         """
-        return getShortDescr(self.descriptor.get('description', ''))
+        return getShortDescr(self.descriptor.description)
 
     @property
     def fullDescription(self):
@@ -215,21 +259,21 @@ class FittingItem(GUIItem, HasIntCD):
         Returns short description tags from passed string and return full description body.
         :return: string
         """
-        return stripShortDescrTags(self.descriptor.get('description', ''))
+        return stripShortDescrTags(self.descriptor.description)
 
     @property
     def name(self):
         """
         Returns item's tech-name as string.
         """
-        return self.descriptor.get('name', '')
+        return self.descriptor.name
 
     @property
     def level(self):
         """
         Returns item's level number value as int.
         """
-        return self.descriptor.get('level', 0)
+        return self.descriptor.level
 
     @property
     def isInInventory(self):
@@ -252,7 +296,7 @@ class FittingItem(GUIItem, HasIntCD):
             params = params_helper.getParameters(self, vehicleDescr)
             formattedParametersDict = dict(formatters.getFormattedParamsList(self.descriptor, params))
             if self.itemTypeName == vehicles._VEHICLE:
-                formattedParametersDict['caliber'] = BigWorld.wg_getIntegralFormat(self.descriptor.gun['shots'][0]['shell']['caliber'])
+                formattedParametersDict['caliber'] = BigWorld.wg_getIntegralFormat(self.descriptor.gun.shots[0].shell.caliber)
             result = description % formattedParametersDict
             return result
         except Exception:
@@ -300,43 +344,33 @@ class FittingItem(GUIItem, HasIntCD):
     def getBonusIcon(self, size='small'):
         return self.icon
 
-    def getBuyPriceCurrency(self):
+    def getBuyPrice(self, preferred=True):
         """
-        Returns the currency of the buy price. If the item has been bought for credits and the item has an
-        alternative price, returns Currency.CREDITS even if the original currency differs from it.
+        Returns the buy price in consideration of item's alternative price and player's preferences (only if the
+        preferred argument is set to True).
+        Be aware that for some items (shells and equipments right now) buying for alternative price (for credits
+        for example) might be disabled on the server side. This method doesn't check it and always returns price
+        as if the switch is off.
         
-        :return: string, see Currency enum.
+        :param preferred: bool, whether isBoughtForAltPrice should be checked.
+        :return: ItemPrice
         """
-        if self.altPrice is not None:
-            currency = self.altPrice.getCurrency(byWeight=True)
-            if currency != Currency.CREDITS and self.isBoughtForCredits:
-                return Currency.CREDITS
-        return self.buyPrice.getCurrency(byWeight=True)
+        if self.buyPrices.hasAltPrice():
+            if preferred:
+                if self.isBoughtForAltPrice:
+                    return self.buyPrices.itemAltPrice
+            else:
+                return self.buyPrices.itemAltPrice
+        return self.buyPrices.itemPrice
 
-    def getBuyPrice(self):
+    def getSellPrice(self, preferred=True):
         """
-        Returns the buy price in consideration of item's alternative price and player's preferences (
-        isBoughtForCredits property). Be aware that for some items (shells and equipments right now) buying for
-        alternative price (for credits for example) might be disabled on the server side. This method doesn't check it
-        and always returns price as if the switch is off.
-        
-        :return: Money
+        The logic is similar to the previous method - getBuyPrice() but in terms of 'sell' price.
+        At the moment we don't have cases to sell an item for alt price, but in future it can appear.
+        :param preferred: bool, pass any value, in the future the flag can be used like 'isBoughtForAltPrice'
+        :return: ItemPrice
         """
-        if self.altPrice is not None:
-            currency = self.altPrice.getCurrency(byWeight=True)
-            if currency != Currency.CREDITS and self.isBoughtForCredits:
-                currency = Currency.CREDITS
-            return Money.makeFrom(currency, self.altPrice.get(currency))
-        else:
-            return self.buyPrice
-
-    def getSellPriceCurrency(self):
-        """
-        Returns the currency of the sell price.
-        
-        :return: string, see Currency enum.
-        """
-        return self.sellPrice.getCurrency(byWeight=True)
+        return self.sellPrices.itemPrice
 
     def isInstalled(self, vehicle, slotIdx=None):
         """
@@ -371,10 +405,10 @@ class FittingItem(GUIItem, HasIntCD):
         :param money: player money as Money
         :return: tuple(can be installed <bool>, error msg <str>)
         """
-        return (False, '')
+        return (False, GUI_ITEM_ECONOMY_CODE.UNDEFINED)
 
     def mayRestore(self, money):
-        return (False, '')
+        return (False, GUI_ITEM_ECONOMY_CODE.UNDEFINED)
 
     def mayRestoreWithExchange(self, money, exchangeRate):
         return False
@@ -392,7 +426,7 @@ class FittingItem(GUIItem, HasIntCD):
         else:
             mayPurchase, reason = self.mayPurchase(money)
         if mayRent or mayPurchase:
-            return (True, '')
+            return (True, GUI_ITEM_ECONOMY_CODE.UNDEFINED)
         elif self.isRentable and not mayRent:
             return (mayRent, rentReason)
         else:
@@ -409,10 +443,11 @@ class FittingItem(GUIItem, HasIntCD):
         canBuy, reason = self.mayPurchase(money)
         if canBuy:
             return canBuy
-        elif reason == GUI_ITEM_PURCHASE_CODE.NOT_ENOUGH_CREDITS:
-            price = self.altPrice or self.buyPrice
-            money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate)
-            return price <= money
+        elif reason == GUI_ITEM_ECONOMY_CODE.NOT_ENOUGH_CREDITS and money.isSet(Currency.GOLD):
+            money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0)
+            price = self.getBuyPrice().price
+            canBuy, reason = self._isEnoughMoney(price, money)
+            return canBuy
         else:
             return False
 
@@ -425,11 +460,9 @@ class FittingItem(GUIItem, HasIntCD):
         @return: <bool>
         """
         canRent, rentReason = self.mayRent(money)
-        if self.isRestoreAvailable():
-            mayPurchase = self.mayRestoreWithExchange(money, exchangeRate)
-        else:
-            mayPurchase = self.mayPurchaseWithExchange(money, exchangeRate)
-        return canRent or mayPurchase
+        if canRent:
+            return True
+        return True if self.isRestoreAvailable() and self.mayRestoreWithExchange(money, exchangeRate) else self.mayPurchaseWithExchange(money, exchangeRate)
 
     def mayPurchase(self, money):
         """
@@ -439,27 +472,21 @@ class FittingItem(GUIItem, HasIntCD):
         :param money: <Money>, player money
         :return: tuple(can be installed <bool>, error msg <str>)
         """
-        if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
-            return (False, GUI_ITEM_PURCHASE_CODE.CENTER_UNAVAILABLE)
+        price = self.getBuyPrice().price
+        currency = price.getCurrency(byWeight=False)
+        wallet = BigWorld.player().serverSettings['wallet']
+        useGold = bool(wallet[0])
+        if currency == Currency.GOLD and useGold:
+            if not self._mayConsumeWalletResources:
+                return (False, GUI_ITEM_ECONOMY_CODE.WALLET_NOT_AVAILABLE)
+        elif getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
+            return (False, GUI_ITEM_ECONOMY_CODE.CENTER_UNAVAILABLE)
         if self.itemTypeID not in (GUI_ITEM_TYPE.EQUIPMENT,
          GUI_ITEM_TYPE.OPTIONALDEVICE,
          GUI_ITEM_TYPE.SHELL,
          GUI_ITEM_TYPE.BATTLE_BOOSTER) and not self.isUnlocked:
-            return (False, GUI_ITEM_PURCHASE_CODE.UNLOCK_ERROR)
-        if self.isHidden:
-            return (False, GUI_ITEM_PURCHASE_CODE.ITEM_IS_HIDDEN)
-        price = self.altPrice or self.buyPrice
-        if not price:
-            return (True, GUI_ITEM_PURCHASE_CODE.OK)
-        for c in price.getSetCurrencies():
-            if money.get(c) >= price.get(c):
-                return (True, GUI_ITEM_PURCHASE_CODE.OK)
-
-        shortage = money.getShortage(price)
-        if shortage:
-            currency, _ = shortage.pop()
-            return (False, '%s_error' % currency)
-        return (True, GUI_ITEM_PURCHASE_CODE.OK)
+            return (False, GUI_ITEM_ECONOMY_CODE.UNLOCK_ERROR)
+        return (False, GUI_ITEM_ECONOMY_CODE.ITEM_IS_HIDDEN) if self.isHidden else self._isEnoughMoney(price, money)
 
     def getTarget(self, vehicle):
         """
@@ -481,6 +508,25 @@ class FittingItem(GUIItem, HasIntCD):
     def isRestoreAvailable(self):
         return False
 
+    @classmethod
+    def _isEnoughMoney(cls, price, money):
+        """
+        Determines if the given money enough for buying/restoring an item with the given price. Note that the method
+        should NOT check if the given price is defined and will return (True, '') if the price is undefined (see Money
+        class, isDefined method).
+        
+        :param price: item price represented by Money
+        :param money: money for buying, see Money
+        :return: tuple(can be installed <bool>, error msg <str>), also see GUI_ITEM_ECONOMY_CODE
+        """
+        if not price.isDefined():
+            return (False, GUI_ITEM_ECONOMY_CODE.ITEM_NO_PRICE)
+        shortage = money.getShortage(price)
+        if shortage:
+            currency = shortage.getCurrency(byWeight=True)
+            return (False, GUI_ITEM_ECONOMY_CODE.getMoneyError(currency))
+        return (True, GUI_ITEM_ECONOMY_CODE.UNDEFINED)
+
     def _sortByType(self, other):
         pass
 
@@ -497,15 +543,17 @@ class FittingItem(GUIItem, HasIntCD):
             res = self.level - other.level
             if res:
                 return res
+            buyMaxValues = self.buyPrices.getMaxValuesAsMoney()
+            otherMaxValues = other.buyPrices.getMaxValuesAsMoney()
             for currency in Currency.BY_WEIGHT:
-                res = self.buyPrice.get(currency) - other.buyPrice.get(currency)
+                res = buyMaxValues.get(currency, 0) - otherMaxValues.get(currency, 0)
                 if res:
                     return res
 
             return cmp(self.userName, other.userName)
 
     def __eq__(self, other):
-        return False if other is None else self.intCompactDescr == other.intCompactDescr
+        return False if other is None else self.intCD == other.intCD
 
     def __repr__(self):
         return '%s<intCD:%d, type:%s, nation:%d>' % (self.__class__.__name__,

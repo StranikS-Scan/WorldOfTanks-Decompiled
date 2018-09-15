@@ -5,6 +5,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION
 from gui import SystemMessages
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
+from gui.Scaleform.framework.managers.loaders import ViewLoadParams
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
@@ -180,7 +181,7 @@ class SfLobbyProxy(GUIProxy):
         aliasMap = self.getViewsAliases()
         if windowType in aliasMap:
             alias = aliasMap[windowType]
-            self.app.loadView(alias, windowID, content)
+            self.app.loadView(ViewLoadParams(alias, windowID), content)
 
     def getItemsOnScene(self):
         if self.app is not None and self.app.tutorialManager is not None:

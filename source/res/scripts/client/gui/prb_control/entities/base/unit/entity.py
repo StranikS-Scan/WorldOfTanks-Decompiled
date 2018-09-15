@@ -668,7 +668,6 @@ class UnitEntity(_UnitEntity):
         self._actionsHandler = self._createActionsHandler()
         self._requestsProcessor = None
         self._vehiclesWatcher = None
-        self._cooldown = self._createCooldownManager()
         self._deferredReset = False
         self._showLeadershipNotification = False
         return
@@ -1850,7 +1849,7 @@ class UnitEntity(_UnitEntity):
                     callback(False)
                 return
             vehicle = invVehs[vehTypeCD]
-            vehInvID = vehicle.inventoryID
+            vehInvID = vehicle.invID
         else:
             LOG_ERROR('Context is invalid', ctx)
             if callback:

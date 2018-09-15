@@ -9,6 +9,7 @@ import BattleReplay
 import TriggersManager
 import SoundGroups
 import MusicControllerWWISE as MC
+from account_helpers.AccountSettings import CURRENT_VEHICLE, AccountSettings
 from account_helpers.settings_core import ISettingsCore
 from account_helpers import isPremiumAccount
 from adisp import process, async
@@ -427,7 +428,7 @@ class Bootcamp(EventSystemEntity):
 
     def onRequestBootcampFinish(self):
         LOG_DEBUG_DEV_BOOTCAMP('onRequestBootcampFinish')
-        self.__account.base.requestBootcampQuit()
+        self.__account.base.requestBootcampQuit(AccountSettings.getFavorites(CURRENT_VEHICLE))
 
     def finishBootcamp(self):
         LOG_DEBUG_DEV_BOOTCAMP('finishBootcamp', self.__currentState.id())

@@ -54,6 +54,13 @@ class _ClanState(object):
     def getWebRequester(self):
         return None
 
+    def compare(self, state):
+        if state is not None:
+            return self.getStateID() == state.getStateID()
+        else:
+            return False
+            return
+
     def update(self):
         self._changeState(self._getNextState())
 
@@ -68,7 +75,7 @@ class _ClanState(object):
         pass
 
     def _changeState(self, state):
-        if state is not None and self._clanCtrl is not None and state.getStateID() != self._clanCtrl.getStateID():
+        if state is not None and self._clanCtrl is not None and not self._clanCtrl.compareStates(state):
             clanCtrl = self._clanCtrl
             self.fini()
             state.init()
@@ -137,18 +144,32 @@ class _ClanWebState(_ClanState):
         super(_ClanWebState, self).__init__(clansCtrl, stateID)
         self.__requestsCtrl = None
         self.__webRequester = None
+        self.__gateUrl = None
         return
 
     def init(self):
         super(_ClanWebState, self).init()
-        self.__webRequester = g_clanFactory.createWebRequester(self.lobbyContext.getServerSettings().clanProfile, client_lang=getClientLanguage())
+        clanProfile = self.lobbyContext.getServerSettings().clanProfile
+        self.__webRequester = g_clanFactory.createWebRequester(clanProfile, client_lang=getClientLanguage())
+        self.__gateUrl = clanProfile.getGateUrl()
         self.__requestsCtrl = g_clanFactory.createClanRequestsController(self._clanCtrl, g_clanFactory.createClanRequester(self.__webRequester))
 
     def fini(self):
         self.__webRequester = None
         self.__requestsCtrl.fini()
+        self.__gateUrl = None
         super(_ClanWebState, self).fini()
         return
+
+    def getGateUrl(self):
+        return self.__gateUrl
+
+    def compare(self, state):
+        if state is not None and isinstance(state, _ClanWebState):
+            return super(_ClanWebState, self).compare(state) and state.__gateUrl == self.__gateUrl
+        else:
+            return super(_ClanWebState, self).compare(state)
+            return
 
     @async
     @process
@@ -305,7 +326,11 @@ class ClanAvailableState(_ClanWebState):
             yield self.__doLogOut()
 
     def _getNextState(self):
-        return super(ClanAvailableState, self)._getNextState()
+        state = super(ClanAvailableState, self)._getNextState()
+        gateUrl = self.getGateUrl()
+        if self.connectionMgr.isConnected() and state is None and gateUrl is not None and gateUrl != self.lobbyContext.getServerSettings().clanProfile.getGateUrl():
+            state = ClanAvailableState(self._clanCtrl)
+        return state
 
     @async
     @process

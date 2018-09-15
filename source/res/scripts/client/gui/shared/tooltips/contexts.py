@@ -12,7 +12,7 @@ from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
 from helpers import dependency
 from shared_utils import findFirst
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.Tankman import getTankmanSkill
+from gui.shared.gui_items.Tankman import TankmanSkill
 from gui.shared.gui_items.dossier import factories, loadDossier
 from gui.shared.tooltips import TOOLTIP_COMPONENT
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -34,7 +34,7 @@ def _getCmpInitialVehicle():
 
 
 class StatsConfiguration(object):
-    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals')
+    __slots__ = ('vehicle', 'sellPrice', 'buyPrice', 'unlockPrice', 'inventoryCount', 'vehiclesCount', 'node', 'xp', 'dailyXP', 'minRentPrice', 'restorePrice', 'rentals', 'slotIdx', 'futureRentals', 'isAwardWindow')
 
     def __init__(self):
         self.vehicle = None
@@ -51,6 +51,7 @@ class StatsConfiguration(object):
         self.xp = True
         self.dailyXP = True
         self.slotIdx = 0
+        self.isAwardWindow = False
         return
 
 
@@ -179,6 +180,7 @@ class AwardContext(ShopContext):
         value.inventoryCount = False
         value.vehiclesCount = False
         value.futureRentals = True
+        value.isAwardWindow = True
         return value
 
     def getStatusConfiguration(self, item):
@@ -488,7 +490,7 @@ class PersonalCaseContext(ToolTipContext):
         tankman = self.itemsCache.items.getTankman(int(tankmanID))
         skill = findFirst(lambda x: x.name == skillID, tankman.skills)
         if skill is None:
-            skill = getTankmanSkill(skillID, tankman=tankman)
+            skill = TankmanSkill(skillID)
         return skill
 
 
@@ -739,3 +741,36 @@ class HangarServerStatusContext(ToolTipContext):
 
     def __init__(self, fieldsToExclude=None):
         super(HangarServerStatusContext, self).__init__(TOOLTIP_COMPONENT.HANGAR, fieldsToExclude)
+
+
+class ShopBattleBoosterContext(HangarContext):
+    """
+    Override HangarContext and always return None vehicle to not show special hints for battle boosters.
+    """
+
+    def getStatsConfiguration(self, item):
+        value = super(HangarContext, self).getStatsConfiguration(item)
+        value.vehicle = None
+        return value
+
+    def getStatusConfiguration(self, item):
+        value = super(HangarContext, self).getStatusConfiguration(item)
+        value.vehicle = None
+        return value
+
+
+class InventoryBattleBoosterContext(ShopBattleBoosterContext):
+    """
+    Override ShopBattleBoosterContext and always return False for everything related to buying.
+    Selling is not available for BattleBooster.
+    """
+
+    def getStatsConfiguration(self, item):
+        value = super(InventoryBattleBoosterContext, self).getStatsConfiguration(item)
+        value.buyPrice = False
+        return value
+
+    def getStatusConfiguration(self, item):
+        value = super(InventoryBattleBoosterContext, self).getStatusConfiguration(item)
+        value.checkBuying = False
+        return value

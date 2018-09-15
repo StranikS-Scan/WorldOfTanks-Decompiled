@@ -646,7 +646,7 @@ def _readGuiItemCriteria(xmlCtx, section, _):
         itemID = parseID(xmlCtx, section['item-id'], 'Specify a item ID')
     else:
         _xml.raiseWrongXml(xmlCtx, section.name, 'Specify a item ID')
-    return chapter.GuiItemCriteria(criteriaID, itemID, _xml.readString(xmlCtx, section, 'value'), _xml.readBool(xmlCtx, section, 'cached'))
+    return chapter.GuiItemCriteria(criteriaID, itemID, _xml.readString(xmlCtx, section, 'value'))
 
 
 def _readAction(xmlCtx, section, eventType, flags):

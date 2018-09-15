@@ -15,12 +15,13 @@ from gui.prb_control import prb_getters
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.shared.economics import calcRentPackages, getActionPrc, calcVehicleRestorePrice
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items import CLAN_LOCK, GUI_ITEM_TYPE, getItemIconName, GUI_ITEM_PURCHASE_CODE
-from gui.shared.gui_items import BATTLE_BOOSTER_SLOT_IDX, DEFAULT_EQUIPMENT_LAYOUT, REGULAR_EQUIPMENT_LAYOUT_SIZE
+from gui.shared.gui_items import CLAN_LOCK, GUI_ITEM_TYPE, getItemIconName, GUI_ITEM_ECONOMY_CODE
+from gui.shared.gui_items.vehicle_equipment import VehicleEquipment
 from gui.shared.gui_items.gui_item import HasStrCD
 from gui.shared.gui_items.fitting_item import FittingItem, RentalInfoProvider
 from gui.shared.gui_items.Tankman import Tankman
-from gui.shared.money import ZERO_MONEY, Currency, Money
+from gui.shared.money import MONEY_UNDEFINED, Currency, Money
+from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_PRICE_EMPTY
 from gui.shared.utils import makeSearchableString
 from helpers import i18n, time_utils, dependency
 from items import vehicles, tankmen, getTypeInfoByName, getTypeOfCompactDescr
@@ -84,6 +85,7 @@ class VEHICLE_TAGS(CONST_CONTAINER):
 
 
 class Vehicle(FittingItem, HasStrCD):
+    __slots__ = ('__descriptor', '__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_hasRentPackages', '_isDisabledForBuy', '_isSelected', '_igrCustomizationsLayout', '_restorePrice', '_canTradeIn', '_canTradeOff', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_optDevices', '_shells', '_equipment', '_equipmentLayout', '_bonuses', '_crewIndices', '_crew', '_lastCrew', '_hasModulesToSelect')
     NOT_FULL_AMMO_MULTIPLIER = 0.2
     MAX_RENT_MULTIPLIER = 2
 
@@ -157,23 +159,23 @@ class Vehicle(FittingItem, HasStrCD):
         self.__descriptor = vehDescr
         HasStrCD.__init__(self, strCompactDescr)
         FittingItem.__init__(self, vehDescr.type.compactDescr, proxy)
-        self.inventoryID = inventoryID
-        self.xp = 0
-        self.dailyXPFactor = -1
-        self.isElite = False
-        self.isFullyElite = False
-        self.clanLock = 0
-        self.isUnique = self.isHidden
-        self.rentPackages = []
-        self.hasRentPackages = False
-        self.isDisabledForBuy = False
-        self.isSelected = False
-        self.igrCustomizationsLayout = {}
-        self.restorePrice = None
-        self.canTradeIn = False
-        self.canTradeOff = False
-        self.tradeOffPriceFactor = 0
-        self.tradeOffPrice = ZERO_MONEY
+        self._inventoryID = inventoryID
+        self._xp = 0
+        self._dailyXPFactor = -1
+        self._isElite = False
+        self._isFullyElite = False
+        self._clanLock = 0
+        self._isUnique = self.isHidden
+        self._rentPackages = []
+        self._hasRentPackages = False
+        self._isDisabledForBuy = False
+        self._isSelected = False
+        self._igrCustomizationsLayout = {}
+        self._restorePrice = None
+        self._canTradeIn = False
+        self._canTradeOff = False
+        self._tradeOffPriceFactor = 0
+        self._tradeOffPrice = MONEY_UNDEFINED
         if self.isPremiumIGR:
             self._searchableUserName = makeSearchableString(self.shortUserName)
         else:
@@ -185,86 +187,85 @@ class Vehicle(FittingItem, HasStrCD):
             if invDataTmp is not None:
                 invData = invDataTmp
             tradeInData = proxy.shop.tradeIn
-            self.xp = proxy.stats.vehiclesXPs.get(self.intCD, self.xp)
+            self._xp = proxy.stats.vehiclesXPs.get(self.intCD, self._xp)
             if proxy.shop.winXPFactorMode == WIN_XP_FACTOR_MODE.ALWAYS or self.intCD not in proxy.stats.multipliedVehicles and not self.isOnlyForEventBattles:
-                self.dailyXPFactor = proxy.shop.dailyXPFactor
-            self.isElite = len(vehDescr.type.unlocksDescrs) == 0 or self.intCD in proxy.stats.eliteVehicles
-            self.isFullyElite = self.isElite and len([ data for data in vehDescr.type.unlocksDescrs if data[1] not in proxy.stats.unlocks ]) == 0
+                self._dailyXPFactor = proxy.shop.dailyXPFactor
+            self._isElite = len(vehDescr.type.unlocksDescrs) == 0 or self.intCD in proxy.stats.eliteVehicles
+            self._isFullyElite = self.isElite and len([ data for data in vehDescr.type.unlocksDescrs if data[1] not in proxy.stats.unlocks ]) == 0
             clanDamageLock = proxy.stats.vehicleTypeLocks.get(self.intCD, {}).get(CLAN_LOCK, 0)
             clanNewbieLock = proxy.stats.globalVehicleLocks.get(CLAN_LOCK, 0)
-            self.clanLock = clanDamageLock or clanNewbieLock
-            self.isDisabledForBuy = self.intCD in proxy.shop.getNotToBuyVehicles()
-            self.hasRentPackages = bool(proxy.shop.getVehicleRentPrices().get(self.intCD, {}))
-            self.isSelected = bool(self.invID in proxy.stats.oldVehInvIDs)
-            self.igrCustomizationsLayout = proxy.inventory.getIgrCustomizationsLayout().get(self.inventoryID, {})
+            self._clanLock = clanDamageLock or clanNewbieLock
+            self._isDisabledForBuy = self.intCD in proxy.shop.getNotToBuyVehicles()
+            self._hasRentPackages = bool(proxy.shop.getVehicleRentPrices().get(self.intCD, {}))
+            self._isSelected = bool(self.invID in proxy.stats.oldVehInvIDs)
+            self._igrCustomizationsLayout = proxy.inventory.getIgrCustomizationsLayout().get(self._inventoryID, {})
             restoreConfig = proxy.shop.vehiclesRestoreConfig
-            self.restorePrice = calcVehicleRestorePrice(self.defaultPrice, proxy.shop)
-            self.restoreInfo = proxy.recycleBin.getVehicleRestoreInfo(self.intCD, restoreConfig.restoreDuration, restoreConfig.restoreCooldown)
+            self._restorePrice = calcVehicleRestorePrice(self.buyPrices.itemPrice.defPrice, proxy.shop)
+            self._restoreInfo = proxy.recycleBin.getVehicleRestoreInfo(self.intCD, restoreConfig.restoreDuration, restoreConfig.restoreCooldown)
             self._personalDiscountPrice = proxy.shop.getPersonalVehicleDiscountPrice(self.intCD)
-            self.rotationGroupNum = proxy.vehicleRotation.getGroupNum(self.intCD)
-            self.rotationBattlesLeft = proxy.vehicleRotation.getBattlesCount(self.rotationGroupNum)
-            self.isRotationGroupLocked = proxy.vehicleRotation.isGroupLocked(self.rotationGroupNum)
-            self.isInfiniteRotationGroup = proxy.vehicleRotation.isInfinite(self.rotationGroupNum)
-        self.inventoryCount = 1 if len(invData.keys()) else 0
+            self._rotationGroupNum = proxy.vehicleRotation.getGroupNum(self.intCD)
+            self._rotationBattlesLeft = proxy.vehicleRotation.getBattlesCount(self.rotationGroupNum)
+            self._isRotationGroupLocked = proxy.vehicleRotation.isGroupLocked(self.rotationGroupNum)
+            self._isInfiniteRotationGroup = proxy.vehicleRotation.isInfinite(self.rotationGroupNum)
+        self._inventoryCount = 1 if len(invData.keys()) else 0
         data = invData.get('rent')
         if data is not None:
-            self.rentInfo = RentalInfoProvider(isRented=True, *data)
-        self.settings = invData.get('settings', 0)
-        self.lock = invData.get('lock', (0, 0))
-        self.repairCost, self.health = invData.get('repair', (0, 0))
-        self.gun = self.itemsFactory.createVehicleGun(vehDescr.gun['compactDescr'], proxy, vehDescr.gun)
-        self.turret = self.itemsFactory.createVehicleTurret(vehDescr.turret['compactDescr'], proxy, vehDescr.turret)
-        self.engine = self.itemsFactory.createVehicleEngine(vehDescr.engine['compactDescr'], proxy, vehDescr.engine)
-        self.chassis = self.itemsFactory.createVehicleChassis(vehDescr.chassis['compactDescr'], proxy, vehDescr.chassis)
-        self.radio = self.itemsFactory.createVehicleRadio(vehDescr.radio['compactDescr'], proxy, vehDescr.radio)
-        self.fuelTank = self.itemsFactory.createVehicleFuelTank(vehDescr.fuelTank['compactDescr'], proxy, vehDescr.fuelTank)
-        self.sellPrice = self._calcSellPrice(proxy)
-        self.defaultSellPrice = self._calcDefaultSellPrice(proxy)
+            self._rentInfo = RentalInfoProvider(isRented=True, *data)
+        self._settings = invData.get('settings', 0)
+        self._lock = invData.get('lock', (0, 0))
+        self._repairCost, self._health = invData.get('repair', (0, 0))
+        self._gun = self.itemsFactory.createVehicleGun(vehDescr.gun.compactDescr, proxy, vehDescr.gun)
+        self._turret = self.itemsFactory.createVehicleTurret(vehDescr.turret.compactDescr, proxy, vehDescr.turret)
+        self._engine = self.itemsFactory.createVehicleEngine(vehDescr.engine.compactDescr, proxy, vehDescr.engine)
+        self._chassis = self.itemsFactory.createVehicleChassis(vehDescr.chassis.compactDescr, proxy, vehDescr.chassis)
+        self._radio = self.itemsFactory.createVehicleRadio(vehDescr.radio.compactDescr, proxy, vehDescr.radio)
+        self._fuelTank = self.itemsFactory.createVehicleFuelTank(vehDescr.fuelTank.compactDescr, proxy, vehDescr.fuelTank)
+        sellPrice = self._calcSellPrice(proxy)
+        defaultSellPrice = self._calcDefaultSellPrice(proxy)
+        self._sellPrices = ItemPrices(itemPrice=ItemPrice(price=sellPrice, defPrice=defaultSellPrice), itemAltPrice=ITEM_PRICE_EMPTY)
         if tradeInData is not None and tradeInData.isEnabled and self.isPremium and not self.isPremiumIGR:
-            self.tradeOffPriceFactor = tradeInData.sellPriceFactor
+            self._tradeOffPriceFactor = tradeInData.sellPriceFactor
             tradeInLevels = tradeInData.allowedVehicleLevels
-            self.canTradeIn = not self.isPurchased and not self.isHidden and self.isUnlocked and not self.isRestorePossible() and self.level in tradeInLevels
-            self.canTradeOff = self.isPurchased and not self.canNotBeSold and self.intCD not in tradeInData.forbiddenVehicles and self.level in tradeInLevels
+            self._canTradeIn = not self.isPurchased and not self.isHidden and self.isUnlocked and not self.isRestorePossible() and self.level in tradeInLevels
+            self._canTradeOff = self.isPurchased and not self.canNotBeSold and self.intCD not in tradeInData.forbiddenVehicles and self.level in tradeInLevels
             if self.canTradeOff:
-                self.tradeOffPrice = Money(gold=int(math.ceil(self.tradeOffPriceFactor * self.buyPrice.gold)))
-        self.optDevices = self._parserOptDevs(vehDescr.optionalDevices, proxy)
+                self._tradeOffPrice = Money(gold=int(math.ceil(self.tradeOffPriceFactor * self.buyPrices.itemPrice.price.gold)))
+        self._optDevices = self._parserOptDevs(vehDescr.optionalDevices, proxy)
         gunAmmoLayout = []
         for shell in self.gun.defaultAmmo:
             gunAmmoLayout += (shell.intCD, shell.defaultCount)
 
-        self.shells = self._parseShells(invData.get('shells', list()), invData.get('shellsLayout', dict()).get(self.shellsLayoutIdx, gunAmmoLayout), proxy)
-        self.eqs = self._parseEqs(invData.get('eqs') or DEFAULT_EQUIPMENT_LAYOUT, proxy)
-        self.eqsLayout = self._parseEqs(invData.get('eqsLayout') or DEFAULT_EQUIPMENT_LAYOUT, proxy)
-        self.battleBooster = self._parseBattleBoosters(invData.get('eqs') or DEFAULT_EQUIPMENT_LAYOUT, proxy)
-        self.battleBoosterLayout = self._parseBattleBoosters(invData.get('eqsLayout') or DEFAULT_EQUIPMENT_LAYOUT, proxy)
+        self._shells = self._parseShells(invData.get('shells', list()), invData.get('shellsLayout', dict()).get(self.shellsLayoutIdx, gunAmmoLayout), proxy)
+        self._equipment = VehicleEquipment(proxy, invData.get('eqs'))
+        self._equipmentLayout = VehicleEquipment(proxy, invData.get('eqsLayout'))
         defaultCrew = [None] * len(vehDescr.type.crewRoles)
         crewList = invData.get('crew', defaultCrew)
-        self.bonuses = self._calcCrewBonuses(crewList, proxy)
-        self.crewIndices = dict([ (invID, idx) for idx, invID in enumerate(crewList) ])
-        self.crew = self._buildCrew(crewList, proxy)
-        self.lastCrew = invData.get('lastCrew')
-        self.rentPackages = calcRentPackages(self, proxy)
-        self.hasModulesToSelect = self.__hasModulesToSelect()
+        self._bonuses = self._calcCrewBonuses(crewList, proxy)
+        self._crewIndices = dict([ (invID, idx) for idx, invID in enumerate(crewList) ])
+        self._crew = self._buildCrew(crewList, proxy)
+        self._lastCrew = invData.get('lastCrew')
+        self._rentPackages = calcRentPackages(self, proxy)
+        self._hasModulesToSelect = self.__hasModulesToSelect()
         self.__customState = ''
         return
 
     @property
-    def buyPrice(self):
+    def buyPrices(self):
         """
-        Get vehicle buy price.
+        Get vehicle buy prices.
         If vehicle has personal discount and price with personal discount is less then its shop price with SSE actions
         then use personal discount price else shop price.
         """
-        currency = self._buyPrice.getCurrency()
-        if self._personalDiscountPrice is not None and self._personalDiscountPrice.get(currency) <= self._buyPrice.get(currency):
+        currency = self._buyPrices.itemPrice.price.getCurrency()
+        if self._personalDiscountPrice is not None and self._personalDiscountPrice.get(currency) <= self._buyPrices.itemPrice.price.get(currency):
             currentPrice = self._personalDiscountPrice
         else:
-            currentPrice = self._buyPrice
+            currentPrice = self._buyPrices.itemPrice.price
         if self.isRented and not self.rentalIsOver:
-            return currentPrice - self.rentCompensation
+            buyPrice = currentPrice - self.rentCompensation
         else:
-            return currentPrice
-            return
+            buyPrice = currentPrice
+        return ItemPrices(itemPrice=ItemPrice(price=buyPrice, defPrice=self._buyPrices.itemPrice.defPrice), itemAltPrice=self._buyPrices.itemAltPrice)
 
     @property
     def searchableUserName(self):
@@ -279,30 +280,30 @@ class Vehicle(FittingItem, HasStrCD):
 
     def _calcSellPrice(self, proxy):
         if self.isRented:
-            return ZERO_MONEY
-        price = self.sellPrice
+            return MONEY_UNDEFINED
+        price = self.sellPrices.itemPrice.price
         defaultDevices, installedDevices, _ = self.descriptor.getDevices()
         for defCompDescr, instCompDescr in izip(defaultDevices, installedDevices):
             if defCompDescr == instCompDescr:
                 continue
-            modulePrice = FittingItem(defCompDescr, proxy).sellPrice
+            modulePrice = FittingItem(defCompDescr, proxy).sellPrices.itemPrice.price
             price = price - modulePrice
-            modulePrice = FittingItem(instCompDescr, proxy).sellPrice
+            modulePrice = FittingItem(instCompDescr, proxy).sellPrices.itemPrice.price
             price = price + modulePrice
 
         return price
 
     def _calcDefaultSellPrice(self, proxy):
         if self.isRented:
-            return ZERO_MONEY
-        price = self.defaultSellPrice
+            return MONEY_UNDEFINED
+        price = self.sellPrices.itemPrice.defPrice
         defaultDevices, installedDevices, _ = self.descriptor.getDevices()
         for defCompDescr, instCompDescr in izip(defaultDevices, installedDevices):
             if defCompDescr == instCompDescr:
                 continue
-            modulePrice = FittingItem(defCompDescr, proxy).defaultSellPrice
+            modulePrice = FittingItem(defCompDescr, proxy).sellPrices.itemPrice.defPrice
             price = price - modulePrice
-            modulePrice = FittingItem(instCompDescr, proxy).defaultSellPrice
+            modulePrice = FittingItem(instCompDescr, proxy).sellPrices.itemPrice.defPrice
             price = price + modulePrice
 
         return price
@@ -310,14 +311,16 @@ class Vehicle(FittingItem, HasStrCD):
     def _calcCrewBonuses(self, crew, proxy):
         bonuses = dict()
         bonuses['equipment'] = 0
-        for eq in self.eqs:
-            if eq is not None:
-                bonuses['equipment'] += eq.crewLevelIncrease
+        for eq in self.equipment.regularConsumables.getInstalledItems():
+            bonuses['equipment'] += eq.crewLevelIncrease
+
+        for battleBooster in self.equipment.battleBoosterConsumables.getInstalledItems():
+            bonuses['equipment'] += battleBooster.getCrewBonus(self)
 
         bonuses['optDevices'] = self.descriptor.miscAttrs['crewLevelIncrease']
         bonuses['commander'] = 0
         commanderEffRoleLevel = 0
-        bonuses['brotherhood'] = tankmen.getSkillsConfig()['brotherhood']['crewLevelIncrease']
+        bonuses['brotherhood'] = tankmen.getSkillsConfig().getSkill('brotherhood').crewLevelIncrease
         for tankmanID in crew:
             if tankmanID is None:
                 bonuses['brotherhood'] = 0
@@ -359,8 +362,8 @@ class Vehicle(FittingItem, HasStrCD):
         shellsDict = dict(((cd, count) for cd, count, _ in LayoutIterator(layoutList)))
         defaultsDict = dict(((cd, (count, isBoughtForCredits)) for cd, count, isBoughtForCredits in LayoutIterator(defaultLayoutList)))
         layoutList = list(layoutList)
-        for shot in self.descriptor.gun['shots']:
-            cd = shot['shell']['compactDescr']
+        for shot in self.descriptor.gun.shots:
+            cd = shot.shell.compactDescr
             if cd not in shellsDict:
                 layoutList.extend([cd, 0])
 
@@ -372,33 +375,12 @@ class Vehicle(FittingItem, HasStrCD):
         return result
 
     @classmethod
-    def _parseEqs(cls, layoutList, proxy):
-        result = list()
-        for i in xrange(len(layoutList)):
-            if i < BATTLE_BOOSTER_SLOT_IDX:
-                intCD = abs(layoutList[i])
-                result.append(cls.itemsFactory.createEquipment(intCD, proxy, layoutList[i] < 0) if intCD != 0 else None)
-
-        if result:
-            result += [None] * (REGULAR_EQUIPMENT_LAYOUT_SIZE - len(result))
-        return result
-
-    @classmethod
     def _parserOptDevs(cls, layoutList, proxy):
         result = list()
         for i in xrange(len(layoutList)):
             optDevDescr = layoutList[i]
-            result.append(cls.itemsFactory.createOptionalDevice(optDevDescr['compactDescr'], proxy) if optDevDescr is not None else None)
+            result.append(cls.itemsFactory.createOptionalDevice(optDevDescr.compactDescr, proxy) if optDevDescr is not None else None)
 
-        return result
-
-    @classmethod
-    def _parseBattleBoosters(cls, layoutList, proxy):
-        result = None
-        if len(layoutList) > BATTLE_BOOSTER_SLOT_IDX:
-            intCD = abs(layoutList[BATTLE_BOOSTER_SLOT_IDX])
-            if intCD != 0:
-                result = cls.itemsFactory.createEquipment(intCD, proxy, layoutList[BATTLE_BOOSTER_SLOT_IDX] < 0)
         return result
 
     @property
@@ -415,11 +397,216 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def shellsLayoutIdx(self):
-        return (self.turret.descriptor['compactDescr'], self.gun.descriptor['compactDescr'])
+        return (self.turret.descriptor.compactDescr, self.gun.descriptor.compactDescr)
 
     @property
     def invID(self):
-        return self.inventoryID
+        return self._inventoryID
+
+    @property
+    def xp(self):
+        return self._xp
+
+    @property
+    def dailyXPFactor(self):
+        return self._dailyXPFactor
+
+    @property
+    def isElite(self):
+        return self._isElite
+
+    @property
+    def isFullyElite(self):
+        return self._isFullyElite
+
+    @property
+    def clanLock(self):
+        return self._clanLock
+
+    @property
+    def isUnique(self):
+        return self._isUnique
+
+    @property
+    def rentPackages(self):
+        return self._rentPackages
+
+    @property
+    def hasRentPackages(self):
+        return self._hasRentPackages
+
+    @property
+    def isDisabledForBuy(self):
+        return self._isDisabledForBuy
+
+    @property
+    def isSelected(self):
+        return self._isSelected
+
+    @property
+    def igrCustomizationsLayout(self):
+        return self._igrCustomizationsLayout
+
+    @property
+    def restorePrice(self):
+        return self._restorePrice
+
+    @property
+    def canTradeIn(self):
+        return self._canTradeIn
+
+    @property
+    def canTradeOff(self):
+        return self._canTradeOff
+
+    @property
+    def tradeOffPriceFactor(self):
+        return self._tradeOffPriceFactor
+
+    @property
+    def tradeOffPrice(self):
+        return self._tradeOffPrice
+
+    @property
+    def rotationGroupNum(self):
+        return self._rotationGroupNum
+
+    @property
+    def rotationBattlesLeft(self):
+        return self._rotationBattlesLeft
+
+    @property
+    def isRotationGroupLocked(self):
+        return self._isRotationGroupLocked
+
+    @property
+    def isInfiniteRotationGroup(self):
+        return self._isInfiniteRotationGroup
+
+    @property
+    def settings(self):
+        return self._settings
+
+    @property
+    def lock(self):
+        return self._lock
+
+    @property
+    def repairCost(self):
+        return self._repairCost
+
+    @property
+    def health(self):
+        return self._health
+
+    @property
+    def gun(self):
+        return self._gun
+
+    @gun.setter
+    def gun(self, value):
+        """
+        This property can be set from cmp_view
+        """
+        self._gun = value
+
+    @property
+    def turret(self):
+        return self._turret
+
+    @turret.setter
+    def turret(self, value):
+        """
+        This property can be set from cmp_view
+        """
+        self._turret = value
+
+    @property
+    def engine(self):
+        return self._engine
+
+    @engine.setter
+    def engine(self, value):
+        """
+        This property can be set from cmp_view
+        """
+        self._engine = value
+
+    @property
+    def chassis(self):
+        return self._chassis
+
+    @chassis.setter
+    def chassis(self, value):
+        """
+        This property can be set from cmp_view
+        """
+        self._chassis = value
+
+    @property
+    def radio(self):
+        return self._radio
+
+    @radio.setter
+    def radio(self, value):
+        """
+        This property can be set from cmp_view
+        """
+        self._radio = value
+
+    @property
+    def fuelTank(self):
+        return self._fuelTank
+
+    @fuelTank.setter
+    def fuelTank(self, value):
+        """
+        This property can be set from cmp_view
+        """
+        self._fuelTank = value
+
+    @property
+    def optDevices(self):
+        return self._optDevices
+
+    @property
+    def shells(self):
+        return self._shells
+
+    @property
+    def equipment(self):
+        return self._equipment
+
+    @property
+    def equipmentLayout(self):
+        return self._equipmentLayout
+
+    @property
+    def bonuses(self):
+        return self._bonuses
+
+    @property
+    def crewIndices(self):
+        return self._crewIndices
+
+    @property
+    def crew(self):
+        return self._crew
+
+    @crew.setter
+    def crew(self, value):
+        """
+        Normally the property should not be changed outside, but params_helper.py does it.
+        """
+        self._crew = value
+
+    @property
+    def lastCrew(self):
+        return self._lastCrew
+
+    @property
+    def hasModulesToSelect(self):
+        return self._hasModulesToSelect
 
     @property
     def isRentable(self):
@@ -447,7 +634,7 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def minRentPrice(self):
         minRentPackage = self.getRentPackage()
-        return minRentPackage.get('rentPrice', None) if minRentPackage is not None else None
+        return minRentPackage.get('rentPrice', MONEY_UNDEFINED) if minRentPackage is not None else MONEY_UNDEFINED
 
     @property
     def isRented(self):
@@ -496,16 +683,16 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def hasTurrets(self):
         vDescr = self.descriptor
-        return len(vDescr.hull['fakeTurrets']['lobby']) != len(vDescr.turrets)
+        return len(vDescr.hull.fakeTurrets['lobby']) != len(vDescr.turrets)
 
     @property
     def hasBattleTurrets(self):
         vDescr = self.descriptor
-        return len(vDescr.hull['fakeTurrets']['battle']) != len(vDescr.turrets)
+        return len(vDescr.hull.fakeTurrets['battle']) != len(vDescr.turrets)
 
     @property
     def ammoMaxSize(self):
-        return self.descriptor.gun['maxAmmo']
+        return self.descriptor.gun.maxAmmo
 
     @property
     def isAmmoFull(self):
@@ -521,7 +708,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def hasEquipments(self):
-        return findFirst(None, self.eqs) is not None
+        return findFirst(None, self.equipment.regularConsumables) is not None
 
     @property
     def hasOptionalDevices(self):
@@ -866,11 +1053,9 @@ class Vehicle(FittingItem, HasStrCD):
 
     def isAutoEquipFull(self):
         if self.isAutoEquip:
-            for i, e in enumerate(self.eqsLayout):
-                if e != self.eqs[i]:
-                    return False
-
-        return True
+            return self.equipment.regularConsumables == self.equipmentLayout.regularConsumables
+        else:
+            return True
 
     def mayPurchase(self, money):
         if self.isOnlyForEventBattles:
@@ -881,19 +1066,16 @@ class Vehicle(FittingItem, HasStrCD):
 
     def mayRent(self, money):
         if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
-            return (False, GUI_ITEM_PURCHASE_CODE.CENTER_UNAVAILABLE)
+            return (False, GUI_ITEM_ECONOMY_CODE.CENTER_UNAVAILABLE)
         elif self.isDisabledForBuy and not self.isRentable:
-            return (False, 'rental_disabled')
+            return (False, GUI_ITEM_ECONOMY_CODE.RENTAL_DISABLED)
         elif self.isRentable and not self.isRentAvailable:
-            return (False, 'rental_time_exceeded')
-        elif self.minRentPrice:
-            shortage = money.getShortage(self.minRentPrice)
-            if shortage:
-                currency, _ = shortage.pop()
-                return (False, '%s_error' % currency)
-            return (True, '')
+            return (False, GUI_ITEM_ECONOMY_CODE.RENTAL_TIME_EXCEEDED)
+        minRentPrice = self.minRentPrice
+        if minRentPrice:
+            return self._isEnoughMoney(minRentPrice, money)
         else:
-            return (False, 'no_rent_price')
+            return (False, GUI_ITEM_ECONOMY_CODE.NO_RENT_PRICE)
 
     def mayRestore(self, money):
         """
@@ -902,14 +1084,8 @@ class Vehicle(FittingItem, HasStrCD):
         :return: tuple(mayRestore:<bool>, errorReason:<str>
         """
         if getattr(BigWorld.player(), 'isLongDisconnectedFromCenter', False):
-            return (False, GUI_ITEM_PURCHASE_CODE.CENTER_UNAVAILABLE)
-        if not self.isRestoreAvailable() or constants.IS_CHINA and self.rentalIsActive:
-            return (False, 'restore_disabled')
-        shortage = money.getShortage(self.restorePrice)
-        if shortage:
-            currency, _ = shortage.pop()
-            return (False, GUI_ITEM_PURCHASE_CODE.getMoneyError(currency))
-        return (True, GUI_ITEM_PURCHASE_CODE.OK)
+            return (False, GUI_ITEM_ECONOMY_CODE.CENTER_UNAVAILABLE)
+        return (False, GUI_ITEM_ECONOMY_CODE.RESTORE_DISABLED) if not self.isRestoreAvailable() or constants.IS_CHINA and self.rentalIsActive else self._isEnoughMoney(self.restorePrice, money)
 
     def mayRestoreWithExchange(self, money, exchangeRate):
         """
@@ -921,9 +1097,10 @@ class Vehicle(FittingItem, HasStrCD):
         mayRestore, reason = self.mayRestore(money)
         if mayRestore:
             return mayRestore
-        elif reason == GUI_ITEM_PURCHASE_CODE.NOT_ENOUGH_CREDITS:
-            money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate)
-            return self.restorePrice <= money
+        elif reason == GUI_ITEM_ECONOMY_CODE.NOT_ENOUGH_CREDITS and money.isSet(Currency.GOLD):
+            money = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0)
+            mayRestore, reason = self._isEnoughMoney(self.restorePrice, money)
+            return mayRestore
         else:
             return False
 
@@ -955,7 +1132,7 @@ class Vehicle(FittingItem, HasStrCD):
         return self.descriptor.type.autounlockedItems[:]
 
     def getAutoUnlockedItemsMap(self):
-        return dict(map(lambda nodeCD: (vehicles.getDictDescr(nodeCD).get('itemTypeName'), nodeCD), self.descriptor.type.autounlockedItems))
+        return dict(map(lambda nodeCD: (vehicles.getItemByCompactDescr(nodeCD).itemTypeName, nodeCD), self.descriptor.type.autounlockedItems))
 
     def getUnlocksDescrs(self):
         for unlockIdx, data in enumerate(self.descriptor.type.unlocksDescrs):
@@ -1100,7 +1277,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     def _getShortInfo(self, vehicle=None, expanded=False):
         description = i18n.makeString('#menu:descriptions/' + self.itemTypeName)
-        caliber = self.descriptor.gun['shots'][0]['shell']['caliber']
+        caliber = self.descriptor.gun.shots[0].shell.caliber
         armor = findVehicleArmorMinMax(self.descriptor)
         return description % {'weight': BigWorld.wg_getNiceNumberFormat(float(self.descriptor.physics['weight']) / 1000),
          'hullArmor': BigWorld.wg_getIntegralFormat(armor[1]),
@@ -1223,10 +1400,10 @@ def findVehicleArmorMinMax(vd):
         return minMax
 
     minMax = None
-    minMax = findComponentArmorMinMax(vd.hull['primaryArmor'], minMax)
+    minMax = findComponentArmorMinMax(vd.hull.primaryArmor, minMax)
     for turrets in vd.type.turrets:
         for turret in turrets:
-            minMax = findComponentArmorMinMax(turret['primaryArmor'], minMax)
+            minMax = findComponentArmorMinMax(turret.primaryArmor, minMax)
 
     return minMax
 

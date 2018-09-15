@@ -19,19 +19,4 @@ def fini():
     _rq_fini()
 
 
-__all__ = ['ShopRequester',
- 'InventoryRequester',
- 'StatsRequester',
- 'DossierRequester',
- 'ItemsRequester',
- 'GoodiesRequester',
- 'RecycleBinRequester',
- 'VehicleRotationRequester',
- 'TokenRequester',
- 'TokenResponse',
- 'getTokenRequester',
- 'REQ_CRITERIA',
- 'RequestCtx',
- 'DataRequestCtx',
- 'RequestsByIDProcessor',
- 'DataRequestsByIDProcessor']
+__all__ = ('ShopRequester', 'InventoryRequester', 'StatsRequester', 'DossierRequester', 'ItemsRequester', 'GoodiesRequester', 'RecycleBinRequester', 'VehicleRotationRequester', 'TokenRequester', 'TokenResponse', 'getTokenRequester', 'REQ_CRITERIA', 'RequestCtx', 'DataRequestCtx', 'RequestsByIDProcessor', 'DataRequestsByIDProcessor')

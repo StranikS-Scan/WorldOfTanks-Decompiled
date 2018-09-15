@@ -243,6 +243,12 @@ class UnitFlags(object):
     def isInArenaChanged(self):
         return self.__flagsDiff & UNIT_FLAGS.IN_ARENA > 0
 
+    def isArenaFinished(self):
+        return self.__flags & UNIT_FLAGS.ARENA_FINISHED > 0
+
+    def isArenaFinishedChanged(self):
+        return self.__flagsDiff & UNIT_FLAGS.ARENA_FINISHED > 0
+
     def isFreezed(self):
         return self.isLocked() or self.isInSearch() or self.isInQueue() or self.isInArena()
 

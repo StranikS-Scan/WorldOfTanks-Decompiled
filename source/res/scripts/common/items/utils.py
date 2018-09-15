@@ -3,7 +3,7 @@
 import copy
 from operator import sub
 from constants import IS_CLIENT, VEHICLE_TTC_ASPECTS
-from items import tankmen, EQUIPMENT_TYPES
+from items import tankmen
 from items.qualifiers import QUALIFIER_TYPE
 from items.tankmen import MAX_SKILL_LEVEL, MIN_ROLE_LEVEL
 from items.vehicles import VEHICLE_ATTRIBUTE_FACTORS, CAMOUFLAGE_KIND_INDICES
@@ -83,39 +83,35 @@ def _replaceMissingTankmenWithDefaultOnes(vehicleDescr, crewCompactDescrs, level
 
 
 def getRadioDistance(vehicleDescr, factors):
-    return vehicleDescr.radio['distance'] * max(factors['radio/distance'], 0.0)
+    return vehicleDescr.radio.distance * max(factors['radio/distance'], 0.0)
 
 
 def getCircularVisionRadius(vehicleDescr, factors):
-    return vehicleDescr.turret['circularVisionRadius'] * vehicleDescr.miscAttrs['circularVisionRadiusFactor'] * max(factors['circularVisionRadius'], 0.0)
+    return vehicleDescr.turret.circularVisionRadius * vehicleDescr.miscAttrs['circularVisionRadiusFactor'] * max(factors['circularVisionRadius'], 0.0)
 
 
 def getReloadTime(vehicleDescr, factors):
-    return vehicleDescr.gun['reloadTime'] * vehicleDescr.miscAttrs['gunReloadTimeFactor'] * max(factors['gun/reloadTime'], 0.0)
+    return vehicleDescr.gun.reloadTime * vehicleDescr.miscAttrs['gunReloadTimeFactor'] * max(factors['gun/reloadTime'], 0.0)
 
 
 def getTurretRotationSpeed(vehicleDescr, factors):
-    return vehicleDescr.turret['rotationSpeed'] * max(factors['turret/rotationSpeed'], 0.0)
+    return vehicleDescr.turret.rotationSpeed * max(factors['turret/rotationSpeed'], 0.0)
 
 
 def getGunRotationSpeed(vehicleDescr, factors):
-    return vehicleDescr.gun['rotationSpeed'] * max(factors['gun/rotationSpeed'], 0.0)
+    return vehicleDescr.gun.rotationSpeed * max(factors['gun/rotationSpeed'], 0.0)
 
 
 def getGunAimingTime(vehicleDescr, factors):
-    return vehicleDescr.gun['aimingTime'] * vehicleDescr.miscAttrs['gunAimingTimeFactor'] * max(factors['gun/aimingTime'], 0.0)
+    return vehicleDescr.gun.aimingTime * vehicleDescr.miscAttrs['gunAimingTimeFactor'] * max(factors['gun/aimingTime'], 0.0)
 
 
 def getChassisRotationSpeed(vehicleDescr, factors):
-    return vehicleDescr.chassis['rotationSpeed'] * max(factors['vehicle/rotationSpeed'], 0.0)
+    return vehicleDescr.chassis.rotationSpeed * max(factors['vehicle/rotationSpeed'], 0.0)
 
 
 def getInvisibility(factors, baseInvisibility, isMoving):
     return (baseInvisibility[0 if isMoving else 1] + factors['invisibility'][0]) * factors['invisibility'][1]
-
-
-def getEnginePower(vehicleDescr, factor):
-    return vehicleDescr.physics['enginePower'] * factor
 
 
 if IS_CLIENT:
@@ -154,7 +150,7 @@ if IS_CLIENT:
 
 
     def getClientShotDispersion(vehicleDescr, shotDispersionFactor):
-        return vehicleDescr.gun['shotDispersionAngle'] * shotDispersionFactor
+        return vehicleDescr.gun.shotDispersionAngle * shotDispersionFactor
 
 
     def getClientInvisibility(vehicleDescr, camouflageFactor, factors):
@@ -214,7 +210,7 @@ if IS_CLIENT:
     def updateVehicleAttrFactors(vehicleDescr, crewCompactDescrs, eqs, factors, aspect):
         factors['crewLevelIncrease'] = _sumCrewLevelIncrease(eqs)
         for eq in eqs:
-            if eq is not None and eq.equipmentType == EQUIPMENT_TYPES.regular:
+            if eq is not None:
                 eq.updateVehicleAttrFactors(vehicleDescr, factors, aspect)
 
         for device in vehicleDescr.optionalDevices:
@@ -223,6 +219,10 @@ if IS_CLIENT:
 
         mainSkillBonuses = VehicleQualifiersApplier({}, vehicleDescr)[QUALIFIER_TYPE.MAIN_SKILL]
         vehicleDescrCrew = VehicleDescrCrew(vehicleDescr, crewCompactDescrs, mainSkillBonuses)
+        for eq in eqs:
+            if eq is not None and 'crewSkillBattleBooster' in eq.tags:
+                vehicleDescrCrew.boostSkillBy(eq)
+
         vehicleDescrCrew.onCollectFactors(factors)
         factors['camouflage'] = vehicleDescrCrew.camouflageFactor
         shotDispersionFactors = [1.0, 0.0]

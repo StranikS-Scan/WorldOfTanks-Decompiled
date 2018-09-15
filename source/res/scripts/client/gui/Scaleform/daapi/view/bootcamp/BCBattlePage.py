@@ -1,13 +1,25 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCBattlePage.py
 import SoundGroups
+from PlayerEvents import g_playerEvents
+from bootcamp.BootCampEvents import g_bootcampEvents
+from bootcamp.Bootcamp import g_bootcamp
+from bootcamp.BootcampConstants import UI_STATE, CONSUMABLE_ERROR_MESSAGES
+from bootcamp.BootcampGUI import BootcampMarkersComponent
+from bootcamp.BootcampSettings import getBattleSettings
+from constants import ARENA_PERIOD, HINT_TYPE, HINT_NAMES
+from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP, LOG_ERROR_BOOTCAMP
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.meta.BCBattlePageMeta import BCBattlePageMeta
-from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
-from gui.Scaleform.daapi.view.battle.shared.crosshair import CrosshairPanelContainer
 from gui.Scaleform.daapi.view.battle.classic.minimap import ClassicMinimapComponent, GlobalSettingsPlugin
+from gui.Scaleform.daapi.view.battle.classic.page import DynamicAliases
+from gui.Scaleform.daapi.view.battle.shared import period_music_listener
+from gui.Scaleform.daapi.view.battle.shared.crosshair import CrosshairPanelContainer
 from gui.Scaleform.daapi.view.battle.shared.minimap import common
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings
+from gui.Scaleform.daapi.view.battle.shared.page import ComponentsConfig
+from gui.Scaleform.daapi.view.bootcamp.battle.bc_finish_sound_player import BCFinishSoundPlayer
+from gui.Scaleform.daapi.view.meta.BCBattlePageMeta import BCBattlePageMeta
+from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control import minimap_utils
 from constants import ARENA_PERIOD, HINT_TYPE, HINT_NAMES
 from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP, LOG_ERROR_BOOTCAMP
@@ -17,8 +29,26 @@ from bootcamp.Bootcamp import g_bootcamp
 from bootcamp.BootcampConstants import UI_STATE, CONSUMABLE_ERROR_MESSAGES
 from bootcamp.BootcampSettings import getBattleSettings
 from PlayerEvents import g_playerEvents
+from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 _BOOTCAMP_EXTERNAL_COMPONENTS = (CrosshairPanelContainer, BootcampMarkersComponent)
+
+class _BCComponentsConfig(ComponentsConfig):
+    BC_FINISH_SOUND_PLAYER = 'bcFinishSoundPlayer'
+
+    def __init__(self):
+        super(_BCComponentsConfig, self).__init__(((BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW_ALIASES.BATTLE_TIMER,
+           BATTLE_VIEW_ALIASES.PREBATTLE_TIMER,
+           BATTLE_VIEW_ALIASES.PLAYERS_PANEL,
+           BATTLE_VIEW_ALIASES.BATTLE_END_WARNING_PANEL,
+           self.BC_FINISH_SOUND_PLAYER,
+           DynamicAliases.PERIOD_MUSIC_LISTENER)),
+         (BATTLE_CTRL_ID.TEAM_BASES, (BATTLE_VIEW_ALIASES.TEAM_BASES_PANEL, self.BC_FINISH_SOUND_PLAYER)),
+         (BATTLE_CTRL_ID.BATTLE_FIELD_CTRL, (self.BC_FINISH_SOUND_PLAYER,)),
+         (BATTLE_CTRL_ID.DEBUG, (BATTLE_VIEW_ALIASES.DEBUG_PANEL,))), viewsConfig=((self.BC_FINISH_SOUND_PLAYER, lambda : BCFinishSoundPlayer()), (DynamicAliases.PERIOD_MUSIC_LISTENER, lambda : period_music_listener.PeriodMusicListener())))
+
+
+_BC_COMPONENTS_CONFIG = _BCComponentsConfig()
 
 class BootcampTargetPlugin(common.EntriesPlugin):
 
@@ -58,7 +88,7 @@ class BootcampMinimapComponent(ClassicMinimapComponent):
 class BCBattlePage(BCBattlePageMeta):
 
     def __init__(self, ctx=None):
-        super(BCBattlePageMeta, self).__init__(external=_BOOTCAMP_EXTERNAL_COMPONENTS)
+        super(BCBattlePageMeta, self).__init__(_BC_COMPONENTS_CONFIG, external=_BOOTCAMP_EXTERNAL_COMPONENTS)
         self._fullStatsAlias = BATTLE_VIEW_ALIASES.FULL_STATS
         self._onAnimationsCompleteCallback = None
         self.__hideOnCountdownPanels = set()

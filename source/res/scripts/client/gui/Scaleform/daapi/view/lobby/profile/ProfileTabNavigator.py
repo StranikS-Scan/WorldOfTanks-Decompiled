@@ -14,6 +14,7 @@ class ProfileTabNavigator(ProfileTabNavigatorMeta):
         self.__selectedData = None
         if len(args) > 4 and args[4]:
             self.__selectedData = args[4]
+        self.tabId = None
         return
 
     def invokeUpdate(self):
@@ -27,3 +28,9 @@ class ProfileTabNavigator(ProfileTabNavigatorMeta):
 
     def registerFlashComponent(self, component, alias, *args):
         super(ProfileTabNavigator, self).registerFlashComponent(component, alias, self.__userName, self.__userID, self.__databaseID, self.__selectedData)
+
+    def onTabChange(self, tabId):
+        self.tabId = tabId
+        currentTab = self.components.get(tabId)
+        if currentTab:
+            currentTab.onSectionActivated()

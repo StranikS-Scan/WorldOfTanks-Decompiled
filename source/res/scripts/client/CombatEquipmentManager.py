@@ -172,8 +172,8 @@ class CombatEquipmentManager(object):
             LOG_DEBUG(equipmentID)
             LOG_DEBUG(pos, dir, time)
         bombEquipment = vehicles.g_cache.equipments()[equipmentID]
-        shellDescr = items.vehicles.getDictDescr(bombEquipment.shellCompactDescr)
-        shotEffect = vehicles.g_cache.shotEffects[shellDescr['effectsIndex']]
+        shellDescr = items.vehicles.getItemByCompactDescr(bombEquipment.shellCompactDescr)
+        shotEffect = vehicles.g_cache.shotEffects[shellDescr.effectsIndex]
         airstrikeID = shotEffect.get('airstrikeID')
         if airstrikeID is None:
             LOG_ERROR('EquipmentID %s has no airstrike shot effect settings' % equipmentID)

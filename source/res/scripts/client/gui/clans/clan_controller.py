@@ -222,6 +222,18 @@ class _ClanDossier(object):
         self.__doRequest(contexts.RankedPositionCtx(), callback)
 
     @async
+    def requestHofUserInfo(self, callback):
+        self.__doRequest(contexts.HofUserInfoCtx(), callback)
+
+    @async
+    def requestHofUserExclude(self, callback):
+        self.__doRequest(contexts.HofUserExcludeCtx(), callback)
+
+    @async
+    def requestHofUserRestore(self, callback):
+        self.__doRequest(contexts.HofUserRestoreCtx(), callback)
+
+    @async
     def __requestClanRatings(self, callback):
         self.__doRequest(contexts.ClanRatingsCtx([self.__clanDbID]), callback)
 
@@ -513,6 +525,9 @@ class ClanController(ClansListeners, IClanController):
     def isEnabled(self):
         settings = self.lobbyContext.getServerSettings()
         return settings.clanProfile.isEnabled() if settings is not None else True
+
+    def compareStates(self, state):
+        return self.__state.compare(state)
 
     def isAvailable(self):
         return self.__state.isAvailable()

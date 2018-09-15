@@ -522,16 +522,12 @@ class GuiItemRef(HasTargetID):
 
 class GuiItemCriteria(HasIDAndTarget):
 
-    def __init__(self, entityID, targetID, value, cached=False):
+    def __init__(self, entityID, targetID, value):
         super(GuiItemCriteria, self).__init__(entityID=entityID, targetID=targetID)
         self.__value = value
-        self.__cached = cached
 
     def getValue(self):
         return self.__value
-
-    def isCached(self):
-        return self.__cached
 
 
 class PlayerCommand(HasID):

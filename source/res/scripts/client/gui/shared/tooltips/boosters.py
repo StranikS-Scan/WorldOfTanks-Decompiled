@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/boosters.py
 from gui.Scaleform.daapi.view.lobby.server_events import old_events_helpers
-from gui.shared.economics import getActionPrc
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
 from gui.shared.tooltips import TOOLTIP_TYPE
 from gui.shared.tooltips import formatters
 from gui.shared.formatters import text_styles
+from gui.shared.money import Currency
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from helpers import dependency
@@ -34,7 +34,7 @@ class BoosterTooltipData(BlocksTooltipData):
             questsResult = self.__getBoosterQuestNames(boosterID)
             if len(questsResult):
                 items.append(self.__packAccessCondition(questsResult))
-        if statsFields.buyPrice and booster.buyPrice:
+        if statsFields.buyPrice and booster.buyPrices:
             priceBlock = self.__getBoosterPrice(booster)
             items.append(formatters.packBuildUpBlockData(priceBlock))
         if statsFields.activeState and booster.inCooldown:
@@ -77,18 +77,21 @@ class BoosterTooltipData(BlocksTooltipData):
     def __getBoosterPrice(self, booster):
         block = []
         money = self.itemsCache.items.stats.money
-        if booster.buyPrice:
-            price = booster.buyPrice
-            defPrice = booster.defaultPrice
-            need = price - money
-            need = need.toNonNegative()
-            leftPadding = 92
-            if price.credits > 0:
-                creditsActionPercent = getActionPrc(price.credits, defPrice.credits)
-                block.append(makePriceBlock(price.credits, CURRENCY_SETTINGS.BUY_CREDITS_PRICE, need.credits if need.credits > 0 else None, defPrice.credits if defPrice.credits > 0 else None, creditsActionPercent, leftPadding=leftPadding))
-            if price.gold > 0:
-                goldActionPercent = getActionPrc(price.gold, defPrice.gold)
-                if price.credits > 0:
-                    block.append(formatters.packTextBlockData(text=text_styles.standard(TOOLTIPS.VEHICLE_TEXTDELIMITER_OR), padding=formatters.packPadding(left=(101 if goldActionPercent > 0 else 81) + self.leftPadding)))
-                block.append(makePriceBlock(price.gold, CURRENCY_SETTINGS.BUY_GOLD_PRICE, need.gold if need.gold > 0 else None, defPrice.gold if defPrice.gold > 0 else None, goldActionPercent, leftPadding=leftPadding))
+        showDelimiter = False
+        leftPadding = 92
+        for itemPrice in booster.buyPrices:
+            currency = itemPrice.getCurrency()
+            value = itemPrice.price.getSignValue(currency)
+            defValue = itemPrice.defPrice.getSignValue(currency)
+            needValue = value - money.getSignValue(currency)
+            actionPercent = itemPrice.getActionPrc()
+            if currency == Currency.GOLD and actionPercent > 0:
+                leftActionPadding = 101 + self.leftPadding
+            else:
+                leftActionPadding = 81 + self.leftPadding
+            if showDelimiter:
+                block.append(formatters.packTextBlockData(text=text_styles.standard(TOOLTIPS.VEHICLE_TEXTDELIMITER_OR), padding=formatters.packPadding(left=leftActionPadding)))
+            block.append(makePriceBlock(value, CURRENCY_SETTINGS.getBuySetting(currency), needValue if needValue > 0 else None, defValue if defValue > 0 else None, actionPercent, leftPadding=leftPadding))
+            showDelimiter = True
+
         return block

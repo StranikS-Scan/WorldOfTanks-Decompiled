@@ -136,7 +136,6 @@ class LobbyMenu(LobbyMenuMeta):
             dialogKey = 'bootcamp/' + ExecutionChooserDialogMeta.START
         result = yield DialogsInterface.showDialog(ExecutionChooserDialogMeta(dialogType, dialogKey, focusedID, not needAwarding and not isSkip))
         if result:
-            self.bootcamp.showActionWaitWindow()
             if isSkip:
                 self.bootcamp.stopBootcamp(False)
             elif self.prbDispatcher is not None:

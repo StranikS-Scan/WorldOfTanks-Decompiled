@@ -126,6 +126,8 @@
     <Maybach_HL_120_TRM_L>	140	</Maybach_HL_120_TRM_L>
     <Maybach_HL_157P_A>	141	</Maybach_HL_157P_A>
     <Maybach_HL_210_TRM_P45M>	142	</Maybach_HL_210_TRM_P45M>
+    <Porsche_Typ_205_2>	143	</Porsche_Typ_205_2>
+    <Maybach_HL_234P60_WT>	144	</Maybach_HL_234P60_WT>
     <Development_Engine>	65535	</Development_Engine>
     <Maybach_HL57TR_bot>	247	</Maybach_HL57TR_bot>
     <Krupp_M301_bot>	248	</Krupp_M301_bot>
@@ -1076,6 +1078,24 @@
       <rpm_min>	404	</rpm_min>
       <rpm_max>	2305	</rpm_max>
     </Maybach_HL_234P60>
+    <Maybach_HL_234P60_WT>
+      <userString>	#germany_vehicles:Maybach_HL_234P60_WT	</userString>
+      <shortUserString>	#germany_vehicles:Maybach_HL_234P60_WT_short	</shortUserString>
+      <tags>	gasoline	</tags>
+      <level>	10	</level>
+      <price>	135000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_ContinentalR_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_ContinentalR_npc	</wwsoundNPC>
+      <power>	1200	</power>
+      <weight>	750	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	170	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	404	</rpm_min>
+      <rpm_max>	2305	</rpm_max>
+    </Maybach_HL_234P60_WT>
     <Praga_EPA_2>
       <userString>	#germany_vehicles:Praga_EPA_2	</userString>
       <tags>	gasoline	</tags>
@@ -1307,6 +1327,23 @@
       <rpm_min>	200	</rpm_min>
       <rpm_max>	2600	</rpm_max>
     </Porsche_16_Cyl_Y2>
+    <Porsche_Typ_205_2>
+      <userString>	#germany_vehicles:Porsche_Typ_205_2	</userString>
+      <tags>	diesel	</tags>
+      <level>	8	</level>
+      <price>	45300	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	780	</power>
+      <weight>	2000	</weight>
+      <maxHealth>	255	</maxHealth>
+      <maxRegenHealth>	127	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.15	</fireStartingChance>
+      <rpm_min>	328	</rpm_min>
+      <rpm_max>	2216	</rpm_max>
+    </Porsche_Typ_205_2>
     <Engine_VK4502P>
       <userString>	#germany_vehicles:Engine_VK4502P	</userString>
       <tags>	diesel	</tags>

@@ -12,6 +12,7 @@ from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.CUSTOMIZATION_ITEM_TYPE import CUSTOMIZATION_ITEM_TYPE
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
+from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.locale.BADGE import BADGE
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -385,6 +386,10 @@ class ItemsBonus(SimpleBonus):
              'label': text_styles.stats('x{}'.format(count)),
              'tooltip': self.makeItemTooltip(item),
              'align': TEXT_ALIGN.RIGHT}
+            if item.itemTypeName == 'optionalDevice':
+                if item.isDeluxe():
+                    itemInfo['highlightType'] = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
+                    itemInfo['overlayType'] = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
             if withKey:
                 itemInfo['itemKey'] = 'item_{}'.format(item.intCD)
             if withCounts:
@@ -560,7 +565,7 @@ class VehiclesBonus(SimpleBonus):
         for curVehicle, vehInfo in self.getVehicles():
             compensation = vehInfo.get('customCompensation')
             if curVehicle == vehicle and compensation:
-                money = Money(*compensation)
+                money = Money.makeMoney(compensation)
                 for currency, value in money.iteritems():
                     if value:
                         cls = _BONUSES.get(currency)
@@ -951,7 +956,7 @@ class CustomizationsBonus(SimpleBonus):
              'align': TEXT_ALIGN.RIGHT}
             itemData.update(self.__itemTooltip(data, isReceived=False))
             if withKey:
-                itemData['itemKey'] = 'customization_{}'.format(item.intCD)
+                itemData['itemKey'] = 'customization_{}'.format(item.get('custType'))
             if withCounts:
                 itemData['count'] = count
             result.append(itemData)

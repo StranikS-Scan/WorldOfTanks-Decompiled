@@ -19,9 +19,10 @@ from helpers import time_utils
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IRankedBattlesController
 from gui.ranked_battles.ranked_models import VehicleRank
+from gui.ranked_battles.constants import PRIME_TIME_STATUS
 from skeletons.gui.shared import IItemsCache
 
-class _AWARD_BLOCK_IDS():
+class _AWARD_BLOCK_IDS:
     WEB_LEAGUE = 'web_league'
     BOOBY_QUEST = 'booby_quest'
     SEASON_AWARDS = 'season_awards'
@@ -62,16 +63,15 @@ class RankedBattlesView(LobbySubView, RankedBattlesViewMeta):
         super(RankedBattlesView, self)._dispose()
 
     def __setData(self, leagueData=None):
-        hasProgress = self.rankedController.hasProgress() or self.itemsCache.items.getAccountDossier().getRankedStats().hasAchievedRank()
         season = self.rankedController.getCurrentSeason()
-        self.as_setDataS({'isHasProgress': hasProgress,
-         'header': text_styles.superPromoTitle(RANKED_BATTLES.RANKEDBATTLEVIEW_TITLE) % {'cycle': season.getCycleOrdinalNumber()},
+        self.as_setDataS({'header': text_styles.superPromoTitle(RANKED_BATTLES.RANKEDBATTLEVIEW_TITLE) % {'cycle': season.getCycleOrdinalNumber()},
          'closeLbl': RANKED_BATTLES.RANKEDBATTLEVIEW_CLOSEBTN,
          'closeDescr': RANKED_BATTLES.RANKEDBATTLEVIEW_CLOSEBTNDESCR,
+         'playVideoLbl': RANKED_BATTLES.RANKEDBATTLEVIEW_PLAYVIDEOBTN,
+         'playVideoBtnEnabled': False,
          'calendarStatus': self.__getStatusBlock(),
          'progressBlock': self.__buildProgressData(),
-         'awardsBlock': self.__getAwardsBlock(leagueData) if hasProgress else [],
-         'notRankedBlock': self.__getNotRankedBlock() if not hasProgress else {},
+         'awardsBlock': self.__getAwardsBlock(leagueData),
          'bgImgPath': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_BG_RANK_BLUR,
          'isUpdateProgress': False})
 
@@ -83,23 +83,22 @@ class RankedBattlesView(LobbySubView, RankedBattlesViewMeta):
         self.as_setDataS({'progressBlock': self.__buildProgressData(),
          'isUpdateProgress': True})
 
-    def __getNotRankedBlock(self):
-        return {'imageWin': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_RANKEDBATTESVIEW_ICON_TOP12_106X98,
-         'imageLose': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_RANKEDBATTESVIEW_ICON_TOP3_106X98,
-         'headerText': text_styles.promoSubTitle(RANKED_BATTLES.RANKEDBATTLEVIEW_NOTRANKEDBLOCK_HEADER),
-         'orText': text_styles.promoSubTitle(RANKED_BATTLES.RANKEDBATTLEVIEW_NOTRANKEDBLOCK_OR),
-         'okLabel': RANKED_BATTLES.RANKEDBATTLEVIEW_NOTRANKEDBLOCK_OKLABEL,
-         'winText': self.__getNotRankedBlockText(),
-         'loseText': self.__getNotRankedBlockText(False)}
-
     def __close(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
         self.destroy()
 
     def __getStatusBlock(self):
-        return {'statusText': self.__getStatusText(),
-         'calendarTooltip': makeTooltip(RANKED_BATTLES.RANKEDBATTLEVIEW_STATUSBLOCK_CALENDARBTNTOOLTIP_HEADER, RANKED_BATTLES.RANKEDBATTLEVIEW_STATUSBLOCK_CALENDARBTNTOOLTIP_BODY),
-         'calendarIcon': RES_ICONS.MAPS_ICONS_BUTTONS_CALENDAR}
+        status, timeLeft = self.rankedController.getPrimeTimeStatus()
+        showPrimeTimeAlert = status != PRIME_TIME_STATUS.AVAILABLE
+        return {'alertIcon': RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON if showPrimeTimeAlert else None,
+         'buttonIcon': RES_ICONS.MAPS_ICONS_BUTTONS_CALENDAR,
+         'buttonLabel': '',
+         'buttonVisible': True,
+         'buttonTooltip': makeTooltip(RANKED_BATTLES.RANKEDBATTLEVIEW_STATUSBLOCK_CALENDARBTNTOOLTIP_HEADER, RANKED_BATTLES.RANKEDBATTLEVIEW_STATUSBLOCK_CALENDARBTNTOOLTIP_BODY),
+         'statusText': self.__getAlertStatusText(timeLeft) if showPrimeTimeAlert else self.__getStatusText(),
+         'popoverAlias': RANKEDBATTLES_ALIASES.RANKED_BATTLES_CALENDAR_POPOVER,
+         'bgVisible': False,
+         'shadowFilterVisible': showPrimeTimeAlert}
 
     def __buildProgressData(self):
         result = []
@@ -206,23 +205,16 @@ class RankedBattlesView(LobbySubView, RankedBattlesViewMeta):
          'totalCycles': len(seasonInfo.getAllCycles())}
         return _AwardsBlockBuilder.pack(leagueData, consolationQuestBattlesLeft, seasonData)
 
-    def __getNotRankedBlockText(self, isWin=True):
-        if isWin:
-            key = RANKED_BATTLES.RANKEDBATTLEVIEW_NOTRANKEDBLOCK_WINTEXT
-        else:
-            key = RANKED_BATTLES.RANKEDBATTLEVIEW_NOTRANKEDBLOCK_LOSETEXT
-        if isWin:
-            keyword = text_styles.bonusAppliedText(RANKED_BATTLES.RANKEDBATTLEVIEW_NOTRANKEDBLOCK_WINTEXT_HIGHLIGHTED)
-        else:
-            keyword = text_styles.error(RANKED_BATTLES.RANKEDBATTLEVIEW_NOTRANKEDBLOCK_LOSETEXT_HIGHLIGHTED)
-        return i18n.makeString(key, team=keyword)
-
     def __getStatusText(self):
         season = self.rankedController.getCurrentSeason()
         endTimeStr = self.__getTillTimeString(season.getCycleEndDate())
         cycleNumber = season.getCycleOrdinalNumber()
         key = RANKED_BATTLES.RANKEDBATTLEVIEW_STATUSBLOCK_STATUSTEXT
         return text_styles.stats(i18n.makeString(key, cycleNumber=cycleNumber)) + endTimeStr
+
+    def __getAlertStatusText(self, timeLeft):
+        timeLeftStr = time_utils.getTillTimeString(timeLeft, RANKED_BATTLES.STATUS_TIMELEFT)
+        return text_styles.vehicleStatusCriticalText(_ms(RANKED_BATTLES.PRIMETIMEALERTMESSAGEBLOCK_MESSAGE, time=timeLeftStr))
 
     def __getTillTimeString(self, endTime):
         timeDelta = time_utils.getTimeDeltaFromNow(endTime)

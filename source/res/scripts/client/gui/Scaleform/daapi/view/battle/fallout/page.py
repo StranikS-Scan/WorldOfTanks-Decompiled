@@ -3,6 +3,7 @@
 from constants import ATTACK_REASON_INDICES
 from gui.Scaleform.daapi.view.battle.fallout import markers2d
 from gui.Scaleform.daapi.view.battle.shared import crosshair
+from gui.Scaleform.daapi.view.battle.shared.page import ComponentsConfig
 from gui.Scaleform.daapi.view.meta.FalloutBattlePageMeta import FalloutBattlePageMeta
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.locale.FALLOUT import FALLOUT
@@ -14,17 +15,17 @@ _COMPONENTS_HIDE_DONT_REVEAL = {BATTLE_VIEW_ALIASES.RADIAL_MENU}
 _COMPONENTS_HIDE_WHEN_RESPAWN = {BATTLE_VIEW_ALIASES.FALLOUT_CONSUMABLES_PANEL, BATTLE_VIEW_ALIASES.DAMAGE_PANEL}
 _COMPONENTS_SHOW_WHEN_RESPAWN = {BATTLE_VIEW_ALIASES.FALLOUT_RESPAWN_VIEW}
 _PERMANENT_COMPONENTS = {BATTLE_VIEW_ALIASES.DEBUG_PANEL, BATTLE_VIEW_ALIASES.FALLOUT_SCORE_PANEL, BATTLE_VIEW_ALIASES.BATTLE_TIMER}
-_FALLOUT_COMPONENTS_TO_CTRLS = ((BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW_ALIASES.BATTLE_TIMER, BATTLE_VIEW_ALIASES.PREBATTLE_TIMER)),
+_FALLOUT_COMPONENTS_CONFIG = ComponentsConfig(((BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW_ALIASES.BATTLE_TIMER, BATTLE_VIEW_ALIASES.PREBATTLE_TIMER)),
  (BATTLE_CTRL_ID.DEBUG, (BATTLE_VIEW_ALIASES.DEBUG_PANEL,)),
  (BATTLE_CTRL_ID.RESPAWN, (BATTLE_VIEW_ALIASES.FALLOUT_RESPAWN_VIEW,)),
- (BATTLE_CTRL_ID.FLAG_NOTS, (BATTLE_VIEW_ALIASES.FLAG_NOTIFICATION,)))
+ (BATTLE_CTRL_ID.FLAG_NOTS, (BATTLE_VIEW_ALIASES.FLAG_NOTIFICATION,))))
 _VEHICLE_STATE_HANDLERS = {VEHICLE_VIEW_STATE.DESTROYED: '_updateDestroyed',
  VEHICLE_VIEW_STATE.SWITCHING: '_switching'}
 _FALLOUT_EXTERNAL_COMPONENTS = (crosshair.CrosshairPanelContainer, markers2d.FalloutMarkersManager)
 
 class FalloutBasePage(FalloutBattlePageMeta):
 
-    def __init__(self, components=_FALLOUT_COMPONENTS_TO_CTRLS, external=_FALLOUT_EXTERNAL_COMPONENTS, fullStatsAlias=''):
+    def __init__(self, components=_FALLOUT_COMPONENTS_CONFIG, external=_FALLOUT_EXTERNAL_COMPONENTS, fullStatsAlias=''):
         super(FalloutBasePage, self).__init__(components=components, external=external, fullStatsAlias=fullStatsAlias)
         self.__isInRespawn = False
         self.__hasGasAttack = None

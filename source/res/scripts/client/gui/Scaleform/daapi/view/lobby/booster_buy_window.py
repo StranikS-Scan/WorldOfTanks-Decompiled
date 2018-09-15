@@ -9,7 +9,9 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.formatters import text_styles
 from gui.shared.tooltips.formatters import packItemActionTooltipData
 from gui.shared.utils.decorators import process
+from gui.shared.utils import decorators
 from gui.shared.gui_items.processors.module import ModuleBuyer
+from gui.shared.gui_items.processors.vehicle import VehicleAutoBattleBoosterEquipProcessor
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
@@ -30,6 +32,13 @@ class BoosterBuyWindow(BoosterBuyWindowMeta):
         self.__buyItem(int(count))
         self.destroy()
 
+    @decorators.process('loadStats')
+    def setAutoRearm(self, autoRearm):
+        vehicle = g_currentVehicle.item
+        if vehicle is not None:
+            yield VehicleAutoBattleBoosterEquipProcessor(vehicle, autoRearm).request()
+        return
+
     def _populate(self):
         super(BoosterBuyWindow, self)._populate()
         if self.__item.isCrewBooster():
@@ -46,15 +55,22 @@ class BoosterBuyWindow(BoosterBuyWindowMeta):
          'buyLabelText': text_styles.main(MENU.BOOSTERBUYWINDOW_TOTALPRICE),
          'totalPriceLabelText': text_styles.highlightText(MENU.BOOSTERBUYWINDOW_TOTALLABEL),
          'inHangarLabelText': text_styles.main(MENU.BOOSTERBUYWINDOW_INHANGARCOUNT),
-         'boosterSlot': self.__getItemSlotData(self.__item, overlayType)})
+         'boosterSlot': self.__getItemSlotData(self.__item, overlayType),
+         'rearmCheckboxLabel': MENU.BOOSTERBUYWINDOW_REARMCHECKBOXLABEL,
+         'rearmCheckboxTooltip': '',
+         'submitBtnLabel': MENU.BOOSTERBUYWINDOW_BUYBUTTONLABEL,
+         'cancelBtnLabel': MENU.BOOSTERBUYWINDOW_CANCELBUTTONLABEL})
         stats = self.itemsCache.items.stats
-        price = self.__getItemPrice()
-        currency = price.getCurrency(byWeight=True)
-        self.as_updateItemPriceDataS({'actionPriceData': packItemActionTooltipData(self.__item, isBuying=True),
-         'itemPrice': price.get(currency),
+        itemPrice = self.__getItemPrice()
+        currency = itemPrice.getCurrency(byWeight=True)
+        vehicle = g_currentVehicle.item
+        self.as_updateDataS({'actionPriceData': packItemActionTooltipData(self.__item, isBuying=True),
+         'itemPrice': itemPrice.price.getSignValue(currency),
          'itemCount': self.__item.inventoryCount,
          'currency': currency,
-         'currencyCount': stats.money.get(currency)})
+         'currencyCount': stats.money.getSignValue(currency),
+         'rearmCheckboxValue': vehicle.isAutoBattleBoosterEquip() if vehicle is not None else False})
+        return
 
     @process('buyItem')
     def __buyItem(self, count):
@@ -68,7 +84,7 @@ class BoosterBuyWindow(BoosterBuyWindowMeta):
         return
 
     def __getItemPrice(self):
-        return self.__item.altPrice or self.__item.buyPrice
+        return self.__item.getBuyPrice(preferred=False)
 
     @classmethod
     def __getItemSlotData(cls, item, overlayType):

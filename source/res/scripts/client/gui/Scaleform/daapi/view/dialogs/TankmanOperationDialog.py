@@ -14,7 +14,7 @@ from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.shared.formatters import text_styles, icons, currency
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.gui_items.serializers import packTankman
-from gui.shared.money import Currency, ZERO_MONEY
+from gui.shared.money import Currency, MONEY_UNDEFINED
 from gui.shared.utils.functions import makeTooltip
 from helpers import time_utils, dependency
 from helpers.i18n import makeString as _ms
@@ -156,19 +156,19 @@ class RestoreTankmanDialog(_TankmanOperationDialogBase):
         actionPriceVO = None
         restorePrice, lengthInHours = getTankmenRestoreInfo(self._tankman)
         warningTexts = []
-        if restorePrice == ZERO_MONEY:
+        if not restorePrice:
             currencyTextFrame = ICON_TEXT_FRAMES.EMPTY
             restorePriceStr = text_styles.success(_ms(DIALOGS.RESTORETANKMAN_FORFREE))
             isEnoughMoney = True
         else:
             currencyName = restorePrice.getCurrency()
             currencyTextFrame = self._CURRENCY_TO_TEXT_FRAME[currencyName]
-            restorePriceStr = str(currency.getBWFormatter(currencyName)(restorePrice.credits))
-            isEnoughMoney = self.itemsCache.items.stats.money.get(currencyName) >= restorePrice.get(currencyName)
+            restorePriceStr = str(currency.getBWFormatter(currencyName)(restorePrice.getSignValue(Currency.CREDITS)))
+            isEnoughMoney = self.itemsCache.items.stats.money.get(currencyName, 0) >= restorePrice.get(currencyName, 0)
             if self._showPeriodEndWarning:
                 daysCount = lengthInHours / time_utils.HOURS_IN_DAY
                 warningTexts.append(text_styles.alert(_ms(DIALOGS.RESTORETANKMAN_NEWPERIODWARNING, daysCount=daysCount)))
-            if constants.IS_KOREA and restorePrice.gold > 0:
+            if constants.IS_KOREA and restorePrice.isSet(Currency.GOLD):
                 warningTexts.append(text_styles.standard(DIALOGS.BUYVEHICLEDIALOG_WARNING))
         if isLongDisconnectedFromCenter():
             warningTexts.append(text_styles.error(DIALOGS.RESTORETANKMAN_DISCONNECTEDFROMCENTER))

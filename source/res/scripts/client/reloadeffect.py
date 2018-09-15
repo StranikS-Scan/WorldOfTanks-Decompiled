@@ -18,6 +18,7 @@ def _createReloadEffectDesc(type, dataSection):
 
 
 class _ReloadDesc(object):
+    __slots__ = ()
 
     def __init__(self):
         pass
@@ -27,6 +28,7 @@ class _ReloadDesc(object):
 
 
 class _SimpleReloadDesc(_ReloadDesc):
+    __slots__ = ('duration', 'soundEvent')
 
     def __init__(self, dataSection):
         super(_SimpleReloadDesc, self).__init__()
@@ -38,6 +40,7 @@ class _SimpleReloadDesc(_ReloadDesc):
 
 
 class _BarrelReloadDesc(_SimpleReloadDesc):
+    __slots__ = ('lastShellAlert', 'shellDuration', 'startLong', 'startLoop', 'stopLoop', 'loopShell', 'loopShellLast', 'ammoLow', 'caliber', 'shellDt', 'shellDtLast')
 
     def __init__(self, dataSection):
         super(_BarrelReloadDesc, self).__init__(dataSection)

@@ -9,8 +9,6 @@ from debug_utils import LOG_WARNING
 class CLANS(object):
     CLAN_HEADER_SENDREQUESTBTN_TOOLTIP = '#clans:clan/header/sendRequestBtn/tooltip'
     CLAN_HEADER_CHATCHANNELBTN_TOOLTIP = '#clans:clan/header/chatChannelBtn/tooltip'
-    CLANPROFILE_SUMMARYVIEW_TOOLTIP_RATINGOUTDATED = '#clans:clanProfile/summaryView/tooltip/ratingOutdated'
-    CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_LIMITHASBEENREACHED = '#clans:clanProfile/summaryView/tooltip/joinUnavailable/limitHasBeenReached'
     CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_INVITESHASBEENREACHED = '#clans:clanProfile/summaryView/tooltip/joinUnavailable/invitesHasBeenReached'
     CLANPROFILE_SUMMARYVIEW_TOOLTIP_JOINUNAVAILABLE_RECEIVINGREQUESTSCLOSED = '#clans:clanProfile/summaryView/tooltip/joinUnavailable/receivingRequestsClosed'
     CLANPROFILE_SUMMARYVIEW_TOOLTIP_TOTALRATING = '#clans:clanProfile/summaryView/tooltip/totalRating'
@@ -499,17 +497,6 @@ class CLANS(object):
     SEARCH_INFO_SERVERUNAVAILABLE_BODY = '#clans:search/info/serverUnavailable/body'
     FORT_HEADER_CLANPROFILEBTNLBL = '#clans:fort/header/clanProfileBtnLbl'
     CLANINVITE_NOTIFICATION_USERNAMEERROR = '#clans:clanInvite/notification/userNameError'
-    CLAN_POST_ENUM = (CLAN_POST_COMMANDER,
-     CLAN_POST_EXECUTIVEOFFICER,
-     CLAN_POST_PERSONNELOFFICER,
-     CLAN_POST_COMBATOFFICER,
-     CLAN_POST_INTELLIGENCEOFFICER,
-     CLAN_POST_QUARTERMASTER,
-     CLAN_POST_RECRUITER,
-     CLAN_POST_JUNIOROFFICER,
-     CLAN_POST_PRIVATE,
-     CLAN_POST_RECRUIT,
-     CLAN_POST_RESERVIST)
     CLANPROFILE_SUMMARYVIEW_BLOCKLBL_ENUM = (CLANPROFILE_SUMMARYVIEW_BLOCKLBL_RAGELEVEL10,
      CLANPROFILE_SUMMARYVIEW_BLOCKLBL_RAGELEVEL8,
      CLANPROFILE_SUMMARYVIEW_BLOCKLBL_RAGELEVEL6,
@@ -578,15 +565,6 @@ class CLANS(object):
      GLOBALMAPVIEW_STATISTICS10_FAVORITEMAP,
      GLOBALMAPVIEW_STATISTICS10_FAVORITEMAP_TOOLTIP_HEADER,
      GLOBALMAPVIEW_STATISTICS10_FAVORITEMAP_TOOLTIP_BODY)
-
-    @classmethod
-    def clan_post(cls, key0):
-        outcome = '#clans:clan/post/{}'.format(key0)
-        if outcome not in cls.CLAN_POST_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
 
     @classmethod
     def clanprofile_summaryview_blocklbl(cls, key0):

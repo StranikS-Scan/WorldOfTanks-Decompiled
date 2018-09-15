@@ -7,12 +7,48 @@ from constants import ARENA_PERIOD as _PERIOD
 from gui.battle_control import event_dispatcher
 from gui.battle_control.arena_info.interfaces import IArenaPeriodController
 from gui.battle_control.battle_constants import COUNTDOWN_STATE, BATTLE_CTRL_ID
-from gui.battle_control.view_components import IViewComponentsController
+from gui.battle_control.view_components import ViewComponentsController
 import SoundGroups
 from helpers import dependency
 from skeletons.connection_mgr import IConnectionManager
 _COUNTDOWN_HIDE_SPEED = 1.5
 _START_NOTIFICATION_TIME = 5.0
+
+class IPlayersPanelsSwitcher(object):
+    """Interface of switcher in UI to change display mode of players panels."""
+
+    def setInitialMode(self):
+        """Sets mode that is stored in settings."""
+        pass
+
+    def setLargeMode(self):
+        """Sets large mode until battle starts."""
+        pass
+
+
+class IAbstractPeriodView(IPlayersPanelsSwitcher):
+
+    def setState(self, state):
+        pass
+
+    def setPeriod(self, period):
+        pass
+
+    def setTotalTime(self, totalTime):
+        pass
+
+    def hideTotalTime(self):
+        pass
+
+    def setCountdown(self, state, timeLeft):
+        pass
+
+    def hideCountdown(self, state, speed):
+        pass
+
+    def updateBattleCtx(self, ctx):
+        pass
+
 
 class ITimersBar(object):
     """Interface of timers bar to display the countdown timer on the center of screen,
@@ -43,7 +79,7 @@ class ITimersBar(object):
         """
         raise NotImplementedError
 
-    def setWinConditionText(self, text):
+    def updateBattleCtx(self, ctx):
         raise NotImplementedError
 
     def setState(self, state):
@@ -53,21 +89,9 @@ class ITimersBar(object):
         raise NotImplementedError
 
 
-class IPlayersPanelsSwitcher(object):
-    """Interface of switcher in UI to change display mode of players panels."""
-
-    def setInitialMode(self):
-        """Sets mode that is stored in settings."""
-        raise NotImplementedError
-
-    def setLargeMode(self):
-        """Sets large mode until battle starts."""
-        raise NotImplementedError
-
-
-class ArenaPeriodController(IArenaPeriodController, IViewComponentsController):
+class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
     """Class of controller to sets/updates timers in the battle."""
-    __slots__ = ('_callbackID', '_period', '_endTime', '_length', '_sound', '_battleTimerUI', '_preBattleTimerUI', '_cdState', '_ttState', '_isNotified', '_totalTime', '_countdown', '_playingTime', '_switcherUI', '_switcherState', '_battleCtx', '_arenaVisitor', '_battleEndWarning')
+    __slots__ = ('_callbackID', '_period', '_endTime', '_length', '_sound', '_cdState', '_ttState', '_isNotified', '_totalTime', '_countdown', '_playingTime', '_switcherState', '_battleCtx', '_arenaVisitor')
 
     def __init__(self):
         super(ArenaPeriodController, self).__init__()
@@ -78,9 +102,6 @@ class ArenaPeriodController(IArenaPeriodController, IViewComponentsController):
         self._countdown = -1
         self._length = 0
         self._sound = None
-        self._battleTimerUI = None
-        self._preBattleTimerUI = None
-        self._switcherUI = None
         self._cdState = COUNTDOWN_STATE.UNDEFINED
         self._ttState = 0
         self._switcherState = 0
@@ -88,7 +109,6 @@ class ArenaPeriodController(IArenaPeriodController, IViewComponentsController):
         self._playingTime = 0
         self._battleCtx = None
         self._arenaVisitor = None
-        self._battleEndWarning = None
         return
 
     def getControllerID(self):
@@ -107,39 +127,31 @@ class ArenaPeriodController(IArenaPeriodController, IViewComponentsController):
         self._setPlayingTimeOnArena()
         return
 
-    def setViewComponents(self, battleTimerUI, preBattleTimerUI, switcherUI=None, battleEndWarning=None):
+    def setViewComponents(self, *components):
         """ Sets UI.
-        :param battleTimerUI: reference to view of timer that show total time (top right on the screen).
-        :param preBattleTimerUI: reference to view of timer that show countdown time (center on the screen).
-        :param switcherUI: reference to view of player's panel switcher.
-        :param battleEndWarning: reference to view of warning.
         """
-        self._battleEndWarning = battleEndWarning
-        self._battleTimerUI = battleTimerUI
-        self._preBattleTimerUI = preBattleTimerUI
-        self._switcherUI = switcherUI
+        super(ArenaPeriodController, self).setViewComponents(*components)
         if self._period == _PERIOD.BATTLE:
-            if switcherUI is not None:
-                self._switcherUI.setInitialMode()
-                self._switcherState = 1
-        elif switcherUI is not None:
-            self._switcherUI.setLargeMode()
+            for viewCmp in self._viewComponents:
+                viewCmp.setInitialMode()
+
+            self._switcherState = 1
+        else:
+            for viewCmp in self._viewComponents:
+                viewCmp.setLargeMode()
+
             self._switcherState = 0
         if self._cdState in COUNTDOWN_STATE.VISIBLE:
-            if self._arenaVisitor is not None:
-                self._preBattleTimerUI.showStateMessage = self._arenaVisitor.showTimerStateMessage()
-            self._preBattleTimerUI.setCountdown(self._cdState, self._countdown)
-            self._battleTimerUI.setState(self._cdState)
-            if self._battleCtx is not None:
-                self._preBattleTimerUI.setWinConditionText(self._battleCtx.getArenaWinString())
-        self._battleTimerUI.setTotalTime(self._totalTime)
-        return
+            for viewCmp in self._viewComponents:
+                viewCmp.setState(self._cdState)
+                viewCmp.setCountdown(self._cdState, self._countdown)
+                if self._battleCtx is not None:
+                    viewCmp.updateBattleCtx(self._battleCtx)
 
-    def clearViewComponents(self):
-        """Removes reference to UI."""
-        self._battleTimerUI = None
-        self._preBattleTimerUI = None
-        self._switcherUI = None
+        for viewCmp in self._viewComponents:
+            viewCmp.setPeriod(self._period)
+            viewCmp.setTotalTime(self._totalTime)
+
         return
 
     def getEndTime(self):
@@ -159,6 +171,7 @@ class ArenaPeriodController(IArenaPeriodController, IViewComponentsController):
         self._period = period
         self._endTime = endTime
         self._length = length
+        self.__invokeViewPeriodUpdate()
         if soundID:
             self._sound = SoundGroups.g_instance.getSound2D(soundID)
         self.__setCallback()
@@ -173,6 +186,7 @@ class ArenaPeriodController(IArenaPeriodController, IViewComponentsController):
         self._period = period
         self._endTime = endTime
         self._length = length
+        self.__invokeViewPeriodUpdate()
         self.__clearCallback()
         self.__setCallback()
         self._setArenaWinStatus(additionalInfo)
@@ -205,34 +219,31 @@ class ArenaPeriodController(IArenaPeriodController, IViewComponentsController):
     def _setTotalTime(self, totalTime):
         if self._totalTime == totalTime:
             return
-        else:
-            self._totalTime = totalTime
-            if self._battleTimerUI is not None:
-                self._battleTimerUI.setTotalTime(totalTime)
-            if self._battleEndWarning is not None and self._battleEndWarning.isLoaded():
-                self._battleEndWarning.setCurrentTimeLeft(totalTime)
-            return
+        self._totalTime = totalTime
+        for viewCmp in self._viewComponents:
+            viewCmp.setTotalTime(totalTime)
 
     def _hideTotalTime(self):
-        if self._battleTimerUI is not None:
-            self._battleTimerUI.hideTotalTime()
-        return
+        for viewCmp in self._viewComponents:
+            viewCmp.hideTotalTime()
 
     def _setCountdown(self, state, timeLeft=None):
         if timeLeft is not None and self._countdown == timeLeft:
             return
         else:
             self._countdown = timeLeft
-            if self._preBattleTimerUI is not None:
-                self._preBattleTimerUI.setCountdown(state, timeLeft)
-                self._battleTimerUI.setState(state)
+            for viewCmp in self._viewComponents:
+                viewCmp.setCountdown(state, timeLeft)
+                viewCmp.setState(state)
+
             return
 
     def _hideCountdown(self, state, speed):
         self._countdown = None
-        if self._preBattleTimerUI is not None:
-            self._preBattleTimerUI.hideCountdown(state, speed)
-            self._battleTimerUI.setState(state)
+        for viewCmp in self._viewComponents:
+            viewCmp.hideCountdown(state, speed)
+            viewCmp.setState(state)
+
         return
 
     def _playSound(self):
@@ -275,6 +286,10 @@ class ArenaPeriodController(IArenaPeriodController, IViewComponentsController):
             self._battleCtx.setLastArenaWinStatus(additionalInfo.getWinStatus())
         return
 
+    def __invokeViewPeriodUpdate(self):
+        for view in self._viewComponents:
+            view.setPeriod(self._period)
+
     def __tick(self):
         floatLength = self._calculate()
         if floatLength is None:
@@ -288,12 +303,14 @@ class ArenaPeriodController(IArenaPeriodController, IViewComponentsController):
                     self._playingTime = self._length - floatLength
                     if self._period == _PERIOD.BATTLE:
                         if self._switcherState != 1:
-                            if self._switcherUI is not None:
-                                self._switcherUI.setInitialMode()
+                            for viewCmp in self._viewComponents:
+                                viewCmp.setInitialMode()
+
                             self._switcherState = 1
                     elif self._switcherState != 0:
-                        if self._switcherUI is not None:
-                            self._switcherUI.setLargeMode()
+                        for viewCmp in self._viewComponents:
+                            viewCmp.setLargeMode()
+
                         self._switcherState = 0
             elif self._ttState:
                 self._ttState = 0

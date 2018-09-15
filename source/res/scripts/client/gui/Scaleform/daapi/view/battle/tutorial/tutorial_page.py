@@ -7,6 +7,7 @@ from gui.Scaleform.daapi.view.battle.shared.markers2d import settings as _marker
 from gui.Scaleform.daapi.view.battle.shared.minimap import common
 from gui.Scaleform.daapi.view.battle.shared.minimap import component
 from gui.Scaleform.daapi.view.battle.shared.minimap import settings as _minimap_settings
+from gui.Scaleform.daapi.view.battle.shared.page import ComponentsConfig
 from gui.Scaleform.daapi.view.meta.BattleTutorialMeta import BattleTutorialMeta
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.battle_control import minimap_utils
@@ -80,13 +81,13 @@ class TutorialMarkersManager(MarkersManager):
         return setup
 
 
-_TUTORIAL_COMPONENTS_TO_CTRLS = ((BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW_ALIASES.BATTLE_TIMER, BATTLE_VIEW_ALIASES.PREBATTLE_TIMER)),)
+_TUTORIAL_COMPONENTS_CONFIG = ComponentsConfig(((BATTLE_CTRL_ID.ARENA_PERIOD, (BATTLE_VIEW_ALIASES.BATTLE_TIMER, BATTLE_VIEW_ALIASES.PREBATTLE_TIMER)),))
 _TUTORIAL_EXTERNAL_COMPONENTS = (CrosshairPanelContainer, TutorialMarkersManager)
 
 class TutorialPage(SharedPage):
 
     def __init__(self):
-        super(TutorialPage, self).__init__(components=_TUTORIAL_COMPONENTS_TO_CTRLS, external=_TUTORIAL_EXTERNAL_COMPONENTS)
+        super(TutorialPage, self).__init__(components=_TUTORIAL_COMPONENTS_CONFIG, external=_TUTORIAL_EXTERNAL_COMPONENTS)
 
     def _onBattleLoadingStart(self):
         self._blToggling = set(self.as_getComponentsVisibilityS())

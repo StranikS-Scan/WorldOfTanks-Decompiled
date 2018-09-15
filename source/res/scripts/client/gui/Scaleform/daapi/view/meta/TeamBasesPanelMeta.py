@@ -13,8 +13,8 @@ class TeamBasesPanelMeta(BaseDAAPIComponent):
     def as_stopCaptureS(self, id, points):
         return self.flashObject.as_stopCapture(id, points) if self._isDAAPIInited() else None
 
-    def as_updateCaptureDataS(self, id, points, rate, captureTime, vehiclesCount):
-        return self.flashObject.as_updateCaptureData(id, points, rate, captureTime, vehiclesCount) if self._isDAAPIInited() else None
+    def as_updateCaptureDataS(self, id, points, rate, captureTime, vehiclesCount, captureString):
+        return self.flashObject.as_updateCaptureData(id, points, rate, captureTime, vehiclesCount, captureString) if self._isDAAPIInited() else None
 
     def as_setCapturedS(self, id, title):
         return self.flashObject.as_setCaptured(id, title) if self._isDAAPIInited() else None

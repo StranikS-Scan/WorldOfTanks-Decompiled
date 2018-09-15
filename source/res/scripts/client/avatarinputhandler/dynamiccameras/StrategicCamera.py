@@ -226,7 +226,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
                 replayCtrl.setAimClipPosition(aimOffset)
         self.__aimOffset = aimOffset
         shotDescr = BigWorld.player().getVehicleDescriptor().shot
-        BigWorld.wg_trajectory_drawer().setParams(shotDescr['maxDistance'], Math.Vector3(0, -shotDescr['gravity'], 0), aimOffset)
+        BigWorld.wg_trajectory_drawer().setParams(shotDescr.maxDistance, Math.Vector3(0, -shotDescr.gravity, 0), aimOffset)
         curTime = BigWorld.time()
         deltaTime = curTime - self.__prevTime
         self.__prevTime = curTime

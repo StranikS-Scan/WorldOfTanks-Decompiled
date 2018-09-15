@@ -409,21 +409,20 @@
       <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	120	</armor_1>
-        <armor_2>	100	</armor_2>
-        <armor_3>	100	</armor_3>
+        <armor_1>	190	</armor_1>
+        <armor_2>	170	</armor_2>
+        <armor_3>	130	</armor_3>
         <armor_4>	100	</armor_4>
         <armor_5>	15	</armor_5>
         <armor_6>	30	</armor_6>
         <armor_7>	100	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	45	</armor_9>
-        <armor_10>	75	</armor_10>
-        <armor_11>	100	</armor_11>
-        <armor_12>	30	</armor_12>
-        <armor_13>	75	</armor_13>
-        <armor_14>	90	</armor_14>
-        <armor_15>	45	</armor_15>
+        <armor_10>	35	</armor_10>
+        <armor_11>	85	</armor_11>
+        <armor_12>	45	</armor_12>
+        <armor_13>	90	</armor_13>
+        <armor_14>	60	</armor_14>
         <armor_16>	115	</armor_16>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
@@ -448,42 +447,36 @@
             <maxPitch>	0 7 0.380783 7 0.444444 5 0.555556 5 0.619218 7 1 7	</maxPitch>
           </pitchLimits>
           <armor>
-            <armor_1>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	190	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	180	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
-            <armor_6>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_6>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_6>
-            <armor_7>	30	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_7>	110	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_7>
-            <armor_8>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_8>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_8>
-            <armor_9>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_9>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_9>
-            <armor_10>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_10>
-            <armor_11>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_11>
-            <armor_12>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_12>
             <gun>	40	</gun>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	8.1	</reloadTime>
+          <reloadTime>	7.5	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.13	</turretRotation>
+            <turretRotation>	0.11	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.2	</aimingTime>
+          <aimingTime>	2	</aimingTime>
           <models>
             <undamaged>	vehicles/russian/R127_T44_100_P/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R127_T44_100_P/crash/lod0/Gun_01.model	</destroyed>
@@ -622,9 +615,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.88	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </R127_T44_100_P.xml>

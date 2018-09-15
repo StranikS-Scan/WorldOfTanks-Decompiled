@@ -526,7 +526,7 @@ class FunctionalSetGuiItemCriteria(FunctionalEffect):
                 value = value.replace(marker, str(getVar(varID)))
 
             LOG_DEBUG('Set gui item criteria', criteria.getTargetID(), value)
-            self._gui.playEffect(GUI_EFFECT_NAME.SET_CRITERIA, (criteria.getTargetID(), value, not criteria.isCached()))
+            self._gui.playEffect(GUI_EFFECT_NAME.SET_CRITERIA, (criteria.getTargetID(), value))
             return
 
 

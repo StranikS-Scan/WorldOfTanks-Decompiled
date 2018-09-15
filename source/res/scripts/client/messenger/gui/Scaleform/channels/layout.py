@@ -39,13 +39,13 @@ class LobbyLayout(IChannelController):
 
     def setView(self, view):
         self._views.append(view)
-        view.onModuleDispose += self._onModuleDispose
+        view.onDispose += self._onModuleDispose
         view.setController(self)
 
     def removeView(self):
         for view in self._views:
             view.removeController()
-            view.onModuleDispose -= self._onModuleDispose
+            view.onDispose -= self._onModuleDispose
             view = None
 
         return
@@ -125,7 +125,7 @@ class LobbyLayout(IChannelController):
 
     def _onModuleDispose(self, view):
         view.removeController()
-        view.onModuleDispose -= self._onModuleDispose
+        view.onDispose -= self._onModuleDispose
         self._views.remove(view)
 
     def _refreshMembersDP(self):

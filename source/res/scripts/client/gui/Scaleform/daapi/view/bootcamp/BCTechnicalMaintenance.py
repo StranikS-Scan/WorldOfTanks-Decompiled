@@ -55,7 +55,7 @@ class BCTechnicalMaintenance(BCTechnicalMaintenanceMeta):
         for module in modules:
             module['currency'] = 'credits'
             creditsPrice = module['prices'].credits
-            module['prices'] = Money(credits=creditsPrice)
+            module['prices'] = Money(credits=creditsPrice).toMoneyTuple()
 
         if isBlock and self.__isLesson:
             for module in modules:
@@ -67,7 +67,7 @@ class BCTechnicalMaintenance(BCTechnicalMaintenanceMeta):
 
     def as_setDataS(self, data):
         for shell in data['shells']:
-            shell['prices'] = Money(credits=0)
+            shell['prices'] = Money(credits=0).toMoneyTuple()
 
         if self.__isLesson:
             data['autoEquipVisible'] = False

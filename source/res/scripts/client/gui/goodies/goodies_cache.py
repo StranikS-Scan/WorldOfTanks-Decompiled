@@ -6,6 +6,7 @@ from debug_utils import LOG_WARNING
 from goodies.goodie_constants import GOODIE_VARIETY, GOODIE_STATE, GOODIE_TARGET_TYPE
 from gui.goodies.goodie_items import Booster, PersonalVehicleDiscount
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from gui.shared.money import Money, MONEY_UNDEFINED
 from helpers import dependency
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.shared import IItemsCache
@@ -73,10 +74,27 @@ class GoodiesCache(IGoodiesCache):
 
     def getBoosterPriceData(self, boosterID):
         """
-        Gets tuple of Booster price, Booster default price, is booster hidden
+        Gets tuple of booster price-related data: (buy price, def price, alt price, def alt price, is booster hidden).
         """
         shop = self._items.shop
-        return (shop.getBoosterPrice(boosterID), shop.defaults.getBoosterPrice(boosterID), boosterID in shop.getHiddenBoosters())
+        prices = Money.makeFromMoneyTuple(shop.getBoosterPricesTuple(boosterID))
+        defPrices = Money.makeFromMoneyTuple(shop.defaults.getBoosterPricesTuple(boosterID))
+        if prices.isCompound():
+            currency = prices.getCurrency(byWeight=True)
+            buyPrice = Money.makeFrom(currency, prices.get(currency))
+            defPrice = Money.makeFrom(currency, defPrices.getSignValue(currency))
+            altPrice = prices.replace(currency, None)
+            defAltPrice = defPrices.replace(currency, None)
+        else:
+            buyPrice = prices
+            defPrice = defPrices
+            altPrice = None
+            defAltPrice = None
+        return (buyPrice,
+         defPrice,
+         altPrice,
+         defAltPrice,
+         boosterID in shop.getHiddenBoosters())
 
     def getItemByTargetValue(self, targetValue):
         """

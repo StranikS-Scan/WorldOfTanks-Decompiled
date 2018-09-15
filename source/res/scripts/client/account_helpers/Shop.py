@@ -224,9 +224,6 @@ class Shop(object):
     def getPlayerInscriptionCost(self, callback):
         self.__getValue('playerInscriptionCost', callback)
 
-    def getHornCost(self, callback):
-        self.__getValue('hornCost', callback)
-
     def buy(self, itemTypeIdx, nationIdx, itemShopID, count, goldForCredits, callback):
         if self.__ignore:
             if callback is not None:

@@ -55,7 +55,7 @@ class ShopDataParser(object):
         for intCD in self.__getListOfCompDescrs(nationID, itemTypeID):
             if intCD in prices:
                 yield (intCD,
-                 Money(*prices[intCD]),
+                 Money.makeFromMoneyTuple(prices[intCD]),
                  intCD in hiddenInShop,
                  intCD in sellForGold)
 
@@ -75,7 +75,7 @@ class ShopDataParser(object):
         return self.data.get('vehiclesToSellForGold', set([]))
 
     def getPrice(self, intCD):
-        return Money(*self._getRawPrice(intCD))
+        return Money.makeFromMoneyTuple(self._getRawPrice(intCD))
 
     def isHidden(self, intCD):
         return intCD in self.getHiddenItems()
@@ -98,7 +98,7 @@ class ShopDataParser(object):
             for typeIdx in itemTypes:
                 if typeIdx in self.__modulesGetters:
                     getter = self.__modulesGetters[typeIdx]
-                    result |= set((v['compactDescr'] for v in getter(nIdx).itervalues()))
+                    result |= set((v.compactDescr for v in getter(nIdx).itervalues()))
 
         return result
 

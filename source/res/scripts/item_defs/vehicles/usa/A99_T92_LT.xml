@@ -16,11 +16,11 @@
     <camouflageNetBonus>	0.1	</camouflageNetBonus>
     <firePenalty>	0.48	</firePenalty>
   </invisibility>
-  <repairCost>	4.5	</repairCost>
-  <premiumVehicleXPFactor>	0.2	</premiumVehicleXPFactor>
+  <repairCost>	5.7	</repairCost>
+  <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
-    <priceFactor>	1.4	</priceFactor>
+    <priceFactor>	1.6	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
     <exclusionMask></exclusionMask>
   </camouflage>
@@ -36,10 +36,10 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	7963	</weight>
-    <maxHealth>	672	</maxHealth>
+    <maxHealth>	800	</maxHealth>
     <ammoBayHealth>
-      <maxHealth>	200	</maxHealth>
-      <maxRegenHealth>	135	</maxRegenHealth>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
     <models>
@@ -96,8 +96,8 @@
     <Chassis_A99_T92_LT>
       <userString>	#usa_vehicles:Chassis_A99_T92_LT	</userString>
       <tags></tags>
-      <level>	7	</level>
-      <price>	20000	</price>
+      <level>	8	</level>
+      <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	20	</leftTrack>
@@ -108,15 +108,15 @@
       <terrainResistance>	0.3 0.4 1.1	</terrainResistance>
       <brakeForce>	17000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	70	</rotationSpeed>
+      <rotationSpeed>	55	</rotationSpeed>
       <shotDispersionFactors>
         <vehicleMovement>	0.08	</vehicleMovement>
         <vehicleRotation>	0.08	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
-      <maxHealth>	155	</maxHealth>
-      <maxRegenHealth>	115	</maxRegenHealth>
-      <repairCost>	5.0	</repairCost>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	7.5	</repairCost>
       <models>
         <undamaged>	vehicles/american/A99_T92_LT/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/american/A99_T92_LT/crash/lod0/Chassis.model	</destroyed>
@@ -322,8 +322,8 @@
     <Turret_1_A99_T92_LT>
       <userString>	#usa_vehicles:Turret_1_A99_T92_LT	</userString>
       <tags></tags>
-      <level>	7	</level>
-      <price>	20000	</price>
+      <level>	8	</level>
+      <price>	30000	</price>
       <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	28.6	</armor_1>
@@ -332,17 +332,17 @@
       </armor>
       <primaryArmor>	armor_1 armor_1 armor_1	</primaryArmor>
       <weight>	3000	</weight>
-      <maxHealth>	168	</maxHealth>
+      <maxHealth>	200	</maxHealth>
       <rotationSpeed>	50	</rotationSpeed>
       <turretRotatorHealth>
-        <maxHealth>	130	</maxHealth>
-        <maxRegenHealth>	65	</maxRegenHealth>
+        <maxHealth>	140	</maxHealth>
+        <maxRegenHealth>	70	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
       <circularVisionRadius>	400	</circularVisionRadius>
       <surveyingDeviceHealth>
-        <maxHealth>	80	</maxHealth>
-        <maxRegenHealth>	40	</maxRegenHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
@@ -363,7 +363,7 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.234	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	4.2	</reloadTime>
+          <reloadTime>	4.5	</reloadTime>
           <aimingTime>	1.8	</aimingTime>
           <shotDispersionFactors>
             <turretRotation>	0.05	</turretRotation>
@@ -443,7 +443,7 @@
     <detailed>
       <engines>
         <Continental_AOI-628-1_A>
-          <smplEnginePower>	550	</smplEnginePower>
+          <smplEnginePower>	600	</smplEnginePower>
         </Continental_AOI-628-1_A>
       </engines>
       <chassis>
@@ -494,9 +494,4 @@
     <lodDist>	MEDIUM	</lodDist>
     <alpha>	0.82	</alpha>
   </emblems>
-  <horns>
-    <priceFactor>	1	</priceFactor>
-    <distanceFactor>	1	</distanceFactor>
-    <volumeFactor>	1	</volumeFactor>
-  </horns>
 </A99_T92_LT.xml>

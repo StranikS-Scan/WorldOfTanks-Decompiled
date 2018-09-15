@@ -6,8 +6,8 @@ from shared_utils import first
 
 class BadgesHelper(object):
 
-    def __init__(self, badges=[]):
-        self.__badges = badges
+    def __init__(self, badges=None):
+        self.__badges = badges or []
 
     def getBadgeID(self):
         return first(self.__badges, 0)

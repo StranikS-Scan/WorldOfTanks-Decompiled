@@ -1,4 +1,4 @@
-﻿"""
+"""
 This file was generated using the wgpygen.
 Please, don't edit this file manually.
 """
@@ -6066,4 +6066,5 @@ class RES_ICONS(object):
             return
         else:
             return outcome
+
 

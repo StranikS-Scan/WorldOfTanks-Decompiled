@@ -131,10 +131,10 @@ def getGuiServicesConfig(manager):
     from gui import Scaleform as _sf
     from skeletons.gui.lobby_context import ILobbyContext
     manager.addConfig(shared.getSharedServices)
+    manager.addConfig(server_events.getServerEventsConfig)
     manager.addConfig(game_control.getGameControllersConfig)
     manager.addConfig(_sf.getScaleformConfig)
     manager.addConfig(login.getLoginManagerConfig)
-    manager.addConfig(server_events.getServerEventsConfig)
     manager.addConfig(battle_control.getBattleSessionConfig)
     manager.addConfig(sounds.getSoundsConfig)
     manager.addConfig(clans.getClanServicesConfig)

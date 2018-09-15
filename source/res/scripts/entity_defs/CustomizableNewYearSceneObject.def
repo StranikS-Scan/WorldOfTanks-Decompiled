@@ -1,0 +1,21 @@
+<CustomizableNewYearSceneObject.def>
+  <Parent>	DormantSelectableObject	</Parent>
+  <Properties>
+    <anchorName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </anchorName>
+    <blankModel>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </blankModel>
+    <slotsRadius>
+      <Type>	FLOAT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Default>	2.0	</Default>
+    </slotsRadius>
+  </Properties>
+</CustomizableNewYearSceneObject.def>

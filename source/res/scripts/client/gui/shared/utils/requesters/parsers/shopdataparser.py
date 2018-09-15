@@ -80,15 +80,10 @@ class ShopDataParser(object):
         return self.__filterByNationAndEqType(allOptDevices, params.OptionalDeviceParams, nationID)
 
     def getItemsIterator(self, nationID=None, itemTypeID=None):
-        hiddenInShop = self.data.get('notInShopItems', [])
-        sellForGold = self.data.get('vehiclesToSellForGold', [])
         prices = self.getPrices()
         for intCD in self.__getListOfCompDescrs(nationID, itemTypeID):
             if intCD in prices:
-                yield (intCD,
-                 Money.makeFromMoneyTuple(prices[intCD]),
-                 intCD in hiddenInShop,
-                 intCD in sellForGold)
+                yield intCD
 
     def getPrices(self):
         return self.data.get('itemPrices', ItemsPrices())
@@ -118,9 +113,12 @@ class ShopDataParser(object):
         return self.getPrices().get(intCD, ())
 
     def __getListOfCompDescrs(self, nationID=None, itemTypeID=None):
-        itemTypes = [itemTypeID]
         if itemTypeID is None:
             itemTypes = self.__modulesGetters.keys()
+        elif not isinstance(itemTypeID, list):
+            itemTypes = [itemTypeID]
+        else:
+            itemTypes = itemTypeID
         itemNations = [nationID]
         if nationID is None:
             itemNations = nations.INDICES.values()

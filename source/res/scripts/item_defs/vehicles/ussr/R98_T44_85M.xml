@@ -7,7 +7,7 @@
   </crew>
   <speedLimits>
     <forward>	68	</forward>
-    <backward>	20	</backward>
+    <backward>	24	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.296	</moving>
@@ -45,7 +45,7 @@
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	12270	</weight>
-    <maxHealth>	960	</maxHealth>
+    <maxHealth>	880	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -102,8 +102,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	50	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.15	</vehicleMovement>
-        <vehicleRotation>	0.15	</vehicleRotation>
+        <vehicleMovement>	0.12	</vehicleMovement>
+        <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -435,14 +435,14 @@
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	6850	</weight>
-      <maxHealth>	240	</maxHealth>
-      <rotationSpeed>	40	</rotationSpeed>
+      <maxHealth>	220	</maxHealth>
+      <rotationSpeed>	45	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	140	</maxHealth>
         <maxRegenHealth>	70	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	380	</circularVisionRadius>
+      <circularVisionRadius>	390	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -451,15 +451,15 @@
       <guns>
         <_85mm_ZiS_S-53_44BM>	shared	  <maxAmmo>	51	</maxAmmo>
           <armor>
-            <armor_1>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	180	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
             <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_4>
-            <armor_5>	90	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_5>	135	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
             <gun>	30	</gun>
           </armor>
@@ -468,14 +468,14 @@
             <minPitch>	0 -20 1 -20	</minPitch>
             <maxPitch>	0 5 0.380783 5 0.444444 4 0.555556 4 0.619218 5 1 5	</maxPitch>
           </pitchLimits>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	6	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	4.8	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.11	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	2	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.0	</aimingTime>
+          <aimingTime>	1.9	</aimingTime>
           <models>
             <undamaged>	vehicles/russian/R98_T44_85/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R98_T44_85/crash/lod0/Gun_01.model	</destroyed>
@@ -582,7 +582,7 @@
     <detailed>
       <engines>
         <V-2IS_R1F>
-          <smplEnginePower>	750	</smplEnginePower>
+          <smplEnginePower>	850	</smplEnginePower>
         </V-2IS_R1F>
       </engines>
       <chassis>

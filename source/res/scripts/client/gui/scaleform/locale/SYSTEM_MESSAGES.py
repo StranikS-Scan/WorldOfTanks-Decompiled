@@ -196,6 +196,7 @@ class SYSTEM_MESSAGES(object):
     GRAFICSPRESETFAIL = '#system_messages:graficsPresetFail'
     DENUNCIATION_SUCCESS = '#system_messages:denunciation/success'
     CUSTOMIZATION_UNAVAILABLE = '#system_messages:customization/unavailable'
+    CUSTOMIZATION_PROHIBITED = '#system_messages:customization/prohibited'
     CUSTOMIZATION_SERVER_ERROR = '#system_messages:customization/server_error'
     CUSTOMIZATION_CREDITS_NOT_ENOUGH = '#system_messages:customization/credits_not_enough'
     CUSTOMIZATION_GOLD_NOT_ENOUGH = '#system_messages:customization/gold_not_enough'
@@ -1281,6 +1282,7 @@ class SYSTEM_MESSAGES(object):
      GRAFICSPRESETFAIL,
      DENUNCIATION_SUCCESS,
      CUSTOMIZATION_UNAVAILABLE,
+     CUSTOMIZATION_PROHIBITED,
      CUSTOMIZATION_SERVER_ERROR,
      CUSTOMIZATION_CREDITS_NOT_ENOUGH,
      CUSTOMIZATION_GOLD_NOT_ENOUGH,

@@ -767,3 +767,13 @@ class IBootcampController(IGameController):
 
     def getDisabledSettings(self):
         raise NotImplementedError
+
+
+class ICalendarController(IGameController):
+
+    def showCalendar(self, invokedFrom):
+        """Show the advent calendar
+        
+        :param invokedFrom: Info string about the place from which the calendar is invoked.
+        """
+        pass

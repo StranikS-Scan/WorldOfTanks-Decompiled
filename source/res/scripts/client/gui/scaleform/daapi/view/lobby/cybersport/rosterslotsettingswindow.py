@@ -47,6 +47,7 @@ class RosterSlotSettingsWindow(RosterSlotSettingsWindowMeta, VehicleSelectorBase
         filters = AccountSettings.getFilter(self.__section)
         filters['isMain'] = False
         result = self._initFilter(**filters)
+        result.update({'compatibleOnlyLabel': CYBERSPORT.WINDOW_VEHICLESELECTOR_FILTERS_MATCHES})
         self.as_updateVehicleFiltersS(result)
 
     def submitButtonHandler(self, value):

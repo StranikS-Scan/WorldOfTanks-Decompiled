@@ -38,6 +38,9 @@ class PredicateCondition(_CriteriaCondition):
     def lookInInventory(self):
         return False
 
+    def getIntCDProtector(self):
+        return None
+
     def __init__(self, predicate):
         self.predicate = predicate
 
@@ -77,10 +80,28 @@ class NegativeCompoundPredicateCondition(CompoundPredicateCondition):
         return not super(NegativeCompoundPredicateCondition, self).__call__(item)
 
 
+class IntCDProtector(object):
+    """ This class is protector to exclude creation of items
+    by int-type compact descriptor."""
+    __slots__ = ('__intCDs',)
+
+    def __init__(self, *intCDs):
+        super(IntCDProtector, self).__init__()
+        self.__intCDs = intCDs
+
+    def isUnlinked(self):
+        return not self.__intCDs
+
+    def isTriggered(self, intCD):
+        return intCD not in self.__intCDs
+
+
 class RequestCriteria(object):
 
     def __init__(self, *args):
         self._conditions = args
+        self._protector = None
+        return
 
     def __call__(self, item):
         for c in self._conditions:
@@ -99,12 +120,22 @@ class RequestCriteria(object):
     def getConditions(self):
         return self._conditions
 
+    def getIntCDProtector(self):
+        return self._protector
+
     def lookInInventory(self):
         for condition in self._conditions:
             if condition.lookInInventory():
                 return True
 
         return False
+
+
+class IntCDProtectionRequestCriteria(RequestCriteria):
+
+    def __init__(self, condition, intCDs):
+        super(IntCDProtectionRequestCriteria, self).__init__(PredicateCondition(condition))
+        self._protector = IntCDProtector(*intCDs)
 
 
 class VehsSuitableCriteria(RequestCriteria):
@@ -152,7 +183,7 @@ class REQ_CRITERIA(object):
         SPECIFIC_BY_INV_ID = staticmethod(lambda invIDs: RequestCriteria(PredicateCondition(lambda item: item.invID in invIDs)))
         SUITABLE = staticmethod(lambda vehsItems, itemTypeIDs=None: VehsSuitableCriteria(vehsItems, itemTypeIDs))
         RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented))
-        ACTIVE_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and not item.rentalIsOver))
+        ACTIVE_RENT = RequestCriteria(InventoryPredicateCondition(lambda item: item.isRented and not item.rentalIsOver))
         EXPIRED_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver))
         EXPIRED_IGR_RENT = RequestCriteria(PredicateCondition(lambda item: item.isRented and item.rentalIsOver and item.isPremiumIGR))
         DISABLED_IN_PREM_IGR = RequestCriteria(PredicateCondition(lambda item: item.isDisabledInPremIGR))
@@ -528,12 +559,44 @@ class ItemsRequester(IItemsRequester):
                         result[item.intCD] = item
 
             itemGetter = self.getItemByCD
-            for intCD, _, _, _ in shopParser.getItemsIterator(nationID=nationID, itemTypeID=typeID):
+            protector = criteria.getIntCDProtector()
+            if protector is not None and protector.isUnlinked():
+                return result
+            for intCD in shopParser.getItemsIterator(nationID=nationID, itemTypeID=typeID):
+                if protector is not None and protector.isTriggered(intCD):
+                    continue
                 item = itemGetter(intCD)
                 if criteria(item):
                     result[intCD] = item
 
         return result
+
+    def getItemsEx(self, itemTypeIDs, criteria=REQ_CRITERIA.EMPTY, nationID=None):
+        shopParser = ShopDataParser(self.__shop.getItemsData())
+        result = ItemsCollection()
+        if GUI_ITEM_TYPE.VEHICLE in itemTypeIDs and nationID is None and criteria.lookInInventory():
+            vehGetter = self.getVehicle
+            for vehInvID in (self.inventory.getItems(GUI_ITEM_TYPE.VEHICLE) or {}).iterkeys():
+                item = vehGetter(vehInvID)
+                if criteria(item):
+                    result[item.intCD] = item
+
+            itemTypeIDs.remove(GUI_ITEM_TYPE.VEHICLE)
+        if not itemTypeIDs:
+            return result
+        else:
+            itemGetter = self.getItemByCD
+            protector = criteria.getIntCDProtector()
+            if protector is not None and protector.isUnlinked():
+                return result
+            for intCD in shopParser.getItemsIterator(nationID=nationID, itemTypeID=itemTypeIDs):
+                if protector is not None and protector.isTriggered(intCD):
+                    continue
+                item = itemGetter(intCD)
+                if criteria(item):
+                    result[intCD] = item
+
+            return result
 
     def getTankmen(self, criteria=REQ_CRITERIA.TANKMAN.ACTIVE):
         result = ItemsCollection()

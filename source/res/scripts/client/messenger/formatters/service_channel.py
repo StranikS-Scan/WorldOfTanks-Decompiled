@@ -5,7 +5,7 @@ import re
 import time
 import types
 from Queue import Queue
-from collections import namedtuple
+from collections import namedtuple, defaultdict
 import ArenaType
 import BigWorld
 import account_helpers
@@ -44,6 +44,7 @@ from helpers import dependency
 from helpers import i18n, html, getLocalizedData
 from helpers import time_utils
 from items import getTypeInfoByIndex, getTypeInfoByName, vehicles as vehicles_core
+from items.new_year_types import NY_STATE
 from messenger import g_settings
 from messenger.ext import passCensor
 from messenger.formatters import TimeFormatter, NCContextItemFormatter
@@ -53,6 +54,9 @@ from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.new_year import INewYearController
+from gui.Scaleform.locale.NY import NY
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 _EOL = '\n'
 _DEFAULT_MESSAGE = 'defaultMessage'
 
@@ -551,6 +555,7 @@ class GiftReceivedFormatter(ServiceChannelFormatter):
 
 
 class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
+    _nyCtrl = dependency.descriptor(INewYearController)
     __assetHandlers = {INVOICE_ASSET.GOLD: '_formatAmount',
      INVOICE_ASSET.CREDITS: '_formatAmount',
      INVOICE_ASSET.CRYSTAL: '_formatAmount',
@@ -796,6 +801,11 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             dossier = dataEx.get('dossier', {})
             if dossier:
                 operations.append(self.__getDossierString())
+            ny18Toys = dataEx.get('ny18Toys', {})
+            if ny18Toys:
+                ny18ToysStr = self._getNy18ToyString(ny18Toys)
+                if ny18ToysStr:
+                    operations.append(ny18ToysStr)
             _extendCustomizationData(dataEx, operations)
             tankmenFreeXP = dataEx.get('tankmenFreeXP', {})
             if tankmenFreeXP:
@@ -974,6 +984,38 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
         if count != 0:
             template = 'awardListAccruedInvoiceReceived' if count > 0 else 'awardListDebitedInvoiceReceived'
             return g_settings.htmlTemplates.format(template, {'count': count})
+
+    @classmethod
+    def _getNy18ToyString(cls, toysData):
+        accuredToys = defaultdict(lambda : 0)
+        debitedToys = defaultdict(lambda : 0)
+        accruedToysStr = []
+        debitedToysStr = []
+        for toyID, count in toysData.iteritems():
+            christmasItemInfo = cls._nyCtrl.toysDescrs.get(toyID)
+            if christmasItemInfo is not None:
+                if count > 0:
+                    accuredToys[christmasItemInfo.type] += count
+                else:
+                    debitedToys[christmasItemInfo.type] += abs(count)
+            LOG_WARNING("Couldn't find toy {}".format(toyID))
+
+        for guiType, count in accuredToys.iteritems():
+            guiTypeName = i18n.makeString('#ny:system_messages/invoiceReceived/toyType/{}'.format(guiType))
+            if count > 0:
+                accruedToysStr.append(i18n.makeString('#ny:system_messages/invoiceReceived/toy', name=guiTypeName, count=count))
+
+        for guiType, count in debitedToys.iteritems():
+            guiTypeName = i18n.makeString('#ny:system_messages/invoiceReceived/toyType/{}'.format(guiType))
+            if count > 0:
+                debitedToysStr.append(i18n.makeString('#ny:system_messages/invoiceReceived/toy', name=guiTypeName, count=count))
+
+        result = []
+        if accruedToysStr:
+            result.append(g_settings.htmlTemplates.format('toysInvoiceReceived', ctx={'toys': ', '.join(accruedToysStr)}))
+        if debitedToysStr:
+            result.append(g_settings.htmlTemplates.format('toysDebitedReceived', ctx={'toys': ', '.join(debitedToysStr)}))
+        return '<br/>'.join(result)
 
 
 class AdminMessageFormatter(ServiceChannelFormatter):
@@ -1579,6 +1621,7 @@ class BootcampResultsFormatter(WaitItemsSyncFormatter):
 
 class TokenQuestsFormatter(WaitItemsSyncFormatter):
     _eventsCache = dependency.descriptor(IEventsCache)
+    _nyCtrl = dependency.descriptor(INewYearController)
 
     @async
     @process
@@ -1595,10 +1638,33 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
                 return
             if self.__processPersonalMissionsSpecial(completedQuestIDs, message, callback):
                 return
+            newYearQuestDescrsIds = set(self._nyCtrl.boxStorage.getDescriptors().keys() + self._nyCtrl.chestStorage.getDescriptors().keys() + self._nyCtrl.collectionRewardsBySettingID)
+            isNYeventFinished = self._nyCtrl.state == NY_STATE.FINISHED
+            isNYChest = bool(not completedQuestIDs.difference(set(self._nyCtrl.chestStorage.getDescriptors().keys())))
+            nyTemplateName = None
+            if not isNYeventFinished:
+                if completedQuestIDs.intersection(newYearQuestDescrsIds):
+                    if not completedQuestIDs.difference(newYearQuestDescrsIds):
+                        if isNYChest:
+                            nyTemplateName = 'nyChestOpenedInvoice'
+                        else:
+                            LOG_DEBUG("Standard Message won't show because it was NY sys msg response.", completedQuestIDs)
+                            callback([])
+                            return
+            else:
+                boxesDescriptorsSet = set(self._nyCtrl.boxStorage.getDescriptors().keys())
+                chestsDescriptorsSet = set(self._nyCtrl.chestStorage.getDescriptors().keys())
+                forcedOpenedBoxes = boxesDescriptorsSet.intersection(completedQuestIDs)
+                forcedOpenedChests = chestsDescriptorsSet.intersection(completedQuestIDs)
+                if forcedOpenedBoxes or forcedOpenedChests:
+                    nyTemplateName = 'nyFinishGoodsInvoice' if not forcedOpenedChests else 'nyFinishGoodsInvoiceWithVD'
+                    self._nyCtrl.stateHandler.setMessageShown()
             fmt = self.formatQuestAchieves(data, asBattleFormatter=False)
             if fmt is not None:
                 settings = self._getGuiSettings(message, self._getTemplateName(completedQuestIDs))
-                formatted = g_settings.msgTemplates.format(self._getTemplateName(completedQuestIDs), {'achieves': fmt})
+                formatted = g_settings.msgTemplates.format(nyTemplateName or self._getTemplateName(completedQuestIDs), {'achieves': fmt})
+                if not isNYeventFinished and isNYChest:
+                    settings.priorityLevel = 'low'
         callback([_MessageData(formatted, settings)])
         return
 
@@ -1647,6 +1713,21 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
         for intCD, count in items.iteritems():
             itemDescr = vehicles_core.getItemByCompactDescr(intCD)
             itemsNames.append(i18n.makeString('#messenger:serviceChannelMessages/battleResults/quests/items/name', name=itemDescr.i18n.userString, count=BigWorld.wg_getIntegralFormat(count)))
+
+        nyBonuses = []
+        if data.get('tokens'):
+            for nyTokenId, nyTokenParams in data['tokens'].iteritems():
+                if nyTokenId in cls._nyCtrl.boxStorage.getDescriptors():
+                    itemsNames.append(i18n.makeString('#ny:system_messages/battleResult/boxes', count=BigWorld.wg_getIntegralFormat(nyTokenParams.get('count', 0))))
+                if nyTokenId in cls._nyCtrl.vehDiscountsStorage.getDescriptors():
+                    intLevel = cls._nyCtrl.vehDiscountsStorage.extractLevelFromDiscountID(nyTokenId)
+                    vehLvlStr = i18n.makeString(TOOLTIPS.level(intLevel))
+                    nyBonuses.insert(0, i18n.makeString(NY.REWARDSSCREEN_TOOLTIP_VEHICLE_HEADER, level=vehLvlStr))
+                if nyTokenId in cls._nyCtrl.tankmanDiscountsStorage.getDescriptors():
+                    nyBonuses.append(i18n.makeString(NY.TOOLTIP_CAROUSELITEM_AWARDS_GIRL))
+
+        for b in nyBonuses:
+            itemsNames.insert(0, b)
 
         if itemsNames:
             result.append(cls.__makeQuestsAchieve('battleQuestsItems', names=', '.join(itemsNames)))
@@ -2341,3 +2422,55 @@ class RankedQuestFormatter(WaitItemsSyncFormatter):
 
     def __packAward(self, key, value, extraKey):
         return '{} {}'.format(i18n.makeString(SYSTEM_MESSAGES.getRankedNotificationBonusName(name=key, extra=extraKey)), self.__awardsStyles.get(key, text_styles.stats)(value))
+
+
+class _NewYearFormatter(ClientSysMessageFormatter):
+
+    def format(self, data, *args):
+        key = self._getKey()
+        formatted = g_settings.msgTemplates.format(key)
+        return [_MessageData(formatted, self._getGuiSettings(args, key))]
+
+    def _getKey(self):
+        raise NotImplementedError
+
+
+class NewYearStartedFormatter(_NewYearFormatter):
+
+    def _getKey(self):
+        pass
+
+
+class NewYearFinishedFormatter(_NewYearFormatter):
+
+    def _getKey(self):
+        pass
+
+
+class NewYearTankmanRecruitFormatter(ClientSysMessageFormatter):
+
+    def format(self, data, *args):
+        tankman = Tankman(args[0])
+        key = 'tankmenNYInvoiceReceived'
+        formatted = g_settings.msgTemplates.format(key, ctx={'rankName': tankman.rankUserName,
+         'lastName': tankman.lastUserName,
+         'role': tankman.roleUserName,
+         'vehicle': getUserName(tankman.vehicleNativeDescr.type),
+         'skillLevel': tankman.roleLevel})
+        return [_MessageData(formatted, self._getGuiSettings(args, key))]
+
+
+class NewYearPresentBoxFormatter(ClientSysMessageFormatter):
+
+    def format(self, data, *args):
+        key = 'presentBoxReceived'
+        formatted = g_settings.msgTemplates.format(key, ctx={'msgBody': args[0]})
+        return [_MessageData(formatted, self._getGuiSettings(args, key))]
+
+
+class NewYearSettingCollectedFormatter(ClientSysMessageFormatter):
+
+    def format(self, data, *args):
+        key = 'nySettingCollected'
+        formatted = g_settings.msgTemplates.format(key, ctx={'msgBody': args[0]})
+        return [_MessageData(formatted, self._getGuiSettings(args, key))]

@@ -113,9 +113,10 @@ class TokenImagesSubRequester(SubRequester):
 
     def _tickets(self):
         tickets = []
-        for quest in self._eventsCache.getQuests().itervalues():
-            if quest.getType() not in (EVENT_TYPE.TOKEN_QUEST, EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST):
-                continue
+        desiredTypes = (EVENT_TYPE.TOKEN_QUEST, EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST)
+        filterType = lambda q: q.getType() in desiredTypes
+        quests = self._eventsCache.getQuests(filterType)
+        for quest in quests.itervalues():
             for token in quest.accountReqs.getTokens():
                 styleID = token.getStyleID()
                 if token.isDisplayable() and styleID not in _DEFAULT_TOKENS_STYLES and styleID not in tickets:
@@ -147,9 +148,10 @@ class TokenInfoSubRequester(SubRequester):
             self._storage[ticket] = ms(MENU.QUOTE, string=title)
 
     def _tickets(self):
-        for quest in self._eventsCache.getQuests().itervalues():
-            if quest.getType() not in (EVENT_TYPE.TOKEN_QUEST, EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST):
-                continue
+        desiredTypes = (EVENT_TYPE.TOKEN_QUEST, EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST)
+        filterType = lambda q: q.getType() in desiredTypes
+        quests = self._eventsCache.getQuests(filterType)
+        for quest in quests.itervalues():
             for token in quest.accountReqs.getTokens():
                 styleID = token.getStyleID()
                 if token.isDisplayable() and styleID not in _DEFAULT_TOKENS_STYLES:
@@ -195,15 +197,15 @@ class DecorationRequester(SubRequester):
 
     def _tickets(self):
         decorations = []
-        for quest in self._eventsCache.getGroups().itervalues():
+        filterIcon = lambda q: q.getIconID()
+        groups = self._eventsCache.getGroups(filterIcon)
+        for quest in groups.itervalues():
             decorationID = quest.getIconID()
-            if decorationID:
-                decorations.append((decorationID, DECORATION_SIZES.MARATHON))
+            decorations.append((decorationID, DECORATION_SIZES.MARATHON))
 
-        for quest in self._eventsCache.getQuests().itervalues():
+        quests = self._eventsCache.getQuests(filterIcon)
+        for quest in quests.itervalues():
             decorationID = quest.getIconID()
-            if not decorationID:
-                continue
             if isMarathon(quest.getID()):
                 if str(decorationID) not in _DEFAULT_DECORATIONS:
                     decorations.append((decorationID, DECORATION_SIZES.BONUS))
@@ -270,11 +272,9 @@ class TokenSaleSubRequester(SubRequester):
 
     def _tickets(self):
         tokens = []
-        for quest in self._eventsCache.getQuests().itervalues():
-            if quest.getType() not in EVENT_TYPE.QUESTS_WITH_SHOP_BUTTON:
-                continue
-            if not quest.isTokensOnSaleDynamic():
-                continue
+        filterByTypeAndSale = lambda q: q.getType() in EVENT_TYPE.QUESTS_WITH_SHOP_BUTTON and q.isTokensOnSaleDynamic()
+        quests = self._eventsCache.getQuests(filterByTypeAndSale)
+        for quest in quests.itervalues():
             for token in quest.accountReqs.getTokens():
                 if token.isDisplayable() and token not in tokens:
                     tokens.append(token)

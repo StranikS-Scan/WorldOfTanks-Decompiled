@@ -332,6 +332,9 @@ class View(AbstractViewMeta):
         """
         self.fireEvent(FocusEvent(FocusEvent.COMPONENT_FOCUSED))
 
+    def delaySwitchTo(self, viewAlias, freezeCbk, unfreezeCbk):
+        return False
+
     def _populate(self):
         super(View, self)._populate()
         self.soundManager.startSpace(self._COMMON_SOUND_SPACE)

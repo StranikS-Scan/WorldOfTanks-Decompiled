@@ -2,9 +2,12 @@
 # Embedded file name: scripts/client/web_client_api/commands/request.py
 from collections import namedtuple
 from command import SchemeValidator, CommandHandler, instantiateObject
-_RequestCommand = namedtuple('_RequestCommand', ('request_id',))
-_RequestCommand.__new__.__defaults__ = (None,)
+_RequestCommand = namedtuple('_RequestCommand', ('request_id', 'custom_parameters'))
+_RequestCommand.__new__.__defaults__ = (None, None)
 _RequestCommandScheme = {'required': (('request_id', basestring),)}
+_RequestAccessTokenCommand = namedtuple('_RequestAccessTokenCommand', ('force',))
+_RequestAccessTokenCommand.__new__.__defaults__ = (False,)
+_RequestAccessTokenCommandScheme = {'optional': (('force', bool),)}
 
 class RequestCommand(_RequestCommand, SchemeValidator):
     """
@@ -14,6 +17,12 @@ class RequestCommand(_RequestCommand, SchemeValidator):
 
     def __init__(self, *args, **kwargs):
         super(RequestCommand, self).__init__(_RequestCommandScheme)
+
+
+class RequestAccessTokenCommand(_RequestAccessTokenCommand, SchemeValidator):
+
+    def __init__(self, *args, **kwargs):
+        super(RequestAccessTokenCommand, self).__init__(_RequestAccessTokenCommandScheme)
 
 
 def createRequestHandler(handlerFunc):

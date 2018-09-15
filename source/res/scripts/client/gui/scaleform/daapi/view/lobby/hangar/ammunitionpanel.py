@@ -33,17 +33,20 @@ HANGAR_FITTING_SLOTS = FITTING_SLOTS + _BOOSTERS_SLOTS
 def getFittingSlotsData(vehicle, slotsRange, VoClass=None, itemsCache=None):
     devices = []
     VoClass = VoClass or FittingSlotVO
+    itemTypeIDs = [ GUI_ITEM_TYPE_INDICES[slotType] for slotType in slotsRange ]
+    gatheredItems = itemsCache.items.getItemsEx(itemTypeIDs, REQ_CRITERIA.CUSTOM(lambda item: item.isInstalled(vehicle)), vehicle.nationID)
     for slotType in slotsRange:
-        data = itemsCache.items.getItems(GUI_ITEM_TYPE_INDICES[slotType], REQ_CRITERIA.CUSTOM(lambda item: item.isInstalled(vehicle))).values()
+        slotTypeIdx = GUI_ITEM_TYPE_INDICES[slotType]
+        slotItems = [ item for item in gatheredItems.itervalues() if item.itemTypeID == slotTypeIdx ]
         if slotType in ARTEFACTS_SLOTS:
             for slotId in xrange(NUM_OPTIONAL_DEVICE_SLOTS):
-                devices.append(VoClass(data, vehicle, slotType, slotId, TOOLTIPS_CONSTANTS.HANGAR_MODULE))
+                devices.append(VoClass(slotItems, vehicle, slotType, slotId, TOOLTIPS_CONSTANTS.HANGAR_MODULE))
 
         if slotType in _BOOSTERS_SLOTS:
             for slotId in xrange(BATTLE_BOOSTER_LAYOUT_SIZE):
-                devices.append(VoClass(data, vehicle, slotType, slotId, tooltipType=TOOLTIPS_CONSTANTS.BATTLE_BOOSTER))
+                devices.append(VoClass(slotItems, vehicle, slotType, slotId, tooltipType=TOOLTIPS_CONSTANTS.BATTLE_BOOSTER))
 
-        devices.append(VoClass(data, vehicle, slotType, tooltipType=TOOLTIPS_CONSTANTS.HANGAR_MODULE))
+        devices.append(VoClass(slotItems, vehicle, slotType, tooltipType=TOOLTIPS_CONSTANTS.HANGAR_MODULE))
 
     return devices
 

@@ -54,3 +54,15 @@ class HangarMeta(View):
 
     def as_setAlertMessageBlockVisibleS(self, isVisible):
         return self.flashObject.as_setAlertMessageBlockVisible(isVisible) if self._isDAAPIInited() else None
+
+    def as_initNYS(self, isEnabled, isAvailable, counter):
+        return self.flashObject.as_initNY(isEnabled, isAvailable, counter) if self._isDAAPIInited() else None
+
+    def as_updateNYBoxCounterS(self, counter):
+        return self.flashObject.as_updateNYBoxCounter(counter) if self._isDAAPIInited() else None
+
+    def as_updateNYEnabledS(self, isEnabled):
+        return self.flashObject.as_updateNYEnabled(isEnabled) if self._isDAAPIInited() else None
+
+    def as_updateNYAvailableS(self, isAvailable):
+        return self.flashObject.as_updateNYAvailable(isAvailable) if self._isDAAPIInited() else None

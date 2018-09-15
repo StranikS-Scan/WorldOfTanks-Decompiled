@@ -783,3 +783,21 @@ class InventoryBattleBoosterContext(ShopBattleBoosterContext):
         value = super(InventoryBattleBoosterContext, self).getStatusConfiguration(item)
         value.checkBuying = False
         return value
+
+
+class NewYearAwardsResultContext(ProfileContext):
+    """ Profile class for tool tip context
+    """
+
+    def __init__(self, fieldsToExclude=None):
+        super(NewYearAwardsResultContext, self).__init__(fieldsToExclude)
+        self._component = TOOLTIP_COMPONENT.NY_REWARDS
+
+    def buildItem(self, block, name, value=0, customData=None):
+        factory = factories.getAchievementFactory((block, name))
+        return factory.create(value=value) if factory is not None else None
+
+    def getParamsConfiguration(self, item):
+        value = super(ProfileContext, self).getParamsConfiguration(item)
+        value.checkAchievementExistence = False
+        return value

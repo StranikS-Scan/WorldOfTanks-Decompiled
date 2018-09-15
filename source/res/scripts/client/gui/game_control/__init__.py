@@ -10,6 +10,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.AwardController import AwardController as _Awards
     from gui.game_control.BoostersController import BoostersController as _Boosters
     from gui.game_control.BrowserController import BrowserController as _Browser
+    from gui.game_control.CalendarController import CalendarController as _Calendar
     from gui.game_control.ChinaController import ChinaController as _China
     from gui.game_control.ChinaController import NoChinaController as _NoChina
     from gui.game_control.ExternalLinksHandler import ExternalLinksHandler as _ExternalLinks
@@ -38,6 +39,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.epic_mode_controller import EpicModeController as _Epic
     from gui.game_control.bootcamp_controller import BootcampController as _Bootcamp
     from skeletons.gui import game_control as _interface
+    import new_year
     tracker = GameStateTracker()
     tracker.init()
     manager.addInstance(_interface.IGameStateTracker, tracker, finalizer='fini')
@@ -47,6 +49,7 @@ def getGameControllersConfig(manager):
         controller.init()
         manager.addInstance(interface, controller, finalizer='fini')
 
+    new_year.getNewYearServiceConfig(manager, tracker)
     _config(_interface.IReloginController, _Relogin())
     _config(_interface.IAOGASController, _AOGAS())
     _config(_interface.IGameSessionController, _GameSessions())
@@ -75,6 +78,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IBootcampController, _Bootcamp())
     _config(_interface.IRankedBattlesController, _Ranked())
     _config(_interface.IEpicModeController, _Epic())
+    _config(_interface.ICalendarController, _Calendar())
     if constants.IS_CHINA:
         _config(_interface.IChinaController, _China())
     else:

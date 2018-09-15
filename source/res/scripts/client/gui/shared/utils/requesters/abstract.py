@@ -60,7 +60,7 @@ class AbstractRequester(object):
 class AbstractSyncDataRequester(AbstractRequester):
 
     def getCacheValue(self, key, defaultValue=None):
-        return self._data.get(key, defaultValue)
+        return self._data[key] if key in self._data else defaultValue
 
     def clear(self):
         self._data.clear()
@@ -124,6 +124,15 @@ class RequestCtx(object):
 
     def getCooldown(self):
         pass
+
+    def getWaiterID(self):
+        """
+        is used to handle separate waiters for requests of the same type.
+        If just getRequestType is used (as it was before) requests of the same type pop callback id from waiters list
+        which causes lost of possibility to stop such waiters.
+        It leads to appearance of "time out" messages in system channel for such lost requests
+        """
+        return self.getRequestType()
 
 
 class DataRequestCtx(RequestCtx):

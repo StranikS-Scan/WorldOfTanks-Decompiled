@@ -24,6 +24,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     LOBBY_PERSONAL_MISSION_DETAILS = 'personalMissionDetails'
     LOBBY_PERSONAL_MISSIONS = PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS
     PERSONAL_MISSIONS_PAGE = PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS
+    ADVENT_CALENDAR = 'adventCalendar'
     LOBBY_EVENT_BOARDS_TABLE = 'eventBoardsTable'
     LOBBY_EVENT_BOARDS_AWARDGROUP = 'eventBoardsAwardGroupsLobby'
     LOBBY_EVENT_BOARDS_PAGINATION = 'eventBoardsPaginationLobby'
@@ -101,6 +102,10 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     ACCOUNT_POPOVER = 'accountPopover'
     TRADEIN_POPOVER = 'TradeInPopover'
     ACOUSTIC_POPOVER = 'acousticPopover'
+    NY_DECORATIONS_POPOVER = 'nyDecorationsPopover'
+    NY_BOX_POPOVER = 'nyBoxPopover'
+    NY_CRAFT_POPOVER = 'nyCraftPopover'
+    NY_APPLY_DISCOUNT_FILTER = 'nyApplyDiscountFilter'
     DISMISS_TANKMAN_DIALOG = 'dismissTankmanDialog'
     RESTORE_TANKMAN_DIALOG = 'restoreTankmanDialog'
     AWARD_WINDOW = 'awardWindow'
@@ -197,3 +202,18 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
      EVENT_BATTLE_PAGE,
      RANKED_BATTLE_PAGE,
      BOOTCAMP_BATTLE_PAGE)
+    LOBBY_NY_SCREEN = 'nyScreen'
+    LOBBY_NY_REWARDS = 'nyRewards'
+    LOBBY_NY_CRAFT = 'nyCraft'
+    LOBBY_NY_BREAK = 'nyScreenBreak'
+    LOBBY_NY_CHESTS = 'nyChestsView'
+    LOBBY_NY_MISSIONS_REWARD = 'nyMissionRewardWindow'
+    LOBBY_NY_MISSIONS_REWARD_RECEIPT = 'nyMissionRewardScreen'
+    NY_TREE = 'nyScreenViewTree'
+    NY_SNOWMAN = 'nyScreenViewTreeSnowman'
+    NY_HOUSE = 'nyScreenViewTreeHouse'
+    NY_LIGHT = 'nyScreenViewTreeLight'
+    NY_LEVEL_UP = 'nyLevelUp'
+    LOBBY_NY_COLLECTIONS_GROUP = 'nyCollectionsGroups'
+    LOBBY_NY_COLLECTIONS = 'nyCollections'
+    NY_RECRUIT_WINDOW = 'nyRecruitWindow'

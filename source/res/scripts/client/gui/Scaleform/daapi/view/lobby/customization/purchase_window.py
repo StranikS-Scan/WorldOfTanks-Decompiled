@@ -4,6 +4,7 @@ from CurrentVehicle import g_currentVehicle
 from Event import Event
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
+from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
 from gui.Scaleform.daapi.view.meta.CustomizationBuyWindowMeta import CustomizationBuyWindowMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
@@ -56,12 +57,14 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
     def selectItem(self, itemIdx):
         """ ActionScript call for when an purchase item is checked.
         """
+        self._c11nView.soundManager.playInstantSound(SOUNDS.SELECT)
         selectCount = self.__searchDP.setSelected(itemIdx, True)
         self.as_setBuyBtnEnabledS(selectCount > 0)
 
     def deselectItem(self, itemIdx):
         """ ActionScript call for when a purchase item is unchecked.
         """
+        self._c11nView.soundManager.playInstantSound(SOUNDS.SELECT)
         selectCount = self.__searchDP.setSelected(itemIdx, False)
         self.as_setBuyBtnEnabledS(selectCount > 0)
 

@@ -1,7 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/server_events/awards_formatters.py
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import formatters
 from gui.server_events.awards_formatters import AWARDS_SIZES, AwardsPacker, QuestsBonusComposer
+from helpers import dependency
+from skeletons.new_year import INewYearController
 SIMPLE_BONUSES_MAX_ITEMS = 5
 
 class OldStyleBonusFormatter(object):
@@ -81,10 +84,20 @@ class SimpleBonusFormatter(OldStyleBonusFormatter):
         return result
 
 
+class NY18BonusFormatter(OldStyleBonusFormatter):
+    _newYearController = dependency.descriptor(INewYearController)
+
+    def accumulateBonuses(self, bonus):
+        for tokenID, token in bonus.getTokens().iteritems():
+            if tokenID in self._newYearController.boxStorage.getDescriptors():
+                self._result.append(formatters._packIconTextElement(label='x{}'.format(token.count) if token.count > 1 else '', icon=RES_ICONS.MAPS_ICONS_NY_BONUSES_SMALL_BOX, dataType='#ny:hangar/bonusInfo/tooltip', iconAutoSize=True))
+
+
 def getFormattersMap(event):
     return {'dossier': DossierFormatter(),
      'customizations': CustomizationsFormatter(),
-     'vehicles': VehiclesFormatter(event)}
+     'vehicles': VehiclesFormatter(event),
+     'battleToken': NY18BonusFormatter()}
 
 
 class OldStyleAwardsPacker(AwardsPacker):

@@ -8,12 +8,9 @@ from debug_utils import LOG_ERROR
 
 class ClientSelectableObject(BigWorld.Entity):
 
-    @property
-    def enabled(self):
-        return self.__enabled
-
-    def __init__(self):
-        BigWorld.Entity.__init__(self)
+    def __init__(self, edgeMode=2):
+        super(ClientSelectableObject, self).__init__()
+        self.__edgeMode = edgeMode
         self.__bspModel = BigWorld.WGBspCollisionModel()
         self.__enabled = True
         self.__edged = False
@@ -26,11 +23,11 @@ class ClientSelectableObject(BigWorld.Entity):
     def onEnterWorld(self, prereqs):
         if self.modelName not in prereqs.failedIDs:
             model = prereqs[self.modelName]
+            model.castsShadow = self._castsShadow()
             self.model = model
             self.filter = BigWorld.DumbFilter()
             self.model.addMotor(BigWorld.Servo(self.matrix))
-            if not self.__bspModel.setModel(self.model):
-                LOG_ERROR('ClientSelectableObject failed to setModel', self.modelName)
+            self.__setBSP(model)
 
     def onLeaveWorld(self):
         if self.__clickSound is not None:
@@ -42,14 +39,14 @@ class ClientSelectableObject(BigWorld.Entity):
         return
 
     def collideSegment(self, startPoint, endPoint, skipGun=False):
-        worldToVehMatrix = Math.Matrix(self.model.matrix)
-        worldToVehMatrix.invert()
-        startPoint = worldToVehMatrix.applyPoint(startPoint)
-        endPoint = worldToVehMatrix.applyPoint(endPoint)
+        worldToModelMatrix = Math.Matrix(self.model.matrix)
+        worldToModelMatrix.invert()
+        startPoint = worldToModelMatrix.applyPoint(startPoint)
+        endPoint = worldToModelMatrix.applyPoint(endPoint)
         res = None
         collisions = self.__bspModel.collideSegment(startPoint, endPoint)
         if collisions is None:
-            return res
+            return
         else:
             for dist, _, hitAngleCos, _ in collisions:
                 if res is None or res[0] >= dist:
@@ -62,14 +59,20 @@ class ClientSelectableObject(BigWorld.Entity):
         if not self.__enabled:
             self.highlight(False)
 
+    @property
+    def enabled(self):
+        return self.__enabled
+
     def highlight(self, show):
         if show:
             if not self.__edged and self.__enabled:
-                BigWorld.wgAddEdgeDetectEntity(self, 0, 2, True)
+                BigWorld.wgAddEdgeDetectEntity(self, 0, self.__edgeMode, True)
                 self.__edged = True
+                self.onMouseEnter()
         elif self.__edged:
             BigWorld.wgDelEdgeDetectEntity(self)
             self.__edged = False
+            self.onMouseLeave()
 
     def onClicked(self):
         if self.__clickSound is None:
@@ -81,3 +84,19 @@ class ClientSelectableObject(BigWorld.Entity):
         else:
             self.__clickSound.play()
         return
+
+    def onMouseEnter(self):
+        pass
+
+    def onMouseLeave(self):
+        pass
+
+    def _tryToOverrideBSP(self, bspModel):
+        self.__setBSP(bspModel)
+
+    def _castsShadow(self):
+        return True
+
+    def __setBSP(self, bspModel):
+        if not self.__bspModel.setModel(bspModel):
+            LOG_ERROR('ClientSelectableObject failed to setModel', bspModel.sources)

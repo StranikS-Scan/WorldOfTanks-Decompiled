@@ -185,11 +185,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         super(CustomizationCarouselDataProvider, self)._dispose()
 
     def _createBaseRequirements(self, season=None, includeApplied=True):
-        appliedItems = set()
-        for seasonType in SeasonType.COMMON_SEASONS:
-            outfit = self._proxy.getModifiedOutfit(seasonType)
-            appliedItems.add((i.intCD for i in outfit.items()))
-
+        appliedItems = self._proxy.getAppliedItems()
         vehicle = self._currentVehicle.item
         season = season or SeasonType.ALL
         progress = self.eventsCache.randomQuestsProgress
@@ -198,7 +194,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
 
     def _buildCustomizationItems(self):
         season = self._seasonID
-        requirement = self._createBaseRequirements(season, includeApplied=True)
+        requirement = self._createBaseRequirements(season)
         seasonAndTabData = self._allSeasonAndTabFilterData[self._tabIndex][self._seasonID]
         allItemsGroup = len(seasonAndTabData.allGroups) - 1
         if seasonAndTabData.selectedGroupIndex != allItemsGroup:
@@ -207,7 +203,9 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         if self._historicOnlyItems:
             requirement |= REQ_CRITERIA.CUSTOMIZATION.HISTORICAL
         if self._onlyOwnedAndFreeItems:
-            requirement |= REQ_CRITERIA.CUSTOM(lambda item: self._proxy.getItemInventoryCount(item) > 0)
+            vehicle = self._currentVehicle.item
+            appliedItems = self._proxy.getAppliedItems()
+            requirement |= REQ_CRITERIA.CUSTOM(lambda item: item.fullInventoryCount(vehicle) > 0 or item.intCD in appliedItems)
         allItems = self.itemsCache.items.getItems(TABS_ITEM_MAPPING[self._tabIndex], requirement)
         self._customizationItems = []
         self._customizationBookmarks = []

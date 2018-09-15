@@ -3,6 +3,7 @@
 from account_helpers.AccountSettings import AccountSettings, DEFAULT_VEHICLE_TYPES_FILTER, DEFAULT_LEVELS_FILTERS
 from gui import SystemMessages
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.game_control.CalendarController import CalendarInvokeOrigin
 from gui.shared import g_eventBus
 from gui.shared.events import OpenLinkEvent
 from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
@@ -10,6 +11,7 @@ from gui.shared.gui_items.processors.vehicle import VehicleSlotBuyer
 from gui.shared.utils import decorators
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.game_control import ICalendarController
 
 @decorators.process('buySlot')
 def buySlots():
@@ -84,3 +86,12 @@ def configureShopForVehicleTradeIn():
     vehFilter['selectedTypes'] = DEFAULT_VEHICLE_TYPES_FILTER
     vehFilter['selectedLevels'] = DEFAULT_LEVELS_FILTERS
     AccountSettings.setFilter('shop_vehicle', vehFilter)
+
+
+def showAdventCalendarFromAction():
+    calendarCtrl = dependency.instance(ICalendarController)
+    calendarCtrl.showCalendar(invokedFrom=CalendarInvokeOrigin.ACTION)
+
+
+def showBuyNyBoxFromAction():
+    g_eventBus.handleEvent(OpenLinkEvent(OpenLinkEvent.NY18_BUY_BOX))

@@ -56,9 +56,9 @@ class RequestsController(object):
 
             def _doRequest():
                 self._clearDelayedRequest()
-                cb = partial(self._callbackWrapper, requestType, callback, cooldown)
+                cb = partial(self._callbackWrapper, ctx, callback, cooldown)
                 if handler(ctx, callback=cb):
-                    self._waiters[requestType] = BigWorld.callback(self._getRequestTimeOut(), partial(self._onTimeout, cb, requestType, ctx))
+                    self._waiters[ctx.getWaiterID()] = BigWorld.callback(self._getRequestTimeOut(), partial(self._onTimeout, cb, requestType, ctx))
                     self._cooldowns.process(requestType, cooldown)
 
             if not allowDelay:
@@ -79,8 +79,8 @@ class RequestsController(object):
     def getCooldownTime(self, requestTypeID):
         return self._cooldowns.getTime(requestTypeID)
 
-    def isProcessing(self, requestTypeID):
-        return requestTypeID in self._waiters
+    def isProcessing(self, waiterID):
+        return waiterID in self._waiters
 
     def hasHandler(self, requestTypeID):
         return self._getHandlerByRequestType(requestTypeID) is not None
@@ -103,11 +103,11 @@ class RequestsController(object):
     def _getRequestTimeOut(self):
         pass
 
-    def _callbackWrapper(self, requestType, callback, cooldown, *args):
-        callbackID = self._waiters.pop(requestType, None)
+    def _callbackWrapper(self, ctx, callback, cooldown, *args):
+        callbackID = self._waiters.pop(ctx.getWaiterID(), None)
         if callbackID is not None:
             safeCancelCallback(callbackID)
-        self._cooldowns.adjust(requestType, cooldown)
+        self._cooldowns.adjust(ctx.getRequestType(), cooldown)
         if callback:
             callback(*args)
         self._doNextRequest(adjustCooldown=cooldown)

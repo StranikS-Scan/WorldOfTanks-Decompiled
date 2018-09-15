@@ -744,6 +744,9 @@ class IRecycleBinRequester(IRequester):
     def getVehicleRestoreInfo(self, intCD, restoreDuration, restoreCooldown):
         raise NotImplementedError
 
+    def getVehiclesIntCDs(self):
+        raise NotImplementedError
+
     def getTankmen(self, maxDuration):
         raise NotImplementedError
 

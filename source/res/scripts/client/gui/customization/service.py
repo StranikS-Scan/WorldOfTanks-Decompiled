@@ -327,12 +327,16 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         """
         return self._helper
 
-    def __onRegionHighlighted(self, triplet):
-        areaID, regionID, selected = -1, -1, False
-        if triplet:
-            areaID, regionID, selected = triplet
-        if self._isOver3dScene:
-            self.onRegionHighlighted(MODE_TO_C11N_TYPE[self._mode], areaID, regionID)
+    def __onRegionHighlighted(self, args):
+        if not self._isMoved:
+            areaID, regionID, selected, hovered = (-1,
+             -1,
+             False,
+             False)
+            if args:
+                areaID, regionID, selected, hovered = args
+            if self._isOver3dScene:
+                self.onRegionHighlighted(MODE_TO_C11N_TYPE[self._mode], areaID, regionID, selected, hovered)
 
     def __onSpaceCreate(self):
         """ Restart the highlighter if it was previously started

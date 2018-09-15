@@ -8,6 +8,10 @@ from constants import TOKEN_TYPE
 from debug_utils import LOG_DEBUG
 from helpers import dependency
 from items import vehicles
+from gui.clans.settings import AccessTokenData
+from helpers import time_utils
+from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.clans import IClanController
 from skeletons.gui.game_control import IBrowserController
 from gui.SystemMessages import SM_TYPE
 from gui.SystemMessages import pushI18nMessage, pushMessage
@@ -25,7 +29,8 @@ from gui.Scaleform.genConsts.CONTEXT_MENU_HANDLER_TYPE import CONTEXT_MENU_HANDL
 from web_client_api import WebCommandException
 from web_client_api.commands import instantiateObject
 from web_client_api.commands.context_menu import UserContextMenuCommand
-from web_client_api.commands.window_navigator import OpenBrowserCommand, CloseWindowCommand
+from web_client_api.commands.request import RequestAccessTokenCommand
+from web_client_api.commands.window_navigator import OpenBrowserCommand
 
 def handleNotificationCommand(command, ctx):
     """
@@ -144,9 +149,15 @@ def handleRequestCommand(command, ctx):
             if callable(callback):
                 callback(data)
 
-        REQUEST_COMMANDS[command.request_id](onCallback)
+        cls, handler = REQUEST_COMMANDS[command.request_id]
+        if cls is not None:
+            subCommand = instantiateObject(cls, command.custom_parameters)
+            handler(subCommand, onCallback)
+        else:
+            handler(onCallback)
     else:
         raise WebCommandException('Unknown request id: %s!' % command.request_id)
+    return
 
 
 def handleContextMenuCommand(command, ctx):
@@ -278,8 +289,24 @@ def _requestGraphicsSettings(callback):
     return
 
 
-REQUEST_COMMANDS = {'token1': _requestWgniToken,
- 'graphics_settings': _requestGraphicsSettings}
+@process
+@dependency.replace_none_kwargs(connectionMgr=IConnectionManager)
+def _requestAccessToken(command, callback, connectionMgr=None):
+    ctrl = dependency.instance(IClanController)
+    accessTokenData = yield ctrl.getAccessTokenData(force=command.force)
+    if accessTokenData is not None:
+        callback({'spa_id': str(connectionMgr.databaseID),
+         'access_token': str(accessTokenData.accessToken),
+         'expires_in': accessTokenData.expiresAt - time_utils.getCurrentTimestamp(),
+         'periphery_id': str(connectionMgr.peripheryID)})
+    else:
+        callback({'error': 'Unable to obtain access token.'})
+    return
+
+
+REQUEST_COMMANDS = {'token1': (None, _requestWgniToken),
+ 'graphics_settings': (None, _requestGraphicsSettings),
+ 'access_token': (RequestAccessTokenCommand, _requestAccessToken)}
 
 def _showUserContextMenu(command, ctx, callback):
     context = {'dbID': command.spa_id,

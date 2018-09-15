@@ -2,7 +2,7 @@
   <itemGroup>
     <priceGroup>	historical paint	</priceGroup>
     <name>	chinese colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_01	</userString>
+    <userString>	#vehicle_customization:repaint/color_group_02	</userString>
     <vehicleFilter>
       <include>
         <nations>	china	</nations>
@@ -13,6 +13,9 @@
         <nations>	china	</nations>
         <levels>	10	</levels>
       </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold	</vehicles>
+      </exclude>
     </vehicleFilter>
     <usages>
       <item>
@@ -27,7 +30,27 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.230	</metallic>
       <userString>	#vehicle_customization:repaint/china_color_01	</userString>
-      <season>	summer	</season>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+    </paint>
+    <paint>
+      <id>	161	</id>
+      <texture>	gui/maps/vehicles/repaints/china_color_02.png	</texture>
+      <color>	83 87 62 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/china_color_02	</userString>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+    </paint>
+    <paint>
+      <id>	162	</id>
+      <texture>	gui/maps/vehicles/repaints/china_color_03.png	</texture>
+      <color>	58 58 48 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/china_color_03	</userString>
+      <season>	ALL	</season>
       <historical>	true	</historical>
     </paint>
     <paint>
@@ -37,7 +60,17 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.230	</metallic>
       <userString>	#vehicle_customization:repaint/china_color_04	</userString>
-      <season>	winter	</season>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+    </paint>
+    <paint>
+      <id>	164	</id>
+      <texture>	gui/maps/vehicles/repaints/china_color_05.png	</texture>
+      <color>	111 97 70 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/china_color_05	</userString>
+      <season>	ALL	</season>
       <historical>	true	</historical>
     </paint>
     <paint>
@@ -47,7 +80,17 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.230	</metallic>
       <userString>	#vehicle_customization:repaint/china_color_06	</userString>
-      <season>	desert	</season>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+    </paint>
+    <paint>
+      <id>	268	</id>
+      <texture>	gui/maps/vehicles/repaints/china_color_07.png	</texture>
+      <color>	51 111 72 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/china_color_07	</userString>
+      <season>	ALL	</season>
       <historical>	true	</historical>
     </paint>
   </itemGroup>

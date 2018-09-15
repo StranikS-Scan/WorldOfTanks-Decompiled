@@ -85,6 +85,9 @@ class RecycleBinRequester(AbstractSyncDataRequester, IRecycleBinRequester):
         else:
             return None
 
+    def getVehiclesIntCDs(self):
+        return self.vehiclesBuffer.keys()
+
     def getTankmen(self, maxDuration):
         filteredBuffer = {}
         tankmenBuffer = self.recycleBin.get('tankmen', {}).get('buffer', {})

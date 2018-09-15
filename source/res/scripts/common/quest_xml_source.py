@@ -423,7 +423,8 @@ class Source(object):
          'vehicle',
          'dossier',
          'tankmen',
-         'customizations'}
+         'customizations',
+         'ny18Toy'}
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST):
             bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
         return bonusTypes

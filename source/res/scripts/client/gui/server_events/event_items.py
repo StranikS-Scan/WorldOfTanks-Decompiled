@@ -553,9 +553,9 @@ class Action(ServerEventAbstract):
                 continue
             modifiers = m.splitModifiers()
             for modifier in modifiers:
-                if mName in result:
-                    result[mName].extend([ActionData(modifier, priority, uiDecoration)])
-                result[mName] = [ActionData(modifier, priority, uiDecoration)]
+                if modifier.getName() in result:
+                    result[modifier.getName()].extend([ActionData(modifier, priority, uiDecoration)])
+                result[modifier.getName()] = [ActionData(modifier, priority, uiDecoration)]
 
         return result
 
@@ -566,9 +566,9 @@ class Action(ServerEventAbstract):
             m = getModifierObj(mName, stepData.get('params'))
             if m is None:
                 continue
-            if mName in result:
-                result[mName].update(m)
-            result[mName] = m
+            if m.getName() in result:
+                result[m.getName()].update(m)
+            result[m.getName()] = m
 
         return sorted(result.itervalues(), key=operator.methodcaller('getName'), cmp=compareModifiers)
 

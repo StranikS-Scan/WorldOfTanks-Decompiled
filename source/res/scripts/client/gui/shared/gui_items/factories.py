@@ -34,9 +34,8 @@ class GuiItemFactory(IGuiItemsFactory):
         :return: An instance of GUI item or None if GUI item type ID is invalid.
         """
         item = None
-        factoryMethod = _ITEM_TYPES_MAPPING.get(itemTypeIdx)
-        if factoryMethod is not None:
-            item = factoryMethod(self, *args, **kwargs)
+        if itemTypeIdx in _ITEM_TYPES_MAPPING:
+            item = _ITEM_TYPES_MAPPING[itemTypeIdx](self, *args, **kwargs)
         else:
             LOG_WARNING('Could not create GUI item with idx {}. There is no class associated with this idx.'.format(itemTypeIdx))
         return item

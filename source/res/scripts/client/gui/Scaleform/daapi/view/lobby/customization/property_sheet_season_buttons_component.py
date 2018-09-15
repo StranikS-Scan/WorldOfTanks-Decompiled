@@ -211,7 +211,7 @@ class PropertySheetSeasonButtonsComponent(PropertySheetSeasonButtonsComponentMet
         renderer.itemIsWide = currentItem.isWide() if currentItem is not None else False
         renderer.wouldAddItem = wouldAddItem and action[0] is not SEASON_BUTTON_ACTIONS.LOCKED
         itemForPurchase = currentItem if currentItem is not None else activeItem
-        buyPrice = itemForPurchase.getBuyPrice() if itemForPurchase else ITEM_PRICE_EMPTY
+        buyPrice = itemForPurchase.getBuyPrice() if itemForPurchase and not itemForPurchase.isHidden else ITEM_PRICE_EMPTY
         renderer.buyPrice = getItemPricesVO(buyPrice)[0]
         renderer.currencyType = buyPrice.getCurrency() if buyPrice is not ITEM_PRICE_EMPTY else ''
         renderer.showBorder = currentItem is not None and currentItem == activeItem and renderer.seasonIDX == SEASON_TYPE_TO_IDX[self._activeSeason]
@@ -232,6 +232,8 @@ class PropertySheetSeasonButtonsComponent(PropertySheetSeasonButtonsComponentMet
             state = SeasonButtonStates.FILLED
         else:
             state = SeasonButtonStates.LOCKED_FILLED
+        if state == SeasonButtonStates.EMPTY_ADD and activeCustomizationItem and activeCustomizationItem.isHidden:
+            state = SeasonButtonStates.EMPTY_APPLY
         return state
 
     def __getAction(self, state):

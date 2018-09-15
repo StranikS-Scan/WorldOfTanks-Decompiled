@@ -198,8 +198,9 @@ def getStyleInventoryCount(item, styleInfo=None):
             inventoryCount -= 1
         if original and original.intCD == item.intCD:
             inventoryCount += 1
-    elif original and g_currentVehicle.item.getStyledOutfit(SeasonType.SUMMER).isEnabled():
-        inventoryCount += 1
+    elif original and original.intCD == item.intCD:
+        if g_currentVehicle.item.getStyledOutfit(SeasonType.SUMMER).isEnabled():
+            inventoryCount += 1
     return max(0, inventoryCount)
 
 

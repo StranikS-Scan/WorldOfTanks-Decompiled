@@ -137,6 +137,10 @@ def __mergeDossier(total, key, value, isLeaf=False, count=1, *args):
             total['type'] = data['type']
 
 
+def __mergeNY18Toys(total, key, value, *args):
+    total.setdefault(key, []).extend(value)
+
+
 BONUS_MERGERS = {'credits': __mergeValue,
  'gold': __mergeValue,
  'xp': __mergeValue,
@@ -156,7 +160,23 @@ BONUS_MERGERS = {'credits': __mergeValue,
  'goodies': __mergeGoodies,
  'dossier': __mergeDossier,
  'tankmen': __mergeTankmen,
- 'customizations': __mergeCustomizations}
+ 'customizations': __mergeCustomizations,
+ 'ny18Toys': __mergeNY18Toys}
+
+class BonusNodeAcceptor(object):
+
+    def __init__(self, account):
+        self.__account = account
+
+    def accept(self, bonusValue):
+        if 'vehicles' not in bonusValue:
+            return True
+        for vehTypeDescr in bonusValue['vehicles'].iterkeys():
+            if self.__account._inventory.getVehicleInvID(vehTypeDescr) != 0:
+                return False
+
+        return True
+
 
 class TrackVisitor(object):
 
@@ -202,23 +222,41 @@ class TrackVisitor(object):
 
 class ProbabilityVisitor(object):
 
-    def __init__(self, mergers, *args):
+    def __init__(self, mergers, nodeAcceptor, *args):
         self.__mergers = mergers
         self.__mergersArgs = args
         self.__bonusTrack = []
+        self.__nodeAcceptor = nodeAcceptor
 
     def bonusTrack(self):
         return _packTrack(self.__bonusTrack)
 
     def onOneOf(self, bonus, value):
         rand = random.random()
-        for probability, bonusValue in value:
+        selectedIdx = None
+        for i, (probability, bonusValue) in enumerate(value):
             if probability > rand:
-                self.__trackChoice(True)
-                return [bonusValue]
+                selectedIdx = i
+                selectedValue = bonusValue
+                break
+
+        if selectedIdx is None:
+            raise Exception('Unreachable code, oneof probability bug %s' % value)
+        if not self.__nodeAcceptor.accept(selectedValue):
+            accept = self.__nodeAcceptor.accept
+            altList = list(enumerate(value))
+            random.shuffle(altList)
+            for i, (_, bonusValue) in altList:
+                if i != selectedIdx and bonusValue.get('compensation', False) and accept(bonusValue):
+                    selectedIdx = i
+                    selectedValue = bonusValue
+                    break
+
+        for i in xrange(selectedIdx):
             self.__trackChoice(False)
 
-        raise Exception('Unreachable code, oneof probability bug %s' % value)
+        self.__trackChoice(True)
+        return [selectedValue]
 
     def onAllOf(self, bonus, value):
         deeper = []
@@ -301,6 +339,7 @@ class StripVisitor(object):
         result = []
         deeper = []
         for probability, bonusValue in value:
+            bonusValue.pop('compensation', None)
             result.append((-1, bonusValue))
             deeper.append(bonusValue)
 

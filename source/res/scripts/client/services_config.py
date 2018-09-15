@@ -10,6 +10,7 @@ def getClientServicesConfig(manager):
     import connection_mgr
     import gui
     import helpers
+    import new_year
     from skeletons.connection_mgr import IConnectionManager
     manager.addInstance(IConnectionManager, connection_mgr.ConnectionManager(), finalizer='fini')
     manager.addConfig(account_helpers.getAccountHelpersConfig)

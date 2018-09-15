@@ -2,7 +2,7 @@
   <itemGroup>
     <priceGroup>	historical paint	</priceGroup>
     <name>	france colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
+    <userString>	#vehicle_customization:repaint/color_group_02	</userString>
     <vehicleFilter>
       <include>
         <nations>	france	</nations>
@@ -27,7 +27,17 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.230	</metallic>
       <userString>	#vehicle_customization:repaint/france_color_01	</userString>
-      <season>	summer	</season>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+    </paint>
+    <paint>
+      <id>	149	</id>
+      <texture>	gui/maps/vehicles/repaints/france_color_02.png	</texture>
+      <color>	109 112 114 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/france_color_02	</userString>
+      <season>	ALL	</season>
       <historical>	true	</historical>
     </paint>
     <paint>
@@ -37,7 +47,7 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.230	</metallic>
       <userString>	#vehicle_customization:repaint/france_color_03	</userString>
-      <season>	winter	</season>
+      <season>	ALL	</season>
       <historical>	true	</historical>
     </paint>
     <paint>
@@ -47,7 +57,37 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.230	</metallic>
       <userString>	#vehicle_customization:repaint/france_color_04	</userString>
-      <season>	desert	</season>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+    </paint>
+    <paint>
+      <id>	152	</id>
+      <texture>	gui/maps/vehicles/repaints/france_color_05.png	</texture>
+      <color>	73 50 44 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/france_color_05	</userString>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+    </paint>
+    <paint>
+      <id>	213	</id>
+      <texture>	gui/maps/vehicles/repaints/france_color_06.png	</texture>
+      <color>	43 60 50 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/france_color_06	</userString>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+    </paint>
+    <paint>
+      <id>	273	</id>
+      <texture>	gui/maps/vehicles/repaints/france_color_07.png	</texture>
+      <color>	67 101 135 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/france_color_07	</userString>
+      <season>	ALL	</season>
       <historical>	true	</historical>
     </paint>
   </itemGroup>

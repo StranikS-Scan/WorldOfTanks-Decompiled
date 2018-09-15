@@ -5,12 +5,13 @@ from PlayerEvents import g_playerEvents
 from gui import DialogsInterface, SystemMessages
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.prb_control.events_dispatcher import g_eventDispatcher
-from gui.prb_control.formatters import messages
 from gui.prb_control.entities.base import vehicleAmmoCheck
 from gui.prb_control.entities.base.ctx import SendInvitesCtx
 from gui.prb_control.entities.base.unit.actions_handler import AbstractActionsHandler
 from gui.prb_control.settings import REQUEST_TYPE, FUNCTIONAL_FLAG
 from messenger.storage import storage_getter
+from helpers import dependency
+from skeletons.new_year import ICustomizableObjectsManager
 
 class SquadActionsHandler(AbstractActionsHandler):
     """
@@ -62,7 +63,9 @@ class SquadActionsHandler(AbstractActionsHandler):
     def executeFini(self):
         prbType = self._entity.getEntityType()
         g_eventDispatcher.removeUnitFromCarousel(prbType)
-        g_eventDispatcher.loadHangar()
+        customizableObjMgr = dependency.instance(ICustomizableObjectsManager)
+        if not customizableObjMgr.state:
+            g_eventDispatcher.loadHangar()
 
     @vehicleAmmoCheck
     def execute(self):

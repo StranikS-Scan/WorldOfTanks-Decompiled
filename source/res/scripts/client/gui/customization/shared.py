@@ -21,9 +21,20 @@ class HighlightingMode(CONST_CONTAINER):
     CAMO_REGIONS = 1
     WHOLE_VEHICLE = 2
     REPAINT_REGIONS_MERGED = 3
+    CAMO_REGIONS_SKIP_TURRET = 4
 
 
 MODE_TO_C11N_TYPE = {HighlightingMode.PAINT_REGIONS: GUI_ITEM_TYPE.PAINT,
  HighlightingMode.REPAINT_REGIONS_MERGED: GUI_ITEM_TYPE.PAINT,
  HighlightingMode.CAMO_REGIONS: GUI_ITEM_TYPE.CAMOUFLAGE,
- HighlightingMode.WHOLE_VEHICLE: GUI_ITEM_TYPE.STYLE}
+ HighlightingMode.WHOLE_VEHICLE: GUI_ITEM_TYPE.STYLE,
+ HighlightingMode.CAMO_REGIONS_SKIP_TURRET: GUI_ITEM_TYPE.CAMOUFLAGE}
+
+def chooseMode(itemTypeID, vehicle):
+    """ Choose mode for the highlighter from the given item type and vehicle.
+    """
+    if itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE:
+        if vehicle.turret.isGunCarriage:
+            return HighlightingMode.CAMO_REGIONS_SKIP_TURRET
+        return HighlightingMode.CAMO_REGIONS
+    return HighlightingMode.REPAINT_REGIONS_MERGED if itemTypeID == GUI_ITEM_TYPE.PAINT else HighlightingMode.WHOLE_VEHICLE

@@ -19,6 +19,7 @@ class CustomizationType(object):
      STYLE,
      MODIFICATION,
      ITEM_GROUP}
+    _SIMPLE_TYPES = (PAINT, CAMOUFLAGE, DECAL)
 
 
 CustomizationTypeNames = {getattr(CustomizationType, k):k for k in dir(CustomizationType) if not k.startswith('_') and k != 'RANGE'}

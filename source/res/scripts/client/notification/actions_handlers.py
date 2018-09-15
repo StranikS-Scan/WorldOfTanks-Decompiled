@@ -18,6 +18,7 @@ from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispa
 from gui.shared.utils import decorators
 from gui.wgnc import g_wgncProvider
 from helpers import dependency
+from items.new_year_types import NY_STATE
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
@@ -26,6 +27,7 @@ from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.clans import IClanController
 from skeletons.gui.game_control import IBrowserController
+from skeletons.new_year import INewYearController
 
 class _ActionHandler(object):
 
@@ -276,6 +278,26 @@ class _ShowClanProfileHandler(_ActionHandler):
         shared_events.showClanProfileWindow(clan.getClanID(), clan.getClanAbbrev())
 
 
+class _OpenNYRewardsScreen(_ActionHandler):
+    _newYearController = dependency.descriptor(INewYearController)
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(self):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(_OpenNYRewardsScreen, self).handleAction(model, entityID, action)
+        ny_state = self._newYearController.state
+        if ny_state == NY_STATE.IN_PROGRESS or ny_state == NY_STATE.FINISHED:
+            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_NY_REWARDS, name=VIEW_ALIAS.LOBBY_NY_REWARDS, ctx={'previewAlias': VIEW_ALIAS.LOBBY_HANGAR}), scope=EVENT_BUS_SCOPE.LOBBY)
+        else:
+            BigWorld.callback(0.0, lambda : SystemMessages.pushI18nMessage('#ny:system_messages/state/error/notAvailable', type=SystemMessages.SM_TYPE.Warning))
+
+
 class ShowBattleResultsHandler(_ShowArenaResultHandler):
     battleResults = dependency.descriptor(IBattleResultsService)
 
@@ -511,7 +533,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _ShowClanSettingsFromInvitesHandler,
  _AcceptClanInviteHandler,
  _DeclineClanInviteHandler,
- _OpenEventBoardsHandler)
+ _OpenEventBoardsHandler,
+ _OpenNYRewardsScreen)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

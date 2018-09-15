@@ -6,6 +6,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.lobby.customization.anchor_properties import ANCHOR_TYPE
 from gui.Scaleform.daapi.view.lobby.customization.anchor_properties import AnchorDataVO
 from gui.Scaleform.daapi.view.lobby.customization.shared import CAMO_SCALE_SIZE
+from gui.Scaleform.daapi.view.lobby.customization.sound_constants import SOUNDS
 from gui.Scaleform.daapi.view.meta.CustomizationCamoAnchorPropertiesMeta import CustomizationCamoAnchorPropertiesMeta
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from helpers import dependency
@@ -47,6 +48,7 @@ class CamoAnchorProperties(CustomizationCamoAnchorPropertiesMeta):
         sets the current camo's palette to the palette at the provided index
         :param paletteIdx:
         """
+        self._c11nView.soundManager.playInstantSound(SOUNDS.SELECT)
         self._component.palette = paletteIdx
         self.service.onOutfitChanged()
 
@@ -56,6 +58,7 @@ class CamoAnchorProperties(CustomizationCamoAnchorPropertiesMeta):
         :param scale: the new value for camo's patternSize. represents amount of tiling to do
         :param scaleIndex: the index of the camo scale slider that was selected
         """
+        self._c11nView.soundManager.playInstantSound(SOUNDS.SELECT)
         self._component.patternSize = scale
         self.service.onOutfitChanged()
 

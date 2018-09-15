@@ -34,6 +34,9 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def fightClick(self, mapID, actionName):
         self._printOverrideError('fightClick')
 
+    def as_updateNYVisibilityS(self, isShowMainMenu, isShowGlow, isShowMainMenuGlow):
+        return self.flashObject.as_updateNYVisibility(isShowMainMenu, isShowGlow, isShowMainMenuGlow) if self._isDAAPIInited() else None
+
     def as_setScreenS(self, alias):
         return self.flashObject.as_setScreen(alias) if self._isDAAPIInited() else None
 
@@ -81,6 +84,12 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
 
     def as_updatePingStatusS(self, pingStatus, isColorBlind):
         return self.flashObject.as_updatePingStatus(pingStatus, isColorBlind) if self._isDAAPIInited() else None
+
+    def as_updateNYEnabledS(self, isNYEnabled):
+        return self.flashObject.as_updateNYEnabled(isNYEnabled) if self._isDAAPIInited() else None
+
+    def as_updateNYAvailableS(self, isNYAvailable):
+        return self.flashObject.as_updateNYAvailable(isNYAvailable) if self._isDAAPIInited() else None
 
     def as_setWalletStatusS(self, walletStatus):
         return self.flashObject.as_setWalletStatus(walletStatus) if self._isDAAPIInited() else None

@@ -66,6 +66,9 @@ class IItemsRequester(requesters.IRequester):
     def getItems(self, itemTypeID=None, criteria=None, nationID=None):
         raise NotImplementedError
 
+    def getItemsEx(self, itemTypeIDs, criteria=None, nationID=None):
+        raise NotImplementedError
+
     def getVehicles(self, criteria=None):
         raise NotImplementedError
 

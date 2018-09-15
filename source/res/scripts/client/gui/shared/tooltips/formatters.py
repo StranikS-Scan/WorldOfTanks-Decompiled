@@ -412,3 +412,19 @@ def packBadgeInfoBlockData(badgeImgSource, vehImgSource, playerName, vehName, li
      'playerName': playerName,
      'vehName': vehName}
     return packBlockDataItem(linkage, data, padding)
+
+
+def packNYProgressBlockData(leftText, rightText, currentScores, nextLvlScores, progressPct, useHtml=True, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_NY_PROGRESS_BLOCK_LINKAGE, padding=None):
+    return packBlockDataItem(linkage, {'leftText': leftText,
+     'rightText': rightText,
+     'currentScores': currentScores,
+     'nextLvlScores': nextLvlScores,
+     'progressPct': progressPct,
+     'useHtml': useHtml}, padding)
+
+
+def packNYAwardsBlockData(title, salePct, firstAward, secondAward='', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_NY_AWARDS_BLOCK_LINKAGE, padding=None):
+    return packBlockDataItem(linkage, {'title': title,
+     'salePct': salePct,
+     'firstAward': firstAward,
+     'secondAward': secondAward}, padding)

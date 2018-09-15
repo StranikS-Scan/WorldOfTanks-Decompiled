@@ -75,6 +75,7 @@ class EventsCache(IEventsCache):
         self.onProfileVisited = Event(self.__em)
         self.onPersonalQuestsVisited = Event(self.__em)
         self.__lockedQuestIds = {}
+        self.__commonQuests = None
         return
 
     def init(self):
@@ -416,7 +417,8 @@ class EventsCache(IEventsCache):
         result = {}
         groups = {}
         filterFunc = filterFunc or (lambda a: True)
-        for qID, q in self.__getCommonQuestsIterator():
+        commonQuests = self.__getCommonQuests()
+        for qID, q in commonQuests.iteritems():
             if qID in self.__quests2actions:
                 q.linkedActions = self.__quests2actions[qID]
             if q.getType() == EVENT_TYPE.GROUP:
@@ -452,7 +454,8 @@ class EventsCache(IEventsCache):
     def _getQuestsGroups(self, filterFunc=None):
         filterFunc = filterFunc or (lambda a: True)
         result = {}
-        for qID, q in self.__getCommonQuestsIterator():
+        commonQuests = self.__getCommonQuests()
+        for qID, q in commonQuests.iteritems():
             if q.getType() != EVENT_TYPE.GROUP:
                 continue
             if not filterFunc(q):
@@ -549,6 +552,7 @@ class EventsCache(IEventsCache):
         self.__clearInvalidateCallback()
         self.__waitForSync = True
         self.onSyncStarted()
+        self.__updateCommonQuests()
         for action in self.getActions().itervalues():
             for modifier in action.getModifiers():
                 section = modifier.getSection()
@@ -705,6 +709,18 @@ class EventsCache(IEventsCache):
         motiveQuests = motivation_quests.g_cache.getAllQuests() or []
         for questDescr in motiveQuests:
             yield (questDescr.questID, self._makeQuest(questDescr.questID, questDescr.questData, maker=_motiveQuestMaker))
+
+    def __updateCommonQuests(self):
+        self.__commonQuests = {}
+        for qID, qData in self.__getCommonQuestsIterator():
+            self.__commonQuests[qID] = qData
+
+        return self.__commonQuests
+
+    def __getCommonQuests(self):
+        if self.__commonQuests is None:
+            self.__updateCommonQuests()
+        return self.__commonQuests
 
     def __loadInvalidateCallback(self, duration):
         LOG_DEBUG('load quest window invalidation callback (secs)', duration)

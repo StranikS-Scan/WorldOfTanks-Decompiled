@@ -1,0 +1,16 @@
+<NewYearSelectableObject.def>
+  <Parent>	ClientSelectableObject	</Parent>
+  <Properties>
+    <anchorName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </anchorName>
+    <singleTargetCaps>
+      <Type>	UINT32	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	True	</Editable>
+      <Default>	0	</Default>
+    </singleTargetCaps>
+  </Properties>
+</NewYearSelectableObject.def>

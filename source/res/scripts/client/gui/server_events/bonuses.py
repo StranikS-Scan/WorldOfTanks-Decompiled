@@ -917,6 +917,12 @@ class BoxBonus(SimpleBonus):
         return RES_ICONS.getRankedBoxIcon(size, boxType, '', number)
 
 
+class NYToyBonuses(SimpleBonus):
+
+    def formatValue(self):
+        pass
+
+
 _BONUSES = {Currency.CREDITS: CreditsBonus,
  Currency.GOLD: GoldBonus,
  Currency.CRYSTAL: CrystalBonus,
@@ -949,7 +955,8 @@ _BONUSES = {Currency.CREDITS: CreditsBonus,
  'goodies': GoodiesBonus,
  'items': ItemsBonus,
  'oneof': BoxBonus,
- 'badgesGroup': BadgesGroupBonus}
+ 'badgesGroup': BadgesGroupBonus,
+ 'ny18Toys': NYToyBonuses}
 _BONUSES_PRIORITY = ('tokens', 'oneof')
 _BONUSES_ORDER = dict(((n, idx) for idx, n in enumerate(_BONUSES_PRIORITY)))
 

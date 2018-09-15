@@ -4,6 +4,7 @@ import types
 import weakref
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
+import BigWorld
 import ArenaType
 import gui.awards.event_dispatcher as shared_events
 import personal_missions
@@ -45,6 +46,9 @@ from skeletons.gui.game_control import IRefSystemController, IAwardController, I
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.new_year import INewYearController, ILootBoxManager
+from gui.shared.utils.functions import getViewName
+from items.new_year_types import NY_STATE
 
 class AwardController(IAwardController, IGlobalListener):
     refSystem = dependency.descriptor(IRefSystemController)
@@ -74,7 +78,8 @@ class AwardController(IAwardController, IGlobalListener):
          TelecomHandler(self),
          RankedQuestsHandler(self),
          MarkByInvoiceHandler(self),
-         MarkByQuestHandler(self)]
+         MarkByQuestHandler(self),
+         _NYBoxesHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -287,11 +292,12 @@ class TokenQuestsWindowHandler(ServiceChannelHandler):
     def _showAward(self, ctx):
         data = ctx[1].data
         completedQuests = {}
-        allQuests = self.eventsCache.getAllQuests(includePersonalMissions=True)
-        for qID in data.get('completedQuestIDs', set()):
-            if qID in allQuests:
-                if self.isShowCongrats(allQuests[qID]):
-                    completedQuests[qID] = (allQuests[qID], {'eventsCache': self.eventsCache})
+        completedQuestIDs = data.get('completedQuestIDs', set())
+        filterCompleted = lambda q: q.getID() in completedQuestIDs
+        allCompletedQuests = self.eventsCache.getAllQuests(includePersonalMissions=True, filterFunc=filterCompleted)
+        for quest in allCompletedQuests.itervalues():
+            if self.isShowCongrats(quest):
+                completedQuests[quest.getID()] = (quest, {'eventsCache': self.eventsCache})
 
         for quest, context in completedQuests.itervalues():
             self._showWindow(quest, context)
@@ -369,19 +375,23 @@ class MotiveQuestsWindowHandler(ServiceChannelHandler):
 
 class QuestBoosterAwardHandler(ServiceChannelHandler):
     goodiesCache = dependency.descriptor(IGoodiesCache)
+    lootboxManager = dependency.descriptor(ILootBoxManager)
 
     def __init__(self, awardCtrl):
         super(QuestBoosterAwardHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
 
     def _showAward(self, ctx):
-        data = ctx[1].data
-        goodies = data.get('goodies', {})
-        for boosterID in goodies:
-            booster = self.goodiesCache.getBooster(boosterID)
-            if booster is not None and booster.enabled:
-                shared_events.showBoosterAward(booster)
+        if self.lootboxManager.isQuestBoosterAwardWindowBlocked:
+            return
+        else:
+            data = ctx[1].data
+            goodies = data.get('goodies', {})
+            for boosterID in goodies:
+                booster = self.goodiesCache.getBooster(boosterID)
+                if booster is not None and booster.enabled:
+                    shared_events.showBoosterAward(booster)
 
-        return
+            return
 
 
 class BoosterAfterBattleAwardHandler(ServiceChannelHandler):
@@ -915,3 +925,40 @@ class RankedQuestsHandler(MultiTypeServiceChannelHandler):
     def __showBoobyAwardWindow(self, quest):
         quests_events.showRankedBoobyAward(quest)
         self.__unlock()
+
+
+class _NYBoxesHandler(AwardHandler):
+    _newYearController = dependency.descriptor(INewYearController)
+
+    def __init__(self, awardCtrl):
+        super(_NYBoxesHandler, self).__init__(awardCtrl)
+        self.__postponedBoxes = defaultdict(int)
+
+    def init(self):
+        self._newYearController.boxStorage.onCountChanged += self.__onBoxesCountChanged
+
+    def fini(self):
+        self._newYearController.boxStorage.onCountChanged -= self.__onBoxesCountChanged
+
+    def __onBoxesCountChanged(self, _, __, addedInfo):
+        if addedInfo:
+            descrs = self._newYearController.boxStorage.getDescriptors()
+            for bId, new_count in addedInfo.iteritems():
+                self.__postponedBoxes[descrs[bId].setting] += new_count
+
+            self.handle()
+
+    def _showAward(self, ctx):
+        for setting, new_count in self.__postponedBoxes.iteritems():
+            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_NY_MISSIONS_REWARD, name=getViewName(VIEW_ALIAS.LOBBY_NY_MISSIONS_REWARD, setting), ctx={'rewards': new_count,
+             'setting': setting}), EVENT_BUS_SCOPE.LOBBY)
+
+        self.__postponedBoxes = defaultdict(int)
+
+    def _needToShowAward(self, ctx):
+        return self.__isNY()
+
+    @staticmethod
+    def __isNY():
+        player = BigWorld.player()
+        return False if not hasattr(player, 'newYear') else player.newYear.state == NY_STATE.IN_PROGRESS

@@ -24,6 +24,7 @@ from gui.Scaleform.managers.SoundManager import SoundManager
 from gui.Scaleform.managers.TweenSystem import TweenManager
 from gui.Scaleform.managers.UtilsManager import UtilsManager
 from gui.Scaleform.managers.voice_chat import LobbyVoiceChatManager
+from gui.Scaleform.managers.fader_manager import FaderManager
 from gui.shared import EVENT_BUS_SCOPE
 from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID
 from helpers import dependency
@@ -34,6 +35,8 @@ class LobbyEntry(SFApplication):
 
     def __init__(self, appNS):
         super(LobbyEntry, self).__init__('lobby.swf', appNS)
+        self.__faderManager = None
+        return
 
     @property
     def cursorMgr(self):
@@ -42,6 +45,10 @@ class LobbyEntry(SFApplication):
     @property
     def waitingManager(self):
         return self.__getWaitingFromContainer()
+
+    @property
+    def faderManager(self):
+        return self.__faderManager
 
     def afterCreate(self):
         super(LobbyEntry, self).afterCreate()
@@ -52,6 +59,9 @@ class LobbyEntry(SFApplication):
         from gui.Scaleform.Waiting import Waiting
         Waiting.setWainingViewGetter(None)
         Waiting.close()
+        if self.__faderManager:
+            self.__faderManager.destroy()
+            self.__faderManager = None
         super(LobbyEntry, self).beforeDelete()
         return
 
@@ -60,6 +70,10 @@ class LobbyEntry(SFApplication):
 
     def _createContainerManager(self):
         return ContainerManager(self._loaderMgr, DefaultContainer(ViewTypes.DEFAULT), DefaultContainer(ViewTypes.CURSOR), DefaultContainer(ViewTypes.WAITING), PopUpContainer(ViewTypes.WINDOW), PopUpContainer(ViewTypes.BROWSER), PopUpContainer(ViewTypes.TOP_WINDOW), PopUpContainer(ViewTypes.OVERLAY), DefaultContainer(ViewTypes.SERVICE_LAYOUT))
+
+    def _createManagers(self):
+        super(LobbyEntry, self)._createManagers()
+        self.__faderManager = FaderManager()
 
     def _createToolTipManager(self):
         tooltip = ToolTip(GUI_GLOBAL_SPACE_ID.BATTLE_LOADING)
@@ -124,3 +138,7 @@ class LobbyEntry(SFApplication):
 
     def __getWaitingFromContainer(self):
         return self._containerMgr.getView(ViewTypes.WAITING) if self._containerMgr is not None else None
+
+    def _addGameCallbacks(self):
+        super(LobbyEntry, self)._addGameCallbacks()
+        self.__faderManager.setup()

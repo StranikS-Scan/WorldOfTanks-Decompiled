@@ -54,7 +54,9 @@ class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
      VIEW_ALIAS.BATTLE_QUEUE,
      VIEW_ALIAS.LOBBY_ACADEMY,
      RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS,
-     RANKEDBATTLES_ALIASES.RANKED_BATTLES_BROWSER_VIEW)
+     RANKEDBATTLES_ALIASES.RANKED_BATTLES_BROWSER_VIEW,
+     VIEW_ALIAS.LOBBY_NY_SCREEN,
+     VIEW_ALIAS.LOBBY_NY_REWARDS)
 
     def __init__(self):
         super(_LobbySubViewsLifecycleHandler, self).__init__([ ViewKey(alias) for alias in self.__SUB_VIEWS ])

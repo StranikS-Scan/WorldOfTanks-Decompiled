@@ -5,6 +5,9 @@
       <include>
         <nations>	china	</nations>
       </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold	</vehicles>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	1	</id>
@@ -12,7 +15,7 @@
       <texture>	gui/maps/vehicles/styles/china.png	</texture>
       <season>	ALL	</season>
       <isRent>	true	</isRent>
-      <rentCount>	10	</rentCount>
+      <rentCount>	100	</rentCount>
       <tags>	vehicleBound	</tags>
       <historical>	true	</historical>
       <outfits>
@@ -68,7 +71,7 @@
       <texture>	gui/maps/vehicles/styles/czech.png	</texture>
       <season>	ALL	</season>
       <isRent>	true	</isRent>
-      <rentCount>	10	</rentCount>
+      <rentCount>	100	</rentCount>
       <tags>	vehicleBound	</tags>
       <historical>	true	</historical>
       <outfits>
@@ -124,7 +127,7 @@
       <texture>	gui/maps/vehicles/styles/france.png	</texture>
       <season>	ALL	</season>
       <isRent>	true	</isRent>
-      <rentCount>	10	</rentCount>
+      <rentCount>	100	</rentCount>
       <tags>	vehicleBound	</tags>
       <historical>	true	</historical>
       <outfits>
@@ -173,6 +176,9 @@
       <include>
         <nations>	germany	</nations>
       </include>
+      <exclude>
+        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian	</vehicles>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	4	</id>
@@ -180,7 +186,7 @@
       <texture>	gui/maps/vehicles/styles/germany.png	</texture>
       <season>	ALL	</season>
       <isRent>	true	</isRent>
-      <rentCount>	10	</rentCount>
+      <rentCount>	100	</rentCount>
       <tags>	vehicleBound	</tags>
       <historical>	true	</historical>
       <outfits>
@@ -236,7 +242,7 @@
       <texture>	gui/maps/vehicles/styles/japan.png	</texture>
       <season>	ALL	</season>
       <isRent>	true	</isRent>
-      <rentCount>	10	</rentCount>
+      <rentCount>	100	</rentCount>
       <tags>	vehicleBound	</tags>
       <historical>	true	</historical>
       <outfits>
@@ -292,7 +298,7 @@
       <texture>	gui/maps/vehicles/styles/sweden.png	</texture>
       <season>	ALL	</season>
       <isRent>	true	</isRent>
-      <rentCount>	10	</rentCount>
+      <rentCount>	100	</rentCount>
       <tags>	vehicleBound	</tags>
       <historical>	true	</historical>
       <outfits>
@@ -348,7 +354,7 @@
       <texture>	gui/maps/vehicles/styles/uk.png	</texture>
       <season>	ALL	</season>
       <isRent>	true	</isRent>
-      <rentCount>	10	</rentCount>
+      <rentCount>	100	</rentCount>
       <tags>	vehicleBound	</tags>
       <historical>	true	</historical>
       <outfits>
@@ -397,6 +403,9 @@
       <include>
         <nations>	usa	</nations>
       </include>
+      <exclude>
+        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	8	</id>
@@ -404,7 +413,7 @@
       <texture>	gui/maps/vehicles/styles/usa.png	</texture>
       <season>	ALL	</season>
       <isRent>	true	</isRent>
-      <rentCount>	10	</rentCount>
+      <rentCount>	100	</rentCount>
       <tags>	vehicleBound	</tags>
       <historical>	true	</historical>
       <outfits>
@@ -453,6 +462,9 @@
       <include>
         <nations>	ussr	</nations>
       </include>
+      <exclude>
+        <vehicles>	ussr:R61_Object252_BF	</vehicles>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	9	</id>
@@ -460,7 +472,7 @@
       <texture>	gui/maps/vehicles/styles/ussr.png	</texture>
       <season>	ALL	</season>
       <isRent>	true	</isRent>
-      <rentCount>	10	</rentCount>
+      <rentCount>	100	</rentCount>
       <tags>	vehicleBound	</tags>
       <historical>	true	</historical>
       <outfits>

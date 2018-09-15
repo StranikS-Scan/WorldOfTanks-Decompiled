@@ -1754,6 +1754,7 @@ class TOOLTIPS(object):
     HANGAR_HEADER_QUESTS_REWARD = '#tooltips:hangar/header/quests/reward'
     HANGAR_HEADER_QUESTS_REWARD_REST = '#tooltips:hangar/header/quests/reward/rest'
     HANGAR_HEADER_QUESTS_BOTTOM = '#tooltips:hangar/header/quests/bottom'
+    HANGAR_HEADER_NYQUESTS_HEADER = '#tooltips:hangar/header/nyquests/header'
     TRADE_HEADER = '#tooltips:trade/header'
     TRADE_BODY = '#tooltips:trade/body'
     TRADE_NODISCOUNT = '#tooltips:trade/noDiscount'

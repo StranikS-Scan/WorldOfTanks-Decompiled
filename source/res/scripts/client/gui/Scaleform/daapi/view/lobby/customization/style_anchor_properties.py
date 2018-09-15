@@ -83,8 +83,7 @@ class StyleAnchorProperties(CustomizationStyleAnchorPropertiesMeta):
         if itemData is None:
             desc = text_styles.neutral(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_EMPTYSTYLE_HINT)
             itemData = {'intCD': 0,
-             'isWide': True,
-             'icon': RES_ICONS.MAPS_ICONS_LIBRARY_TANKITEM_BUY_TANK_POPOVER}
+             'icon': RES_ICONS.MAPS_ICONS_LIBRARY_TANKITEM_BUY_TANK_POPOVER_SMALL}
         showProlongationCB = False
         autoProlongationCBLabel = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_STYLE_AUTOPROLONGATIONLABEL
         if self._item is not None and self._item.isRentable:

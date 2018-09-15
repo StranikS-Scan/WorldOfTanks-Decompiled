@@ -10,6 +10,9 @@
       <include>
         <levels>	10	</levels>
       </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
     </vehicleFilter>
     <modification>
       <id>	1	</id>
@@ -21,7 +24,7 @@
       <effects>
         <effect>
           <type>	paint_age	</type>
-          <value>	0.35	</value>
+          <value>	0.3	</value>
         </effect>
         <effect>
           <type>	paint_fading	</type>
@@ -39,11 +42,44 @@
       <effects>
         <effect>
           <type>	paint_age	</type>
-          <value>	0.6	</value>
+          <value>	0.5	</value>
         </effect>
         <effect>
           <type>	paint_fading	</type>
-          <value>	0.2	</value>
+          <value>	0.3	</value>
+        </effect>
+      </effects>
+    </modification>
+  </itemGroup>
+  <itemGroup>
+    <priceGroup>	effect gold notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+      </include>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <modification>
+      <id>	3	</id>
+      <texture>	gui/maps/vehicles/modifications/effect.png	</texture>
+      <userString>	#vehicle_customization:modifications/age_effect_03	</userString>
+      <description>	#vehicle_customization:modifications/age_effect_03/description	</description>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+      <effects>
+        <effect>
+          <type>	paint_age	</type>
+          <value>	0.3	</value>
+        </effect>
+        <effect>
+          <type>	paint_fading	</type>
+          <value>	0.1	</value>
         </effect>
       </effects>
     </modification>

@@ -20,9 +20,9 @@ from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getAchievementsTabCou
 from gui.Scaleform.daapi.view.lobby.store.actions_formatters import getNewActiveActions
 from gui.Scaleform.daapi.view.meta.LobbyHeaderMeta import LobbyHeaderMeta
 from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
+from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
-from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -59,6 +59,7 @@ from skeletons.gui.game_control import IWalletController, IGameSessionController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.new_year import INewYearController
 _MAX_BOOSTERS_TO_DISPLAY = 99
 _MAX_HEADER_SERVER_NAME_LEN = 6
 _SERVER_NAME_PREFIX = '%s..'
@@ -127,6 +128,17 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         PERSONAL_MISSIONS_PAGE = VIEW_ALIAS.PERSONAL_MISSIONS_PAGE
 
     RANKED_WELCOME_VIEW_DISABLE_CONTROLS = BUTTONS.ALL()
+
+    class NY_SUB_VIEWS(CONST_CONTAINER):
+        LOBBY_NY_SCREEN = VIEW_ALIAS.LOBBY_NY_SCREEN
+        LOBBY_NY_REWARDS = VIEW_ALIAS.LOBBY_NY_REWARDS
+        LOBBY_NY_CRAFT = VIEW_ALIAS.LOBBY_NY_CRAFT
+        LOBBY_NY_BREAK = VIEW_ALIAS.LOBBY_NY_BREAK
+        LOBBY_NY_CHESTS = VIEW_ALIAS.LOBBY_NY_CHESTS
+        LOBBY_NY_MISSIONS_REWARD_RECEIPT = VIEW_ALIAS.LOBBY_NY_MISSIONS_REWARD_RECEIPT
+        LOBBY_NY_COLLECTIONS_GROUP = VIEW_ALIAS.LOBBY_NY_COLLECTIONS_GROUP
+        LOBBY_NY_COLLECTIONS = VIEW_ALIAS.LOBBY_NY_COLLECTIONS
+
     itemsCache = dependency.descriptor(IItemsCache)
     wallet = dependency.descriptor(IWalletController)
     gameSession = dependency.descriptor(IGameSessionController)
@@ -141,6 +153,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     goodiesCache = dependency.descriptor(IGoodiesCache)
     connectionMgr = dependency.descriptor(IConnectionManager)
     rankedController = dependency.descriptor(IRankedBattlesController)
+    newYearController = dependency.descriptor(INewYearController)
 
     def __init__(self):
         super(LobbyHeader, self).__init__()
@@ -262,10 +275,18 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         battle_selector_items.create()
         super(LobbyHeader, self)._populate()
         self.__addListeners()
+        available = self.newYearController.isAvailable()
+        self.as_updateNYAvailableS(available)
+        self.as_updateNYEnabledS(available)
         Waiting.hide('enter')
         self._isLobbyHeaderControlsDisabled = False
         self.__viewLifecycleWatcher.start(self.app.containerManager, [_RankedBattlesWelcomeViewLifecycleHandler(self)])
         self._onPopulateEnd()
+
+    def __onNYStateChanged(self, _):
+        available = self.newYearController.isAvailable()
+        self.as_updateNYEnabledS(available)
+        self.as_updateNYAvailableS(available)
 
     def _invalidate(self, *args, **kwargs):
         super(LobbyHeader, self)._invalidate(*args, **kwargs)
@@ -307,6 +328,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.falloutCtrl.onVehiclesChanged += self.__updateFalloutSettings
         self.falloutCtrl.onSettingsChanged += self.__updateFalloutSettings
         self.rankedController.onUpdated += self.__updateRanked
+        self.newYearController.onStateChanged += self.__onNYStateChanged
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -371,6 +393,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.encyclopedia.onStateChanged -= self._updateHangarMenuData
         self.encyclopedia.onNewRecommendationReceived -= self.__onNewEncyclopediaRecommendation
+        self.newYearController.onStateChanged -= self.__onNYStateChanged
 
     def __updateServerData(self):
         """
@@ -572,6 +595,13 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if settings.type is ViewTypes.LOBBY_SUB:
             if settings.alias in self.TABS.ALL():
                 self.__setCurrentScreen(settings.alias)
+            self.__updateNYVisibility(settings.alias)
+
+    def __updateNYVisibility(self, alias):
+        isShowMainMenu = alias not in self.NY_SUB_VIEWS.ALL()
+        isShowGlow = alias == self.NY_SUB_VIEWS.LOBBY_NY_SCREEN
+        isShowMainMenuGlow = alias == self.TABS.HANGAR
+        self.as_updateNYVisibilityS(isShowMainMenu, isShowGlow, isShowMainMenuGlow)
 
     def __getContainer(self, viewType):
         return self.app.containerManager.getContainer(viewType) if self.app is not None and self.app.containerManager is not None else None

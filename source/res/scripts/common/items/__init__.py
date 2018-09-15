@@ -145,6 +145,8 @@ def init(preloadEverything, pricesToCollect=None):
     tankmen.init(preloadEverything)
     from . import qualifiers
     qualifiers.init()
+    from . import new_year_types
+    new_year_types.init()
     return
 
 

@@ -88,6 +88,10 @@ class VehicleTurret(VehicleModule):
     def icon(self):
         return RES_ICONS.MAPS_ICONS_MODULES_TOWER
 
+    @property
+    def isGunCarriage(self):
+        return self.descriptor.isGunCarriage
+
 
 class VehicleGun(VehicleModule):
     __slots__ = ('_defaultAmmo', '_maxAmmo')

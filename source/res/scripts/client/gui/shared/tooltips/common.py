@@ -1,27 +1,30 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/common.py
 import cPickle
-from collections import namedtuple
 import math
+from collections import namedtuple
 from operator import methodcaller
-import ResMgr
 import BigWorld
-import constants
+import ResMgr
 import ArenaType
+import constants
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
+from gui.Scaleform.genConsts.NY_CONSTANTS import NY_CONSTANTS
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.shared.formatters.servers import formatPingStatus, wrapServerName
-from helpers import dependency
+from gui.Scaleform.locale.NY import NY
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.clans import formatters as clans_fmts
 from gui.clans.items import formatField
 from gui.shared.formatters import icons, text_styles
+from gui.shared.formatters.servers import formatPingStatus, wrapServerName
 from gui.shared.formatters.text_styles import concatStylesToMultiLine
 from gui.shared.formatters.time_formatters import getTimeLeftStr
-from gui.shared.view_helpers import UsersInfoHelper
-from gui.shared.tooltips import efficiency
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
+from gui.shared.tooltips import efficiency
+from gui.shared.view_helpers import UsersInfoHelper
+from helpers import dependency
+from items.new_year_types import NATIONAL_SETTINGS_IDS_BY_NAME
 from messenger.gui.Scaleform.data.contacts_vo_converter import ContactConverter, makeClanFullName, makeContactStatusDescription
 from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY, PING_STATUSES, PingData
 from constants import WG_GAMES, VISIBILITY
@@ -52,6 +55,8 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.new_year import INewYearController
+from items.new_year_types import BOUND_ATMOSPHERE_BY_LEVEL, TOY_ATMOSPHERE_BY_RANK
 _UNAVAILABLE_DATA_PLACEHOLDER = '--'
 _ITEM_TYPE_TO_TOOLTIP_DICT = {GUI_ITEM_TYPE.SHELL: i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_TYPE_SHELL),
  GUI_ITEM_TYPE.EQUIPMENT: i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_TYPE_EQUIPMENT),
@@ -1288,3 +1293,216 @@ class MissionsToken(BlocksTooltipData):
         return formatters.packAlignedTextBlockData(text, BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding={'top': -1,
          'bottom': 15,
          'left': -12})
+
+
+def paramToString(param):
+    string = '+' + str(param * 100.0) + '%' if param != 0.0 else None
+    return string
+
+
+TOOLTIP_SETTINGS_BY_NATION_ID = (NY.TOOLTIP_SETTINGS_NATIONS_NEW_YEAR,
+ NY.TOOLTIP_SETTINGS_NATIONS_OLD_CHRISTMAS,
+ NY.TOOLTIP_SETTINGS_NATIONS_CHRISTMAS,
+ NY.TOOLTIP_SETTINGS_NATIONS_EASTERN_NEW_YEAR)
+POPOVER_SETTINGS_BY_NATION_ID = (NY.POPOVER_DECORATIONS_SETTINGS_NATIONS_NEW_YEAR,
+ NY.POPOVER_DECORATIONS_SETTINGS_NATIONS_OLD_CHRISTMAS,
+ NY.POPOVER_DECORATIONS_SETTINGS_NATIONS_CHRISTMAS,
+ NY.POPOVER_DECORATIONS_SETTINGS_NATIONS_EASTERN_NEW_YEAR)
+TOOLTIP_SETTINGS_ICON_BY_NATION_ID = (RES_ICONS.MAPS_ICONS_NY_SETTING_48X48_SOVIET,
+ RES_ICONS.MAPS_ICONS_NY_SETTING_48X48_TRADITIONALWESTERN,
+ RES_ICONS.MAPS_ICONS_NY_SETTING_48X48_MODERNWESTERN,
+ RES_ICONS.MAPS_ICONS_NY_SETTING_48X48_ASIAN)
+TOOLTIP_SETTINGS_BG_BY_LEVEL = (NY_CONSTANTS.NY_TOOLTIP_BUILDUP_BLOCK_RANK_BG_RED_LINKAGE,
+ NY_CONSTANTS.NY_TOOLTIP_BUILDUP_BLOCK_RANK_BG_YELLOW_LINKAGE,
+ NY_CONSTANTS.NY_TOOLTIP_BUILDUP_BLOCK_RANK_BG_GREEN_LINKAGE,
+ NY_CONSTANTS.NY_TOOLTIP_BUILDUP_BLOCK_RANK_BG_BLUE_LINKAGE,
+ NY_CONSTANTS.NY_TOOLTIP_BUILDUP_BLOCK_RANK_BG_VIOLET_LINKAGE)
+
+class NyDecorationTooltipData(BlocksTooltipData):
+    _newYearController = dependency.descriptor(INewYearController)
+
+    def __init__(self, context):
+        super(NyDecorationTooltipData, self).__init__(context, TOOLTIP_TYPE.NY)
+        self.item = None
+        self._setContentMargin(top=15, left=19, bottom=25, right=35)
+        self._setMargins(afterBlock=40, afterSeparator=20)
+        self._setWidth(355)
+        self.__level = None
+        self.__name = None
+        self.__settingsNation = None
+        self.__atmosphere_scores = None
+        self.__flakes_price = None
+        self.__settingsIcon = None
+        self.__settingsBg = None
+        return
+
+    def __setToyParameters(self, toyId):
+        toyDescr = self._newYearController.toysDescrs[toyId]
+        nationId = NATIONAL_SETTINGS_IDS_BY_NAME[toyDescr.setting]
+        self._level = toyDescr.rank
+        self.__settingsNation = TOOLTIP_SETTINGS_BY_NATION_ID[nationId]
+        self.__atmosphere_scores = TOY_ATMOSPHERE_BY_RANK[toyDescr.rank - 1]
+        self.__flakes_price = toyDescr.fragments
+        self.__name = toyDescr.name
+        self.__id = toyDescr.id
+        self.__nations = POPOVER_SETTINGS_BY_NATION_ID[nationId]
+        self.__settingsIcon = self._getIcon(toyDescr)
+        self.__settingsBg = TOOLTIP_SETTINGS_BG_BY_LEVEL[self._level - 1]
+
+    def _getIcon(self, toyDescr):
+        nationId = NATIONAL_SETTINGS_IDS_BY_NAME[toyDescr.setting]
+        return TOOLTIP_SETTINGS_ICON_BY_NATION_ID[nationId]
+
+    def _packBlocks(self, *args, **kwargs):
+        self.item = self.context.buildItem(*args, **kwargs)
+        self.__setToyParameters(int(args[0]))
+        items = super(NyDecorationTooltipData, self)._packBlocks(*args, **kwargs)
+        topBuildUpBlockContent = [self._packHeaderBlock()]
+        topBuildUpBlock = [formatters.packBuildUpBlockData(topBuildUpBlockContent, stretchBg=False, linkage=self.__settingsBg, padding=formatters.packPadding(top=-13, left=-20, bottom=0 if self._canShowDescription() else -18))]
+        if self._canShowDescription():
+            topBuildUpBlock.append(formatters.packTextBlockData(text=text_styles.main('#ny:tooltip/settings/toys/toy%d/descr' % self.__id), padding=formatters.packPadding(top=16, left=60, bottom=-18)))
+        items.append(formatters.packBuildUpBlockData(topBuildUpBlock))
+        items.append(self._packBottomBlock())
+        return items
+
+    def _canShowDescription(self):
+        return self._level == 5
+
+    def _packHeaderBlock(self):
+        return formatters.packImageTextBlockData(title=text_styles.highTitle(self.__name), desc=text_styles.standard(self.__settingsNation), img=self.__settingsIcon, imgPadding=formatters.packPadding(left=18, top=-5), txtGap=-2, txtOffset=80, padding=formatters.packPadding(top=20, bottom=-20), linkage=NY_CONSTANTS.NY_TOOLTIP_DECORATION_TYPE_LINKAGE)
+
+    def _packBottomBlock(self):
+        levelStr = int2roman(self._level)
+        text = text_styles.concatStylesWithSpace(text_styles.main(NY.DECORATIONS_TOOLTIP_DECORATION_LEVEL))
+        valueFormatted = text_styles.stats(levelStr)
+        bottomBuildUpBlock = [formatters.packTextParameterBlockData(name=text, value=valueFormatted, padding=formatters.packPadding(0, 0, 4))]
+        text = text_styles.concatStylesWithSpace(text_styles.main(NY.DECORATIONS_TOOLTIP_ATMOSPHERE_SCORES))
+        valueFormatted = text_styles.stats(self.__atmosphere_scores)
+        bottomBuildUpBlock.append(formatters.packTitleDescParameterWithIconBlockData(title=text, value=valueFormatted, icon=RES_ICONS.MAPS_ICONS_NY_ICONS_ICON_BUTTON_FREEZE, titlePadding=formatters.packPadding(left=3), iconPadding=formatters.packPadding(left=3, top=-1), padding=formatters.packPadding(left=55)))
+        text = text_styles.concatStylesWithSpace(text_styles.main(NY.DECORATIONS_TOOLTIP_FLAKES_PRICE))
+        valueFormatted = text_styles.stats(self.__flakes_price)
+        bottomBuildUpBlock.append(formatters.packTitleDescParameterWithIconBlockData(title=text, value=valueFormatted, icon=RES_ICONS.MAPS_ICONS_NY_ICONS_MONEY_SMALL, titlePadding=formatters.packPadding(left=-10), iconPadding=formatters.packPadding(left=-10, top=-1), padding=formatters.packPadding(left=55)))
+        return formatters.packBuildUpBlockData(bottomBuildUpBlock)
+
+
+class NyBoxTooltipData(BlocksTooltipData):
+    newYearController = dependency.descriptor(INewYearController)
+
+    def __init__(self, context):
+        super(NyBoxTooltipData, self).__init__(context, TOOLTIP_TYPE.NY)
+        self.item = None
+        self._setContentMargin(top=20, left=19, bottom=20, right=10)
+        self._setMargins(afterBlock=10, afterSeparator=0)
+        self._setWidth(400)
+        return
+
+    def _packBlocks(self, *args, **kwargs):
+        self.item = self.context.buildItem(*args, **kwargs)
+        items = super(NyBoxTooltipData, self)._packBlocks(*args, **kwargs)
+        content = []
+        content.append(formatters.packTextBlockData(text_styles.highTitle(NY.TOOLTIP_BOX_HEADER), padding=formatters.packPadding(bottom=-40)))
+        content.append(formatters.packImageBlockData(img=RES_ICONS.MAPS_ICONS_NY_BOX_NY_BOX_CLOSED, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
+        content.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.middleTitle(NY.TOOLTIP_BOX_BUY_HEADER)), formatters.packTextBlockData(text_styles.main(NY.TOOLTIP_BOX_BUY_BODY))], padding=formatters.packPadding(top=-10)))
+        content.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.middleTitle(NY.TOOLTIP_BOX_WIN_HEADER)), formatters.packTextBlockData(text_styles.main(NY.TOOLTIP_BOX_WIN_BODY))], padding=formatters.packPadding(top=20, bottom=10)))
+        items.append(formatters.packBuildUpBlockData(content))
+        return items
+
+
+class NyFlakesTooltipData(BlocksTooltipData):
+    newYearController = dependency.descriptor(INewYearController)
+
+    def __init__(self, context):
+        super(NyFlakesTooltipData, self).__init__(context, TOOLTIP_TYPE.NY)
+        self.item = None
+        self._setContentMargin(top=15, left=19, bottom=15, right=10)
+        self._setMargins(afterBlock=15, afterSeparator=15)
+        self._setWidth(310)
+        self.__toyFragments = 0
+        return
+
+    def _packBlocks(self, *args, **kwargs):
+        self.item = self.context.buildItem(*args, **kwargs)
+        items = super(NyFlakesTooltipData, self)._packBlocks(*args, **kwargs)
+        topBuildUpBlock = formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.highTitle(NY.TOOLTIP_FLAKES_HEADER)), formatters.packTextBlockData(text_styles.standard(NY.TOOLTIP_FLAKES_BODY))])
+        middleBuildUpBlock = []
+        text = text_styles.concatStylesWithSpace(text_styles.main(NY.TOOLTIP_FLAKES_IN_STOCK))
+        self.__toyFragments = self.newYearController.getToyFragments()
+        valueFormatted = text_styles.warning(BigWorld.wg_getIntegralFormat(self.__toyFragments))
+        middleBuildUpBlock.append(formatters.packTitleDescParameterWithIconBlockData(title=text, value=valueFormatted, icon=RES_ICONS.MAPS_ICONS_NY_ICONS_MONEY_SMALL, titlePadding=formatters.packPadding(left=-10), iconPadding=formatters.packPadding(left=-10, top=-1), padding=formatters.packPadding(left=70)))
+        bottomBuildUpBlock = []
+        bottomBuildUpBlock.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.main(NY.TOOLTIP_FLAKES_DESCR))]))
+        items.append(topBuildUpBlock)
+        items.append(formatters.packBuildUpBlockData(middleBuildUpBlock, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
+        items.append(formatters.packBuildUpBlockData(bottomBuildUpBlock))
+        return items
+
+
+class NyCarouselItemTooltipData(BlocksTooltipData):
+    newYearController = dependency.descriptor(INewYearController)
+    eventsCache = dependency.descriptor(IEventsCache)
+
+    def __init__(self, context):
+        super(NyCarouselItemTooltipData, self).__init__(context, TOOLTIP_TYPE.NY)
+        self.item = None
+        self._setContentMargin(top=20, left=0, right=-20, bottom=0)
+        self._setWidth(355)
+        self.__level = None
+        self.__prevLvlScores = None
+        self.__currentScores = None
+        self.__nextLvlScores = None
+        self.__progressPct = None
+        self.__salePct = None
+        self.__vehicleLvl = None
+        self.__secondAward = None
+        return
+
+    def __updateParams(self):
+        self.__level, maxLevel, self.__currentScores, self.__nextLvlScores = self.newYearController.getProgress()
+        self.__prevLvlScores = BOUND_ATMOSPHERE_BY_LEVEL[self.__level - 1]
+        self.__progressPct = float(self.__currentScores) / float(self.__nextLvlScores)
+        self.__currentScores += self.__prevLvlScores
+        self.__nextLvlScores += self.__prevLvlScores
+        self.__secondAward = None
+        self.__salePct = ''
+        allChests = self.newYearController.chestStorage.getDescriptors()
+        nextChest = None
+        for chest in allChests.values():
+            if chest.level == maxLevel + 1:
+                nextChest = chest
+                break
+
+        if nextChest:
+            nyQuest = self.eventsCache.getHiddenQuests().get(nextChest.id, None)
+            if nyQuest:
+                vehDiscount = self.newYearController.vehDiscountsStorage.extractDiscountValueByLevel(nextChest.level)
+                if vehDiscount:
+                    self.__salePct = '-' + str(vehDiscount) + '%'
+                    self.__vehicleLvl = nextChest.level
+                descrs = self.newYearController.tankmanDiscountsStorage.getDescriptors()
+                for d in descrs.itervalues():
+                    if d.level == nextChest.level:
+                        self.__secondAward = NY.TOOLTIP_CAROUSELITEM_AWARDS_GIRL
+                        break
+
+        self.__maxLevel = 10
+        return
+
+    def _packBlocks(self, *args, **kwargs):
+        self.item = self.context.buildItem(*args, **kwargs)
+        self.__updateParams()
+        self.newYearController.getBonusesForNation(1)
+        items = super(NyCarouselItemTooltipData, self)._packBlocks(*args, **kwargs)
+        levelStr = int2roman(self.__level)
+        content = []
+        vehicleLvlStr = int2roman(self.__vehicleLvl)
+        secondAwardFormatted = ''
+        if self.__secondAward:
+            secondAwardFormatted = text_styles.main(self.__secondAward)
+        content.append(formatters.packTextBlockData(text_styles.highTitle(NY.TOOLTIP_CAROUSELITEM_PROGRESS_HEADER_DECORATIONS), padding=formatters.packPadding(0, 24, 0, 20)))
+        content.append(formatters.packTextBlockData(text_styles.highTitle('{} {}'.format(text_styles.main(levelStr), text_styles.main(NY.DECORATIONS_TOOLTIP_LEVELHEADER))), padding=formatters.packPadding(-6, 24, 15)))
+        content.append(formatters.packTextBlockData(text_styles.main(NY.TOOLTIP_CAROUSELITEM_PROGRESS_HEADER_SUBTITLE), padding=formatters.packPadding(0, 24, 5, 20)))
+        content.append(formatters.packNYProgressBlockData(text_styles.main(self.__prevLvlScores), '{} {} {} {}'.format(icons.makeImageTag(RES_ICONS.MAPS_ICONS_NY_ICONS_ICON_BUTTON_FREEZE, 24, 24, -6), text_styles.stats(self.__currentScores), text_styles.stats('/'), text_styles.main(self.__nextLvlScores), text_styles.main(NY.POPOVER_DECORATIONS_SETTINGS_NATIONS_OLD_CHRISTMAS)), self.__currentScores, self.__nextLvlScores, self.__progressPct, padding=formatters.packPadding(0, 20, 0, 40)))
+        if self.__level < self.__maxLevel:
+            content.append(formatters.packNYAwardsBlockData(text_styles.middleTitle(NY.TOOLTIP_CAROUSELITEM_AWARDS_HEADER), text_styles.stats(self.__salePct), text_styles.main(makeString(NY.TOOLTIP_ATMOSPHERE_VEHICLE_HEADER, level=vehicleLvlStr)), secondAwardFormatted))
+        items.append(formatters.packBuildUpBlockData(content))
+        return items

@@ -6,10 +6,12 @@ from operator import itemgetter
 import BigWorld
 import Event
 from account_helpers.AccountSettings import AccountSettings, LAST_RESTORE_NOTIFICATION
+from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import MONEY_UNDEFINED
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from gui.shared.utils.requesters.ItemsRequester import IntCDProtectionRequestCriteria
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
 from helpers import dependency
 from helpers import time_utils
@@ -25,13 +27,20 @@ def getTankmenRestoreInfo(tankman, itemsCache=None):
     return (price, config.billableDuration - dismissalLength)
 
 
+def _hasLimitedRestore(item):
+    return item.hasLimitedRestore()
+
+
+def _doRestoreFilter(item):
+    return item.hasRestoreCooldown() or item.hasLimitedRestore()
+
+
 class RestoreController(IRestoreController, Notifiable):
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         """
         RestoreController send event onRestoreChangeNotify on restore left time change
-        :param proxy: <_GameControllers>
         """
         super(RestoreController, self).__init__()
         self.__eventManager = Event.EventManager()
@@ -41,8 +50,10 @@ class RestoreController(IRestoreController, Notifiable):
         self.__tankmanLiveTime = None
         self.__maxTankmenBufferLength = DEFAULT_MAX_TANKMEN_BUFFER_LENGTH
         self.__checkForNotify = False
+        self.__waitNextUpdate = False
         self.onRestoreChangeNotify = Event.Event(self.__eventManager)
         self.onTankmenBufferUpdated = Event.Event(self.__eventManager)
+        LOG_DEBUG('PATCH FOR WOTD-91767 IS APPLIED')
         return
 
     def init(self):
@@ -51,7 +62,7 @@ class RestoreController(IRestoreController, Notifiable):
 
     def onLobbyInited(self, _):
         self.__tankmanLiveTime = self.itemsCache.items.shop.tankmenRestoreConfig.billableDuration
-        if self.__restoreNotifyTimeCallback is None:
+        if self.__restoreNotifyTimeCallback is None and not self.__waitNextUpdate:
             self.__startRestoreTimeNotifyCallback()
         self.__checkLimitedRestoreNotification()
         return
@@ -121,7 +132,7 @@ class RestoreController(IRestoreController, Notifiable):
 
     def __startRestoreTimeNotifyCallback(self):
         self.__vehiclesForUpdate = []
-        criteria = REQ_CRITERIA.CUSTOM(lambda item: item.hasRestoreCooldown() or item.hasLimitedRestore())
+        criteria = IntCDProtectionRequestCriteria(_doRestoreFilter, self.itemsCache.items.recycleBin.getVehiclesIntCDs())
         restoreVehicles = self.itemsCache.items.getVehicles(criteria).values()
         notificationList = []
         for vehicle in restoreVehicles:
@@ -146,7 +157,9 @@ class RestoreController(IRestoreController, Notifiable):
 
             nextRestoreNotification = max(nextRestoreNotification, 0)
         else:
+            self.__waitNextUpdate = True
             return
+        self.__waitNextUpdate = False
         self.__restoreNotifyTimeCallback = BigWorld.callback(nextRestoreNotification, self.__notifyRestoreTime)
 
     def __notifyRestoreTime(self):
@@ -173,7 +186,7 @@ class RestoreController(IRestoreController, Notifiable):
             return time_utils.getTimeDeltaFromNow(timeOfClosestDeletion) + 1
 
     def __checkLimitedRestoreNotification(self):
-        criteria = REQ_CRITERIA.CUSTOM(lambda item: item.hasLimitedRestore())
+        criteria = IntCDProtectionRequestCriteria(_hasLimitedRestore, self.itemsCache.items.recycleBin.getVehiclesIntCDs())
         vehicles = self.itemsCache.items.getVehicles(criteria).values()
         lastRestoreNotification = AccountSettings.getSettings(LAST_RESTORE_NOTIFICATION)
         if lastRestoreNotification is None:

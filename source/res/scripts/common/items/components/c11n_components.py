@@ -286,7 +286,10 @@ class CustomizationCache(object):
 
     def isVehicleBound(self, itemId):
         """Check if item can be remounted to another vehicle."""
-        itemType, inTypeId = splitIntDescr(itemId)
+        if isinstance(itemId, int):
+            itemType, inTypeId = splitIntDescr(itemId)
+        else:
+            itemType, inTypeId = itemId
         if itemType not in self.itemTypes:
             raise ValueError('Incorrect item type', itemId)
         if inTypeId not in self.itemTypes[itemType]:

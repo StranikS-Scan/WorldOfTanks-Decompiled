@@ -26,7 +26,7 @@ from cStringIO import StringIO
 import varint
 import ResMgr
 from collections import namedtuple, OrderedDict, defaultdict
-from items.components.c11n_constants import ApplyArea, SeasonType
+from items.components.c11n_constants import ApplyArea, SeasonType, CustomizationType
 from items.components import c11n_components as cn
 from constants import IS_CELLAPP, IS_BASEAPP
 if IS_CELLAPP or IS_BASEAPP:
@@ -484,6 +484,29 @@ class CustomizationOutfit(SerializableComponent):
 
         selfItems[:] = [ i for i in selfItems if i.appliedTo != 0 ]
         selfItems.extend(otherItems)
+
+    def dismountComponents(self, applyArea, dismountTypes=CustomizationType._SIMPLE_TYPES):
+        """Dismount items from specified applyArea.
+        
+        :param dismountTypes: types of customization to unmount
+        :param applyArea: bitmask of ApplyArea values
+        :return: Dictionary of dismounted items
+        """
+        outfitComponents = (self.paints, self.camouflages, self.decals)
+        toMove = defaultdict(int)
+        areas = [ i for i in ApplyArea.RANGE if i & applyArea ]
+        for c11nType, components in zip(CustomizationType._SIMPLE_TYPES, outfitComponents):
+            if c11nType not in dismountTypes:
+                continue
+            for component in components:
+                for area in areas:
+                    if component.appliedTo & area:
+                        component.appliedTo &= ~area
+                        toMove[(c11nType, component.id)] += 1
+
+            components[:] = [ c for c in components if c.appliedTo != 0 ]
+
+        return dict(toMove)
 
 
 _CUSTOMIZATION_CLASSES = {t.customType:t for t in SerializableComponent.__subclasses__()}

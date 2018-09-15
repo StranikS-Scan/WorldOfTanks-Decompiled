@@ -292,17 +292,13 @@ class FOVSettingsStorage(ISettingsStorage):
         if self._settings or forceApply:
             staticFOV, dynamicFOVLow, dynamicFOVTop = self.FOV
             dynamicFOVEnabled = self.dynamicFOVEnabled
-
-            def setFov(value, multiplier, dynamicFOVEnabled):
-                if not dynamicFOVEnabled:
-                    FovExtended.instance().resetFov()
-                FovExtended.instance().defaultHorizontalFov = value
-
             if dynamicFOVEnabled:
-                multiplier = float(dynamicFOVLow) / dynamicFOVTop
                 defaultHorizontalFov = math.radians(dynamicFOVTop)
             else:
-                multiplier = 1.0
                 defaultHorizontalFov = math.radians(staticFOV)
-            BigWorld.callback(0.0, functools.partial(setFov, defaultHorizontalFov, multiplier, dynamicFOVEnabled))
+
+            def setFov(value, isDynamicFov):
+                FovExtended.instance().applyHorizontalFovSetting(value, not isDynamicFov)
+
+            BigWorld.callback(0.0, functools.partial(setFov, defaultHorizontalFov, dynamicFOVEnabled))
         return super(FOVSettingsStorage, self).apply(restartApproved)

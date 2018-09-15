@@ -2,7 +2,7 @@
   <itemGroup>
     <priceGroup>	historical paint	</priceGroup>
     <name>	germany colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <userString>	#vehicle_customization:repaint/color_group_02	</userString>
     <vehicleFilter>
       <include>
         <nations>	germany	</nations>
@@ -13,6 +13,9 @@
         <nations>	germany	</nations>
         <levels>	10	</levels>
       </include>
+      <exclude>
+        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian	</vehicles>
+      </exclude>
     </vehicleFilter>
     <usages>
       <item>
@@ -21,13 +24,33 @@
       </item>
     </usages>
     <paint>
+      <id>	135	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_01.png	</texture>
+      <color>	80 53 44 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/germany_color_01	</userString>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+    </paint>
+    <paint>
       <id>	136	</id>
       <texture>	gui/maps/vehicles/repaints/germany_color_02.png	</texture>
       <color>	124 109 88 255	</color>
       <gloss>	0.509	</gloss>
       <metallic>	0.230	</metallic>
       <userString>	#vehicle_customization:repaint/germany_color_02	</userString>
-      <season>	desert	</season>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+    </paint>
+    <paint>
+      <id>	137	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_03.png	</texture>
+      <color>	49 46 36 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/germany_color_03	</userString>
+      <season>	ALL	</season>
       <historical>	true	</historical>
     </paint>
     <paint>
@@ -37,7 +60,7 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.230	</metallic>
       <userString>	#vehicle_customization:repaint/germany_color_04	</userString>
-      <season>	winter	</season>
+      <season>	ALL	</season>
       <historical>	true	</historical>
     </paint>
     <paint>
@@ -47,7 +70,27 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.230	</metallic>
       <userString>	#vehicle_customization:repaint/germany_color_05	</userString>
-      <season>	summer	</season>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+    </paint>
+    <paint>
+      <id>	216	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_06.png	</texture>
+      <color>	48 51 34 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/germany_color_06	</userString>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+    </paint>
+    <paint>
+      <id>	274	</id>
+      <texture>	gui/maps/vehicles/repaints/germany_color_07.png	</texture>
+      <color>	179 121 94 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/germany_color_07	</userString>
+      <season>	ALL	</season>
       <historical>	true	</historical>
     </paint>
   </itemGroup>

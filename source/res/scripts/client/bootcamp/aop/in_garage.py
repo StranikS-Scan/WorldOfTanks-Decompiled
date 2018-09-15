@@ -52,6 +52,9 @@ def weave(weaver, stateInGarage):
     if getClientLanguage() == 'ko':
         weaver.weave(pointcut=_PointcutOverrideKoreaParentalControl)
     weaver.weave(pointcut=_PointcutDisableRankedBattleEvents)
+    weaver.weave(pointcut=_PointcutDisableNewYearEventAvailability)
+    weaver.weave(pointcut=_PointcutDisableNewYearEvent)
+    weaver.weave(pointcut=_PointcutDisableNewYearStateUpdating)
 
 
 class PointcutBattleSelectorHintText(aop.Pointcut):
@@ -202,6 +205,27 @@ class _PointcutDisableRankedBattleEvents(aop.Pointcut):
 
     def __init__(self):
         super(_PointcutDisableRankedBattleEvents, self).__init__('gui.game_control.ranked_battles_controller', 'RankedBattlesController', 'isAvailable', aspects=(common.AspectAvoidWithConstantRet(False),))
+
+
+class _PointcutDisableNewYearEventAvailability(aop.Pointcut):
+    """ Forces bootcamp to ignore new year event. See WOTD-95729 """
+
+    def __init__(self):
+        super(_PointcutDisableNewYearEventAvailability, self).__init__('new_year.new_year_controller', 'NewYearController', 'isAvailable', aspects=(common.AspectAvoidWithConstantRet(False),))
+
+
+class _PointcutDisableNewYearEvent(aop.Pointcut):
+    """ Forces bootcamp to ignore new year event. See WOTD-95729 """
+
+    def __init__(self):
+        super(_PointcutDisableNewYearEvent, self).__init__('new_year.new_year_controller', 'NewYearController', 'isEnabled', aspects=(common.AspectAvoidWithConstantRet(False),))
+
+
+class _PointcutDisableNewYearStateUpdating(aop.Pointcut):
+    """ Forces bootcamp to ignore new year event. See WOTD-95729 """
+
+    def __init__(self):
+        super(_PointcutDisableNewYearStateUpdating, self).__init__('new_year.new_year_controller', 'NewYearController', '_updateState', aspects=(common.AspectAvoidWithConstantRet(False),))
 
 
 class _AspectPrbInvitationNote(aop.Aspect):

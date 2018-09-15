@@ -2,7 +2,7 @@
   <itemGroup>
     <priceGroup>	historical paint	</priceGroup>
     <name>	ussr base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_10	</userString>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
     <vehicleFilter>
       <include>
         <tags>	premium	</tags>
@@ -13,6 +13,9 @@
       </include>
       <exclude>
         <nations>	ussr	</nations>
+      </exclude>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <usages>
@@ -35,7 +38,7 @@
   <itemGroup>
     <priceGroup>	historical paint	</priceGroup>
     <name>	chinese base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_10	</userString>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
     <vehicleFilter>
       <include>
         <tags>	premium	</tags>
@@ -46,6 +49,9 @@
       </include>
       <exclude>
         <nations>	china	</nations>
+      </exclude>
+      <exclude>
+        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <usages>
@@ -68,7 +74,7 @@
   <itemGroup>
     <priceGroup>	historical paint	</priceGroup>
     <name>	france base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_10	</userString>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
     <vehicleFilter>
       <include>
         <tags>	premium	</tags>
@@ -79,6 +85,9 @@
       </include>
       <exclude>
         <nations>	france	</nations>
+      </exclude>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <usages>
@@ -101,7 +110,7 @@
   <itemGroup>
     <priceGroup>	historical paint	</priceGroup>
     <name>	germany base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_10	</userString>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
     <vehicleFilter>
       <include>
         <tags>	premium	</tags>
@@ -112,6 +121,9 @@
       </include>
       <exclude>
         <nations>	germany	</nations>
+      </exclude>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <usages>
@@ -134,7 +146,7 @@
   <itemGroup>
     <priceGroup>	historical paint	</priceGroup>
     <name>	japan base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_10	</userString>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
     <vehicleFilter>
       <include>
         <tags>	premium	</tags>
@@ -145,6 +157,9 @@
       </include>
       <exclude>
         <nations>	japan	</nations>
+      </exclude>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <usages>
@@ -167,7 +182,7 @@
   <itemGroup>
     <priceGroup>	historical paint	</priceGroup>
     <name>	sweden base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_10	</userString>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
     <vehicleFilter>
       <include>
         <tags>	premium	</tags>
@@ -178,6 +193,9 @@
       </include>
       <exclude>
         <nations>	sweden	</nations>
+      </exclude>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <usages>
@@ -200,7 +218,7 @@
   <itemGroup>
     <priceGroup>	historical paint	</priceGroup>
     <name>	uk base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_10	</userString>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
     <vehicleFilter>
       <include>
         <tags>	premium	</tags>
@@ -211,6 +229,9 @@
       </include>
       <exclude>
         <nations>	uk	</nations>
+      </exclude>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <usages>
@@ -233,7 +254,7 @@
   <itemGroup>
     <priceGroup>	historical paint	</priceGroup>
     <name>	usa base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_10	</userString>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
     <vehicleFilter>
       <include>
         <tags>	premium	</tags>
@@ -244,6 +265,9 @@
       </include>
       <exclude>
         <nations>	usa	</nations>
+      </exclude>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <usages>
@@ -266,7 +290,7 @@
   <itemGroup>
     <priceGroup>	historical paint	</priceGroup>
     <name>	czech base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_10	</userString>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
     <vehicleFilter>
       <include>
         <tags>	premium	</tags>
@@ -277,6 +301,9 @@
       </include>
       <exclude>
         <nations>	czech	</nations>
+      </exclude>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
     <usages>

@@ -6,6 +6,7 @@ import calendar
 from account_shared import validateCustomizationItem
 from invoices_helpers import checkAccountDossierOperation
 from items import vehicles, tankmen
+from items.new_year_types import NATIONAL_SETTINGS_IDS_BY_NAME, TOY_TYPES_IDS_BY_NAME
 from constants import EVENT_TYPE, DOSSIER_TYPE, IS_DEVELOPMENT
 __all__ = ['getBonusReaders', 'readUTC', 'SUPPORTED_BONUSES']
 
@@ -129,6 +130,22 @@ def __readBonus_vehicle(bonus, _name, section):
         extra['customCompensation'] = (credits, gold)
     bonus.setdefault('vehicles', {})[vehCompDescr if vehCompDescr else vehTypeCompDescr] = extra
     return
+
+
+def __readBonus_ny18Toy(bonus, _name, section):
+    if section.has_key('setting'):
+        settingID = NATIONAL_SETTINGS_IDS_BY_NAME[section.readString('setting')]
+    else:
+        settingID = -1
+    if section.has_key('type'):
+        typeID = TOY_TYPES_IDS_BY_NAME[section.readString('type')]
+    else:
+        typeID = -1
+    if section.has_key('rank'):
+        rank = section['rank'].asInt
+    else:
+        rank = -1
+    bonus.setdefault('ny18Toys', []).append((settingID, typeID, rank))
 
 
 def __readBonus_tankmen(bonus, vehTypeCompDescr, section):
@@ -283,7 +300,7 @@ def __readBonus_optional(bonusReaders, bonusRange, bonus, section, hasOneOf, isO
     if probabilityAttr is None:
         probability = 0
     else:
-        probability = probabilityAttr.asInt / 100.0
+        probability = round(probabilityAttr.asFloat, 2) / 100.0
     if not 0 <= probability <= 100:
         raise Exception('Probability is out of range: {}'.format(probability))
     if isOneOf:
@@ -360,7 +377,8 @@ __BONUS_READERS = {'buyAllVehicles': __readBonus_bool,
  'vehicle': __readBonus_vehicle,
  'dossier': __readBonus_dossier,
  'tankmen': __readBonus_tankmen,
- 'customizations': __readBonus_customizations}
+ 'customizations': __readBonus_customizations,
+ 'ny18Toy': __readBonus_ny18Toy}
 __PROBABILITY_READERS = {'optional': __readBonus_optional,
  'oneof': __readBonus_oneof,
  'group': __readBonus_group}
@@ -407,6 +425,9 @@ def __readBonusSubSection(bonusReaders, bonusRange, section, isOneOf=False):
                     bonus['name'] = sub.readString('', '').strip()
                 continue
             elif name == 'probability':
+                continue
+            elif name == 'compensation':
+                bonus['compensation'] = sub.readBool('', False)
                 continue
             elif name not in bonusReaders:
                 raise Exception('Bonus not in bonus readers {}'.format(name))

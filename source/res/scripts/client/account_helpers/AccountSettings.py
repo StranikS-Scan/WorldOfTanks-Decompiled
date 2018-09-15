@@ -28,6 +28,7 @@ PM_SELECTOR_FILTER = 'PM_SELECTOR_FILTER'
 RANKED_CAROUSEL_FILTER_1 = 'RANKED_CAROUSEL_FILTER_1'
 RANKED_CAROUSEL_FILTER_2 = 'RANKED_CAROUSEL_FILTER_2'
 RANKED_CAROUSEL_FILTER_CLIENT_1 = 'RANKED_CAROUSEL_FILTER_CLIENT_1'
+NY_DECORATIONS_POPOVER_FILTER_1 = 'NY_DECORATIONS_POPOVER_FILTER_1'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
@@ -43,6 +44,7 @@ FALLOUT_VEHICLES = 'FALLOUT_VEHICLES'
 GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
+LAST_CALENDAR_SHOW_TIMESTAMP = 'lastCalendarShowTimestamp'
 LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
 NEW_SETTINGS_COUNTER = 'newSettingsCounter'
@@ -61,6 +63,11 @@ MISSIONS_PAGE = 'missions_page'
 DEFAULT_VEHICLE_TYPES_FILTER = [False] * len(VEHICLE_CLASSES)
 DEFAULT_LEVELS_FILTERS = [False] * MAX_VEHICLE_LEVEL
 SHOW_OPT_DEVICE_HINT = 'showOptDeviceHint'
+CHRISTMAS_BOXES = 'christmasBoxes'
+CHRISTMAS_STARTED_AWARDS_SHOWN = 'christmasStartedAwardsShown'
+CHRISTMAS_FINISHED_AWARDS_SHOWN = 'christmasFinishedAwardsShown'
+CHRISTMAS_VEH_DISCOUNTS = 'christmasVehDiscounts'
+CHRISTMAS_TMANS_INV_IDS = 'christmasTmansInvIDs'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -190,6 +197,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'favorite': False,
                                           'bonus': False},
                RANKED_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
+               NY_DECORATIONS_POPOVER_FILTER_1: (0, 0),
                MISSION_SELECTOR_FILTER: {'inventory': False},
                PM_SELECTOR_FILTER: {'inventory': False},
                BARRACKS_FILTER: {'nation': -1,
@@ -230,6 +238,11 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                          'isMain': False,
                                          'level': -1,
                                          'compatibleOnly': True},
+               'ny_vehicle_discount_activation': {'nation': -1,
+                                                  'vehicleType': 'none',
+                                                  'isMain': False,
+                                                  'level': -1,
+                                                  'compatibleOnly': False},
                PROMO: {},
                AWARDS: {'vehicleResearchAward': -1,
                         'victoryAward': -1,
@@ -242,7 +255,12 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'selectedColumnSorting': 'descending'}},
  KEY_FAVORITES: {CURRENT_VEHICLE: 0,
                  FALLOUT_VEHICLES: {}},
- KEY_SETTINGS: {'unitWindow': {'selectedIntroVehicles': []},
+ KEY_SETTINGS: {CHRISTMAS_BOXES: {},
+                CHRISTMAS_STARTED_AWARDS_SHOWN: False,
+                CHRISTMAS_FINISHED_AWARDS_SHOWN: False,
+                CHRISTMAS_VEH_DISCOUNTS: {},
+                CHRISTMAS_TMANS_INV_IDS: {},
+                'unitWindow': {'selectedIntroVehicles': []},
                 'vehicleSellDialog': {'isOpened': False},
                 KNOWN_SELECTOR_BATTLES: set(),
                 'tankmanDropSkillIdx': 0,
@@ -376,6 +394,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'fireExtinguisherInstalled': False,
                 'PveTriggerShown': False,
                 LAST_PROMO_PATCH_VERSION: '',
+                LAST_CALENDAR_SHOW_TIMESTAMP: '',
                 LAST_RESTORE_NOTIFICATION: None,
                 'dynamicRange': 0,
                 'soundDevice': 0,

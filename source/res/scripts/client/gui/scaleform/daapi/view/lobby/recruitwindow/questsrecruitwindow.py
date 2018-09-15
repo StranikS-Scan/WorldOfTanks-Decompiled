@@ -50,23 +50,23 @@ class QuestsRecruitWindow(QuestRecruitWindowMeta):
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(QuestsRecruitWindow, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == VIEW_ALIAS.RECRUIT_PARAMS:
-            viewPy.onDataChange += self.__paramsChangeHandler
+            viewPy.onDataChange += self._paramsChangeHandler
             viewPy.init()
 
     def _onUnregisterFlashComponent(self, viewPy, alias):
         super(QuestsRecruitWindow, self)._onUnregisterFlashComponent(viewPy, alias)
         if alias == VIEW_ALIAS.RECRUIT_PARAMS:
-            viewPy.onDataChange -= self.__paramsChangeHandler
+            viewPy.onDataChange -= self._paramsChangeHandler
 
     def _populate(self):
         super(QuestsRecruitWindow, self)._populate()
         self.soundManager.playInstantSound(SOUNDS.WOMAN_AWARD_WINDOW)
 
-    def __paramsChangeHandler(self, selectedNationID, selectedVehClass, selectedVehicle, selectedTmanRole):
+    def _paramsChangeHandler(self, selectedNationID, selectedVehClass, selectedVehicle, selectedTmanRole):
         selectedNationID = int(selectedNationID)
         nationName = nations.NAMES[selectedNationID]
         if self.__currentSelectedNationID != selectedNationID:
-            firstNameID, lastNameID, iconID = self.eventsCache.personalMissions.getNextTankwomanIDs(selectedNationID, self.__isPremium, int(self.__fnGroup), int(self.__lnGroup), int(self.__iGroupID))
+            firstNameID, lastNameID, iconID = self._getTankmanData(selectedNationID)
             rankID = Tankman.calculateRankID(tankmen.MAX_SKILL_LEVEL, self.__freeXpValue)
             faceIcon = Tankman.getBigIconPath(selectedNationID, iconID)
             self.as_setInitDataS({'windowTitle': _ms(DIALOGS.RECRUITWINDOW_TITLE),
@@ -82,3 +82,6 @@ class QuestsRecruitWindow(QuestRecruitWindowMeta):
         return {'image': faceIcon,
          'animationPath': AWARDWINDOW_CONSTANTS.EXPLOSION_BACK_ANIMATION_PATH,
          'animationLinkage': AWARDWINDOW_CONSTANTS.EXPLOSION_BACK_ANIMATION_LINKAGE}
+
+    def _getTankmanData(self, nationID):
+        return self.eventsCache.personalMissions.getNextTankwomanIDs(nationID, self.__isPremium, int(self.__fnGroup), int(self.__lnGroup), int(self.__iGroupID))

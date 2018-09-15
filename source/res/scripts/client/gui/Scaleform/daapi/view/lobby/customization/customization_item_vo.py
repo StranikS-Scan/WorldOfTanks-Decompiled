@@ -22,7 +22,7 @@ def buildCustomizationItemDataVO(item, count, plainView=False, showDetailItems=T
     else:
         extraName = ''
     if item.itemTypeID == GUI_ITEM_TYPE.STYLE:
-        extraIcon = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_CAMOUFLAGE
+        extraIcon = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_STYLE
     else:
         extraIcon = ''
     return CustomizationCarouselRendererVO(item.intCD, item.itemTypeID, item.isWide(), item.icon, hasBonus, locked, buyPrice, count, item.isRentable, showDetailItems, isNonHistoric, showUnsupportedAlert, extraName=extraName, extraIcon=extraIcon, showRareIcon=item.isRare()).asDict()

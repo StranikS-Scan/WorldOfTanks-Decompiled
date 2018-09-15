@@ -46,7 +46,11 @@ _DEFAULT_SPACES_PATH = 'spaces'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
 _SERVER_CMD_CHANGE_HANGAR_PREM = 'cmd_change_hangar_prem'
 
-def _getDefaultHangarPath(isPremium):
+def _getDefaultHangarPath(isPremium, xmlCfg=None):
+    if xmlCfg is not None:
+        defaultHangar = xmlCfg.readString('default_hangar')
+        if defaultHangar:
+            return '%s/%s' % (_DEFAULT_SPACES_PATH, defaultHangar)
     if isPremium:
         template = '%s/hangar_premium_v2'
     else:
@@ -72,6 +76,11 @@ class OutfitComponent():
     PAINT = 2
     DECAL = 4
     ALL = CAMO | PAINT | DECAL
+
+
+def getHangarSpaceConfig():
+    global _CFG
+    return _CFG
 
 
 class HangarCameraYawFilter():
@@ -139,7 +148,7 @@ def readHangarSettings(igrKey):
     global _CFG
     hangarsXml = ResMgr.openSection('gui/hangars.xml')
     for isPremium in (False, True):
-        spacePath = _getDefaultHangarPath(isPremium)
+        spacePath = _getDefaultHangarPath(isPremium, hangarsXml)
         settingsXmlPath = spacePath + '/space.settings'
         ResMgr.purge(settingsXmlPath, True)
         settingsXml = ResMgr.openSection(settingsXmlPath)
@@ -763,14 +772,6 @@ class _VehicleAppearance(ComponentSystem):
             self.__showMarksOnGun = not diff['showMarksOnGun']
             self.refresh()
         elif 'dynamicFov' in diff or 'fov' in diff:
-            if 'fov' in diff:
-                staticFOV, dynamicFOVLow, dynamicFOVTop = diff['fov']
-                defaultHorizontalFov = math.radians(dynamicFOVTop)
-
-                def resetFov(value):
-                    FovExtended.instance().defaultHorizontalFov = value
-
-                BigWorld.callback(0.0, partial(resetFov, defaultHorizontalFov))
             self.__hangarSpace.updateCameraByMouseMove(0, 0, 0)
 
     def __getActiveOutfit(self):

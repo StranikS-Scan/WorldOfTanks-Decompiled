@@ -51,4 +51,9 @@ CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageForma
  SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: _sc.AOGASNotifyFormatter(),
  SCH_CLIENT_MSG_TYPE.ACTION_NOTIFY_TYPE: _sc.ActionNotificationFormatter(),
  SCH_CLIENT_MSG_TYPE.BATTLE_TUTORIAL_RESULTS_TYPE: _sc.BattleTutorialResultsFormatter(),
- SCH_CLIENT_MSG_TYPE.KOREA_PARENTAL_CONTROL_TYPE: _sc.KoreaParentalControlFormatter()}
+ SCH_CLIENT_MSG_TYPE.KOREA_PARENTAL_CONTROL_TYPE: _sc.KoreaParentalControlFormatter(),
+ SCH_CLIENT_MSG_TYPE.NY_EVENT_STARTED: _sc.NewYearStartedFormatter(),
+ SCH_CLIENT_MSG_TYPE.NY_EVENT_FINISHED: _sc.NewYearFinishedFormatter(),
+ SCH_CLIENT_MSG_TYPE.NY_TANKMAN_RECRUITED: _sc.NewYearTankmanRecruitFormatter(),
+ SCH_CLIENT_MSG_TYPE.NY_PRESENT_BOX_RECEIVED: _sc.NewYearPresentBoxFormatter(),
+ SCH_CLIENT_MSG_TYPE.NY_SETTING_COLLECTED: _sc.NewYearSettingCollectedFormatter()}

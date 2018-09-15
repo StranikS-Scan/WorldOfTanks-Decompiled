@@ -957,6 +957,30 @@ class ComingSoonActionInfo(ActionInfo):
         return paramName
 
 
+class CalendarActionInfo(ActionInfo):
+
+    def isDiscountVisible(self):
+        return True
+
+    def getTitle(self):
+        return i18n.makeString(QUESTS.ACTION_SHORT_CALENDAR)
+
+    def getTriggerChainID(self):
+        pass
+
+
+class NyBoxBuyingActionInfo(ActionInfo):
+
+    def isDiscountVisible(self):
+        return True
+
+    def getTitle(self):
+        return i18n.makeString(QUESTS.ACTION_SHORT_BOXBUYING)
+
+    def getTriggerChainID(self):
+        pass
+
+
 def getEconomicalStatsDict():
     itemsCache = dependency.instance(IItemsCache)
     shop = itemsCache.items.shop
@@ -1039,7 +1063,9 @@ _PARAM_TO_IMG_DICT = {'exchangeRate': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CONVE
  'set_GoodiePrice': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_RESERVE,
  'mul_GoodiePrice': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_RESERVE,
  'mul_GoodiePriceAll': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_RESERVE,
- 'tradeInSellPriceFactor': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_TRADE_IN}
+ 'tradeInSellPriceFactor': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_TRADE_IN,
+ 'calendar': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CALENDAR,
+ 'boxbuying': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_BOXES}
 _MODIFIERS_DICT = {'mul_EconomicsParams': EconomicsActionsInfo,
  'set_EconomicsParams': EconomicsActionsInfo,
  'mul_EconomicsPrices': EconomicsActionsInfo,
@@ -1057,7 +1083,9 @@ _MODIFIERS_DICT = {'mul_EconomicsParams': EconomicsActionsInfo,
  'mul_PriceGroupPriceAll': C11nPriceGroupPriceActionInfo,
  'set_GoodiePrice': BoosterPriceActionInfo,
  'mul_GoodiePrice': BoosterPriceActionInfo,
- 'mul_GoodiePriceAll': BoosterPriceActionInfo}
+ 'mul_GoodiePriceAll': BoosterPriceActionInfo,
+ 'calendar': CalendarActionInfo,
+ 'boxbuying': NyBoxBuyingActionInfo}
 
 def getModifierObj(name, event, modifier):
     return _MODIFIERS_DICT[name](event, modifier) if name in _MODIFIERS_DICT else None

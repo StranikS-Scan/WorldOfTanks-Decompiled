@@ -60,7 +60,7 @@ class PersonalMissionFirstEntryView(LobbySubView, PersonalMissionFirstEntryViewM
         webBrowser = self.__getCurrentBrowser()
         if not webBrowser or url != webBrowser.url:
             title = i18n.makeString(PERSONAL_MISSIONS.PERSONALMISSIONS_VIDEO_TITLE)
-            self.__currentVersionBrowserID = yield self.browserCtrl.load(url, title, showActionBtn=False, browserID=self.__currentVersionBrowserID, browserSize=gc_constants.BROWSER.PERSONAL_MISSIONS_VIDEO_SIZE, isDefault=False, showCloseBtn=True)
+            self.__currentVersionBrowserID = yield self.browserCtrl.load(url, title, showActionBtn=False, browserID=self.__currentVersionBrowserID, browserSize=gc_constants.BROWSER.VIDEO_SIZE, isDefault=False, showCloseBtn=True)
 
     @staticmethod
     def __makeTileData(iconSource, titleLabel, descriptionLabel):

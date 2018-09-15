@@ -32,15 +32,12 @@
       <armor_4>	31.8	</armor_4>
       <armor_5>	28.6	</armor_5>
       <armor_6>	17	</armor_6>
-      <armor_7>	108	</armor_7>
+      <armor_7>	10	</armor_7>
       <armor_8>	0	</armor_8>
-      <armor_9>	10	</armor_9>
-      <armor_10>	28.6	</armor_10>
-      <armor_11>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-      </armor_11>
-      <armor_12>	127	</armor_12>
-      <armor_13>	152.4	</armor_13>
-      <armor_14>	19.1	</armor_14>
+      <armor_9>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_9>
+      <armor_10>	165.1	</armor_10>
+      <armor_11>	19.1	</armor_11>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	22501	</weight>
@@ -391,7 +388,7 @@
         <armor_1>	240	</armor_1>
         <armor_2>	200	</armor_2>
         <armor_3>	80	</armor_3>
-        <armor_4>	60	</armor_4>
+        <armor_4>	65	</armor_4>
         <armor_5>	28.6	</armor_5>
         <armor_6>	38.1	</armor_6>
         <armor_7>	170	</armor_7>
@@ -400,12 +397,12 @@
         <armor_10>	95	</armor_10>
         <armor_11>	115	</armor_11>
         <armor_12>	27	</armor_12>
-        <armor_13>	27	</armor_13>
+        <armor_13>	140	</armor_13>
         <armor_14>	105	</armor_14>
         <armor_15>	90	</armor_15>
-        <armor_16>	85	</armor_16>
+        <armor_16>	190	</armor_16>
       </armor>
-      <primaryArmor>	armor_7 armor_15 armor_15	</primaryArmor>
+      <primaryArmor>	armor_2 armor_15 armor_15	</primaryArmor>
       <weight>	8500	</weight>
       <maxHealth>	280	</maxHealth>
       <rotationSpeed>	36	</rotationSpeed>
@@ -427,8 +424,6 @@
             <maxPitch>	0 10 0.333333 10 0.388889 2 0.611111 2 0.666667 10 1 10	</maxPitch>
           </pitchLimits>
           <armor>
-            <armor_1>	170	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
-            </armor_1>
             <gun>	45	</gun>
           </armor>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>

@@ -607,6 +607,8 @@ class AmmoController(MethodsRules, IBattleController):
     def applySettings(self, avatar=None):
         if self.__nextShellCD > 0 and self.__nextShellCD in self.__ammo:
             avatar_getter.changeVehicleSetting(VEHICLE_SETTING.NEXT_SHELLS, self.__nextShellCD, avatar)
+        if self.__currShellCD > 0 and self.__currShellCD in self.__ammo:
+            avatar_getter.changeVehicleSetting(VEHICLE_SETTING.CURRENT_SHELLS, self.__currShellCD, avatar)
 
     def changeSetting(self, intCD, avatar=None):
         if not avatar_getter.isVehicleAlive(avatar):

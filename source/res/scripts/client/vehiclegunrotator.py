@@ -264,6 +264,8 @@ class VehicleGunRotator(object):
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying:
             return
+        if self.__avatar.vehicleTypeDescriptor.isMultiTurret:
+            return
         if self.__showServerMarker == value:
             return
         self.__showServerMarker = value

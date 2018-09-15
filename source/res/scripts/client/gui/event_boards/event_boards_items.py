@@ -60,6 +60,7 @@ class PLAYER_STATE_REASON(CONST_CONTAINER):
     BYBAN = 4
     WASUNREGISTERED = 5
     SPECIALACCOUNT = 6
+    VEHICLESMISSING = 7
 
 
 class SET_DATA_STATUS_CODE(CONST_CONTAINER):
@@ -772,6 +773,10 @@ class EventsList(object):
         self.__canJoin = data['can_join']
         self.__playersInEvent = data['players_in_event']
         self.__playerStateReasons = data['player_state_reasons']
+
+    def updateStateReason(self, reason):
+        self.__canJoin = False
+        self.__playerStateReasons.append(reason)
 
     def getEventID(self):
         """

@@ -16,7 +16,7 @@ def checkAccountDossierOperation(dossierType, blockName, recordName, opType):
         if opType not in ('add', 'set'):
             return (False, 'Invalid dossier operation')
     elif blockName in ACCOUNT_DOSSIER_DICT_BLOCKS:
-        if opType not in ('set',):
+        if opType not in ('set', 'append'):
             return (False, 'Invalid dossier operation')
     elif blockName in ACCOUNT_DOSSIER_LIST_BLOCKS:
         if opType not in ('append',):

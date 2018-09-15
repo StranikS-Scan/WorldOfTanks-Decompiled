@@ -14,16 +14,18 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from adisp import process, async
 from gui.event_boards.contexts import EventBoardsGetEventDataCtx, EventBoardsGetPlayerDataCtx, EventBoardsJoinEventCtx, EventBoardsLeaveEventCtx, EventBoardsGetMyEventTopCtx, EventBoardsGetMyLeaderboardPositionCtx, EventBoardsGetLeaderboardCtx, EventBoardsGetHangarFlagCtx
-from gui.event_boards.event_boards_items import EventBoardsSettings, HangarFlagData, LeaderBoard, MyInfoInLeaderBoard, SET_DATA_STATUS_CODE, EVENT_STATE, EventSettings
+from gui.event_boards.event_boards_items import EventBoardsSettings, HangarFlagData, LeaderBoard, MyInfoInLeaderBoard, SET_DATA_STATUS_CODE, EVENT_STATE, EventSettings, PLAYER_STATE_REASON as _psr
 from gui.clans import IClanController
 from gui.shared.utils.requesters.abstract import Response
 from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.shared import IItemsCache
 SUCCESS_STATUSES = (200, 201, 304)
 
 class EventBoardsController(IEventBoardController, IEventBoardsListener):
     clanController = dependency.descriptor(IClanController)
     connectionMgr = dependency.descriptor(IConnectionManager)
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
         super(EventBoardsController, self).__init__()
@@ -108,6 +110,10 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
             for event in eventsSettings.getEvents():
                 eventID = event.getEventID()
                 pState = playerData.getPlayerStateByEventId(eventID)
+                vehicles = event.getLimits().getVehiclesWhiteList()
+                availableVehicles = self.__getAvailableVehicles(vehicles)
+                if len(availableVehicles) is 0:
+                    pState.updateStateReason(_psr.VEHICLESMISSING)
                 if not event.isStarted() or pState is None or pState.getPlayerState() != EVENT_STATE.JOINED:
                     continue
                 myETop = dict()
@@ -238,3 +244,14 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
 
     def __standardErrorNotification(self):
         SystemMessages.pushMessage(_ms(EVENT_BOARDS.NOTIFICATION_UNKNOWNERROR_BODY), type=SM_TYPE.Error)
+
+    def __getAvailableVehicles(self, vehicleIds):
+        items = self.itemsCache.items
+        availableVehicles = []
+        for vehCD in vehicleIds:
+            if items.doesVehicleExist(vehCD):
+                vehicle = items.getItemByCD(vehCD)
+                if vehicle.isInInventory:
+                    availableVehicles.append(vehicle)
+
+        return availableVehicles

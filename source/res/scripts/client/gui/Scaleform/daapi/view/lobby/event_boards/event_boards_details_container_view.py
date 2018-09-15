@@ -50,9 +50,11 @@ class EventBoardsDetailsVehiclesView(EventBoardsDetailsContainerView):
 
 class EventBoardsDetailsAwardsView(EventBoardsDetailsContainerView):
     _linkage = EVENTBOARDS_ALIASES.EVENTBOARDS_DETAILS_AWARDS_LINKAGE
+    _extra = {'bgWidth': 753,
+     'bgHeight': 509}
 
 
 class EventBoardsDetailsBattleView(EventBoardsDetailsContainerView):
     _linkage = EVENTBOARDS_ALIASES.EVENTBOARDS_DETAILS_BATTLE_LINKAGE
-    _extra = {'bgWidth': 752,
-     'bgHeight': 548}
+    _extra = {'bgWidth': 753,
+     'bgHeight': 549}

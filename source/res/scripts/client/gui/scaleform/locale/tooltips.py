@@ -2124,6 +2124,7 @@ class TOOLTIPS(object):
     ELEN_BUTTON_REGISTRATION_STARTED_BODY = '#tooltips:elen/button/registration/started/body'
     ELEN_STATUS_REQUIREMENTS_HEADER = '#tooltips:elen/status/requirements/header'
     ELEN_STATUS_CANTJOIN_REASON_BYAGE = '#tooltips:elen/status/cantJoin/reason/byAge'
+    ELEN_STATUS_CANTJOIN_REASON_BYVEHICLE = '#tooltips:elen/status/cantJoin/reason/byVehicle'
     ELEN_STATUS_CANTJOIN_REASON_BYWINRATEHIGH = '#tooltips:elen/status/cantJoin/reason/byWinRateHigh'
     ELEN_STATUS_CANTJOIN_REASON_BYWINRATELOW = '#tooltips:elen/status/cantJoin/reason/byWinRateLow'
     ELEN_STATUS_CANTJOIN_REASON_BYBATTLESCOUNT = '#tooltips:elen/status/cantJoin/reason/byBattlesCount'

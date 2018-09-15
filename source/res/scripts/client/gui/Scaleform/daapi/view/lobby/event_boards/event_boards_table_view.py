@@ -413,13 +413,13 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
 
     def __scrollToRank(self, rank):
         if rank == self.TOP_POSITION_RANK:
-            self.as_setScrollPosS(0)
+            self.as_setScrollPosS(0, False)
             categoryNumber = self.__getCategoryByRank(self.__leaderboardData.excelItems[0].getRank())
         elif rank == self.MY_RANK:
-            self.as_setScrollPosS(self.__getMyPosition())
+            self.as_setScrollPosS(self.__getMyPosition(), True)
             categoryNumber = self.__getCategoryByRank(self.__myInfo.rank)
         else:
-            self.as_setScrollPosS(self.__getPositionByRank(rank))
+            self.as_setScrollPosS(self.__getPositionByRank(rank), False)
             categoryNumber = self.__getCategoryByRank(rank)
         if self.MIN_CATEGORY < categoryNumber <= self.MAX_CATEGORY - 1:
             self.__awardGroup.setActiveRewardGroup(categoryNumber)

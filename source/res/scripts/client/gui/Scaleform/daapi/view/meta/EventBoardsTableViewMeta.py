@@ -46,8 +46,8 @@ class EventBoardsTableViewMeta(View):
     def as_setBackgroundS(self, source):
         return self.flashObject.as_setBackground(source) if self._isDAAPIInited() else None
 
-    def as_setScrollPosS(self, value):
-        return self.flashObject.as_setScrollPos(value) if self._isDAAPIInited() else None
+    def as_setScrollPosS(self, value, centered):
+        return self.flashObject.as_setScrollPos(value, centered) if self._isDAAPIInited() else None
 
     def as_setMyPlaceVisibleS(self, visible):
         return self.flashObject.as_setMyPlaceVisible(visible) if self._isDAAPIInited() else None

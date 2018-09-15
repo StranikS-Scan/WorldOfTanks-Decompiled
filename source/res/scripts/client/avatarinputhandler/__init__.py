@@ -757,8 +757,13 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
     def __onArenaStarted(self, period, *args):
         self.__isArenaStarted = period == ARENA_PERIOD.BATTLE
         self.__curCtrl.setGunMarkerFlag(self.__isArenaStarted, _GUN_MARKER_FLAG.CONTROL_ENABLED)
-        self.showGunMarker2(gun_marker_ctrl.useServerGunMarker())
-        self.showGunMarker(gun_marker_ctrl.useClientGunMarker())
+        player = BigWorld.player()
+        if player.vehicleTypeDescriptor.isMultiTurret:
+            self.showGunMarker2(False)
+            self.showGunMarker(True)
+        else:
+            self.showGunMarker2(gun_marker_ctrl.useServerGunMarker())
+            self.showGunMarker(gun_marker_ctrl.useClientGunMarker())
 
     def __onRecreateDevice(self):
         self.__curCtrl.onRecreateDevice()

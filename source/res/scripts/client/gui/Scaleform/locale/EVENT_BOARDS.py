@@ -169,6 +169,7 @@ class EVENT_BOARDS(object):
     STATUS_CANTJOIN_REASON_BYBATTLESCOUNT = '#event_boards:status/cantJoin/reason/byBattlesCount'
     STATUS_CANTJOIN_REASON_MORETHANONE = '#event_boards:status/cantJoin/reason/moreThanOne'
     STATUS_CANTJOIN_REASON_OUTOFRATING = '#event_boards:status/cantJoin/reason/outOfRating'
+    STATUS_CANTJOIN_REASON_VEHICLESMISSING = '#event_boards:status/cantJoin/reason/vehiclesMissing'
     STATUS_CANTJOIN_REASON_ENDREGISTRATION = '#event_boards:status/cantJoin/reason/endRegistration'
     STATUS_CANTJOIN_REASON_ENDREGISTRATION_TOOLTIP = '#event_boards:status/cantJoin/reason/endRegistration/tooltip'
     STATUS_CANTJOIN_REASON_LEFTEVENT = '#event_boards:status/cantJoin/reason/leftEvent'

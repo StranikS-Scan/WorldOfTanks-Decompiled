@@ -441,7 +441,8 @@ class EventInfo(object):
             title = text_styles.highTitle(EVENT_BOARDS.STATUS_BESTRESULTS_MANY)
             if self._topMeta:
                 recalculationTS = self._topMeta.getLastLeaderboardRecalculationTS()
-                description1 = text_styles.standard(formatUpdateTime(recalculationTS))
+                if recalculationTS:
+                    description1 = text_styles.standard(formatUpdateTime(recalculationTS))
             if not anyTops:
                 description2 = formatAttentionTextWithIcon(text_styles.neutral(EVENT_BOARDS.STATUS_PARTICIPATE_NEEDMOREBATTLES))
         elif not self._canJoin:
@@ -460,8 +461,8 @@ class EventInfo(object):
                 buttonRegistrationLabel = EVENT_BOARDS.TABLE_SELECTREGISTRATIONBTN
                 registrationTooltip = TOOLTIPS.ELEN_BUTTON_REGISTRATION_NOTSTARTED
         return {'title': title,
-         'description1': text_styles.standard(description1),
-         'description2': text_styles.neutral(description2),
+         'description1': description1,
+         'description2': description2,
          'isRegistrationTop': isRegistrationTop,
          'isRegistration': isRegistration,
          'isRegistrationEnabled': isRegistrationButtonEnabled,
@@ -515,7 +516,8 @@ class EventHeader(object):
      _psr.BYBATTLESCOUNT: EVENT_BOARDS.HEADER_PARTICIPATE_REASON_CANTJOIN,
      _psr.BYBAN: EVENT_BOARDS.HEADER_PARTICIPATE_REASON_CANTJOIN,
      _psr.WASUNREGISTERED: EVENT_BOARDS.HEADER_PARTICIPATE_REASON_LEFTEVENT,
-     _psr.SPECIALACCOUNT: EVENT_BOARDS.HEADER_PARTICIPATE_REASON_CANTJOIN}
+     _psr.SPECIALACCOUNT: EVENT_BOARDS.HEADER_PARTICIPATE_REASON_CANTJOIN,
+     _psr.VEHICLESMISSING: EVENT_BOARDS.HEADER_PARTICIPATE_REASON_CANTJOIN}
 
     def __init__(self, event, playerData):
         self._event = event

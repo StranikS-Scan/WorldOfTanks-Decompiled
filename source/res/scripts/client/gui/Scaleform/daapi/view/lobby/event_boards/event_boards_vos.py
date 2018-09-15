@@ -160,13 +160,14 @@ def makeParameterTooltipVO(method, amount, parameter):
 
 
 def makeEventBoardsTableViewStatusVO(title, tooltip, info, value1, value2, value3, showPoints, buttonLabel, buttonTooltip, buttonVisible, buttonEnabled, titleTooltip):
+    buttonTop = not title
     result = {'title': title,
      'titleTooltip': tooltip,
      'buttonLabel': buttonLabel,
      'buttonTooltip': buttonTooltip,
      'buttonVisible': buttonVisible,
      'buttonEnabled': buttonEnabled,
-     'buttonTop': False,
+     'buttonTop': buttonTop,
      'informationTooltip': titleTooltip}
     if showPoints:
         result.update({'info': text_styles.playerOnline(info),
@@ -201,7 +202,7 @@ def _makeCantJoinReasonTooltip(stateReasons, playerData, limits):
 
     def _addItem(name, error):
         formatter = formatNotAvailableTextWithIcon if error else formatOkTextWithIcon
-        return formatter(name) + '\n'
+        return (error, formatter(name) + '\n')
 
     header = TOOLTIPS.ELEN_STATUS_REQUIREMENTS_HEADER
     body = ''
@@ -210,13 +211,19 @@ def _makeCantJoinReasonTooltip(stateReasons, playerData, limits):
     winRateMax = limits.getWinRateMax()
     battlesCount = limits.getBattlesCountMin()
     winRate = playerData.getWinRate()
-    body += _addItem(_ms(TOOLTIPS.ELEN_STATUS_CANTJOIN_REASON_BYAGE, date=date), _psr.BYAGE in stateReasons)
+    items = list()
+    items.append(_addItem(_ms(TOOLTIPS.ELEN_STATUS_CANTJOIN_REASON_BYAGE, date=date), _psr.BYAGE in stateReasons))
+    items.append(_addItem(_ms(TOOLTIPS.ELEN_STATUS_CANTJOIN_REASON_BYVEHICLE), _psr.VEHICLESMISSING in stateReasons))
     if battlesCount:
-        body += _addItem(_ms(TOOLTIPS.ELEN_STATUS_CANTJOIN_REASON_BYBATTLESCOUNT, number=battlesCount), _psr.BYBATTLESCOUNT in stateReasons)
+        items.append(_addItem(_ms(TOOLTIPS.ELEN_STATUS_CANTJOIN_REASON_BYBATTLESCOUNT, number=battlesCount), _psr.BYBATTLESCOUNT in stateReasons))
     if winRateMin:
-        body += _addItem(_ms(TOOLTIPS.ELEN_STATUS_CANTJOIN_REASON_BYWINRATELOW, number=winRateMin), _psr.BYWINRATE in stateReasons and winRate < winRateMin)
+        items.append(_addItem(_ms(TOOLTIPS.ELEN_STATUS_CANTJOIN_REASON_BYWINRATELOW, number=winRateMin), _psr.BYWINRATE in stateReasons and winRate < winRateMin))
     if winRateMax:
-        body += _addItem(_ms(TOOLTIPS.ELEN_STATUS_CANTJOIN_REASON_BYWINRATEHIGH, number=winRateMax), _psr.BYWINRATE in stateReasons and winRate > winRateMax)
+        items.append(_addItem(_ms(TOOLTIPS.ELEN_STATUS_CANTJOIN_REASON_BYWINRATEHIGH, number=winRateMax), _psr.BYWINRATE in stateReasons and winRate > winRateMax))
+    items.sort(key=lambda item: item[0], reverse=True)
+    for item in items:
+        body += item[1]
+
     return makeTooltip(header, body)
 
 
@@ -259,6 +266,8 @@ def makeCantJoinReasonTextVO(event, playerData):
             reasonText = _ms(EVENT_BOARDS.STATUS_CANTJOIN_REASON_BYBATTLESCOUNT, number=battlesCount)
         elif stateReason is _psr.BYBAN:
             reasonText = _ms(EVENT_BOARDS.STATUS_CANTJOIN_REASON_BANNED)
+        elif stateReason is _psr.VEHICLESMISSING:
+            reasonText = _ms(EVENT_BOARDS.STATUS_CANTJOIN_REASON_VEHICLESMISSING)
         else:
             reasonText = ''
         notAvailableText = formatErrorTextWithIcon(EVENT_BOARDS.STATUS_CANTJOIN_NOTAVAILABLE)

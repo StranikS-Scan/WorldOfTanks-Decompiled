@@ -3,11 +3,13 @@
 from gui.Scaleform.daapi.view.lobby.customization.shared import TABS_ITEM_MAPPING, TYPE_TO_TAB_IDX
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
+from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType
 from skeletons.gui.customization import ICustomizationService
+from skeletons.gui.shared import IItemsCache
 from skeletons.gui.server_events import IEventsCache
 
 def comparisonKey(item):
@@ -43,6 +45,7 @@ class CustomizationSeasonAndTypeFilterData(object):
 
 class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
     service = dependency.descriptor(ICustomizationService)
+    itemsCache = dependency.descriptor(IItemsCache)
     eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, currentVehicle, carouselItemWrapper, proxy):
@@ -56,12 +59,8 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self.setItemWrapper(carouselItemWrapper)
         self._proxy = proxy
         self._allSeasonAndTabFilterData = {}
-        allTypes = set()
-        for cType in TABS_ITEM_MAPPING.itervalues():
-            allTypes.add(cType)
-
-        requirement = self._createBaseRequirements(None, *allTypes)
-        allItems = self.service.getItems(None, vehicle=self._currentVehicle.item, criteria=requirement)
+        requirement = self._createBaseRequirements()
+        allItems = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CUSTOMIZATIONS, requirement)
         for tabIndex, cType in TABS_ITEM_MAPPING.iteritems():
             self._allSeasonAndTabFilterData[tabIndex] = {}
             for season in SeasonType.COMMON_SEASONS:
@@ -185,17 +184,21 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         del self._customizationBookmarks[:]
         super(CustomizationCarouselDataProvider, self)._dispose()
 
-    def _createBaseRequirements(self, season, *itemTypes):
-        requirement = REQ_CRITERIA.ITEM_TYPES(*itemTypes)
-        requirement |= REQ_CRITERIA.CUSTOM(lambda item: not item.isHidden or self._proxy.getItemInventoryCount(item) > 0 or self._proxy.isItemInOutfit(item))
-        if season:
-            requirement |= REQ_CRITERIA.CUSTOMIZATION.SEASON(season)
-        requirement |= REQ_CRITERIA.CUSTOMIZATION.IS_UNLOCKED(self.eventsCache.randomQuestsProgress)
-        return requirement
+    def _createBaseRequirements(self, season=None, includeApplied=True):
+        appliedItems = set()
+        for seasonType in SeasonType.COMMON_SEASONS:
+            outfit = self._proxy.getModifiedOutfit(seasonType)
+            appliedItems.add((i.intCD for i in outfit.items()))
+
+        vehicle = self._currentVehicle.item
+        season = season or SeasonType.ALL
+        progress = self.eventsCache.randomQuestsProgress
+        criteria = REQ_CRITERIA.CUSTOM(lambda item: item.mayInstall(vehicle) and item.season & season and (not item.isHidden or item.fullInventoryCount(vehicle) > 0 or includeApplied and item.intCD in appliedItems) and (not item.requiredToken or progress.getTokenCount(item.requiredToken) > 0))
+        return criteria
 
     def _buildCustomizationItems(self):
         season = self._seasonID
-        requirement = self._createBaseRequirements(season, TABS_ITEM_MAPPING[self._tabIndex])
+        requirement = self._createBaseRequirements(season, includeApplied=True)
         seasonAndTabData = self._allSeasonAndTabFilterData[self._tabIndex][self._seasonID]
         allItemsGroup = len(seasonAndTabData.allGroups) - 1
         if seasonAndTabData.selectedGroupIndex != allItemsGroup:
@@ -204,8 +207,8 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         if self._historicOnlyItems:
             requirement |= REQ_CRITERIA.CUSTOMIZATION.HISTORICAL
         if self._onlyOwnedAndFreeItems:
-            requirement |= REQ_CRITERIA.CUSTOM(lambda item: self._proxy.getItemInventoryCount(item) > 0 or self._proxy.isItemInOutfit(item))
-        allItems = self.service.getItems(None, vehicle=self._currentVehicle.item, criteria=requirement)
+            requirement |= REQ_CRITERIA.CUSTOM(lambda item: self._proxy.getItemInventoryCount(item) > 0)
+        allItems = self.itemsCache.items.getItems(TABS_ITEM_MAPPING[self._tabIndex], requirement)
         self._customizationItems = []
         self._customizationBookmarks = []
         lastGroupID = None

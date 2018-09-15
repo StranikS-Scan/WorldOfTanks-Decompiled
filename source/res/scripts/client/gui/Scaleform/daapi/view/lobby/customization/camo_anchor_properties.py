@@ -9,12 +9,11 @@ from gui.Scaleform.daapi.view.lobby.customization.shared import CAMO_SCALE_SIZE
 from gui.Scaleform.daapi.view.meta.CustomizationCamoAnchorPropertiesMeta import CustomizationCamoAnchorPropertiesMeta
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from helpers import dependency
-from helpers.i18n import makeString as _ms
 from skeletons.gui.customization import ICustomizationService
 CustomizationCamoSwatchVO = namedtuple('CustomizationCamoSwatchVO', 'paletteIcon selected')
 _MAX_PALETTES = 3
 _PALETTE_TEXTURE = 'gui/maps/vehicles/camouflages/camo_palette_{colornum}.dds'
-_DEFAULT_COLORNUM = 4
+_DEFAULT_COLORNUM = 1
 _PALETTE_BACKGROUND = 'gui/maps/vehicles/camouflages/camo_palettes_back.dds'
 _PALETTE_WIDTH = 78
 _PALETTE_HEIGHT = 18
@@ -75,7 +74,7 @@ class CamoAnchorProperties(CustomizationCamoAnchorPropertiesMeta):
 
             colornum = _DEFAULT_COLORNUM
             for palette in self._item.palettes:
-                colornum = sum(((color >> 24) / 255.0 > 0 for color in palette))
+                colornum = max(colornum, sum(((color >> 24) / 255.0 > 0 for color in palette)))
 
             for idx, palette in enumerate(self._item.palettes[:_MAX_PALETTES]):
                 texture = _PALETTE_TEXTURE.format(colornum=colornum)

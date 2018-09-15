@@ -144,7 +144,7 @@ class ElementTooltip(BlocksTooltipData):
                     forcedText = ''
                 else:
                     setting = CURRENCY_SETTINGS.getRentSetting
-                    forcedText = text_styles.main(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_INVENTORY_COST_RENT, battlesNum=self._item.rentCount))
+                    forcedText = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_INVENTORY_COST_RENT, battlesNum=self._item.rentCount)
                 subBlocks.append(makePriceBlock(value, setting(currency), needValue if needValue > 0 else None, defValue if defValue > 0 else None, actionPercent, valueWidth=88, leftPadding=49, forcedText=forcedText))
 
             if not self._item.isRentable:

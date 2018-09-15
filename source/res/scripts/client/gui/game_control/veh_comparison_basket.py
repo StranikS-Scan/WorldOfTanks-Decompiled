@@ -420,7 +420,8 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         vehCompareData = self.__vehicles[index]
         assert vehCompareData.getVehicleCD() == vehicle.intCD
         isChanged = False
-        copyVehicle = Vehicle(_makeStrCD(vehicle))
+        copyVehicle = Vehicle(_makeStrCD(vehicle), proxy=self.itemsCache.items)
+        copyVehicle.setOutfits(vehicle)
         hasCamouflage = _isVehHasCamouflage(copyVehicle)
         if hasCamouflage:
             _removeVehicleCamouflages(copyVehicle)
@@ -590,7 +591,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         defBattleBooster = initParameters.get('battleBooster')
         try:
             vehicle = self.itemsCache.items.getItemByCD(intCD)
-            copyVehicle = Vehicle(_makeStrCD(vehicle))
+            copyVehicle = Vehicle(_makeStrCD(vehicle), proxy=self.itemsCache.items)
             hasCamouflage = _isVehHasCamouflage(copyVehicle)
             if hasCamouflage:
                 _removeVehicleCamouflages(copyVehicle)
@@ -710,6 +711,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
                                     changedIDXs.add(idx)
                                 if GUI_ITEM_TYPE.TANKMAN in diffKeys:
                                     self.__updateInventoryCrewData(vehCompareData, vehicle)
+                                if GUI_ITEM_TYPE.CUSTOMIZATION in diffKeys or GUI_ITEM_TYPE.OUTFIT in diffKeys:
                                     self.__updateInventoryData(vehCompareData, vehicle)
                                     changedIDXs.add(idx)
 
@@ -728,7 +730,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
     def __updateInventoryData(cls, vehCompareData, vehicle):
         isInInventory = vehicle.isInInventory
         vehCompareData.setIsInInventory(isInInventory)
-        copyVehicle = Vehicle(_makeStrCD(vehicle))
+        copyVehicle = Vehicle(_makeStrCD(vehicle), proxy=cls.itemsCache.items)
         hasCamouflage = _isVehHasCamouflage(copyVehicle)
         vehCompareData.setInvHasCamouflage(hasCamouflage)
         if hasCamouflage:

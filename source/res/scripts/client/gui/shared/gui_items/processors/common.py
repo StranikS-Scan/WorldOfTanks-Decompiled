@@ -150,7 +150,7 @@ class StyleApplier(Processor):
     """ Style buyer and applier.
     """
 
-    def __init__(self, vehicle, style):
+    def __init__(self, vehicle, style=None):
         super(StyleApplier, self).__init__()
         self.vehicle = vehicle
         self.style = style

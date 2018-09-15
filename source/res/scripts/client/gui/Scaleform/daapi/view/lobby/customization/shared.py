@@ -134,6 +134,26 @@ def getCustomPurchaseItems(outfitsInfo):
     return purchaseItems
 
 
+def getOutfitWithoutItem(outfitsInfo, intCD):
+    """ Get original outfit with one item put off.
+    """
+    for season, outfitCompare in outfitsInfo.iteritems():
+        backward = outfitCompare.modified.diff(outfitCompare.original)
+        for container in backward.containers():
+            for slot in container.slots():
+                for idx in range(slot.capacity()):
+                    item = slot.getItem(idx)
+                    if item and item.intCD == intCD:
+                        outfit = outfitCompare.original
+                        season = season
+                        container = outfit.getContainer(container.getAreaID())
+                        slot = container.slotFor(item.itemTypeID)
+                        slot.remove(idx)
+                        return (season, outfit)
+
+    return (None, None)
+
+
 def getStylePurchaseItems(styleInfo):
     """ Get purchase items for the styles mode.
     """

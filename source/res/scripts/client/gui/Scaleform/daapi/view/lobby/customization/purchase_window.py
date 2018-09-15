@@ -9,6 +9,7 @@ from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.shared.formatters import text_styles, icons, getItemPricesVO
+from gui.shared.gui_items.gui_item_economics import ItemPrice
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType
@@ -103,12 +104,12 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         cart = getTotalPurchaseInfo(self._purchaseItems)
         totalPriceVO = getItemPricesVO(cart.totalPrice)
         state = g_currentVehicle.getViewState()
-        enoughMoney = self.itemsCache.items.stats.money.getShortage(cart.totalPrice.price)
+        shortage = self.itemsCache.items.stats.money.getShortage(cart.totalPrice.price)
         inFormationAlert = ''
         if not state.isCustomizationEnabled():
             inFormationAlert = text_styles.concatStylesWithSpace(icons.markerBlocked(), text_styles.error(VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_FORMATION_ALERT))
         self.as_setTotalDataS({'totalLabel': text_styles.highTitle(_ms(VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_TOTALCOST, selected=cart.numSelected, total=cart.numApplying)),
-         'enoughMoney': not enoughMoney,
+         'enoughMoney': getItemPricesVO(ItemPrice(shortage, shortage))[0],
          'inFormationAlert': inFormationAlert,
          'totalPrice': totalPriceVO[0]})
 

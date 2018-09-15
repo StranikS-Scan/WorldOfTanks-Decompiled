@@ -439,13 +439,13 @@ class EventSettings(object):
         return filter(lambda pt: pt.isActive(), self.__primeTimes.getPrimeTimes())
 
     def getKeyArtBig(self):
-        return self.__getImage(self.__keyArtBig, RES_ICONS.MAPS_ICONS_EVENTBOARDS_LANDINGBACKGROUNDS_EVENT_1_BGR_LANDING)
+        return self.__getImage(self.__keyArtBig, RES_ICONS.MAPS_ICONS_EVENTBOARDS_BLANK_EVENT_BGR_LANDING_BLANK)
 
     def getKeyArtSmall(self):
-        return self.__getImage(self.__keyArtSmall, RES_ICONS.MAPS_ICONS_EVENTBOARDS_TOOLTIPBACKGROUNDS_EVENT_1_FLAG_TOOLTIP)
+        return self.__getImage(self.__keyArtSmall, RES_ICONS.MAPS_ICONS_EVENTBOARDS_BLANK_TOOLTIP_BACKGROUND_BLANK)
 
     def getPromoBonuses(self):
-        return self.__getImage(self.__promoBonuses, RES_ICONS.MAPS_ICONS_EVENTBOARDS_LANDINGAWARDS_EVENT_1_AWARD_IMG)
+        return self.__getImage(self.__promoBonuses, RES_ICONS.MAPS_ICONS_EVENTBOARDS_BLANK_EVENT_PROMO_REWARD_BLANK)
 
     def __requestImage(self, url):
         if url:
@@ -1209,12 +1209,21 @@ class LeaderBoard(object):
             if not isDataSchemaValid(self.EXPECTED_FIELDS_META_REWARDS, rewardItem):
                 return False
 
-        for dataItem in data:
-            if not isDataSchemaValid(self.EXPECTED_FIELDS_DATA, dataItem):
-                return False
-            for infoItem in dataItem['info']:
-                if not isDataSchemaValid(self.CALCULATION_METHODS_EXPECTED_FIELDS[infoType], infoItem):
+        singleMethods = (CALCULATION_METHODS.MAX, CALCULATION_METHODS.SUMALL)
+        if infoType in singleMethods:
+            for dataItem in data:
+                if not isDataSchemaValid(self.EXPECTED_FIELDS_DATA, dataItem):
                     return False
+                if not isDataSchemaValid(self.CALCULATION_METHODS_EXPECTED_FIELDS[infoType], dataItem['info']):
+                    return False
+
+        else:
+            for dataItem in data:
+                if not isDataSchemaValid(self.EXPECTED_FIELDS_DATA, dataItem):
+                    return False
+                for infoItem in dataItem['info']:
+                    if not isDataSchemaValid(self.CALCULATION_METHODS_EXPECTED_FIELDS[infoType], infoItem):
+                        return False
 
         return True
 
@@ -1472,7 +1481,7 @@ class ExcelItem(object):
     def __setInfoData(self, methodType, data):
         singleMethods = (CALCULATION_METHODS.MAX, CALCULATION_METHODS.SUMALL)
         if methodType in singleMethods:
-            self.__info = CALCULATION_METHODS_TYPE[methodType](methodType, data[0])
+            self.__info = CALCULATION_METHODS_TYPE[methodType](methodType, data)
         else:
             self.__info = []
             for item in data:

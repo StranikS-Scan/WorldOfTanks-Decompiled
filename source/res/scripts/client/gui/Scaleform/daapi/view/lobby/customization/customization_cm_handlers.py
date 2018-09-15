@@ -56,7 +56,7 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
         item = self.itemsCache.items.getItemByCD(self._intCD)
         buyPriceVO = getItemPricesVO(item.getBuyPrice())
         sellPriceVO = getItemPricesVO(item.getSellPrice())
-        inventoryCount = item.fullInventoryCount(g_currentVehicle.item)
+        inventoryCount = self._c11nView.getItemInventoryCount(item)
         availableForSale = inventoryCount > 0 and item.getSellPrice() != ITEM_PRICE_EMPTY and not item.isRentable and not item.isHidden
         outfit = self._c11nView.getCurrentOutfit()
         style = self._c11nView.getModifiedStyle()

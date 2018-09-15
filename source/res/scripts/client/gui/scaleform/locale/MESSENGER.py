@@ -506,6 +506,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_EMBLEMS = '#messenger:serviceChannelMessages/sysMsg/converter/emblems'
     SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_INSCRIPTIONS = '#messenger:serviceChannelMessages/sysMsg/converter/inscriptions'
     SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_CAMOUFLAGES = '#messenger:serviceChannelMessages/sysMsg/converter/camouflages'
+    SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_CUSTOMIZATIONS = '#messenger:serviceChannelMessages/sysMsg/converter/customizations'
     SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_GOLDRECEIVED = '#messenger:serviceChannelMessages/sysMsg/converter/goldReceived'
     SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_GOLDWITHDRAWN = '#messenger:serviceChannelMessages/sysMsg/converter/goldWithdrawn'
     SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_CRYSTALRECEIVED = '#messenger:serviceChannelMessages/sysMsg/converter/crystalReceived'

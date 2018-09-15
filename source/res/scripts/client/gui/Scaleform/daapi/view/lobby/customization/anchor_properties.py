@@ -11,7 +11,6 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.shared import IItemsCache
-from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInventoryCount
 
 class ANCHOR_TYPE(object):
     NONE = 0
@@ -119,7 +118,7 @@ class AnchorProperties(CustomizationAnchorPropertiesMeta):
         """
         rendererVO = None
         if self._item is not None:
-            rendererVO = buildCustomizationItemDataVO(self._item, count=getItemInventoryCount(self._item) if self._item.isRentable else None)
+            rendererVO = buildCustomizationItemDataVO(self._item, count=self._c11nView.getItemInventoryCount(self._item) if self._item.isRentable else None)
         return rendererVO
 
     def __generateDescription(self):

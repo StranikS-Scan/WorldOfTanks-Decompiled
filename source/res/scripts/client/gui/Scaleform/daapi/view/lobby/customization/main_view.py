@@ -16,7 +16,7 @@ from gui.Scaleform.daapi.view.lobby.customization import CustomizationItemCMHand
 from gui.Scaleform.daapi.view.lobby.customization.customization_carousel import CustomizationCarouselDataProvider
 from gui.Scaleform.daapi.view.lobby.customization.customization_cm_handlers import CustomizationOptions
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
-from gui.Scaleform.daapi.view.lobby.customization.shared import C11N_MODE, CUSTOMIZATION_POPOVER_ALIASES, TABS_ITEM_MAPPING, CUSTOMIZATION_TABS, SEASON_IDX_TO_TYPE, SEASON_TYPE_TO_NAME, SEASONS_ORDER, getCustomPurchaseItems, getStylePurchaseItems, getTotalPurchaseInfo, OutfitInfo, getItemInventoryCount, getStyleInventoryCount, AdditionalPurchaseGroups
+from gui.Scaleform.daapi.view.lobby.customization.shared import C11N_MODE, CUSTOMIZATION_POPOVER_ALIASES, TABS_ITEM_MAPPING, CUSTOMIZATION_TABS, SEASON_IDX_TO_TYPE, SEASON_TYPE_TO_NAME, SEASONS_ORDER, OutfitInfo, getCustomPurchaseItems, getStylePurchaseItems, getTotalPurchaseInfo, getOutfitWithoutItem, getItemInventoryCount, getStyleInventoryCount, AdditionalPurchaseGroups
 from gui.Scaleform.framework.entities.View import ViewKey, ViewKeyDynamic
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
 from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
@@ -31,7 +31,7 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, icons, getItemPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.customization.outfit import Area
-from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
+from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY, ItemPrice
 from gui.shared.gui_items.processors.common import OutfitApplier, StyleApplier, CustomizationsSeller
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.decorators import process
@@ -198,6 +198,8 @@ class MainView(CustomizationMainViewMeta):
         """ Install the given item on a vehicle.
         """
         item = self.itemsCache.items.getItemByCD(intCD)
+        if item.isHidden and not self.getItemInventoryCount(item):
+            return
         if self._mode == C11N_MODE.STYLE:
             self._modifiedStyle = item
         else:
@@ -329,11 +331,12 @@ class MainView(CustomizationMainViewMeta):
     def onLobbyClick(self):
         if self._tabIndex in (CUSTOMIZATION_TABS.EMBLEM, CUSTOMIZATION_TABS.INSCRIPTION):
             self.as_hideAnchorPropertySheetS()
-        if self.__locatedOnEmbelem:
-            self.__stopTimer()
-            self.__hangarSpace.clearSelectedEmblemInfo()
-            self.__hangarSpace.locateCameraToPreview()
-            self.__startTimer(ANCHOR_UPDATE_TIMER_DELAY, self.__updateAnchorPositions)
+            if self.__locatedOnEmbelem:
+                self.__stopTimer()
+                self.__hangarSpace.clearSelectedEmblemInfo()
+                self.__hangarSpace.locateCameraToPreview()
+                self.__startTimer(ANCHOR_UPDATE_TIMER_DELAY, self.__updateAnchorPositions)
+                self.__locatedOnEmbelem = False
 
     def setEnableMultiselectRegions(self, isEnabled):
         """ Turn off highlighting when doing pick'n'click.
@@ -441,6 +444,21 @@ class MainView(CustomizationMainViewMeta):
             self.__onCacheResync()
         self.itemsCache.onSyncCompleted += self.__onCacheResync
 
+    @process('sellItem')
+    def sellItem(self, intCD, shouldSell):
+        if not shouldSell:
+            return
+        item = self.itemsCache.items.getItemByCD(intCD)
+        if item.fullInventoryCount(g_currentVehicle.item):
+            yield CustomizationsSeller(g_currentVehicle.item, item).request()
+            return
+        if self._mode == C11N_MODE.CUSTOM:
+            season, outfit = getOutfitWithoutItem(self.getOutfitsInfo(), intCD)
+            yield OutfitApplier(g_currentVehicle.item, outfit, season).request()
+        else:
+            yield StyleApplier(g_currentVehicle.item).request()
+        yield CustomizationsSeller(g_currentVehicle.item, item).request()
+
     def _populate(self):
         super(MainView, self)._populate()
         self.__viewLifecycleWatcher.start(self.app.containerManager, [_C11nWindowsLifecycleHandler()])
@@ -503,17 +521,7 @@ class MainView(CustomizationMainViewMeta):
         if ctxMenuID == CustomizationOptions.BUY:
             DialogsInterface.showDialog(ConfirmCustomizationItemMeta(itemIntCD), lambda _: None)
         elif ctxMenuID == CustomizationOptions.SELL:
-
-            @process('sellItem')
-            def __confirmSellResultCallback(shouldSell):
-                """ Callback for Dialog sale customization icon
-                :param shouldSell: If true, user pressed 'OK',
-                                   false - 'Decline' or 'Close' button
-                """
-                if shouldSell:
-                    yield CustomizationsSeller(g_currentVehicle.item, item).request()
-
-            DialogsInterface.showI18nConfirmDialog('customizationConfirmSell', __confirmSellResultCallback, focusedID=DIALOG_BUTTON_ID.CLOSE, meta=_getSellItemDialogMeta(item))
+            DialogsInterface.showI18nConfirmDialog('customizationConfirmSell', partial(self.sellItem, item.intCD), focusedID=DIALOG_BUTTON_ID.CLOSE, meta=_getSellItemDialogMeta(item))
         elif ctxMenuID == CustomizationOptions.REMOVE_FROM_TANK:
             self.removeItems(item.intCD)
 
@@ -661,10 +669,10 @@ class MainView(CustomizationMainViewMeta):
             label = _ms(VEHICLE_CUSTOMIZATION.COMMIT_APPLY)
             self.as_hideBuyingPanelS()
         isApplyEnabled = bool(cart.numTotal) or self._mode == C11N_MODE.CUSTOM and bool(self._originalStyle)
-        isEnoughMoney = not self.itemsCache.items.stats.money.getShortage(cart.totalPrice.price)
-        self.as_setBottomPanelHeaderS({'enoughMoney': isEnoughMoney,
-         'buyBtnEnabled': isApplyEnabled,
+        shortage = self.itemsCache.items.stats.money.getShortage(cart.totalPrice.price)
+        self.as_setBottomPanelHeaderS({'buyBtnEnabled': isApplyEnabled,
          'buyBtnLabel': label,
+         'enoughMoney': getItemPricesVO(ItemPrice(shortage, shortage))[0],
          'pricePanel': totalPriceVO[0]})
 
     def __setSeasonData(self):

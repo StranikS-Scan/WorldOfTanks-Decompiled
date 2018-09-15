@@ -1308,6 +1308,8 @@ class ConverterFormatter(ServiceChannelFormatter):
             text.append(i18n.makeString('#messenger:serviceChannelMessages/sysMsg/converter/emblems'))
         if data.get('camouflages'):
             text.append(i18n.makeString('#messenger:serviceChannelMessages/sysMsg/converter/camouflages'))
+        if data.get('customizations'):
+            text.append(i18n.makeString('#messenger:serviceChannelMessages/sysMsg/converter/customizations'))
         vehicles = data.get('vehicles')
         if vehicles:
             vehiclesReceived = [ self.__vehName(cd) for cd in vehicles if cd > 0 and self.itemsCache.items.doesVehicleExist(cd) ]

@@ -1260,6 +1260,11 @@ class Vehicle(FittingItem, HasStrCD):
     def setCustomOutfit(self, season, outfit):
         self._customOutfits[season] = outfit
 
+    def setOutfits(self, fromVehicle):
+        for season in SeasonType.SEASONS:
+            self._customOutfits[season] = fromVehicle.getCustomOutfit(season)
+            self._styledOutfits[season] = fromVehicle.getStyledOutfit(season)
+
     def getCustomOutfit(self, season):
         """
         Get a custom outfit for a given season.

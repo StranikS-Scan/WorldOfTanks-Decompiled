@@ -1095,7 +1095,7 @@ def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, perc
         neededText = ''
         if neededValue is not None:
             neededText = text_styles.concatStylesToSingleLine(text_styles.main('('), text_styles.error(TOOLTIPS.VEHICLE_GRAPH_BODY_NOTENOUGH), ' ', needFormatted, ' ', icon, text_styles.main(')'))
-        text = text_styles.concatStylesWithSpace(text_styles.main(settings.text), neededText)
+        text = text_styles.concatStylesWithSpace(text_styles.main(settings.text if not forcedText else forcedText), neededText)
         if hasAction:
             actionText = text_styles.main(makeString(TOOLTIPS.VEHICLE_ACTION_PRC, actionPrc=text_styles.stats(str(percent) + '%'), oldPrice=oldPriceText))
             text = text_styles.concatStylesToMultiLine(text, actionText)
@@ -1106,10 +1106,10 @@ def makePriceBlock(price, currencySetting, neededValue=None, oldPrice=None, perc
             else:
                 newPrice = Money(credits=price)
                 oldPrice = Money(credits=oldPrice)
-            return formatters.packSaleTextParameterBlockData(name=text if not forcedText else forcedText, saleData={'newPrice': newPrice.toMoneyTuple(),
+            return formatters.packSaleTextParameterBlockData(name=text, saleData={'newPrice': newPrice.toMoneyTuple(),
              'oldPrice': oldPrice.toMoneyTuple(),
              'valuePadding': -8}, actionStyle='alignTop', padding=formatters.packPadding(left=leftPadding), currency=newPrice.getCurrency())
-        return formatters.packTextParameterWithIconBlockData(name=text if not forcedText else forcedText, value=valueFormatted, icon=settings.frame, valueWidth=valueWidth, padding=formatters.packPadding(left=-5))
+        return formatters.packTextParameterWithIconBlockData(name=text, value=valueFormatted, icon=settings.frame, valueWidth=valueWidth, padding=formatters.packPadding(left=-5))
         return
 
 

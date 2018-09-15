@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/battle_chat_cmd.py
-import cPickle
+import struct
 from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
 from helpers import dependency
@@ -95,7 +95,12 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
                 if self.isOnMinimap():
                     cellIdx = None
                     if self.isSPGAimCommand():
-                        dsp, cellIdx, reloadTime = cPickle.loads(self._protoData['strArg1'])
+                        try:
+                            cellIdx, reloadTime = struct.unpack('<fffif', self._protoData['strArg1'])[3:]
+                        except struct.error as e:
+                            LOG_ERROR('The following command can not be unpacked: ', e)
+                            return
+
                         if reloadTime > 0:
                             i18nArguments['reloadTime'] = reloadTime
                             i18nKey += '_reloading'
@@ -178,8 +183,8 @@ class BattleCommandFactory(IBattleCommandFactory):
         return _ReceivedCmdDecorator(actionID, args)
 
     def createSPGAimAreaCommand(self, dsp, cellIdx, reloadTime):
-        data = cPickle.dumps(((dsp.x, dsp.y, dsp.z), int(cellIdx), reloadTime))
-        return _OutCmdDecorator('SPG_AIM_AREA', messageArgs(strArg1=data))
+        record = struct.pack('<fffif', dsp.x, dsp.y, dsp.z, int(cellIdx), reloadTime)
+        return _OutCmdDecorator('SPG_AIM_AREA', messageArgs(strArg1=record))
 
     def createSPGAimTargetCommand(self, targetID, reloadTime):
         return _OutCmdDecorator('ATTACKENEMY', messageArgs(int32Arg1=targetID, floatArg1=reloadTime))

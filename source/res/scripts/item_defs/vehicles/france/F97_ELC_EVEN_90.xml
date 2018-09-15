@@ -102,8 +102,8 @@
       <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
       <rotationSpeed>	45	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.16	</vehicleMovement>
-        <vehicleRotation>	0.16	</vehicleRotation>
+        <vehicleMovement>	0.19	</vehicleMovement>
+        <vehicleRotation>	0.19	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -394,17 +394,17 @@
             <gun>	10	</gun>
           </armor>
           <shotDispersionRadius>	0.38	</shotDispersionRadius>
-          <reloadTime>	26	</reloadTime>
-          <aimingTime>	2.7	</aimingTime>
+          <reloadTime>	30	</reloadTime>
+          <aimingTime>	2.9	</aimingTime>
           <shotDispersionFactors>
-            <turretRotation>	0.14	</turretRotation>
+            <turretRotation>	0.16	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <clip>
             <count>	3	</count>
-            <rate>	26.08696	</rate>
+            <rate>	24	</rate>
           </clip>
           <models>
             <undamaged>	vehicles/french/F97_ELC_EVEN_90/normal/lod0/Gun_01.model	</undamaged>

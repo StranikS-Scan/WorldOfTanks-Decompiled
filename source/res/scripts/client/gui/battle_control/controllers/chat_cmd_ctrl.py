@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/chat_cmd_ctrl.py
-import cPickle
 import math
+import struct
 import weakref
 import CommandMapping
 import Math
@@ -249,9 +249,14 @@ class ChatCommandsController(IBattleController):
             return
         if cmd.isOnMinimap():
             if cmd.isSPGAimCommand():
-                dsp, cellIdx, reloadTime = cPickle.loads(cmd.getCommandData()['strArg1'])
+                try:
+                    coordX, coordY, coordZ = struct.unpack('<fffif', cmd.getCommandData()['strArg1'])[:3]
+                except struct.error as e:
+                    LOG_ERROR('The following command can not be unpacked: ', e)
+                    return
+
                 senderID = cmd.getSenderID()
-                g_stunAreaManager.manageStunArea(Math.Vector3(*dsp), senderID)
+                g_stunAreaManager.manageStunArea(Math.Vector3(coordX, coordY, coordZ), senderID)
             else:
                 self.__feedback.markCellOnMinimap(cmd.getCellIndex())
         elif cmd.isPrivate():

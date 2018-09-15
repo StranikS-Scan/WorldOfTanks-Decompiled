@@ -533,7 +533,8 @@ class Vehicle(BigWorld.Entity):
         if hasattr(self.filter, 'allowStrafeCompensation'):
             self.filter.allowStrafeCompensation = not self.isPlayerVehicle
         self.isStarted = True
-        self.show(True)
+        if not self.appearance.isObserver:
+            self.show(True)
         self.set_publicStateModifiers()
         self.set_damageStickers()
         if TriggersManager.g_manager:

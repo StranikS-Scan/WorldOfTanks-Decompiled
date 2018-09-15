@@ -99,7 +99,6 @@ class _HangarSpace(object):
         self.__lastUpdatedVehicle = None
         self.onSpaceCreate = Event.Event()
         self.onSpaceDestroy = Event.Event()
-        self.onSpaceDestroy = Event.Event()
         self.onSpaceRefreshed = Event.Event()
         self.onObjectSelected = Event.Event()
         self.onObjectUnselected = Event.Event()
@@ -169,11 +168,11 @@ class _HangarSpace(object):
             return
 
     def destroy(self):
-        self.onSpaceDestroy()
+        if self.__spaceInited:
+            self.onSpaceDestroy()
         self.__videoCameraController.destroy()
         if self.__spaceInited:
             LOG_DEBUG('_HangarSpace::destroy')
-            self.onSpaceDestroy()
             self.__inited = False
             self.__spaceInited = False
             self.__space.destroy()

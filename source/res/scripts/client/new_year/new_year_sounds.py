@@ -144,10 +144,12 @@ class NYSoundEvents(INYSoundEvents):
         self.__currentTopNation = None
         self.__customizationState = None
         g_hangarSpace.onSpaceCreate += self.__onSpaceCreated
-        g_hangarSpace.onSpaceDestroy += self.__onSpaceDestroyed
         return
 
     def __onSpaceCreated(self):
+        if not self.newYearController.isAvailable():
+            return
+        g_hangarSpace.onSpaceDestroy += self.__onSpaceDestroyed
         self.__atmosphereLevel = self.newYearController.getProgress().level
         self.setRTPC(self.RTPC_ATMOSPHERE, self.__atmosphereLevel)
         NYSoundEvents.setRTPC(NYSoundEvents.RTPC_DECORATION, 0)
@@ -163,6 +165,7 @@ class NYSoundEvents(INYSoundEvents):
         self.newYearController.onProgressChanged -= self.__onProgressChanged
         self.newYearController.onInventoryUpdated -= self.__updateDecorationsState
         self.newYearController.onToysBreak -= NYSoundEvents.__onToysBreak
+        g_hangarSpace.onSpaceDestroy -= self.__onSpaceDestroyed
 
     @staticmethod
     def __onToysBreak(*args):

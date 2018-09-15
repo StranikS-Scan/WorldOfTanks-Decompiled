@@ -11,6 +11,9 @@
         <levels>	10	</levels>
         <nations>	china	</nations>
       </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold	</vehicles>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	128	</id>
@@ -51,6 +54,9 @@
         <levels>	10	</levels>
         <nations>	ussr	</nations>
       </include>
+      <exclude>
+        <vehicles>	ussr:R61_Object252_BF	</vehicles>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	129	</id>
@@ -91,6 +97,9 @@
         <levels>	10	</levels>
         <nations>	germany czech france poland	</nations>
       </include>
+      <exclude>
+        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian	</vehicles>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	130	</id>
@@ -131,6 +140,9 @@
         <levels>	10	</levels>
         <nations>	usa uk sweden japan	</nations>
       </include>
+      <exclude>
+        <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	131	</id>

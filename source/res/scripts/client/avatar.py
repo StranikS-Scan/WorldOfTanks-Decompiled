@@ -28,7 +28,7 @@ import AvatarPositionControl
 import ResMgr
 import TriggersManager
 import AccountCommands
-from account_helpers.settings_core.settings_constants import SOUND
+from account_helpers.settings_core.settings_constants import SOUND, GAME
 from TriggersManager import TRIGGER_TYPE
 from OfflineMapCreator import g_offlineMapCreator
 from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
@@ -153,6 +153,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     consistentMatrices = property(lambda self: self.__consistentMatrices)
     isVehicleOverturned = property(lambda self: self.__isVehicleOverturned)
     isOwnBarrelUnderWater = property(lambda self: self.__isOwnBarrelUnderWater())
+    isC11nHistorical = property(lambda self: self.__isC11nHistorical)
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -217,6 +218,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if BattleReplay.g_replayCtrl.isPlaying:
             BattleReplay.g_replayCtrl.setDataCallback('gunDamagedSound', self.__gunDamagedSound)
         self.__aimingBooster = None
+        self.__isC11nHistorical = True
         return
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
@@ -828,6 +830,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             else:
                 vehicle.typeDescriptor.activeGunShotIndex = self.vehicleTypeDescriptor.activeGunShotIndex
             self.__isVehicleAlive = vehicle.isAlive()
+            self.__isC11nHistorical = bool(self.settingsCore.getSetting(GAME.C11N_HISTORICALLY_ACCURATE))
         if self.__initProgress & _INIT_STEPS.INIT_COMPLETED and not vehicle.isStarted:
             self.__startVehicleVisual(vehicle)
         else:

@@ -173,26 +173,6 @@ class StyleApplier(Processor):
             styleID = 0
         BigWorld.player().shop.buyAndEquipStyle(self.vehicle.invID, styleID, lambda code: self._response(code, callback))
 
-    def _getTotalPrice(self):
-        buyPrice = self.style.buyPrices.itemPrice.price
-        if not buyPrice:
-            LOG_ERROR('Incorrect attempt to buy item {}'.format(self.style))
-        return buyPrice
-
-    def _getMsgCtx(self):
-        return {'itemType': '',
-         'itemName': self.style.longUserName,
-         'count': 1,
-         'money': formatPrice(self._getTotalPrice())}
-
-    def _successHandler(self, code, ctx=None):
-        if not self.style:
-            return makeSuccess(auxData=ctx)
-        messageType = MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_BUY_1
-        sysMsgType = CURRENCY_TO_SM_TYPE.get(self.style.buyPrices.itemPrice.price, SM_TYPE.PurchaseForCredits)
-        SystemMessages.pushI18nMessage(messageType, type=sysMsgType, **self._getMsgCtx())
-        return makeSuccess(auxData=ctx)
-
 
 class CustomizationsBuyer(Processor):
     """ Customizations buyer.

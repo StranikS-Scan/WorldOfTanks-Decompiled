@@ -240,7 +240,7 @@ class OptDeviceInstaller(ModuleInstallProcessor):
             action = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'paidRemovalCost', True, self.removalPrice.price, self.removalPrice.defPrice)
         addPlugins = []
         if install:
-            addPlugins += (plugins.MessageConfirmator('installConfirmationNotRemovable', ctx={'name': item.userName}, isEnabled=not item.isRemovable and not skipConfirm),)
+            addPlugins += (plugins.MessageConfirmator('installConfirmationNotRemovable_%s' % self.removalPrice.price.getCurrency(), ctx={'name': item.userName}, isEnabled=not item.isRemovable and not skipConfirm),)
         else:
             addPlugins += (plugins.DemountDeviceConfirmator('removeConfirmationNotRemovableMoney', ctx={'name': item.userName,
               'price': self.removalPrice,
@@ -461,7 +461,8 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
             if item.itemTypeID == GUI_ITEM_TYPE.TURRET:
                 self.addPlugin(plugins.TurretCompatibilityInstallValidator(vehicle, item, self.__gunCompDescr))
             elif item.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
-                self.addPlugin(plugins.MessageConfirmator('installConfirmationNotRemovable', ctx={'name': item.userName}, isEnabled=not item.isRemovable and not skipConfirm))
+                removalPrice = item.getRemovalPrice(self.itemsCache.items)
+                self.addPlugin(plugins.MessageConfirmator('installConfirmationNotRemovable_%s' % removalPrice.price.getCurrency(), ctx={'name': item.userName}, isEnabled=not item.isRemovable and not skipConfirm))
             self.addPlugin(plugins.MessageConfirmator('removeIncompatibleEqs', ctx={'name': "', '".join([ eq.userName for eq in conflictedEqs ])}, isEnabled=bool(conflictedEqs) and not skipConfirm))
         else:
             self.addPlugins([plugins.ModuleBuyerConfirmator('confirmBuyNotInstall', ctx={'userString': item.userName,

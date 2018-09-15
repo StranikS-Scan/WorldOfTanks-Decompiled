@@ -19,13 +19,11 @@ from skeletons.gui.shared import IItemsCache
 _CUSTOMIZATION_SEASON_TITLES = {AdditionalPurchaseGroups.STYLES_GROUP_ID: VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_ACTIVESTYLE,
  SeasonType.WINTER: VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_WINTER,
  SeasonType.SUMMER: VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_SUMMER,
- SeasonType.DESERT: VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_DESERT,
- AdditionalPurchaseGroups.UNASSIGNED_GROUP_ID: VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_UNASSIGNED}
+ SeasonType.DESERT: VEHICLE_CUSTOMIZATION.BUYWINDOW_TITLE_DESERT}
 PURCHASE_GROUPS = (AdditionalPurchaseGroups.STYLES_GROUP_ID,
  SeasonType.SUMMER,
  SeasonType.WINTER,
- SeasonType.DESERT,
- AdditionalPurchaseGroups.UNASSIGNED_GROUP_ID)
+ SeasonType.DESERT)
 
 def _getColumnHeaderVO(idx, label, buttonWidth, align, showSeparator):
     return {'id': idx,
@@ -110,10 +108,9 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         if not state.isCustomizationEnabled():
             inFormationAlert = text_styles.concatStylesWithSpace(icons.markerBlocked(), text_styles.error(VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_FORMATION_ALERT))
         self.as_setTotalDataS({'totalLabel': text_styles.highTitle(_ms(VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_TOTALCOST, selected=cart.numSelected, total=cart.numApplying)),
-         'enoughMoney': enoughMoney,
+         'enoughMoney': not enoughMoney,
          'inFormationAlert': inFormationAlert,
          'totalPrice': totalPriceVO[0]})
-        self.as_setBuyBtnEnabledS(enoughMoney)
 
     def __onServerSettingChanged(self, diff):
         if 'isCustomizationEnabled' in diff and not diff.get('isCustomizationEnabled', True):

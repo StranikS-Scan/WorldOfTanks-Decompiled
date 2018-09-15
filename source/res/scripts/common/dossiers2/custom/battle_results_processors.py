@@ -416,6 +416,7 @@ def __updateVehicleDossierImpl(vehTypeCompDescr, dossierDescr, results):
         return
     achievements = dossierDescr['achievements']
     if results['winnerTeam'] == results['team'] and results['aimerSeries'] > 0:
+        dossierDescr['singleAchievements']['aimer'] = 1
         if achievements['maxAimerSeries'] < results['aimerSeries']:
             achievements['maxAimerSeries'] = results['aimerSeries']
     isSPG = isVehicleSPG(vehTypeCompDescr)

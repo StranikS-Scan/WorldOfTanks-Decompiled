@@ -744,7 +744,7 @@
         <collisionModelServer>	vehicles/chinese/Ch11_110/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/chinese/Ch11_110/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.00086 0.3495 1.31213	</gunPosition>
+      <gunPosition>	-0.00086 0.319623 1.31193	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	-0.986349 0.499258 0.747534	</rayStart>
@@ -877,7 +877,7 @@
             <master>
               <node>	Gun	</node>
               <table>
-                <row>	-15.0	</row>
+                <row>	-14.95	</row>
                 <row>	0.0	</row>
                 <row>	7.0	</row>
               </table>
@@ -885,9 +885,9 @@
                 <slave>
                   <node>	static_joint	</node>
                   <table>
-                    <row>	-4.865	</row>
-                    <row>	0.0	</row>
-                    <row>	0.552	</row>
+                    <row>	-4.044	</row>
+                    <row>	0.43	</row>
+                    <row>	0.43	</row>
                   </table>
                 </slave>
               </slaves>
@@ -951,7 +951,7 @@
             <master>
               <node>	Gun	</node>
               <table>
-                <row>	-15.0	</row>
+                <row>	-14.95	</row>
                 <row>	0.0	</row>
                 <row>	7.0	</row>
               </table>
@@ -959,9 +959,9 @@
                 <slave>
                   <node>	static_joint	</node>
                   <table>
-                    <row>	-4.865	</row>
-                    <row>	0.0	</row>
-                    <row>	0.552	</row>
+                    <row>	-4.044	</row>
+                    <row>	0.43	</row>
+                    <row>	0.43	</row>
                   </table>
                 </slave>
               </slaves>
@@ -1025,7 +1025,7 @@
             <master>
               <node>	Gun	</node>
               <table>
-                <row>	-15.0	</row>
+                <row>	-14.95	</row>
                 <row>	0.0	</row>
                 <row>	7.0	</row>
               </table>
@@ -1033,9 +1033,9 @@
                 <slave>
                   <node>	static_joint	</node>
                   <table>
-                    <row>	-4.865	</row>
-                    <row>	0.0	</row>
-                    <row>	0.552	</row>
+                    <row>	-4.044	</row>
+                    <row>	0.43	</row>
+                    <row>	0.43	</row>
                   </table>
                 </slave>
               </slaves>
@@ -1055,7 +1055,7 @@
         <collisionModelServer>	vehicles/chinese/Ch11_110/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/chinese/Ch11_110/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.00086 0.2656 1.08163	</gunPosition>
+      <gunPosition>	-0.00086 0.265723 1.08143	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	-1.15835 0.424213 0.282947	</rayStart>

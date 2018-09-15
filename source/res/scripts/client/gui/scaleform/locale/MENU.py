@@ -1679,7 +1679,7 @@ class MENU(object):
     FITTINGSELECTPOPOVER_DESCTEXT = '#menu:fittingSelectPopover/descText'
     FITTINGSELECTPOPOVER_DESCTEXT_CRYSTAL = '#menu:fittingSelectPopover/descText/crystal'
     QUOTE = '#menu:quote'
-    CST_ITEM_CTX_MENU_ADDTOCART = '#menu:cst_item_ctx_menu/addToCart'
+    CST_ITEM_CTX_MENU_BUY = '#menu:cst_item_ctx_menu/buy'
     CST_ITEM_CTX_MENU_SELL = '#menu:cst_item_ctx_menu/sell'
     CST_ITEM_CTX_MENU_REMOVEFROMTANK = '#menu:cst_item_ctx_menu/removeFromTank'
     CONTEXTMENU_ENUM = (CONTEXTMENU_VEHICLEINFO,
@@ -2061,7 +2061,7 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_19,
      LOADING_BATTLETYPES_20,
      LOADING_BATTLETYPES_DESC_20)
-    CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_ADDTOCART, CST_ITEM_CTX_MENU_SELL, CST_ITEM_CTX_MENU_REMOVEFROMTANK)
+    CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_BUY, CST_ITEM_CTX_MENU_SELL, CST_ITEM_CTX_MENU_REMOVEFROMTANK)
 
     @classmethod
     def contextmenu(cls, key0):

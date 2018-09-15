@@ -232,9 +232,10 @@ def requestProfile(databaseID, userName, successCallback):
     return
 
 
-def showSettingsWindow(redefinedKeyMode=False, tabIndex=None):
+def showSettingsWindow(redefinedKeyMode=False, tabIndex=None, isBattleSettings=False):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.SETTINGS_WINDOW, ctx={'redefinedKeyMode': redefinedKeyMode,
-     'tabIndex': tabIndex}), scope=EVENT_BUS_SCOPE.GLOBAL)
+     'tabIndex': tabIndex,
+     'isBattleSettings': isBattleSettings}), scope=EVENT_BUS_SCOPE.GLOBAL)
 
 
 def showVehicleCompare():

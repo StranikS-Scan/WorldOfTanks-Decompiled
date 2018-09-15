@@ -202,6 +202,7 @@ class ShowDialogEvent(SharedEvent):
     SHOW_DESERTER_DLG = 'showDeserterDialog'
     SHOW_EXECUTION_CHOOSER_DIALOG = 'showExecutionChooserDialog'
     SHOW_USE_AWARD_SHEET_DIALOG = 'useAwardSheetDialog'
+    SHOW_CONFIRM_CUSTOMIZATION_ITEM_DIALOG = 'showConfirmCustomizationItemDialog'
 
     def __init__(self, meta, handler):
         super(ShowDialogEvent, self).__init__(meta.getEventType())

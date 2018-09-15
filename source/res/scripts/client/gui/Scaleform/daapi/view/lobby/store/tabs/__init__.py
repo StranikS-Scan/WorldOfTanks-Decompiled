@@ -320,7 +320,8 @@ class StoreItemsTab(object):
             minRentPricePackage = item.getRentPackage()
             if minRentPricePackage:
                 actionPrc = item.getRentPackageActionPrc(minRentPricePackage['days'])
-                return Money(gold=actionPrc)
+                if actionPrc > 0:
+                    return Money(gold=actionPrc)
         return MONEY_UNDEFINED
 
 

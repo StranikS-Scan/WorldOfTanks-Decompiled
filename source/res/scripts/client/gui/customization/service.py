@@ -148,13 +148,13 @@ class _ServiceHelpersMixin(object):
         return self.getItemByID(GUI_ITEM_TYPE.STYLE, outfit.id) if outfit else None
 
     @process('buyItem')
-    def buyItems(self, items, vehicle=None):
+    def buyItems(self, item, count, vehicle=None):
         """ Buy customization items.
         
         :param items: list of customizations to buy.
         :param vehicle: if provided, bound bound-only items to the given vehicle.
         """
-        result = yield CustomizationsBuyer(vehicle, items).request()
+        result = yield CustomizationsBuyer(vehicle, item, count).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 

@@ -54,7 +54,7 @@ class IngameHelpWindow(IngameHelpWindowMeta, BattleGUIKeyHandler):
 
     def clickSettingWindow(self):
         self.destroy()
-        event_dispatcher.showSettingsWindow(redefinedKeyMode=True, tabIndex=event_dispatcher.SETTINGS_TAB_INDEX.CONTROL)
+        event_dispatcher.showSettingsWindow(redefinedKeyMode=True, tabIndex=event_dispatcher.SETTINGS_TAB_INDEX.CONTROL, isBattleSettings=True)
 
     def _populate(self):
         super(IngameHelpWindow, self)._populate()

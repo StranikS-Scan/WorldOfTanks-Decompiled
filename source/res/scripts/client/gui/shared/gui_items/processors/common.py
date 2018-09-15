@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/common.py
 import BigWorld
-from collections import Counter
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.SystemMessages import SM_TYPE
@@ -176,10 +175,11 @@ class CustomizationsBuyer(Processor):
     """ Customizations buyer.
     """
 
-    def __init__(self, vehicle, items):
+    def __init__(self, vehicle, item, count):
         super(CustomizationsBuyer, self).__init__()
         self.vehicle = vehicle
-        self.items = items
+        self.item = item
+        self.count = count
 
     def _errorHandler(self, code, errStr='', ctx=None):
         if not errStr:
@@ -193,8 +193,8 @@ class CustomizationsBuyer(Processor):
             invID = self.vehicle.invID
         else:
             invID = 0
-        LOG_DEBUG('Make server request to buy customizations on vehicle {}: {}'.format(invID, self.items))
-        BigWorld.player().shop.buyCustomizations(invID, Counter((item.intCD for item in self.items)), lambda code: self._response(code, callback))
+        LOG_DEBUG('Make server request to buy customizations on vehicle {}: {} count {}'.format(invID, self.item, self.count))
+        BigWorld.player().shop.buyCustomizations(invID, {self.item.intCD: self.count}, lambda code: self._response(code, callback))
 
 
 class CustomizationsSeller(Processor):

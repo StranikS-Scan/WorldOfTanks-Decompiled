@@ -13,7 +13,9 @@ from helpers.i18n import makeString as _ms
 from skeletons.gui.customization import ICustomizationService
 CustomizationCamoSwatchVO = namedtuple('CustomizationCamoSwatchVO', 'paletteIcon selected')
 _MAX_PALETTES = 3
-_PALETTE_TEXTURE = 'gui/maps/vehicles/camo_palettes.dds'
+_PALETTE_TEXTURE = 'gui/maps/vehicles/camouflages/camo_palette_{colornum}.dds'
+_DEFAULT_COLORNUM = 4
+_PALETTE_BACKGROUND = 'gui/maps/vehicles/camouflages/camo_palettes_back.dds'
 _PALETTE_WIDTH = 78
 _PALETTE_HEIGHT = 18
 
@@ -71,8 +73,13 @@ class CamoAnchorProperties(CustomizationCamoAnchorPropertiesMeta):
                  'selected': self._component.patternSize == idx,
                  'value': idx})
 
+            colornum = _DEFAULT_COLORNUM
+            for palette in self._item.palettes:
+                colornum = sum(((color >> 24) / 255.0 > 0 for color in palette))
+
             for idx, palette in enumerate(self._item.palettes[:_MAX_PALETTES]):
-                icon = camoIconTemplate(_PALETTE_TEXTURE, _PALETTE_WIDTH, _PALETTE_HEIGHT, palette)
+                texture = _PALETTE_TEXTURE.format(colornum=colornum)
+                icon = camoIconTemplate(texture, _PALETTE_WIDTH, _PALETTE_HEIGHT, palette, background=_PALETTE_BACKGROUND)
                 swatchColors.append(CustomizationCamoSwatchVO(icon, idx == self._component.palette)._asdict())
 
         scaleText = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_CAMO_SCALE

@@ -203,6 +203,10 @@ def counter(text):
     return _formatText('counterText', text)
 
 
+def boosterText(text):
+    return _formatText('boosterText', text)
+
+
 def counterLabelText(text):
     return _formatText('counterLabelText', text)
 

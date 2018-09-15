@@ -41,6 +41,9 @@ class BaseCustomizationItem(object):
     def isUnlocked(self, tokens):
         return not self.requiredToken or tokens and self.requiredToken in tokens
 
+    def isRare(self):
+        return ItemTags.RARE in self.tags
+
     @classmethod
     def makeIntDescr(cls, itemId):
         return items.makeIntCompactDescrByID('customizationItem', cls.itemType, itemId)

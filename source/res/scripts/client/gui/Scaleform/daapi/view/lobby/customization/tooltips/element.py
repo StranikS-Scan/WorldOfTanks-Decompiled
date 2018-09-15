@@ -121,7 +121,7 @@ class ElementTooltip(BlocksTooltipData):
          'left': -19,
          'bottom': -7}, txtPadding={'top': 20,
          'left': -8}, descPadding={'left': -25,
-         'top': 17}) if self._item.requiredToken else formatters.packTitleDescBlock(title=text_styles.highTitle(self._item.userName), desc=text_styles.main(desc), descPadding={'top': -5})
+         'top': 17}) if self._item.isRare() else formatters.packTitleDescBlock(title=text_styles.highTitle(self._item.userName), desc=text_styles.main(desc), descPadding={'top': -5})
 
     def _packInventoryBlock(self):
         container = self.app.containerManager.getContainer(ViewTypes.LOBBY_SUB)
@@ -132,22 +132,28 @@ class ElementTooltip(BlocksTooltipData):
             getInventoryCount = getItemInventoryCount
         subBlocks = [formatters.packTextBlockData(text=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_INVENTORY_TITLE), padding={'bottom': 4})]
         money = self.itemsCache.items.stats.money
-        for itemPrice in self._item.buyPrices:
-            currency = itemPrice.getCurrency()
-            value = itemPrice.price.getSignValue(currency)
-            defValue = itemPrice.defPrice.getSignValue(currency)
-            needValue = value - money.getSignValue(currency)
-            actionPercent = itemPrice.getActionPrc()
-            if not self._item.isRentable:
-                setting = CURRENCY_SETTINGS.getBuySetting
-                forcedText = ''
-            else:
-                setting = CURRENCY_SETTINGS.getRentSetting
-                forcedText = text_styles.main(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_INVENTORY_COST_RENT, battlesNum=self._item.rentCount))
-            subBlocks.append(makePriceBlock(value, setting(currency), needValue if needValue > 0 else None, defValue if defValue > 0 else None, actionPercent, valueWidth=88, leftPadding=49, forcedText=forcedText))
+        if not self._item.isHidden:
+            for itemPrice in self._item.buyPrices:
+                currency = itemPrice.getCurrency()
+                value = itemPrice.price.getSignValue(currency)
+                defValue = itemPrice.defPrice.getSignValue(currency)
+                needValue = value - money.getSignValue(currency)
+                actionPercent = itemPrice.getActionPrc()
+                if not self._item.isRentable:
+                    setting = CURRENCY_SETTINGS.getBuySetting
+                    forcedText = ''
+                else:
+                    setting = CURRENCY_SETTINGS.getRentSetting
+                    forcedText = text_styles.main(_ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_INVENTORY_COST_RENT, battlesNum=self._item.rentCount))
+                subBlocks.append(makePriceBlock(value, setting(currency), needValue if needValue > 0 else None, defValue if defValue > 0 else None, actionPercent, valueWidth=88, leftPadding=49, forcedText=forcedText))
 
-        for _ in self._item.sellPrices:
-            subBlocks.append(makePriceBlock(self._item.sellPrices.itemPrice.price.credits, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=self._item.sellPrices.itemPrice.defPrice.credits, percent=self._item.sellPrices.itemPrice.getActionPrc(), valueWidth=88, leftPadding=49))
+            if not self._item.isRentable:
+                for itemPrice in self._item.sellPrices:
+                    currency = itemPrice.getCurrency()
+                    value = itemPrice.price.getSignValue(currency)
+                    defValue = itemPrice.defPrice.getSignValue(currency)
+                    actionPercent = itemPrice.getActionPrc()
+                    subBlocks.append(makePriceBlock(value, CURRENCY_SETTINGS.SELL_PRICE, oldPrice=defValue if defValue > 0 else None, percent=actionPercent, valueWidth=88, leftPadding=49))
 
         inventoryCount = getInventoryCount(self._item)
         info = text_styles.concatStylesWithSpace(text_styles.stats(inventoryCount))

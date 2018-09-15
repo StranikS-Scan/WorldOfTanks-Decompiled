@@ -4,6 +4,7 @@ import constants
 RENT_DEFAULT_BATTLES = 50
 MAX_OUTFIT_LENGTH = 1024
 MAX_CAMOUFLAGE_PATTERN_SIZE = 5
+MAX_ITEMS_FOR_BUY_OPERATION = 100
 
 class CustomizationType(object):
     PAINT = 1
@@ -26,6 +27,7 @@ class ItemTags(object):
     VEHICLE_BOUND = 'vehicleBound'
     PREMIUM_IGR = 'premiumIGR'
     IGR = 'IGR'
+    RARE = 'rare'
 
 
 class ApplyArea(object):

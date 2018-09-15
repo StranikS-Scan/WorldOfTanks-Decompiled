@@ -1706,7 +1706,7 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
         for quest in self._eventsCache.getHiddenQuests(lambda q: q.getID() in questIDs).values():
             if quest.getID().endswith('camouflage'):
                 for bonus in quest.getBonuses('customizations'):
-                    camouflage = findFirst(lambda c: c.get('custType') == 'camouflages' and c.get('vehTypeCompDescr'), bonus.getCustomizations())
+                    camouflage = findFirst(lambda c: c.get('custType') == 'camouflage' and c.get('vehTypeCompDescr'), bonus.getCustomizations())
                     if camouflage:
                         camouflageGivenFor.add(camouflage.get('vehTypeCompDescr'))
 

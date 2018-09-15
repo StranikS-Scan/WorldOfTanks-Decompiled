@@ -830,8 +830,8 @@ class CustomizationsBonus(SimpleBonus):
         result = []
         for itemData in self.getCustomizations():
             itemTypeName = itemData.get('custType')
-            itemID = itemData.get('id', -1)
-            boundVehicle = itemData.get('vehTypeCompDescr', None)
+            itemID = itemData.get('id')
+            boundVehicle = itemData.get('vehTypeCompDescr')
             boundToCurrentVehicle = itemData.get('boundToCurrentVehicle', False)
             itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
             item = self.c11n.getItemByID(itemTypeID, itemID)
@@ -854,8 +854,12 @@ class CustomizationsBonus(SimpleBonus):
     def getRankedAwardVOs(self, iconSize='small', withCounts=False, withKey=False):
         result = []
         for item, data in zip(self.getCustomizations(), self.getList()):
+            itemTypeName = item.get('custType')
+            itemID = item.get('id')
+            itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
+            c11nItem = self.c11n.getItemByID(itemTypeID, itemID)
             count = item.get('value', 1)
-            itemData = {'imgSource': RES_ICONS.getBonusIcon(iconSize, item.get('custType')),
+            itemData = {'imgSource': RES_ICONS.getBonusIcon(iconSize, c11nItem.itemTypeName),
              'label': text_styles.hightlight('x{}'.format(count)),
              'align': TEXT_ALIGN.RIGHT}
             itemData.update(self.__itemTooltip(data, isReceived=False))

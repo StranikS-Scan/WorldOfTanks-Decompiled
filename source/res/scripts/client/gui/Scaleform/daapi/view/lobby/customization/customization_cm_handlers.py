@@ -13,7 +13,7 @@ from skeletons.gui.customization import ICustomizationService
 from gui.Scaleform.framework import ViewTypes
 
 class CustomizationOptions(object):
-    ADD_TO_CART = 'addToCart'
+    BUY = 'buy'
     SELL = 'sell'
     REMOVE_FROM_TANK = 'removeFromTank'
 
@@ -24,7 +24,7 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
 
     def __init__(self, cmProxy, ctx=None):
         self._intCD = 0
-        super(CustomizationItemCMHandler, self).__init__(cmProxy, ctx, {CustomizationOptions.ADD_TO_CART: 'addItemToCart',
+        super(CustomizationItemCMHandler, self).__init__(cmProxy, ctx, {CustomizationOptions.BUY: 'buyItem',
          CustomizationOptions.SELL: 'sellItem',
          CustomizationOptions.REMOVE_FROM_TANK: 'removeItemFromTank'})
         self.onSelected = Event(self._eManager)
@@ -37,10 +37,8 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
         super(CustomizationItemCMHandler, self).fini()
         return
 
-    def addItemToCart(self):
-        """ Adds item for purchase.
-        """
-        self.onSelected(CustomizationOptions.ADD_TO_CART, self._intCD)
+    def buyItem(self):
+        self.onSelected(CustomizationOptions.BUY, self._intCD)
 
     def sellItem(self):
         """ Sells item.
@@ -59,7 +57,7 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
         buyPriceVO = getItemPricesVO(item.getBuyPrice())
         sellPriceVO = getItemPricesVO(item.getSellPrice())
         inventoryCount = item.fullInventoryCount(g_currentVehicle.item)
-        availableForSale = inventoryCount > 0 and item.getSellPrice() != ITEM_PRICE_EMPTY and not item.isRentable
+        availableForSale = inventoryCount > 0 and item.getSellPrice() != ITEM_PRICE_EMPTY and not item.isRentable and not item.isHidden
         outfit = self._c11nView.getCurrentOutfit()
         style = self._c11nView.getModifiedStyle()
         removeFromTankEnabled = style.intCD == item.intCD if style is not None else False
@@ -68,7 +66,7 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
                 removeFromTankEnabled = True
 
         availableForPurchase = not item.isHidden and item.getBuyPrice() != ITEM_PRICE_EMPTY
-        return [self._makeItem(CustomizationOptions.ADD_TO_CART, MENU.cst_item_ctx_menu(CustomizationOptions.ADD_TO_CART), {'data': {'price': first(buyPriceVO)} if availableForPurchase else None,
+        return [self._makeItem(CustomizationOptions.BUY, MENU.cst_item_ctx_menu(CustomizationOptions.BUY), {'data': {'price': first(buyPriceVO)} if availableForPurchase else None,
           'enabled': availableForPurchase}, None, 'CurrencyContextMenuItem'),
          self._makeSeparator(),
          self._makeItem(CustomizationOptions.SELL, MENU.cst_item_ctx_menu(CustomizationOptions.SELL), {'data': {'price': first(sellPriceVO)} if availableForSale else None,

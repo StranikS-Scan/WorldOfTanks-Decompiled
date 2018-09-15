@@ -49,7 +49,7 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
             self.__doLeaveArena()
 
     def settingsClick(self):
-        shared_event_dispatcher.showSettingsWindow(redefinedKeyMode=True)
+        shared_event_dispatcher.showSettingsWindow(redefinedKeyMode=True, isBattleSettings=True)
 
     def helpClick(self):
         self.destroy()

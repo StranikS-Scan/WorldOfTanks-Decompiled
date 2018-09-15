@@ -528,7 +528,8 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
             self.__targeting.onRecreateDevice()
             self.__curCtrl.setGUIVisible(self.__isGUIVisible)
             if isObserverMode:
-                self.__curCtrl.enable(vehicleID=self.__observerVehicle, **args)
+                args.update(vehicleID=self.__observerVehicle)
+                self.__curCtrl.enable(**args)
             else:
                 self.__curCtrl.enable(**args)
             isReplayPlaying = replayCtrl.isPlaying

@@ -45,6 +45,7 @@ class SettingsWindow(SettingsWindowMeta):
     def __init__(self, ctx=None):
         super(SettingsWindow, self).__init__()
         self.__redefinedKeyModeEnabled = ctx.get('redefinedKeyMode', True)
+        self.__isBattleSettings = ctx.get('isBattleSettings', False)
         if 'tabIndex' in ctx and ctx['tabIndex'] is not None:
             _setLastTabIndex(ctx['tabIndex'])
         self.params = SettingsParams()
@@ -198,6 +199,8 @@ class SettingsWindow(SettingsWindowMeta):
             DialogsInterface.showI18nConfirmDialog('graphicsPresetRestartConfirmation', confirmHandler)
         elif applyMethod == APPLY_METHOD.DELAYED:
             DialogsInterface.showI18nConfirmDialog('graphicsPresetDelayedConfirmation', confirmHandler)
+        elif applyMethod == APPLY_METHOD.NEXT_BATTLE and self.__isBattleSettings:
+            DialogsInterface.showI18nConfirmDialog('nextBattleOptionConfirmation', confirmHandler)
         else:
             confirmHandler(True)
 

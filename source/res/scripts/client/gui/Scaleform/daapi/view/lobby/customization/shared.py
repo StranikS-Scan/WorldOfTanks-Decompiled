@@ -95,13 +95,13 @@ class AdditionalPurchaseGroups(object):
 
 OutfitInfo = namedtuple('OutfitInfo', ('original', 'modified'))
 
-def getCustomPurchaseItems(outfitsInfo, cartItems):
+def getCustomPurchaseItems(outfitsInfo):
     """ Builds and returns a list of PurchaseItems.  This list will only contain items that would be newly purchased.
     This takes into account current inventory and what items are already available.
     :return: list of PurcahseItem entries containing items that would require a new purchase.
     """
     itemsCache = dependency.instance(IItemsCache)
-    purchaseItems = getCartPurchaseItems(cartItems)
+    purchaseItems = []
     inventoryCount = Counter()
     for season, outfitCompare in outfitsInfo.iteritems():
         inventoryCount.update({i.intCD:0 for i in outfitCompare.modified.items()})
@@ -134,10 +134,10 @@ def getCustomPurchaseItems(outfitsInfo, cartItems):
     return purchaseItems
 
 
-def getStylePurchaseItems(styleInfo, cartItems):
+def getStylePurchaseItems(styleInfo):
     """ Get purchase items for the styles mode.
     """
-    purchaseItems = getCartPurchaseItems(cartItems)
+    purchaseItems = []
     original = styleInfo.original
     modified = styleInfo.modified
     if modified and not original or modified and original.id != modified.id:
@@ -146,16 +146,6 @@ def getStylePurchaseItems(styleInfo, cartItems):
         purchaseItems.append(PurchaseItem(modified, modified.getBuyPrice(), areaID=None, slot=None, regionID=None, selected=True, group=AdditionalPurchaseGroups.STYLES_GROUP_ID, isFromInventory=isFromInventory, isDismantling=False))
     elif original and not modified:
         purchaseItems.append(PurchaseItem(original, original.getBuyPrice(), areaID=None, slot=None, regionID=None, selected=True, group=AdditionalPurchaseGroups.STYLES_GROUP_ID, isFromInventory=False, isDismantling=True))
-    return purchaseItems
-
-
-def getCartPurchaseItems(cartItems):
-    """ Get purchase items from the given cart.
-    """
-    purchaseItems = []
-    for item in cartItems:
-        purchaseItems.append(PurchaseItem(item, price=item.getBuyPrice(), areaID=None, slot=None, regionID=None, selected=True, group=AdditionalPurchaseGroups.UNASSIGNED_GROUP_ID))
-
     return purchaseItems
 
 
@@ -183,14 +173,13 @@ def getStyleInventoryCount(item, styleInfo=None):
         return inventoryCount
     original = styleInfo.original
     modified = styleInfo.modified
-    if modified and modified.intCD == item.intCD:
-        if not item.isRentable:
+    if not item.isRentable:
+        if modified and modified.intCD == item.intCD:
             inventoryCount -= 1
-    if original and original.intCD == item.intCD:
-        if not item.isRentable:
-            inventoryCount -= 1
-        elif g_currentVehicle.item.getStyledOutfit(SeasonType.SUMMER).isEnabled():
+        if original and original.intCD == item.intCD:
             inventoryCount += 1
+    elif original and g_currentVehicle.item.getStyledOutfit(SeasonType.SUMMER).isEnabled():
+        inventoryCount += 1
     return max(0, inventoryCount)
 
 

@@ -36,5 +36,5 @@ class AwardWindowBase(AwardWindowsBaseMeta):
     def __playSound(self):
         sound = self._award.getSound()
         if sound is not None:
-            self.soundManager.playSound(sound, owner=id(self))
+            self.soundManager.playInstantSound(sound)
         return

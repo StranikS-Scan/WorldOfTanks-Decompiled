@@ -67,6 +67,9 @@ class CustomizationMainViewMeta(View):
     def onChangeSize(self):
         self._printOverrideError('onChangeSize')
 
+    def onSelectAnchor(self, areaID, regionID):
+        self._printOverrideError('onSelectAnchor')
+
     def as_showBuyingPanelS(self):
         return self.flashObject.as_showBuyingPanel() if self._isDAAPIInited() else None
 

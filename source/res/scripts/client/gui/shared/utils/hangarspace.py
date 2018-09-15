@@ -155,6 +155,7 @@ class _HangarSpace(object):
             return
 
     def destroy(self):
+        self.onSpaceDestroy()
         self.__videoCameraController.destroy()
         if self.__spaceInited:
             LOG_DEBUG('_HangarSpace::destroy')
@@ -170,7 +171,6 @@ class _HangarSpace(object):
         if self.__delayedRefreshCallback is not None:
             BigWorld.cancelCallback(self.__delayedRefreshCallback)
             self.__delayedRefreshCallback = None
-        self.onSpaceDestroy()
         self.gameSession.onPremiumNotify -= self.onPremiumChanged
         return
 

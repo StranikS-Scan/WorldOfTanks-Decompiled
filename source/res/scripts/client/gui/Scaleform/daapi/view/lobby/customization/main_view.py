@@ -19,8 +19,8 @@ from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import b
 from gui.Scaleform.daapi.view.lobby.customization.shared import C11N_MODE, CUSTOMIZATION_POPOVER_ALIASES, TABS_ITEM_MAPPING, CUSTOMIZATION_TABS, SEASON_IDX_TO_TYPE, SEASON_TYPE_TO_NAME, SEASONS_ORDER, getCustomPurchaseItems, getStylePurchaseItems, getTotalPurchaseInfo, OutfitInfo, getItemInventoryCount, getStyleInventoryCount, AdditionalPurchaseGroups
 from gui.Scaleform.framework.entities.View import ViewKey, ViewKeyDynamic
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
+from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
 from gui.Scaleform.daapi.view.meta.CustomizationMainViewMeta import CustomizationMainViewMeta
-from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -32,11 +32,11 @@ from gui.shared.formatters import text_styles, icons, getItemPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.gui_items.customization.outfit import Area
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
-from gui.shared.gui_items.processors.common import OutfitApplier, StyleApplier, CustomizationsSeller, CustomizationsBuyer
+from gui.shared.gui_items.processors.common import OutfitApplier, StyleApplier, CustomizationsSeller
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.decorators import process
 from gui.shared.utils.functions import makeTooltip
-from helpers import dependency
+from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType
 from shared_utils import first
@@ -44,13 +44,15 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from gui.Scaleform.daapi.view.dialogs.confirm_customization_item_dialog_meta import ConfirmCustomizationItemMeta
+from gui.shared.utils import toUpper
 
 class _C11nWindowsLifecycleHandler(IViewLifecycleHandler):
     """ Class responsible for suspending highlighter whenever modal windows pops up.
     """
     service = dependency.descriptor(ICustomizationService)
     __SUB_VIEWS = (VIEW_ALIAS.SETTINGS_WINDOW, VIEW_ALIAS.CUSTOMIZATION_PURCHASE_WINDOW, VIEW_ALIAS.LOBBY_MENU)
-    __DIALOGS = (VIEW_ALIAS.SIMPLE_DIALOG,)
+    __DIALOGS = (VIEW_ALIAS.SIMPLE_DIALOG, CUSTOMIZATION_ALIASES.CONFIRM_CUSTOMIZATION_ITEM_DIALOG)
 
     def __init__(self):
         super(_C11nWindowsLifecycleHandler, self).__init__([ ViewKey(alias) for alias in self.__SUB_VIEWS ] + [ ViewKeyDynamic(alias) for alias in self.__DIALOGS ])
@@ -84,6 +86,8 @@ CustomizationAnchorPositionVO = namedtuple('CustomizationAnchorPositionVO', ('cl
 AnchorPositionData = namedtuple('AnchorPositionData', ('angleToCamera', 'clipSpacePos', 'slotId'))
 ANCHOR_UPDATE_TIMER_DELAY = 2
 ANCHOR_UPDATE_FREQUENCY = 1 / 30
+ANCHOR_FADE_EXPO = 1.1
+ANCHOR_ALPHA_MIN = 0.15
 
 class MainView(CustomizationMainViewMeta):
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -94,12 +98,7 @@ class MainView(CustomizationMainViewMeta):
     def __init__(self, ctx=None):
         super(MainView, self).__init__()
         self.__viewLifecycleWatcher = ViewLifecycleWatcher()
-        self.anchorAlphaOverride = 1
         self.fadeAnchorsOut = False
-        self.anchorFadeInSpeed = 0.05
-        self.anchorFadeOutSpeed = 0.05
-        self.anchorMinAlpha = 0.15
-        self.anchorFadeExpo = 2
         self.anchorMinScale = 0.75
         self._currentSeason = SeasonType.SUMMER
         self._tabIndex = CUSTOMIZATION_TABS.PAINT
@@ -109,11 +108,12 @@ class MainView(CustomizationMainViewMeta):
         self._originalOutfits = {}
         self._modifiedOutfits = {}
         self._currentOutfit = None
-        self._cartItems = {mode:[] for mode in C11N_MODE.ALL()}
         self._mode = C11N_MODE.CUSTOM
         self._isDeferredRenderer = True
         self.__anchorPositionCallbackID = None
         self._state = {}
+        self.__hangarSpace = g_hangarSpace.space
+        self.__locatedOnEmbelem = False
         return
 
     def showBuyWindow(self):
@@ -178,7 +178,12 @@ class MainView(CustomizationMainViewMeta):
             self.service.stopHighlighter()
         self.__stopTimer()
         self.__setAnchorsInitData(self._tabIndex, doRegions)
-        self.__updateAnchorPositions()
+        if self.__locatedOnEmbelem:
+            self.__hangarSpace.clearSelectedEmblemInfo()
+            self.__hangarSpace.locateCameraToPreview()
+            self.__startTimer(ANCHOR_UPDATE_TIMER_DELAY, self.__updateAnchorPositions)
+        else:
+            self.__updateAnchorPositions()
         if self._tabIndex == CUSTOMIZATION_TABS.STYLE:
             slotIdVO = CustomizationSlotIdVO(0, GUI_ITEM_TYPE.STYLE, 0)._asdict()
         elif self._tabIndex == CUSTOMIZATION_TABS.EFFECT:
@@ -324,6 +329,11 @@ class MainView(CustomizationMainViewMeta):
     def onLobbyClick(self):
         if self._tabIndex in (CUSTOMIZATION_TABS.EMBLEM, CUSTOMIZATION_TABS.INSCRIPTION):
             self.as_hideAnchorPropertySheetS()
+        if self.__locatedOnEmbelem:
+            self.__stopTimer()
+            self.__hangarSpace.clearSelectedEmblemInfo()
+            self.__hangarSpace.locateCameraToPreview()
+            self.__startTimer(ANCHOR_UPDATE_TIMER_DELAY, self.__updateAnchorPositions)
 
     def setEnableMultiselectRegions(self, isEnabled):
         """ Turn off highlighting when doing pick'n'click.
@@ -332,6 +342,17 @@ class MainView(CustomizationMainViewMeta):
 
     def onChangeSize(self):
         self.__updateAnchorPositions()
+
+    def onSelectAnchor(self, areaID, regionID):
+        if self._tabIndex == CUSTOMIZATION_TABS.EMBLEM:
+            emblemType = 'player'
+            zoom = 0.06
+        else:
+            emblemType = 'inscription'
+            zoom = 0.1
+        self.__stopTimer()
+        self.__startTimer(ANCHOR_UPDATE_TIMER_DELAY, self.__updateAnchorPositions)
+        self.__locatedOnEmbelem = self.__hangarSpace.locateCameraOnEmblem(areaID < 2, emblemType, regionID, zoom)
 
     def getOutfitsInfo(self):
         outfitsInfo = {}
@@ -344,7 +365,7 @@ class MainView(CustomizationMainViewMeta):
         return OutfitInfo(self._originalStyle, self._modifiedStyle)
 
     def getPurchaseItems(self):
-        return getCustomPurchaseItems(self.getOutfitsInfo(), self._cartItems.get(self._mode)) if self._mode == C11N_MODE.CUSTOM else getStylePurchaseItems(self.getStyleInfo(), self._cartItems.get(self._mode))
+        return getCustomPurchaseItems(self.getOutfitsInfo()) if self._mode == C11N_MODE.CUSTOM else getStylePurchaseItems(self.getStyleInfo())
 
     def getItemInventoryCount(self, item):
         return getItemInventoryCount(item, self.getOutfitsInfo()) if self._mode == C11N_MODE.CUSTOM else getStyleInventoryCount(item, self.getStyleInfo())
@@ -379,7 +400,6 @@ class MainView(CustomizationMainViewMeta):
     def buyAndExit(self, purchaseItems):
         self.itemsCache.onSyncCompleted -= self.__onCacheResync
         groupHasItems = {AdditionalPurchaseGroups.STYLES_GROUP_ID: False,
-         AdditionalPurchaseGroups.UNASSIGNED_GROUP_ID: False,
          SeasonType.WINTER: False,
          SeasonType.SUMMER: False,
          SeasonType.DESERT: False}
@@ -407,10 +427,6 @@ class MainView(CustomizationMainViewMeta):
 
         if groupHasItems[AdditionalPurchaseGroups.STYLES_GROUP_ID]:
             result = yield StyleApplier(g_currentVehicle.item, self._modifiedStyle).request()
-            results.append(result)
-        selectedItems = [ purchaseItem.item for purchaseItem in purchaseItems if purchaseItem.group == AdditionalPurchaseGroups.UNASSIGNED_GROUP_ID and purchaseItem.selected ]
-        if selectedItems:
-            result = yield CustomizationsBuyer(g_currentVehicle.item, selectedItems).request()
             results.append(result)
         errorCount = 0
         for result in results:
@@ -455,6 +471,9 @@ class MainView(CustomizationMainViewMeta):
         self.refreshOutfit()
 
     def _dispose(self):
+        if self.__locatedOnEmbelem:
+            self.__hangarSpace.clearSelectedEmblemInfo()
+            self.__hangarSpace.locateCameraToPreview()
         self.__viewLifecycleWatcher.stop()
         self.__stopTimer()
         self.service.stopHighlighter()
@@ -481,9 +500,8 @@ class MainView(CustomizationMainViewMeta):
         :param itemIntCD: item CD for fetching the correct item
         """
         item = self.itemsCache.items.getItemByCD(itemIntCD)
-        if ctxMenuID == CustomizationOptions.ADD_TO_CART:
-            self._cartItems.get(self._mode).append(item)
-            self.__setBuyingPanelData()
+        if ctxMenuID == CustomizationOptions.BUY:
+            DialogsInterface.showDialog(ConfirmCustomizationItemMeta(itemIntCD), lambda _: None)
         elif ctxMenuID == CustomizationOptions.SELL:
 
             @process('sellItem')
@@ -519,7 +537,8 @@ class MainView(CustomizationMainViewMeta):
 
         anchorPosData.sort(key=lambda pos: pos.angleToCamera)
         for zIdx, posData in enumerate(anchorPosData):
-            alpha = (posData.angleToCamera / math.pi) ** self.anchorFadeExpo
+            alpha = (posData.angleToCamera / math.pi) ** ANCHOR_FADE_EXPO
+            alpha = mathUtils.clamp(ANCHOR_ALPHA_MIN, 1, alpha)
             if posData.angleToCamera > math.pi / 2:
                 scale = (1 - self.anchorMinScale) * 2 * posData.angleToCamera / math.pi + 2 * self.anchorMinScale - 1
             else:
@@ -569,11 +588,6 @@ class MainView(CustomizationMainViewMeta):
             self._currentOutfit = self._modifiedOutfits[self._currentSeason]
 
     def __updateAnchorPositions(self, _=None):
-        if self.fadeAnchorsOut and self.anchorAlphaOverride > self.anchorMinAlpha:
-            self.anchorAlphaOverride -= self.anchorFadeOutSpeed
-        elif not self.fadeAnchorsOut and self.anchorAlphaOverride < 1:
-            self.anchorAlphaOverride += self.anchorFadeInSpeed
-        self.anchorAlphaOverride = mathUtils.clamp(0, 1, self.anchorAlphaOverride)
         self.as_setAnchorPositionsS(self._getUpdatedAnchorPositions())
 
     def __onRegionHighlighted(self, typeID, tankPartID, regionID):
@@ -618,7 +632,7 @@ class MainView(CustomizationMainViewMeta):
         self.__setBuyingPanelData()
         if self._mode == C11N_MODE.CUSTOM:
             self.as_hideAnchorPropertySheetS()
-        self.refreshCarousel(rebuild=True)
+        self.refreshCarousel(rebuild=False)
         self.refreshOutfit()
 
     def __preserveState(self):
@@ -647,7 +661,9 @@ class MainView(CustomizationMainViewMeta):
             label = _ms(VEHICLE_CUSTOMIZATION.COMMIT_APPLY)
             self.as_hideBuyingPanelS()
         isApplyEnabled = bool(cart.numTotal) or self._mode == C11N_MODE.CUSTOM and bool(self._originalStyle)
-        self.as_setBottomPanelHeaderS({'buyBtnEnabled': isApplyEnabled,
+        isEnoughMoney = not self.itemsCache.items.stats.money.getShortage(cart.totalPrice.price)
+        self.as_setBottomPanelHeaderS({'enoughMoney': isEnoughMoney,
+         'buyBtnEnabled': isApplyEnabled,
          'buyBtnLabel': label,
          'pricePanel': totalPriceVO[0]})
 
@@ -686,8 +702,8 @@ class MainView(CustomizationMainViewMeta):
 
     def __setHeaderInitData(self):
         vehicle = g_currentVehicle.item
-        self.as_setHeaderDataS({'tankTier': text_styles.promoSubTitle(MENU.levels_roman(vehicle.level)),
-         'tankName': text_styles.promoSubTitle(vehicle.shortUserName),
+        self.as_setHeaderDataS({'tankTier': str(int2roman(vehicle.level)),
+         'tankName': vehicle.shortUserName,
          'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
          'isElite': vehicle.isElite,
          'closeBtnTooltip': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_HEADERCLOSEBTN,
@@ -715,6 +731,7 @@ class MainView(CustomizationMainViewMeta):
     def __getHistoricIndicatorData(self):
         """ Historicity indicator and name of the current style or custom outfit.
         """
+        isDefault = all((outfit.isEmpty() for outfit in self._modifiedOutfits.itervalues()))
         if self._mode == C11N_MODE.STYLE:
             if self._modifiedStyle:
                 isHistorical = self._modifiedStyle.isHistorical()
@@ -724,9 +741,10 @@ class MainView(CustomizationMainViewMeta):
                 name = ''
         else:
             isHistorical = all((outfit.isHistorical() for outfit in self._modifiedOutfits.itervalues()))
-            name = _ms(VEHICLE_CUSTOMIZATION.HISTORICINDICATOR_STYLENAME_CUSTSOMSTYLE)
-        return {'historicText': name,
-         'isDefaultAppearance': self._currentOutfit.isEmpty(),
+            name = _ms(VEHICLE_CUSTOMIZATION.HISTORICINDICATOR_STYLENAME_CUSTSOMSTYLE) if not isDefault else ''
+        txtStyle = text_styles.stats if isHistorical else text_styles.tutorial
+        return {'historicText': txtStyle(toUpper(name)),
+         'isDefaultAppearance': isDefault,
          'isHistoric': isHistorical,
          'tooltip': TOOLTIPS.CUSTOMIZATION_NONHISTORICINDICATOR if not isHistorical else ''}
 
@@ -819,11 +837,3 @@ class MainView(CustomizationMainViewMeta):
             DialogsInterface.showI18nConfirmDialog('customization/close', callback)
         else:
             callback(True)
-
-    def sell(self, intCD=3841596):
-        from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
-        ItemsActionsFactory.doAction(ItemsActionsFactory.SELL_ITEM, intCD)
-
-    def buy(self, intCD=3841596):
-        from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
-        ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_MODULE, intCD)

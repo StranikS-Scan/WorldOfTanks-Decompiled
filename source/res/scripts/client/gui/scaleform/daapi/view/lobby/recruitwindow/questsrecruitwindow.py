@@ -60,7 +60,7 @@ class QuestsRecruitWindow(QuestRecruitWindowMeta):
 
     def _populate(self):
         super(QuestsRecruitWindow, self)._populate()
-        self.soundManager.playSound(SOUNDS.WOMAN_AWARD_WINDOW, owner=id(self))
+        self.soundManager.playInstantSound(SOUNDS.WOMAN_AWARD_WINDOW)
 
     def __paramsChangeHandler(self, selectedNationID, selectedVehClass, selectedVehicle, selectedTmanRole):
         selectedNationID = int(selectedNationID)

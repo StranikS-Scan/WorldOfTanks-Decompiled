@@ -10,7 +10,6 @@ from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.shared.formatters import getItemPricesVO
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from helpers import dependency
-from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType
 from skeletons.gui.customization import ICustomizationService
 PropertySheetSeasonButtonRenderers = namedtuple('PropertySheetSeasonButtonRenderers', 'rendererVOs')
@@ -200,7 +199,7 @@ class PropertySheetSeasonButtonsComponent(PropertySheetSeasonButtonsComponentMet
         self._activeSeason = self._c11nView.getCurrentSeason()
         wouldAddItem = False
         if currentItem is None and activeItem:
-            wouldAddItem = self._c11nView.getItemInventoryCount(activeItem) <= 0
+            wouldAddItem = self._c11nView.getItemInventoryCount(activeItem) == 0
         renderer.itemIntCD = currentItem.intCD if currentItem is not None else -1
         state = self.__getState(activeItem, currentItem, self.__isApplicableToActiveSeason(activeItem, seasonIDX), wouldAddItem)
         action = self.__getAction(state)
@@ -215,7 +214,6 @@ class PropertySheetSeasonButtonsComponent(PropertySheetSeasonButtonsComponentMet
         buyPrice = itemForPurchase.getBuyPrice() if itemForPurchase else ITEM_PRICE_EMPTY
         renderer.buyPrice = getItemPricesVO(buyPrice)[0]
         renderer.currencyType = buyPrice.getCurrency() if buyPrice is not ITEM_PRICE_EMPTY else ''
-        renderer.requiresPurchase = currentItem is not None and self._c11nView.getItemInventoryCount(currentItem) <= 0
         renderer.showBorder = currentItem is not None and currentItem == activeItem and renderer.seasonIDX == SEASON_TYPE_TO_IDX[self._activeSeason]
         renderer.showPurchaseGlow = showGlow and renderer.requiresPurchase and currentItem == activeItem and currentItem is not None
         return

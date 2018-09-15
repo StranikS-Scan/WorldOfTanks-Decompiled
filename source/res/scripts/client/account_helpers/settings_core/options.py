@@ -64,6 +64,7 @@ class APPLY_METHOD:
     NORMAL = 'normal'
     DELAYED = 'delayed'
     RESTART = 'restart'
+    NEXT_BATTLE = 'next_battle'
 
 
 class ISetting(object):
@@ -193,7 +194,9 @@ class SettingsContainer(ISetting):
         methods = [ m for m in self.__forEach(settings, lambda n, p: p.getApplyMethod(diff[n])) ]
         if APPLY_METHOD.RESTART in methods:
             return APPLY_METHOD.RESTART
-        return APPLY_METHOD.DELAYED if APPLY_METHOD.DELAYED in methods else APPLY_METHOD.NORMAL
+        if APPLY_METHOD.DELAYED in methods:
+            return APPLY_METHOD.DELAYED
+        return APPLY_METHOD.NEXT_BATTLE if APPLY_METHOD.NEXT_BATTLE in methods else APPLY_METHOD.NORMAL
 
     def getSetting(self, name):
         if name in self.indices:
@@ -459,6 +462,12 @@ class StorageAccountSetting(StorageDumpSetting):
 
     def getDefaultValue(self):
         return AccountSettings.getSettingsDefault(self.settingName)
+
+
+class C11nHistoricallyAccurateSetting(StorageAccountSetting):
+
+    def getApplyMethod(self, value):
+        return APPLY_METHOD.NEXT_BATTLE
 
 
 class SettingFalseByDefault(StorageDumpSetting):

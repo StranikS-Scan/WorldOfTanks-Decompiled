@@ -12,16 +12,16 @@ from items.components.c11n_constants import SeasonType, ModificationType
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
 _UNBOUND_VEH = 0
-_CAMO_ICON_TEMPLATE = 'img://camouflage,{width},{height},"{texture}",{colors},{weights},{base_color}'
+_CAMO_ICON_TEMPLATE = 'img://camouflage,{width},{height},"{texture}","{background}",{colors},{weights}'
 _CAMO_SWATCH_WIDTH = 128
 _CAMO_SWATCH_HEIGHT = 128
-_CAMO_SWATCH_BASE_COLOR = 0
+_CAMO_SWATCH_BACKGROUND = 'gui/maps/vehicles/camouflages/camo_back.dds'
 
-def camoIconTemplate(texture, width, height, colors, base=_CAMO_SWATCH_BASE_COLOR):
+def camoIconTemplate(texture, width, height, colors, background=_CAMO_SWATCH_BACKGROUND):
     """ Fill the _CAMO_ICON_TEMPLATE (in order to dynamically generate camo image)
     """
     weights = Math.Vector4(*[ (color >> 24) / 255.0 for color in colors ])
-    return _CAMO_ICON_TEMPLATE.format(width=width, height=height, texture=texture, colors=','.join((str(color) for color in colors)), weights=','.join((str(weight) for weight in weights)), base_color=base)
+    return _CAMO_ICON_TEMPLATE.format(width=width, height=height, texture=texture, background=background, colors=','.join((str(color) for color in colors)), weights=','.join((str(weight) for weight in weights)))
 
 
 class ConcealmentBonus(object):
@@ -229,6 +229,11 @@ class Customization(FittingItem):
         """
         return bool(self.eventsCache.questsProgress.getTokenCount(self.requiredToken)) if self.requiredToken else True
 
+    def isRare(self):
+        """ Check if item is rare (i.e. is from personal mission).
+        """
+        return self.descriptor.isRare()
+
     def fullInventoryCount(self, vehicle):
         """ Check if item is in inventory.
         """
@@ -401,6 +406,12 @@ class Style(Customization):
         """ Returns number of battles this style provides (if it's rentable)
         """
         return self.descriptor.rentCount if self.isRentable else 0
+
+    @property
+    def userType(self):
+        """ User readable item type name.
+        """
+        return i18n.makeString(VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_RENT) if self.isRentable else i18n.makeString(VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_PERMANENT)
 
     def getRentInfo(self, vehicle):
         """ Get rental info for the given vehicle.

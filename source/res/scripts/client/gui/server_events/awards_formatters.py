@@ -8,7 +8,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events.formatters import parseComplexToken, TOKEN_SIZES
 from gui.shared.formatters import text_styles
-from gui.shared.gui_items import GUI_ITEM_TYPE, getItemIconName
+from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES, getItemIconName
 from gui.shared.gui_items.Tankman import getRoleUserName
 from gui.shared.money import Currency
 from gui.shared.utils.functions import makeTooltip
@@ -576,6 +576,7 @@ class TankwomanBonusFormatter(SimpleBonusFormatter):
 
 
 class CustomizationsBonusFormatter(SimpleBonusFormatter):
+    c11n = dependency.descriptor(ICustomizationService)
 
     def _format(self, bonus):
         result = []
@@ -587,14 +588,23 @@ class CustomizationsBonusFormatter(SimpleBonusFormatter):
     @classmethod
     def _getImages(cls, item):
         result = {}
+        c11nItem = cls.__getC11nItem(item)
         for size in AWARDS_SIZES.ALL():
-            result[size] = RES_ICONS.getBonusIcon(size, item.get('custType'))
+            result[size] = RES_ICONS.getBonusIcon(size, c11nItem.itemTypeName)
 
         return result
 
     @classmethod
     def _getUserName(cls, item):
-        return i18n.makeString(QUESTS.getBonusName(item.get('custType')))
+        c11nItem = cls.__getC11nItem(item)
+        return i18n.makeString(QUESTS.getBonusName(c11nItem.itemTypeName))
+
+    @classmethod
+    def __getC11nItem(cls, item):
+        itemTypeName = item.get('custType')
+        itemID = item.get('id')
+        itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
+        return cls.c11n.getItemByID(itemTypeID, itemID)
 
 
 class OperationCustomizationsBonusFormatter(CustomizationsBonusFormatter):

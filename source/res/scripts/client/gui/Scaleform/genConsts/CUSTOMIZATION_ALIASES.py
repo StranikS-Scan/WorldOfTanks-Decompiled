@@ -11,3 +11,4 @@ class CUSTOMIZATION_ALIASES(object):
     CUSTOMIZATION_CAMO_POPOVER = 'CustomizationCamoAnchorPropertiesUI'
     CUSTOMIZATION_DECAL_POPOVER = 'CustomizationDecalAnchorPropertiesUI'
     CUSTOMIZATION_EFFECT_POPOVER = 'CustomizationEffectsPropertiesUI'
+    CONFIRM_CUSTOMIZATION_ITEM_DIALOG = 'ConfirmCustomizationItemDialog_UI'

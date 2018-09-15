@@ -146,7 +146,8 @@ def readHangarSettings(igrKey):
         settingsXml = settingsXml['hangarSettings']
         cfg = {'path': spacePath,
          'cam_yaw_constr': Math.Vector2(-180, 180),
-         'cam_pitch_constr': Math.Vector2(-70, -5)}
+         'cam_pitch_constr': Math.Vector2(-70, -5),
+         'decal_cam_fluency': 0.2}
         loadConfig(cfg, settingsXml)
         loadConfigValue('shadow_model_name', hangarsXml, hangarsXml.readString, cfg)
         loadConfigValue('shadow_default_texture_name', hangarsXml, hangarsXml.readString, cfg)
@@ -431,7 +432,11 @@ class ClientHangarSpace():
         return
 
     def locateCameraToPreview(self):
-        self.setCameraLocation(targetPos=_CFG['preview_cam_start_target_pos'], pivotPos=_CFG['preview_cam_pivot_pos'], yaw=math.radians(_CFG['preview_cam_start_angles'][0]), pitch=math.radians(_CFG['preview_cam_start_angles'][1]), dist=_CFG['preview_cam_start_dist'])
+        if self.__cam is not None:
+            self.__cam.movementHalfLife = _CFG['cam_fluency']
+            self.__cam.turningHalfLife = _CFG['cam_fluency']
+            self.setCameraLocation(targetPos=_CFG['preview_cam_start_target_pos'], pivotPos=_CFG['preview_cam_pivot_pos'], yaw=math.radians(_CFG['preview_cam_start_angles'][0]), pitch=math.radians(_CFG['preview_cam_start_angles'][1]), dist=_CFG['preview_cam_start_dist'])
+        return
 
     def locateCameraOnEmblem(self, onHull, emblemType, emblemIdx, relativeSize=0.5):
         self.__selectedEmblemInfo = (onHull,
@@ -446,6 +451,8 @@ class ClientHangarSpace():
             emblemSize = emblemDesc[3] * _CFG['v_scale']
             halfF = emblemSize / (2 * relativeSize)
             dist = halfF / math.tan(BigWorld.projection().fov / 2)
+            self.__cam.movementHalfLife = _CFG['decal_cam_fluency']
+            self.__cam.turningHalfLife = _CFG['decal_cam_fluency']
             self.setCameraLocation(targetPos, Math.Vector3(0, 0, 0), dir.yaw, -dir.pitch, dist, True)
             self.__locatedOnEmbelem = True
             return True
@@ -456,12 +463,12 @@ class ClientHangarSpace():
 
     def updateCameraByMouseMove(self, dx, dy, dz):
         if self.__selectedEmblemInfo is not None:
-            self.__cam.target.setTranslate(_CFG['preview_cam_start_target_pos'])
-            self.__cam.pivotPosition = _CFG['preview_cam_pivot_pos']
             if self.__locatedOnEmbelem:
                 self.__cam.maxDistHalfLife = 0.0
             else:
                 self.__cam.maxDistHalfLife = _CFG['cam_fluency']
+        self.__cam.movementHalfLife = _CFG['cam_fluency']
+        self.__cam.turningHalfLife = _CFG['cam_fluency']
         sourceMat = Math.Matrix(self.__cam.source)
         yaw = sourceMat.yaw
         pitch = sourceMat.pitch

@@ -112,8 +112,8 @@ def onAccountShowGUI(ctx):
     g_appLoader.showLobby()
     g_prbLoader.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
     if ServicesLocator.lobbyContext.getServerSettings().isElenEnabled():
-        yield ServicesLocator.eventsController.getEvents(onlySettings=True)
-        yield ServicesLocator.eventsController.getHangarFlag()
+        yield ServicesLocator.eventsController.getEvents(onlySettings=True, onLogin=True)
+        yield ServicesLocator.eventsController.getHangarFlag(onLogin=True)
     g_prbLoader.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
     g_clanCache.onAccountShowGUI()
     SoundGroups.g_instance.enableLobbySounds(True)

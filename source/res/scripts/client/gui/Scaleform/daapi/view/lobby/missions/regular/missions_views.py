@@ -131,7 +131,7 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
         success = yield DialogsInterface.showI18nConfirmDialog(dialog)
         if success:
             yield self.eventsController.leaveEvent(eventID)
-            self._onEventsUpdate()
+            yield self._onEventsUpdateAsync()
         self.as_setWaitingVisibleS(False)
 
     @checkEventExist

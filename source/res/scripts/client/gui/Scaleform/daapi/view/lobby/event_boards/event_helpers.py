@@ -180,7 +180,7 @@ class _VehiclesCondition(_Condition):
                     availableVehicle = vehicle
                     available += 1
 
-        singleVehicle = allCount is 1 or available is 1
+        singleVehicle = allCount is 1
         vehicleMissing = available is 0
         if singleVehicle:
             vehicle = availableVehicle or items.getItemByCD(vehicles[0])
@@ -547,11 +547,15 @@ class EventHeader(object):
 
     def getTimerInfo(self):
 
-        def formatToEnd(iconPath, text, dateType):
+        def formatToEnd(iconPath, text, dateType, isEndSoon):
             iconPath = icons.makeImageTag(iconPath)
             timeData = event.getFormattedRemainingTime(dateType)
             text = _ms(text, time=formatTimeToEnd(timeData[0], timeData[1]))
-            return '{} {}'.format(iconPath, timeEndStyle(text))
+            if isEndSoon:
+                formatedText = timeEndStyle(text)
+            else:
+                formatedText = text_styles.vehicleStatusInfoText(text)
+            return '{} {}'.format(iconPath, formatedText)
 
         event = self._event
         sday, smonth, _ = event_boards_timer.getDayMonthYear(event.getStartDate())
@@ -563,19 +567,19 @@ class EventHeader(object):
             result = '{} {}    '.format(icon, text_styles.vehicleStatusInfoText(timePeriod))
             startSoon = event.isStartSoon()
             if startSoon:
-                result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_TIME_ICON, EVENT_BOARDS.TIME_TIMETO_START, EVENT_DATE_TYPE.START)
+                result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_TIME_ICON, EVENT_BOARDS.TIME_TIMETO_START, EVENT_DATE_TYPE.START, startSoon)
             elif not self._joined and not event.isRegistrationFinished() and not self._stateReasons:
                 finishSoon = event.isRegistrationFinishSoon()
                 if finishSoon:
-                    result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_TIME_ICON, EVENT_BOARDS.TIME_TIMETO_ENDREGISTRATION, EVENT_DATE_TYPE.PARTICIPANTS_FREEZE)
+                    result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_TIME_ICON, EVENT_BOARDS.TIME_TIMETO_ENDREGISTRATION, EVENT_DATE_TYPE.PARTICIPANTS_FREEZE, finishSoon)
                 else:
-                    result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_ICON_FLAG, EVENT_BOARDS.TIME_TIMETO_ENDREGISTRATION, EVENT_DATE_TYPE.PARTICIPANTS_FREEZE)
+                    result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_ICON_FLAG, EVENT_BOARDS.TIME_TIMETO_ENDREGISTRATION, EVENT_DATE_TYPE.PARTICIPANTS_FREEZE, finishSoon)
             elif self._joined:
                 endSoon = event.isEndSoon()
                 if endSoon:
-                    result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_TIME_ICON, EVENT_BOARDS.TIME_TIMETO_END, EVENT_DATE_TYPE.END)
+                    result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_TIME_ICON, EVENT_BOARDS.TIME_TIMETO_END, EVENT_DATE_TYPE.END, endSoon)
                 else:
-                    result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_ICON_FLAG, EVENT_BOARDS.TIME_TIMETO_END, EVENT_DATE_TYPE.END)
+                    result += formatToEnd(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_ICON_FLAG, EVENT_BOARDS.TIME_TIMETO_END, EVENT_DATE_TYPE.END, endSoon)
         else:
             date = BigWorld.wg_getLongDateFormat(event.getEndDateTs())
             result = text_styles.main(_ms(EVENT_BOARDS.TIME_EVENTFINISHED, date=date))

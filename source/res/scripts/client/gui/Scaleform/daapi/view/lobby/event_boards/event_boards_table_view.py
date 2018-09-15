@@ -95,11 +95,7 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
         """
         Move to my place
         """
-        myPage = self.__myInfo.pageNumber
-        if self.__leaderboardData.pageNumber != myPage:
-            self.__fetchMyLeaderboardInfo(self.__moveToMyPlace)
-        else:
-            self.__scrollToRank(self.MY_RANK)
+        self.__fetchMyLeaderboardInfo(self.__moveToMyPlace)
 
     def showNextAward(self, visible):
         stripesLen = len(self.__stripes['tableDP'])
@@ -184,7 +180,6 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
     def __updateStatus(self):
         event = self.__eventData
         playerState = self.__playerState
-        top = self.__top
         myInfo = self.__myInfo
         state = playerState.getPlayerState() if playerState else None
         canJoin = playerState.getCanJoin() if playerState else True
@@ -238,8 +233,9 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
             titleTooltip = makeParameterTooltipVO(method, amount, parameter)
         playerName = getattr(BigWorld.player(), 'name', '')
         playerName = getFullName(playerName, myInfo.fullData.getClanTag(), myInfo.fullData.getClanColor())
+        myPosition = self.__myInfo.rank
         self.as_setStatusVisibleS(visible)
-        self.as_setMyPlaceVisibleS(not visible and top is not None)
+        self.as_setMyPlaceVisibleS(not visible and myPosition is not None)
         if visible:
             p1 = myInfo.fullData.getP1()
             p2 = myInfo.fullData.getP2()

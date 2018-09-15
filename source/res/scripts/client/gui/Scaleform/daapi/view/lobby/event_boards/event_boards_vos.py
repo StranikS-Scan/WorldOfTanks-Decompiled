@@ -58,7 +58,7 @@ def makeTableViewHeaderVO(type, value, eventName, status=None, statusTooltip=Non
         popoverAlias = EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_ALIAS
     return {'title': title,
      'icon': icon,
-     'name': _ms(EVENT_BOARDS.EXCEL_SUBHEADER, eventName=eventName),
+     'name': text_styles.main(_ms(EVENT_BOARDS.EXCEL_SUBHEADER, eventName=eventName)),
      'level': level,
      'popoverAlias': popoverAlias,
      'status': status,
@@ -243,7 +243,7 @@ def makeCantJoinReasonTextVO(event, playerData):
     elif _psr.SPECIALACCOUNT in stateReasons:
         result = getStatusTitleStyle(_ms(EVENT_BOARDS.STATUS_CANTJOIN_REASON_SPECIAL))
     elif stateReason is _psr.WASUNREGISTERED:
-        result = formatErrorTextWithIcon(EVENT_BOARDS.STATUS_CANTJOIN_REASON_LEFTEVENT)
+        result = getStatusTitleStyle(_ms(EVENT_BOARDS.STATUS_CANTJOIN_REASON_LEFTEVENT))
         tooltip = makeTooltip(EVENT_BOARDS.STATUS_CANTJOIN_REASON_LEFTEVENT, EVENT_BOARDS.STATUS_CANTJOIN_REASON_LEFTEVENT_TOOLTIP)
     else:
         limits = event.getLimits()

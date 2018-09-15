@@ -29,6 +29,7 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
 
     def __init__(self):
         super(EventBoardsController, self).__init__()
+        self.__isLoggedIn = False
         self.__eventBoardsSettings = EventBoardsSettings()
         self.__hangarFlagData = HangarFlagData()
 
@@ -72,31 +73,34 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
 
     @async
     @process
-    def getHangarFlag(self, callback):
-        response = yield self.sendRequest(EventBoardsGetHangarFlagCtx())
-        if response is not None:
-            self.__hangarFlagData.setData(response.getData())
-            self.updateHangarFlag()
+    def getHangarFlag(self, callback, onLogin=False):
+        if not self.__isLoggedIn or self.__isLoggedIn and not onLogin:
+            response = yield self.sendRequest(EventBoardsGetHangarFlagCtx())
+            if response is not None:
+                self.__isLoggedIn = True
+                self.__hangarFlagData.setData(response.getData())
+                self.updateHangarFlag()
         callback(self)
         return
 
     @async
     @process
-    def getEvents(self, callback, onlySettings=False, isTabVisited=False):
+    def getEvents(self, callback, onlySettings=False, isTabVisited=False, onLogin=False):
         statusCode = SET_DATA_STATUS_CODE.ERROR
         eventsSettings = self.__eventBoardsSettings.getEventsSettings()
         playerData = self.__eventBoardsSettings.getPlayerEventsData()
-        edResponse = yield self.sendRequest(EventBoardsGetEventDataCtx(needShowErrorNotification=not onlySettings))
-        if edResponse is not None:
-            statusCode = eventsSettings.setData(edResponse.getData())
-            if statusCode == SET_DATA_STATUS_CODE.OK:
-                self.__checkStartedFinishedEvents(isTabVisited)
-                if onlySettings:
-                    statusCode = SET_DATA_STATUS_CODE.RETURN
+        if not self.__isLoggedIn or self.__isLoggedIn and not onLogin:
+            edResponse = yield self.sendRequest(EventBoardsGetEventDataCtx(needShowErrorNotification=not onlySettings))
+            if edResponse is not None:
+                statusCode = eventsSettings.setData(edResponse.getData())
+                if statusCode == SET_DATA_STATUS_CODE.OK:
+                    self.__checkStartedFinishedEvents(isTabVisited)
+                    if onlySettings:
+                        statusCode = SET_DATA_STATUS_CODE.RETURN
+                else:
+                    self.updateHangarFlag()
             else:
-                self.updateHangarFlag()
-        else:
-            playerData.clearData()
+                playerData.clearData()
         if statusCode == SET_DATA_STATUS_CODE.OK:
             pdResponse = yield self.sendRequest(EventBoardsGetPlayerDataCtx())
             if pdResponse is not None:

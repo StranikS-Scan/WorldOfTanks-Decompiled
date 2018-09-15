@@ -59,19 +59,21 @@ class IEventBoardController(object):
 
     @async
     @process
-    def getHangarFlag(self, callback):
+    def getHangarFlag(self, callback, onLogin=False):
         """Sends request to wglene server for get hangar flag data.
         :param callback: callable object
+        :param onLogin: is call on login to client
         """
         raise NotImplementedError
 
     @async
     @process
-    def getEvents(self, callback, onlySettings=True, isTabVisited=False):
+    def getEvents(self, callback, onlySettings=True, isTabVisited=False, onLogin=False):
         """Sends request to wglene server for get events settings, player events data and my events top.
         :param callback: callable object
         :param onlySettings: need request only static data with wgelen settings
         :param isTabVisited: is events tab visited
+        :param onLogin: is call on login to client
         """
         raise NotImplementedError
 

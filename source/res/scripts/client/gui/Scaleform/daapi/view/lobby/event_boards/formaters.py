@@ -40,14 +40,14 @@ def formatOkTextWithIcon(text):
 
 
 def formatVehicleNameWithTypeIcon(vehicle, path):
-    icon = icons.makeImageTag(Vehicle.getTypeSmallIconPath(vehicle.type), 16, 16, -3, 0)
+    icon = icons.makeImageTag(Vehicle.getTypeSmallIconPath(vehicle.type, vehicle.isPremium))
     level = int2roman(vehicle.level)
     key = 'vehicle_prem' if vehicle.isPremium else 'vehicle'
     return makeHtmlString(path, key, {'msg': '{}{}{}'.format(level, icon, vehicle.userName)})
 
 
 def formatVehicleNationAndTypeIcon(vehicle, path):
-    iconType = icons.makeImageTag(Vehicle.getTypeSmallIconPath(vehicle.type))
+    iconType = icons.makeImageTag(Vehicle.getTypeSmallIconPath(vehicle.type, vehicle.isPremium))
     iconNation = icons.makeImageTag(RES_ICONS.getFilterNation(vehicle.nationName), width=26, height=16)
     level = int2roman(vehicle.level)
     return makeHtmlString(path, 'vehicle', {'msg': '{}{}{}'.format(iconNation, iconType, level)})

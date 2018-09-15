@@ -6,7 +6,7 @@ from CurrentVehicle import g_currentVehicle
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import MISSIONS_PAGE
 from async import async, await
-from adisp import process
+from adisp import process, async as adispasync
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
@@ -423,14 +423,20 @@ class ElenMissionView(MissionViewBase):
 
     @process
     def _onEventsUpdate(self, *args):
+        yield self._onEventsUpdateAsync(*args)
+
+    @adispasync
+    @process
+    def _onEventsUpdateAsync(self, callback, *args):
         self.as_setWaitingVisibleS(True)
-        yield await(self.eventsController.getEvents(isTabVisited=True))
-        yield await(self.eventsController.getHangarFlag())
+        yield self.eventsController.getEvents(isTabVisited=True)
+        yield self.eventsController.getHangarFlag()
         self.as_setWaitingVisibleS(False)
         eventsData = self.eventsController.getEventsSettingsData()
         playerData = self.eventsController.getPlayerEventsData()
         myEventsTop = self.eventsController.getMyEventsTopData()
         if self.isDisposed():
+            callback(self)
             return
         if eventsData and playerData and playerData.getEventsList() and myEventsTop:
             self._setMaintenance(False)
@@ -438,6 +444,7 @@ class ElenMissionView(MissionViewBase):
         else:
             self._setMaintenance(True)
         self._onDataChangedNotify()
+        callback(self)
 
     def _setMaintenance(self, visible):
         pass

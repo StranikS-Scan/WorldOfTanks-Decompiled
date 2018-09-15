@@ -104,6 +104,8 @@ class _PlayerEvents(object):
         self.onShowDevelopmentInfo = Event.Event()
         self.onEntityCheckOutEnqueued = Event.Event()
         self.onRoundFinished = Event.Event()
+        self.onGiftReceived = Event.Event()
+        self.onGiftClaimed = Event.Event()
 
 
 g_playerEvents = _PlayerEvents()

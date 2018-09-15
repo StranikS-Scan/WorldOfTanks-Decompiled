@@ -11,7 +11,7 @@ from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, AWARDS
 from account_shared import getFairPlayViolationName
 from chat_shared import SYS_MESSAGE_TYPE
-from constants import EVENT_TYPE
+from constants import EVENT_TYPE, GIFT_TANKMAN_TOKEN_NAME
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
@@ -20,11 +20,14 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
+from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.SystemMessages import SM_TYPE
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.ranked_battles import ranked_helpers
 from gui.server_events import events_dispatcher as quests_events
+from gui.server_events.events_dispatcher import showGiftAward
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import Vehicle
@@ -37,6 +40,8 @@ from helpers import i18n
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core
 from messenger.formatters import NCContextItemFormatter, TimeFormatter
 from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
+from messenger.m_constants import PROTO_TYPE
+from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from skeletons.gui.game_control import IRefSystemController, IAwardController, IRankedBattlesController, IBootcampController
 from skeletons.gui.goodies import IGoodiesCache
@@ -68,7 +73,8 @@ class AwardController(IAwardController, IGlobalListener):
          PersonalMissionOperationUnlockedHandler(self),
          GoldFishHandler(self),
          TelecomHandler(self),
-         RankedQuestsHandler(self)]
+         RankedQuestsHandler(self),
+         GiftHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -863,3 +869,39 @@ class RankedQuestsHandler(MultiTypeServiceChannelHandler):
     def __showBoobyAwardWindow(self, quest):
         quests_events.showRankedBoobyAward(quest)
         self.__unlock()
+
+
+class GiftHandler(AwardHandler):
+    eventsCache = dependency.descriptor(IEventsCache)
+
+    def __init__(self, awardCtrl):
+        super(GiftHandler, self).__init__(awardCtrl)
+        self.__shownMessageID = None
+        return
+
+    def start(self):
+        self.eventsCache.onProgressUpdated += self.__onTokensChanged
+        self.handle()
+
+    def stop(self):
+        self.__shownMessageID = None
+        self.eventsCache.onProgressUpdated -= self.__onTokensChanged
+        return
+
+    @proto_getter(PROTO_TYPE.BW)
+    def proto(self):
+        return None
+
+    def _needToShowAward(self, ctx):
+        isEnabled = self.eventsCache.questsProgress.getTokenCount(GIFT_TANKMAN_TOKEN_NAME) > 0
+        if not isEnabled and self.__shownMessageID is not None:
+            g_playerEvents.onGiftClaimed(self.__shownMessageID)
+            self.__shownMessageID = None
+        return isEnabled and self.__shownMessageID is None
+
+    def _showAward(self, ctx):
+        showGiftAward()
+        self.__shownMessageID = self.proto.serviceChannel.pushClientSysMessage(i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_GIFT_TEXT), SM_TYPE.OpenGift, messageData={'header': i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_GIFT_HEADER)})
+
+    def __onTokensChanged(self, _):
+        self.handle()

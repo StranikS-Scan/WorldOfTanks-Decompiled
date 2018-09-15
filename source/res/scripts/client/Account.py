@@ -933,6 +933,15 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdIntArr(AccountCommands.CMD_GET_POTAPOV_QUEST_REWARD, arr, proxy)
         return
 
+    def getTankmanGift(self, vehicleTypeCD, roleID=1, callback=None):
+        arr = [vehicleTypeCD, roleID]
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+        else:
+            proxy = None
+        self._doCmdIntArr(AccountCommands.CMD_GET_TANKMAN_GIFT, arr, proxy)
+        return
+
     def activateGoodie(self, goodieID, callback):
         self._doCmdIntArr(AccountCommands.CMD_ACTIVATE_GOODIE, goodieID, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 

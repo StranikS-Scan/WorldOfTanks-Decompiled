@@ -750,6 +750,9 @@ class MESSENGER(object):
     CHAT_TOXICMESSAGES_BLOCKEDMESSAGE = '#messenger:chat/toxicMessages/blockedMessage'
     BATTLE_TOOLTIPS_TOXICMESSAGE = '#messenger:battle/toolTips/toxicMessage'
     PERSONALMISSIONS_COMPLETIONTOKENGAIN = '#messenger:personalMissions/completionTokenGain'
+    SERVICECHANNELMESSAGES_GIFT_HEADER = '#messenger:serviceChannelMessages/gift/header'
+    SERVICECHANNELMESSAGES_GIFT_TEXT = '#messenger:serviceChannelMessages/gift/text'
+    SERVICECHANNELMESSAGES_GIFT_BUTTON = '#messenger:serviceChannelMessages/gift/button'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,
      CLIENT_ERROR_SHARED_NOT_CONNECTED,

@@ -1069,6 +1069,9 @@ class VehicleDescriptor(object):
     def shot(self):
         return self.gun.shots[self.activeGunShotIndex]
 
+    def changeShotIndex(self, turretIdx, shotIdx):
+        self.turrets[turretIdx].shotIndex = shotIdx
+
 
 class CompositeVehicleDescriptor(object):
     defaultVehicleDescr = property(lambda self: self.__vehicleDescr)
@@ -1118,6 +1121,10 @@ class CompositeVehicleDescriptor(object):
     def __installGun(self, gunID, turretPositionIdx):
         self.__siegeDescr.__installGun(gunID, turretPositionIdx)
         return self.__vehicleDescr.__installGun(gunID, turretPositionIdx)
+
+    def changeShotIndex(self, turretIdx, shotIdx):
+        self.__siegeDescr.turrets[turretIdx].shotIndex = shotIdx
+        self.__vehicleDescr.turrets[turretIdx].shotIndex = shotIdx
 
 
 def VehicleDescr(compactDescr=None, typeID=None, typeName=None):

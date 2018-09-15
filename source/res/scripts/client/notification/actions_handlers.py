@@ -56,6 +56,21 @@ class _OpenEventBoardsHandler(_ActionHandler):
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MISSIONS, ctx={'tab': QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+class _OpenGiftHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.GIFT
+
+    @classmethod
+    def getActions(self):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(_OpenGiftHandler, self).handleAction(model, entityID, action)
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.GIFT_RECRUIT_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+
+
 class _ShowArenaResultHandler(_ActionHandler):
 
     @proto_getter(PROTO_TYPE.BW)
@@ -511,7 +526,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _ShowClanSettingsFromInvitesHandler,
  _AcceptClanInviteHandler,
  _DeclineClanInviteHandler,
- _OpenEventBoardsHandler)
+ _OpenEventBoardsHandler,
+ _OpenGiftHandler)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

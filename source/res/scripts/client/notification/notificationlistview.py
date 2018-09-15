@@ -8,7 +8,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from messenger.formatters import TimeFormatter
 from notification import NotificationMVC
 from notification.BaseNotificationView import BaseNotificationView
-from notification.settings import LIST_SCROLL_STEP_FACTOR, NOTIFICATION_STATE, NOTIFICATION_GROUP
+from notification.settings import LIST_SCROLL_STEP_FACTOR, NOTIFICATION_STATE, NOTIFICATION_GROUP, NOTIFICATION_TYPE
 from gui.shared.formatters import icons
 from helpers.i18n import makeString as _ms
 
@@ -141,6 +141,8 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
             NotificationMVC.g_instance.getAlertController().showAlertMessage(notification)
         if notification.getGroup() == self.__currentGroup:
             self.as_appendMessageS(self.__getListVO(notification))
+            if notification.getType() == NOTIFICATION_TYPE.GIFT:
+                self._model.incrementNotifiedMessagesCount(*notification.getCounterInfo())
         elif notification.getGroup() == NOTIFICATION_GROUP.INVITE:
             self.__currentGroup = NOTIFICATION_GROUP.INVITE
             self.__setNotificationList()

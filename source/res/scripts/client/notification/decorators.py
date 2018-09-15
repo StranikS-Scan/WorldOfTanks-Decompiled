@@ -187,6 +187,15 @@ class MessageDecorator(_NotificationDecorator):
          'notify': self.isNotify()}
 
 
+class GiftDecorator(MessageDecorator):
+
+    def getGroup(self):
+        return NOTIFICATION_GROUP.OFFER
+
+    def getType(self):
+        return NOTIFICATION_TYPE.GIFT
+
+
 class PrbInviteDecorator(_NotificationDecorator):
     __slots__ = ('_createdAt',)
 

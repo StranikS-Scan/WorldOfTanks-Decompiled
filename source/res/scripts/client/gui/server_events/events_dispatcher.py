@@ -135,6 +135,10 @@ def showTankwomanAward(questID, tankmanData):
      'iGroupID': tankmanData.iGroupID}), EVENT_BUS_SCOPE.LOBBY)
 
 
+def showGiftAward():
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.GIFT_RECRUIT_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+
+
 def showMissionAward(quest, ctx, bonus_data):
     qID = quest.getID()
     if qID.startswith(HALLOWEEN_REWARD_QUEST_PREFIX):

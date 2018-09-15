@@ -159,6 +159,29 @@ class PersonalMissionsGetTankwomanReward(_PersonalMissionsGetReward):
         pass
 
 
+class GiftGetReward(Processor):
+
+    def __init__(self, vehicleTypeCD, role):
+        vehicle = self.itemsCache.items.getItemByCD(vehicleTypeCD)
+        plugs = [plugins.VehicleValidator(vehicle, setAll=False), plugins.VehicleCrewLockedValidator(vehicle)]
+        super(GiftGetReward, self).__init__(tuple(plugs))
+        self.__vehicleTypeCD = vehicleTypeCD
+        self.__role = role
+
+    def _getMessagePrefix(self):
+        pass
+
+    def _successHandler(self, code, ctx=None):
+        return makeI18nSuccess('%s/success' % self._getMessagePrefix())
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('%s/server_error/%s' % (self._getMessagePrefix(), errStr), defaultSysMsgKey='%s/server_error' % self._getMessagePrefix())
+
+    def _request(self, callback):
+        LOG_DEBUG('Make server request to get gifted reward', self.__vehicleTypeCD, self.__role)
+        BigWorld.player().getTankmanGift(self.__vehicleTypeCD, tankmen.SKILL_INDICES[self.__role], lambda code, errStr: self._response(code, callback, errStr=errStr))
+
+
 class PersonalMissionsGetRegularReward(_PersonalMissionsGetReward):
 
     def __init__(self, personalMission):

@@ -13,8 +13,8 @@ class NYBoxPopoverMeta(SmartPopOverView):
     def toEarn(self):
         self._printOverrideError('toEarn')
 
-    def as_setDataS(self, data):
+    def as_setDataS(self, data, isShowAd):
         """
         :param data: Represented by Vector.<NYPopoverBoxVo> (AS)
         """
-        return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
+        return self.flashObject.as_setData(data, isShowAd) if self._isDAAPIInited() else None

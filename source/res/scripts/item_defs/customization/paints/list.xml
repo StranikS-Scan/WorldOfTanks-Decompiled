@@ -177,6 +177,39 @@
     </paint>
   </itemGroup>
   <itemGroup>
+    <name>	WG Fest Paint	</name>
+    <priceGroup>	custom paint notInShop	</priceGroup>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
+    <vehicleFilter>
+      <include>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+      </include>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+    <paint>
+      <id>	276	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
+      <color>	17 17 34 255	</color>
+      <gloss>	0.525	</gloss>
+      <metallic>	0.30	</metallic>
+      <userString>	#vehicle_customization:repaint/custom_color_20	</userString>
+      <season>	ALL	</season>
+      <historical>	false	</historical>
+    </paint>
+  </itemGroup>
+  <itemGroup>
     <name>	primers	</name>
     <priceGroup>	historical paint	</priceGroup>
     <userString>	#vehicle_customization:repaint/color_group_03	</userString>

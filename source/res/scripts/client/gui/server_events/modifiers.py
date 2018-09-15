@@ -1121,7 +1121,7 @@ class BoxBuyingModifier(ActionModifier):
     """A modifier which does absolutely nothing, just open shop url where user cal buy NY boxes."""
 
     def __init__(self, name, params):
-        super(BoxBuyingModifier, self).__init__('boxbuying', params, modType=ACTION_MODIFIER_TYPE.DISCOUNT, section=ACTION_SECTION_TYPE.ALL, itemType=GUI_ITEM_TYPE.ACHIEVEMENT)
+        super(BoxBuyingModifier, self).__init__(constants.ASIA_ACTION_ID_BOX_BUYING, params, modType=ACTION_MODIFIER_TYPE.DISCOUNT, section=ACTION_SECTION_TYPE.ALL, itemType=GUI_ITEM_TYPE.ACHIEVEMENT)
 
 
 _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),

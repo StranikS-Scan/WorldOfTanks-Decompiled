@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ny/ny_mission_reward_window.py
+import constants
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.ny import ny_common
 from gui.Scaleform.daapi.view.meta.NYMissionRewardWindowMeta import NYMissionRewardWindowMeta
@@ -69,7 +70,10 @@ class NYMissionRewardWindow(NYMissionRewardWindowMeta):
             windowTitle = NY.MISSIONREWARDWINDOW_TITLE_SETTING
             header = NY.MISSIONREWARDWINDOW_HEADER_SETTING
             boxName = _ms(NY.missionrewardwindow_boxname(self.__setting))
-            description = _ms(NY.MISSIONREWARDWINDOW_DESCRIPTION_SETTING, boxName=boxName)
+            if constants.IS_SINGAPORE:
+                description = _ms(NY.MISSIONREWARDWINDOW_ASIA_DESCRIPTION_SETTING, boxName=boxName)
+            else:
+                description = _ms(NY.MISSIONREWARDWINDOW_DESCRIPTION_SETTING, boxName=boxName)
         else:
             windowTitle = NY.MISSIONREWARDWINDOW_TITLE_ANY
             header = NY.MISSIONREWARDWINDOW_HEADER_ANY

@@ -148,7 +148,7 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
         listeners = ((FALLOUT_ALIASES.FALLOUT_BATTLE_SELECTOR_WINDOW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.ADVENT_CALENDAR, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.ADVENT_CALENDAR, self.loadOrShowView),
          (VIEW_ALIAS.AWARD_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_QUEUE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_RESULTS, self.loadViewByCtxEvent),
@@ -185,6 +185,14 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.CRYSTALS_PROMO_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BADGES_PAGE, self.loadViewByCtxEvent))
         super(LobbyPackageBusinessHandler, self).__init__(listeners, APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
+
+    def loadOrShowView(self, event):
+        view = self.findViewByName(ViewTypes.WINDOW, event.name)
+        if view is not None:
+            self.bringViewToFront(event.name)
+        else:
+            self.loadViewByCtxEvent(event)
+        return
 
 
 class LobbyDialogsHandler(PackageBusinessHandler):

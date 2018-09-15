@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ny/ny_box_popover.py
+import constants
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.ny.ny_common import NO_SETTING_BOX_ID
 from gui.Scaleform.daapi.view.meta.NYBoxPopoverMeta import NYBoxPopoverMeta
@@ -66,5 +67,6 @@ class NYBoxPopover(NYBoxPopoverMeta):
                  'count': count})
             lastSetting = setting_id
 
-        self.as_setDataS(boxes)
+        isShowAd = not constants.IS_SINGAPORE
+        self.as_setDataS(boxes, isShowAd)
         return

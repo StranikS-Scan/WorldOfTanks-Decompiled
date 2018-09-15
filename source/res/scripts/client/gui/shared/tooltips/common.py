@@ -1391,7 +1391,7 @@ class NyBoxTooltipData(BlocksTooltipData):
     def __init__(self, context):
         super(NyBoxTooltipData, self).__init__(context, TOOLTIP_TYPE.NY)
         self.item = None
-        self._setContentMargin(top=20, left=19, bottom=20, right=10)
+        self._setContentMargin(top=20, left=19, bottom=10, right=10)
         self._setMargins(afterBlock=10, afterSeparator=0)
         self._setWidth(400)
         return
@@ -1399,11 +1399,14 @@ class NyBoxTooltipData(BlocksTooltipData):
     def _packBlocks(self, *args, **kwargs):
         self.item = self.context.buildItem(*args, **kwargs)
         items = super(NyBoxTooltipData, self)._packBlocks(*args, **kwargs)
+        lastBottomPadding = 0
         content = []
         content.append(formatters.packTextBlockData(text_styles.highTitle(NY.TOOLTIP_BOX_HEADER), padding=formatters.packPadding(bottom=-40)))
         content.append(formatters.packImageBlockData(img=RES_ICONS.MAPS_ICONS_NY_BOX_NY_BOX_CLOSED, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
-        content.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.middleTitle(NY.TOOLTIP_BOX_BUY_HEADER)), formatters.packTextBlockData(text_styles.main(NY.TOOLTIP_BOX_BUY_BODY))], padding=formatters.packPadding(top=-10)))
-        content.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.middleTitle(NY.TOOLTIP_BOX_WIN_HEADER)), formatters.packTextBlockData(text_styles.main(NY.TOOLTIP_BOX_WIN_BODY))], padding=formatters.packPadding(top=20, bottom=10)))
+        if not constants.IS_SINGAPORE:
+            content.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.middleTitle(NY.TOOLTIP_BOX_BUY_HEADER)), formatters.packTextBlockData(text_styles.main(NY.TOOLTIP_BOX_BUY_BODY))], padding=formatters.packPadding(top=-10)))
+            lastBottomPadding = 10
+        content.append(formatters.packBuildUpBlockData([formatters.packTextBlockData(text_styles.middleTitle(NY.TOOLTIP_BOX_WIN_HEADER)), formatters.packTextBlockData(text_styles.main(NY.TOOLTIP_BOX_WIN_BODY))], padding=formatters.packPadding(top=20, bottom=lastBottomPadding)))
         items.append(formatters.packBuildUpBlockData(content))
         return items
 

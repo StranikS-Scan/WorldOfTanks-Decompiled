@@ -233,10 +233,19 @@ class ActionInfo(EventInfoModel):
     def _getFullDescription(self, stepName, discount=None, forHeroCard=False):
         modifiedStepName = self.__modifyName(stepName)
         locKey = None
+        isSpecifiedAsianAction = constants.IS_SINGAPORE and modifiedStepName == constants.ASIA_ACTION_ID_BOX_BUYING
         if forHeroCard:
-            locKey = QUESTS.getActionDescription('hero/full/{}'.format(modifiedStepName))
+            if isSpecifiedAsianAction:
+                formatter = 'asia/hero/full/{}'.format(modifiedStepName)
+            else:
+                formatter = 'hero/full/{}'.format(modifiedStepName)
+            locKey = QUESTS.getActionDescription(formatter)
         if locKey is None:
-            locKey = QUESTS.getActionDescription('full/{}'.format(modifiedStepName))
+            if isSpecifiedAsianAction:
+                formatter = 'asia/full/{}'.format(modifiedStepName)
+            else:
+                formatter = 'full/{}'.format(modifiedStepName)
+            locKey = QUESTS.getActionDescription(formatter)
         return i18n.makeString(locKey, discount=discount)
 
     def _getShortDescription(self, stepName, **kwargs):

@@ -32,6 +32,10 @@ class CalendarInvokeOrigin(CONST_CONTAINER):
     SPLASH = 'first'
 
 
+def _genWindowName(browserID):
+    return 'calendarBrowserWindow_{}'.format(browserID)
+
+
 class CalendarController(ICalendarController):
     """Advent calendar controller.
     
@@ -46,6 +50,7 @@ class CalendarController(ICalendarController):
     def __init__(self):
         super(CalendarController, self).__init__()
         self.__browserID = None
+        self.__browserLoaded = False
         self.__showOnSplash = False
         self.__urlMacros = URLMarcos()
         return
@@ -53,11 +58,13 @@ class CalendarController(ICalendarController):
     def init(self):
         self.eventsCache.onSyncCompleted += self.__onSyncCompleted
         self.browserCtrl.onBrowserDeleted += self.__onBrowserDeleted
+        g_eventBus.addListener(events.BrowserEvent.BROWSER_CREATED, self.__onBrowserCreated)
 
     def fini(self):
         self.__urlMacros.clear()
         self.__urlMacros = None
         self.hideCalendar()
+        g_eventBus.removeListener(events.BrowserEvent.BROWSER_CREATED, self.__onBrowserCreated)
         self.browserCtrl.onBrowserDeleted -= self.__onBrowserDeleted
         self.eventsCache.onSyncCompleted -= self.__onSyncCompleted
         super(CalendarController, self).fini()
@@ -87,20 +94,25 @@ class CalendarController(ICalendarController):
 
     def showCalendar(self, invokedFrom):
         """Show the advent calendar in browser window."""
-        self.hideCalendar()
-        try:
-            while self.__browserID is None:
-                browserID = next(_browserIDGen)
-                if self.browserCtrl.getBrowser(browserID) is None:
-                    self.__browserID = browserID
-
-        except StopIteration:
-            _logger.error('Could not allocate a browser ID for calendar')
+        if self.__browserID is not None:
+            if self.__browserLoaded:
+                _logger.debug('Calendar already opened, bringing window to focus (browserID=%d)' % self.__browserID)
+                g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.ADVENT_CALENDAR, name=_genWindowName(self.__browserID)), scope=EVENT_BUS_SCOPE.LOBBY)
             return
+        else:
+            try:
+                while self.__browserID is None:
+                    browserID = next(_browserIDGen)
+                    if self.browserCtrl.getBrowser(browserID) is None:
+                        self.__browserID = browserID
 
-        self.__openBrowser(self.__browserID, _BROWSER_SIZE, invokedFrom)
-        _logger.debug('Calendar opened in web browser (browserID=%d)' % self.__browserID)
-        return
+            except StopIteration:
+                _logger.error('Could not allocate a browser ID for calendar')
+                return
+
+            self.__openBrowser(self.__browserID, _BROWSER_SIZE, invokedFrom)
+            _logger.debug('Calendar opening scheduled (browserID=%d)' % self.__browserID)
+            return
 
     def hideCalendar(self):
         if self.__browserID is None:
@@ -118,9 +130,18 @@ class CalendarController(ICalendarController):
 
     def __onBrowserDeleted(self, browserID):
         if browserID == self.__browserID:
-            _logger.debug('Calendar web browser destroyed (browserID=%d)' % browserID)
+            _logger.debug('Calendar WebBrowser instance destroyed (browserID=%d)' % browserID)
             self.__browserID = None
+            self.__browserLoaded = False
         return
+
+    def __onBrowserCreated(self, event):
+        browserID = event.ctx.get('browserID')
+        if browserID == self.__browserID:
+            _logger.debug('Calendar WebBrowser instance created (browserID=%d)' % browserID)
+            browser = self.browserCtrl.getBrowser(browserID)
+            browser.useSpecialKeys = False
+            self.__browserLoaded = True
 
     def __getShowTimestamp(self):
         tstampStr = AccountSettings.getSettings(LAST_CALENDAR_SHOW_TIMESTAMP)
@@ -154,8 +175,7 @@ class CalendarController(ICalendarController):
              'showCloseBtn': False,
              'showWaiting': True,
              'showActionBtn': False}
-            browser = self.browserCtrl.getBrowser(browserID)
-            browser.useSpecialKeys = False
-            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.ADVENT_CALENDAR, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.ADVENT_CALENDAR, name=_genWindowName(browserID), ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+            _logger.debug('Calendar browser window shown (browserID=%d)' % browserID)
 
         yield self.browserCtrl.load(url=url, browserID=browserID, browserSize=browserSize, isAsync=False, useBrowserWindow=False, showBrowserCallback=showBrowserWindow, showCreateWaiting=False)

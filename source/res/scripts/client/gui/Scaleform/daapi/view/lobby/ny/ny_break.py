@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ny/ny_break.py
 import BigWorld
+import constants
 from adisp import process
 from gui import DialogsInterface
 from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
@@ -36,8 +37,9 @@ class NY_Break(NYHelperView, NYScreenBreakMeta):
 
     @staticmethod
     def _getDummy():
+        descrKey = NY.BREAKSCREEN_NOTOYS_ASIA_LABEL if constants.IS_SINGAPORE else NY.BREAKSCREEN_NOTOYS_LABEL
         return {'iconSource': RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON,
-         'htmlText': text_styles.main(_ms(NY.BREAKSCREEN_NOTOYS_LABEL)),
+         'htmlText': text_styles.main(_ms(descrKey)),
          'alignCenter': False,
          'btnVisible': False,
          'btnLabel': '',

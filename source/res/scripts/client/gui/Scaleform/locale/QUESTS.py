@@ -1173,6 +1173,8 @@ class QUESTS(object):
     ACTION_AUTO_BOXBUYING = '#quests:action/auto/boxbuying'
     ACTION_FULL_BOXBUYING = '#quests:action/full/boxbuying'
     ACTION_HERO_FULL_BOXBUYING = '#quests:action/hero/full/boxbuying'
+    ACTION_ASIA_FULL_BOXBUYING = '#quests:action/asia/full/boxbuying'
+    ACTION_ASIA_HERO_FULL_BOXBUYING = '#quests:action/asia/hero/full/boxbuying'
     ACTION_BUTTON_BOXBUYING = '#quests:action/button/boxbuying'
     ACTION_SHORT_BOXBUYING = '#quests:action/short/boxbuying'
     ACTION_AUTO_EXCHANGERATE = '#quests:action/auto/exchangeRate'
@@ -1517,6 +1519,8 @@ class QUESTS(object):
      ACTION_AUTO_BOXBUYING,
      ACTION_FULL_BOXBUYING,
      ACTION_HERO_FULL_BOXBUYING,
+     ACTION_ASIA_FULL_BOXBUYING,
+     ACTION_ASIA_HERO_FULL_BOXBUYING,
      ACTION_BUTTON_BOXBUYING,
      ACTION_SHORT_BOXBUYING,
      ACTION_AUTO_EXCHANGERATE,

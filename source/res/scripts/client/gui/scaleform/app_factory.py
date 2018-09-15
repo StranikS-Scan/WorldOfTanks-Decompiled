@@ -89,10 +89,10 @@ class AS3_AppFactory(IAppFactory):
         return
 
     def destroyLobby(self):
-        LOG_DEBUG('Destroying app', _SPACE.SF_LOBBY)
         if _SPACE.SF_LOBBY in self.__apps:
             lobby = self.__apps[_SPACE.SF_LOBBY]
             if lobby:
+                LOG_DEBUG('Destroying app', _SPACE.SF_LOBBY)
                 lobby.close()
                 self.__importer.unload(self.__packages[_SPACE.SF_LOBBY])
                 self.__apps[_SPACE.SF_LOBBY] = None

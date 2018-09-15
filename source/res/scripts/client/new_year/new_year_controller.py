@@ -102,6 +102,11 @@ class _NYContainersStorage(_NYBaseStorage):
         self._openingItemId = None
         return
 
+    def clear(self):
+        super(_NYContainersStorage, self).clear()
+        self._openingItemId = None
+        return
+
     def hasItem(self, itemId):
         return None
 

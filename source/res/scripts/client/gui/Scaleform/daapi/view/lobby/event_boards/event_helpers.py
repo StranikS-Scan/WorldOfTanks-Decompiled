@@ -313,20 +313,16 @@ class _TopLeaderboard(object):
 
     def __getMyPosititon(self):
         event = self._event
-        top = self._top
-        finished = event.isFinished()
-        if finished and top.getBattlesCount() > 0:
+        if event.isFinished() and self.__notFull:
             return text_styles.neutral(_ms(EVENT_BOARDS.TOP_PARTICIPATION_NOTPARTICIPATED))
         if self.__notFull:
             return text_styles.neutral(_ms(EVENT_BOARDS.TOP_PARTICIPATION_NOTFULL))
-        return text_styles.neutral(_ms(EVENT_BOARDS.TOP_PARTICIPATION_NOTINTOP)) if self.__notInTop else '{} {}'.format(_ms(EVENT_BOARDS.TOP_POSITION), self._top.getMyPosition())
+        return text_styles.neutral(_ms(EVENT_BOARDS.TOP_PARTICIPATION_NOTINTOP)) if self.__notInTop else text_styles.main('{} {}'.format(_ms(EVENT_BOARDS.TOP_POSITION), self._top.getMyPosition()))
 
     def __getStatusValue(self):
         event = self._event
-        top = self._top
-        finished = event.isFinished()
-        if self.__notFull and not finished:
-            count = text_styles.stats(str(event.getCardinality() - top.getBattlesCount()))
+        if self.__notFull and not event.isFinished():
+            count = text_styles.stats(str(event.getCardinality() - self._top.getBattlesCount()))
             text = text_styles.standard(_ms(EVENT_BOARDS.TOP_REASON_NOTFULL))
             return '{} {}'.format(text, count)
         else:

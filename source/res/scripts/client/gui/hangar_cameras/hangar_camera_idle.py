@@ -6,16 +6,61 @@ import Math
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
 from AvatarInputHandler import mathUtils
 from account_helpers.settings_core.settings_constants import GAME
-from skeletons.account_helpers.settings_core import ISettingsCore
-from helpers import dependency
 import gui.hangar_cam_settings as settings
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
+from .hangar_camera_settings_listener import HangarCameraSettingsListener
 
-class HangarCameraIdle(CallbackDelayer, TimeDeltaMeter):
+class HangarCameraIdleController(HangarCameraSettingsListener):
+
+    def __init__(self):
+        super(HangarCameraIdleController, self).__init__()
+        self.registerSettingHandler(GAME.HANGAR_CAM_PERIOD, self._onHangarCamPeriodChanged)
+        self.__camPeriod = 0
+        self.__isForcedDisabled = False
+
+    def destroy(self):
+        self.__camPeriod = None
+        self.__isForcedDisabled = None
+        self.unregisterSettingsHandler(GAME.HANGAR_CAM_PERIOD)
+        super(HangarCameraIdleController, self).destroy()
+        return
+
+    def _onSpaceCreated(self):
+        super(HangarCameraIdleController, self)._onSpaceCreated()
+        g_eventBus.addListener(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, self.__onCameraForceDisable, EVENT_BUS_SCOPE.LOBBY)
+        self.__camPeriod = self.__getHangarCamPeriodSetting()
+        self._setStartDelay(self.__camPeriod)
+
+    def _onSpaceDestroy(self, inited):
+        super(HangarCameraIdleController, self)._onSpaceDestroy(inited)
+        self.__isForcedDisabled = False
+        if inited:
+            g_eventBus.removeListener(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, self.__onCameraForceDisable, EVENT_BUS_SCOPE.LOBBY)
+
+    def _setStartDelay(self, delay):
+        pass
+
+    def __getHangarCamPeriodSetting(self):
+        return settings.convertSettingToFeatures(self.settingsCore.getSetting(GAME.HANGAR_CAM_PERIOD))
+
+    def _onHangarCamPeriodChanged(self):
+        self.__camPeriod = self.__getHangarCamPeriodSetting()
+        if self.__isForcedDisabled:
+            return
+        self._setStartDelay(self.__camPeriod)
+
+    def __onCameraForceDisable(self, event):
+        self.__isForcedDisabled = event.ctx['isDisable']
+        if self.__isForcedDisabled:
+            self._setStartDelay(0.0)
+        else:
+            self._setStartDelay(self.__camPeriod)
+
+
+class HangarCameraIdle(HangarCameraIdleController, CallbackDelayer, TimeDeltaMeter):
     TIME_OUT = 0.8
     MAX_DT = 0.05
-    settingsCore = dependency.descriptor(ISettingsCore)
 
     class IdleParams(object):
 
@@ -28,6 +73,7 @@ class HangarCameraIdle(CallbackDelayer, TimeDeltaMeter):
             self.speed = 0.0
 
     def __init__(self, camera):
+        HangarCameraIdleController.__init__(self)
         CallbackDelayer.__init__(self)
         TimeDeltaMeter.__init__(self)
         self.__camera = camera
@@ -45,14 +91,8 @@ class HangarCameraIdle(CallbackDelayer, TimeDeltaMeter):
         self.__distParams.maxValue = cfg['cam_idle_dist_constr'][1]
         self.__distParams.period = cfg['cam_idle_dist_period']
         self.__yawPeriod = cfg['cam_idle_yaw_period']
-        from gui.shared.utils.HangarSpace import g_hangarSpace
-        g_hangarSpace.onSpaceCreate += self.__onSpaceCreated
-        g_hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
 
     def destroy(self):
-        from gui.shared.utils.HangarSpace import g_hangarSpace
-        g_hangarSpace.onSpaceCreate -= self.__onSpaceCreated
-        g_hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
         self.stopCallback(self.__updateIdleMovement)
         self.stopCallback(self.__updateEasingOut)
         BigWorld.removeAllIdleCallbacks()
@@ -60,19 +100,11 @@ class HangarCameraIdle(CallbackDelayer, TimeDeltaMeter):
         self.__distParams = None
         self.__camera = None
         CallbackDelayer.destroy(self)
+        HangarCameraIdleController.destroy(self)
         return
 
-    def __onSpaceCreated(self):
-        self.setStartDelay(settings.convertSettingToFeatures(self.settingsCore.getSetting(GAME.HANGAR_CAM_PERIOD)))
-        self.settingsCore.onSettingsChanged += self.__onSettingsChanged
-
-    def __onSpaceDestroy(self, inited):
-        if inited:
-            self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
-
-    def __onSettingsChanged(self, diff):
-        if GAME.HANGAR_CAM_PERIOD in diff:
-            self.setStartDelay(settings.convertSettingToFeatures(self.settingsCore.getSetting(GAME.HANGAR_CAM_PERIOD)))
+    def _setStartDelay(self, delay):
+        self.setStartDelay(delay)
 
     def setStartDelay(self, delay):
         BigWorld.removeAllIdleCallbacks()

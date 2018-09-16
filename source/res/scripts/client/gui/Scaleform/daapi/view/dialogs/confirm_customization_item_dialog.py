@@ -70,6 +70,7 @@ class ConfirmCustomizationItemDialog(ConfirmItemWindowMeta):
              'price': getMoneyVO(actualPrices),
              'actionPriceData': action,
              'name': item.userName,
+             'description': item.userType,
              'currency': currency,
              'defaultValue': self.meta.getDefaultValue(item),
              'maxAvailableCount': self.meta.getMaxAvailableItemsCount(item),

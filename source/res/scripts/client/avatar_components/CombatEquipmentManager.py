@@ -18,7 +18,7 @@ import BattleReplay
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 _ENABLE_DEBUG_DRAW = False
-_ENABLE_DEBUG_LOG = True
+_ENABLE_DEBUG_LOG = False
 
 class _DebugFrontLine(CallbackDelayer):
 

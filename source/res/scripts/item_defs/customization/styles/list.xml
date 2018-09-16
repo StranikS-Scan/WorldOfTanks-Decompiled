@@ -1,6 +1,7 @@
 <list.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <priceGroup>	rented style	</priceGroup>
     <vehicleFilter>
       <include>
@@ -60,6 +61,7 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <priceGroup>	rented style	</priceGroup>
     <vehicleFilter>
       <include>
@@ -116,6 +118,7 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <priceGroup>	rented style	</priceGroup>
     <vehicleFilter>
       <include>
@@ -172,6 +175,7 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <priceGroup>	rented style	</priceGroup>
     <vehicleFilter>
       <include>
@@ -231,6 +235,7 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <priceGroup>	rented style	</priceGroup>
     <vehicleFilter>
       <include>
@@ -287,6 +292,7 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <priceGroup>	rented style	</priceGroup>
     <vehicleFilter>
       <include>
@@ -343,6 +349,7 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <priceGroup>	rented style	</priceGroup>
     <vehicleFilter>
       <include>
@@ -399,6 +406,7 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <priceGroup>	rented style	</priceGroup>
     <vehicleFilter>
       <include>
@@ -458,6 +466,7 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <priceGroup>	rented style	</priceGroup>
     <vehicleFilter>
       <include>
@@ -517,6 +526,7 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/rented_styles	</userString>
     <priceGroup>	rented style	</priceGroup>
     <vehicleFilter>
       <include>
@@ -573,15 +583,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	china	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	china	</nations>
       </include>
       <exclude>
@@ -716,15 +722,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	china	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	china	</nations>
       </include>
       <exclude>
@@ -773,15 +775,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	czech	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	czech	</nations>
       </include>
     </vehicleFilter>
@@ -913,15 +911,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	czech	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	czech	</nations>
       </include>
     </vehicleFilter>
@@ -967,15 +961,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	france	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	france	</nations>
       </include>
     </vehicleFilter>
@@ -1107,15 +1097,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	france	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	france	</nations>
       </include>
     </vehicleFilter>
@@ -1161,6 +1147,7 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	bdr_g1b_w style	</priceGroup>
     <vehicleFilter>
       <include>
@@ -1201,15 +1188,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	germany	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	germany	</nations>
       </include>
       <exclude>
@@ -1344,15 +1327,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	germany	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	germany	</nations>
       </include>
       <exclude>
@@ -1401,15 +1380,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	japan	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	japan	</nations>
       </include>
     </vehicleFilter>
@@ -1541,15 +1516,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	japan	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	japan	</nations>
       </include>
     </vehicleFilter>
@@ -1595,15 +1566,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	sweden	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	sweden	</nations>
       </include>
     </vehicleFilter>
@@ -1735,15 +1702,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	sweden	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	sweden	</nations>
       </include>
     </vehicleFilter>
@@ -1789,15 +1752,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	uk	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	uk	</nations>
       </include>
     </vehicleFilter>
@@ -1929,15 +1888,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	uk	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	uk	</nations>
       </include>
     </vehicleFilter>
@@ -1983,15 +1938,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	usa	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	usa	</nations>
       </include>
       <exclude>
@@ -2126,15 +2077,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	usa	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	usa	</nations>
       </include>
       <exclude>
@@ -2183,15 +2130,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	ussr	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	ussr	</nations>
       </include>
       <exclude>
@@ -2326,15 +2269,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	ussr	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	ussr	</nations>
       </include>
       <exclude>
@@ -2383,6 +2322,7 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	kv2_w style	</priceGroup>
     <vehicleFilter>
       <include>
@@ -2423,15 +2363,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	italy	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	italy	</nations>
       </include>
     </vehicleFilter>
@@ -2563,15 +2499,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	italy	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	italy	</nations>
       </include>
     </vehicleFilter>
@@ -2617,15 +2549,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	italy marathon style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	italy	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	italy	</nations>
       </include>
     </vehicleFilter>
@@ -2665,15 +2593,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	NY style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	china	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	china	</nations>
       </include>
       <exclude>
@@ -2708,15 +2632,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	NY style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	ussr	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	ussr	</nations>
       </include>
       <exclude>
@@ -2751,15 +2671,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	NY style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	germany czech france poland	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	germany czech france poland	</nations>
       </include>
       <exclude>
@@ -2794,15 +2710,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	NY style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	usa uk sweden japan	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	usa uk sweden japan	</nations>
       </include>
       <exclude>
@@ -2837,14 +2749,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	WG Fest style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -2892,6 +2801,7 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	Rostelecom style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -2932,6 +2842,7 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	special style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
@@ -3063,7 +2974,8 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <priceGroup>	special style notInShop	</priceGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <tags>	premium	</tags>
@@ -3071,6 +2983,58 @@
       </include>
       <include>
         <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	139	</id>
+      <userString>	#vehicle_customization:special_style/global_map	</userString>
+      <texture>	gui/maps/vehicles/styles/global_map_01.png	</texture>
+      <season>	ALL	</season>
+      <historical>	false	</historical>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <paints>
+            <item>
+              <id>	287	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	557	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	545	</id>
+              <appliedTo>	48	</appliedTo>
+            </item>
+            <item>
+              <id>	545	</id>
+              <appliedTo>	768	</appliedTo>
+            </item>
+            <item>
+              <id>	545	</id>
+              <appliedTo>	12288	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <priceGroup>	special style notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	8 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -3124,15 +3088,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	special style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	ussr poland czech china	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	ussr poland czech china	</nations>
       </include>
       <exclude>
@@ -3167,15 +3127,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	special style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	france uk usa sweden	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	france uk usa sweden	</nations>
       </include>
       <exclude>
@@ -3210,15 +3166,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	special style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	germany italy japan	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	germany italy japan	</nations>
       </include>
       <exclude>
@@ -3257,14 +3209,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	23feb style	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -3359,6 +3308,7 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <historical>	true	</historical>
     <season>	ALL	</season>
     <priceGroup>	misc notInShop	</priceGroup>

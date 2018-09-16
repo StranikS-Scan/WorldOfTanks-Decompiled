@@ -10,6 +10,7 @@ from items import getTypeOfCompactDescr
 from skeletons.gui.game_control import IQuestsController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from gui.server_events.events_helpers import isLinkedSet
 _MAX_LVL_FOR_TUTORIAL = 3
 
 class _QuestCache(object):
@@ -100,7 +101,9 @@ class _QuestCache(object):
             return False
         if not event.getFinishTimeLeft():
             return False
-        return not event.isCompleted() and event.isAvailable()[0] if event.getType() == EVENT_TYPE.MOTIVE_QUEST else True
+        if event.getType() == EVENT_TYPE.MOTIVE_QUEST:
+            return not event.isCompleted() and event.isAvailable()[0]
+        return False if isLinkedSet(event.getGroupID()) else True
 
 
 class QuestsController(IQuestsController):

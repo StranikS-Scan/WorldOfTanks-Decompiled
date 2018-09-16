@@ -67,11 +67,8 @@ class BaseVoiceChatManager(VoiceChatManagerMeta):
         self.as_onPlayerSpeakS(accountDBID, isSpeak, accountDBID == getPlayerDatabaseID())
 
     def __onViewAddedToContainer(self, _, pyView):
-        settings = pyView.settings
-        viewType = settings.type
-        if viewType == ViewTypes.DEFAULT:
-            viewAlias = settings.alias
-            self._onViewAdded(viewAlias)
+        if pyView.viewType == ViewTypes.DEFAULT:
+            self._onViewAdded(pyView.alias)
 
 
 class LobbyVoiceChatManager(BaseVoiceChatManager):

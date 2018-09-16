@@ -2351,24 +2351,20 @@ class InterfaceScaleSetting(UserPrefsFloatSetting):
 
 
 class GraphicsQualityNote(SettingAbstract):
-    note = '{0}{1}  {2}{3}'.format("<font face='$FieldFont' size='13' color='#595950'>", i18n.makeString(SETTINGS.GRAPHICSQUALITYHDSD_SD), icons.info(), '</font>')
-    _GRAPHICS_QUALITY_TYPES = {CONTENT_TYPE.SD_TEXTURES: note,
-     CONTENT_TYPE.TUTORIAL: note,
-     CONTENT_TYPE.SANDBOX: note}
+    _GRAPHICS_QUALITY_TYPES = {CONTENT_TYPE.SD_TEXTURES, CONTENT_TYPE.TUTORIAL, CONTENT_TYPE.SANDBOX}
 
     def _get(self):
-        return self._GRAPHICS_QUALITY_TYPES.get(ResMgr.activeContentType(), '')
+        return '{0}{1}  {2}{3}'.format("<font face='$FieldFont' size='13' color='#595950'>", i18n.makeString(SETTINGS.GRAPHICSQUALITYHDSD_SD), icons.info(), '</font>') if ResMgr.activeContentType() in self._GRAPHICS_QUALITY_TYPES else ''
 
     def _set(self, value):
         pass
 
 
 class GraphicsHigtQualityNote(SettingAbstract):
-    note = '{0}{1}  {2}{3}'.format("<font face='$FieldFont' size='13' color='#595950'>", i18n.makeString(SETTINGS.GRAPHICSQUALITYHDSD_SD), icons.alert(), '</font>')
-    _GRAPHICS_QUALITY_TYPES = {CONTENT_TYPE.SD_TEXTURES: note}
+    _GRAPHICS_QUALITY_TYPES = {CONTENT_TYPE.SD_TEXTURES}
 
     def _get(self):
-        return self._GRAPHICS_QUALITY_TYPES.get(ResMgr.activeContentType(), '')
+        return '{0}{1}  {2}{3}'.format("<font face='$FieldFont' size='13' color='#595950'>", i18n.makeString(SETTINGS.GRAPHICSQUALITYHDSD_SD), icons.alert(), '</font>') if ResMgr.activeContentType() in self._GRAPHICS_QUALITY_TYPES else ''
 
     def _set(self, value):
         pass

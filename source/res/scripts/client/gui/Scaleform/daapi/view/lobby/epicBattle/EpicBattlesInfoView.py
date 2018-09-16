@@ -42,7 +42,7 @@ _RULE_PANEL_BUTTON_LABELS = [EPIC_BATTLE.EPICBATTLESINFOVIEW_RULEREWARDSBUTTON_L
  EPIC_BATTLE.METAABILITYSCREEN_MANAGE_ABILITIES,
  EPIC_BATTLE.EPICBATTLESINFOVIEW_RULEBATTLEPERFORMANCEBUTTON_LABEL,
  EPIC_BATTLE.EPICBATTLESINFOVIEW_RULEREWARDSPRESTIGEBUTTON_LABEL]
-EpicBattlesRulePanelVO = namedtuple('EpicBattlesRulePanelVO', ('imageFrame', 'panelState', 'headlineText', 'descriptionText', 'prestigeAllowed', 'skillPoints', 'buttonLabel', 'enabled'))
+EpicBattlesRulePanelVO = namedtuple('EpicBattlesRulePanelVO', ('imageFrame', 'panelState', 'headlineText', 'descriptionText', 'prestigeAllowed', 'skillPoints', 'buttonLabel'))
 EpicBattlesInfoViewVO = namedtuple('EpicBattlesInfoViewVO', ('firstTimeInScreen', 'backgroundImageSrc', 'headlineTitleHtmlText', 'epicMetaLevelIconData', 'barPercentage', 'barText', 'prestigeAllowed', 'skillPoints', 'rulePanels'))
 
 class EpicBattlesInfoView(LobbySubView, EpicBattlesInfoViewMeta):
@@ -103,7 +103,7 @@ class EpicBattlesInfoView(LobbySubView, EpicBattlesInfoViewMeta):
                 state = _RULE_PANEL_ATTENTION_STATE
             elif index == _RULE_PANEL_MAX_INDEX:
                 state = _RULE_PANEL_PRESTIGE_STATE
-            rulePaneVO = EpicBattlesRulePanelVO(imageFrame=_INDEX_TO_FRAME_NAME_STATE[index], panelState=state, headlineText=_RULE_PANEL_HEADLINES[index], descriptionText=_RULE_PANEL_DESCRIPTIONS[index], prestigeAllowed=state == _RULE_PANEL_PRESTIGE_STATE, skillPoints=skillPoints if state == _RULE_PANEL_ATTENTION_STATE else 0, buttonLabel=_RULE_PANEL_BUTTON_LABELS[index], enabled=True)
+            rulePaneVO = EpicBattlesRulePanelVO(imageFrame=_INDEX_TO_FRAME_NAME_STATE[index], panelState=state, headlineText=_RULE_PANEL_HEADLINES[index], descriptionText=_RULE_PANEL_DESCRIPTIONS[index], prestigeAllowed=state == _RULE_PANEL_PRESTIGE_STATE, skillPoints=skillPoints if state == _RULE_PANEL_ATTENTION_STATE else 0, buttonLabel=_RULE_PANEL_BUTTON_LABELS[index])
             rulePanelsResult.append(rulePaneVO._asdict())
 
         return rulePanelsResult

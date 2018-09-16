@@ -23,7 +23,7 @@ class BCHangar(Hangar):
             return True
         else:
             for loadingView in container.getAllLoadingViews():
-                if loadingView.settings.alias == viewAlias:
+                if loadingView.alias == viewAlias:
                     return True
 
             return False

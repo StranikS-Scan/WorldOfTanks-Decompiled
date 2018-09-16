@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/settings.py
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.shared.gui_items.Vehicle import VEHICLE_BATTLE_TYPES_ORDER_INDICES
-from helpers import i18n
 from shared_utils import BitmaskHelper
 __all__ = ('UNKNOWN_VEHICLE_NAME', 'UNKNOWN_VEHICLE_CLASS_NAME', 'UNKNOWN_PLAYER_NAME', 'UNKNOWN_VEHICLE_LEVEL', 'UNKNOWN_VEHICLE_CLASS_ORDER', 'SQUAD_RANGE_TO_SHOW', 'VEHICLE_STATUS', 'PLAYER_STATUS', 'INVALIDATE_OP', 'getOrderByVehicleClass')
 CONTOUR_ICON_SF_PATH = '../maps/icons/vehicle/contour/{0}.png'
@@ -12,9 +12,9 @@ RESPAWN_MAP_IMAGE_RES_PATH = 'gui/maps/icons/map/respawn/%s.dds'
 UNKNOWN_CONTOUR_ICON_NAME = 'unknown'
 UNKNOWN_CONTOUR_ICON_SF_PATH = CONTOUR_ICON_SF_PATH.format(UNKNOWN_CONTOUR_ICON_NAME)
 UNKNOWN_CONTOUR_ICON_RES_PATH = CONTOUR_ICON_RES_PATH.format(UNKNOWN_CONTOUR_ICON_NAME)
-UNKNOWN_VEHICLE_NAME = i18n.makeString('#ingame_gui:players_panel/unknown_vehicle')
+UNKNOWN_VEHICLE_NAME = INGAME_GUI.PLAYERS_PANEL_UNKNOWN_VEHICLE
 UNKNOWN_VEHICLE_CLASS_NAME = 'unknown'
-UNKNOWN_PLAYER_NAME = i18n.makeString('#ingame_gui:players_panel/unknown_name')
+UNKNOWN_PLAYER_NAME = INGAME_GUI.PLAYERS_PANEL_UNKNOWN_NAME
 UNKNOWN_VEHICLE_LEVEL = -1
 UNKNOWN_VEHICLE_CLASS_ORDER = 100
 SQUAD_RANGE_TO_SHOW = xrange(2, 4)

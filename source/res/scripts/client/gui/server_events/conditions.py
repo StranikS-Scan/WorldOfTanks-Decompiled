@@ -913,7 +913,7 @@ class Survive(_Condition, _Negatable):
         return self._isAlive
 
 
-class CorrespondedCamouflage(_Condition, _Negatable):
+class CorrespondedCamouflage(_Requirement):
 
     def __init__(self, path, data):
         super(CorrespondedCamouflage, self).__init__('correspondedCamouflage', dict(data), path)
@@ -1510,3 +1510,13 @@ class RefSystemRalBought10Lvl(_Requirement):
 
     def getValue(self):
         return self._relation
+
+
+def getProgressFromQuestWithSingleAccumulative(quest):
+    conditions = quest.bonusCond.getConditions()
+    if conditions and len(conditions.items) == 1:
+        item = conditions.items[0]
+        if isinstance(item, _Cumulativable):
+            currentProgress, totalProgress = item.getProgressPerGroup().get(None, [])[:2]
+            return (currentProgress, totalProgress)
+    return (None, None)

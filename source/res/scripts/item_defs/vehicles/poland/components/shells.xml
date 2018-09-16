@@ -51,4 +51,48 @@
       <devices>	100	</devices>
     </damage>
   </_75mm_Sprg.18L>
+  <_122mm_BR-471_B>
+    <id>	27	</id>
+    <userString>	#poland_vehicles:_122mm_BR-471_B	</userString>
+    <icon>	ap	</icon>
+    <price>	880	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeArmorPiercing	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_122mm_BR-471_B>
+  <_122mm_BR-471_D>
+    <id>	28	</id>
+    <userString>	#poland_vehicles:_122mm_BR-471_D	</userString>
+    <icon>	ap_cr	</icon>
+    <price>	4800	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING_CR	</kind>
+    <caliber>	122	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	largeAPCR	</effects>
+    <damage>
+      <armor>	440	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_122mm_BR-471_D>
+  <_122mm_OF-471>
+    <id>	29	</id>
+    <userString>	#poland_vehicles:_122mm_OF-471	</userString>
+    <icon>	he	</icon>
+    <price>	720	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	122	</caliber>
+    <explosionRadius>	2.49	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	largeHighExplosive	</effects>
+    <damage>
+      <armor>	560	</armor>
+      <devices>	165	</devices>
+    </damage>
+  </_122mm_OF-471>
 </shells.xml>

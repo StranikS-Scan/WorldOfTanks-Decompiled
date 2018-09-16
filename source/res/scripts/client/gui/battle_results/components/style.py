@@ -9,15 +9,13 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform import settings
 from gui.battle_results.components import base
 from gui.shared.formatters import text_styles
+from gui.shared.utils.functions import makeTooltip
 from helpers import i18n
 WIDE_STAT_ROW = 'wideLine'
 NORMAL_STAT_ROW = 'normalLine'
 SMALL_STAT_LINE = 'smallLineUI'
 _LINE_BRAKE_STR = '<br/>'
-_TIME_STATS_KEY_FORMAT = '#battle_results:details/time/lbl_{0}'
-_RESULT_LINE__FORMAT = '#battle_results:details/calculations/{0}'
-_STATS_KEY_FORMAT = '#battle_results:team/stats/labels_{0}'
-_VEHICLE_STATE_FORMAT = '#battle_results:common/vehicleState/dead{0}'
+_STATS_INFOTIP_HEADER_FORMAT = '#battle_results:team/stats/infotip_{0}/header'
 _VEHICLE_STATE_PREFIX = '{0} ('
 _VEHICLE_STATE_SUFFIX = ')'
 _DIFF_FORMAT = '+ {}'
@@ -30,7 +28,7 @@ def getUnknownPlayerName(isEnemy=False):
 I18nDeathReason = namedtuple('I18nDeathReason', 'i18nString prefix suffix')
 
 def makeI18nDeathReason(deathReason):
-    i18nString = i18n.makeString(_VEHICLE_STATE_FORMAT.format(deathReason))
+    i18nString = i18n.makeString(BATTLE_RESULTS.getVehicleDeadState(intType=deathReason))
     return I18nDeathReason(i18nString, _VEHICLE_STATE_PREFIX.format(i18nString), _VEHICLE_STATE_SUFFIX)
 
 
@@ -124,7 +122,7 @@ def makeStatRow(label='', column1=None, column2=None, column3=None, column4=None
     else:
         lineType = NORMAL_STAT_ROW
     if label:
-        i18nText = i18n.makeString(_RESULT_LINE__FORMAT.format(label))
+        i18nText = i18n.makeString(BATTLE_RESULTS.getDetailsCalculation(statName=label))
         if htmlKey:
             label = makeHtmlString('html_templates:lobby/battle_results', htmlKey, {'value': i18nText})
         else:
@@ -229,12 +227,17 @@ def makeMultiLineHtmlString(seq):
 
 
 def makeStatValue(field, value):
-    return {'label': i18n.makeString(_STATS_KEY_FORMAT.format(field)),
-     'value': value}
+    tooltip = ''
+    tooltipHeader = _STATS_INFOTIP_HEADER_FORMAT.format(field)
+    if i18n.doesTextExist(tooltipHeader):
+        tooltip = makeTooltip(header=i18n.makeString(tooltipHeader), body=i18n.makeString(BATTLE_RESULTS.getTeamStatsInfotipBody(statName=field)))
+    return {'label': i18n.makeString(BATTLE_RESULTS.getTeamStatsLabel(statName=field)),
+     'value': value,
+     'infoTooltip': tooltip}
 
 
 def makeTimeStatsVO(field, value):
-    return {'label': i18n.makeString(_TIME_STATS_KEY_FORMAT.format(field)),
+    return {'label': i18n.makeString(BATTLE_RESULTS.getDetailsTimeLbl(statName=field)),
      'value': value}
 
 
@@ -260,6 +263,15 @@ def makeRankedPointValue(pointsValue):
 
 def makeRankedPointHugeValue(pointsValue):
     return makeHtmlString('html_templates:lobby/battle_results', 'xp_small_label', {'value': text_styles.hightlight(pointsValue)})
+
+
+def markVehicleAsTeamKiller(vehicle):
+    vehicle.vehicleStatePrefix = vehicle.vehicleStatePrefix[:-1] + makeTeamKillerText(vehicle.vehicleStatePrefix[-1])
+    vehicle.vehicleStateSuffix = makeTeamKillerText(vehicle.vehicleStateSuffix)
+
+
+def makeTeamKillerText(text):
+    return makeHtmlString('html_templates:lobby/battle_results', 'team_killer', {'text': text})
 
 
 def makeRankedNickNameValue(name):
@@ -373,6 +385,15 @@ class MetersToKillometersItem(base.StatsItem):
 
     def _convert(self, value, reusable):
         converted = BigWorld.wg_getFractionalFormat(value / 1000.0)
+        if not value:
+            converted = markValueAsEmpty(converted)
+        return converted
+
+
+class XpStatsItem(base.StatsItem):
+
+    def _convert(self, value, reusable):
+        converted = makeXpLabel(value)
         if not value:
             converted = markValueAsEmpty(converted)
         return converted

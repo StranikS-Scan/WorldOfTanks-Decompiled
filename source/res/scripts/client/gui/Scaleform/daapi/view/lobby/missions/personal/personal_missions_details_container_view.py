@@ -43,20 +43,27 @@ class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsCo
     def obtainAward(self, eventID):
         LOG_ERROR('Award obtain from personal mission details view is not available.')
 
-    def onChangePage(self, eventID):
+    def requestMissionData(self, index):
+        missionData = self.__datailedList[index]
+        self.as_setMissionDataS(missionData)
+        self.changePage(missionData['eventID'])
+
+    def changePage(self, eventID):
         self.__selectedQuestID = int(eventID)
         quest = self.__quests.get(self.__selectedQuestID)
         mayPawn = self.eventsCache.random.getFreeTokensCount() >= quest.getPawnCost() and quest.canBePawned()
         if self.__storage:
             self.__storage.setValue(MAY_PAWN_PERSONAL_MISSION, mayPawn)
         vehicleSelector = self.components.get(QUESTS_ALIASES.PERSONAL_MISSIONS_VEHICLE_SELECTOR_ALIAS)
-        criteria, extraConditions = getDetailedMissionData(quest).getVehicleRequirementsCriteria()
-        vehicleSelector.as_closeS()
-        vehicleSelector.setSelectedQuest(self.__selectedQuestID)
-        if criteria and quest.isInProgress() and quest.isAvailable()[0]:
-            vehicleSelector.setCriteria(criteria, extraConditions)
-        else:
-            vehicleSelector.as_hideSelectedVehicleS()
+        if vehicleSelector is not None:
+            criteria, extraConditions = getDetailedMissionData(quest).getVehicleRequirementsCriteria()
+            vehicleSelector.as_closeS()
+            vehicleSelector.setSelectedQuest(self.__selectedQuestID)
+            if criteria and quest.isInProgress() and quest.isAvailable()[0]:
+                vehicleSelector.setCriteria(criteria, extraConditions)
+            else:
+                vehicleSelector.as_hideSelectedVehicleS()
+        return
 
     def declineMission(self, eventID):
         self._declineMission(eventID)
@@ -121,9 +128,9 @@ class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsCo
         return quests
 
     def __setData(self):
-        datailedList = []
+        self.__datailedList = []
         for _, q in enumerate(sorted(self.__quests.itervalues(), key=methodcaller('getID'))):
-            datailedList.append(getDetailedMissionData(q).getInfo())
+            self.__datailedList.append(getDetailedMissionData(q).getInfo())
 
         pages = map(lambda (i, mission): {'buttonsGroup': 'MissionDetailsPageGroup',
          'pageIndex': i,
@@ -132,7 +139,6 @@ class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsCo
                      'specialAlias': TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_MAP_REGION,
                      'specialArgs': [int(mission.get('eventID')), 0]},
          'status': mission.get('status'),
-         'selected': self.__selectedQuestID == int(mission.get('eventID'))}, enumerate(datailedList))
+         'selected': self.__selectedQuestID == int(mission.get('eventID'))}, enumerate(self.__datailedList))
         self.as_setInitDataS({'title': 'Title',
-         'missions': datailedList,
          'pages': pages})

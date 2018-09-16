@@ -48,7 +48,8 @@ class IntSettingsRequester(object):
      'FEEDBACK_BORDER_MAP': 85,
      'UI_STORAGE': 86,
      'EPICBATTLE_CAROUSEL_FILTER_1': 87,
-     'EPICBATTLE_CAROUSEL_FILTER_2': 88}
+     'EPICBATTLE_CAROUSEL_FILTER_2': 88,
+     'LINKEDSET_QUESTS': constants.USER_SERVER_SETTINGS.LINKEDSET_QUESTS}
 
     def __init__(self):
         self.__cache = dict()

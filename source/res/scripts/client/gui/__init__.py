@@ -1,11 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/__init__.py
+import logging
 from collections import defaultdict
 import nations
-from constants import IS_DEVELOPMENT
+from constants import IS_DEVELOPMENT, HAS_DEV_RESOURCES
 from gui.GuiSettings import GuiSettings as _GuiSettings
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from helpers.html.templates import XMLCollection
+_logger = logging.getLogger(__name__)
 g_guiResetters = set()
 g_repeatKeyHandlers = set()
 g_keyEventHandlers = set()
@@ -33,7 +34,7 @@ def onRepeatKeyEvent(event):
             if processed:
                 break
         except Exception:
-            LOG_CURRENT_EXCEPTION()
+            _logger.exception('onRepeatKeyEvent is invoked with exception')
 
     safeCopy = None
     return processed
@@ -50,7 +51,7 @@ try:
 
     GUI_NATIONS = tuple(new_order_list)
 except AttributeError:
-    LOG_ERROR('Could not read nations order from XML. Default order.')
+    _logger.error('Could not read nations order from XML. Default order.')
 
 GUI_NATIONS_ORDER_INDEX = {name:idx for idx, name in enumerate(GUI_NATIONS)}
 GUI_NATIONS_ORDER_INDEX[NONE_NATION_NAME] = nations.NONE_INDEX
@@ -127,12 +128,15 @@ def getGuiServicesConfig(manager):
     from gui import sounds
     from gui import Scaleform as _sf
     from gui import hangar_cameras
+    from gui import impl
     from skeletons.gui.lobby_context import ILobbyContext
     manager.addConfig(shared.getSharedServices)
     manager.addConfig(game_control.getGameControllersConfig)
     manager.addConfig(_sf.getScaleformConfig)
+    manager.addConfig(impl.getGuiImplConfig)
     manager.addConfig(login.getLoginManagerConfig)
     manager.addConfig(server_events.getServerEventsConfig)
+    manager.addConfig(server_events.getLinkedSetController)
     manager.addConfig(battle_control.getBattleSessionConfig)
     manager.addConfig(sounds.getSoundsConfig)
     manager.addConfig(wgcg.getWebServicesConfig)
@@ -142,3 +146,11 @@ def getGuiServicesConfig(manager):
     manager.addConfig(customization.getCustomizationServiceConfig)
     manager.addConfig(hangar_cameras.getHangarCamerasConfig)
     manager.addInstance(ILobbyContext, lobby_context.LobbyContext(), finalizer='clear')
+    if HAS_DEV_RESOURCES:
+        try:
+            from gui.development import getDevelopmentServicesConfig
+        except ImportError:
+            _logger.exception('Package development can not be imported')
+            return
+
+        getDevelopmentServicesConfig(manager)

@@ -166,7 +166,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         title = i18n.makeString(TOOLTIPS.CYBERSPORT_MODECHANGEFROZEN_HEADER)
         windowSize = GUI_SETTINGS.lookup('StrongholdsPopupWebWindowSize')
         browserSize = (windowSize.get('width', 800), windowSize.get('height', 600))
-        self.__changeModeBrowserId = yield self.browserCtrl.load(url=url, title=title, browserSize=browserSize, isModal=True, showCreateWaiting=True, handlers=createStrongholdsWebHandlers(True), showActionBtn=False)
+        self.__changeModeBrowserId = yield self.browserCtrl.load(url=url, title=title, browserSize=browserSize, isModal=True, showCreateWaiting=True, handlers=createStrongholdsWebHandlers(), showActionBtn=False)
         browser = self.browserCtrl.getBrowser(self.__changeModeBrowserId)
         if browser:
             browser.ignoreKeyEvents = True

@@ -382,7 +382,7 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
 
         if removedItems:
             additionalMessages.append(makeI18nSuccess(self._formApplyMessage('incompatibleEqs'), items="', '".join(removedItems), type=SM_TYPE.Information))
-        additionalMessages.append(makeI18nSuccess(self._formApplyMessage('success'), type=SM_TYPE.Information, auxData=additionalMessages, **self._getMsgCtx()))
+        additionalMessages.append(makeI18nSuccess(self._formApplyMessage('success'), type=SM_TYPE.Information, auxData=additionalMessages[:], **self._getMsgCtx()))
         return additionalMessages
 
     def _formApplyMessage(self, msg):

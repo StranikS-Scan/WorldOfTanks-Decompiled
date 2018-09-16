@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/store/actions_helpers.py
 import operator
 import time
+from collections import namedtuple
 import BigWorld
 import constants
 import nations
@@ -13,6 +14,7 @@ from gui.server_events.formatters import formatStrDiscount, formatPercentValue, 
 from gui.shared.formatters import icons
 from gui.server_events import settings as quest_settings
 from helpers import i18n, dependency, time_utils
+from skeletons.gui.game_control import IMarathonEventController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -225,7 +227,13 @@ class ActionInfo(EventInfoModel):
 
     def _getPackedDiscounts(self, sorting=False):
         if not self._packedDiscounts:
-            self._packedDiscounts = self.discount.packDiscounts(sorting=sorting)
+            self._packedDiscounts = {}
+            for key, discount in self.discount.packDiscounts(sorting=sorting).iteritems():
+                if discount.discountType == _DT.MULTIPLIER and not (discount.discountValue == 0 or discount.discountValue == 1):
+                    self._packedDiscounts[key] = discount
+                if discount.discountValue > 0:
+                    self._packedDiscounts[key] = discount
+
         return self._packedDiscounts
 
     def _getMaxDiscount(self):
@@ -560,7 +568,8 @@ class VehRentActionInfo(VehPriceActionInfo):
                 price = itemPrice.price
                 currency = price.getCurrency()
                 buyPriceValue = price.get(currency)
-                block.append(self._makePriceBlock(buyPriceValue, CURRENCY_SETTINGS.getBuySetting(currency), percent=itemPrice.getActionPrc(), valueWidth=valueWidth))
+                if vehicle.isDisabledForBuy is not True:
+                    block.append(self._makePriceBlock(buyPriceValue, CURRENCY_SETTINGS.getBuySetting(currency), percent=itemPrice.getActionPrc(), valueWidth=valueWidth))
                 for rent in rentPackages:
                     defaultPrice = rent.get('defaultRentPrice')
                     defaultPriceValue = defaultPrice.get(defaultPrice.getCurrency())
@@ -788,7 +797,7 @@ class ComingSoonActionInfo(ActionInfo):
     def getIsNew(self):
         return False
 
-    def getAutoDescription(self, useBigIco=False):
+    def getAutoDescription(self, useBigIco=False, forNormalCard=False):
         pass
 
     def getAdditionalDescription(self, useBigIco=False, forHeroCard=False):
@@ -827,6 +836,53 @@ class ComingSoonActionInfo(ActionInfo):
         if paramName.endswith(_MULTIPLIER):
             paramName = paramName[:-len(_MULTIPLIER)]
         return paramName
+
+
+class MarathonEventActionInfo(ActionInfo):
+    _marathonCtrl = dependency.descriptor(IMarathonEventController)
+
+    def getTitle(self):
+        return i18n.makeString(QUESTS.ACTIONCARD_TITLE_SET_MARATHONINPROGRESS)
+
+    def getAutoDescription(self, useBigIco=False, forNormalCard=False):
+        values = {'level': formatVehicleLevel(i18n.makeString(TOOLTIPS.level(8)))}
+        name = self.discount.getParamName()
+        if name == 'set_MarathonAnnounce':
+            return i18n.makeString(QUESTS.ACTION_AUTO_SET_MARATHONANNOUNCE, **values)
+        return i18n.makeString(QUESTS.ACTION_AUTO_SET_MARATHONINPROGRESS, **values) if name == 'set_MarathonInProgress' else i18n.makeString(QUESTS.ACTION_AUTO_SET_MARATHONFINISHED, **values)
+
+    def _getFullDescription(self, stepName, discount=None, forHeroCard=False):
+        if stepName == 'set_MarathonFinished':
+            locKey = QUESTS.getActionDescription('hero/full/{}'.format(stepName))
+            return i18n.makeString(locKey, value=self._marathonCtrl.getExtraDaysToBuy())
+        return super(MarathonEventActionInfo, self)._getFullDescription(stepName, discount, forHeroCard)
+
+    def getDiscount(self):
+        _ActionDiscountValue = namedtuple('_ActionDiscountValue', 'discountName, discountValue, discountType')
+        return formatStrDiscount(_ActionDiscountValue(discountValue=100, discountType=DISCOUNT_TYPE.PERCENT, discountName='marathon'))
+
+    def getTriggerChainID(self):
+        pass
+
+    def isDiscountVisible(self):
+        return not self._marathonCtrl.isVehicleObtained()
+
+    def _getActiveDateTimeString(self):
+        name = self.discount.getParamName()
+        if name == 'set_MarathonAnnounce':
+            timeStr = BigWorld.wg_getLongDateFormat(self.getFinishTime())
+            if timeStr is not None:
+                return text_styles.main(i18n.makeString(QUESTS.ACTION_MARATHON_ANNOUNCETIME, startTime=timeStr))
+        elif name == 'set_MarathonInProgress':
+            return super(MarathonEventActionInfo, self)._getActiveDateTimeString()
+        return ''
+
+    def _formatFinishTime(self):
+        return '{} {}'.format(text_styles.main(i18n.makeString(QUESTS.ACTION_TIME_FINISH)), BigWorld.wg_getLongDateFormat(self.getFinishTime()))
+
+    def _showTimerIco(self):
+        name = self.discount.getParamName()
+        return False if name == 'set_MarathonFinished' else self.event.getFinishTimeLeft() <= time_utils.ONE_DAY
 
 
 def getEconomicalStatsDict():
@@ -909,7 +965,10 @@ _PARAM_TO_IMG_DICT = {'exchangeRate': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CONVE
  'set_GoodiePrice': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_RESERVE,
  'mul_GoodiePrice': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_RESERVE,
  'mul_GoodiePriceAll': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_RESERVE,
- 'tradeInSellPriceFactor': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_TRADE_IN}
+ 'tradeInSellPriceFactor': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_TRADE_IN,
+ 'set_MarathonAnnounce': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_MARATHON_ITALY,
+ 'set_MarathonInProgress': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_MARATHON_ITALY,
+ 'set_MarathonFinished': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_MARATHON_ITALY}
 _MODIFIERS_DICT = {'mul_EconomicsParams': EconomicsActionsInfo,
  'set_EconomicsParams': EconomicsActionsInfo,
  'mul_EconomicsPrices': EconomicsActionsInfo,
@@ -927,7 +986,10 @@ _MODIFIERS_DICT = {'mul_EconomicsParams': EconomicsActionsInfo,
  'mul_PriceGroupPriceAll': C11nPriceGroupPriceActionInfo,
  'set_GoodiePrice': BoosterPriceActionInfo,
  'mul_GoodiePrice': BoosterPriceActionInfo,
- 'mul_GoodiePriceAll': BoosterPriceActionInfo}
+ 'mul_GoodiePriceAll': BoosterPriceActionInfo,
+ 'set_MarathonAnnounce': MarathonEventActionInfo,
+ 'set_MarathonInProgress': MarathonEventActionInfo,
+ 'set_MarathonFinished': MarathonEventActionInfo}
 
 def getModifierObj(name, event, modifier):
     return _MODIFIERS_DICT[name](event, modifier) if name in _MODIFIERS_DICT else None

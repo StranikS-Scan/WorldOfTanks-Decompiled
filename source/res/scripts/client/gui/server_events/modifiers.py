@@ -635,10 +635,11 @@ class EconomicsSet(ActionModifier):
 
     def _makeParamCtx(self, name, value):
         if name == 'winXPFactorMode':
-            result = '{}/{}'.format(name, self.getParamValue())
+            newName = '{}/{}'.format(name, self.getParamValue())
+            currency = None
         else:
-            result = name
-        return _ParamContext(result, value)
+            newName, currency = self._extractCurrency(name)
+        return _ParamContext(newName, value, currency)
 
     @classmethod
     def _calcCustomizationDiscountValue(cls, value, default):
@@ -761,21 +762,23 @@ class EconomicsSet(ActionModifier):
 
         return result
 
+    def _extractCurrency(self, name):
+        for cur in Currency.ALL:
+            if name.endswith(cur.capitalize()):
+                return (name[:-len(cur)], cur)
+
+        return (name, None)
+
 
 class EconomicsMul(EconomicsSet):
 
     def _makeParamCtx(self, name, value):
-        currency = None
-        for cur in Currency.ALL:
-            if name.endswith(cur.capitalize()):
-                name = name[:-len(cur)]
-                currency = cur
-
+        newName, currency = self._extractCurrency(name)
         isMult = False
-        if name not in ('exchangeRateForShellsAndEqs',) and name.endswith(_MULTIPLIER):
-            name = name[:-len(_MULTIPLIER)]
+        if name not in ('exchangeRateForShellsAndEqs',) and newName.endswith(_MULTIPLIER):
+            newName = newName[:-len(_MULTIPLIER)]
             isMult = True
-        return _ParamContext(name, value, currency=currency, isMultiplier=isMult)
+        return _ParamContext(newName, value, currency=currency, isMultiplier=isMult)
 
     def _calcDiscountValue(self, value, default):
         return _getPercentDiscountByMultiplier(value, default)
@@ -1184,6 +1187,12 @@ class C11nPriceGroupPriceAll(_ItemsPriceAll):
         return result
 
 
+class MarathonEventModifier(ActionModifier):
+
+    def __init__(self, name, params):
+        super(MarathonEventModifier, self).__init__(name, params, modType=ACTION_MODIFIER_TYPE.DISCOUNT, section=ACTION_SECTION_TYPE.ALL, itemType=GUI_ITEM_TYPE.ACHIEVEMENT)
+
+
 _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('set_EconomicsParams', EconomicsSet),
  ('mul_EconomicsPrices', EconomicsMul),
@@ -1216,7 +1225,10 @@ _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('mul_PriceGroupPriceAll', C11nPriceGroupPriceAll),
  ('set_GoodiePrice', BoosterPriceSet),
  ('mul_GoodiePrice', BoosterPriceMul),
- ('mul_GoodiePriceAll', BoostersPriceAll))
+ ('mul_GoodiePriceAll', BoostersPriceAll),
+ ('set_MarathonAnnounce', MarathonEventModifier),
+ ('set_MarathonInProgress', MarathonEventModifier),
+ ('set_MarathonFinished', MarathonEventModifier))
 _MODIFIERS_DICT = dict(_MODIFIERS)
 _MODIFIERS_ORDER = dict(((n, idx) for idx, (n, _) in enumerate(_MODIFIERS)))
 

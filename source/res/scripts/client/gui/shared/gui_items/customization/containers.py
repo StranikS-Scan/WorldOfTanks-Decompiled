@@ -1,21 +1,48 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/customization/containers.py
-from collections import namedtuple
-from functools import partial
 from debug_utils import LOG_WARNING
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.customization import packers
-from items.customizations import PaintComponent, CamouflageComponent, DecalComponent
-Pair = namedtuple('Pair', 'item component')
-Pair = partial(Pair, item=None, component=None)
+from items.customizations import EmptyComponent, PaintComponent, CamouflageComponent, DecalComponent
+
+class SlotData(object):
+    __slots__ = ('item', 'component')
+
+    def __init__(self, item=None, component=None):
+        self.item = item
+        self.component = component
+
+    def diff(self, other):
+        aitem, acomp = self.item, self.component
+        bitem, bcomp = other.item, other.component
+        citem, ccomp = (None, None)
+        if not aitem:
+            citem, ccomp = bitem, bcomp
+        elif bitem and aitem.id != bitem.id:
+            citem, ccomp = bitem, bcomp
+        elif bitem and acomp != bcomp:
+            citem, ccomp = bitem, bcomp
+        return SlotData(item=citem, component=ccomp)
+
+    def weakDiff(self, other):
+        aitem, acomp = self.item, self.component
+        bitem, bcomp = other.item, other.component
+        citem, ccomp = (None, None)
+        if not aitem:
+            citem, ccomp = bitem, bcomp
+        elif bitem and aitem.id != bitem.id:
+            citem, ccomp = bitem, bcomp
+        elif bitem and not acomp.weak_eq(bcomp):
+            citem, ccomp = bitem, bcomp
+        return SlotData(item=citem, component=ccomp)
+
 
 def emptyComponent(itemTypeID):
     if itemTypeID == GUI_ITEM_TYPE.CAMOUFLAGE:
         return CamouflageComponent()
-    elif itemTypeID == GUI_ITEM_TYPE.PAINT:
+    if itemTypeID == GUI_ITEM_TYPE.PAINT:
         return PaintComponent()
-    else:
-        return DecalComponent() if itemTypeID in (GUI_ITEM_TYPE.DECAL, GUI_ITEM_TYPE.EMBLEM, GUI_ITEM_TYPE.INSCRIPTION) else None
+    return DecalComponent() if itemTypeID in (GUI_ITEM_TYPE.DECAL, GUI_ITEM_TYPE.EMBLEM, GUI_ITEM_TYPE.INSCRIPTION) else EmptyComponent()
 
 
 class OutfitContainer(object):
@@ -90,11 +117,14 @@ class MultiSlot(object):
     def capacity(self):
         return len(self._regions)
 
+    def getSlotData(self, idx=0):
+        return self._items.get(idx, SlotData())
+
     def getItem(self, idx=0):
-        return self._items.get(idx, Pair()).item
+        return self._items.get(idx, SlotData()).item
 
     def getComponent(self, idx=0):
-        return self._items.get(idx, Pair()).component
+        return self._items.get(idx, SlotData()).component
 
     def set(self, item, idx=0, component=None):
         if self._slotType != item.itemTypeID:
@@ -107,7 +137,7 @@ class MultiSlot(object):
             component = component.copy()
         else:
             component = emptyComponent(self._slotType)
-        self._items[idx] = Pair(item=item, component=component)
+        self._items[idx] = SlotData(item=item, component=component)
 
     def lock(self, idx=0):
         self._locks[idx] = True
@@ -135,16 +165,8 @@ class MultiSlot(object):
     def diff(self, other):
         result = MultiSlot(self.getType(), self.getRegions())
         for idx in range(self.capacity()):
-            aitem, acomp = self.getItem(idx), self.getComponent(idx)
-            bitem, bcomp = other.getItem(idx), other.getComponent(idx)
-            citem, ccomp = (None, None)
-            if not aitem:
-                citem, ccomp = bitem, bcomp
-            elif bitem and aitem.id != bitem.id:
-                citem, ccomp = bitem, bcomp
-            elif bitem and acomp != bcomp:
-                citem, ccomp = bitem, bcomp
-            if citem:
-                result.set(citem, idx=idx, component=ccomp)
+            df = self.getSlotData(idx).diff(other.getSlotData(idx))
+            if df.item:
+                result.set(df.item, idx=idx, component=df.component)
 
         return result

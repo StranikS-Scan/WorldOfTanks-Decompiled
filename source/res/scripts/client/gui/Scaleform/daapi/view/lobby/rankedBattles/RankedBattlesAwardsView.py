@@ -46,7 +46,7 @@ class RankedBattlesAwardsView(RankedBattlesAwardsViewMeta):
             points = rank.getPoints()
             scoreTitle = RANKED_BATTLES.AWARDS_NEXTRANKTITLE
             rankID = self.__rankID
-            rankTitle = RANKED_BATTLES.AWARDS_GOTRANK
+            rankTitle = i18n.makeString(RANKED_BATTLES.AWARDS_GOTRANK, rank=rankID)
         rankVOs = {'currentRank': {'rankTitle': rankTitle,
                          'rank': buildRankVO(rank=rank, imageSize=RANKEDBATTLES_ALIASES.WIDGET_HUGE, isEnabled=True, shieldStatus=self.rankedController.getShieldStatus(rank)),
                          'congratulationTitle': RANKED_BATTLES.AWARDS_CONGRATULATION,

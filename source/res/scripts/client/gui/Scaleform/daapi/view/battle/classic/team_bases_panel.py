@@ -140,8 +140,9 @@ class TeamBasesPanel(TeamBasesPanelMeta, team_bases_ctrl.ITeamBasesListener):
         self.as_setCapturedS(clientID, item.getCapturedString())
 
     def removeTeamBase(self, clientID):
-        self.__basesDict.pop(clientID)
-        self.as_removeS(clientID)
+        if clientID in self.__basesDict:
+            self.__basesDict.pop(clientID)
+            self.as_removeS(clientID)
 
     def removeTeamsBases(self):
         self.__basesDict.clear()

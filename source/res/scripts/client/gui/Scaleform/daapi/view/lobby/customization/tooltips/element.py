@@ -3,7 +3,6 @@
 import nations
 import BigWorld
 from CurrentVehicle import g_currentVehicle
-from account_helpers.settings_core.settings_constants import GRAPHICS
 from gui.Scaleform import getNationsFilterAssetPath
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.shared import getItemInventoryCount
@@ -20,6 +19,7 @@ from gui.shared.items_parameters import params_helper, formatters as params_form
 from gui.shared.items_parameters.params_helper import SimplifiedBarVO
 from gui.shared.tooltips import formatters, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
+from gui.shared.utils.graphics import isRendererPipelineDeferred
 from items.components.c11n_constants import SeasonType
 from items.vehicles import VEHICLE_CLASS_TAGS
 from helpers import dependency, int2roman
@@ -27,6 +27,8 @@ from helpers.i18n import makeString as _ms
 from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.customization import ICustomizationService
+from gui.Scaleform.daapi.view.lobby.customization.shared import SEASON_TYPE_TO_NAME
 
 class SimplifiedStatsBlockConstructor(object):
 
@@ -47,9 +49,46 @@ class SimplifiedStatsBlockConstructor(object):
         return blocks
 
 
+class NonHistoricTooltip(BlocksTooltipData):
+    service = dependency.descriptor(ICustomizationService)
+
+    def __init__(self, context):
+        super(NonHistoricTooltip, self).__init__(context, TOOLTIP_TYPE.TECH_CUSTOMIZATION)
+        self._setContentMargin(top=20, left=19, bottom=20, right=20)
+        self._setMargins(afterBlock=14)
+        self._setWidth(440)
+
+    def _packBlocks(self, *args):
+        return self._packItemBlocks(args[0], args[1])
+
+    def _packItemBlocks(self, isNonHistoric, isInfo):
+        items = []
+        items.append(self._packDescriptionBlock(isNonHistoric, isInfo))
+        return items
+
+    def _packDescriptionBlock(self, isNonHistoric, isInfo):
+        img = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_NON_HISTORICAL
+        nonHistoricTitle = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMSPOPOVER_HISTORICCHECKBOX_ITEMS
+        nonHistoricDesc = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_DESCRIPTION_HISTORIC_FALSE_DESCRIPTION
+        seasonName = SEASON_TYPE_TO_NAME.get(self.service.getCtx().currentSeason)
+        mapName = _ms(VEHICLE_CUSTOMIZATION.getMapName(seasonName))
+        title = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_ITEMSPOPOVER_BTN)
+        desc = _ms(VEHICLE_CUSTOMIZATION.SEASON_SELECTION_TOOLTIP, mapName=mapName)
+        blocks = []
+        if not isInfo:
+            blocks.append(formatters.packTextBlockData(text=text_styles.middleTitle(title)))
+            blocks.append(formatters.packTextBlockData(text=text_styles.main(desc), padding={'top': 10}))
+        if isNonHistoric:
+            blocks.append(formatters.packImageTextBlockData(title=text_styles.middleTitle(nonHistoricTitle), img=img, imgPadding={'left': -3,
+             'top': -4}, padding={'top': 20 if not isInfo else 0}))
+            blocks.append(formatters.packTextBlockData(text=text_styles.main(nonHistoricDesc)))
+        return formatters.packBuildUpBlockData(blocks, gap=-6, padding={'bottom': -5})
+
+
 class ElementTooltip(BlocksTooltipData):
     itemsCache = dependency.descriptor(IItemsCache)
     settingsCore = dependency.descriptor(ISettingsCore)
+    service = dependency.descriptor(ICustomizationService)
 
     def __init__(self, context):
         super(ElementTooltip, self).__init__(context, TOOLTIP_TYPE.TECH_CUSTOMIZATION)
@@ -70,7 +109,6 @@ class ElementTooltip(BlocksTooltipData):
         return self._packItemBlocks()
 
     def _packItemBlocks(self):
-        isDeferredRenderer = self.settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE) == 0
         topBlocks = [self._packTitleBlock(), self._packIconBlock()]
         items = [formatters.packBuildUpBlockData(blocks=topBlocks, gap=10)]
         camo = None
@@ -98,7 +136,7 @@ class ElementTooltip(BlocksTooltipData):
             block = self._packSuitableBlock()
             if block:
                 items.append(block)
-        if self._item.itemTypeID == GUI_ITEM_TYPE.MODIFICATION and not isDeferredRenderer:
+        if self._item.itemTypeID == GUI_ITEM_TYPE.MODIFICATION and not isRendererPipelineDeferred():
             items.append(self._packUnsupportedBlock())
         return items
 
@@ -127,7 +165,7 @@ class ElementTooltip(BlocksTooltipData):
         container = self.app.containerManager.getContainer(ViewTypes.LOBBY_SUB)
         view = container.getView()
         if view.alias == VIEW_ALIAS.LOBBY_CUSTOMIZATION:
-            getInventoryCount = view.getItemInventoryCount
+            getInventoryCount = self.service.getCtx().getItemInventoryCount
         else:
             getInventoryCount = getItemInventoryCount
         subBlocks = [formatters.packTextBlockData(text=text_styles.middleTitle(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_INVENTORY_TITLE), padding={'bottom': 4})]

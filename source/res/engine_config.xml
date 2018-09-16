@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -47,6 +47,11 @@
       <LOW>	0.25	</LOW>
       <MIN>	0	</MIN>
     </streaming>
+    <ObjectsFarPlaneManager>
+      <cullVolume>	10000	</cullVolume>
+      <decalCullDistance>	400	</decalCullDistance>
+      <controlPointCullDistance>	1400	</controlPointCullDistance>
+    </ObjectsFarPlaneManager>
   </renderer>
   <influx>
     <force_use_bw_collision>	true	</force_use_bw_collision>
@@ -129,7 +134,7 @@
     <PS_PERFORMANCE_LOD_MULT>	1.2	</PS_PERFORMANCE_LOD_MULT>
   </ParticleSystem>
   <debug>
-    <fullDump>	true	</fullDump>
+    <fullDump>	false	</fullDump>
     <dxdiag>	true	</dxdiag>
     <framesCount>	0	</framesCount>
     <enableServers>	false	</enableServers>
@@ -260,19 +265,10 @@
         <project>
           <name>	plugin_media.bnk	</name>
         </project>
-        <project>
-          <name>	epic_battle.bnk	</name>
-        </project>
-        <project>
-          <name>	epic_battle.pck	</name>
-        </project>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_hangar>
         <project>
           <name>	fort_area.bnk	</name>
-        </project>
-        <project>
-          <name>	hangar_v2.bnk	</name>
         </project>
         <project>
           <name>	gui_ranked_battles.bnk	</name>
@@ -367,9 +363,6 @@
         </project>
       </SFX_soundbanks_arena>
       <SFX_soundbanks_editor>
-        <project>
-          <name>	hangar_v2.bnk	</name>
-        </project>
         <project>
           <name>	fort_area.bnk	</name>
         </project>

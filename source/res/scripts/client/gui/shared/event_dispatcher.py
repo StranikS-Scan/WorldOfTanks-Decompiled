@@ -95,6 +95,13 @@ def showResearchView(vehTypeCompDescr):
     g_eventBus.handleEvent(loadEvent, scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def showTechTree(vehTypeCompDescr=None, itemsCache=None):
+    vehicle = itemsCache.items.getItemByCD(vehTypeCompDescr)
+    nation = vehicle.nationName
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={'nation': nation}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
 def showVehicleStats(vehTypeCompDescr):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_PROFILE, ctx={'itemCD': vehTypeCompDescr}), scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -211,8 +218,12 @@ def showPremiumWindow(arenaUniqueID=0, premiumBonusesDiff=None):
      'premiumBonusesDiff': premiumBonusesDiff}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showBoostersWindow():
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTERS_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+def showBoostersWindow(tabID=None):
+    ctx = {}
+    if tabID is not None:
+        ctx['tabID'] = tabID
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTERS_WINDOW, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+    return
 
 
 def stopTutorial():
@@ -274,7 +285,7 @@ def openPaymentLink():
 
 
 @pointcutable
-def showExchangeWindow():
+def showExchangeCurrencyWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.EXCHANGE_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
 

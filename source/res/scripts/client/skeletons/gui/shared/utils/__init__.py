@@ -102,3 +102,109 @@ class IItemsRequester(requesters.IRequester):
 
     def doesVehicleExist(self, intCD):
         raise NotImplementedError
+
+
+class IHangarSpace(object):
+    onStatsReceived = None
+    onSpaceCreate = None
+    onSpaceDestroy = None
+    onObjectSelected = None
+    onObjectUnselected = None
+    onObjectClicked = None
+    onObjectReleased = None
+    onVehicleChangeStarted = None
+    onVehicleChanged = None
+    onSpaceRefresh = None
+    onHeroTankReady = None
+
+    @property
+    def space(self):
+        raise NotImplementedError
+
+    @property
+    def inited(self):
+        raise NotImplementedError
+
+    @property
+    def spaceInited(self):
+        raise NotImplementedError
+
+    @property
+    def isPremium(self):
+        raise NotImplementedError
+
+    @property
+    def isModelLoaded(self):
+        raise NotImplementedError
+
+    @property
+    def isCursorOver3DScene(self):
+        raise NotImplementedError
+
+    def spaceLoading(self):
+        raise NotImplementedError
+
+    def init(self, isPremium):
+        raise NotImplementedError
+
+    def refreshSpace(self, isPremium, forceRefresh=False):
+        raise NotImplementedError
+
+    def destroy(self):
+        raise NotImplementedError
+
+    def updateVehicle(self, vehicle):
+        raise NotImplementedError
+
+    def startToUpdateVehicle(self, vehicle):
+        raise NotImplementedError
+
+    def updatePreviewVehicle(self, vehicle):
+        raise NotImplementedError
+
+    def removeVehicle(self):
+        raise NotImplementedError
+
+    def onPremiumChanged(self, isPremium, attrs, premiumExpiryTime):
+        raise NotImplementedError
+
+    def leftButtonClicked(self):
+        raise NotImplementedError
+
+    def setVehicleSelectable(self, flag):
+        raise NotImplementedError
+
+    def updateVehicleOutfit(self, outfit):
+        raise NotImplementedError
+
+    def getVehicleEntity(self):
+        raise NotImplementedError
+
+    def getCentralPointForArea(self, areaID):
+        raise NotImplementedError
+
+
+class IRaresCache(object):
+    onTextReceived = None
+    onImageReceived = None
+
+    def request(self, listOfIds):
+        raise NotImplementedError
+
+    def isLocallyLoaded(self, achieveID):
+        raise NotImplementedError
+
+    def getTitle(self, achieveID):
+        raise NotImplementedError
+
+    def getDescription(self, achieveID):
+        raise NotImplementedError
+
+    def getImageData(self, imgType, achieveID):
+        raise NotImplementedError
+
+    def getHeroInfo(self, achieveID):
+        raise NotImplementedError
+
+    def getConditions(self, achieveID):
+        raise NotImplementedError

@@ -70,8 +70,8 @@ class _ActionScriptTimer(_IStatusAnimPlayer):
 
 class _PythonTimer(PythonTimer, _IStatusAnimPlayer):
 
-    def __init__(self, panel, statusId):
-        super(_PythonTimer, self).__init__(panel, 0, 0, 0, 0, statusId=statusId)
+    def __init__(self, viewObject, statusId):
+        super(_PythonTimer, self).__init__(viewObject, 0, 0, 0, 0, statusId=statusId)
         self.__hideAnimated = False
 
     def showStatus(self, totalTime, animated):
@@ -87,14 +87,14 @@ class _PythonTimer(PythonTimer, _IStatusAnimPlayer):
         super(_PythonTimer, self).hideStatus(animated)
 
     def _showView(self, isBubble):
-        self._panel.as_setStatusTimerSnapshotS(self._statusId, self._totalTime)
+        self._viewObject.as_setStatusTimerSnapshotS(self._statusId, self._totalTime)
 
     def _hideView(self):
         if self._hasStatus:
-            self._panel.as_hideStatusS(self._statusId, self.__hideAnimated)
+            self._viewObject.as_hideStatusS(self._statusId, self.__hideAnimated)
 
     def _setViewSnapshot(self, timeLeft):
-        self._panel.as_setStatusTimerSnapshotS(self._statusId, math.ceil(timeLeft))
+        self._viewObject.as_setStatusTimerSnapshotS(self._statusId, math.ceil(timeLeft))
 
 
 class _TankIndicatorCtrl(object):

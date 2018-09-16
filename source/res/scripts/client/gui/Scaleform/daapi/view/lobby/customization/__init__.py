@@ -16,28 +16,18 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
-    from gui.Scaleform.daapi.view.lobby.customization.camo_anchor_properties import CamoAnchorProperties
-    from gui.Scaleform.daapi.view.lobby.customization.customization_popover import CustomizationPopover
-    from gui.Scaleform.daapi.view.lobby.customization.decal_anchor_properties import DecalAnchorProperties
-    from gui.Scaleform.daapi.view.lobby.customization.effects_properties import EffectsAnchorProperties
+    from gui.Scaleform.daapi.view.lobby.customization.customization_properties_sheet import CustomizationPropertiesSheet
+    from gui.Scaleform.daapi.view.lobby.customization.customization_bottom_panel import CustomizationBottomPanel
     from gui.Scaleform.daapi.view.lobby.customization.filter_popover import FilterPopover
-    from gui.Scaleform.daapi.view.lobby.customization.non_historic_indicator_popover import NonHistoricItemsPopover
-    from gui.Scaleform.daapi.view.lobby.customization.paint_anchor_properties import PaintAnchorProperties
-    from gui.Scaleform.daapi.view.lobby.customization.property_sheet_season_buttons_component import PropertySheetSeasonButtonsComponent
+    from gui.Scaleform.daapi.view.lobby.customization.installed_items_popover import InstalledItemsPopover
     from gui.Scaleform.daapi.view.lobby.customization.purchase_window import PurchaseWindow
-    from gui.Scaleform.daapi.view.lobby.customization.style_anchor_properties import StyleAnchorProperties
     from gui.Scaleform.daapi.view.dialogs.confirm_customization_item_dialog import ConfirmCustomizationItemDialog
     return (GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, FilterPopover, 'customizationFiltersPopoverView.swf', ViewTypes.WINDOW, VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_NON_HISTORIC_ITEMS_POPOVER, NonHistoricItemsPopover, 'customizationNonHistoricItemsPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.CUSTOMIZATION_NON_HISTORIC_ITEMS_POPOVER, VIEW_ALIAS.CUSTOMIZATION_NON_HISTORIC_ITEMS_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
-     GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_PURCHASE_WINDOW, PurchaseWindow, 'customizationBuyWindow.swf', ViewTypes.TOP_WINDOW, 'customizationBuyWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
+     GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, InstalledItemsPopover, 'customizationItemsPopover.swf', ViewTypes.WINDOW, VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.CUSTOMIZATION_PURCHASE_WINDOW, PurchaseWindow, 'customizationBuyWindow.swf', ViewTypes.LOBBY_TOP_SUB, 'customizationBuyWindow', None, ScopeTemplates.LOBBY_SUB_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(CUSTOMIZATION_ALIASES.CONFIRM_CUSTOMIZATION_ITEM_DIALOG, ConfirmCustomizationItemDialog, 'confirmCustomizationItemDialog.swf', ViewTypes.TOP_WINDOW, 'confirmCustomizationItemDialog', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
-     ViewSettings(VIEW_ALIAS.CUSTOMIZATION_POPOVER, CustomizationPopover, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(CUSTOMIZATION_ALIASES.CUSTOMIZATION_STYLE_POPOVER, StyleAnchorProperties, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(CUSTOMIZATION_ALIASES.CUSTOMIZATION_DECAL_POPOVER, DecalAnchorProperties, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(CUSTOMIZATION_ALIASES.CUSTOMIZATION_PAINT_POPOVER, PaintAnchorProperties, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(CUSTOMIZATION_ALIASES.CUSTOMIZATION_CAMO_POPOVER, CamoAnchorProperties, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(CUSTOMIZATION_ALIASES.CUSTOMIZATION_EFFECT_POPOVER, EffectsAnchorProperties, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(VIEW_ALIAS.SEASON_BUTTONS_COMPONENTS, PropertySheetSeasonButtonsComponent, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+     ViewSettings(VIEW_ALIAS.CUSTOMIZATION_PROPERTIES_SHEET, CustomizationPropertiesSheet, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VIEW_ALIAS.CUSTOMIZATION_BOTTOM_PANEL, CustomizationBottomPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
 
 
 CAMOUFLAGES_KIND_TEXTS = [VEHICLE_CUSTOMIZATION.CAMOUFLAGE_WINTER, VEHICLE_CUSTOMIZATION.CAMOUFLAGE_SUMMER, VEHICLE_CUSTOMIZATION.CAMOUFLAGE_DESERT]
@@ -57,7 +47,7 @@ def getBusinessHandlers():
 class CustomizationPackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
-        listeners = ((VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, self.loadViewByCtxEvent), (VIEW_ALIAS.CUSTOMIZATION_PURCHASE_WINDOW, self.loadViewByCtxEvent), (VIEW_ALIAS.CUSTOMIZATION_NON_HISTORIC_ITEMS_POPOVER, self.loadViewByCtxEvent))
+        listeners = ((VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER, self.loadViewByCtxEvent), (VIEW_ALIAS.CUSTOMIZATION_PURCHASE_WINDOW, self.loadViewByCtxEvent), (VIEW_ALIAS.CUSTOMIZATION_ITEMS_POPOVER, self.loadViewByCtxEvent))
         super(CustomizationPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
 
 

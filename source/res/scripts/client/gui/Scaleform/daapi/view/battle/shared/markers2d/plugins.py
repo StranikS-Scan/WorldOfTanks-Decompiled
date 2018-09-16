@@ -11,6 +11,7 @@ from account_helpers.settings_core.settings_constants import MARKERS, GRAPHICS, 
 from battleground.StunAreaManager import STUN_AREA_STATIC_MARKER
 from gui.Scaleform.daapi.view.battle.shared.markers2d import markers
 from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
+from gui.Scaleform.daapi.view.battle.shared.markers2d.timer import StunMarkerTimer
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control.arena_info.arena_vos import VehicleActions
 from gui.battle_control.arena_info.interfaces import IArenaVehiclesController
@@ -205,13 +206,14 @@ class AreaStaticMarkerPlugin(MarkerPlugin):
 
 class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
     bootcamp = dependency.descriptor(IBootcampController)
-    __slots__ = ('_markers', '_markersStates', '_clazz', '__playerVehicleID', '_isSquadIndicatorEnabled', '__showDamageIcon')
+    __slots__ = ('_markers', '_markersStates', '_clazz', '__playerVehicleID', '_isSquadIndicatorEnabled', '__showDamageIcon', '_stunTimers')
 
     def __init__(self, parentObj, clazz=markers.VehicleMarker):
         super(VehicleMarkerPlugin, self).__init__(parentObj)
         self._markers = {}
         self._markersStates = defaultdict(list)
         self._clazz = clazz
+        self._stunTimers = {}
         self._isSquadIndicatorEnabled = False
         self.__playerVehicleID = 0
         self.__showDamageIcon = False
@@ -258,6 +260,10 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             _, marker = self._markers.popitem()
             marker.destroy()
 
+        while self._stunTimers:
+            _, timer = self._stunTimers.popitem()
+            timer.clear()
+
         super(VehicleMarkerPlugin, self).stop()
 
     def invalidateArenaInfo(self):
@@ -302,6 +308,12 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
 
     def invalidatePlayerStatus(self, flags, vInfo, arenaDP):
         self.__setEntityName(vInfo, arenaDP)
+
+    def showStunMarker(self, handle, stunState, leftStunTime, animated):
+        self._invokeMarker(handle, 'updateStatusMarker', stunState, leftStunTime, animated)
+
+    def hideStunMarker(self, handle, stunState, currentlyActiveStatusID, animated):
+        self._invokeMarker(handle, 'hideStatusMarker', stunState, currentlyActiveStatusID, animated)
 
     def _setMarkerInitialState(self, marker, accountDBID=0):
         self.__setupDynamic(marker, accountDBID=accountDBID)
@@ -432,7 +444,14 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         self._invokeMarker(handle, 'showActionMarker', newState)
 
     def __updateStunMarker(self, vehicleID, handle, stunDuration, animated=True):
-        self.__updateStatusMarkerState(vehicleID, stunDuration > 0, handle, STUN_STATE, stunDuration, animated, False)
+        if handle in self._stunTimers:
+            timer = self._stunTimers.pop(handle)
+            timer.hide()
+            timer.clear()
+        if stunDuration > 0:
+            timer = StunMarkerTimer(self, handle, stunDuration, stunState=STUN_STATE, animated=True)
+            self._stunTimers[handle] = timer
+            timer.show(True)
 
     def __updatePassiveEngineeringMarker(self, vehicleID, handle, isAttacker, enabled, animated=True):
         self.__updateStatusMarkerState(vehicleID, enabled, handle, ENGINEER_STATE, enabled, animated, isAttacker)

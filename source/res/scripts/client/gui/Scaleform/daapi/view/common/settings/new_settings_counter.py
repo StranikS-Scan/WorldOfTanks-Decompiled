@@ -25,20 +25,20 @@ def getNewSettings():
     return result
 
 
-def invalidateSettings(tabName, subTabName, controlID):
+def invalidateSettings(tabName, subTabName, controlIDs):
     settings = _getSettingsFromStorage()
     isChanged = False
     if tabName in settings.keys():
         tabSettings = settings[tabName]
-        if subTabName:
-            if subTabName in tabSettings:
-                subTabSettings = tabSettings[subTabName]
-                if controlID in subTabSettings and subTabSettings[controlID]:
-                    subTabSettings[controlID] = False
-                    isChanged = True
-        elif controlID in tabSettings and tabSettings[controlID]:
-            tabSettings[controlID] = False
-            isChanged = True
+        if subTabName in tabSettings:
+            subContainer = tabSettings[subTabName]
+        else:
+            subContainer = tabSettings
+        for controlID in controlIDs:
+            if controlID in subContainer and subContainer[controlID]:
+                subContainer[controlID] = False
+                isChanged = True
+
     if isChanged:
         _setSettingsToStorage(settings)
         return True
@@ -50,7 +50,7 @@ def dropCounters():
     for setting in newsettings:
         for subtab in setting['subTabsData']:
             for counter in subtab['counters']:
-                invalidateSettings(setting['tabId'], subtab['subTabId'], counter['componentId'])
+                invalidateSettings(setting['tabId'], subtab['subTabId'], [counter['componentId']])
 
 
 def _countNewSettingsItems(dictItem, count):

@@ -10,6 +10,8 @@ from constants import ARENA_PERIOD
 import SoundGroups
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from helpers.PixieBG import PixieBG
+from helpers import dependency
+from skeletons.map_activities import IMapActivities
 
 class Timer(object):
     __timeMethod = None
@@ -71,7 +73,7 @@ class BaseMapActivity(object):
         self._name = self._settings.readString('name', '')
 
 
-class MapActivities(object):
+class MapActivities(IMapActivities):
 
     def __init__(self):
         self.__cbID = None
@@ -138,9 +140,9 @@ class MapActivities(object):
         return
 
     def generateArenaActivitiesTests(self):
-        self.__generateArenaActivities()
+        self._generateArenaActivities()
 
-    def __generateArenaActivities(self):
+    def _generateArenaActivities(self):
         Timer.init()
         arenaType = BigWorld.player().arena.arenaType
         self.__generateActivities(arenaType.mapActivitiesSection)
@@ -185,7 +187,7 @@ class MapActivities(object):
         return
 
     def __onAvatarBecomePlayer(self):
-        self.__generateArenaActivities()
+        self._generateArenaActivities()
 
     def __onArenaPeriodChange(self, period, periodEndTime, periodLength, periodAdditionalInfo):
         isOnArena = period in (ARENA_PERIOD.PREBATTLE, ARENA_PERIOD.BATTLE, ARENA_PERIOD.AFTERBATTLE)
@@ -687,9 +689,8 @@ def _createActivity(typeName):
 
 
 def startActivity(name, timeOffset=0.0):
-    global g_mapActivities
-    g_mapActivities.start(name, Timer.getTime() + timeOffset)
+    mapActivities = dependency.instance(IMapActivities)
+    mapActivities.start(name, Timer.getTime() + timeOffset)
 
 
-g_mapActivities = MapActivities()
 Timer.init()

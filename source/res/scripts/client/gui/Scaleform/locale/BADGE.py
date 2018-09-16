@@ -92,6 +92,14 @@ class BADGE(object):
     BADGE_35 = '#badge:badge_35'
     BADGE_35_DESCR = '#badge:badge_35_descr'
     BADGE_NOTE = '#badge:badge_note'
+    BADGE_ALL_SHORT_ENUM = (BADGE_10_SHORT,
+     BADGE_11_SHORT,
+     BADGE_12_SHORT,
+     BADGE_13_SHORT,
+     BADGE_14_SHORT,
+     BADGE_15_SHORT,
+     BADGE_16_SHORT,
+     BADGE_17_SHORT)
     BADGE_ENUM = (BADGE_0,
      BADGE_0_DESCR,
      BADGE_1,
@@ -173,14 +181,6 @@ class BADGE(object):
      BADGE_35,
      BADGE_35_DESCR,
      BADGE_NOTE)
-    BADGE_ALL_SHORT_ENUM = (BADGE_10_SHORT,
-     BADGE_11_SHORT,
-     BADGE_12_SHORT,
-     BADGE_13_SHORT,
-     BADGE_14_SHORT,
-     BADGE_15_SHORT,
-     BADGE_16_SHORT,
-     BADGE_17_SHORT)
     BADGE_ALL_DESCR_ENUM = (BADGE_0_DESCR,
      BADGE_1_DESCR,
      BADGE_2_DESCR,

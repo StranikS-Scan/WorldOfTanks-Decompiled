@@ -11,6 +11,7 @@ from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
 STATISTICS_VERSION = '0.0.2'
 
@@ -96,6 +97,7 @@ class StatisticsCollector(IStatisticsCollector):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
     connectionMgr = dependency.descriptor(IConnectionManager)
+    hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self):
         self.__state = _STATISTICS_STATE.STOPPED
@@ -116,14 +118,12 @@ class StatisticsCollector(IStatisticsCollector):
 
     def init(self):
         self.connectionMgr.onDisconnected += self.__onClientDisconnected
-        from gui.shared.utils.HangarSpace import g_hangarSpace
-        g_hangarSpace.onSpaceCreate += self.__onHangarSpaceLoaded
+        self.hangarSpace.onSpaceCreate += self.__onHangarSpaceLoaded
 
     def fini(self):
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.connectionMgr.onDisconnected -= self.__onClientDisconnected
-        from gui.shared.utils.HangarSpace import g_hangarSpace
-        g_hangarSpace.onSpaceCreate -= self.__onHangarSpaceLoaded
+        self.hangarSpace.onSpaceCreate -= self.__onHangarSpaceLoaded
         self.__updateFunc = None
         return
 

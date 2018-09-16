@@ -15,11 +15,6 @@ from helpers import i18n
 from shared_utils import CONST_CONTAINER
 COMPLEX_TOKEN_TEMPLATE = 'img:(?P<styleID>.+):(?P<webID>.+)'
 TokenComplex = namedtuple('TokenComplex', 'isDisplayable styleID webID')
-MARATHON_PREFIX = 'marathon:'
-
-def isMarathon(eventID):
-    return eventID.startswith(MARATHON_PREFIX)
-
 
 def getLinkedActionID(groupID, actions):
     delimiter = ':'
@@ -159,9 +154,13 @@ def makeUniquePath(path, name):
 
 def formatStrDiscount(discountVal):
     dt = discountVal.discountType
+    dn = discountVal.discountName
     if dt == DISCOUNT_TYPE.PERCENT or dt == DISCOUNT_TYPE.TRADE_IN_PERCENT:
         if dt == DISCOUNT_TYPE.PERCENT:
-            txtKey = QUESTS.ACTION_DISCOUNT_DISCOUNTTEXT
+            if isinstance(dn, types.StringTypes) and dn == 'marathon':
+                txtKey = QUESTS.ACTION_DISCOUNT_DISCOUNTUPTOTEXT
+            else:
+                txtKey = QUESTS.ACTION_DISCOUNT_DISCOUNTTEXT
         else:
             txtKey = QUESTS.ACTION_DISCOUNT_TRADEINLABELTEXT
         return '{} {}'.format(i18n.makeString(txtKey), i18n.makeString(QUESTS.ACTION_DISCOUNT_PERCENT, value=discountVal.discountValue))
@@ -292,7 +291,7 @@ def packMissionIconCondition(titleData, progressType, descrData, iconKey, curren
 
 _IconData = namedtuple('_IconData', 'icon, iconLabel')
 
-def packMissionBonusTypeElements(bonusTypes, width=24, height=24, vSpace=-9):
+def packMissionBonusTypeElements(bonusTypes, width=32, height=32, vSpace=-11):
     uniqueTypes = getUniqueBonusTypes(bonusTypes)
     elements = []
     for bonusType in uniqueTypes:
@@ -303,7 +302,7 @@ def packMissionBonusTypeElements(bonusTypes, width=24, height=24, vSpace=-9):
     return elements
 
 
-def packMissionFormationElement(formationName, width=24, height=24, vSpace=-9):
+def packMissionFormationElement(formationName, width=32, height=32, vSpace=-11):
     return _IconData(gui_icons.makeImageTag(RES_ICONS.getBrebattleConditionIcon(formationName), width=width, height=height, vSpace=vSpace), i18n.makeString('#quests:details/conditions/formation/%s' % formationName))
 
 
@@ -332,7 +331,7 @@ def packMissionPrebattleCondition(label, icons='', tooltip=''):
      'tooltip': tooltip}
 
 
-def packMissionCamoElement(camoTypeName, width=24, height=24, vSpace=-9):
+def packMissionCamoElement(camoTypeName, width=32, height=32, vSpace=-11):
     return _IconData(gui_icons.makeImageTag(RES_ICONS.getBrebattleConditionIcon(camoTypeName), width=width, height=height, vSpace=vSpace), i18n.makeString('#quests:details/conditions/mapsType/%s' % camoTypeName))
 
 

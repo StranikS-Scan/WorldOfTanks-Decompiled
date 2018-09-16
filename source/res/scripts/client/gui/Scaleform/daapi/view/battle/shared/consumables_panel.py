@@ -60,8 +60,8 @@ def _isEquipmentAvailableToUse(eq):
 
 class _PythonReloadTicker(PythonTimer):
 
-    def __init__(self, panel):
-        super(_PythonReloadTicker, self).__init__(panel, 0, 0, 0, 0, interval=0.1)
+    def __init__(self, viewObject):
+        super(_PythonReloadTicker, self).__init__(viewObject, 0, 0, 0, 0, interval=0.1)
         self.__index = 0
 
     def _hideView(self):
@@ -82,11 +82,11 @@ class _PythonReloadTicker(PythonTimer):
         if self._totalTime > 0:
             timeGone = self._totalTime - timeLeft
             progressInPercents = float(timeGone) / self._totalTime * 100
-            self._panel.as_setCoolDownPosAsPercentS(self.__index, progressInPercents)
+            self._viewObject.as_setCoolDownPosAsPercentS(self.__index, progressInPercents)
 
     def _stopTick(self):
         super(_PythonReloadTicker, self)._stopTick()
-        self._panel.as_setCoolDownPosAsPercentS(self.__index, 100.0)
+        self._viewObject.as_setCoolDownPosAsPercentS(self.__index, 100.0)
 
 
 class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):

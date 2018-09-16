@@ -7,7 +7,11 @@ from helpers import i18n, html
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI as I18N_INGAME_GUI
 from messenger.formatters.users_messages import getBroadcastIsInCoolDownMessage
 from messenger.m_constants import MESSENGER_I18N_FILE
-BROADCAST_COOL_DOWN_MESSAGE = getBroadcastIsInCoolDownMessage(getOperationCooldownPeriod(CHAT_COMMANDS.broadcast))
+
+def getBroadcastCoolDownMessage():
+    return getBroadcastIsInCoolDownMessage(getOperationCooldownPeriod(CHAT_COMMANDS.broadcast))
+
+
 _battleChatShortcuts = (CHAT_COMMANDS.HELPME.name(),
  CHAT_COMMANDS.FOLLOWME.name(),
  CHAT_COMMANDS.ATTACK.name(),

@@ -4,7 +4,6 @@ import copy
 import json
 import math
 import BigWorld
-import MapActivities
 import Math
 import MusicControllerWWISE
 import ResMgr
@@ -17,9 +16,12 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IIGRController
 from gui.hangar_cameras.hangar_camera_manager import HangarCameraManager
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from skeletons.map_activities import IMapActivities
+from skeletons.gui.shared.utils import IHangarSpace
 _DEFAULT_SPACES_PATH = 'spaces'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
 _SERVER_CMD_CHANGE_HANGAR_PREM = 'cmd_change_hangar_prem'
+_CUSTOMIZATION_HANGAR_SETTINGS_SEC = 'customizationHangarSettings'
 
 def _getDefaultHangarPath(isPremium):
     return '%s/hangar_v3' % _DEFAULT_SPACES_PATH
@@ -51,6 +53,10 @@ def hangarCFG():
     return _CFG
 
 
+def customizationHangarCFG():
+    return _CFG.get(_CUSTOMIZATION_HANGAR_SETTINGS_SEC)
+
+
 def _readHangarSettings():
     hangarsXml = ResMgr.openSection('gui/hangars.xml')
     paths = [ path for path, _ in ResMgr.openSection(_DEFAULT_SPACES_PATH).items() ]
@@ -69,6 +75,11 @@ def _readHangarSettings():
         loadConfigValue('shadow_empty_texture_name', hangarsXml, hangarsXml.readString, cfg)
         loadConfigValue(_IGR_HANGAR_PATH_KEY, hangarsXml, hangarsXml.readString, cfg)
         loadConfig(cfg, settingsXml)
+        if settingsXml.has_key(_CUSTOMIZATION_HANGAR_SETTINGS_SEC):
+            customizationXmlSection = settingsXml[_CUSTOMIZATION_HANGAR_SETTINGS_SEC]
+            customizationCfg = {}
+            _loadCustomizationConfig(customizationCfg, customizationXmlSection)
+            cfg[_CUSTOMIZATION_HANGAR_SETTINGS_SEC] = customizationCfg
         configset[spaceKey] = cfg
 
     return configset
@@ -136,6 +147,20 @@ def loadConfig(cfg, xml, defaultCfg=None):
     return
 
 
+def _loadCustomizationConfig(cfg, xml):
+    defaultFakeShadowOffsetsCfg = {'shadow_forward_y_offset': 0.0,
+     'shadow_deferred_y_offset': 0.0}
+    loadConfigValue('v_start_pos', xml, xml.readVector3, cfg, cfg)
+    loadConfigValue('v_start_angles', xml, xml.readVector3, cfg, cfg)
+    loadConfigValue('cam_start_dist', xml, xml.readFloat, cfg, cfg)
+    loadConfigValue('cam_dist_constr', xml, xml.readVector2, cfg, cfg)
+    loadConfigValue('cam_start_angles', xml, xml.readVector2, cfg, cfg)
+    loadConfigValue('cam_pivot_pos', xml, xml.readVector3, cfg, cfg)
+    loadConfigValue('cam_start_target_pos', xml, xml.readVector3, cfg, cfg)
+    loadConfigValue('shadow_forward_y_offset', xml, xml.readFloat, cfg, defaultFakeShadowOffsetsCfg)
+    loadConfigValue('shadow_deferred_y_offset', xml, xml.readFloat, cfg, defaultFakeShadowOffsetsCfg)
+
+
 def loadConfigValue(name, xml, fn, cfg, defaultCfg=None):
     if xml.has_key(name):
         cfg[name] = fn(name)
@@ -148,6 +173,7 @@ class ClientHangarSpace(object):
     igrCtrl = dependency.descriptor(IIGRController)
     settingsCore = dependency.descriptor(ISettingsCore)
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
+    mapActivities = dependency.descriptor(IMapActivities)
 
     def __init__(self, onVehicleLoadedCallback):
         global _HANGAR_CFGS
@@ -204,7 +230,7 @@ class ClientHangarSpace(object):
         self.__gfxOptimizerMgr = GraphicsOptimizationManager()
         size = BigWorld.screenSize()
         self.__optimizerID = self.__gfxOptimizerMgr.registerOptimizationArea(0, 0, size[0], size[1])
-        MapActivities.g_mapActivities.generateOfflineActivities(spacePath)
+        self.mapActivities.generateOfflineActivities(spacePath)
         BigWorld.pauseDRRAutoscaling(True)
         return
 
@@ -246,7 +272,7 @@ class ClientHangarSpace(object):
         vEntity = self.getVehicleEntity()
         if vEntity is not None and vEntity.isVehicleLoaded:
             outfit = outfit or self.itemsFactory.createOutfit()
-            vEntity.appearance.updateCustomization(outfit)
+            vEntity.updateVehicleCustomization(outfit)
         return
 
     def getCentralPointForArea(self, areaId):
@@ -288,7 +314,7 @@ class ClientHangarSpace(object):
             BigWorld.cancelCallback(self.__waitCallback)
             self.__waitCallback = None
         BigWorld.SetDrawInflux(False)
-        MapActivities.g_mapActivities.stop()
+        self.mapActivities.stop()
         if self.__spaceId is not None and BigWorld.isClientSpace(self.__spaceId):
             if self.__spaceMappingId is not None:
                 BigWorld.delSpaceGeometryMapping(self.__spaceId, self.__spaceMappingId)
@@ -330,6 +356,12 @@ class ClientHangarSpace(object):
     def locateCameraToPreview(self):
         self.__cameraManager.locateCameraToPreview()
 
+    def locateCameraToCustomizationPreview(self):
+        self.__cameraManager.locateCameraToCustomizationPreview()
+
+    def locateCameraToStartState(self):
+        self.__cameraManager.locateCameraToStartState()
+
     def locateCameraOnEmblem(self, onHull, emblemType, emblemIdx, relativeSize=0.5):
         return self.__cameraManager.locateCameraOnEmblem(onHull, emblemType, emblemIdx, relativeSize)
 
@@ -342,6 +374,7 @@ class ClientHangarSpace(object):
 
 
 class _ClientHangarSpacePathOverride(object):
+    hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self):
         g_playerEvents.onEventNotificationsChanged += self.__onEventNotificationsChanged
@@ -352,21 +385,19 @@ class _ClientHangarSpacePathOverride(object):
         g_playerEvents.onDisconnected -= self.__onDisconnected
 
     def setPremium(self, isPremium):
-        from gui.shared.utils.HangarSpace import g_hangarSpace
-        g_hangarSpace.refreshSpace(isPremium, True)
+        self.hangarSpace.refreshSpace(isPremium, True)
 
     def setPath(self, path, isPremium=None, isReload=True):
         if path is not None and not path.startswith('spaces/'):
             path = 'spaces/' + path
-        from gui.shared.utils.HangarSpace import g_hangarSpace
         if isPremium is None:
-            isPremium = g_hangarSpace.isPremium
+            isPremium = self.hangarSpace.isPremium
         if path is not None:
             _EVENT_HANGAR_PATHS[isPremium] = path
         elif _EVENT_HANGAR_PATHS.has_key(isPremium):
             del _EVENT_HANGAR_PATHS[isPremium]
         if isReload:
-            g_hangarSpace.refreshSpace(g_hangarSpace.isPremium, True)
+            self.hangarSpace.refreshSpace(self.hangarSpace.isPremium, True)
         return
 
     def __onDisconnected(self):
@@ -374,8 +405,7 @@ class _ClientHangarSpacePathOverride(object):
         _EVENT_HANGAR_PATHS = {}
 
     def __onEventNotificationsChanged(self, diff):
-        from gui.shared.utils.HangarSpace import g_hangarSpace
-        isPremium = g_hangarSpace.isPremium
+        isPremium = self.hangarSpace.isPremium
         hasChanged = False
         for notification in diff['removed']:
             if notification['type'] == _SERVER_CMD_CHANGE_HANGAR:
@@ -408,8 +438,8 @@ class _ClientHangarSpacePathOverride(object):
                 if isPremium:
                     hasChanged = True
 
-        if hasChanged and g_hangarSpace.inited:
-            g_hangarSpace.refreshSpace(isPremium, True)
+        if hasChanged and self.hangarSpace.inited:
+            self.hangarSpace.refreshSpace(isPremium, True)
         return
 
 

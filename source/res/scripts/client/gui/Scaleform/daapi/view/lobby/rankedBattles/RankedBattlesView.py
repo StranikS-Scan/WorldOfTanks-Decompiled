@@ -94,12 +94,17 @@ class RankedBattlesView(LobbySubView, RankedBattlesViewMeta):
          'shadowFilterVisible': showPrimeTimeAlert}
 
     def __buildProgressData(self):
+        rank = self.rankedController.getCurrentRank()
+        rankID = rank.getID()
+        rankLabel = ''
         if self.rankedController.isAccountMastered():
-            rank = self.rankedController.getCurrentRank()
-            result = [self.__packProgressInfo(RES_ICONS.MAPS_ICONS_RANKEDBATTLES_ICON_VICTORY, text_styles.vehicleName(_ms(RANKED_BATTLES.RANKEDBATTLEVIEW_PROGRESSBLOCK_FINALRANK))), self.__packRank(rank), self.__packProgressInfo(RES_ICONS.MAPS_ICONS_RANKEDBATTLES_ICON_FINAL_CUP_150X100, text_styles.vehicleName(_ms(RANKED_BATTLES.RANKEDBATTLEVIEW_PROGRESSBLOCK_CONTINUE)))]
+            blocks = [self.__packProgressInfo(RES_ICONS.MAPS_ICONS_RANKEDBATTLES_ICON_VICTORY, text_styles.vehicleName(_ms(RANKED_BATTLES.RANKEDBATTLEVIEW_PROGRESSBLOCK_FINALRANK, rank=rankID))), self.__packRank(rank), self.__packProgressInfo(RES_ICONS.MAPS_ICONS_RANKEDBATTLES_ICON_FINAL_CUP_150X100, text_styles.vehicleName(_ms(RANKED_BATTLES.RANKEDBATTLEVIEW_PROGRESSBLOCK_CONTINUE)))]
         else:
-            result = [ self.__packRank(rank) for rank in self.rankedController.getRanksChain() if rank.getID() != 0 ]
-        return result
+            blocks = [ self.__packRank(rank) for rank in self.rankedController.getRanksChain() if rank.getID() != 0 ]
+            if rankID > 0:
+                rankLabel = text_styles.neutral(_ms(RANKED_BATTLES.RANKEDBATTLEVIEW_PROGRESSBLOCK_CURRENTRANK, rank=text_styles.stats(rankID)))
+        return {'blocks': blocks,
+         'currentRankLabel': rankLabel}
 
     def __packRank(self, rank):
         isCurrent = rank.isCurrent()

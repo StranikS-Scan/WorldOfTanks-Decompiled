@@ -31,6 +31,9 @@ class LobbyMenuMeta(View):
     def onEscapePress(self):
         self._printOverrideError('onEscapePress')
 
+    def manualClick(self):
+        self._printOverrideError('manualClick')
+
     def as_setVersionMessageS(self, data):
         return self.flashObject.as_setVersionMessage(data) if self._isDAAPIInited() else None
 
@@ -45,6 +48,9 @@ class LobbyMenuMeta(View):
 
     def as_showBootcampButtonS(self, value):
         return self.flashObject.as_showBootcampButton(value) if self._isDAAPIInited() else None
+
+    def as_showManualButtonS(self, value):
+        return self.flashObject.as_showManualButton(value) if self._isDAAPIInited() else None
 
     def as_setMenuStateS(self, state):
         return self.flashObject.as_setMenuState(state) if self._isDAAPIInited() else None

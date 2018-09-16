@@ -2,6 +2,14 @@
 # Embedded file name: scripts/client/skeletons/connection_mgr.py
 from Event import Event
 
+class DisconnectReason(object):
+    UNDEFINED = 0
+    REQUEST = 1
+    EVENT = 2
+    KICK = 3
+    ERROR = 4
+
+
 class IConnectionManager(object):
     onLoggedOn = None
     onConnected = None

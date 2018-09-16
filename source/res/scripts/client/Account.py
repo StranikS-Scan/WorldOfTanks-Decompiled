@@ -25,6 +25,7 @@ from gui.Scaleform.Waiting import Waiting
 from messenger import MessengerEntry
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared.utils import IHangarSpace
 from streamIDs import RangeStreamIDCallbacks, STREAM_ID_CHAT_MAX, STREAM_ID_CHAT_MIN
 from ContactInfo import ContactInfo
 from ClientChat import ClientChat
@@ -51,6 +52,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
      AccountCommands.REQUEST_ID_PREBATTLE_ROSTER: 'receivePrebattleRoster'}
     lobbyContext = dependency.descriptor(ILobbyContext)
     connectionMgr = dependency.descriptor(IConnectionManager)
+    hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self):
         global g_accountRepository
@@ -383,13 +385,11 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def targetFocus(self, entity):
         if isinstance(entity, ClientSelectableObject) and entity.enabled:
-            from gui.shared.utils.HangarSpace import g_hangarSpace
-            g_hangarSpace.onObjectSelected(entity)
+            self.hangarSpace.onObjectSelected(entity)
 
     def targetBlur(self, prevEntity):
         if isinstance(prevEntity, ClientSelectableObject):
-            from gui.shared.utils.HangarSpace import g_hangarSpace
-            g_hangarSpace.onObjectUnselected(prevEntity)
+            self.hangarSpace.onObjectUnselected(prevEntity)
 
     def onKickedFromQueue(self, queueType):
         LOG_DEBUG('onKickedFromQueue', queueType)
@@ -936,6 +936,15 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
          isBan]
         strArr = [reason]
         self._doCmdIntArrStrArr(AccountCommands.CMD_BAN_UNBAN_USER, intArr, strArr, proxy)
+        return
+
+    def chooseQuestReward(self, eventType, questID, rewardID, callback=None):
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorCode: callback(resultID, errorCode)
+        else:
+            proxy = None
+        strArr = [questID.encode('utf8'), rewardID.encode('utf8')]
+        self._doCmdIntStrArr(AccountCommands.CMD_CHOOSE_QUEST_REWARD, eventType, strArr, proxy)
         return
 
     def logClientSystem(self, stats):

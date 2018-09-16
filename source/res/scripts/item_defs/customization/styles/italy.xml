@@ -1,14 +1,10 @@
 <italy.xml>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
     <priceGroup>	style gold	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	italy	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	italy	</nations>
       </include>
     </vehicleFilter>
@@ -140,15 +136,11 @@
     </style>
   </itemGroup>
   <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	italy	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	italy	</nations>
       </include>
     </vehicleFilter>

@@ -4,19 +4,29 @@ from debug_utils import LOG_UNEXPECTED
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import ViewEventType
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
-from gui.Scaleform.framework.managers.loaders import ViewLoadParams, ViewLoadMode
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
+from gui.Scaleform.framework.managers.loaders import ViewLoadMode
+from gui.Scaleform.framework.managers.loaders import UBViewLoadParams
 from gui.Scaleform.framework.managers.containers import ChainItem
 
 def _loadViewEventHandler(containerManager, e):
     containerManager.load(e.loadParams, *e.args, **e.kwargs)
 
 
+def _loadUbViewEventHandler(containerManager, e):
+    containerManager.load(UBViewLoadParams(e.alias, e.viewClass), *e.args, **e.kwargs)
+
+
 def _preLoadViewEventHandler(containerManager, e):
-    containerManager.load(ViewLoadParams(e.alias, e.name, loadMode=ViewLoadMode.PRELOAD), e.ctx)
+    containerManager.load(SFViewLoadParams(e.alias, e.name, loadMode=ViewLoadMode.PRELOAD), e.ctx)
 
 
 def _destroyViewEventHandler(containerManager, e):
     containerManager.destroyViews(e.alias, e.name)
+
+
+def _destroyUbViewEventHandler(containerManager, e):
+    containerManager.destroyViews(e.alias)
 
 
 def _loadViewsChainEventHandler(containerManager, e):
@@ -25,8 +35,10 @@ def _loadViewsChainEventHandler(containerManager, e):
 
 
 _EVENT_HANDLERS = {ViewEventType.LOAD_VIEW: _loadViewEventHandler,
+ ViewEventType.LOAD_UB_VIEW: _loadUbViewEventHandler,
  ViewEventType.PRELOAD_VIEW: _preLoadViewEventHandler,
  ViewEventType.DESTROY_VIEW: _destroyViewEventHandler,
+ ViewEventType.DESTROY_UB_VIEW: _destroyUbViewEventHandler,
  ViewEventType.LOAD_VIEWS_CHAIN: _loadViewsChainEventHandler}
 
 class ViewEventsListener(EventSystemEntity):

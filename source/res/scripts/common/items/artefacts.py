@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/items/artefacts.py
 import math
 from functools import partial
+from itertools import chain
 import items
 import nations
 from constants import IS_CLIENT, IS_CELLAPP, IS_WEB, VEHICLE_TTC_ASPECTS
@@ -77,6 +78,9 @@ class Artefact(BasicItem):
         else:
             filter = self.__artefactFilter
             return True if filter is None else not filter.inActive(other.tags)
+
+    def compatibleNations(self):
+        return self.__vehicleFilter.compatibleNations() if self.__vehicleFilter else {nations.INDICES[n] for n in nations.AVAILABLE_NAMES}
 
     def _readConfig(self, xmlCtx, scriptSection):
         pass
@@ -156,19 +160,17 @@ class StaticFactorDevice(OptionalDevice):
 
     def __init__(self):
         super(StaticFactorDevice, self).__init__()
-        self.__attr = None
         self.__factor = component_constants.ZERO_FLOAT
+        self.__attr = None
         return
 
     def updateVehicleDescrAttrs(self, vehicleDescr):
         if len(self.__attr) == 1:
             attrDict = vehicleDescr.__dict__
-            attrName = self.__attr[0]
         else:
             attrDict = getattr(vehicleDescr, self.__attr[0])
-            attrName = self.__attr[1]
-        val = attrDict[attrName]
-        attrDict[attrName] = val * self.__factor
+        val = attrDict[self.attribute]
+        attrDict[self.attribute] = val * self.factor
         miscAttrs = vehicleDescr.miscAttrs
         miscAttrs['stunResistanceEffect'] += self.stunResistanceEffect
         miscAttrs['stunResistanceDuration'] += self.stunResistanceDuration
@@ -176,6 +178,14 @@ class StaticFactorDevice(OptionalDevice):
     def _readConfig(self, xmlCtx, section):
         self.__factor = _xml.readPositiveFloat(xmlCtx, section, 'factor')
         self.__attr = _xml.readNonEmptyString(xmlCtx, section, 'attribute').split('/', 1)
+
+    @property
+    def factor(self):
+        return self.__factor
+
+    @property
+    def attribute(self):
+        return self.__attr[0] if len(self.__attr) == 1 else self.__attr[1]
 
 
 class StaticAdditiveDevice(OptionalDevice):
@@ -190,12 +200,10 @@ class StaticAdditiveDevice(OptionalDevice):
     def updateVehicleDescrAttrs(self, vehicleDescr):
         if len(self.__attr) == 1:
             attrDict = vehicleDescr.__dict__
-            attrName = self.__attr[0]
         else:
             attrDict = getattr(vehicleDescr, self.__attr[0])
-            attrName = self.__attr[1]
-        val = attrDict[attrName]
-        attrDict[attrName] = val + self.__value
+        val = attrDict[self.attribute]
+        attrDict[self.attribute] = val + self.value
         miscAttrs = vehicleDescr.miscAttrs
         miscAttrs['stunResistanceEffect'] += self.stunResistanceEffect
         miscAttrs['stunResistanceDuration'] += self.stunResistanceDuration
@@ -203,6 +211,14 @@ class StaticAdditiveDevice(OptionalDevice):
     def _readConfig(self, xmlCtx, section):
         self.__value = _xml.readFloat(xmlCtx, section, 'value')
         self.__attr = _xml.readNonEmptyString(xmlCtx, section, 'attribute').split('/', 1)
+
+    @property
+    def value(self):
+        return self.__value
+
+    @property
+    def attribute(self):
+        return self.__attr[0] if len(self.__attr) == 1 else self.__attr[1]
 
 
 class Stereoscope(OptionalDevice):
@@ -247,71 +263,71 @@ class CamouflageNet(OptionalDevice):
 
 
 class EnhancedSuspension(OptionalDevice):
-    __slots__ = ('__chassisMaxLoadFactor', '__chassisHealthFactor', '__vehicleByChassisDamageFactor')
+    __slots__ = ('chassisMaxLoadFactor', 'chassisHealthFactor', 'vehicleByChassisDamageFactor')
 
     def __init__(self):
         super(EnhancedSuspension, self).__init__()
-        self.__chassisMaxLoadFactor = component_constants.ZERO_FLOAT
-        self.__chassisHealthFactor = component_constants.ZERO_FLOAT
-        self.__vehicleByChassisDamageFactor = component_constants.ZERO_FLOAT
+        self.chassisMaxLoadFactor = component_constants.ZERO_FLOAT
+        self.chassisHealthFactor = component_constants.ZERO_FLOAT
+        self.vehicleByChassisDamageFactor = component_constants.ZERO_FLOAT
 
     def weightOnVehicle(self, vehicleDescr):
         chassis = vehicleDescr.chassis
-        return (self._vehWeightFraction, self._weight, chassis.maxLoad * (self.__chassisMaxLoadFactor - 1.0))
+        return (self._vehWeightFraction, self._weight, chassis.maxLoad * (self.chassisMaxLoadFactor - 1.0))
 
     def _readConfig(self, xmlCtx, section):
         reader = partial(_xml.readPositiveFloat, xmlCtx, section)
-        self.__chassisMaxLoadFactor = reader('chassisMaxLoadFactor')
-        self.__chassisHealthFactor = reader('chassisHealthFactor')
-        self.__vehicleByChassisDamageFactor = reader('vehicleByChassisDamageFactor')
+        self.chassisMaxLoadFactor = reader('chassisMaxLoadFactor')
+        self.chassisHealthFactor = reader('chassisHealthFactor')
+        self.vehicleByChassisDamageFactor = reader('vehicleByChassisDamageFactor')
 
     def updateVehicleDescrAttrs(self, vehicleDescr):
         miscAttrs = vehicleDescr.miscAttrs
-        miscAttrs['chassisHealthFactor'] *= self.__chassisHealthFactor
-        miscAttrs['vehicleByChassisDamageFactor'] *= self.__vehicleByChassisDamageFactor
+        miscAttrs['chassisHealthFactor'] *= self.chassisHealthFactor
+        miscAttrs['vehicleByChassisDamageFactor'] *= self.vehicleByChassisDamageFactor
         miscAttrs['stunResistanceEffect'] += self.stunResistanceEffect
         miscAttrs['stunResistanceDuration'] += self.stunResistanceDuration
 
 
 class Grousers(OptionalDevice):
-    __slots__ = ('__factorSoft', '__factorMedium')
+    __slots__ = ('factorSoft', 'factorMedium')
 
     def __init__(self):
         super(Grousers, self).__init__()
-        self.__factorSoft = component_constants.ZERO_FLOAT
-        self.__factorMedium = component_constants.ZERO_FLOAT
+        self.factorSoft = component_constants.ZERO_FLOAT
+        self.factorMedium = component_constants.ZERO_FLOAT
 
     def updateVehicleDescrAttrs(self, vehicleDescr):
         r = vehicleDescr.physics['terrainResistance']
-        vehicleDescr.physics['terrainResistance'] = (r[0], r[1] * self.__factorMedium, r[2] * self.__factorSoft)
+        vehicleDescr.physics['terrainResistance'] = (r[0], r[1] * self.factorMedium, r[2] * self.factorSoft)
         rff = vehicleDescr.physics['rollingFrictionFactors']
-        rff[1] *= self.__factorMedium
-        rff[2] *= self.__factorSoft
+        rff[1] *= self.factorMedium
+        rff[2] *= self.factorSoft
 
     def _readConfig(self, xmlCtx, section):
-        self.__factorSoft = _xml.readPositiveFloat(xmlCtx, section, 'softGroundResistanceFactor')
-        self.__factorMedium = _xml.readPositiveFloat(xmlCtx, section, 'mediumGroundResistanceFactor')
+        self.factorSoft = _xml.readPositiveFloat(xmlCtx, section, 'softGroundResistanceFactor')
+        self.factorMedium = _xml.readPositiveFloat(xmlCtx, section, 'mediumGroundResistanceFactor')
 
 
 class AntifragmentationLining(OptionalDevice):
-    __slots__ = ('__antifragmentationLiningFactor', '__increaseCrewChanceToEvadeHit')
+    __slots__ = ('antifragmentationLiningFactor', 'increaseCrewChanceToEvadeHit')
 
     def __init__(self):
         super(AntifragmentationLining, self).__init__()
-        self.__antifragmentationLiningFactor = component_constants.ZERO_FLOAT
-        self.__increaseCrewChanceToEvadeHit = component_constants.ZERO_FLOAT
+        self.antifragmentationLiningFactor = component_constants.ZERO_FLOAT
+        self.increaseCrewChanceToEvadeHit = component_constants.ZERO_FLOAT
 
     def updateVehicleDescrAttrs(self, vehicleDescr):
         miscAttrs = vehicleDescr.miscAttrs
-        miscAttrs['antifragmentationLiningFactor'] *= self.__antifragmentationLiningFactor
-        miscAttrs['crewChanceToHitFactor'] *= 1.0 - self.__increaseCrewChanceToEvadeHit
+        miscAttrs['antifragmentationLiningFactor'] *= self.antifragmentationLiningFactor
+        miscAttrs['crewChanceToHitFactor'] *= 1.0 - self.increaseCrewChanceToEvadeHit
         miscAttrs['stunResistanceEffect'] += self.stunResistanceEffect
         miscAttrs['stunResistanceDuration'] += self.stunResistanceDuration
 
     def _readConfig(self, xmlCtx, section):
         reader = partial(_xml.readPositiveFloat, xmlCtx, section)
-        self.__antifragmentationLiningFactor = reader('antifragmentationLiningFactor')
-        self.__increaseCrewChanceToEvadeHit = reader('increaseCrewChanceToEvadeHit')
+        self.antifragmentationLiningFactor = reader('antifragmentationLiningFactor')
+        self.increaseCrewChanceToEvadeHit = reader('increaseCrewChanceToEvadeHit')
 
 
 class Extinguisher(Equipment):
@@ -1111,6 +1127,11 @@ class _VehicleFilter(object):
                     return (False, 'not for this vehicle type')
                 return (False, 'not for current vehicle')
         return (True, None)
+
+    def compatibleNations(self):
+        included = set(*chain((params.get('nations', []) for params in self.__include)))
+        excluded = set(*chain((params.get('nations', []) for params in self.__exclude)))
+        return included - excluded
 
 
 class _ArtefactFilter(object):

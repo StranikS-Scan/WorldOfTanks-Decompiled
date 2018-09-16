@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/proto/entities.py
 from collections import deque
-from helpers import dependency
+from helpers import dependency, i18n
 from ids_generators import SequenceIDGenerator
 from gui.shared.utils.decorators import ReprInjector
 from messenger.m_constants import USER_GUI_TYPE, MESSAGES_HISTORY_MAX_LEN, MESSENGER_COMMAND_TYPE, USER_TAG, USER_DEFAULT_NAME_PREFIX, GAME_ONLINE_STATUS, PRIMARY_CHANNEL_ORDER
@@ -14,7 +14,7 @@ def _generateUserName():
     global _g_namesGenerator
     if _g_namesGenerator is None:
         _g_namesGenerator = SequenceIDGenerator()
-    return '%s %d' % (USER_DEFAULT_NAME_PREFIX, _g_namesGenerator.next())
+    return '%s %d' % (i18n.makeString(USER_DEFAULT_NAME_PREFIX), _g_namesGenerator.next())
 
 
 class ChatEntity(object):

@@ -3,13 +3,16 @@
 import uuid
 import imghdr
 import BigWorld
-from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache, IMAGE_TYPE
+from gui.shared.utils.RareAchievementsCache import IMAGE_TYPE
 from RegularAchievement import RegularAchievement
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK as _AB
 from gui.shared.gui_items.dossier.achievements import validators
+from helpers import dependency
+from skeletons.gui.shared.utils import IRaresCache
 
 class RareAchievement(RegularAchievement):
     SHOW_COUNTER = True
+    rareAchievesCache = dependency.descriptor(IRaresCache)
 
     def __init__(self, rareID, dossier, value=None):
         self._rareID = int(rareID)
@@ -22,10 +25,10 @@ class RareAchievement(RegularAchievement):
         return (_AB.RARE, self._rareID)
 
     def getUserName(self):
-        return g_rareAchievesCache.getTitle(self._rareID)
+        return self.rareAchievesCache.getTitle(self._rareID)
 
     def getUserDescription(self):
-        return g_rareAchievesCache.getDescription(self._rareID)
+        return self.rareAchievesCache.getDescription(self._rareID)
 
     @classmethod
     def checkIsInDossier(cls, block, rareID, dossier):
@@ -36,13 +39,13 @@ class RareAchievement(RegularAchievement):
         return not validators.accountIsRoaming(dossier) if dossier is not None else True
 
     def getUserHeroInfo(self):
-        return g_rareAchievesCache.getHeroInfo(self._rareID)
+        return self.rareAchievesCache.getHeroInfo(self._rareID)
 
     def getUserCondition(self):
-        return g_rareAchievesCache.getConditions(self._rareID)
+        return self.rareAchievesCache.getConditions(self._rareID)
 
     def isAvailableInQuest(self):
-        return g_rareAchievesCache.isLocallyLoaded(self._rareID)
+        return self.rareAchievesCache.isLocallyLoaded(self._rareID)
 
     def hasCounter(self):
         return self.SHOW_COUNTER and self._value > 1
@@ -57,9 +60,9 @@ class RareAchievement(RegularAchievement):
         return dossier.getBlock(_AB.RARE).count(self._rareID)
 
     def _requestImageID(self, imgType):
-        g_rareAchievesCache.request([self._rareID])
+        self.rareAchievesCache.request([self._rareID])
         memImgID = None
-        iconData = g_rareAchievesCache.getImageData(imgType, self._rareID)
+        iconData = self.rareAchievesCache.getImageData(imgType, self._rareID)
         if iconData and imghdr.what(None, iconData) is not None:
             memImgID = str(uuid.uuid4())
             BigWorld.wg_addTempScaleformTexture(memImgID, iconData)

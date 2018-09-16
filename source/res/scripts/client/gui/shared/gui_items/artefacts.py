@@ -1,13 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/artefacts.py
+from itertools import chain, imap
+import nations
 from debug_utils import LOG_CURRENT_EXCEPTION
-from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
+from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE, KPI, VEHICLE_ATTR_TO_KPI_NAME_MAP, CREW_SKILL_TO_KPI_NAME_MAP
 from gui.shared.gui_items.fitting_item import FittingItem
 from gui.shared.gui_items.Tankman import isSkillLearnt
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
-from items import artefacts
+from items import artefacts, vehicles as vehicleItems, tankmen
 from items.tankmen import PERKS
 from gui.Scaleform.locale.ARTEFACTS import ARTEFACTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
@@ -21,6 +23,15 @@ _TOKEN_OPT_DEVICE_SIMPLE = 'simple'
 _TOKEN_OPT_DEVICE_DELUXE = 'deluxe'
 _TOKEN_CREW_PERK_REPLACE = 'perk'
 _TOKEN_CREW_PERK_BOOST = 'boost'
+_MAX_CAMOUFLAGE_NET_BONUS = None
+
+def getMaxCamouflageNetBonus():
+    global _MAX_CAMOUFLAGE_NET_BONUS
+    if _MAX_CAMOUFLAGE_NET_BONUS is None:
+        maxNetBonusDelta = max((vehicle.invisibilityDeltas['camouflageNetBonus'] for vehicle in chain.from_iterable((imap(lambda vehicleTypeID, n=n: vehicleItems.g_cache.vehicle(n, vehicleTypeID), vehicleItems.g_list.getList(n)) for n in nations.INDICES.itervalues()))))
+        _MAX_CAMOUFLAGE_NET_BONUS = 1.0 + maxNetBonusDelta
+    return _MAX_CAMOUFLAGE_NET_BONUS
+
 
 class VehicleArtefact(FittingItem):
     __slots__ = ()
@@ -47,6 +58,13 @@ class VehicleArtefact(FittingItem):
     @property
     def tags(self):
         return self.descriptor.tags
+
+    @property
+    def kpi(self):
+        kpiList = []
+        if self.descriptor.stunResistanceDuration != 0.0:
+            kpiList.append(KPI(KPI.Name.CREW_STUN_DURATION, 1.0 - self.descriptor.stunResistanceDuration))
+        return kpiList
 
     @property
     def isStimulator(self):
@@ -82,6 +100,26 @@ class Equipment(VehicleArtefact):
     def isRemovingStun(self):
         descr = self.descriptor
         return bool(descr.stunResistanceEffect or descr.stunResistanceDuration)
+
+    @property
+    def kpi(self):
+        kpiList = super(Equipment, self).kpi
+        descr = self.descriptor
+        if isinstance(descr, artefacts.Repairkit):
+            isMedkit = 'medkit' in self.tags
+            if isMedkit:
+                kpiList.append(KPI(KPI.Name.CREW_HIT_CHANCE, 1.0 - descr.bonusValue))
+            else:
+                kpiList.append(KPI(KPI.Name.VEHICLE_REPAIR_SPEED, 1.0 + descr.bonusValue))
+        elif isinstance(descr, artefacts.Extinguisher):
+            kpiList.append(KPI(KPI.Name.VEHICLE_FIRE_CHANCE, descr.fireStartingChanceFactor))
+        elif isinstance(descr, artefacts.Fuel):
+            kpiList.extend([KPI(KPI.Name.VEHICLE_ENGINE_POWER, descr.enginePowerFactor), KPI(KPI.Name.VEHICLE_TURRET_ROTATION_SPEED, descr.turretRotationSpeedFactor)])
+        elif isinstance(descr, artefacts.Stimulator):
+            kpiList.append(KPI(KPI.Name.CREW_LEVEL, 1.0 + self.crewLevelIncrease / 100.0))
+        elif isinstance(descr, artefacts.RemovedRpmLimiter):
+            kpiList.append(KPI(KPI.Name.VEHICLE_ENGINE_POWER, descr.enginePowerFactor))
+        return kpiList
 
     def isInstalled(self, vehicle, slotIdx=None):
         return vehicle.equipment.regularConsumables.containsIntCD(self.intCD, slotIdx)
@@ -207,6 +245,9 @@ class BattleBooster(Equipment):
     def getAffectedSkillName(self):
         return self.descriptor.skillName if self.isCrewBooster() else None
 
+    def getAffectedSkillUserName(self):
+        return tankmen.getSkillsConfig().getSkill(self.getAffectedSkillName()).userString if self.isCrewBooster() else ''
+
     def isAffectedSkillLearnt(self, vehicle=None):
         return isSkillLearnt(self.getAffectedSkillName(), vehicle) if vehicle is not None else False
 
@@ -245,6 +286,34 @@ class BattleBooster(Equipment):
         gain = i18n.makeString(ARTEFACTS.getDeviceGainForBattleBooster(self.name, deviceType))
         formatted = valueFormatter(gain) if valueFormatter is not None else gain
         return self.shortDescription % formatted
+
+    @property
+    def kpi(self):
+        kpiList = super(BattleBooster, self).kpi
+        descr = self.descriptor
+        if isinstance(descr, artefacts.FactorSkillBattleBooster):
+            skillName = CREW_SKILL_TO_KPI_NAME_MAP.get(descr.skillName)
+            if skillName is not None:
+                kpiList.append(KPI(KPI.Name.COMPOUND_KPI, [KPI(skillName, None, KPI.Type.SKILL_BOOST), KPI(skillName, descr.efficiencyFactor, KPI.Type.FACTOR)], KPI.Type.OR))
+        elif isinstance(descr, artefacts.FactorPerLevelBattleBooster):
+            skillName = CREW_SKILL_TO_KPI_NAME_MAP.get(descr.skillName)
+            if skillName is not None:
+                kpiList.append(KPI(KPI.Name.COMPOUND_KPI, [KPI(skillName, None, KPI.Type.SKILL_BOOST), KPI(skillName, 2.0, KPI.Type.FACTOR)], KPI.Type.OR))
+        elif isinstance(descr, artefacts.SixthSenseBattleBooster):
+            kpiList.append(KPI(KPI.Name.COMPOUND_KPI, [KPI(KPI.Name.CREW_SKILL_SIXTH_SENSE, None, KPI.Type.SKILL_BOOST), KPI(KPI.Name.CREW_SKILL_SIXTH_SENSE_DELAY, descr.delay, KPI.Type.VALUE)], KPI.Type.OR))
+        elif isinstance(descr, artefacts.LastEffortBattleBooster):
+            kpiList.append(KPI(KPI.Name.COMPOUND_KPI, [KPI(KPI.Name.CREW_SKILL_LAST_EFFORT, None, KPI.Type.SKILL_BOOST), KPI(KPI.Name.CREW_SKILL_LAST_EFFORT_DURATION, descr.duration, KPI.Type.VALUE)], KPI.Type.OR))
+        elif isinstance(descr, artefacts.PedantBattleBooster):
+            kpiList.append(KPI(KPI.Name.COMPOUND_KPI, [KPI(KPI.Name.CREW_SKILL_PEDANT, None, KPI.Type.SKILL_BOOST), KPI(KPI.Name.VEHICLE_AMMO_BAY_STRENGTH, descr.ammoBayHealthFactor, KPI.Type.FACTOR)], KPI.Type.OR))
+        elif isinstance(descr, artefacts.RancorousBattleBooster):
+            kpiList.append(KPI(KPI.Name.COMPOUND_KPI, [KPI(KPI.Name.CREW_SKILL_RANCOROUS, None, KPI.Type.SKILL_BOOST), KPI(KPI.Name.CREW_SKILL_RANCOROUS_DURATION, descr.duration, KPI.Type.VALUE)], KPI.Type.OR))
+        elif isinstance(descr, artefacts.DynamicEquipment):
+            attribFactors = {VEHICLE_ATTR_TO_KPI_NAME_MAP.get(attribute):(factor if isinstance(descr, artefacts.FactorBattleBooster) else 1.0 + factor / 100.0) for _, (attribute, factor) in descr._config}
+            for name, factor in attribFactors.iteritems():
+                if name is not None:
+                    kpiList.append(KPI(name, factor, KPI.Type.FACTOR))
+
+        return kpiList
 
     def _getShortInfo(self, vehicle=None, expanded=False):
         return self.getCrewBoosterDescription(isPerkReplace=False, formatter=None) if self.isCrewBooster() else self.getOptDeviceBoosterDescription(vehicle=None, valueFormatter=None)
@@ -392,3 +461,38 @@ class OptionalDevice(RemovableDevice):
 
     def getGUIEmblemID(self):
         return self._GUIEmblemID
+
+    @property
+    def kpi(self):
+        kpiList = super(OptionalDevice, self).kpi
+        descr = self.descriptor
+        if isinstance(descr, artefacts.StaticFactorDevice):
+            kpiName = VEHICLE_ATTR_TO_KPI_NAME_MAP.get(descr.attribute)
+            if kpiName is not None and descr.factor != 0.0:
+                value = descr.factor
+                if 'enhancedAimDrives' in self.tags:
+                    value = 1.0 / value
+                kpiList.append(KPI(kpiName, value))
+        elif isinstance(descr, artefacts.StaticAdditiveDevice):
+            kpiName = VEHICLE_ATTR_TO_KPI_NAME_MAP.get(descr.attribute)
+            if kpiName is not None and descr.value != 0.0:
+                if kpiName == KPI.Name.CREW_LEVEL:
+                    value = 1.0 + descr.value / 100.0
+                else:
+                    value = 1.0 + descr.value
+                kpiList.append(KPI(kpiName, value))
+        elif isinstance(descr, artefacts.Stereoscope):
+            if descr.activateWhenStillSec == 0.0:
+                name = KPI.Name.VEHICLE_CIRCULAR_VISION_RADIUS
+            else:
+                name = KPI.Name.VEHICLE_STILL_CIRCULAR_VISION_RADIUS
+            kpiList.append(KPI(name, descr.circularVisionRadiusFactor))
+        elif isinstance(descr, artefacts.EnhancedSuspension):
+            kpiList.extend([KPI(KPI.Name.VEHICLE_CHASSIS_STRENGTH, descr.chassisHealthFactor), KPI(KPI.Name.VEHICLE_CHASSIS_LOAD, descr.chassisMaxLoadFactor), KPI(KPI.Name.VEHICLE_CHASSIS_FALL_DAMAGE_RESISTANCE, descr.vehicleByChassisDamageFactor)])
+        elif isinstance(descr, artefacts.AntifragmentationLining):
+            kpiList.extend([KPI(KPI.Name.VEHICLE_RAM_OR_EXPLOSION_DAMAGE_RESISTANCE, descr.antifragmentationLiningFactor), KPI(KPI.Name.CREW_HIT_CHANCE, 1.0 - descr.increaseCrewChanceToEvadeHit)])
+        elif isinstance(descr, artefacts.Grousers):
+            kpiList.extend([KPI(KPI.Name.VEHICLE_SOFT_GROUND_PASSABILITY, 1.0 / descr.factorSoft), KPI(KPI.Name.VEHICLE_MEDIUM_GROUND_PASSABILITY, 1.0 / descr.factorMedium)])
+        elif isinstance(descr, artefacts.CamouflageNet):
+            kpiList.append(KPI(KPI.Name.VEHICLE_STILL_CAMOUFLAGE, getMaxCamouflageNetBonus()))
+        return kpiList

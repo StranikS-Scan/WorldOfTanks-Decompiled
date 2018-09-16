@@ -47,7 +47,7 @@ class MissionVehicleSelectorCarousel(VehicleSelectorCarouselMeta):
         raise NotImplementedError
 
     def __onViewLoaded(self, view, *args, **kwargs):
-        if view.settings.alias == VIEW_ALIAS.VEHICLES_FILTER_POPOVER:
+        if view.alias == VIEW_ALIAS.VEHICLES_FILTER_POPOVER:
             view.setTankCarousel(self)
 
 

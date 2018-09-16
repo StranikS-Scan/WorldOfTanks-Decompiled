@@ -440,17 +440,11 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         return {pID:PrimeTime(pID, {wDay:collapseIntervals(periods) for wDay, periods in pPeriods.iteritems()}) for pID, pPeriods in primeTimesPeriods.iteritems()}
 
     def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
-        hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming(), withShortName=True)
-        if self.connectionMgr.peripheryID == 0:
-            hostsList.insert(0, (self.connectionMgr.url,
-             self.connectionMgr.serverUserName,
-             self.connectionMgr.serverUserNameShort,
-             HOST_AVAILABILITY.IGNORED,
-             0))
         primeTimes = self.getPrimeTimes()
         dayStart, dayEnd = time_utils.getDayTimeBoundsForLocal(selectedTime)
         dayEnd += 1
         serversPeriodsMapping = {}
+        hostsList = self.__getHostList()
         for _, _, serverShortName, _, peripheryID in hostsList:
             if peripheryID not in primeTimes:
                 continue
@@ -473,9 +467,21 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         else:
             if peripheryID is None:
                 peripheryID = self.connectionMgr.peripheryID
-            primeTime = self.getPrimeTimes().get(peripheryID)
+            primeTimes = self.getPrimeTimes()
+            hasAnyPeriods = False
+            for pId in primeTimes:
+                hasAnyPeriods = primeTimes[pId].hasAnyPeriods()
+                if hasAnyPeriods:
+                    break
+
+            if not hasAnyPeriods:
+                LOG_WARNING('RankedBattles enabled but primetimes did not have any period to play or they are frozen!')
+            primeTime = primeTimes.get(peripheryID)
             if primeTime is None:
-                return (PRIME_TIME_STATUS.NOT_SET, 0, False)
+                if hasAnyPeriods:
+                    return (PRIME_TIME_STATUS.NOT_SET, 0, False)
+                LOG_WARNING('RankedBattles primetimes did not have playable period on pID:', peripheryID)
+                return (PRIME_TIME_STATUS.DISABLED, 0, False)
             if not primeTime.hasAnyPeriods():
                 return (PRIME_TIME_STATUS.FROZEN, 0, False)
             currentSeason = self.getCurrentSeason()
@@ -483,6 +489,32 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
                 return (PRIME_TIME_STATUS.NO_SEASON, 0, False)
             isNow, timeLeft = primeTime.getAvailability(time_utils.getCurrentLocalServerTimestamp(), self.getCurrentSeason().getCycleEndDate())
             return (PRIME_TIME_STATUS.AVAILABLE, timeLeft, isNow) if isNow else (PRIME_TIME_STATUS.NOT_AVAILABLE, timeLeft, False)
+
+    def hasAvailablePrimeTimeServers(self):
+        if self.isAvailable():
+            lobbyContext = dependency.instance(ILobbyContext)
+            rankedBattlesConfig = lobbyContext.getServerSettings().rankedBattles
+            peripheryIDs = rankedBattlesConfig.peripheryIDs
+            hostsList = self.__getHostList()
+            avalaiblePeripheryIDS = []
+            for _, _, _, _, peripheryID in hostsList:
+                if peripheryID in peripheryIDs:
+                    avalaiblePeripheryIDS.append(peripheryID)
+
+            if not avalaiblePeripheryIDS:
+                if peripheryIDs:
+                    LOG_WARNING('RankedBattles no any playable periphery! Peripheries setup:', peripheryIDs)
+                return False
+            primeTimes = rankedBattlesConfig.primeTimes
+            canShowPrimeTime = False
+            for primeTime in primeTimes.itervalues():
+                for pID in primeTime['peripheryIDs']:
+                    if pID not in avalaiblePeripheryIDS:
+                        continue
+                    canShowPrimeTime = True
+
+            return canShowPrimeTime
+        return False
 
     def hasAnyPeripheryWithPrimeTime(self):
         if not self.isAvailable():
@@ -797,3 +829,13 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
     def __timerUpdate(self):
         status, _, _ = self.getPrimeTimeStatus()
         self.onPrimeTimeStatusUpdated(status)
+
+    def __getHostList(self):
+        hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming(), withShortName=True)
+        if self.connectionMgr.isStandalone():
+            hostsList.insert(0, (self.connectionMgr.url,
+             self.connectionMgr.serverUserName,
+             self.connectionMgr.serverUserNameShort,
+             HOST_AVAILABILITY.IGNORED,
+             0))
+        return hostsList

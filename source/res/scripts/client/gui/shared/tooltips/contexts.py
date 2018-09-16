@@ -8,8 +8,6 @@ from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
-from gui.Scaleform.genConsts.SEASONS_CONSTANTS import SEASONS_CONSTANTS
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events import events_helpers
 from gui.shared.formatters import text_styles
@@ -21,7 +19,6 @@ from gui.shared.items_parameters.formatters import NO_BONUS_SIMPLIFIED_SCHEME
 from gui.shared.tooltips import TOOLTIP_COMPONENT
 from helpers import dependency
 from helpers.i18n import makeString
-from items.components.c11n_constants import SeasonType
 from shared_utils import findFirst
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.goodies import IGoodiesCache
@@ -399,21 +396,6 @@ class TankmanHangarContext(HangarContext):
 
     def buildItem(self, invID):
         return self.itemsCache.items.getTankman(int(invID))
-
-
-class SeasonsHangarContext(HangarContext):
-
-    def buildItem(self, season):
-        seasonImage = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_SEASON_SUMMER
-        if season == SeasonType.WINTER:
-            seasonImage = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_SEASON_WINTER
-        elif season == SeasonType.DESERT:
-            seasonImage = RES_ICONS.MAPS_ICONS_CUSTOMIZATION_SEASON_DESERT
-        elif season == SeasonType.EVENT:
-            pass
-        return {'seasonImage': seasonImage,
-         'header': TOOLTIPS.seasonHeader(SEASONS_CONSTANTS.SEASONS[season]),
-         'body': TOOLTIPS.seasonBody(SEASONS_CONSTANTS.SEASONS[season])}
 
 
 class TechTreeContext(ShopContext):

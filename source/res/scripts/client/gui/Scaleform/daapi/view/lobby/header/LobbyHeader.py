@@ -45,7 +45,6 @@ from gui.shared.formatters.currency import getBWFormatter
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.money import Currency
 from gui.shared.tooltips import formatters
-from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
@@ -64,6 +63,7 @@ from skeletons.gui.game_control import IWalletController, IGameSessionController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.shared.utils import IHangarSpace
 _MAX_BOOSTERS_TO_DISPLAY = 99
 _MAX_HEADER_SERVER_NAME_LEN = 6
 _SERVER_NAME_PREFIX = '%s..'
@@ -147,6 +147,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     rankedController = dependency.descriptor(IRankedBattlesController)
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
     bootcampController = dependency.descriptor(IBootcampController)
+    hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self):
         super(LobbyHeader, self).__init__()
@@ -228,7 +229,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         shared_events.openPaymentLink()
 
     def showExchangeWindow(self):
-        shared_events.showExchangeWindow()
+        shared_events.showExchangeCurrencyWindow()
 
     def showExchangeXPWindow(self):
         shared_events.showExchangeXPWindow()
@@ -307,8 +308,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         g_currentVehicle.onChanged += self.__onVehicleChanged
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
-        g_hangarSpace.onSpaceCreate += self.__onHangarSpaceCreated
-        g_hangarSpace.onSpaceDestroy += self.__onHangarSpaceDestroy
+        self.hangarSpace.onSpaceCreate += self.__onHangarSpaceCreated
+        self.hangarSpace.onSpaceDestroy += self.__onHangarSpaceDestroy
         self.eventsCache.onSyncCompleted += self.__onEventsCacheResync
         self.eventsCache.onProgressUpdated += self.__onEventsCacheResync
         self.eventsCache.onEventsVisited += self.__onEventsVisited
@@ -351,6 +352,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.encyclopedia.onStateChanged += self._updateHangarMenuData
         self.addListener(events.TutorialEvent.OVERRIDE_HANGAR_MENU_BUTTONS, self.__onOverrideHangarMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.TutorialEvent.OVERRIDE_HEADER_MENU_BUTTONS, self.__onOverrideHeaderMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.LobbyHeaderMenuEvent.MENY_HIDE, self.__onHideMenuBar, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _removeListeners(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -365,8 +367,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         g_currentVehicle.onChanged -= self.__onVehicleChanged
         g_currentPreviewVehicle.onChanged -= self.__onVehicleChanged
-        g_hangarSpace.onSpaceCreate -= self.__onHangarSpaceCreated
-        g_hangarSpace.onSpaceDestroy -= self.__onHangarSpaceDestroy
+        self.hangarSpace.onSpaceCreate -= self.__onHangarSpaceCreated
+        self.hangarSpace.onSpaceDestroy -= self.__onHangarSpaceDestroy
         self.eventsCache.onSyncCompleted -= self.__onEventsCacheResync
         self.eventsCache.onProgressUpdated -= self.__onEventsCacheResync
         self.eventsCache.onEventsVisited -= self.__onEventsVisited
@@ -385,6 +387,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.encyclopedia.onNewRecommendationReceived -= self.__onNewEncyclopediaRecommendation
         self.removeListener(events.TutorialEvent.OVERRIDE_HANGAR_MENU_BUTTONS, self.__onOverrideHangarMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.TutorialEvent.OVERRIDE_HEADER_MENU_BUTTONS, self.__onOverrideHeaderMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.LobbyHeaderMenuEvent.MENY_HIDE, self.__onHideMenuBar, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __updateServerData(self):
         serverShortName = self.connectionMgr.serverUserNameShort.strip().split(' ')[-1]
@@ -577,10 +580,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__setAccountsAttrs(isPremium, premiumExpiryTime=premiumExpiryTime)
 
     def __onViewAddedToContainer(self, _, pyEntity):
-        settings = pyEntity.settings
-        if settings.type is ViewTypes.LOBBY_SUB:
-            if settings.alias in self.TABS.ALL():
-                self.__setCurrentScreen(settings.alias)
+        if pyEntity.viewType is ViewTypes.LOBBY_SUB:
+            if pyEntity.alias in self.TABS.ALL():
+                self.__setCurrentScreen(pyEntity.alias)
 
     def __getContainer(self, viewType):
         return self.app.containerManager.getContainer(viewType) if self.app is not None and self.app.containerManager is not None else None
@@ -727,7 +729,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                 self.as_setFightBtnTooltipS('', False)
         else:
             self.as_setFightBtnTooltipS('', False)
-        if g_hangarSpace.spaceInited or not self.bootcampController.isInBootcamp():
+        if self.hangarSpace.spaceInited or not self.bootcampController.isInBootcamp():
             self.as_disableFightButtonS(self.__isFightBtnDisabled)
         self.as_setFightButtonS(selected.getFightButtonLabel(state, playerInfo))
         if self.__isHeaderButtonPresent(LobbyHeader.BUTTONS.BATTLE_SELECTOR):
@@ -759,6 +761,10 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def __onHangarSpaceDestroy(self, inited):
         if inited and self.bootcampController.isInBootcamp():
             self.as_disableFightButtonS(True)
+
+    def __onHideMenuBar(self, event):
+        hide = event.ctx['hide']
+        self.as_hideMenuS(hide)
 
     def _checkFightButtonDisabled(self, canDo, isFightButtonForcedDisabled):
         return not canDo or isFightButtonForcedDisabled

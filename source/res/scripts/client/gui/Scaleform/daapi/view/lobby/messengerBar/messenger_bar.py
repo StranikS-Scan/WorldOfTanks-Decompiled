@@ -70,8 +70,7 @@ class _CompareBasketListener(object):
         return self.__view.app.containerManager
 
     def __onViewAddedToContainer(self, _, pyEntity):
-        settings = pyEntity.settings
-        if settings.type == ViewTypes.WINDOW and settings.alias == VEHICLE_COMPARE_CONSTANTS.VEHICLE_COMPARE_CART_POPOVER:
+        if pyEntity.viewType == ViewTypes.WINDOW and pyEntity.alias == VEHICLE_COMPARE_CONSTANTS.VEHICLE_COMPARE_CART_POPOVER:
             if self.__currentCartPopover is not None:
                 raise SoftException('Attempt to initialize object 2nd time!')
             self.__currentCartPopover = pyEntity

@@ -3,9 +3,12 @@
 import Math
 from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
 from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
-from gui.shared.utils.HangarSpace import g_hangarSpace
+from helpers import dependency
+from skeletons.gui.shared.utils import IHangarSpace
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE, events
 
 class HangarVehicle(ClientSelectableCameraVehicle):
+    hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self):
         self.selectionId = ''
@@ -32,18 +35,32 @@ class HangarVehicle(ClientSelectableCameraVehicle):
 
     def onEnterWorld(self, prereqs):
         super(HangarVehicle, self).onEnterWorld(prereqs)
-        g_hangarSpace.onSpaceCreate += self.__onSpaceCreated
+        self.hangarSpace.onSpaceCreate += self.__onSpaceCreated
+        g_eventBus.addListener(events.HangarCustomizationEvent.CHANGE_VEHICLE_MODEL_TRANSFORM, self.__changeVehicleModelTransform, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.addListener(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM, self.__resetVehicleModelTransform, scope=EVENT_BUS_SCOPE.LOBBY)
         self.enable(False)
         self.setState(CameraMovementStates.ON_OBJECT)
 
     def onLeaveWorld(self):
-        g_hangarSpace.onSpaceCreate -= self.__onSpaceCreated
+        self.hangarSpace.onSpaceCreate -= self.__onSpaceCreated
+        g_eventBus.removeListener(events.HangarCustomizationEvent.CHANGE_VEHICLE_MODEL_TRANSFORM, self.__changeVehicleModelTransform, scope=EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.removeListener(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM, self.__resetVehicleModelTransform, scope=EVENT_BUS_SCOPE.LOBBY)
         super(HangarVehicle, self).onLeaveWorld()
 
     def __onSpaceCreated(self):
         self.enable(False)
         self.setState(CameraMovementStates.ON_OBJECT)
-        self.cameraPivot = g_hangarSpace.space.camera.pivotPosition
+        self.cameraPivot = self.hangarSpace.space.camera.pivotPosition
 
     def _setStartValues(self):
         pass
+
+    def __changeVehicleModelTransform(self, event):
+        ctx = event.ctx
+        targetPos = ctx['targetPos']
+        rotateYPR = ctx['rotateYPR']
+        shadowYOffset = ctx['shadowYOffset']
+        self._setVehicleModelTransform(targetPos, rotateYPR, shadowYOffset)
+
+    def __resetVehicleModelTransform(self, event):
+        self._resetVehicleModelTransform()

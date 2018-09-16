@@ -13,7 +13,8 @@ from gui.ranked_battles import ranked_helpers
 from gui.server_events import events_helpers, finders
 from gui.server_events.bonuses import getBonuses, compareBonuses, BoxBonus
 from gui.server_events.cond_formatters.mixed_formatters import StringPersonalMissionConditionsFormatter
-from gui.server_events.formatters import isMarathon, getLinkedActionID
+from gui.server_events.events_helpers import isMarathon, isLinkedSet, isRegularQuest
+from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import getModifierObj, compareModifiers
 from gui.server_events.parsers import AccountRequirements, VehicleRequirements, TokenQuestAccountRequirements, PreBattleConditions, PostBattleConditions, BonusConditions
 from gui.shared.utils import ValidationResult
@@ -21,7 +22,9 @@ from helpers import dependency
 from helpers import getLocalizedData, i18n, time_utils
 from personal_missions import PM_STATE as _PMS, PM_BRANCH
 from shared_utils import first, findFirst
+from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.server_events import IEventsCache
 EventBattles = namedtuple('EventBattles', ['vehicleTags',
  'vehicles',
  'enabled',
@@ -32,6 +35,7 @@ class DEFAULTS_GROUPS(object):
     UNGROUPED_ACTIONS = 'ungroupedActions'
     UNGROUPED_QUESTS = 'ungroupedQuests'
     MOTIVE_QUESTS = 'motiveQuests'
+    LINKEDSET_QUESTS = 'AdvancedTrainingQuests'
 
 
 class CONTITIONS_SCOPE(object):
@@ -48,6 +52,7 @@ class TOKEN_SHOP(object):
 
 class ServerEventAbstract(object):
     __metaclass__ = ABCMeta
+    _connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self, eID, data):
         self._id = eID
@@ -59,7 +64,7 @@ class ServerEventAbstract(object):
         return self._data.get('disableGui', False)
 
     def isHidden(self):
-        return self._data.get('hidden', False)
+        return self._data.get('hidden', False) or not self.__isForCurrentPeriphery()
 
     def getWeekDays(self):
         return self._data.get('weekDays', set())
@@ -184,6 +189,10 @@ class ServerEventAbstract(object):
     def _getTokenSaleState(self):
         return self._data.get('shopButton', TOKEN_SHOP.HIDE)
 
+    def __isForCurrentPeriphery(self):
+        peripheryIDs = self._data.get('peripheryIDs')
+        return True if not peripheryIDs else self._connectionMgr.peripheryID in peripheryIDs
+
     def __repr__(self):
         return '%s(qID = %s, groupID = %s)' % (self.__class__.__name__, self._id, self._groupID)
 
@@ -204,6 +213,12 @@ class Group(ServerEventAbstract):
 
     def isMarathon(self):
         return isMarathon(self.getID())
+
+    def isLinkedSet(self):
+        return isLinkedSet(self.getID())
+
+    def isRegularQuest(self):
+        return isRegularQuest(self.getID())
 
     def getLinkedAction(self, actions):
         return getLinkedActionID(self.getID(), actions)
@@ -395,6 +410,31 @@ class TokenQuest(Quest):
 
     def _checkConditions(self):
         return self.accountReqs.isAvailable()
+
+
+class LinkedSetTokenQuest(TokenQuest):
+
+    def isCompleted(self, progress=None):
+        res = super(LinkedSetTokenQuest, self).isCompleted(progress)
+        if res:
+            eventsCache = dependency.instance(IEventsCache)
+            res = not eventsCache.hasQuestDelayedRewards(self.getID())
+        return res
+
+    def _checkConditions(self):
+        res = _isLinkedSetQuestAvailable(self)
+        if res is None:
+            res = super(LinkedSetTokenQuest, self)._checkConditions()
+        return res
+
+
+class LinkedSetQuest(Quest):
+
+    def _checkConditions(self):
+        res = _isLinkedSetQuestAvailable(self)
+        if res is None:
+            res = super(LinkedSetQuest, self)._checkConditions()
+        return res
 
 
 class PersonalQuest(Quest):
@@ -1075,8 +1115,26 @@ def createQuest(questType, qID, data, progress=None, expiryTime=None):
         return MotiveQuest(qID, data, progress)
     if questType == constants.EVENT_TYPE.RANKED_QUEST:
         return RankedQuest(qID, data, progress)
-    return TokenQuest(qID, data, progress) if questType == constants.EVENT_TYPE.TOKEN_QUEST else Quest(qID, data, progress)
+    if questType == constants.EVENT_TYPE.TOKEN_QUEST:
+        tokenClass = LinkedSetTokenQuest if qID.startswith('linkedset_') else TokenQuest
+        return tokenClass(qID, data, progress)
+    questClass = LinkedSetQuest if qID.startswith('linkedset_') else Quest
+    return questClass(qID, data, progress)
 
 
 def createAction(eventType, aID, data):
     return Group(aID, data) if eventType == constants.EVENT_TYPE.GROUP else Action(aID, data)
+
+
+def _isLinkedSetQuestAvailable(quest):
+    if quest.isCompleted():
+        return True
+    else:
+        if isinstance(quest, LinkedSetTokenQuest):
+            if super(LinkedSetTokenQuest, quest).isCompleted():
+                return True
+        for item in quest.accountReqs.getConditions().items:
+            if item.getName() == 'token' and item.getID() == '{}_unlock'.format(quest.getID()):
+                return item.getReceivedCount() >= item.getNeededCount()
+
+        return None

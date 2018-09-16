@@ -17,6 +17,10 @@ from gui.shared.utils.decorators import process
 from helpers import time_utils, i18n, dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.server_events import IEventsCache
+from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX
+from helpers.i18n import makeString as _ms
+from gui.Scaleform.locale.LINKEDSET import LINKEDSET
+from gui.server_events.conditions import getProgressFromQuestWithSingleAccumulative
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
 AWARDS_PER_PAGE = 3
@@ -263,3 +267,90 @@ def getBoosterQuests():
 
     eventsCache = dependency.instance(IEventsCache)
     return eventsCache.getActiveQuests(filterFunc=filterQuests)
+
+
+def hasAtLeastOneAvailableQuest(quests):
+    return any((quest.isAvailable().isValid for quest in quests))
+
+
+def hasAtLeastOneCompletedQuest(quests):
+    return any((quest.isCompleted() for quest in quests))
+
+
+def isAllQuestsCompleted(quests):
+    return all((quest.isCompleted() for quest in quests))
+
+
+def isMarathon(eventID):
+    return eventID.startswith(MARATHON_GROUP_PREFIX)
+
+
+def isLinkedSet(eventID):
+    return eventID.startswith(LINKEDSET_GROUP_PREFIX)
+
+
+def isRegularQuest(eventID):
+    return not (isMarathon(eventID) or isLinkedSet(eventID))
+
+
+def getLocalizedMissionNameForLinkedSet(missionID):
+    return _ms(LINKEDSET.getMissionName(missionID))
+
+
+def getLocalizedMissionNameForLinkedSetQuest(quest):
+    return getLocalizedMissionNameForLinkedSet(getLinkedSetMissionIDFromQuest(quest))
+
+
+def getLocalizedQuestNameForLinkedSetQuest(quest):
+    return _getlocalizeLinkedSetQuestString(LINKEDSET.getQuestName(getLinkedSetMissionIDFromQuest(quest), getLinkedSetQuestID(quest)), quest)
+
+
+def getLocalizedQuestDescForLinkedSetQuest(quest):
+    return _getlocalizeLinkedSetQuestString(LINKEDSET.getQuestDesc(getLinkedSetMissionIDFromQuest(quest), getLinkedSetQuestID(quest)), quest)
+
+
+def hasLocalizedQuestHintNameForLinkedSetQuest(quest):
+    return LINKEDSET.hasQuestHintName(getLinkedSetMissionIDFromQuest(quest), getLinkedSetQuestID(quest))
+
+
+def getLocalizedQuestHintNameForLinkedSetQuest(quest):
+    return _getlocalizeLinkedSetQuestString(LINKEDSET.getQuestHintName(getLinkedSetMissionIDFromQuest(quest), getLinkedSetQuestID(quest)), quest)
+
+
+def getLocalizedQuestHintDescForLinkedSetQuest(quest):
+    return _getlocalizeLinkedSetQuestString(LINKEDSET.getQuestHintDesc(getLinkedSetMissionIDFromQuest(quest), getLinkedSetQuestID(quest)), quest)
+
+
+def hasLocalizedQuestWinNameForLinkedSetQuest(quest):
+    return LINKEDSET.hasQuestWinName(getLinkedSetMissionIDFromQuest(quest), getLinkedSetQuestID(quest))
+
+
+def getLocalizedQuestWinNameForLinkedSetQuest(quest):
+    return _getlocalizeLinkedSetQuestString(LINKEDSET.getQuestWinName(getLinkedSetMissionIDFromQuest(quest), getLinkedSetQuestID(quest)), quest)
+
+
+def hasLocalizedQuestWinDescForLinkedSetQuest(quest):
+    return LINKEDSET.hasQuestWinDesc(getLinkedSetMissionIDFromQuest(quest), getLinkedSetQuestID(quest))
+
+
+def getLocalizedQuestWinDescForLinkedSetQuest(quest):
+    return _getlocalizeLinkedSetQuestString(LINKEDSET.getQuestWinDesc(getLinkedSetMissionIDFromQuest(quest), getLinkedSetQuestID(quest)), quest)
+
+
+def getLinkedSetMissionIDFromQuest(quest):
+    return int(quest.getID().split('_')[1])
+
+
+def getLinkedSetQuestID(quest):
+    return int(quest.getID().split('_')[2])
+
+
+def _getlocalizeLinkedSetQuestString(localizedKey, quest):
+    curProgress, totalProgress = getProgressFromQuestWithSingleAccumulative(quest)
+    kwargs = {'cur_progress': _formatNumberInLinkedSetQuest(curProgress),
+     'total_progress': _formatNumberInLinkedSetQuest(totalProgress)}
+    return _ms(localizedKey, **kwargs)
+
+
+def _formatNumberInLinkedSetQuest(number):
+    return number if number is None else '{0:,}'.format(number).replace(',', ' ')

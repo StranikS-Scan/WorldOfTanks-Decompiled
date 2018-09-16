@@ -4,10 +4,12 @@ import WWISE
 from SoundGroups import g_instance as SoundGroupsInstance
 from skeletons.gui.hangar_cameras import IHangarCameraSounds
 from gui.shared import g_eventBus
-from gui.shared.utils.HangarSpace import g_hangarSpace
+from helpers import dependency
+from skeletons.gui.shared.utils import IHangarSpace
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 
 class HangarCameraSounds(IHangarCameraSounds):
+    hangarSpace = dependency.descriptor(IHangarSpace)
 
     class _MoveCameraEvents(object):
         MOVE_TO_HERO = 'ue_hangar_generic_camera_fly_forward'
@@ -40,7 +42,10 @@ class HangarCameraSounds(IHangarCameraSounds):
         state = ctx['state']
         if state == CameraMovementStates.FROM_OBJECT:
             return
-        isMainView = ctx['entityId'] == g_hangarSpace.space.vehicleEntityId if g_hangarSpace.spaceInited else True
+        if self.hangarSpace.spaceInited:
+            isMainView = ctx['entityId'] == self.hangarSpace.space.vehicleEntityId
+        else:
+            isMainView = True
         if state == CameraMovementStates.MOVING_TO_OBJECT:
             SoundGroupsInstance.playSound2D(self._MoveCameraEvents.MOVE_TO_MAIN if isMainView else self._MoveCameraEvents.MOVE_TO_HERO)
         if isMainView != self.__isMainView:

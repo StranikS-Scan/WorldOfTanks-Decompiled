@@ -13,8 +13,8 @@ from helpers import i18n
 from items.vehicles import CAMOUFLAGE_KINDS
 from shared_utils import findFirst
 from soft_exception import SoftException
-ICON_SIZE = 24
-VERTICAL_SPACE = -9
+ICON_SIZE = 32
+VERTICAL_SPACE = -11
 
 class MissionsPreBattleConditionsFormatter(MissionsBattleConditionsFormatter):
 

@@ -50,12 +50,6 @@ class IAppFactory(object):
     def destroy(self):
         pass
 
-    def hasLobby(self):
-        return False
-
-    def hasBattle(self):
-        return False
-
     def attachCursor(self, appNS, flags=_CTRL_FLAG.GUI_ENABLED):
         pass
 
@@ -81,9 +75,6 @@ class IAppFactory(object):
         pass
 
     def goToBattlePage(self, appNS):
-        pass
-
-    def showDisconnectDialog(self, appNS, description):
         pass
 
     def handleKey(self, appNS, isDown, key, mods):

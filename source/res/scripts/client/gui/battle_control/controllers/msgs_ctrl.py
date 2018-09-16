@@ -73,18 +73,13 @@ class BattleMessagesController(IBattleController):
         except AttributeError:
             return
 
-        sound = None
         if attackerID == playerVehicleID:
             code = 'DESTRUCTIBLE_DESTROYED_SELF'
-            sound = _PLAYER_KILL_ENEMY_SOUND
         elif BigWorld.player().team == 1:
             code = 'DESTRUCTIBLE_DESTROYED_ALLY'
         else:
             code = 'DESTRUCTIBLE_DESTROYED_ENEMY'
-        if sound is not None:
-            avatar.soundNotifications.play(sound)
         self.onShowDestructibleEntityMessageByCode(code, destructibleID, attackerID)
-        return
 
     def showVehicleKilledMessage(self, avatar, targetID, attackerID, equipmentID, reason):
         try:

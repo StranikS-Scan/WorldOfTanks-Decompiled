@@ -176,8 +176,8 @@ class SettingsWindow(SettingsWindowMeta):
         else:
             LOG_WARNING("Unknown settings window's page id", tabId)
 
-    def onCounterTargetVisited(self, tabName, subTabName, controlId):
-        isSettingsChanged = invalidateSettings(tabName, subTabName, controlId)
+    def onCounterTargetVisited(self, tabName, subTabName, controlsIDs):
+        isSettingsChanged = invalidateSettings(tabName, subTabName, controlsIDs)
         if isSettingsChanged:
             newSettings = getNewSettings()
             self.as_setCountersDataS(newSettings)

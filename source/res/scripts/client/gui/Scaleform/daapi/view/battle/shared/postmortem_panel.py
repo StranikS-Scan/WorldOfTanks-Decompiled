@@ -84,6 +84,9 @@ class _BasePostmortemPanel(PostmortemPanelMeta):
 
     def _prepareMessage(self, code, killerVehID, device=None):
         msgText, colors = self.__messages[code]
+        context = self.sessionProvider.getCtx()
+        if context.isTeamKiller(killerVehID):
+            _, colors = self.__messages['DEATH_FROM_TEAM_KILLER']
         self.__deathInfo = {'text': msgText,
          'colors': colors,
          'killerVehicle': killerVehID,

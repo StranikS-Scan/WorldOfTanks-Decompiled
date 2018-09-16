@@ -410,10 +410,10 @@ class EventDispatcher(object):
 
     def __onViewAddedToContainer(self, _, pyEntity):
         settings = pyEntity.settings
-        if settings.event == self.__loadingEvent:
+        if settings is None or settings.event == self.__loadingEvent:
             self.__loadingEvent = None
-        if settings.type == ViewTypes.LOBBY_SUB:
-            self.updateUI(settings.alias)
+        if pyEntity.viewType == ViewTypes.LOBBY_SUB:
+            self.updateUI(pyEntity.alias)
         return
 
     def __getLoadedEvent(self):
@@ -422,9 +422,9 @@ class EventDispatcher(object):
             container = app.containerManager.getContainer(ViewTypes.LOBBY_SUB)
             if container:
                 view = container.getView()
-                if view:
+                if view and view.settings is not None:
                     return view.settings.event
-        return None
+        return
 
     def __addUnitToCarousel(self, prbType):
         from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT

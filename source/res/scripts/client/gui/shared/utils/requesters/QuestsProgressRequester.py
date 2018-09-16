@@ -31,15 +31,19 @@ class QuestsProgressRequester(_QuestsProgressRequester):
     def getQuestProgress(self, qID):
         return self.__getQuestsData().get(qID, {}).get('progress')
 
+    def hasQuestDelayedRewards(self, qID):
+        return qID in self.__getQuestsRewards()
+
     def __getQuestsData(self):
         return self.getCacheValue('quests', {})
 
+    def __getQuestsRewards(self):
+        return self.getCacheValue('questsRewards', {})
+
+
+PersonalMissionProgress = namedtuple('PersonalMissionProgress', ('state', 'selected', 'unlocked', 'pawned'))
 
 class _PersonalMissionsProgressRequester(_QuestsProgressRequester):
-    PersonalMissionProgress = namedtuple('PersonalMissionProgress', ['state',
-     'selected',
-     'unlocked',
-     'pawned'])
 
     def __init__(self, questsType):
         super(_PersonalMissionsProgressRequester, self).__init__()
@@ -49,7 +53,7 @@ class _PersonalMissionsProgressRequester(_QuestsProgressRequester):
 
     def getPersonalMissionProgress(self, pqType, personalMissionID):
         personalMissionsProgress = self.__getQuestsData()
-        return self.PersonalMissionProgress(self.__pmStorage.get(personalMissionID, (0, personal_missions.PM_STATE.NONE))[1], personalMissionID in personalMissionsProgress['selected'], pqType.maySelectQuest(self.__pmStorage.keys()), self.getTokenCount(pqType.mainAwardListQuestID) > 0)
+        return PersonalMissionProgress(self.__pmStorage.get(personalMissionID, (0, personal_missions.PM_STATE.NONE))[1], personalMissionID in personalMissionsProgress['selected'], pqType.maySelectQuest(self.__pmStorage.keys()), self.getTokenCount(pqType.mainAwardListQuestID) > 0)
 
     def getPersonalMissionsStorage(self):
         return self.__pmStorage

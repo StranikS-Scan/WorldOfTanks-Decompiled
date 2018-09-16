@@ -856,6 +856,7 @@ class VEHICLE_CUSTOMIZATION(object):
     EMBLEM_GROUP45_SPECIAL_367 = '#vehicle_customization:emblem/group45/special_367'
     EMBLEM_SPECIAL_STICKER_381 = '#vehicle_customization:emblem/special/sticker_381'
     EMBLEM_SPECIAL_STICKER_382 = '#vehicle_customization:emblem/special/sticker_382'
+    EMBLEM_GROUP46_SPECIAL_383 = '#vehicle_customization:emblem/group46/special_383'
     INSCRIPTION = '#vehicle_customization:inscription'
     INSCRIPTION_HISTORICAL = '#vehicle_customization:inscription/historical'
     INSCRIPTION_MOTTO = '#vehicle_customization:inscription/motto'
@@ -1412,6 +1413,7 @@ class VEHICLE_CUSTOMIZATION(object):
     ITEM_CAMOUFLAGE2 = '#vehicle_customization:item/camouflage2'
     CUSTOMIZATIONHEADER_TITLE = '#vehicle_customization:customizationHeader/title'
     CUSTOMIZATIONHEADER_CLOSE = '#vehicle_customization:customizationHeader/close'
+    CUSTOMIZATIONHEADER_BACK = '#vehicle_customization:customizationHeader/back'
     CUSTOMIZATION_FILTER_DURATION_ALWAYS = '#vehicle_customization:customization/filter/duration/always'
     CUSTOMIZATION_FILTER_DURATION_MONTH = '#vehicle_customization:customization/filter/duration/month'
     CUSTOMIZATION_FILTER_DURATION_WEEK = '#vehicle_customization:customization/filter/duration/week'
@@ -1539,6 +1541,7 @@ class VEHICLE_CUSTOMIZATION(object):
     FILTER_POPOVER_GROUPS_ALL = '#vehicle_customization:filter/popover/groups/all'
     CAROUSEL_ITEMLABEL_PURCHASED = '#vehicle_customization:carousel/itemLabel/purchased'
     CAROUSEL_ITEMLABEL_APPLIED = '#vehicle_customization:carousel/itemLabel/applied'
+    CAROUSEL_RENTALBATTLES = '#vehicle_customization:carousel/rentalBattles'
     QUALIFIER_CONDITION_MAP_KIND_WINTER = '#vehicle_customization:qualifier/condition/map_kind_winter'
     QUALIFIER_CONDITION_MAP_KIND_SUMMER = '#vehicle_customization:qualifier/condition/map_kind_summer'
     QUALIFIER_CONDITION_MAP_KIND_DESERT = '#vehicle_customization:qualifier/condition/map_kind_desert'
@@ -1572,6 +1575,10 @@ class VEHICLE_CUSTOMIZATION(object):
     BUYWINDOW_TITLE_DESERT = '#vehicle_customization:buyWindow/title/desert'
     BUYWINDOW_TITLE_EVENT = '#vehicle_customization:buyWindow/title/event'
     BUYWINDOW_TITLE_ACTIVESTYLE = '#vehicle_customization:buyWindow/title/activeStyle'
+    BUYPOPOVER_BTN = '#vehicle_customization:buypopover/btn'
+    BUYPOPOVER_RESULT = '#vehicle_customization:buypopover/result'
+    BUYPOPOVER_PRICE = '#vehicle_customization:buypopover/price'
+    BUYPOPOVER_FROMSTORAGE = '#vehicle_customization:buypopover/fromStorage'
     CUSTOMIZATION_HEADERCLOSEBTN_HEADER = '#vehicle_customization:customization/headerCloseBtn/header'
     CUSTOMIZATION_HEADERCLOSEBTN_BODY = '#vehicle_customization:customization/headerCloseBtn/body'
     CUSTOMIZATION_NOTENOUGHRESOURCES_HEADER = '#vehicle_customization:customization/notEnoughResources/header'
@@ -1700,6 +1707,9 @@ class VEHICLE_CUSTOMIZATION(object):
     CUSTOMIZATION_POPOVER_STYLE_AUTOPROLONGATIONLABEL = '#vehicle_customization:customization/popover/style/autoProlongationLabel'
     CUSTOMIZATION_INFOTYPE_MAP = '#vehicle_customization:customization/infotype/map'
     CUSTOMIZATION_INFOTYPE_DESCRIPTION_MAP = '#vehicle_customization:customization/infotype/description/map'
+    CUSTOMIZATION_INFOTYPE_MAPTYPE_WINTER = '#vehicle_customization:customization/infotype/mapType/winter'
+    CUSTOMIZATION_INFOTYPE_MAPTYPE_SUMMER = '#vehicle_customization:customization/infotype/mapType/summer'
+    CUSTOMIZATION_INFOTYPE_MAPTYPE_DESERT = '#vehicle_customization:customization/infotype/mapType/desert'
     CUSTOMIZATION_INFOTYPE_DESCRIPTION_TYPE = '#vehicle_customization:customization/infotype/description/type'
     CUSTOMIZATION_INFOTYPE_MAP_WINTER = '#vehicle_customization:customization/infotype/map/winter'
     CUSTOMIZATION_INFOTYPE_MAP_SPRING = '#vehicle_customization:customization/infotype/map/spring'
@@ -1825,6 +1835,9 @@ class VEHICLE_CUSTOMIZATION(object):
     MODIFICATIONS_AGE_EFFECT_02_DESCRIPTION = '#vehicle_customization:modifications/age_effect_02/description'
     MODIFICATIONS_AGE_EFFECT_03 = '#vehicle_customization:modifications/age_effect_03'
     MODIFICATIONS_AGE_EFFECT_03_DESCRIPTION = '#vehicle_customization:modifications/age_effect_03/description'
+    STYLES_SPECIAL_STYLES = '#vehicle_customization:styles/special_styles'
+    STYLES_RENTED_STYLES = '#vehicle_customization:styles/rented_styles'
+    STYLES_MAIN_STYLES = '#vehicle_customization:styles/main_styles'
     RENTED_STYLE_CHINA = '#vehicle_customization:rented_style/china'
     RENTED_STYLE_CZECH = '#vehicle_customization:rented_style/czech'
     RENTED_STYLE_FRANCE = '#vehicle_customization:rented_style/france'
@@ -1868,19 +1881,27 @@ class VEHICLE_CUSTOMIZATION(object):
     SEASON_SELECTION_SUMMER = '#vehicle_customization:season/selection/summer'
     SEASON_SELECTION_WINTER = '#vehicle_customization:season/selection/winter'
     SEASON_SELECTION_DESERT = '#vehicle_customization:season/selection/desert'
-    SEASON_SELECTION_HEADER = '#vehicle_customization:season/selection/header'
+    SEASON_SELECTION_SELECTED_SUMMER = '#vehicle_customization:season/selection/selected/summer'
+    SEASON_SELECTION_SELECTED_WINTER = '#vehicle_customization:season/selection/selected/winter'
+    SEASON_SELECTION_SELECTED_DESERT = '#vehicle_customization:season/selection/selected/desert'
+    SEASON_SELECTION_TOOLTIP = '#vehicle_customization:season/selection/tooltip'
+    SEASON_SELECTION_MAPNAME_SUMMER = '#vehicle_customization:season/selection/mapName/summer'
+    SEASON_SELECTION_MAPNAME_WINTER = '#vehicle_customization:season/selection/mapName/winter'
+    SEASON_SELECTION_MAPNAME_DESERT = '#vehicle_customization:season/selection/mapName/desert'
     CUSTOMIZATION_NONHISTORIC_TABLEHEADER_APPLIED = '#vehicle_customization:customization/nonHistoric/tableHeader/applied'
     CUSTOMIZATION_NONHISTORIC_BUTTONTEXT_REMOVEFROMALL = '#vehicle_customization:customization/nonHistoric/buttonText/removeFromAll'
+    CUSTOMIZATION_NONHISTORIC_BUTTONCLEARTEXT = '#vehicle_customization:customization/nonHistoric/buttonClearText'
     CUSTOMIZATION_NONHISTORIC_TABLEHEADER_ITEM = '#vehicle_customization:customization/nonHistoric/tableHeader/item'
     CUSTOMIZATION_NONHISTORIC_TABLEHEADER_REMOVE = '#vehicle_customization:customization/nonHistoric/tableHeader/remove'
-    CUSTOMIZATION_NONHISTORIC_TITLE_ITEMS = '#vehicle_customization:customization/nonHistoric/title/items'
-    CUSTOMIZATION_PROPSHEET_POPOVER_REMOVE = '#vehicle_customization:customization/propSheet/popover/remove'
-    CUSTOMIZATION_PROPSHEET_POPOVER_APPLYITEM = '#vehicle_customization:customization/propSheet/popover/applyItem'
-    CUSTOMIZATION_PROPSHEET_POPOVER_LOCKED = '#vehicle_customization:customization/propSheet/popover/locked'
-    CUSTOMIZATION_PROPSHEET_POPOVER_EMPTY = '#vehicle_customization:customization/propSheet/popover/empty'
-    CUSTOMIZATION_PROPSHEET_POPOVER_ADDITEM = '#vehicle_customization:customization/propSheet/popover/addItem'
+    CUSTOMIZATION_NONHISTORIC_TABLEHEADERS_NEW = '#vehicle_customization:customization/nonHistoric/tableHeaders/new'
+    CUSTOMIZATION_NONHISTORIC_TABLEHEADERS_PURCHASE = '#vehicle_customization:customization/nonHistoric/tableHeaders/purchase'
+    CUSTOMIZATION_ITEMSPOPOVER_TITLE_ITEMS = '#vehicle_customization:customization/itemsPopover/title/items'
+    CUSTOMIZATION_ITEMSPOPOVER_HISTORICCHECKBOX_ITEMS = '#vehicle_customization:customization/itemsPopover/historicCheckBox/items'
+    CUSTOMIZATION_ITEMSPOPOVER_BTN = '#vehicle_customization:customization/itemsPopover/btn'
+    CUSTOMIZATION_ITEMSPOPOVER_CLEAR_MASSAGE = '#vehicle_customization:customization/itemsPopover/clear/massage'
+    CUSTOMIZATION_ITEMSPOPOVER_CLEAR_NONHISTORICMASSAGE = '#vehicle_customization:customization/itemsPopover/clear/nonHistoricMassage'
+    CUSTOMIZATION_BUYWINDOW_TITLE = '#vehicle_customization:customization/buyWindow/title'
     CUSTOMIZATION_NONHISTORIC_INDICATORTEXT = '#vehicle_customization:customization/nonHistoric/indicatorText'
-    CUSTOMIZATION_PROPSHEET_EFFECTS_TANKEFFECTS = '#vehicle_customization:customization/propSheet/effects/tankEffects'
     CUSTOMIZATION_FILTER_ALLGROUPS = '#vehicle_customization:customization/filter/allGroups'
     COMMIT_APPLY = '#vehicle_customization:commit/apply'
     COMMIT_BUY = '#vehicle_customization:commit/buy'
@@ -1889,16 +1910,96 @@ class VEHICLE_CUSTOMIZATION(object):
     HISTORICINDICATOR_STYLENAME_CUSTSOMSTYLE = '#vehicle_customization:historicIndicator/styleName/custsomStyle'
     SWITCHER_NAME_CUSTSOMSTYLE = '#vehicle_customization:switcher/name/custsomStyle'
     SWITCHER_NAME_DEFAULTSTYLE = '#vehicle_customization:switcher/name/defaultStyle'
-    CAROUSEL_SWATCH_STYLE_RENT = '#vehicle_customization:carousel/swatch/style/rent'
-    CAROUSEL_SWATCH_STYLE_PERMANENT = '#vehicle_customization:carousel/swatch/style/permanent'
+    CAROUSEL_SWATCH_STYLE_RENTED = '#vehicle_customization:carousel/swatch/style/rented'
+    CAROUSEL_SWATCH_STYLE_MAIN = '#vehicle_customization:carousel/swatch/style/main'
+    CAROUSEL_SWATCH_STYLE_SPECIAL = '#vehicle_customization:carousel/swatch/style/special'
     DEFAULTSTYLE_LABEL = '#vehicle_customization:defaultStyle/label'
     FILTER_OR = '#vehicle_customization:filter/or'
-    BONUS_NAME_ENUM = (BONUS_NAME_CAMOUFLAGE, BONUS_NAME_EXTENDED_CAMOUFLAGE)
+    PROPERTYSHEET_TITLE_APPLIEDTO = '#vehicle_customization:propertySheet/title/appliedTo'
+    PROPERTYSHEET_TITLE_ALLTANKPAINTED = '#vehicle_customization:propertySheet/title/allTankPainted'
+    PROPERTYSHEET_TITLE_APPLIEDTOMAP = '#vehicle_customization:propertySheet/title/appliedToMap'
+    PROPERTYSHEET_TITLE_ALLMAPS = '#vehicle_customization:propertySheet/title/allMaps'
+    PROPERTYSHEET_TITLE_REMOVE_PAINT = '#vehicle_customization:propertySheet/title/remove/paint'
+    PROPERTYSHEET_TITLE_REMOVE_CAMOUFLAGE = '#vehicle_customization:propertySheet/title/remove/camouflage'
+    PROPERTYSHEET_TITLE_REMOVE_EMBLEM = '#vehicle_customization:propertySheet/title/remove/emblem'
+    PROPERTYSHEET_TITLE_REMOVE_INSCRIPTION = '#vehicle_customization:propertySheet/title/remove/inscription'
+    PROPERTYSHEET_TITLE_REMOVE_MODIFICATION = '#vehicle_customization:propertySheet/title/remove/modification'
+    PROPERTYSHEET_TITLE_COLOR = '#vehicle_customization:propertySheet/title/color'
+    PROPERTYSHEET_TITLE_SCALE = '#vehicle_customization:propertySheet/title/scale'
+    PROPERTYSHEET_ACTIONBTN_APPLYTOWHOLETANK = '#vehicle_customization:propertySheet/actionBtn/applyToWholeTank'
+    PROPERTYSHEET_ACTIONBTN_APPLYTOALLMAPS = '#vehicle_customization:propertySheet/actionBtn/applyToAllMaps'
+    PROPERTYSHEET_ACTIONBTN_REMOVE_TURRET = '#vehicle_customization:propertySheet/actionBtn/remove/turret'
+    PROPERTYSHEET_ACTIONBTN_REMOVE_MASK = '#vehicle_customization:propertySheet/actionBtn/remove/mask'
+    PROPERTYSHEET_ACTIONBTN_REMOVE_GUN = '#vehicle_customization:propertySheet/actionBtn/remove/gun'
+    PROPERTYSHEET_ACTIONBTN_REMOVE_CHASSIS = '#vehicle_customization:propertySheet/actionBtn/remove/chassis'
+    PROPERTYSHEET_ACTIONBTN_REMOVE_HULL = '#vehicle_customization:propertySheet/actionBtn/remove/hull'
+    PROPERTYSHEET_ACTIONBTN_REMOVE_TANK = '#vehicle_customization:propertySheet/actionBtn/remove/tank'
+    PROPERTYSHEET_ACTIONBTN_REMOVE_EMBLEM = '#vehicle_customization:propertySheet/actionBtn/remove/emblem'
+    PROPERTYSHEET_ACTIONBTN_REMOVE_INSCRIPTION = '#vehicle_customization:propertySheet/actionBtn/remove/inscription'
+    PROPERTYSHEET_ACTIONBTN_REMOVE_SEASONS = '#vehicle_customization:propertySheet/actionBtn/remove/seasons'
+    PROPERTYSHEET_ACTIONBTN_CANCEL = '#vehicle_customization:propertySheet/actionBtn/cancel'
+    PROPERTYSHEET_ACTIONBTN_REMOVESTYLE = '#vehicle_customization:propertySheet/actionBtn/removeStyle'
+    PROPERTYSHEET_ELEMENTTYPE_TURRET = '#vehicle_customization:propertySheet/elementType/turret'
+    PROPERTYSHEET_ELEMENTTYPE_MASK = '#vehicle_customization:propertySheet/elementType/mask'
+    PROPERTYSHEET_ELEMENTTYPE_GUN = '#vehicle_customization:propertySheet/elementType/gun'
+    PROPERTYSHEET_ELEMENTTYPE_CHASSIS = '#vehicle_customization:propertySheet/elementType/chassis'
+    PROPERTYSHEET_ELEMENTTYPE_HULL = '#vehicle_customization:propertySheet/elementType/hull'
+    PROPERTYSHEET_ELEMENTTYPE_INSCRIPTION = '#vehicle_customization:propertySheet/elementType/inscription'
+    PROPERTYSHEET_ELEMENTTYPE_EMBLEM = '#vehicle_customization:propertySheet/elementType/emblem'
+    PROPERTYSHEET_ELEMENTTYPE_ALL = '#vehicle_customization:propertySheet/elementType/all'
+    PROPERTYSHEET_MAP_SUMMER = '#vehicle_customization:propertySheet/map/summer'
+    PROPERTYSHEET_MAP_WINTER = '#vehicle_customization:propertySheet/map/winter'
+    PROPERTYSHEET_MAP_DESERT = '#vehicle_customization:propertySheet/map/desert'
+    PROPERTYSHEET_CHOOSE_PAINT = '#vehicle_customization:propertySheet/choose/paint'
+    PROPERTYSHEET_CHOOSE_CAMOUFLAGE = '#vehicle_customization:propertySheet/choose/camouflage'
+    PROPERTYSHEET_CHOOSE_EMBLEM = '#vehicle_customization:propertySheet/choose/emblem'
+    PROPERTYSHEET_CHOOSE_INSCRIPTION = '#vehicle_customization:propertySheet/choose/inscription'
+    PROPERTYSHEET_CHOOSE_MODIFICATION = '#vehicle_customization:propertySheet/choose/modification'
+    PROPERTYSHEET_CHOOSE_STYLE = '#vehicle_customization:propertySheet/choose/style'
+    PROPERTYSHEET_DESCRIPTION = '#vehicle_customization:propertySheet/description'
     BONUS_NAME_EXTENDED_ENUM = (BONUS_NAME_EXTENDED_CAMOUFLAGE,)
     SEASON_SELECTION_ENUM = (SEASON_SELECTION_SUMMER,
      SEASON_SELECTION_WINTER,
      SEASON_SELECTION_DESERT,
-     SEASON_SELECTION_HEADER)
+     SEASON_SELECTION_SELECTED_SUMMER,
+     SEASON_SELECTION_SELECTED_WINTER,
+     SEASON_SELECTION_SELECTED_DESERT,
+     SEASON_SELECTION_TOOLTIP,
+     SEASON_SELECTION_MAPNAME_SUMMER,
+     SEASON_SELECTION_MAPNAME_WINTER,
+     SEASON_SELECTION_MAPNAME_DESERT)
+    PROPERTYSHEET_MAP_ENUM = (PROPERTYSHEET_MAP_SUMMER, PROPERTYSHEET_MAP_WINTER, PROPERTYSHEET_MAP_DESERT)
+    SEASON_SELECTION_SELECTED_ENUM = (SEASON_SELECTION_SELECTED_SUMMER, SEASON_SELECTION_SELECTED_WINTER, SEASON_SELECTION_SELECTED_DESERT)
+    PROPERTYSHEET_ACTIONBTN_REMOVE_ENUM = (PROPERTYSHEET_ACTIONBTN_REMOVE_TURRET,
+     PROPERTYSHEET_ACTIONBTN_REMOVE_MASK,
+     PROPERTYSHEET_ACTIONBTN_REMOVE_GUN,
+     PROPERTYSHEET_ACTIONBTN_REMOVE_CHASSIS,
+     PROPERTYSHEET_ACTIONBTN_REMOVE_HULL,
+     PROPERTYSHEET_ACTIONBTN_REMOVE_TANK,
+     PROPERTYSHEET_ACTIONBTN_REMOVE_EMBLEM,
+     PROPERTYSHEET_ACTIONBTN_REMOVE_INSCRIPTION,
+     PROPERTYSHEET_ACTIONBTN_REMOVE_SEASONS)
+    PROPERTYSHEET_CHOOSE_ENUM = (PROPERTYSHEET_CHOOSE_PAINT,
+     PROPERTYSHEET_CHOOSE_CAMOUFLAGE,
+     PROPERTYSHEET_CHOOSE_EMBLEM,
+     PROPERTYSHEET_CHOOSE_INSCRIPTION,
+     PROPERTYSHEET_CHOOSE_MODIFICATION,
+     PROPERTYSHEET_CHOOSE_STYLE)
+    SEASON_SELECTION_MAPNAME_ENUM = (SEASON_SELECTION_MAPNAME_SUMMER, SEASON_SELECTION_MAPNAME_WINTER, SEASON_SELECTION_MAPNAME_DESERT)
+    PROPERTYSHEET_TITLE_REMOVE_ENUM = (PROPERTYSHEET_TITLE_REMOVE_PAINT,
+     PROPERTYSHEET_TITLE_REMOVE_CAMOUFLAGE,
+     PROPERTYSHEET_TITLE_REMOVE_EMBLEM,
+     PROPERTYSHEET_TITLE_REMOVE_INSCRIPTION,
+     PROPERTYSHEET_TITLE_REMOVE_MODIFICATION)
+    BONUS_NAME_ENUM = (BONUS_NAME_CAMOUFLAGE, BONUS_NAME_EXTENDED_CAMOUFLAGE)
+    PROPERTYSHEET_ELEMENTTYPE_ENUM = (PROPERTYSHEET_ELEMENTTYPE_TURRET,
+     PROPERTYSHEET_ELEMENTTYPE_MASK,
+     PROPERTYSHEET_ELEMENTTYPE_GUN,
+     PROPERTYSHEET_ELEMENTTYPE_CHASSIS,
+     PROPERTYSHEET_ELEMENTTYPE_HULL,
+     PROPERTYSHEET_ELEMENTTYPE_INSCRIPTION,
+     PROPERTYSHEET_ELEMENTTYPE_EMBLEM,
+     PROPERTYSHEET_ELEMENTTYPE_ALL)
 
     @classmethod
     def getShortBonusName(cls, bonusType):
@@ -1922,6 +2023,69 @@ class VEHICLE_CUSTOMIZATION(object):
     def getSeasonName(cls, season):
         outcome = '#vehicle_customization:season/selection/{}'.format(season)
         if outcome not in cls.SEASON_SELECTION_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getSeasonSelectedName(cls, season):
+        outcome = '#vehicle_customization:season/selection/selected/{}'.format(season)
+        if outcome not in cls.SEASON_SELECTION_SELECTED_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getSheetEmptyDescription(cls, itemType):
+        outcome = '#vehicle_customization:propertySheet/choose/{}'.format(itemType)
+        if outcome not in cls.PROPERTYSHEET_CHOOSE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getSheetVehPartName(cls, elementType):
+        outcome = '#vehicle_customization:propertySheet/elementType/{}'.format(elementType)
+        if outcome not in cls.PROPERTYSHEET_ELEMENTTYPE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getSheetRemoveText(cls, itemType):
+        outcome = '#vehicle_customization:propertySheet/title/remove/{}'.format(itemType)
+        if outcome not in cls.PROPERTYSHEET_TITLE_REMOVE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getSheetBtnRemoveText(cls, itemType):
+        outcome = '#vehicle_customization:propertySheet/actionBtn/remove/{}'.format(itemType)
+        if outcome not in cls.PROPERTYSHEET_ACTIONBTN_REMOVE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getSheetSeasonName(cls, season):
+        outcome = '#vehicle_customization:propertySheet/map/{}'.format(season)
+        if outcome not in cls.PROPERTYSHEET_MAP_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getMapName(cls, season):
+        outcome = '#vehicle_customization:season/selection/mapName/{}'.format(season)
+        if outcome not in cls.SEASON_SELECTION_MAPNAME_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

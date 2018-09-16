@@ -125,11 +125,11 @@ def _offlineLoadCheck():
 g_spaceID = 0
 g_avatar = None
 
-class FakeAvatar(object):
-    spaceID = property(lambda self: BigWorld.camera().spaceID)
+def createFakeAvatar():
+    entityID = BigWorld.createEntity('OfflineEntity', BigWorld.camera().spaceID, 0, (0, 0, 0), (0, 0, 0), {})
+    entity = BigWorld.entity(entityID)
+    BigWorld.player = lambda : entity
 
-
-g_fakeAvatar = FakeAvatar()
 
 def launch(spaceName):
     global g_offlineModeEnabled
@@ -154,6 +154,7 @@ def launch(spaceName):
     GUI.mcursor().clipped = False
     g_offlineModeEnabled = True
     BigWorld.callback(1.0, _offlineLoadCheck)
+    createFakeAvatar()
     return
 
 
@@ -169,7 +170,6 @@ def adjustFOV(diff):
     newFov = BigWorld.projection().fov + diff
     newFov = min(max(newFov, FOV_MIN), FOV_MAX)
     BigWorld.projection().rampFov(newFov, 0.1)
-    BigWorld.player = lambda : g_fakeAvatar
     if WWISE.enabled:
         WWISE.WG_loadBanks('', False)
 

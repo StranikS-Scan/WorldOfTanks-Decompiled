@@ -238,8 +238,8 @@ class EventBusPlugin(CrosshairPlugin):
 
 class _PythonTicker(PythonTimer):
 
-    def __init__(self, panel):
-        super(_PythonTicker, self).__init__(panel, 0, 0, 0, 0, interval=0.1)
+    def __init__(self, viewObject):
+        super(_PythonTicker, self).__init__(viewObject, 0, 0, 0, 0, interval=0.1)
 
     def _hideView(self):
         pass
@@ -265,17 +265,17 @@ class _PythonShellInGunTicker(_PythonTicker):
         if self._totalTime > 0:
             progress = self._totalTime - timeLeft
             percent = round(float(progress) / self._totalTime, 2)
-            self._panel.as_setAutoloaderReloadasPercentS(percent)
+            self._viewObject.as_setAutoloaderReloadasPercentS(percent)
 
     def _stopTick(self):
         super(_PythonShellInGunTicker, self)._stopTick()
-        self._panel.as_setAutoloaderReloadasPercentS(1.0)
+        self._viewObject.as_setAutoloaderReloadasPercentS(1.0)
 
 
 class _PythonClipLoadingTicker(_PythonTicker):
 
-    def __init__(self, panel):
-        super(_PythonClipLoadingTicker, self).__init__(panel)
+    def __init__(self, viewObject):
+        super(_PythonClipLoadingTicker, self).__init__(viewObject)
         self.__isStunned = False
         self.__showTimer = True
 
@@ -288,11 +288,11 @@ class _PythonClipLoadingTicker(_PythonTicker):
     def _setViewSnapshot(self, timeLeft):
         if self._totalTime > 0:
             percent = round(float(timeLeft) / self._totalTime, 2)
-            self._panel.as_setAutoloaderPercentS(percent, timeLeft, self.__showTimer)
+            self._viewObject.as_setAutoloaderPercentS(percent, timeLeft, self.__showTimer)
 
     def _stopTick(self):
         super(_PythonClipLoadingTicker, self)._stopTick()
-        self._panel.as_setAutoloaderPercentS(1.0, self._totalTime, self.__showTimer)
+        self._viewObject.as_setAutoloaderPercentS(1.0, self._totalTime, self.__showTimer)
 
 
 class _PythonReloadTicker(_PythonTicker):
@@ -301,11 +301,11 @@ class _PythonReloadTicker(_PythonTicker):
         if self._totalTime > 0:
             timeGone = self._totalTime - timeLeft
             progressInPercents = round(float(timeGone) / self._totalTime * 100, 2)
-            self._panel.as_setReloadingAsPercentS(progressInPercents, True)
+            self._viewObject.as_setReloadingAsPercentS(progressInPercents, True)
 
     def _stopTick(self):
         super(_PythonReloadTicker, self)._stopTick()
-        self._panel.as_setReloadingAsPercentS(100.0, False)
+        self._viewObject.as_setReloadingAsPercentS(100.0, False)
 
 
 class _ReloadingAnimationsProxy(object):

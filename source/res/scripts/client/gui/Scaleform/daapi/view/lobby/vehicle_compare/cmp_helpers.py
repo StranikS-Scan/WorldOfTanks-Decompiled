@@ -177,3 +177,10 @@ def getVehicleTopModules(vehicle):
     topMoudles = checker.process()
     checker.clear()
     return sorted(topMoudles, key=lambda module: MODULES_INSTALLING_ORDER.index(module.itemTypeID))
+
+
+def isVehicleTopConfiguration(vehicle):
+    selectedModules = getVehicleModules(vehicle)
+    topModules = getVehicleTopModules(vehicle)
+    topModulesFromStock = not topModules
+    return True if topModulesFromStock else all((bool(item in selectedModules) for item in topModules))

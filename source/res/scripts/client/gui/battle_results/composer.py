@@ -111,11 +111,12 @@ class StrongholdBattleStatsComposer(StatsComposer):
 class RankedBattlesStatsComposer(StatsComposer):
 
     def __init__(self, reusable):
-        super(RankedBattlesStatsComposer, self).__init__(reusable, templates.RANKED_COMMON_STATS_BLOCK.clone(), templates.REGULAR_PERSONAL_STATS_BLOCK.clone(), templates.RANKED_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
+        super(RankedBattlesStatsComposer, self).__init__(reusable, templates.RANKED_COMMON_STATS_BLOCK.clone(), templates.RANKED_PERSONAL_STATS_BLOCK.clone(), templates.RANKED_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
         self.__resultsTeamsBlock = base.StatsBlock(templates.RANKED_RESULTS_BLOCK)
         self.__resultsTeamsBlock.addNextComponent(templates.RANKED_RESULTS_STATUS_BLOCK.clone())
         self.__resultsTeamsBlock.addNextComponent(templates.RANKED_RESULTS_TEAMS_STATS_BLOCK.clone())
         self.__resultsTeamsBlock.addNextComponent(templates.RANKED_ENABLE_ANIMATION_BLOCK.clone())
+        self.__resultsTeamsBlock.addNextComponent(templates.RANKED_SHOW_WIDGET_BLOCK.clone())
 
     def clear(self):
         super(RankedBattlesStatsComposer, self).clear()

@@ -21,7 +21,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.techtree.techtree_page import TechTree
     from gui.Scaleform.daapi.view.bootcamp.BCTechTree import BCTechTree
     from gui.Scaleform.daapi.view.bootcamp.BCResearch import BCResearch
-    return (ConditionalViewSettings(VIEW_ALIAS.LOBBY_TECHTREE, BootcampComponentOverride(TechTree, BCTechTree), 'techtree.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.LOBBY_TECHTREE, ScopeTemplates.DEFAULT_SCOPE, True), ConditionalViewSettings(VIEW_ALIAS.LOBBY_RESEARCH, BootcampComponentOverride(Research, BCResearch), 'research.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.LOBBY_RESEARCH, ScopeTemplates.DEFAULT_SCOPE, True))
+    return (ConditionalViewSettings(VIEW_ALIAS.LOBBY_TECHTREE, BootcampComponentOverride(TechTree, BCTechTree), 'techtree.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.LOBBY_TECHTREE, ScopeTemplates.LOBBY_SUB_SCOPE, True), ConditionalViewSettings(VIEW_ALIAS.LOBBY_RESEARCH, BootcampComponentOverride(Research, BCResearch), 'research.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.LOBBY_RESEARCH, ScopeTemplates.LOBBY_SUB_SCOPE, True))
 
 
 def getBusinessHandlers():

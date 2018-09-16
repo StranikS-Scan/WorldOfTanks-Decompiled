@@ -177,7 +177,8 @@ _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'EFC2016Goleador',
  'markIBomberman',
  'markIRepairer',
- 'markI100Years']
+ 'markI100Years',
+ 'rankedBattlesHeroProgress']
 _achievements15x15PopUps = ['warrior',
  'invader',
  'sniper',

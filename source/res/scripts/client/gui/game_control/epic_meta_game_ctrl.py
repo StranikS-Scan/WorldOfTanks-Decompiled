@@ -121,7 +121,6 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
         self.startGlobalListening()
         self.__getStaticData()
         self.__invalidateBattleAbilityItems()
-        self.__invalidateBattleAbilitiesForVehicle()
         self.startNotification()
         if self.getPerformanceGroup() == EPIC_PERF_GROUP.HIGH_RISK:
             self.lobbyContext.addFightButtonConfirmator(self.__confirmFightButtonPressEnabled)
@@ -261,6 +260,21 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
             serversPeriodsMapping[serverShortName] = dayPeriods
 
         return serversPeriodsMapping
+
+    def hasAvailablePrimeTimeServers(self):
+        hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming(), withShortName=True)
+        if self.connectionMgr.isStandalone():
+            hostsList.insert(0, (self.connectionMgr.url,
+             self.connectionMgr.serverUserName,
+             self.connectionMgr.serverUserNameShort,
+             HOST_AVAILABILITY.IGNORED,
+             0))
+        for _, _, _, _, peripheryID in hostsList:
+            primeTimeStatus, _, _ = self.getPrimeTimeStatus(peripheryID)
+            if primeTimeStatus in (PRIME_TIME_STATUS.AVAILABLE, PRIME_TIME_STATUS.NOT_AVAILABLE):
+                return True
+
+        return False
 
     def increaseSkillLevel(self, skillID):
         BigWorld.player().epicMetaGame.increaseAbility(skillID)

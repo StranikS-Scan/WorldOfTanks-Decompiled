@@ -55,17 +55,11 @@ def createMovieGUI(file='scaleform/d3d9guide.swf'):
 
 
 def createIMEFontsMovie():
-    file = 'scaleform/fonts_all.swf'
-    m, d = createMovieInstance(file)
-    d.setAsFontMovie()
-    d.addToFontLibrary()
+    print 'Fonts loading from Python is not supported anymore.'
 
 
 def createIME():
-    mapFont('$IMECandidateListFont', 'SimSun')
-    mapFont('$IMELanguageBar', 'SimSun')
-    mapFont('$IMESample', 'SimSun')
-    createIMEFontsMovie()
+    print 'Fonts mapping from Python is not supported anymore.'
     showCursor()
 
 
@@ -75,16 +69,11 @@ def createIMEMovie():
 
 
 def createFontMovie(file='scaleform/drawtext_fonts.swf'):
-    m, d = createMovieInstance(file)
-    d.setAsFontMovie()
-    d.addToFontLibrary()
+    print 'Fonts loading from Python is not supported anymore.'
 
 
 def createAllFontsMovie():
-    file = 'scaleform/fonts_all.swf'
-    m, d = createMovieInstance(file)
-    d.setAsFontMovie()
-    d.addToFontLibrary()
+    print 'Fonts loading from Python is not supported anymore.'
 
 
 def createFlashText(fontName='Slate Mobile'):

@@ -22,6 +22,9 @@ class SOUNDS(CONST_CONTAINER):
     PICK = 'cust_color_take'
     RELEASE = 'cust_color_release'
     APPLY = 'cust_color_apply'
+    CUST_TICK_ON = 'cust_tick_on'
+    CUST_TICK_ON_ALL = 'cust_tick_on_all'
+    CUST_TICK_OFF = 'cust_tick_off'
 
 
 C11N_SOUND_SPACE = CommonSoundSpaceSettings(name=SOUNDS.COMMON_SOUND_SPACE, entranceStates={SOUNDS.STATE_PLACE: SOUNDS.STATE_PLACE_C11N}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True)

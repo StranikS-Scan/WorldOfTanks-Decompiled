@@ -3,7 +3,7 @@
 import BigWorld
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE, GOODIE_STATE, GOODIE_VARIETY, GOODIE_TARGET_TYPE
 from gui import GUI_SETTINGS
-from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE
+from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, KPI
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.economics import getActionPrc
@@ -40,6 +40,10 @@ BOOSTERS_ORDERS = {GOODIE_RESOURCE_TYPE.XP: 0,
  GOODIE_RESOURCE_TYPE.FREE_XP: 2,
  GOODIE_RESOURCE_TYPE.CREDITS: 3,
  GOODIE_RESOURCE_TYPE.GOLD: 4}
+GOODIE_TYPE_TO_KPI_NAME_MAP = {GOODIE_RESOURCE_TYPE.XP: KPI.Name.GAME_XP,
+ GOODIE_RESOURCE_TYPE.FREE_XP: KPI.Name.GAME_FREE_XP,
+ GOODIE_RESOURCE_TYPE.CREW_XP: KPI.Name.GAME_CREW_XP,
+ GOODIE_RESOURCE_TYPE.CREDITS: KPI.Name.GAME_CREDITS}
 
 class _Goodie(object):
 
@@ -276,6 +280,14 @@ class Booster(_Goodie):
     @property
     def description(self):
         return _ms(_BOOSTER_DESCRIPTION_LOCALE % self.boosterGuiType, effectValue=self.getFormattedValue(text_styles.neutral)) + _ms(MENU.BOOSTER_DESCRIPTION_EFFECTTIME, effectTime=self.getEffectTimeStr())
+
+    @property
+    def kpi(self):
+        kpiList = []
+        name = GOODIE_TYPE_TO_KPI_NAME_MAP.get(self.boosterType)
+        if name is not None:
+            kpiList.append(KPI(name, 1.0 + self.effectValue / 100.0, KPI.Type.FACTOR))
+        return kpiList
 
     def getCooldownAsPercent(self):
         percent = 0

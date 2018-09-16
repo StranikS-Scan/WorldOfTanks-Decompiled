@@ -241,6 +241,7 @@ def _readTips():
                                 if arenaGuiTypeCondition.validate(arenaGuiType):
                                     result[battleCondition][arenaGuiType][vehicleTypeCondition][nation][vehLevel].append((i18n.makeString('#tips:%s' % status), i18n.makeString('#tips:%s' % key), _getTipIcon(tipID, group)))
 
+    i18n.g_translators.clear()
     return result
 
 

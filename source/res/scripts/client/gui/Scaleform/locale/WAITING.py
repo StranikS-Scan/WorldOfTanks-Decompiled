@@ -105,6 +105,7 @@ class WAITING(object):
     DOWNLOAD_RECYCLEBIN = '#waiting:download/recycleBin'
     DOWNLOAD_RANKED = '#waiting:download/ranked'
     DOWNLOAD_BADGES = '#waiting:download/badges'
+    DOWNLOAD_EPICMETAGAME = '#waiting:download/epicMetaGame'
     UPDATINGSKILLWINDOW = '#waiting:updatingSkillWindow'
     PREBATTLE_CREATE = '#waiting:prebattle/create'
     PREBATTLE_TEAM_READY = '#waiting:prebattle/team_ready'

@@ -33,7 +33,7 @@ class LogConfigurator(logging.config.DictConfigurator):
         return
 
 
-def setupFromXML(envKey=ENV_KEY, filename=XML_CFG_FILE, level=logging.WARNING):
+def setupFromXML(envKey=ENV_KEY, filename=XML_CFG_FILE, level=logging.INFO):
     value = os.getenv(envKey, '')
     if not value:
         value = filename

@@ -186,7 +186,8 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.ACOUSTIC_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.TRADEIN_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.CRYSTALS_PROMO_WINDOW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.BADGES_PAGE, self.loadViewByCtxEvent))
+         (VIEW_ALIAS.BADGES_PAGE, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.UNBOUND_INJECT_WINDOW, self.loadViewByCtxEvent))
         super(LobbyPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
 
 

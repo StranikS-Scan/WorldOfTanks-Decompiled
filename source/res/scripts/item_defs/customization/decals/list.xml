@@ -1720,6 +1720,20 @@
       </vehicleFilter>
     </decal>
   </itemGroup>
+  <itemGroup>
+    <name>	group46	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <type>	EMBLEM	</type>
+    <historical>	true	</historical>
+    <vehicleFilter></vehicleFilter>
+    <decal>
+      <id>	15945	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_383.dds	</texture>
+      <userString>	#vehicle_customization:emblem/group46/special_383	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>
   <xmlns:germany>	germany	</xmlns:germany>
   <xmlns:usa>	usa	</xmlns:usa>
@@ -2855,11 +2869,7 @@
     <historical>	false	</historical>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
       </include>
     </vehicleFilter>
     <decal>
@@ -2895,12 +2905,7 @@
     <historical>	true	</historical>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	germany italy japan	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	germany italy japan	</nations>
       </include>
     </vehicleFilter>
@@ -3026,12 +3031,7 @@
     <historical>	true	</historical>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	italy	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	italy	</nations>
       </include>
     </vehicleFilter>
@@ -6408,12 +6408,7 @@
     <historical>	true	</historical>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	ussr poland czech china germany italy japan	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	ussr poland czech china germany italy japan	</nations>
       </include>
     </vehicleFilter>
@@ -6431,12 +6426,7 @@
     <historical>	true	</historical>
     <vehicleFilter>
       <include>
-        <tags>	premium	</tags>
-        <levels>	8	</levels>
-        <nations>	france uk usa sweden	</nations>
-      </include>
-      <include>
-        <levels>	10	</levels>
+        <levels>	8 10	</levels>
         <nations>	france uk usa sweden	</nations>
       </include>
     </vehicleFilter>
@@ -6469,8 +6459,8 @@
     </vehicleFilter>
     <decal>
       <id>	549	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_196.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_196	</userString>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_197.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_197	</userString>
     </decal>
   </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>

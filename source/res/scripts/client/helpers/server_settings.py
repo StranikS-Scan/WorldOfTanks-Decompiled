@@ -509,6 +509,9 @@ class ServerSettings(object):
     def isBootcampEnabled(self):
         return self.__getGlobalSetting('isBootcampEnabled', False)
 
+    def getBootcampBonuses(self):
+        return self.__getGlobalSetting('bootcampBonuses', {})
+
     def isEpicRandomEnabled(self):
         return self.__getGlobalSetting('isEpicRandomEnabled', False)
 
@@ -567,6 +570,9 @@ class ServerSettings(object):
 
     def getHeroVehicles(self):
         return self.__getGlobalSetting('hero_vehicles', {})
+
+    def isManualEnabled(self):
+        return self.__getGlobalSetting('isManualEnabled', False)
 
     def __getGlobalSetting(self, settingsName, default=None):
         return self.__serverSettings.get(settingsName, default)

@@ -280,7 +280,7 @@ class _EpicQueueItem(_SelectorItem):
         isEpicEnabled = self.lobbyContext.getServerSettings().isEpicBattleEnabled()
         if not isEpicEnabled or not isNow:
             self._isLocked = True
-        self._isDisabled = state.hasLockedState
+        self._isDisabled = state.hasLockedState or not self.epicQueueController.hasAvailablePrimeTimeServers()
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.EPIC)
         self._isVisible = isEpicEnabled
 
@@ -416,7 +416,8 @@ class _RankedItem(_SelectorItem):
     def _update(self, state):
         self._isSelected = state.isInPreQueue(QUEUE_TYPE.RANKED)
         self.__hasPastSeason = self.rankedController.getPreviousSeason() is not None and self.__ladderURL is not None
-        self._isDisabled = state.hasLockedState or not self.rankedController.isAvailable() and not self.__hasPastSeason
+        cantPlayRanked = not self.rankedController.hasAvailablePrimeTimeServers() and not self.__hasPastSeason
+        self._isDisabled = state.hasLockedState or cantPlayRanked
         self._isVisible = self.rankedController.isEnabled()
         return
 

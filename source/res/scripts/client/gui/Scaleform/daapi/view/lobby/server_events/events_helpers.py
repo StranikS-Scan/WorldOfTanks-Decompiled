@@ -12,12 +12,15 @@ from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events import formatters, conditions, settings as quest_settings
-from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, QuestInfoModel
+from gui.server_events.events_helpers import EventInfoModel, MISSIONS_STATES, QuestInfoModel, isLinkedSet
 from gui.shared.formatters import text_styles
 from helpers import i18n, int2roman, time_utils, dependency
 from personal_missions import PM_BRANCH
 from quest_xml_source import MAX_BONUS_LIMIT
 from skeletons.gui.shared import IItemsCache
+from helpers.i18n import makeString as _ms
+from gui.Scaleform.locale.LINKEDSET import LINKEDSET
+from gui.server_events.events_helpers import getLocalizedMissionNameForLinkedSetQuest, getLocalizedQuestNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest
 _AWARDS_PER_PAGE = 3
 FINISH_TIME_LEFT_TO_SHOW = time_utils.ONE_DAY
 START_TIME_LIMIT = 5 * time_utils.ONE_DAY
@@ -264,11 +267,36 @@ class _MotiveQuestInfo(_QuestInfo):
         return info
 
 
+class _LinkedSetQuestInfo(_QuestInfo):
+
+    def getInfo(self, svrEvents, pCur=None, pPrev=None, noProgressInfo=False):
+        res = super(_LinkedSetQuestInfo, self).getInfo(svrEvents, pCur, pPrev, noProgressInfo)
+        missionName = getLocalizedMissionNameForLinkedSetQuest(self.event)
+        questName = getLocalizedQuestNameForLinkedSetQuest(self.event)
+        res['description'] = _ms(LINKEDSET.QUEST_CARD_TITLE, mission_name=missionName, quest_name=questName)
+        return res
+
+    def getPostBattleInfo(self, svrEvents, pCur, pPrev, isProgressReset, isCompleted):
+        bonuses = self.event.getBonuses()
+        if not bonuses:
+            return None
+        else:
+            res = super(_LinkedSetQuestInfo, self).getPostBattleInfo(svrEvents, pCur, pPrev, isProgressReset, isCompleted)
+            res['title'] = getLocalizedQuestNameForLinkedSetQuest(self.event)
+            progresses = res.get('progressList', [])
+            if progresses and len(progresses) == 1:
+                curProgress = progresses[0]
+                curProgress['description'] = getLocalizedQuestDescForLinkedSetQuest(self.event)
+            return res
+
+
 def getEventInfoData(event):
     if event.getType() == constants.EVENT_TYPE.PERSONAL_MISSION:
         return _PersonalMissionInfo(event)
     if event.getType() == constants.EVENT_TYPE.MOTIVE_QUEST:
         return _MotiveQuestInfo(event)
+    if isLinkedSet(event.getGroupID()):
+        return _LinkedSetQuestInfo(event)
     return _QuestInfo(event) if event.getType() in constants.EVENT_TYPE.QUEST_RANGE else _EventInfo(event)
 
 

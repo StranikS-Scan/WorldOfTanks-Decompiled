@@ -1,6 +1,7 @@
 <engines.xml>
   <ids>
     <Maybach_HL_230P30A>	0	</Maybach_HL_230P30A>
+    <W_12_5>	3	</W_12_5>
   </ids>
   <shared>
     <Maybach_HL_230P30A>
@@ -20,5 +21,22 @@
       <rpm_min>	564	</rpm_min>
       <rpm_max>	2508	</rpm_max>
     </Maybach_HL_230P30A>
+    <W_12_5>
+      <userString>	#poland_vehicles:W_12_5	</userString>
+      <tags>	gasoline	</tags>
+      <level>	8	</level>
+      <price>	55000	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_Ford_GAA_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_Ford_GAA_npc	</wwsoundNPC>
+      <power>	750	</power>
+      <weight>	1400	</weight>
+      <maxHealth>	260	</maxHealth>
+      <maxRegenHealth>	129	</maxRegenHealth>
+      <repairCost>	8	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	564	</rpm_min>
+      <rpm_max>	2508	</rpm_max>
+    </W_12_5>
   </shared>
 </engines.xml>

@@ -3,13 +3,33 @@
 
 
 class APP_CONTAINERS_NAMES(object):
-    VIEWS = 'views'
+    VIEWS = 'view'
+    TOP_SUB_VIEW = 'topSubView'
+    SUBVIEW = 'subView'
     WINDOWS = 'window'
     SYSTEM_MESSAGES = 'systemMessages'
-    DIALOGS = 'dialogs'
+    FRONT_WAITING = 'frontWaiting'
+    BACK_WAITING = 'backWaiting'
+    BROWSER = 'browser'
+    DIALOGS = 'topWindow'
+    OVERLAY = 'overlay'
+    SERVICE_LAYOUT = 'serviceLayout'
     TOOL_TIPS = 'toolTips'
     CURSOR = 'cursor'
-    SERVICE_LAYOUT = 'serviceLayout'
-    BROWSER = 'browser'
     WAITING = 'waiting'
-    OVERLAY = 'overlay'
+    MARKER = 'marker'
+    CONTAINER_TYPES = [VIEWS,
+     TOP_SUB_VIEW,
+     SUBVIEW,
+     WINDOWS,
+     SYSTEM_MESSAGES,
+     FRONT_WAITING,
+     BACK_WAITING,
+     BROWSER,
+     DIALOGS,
+     OVERLAY,
+     SERVICE_LAYOUT,
+     TOOL_TIPS,
+     CURSOR,
+     WAITING,
+     MARKER]

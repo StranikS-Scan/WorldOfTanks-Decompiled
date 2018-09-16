@@ -24,6 +24,7 @@ from gui.prb_control.settings import CTRL_ENTITY_TYPE as _CTRL_TYPE, ENTER_UNIT_
 from gui.prb_control.settings import IGNORED_UNIT_BROWSER_ERRORS
 from gui.prb_control.settings import IGNORED_UNIT_MGR_ERRORS
 from gui.prb_control.settings import PREBATTLE_RESTRICTION, FUNCTIONAL_FLAG
+from gui.prb_control.settings import UNIT_NOTIFICATION_TO_DISPLAY
 from gui.prb_control.settings import REQUEST_TYPE as _RQ_TYPE
 from gui.prb_control.storages import PrbStorageDecorator
 from gui.shared import actions
@@ -431,6 +432,12 @@ class _PreBattleDispatcher(ListenersCollection):
         if errorCode in ENTER_UNIT_MGR_ERRORS:
             self.restorePrevious()
 
+    def unitMgr_onUnitNotifyReceived(self, unitMgrID, notifyCode, notifyString, argsList):
+        if notifyCode in UNIT_NOTIFICATION_TO_DISPLAY:
+            msgType, msgBody = messages.getUnitMessage(notifyCode, notifyString)
+            SystemMessages.pushMessage(msgBody, type=msgType)
+            self.__requestCtx.stopProcessing()
+
     def unitBrowser_onErrorReceived(self, errorCode, errorString):
         if errorCode not in IGNORED_UNIT_BROWSER_ERRORS:
             msgType, msgBody = messages.getUnitBrowserMessage(errorCode, errorString)
@@ -491,6 +498,7 @@ class _PreBattleDispatcher(ListenersCollection):
             unitMgr.onUnitLeft += self.unitMgr_onUnitLeft
             unitMgr.onUnitRestored += self.unitMgr_onUnitRestored
             unitMgr.onUnitErrorReceived += self.unitMgr_onUnitErrorReceived
+            unitMgr.onUnitNotifyReceived += self.unitMgr_onUnitNotifyReceived
         else:
             LOG_ERROR('Unit manager is not defined')
         unitBrowser = prb_getters.getClientUnitBrowser()
@@ -528,6 +536,7 @@ class _PreBattleDispatcher(ListenersCollection):
             unitMgr.onUnitLeft -= self.unitMgr_onUnitLeft
             unitMgr.onUnitRestored -= self.unitMgr_onUnitRestored
             unitMgr.onUnitErrorReceived -= self.unitMgr_onUnitErrorReceived
+            unitMgr.onUnitNotifyReceived -= self.unitMgr_onUnitNotifyReceived
         unitBrowser = prb_getters.getClientUnitBrowser()
         if unitBrowser:
             unitBrowser.onErrorReceived -= self.unitBrowser_onErrorReceived

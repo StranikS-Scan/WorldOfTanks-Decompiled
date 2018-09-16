@@ -2,9 +2,11 @@
 # Embedded file name: scripts/client/helpers/dependency.py
 import functools
 import inspect
-from debug_utils import LOG_DEBUG, LOG_WARNING
+import logging
 from ids_generators import SequenceIDGenerator
 from soft_exception import SoftException
+_logger = logging.getLogger(__name__)
+_logger.addHandler(logging.NullHandler())
 _g_manager = None
 _MAX_ORDER_NUMBER = 32767
 _orderGen = SequenceIDGenerator(lowBound=0, highBound=_MAX_ORDER_NUMBER)
@@ -58,13 +60,13 @@ class replace_none_kwargs(object):
 
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
-            for name, class_ in self.__services.iteritems():
-                if name not in kwargs:
+            for serviceName, clazz in self.__services.iteritems():
+                if serviceName not in kwargs:
                     actual = None
                 else:
-                    actual = kwargs[name]
+                    actual = kwargs[serviceName]
                 if actual is None:
-                    kwargs[name] = instance(class_)
+                    kwargs[serviceName] = instance(clazz)
 
             return func(*args, **kwargs)
 
@@ -93,11 +95,11 @@ class DependencyManager(object):
     def addInstance(self, class_, obj, finalizer=None):
         self._validate(class_)
         self.__services[class_] = _DependencyItem(order=_orderGen.next(), service=obj, finalizer=finalizer)
-        LOG_DEBUG('Instance of service is added', class_, obj)
+        _logger.debug('Instance of service is added: %r->%r', class_, obj)
 
     def replaceInstance(self, class_, obj, finalizer=None):
         if class_ not in self.__services:
-            LOG_WARNING('No implementation found for Service {} prior to replace!'.format(class_))
+            _logger.warning('No implementation found for Service %r prior to replace!', class_)
         else:
             self.__services[class_].finalize()
             self.__services[class_].clear()
@@ -108,7 +110,7 @@ class DependencyManager(object):
     def addRuntime(self, class_, creator, finalizer=None):
         self._validate(class_)
         self.__services[class_] = _RuntimeItem(creator, finalizer=finalizer)
-        LOG_DEBUG('Factory of service is added', class_)
+        _logger.debug('Factory of service is added: %r', class_)
 
     def addConfig(self, config):
         if not callable(config):

@@ -124,7 +124,7 @@ class InstallableItem(VehicleItem):
 
 @add_shallow_copy()
 class Chassis(InstallableItem):
-    __slots__ = ('hullPosition', 'topRightCarryingPoint', 'navmeshGirth', 'minPlaneNormalY', 'maxLoad', 'specificFriction', 'rotationSpeed', 'rotationSpeedLimit', 'rotationIsAroundCenter', 'shotDispersionFactors', 'terrainResistance', 'bulkHealthFactor', 'carryingTriangles', 'drivingWheelsSizes', 'traces', 'tracks', 'wheels', 'groundNodes', 'trackNodes', 'trackParams', 'splineDesc', 'leveredSuspension', 'suspensionSpringsLength', 'hullAimingSound', 'effects', 'customEffects', 'AODecals', 'brakeForce')
+    __slots__ = ('hullPosition', 'topRightCarryingPoint', 'navmeshGirth', 'minPlaneNormalY', 'maxLoad', 'specificFriction', 'rotationSpeed', 'rotationSpeedLimit', 'rotationIsAroundCenter', 'shotDispersionFactors', 'terrainResistance', 'bulkHealthFactor', 'carryingTriangles', 'drivingWheelsSizes', 'traces', 'tracks', 'wheels', 'groundNodes', 'trackNodes', 'trackParams', 'splineDesc', 'leveredSuspension', 'suspensionSpringsLength', 'hullAimingSound', 'effects', 'customEffects', 'AODecals', 'brakeForce', 'physicalTracks')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Chassis, self).__init__(typeID, componentID, componentName, compactDescr, level=level)
@@ -156,6 +156,7 @@ class Chassis(InstallableItem):
         self.effects = None
         self.customEffects = None
         self.AODecals = component_constants.EMPTY_TUPLE
+        self.physicalTracks = None
         return
 
 

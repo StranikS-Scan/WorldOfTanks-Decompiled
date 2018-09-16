@@ -10,7 +10,6 @@ from items.components.c11n_constants import SeasonType
 from shared_utils import first
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
-from gui.Scaleform.framework import ViewTypes
 from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 
@@ -31,9 +30,10 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
          CustomizationOptions.REMOVE_FROM_TANK: 'removeItemFromTank'})
         self.onSelected = Event(self._eManager)
         self._item = self.itemsCache.items.getItemByCD(self._intCD)
-        self._c11nView = self.app.containerManager.getContainer(ViewTypes.LOBBY_SUB).getView()
+        self.__ctx = self.service.getCtx()
 
     def fini(self):
+        self.__ctx = None
         self.onSelected.clear()
         self.onSelected = None
         super(CustomizationItemCMHandler, self).fini()
@@ -52,11 +52,11 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
         item = self.itemsCache.items.getItemByCD(self._intCD)
         buyPriceVO = getItemPricesVO(item.getBuyPrice())
         sellPriceVO = getItemPricesVO(item.getSellPrice())
-        inventoryCount = self._c11nView.getItemInventoryCount(item)
+        inventoryCount = self.__ctx.getItemInventoryCount(item)
         availableForSale = inventoryCount > 0 and item.getSellPrice() != ITEM_PRICE_EMPTY and not item.isRentable and not item.isHidden
-        style = self._c11nView.getModifiedStyle()
+        style = self.__ctx.modifiedStyle
         removeFromTankEnabled = style.intCD == item.intCD if style is not None else False
-        for outfit in (self._c11nView.getModifiedOutfit(season) for season in SeasonType.COMMON_SEASONS):
+        for outfit in (self.__ctx.getModifiedOutfit(season) for season in SeasonType.COMMON_SEASONS):
             if outfit.has(item):
                 removeFromTankEnabled = True
                 break

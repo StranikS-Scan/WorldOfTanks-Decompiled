@@ -8,7 +8,7 @@ from gui.shared.events import BrowserEvent
 from gui.shared.formatters import icons
 from helpers import i18n, dependency
 from skeletons.gui.game_control import IBrowserController
-from web_client_api.WebCommandHandler import WebCommandHandler
+from web_client_api import WebCommandHandler
 from soft_exception import SoftException
 
 class Browser(BrowserMeta):

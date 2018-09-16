@@ -39,6 +39,7 @@ if IS_CLIENT:
     from helpers import EffectsList
     from CustomEffect import SelectorDescFactory, CustomEffectsDescriptor, ExhaustEffectDescriptor
     import ReloadEffect
+    import Vehicular
 elif IS_WEB:
     from web_stubs import *
 if IS_CELLAPP:
@@ -1091,7 +1092,7 @@ def isVehicleDescr(descr):
 
 class VehicleType(object):
     currentReadingVeh = None
-    __slots__ = ('name', 'id', 'compactDescr', 'mode', 'tags', 'level', 'hasSiegeMode', 'hasCustomDefaultCamouflage', 'customizationNationID', 'baseColorID', 'speedLimits', 'repairCost', 'crewXpFactor', 'premiumVehicleXPFactor', 'xpFactor', 'creditsFactor', 'freeXpFactor', 'healthBurnPerSec', 'healthBurnPerSecLossFraction', 'invisibility', 'invisibilityDeltas', 'crewRoles', 'extras', 'extrasDict', 'devices', 'tankmen', 'i18nInfo', 'balanceByClass', 'balanceByComponentLevels', 'damageStickersLodDist', 'heavyCollisionEffectVelocities', 'effects', 'camouflage', 'emblemsLodDist', 'emblemsAlpha', '_prereqs', 'clientAdjustmentFactors', 'defaultPlayerEmblemID', '_defEmblem', '_defEmblems', 'unlocks', 'chassis', 'engines', 'fuelTanks', 'radios', 'turrets', 'hulls', 'installableComponents', 'unlocksDescrs', 'autounlockedItems', 'collisionEffectVelocities', 'isRotationStill', 'useHullZ', 'siegeModeParams', 'hullAimingParams', 'overmatchMechanicsVer', 'xphysics', 'repaintParameters')
+    __slots__ = ('name', 'id', 'compactDescr', 'mode', 'tags', 'level', 'hasSiegeMode', 'hasCustomDefaultCamouflage', 'customizationNationID', 'baseColorID', 'speedLimits', 'repairCost', 'crewXpFactor', 'premiumVehicleXPFactor', 'xpFactor', 'creditsFactor', 'freeXpFactor', 'healthBurnPerSec', 'healthBurnPerSecLossFraction', 'invisibility', 'invisibilityDeltas', 'crewRoles', 'extras', 'extrasDict', 'devices', 'tankmen', 'i18nInfo', 'balanceByClass', 'balanceByComponentLevels', 'damageStickersLodDist', 'heavyCollisionEffectVelocities', 'effects', 'camouflage', 'emblemsLodDist', 'emblemsAlpha', '_prereqs', 'clientAdjustmentFactors', 'defaultPlayerEmblemID', '_defEmblem', '_defEmblems', 'unlocks', 'chassis', 'engines', 'fuelTanks', 'radios', 'turrets', 'hulls', 'installableComponents', 'unlocksDescrs', 'autounlockedItems', 'collisionEffectVelocities', 'isRotationStill', 'useHullZ', 'siegeModeParams', 'hullAimingParams', 'overmatchMechanicsVer', 'xphysics', 'repaintParameters', 'customizableVehicleAreas')
 
     def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT):
         self.name = basicInfo.name
@@ -1151,6 +1152,7 @@ class VehicleType(object):
             self.camouflage = shared_readers.readCamouflage(xmlCtx, section, 'camouflage')
             self.emblemsLodDist = shared_readers.readLodDist(xmlCtx, section, 'emblems/lodDist', g_cache)
             self.emblemsAlpha = _xml.readFraction(xmlCtx, section, 'emblems/alpha')
+            self.customizableVehicleAreas = _readCustomizableVehicleAreas(xmlCtx, section, 'customization/customizableVehicleAreas')
             self._prereqs = None
             self.clientAdjustmentFactors = _readClientAdjustmentFactors(xmlCtx, section)
         if IS_CELLAPP or IS_CLIENT:
@@ -2230,6 +2232,8 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
         topRight = Vector2(v.x, v.y)
         bottomRight = Vector2(v.x, -v.y)
         item.carryingTriangles = (((topLeft + bottomLeft) / 2.0, topRight, bottomRight), ((topRight + bottomRight) / 2.0, bottomLeft, topLeft))
+    wheelGroups = None
+    wheels = None
     if IS_CLIENT or IS_CELLAPP:
         wheelGroups, wheels = chassis_readers.readWheelsAndGroups(xmlCtx, section)
         drivingWheelNames = section.readString('drivingWheels').split()
@@ -2271,6 +2275,11 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
         if sounds.isEmpty():
             raise SoftException('chassis sound tags are wrong for vehicle ' + item.name)
         item.sounds = sounds
+        item.physicalTracks = physicalTracksDict = {}
+        physicalTracksSection = section['physicalTracks']
+        if physicalTracksSection is not None and False:
+            physicalTracksDict['left'] = shared_readers.readBuilder(xmlCtx, physicalTracksSection, 'left', Vehicular.PhysicalTrackBuilder)
+            physicalTracksDict['right'] = shared_readers.readBuilder(xmlCtx, physicalTracksSection, 'right', Vehicular.PhysicalTrackBuilder)
         item.wheels = chassis_components.WheelsConfig(shared_readers.readLodDist(xmlCtx, section, 'wheels/lodDist', g_cache), wheelGroups, wheels)
         item.customEffects = (CustomEffectsDescriptor.getDescriptor(section, g_cache._customEffects['slip'], xmlCtx, 'effects/mud'),)
         item.AODecals = _readAODecals(xmlCtx, section, 'AODecals')
@@ -4163,6 +4172,19 @@ def _readTurretDetachmentEffects(xmlCtx, section, subsectionName, defaultEffects
     return res
 
 
+def _readCustomizableVehicleAreas(xmlCtx, section, subsectionName):
+    subsection = section[subsectionName]
+    if subsection is None:
+        return _customizableVehicleAreasNames
+    else:
+        areas = tuple(subsection.asString.split())
+        for area in areas:
+            if area not in _customizableVehicleAreasNames:
+                _xml.raiseWrongXml(xmlCtx, subsectionName, "subsection '%s' contains wrong value %s" % (subsectionName, area))
+
+        return areas
+
+
 if IS_CLIENT:
     _vehicleEffectKindNames = tuple(['collisionVehicleLight',
      'collisionVehicleHeavy',
@@ -4179,6 +4201,11 @@ if IS_CLIENT:
      'rammingDestruction',
      'submersionDeath',
      'flaming')
+    _customizableVehicleAreasNames = ('CHASSIS',
+     'HULL',
+     'TURRET',
+     'GUN',
+     'GUN_2')
 
 def _readClientAdjustmentFactors(xmlCtx, section):
     return {'power': section.readFloat('clientAdjustmentFactors/power', 1.0),

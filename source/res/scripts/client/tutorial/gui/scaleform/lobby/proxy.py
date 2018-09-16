@@ -5,7 +5,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION
 from gui import SystemMessages
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
-from gui.Scaleform.framework.managers.loaders import ViewLoadParams
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
@@ -131,7 +131,7 @@ class SfLobbyProxy(GUIProxy):
         if container is not None:
             pyView = container.getView()
             if pyView is not None:
-                sceneID = self.config.getSceneID(pyView.settings.alias)
+                sceneID = self.config.getSceneID(pyView.alias)
         LOG_DEBUG('GUI.getSceneID', sceneID)
         return sceneID
 
@@ -201,7 +201,7 @@ class SfLobbyProxy(GUIProxy):
         aliasMap = self.getViewsAliases()
         if windowType in aliasMap:
             alias = aliasMap[windowType]
-            self.app.loadView(ViewLoadParams(alias, windowID), content)
+            self.app.loadView(SFViewLoadParams(alias, windowID), content)
 
     def getItemsOnScene(self):
         return self.app.tutorialManager.getFoundComponentsIDs() if self.app is not None and self.app.tutorialManager is not None else set()
@@ -236,8 +236,8 @@ class SfLobbyProxy(GUIProxy):
         return self.effects.isStillRunning(GUI_EFFECT_NAME.SHOW_WINDOW, effectID=windowID)
 
     def __onViewLoadInit(self, pyEntity):
-        if pyEntity.settings.type is ViewTypes.LOBBY_SUB:
-            pageName = pyEntity.settings.alias
+        if pyEntity.viewType is ViewTypes.LOBBY_SUB:
+            pageName = pyEntity.alias
             sceneID = self.config.getSceneID(pageName)
             prevSceneID = self.getSceneID()
             LOG_DEBUG('GUI.onPageChanging', prevSceneID, '->', sceneID)

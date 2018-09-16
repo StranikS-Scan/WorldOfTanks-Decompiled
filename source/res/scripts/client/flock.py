@@ -206,10 +206,8 @@ class Flock(BigWorld.Entity, FlockLike):
             boid.visible = True
 
         self.middlePosition = Math.Vector3(self.position)
-        self.physics = 0
         newPosition = Math.Vector3(self.position)
         newPosition.y = (self.minHeight + self.maxHeight) / 2.0
-        self.physics.teleport(newPosition)
         self.__makeDecision()
 
     def onLeaveWorld(self):
@@ -250,19 +248,9 @@ class Flock(BigWorld.Entity, FlockLike):
             if heightFraction >= Flock.CIRCLE_FLIGHT_ABOVE and random.random() <= Flock.CIRCLE_FLIGHT_PROBABILITY:
                 return
             self.filter.speed = self.speedAtBottom + (self.speedAtTop - self.speedAtBottom) * heightFraction
-            randY = self.position.y + random.uniform(-flightZoneHeight * Flock.HEIGHT_DISPERSION_CORRIDOR, flightZoneHeight * Flock.HEIGHT_DISPERSION_CORRIDOR)
-            if randY < self.minHeight:
-                randY = self.minHeight
-            elif randY > self.maxHeight:
-                randY = self.maxHeight
-        randRadius = random.uniform(self.deadZoneRadius, self.radius)
-        randAngle = random.uniform(0.0, 2.0 * math.pi)
-        newPosition = Math.Vector3(self.middlePosition.x + randRadius * math.cos(randAngle), randY, self.middlePosition.z + randRadius * math.sin(randAngle))
-        self.physics.teleport(newPosition)
 
     def __doAroundCenterFly(self):
-        randY = random.uniform(self.minHeight, self.maxHeight)
-        self.physics.teleport(Math.Vector3(self.middlePosition.x, randY, self.middlePosition.z))
+        pass
 
     def __makeDecision(self):
         self.__decisionCallbackId = BigWorld.callback(self.decisionTime, self.__makeDecision)

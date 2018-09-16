@@ -15,7 +15,7 @@ from gui.Scaleform.framework.managers.containers import DefaultContainer
 from gui.Scaleform.framework.managers.containers import PopUpContainer
 from gui.Scaleform.framework.managers.context_menu import ContextMenuManager
 from gui.Scaleform.framework.managers.event_logging import EventLogManager
-from gui.Scaleform.framework.managers.loaders import ViewLoadParams
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.Scaleform.framework.managers.optimization_manager import GraphicsOptimizationManager, OptimizationSetting
 from gui.Scaleform.genConsts.GRAPHICS_OPTIMIZATION_ALIASES import GRAPHICS_OPTIMIZATION_ALIASES
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
@@ -122,7 +122,7 @@ class LobbyEntry(SFApplication):
         BigWorld.wg_setRedefineKeysMode(True)
 
     def _loadWaiting(self):
-        self._containerMgr.load(ViewLoadParams(VIEW_ALIAS.WAITING))
+        self._containerMgr.load(SFViewLoadParams(VIEW_ALIAS.WAITING))
 
     def _getRequiredLibraries(self):
         pass

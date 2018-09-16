@@ -5,6 +5,10 @@ from skeletons.gui.customization import ICustomizationService
 __all__ = ('getCustomizationServiceConfig',)
 
 def getCustomizationServiceConfig(manager):
-    instance = CustomizationService()
-    instance.init()
-    manager.addInstance(ICustomizationService, instance, finalizer='fini')
+
+    def _create():
+        instance = CustomizationService()
+        instance.init()
+        return instance
+
+    manager.addRuntime(ICustomizationService, _create, finalizer='fini')

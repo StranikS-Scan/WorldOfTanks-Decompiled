@@ -7,6 +7,7 @@ import Math
 import Keys
 from AvatarInputHandler import mathUtils
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.shared.utils import IHangarSpace
 from helpers import dependency
 from gui import g_keyEventHandlers, g_mouseEventHandlers
 from gui.shared import g_eventBus
@@ -91,6 +92,7 @@ class HangarCameraYawFilter(object):
 
 class HangarCameraManager(object):
     settingsCore = dependency.descriptor(ISettingsCore)
+    hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self, spaceId):
         self.__spaceId = spaceId
@@ -108,18 +110,16 @@ class HangarCameraManager(object):
 
     def init(self):
         self.__setupCamera()
-        from gui.shared.utils.HangarSpace import g_hangarSpace
-        g_hangarSpace.onSpaceCreate += self.__onSpaceCreated
-        g_hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
+        self.hangarSpace.onSpaceCreate += self.__onSpaceCreated
+        self.hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
         self.settingsCore.onSettingsChanged += self.__handleSettingsChange
         g_eventBus.addListener(CameraRelatedEvents.IDLE_CAMERA, self.__handleIdleCameraActivation)
         g_eventBus.addListener(CameraRelatedEvents.VEHICLE_LOADING, self.__handleVehicleLoading)
         g_eventBus.addListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.__handleEntityUpdated)
 
     def destroy(self):
-        from gui.shared.utils.HangarSpace import g_hangarSpace
-        g_hangarSpace.onSpaceCreate -= self.__onSpaceCreated
-        g_hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
+        self.hangarSpace.onSpaceCreate -= self.__onSpaceCreated
+        self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
         self.settingsCore.onSettingsChanged -= self.__handleSettingsChange
         g_eventBus.removeListener(CameraRelatedEvents.IDLE_CAMERA, self.__handleIdleCameraActivation)
         g_eventBus.removeListener(CameraRelatedEvents.VEHICLE_LOADING, self.__handleVehicleLoading)
@@ -163,13 +163,18 @@ class HangarCameraManager(object):
         else:
             self.__camConstraints[0] = cfg['cam_pitch_constr']
             self.__camConstraints[1] = cfg['cam_yaw_constr']
-        self.__yawCameraFilter.setConstraints(math.radians(self.__camConstraints[1][0]), math.radians(self.__camConstraints[1][1]))
-        self.__yawCameraFilter.setYawLimits(self.__camConstraints[1])
+        camYawConstr = self.__camConstraints[1]
+        startYaw, endYaw = camYawConstr
+        self.__yawCameraFilter.setConstraints(math.radians(startYaw), math.radians(endYaw))
+        self.__yawCameraFilter.setYawLimits(camYawConstr)
         if not ignoreConstraints:
             yaw = self.__yawCameraFilter.toLimit(yaw)
-            pitch = mathUtils.clamp(math.radians(self.__camConstraints[0][0]), math.radians(self.__camConstraints[0][1]), pitch)
+            camPitchConstr = self.__camConstraints[0]
+            startPitch, endPitch = camPitchConstr
+            pitch = mathUtils.clamp(math.radians(startPitch), math.radians(endPitch), pitch)
             distConstr = cfg['preview_cam_dist_constr'] if self.__selectedEmblemInfo else self.__camConstraints[2]
-            dist = mathUtils.clamp(distConstr[0], distConstr[1], dist)
+            minDist, maxDist = distConstr
+            dist = mathUtils.clamp(minDist, maxDist, dist)
         mat = Math.Matrix()
         pitch = mathUtils.clamp(-math.pi / 2 * 0.99, math.pi / 2 * 0.99, pitch)
         mat.setRotateYPR((yaw, pitch, 0.0))
@@ -198,6 +203,17 @@ class HangarCameraManager(object):
         from gui.ClientHangarSpace import hangarCFG
         cfg = hangarCFG()
         self.setCameraLocation(targetPos=cfg['preview_cam_start_target_pos'], pivotPos=cfg['preview_cam_pivot_pos'], yaw=math.radians(cfg['preview_cam_start_angles'][0]), pitch=math.radians(cfg['preview_cam_start_angles'][1]), dist=cfg['preview_cam_start_dist'])
+
+    def locateCameraToCustomizationPreview(self):
+        from gui.ClientHangarSpace import customizationHangarCFG, hangarCFG
+        cfg = customizationHangarCFG()
+        hangarConfig = hangarCFG()
+        self.setCameraLocation(targetPos=cfg['cam_start_target_pos'], pivotPos=cfg['cam_pivot_pos'], yaw=math.radians(cfg['cam_start_angles'][0]), pitch=math.radians(cfg['cam_start_angles'][1]), dist=cfg['cam_start_dist'], camConstraints=[hangarConfig['cam_pitch_constr'], hangarConfig['cam_yaw_constr'], cfg['cam_dist_constr']])
+
+    def locateCameraToStartState(self):
+        from gui.ClientHangarSpace import hangarCFG
+        cfg = hangarCFG()
+        self.setCameraLocation(targetPos=cfg['cam_start_target_pos'], pivotPos=cfg['cam_pivot_pos'], yaw=math.radians(cfg['cam_start_angles'][0]), pitch=math.radians(cfg['cam_start_angles'][1]), dist=cfg['cam_start_dist'], camConstraints=[cfg['cam_pitch_constr'], cfg['cam_yaw_constr'], cfg['cam_dist_constr']])
 
     def locateCameraOnEmblem(self, onHull, emblemType, emblemIdx, relativeSize=0.5):
         self.__selectedEmblemInfo = (onHull,
@@ -242,9 +258,12 @@ class HangarCameraManager(object):
         cfg = hangarCFG()
         pitch -= dy * cfg['cam_sens']
         dist -= dz * cfg['cam_dist_sens']
-        pitch = mathUtils.clamp(math.radians(self.__camConstraints[0][0]), math.radians(self.__camConstraints[0][1]), pitch)
+        camPitchConstr = self.__camConstraints[0]
+        startPitch, endPitch = camPitchConstr
+        pitch = mathUtils.clamp(math.radians(startPitch), math.radians(endPitch), pitch)
         distConstr = cfg['preview_cam_dist_constr'] if self.__selectedEmblemInfo else self.__camConstraints[2]
-        dist = mathUtils.clamp(distConstr[0], distConstr[1], dist)
+        minDist, maxDist = distConstr
+        dist = mathUtils.clamp(minDist, maxDist, dist)
         self.__locatedOnEmbelem = False
         mat = Math.Matrix()
         mat.setRotateYPR((yaw, pitch, 0.0))
@@ -262,7 +281,9 @@ class HangarCameraManager(object):
         self.__cam = BigWorld.CursorCamera()
         self.__cam.isHangar = True
         self.__cam.spaceID = self.__spaceId
-        self.__cam.pivotMaxDist = mathUtils.clamp(cfg['cam_dist_constr'][0], cfg['cam_dist_constr'][1], cfg['cam_start_dist'])
+        camDistConstr = cfg['cam_dist_constr']
+        minDist, maxDist = camDistConstr
+        self.__cam.pivotMaxDist = mathUtils.clamp(minDist, maxDist, cfg['cam_start_dist'])
         self.__cam.pivotMinDist = 0.0
         self.__cam.maxDistHalfLife = cfg['cam_fluency']
         self.__cam.turningHalfLife = cfg['cam_fluency']
@@ -271,8 +292,10 @@ class HangarCameraManager(object):
         self.__camConstraints[0] = cfg['cam_pitch_constr']
         self.__camConstraints[1] = cfg['cam_yaw_constr']
         self.__camConstraints[2] = (0.0, 0.0)
-        self.__yawCameraFilter = HangarCameraYawFilter(math.radians(cfg['cam_yaw_constr'][0]), math.radians(cfg['cam_yaw_constr'][1]), cfg['cam_sens'])
-        self.__yawCameraFilter.setYawLimits(self.__camConstraints[1])
+        camYawConstr = self.__camConstraints[1]
+        startYaw, endYaw = camYawConstr
+        self.__yawCameraFilter = HangarCameraYawFilter(math.radians(startYaw), math.radians(endYaw), cfg['cam_sens'])
+        self.__yawCameraFilter.setYawLimits(camYawConstr)
         mat = Math.Matrix()
         yaw = self.__yawCameraFilter.toLimit(math.radians(cfg['cam_start_angles'][0]))
         mat.setRotateYPR((yaw, math.radians(cfg['cam_start_angles'][1]), 0.0))
@@ -350,7 +373,8 @@ class HangarCameraManager(object):
         point2 = self.__cam.position
         d2 = (point2 - point1).length
         d3 = max(self.__cam.targetMaxDist, d2)
-        return mathUtils.clamp(self.__camConstraints[2][0], self.__camConstraints[2][1], d3)
+        minDist, maxDist = self.__camConstraints[2]
+        return mathUtils.clamp(minDist, maxDist, d3)
 
     @property
     def camera(self):

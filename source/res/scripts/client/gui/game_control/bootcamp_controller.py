@@ -2,17 +2,25 @@
 # Embedded file name: scripts/client/gui/game_control/bootcamp_controller.py
 import AccountCommands
 import BigWorld
+from adisp import process
 from account_helpers.AccountSettings import CURRENT_VEHICLE, AccountSettings
+from account_helpers import isLongDisconnectedFromCenter
 from helpers import dependency
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.bootcamp.disabled_settings import BCDisabledSettings
+from gui.Scaleform.daapi.view.dialogs.bootcamp_dialogs_meta import ExecutionChooserDialogMeta
+from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from bootcamp.BootCampEvents import g_bootcampEvents
 from PlayerEvents import g_playerEvents
 from bootcamp.Bootcamp import g_bootcamp
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.prb_control import prbDispatcherProperty
+from gui.prb_control.entities.base.ctx import PrbAction
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
+from gui import DialogsInterface
 from debug_utils import LOG_ERROR
 
 class BootcampController(IBootcampController):
@@ -165,3 +173,35 @@ class BootcampController(IBootcampController):
 
     def __onGameplayChoice(self, gameplayType, gameplayChoice):
         BigWorld.player().base.doCmdIntStr(AccountCommands.REQUEST_ID_NO_RESPONSE, AccountCommands.CMD_GAMEPLAY_CHOICE, gameplayChoice, gameplayType)
+
+    def runBootcamp(self):
+        if self.isInBootcamp():
+            if not self.needAwarding():
+                self.stopBootcamp(inBattle=False)
+            else:
+                self.__doBootcamp(isSkip=True)
+        elif isLongDisconnectedFromCenter():
+            DialogsInterface.showI18nInfoDialog('bootcampCenterUnavailable', lambda result: None)
+        else:
+            self.__doBootcamp(isSkip=False)
+
+    @prbDispatcherProperty
+    def prbDispatcher(self):
+        return None
+
+    @process
+    def __doBootcamp(self, isSkip):
+        dialogType, focusedID = (ExecutionChooserDialogMeta.SKIP, DIALOG_BUTTON_ID.CLOSE) if isSkip else (ExecutionChooserDialogMeta.RETRY, DIALOG_BUTTON_ID.SUBMIT)
+        bootcampLiteral = 'bootcamp/'
+        dialogKey = bootcampLiteral + dialogType
+        needAwarding = self.needAwarding()
+        if not isSkip and needAwarding:
+            dialogKey = bootcampLiteral + ExecutionChooserDialogMeta.START
+        result = yield DialogsInterface.showDialog(ExecutionChooserDialogMeta(dialogType, dialogKey, focusedID, not needAwarding and not isSkip))
+        if result:
+            if isSkip:
+                self.stopBootcamp(False)
+            elif self.prbDispatcher is not None:
+                action = PrbAction(PREBATTLE_ACTION_NAME.BOOTCAMP)
+                yield self.prbDispatcher.doSelectAction(action)
+        return

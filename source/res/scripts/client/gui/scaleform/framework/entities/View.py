@@ -5,7 +5,9 @@ import WWISE
 from soft_exception import SoftException
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 import SoundGroups
+from gui.Scaleform.framework.settings import UIFrameworkImpl
 from gui.Scaleform.framework.entities.abstract.AbstractViewMeta import AbstractViewMeta
+from gui.Scaleform.framework.entities.view_interface import ViewInterface
 from gui.doc_loaders import hints_layout
 from gui.shared.events import FocusEvent
 _ViewKey = namedtuple('_ViewKey', ['alias', 'name'])
@@ -151,7 +153,7 @@ class _ViewSoundsManager(object):
 
 CommonSoundSpaceSettings = namedtuple('CommonSoundSpaceSettings', ('name', 'entranceStates', 'exitStates', 'persistentSounds', 'stoppableSounds', 'priorities', 'autoStart'))
 
-class View(AbstractViewMeta):
+class View(AbstractViewMeta, ViewInterface):
     _COMMON_SOUND_SPACE = None
     __commonSoundManagers = {}
 
@@ -172,8 +174,20 @@ class View(AbstractViewMeta):
         LOG_DEBUG('View deleted:', self)
 
     @property
+    def uiImpl(self):
+        return UIFrameworkImpl.SCALEFORM
+
+    @property
     def settings(self):
         return self.__settings
+
+    @property
+    def viewType(self):
+        return self.__settings.type
+
+    @property
+    def viewScope(self):
+        return self.__settings.scope
 
     @property
     def key(self):

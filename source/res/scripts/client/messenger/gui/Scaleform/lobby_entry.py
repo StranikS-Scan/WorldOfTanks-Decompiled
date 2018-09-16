@@ -12,6 +12,7 @@ from messenger.formatters.users_messages import getUserActionReceivedMessage
 from messenger.gui import events_dispatcher
 from messenger.gui.Scaleform import channels
 from messenger.gui.Scaleform.data.ChannelsCarouselHandler import ChannelsCarouselHandler
+from messenger.gui.Scaleform.view.lobby import antispam_message
 from messenger.gui.interfaces import IGUIEntry
 from messenger.m_constants import MESSENGER_SCOPE
 from messenger.proto.events import g_messengerEvents
@@ -94,6 +95,7 @@ class LobbyEntry(IGUIEntry):
 
         self.__carouselHandler.stop()
         if nextScope is MESSENGER_SCOPE.LOGIN:
+            antispam_message.reset()
             self.__channelsCtrl.removeControllers()
             self.__carouselHandler.removeChannels()
         cEvents = g_messengerEvents.channels

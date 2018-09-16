@@ -53,7 +53,7 @@
       <lodDist>	FAR	</lodDist>
       <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
       <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
-      <sensitivityToImpulse>	0.94	</sensitivityToImpulse>
+      <sensitivityToImpulse>	0.34	</sensitivityToImpulse>
     </swinging>
     <exhaust>
       <pixie>	diesel_large	</pixie>
@@ -71,7 +71,7 @@
         <rayStart>	-0.00496294 0.208176 2.8769	</rayStart>
         <rayEnd>	-0.00496294 0.0443664 2.76217	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
-        <size>	0.26	</size>
+        <size>	0.36	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
     </emblemSlots>
@@ -116,8 +116,8 @@
       <traces>
         <lodDist>	MEDIUM	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	ussr_01	</textureSet>
-        <size>	0.5 0.3	</size>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.5 0.67	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -128,10 +128,10 @@
       <AODecals>
         <decal>
           <transform>
-            <row0>	2.430480 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.342020 0.000000	</row1>
-            <row2>	0.000000 0.000000 3.652850	</row2>
-            <row3>	0.000000 0.000000 0.000000	</row3>
+            <row0>	4.261340 0.000313 -0.030457	</row0>
+            <row1>	0.000173 1.342080 -0.009827	</row1>
+            <row2>	-0.045775 -0.026749 8.059640	</row2>
+            <row3>	-0.000004 -0.000002 0.000191	</row3>
           </transform>
         </decal>
       </AODecals>
@@ -199,7 +199,7 @@
         <lodDist>	MEDIUM	</lodDist>
         <mud>	largeTankMud	</mud>
       </effects>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.938969 0.000000	</hullPosition>
       <hitTester>
@@ -365,8 +365,8 @@
       <traces>
         <lodDist>	MEDIUM	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
-        <textureSet>	ussr_01	</textureSet>
-        <size>	0.5 0.3	</size>
+        <textureSet>	usa_01	</textureSet>
+        <size>	0.5 0.67	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -377,10 +377,10 @@
       <AODecals>
         <decal>
           <transform>
-            <row0>	2.430480 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.342020 0.000000	</row1>
-            <row2>	0.000000 0.000000 3.652850	</row2>
-            <row3>	0.000000 0.000000 0.000000	</row3>
+            <row0>	4.261340 0.000313 -0.030457	</row0>
+            <row1>	0.000173 1.342080 -0.009827	</row1>
+            <row2>	-0.045775 -0.026749 8.059640	</row2>
+            <row3>	-0.000004 -0.000002 0.000191	</row3>
           </transform>
         </decal>
       </AODecals>
@@ -448,7 +448,7 @@
         <lodDist>	MEDIUM	</lodDist>
         <mud>	largeTankMud	</mud>
       </effects>
-      <wwsoundPC>	trds_chf_pc	</wwsoundPC>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
       <hullPosition>	0.000000 0.938969 0.000000	</hullPosition>
       <hitTester>
@@ -674,7 +674,6 @@
               <rayUp>	0.078 0.075 5	</rayUp>
               <size>	0.6	</size>
               <hideIfDamaged>	false	</hideIfDamaged>
-              <isMirrored>	true	</isMirrored>
             </insigniaOnGun>
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
@@ -761,33 +760,33 @@
       <gunPosition>	-0.00221 0.327059 1.07222	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.896896 0.5325 0.470951	</rayStart>
-          <rayEnd>	-0.824111 0.469788 0.443214	</rayEnd>
+          <rayStart>	-1.03167 0.267909 0.579007	</rayStart>
+          <rayEnd>	-0.9492 0.221417 0.546795	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.26	</size>
+          <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </player>
-        <player>
-          <rayStart>	0.934579 0.562293 0.48495	</rayStart>
-          <rayEnd>	0.789015 0.436875 0.429479	</rayEnd>
+        <inscription>
+          <rayStart>	-1.27879 0.266289 -0.206315	</rayStart>
+          <rayEnd>	-1.10936 0.160118 -0.210494	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.26	</size>
+          <size>	0.7	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	1.03167 0.267909 0.579007	</rayStart>
+          <rayEnd>	0.9492 0.221417 0.546795	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
         <inscription>
-          <rayStart>	-1.07937 0.567054 -0.177255	</rayStart>
-          <rayEnd>	-0.922804 0.444372 -0.198048	</rayEnd>
+          <rayStart>	1.27879 0.266289 -0.206315	</rayStart>
+          <rayEnd>	1.10936 0.160118 -0.210494	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.44	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <inscription>
-          <rayStart>	1.07937 0.567054 -0.177255	</rayStart>
-          <rayEnd>	0.922804 0.444372 -0.198048	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.44	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <size>	0.7	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
@@ -970,34 +969,34 @@
       <gunPosition>	-0.00119 0.284225 1.16924	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-1.05113 0.425492 0.339576	</rayStart>
-          <rayEnd>	-0.897671 0.303936 0.298706	</rayEnd>
+          <rayStart>	-1.05945 0.35647 0.483027	</rayStart>
+          <rayEnd>	-0.912476 0.236575 0.419626	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.26	</size>
+          <size>	0.3	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	-1.07615 0.457116 -0.327367	</rayStart>
-          <rayEnd>	-0.91326 0.342288 -0.310769	</rayEnd>
+          <rayStart>	-1.15727 0.348031 -0.274271	</rayStart>
+          <rayEnd>	-0.993521 0.233446 -0.267077	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.42	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <inscription>
-          <rayStart>	1.10153 0.450547 -0.12999	</rayStart>
-          <rayEnd>	0.936224 0.33801 -0.132009	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.42	</size>
+          <size>	0.7	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
         <player>
-          <rayStart>	1.05113 0.425492 0.339576	</rayStart>
-          <rayEnd>	0.897671 0.303936 0.298706	</rayEnd>
+          <rayStart>	1.05945 0.35647 0.483027	</rayStart>
+          <rayEnd>	0.912476 0.236575 0.419626	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.26	</size>
+          <size>	0.3	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
+        <inscription>
+          <rayStart>	1.15727 0.348031 -0.274271	</rayStart>
+          <rayEnd>	0.993521 0.233446 -0.267077	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.7	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
       </emblemSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>

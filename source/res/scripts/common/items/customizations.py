@@ -91,6 +91,24 @@ class SerializableComponent(object):
         self.__writeStr(buf)
         return buf.getvalue()
 
+    def weak_eq(self, o):
+        if self.__class__ != o.__class__:
+            return False
+        for name, ftype in self.fields.iteritems():
+            if ftype.deprecated:
+                continue
+            if ftype.weak_equal_ignored:
+                continue
+            v1 = getattr(self, name)
+            v2 = getattr(o, name)
+            if ftype.type & FieldTypes.TYPED_ARRAY:
+                v1 = set(v1)
+                v2 = set(v2)
+            if v1 != v2:
+                return False
+
+        return True
+
     def copy(self):
         o = self.__class__()
         for fname in self.fields.iterkeys():
@@ -309,6 +327,10 @@ class ComponentXmlDeserializer(object):
             result.append(itemValue)
 
         return reduce(int.__or__, result)
+
+
+class EmptyComponent(SerializableComponent):
+    pass
 
 
 class PaintComponent(SerializableComponent):

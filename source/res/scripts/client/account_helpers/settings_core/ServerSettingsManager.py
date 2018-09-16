@@ -46,6 +46,7 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     ENCYCLOPEDIA_RECOMMENDATIONS_2 = 'ENCYCLOPEDIA_RECOMMENDATIONS_2'
     ENCYCLOPEDIA_RECOMMENDATIONS_3 = 'ENCYCLOPEDIA_RECOMMENDATIONS_3'
     UI_STORAGE = 'UI_STORAGE'
+    LINKEDSET_QUESTS = 'LINKEDSET_QUESTS'
 
 
 class UI_STORAGE_KEYS(CONST_CONTAINER):
@@ -306,7 +307,8 @@ class ServerSettingsManager(object):
                                     UI_STORAGE_KEYS.AUTO_RELOAD_MARK_IS_SHOWN: 9,
                                     'disable_animated_tooltip': 10}, offsets={PM_TUTOR_FIELDS.FIRST_ENTRY_STATE: Offset(0, 3),
                                     PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: Offset(2, 124),
-                                    UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER: Offset(10, 7168)})}
+                                    UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER: Offset(10, 7168)}),
+     SETTINGS_SECTIONS.LINKEDSET_QUESTS: Section(masks={}, offsets={'shown': Offset(0, 4294967295L)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -396,6 +398,18 @@ class ServerSettingsManager(object):
 
     def setHasNewEncyclopediaRecommendations(self, value=True):
         return self.setSectionSettings(SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_1, {'hasNew': value})
+
+    def isLinkedSetQuestWasShowed(self, questID, missionID):
+        section = self.getSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, 'shown')
+        return bool(section & self._getMaskForLinkedSetQuest(questID, missionID)) if section else False
+
+    def setLinkedSetQuestWasShowed(self, questID, missionID):
+        mask = self._getMaskForLinkedSetQuest(questID, missionID)
+        newValue = self.getSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, 'shown', 0) | mask
+        return self.setSectionSettings(SETTINGS_SECTIONS.LINKEDSET_QUESTS, {'shown': newValue})
+
+    def _getMaskForLinkedSetQuest(self, questID, missionID):
+        return 1 << questID - 1 + (missionID - 1) * 10
 
     def _buildAimSettings(self, settings):
         settingToServer = {}

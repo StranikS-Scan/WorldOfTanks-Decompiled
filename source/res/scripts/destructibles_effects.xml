@@ -1340,7 +1340,7 @@
         <effects>
           <pixie>
             <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Broadleaves/tree_Birch_Bold_01_touchdown.xml	</file>
+            <file>	particles/Environment/trees/Broadleaves/inf_deadtree_small_touchdown.xml	</file>
             <force>	1	</force>
           </pixie>
           <destructionSound>
@@ -1448,7 +1448,7 @@
         <effects>
           <pixie>
             <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Broadleaves/tree_Birch_Sparse_02_touchdown.xml	</file>
+            <file>	particles/Environment/trees/Broadleaves/tree_BrokenTree_Burned_02_touchdown.xml	</file>
             <force>	1	</force>
           </pixie>
           <destructionSound>
@@ -1926,42 +1926,6 @@
         </effects>
       </variant1>
     </tree_Birch_Dry_Frost_17m_touchdown>
-    <tree_PheonixPalm_Medium_fall>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Conifers/tree_PheonixPalm_Medium_fall.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </tree_PheonixPalm_Medium_fall>
-    <tree_PheonixPalm_Medium_touchdown>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Conifers/tree_PheonixPalm_Medium_touchdown.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_down	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </tree_PheonixPalm_Medium_touchdown>
     <tree_PheonixPalm_Big01_fall>
       <variant1>
         <stages>
@@ -1998,6 +1962,42 @@
         </effects>
       </variant1>
     </tree_PheonixPalm_Big01_touchdown>
+    <tree_PheonixPalm_Medium_fall>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Conifers/tree_PheonixPalm_Medium_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_creak	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_PheonixPalm_Medium_fall>
+    <tree_PheonixPalm_Medium_touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Conifers/tree_PheonixPalm_Medium_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_down	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_PheonixPalm_Medium_touchdown>
     <tree_BananaPalm_01_fall>
       <variant1>
         <stages>
@@ -2106,42 +2106,6 @@
         </effects>
       </variant1>
     </tree_palmetto_palm_touchdown_med>
-    <inf_tree_platanus_fall>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Broadleaves/inf_tree_platanus_fall.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_tree_platanus_fall>
-    <inf_tree_platanus_touchdown>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Broadleaves/inf_tree_platanus_touchdown.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_down	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_tree_platanus_touchdown>
     <inf_tree_Poplar_fall_small>
       <variant1>
         <stages>
@@ -2430,6 +2394,42 @@
         </effects>
       </variant1>
     </inf_tree_grapevine_touchdown>
+    <tree_Platanus_Spring_01_fall>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Broadleaves/tree_Platanus_Spring_01_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_creak	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_Platanus_Spring_01_fall>
+    <tree_Platanus_Spring_01_touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Broadleaves/tree_Platanus_Spring_01_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_down	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_Platanus_Spring_01_touchdown>
     <inf_tree_scots_pine_curved_fall_big>
       <variant1>
         <stages>
@@ -2776,44 +2776,6 @@
     </tree_Spruce_24m_touchdown>
   </trees>
   <fallingAtoms>
-    <hd_env_EU_443_LinenFlag_left_fracture>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_EU_443_LinenFlag_left_fracture.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_pole_metall_crack	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_EU_443_LinenFlag_left_fracture>
-    <hd_env_EU_443_LinenFlag_left_touchdown>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_env_EU_443_LinenFlag_left_touchdown.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_pole_metall_touch	</wwsound>
-            <params></params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_env_EU_443_LinenFlag_left_touchdown>
     <inf_env_112_09_StreetLamp_fracture>
       <variant1>
         <stages>
@@ -3145,6 +3107,24 @@
         </effects>
       </variant1>
     </inf_env414_Pole_Touchdown>
+    <hd_env_UNI_632_DoraEnv_01_touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_UNI_632_DoraEnv_01_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_touchdown_street_lights	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_UNI_632_DoraEnv_01_touchdown>
   </fallingAtoms>
   <fragiles>
     <hd_gaf_SU_007_AvenueFence_01>
@@ -3217,6 +3197,85 @@
         </effects>
       </variant1>
     </hd_env_UNI_055_GardenBench_hit>
+    <hd_env_112_11_AdvertisingCloset_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_112_11_AdvertisingCloset_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+        </effects>
+      </variant1>
+    </hd_env_112_11_AdvertisingCloset_01>
+    <hd_env_112_11_AdvertisingCloset_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_112_11_AdvertisingCloset_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+        </effects>
+      </variant1>
+    </hd_env_112_11_AdvertisingCloset_03>
+    <hd_env_UNI_663_FactoryFurniture_09_01_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_UNI_663_FactoryFurniture_09.xml	</file>
+            <force>	1	</force>
+          </pixie>
+        </effects>
+      </variant1>
+    </hd_env_UNI_663_FactoryFurniture_09_01_01>
+    <hd_env_UNI_663_FactoryFurniture_09_hit_01_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_UNI_663_FactoryFurniture_09.xml	</file>
+            <force>	1	</force>
+          </pixie>
+        </effects>
+      </variant1>
+    </hd_env_UNI_663_FactoryFurniture_09_hit_01_hit>
+    <inf_smallpole_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_smallpole.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_2>	30	</metal_2>
+              <debrisAmount>	30	</debrisAmount>
+              <weight>	2000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_smallpole_02>
     <hd_env_EU_443_LinenFlag_right>
       <variant1>
         <stages>
@@ -3485,98 +3544,6 @@
         </effects>
       </variant1>
     </hd_bld_UNI_010_WorkshopIndoor_02_hit>
-    <hd_bld_UNI_010_WorkshopIndoor_02_01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_bld_UNI_010_WorkshopIndoor_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	77.23	</metal_1>
-              <debrisAmount>	68.33	</debrisAmount>
-              <weight>	7835.82	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_bld_UNI_010_WorkshopIndoor_02_01>
-    <hd_bld_UNI_010_WorkshopIndoor_02_01_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_bld_UNI_010_WorkshopIndoor_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	77.23	</metal_1>
-              <debrisAmount>	68.33	</debrisAmount>
-              <weight>	7835.82	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_bld_UNI_010_WorkshopIndoor_02_01_hit>
-    <hd_bld_UNI_010_WorkshopIndoor_02_02>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_bld_UNI_010_WorkshopIndoor_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	77.23	</metal_1>
-              <debrisAmount>	68.33	</debrisAmount>
-              <weight>	7835.82	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_bld_UNI_010_WorkshopIndoor_02_02>
-    <hd_bld_UNI_010_WorkshopIndoor_02_02_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_bld_UNI_010_WorkshopIndoor_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	77.23	</metal_1>
-              <debrisAmount>	68.33	</debrisAmount>
-              <weight>	7835.82	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_bld_UNI_010_WorkshopIndoor_02_02_hit>
     <hd_bld_UNI_010_WorkshopIndoor_FireStairs_02>
       <variant1>
         <stages>
@@ -3625,54 +3592,6 @@
         </effects>
       </variant1>
     </hd_bld_UNI_010_WorkshopIndoor_FireStairs_02_hit>
-    <hd_bld_UNI_010_WorkshopIndoor_FireStairs_02_01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_bld_UNI_010_WorkshopIndoor_FireStairs_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	16.42	</metal_1>
-              <metal_2>	42.17	</metal_2>
-              <debrisAmount>	75.74	</debrisAmount>
-              <weight>	4626.86	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_bld_UNI_010_WorkshopIndoor_FireStairs_02_01>
-    <hd_bld_UNI_010_WorkshopIndoor_FireStairs_02_01_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/hd_bld_UNI_010_WorkshopIndoor_FireStairs_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	16.42	</metal_1>
-              <metal_2>	42.17	</metal_2>
-              <debrisAmount>	75.74	</debrisAmount>
-              <weight>	4626.86	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </hd_bld_UNI_010_WorkshopIndoor_FireStairs_02_01_hit>
     <hd_env_AS_029_GroupofTradeObjects_01_02_hit>
       <variant1>
         <stages>
@@ -3831,6 +3750,54 @@
         </effects>
       </variant1>
     </hd_env_AM_015_AdvertisingPosters_02_hit>
+    <hd_env_AM_015_AdvertisingPosters_02_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_AM_015_AdvertisingPosters_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_2>	24	</metal_2>
+              <wood_1>	24	</wood_1>
+              <debrisAmount>	80	</debrisAmount>
+              <weight>	4700	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_AM_015_AdvertisingPosters_02_01>
+    <hd_env_AM_015_AdvertisingPosters_02_01_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_AM_015_AdvertisingPosters_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_2>	24	</metal_2>
+              <wood_1>	24	</wood_1>
+              <debrisAmount>	80	</debrisAmount>
+              <weight>	4700	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_AM_015_AdvertisingPosters_02_01_hit>
     <hd_env_AM_015_AdvertisingPosters_02_02>
       <variant1>
         <stages>
@@ -6004,6 +5971,24 @@
         </effects>
       </variant1>
     </inf_env615_Pier_Crash>
+    <inf_gaf_101_01_StoneFenceBig_End_small>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_gaf_101_01_StoneFenceBig_End_small.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_stone_crash_mid	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_gaf_101_01_StoneFenceBig_End_small>
     <inf_env_101_06_WoodenCart_01>
       <variant1>
         <stages>
@@ -6440,6 +6425,106 @@
         </effects>
       </variant1>
     </inf_env_AM_016_AdvertisingBigBoard_01_hit>
+    <inf_env_AM_016_AdvertisingBigBoard_01_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/hd_env_AM_025_WoodConstructions_Corner.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	80	</wood_1>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	5500	</weight>
+              <metal_2>	15	</metal_2>
+              <wood_2>	24	</wood_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env_AM_016_AdvertisingBigBoard_01_01>
+    <inf_env_AM_016_AdvertisingBigBoard_01_01_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/hd_env_AM_025_WoodConstructions_Corner.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_2>	15	</metal_2>
+              <wood_1>	80	</wood_1>
+              <wood_2>	24	</wood_2>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	5500	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env_AM_016_AdvertisingBigBoard_01_01_hit>
+    <inf_env_AM_016_AdvertisingBigBoard_01_04>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/inf_env_AM_016_AdvertisingBigBoard_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_2>	12	</metal_2>
+              <wood_1>	70	</wood_1>
+              <wood_2>	24	</wood_2>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	5500	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env_AM_016_AdvertisingBigBoard_01_04>
+    <inf_env_AM_016_AdvertisingBigBoard_01_04_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/inf_env_AM_016_AdvertisingBigBoard_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_2>	12	</metal_2>
+              <wood_1>	70	</wood_1>
+              <wood_2>	24	</wood_2>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	5500	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env_AM_016_AdvertisingBigBoard_01_04_hit>
     <inf_env_AM_016_AdvertisingBigBoard_02>
       <variant1>
         <stages>
@@ -6937,6 +7022,54 @@
         </effects>
       </variant1>
     </inf_gaf003_RabitzFence_End_02>
+    <inf_envAM_017_PlywoodBoxes_03_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_envAM_017_PlywoodBoxes_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	30	</wood_1>
+              <debrisAmount>	60	</debrisAmount>
+              <weight>	3000	</weight>
+              <metal_2>	24	</metal_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_envAM_017_PlywoodBoxes_03_01>
+    <inf_envAM_017_PlywoodBoxes_03_01_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_envAM_017_PlywoodBoxes_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_2>	24	</metal_2>
+              <wood_1>	30	</wood_1>
+              <debrisAmount>	60	</debrisAmount>
+              <weight>	3000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_envAM_017_PlywoodBoxes_03_01_hit>
     <inf_mle046_Bag1_01>
       <variant1>
         <stages>
@@ -7792,154 +7925,6 @@
         </effects>
       </variant1>
     </inf_bld_112_04_TrocaderoFountain_01_3>
-    <inf_bld_114_01_Workshop_new_01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_114_01_Workshop_new_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	98.14	</metal_1>
-              <metal_2>	33.95	</metal_2>
-              <debrisAmount>	43.44	</debrisAmount>
-              <weight>	8992.53	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_114_01_Workshop_new_01>
-    <inf_bld_114_01_Workshop_new_01_01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_114_01_Workshop_new_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	1.11	</metal_1>
-              <metal_2>	6.34	</metal_2>
-              <glass>	57.47	</glass>
-              <debrisAmount>	71.64	</debrisAmount>
-              <weight>	1828.36	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_114_01_Workshop_new_01_01>
-    <inf_bld_114_01_Workshop_new_01_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_114_01_Workshop_new_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	98.14	</metal_1>
-              <metal_2>	33.95	</metal_2>
-              <debrisAmount>	43.44	</debrisAmount>
-              <weight>	8992.53	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_114_01_Workshop_new_01_hit>
-    <inf_bld_114_01_Workshop_new_01_hit_01_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_114_01_Workshop_new_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	1.11	</metal_1>
-              <metal_2>	6.34	</metal_2>
-              <glass>	57.47	</glass>
-              <debrisAmount>	71.64	</debrisAmount>
-              <weight>	1828.36	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_114_01_Workshop_new_01_hit_01_hit>
-    <inf_bld_114_01_Workshop_new_02>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_114_01_Workshop_new_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	1.11	</metal_1>
-              <metal_2>	6.34	</metal_2>
-              <glass>	57.47	</glass>
-              <debrisAmount>	71.64	</debrisAmount>
-              <weight>	1828.36	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_114_01_Workshop_new_02>
-    <inf_bld_114_01_Workshop_new_02_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_114_01_Workshop_new_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	1.11	</metal_1>
-              <metal_2>	6.34	</metal_2>
-              <glass>	57.47	</glass>
-              <debrisAmount>	71.64	</debrisAmount>
-              <weight>	1828.36	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_114_01_Workshop_new_02_hit>
     <inf_env_112_20_FochStatue>
       <variant1>
         <stages>
@@ -8177,6 +8162,52 @@
         </effects>
       </variant1>
     </inf_gaf_112_04_BridgeFence_02_01>
+    <inf_gaf_101_01_StoneFenceBig_End_small>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_gaf_101_01_StoneFenceBig_End_small.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <stone_1>	24	</stone_1>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	5200	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_gaf_101_01_StoneFenceBig_End_small>
+    <inf_gaf_101_01_StoneFenceBig_Tile_small>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_gaf_101_01_StoneFenceBig_Tile_small.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <stone_1>	30	</stone_1>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	5050	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_gaf_101_01_StoneFenceBig_Tile_small>
     <inf_env_101_06_WoodenCart_01>
       <variant1>
         <stages>
@@ -8472,6 +8503,30 @@
         </effects>
       </variant1>
     </inf_env_EU_425_PopeStatue_hit>
+    <inf_envSU_83_03_OldFurniture_10>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_envSU_83_03_OldFurniture_10.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	24	</wood_1>
+              <cloth>	24	</cloth>
+              <debrisAmount>	35	</debrisAmount>
+              <weight>	3400	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_envSU_83_03_OldFurniture_10>
     <inf_envSU_83_03_OldFurniture_8_01>
       <variant1>
         <stages>
@@ -10582,6 +10637,52 @@
         </effects>
       </variant1>
     </inf_env601_BunchLogs_1>
+    <inf_env601_BunchLogs_1_01_01_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env601_BunchLogs_1.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	60	</wood_2>
+              <debrisAmount>	90	</debrisAmount>
+              <weight>	8700	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env601_BunchLogs_1_01_01_01>
+    <inf_env601_BunchLogs_1_01_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env601_BunchLogs_1.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	60	</wood_2>
+              <debrisAmount>	90	</debrisAmount>
+              <weight>	8700	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env601_BunchLogs_1_01_01>
     <inf_env601_BunchLogs_1_01>
       <variant1>
         <stages>
@@ -10628,6 +10729,42 @@
         </effects>
       </variant1>
     </inf_env601_BunchLogs_1_01>
+    <inf_envAM_014_PetrolPump_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_envAM_014_PetrolPump.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_car_corps	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_envAM_014_PetrolPump_01>
+    <inf_envAM_014_PetrolPump_01_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_envAM_014_PetrolPump.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_car_corps	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_envAM_014_PetrolPump_01_hit>
     <inf_gaf001_WoodFence_01>
       <variant1>
         <stages>
@@ -11876,6 +12013,32 @@
         </effects>
       </variant1>
     </inf_envAM_011_Truck_01_03>
+    <inf_envAM_011_Truck_01_04>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_envAM_011_Truck_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	24	</metal_1>
+              <metal_2>	30	</metal_2>
+              <wood_1>	24	</wood_1>
+              <glass>	15	</glass>
+              <debrisAmount>	90	</debrisAmount>
+              <weight>	7400	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_envAM_011_Truck_01_04>
     <inf_envAM_011_Truck_02_01>
       <variant1>
         <stages>
@@ -12159,6 +12322,29 @@
         </effects>
       </variant1>
     </inf_gaf_026_WoodFence_Tile_01>
+    <inf_gaf_026_WoodFence_Tile_01_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_gaf_026_WoodFence_Tile_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	30	</wood_1>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	3000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_gaf_026_WoodFence_Tile_01_01>
     <inf_gaf_026_WoodFence_Tile_02>
       <variant1>
         <stages>
@@ -12182,6 +12368,29 @@
         </effects>
       </variant1>
     </inf_gaf_026_WoodFence_Tile_02>
+    <inf_gaf_026_WoodFence_Tile_02_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_gaf_026_WoodFence_Tile_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	30	</wood_1>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	3000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_gaf_026_WoodFence_Tile_02_01>
     <inf_gaf_026_WoodFence_Tile_End>
       <variant1>
         <stages>
@@ -15373,6 +15582,29 @@
         </effects>
       </variant1>
     </inf_gafNW_002_SmallWhiteFence_1_02>
+    <inf_gafNW_002_SmallWhiteFence_1_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_gafNW_002_SmallWhiteFence_1.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	40	</wood_1>
+              <debrisAmount>	60	</debrisAmount>
+              <weight>	2500	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_gafNW_002_SmallWhiteFence_1_03>
     <inf_gafNW_002_SmallWhiteFence_1_04>
       <variant1>
         <stages>
@@ -15442,6 +15674,30 @@
         </effects>
       </variant1>
     </inf_gafNW_002_SmallWhiteFence_1_06>
+    <inf_gafAM_006_ConcreteFence_tile1_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_gafAM_006_ConcreteFence_tile1.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <stone_1>	30	</stone_1>
+              <wood_1>	24	</wood_1>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	5100	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_gafAM_006_ConcreteFence_tile1_01>
     <inf_gafAM_006_ConcreteFence_tile1_02>
       <variant1>
         <stages>
@@ -15512,6 +15768,29 @@
         </effects>
       </variant1>
     </inf_gafAM_006_ConcreteFence_tile1_04>
+    <inf_gafAM_006_ConcreteFence_tile1_05>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_gafAM_006_ConcreteFence_tile1.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <stone_1>	52	</stone_1>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	5200	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_gafAM_006_ConcreteFence_tile1_05>
     <inf_envAM_012_WindTurbine>
       <variant1>
         <stages>
@@ -17722,7 +18001,7 @@
         </effects>
       </variant1>
     </inf_mleAF_004_Hurricane>
-    <inf_env_112_11_AdvertisingCloset>
+    <hd_env_112_11_AdvertisingCloset_01>
       <variant1>
         <stages>
           <base>	5.0	</base>
@@ -17730,7 +18009,7 @@
         <effects>
           <pixie>
             <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_env_112_11_AdvertisingCloset.xml	</file>
+            <file>	particles/Environment/objects/hd_env_112_11_AdvertisingCloset_01.xml	</file>
             <force>	1	</force>
           </pixie>
           <destructionSound>
@@ -17745,8 +18024,8 @@
           </destructionSound>
         </effects>
       </variant1>
-    </inf_env_112_11_AdvertisingCloset>
-    <inf_env_112_11_AdvertisingCloset_01>
+    </hd_env_112_11_AdvertisingCloset_01>
+    <hd_env_112_11_AdvertisingCloset_03>
       <variant1>
         <stages>
           <base>	5.0	</base>
@@ -17754,46 +18033,22 @@
         <effects>
           <pixie>
             <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_env_112_11_AdvertisingCloset.xml	</file>
+            <file>	particles/Environment/objects/hd_env_112_11_AdvertisingCloset_03.xml	</file>
             <force>	1	</force>
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
+              <metal_1>	24	</metal_1>
               <wood_1>	49	</wood_1>
               <debrisAmount>	80	</debrisAmount>
               <weight>	4000	</weight>
-              <metal_1>	5	</metal_1>
             </params>
           </destructionSound>
         </effects>
       </variant1>
-    </inf_env_112_11_AdvertisingCloset_01>
-    <inf_env_112_11_AdvertisingCloset_02>
-      <variant1>
-        <stages>
-          <base>	5.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_env_112_11_AdvertisingCloset.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	18	</metal_1>
-              <wood_1>	49	</wood_1>
-              <debrisAmount>	80	</debrisAmount>
-              <weight>	3500	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_env_112_11_AdvertisingCloset_02>
+    </hd_env_112_11_AdvertisingCloset_03>
     <inf_env053_Carousel>
       <variant1>
         <stages>
@@ -18595,6 +18850,30 @@
         </effects>
       </variant1>
     </inf_env_101_09_WoodenFurniture_02>
+    <inf_gaf_101_02_StoneFenceSmall_Gate_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <hasHavokVersion>	false	</hasHavokVersion>
+            <file>	particles/Environment/objects/inf_gaf_101_02_StoneFenceSmall_Gate_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	30	</wood_1>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	4500	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_gaf_101_02_StoneFenceSmall_Gate_01>
     <inf_envAF_005_ClayJug_1>
       <variant1>
         <stages>
@@ -19492,24 +19771,6 @@
         </effects>
       </variant1>
     </inf_env418_OldGMercedes4_01>
-    <inf_fuel_env418_OldGMercedes2>
-      <variant1>
-        <stages>
-          <base>	35.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_fuel_env418_OldGMercedes2.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	inf_fuel_env418_OldGMercedes2	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_fuel_env418_OldGMercedes2>
     <inf_rw403_LoadingWinch>
       <variant1>
         <stages>
@@ -19675,6 +19936,29 @@
         </effects>
       </variant1>
     </inf_env012_Chairs_group_01>
+    <inf_env012_Chairs>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env012_Chairs.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	50	</debrisAmount>
+              <weight>	1800	</weight>
+              <wood_2>	20	</wood_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env012_Chairs>
     <inf_env012_Chairs_01>
       <variant1>
         <stages>
@@ -20055,6 +20339,30 @@
         </effects>
       </variant1>
     </inf_env_AM_034_Scaffold>
+    <inf_env_AM_034_Scaffold_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env_AM_034_Scaffold.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	49	</wood_1>
+              <wood_2>	24	</wood_2>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	5000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env_AM_034_Scaffold_01>
     <inf_env_AM_033_Awning_01>
       <variant1>
         <stages>
@@ -20917,6 +21225,52 @@
         </effects>
       </variant1>
     </inf_env_AF_023_FoodTrailer>
+    <inf_env_UNI_632_DoraEnv_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env_UNI_632_DoraEnv_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_2>	24	</metal_2>
+              <debrisAmount>	15	</debrisAmount>
+              <weight>	4200	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env_UNI_632_DoraEnv_02>
+    <inf_env_UNI_632_DoraEnv_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env_UNI_632_DoraEnv_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <cloth>	80	</cloth>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	4800	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env_UNI_632_DoraEnv_03>
     <inf_env_UNI_632_DoraEnv_04>
       <variant1>
         <stages>
@@ -21447,6 +21801,29 @@
         </effects>
       </variant1>
     </inf_gafAF_001_ClayFence_07_hit>
+    <inf_gaf011_fence_01_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_gaf011_FenceTile_1.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	30	</wood_2>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	1500	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_gaf011_fence_01_01>
     <inf_gaf011_fence_01_02>
       <variant1>
         <stages>
@@ -21493,6 +21870,29 @@
         </effects>
       </variant1>
     </inf_gaf011_fence_01_03>
+    <inf_gaf011_fence_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_gaf011_FenceTile_2.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	30	</wood_2>
+              <debrisAmount>	75	</debrisAmount>
+              <weight>	1500	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_gaf011_fence_03>
     <inf_gaf011_fence_03_01>
       <variant1>
         <stages>
@@ -22290,31 +22690,6 @@
         </effects>
       </variant1>
     </inf_envEU_009_TownEnv_flowerpot_02_09>
-    <inf_mle_UNI_820_EightyEight_01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_mle_UNI_820_EightyEight_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	24	</metal_1>
-              <metal_2>	49	</metal_2>
-              <wood_1>	24	</wood_1>
-              <debrisAmount>	60	</debrisAmount>
-              <weight>	7500	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_mle_UNI_820_EightyEight_01>
     <inf_mle_UNI_820_EightyEight_01_01>
       <variant1>
         <stages>
@@ -22462,106 +22837,6 @@
         </effects>
       </variant1>
     </inf_envSU_008_ArmyTech01_Zis5_01>
-    <inf_mle_SU_003_He111_Rooftop_01>
-      <variant1>
-        <stages>
-          <base>	35.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_mle_SU_003_He111_Rooftop_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	49	</metal_1>
-              <metal_2>	22.86	</metal_2>
-              <glass>	9.79	</glass>
-              <debrisAmount>	50	</debrisAmount>
-              <weight>	8000	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_mle_SU_003_He111_Rooftop_01>
-    <inf_mle_SU_003_He111_Rooftop_01_hit>
-      <variant1>
-        <stages>
-          <base>	35.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_mle_SU_003_He111_Rooftop_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	49	</metal_1>
-              <metal_2>	22.86	</metal_2>
-              <glass>	9.79	</glass>
-              <debrisAmount>	50	</debrisAmount>
-              <weight>	8000	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_mle_SU_003_He111_Rooftop_01_hit>
-    <inf_mle_SU_003_He111_Vertical_01>
-      <variant1>
-        <stages>
-          <base>	35.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_mle_SU_003_He111_Vertical_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	49	</metal_1>
-              <metal_2>	22.86	</metal_2>
-              <glass>	9.79	</glass>
-              <debrisAmount>	60	</debrisAmount>
-              <weight>	8000	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_mle_SU_003_He111_Vertical_01>
-    <inf_mle_SU_003_He111_Vertical_01_hit>
-      <variant1>
-        <stages>
-          <base>	35.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_mle_SU_003_He111_Vertical_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	49	</metal_1>
-              <metal_2>	22.86	</metal_2>
-              <glass>	9.79	</glass>
-              <debrisAmount>	60	</debrisAmount>
-              <weight>	8000	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_mle_SU_003_He111_Vertical_01_hit>
     <inf_env_SU_027_StalinistSixtyFive>
       <variant1>
         <stages>
@@ -23112,6 +23387,29 @@
         </effects>
       </variant1>
     </inf_env_SU_019_SovietTram_01_hit>
+    <inf_mil006_AAG_Fortification1>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_mil006_AAG_Fortification1.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	75.92	</wood_1>
+              <debrisAmount>	74.69	</debrisAmount>
+              <weight>	5000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_mil006_AAG_Fortification1>
     <inf_env_AF_025_Feeders>
       <variant1>
         <stages>
@@ -23135,29 +23433,6 @@
         </effects>
       </variant1>
     </inf_env_AF_025_Feeders>
-    <inf_env_UNI_632_DoraEnv_02>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_env_UNI_632_DoraEnv_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_2>	24	</metal_2>
-              <debrisAmount>	15	</debrisAmount>
-              <weight>	4200	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_env_UNI_632_DoraEnv_02>
     <inf_gafNW_001_VillageFance_post_01>
       <variant1>
         <stages>
@@ -23205,6 +23480,29 @@
         </effects>
       </variant1>
     </inf_env051_EurNewsstand>
+    <inf_env601_BunchLogs3>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env601_BunchLogs3.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	80	</wood_2>
+              <debrisAmount>	70	</debrisAmount>
+              <weight>	6500	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env601_BunchLogs3>
     <inf_env601_BunchLogs3_01>
       <variant1>
         <stages>
@@ -23252,6 +23550,29 @@
         </effects>
       </variant1>
     </inf_env601_BunchLogs4>
+    <inf_env601_BunchLogs4_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env601_BunchLogs4.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	30	</wood_2>
+              <debrisAmount>	60	</debrisAmount>
+              <weight>	5500	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env601_BunchLogs4_01>
     <inf_env601_BunchLogs5_01>
       <variant1>
         <stages>
@@ -23276,6 +23597,30 @@
         </effects>
       </variant1>
     </inf_env601_BunchLogs5_01>
+    <inf_env601_BunchLogs5_01_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env601_BunchLogs5.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	24	</wood_1>
+              <wood_2>	80	</wood_2>
+              <debrisAmount>	90	</debrisAmount>
+              <weight>	5500	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env601_BunchLogs5_01_01>
     <inf_envSU_83_05_Scaffold2_01>
       <variant1>
         <stages>
@@ -24213,6 +24558,104 @@
         </effects>
       </variant1>
     </bld_SU_024_FactoryBuilding_02_hit>
+    <bld_SU_024_FactoryBuilding_08>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/bld_SU_024_FactoryBuilding.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	76.48	</metal_1>
+              <metal_2>	12.31	</metal_2>
+              <wood_1>	3.36	</wood_1>
+              <glass>	22.39	</glass>
+              <debrisAmount>	70.15	</debrisAmount>
+              <weight>	6828.36	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </bld_SU_024_FactoryBuilding_08>
+    <bld_SU_024_FactoryBuilding_08_hit>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/bld_SU_024_FactoryBuilding.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	76.48	</metal_1>
+              <metal_2>	12.31	</metal_2>
+              <wood_1>	3.36	</wood_1>
+              <glass>	22.39	</glass>
+              <debrisAmount>	70.15	</debrisAmount>
+              <weight>	6828.36	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </bld_SU_024_FactoryBuilding_08_hit>
+    <bld_SU_024_FactoryBuilding_09>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/bld_SU_024_FactoryBuilding.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_2>	73.88	</metal_2>
+              <debrisAmount>	83.21	</debrisAmount>
+              <weight>	6417.91	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </bld_SU_024_FactoryBuilding_09>
+    <bld_SU_024_FactoryBuilding_09_hit>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/bld_SU_024_FactoryBuilding.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_2>	73.88	</metal_2>
+              <debrisAmount>	83.21	</debrisAmount>
+              <weight>	6417.91	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </bld_SU_024_FactoryBuilding_09_hit>
     <bld_SU_024_FactoryBuilding_10_hit>
       <variant1>
         <stages>
@@ -24662,6 +25105,230 @@
         </effects>
       </variant1>
     </hd_env_EU_446_Graves_03_hit>
+    <hd_mle_UNI_813_OpelBlitz_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_mle_UNI_813_OpelBlitz_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	24	</metal_1>
+              <metal_2>	30	</metal_2>
+              <wood_1>	24	</wood_1>
+              <cloth>	30	</cloth>
+              <glass>	15	</glass>
+              <debrisAmount>	80	</debrisAmount>
+              <weight>	7400	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_mle_UNI_813_OpelBlitz_01>
+    <hd_mle_UNI_813_OpelBlitz_01_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_mle_UNI_813_OpelBlitz_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	24	</metal_1>
+              <metal_2>	30	</metal_2>
+              <wood_1>	24	</wood_1>
+              <cloth>	30	</cloth>
+              <glass>	15	</glass>
+              <debrisAmount>	80	</debrisAmount>
+              <weight>	7400	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_mle_UNI_813_OpelBlitz_01_hit>
+    <hd_env_ASKR_009_VillageEnv_Bag_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_ASKR_009_VillageEnv_Bag_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_sandbag	</wwsound>
+            <params></params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_ASKR_009_VillageEnv_Bag_01>
+    <hd_env_ASKR_009_VillageEnv_Bag_01_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_ASKR_009_VillageEnv_Bag_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_sandbag	</wwsound>
+            <params></params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_ASKR_009_VillageEnv_Bag_01_hit>
+    <hd_env_ASKR_009_VillageEnv_Bag_01_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_ASKR_009_VillageEnv_Bag_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_sandbag	</wwsound>
+            <params></params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_ASKR_009_VillageEnv_Bag_01_01>
+    <hd_env_ASKR_009_VillageEnv_Bag_01_01_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_ASKR_009_VillageEnv_Bag_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_sandbag	</wwsound>
+            <params></params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_ASKR_009_VillageEnv_Bag_01_01_hit>
+    <hd_env_UNI_048_Stage>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_UNI_048_Stage.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	55	</wood_1>
+              <debrisAmount>	70	</debrisAmount>
+              <weight>	4850	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_UNI_048_Stage>
+    <hd_env_UNI_048_Stage_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_UNI_048_Stage.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	55	</wood_1>
+              <debrisAmount>	70	</debrisAmount>
+              <weight>	4850	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_UNI_048_Stage_hit>
+    <hd_env_UNI_048_Stage_Boxes>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_UNI_048_Stage_Boxes.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	80	</wood_1>
+              <debrisAmount>	80	</debrisAmount>
+              <weight>	4850	</weight>
+              <wood_2>	30	</wood_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_UNI_048_Stage_Boxes>
+    <hd_env_UNI_048_Stage_Boxes_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_UNI_048_Stage_Boxes.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	80	</wood_1>
+              <wood_2>	30	</wood_2>
+              <debrisAmount>	80	</debrisAmount>
+              <weight>	4850	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_UNI_048_Stage_Boxes_hit>
     <hd_env_SU_032_TramPost>
       <variant1>
         <stages>
@@ -24938,6 +25605,52 @@
         </effects>
       </variant1>
     </hd_env205_Boats03_hit>
+    <hd_env205_Boats03_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env205_Boats03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	49	</wood_1>
+              <debrisAmount>	80	</debrisAmount>
+              <weight>	4800	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env205_Boats03_01>
+    <hd_env205_Boats03_01_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env205_Boats03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	49	</wood_1>
+              <debrisAmount>	80	</debrisAmount>
+              <weight>	4800	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env205_Boats03_01_hit>
     <inf_fuel_mle008_Canisters1_04>
       <variant1>
         <stages>
@@ -25288,6 +26001,56 @@
         </effects>
       </variant1>
     </inf_shells_detonation_medium_07>
+    <inf_shells_detonation_small_10>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_shells_detonation_small.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	24	</metal_1>
+              <wood_1>	55	</wood_1>
+              <debrisAmount>	30	</debrisAmount>
+              <weight>	1500	</weight>
+              <metal_2>	24	</metal_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_shells_detonation_small_10>
+    <inf_shells_detonation_small_10_hit>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_shells_detonation_small.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	24	</metal_1>
+              <wood_1>	55	</wood_1>
+              <debrisAmount>	30	</debrisAmount>
+              <weight>	1500	</weight>
+              <metal_2>	24	</metal_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_shells_detonation_small_10_hit>
     <inf_shells_detonation_small_11>
       <variant1>
         <stages>
@@ -25575,6 +26338,98 @@
         </effects>
       </variant1>
     </hd_env_SU_038_Flag_01_hit>
+    <hd_bld_EU_038_PortWall_FenceEnd>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_bld_EU_038_PortWall_FenceEnd.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	16.85	</debrisAmount>
+              <weight>	3782.77	</weight>
+              <metal_2>	1.5	</metal_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_bld_EU_038_PortWall_FenceEnd>
+    <hd_bld_EU_038_PortWall_FenceEnd_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_bld_EU_038_PortWall_FenceEnd.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	16.85	</debrisAmount>
+              <weight>	3782.77	</weight>
+              <metal_2>	1.5	</metal_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_bld_EU_038_PortWall_FenceEnd_hit>
+    <hd_bld_EU_038_PortWall_FenceTile>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_bld_EU_038_PortWall_FenceTile.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	33.58	</debrisAmount>
+              <weight>	4453.84	</weight>
+              <metal_2>	1.5	</metal_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_bld_EU_038_PortWall_FenceTile>
+    <hd_bld_EU_038_PortWall_FenceTile_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_bld_EU_038_PortWall_FenceTile.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <debrisAmount>	33.58	</debrisAmount>
+              <weight>	4453.84	</weight>
+              <metal_2>	1.5	</metal_2>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_bld_EU_038_PortWall_FenceTile_hit>
     <hd_env_UNI_628_VentilationSys_01>
       <variant1>
         <stages>
@@ -25603,6 +26458,34 @@
         </effects>
       </variant1>
     </hd_env_UNI_628_VentilationSys_01_hit>
+    <hd_env_UNI_628_VentilationSys_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_UNI_628_VentilationSys_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+        </effects>
+      </variant1>
+    </hd_env_UNI_628_VentilationSys_02>
+    <hd_env_UNI_628_VentilationSys_02_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_UNI_628_VentilationSys_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+        </effects>
+      </variant1>
+    </hd_env_UNI_628_VentilationSys_02_hit>
     <hd_env_UNI_628_VentilationSys_03>
       <variant1>
         <stages>
@@ -26102,7 +26985,7 @@
         </effects>
       </variant1>
     </hd_env_SU_018_StreetSigns_04>
-    <inf_gafBR_002_FieldFence1_new>
+    <hd_bld_UNI_008_WorkshopNew_Wall_01>
       <variant1>
         <stages>
           <base>	4.0	</base>
@@ -26110,22 +26993,23 @@
         <effects>
           <pixie>
             <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gafBR_002_FieldFence1_new.xml	</file>
+            <file>	particles/Environment/buildings/hd_bld_UNI_008_WorkshopNew_Wall_01.xml	</file>
             <force>	1	</force>
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <stone_2>	35	</stone_2>
-              <debrisAmount>	70	</debrisAmount>
-              <weight>	5300	</weight>
+              <wood_1>	77.99	</wood_1>
+              <wood_2>	30.97	</wood_2>
+              <debrisAmount>	75.37	</debrisAmount>
+              <weight>	8059.71	</weight>
             </params>
           </destructionSound>
         </effects>
       </variant1>
-    </inf_gafBR_002_FieldFence1_new>
-    <inf_gafBR_002_FieldFence1>
+    </hd_bld_UNI_008_WorkshopNew_Wall_01>
+    <hd_bld_UNI_008_WorkshopNew_Wall_Corner_01>
       <variant1>
         <stages>
           <base>	4.0	</base>
@@ -26133,361 +27017,24 @@
         <effects>
           <pixie>
             <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gafBR_002_FieldFence1.xml	</file>
+            <file>	particles/Environment/buildings/hd_bld_UNI_008_WorkshopNew_Wall_Corner_01.xml	</file>
             <force>	1	</force>
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
             <wwsound>	obj_generative	</wwsound>
             <params>
-              <stone_2>	26	</stone_2>
-              <debrisAmount>	80	</debrisAmount>
-              <weight>	5200	</weight>
+              <wood_1>	77.99	</wood_1>
+              <wood_2>	30.97	</wood_2>
+              <debrisAmount>	75.37	</debrisAmount>
+              <weight>	8059.71	</weight>
             </params>
           </destructionSound>
         </effects>
       </variant1>
-    </inf_gafBR_002_FieldFence1>
-    <inf_gafBR_002_FieldFenceCorner_new>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gafBR_002_FieldFenceCorner_new.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	50	</stone_2>
-              <debrisAmount>	60	</debrisAmount>
-              <weight>	5100	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_gafBR_002_FieldFenceCorner_new>
-    <inf_gafBR_002_FieldFenceCorner>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gafBR_002_FieldFenceCorner.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	50	</stone_2>
-              <debrisAmount>	60	</debrisAmount>
-              <weight>	5100	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_gafBR_002_FieldFenceCorner>
-    <inf_gafBR_002_FieldFenceGate_new>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gafBR_002_FieldFenceGate_new.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_1>	30	</wood_1>
-              <debrisAmount>	100	</debrisAmount>
-              <weight>	2800	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_gafBR_002_FieldFenceGate_new>
-    <inf_gafBR_002_FieldFenceGate>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gafBR_002_FieldFenceGate.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_1>	30	</wood_1>
-              <debrisAmount>	100	</debrisAmount>
-              <weight>	2800	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_gafBR_002_FieldFenceGate>
-    <inf_gafBR_002_FieldFenceGate_01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_gafBR_002_FieldFenceGate.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_1>	30	</wood_1>
-              <debrisAmount>	100	</debrisAmount>
-              <weight>	2800	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_gafBR_002_FieldFenceGate_01>
-    <inf_mle031_Aeroplane>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_mle031_Aeroplane.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	36.73	</metal_1>
-              <metal_2>	44.5	</metal_2>
-              <glass>	18.37	</glass>
-              <debrisAmount>	40	</debrisAmount>
-              <weight>	8500	</weight>
-              <wood_1>	24	</wood_1>
-              <cloth>	14.29	</cloth>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_mle031_Aeroplane>
-    <inf_mle031_Aeroplane_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_mle031_Aeroplane.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	36.73	</metal_1>
-              <metal_2>	44.5	</metal_2>
-              <glass>	18.37	</glass>
-              <debrisAmount>	40	</debrisAmount>
-              <weight>	8500	</weight>
-              <wood_1>	24	</wood_1>
-              <cloth>	14.29	</cloth>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_mle031_Aeroplane_hit>
-    <inf_mle031_Aeroplane_01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_mle031_Aeroplane.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	36.73	</metal_1>
-              <metal_2>	44.5	</metal_2>
-              <glass>	18.37	</glass>
-              <debrisAmount>	40	</debrisAmount>
-              <weight>	8500	</weight>
-              <wood_1>	24	</wood_1>
-              <cloth>	14.29	</cloth>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_mle031_Aeroplane_01>
-    <inf_mle031_Aeroplane_01_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_mle031_Aeroplane.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	36.73	</metal_1>
-              <metal_2>	44.5	</metal_2>
-              <glass>	18.37	</glass>
-              <debrisAmount>	40	</debrisAmount>
-              <weight>	8500	</weight>
-              <wood_1>	24	</wood_1>
-              <cloth>	14.29	</cloth>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_mle031_Aeroplane_01_hit>
+    </hd_bld_UNI_008_WorkshopNew_Wall_Corner_01>
   </fragiles>
   <structures>
-    <inf_mil204_AreaForGun_01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_mil204_AreaForGun_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_2>	58.65	</wood_2>
-              <debrisAmount>	77.64	</debrisAmount>
-              <weight>	6526.71	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_mil204_AreaForGun_01>
-    <inf_mil204_AreaForGun_02>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_mil204_AreaForGun_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_2>	58.65	</wood_2>
-              <debrisAmount>	77.64	</debrisAmount>
-              <weight>	6526.71	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_mil204_AreaForGun_02>
-    <inf_mil204_AreaForGun_03>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_mil204_AreaForGun_03.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_2>	58.65	</wood_2>
-              <debrisAmount>	77.64	</debrisAmount>
-              <weight>	6526.71	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_mil204_AreaForGun_03>
-    <inf_mil204_AreaForGun_04>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_mil204_AreaForGun_04.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_2>	58.65	</wood_2>
-              <debrisAmount>	77.64	</debrisAmount>
-              <weight>	6526.71	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_mil204_AreaForGun_04>
-    <inf_mil204_AreaForGun_05>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_mil204_AreaForGun_05.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_2>	58.65	</wood_2>
-              <debrisAmount>	77.64	</debrisAmount>
-              <weight>	6526.71	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_mil204_AreaForGun_05>
     <hd_gaf_SU_007_AvenueFence_02>
       <variant1>
         <stages>
@@ -29048,6 +29595,100 @@
         </effects>
       </variant1>
     </bld_19_02_Monastery_07_WallRight_01>
+    <bld_19_02_Monastery_07_WallRight_01_01_ram_01_ram>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bld_19_02_Monastery_07_WallRight_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	30	</wood_1>
+              <wood_2>	24	</wood_2>
+              <debrisAmount>	90	</debrisAmount>
+              <weight>	7300	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </bld_19_02_Monastery_07_WallRight_01_01_ram_01_ram>
+    <bld_19_02_Monastery_07_WallRight_01_01_hit_01_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bld_19_02_Monastery_07_WallRight_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	30	</wood_1>
+              <wood_2>	24	</wood_2>
+              <debrisAmount>	90	</debrisAmount>
+              <weight>	7300	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </bld_19_02_Monastery_07_WallRight_01_01_hit_01_hit>
+    <bld_19_02_Monastery_07_WallRight_01_02_ram>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bld_19_02_Monastery_07_WallRight_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	40	</wood_2>
+              <debrisAmount>	80	</debrisAmount>
+              <weight>	7450	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </bld_19_02_Monastery_07_WallRight_01_02_ram>
+    <bld_19_02_Monastery_07_WallRight_01_02_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bld_19_02_Monastery_07_WallRight_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	40	</wood_2>
+              <debrisAmount>	80	</debrisAmount>
+              <weight>	7450	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </bld_19_02_Monastery_07_WallRight_01_02_hit>
     <bld_19_02_Monastery_07_WallRight_01_01_ram>
       <variant1>
         <stages>
@@ -29380,7 +30021,79 @@
         </effects>
       </variant1>
     </inf_bld_19_02_Monastery_01_enfilade01_04_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02>
+    <bld_19_04_Amphitheatre_01>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bld_19_04_Amphitheatre_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wood_house	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </bld_19_04_Amphitheatre_01>
+    <bld_19_04_Amphitheatre_02>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bld_19_04_Amphitheatre_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wood_house	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </bld_19_04_Amphitheatre_02>
+    <bld_19_04_Amphitheatre_03>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bld_19_04_Amphitheatre_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wood_house	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </bld_19_04_Amphitheatre_03>
+    <bld_19_04_Amphitheatre_04>
+      <variant1>
+        <stages>
+          <base>	6.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/bld_19_04_Amphitheatre_04.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_wood_house	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </bld_19_04_Amphitheatre_04>
+    <bld_19_04_Ampitheratre_Column_01>
       <variant1>
         <stages>
           <base>	4.0	</base>
@@ -29388,7 +30101,7 @@
         <effects>
           <pixie>
             <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
+            <file>	particles/Environment/buildings/bld_19_04_Ampitheratre_Column_01.xml	</file>
             <force>	1	</force>
           </pixie>
           <destructionSound>
@@ -29402,8 +30115,8 @@
           </destructionSound>
         </effects>
       </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_hit>
+    </bld_19_04_Ampitheratre_Column_01>
+    <bld_19_04_Ampitheratre_ColumnRuin_01>
       <variant1>
         <stages>
           <base>	4.0	</base>
@@ -29411,7 +30124,7 @@
         <effects>
           <pixie>
             <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
+            <file>	particles/Environment/buildings/bld_19_04_Ampitheratre_ColumnRuin_01.xml	</file>
             <force>	1	</force>
           </pixie>
           <destructionSound>
@@ -29425,8 +30138,8 @@
           </destructionSound>
         </effects>
       </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_hit_01_hit>
+    </bld_19_04_Ampitheratre_ColumnRuin_01>
+    <bld_19_04_Ampitheratre_ColumnRuin_04>
       <variant1>
         <stages>
           <base>	4.0	</base>
@@ -29434,22 +30147,17 @@
         <effects>
           <pixie>
             <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
+            <file>	particles/Environment/buildings/bld_19_04_Ampitheratre_ColumnRuin_04.xml	</file>
             <force>	1	</force>
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
+            <wwsound>	obj_stone_crash_mid	</wwsound>
           </destructionSound>
         </effects>
       </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_hit_01_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_01_ram>
+    </bld_19_04_Ampitheratre_ColumnRuin_04>
+    <bld_19_04_Ampitheratre_ColumnRuin_05>
       <variant1>
         <stages>
           <base>	4.0	</base>
@@ -29457,1194 +30165,16 @@
         <effects>
           <pixie>
             <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
+            <file>	particles/Environment/buildings/bld_19_04_Ampitheratre_ColumnRuin_05.xml	</file>
             <force>	1	</force>
           </pixie>
           <destructionSound>
             <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
+            <wwsound>	obj_stone_crash_mid	</wwsound>
           </destructionSound>
         </effects>
       </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_01_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_01_ram_01_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_01_ram_01_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_01_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_01_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_01_hit_01_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_01_hit_01_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_02_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_02_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_02_ram_01_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_02_ram_01_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_02_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_02_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_02_hit_01_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_02_hit_01_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_03_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_03_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_03_ram_01_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_03_ram_01_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_03_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_03_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_03_hit_01_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_03_hit_01_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_04_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_04_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_04_ram_01_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_04_ram_01_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_04_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_04_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_04_hit_01_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_04_hit_01_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_05_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_05_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_05_ram_01_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_05_ram_01_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_05_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_05_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_05_hit_01_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_05_hit_01_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_06_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_06_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_06_ram_01_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_06_ram_01_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_06_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_06_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_06_hit_01_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_06_hit_01_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_07_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_07_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_07_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_07_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_08_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_08_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_08_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_08_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_09_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_09_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_09_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_09_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_10_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_10_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_10_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_10_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_11_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_11_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_11_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_11_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_12_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_12_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_12_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_12_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_13_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_13_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_13_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_13_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_14_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_14_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_01_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_01_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_01_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_01_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_02_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_02_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_02_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_02_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_03_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_03_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_03_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_03_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_04_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_04_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_04_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_04_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_05_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_05_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_05_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_05_hit>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_06_ram>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_06_ram>
-    <inf_bld_19_04_Ampitheratre_ColumnRuin_02_06_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_19_04_Ampitheratre_ColumnRuin_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_19_04_Ampitheratre_ColumnRuin_02_06_hit>
+    </bld_19_04_Ampitheratre_ColumnRuin_05>
     <inf_mleSU_92_02_HE111_2_02_ram>
       <variant1>
         <stages>
@@ -31015,268 +30545,6 @@
         </effects>
       </variant1>
     </inf_bld_UNI_000_Base_05_hit>
-    <inf_bldAM_039_Amphitheatre_Crash_01>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_wood_house	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_01>
-    <inf_bldAM_039_Amphitheatre_Crash_01_hit>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_1>	23.13	</stone_1>
-              <stone_2>	69.03	</stone_2>
-              <debrisAmount>	62.68	</debrisAmount>
-              <weight>	7649.25	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_01_hit>
-    <inf_bldAM_039_Amphitheatre_Crash_01_01_ram>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	69.03	</stone_2>
-              <debrisAmount>	73.88	</debrisAmount>
-              <weight>	9253.72	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_01_01_ram>
-    <inf_bldAM_039_Amphitheatre_Crash_01_01_hit>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	69.03	</stone_2>
-              <debrisAmount>	73.88	</debrisAmount>
-              <weight>	9253.72	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_01_01_hit>
-    <inf_bldAM_039_Amphitheatre_Crash_02>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_wood_house	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_02>
-    <inf_bldAM_039_Amphitheatre_Crash_02_hit>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	75.37	</stone_2>
-              <debrisAmount>	62.68	</debrisAmount>
-              <weight>	9552.23	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_02_hit>
-    <inf_bldAM_039_Amphitheatre_Crash_02_01_ram>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	43.66	</stone_2>
-              <debrisAmount>	73.88	</debrisAmount>
-              <weight>	7798.5	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_02_01_ram>
-    <inf_bldAM_039_Amphitheatre_Crash_02_01_hit>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	43.66	</stone_2>
-              <debrisAmount>	73.88	</debrisAmount>
-              <weight>	7798.5	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_02_01_hit>
-    <inf_bldAM_039_Amphitheatre_Crash_02_02_ram>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	43.66	</stone_2>
-              <debrisAmount>	73.88	</debrisAmount>
-              <weight>	7798.5	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_02_02_ram>
-    <inf_bldAM_039_Amphitheatre_Crash_02_02_hit>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	43.66	</stone_2>
-              <debrisAmount>	73.88	</debrisAmount>
-              <weight>	7798.5	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_02_02_hit>
-    <inf_bldAM_039_Amphitheatre_Crash_03>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_03.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_wood_house	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_03>
-    <inf_bldAM_039_Amphitheatre_Crash_03_hit>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_03.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	69.03	</stone_2>
-              <debrisAmount>	73.88	</debrisAmount>
-              <weight>	9253.72	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_03_hit>
     <inf_bld_AF_013_AthenaStatue_1>
       <variant1>
         <stages>
@@ -32953,102 +32221,6 @@
         </effects>
       </variant1>
     </hd_bld_AF_001_VHouse_Ruins_02_04_ram>
-    <inf_bld_114_01_Workshop_new_04_1>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_114_01_Workshop_new_04_1.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	77.98	</metal_1>
-              <metal_2>	7.46	</metal_2>
-              <debrisAmount>	14.18	</debrisAmount>
-              <weight>	8656.72	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_114_01_Workshop_new_04_1>
-    <inf_bld_114_01_Workshop_new_04_1_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_114_01_Workshop_new_04_1.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	77.98	</metal_1>
-              <metal_2>	7.46	</metal_2>
-              <debrisAmount>	14.18	</debrisAmount>
-              <weight>	8656.72	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_114_01_Workshop_new_04_1_hit>
-    <inf_bld_114_01_Workshop_new_04_2>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_114_01_Workshop_new_04_2.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	77.98	</metal_1>
-              <metal_2>	23.88	</metal_2>
-              <debrisAmount>	53.73	</debrisAmount>
-              <weight>	7611.94	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_114_01_Workshop_new_04_2>
-    <inf_bld_114_01_Workshop_new_04_2_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bld_114_01_Workshop_new_04_2.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	77.98	</metal_1>
-              <metal_2>	23.88	</metal_2>
-              <debrisAmount>	53.73	</debrisAmount>
-              <weight>	7611.94	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bld_114_01_Workshop_new_04_2_hit>
     <inf_env_112_19_MetroEnterance_1>
       <variant1>
         <stages>
@@ -35213,163 +34385,6 @@
         </effects>
       </variant1>
     </inf_bldAF_module_01_13_hit>
-    <inf_bldAM_039_Amphitheatre_Crash_01>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_1>	23.13	</stone_1>
-              <stone_2>	69.03	</stone_2>
-              <debrisAmount>	62.68	</debrisAmount>
-              <weight>	7649.25	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_01>
-    <inf_bldAM_039_Amphitheatre_Crash_02>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	75.37	</stone_2>
-              <debrisAmount>	62.68	</debrisAmount>
-              <weight>	9552.23	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_02>
-    <inf_bldAM_039_Amphitheatre_Crash_03>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_03.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	69.03	</stone_2>
-              <debrisAmount>	73.88	</debrisAmount>
-              <weight>	9253.72	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_03>
-    <inf_bldAM_039_Amphitheatre_Crash_04>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_04.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_stone_building_mid	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_04>
-    <inf_bldAM_039_Amphitheatre_Crash_04_hit>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_04.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	43.66	</stone_2>
-              <debrisAmount>	73.88	</debrisAmount>
-              <weight>	7798.5	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_04_hit>
-    <inf_bldAM_039_Amphitheatre_Crash_04_01_ram>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_04.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	43.66	</stone_2>
-              <debrisAmount>	73.88	</debrisAmount>
-              <weight>	7798.5	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_04_01_ram>
-    <inf_bldAM_039_Amphitheatre_Crash_04_01_hit>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_04.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	43.66	</stone_2>
-              <debrisAmount>	73.88	</debrisAmount>
-              <weight>	7798.5	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_04_01_hit>
     <inf_envSU_83_05_Scaffold1>
       <variant1>
         <stages>
@@ -35560,29 +34575,6 @@
         </effects>
       </variant1>
     </inf_envSU_83_05_Scaffold2_03_hit>
-    <inf_bldAM_039_Amphitheatre_Crash_04>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/inf_bldAM_039_Amphitheatre_Crash_04.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	43.66	</stone_2>
-              <debrisAmount>	73.88	</debrisAmount>
-              <weight>	7798.5	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_bldAM_039_Amphitheatre_Crash_04>
     <inf_bld201_vhouse01_wall_01>
       <variant1>
         <stages>
@@ -41153,6 +40145,102 @@
         </effects>
       </variant1>
     </inf_env_UNI_633_WaterPump_02_hit>
+    <inf_env_SU_023_MillPipe>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/inf_env_SU_023_MillPipe.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <stone_1>	80	</stone_1>
+              <stone_2>	24	</stone_2>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	9000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env_SU_023_MillPipe>
+    <inf_env_SU_023_MillPipe_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/inf_env_SU_023_MillPipe.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <stone_1>	80	</stone_1>
+              <stone_2>	24	</stone_2>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	9000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env_SU_023_MillPipe_hit>
+    <inf_env_SU_023_MillPipe_01_ram>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/inf_env_SU_023_MillPipe.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <stone_1>	80	</stone_1>
+              <stone_2>	24	</stone_2>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	9000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env_SU_023_MillPipe_01_ram>
+    <inf_env_SU_023_MillPipe_01_hit>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/inf_env_SU_023_MillPipe.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <stone_1>	80	</stone_1>
+              <stone_2>	24	</stone_2>
+              <debrisAmount>	100	</debrisAmount>
+              <weight>	9000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env_SU_023_MillPipe_01_hit>
     <inf_bld701_vhouse_01_03>
       <variant1>
         <stages>
@@ -43297,160 +42385,6 @@
         </effects>
       </variant2>
     </inf_building_fire>
-    <bld_19_04_Amphitheatre_01>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/bld_19_04_Amphitheatre_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_wood_house	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </bld_19_04_Amphitheatre_01>
-    <bld_19_04_Amphitheatre_02>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/bld_19_04_Amphitheatre_02.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_wood_house	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </bld_19_04_Amphitheatre_02>
-    <bld_19_04_Amphitheatre_03>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/bld_19_04_Amphitheatre_03.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_wood_house	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </bld_19_04_Amphitheatre_03>
-    <bld_19_04_Amphitheatre_04>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/bld_19_04_Amphitheatre_04.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_wood_house	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </bld_19_04_Amphitheatre_04>
-    <bld_19_04_Ampitheratre_Column_01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/bld_19_04_Ampitheratre_Column_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </bld_19_04_Ampitheratre_Column_01>
-    <bld_19_04_Ampitheratre_ColumnRuin_01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/bld_19_04_Ampitheratre_ColumnRuin_01.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <stone_2>	57.84	</stone_2>
-              <debrisAmount>	49.26	</debrisAmount>
-              <weight>	7238.81	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </bld_19_04_Ampitheratre_ColumnRuin_01>
-    <bld_19_04_Ampitheratre_ColumnRuin_04>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/bld_19_04_Ampitheratre_ColumnRuin_04.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_mid	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </bld_19_04_Ampitheratre_ColumnRuin_04>
-    <bld_19_04_Ampitheratre_ColumnRuin_05>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/buildings/bld_19_04_Ampitheratre_ColumnRuin_05.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_stone_crash_mid	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </bld_19_04_Ampitheratre_ColumnRuin_05>
     <inf_bld_19_04_Ampitheratre_WallRuin_01>
       <variant1>
         <stages>
@@ -45145,5 +44079,28 @@
         </effects>
       </variant1>
     </bld_AM_033_ServiceStation_5_01_hit>
+    <hd_env_EU_050_Enfilade_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/hd_env_EU_050_Enfilade_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <stone_2>	57.84	</stone_2>
+              <debrisAmount>	49.26	</debrisAmount>
+              <weight>	7238.81	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_EU_050_Enfilade_01>
   </structures>
 </destructibles_effects.xml>

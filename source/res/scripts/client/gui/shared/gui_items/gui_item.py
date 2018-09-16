@@ -3,7 +3,8 @@
 import nations
 from items import ITEM_TYPE_NAMES, vehicles
 from gui import nationCompareByIndex
-from helpers import dependency
+from gui.Scaleform.locale.MENU import MENU
+from helpers import dependency, i18n
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 
 class GUIItem(object):
@@ -36,7 +37,11 @@ class HasIntCD(object):
 
     @property
     def nationName(self):
-        return nations.NAMES[self.nationID]
+        return nations.NAMES[self.nationID] if self.nationID != nations.NONE_INDEX else ''
+
+    @property
+    def nationUserName(self):
+        return i18n.makeString(MENU.nations(self.nationName)) if self.nationName else ''
 
     def __cmp__(self, other):
         if self is other:

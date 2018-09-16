@@ -4,7 +4,7 @@ import constants
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
-from gui.server_events import awards, formatters
+from gui.server_events import awards, events_helpers
 from gui.shared import g_eventBus, events, event_dispatcher as shared_events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
@@ -30,8 +30,12 @@ def showPersonalMissionsChain(operationID, chainID):
      'chainID': chainID}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showMissionsMarathons(missionID=None, groupID=None, anchor=None):
-    showMissions(tab=QUESTS_ALIASES.MISSIONS_MARATHONS_VIEW_PY_ALIAS, missionID=missionID, groupID=groupID, anchor=anchor)
+def showMissionsGrouped(missionID=None, groupID=None, anchor=None):
+    showMissions(tab=QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, missionID=missionID, groupID=groupID, anchor=anchor)
+
+
+def showMissionsMarathon():
+    showMissions(tab=QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS)
 
 
 def showMissionsCategories(missionID=None, groupID=None, anchor=None):
@@ -44,6 +48,10 @@ def showMissionsForCurrentVehicle(missionID=None, groupID=None, anchor=None):
 
 def showMissionsElen(eventQuestsID):
     showMissions(tab=QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, missionID=eventQuestsID, groupID=eventQuestsID, showMissionDetails=False)
+
+
+def showMissionsLinkedSet():
+    showMissions(tab=QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS)
 
 
 def showMissionDetails(missionID, groupID):
@@ -74,15 +82,17 @@ def showMission(eventID, eventType=None):
     if eventType is not None and eventType == constants.EVENT_TYPE.PERSONAL_MISSION:
         showPersonalMission(eventID)
     elif quest is not None:
-        if formatters.isMarathon(quest.getGroupID()):
+        if events_helpers.isMarathon(quest.getGroupID()):
             groups = eventsCache.getGroups()
             group = groups.get(quest.getGroupID())
             groupContent = group.getGroupContent(quests)
             mainQuest = group.getMainQuest(groupContent)
             if mainQuest and quest.getID() != mainQuest.getID():
-                showMissionsMarathons(missionID=quest.getID(), groupID=group.getID(), anchor=group.getID())
+                showMissionsGrouped(missionID=quest.getID(), groupID=group.getID(), anchor=group.getID())
             else:
-                showMissionsMarathons(anchor=group.getID())
+                showMissionsGrouped(anchor=group.getID())
+        elif events_helpers.isLinkedSet(quest.getGroupID()):
+            showMissionsLinkedSet()
         else:
             showMissionsCategories(missionID=quest.getID(), groupID=quest.getGroupID(), anchor=quest.getGroupID())
     return

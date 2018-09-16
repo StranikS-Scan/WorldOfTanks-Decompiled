@@ -84,6 +84,13 @@ class NegativeCompoundPredicateCondition(CompoundPredicateCondition):
 
         return False
 
+    def lookInInventory(self):
+        for predicate in self.predicates:
+            if predicate.lookInInventory():
+                return False
+
+        return super(NegativeCompoundPredicateCondition, self).lookInInventory()
+
 
 class IntCDProtector(object):
     __slots__ = ('__intCDs',)
@@ -170,6 +177,7 @@ class REQ_CRITERIA(object):
     INVENTORY_OR_UNLOCKED = RequestCriteria(InventoryPredicateCondition(lambda item: item.inventoryCount > 0 or item.isUnlocked and not item.isInitiallyUnlocked))
     DISCOUNT_BUY = RequestCriteria(PredicateCondition(lambda item: item.buyPrices.itemPrice.isActionPrice() and not item.isRestoreAvailable()))
     DISCOUNT_SELL = RequestCriteria(PredicateCondition(lambda item: not item.isRented and item.sellPrices.itemPrice.isActionPrice()))
+    IN_OWNERSHIP = RequestCriteria(PredicateCondition(lambda item: item.inventoryCount > 0 and not item.isRented))
 
     class VEHICLE(object):
         FAVORITE = RequestCriteria(PredicateCondition(lambda item: item.isFavorite))
@@ -199,6 +207,7 @@ class REQ_CRITERIA(object):
         IS_RESTORE_POSSIBLE = RequestCriteria(PredicateCondition(lambda item: item.isRestorePossible()))
         CAN_TRADE_IN = RequestCriteria(PredicateCondition(lambda item: item.canTradeIn))
         CAN_TRADE_OFF = RequestCriteria(PredicateCondition(lambda item: item.canTradeOff))
+        CAN_SELL = RequestCriteria(PredicateCondition(lambda item: item.canSell))
         NAME_VEHICLE = staticmethod(lambda nameVehicle: RequestCriteria(PredicateCondition(lambda item: nameVehicle in item.searchableUserName)))
         DISCOUNT_RENT_OR_BUY = RequestCriteria(PredicateCondition(lambda item: (item.buyPrices.itemPrice.isActionPrice() or item.getRentPackageActionPrc() != 0) and not item.isRestoreAvailable()))
 
@@ -211,7 +220,7 @@ class REQ_CRITERIA(object):
 
     class BOOSTER(object):
         ENABLED = RequestCriteria(PredicateCondition(lambda item: item.enabled))
-        IN_ACCOUNT = RequestCriteria(PredicateCondition(lambda item: item.count > 0))
+        IN_ACCOUNT = RequestCriteria(InventoryPredicateCondition(lambda item: item.count > 0))
         ACTIVE = RequestCriteria(PredicateCondition(lambda item: item.finishTime is not None and item.state == GOODIE_STATE.ACTIVE))
         IS_READY_TO_ACTIVATE = RequestCriteria(PredicateCondition(lambda item: item.isReadyToActivate))
         BOOSTER_TYPES = staticmethod(lambda boosterTypes: RequestCriteria(PredicateCondition(lambda item: item.boosterType in boosterTypes)))
@@ -344,7 +353,7 @@ class ItemsRequester(IItemsRequester):
         callback(self)
 
     def isSynced(self):
-        return (self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced(), self.epicMetaGame.isSynced())
+        return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced() and self.epicMetaGame.isSynced()
 
     @async
     @process

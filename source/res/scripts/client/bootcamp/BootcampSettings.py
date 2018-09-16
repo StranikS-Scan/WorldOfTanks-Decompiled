@@ -203,11 +203,18 @@ class BattleSettings(object):
             lessonPagesDefaults[pageName] = lessonProps
 
 
-_BattleSettings = BattleSettings()
+_g_battleSettings = None
+
+def _getBattleSettings():
+    global _g_battleSettings
+    if _g_battleSettings is None:
+        _g_battleSettings = BattleSettings()
+    return _g_battleSettings
+
 
 def getBattleSettings(lessonId):
-    return _BattleSettings.lessonConfiguration(lessonId)
+    return _getBattleSettings().lessonConfiguration(lessonId)
 
 
 def getBattleDefaults():
-    return _BattleSettings.defaults
+    return _getBattleSettings().defaults

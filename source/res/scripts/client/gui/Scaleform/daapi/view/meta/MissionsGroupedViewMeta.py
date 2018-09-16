@@ -12,3 +12,6 @@ class MissionsGroupedViewMeta(MissionView):
 
     def openTokenPopover(self, id):
         self._printOverrideError('openTokenPopover')
+
+    def useTokenClick(self, eventID):
+        self._printOverrideError('useTokenClick')

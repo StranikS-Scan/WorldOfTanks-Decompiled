@@ -522,6 +522,21 @@ class SecurityLinkHandler(_ActionHandler):
         g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.SECURITY_SETTINGS))
 
 
+class OpenCustomizationHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(OpenCustomizationHandler, self).handleAction(model, entityID, action)
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_CUSTOMIZATION), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -543,7 +558,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _ShowClanSettingsFromInvitesHandler,
  _AcceptClanInviteHandler,
  _DeclineClanInviteHandler,
- _OpenEventBoardsHandler)
+ _OpenEventBoardsHandler,
+ OpenCustomizationHandler)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

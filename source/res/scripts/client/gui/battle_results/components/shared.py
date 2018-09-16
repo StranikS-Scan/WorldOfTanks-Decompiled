@@ -4,6 +4,7 @@ from debug_utils import LOG_ERROR
 from dossiers2.ui.achievements import ACHIEVEMENT_TYPE, MARK_ON_GUN_RECORD, MARK_OF_MASTERY_RECORD
 from gui.battle_results import stored_sorting
 from gui.battle_results.components import base
+from gui.battle_results.components.style import makeTeamKillerText
 from gui.shared.gui_items.dossier.achievements import MarkOnGunAchievement
 
 class TrueFlag(base.StatsItem):
@@ -33,6 +34,10 @@ class PlayerNameBlock(base.StatsBlock):
 
     def setAccountDBID(self, dbID):
         self.__dbID = dbID
+
+    def setTeamKillerInfo(self):
+        self.nameLabel = makeTeamKillerText(self.nameLabel)
+        self.fullNameLabel = makeTeamKillerText(self.fullNameLabel)
 
     def setPlayerInfo(self, playerInfo):
         self.__dbID = playerInfo.dbID

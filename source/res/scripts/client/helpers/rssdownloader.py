@@ -5,7 +5,6 @@ import helpers
 import BigWorld
 import feedparser
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION
-_CLIENT_VERSION = helpers.getFullClientVersion()
 feedparser.PARSE_MICROFORMATS = 0
 feedparser.SANITIZE_HTML = 0
 
@@ -74,7 +73,7 @@ class _WorkerThread(threading.Thread):
 
     def run(self):
         try:
-            self.result = feedparser.parse(self.url, None, None, _CLIENT_VERSION)
+            self.result = feedparser.parse(self.url, None, None, helpers.getFullClientVersion())
         except Exception:
             LOG_CURRENT_EXCEPTION()
 

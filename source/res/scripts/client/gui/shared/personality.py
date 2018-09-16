@@ -21,8 +21,6 @@ from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.items_parameters.params_cache import g_paramsCache
-from gui.shared.utils.HangarSpace import g_hangarSpace
-from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
 from gui.shared.utils import requesters
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.wgnc import g_wgncProvider
@@ -30,7 +28,9 @@ from helpers import isPlayerAccount, time_utils, dependency
 from helpers.statistics import HANGAR_LOADING_STATE
 from skeletons.account_helpers.settings_core import ISettingsCache, ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gameplay import IGameplayLogic, PlayerEventID
 from skeletons.gui.battle_results import IBattleResultsService
+from skeletons.gui.shared.utils import IHangarSpace, IRaresCache
 from skeletons.gui.web import IWebController
 from skeletons.gui.game_control import IGameStateTracker
 from skeletons.gui.goodies import IGoodiesCache
@@ -65,6 +65,9 @@ class ServicesLocator(object):
     connectionMgr = dependency.descriptor(IConnectionManager)
     statsCollector = dependency.descriptor(IStatisticsCollector)
     eventsController = dependency.descriptor(IEventBoardController)
+    gameplay = dependency.descriptor(IGameplayLogic)
+    hangarSpace = dependency.descriptor(IHangarSpace)
+    rareAchievesCache = dependency.descriptor(IRaresCache)
 
     @classmethod
     def clear(cls):
@@ -87,7 +90,7 @@ def onAccountShowGUI(ctx):
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.USER_SERVER_SETTINGS_SYNC)
     yield ServicesLocator.settingsCache.update()
     if not ServicesLocator.itemsCache.isSynced():
-        g_appLoader.goToLoginByError('#menu:disconnect/codes/0')
+        ServicesLocator.gameplay.goToLoginByError('#menu:disconnect/codes/0')
         return
     eula = EULADispatcher()
     yield eula.processLicense()
@@ -95,36 +98,34 @@ def onAccountShowGUI(ctx):
     g_playerEvents.onGuiCacheSyncCompleted(ctx)
     code = yield AccountValidator().validate()
     if code > 0:
-        g_appLoader.goToLoginByError('#menu:disconnect/codes/%d' % code)
+        ServicesLocator.gameplay.goToLoginByError('#menu:disconnect/codes/%d' % code)
         return
     ServicesLocator.itemsCache.onSyncCompleted(CACHE_SYNC_REASON.SHOW_GUI, {})
     ServicesLocator.settingsCore.serverSettings.applySettings()
     ServicesLocator.gameState.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
     accDossier = ServicesLocator.itemsCache.items.getAccountDossier()
-    g_rareAchievesCache.request(accDossier.getBlock('rareAchievements'))
+    ServicesLocator.rareAchievesCache.request(accDossier.getBlock('rareAchievements'))
     premium = isPremiumAccount(ServicesLocator.itemsCache.items.stats.attributes)
-    if g_hangarSpace.inited:
-        g_hangarSpace.refreshSpace(premium)
+    if ServicesLocator.hangarSpace.inited:
+        ServicesLocator.hangarSpace.refreshSpace(premium)
     else:
-        g_hangarSpace.init(premium)
+        ServicesLocator.hangarSpace.init(premium)
     g_currentVehicle.init()
     g_currentPreviewVehicle.init()
     ServicesLocator.webCtrl.start()
     ServicesLocator.soundCtrl.start()
-    g_appLoader.showLobby()
-    g_prbLoader.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
+    ServicesLocator.gameplay.postStateEvent(PlayerEventID.ACCOUNT_SHOW_GUI)
     serverSettings = ServicesLocator.lobbyContext.getServerSettings()
-    if serverSettings.wgcg.getLoginOnStart():
-        yield ServicesLocator.webCtrl.login()
-    if serverSettings.isElenEnabled():
-        yield ServicesLocator.eventsController.getEvents(onlySettings=True, onLogin=True, prefetchKeyArtBig=False)
-        yield ServicesLocator.eventsController.getHangarFlag(onLogin=True)
     g_prbLoader.onAccountShowGUI(ServicesLocator.lobbyContext.getGuiCtx())
     g_clanCache.onAccountShowGUI()
     SoundGroups.g_instance.enableLobbySounds(True)
     onCenterIsLongDisconnected(True)
     guiModsSendEvent('onAccountShowGUI', ctx)
-    Waiting.hide('enter')
+    if serverSettings.wgcg.getLoginOnStart():
+        yield ServicesLocator.webCtrl.login()
+    if serverSettings.isElenEnabled():
+        yield ServicesLocator.eventsController.getEvents(onlySettings=True, onLogin=True, prefetchKeyArtBig=False)
+        yield ServicesLocator.eventsController.getHangarFlag(onLogin=True)
 
 
 def onAccountBecomeNonPlayer():
@@ -133,7 +134,7 @@ def onAccountBecomeNonPlayer():
     ServicesLocator.goodiesCache.clear()
     g_currentVehicle.destroy()
     g_currentPreviewVehicle.destroy()
-    g_hangarSpace.destroy()
+    ServicesLocator.hangarSpace.destroy()
     g_prbLoader.onAccountBecomeNonPlayer()
     guiModsSendEvent('onAccountBecomeNonPlayer')
     UsersInfoHelper.clear()
@@ -247,7 +248,7 @@ def init(loadingScreenGUI=None):
 
 
 def start():
-    g_appLoader.startLobby()
+    pass
 
 
 def fini():
@@ -292,7 +293,7 @@ def onConnected():
 def onDisconnected():
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.DISCONNECTED)
     guiModsSendEvent('onDisconnected')
-    g_appLoader.goToLoginByEvent()
+    ServicesLocator.gameplay.goToLoginByEvent()
     ServicesLocator.battleResults.clear()
     g_prbLoader.onDisconnected()
     g_clanCache.onDisconnected()
@@ -311,7 +312,7 @@ def onDisconnected():
 
 
 def onKickedFromServer(reason, isBan, expiryTime):
-    g_appLoader.goToLoginByKick(reason, isBan, expiryTime)
+    ServicesLocator.gameplay.goToLoginByKick(reason, isBan, expiryTime)
 
 
 def onScreenShotMade(path):

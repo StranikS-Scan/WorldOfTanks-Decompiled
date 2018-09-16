@@ -206,3 +206,97 @@ class ACTION_ENTITY_ITEM(object):
     ENTITIES_SECTION_NAME = 'actionEntities'
     ACTIONS_SECTION_NAME = 'actions'
     STEPS_SECTION_NAME = 'steps'
+
+
+class KPI(object):
+
+    class Name(CONST_CONTAINER):
+        COMPOUND_KPI = 'compoundKPI'
+        VEHICLE_REPAIR_SPEED = 'vehicleRepairSpeed'
+        VEHICLE_ENGINE_POWER = 'vehicleEnginePower'
+        VEHICLE_TURRET_ROTATION_SPEED = 'vehicleTurretRotationSpeed'
+        VEHICLE_CIRCULAR_VISION_RADIUS = 'vehicleCircularVisionRadius'
+        VEHICLE_STILL_CIRCULAR_VISION_RADIUS = 'vehicleStillCircularVisionRadius'
+        VEHICLE_CAMOUFLAGE = 'vehicleCamouflage'
+        VEHICLE_STILL_CAMOUFLAGE = 'vehicleStillCamouflage'
+        VEHICLE_FIRE_CHANCE = 'vehicleFireChance'
+        VEHICLE_GUN_RELOAD_TIME = 'vehicleGunReloadTime'
+        VEHICLE_GUN_AIM_TIME = 'vehicleGunAimTime'
+        VEHICLE_GUN_SHOT_DISPERSION = 'vehicleGunShotDispersion'
+        VEHICLE_AMMO_BAY_STRENGTH = 'vehicleAmmoBayStrength'
+        VEHICLE_FUEL_TANK_STRENGTH = 'vehicleFuelTankStrength'
+        VEHICLE_ENGINE_STRENGTH = 'vehicleEngineStrength'
+        VEHICLE_CHASSIS_STRENGTH = 'vehicleChassisStrength'
+        VEHICLE_CHASSIS_LOAD = 'vehicleChassisLoad'
+        VEHICLE_CHASSIS_FALL_DAMAGE_RESISTANCE = 'vehicleChassisFallDamageResistance'
+        VEHICLE_RAM_OR_EXPLOSION_DAMAGE_RESISTANCE = 'vehicleRamOrExplosionDamageResistance'
+        VEHICLE_SOFT_GROUND_PASSABILITY = 'vehicleSoftGroundPassability'
+        VEHICLE_MEDIUM_GROUND_PASSABILITY = 'vehicleMediumGroundPassability'
+        CREW_LEVEL = 'crewLevel'
+        CREW_HIT_CHANCE = 'crewHitChance'
+        CREW_STUN_DURATION = 'crewStunDuration'
+        CREW_SKILL_REPAIR = 'crewSkillRepair'
+        CREW_SKILL_FIRE_FIGHTING = 'crewSkillFireFighting'
+        CREW_SKILL_CAMOUFLAGE = 'crewSkillCamouflage'
+        CREW_SKILL_BROTHERHOOD = 'crewSkillBrotherHood'
+        CREW_SKILL_SIXTH_SENSE = 'crewSkillSixthSense'
+        CREW_SKILL_SIXTH_SENSE_DELAY = 'crewSkillSixthSenseDelay'
+        CREW_SKILL_VIRTUOSO = 'crewSkillVirtuoso'
+        CREW_SKILL_SMOOTH_DRIVING = 'crewSkillSmoothRiding'
+        CREW_SKILL_LAST_EFFORT = 'crewSkillLastEffort'
+        CREW_SKILL_LAST_EFFORT_DURATION = 'crewSkillLastEffortDuration'
+        CREW_SKILL_RANCOROUS = 'crewSkillRancorous'
+        CREW_SKILL_RANCOROUS_DURATION = 'crewSkillRancorousDuration'
+        CREW_SKILL_PEDANT = 'crewSkillPedant'
+        CREW_SKILL_SMOOTH_TURRET = 'crewSkillSmoothTurret'
+        GAME_XP = 'gameXp'
+        GAME_FREE_XP = 'gameFreeXp'
+        GAME_CREW_XP = 'gameCrewXp'
+        GAME_CREDITS = 'gameCredits'
+
+    class Type(CONST_CONTAINER):
+        FACTOR = 'factor'
+        VALUE = 'value'
+        SKILL_BOOST = 'skillBoost'
+        OR = 'or'
+
+    def __init__(self, kpiName, kpiValue, kpyType=Type.FACTOR):
+        self.__name = kpiName
+        self.__value = kpiValue
+        self.__type = kpyType
+
+    @property
+    def name(self):
+        return self.__name
+
+    @property
+    def value(self):
+        return self.__value
+
+    @property
+    def type(self):
+        return self.__type
+
+
+VEHICLE_ATTR_TO_KPI_NAME_MAP = {'repairSpeed': KPI.Name.VEHICLE_REPAIR_SPEED,
+ 'repairSpeedFactor': KPI.Name.VEHICLE_REPAIR_SPEED,
+ 'circularVisionRadius': KPI.Name.VEHICLE_CIRCULAR_VISION_RADIUS,
+ 'circularVisionRadiusFactor': KPI.Name.VEHICLE_CIRCULAR_VISION_RADIUS,
+ 'gunReloadTimeFactor': KPI.Name.VEHICLE_GUN_RELOAD_TIME,
+ 'gunAimingTimeFactor': KPI.Name.VEHICLE_GUN_AIM_TIME,
+ 'crewLevelIncrease': KPI.Name.CREW_LEVEL,
+ 'ammoBayHealthFactor': KPI.Name.VEHICLE_AMMO_BAY_STRENGTH,
+ 'fuelTankHealthFactor': KPI.Name.VEHICLE_FUEL_TANK_STRENGTH,
+ 'engineHealthFactor': KPI.Name.VEHICLE_ENGINE_STRENGTH,
+ 'additiveShotDispersionFactor': KPI.Name.VEHICLE_GUN_SHOT_DISPERSION}
+CREW_SKILL_TO_KPI_NAME_MAP = {'repair': KPI.Name.CREW_SKILL_REPAIR,
+ 'fireFighting': KPI.Name.CREW_SKILL_FIRE_FIGHTING,
+ 'camouflage': KPI.Name.CREW_SKILL_CAMOUFLAGE,
+ 'brotherhood': KPI.Name.CREW_SKILL_BROTHERHOOD,
+ 'commander_sixthSense': KPI.Name.CREW_SKILL_SIXTH_SENSE,
+ 'driver_virtuoso': KPI.Name.CREW_SKILL_VIRTUOSO,
+ 'driver_smoothDriving': KPI.Name.CREW_SKILL_SMOOTH_DRIVING,
+ 'gunner_smoothTurret': KPI.Name.CREW_SKILL_SMOOTH_TURRET,
+ 'loader_pedant': KPI.Name.CREW_SKILL_PEDANT,
+ 'radioman_lastEffort': KPI.Name.CREW_SKILL_LAST_EFFORT,
+ 'gunner_rancorous': KPI.Name.CREW_SKILL_RANCOROUS}

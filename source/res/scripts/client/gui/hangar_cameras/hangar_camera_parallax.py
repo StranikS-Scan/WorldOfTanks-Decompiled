@@ -8,9 +8,10 @@ from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
 from AvatarInputHandler import mathUtils
 from account_helpers.settings_core.settings_constants import GAME
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.shared.utils import IHangarSpace
 from helpers import dependency
 from gui.Scaleform.Waiting import Waiting
-from gui.shared import g_eventBus
+from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 
 def cubicEasing(delta, position):
@@ -25,6 +26,7 @@ class HangarCameraParallax(CallbackDelayer, TimeDeltaMeter):
     CURSOR_POSITION_CLAMP_VALUE = 2.0
     MAX_DT = 0.05
     settingsCore = dependency.descriptor(ISettingsCore)
+    hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self, camera):
         CallbackDelayer.__init__(self)
@@ -40,25 +42,28 @@ class HangarCameraParallax(CallbackDelayer, TimeDeltaMeter):
         self.__anglesDelta = Math.Vector2(0.0, 0.0)
         self.__smoothingMultiplier = 0.0
         self.__isWindowAccessible = True
+        self.__isForcedDisabled = False
         from gui.ClientHangarSpace import hangarCFG
         cfg = hangarCFG()
         self.__distanceDelta = cfg['cam_parallax_distance']
         self.__anglesDelta = cfg['cam_parallax_angles']
         self.__smoothingMultiplier = cfg['cam_parallax_smoothing']
-        from gui.shared.utils.HangarSpace import g_hangarSpace
-        g_hangarSpace.onSpaceCreate += self.__onSpaceCreated
-        g_hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
+        self.hangarSpace.onSpaceCreate += self.__onSpaceCreated
+        self.hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
 
     def __onSpaceCreated(self):
         self.setEnabled(self.settingsCore.getSetting(GAME.HANGAR_CAM_PARALLAX_ENABLED))
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         g_eventBus.addListener(CameraRelatedEvents.IDLE_CAMERA, self.__handleIdleCameraActivation)
+        g_eventBus.addListener(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, self.__onForceDisable, EVENT_BUS_SCOPE.LOBBY)
         Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
 
     def __onSpaceDestroy(self, inited):
+        self.__isForcedDisabled = False
         if inited:
             self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
             g_eventBus.removeListener(CameraRelatedEvents.IDLE_CAMERA, self.__handleIdleCameraActivation)
+            g_eventBus.removeListener(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, self.__onForceDisable, EVENT_BUS_SCOPE.LOBBY)
             Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
 
     def __onSettingsChanged(self, diff):
@@ -76,9 +81,8 @@ class HangarCameraParallax(CallbackDelayer, TimeDeltaMeter):
             self.stopCallback(self.__update)
 
     def destroy(self):
-        from gui.shared.utils.HangarSpace import g_hangarSpace
-        g_hangarSpace.onSpaceCreate -= self.__onSpaceCreated
-        g_hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
+        self.hangarSpace.onSpaceCreate -= self.__onSpaceCreated
+        self.hangarSpace.onSpaceDestroy -= self.__onSpaceDestroy
         self.__camera = None
         self.__isInIdle = None
         self.stopCallback(self.__update)
@@ -99,6 +103,8 @@ class HangarCameraParallax(CallbackDelayer, TimeDeltaMeter):
         self.measureDeltaTime()
 
     def __checkToSkipUpdate(self):
+        if self.__isForcedDisabled:
+            return True
         if not self.__camera or self.__camera != BigWorld.camera():
             return True
         if self.__isInIdle:
@@ -141,3 +147,6 @@ class HangarCameraParallax(CallbackDelayer, TimeDeltaMeter):
 
     def __handleIdleCameraActivation(self, event):
         self.__isInIdle = event.ctx['started']
+
+    def __onForceDisable(self, event):
+        self.__isForcedDisabled = event.ctx['isDisable']

@@ -25,6 +25,11 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
     def closeView(self):
         self.destroy()
 
+    def requestMissionData(self, index):
+        missionData = self.__datailedList[index]
+        self.as_setMissionDataS(missionData)
+        self.onChangePage(missionData['eventID'])
+
     def onTokenBuyClick(self, tokenId, questId):
         self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.TOKEN_SHOP, params={'name': parseComplexToken(tokenId).webID}))
 
@@ -44,15 +49,15 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
 
     def _populate(self):
         super(MissionDetailsContainerView, self)._populate()
-        self.eventsCache.onSyncCompleted += self.__update
-        self.__update(needDemand=True)
+        self.eventsCache.onSyncCompleted += self.__setData
+        self.__setData(needDemand=True)
 
     def _invalidate(self, ctx=None):
         self.__ctx = ctx
-        self.__update(needDemand=False)
+        self.__setData(needDemand=False)
 
     def _dispose(self):
-        self.eventsCache.onSyncCompleted -= self.__update
+        self.eventsCache.onSyncCompleted -= self.__setData
         self.__quests = None
         if self.__groupPacker is not None:
             self.__groupPacker.clear()
@@ -61,7 +66,7 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
         return
 
     @async
-    def __update(self, needDemand=True):
+    def __setData(self, needDemand=True):
         if needDemand:
             yield await(self.eventsCache.prefetcher.demand())
         self.__quests = self.eventsCache.getQuests(lambda q: q.getFinishTimeLeft())
@@ -70,19 +75,19 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
         if self.__groupPacker is not None:
             self.__groupPacker.clear()
         self.__groupPacker = getGroupPackerByContextID(groupID, self.eventsCache)
-        datailedList = []
+        self.__datailedList = []
         if self.__groupPacker is not None:
             title = self.__groupPacker.getTitle()
-            for q in self.__groupPacker.findEvents(self.__quests):
-                data = missions_helper.getDetailedMissionData(q).getInfo()
-                datailedList.append(data)
+            for quest in self.__groupPacker.findEvents(self.__quests):
+                data = missions_helper.getDetailedMissionData(quest).getInfo()
+                self.__datailedList.append(data)
 
         else:
             title = ''
             quest = self.__quests.get(eventID)
             if quest is not None:
-                datailedList.append(missions_helper.getDetailedMissionData(quest).getInfo())
-        if not datailedList:
+                self.__datailedList.append(missions_helper.getDetailedMissionData(quest).getInfo())
+        if not self.__datailedList:
             self.closeView()
         else:
             pages = [ {'buttonsGroup': 'MissionDetailsPageGroup',
@@ -90,9 +95,8 @@ class MissionDetailsContainerView(LobbySubView, MissionDetailsContainerViewMeta)
              'label': '%i' % (i + 1),
              'tooltip': mission.get('statusTooltipData'),
              'status': mission.get('status'),
-             'selected': eventID == mission.get('eventID')} for i, mission in enumerate(datailedList) ]
+             'selected': eventID == mission.get('eventID')} for i, mission in enumerate(self.__datailedList) ]
             self.as_setInitDataS({'title': title,
-             'missions': datailedList,
              'pages': pages})
         return
 

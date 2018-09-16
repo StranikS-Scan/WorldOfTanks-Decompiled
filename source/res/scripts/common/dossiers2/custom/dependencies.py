@@ -82,7 +82,8 @@ def _set_ACHIEVEMENT15X15_DEPENDENCIES():
      'reliableComradeSeries': [_updateReliableComrade],
      'deathTrackWinSeries': [_updateMaxDeathTrackWinSeries],
      'tankwomenProgress': [_updateTankwomen],
-     'EFC2016WinSeries': [_updateMaxEFC2016WinSeries]})
+     'EFC2016WinSeries': [_updateMaxEFC2016WinSeries],
+     'rankedBattlesHeroProgress': [_updateRankedBattlesHeroProgress]})
 
 
 ACHIEVEMENT7X7_DEPENDENCIES = {}
@@ -543,6 +544,14 @@ def _updateMaxWFC2014WinSeries(dossierDescr, dossierBlockDescr, key, value, prev
 def _updateMaxEFC2016WinSeries(dossierDescr, dossierBlockDescr, key, value, prevValue):
     if value > dossierBlockDescr['maxEFC2016WinSeries']:
         dossierBlockDescr['maxEFC2016WinSeries'] = value
+
+
+def _updateRankedBattlesHeroProgress(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value >= 1:
+        dossierDescr['singleAchievements']['rankedBattlesHero'] = 1
+        dossierDescr.addPopUp('singleAchievements', 'rankedBattlesHero', 1)
+    elif value == 0:
+        dossierDescr['singleAchievements']['rankedBattlesHero'] = 0
 
 
 def _updateReliableComrade(dossierDescr, dossierBlockDescr, key, value, prevValue):

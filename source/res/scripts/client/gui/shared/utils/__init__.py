@@ -12,13 +12,11 @@ import AccountCommands
 import Settings
 import constants
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG, LOG_WARNING
-from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from helpers import getLanguageCode, i18n
 from items import vehicles as vehs_core
 from account_helpers import getAccountDatabaseID
 from account_helpers.AccountSettings import AccountSettings
 from avatar_helpers import getAvatarDatabaseID
-from graphics import GRAPHICS_SETTINGS
 SHELLS_COUNT_PROP_NAME = 'shellsCount'
 RELOAD_TIME_PROP_NAME = 'reloadTime'
 RELOAD_MAGAZINE_TIME_PROP_NAME = 'reloadMagazineTime'

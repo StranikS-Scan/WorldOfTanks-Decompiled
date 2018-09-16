@@ -1,18 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/data/faq_data.py
+import inspect
+import logging
 from collections import namedtuple
-import re
-from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
-from gui.Scaleform.locale.FAQ import FAQ as I18N_FAQ
+from gui.impl.gen import R
+from gui.impl.gen_utils import INVALID_RESOURCE_ID
 from gui.shared.events import OpenLinkEvent
-from helpers import i18n
+from helpers import dependency
 from messenger import g_settings
-QUESTION_PATTERN = re.compile('^\\#faq:question_(\\d+)$')
-ANSWER_FORMAT = '#faq:answer_{0:d}'
+from skeletons.gui.impl import IGuiLoader
+_logger = logging.getLogger(__name__)
+QUESTION_FORMAT = 'question_{0:d}'
+ANSWER_FORMAT = 'answer_{0:d}'
 SUPPORTED_LINKS_EVENTS = (OpenLinkEvent.SUPPORT,)
 FAQItem = namedtuple('FAQItem', ('number', 'question', 'answer'))
 
 class FAQList(object):
+    gui = dependency.descriptor(IGuiLoader)
 
     def __init__(self):
         super(FAQList, self).__init__()
@@ -46,41 +50,45 @@ class FAQList(object):
         return links
 
     def __buildList(self):
-        faq = []
-        for questionKey in I18N_FAQ.QUESTION_ENUM:
-            sreMatch = QUESTION_PATTERN.match(questionKey)
-            if sreMatch is not None and sreMatch.groups():
-                number = int(sreMatch.groups()[0])
-                answerKey = ANSWER_FORMAT.format(number)
-                if answerKey in I18N_FAQ.ANSWER_ENUM:
-                    answer = i18n.makeString(answerKey)
-                else:
-                    answer = self.__findAnswerWithSuffix(answerKey)
-                if answer:
-                    faq.append(FAQItem(number, i18n.makeString(questionKey), answer))
-                else:
-                    LOG_ERROR('Answer is not found', number)
+        result = []
+        faq = R.strings.faq
+        length = faq.length()
+        translation = self.gui.resourceManager.getTranslatedText
+        for number in xrange(1, length + 1):
+            questionID = faq.dyn(QUESTION_FORMAT.format(number))
+            if questionID == INVALID_RESOURCE_ID:
+                continue
+            question = translation(questionID)
+            answerID = faq.dyn(ANSWER_FORMAT.format(number))
+            if answerID == INVALID_RESOURCE_ID:
+                _logger.error('Answer %d is not found', number)
+                continue
+            elif inspect.isclass(answerID):
+                answer = self.__findAnswerWithSuffix(answerID)
+            else:
+                answer = translation(answerID)
+            result.append(FAQItem(number, question, answer))
 
-        return sorted(faq, cmp=lambda item, other: cmp(item.number, other.number))
+        return sorted(result, key=lambda item: item.number)
 
     def __formatLinksInAnswer(self, answer):
         try:
             answer = answer.format(**self.__links)
         except (ValueError, TypeError, KeyError):
-            LOG_CURRENT_EXCEPTION()
+            _logger.exception('Link can not be added to answer')
 
         return answer
 
-    def __findAnswerWithSuffix(self, answerKey):
-        result = None
+    def __findAnswerWithSuffix(self, answerID):
+        result = INVALID_RESOURCE_ID
         for suffix, methodName in self.__extraFormats.iteritems():
-            nextKey = '{0}/{1}'.format(answerKey, suffix)
-            if nextKey in I18N_FAQ.ANSWER_ENUM:
+            nextID = answerID.dyn(suffix)
+            if nextID != INVALID_RESOURCE_ID:
                 method = getattr(self, methodName, None)
                 if method and callable(method):
-                    result = method(i18n.makeString(nextKey))
+                    result = method(self.gui.resourceManager.getTranslatedText(nextID))
                 else:
-                    LOG_ERROR('Method is not found', methodName)
+                    _logger.error('Method %s is not found', methodName)
                 break
 
         return result

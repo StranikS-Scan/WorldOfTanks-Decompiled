@@ -51,10 +51,14 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.bootcamp.BCHangar import BCHangar
     from gui.Scaleform.daapi.view.bootcamp.BCTechnicalMaintenance import BCTechnicalMaintenance
     from gui.Scaleform.daapi.view.lobby.hangar.epic_battles_widget import EpicBattlesWidget
+    from gui.Scaleform.daapi.view.lobby.manual.manual_main_view import ManualMainView
+    from gui.Scaleform.daapi.view.lobby.manual.manual_chapter_view import ManualChapterView
     return (ConditionalViewSettings(VIEW_ALIAS.LOBBY_HANGAR, BootcampComponentOverride(Hangar, BCHangar), 'hangar.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.LOBBY_HANGAR, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_ACADEMY, Academy, 'academyView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_ACADEMY, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_STRONGHOLD, StrongholdView, 'StrongholdView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_STRONGHOLD, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.BROWSER_VIEW, BrowserView, 'browserView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
+     ViewSettings(VIEW_ALIAS.WIKI_VIEW, ManualMainView, 'manual.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.WIKI_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.MANUAL_CHAPTER_VIEW, ManualChapterView, 'manualChapterView.swf', ViewTypes.LOBBY_TOP_SUB, VIEW_ALIAS.MANUAL_CHAPTER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
      GroupedViewSettings(VIEW_ALIAS.CREW_ABOUT_DOG_WINDOW, CrewAboutDogWindow, 'simpleWindow.swf', ViewTypes.WINDOW, 'aboutDogWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      ConditionalViewSettings(VIEW_ALIAS.TECHNICAL_MAINTENANCE, BootcampComponentOverride(TechnicalMaintenance, BCTechnicalMaintenance), 'technicalMaintenance.swf', ViewTypes.WINDOW, '', None, BootcampComponentOverride(ScopeTemplates.DEFAULT_SCOPE, ScopeTemplates.LOBBY_SUB_SCOPE)),
      GroupedViewSettings(VIEW_ALIAS.BOOSTER_BUY_WINDOW, BoosterBuyWindow, 'boosterBuyWindow.swf', ViewTypes.WINDOW, VIEW_ALIAS.BOOSTER_BUY_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
@@ -101,7 +105,9 @@ class HangarPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.BOOSTER_SELECT_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.OPT_DEVICES_SELECT_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLES_FILTER_POPOVER, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.BATTLE_ABILITY_SELECT_POPOVER, self.loadViewByCtxEvent))
+         (VIEW_ALIAS.BATTLE_ABILITY_SELECT_POPOVER, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.WIKI_VIEW, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.MANUAL_CHAPTER_VIEW, self.loadViewByCtxEvent))
         super(HangarPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
 
     def loadAcademy(self, event):

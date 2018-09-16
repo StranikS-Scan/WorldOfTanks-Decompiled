@@ -2,13 +2,15 @@
 # Embedded file name: scripts/client/bootcamp/hints/HintsLobby.py
 import time
 import math
-import weakref
 from copy import copy
 from bootcamp.BootcampConstants import HINT_TYPE
 from HintsBase import HintBase, HINT_COMMAND
 from AvatarInputHandler import mathUtils
+from helpers import dependency
+from skeletons.gui.shared.utils import IHangarSpace
 
 class HintLobbyRotate(HintBase):
+    hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self, params):
         super(HintLobbyRotate, self).__init__(None, HINT_TYPE.HINT_ROTATE_LOBBY, params['timeout'])
@@ -16,16 +18,15 @@ class HintLobbyRotate(HintBase):
         self.__neededAngle = math.radians(params['angle'])
         self.__curAngle = 0.0
         self.__cancelAngle = params.get('cancelAngle', 0.2)
-        self.__hangarSpace = None
         return
 
     def update(self):
         if self._state == HintBase.STATE_INACTIVE or self._state == HintBase.STATE_COMPLETE:
             return
-        elif self.__hangarSpace is None or self.__hangarSpace.space is None:
+        elif self.hangarSpace is None or self.hangarSpace.space is None:
             return
         else:
-            camera = self.__hangarSpace.space.camera
+            camera = self.hangarSpace.space.camera
             if camera is None:
                 return
             elif self.__prevCameraDirection is None:
@@ -55,10 +56,6 @@ class HintLobbyRotate(HintBase):
     def start(self):
         self._state = HintBase.STATE_DEFAULT
         self._timeStart = time.time()
-        from gui.shared.utils.HangarSpace import g_hangarSpace
-        self.__hangarSpace = weakref.proxy(g_hangarSpace)
 
     def stop(self):
         self._state = HintBase.STATE_INACTIVE
-        self.__hangarSpace = None
-        return

@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/m_constants.py
 from collections import namedtuple
-from helpers import i18n
 MESSENGER_XML_FILE = 'messenger'
 MESSENGER_I18N_FILE = 'messenger'
 MESSENGER_XML_FILE_PATH = 'gui/{0:>s}.xml'.format(MESSENGER_XML_FILE)
@@ -60,7 +59,7 @@ class BATTLE_CHANNEL(object):
         return True
 
 
-USER_DEFAULT_NAME_PREFIX = i18n.makeString('#settings:defaultNamePrefix')
+USER_DEFAULT_NAME_PREFIX = '#settings:defaultNamePrefix'
 
 class USER_TAG(object):
     CACHED = 'cached'

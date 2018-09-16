@@ -17,11 +17,11 @@ from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.server_events import caches as quests_caches
 from gui.server_events.personal_missions_controller import PersonalMissionsController
 from gui.server_events.event_items import EventBattles, createQuest, createAction, MotiveQuest
-from gui.server_events.formatters import isMarathon, getLinkedActionID
+from gui.server_events.events_helpers import isMarathon, isLinkedSet
+from gui.server_events.formatters import getLinkedActionID
 from gui.server_events.modifiers import ACTION_SECTION_TYPE, ACTION_MODIFIER_TYPE, clearModifiersCache
 from gui.server_events.prefetcher import Prefetcher
 from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM as aei
-from gui.shared.utils.RareAchievementsCache import g_rareAchievesCache
 from gui.shared.utils.requesters.QuestsProgressRequester import QuestsProgressRequester
 from helpers import dependency
 from helpers import isPlayerAccount
@@ -31,6 +31,8 @@ from quest_cache_helpers import readQuestsFromFile
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.shared.utils import IRaresCache
+from skeletons.gui.linkedset import ILinkedSetController
 
 def _defaultQuestMaker(qID, qData, progress):
     return createQuest(qData.get('type', 0), qID, qData, progress.getQuestProgress(qID), progress.getTokenExpiryTime(qData.get('requiredToken')))
@@ -47,6 +49,8 @@ class EventsCache(IEventsCache):
      EVENT_TYPE.PERSONAL_MISSION)
     SYSTEM_QUESTS = (EVENT_TYPE.REF_SYSTEM_QUEST,)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    rareAchievesCache = dependency.descriptor(IRaresCache)
+    linkedSet = dependency.descriptor(ILinkedSetController)
 
     def __init__(self):
         self.__waitForSync = False
@@ -186,7 +190,7 @@ class EventsCache(IEventsCache):
         filterFunc = filterFunc or (lambda a: True)
 
         def userFilterFunc(q):
-            return q.getFinishTimeLeft() and filterFunc(q)
+            return False if isLinkedSet(q.getGroupID()) and not self.linkedSet.isLinkedSetEnabled() else q.getFinishTimeLeft() and filterFunc(q)
 
         return self.getQuests(userFilterFunc)
 
@@ -194,9 +198,11 @@ class EventsCache(IEventsCache):
         filterFunc = filterFunc or (lambda a: True)
 
         def userFilterFunc(q):
-            if q.getType() == EVENT_TYPE.MOTIVE_QUEST and not q.isAvailable()[0]:
+            if q.getType() == EVENT_TYPE.MOTIVE_QUEST and not q.isAvailable().isValid:
                 return False
-            return False if q.getType() == EVENT_TYPE.TOKEN_QUEST and isMarathon(q.getID()) else filterFunc(q)
+            if q.getType() == EVENT_TYPE.TOKEN_QUEST and isMarathon(q.getID()):
+                return False
+            return False if isLinkedSet(q.getGroupID()) and not q.isAvailable().isValid else filterFunc(q)
 
         return self.getActiveQuests(userFilterFunc)
 
@@ -205,6 +211,14 @@ class EventsCache(IEventsCache):
 
         def userFilterFunc(q):
             return q.getType() == EVENT_TYPE.MOTIVE_QUEST and filterFunc(q)
+
+        return self.getQuests(userFilterFunc)
+
+    def getLinkedSetQuests(self, filterFunc=None):
+        filterFunc = filterFunc or (lambda a: True)
+
+        def userFilterFunc(q):
+            return isLinkedSet(q.getGroupID()) and filterFunc(q)
 
         return self.getQuests(userFilterFunc)
 
@@ -392,6 +406,9 @@ class EventsCache(IEventsCache):
     def getCompensation(self, tokenID):
         return self.__compensations.get(tokenID)
 
+    def hasQuestDelayedRewards(self, questID):
+        return self.__questsProgress.hasQuestDelayedRewards(questID)
+
     def _getQuests(self, filterFunc=None, includePersonalMissions=False):
         result = {}
         groups = {}
@@ -565,7 +582,7 @@ class EventsCache(IEventsCache):
                     invalidateTimeLeft = min(invalidateTimeLeft, intervalBeginTimeLeft + intervalEnd - intervalStart)
             invalidateTimeLeft = min(invalidateTimeLeft, q.getFinishTimeLeft())
 
-        g_rareAchievesCache.request(rareAchieves)
+        self.rareAchievesCache.request(rareAchieves)
         for q in self.getFutureEvents().itervalues():
             timeLeftInfo = q.getNearestActivityTimeLeft()
             if timeLeftInfo is None:

@@ -25,7 +25,6 @@ from gui.shared.economics import getGUIPrice
 from gui.shared.formatters import text_styles, icons
 from gui.shared.money import Currency
 from gui.shared.tooltips.formatters import getActionPriceData
-from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -33,6 +32,7 @@ from skeletons.gui.game_control import IVehicleComparisonBasket, ITradeInControl
 from skeletons.gui.shared import IItemsCache
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from HeroTank import HeroTank
+from skeletons.gui.shared.utils import IHangarSpace
 CREW_INFO_TAB_ID = 'crewInfoTab'
 FACT_SHEET_TAB_ID = 'factSheetTab'
 TAB_ORDER = [FACT_SHEET_TAB_ID, CREW_INFO_TAB_ID]
@@ -59,6 +59,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     restores = dependency.descriptor(IRestoreController)
     heroTanks = dependency.descriptor(IHeroTankController)
     bootcamp = dependency.descriptor(IBootcampController)
+    hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self, ctx=None, skipConfirm=False):
         LobbySelectableView.__init__(self, ctx)
@@ -96,8 +97,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.comparisonBasket.onChange += self.__onCompareBasketChanged
         self.comparisonBasket.onSwitchChange += self.__updateHeaderData
         self.restores.onRestoreChangeNotify += self.__onRestoreChanged
-        g_hangarSpace.onSpaceCreate += self.__onHangarCreateOrRefresh
-        g_hangarSpace.setVehicleSelectable(True)
+        self.hangarSpace.onSpaceCreate += self.__onHangarCreateOrRefresh
+        self.hangarSpace.setVehicleSelectable(True)
         if g_currentPreviewVehicle.isPresent():
             self.__fullUpdate()
         else:
@@ -113,8 +114,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.comparisonBasket.onChange -= self.__onCompareBasketChanged
         self.comparisonBasket.onSwitchChange -= self.__updateHeaderData
         self.restores.onRestoreChangeNotify -= self.__onRestoreChanged
-        g_hangarSpace.onSpaceCreate -= self.__onHangarCreateOrRefresh
-        g_hangarSpace.setVehicleSelectable(self.__keepVehicleSelectionEnabled)
+        self.hangarSpace.onSpaceCreate -= self.__onHangarCreateOrRefresh
+        self.hangarSpace.setVehicleSelectable(self.__keepVehicleSelectionEnabled)
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.handleSelectedEntityUpdated)
         if self._needToResetAppearance:
             g_currentPreviewVehicle.selectNoVehicle()
@@ -155,7 +156,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
                 if descriptor:
                     self._needToResetAppearance = False
                     event_dispatcher.showHeroTankPreview(descriptor.type.compactDescr, previewAlias=VIEW_ALIAS.VEHICLE_PREVIEW, previousBackAlias=self._backAlias)
-            elif entity.id == g_hangarSpace.space.vehicleEntityId:
+            elif entity.id == self.hangarSpace.space.vehicleEntityId:
                 self.__processBackClick({'entity': entity})
         return
 

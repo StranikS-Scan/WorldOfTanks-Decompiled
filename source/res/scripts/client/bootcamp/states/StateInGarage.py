@@ -13,9 +13,11 @@ from gui.app_loader.settings import APP_NAME_SPACE
 from helpers import dependency, aop
 from skeletons.gui.lobby_context import ILobbyContext
 from PlayerEvents import g_playerEvents
+from skeletons.gui.shared.utils import IHangarSpace
 
 class StateInGarage(AbstractState):
     lobbyContext = dependency.descriptor(ILobbyContext)
+    hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self):
         super(StateInGarage, self).__init__(STATE.IN_GARAGE)
@@ -36,10 +38,9 @@ class StateInGarage(AbstractState):
     def _doDeactivate(self):
         g_eventBus.removeListener(AppLifeCycleEvent.INITIALIZED, self.__onSfAppInited, EVENT_BUS_SCOPE.GLOBAL)
         self.__weaver.clear()
-        from gui.shared.utils.HangarSpace import g_hangarSpace
         g_currentVehicle.destroy()
         g_currentPreviewVehicle.destroy()
-        g_hangarSpace.destroy()
+        self.hangarSpace.destroy()
 
     def __onSfAppInited(self, event=None):
         LOG_DEBUG_DEV_BOOTCAMP('StateInGarage.__onSfAppInited')

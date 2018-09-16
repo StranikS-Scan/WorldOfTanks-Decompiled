@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/app_factory.py
+import logging
 import BattleReplay
 from constants import ARENA_GUI_TYPE
-from debug_utils import LOG_DEBUG
-from gui import DialogsInterface, GUI_SETTINGS
+from gui import GUI_SETTINGS
 from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from gui.Scaleform.battle_entry import BattleEntry
 from gui.Scaleform.daapi.settings import config as sf_config
@@ -16,24 +16,26 @@ from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
 from shared_utils import AlwaysValidObject
 from skeletons.gui.game_control import IBootcampController
+_logger = logging.getLogger(__name__)
+_logger.addHandler(logging.NullHandler())
 _SPACE = app_settings.APP_NAME_SPACE
 
 class NoAppFactory(AlwaysValidObject, interfaces.IAppFactory):
 
     def createLobby(self):
-        LOG_DEBUG('NoAppFactory.createLobby')
+        _logger.debug('NoAppFactory.createLobby')
 
     def destroyLobby(self):
-        LOG_DEBUG('NoAppFactory.destroyLobby')
+        _logger.debug('NoAppFactory.destroyLobby')
 
     def reloadLobbyPackages(self):
-        LOG_DEBUG('NoAppFactory.reloadLobbyPackages')
+        _logger.debug('NoAppFactory.reloadLobbyPackages')
 
     def createBattle(self, _):
-        LOG_DEBUG('NoAppFactory.createBattle')
+        _logger.debug('NoAppFactory.createBattle')
 
     def destroyBattle(self):
-        LOG_DEBUG('NoAppFactory.destroyBattle')
+        _logger.debug('NoAppFactory.destroyBattle')
 
 
 class AS3_AppFactory(interfaces.IAppFactory):
@@ -70,7 +72,7 @@ class AS3_AppFactory(interfaces.IAppFactory):
         return self.__apps[_SPACE.SF_BATTLE]
 
     def createLobby(self):
-        LOG_DEBUG('Creating app', _SPACE.SF_LOBBY)
+        _logger.info('Creating app: %s', _SPACE.SF_LOBBY)
         lobby = self.__apps[_SPACE.SF_LOBBY]
         if lobby is None:
             lobby = LobbyEntry(_SPACE.SF_LOBBY)
@@ -82,7 +84,7 @@ class AS3_AppFactory(interfaces.IAppFactory):
         return
 
     def reloadLobbyPackages(self):
-        LOG_DEBUG('Reload app', _SPACE.SF_LOBBY)
+        _logger.info('Reload app: %s', _SPACE.SF_LOBBY)
         lobby = self.__apps[_SPACE.SF_LOBBY]
         if lobby is not None:
             self.__importer.load(lobby.proxy, sf_config.COMMON_PACKAGES + sf_config.LOBBY_PACKAGES)
@@ -92,7 +94,7 @@ class AS3_AppFactory(interfaces.IAppFactory):
         if _SPACE.SF_LOBBY in self.__apps:
             lobby = self.__apps[_SPACE.SF_LOBBY]
             if lobby:
-                LOG_DEBUG('Destroying app', _SPACE.SF_LOBBY)
+                _logger.info('Destroying app: %s', _SPACE.SF_LOBBY)
                 lobby.close()
                 self.__importer.unload(self.__packages[_SPACE.SF_LOBBY])
                 self.__apps[_SPACE.SF_LOBBY] = None
@@ -100,24 +102,24 @@ class AS3_AppFactory(interfaces.IAppFactory):
         return
 
     def showLobby(self):
-        LOG_DEBUG('Shows lobby application')
+        _logger.debug('Shows lobby application')
         self._setActive(_SPACE.SF_LOBBY, True)
-        BattleReplay.g_replayCtrl.onCommonSwfLoaded()
+        BattleReplay.g_replayCtrl.disableTimeWrap()
 
     def hideLobby(self):
-        LOG_DEBUG('Hides lobby application')
+        _logger.debug('Hides lobby application')
         self._setActive(_SPACE.SF_LOBBY, False)
 
     def showBattle(self):
-        LOG_DEBUG('Shows battle application')
+        _logger.debug('Shows battle application')
         self._setActive(_SPACE.SF_BATTLE, True)
 
     def hideBattle(self):
-        LOG_DEBUG('Hides battle application')
+        _logger.debug('Hides battle application')
         self._setActive(_SPACE.SF_BATTLE, False)
 
     def createBattle(self, arenaGuiType):
-        LOG_DEBUG('Creating app', _SPACE.SF_BATTLE)
+        _logger.info('Creating app: %s', _SPACE.SF_BATTLE)
         battle = self.__apps[_SPACE.SF_BATTLE]
         if not battle:
             battle = BattleEntry(_SPACE.SF_BATTLE)
@@ -129,13 +131,14 @@ class AS3_AppFactory(interfaces.IAppFactory):
             self.__packages[_SPACE.SF_BATTLE] = packages
             self.__importer.load(battle.proxy, sf_config.COMMON_PACKAGES + packages)
             self.__apps[_SPACE.SF_BATTLE] = battle
-        BattleReplay.g_replayCtrl.onBattleSwfLoaded()
+        BattleReplay.g_replayCtrl.enableTimeWrap()
+        BattleReplay.g_replayCtrl.loadServerSettings()
         battle.active(True)
         battle.component.visible = False
         battle.detachCursor()
 
     def destroyBattle(self):
-        LOG_DEBUG('Destroying app', _SPACE.SF_BATTLE)
+        _logger.info('Destroying app: %s', _SPACE.SF_BATTLE)
         if _SPACE.SF_BATTLE in self.__apps:
             battle = self.__apps[_SPACE.SF_BATTLE]
             if battle:
@@ -148,41 +151,41 @@ class AS3_AppFactory(interfaces.IAppFactory):
         if appNS not in self.__apps:
             return
         else:
-            LOG_DEBUG('Attach cursor', appNS)
+            _logger.debug('Attach cursor: %s', appNS)
             app = self.__apps[appNS]
             if app is not None:
                 app.attachCursor(flags=flags)
             else:
-                LOG_DEBUG('Can not attach cursor because of app is not found', appNS)
+                _logger.debug('Can not attach cursor because of app is not found: %s', appNS)
             return
 
     def detachCursor(self, appNS):
         if appNS not in self.__apps:
             return
         else:
-            LOG_DEBUG('Detach cursor', appNS)
+            _logger.debug('Detach cursor: %s', appNS)
             app = self.__apps[appNS]
             if app is not None:
                 app.detachCursor()
             else:
-                LOG_DEBUG('Can not detach cursor because of app is not found', appNS)
+                _logger.debug('Can not detach cursor because of app is not found: %s', appNS)
             return
 
     def syncCursor(self, appNS, flags=_CTRL_FLAG.GUI_ENABLED):
         if appNS not in self.__apps:
             return
         else:
-            LOG_DEBUG('Attach cursor', appNS)
+            _logger.debug('Attach cursor: %s', appNS)
             app = self.__apps[appNS]
             if app is not None:
                 app.syncCursor(flags=flags)
             else:
-                LOG_DEBUG('Can not attach cursor because of app is not found', appNS)
+                _logger.debug('Can not attach cursor because of app is not found: %s', appNS)
             return
 
     def destroy(self):
         for appNS in self.__apps.iterkeys():
-            LOG_DEBUG('Destroying app', appNS)
+            _logger.info('Destroying app: %s', appNS)
             entry = self.__apps[appNS]
             if entry:
                 entry.close()
@@ -243,10 +246,6 @@ class AS3_AppFactory(interfaces.IAppFactory):
         battle = self.__apps[_SPACE.SF_BATTLE]
         if battle:
             self._toggleBattleLoading(False)
-
-    def showDisconnectDialog(self, appNS, description):
-        if appNS == _SPACE.SF_LOBBY:
-            DialogsInterface.showDisconnect(*description)
 
     def handleKey(self, appNS, isDown, key, mods):
         app = self.getApp(appNS=appNS)

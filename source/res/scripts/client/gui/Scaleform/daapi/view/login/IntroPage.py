@@ -9,8 +9,8 @@ from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3, DEFAULT_VIDEO_BUFFERING_TIME as _DEFAULT_BUFFERING
 from gui.Scaleform.daapi.view.meta.IntroPageMeta import IntroPageMeta
 from gui.doc_loaders.GuiDirReader import GuiDirReader
-from gui.shared import events
-from helpers import isIntroVideoSettingChanged, writeIntroVideoSetting, uniprof
+from helpers import isIntroVideoSettingChanged, writeIntroVideoSetting, dependency, uniprof
+from skeletons.gameplay import IGameplayLogic, GUIEventID
 _VideoSettings = namedtuple('_VideoSettings', ['canBeSkipped'])
 
 def _getCompalsoryVideoSettings(path):
@@ -22,6 +22,7 @@ def _getCompalsoryVideoSettings(path):
 
 
 class IntroPage(IntroPageMeta):
+    gameplay = dependency.descriptor(IGameplayLogic)
 
     def __init__(self, _=None):
         super(IntroPage, self).__init__()
@@ -91,4 +92,4 @@ class IntroPage(IntroPageMeta):
             LOG_ERROR(msg)
         if self.__writeSetting:
             writeIntroVideoSetting()
-        self.fireEvent(events.GlobalSpaceEvent(events.GlobalSpaceEvent.GO_NEXT))
+        self.gameplay.postStateEvent(GUIEventID.INTRO_VIDEO_FINISHED)

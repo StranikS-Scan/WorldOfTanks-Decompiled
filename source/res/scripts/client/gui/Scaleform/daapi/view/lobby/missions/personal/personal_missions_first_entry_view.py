@@ -4,7 +4,6 @@ from adisp import process
 from gui import GUI_SETTINGS
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.shared.web_handlers import handleHangarSoundCommand, handleHangarSoundCommandFini
 from gui.Scaleform.daapi.view.meta.PersonalMissionFirstEntryViewMeta import PersonalMissionFirstEntryViewMeta
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -17,7 +16,7 @@ from gui.shared.formatters import text_styles, icons
 from helpers import i18n, dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBrowserController
-from web_client_api.commands import createHangarSoundHandler
+from web_client_api.sound import HangarSoundWebApi
 
 class PersonalMissionFirstEntryView(LobbySubView, PersonalMissionFirstEntryViewMeta):
     browserCtrl = dependency.descriptor(IBrowserController)
@@ -74,4 +73,4 @@ class PersonalMissionFirstEntryView(LobbySubView, PersonalMissionFirstEntryViewM
         return self.browserCtrl.getBrowser(self.__currentVersionBrowserID)
 
     def __createWebHandlers(self):
-        return [createHangarSoundHandler(handleHangarSoundCommand, handleHangarSoundCommandFini)]
+        return HangarSoundWebApi().getHandlers()

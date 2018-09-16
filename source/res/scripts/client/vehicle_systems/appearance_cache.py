@@ -115,6 +115,9 @@ class _AppearanceCache(object):
                 return
             if _ENABLE_CACHE_TRACKER:
                 LOG_DEBUG('Appearance cache. Constructed vID = {0}'.format(vId))
+            if not resourceRefs.has_key(assemblerData.info.typeDescr.name):
+                LOG_WARNING('Loaded appearance is not latest requested appearance, construction of the appearance is skipped ', assemblerData.info.typeDescr.name, resourceRefs)
+                return
             assemblerData.info.typeDescr.keepPrereqs(resourceRefs)
             assembler.appearance.start(resourceRefs)
             assembler.constructAppearance(BigWorld.player().playerVehicleID == vId, resourceRefs)
@@ -137,6 +140,13 @@ class _AppearanceCache(object):
         prereqs = info.typeDescr.prerequisites(True)
         compoundAssembler, assemblerPrereqs = assembler.prerequisites(info.typeDescr, vId, info.health, info.isCrewActive, info.isTurretDetached, info.outfitCD)
         prereqs += assemblerPrereqs
+        if vId in self.__assemblersCache:
+            assemblerData = self.__assemblersCache.get(vId, None)
+            if assemblerData is not None:
+                oldAssembler = assemblerData.assembler
+                LOG_WARNING('The latest resources for the vehicle are not loaded yet, deleting old assember and creating new one %s %s' % (info.typeDescr.name, assemblerData.info.typeDescr))
+                del oldAssembler
+            del self.__assemblersCache[vId]
         self.__assemblersCache[vId] = _AssemblerData(compoundAssembler, assembler, info, prereqs)
         if self.__spaceLoaded:
             BigWorld.loadResourceListBG(prereqs, partial(_resourceLoaded, prereqs, vId), loadingPriority(vId))

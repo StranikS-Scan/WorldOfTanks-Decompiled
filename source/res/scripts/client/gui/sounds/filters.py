@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/sounds/filters.py
 import WWISE
 from gui.sounds.sound_constants import SoundFilters
+STATE_HANGAR_FILTERED = 'STATE_hangar_filtered'
 
 class _SoundFilterAbstract(object):
 
@@ -70,7 +71,7 @@ class WWISEFortAmbientFilter(_FortAmbientFilter, _WWISEStateAmbient):
 class WWISEFilteredHangarFilter(_WWISEStateAmbient):
 
     def __init__(self):
-        _WWISEStateAmbient.__init__(self, 'STATE_hangar_filtered')
+        _WWISEStateAmbient.__init__(self, STATE_HANGAR_FILTERED)
 
     def stopView(self, view):
         view.soundManager.clear(stopPersistent=True)

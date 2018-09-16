@@ -175,6 +175,7 @@ class VEH_COMPARE(object):
     VEHCONF_TOOLTIPS_CAMOTITLE = '#veh_compare:vehConf/tooltips/camoTitle'
     VEHCONF_CREWTITLE = '#veh_compare:vehConf/crewTitle'
     VEHCONF_TOOLTIPS_CAMOINFO = '#veh_compare:vehConf/tooltips/camoInfo'
+    VEHCONF_TOOLTIPS_DEFCAMOINFO = '#veh_compare:vehConf/tooltips/defCamoInfo'
     VEHCONF_TOOLTIPS_CAMOINFODISABLED_HEADER = '#veh_compare:vehConf/tooltips/camoInfoDisabled/header'
     VEHCONF_TOOLTIPS_CAMOINFODISABLED_BODY = '#veh_compare:vehConf/tooltips/camoInfoDisabled/body'
     VEHCONF_TOOLTIPS_SKILLS_HEADER = '#veh_compare:vehConf/tooltips/skills/header'

@@ -60,6 +60,9 @@ class _ComponentsBridge(object):
         self.__componentToCrl = defaultdict(list)
 
     def clear(self):
+        for componentID in self.__componentToCrl:
+            self.removeViewComponent(componentID)
+
         self.__components.clear()
         self.__ctrls.clear()
         self.__indexes.clear()

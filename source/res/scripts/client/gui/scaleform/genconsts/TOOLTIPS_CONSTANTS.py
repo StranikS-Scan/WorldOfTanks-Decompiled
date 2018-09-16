@@ -5,7 +5,6 @@
 class TOOLTIPS_CONSTANTS(object):
     DEFAULT = 'default'
     TANKMAN = 'tankman'
-    SEASONS = 'seasons'
     CONTACT = 'contact'
     BATTLE_STATS_ACHIEVS = 'battleStatsAchievementData'
     ACHIEVEMENT = 'achievement'
@@ -55,6 +54,7 @@ class TOOLTIPS_CONSTANTS(object):
     SETTINGS_BUTTON = 'settingsButton'
     CUSTOMIZATION_ITEM = 'customizationItem'
     TECH_CUSTOMIZATION_ITEM = 'techCustomizationItem'
+    TECH_CUSTOMIZATION_HISTORIC_ITEM = 'techCustomizationHistoricItem'
     VEHICLE_FILTER = 'vehicleFilter'
     LADDER = 'ladder'
     CLAN_INFO = 'clanInfo'
@@ -72,6 +72,7 @@ class TOOLTIPS_CONSTANTS(object):
     CYBER_SPORT_VEHICLE_NOT_READY = 'cyberSportVehicleNotReady'
     SQUAD_SLOT_VEHICLE_SELECTED = 'squadSlotVehicleSelected'
     SORTIE_DIVISION = 'sortieDivision'
+    MARATHON_QUESTS_PREVIEW = 'marathonQuestsPreview'
     QUESTS_PREVIEW = 'questsPreview'
     EVENT_QUESTS_PREVIEW = 'EventQuestsPreview'
     PERSONAL_QUESTS_PREVIEW = 'presonalQuestsPreview'
@@ -158,7 +159,6 @@ class TOOLTIPS_CONSTANTS(object):
     EPIC_SELECTOR_UNAVAILABLE_INFO = 'epicSelectorUnavailableInfo'
     BLOCKS_DEFAULT_UI = 'ToolTipInblocksDefaultUI'
     TANKMEN_UI = 'ToolTipTankmenUI'
-    SEASONS_UI = 'ToolTipSeasonsUI'
     TANKMEN_SKILL_UI = 'ToolTipSkillUI'
     TANKMEN_BUY_SKILL_UI = 'ToolTipBuySkillUI'
     ACHIEVEMENT_UI = 'ToolTipAchievementUI'
@@ -280,7 +280,7 @@ class TOOLTIPS_CONSTANTS(object):
      VEHICLE_ELITE_BONUS,
      VEHICLE_HISTORICAL_REFERENCE,
      BATTLE_TRAINING]
-    CUSTOMIZATION_SET = [TECH_CUSTOMIZATION_ITEM]
+    CUSTOMIZATION_SET = [TECH_CUSTOMIZATION_ITEM, TECH_CUSTOMIZATION_HISTORIC_ITEM]
     CYBER_SPORT_SET = [CYBER_SPORT_SLOT,
      CYBER_SPORT_SLOT_SELECTED,
      CYBER_SPORT_SELECTED_VEHICLE,
@@ -312,6 +312,7 @@ class TOOLTIPS_CONSTANTS(object):
      MISSION_VEHICLE_TYPE,
      ADDITIONAL_AWARDS,
      UNAVAILABLE_QUEST]
+    MARATHON_SET = [MARATHON_QUESTS_PREVIEW]
     TANKMAN_SET = [TANKMAN,
      TANKMAN_SKILL,
      TANKMAN_NEW_SKILL,
@@ -376,4 +377,3 @@ class TOOLTIPS_CONSTANTS(object):
      INVENTORY_SHELL,
      TECH_MAIN_SHELL]
     WGM_CURRENCY_SET = [GOLD_STATS, CREDITS_STATS]
-    SEASONS_SET = [SEASONS]

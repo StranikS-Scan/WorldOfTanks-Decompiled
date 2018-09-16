@@ -10,7 +10,7 @@ from gui.battle_control import avatar_getter, vehicle_getter
 from gui.battle_control.arena_info import settings
 from gui.shared.gui_items import Vehicle
 from gui.shared.gui_items.Vehicle import VEHICLE_TAGS, VEHICLE_CLASS_NAME
-from helpers import dependency
+from helpers import dependency, i18n
 from skeletons.gui.server_events import IEventsCache
 _INVALIDATE_OP = settings.INVALIDATE_OP
 _VEHICLE_STATUS = settings.VEHICLE_STATUS
@@ -127,7 +127,7 @@ class PlayerInfoVO(object):
         return invalidate
 
     def getPlayerLabel(self):
-        return self.name if self.name else settings.UNKNOWN_PLAYER_NAME
+        return self.name if self.name else i18n.makeString(settings.UNKNOWN_PLAYER_NAME)
 
     def getRandomPersonalMissions(self):
         pQuests = self.eventsCache.random.getQuests()
@@ -184,20 +184,21 @@ class VehicleTypeInfoVO(object):
             self.iconName = settings.makeVehicleIconName(vName)
             self.iconPath = settings.makeContourIconSFPath(vName)
         else:
+            vehicleName = i18n.makeString(settings.UNKNOWN_VEHICLE_NAME)
             self.compactDescr = 0
             self.classTag = None
             self.isObserver = False
             self.isPremiumIGR = False
             self.turretYawLimits = None
-            self.shortName = settings.UNKNOWN_VEHICLE_NAME
-            self.name = settings.UNKNOWN_VEHICLE_NAME
-            self.guiName = settings.UNKNOWN_VEHICLE_NAME
-            self.shortNameWithPrefix = settings.UNKNOWN_VEHICLE_NAME
+            self.shortName = vehicleName
+            self.name = vehicleName
+            self.guiName = vehicleName
+            self.shortNameWithPrefix = vehicleName
             self.nationID = nations.NONE_INDEX
             self.level = settings.UNKNOWN_VEHICLE_LEVEL
             self.iconName = settings.UNKNOWN_CONTOUR_ICON_NAME
             self.iconPath = settings.UNKNOWN_CONTOUR_ICON_SF_PATH
-            self.shortNameWithPrefix = settings.UNKNOWN_VEHICLE_NAME
+            self.shortNameWithPrefix = vehicleName
             self.maxHealth = None
         return
 

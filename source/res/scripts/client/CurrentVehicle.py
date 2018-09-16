@@ -20,19 +20,16 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.Waiting import Waiting
 from skeletons.gui.game_control import IIGRController, IRentalsController
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.shared.utils import IHangarSpace
 _MODULES_NAMES = ('turret',
  'chassis',
  'engine',
  'gun',
  'radio')
 
-def _getHangarSpace():
-    from gui.shared.utils.HangarSpace import g_hangarSpace
-    return g_hangarSpace
-
-
 class _CachedVehicle(object):
     itemsCache = dependency.descriptor(IItemsCache)
+    hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self):
         self._eManager = EventManager()
@@ -71,10 +68,6 @@ class _CachedVehicle(object):
     @property
     def invID(self):
         raise NotImplementedError
-
-    @property
-    def hangarSpace(self):
-        return _getHangarSpace()
 
     def _addListeners(self):
         g_clientUpdateManager.addCallbacks({'inventory': self.onInventoryUpdate})
@@ -341,10 +334,11 @@ class PreviewAppearance(object):
 
 
 class _RegularPreviewAppearance(PreviewAppearance):
+    hangarSpace = dependency.descriptor(IHangarSpace)
 
     def refreshVehicle(self, item):
         if item is not None:
-            _getHangarSpace().updatePreviewVehicle(item)
+            self.hangarSpace.updatePreviewVehicle(item)
         else:
             g_currentVehicle.refreshModel()
         return

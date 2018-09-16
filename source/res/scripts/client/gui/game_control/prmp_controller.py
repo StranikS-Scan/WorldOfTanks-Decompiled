@@ -8,7 +8,7 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.SystemMessages import pushI18nMessage
 from gui.game_control.links import URLMarcos
 from gui.shared.notifications import NotificationPriorityLevel
-from helpers import dependency
+from helpers import dependency, getClientLanguage
 from helpers.http.url_formatters import addParamsToUrlQuery
 from skeletons.account_helpers.settings_core import ISettingsCache, ISettingsCore
 from skeletons.gui.game_control import IEncyclopediaController
@@ -34,7 +34,7 @@ class EncyclopediaController(IEncyclopediaController):
         self.__hasNewRecommendations = False
         if GUI_SETTINGS.lookup('encyclopedia'):
             self.__baseUrl = GUI_SETTINGS.encyclopedia['url']
-            self.__isSuitableLanguage = GUI_SETTINGS.encyclopedia['enabled']
+            self.__isSuitableLanguage = getClientLanguage() in GUI_SETTINGS.encyclopedia.get('languages', ())
         else:
             self.__baseUrl = None
             self.__isSuitableLanguage = False
@@ -49,7 +49,7 @@ class EncyclopediaController(IEncyclopediaController):
     def onConnected(self):
         if GUI_SETTINGS.lookup('encyclopedia'):
             self.__baseUrl = GUI_SETTINGS.encyclopedia['url']
-            self.__isSuitableLanguage = GUI_SETTINGS.encyclopedia['enabled']
+            self.__isSuitableLanguage = getClientLanguage() in GUI_SETTINGS.encyclopedia.get('languages', ())
 
     def onLobbyStarted(self, _):
         self.__isLobbyStarted = True

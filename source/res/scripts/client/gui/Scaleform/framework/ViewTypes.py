@@ -14,3 +14,4 @@ COMPONENT = 'component'
 SERVICE_LAYOUT = 'serviceLayout'
 OVERLAY = 'overlay'
 DEFAULT = VIEW
+INVALID = ''

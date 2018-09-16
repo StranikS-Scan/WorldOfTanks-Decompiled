@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/bonuses.py
+import copy
 from collections import namedtuple
 from functools import partial
 import BigWorld
@@ -75,6 +76,9 @@ class SimpleBonus(object):
 
     def getValue(self):
         return self._value
+
+    def setValue(self, value):
+        self._value = value
 
     def isCompensation(self):
         return self._isCompensation
@@ -1103,3 +1107,51 @@ def _getItemTooltip(name):
     header = i18n.makeString(TOOLTIPS.getAwardHeader(name))
     body = i18n.makeString(TOOLTIPS.getAwardBody(name))
     return makeTooltip(header or None, body or None) if header or body else ''
+
+
+def mergeBonuses(bonuses):
+    merged = copy.deepcopy(bonuses)
+    if len(merged) > 1:
+        i = 0
+        while i < len(merged) - 1:
+            j = i + 1
+            while j < len(merged):
+                mergFunc = getMergeBonusFunction(merged[i], merged[j])
+                if mergFunc and merged[i].getName() == merged[j].getName():
+                    merged[i] = mergFunc(merged[i], merged[j])
+                    merged.pop(j)
+                j += 1
+
+            i += 1
+
+    return merged
+
+
+def getMergeBonusFunction(lhv, rhv):
+
+    def hasOneBaseClass(l, r, cls):
+        return isinstance(l, cls) and isinstance(r, cls)
+
+    if hasOneBaseClass(lhv, lhv, ItemsBonus):
+        return mergeItemsBonuses
+    else:
+        return mergeIntegralBonuses if hasOneBaseClass(lhv, rhv, IntegralBonus) or hasOneBaseClass(lhv, rhv, GoldBonus) else None
+
+
+def mergeItemsBonuses(lhv, rhv):
+    merged = copy.deepcopy(lhv)
+    for key in merged.getValue():
+        if key in rhv.getValue():
+            merged.getValue()[key] += rhv.getValue()[key]
+
+    for key, value in rhv.getValue().iteritems():
+        if key not in merged.getValue():
+            merged.getValue()[key] = value
+
+    return merged
+
+
+def mergeIntegralBonuses(lhv, rhv):
+    merged = copy.deepcopy(lhv)
+    merged.setValue(merged.getValue() + rhv.getValue())
+    return merged

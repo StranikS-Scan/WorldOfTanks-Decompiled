@@ -3,6 +3,7 @@
 import SoundGroups
 from gui.Scaleform.daapi.view.meta.BattleTimerMeta import BattleTimerMeta
 from gui.Scaleform.daapi.view.meta.PrebattleTimerMeta import PrebattleTimerMeta
+from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.battle_control.battle_constants import COUNTDOWN_STATE
 from gui.battle_control.controllers.period_ctrl import IAbstractPeriodView
 from helpers import dependency
@@ -16,9 +17,9 @@ class _WWISE_EVENTS(object):
 
 
 _BATTLE_END_TIME = 0
-_STATE_TO_MESSAGE = {COUNTDOWN_STATE.WAIT: i18n.makeString('#ingame_gui:timer/waiting'),
- COUNTDOWN_STATE.START: i18n.makeString('#ingame_gui:timer/starting'),
- COUNTDOWN_STATE.STOP: i18n.makeString('#ingame_gui:timer/started')}
+_STATE_TO_MESSAGE = {COUNTDOWN_STATE.WAIT: INGAME_GUI.TIMER_WAITING,
+ COUNTDOWN_STATE.START: INGAME_GUI.TIMER_STARTING,
+ COUNTDOWN_STATE.STOP: INGAME_GUI.TIMER_STARTED}
 
 class PreBattleTimer(PrebattleTimerMeta, IAbstractPeriodView):
 
@@ -26,14 +27,14 @@ class PreBattleTimer(PrebattleTimerMeta, IAbstractPeriodView):
         self.as_setWinConditionTextS(battleCtx.getArenaWinString())
 
     def setCountdown(self, state, timeLeft):
-        self.as_setMessageS(_STATE_TO_MESSAGE[state])
+        self.as_setMessageS(i18n.makeString(_STATE_TO_MESSAGE[state]))
         if state == COUNTDOWN_STATE.WAIT:
             self.as_hideTimerS()
         else:
             self.as_setTimerS(timeLeft)
 
     def hideCountdown(self, state, speed):
-        self.as_setMessageS(_STATE_TO_MESSAGE[state])
+        self.as_setMessageS(i18n.makeString(_STATE_TO_MESSAGE[state]))
         self.as_hideAllS(speed)
 
 

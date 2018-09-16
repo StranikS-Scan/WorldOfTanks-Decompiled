@@ -131,6 +131,8 @@ class ChatCommandsController(IBattleController):
     def handleSPGAimAreaCommand(self, player):
         boundingBox = player.arena.arenaType.boundingBox
         desiredShotPoint = player.inputHandler.getMarkerPoint()
+        if not boundingBox[0][0] <= desiredShotPoint.x <= boundingBox[1][0] or not boundingBox[0][1] <= desiredShotPoint.z <= boundingBox[1][1]:
+            desiredShotPoint = None
         if desiredShotPoint is not None:
             reloadTime = self.__getReloadTime()
             cellIdx = minimap_utils.getCellIdxFromPosition(desiredShotPoint, boundingBox)

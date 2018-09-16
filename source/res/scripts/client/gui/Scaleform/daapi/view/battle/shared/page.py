@@ -15,6 +15,7 @@ from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VIEW_COMPONENT_RULE, BATTLE_CTRL_ID
 from gui.shared import EVENT_BUS_SCOPE, events
 from helpers import dependency, uniprof
+from skeletons.gameplay import IGameplayLogic, PlayerEventID
 from skeletons.gui.battle_session import IBattleSessionProvider
 
 class IComponentsConfig(object):
@@ -59,6 +60,7 @@ _SHARED_COMPONENTS_CONFIG = _SharedComponentsConfig()
 
 class SharedPage(BattlePageMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    gameplay = dependency.descriptor(IGameplayLogic)
 
     def __init__(self, components=None, external=None):
         super(SharedPage, self).__init__()
@@ -107,8 +109,8 @@ class SharedPage(BattlePageMeta):
         self.addListener(events.GameEvent.SHOW_EXTERNAL_COMPONENTS, self.__handleShowExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.HIDE_EXTERNAL_COMPONENTS, self.__handleHideExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.SHOW_COLOR_SETTINGS_TIP, self.__handleShowSettingsTip, scope=EVENT_BUS_SCOPE.GLOBAL)
-        self.addListener(events.GameEvent.HIDE_COLOR_SETTINGS_TIP, self.__handleHideSettingsTip, scope=EVENT_BUS_SCOPE.GLOBAL)
-        self.fireEvent(events.GlobalSpaceEvent(events.GlobalSpaceEvent.GO_NEXT))
+        self.addListener(events.GameEvent.HIDE_COLOR_SETTINGS_TIP, self._handleHideSettingsTip, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.gameplay.postStateEvent(PlayerEventID.AVATAR_SHOW_GUI)
 
     @uniprof.regionDecorator(label='avatar.show_gui', scope='exit')
     def _dispose(self):
@@ -125,7 +127,7 @@ class SharedPage(BattlePageMeta):
         self.removeListener(events.GameEvent.SHOW_EXTERNAL_COMPONENTS, self.__handleShowExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.HIDE_EXTERNAL_COMPONENTS, self.__handleHideExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.SHOW_COLOR_SETTINGS_TIP, self.__handleShowSettingsTip, scope=EVENT_BUS_SCOPE.GLOBAL)
-        self.removeListener(events.GameEvent.HIDE_COLOR_SETTINGS_TIP, self.__handleHideSettingsTip, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(events.GameEvent.HIDE_COLOR_SETTINGS_TIP, self._handleHideSettingsTip, scope=EVENT_BUS_SCOPE.GLOBAL)
         self._stopBattleSession()
         super(SharedPage, self)._dispose()
 
@@ -278,7 +280,7 @@ class SharedPage(BattlePageMeta):
         elif not self.as_isComponentVisibleS(alias):
             self._setComponentsVisibility(visible={alias})
 
-    def __handleHideSettingsTip(self, _):
+    def _handleHideSettingsTip(self, _):
         alias = _ALIASES.COLOR_SETTINGS_TIP_PANEL
         if self._isBattleLoading:
             self._blToggling.discard(alias)

@@ -220,6 +220,26 @@
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
         <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+        </node>
+        <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
           <forwardElastK>	0.68	</forwardElastK>
@@ -311,32 +331,16 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L10	</name>
-          <forwardElastK>	0.68	</forwardElastK>
+          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	2	</backwardElastK>
           <offset>	-0.043	</offset>
           <leftSibling>	Track_VT_L9	</leftSibling>
         </node>
         <node>
           <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L1	</name>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R1	</name>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
           <forwardElastK>	0.68	</forwardElastK>
-          <backwardElastK>	2	</backwardElastK>
+          <backwardElastK>	1	</backwardElastK>
           <offset>	-0.043	</offset>
           <rightSibling>	Track_VT_R1	</rightSibling>
         </node>
@@ -424,8 +428,8 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R10	</name>
-          <forwardElastK>	0.68	</forwardElastK>
-          <backwardElastK>	1	</backwardElastK>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
           <offset>	-0.043	</offset>
           <leftSibling>	Track_VT_R9	</leftSibling>
         </node>

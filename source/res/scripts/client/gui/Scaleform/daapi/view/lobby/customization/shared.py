@@ -6,7 +6,6 @@ from gui.customization.shared import HighlightingMode
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.Scaleform.genConsts.SEASONS_CONSTANTS import SEASONS_CONSTANTS
-from gui.Scaleform.genConsts.CUSTOMIZATION_ALIASES import CUSTOMIZATION_ALIASES
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from helpers import dependency
 from items.components.c11n_constants import SeasonType
@@ -58,12 +57,6 @@ SEASON_TYPE_TO_IDX = {SeasonType.SUMMER: SEASONS_CONSTANTS.SUMMER_INDEX,
  SeasonType.WINTER: SEASONS_CONSTANTS.WINTER_INDEX,
  SeasonType.DESERT: SEASONS_CONSTANTS.DESERT_INDEX}
 CAMO_SCALE_SIZE = (VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_CAMO_SCALE_SMALL, VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_CAMO_SCALE_NORMAL, VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_CAMO_SCALE_LARGE)
-CUSTOMIZATION_POPOVER_ALIASES = {GUI_ITEM_TYPE.STYLE: CUSTOMIZATION_ALIASES.CUSTOMIZATION_STYLE_POPOVER,
- GUI_ITEM_TYPE.PAINT: CUSTOMIZATION_ALIASES.CUSTOMIZATION_PAINT_POPOVER,
- GUI_ITEM_TYPE.CAMOUFLAGE: CUSTOMIZATION_ALIASES.CUSTOMIZATION_CAMO_POPOVER,
- GUI_ITEM_TYPE.EMBLEM: CUSTOMIZATION_ALIASES.CUSTOMIZATION_DECAL_POPOVER,
- GUI_ITEM_TYPE.INSCRIPTION: CUSTOMIZATION_ALIASES.CUSTOMIZATION_DECAL_POPOVER,
- GUI_ITEM_TYPE.MODIFICATION: CUSTOMIZATION_ALIASES.CUSTOMIZATION_EFFECT_POPOVER}
 SEASONS_ORDER = (SeasonType.SUMMER, SeasonType.WINTER, SeasonType.DESERT)
 TYPES_ORDER = (GUI_ITEM_TYPE.PAINT,
  GUI_ITEM_TYPE.CAMOUFLAGE,
@@ -71,6 +64,7 @@ TYPES_ORDER = (GUI_ITEM_TYPE.PAINT,
  GUI_ITEM_TYPE.INSCRIPTION,
  GUI_ITEM_TYPE.MODIFICATION,
  GUI_ITEM_TYPE.STYLE)
+DRAG_AND_DROP_INACTIVE_TABS = (C11nTabs.STYLE, C11nTabs.EFFECT)
 
 class PurchaseItem(object):
     __slots__ = ('item', 'price', 'areaID', 'slot', 'regionID', 'selected', 'group', 'isFromInventory', 'isDismantling')
@@ -149,16 +143,18 @@ def getOutfitWithoutItems(outfitsInfo, intCD, count):
         yield (season, outfitCompare.original)
 
 
-def getStylePurchaseItems(styleInfo, isOriginalStyleInstalled):
+def getStylePurchaseItems(styleInfo):
     purchaseItems = []
     original = styleInfo.original
     modified = styleInfo.modified
-    if modified and not original or modified and original.id != modified.id or modified and original.id == modified.id and not isOriginalStyleInstalled:
+    if modified and not original or modified and original.id != modified.id:
         inventoryCount = styleInfo.modified.fullInventoryCount(g_currentVehicle.item)
         isFromInventory = inventoryCount > 0
         purchaseItems.append(PurchaseItem(modified, modified.getBuyPrice(), areaID=None, slot=None, regionID=None, selected=True, group=AdditionalPurchaseGroups.STYLES_GROUP_ID, isFromInventory=isFromInventory, isDismantling=False))
     elif original and not modified:
         purchaseItems.append(PurchaseItem(original, original.getBuyPrice(), areaID=None, slot=None, regionID=None, selected=True, group=AdditionalPurchaseGroups.STYLES_GROUP_ID, isFromInventory=False, isDismantling=True))
+    elif not original and not modified:
+        purchaseItems.append(PurchaseItem(original, None, areaID=None, slot=None, regionID=None, selected=True, group=AdditionalPurchaseGroups.STYLES_GROUP_ID, isFromInventory=False, isDismantling=True))
     return purchaseItems
 
 

@@ -63,6 +63,9 @@ class IEventsCache(object):
     def getMotiveQuests(self, filterFunc=None):
         raise NotImplementedError
 
+    def getLinkedSetQuests(self, filterFunc=None):
+        raise NotImplementedError
+
     def getBattleQuests(self, filterFunc=None):
         raise NotImplementedError
 
@@ -148,6 +151,9 @@ class IEventsCache(object):
         raise NotImplementedError
 
     def getCompensation(self, tokenID):
+        raise NotImplementedError
+
+    def hasQuestDelayedRewards(self, questID):
         raise NotImplementedError
 
     def getAdvisableQuests(self, filterFunc=None):

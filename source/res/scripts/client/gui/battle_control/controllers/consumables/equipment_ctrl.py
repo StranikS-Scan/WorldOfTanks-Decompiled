@@ -587,12 +587,12 @@ class _ReplayItem(_EquipmentItem):
     def canActivate(self, entityName=None, avatar=None):
         return (False, None)
 
-    def getTimeRemaining(self):
+    def getReplayTimeRemaining(self):
         return max(0, self.__cooldownTime - BigWorld.serverTime())
 
     def getCooldownPercents(self):
         totalTime = self.getTotalTime()
-        timeRemaining = self.getTimeRemaining()
+        timeRemaining = self.getReplayTimeRemaining()
         return round(float(totalTime - timeRemaining) / totalTime * 100.0) if totalTime > 0 else 0.0
 
 
@@ -708,7 +708,7 @@ class EquipmentsReplayPlayer(EquipmentsController):
                 BigWorld.cancelCallback(self.__callbackID)
                 self.__callbackID = None
             if equipment.getTotalTime() > 0:
-                self.__timeGetters[intCD] = equipment.getTimeRemaining
+                self.__timeGetters[intCD] = equipment.getReplayTimeRemaining
                 if self.__callbackTimeID is not None:
                     BigWorld.cancelCallback(self.__callbackTimeID)
                     self.__callbackTimeID = None

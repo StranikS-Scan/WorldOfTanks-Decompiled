@@ -125,15 +125,33 @@ def __readBonus_vehicle(bonus, _name, section):
             extra['crewFreeXP'] = section['crewFreeXP'].asInt
     if section.has_key('rent'):
         __readBonus_rent(extra, None, section['rent'])
+    if section.has_key('customization'):
+        __readBonus_vehicleCustomizations(extra, None, section['customization'])
     if section.has_key('customCompensation'):
-        credits = section['customCompensation'].readInt('credits', 0)
-        gold = section['customCompensation'].readInt('gold', 0)
-        extra['customCompensation'] = (credits, gold)
-    if section.has_key('styleId'):
-        extra['styleId'] = section['styleId'].asInt
+        __readBonus_customCompensation(extra, None, section['customCompensation'])
     if section.has_key('outfits'):
         __readBonus_outfits(extra, None, section['outfits'])
     bonus.setdefault('vehicles', {})[vehCompDescr if vehCompDescr else vehTypeCompDescr] = extra
+    return
+
+
+def __readBonus_customCompensation(bonus, _name, section):
+    credits = section.readInt('credits', 0)
+    gold = section.readInt('gold', 0)
+    bonus['customCompensation'] = (credits, gold)
+
+
+def __readBonus_vehicleCustomizations(bonus, _name, section):
+    custData = {'value': 1,
+     'custType': 'style',
+     'id': section.readInt('styleId', -1)}
+    if section.has_key('customCompensation'):
+        __readBonus_customCompensation(custData, None, section['customCompensation'])
+    isValid, item = validateCustomizationItem(custData)
+    if not isValid:
+        raise SoftException(item)
+    bonus['customization'] = {'styleId': custData['id'],
+     'customCompensation': custData['customCompensation']}
     return
 
 
@@ -223,15 +241,14 @@ def __readBonus_customizations(bonus, _name, section):
         elif subsection.has_key('boundToCurrentVehicle'):
             custData['boundToCurrentVehicle'] = True
         if subsection.has_key('customCompensation'):
-            credits = subsection['customCompensation'].readInt('credits', 0)
-            gold = subsection['customCompensation'].readInt('gold', 0)
-            custData['customCompensation'] = (credits, gold)
+            __readBonus_customCompensation(custData, None, subsection['customCompensation'])
         isValid, item = validateCustomizationItem(custData)
         if not isValid:
             raise SoftException(item)
         lst.append(custData)
 
     bonus['customizations'] = lst
+    return
 
 
 def __readBonus_tokens(bonus, _name, section):
@@ -295,6 +312,16 @@ def __readBonus_dossier(bonus, _name, section):
     bonus.setdefault('dossier', {}).setdefault(dossierType, {})[blockName, record] = {'value': value,
      'unique': unique,
      'type': operation}
+
+
+def __readBonus_vehicleChoice(bonus, _name, section):
+    extra = {}
+    if section.has_key('levels'):
+        for level in section['levels'].asString.split():
+            if 1 <= int(level) <= 10:
+                extra.setdefault('levels', set()).add(int(level))
+
+    bonus['demandedVehicles'] = extra
 
 
 def __readBonus_optional(bonusReaders, bonusRange, bonus, section, hasOneOf, isOneOf):
@@ -382,7 +409,8 @@ __BONUS_READERS = {'buyAllVehicles': __readBonus_bool,
  'vehicle': __readBonus_vehicle,
  'dossier': __readBonus_dossier,
  'tankmen': __readBonus_tankmen,
- 'customizations': __readBonus_customizations}
+ 'customizations': __readBonus_customizations,
+ 'vehicleChoice': __readBonus_vehicleChoice}
 __PROBABILITY_READERS = {'optional': __readBonus_optional,
  'oneof': __readBonus_oneof,
  'group': __readBonus_group}

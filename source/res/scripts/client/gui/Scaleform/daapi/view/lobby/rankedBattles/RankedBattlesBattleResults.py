@@ -16,24 +16,26 @@ class RankedBattlesBattleResults(RankedBattlesBattleResultsMeta):
         self.__vehicle = ctx['vehicle']
         self.__rankInfo = ctx['rankInfo']
         self.__questsProgress = ctx['questsProgress']
-        accProgress = (self.__rankInfo.accRank, self.__rankInfo.accStep)
-        vehProgress = (self.__rankInfo.vehRank, self.__rankInfo.vehStep)
-        prevAccProgress = (self.__rankInfo.prevAccRank, self.__rankInfo.prevAccStep)
-        prevVehProgress = (self.__rankInfo.prevVehRank, self.__rankInfo.prevVehStep)
-        maxProgress = max(accProgress, prevAccProgress)
-        self.__ranks = self.rankedController.buildRanksChain(accProgress, maxProgress, prevAccProgress)
-        accRanksCount = self.rankedController.getAccRanksTotal()
-        if self.__rankInfo.accRank <= accRanksCount and self.__rankInfo.vehRank < 1:
-            if self.__rankInfo.accRank == accRanksCount:
+        self.__showRankedWidget = self.__rankedResultsVO.get('showWidgetAnimation', True)
+        if self.__showRankedWidget:
+            accProgress = (self.__rankInfo.accRank, self.__rankInfo.accStep)
+            vehProgress = (self.__rankInfo.vehRank, self.__rankInfo.vehStep)
+            prevAccProgress = (self.__rankInfo.prevAccRank, self.__rankInfo.prevAccStep)
+            prevVehProgress = (self.__rankInfo.prevVehRank, self.__rankInfo.prevVehStep)
+            maxProgress = max(accProgress, prevAccProgress)
+            self.__ranks = self.rankedController.buildRanksChain(accProgress, maxProgress, prevAccProgress)
+            accRanksCount = self.rankedController.getAccRanksTotal()
+            if self.__rankInfo.accRank <= accRanksCount and self.__rankInfo.vehRank < 1:
+                if self.__rankInfo.accRank == accRanksCount:
+                    maxVehProgress = max(vehProgress, prevVehProgress)
+                    vehRanks = self.rankedController.buildVehicleRanksChain(vehProgress, maxVehProgress, prevVehProgress, self.__vehicle)
+                    self.__ranks.extend(vehRanks)
+                self.__setRanks(accProgress, prevAccProgress)
+            else:
                 maxVehProgress = max(vehProgress, prevVehProgress)
                 vehRanks = self.rankedController.buildVehicleRanksChain(vehProgress, maxVehProgress, prevVehProgress, self.__vehicle)
                 self.__ranks.extend(vehRanks)
-            self.__setRanks(accProgress, prevAccProgress)
-        else:
-            maxVehProgress = max(vehProgress, prevVehProgress)
-            vehRanks = self.rankedController.buildVehicleRanksChain(vehProgress, maxVehProgress, prevVehProgress, self.__vehicle)
-            self.__ranks.extend(vehRanks)
-            self.__setRanks(vehProgress, prevVehProgress, accRanksCount)
+                self.__setRanks(vehProgress, prevVehProgress, accRanksCount)
 
     def onEscapePress(self):
         self.__close()
@@ -53,7 +55,8 @@ class RankedBattlesBattleResults(RankedBattlesBattleResultsMeta):
 
     def _populate(self):
         super(RankedBattlesBattleResults, self)._populate()
-        self.__updateRankedWidget()
+        if self.__showRankedWidget:
+            self.__updateRankedWidget()
         self.as_setDataS(self.__rankedResultsVO)
 
     def __setRanks(self, progress, prevProgress, adjustment=0):
@@ -70,6 +73,6 @@ class RankedBattlesBattleResults(RankedBattlesBattleResultsMeta):
         return
 
     def __close(self):
-        if self.rankedController.awardWindowShouldBeShown(self.__rankInfo):
+        if not self.__showRankedWidget:
             self.rankedController.showRankedAwardWindow(self.__rankInfo, self.__vehicle, self.__questsProgress)
         self.destroy()

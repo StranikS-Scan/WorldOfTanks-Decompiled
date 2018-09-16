@@ -12,7 +12,8 @@ from gui import GUI_SETTINGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.server_events.formatters import isMarathon, TOKEN_SIZES, DECORATION_SIZES
+from gui.server_events.formatters import TOKEN_SIZES, DECORATION_SIZES
+from gui.server_events.events_helpers import isMarathon
 from gui.shared.utils import mapTextureToTheMemory, getImageSize
 from helpers import getClientLanguage, dependency
 from helpers.i18n import makeString as ms

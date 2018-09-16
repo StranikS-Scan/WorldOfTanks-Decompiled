@@ -3,7 +3,7 @@
 from collections import namedtuple
 from gui.shared.event_bus import SharedEvent
 from shared_utils import CONST_CONTAINER
-__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent')
+__all__ = ('ArgsEvent', 'LoadEvent', 'ComponentEvent', 'LoadViewEvent', 'ShowDialogEvent', 'LoginEvent', 'LoginCreateEvent', 'LoginEventEx', 'LobbySimpleEvent', 'FightButtonDisablingEvent', 'FightButtonEvent', 'CloseWindowEvent', 'BrowserEvent', 'HangarVehicleEvent', 'HangarCustomizationEvent')
 
 class HasCtxEvent(SharedEvent):
 
@@ -26,10 +26,6 @@ class AppLifeCycleEvent(SharedEvent):
     @property
     def ns(self):
         return self.__ns
-
-
-class GlobalSpaceEvent(SharedEvent):
-    GO_NEXT = 'globalSpace/goNext'
 
 
 class GameEvent(HasCtxEvent):
@@ -104,9 +100,11 @@ class LoadViewEvent(HasCtxEvent):
 
 class ViewEventType(CONST_CONTAINER):
     LOAD_VIEW = 'viewEventLoadView'
+    LOAD_UB_VIEW = 'ubViewEventLoadView'
     LOAD_VIEWS_CHAIN = 'viewEventLoadViewChain'
     PRELOAD_VIEW = 'viewEventPreLoadView'
     DESTROY_VIEW = 'viewEventDestroyView'
+    DESTROY_UB_VIEW = 'ubViewEventDestroyView'
 
 
 class _ViewEvent(HasCtxEvent):
@@ -144,6 +142,21 @@ class DestroyViewEvent(_ViewEvent):
 
     def __init__(self, alias, name=None):
         super(DestroyViewEvent, self).__init__(ViewEventType.DESTROY_VIEW, alias, name)
+
+
+class LoadUnboundViewEvent(_ViewEvent):
+
+    def __init__(self, layoutID, viewClass, *args, **kwargs):
+        super(LoadUnboundViewEvent, self).__init__(ViewEventType.LOAD_UB_VIEW, layoutID)
+        self.viewClass = viewClass
+        self.args = args
+        self.kwargs = kwargs
+
+
+class DestroyUnboundViewEvent(_ViewEvent):
+
+    def __init__(self, layoutID):
+        super(DestroyUnboundViewEvent, self).__init__(ViewEventType.DESTROY_UB_VIEW, layoutID)
 
 
 class BrowserEvent(HasCtxEvent):
@@ -272,6 +285,7 @@ class MissionsEvent(HasCtxEvent):
     ON_DEACTIVATE = 'onDeactivate'
     ON_TAB_CHANGED = 'onTabChanged'
     PAGE_INVALIDATE = 'pageInvalidate'
+    ON_LINKEDSET_STATE_UPDATED = 'onLinkedSetStateUpdated'
 
 
 class TrainingSettingsEvent(HasCtxEvent):
@@ -301,6 +315,10 @@ class FightButtonDisablingEvent(LobbySimpleEvent):
 
 class FightButtonEvent(LobbySimpleEvent):
     FIGHT_BUTTON_UPDATE = 'updateFightButton'
+
+
+class LobbyHeaderMenuEvent(LobbySimpleEvent):
+    MENY_HIDE = 'hideLobbyHeaderMenu'
 
 
 class SkillDropEvent(SharedEvent):
@@ -559,3 +577,16 @@ class VehicleBuyEvent(HasCtxEvent):
 class HangarVehicleEvent(HasCtxEvent):
     ON_HERO_TANK_LOADED = 'hangarVehicle/onHeroTankLoaded'
     ON_HERO_TANK_DESTROY = 'hangarVehicle/onHeroTankDestroy'
+
+
+class LinkedSetEvent(HasCtxEvent):
+    VEHICLE_SELECTED = 'LinkedSetEvent/vehicleSelected'
+
+
+class ManualEvent(HasCtxEvent):
+    CHAPTER_CLOSED = 'manual/chapterClosed'
+
+
+class HangarCustomizationEvent(HasCtxEvent):
+    CHANGE_VEHICLE_MODEL_TRANSFORM = 'hangarCustomization/changeVehicleModelTransform'
+    RESET_VEHICLE_MODEL_TRANSFORM = 'hangarCustomization/resetVehicleModelTransform'

@@ -44,7 +44,8 @@ class VehicleMessages(fading_messages.FadingMessages):
 
     def _removeGameListeners(self):
         self.removeListener(GameEvent.SCREEN_SHOT_MADE, self.__handleScreenShotMade)
-        g_critMemHandler.onMemCrit -= self.__handleMemoryCriticalMessage
+        if g_critMemHandler.onMemCrit:
+            g_critMemHandler.onMemCrit -= self.__handleMemoryCriticalMessage
         ctrl = self.sessionProvider.shared.messages
         if ctrl is not None:
             ctrl.onShowVehicleMessageByCode -= self.__onShowVehicleMessageByCode

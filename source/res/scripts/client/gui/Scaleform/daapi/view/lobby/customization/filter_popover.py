@@ -38,6 +38,7 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
     def __init__(self, ctx=None):
         super(FilterPopover, self).__init__()
         self.__groupsMap = []
+        self.__ctx = None
         data = ctx['data']
         self._purchasedToggleEnabled = data.purchasedEnabled
         self._historicToggleEnabled = data.historicEnabled
@@ -50,6 +51,7 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
         else:
             self._isInit = False
         self.__updateVO = self.__createUpdateVO()
+        return
 
     def onFilterChange(self, index, value):
         (self.setShowOnlyHistoric, self.setShowOnlyAcquired, self.setShowOnlyApplied)[index](value)
@@ -57,21 +59,21 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
     def setShowOnlyHistoric(self, value):
         self._historicToggleEnabled = value
         self.updateDefaultButton()
-        self.service.onCarouselFilter(historic=value)
+        self.__ctx.applyCarouselFilter(historic=value)
 
     def setShowOnlyAcquired(self, value):
         self._purchasedToggleEnabled = value
         self.updateDefaultButton()
-        self.service.onCarouselFilter(inventory=value)
+        self.__ctx.applyCarouselFilter(inventory=value)
 
     def setShowOnlyApplied(self, value):
         self._appliedToggleEnabled = value
         self.updateDefaultButton()
-        self.service.onCarouselFilter(applied=value)
+        self.__ctx.applyCarouselFilter(applied=value)
 
     def changeGroup(self, filterGroupValue):
         if not self._isInit:
-            self.service.onCarouselFilter(group=filterGroupValue)
+            self.__ctx.applyCarouselFilter(group=filterGroupValue)
             self._selectedGroup = filterGroupValue
             self.updateDefaultButton()
         else:
@@ -90,16 +92,19 @@ class FilterPopover(CustomizationFiltersPopoverMeta):
         self.__updateVO = self.__createUpdateVO()
         self.as_setDataS(self.__updateVO.asDict())
         self.updateDefaultButton()
-        self.service.onCarouselFilter(historic=self._historicToggleEnabled, inventory=self._purchasedToggleEnabled, applied=self._appliedToggleEnabled, group=self._selectedGroup)
+        self.__ctx.applyCarouselFilter(historic=self._historicToggleEnabled, inventory=self._purchasedToggleEnabled, applied=self._appliedToggleEnabled, group=self._selectedGroup)
 
     def _populate(self):
         super(FilterPopover, self)._populate()
         self.as_setDataS(self.__updateVO.asDict())
+        self.__ctx = self.service.getCtx()
         self.updateDefaultButton()
 
     def _dispose(self):
         self.__groupsMap = []
+        self.__ctx = None
         super(FilterPopover, self)._dispose()
+        return
 
     def __createUpdateVO(self):
         self._filterBtns = [{'value': RES_ICONS.MAPS_ICONS_BUTTONS_NON_HISTORICAL,

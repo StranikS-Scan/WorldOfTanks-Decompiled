@@ -27,7 +27,7 @@ class EpicMessagePanel(GameMessagesPanelMeta):
         endGameMsgData = {'title': title,
          'reason': reason,
          'subTitle': makeEpicBattleFinishResultLabel(reason, messageType)}
-        msg = PlayerMessageData(messageType, GAME_MESSAGES_CONSTS.DEFAULT_MESSAGE_LENGTH, GAME_MESSAGES_CONSTS.GAME_MESSAGE_PRIORITY_HIGH, endGameMsgData)
+        msg = PlayerMessageData(messageType, GAME_MESSAGES_CONSTS.DEFAULT_MESSAGE_LENGTH, GAME_MESSAGES_CONSTS.GAME_MESSAGE_PRIORITY_END_GAME, endGameMsgData)
         self.__onIngameMessageReady(msg)
         self.__blockNewMessages = True
 

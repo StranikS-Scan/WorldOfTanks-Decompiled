@@ -207,6 +207,7 @@
     </isBlockingCapture>
   </Properties>
   <TempProperties>
+    <events></events>
     <p></p>
     <_Vehicle__p></_Vehicle__p>
     <_components></_components>
@@ -346,22 +347,6 @@
     <sendStateToOwnClient>
       <Exposed></Exposed>
     </sendStateToOwnClient>
-    <receiveHitAssistBonus>
-      <Arg>	OBJECT_ID	</Arg>
-      <Arg>	SHOT_ID	</Arg>
-      <Arg>	UINT16	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	INT32	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	UINT8	</Arg>
-      <Arg>	UINT16	</Arg>
-      <Arg>	BOOL	</Arg>
-      <Arg>	UINT16	</Arg>
-      <Arg>	UINT8	</Arg>
-    </receiveHitAssistBonus>
     <onEnemyVehicleShot>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	ARRAY	  <of>	SHOT_ID	</of>

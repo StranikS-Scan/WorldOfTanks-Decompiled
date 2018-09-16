@@ -149,3 +149,7 @@ class StyleFlags(object):
     INSTALLED = 2
     EMPTY = 0
     ACTIVE = ENABLED | INSTALLED
+
+
+C11N_MAX_REGION_NUM = 3
+C11N_MASK_REGION = 2

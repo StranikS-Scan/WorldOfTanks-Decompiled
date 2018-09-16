@@ -37,6 +37,9 @@ class VehicleCompareConfiguratorViewMeta(VehicleCompareConfiguratorBaseView):
     def as_setCamoS(self, selected):
         return self.flashObject.as_setCamo(selected) if self._isDAAPIInited() else None
 
+    def as_disableCamoS(self):
+        return self.flashObject.as_disableCamo() if self._isDAAPIInited() else None
+
     def as_setSkillsBlockedS(self, value):
         return self.flashObject.as_setSkillsBlocked(value) if self._isDAAPIInited() else None
 

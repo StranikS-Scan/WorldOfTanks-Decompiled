@@ -8,6 +8,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.battle_results.components import base
 from gui.battle_results.components import shared
 from gui.battle_results.components import style
+from gui.battle_results.components.style import markVehicleAsTeamKiller
 from gui.shared.crits_mask_parser import CRIT_MASK_SUB_TYPES
 from gui.shared.formatters import numbers, icons
 from gui.shared.formatters import text_styles
@@ -127,13 +128,7 @@ class PersonalVehicleBlock(base.StatsBlock):
             self.vehicleState = i18n.makeString(BATTLE_RESULTS.COMMON_VEHICLESTATE_PREMATURELEAVE)
         elif deathReason > DEATH_REASON_ALIVE:
             if self._isVehicleStatusDefined and killerID:
-                reason = style.makeI18nDeathReason(deathReason)
-                self.vehicleState = reason.i18nString
-                self.vehicleStatePrefix = reason.prefix
-                self.vehicleStateSuffix = reason.suffix
-                block = KillerPlayerNameBlock()
-                block.setPlayerInfo(reusable.getPlayerInfoByVehicleID(killerID))
-                self.addComponent(self.getNextComponentIndex(), block)
+                fillKillerInfoBlock(self, deathReason, killerID, reusable)
         else:
             self.vehicleState = i18n.makeString(BATTLE_RESULTS.COMMON_VEHICLESTATE_ALIVE)
 
@@ -505,3 +500,18 @@ class MoneyPropsBlock(base.StatsBlock):
         self.moneyEnabledTooltip = makeTooltip(' '.join((icons.alert(-3), i18n.makeString(TOOLTIPS.BATTLERESULTS_MONEYALERT_HEADER))), TOOLTIPS.BATTLERESULTS_MONEYALERT_BODY, None, None)
         self.creditsNotAccrueStr = text_styles.alert(BATTLE_RESULTS.COMMON_CREDITS_NOTACCRUED)
         return
+
+
+def fillKillerInfoBlock(vehicleStateBlock, deathReason, killerID, reusable):
+    reason = style.makeI18nDeathReason(deathReason)
+    vehicleStateBlock.vehicleState = reason.i18nString
+    vehicleStateBlock.vehicleStatePrefix = reason.prefix
+    vehicleStateBlock.vehicleStateSuffix = reason.suffix
+    pi = reusable.getPlayerInfoByVehicleID(killerID)
+    playerKillerBlock = KillerPlayerNameBlock()
+    playerKillerBlock.setPlayerInfo(pi)
+    vi = reusable.vehicles.getVehicleInfo(killerID)
+    if vi.isTeamKiller:
+        playerKillerBlock.setTeamKillerInfo()
+        markVehicleAsTeamKiller(vehicleStateBlock)
+    vehicleStateBlock.addComponent(vehicleStateBlock.getNextComponentIndex(), playerKillerBlock)

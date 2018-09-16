@@ -29,39 +29,60 @@ DEFAULT_CAMOUFLAGE = Camouflage(None, None)
 SwingingSettings = namedtuple('SwingingSettings', ('lodDist', 'sensitivityToImpulse', 'pitchParams', 'rollParams'))
 
 class I18nString(object):
-    __slots__ = ('__value',)
+    __slots__ = ('__value', '__converted')
 
     def __init__(self, key):
         super(I18nString, self).__init__()
         self.__value = i18n.makeString(key)
+        self.__converted = False
 
     @property
     def value(self):
+        if not self.__converted:
+            self.__value = i18n.makeString(self.__value)
+            self.__converted = True
         return self.__value
 
 
+class _I18nConvertedFlags(object):
+    UNDEFINED = 0
+    USER_STRING = 1
+    SHORT_STRING = 2
+    DESCRIPTION = 4
+
+
 class I18nComponent(object):
-    __slots__ = ('__userString', '__shortString', '__description')
+    __slots__ = ('__userString', '__shortString', '__description', '__converted')
 
     def __init__(self, userStringKey, descriptionKey, shortStringKey=''):
         super(I18nComponent, self).__init__()
-        self.__userString = i18n.makeString(userStringKey)
+        self.__userString = userStringKey
         if shortStringKey:
-            self.__shortString = i18n.makeString(shortStringKey)
+            self.__shortString = shortStringKey
         else:
             self.__shortString = component_constants.EMPTY_STRING
-        self.__description = i18n.makeString(descriptionKey)
+        self.__description = descriptionKey
+        self.__converted = _I18nConvertedFlags.UNDEFINED
 
     @property
     def userString(self):
+        if self.__converted & _I18nConvertedFlags.USER_STRING == 0:
+            self.__userString = i18n.makeString(self.__userString)
+            self.__converted |= _I18nConvertedFlags.USER_STRING
         return self.__userString
 
     @property
     def shortString(self):
-        return self.__shortString or self.__userString
+        if self.__shortString and self.__converted & _I18nConvertedFlags.SHORT_STRING == 0:
+            self.__shortString = i18n.makeString(self.__shortString)
+            self.__converted |= _I18nConvertedFlags.SHORT_STRING
+        return self.__shortString or self.userString
 
     @property
     def description(self):
+        if self.__converted & _I18nConvertedFlags.DESCRIPTION == 0:
+            self.__description = i18n.makeString(self.__description)
+            self.__converted |= _I18nConvertedFlags.DESCRIPTION
         return self.__description
 
 

@@ -16,17 +16,21 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.MOTIVATION_QUESTS import MOTIVATION_QUESTS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.event_boards.settings import isGroupMinimized, expandGroup
 from gui.server_events import settings
 from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.cond_formatters.tokens import TokensMarathonFormatter
 from gui.server_events.event_items import DEFAULTS_GROUPS
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
-from gui.event_boards.settings import isGroupMinimized, expandGroup
 from gui.shared.formatters import text_styles
 from helpers import dependency
-from helpers.i18n import makeString as _ms
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.linkedset import ILinkedSetController
+from gui.Scaleform.daapi.view.lobby.event_boards.formaters import formatErrorTextWithIcon
+from helpers.i18n import makeString as _ms
+from gui.Scaleform.locale.LINKEDSET import LINKEDSET
+from gui.server_events.events_helpers import hasAtLeastOneAvailableQuest, isAllQuestsCompleted, isLinkedSet, getLocalizedQuestNameForLinkedSetQuest, getLocalizedQuestDescForLinkedSetQuest, getLinkedSetMissionIDFromQuest
 from soft_exception import SoftException
 _EventsBlockData = namedtuple('EventsBlockData', 'filteredCount totalCount blockData')
 _MAIN_QUEST_AWARDS_COUNT = 6
@@ -45,7 +49,9 @@ def getGroupPackerByContextID(contextID, proxy):
             group = groups.get(contextID)
             if group:
                 if group.isMarathon():
-                    return _MarathonQuestsBlockInfo(group)
+                    return _MissionsGroupQuestsBlockInfo(group)
+                if group.isLinkedSet():
+                    return _LinkedSetQuestsBlockInfo()
                 return _GroupedEventsBlockInfo(group)
         return
 
@@ -188,13 +194,33 @@ class GroupedEventsBlocksFinder(_EventsBlockBuilder):
         raise NotImplementedError
 
 
-class MarathonsGroupsFinder(GroupedEventsBlocksFinder):
+class MissionsGroupsFinder(GroupedEventsBlocksFinder):
+    linkedSet = dependency.descriptor(ILinkedSetController)
+
+    def __init__(self):
+        super(MissionsGroupsFinder, self).__init__()
+        self.__wasLinkedSetShowed = False
 
     def _createGroupedEventsBlock(self, group):
-        return _MarathonQuestsBlockInfo(group)
+        return _MissionsGroupQuestsBlockInfo(group)
 
     def _getEventsGroups(self):
         return self.eventsCache.getGroups(filterFunc=lambda g: g.isMarathon())
+
+    def invalidateBlocks(self):
+        super(MissionsGroupsFinder, self).invalidateBlocks()
+        if self.linkedSet.isLinkedSetEnabled() and (self.__wasLinkedSetShowed or not self.linkedSet.isLinkedSetFinished()):
+            self._cache['groupedEvents']['linkedset'] = _LinkedSetQuestsBlockInfo()
+            self.__wasLinkedSetShowed = True
+
+
+class MarathonsDumbFinder(GroupedEventsBlocksFinder):
+
+    def _createGroupedEventsBlock(self, group):
+        return []
+
+    def _getEventsGroups(self):
+        return {}
 
 
 class QuestsGroupsFinder(GroupedEventsBlocksFinder):
@@ -206,7 +232,7 @@ class QuestsGroupsFinder(GroupedEventsBlocksFinder):
         return _GroupedQuestsBlockInfo(group)
 
     def _getEventsGroups(self):
-        return self.eventsCache.getGroups(filterFunc=lambda g: not g.isMarathon())
+        return self.eventsCache.getGroups(filterFunc=lambda g: g.isRegularQuest())
 
 
 class ElenGroupsFinder(_EventsBlockBuilder):
@@ -415,16 +441,16 @@ class _GroupedQuestsBlockInfo(_GroupedEventsBlockInfo):
         return data
 
 
-class _MarathonQuestsBlockInfo(_GroupedEventsBlockInfo):
+class _MissionsGroupQuestsBlockInfo(_GroupedEventsBlockInfo):
 
     def __init__(self, group):
-        super(_MarathonQuestsBlockInfo, self).__init__(group)
+        super(_MissionsGroupQuestsBlockInfo, self).__init__(group)
         self._mainQuest = None
         return
 
     def clear(self):
         self._mainQuest = None
-        super(_MarathonQuestsBlockInfo, self).clear()
+        super(_MissionsGroupQuestsBlockInfo, self).clear()
         return
 
     def getDetailedTitle(self):
@@ -446,7 +472,7 @@ class _MarathonQuestsBlockInfo(_GroupedEventsBlockInfo):
          'bodyLinkage': QUESTS_ALIASES.MISSION_PACK_MARATHON_BODY_LINKAGE}
 
     def _getDescrBlock(self):
-        data = super(_MarathonQuestsBlockInfo, self)._getDescrBlock()
+        data = super(_MissionsGroupQuestsBlockInfo, self)._getDescrBlock()
         if self._mainQuest:
             data.update({'descr': text_styles.main(self._mainQuest.getDescription())})
         return data
@@ -603,9 +629,8 @@ class _VehicleQuestsBlockInfo(_EventsBlockInfo):
          'bodyLinkage': QUESTS_ALIASES.MISSION_PACK_MARATHON_BODY_LINKAGE}
 
     def __applyFilter(self, quest):
-        if quest.getType() in (EVENT_TYPE.TOKEN_QUEST, EVENT_TYPE.REF_SYSTEM_QUEST):
-            return False
-        if not quest.getFinishTimeLeft():
+        forbiddenQuestConditions = [lambda q: q.getType() in (EVENT_TYPE.TOKEN_QUEST, EVENT_TYPE.REF_SYSTEM_QUEST), lambda q: not q.getFinishTimeLeft(), lambda q: isLinkedSet(q.getGroupID())]
+        if any((isForbidden(quest) for isForbidden in forbiddenQuestConditions)):
             return False
         return quest.isValidVehicleCondition(g_currentVehicle.item) if quest.getType() != EVENT_TYPE.MOTIVE_QUEST else quest.isValidVehicleCondition(g_currentVehicle.item) and not quest.isCompleted() and quest.isAvailable()[0]
 
@@ -676,3 +701,119 @@ class _ElenBlockInfo(_EventsBlockInfo):
     def _getGuiLinkages(cls):
         return {'headerLinkage': QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_HEADER_LINKAGE,
          'bodyLinkage': QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_BODY_LINKAGE}
+
+
+class _LinkedSetQuestsBlockInfo(_EventsBlockInfo):
+    eventsCache = dependency.descriptor(IEventsCache)
+    linkedSet = dependency.descriptor(ILinkedSetController)
+
+    def __init__(self):
+        super(_LinkedSetQuestsBlockInfo, self).__init__()
+        self._questMissions = []
+        self.mainQuest = None
+        return
+
+    @property
+    def questMissions(self):
+        return self._questMissions
+
+    def getEventsBlockID(self):
+        return DEFAULTS_GROUPS.LINKEDSET_QUESTS
+
+    def buildEventsBlockData(self, srvEvents, filterFunc):
+        self._suitableEvents = self.linkedSet.getLinkedSetQuests().values()
+        self._events = self._suitableEvents
+        self._updateLinkedSetMissions()
+        return _EventsBlockData(len(self._suitableEvents), len(self._suitableEvents), self._getVO())
+
+    def getTitleBlock(self):
+        return {'title': _ms(LINKEDSET.LINKEDSET_GROUP_TITLE)}
+
+    def isLinkedSetCompleted(self):
+        return self.getTotalMissionsCount() == self.getCompletedMissionsCount()
+
+    def getTotalMissionsCount(self):
+        return len(self._questMissions)
+
+    def getCompletedMissionsCount(self):
+        return sum((1 for quests in self._questMissions if isAllQuestsCompleted(quests)))
+
+    def getDetailedTitle(self):
+        raise SoftException('This method should not be reached in this context')
+
+    def getTitle(self):
+        return _ms(getLocalizedQuestNameForLinkedSetQuest(self.mainQuest))
+
+    def getSortPriority(self):
+        pass
+
+    def markVisited(self):
+        if self.mainQuest and (self.mainQuest.isAvailable().isValid or self.mainQuest.isCompleted()):
+            settings.visitEventGUI(self.mainQuest)
+
+    def _findEvents(self, srvEvents):
+        return filter(self.__applyFilter, srvEvents.itervalues())
+
+    def _getHeaderData(self):
+        text_styles.alert(_ms(QUESTS.MISSIONS_NOTASKSBODY_DUMMY_TEXT))
+        info = text_styles.standard(_ms(LINKEDSET.MISSIONS_COMPLETED, cur_count=self.getCompletedMissionsCount(), total_count=self.getTotalMissionsCount()))
+        return {'titleBlock': self.getTitleBlock(),
+         'info': info}
+
+    def _getVO(self):
+        vo = super(_LinkedSetQuestsBlockInfo, self)._getVO()
+        vo['bodyDataLinkedSet'] = vo.pop('bodyData')
+        vo['isLinkedSet'] = True
+        return vo
+
+    def _getBodyData(self):
+        missions = []
+        for quests in self._questMissions:
+            status = None
+            checkStates = []
+            groupIsCompleted = isAllQuestsCompleted(quests)
+            groupIsAvailable = groupIsCompleted or hasAtLeastOneAvailableQuest(quests)
+            if not groupIsAvailable:
+                status = formatErrorTextWithIcon(_ms(LINKEDSET.NOT_AVAILABLE))
+            else:
+                isSingleQuest = len(quests) == 1
+                if not groupIsCompleted and isSingleQuest:
+                    status = _ms(LINKEDSET.MISSION_NOT_COMPLETE)
+                else:
+                    checkStates = [ quest.isCompleted() for quest in quests ]
+            missionID = getLinkedSetMissionIDFromQuest(quests[0])
+            if groupIsAvailable:
+                uiDecoration = RES_ICONS.getLinkedSetMissionItemActive(missionID)
+            else:
+                uiDecoration = RES_ICONS.getLinkedSetMissionItemDisable(missionID)
+            advisable = self.eventsCache.getAdvisableQuests()
+            advisableQuests = [ quest for quest in quests if quest.getID() in advisable ]
+            isCornerEnable = bool(len(settings.getNewCommonEvents(advisableQuests)))
+            missions.append({'eventID': str(missionID),
+             'title': _ms(LINKEDSET.getMissionName(missionID)),
+             'status': status,
+             'isAvailable': True,
+             'isCornerEnable': isCornerEnable,
+             'uiPicture': RES_ICONS.getLinkedSetMissionIconItem(missionID),
+             'uiDecoration': uiDecoration,
+             'checkStates': checkStates})
+
+        result = {'title': _ms(getLocalizedQuestNameForLinkedSetQuest(self.mainQuest)),
+         'description': _ms(getLocalizedQuestDescForLinkedSetQuest(self.mainQuest)),
+         'isButtonUseTokenEnabled': self.linkedSet.hasLinkedSetFinishToken(),
+         'buttonUseTokenLabel': _ms(LINKEDSET.USE_THE_TOKEN),
+         'uiDecoration': RES_ICONS.MAPS_ICONS_LINKEDSET_LINKEDSET_BGR_LANDING,
+         'missions': missions}
+        return result
+
+    def _updateLinkedSetMissions(self):
+        self._questMissions = self.linkedSet.getMissions()
+        self.mainQuest = self._questMissions.pop()[0]
+
+    @classmethod
+    def _getGuiLinkages(cls):
+        return {'headerLinkage': QUESTS_ALIASES.MISSIONS_LINKED_SET_HEADER_LINKAGE,
+         'bodyLinkage': QUESTS_ALIASES.MISSIONS_LINKED_SET_BODY_LINKAGE}
+
+    def __applyFilter(self, quest):
+        return isLinkedSet(quest.getGroupID())

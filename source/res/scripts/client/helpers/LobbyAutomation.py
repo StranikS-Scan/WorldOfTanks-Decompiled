@@ -91,21 +91,21 @@ def _detectCurrentScreen():
                 dialog.cancel()
         view = lobby.containerManager.getView(ViewTypes.DEFAULT)
         connectionMgr = dependency.instance(IConnectionManager)
-        if view and view.settings.alias == VIEW_ALIAS.LOGIN and view.isCreated() and connectionMgr.isDisconnected() and not _isConnecting:
+        if view and view.alias == VIEW_ALIAS.LOGIN and view.isCreated() and connectionMgr.isDisconnected() and not _isConnecting:
             _isConnecting = True
             _connect()
             BigWorld.callback(0.2, _detectCurrentScreen)
             return
         view = lobby.containerManager.getView(ViewTypes.DEFAULT)
-        if view is not None and view.settings.alias == 'lobby':
+        if view is not None and view.alias == 'lobby':
             if _justLogin:
                 return
             subView = lobby.containerManager.getView(ViewTypes.LOBBY_SUB)
-            if subView.settings.alias == 'hangar':
+            if subView.alias == 'hangar':
                 _leaveDevRoom()
                 BigWorld.callback(0.2, _detectCurrentScreen)
                 return
-            if subView.settings.alias == 'trainingRoom':
+            if subView.alias == 'trainingRoom':
                 _enterBattle()
                 return
         BigWorld.callback(0.2, _detectCurrentScreen)

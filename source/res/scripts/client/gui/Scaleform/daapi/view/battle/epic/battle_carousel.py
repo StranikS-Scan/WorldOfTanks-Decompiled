@@ -137,7 +137,8 @@ class VehicleData(object):
         self.__carousel = carousel
         self.__vehicles = None
         ctrl = self.sessionProvider.dynamic.respawn
-        ctrl.onRespawnVehiclesUpdated += self.__updateVehiclesList
+        if ctrl is not None:
+            ctrl.onRespawnVehiclesUpdated += self.__updateVehiclesList
         return
 
     def getVehicles(self, criteria=None):
@@ -151,7 +152,9 @@ class VehicleData(object):
 
     def dispose(self):
         ctrl = self.sessionProvider.dynamic.respawn
-        ctrl.onRespawnVehiclesUpdated -= self.__updateVehiclesList
+        if ctrl is not None:
+            ctrl.onRespawnVehiclesUpdated -= self.__updateVehiclesList
+        return
 
     def getRawVehicleData(self, invID):
         return None if invID >= len(self.__vehicles) else self.__vehicles[invID]

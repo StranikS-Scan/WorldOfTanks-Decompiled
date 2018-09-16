@@ -5,16 +5,25 @@ from account_helpers.settings_core.settings_constants import CONTACTS
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 MAX_ANTISPAM_MESSAGES = 3
+_isClosed = False
 
 def isShown():
-    return _getCounter() < MAX_ANTISPAM_MESSAGES
+    global _isClosed
+    return _getCounter() < MAX_ANTISPAM_MESSAGES and not _isClosed
 
 
 def close():
+    global _isClosed
     counter = _getCounter()
     newCounter = min(counter + 1, MAX_ANTISPAM_MESSAGES)
+    _isClosed = True
     if newCounter != counter:
         _setCounter(newCounter)
+
+
+def reset():
+    global _isClosed
+    _isClosed = False
 
 
 @dependency.replace_none_kwargs(settingsCore=ISettingsCore)

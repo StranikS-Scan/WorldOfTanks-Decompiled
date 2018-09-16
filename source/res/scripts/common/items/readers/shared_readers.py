@@ -91,3 +91,15 @@ def readCamouflage(xmlCtx, section, sectionName, default=None):
     if not mask and default is not None:
         mask = default[1]
     return shared_components.Camouflage(tiling, mask)
+
+
+def readBuilder(xmlCtx, section, subsectionName, builderType):
+    subsection = section[subsectionName]
+    if subsection is not None:
+        product = builderType(subsection)
+        if product is not None:
+            return product
+        _xml.raiseWrongXml(xmlCtx, subsectionName, 'Failed builder {0} loading from {1}'.format(builderType, subsectionName))
+    else:
+        _xml.raiseWrongSection(xmlCtx, subsectionName)
+    return

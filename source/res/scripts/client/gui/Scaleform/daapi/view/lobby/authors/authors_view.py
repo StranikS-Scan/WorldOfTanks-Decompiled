@@ -3,19 +3,19 @@
 import WWISE
 from gui.Scaleform.daapi.view.meta.AuthorsViewMeta import AuthorsViewMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.sounds.filters import STATE_HANGAR_FILTERED
 from helpers import getClientLanguage
-_STATE_HANGAR_FILTERED = 'STATE_hangar_filtered'
 
 class AuthorsView(AuthorsViewMeta):
 
     def _populate(self):
         super(AuthorsView, self)._populate()
         self.setBgPath()
-        WWISE.WW_setState(_STATE_HANGAR_FILTERED, '{}_on'.format(_STATE_HANGAR_FILTERED))
+        WWISE.WW_setState(STATE_HANGAR_FILTERED, '{}_on'.format(STATE_HANGAR_FILTERED))
 
     def onClose(self):
         self.destroy()
-        WWISE.WW_setState(_STATE_HANGAR_FILTERED, '{}_off'.format(_STATE_HANGAR_FILTERED))
+        WWISE.WW_setState(STATE_HANGAR_FILTERED, '{}_off'.format(STATE_HANGAR_FILTERED))
 
     def setBgPath(self):
         if getClientLanguage() in ('ru', 'be', 'uk', 'kk'):

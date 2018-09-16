@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/awards_formatters.py
 from collections import namedtuple
+from math import ceil
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -128,12 +129,31 @@ def getEventBoardsFormattersMap():
     return mapping
 
 
+def getLinkedSetFormattersMap():
+    countableIntegralBonusFormatter = CountableIntegralBonusFormatter()
+    tokenBonusFormatter = LinkedSetTokenBonusFormatter()
+    mapping = getDefaultFormattersMap()
+    mapping.update({'slots': countableIntegralBonusFormatter,
+     'berths': countableIntegralBonusFormatter,
+     'battleToken': tokenBonusFormatter,
+     'tokens': tokenBonusFormatter,
+     'items': LinkedSetItemsBonusFormatter(),
+     'premium': LinkedSetPremiumDaysBonusFormatter(),
+     'vehicles': LinkedSetVehiclesBonusFormatter(),
+     'customizations': LinkedSetCustomizationsBonusFormatter()})
+    return mapping
+
+
 def getDefaultAwardFormatter():
     return AwardsPacker(getDefaultFormattersMap())
 
 
 def getMissionAwardPacker():
     return AwardsPacker(getMisssionsFormattersMap())
+
+
+def getLinkedSetAwardPacker():
+    return AwardsPacker(getLinkedSetFormattersMap())
 
 
 def getEventBoardsAwardPacker():
@@ -157,6 +177,16 @@ def getOperationPacker():
 
 def formatCountLabel(count):
     return 'x{}'.format(count) if count > 1 else ''
+
+
+def formatTimeLabel(hours):
+    time = hours
+    if hours >= time_utils.HOURS_IN_DAY:
+        time = ceil(hours / time_utils.HOURS_IN_DAY)
+        timeMetric = i18n.makeString('#menu:header/account/premium/days')
+    else:
+        timeMetric = i18n.makeString('#menu:header/account/premium/hours')
+    return str(int(time)) + ' ' + timeMetric
 
 
 _PreformattedBonus = namedtuple('_PreformattedBonus', 'bonusName, label userName images tooltip labelFormatter areTokensPawned specialArgs specialAlias isSpecial isCompensation align highlightType overlayType')
@@ -365,6 +395,12 @@ class PremiumDaysBonusFormatter(SimpleBonusFormatter):
         return result
 
 
+class LinkedSetPremiumDaysBonusFormatter(PremiumDaysBonusFormatter):
+
+    def _format(self, bonus):
+        return [PreformattedBonus(label=formatTimeLabel(bonus.getValue() * time_utils.HOURS_IN_DAY), bonusName=bonus.getName(), userName=self._getUserName(bonus), images=self._getImages(bonus), tooltip=bonus.getTooltip(), isCompensation=self._isCompensation(bonus))]
+
+
 class TokenBonusFormatter(SimpleBonusFormatter):
     eventsCache = dependency.descriptor(IEventsCache)
 
@@ -375,9 +411,12 @@ class TokenBonusFormatter(SimpleBonusFormatter):
             if complexToken.isDisplayable:
                 userName = self._getUserName(complexToken.styleID)
                 tooltip = makeTooltip(i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=userName), i18n.makeString(TOOLTIPS.QUESTS_BONUSES_TOKEN_BODY))
-                result.append(PreformattedBonus(bonusName=bonus.getName(), images=self.__getTokenImages(complexToken.styleID), label=formatCountLabel(token.count), userName=self._getUserName(complexToken.styleID), labelFormatter=self._getLabelFormatter(bonus), tooltip=tooltip, align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus)))
+                result.append(PreformattedBonus(bonusName=bonus.getName(), images=self.__getTokenImages(complexToken.styleID), label=self._formatBonusLabel(token.count), userName=self._getUserName(complexToken.styleID), labelFormatter=self._getLabelFormatter(bonus), tooltip=tooltip, align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus)))
 
         return result
+
+    def _formatBonusLabel(self, count):
+        return formatCountLabel(count)
 
     def _getUserName(self, styleID):
         webCache = self.eventsCache.prefetcher
@@ -392,6 +431,12 @@ class TokenBonusFormatter(SimpleBonusFormatter):
                     result[awardSizeVlaue] = webCache.getTokenImage(styleID, tokenSizeValue)
 
         return result
+
+
+class LinkedSetTokenBonusFormatter(TokenBonusFormatter):
+
+    def _formatBonusLabel(self, count):
+        return 'x{}'.format(count)
 
 
 class CustomizationUnlockFormatter(TokenBonusFormatter):
@@ -432,7 +477,7 @@ class VehiclesBonusFormatter(SimpleBonusFormatter):
             else:
                 rentExpiryTime = 0
             isRent = rentDays or rentBattles or rentWins
-            result.append(PreformattedBonus(bonusName=bonus.getName(), label=self._getLabel(vehicle), userName=self._getUserName(vehicle), images=self._getImages(vehicle, isRent), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.AWARD_VEHICLE, specialArgs=[vehicle.intCD,
+            result.append(PreformattedBonus(bonusName=bonus.getName(), label=self._getVehicleLabel(bonus, vehicle, vehInfo), userName=self._getUserName(vehicle), images=self._getImages(vehicle, isRent), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.AWARD_VEHICLE, specialArgs=[vehicle.intCD,
              tmanRoleLevel,
              rentExpiryTime,
              rentBattles,
@@ -446,6 +491,10 @@ class VehiclesBonusFormatter(SimpleBonusFormatter):
     @classmethod
     def _getLabel(cls, vehicle):
         return vehicle.userName if cls.__hasUniqueIcon(vehicle) else ''
+
+    @classmethod
+    def _getVehicleLabel(cls, bonus, vehicle, vehInfo):
+        return cls._getLabel(vehicle)
 
     @classmethod
     def _getImages(cls, vehicle, isRent=False):
@@ -469,6 +518,13 @@ class VehiclesBonusFormatter(SimpleBonusFormatter):
                 return True
 
         return False
+
+
+class LinkedSetVehiclesBonusFormatter(VehiclesBonusFormatter):
+
+    @classmethod
+    def _getVehicleLabel(cls, bonus, vehicle, vehInfo):
+        return formatTimeLabel(bonus.getRentDays(vehInfo) * time_utils.HOURS_IN_DAY)
 
 
 class DossierBonusFormatter(SimpleBonusFormatter):
@@ -581,9 +637,12 @@ class CustomizationsBonusFormatter(SimpleBonusFormatter):
     def _format(self, bonus):
         result = []
         for item, data in zip(bonus.getCustomizations(), bonus.getList()):
-            result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), userName=self._getUserName(item), isSpecial=True, label=formatCountLabel(item.get('value')), labelFormatter=self._getLabelFormatter(bonus), specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM, specialArgs=[ data[o] for o in bonus.INFOTIP_ARGS_ORDER ], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus)))
+            result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), userName=self._getUserName(item), isSpecial=True, label=self._formatBonusLabel(item.get('value')), labelFormatter=self._getLabelFormatter(bonus), specialAlias=TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM, specialArgs=[ data[o] for o in bonus.INFOTIP_ARGS_ORDER ], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus)))
 
         return result
+
+    def _formatBonusLabel(self, count):
+        return formatCountLabel(count)
 
     @classmethod
     def _getImages(cls, item):
@@ -605,6 +664,12 @@ class CustomizationsBonusFormatter(SimpleBonusFormatter):
         itemID = item.get('id')
         itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
         return cls.c11n.getItemByID(itemTypeID, itemID)
+
+
+class LinkedSetCustomizationsBonusFormatter(CustomizationsBonusFormatter):
+
+    def _formatBonusLabel(self, count):
+        return 'x{}'.format(count)
 
 
 class OperationCustomizationsBonusFormatter(CustomizationsBonusFormatter):
@@ -665,9 +730,12 @@ class ItemsBonusFormatter(SimpleBonusFormatter):
                 if item.itemTypeName == 'optionalDevice' and item.isDeluxe():
                     highlightType = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
                     overlayType = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
-                result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), isSpecial=True, label=formatCountLabel(count), labelFormatter=self._getLabelFormatter(bonus), userName=self._getUserName(item), specialAlias=alias, specialArgs=[item.intCD], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), highlightType=highlightType, overlayType=overlayType))
+                result.append(PreformattedBonus(bonusName=bonus.getName(), images=self._getImages(item), isSpecial=True, label=self._formatBonusLabel(count), labelFormatter=self._getLabelFormatter(bonus), userName=self._getUserName(item), specialAlias=alias, specialArgs=[item.intCD], align=LABEL_ALIGN.RIGHT, isCompensation=self._isCompensation(bonus), highlightType=highlightType, overlayType=overlayType))
 
         return result
+
+    def _formatBonusLabel(self, count):
+        return formatCountLabel(count)
 
     @classmethod
     def _getUserName(cls, item):
@@ -680,3 +748,9 @@ class ItemsBonusFormatter(SimpleBonusFormatter):
             result[size] = RES_ICONS.getBonusIcon(size, item.getGUIEmblemID())
 
         return result
+
+
+class LinkedSetItemsBonusFormatter(ItemsBonusFormatter):
+
+    def _formatBonusLabel(self, count):
+        return 'x{}'.format(count)

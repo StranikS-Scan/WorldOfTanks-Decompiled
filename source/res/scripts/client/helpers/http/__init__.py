@@ -3,12 +3,19 @@
 import urllib2
 from debug_utils import LOG_WARNING, LOG_ERROR
 from helpers import feedparser, time_utils, getFullClientVersion
-_CLIENT_VERSION = getFullClientVersion()
+_CLIENT_VERSION = None
 _DEFAULT_TIMEOUT = 10.0
 _VALID_RESPONSE = 200
 _IS_NOT_MODIFIED = 304
 _VALID_RESPONSE_CODES = (_VALID_RESPONSE, _IS_NOT_MODIFIED)
 _HAS_DATA_RESPONSE_CODES = (_VALID_RESPONSE,)
+
+def _getClientVersion():
+    global _CLIENT_VERSION
+    if _CLIENT_VERSION is None:
+        _CLIENT_VERSION = getFullClientVersion()
+    return _CLIENT_VERSION
+
 
 def parsedate(httpDate):
     return time_utils.getTimestampFromUTC(feedparser._parse_date(httpDate))
@@ -105,8 +112,10 @@ class _HttpConnResponse(_HttpResponse):
         return response.read() if response else None
 
 
-def openUrl(url, timeout=_DEFAULT_TIMEOUT, modified=None, agent=_CLIENT_VERSION):
+def openUrl(url, timeout=_DEFAULT_TIMEOUT, modified=None, agent=''):
     response = None
+    if not agent:
+        agent = _getClientVersion()
     try:
         try:
             request = urllib2.Request(url)
@@ -133,8 +142,10 @@ def openUrl(url, timeout=_DEFAULT_TIMEOUT, modified=None, agent=_CLIENT_VERSION)
     return _HttpResponse(response)
 
 
-def openPage(connection, page, modified=None, agent=_CLIENT_VERSION):
+def openPage(connection, page, modified=None, agent=''):
     response = None
+    if not agent:
+        agent = _getClientVersion()
     try:
         headers = {'User-Agent': agent,
          'Connection': 'Keep-Alive'}

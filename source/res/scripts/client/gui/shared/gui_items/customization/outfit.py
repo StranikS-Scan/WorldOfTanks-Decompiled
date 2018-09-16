@@ -14,6 +14,8 @@ from skeletons.gui.shared.gui_items import IGuiItemsFactory
 
 class Area(TankPartIndexes):
     MISC = 4
+    TANK_PARTS = TankPartIndexes.ALL
+    ALL = TankPartIndexes.ALL + (MISC,)
 
 
 def scaffold():

@@ -25,9 +25,11 @@ class VehCmpCustomizationTooltip(BlocksTooltipData):
         self._setMargins(afterBlock=14)
         self._setWidth(380)
         self._showTTC = False
+        self._customCamo = False
 
     def _packBlocks(self, *args):
         self._showTTC = args[0]
+        self._customCamo = args[1]
         items = [self.__packTitleBlock(), self.__packBonusBlock(), self.__packBottomPanelBlock()]
         return items
 
@@ -35,9 +37,13 @@ class VehCmpCustomizationTooltip(BlocksTooltipData):
     def __packTitleBlock():
         return formatters.packImageTextBlockData(title=text_styles.highTitle(VEH_COMPARE.VEHCONF_TOOLTIPS_CAMOTITLE), padding={'top': -5})
 
-    @staticmethod
-    def __packBottomPanelBlock():
-        return formatters.packImageTextBlockData(title=text_styles.standard(VEH_COMPARE.VEHCONF_TOOLTIPS_CAMOINFO), img=RES_ICONS.MAPS_ICONS_LIBRARY_INFO, imgPadding={'left': 25,
+    def __packBottomPanelBlock(self):
+        title = text_styles.standard(VEH_COMPARE.VEHCONF_TOOLTIPS_CAMOINFO)
+        img = RES_ICONS.MAPS_ICONS_LIBRARY_INFO
+        if self._customCamo is False:
+            title = text_styles.neutral(VEH_COMPARE.VEHCONF_TOOLTIPS_DEFCAMOINFO)
+            img = RES_ICONS.MAPS_ICONS_LIBRARY_INFO_YELLOW
+        return formatters.packImageTextBlockData(title=title, img=img, imgPadding={'left': 25,
          'top': 3}, txtGap=-4, txtOffset=65, padding={'top': -1,
          'left': 7})
 

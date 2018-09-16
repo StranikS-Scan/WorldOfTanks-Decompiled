@@ -16,17 +16,14 @@ import Keys
 import Event
 import AreaDestructibles
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
-from gui import GUI_CTRL_MODE_FLAG
-from gui.app_loader import g_appLoader, settings
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
 from PlayerEvents import g_playerEvents
 from ReplayEvents import g_replayEvents
 from constants import ARENA_PERIOD
-from gui.Scaleform.framework.ViewTypes import TOP_WINDOW
-from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gameplay import IGameplayLogic, ReplayEventID
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
@@ -81,6 +78,7 @@ class BattleReplay(object):
     isUpdateGunOnTimeWarp = property(lambda self: self.__updateGunOnTimeWarp)
     isBattleSimulation = property(lambda self: self.__isBattleSimulation)
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
+    gameplay = dependency.descriptor(IGameplayLogic)
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
     connectionMgr = dependency.descriptor(IConnectionManager)
@@ -279,18 +277,21 @@ class BattleReplay(object):
                 if isPlayerAvatar():
                     BigWorld.player().onVehicleEnterWorld -= self.__onVehicleEnterWorld
                 if not isOffline and not isDestroyed:
-                    self.connectionMgr.onDisconnected += self.__showLoginPage
+                    self.connectionMgr.onDisconnected += self.__goToNextReplay
                 BigWorld.clearEntitiesAndSpaces()
                 BigWorld.disconnect()
                 if self.__quitAfterStop:
                     BigWorld.quit()
                 elif isOffline and not isDestroyed:
-                    self.__showLoginPage()
+                    self.__goToNextReplay()
             return True
 
+    def getAutoStartFileName(self):
+        return self.__replayCtrl.getAutoStartFileName()
+
     def autoStartBattleReplay(self):
-        fileName = self.__replayCtrl.getAutoStartFileName()
-        if fileName != '':
+        fileName = self.getAutoStartFileName()
+        if fileName:
             self.__quitAfterStop = True
             if not self.play(fileName):
                 BigWorld.quit()
@@ -301,22 +302,23 @@ class BattleReplay(object):
     def handleKeyEvent(self, isDown, key, mods, isRepeat, event):
         if not self.isPlaying:
             return False
-        elif self.isBattleSimulation:
+        if self.isBattleSimulation:
             return False
-        elif self.isTimeWarpInProgress:
+        if self.isTimeWarpInProgress:
             return True
-        elif key == Keys.KEY_F1:
+        if key == Keys.KEY_F1:
             if not isRepeat and not isDown:
                 self.__showInfoMessages()
             return True
-        elif not self.isClientReady:
+        if not self.isClientReady:
             return False
         cmdMap = CommandMapping.g_instance
         player = BigWorld.player()
         if not isPlayerAvatar():
             return False
+        isCursorVisible = player.isForcedGuiControlMode()
         if key == Keys.KEY_ESCAPE:
-            if isDown and not player.isForcedGuiControlMode():
+            if isDown and not isCursorVisible:
                 self.__isMenuShowed = True
                 return False
         if not player.isForcedGuiControlMode():
@@ -327,11 +329,6 @@ class BattleReplay(object):
         finishReplayTime = self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_REPLAY_FINISHED)
         if currReplayTime > finishReplayTime:
             currReplayTime = finishReplayTime
-        app = g_appLoader.getDefBattleApp()
-        if app is not None:
-            isCursorVisible = app.ctrlModeFlags & GUI_CTRL_MODE_FLAG.CURSOR_ATTACHED > 0
-        else:
-            isCursorVisible = False
         fastForwardStep = FAST_FORWARD_STEP * (2.0 if mods == 2 else 1.0)
         if (key == Keys.KEY_LEFTMOUSE or cmdMap.isFired(CommandMapping.CMD_CM_SHOOT, key)) and isDown and not isCursorVisible:
             if self.isControllingCamera:
@@ -354,24 +351,24 @@ class BattleReplay(object):
             else:
                 self.setPlaybackSpeedIdx(self.__savedPlaybackSpeedIdx if self.__savedPlaybackSpeedIdx != 0 else self.__playbackSpeedModifiers.index(1.0))
             return True
-        elif key == Keys.KEY_DOWNARROW and isDown and not self.__isFinished:
+        if key == Keys.KEY_DOWNARROW and isDown and not self.__isFinished:
             if self.__playbackSpeedIdx > 0:
                 self.setPlaybackSpeedIdx(self.__playbackSpeedIdx - 1)
             return True
-        elif key == Keys.KEY_UPARROW and isDown and not self.__isFinished:
+        if key == Keys.KEY_UPARROW and isDown and not self.__isFinished:
             if self.__playbackSpeedIdx < len(self.__playbackSpeedModifiers) - 1:
                 self.setPlaybackSpeedIdx(self.__playbackSpeedIdx + 1)
             return True
-        elif key == Keys.KEY_RIGHTARROW and isDown and not self.__isFinished:
+        if key == Keys.KEY_RIGHTARROW and isDown and not self.__isFinished:
             self.__timeWarp(currReplayTime + fastForwardStep)
             return True
-        elif key == Keys.KEY_LEFTARROW:
+        if key == Keys.KEY_LEFTARROW:
             self.__timeWarp(currReplayTime - fastForwardStep)
             return True
-        elif key == Keys.KEY_HOME and isDown:
+        if key == Keys.KEY_HOME and isDown:
             self.__timeWarp(0.0)
             return True
-        elif key == Keys.KEY_END and isDown and not self.__isFinished:
+        if key == Keys.KEY_END and isDown and not self.__isFinished:
             self.__timeWarp(finishReplayTime)
             return True
         if key == Keys.KEY_C and isDown:
@@ -402,8 +399,7 @@ class BattleReplay(object):
             if isVideoCamera:
                 playerControlMode.handleKeyEvent(isDown, key, mods, event)
             return True
-        else:
-            return False
+        return False
 
     def handleMouseEvent(self, dx, dy, dz):
         if not (self.isPlaying and self.isClientReady):
@@ -634,7 +630,7 @@ class BattleReplay(object):
 
         return vehicles
 
-    def onBattleSwfLoaded(self):
+    def loadServerSettings(self):
         if self.isPlaying:
             self.__serverSettings = dict()
             try:
@@ -646,10 +642,10 @@ class BattleReplay(object):
 
             self.lobbyContext.setServerSettings(self.__serverSettings)
 
-    def onCommonSwfLoaded(self):
+    def disableTimeWrap(self):
         self.__enableTimeWarp = False
 
-    def onCommonSwfUnloaded(self):
+    def enableTimeWrap(self):
         if self.isPlaying:
             self.__enableTimeWarp = True
             self.__replayCtrl.onCommonSfwUnloaded()
@@ -663,8 +659,7 @@ class BattleReplay(object):
             BigWorld.callback(1.0, self.play)
             return
         self.__isMenuShowed = False
-        from gui import DialogsInterface
-        DialogsInterface.showI18nConfirmDialog('replayStopped', self.__replayFinishedDlgCallback)
+        self.gameplay.postStateEvent(ReplayEventID.REPLAY_FINISHED)
         self.__isFinished = True
         self.setPlaybackSpeedIdx(0)
 
@@ -736,13 +731,15 @@ class BattleReplay(object):
     def onClientVersionDiffers(self):
         if BigWorld.wg_isFpsInfoStoreEnabled():
             BigWorld.wg_markFpsStoreFileAsFailed(self.__fileName)
-            self.__onClientVersionConfirmDlgClosed(False)
+            self.stop()
             return
         if not self.scriptModalWindowsEnabled:
-            self.__onClientVersionConfirmDlgClosed(True)
+            self.acceptVersionDiffering()
             return
-        g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
-        g_appLoader.showLogin()
+        self.gameplay.postStateEvent(ReplayEventID.REPLAY_VERSION_CONFIRMATION)
+
+    def acceptVersionDiffering(self):
+        self.__replayCtrl.confirmDlgAccepted()
 
     def setControllingCamera(self):
         if self.isControllingCamera:
@@ -750,19 +747,6 @@ class BattleReplay(object):
             self.onControlModeChanged('arcade')
             self.__replayCtrl.isControllingCamera = False
             self.onControlModeChanged(controlMode)
-
-    def __onGUISpaceEntered(self, spaceID):
-        if spaceID != settings.GUI_GLOBAL_SPACE_ID.LOGIN:
-            return
-        g_appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
-        from gui import DialogsInterface
-        DialogsInterface.showI18nConfirmDialog('replayNotification', self.__onClientVersionConfirmDlgClosed)
-
-    def __onClientVersionConfirmDlgClosed(self, result):
-        if result:
-            self.__replayCtrl.confirmDlgAccepted()
-        else:
-            self.stop()
 
     def registerWotReplayFileExtension(self):
         self.__replayCtrl.registerWotReplayFileExtension()
@@ -805,9 +789,9 @@ class BattleReplay(object):
             return
         self.record()
 
-    def __showLoginPage(self):
-        g_appLoader.showLogin()
-        self.connectionMgr.onDisconnected -= self.__showLoginPage
+    def __goToNextReplay(self):
+        self.gameplay.postStateEvent(ReplayEventID.REPLAY_NEXT)
+        self.connectionMgr.onDisconnected -= self.__goToNextReplay
 
     def setArenaStatisticsStr(self, arenaUniqueStr):
         self.__replayCtrl.setArenaStatisticsStr(arenaUniqueStr)
@@ -859,7 +843,6 @@ class BattleReplay(object):
         BigWorld.wg_enableGUIBackground(True, False)
         if self.__isFinished:
             self.setPlaybackSpeedIdx(self.__savedPlaybackSpeedIdx)
-            self.__closeModalWindow()
         self.__isFinished = False
         self.__warpTime = time
         self.__rewind = time < self.__replayCtrl.getTimeMark(REPLAY_TIME_MARK_CURRENT_TIME)
@@ -873,22 +856,12 @@ class BattleReplay(object):
             BigWorld.PyGroundEffectManager().stopAll()
         g_replayEvents.onMuteSound(True)
         self.__enableInGameEffects(False)
+        if self.__rewind:
+            self.gameplay.postStateEvent(ReplayEventID.REPLAY_REWIND)
         if not self.__replayCtrl.beginTimeWarp(time):
             self.__cleanupAfterTimeWarp()
             return
         self.__rewind = False
-
-    @classmethod
-    def __closeModalWindow(cls):
-        app = g_appLoader.getDefBattleApp()
-        if app is not None:
-            topWindowContainer = app.containerManager.getContainer(TOP_WINDOW)
-            if topWindowContainer is not None:
-                pyView = topWindowContainer.getView({POP_UP_CRITERIA.VIEW_ALIAS: 'simpleDialog'}) or topWindowContainer.getView({POP_UP_CRITERIA.VIEW_ALIAS: 'bootcampSimpleDialog'})
-                if pyView is not None:
-                    topWindowContainer.removeView(pyView)
-                    pyView.destroy()
-        return
 
     def __enableInGameEffects(self, enable):
         AreaDestructibles.g_destructiblesManager.forceNoAnimation = not enable
@@ -940,10 +913,6 @@ class BattleReplay(object):
         else:
             arcadeMode.showGunMarker(True)
         return
-
-    def __replayFinishedDlgCallback(self, shouldExit):
-        if shouldExit:
-            BigWorld.callback(0.0, self.stop)
 
     def __onVehicleEnterWorld(self, vehicle):
         if vehicle.id == self.playerVehicleID:

@@ -28,10 +28,9 @@ import WebBrowser
 import SoundGroups
 from skeletons.connection_mgr import IConnectionManager
 from bootcamp.Bootcamp import g_bootcamp
+from skeletons.gameplay import IGameplayLogic
 tutorialLoaderInit = lambda : None
 tutorialLoaderFini = lambda : None
-bootcampLoaderInit = lambda : None
-bootcampLoaderFini = lambda : None
 if constants.IS_TUTORIAL_ENABLED:
     if GUI_SETTINGS.isGuiEnabled():
         try:
@@ -47,9 +46,11 @@ try:
 except locale.Error:
     LOG_CURRENT_EXCEPTION()
 
-if GUI_SETTINGS.isGuiEnabled():
-    from gui.Scaleform import fonts_config
-    fonts_config.g_fontConfigMap.load()
+class ServiceLocator(object):
+    connectionMgr = dependency.descriptor(IConnectionManager)
+    gameplay = dependency.descriptor(IGameplayLogic)
+
+
 g_replayCtrl = None
 g_onBeforeSendEvent = None
 
@@ -147,9 +148,8 @@ def start():
         LOG_DEBUG('LightingGenerationMode')
         return
     else:
-        manager = dependency.instance(IConnectionManager)
-        manager.onConnected += onConnected
-        manager.onDisconnected += onDisconnected
+        ServiceLocator.connectionMgr.onConnected += onConnected
+        ServiceLocator.connectionMgr.onDisconnected += onDisconnected
         if len(sys.argv) > 2:
             if sys.argv[1] == 'scriptedTest':
                 try:
@@ -164,6 +164,7 @@ def start():
                         except ImportError:
                             __import__('Cat.' + scriptName)
 
+                    ServiceLocator.gameplay.start()
                 except Exception:
                     LOG_CURRENT_EXCEPTION()
                     BigWorld.wg_writeToStdOut('Failed to run scripted test, Python exception was thrown, see python.log')
@@ -205,6 +206,7 @@ def start():
                     LOG_DEBUG('Game start FAILED with:')
                     LOG_CURRENT_EXCEPTION()
 
+                ServiceLocator.gameplay.start()
                 gui_personality.start()
             elif sys.argv[1] == 'replayTimeout':
                 try:
@@ -213,8 +215,10 @@ def start():
                     LOG_DEBUG('Game start FAILED with:')
                     LOG_CURRENT_EXCEPTION()
 
+                ServiceLocator.gameplay.start()
                 gui_personality.start()
             elif sys.argv[1] == 'botInit' or sys.argv[1] == 'botExecute':
+                ServiceLocator.gameplay.start()
                 gui_personality.start()
                 try:
                     LOG_DEBUG('BOTNET: Playing scenario "%s" with bot "%s"...' % (sys.argv[2], sys.argv[3]))
@@ -227,8 +231,10 @@ def start():
                     LOG_CURRENT_EXCEPTION()
 
             else:
+                ServiceLocator.gameplay.start()
                 gui_personality.start()
         else:
+            ServiceLocator.gameplay.start()
             gui_personality.start()
         try:
             import Vibroeffects
@@ -272,9 +278,8 @@ def fini():
         MusicControllerWWISE.destroy()
         if RSSDownloader.g_downloader is not None:
             RSSDownloader.g_downloader.destroy()
-        manager = dependency.instance(IConnectionManager)
-        manager.onConnected -= onConnected
-        manager.onDisconnected -= onDisconnected
+        ServiceLocator.connectionMgr.onConnected -= onConnected
+        ServiceLocator.connectionMgr.onDisconnected -= onDisconnected
         MessengerEntry.g_instance.fini()
         from helpers import EdgeDetectColorController
         if EdgeDetectColorController.g_instance is not None:

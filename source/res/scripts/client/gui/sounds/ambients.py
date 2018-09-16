@@ -493,9 +493,9 @@ class GuiAmbientsCtrl(object):
         if view is not None and view.settings is not None:
             soundEnvClass = _getViewSoundEnv(view)
             if soundEnvClass is not None:
-                alias = view.settings.alias
+                alias = view.alias
                 SOUND_DEBUG('Custom sound environ has been detected', alias, soundEnvClass)
-                self._customEnvs[view.settings.type][view.getUniqueName()] = self._buildSoundEnv(soundEnvClass)
+                self._customEnvs[view.viewType][view.getUniqueName()] = self._buildSoundEnv(soundEnvClass)
                 view.onDispose += self.__onViewDisposed
                 self._restartSounds()
             else:
@@ -504,10 +504,10 @@ class GuiAmbientsCtrl(object):
 
     def __onViewDisposed(self, view):
         uniqueName = view.getUniqueName()
-        if uniqueName in self._customEnvs[view.settings.type]:
-            env = self._clearSoundEnv(self._customEnvs[view.settings.type][uniqueName], view)
-            SOUND_DEBUG('Custom sound environ has been stopped', view.settings.alias, env)
-            del self._customEnvs[view.settings.type][uniqueName]
+        if uniqueName in self._customEnvs[view.viewType]:
+            env = self._clearSoundEnv(self._customEnvs[view.viewType][uniqueName], view)
+            SOUND_DEBUG('Custom sound environ has been stopped', view.alias, env)
+            del self._customEnvs[view.viewType][uniqueName]
             view.onDispose -= self.__onViewDisposed
             self._restartSounds()
 

@@ -13,3 +13,4 @@ class CameraRelatedEvents(HasCtxEvent):
     IDLE_CAMERA = 'IdleCamera'
     VEHICLE_LOADING = 'VehicleLoading'
     LOBBY_VIEW_MOUSE_MOVE = 'MouseMove'
+    FORCE_DISABLE_IDLE_PARALAX_MOVEMENT = 'cameraRelatedEvents/forceDisableIdleParalaxMovement'

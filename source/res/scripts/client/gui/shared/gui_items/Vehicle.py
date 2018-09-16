@@ -578,6 +578,14 @@ class Vehicle(FittingItem, HasStrCD):
         return self._equipmentLayout
 
     @property
+    def modules(self):
+        return (self.chassis,
+         self.turret if self.hasTurrets else None,
+         self.gun,
+         self.engine,
+         self.radio)
+
+    @property
     def bonuses(self):
         return self._bonuses
 

@@ -17,7 +17,7 @@ from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.view.lobby.techtree import unlock
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockStats, RequestState
 from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import LocalSellModuleMeta, BuyModuleMeta
-from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeXpMeta, ExchangeCreditsMeta, RestoreExchangeCreditsMeta
+from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeXpMeta, ExchangeCreditsSingleItemMeta, RestoreExchangeCreditsMeta
 from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
@@ -134,7 +134,7 @@ class ModuleBuyAction(BuyAction):
         item = self.itemsCache.items.getItemByCD(self.__intCD)
         if not self._mayObtainForMoney(item):
             if self._mayObtainWithMoneyExchange(item):
-                isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsMeta(self.__intCD))
+                isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsSingleItemMeta(self.__intCD))
                 if not isOk:
                     return
             else:
@@ -172,7 +172,7 @@ class VehicleBuyAction(BuyAction):
                         if item.isRestoreAvailable():
                             meta = RestoreExchangeCreditsMeta(self.__vehCD)
                         else:
-                            meta = ExchangeCreditsMeta(self.__vehCD)
+                            meta = ExchangeCreditsSingleItemMeta(self.__vehCD)
                         isOk, _ = yield DialogsInterface.showDialog(meta)
                         if not isOk:
                             return
@@ -297,7 +297,7 @@ class BuyAndInstallItemAction(InstallItemAction):
         item = self.itemsCache.items.getItemByCD(itemCD)
         conflictedEqs = item.getConflictedEquipments(vehicle)
         if not self._mayObtainForMoney(item) and self._mayObtainWithMoneyExchange(item):
-            isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsMeta(itemCD, vehicle.intCD))
+            isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsSingleItemMeta(itemCD, vehicle.intCD))
             if not isOk:
                 return
         if self._mayObtainForMoney(item):
@@ -352,7 +352,7 @@ class SetVehicleModuleAction(BuyAction):
             if not self.__isRemove and not newComponentItem.isInInventory and not newComponentItem.itemTypeID == GUI_ITEM_TYPE.BATTLE_ABILITY:
                 conflictedEqs = newComponentItem.getConflictedEquipments(vehicle)
                 if not self._mayObtainForMoney(newComponentItem) and self._mayObtainWithMoneyExchange(newComponentItem):
-                    isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsMeta(newComponentItem.intCD, vehicle.intCD))
+                    isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsSingleItemMeta(newComponentItem.intCD, vehicle.intCD))
                     if not isOk:
                         return
                 if self._mayObtainForMoney(newComponentItem):

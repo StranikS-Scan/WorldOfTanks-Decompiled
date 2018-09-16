@@ -15,6 +15,9 @@ _CAMO_ICON_TEMPLATE = 'img://camouflage,{width},{height},"{texture}","{backgroun
 _CAMO_SWATCH_WIDTH = 128
 _CAMO_SWATCH_HEIGHT = 128
 _CAMO_SWATCH_BACKGROUND = 'gui/maps/vehicles/camouflages/camo_back.dds'
+STYLE_GROUP_ID_TO_GROUP_NAME_MAP = {VEHICLE_CUSTOMIZATION.STYLES_SPECIAL_STYLES: VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_SPECIAL,
+ VEHICLE_CUSTOMIZATION.STYLES_MAIN_STYLES: VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_MAIN,
+ VEHICLE_CUSTOMIZATION.STYLES_RENTED_STYLES: VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_RENTED}
 
 def camoIconTemplate(texture, width, height, colors, background=_CAMO_SWATCH_BACKGROUND):
     weights = Math.Vector4(*[ (color >> 24) / 255.0 for color in colors ])
@@ -169,6 +172,9 @@ class Customization(FittingItem):
     def fullInventoryCount(self, vehicle):
         return self.inventoryCount + self.boundInventoryCount.get(vehicle.intCD, 0)
 
+    def getGUIEmblemID(self):
+        pass
+
 
 class Paint(Customization):
 
@@ -291,7 +297,7 @@ class Style(Customization):
 
     @property
     def userType(self):
-        return i18n.makeString(VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_RENT) if self.isRentable else i18n.makeString(VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_PERMANENT)
+        return i18n.makeString(STYLE_GROUP_ID_TO_GROUP_NAME_MAP[self.groupID])
 
     def getRentInfo(self, vehicle):
         if not self.isRentable:

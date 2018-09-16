@@ -234,9 +234,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
         BigWorld.cameraSpaceID(0)
         BigWorld.camera(BigWorld.CursorCamera())
-        from gui.shared.utils.HangarSpace import g_hangarSpace
-        if g_hangarSpace is not None:
-            g_hangarSpace.destroy()
         chatManager.switchPlayerProxy(self)
         g_playerEvents.isPlayerEntityChanging = False
         self.__isSpaceInitialized = False
@@ -1963,7 +1960,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.soundNotifications.start()
 
     def __destroyGUI(self):
-        g_appLoader.destroyBattle()
         self.arena.onVehicleKilled -= self.__onArenaVehicleKilled
         self.complexSoundNotifications.destroy()
         self.complexSoundNotifications = None

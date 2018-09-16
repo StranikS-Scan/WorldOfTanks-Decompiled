@@ -12,11 +12,26 @@ GUI_SETTINGS_FILE_PATH = 'gui/gui_settings.xml'
 VIDEO_SETTINGS_FILE_PATH = 'gui/video_settings.xml'
 MovingTextProps = namedtuple('MovingTextProps', 'show internalBrowser')
 LoginRssFeedProps = namedtuple('LoginRssFeedProps', 'show url internalBrowser')
-EULAProps = namedtuple('EULAProps', 'full url')
 BrowserProps = namedtuple('BrowserProps', 'url params')
 PostBattleExchangeProps = namedtuple('PostBattleExchangeProps', 'enabled url')
-EncyclopediaProps = namedtuple('EncyclopediaProps', 'url enabled')
 _MacrosValue = namedtuple('MacrosValue', 'macros dictValue')
+
+class EULAProps(object):
+    __slots__ = ('__full', '__url')
+
+    def __init__(self, full=None, url=''):
+        super(EULAProps, self).__init__()
+        self.__full = full or ()
+        self.__url = url
+
+    @property
+    def full(self):
+        return getClientLanguage() in self.__full
+
+    @property
+    def url(self):
+        return self.__url
+
 
 def _readMacros(xmlCtx, section, valueName='value'):
     result = {}
@@ -44,23 +59,8 @@ def _convertToNamedTuple(settings, item):
     return settings._replace(**item.value)
 
 
-def _convertEULASetting(settings, item):
-    value = item.value
-    if 'full' in value:
-        value['full'] = getClientLanguage() in value['full']
-    else:
-        value['full'] = False
-    return settings._replace(**item.value)
-
-
-def _convertEncyclopedia(_, item):
-    value = item.value
-    if isinstance(value, _MacrosValue):
-        dictValue = value.dictValue
-        dictValue['enabled'] = getClientLanguage() in dictValue.pop('languages', [])
-    else:
-        value['enabled'] = getClientLanguage() in value.pop('languages', [])
-    return value
+def _convertEULASetting(_, item):
+    return EULAProps(**item.value)
 
 
 _SETTING_CONVERTERS = {'loginRssFeed': _convertToNamedTuple,
@@ -69,8 +69,7 @@ _SETTING_CONVERTERS = {'loginRssFeed': _convertToNamedTuple,
  'markerScaleSettings': _convertVector4ToTuple,
  'markerBgSettings': _convertVector4ToTuple,
  'browser': _convertToNamedTuple,
- 'postBattleExchange': _convertToNamedTuple,
- 'encyclopedia': _convertEncyclopedia}
+ 'postBattleExchange': _convertToNamedTuple}
 _DEFAULT_SETTINGS = {'registrationURL': '',
  'registrationProxyURL': '',
  'recoveryPswdURL': '',
@@ -103,7 +102,7 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'roaming': True,
  'movingText': MovingTextProps(False, False),
  'loginRssFeed': LoginRssFeedProps(True, '', False),
- 'eula': EULAProps(False, ''),
+ 'eula': EULAProps(),
  'igrCredentialsReset': False,
  'igrEnabled': False,
  'battleEndWarningEnabled': True,

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/BATTLE_RESULTS.py
-
+from debug_utils import LOG_WARNING
 
 class BATTLE_RESULTS(object):
     CYBERSPORT_BTNTOTEAMPROFILE = '#battle_results:cyberSport/btnToTeamProfile'
@@ -186,6 +186,16 @@ class BATTLE_RESULTS(object):
     TEAM_PLAYERHEADERNOSORT_HEADER = '#battle_results:team/playerHeaderNoSort/header'
     TEAM_TEAMRESOURCETOTAL = '#battle_results:team/teamResourceTotal'
     TEAM_TEAMINFLUENCETOTAL = '#battle_results:team/teamInfluenceTotal'
+    TEAM_STATS_LABELS_XP = '#battle_results:team/stats/labels_xp'
+    TEAM_STATS_LABELS_XPFORATTACK = '#battle_results:team/stats/labels_xpForAttack'
+    TEAM_STATS_INFOTIP_XPFORATTACK_HEADER = '#battle_results:team/stats/infotip_xpForAttack/header'
+    TEAM_STATS_INFOTIP_XPFORATTACK_BODY = '#battle_results:team/stats/infotip_xpForAttack/body'
+    TEAM_STATS_LABELS_XPFORASSIST = '#battle_results:team/stats/labels_xpForAssist'
+    TEAM_STATS_INFOTIP_XPFORASSIST_HEADER = '#battle_results:team/stats/infotip_xpForAssist/header'
+    TEAM_STATS_INFOTIP_XPFORASSIST_BODY = '#battle_results:team/stats/infotip_xpForAssist/body'
+    TEAM_STATS_LABELS_XPOTHER = '#battle_results:team/stats/labels_xpOther'
+    TEAM_STATS_INFOTIP_XPOTHER_HEADER = '#battle_results:team/stats/infotip_xpOther/header'
+    TEAM_STATS_INFOTIP_XPOTHER_BODY = '#battle_results:team/stats/infotip_xpOther/body'
     TEAM_STATS_LABELS_SHOTS = '#battle_results:team/stats/labels_shots'
     TEAM_STATS_LABELS_HITS = '#battle_results:team/stats/labels_hits'
     TEAM_STATS_LABELS_EXPLOSIONHITS = '#battle_results:team/stats/labels_explosionHits'
@@ -302,3 +312,146 @@ class BATTLE_RESULTS(object):
     GETPREMIUMPOPOVER_ACTIONBTN_LABEL = '#battle_results:getPremiumPopover/actionBtn/label'
     GETPREMIUMPOPOVER_PREM = '#battle_results:getPremiumPopover/prem'
     GETPREMIUMPOPOVER_AWARD = '#battle_results:getPremiumPopover/award'
+    DETAILS_TIME_LBL_ENUM = (DETAILS_TIME_LBL_OBJECTIVESREACHED,
+     DETAILS_TIME_LBL_OBJECTIVESDESTROYED,
+     DETAILS_TIME_LBL_BASESCAPTURED,
+     DETAILS_TIME_LBL_ARENACREATETIMEONLYSTR,
+     DETAILS_TIME_LBL_DURATION,
+     DETAILS_TIME_LBL_PLAYERKILLED)
+    TEAM_STATS_INFOTIP_ALL_HEADER_ENUM = (TEAM_STATS_INFOTIP_XPFORATTACK_HEADER, TEAM_STATS_INFOTIP_XPFORASSIST_HEADER, TEAM_STATS_INFOTIP_XPOTHER_HEADER)
+    TEAM_STATS_INFOTIP_ALL_BODY_ENUM = (TEAM_STATS_INFOTIP_XPFORATTACK_BODY, TEAM_STATS_INFOTIP_XPFORASSIST_BODY, TEAM_STATS_INFOTIP_XPOTHER_BODY)
+    COMMON_VEHICLESTATE_DEAD_ENUM = (COMMON_VEHICLESTATE_DEAD0,
+     COMMON_VEHICLESTATE_DEAD1,
+     COMMON_VEHICLESTATE_DEAD2,
+     COMMON_VEHICLESTATE_DEAD3,
+     COMMON_VEHICLESTATE_DEAD4,
+     COMMON_VEHICLESTATE_DEAD5,
+     COMMON_VEHICLESTATE_DEAD6,
+     COMMON_VEHICLESTATE_DEAD7)
+    TEAM_STATS_LABELS_ENUM = (TEAM_STATS_LABELS_XP,
+     TEAM_STATS_LABELS_XPFORATTACK,
+     TEAM_STATS_LABELS_XPFORASSIST,
+     TEAM_STATS_LABELS_XPOTHER,
+     TEAM_STATS_LABELS_SHOTS,
+     TEAM_STATS_LABELS_HITS,
+     TEAM_STATS_LABELS_EXPLOSIONHITS,
+     TEAM_STATS_LABELS_DAMAGEDEALT,
+     TEAM_STATS_LABELS_SNIPERDAMAGEDEALT,
+     TEAM_STATS_LABELS_DESTRUCTIBLESDAMAGEDEALT,
+     TEAM_STATS_LABELS_EQUIPMENTDAMAGEDEALT,
+     TEAM_STATS_LABELS_DAMAGEDEALTRATIO,
+     TEAM_STATS_LABELS_DIRECTHITSRECEIVED,
+     TEAM_STATS_LABELS_PIERCINGSRECEIVED,
+     TEAM_STATS_LABELS_NODAMAGEDIRECTHITSRECEIVED,
+     TEAM_STATS_LABELS_EXPLOSIONHITSRECEIVED,
+     TEAM_STATS_LABELS_DAMAGEBLOCKEDBYARMOR,
+     TEAM_STATS_LABELS_TEAMHITSDAMAGE,
+     TEAM_STATS_LABELS_SPOTTED,
+     TEAM_STATS_LABELS_DAMAGEDKILLED,
+     TEAM_STATS_LABELS_KILLED,
+     TEAM_STATS_LABELS_DAMAGEASSISTED,
+     TEAM_STATS_LABELS_DAMAGEASSISTEDSTUN,
+     TEAM_STATS_LABELS_STUNNUM,
+     TEAM_STATS_LABELS_STUNDURATION,
+     TEAM_STATS_LABELS_DAMAGEDEALTBYORDER,
+     TEAM_STATS_LABELS_KILLSBYORDER,
+     TEAM_STATS_LABELS_DAMAGEASSISTEDSELF,
+     TEAM_STATS_LABELS_EQUIPMENTDAMAGEASSISTED,
+     TEAM_STATS_LABELS_DAMAGEASSISTEDSTUNSELF,
+     TEAM_STATS_LABELS_CAPTUREPOINTSVAL,
+     TEAM_STATS_LABELS_MILEAGE,
+     TEAM_STATS_LABELS_TIMESDESTROYED,
+     TEAM_STATS_LABELS_FLAGS,
+     TEAM_STATS_LABELS_DEATHS,
+     TEAM_STATS_LABELS_DESTROYRECOVERYRATIO,
+     TEAM_STATS_LABELS_ATKOBJECTIVES,
+     TEAM_STATS_LABELS_DEFOBJECTIVES)
+    DETAILS_CALCULATIONS_ENUM = (DETAILS_CALCULATIONS_WGMOFFLINEEMERGENCY,
+     DETAILS_CALCULATIONS_BOOSTERS,
+     DETAILS_CALCULATIONS_BATTLEPAYMENTS,
+     DETAILS_CALCULATIONS_TACTICALTRAINING,
+     DETAILS_CALCULATIONS_MILITARYMANEUVERS,
+     DETAILS_CALCULATIONS_HEAVYTRUCKS,
+     DETAILS_CALCULATIONS_INTERMEDIATETOTAL,
+     DETAILS_CALCULATIONS_BASE,
+     DETAILS_CALCULATIONS_XPRECORD,
+     DETAILS_CALCULATIONS_NOPENALTY,
+     DETAILS_CALCULATIONS_EVENT,
+     DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_DESERTER,
+     DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_AFK,
+     DETAILS_CALCULATIONS_FAIRPLAYVIOLATION_SUICIDE,
+     DETAILS_CALCULATIONS_FRIENDLYFIREPENALTY,
+     DETAILS_CALCULATIONS_FRIENDLYFIRECOMPENSATION,
+     DETAILS_CALCULATIONS_PLAYERRANKXP,
+     DETAILS_CALCULATIONS_AUTOREPAIR,
+     DETAILS_CALCULATIONS_AUTOLOAD,
+     DETAILS_CALCULATIONS_AUTOEQUIP,
+     DETAILS_CALCULATIONS_AOGASFACTOR,
+     DETAILS_CALCULATIONS_PREMIUMVEHICLEXP,
+     DETAILS_CALCULATIONS_SQUADXP,
+     DETAILS_CALCULATIONS_SQUADXPPENALTY,
+     DETAILS_CALCULATIONS_TOTAL,
+     DETAILS_CALCULATIONS_FIRSTWIN,
+     DETAILS_CALCULATIONS_IGRBONUS,
+     DETAILS_CALCULATIONS_FORTORDER,
+     DETAILS_CALCULATIONS_REFERRALBONUS,
+     DETAILS_CALCULATIONS_MULTIPLIERINFO_HEADER,
+     DETAILS_CALCULATIONS_MULTIPLIERINFO_BODY,
+     DETAILS_CALCULATIONS_MULTIPLIERINFO_VEHICLESEPARATOR,
+     DETAILS_CALCULATIONS_SQUAD_RESTRICTIONS_TITLE,
+     DETAILS_CALCULATIONS_CRYSTAL_TOTAL,
+     DETAILS_CALCULATIONS_CRYSTAL_ACHIEVEMENT)
+
+    @classmethod
+    def getDetailsTimeLbl(cls, statName):
+        outcome = '#battle_results:details/time/lbl_{}'.format(statName)
+        if outcome not in cls.DETAILS_TIME_LBL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getDetailsCalculation(cls, statName):
+        outcome = '#battle_results:details/calculations/{}'.format(statName)
+        if outcome not in cls.DETAILS_CALCULATIONS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getTeamStatsLabel(cls, statName):
+        outcome = '#battle_results:team/stats/labels_{}'.format(statName)
+        if outcome not in cls.TEAM_STATS_LABELS_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getTeamStatsInfotipHeader(cls, statName):
+        outcome = '#battle_results:team/stats/infotip_{}/header'.format(statName)
+        if outcome not in cls.TEAM_STATS_INFOTIP_ALL_HEADER_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getTeamStatsInfotipBody(cls, statName):
+        outcome = '#battle_results:team/stats/infotip_{}/body'.format(statName)
+        if outcome not in cls.TEAM_STATS_INFOTIP_ALL_BODY_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getVehicleDeadState(cls, intType):
+        outcome = '#battle_results:common/vehicleState/dead{}'.format(intType)
+        if outcome not in cls.COMMON_VEHICLESTATE_DEAD_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome

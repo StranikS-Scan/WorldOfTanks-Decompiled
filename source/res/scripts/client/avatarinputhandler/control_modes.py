@@ -29,7 +29,7 @@ from helpers import dependency, uniprof
 from skeletons.gui.battle_session import IBattleSessionProvider
 from constants import VEHICLE_SIEGE_STATE
 from gui import GUI_SETTINGS
-from gui.battle_control import avatar_getter
+from gui.battle_control import avatar_getter, vehicle_getter
 _ARCADE_CAM_PIVOT_POS = Math.Vector3(0, 4, 3)
 
 class IControlMode(object):
@@ -823,7 +823,6 @@ class SniperControlMode(_GunControlMode):
         super(SniperControlMode, self).__init__(dataSection, avatarInputHandler, CTRL_MODE_NAME.SNIPER)
         self.__binoculars = BigWorld.wg_binoculars()
         self._cam = SniperCamera.SniperCamera(dataSection['camera'], defaultOffset=self._defaultOffset, binoculars=self.__binoculars)
-        self.__coatedOptics = False
         self.__binocularsModes = {}
         for suffix in SniperControlMode._BINOCULARS_MODE_SUFFIX:
             prefPath = 'binoculars_' + suffix
@@ -833,8 +832,7 @@ class SniperControlMode(_GunControlMode):
     def create(self):
         self._cam.create(self.onChangeControlModeByScroll)
         super(SniperControlMode, self).create()
-        from items.vehicles import g_cache
-        self.__setupBinoculars(g_cache.optionalDevices()[5] in BigWorld.entities[BigWorld.player().playerVehicleID].typeDescriptor.optionalDevices)
+        self.__setupBinoculars(vehicle_getter.isCoatedOpticsInstalled())
 
     def destroy(self):
         self.disable(True)

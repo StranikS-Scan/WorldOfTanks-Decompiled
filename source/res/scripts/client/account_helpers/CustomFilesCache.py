@@ -18,7 +18,14 @@ _MIN_LIFE_TIME = 900
 _MAX_LIFE_TIME = 86400
 _LIFE_TIME_IN_MEMORY = 1200
 _CACHE_VERSION = 2
-_CLIENT_VERSION = getFullClientVersion()
+_CLIENT_VERSION = None
+
+def _getClientVersion():
+    global _CLIENT_VERSION
+    if _CLIENT_VERSION is None:
+        _CLIENT_VERSION = getFullClientVersion()
+    return _CLIENT_VERSION
+
 
 def _LOG_EXECUTING_TIME(startTime, methodName, deltaTime=0.1):
     finishTime = time.time()
@@ -198,7 +205,7 @@ class WorkerThread(threading.Thread):
                 fh = remote_file = None
                 last_modified = expires = None
                 req = urllib2.Request(url)
-                req.add_header('User-Agent', _CLIENT_VERSION)
+                req.add_header('User-Agent', _getClientVersion())
                 headers = params.get('headers') or {}
                 for name, value in headers.iteritems():
                     req.add_header(name, value)

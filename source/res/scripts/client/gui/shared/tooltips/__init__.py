@@ -16,7 +16,6 @@ from skeletons.gui.shared import IItemsCache
 class TOOLTIP_TYPE(CONST_CONTAINER):
     VEHICLE = 'vehicle'
     TANKMAN = 'tankman'
-    SEASONS = 'seasons'
     SKILL = 'skill'
     ACHIEVEMENT = 'achievement'
     ACHIEVEMENT_ATTR = 'achievementAttr'
@@ -47,6 +46,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     FAKE = 'fake'
     VEHICLE_ELITE_BONUS = 'vehicleEliteBonus'
     VEHICLE_HISTORICAL_REFERENCE = 'vehicleHistoricalReference'
+    MARATHON = 'marathon'
     EPIC_SKILL_INFO = 'epicSkillInfo'
     EPIC_SELECTOR_INFO = 'epicSelectorInfo'
     EPIC_SELECTOR_UNAVAILABLE_INFO = 'epicSelectorUnavailableInfo'

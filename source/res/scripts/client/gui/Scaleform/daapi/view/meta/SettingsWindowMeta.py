@@ -34,7 +34,7 @@ class SettingsWindowMeta(AbstractWindowView):
     def onTabSelected(self, tabId):
         self._printOverrideError('onTabSelected')
 
-    def onCounterTargetVisited(self, viewId, subViewId, controlId):
+    def onCounterTargetVisited(self, viewId, subViewId, controlsIDs):
         self._printOverrideError('onCounterTargetVisited')
 
     def autodetectAcousticType(self):

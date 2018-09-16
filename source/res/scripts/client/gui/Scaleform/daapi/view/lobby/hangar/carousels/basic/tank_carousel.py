@@ -124,5 +124,5 @@ class TankCarousel(TankCarouselMeta):
         self.updateParams()
 
     def __onViewLoaded(self, view, *args, **kwargs):
-        if view.settings.alias == VIEW_ALIAS.TANK_CAROUSEL_FILTER_POPOVER:
+        if view.alias == VIEW_ALIAS.TANK_CAROUSEL_FILTER_POPOVER:
             view.setTankCarousel(self)

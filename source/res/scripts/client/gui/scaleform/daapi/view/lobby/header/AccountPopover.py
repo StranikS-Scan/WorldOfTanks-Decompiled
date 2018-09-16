@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/AccountPopover.py
 import BigWorld
+from adisp import process
 from PlayerEvents import g_playerEvents
 from account_helpers.AccountSettings import AccountSettings, BOOSTERS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -28,6 +29,7 @@ from helpers import dependency
 from helpers import isPlayerAccount
 from helpers.i18n import makeString
 from skeletons.gui.game_control import IRefSystemController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from tutorial.hints_manager import HINT_SHOWN_STATUS
 HAVE_NEW_BADGE = '_HaveNewBadge'
@@ -36,6 +38,7 @@ HINT_ID = 'HaveNewBadgeHint'
 class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmblemsHelper):
     itemsCache = dependency.descriptor(IItemsCache)
     refSystem = dependency.descriptor(IRefSystemController)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _):
         super(AccountPopover, self).__init__()
@@ -80,13 +83,18 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.REFERRAL_MANAGEMENT_WINDOW), EVENT_BUS_SCOPE.LOBBY)
         self.destroy()
 
+    @process
     def openBadgesWindow(self):
-        if self.__tutorStorage is not None:
-            self.__tutorStorage.setValue(HAVE_NEW_BADGE, False)
-        from gui.shared import g_eventBus
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BADGES_PAGE, ctx={}), scope=EVENT_BUS_SCOPE.LOBBY)
-        self.destroy()
-        return
+        navigationPossible = yield self.lobbyContext.isHeaderNavigationPossible()
+        if not navigationPossible:
+            return
+        else:
+            if self.__tutorStorage is not None:
+                self.__tutorStorage.setValue(HAVE_NEW_BADGE, False)
+            from gui.shared import g_eventBus
+            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BADGES_PAGE, ctx={}), scope=EVENT_BUS_SCOPE.LOBBY)
+            self.destroy()
+            return
 
     def onUnitFlagsChanged(self, flags, timeLeft):
         self.__updateButtonsStates()

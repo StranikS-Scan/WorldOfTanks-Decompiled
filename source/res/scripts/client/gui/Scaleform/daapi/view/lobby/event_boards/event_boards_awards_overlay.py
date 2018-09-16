@@ -110,7 +110,7 @@ class EventBoardsAwardsOverlay(EventBoardsAwardsOverlayMeta):
         super(EventBoardsAwardsOverlay, self)._dispose()
 
     def __onViewLoaded(self, view, *args, **kwargs):
-        if view.settings.alias == EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_VEHICLES_ALIAS:
+        if view.alias == EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_VEHICLES_ALIAS:
             if view.caller == 'awards':
                 eventData = self.__opener.eventData
                 view.setData(eventData, self._setData, self.__leaderboardID)

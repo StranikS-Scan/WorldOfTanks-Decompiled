@@ -10,9 +10,9 @@ from helpers import dependency
 from items.components.c11n_constants import SeasonType
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.game_control import IHeroTankController
+from skeletons.gui.shared.utils import IHangarSpace
 from vehicle_systems.tankStructure import ModelStates
 from items import vehicles
-from gui.shared.utils.HangarSpace import g_hangarSpace
 
 class _HeroTankAppearance(HangarVehicleAppearance):
     _heroTankCtrl = dependency.descriptor(IHeroTankController)
@@ -32,6 +32,7 @@ class _HeroTankAppearance(HangarVehicleAppearance):
 
 class HeroTank(ClientSelectableCameraVehicle):
     _heroTankCtrl = dependency.descriptor(IHeroTankController)
+    _hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self):
         self.__heroTankCD = None
@@ -40,11 +41,11 @@ class HeroTank(ClientSelectableCameraVehicle):
 
     def onEnterWorld(self, prereqs):
         super(HeroTank, self).onEnterWorld(prereqs)
-        g_hangarSpace.onHeroTankReady += self._updateHeroTank
+        self._hangarSpace.onHeroTankReady += self._updateHeroTank
         self._heroTankCtrl.onUpdated += self._updateHeroTank
 
     def onLeaveWorld(self):
-        g_hangarSpace.onHeroTankReady -= self._updateHeroTank
+        self._hangarSpace.onHeroTankReady -= self._updateHeroTank
         self._heroTankCtrl.onUpdated -= self._updateHeroTank
         super(HeroTank, self).onLeaveWorld()
 

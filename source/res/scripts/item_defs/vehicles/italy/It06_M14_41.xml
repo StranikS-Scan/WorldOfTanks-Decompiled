@@ -50,9 +50,9 @@
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
-      <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
-      <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
-      <sensitivityToImpulse>	0.54	</sensitivityToImpulse>
+      <pitchParams>	0.20 36.00 0.36 1.00 0.04 0.26	</pitchParams>
+      <rollParams>	1.00 0.10 36.00 0.36 1.00 0.01 0.26	</rollParams>
+      <sensitivityToImpulse>	0.13	</sensitivityToImpulse>
     </swinging>
     <exhaust>
       <pixie>	diesel_small	</pixie>
@@ -116,7 +116,7 @@
         <lodDist>	MEDIUM	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	usa_02	</textureSet>
-        <size>	0.3 0.3	</size>
+        <size>	0.3 0.36	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -362,7 +362,7 @@
         <lodDist>	MEDIUM	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	usa_02	</textureSet>
-        <size>	0.3 0.3	</size>
+        <size>	0.3 0.36	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -688,32 +688,32 @@
       <gunPosition>	0.002245 0.242515 0.618962	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.563583 0.342588 0.491088	</rayStart>
-          <rayEnd>	-0.386 0.280791 0.422932	</rayEnd>
+          <rayStart>	-0.800856 0.251735 -0.0597034	</rayStart>
+          <rayEnd>	-0.620042 0.188618 -0.117339	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.3	</size>
+          <size>	0.247	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </player>
-        <player>
-          <rayStart>	0.563583 0.342588 0.491088	</rayStart>
-          <rayEnd>	0.386 0.280791 0.422932	</rayEnd>
+        <inscription>
+          <rayStart>	-0.564005 0.346108 0.486796	</rayStart>
+          <rayEnd>	-0.386426 0.284312 0.418642	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.3	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <size>	0.432	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <player>
+          <rayStart>	0.800856 0.251735 -0.0597034	</rayStart>
+          <rayEnd>	0.620042 0.188618 -0.117339	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.247	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
         <inscription>
-          <rayStart>	-0.815602 0.316945 -0.268092	</rayStart>
-          <rayEnd>	-0.629306 0.244292 -0.264415	</rayEnd>
+          <rayStart>	0.561988 0.336965 0.500554	</rayStart>
+          <rayEnd>	0.384426 0.27526 0.432273	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.55	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-        </inscription>
-        <inscription>
-          <rayStart>	0.815602 0.316945 -0.268092	</rayStart>
-          <rayEnd>	0.629306 0.244292 -0.264415	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.55	</size>
+          <size>	0.405	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </inscription>
       </emblemSlots>

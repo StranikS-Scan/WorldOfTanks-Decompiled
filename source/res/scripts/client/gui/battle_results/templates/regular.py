@@ -310,8 +310,6 @@ TEAM_ITEM_VO_META = base.PropertyMeta((('achievements', shared.AchievementsBlock
  ('playerRank', 0, 'playerRank'),
  ('respawns', 0, 'respawns')))
 TEAM_ITEM_VO_META.bind(vehicles.RegularVehicleStatsBlock)
-REGULAR_TEAM_ITEM_VO_META = TEAM_ITEM_VO_META.replace(('statValues', vehicles.AllRegularVehicleStatValuesBlock(base.ListMeta(), 'statValues'), 'statValues'))
-REGULAR_TEAM_ITEM_VO_META.bind(vehicles.RegularVehicleStatsBlock)
 TEAMS_VO_META = base.DictMeta({'team1': [],
  'team2': []})
 REGULAR_TEAMS_STATS_BLOCK = vehicles.TwoTeamsStatsBlock(TEAMS_VO_META.clone(), '', _RECORD.VEHICLES)

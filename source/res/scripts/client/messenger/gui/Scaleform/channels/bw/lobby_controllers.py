@@ -49,7 +49,7 @@ class _ChannelController(LobbyLayout):
     def canSendMessage(self):
         result, errorMsg = True, ''
         if cooldown.isBroadcatInCooldown():
-            result, errorMsg = False, cooldown.BROADCAST_COOL_DOWN_MESSAGE
+            result, errorMsg = False, cooldown.getBroadcastCoolDownMessage()
         return (result, errorMsg)
 
     def _broadcast(self, message):

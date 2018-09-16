@@ -43,16 +43,16 @@
       </value>
     </badge>
     <badge>
-      <name>	ranked_s1_gold	</name>
+      <name>	ranked_s2_gold	</name>
       <type>	dict	</type>
       <value>
-        <item>	29	  <name>	id	</name>
+        <item>	3	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	5.10	  <name>	weight	</name>
+        <item>	5.07	  <name>	weight	</name>
           <type>	float	</type>
         </item>
-        <item>	12	  <name>	group	</name>
+        <item>	16	  <name>	group	</name>
           <type>	int	</type>
         </item>
         <item>	3	  <name>	class	</name>
@@ -106,16 +106,16 @@
       </value>
     </badge>
     <badge>
-      <name>	ranked_s1_silver	</name>
+      <name>	ranked_s2_silver	</name>
       <type>	dict	</type>
       <value>
-        <item>	30	  <name>	id	</name>
+        <item>	6	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	5.11	  <name>	weight	</name>
+        <item>	5.08	  <name>	weight	</name>
           <type>	float	</type>
         </item>
-        <item>	12	  <name>	group	</name>
+        <item>	16	  <name>	group	</name>
           <type>	int	</type>
         </item>
         <item>	2	  <name>	class	</name>
@@ -169,16 +169,16 @@
       </value>
     </badge>
     <badge>
-      <name>	ranked_s1_bronze	</name>
+      <name>	ranked_s2_bronze	</name>
       <type>	dict	</type>
       <value>
-        <item>	31	  <name>	id	</name>
+        <item>	9	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	5.12	  <name>	weight	</name>
+        <item>	5.09	  <name>	weight	</name>
           <type>	float	</type>
         </item>
-        <item>	12	  <name>	group	</name>
+        <item>	16	  <name>	group	</name>
           <type>	int	</type>
         </item>
         <item>	1	  <name>	class	</name>
@@ -391,6 +391,21 @@
         <item>	green	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+                <item>	ASIA	</item>
+                <item>	NA	</item>
+              </value>
+            </item>
+          </value>
+        </item>
       </value>
     </badge>
     <badge>
@@ -411,6 +426,21 @@
         </item>
         <item>	green	  <name>	highlight	</name>
           <type>	string	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+                <item>	ASIA	</item>
+                <item>	NA	</item>
+              </value>
+            </item>
+          </value>
         </item>
       </value>
     </badge>
@@ -433,6 +463,21 @@
         <item>	green	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+                <item>	ASIA	</item>
+                <item>	NA	</item>
+              </value>
+            </item>
+          </value>
+        </item>
       </value>
     </badge>
     <badge>
@@ -453,6 +498,21 @@
         </item>
         <item>	green	  <name>	highlight	</name>
           <type>	string	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+                <item>	ASIA	</item>
+                <item>	NA	</item>
+              </value>
+            </item>
+          </value>
         </item>
       </value>
     </badge>
@@ -475,6 +535,21 @@
         <item>	green	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+                <item>	ASIA	</item>
+                <item>	NA	</item>
+              </value>
+            </item>
+          </value>
+        </item>
       </value>
     </badge>
     <badge>
@@ -495,6 +570,21 @@
         </item>
         <item>	green	  <name>	highlight	</name>
           <type>	string	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+                <item>	ASIA	</item>
+                <item>	NA	</item>
+              </value>
+            </item>
+          </value>
         </item>
       </value>
     </badge>
@@ -517,6 +607,21 @@
         <item>	green	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+                <item>	ASIA	</item>
+                <item>	NA	</item>
+              </value>
+            </item>
+          </value>
+        </item>
       </value>
     </badge>
     <badge>
@@ -538,6 +643,21 @@
         <item>	green	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+                <item>	ASIA	</item>
+                <item>	NA	</item>
+              </value>
+            </item>
+          </value>
+        </item>
       </value>
     </badge>
     <badge>
@@ -547,7 +667,7 @@
         <item>	27	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	4.1	  <name>	weight	</name>
+        <item>	4.11	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	13	  <name>	group	</name>
@@ -555,6 +675,19 @@
         </item>
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+              </value>
+            </item>
+          </value>
         </item>
       </value>
     </badge>
@@ -565,13 +698,89 @@
         <item>	28	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	4.2	  <name>	weight	</name>
+        <item>	4.12	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	14	  <name>	group	</name>
           <type>	int	</type>
         </item>
         <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+              </value>
+            </item>
+          </value>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	ranked_s1_gold	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	29	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.10	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	12	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	3	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	red	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	ranked_s1_silver	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	30	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.11	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	12	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	2	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	red	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	ranked_s1_bronze	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	31	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.12	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	12	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	red	  <name>	highlight	</name>
           <type>	string	</type>
         </item>
       </value>
@@ -583,7 +792,7 @@
         <item>	32	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	5.1	  <name>	weight	</name>
+        <item>	4.41	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	15	  <name>	group	</name>
@@ -601,7 +810,7 @@
         <item>	33	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	5.2	  <name>	weight	</name>
+        <item>	4.42	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	15	  <name>	group	</name>
@@ -619,7 +828,7 @@
         <item>	34	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	5.3	  <name>	weight	</name>
+        <item>	4.43	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	15	  <name>	group	</name>
@@ -637,11 +846,24 @@
         <item>	35	  <name>	id	</name>
           <type>	int	</type>
         </item>
-        <item>	4.15	  <name>	weight	</name>
+        <item>	4.13	  <name>	weight	</name>
           <type>	float	</type>
         </item>
         <item>	gold	  <name>	highlight	</name>
           <type>	string	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	exclude	</name>
+              <type>	list	</type>
+              <value>
+                <item>	CN	</item>
+              </value>
+            </item>
+          </value>
         </item>
       </value>
     </badge>

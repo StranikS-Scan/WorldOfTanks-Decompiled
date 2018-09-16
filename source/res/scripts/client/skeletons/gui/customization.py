@@ -4,15 +4,18 @@ from Event import Event
 
 class ICustomizationService(object):
     onRegionHighlighted = None
-    onRemoveItems = None
-    onCarouselFilter = None
     onOutfitChanged = None
-    onPropertySheetShow = None
 
     def init(self):
         raise NotImplementedError
 
     def fini(self):
+        raise NotImplementedError
+
+    def getCtx(self):
+        raise NotImplementedError
+
+    def destroyCtx(self):
         raise NotImplementedError
 
     def startHighlighter(self, mode):
@@ -69,6 +72,9 @@ class ICustomizationService(object):
     def getItemByID(self, itemTypeID, itemID):
         raise NotImplementedError
 
+    def getItemByCD(self, itemCD):
+        raise NotImplementedError
+
     def getEmptyOutfit(self):
         raise NotImplementedError
 
@@ -100,4 +106,10 @@ class ICustomizationService(object):
         raise NotImplementedError
 
     def setSelectHighlighting(self, value):
+        raise NotImplementedError
+
+    def resetHighlighting(self):
+        raise NotImplementedError
+
+    def moveHangarVehicleToCustomizationRoom(self):
         raise NotImplementedError

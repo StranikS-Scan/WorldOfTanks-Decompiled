@@ -117,6 +117,10 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     terrainMatKindSensor = ComponentDescriptor()
     waterSensor = ComponentDescriptor()
     peripheralsController = ComponentDescriptor()
+    tracks = ComponentDescriptor()
+    crashedTrackController = ComponentDescriptor()
+    collisionObstaclesCollector = ComponentDescriptor()
+    tessellationCollisionSensor = ComponentDescriptor()
 
     def __init__(self):
         CallbackDelayer.__init__(self)
@@ -128,7 +132,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__originalFilter = None
         self.__typeDesc = None
         self.__fashion = None
-        self.__crashedTracksCtrl = None
+        self.crashedTracksController = None
         self.__currentDamageState = VehicleDamageState()
         self.__effectsPlayer = None
         self.__engineMode = (0, 0)
@@ -185,8 +189,8 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__vehicle = vehicle
         if self.customEffectManager is not None:
             self.customEffectManager.setVehicle(vehicle)
-        if self.__crashedTracksCtrl is not None:
-            self.__crashedTracksCtrl.setVehicle(vehicle)
+        if self.crashedTracksController is not None:
+            self.crashedTracksController.setVehicle(vehicle)
         if self.frictionAudition is not None:
             self.frictionAudition.setVehicleMatrix(vehicle.matrix)
         self.highlighter.setVehicle(vehicle)
@@ -295,8 +299,6 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.__vehicle.model = None
             self.__compoundModel.matrix = Math.Matrix()
             self.__vehicle = None
-            if self.__crashedTracksCtrl is not None:
-                self.__crashedTracksCtrl.deactivate()
             BigWorld.player().arena.onPeriodChange -= self.__arenaPeriodChanged
             BigWorld.player().inputHandler.onCameraChanged -= self.__onCameraChanged
             return
@@ -354,9 +356,9 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         if self.__trackScrollCtl is not None:
             self.__trackScrollCtl.deactivate()
             self.__trackScrollCtl = None
-        if self.__crashedTracksCtrl is not None:
-            self.__crashedTracksCtrl.destroy()
-            self.__crashedTracksCtrl = None
+        if self.crashedTracksController is not None:
+            self.crashedTracksController.destroy()
+            self.crashedTracksController = None
         self.__systemStarted = False
         return
 
@@ -392,6 +394,9 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.waterSensor.sensorPlaneLink = model.root
         self.peripheralsController = None
         self.dirtComponent = None
+        self.tracks = None
+        self.collisionObstaclesCollector = None
+        self.tessellationCollisionSensor = None
         self.__destroySystems()
         return
 
@@ -422,12 +427,12 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         isCurrentModelDamaged = self.__currentDamageState.isCurrentModelDamaged
         fashions = camouflages.prepareFashions(isCurrentModelDamaged)
         if not isCurrentModelDamaged:
-            model_assembler.setupVehicleFashion(fashions.chassis, self.__typeDesc)
+            model_assembler.setupTracksFashion(self.__typeDesc, fashions.chassis)
         self.__setFashions(fashions, self.__isTurretDetached)
         self.__setupModels()
         if not isCurrentModelDamaged:
             self.__splineTracks = model_assembler.setupSplineTracks(self.__fashion, self.__typeDesc, self.__compoundModel, prereqs)
-            self.__crashedTracksCtrl = CrashedTrackController(self.__typeDesc, self.__fashion)
+            self.crashedTracksController = CrashedTrackController(self.__typeDesc, self.__fashion)
         else:
             self.__trackScrollCtl = None
         if self.__currentDamageState.effect is not None:
@@ -444,8 +449,8 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     def changeVisibility(self, modelVisible):
         self.compoundModel.visible = modelVisible
         self.showStickers(modelVisible)
-        if self.__crashedTracksCtrl is not None:
-            self.__crashedTracksCtrl.setVisible(modelVisible)
+        if self.crashedTracksController is not None:
+            self.crashedTracksController.setVisible(modelVisible)
         return
 
     def changeDrawPassVisibility(self, visibilityMask):
@@ -453,8 +458,8 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.compoundModel.visible = visibilityMask
         self.compoundModel.skipColorPass = not colorPassEnabled
         self.showStickers(colorPassEnabled)
-        if self.__crashedTracksCtrl is not None:
-            self.__crashedTracksCtrl.setVisible(visibilityMask)
+        if self.crashedTracksController is not None:
+            self.crashedTracksController.setVisible(visibilityMask)
         return
 
     def onVehicleHealthChanged(self, showEffects=True):
@@ -521,8 +526,8 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         else:
             if not VehicleDamageState.isDamagedModel(self.__currentDamageState.modelState):
                 self.swingingAnimator.receiveShotImpulse(direction, impulse)
-                if self.__crashedTracksCtrl is not None:
-                    self.__crashedTracksCtrl.receiveShotImpulse(direction, impulse)
+                if self.crashedTracksController is not None:
+                    self.crashedTracksController.receiveShotImpulse(direction, impulse)
             return
 
     def recoil(self):
@@ -539,15 +544,15 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         if not self.__vehicle.isAlive():
             return
         else:
-            if self.__crashedTracksCtrl is not None:
-                self.__crashedTracksCtrl.addTrack(isLeft, self.isLeftSideFlying if isLeft else self.isRightSideFlying)
+            if self.crashedTracksController is not None:
+                self.crashedTracksController.addTrack(isLeft, self.isLeftSideFlying if isLeft else self.isRightSideFlying)
             if not self.__vehicle.isEnteringWorld and self.trackCrashAudition:
                 self.trackCrashAudition.playCrashSound(isLeft)
             return
 
     def delCrashedTrack(self, isLeft):
-        if self.__crashedTracksCtrl is not None:
-            self.__crashedTracksCtrl.delTrack(isLeft)
+        if self.crashedTracksController is not None:
+            self.crashedTracksController.delTrack(isLeft)
         if not self.__vehicle.isEnteringWorld and self.trackCrashAudition and self.__vehicle.isPlayerVehicle:
             self.trackCrashAudition.playCrashSound(isLeft, True)
         return
@@ -683,7 +688,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
                 return
             vehicle = self.__vehicle
             if self.peripheralsController is not None:
-                self.peripheralsController.update(vehicle, self.__crashedTracksCtrl)
+                self.peripheralsController.update(vehicle, self.crashedTracksController)
             if not vehicle.isAlive():
                 return
             distanceFromPlayer = self.lodCalculator.lodDistance

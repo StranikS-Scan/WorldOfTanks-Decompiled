@@ -184,6 +184,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__updateAngles(0, 0)
         cameraPosProvider = Math.Vector4Translation(self.__aimingSystem.matrix)
         self.__cam.cameraPositionProvider = cameraPosProvider
+        self.settingsCore.onSettingsChanged += self.__handleSettingsChange
 
     def getTargetMProv(self):
         replayCtrl = BattleReplay.g_replayCtrl
@@ -201,6 +202,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.setYawPitch(matrix.yaw, matrix.pitch)
 
     def destroy(self):
+        self.settingsCore.onSettingsChanged -= self.__handleSettingsChange
         CallbackDelayer.destroy(self)
         self.disable()
         self.__onChangeControlMode = None
@@ -282,6 +284,18 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         from gui import g_guiResetters
         g_guiResetters.add(self.__onRecreateDevice)
         return
+
+    def __handleSettingsChange(self, diff):
+        if 'fov' in diff or 'dynamicFov' in diff:
+            self.__inputInertia.teleport(self.__calcRelativeDist(), self.__calculateInputInertiaMinMax())
+
+    def __calculateInputInertiaMinMax(self):
+        if self.settingsCore.getSetting('dynamicFov'):
+            _, minFov, maxFov = self.settingsCore.getSetting('fov')
+            kMin = minFov / maxFov
+        else:
+            kMin = 1.0
+        return MinMax(kMin, 1.0)
 
     def __setupCameraTransition(self, duration, previousMatrix):
         self.__endCamPosition = previousMatrix.translation - Math.Vector3(self.__cam.cameraPositionProvider.b.value[0:3])
@@ -738,7 +752,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         accelerationFilter = mathUtils.RangeFilter(self.__dynamicCfg['accelerationThreshold'], self.__dynamicCfg['accelerationMax'], 100, mathUtils.SMAFilter(ArcadeCamera._FILTER_LENGTH))
         maxAccelerationDuration = readFloat(dynamicsSection, 'maxAccelerationDuration', 0.0, 10000.0, ArcadeCamera._DEFAULT_MAX_ACCELERATION_DURATION)
         self.__accelerationSmoother = AccelerationSmoother(accelerationFilter, maxAccelerationDuration)
-        self.__inputInertia = _InputInertia(self.__cfg['fovMultMinMaxDist'], 0.0)
+        self.__inputInertia = _InputInertia(self.__calculateInputInertiaMinMax(), 0.0)
         advancedCollider = dataSec['advancedCollider']
         self.__adCfg = dict()
         cfg = self.__adCfg

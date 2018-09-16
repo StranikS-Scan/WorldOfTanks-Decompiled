@@ -4,8 +4,9 @@ from constants import DEATH_REASON_ALIVE
 from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
-from gui.battle_results.components import base, personal, shared, style, common
+from gui.battle_results.components import base, shared, style, common
 from gui.battle_results.components.base import PropertyValue
+from gui.battle_results.components.personal import fillKillerInfoBlock
 from gui.battle_results.reusable import sort_keys
 from gui.shared.gui_items.Vehicle import getSmallIconPath, getIconPath
 from gui.shared.formatters import text_styles
@@ -119,13 +120,7 @@ class RegularVehicleStatsBlock(base.StatsBlock):
             self.vehicleStatePrefix = state
         elif self.deathReason > DEATH_REASON_ALIVE:
             if self.killerID:
-                reason = style.makeI18nDeathReason(self.deathReason)
-                self.vehicleState = reason.i18nString
-                self.vehicleStatePrefix = reason.prefix
-                self.vehicleStateSuffix = reason.suffix
-                block = personal.KillerPlayerNameBlock()
-                block.setPlayerInfo(reusable.getPlayerInfoByVehicleID(self.killerID))
-                self.addComponent(self.getNextComponentIndex(), block)
+                fillKillerInfoBlock(self, self.deathReason, self.killerID, reusable)
         else:
             self.vehicleState = i18n.makeString(BATTLE_RESULTS.COMMON_VEHICLESTATE_ALIVE)
         self.isTeamKiller = result.isTeamKiller
@@ -232,6 +227,17 @@ class RegularVehicleStatValuesBlock(base.StatsBlock):
         return vo
 
 
+class RankedVehicleStatValuesBlock(RegularVehicleStatValuesBlock):
+    __slots__ = ('xp', 'xpForAttack', 'xpForAssist', 'xpOther')
+
+    def setRecord(self, result, reusable):
+        super(RankedVehicleStatValuesBlock, self).setRecord(result, reusable)
+        self.xp = result.xp
+        self.xpForAttack = result.xpForAttack
+        self.xpForAssist = result.xpForAssist
+        self.xpOther = result.xpOther
+
+
 class EpicVehicleStatValuesBlock(base.StatsBlock):
     __slots__ = ('_team', '_isPersonal', '_filters', 'shots', 'hits', 'explosionHits', 'damageDealt', 'sniperDamageDealt', 'destructiblesDamageDealt', 'equipmentDamageDealt', 'directHitsReceived', 'piercingsReceived', 'noDamageDirectHitsReceived', 'explosionHitsReceived', 'damageBlockedByArmor', 'teamHitsDamage', 'spotted', 'damagedKilled', 'damageAssisted', 'equipmentDamageAssisted', 'damageAssistedStun', 'stunNum', 'capturePoints', 'timesDestroyed', 'teamSpecificStat', '__rawDamageAssistedStun', '__rawStunNum')
 
@@ -309,6 +315,21 @@ class AllRegularVehicleStatValuesBlock(base.StatsBlock):
             add(block)
 
 
+class AllRankedVehicleStatValuesBlock(base.StatsBlock):
+    __slots__ = ()
+
+    def setRecord(self, result, reusable):
+        isPersonal, iterator = result
+        add = self.addNextComponent
+        stunFilter = _getStunFilter()
+        for vehicle in iterator:
+            block = RankedVehicleStatValuesBlock()
+            block.setPersonal(isPersonal)
+            block.addFilters(stunFilter)
+            block.setRecord(vehicle, reusable)
+            add(block)
+
+
 class AllEpicVehicleStatValuesBlock(base.StatsBlock):
     __slots__ = ()
 
@@ -333,6 +354,21 @@ class PersonalVehiclesRegularStatsBlock(base.StatsBlock):
         stunFilter = _getStunFilter()
         for data in info.getVehiclesIterator():
             block = RegularVehicleStatValuesBlock()
+            block.setPersonal(True)
+            block.addFilters(stunFilter)
+            block.setRecord(data, reusable)
+            add(block)
+
+
+class PersonalVehiclesRankedStatsBlock(base.StatsBlock):
+    __slots__ = ()
+
+    def setRecord(self, result, reusable):
+        info = reusable.getPersonalVehiclesInfo(result)
+        add = self.addNextComponent
+        stunFilter = _getStunFilter()
+        for data in info.getVehiclesIterator():
+            block = RankedVehicleStatValuesBlock()
             block.setPersonal(True)
             block.addFilters(stunFilter)
             block.setRecord(data, reusable)

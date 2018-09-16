@@ -44,9 +44,10 @@ class EpicMissionsPlugin(EpicMarkerPlugin):
     def start(self):
         super(EpicMissionsPlugin, self).start()
         missionCtrl = self.sessionProvider.dynamic.missions
-        missionCtrl.onPlayerMissionUpdated += self._onPlayerMissionUpdated
-        missionCtrl.onPlayerMissionReset += self._onPlayerMissionReset
-        missionCtrl.onNearestObjectiveChanged += self._onNearestObjectiveChanged
+        if missionCtrl is not None:
+            missionCtrl.onPlayerMissionUpdated += self._onPlayerMissionUpdated
+            missionCtrl.onPlayerMissionReset += self._onPlayerMissionReset
+            missionCtrl.onNearestObjectiveChanged += self._onNearestObjectiveChanged
         specCtrl = self.sessionProvider.dynamic.spectator
         if specCtrl is not None:
             specCtrl.onSpectatorViewModeChanged += self._onSpectatorModeChanged
@@ -62,9 +63,10 @@ class EpicMissionsPlugin(EpicMarkerPlugin):
 
     def stop(self):
         missionCtrl = self.sessionProvider.dynamic.missions
-        missionCtrl.onPlayerMissionUpdated -= self._onPlayerMissionUpdated
-        missionCtrl.onPlayerMissionReset -= self._onPlayerMissionReset
-        missionCtrl.onNearestObjectiveChanged -= self._onNearestObjectiveChanged
+        if missionCtrl is not None:
+            missionCtrl.onPlayerMissionUpdated -= self._onPlayerMissionUpdated
+            missionCtrl.onPlayerMissionReset -= self._onPlayerMissionReset
+            missionCtrl.onNearestObjectiveChanged -= self._onNearestObjectiveChanged
         specCtrl = self.sessionProvider.dynamic.spectator
         if specCtrl is not None:
             specCtrl.onSpectatorViewModeChanged -= self._onSpectatorModeChanged
@@ -130,8 +132,9 @@ class SectorBasesPlugin(EpicMissionsPlugin):
             sectorBaseComp.onSectorBasePointsUpdate -= self.__onSectorBasePointsUpdate
             sectorBaseComp.onSectorBaseActiveStateChanged -= self.__onSectorBaseActiveStateChanged
         progressCtrl = self.sessionProvider.dynamic.progressTimer
-        progressCtrl.onVehicleEntered -= self.__onVehicleEntered
-        progressCtrl.onVehicleLeft -= self.__onVehicleLeft
+        if progressCtrl is not None:
+            progressCtrl.onVehicleEntered -= self.__onVehicleEntered
+            progressCtrl.onVehicleLeft -= self.__onVehicleLeft
         super(SectorBasesPlugin, self).fini()
         return
 
@@ -495,10 +498,11 @@ class StepRepairPointPlugin(EpicMarkerPlugin):
         else:
             LOG_ERROR('Expected StepRepairPointComponent not present!')
         progressCtrl = self.sessionProvider.dynamic.progressTimer
-        progressCtrl.onTimerUpdated += self.__onTimerUpdated
-        progressCtrl.onCircleStatusChanged += self.__onCircleStatusChanged
-        progressCtrl.onVehicleEntered += self.__onVehicleEntered
-        progressCtrl.onVehicleLeft += self.__onVehicleLeft
+        if progressCtrl is not None:
+            progressCtrl.onTimerUpdated += self.__onTimerUpdated
+            progressCtrl.onCircleStatusChanged += self.__onCircleStatusChanged
+            progressCtrl.onVehicleEntered += self.__onVehicleEntered
+            progressCtrl.onVehicleLeft += self.__onVehicleLeft
         return
 
     def fini(self):
@@ -507,10 +511,11 @@ class StepRepairPointPlugin(EpicMarkerPlugin):
             stepRepairPointComponent.onStepRepairPointAdded -= self.__onStepRepairPointAdded
             stepRepairPointComponent.onStepRepairPointActiveStateChanged -= self.__onStepRepairPointActiveStateChanged
         ctrl = self.sessionProvider.dynamic.progressTimer
-        ctrl.onTimerUpdated -= self.__onTimerUpdated
-        ctrl.onCircleStatusChanged -= self.__onCircleStatusChanged
-        ctrl.onVehicleEntered -= self.__onVehicleEntered
-        ctrl.onVehicleLeft -= self.__onVehicleLeft
+        if ctrl is not None:
+            ctrl.onTimerUpdated -= self.__onTimerUpdated
+            ctrl.onCircleStatusChanged -= self.__onCircleStatusChanged
+            ctrl.onVehicleEntered -= self.__onVehicleEntered
+            ctrl.onVehicleLeft -= self.__onVehicleLeft
         super(StepRepairPointPlugin, self).fini()
         return
 
@@ -756,7 +761,8 @@ class SectorWaypointsPlugin(EpicMarkerPlugin, IVehiclesAndPositionsController):
         if component is not None:
             componentSystem.sectorWarningComponent.onTransitionTimerUpdated -= self.__onTransitionTimerUpdated
         ctrl = self.sessionProvider.dynamic.gameNotifications
-        ctrl.onGameNotificationRecieved -= self.__onGameNotificationRecieved
+        if ctrl is not None:
+            ctrl.onGameNotificationRecieved -= self.__onGameNotificationRecieved
         super(SectorWaypointsPlugin, self).fini()
         return
 
@@ -894,7 +900,9 @@ class EpicMarkersManager(MarkersManager):
         return GUI.WGVehicleStickyMarkersCanvasFlashAS3(self.movie)
 
     def _setupPlugins(self, arenaVisitor):
-        self.sessionProvider.dynamic.respawn.onRespawnVisibilityChanged += self.__onRespawnScreenVisibilityChanged
+        ctrl = self.sessionProvider.dynamic.respawn
+        if ctrl is not None:
+            ctrl.onRespawnVisibilityChanged += self.__onRespawnScreenVisibilityChanged
         setup = super(EpicMarkersManager, self)._setupPlugins(arenaVisitor)
         if arenaVisitor.hasSectors():
             setup['sector_bases'] = SectorBasesPlugin
@@ -908,8 +916,11 @@ class EpicMarkersManager(MarkersManager):
         return setup
 
     def stopPlugins(self):
-        self.sessionProvider.dynamic.respawn.onRespawnVisibilityChanged -= self.__onRespawnScreenVisibilityChanged
+        ctrl = self.sessionProvider.dynamic.respawn
+        if ctrl is not None:
+            ctrl.onRespawnVisibilityChanged -= self.__onRespawnScreenVisibilityChanged
         super(EpicMarkersManager, self).stopPlugins()
+        return
 
     def __onRespawnScreenVisibilityChanged(self, isRespawnScreenVisible):
         self.setVisible(not isRespawnScreenVisible)

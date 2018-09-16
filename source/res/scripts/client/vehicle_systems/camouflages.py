@@ -4,10 +4,9 @@ from collections import namedtuple
 import BigWorld
 import Math
 import items.vehicles
-from constants import C11N_MASK_REGION
 from vehicle_systems.tankStructure import VehiclePartsTuple
 from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
-from items.components.c11n_constants import ModificationType
+from items.components.c11n_constants import ModificationType, C11N_MASK_REGION
 from gui.shared.gui_items import GUI_ITEM_TYPE
 RepaintParams = namedtuple('PaintParams', ('enabled', 'baseColor', 'color', 'metallic', 'gloss', 'fading', 'strength'))
 RepaintParams.__new__.__defaults__ = (False,

@@ -6,23 +6,20 @@ import Math
 import BigWorld
 import TriggersManager
 from TriggersManager import TRIGGER_TYPE
+from svarog_script.auto_properties import AutoProperty
+from svarog_script.py_component import Component
 from vehicle_systems import model_assembler
 from vehicle_systems.tankStructure import getPartModelsFromDesc, TankPartNames, ModelsSetParams
 from vehicle_systems.stricted_loading import loadingPriority
 
-def testAllocate(spaceID):
-    import items.vehicles
-    vehicleDesc = items.vehicles.VehicleDescr(typeName=items.vehicles.g_cache.vehicle(0, 1).name)
-    entityId = BigWorld.createEntity('OfflineEntity', spaceID, 0, BigWorld.camera().position, (0, 0, 0), dict())
-    return CrashedTrackController(vehicleDesc, BigWorld.entity(entityId))
+class CrashedTrackController(Component):
+    baseTracksComponent = AutoProperty()
 
-
-class CrashedTrackController(object):
-
-    def __init__(self, vehicleDesc, trackFashion=None):
+    def __init__(self, vehicleDesc, trackFashion):
         self.__vehicleDesc = vehicleDesc
         self.__entity = None
         self.__baseTrackFashion = trackFashion
+        self.baseTracksComponent = None
         self.__triggerEvents = False
         self.__flags = 0
         self.__model = None
@@ -42,12 +39,12 @@ class CrashedTrackController(object):
         self.__triggerEvents = entity.isPlayerVehicle
 
     def activate(self):
-        if self.__entity is not None and self.__model is not None:
+        if self.__entity is not None and self.__model is not None and not self.__model.isAttached:
             self.__entity.addModel(self.__model)
         return
 
     def deactivate(self):
-        if self.__entity is not None and self.__model is not None:
+        if self.__entity is not None and self.__model is not None and self.__model.isAttached:
             self.__entity.delModel(self.__model)
         self.__loading = False
         return
@@ -59,6 +56,7 @@ class CrashedTrackController(object):
         self.__loading = False
         self.__baseTrackFashion = None
         self.__fashion = None
+        self.baseTracksComponent = None
         return
 
     def setVisible(self, visibilityMask):
@@ -130,15 +128,16 @@ class CrashedTrackController(object):
     def __setupTracksHiding(self):
         force = self.__visibilityMask == 0
         if force:
-            tracks = (True, True)
-            invTracks = (True, True)
+            hideLeftTrack = True
+            hideRightTrack = True
         else:
-            tracks = (self.__flags & 1, self.__flags & 2)
-            invTracks = (not tracks[0], not tracks[1])
-        if self.__baseTrackFashion is not None:
-            self.__baseTrackFashion.hideTracks(*tracks)
+            hideLeftTrack, hideRightTrack = self.__flags & 1, self.__flags & 2
+        if self.baseTracksComponent is not None:
+            self.baseTracksComponent.leftTrack.disableTrack(hideLeftTrack)
+            self.baseTracksComponent.rightTrack.disableTrack(hideRightTrack)
         if self.__fashion is not None:
-            self.__fashion.hideTracks(*invTracks)
+            self.__fashion.changeTrackVisibility(True, hideLeftTrack)
+            self.__fashion.changeTrackVisibility(False, hideRightTrack)
         return
 
     def __applyVisibilityMask(self):
@@ -161,11 +160,10 @@ class CrashedTrackController(object):
             for handler in matHandlers:
                 self.__fashion.addMaterialHandler(handler)
 
-            model_assembler.setupTracksFashion(self.__fashion, self.__vehicleDesc, True)
+            model_assembler.setupTracksFashion(self.__vehicleDesc, self.__fashion)
             self.__model.setupFashions([self.__fashion])
             rotationMProv = mathUtils.MatrixProviders.product(self.__entity.model.node('hull'), Math.MatrixInverse(self.__model.node('Tank')))
             self.__model.node('V', rotationMProv)
-            self.__fashion.setCrashEffectCoeff(0.0)
             self.__setupTracksHiding()
             self.__entity.addModel(self.__model)
             self.__applyVisibilityMask()

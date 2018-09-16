@@ -111,3 +111,6 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
 
     def as_setHeaderButtonsS(self, data):
         return self.flashObject.as_setHeaderButtons(data) if self._isDAAPIInited() else None
+
+    def as_hideMenuS(self, value):
+        return self.flashObject.as_hideMenu(value) if self._isDAAPIInited() else None

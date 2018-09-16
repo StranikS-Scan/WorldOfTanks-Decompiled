@@ -1,19 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/quest_xml_source.py
+import time
 from soft_exception import SoftException
 from copy import deepcopy
 from pprint import pformat
-import time
-import ResMgr
-import nations
 import ArenaType
+import ResMgr
 import battle_results_shared
-from debug_utils import LOG_DEBUG, LOG_WARNING
+import nations
+from bonus_readers import readBonusSection, readUTC
+from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, QUEST_RUN_FLAGS, DEFAULT_QUEST_START_TIME, DEFAULT_QUEST_FINISH_TIME
+from debug_utils import LOG_WARNING
 from dossiers2.custom.layouts import accountDossierLayout, vehicleDossierLayout, StaticSizeBlockBuilder, BinarySetDossierBlockBuilder
 from dossiers2.custom.records import RECORD_DB_IDS
-from items import vehicles, tankmen
-from constants import VEHICLE_CLASS_INDICES, ARENA_BONUS_TYPE, EVENT_TYPE, IGR_TYPE, ATTACK_REASONS, QUEST_RUN_FLAGS, DEFAULT_QUEST_START_TIME, DEFAULT_QUEST_FINISH_TIME
-from bonus_readers import readBonusSection, readUTC
+from items import vehicles
 from optional_bonuses import walkBonuses, FilterVisitor, StripVisitor
 _WEEKDAYS = {'Mon': 1,
  'Tue': 2,
@@ -241,6 +241,7 @@ class Source(object):
 
         tOption = curTime > time.time()
         showCongrats = questSection.readBool('showCongrats', eventType in (EVENT_TYPE.PERSONAL_MISSION,))
+        onlyForPeripheriesList = questSection.readString('peripheryIDs', '')
         info = {'id': id,
          'hidden': questSection.readBool('hidden', False),
          'serverOnly': questSection.readBool('serverOnly', False),
@@ -259,6 +260,7 @@ class Source(object):
          'Toption': None if not tOption else startTime,
          'priority': questSection.readInt('priority', 0),
          'uiDecoration': questSection.readInt('uiDecoration', 0),
+         'peripheryIDs': {int(p) for p in onlyForPeripheriesList.split()} if onlyForPeripheriesList else set(),
          'runFlags': runFlags}
         if eventType == EVENT_TYPE.MOTIVE_QUEST:
             extraSubsectionsNames = ('advice', 'requirements', 'congratulation')
@@ -302,7 +304,7 @@ class Source(object):
          'token': self.__readBattleResultsConditionList,
          'id': self.__readCondition_string,
          'consume': self.__readCondition_consume,
-         'inClan': self.__readClanIds,
+         'inClan': self.__readListOfInts,
          'vehiclesUnlocked': self.__readBattleResultsConditionList,
          'vehiclesOwned': self.__readBattleResultsConditionList,
          'classes': self.__readVehicleFilter_classes,
@@ -318,7 +320,11 @@ class Source(object):
          'daily': self.__readCondition_true,
          'bonusLimit': self.__readCondition_int,
          'refSystemRalXPPool': self.__readBattleResultsConditionList,
-         'refSystemRalBought10Lvl': self.__readCondition_true}
+         'refSystemRalBought10Lvl': self.__readCondition_true,
+         'isTutorialCompleted': self.__readCondition_bool,
+         'totalBattles': self.__readBattleResultsConditionList,
+         'accountPrimaryTypes': self.__readListOfInts,
+         'accountSecondaryTypes': self.__readListOfInts}
         if eventType in EVENT_TYPE.LIKE_BATTLE_QUESTS:
             condition_readers.update({'value': self.__readCondition_bool,
              'win': self.__readConditionComplex_true,
@@ -361,7 +367,6 @@ class Source(object):
              'whileEnemyFullHealth': self.__readCondition_true,
              'allInSpecifiedClasses': self.__readCondition_true,
              'enemyIsNotSpotted': self.__readCondition_true,
-             'whileEnemyWithFlag': self.__readCondition_true,
              'installedModules': self.__readBattleResultsConditionList,
              'guns': self.__readCondition_installedModules,
              'engines': self.__readCondition_installedModules,
@@ -369,7 +374,17 @@ class Source(object):
              'turrets': self.__readCondition_installedModules,
              'radios': self.__readCondition_installedModules,
              'optionalDevice': self.__readCondition_installedModules,
+             'optionalDeviceCount': self.__readBattleResultsConditionList,
+             'consumables': self.__readBattleResultsConditionList,
+             'equipment': self.__readCondition_consumables,
+             'equipmentCount': self.__readBattleResultsConditionList,
+             'goodies': self.__readBattleResultsConditionList,
+             'goodiesCount': self.__readBattleResultsConditionList,
              'correspondedCamouflage': self.__readConditionComplex_true,
+             'correspondedDecal': self.__readConditionComplex_true,
+             'correspondedPaint': self.__readConditionComplex_true,
+             'correspondedStyle': self.__readConditionComplex_true,
+             'correspondedModification': self.__readConditionComplex_true,
              'unit': self.__readBattleResultsConditionList,
              'results': self.__readBattleResultsConditionList,
              'key': self.__readCondition_keyResults,
@@ -394,12 +409,13 @@ class Source(object):
              'tankman': self.__readBattleResultsConditionList,
              'critical': self.__readBattleResultsConditionList,
              'crit': self.__readBattleResultsConditionList,
-             'critName': self.__readCritName})
+             'critName': self.__readCritName,
+             'unregularAmmo': self.__readCondition_true})
         if eventType in (EVENT_TYPE.BATTLE_QUEST,):
-            condition_readers.update({'red': self.__readClanIds,
-             'silver': self.__readClanIds,
-             'gold': self.__readClanIds,
-             'black': self.__readClanIds})
+            condition_readers.update({'red': self.__readListOfInts,
+             'silver': self.__readListOfInts,
+             'gold': self.__readListOfInts,
+             'black': self.__readListOfInts})
         if eventType in (EVENT_TYPE.RANKED_QUEST,):
             condition_readers.update({'season': self.__readCondition_int,
              'cycle': self.__readCondition_int,
@@ -407,6 +423,8 @@ class Source(object):
              'step': self.__readCondition_int,
              'maxRank': self.__readBattleResultsConditionList,
              'ladderPts': self.__readBattleResultsConditionList})
+        if eventType in (EVENT_TYPE.HANGAR_QUEST,):
+            condition_readers.update({'moduleBuySell': self.__readBattleResultsConditionList})
         return condition_readers
 
     def __getAvailableBonuses(self, eventType):
@@ -424,7 +442,8 @@ class Source(object):
          'vehicle',
          'dossier',
          'tankmen',
-         'customizations'}
+         'customizations',
+         'vehicleChoice'}
         if eventType in (EVENT_TYPE.BATTLE_QUEST, EVENT_TYPE.PERSONAL_QUEST):
             bonusTypes.update(('xp', 'tankmenXP', 'xpFactor', 'creditsFactor', 'freeXPFactor', 'tankmenXPFactor'))
         return bonusTypes
@@ -468,6 +487,16 @@ class Source(object):
             else:
                 raise SoftException('Unknown module(%s) %s' % (node.name, module))
 
+        node.addChild(modules)
+
+    def __readCondition_consumables(self, _, section, node):
+        modules = set()
+        name = section.asString
+        if node.name == 'equipment':
+            idx = vehicles.g_cache.equipmentIDs()[name]
+            modules.add(vehicles.g_cache.equipmentIDs()[idx].compactDescr)
+        else:
+            raise SoftException('Unknown consumables(%s)' % node.name)
         node.addChild(modules)
 
     def __readCritName(self, _, section, node):
@@ -621,7 +650,7 @@ class Source(object):
 
         node.addChild(res)
 
-    def __readClanIds(self, _, section, node):
+    def __readListOfInts(self, _, section, node):
         node.addChild(set([ int(val) for val in section.asString.split() ]))
 
     def __readVehicleFilter_nations(self, _, section, node):

@@ -1,20 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/application.py
+import logging
 import weakref
 from account_helpers.settings_core import settings_constants
-from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import g_guiResetters, g_repeatKeyHandlers, GUI_CTRL_MODE_FLAG
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
 from gui.Scaleform.Flash import Flash
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.view_events_listener import ViewEventsListener
 from gui.Scaleform.framework.entities.abstract.ApplicationMeta import ApplicationMeta
-from gui.Scaleform.framework.managers.loaders import ViewLoadParams
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared.events import AppLifeCycleEvent, GameEvent, DirectLoadViewEvent
 from gui.shared import EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
+_logger = logging.getLogger(__name__)
+_logger.addHandler(logging.NullHandler())
 
 class DAAPIRootBridge(object):
     __slots__ = ('__pyScript', '__rootPath', '__initCallback', '__isInited')
@@ -51,7 +53,7 @@ class DAAPIRootBridge(object):
             self.__pyScript.setFlashObject(root)
             self.__pyScript.afterCreate()
         else:
-            LOG_ERROR('Flash root is not found', self.__rootPath)
+            _logger.error('Flash root is not found: %s', self.__rootPath)
 
 
 class SFApplication(Flash, ApplicationMeta):
@@ -187,7 +189,7 @@ class SFApplication(Flash, ApplicationMeta):
 
     def afterCreate(self):
         self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.INITIALIZING))
-        LOG_DEBUG('[SFApplication] afterCreate', self.__ns)
+        _logger.debug('SFApplication.afterCreate: %s', self.__ns)
         super(SFApplication, self).afterCreate()
         self._createManagers()
         self.as_registerManagersS()
@@ -203,7 +205,7 @@ class SFApplication(Flash, ApplicationMeta):
         self.connectionMgr.onDisconnected += self.__cm_onDisconnected
 
     def beforeDelete(self):
-        LOG_DEBUG('[SFApplication] beforeDelete', self.__ns)
+        _logger.debug('SFApplication.beforeDelete: %s', self.__ns)
         self.__viewEventsListener.destroy()
         self.removeListener(GameEvent.CHANGE_APP_RESOLUTION, self.__onAppResolutionChanged, scope=EVENT_BUS_SCOPE.GLOBAL)
         self._removeGameCallbacks()
@@ -480,7 +482,7 @@ class SFApplication(Flash, ApplicationMeta):
         raise NotImplementedError('App._setup must be overridden')
 
     def _loadCursor(self):
-        self._containerMgr.load(ViewLoadParams(VIEW_ALIAS.CURSOR))
+        self._containerMgr.load(SFViewLoadParams(VIEW_ALIAS.CURSOR))
 
     def _loadWaiting(self):
         raise NotImplementedError('App._loadWaiting must be overridden')
@@ -491,13 +493,13 @@ class SFApplication(Flash, ApplicationMeta):
     def __onAppResolutionChanged(self, event):
         ctx = event.ctx
         if 'width' not in ctx:
-            LOG_ERROR('Application width is not found', ctx)
+            _logger.error('Application width is not found: %r', ctx)
             return
         if 'height' not in ctx:
-            LOG_ERROR('Application height is not found', ctx)
+            _logger.error('Application height is not found: %r', ctx)
             return
         if 'scale' not in ctx:
-            LOG_ERROR('Application scale is not found', ctx)
+            _logger.error('Application scale is not found: %r', ctx)
             return
         self.updateStage(ctx['width'], ctx['height'], ctx['scale'])
 

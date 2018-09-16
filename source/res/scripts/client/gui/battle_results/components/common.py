@@ -122,25 +122,25 @@ class RankInfoHelper(object):
                 if shieldState == RANKEDBATTLES_ALIASES.SHIELD_ENABLED and rankState == RANK_CHANGE_STATES.STEP_LOST:
                     return RANKEDBATTLES_ALIASES.SUBTASK_STATE_STAGE
                 return RANKEDBATTLES_ALIASES.SUBTASK_STATE_RANK
-        return RANKEDBATTLES_ALIASES.SUBTASK_STATE_RANK if rankState in (RANK_CHANGE_STATES.RANK_EARNED,
-         RANK_CHANGE_STATES.RANK_LOST,
-         RANK_CHANGE_STATES.RANK_POINT,
-         RANK_CHANGE_STATES.RANK_POINT) else RANKEDBATTLES_ALIASES.SUBTASK_STATE_STAGE
+        return RANKEDBATTLES_ALIASES.SUBTASK_STATE_RANK if rankState in (RANK_CHANGE_STATES.RANK_EARNED, RANK_CHANGE_STATES.RANK_LOST, RANK_CHANGE_STATES.RANK_POINT) else RANKEDBATTLES_ALIASES.SUBTASK_STATE_STAGE
 
     def makeTitleLabel(self):
         isWin = self.__reusable.getPersonalTeam() == self.__reusable.common.winnerTeam
         rankState = self.getState()
         if rankState in self.__WITH_SHIELD_STATES:
-            shieldState = self.__reusable.personal.getRankInfo().shieldState
+            rankInfo = self.__reusable.personal.getRankInfo()
+            shieldState = rankInfo.shieldState
             if shieldState is not None and shieldState in self.__SHIELD_STATES:
                 return self.__TITLE_LABEL_MAP[shieldState, isWin]
+            if rankState == RANK_CHANGE_STATES.RANK_EARNED:
+                return i18n.makeString(self.__TITLE_LABEL_MAP[rankState, isWin], rank=rankInfo.accRank)
         return self.__TITLE_LABEL_MAP[rankState, isWin]
 
     def makeStatusLabel(self):
         isWin = self.__reusable.getPersonalTeam() == self.__reusable.common.winnerTeam
         rankState = self.getState()
+        rankInfo = self.__reusable.personal.getRankInfo()
         if rankState in self.__RESULTS_WITH_SHIELDS:
-            rankInfo = self.__reusable.personal.getRankInfo()
             shieldState = rankInfo.shieldState
             if shieldState is not None:
                 txt = '{}{}'
@@ -155,7 +155,9 @@ class RankInfoHelper(object):
                         return txt.format(text_styles.highlightText(RANKED_BATTLES.BATTLERESULT_STATUS_STAGEEARNED), text_styles.main(RANKED_BATTLES.BATTLERESULT_STATUS_SHIELDRENEW))
                     if rankState == RANK_CHANGE_STATES.STEPS_EARNED:
                         return txt.format(text_styles.highlightText(RANKED_BATTLES.BATTLERESULT_STATUS_STAGESEARNED), text_styles.main(RANKED_BATTLES.BATTLERESULT_STATUS_SHIELDRENEW))
-        return text_styles.highlightText(self.__STATUS_LABEL_MAP[rankState, isWin])
+            if rankState == RANK_CHANGE_STATES.RANK_EARNED:
+                return text_styles.highlightText(i18n.makeString(self.__STATUS_LABEL_MAP[rankState, isWin], rank=rankInfo.accRank))
+        return text_styles.highlightText(i18n.makeString(self.__STATUS_LABEL_MAP[rankState, isWin], rank=rankInfo.prevAccRank)) if rankState == RANK_CHANGE_STATES.RANK_LOST else text_styles.highlightText(self.__STATUS_LABEL_MAP[rankState, isWin])
 
     def makeDescriptionLabelAndTopIcon(self, allyVehicles):
         state = self.getState()
@@ -585,6 +587,13 @@ class RankedResultsEnableAnimation(base.StatsItem):
 
     def _convert(self, value, reusable):
         return bool(AccountSettings.getSettings(ENABLE_RANKED_ANIMATIONS))
+
+
+class RankedResultsShowWidgetAnimation(base.StatsItem):
+    rankedController = dependency.descriptor(IRankedBattlesController)
+
+    def _convert(self, value, reusable):
+        return not self.rankedController.awardWindowShouldBeShown(reusable.personal.getRankInfo())
 
 
 class TeamsUiVisibility(base.StatsItem):

@@ -27,6 +27,8 @@ class RankedBattlesCyclesView(LobbySubView, RankedBattlesCyclesViewMeta):
         self.__leagueData = None
         self.__leagueDataReceived = False
         self.__currentTab = None
+        self.__currentRank = None
+        self.__currentAccRank = None
         return
 
     def onEscapePress(self):
@@ -43,6 +45,8 @@ class RankedBattlesCyclesView(LobbySubView, RankedBattlesCyclesViewMeta):
         self.rankedController.openWebLeaguePage(ctx={'returnAlias': RANKEDBATTLES_ALIASES.RANKED_BATTLES_CYCLES_VIEW_ALIAS})
 
     def _populate(self):
+        self.__currentRank = self.rankedController.getCurrentRank(g_currentVehicle.item)
+        self.__currentAccRank = self.rankedController.getCurrentRank()
         self.as_setDataS(self.__getStartData())
         self.__requestWebLeagueData()
         super(RankedBattlesCyclesView, self)._populate()
@@ -91,7 +95,8 @@ class RankedBattlesCyclesView(LobbySubView, RankedBattlesCyclesViewMeta):
         items.append(self.__getCurrentCycleVehicleRankRow())
         return {'items': items,
          'rank': _ms(RANKED_BATTLES.RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_TABLEHEADER_RANK),
-         'rankAward': _ms(RANKED_BATTLES.RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_TABLEHEADER_RANKAWARD)}
+         'rankAward': _ms(RANKED_BATTLES.RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_TABLEHEADER_RANKAWARD),
+         'selectedIdx': self.__currentAccRank.getID() - 1}
 
     def __packRankRow(self, rank):
         rankIcon = {'imageSrc': rank.getIcon('small'),
@@ -104,24 +109,28 @@ class RankedBattlesCyclesView(LobbySubView, RankedBattlesCyclesViewMeta):
             receivedStr = ''.join([makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_OKICON), _ts.statInfo(RANKED_BATTLES.RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_ITEM_AWARDRECIEVED)])
         else:
             receivedStr = ''
-        if rank.isMax() and rank.getID() != 1:
+        rankID = rank.getID()
+        isCurrent = rankID == self.__currentAccRank.getID()
+        if rank.isMax() and rankID != 1:
             rankDescr = _ts.main(RANKED_BATTLES.RANKEDBATTLEVIEW_PROGRESSBLOCK_BESTRANK)
         else:
             rankDescr = ''
         return {'rankIcon': rankIcon,
          'rankDescr': rankDescr,
          'rankAwards': rankAwards,
-         'receivedStatus': receivedStr}
+         'receivedStatus': receivedStr,
+         'isCurrent': isCurrent,
+         'rankNumber': _ts.main(str(rankID))}
 
     def __getCurrentCycleVehicleRankRow(self):
-        isMaxRank = self.rankedController.getCurrentRank(g_currentVehicle.item) == self.rankedController.getMaxRank()
+        isMaxRank = self.__currentRank == self.rankedController.getMaxRank()
         isAccountMastered = self.rankedController.isAccountMastered()
         if isAccountMastered:
             status = _ts.statInfo(RANKED_BATTLES.RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_VEHICLERANKCOMMENT)
         else:
             status = ''
         if isAccountMastered and not isMaxRank:
-            vehicleRank = self.rankedController.getCurrentRank(g_currentVehicle.item)
+            vehicleRank = self.__currentRank
         else:
             vehicleRank = first(self.rankedController.getVehicleRanksChain(g_currentVehicle.item))
         rankIcon = {'imageSrc': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_ICON_FINAL_CUP_100X100,
@@ -130,7 +139,9 @@ class RankedBattlesCyclesView(LobbySubView, RankedBattlesCyclesViewMeta):
         return {'rankIcon': rankIcon,
          'rankDescr': '',
          'rankAwards': vehicleRank.getAwardsVOs(),
-         'receivedStatus': status}
+         'receivedStatus': status,
+         'isCurrent': False,
+         'rankNumber': ''}
 
     def __buildFinalBlock(self):
         return {'contentID': RANKEDBATTLES_ALIASES.FINAL,

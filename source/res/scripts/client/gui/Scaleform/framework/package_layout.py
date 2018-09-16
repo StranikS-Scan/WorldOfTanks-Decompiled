@@ -1,14 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/package_layout.py
 import importlib
+import logging
 from soft_exception import SoftException
-from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
 from gui.Scaleform.framework.managers import context_menu
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
-from gui.Scaleform.framework.managers.loaders import ViewLoadParams
+from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from ids_generators import SequenceIDGenerator
+_logger = logging.getLogger(__name__)
+_logger.addHandler(logging.NullHandler())
 _addListener = g_eventBus.addListener
 _removeListener = g_eventBus.removeListener
 
@@ -46,16 +48,16 @@ class PackageBusinessHandler(object):
         return
 
     def loadViewWithDefName(self, alias, name=None, *args, **kwargs):
-        self._app.loadView(ViewLoadParams(alias, name), *args, **kwargs)
+        self._app.loadView(SFViewLoadParams(alias, name), *args, **kwargs)
 
     def loadViewWithGenName(self, alias, *args, **kwargs):
-        self._app.loadView(ViewLoadParams(alias, 'rw{0}'.format(self.__counter.next())), *args, **kwargs)
+        self._app.loadView(SFViewLoadParams(alias, 'rw{0}'.format(self.__counter.next())), *args, **kwargs)
 
     def loadViewBySharedEvent(self, event):
-        self._app.loadView(ViewLoadParams(event.eventType, event.name))
+        self._app.loadView(SFViewLoadParams(event.eventType, event.name))
 
     def loadViewByCtxEvent(self, event):
-        self._app.loadView(ViewLoadParams(event.eventType, event.name), event.ctx)
+        self._app.loadView(SFViewLoadParams(event.eventType, event.name), event.ctx)
 
     def findViewByAlias(self, viewType, alias):
         container = self.__getContainer(viewType)
@@ -123,7 +125,7 @@ class PackageImporter(object):
         for path in seq:
             if not isLoaded(path):
                 continue
-            LOG_DEBUG('Tries to unload GUI package', path)
+            _logger.debug('Tries to unload GUI package "%s"', path)
             handlers = self._handlers.pop(path)
             for handler in handlers:
                 handler.fini()
@@ -140,26 +142,26 @@ class PackageImporter(object):
     def _loadPackage(self, path):
         if self.isPackageLoaded(path):
             return
-        LOG_DEBUG('Tries to load GUI package', path)
+        _logger.debug('Tries to load GUI package "%s"', path)
         imported = importlib.import_module(path)
         try:
             settings = imported.getViewSettings()
         except AttributeError:
-            LOG_CURRENT_EXCEPTION()
+            _logger.exception('Package "%s" can not be loaded', path)
             raise SoftException('Package {0} does not have method getViewSettings'.format(path))
 
         aliases = g_entitiesFactories.initSettings(settings)
         try:
             handlers = imported.getContextMenuHandlers()
         except AttributeError:
-            LOG_CURRENT_EXCEPTION()
+            _logger.exception('Package "%s" can not be loaded', path)
             raise SoftException('Package {0} does not have method getContextMenuHandlers'.format(path))
 
         contextMenuTypes = context_menu.registerHandlers(*handlers)
         try:
             handlers = imported.getBusinessHandlers()
         except AttributeError:
-            LOG_CURRENT_EXCEPTION()
+            _logger.exception('Package "%s" can not be loaded', path)
             raise SoftException('Package {0} does not have method getBusinessHandlers'.format(path))
 
         processed = set()

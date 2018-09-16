@@ -264,15 +264,15 @@
           <component>
             <id>	socket	</id>
             <destructible>	false	</destructible>
-            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_s_B1.model	</physics_model>
-            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_s.model	</visual_model>
+            <physics_model>	vehicles/german/G42_Maus/normal/lod0/Gun_01.model	</physics_model>
+            <visual_model>	vehicles/german/G42_Maus/normal/lod0/Gun_01.model	</visual_model>
           </component>
           <component>
             <id>	structure	</id>
             <destructible>	true	</destructible>
             <gui_node>	HP_gui	</gui_node>
-            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_t_B1.model	</physics_model>
-            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_t.model	</visual_model>
+            <physics_model>	content/Buildings/hd_bld_AF_015_Pillar/normal/lod0/hd_bld_AF_015_Pillar_01.model	</physics_model>
+            <visual_model>	content/Buildings/hd_bld_AF_015_Pillar/normal/lod0/hd_bld_AF_015_Pillar_01.model	</visual_model>
           </component>
         </components>
       </state>
@@ -283,15 +283,15 @@
           <component>
             <id>	socket	</id>
             <destructible>	false	</destructible>
-            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_s_B1.model	</physics_model>
-            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_s.model	</visual_model>
+            <physics_model>	vehicles/german/G42_Maus/crash/lod0/Gun_01.model	</physics_model>
+            <visual_model>	vehicles/german/G42_Maus/crash/lod0/Gun_01.model	</visual_model>
           </component>
           <component>
             <id>	structure	</id>
             <destructible>	false	</destructible>
             <gui_node>	HP_gui	</gui_node>
-            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_t_d_B3.model	</physics_model>
-            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_t_crash.model	</visual_model>
+            <physics_model>	content/Buildings/hd_bld_AF_015_Pillar/normal/lod0/hd_bld_AF_015_Pillar_01.model	</physics_model>
+            <visual_model>	content/Buildings/hd_bld_AF_015_Pillar/normal/lod0/hd_bld_AF_015_Pillar_01.model	</visual_model>
           </component>
         </components>
       </state>

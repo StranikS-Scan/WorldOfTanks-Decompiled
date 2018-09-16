@@ -58,32 +58,32 @@ class _ActionScriptTimer(TimerComponent):
 
     def _startTick(self):
         if self._totalTime > 0 and self._typeID not in _SECONDARY_TIMERS:
-            self._panel.as_setTimeInSecondsS(self._typeID, self._totalTime, BigWorld.serverTime() - self._startTime)
+            self._viewObject.as_setTimeInSecondsS(self._typeID, self._totalTime, BigWorld.serverTime() - self._startTime)
 
     def _stopTick(self):
         pass
 
     def _showView(self, isBubble):
-        _showTimerView(self._typeID, self._viewID, self._panel, self._totalTime, isBubble, BigWorld.serverTime() - self._startTime)
+        _showTimerView(self._typeID, self._viewID, self._viewObject, self._totalTime, isBubble, BigWorld.serverTime() - self._startTime)
 
     def _hideView(self):
-        _hideTimerView(self._typeID, self._panel)
+        _hideTimerView(self._typeID, self._viewObject)
 
 
 class _PythonTimer(PythonTimer):
 
     def _showView(self, isBubble):
-        _showTimerView(self._typeID, self._viewID, self._panel, self._totalTime, isBubble)
+        _showTimerView(self._typeID, self._viewID, self._viewObject, self._totalTime, isBubble)
 
     def _hideView(self):
-        _hideTimerView(self._typeID, self._panel)
+        _hideTimerView(self._typeID, self._viewObject)
 
     def _setViewSnapshot(self, timeLeft):
         totalTime = math.ceil(self._totalTime)
         if self._typeID in _SECONDARY_TIMERS:
-            self._panel.as_setSecondaryTimeSnapshotS(self._typeID, totalTime, totalTime - math.ceil(timeLeft))
+            self._viewObject.as_setSecondaryTimeSnapshotS(self._typeID, totalTime, totalTime - math.ceil(timeLeft))
         else:
-            self._panel.as_setTimeSnapshotS(self._typeID, totalTime, totalTime - math.ceil(timeLeft))
+            self._viewObject.as_setTimeSnapshotS(self._typeID, totalTime, totalTime - math.ceil(timeLeft))
 
 
 class _BaseTimersCollection(object):

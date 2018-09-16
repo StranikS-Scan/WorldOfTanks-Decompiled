@@ -2,12 +2,12 @@
 # Embedded file name: scripts/client/OfflineMapCreator.py
 import math
 import BigWorld
-import MapActivities
 import Math
 from ArenaType import g_cache
-from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
-from gui.app_loader import g_appLoader
 import constants
+from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
+from helpers import dependency
+from skeletons.map_activities import IMapActivities
 _CFG = {'basic': {'v_scale': 1.3,
            'v_start_angles': Math.Vector3(0, 0, 0),
            'v_start_pos': Math.Vector3(50, 0, 50),
@@ -41,6 +41,7 @@ _EMBLEMS_ALPHA_UNDAMAGED = None
 _SHADOW_LIGHT_DIR = None
 
 class OfflineMapCreator(object):
+    mapActivities = dependency.descriptor(IMapActivities)
 
     def __init__(self):
         self.__spaceId = None
@@ -59,7 +60,6 @@ class OfflineMapCreator(object):
         global _V_START_ANGLES
         try:
             LOG_DEBUG('OfflineMapCreator.Create( %s )' % mapName)
-            g_appLoader.showBattlePage()
             cfgType = 'basic'
             self.__loadCfg(cfgType, mapName)
             BigWorld.worldDrawEnabled(False)
@@ -97,7 +97,7 @@ class OfflineMapCreator(object):
             BigWorld.cameraSpaceID(0)
             self.__cam = None
             BigWorld.clearEntitiesAndSpaces()
-            MapActivities.g_mapActivities.stop()
+            self.mapActivities.stop()
             if self.__spaceId and BigWorld.isClientSpace(self.__spaceId):
                 if self.__spaceMappingId:
                     BigWorld.delSpaceGeometryMapping(self.__spaceId, self.__spaceMappingId)

@@ -12,14 +12,6 @@ class GUI_GLOBAL_SPACE_ID(object):
     BATTLE = 6
 
 
-class DISCONNECT_REASON(object):
-    UNDEFINED = 0
-    REQUEST = 1
-    EVENT = 2
-    KICK = 3
-    ERROR = 4
-
-
 class APP_STATE_ID(object):
     NOT_CREATED = 0
     INITIALIZING = 1

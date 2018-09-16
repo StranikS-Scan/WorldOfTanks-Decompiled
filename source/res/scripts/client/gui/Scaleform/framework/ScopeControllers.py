@@ -58,7 +58,7 @@ class ScopeController(DisposableEntity):
         return views
 
     def getLoadingViewsByType(self, viewType):
-        views = {v for v in self.__loadingViews if v.settings.type == viewType}
+        views = {v for v in self.__loadingViews if v.viewType == viewType}
         for scopeController in self.__subControllers:
             views.update(scopeController.getLoadingViewsByType(viewType))
 
@@ -160,7 +160,7 @@ class ScopeController(DisposableEntity):
 
     @classmethod
     def extractScopeFromView(cls, pyView):
-        scope = pyView.settings.scope
+        scope = pyView.viewScope
         return pyView.getCurrentScope() if scope.getScopeType() == ScopeTemplates.DYNAMIC_SCOPE.getScopeType() else scope
 
     def _dispose(self):
@@ -272,8 +272,8 @@ class GlobalScopeController(ScopeController):
 
     def addView(self, pyView, addAsGlobal):
         if not addAsGlobal:
-            if pyView.settings.type in ScopeTemplates.VIEW_TYPES_TO_SCOPES.keys():
-                mainScope = ScopeTemplates.VIEW_TYPES_TO_SCOPES[pyView.settings.type]
+            if pyView.viewType in ScopeTemplates.VIEW_TYPES_TO_SCOPES.keys():
+                mainScope = ScopeTemplates.VIEW_TYPES_TO_SCOPES[pyView.viewType]
                 mainController = self._getScopeControllerForScope(mainScope)
                 mainController.switchMainView(pyView)
             customScope = self.getScopeControllerForScopeType(pyView.getAlias())
@@ -283,8 +283,8 @@ class GlobalScopeController(ScopeController):
         return
 
     def _handleViewDispose(self, pyView):
-        if pyView.settings.type in ScopeTemplates.VIEW_TYPES_TO_SCOPES.keys():
-            mainScope = ScopeTemplates.VIEW_TYPES_TO_SCOPES[pyView.settings.type]
+        if pyView.viewType in ScopeTemplates.VIEW_TYPES_TO_SCOPES.keys():
+            mainScope = ScopeTemplates.VIEW_TYPES_TO_SCOPES[pyView.viewType]
             mainController = self.getScopeControllerForScopeType(mainScope.getScopeType())
             if mainController is not None and mainController.mainView == pyView:
                 mainController.switchMainView(None)

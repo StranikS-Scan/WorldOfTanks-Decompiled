@@ -4,6 +4,7 @@ from collections import defaultdict
 from gui import TANKMEN_ROLES_ORDER_DICT
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_DEVICES, VEHICLE_GUI_ITEMS, VEHICLE_COMPLEX_ITEMS, VEHICLE_INDICATOR_TYPE, AUTO_ROTATION_FLAG
+_COATED_OPTICS_TAG = 'coatedOptics'
 
 def hasTurretRotator(vDesc):
     if vDesc is None:
@@ -48,6 +49,28 @@ def getAutoRotationFlag(vDesc):
         else:
             flag = AUTO_ROTATION_FLAG.TURN_OFF
     return flag
+
+
+def isCoatedOpticsInstalled(avatar=None):
+    vehicleID = avatar_getter.getPlayerVehicleID(avatar=avatar)
+    if not vehicleID:
+        return False
+    else:
+        arena = avatar_getter.getArena(avatar=avatar)
+        if arena is None:
+            return False
+        if vehicleID not in arena.vehicles:
+            return False
+        vehicleType = arena.vehicles[vehicleID].get('vehicleType')
+        if vehicleType is None:
+            return False
+        for device in vehicleType.optionalDevices:
+            if device is None:
+                continue
+            if _COATED_OPTICS_TAG in device.tags:
+                return True
+
+        return False
 
 
 def getCrewMainRolesWoIndexes(crewRoles):

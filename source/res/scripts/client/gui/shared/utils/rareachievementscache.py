@@ -7,6 +7,7 @@ import Event
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from helpers import i18n, getClientLanguage
 from account_helpers.rare_achievements import getRareAchievementImage, getRareAchievementImageBig, getRareAchievementText
+from skeletons.gui.shared.utils import IRaresCache
 
 class IMAGE_TYPE(object):
     IT_67X71 = 1
@@ -18,9 +19,7 @@ class IMAGE_PATH(object):
     IT_180X180 = 'gui/maps/icons/achievement/big/'
 
 
-class _RaresCache(object):
-    DEFAULT_TITLE = i18n.makeString('#tooltips:achievement/action/unavailable/title')
-    DEFAULT_DESCR = i18n.makeString('#tooltips:achievement/action/unavailable/descr')
+class RaresCache(IRaresCache):
     RARE_ACHIEVEMENT_PREFIX = 'rare'
     RARE_ACHIEVEMENT_PATTERN = '^%s([0-9]+)' % RARE_ACHIEVEMENT_PREFIX
     RARE_ACHIEVEMENT_ICON_PATTERN = '^%s[0-9]+\\.png$' % RARE_ACHIEVEMENT_PREFIX
@@ -128,10 +127,10 @@ class _RaresCache(object):
         return achieveID in self.__local
 
     def getTitle(self, achieveID):
-        return self.__cache.get(achieveID, dict()).get('title') or _RaresCache.DEFAULT_TITLE
+        return self.__cache.get(achieveID, dict()).get('title') or i18n.makeString('#tooltips:achievement/action/unavailable/title')
 
     def getDescription(self, achieveID):
-        return self.__cache.get(achieveID, dict()).get('descr') or _RaresCache.DEFAULT_DESCR
+        return self.__cache.get(achieveID, dict()).get('descr') or i18n.makeString('#tooltips:achievement/action/unavailable/descr')
 
     def getImageData(self, imgType, achieveID):
         return self.__cache.get(achieveID, dict()).get('image', {}).get(imgType)
@@ -145,6 +144,3 @@ class _RaresCache(object):
     @classmethod
     def __getRareAchievementID(cls, rareName):
         return int(rareName.replace(cls.RARE_ACHIEVEMENT_PREFIX, ''))
-
-
-g_rareAchievesCache = _RaresCache()

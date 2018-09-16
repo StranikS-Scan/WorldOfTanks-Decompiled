@@ -480,6 +480,8 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
         self.__updateShellSlots()
         self.as_setSelectedAmmoIndexS(self._container.getCurrentShellIndex())
         self.as_setCamoS(self._container.isCamouflageSet())
+        if currentVehicle.descriptor.type.hasCustomDefaultCamouflage:
+            self.as_disableCamoS()
         self.__updateControlBtns()
         topModulesSelected = topModulesFromStock or self._container.isTopModulesSelected()
         self.as_setTopModulesSelectedS(topModulesSelected)

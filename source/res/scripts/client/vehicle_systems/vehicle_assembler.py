@@ -53,6 +53,10 @@ class _CompoundAssembler(VehicleAssemblerAbstract):
             bspModels = ((TankPartNames.getIdx(TankPartNames.CHASSIS), typeDescriptor.chassis.hitTester.bspModelName), (TankPartNames.getIdx(TankPartNames.HULL), typeDescriptor.hull.hitTester.bspModelName))
         collisionAssembler = BigWorld.CollisionAssembler(bspModels, BigWorld.player().spaceID)
         prereqs += [compoundAssembler, collisionAssembler]
+        physicalTracksBuilders = typeDescriptor.chassis.physicalTracks
+        for name, builder in physicalTracksBuilders.iteritems():
+            prereqs.append(builder.createLoader('{0}PhysicalTrack'.format(name)))
+
         return (compoundAssembler, prereqs)
 
     def _assembleParts(self, vehicle, appearance, resourceRefs):
@@ -84,10 +88,12 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
         return
 
     @staticmethod
-    def __assembleNonDamagedOnly(appearance, isPlayer, lodLink, lodStateLink):
+    def __assembleNonDamagedOnly(resourceRefs, appearance, isPlayer, lodLink, lodStateLink):
         model_assembler.assembleTerrainMatKindSensor(appearance, lodStateLink)
         model_assembler.assembleRecoil(appearance, lodLink)
         model_assembler.assembleGunLinkedNodesAnimator(appearance)
+        model_assembler.assembleCollisionObstaclesCollector(appearance, lodStateLink)
+        model_assembler.assembleTessellationCollisionSensor(appearance, lodStateLink)
         model_assembler.assembleSuspensionIfNeed(appearance, lodStateLink)
         model_assembler.assembleLeveredSuspensionIfNeed(appearance, lodStateLink)
         _assembleSwinging(appearance, lodLink)
@@ -96,6 +102,7 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
         appearance.wheelsAnimator = model_assembler.createWheelsAnimator(appearance.compoundModel, appearance.typeDescriptor, appearance.splineTracks, appearance.filter, lodStateLink)
         appearance.trackNodesAnimator = model_assembler.createTrackNodesAnimator(appearance.compoundModel, appearance.typeDescriptor, appearance.wheelsAnimator, lodStateLink)
         model_assembler.assembleVehicleTraces(appearance, appearance.filter, lodStateLink)
+        model_assembler.assembleTracks(resourceRefs, appearance.typeDescriptor, appearance, appearance.splineTracks, False, lodStateLink)
 
     def _assembleParts(self, isPlayer, appearance, resourceRefs):
         appearance.filter = model_assembler.createVehicleFilter(appearance.typeDescriptor)
@@ -122,7 +129,7 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
         appearance.shadowManager = VehicleShadowManager(compoundModel, matrixBinding)
         isDamaged = appearance.damageState.isCurrentModelDamaged
         if not isDamaged:
-            self.__assembleNonDamagedOnly(appearance, isPlayer, lodLink, lodStateLink)
+            self.__assembleNonDamagedOnly(resourceRefs, appearance, isPlayer, lodLink, lodStateLink)
             dirtEnabled = BigWorld.WG_dirtEnabled() and 'HD' in appearance.typeDescriptor.type.tags
             fashions = appearance.fashions
             if dirtEnabled and fashions is not None:
@@ -136,8 +143,6 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
                     fashions[fashionIdx].addMaterialHandler(dirtHandlers[fashionIdx])
 
         model_assembler.setupTurretRotations(appearance)
-        if appearance.fashion is not None:
-            appearance.fashion.movementInfo = appearance.filter.movementInfo
         appearance.waterSensor = model_assembler.assembleWaterSensor(appearance.typeDescriptor, appearance, lodStateLink)
         if appearance.engineAudition is not None:
             appearance.engineAudition.setIsUnderwaterInfo(DataLinks.createBoolLink(appearance.waterSensor, 'isUnderWater'))

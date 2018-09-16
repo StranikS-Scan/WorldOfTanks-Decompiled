@@ -12,8 +12,8 @@ from gui.app_loader import g_appLoader, settings as app_settings
 from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from skeletons.gui.battle_results import IBattleResultsService
 from bootcamp.Bootcamp import g_bootcamp
-_SNDID_ACHIEVEMENT = 'bc_result_screen_achievements'
-_SNDID_BONUS = 'bc_result_screen_bonus'
+_SNDID_ACHIEVEMENT = 'result_screen_achievements'
+_SNDID_BONUS = 'result_screen_bonus'
 
 class BCBattleResult(BCBattleResultMeta):
     battleResults = dependency.descriptor(IBattleResultsService)

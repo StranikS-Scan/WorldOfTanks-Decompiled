@@ -38,6 +38,7 @@ ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
 GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
 EULA_VERSION = 'EULA_VERSION'
+LINKEDSET_QUESTS = 'LINKEDSET_QUEST'
 FORT_MEMBER_TUTORIAL = 'FORT_MEMBER_TUTORIAL'
 IGR_PROMO = 'IGR_PROMO'
 PROMO = 'PROMO'
@@ -252,6 +253,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                     'isEpicRandomCheckboxClicked': False,
                                     'isEpicWelcomeViewShowed': False},
                EULA_VERSION: {'version': 0},
+               LINKEDSET_QUESTS: {'shown': 0},
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
                IGR_PROMO: {'wasShown': False},
                BOOSTERS: {'wasShown': False},
@@ -279,6 +281,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                          'isMain': False,
                                          'level': -1,
                                          'compatibleOnly': True},
+               'linkedset_view_vehicle': {'nation': -1,
+                                          'vehicleType': 'none'},
                PROMO: {},
                AWARDS: {'vehicleResearchAward': -1,
                         'victoryAward': -1,
@@ -484,6 +488,23 @@ def _pack(value):
 
 def _unpack(value):
     return pickle.loads(base64.b64decode(value))
+
+
+def _recursiveStep(defaultDict, savedDict, finalDict):
+    for key in defaultDict:
+        defaultElement = defaultDict[key]
+        savedElement = savedDict.get(key, None)
+        if type(defaultElement) == dict:
+            if savedElement is not None and type(savedElement) == dict:
+                finalDict[key] = dict()
+                _recursiveStep(defaultElement, savedElement, finalDict[key])
+            else:
+                finalDict[key] = deepcopy(defaultElement)
+        if savedElement is not None:
+            finalDict[key] = savedElement
+        finalDict[key] = defaultElement
+
+    return
 
 
 class AccountSettings(object):
@@ -929,25 +950,8 @@ class AccountSettings(object):
 
     @staticmethod
     def updateNewSettingsCounter(defaultDict, savedDict):
-        finalDict = dict()
-
-        def recursiveStep(defaultDict, savedDict, finalDict):
-            for key in defaultDict:
-                defaultElement = defaultDict[key]
-                savedElement = savedDict.get(key, None)
-                if type(defaultElement) == dict:
-                    if savedElement is not None and type(savedElement) == dict:
-                        finalDict[key] = dict()
-                        recursiveStep(defaultElement, savedElement, finalDict[key])
-                    else:
-                        finalDict[key] = deepcopy(defaultElement)
-                if savedElement is not None:
-                    finalDict[key] = savedElement
-                finalDict[key] = defaultElement
-
-            return
-
-        recursiveStep(defaultDict, savedDict, finalDict)
+        finalDict = {}
+        _recursiveStep(defaultDict, savedDict, finalDict)
         return finalDict
 
     @staticmethod

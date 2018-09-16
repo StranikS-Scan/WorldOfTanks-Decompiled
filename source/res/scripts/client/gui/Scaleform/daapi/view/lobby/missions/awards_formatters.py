@@ -5,7 +5,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import finders
-from gui.server_events.awards_formatters import QuestsBonusComposer, AWARDS_SIZES, PreformattedBonus, getPersonalMissionAwardPacker, getOperationPacker, formatCountLabel, LABEL_ALIGN
+from gui.server_events.awards_formatters import QuestsBonusComposer, AWARDS_SIZES, PreformattedBonus, getPersonalMissionAwardPacker, getOperationPacker, formatCountLabel, LABEL_ALIGN, getLinkedSetAwardPacker
 from gui.server_events.bonuses import FreeTokensBonus
 from gui.shared.formatters import text_styles
 from helpers import i18n, dependency
@@ -69,6 +69,27 @@ class CurtailingAwardsComposer(QuestsBonusComposer):
             bonuses.append(shortData)
 
         return bonuses
+
+
+class LinkedSetAwardsComposer(CurtailingAwardsComposer):
+
+    def __init__(self, displayedAwardsCount, awardsFormatter=None):
+        if awardsFormatter is None:
+            awardsFormatter = getLinkedSetAwardPacker()
+        super(LinkedSetAwardsComposer, self).__init__(displayedAwardsCount, awardsFormatter)
+        return
+
+    def _packBonus(self, bonus, size=AWARDS_SIZES.SMALL):
+        return {'label': bonus.label,
+         'imgSource': bonus.getImage(size),
+         'tooltip': bonus.tooltip,
+         'isSpecial': bonus.isSpecial,
+         'specialAlias': bonus.specialAlias,
+         'specialArgs': bonus.specialArgs,
+         'hasCompensation': bonus.isCompensation,
+         'align': bonus.align,
+         'highlightType': bonus.highlightType,
+         'overlayType': bonus.overlayType}
 
 
 class DetailedCardAwardComposer(CurtailingAwardsComposer):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/prb_windows/squad_view.py
+from adisp import process
 from gui.Scaleform.daapi.view.lobby.prb_windows.SquadActionButtonStateVO import SquadActionButtonStateVO
 from gui.Scaleform.daapi.view.lobby.rally import vo_converters
 from gui.Scaleform.daapi.view.lobby.rally.vo_converters import makeVehicleVO
@@ -18,17 +19,24 @@ from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers import i18n
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.lobby_context import ILobbyContext
 
 class SquadView(SquadViewMeta):
     eventsCache = dependency.descriptor(IEventsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def inviteFriendRequest(self):
         if self.__canSendInvite():
             self.fireEvent(events.LoadViewEvent(PREBATTLE_ALIASES.SEND_INVITES_WINDOW_PY, ctx={'prbName': 'squad',
              'ctrlType': CTRL_ENTITY_TYPE.UNIT}), scope=EVENT_BUS_SCOPE.LOBBY)
 
+    @process
     def toggleReadyStateRequest(self):
-        self.prbEntity.togglePlayerReadyAction(True)
+        changeStatePossible = True
+        if not self.prbEntity.getPlayerInfo().isReady:
+            changeStatePossible = yield self.lobbyContext.isHeaderNavigationPossible()
+        if changeStatePossible:
+            self.prbEntity.togglePlayerReadyAction(True)
 
     def onUnitVehiclesChanged(self, dbID, vInfos):
         entity = self.prbEntity

@@ -14,7 +14,9 @@ from gui.ClientHangarSpace import ClientHangarSpace, _getHangarPath
 from gui.Scaleform.Waiting import Waiting
 from helpers import dependency, uniprof
 from helpers.statistics import HANGAR_LOADING_STATE
+from shared_utils import BoundMethodWeakref
 from skeletons.gui.game_control import IGameSessionController, IIGRController
+from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
 from gui import g_keyEventHandlers
 from gui.shared import g_eventBus, events
@@ -22,6 +24,7 @@ _MAX_HANDLERS_IN_Q = 100
 _Q_CHECK_DELAY = 0.0
 
 class _execute_after_hangar_space_inited(object):
+    hangarSpace = dependency.descriptor(IHangarSpace)
     __slots__ = ('__queue',)
 
     def __init__(self):
@@ -37,7 +40,7 @@ class _execute_after_hangar_space_inited(object):
         return wrapped
 
     def checkConditionForExit(self):
-        if not g_hangarSpace.spaceInited:
+        if not self.hangarSpace.spaceInited:
             BigWorld.callback(_Q_CHECK_DELAY, self.checkConditionForExit)
             return
         self.delayCall()
@@ -114,14 +117,14 @@ class HangarVideoCameraController(object):
             return self.__videoCamera.handleMouseEvent(event.dx, event.dy, event.dz) if self.__enabled else False
 
 
-class _HangarSpace(object):
+class HangarSpace(IHangarSpace):
     isPremium = property(lambda self: self.__isSpacePremium if self.__spaceInited else self.__delayedIsPremium)
     gameSession = dependency.descriptor(IGameSessionController)
     igrCtrl = dependency.descriptor(IIGRController)
     statsCollector = dependency.descriptor(IStatisticsCollector)
 
     def __init__(self):
-        self.__space = ClientHangarSpace(self.__changeDone)
+        self.__space = None
         self.__videoCameraController = HangarVideoCameraController()
         self.__inited = False
         self.__spaceInited = False
@@ -167,7 +170,7 @@ class _HangarSpace(object):
         return self.__isModelLoaded
 
     def spaceLoading(self):
-        return self.__space.spaceLoading()
+        return self.__space.spaceLoading() if self.__space is not None else False
 
     def getSlotPositions(self):
         return self.__space.getSlotPositions()
@@ -177,11 +180,13 @@ class _HangarSpace(object):
 
     @uniprof.regionDecorator(label='hangar.space.loading', scope='enter')
     def init(self, isPremium):
+        if self.__space is None:
+            self.__space = ClientHangarSpace(BoundMethodWeakref(self._changeDone))
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.START_LOADING_SPACE)
         self.__videoCameraController.init()
         self.__spaceDestroyedDuringLoad = False
         if not self.__spaceInited:
-            LOG_DEBUG('_HangarSpace::init')
+            LOG_DEBUG('HangarSpace::init')
             Waiting.show('loadHangarSpace', overlapsUI=False)
             self.__inited = True
             self.__isSpacePremium = isPremium
@@ -201,13 +206,13 @@ class _HangarSpace(object):
         else:
             self.onSpaceRefresh()
             if not self.__spaceInited and self.__space.spaceLoading():
-                LOG_DEBUG('_HangarSpace::refreshSpace(isPremium={0!r:s}) - is delayed until space load is done'.format(isPremium))
+                LOG_DEBUG('HangarSpace::refreshSpace(isPremium={0!r:s}) - is delayed until space load is done'.format(isPremium))
                 if self.__delayedRefreshCallback is None:
                     self.__delayedRefreshCallback = BigWorld.callback(0.1, self.__delayedRefresh)
                 self.__delayedIsPremium = isPremium
                 self.__delayedForceRefresh = forceRefresh
                 return
-            LOG_DEBUG('_HangarSpace::refreshSpace(isPremium={0!r:s})'.format(isPremium))
+            LOG_DEBUG('HangarSpace::refreshSpace(isPremium={0!r:s})'.format(isPremium))
             self.destroy()
             self.init(isPremium)
             self.__isSpacePremium = isPremium
@@ -222,12 +227,12 @@ class _HangarSpace(object):
         self.__videoCameraController.destroy()
         self.__isModelLoaded = False
         if self.__spaceInited:
-            LOG_DEBUG('_HangarSpace::destroy')
+            LOG_DEBUG('HangarSpace::destroy')
             self.__inited = False
             self.__spaceInited = False
             self.__space.destroy()
         elif self.spaceLoading():
-            LOG_DEBUG('_HangarSpace::destroy - delayed until space load done')
+            LOG_DEBUG('HangarSpace::destroy - delayed until space load done')
             self.__spaceDestroyedDuringLoad = True
             self.__space.destroy()
             self.__inited = False
@@ -266,7 +271,7 @@ class _HangarSpace(object):
         if self.__inited:
             self.__isModelLoaded = False
             self.onVehicleChangeStarted()
-            Waiting.show('loadHangarSpaceVehicle', True, overlapsUI=False)
+            Waiting.show('loadHangarSpaceVehicle', isSingle=True, overlapsUI=False)
             self.__space.recreateVehicle(vehicle.descriptor, vehicle.modelState)
             self.__lastUpdatedVehicle = vehicle
 
@@ -285,7 +290,7 @@ class _HangarSpace(object):
         if self.__inited:
             self.__isModelLoaded = False
             self.onVehicleChangeStarted()
-            Waiting.show('loadHangarSpaceVehicle', overlapsUI=False)
+            Waiting.show('loadHangarSpaceVehicle', isSingle=True, overlapsUI=False)
             if self.__space is not None:
                 self.__space.removeVehicle()
             Waiting.hide('loadHangarSpaceVehicle')
@@ -326,7 +331,7 @@ class _HangarSpace(object):
         return
 
     @uniprof.regionDecorator(label='hangar.vehicle.loading', scope='exit')
-    def __changeDone(self):
+    def _changeDone(self):
         Waiting.hide('loadHangarSpaceVehicle')
         self.__isModelLoaded = True
         self.onVehicleChanged()
@@ -340,6 +345,3 @@ class _HangarSpace(object):
         else:
             self.refreshSpace(self.__delayedIsPremium, self.__delayedForceRefresh)
             return
-
-
-g_hangarSpace = _HangarSpace()

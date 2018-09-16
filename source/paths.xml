@@ -1,12 +1,12 @@
 <root>
   <Paths>
-    <Path cacheSubdirs="true">./res_mods/1.0.1.1</Path>
-    <Path mode="recursive" mask="*.wotmod" root="res">./mods/1.0.1.1</Path>
+    <Path cacheSubdirs="true">./res_mods/1.0.2 Common Test</Path>
+    <Path mode="recursive" mask="*.wotmod" root="res">./mods/1.0.2 Common Test</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part1.pkg</Package>
-      <Package type="hd">./res/packages/shared_content_hd-part2.pkg</Package>
       <Package type="hd">./res/packages/shared_content_hd-part1.pkg</Package>
+      <Package type="hd">./res/packages/shared_content_hd-part2.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/shared_content_sandbox-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/shared_content_sandbox-part2.pkg</Package>
       <Package type="hd">./res/packages/shared_content_sandbox_hd-part1.pkg</Package>
@@ -46,10 +46,10 @@
       <Package type="hd">./res/packages/18_cliff_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/19_monastery.pkg</Package>
       <Package type="hd">./res/packages/19_monastery_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/208_bf_epic_normandy.pkg</Package>
-      <Package type="hd">./res/packages/208_bf_epic_normandy_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/212_epic_random_valley.pkg</Package>
       <Package type="hd">./res/packages/212_epic_random_valley_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/217_er_alaska.pkg</Package>
+      <Package type="hd">./res/packages/217_er_alaska_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/23_westfeld.pkg</Package>
       <Package type="hd">./res/packages/23_westfeld_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/28_desert.pkg</Package>
@@ -78,8 +78,6 @@
       <Package type="hd">./res/packages/63_tundra_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/hangar_v3.pkg</Package>
       <Package type="hd">./res/packages/hangar_v3_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/hangar_victory_day.pkg</Package>
-      <Package type="hd">./res/packages/hangar_victory_day_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part2.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/gui.pkg</Package>
@@ -96,18 +94,30 @@
       <Package type="hd">./res/packages/vehicles_level_03_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/vehicles_level_04.pkg</Package>
       <Package type="hd">./res/packages/vehicles_level_04_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/vehicles_level_05.pkg</Package>
-      <Package type="hd">./res/packages/vehicles_level_05_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/vehicles_level_06.pkg</Package>
-      <Package type="hd">./res/packages/vehicles_level_06_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/vehicles_level_07.pkg</Package>
-      <Package type="hd">./res/packages/vehicles_level_07_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/vehicles_level_08.pkg</Package>
-      <Package type="hd">./res/packages/vehicles_level_08_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/vehicles_level_09.pkg</Package>
-      <Package type="hd">./res/packages/vehicles_level_09_hd.pkg</Package>
-      <Package type="sd,hd">./res/packages/vehicles_level_10.pkg</Package>
-      <Package type="hd">./res/packages/vehicles_level_10_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_05-part1.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_05-part2.pkg</Package>
+      <Package type="hd">./res/packages/vehicles_level_05_hd-part1.pkg</Package>
+      <Package type="hd">./res/packages/vehicles_level_05_hd-part2.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_06-part1.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_06-part2.pkg</Package>
+      <Package type="hd">./res/packages/vehicles_level_06_hd-part2.pkg</Package>
+      <Package type="hd">./res/packages/vehicles_level_06_hd-part1.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_07-part1.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_07-part2.pkg</Package>
+      <Package type="hd">./res/packages/vehicles_level_07_hd-part1.pkg</Package>
+      <Package type="hd">./res/packages/vehicles_level_07_hd-part2.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_08-part1.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_08-part2.pkg</Package>
+      <Package type="hd">./res/packages/vehicles_level_08_hd-part1.pkg</Package>
+      <Package type="hd">./res/packages/vehicles_level_08_hd-part2.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_09-part2.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_09-part1.pkg</Package>
+      <Package type="hd">./res/packages/vehicles_level_09_hd-part2.pkg</Package>
+      <Package type="hd">./res/packages/vehicles_level_09_hd-part1.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_10-part2.pkg</Package>
+      <Package type="sd,hd">./res/packages/vehicles_level_10-part1.pkg</Package>
+      <Package type="hd">./res/packages/vehicles_level_10_hd-part1.pkg</Package>
+      <Package type="hd">./res/packages/vehicles_level_10_hd-part2.pkg</Package>
     </Packages>
     <Path>./res</Path>
   </Paths>

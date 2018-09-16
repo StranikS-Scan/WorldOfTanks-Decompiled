@@ -354,7 +354,7 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
             self.__fetchLeaderboardPageData(1, self.TOP_POSITION_RANK)
 
     def __onViewLoaded(self, view, *args, **kwargs):
-        if view.settings.alias in (EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_ALIAS, EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_VEHICLES_ALIAS):
+        if view.alias in (EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_ALIAS, EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_VEHICLES_ALIAS):
             if view.caller == 'excel':
                 view.setData(self.__eventData, self.changeLeaderboard, self.__leaderboardID)
 

@@ -6,7 +6,7 @@ import BigWorld
 import constants
 from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.view.lobby.missions import cards_formatters
-from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CurtailingAwardsComposer, DetailedCardAwardComposer, PersonalMissionsAwardComposer
+from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CurtailingAwardsComposer, DetailedCardAwardComposer, PersonalMissionsAwardComposer, LinkedSetAwardsComposer
 from gui.Scaleform.daapi.view.lobby.missions.cards_formatters import PMCardConditionsFormatter
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_BUTTONS import PERSONAL_MISSIONS_BUTTONS
@@ -21,8 +21,8 @@ from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.server_events.cond_formatters.prebattle import MissionsPreBattleConditionsFormatter
 from gui.server_events.cond_formatters.requirements import AccountRequirementsFormatter, TQAccountRequirementsFormatter
 from gui.server_events.conditions import GROUP_TYPE
-from gui.server_events.events_helpers import MISSIONS_STATES, QuestInfoModel, AWARDS_PER_SINGLE_PAGE
-from gui.server_events.formatters import isMarathon, DECORATION_SIZES
+from gui.server_events.events_helpers import MISSIONS_STATES, QuestInfoModel, AWARDS_PER_SINGLE_PAGE, isMarathon
+from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
@@ -32,6 +32,7 @@ from quest_xml_source import MAX_BONUS_LIMIT
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
 CARD_AWARDS_COUNT = 6
+LINKED_SET_CARD_AWARDS_COUNT = 8
 DETAILED_CARD_AWARDS_COUNT = 10
 _preBattleConditionFormatter = MissionsPreBattleConditionsFormatter()
 _accountReqsFormatter = AccountRequirementsFormatter()
@@ -45,6 +46,7 @@ _detailedCardAwardsFormatter = DetailedCardAwardComposer(DETAILED_CARD_AWARDS_CO
 _awardsWindowBonusFormatter = CurtailingAwardsComposer(sys.maxint)
 _personalMissionsConditionsFormatter = PMCardConditionsFormatter()
 _personalMissionsAwardsFormatter = PersonalMissionsAwardComposer(DETAILED_CARD_AWARDS_COUNT)
+_linkedSetAwardsComposer = LinkedSetAwardsComposer(LINKED_SET_CARD_AWARDS_COUNT)
 HIDE_DONE = 'hideDone'
 HIDE_UNAVAILABLE = 'hideUnavailable'
 AWARD_SHEET_ICON = icons.makeImageTag(RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_SHEET_RECEIVED_SMALL, 16, 16, -2, 0)
@@ -806,3 +808,11 @@ def getPersonalMissionAwardsFormatter():
 
 def getMissionAwardsFormatter():
     return _awardsWindowBonusFormatter
+
+
+def getLinkedSetBonuses(bonuses):
+    result = _linkedSetAwardsComposer.getFormattedBonuses(bonuses, AWARDS_SIZES.BIG)
+    while len(result) % AWARDS_PER_SINGLE_PAGE != 0 and len(result) > AWARDS_PER_SINGLE_PAGE:
+        result.append({})
+
+    return result

@@ -94,6 +94,10 @@ class ClassicPage(SharedPage):
                     self.as_setPostmortemTipsVisibleS(not isShown)
             return
 
+    def _handleHideSettingsTip(self, _):
+        super(ClassicPage, self)._handleHideSettingsTip(_)
+        self._fsToggling.discard(BATTLE_VIEW_ALIASES.COLOR_SETTINGS_TIP_PANEL)
+
     def _handleRadialMenuCmd(self, event):
         isDown = event.ctx['isDown']
         self._toggleRadialMenu(isDown)

@@ -4,6 +4,7 @@ from collections import namedtuple
 from gui.Scaleform.framework import ViewTypes
 import gui.Scaleform.framework.ScopeTemplates
 from gui.Scaleform.framework.factories import EntitiesFactories, DAAPIModuleFactory, ViewFactory
+from gui.Scaleform.framework.settings import UIFrameworkImpl
 
 class COMMON_VIEW_ALIAS(object):
     LOGIN = 'login'

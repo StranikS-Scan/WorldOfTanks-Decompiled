@@ -5,6 +5,7 @@ import BigWorld
 import account_helpers
 from constants import PREBATTLE_TYPE
 from debug_utils import LOG_ERROR
+from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.prb_control import prb_getters
 from gui.prb_control.entities.training.legacy.actions_validator import TrainingActionsValidator, TrainingIntroActionsValidator
@@ -16,10 +17,10 @@ from gui.prb_control.entities.training.legacy.ctx import TrainingSettingsCtx, Se
 from gui.prb_control.entities.training.legacy.limits import TrainingLimits
 from gui.prb_control.entities.training.legacy.permissions import TrainingPermissions
 from gui.prb_control.entities.training.legacy.requester import TrainingListRequester
-from gui.prb_control.items import prb_items, SelectResult
+from gui.prb_control.items import prb_items, SelectResult, ValidationResult
 from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import PREBATTLE_ROSTER, REQUEST_TYPE
-from gui.prb_control.settings import PREBATTLE_SETTING_NAME
+from gui.prb_control.settings import PREBATTLE_SETTING_NAME, PREBATTLE_RESTRICTION
 from gui.prb_control.storages import legacy_storage_getter
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from prebattle_shared import decodeRoster
@@ -299,6 +300,14 @@ class TrainingEntity(LegacyEntity):
                 if callback is not None:
                     callback(False)
             return
+
+    def _setPlayerReady(self, ctx, callback=None):
+        if g_currentVehicle.isObserver():
+            if not self._processValidationResult(ctx, ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED)):
+                if callback:
+                    callback(False)
+                return
+        super(TrainingEntity, self)._setPlayerReady(ctx, callback)
 
     def _createActionsValidator(self):
         return TrainingActionsValidator(self)

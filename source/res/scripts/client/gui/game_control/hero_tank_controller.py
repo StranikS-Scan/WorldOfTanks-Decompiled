@@ -32,6 +32,8 @@ class HeroTankController(IHeroTankController):
     def onLobbyStarted(self, ctx):
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
         self.__fullUpdate()
+        self.__updateSettings()
+        self.onUpdated()
 
     def onAvatarBecomePlayer(self):
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
@@ -52,11 +54,9 @@ class HeroTankController(IHeroTankController):
 
     def __fullUpdate(self):
         self.__invVehsIntCD = []
-        invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.INVENTORY).values()
+        invVehicles = self.itemsCache.items.getVehicles(REQ_CRITERIA.CUSTOM(lambda item: item.inventoryCount > 0 or item.isRestorePossible())).values()
         for invVeh in invVehicles:
             self.__invVehsIntCD.append(invVeh.intCD)
-
-        self.__updateSettings()
 
     def __updateInventoryVehsData(self, reason, diff):
         if reason != CACHE_SYNC_REASON.CLIENT_UPDATE:
@@ -64,15 +64,18 @@ class HeroTankController(IHeroTankController):
         else:
             if diff is not None and GUI_ITEM_TYPE.VEHICLE in diff:
                 vehDiff = diff[GUI_ITEM_TYPE.VEHICLE]
+                self.__fullUpdate()
+                self.__updateSettings()
                 for vehIntCD in vehDiff:
                     if vehIntCD == self.__currentTankOnScene:
-                        self.__fullUpdate()
+                        self.onUpdated()
 
             return
 
     def __onServerSettingsChanged(self, diff):
         if _HERO_VEHICLES in diff:
             self.__updateSettings()
+            self.onUpdated()
 
     def __updateSettings(self):
         self.__data = {}
@@ -80,13 +83,14 @@ class HeroTankController(IHeroTankController):
         self.__isEnabled = heroVehsDict.get('isEnabled', False)
         if 'vehicles' in heroVehsDict:
             self.__data = {k:v for k, v in heroVehsDict['vehicles'].iteritems() if k not in self.__invVehsIntCD}
-            self.onUpdated()
 
     def __randomChoice(self):
         items = self.__data.keys()
         if items:
             self.__currentTankOnScene = random.choice(self.__data.keys())
-            return self.__currentTankOnScene
+        else:
+            self.__currentTankOnScene = ''
+        return self.__currentTankOnScene
 
     def __getNameFromCD(self, cd):
         if cd:

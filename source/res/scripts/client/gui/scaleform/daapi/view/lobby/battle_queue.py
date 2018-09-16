@@ -185,31 +185,35 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         super(BattleQueue, self)._dispose()
 
     def __updateClientState(self):
-        permissions = self.prbEntity.getPermissions()
-        if not permissions.canExitFromQueue():
-            self.as_showExitS(False)
-        guiType = prb_getters.getArenaGUIType(queueType=self.__provider.getQueueType())
-        title = MENU.loading_battletypes(guiType)
-        description = MENU.loading_battletypes_desc(guiType)
-        if guiType != constants.ARENA_GUI_TYPE.UNKNOWN and guiType in constants.ARENA_GUI_TYPE_LABEL.LABELS:
-            iconlabel = constants.ARENA_GUI_TYPE_LABEL.LABELS[guiType]
+        if self.prbEntity is None:
+            return
         else:
-            iconlabel = 'neutral'
-        if self.__provider.needAdditionalInfo():
-            additional = self.__provider.additionalInfo()
-        else:
-            additional = ''
-        vehicle = g_currentVehicle.item
-        textLabel = makeString(MENU.PREBATTLE_TANKLABEL)
-        tankName = vehicle.shortUserName
-        iconPath = _getVehicleIconPath(vehicle.type)
-        self.as_setTypeInfoS({'iconLabel': iconlabel,
-         'title': title,
-         'description': description,
-         'additional': additional,
-         'tankLabel': text_styles.main(textLabel),
-         'tankIcon': iconPath,
-         'tankName': tankName})
+            permissions = self.prbEntity.getPermissions()
+            if not permissions.canExitFromQueue():
+                self.as_showExitS(False)
+            guiType = prb_getters.getArenaGUIType(queueType=self.__provider.getQueueType())
+            title = MENU.loading_battletypes(guiType)
+            description = MENU.loading_battletypes_desc(guiType)
+            if guiType != constants.ARENA_GUI_TYPE.UNKNOWN and guiType in constants.ARENA_GUI_TYPE_LABEL.LABELS:
+                iconlabel = constants.ARENA_GUI_TYPE_LABEL.LABELS[guiType]
+            else:
+                iconlabel = 'neutral'
+            if self.__provider.needAdditionalInfo():
+                additional = self.__provider.additionalInfo()
+            else:
+                additional = ''
+            vehicle = g_currentVehicle.item
+            textLabel = makeString(MENU.PREBATTLE_TANKLABEL)
+            tankName = vehicle.shortUserName
+            iconPath = _getVehicleIconPath(vehicle.type)
+            self.as_setTypeInfoS({'iconLabel': iconlabel,
+             'title': title,
+             'description': description,
+             'additional': additional,
+             'tankLabel': text_styles.main(textLabel),
+             'tankIcon': iconPath,
+             'tankName': tankName})
+            return
 
     def __stopUpdateScreen(self):
         if self.__timerCallback is not None:
@@ -221,9 +225,13 @@ class BattleQueue(BattleQueueMeta, LobbySubView):
         return
 
     def __updateQueueInfo(self):
-        qType = self.prbEntity.getQueueType()
-        self.__provider = _providerFactory(self, qType)
-        self.__provider.start()
+        if self.prbEntity is None:
+            return
+        else:
+            qType = self.prbEntity.getQueueType()
+            self.__provider = _providerFactory(self, qType)
+            self.__provider.start()
+            return
 
     def __updateTimer(self):
         self.__timerCallback = None

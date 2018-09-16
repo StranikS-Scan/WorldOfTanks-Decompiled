@@ -392,7 +392,9 @@ _SINGLE_ACHIEVEMENTS_VALUES = ['titleSniper',
  'HE17A3',
  'NY18A1',
  'NY18A2',
- 'NY18A3']
+ 'NY18A3',
+ 'rankedBattlesHero',
+ 'rankedBattlesSeasonOne']
 _singleAchievementsPopUps = ['titleSniper',
  'invincible',
  'diehard',
@@ -426,7 +428,9 @@ _singleAchievementsPopUps = ['titleSniper',
  'HE17A3',
  'NY18A1',
  'NY18A2',
- 'NY18A3']
+ 'NY18A3',
+ 'rankedBattlesHero',
+ 'rankedBattlesSeasonOne']
 _singleAchievementsBlockBuilder = BinarySetDossierBlockBuilder('singleAchievements', _SINGLE_ACHIEVEMENTS_VALUES, {}, _singleAchievementsPopUps)
 FORT_ACHIEVEMENTS_BLOCK_LAYOUT = ['conqueror',
  'fireAndSword',

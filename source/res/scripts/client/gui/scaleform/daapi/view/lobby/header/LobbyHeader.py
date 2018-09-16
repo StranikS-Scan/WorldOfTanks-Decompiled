@@ -46,6 +46,7 @@ from gui.shared.money import Currency
 from gui.shared.tooltips import formatters
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
+from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
 from helpers import dependency
 from helpers import i18n, time_utils, isPlayerAccount
@@ -57,6 +58,7 @@ from skeletons.gui.game_control import IEncyclopediaController
 from skeletons.gui.game_control import IIGRController, IChinaController, IServerStatsController
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.game_control import IWalletController, IGameSessionController, IBoostersController
+from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -141,6 +143,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     goodiesCache = dependency.descriptor(IGoodiesCache)
     connectionMgr = dependency.descriptor(IConnectionManager)
     rankedController = dependency.descriptor(IRankedBattlesController)
+    bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self):
         super(LobbyHeader, self).__init__()
@@ -148,6 +151,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__shownCounters = set()
         self._isLobbyHeaderControlsDisabled = False
         self.__viewLifecycleWatcher = ViewLifecycleWatcher()
+        self.__isFightBtnDisabled = self.bootcampController.isInBootcamp()
         return
 
     def onClanEmblem16x16Received(self, clanDbID, emblem):
@@ -263,6 +267,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         Waiting.hide('enter')
         self._isLobbyHeaderControlsDisabled = False
         self.__viewLifecycleWatcher.start(self.app.containerManager, [_RankedBattlesWelcomeViewLifecycleHandler(self)])
+        if self.bootcampController.isInBootcamp():
+            self.as_disableFightButtonS(self.__isFightBtnDisabled)
         self._onPopulateEnd()
         return
 
@@ -297,6 +303,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
         g_currentVehicle.onChanged += self.__onVehicleChanged
         g_currentPreviewVehicle.onChanged += self.__onVehicleChanged
+        g_hangarSpace.onSpaceCreate += self.__onHangarSpaceCreated
+        g_hangarSpace.onSpaceDestroy += self.__onHangarSpaceDestroy
         self.eventsCache.onSyncCompleted += self.__onEventsCacheResync
         self.eventsCache.onProgressUpdated += self.__onEventsCacheResync
         self.eventsCache.onEventsVisited += self.__onEventsVisited
@@ -351,6 +359,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
         g_currentVehicle.onChanged -= self.__onVehicleChanged
         g_currentPreviewVehicle.onChanged -= self.__onVehicleChanged
+        g_hangarSpace.onSpaceCreate -= self.__onHangarSpaceCreated
+        g_hangarSpace.onSpaceDestroy -= self.__onHangarSpaceDestroy
         self.eventsCache.onSyncCompleted -= self.__onEventsCacheResync
         self.eventsCache.onProgressUpdated -= self.__onEventsCacheResync
         self.eventsCache.onEventsVisited -= self.__onEventsVisited
@@ -680,8 +690,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             else:
                 iconSquad = RES_ICONS.MAPS_ICONS_BATTLETYPES_40X40_SQUAD
             self.as_updateSquadS(isInSquad, tooltip, TOOLTIP_TYPES.COMPLEX, isEvent, iconSquad)
-        isFightBtnDisabled = self._checkFightButtonDisabled(canDo, selected.isFightButtonForcedDisabled())
-        if isFightBtnDisabled and not state.hasLockedState:
+        self.__isFightBtnDisabled = self._checkFightButtonDisabled(canDo, selected.isFightButtonForcedDisabled())
+        if self.__isFightBtnDisabled and not state.hasLockedState:
             if isSandbox:
                 self.as_setFightBtnTooltipS(self.__getSandboxTooltipData(result))
             elif isEvent and state.isInUnit(constants.PREBATTLE_TYPE.EVENT):
@@ -696,7 +706,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
                 self.as_setFightBtnTooltipS('')
         else:
             self.as_setFightBtnTooltipS('')
-        self.as_disableFightButtonS(isFightBtnDisabled)
+        if g_hangarSpace.spaceInited or not self.bootcampController.isInBootcamp():
+            self.as_disableFightButtonS(self.__isFightBtnDisabled)
         self.as_setFightButtonS(selected.getFightButtonLabel(state, playerInfo))
         if self.__isHeaderButtonPresent(LobbyHeader.BUTTONS.BATTLE_SELECTOR):
             eventEnabled = self.rankedController.isAvailable()
@@ -719,6 +730,14 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         else:
             self.as_setScreenS(self.__currentScreen)
         self.updateAccountAttrs()
+
+    def __onHangarSpaceCreated(self):
+        if self.bootcampController.isInBootcamp():
+            self.as_disableFightButtonS(self.__isFightBtnDisabled)
+
+    def __onHangarSpaceDestroy(self, inited):
+        if inited and self.bootcampController.isInBootcamp():
+            self.as_disableFightButtonS(True)
 
     def _checkFightButtonDisabled(self, canDo, isFightButtonForcedDisabled):
         return not canDo or isFightButtonForcedDisabled

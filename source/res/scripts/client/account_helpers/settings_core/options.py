@@ -895,6 +895,8 @@ class GraphicSetting(SettingAbstract):
             LOG_ERROR('Unable to set value `%s` for option `%s`' % (value, self.name))
             return False
 
+        if self.isPreview:
+            self._currentValue = graphics.getGraphicsSetting(self.name)
         return True
 
     def getApplyMethod(self, value):

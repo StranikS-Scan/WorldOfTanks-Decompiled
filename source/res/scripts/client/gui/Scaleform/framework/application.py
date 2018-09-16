@@ -14,6 +14,7 @@ from gui.shared.events import AppLifeCycleEvent, GameEvent, DirectLoadViewEvent
 from gui.shared import EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.connection_mgr import IConnectionManager
 
 class DAAPIRootBridge(object):
     __slots__ = ('__pyScript', '__rootPath', '__initCallback', '__isInited')
@@ -55,6 +56,7 @@ class DAAPIRootBridge(object):
 
 class SFApplication(Flash, ApplicationMeta):
     settingsCore = dependency.descriptor(ISettingsCore)
+    connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self, swfName, appNS, daapiBridge=None):
         super(SFApplication, self).__init__(swfName, path=SCALEFORM_SWF_PATH_V3)
@@ -198,6 +200,7 @@ class SFApplication(Flash, ApplicationMeta):
         self.__viewEventsListener.handleWaitingEvents()
         self._loadCursor()
         self._loadWaiting()
+        self.connectionMgr.onDisconnected += self.__cm_onDisconnected
 
     def beforeDelete(self):
         LOG_DEBUG('[SFApplication] beforeDelete', self.__ns)
@@ -261,6 +264,7 @@ class SFApplication(Flash, ApplicationMeta):
         super(SFApplication, self).beforeDelete()
         self.proxy = None
         self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.DESTROYED))
+        self.connectionMgr.onDisconnected -= self.__cm_onDisconnected
         return
 
     def loadView(self, loadParams, *args, **kwargs):
@@ -496,3 +500,10 @@ class SFApplication(Flash, ApplicationMeta):
             LOG_ERROR('Application scale is not found', ctx)
             return
         self.updateStage(ctx['width'], ctx['height'], ctx['scale'])
+
+    def __cm_onDisconnected(self):
+        self.clear()
+        self._tutorialMgr.clear()
+
+    def clear(self):
+        pass

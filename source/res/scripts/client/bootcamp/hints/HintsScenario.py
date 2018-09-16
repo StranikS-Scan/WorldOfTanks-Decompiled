@@ -30,9 +30,12 @@ class HintAvoidAndDestroy(HintBase, TriggersManager.ITriggerListener):
         self.__vehicleIds = [ vehId for vehId, vehInfo in allVehicles if vehInfo['name'] in names ]
         self.__enemyWasKilled = False
         self.__avatar = avatar
+        self.__attaching = False
+        self._vehicleKilledTrigger = None
         self.__modelName = self.__getModelName()
         self.__models = []
         self.__active = False
+        return
 
     def start(self):
         self.__active = True

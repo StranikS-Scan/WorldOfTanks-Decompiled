@@ -388,6 +388,8 @@ class VEHICLE_CUSTOMIZATION(object):
     CAMOUFLAGE_23FEB_WINTER_DESCRIPTION = '#vehicle_customization:camouflage/23feb_winter/description'
     CAMOUFLAGE_23FEB_DESERT_LABEL = '#vehicle_customization:camouflage/23feb_desert/label'
     CAMOUFLAGE_23FEB_DESERT_DESCRIPTION = '#vehicle_customization:camouflage/23feb_desert/description'
+    CAMOUFLAGE_1_0_EVENT_LABEL = '#vehicle_customization:camouflage/1_0_event/label'
+    CAMOUFLAGE_1_0_EVENT_DESCRIPTION = '#vehicle_customization:camouflage/1_0_event/description'
     CAMOUFLAGE_PREM_CAMOUFLAGE_WINTER_LABEL = '#vehicle_customization:camouflage/prem_camouflage_winter/label'
     CAMOUFLAGE_PREM_CAMOUFLAGE_WINTER_DESCRIPTION = '#vehicle_customization:camouflage/prem_camouflage_winter/description'
     CAMOUFLAGE_PREM_CAMOUFLAGE_SUMMER_LABEL = '#vehicle_customization:camouflage/prem_camouflage_summer/label'

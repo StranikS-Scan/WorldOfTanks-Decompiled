@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/prb_control/entities/base/legacy/entity.py
 import BigWorld
 import account_helpers
-from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from constants import PREBATTLE_ACCOUNT_STATE, REQUEST_COOLDOWN, PREBATTLE_ERRORS
 from debug_utils import LOG_ERROR, LOG_DEBUG
@@ -19,8 +18,8 @@ from gui.prb_control.entities.base.legacy.ctx import JoinLegacyModeCtx
 from gui.prb_control.entities.base.legacy.limits import LegacyLimits
 from gui.prb_control.entities.base.legacy.listener import ILegacyListener, ILegacyIntroListener
 from gui.prb_control.entities.base.legacy.permissions import ILegacyPermissions, LegacyIntroPermissions, LegacyPermissions
-from gui.prb_control.items import prb_items, ValidationResult
-from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE, PREBATTLE_ROSTER, REQUEST_TYPE, PREBATTLE_INIT_STEP, makePrebattleSettings, PREBATTLE_RESTRICTION
+from gui.prb_control.items import prb_items
+from gui.prb_control.settings import FUNCTIONAL_FLAG, CTRL_ENTITY_TYPE, PREBATTLE_ROSTER, REQUEST_TYPE, PREBATTLE_INIT_STEP, makePrebattleSettings
 from gui.shared.utils.listeners_collection import ListenersCollection
 from prebattle_shared import decodeRoster
 
@@ -660,11 +659,6 @@ class LegacyEntity(_LegacyEntity):
             if callback:
                 callback(False)
             return
-        if g_currentVehicle.isObserver():
-            if not self._processValidationResult(ctx, ValidationResult(False, PREBATTLE_RESTRICTION.VEHICLE_NOT_SUPPORTED)):
-                if callback:
-                    callback(False)
-                return
         if ctx.doVehicleValidation():
             result = self._limits.isVehicleValid()
             if not self._processValidationResult(ctx, result):

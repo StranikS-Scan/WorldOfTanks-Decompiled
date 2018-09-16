@@ -8,6 +8,7 @@ from account_helpers.settings_core import settings_constants
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.ColorSettingsViewMeta import ColorSettingsViewMeta
+from gui.Scaleform.genConsts.COLOR_SETTINGS import COLOR_SETTINGS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from gui.shared import EVENT_BUS_SCOPE, events
@@ -61,9 +62,12 @@ class ColorSettingsView(ColorSettingsViewMeta):
 
     def onApply(self, diff):
         diff = flashObject2Dict(diff)
+        AccountSettings.setSettings(COLOR_SETTINGS_TAB_IDX, self.__selectedTabIdx)
         if self.__selectedTabIdx == TABS.CUSTOM:
             if self.__hasChangesInSettings(settings_constants.GRAPHICS.getCustomColorSettings(), diff):
                 diff.update({settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE: COLOR_GRADING_TECHNIQUE_DEFAULT})
+            diff[COLOR_SETTINGS.COLOR_GRADING_TECHNIQUE] = 0
+            diff[COLOR_SETTINGS.COLOR_FILTER_INTENSITY] = 25
         self.settingsCore.applySettings(diff)
         lastAppliedSettings = AccountSettings.getSettings(APPLIED_COLOR_SETTINGS)
         lastAppliedSettings[self.__selectedTabIdx] = diff
@@ -72,9 +76,17 @@ class ColorSettingsView(ColorSettingsViewMeta):
         self.destroy()
 
     def onTabSelected(self, selectedTab):
-        self.__selectedTabIdx = selectedTab
-        AccountSettings.setSettings(COLOR_SETTINGS_TAB_IDX, selectedTab)
-        settings = self.__getCurrentTabSettings()
+        savedTab = AccountSettings.getSettings(COLOR_SETTINGS_TAB_IDX)
+        if savedTab == self.__selectedTabIdx and self.__selectedTabIdx == TABS.FILTERS and selectedTab == TABS.CUSTOM:
+            prevSettings = self.__getLastAppliedTabsSettings()[TABS.FILTERS]
+            self.__selectedTabIdx = selectedTab
+            settings = self.__getCurrentTabSettings()
+            prevFilter = prevSettings[settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE]
+            settings[settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE] = prevFilter
+            settings[COLOR_SETTINGS.COLOR_FILTER_INTENSITY] = prevSettings[COLOR_SETTINGS.COLOR_FILTER_INTENSITY]
+        else:
+            self.__selectedTabIdx = selectedTab
+            settings = self.__getCurrentTabSettings()
         self.__previewSettings(settings)
         self.as_updateDataS(self.__selectedTabIdx, settings)
         if self.__selectedTabIdx == TABS.CUSTOM:

@@ -4,6 +4,8 @@ import functools
 import BattleReplay
 import BigWorld
 import VOIP
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import COLOR_SETTINGS_TAB_IDX
 from account_helpers.settings_core.settings_constants import SETTINGS_GROUP
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -321,20 +323,29 @@ class SettingsWindow(SettingsWindowMeta):
         return
 
     def __setColorGradingTechnique(self, value=None):
-        setting = self.settingsCore.options.getSetting(settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE)
-        images = graphics.getGraphicSettingImages(settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE)
+        colorSettingsSelectedTab = AccountSettings.getSettings(COLOR_SETTINGS_TAB_IDX)
+        if colorSettingsSelectedTab is None:
+            colorSettingsSelectedTab = 0
         label = SETTINGS.GRAPHICSSETTINGSOPTIONS_NONE
-        image = None
-        filterIdx = setting.get() if value is None else value
-        if setting is not None:
-            for option in setting.getOptions():
-                currentIdx = option.get('data', 0)
-                if currentIdx == filterIdx:
-                    label = option.get('label')
-                    image = images.get(option.get('data', 0))
-                    break
+        image = RES_ICONS.MAPS_ICONS_SETTINGS_COLOR_GRADING_TECHNIQUE_NONE
+        if colorSettingsSelectedTab == 2:
+            label = SETTINGS.SOUND_BULBVOICES_SIXTHSENSE
+            image = RES_ICONS.MAPS_ICONS_SETTINGS_COLOR_GRADING_TECHNIQUE_RANDOM
+        elif colorSettingsSelectedTab == 1:
+            setting = self.settingsCore.options.getSetting(settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE)
+            images = graphics.getGraphicSettingImages(settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE)
+            label = SETTINGS.GRAPHICSSETTINGSOPTIONS_NONE
+            image = None
+            filterIdx = setting.get() if value is None else value
+            if setting is not None:
+                for option in setting.getOptions():
+                    currentIdx = option.get('data', 0)
+                    if currentIdx == filterIdx:
+                        label = option.get('label')
+                        image = images.get(option.get('data', 0))
+                        break
 
-        if image is None:
-            image = RES_ICONS.MAPS_ICONS_SETTINGS_COLOR_GRADING_TECHNIQUE_NONE
+            if image is None:
+                image = RES_ICONS.MAPS_ICONS_SETTINGS_COLOR_GRADING_TECHNIQUE_NONE
         self.as_setColorGradingTechniqueS(image, label)
         return

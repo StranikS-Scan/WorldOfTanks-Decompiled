@@ -49,12 +49,18 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def __init__(self, _=None):
         LobbySelectableView.__init__(self, 0)
         self.__currentCarouselAlias = None
+        self.__isSpaceReadyForC11n = False
+        self.__isVehicleReadyForC11n = False
         return
 
     def _populate(self):
         LobbySelectableView._populate(self)
+        self.__isSpaceReadyForC11n = g_hangarSpace.spaceInited
+        self.__isVehicleReadyForC11n = g_hangarSpace.isModelLoaded
         g_hangarSpace.onVehicleChangeStarted += self.__onCurrentVehicleStartedToChange
         g_hangarSpace.onVehicleChanged += self.__onCurrentVehicleChanged
+        g_hangarSpace.onSpaceRefresh += self.__onSpaceRefresh
+        g_hangarSpace.onSpaceCreate += self.__onSpaceCreate
         self.igrCtrl.onIgrTypeChanged += self.__onIgrTypeChanged
         self.itemsCache.onSyncCompleted += self.onCacheResync
         self.rankedController.onUpdated += self.onRankedUpdate
@@ -103,6 +109,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         g_clientUpdateManager.removeObjectCallbacks(self)
         g_hangarSpace.onVehicleChangeStarted -= self.__onCurrentVehicleStartedToChange
         g_hangarSpace.onVehicleChanged -= self.__onCurrentVehicleChanged
+        g_hangarSpace.onSpaceRefresh -= self.__onSpaceRefresh
+        g_hangarSpace.onSpaceCreate -= self.__onSpaceCreate
         self.igrCtrl.onIgrTypeChanged -= self.__onIgrTypeChanged
         self.rankedController.onUpdated -= self.onRankedUpdate
         self.rankedController.onPrimeTimeStatusUpdated -= self.__onRankedPrimeStatusUpdate
@@ -280,7 +288,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def __updateAll(self):
         Waiting.show('updateVehicle')
         self.__switchCarousels()
-        self.__updateState(forceDisableCustomization=not g_hangarSpace.isModelLoaded)
+        self.__updateState()
         self.__updateAmmoPanel()
         self.__updateParams()
         self.__updateVehicleInResearchPanel()
@@ -293,6 +301,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __onCurrentVehicleChanged(self):
         Waiting.show('updateVehicle')
+        self.__isVehicleReadyForC11n = True
         self.__updateState()
         self.__updateAmmoPanel()
         self.__updateParams()
@@ -304,19 +313,28 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __onCurrentVehicleStartedToChange(self):
         Waiting.show('updateVehicle')
-        self.__updateState(True)
+        self.__isVehicleReadyForC11n = False
+        self.__updateState()
         self.__updateAmmoPanel()
         Waiting.hide('updateVehicle')
+
+    def __onSpaceRefresh(self):
+        self.__isSpaceReadyForC11n = False
+        self.__updateState()
+
+    def __onSpaceCreate(self):
+        self.__isSpaceReadyForC11n = True
+        self.__updateState()
 
     def __onIgrTypeChanged(self, *args):
         self.__updateVehicleInResearchPanel()
         self.__updateHeader()
         self.__updateParams()
 
-    def __updateState(self, forceDisableCustomization=False):
+    def __updateState(self):
         state = g_currentVehicle.getViewState()
         self.as_setCrewEnabledS(state.isCrewOpsEnabled())
-        isC11nEnabled = self.lobbyContext.getServerSettings().isCustomizationEnabled() and state.isCustomizationEnabled() and not state.isOnlyForEventBattles() and not forceDisableCustomization
+        isC11nEnabled = self.lobbyContext.getServerSettings().isCustomizationEnabled() and state.isCustomizationEnabled() and not state.isOnlyForEventBattles() and self.__isSpaceReadyForC11n and self.__isVehicleReadyForC11n
         if isC11nEnabled:
             customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_BODY))
         else:

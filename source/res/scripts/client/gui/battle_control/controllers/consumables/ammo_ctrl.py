@@ -541,7 +541,7 @@ class AmmoController(MethodsRules, IBattleController):
 
     def reloadPartialClip(self, avatar=None):
         clipSize = self.__gunSettings.clip.size
-        if clipSize > 1 and self.__currShellCD in self.__ammo:
+        if clipSize > 1 and self.__currShellCD in self.__ammo and not self.__gunSettings.hasAutoReload():
             quantity, quantityInClip = self.__ammo[self.__currShellCD]
             if quantity != 0 and (quantityInClip < clipSize or self.__nextShellCD != self.__currShellCD):
                 avatar_getter.changeVehicleSetting(VEHICLE_SETTING.RELOAD_PARTIAL_CLIP, 0, avatar)

@@ -1066,10 +1066,6 @@ def getTileGrayOverIconPath(tileIconID):
     return _getTileIconPath(tileIconID, 'gray', 'over')
 
 
-def getTileAnimationPath(tileIconID):
-    return '../flash/animations/questTiles/%s.swf' % tileIconID
-
-
 def createQuest(questType, qID, data, progress=None, expiryTime=None):
     if questType == constants.EVENT_TYPE.PERSONAL_QUEST:
         return PersonalQuest(qID, data, progress, expiryTime)

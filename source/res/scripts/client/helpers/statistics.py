@@ -104,6 +104,7 @@ class StatisticsCollector(IStatisticsCollector):
         self.__dynEvents = []
         self.reset()
         self.__needCollectSystemData = False
+        self.__needCollectSessionData = False
         self.__hangarWasLoadedOnce = False
         self.__sendFullStat = False
         self.__loadingStates = [0.0] * HANGAR_LOADING_STATE.COUNT
@@ -148,6 +149,9 @@ class StatisticsCollector(IStatisticsCollector):
     def needCollectSystemData(self, value):
         self.__needCollectSystemData = value
 
+    def needCollectSessionData(self, value):
+        self.__needCollectSessionData = value
+
     def getStatistics(self, andStop=True):
         result = {'system': None,
          'session': None}
@@ -158,12 +162,14 @@ class StatisticsCollector(IStatisticsCollector):
             if self.__sendFullStat:
                 self.__sendFullStat = False
                 self.__needCollectSystemData = False
+                self.__needCollectSessionData = False
                 result['system'] = self.__getSystemData(stat)
                 result['session'] = self.__getSessionData(stat)
-            elif self.__needCollectSystemData:
+            if self.__needCollectSystemData:
                 self.__needCollectSystemData = False
                 result['system'] = self.__getSystemData(stat)
-            else:
+            if self.__needCollectSessionData:
+                self.__needCollectSessionData = False
                 result['session'] = self.__getSessionData(stat)
             if andStop is True:
                 self.stop()

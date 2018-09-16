@@ -199,6 +199,10 @@ class TutorialManager(TutorialManagerMeta):
             self.fireEvent(_Event(eventType, targetID=componentID, settingsID=effectType), scope=EVENT_BUS_SCOPE.GLOBAL)
         return
 
+    def clear(self):
+        self._componentProps.clear()
+        self._pendingComponentAnimations.clear()
+
     def _populate(self):
         super(TutorialManager, self)._populate()
         self.as_setSystemEnabledS(self._isEnabled)
@@ -227,8 +231,7 @@ class TutorialManager(TutorialManagerMeta):
         self._config = None
         self._componentViewBindings.clear()
         self._components.clear()
-        self._componentProps.clear()
-        self._pendingComponentAnimations.clear()
+        self.clear()
         super(TutorialManager, self)._dispose()
         return
 

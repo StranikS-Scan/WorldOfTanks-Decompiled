@@ -90,12 +90,9 @@ class UnitLevelsValidator(ExceptDevModeValidator):
         if not stats.curTotalLevel:
             return ValidationResult(False, UNIT_RESTRICTION.ZERO_TOTAL_LEVEL)
         roster = self._entity.getRosterSettings()
-        if self._areVehiclesSelected(stats):
-            if stats.curTotalLevel < roster.getMinTotalLevel():
-                return ValidationResult(False, UNIT_RESTRICTION.MIN_TOTAL_LEVEL, {'level': roster.getMinTotalLevel()})
-            if stats.curTotalLevel > roster.getMaxTotalLevel():
-                return ValidationResult(False, UNIT_RESTRICTION.MAX_TOTAL_LEVEL, {'level': roster.getMaxTotalLevel()})
-        return super(UnitLevelsValidator, self)._validate()
+        if stats.curTotalLevel < roster.getMinTotalLevel():
+            return ValidationResult(False, UNIT_RESTRICTION.MIN_TOTAL_LEVEL, {'level': roster.getMinTotalLevel()})
+        return ValidationResult(False, UNIT_RESTRICTION.MAX_TOTAL_LEVEL, {'level': roster.getMaxTotalLevel()}) if stats.curTotalLevel > roster.getMaxTotalLevel() else super(UnitLevelsValidator, self)._validate()
 
     def _areVehiclesSelected(self, stats):
         return not stats.freeSlotsCount and len(stats.levelsSeq) == stats.occupiedSlotsCount

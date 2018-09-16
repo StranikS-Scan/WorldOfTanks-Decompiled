@@ -19,6 +19,10 @@ class BCIntroVideoPage(BCIntroPage, IArenaVehiclesController):
 
     def onIntroVideoLoaded(self):
         self.as_loadedS()
+        if self._shouldHighlight(INTRO_HIGHLIGHT_TYPE.START_BUTTON):
+            self._setHighlighting(INTRO_HIGHLIGHT_TYPE.START_BUTTON, True)
+        if self._isCurrentlyHighlighting(INTRO_HIGHLIGHT_TYPE.ARROWS):
+            self._setHighlighting(INTRO_HIGHLIGHT_TYPE.ARROWS, False)
 
     def stopVideo(self):
         self._onFinish()
@@ -28,11 +32,6 @@ class BCIntroVideoPage(BCIntroPage, IArenaVehiclesController):
 
     def updateSpaceLoadProgress(self, progress):
         self.as_updateProgressS(progress)
-        if progress == 1.0:
-            if self._isCurrentlyHighlighting(INTRO_HIGHLIGHT_TYPE.ARROWS):
-                self._setHighlighting(INTRO_HIGHLIGHT_TYPE.ARROWS, False)
-            if self._shouldHighlight(INTRO_HIGHLIGHT_TYPE.START_BUTTON):
-                self._setHighlighting(INTRO_HIGHLIGHT_TYPE.START_BUTTON, True)
 
     def _populate(self):
         g_bootcampEvents.onArenaStarted += self.onArenaStarted

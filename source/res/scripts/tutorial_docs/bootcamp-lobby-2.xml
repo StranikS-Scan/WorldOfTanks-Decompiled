@@ -114,6 +114,9 @@
         </set-visible>
         <play-animation>	HangarParams	  <type>	tween	</type>
           <wait_for_finish>	True	</wait_for_finish>
+          <condition>
+            <not-on-scene>	Research	</not-on-scene>
+          </condition>
         </play-animation>
       </effects>
     </checkpoint>

@@ -26,6 +26,9 @@ class IStatisticsCollector(object):
     def needCollectSystemData(self, value):
         raise NotImplementedError
 
+    def needCollectSessionData(self, value):
+        raise NotImplementedError
+
     def getStatistics(self, andStop=True):
         raise NotImplementedError
 

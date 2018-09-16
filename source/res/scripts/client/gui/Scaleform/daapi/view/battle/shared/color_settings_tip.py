@@ -33,7 +33,7 @@ class ColorSettingsTipPanel(ColorSettingsTipPanelMeta, IAbstractPeriodView):
     def setPeriod(self, period):
         if self.__isActive and not self.sessionProvider.getCtx().isPlayerObserver():
             if period in (ARENA_PERIOD.PREBATTLE,):
-                self.fireEvent(GameEvent(GameEvent.SHOW_COLOR_SETTINGS_TIP), scope=EVENT_BUS_SCOPE.GLOBAL)
+                self.fireEvent(GameEvent(GameEvent.SHOW_COLOR_SETTINGS_TIP, ctx={'isPrebattle': True}), scope=EVENT_BUS_SCOPE.GLOBAL)
             else:
                 self.fireEvent(GameEvent(GameEvent.HIDE_COLOR_SETTINGS_TIP), scope=EVENT_BUS_SCOPE.GLOBAL)
 
@@ -76,6 +76,6 @@ class ColorSettingsTipPanel(ColorSettingsTipPanelMeta, IAbstractPeriodView):
         if ctrl.isInPostmortem and not self.sessionProvider.getCtx().isPlayerObserver():
             vehicle = ctrl.getControllingVehicle()
             if vehicle and vehicle.isPlayerVehicle:
-                self.fireEvent(GameEvent(GameEvent.SHOW_COLOR_SETTINGS_TIP), scope=EVENT_BUS_SCOPE.GLOBAL)
+                self.fireEvent(GameEvent(GameEvent.SHOW_COLOR_SETTINGS_TIP, ctx={'isPrebattle': False}), scope=EVENT_BUS_SCOPE.GLOBAL)
             else:
                 self.fireEvent(GameEvent(GameEvent.HIDE_COLOR_SETTINGS_TIP), scope=EVENT_BUS_SCOPE.GLOBAL)

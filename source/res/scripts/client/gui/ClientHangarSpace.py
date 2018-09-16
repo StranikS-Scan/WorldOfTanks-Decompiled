@@ -155,7 +155,6 @@ class ClientHangarSpace(object):
         self.__cameraManager = None
         self.__waitCallback = None
         self.__loadingStatus = 0.0
-        self.__destroyFunc = None
         self.__spaceMappingId = None
         self.__onLoadedCallback = None
         self.__vEntityId = None
@@ -202,7 +201,6 @@ class ClientHangarSpace(object):
         self.__cameraManager = HangarCameraManager(self.__spaceId)
         self.__cameraManager.init()
         self.__waitCallback = BigWorld.callback(0.1, self.__waitLoadingSpace)
-        self.__destroyFunc = None
         self.__gfxOptimizerMgr = GraphicsOptimizationManager()
         size = BigWorld.screenSize()
         self.__optimizerID = self.__gfxOptimizerMgr.registerOptimizationArea(0, 0, size[0], size[1])
@@ -247,12 +245,6 @@ class ClientHangarSpace(object):
     def destroy(self):
         self.__onLoadedCallback = None
         self.__closeOptimizedRegion()
-        if self.__waitCallback is not None:
-            BigWorld.cancelCallback(self.__waitCallback)
-            self.__waitCallback = None
-            if not self.spaceLoaded():
-                self.__destroyFunc = self.__destroy
-                return
         self.__destroy()
         return
 
@@ -308,9 +300,6 @@ class ClientHangarSpace(object):
             if self.__onLoadedCallback is not None:
                 self.__onLoadedCallback()
                 self.__onLoadedCallback = None
-            if self.__destroyFunc:
-                self.__destroyFunc()
-                self.__destroyFunc = None
         return
 
     def __closeOptimizedRegion(self):

@@ -63,6 +63,7 @@ class SharedPage(BattlePageMeta):
     def __init__(self, components=None, external=None):
         super(SharedPage, self).__init__()
         self._isInPostmortem = False
+        self._isBattleLoading = False
         self._isVisible = True
         self._blToggling = set()
         self._fsToggling = set()
@@ -191,6 +192,7 @@ class SharedPage(BattlePageMeta):
         raise NotImplementedError
 
     def _onBattleLoadingStart(self):
+        self._isBattleLoading = True
         if not self._blToggling:
             self._blToggling = set(self.as_getComponentsVisibilityS())
         self._blToggling.difference_update([_ALIASES.BATTLE_LOADING])
@@ -198,6 +200,7 @@ class SharedPage(BattlePageMeta):
         self._setComponentsVisibility(visible={_ALIASES.BATTLE_LOADING}, hidden=self._blToggling)
 
     def _onBattleLoadingFinish(self):
+        self._isBattleLoading = False
         self._setComponentsVisibility(visible=self._blToggling, hidden={_ALIASES.BATTLE_LOADING})
         self._blToggling.clear()
         for component in self._external:
@@ -267,9 +270,12 @@ class SharedPage(BattlePageMeta):
 
         self.sessionProvider.shared.hitDirection.setVisible(False)
 
-    def __handleShowSettingsTip(self, _):
+    def __handleShowSettingsTip(self, event):
+        isPrebattleState = event.ctx['isPrebattle']
         alias = _ALIASES.COLOR_SETTINGS_TIP_PANEL
-        if not self.as_isComponentVisibleS(alias):
+        if self._isBattleLoading and (isPrebattleState or self._isInPostmortem):
+            self._blToggling.add(alias)
+        elif not self.as_isComponentVisibleS(alias):
             self._setComponentsVisibility(visible={alias})
 
     def __handleHideSettingsTip(self, _):

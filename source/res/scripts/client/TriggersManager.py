@@ -40,7 +40,7 @@ class ITriggerListener(object):
 
 
 class TriggersManager(object):
-    UPDATE_PERIOD = 0.1
+    UPDATE_PERIOD = 0.05
     isActive = property(lambda self: self.__isEnabled and self.__isOnArena)
 
     def __init__(self):

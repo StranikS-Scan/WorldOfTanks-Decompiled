@@ -1615,6 +1615,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         LOG_DEBUG('Avatar.leaveArena')
         from helpers import statistics
         self.statsCollector.noteLastArenaData(self.arenaTypeID, self.arenaUniqueID, self.team)
+        self.statsCollector.needCollectSessionData(True)
         self.statsCollector.noteHangarLoadingState(statistics.HANGAR_LOADING_STATE.CONNECTED, True)
         try:
             if self.__projectileMover is not None:

@@ -33,6 +33,7 @@ from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
+from gui.Scaleform.Waiting import Waiting
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -540,6 +541,7 @@ class MainView(CustomizationMainViewMeta):
         self.service.onOutfitChanged += self.__onOutfitChanged
         g_eventBus.addListener(CameraRelatedEvents.IDLE_CAMERA, self.__onNotifyHangarCameraIdleStateChanged)
         g_hangarSpace.onSpaceCreate += self.__onSpaceCreateHandler
+        g_hangarSpace.onSpaceRefresh += self.__onSpaceRefreshHandler
         self.service.onRegionHighlighted += self.__onRegionHighlighted
         self.itemsCache.onSyncCompleted += self.__onCacheResync
         self.__carveUpOutfits()
@@ -583,6 +585,7 @@ class MainView(CustomizationMainViewMeta):
         self.service.onOutfitChanged -= self.__onOutfitChanged
         g_eventBus.removeListener(CameraRelatedEvents.IDLE_CAMERA, self.__onNotifyHangarCameraIdleStateChanged)
         g_hangarSpace.onSpaceCreate -= self.__onSpaceCreateHandler
+        g_hangarSpace.onSpaceRefresh -= self.__onSpaceRefreshHandler
         self.service.onRegionHighlighted -= self.__onRegionHighlighted
         self.itemsCache.onSyncCompleted -= self.__onCacheResync
         if g_currentVehicle.item:
@@ -676,8 +679,12 @@ class MainView(CustomizationMainViewMeta):
             return
 
     def __onSpaceCreateHandler(self):
+        Waiting.hide('loadHangarSpace')
         self.refreshOutfit()
         self.__updateAnchorPositions()
+
+    def __onSpaceRefreshHandler(self):
+        Waiting.show('loadHangarSpace')
 
     def __onConfirmCloseWindow(self, proceed):
         if proceed:

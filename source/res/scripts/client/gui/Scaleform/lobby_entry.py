@@ -190,3 +190,10 @@ class LobbyEntry(SFApplication):
         if override != self.__battleSelectorHintOverride:
             self.__battleSelectorHintOverride = override
             self.onBattleSelectorHintOverride()
+
+    def clear(self):
+        self.__hangarMenuOverride = None
+        self.__headerMenuOverride = None
+        self.__hangarHeaderEnabled = True
+        self.__battleSelectorHintOverride = None
+        return

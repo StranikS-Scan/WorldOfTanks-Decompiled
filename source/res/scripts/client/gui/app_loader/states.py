@@ -277,6 +277,8 @@ class BattleLoadingState(_ArenaState):
     def showGUI(self, appFactory, appNS, appState):
         if not _isBattleReplayPlaying():
             appFactory.destroyLobby()
+        else:
+            appFactory.hideLobby()
         if appState == _STATE_ID.INITIALIZED:
             appFactory.loadBattlePage(appNS, arenaGuiType=self._arenaGuiType)
 

@@ -31,6 +31,7 @@ class RES_ICONS(object):
     MAPS_ICONS_ACTIONS_480X280_RESERVE = '../maps/icons/actions/480x280/reserve.png'
     MAPS_ICONS_ACTIONS_480X280_SHELLS = '../maps/icons/actions/480x280/shells.png'
     MAPS_ICONS_ACTIONS_480X280_SLOT = '../maps/icons/actions/480x280/slot.png'
+    MAPS_ICONS_ACTIONS_480X280_SUMMERSALES = '../maps/icons/actions/480x280/summersales.png'
     MAPS_ICONS_ACTIONS_480X280_TANK_CLOCK = '../maps/icons/actions/480x280/tank_clock.png'
     MAPS_ICONS_ACTIONS_480X280_TANK_EXP = '../maps/icons/actions/480x280/tank_exp.png'
     MAPS_ICONS_ACTIONS_480X280_TRADE_IN = '../maps/icons/actions/480x280/trade_in.png'

@@ -130,7 +130,9 @@ _DEFAULT_SETTINGS = {'registrationURL': '',
  'tokenShopAvailabilityURL': '',
  'tokenShopAPIKey': '',
  'personalMissions': {},
- 'rankedBattles': {}}
+ 'rankedBattles': {},
+ 'adventCalendarPopupIntervalInHours': 24,
+ 'adventCalendarURL': ''}
 
 class GuiSettings(object):
 

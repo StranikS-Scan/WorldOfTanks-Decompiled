@@ -56,7 +56,7 @@ class RankedBattlesView(LobbySubView, RankedBattlesViewMeta):
         self.rankedController.onUpdated -= self.__updateData
         super(RankedBattlesView, self)._dispose()
 
-    def __setData(self, leagueData=None):
+    def __setData(self):
         self.as_setDataS({'header': text_styles.superPromoTitle(RANKED_BATTLES.RANKEDBATTLEVIEW_TITLE),
          'closeLbl': RANKED_BATTLES.RANKEDBATTLEVIEW_CLOSEBTN,
          'closeDescr': RANKED_BATTLES.RANKEDBATTLEVIEW_CLOSEBTNDESCR,
@@ -64,13 +64,13 @@ class RankedBattlesView(LobbySubView, RankedBattlesViewMeta):
          'playVideoBtnEnabled': False,
          'calendarStatus': self.__getStatusBlock(),
          'progressBlock': self.__buildProgressData(),
-         'awardsBlock': self.__getAwardsBlock(leagueData),
+         'awardsBlock': self.__getAwardsBlock(),
          'bgImgPath': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_BG_RANK_BLUR,
          'isUpdateProgress': False})
 
     def __updateData(self):
         self.__setData()
-        self.rankedController.getLeagueData()(self.__setData)
+        self.rankedController.getLeagueData()(self.__getAwardsBlock)
 
     def __updateProgress(self):
         self.as_setDataS({'progressBlock': self.__buildProgressData(),

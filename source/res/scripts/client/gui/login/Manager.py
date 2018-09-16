@@ -106,13 +106,13 @@ class Manager(ILoginManager):
         return self.__servers
 
     def _onLoggedOn(self, responseData):
+        name = responseData.get('name', 'UNKNOWN')
+        token2 = responseData.get('token2', '')
+        self.lobbyContext.setCredentials(name, token2)
         if self.wgcAvailable and self.__wgcManager.onLoggedOn(responseData):
             self._preferences.clear()
             self._preferences.writeLoginInfo()
             return
-        name = responseData.get('name', 'UNKNOWN')
-        token2 = responseData.get('token2', '')
-        self.lobbyContext.setCredentials(name, token2)
         if self._preferences['remember_user']:
             self._preferences['name'] = name
             self._preferences['token2'] = token2

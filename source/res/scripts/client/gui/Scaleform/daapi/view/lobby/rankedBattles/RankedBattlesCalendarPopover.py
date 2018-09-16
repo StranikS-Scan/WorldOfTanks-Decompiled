@@ -24,7 +24,7 @@ class RankedBattlesCalendarPopover(RankedBattlesCalendarPopoverMeta):
     def __init__(self, ctx=None):
         super(RankedBattlesCalendarPopover, self).__init__()
         self.__seasonInfo = self.rankedController.getCurrentSeason()
-        self.__currentCycle = self.__seasonInfo.getCycleOrdinalNumber()
+        self.__currentCycle = self.__seasonInfo.getNumber()
         self.__selectedDate = time_utils.getCurrentLocalServerTimestamp()
         self.__weekDays = self._createUtilsManager().getWeekDayNames(full=True, isLower=False, isUpper=False, useRegionSettings=False)
         data = ctx.get('data', None)
@@ -67,7 +67,7 @@ class RankedBattlesCalendarPopover(RankedBattlesCalendarPopoverMeta):
             formatter = text_styles.main if cycle.status == CYCLE_STATUS.CURRENT else text_styles.standard
             startDate = time_utils.getTimeStructInLocal(cycle.startDate)
             endDate = time_utils.getTimeStructInLocal(cycle.endDate)
-            result.append(formatter(i18n.makeString(key, cycleNumber=cycle.ordinalNumber, day0='{:02d}'.format(startDate.tm_mday), month0='{:02d}'.format(startDate.tm_mon), day1='{:02d}'.format(endDate.tm_mday), month1='{:02d}'.format(endDate.tm_mon))))
+            result.append(formatter(i18n.makeString(key, cycleNumber=self.__currentCycle, day0='{:02d}'.format(startDate.tm_mday), month0='{:02d}'.format(startDate.tm_mon), day1='{:02d}'.format(endDate.tm_mday), month1='{:02d}'.format(endDate.tm_mon))))
 
     def __constructPrimeTimes(self, selectedTime):
         items = []
@@ -96,11 +96,11 @@ class RankedBattlesCalendarPopover(RankedBattlesCalendarPopoverMeta):
                 formatter = text_styles.main
                 startDate = time_utils.getTimeStructInLocal(cycle.startDate)
                 endDate = time_utils.getTimeStructInLocal(cycle.endDate)
-                return formatter(i18n.makeString(key, cycleNumber=cycle.ordinalNumber, day0='{:02d}'.format(startDate.tm_mday), month0='{:02d}'.format(startDate.tm_mon), day1='{:02d}'.format(endDate.tm_mday), month1='{:02d}'.format(endDate.tm_mon)))
+                return formatter(i18n.makeString(key, cycleNumber=self.__currentCycle, day0='{:02d}'.format(startDate.tm_mday), month0='{:02d}'.format(startDate.tm_mon), day1='{:02d}'.format(endDate.tm_mday), month1='{:02d}'.format(endDate.tm_mon)))
 
     def __getAttentionText(self):
         key = RANKED_BATTLES.RANKEDBATTLEVIEW_STATUSBLOCK_CALENDARPOPOVER_ATTENTIONTEXT
-        cycleNumber = self.__seasonInfo.getCycleOrdinalNumber()
+        cycleNumber = self.__currentCycle
         timeDelta = time_utils.getTimeDeltaFromNow(self.__seasonInfo.getCycleEndDate())
         endTimeStr = time_utils.getTillTimeString(timeDelta, RANKED_BATTLES.STATUS_TIMELEFT)
         if timeDelta <= time_utils.ONE_HOUR:

@@ -27,7 +27,9 @@ class RankedCalendarStepsTooltip(BlocksTooltipData):
         items = super(RankedCalendarStepsTooltip, self)._packBlocks()
         blocks = [self._packHeaderBlock()]
         key = RANKED_BATTLES.RANKEDBATTLEVIEW_STATUSBLOCK_CALENDARPOPOVER_CYCLEITEM
-        cycles = self.rankedController.getCurrentSeason().getAllCycles()
+        currentSeason = self.rankedController.getCurrentSeason()
+        cycles = currentSeason.getAllCycles()
+        seasonName = currentSeason.getNumber()
         for cycle in sorted(cycles.values()):
             currentCycle = False
             if cycle.status == CYCLE_STATUS.CURRENT:
@@ -37,7 +39,7 @@ class RankedCalendarStepsTooltip(BlocksTooltipData):
                 formatter = text_styles.standard
             startDate = time_utils.getTimeStructInLocal(cycle.startDate)
             endDate = time_utils.getTimeStructInLocal(cycle.endDate)
-            item = formatter(i18n.makeString(key, cycleNumber=cycle.ordinalNumber, day0='{:02d}'.format(startDate.tm_mday), month0='{:02d}'.format(startDate.tm_mon), day1='{:02d}'.format(endDate.tm_mday), month1='{:02d}'.format(endDate.tm_mon)))
+            item = formatter(i18n.makeString(key, cycleNumber=seasonName, day0='{:02d}'.format(startDate.tm_mday), month0='{:02d}'.format(startDate.tm_mon), day1='{:02d}'.format(endDate.tm_mday), month1='{:02d}'.format(endDate.tm_mon)))
             if currentCycle:
                 blocks.append(formatters.packImageTextBlockData(title=item, img=RES_ICONS.MAPS_ICONS_LIBRARY_INPROGRESSICON, imgPadding=formatters.packPadding(top=5), txtPadding=formatters.packPadding(left=5)))
             blocks.append(formatters.packTextBlockData(text=item, padding=formatters.packPadding(left=20)))

@@ -10,6 +10,8 @@ from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
 from gui.shared.gui_items.processors.vehicle import VehicleSlotBuyer
 from gui.shared.utils import decorators
 from helpers import dependency
+from skeletons.gui.game_control import ICalendarController
+from gui.game_control.calendar_controller import CalendarInvokeOrigin
 from skeletons.gui.shared import IItemsCache
 
 @decorators.process('buySlot')
@@ -89,3 +91,8 @@ def configureShopForVehicleTradeIn():
     vehFilter['selectedTypes'] = DEFAULT_VEHICLE_TYPES_FILTER
     vehFilter['selectedLevels'] = DEFAULT_LEVELS_FILTERS
     AccountSettings.setFilter('shop_vehicle', vehFilter)
+
+
+def showAdventCalendarFromAction():
+    calendarCtrl = dependency.instance(ICalendarController)
+    calendarCtrl.showCalendar(invokedFrom=CalendarInvokeOrigin.ACTION)

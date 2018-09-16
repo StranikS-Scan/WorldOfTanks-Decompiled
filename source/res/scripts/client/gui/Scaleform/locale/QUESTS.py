@@ -1176,6 +1176,12 @@ class QUESTS(object):
     BONUSNAME_COMPLETIONTOKENS_4_3 = '#quests:bonusName/completionTokens_4_3'
     BONUSNAME_COMPLETIONTOKENS_4_4 = '#quests:bonusName/completionTokens_4_4'
     BONUSNAME_COMPLETIONTOKENS_4_5 = '#quests:bonusName/completionTokens_4_5'
+    ACTION_AUTO_CALENDAR = '#quests:action/auto/calendar'
+    ACTION_FULL_CALENDAR = '#quests:action/full/calendar'
+    ACTION_HERO_FULL_CALENDAR = '#quests:action/hero/full/calendar'
+    ACTION_BUTTON_CALENDAR = '#quests:action/button/calendar'
+    ACTION_SHORT_CALENDAR = '#quests:action/short/calendar'
+    ACTION_SUBHEADER_CALENDAR = '#quests:action/subheader/calendar'
     ACTION_AUTO_EXCHANGERATE = '#quests:action/auto/exchangeRate'
     ACTION_FULL_EXCHANGERATE = '#quests:action/full/exchangeRate'
     ACTION_HERO_FULL_EXCHANGERATE = '#quests:action/hero/full/exchangeRate'
@@ -1658,7 +1664,13 @@ class QUESTS(object):
      DETAILS_DOSSIER_22_BATTLESCOUNT,
      DETAILS_DOSSIER_24_BATTLESCOUNT,
      DETAILS_DOSSIER_27_BATTLESCOUNT)
-    ACTION_ENUM = (ACTION_AUTO_EXCHANGERATE,
+    ACTION_ENUM = (ACTION_AUTO_CALENDAR,
+     ACTION_FULL_CALENDAR,
+     ACTION_HERO_FULL_CALENDAR,
+     ACTION_BUTTON_CALENDAR,
+     ACTION_SHORT_CALENDAR,
+     ACTION_SUBHEADER_CALENDAR,
+     ACTION_AUTO_EXCHANGERATE,
      ACTION_FULL_EXCHANGERATE,
      ACTION_HERO_FULL_EXCHANGERATE,
      ACTION_SHORT_EXCHANGERATE,

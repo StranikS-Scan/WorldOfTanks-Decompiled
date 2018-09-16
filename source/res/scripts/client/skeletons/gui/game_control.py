@@ -918,3 +918,7 @@ class IFootballMetaGame(IGameController):
 
     def recruitBuffon(self, vehicleIntCD):
         raise NotImplementedError
+
+
+class ICalendarController(IGameController):
+    pass

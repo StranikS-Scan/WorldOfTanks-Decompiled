@@ -1091,7 +1091,7 @@ def isVehicleDescr(descr):
 
 class VehicleType(object):
     currentReadingVeh = None
-    __slots__ = ('name', 'id', 'compactDescr', 'mode', 'tags', 'level', 'hasSiegeMode', 'hasCustomDefaultCamouflage', 'customizationNationID', 'speedLimits', 'repairCost', 'crewXpFactor', 'premiumVehicleXPFactor', 'xpFactor', 'creditsFactor', 'freeXpFactor', 'healthBurnPerSec', 'healthBurnPerSecLossFraction', 'invisibility', 'invisibilityDeltas', 'crewRoles', 'extras', 'extrasDict', 'devices', 'tankmen', 'i18nInfo', 'damageStickersLodDist', 'heavyCollisionEffectVelocities', 'effects', 'camouflage', 'emblemsLodDist', 'emblemsAlpha', '_prereqs', 'clientAdjustmentFactors', 'defaultPlayerEmblemID', '_defEmblem', '_defEmblems', 'unlocks', 'chassis', 'engines', 'fuelTanks', 'radios', 'turrets', 'hulls', 'installableComponents', 'unlocksDescrs', 'autounlockedItems', 'collisionEffectVelocities', 'isRotationStill', 'useHullZ', 'siegeModeParams', 'hullAimingParams', 'overmatchMechanicsVer', 'xphysics', 'repaintParameters')
+    __slots__ = ('name', 'id', 'compactDescr', 'mode', 'tags', 'level', 'hasSiegeMode', 'hasCustomDefaultCamouflage', 'customizationNationID', 'baseColorID', 'speedLimits', 'repairCost', 'crewXpFactor', 'premiumVehicleXPFactor', 'xpFactor', 'creditsFactor', 'freeXpFactor', 'healthBurnPerSec', 'healthBurnPerSecLossFraction', 'invisibility', 'invisibilityDeltas', 'crewRoles', 'extras', 'extrasDict', 'devices', 'tankmen', 'i18nInfo', 'damageStickersLodDist', 'heavyCollisionEffectVelocities', 'effects', 'camouflage', 'emblemsLodDist', 'emblemsAlpha', '_prereqs', 'clientAdjustmentFactors', 'defaultPlayerEmblemID', '_defEmblem', '_defEmblems', 'unlocks', 'chassis', 'engines', 'fuelTanks', 'radios', 'turrets', 'hulls', 'installableComponents', 'unlocksDescrs', 'autounlockedItems', 'collisionEffectVelocities', 'isRotationStill', 'useHullZ', 'siegeModeParams', 'hullAimingParams', 'overmatchMechanicsVer', 'xphysics', 'repaintParameters')
 
     def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT):
         self.name = basicInfo.name
@@ -1106,6 +1106,7 @@ class VehicleType(object):
         self.level = basicInfo.level
         self.hasSiegeMode = 'siegeMode' in self.tags
         VehicleType.currentReadingVeh = self
+        self.baseColorID = section.readInt('baseColorID', 0)
         self.hasCustomDefaultCamouflage = section.readBool('customDefaultCamouflage', False)
         customizationNation = section.readString('customizationNation')
         if not customizationNation:

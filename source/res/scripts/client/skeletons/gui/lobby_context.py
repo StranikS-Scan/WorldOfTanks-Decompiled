@@ -80,3 +80,12 @@ class ILobbyContext(object):
 
     def isHeaderNavigationPossible(self, callback=None):
         raise NotImplementedError
+
+    def addFightButtonConfirmator(self, confirmator):
+        raise NotImplementedError
+
+    def deleteFightButtonConfirmator(self, confirmator):
+        raise NotImplementedError
+
+    def isFightButtonPressPossible(self, callback=None):
+        raise NotImplementedError

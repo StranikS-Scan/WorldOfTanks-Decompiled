@@ -15,6 +15,8 @@ class HANGAR_ALIASES(object):
     RANKED_WIDGET = 'rankedWdgt'
     ALERT_MESSAGE_BLOCK = 'alertMessageBlock'
     EPIC_WIDGET = 'epicWdgt'
+    PRIME_TIME = 'primeTime'
+    PRIME_TIME_UI = 'primeTime.swf'
     TANK_CAROUSEL_UI = 'TankCarouselUI'
     VEH_PARAM_RENDERER_STATE_SIMPLE_TOP = 'simpleTop'
     VEH_PARAM_RENDERER_STATE_SIMPLE_BOTTOM = 'simpleBottom'

@@ -557,7 +557,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             return
         outfit = Outfit(outfitCD)
         player = BigWorld.player()
-        forceHistorical = player.isC11nHistorical and player.playerVehicleID != self.__vID and not outfit.isHistorical()
+        forceHistorical = player.isHistoricallyAccurate and player.playerVehicleID != self.__vID and not outfit.isHistorical()
         self.__outfit = Outfit() if forceHistorical else outfit
 
     def __applyVehicleOutfit(self):
@@ -684,8 +684,8 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             vehicle = self.__vehicle
             if self.peripheralsController is not None:
                 self.peripheralsController.update(vehicle, self.__crashedTracksCtrl)
-                if not vehicle.isAlive():
-                    return
+            if not vehicle.isAlive():
+                return
             distanceFromPlayer = self.lodCalculator.lodDistance
             self.__updateCurrTerrainMatKinds()
             if not self.__vehicle.isPlayerVehicle:

@@ -5,11 +5,13 @@ from gui.shared.tooltips import contexts
 from gui.shared.tooltips import epic_skills
 from gui.Scaleform.daapi.view.lobby.hangar.epic_battles_widget import EpicBattlesWidgetTooltip
 from gui.shared.tooltips.builders import DataBuilder
-from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_game_selector_tooltip import EpicMetaGameSelectorTooltip
+from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_game_selector_tooltip import EpicMetaGameUnavailableTooltip
+from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_game_selector_tooltip import EpicSelectorWarningTooltip
 __all__ = ('getTooltipBuilders',)
 
 def getTooltipBuilders():
     return (DataBuilder(TOOLTIPS_CONSTANTS.EPIC_SKILL_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, epic_skills.EpicSkillExtendedTooltip(contexts.QuestsBoosterContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.EPIC_SELECTOR_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, EpicMetaGameSelectorTooltip(contexts.ToolTipContext(None))),
+     DataBuilder(TOOLTIPS_CONSTANTS.EPIC_SELECTOR_UNAVAILABLE_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, EpicMetaGameUnavailableTooltip(contexts.ToolTipContext(None))),
+     DataBuilder(TOOLTIPS_CONSTANTS.EPIC_SELECTOR_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, EpicSelectorWarningTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.EPIC_SKILL_SLOT_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, epic_skills.EpicSkillSlotTooltip(contexts.ToolTipContext(None))),
      DataBuilder(TOOLTIPS_CONSTANTS.EPIC_META_LEVEL_PROGRESS_INFO, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, EpicBattlesWidgetTooltip(contexts.ToolTipContext(None))))

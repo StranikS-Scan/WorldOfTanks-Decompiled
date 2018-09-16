@@ -245,9 +245,7 @@ EPIC_BATTLE_ACHIEVEMENTS_BLOCK_LAYOUT = ['occupyingForce',
  'ironShield',
  'generalOfTheArmy',
  'supremeGun',
- 'smallArmy',
- 'medalPrimozicCount',
- 'medalPrimozic']
+ 'smallArmy']
 _epicBattleAchievementsPopUps = ['occupyingForce',
  'ironShield',
  'generalOfTheArmy',

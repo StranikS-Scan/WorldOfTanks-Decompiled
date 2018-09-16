@@ -234,8 +234,8 @@ class EpicBattleMessagesPlayer(BattleMessagesPlayer):
             if playerDataComp is not None:
                 voTarget = self._arenaDP.getVehicleStats(targetID)
                 voAttacker = self._arenaDP.getVehicleStats(attackerID)
-                targetLane = voTarget.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PHYSICAL_LANE)
-                attackerLane = voAttacker.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PHYSICAL_LANE)
+                targetLane = voTarget.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PLAYER_GROUP)
+                attackerLane = voAttacker.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PLAYER_GROUP)
                 playerLane = playerDataComp.physicalLane
                 if playerLane != targetLane and playerLane != attackerLane:
                     return False
@@ -256,8 +256,8 @@ class EpicBattleMessagesController(BattleMessagesController):
             if playerDataComp is not None:
                 voTarget = self._arenaDP.getVehicleStats(targetID)
                 voAttacker = self._arenaDP.getVehicleStats(attackerID)
-                targetLane = voTarget.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PHYSICAL_LANE)
-                attackerLane = voAttacker.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PHYSICAL_LANE)
+                targetLane = voTarget.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PLAYER_GROUP)
+                attackerLane = voAttacker.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PLAYER_GROUP)
                 playerLane = playerDataComp.physicalLane
                 if playerLane != targetLane and playerLane != attackerLane:
                     return False

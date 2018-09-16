@@ -78,6 +78,15 @@ class DetachedTurret(BigWorld.Entity, ComponentSystem):
         ComponentSystem.activate(self)
         return
 
+    def isAlive(self):
+        return False
+
+    def removeEdge(self):
+        pass
+
+    def drawEdge(self):
+        pass
+
     def __createAndAttachStickers(self):
         vehicle = BigWorld.entity(self.vehicleID)
         if not vehicle:

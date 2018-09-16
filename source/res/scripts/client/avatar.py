@@ -25,7 +25,7 @@ import AvatarPositionControl
 import ResMgr
 import TriggersManager
 import AccountCommands
-from account_helpers.settings_core.settings_constants import SOUND, GAME
+from account_helpers.settings_core.settings_constants import SOUND
 from TriggersManager import TRIGGER_TYPE
 from OfflineMapCreator import g_offlineMapCreator
 from bootcamp_shared import BOOTCAMP_BATTLE_ACTION
@@ -154,7 +154,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     consistentMatrices = property(lambda self: self.__consistentMatrices)
     isVehicleOverturned = property(lambda self: self.__isVehicleOverturned)
     isOwnBarrelUnderWater = property(lambda self: self.__isOwnBarrelUnderWater())
-    isC11nHistorical = property(lambda self: self.__isC11nHistorical)
     guiSessionProvider = dependency.descriptor(IBattleSessionProvider)
     settingsCore = dependency.descriptor(ISettingsCore)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -221,7 +220,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         if BattleReplay.g_replayCtrl.isPlaying:
             BattleReplay.g_replayCtrl.setDataCallback('gunDamagedSound', self.__gunDamagedSound)
         self.__aimingBooster = None
-        self.__isC11nHistorical = bool(self.settingsCore.getSetting(GAME.C11N_HISTORICALLY_ACCURATE))
         return
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)

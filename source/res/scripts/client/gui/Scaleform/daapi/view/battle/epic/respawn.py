@@ -14,11 +14,8 @@ from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.battle_control import minimap_utils
 from gui.Scaleform.daapi.view.battle.shared.respawn import respawn_utils
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
-from gui.sounds.epic_sound_constants import EPIC_SOUND
-_BF_EB_COUNT_DOWN_SOUND_ID = {True: 'eb_respawn_screen_count_down',
- False: 'eb_respawn_screen_count_down_STOP'}
-_BF_EB_READY_FOR_DEPLOYMENT_ID = {True: 'eb_ready_for_deployment',
- False: 'eb_stop_ready_for_deployment'}
+from gui.sounds.epic_sound_constants import EPIC_SOUND, EPIC_TIME_WWEVENTS
+import SoundGroups
 _BF_EB_COUNT_DOWN_SOUND_SECONDS = 10
 
 class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
@@ -87,7 +84,7 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
         return
 
     def py_onDeploymentReady(self):
-        self.__playSound(_BF_EB_READY_FOR_DEPLOYMENT_ID[True])
+        self.__playSound(EPIC_SOUND.EB_READY_FOR_DEPLOYMENT_ID[True])
 
     def onRespawnInfoUpdated(self, respawnInfo):
         vehicle = self.__carousel.getSelectedVehicle()
@@ -177,10 +174,10 @@ class EpicBattleRespawn(EpicRespawnViewMeta, IEpicRespawnView):
 
     def __playCountDownSound(self, play):
         if play is True:
-            self.__playSound(_BF_EB_COUNT_DOWN_SOUND_ID[play])
+            SoundGroups.g_instance.playSound2D(EPIC_TIME_WWEVENTS.EB_RESPAWN_COUNT_DOWN_SOUND_ID[play])
             self.__countDownIsPlaying = True
         else:
-            self.__playSound(_BF_EB_COUNT_DOWN_SOUND_ID[play])
+            SoundGroups.g_instance.playSound2D(EPIC_TIME_WWEVENTS.EB_RESPAWN_COUNT_DOWN_SOUND_ID[play])
             self.__countDownIsPlaying = False
 
     def __playSound(self, eventName):

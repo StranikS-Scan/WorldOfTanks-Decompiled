@@ -2,8 +2,8 @@
 # Embedded file name: scripts/client/gui/game_control/epic_meta_game_ctrl.py
 from itertools import chain
 from collections import defaultdict
-import Event
 import BigWorld
+import Event
 from shared_utils import collapseIntervals
 from gui.ranked_battles.ranked_models import PrimeTime
 from constants import ARENA_BONUS_TYPE, PREBATTLE_TYPE, QUEUE_TYPE
@@ -25,7 +25,31 @@ from gui.shared.gui_items.vehicle_equipment import BattleAbilityConsumables
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared.utils.scheduled_notifications import Notifiable, SimpleNotifier
 from gui.prb_control.entities.listener import IGlobalListener
+from helpers.statistics import HARDWARE_SCORE_PARAMS
+from predefined_hosts import g_preDefinedHosts, HOST_AVAILABILITY
+from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR
+from debug_utils import LOG_DEBUG
+from gui import DialogsInterface
+from adisp import async, process as adisp_process
+from skeletons.account_helpers.settings_core import ISettingsCore
+from account_helpers.settings_core.settings_constants import GRAPHICS
 _VALID_PREBATTLE_TYPES = [PREBATTLE_TYPE.EPIC, PREBATTLE_TYPE.EPIC_TRAINING]
+
+class EPIC_PERF_GROUP(object):
+    HIGH_RISK = 1
+    MEDIUM_RISK = 2
+    LOW_RISK = 3
+
+
+class EPIC_META_GAME_LIMIT_TYPE(object):
+    SYSTEM_DATA = 0
+    HARDWARE_PARAMS = 1
+
+
+PERFORMANCE_GROUP_LIMITS = {EPIC_PERF_GROUP.HIGH_RISK: [{EPIC_META_GAME_LIMIT_TYPE.SYSTEM_DATA: {'osBit': 1,
+                                                                      'graphicsEngine': 0}}, {EPIC_META_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_GPU_MEMORY: 490}}, {EPIC_META_GAME_LIMIT_TYPE.SYSTEM_DATA: {'graphicsEngine': 0},
+                              EPIC_META_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_RAM: 2900}}],
+ EPIC_PERF_GROUP.MEDIUM_RISK: [{EPIC_META_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_GPU_SCORE: 150}}, {EPIC_META_GAME_LIMIT_TYPE.HARDWARE_PARAMS: {HARDWARE_SCORE_PARAMS.PARAM_CPU_SCORE: 50000}}]}
 
 class EpicMetaGameSkillLevel(object):
     __slots__ = ('level', 'name', 'descr', 'shortDescr', 'longDescr', 'icon', 'eqID')
@@ -65,6 +89,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
     battleResultsService = dependency.descriptor(IBattleResultsService)
     connectionMgr = dependency.descriptor(IConnectionManager)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self):
         super(EpicBattleMetaGameController, self).__init__()
@@ -75,6 +100,8 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
         self.__levelProgress = []
         self.__isNow = False
         self.__inEpicPrebattle = False
+        self.__performanceGroup = None
+        return
 
     def init(self):
         super(EpicBattleMetaGameController, self).init()
@@ -95,6 +122,8 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
         self.__getStaticData()
         self.__invalidateBattleAbilityItems()
         self.startNotification()
+        if self.getPerformanceGroup() == EPIC_PERF_GROUP.HIGH_RISK:
+            self.lobbyContext.addFightButtonConfirmator(self.__confirmFightButtonPressEnabled)
 
     def onDisconnected(self):
         self.__clear()
@@ -109,6 +138,12 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
     def onAvatarBecomePlayer(self):
         self.__clear()
         self.battleResultsService.onResultPosted -= self.__showBattleResults
+
+    def getPerformanceGroup(self):
+        if not self.__performanceGroup:
+            self.__analyzeClientSystem()
+            LOG_DEBUG('Current performance group ', self.__performanceGroup)
+        return self.__performanceGroup
 
     def getMaxPlayerLevel(self):
         return self.__playerMaxLevel
@@ -153,7 +188,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
         return len(vehs) > 0
 
     def hasAnySeason(self):
-        return True if self.__getSettingsEpicBattles().season is not None else False
+        return bool(self.__getSettingsEpicBattles().season)
 
     def isFrozen(self):
         peripheryPrimeTime = self.getPrimeTimes().get(self.connectionMgr.peripheryID)
@@ -163,8 +198,8 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
         if not self.hasAnySeason():
             return {}
         epicBattlesConfig = self.lobbyContext.getServerSettings().epicBattles
-        primeTimes = epicBattlesConfig.season['primeTimes']
-        peripheryIDs = primeTimes[0]['peripheryIDs']
+        primeTimes = epicBattlesConfig.season.get('primeTimes', {})
+        peripheryIDs = epicBattlesConfig.peripheryIDs
         primeTimesPeriods = defaultdict(lambda : defaultdict(list))
         for primeTime in primeTimes:
             period = (primeTime['start'], primeTime['end'])
@@ -188,7 +223,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
             return (PRIME_TIME_STATUS.FROZEN, 0, False)
         else:
             currentSeason = self.__getSettingsEpicBattles().season
-            if currentSeason is None:
+            if not currentSeason:
                 return (PRIME_TIME_STATUS.NO_SEASON, 0, False)
             time, inSeason = self.getSeasonEndTime()
             if inSeason:
@@ -197,6 +232,34 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
                 timeLeft = 0 if time is None else time - time_utils.getCurrentLocalServerTimestamp()
                 self.__isNow = False
             return (PRIME_TIME_STATUS.AVAILABLE, timeLeft, self.__isNow) if self.__isNow else (PRIME_TIME_STATUS.NOT_AVAILABLE, timeLeft, self.__isNow)
+
+    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
+        hostsList = g_preDefinedHosts.getSimpleHostsList(g_preDefinedHosts.hostsWithRoaming(), withShortName=True)
+        if self.connectionMgr.peripheryID == 0:
+            hostsList.insert(0, (self.connectionMgr.url,
+             self.connectionMgr.serverUserName,
+             self.connectionMgr.serverUserNameShort,
+             HOST_AVAILABILITY.IGNORED,
+             0))
+        primeTimes = self.getPrimeTimes()
+        dayStart, dayEnd = time_utils.getDayTimeBoundsForLocal(selectedTime)
+        dayEnd += 1
+        serversPeriodsMapping = {}
+        for _, _, serverShortName, _, peripheryID in hostsList:
+            if peripheryID not in primeTimes:
+                continue
+            dayPeriods = primeTimes[peripheryID].getPeriodsBetween(dayStart, dayEnd)
+            if groupIdentical and dayPeriods in serversPeriodsMapping.values():
+                for name, period in serversPeriodsMapping.iteritems():
+                    serverInMapping = name if period == dayPeriods else None
+                    if serverInMapping:
+                        newName = '{0}, {1}'.format(serverInMapping, serverShortName)
+                        serversPeriodsMapping[newName] = serversPeriodsMapping.pop(serverInMapping)
+                        break
+
+            serversPeriodsMapping[serverShortName] = dayPeriods
+
+        return serversPeriodsMapping
 
     def increaseSkillLevel(self, skillID):
         BigWorld.player().epicMetaGame.increaseAbility(skillID)
@@ -265,6 +328,8 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
         self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__updateEpicMetaGameSettings
         g_currentVehicle.onChanged -= self.__invalidateBattleAbilitiesForVehicle
         g_clientUpdateManager.removeObjectCallbacks(self)
+        if self.getPerformanceGroup() == EPIC_PERF_GROUP.HIGH_RISK:
+            self.lobbyContext.deleteFightButtonConfirmator(self.__confirmFightButtonPressEnabled)
 
     def __updateEpic(self, diff):
         changes = set(diff.keys())
@@ -313,7 +378,8 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
     def __invalidateBattleAbilitiesForVehicle(self):
         vehicle = g_currentVehicle.item
         if vehicle is None or vehicle.descriptor.type.level not in self.lobbyContext.getServerSettings().epicBattles.validVehicleLevels or not self.__isInValidPrebattle():
-            vehicle.equipment.setBattleAbilityConsumables(BattleAbilityConsumables(*[]))
+            if vehicle is not None:
+                vehicle.equipment.setBattleAbilityConsumables(BattleAbilityConsumables(*[]))
             return
         else:
             amountOfSlots = getNumAbilitySlots(vehicle.descriptor.type)
@@ -329,6 +395,48 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
 
             vehicle.equipment.setBattleAbilityConsumables(BattleAbilityConsumables(*selectedItems))
             return
+
+    def __analyzeClientSystem(self):
+        stats = BigWorld.wg_getClientStatistics()
+        stats['graphicsEngine'] = self.settingsCore.getSetting(GRAPHICS.RENDER_PIPELINE)
+        self.__performanceGroup = EPIC_PERF_GROUP.LOW_RISK
+        for groupName, conditions in PERFORMANCE_GROUP_LIMITS.iteritems():
+            for currentLimit in conditions:
+                condValid = True
+                systemStats = currentLimit.get(EPIC_META_GAME_LIMIT_TYPE.SYSTEM_DATA, {})
+                for key, limit in systemStats.iteritems():
+                    currValue = stats.get(key, None)
+                    if currValue is None or currValue != limit:
+                        condValid = False
+
+                hardwareParams = currentLimit.get(EPIC_META_GAME_LIMIT_TYPE.HARDWARE_PARAMS, {})
+                for key, limit in hardwareParams.iteritems():
+                    currValue = BigWorld.getAutoDetectGraphicsSettingsScore(key)
+                    if currValue >= limit:
+                        condValid = False
+
+                if condValid:
+                    self.__performanceGroup = groupName
+                    return
+
+        return
+
+    @async
+    @adisp_process
+    def __confirmFightButtonPressEnabled(self, callback):
+        if not self.__isInValidPrebattle():
+            callback(True)
+            return
+        defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
+        filters = self.settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
+        isEpicPerformanceWarningEnabled = not AccountSettings.getSettings('isEpicPerformanceWarningClicked')
+        if isEpicPerformanceWarningEnabled:
+            result, checkboxChecked = yield DialogsInterface.showI18nCheckBoxDialog('epicBattleConfirmDialog')
+            filters['isEpicPerformanceWarningClicked'] = checkboxChecked
+            AccountSettings.setSettings('isEpicPerformanceWarningClicked', checkboxChecked)
+        else:
+            result = True
+        callback(result)
 
     @staticmethod
     def __getSettings(cycleID=None):

@@ -201,6 +201,7 @@ class RANKED_BATTLES(object):
     PRIMETIME_SERVERTOOLTIP = '#ranked_battles:primeTime/serverTooltip'
     PRIMETIME_SERVERS = '#ranked_battles:primeTime/servers'
     PRIMETIME_STATUS_THISENABLE = '#ranked_battles:primeTime/status/thisEnable'
+    PRIMETIME_STATUS_DISABLEFIRST = '#ranked_battles:primeTime/status/disableFirst'
     PRIMETIME_STATUS_DISABLE = '#ranked_battles:primeTime/status/disable'
     PRIMETIMEALERTMESSAGEBLOCK_MESSAGE = '#ranked_battles:primeTimeAlertMessageBlock/message'
     CALENDARDAY_TITLE = '#ranked_battles:calendarDay/title'

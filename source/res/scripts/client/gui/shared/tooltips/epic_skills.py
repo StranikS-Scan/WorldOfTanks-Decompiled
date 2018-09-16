@@ -57,7 +57,7 @@ class EpicSkillExtendedTooltip(EpicSkillBaseTooltipData):
         levels = skillInfo.levels
         curLvlEq = eqs[levels[currentLvl].eqID]
         specLvlEq = eqs[levels[specLevel].eqID]
-        bodyBlocks = [formatters.packTextParameterBlockData(name='', value=text_styles.middleTitle('{}{}'.format(i18n.makeString(EPIC_BATTLE.ABILITYINFO_PROPERTIES), i18n.makeString(COMMON.COMMON_COLON))), valueWidth=80)]
+        bodyBlocks = [formatters.packTextBlockData(text=text_styles.middleTitle('{}{}'.format(i18n.makeString(EPIC_BATTLE.ABILITYINFO_PROPERTIES), i18n.makeString(COMMON.COMMON_COLON))))]
         for tooltipInfo in eqs[skillInfo.levels[currentLvl].eqID].tooltipInformation:
             renderer = g_battleAbilityParamsRenderers.get(tooltipInfo.renderer, None)
             if renderer:

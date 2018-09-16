@@ -97,6 +97,8 @@ def calcGunParams(gunDescr, descriptors):
      GUARANTEED_STUN_DURATION_PROP_NAME):
         result[key] = tuple(result[key])
 
+    if AUTO_RELOAD_PROP_NAME in result:
+        result[AUTO_RELOAD_PROP_NAME] = tuple((tuple(minMaxPair) for minMaxPair in result[AUTO_RELOAD_PROP_NAME]))
     return result
 
 

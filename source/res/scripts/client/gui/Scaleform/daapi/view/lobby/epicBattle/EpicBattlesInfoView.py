@@ -103,7 +103,7 @@ class EpicBattlesInfoView(LobbySubView, EpicBattlesInfoViewMeta):
                 state = _RULE_PANEL_ATTENTION_STATE
             elif index == _RULE_PANEL_MAX_INDEX:
                 state = _RULE_PANEL_PRESTIGE_STATE
-            rulePaneVO = EpicBattlesRulePanelVO(imageFrame=_INDEX_TO_FRAME_NAME_STATE[index], panelState=state, headlineText=_RULE_PANEL_HEADLINES[index], descriptionText=_RULE_PANEL_DESCRIPTIONS[index], prestigeAllowed=state == _RULE_PANEL_PRESTIGE_STATE, skillPoints=skillPoints if state == _RULE_PANEL_ATTENTION_STATE else 0, buttonLabel=_RULE_PANEL_BUTTON_LABELS[index], enabled=bool(state in (_RULE_PANEL_ATTENTION_STATE, _RULE_PANEL_PRESTIGE_STATE)))
+            rulePaneVO = EpicBattlesRulePanelVO(imageFrame=_INDEX_TO_FRAME_NAME_STATE[index], panelState=state, headlineText=_RULE_PANEL_HEADLINES[index], descriptionText=_RULE_PANEL_DESCRIPTIONS[index], prestigeAllowed=state == _RULE_PANEL_PRESTIGE_STATE, skillPoints=skillPoints if state == _RULE_PANEL_ATTENTION_STATE else 0, buttonLabel=_RULE_PANEL_BUTTON_LABELS[index], enabled=True)
             rulePanelsResult.append(rulePaneVO._asdict())
 
         return rulePanelsResult

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/arena_achievements.py
 from dossiers2.custom.records import RECORD_DB_IDS
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS as BONUS_CAPS
-ACHIEVEMENTS = ('warrior', 'invader', 'sniper', 'sniper2', 'mainGun', 'defender', 'steelwall', 'supporter', 'scout', 'evileye', 'medalWittmann', 'medalOrlik', 'medalOskin', 'medalHalonen', 'medalBurda', 'medalBillotte', 'medalKolobanov', 'medalFadin', 'medalRadleyWalters', 'medalLafayettePool', 'medalLehvaslaiho', 'medalNikolas', 'medalPascucci', 'medalDumitru', 'medalBrunoPietro', 'medalTarczay', 'heroesOfRassenay', 'medalDeLanglade', 'medalTamadaYoshio', 'raider', 'kamikaze', 'huntsman', 'bombardier', 'luckyDevil', 'ironMan', 'sturdy', 'alaric', 'lumberjack', 'medalBrothersInArms', 'medalCrucialContribution', 'armoredFist', 'kingOfTheHill', 'willToWinSpirit', 'shoulderToShoulder', 'aloneInTheField', 'fallenFlags', 'effectiveSupport', 'falloutDieHard', 'stormLord', 'winnerLaurels', 'predator', 'unreachable', 'champion', 'bannerman', 'markIProtector', 'markIBaseProtector', 'markIBomberman', 'markIRepairer', 'occupyingForce', 'ironShield', 'generalOfTheArmy', 'supremeGun', 'smallArmy', 'medalPrimozic', 'frontlineMedal')
+ACHIEVEMENTS = ('warrior', 'invader', 'sniper', 'sniper2', 'mainGun', 'defender', 'steelwall', 'supporter', 'scout', 'evileye', 'medalWittmann', 'medalOrlik', 'medalOskin', 'medalHalonen', 'medalBurda', 'medalBillotte', 'medalKolobanov', 'medalFadin', 'medalRadleyWalters', 'medalLafayettePool', 'medalLehvaslaiho', 'medalNikolas', 'medalPascucci', 'medalDumitru', 'medalBrunoPietro', 'medalTarczay', 'heroesOfRassenay', 'medalDeLanglade', 'medalTamadaYoshio', 'raider', 'kamikaze', 'huntsman', 'bombardier', 'luckyDevil', 'ironMan', 'sturdy', 'alaric', 'lumberjack', 'medalBrothersInArms', 'medalCrucialContribution', 'armoredFist', 'kingOfTheHill', 'willToWinSpirit', 'shoulderToShoulder', 'aloneInTheField', 'fallenFlags', 'effectiveSupport', 'falloutDieHard', 'stormLord', 'winnerLaurels', 'predator', 'unreachable', 'champion', 'bannerman', 'markIProtector', 'markIBaseProtector', 'markIBomberman', 'markIRepairer', 'occupyingForce', 'ironShield', 'generalOfTheArmy', 'supremeGun', 'smallArmy', 'frontlineMedal')
 ACHIEVEMENTS_WITH_REWARD = set([ RECORD_DB_IDS['achievements', name] for name in ('warrior', 'invader', 'sniper', 'sniper2', 'mainGun', 'defender', 'steelwall', 'supporter', 'scout', 'evileye', 'heroesOfRassenay', 'medalFadin', 'medalNikolas', 'medalPascucci', 'medalLehvaslaiho', 'medalRadleyWalters', 'medalHalonen', 'medalDumitru', 'medalDeLanglade', 'medalOrlik', 'medalOskin', 'medalLafayettePool', 'medalBurda', 'medalTamadaYoshio', 'medalBrothersInArms', 'medalCrucialContribution', 'huntsman', 'medalStark', 'medalGore') ] + [ RECORD_DB_IDS['falloutAchievements', name] for name in ('shoulderToShoulder', 'falloutDieHard', 'champion', 'bannerman') ])
 INBATTLE_SERIES = ('sniper', 'killing', 'piercing')
 INBATTLE_SERIES_INDICES = dict(((x[1], x[0]) for x in enumerate(INBATTLE_SERIES)))
@@ -118,8 +118,7 @@ ACHIEVEMENT_CONDITIONS = {'warrior': {'minFrags': 6},
                 'checks': [('DestructibleEntity', 150), ('SectorBase', 50)]},
  'occupyingForce': {'minBasePoints': 100},
  'supremeGun': {'minDamageDealt': 10000},
- 'smallArmy': {'minVehiclesDestroyed': 20},
- 'medalPrimozic': {'numTopPlayersEligible': 3}}
+ 'smallArmy': {'minVehiclesDestroyed': 20}}
 ACHIEVEMENT_CONDITIONS_EXT = {'warrior': {'minFrags': 8},
  'heroesOfRassenay': {'minKills': 21,
                       'maxKills': 255},

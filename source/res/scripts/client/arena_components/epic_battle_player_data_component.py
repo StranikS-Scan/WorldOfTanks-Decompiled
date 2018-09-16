@@ -3,6 +3,7 @@
 from collections import defaultdict
 from arena_components.player_data_component import PlayerDataComponent
 from constants import ARENA_SYNC_OBJECTS, SECTOR_STATE, ARENA_PERIOD
+from PlayerEvents import g_playerEvents
 import Event
 import BigWorld
 from gui.battle_control import avatar_getter
@@ -43,6 +44,7 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
         self.onPlayerXPUpdated = Event.Event(self._eventManager)
         self.onFrontlineCenterUpdated = Event.Event(self._eventManager)
         self.onRespawnOffsetsUpdated = Event.Event(self._eventManager)
+        g_playerEvents.onAvatarBecomePlayer += self.setPlayerLaneByPlayerGroups
         return
 
     def destroy(self):
@@ -54,6 +56,7 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
         self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.RESPAWN, 'outOfLives', self.__onPlayerOutOfLivesAdded)
         self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.RESPAWN, 'outOfLives_d', self.__onPlayerOutOfLivesDeleted)
         self.removeSyncDataCallback(ARENA_SYNC_OBJECTS.FRONT_LINE, 'CoM', self.__onFrontlineCenterOfMassUpdated)
+        g_playerEvents.onAvatarBecomePlayer -= self.setPlayerLaneByPlayerGroups
 
     def getPlayerLivesForTeam(self, teamId):
         lives = 0
@@ -111,8 +114,8 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
         _, groupID = vehicleSectorIDs.get(vehId, (0, 0))
         return groupID
 
-    def setPhysicalLane(self, lane, groupID):
-        if self.__physicalLane != lane or self.__physicalSectorGroup != groupID:
+    def setPhysicalLane(self, lane, groupID, force=False):
+        if self.__physicalLane != lane or self.__physicalSectorGroup != groupID or force:
             self.__physicalLane = lane
             self.__physicalSectorGroup = groupID
             self.onPlayerPhysicalLaneUpdated(lane)
@@ -120,6 +123,14 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
     def setPlayerXP(self, xp):
         self.__playerXP = xp
         self.onPlayerXPUpdated(xp)
+
+    def setPlayerLaneByPlayerGroups(self):
+        playerId = avatar_getter.getPlayerVehicleID()
+        playerGroups = self.playerGroups
+        if playerGroups and playerId is not 0 and playerId in playerGroups:
+            self.__respawnLane = playerGroups[playerId]
+            self.onPlayerRespawnLaneUpdated(self.__respawnLane)
+            self.setPhysicalLane(self.__respawnLane, self.__physicalSectorGroup, force=True)
 
     def _vehiclePlayerGroupsUpdated(self, args):
         self.__respawnLane = None
@@ -132,7 +143,7 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
         playerId = avatar_getter.getPlayerVehicleID()
         if playerId is not 0 and playerId in args:
             self.__respawnLane = args[playerId]
-        self.onPlayerRespawnLaneUpdated(self.__respawnLane)
+            self.onPlayerRespawnLaneUpdated(self.__respawnLane)
         return
 
     def __getPlayerLives(self):
@@ -195,7 +206,7 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
             if self.__physicalLane != group:
                 self.__physicalLane = group
                 self.onPlayerPhysicalLaneUpdated(group)
-        gameModeStats = dict(((vehID, {'physicalLane': group,
+        gameModeStats = dict(((vehID, {'playerGroup': group,
           'physicalSector': sectorID}) for vehID, (sectorID, group) in args.iteritems()))
         arena.onGameModeSpecifcStats(False, gameModeStats)
 
@@ -219,10 +230,10 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
         self.onRespawnOffsetsUpdated(args)
 
     def __onPlayerOutOfLivesAdded(self, args):
-        self.__updatePlayerOutOfLives(args, True)
+        self.__updatePlayerOutOfLives(args, False)
 
     def __onPlayerOutOfLivesDeleted(self, args):
-        self.__updatePlayerOutOfLives(args, False)
+        self.__updatePlayerOutOfLives(args, True)
 
     def __updatePlayerOutOfLives(self, playerList, hasRespawns):
         arena = avatar_getter.getArena()

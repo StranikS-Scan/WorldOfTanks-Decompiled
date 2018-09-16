@@ -58,7 +58,7 @@ class RankedEntryPoint(PreQueueEntryPoint):
         super(RankedEntryPoint, self).__init__(FUNCTIONAL_FLAG.RANKED, QUEUE_TYPE.RANKED)
 
     def select(self, ctx, callback=None):
-        status, _ = self.rankedController.getPrimeTimeStatus()
+        status, _, _ = self.rankedController.getPrimeTimeStatus()
         if status in (PRIME_TIME_STATUS.DISABLED, PRIME_TIME_STATUS.FROZEN, PRIME_TIME_STATUS.NO_SEASON):
             SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.RANKED_NOTIFICATION_NOTAVAILABLE), type=SystemMessages.SM_TYPE.Error)
             if callback is not None:

@@ -164,7 +164,7 @@ class EpicTeamChannelController(TeamChannelController):
             adp = self.sessionProvider.getArenaDP()
             vo = adp.getVehicleStats(senderVID)
             sectorID = vo.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PHYSICAL_SECTOR)
-            lane = vo.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PHYSICAL_LANE)
+            lane = vo.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PLAYER_GROUP)
             hqActive = False
             hqs = destructibleEntityComp.destructibleEntities
             if hqs:

@@ -242,7 +242,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     @process
     def fightClick(self, mapID, actionName):
         navigationPossible = yield self.lobbyContext.isHeaderNavigationPossible()
-        if navigationPossible:
+        fightButtonPressPossible = yield self.lobbyContext.isFightButtonPressPossible()
+        if navigationPossible and fightButtonPressPossible:
             if self.prbDispatcher:
                 self.prbDispatcher.doAction(PrbAction(actionName, mapID=mapID))
             else:
@@ -660,7 +661,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             header = i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDVEHLEVELREQUIRED_HEADER)
             body = i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDVEHLEVELREQUIRED_BODY, level=toRomanRangeString(result.ctx['levels'], 1))
             return (makeTooltip(header, body), False)
-        return (TOOLTIPS_CONSTANTS.EPIC_SELECTOR_INFO, True)
+        return (TOOLTIPS_CONSTANTS.EPIC_SELECTOR_UNAVAILABLE_INFO, True)
 
     def __getSandboxTooltipData(self, result):
         state = result.restriction

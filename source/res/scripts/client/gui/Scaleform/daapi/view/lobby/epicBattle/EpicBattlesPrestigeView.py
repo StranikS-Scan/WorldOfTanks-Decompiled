@@ -56,7 +56,7 @@ class EpicBattlesPrestigeView(LobbySubView, EpicBattlesPrestigeViewMeta):
             currentPrestigeQuest = allQuests.get(_PRESTIGE_TOKEN_TEMPLATE % (pPrestigeLevel + 1), None)
             if currentPrestigeQuest:
                 bonuses = currentPrestigeQuest.getBonuses()
-                awardsVO = sum([ bonus.getEpicAwardVOs(withDescription=True) for bonus in bonuses ], [])
+                awardsVO = sum([ bonus.getEpicAwardVOs(withDescription=False) for bonus in bonuses ], [])
             else:
                 awardsVO = []
             prestigeLvlTxt = i18n.makeString(EPIC_BATTLE.EPICBATTLESPRESTIGEVIEW_PRESTIGELEVEL, level=int2roman(pPrestigeLevel + 1))

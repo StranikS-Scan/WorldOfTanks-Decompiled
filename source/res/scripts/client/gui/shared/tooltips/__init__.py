@@ -49,6 +49,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     VEHICLE_HISTORICAL_REFERENCE = 'vehicleHistoricalReference'
     EPIC_SKILL_INFO = 'epicSkillInfo'
     EPIC_SELECTOR_INFO = 'epicSelectorInfo'
+    EPIC_SELECTOR_UNAVAILABLE_INFO = 'epicSelectorUnavailableInfo'
     EPIC_META_LEVEL_PROGRESS_INFO = 'epicMetaLevelProgressInfo'
 
 

@@ -709,6 +709,9 @@ class IEpicBattleMetaGameController(IGameController):
     def isInPrimeTime(self):
         raise NotImplementedError
 
+    def getPerformanceGroup(self):
+        raise NotImplementedError
+
     def getMaxPlayerLevel(self):
         raise NotImplementedError
 
@@ -761,4 +764,7 @@ class IEpicBattleMetaGameController(IGameController):
         raise NotImplementedError
 
     def hasSuitableVehicles(self):
+        raise NotImplementedError
+
+    def getPrimeTimesForDay(self, selectedTime, groupIdentical=False):
         raise NotImplementedError

@@ -19,7 +19,7 @@ class RankedScheduler(BaseScheduler):
         self.__isPrimeTime = False
 
     def init(self):
-        status, _ = self.rankedController.getPrimeTimeStatus()
+        status, _, _ = self.rankedController.getPrimeTimeStatus()
         self.__isPrimeTime = status == PRIME_TIME_STATUS.AVAILABLE
         self.rankedController.onPrimeTimeStatusUpdated += self.__update
         self.__show(isInit=True)

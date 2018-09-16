@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/AmmunitionPanel.py
 import logging
+from constants import QUEUE_TYPE
+from gui.prb_control.entities.listener import IGlobalListener
 from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS
 from CurrentVehicle import g_currentVehicle
 from gui import makeHtmlString
@@ -20,6 +22,7 @@ from gui.shared.gui_items.vehicle_equipment import BATTLE_BOOSTER_LAYOUT_SIZE
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import i18n, dependency
 from skeletons.gui.shared import IItemsCache
+from gui.prb_control.settings import CTRL_ENTITY_TYPE
 ARTEFACTS_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.OPTIONALDEVICE], GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.EQUIPMENT])
 _BOOSTERS_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_BOOSTER],)
 _ABILITY_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_ABILITY],)
@@ -72,7 +75,7 @@ def getAmmo(shells):
     return outcome
 
 
-class AmmunitionPanel(AmmunitionPanelMeta):
+class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     itemsCache = dependency.descriptor(IItemsCache)
 
     def update(self):
@@ -104,10 +107,12 @@ class AmmunitionPanel(AmmunitionPanelMeta):
 
     def _populate(self):
         super(AmmunitionPanel, self)._populate()
+        self.startGlobalListening()
         g_clientUpdateManager.addCallbacks({'inventory': self.__inventoryUpdateCallBack})
         self.update()
 
     def _dispose(self):
+        self.stopGlobalListening()
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(AmmunitionPanel, self)._dispose()
 
@@ -138,4 +143,19 @@ class AmmunitionPanel(AmmunitionPanelMeta):
         self.as_setAmmoS(shells, stateWarning)
         self.as_setModulesEnabledS(True)
         self.as_setVehicleHasTurretS(vehicle.hasTurrets)
-        self.as_setDataS({'devices': getFittingSlotsData(vehicle, HANGAR_FITTING_SLOTS, VoClass=HangarFittingSlotVO)})
+        slotsRange = self.__getSlotsRange()
+        devices = getFittingSlotsData(vehicle, slotsRange, VoClass=HangarFittingSlotVO)
+        self.as_setDataS({'devices': devices})
+        if slotsRange == HANGAR_FITTING_SLOTS and self.itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_ABILITY, REQ_CRITERIA.UNLOCKED):
+            showAlert = True
+            for slot in devices:
+                if slot['slotType'] in _ABILITY_SLOTS and slot['id'] != -1:
+                    showAlert = False
+                    break
+
+            self.as_showBattleAbilitiesAlertS(showAlert)
+        else:
+            self.as_showBattleAbilitiesAlertS(False)
+
+    def __getSlotsRange(self):
+        return HANGAR_FITTING_SLOTS if self.prbDispatcher is not None and self.prbDispatcher.getEntity().getCtrlType() == CTRL_ENTITY_TYPE.PREQUEUE and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) else VEHICLE_FITTING_SLOTS

@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences_ct.xml	</preferences>
+  <preferences>	preferences.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -129,7 +129,7 @@
     <PS_PERFORMANCE_LOD_MULT>	1.2	</PS_PERFORMANCE_LOD_MULT>
   </ParticleSystem>
   <debug>
-    <fullDump>	false	</fullDump>
+    <fullDump>	true	</fullDump>
     <dxdiag>	true	</dxdiag>
     <framesCount>	0	</framesCount>
     <enableServers>	false	</enableServers>
@@ -195,9 +195,6 @@
           <name>	damage.pck	</name>
         </project>
         <project>
-          <name>	epic_battle.bnk	</name>
-        </project>
-        <project>
           <name>	eng_continental_R975.pck	</name>
         </project>
         <project>
@@ -252,9 +249,6 @@
           <name>	gui_ranked_battles.pck	</name>
         </project>
         <project>
-          <name>	epic_battle.pck	</name>
-        </project>
-        <project>
           <name>	utility.bnk	</name>
         </project>
         <project>
@@ -265,6 +259,12 @@
         </project>
         <project>
           <name>	plugin_media.bnk	</name>
+        </project>
+        <project>
+          <name>	epic_battle.bnk	</name>
+        </project>
+        <project>
+          <name>	epic_battle.pck	</name>
         </project>
       </SFX_soundbanks_loadonce>
       <SFX_soundbanks_hangar>

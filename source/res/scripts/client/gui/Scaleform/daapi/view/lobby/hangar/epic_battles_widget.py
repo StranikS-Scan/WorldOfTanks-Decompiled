@@ -26,6 +26,7 @@ CalendarStatusVO = namedtuple('EpicBattlesWidgetVO', ('alertIcon', 'buttonIcon',
 
 class EpicBattlesWidget(EpicBattlesWidgetMeta):
     epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def onWidgetClick(self):
         self.fireEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS), EVENT_BUS_SCOPE.LOBBY)
@@ -41,7 +42,9 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
         showPrimeTimeAlert = status != PRIME_TIME_STATUS.AVAILABLE
         pPrestigeLevel, pLevel, _ = self.epicMetaGameCtrl.getPlayerLevelInfo()
         maxMetaLevel = self.epicMetaGameCtrl.getMaxPlayerLevel()
-        return EpicBattlesWidgetVO(skillPoints=self.epicMetaGameCtrl.getSkillPoints(), calendarStatus=self.__getStatusBlock(showPrimeTimeAlert, timeLeft)._asdict(), canPrestige=pLevel == maxMetaLevel, showAlert=not self.epicMetaGameCtrl.isInPrimeTime(), epicMetaLevelIconData=getEpicMetaIconVODict(pPrestigeLevel, pLevel))
+        isEpicEnabled = self.lobbyContext.getServerSettings().isEpicBattleEnabled()
+        showAlert = not self.epicMetaGameCtrl.isInPrimeTime() and isEpicEnabled and timeLeft > 0
+        return EpicBattlesWidgetVO(skillPoints=self.epicMetaGameCtrl.getSkillPoints(), calendarStatus=self.__getStatusBlock(showPrimeTimeAlert, timeLeft)._asdict(), canPrestige=pLevel == maxMetaLevel, showAlert=showAlert, epicMetaLevelIconData=getEpicMetaIconVODict(pPrestigeLevel, pLevel))
 
     def __getStatusBlock(self, showPrimeTimeAlert, timeLeft):
         return CalendarStatusVO(alertIcon=RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON if showPrimeTimeAlert else None, buttonIcon=RES_ICONS.MAPS_ICONS_BUTTONS_CALENDAR, buttonLabel='', buttonVisible=False, buttonTooltip=None, statusText=self.__getAlertStatusText(timeLeft), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert)
@@ -62,6 +65,7 @@ class EpicBattlesWidgetTooltip(BlocksTooltipData):
 
     def __init__(self, context):
         super(EpicBattlesWidgetTooltip, self).__init__(context, TOOLTIP_TYPE.EPIC_META_LEVEL_PROGRESS_INFO)
+        self._setWidth(width=353)
         self._setMargins(afterBlock=5, afterSeparator=15)
 
     def _packBlocks(self):

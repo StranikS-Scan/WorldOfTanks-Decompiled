@@ -2887,6 +2887,30 @@
       <mirror>	false	</mirror>
     </decal>
   </itemGroup>
+  <itemGroup>
+    <name>	Frontline	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <type>	EMBLEM	</type>
+    <historical>	true	</historical>
+    <vehicleFilter>
+      <include>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+        <nations>	germany italy japan	</nations>
+      </include>
+      <include>
+        <levels>	10	</levels>
+        <nations>	germany italy japan	</nations>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	552	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_382.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_382	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>
   <xmlns:germany>	germany	</xmlns:germany>
   <xmlns:usa>	usa	</xmlns:usa>
@@ -6356,6 +6380,52 @@
       <userString>	#vehicle_customization:inscription/special/special_195	</userString>
     </decal>
   </itemGroup>
+  <itemGroup>
+    <name>	Frontline parade	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <historical>	true	</historical>
+    <vehicleFilter>
+      <include>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+        <nations>	ussr poland czech china germany italy japan	</nations>
+      </include>
+      <include>
+        <levels>	10	</levels>
+        <nations>	ussr poland czech china germany italy japan	</nations>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	550	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_199.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_199	</userString>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Frontline alliance	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <historical>	true	</historical>
+    <vehicleFilter>
+      <include>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+        <nations>	france uk usa sweden	</nations>
+      </include>
+      <include>
+        <levels>	10	</levels>
+        <nations>	france uk usa sweden	</nations>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	551	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_198.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_198	</userString>
+    </decal>
+  </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>
   <xmlns:germany>	germany	</xmlns:germany>
   <xmlns:usa>	usa	</xmlns:usa>
@@ -6379,8 +6449,8 @@
     </vehicleFilter>
     <decal>
       <id>	549	</id>
-      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_197.dds	</texture>
-      <userString>	#vehicle_customization:inscription/special/special_197	</userString>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_196.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_196	</userString>
     </decal>
   </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>

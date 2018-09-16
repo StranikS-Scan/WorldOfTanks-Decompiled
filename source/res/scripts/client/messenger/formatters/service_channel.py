@@ -2098,12 +2098,18 @@ class TelecomStatusFormatter(ServiceChannelFormatter):
         vehTypeDescrs = data['vehTypeCompDescrs']
         if vehTypeDescrs:
             serverSettings = self.lobbyContext.getServerSettings()
-            vehInvID = self.itemsCache.items.getItemByCD(vehTypeDescrs[0]).invID
+            vehInvID = self.itemsCache.items.getItemByCD(list(vehTypeDescrs)[0]).invID
             provider = BigWorld.player().inventory.getProviderForVehInvId(vehInvID, serverSettings)
         else:
             provider = ''
+        if provider:
+            i18nProvider = i18n.makeString(MENU.internetProviderName(provider))
+            if i18nProvider is None:
+                i18nProvider = ''
+        else:
+            i18nProvider = ''
         msgctx = {'vehicles': self.__getVehicleNames(vehTypeDescrs),
-         'provider': i18n.makeString(MENU.internetProviderName(provider))}
+         'provider': i18nProvider}
         ctx = {}
         for txtBlock in ('title', 'comment', 'subcomment'):
             ctx[txtBlock] = i18n.makeString('#system_messages:telecom/notifications/{0:s}/{1:s}'.format(key, txtBlock), **msgctx)

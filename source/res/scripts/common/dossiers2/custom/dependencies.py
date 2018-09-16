@@ -286,8 +286,7 @@ def _set_RANKED_STATS_DEPENDENCIES():
 EPIC_BATTLE_STATS_DEPENDENCIES = {}
 
 def _set_EPIC_BATTLE_STATS_DEPENDENCIES():
-    global EPIC_BATTLE_STATS_DEPENDENCIES
-    EPIC_BATTLE_STATS_DEPENDENCIES.update({'medalPrimozicCount': [_updateMedalPrimozic]})
+    pass
 
 
 def _updateMedalCarius(dossierDescr, dossierBlockDescr, key, value, prevValue):
@@ -892,11 +891,6 @@ def _updateWinnerLaurels(dossierDescr, dossierBlockDescr, key, value, prevValue)
     if newMedalClass is not None:
         dossierDescr['falloutAchievements'][medalName] = newMedalClass
     return
-
-
-def _updateMedalPrimozic(dossierDescr, dossierBlockDescr, key, value, prevValue):
-    if value > 0:
-        dossierDescr['epicBattleAchievements']['medalPrimozic'] = 1
 
 
 def __getNewMedalClass(medalConfigName, valueToCheck, curMedalClass):

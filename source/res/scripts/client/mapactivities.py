@@ -279,7 +279,10 @@ class WarplaneActivity(BaseMapActivity):
         self.__modelName = self.__curve.getChannelProperty(0, 'modelName').asString
         ds = self.__curve.getChannelProperty(0, 'wwsoundName')
         soundName = ds.asString if ds is not None else ''
-        self.__sound = SoundGroups.g_instance.getSound3D(None, soundName)
+        if soundName != '':
+            self.__sound = SoundGroups.g_instance.getSound3D(None, soundName)
+        else:
+            self.__sound = None
         BigWorld.loadResourceListBG((self.__modelName,), self.__onModelLoaded)
         return True
 
@@ -351,7 +354,9 @@ class WarplaneActivity(BaseMapActivity):
             self.__model = None
             self.__motor = None
             self.__curve = None
-        self.__sound.stop(self.FADE_TIME)
+        if self.__sound is not None:
+            self.__sound.stop(self.FADE_TIME)
+            self.__sound.releaseMatrix()
         if self.__particle[1] is not None and self.__particle[1].pixie is not None:
             self.__particle[0].detach(self.__particle[1].pixie)
             self.__particle[1].destroy()
@@ -360,7 +365,9 @@ class WarplaneActivity(BaseMapActivity):
         return
 
     def pause(self):
-        self.__sound.stop(self.FADE_TIME)
+        if self.__sound is not None:
+            self.__sound.stop(self.FADE_TIME)
+            self.__sound.releaseMatrix()
         if self.__particle[1] is not None and self.__particle[1].pixie is not None:
             self.__particle[0].detach(self.__particle[1].pixie)
         self.__particle = (None, None)
@@ -384,10 +391,16 @@ class WarplaneActivity(BaseMapActivity):
         visibility = self.__motor.warplaneAlpha
         if visibility > 0.7:
             self.__loadEffects()
-        if visibility > 0.1 and not self.__fadedIn:
-            self.__fadedIn = True
-            self.__sound.play()
-            self.__sound.volume = visibility
+        if visibility > 0.1:
+            if not self.__fadedIn:
+                self.__fadedIn = True
+                if self.__sound is not None:
+                    self.__sound.play()
+                    self.__sound.volume = visibility
+                    if self.__model is not None:
+                        self.__sound.matrixProvider = self.__model.root
+            elif self.__sound is not None:
+                self.__sound.volume = visibility
         elif visibility <= 0.1 and self.__fadedIn or Timer.getTime() > self.__endTime:
             self.pause()
             return
@@ -397,7 +410,6 @@ class WarplaneActivity(BaseMapActivity):
     def __onModelLoaded(self, resourceRefs):
         if self.__modelName not in resourceRefs.failedIDs and not self.__isStopped:
             self.__model = resourceRefs[self.__modelName]
-            self.__sound.matrixProvider = self.__model.root
         else:
             LOG_ERROR('Could not load model %s' % self.__modelName)
 

@@ -3,7 +3,7 @@
 from gui.Scaleform.Waiting import Waiting
 from gui.shared import events, g_eventBus
 from gui.shared.utils.decorators import dialog
-from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DisconnectMeta
+from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta, I18nConfirmDialogMeta, DisconnectMeta, CheckBoxDialogMeta
 
 @dialog
 def showDialog(meta, callback):
@@ -27,6 +27,11 @@ def showI18nInfoDialog(i18nKey, callback, meta=None):
 @dialog
 def showI18nConfirmDialog(i18nKey, callback, meta=None, focusedID=None):
     showDialog(I18nConfirmDialogMeta(i18nKey, meta=meta, focusedID=focusedID), callback)
+
+
+@dialog
+def showI18nCheckBoxDialog(i18nKey, callback, meta=None, focusedID=None):
+    showDialog(CheckBoxDialogMeta(i18nKey, meta=meta, focusedID=focusedID), callback)
 
 
 __ifDisconnectDialogShown = False

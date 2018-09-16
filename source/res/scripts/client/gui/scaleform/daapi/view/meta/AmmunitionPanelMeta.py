@@ -21,3 +21,6 @@ class AmmunitionPanelMeta(ModulesPanelMeta):
 
     def as_updateVehicleStatusS(self, data):
         return self.flashObject.as_updateVehicleStatus(data) if self._isDAAPIInited() else None
+
+    def as_showBattleAbilitiesAlertS(self, value):
+        return self.flashObject.as_showBattleAbilitiesAlert(value) if self._isDAAPIInited() else None

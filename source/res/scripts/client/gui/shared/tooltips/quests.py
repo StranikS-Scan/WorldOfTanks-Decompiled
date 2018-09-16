@@ -214,7 +214,7 @@ class AdditionalAwardTooltipData(BlocksTooltipData):
         items.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.QUESTS_AWARDS_ADDITIONAL_HEADER), padding=formatters.packPadding(top=8, bottom=8)))
         for bonus in args:
             items.append(formatters.packRendererTextBlockData(rendererType='AwardItemExUI', dataType='net.wg.gui.data.AwardItemVO', title=text_styles.main(bonus.name), rendererData={'imgSource': bonus.imgSource,
-             'label': bonus.label}, padding=formatters.packPadding(top=-10, bottom=-10), txtPadding=formatters.packPadding(top=5)))
+             'label': bonus.label}, padding=formatters.packPadding(top=-10, bottom=-10), txtPadding=formatters.packPadding(top=15, left=5)))
             if len(items) > _MAX_AWARDS_PER_TOOLTIP:
                 count = len(args) - len(items) + 1
                 if count > 0:

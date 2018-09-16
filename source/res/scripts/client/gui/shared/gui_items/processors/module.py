@@ -419,6 +419,9 @@ class BattleAbilityInstaller(ModuleInstallProcessor):
 
         epicMetaGameCtrl.changeEquippedSkills(currentSkills, self.vehicle.intCD, lambda code: self._response(code, callback))
 
+    def _successHandler(self, code, ctx=None):
+        return makeSuccess()
+
 
 def getInstallerProcessor(vehicle, newComponentItem, slotIdx=0, install=True, isUseMoney=False, conflictedEqs=None, skipConfirm=False):
     if newComponentItem.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:

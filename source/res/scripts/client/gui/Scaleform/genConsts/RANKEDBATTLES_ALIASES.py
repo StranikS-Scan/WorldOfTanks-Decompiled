@@ -52,7 +52,6 @@ class RANKEDBATTLES_ALIASES(object):
     RANKED_BATTLES_SEASON_COMPLETE_UI = 'rankedBattlesSeasonCompleteView.swf'
     RANKED_BATTLES_STAGE_COMPLETE_UI = 'rankedBattlesStageCompleteView.swf'
     RANKED_BATTLES_BROWSER_VIEW_UI = 'rankedBattlesBrowserView.swf'
-    RANKED_BATTLE_PRIME_TIME_UI = 'rankedBattlesPrimeTime.swf'
     STEP_RECEIVED_STATE = 'received'
     STEP_RECEIVED_BLINK_STATE = 'received_blink'
     STEP_NOT_RECEIVED_STATE = 'not_received'

@@ -26,10 +26,12 @@ class LobbyContext(ILobbyContext):
         self.__epicBattlesCount = None
         self.__clientArenaIDGenerator = Int32IDGenerator()
         self.__headerNavigationConfirmators = set()
+        self.__fightButtonConfirmators = set()
         return
 
     def clear(self):
         self.__headerNavigationConfirmators.clear()
+        self.__fightButtonConfirmators.clear()
         self.__credentials = None
         self.__battlesCount = None
         self.__guiCtx.clear()
@@ -171,6 +173,23 @@ class LobbyContext(ILobbyContext):
     @process
     def isHeaderNavigationPossible(self, callback=None):
         for confirmator in self.__headerNavigationConfirmators:
+            confirmed = yield confirmator()
+            if not confirmed:
+                callback(False)
+
+        callback(True)
+
+    def addFightButtonConfirmator(self, confirmator):
+        self.__fightButtonConfirmators.add(confirmator)
+
+    def deleteFightButtonConfirmator(self, confirmator):
+        if confirmator in self.__fightButtonConfirmators:
+            self.__fightButtonConfirmators.remove(confirmator)
+
+    @async
+    @process
+    def isFightButtonPressPossible(self, callback=None):
+        for confirmator in self.__fightButtonConfirmators:
             confirmed = yield confirmator()
             if not confirmed:
                 callback(False)

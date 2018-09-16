@@ -92,7 +92,7 @@ class SwitchPeripheryRankedCtx(SwitchPeripheryCtx):
         return [actions.OnLobbyInitedAction(onInited=onLobbyInit)]
 
     def isPeripheryAvailable(self, peripheryID):
-        status, _ = self.rankedController.getPrimeTimeStatus(peripheryID)
+        status, _, _ = self.rankedController.getPrimeTimeStatus(peripheryID)
         return status == PRIME_TIME_STATUS.AVAILABLE
 
     def getUpdateTime(self):

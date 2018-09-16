@@ -40,6 +40,7 @@ HIGH_ENERGY_COLLISION_D = 0.6
 _g_waitingVehicle = dict()
 _VALKYRIE_SOUND_MODES = {(6, 205): 'valkyrie1',
  (6, 206): 'valkyrie2'}
+_GIANLUIGI_BUFFON_VEH_NAME = 'italy:It13_Progetto_M35_mod_46'
 
 class _Vector4Provider(object):
     __slots__ = ('_v',)
@@ -623,6 +624,10 @@ class Vehicle(BigWorld.Entity):
             if nationID == nations.INDICES['sweden'] and tankmen.hasTagInTankmenGroup(nationID, groupID, isPremium, sabaton_crew.SABATON_VEH_NAME):
                 SoundGroups.g_instance.setSwitch(CREW_GENDER_SWITCHES.GROUP, CREW_GENDER_SWITCHES.MALE)
                 SoundGroups.g_instance.soundModes.setMode('sabaton')
+                return
+            if nationID == nations.INDICES['italy'] and tankmen.hasTagInTankmenGroup(nationID, groupID, isPremium, _GIANLUIGI_BUFFON_VEH_NAME):
+                SoundGroups.g_instance.setSwitch(CREW_GENDER_SWITCHES.GROUP, CREW_GENDER_SWITCHES.MALE)
+                SoundGroups.g_instance.soundModes.setMode('buffon')
                 return
             if vehicleTypeID in _VALKYRIE_SOUND_MODES and self.id == player.playerVehicleID:
                 SoundGroups.g_instance.soundModes.setMode(_VALKYRIE_SOUND_MODES[vehicleTypeID])

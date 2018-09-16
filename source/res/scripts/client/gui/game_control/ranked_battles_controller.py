@@ -469,20 +469,20 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
 
     def getPrimeTimeStatus(self, peripheryID=None):
         if not self.isEnabled():
-            return (PRIME_TIME_STATUS.DISABLED, 0)
+            return (PRIME_TIME_STATUS.DISABLED, 0, False)
         else:
             if peripheryID is None:
                 peripheryID = self.connectionMgr.peripheryID
             primeTime = self.getPrimeTimes().get(peripheryID)
             if primeTime is None:
-                return (PRIME_TIME_STATUS.NOT_SET, 0)
+                return (PRIME_TIME_STATUS.NOT_SET, 0, False)
             if not primeTime.hasAnyPeriods():
-                return (PRIME_TIME_STATUS.FROZEN, 0)
+                return (PRIME_TIME_STATUS.FROZEN, 0, False)
             currentSeason = self.getCurrentSeason()
             if currentSeason is None:
-                return (PRIME_TIME_STATUS.NO_SEASON, 0)
+                return (PRIME_TIME_STATUS.NO_SEASON, 0, False)
             isNow, timeLeft = primeTime.getAvailability(time_utils.getCurrentLocalServerTimestamp(), self.getCurrentSeason().getCycleEndDate())
-            return (PRIME_TIME_STATUS.AVAILABLE, timeLeft) if isNow else (PRIME_TIME_STATUS.NOT_AVAILABLE, timeLeft)
+            return (PRIME_TIME_STATUS.AVAILABLE, timeLeft, isNow) if isNow else (PRIME_TIME_STATUS.NOT_AVAILABLE, timeLeft, False)
 
     def hasAnyPeripheryWithPrimeTime(self):
         if not self.isAvailable():
@@ -787,7 +787,7 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
             self.__resetTimer()
 
     def __getTimer(self):
-        _, timeLeft = self.getPrimeTimeStatus()
+        _, timeLeft, _ = self.getPrimeTimeStatus()
         return timeLeft + 1 if timeLeft > 0 else time_utils.ONE_MINUTE
 
     def __resetTimer(self):
@@ -795,5 +795,5 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         self.__timerUpdate()
 
     def __timerUpdate(self):
-        status, _ = self.getPrimeTimeStatus()
+        status, _, _ = self.getPrimeTimeStatus()
         self.onPrimeTimeStatusUpdated(status)

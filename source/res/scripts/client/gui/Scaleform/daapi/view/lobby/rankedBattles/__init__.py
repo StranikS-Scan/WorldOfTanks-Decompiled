@@ -3,6 +3,7 @@
 from gui.Scaleform.framework import ScopeTemplates, GroupedViewSettings
 from gui.Scaleform.framework import ViewSettings, ViewTypes
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
+from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.app_loader import settings as app_settings
 from gui.shared import EVENT_BUS_SCOPE
@@ -35,7 +36,7 @@ def getViewSettings():
      ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE, RankedBattlesSeasonCompleteView, RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE_UI, ViewTypes.OVERLAY, RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
      ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_STAGE_COMPLETE, RankedBattlesStageCompleteView, RANKEDBATTLES_ALIASES.RANKED_BATTLES_STAGE_COMPLETE_UI, ViewTypes.OVERLAY, RANKEDBATTLES_ALIASES.RANKED_BATTLES_STAGE_COMPLETE, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
      ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLE_RESULTS_WIDGET, RankedBattleResultsWidget, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, RankedBattlesPrimeTimeView, RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME_UI, ViewTypes.LOBBY_SUB, RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True))
+     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, RankedBattlesPrimeTimeView, HANGAR_ALIASES.PRIME_TIME_UI, ViewTypes.LOBBY_SUB, RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True))
 
 
 def getBusinessHandlers():

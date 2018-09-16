@@ -52,6 +52,7 @@ class EpicBattlesSkillView(LobbySubView, EpicBattlesSkillViewMeta):
 
     def onSkillOverLevel(self, skillID, level):
         self.__updateSkillDataBlock(skillID, level)
+        SoundGroups.g_instance.playSound2D('highlight')
 
     def _populate(self):
         super(EpicBattlesSkillView, self)._populate()

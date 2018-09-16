@@ -1,24 +1,31 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/epic/pre_queue/entity.py
 import BigWorld
+import constants
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
 from constants import QUEUE_TYPE
 from debug_utils import LOG_DEBUG
+from gui import SystemMessages
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control import prb_getters
+from gui.prb_control.ctrl_events import g_prbCtrlEvents
 from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.entities.base import vehicleAmmoCheck
 from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, PreQueueEntryPoint, PreQueueEntity
 from gui.prb_control.entities.epic.pre_queue.ctx import EpicQueueCtx
 from gui.prb_control.items import SelectResult
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG, PRE_QUEUE_JOIN_ERRORS
 from account_helpers.AccountSettings import AccountSettings, GUI_START_BEHAVIOR
 from gui.prb_control.storages import prequeue_storage_getter
 from gui.prb_control.entities.epic.pre_queue.actions_validator import EpicActionsValidator
 from gui.prb_control.entities.epic.pre_queue.vehicles_watcher import EpicVehiclesWatcher
 from gui.prb_control.entities.epic.squad.entity import EpicSquadEntryPoint
-from helpers import dependency
+from gui.ranked_battles.constants import PRIME_TIME_STATUS
+from gui.shared.event_dispatcher import showEpicBattlesPrimeTimeWindow
+from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 
 class EpicSubscriber(PreQueueSubscriber):
 
@@ -40,9 +47,37 @@ class EpicSubscriber(PreQueueSubscriber):
 
 
 class EpicEntryPoint(PreQueueEntryPoint):
+    epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self):
         super(EpicEntryPoint, self).__init__(FUNCTIONAL_FLAG.EPIC, QUEUE_TYPE.EPIC)
+
+    def select(self, ctx, callback=None):
+        status, _, _ = self.epicController.getPrimeTimeStatus()
+        if status in (PRIME_TIME_STATUS.DISABLED, PRIME_TIME_STATUS.FROZEN, PRIME_TIME_STATUS.NO_SEASON):
+            SystemMessages.pushMessage(i18n.makeString(SYSTEM_MESSAGES.EPICBATTLES_NOTIFICATION_NOTAVAILABLE), type=SystemMessages.SM_TYPE.Error)
+            if callback is not None:
+                callback(False)
+            g_prbCtrlEvents.onPreQueueJoinFailure(PRE_QUEUE_JOIN_ERRORS.DISABLED)
+            return
+        elif status in self._getFilterStates() and not constants.IS_CHINA:
+            showEpicBattlesPrimeTimeWindow()
+            if callback is not None:
+                callback(False)
+            g_prbCtrlEvents.onPreQueueJoinFailure(PRE_QUEUE_JOIN_ERRORS.NOT_AVAILABLE)
+            return
+        else:
+            super(EpicEntryPoint, self).select(ctx, callback)
+            return
+
+    def _getFilterStates(self):
+        return (PRIME_TIME_STATUS.NOT_SET, PRIME_TIME_STATUS.NOT_AVAILABLE)
+
+
+class EpicForcedEntryPoint(EpicEntryPoint):
+
+    def _getFilterStates(self):
+        return (PRIME_TIME_STATUS.NOT_SET,)
 
 
 class EpicEntity(PreQueueEntity):
@@ -91,7 +126,7 @@ class EpicEntity(PreQueueEntity):
 
     def doSelectAction(self, action):
         name = action.actionName
-        if name == PREBATTLE_ACTION_NAME.EPIC:
+        if name in (PREBATTLE_ACTION_NAME.EPIC, PREBATTLE_ACTION_NAME.EPIC_FORCED):
             return SelectResult(True)
         return SelectResult(True, EpicSquadEntryPoint(accountsToInvite=action.accountsToInvite)) if name == PREBATTLE_ACTION_NAME.SQUAD else super(EpicEntity, self).doSelectAction(action)
 

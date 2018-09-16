@@ -12,13 +12,11 @@ from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import LoadViewEvent
 from skeletons.gui.game_control import IEpicBattleMetaGameController
-from helpers import i18n, dependency
+from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from gui.ranked_battles.constants import PRIME_TIME_STATUS
-from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
-from gui.shared.utils.functions import makeTooltip
 
 class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
     eventsCache = dependency.descriptor(IEventsCache)
@@ -90,9 +88,4 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
 
     def __getEpicAvailabilityData(self):
         status, _, _ = self.epicQueueController.getPrimeTimeStatus()
-        if status == PRIME_TIME_STATUS.NOT_AVAILABLE:
-            return (TOOLTIPS_CONSTANTS.EPIC_SELECTOR_INFO, True)
-        header = i18n.makeString(EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_ENABLED_HEADER)
-        body = i18n.makeString(EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_ENABLED_BODY)
-        res = makeTooltip(header, body)
-        return (res, False)
+        return (TOOLTIPS_CONSTANTS.EPIC_SELECTOR_UNAVAILABLE_INFO, True) if status == PRIME_TIME_STATUS.NOT_AVAILABLE else (TOOLTIPS_CONSTANTS.EPIC_SELECTOR_INFO, True)

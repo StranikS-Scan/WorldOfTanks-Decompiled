@@ -18,7 +18,6 @@ _PLAYER_STATUS = settings.PLAYER_STATUS
 _DELIVERY_STATUS = settings.INVITATION_DELIVERY_STATUS
 _DEFAULT_PLAYER_GROUP = 1
 _DEFAULT_PLAYER_RANK = 0
-_DEFAULT_PHYSICAL_LANE = 1
 _DEFAULT_PHYSICAL_SECTOR = 1
 _DEFAULT_HAS_RESPAWNS = True
 
@@ -36,14 +35,14 @@ class EPIC_RANDOM_KEYS(object):
 
 class EPIC_BATTLE_KEYS():
     RANK = 'playerRank'
-    PHYSICAL_LANE = 'physicalLane'
+    PLAYER_GROUP = 'playerGroup'
     PHYSICAL_SECTOR = 'physicalSector'
     HAS_RESPAWNS = 'hasRespawns'
 
     @staticmethod
     def getKeys(static=True):
         return [] if static else [(EPIC_BATTLE_KEYS.RANK, _DEFAULT_PLAYER_RANK),
-         (EPIC_BATTLE_KEYS.PHYSICAL_LANE, _DEFAULT_PHYSICAL_LANE),
+         (EPIC_BATTLE_KEYS.PLAYER_GROUP, _DEFAULT_PLAYER_GROUP),
          (EPIC_BATTLE_KEYS.PHYSICAL_SECTOR, _DEFAULT_PHYSICAL_SECTOR),
          (EPIC_BATTLE_KEYS.HAS_RESPAWNS, _DEFAULT_HAS_RESPAWNS)]
 
@@ -74,7 +73,7 @@ class GameModeDataVO(object):
         for key, value in data.items():
             if key in self.__sortingKeys:
                 invalidate = _INVALIDATE_OP.SORTING
-            if self.__internalData.get(key) and self.__internalData[key] != value:
+            if key in self.__internalData and self.__internalData[key] != value:
                 invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.VEHICLE_STATS)
             self.__internalData[key] = value
 

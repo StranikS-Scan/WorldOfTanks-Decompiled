@@ -4,7 +4,6 @@ from gui.Scaleform import MENU
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.shared.formatters import text_styles
 from gui.shared.tooltips import TOOLTIP_TYPE
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
@@ -13,20 +12,22 @@ from helpers import dependency, i18n, time_utils
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
+from gui.game_control.epic_meta_game_ctrl import EPIC_PERF_GROUP
+from gui.shared.formatters import text_styles, icons
 _TOOLTIP_MIN_WIDTH = 280
 
-class EpicMetaGameSelectorTooltip(BlocksTooltipData):
+class EpicMetaGameUnavailableTooltip(BlocksTooltipData):
     connectionMgr = dependency.descriptor(IConnectionManager)
     epicController = dependency.descriptor(IEpicBattleMetaGameController)
 
     def __init__(self, ctx):
-        super(EpicMetaGameSelectorTooltip, self).__init__(ctx, TOOLTIP_TYPE.EPIC_SELECTOR_INFO)
+        super(EpicMetaGameUnavailableTooltip, self).__init__(ctx, TOOLTIP_TYPE.EPIC_SELECTOR_UNAVAILABLE_INFO)
         self._setContentMargin(top=20, left=20, bottom=20, right=20)
         self._setMargins(afterBlock=20)
         self._setWidth(_TOOLTIP_MIN_WIDTH)
 
     def _packBlocks(self, *args):
-        items = super(EpicMetaGameSelectorTooltip, self)._packBlocks()
+        items = super(EpicMetaGameUnavailableTooltip, self)._packBlocks()
         items.append(self._packHeaderBlock())
         timeTableBlocks = [self._packTimeTableHeaderBlock()]
         primeTime = self.epicController.getPrimeTimes().get(self.connectionMgr.peripheryID, None)
@@ -78,3 +79,34 @@ class EpicMetaGameSelectorTooltip(BlocksTooltipData):
         else:
             endKey = EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_DISABLED_STARTIN
         return formatters.packTextBlockData(text_styles.main(endKey) + ' ' + text_styles.stats(time_utils.getTillTimeString(timeLeft, MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY)))
+
+
+class EpicSelectorWarningTooltip(BlocksTooltipData):
+    epicController = dependency.descriptor(IEpicBattleMetaGameController)
+
+    def __init__(self, context):
+        super(EpicSelectorWarningTooltip, self).__init__(context, None)
+        self._setContentMargin(top=20, left=20, bottom=20, right=20)
+        self._setMargins(afterBlock=20)
+        self._setWidth(540)
+        return
+
+    def _packBlocks(self, *args, **kwargs):
+        items = super(EpicSelectorWarningTooltip, self)._packBlocks(*args, **kwargs)
+        bodyKey = EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_ENABLED_BODY
+        additionalInfo = self.__getPerformanceWarningText()
+        body = '%s\n\n%s' % (i18n.makeString(bodyKey), additionalInfo)
+        items.append(formatters.packImageTextBlockData(title=text_styles.middleTitle(EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_ENABLED_HEADER), desc=text_styles.main(body)))
+        return items
+
+    def __getPerformanceWarningText(self):
+        performanceGroup = self.epicController.getPerformanceGroup()
+        attentionText = text_styles.main(EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_ENABLED_ATTENTION_INFORMATIVELOWPERFORMANCE)
+        iconSrc = RES_ICONS.MAPS_ICONS_LIBRARY_INFORMATIONICON
+        if performanceGroup == EPIC_PERF_GROUP.HIGH_RISK:
+            attentionText = text_styles.error(EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_ENABLED_ATTENTION_ASSUREDLOWPERFORMANCE)
+            iconSrc = RES_ICONS.MAPS_ICONS_LIBRARY_MARKER_BLOCKED
+        elif performanceGroup == EPIC_PERF_GROUP.MEDIUM_RISK:
+            attentionText = text_styles.neutral(EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_ENABLED_ATTENTION_POSSIBLELOWPERFORMANCE)
+            iconSrc = RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICON
+        return icons.makeImageTag(iconSrc, vSpace=-3) + ' ' + attentionText

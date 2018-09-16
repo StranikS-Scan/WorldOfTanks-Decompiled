@@ -138,8 +138,9 @@ def getRepaint(outfit, containerId, vDesc):
     quality = fading = 0.0
     overlapMetallic = overlapGloss = None
     nationID = vDesc.type.customizationNationID
+    colorId = vDesc.type.baseColorID
     defaultColors = items.vehicles.g_cache.customization20().defaultColors
-    defaultColor = defaultColors[nationID]
+    defaultColor = defaultColors[nationID][colorId]
     mod = outfit.misc.slotFor(GUI_ITEM_TYPE.MODIFICATION).getItem()
     if mod:
         enabled = True

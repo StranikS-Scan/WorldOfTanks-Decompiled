@@ -81,7 +81,7 @@ class RankedBattlesView(LobbySubView, RankedBattlesViewMeta):
         self.destroy()
 
     def __getStatusBlock(self):
-        status, timeLeft = self.rankedController.getPrimeTimeStatus()
+        status, timeLeft, _ = self.rankedController.getPrimeTimeStatus()
         showPrimeTimeAlert = status != PRIME_TIME_STATUS.AVAILABLE
         return {'alertIcon': RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON if showPrimeTimeAlert else None,
          'buttonIcon': RES_ICONS.MAPS_ICONS_BUTTONS_CALENDAR,

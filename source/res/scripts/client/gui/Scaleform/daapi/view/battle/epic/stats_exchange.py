@@ -39,7 +39,7 @@ class EpicStatsComponent(vehicle.VehicleStatsComponent):
 
     def addStats(self, vStatsVO):
         self._vehicleID = vStatsVO.vehicleID
-        self._lane = vStatsVO.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PHYSICAL_LANE)
+        self._lane = vStatsVO.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PLAYER_GROUP)
         self._rank = vStatsVO.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.RANK)
         self._hasRespawns = vStatsVO.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.HAS_RESPAWNS)
         if self._rank is None:
@@ -95,6 +95,13 @@ class EpicStatisticsDataController(EpicBattleStatisticDataControllerMeta):
         data = exchange.get()
         if data:
             self.as_updateVehicleStatusS(data)
+
+    def _populate(self):
+        super(EpicStatisticsDataController, self)._populate()
+        componentSystem = self._arenaVisitor.getComponentSystem()
+        playerComp = getattr(componentSystem, 'playerDataComponent', None)
+        playerComp.setPlayerLaneByPlayerGroups()
+        return
 
     def _createExchangeBroker(self, exchangeCtx):
         exchangeBroker = createExchangeBroker(exchangeCtx)

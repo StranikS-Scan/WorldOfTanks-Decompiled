@@ -274,7 +274,10 @@ class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ['maxCombatReserveLe
 
 _EpicMetaGameConfig.__new__.__defaults__ = (0, 0, {})
 
-class _EpicGameConfig(namedtuple('_EpicGameConfig', ['enabled', 'validVehicleLevels', 'season'])):
+class _EpicGameConfig(namedtuple('_EpicGameConfig', ['enabled',
+ 'validVehicleLevels',
+ 'season',
+ 'peripheryIDs'])):
 
     def asDict(self):
         return self._asdict()
@@ -285,7 +288,10 @@ class _EpicGameConfig(namedtuple('_EpicGameConfig', ['enabled', 'validVehicleLev
         return self._replace(**dataToUpdate)
 
 
-_EpicGameConfig.__new__.__defaults__ = (1, [10], {})
+_EpicGameConfig.__new__.__defaults__ = (1,
+ [10],
+ {},
+ {})
 
 class _TelecomConfig(object):
     __slots__ = ('__config',)

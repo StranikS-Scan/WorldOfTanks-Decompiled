@@ -13,7 +13,7 @@ from gui.prb_control.events_dispatcher import g_eventDispatcher
 from gui.prb_control.prb_getters import areSpecBattlesHidden
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.prb_control.settings import SELECTOR_BATTLE_TYPES
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, icons
 from gui.shared.utils import SelectorBattleTypesUtils as selectorUtils
 from helpers import i18n, time_utils, dependency
 from skeletons.gui.game_control import IRankedBattlesController
@@ -23,6 +23,7 @@ from skeletons.gui.server_events import IEventsCache
 from gui.clans.clan_helpers import isStrongholdsEnabled
 from gui.ranked_battles.ranked_helpers import getRankedBattlesUrl
 from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
+from gui.game_control.epic_meta_game_ctrl import EPIC_PERF_GROUP
 _SMALL_ICON_PATH = '../maps/icons/battleTypes/40x40/{0}.png'
 _LARGER_ICON_PATH = '../maps/icons/battleTypes/64x64/{0}.png'
 
@@ -259,18 +260,29 @@ class _EpicQueueItem(_SelectorItem):
     def __getAvailabilityStr(self):
         _, time, _ = self.epicQueueController.getPrimeTimeStatus()
         timeLeftStr = time_utils.getTillTimeString(time, EPIC_BATTLE.STATUS_TIMELEFT)
-        return None if self.epicQueueController.isInPrimeTime() else text_styles.main(i18n.makeString(EPIC_BATTLE.TOOLTIP_EPICBATTLE_AVAILABLEIN, time=timeLeftStr))
+        if not self.epicQueueController.isInPrimeTime():
+            availablePrimeTime = self.epicQueueController.hasAnySeason() and self.epicQueueController.getPrimeTimeStatus()[1] != 0
+            if availablePrimeTime:
+                return text_styles.main(i18n.makeString(EPIC_BATTLE.TOOLTIP_EPICBATTLE_AVAILABLEIN, time=timeLeftStr))
+            return None
+        currPerformanceGroup = self.epicQueueController.getPerformanceGroup()
+        if currPerformanceGroup == EPIC_PERF_GROUP.HIGH_RISK:
+            attention = text_styles.error(MENU.HEADERBUTTONS_BATTLE_MENU_ATTENTION_LOWPERFORMANCE)
+            return icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_MARKER_BLOCKED, vSpace=-3) + ' ' + attention
+        elif currPerformanceGroup == EPIC_PERF_GROUP.MEDIUM_RISK:
+            attention = text_styles.neutral(MENU.HEADERBUTTONS_BATTLE_MENU_ATTENTION_REDUCEDPERFORMANCE)
+            return icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICON, vSpace=-3) + ' ' + attention
+        else:
+            return None
 
     def _update(self, state):
         isNow = self.epicQueueController.isInPrimeTime()
         isEpicEnabled = self.lobbyContext.getServerSettings().isEpicBattleEnabled()
-        if not isNow or not isEpicEnabled:
+        if not isEpicEnabled or not isNow:
             self._isLocked = True
         self._isDisabled = state.hasLockedState
         self._isSelected = state.isQueueSelected(QUEUE_TYPE.EPIC)
-        availablePrimeTime = self.epicQueueController.hasAnySeason() and self.epicQueueController.getPrimeTimeStatus()[1] != 0
-        isEpicEnabled = self.lobbyContext.getServerSettings().isEpicBattleEnabled()
-        self._isVisible = True if isEpicEnabled and availablePrimeTime else False
+        self._isVisible = isEpicEnabled
 
 
 class _BattleSelectorItems(object):

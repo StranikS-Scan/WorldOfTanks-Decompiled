@@ -212,20 +212,20 @@
       <navmeshGirth>	6.0	</navmeshGirth>
       <groundNodes>
         <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
           <template>	Track_R	</template>
           <startIndex>	0	</startIndex>
           <count>	6	</count>
           <isLeft>	false	</isLeft>
           <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.005	</maxOffset>
-        </group>
-        <group>
-          <template>	Track_L	</template>
-          <startIndex>	0	</startIndex>
-          <count>	6	</count>
-          <isLeft>	false	</isLeft>
-          <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.005	</maxOffset>
+          <maxOffset>	0.1	</maxOffset>
         </group>
       </groundNodes>
       <splineDesc>
@@ -244,7 +244,7 @@
           <VTiles>	1	</VTiles>
         </atlas>
       </splineDesc>
-      <trackThickness>	0.0175439	</trackThickness>
+      <trackThickness>	-0.00454545	</trackThickness>
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
@@ -446,15 +446,15 @@
           <count>	6	</count>
           <isLeft>	false	</isLeft>
           <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.005	</maxOffset>
+          <maxOffset>	0.1	</maxOffset>
         </group>
         <group>
           <template>	Track_L	</template>
           <startIndex>	0	</startIndex>
           <count>	6	</count>
-          <isLeft>	false	</isLeft>
+          <isLeft>	true	</isLeft>
           <minOffset>	-0.1	</minOffset>
-          <maxOffset>	0.005	</maxOffset>
+          <maxOffset>	0.1	</maxOffset>
         </group>
       </groundNodes>
       <splineDesc>
@@ -697,7 +697,7 @@
         <collisionModelServer>	vehicles/italy/It14_P44_Pantera/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/italy/It14_P44_Pantera/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.22138 0.807153	</gunPosition>
+      <gunPosition>	0.000000 0.2218 0.8937	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	-0.975921 0.384359 0.513165	</rayStart>
@@ -731,7 +731,7 @@
       </emblemSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <physicsShape>	1.029 -0.025 1.012 0.008 0.398 0.390 0.763 0.398 0.353 0.494 0.340 0.502 0.237 0.402 0.100	</physicsShape>
     </Turret_1_It14_P44_Pantera>
     <Turret_2_It14_P44_Pantera>
       <userString>	#italy_vehicles:Turret_2_It14_P44_Pantera	</userString>
@@ -881,7 +881,7 @@
         <collisionModelServer>	vehicles/italy/It14_P44_Pantera/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/italy/It14_P44_Pantera/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.314 0.84043	</gunPosition>
+      <gunPosition>	0.000000 0.314 0.9116	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	-0.966014 0.463513 0.481649	</rayStart>
@@ -915,7 +915,7 @@
       </emblemSlots>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+      <physicsShape>	1.029 -0.025 0.988 0.008 0.432 0.373 0.763 0.398 0.452 0.498 0.303 0.498 0.237 0.402 0.100	</physicsShape>
     </Turret_2_It14_P44_Pantera>
   </turrets0>
   <engines>

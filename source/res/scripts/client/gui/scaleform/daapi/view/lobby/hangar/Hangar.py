@@ -192,7 +192,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __updateAlertMessage(self):
         if self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
-            status, timeLeft = self.rankedController.getPrimeTimeStatus()
+            status, timeLeft, _ = self.rankedController.getPrimeTimeStatus()
             visible = status == PRIME_TIME_STATUS.NOT_AVAILABLE
             self.as_setAlertMessageBlockVisibleS(visible)
             if visible and self.alertMessage is not None:

@@ -149,6 +149,7 @@ class PREBATTLE_ACTION_NAME(object):
     RANKED_FORCED = 'rankedForced'
     EPIC_DEV = 'epicBattle'
     EPIC = 'epicQueue'
+    EPIC_FORCED = 'epicForced'
 
 
 class PREBATTLE_INIT_STEP(object):

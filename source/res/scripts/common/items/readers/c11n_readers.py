@@ -312,8 +312,12 @@ def _readDefaultColors(cache, xmlCtx, section, sectionName):
         if tag != sectionName:
             continue
         nation = ix.readString(xmlCtx, iSection, 'nation')
-        color = iv._readColor(xmlCtx, iSection, 'color')
-        cache.defaultColors[nations.INDICES[nation]] = color
+        colors = []
+        scolors = iSection['colors']
+        for idx, (ctag, csection) in enumerate(scolors.items()):
+            colors.append(iv._readColor((xmlCtx, 'color {}'.format(idx)), scolors, ctag))
+
+        cache.defaultColors[nations.INDICES[nation]] = tuple(colors)
 
 
 def readFlagEnum(xmlCtx, section, subsectionName, enumClass, defaultValue=None):

@@ -55,5 +55,21 @@
       </condition>
       <equal-actions>	True	</equal-actions>
     </hint>
+    <hint>	EpicReservesSlotHint	  <item-id>	EpicReservesSlot	</item-id>
+      <text>	_(#epic_battle:tutorial/hint/epicReservesSlotHint)	</text>
+      <arrow>
+        <direction>	T	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <equal-actions>	True	</equal-actions>
+    </hint>
+    <hint>	EpicReservesBtnHint	  <item-id>	EpicReservesBtn	</item-id>
+      <text>	_(#epic_battle:tutorial/hint/epicReservesBtnHint)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <equal-actions>	True	</equal-actions>
+    </hint>
   </hints>
 </once-only-hints.xml>

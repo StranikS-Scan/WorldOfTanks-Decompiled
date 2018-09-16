@@ -598,6 +598,8 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_MENU_UNIT = '#menu:headerButtons/battle/menu/unit'
     HEADERBUTTONS_BATTLE_MENU_HISTORICAL = '#menu:headerButtons/battle/menu/historical'
     HEADERBUTTONS_BATTLE_MENU_EPICBATTLE = '#menu:headerButtons/battle/menu/epicBattle'
+    HEADERBUTTONS_BATTLE_MENU_ATTENTION_LOWPERFORMANCE = '#menu:headerButtons/battle/menu/attention/lowPerformance'
+    HEADERBUTTONS_BATTLE_MENU_ATTENTION_REDUCEDPERFORMANCE = '#menu:headerButtons/battle/menu/attention/reducedPerformance'
     HEADERBUTTONS_HANGAR = '#menu:headerButtons/hangar'
     HEADERBUTTONS_SHOP = '#menu:headerButtons/shop'
     HEADERBUTTONS_BATTLE = '#menu:headerButtons/battle'

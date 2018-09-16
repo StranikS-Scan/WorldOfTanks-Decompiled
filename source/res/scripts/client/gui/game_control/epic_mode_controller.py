@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/epic_mode_controller.py
+import BigWorld
 from account_helpers.settings_core.settings_constants import GAME
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import GUI_START_BEHAVIOR
@@ -8,7 +9,6 @@ from skeletons.gui.game_control import IEpicModeController
 from debug_utils import LOG_DEBUG
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
-import BigWorld
 _RESTRICED_PRESET_NAMES = ['MIN']
 _VIRTUAL_MEMORY_LIMIT = 2048
 

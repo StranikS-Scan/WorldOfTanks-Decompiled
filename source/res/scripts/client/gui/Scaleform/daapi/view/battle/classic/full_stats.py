@@ -1,5 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/classic/full_stats.py
+import BattleReplay
+from ReplayEvents import g_replayEvents
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import SELECTED_QUEST_IN_REPLAY
 from gui.Scaleform.daapi.view.meta.FullStatsMeta import FullStatsMeta
 from account_helpers.settings_core.options import QuestsProgressViewType
 from account_helpers.settings_core.settings_constants import QUESTS_PROGRESS
@@ -53,6 +57,9 @@ class FullStatsComponent(FullStatsMeta):
             if qProgressCtrl.isInited():
                 self.__setNoQuestsDescription()
                 self.__setQuestTrackingData()
+        if BattleReplay.g_replayCtrl.isPlaying:
+            g_replayEvents.onTimeWarpStart += self.__onReplayTimeWarpStart
+            g_replayEvents.onTimeWarpFinish += self.__onReplayTimeWarpFinished
         return
 
     def _dispose(self):
@@ -61,11 +68,28 @@ class FullStatsComponent(FullStatsMeta):
         self.settingsCore.onSettingsChanged -= self.__onSettingsChange
         if qProgressCtrl is not None:
             qProgressCtrl.onQuestProgressInited -= self.__onQuestProgressInited
+        if BattleReplay.g_replayCtrl.isPlaying:
+            g_replayEvents.onTimeWarpStart -= self.__onReplayTimeWarpStart
+            g_replayEvents.onTimeWarpFinish -= self.__onReplayTimeWarpFinished
         return
 
     def __onQuestProgressInited(self):
         self.__setNoQuestsDescription()
         self.__setQuestTrackingData()
+
+    def __onReplayTimeWarpFinished(self):
+        questID = AccountSettings.getSettings(SELECTED_QUEST_IN_REPLAY)
+        if questID:
+            self.onSelectQuest(questID)
+        AccountSettings.setSettings(SELECTED_QUEST_IN_REPLAY, questID)
+
+    def __onReplayTimeWarpStart(self):
+        quest = self.sessionProvider.shared.questProgress.getSelectedQuest()
+        questID = None
+        if quest:
+            questID = quest.getID()
+        AccountSettings.setSettings(SELECTED_QUEST_IN_REPLAY, questID)
+        return
 
     def __onSettingsChange(self, diff):
         if QUESTS_PROGRESS.VIEW_TYPE in diff:
@@ -89,7 +113,8 @@ class FullStatsComponent(FullStatsMeta):
              'fullMissionName': makeString(quest.getUserName()),
              'operationName': makeString(operation.getShortUserName()),
              'vehicle': QUESTSPROGRESS.getOperationTrackingIcon(operation.getID()),
-             'questID': quest.getID()})
+             'questID': quest.getID(),
+             'onPause': quest.isOnPause})
 
         progressTracingText = ''
         if not self.__isProgressTrackingAvailable:

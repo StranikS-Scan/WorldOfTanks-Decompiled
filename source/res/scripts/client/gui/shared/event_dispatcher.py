@@ -1,13 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
 import urlparse
+from CurrentVehicle import HeroTankPreviewAppearance
 from adisp import process
 from debug_utils import LOG_WARNING
 from gui import SystemMessages
-from CurrentVehicle import HeroTankPreviewAppearance
-from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
-from gui.Scaleform.locale.MESSENGER import MESSENGER
-from gui.app_loader import g_appLoader
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL, isIngameShopEnabled
@@ -16,19 +13,20 @@ from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
+from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
+from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.app_loader import g_appLoader
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
-from gui.shared import events, g_eventBus
-from gui.shared.money import MONEY_UNDEFINED
+from gui.shared import events, g_eventBus, money
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName, getUniqueViewName
 from helpers import dependency
-from helpers.aop import pointcutable
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IHeroTankController
-from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 from soft_exception import SoftException
 
 class SETTINGS_TAB_INDEX(object):
@@ -89,7 +87,7 @@ def showVehicleSellDialog(vehInvID):
 
 
 def showVehicleBuyDialog(vehicle, isTradeIn=False, previousAlias=None):
-    from gui.impl.views.lobby.buy_vehicle_view import BuyVehicleWindow
+    from gui.impl.lobby.buy_vehicle_view import BuyVehicleWindow
     ctx = {'nationID': vehicle.nationID,
      'itemID': vehicle.innationID,
      'isTradeIn': isTradeIn,
@@ -171,28 +169,29 @@ def showOldVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR
      'previewBackCb': previewBackCb}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, price=MONEY_UNDEFINED, oldPrice=None, title='', endTime=None, buyParams=None):
-    heroTankCtrl = dependency.instance(IHeroTankController)
-    heroTankCD = heroTankCtrl.getCurrentTankCD()
-    if heroTankCD and heroTankCD == vehTypeCompDescr:
+def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS, vehStrCD=None, previewBackCb=None, itemsPack=None, price=money.MONEY_UNDEFINED, oldPrice=None, title='', endTime=None, buyParams=None):
+    lobbyContext = dependency.instance(ILobbyContext)
+    newPreviewEnabled = lobbyContext.getServerSettings().isIngamePreviewEnabled()
+    heroTankController = dependency.instance(IHeroTankController)
+    heroTankCD = heroTankController.getCurrentTankCD()
+    isHeroTank = heroTankCD and heroTankCD == vehTypeCompDescr
+    if isHeroTank and not itemsPack:
         goToHeroTankOnScene(vehTypeCompDescr, previewAlias)
+    elif newPreviewEnabled:
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_PREVIEW_20, ctx={'itemCD': vehTypeCompDescr,
+         'previewAlias': previewAlias,
+         'vehicleStrCD': vehStrCD,
+         'previewBackCb': previewBackCb,
+         'itemsPack': itemsPack,
+         'price': price,
+         'oldPrice': oldPrice,
+         'title': title,
+         'endTime': endTime,
+         'buyParams': buyParams}), scope=EVENT_BUS_SCOPE.LOBBY)
+    elif itemsPack:
+        SystemMessages.pushMessage(text=_ms(MESSENGER.CLIENT_ERROR_SHARED_TRY_LATER), type=SystemMessages.SM_TYPE.Error, priority=NotificationPriorityLevel.MEDIUM)
     else:
-        lobbyContext = dependency.instance(ILobbyContext)
-        if lobbyContext.getServerSettings().isIngamePreviewEnabled():
-            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_PREVIEW_20, ctx={'itemCD': vehTypeCompDescr,
-             'previewAlias': previewAlias,
-             'vehicleStrCD': vehStrCD,
-             'previewBackCb': previewBackCb,
-             'itemsPack': itemsPack,
-             'price': price,
-             'oldPrice': oldPrice,
-             'title': title,
-             'endTime': endTime,
-             'buyParams': buyParams}), scope=EVENT_BUS_SCOPE.LOBBY)
-        elif itemsPack:
-            SystemMessages.pushMessage(text=_ms(MESSENGER.CLIENT_ERROR_SHARED_TRY_LATER), type=SystemMessages.SM_TYPE.Error, priority=NotificationPriorityLevel.MEDIUM)
-        else:
-            showOldVehiclePreview(vehTypeCompDescr, previewAlias, vehStrCD, previewBackCb)
+        showOldVehiclePreview(vehTypeCompDescr, previewAlias, vehStrCD, previewBackCb)
 
 
 def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR):
@@ -202,13 +201,13 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR):
     for entity in BigWorld.entities.values():
         if entity and isinstance(entity, HeroTank):
             ClientSelectableCameraObject.switchCamera(entity)
-            showHeroTankPreview(vehTypeCompDescr, previewAlias=previewAlias, previousBackAlias=None, objectSelectionEnabled=False)
+            showHeroTankPreview(vehTypeCompDescr, previewAlias=previewAlias, previousBackAlias=None)
             break
 
     return
 
 
-def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, objectSelectionEnabled=True):
+def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None):
     lobbyContext = dependency.instance(ILobbyContext)
     if lobbyContext.getServerSettings().isIngamePreviewEnabled():
         alias = VIEW_ALIAS.HERO_VEHICLE_PREVIEW_20
@@ -218,8 +217,7 @@ def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, 
      'previewAlias': previewAlias,
      'previewAppearance': HeroTankPreviewAppearance(),
      'isHeroTank': True,
-     'previousBackAlias': previousBackAlias,
-     'objectSelectionEnabled': objectSelectionEnabled}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'previousBackAlias': previousBackAlias}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def hideVehiclePreview():
@@ -361,22 +359,18 @@ def showEpicBattleSkillView():
     g_eventBus.handleEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_SKILL_ALIAS), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-@pointcutable
 def showCrystalWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.CRYSTALS_PROMO_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
 
-@pointcutable
 def openPaymentLink():
     g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.PAYMENT))
 
 
-@pointcutable
 def showExchangeCurrencyWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.EXCHANGE_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
 
-@pointcutable
 def showExchangeXPWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.EXCHANGE_XP_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 

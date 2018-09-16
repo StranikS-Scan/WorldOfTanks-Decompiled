@@ -1,8 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/ub_view_adaptor.py
 import BigWorld
-from frameworks.wulf import ViewStatus
-from frameworks.wulf import View
+from frameworks.wulf import WindowStatus, WindowFlags
+from frameworks.wulf import Window
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.framework.entities.DisposableEntity import DisposableEntity
 from gui.Scaleform.framework.entities.View import ViewKey
@@ -14,9 +14,14 @@ class UnboundViewAdaptor(DisposableEntity, ViewInterface):
 
     def __init__(self):
         super(UnboundViewAdaptor, self).__init__()
-        self.__view = None
+        self.__window = None
         self.__loadID = None
+        self.__scope = ScopeTemplates.DEFAULT_SCOPE
         return
+
+    @property
+    def view(self):
+        return self.__window.content
 
     @property
     def uiImpl(self):
@@ -24,23 +29,23 @@ class UnboundViewAdaptor(DisposableEntity, ViewInterface):
 
     @property
     def viewType(self):
-        return self.__view.viewType
+        return self.view.viewType
 
     @property
     def viewScope(self):
-        return ScopeTemplates.DEFAULT_SCOPE
+        return self.__scope
 
     @property
     def key(self):
-        return ViewKey(self.__view.layoutID, self.__view.uniqueID)
+        return ViewKey(self.view.layoutID, self.view.uniqueID)
 
     @property
     def alias(self):
-        return self.__view.layoutID
+        return self.view.layoutID
 
     @property
     def uniqueName(self):
-        return self.__view.uniqueID
+        return self.view.uniqueID
 
     @property
     def settings(self):
@@ -54,7 +59,7 @@ class UnboundViewAdaptor(DisposableEntity, ViewInterface):
         return False
 
     def getAlias(self):
-        return self.__view.layoutID
+        return self.view.layoutID
 
     def setAlias(self, alias):
         raise SoftException('This method is not implemented')
@@ -63,23 +68,24 @@ class UnboundViewAdaptor(DisposableEntity, ViewInterface):
         pass
 
     def getUniqueName(self):
-        return self.__view.uniqueID
+        return self.view.uniqueID
 
     def setUniqueName(self, name):
         raise SoftException('This method is not implemented')
 
     def getCurrentScope(self):
-        return ScopeTemplates.DEFAULT_SCOPE
+        return self.__scope
 
     def setCurrentScope(self, scope):
-        raise SoftException('This method is not implemented')
+        self.__scope = scope
 
     def isLoaded(self):
-        return False if self.__view is None else self.__view.viewStatus == ViewStatus.LOADED
+        return False if self.__window is None else self.__window.windowStatus == WindowStatus.LOADED
 
     def setView(self, view):
-        self.__view = view
-        self.__view.onStatusChanged += self.__onStatusChanged
+        self.__window = Window(WindowFlags.WINDOW, None, view)
+        self.__window.onStatusChanged += self.__onStatusChanged
+        return
 
     def loadView(self):
         if self.__loadID is not None:
@@ -92,23 +98,23 @@ class UnboundViewAdaptor(DisposableEntity, ViewInterface):
         if self.__loadID is not None:
             BigWorld.cancelCallback(self.__loadID)
             self.__loadID = None
-        if self.__view is None:
+        if self.__window is None:
             return
         else:
-            self.__view.onStatusChanged -= self.__onStatusChanged
-            self.__view.destroy()
-            self.__view = None
+            self.__window.onStatusChanged -= self.__onStatusChanged
+            self.__window.destroy()
+            self.__window = None
             return
 
     def __onStatusChanged(self, state):
-        if state == ViewStatus.LOADED:
+        if state == WindowStatus.LOADED:
             self.create()
-        elif state == ViewStatus.DESTROYED:
+        elif state == WindowStatus.DESTROYED:
             self.destroy()
 
     def __startToLoad(self):
         self.__loadID = None
-        if self.__view is None:
-            raise SoftException('View is not defined.')
-        self.__view.load()
+        if self.__window is None:
+            raise SoftException('Window is not defined.')
+        self.__window.load()
         return

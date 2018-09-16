@@ -4589,262 +4589,102 @@
         <selector>
           <type>	template	</type>
           <name>	Drift	</name>
-          <parameters>	_matkind:matkindR;
-				_direction:directionR;
-				_const1:1;
-				_delta:deltaR;
-				_hullAngle:hullAngle;
-				_TrackFront:HP_Track_RFront;
-				_TrackRear:HP_Track_RRear;
-				_Turret:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindR;     _direction:directionR;     _const1:1;     _delta:deltaR;     _hullAngle:hullAngle;     _TrackFront:HP_Track_RFront;     _TrackRear:HP_Track_RRear;     _Turret:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Drift	</name>
-          <parameters>	_matkind:matkindL;
-				_direction:directionL;
-				_const1:1;
-				_delta:deltaL;
-				_hullAngle:hullAngle;
-				_TrackFront:HP_Track_LFront;
-				_TrackRear:HP_Track_LRear;
-				_Turret:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindL;     _direction:directionL;     _const1:1;     _delta:deltaL;     _hullAngle:hullAngle;     _TrackFront:HP_Track_LFront;     _TrackRear:HP_Track_LRear;     _Turret:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Drift	</name>
-          <parameters>	_matkind:matkindR;
-				_direction:directionR;
-				_const1:-1;
-				_delta:deltaR;
-				_hullAngle:hullAngle;
-				_TrackFront:HP_Track_RRear;
-				_TrackRear:HP_Track_RFront;
-				_Turret:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindR;     _direction:directionR;     _const1:-1;     _delta:deltaR;     _hullAngle:hullAngle;     _TrackFront:HP_Track_RRear;     _TrackRear:HP_Track_RFront;     _Turret:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Drift	</name>
-          <parameters>	_matkind:matkindL;
-				_direction:directionL;
-				_const1:-1;
-				_delta:deltaL;
-				_hullAngle:hullAngle;
-				_TrackFront:HP_Track_LRear;
-				_TrackRear:HP_Track_LFront;
-				_Turret:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindL;     _direction:directionL;     _const1:-1;     _delta:deltaL;     _hullAngle:hullAngle;     _TrackFront:HP_Track_LRear;     _TrackRear:HP_Track_LFront;     _Turret:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Turn	</name>
-          <parameters>	_matkind:matkindR;
-				_direction:directionR;
-				_speed:speed;
-				_const1:1;
-				_delta:deltaR;
-				_TrackFront:HP_Track_RFront;
-				_TrackRear:HP_Track_RRear;
-				_rotSpeed:rotSpeed	</parameters>
+          <parameters>	_matkind:matkindR;     _direction:directionR;     _speed:speed;     _const1:1;     _delta:deltaR;     _TrackFront:HP_Track_RFront;     _TrackRear:HP_Track_RRear;     _rotSpeed:rotSpeed	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Turn	</name>
-          <parameters>	_matkind:matkindL;
-				_direction:directionL;
-				_speed:speed;
-				_const1:1;
-				_delta:deltaL;
-				_TrackFront:HP_Track_LFront;
-				_TrackRear:HP_Track_LRear;
-				_rotSpeed:rotSpeed	</parameters>
+          <parameters>	_matkind:matkindL;     _direction:directionL;     _speed:speed;     _const1:1;     _delta:deltaL;     _TrackFront:HP_Track_LFront;     _TrackRear:HP_Track_LRear;     _rotSpeed:rotSpeed	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Turn	</name>
-          <parameters>	_matkind:matkindR;
-				_direction:directionR;
-				_speed:speed;
-				_const1:-1;
-				_delta:deltaR;
-				_TrackFront:HP_Track_LRear;
-				_TrackRear:HP_Track_LFront;
-				_rotSpeed:rotSpeed	</parameters>
+          <parameters>	_matkind:matkindR;     _direction:directionR;     _speed:speed;     _const1:-1;     _delta:deltaR;     _TrackFront:HP_Track_LRear;     _TrackRear:HP_Track_LFront;     _rotSpeed:rotSpeed	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Turn	</name>
-          <parameters>	_matkind:matkindL;
-				_direction:directionL;
-				_speed:speed;
-				_const1:-1;
-				_delta:deltaL;
-				_TrackFront:HP_Track_RRear;
-				_TrackRear:HP_Track_RFront;
-				_rotSpeed:rotSpeed	</parameters>
+          <parameters>	_matkind:matkindL;     _direction:directionL;     _speed:speed;     _const1:-1;     _delta:deltaL;     _TrackFront:HP_Track_RRear;     _TrackRear:HP_Track_RFront;     _rotSpeed:rotSpeed	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	SlipR	</name>
-          <parameters>	_matkind:matkindR;
-				_direction:directionR;
-				_const1:1;
-				_delta:deltaR;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_RRear;
-				_TrackFront:HP_Track_RFront;
-				_TrackUpRear:HP_TrackUp_RRear;
-				_TrackUpFront:HP_TrackUp_RFront;
-				_TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindR;     _direction:directionR;     _const1:1;     _delta:deltaR;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:HP_Track_RRear;     _TrackFront:HP_Track_RFront;     _TrackUpRear:HP_TrackUp_RRear;     _TrackUpFront:HP_TrackUp_RFront;     _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	SlipL	</name>
-          <parameters>	_matkind:matkindL;
-				_direction:directionL;
-				_const1:1;
-				_delta:deltaL;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_LRear;
-				_TrackFront:HP_Track_LFront;
-				_TrackUpRear:HP_TrackUp_LRear;
-				_TrackUpFront:HP_TrackUp_LFront;
-				_TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindL;     _direction:directionL;     _const1:1;     _delta:deltaL;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:HP_Track_LRear;     _TrackFront:HP_Track_LFront;     _TrackUpRear:HP_TrackUp_LRear;     _TrackUpFront:HP_TrackUp_LFront;     _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	SlipL	</name>
-          <parameters>	_matkind:matkindR;
-				_direction:directionR;
-				_const1:-1;
-				_delta:deltaR;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_RFront;
-				_TrackFront:HP_Track_RRear;
-				_TrackUpRear:HP_TrackUp_RFront;
-				_TrackUpFront:HP_TrackUp_RRear;
-				_TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindR;     _direction:directionR;     _const1:-1;     _delta:deltaR;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:HP_Track_RFront;     _TrackFront:HP_Track_RRear;     _TrackUpRear:HP_TrackUp_RFront;     _TrackUpFront:HP_TrackUp_RRear;     _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	SlipR	</name>
-          <parameters>	_matkind:matkindL;
-				_direction:directionL;
-				_const1:-1;
-				_delta:deltaL;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_LFront;
-				_TrackFront:HP_Track_LRear;
-				_TrackUpRear:HP_TrackUp_LFront;
-				_TrackUpFront:HP_TrackUp_LRear;
-				_TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindL;     _direction:directionL;     _const1:-1;     _delta:deltaL;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:HP_Track_LFront;     _TrackFront:HP_Track_LRear;     _TrackUpRear:HP_TrackUp_LFront;     _TrackUpFront:HP_TrackUp_LRear;     _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	ForceFieldR	</name>
-          <parameters>	_direction:directionR;
-				_const1:1;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_RRear;
-				_TrackFront:HP_Track_RFront;
-				_TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_direction:directionR;     _const1:1;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:HP_Track_RRear;     _TrackFront:HP_Track_RFront;     _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	ForceFieldL	</name>
-          <parameters>	_direction:directionL;
-				_const1:1;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_LRear;
-				_TrackFront:HP_Track_LFront;
-				_TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_direction:directionL;     _const1:1;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:HP_Track_LRear;     _TrackFront:HP_Track_LFront;     _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	ForceFieldL	</name>
-          <parameters>	_direction:directionR;
-				_const1:-1;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_RFront;
-				_TrackFront:HP_Track_RRear;
-				_TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_direction:directionR;     _const1:-1;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:HP_Track_RFront;     _TrackFront:HP_Track_RRear;     _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	ForceFieldR	</name>
-          <parameters>	_direction:directionL;
-				_const1:-1;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_LFront;
-				_TrackFront:HP_Track_LRear;
-				_TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_direction:directionL;     _const1:-1;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:HP_Track_LFront;     _TrackFront:HP_Track_LRear;     _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	TrailR	</name>
-          <parameters>	_matkind:matkindR;
-				_direction:directionR;
-				_const1:1;
-				_delta:deltaR;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_RRear;
-				_TrackFront:HP_Track_RFront;
-				_TrackUpRear:HP_TrackUp_RRear;
-				_TrackUpFront:HP_TrackUp_RFront;
-				_TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindR;     _direction:directionR;     _const1:1;     _delta:deltaR;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:HP_Track_RRear;     _TrackFront:HP_Track_RFront;     _TrackUpRear:HP_TrackUp_RRear;     _TrackUpFront:HP_TrackUp_RFront;     _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	TrailL	</name>
-          <parameters>	_matkind:matkindL;
-				_direction:directionL;
-				_const1:1;
-				_delta:deltaL;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_LRear;
-				_TrackFront:HP_Track_LFront;
-				_TrackUpRear:HP_TrackUp_LRear;
-				_TrackUpFront:HP_TrackUp_LFront;
-				_TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindL;     _direction:directionL;     _const1:1;     _delta:deltaL;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:HP_Track_LRear;     _TrackFront:HP_Track_LFront;     _TrackUpRear:HP_TrackUp_LRear;     _TrackUpFront:HP_TrackUp_LFront;     _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	TrailL	</name>
-          <parameters>	_matkind:matkindR;
-				_direction:directionR;
-				_const1:-1;
-				_delta:deltaR;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_RFront;
-				_TrackFront:HP_Track_RRear;
-				_TrackUpRear:HP_TrackUp_RFront;
-				_TrackUpFront:HP_TrackUp_RRear;
-				_TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindR;     _direction:directionR;     _const1:-1;     _delta:deltaR;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:HP_Track_RFront;     _TrackFront:HP_Track_RRear;     _TrackUpRear:HP_TrackUp_RFront;     _TrackUpFront:HP_TrackUp_RRear;     _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	TrailR	</name>
-          <parameters>	_matkind:matkindL;
-				_direction:directionL;
-				_const1:-1;
-				_delta:deltaL;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_LFront;
-				_TrackFront:HP_Track_LRear;
-				_TrackUpRear:HP_TrackUp_LFront;
-				_TrackUpFront:HP_TrackUp_LRear;
-				_TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindL;     _direction:directionL;     _const1:-1;     _delta:deltaL;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:HP_Track_LFront;     _TrackFront:HP_Track_LRear;     _TrackUpRear:HP_TrackUp_LFront;     _TrackUpFront:HP_TrackUp_LRear;     _TankDust:DM_Mid_Trail	</parameters>
         </selector>
       </selector>
     </template>
@@ -4856,58 +4696,22 @@
         <selector>
           <type>	template	</type>
           <name>	Slip_R_NPC	</name>
-          <parameters>	_matkind:matkindR;
-				_direction:directionR;
-				_const1:1;
-				_delta:deltaR;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_RRear;
-				_TrackFront:HP_Track_RFront;
-				_TrackUpFront:HP_TrackUp_RFront;
-				_TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindR;     _direction:directionR;     _const1:1;     _delta:deltaR;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:HP_Track_RRear;     _TrackFront:HP_Track_RFront;     _TrackUpFront:HP_TrackUp_RFront;     _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Slip_L_NPC	</name>
-          <parameters>	_matkind:matkindL;
-				_direction:directionL;
-				_const1:1;
-				_delta:deltaL;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_LRear;
-				_TrackFront:HP_Track_LFront;
-				_TrackUpFront:HP_TrackUp_LFront;
-				_TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindL;     _direction:directionL;     _const1:1;     _delta:deltaL;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:HP_Track_LRear;     _TrackFront:HP_Track_LFront;     _TrackUpFront:HP_TrackUp_LFront;     _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Slip_R_NPC	</name>
-          <parameters>	_matkind:matkindR;
-				_direction:directionR;
-				_const1:-1;
-				_delta:deltaR;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_RFront;
-				_TrackFront:HP_Track_RRear;
-				_TrackUpFront:HP_TrackUp_LRear;
-				_TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindR;     _direction:directionR;     _const1:-1;     _delta:deltaR;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:HP_Track_RFront;     _TrackFront:HP_Track_RRear;     _TrackUpFront:HP_TrackUp_LRear;     _TankDust:DM_Mid_Trail	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
           <name>	Slip_L_NPC	</name>
-          <parameters>	_matkind:matkindL;
-				_direction:directionL;
-				_const1:-1;
-				_delta:deltaL;
-				_speed:speed;
-				_isUnderWater:isUnderWater;
-				_TrackRear:HP_Track_LFront;
-				_TrackFront:HP_Track_LRear;
-				_TrackUpFront:HP_TrackUp_RRear;
-				_TankDust:DM_Mid_Trail	</parameters>
+          <parameters>	_matkind:matkindL;     _direction:directionL;     _const1:-1;     _delta:deltaL;     _speed:speed;     _isUnderWater:isUnderWater;     _TrackRear:HP_Track_LFront;     _TrackFront:HP_Track_LRear;     _TrackUpFront:HP_TrackUp_RRear;     _TankDust:DM_Mid_Trail	</parameters>
         </selector>
       </selector>
     </template>

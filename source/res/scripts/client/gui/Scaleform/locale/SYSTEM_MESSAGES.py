@@ -725,12 +725,6 @@ class SYSTEM_MESSAGES(object):
     WALLET_NOT_AVAILABLE = '#system_messages:wallet/not_available'
     WALLET_NOT_AVAILABLE_GOLD = '#system_messages:wallet/not_available_gold'
     WALLET_NOT_AVAILABLE_FREEXP = '#system_messages:wallet/not_available_freexp'
-    WALLET_AVAILABLE_ASIA = '#system_messages:wallet/available_asia'
-    WALLET_AVAILABLE_ASIA_GOLD = '#system_messages:wallet/available_asia_gold'
-    WALLET_AVAILABLE_ASIA_FREEXP = '#system_messages:wallet/available_asia_freexp'
-    WALLET_NOT_AVAILABLE_ASIA = '#system_messages:wallet/not_available_asia'
-    WALLET_NOT_AVAILABLE_ASIA_GOLD = '#system_messages:wallet/not_available_asia_gold'
-    WALLET_NOT_AVAILABLE_ASIA_FREEXP = '#system_messages:wallet/not_available_asia_freexp'
     PERSONALMISSIONS_SELECT_SUCCESS = '#system_messages:personalMissions/select/success'
     PERSONALMISSIONS_SELECT_SERVER_ERROR = '#system_messages:personalMissions/select/server_error'
     PERSONALMISSIONS_SELECT_SERVER_ERROR_WRONG_ARGS_TYPE = '#system_messages:personalMissions/select/server_error/WRONG_ARGS_TYPE'
@@ -743,15 +737,20 @@ class SYSTEM_MESSAGES(object):
     PERSONALMISSIONS_SELECT_SERVER_ERROR_TOO_MANY_QUESTS_IN_CHAIN = '#system_messages:personalMissions/select/server_error/TOO_MANY_QUESTS_IN_CHAIN'
     PERSONALMISSIONS_SELECT_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST = '#system_messages:personalMissions/select/server_error/LOCKED_BY_VEHICLE_QUEST'
     PERSONALMISSIONS_SELECT_SERVER_ERROR_SEASON_LIMIT_THE_SAME_CLASS = '#system_messages:personalMissions/select/server_error/SEASON_LIMIT_THE_SAME_CLASS'
-    PERSONALMISSIONS_SELECT_DISABLED = '#system_messages:personalMissions/select/DISABLED'
-    PERSONALMISSIONS_REFUSE_SUCCESS = '#system_messages:personalMissions/refuse/success'
-    PERSONALMISSIONS_REFUSE_QUESTS = '#system_messages:personalMissions/refuse/quests'
-    PERSONALMISSIONS_REFUSE_NO_QUESTS = '#system_messages:personalMissions/refuse/no_quests'
-    PERSONALMISSIONS_REFUSE_SERVER_ERROR = '#system_messages:personalMissions/refuse/server_error'
-    PERSONALMISSIONS_REFUSE_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST = '#system_messages:personalMissions/refuse/server_error/LOCKED_BY_VEHICLE_QUEST'
+    PERSONALMISSIONS_SELECT_SERVER_ERROR_DISABLED = '#system_messages:personalMissions/select/server_error/DISABLED'
     PERSONALMISSIONS_SELECT_SERVER_ERROR_FALLOUT_LOCKED_BY_VEHICLE_QUEST = '#system_messages:personalMissions/select/server_error/fallout/LOCKED_BY_VEHICLE_QUEST'
-    PERSONALMISSIONS_REFUSE_SERVER_ERROR_FALLOUT_LOCKED_BY_VEHICLE_QUEST = '#system_messages:personalMissions/refuse/server_error/fallout/LOCKED_BY_VEHICLE_QUEST'
-    PERSONALMISSIONS_REFUSE_DISABLED = '#system_messages:personalMissions/refuse/DISABLED'
+    PERSONALMISSIONS_DISCARD_SUCCESS = '#system_messages:personalMissions/discard/success'
+    PERSONALMISSIONS_DISCARD_SERVER_ERROR = '#system_messages:personalMissions/discard/server_error'
+    PERSONALMISSIONS_DISCARD_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST = '#system_messages:personalMissions/discard/server_error/LOCKED_BY_VEHICLE_QUEST'
+    PERSONALMISSIONS_DISCARD_SERVER_ERROR_INVALID_QUEST_ID = '#system_messages:personalMissions/discard/server_error/INVALID_QUEST_ID'
+    PERSONALMISSIONS_DISCARD_SERVER_ERROR_FALLOUT_LOCKED_BY_VEHICLE_QUEST = '#system_messages:personalMissions/discard/server_error/fallout/LOCKED_BY_VEHICLE_QUEST'
+    PERSONALMISSIONS_DISCARD_SERVER_ERROR_DISABLED = '#system_messages:personalMissions/discard/server_error/DISABLED'
+    PERSONALMISSIONS_PAUSE_SUCCESS_PAUSE = '#system_messages:personalMissions/pause/success_pause'
+    PERSONALMISSIONS_PAUSE_SUCCESS_UNPAUSE = '#system_messages:personalMissions/pause/success_unpause'
+    PERSONALMISSIONS_PAUSE_SERVER_ERROR = '#system_messages:personalMissions/pause/server_error'
+    PERSONALMISSIONS_PAUSE_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST = '#system_messages:personalMissions/pause/server_error/LOCKED_BY_VEHICLE_QUEST'
+    PERSONALMISSIONS_PAUSE_SERVER_ERROR_INVALID_QUEST_ID = '#system_messages:personalMissions/pause/server_error/INVALID_QUEST_ID'
+    PERSONALMISSIONS_PAUSE_SERVER_ERROR_DISABLED = '#system_messages:personalMissions/pause/server_error/DISABLED'
     PERSONALMISSIONS_REWARD_REGULAR_SERVER_ERROR = '#system_messages:personalMissions/reward/regular/server_error'
     PERSONALMISSIONS_REWARD_REGULAR_SERVER_ERROR_WRONG_ARGS_TYPE = '#system_messages:personalMissions/reward/regular/server_error/WRONG_ARGS_TYPE'
     PERSONALMISSIONS_REWARD_REGULAR_SERVER_ERROR_NO_REWARD = '#system_messages:personalMissions/reward/regular/server_error/NO_REWARD'
@@ -1752,12 +1751,6 @@ class SYSTEM_MESSAGES(object):
      WALLET_NOT_AVAILABLE,
      WALLET_NOT_AVAILABLE_GOLD,
      WALLET_NOT_AVAILABLE_FREEXP,
-     WALLET_AVAILABLE_ASIA,
-     WALLET_AVAILABLE_ASIA_GOLD,
-     WALLET_AVAILABLE_ASIA_FREEXP,
-     WALLET_NOT_AVAILABLE_ASIA,
-     WALLET_NOT_AVAILABLE_ASIA_GOLD,
-     WALLET_NOT_AVAILABLE_ASIA_FREEXP,
      PERSONALMISSIONS_SELECT_SUCCESS,
      PERSONALMISSIONS_SELECT_SERVER_ERROR,
      PERSONALMISSIONS_SELECT_SERVER_ERROR_WRONG_ARGS_TYPE,
@@ -1770,15 +1763,20 @@ class SYSTEM_MESSAGES(object):
      PERSONALMISSIONS_SELECT_SERVER_ERROR_TOO_MANY_QUESTS_IN_CHAIN,
      PERSONALMISSIONS_SELECT_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST,
      PERSONALMISSIONS_SELECT_SERVER_ERROR_SEASON_LIMIT_THE_SAME_CLASS,
-     PERSONALMISSIONS_SELECT_DISABLED,
-     PERSONALMISSIONS_REFUSE_SUCCESS,
-     PERSONALMISSIONS_REFUSE_QUESTS,
-     PERSONALMISSIONS_REFUSE_NO_QUESTS,
-     PERSONALMISSIONS_REFUSE_SERVER_ERROR,
-     PERSONALMISSIONS_REFUSE_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST,
+     PERSONALMISSIONS_SELECT_SERVER_ERROR_DISABLED,
      PERSONALMISSIONS_SELECT_SERVER_ERROR_FALLOUT_LOCKED_BY_VEHICLE_QUEST,
-     PERSONALMISSIONS_REFUSE_SERVER_ERROR_FALLOUT_LOCKED_BY_VEHICLE_QUEST,
-     PERSONALMISSIONS_REFUSE_DISABLED,
+     PERSONALMISSIONS_DISCARD_SUCCESS,
+     PERSONALMISSIONS_DISCARD_SERVER_ERROR,
+     PERSONALMISSIONS_DISCARD_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST,
+     PERSONALMISSIONS_DISCARD_SERVER_ERROR_INVALID_QUEST_ID,
+     PERSONALMISSIONS_DISCARD_SERVER_ERROR_FALLOUT_LOCKED_BY_VEHICLE_QUEST,
+     PERSONALMISSIONS_DISCARD_SERVER_ERROR_DISABLED,
+     PERSONALMISSIONS_PAUSE_SUCCESS_PAUSE,
+     PERSONALMISSIONS_PAUSE_SUCCESS_UNPAUSE,
+     PERSONALMISSIONS_PAUSE_SERVER_ERROR,
+     PERSONALMISSIONS_PAUSE_SERVER_ERROR_LOCKED_BY_VEHICLE_QUEST,
+     PERSONALMISSIONS_PAUSE_SERVER_ERROR_INVALID_QUEST_ID,
+     PERSONALMISSIONS_PAUSE_SERVER_ERROR_DISABLED,
      PERSONALMISSIONS_REWARD_REGULAR_SERVER_ERROR,
      PERSONALMISSIONS_REWARD_REGULAR_SERVER_ERROR_WRONG_ARGS_TYPE,
      PERSONALMISSIONS_REWARD_REGULAR_SERVER_ERROR_NO_REWARD,
@@ -2131,6 +2129,12 @@ class SYSTEM_MESSAGES(object):
      RANKED_NOTIFICATIONS_FINAL_BONUSNAME_POINTS,
      RANKED_NOTIFICATIONS_FINAL_BONUSNAME_LEAGUE,
      RANKED_NOTIFICATIONS_FINAL_BONUSNAME_LEAGUE_CYCLE)
+    WALLET_ENUM = (WALLET_AVAILABLE,
+     WALLET_AVAILABLE_GOLD,
+     WALLET_AVAILABLE_FREEXP,
+     WALLET_NOT_AVAILABLE,
+     WALLET_NOT_AVAILABLE_GOLD,
+     WALLET_NOT_AVAILABLE_FREEXP)
 
     @classmethod
     def unit_notification_divisiontype(cls, key0):
@@ -2190,6 +2194,15 @@ class SYSTEM_MESSAGES(object):
     def getRankedNotificationBonusName(cls, extra, name):
         outcome = '#system_messages:ranked/notifications{}/bonusName/{}'.format(extra, name)
         if outcome not in cls.RANKED_NOTIFICATIONSALL_BONUSNAME_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getWalletStatus(cls, status):
+        outcome = '#system_messages:wallet/{}'.format(status)
+        if outcome not in cls.WALLET_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

@@ -10,7 +10,7 @@ from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_
 from gui.shared.gui_items.gui_item import GUIItem, HasIntCD
 from gui.shared.items_parameters import params_helper, formatters
 from gui.shared.money import Money, Currency, MONEY_UNDEFINED
-from gui.shared.utils.functions import getShortDescr, stripShortDescrTags
+from gui.shared.utils.functions import getShortDescr, stripColorTagDescrTags
 from helpers import i18n, time_utils
 from items import vehicles, getTypeInfoByName
 ICONS_MASK = '../maps/icons/%(type)s/%(subtype)s%(unicName)s.png'
@@ -193,7 +193,7 @@ class FittingItem(GUIItem, HasIntCD):
 
     @property
     def fullDescription(self):
-        return stripShortDescrTags(self.descriptor.description)
+        return stripColorTagDescrTags(self.descriptor.description)
 
     @property
     def shortDescriptionSpecial(self):

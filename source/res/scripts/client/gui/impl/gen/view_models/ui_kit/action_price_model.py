@@ -108,6 +108,7 @@ class ActionPriceModel(ViewModel):
         self._setBool(16, value)
 
     def _initialize(self):
+        super(ActionPriceModel, self)._initialize()
         self._addStringProperty('type', 'gold')
         self._addBoolProperty('isEnough', False)
         self._addBoolProperty('isWithAction', False)

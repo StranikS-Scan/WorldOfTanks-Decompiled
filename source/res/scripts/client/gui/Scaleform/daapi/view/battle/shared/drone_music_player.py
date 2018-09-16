@@ -327,10 +327,10 @@ class _EnemyBaseCaptureCondition(_BaseCaptureCondition):
 
 class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesListener, IViewComponentsCtrlListener, IArenaLoadCtrlListener):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
-    _SETTING_TO_CONDITION_MAPPING = {'vehiclesRemained': (lambda player: not player.sessionProvider.arenaVisitor.hasArenaFogOfWarHiddenVehicles(), (_DeadAlliesCondition, _DeadEnemiesCondition), lambda name, key, data: data[name][key]),
+    _SETTING_TO_CONDITION_MAPPING = {'vehiclesRemained': (lambda player: not player.sessionProvider.arenaVisitor.isArenaFogOfWarEnabled(), (_DeadAlliesCondition, _DeadEnemiesCondition), lambda name, key, data: data[name][key]),
      'timeRemained': (lambda player: True, (_TimeRemainedCondition,), lambda name, key, data: data[name][key]),
      'capturedPoints': (lambda player: True, (_AlliedBaseCaptureCondition, _EnemyBaseCaptureCondition), lambda name, key, data: (data[name][key], data['musicStopPredelay'][key])),
-     'hpPercentRemained': (lambda player: not player.sessionProvider.arenaVisitor.hasArenaFogOfWarHiddenVehicles(), (_AlliesHPCondition, _EnemiesHPCondition), lambda name, key, data: data[name][key])}
+     'hpPercentRemained': (lambda player: not player.sessionProvider.arenaVisitor.isArenaFogOfWarEnabled(), (_AlliesHPCondition, _EnemiesHPCondition), lambda name, key, data: data[name][key])}
 
     def __init__(self):
         super(DroneMusicPlayer, self).__init__()

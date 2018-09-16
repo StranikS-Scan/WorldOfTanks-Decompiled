@@ -19,23 +19,40 @@ def showPQSeasonAwardsWindow(questsType):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW, ctx={'questsType': questsType}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, marathonPostfix=None, anchor=None, showDetails=True):
+def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, anchor=None, showDetails=True):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MISSIONS, ctx={'tab': tab,
      'eventID': missionID,
      'groupID': groupID,
      'marathonPrefix': marathonPrefix,
-     'marathonPostfix': marathonPostfix,
      'anchor': anchor,
      'showMissionDetails': showDetails}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def canOpenPMPage(branch=None, operationID=None, missionID=None):
+def canOpenPMPage(branchID=None, operationID=None, missionID=None):
     serverSettings = dependency.instance(ILobbyContext).getServerSettings()
-    if branch and not serverSettings.isPersonalMissionsEnabled(branch):
-        return False
-    if operationID and operationID in serverSettings.getDisabledPMOperations():
-        return False
-    return False if missionID and missionID in serverSettings.getDisabledPersonalMissions() else True
+    eventsCache = dependency.instance(IEventsCache)
+    disabledOperationsIds = serverSettings.getDisabledPMOperations()
+    disabledMissionsIds = serverSettings.getDisabledPersonalMissions()
+
+    def checkBranch(idx):
+        return serverSettings.isPersonalMissionsEnabled(int(idx))
+
+    def checkOperation(idx):
+        return int(idx) not in disabledOperationsIds
+
+    def checkMission(idx):
+        return int(idx) not in disabledMissionsIds
+
+    if missionID is not None:
+        mission = eventsCache.getPersonalMissions().getAllQuests()[int(missionID)]
+        operationID = mission.getOperationID()
+        branchID = mission.getPMType().branch
+        return checkBranch(branchID) and checkOperation(operationID) and checkMission(missionID)
+    elif operationID is not None:
+        operation = eventsCache.getPersonalMissions().getAllOperations()[int(operationID)]
+        return checkBranch(operation.getBranch()) and checkOperation(operationID)
+    else:
+        return checkBranch(branchID) if branchID is not None else False
 
 
 def showPersonalMission(missionID=None):
@@ -51,19 +68,24 @@ def showPersonalMissionsChain(operationID, chainID):
      'chainID': chainID}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showPersonalMissionOperationsPage(branch, operationID=None):
-    if not canOpenPMPage(branch=branch, operationID=operationID):
+def showPersonalMissionOperationsPage(branchID, operationID):
+    if not canOpenPMPage(branchID, operationID):
+        showPersonalMissionsOperationsMap()
         return
-    g_eventBus.handleEvent(events.LoadViewEvent(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS, ctx={'branch': branch,
+    g_eventBus.handleEvent(events.LoadViewEvent(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_PAGE_ALIAS, ctx={'branch': branchID,
      'operationID': operationID}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showPersonalMissionsOperationsMap():
+    g_eventBus.handleEvent(events.LoadViewEvent(PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showMissionsGrouped(missionID=None, groupID=None, anchor=None):
     showMissions(tab=QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, missionID=missionID, groupID=groupID, anchor=anchor)
 
 
-def showMissionsMarathon(marathonPrefix=DEFAULT_MARATHON_PREFIX, marathonPostfix=''):
-    showMissions(tab=QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, marathonPrefix=marathonPrefix, marathonPostfix=marathonPostfix)
+def showMissionsMarathon(marathonPrefix=DEFAULT_MARATHON_PREFIX):
+    showMissions(tab=QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, marathonPrefix=marathonPrefix)
 
 
 def showMissionsCategories(missionID=None, groupID=None, anchor=None):

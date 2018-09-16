@@ -6,6 +6,7 @@ import BigWorld
 from gui.shared.events import LobbySimpleEvent
 from helpers import dependency
 from skeletons.gui.shared.utils import IHangarSpace
+from gui.Scaleform.Waiting import Waiting
 
 class LobbySelectableView(LobbySubView):
     hangarSpace = dependency.descriptor(IHangarSpace)
@@ -13,29 +14,25 @@ class LobbySelectableView(LobbySubView):
     def __init__(self, ctx=None):
         super(LobbySelectableView, self).__init__(ctx)
         self.__selected3DEntity = None
-        self.__selected3DEntityOnClick = None
-        self.__isMouseDown = False
-        self._objectSelectionEnabled = True
+        self.__selected3DEntityUnderMouseDown = None
         return
 
     def _populate(self):
         super(LobbySelectableView, self)._populate()
-        if self._objectSelectionEnabled:
-            self.hangarSpace.onObjectSelected += self._on3DObjectSelected
-            self.hangarSpace.onObjectUnselected += self._on3DObjectUnSelected
-            self.hangarSpace.onObjectClicked += self._on3DObjectClicked
-            self.hangarSpace.onObjectReleased += self._on3DObjectReleased
-            self.addListener(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self._onNotifyCursorOver3dScene)
+        self.hangarSpace.onMouseEnter += self._on3DObjectMouseEnter
+        self.hangarSpace.onMouseExit += self._on3DObjectMouseExit
+        self.hangarSpace.onMouseDown += self._on3DObjectMouseDown
+        self.hangarSpace.onMouseUp += self._on3DObjectMouseUp
+        self.addListener(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self._onNotifyCursorOver3dScene)
 
     def _dispose(self):
         super(LobbySelectableView, self)._dispose()
-        if self._objectSelectionEnabled:
-            self.hangarSpace.onObjectSelected -= self._on3DObjectSelected
-            self.hangarSpace.onObjectUnselected -= self._on3DObjectUnSelected
-            self.hangarSpace.onObjectClicked -= self._on3DObjectClicked
-            self.hangarSpace.onObjectReleased -= self._on3DObjectReleased
-            self.removeListener(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self._onNotifyCursorOver3dScene)
-        self.__selected3DEntityOnClick = None
+        self.hangarSpace.onMouseEnter -= self._on3DObjectMouseEnter
+        self.hangarSpace.onMouseExit -= self._on3DObjectMouseExit
+        self.hangarSpace.onMouseDown -= self._on3DObjectMouseDown
+        self.hangarSpace.onMouseUp -= self._on3DObjectMouseUp
+        self.removeListener(LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self._onNotifyCursorOver3dScene)
+        self.__selected3DEntityUnderMouseDown = None
         if self.__selected3DEntity is not None:
             BigWorld.wgDelEdgeDetectEntity(self.__selected3DEntity)
             self.__selected3DEntity = None
@@ -55,33 +52,40 @@ class LobbySelectableView(LobbySubView):
             else:
                 self._fade3DEntityAndHideTT(self.__selected3DEntity)
 
-    def _on3DObjectSelected(self, entity):
-        self.__selected3DEntity = entity
-        if self.hangarSpace.isCursorOver3DScene and not self.__isMouseDown and entity:
+    def _on3DObjectMouseEnter(self, entity):
+        if Waiting.isVisible():
+            return
+        else:
+            self.__selected3DEntity = entity
+            if not self.hangarSpace.isCursorOver3DScene:
+                return
+            if entity is None:
+                return
             self._highlight3DEntityAndShowTT(entity)
             if entity.mouseOverSoundName:
                 SoundGroups.g_instance.playSound3D(entity.model.root, entity.mouseOverSoundName)
+            return
 
-    def _on3DObjectUnSelected(self, entity):
+    def _on3DObjectMouseExit(self, entity):
         self.__selected3DEntity = None
-        self.__selected3DEntityOnClick = None
         if self.hangarSpace.isCursorOver3DScene:
             self._fade3DEntityAndHideTT(entity)
         return
 
-    def _on3DObjectClicked(self):
-        self.__isMouseDown = True
-        self.__selected3DEntityOnClick = self.__selected3DEntity
+    def _on3DObjectMouseDown(self):
         if self.hangarSpace.isCursorOver3DScene:
-            if self.__selected3DEntity and hasattr(self.__selected3DEntity, 'onClicked'):
-                self.__selected3DEntity.onClicked()
+            self.__selected3DEntityUnderMouseDown = self.__selected3DEntity
+            if self.__selected3DEntity and hasattr(self.__selected3DEntity, 'onMouseDown'):
+                self.__selected3DEntity.onMouseDown()
 
-    def _on3DObjectReleased(self):
-        self.__isMouseDown = False
+    def _on3DObjectMouseUp(self):
         if self.hangarSpace.isCursorOver3DScene:
-            if self.__selected3DEntity and self.__selected3DEntity == self.__selected3DEntityOnClick:
-                if hasattr(self.__selected3DEntity, 'onReleased'):
-                    self.__selected3DEntity.onReleased()
-        self._on3DObjectSelected(self.__selected3DEntity)
-        self.__selected3DEntityOnClick = None
+            if self.__selected3DEntityUnderMouseDown:
+                if self.__selected3DEntityUnderMouseDown == self.__selected3DEntity:
+                    if hasattr(self.__selected3DEntityUnderMouseDown, 'onMouseClick'):
+                        self.__selected3DEntityUnderMouseDown.onMouseClick()
+                if hasattr(self.__selected3DEntityUnderMouseDown, 'onMouseUp'):
+                    self.__selected3DEntityUnderMouseDown.onMouseUp()
+        self._on3DObjectMouseEnter(self.__selected3DEntity)
+        self.__selected3DEntityUnderMouseDown = None
         return

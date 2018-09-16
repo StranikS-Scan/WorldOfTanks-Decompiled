@@ -140,12 +140,14 @@ class BaseVehicleParametersTooltipData(BlocksTooltipData):
         return []
 
     def _getPenalties(self):
+        notFullCrew = False
         result = []
         penalties = self._extendedData.penalties
         actualPenalties, _ = _getNumNotNullPenaltyTankman(penalties)
         penaltiesLen = len(penalties)
         numNotNullPenaltyTankman = len(actualPenalties)
         if penaltiesLen > numNotNullPenaltyTankman:
+            notFullCrew = True
             result.append(formatters.packTitleDescParameterWithIconBlockData(text_styles.main(_ms(TOOLTIPS.VEHICLEPARAMS_PENALTY_CREWNOTFULL_TEMPLATE)), icon=RES_ICONS.MAPS_ICONS_VEHPARAMS_TOOLTIPS_PENALTIES_ALL, iconPadding=self.__iconPadding, titlePadding=self.__titlePadding, padding=self.__listPadding))
         if numNotNullPenaltyTankman > 0:
             for penalty in penalties:
@@ -158,7 +160,7 @@ class BaseVehicleParametersTooltipData(BlocksTooltipData):
                     penaltyStr = text_styles.main(_ms(locKey, tankmanType=_ms(ITEM_TYPES.tankman_roles(penalty.roleName))))
                     result.append(formatters.packTitleDescParameterWithIconBlockData(penaltyStr, text_styles.warning(_ms(TOOLTIPS.VEHICLEPARAMS_TITLE_VALUETEMPLATE, value=valueStr)), icon=param_formatter.getPenaltyIcon(penalty.roleName), iconPadding=self.__iconPadding, titlePadding=self.__titlePadding, padding=self.__listPadding))
 
-        return result
+        return (notFullCrew, result)
 
 
 class VehicleSimpleParametersTooltipData(BaseVehicleParametersTooltipData):
@@ -253,7 +255,9 @@ class VehicleAdvancedParametersTooltipData(BaseVehicleAdvancedParametersTooltipD
         self.__paramName = self._extendedData.name
         bonuses, hasSituational = self._getBonuses()
         self._packListBlock(blocks, bonuses, text_styles.warning(_ms(TOOLTIPS.VEHICLEPARAMS_BONUSES_TITLE)))
-        penalties = self._getPenalties()
+        notFullCrew, penalties = self._getPenalties()
+        if notFullCrew:
+            blocks.append(formatters.packImageTextBlockData(title='', desc=text_styles.standard(TOOLTIPS.VEHICLE_STATS_FOOTNOTE), img=RES_ICONS.MAPS_ICONS_LIBRARY_STORE_CONDITION_OFF, imgPadding=formatters.packPadding(top=4), txtGap=-4, txtOffset=20, padding=formatters.packPadding(left=59, right=20)))
         self._packListBlock(blocks, penalties, text_styles.critical(_ms(TOOLTIPS.VEHICLEPARAMS_PENALTIES_TITLE)))
         if self._extendedData.inactiveBonuses:
             blocks.append(formatters.packBuildUpBlockData(self._getFootNoteBlock('inactive'), padding=0))
@@ -690,7 +694,7 @@ class RotationLockAdditionalStatsBlockConstructor(LockAdditionalStatsBlockConstr
         return text_styles.warning(_ms(TOOLTIPS.TANKCARUSEL_LOCK_ROTATION_HEADER, groupNum=self.vehicle.rotationGroupNum))
 
     def _makeLockText(self):
-        return text_styles.main(_ms(TOOLTIPS.TANKCARUSEL_LOCK_ROTATION))
+        return text_styles.main(_ms(TOOLTIPS.TANKCARUSEL_LOCK_ROTATION, battlesToUnlock=text_styles.highlightText(self.vehicle.rotationBattlesLeft), unlockedBy=text_styles.highlightText(', '.join((str(groupNum) for groupNum in self.vehicle.unlockedBy)))))
 
 
 class RoamingLockAdditionalStatsBlockConstructor(LockAdditionalStatsBlockConstructor):

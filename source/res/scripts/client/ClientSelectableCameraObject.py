@@ -112,7 +112,7 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         CallbackDelayer.destroy(self)
         return
 
-    def onReleased(self):
+    def onMouseClick(self):
         ClientSelectableCameraObject.switchCamera(self)
         return self.state != CameraMovementStates.FROM_OBJECT
 

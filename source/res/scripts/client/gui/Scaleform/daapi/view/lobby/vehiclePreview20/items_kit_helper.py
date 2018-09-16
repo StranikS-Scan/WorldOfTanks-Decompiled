@@ -12,7 +12,7 @@ from items import makeIntCompactDescrByID as makeCD
 from items.components.c11n_constants import CustomizationType
 from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS, NUM_EQUIPMENT_SLOTS_BY_TYPE, NUM_SHELLS_SLOTS
 from skeletons.gui.goodies import IGoodiesCache
-from web_client_api.common import ItemPackType, ItemPackTypeGroup
+from web_client_api.common import ItemPackType, ItemPackTypeGroup, ItemPackEntry
 from gui.shared.gui_items import vehicle_adjusters
 from shared_utils import first
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -81,7 +81,7 @@ _ICONS = {ItemPackType.CAMOUFLAGE: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_CAMOUF
  ItemPackType.STYLE: RES_SHOP.MAPS_SHOP_REWARDS_48X48_STYLE_ICON,
  ItemPackType.DECAL: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_EMBLEM,
  ItemPackType.DECAL_1: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_EMBLEM,
- ItemPackType.DECAL_2: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_EMBLEM,
+ ItemPackType.DECAL_2: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PRIZE_INSCRIPTION,
  ItemPackType.MODIFICATION: RES_SHOP.MAPS_SHOP_REWARDS_48X48_EFFECT_ICON,
  ItemPackType.PAINT: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PAINT_ICON,
  ItemPackType.PAINT_WINTER: RES_SHOP.MAPS_SHOP_REWARDS_48X48_PAINT_ICON,
@@ -156,7 +156,7 @@ def getCompensateItemsCount(rawItem, itemsCache):
 
 @dependency.replace_none_kwargs(c11nService=ICustomizationService)
 def previewStyle(vehicle, style, c11nService=None):
-    if style.itemTypeID == GUI_ITEM_TYPE.STYLE and style.mayInstall(vehicle):
+    if style.itemTypeID == GUI_ITEM_TYPE.STYLE and style.mayInstall(vehicle) and not style.isRentable:
         c11nService.tryOnOutfit(style.getOutfit(first(style.seasons)))
 
 
@@ -264,43 +264,59 @@ def showItemTooltip(toolTipMgr, rawItem, item):
     return
 
 
+def collapseItemsPack(items):
+    if items is None or len(items) < 2:
+        return items
+    else:
+        uniqueItems = []
+        for _, group in itertools.groupby(sorted(items, key=_getItemKey), key=_getItemKey):
+            items = list(group)
+            item = items[0]
+            uniqueItems.append(ItemPackEntry(type=item.type, id=item.id, count=sum((item.count for item in items)), groupID=item.groupID, compensation=item.compensation, iconSource=item.iconSource, title=item.title, description=item.description))
+
+        return uniqueItems
+
+
+def _getItemKey(item):
+    return (item.id, item.type)
+
+
 def _createItemVO(rawItem, itemsCache, goodiesCache, slotIndex, rawTooltipData=None):
     if rawItem == _BOX_ITEM:
         cd = 0
         icon = RES_ICONS.MAPS_ICONS_RANKEDBATTLES_BOXES_48X48_METAL_1
         count = 0
-        hasCompensation = False
     else:
         fittingItem = lookupItem(rawItem, itemsCache, goodiesCache)
-        cd = fittingItem.intCD if fittingItem is not None else 0
+        cd = fittingItem.intCD if fittingItem is not None else rawItem.id
         icon = getItemIcon(rawItem, fittingItem)
         if rawItem.type in _UNCOUNTABLE_ITEM_TYPE:
             count = 1
         else:
             count = rawItem.count
-        hasCompensation = getCompensateItemsCount(rawItem, itemsCache) > 0
-    return {'id': cd,
+    return {'id': str(cd),
      'icon': icon,
      'type': rawItem.type if rawItem is not None else BOX_TYPE,
      'iconAlt': RES_ICONS.MAPS_ICONS_ARTEFACT_NOTFOUND,
      'slotIndex': slotIndex,
      'count': 'x{}'.format(count) if count > 1 else '',
-     'rawData': rawTooltipData,
-     'hasCompensation': hasCompensation}
+     'rawData': rawTooltipData}
 
 
 def _getBoxTooltipVO(rawItems, itemsCache, goodiesCache):
     items = []
+    rawItems = collapseItemsPack(rawItems)
     for rawItem in rawItems:
         fittingItem = lookupItem(rawItem, itemsCache, goodiesCache)
         if fittingItem is not None and fittingItem.itemTypeID in GUI_ITEM_TYPE.CUSTOMIZATIONS:
             icon = RES_ICONS.getBonusIcon('small', fittingItem.itemTypeName)
         else:
             icon = getItemIcon(rawItem, fittingItem)
-        items.append({'count': str(rawItem.count) if rawItem.type not in _UNCOUNTABLE_ITEM_TYPE else '',
+        items.append({'id': rawItem.id,
+         'type': rawItem.type,
+         'count': str(rawItem.count) if rawItem.type not in _UNCOUNTABLE_ITEM_TYPE else '',
          'icon': icon,
-         'desc': getItemTitle(rawItem, fittingItem, forBox=True),
-         'hasCompensation': getCompensateItemsCount(rawItem, itemsCache) > 0})
+         'desc': getItemTitle(rawItem, fittingItem, forBox=True)})
 
     vo = {'icon': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_BOXES_48X48_METAL_1,
      'count': len(rawItems),
@@ -469,7 +485,7 @@ class _PriorityNodeContainer(_NodeContainer):
         if fittingItem is None:
             return
         else:
-            if item.type == ItemPackType.STYLE:
+            if item.type == ItemPackType.STYLE and not fittingItem.isRentable:
                 _applyCamouflage(vehicle)
                 previewStyle(vehicle, fittingItem)
             return
@@ -489,7 +505,7 @@ def getDataOneVehicle(itemsPack, vehicle, vehicleGroupId):
         root = prevNode.getNextNode()
         prevNode.destroy()
 
-    return itemsVOs
+    return addCompensationInfo(itemsVOs, itemsPack)
 
 
 def getDataMultiVehicles(itemsPack, vehicle):
@@ -497,4 +513,25 @@ def getDataMultiVehicles(itemsPack, vehicle):
     for item in itemsPack:
         container.addItem(item, vehicle, None)
 
-    return [container.getVO()]
+    itemsVOs = [container.getVO()]
+    return addCompensationInfo(itemsVOs, itemsPack)
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def addCompensationInfo(itemsVOs, itemsPack, itemsCache=None):
+    compensationInfo = [ {'id': str(item.id),
+     'type': item.type,
+     'hasCompensation': getCompensateItemsCount(item, itemsCache) > 0} for item in collapseItemsPack(itemsPack) ]
+
+    def hasCompensation(itemVO):
+        for ci in compensationInfo:
+            if ci['id'] == itemVO['id'] and ci['type'] == itemVO['type']:
+                return ci['hasCompensation']
+
+        return False
+
+    for itemsVO in itemsVOs:
+        for vo in itemsVO:
+            vo['hasCompensation'] = hasCompensation(vo)
+
+    return itemsVOs

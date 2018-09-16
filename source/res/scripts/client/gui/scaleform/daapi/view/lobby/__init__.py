@@ -3,7 +3,7 @@
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.bootcamp.component_override import BootcampComponentOverride
 from gui.Scaleform.daapi.view.dialogs.missions_dialogs import UseAwardSheetWindow
-from gui.Scaleform.daapi.view.lobby.authors.authors_view import AuthorsView
+from gui.Scaleform.daapi.view.lobby.image_view.image_view import ImageView
 from gui.Scaleform.framework import ViewSettings, GroupedViewSettings, ContainerSettings, ViewTypes, ScopeTemplates, ConditionalViewSettings
 from gui.Scaleform.framework.managers import containers
 from gui.Scaleform.framework.package_layout import PackageBusinessHandler
@@ -90,7 +90,7 @@ def getViewSettings():
      ConditionalViewSettings(VIEW_ALIAS.HERO_VEHICLE_PREVIEW, BootcampComponentOverride(VehiclePreview, BCVehiclePreview), 'vehiclePreview.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.HERO_VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.VEHICLE_PREVIEW_20, VehiclePreview20, 'vehiclePreview20.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.VEHICLE_PREVIEW_20, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.HERO_VEHICLE_PREVIEW_20, VehiclePreview20, 'vehiclePreview20.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.HERO_VEHICLE_PREVIEW_20, ScopeTemplates.LOBBY_SUB_SCOPE),
-     ViewSettings(VIEW_ALIAS.AUTHORS_VIEW, AuthorsView, 'authorsView.swf', ViewTypes.OVERLAY, VIEW_ALIAS.AUTHORS_VIEW, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
+     ViewSettings(VIEW_ALIAS.IMAGE_VIEW, ImageView, 'imageView.swf', ViewTypes.OVERLAY, VIEW_ALIAS.IMAGE_VIEW, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
      ViewSettings(VIEW_ALIAS.VEHICLE_COMPARE, VehicleCompareView, 'vehicleCompareView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.VEHICLE_COMPARE, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR, VehicleCompareConfiguratorMain, 'vehicleCompareConfiguratorMain.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR, ScopeTemplates.LOBBY_SUB_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.CHECK_BOX_DIALOG, CheckBoxDialog, 'confirmDialog.swf', ViewTypes.TOP_WINDOW, 'confirmDialog', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
@@ -108,6 +108,7 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.SYSTEM_MESSAGE_DIALOG, SystemMessageDialog, 'systemMessageDialog.swf', ViewTypes.WINDOW, 'systemMessageDialog', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True),
      GroupedViewSettings(VIEW_ALIAS.FREE_X_P_INFO_WINDOW, FreeXPInfoWindow, 'freeXPInfoWindow.swf', ViewTypes.TOP_WINDOW, 'freeXPInfoWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canClose=False, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.RECRUIT_WINDOW, RecruitWindow, 'recruitWindow.swf', ViewTypes.WINDOW, 'recruitWindow', None, ScopeTemplates.DEFAULT_SCOPE),
+     GroupedViewSettings(VIEW_ALIAS.ADVENT_CALENDAR, BrowserWindow, 'browserWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, canDrag=True, isModal=False),
      GroupedViewSettings(VIEW_ALIAS.AWARD_WINDOW, AwardWindow, 'awardWindow.swf', ViewTypes.WINDOW, 'awardWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      ConditionalViewSettings(VIEW_ALIAS.BATTLE_RESULTS, BootcampComponentOverride(BattleResultsWindow, BCBattleResult), BootcampComponentOverride('battleResults.swf', 'BCBattleResult.swf'), BootcampComponentOverride(ViewTypes.WINDOW, ViewTypes.TOP_WINDOW), BootcampComponentOverride('BattleResultsWindow', ''), None, BootcampComponentOverride(ScopeTemplates.DEFAULT_SCOPE, ScopeTemplates.TOP_WINDOW_SCOPE)),
      GroupedViewSettings(VIEW_ALIAS.BROWSER_WINDOW, BrowserWindow, 'browserWindow.swf', ViewTypes.WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE),
@@ -153,7 +154,8 @@ def getBusinessHandlers():
 class LobbyPackageBusinessHandler(PackageBusinessHandler):
 
     def __init__(self):
-        listeners = ((VIEW_ALIAS.AWARD_WINDOW, self.loadViewByCtxEvent),
+        listeners = ((VIEW_ALIAS.ADVENT_CALENDAR, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.AWARD_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_QUEUE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_RESULTS, self.loadViewByCtxEvent),
@@ -168,7 +170,7 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.LOBBY_CUSTOMIZATION, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_PREVIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_PREVIEW_20, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.AUTHORS_VIEW, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.IMAGE_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.HERO_VEHICLE_PREVIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.HERO_VEHICLE_PREVIEW_20, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_COMPARE, self.loadViewByCtxEvent),

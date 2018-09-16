@@ -137,6 +137,7 @@ class INGAME_GUI(object):
     STATISTICS_TAB_LINE_UP_TITLE = '#ingame_gui:statistics/tab/line_up/title'
     STATISTICS_TAB_QUESTS_HEADER = '#ingame_gui:statistics/tab/quests/header'
     STATISTICS_TAB_QUESTS_STATUS_INPROGRESS = '#ingame_gui:statistics/tab/quests/status/inProgress'
+    STATISTICS_TAB_QUESTS_STATUS_ONPAUSE = '#ingame_gui:statistics/tab/quests/status/onPause'
     STATISTICS_TAB_QUESTS_STATUS_INCREASERESULT = '#ingame_gui:statistics/tab/quests/status/increaseResult'
     STATISTICS_TAB_QUESTS_STATUS_DONE = '#ingame_gui:statistics/tab/quests/status/done'
     STATISTICS_TAB_QUESTS_STATUS_FULLDONE = '#ingame_gui:statistics/tab/quests/status/fullDone'
@@ -599,12 +600,13 @@ class INGAME_GUI(object):
     STUN_SECONDS = '#ingame_gui:stun/seconds'
     BATTLEPROGRESS_HINT_PRESS = '#ingame_gui:battleProgress/hint/press'
     BATTLEPROGRESS_HINT_DESCRIPTION = '#ingame_gui:battleProgress/hint/description'
-    BATTLEPROGRESS_HINT_NOBINDINGKEY = '#ingame_gui:battleProgress/hint/noBindingKey'
+    COLORSETTINGSTIPPANEL_BTNLABEL = '#ingame_gui:colorSettingsTipPanel/btnLabel'
     REWARDWINDOW_WINHEADERTEXT = '#ingame_gui:rewardWindow/winHeaderText'
     REWARDWINDOW_BASE_SUBHEADERTEXT = '#ingame_gui:rewardWindow/base/subHeaderText'
     REWARDWINDOW_BASE_HEADERTEXT = '#ingame_gui:rewardWindow/base/headerText'
     REWARDWINDOW_BASE_DESCTEXT = '#ingame_gui:rewardWindow/base/descText'
     REWARDWINDOW_BASE_BTNLABEL = '#ingame_gui:rewardWindow/base/btnLabel'
+    BATTLEPROGRESS_HINT_NOBINDINGKEY = '#ingame_gui:battleProgress/hint/noBindingKey'
     REWARDWINDOW_ALL_DESCTEXT_ENUM = (REWARDWINDOW_BASE_DESCTEXT,)
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_TURN_BACK,
      CHAT_SHORTCUTS_SUPPORT_ME_WITH_FIRE,

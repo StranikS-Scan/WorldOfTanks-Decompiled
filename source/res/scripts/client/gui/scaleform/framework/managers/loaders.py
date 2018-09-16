@@ -81,11 +81,12 @@ class SFViewLoadParams(ViewLoadParams):
 
 
 class UBViewLoadParams(ViewLoadParams):
-    __slots__ = ('__viewClass',)
+    __slots__ = ('__viewClass', '__scope')
 
-    def __init__(self, layoutID, viewClass, loadMode=ViewLoadMode.DEFAULT):
-        super(UBViewLoadParams, self).__init__(ViewKey(layoutID, None), loadMode=loadMode)
+    def __init__(self, layoutID, viewClass, scope):
+        super(UBViewLoadParams, self).__init__(ViewKey(layoutID, None), loadMode=ViewLoadMode.DEFAULT)
         self.__viewClass = viewClass
+        self.__scope = scope
         return
 
     @property
@@ -95,6 +96,10 @@ class UBViewLoadParams(ViewLoadParams):
     @property
     def viewClass(self):
         return self.__viewClass
+
+    @property
+    def scope(self):
+        return self.__scope
 
 
 class LoaderManager(LoaderManagerMeta):
@@ -264,11 +269,13 @@ class LoaderManager(LoaderManagerMeta):
         manager = self.uiLoader.windowsManager
         layoutID = loadParams.viewKey.alias
         viewClass = loadParams.viewClass
+        scope = loadParams.scope
         if manager.getView(layoutID) is not None:
             raise SoftException('There is unexpected behavior,we have unbound view, but adaptor is not created: %r'.format(loadParams))
         ubView = viewClass(layoutID, *args, **kwargs)
         adaptor = UnboundViewAdaptor()
         adaptor.setView(ubView)
+        adaptor.setCurrentScope(scope)
         if adaptor.isLoaded():
             raise SoftException('Synchronous loading does not supported: {}'.format(loadParams))
         adaptor.onDispose += self.__handleViewDispose

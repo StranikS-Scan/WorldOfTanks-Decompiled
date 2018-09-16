@@ -89,6 +89,12 @@ class VehiclesInfo(shared.UnpackedInfo):
             vehicleID = self.__accountToVehicleID[dbID]
         else:
             vehicleID = 0
+        return self.__getVehicleSummarize(vehicleID, player, result)
+
+    def getAIBotVehicleSummarizeInfo(self, vehicleID, player, result):
+        return self.__getVehicleSummarize(vehicleID, player, result)
+
+    def __getVehicleSummarize(self, vehicleID, player, result):
         if vehicleID in result:
             result = result[vehicleID]
         else:

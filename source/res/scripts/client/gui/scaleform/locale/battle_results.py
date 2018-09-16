@@ -135,7 +135,6 @@ class BATTLE_RESULTS(object):
     COMMON_DETAILS_BUYPREMIUMBTN = '#battle_results:common/details/buyPremiumBtn'
     COMMON_NOINCOME_ALERT_TITLE = '#battle_results:common/noIncome/alert/title'
     COMMON_NOINCOME_ALERT_TEXT = '#battle_results:common/noIncome/alert/text'
-    COMMON_CREDITS_NOTACCRUED = '#battle_results:common/credits/notAccrued'
     TEAM_STATS_OWNTEAM = '#battle_results:team/stats/ownTeam'
     TEAM_STATS_ENEMYTEAM = '#battle_results:team/stats/enemyTeam'
     TEAM_PLAYERNUMBER_HEADER = '#battle_results:team/playerNumber/header'
@@ -251,7 +250,6 @@ class BATTLE_RESULTS(object):
     DETAILS_TIME_LBL_DURATION = '#battle_results:details/time/lbl_duration'
     DETAILS_TIME_LBL_PLAYERKILLED = '#battle_results:details/time/lbl_playerKilled'
     DETAILS_TIME_VALUE = '#battle_results:details/time/value'
-    DETAILS_CALCULATIONS_WGMOFFLINEEMERGENCY = '#battle_results:details/calculations/wgmOfflineEmergency'
     DETAILS_CALCULATIONS_BOOSTERS = '#battle_results:details/calculations/boosters'
     DETAILS_CALCULATIONS_BATTLEPAYMENTS = '#battle_results:details/calculations/battlePayments'
     DETAILS_CALCULATIONS_TACTICALTRAINING = '#battle_results:details/calculations/tacticalTraining'
@@ -366,8 +364,7 @@ class BATTLE_RESULTS(object):
      TEAM_STATS_LABELS_DESTROYRECOVERYRATIO,
      TEAM_STATS_LABELS_ATKOBJECTIVES,
      TEAM_STATS_LABELS_DEFOBJECTIVES)
-    DETAILS_CALCULATIONS_ENUM = (DETAILS_CALCULATIONS_WGMOFFLINEEMERGENCY,
-     DETAILS_CALCULATIONS_BOOSTERS,
+    DETAILS_CALCULATIONS_ENUM = (DETAILS_CALCULATIONS_BOOSTERS,
      DETAILS_CALCULATIONS_BATTLEPAYMENTS,
      DETAILS_CALCULATIONS_TACTICALTRAINING,
      DETAILS_CALCULATIONS_MILITARYMANEUVERS,

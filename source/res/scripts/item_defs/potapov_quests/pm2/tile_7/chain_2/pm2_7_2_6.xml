@@ -100,7 +100,7 @@ def onFinishBattle(eventType, eventData, quest, processor):
             resultAdd = questProgress.increaseCounterUntilComplete(PROGRESS_ID_ADD, vehClass, killedThisType)
 
     questProgress.increaseEveryProgress(PROGRESS_ID_MAIN_SERIES, resultMain)
-    questProgress.increaseEveryProgress(PROGRESS_ID_ADD_SERIES, resultAdd)
+    questProgress.increaseEveryProgress(PROGRESS_ID_ADD_SERIES, resultAdd, PROGRESS_ID_MAIN_SERIES)
 
     eventData['results'].update(processor.checkComplete(questProgress, quest.progressID, additionalProgressID=PROGRESS_ID_ADD_SERIES))
 

@@ -1,20 +1,16 @@
 <italy.xml>
   <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
     <name>	italy colors	</name>
     <userString>	#vehicle_customization:repaint/color_group_02	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	italy	</nations>
         <levels>	6 8 9 10	</levels>
       </include>
     </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	278	</id>
       <texture>	gui/maps/vehicles/repaints/italy_color_01.png	</texture>
@@ -22,8 +18,6 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/italy_color_01	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	279	</id>
@@ -32,8 +26,6 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/italy_color_02	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	280	</id>
@@ -42,8 +34,6 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/italy_color_03	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	281	</id>
@@ -52,8 +42,6 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/italy_color_04	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	282	</id>
@@ -62,8 +50,6 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/italy_color_05	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	283	</id>
@@ -72,8 +58,6 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/italy_color_06	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	284	</id>
@@ -82,8 +66,12 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/italy_color_07	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
   </itemGroup>
 </italy.xml>

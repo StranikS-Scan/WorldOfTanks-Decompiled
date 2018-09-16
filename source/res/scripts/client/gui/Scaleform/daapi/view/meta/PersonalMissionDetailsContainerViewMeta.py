@@ -13,8 +13,11 @@ class PersonalMissionDetailsContainerViewMeta(BaseMissionDetailsContainerViewMet
     def retryMission(self, eventID):
         self._printOverrideError('retryMission')
 
-    def declineMission(self, eventID):
-        self._printOverrideError('declineMission')
+    def discardMission(self, eventID):
+        self._printOverrideError('discardMission')
 
     def obtainAward(self, eventID):
         self._printOverrideError('obtainAward')
+
+    def onPauseClick(self, eventID):
+        self._printOverrideError('onPauseClick')

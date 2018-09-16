@@ -1349,6 +1349,7 @@ class MENU(object):
     CONTEXTMENU_CREATECONTACTNOTE = '#menu:contextMenu/createContactNote'
     CONTEXTMENU_EDITCONTACTNOTE = '#menu:contextMenu/editContactNote'
     CONTEXTMENU_REMOVECONTACTNOTE = '#menu:contextMenu/removeContactNote'
+    CONTEXTMENU_BOTNOACTIONS = '#menu:contextMenu/botNoActions'
     CONTEXTMENU_COMPARE = '#menu:contextMenu/compare'
     CONTEXTMENU_USERVEHICLECOMPARE = '#menu:contextMenu/userVehicleCompare'
     CONTEXTMENU_PROFILEVEHICLECOMPARE = '#menu:contextMenu/profileVehicleCompare'
@@ -1393,6 +1394,7 @@ class MENU(object):
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_TECHWIN = '#menu:finalStatistic/commonStats/resultlabel/techWin'
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_ENDED = '#menu:finalStatistic/commonStats/resultlabel/ended'
     BROWSER_WINDOW_TITLE = '#menu:browser/window/title'
+    ADVENTCALENDAR_WINDOW_TITLE = '#menu:adventCalendar/window/title'
     BROWSER_DATAUNAVAILABLE_HEADER = '#menu:browser/dataUnavailable/header'
     BROWSER_DATAUNAVAILABLE_DESCRIPTION = '#menu:browser/dataUnavailable/description'
     BROWSER_CUSTOMTITLE_FORT_OFFENSIVERESULT = '#menu:browser/customTitle/fort/offensiveResult'
@@ -1601,19 +1603,6 @@ class MENU(object):
     AWARDWINDOW_PERSONALMISSION_NEXTBUTTONAWARD = '#menu:awardWindow/personalMission/nextButtonAward'
     AWARDWINDOW_PERSONALMISSION_NEXTBUTTONAWARD_TOOLTIP_HEADER = '#menu:awardWindow/personalMission/nextButtonAward/tooltip/header'
     AWARDWINDOW_PERSONALMISSION_NEXTBUTTONAWARD_TOOLTIP_BODY = '#menu:awardWindow/personalMission/nextButtonAward/tooltip/body'
-    AWARDWINDOW_TITLE_BLOGGERSAWARD = '#menu:awardWindow/title/bloggersAward'
-    AWARDWINDOW_BLOGGERSAWARD_HEADER = '#menu:awardWindow/bloggersAward/header'
-    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION = '#menu:awardWindow/bloggersAward/description'
-    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_MEDAL = '#menu:awardWindow/bloggersAward/description/medal'
-    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_EMBLEM = '#menu:awardWindow/bloggersAward/description/emblem'
-    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_INSCRIPTION = '#menu:awardWindow/bloggersAward/description/inscription'
-    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_EXP = '#menu:awardWindow/bloggersAward/description/exp'
-    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_STYLE = '#menu:awardWindow/bloggersAward/description/style'
-    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_BADGE = '#menu:awardWindow/bloggersAward/description/badge'
-    AWARDWINDOW_BLOGGERSAWARD_NAME_USHA = '#menu:awardWindow/bloggersAward/name/usha'
-    AWARDWINDOW_BLOGGERSAWARD_NAME_AMWAY = '#menu:awardWindow/bloggersAward/name/amway'
-    AWARDWINDOW_BLOGGERSAWARD_NAME_JOVE = '#menu:awardWindow/bloggersAward/name/jove'
-    AWARDWINDOW_BLOGGERSAWARD_NAME_LEBWA = '#menu:awardWindow/bloggersAward/name/lebwa'
     REFERRALMANAGEMENTWINDOW_TITLE = '#menu:ReferralManagementWindow/title'
     REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVENOTTANK = '#menu:ReferralManagementWindow/infoHeader/haveNotTank'
     REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVETANK = '#menu:ReferralManagementWindow/infoHeader/haveTank'
@@ -1875,6 +1864,7 @@ class MENU(object):
      CONTEXTMENU_CREATECONTACTNOTE,
      CONTEXTMENU_EDITCONTACTNOTE,
      CONTEXTMENU_REMOVECONTACTNOTE,
+     CONTEXTMENU_BOTNOACTIONS,
      CONTEXTMENU_COMPARE,
      CONTEXTMENU_USERVEHICLECOMPARE,
      CONTEXTMENU_PROFILEVEHICLECOMPARE,

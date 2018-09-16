@@ -20,6 +20,13 @@ from skeletons.gui.shared.utils import IHangarSpace
 from skeletons.helpers.statistics import IStatisticsCollector
 from gui import g_keyEventHandlers
 from gui.shared import g_eventBus, events
+from constants import IS_DEVELOPMENT
+import AvatarInputHandler
+from AvatarInputHandler.VideoCamera import VideoCamera
+from gui.app_loader import g_appLoader, settings as app_settings
+from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
+from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
+from gui.prb_control.events_dispatcher import g_eventDispatcher
 _MAX_HANDLERS_IN_Q = 100
 _Q_CHECK_DELAY = 0.0
 
@@ -57,29 +64,26 @@ class _execute_after_hangar_space_inited(object):
 g_execute_after_hangar_space_inited = _execute_after_hangar_space_inited()
 
 class HangarVideoCameraController(object):
-    import AvatarInputHandler
-    from AvatarInputHandler.VideoCamera import VideoCamera
+    hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self):
         self.__videoCamera = None
         self.__enabled = False
-        self.__overriddenCamera = None
         self.__videoCamera = None
         return
 
     def init(self):
-        rootSection = ResMgr.openSection(HangarVideoCameraController.AvatarInputHandler._INPUT_HANDLER_CFG)
-        if rootSection is None:
+        if not IS_DEVELOPMENT:
             return
         else:
+            rootSection = ResMgr.openSection(AvatarInputHandler.INPUT_HANDLER_CFG)
+            if rootSection is None:
+                return
             videoSection = rootSection['videoMode']
             if videoSection is None:
                 return
-            if not videoSection.readBool('enableInHangar', False):
-                return
             videoCameraSection = videoSection['camera']
-            self.__videoCamera = HangarVideoCameraController.VideoCamera(videoCameraSection)
-            self.__overriddenCamera = BigWorld.camera()
+            self.__videoCamera = VideoCamera(videoCameraSection)
             InputHandler.g_instance.onKeyDown += self.handleKeyEvent
             InputHandler.g_instance.onKeyUp += self.handleKeyEvent
             g_mouseEventHandlers.add(self.handleMouseEvent)
@@ -90,7 +94,6 @@ class HangarVideoCameraController(object):
             return
         else:
             self.__videoCamera.destroy()
-            BigWorld.camera(self.__overriddenCamera)
             InputHandler.g_instance.onKeyDown -= self.handleKeyEvent
             InputHandler.g_instance.onKeyUp -= self.handleKeyEvent
             g_mouseEventHandlers.discard(self.handleMouseEvent)
@@ -103,12 +106,28 @@ class HangarVideoCameraController(object):
             if BigWorld.isKeyDown(Keys.KEY_CAPSLOCK) and event.isKeyDown() and event.key == Keys.KEY_F3:
                 self.__enabled = not self.__enabled
                 if self.__enabled:
-                    self.__overriddenCamera = BigWorld.camera()
-                    self.__videoCamera.enable()
+                    self.__enableVideoCamera()
                 else:
-                    self.__videoCamera.disable()
-                    BigWorld.camera(self.__overriddenCamera)
+                    self.__disableVideoCamera()
             return self.__videoCamera.handleKeyEvent(event.key, event.isKeyDown()) if self.__enabled else False
+
+    def __enableVideoCamera(self):
+        playerVehicle = self.hangarSpace.space.getVehicleEntity()
+        if playerVehicle is not None and playerVehicle.state != CameraMovementStates.ON_OBJECT:
+            self.__enabled = False
+            return
+        else:
+            self.__videoCamera.enable()
+            g_appLoader.detachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY)
+            BigWorld.player().objectsSelectionEnabled(False)
+            g_eventDispatcher.loadHangar()
+            return
+
+    def __disableVideoCamera(self):
+        self.__videoCamera.disable()
+        BigWorld.camera(self.hangarSpace.space.camera)
+        g_appLoader.attachCursor(app_settings.APP_NAME_SPACE.SF_LOBBY, _CTRL_FLAG.GUI_ENABLED)
+        BigWorld.player().objectsSelectionEnabled(True)
 
     def handleMouseEvent(self, event):
         if self.__videoCamera is None:
@@ -139,10 +158,11 @@ class HangarSpace(IHangarSpace):
         self.onSpaceRefresh = Event.Event()
         self.onSpaceCreate = Event.Event()
         self.onSpaceDestroy = Event.Event()
-        self.onObjectSelected = Event.Event()
-        self.onObjectUnselected = Event.Event()
-        self.onObjectClicked = Event.Event()
-        self.onObjectReleased = Event.Event()
+        self.onSpaceChanged = Event.Event()
+        self.onMouseEnter = Event.Event()
+        self.onMouseExit = Event.Event()
+        self.onMouseDown = Event.Event()
+        self.onMouseUp = Event.Event()
         self.onHeroTankReady = Event.Event()
         self.onVehicleChanged = Event.Event()
         self.onVehicleChangeStarted = Event.Event()
@@ -262,9 +282,9 @@ class HangarSpace(IHangarSpace):
     def __handleKeyEvent(self, event):
         if event.key == Keys.KEY_LEFTMOUSE:
             if event.isKeyDown():
-                self.onObjectClicked()
+                self.onMouseDown()
             else:
-                self.onObjectReleased()
+                self.onMouseUp()
 
     @g_execute_after_hangar_space_inited
     def updatePreviewVehicle(self, vehicle):

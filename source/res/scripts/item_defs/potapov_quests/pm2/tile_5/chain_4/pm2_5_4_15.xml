@@ -138,46 +138,8 @@ def onFinishBattle(eventType, eventData, quest, processor):
 
     avatarResults = eventData['avatarResults']
 
-    battleHeroAchievements = [('achievements', 'warrior'),
-                              ('achievements', 'invader'),
-                              ('achievements', 'sniper'),
-                              ('achievements', 'sniper2'),
-                              ('achievements', 'mainGun'),
-                              ('achievements', 'defender'),
-                              ('achievements', 'steelwall'),
-                              ('achievements', 'supporter'),
-                              ('achievements', 'scout'),
-                              ('achievements', 'evileye')]
-
-    epicMedals = [('achievements', 'medalWittmann'),
-                  ('achievements', 'medalRadleyWalters'),
-                  ('achievements', 'medalLafayettePool'),
-                  ('achievements', 'heroesOfRassenay'),
-                  ('achievements', 'medalBillotte'),
-                  ('achievements', 'medalBrunoPietro'),
-                  ('achievements', 'medalTarczay'),
-                  ('achievements', 'medalBurda'),
-                  ('achievements', 'medalPascucci'),
-                  ('achievements', 'medalDumitru'),
-                  ('achievements', 'medalOskin'),
-                  ('achievements', 'medalLehvaslaiho'),
-                  ('achievements', 'medalNikolas'),
-                  ('achievements', 'medalOrlik'),
-                  ('achievements', 'medalHalonen'),
-                  ('achievements', 'medalKolobanov'),
-                  ('achievements', 'medalFadin'),
-                  ('achievements', 'medalDeLanglade'),
-                  ('achievements', 'medalGore'),
-                  ('achievements', 'huntsman'),
-                  ('achievements', 'medalTamadaYoshio')]
-
-    medalDescriptors = []
-    medalDescriptors.extend(battleHeroAchievements)
-    medalDescriptors.extend(epicMedals)
-
-    battleHeroMedalSet = {records.RECORD_DB_IDS[rec] for rec in medalDescriptors}
-
-    medalsCount = sum(1 for medal in avatarResults['achievements'] if medal in battleHeroMedalSet)
+    medalSet = records.BATTLE_HERO_MEDAL_SET | records.EPIC_MEDAL_SET
+    medalsCount = sum(1 for medal in avatarResults['achievements'] if medal in medalSet)
 
     if questProgress.increaseUntilComplete(BATTLE_HERO_MEDALS_IN_BATTLE, medalsCount):
         questProgress.increaseUntilComplete(BATTLE_HERO_MEDALS_IN_BATTLE_SERIES, 1)

@@ -5,6 +5,7 @@ import weakref
 import BigWorld
 import Math
 import TriggersManager
+import AnimationSequence
 from constants import ARENA_PERIOD
 from PlayerEvents import g_playerEvents
 from gui.battle_control import avatar_getter
@@ -183,6 +184,7 @@ class _StaticObjectMarker3D(_IMarker):
         path = data.get('path')
         offset = data.get('offset', Math.Vector3(0, 0, 0))
         self.__model = None
+        self.__animator = None
         if path is not None:
             try:
                 self.__model = BigWorld.Model(path)
@@ -200,7 +202,12 @@ class _StaticObjectMarker3D(_IMarker):
             action = data.get('action')
             if action:
                 try:
-                    self.__model.action(action)()
+                    clipResource = self.__model.deprecatedGetAnimationClipResource(action)
+                    loader = AnimationSequence.Loader(clipResource, BigWorld.player().spaceID)
+                    animator = loader.loadSync()
+                    animator.bindTo(AnimationSequence.ModelWrapperContainer(self.__model))
+                    animator.start()
+                    self.__animator = animator
                 except ValueError:
                     LOG_ERROR('Action not found', path, action)
 
@@ -211,6 +218,7 @@ class _StaticObjectMarker3D(_IMarker):
 
     def clear(self):
         LOG_DEBUG('_StaticObjectMarker3D.clear', self.__model)
+        self.__animator = None
         if self.__model is not None:
             BigWorld.delModel(self.__model)
         self.__model = None

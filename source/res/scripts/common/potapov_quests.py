@@ -40,8 +40,16 @@ def isPotapovQuestBranchEnabled(gameParams, branch):
     return gameParams['misc_settings']['isPM2QuestEnabled'] if branch == PQ_BRANCH.PERSONAL_MISSION_2 else False
 
 
-def isPotapovQuestEnabled(gameParams, pqType):
+def isPotapovQuestTileEnabled(gameParams, pqType):
     return pqType.tileID not in gameParams['misc_settings']['disabledPMOperations']
+
+
+def isPotapovQuestEnabled(gameParams, questID):
+    return questID not in gameParams['misc_settings']['disabledPersonalMissions']
+
+
+def isPotapovQuestBranchTileAndMissionEnabled(gameParams, pqType):
+    return isPotapovQuestBranchEnabled(gameParams, pqType.branch) and isPotapovQuestTileEnabled(gameParams, pqType) and isPotapovQuestEnabled(gameParams, pqType.id)
 
 
 class PQ_STATE():
@@ -60,6 +68,11 @@ class PQ_STATE():
      NEED_GET_ALL_REWARDS: (ALL_REWARDS_GOTTEN,)}
     NEED_GET_REWARD = (NEED_GET_MAIN_REWARD, NEED_GET_ADD_REWARD, NEED_GET_ALL_REWARDS)
     COMPLETED = (ALL_REWARDS_GOTTEN, NEED_GET_ALL_REWARDS, NEED_GET_ADD_REWARD)
+
+
+class PQ_FLAG():
+    NONE = 0
+    PAUSE = 1
 
 
 PQ_REWARD_BY_DEMAND = {1: (PQ_STATE.NEED_GET_MAIN_REWARD, PQ_STATE.NEED_GET_ALL_REWARDS),
@@ -417,15 +430,15 @@ class PQType(object):
     def getMajorTag(self):
         return self.classifier.classificationAttr
 
-    def maySelectQuest(self, unlockedQuests):
-        return len(self.requiredUnlocks - frozenset(unlockedQuests)) == 0
+    def maySelectQuest(self, completedQuests):
+        return len(self.requiredUnlocks - frozenset(completedQuests)) == 0
 
-    def maySelectQuestToPawn(self, unlockedQuests):
+    def maySelectQuestToPawn(self, completedQuests):
         result = True
-        requiredQuestIds = self.requiredUnlocks - frozenset(unlockedQuests)
+        requiredQuestIds = self.requiredUnlocks - frozenset(completedQuests)
         for requiredQuestId in requiredQuestIds:
             pqType = g_cache.questByPotapovQuestID(requiredQuestId)
-            result &= pqType.maySelectQuest(unlockedQuests)
+            result &= pqType.maySelectQuest(completedQuests)
 
         return result
 
@@ -474,6 +487,9 @@ class PQStorage(object):
     def keys(self):
         return self.__quests.keys()
 
+    def completedPQIDs(self):
+        return [ k for k, v in self.__quests.iteritems() if v[1] >= PQ_STATE.NEED_GET_MAIN_REWARD ]
+
     def __getitem__(self, id):
         return self.__quests[id]
 
@@ -489,7 +505,7 @@ class PQStorage(object):
     def __contains__(self, id):
         return id in self.__quests
 
-    def get(self, key, default=(0, PQ_STATE.NONE)):
+    def get(self, key, default=(PQ_FLAG.NONE, PQ_STATE.NONE)):
         return self.__quests.get(key, default)
 
     def pop(self, id):

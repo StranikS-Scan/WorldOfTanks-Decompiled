@@ -198,6 +198,10 @@ def allianceFromVehicleCD(compactDescr):
     return nations.NATION_TO_ALLIANCE_IDS_MAP[nation]
 
 
+def getVehicleAlliance(vehTypeCompDescr):
+    return nations.ALLIANCES_TAGS_ORDER[allianceFromVehicleCD(vehTypeCompDescr)]
+
+
 def isFromSameAlliance(typeCD1, typeCD2):
     return allianceFromVehicleCD(typeCD1) == allianceFromVehicleCD(typeCD2)
 

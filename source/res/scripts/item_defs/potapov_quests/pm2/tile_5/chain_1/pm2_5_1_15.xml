@@ -130,12 +130,12 @@ def onFinishBattle(eventType, eventData, quest, processor):
     questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
 
     brfilter = filter.BattleResultsFilter(eventData)
-    addCondition = bool(eventData['avatarResults'].get('markOfMastery', None) &gt;=
+    addCondition = bool(eventData['avatarResults']['markOfMastery'] &gt;=
                         questProgress.getProgress(PROGRESS_ID_ADD).getParam("markOfMastery"))
     if addCondition:
         questProgress.setCompleted(PROGRESS_ID_ADD)
         questProgress.increaseUntilComplete(PROGRESS_SERIES, 1)
-    mainCondition = bool(eventData['avatarResults'].get('markOfMastery', None) &gt;=
+    mainCondition = bool(eventData['avatarResults']['markOfMastery'] &gt;=
                          questProgress.getProgress(PROGRESS_ID_MAIN).getParam("markOfMastery"))
     if mainCondition:
         questProgress.setCompleted(PROGRESS_ID_MAIN)

@@ -84,8 +84,6 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self._disableBuyButton = False
         self.__keepVehicleSelectionEnabled = False
         self._needToResetAppearance = True
-        if 'objectSelectionEnabled' in ctx:
-            self._objectSelectionEnabled = ctx.get('objectSelectionEnabled')
         return
 
     def _populate(self):

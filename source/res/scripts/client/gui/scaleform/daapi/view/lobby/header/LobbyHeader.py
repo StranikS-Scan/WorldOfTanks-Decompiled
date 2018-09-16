@@ -902,6 +902,19 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
          'icon': emblem,
          'enabled': strongholdEnabled}
 
+    def _updatePersonalMissionSelector(self):
+        if self.lobbyContext.getServerSettings().isPersonalMissionsEnabled():
+            tooltip = TOOLTIPS.HEADER_BUTTONS_PERSONALMISSIONS
+            enabled = True
+        else:
+            tooltip = TOOLTIPS.HEADER_BUTTONS_PERSONALMISSIONSDISABLED
+            enabled = False
+        return {'label': MENU.HEADERBUTTONS_PERSONALMISSIONS,
+         'value': self.TABS.PERSONAL_MISSIONS,
+         'tooltip': tooltip,
+         'enabled': enabled,
+         'subValues': [self.TABS.PERSONAL_MISSIONS_PAGE]}
+
     def _getHangarMenuItemDataProvider(self, fortEmblem):
         tabDataProvider = [{'label': MENU.HEADERBUTTONS_HANGAR,
           'value': self.TABS.HANGAR,
@@ -914,22 +927,16 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             tabDataProvider.append({'label': MENU.HEADERBUTTONS_STORAGE,
              'value': self.TABS.STORAGE,
              'tooltip': TOOLTIPS.HEADER_BUTTONS_STORAGE})
-        tabDataProvider.extend([{'label': MENU.HEADERBUTTONS_MISSIONS,
-          'value': self.TABS.MISSIONS,
-          'tooltip': TOOLTIPS.HEADER_BUTTONS_MISSIONS},
-         {'label': MENU.HEADERBUTTONS_PERSONALMISSIONS,
-          'value': self.TABS.PERSONAL_MISSIONS,
-          'tooltip': TOOLTIPS.HEADER_BUTTONS_PERSONALMISSIONS,
-          'enabled': self.lobbyContext.getServerSettings().isPersonalMissionsEnabled(),
-          'subValues': [self.TABS.PERSONAL_MISSIONS_PAGE]},
-         {'label': MENU.HEADERBUTTONS_PROFILE,
+        tabDataProvider.append({'label': MENU.HEADERBUTTONS_MISSIONS,
+         'value': self.TABS.MISSIONS,
+         'tooltip': TOOLTIPS.HEADER_BUTTONS_MISSIONS})
+        tabDataProvider.append(self._updatePersonalMissionSelector())
+        tabDataProvider.extend([{'label': MENU.HEADERBUTTONS_PROFILE,
           'value': self.TABS.PROFILE,
-          'tooltip': TOOLTIPS.HEADER_BUTTONS_PROFILE},
-         {'label': MENU.HEADERBUTTONS_TECHTREE,
+          'tooltip': TOOLTIPS.HEADER_BUTTONS_PROFILE}, {'label': MENU.HEADERBUTTONS_TECHTREE,
           'value': self.TABS.TECHTREE,
           'tooltip': TOOLTIPS.HEADER_BUTTONS_TECHTREE,
-          'subValues': [self.TABS.RESEARCH]},
-         {'label': MENU.HEADERBUTTONS_BARRACKS,
+          'subValues': [self.TABS.RESEARCH]}, {'label': MENU.HEADERBUTTONS_BARRACKS,
           'value': self.TABS.BARRACKS,
           'tooltip': TOOLTIPS.HEADER_BUTTONS_BARRACKS}])
         if constants.IS_CHINA:

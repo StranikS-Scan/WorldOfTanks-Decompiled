@@ -13,8 +13,8 @@ except ImportError:
 
 SCALEFORM_SWF_PATH = 'gui/scaleform'
 SCALEFORM_SWF_PATH_V3 = 'gui/flash'
-SCALEFORM_STARTUP_VIDEO_PATH = 'gui/flash/video'
-SCALEFORM_STARTUP_VIDEO_MASK = 'video/%s'
+SCALEFORM_STARTUP_VIDEO_PATH = 'gui/flash/videos'
+SCALEFORM_STARTUP_VIDEO_MASK = 'videos/%s'
 SCALEFORM_WALLPAPER_PATH = 'gui/maps/login'
 VEHICLE_TYPES_ICONS_DIR_PATH = '../maps/icons/filters/tanks/'
 NATION_FILTER_ICONS_DIR_PATH = '../maps/icons/filters/nations/'

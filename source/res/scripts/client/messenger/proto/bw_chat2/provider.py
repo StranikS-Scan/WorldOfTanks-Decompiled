@@ -2,15 +2,15 @@
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/provider.py
 import weakref
 from collections import defaultdict, deque
-import BattleReplay
-from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
 import BigWorld
+import BattleReplay
+from BattleReplay import CallbackDataNames
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION
+from gui.shared.rq_cooldown import RequestCooldownManager, REQUEST_SCOPE
 from ids_generators import SequenceIDGenerator
 from messenger.proto.bw_chat2.errors import createCoolDownError
 from messenger.proto.events import g_messengerEvents
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS, messageArgs
-_REPLAY_ACTION_RECEIVED_CALLBACK = 'bw_chat2.onActionReceived'
 
 class _ChatCooldownManager(RequestCooldownManager):
 
@@ -39,10 +39,10 @@ class BWChatProvider(object):
 
     def clear(self):
         self.__handlers.clear()
-        BattleReplay.g_replayCtrl.delDataCallback(_REPLAY_ACTION_RECEIVED_CALLBACK, self.__onActionReceivedFromReplay)
+        BattleReplay.g_replayCtrl.delDataCallback(CallbackDataNames.BW_CHAT2_REPLAY_ACTION_RECEIVED_CALLBACK, self.__onActionReceivedFromReplay)
 
     def goToReplay(self):
-        BattleReplay.g_replayCtrl.setDataCallback(_REPLAY_ACTION_RECEIVED_CALLBACK, self.__onActionReceivedFromReplay)
+        BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.BW_CHAT2_REPLAY_ACTION_RECEIVED_CALLBACK, self.__onActionReceivedFromReplay)
 
     def setEnable(self, value):
         if self.__isEnabled == value:
@@ -69,7 +69,7 @@ class BWChatProvider(object):
 
     def onActionReceived(self, actionID, reqID, args):
         if BattleReplay.g_replayCtrl.isRecording and self.__isActionWrittenToReplay(actionID):
-            BattleReplay.g_replayCtrl.serializeCallbackData(_REPLAY_ACTION_RECEIVED_CALLBACK, (actionID, reqID, args))
+            BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.BW_CHAT2_REPLAY_ACTION_RECEIVED_CALLBACK, (actionID, reqID, args))
         handlers = self.__handlers[actionID]
         for handler in handlers:
             try:

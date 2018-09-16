@@ -407,6 +407,7 @@ class _ClientHangarSpacePathOverride(object):
             del _EVENT_HANGAR_PATHS[isPremium]
         if isReload:
             self.hangarSpace.refreshSpace(self.hangarSpace.isPremium, True)
+            self.hangarSpace.onSpaceChanged()
         return
 
     def __onDisconnected(self):

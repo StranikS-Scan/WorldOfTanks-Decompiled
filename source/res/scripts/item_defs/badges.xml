@@ -868,6 +868,43 @@
       </value>
     </badge>
     <badge>
+      <name>	vbr	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	43	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>
+          <name>	realm	</name>
+          <type>	dict	</type>
+          <value>
+            <item>
+              <name>	include	</name>
+              <type>	list	</type>
+              <value>
+                <item>	RU	</item>
+              </value>
+            </item>
+          </value>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	ai_bot	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	51	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1.5	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	gold	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
       <name>	personal_missions_2_1_1	</name>
       <type>	dict	</type>
       <value>
@@ -1009,31 +1046,6 @@
       </value>
     </badge>
     <badge>
-      <name>	vbr	</name>
-      <type>	dict	</type>
-      <value>
-        <item>	43	  <name>	id	</name>
-          <type>	int	</type>
-        </item>
-        <item>	1.00	  <name>	weight	</name>
-          <type>	float	</type>
-        </item>
-        <item>
-          <name>	realm	</name>
-          <type>	dict	</type>
-          <value>
-            <item>
-              <name>	include	</name>
-              <type>	list	</type>
-              <value>
-                <item>	RU	</item>
-              </value>
-            </item>
-          </value>
-        </item>
-      </value>
-    </badge>
-    <badge>
       <name>	StreamersEventUsha	</name>
       <type>	dict	</type>
       <value>
@@ -1154,6 +1166,69 @@
               </value>
             </item>
           </value>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	ranked_s3_gold	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	48	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.04	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	17	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	3	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	red	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	ranked_s3_silver	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	49	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.05	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	17	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	2	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	red	  <name>	highlight	</name>
+          <type>	string	</type>
+        </item>
+      </value>
+    </badge>
+    <badge>
+      <name>	ranked_s3_bronze	</name>
+      <type>	dict	</type>
+      <value>
+        <item>	50	  <name>	id	</name>
+          <type>	int	</type>
+        </item>
+        <item>	5.06	  <name>	weight	</name>
+          <type>	float	</type>
+        </item>
+        <item>	17	  <name>	group	</name>
+          <type>	int	</type>
+        </item>
+        <item>	1	  <name>	class	</name>
+          <type>	int	</type>
+        </item>
+        <item>	red	  <name>	highlight	</name>
+          <type>	string	</type>
         </item>
       </value>
     </badge>

@@ -110,7 +110,7 @@ class StateBattlePreparing(AbstractState):
         video = ''
         background = ''
         if self.isVideoPlayingLesson:
-            video = 'video/_tutorialInitial.usm'
+            video = 'videos/_tutorialInitial.usm'
             background = RES_ICONS.MAPS_ICONS_BOOTCAMP_LOADING_INTROLOADING
         introVideoData = {'backgroundImage': background,
          'video': video,

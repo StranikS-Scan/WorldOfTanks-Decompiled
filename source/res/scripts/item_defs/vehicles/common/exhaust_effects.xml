@@ -188,9 +188,7 @@
         <selector>
           <type>	template	</type>
           <name>	ExhaustLoad	</name>
-          <parameters>	_engine_load:engineLoad;
-				_physicLoad:physicLoad;
-				_rpm:RPM	</parameters>
+          <parameters>	_engine_load:engineLoad;     _physicLoad:physicLoad;     _rpm:RPM	</parameters>
         </selector>
         <selector>
           <type>	template	</type>
@@ -253,9 +251,7 @@
         <selector>
           <type>	template	</type>
           <name>	STRVLoad	</name>
-          <parameters>	_engine_load:engineLoad;
-				_physicLoad:physicLoad;
-				_rpm:RPM	</parameters>
+          <parameters>	_engine_load:engineLoad;     _physicLoad:physicLoad;     _rpm:RPM	</parameters>
         </selector>
         <selector>
           <type>	template	</type>

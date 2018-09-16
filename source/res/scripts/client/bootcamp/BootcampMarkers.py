@@ -7,15 +7,17 @@ from functools import partial
 import Math
 import BigWorld
 import SoundGroups
-from helpers import dependency
-from account_helpers.settings_core import ISettingsCore
-from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP, LOG_ERROR_BOOTCAMP
-from skeletons.gui.battle_session import IBattleSessionProvider
+import AnimationSequence
 import TriggersManager
 import BattleReplay
+from account_helpers.settings_core import ISettingsCore
+from BattleReplay import CallbackDataNames
 from BootCampEvents import g_bootcampEvents
 from BootcampConstants import UI_STATE
 from BootcampGUI import getDirectionIndicator
+from debug_utils_bootcamp import LOG_DEBUG_DEV_BOOTCAMP, LOG_ERROR_BOOTCAMP
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.game_control import IBootcampController
 
 class _IMarker(object):
@@ -287,6 +289,7 @@ class _StaticObjectMarker3D(_IMarker):
         self.__model = None
         self.__isMarkerVisible = not switchedToSniperMode
         self.__action = data.get('action')
+        self.__animator = None
         self.__modelOwner = None
         self.__destroyed = False
         if self.__path is not None:
@@ -302,7 +305,12 @@ class _StaticObjectMarker3D(_IMarker):
             self.__modelOwner.addModel(self.__model)
             if self.__action:
                 try:
-                    self.__model.action(self.__action)()
+                    clipResource = self.__model.deprecatedGetAnimationClipResource(self.__action)
+                    loader = AnimationSequence.Loader(clipResource, BigWorld.player().spaceID)
+                    animator = loader.loadSync()
+                    animator.bindTo(AnimationSequence.ModelWrapperContainer(self.__model))
+                    animator.start()
+                    self.__animator = animator
                 except ValueError:
                     LOG_ERROR_BOOTCAMP('Action not found', self.__path, self.__action)
                 except EnvironmentError:
@@ -316,6 +324,7 @@ class _StaticObjectMarker3D(_IMarker):
     def clear(self):
         LOG_DEBUG_DEV_BOOTCAMP('_StaticObjectMarker3D.clear', self.__model)
         self.setVisible(False)
+        self.__animator = None
         self.__model = None
         self.__destroyed = True
         return
@@ -326,6 +335,7 @@ class _StaticObjectMarker3D(_IMarker):
             self.addMarkerModel()
         elif not isVisible:
             self.__isMarkerVisible = False
+            self.__animator = None
             if self.__modelOwner is not None and not self.__modelOwner.isDestroyed:
                 self.__modelOwner.delModel(self.__model)
             self.__modelOwner = None
@@ -439,7 +449,7 @@ class BootcampMarkersManager(object):
 
     def onTriggerActivated(self, params):
         if params['type'] == TriggersManager.TRIGGER_TYPE.SNIPER_MODE:
-            self.serializeMethod('bootcampMarkers_onTriggerActivated', (params,))
+            self.serializeMethod(CallbackDataNames.BC_MARKERS_ONTRIGGERACTIVATED, (params,))
             self.__switchedToSniperMode = True
             for marker in self.__markers.values():
                 marker.setVisible(False)
@@ -447,7 +457,7 @@ class BootcampMarkersManager(object):
             return
         else:
             if 'name' in params:
-                self.serializeMethod('bootcampMarkers_onTriggerActivated', (params,))
+                self.serializeMethod(CallbackDataNames.BC_MARKERS_ONTRIGGERACTIVATED, (params,))
                 triggerName = params['name']
                 if self.__markersParams is not None:
                     for markerParams in self.__markersParams:
@@ -462,7 +472,7 @@ class BootcampMarkersManager(object):
 
     def onTriggerDeactivated(self, params):
         if params['type'] == TriggersManager.TRIGGER_TYPE.SNIPER_MODE:
-            self.serializeMethod('bootcampMarkers_onTriggerDeactivated', (params,))
+            self.serializeMethod(CallbackDataNames.BC_MARKERS_ONTRIGGERDEACTIVATED, (params,))
             self.__switchedToSniperMode = False
             for marker in self.__markers.itervalues():
                 marker.setVisible(True)
@@ -481,7 +491,7 @@ class BootcampMarkersManager(object):
         if self.__markersParams is None:
             return
         else:
-            self.serializeMethod('bootcampMarkers_showMarker', (name,))
+            self.serializeMethod(CallbackDataNames.BC_MARKERS_SHOWMARKER, (name,))
             for markerParams in self.__markersParams:
                 if name == markerParams['name']:
                     if name not in self.__markers:
@@ -502,7 +512,7 @@ class BootcampMarkersManager(object):
         if self.__markersParams is None:
             return
         else:
-            self.serializeMethod('bootcampMarkers_hideMarker', (name, silently))
+            self.serializeMethod(CallbackDataNames.BC_MARKERS_HIDEMARKER, (name, silently))
             if name in self.__markers:
                 if self.__markerSoundShow is not None:
                     self.__markerSoundShow.stop()
@@ -523,10 +533,10 @@ class BootcampMarkersManager(object):
         return self.__markers
 
     def replaySubscribe(self):
-        self.replayMethodSubscribe('bootcampMarkers_onTriggerActivated', self.onTriggerActivated)
-        self.replayMethodSubscribe('bootcampMarkers_onTriggerDeactivated', self.onTriggerDeactivated)
-        self.replayMethodSubscribe('bootcampMarkers_showMarker', self.showMarker)
-        self.replayMethodSubscribe('bootcampMarkers_hideMarker', self.hideMarker)
+        self.replayMethodSubscribe(CallbackDataNames.BC_MARKERS_ONTRIGGERACTIVATED, self.onTriggerActivated)
+        self.replayMethodSubscribe(CallbackDataNames.BC_MARKERS_ONTRIGGERDEACTIVATED, self.onTriggerDeactivated)
+        self.replayMethodSubscribe(CallbackDataNames.BC_MARKERS_SHOWMARKER, self.showMarker)
+        self.replayMethodSubscribe(CallbackDataNames.BC_MARKERS_HIDEMARKER, self.hideMarker)
 
     def replayMethodSubscribe(self, eventName, method):
         callback = partial(self.replayMethodCall, method, eventName)

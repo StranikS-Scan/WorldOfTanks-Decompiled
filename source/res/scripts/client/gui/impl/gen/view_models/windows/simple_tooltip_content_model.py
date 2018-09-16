@@ -30,6 +30,7 @@ class SimpleTooltipContentModel(ViewModel):
         self._setString(3, value)
 
     def _initialize(self):
+        super(SimpleTooltipContentModel, self)._initialize()
         self._addStringProperty('header', '')
         self._addStringProperty('body', '')
         self._addStringProperty('note', '')

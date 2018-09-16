@@ -201,13 +201,14 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
                 self.__moneyState = _MoneyForPurchase.ENOUGH_WITH_EXCHANGE
             else:
                 self.__moneyState = _MoneyForPurchase.NOT_ENOUGH
+        validTransaction = self.__moneyState != _MoneyForPurchase.NOT_ENOUGH or Currency.GOLD in shortage.getCurrency() and isIngameShopEnabled()
         self.as_setTotalDataS({'totalLabel': text_styles.highTitle(_ms(VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_TOTALCOST, selected=cart.numSelected, total=cart.numApplying)),
-         'enoughMoney': self.__moneyState == _MoneyForPurchase.ENOUGH,
+         'enoughMoney': validTransaction,
          'inFormationAlert': inFormationAlert,
          'totalPrice': totalPriceVO[0]})
-        self.__setBuyButtonState()
+        self.__setBuyButtonState(validTransaction)
 
-    def __setBuyButtonState(self):
+    def __setBuyButtonState(self, validTransaction):
         purchase = 1 if self.__isStyle else 0
         purchase += sum([ self.__counters[season][0] for season in SeasonType.COMMON_SEASONS ])
         inventory = sum([ self.__counters[season][1] for season in SeasonType.COMMON_SEASONS ])
@@ -216,12 +217,11 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
             label = VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_BTNBUY
         else:
             label = VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_BTNAPPLY
-        isEnabled = self.__moneyState is not _MoneyForPurchase.NOT_ENOUGH or isIngameShopEnabled()
         isAnySelected = purchase + inventory > 0
         if not isAnySelected:
             label = ''
             tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTSELECTEDITEMS
-        self.as_setBuyBtnStateS(isEnabled and isAnySelected, label, tooltip)
+        self.as_setBuyBtnStateS(validTransaction and isAnySelected, label, tooltip)
 
     def __onServerSettingChanged(self, diff):
         if 'isCustomizationEnabled' in diff and not diff.get('isCustomizationEnabled', True):

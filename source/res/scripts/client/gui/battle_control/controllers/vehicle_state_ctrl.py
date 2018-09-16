@@ -2,9 +2,11 @@
 # Embedded file name: scripts/client/gui/battle_control/controllers/vehicle_state_ctrl.py
 import weakref
 import BigWorld
+import BattleReplay
 import Event
 import SoundGroups
 import nations
+from BattleReplay import CallbackDataNames
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.battle_control import avatar_getter
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, VEHICLE_WAINING_INTERVAL
@@ -329,15 +331,30 @@ class VehicleStateController(IBattleController):
 class VehicleStateReplayRecorder(VehicleStateController):
 
     def invalidate(self, state, value, vehicleID=0):
-        if state == VEHICLE_VIEW_STATE.CRUISE_MODE:
-            import BattleReplay
-            BattleReplay.g_replayCtrl.onSetCruiseMode(value)
+        if state in VEHICLE_VIEW_STATE.CLIENT_ONLY:
+            BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.CLIENT_VEHICLE_STATE_GROUP.format(state), (state, value, vehicleID))
         super(VehicleStateReplayRecorder, self).invalidate(state, value, vehicleID)
+
+
+class VehicleStateReplayPlayer(VehicleStateController):
+
+    def startControl(self):
+        super(VehicleStateReplayPlayer, self).startControl()
+        for state in VEHICLE_VIEW_STATE.CLIENT_ONLY:
+            BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.CLIENT_VEHICLE_STATE_GROUP.format(state), self.invalidate)
+
+    def stopControl(self):
+        for state in VEHICLE_VIEW_STATE.CLIENT_ONLY:
+            BattleReplay.g_replayCtrl.delDataCallback(CallbackDataNames.CLIENT_VEHICLE_STATE_GROUP.format(state), self.invalidate)
+
+        super(VehicleStateReplayPlayer, self).stopControl()
 
 
 def createCtrl(setup):
     if setup.isReplayRecording:
         ctrl = VehicleStateReplayRecorder()
+    elif setup.isReplayPlaying:
+        ctrl = VehicleStateReplayPlayer()
     else:
         ctrl = VehicleStateController()
     return ctrl

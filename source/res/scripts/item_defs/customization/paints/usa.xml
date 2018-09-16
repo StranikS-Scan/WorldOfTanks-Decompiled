@@ -1,8 +1,10 @@
 <usa.xml>
   <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
     <name>	usa colors	</name>
     <userString>	#vehicle_customization:repaint/color_group_02	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	usa	</nations>
@@ -12,81 +14,67 @@
         <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
       </exclude>
     </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	154	</id>
       <texture>	gui/maps/vehicles/repaints/usa_color_01.png	</texture>
       <color>	52 48 33 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/usa_color_01	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	155	</id>
       <texture>	gui/maps/vehicles/repaints/usa_color_02.png	</texture>
       <color>	75 74 73 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/usa_color_02	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	156	</id>
       <texture>	gui/maps/vehicles/repaints/usa_color_03.png	</texture>
       <color>	78 74 54 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/usa_color_03	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	157	</id>
       <texture>	gui/maps/vehicles/repaints/usa_color_04.png	</texture>
       <color>	57 60 53 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/usa_color_04	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	158	</id>
       <texture>	gui/maps/vehicles/repaints/usa_color_05.png	</texture>
       <color>	116 104 87 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/usa_color_05	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	218	</id>
       <texture>	gui/maps/vehicles/repaints/usa_color_06.png	</texture>
       <color>	55 55 51 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/usa_color_06	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	272	</id>
       <texture>	gui/maps/vehicles/repaints/usa_color_07.png	</texture>
       <color>	86 101 116 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/usa_color_07	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
   </itemGroup>
 </usa.xml>

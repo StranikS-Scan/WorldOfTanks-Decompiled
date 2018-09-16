@@ -275,6 +275,21 @@ class ActionInfo(EventInfoModel):
         return self._compositionType or stepName
 
 
+class CalendarActionInfo(ActionInfo):
+
+    def isDiscountVisible(self):
+        return True
+
+    def getTitle(self):
+        return i18n.makeString(QUESTS.ACTION_SHORT_CALENDAR)
+
+    def getTriggerChainID(self):
+        pass
+
+    def getAutoDescription(self, useBigIco=False, forNormalCard=False):
+        return i18n.makeString(QUESTS.ACTION_SUBHEADER_CALENDAR)
+
+
 class EconomicsActionsInfo(ActionInfo):
 
     def getTriggerChainID(self):
@@ -967,7 +982,9 @@ _PARAM_TO_IMG_DICT = {'exchangeRate': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CONVE
  'tradeInSellPriceFactor': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_TRADE_IN,
  'set_MarathonAnnounce': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_MARATHON_ITALY,
  'set_MarathonInProgress': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_MARATHON_ITALY,
- 'set_MarathonFinished': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_MARATHON_ITALY}
+ 'set_MarathonFinished': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_MARATHON_ITALY,
+ 'calendar': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CALENDAR,
+ 'AdventCalendarEnabled': RES_ICONS.MAPS_ICONS_ACTIONS_480X280_CALENDAR}
 _MODIFIERS_DICT = {'mul_EconomicsParams': EconomicsActionsInfo,
  'set_EconomicsParams': EconomicsActionsInfo,
  'mul_EconomicsPrices': EconomicsActionsInfo,
@@ -1002,7 +1019,8 @@ _MODIFIERS_DICT = {'mul_EconomicsParams': EconomicsActionsInfo,
  'mul_GoodiePriceAll': BoosterPriceActionInfo,
  'set_MarathonAnnounce': MarathonEventActionInfo,
  'set_MarathonInProgress': MarathonEventActionInfo,
- 'set_MarathonFinished': MarathonEventActionInfo}
+ 'set_MarathonFinished': MarathonEventActionInfo,
+ 'AdventCalendarEnabled': CalendarActionInfo}
 
 def getModifierObj(name, event, modifier):
     return _MODIFIERS_DICT[name](event, modifier) if name in _MODIFIERS_DICT else None

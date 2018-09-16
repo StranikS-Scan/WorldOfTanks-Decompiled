@@ -3,19 +3,16 @@
 import operator
 import WWISE
 import SoundGroups
-from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getPersonalMissionAwardsFormatter
+from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getPersonalMissionAwardsFormatter, getMapRegionTooltipData
 from gui.Scaleform.daapi.view.meta.PersonalMissionsMapViewMeta import PersonalMissionsMapViewMeta
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events.awards_formatters import COMPLETION_TOKENS_SIZES
 from gui.server_events.events_dispatcher import showPersonalMissionDetails
 from gui.server_events.events_helpers import AwardSheetPresenter
 from gui.server_events.personal_missions_navigation import PersonalMissionsNavigation
 from gui.server_events.pm_constants import SOUNDS
-from gui.shared.utils.functions import makeTooltip
 from helpers.i18n import makeString as _ms
 from personal_missions import PM_BRANCH
 from shared_utils import findFirst, first
@@ -75,7 +72,7 @@ class PersonalMissionsMapView(PersonalMissionsMapViewMeta, PersonalMissionsNavig
         awards = {}
         for quest in quests:
             questsData.append(self.__getQuestStatusData(chainID, quest))
-            if quest.isFinal():
+            if quest.isFinal() and not quest.isDisabled():
                 awards = self.__getFinalQuestAwardsVO(quest)
 
         return (questsData, awards)
@@ -87,29 +84,28 @@ class PersonalMissionsMapView(PersonalMissionsMapViewMeta, PersonalMissionsNavig
         areTokensPawned = quest.areTokensPawned()
         isUnlocked = quest.isUnlocked()
         isFullCompleted = quest.isFullCompleted()
-        if quest.isDisabled():
+        isDisabled = quest.isDisabled()
+        isOnPause = quest.isOnPause
+        if isDisabled:
             state = PERSONAL_MISSIONS_ALIASES.REGION_DISABLED
         elif quest.isInProgress():
-            state = PERSONAL_MISSIONS_ALIASES.REGION_IN_PROGRESS
+            if isOnPause:
+                state = PERSONAL_MISSIONS_ALIASES.REGION_ON_PAUSE
+            else:
+                state = PERSONAL_MISSIONS_ALIASES.REGION_IN_PROGRESS
         elif isFullCompleted:
             state = PERSONAL_MISSIONS_ALIASES.REGION_FULLY_COMPLETED
         elif quest.isMainCompleted():
             state = PERSONAL_MISSIONS_ALIASES.REGION_COMPLETED
         elif not isUnlocked and (not isFinal or not quest.canBePawned()):
             state = PERSONAL_MISSIONS_ALIASES.REGION_NOT_AVAILABLE
-        if isFullCompleted:
-            tooltipData = {'tooltip': makeTooltip(header=quest.getUserName(), body=_ms(TOOLTIPS.PERSONALMISSIONS_MAPREGION_DESCR_EXCELLENTDONE)),
-             'isSpecial': False,
-             'specialArgs': []}
-        else:
-            tooltipData = {'specialAlias': TOOLTIPS_CONSTANTS.PERSONAL_MISSIONS_MAP_REGION,
-             'isSpecial': True,
-             'specialArgs': [questId, state]}
         vo = {'id': questId,
          'state': state,
-         'isLocked': isFinal and not isUnlocked and not areTokensPawned,
-         'tooltipData': tooltipData,
+         'isLocked': isFinal and not isUnlocked and not areTokensPawned or isDisabled,
+         'isOnPause': isOnPause,
+         'tooltipData': getMapRegionTooltipData(state, quest),
          'isTokenPawned': areTokensPawned,
+         'isFinal': isFinal,
          'vehType': chainID,
          'sheet': AwardSheetPresenter.getIcon(AwardSheetPresenter.Size.TINY)}
         return vo

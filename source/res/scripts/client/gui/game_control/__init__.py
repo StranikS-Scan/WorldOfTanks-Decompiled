@@ -34,9 +34,10 @@ def getGameControllersConfig(manager):
     from gui.game_control.epic_mode_controller import EpicModeController as _Epic
     from gui.game_control.bootcamp_controller import BootcampController as _Bootcamp
     from gui.game_control.hero_tank_controller import HeroTankController as _HeroTankController
-    from gui.marathon.marathon_event_controller import MarathonEventsController as _MarathonEventsController
     from gui.game_control.epic_meta_game_ctrl import EpicBattleMetaGameController as _EpicMeta
     from gui.game_control.manual_controller import ManualController as _ManualController
+    from gui.game_control.calendar_controller import CalendarController as _Calendar
+    from gui.marathon.marathon_event_controller import MarathonEventsController as _MarathonEventsController
     from skeletons.gui import game_control as _interface
     tracker = GameStateTracker()
     tracker.init()
@@ -76,6 +77,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IEpicModeController, _Epic())
     _config(_interface.IHeroTankController, _HeroTankController())
     _config(_interface.IMarathonEventsController, _MarathonEventsController())
+    _config(_interface.ICalendarController, _Calendar())
     _config(_interface.IEpicBattleMetaGameController, _EpicMeta())
     _config(_interface.IManualController, _ManualController())
     if constants.IS_CHINA:

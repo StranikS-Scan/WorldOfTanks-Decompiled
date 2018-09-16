@@ -117,9 +117,9 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
                 viewCmp.setLargeMode()
 
             self._switcherState = 0
-        if self._cdState in COUNTDOWN_STATE.VISIBLE:
-            for viewCmp in self._viewComponents:
-                viewCmp.setState(self._cdState)
+        for viewCmp in self._viewComponents:
+            viewCmp.setState(self._cdState)
+            if self._cdState in COUNTDOWN_STATE.VISIBLE:
                 viewCmp.setCountdown(self._cdState, self._countdown)
                 if self._battleCtx is not None:
                     viewCmp.updateBattleCtx(self._battleCtx)
@@ -250,10 +250,15 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
             self._cdState = COUNTDOWN_STATE.START
             self._setCountdown(COUNTDOWN_STATE.START, timeLeft)
             self._updateSound(timeLeft)
-        elif self._period == _PERIOD.BATTLE and self._cdState in COUNTDOWN_STATE.VISIBLE:
-            self._cdState = COUNTDOWN_STATE.STOP
-            self._stopSound()
-            self._hideCountdown(COUNTDOWN_STATE.STOP, self._getHideSpeed())
+        elif self._period == _PERIOD.BATTLE:
+            if self._cdState in COUNTDOWN_STATE.VISIBLE:
+                self._cdState = COUNTDOWN_STATE.STOP
+                self._stopSound()
+                self._hideCountdown(COUNTDOWN_STATE.STOP, self._getHideSpeed())
+            elif self._cdState != COUNTDOWN_STATE.STOP:
+                self._cdState = COUNTDOWN_STATE.STOP
+                for viewCmp in self._viewComponents:
+                    viewCmp.setState(self._cdState)
 
     def _setArenaWinStatus(self, additionalInfo):
         if additionalInfo is not None:

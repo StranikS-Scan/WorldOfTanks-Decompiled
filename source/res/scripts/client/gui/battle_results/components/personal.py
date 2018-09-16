@@ -8,9 +8,8 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.battle_results.components import base
 from gui.battle_results.components import shared
 from gui.battle_results.components import style
-from gui.battle_results.components.style import markVehicleAsTeamKiller
 from gui.shared.crits_mask_parser import CRIT_MASK_SUB_TYPES
-from gui.shared.formatters import numbers, icons
+from gui.shared.formatters import numbers
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getIconPath, getSmallIconPath, getTypeBigIconPath
 from gui.shared.utils.functions import makeTooltip
@@ -22,6 +21,13 @@ class PremiumAccountFlag(base.StatsItem):
 
     def _convert(self, value, reusable):
         return reusable.isPostBattlePremium
+
+
+class IsTeamKillerFlag(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, value, reusable):
+        return reusable.personal.isTeamKiller
 
 
 class CanUpgradeToPremiumFlag(base.StatsItem):
@@ -108,7 +114,7 @@ class EpicVehicleNamesBlock(PersonalVehicleNamesBlock):
 
 
 class PersonalVehicleBlock(base.StatsBlock):
-    __slots__ = ('_isVehicleStatusDefined', 'vehicleIcon', 'nationName', 'killerID', 'vehicleState', 'vehicleStatePrefix', 'vehicleStateSuffix', 'isPrematureLeave')
+    __slots__ = ('_isVehicleStatusDefined', 'vehicleIcon', 'nationName', 'killerID', 'vehicleState', 'vehicleStatePrefix', 'vehicleStateSuffix', 'isPrematureLeave', 'isKilledByTeamKiller')
 
     def setVehicle(self, item):
         if item is not None:
@@ -486,22 +492,6 @@ class PersonalAccountDBID(base.StatsItem):
         return reusable.personal.avatar.accountDBID
 
 
-class MoneyPropsBlock(base.StatsBlock):
-    __slots__ = ('isMoneyEnabled', 'moneyEnabledTooltip', 'creditsNotAccrueStr')
-
-    def __init__(self, meta=None, field='', *path):
-        super(MoneyPropsBlock, self).__init__(meta, field, *path)
-        self.isMoneyEnabled = True
-        self.moneyEnabledTooltip = ''
-        self.creditsNotAccrueStr = ''
-
-    def setRecord(self, result, reusable):
-        self.isMoneyEnabled = not reusable.isWGMoneyOffline
-        self.moneyEnabledTooltip = makeTooltip(' '.join((icons.alert(-3), i18n.makeString(TOOLTIPS.BATTLERESULTS_MONEYALERT_HEADER))), TOOLTIPS.BATTLERESULTS_MONEYALERT_BODY, None, None)
-        self.creditsNotAccrueStr = text_styles.alert(BATTLE_RESULTS.COMMON_CREDITS_NOTACCRUED)
-        return
-
-
 def fillKillerInfoBlock(vehicleStateBlock, deathReason, killerID, reusable):
     reason = style.makeI18nDeathReason(deathReason)
     vehicleStateBlock.vehicleState = reason.i18nString
@@ -513,5 +503,5 @@ def fillKillerInfoBlock(vehicleStateBlock, deathReason, killerID, reusable):
     vi = reusable.vehicles.getVehicleInfo(killerID)
     if vi.isTeamKiller:
         playerKillerBlock.setTeamKillerInfo()
-        markVehicleAsTeamKiller(vehicleStateBlock)
+        vehicleStateBlock.isKilledByTeamKiller = True
     vehicleStateBlock.addComponent(vehicleStateBlock.getNextComponentIndex(), playerKillerBlock)

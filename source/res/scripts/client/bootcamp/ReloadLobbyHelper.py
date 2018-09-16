@@ -1,9 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/ReloadLobbyHelper.py
-from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
-from gui.shared import EVENT_BUS_SCOPE
+from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.app_loader import g_appLoader
-from gui.shared.events import AppLifeCycleEvent
 from BootcampTransition import BootcampTransition
 from helpers import aop
 
@@ -19,33 +17,30 @@ class _AspectGameSessionControllerFix(aop.Aspect):
         return cd.changeArgs((0, 'doNotifyInStart', False))
 
 
-class ReloadLobbyHelper(EventSystemEntity):
+class ReloadLobbyHelper(object):
 
-    def __init__(self, finishCallback=None):
+    def __init__(self):
         super(ReloadLobbyHelper, self).__init__()
-        self.__callback = finishCallback
+        self.__isReloading = False
+
+    def cancel(self):
+        if self.__isReloading:
+            g_eventBus.removeListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyViewLoaded, EVENT_BUS_SCOPE.DEFAULT)
+            BootcampTransition.stop()
+        self.__isReloading = False
 
     def reload(self):
+        self.__isReloading = True
+        g_eventBus.addListener(events.GUICommonEvent.LOBBY_VIEW_LOADED, self.__onLobbyViewLoaded, EVENT_BUS_SCOPE.DEFAULT)
         from gui.prb_control.dispatcher import g_prbLoader
         from gui.shared.personality import ServicesLocator
         pc = _PointcutGameSessionControllerFix()
-        self.addListener(AppLifeCycleEvent.INITIALIZED, self.__appInitialized, EVENT_BUS_SCOPE.GLOBAL)
+        BootcampTransition.start()
         g_prbLoader.onAccountBecomeNonPlayer()
         ServicesLocator.gameState.onAvatarBecomePlayer()
         g_appLoader.switchAccountEntity()
         g_prbLoader.onAccountShowGUI({})
-        BootcampTransition.start()
         pc.clear()
 
-    def __onViewLoaded(self, view, loadParams):
-        view.app.loaderManager.onViewLoaded -= self.__onViewLoaded
-        BootcampTransition.stop()
-        if self.__callback is not None:
-            self.__callback()
-        self.destroy()
-        return
-
-    def __appInitialized(self, event):
-        self.app = g_appLoader.getApp(event.ns)
-        self.app.loaderManager.onViewLoaded += self.__onViewLoaded
-        self.removeListener(AppLifeCycleEvent.INITIALIZED, self.__appInitialized, EVENT_BUS_SCOPE.GLOBAL)
+    def __onLobbyViewLoaded(self, _):
+        self.cancel()

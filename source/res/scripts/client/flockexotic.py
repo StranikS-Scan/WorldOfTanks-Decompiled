@@ -5,10 +5,19 @@ import random
 from functools import partial
 import BigWorld
 import Math
+import AnimationSequence
 import FlockManager
 from Flock import FlockLike
 from helpers.CallbackDelayer import CallbackDelayer
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
+_MATH_2PI = math.pi * 2.0
+
+def wrapPi(theta):
+    if abs(theta) > math.pi:
+        revolutions = math.floor((theta + math.pi) / _MATH_2PI)
+        theta -= revolutions * _MATH_2PI
+    return theta
+
 
 class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
 
@@ -18,10 +27,6 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
         CallbackDelayer.__init__(self)
         self.flightAngleMin = math.radians(self.flightAngleMin)
         self.flightAngleMax = math.radians(self.flightAngleMax)
-        if self.flightAngleMin < 0:
-            self.flightAngleMin += math.ceil(abs(self.flightAngleMin) / (math.pi * 2)) * math.pi * 2
-        elif self.flightAngleMin > math.pi * 2:
-            self.flightAngleMin -= math.floor(self.flightAngleMin / (math.pi * 2)) * math.pi * 2
         self.__isTriggered = False
         self.__models = []
 
@@ -45,9 +50,9 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
 
     def onLeaveWorld(self):
         self.__removeModels()
+        FlockLike.destroy(self)
         self.__models = []
         self.models = []
-        FlockLike.destroy(self)
         CallbackDelayer.destroy(self)
 
     def name(self):
@@ -64,7 +69,12 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
                 model.visible = False
                 self.__models.append(model)
                 animSpeed = random.uniform(self.animSpeedMin, self.animSpeedMax)
-                model.actionScale = animSpeed
+                clipResource = model.deprecatedGetAnimationClipResource('FlockAnimAction')
+                loader = AnimationSequence.Loader(clipResource, self.spaceID)
+                animator = loader.loadSync()
+                animator.bindTo(AnimationSequence.ModelWrapperContainer(model))
+                animator.speed = animSpeed
+                self._animators.append(animator)
 
         except Exception:
             LOG_CURRENT_EXCEPTION()
@@ -76,6 +86,9 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
         self.models = []
 
     def __removeModel(self, model):
+        index = self.__models.index(model)
+        if index < len(self._animators):
+            self._animators[index].stop()
         self._delSound()
         model.motors = ()
         model.position = self.position
@@ -90,10 +103,8 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
 
     def __getRandomTargetPos(self, startPos):
         randHeight = random.uniform(0, self.flightHeight)
-        arc = self.flightAngleMax - self.flightAngleMin
-        if self.flightAngleMax < self.flightAngleMin:
-            arc = 2 * math.pi - abs(arc)
-        randAngle = random.uniform(self.flightAngleMin, self.flightAngleMin + arc)
+        arc = wrapPi(self.flightAngleMax - self.flightAngleMin)
+        randAngle = random.uniform(0.0, arc) + self.flightAngleMin
         direction = Math.Vector3(self.flightRadius * math.cos(randAngle), self.flightOffsetFromOrigin + randHeight, self.flightRadius * math.sin(randAngle)) + self.position
         direction = direction - startPos
         direction.normalise()
@@ -102,10 +113,12 @@ class FlockExotic(BigWorld.Entity, FlockLike, CallbackDelayer):
 
     def onTrigger(self):
         index = 0
+        animatorIndex = 0
         for model in self.__models:
             model.visible = True
             self.addModel(model)
-            model.action('FlockAnimAction')()
+            self._animators[animatorIndex].start()
+            animatorIndex += 1
             model.position = self.__getRandomSpawnPos()
             targetPos = self.__getRandomTargetPos(model.position)
             direction = targetPos - model.position

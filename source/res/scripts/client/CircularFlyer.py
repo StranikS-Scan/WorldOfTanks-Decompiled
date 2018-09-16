@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/CircularFlyer.py
 import math
 import BigWorld
+import AnimationSequence
 from Math import Matrix, Vector3
 from debug_utils import LOG_CURRENT_EXCEPTION
 import SoundGroups
@@ -19,6 +20,7 @@ class CircularFlyer(BigWorld.UserDataObject):
         self.__model = None
         self.__modelMatrix = None
         self.__sound = None
+        self.__animator = None
         BigWorld.loadResourceListBG((self.modelName, self.pixieName), self.__onResourcesLoaded)
         return
 
@@ -34,6 +36,7 @@ class CircularFlyer(BigWorld.UserDataObject):
             self.__sound.releaseMatrix()
             self.__sound = None
         if self.__model is not None:
+            self.__animator = None
             BigWorld.delModel(self.__model)
             self.__model = None
         return
@@ -53,9 +56,13 @@ class CircularFlyer(BigWorld.UserDataObject):
                 self.__model.addMotor(servo)
                 BigWorld.addModel(self.__model)
                 if self.actionName != '':
-                    action = self.__model.action(self.actionName)
-                    if action is not None:
-                        action()
+                    clipResource = self.__model.deprecatedGetAnimationClipResource(self.actionName)
+                    if clipResource:
+                        loader = AnimationSequence.Loader(clipResource, BigWorld.player().spaceID)
+                        animator = loader.loadSync()
+                        animator.bindTo(AnimationSequence.ModelWrapperContainer(self.__model))
+                        animator.start()
+                        self.__animator = animator
                 if self.pixieName != '' and self.pixieName not in resourceRefs.failedIDs:
                     pixieNode = self.__model.node(self.pixieHardPoint)
                     pixieNode.attach(resourceRefs[self.pixieName])

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/ui_kit/button_model.py
-from frameworks.wulf.gui_constants import ResourceValue
+from frameworks.wulf import Resource
 from frameworks.wulf import ViewModel
 
 class ButtonModel(ViewModel):
@@ -37,9 +37,10 @@ class ButtonModel(ViewModel):
         self._setBool(4, value)
 
     def _initialize(self):
+        super(ButtonModel, self)._initialize()
         self._addStringProperty('rawLabel', '')
-        self._addResourceProperty('label', ResourceValue.DEFAULT)
+        self._addResourceProperty('label', Resource.INVALID)
         self._addBoolProperty('isEnabled', True)
-        self._addResourceProperty('icon', ResourceValue.DEFAULT)
+        self._addResourceProperty('icon', Resource.INVALID)
         self._addBoolProperty('iconAfterText', True)
         self.onClicked = self._addCommand('onClicked')

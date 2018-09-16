@@ -2,10 +2,11 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/LobbyMenu.py
 import BigWorld
 import constants
-from adisp import process
-from gui import DialogsInterface
+from async import async, await
+from gui.impl import dialogs
+from gui.impl.gen import R
+from gui.impl.pub.dialog_window import DialogButtons
 from gui.Scaleform.daapi.view.common.settings.new_settings_counter import getCountNewSettings
-from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.meta.LobbyMenuMeta import LobbyMenuMeta
 from gui.Scaleform.genConsts.MENU_CONSTANTS import MENU_CONSTANTS
 from gui.Scaleform.locale.BOOTCAMP import BOOTCAMP
@@ -21,11 +22,6 @@ from skeletons.gui.game_control import IPromoController
 from skeletons.gui.game_control import IManualController
 from skeletons.gui.lobby_context import ILobbyContext
 from PlayerEvents import g_playerEvents as events
-from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.events import LoadViewEvent
-from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
-from gui.Scaleform.framework import ViewTypes
 from gui.prb_control import prbEntityProperty
 
 def _getVersionMessage():
@@ -60,22 +56,22 @@ class LobbyMenu(LobbyMenuMeta):
     def onEscapePress(self):
         self.destroy()
 
-    @process
+    @async
     def refuseTraining(self):
-        isOk = yield DialogsInterface.showI18nConfirmDialog('refuseTraining')
+        isOk = yield await(dialogs.warning(self, R.strings.dialogs.refuseTraining))
         if isOk:
             event_dispatcher.stopTutorial()
         self.destroy()
 
-    @process
+    @async
     def logoffClick(self):
-        isOk = yield DialogsInterface.showI18nConfirmDialog('disconnect', focusedID=DIALOG_BUTTON_ID.CLOSE)
+        isOk = yield await(dialogs.warning(self, R.strings.dialogs.disconnect, focused=DialogButtons.CANCEL))
         if isOk:
             self.gameplay.goToLoginByRQ()
 
-    @process
+    @async
     def quitClick(self):
-        isOk = yield DialogsInterface.showI18nConfirmDialog('quit', focusedID=DIALOG_BUTTON_ID.CLOSE)
+        isOk = yield await(dialogs.quitGame(self))
         if isOk:
             self.gameplay.quitFromGame()
 
@@ -87,12 +83,11 @@ class LobbyMenu(LobbyMenuMeta):
 
     def manualClick(self):
         if self.manualController.isActivated():
-            windowContainer = self.app.containerManager.getContainer(ViewTypes.LOBBY_SUB)
-            view = windowContainer.getView(criteria={POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.WIKI_VIEW})
+            view = self.manualController.getView()
             if view is not None:
                 self.destroy()
             else:
-                self.fireEvent(LoadViewEvent(VIEW_ALIAS.WIKI_VIEW), EVENT_BUS_SCOPE.LOBBY)
+                self.manualController.show()
         return
 
     def _populate(self):

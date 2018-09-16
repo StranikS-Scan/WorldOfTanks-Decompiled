@@ -6,6 +6,9 @@ from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared import g_eventBus
 from gui.shared.events import OpenLinkEvent
 from gui.shared.gui_items.items_actions import factory as ActionsFactory
+from helpers import dependency
+from skeletons.gui.game_control import ICalendarController
+from gui.game_control.calendar_controller import CalendarInvokeOrigin
 
 def buySlots():
     ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE_SLOT)
@@ -75,3 +78,8 @@ def configureShopForVehicleTradeIn():
     vehFilter['selectedTypes'] = DEFAULT_VEHICLE_TYPES_FILTER
     vehFilter['selectedLevels'] = DEFAULT_LEVELS_FILTERS
     AccountSettings.setFilter('shop_vehicle', vehFilter)
+
+
+def showAdventCalendarFromAction():
+    calendarCtrl = dependency.instance(ICalendarController)
+    calendarCtrl.showCalendar(invokedFrom=CalendarInvokeOrigin.ACTION)

@@ -1,4 +1,5 @@
 <F83_AMX_M4_Mle1949_Bis.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
     <commander></commander>
     <driver></driver>
@@ -1200,16 +1201,6 @@
           <name>	Track_VD_R1	</name>
         </node>
       </trackNodes>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	4.008630 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.298660 0.000000	</row1>
-            <row2>	0.000000 0.000000 8.321680	</row2>
-            <row3>	0.000000 0.000000 0.000047	</row3>
-          </transform>
-        </decal>
-      </AODecals>
       <physicalTracks>
         <left>
           <segmentsCount>	118	</segmentsCount>
@@ -1642,6 +1633,16 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.008630 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.298660 0.000000	</row1>
+            <row2>	0.000000 0.000000 8.321680	</row2>
+            <row3>	0.000000 0.000000 0.000047	</row3>
+          </transform>
+        </decal>
+      </AODecals>
     </Chassis_F83_AMX_M4_Mle1949_Bis_2>
   </chassis>
   <turrets0>
@@ -1756,7 +1757,7 @@
         <collisionModelServer>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.7427 -0.2587	</gunPosition>
+      <gunPosition>	0.005531 0.734196 -0.247918	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	-1.48162 0.838934 -0.386888	</rayStart>
@@ -1876,7 +1877,7 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.000174063 0.00272185 3.88191	</rayStart>
+              <rayStart>	0.000174063 0.0716265 3.88191	</rayStart>
               <rayEnd>	-0.0627676 -0.0271342 3.87969	</rayEnd>
               <rayUp>	0.117 0.114 5	</rayUp>
               <size>	0.6	</size>
@@ -1937,7 +1938,7 @@
           </hitTester>
           <emblemSlots>
             <insigniaOnGun>
-              <rayStart>	0.000426271 0.00299614 3.56783	</rayStart>
+              <rayStart>	0.000474063 0.0716265 3.56783	</rayStart>
               <rayEnd>	-0.0569227 -0.00565288 3.56584	</rayEnd>
               <rayUp>	0.127 0.123 5	</rayUp>
               <size>	0.6	</size>
@@ -1961,7 +1962,7 @@
         <collisionModelServer>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F83_AMX_M4_Mle1949_Bis/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.5891 1.201	</gunPosition>
+      <gunPosition>	0.005531 0.519983 1.11236	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	-1.19492 0.963252 -1.46237	</rayStart>

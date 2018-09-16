@@ -108,14 +108,15 @@ class IHangarSpace(object):
     onStatsReceived = None
     onSpaceCreate = None
     onSpaceDestroy = None
-    onObjectSelected = None
-    onObjectUnselected = None
-    onObjectClicked = None
-    onObjectReleased = None
+    onMouseEnter = None
+    onMouseExit = None
+    onMouseDown = None
+    onMouseUp = None
     onVehicleChangeStarted = None
     onVehicleChanged = None
     onSpaceRefresh = None
     onHeroTankReady = None
+    onSpaceChanged = None
 
     @property
     def space(self):

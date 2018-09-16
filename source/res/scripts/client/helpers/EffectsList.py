@@ -4,6 +4,7 @@ import random
 import string
 from collections import namedtuple
 from functools import partial
+import AnimationSequence
 import BigWorld
 import Math
 import DecalMap
@@ -32,6 +33,10 @@ class SpecialKeyPointNames(object):
 
 __START_KEY_POINT = KeyPoint(SpecialKeyPointNames.START, 0.0)
 SoundStartParam = namedtuple('SoundStartParam', ('name', 'value'))
+
+def _isPyModel(model):
+    return model is not None and model.__class__.__name__ == 'Model'
+
 
 def reload():
     import __builtin__
@@ -408,7 +413,7 @@ class _PixieEffectDesc(_EffectDesc):
 
 
 class _AnimationEffectDesc(_EffectDesc):
-    __slots__ = ('_name', '_action')
+    __slots__ = ('_name',)
     TYPE = '_AnimationEffectDesc'
 
     def __init__(self, dataSection):
@@ -419,20 +424,31 @@ class _AnimationEffectDesc(_EffectDesc):
 
     def create(self, model, effects, args):
         targetModel = _findTargetModel(model, self._nodeName)
-        self._action = targetModel.action(self._name)
-        self._action()
+        animator = None
+        if _isPyModel(targetModel):
+            clipResource = targetModel.deprecatedGetAnimationClipResource(self._name)
+            loader = AnimationSequence.Loader(clipResource, BigWorld.player().spaceID)
+            animator = loader.loadSync()
+            animator.bindTo(AnimationSequence.ModelWrapperContainer(model))
+            animator.start()
+        else:
+            SoftException('EffectsList trying to play old animation <%s> on compoud model <%s>.' % (self._name, self.TYPE))
         effects.append({'typeDesc': self,
-         'action': self._action})
+         'animator': animator})
+        return
 
     def delete(self, elem, reason):
-        if reason == 2:
+        if elem['animator'] is None:
+            return True
+        elif reason == 2:
             if self.endKey:
-                elem['action'].stop()
+                elem['animator'].stop()
                 return True
             return False
         else:
-            elem['action'].stop()
+            elem['animator'].stop()
             return True
+            return
 
 
 class _VisibilityEffectDesc(_EffectDesc):
@@ -500,10 +516,16 @@ class _ModelEffectDesc(_EffectDesc):
             nodeName = string.split(newPos[0], '/') if newPos[0] else []
         targetNode = _findTargetNode(model, nodeName, newPos[1] if newPos else None)
         targetNode.attach(currentModel)
+        animator = None
         if self._animation:
-            currentModel.action(self._animation)()
+            clipResource = model.deprecatedGetAnimationClipResource(self._animation)
+            loader = AnimationSequence.Loader(clipResource, BigWorld.player().spaceID)
+            animator = loader.loadSync()
+            animator.bindTo(AnimationSequence.ModelWrapperContainer(model))
+            animator.start()
         elem = {'typeDesc': self,
          'model': model,
+         'animator': animator,
          'attachment': currentModel,
          'newPos': newPos,
          'node': targetNode}
@@ -1242,7 +1264,7 @@ class _NodeWithLocal(object):
         if local is None:
             local = Math.Matrix()
             local.setIdentity()
-        if model.__class__.__name__ == 'Model':
+        if _isPyModel(model):
             allAttachmentsChecked = success = False
             attachmentsChecked = 0
             while not allAttachmentsChecked and not success:

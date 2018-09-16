@@ -1,4 +1,5 @@
 <F70_SARL42.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -99,7 +100,6 @@
     </emblemSlots>
     <hangarShadowTexture>	vehicles/french/F70_SARL42/SARL42_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
-      <exclusionMask></exclusionMask>
       <tiling>	1.6 1.6 0.000000 0.000000	</tiling>
     </camouflage>
   </hull>
@@ -2042,7 +2042,6 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <exclusionMask></exclusionMask>
             <tiling>	0.94 0.4 0.000000 0.000000	</tiling>
           </camouflage>
         </_47mm_SA35>
@@ -2095,7 +2094,6 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <exclusionMask></exclusionMask>
             <tiling>	0.91 0.445 0.000000 0.000000	</tiling>
           </camouflage>
         </_47mm_SA37>
@@ -2142,8 +2140,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <exclusionMask></exclusionMask>
-            <tiling>	0.76 0.445 0.000000 0.000000	</tiling>
+            <tiling>	0.91 0.445 0.000000 0.000000	</tiling>
           </camouflage>
         </_47mm_SA37_ameliore>
       </guns>
@@ -2178,8 +2175,7 @@
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <physicsShape>	0.965 -0.035 1.023 -0.023 0.653 0.231 0.405 0.301 0.500 0.587 0.000 0.500 0.000 0.000 0.295	</physicsShape>
       <camouflage>
-        <exclusionMask></exclusionMask>
-        <tiling>	0.79 0.43 0.000000 0.000000	</tiling>
+        <tiling>	0.76 0.43 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_1_SARL42>
     <Turret_2_SARL42>
@@ -2273,7 +2269,6 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <exclusionMask></exclusionMask>
             <tiling>	1.18 0.475 0.000000 0.000000	</tiling>
           </camouflage>
         </_47mm_SA35>
@@ -2324,7 +2319,6 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <exclusionMask></exclusionMask>
             <tiling>	1 0.55 0.000000 0.000000	</tiling>
           </camouflage>
         </_47mm_SA37>
@@ -2375,7 +2369,6 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <exclusionMask></exclusionMask>
             <tiling>	1 0.55 0.000000 0.000000	</tiling>
           </camouflage>
         </_47mm_SA37_ameliore>
@@ -2433,7 +2426,6 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <exclusionMask></exclusionMask>
             <tiling>	0.97 0.46 0.000000 0.000000	</tiling>
           </camouflage>
         </_75mm_SA32>
@@ -2484,7 +2476,6 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <exclusionMask></exclusionMask>
             <tiling>	1 0.52 0.000000 0.000000	</tiling>
           </camouflage>
         </_75mm_Long_44>
@@ -2520,7 +2511,6 @@
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <physicsShape>	0.988 0.000 1.000 0.000 0.827 0.116 0.728 0.587 0.500 0.500 0.000 0.500 0.000 0.000 0.514	</physicsShape>
       <camouflage>
-        <exclusionMask></exclusionMask>
         <tiling>	0.94 0.46 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_2_SARL42>

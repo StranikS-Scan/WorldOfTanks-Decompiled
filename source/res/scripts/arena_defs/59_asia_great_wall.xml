@@ -1,0 +1,66 @@
+<59_asia_great_wall.xml>
+  <name>	#arenas:59_asia_great_wall/name	</name>
+  <description>	#arenas:59_asia_great_wall/description	</description>
+  <geometry>	spaces/59_asia_great_wall	</geometry>
+  <roundLength>	900	</roundLength>
+  <boundingBox>
+    <bottomLeft>	-500.0 -500.0	</bottomLeft>
+    <upperRight>	500.0 500.0	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/59_asia_great_wall/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	music_great_wall_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	music_great_wall_dron_intensive	</wwmusicIntensive>
+    <wwmusicRelaxed>	music_great_wall_dron_relaxed	</wwmusicRelaxed>
+    <wwmusicStop>	music_dron_stop	</wwmusicStop>
+    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
+    <wwmusicResultWin>	music_great_wall_result_win	</wwmusicResultWin>
+    <wwmusicResultDrawn>	music_great_wall_result_drawn	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	music_great_wall_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwambientSound>	ambient_wind_autumn_01	</wwambientSound>
+  <gameplayTypes>
+    <ctf>
+      <teamBasePositions>
+        <team1>
+          <position1>	-339.279114 387.880066	</position1>
+        </team1>
+        <team2>
+          <position1>	396.877289 -377.398712	</position1>
+        </team2>
+      </teamBasePositions>
+    </ctf>
+    <domination>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-339.279114 387.880066	</position>
+        </team1>
+        <team2>
+          <position>	396.877289 -377.398712	</position>
+        </team2>
+      </teamSpawnPoints>
+      <controlPoint>	-140.728149 -164.915146	</controlPoint>
+    </domination>
+    <assault>
+      <winnerIfTimeout>	1	</winnerIfTimeout>
+      <teamSpawnPoints>
+        <team1>
+          <position>	-426.267 -402.299	</position>
+        </team1>
+        <team2>
+          <position>	391.595 283.083	</position>
+        </team2>
+      </teamSpawnPoints>
+      <teamBasePositions>
+        <team1>
+          <position1>	-131.931 -158.477	</position1>
+        </team1>
+        <team2></team2>
+      </teamBasePositions>
+    </assault>
+  </gameplayTypes>
+  <mapActivities></mapActivities>
+  <roadMap></roadMap>
+</59_asia_great_wall.xml>

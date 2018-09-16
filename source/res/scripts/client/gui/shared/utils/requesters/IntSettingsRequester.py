@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/utils/requesters/IntSettingsRequester.py
+import logging
 import BigWorld
 import constants
 from adisp import async, process
-from debug_utils import LOG_ERROR, LOG_WARNING
 from gui.shared.utils import code2str
+_logger = logging.getLogger(__name__)
 
 class IntSettingsRequester(object):
     __SETTINGS = {'VERSION': 0,
@@ -82,7 +83,7 @@ class IntSettingsRequester(object):
 
     def _response(self, resID, value, callback):
         if resID < 0:
-            LOG_ERROR('[class %s] There is error while getting data from cache: %s[%d]' % (self.__class__.__name__, code2str(resID), resID))
+            _logger.error('[class %s] There is error while getting data from cache: %s[%d]', self.__class__.__name__, code2str(resID), resID)
             return callback(dict())
         callback(value)
 
@@ -92,18 +93,28 @@ class IntSettingsRequester(object):
         if player is not None and player.intUserSettings is not None:
             player.intUserSettings.getCache(lambda resID, value: self._response(resID, value, callback))
         else:
-            LOG_WARNING('Player or intUserSettings is not defined', player, player.intUserSettings if player is not None else None)
+            _logger.warning('Player or intUserSettings is not defined: %r, %r', player, player.intUserSettings if player is not None else None)
         return
 
     @async
     def _addIntSettings(self, settings, callback=None):
         import BattleReplay
         if not BattleReplay.g_replayCtrl.isPlaying:
-            self.__cache.update(settings)
-            BigWorld.player().intUserSettings.addIntSettings(settings, callback)
+            player = BigWorld.player()
+            if player is not None:
+                self.__cache.update(settings)
+                player.intUserSettings.addIntSettings(settings, callback)
+            else:
+                _logger.warning('Player is not defined, int setting can not be added: %r', settings)
+        return
 
     @async
     def _delIntSettings(self, settings, callback=None):
         import BattleReplay
         if not BattleReplay.g_replayCtrl.isPlaying:
-            BigWorld.player().intUserSettings.delIntSettings(settings, callback)
+            player = BigWorld.player()
+            if player is not None:
+                player.intUserSettings.delIntSettings(settings, callback)
+            else:
+                _logger.warning('Player is not defined, int setting can not be removed: %r', settings)
+        return

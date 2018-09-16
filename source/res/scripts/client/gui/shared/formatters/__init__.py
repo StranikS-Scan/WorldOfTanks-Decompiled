@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/formatters/__init__.py
 import logging
 import BigWorld
+from gui import makeHtmlString
 from gui.shared.formatters import icons
 from gui.shared.formatters import text_styles
 from gui.shared.formatters import time_formatters
@@ -13,17 +14,22 @@ from gui.impl.gen.view_models.ui_kit.action_price_model import ActionPriceModel
 _logger = logging.getLogger(__name__)
 __all__ = ('icons', 'text_styles', 'time_formatters')
 
-def formatPrice(price, reverse=False, defaultCurrency=Currency.CREDITS):
+def formatPrice(price, reverse=False, currency=Currency.CREDITS, useIcon=False):
     outPrice = []
-    currencies = price.getSetCurrencies(byWeight=False)
+    currencies = [ c for c in Currency.ALL if price.get(c) is not None ]
     if not currencies:
-        currencies = [defaultCurrency]
-    for currency in currencies:
-        formatter = getBWFormatter(currency)
-        cname = makeString('#menu:price/{}'.format(currency)) + ': '
-        value = price.get(currency, 0)
-        cformatted = formatter(value) if formatter else value
-        outPrice.append(''.join((cformatted, ' ', cname) if reverse else (cname, ' ', cformatted)))
+        currencies = [currency]
+    for c in currencies:
+        formatter = getBWFormatter(c)
+        value = price.get(c, 0)
+        cFormatted = formatter(value) if formatter else value
+        if useIcon:
+            cIdentifier = makeHtmlString('html_templates:lobby/iconText', c)
+            cSpace = ' ' if reverse else ''
+        else:
+            cIdentifier = makeString('#menu:price/{}'.format(c))
+            cSpace = ' ' if reverse else ': '
+        outPrice.append(''.join((cFormatted, cSpace, cIdentifier) if reverse else (cIdentifier, cSpace, cFormatted)))
 
     return ', '.join(outPrice)
 
@@ -33,7 +39,7 @@ def formatPriceForCurrency(money, currencyName):
 
 
 def formatGoldPrice(gold, reverse=False):
-    return formatPrice(Money(gold=gold), reverse, defaultCurrency=Currency.GOLD)
+    return formatPrice(Money(gold=gold), reverse, currency=Currency.GOLD)
 
 
 def getGlobalRatingFmt(globalRating):

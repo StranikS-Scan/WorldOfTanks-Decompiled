@@ -1,19 +1,27 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen_utils.py
 from typing import Optional, Union
-INVALID_RESOURCE_ID = -1
+from frameworks.wulf import Resource
 
 class DynAccessor(object):
     __slots__ = ()
 
     @classmethod
-    def dyn(cls, attr, default=INVALID_RESOURCE_ID):
+    def dyn(cls, attr, default=Resource.INVALID):
         return getattr(cls, attr, default)
 
     @classmethod
-    def generator(cls):
-        return (getattr(cls, attr) for attr in dir(cls) if not attr.startswith('_'))
+    def keys(cls):
+        return (attr for attr in dir(cls) if attr not in dir(DynAccessor))
+
+    @classmethod
+    def values(cls):
+        return (getattr(cls, attr) for attr in cls.keys())
+
+    @classmethod
+    def items(cls):
+        return ((attr, getattr(cls, attr)) for attr in cls.keys())
 
     @classmethod
     def length(cls):
-        return len(tuple(cls.generator()))
+        return len(tuple(cls.keys()))

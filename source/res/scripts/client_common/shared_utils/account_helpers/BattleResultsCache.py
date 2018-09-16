@@ -156,7 +156,7 @@ def convertToFullForm(compactForm):
      'players': {},
      'vehicles': {},
      'avatars': {}}
-    personal['avatar'] = avatarResults = AVATAR_FULL_RESULTS.unpack(avatarResults)
+    personal['avatar'] = AVATAR_FULL_RESULTS.unpack(avatarResults)
     for vehTypeCompDescr, ownResults in fullResultsList.iteritems():
         vehPersonal = personal[vehTypeCompDescr] = VEH_FULL_RESULTS.unpack(ownResults)
         if vehPersonal is None:

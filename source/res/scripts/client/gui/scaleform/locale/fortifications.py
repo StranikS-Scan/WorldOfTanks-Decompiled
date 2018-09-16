@@ -123,6 +123,7 @@ class FORTIFICATIONS(object):
     ROSTER_CLANMEMBERSNOTENOUGH = '#fortifications:roster/clanMembersNotEnough'
     UNIT_WINDOW_WILLSEARCHPLAYERS = '#fortifications:unit/window/willSearchPlayers'
     FORTVEHPOPOVER_BTNSAVE = '#fortifications:fortVehPopover/btnSave'
+    TOOLTIP_VEHICLETYPES_BODY = '#fortifications:tooltip/vehicleTypes/body'
     STRONGHOLDDIRECTION_ENUM = (STRONGHOLDDIRECTION_A,
      STRONGHOLDDIRECTION_B,
      STRONGHOLDDIRECTION_C,

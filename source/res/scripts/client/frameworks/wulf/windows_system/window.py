@@ -29,7 +29,7 @@ class Window(PyObjectEntity):
 
     @property
     def content(self):
-        return self.proxy.content.getViewModel().getContent() if self.proxy.content is not None else None
+        return self.proxy.content
 
     @property
     def parent(self):
@@ -38,6 +38,10 @@ class Window(PyObjectEntity):
     @property
     def uniqueID(self):
         return self.proxy.uniqueID
+
+    @property
+    def descriptor(self):
+        return self.proxy.wndDescriptor
 
     @property
     def windowFlags(self):
@@ -80,7 +84,7 @@ class Window(PyObjectEntity):
         pass
 
     def _getDecoratorViewModel(self):
-        return self.proxy.content.viewModel
+        return self.proxy.content.getViewModel()
 
     def _finalize(self):
         pass

@@ -32,6 +32,15 @@ _TABS_ITEM_TYPES = {STORAGE_CONSTANTS.INVENTORY_TAB_ALL: GUI_ITEM_TYPE.VEHICLE_C
  STORAGE_CONSTANTS.INVENTORY_TAB_CONSUMABLE: (GUI_ITEM_TYPE.EQUIPMENT, GUI_ITEM_TYPE.BATTLE_BOOSTER),
  STORAGE_CONSTANTS.INVENTORY_TAB_MODULES: GUI_ITEM_TYPE.VEHICLE_MODULES,
  STORAGE_CONSTANTS.INVENTORY_TAB_SHELLS: GUI_ITEM_TYPE.SHELL}
+_TABS_SORT_ORDER = dict(((n, idx) for idx, n in enumerate((GUI_ITEM_TYPE.OPTIONALDEVICE,
+ GUI_ITEM_TYPE.EQUIPMENT,
+ GUI_ITEM_TYPE.BATTLE_BOOSTER,
+ GUI_ITEM_TYPE.TURRET,
+ GUI_ITEM_TYPE.ENGINE,
+ GUI_ITEM_TYPE.GUN,
+ GUI_ITEM_TYPE.RADIO,
+ GUI_ITEM_TYPE.CHASSIS,
+ GUI_ITEM_TYPE.SHELL))))
 
 class InventoryCategoryStorageView(StorageCategoryStorageViewMeta):
 
@@ -70,11 +79,11 @@ class InventoryCategoryStorageView(StorageCategoryStorageViewMeta):
     def _getComparator(self):
 
         def _comparator(a, b):
-            if self.__currentTabId == STORAGE_CONSTANTS.INVENTORY_TAB_MODULES:
-                result = cmp(a.itemTypeID, b.itemTypeID) or cmp(a.longUserName, b.longUserName)
+            if a.itemTypeID == b.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
+                preResult = (1 if a.isDeluxe() else 0) - (1 if b.isDeluxe() else 0)
             else:
-                result = cmp(a.itemTypeID, b.itemTypeID) or cmp(a.userName, b.userName)
-            return result
+                preResult = cmp(_TABS_SORT_ORDER[a.itemTypeID], _TABS_SORT_ORDER[b.itemTypeID])
+            return preResult or cmp(storage_helpers.getStorageModuleName(a), storage_helpers.getStorageModuleName(b))
 
         return _comparator
 

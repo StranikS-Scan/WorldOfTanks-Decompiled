@@ -67,6 +67,9 @@ items = globals().get('items')
 filter = globals().get('BattleResults')
 """:type: battle_result_filters"""
 
+records = globals().get('records')
+""":type: dossiers2.custom.records"""
+
 PROGRESS_ID_MAIN = 'medal'
 PROGRESS_ID_MAIN_SERIES = 'battlesSeries'
 PROGRESS_ID_ADD = 'medalAdv'
@@ -80,47 +83,9 @@ def onInit(eventType, eventData, quest, processor):
 def onFinishBattle(eventType, eventData, quest, processor):
     questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
 
-    brfilter = filter.BattleResultsFilter(eventData)
-    battleHeroAchievements = [('achievements', 'warrior'),
-                              ('achievements', 'invader'),
-                              ('achievements', 'sniper'),
-                              ('achievements', 'sniper2'),
-                              ('achievements', 'mainGun'),
-                              ('achievements', 'defender'),
-                              ('achievements', 'steelwall'),
-                              ('achievements', 'supporter'),
-                              ('achievements', 'scout'),
-                              ('achievements', 'evileye')]
-
-    epicMedals = [('achievements', 'medalWittmann'),
-                  ('achievements', 'medalRadleyWalters'),
-                  ('achievements', 'medalLafayettePool'),
-                  ('achievements', 'heroesOfRassenay'),
-                  ('achievements', 'medalBillotte'),
-                  ('achievements', 'medalBrunoPietro'),
-                  ('achievements', 'medalTarczay'),
-                  ('achievements', 'medalBurda'),
-                  ('achievements', 'medalPascucci'),
-                  ('achievements', 'medalDumitru'),
-                  ('achievements', 'medalOskin'),
-                  ('achievements', 'medalLehvaslaiho'),
-                  ('achievements', 'medalNikolas'),
-                  ('achievements', 'medalOrlik'),
-                  ('achievements', 'medalHalonen'),
-                  ('achievements', 'medalKolobanov'),
-                  ('achievements', 'medalFadin'),
-                  ('achievements', 'medalDeLanglade'),
-                  ('achievements', 'medalGore'),
-                  ('achievements', 'huntsman'),
-                  ('achievements', 'medalTamadaYoshio')]
-
-    medalDescriptors = []
-    medalDescriptors.extend(battleHeroAchievements)
-    medalDescriptors.extend(epicMedals)
-
-    battleHeroMedalSet = {records.RECORD_DB_IDS[rec] for rec in medalDescriptors}
-
-    result = sum(1 for medal in eventData['avatarResults']['achievements'] if medal in battleHeroMedalSet)
+    medalSet = records.BATTLE_HERO_MEDAL_SET | records.EPIC_MEDAL_SET
+    result = sum(1 for medal in eventData['avatarResults']['achievements'] if medal in medalSet)
+    
     questProgress.increaseSumProgress(PROGRESS_ID_MAIN, PROGRESS_ID_MAIN_SERIES, result)
     questProgress.increaseSumProgress(PROGRESS_ID_ADD, PROGRESS_ID_ADD_SERIES, result, PROGRESS_ID_MAIN)
 

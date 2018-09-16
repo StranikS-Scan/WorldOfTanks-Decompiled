@@ -15,7 +15,7 @@ from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 from web_client_api.common import CompensationType
-from items_kit_helper import getCompensateItemsCount, getDataOneVehicle, getDataMultiVehicles
+from items_kit_helper import getCompensateItemsCount, getDataOneVehicle, getDataMultiVehicles, collapseItemsPack
 from gui import GUI_NATIONS_ORDER_INDEX_REVERSED
 _logger = logging.getLogger(__name__)
 
@@ -135,7 +135,7 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
     def __getCompensationData(self, itemsPack):
         compensationMoney = MONEY_UNDEFINED
         if itemsPack is not None:
-            for item in itemsPack:
+            for item in collapseItemsPack(itemsPack):
                 compensateItemsCount = getCompensateItemsCount(item, self.itemsCache)
                 if compensateItemsCount > 0:
                     for compensation in item.compensation:

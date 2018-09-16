@@ -46,4 +46,6 @@ class PM_TUTOR_FIELDS(CONST_CONTAINER):
     FIRST_ENTRY_AWARDS_SHOWN = 'pm_first_entry_awards_shown'
     INITIAL_FAL_COUNT = 'pm_initial_free_award_lists_count'
     ONE_FAL_SHOWN = 'pm_first_free_award_list_shown'
-    FOUR_FAL_SHOWN = 'pm_four_free_award_lists_shown'
+    MULTIPLE_FAL_SHOWN = 'pm_four_free_award_lists_shown'
+    PM2_ONE_FAL_SHOWN = 'pm2_first_free_award_list_shown'
+    PM2_MULTIPLE_FAL_SHOWN = 'pm2_four_free_award_lists_shown'

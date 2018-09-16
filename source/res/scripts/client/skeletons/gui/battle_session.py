@@ -235,7 +235,7 @@ class IClientArenaVisitor(object):
     def getArenaStatistics(self):
         raise NotImplementedError
 
-    def hasArenaFogOfWarHiddenVehicles(self):
+    def isArenaFogOfWarEnabled(self):
         raise NotImplementedError
 
     def hasGameEndMessage(self):

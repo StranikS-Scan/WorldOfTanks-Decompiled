@@ -252,7 +252,7 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
         commonStatsBlock.append(formatters.packTextParameterBlockData(text_styles.main(item.roleUserName + ' ') + vehicleName, text_styles.stats(str(item.roleLevel + penalty + addition) + '%' + addRoleLevels), valueWidth=90, padding=formatters.packPadding(left=0, right=0, top=5, bottom=0)))
         field = TankmanSkillListField(self, 'skills')
         _, value = field.buildData()
-        skills = value
+        skills = value or []
         maxPopUpBlocks = 14
         for skill in skills[:maxPopUpBlocks]:
             commonStatsBlock.append(formatters.packTextParameterBlockData(text_styles.main(skill['label']), text_styles.stats(str(skill['level']) + '%'), valueWidth=90))
@@ -266,8 +266,9 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
         if newSkillCount > 0:
             items.append(formatters.packImageTextBlockData(img='../maps/icons/tankmen/skills/small/new_skill.png', txtOffset=20, padding=formatters.packPadding(bottom=0, top=5, left=0), imgPadding=formatters.packPadding(left=0, top=3), title=makeHtmlString('html_templates:lobby/textStyle', 'goldTextTitle', {'message': makeString(TOOLTIPS.HANGAR_CREW_NEW_SKILL_AVAILABLE_HEADER)}), desc=makeHtmlString('html_templates:lobby/textStyle', 'goldTextField', {'message': makeString(TOOLTIPS.HANGAR_CREW_NEW_SKILL_AVAILABLE_TEXT)})))
         field = TankmanStatusField(self, '')
-        _, status = field.buildData()
-        if status['header'] != '':
+        _, value = field.buildData()
+        status = value or {}
+        if 'header' in status and status['header'] != '':
             items.append(formatters.packImageTextBlockData(title=text_styles.warning(status['header']), desc=makeHtmlString('html_templates:lobby/textStyle', 'statusWarningField', {'message': status['text']})))
         return items
 

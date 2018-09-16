@@ -760,10 +760,7 @@ class IMarathonEventsController(IGameController):
     def getTokensData(self, prefix=None, postfix=None):
         raise NotImplementedError
 
-    def isAnyAvailable(self):
-        raise NotImplementedError
-
-    def isAnyEnabled(self):
+    def isAnyActive(self):
         raise NotImplementedError
 
 
@@ -853,4 +850,10 @@ class IManualController(IGameController):
         raise NotImplementedError
 
     def runBootcamp(self):
+        raise NotImplementedError
+
+
+class ICalendarController(IGameController):
+
+    def showCalendar(self, invokedFrom):
         raise NotImplementedError

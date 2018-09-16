@@ -43,7 +43,7 @@ def calcEffectMaterialIndex(matKind):
     else:
         effectIndex = -1
         player = BigWorld.player()
-        if player.__class__.__name__ == 'PlayerAvatar':
+        if player.__class__.__name__ in ('PlayerAvatar', 'BotPlayerAvatar'):
             arenaSpecificEffect = player.arena.arenaType.defaultGroundEffect
             if arenaSpecificEffect is not None:
                 if arenaSpecificEffect == 'None':

@@ -1,0 +1,40 @@
+<AiScenarioSpawnPoint.def>
+  <Domain>	BASE	</Domain>
+  <Properties>
+    <team>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+    </team>
+    <spawnTypes>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+    </spawnTypes>
+    <decissionTree>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+    </decissionTree>
+    <btMain>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+    </btMain>
+    <playerSpawn>
+      <Type>	UINT8	</Type>
+      <Editable>	true	</Editable>
+      <MinValue>	0	</MinValue>
+      <MaxValue>	1	</MaxValue>
+    </playerSpawn>
+    <tier>
+      <Type>	INT8	</Type>
+      <Editable>	true	</Editable>
+    </tier>
+    <assignment>
+      <Type>	ARRAY	  <of>	UDO_REF	</of>
+      </Type>
+      <Editable>	True	</Editable>
+    </assignment>
+    <userData>
+      <Type>	STRING	</Type>
+      <Editable>	true	</Editable>
+    </userData>
+  </Properties>
+</AiScenarioSpawnPoint.def>

@@ -12,6 +12,7 @@ from AvatarInputHandler import AimingSystems
 from AvatarInputHandler.DynamicCameras import CameraDynamicConfig
 from AvatarInputHandler.DynamicCameras import createCrosshairMatrix, createOscillatorFromSection, AccelerationSmoother
 from AvatarInputHandler.cameras import ICamera, readFloat, readVec3, ImpulseReason, FovExtended
+from BattleReplay import CallbackDataNames
 from Math import Vector2, Vector3, Matrix
 from debug_utils import LOG_WARNING, LOG_DEBUG
 from helpers import dependency
@@ -66,7 +67,7 @@ class SniperCamera(ICamera, CallbackDelayer):
             self.__prevTime = BigWorld.time()
             self.__autoUpdateDxDyDz = Vector3(0, 0, 0)
             if BattleReplay.g_replayCtrl.isPlaying:
-                BattleReplay.g_replayCtrl.setDataCallback('applyZoom', self.__applySerializedZoom)
+                BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.APPLY_ZOOM, self.__applySerializedZoom)
             return
 
     def __onSettingsChanged(self, diff):
@@ -241,7 +242,7 @@ class SniperCamera(ICamera, CallbackDelayer):
     def __applyZoom(self, zoomFactor):
         self.__zoomFactor = zoomFactor
         if BattleReplay.g_replayCtrl.isRecording:
-            BattleReplay.g_replayCtrl.serializeCallbackData('applyZoom', (zoomFactor,))
+            BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.APPLY_ZOOM, (zoomFactor,))
         FovExtended.instance().setFovByMultiplier(1 / zoomFactor)
 
     def __getZooms(self):

@@ -294,7 +294,7 @@ class ActionsBuilder(object):
         template = self.createLayoutTemplate(self.__visibleCards)
         cards = template[_ltf.CARDS]
         for field in _FORMATING_FIELDS:
-            discounts = cards[field]
+            discounts = cards[field] or []
             result = []
             if discounts:
                 for discount in discounts:
@@ -304,10 +304,12 @@ class ActionsBuilder(object):
 
             cards[field] = result or None
 
-        if cards[_ltf.HEROCARD]:
-            cards[_ltf.HEROCARD] = cards[_ltf.HEROCARD][0]
-        if cards[_ltf.COMINGSOON]:
-            cards[_ltf.COMINGSOON] = cards[_ltf.COMINGSOON][0]
+        card = cards[_ltf.HEROCARD] or []
+        if card:
+            cards[_ltf.HEROCARD] = card[0]
+        card = cards[_ltf.COMINGSOON] or []
+        if card:
+            cards[_ltf.COMINGSOON] = card[0]
         if not any(cards.values()):
             template[_ltf.CARDS] = None
         return template

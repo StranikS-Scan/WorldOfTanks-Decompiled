@@ -1,8 +1,10 @@
 <china.xml>
   <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
     <name>	chinese colors	</name>
     <userString>	#vehicle_customization:repaint/color_group_02	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	china	</nations>
@@ -12,81 +14,67 @@
         <vehicles>	china:Ch01_Type59_Gold	</vehicles>
       </exclude>
     </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	160	</id>
       <texture>	gui/maps/vehicles/repaints/china_color_01.png	</texture>
       <color>	60 66 40 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/china_color_01	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	161	</id>
       <texture>	gui/maps/vehicles/repaints/china_color_02.png	</texture>
       <color>	83 87 62 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/china_color_02	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	162	</id>
       <texture>	gui/maps/vehicles/repaints/china_color_03.png	</texture>
       <color>	58 58 48 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/china_color_03	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	163	</id>
       <texture>	gui/maps/vehicles/repaints/china_color_04.png	</texture>
       <color>	116 103 86 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/china_color_04	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	164	</id>
       <texture>	gui/maps/vehicles/repaints/china_color_05.png	</texture>
       <color>	111 97 70 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/china_color_05	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	219	</id>
       <texture>	gui/maps/vehicles/repaints/china_color_06.png	</texture>
       <color>	101 87 69 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/china_color_06	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	268	</id>
       <texture>	gui/maps/vehicles/repaints/china_color_07.png	</texture>
       <color>	54 103 70 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/china_color_07	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
   </itemGroup>
 </china.xml>

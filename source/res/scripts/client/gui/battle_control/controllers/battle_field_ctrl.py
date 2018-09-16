@@ -39,7 +39,7 @@ class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
 
     def startControl(self, battleCtx, arenaVisitor):
         self.__battleCtx = battleCtx
-        self.__isEnabled = not arenaVisitor.hasArenaFogOfWarHiddenVehicles()
+        self.__isEnabled = not arenaVisitor.isArenaFogOfWarEnabled()
 
     def stopControl(self):
         super(BattleFieldCtrl, self).stopControl()
@@ -66,7 +66,7 @@ class BattleFieldCtrl(IBattleFieldController, ViewComponentsController):
             self.__registerAliveVehicle(vInfoVO, arenaDP)
             self.__updateVehiclesHealth()
 
-    def invalidateFogOfWarHiddenVehiclesFlag(self, flag):
+    def invalidateFogOfWarEnabledFlag(self, flag):
         self.__isEnabled = not flag
 
     def invalidateArenaInfo(self):

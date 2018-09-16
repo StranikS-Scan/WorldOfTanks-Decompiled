@@ -1,8 +1,10 @@
 <ussr.xml>
   <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
     <name>	ussr colors	</name>
     <userString>	#vehicle_customization:repaint/color_group_02	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	ussr	</nations>
@@ -12,81 +14,67 @@
         <vehicles>	ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	129	</id>
       <texture>	gui/maps/vehicles/repaints/ussr_color_01.png	</texture>
       <color>	84 77 49 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/ussr_color_01	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	130	</id>
       <texture>	gui/maps/vehicles/repaints/ussr_color_02.png	</texture>
       <color>	39 43 38 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/ussr_color_02	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	131	</id>
       <texture>	gui/maps/vehicles/repaints/ussr_color_03.png	</texture>
       <color>	95 91 65 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/ussr_color_03	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	132	</id>
       <texture>	gui/maps/vehicles/repaints/ussr_color_04.png	</texture>
       <color>	61 57 31 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/ussr_color_04	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	133	</id>
       <texture>	gui/maps/vehicles/repaints/ussr_color_05.png	</texture>
       <color>	62 60 49 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/ussr_color_05	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	214	</id>
       <texture>	gui/maps/vehicles/repaints/ussr_color_06.png	</texture>
       <color>	48 58 48 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/ussr_color_06	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	267	</id>
       <texture>	gui/maps/vehicles/repaints/ussr_color_07.png	</texture>
       <color>	54 103 70 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/ussr_color_07	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
   </itemGroup>
 </ussr.xml>

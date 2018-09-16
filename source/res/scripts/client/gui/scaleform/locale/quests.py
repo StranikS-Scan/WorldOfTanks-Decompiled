@@ -4,9 +4,7 @@ from debug_utils import LOG_WARNING
 
 class QUESTS(object):
     BONUSES_COMPENSATION = '#quests:bonuses/compensation'
-    MISSIONS_TAB_SEPTEMBER = '#quests:missions/tab/september'
     MISSIONS_TAB_KURSK = '#quests:missions/tab/kursk'
-    MISSIONS_TAB_BLOGGERS = '#quests:missions/tab/bloggers'
     MISSIONS_TAB_MARATHONS = '#quests:missions/tab/marathons'
     MISSIONS_TAB_EVENTBOARDS = '#quests:missions/tab/eventBoards'
     MISSIONS_TAB_CATEGORIES = '#quests:missions/tab/categories'
@@ -989,18 +987,8 @@ class QUESTS(object):
     MISSIONS_TAB_LABEL_MARATHONS = '#quests:missions/tab/label/marathons'
     MISSIONS_TAB_KURSK_HEADER = '#quests:missions/tab/kursk/header'
     MISSIONS_TAB_KURSK_BODY = '#quests:missions/tab/kursk/body'
-    MISSIONS_TAB_LABEL_BLOGGERS = '#quests:missions/tab/label/bloggers'
-    MISSIONS_TAB_BLOGGERS_HEADER = '#quests:missions/tab/bloggers/header'
-    MISSIONS_TAB_BLOGGERS_BODY = '#quests:missions/tab/bloggers/body'
-    MISSIONS_TAB_BLOGGERS_DISABLED = '#quests:missions/tab/bloggers/disabled'
-    MISSIONS_TAB_BLOGGERS_DISABLED_HEADER = '#quests:missions/tab/bloggers/disabled/header'
-    MISSIONS_TAB_BLOGGERS_DISABLED_BODY = '#quests:missions/tab/bloggers/disabled/body'
     MISSIONS_TAB_MARATHONS_HEADER = '#quests:missions/tab/marathons/header'
     MISSIONS_TAB_MARATHONS_BODY = '#quests:missions/tab/marathons/body'
-    MISSIONS_TAB_LABEL_SEPTEMBER = '#quests:missions/tab/label/september'
-    MISSIONS_TAB_SEPTEMBER_HEADER = '#quests:missions/tab/september/header'
-    MISSIONS_TAB_SEPTEMBER_DISABLED = '#quests:missions/tab/september/disabled'
-    MISSIONS_TAB_SEPTEMBER_BODY = '#quests:missions/tab/september/body'
     MISSIONS_TAB_MISSIONS_HEADER = '#quests:missions/tab/missions/header'
     MISSIONS_TAB_MISSIONS_BODY = '#quests:missions/tab/missions/body'
     MISSIONS_TAB_LABEL_MISSIONS = '#quests:missions/tab/label/missions'
@@ -1198,6 +1186,12 @@ class QUESTS(object):
     BONUSNAME_COMPLETIONTOKENS_7_2 = '#quests:bonusName/completionTokens_7_2'
     BONUSNAME_COMPLETIONTOKENS_7_3 = '#quests:bonusName/completionTokens_7_3'
     BONUSNAME_COMPLETIONTOKENS_7_4 = '#quests:bonusName/completionTokens_7_4'
+    ACTION_AUTO_CALENDAR = '#quests:action/auto/calendar'
+    ACTION_FULL_CALENDAR = '#quests:action/full/calendar'
+    ACTION_HERO_FULL_CALENDAR = '#quests:action/hero/full/calendar'
+    ACTION_BUTTON_CALENDAR = '#quests:action/button/calendar'
+    ACTION_SHORT_CALENDAR = '#quests:action/short/calendar'
+    ACTION_SUBHEADER_CALENDAR = '#quests:action/subheader/calendar'
     ACTION_AUTO_EXCHANGERATE = '#quests:action/auto/exchangeRate'
     ACTION_FULL_EXCHANGERATE = '#quests:action/full/exchangeRate'
     ACTION_HERO_FULL_EXCHANGERATE = '#quests:action/hero/full/exchangeRate'
@@ -1423,6 +1417,7 @@ class QUESTS(object):
     ACTION_CHAIN_HINT_EMBLEMS = '#quests:action/chain/hint/emblems'
     ACTION_CHAIN_HINT_INSCRIPTIONS = '#quests:action/chain/hint/inscriptions'
     QUEST_CHAIN_HINT_HOLDAWARDSHEET = '#quests:quest/chain/hint/holdAwardSheet'
+    QUEST_CHAIN_HINT_PAUSE = '#quests:quest/chain/hint/pause'
     ACTION_LABEL_BATTLEQUESTS = '#quests:action/label/battleQuests'
     ACTION_EMPTY_INFO = '#quests:action/empty/info'
     ACTION_EMPTY_BTNLABEL = '#quests:action/empty/btnLabel'
@@ -1448,6 +1443,7 @@ class QUESTS(object):
     PERSONALMISSION_STATUS_FULLDONE = '#quests:personalMission/status/fullDone'
     PERSONALMISSION_STATUS_DONEWITHPAWN = '#quests:personalMission/status/doneWithPawn'
     PERSONALMISSION_STATUS_INPROGRESS = '#quests:personalMission/status/inProgress'
+    PERSONALMISSION_STATUS_ISONPAUSE = '#quests:personalMission/status/isOnPause'
     PERSONALMISSION_STATUS_NOTDONE = '#quests:personalMission/status/notDone'
     PERSONALMISSION_STATUS_ADDINPROGRESS = '#quests:personalMission/status/addInProgress'
     PERSONALMISSION_STATUS_SHEETRECOVERYINPROGRESS = '#quests:personalMission/status/sheetRecoveryInProgress'
@@ -1464,6 +1460,7 @@ class QUESTS(object):
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_HEAVYTANK = '#quests:personalMission/status/addBottom/vehicleType/heavyTank'
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_AT_SPG = '#quests:personalMission/status/addBottom/vehicleType/AT-SPG'
     PERSONALMISSION_STATUS_ADDBOTTOM_VEHICLETYPE_SPG = '#quests:personalMission/status/addBottom/vehicleType/SPG'
+    PERSONALMISSION_STATUS_MISSIONDISABLED = '#quests:personalMission/status/missionDisabled'
     PERSONALMISSION_STATUS_LOCKEDBYPREVMISSIONS = '#quests:personalMission/status/lockedByPrevMissions'
     PERSONALMISSION_STATUS_LOCKEDBYPREVOPERATION = '#quests:personalMission/status/lockedByPrevOperation'
     PERSONALMISSION_BOTTOMSTATUS_ALLAWARDSRECEIVED = '#quests:personalMission/bottomStatus/allAwardsReceived'
@@ -1736,7 +1733,13 @@ class QUESTS(object):
      DETAILS_DOSSIER_22_BATTLESCOUNT,
      DETAILS_DOSSIER_24_BATTLESCOUNT,
      DETAILS_DOSSIER_27_BATTLESCOUNT)
-    ACTION_ENUM = (ACTION_AUTO_EXCHANGERATE,
+    ACTION_ENUM = (ACTION_AUTO_CALENDAR,
+     ACTION_FULL_CALENDAR,
+     ACTION_HERO_FULL_CALENDAR,
+     ACTION_BUTTON_CALENDAR,
+     ACTION_SHORT_CALENDAR,
+     ACTION_SUBHEADER_CALENDAR,
+     ACTION_AUTO_EXCHANGERATE,
      ACTION_FULL_EXCHANGERATE,
      ACTION_HERO_FULL_EXCHANGERATE,
      ACTION_SHORT_EXCHANGERATE,

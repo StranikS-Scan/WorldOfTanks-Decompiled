@@ -14,6 +14,7 @@
               <description>
                 <key>	#personal_missions_details:quest_2_3_2_condition_description_vehicleDamage	</key>
               </description>
+              <attackReason>	0	</attackReason>
               <eventCount></eventCount>
               <greaterOrEqual>	9	</greaterOrEqual>
             </vehicleDamage>
@@ -68,6 +69,7 @@
               <description>
                 <key>	#personal_missions_details:quest_2_3_2_condition_description_vehicleDamage	</key>
               </description>
+              <attackReason>	0	</attackReason>
               <eventCount></eventCount>
               <greaterOrEqual>	9	</greaterOrEqual>
             </vehicleDamage>
@@ -111,6 +113,7 @@
         <postBattle>
           <and>
             <vehicleDamage>
+              <attackReason>	0	</attackReason>
               <eventCount></eventCount>
               <greaterOrEqual>	9	</greaterOrEqual>
             </vehicleDamage>

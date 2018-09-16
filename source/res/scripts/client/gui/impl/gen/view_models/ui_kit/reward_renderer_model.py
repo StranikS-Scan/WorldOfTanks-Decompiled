@@ -24,6 +24,7 @@ class RewardRendererModel(ViewModel):
         self._setNumber(2, value)
 
     def _initialize(self):
+        super(RewardRendererModel, self)._initialize()
         self._addStringProperty('labelStr', '')
         self._addStringProperty('icon', '')
         self._addNumberProperty('tooltipId', 0)

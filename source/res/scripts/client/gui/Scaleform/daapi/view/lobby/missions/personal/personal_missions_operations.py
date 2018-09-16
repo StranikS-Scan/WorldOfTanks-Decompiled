@@ -105,5 +105,5 @@ class PersonalMissionOperations(LobbySubView, PersonalMissionOperationsMeta, Per
         return PERSONAL_MISSIONS_ALIASES.OPERATION_COMPLETE_STATE if state == PERSONAL_MISSIONS_ALIASES.OPERATION_COMPLETE_FULL_STATE else state
 
     def _onSettingsChanged(self, diff):
-        if 'isRegularQuestEnabled' in diff and not diff['isRegularQuestEnabled'] or 'isPM2QuestEnabled' in diff and not diff['isPM2QuestEnabled'] or 'disabledPMOperations' in diff and diff['disabledPMOperations']:
+        if 'isRegularQuestEnabled' in diff and not diff['isRegularQuestEnabled'] or 'isPM2QuestEnabled' in diff and not diff['isPM2QuestEnabled'] or 'disabledPMOperations' in diff and diff['disabledPMOperations'] or 'disabledPersonalMissions' in diff and diff['disabledPersonalMissions']:
             self.__update()

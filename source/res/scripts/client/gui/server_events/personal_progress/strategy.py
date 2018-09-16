@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/personal_progress/strategy.py
 import typing
+import logging
 from constants import QUEST_PROGRESS_STATE
 from gui.Scaleform.genConsts.QUEST_PROGRESS_BASE import QUEST_PROGRESS_BASE
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.shared.formatters import text_styles
 from helpers import i18n
+_logger = logging.getLogger(__name__)
 
 class IProgressGetter(object):
 
@@ -39,6 +41,27 @@ class ValueProgressGetter(IProgressGetter):
     @classmethod
     def getCurrent(cls, progress):
         return progress.getGoal() if progress.getState() == QUEST_PROGRESS_STATE.COMPLETED else int(min(progress.getValue(), progress.getGoal()))
+
+
+class AverageProgressGetter(ValueProgressGetter):
+
+    @classmethod
+    def getAverageGoal(cls, progress, counter):
+        if counter is not None and counter.getGoal() != 0:
+            return round(float(cls.getGoal(progress)) / counter.getGoal(), 1)
+        else:
+            _logger.error('Counter is not found or has wrong config for progress: %s!', progress.getProgressID())
+            return 1.0
+
+    @classmethod
+    def getAverageValue(cls, progress, counter):
+        if counter is not None and counter.getGoal() != 0:
+            if progress.getState() == QUEST_PROGRESS_STATE.COMPLETED:
+                return cls.getAverageGoal(progress, counter)
+            return round(float(cls.getCurrent(progress)) / counter.getGoal(), 1)
+        else:
+            _logger.error('Counter is not found or has wrong config for progress: %s!', progress.getProgressID())
+            return 0.0
 
 
 class CounterProgressGetter(IProgressGetter):

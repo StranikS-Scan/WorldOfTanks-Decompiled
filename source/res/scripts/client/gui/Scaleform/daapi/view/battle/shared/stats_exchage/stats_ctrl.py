@@ -339,11 +339,17 @@ class BattleStatisticsDataController(BattleStatisticDataControllerMeta, IVehicle
             self.as_setQuestStatusS(self.__getStatusData(selectedQuest))
 
     def __getStatusData(self, selectedQuest):
-        status = MISSIONS_STATES.IN_PROGRESS
-        icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_INPROGRESSICON, 16, 16, -2, 8)
-        text = text_styles.neutral(INGAME_GUI.STATISTICS_TAB_QUESTS_STATUS_INPROGRESS)
-        if selectedQuest.isMainCompleted():
-            text = text_styles.neutral(INGAME_GUI.STATISTICS_TAB_QUESTS_STATUS_INCREASERESULT)
+        if selectedQuest.isOnPause:
+            status = MISSIONS_STATES.IS_ON_PAUSE
+            icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ONPAUSE, 16, 16, -3, 8)
+            text = text_styles.playerOnline(INGAME_GUI.STATISTICS_TAB_QUESTS_STATUS_ONPAUSE)
+        else:
+            status = MISSIONS_STATES.IN_PROGRESS
+            icon = icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_INPROGRESSICON, 16, 16, -2, 8)
+            if selectedQuest.isMainCompleted():
+                text = text_styles.neutral(INGAME_GUI.STATISTICS_TAB_QUESTS_STATUS_INCREASERESULT)
+            else:
+                text = text_styles.neutral(INGAME_GUI.STATISTICS_TAB_QUESTS_STATUS_INPROGRESS)
         statusLabel = text_styles.concatStylesToSingleLine(icon, text)
         return {'statusLabel': statusLabel,
          'status': status}

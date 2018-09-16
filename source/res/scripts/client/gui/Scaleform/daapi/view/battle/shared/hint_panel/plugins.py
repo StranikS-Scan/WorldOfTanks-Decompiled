@@ -179,6 +179,9 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         self.__isHintShown = False
         self.__isInPostmortem = False
         self.__isObserver = False
+        self._isInRecovery = False
+        self._isInProgressCircle = False
+        self._isUnderFire = False
 
     def start(self):
         vStateCtrl = self.sessionProvider.shared.vehicleState
@@ -217,10 +220,10 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         LOG_DEBUG('Updating siege mode: hint')
         if self.__isInPostmortem or self.__isObserver:
             return
-        if self.__siegeState not in _SIEGE_STATE.SWITCHING and self.__hintsLeft:
+        if self.__siegeState not in _SIEGE_STATE.SWITCHING and self.__hintsLeft and not self.__areOtherIndicatorsShown():
             self._parentObj.setBtnHint(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION, self._getHint())
             self.__isHintShown = True
-        elif self.__isHintShown:
+        elif self.__isHintShown or self.__areOtherIndicatorsShown():
             self._parentObj.removeBtnHint(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
             self.__isHintShown = False
 
@@ -250,6 +253,18 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
                     self.__hintsLeft = max(0, self.__hintsLeft - 1)
             self.__siegeState = siegeState
             self.__updateHint()
+        elif state == VEHICLE_VIEW_STATE.RECOVERY:
+            self._isInRecovery = value[0]
+            if self.__isEnabled:
+                self.__updateHint()
+        elif state == VEHICLE_VIEW_STATE.PROGRESS_CIRCLE:
+            self._isInProgressCircle = value[1]
+            if self.__isEnabled:
+                self.__updateHint()
+        elif state == VEHICLE_VIEW_STATE.UNDER_FIRE:
+            self._isUnderFire = value
+            if self.__isEnabled:
+                self.__updateHint()
 
     def __onPostMortemSwitched(self, *args):
         self.__isInPostmortem = True
@@ -272,6 +287,9 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
         else:
             hintText = INGAME_GUI.SIEGEMODE_HINT_NOBINDING
         return HintData(keyName, pressText, hintText, 0, 0, HintPriority.SIEGE)
+
+    def __areOtherIndicatorsShown(self):
+        return self._isUnderFire or self._isInRecovery or self._isInProgressCircle
 
 
 class QuestProgressHintPlugin(HintPanelPlugin):

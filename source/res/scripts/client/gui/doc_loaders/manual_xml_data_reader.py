@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/doc_loaders/manual_xml_data_reader.py
+import itertools
 import logging
 from helpers.html import translation
 import resource_helper
@@ -18,6 +19,11 @@ def getChapters(isBootcampEnabled):
     with resource_helper.root_generator(chaptersListPath) as ctx, root:
         chapters = __readChapters(ctx, root, isBootcampEnabled)
     return chapters
+
+
+def getPagesIndexesList(isBootcampEnabled):
+    chaptersData = getChapters(isBootcampEnabled)
+    return itertools.chain.from_iterable([ chapter['pageIDs'] for chapter in chaptersData ])
 
 
 def getChaptersIndexesList(isBootcampEnabled):
@@ -47,9 +53,7 @@ def __readChapter(ctx, root, isBootcampEnabled, bootcampRunCount):
             description = ''
         else:
             description = translation(description)
-        contentRendererData = None
         contentRendererLinkage = ''
-        hintsCount = 0
         if template is _BOOTCAMP_PAGE:
             if not isBootcampEnabled:
                 continue
@@ -85,12 +89,17 @@ def __readChapters(ctx, root, isBootcampEnabled):
         filePath = __getCustomSectionValue(chapterCtx, chapterSection, 'file-path')
         title = __getCustomSectionValue(chapterCtx, chapterSection, 'title')
         background = __getCustomSectionValue(chapterCtx, chapterSection, 'background')
-        lessonsTitlesList = __getChaptersTitlesList(filePath, isBootcampEnabled)
+        ids, lessonsTitles = __getLessonsIDsAndTitlesFromChapter(filePath, isBootcampEnabled)
+        if len(ids) != len(set(ids)):
+            _logger.warning('chapter %s has duplicate page ids', title)
         chapter = {'filePath': filePath,
+         'pageIDs': ids,
          'uiData': {'index': int(index),
                     'label': translation(title),
                     'image': background,
-                    'tooltip': makeTooltip(translation(title), '\n'.join(lessonsTitlesList))}}
+                    'tooltip': makeTooltip(translation(title), '\n'.join(lessonsTitles))}}
+        if any((ids in chapter['pageIDs'] for chapter in chapters)):
+            _logger.warning('chapter %s has duplicate page ids from another chapters', title)
         _logger.debug('ManualXMLDataReader: Read chapters. Chapter: %s', chapter)
         chapters.append(chapter)
         index += 1
@@ -98,19 +107,20 @@ def __readChapters(ctx, root, isBootcampEnabled):
     return chapters
 
 
-def __getChaptersTitlesList(chapterFileName, isBootcampEnabled):
+def __getLessonsIDsAndTitlesFromChapter(chapterFileName, isBootcampEnabled):
     chaptersTitles = []
+    ids = []
     chapterPath = _CHAPTERS_DATA_PATH + chapterFileName
     with resource_helper.root_generator(chapterPath) as ctx, root:
         ctx, section = resource_helper.getSubSection(ctx, root, 'lessons')
         for lessonCtx, lessonSection in resource_helper.getIterator(ctx, section):
-            title = translation(__getCustomSectionValue(lessonCtx, lessonSection, 'title'))
             template = __getCustomSectionValue(lessonCtx, lessonSection, 'template')
             if template is _BOOTCAMP_PAGE and not isBootcampEnabled:
                 continue
-            chaptersTitles.append(title)
+            ids.append(int(__getCustomSectionValue(lessonCtx, lessonSection, 'id')))
+            chaptersTitles.append(translation(__getCustomSectionValue(lessonCtx, lessonSection, 'title')))
 
-    return chaptersTitles
+    return (ids, chaptersTitles)
 
 
 def __getCustomSectionValue(ctx, section, name, safe=False):

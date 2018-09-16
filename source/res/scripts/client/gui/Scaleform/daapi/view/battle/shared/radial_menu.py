@@ -148,7 +148,8 @@ class RadialMenu(RadialMenuMeta, BattleGUIKeyHandler):
     def __isTargetCorrect(self, player, target):
         if target is not None and target.isAlive() and player is not None and isPlayerAvatar():
             vInfo = self.sessionProvider.getArenaDP().getVehicleInfo(target.id)
-            return not vInfo.isActionsDisabled()
+            isAlly = target.publicInfo.team == player.team
+            return not vInfo.isChatCommandsDisabled(isAlly)
         else:
             return False
 

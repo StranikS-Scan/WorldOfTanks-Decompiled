@@ -394,7 +394,7 @@ class PersonalMissionsMapRegionTooltipData(BlocksTooltipData):
         if not quest.isDone():
             bonuses = quest.getBonuses(isMain=not quest.isMainCompleted())
             pawnedTokensCount = quest.getPawnCost() if quest.areTokensPawned() else 0
-            bonuses = missions_helper.getPersonalMissionAwardsFormatter().getFormattedBonuses(bonuses, size=AWARDS_SIZES.BIG, pawnedTokensCount=pawnedTokensCount, freeTokenName=PM_BRANCH_TO_FREE_TOKEN_NAME[quest.getQuestBranch()])
+            bonuses = missions_helper.getPersonalMissionAwardsFormatter().getPawnedQuestBonuses(bonuses, size=AWARDS_SIZES.BIG, pawnedTokensCount=pawnedTokensCount, freeTokenName=PM_BRANCH_TO_FREE_TOKEN_NAME[quest.getQuestBranch()])
             items.append(formatters.packAwardsExBlockData(bonuses, columnWidth=90, rowHeight=80, horizontalGap=10, renderersAlign=formatters.RENDERERS_ALIGN_CENTER, padding=formatters.packPadding(bottom=20, left=10)))
         return formatters.packBuildUpBlockData(blocks=items, stretchBg=False, linkage=linkage)
 
@@ -404,13 +404,13 @@ class PersonalMissionsMapRegionTooltipData(BlocksTooltipData):
         if not isAvailable:
             if reason == 'noVehicle':
                 key = TOOLTIPS.PERSONALMISSIONS_MAPREGION_FOOTER_TITLE_NOVEHICLE
-            elif reason == 'disabled':
-                key = TOOLTIPS.PERSONALMISSIONS_MAPREGION_FOOTER_TITLE_DISABLED
             else:
                 key = TOOLTIPS.PERSONALMISSIONS_MAPREGION_FOOTER_TITLE_NOTAVAILABLE
             text = text_styles.concatStylesWithSpace(icons.markerBlocked(-2), text_styles.error(key))
         elif quest.isInProgress():
-            if quest.areTokensPawned():
+            if quest.isOnPause:
+                text = text_styles.concatStylesWithSpace(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ONPAUSE, 16, 16, -3, 8), text_styles.playerOnline(TOOLTIPS.PERSONALMISSIONS_MAPREGION_FOOTER_TITLE_ONPAUSE))
+            elif quest.areTokensPawned():
                 label = _ms(TOOLTIPS.PERSONALMISSIONS_MAPREGION_FOOTER_TITLE_SHEETRECOVERYINPROGRESS, icon=missions_helper.getHtmlAwardSheetIcon(quest.getQuestBranch()), count=quest.getPawnCost())
                 text = text_styles.concatStylesWithSpace(icons.inProgress(-1), text_styles.neutral(label))
             else:

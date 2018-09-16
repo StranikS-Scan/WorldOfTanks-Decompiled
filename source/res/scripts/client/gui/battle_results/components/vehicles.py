@@ -39,7 +39,7 @@ class TeamPlayerNameBlock(shared.PlayerNameBlock):
 
 
 class RegularVehicleStatsBlock(base.StatsBlock):
-    __slots__ = ('_isObserver', 'achievements', 'achievementsCount', 'vehicleState', 'vehicleStatePrefix', 'vehicleStateSuffix', 'killerID', 'deathReason', 'isPrematureLeave', 'vehicleName', 'vehicleShortName', 'vehicleIcon', 'vehicleSort', 'isPersonal', 'isTeamKiller', 'kills', 'tkills', 'realKills', 'xp', 'damageDealt', 'vehicles', 'playerID', 'player', 'statValues', 'fortResource', 'squadIndex', 'isPersonalSquad', 'xpSort', 'intCD', 'rank', 'rankIcon', 'badge', 'badgeIcon', 'playerRank', 'respawns')
+    __slots__ = ('_isObserver', 'achievements', 'achievementsCount', 'vehicleState', 'vehicleStatePrefix', 'vehicleStateSuffix', 'killerID', 'deathReason', 'isPrematureLeave', 'vehicleName', 'vehicleShortName', 'vehicleIcon', 'vehicleSort', 'isPersonal', 'isTeamKiller', 'kills', 'tkills', 'realKills', 'xp', 'damageDealt', 'vehicles', 'playerID', 'player', 'statValues', 'fortResource', 'squadIndex', 'isPersonalSquad', 'xpSort', 'intCD', 'rank', 'rankIcon', 'badge', 'badgeIcon', 'isKilledByTeamKiller', 'playerRank', 'respawns')
 
     def __init__(self, meta=None, field='', *path):
         super(RegularVehicleStatsBlock, self).__init__(meta, field, *path)
@@ -47,6 +47,7 @@ class RegularVehicleStatsBlock(base.StatsBlock):
         self.isPersonal = None
         self.isPersonalSquad = None
         self.isTeamKiller = False
+        self.isKilledByTeamKiller = False
         self.vehicleSort = None
         self.badge = 0
         self.badgeIcon = None
@@ -56,11 +57,12 @@ class RegularVehicleStatsBlock(base.StatsBlock):
         player = result.player
         avatar = reusable.avatars.getAvatarInfo(player.dbID)
         noPenalties = not avatar.hasPenalties()
-        self.badge = avatar.badge
-        if self.badge > 0:
-            self.badgeIcon = style.makeBadgeIcon(self.badge)
-        else:
-            self.badgeIcon = None
+        badgeIcon = None
+        if avatar is not None:
+            self.badge = avatar.badge
+            if self.badge > 0:
+                badgeIcon = style.makeBadgeIcon(self.badge)
+        self.badgeIcon = badgeIcon
         self._processVehicles(result)
         self._setPlayerInfo(player)
         self._setTotalStats(result, noPenalties)

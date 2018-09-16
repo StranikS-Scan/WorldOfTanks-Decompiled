@@ -93,15 +93,17 @@ def onInit(eventType, eventData, quest, processor):
 def onFinishBattle(eventType, eventData, quest, processor):
     questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
 
-    brfilter = filter.BattleResultsFilter(eventData)
-    medalDescriptors = [('achievements', 'shootToKill')]
+    medalDescriptors = [questProgress.getProgress(PROGRESS_ID_MAIN).getParam("medal")]
     battleHeroMedalSet = {records.RECORD_DB_IDS[rec] for rec in medalDescriptors}
+    resultMain = sum(1 for medal in eventData['avatarResults']['achievements'] if medal in battleHeroMedalSet)
+    questProgress.increaseBattleSeriesUntilCompleteOrFail(PROGRESS_ID_MAIN_SERIES, bool(resultMain))
 
-    result = sum(1 for medal in eventData['avatarResults']['achievements'] if medal in battleHeroMedalSet)
-    questProgress.increaseSumProgress(PROGRESS_ID_MAIN, PROGRESS_ID_MAIN_SERIES, result)
-    questProgress.increaseSumProgress(PROGRESS_ID_ADD, PROGRESS_ID_ADD_SERIES, result, PROGRESS_ID_MAIN)
+    medalDescriptors = [questProgress.getProgress(PROGRESS_ID_ADD).getParam("medal")]
+    battleHeroMedalSet = {records.RECORD_DB_IDS[rec] for rec in medalDescriptors}
+    resultAdd = sum(1 for medal in eventData['avatarResults']['achievements'] if medal in battleHeroMedalSet)
+    questProgress.increaseBattleSeriesUntilCompleteOrFail(PROGRESS_ID_ADD_SERIES, bool(resultAdd), PROGRESS_ID_MAIN_SERIES)
 
-    eventData['results'].update(processor.checkComplete(questProgress, quest.progressID, additionalProgressID=PROGRESS_ID_ADD))
+    eventData['results'].update(processor.checkComplete(questProgress, quest.progressID, additionalProgressID=PROGRESS_ID_ADD_SERIES))
 
     processor.setQuestProgress(quest.progressID, questProgress.save())
 

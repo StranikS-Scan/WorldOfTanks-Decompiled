@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/items_parameters/params_helper.py
-from collections import namedtuple
 import copy
+from collections import namedtuple
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_WARNING
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
@@ -127,12 +127,12 @@ def artifactComparator(vehicle, item, slotIdx, compareWithEmptySlot=False):
     vehicleParams = params.VehicleParams(vehicle).getParamsDict()
     if item.itemTypeID == ITEM_TYPES.optionalDevice:
         removable, notRemovable = vehicle.descriptor.installOptionalDevice(item.intCD, slotIdx)
-        withItemParams = params.VehicleParams(vehicle).getParamsDict()
+        withItemParams = params.VehicleParams(vehicle).getParamsDict(preload=True)
         removed = removable or notRemovable
         if removed:
             if compareWithEmptySlot:
                 vehicle.descriptor.removeOptionalDevice(slotIdx)
-                vehicleParams = params.VehicleParams(vehicle).getParamsDict()
+                vehicleParams = params.VehicleParams(vehicle).getParamsDict(preload=True)
             vehicle.descriptor.installOptionalDevice(removed[0], slotIdx)
         else:
             vehicle.descriptor.removeOptionalDevice(slotIdx)

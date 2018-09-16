@@ -254,7 +254,7 @@ FORMAT_SETTINGS = {'relativePower': _integralFormat,
  'stunMinDurationList': _niceListFormat,
  'cooldownSeconds': _niceFormat,
  AUTO_RELOAD_PROP_NAME: {'preprocessor': _autoReloadPreprocessor,
-                         'rounder': lambda v: str(int(round(v)))}}
+                         'rounder': lambda v: BigWorld.wg_getNiceNumberFormat(round(v, 1))}}
 
 def _deltaWrapper(fn):
 

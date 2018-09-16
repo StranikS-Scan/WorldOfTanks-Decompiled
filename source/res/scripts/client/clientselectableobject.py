@@ -66,7 +66,13 @@ class ClientSelectableObject(BigWorld.Entity, ComponentSystem):
             BigWorld.wgDelEdgeDetectEntity(self)
             self.__edged = False
 
-    def onClicked(self):
+    def onMouseDown(self):
+        pass
+
+    def onMouseUp(self):
+        pass
+
+    def onMouseClick(self):
         if self.__clickSound is None:
             if self.clickSoundName:
                 self.__clickSound = SoundGroups.g_instance.getSound3D(self.model.root, self.clickSoundName)
@@ -76,6 +82,9 @@ class ClientSelectableObject(BigWorld.Entity, ComponentSystem):
         else:
             self.__clickSound.play()
         return
+
+    def onReleased(self):
+        pass
 
     def _getModelHeight(self):
         return self.model.height

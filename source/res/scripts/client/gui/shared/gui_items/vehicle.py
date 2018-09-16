@@ -167,6 +167,7 @@ class Vehicle(FittingItem, HasStrCD):
         self._rotationBattlesLeft = 0
         self._isRotationGroupLocked = False
         self._isInfiniteRotationGroup = False
+        self._unlockedBy = []
         self._customOutfits = {}
         self._styledOutfits = {}
         if self.isPremiumIGR:
@@ -201,6 +202,7 @@ class Vehicle(FittingItem, HasStrCD):
             self._rotationBattlesLeft = proxy.vehicleRotation.getBattlesCount(self.rotationGroupNum)
             self._isRotationGroupLocked = proxy.vehicleRotation.isGroupLocked(self.rotationGroupNum)
             self._isInfiniteRotationGroup = proxy.vehicleRotation.isInfinite(self.rotationGroupNum)
+            self._unlockedBy = proxy.vehicleRotation.unlockedBy(self.rotationGroupNum)
         self._inventoryCount = 1 if invData.keys() else 0
         data = invData.get('rent')
         if data is not None:
@@ -493,6 +495,10 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def isRotationGroupLocked(self):
         return self._isRotationGroupLocked
+
+    @property
+    def unlockedBy(self):
+        return self._unlockedBy
 
     @property
     def isInfiniteRotationGroup(self):

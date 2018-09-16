@@ -303,12 +303,10 @@ class PromoController(IPromoController):
     def __addAuthParams(self, url, callback):
         if not url or not self.__webController:
             callback(url)
-        if self.__webController:
-            accessTokenData = yield self.__webController.getAccessTokenData(force=True)
-            if accessTokenData:
-                params = {'access_token': str(accessTokenData.accessToken),
-                 'spa_id': BigWorld.player().databaseID}
-                callback(url_formatters.addParamsToUrlQuery(url, params))
+        accessTokenData = yield self.__webController.getAccessTokenData(force=True)
+        params = {'access_token': str(accessTokenData.accessToken),
+         'spa_id': BigWorld.player().databaseID}
+        callback(url_formatters.addParamsToUrlQuery(url, params))
 
     def __onViewLoaded(self, pyView, _):
         if self.__isLobbyInited:

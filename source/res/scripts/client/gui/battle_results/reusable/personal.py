@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/reusable/personal.py
-from collections import namedtuple
 import itertools
+from collections import namedtuple
 from ValueReplay import ValueReplay, ValueReplayConnector
 from battle_results_shared import VEH_FULL_RESULTS
 from debug_utils import LOG_ERROR
@@ -12,10 +12,10 @@ from gui.battle_results.reusable import sort_keys
 from gui.battle_results.settings import BATTLE_RESULTS_RECORD as _RECORD
 from gui.battle_results.settings import FACTOR_VALUE
 from gui.ranked_battles.ranked_models import PostBattleRankInfo
+from gui.shared.money import Currency
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.shared.money import Currency
 _LifeTimeInfo = namedtuple('_LifeTimeInfo', ('isKilled', 'lifeTime'))
 
 class _SquadBonusInfo(object):
@@ -178,7 +178,7 @@ class _FreeXPReplayRecords(records.ReplayRecords):
 
 
 class _EconomicsRecordsChains(object):
-    __slots__ = ('_baseCredits', '_premiumCredits', '_goldRecords', '_autoRecords', '_baseXP', '_premiumXP', '_baseFreeXP', '_premiumFreeXP', '_fortResource', '_crystal', '_crystalDetails', '_zeroEarnings')
+    __slots__ = ('_baseCredits', '_premiumCredits', '_goldRecords', '_autoRecords', '_baseXP', '_premiumXP', '_baseFreeXP', '_premiumFreeXP', '_fortResource', '_crystal', '_crystalDetails')
 
     def __init__(self):
         super(_EconomicsRecordsChains, self).__init__()
@@ -192,13 +192,9 @@ class _EconomicsRecordsChains(object):
         self._premiumFreeXP = records.RecordsIterator()
         self._crystal = records.RecordsIterator()
         self._crystalDetails = []
-        self._zeroEarnings = False
 
     def getBaseCreditsRecords(self):
         return self._baseCredits
-
-    def isZeroEarnings(self):
-        return self._zeroEarnings
 
     def getPremiumCreditsRecords(self):
         return self._premiumCredits
@@ -229,10 +225,6 @@ class _EconomicsRecordsChains(object):
 
     def addResults(self, _, results):
         connector = ValueReplayConnector(VEH_FULL_RESULTS, results)
-        self._zeroEarnings = not any((results.get('credits'),
-         results.get('gold'),
-         results.get('freeXP'),
-         results.get('crystal')))
         self._addMoneyResults(connector, results)
         self._addXPResults(connector, results)
         self._addCrystalResults(connector, results)
@@ -300,7 +292,7 @@ class _EconomicsRecordsChains(object):
 
 
 class PersonalInfo(shared.UnpackedInfo):
-    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '__economicsRecords', '__isPremium', '__questsProgress', '__PM2Progress', '__rankInfo')
+    __slots__ = ('__avatar', '__vehicles', '__lifeTimeInfo', '__isObserver', '__economicsRecords', '__isPremium', '__questsProgress', '__PM2Progress', '__rankInfo', '__isTeamKiller')
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, personal):
@@ -312,6 +304,7 @@ class PersonalInfo(shared.UnpackedInfo):
             self._addUnpackedItemID(_RECORD.PERSONAL_AVATAR)
         self.__vehicles = []
         self.__isObserver = False
+        self.__isTeamKiller = False
         self.__isPremium = False
         self.__economicsRecords = _EconomicsRecordsChains()
         self.__lifeTimeInfo = _LifeTimeInfo(False, 0)
@@ -333,6 +326,10 @@ class PersonalInfo(shared.UnpackedInfo):
     @property
     def isPremium(self):
         return self.__isPremium
+
+    @property
+    def isTeamKiller(self):
+        return self.__isTeamKiller
 
     def getVehicleCDsIterator(self, result):
         for intCD in self.__vehicles:
@@ -378,9 +375,6 @@ class PersonalInfo(shared.UnpackedInfo):
 
     def getBaseCreditsRecords(self):
         return self.__economicsRecords.getBaseCreditsRecords()
-
-    def isWGMoneyRelatedZeroEarnings(self):
-        return self.__economicsRecords.isZeroEarnings()
 
     def getPremiumCreditsRecords(self):
         return self.__economicsRecords.getPremiumCreditsRecords()
@@ -433,6 +427,7 @@ class PersonalInfo(shared.UnpackedInfo):
             lifeTime = data['lifeTime'] if 'lifeTime' in data else 0
             if killerID and lifeTime:
                 lifeTimes.append(lifeTime)
+            self.__isTeamKiller = data['isTeamKiller'] if 'isTeamKiller' in data else False
             if not self.__isPremium and data.get('isPremium', False):
                 self.__isPremium = True
             self.__questsProgress.update(data.get('questsProgress', {}))

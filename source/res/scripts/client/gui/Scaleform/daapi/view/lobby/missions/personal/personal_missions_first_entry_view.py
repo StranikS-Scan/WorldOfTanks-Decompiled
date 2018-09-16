@@ -16,6 +16,8 @@ from gui.shared.formatters import text_styles, icons
 from helpers import i18n, dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBrowserController
+from web_client_api import webApiCollection
+from web_client_api.sound import HangarSoundWebApi
 
 class PersonalMissionFirstEntryView(LobbySubView, PersonalMissionFirstEntryViewMeta):
     browserCtrl = dependency.descriptor(IBrowserController)
@@ -98,7 +100,7 @@ class PersonalMissionFirstEntryView(LobbySubView, PersonalMissionFirstEntryViewM
         webBrowser = self.__getCurrentBrowser()
         if not webBrowser or url != webBrowser.url:
             title = i18n.makeString(PERSONAL_MISSIONS.PERSONALMISSIONS_VIDEO_TITLE)
-            self.__currentVersionBrowserID = yield self.browserCtrl.load(url, title, showActionBtn=False, browserID=self.__currentVersionBrowserID, browserSize=gc_constants.BROWSER.VIDEO_SIZE, isDefault=False, showCloseBtn=True)
+            self.__currentVersionBrowserID = yield self.browserCtrl.load(url, title, showActionBtn=False, browserID=self.__currentVersionBrowserID, browserSize=gc_constants.BROWSER.VIDEO_SIZE, isDefault=False, showCloseBtn=True, handlers=webApiCollection(HangarSoundWebApi))
 
     @staticmethod
     def __makeTileData(cardIndex):

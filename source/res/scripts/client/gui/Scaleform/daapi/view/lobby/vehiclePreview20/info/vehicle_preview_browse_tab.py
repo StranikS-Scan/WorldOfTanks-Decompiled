@@ -5,6 +5,7 @@ from gui.Scaleform.daapi.view.meta.VehiclePreviewBrowseTabMeta import VehiclePre
 from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
 from gui.shared.formatters import text_styles
+from gui.shared.money import Currency
 _MAX_LENGTH_FULL_DESCRIPTION_NO_KPI = 400
 _MAX_LENGTH_FULL_DESCRIPTION_WITH_KPI = 280
 
@@ -38,13 +39,14 @@ class VehiclePreviewBrowseTab(VehiclePreviewBrowseTabMeta):
     def _update(self):
         if g_currentPreviewVehicle.isPresent():
             item = g_currentPreviewVehicle.item
-            isPremium = item.isPremium and (not item.isHidden or item.isRentable or item.isRestorePossible())
-            if isPremium or self.__isHeroTank:
+            if item.buyPrices.itemPrice.defPrice.get(Currency.GOLD):
                 maxDescriptionLength = _MAX_LENGTH_FULL_DESCRIPTION_WITH_KPI
                 bonuses = [{'icon': RES_SHOP.MAPS_SHOP_KPI_STAR_ICON_BENEFITS,
-                  'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_FREEEXPMULTIPLIER), text_styles.main(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_FREEEXPTEXT))}, {'icon': RES_SHOP.MAPS_SHOP_KPI_MONEY_BENEFITS,
-                  'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREDITSMULTIPLIER), text_styles.main(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREDITSTEXT))}, {'icon': RES_SHOP.MAPS_SHOP_KPI_CROW_BENEFITS,
+                  'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_FREEEXPMULTIPLIER), text_styles.main(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_FREEEXPTEXT))}, {'icon': RES_SHOP.MAPS_SHOP_KPI_CROW_BENEFITS,
                   'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREWTRANSFERTITLE), text_styles.main(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREWTRANSFERTEXT))}]
+                if not item.isSpecial:
+                    bonuses.insert(1, {'icon': RES_SHOP.MAPS_SHOP_KPI_MONEY_BENEFITS,
+                     'title': text_styles.concatStylesToMultiLine(text_styles.highTitle(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREDITSMULTIPLIER), text_styles.main(VEHICLE_PREVIEW.INFOPANEL_PREMIUM_CREDITSTEXT))})
             else:
                 maxDescriptionLength = _MAX_LENGTH_FULL_DESCRIPTION_NO_KPI
                 bonuses = None

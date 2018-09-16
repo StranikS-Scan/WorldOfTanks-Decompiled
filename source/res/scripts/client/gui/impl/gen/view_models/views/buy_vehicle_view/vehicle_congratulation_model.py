@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/buy_vehicle_view/vehicle_congratulation_model.py
-from frameworks.wulf.gui_constants import ResourceValue
+from frameworks.wulf import Resource
 from frameworks.wulf import ViewModel
 
 class VehicleCongratulationModel(ViewModel):
@@ -55,11 +55,12 @@ class VehicleCongratulationModel(ViewModel):
         self._setResource(7, value)
 
     def _initialize(self):
+        super(VehicleCongratulationModel, self)._initialize()
         self._addBoolProperty('isElite', False)
         self._addStringProperty('vehicleType', '')
         self._addStringProperty('lvl', '')
         self._addStringProperty('vName', '')
         self._addStringProperty('image', '')
         self._addStringProperty('imageAlt', '')
-        self._addResourceProperty('btnLbl', ResourceValue.DEFAULT)
-        self._addResourceProperty('title', ResourceValue.DEFAULT)
+        self._addResourceProperty('btnLbl', Resource.INVALID)
+        self._addResourceProperty('title', Resource.INVALID)

@@ -119,21 +119,18 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
     def __setData(self):
         detailedData = getDetailedMissionData(self._quest)
         status = MISSIONS_STATES.COMPLETED
-        showExtraBtn = False
         isFinal = self._quest.isFinal()
         if self._isAwardListUsed:
             count = text_styles.stats(str(self._quest.getPawnCost()) + getHtmlAwardSheetIcon(self._quest.getQuestBranch()))
             statusLabel = text_styles.bonusAppliedText(_ms(QUESTS.PERSONALMISSION_STATUS_DONEWITHPAWN, count=count))
-            if not isFinal:
-                showExtraBtn = True
         elif self._mainReward and self._addReward:
             statusLabel = text_styles.bonusAppliedText(QUESTS.PERSONALMISSION_STATUS_FULLDONE)
             status = MISSIONS_STATES.FULL_COMPLETED
         elif self._addReward:
             statusLabel = text_styles.bonusAppliedText(QUESTS.PERSONALMISSION_STATUS_ONLYADDDONE)
+            status = MISSIONS_STATES.FULL_COMPLETED
         else:
             statusLabel = text_styles.bonusAppliedText(QUESTS.PERSONALMISSION_STATUS_ONLYMAINDONE)
-            showExtraBtn = True
         questText = _ms(_PM.QUESTAWARDSCREEN_QUEST, quest=self._quest.getShortUserName())
         dataVO = {'bgImage': _OPERATION_ID_TO_UI_BACKGROUND.get(self._quest.getOperationID(), ''),
          'operationText': text_styles.promoTitle(_ms(_PM.QUESTAWARDSCREEN_OPERATION, operation=self._operation.getUserName())),
@@ -146,7 +143,13 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
                         'rendererWidth': 80,
                         'rendererHeight': 80,
                         'awards': self.__packAwards(detailedData)}}
-        dataVO.update(self.__packQuestsConditions(detailedData))
+        dataVO.update(self.__packQuestConditions(detailedData))
+        dataVO.update(self.__packNextQuestTitleSection(isFinal))
+        dataVO.update(self.__packButtonsSection(isFinal))
+        self.as_setDataS(dataVO)
+
+    def __packNextQuestTitleSection(self, isFinal):
+        dataVO = {}
         if self._addReward:
             if self._nextQuest:
                 nextQuestTitle = _PM.QUESTAWARDSCREEN_NEXTQUEST_TITLE_QUESTACCEPT
@@ -157,27 +160,34 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
                 chainName = getTypeShortUserName(self._quest.getQuestClassifier().classificationAttr)
                 nextQuestTitle = _ms(_PM.STATUSPANEL_STATUS_ALLDONE, vehicleClass=chainName)
                 dataVO.update({'nextQuestTitle': text_styles.highlightText(nextQuestTitle)})
-        elif self._isAwardListUsed and isFinal:
-            dataVO.update({'nextQuestTitle': text_styles.highlightText(QUESTS.PERSONALMISSION_STATUS_LASTDONEWITHPAWN)})
+        elif self._isAwardListUsed:
+            if isFinal:
+                dataVO.update({'nextQuestTitle': text_styles.highlightText(QUESTS.PERSONALMISSION_STATUS_LASTDONEWITHPAWN)})
+            elif self._quest.isInProgress():
+                dataVO.update({'nextQuestText': text_styles.promoTitle(self._quest.getUserName()),
+                 'nextQuestTitle': text_styles.highlightText(_PM.QUESTAWARDSCREEN_NEXTQUEST_TITLE_QUESTIMPROVE)})
         else:
-            dataVO.update(self.__getQuestImproveTitleData(self._quest))
-        if showExtraBtn:
+            dataVO.update({'nextQuestText': text_styles.promoTitle(self._quest.getUserName()),
+             'nextQuestTitle': text_styles.highlightText(_PM.QUESTAWARDSCREEN_NEXTQUEST_TITLE_QUESTIMPROVE)})
+        return dataVO
+
+    def __packButtonsSection(self, isFinal):
+        dataVO = {}
+        if self._addReward:
+            mainLbl = _PM.QUESTAWARDSCREEN_RECRUITBTN_LABEL if isFinal and self._mainReward else _PM.QUESTAWARDSCREEN_OKBTN_LABEL
+            dataVO.update({'mainBtnLabel': mainLbl})
+        elif not self._nextQuest and not isFinal or self._isAwardListUsed and not self._quest.isInProgress():
+            mainLbl = _PM.QUESTAWARDSCREEN_RECRUITBTN_LABEL if isFinal else _PM.QUESTAWARDSCREEN_OKBTN_LABEL
+            dataVO.update({'mainBtnLabel': mainLbl})
+        else:
             extraLbl = _PM.QUESTAWARDSCREEN_RECRUITBTN_LABEL if isFinal else _PM.QUESTAWARDSCREEN_NEXTQUESTBTN_LABEL
             dataVO.update({'mainBtnLabel': _PM.QUESTAWARDSCREEN_CONTINUEBTN_LABEL,
              'extraBtnLabel': extraLbl})
-        else:
-            mainLbl = _PM.QUESTAWARDSCREEN_RECRUITBTN_LABEL if isFinal and self._mainReward else _PM.QUESTAWARDSCREEN_OKBTN_LABEL
-            dataVO.update({'mainBtnLabel': mainLbl})
-        self.as_setDataS(dataVO)
+        return dataVO
 
-    def __packQuestsConditions(self, detailedData):
+    def __packQuestConditions(self, detailedData):
         formatter = detailedData.getAwardScreenConditionsFormatter()
-        mainBody = formatter.bodyFormat(isMain=True)
-        addBody = []
-        if self._addReward:
-            addBody = formatter.bodyFormat(isMain=False)
-        return {'mainConditions': mainBody,
-         'addConditions': addBody}
+        return formatter.getConditionsData(self._mainReward, self._addReward)
 
     def __packAwards(self, detailedData):
         awards = detailedData.getAwards(extended=self._awardListReturned)
@@ -185,10 +195,8 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
         keys = []
         if self._mainReward:
             keys.append('awards')
-        if self._addReward:
+        if self._addReward or self._awardListReturned:
             keys.append('awardsFullyCompleted')
-        if self._awardListReturned:
-            keys.append('awardListReturn')
         for key in keys:
             for item in awards.get(key, []):
                 label = item['label'] if item['label'] is not None else ''
@@ -220,8 +228,3 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
             result = yield quests_proc.PMGetReward(self._quest).request()
         callback(result)
         return
-
-    @staticmethod
-    def __getQuestImproveTitleData(quest):
-        return {'nextQuestText': text_styles.promoTitle(quest.getUserName()),
-         'nextQuestTitle': text_styles.highlightText(_PM.QUESTAWARDSCREEN_NEXTQUEST_TITLE_QUESTIMPROVE)}

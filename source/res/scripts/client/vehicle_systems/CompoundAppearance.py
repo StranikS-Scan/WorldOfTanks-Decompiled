@@ -381,8 +381,9 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.leveredSuspension = None
         self.trackNodesAnimator = None
         self.wheelsAnimator = None
-        fashions = VehiclePartsTuple(None, None, None, None)
+        fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(True), None, None, None)
         self.__setFashions(fashions, isTurretDetached)
+        model_assembler.setupTracksFashion(self.__typeDesc, self.__fashion)
         self.customEffectManager = None
         self.__destroyEngineAudition()
         self.detailedEngineState = None
@@ -405,6 +406,8 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         if self.__vehicle is not None:
             self.deactivate()
         self.__destroySystems()
+        fashions = VehiclePartsTuple(None, None, None, None)
+        self.__setFashions(fashions, self.__isTurretDetached)
         ComponentSystem.destroy(self)
         self.__typeDesc = None
         if self.__boundEffects is not None:
@@ -587,11 +590,17 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             prevGunPitch = Math.Matrix(self.gunMatrix).pitch
             vehicle = self.__vehicle
             newCompoundModel = resourceList[self.__typeDesc.name]
+            isRightSideFlying = self.isRightSideFlying
+            isLeftSideFlying = self.isLeftSideFlying
             self.deactivate(False)
             self.shadowManager.reattachCompoundModel(vehicle, self.__compoundModel, newCompoundModel)
             self.__compoundModel = newCompoundModel
             self.__isTurretDetached = vehicle.isTurretDetached
             self.__prepareSystemsForDamagedVehicle(vehicle, self.__isTurretDetached)
+            if isRightSideFlying:
+                self.__fashion.changeTrackVisibility(False, False)
+            if isLeftSideFlying:
+                self.__fashion.changeTrackVisibility(True, False)
             self.__setupModels()
             self.setVehicle(vehicle)
             self.activate()

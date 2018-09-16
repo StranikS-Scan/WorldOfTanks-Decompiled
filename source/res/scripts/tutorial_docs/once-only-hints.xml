@@ -44,6 +44,14 @@
       </condition>
       <equal-actions>	True	</equal-actions>
     </hint>
+    <hint>	PauseHint	  <item-id>	PauseHintBtn	</item-id>
+      <text>	_(#quests:quest/chain/hint/pause)	</text>
+      <arrow>
+        <direction>	L	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <equal-actions>	True	</equal-actions>
+    </hint>
     <hint>	HaveNewBadgeHint	  <item-id>	NewBadgeHintBtn	</item-id>
       <text>	_(#menu:header/account/popover/tutorial/newBadge)	</text>
       <arrow>

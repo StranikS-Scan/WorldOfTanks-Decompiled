@@ -9,7 +9,7 @@ from skeletons.gui.lobby_context import ILobbyContext
 _ClanInfo = namedtuple('_ClanInfo', 'clanDBID clanAbbrev')
 
 class PlayerInfo(shared.ItemInfo):
-    __slots__ = ('__dbID', '__team', '__name', '__prebattleID', '__igrType', '__clanInfo', 'squadIndex', '__weakref__')
+    __slots__ = ('__dbID', '__team', '__name', '__prebattleID', '__igrType', '__clanInfo', 'squadIndex', '__weakref__', '__isTeamKiller')
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, dbID=0, team=0, name=style.getUnknownPlayerName(), prebattleID=0, igrType=0, clanAbbrev='', clanDBID=0, wasInBattle=True):
@@ -20,6 +20,7 @@ class PlayerInfo(shared.ItemInfo):
         self.__prebattleID = prebattleID
         self.__igrType = igrType
         self.__clanInfo = _ClanInfo(clanDBID, clanAbbrev)
+        self.__isTeamKiller = False
         self.squadIndex = 0
 
     @property

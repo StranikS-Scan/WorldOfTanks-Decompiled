@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/wgnc/proxy_data.py
-import gui.awards.event_dispatcher as shared_events
 from account_helpers import getAccountDatabaseID
 from adisp import process
 from gui.Scaleform.locale.MENU import MENU
@@ -249,20 +248,6 @@ class ShowInBrowserItem(_ProxyDataItem, WebHandlersContainer):
         if self.__titleKey:
             localizedValue = MENU.browser_customtitle(self.__titleKey)
         return localizedValue or self.__title
-
-
-class ShowBloggersAwardItem(_ProxyDataItem):
-    _promoCtrl = dependency.descriptor(IPromoController)
-
-    def __init__(self, award_id, blogger):
-        self.__awardId = award_id
-        self.__blogger = blogger
-
-    def getType(self):
-        return WGNC_DATA_PROXY_TYPE.SHOW_BLOGGERS_AWARD
-
-    def show(self, _):
-        return shared_events.showBloggersBattleAward(self.__awardId, self.__blogger)
 
 
 class ProxyDataHolder(object):

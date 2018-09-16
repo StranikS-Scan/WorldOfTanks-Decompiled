@@ -70,7 +70,7 @@ class _ClientArenaSkeleton(object):
     statistics = {}
     extraData = {}
     viewPoints = []
-    hasFogOfWarHiddenVehicles = False
+    isFogOfWarEnabled = False
 
 
 class _ArenaTypeSkeleton(object):
@@ -583,6 +583,6 @@ class _ClientArenaVisitor(IClientArenaVisitor):
     def getArenaViewPoints(self):
         return self._arena.viewPoints
 
-    @catch_attribute_exception(default=_ClientArenaSkeleton.hasFogOfWarHiddenVehicles)
-    def hasArenaFogOfWarHiddenVehicles(self):
-        return self._arena.hasFogOfWarHiddenVehicles
+    @catch_attribute_exception(default=_ClientArenaSkeleton.isFogOfWarEnabled)
+    def isArenaFogOfWarEnabled(self):
+        return self._arena.isFogOfWarEnabled

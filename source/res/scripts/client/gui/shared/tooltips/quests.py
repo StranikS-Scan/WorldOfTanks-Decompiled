@@ -222,7 +222,7 @@ class AdditionalAwardTooltipData(BlocksTooltipData):
             imgSource = bonusDict.get('imgSource', '')
             label = bonusDict.get('label', '')
             items.append(formatters.packRendererTextBlockData(rendererType='AwardItemExUI', dataType='net.wg.gui.data.AwardItemVO', title=text_styles.main(bonusName), rendererData={'imgSource': imgSource,
-             'label': label}, padding=formatters.packPadding(top=-10, bottom=-10), txtPadding=formatters.packPadding(top=15, left=10)))
+             'label': label}, padding=formatters.packPadding(top=-10, bottom=-10), txtPadding=formatters.packPadding(top=15, left=10), titleAtMiddle=True))
             if len(items) > _MAX_AWARDS_PER_TOOLTIP:
                 count = len(args) - len(items) + 1
                 if count > 0:

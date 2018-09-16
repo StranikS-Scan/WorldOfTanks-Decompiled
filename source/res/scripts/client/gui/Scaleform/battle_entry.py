@@ -25,7 +25,7 @@ from gui.Scaleform.managers.UtilsManager import UtilsManager
 from gui.Scaleform.managers.battle_input import BattleGameInputMgr
 from gui.Scaleform.managers.voice_chat import BattleVoiceChatManager
 from gui.app_loader import settings as app_settings
-from gui.impl.windows import UserWindowFlags
+from gui.impl.pub import UserWindowFlags
 from gui.shared import EVENT_BUS_SCOPE
 from helpers import uniprof
 
@@ -59,7 +59,7 @@ BATTLE_OPTIMIZATION_CONFIG = {BATTLE_VIEW_ALIASES.MINIMAP: OptimizationSetting('
 class BattleEntry(AppEntry):
 
     def __init__(self, appNS):
-        super(BattleEntry, self).__init__(UserWindowFlags.BATTLE_MAIN_WND, 'battle.swf', appNS, DAAPIRootBridge(initCallback='registerBattleTest'))
+        super(BattleEntry, self).__init__(UserWindowFlags.MAIN_WINDOW, 'battle.swf', appNS, DAAPIRootBridge(initCallback='registerBattleTest'))
         self.__input = None
         return
 

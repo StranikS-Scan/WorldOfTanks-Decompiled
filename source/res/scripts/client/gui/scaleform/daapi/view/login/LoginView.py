@@ -6,18 +6,19 @@ import BigWorld
 import constants
 from PlayerEvents import g_playerEvents
 from adisp import process
+from async import async, await
 from connection_mgr import LOGIN_STATUS
 from external_strings_utils import isAccountLoginValid, isPasswordValid
 from gui import DialogsInterface, GUI_SETTINGS
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
 from gui.Scaleform.daapi.view.meta.LoginPageMeta import LoginPageMeta
 from gui.Scaleform.daapi.view.servers_data_provider import ServersDataProvider
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.BAN_REASON import BAN_REASON
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.WAITING import WAITING
+from gui.impl import dialogs
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import OpenLinkEvent, LoginEventEx, ArgsEvent, LoginEvent, BootcampEvent
@@ -101,13 +102,7 @@ class LoginView(LoginPageMeta):
         return self._loginMode.isToken2()
 
     def onEscape(self):
-
-        def buttonHandler(isOk):
-            if isOk:
-                self.destroy()
-                BigWorld.quit()
-
-        DialogsInterface.showI18nConfirmDialog('quit', buttonHandler, focusedID=DIALOG_BUTTON_ID.CLOSE)
+        self.__showExitDialog()
 
     def changeAccount(self):
         self._loginMode.changeAccount()
@@ -346,3 +341,10 @@ class LoginView(LoginPageMeta):
         if not self.__isListInitialized and self._servers.serverList:
             self.__isListInitialized = True
             self.as_setSelectedServerIndexS(self._servers.selectedServerIdx)
+
+    @async
+    def __showExitDialog(self):
+        isOk = yield await(dialogs.quitGame(self))
+        if isOk:
+            self.destroy()
+            BigWorld.quit()

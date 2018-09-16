@@ -466,8 +466,6 @@ class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
             questID, ctx = self._getContext(uniqueQuestID, completedQuests, completedQuestUniqueIDs)
             if questID in allQuests:
                 quest = allQuests[questID]
-                if uniqueQuestID.endswith('_add_award_list'):
-                    ctx.update({'awardListReturned': True})
                 if self.isShowCongrats(quest):
                     ctx.update({'eventsCache': self.eventsCache})
                     completedQuests[questID] = (quest, ctx)
@@ -511,6 +509,9 @@ class PersonalMissionAutoWindowHandler(BattleQuestsAutoWindowHandler):
                  'isAddReward': pqType.addQuestID in completedQuestUniqueIDs,
                  'awardListReturned': uniqueQuestID.endswith('_add_award_list')}
                 return (pqType.id, ctx)
+            if uniqueQuestID.endswith('_add_award_list'):
+                _, ctx = completedQuests[pqType.id]
+                ctx.update(awardListReturned=True)
         return (None, {})
 
 
@@ -555,12 +556,18 @@ class PersonalMissionOperationAwardHandler(BattleQuestsAutoWindowHandler):
         if msg is not None and isinstance(msg.data, types.DictType):
             completedQuestUniqueIDs = msg.data.get('completedQuestIDs', set())
             for uniqueQuestID in completedQuestUniqueIDs:
-                for questID, prefixes in PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID.iteritems():
+                for operationID, prefixes in PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID.iteritems():
                     if uniqueQuestID.startswith(prefixes):
                         if uniqueQuestID in self.__CHAMPION_BADGES_IDS:
                             return True
-                        if questID in self.__FINAL_BRANCHES_OPERATION_IDS:
-                            self.__postponedAwards.append(uniqueQuestID)
+                        if operationID in self.__FINAL_BRANCHES_OPERATION_IDS:
+                            pmCache = self.eventsCache.getPersonalMissions()
+                            operation = pmCache.getAllOperations()[operationID]
+                            operations = pmCache.getOperationsForBranch(operation.getBranch())
+                            if all([ op.isFullCompleted() for op in operations.itervalues() ]):
+                                self.__postponedAwards.append(uniqueQuestID)
+                            else:
+                                return True
                         else:
                             return True
 

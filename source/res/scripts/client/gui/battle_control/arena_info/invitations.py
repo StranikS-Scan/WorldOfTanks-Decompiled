@@ -3,6 +3,7 @@
 import BattleReplay
 from adisp import process
 from constants import INVITATION_TYPE
+from BattleReplay import CallbackDataNames
 from gui.battle_control.arena_info.settings import INVITATION_DELIVERY_STATUS
 from gui.battle_control.requests.context import SendInvitesCtx
 from gui.prb_control import prbInvitesProperty
@@ -12,9 +13,6 @@ from unit_roster_config import SquadRoster, EpicRoster
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
 _STATUS = INVITATION_DELIVERY_STATUS
-_SEND_ACTION_NAME = 'DynSquad.SendInvitationToSquad'
-_ACCEPT_ACTION_NAME = 'DynSquad.AcceptInvitationToSquad'
-_REJECT_ACTION_NAME = 'DynSquad.RejectInvitationToSquad'
 
 class SquadInvitationsFilter(object):
     __slots__ = ('__arenaUniqueID', '__isReceivingProhibited', '__isSendingProhibited', '__received', '__sent')
@@ -197,15 +195,15 @@ class _SquadInvitationsRecorder(_SquadInvitationsHandler):
         self.__idGen = SequenceIDGenerator()
 
     def send(self, playerID):
-        BattleReplay.g_replayCtrl.serializeCallbackData(_SEND_ACTION_NAME, (self.__idGen.next(), playerID))
+        BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.DYN_SQUAD_SEND_ACTION_NAME, (self.__idGen.next(), playerID))
         super(_SquadInvitationsRecorder, self).send(playerID)
 
     def accept(self, playerID):
-        BattleReplay.g_replayCtrl.serializeCallbackData(_ACCEPT_ACTION_NAME, (self.__idGen.next(), playerID))
+        BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.DYN_SQUAD_ACCEPT_ACTION_NAME, (self.__idGen.next(), playerID))
         super(_SquadInvitationsRecorder, self).accept(playerID)
 
     def reject(self, playerID):
-        BattleReplay.g_replayCtrl.serializeCallbackData(_REJECT_ACTION_NAME, (self.__idGen.next(), playerID))
+        BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.DYN_SQUAD_REJECT_ACTION_NAME, (self.__idGen.next(), playerID))
         super(_SquadInvitationsRecorder, self).reject(playerID)
 
 
@@ -215,12 +213,12 @@ class _SquadInvitationsPlayer(_SquadInvitationsHandler):
     def __init__(self, setup):
         super(_SquadInvitationsPlayer, self).__init__(setup)
         setCallback = BattleReplay.g_replayCtrl.setDataCallback
-        for action, method in [(_SEND_ACTION_NAME, self.__onSend), (_ACCEPT_ACTION_NAME, self.__onAccept), (_REJECT_ACTION_NAME, self.__onReject)]:
+        for action, method in [(CallbackDataNames.DYN_SQUAD_SEND_ACTION_NAME, self.__onSend), (CallbackDataNames.DYN_SQUAD_ACCEPT_ACTION_NAME, self.__onAccept), (CallbackDataNames.DYN_SQUAD_REJECT_ACTION_NAME, self.__onReject)]:
             setCallback(action, method)
 
     def clear(self):
         delCallback = BattleReplay.g_replayCtrl.delDataCallback
-        for eventName, method in [(_SEND_ACTION_NAME, self.__onSend), (_ACCEPT_ACTION_NAME, self.__onAccept), (_REJECT_ACTION_NAME, self.__onReject)]:
+        for eventName, method in [(CallbackDataNames.DYN_SQUAD_SEND_ACTION_NAME, self.__onSend), (CallbackDataNames.DYN_SQUAD_ACCEPT_ACTION_NAME, self.__onAccept), (CallbackDataNames.DYN_SQUAD_REJECT_ACTION_NAME, self.__onReject)]:
             delCallback(eventName, method)
 
         super(_SquadInvitationsPlayer, self).clear()

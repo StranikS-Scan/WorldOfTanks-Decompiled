@@ -73,5 +73,5 @@ class ViewEvent(object):
     def hasArgument(self, name):
         return self.__core.hasArgument(name)
 
-    def getArgument(self, name):
-        return self.__core.getArgument(name)
+    def getArgument(self, name, default=None):
+        return self.__core.getArgument(name) if self.hasArgument(name) else default

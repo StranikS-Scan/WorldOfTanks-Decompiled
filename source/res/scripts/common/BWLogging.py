@@ -59,6 +59,11 @@ class BWLogRedirectionHandler(logging.Handler):
 
 _bwRedirectionHandler = None
 
+def getBwHandler():
+    global _bwRedirectionHandler
+    return _bwRedirectionHandler
+
+
 def init():
     global _bwRedirectionHandler
     _bwRedirectionHandler = BWLogRedirectionHandler()

@@ -5,6 +5,7 @@ from collections import namedtuple
 from gui.Scaleform.framework.entities.ub_windows_tracker import UnboundWindowsTracker
 from soft_exception import SoftException
 from gui.Scaleform.framework.settings import UIFrameworkImpl
+from gui.Scaleform.framework.entities.DisposableEntity import EntityState
 from gui.Scaleform.framework.entities.abstract.AbstractViewMeta import AbstractViewMeta
 from gui.Scaleform.framework.entities.view_interface import ViewInterface
 from gui.doc_loaders import hints_layout
@@ -152,6 +153,9 @@ class View(AbstractViewMeta, ViewInterface):
             self.__ubWindowsTracker = UnboundWindowsTracker()
             self.__ubWindowsTracker.create()
         return self.__ubWindowsTracker.getParentWindow()
+
+    def isVisible(self):
+        return self.getState() == EntityState.CREATED
 
     def _populate(self):
         super(View, self)._populate()

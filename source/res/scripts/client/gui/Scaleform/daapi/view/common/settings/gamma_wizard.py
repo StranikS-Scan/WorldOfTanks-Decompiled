@@ -48,9 +48,6 @@ class GammaWizardView(GammaWizardViewMeta):
 
     def _populate(self):
         super(GammaWizardView, self)._populate()
-        if self.app is not None:
-            self._savedBackgroundAlpha = self.app.getBackgroundAlpha()
-            self.app.setBackgroundAlpha(0)
         self._currentGammaValue = self._changeGammaValue = self._gammaWizard.gamma
         self.as_initDataS({'title': text_styles.superPromoTitle(SETTINGS.GAMMAWIZARD_TITLE),
          'header': text_styles.highlightText(SETTINGS.GAMMAWIZARD_HEADER),
@@ -63,11 +60,9 @@ class GammaWizardView(GammaWizardViewMeta):
          'minValue': self.MIN_VALUE,
          'maxValue': self.MAX_VALUE,
          'defaultValue': self.DEFAULT_VALUE})
-        return
 
     def _dispose(self):
         self._gammaWizard.gamma = self._changeGammaValue
         self._gammaWizard.enable = False
-        self.app.setBackgroundAlpha(self._savedBackgroundAlpha)
         self.fireEvent(GameEvent(GameEvent.SHOW_EXTERNAL_COMPONENTS), scope=EVENT_BUS_SCOPE.GLOBAL)
         super(GammaWizardView, self)._dispose()

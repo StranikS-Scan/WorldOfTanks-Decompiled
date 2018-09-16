@@ -3,8 +3,8 @@
 import inspect
 import logging
 from collections import namedtuple
+from frameworks.wulf import Resource
 from gui.impl.gen import R
-from gui.impl.gen_utils import INVALID_RESOURCE_ID
 from gui.shared.events import OpenLinkEvent
 from helpers import dependency
 from messenger import g_settings
@@ -56,11 +56,11 @@ class FAQList(object):
         translation = self.gui.resourceManager.getTranslatedText
         for number in xrange(1, length + 1):
             questionID = faq.dyn(QUESTION_FORMAT.format(number))
-            if questionID == INVALID_RESOURCE_ID:
+            if not questionID:
                 continue
             question = translation(questionID)
             answerID = faq.dyn(ANSWER_FORMAT.format(number))
-            if answerID == INVALID_RESOURCE_ID:
+            if not answerID:
                 _logger.error('Answer %d is not found', number)
                 continue
             elif inspect.isclass(answerID):
@@ -80,10 +80,10 @@ class FAQList(object):
         return answer
 
     def __findAnswerWithSuffix(self, answerID):
-        result = INVALID_RESOURCE_ID
+        result = Resource.INVALID
         for suffix, methodName in self.__extraFormats.iteritems():
             nextID = answerID.dyn(suffix)
-            if nextID != INVALID_RESOURCE_ID:
+            if nextID:
                 method = getattr(self, methodName, None)
                 if method and callable(method):
                     result = method(self.gui.resourceManager.getTranslatedText(nextID))

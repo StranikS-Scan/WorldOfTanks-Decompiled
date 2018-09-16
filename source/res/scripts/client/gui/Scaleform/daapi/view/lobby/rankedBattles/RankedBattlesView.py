@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/RankedBattlesView.py
+from adisp import process
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.RankedBattlesViewMeta import RankedBattlesViewMeta
@@ -50,13 +51,15 @@ class RankedBattlesView(LobbySubView, RankedBattlesViewMeta):
     def _populate(self):
         super(RankedBattlesView, self)._populate()
         self.rankedController.onUpdated += self.__updateData
+        self.__setData(None)
         self.__updateData()
+        return
 
     def _dispose(self):
         self.rankedController.onUpdated -= self.__updateData
         super(RankedBattlesView, self)._dispose()
 
-    def __setData(self):
+    def __setData(self, leagueData):
         self.as_setDataS({'header': text_styles.superPromoTitle(RANKED_BATTLES.RANKEDBATTLEVIEW_TITLE),
          'closeLbl': RANKED_BATTLES.RANKEDBATTLEVIEW_CLOSEBTN,
          'closeDescr': RANKED_BATTLES.RANKEDBATTLEVIEW_CLOSEBTNDESCR,
@@ -64,13 +67,15 @@ class RankedBattlesView(LobbySubView, RankedBattlesViewMeta):
          'playVideoBtnEnabled': False,
          'calendarStatus': self.__getStatusBlock(),
          'progressBlock': self.__buildProgressData(),
-         'awardsBlock': self.__getAwardsBlock(),
+         'awardsBlock': self.__getAwardsBlock(leagueData),
          'bgImgPath': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_BG_RANK_BLUR,
          'isUpdateProgress': False})
 
+    @process
     def __updateData(self):
-        self.__setData()
-        self.rankedController.getLeagueData()(self.__getAwardsBlock)
+        result = yield self.rankedController.getLeagueData()
+        if not self.isDisposed():
+            self.__setData(result)
 
     def __updateProgress(self):
         self.as_setDataS({'progressBlock': self.__buildProgressData(),

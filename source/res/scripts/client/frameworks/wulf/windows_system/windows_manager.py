@@ -24,6 +24,9 @@ class WindowsManager(PyObjectEntity):
     def getWindow(self, uniqueID):
         return self.proxy.getPyWindow(uniqueID)
 
+    def findWindow(self, predicate):
+        return self.proxy.findPyWindow(predicate)
+
     def loadView(self, layoutID, viewClass, *args, **kwargs):
         pyView = self.getView(layoutID)
         if pyView is None:

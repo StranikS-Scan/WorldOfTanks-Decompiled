@@ -50,6 +50,7 @@ class GameEvent(HasCtxEvent):
     CHANGE_APP_RESOLUTION = 'game/changeAppResolution'
     SHOW_EXTERNAL_COMPONENTS = 'game/showExternalComponents'
     HIDE_EXTERNAL_COMPONENTS = 'game/hideExternalComponents'
+    ON_BACKGROUND_ALPHA_CHANGE = 'game/onBackgroundAlphaChange'
     BATTLE_LOADING = 'game/battleLoading'
     EPIC_GLOBAL_MSG_CMD = 'game/setGlobalMessageCmd'
     SHOW_BTN_HINT = 'game/showBtnHint'
@@ -147,9 +148,10 @@ class DestroyViewEvent(_ViewEvent):
 
 class LoadUnboundViewEvent(_ViewEvent):
 
-    def __init__(self, layoutID, viewClass, *args, **kwargs):
+    def __init__(self, layoutID, viewClass, scope, *args, **kwargs):
         super(LoadUnboundViewEvent, self).__init__(ViewEventType.LOAD_UB_VIEW, layoutID)
         self.viewClass = viewClass
+        self.scope = scope
         self.args = args
         self.kwargs = kwargs
 
@@ -258,6 +260,8 @@ class HideWindowEvent(HasCtxEvent):
     HIDE_BROWSER_WINDOW = 'hideBrowserWindow'
     HIDE_BOOSTERS_WINDOW = 'hideBoostersWindow'
     HIDE_VEHICLE_PREVIEW = 'hideVehiclePreview'
+    HIDE_BUTTON_TEST_DEMO = 'hideButtonTestDemo'
+    HIDE_BUTTON_TEST_DEMO1 = 'hideButtonTestDemo1'
 
 
 class HidePopoverEvent(HasCtxEvent):
@@ -604,6 +608,7 @@ class LinkedSetEvent(HasCtxEvent):
 
 
 class ManualEvent(HasCtxEvent):
+    CHAPTER_OPENED = 'manual/chapterOpened'
     CHAPTER_CLOSED = 'manual/chapterClosed'
 
 

@@ -9,12 +9,6 @@ from skeletons.gameplay import PlayerEventID
 from skeletons.gameplay import ReplayEventID
 from skeletons.gameplay import GUIEventID
 
-class StartState(State):
-
-    def __init__(self):
-        super(StartState, self).__init__(stateID=GameplayStateID.START)
-
-
 class OfflineState(State):
     __slots__ = ()
 

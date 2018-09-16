@@ -90,26 +90,16 @@ def onInit(eventType, eventData, quest, processor):
 def onFinishBattle(eventType, eventData, quest, processor):
     questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
 
-    avatarResults = eventData['avatarResults']
     brfilter = filter.BattleResultsFilter(eventData)
-    damageLog = avatarResults['damageEventList']
-    killList = [vehicleCD for (_, vehicleCD), eventsList in damageLog.iteritems() if filters.isTargetKilled(eventsList)]
+    for veh in brfilter.filterDamageTo(result=['killed']).iterkeys():
+        vehClass = items.vehicles.getVehicleClass(veh[1])
+        questProgress.increaseCounterUntilComplete(PROGRESS_ID_MAIN, vehClass, 1)
+        questProgress.increaseCounterUntilComplete(PROGRESS_ID_ADD, vehClass, 1)
 
-    killCount = len(killList)
-    killDiversity = len(set(items.vehicles.getVehicleClass(cd) for cd in killList))
-
-    for killItem in killList:
-        if questProgress.increaseCounterUntilComplete(PROGRESS_ID_ADD, items.vehicles.getVehicleClass(killItem), 1):
-            questProgress.increaseUntilComplete(PROGRESS_ID_ADD_SERIES, 1)
-            break
-            
-    for killItem in killList:
-        if questProgress.increaseCounterUntilComplete(PROGRESS_ID_MAIN, items.vehicles.getVehicleClass(killItem), 1):
-            questProgress.increaseUntilComplete(PROGRESS_ID_MAIN_SERIES, 1)
-            break
+    questProgress.increaseEveryProgress(PROGRESS_ID_MAIN_SERIES, questProgress.isCompleted(PROGRESS_ID_MAIN))
+    questProgress.increaseEveryProgress(PROGRESS_ID_ADD_SERIES, questProgress.isCompleted(PROGRESS_ID_ADD), PROGRESS_ID_MAIN_SERIES)
 
     eventData['results'].update(processor.checkComplete(questProgress, quest.progressID, additionalProgressID=PROGRESS_ID_ADD_SERIES))
-
     processor.setQuestProgress(quest.progressID, questProgress.save())
 
 events = {

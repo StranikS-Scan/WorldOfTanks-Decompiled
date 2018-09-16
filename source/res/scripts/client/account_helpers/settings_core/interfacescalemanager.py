@@ -53,6 +53,7 @@ class InterfaceScaleManager(object):
         prevScaleValue = self.__scaleValue
         self.__scaleValue = self.getScaleByIndex(self.__index)
         self.onScaleChanged(self.__scaleValue)
+        graphics.onInterfaceScaleChanged(self.__scaleValue)
         if prevScaleValue != self.__scaleValue:
             self.onScaleExactlyChanged(self.__scaleValue)
 

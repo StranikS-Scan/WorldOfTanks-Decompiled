@@ -24,7 +24,7 @@ from gui.shared.utils import ValidationResult
 from gui.shared.utils.requesters.QuestsProgressRequester import PersonalMissionsProgressRequester
 from helpers import dependency
 from helpers import getLocalizedData, i18n, time_utils
-from personal_missions import PM_STATE as _PMS, PM_BRANCH, PM_BRANCH_TO_FINAL_PAWN_COST
+from personal_missions import PM_STATE as _PMS, PM_FLAG, PM_BRANCH, PM_BRANCH_TO_FINAL_PAWN_COST
 from personal_missions_config import getQuestConfig
 from personal_missions_constants import DISPLAY_TYPE
 from shared_utils import first, findFirst
@@ -103,12 +103,6 @@ class ServerEventAbstract(object):
 
     def getType(self):
         return self._data.get('type', 0)
-
-    def getStartTimePure(self):
-        return self._data['startTime'] if 'startTime' in self._data else time.time()
-
-    def getFinishTimePure(self):
-        return self._data['finishTime'] if 'finishTime' in self._data else time.time()
 
     def getStartTime(self):
         return time_utils.makeLocalServerTime(self._data['startTime']) if 'startTime' in self._data else time.time()
@@ -810,6 +804,13 @@ class PMOperation(object):
     def getFinalQuests(self):
         return self.__finalQuests
 
+    def isAvailable(self):
+        if self.isDisabled():
+            return ValidationResult(False, 'disabled')
+        if not self.isUnlocked():
+            return ValidationResult(False, 'isLocked')
+        return ValidationResult(False, 'noVehicle') if not self.hasRequiredVehicles() else ValidationResult(True, '')
+
     def isUnlocked(self):
         return self.__isUnlocked
 
@@ -1045,7 +1046,7 @@ class PersonalMission(Quest):
         return self.__pqProgress is not None and self.__pqProgress.selected
 
     def isAvailableToPerform(self):
-        return self.__pqProgress is not None and self.__pqProgress.unlocked and self.__pqProgress.state <= _PMS.UNLOCKED
+        return self.__pqProgress is not None and self.__pqProgress.unlocked and self.__pqProgress.state <= _PMS.UNLOCKED and not self.isDisabled()
 
     def hasProgress(self):
         return self.__pqProgress.state > _PMS.NONE
@@ -1055,6 +1056,10 @@ class PersonalMission(Quest):
 
     def isFinal(self):
         return self.__pmType.isFinal
+
+    @property
+    def isOnPause(self):
+        return self.__checkForFlags(PM_FLAG.PAUSE)
 
     def getQuestClassifier(self):
         return self.__pmType.classifier
@@ -1123,9 +1128,9 @@ class PersonalMission(Quest):
 
     def updatePqStateInBattle(self, pqState):
         if self.__pqProgress:
-            self.__pqProgress = PersonalMissionsProgressRequester.PersonalMissionProgress(state=pqState, selected=self.__pqProgress.selected, unlocked=self.__pqProgress.unlocked, pawned=self.__pqProgress.pawned)
+            self.__pqProgress = PersonalMissionsProgressRequester.PersonalMissionProgress(state=pqState, flags=self.__pqProgress.flags, selected=self.__pqProgress.selected, unlocked=self.__pqProgress.unlocked, pawned=self.__pqProgress.pawned)
         else:
-            self.__pqProgress = PersonalMissionsProgressRequester.PersonalMissionProgress(state=pqState, selected=(), unlocked=0, pawned=False)
+            self.__pqProgress = PersonalMissionsProgressRequester.PersonalMissionProgress(state=pqState, flags=PM_FLAG.NONE, selected=(), unlocked=0, pawned=False)
 
     def getBonuses(self, bonusName=None, isMain=None, returnAwardList=False, isDelayed=False, ctx=None):
         if isMain is None:
@@ -1165,8 +1170,14 @@ class PersonalMission(Quest):
     def __checkForStates(self, *statesToCheck):
         return self.__pqProgress is not None and self.__pqProgress.state in statesToCheck
 
+    def __checkForFlags(self, flagsToCheck):
+        return self.__pqProgress is not None and self.__pqProgress.flags & flagsToCheck == flagsToCheck
+
     def __repr__(self):
-        return 'PQuest<id=%d; state=%s; unlocked=%s>' % (self._id, self.__pqProgress.state, self.isUnlocked())
+        return 'PQuest<id=%d; state=%s; flags=%s unlocked=%s>' % (self._id,
+         self.__pqProgress.state,
+         self.__pqProgress.flags,
+         self.isUnlocked())
 
 
 class MotiveQuest(Quest):

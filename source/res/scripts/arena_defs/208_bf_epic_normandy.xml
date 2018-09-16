@@ -13,13 +13,10 @@
   <overviewmap>	spaces/208_bf_epic_normandy/ovmap.dds	</overviewmap>
   <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
   <maxPlayersInTeam>	30	</maxPlayersInTeam>
-  <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
   <wwmusicSetup>
     <wwmusicLoading>	music_epic_normandy_loading_screen	</wwmusicLoading>
     <wwmusicIntensive>	music_epic_normandy_dron_battle	</wwmusicIntensive>
     <wwmusicRelaxed>	music_epic_normandy_dron_battle	</wwmusicRelaxed>
-    <wwmusicStop>	music_dron_stop	</wwmusicStop>
-    <wwmusicEndbattleStop>	music_dron_endbattle_stop	</wwmusicEndbattleStop>
     <wwmusicResultWin>	music_epic_normandy_result_win	</wwmusicResultWin>
     <wwmusicResultDrawn>	music_epic_normandy_result_win	</wwmusicResultDrawn>
     <wwmusicResultDefeat>	music_epic_normandy_result_defeat	</wwmusicResultDefeat>
@@ -47,8 +44,10 @@
       <value>	1	</value>
     </epicZoneTransition>
   </wwmusicDroneSetup>
+  <wwambientSound>	ambient_wind_summer_01	</wwambientSound>
   <soundRemapping>
     <loadBanks>
+      <bank>	epic_battle.bnk	</bank>
       <bank>	epic_battle_voiceover.bnk	</bank>
     </loadBanks>
   </soundRemapping>
@@ -79,7 +78,7 @@
         </bordersX>
       </epicSectorGrid>
       <winnerIfTimeout>	2	</winnerIfTimeout>
-      <playerGroupLimit>	12	</playerGroupLimit>
+      <playerGroupLimit>	13	</playerGroupLimit>
       <numPlayerGroups>	3	</numPlayerGroups>
       <numDestructiblesToDestroyForWin>	3	</numDestructiblesToDestroyForWin>
       <recon>
@@ -301,9 +300,9 @@
   <roadMap></roadMap>
   <mapActivities>
     <scenario>
-      <startTime>	12.000000 12.000000	</startTime>
+      <startTime>	10.000000 12.000000	</startTime>
       <possibility>	1.000000	</possibility>
-      <interval>	-1.000000000	</interval>
+      <interval>	0.000000	</interval>
       <arenaPeriod>	2	</arenaPeriod>
       <name>	pregame_attack_east	</name>
       <trajectories>
@@ -354,49 +353,42 @@
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
+          <startTime>	7.500000 7.500000	</startTime>
         </warplane>
         <warplane>
           <preset>	IL2_attack_air_defense_east_02	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
+          <startTime>	7.000000 7.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	IL2_crash_east_01	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
-          <startTime>	13.800000 13.800000	</startTime>
-        </warplane>
-        <warplane>
-          <preset>	IL2_smoke_01_east	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
-          <startTime>	13.800000 13.800000	</startTime>
+          <possibility>	1.000000	</possibility>
+          <startTime>	18.9000 18.90000	</startTime>
         </warplane>
         <warplane>
           <preset>	IL2_crash_east_02	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
-          <startTime>	13.400000 0.000000	</startTime>
+          <possibility>	1.000000	</possibility>
+          <startTime>	18.000000 18.000000	</startTime>
         </warplane>
         <warplane>
-          <preset>	IL2_smoke_02_east	</preset>
+          <preset>	IL2_smoke_east_02	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
           <possibility>	0.000000	</possibility>
-          <startTime>	13.400000 13.410000	</startTime>
+          <startTime>	23.0000 25.0	</startTime>
         </warplane>
       </trajectories>
     </scenario>
     <scenario>
-      <startTime>	10.000000 10.000000	</startTime>
+      <startTime>	10.000000 12.000000	</startTime>
       <possibility>	1.000000	</possibility>
-      <interval>	-1.000000	</interval>
+      <interval>	0.000000	</interval>
       <arenaPeriod>	2	</arenaPeriod>
       <name>	pregame_attack_west	</name>
       <trajectories>
@@ -404,14 +396,14 @@
           <preset>	IL2_attack_failed_west_01	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	IL2_attack_failed_west_02	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
@@ -447,21 +439,35 @@
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
+          <startTime>	8.000000 8.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	IL2_attack_air_defense_west_02	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
+          <startTime>	7.000000 7.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	IL2_crash_west_01	</preset>
+          <position>	0.000000 0.000000 0.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	23.500000 23.500000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	IL2_crash_west_02	</preset>
+          <position>	100.000000 -25.000000 -900.000000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	26.000000 26.00000	</startTime>
         </warplane>
       </trajectories>
     </scenario>
     <scenario>
-      <startTime>	5.000000 5.000000	</startTime>
+      <startTime>	4.000000 5.000000	</startTime>
       <possibility>	1.000000	</possibility>
-      <interval>	-1.000000	</interval>
+      <interval>	0.000000	</interval>
       <arenaPeriod>	2	</arenaPeriod>
       <name>	pregame_attack_center	</name>
       <trajectories>
@@ -469,100 +475,87 @@
           <preset>	IL2_attack_failed_center_01	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	IL2_attack_failed_center_02	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	IL2_attack_failed_center_03	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	IL2_attack_failed_center_04	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	IL2_attack_failed_center_05	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	IL2_attack_failed_center_06	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	IL2_attack_air_defense_center_01	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
+          <possibility>	1.000000	</possibility>
+          <startTime>	7.000000 7.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	IL2_attack_air_defense_center_02	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
-          <startTime>	0.000000 0.000000	</startTime>
+          <possibility>	1.000000	</possibility>
+          <startTime>	6.500000 6.500000	</startTime>
         </warplane>
         <warplane>
           <preset>	IL2_crash_center_01	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
-          <startTime>	15.000000 15.000000	</startTime>
+          <possibility>	1.000000	</possibility>
+          <startTime>	20.600000 20.600000	</startTime>
         </warplane>
         <warplane>
-          <preset>	IL2_smoke_01_center	</preset>
+          <preset>	IL2_smoke_center_01	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
           <possibility>	0.000000	</possibility>
-          <startTime>	12.000000 12.000000	</startTime>
+          <startTime>	20.600000 21.250000	</startTime>
         </warplane>
         <warplane>
-          <preset>	IL2_smoke_02_center	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
+          <preset>	IL2_smoke_center_02	</preset>
+          <position>	0.000000 15.000000 -700.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
-          <startTime>	21.850000 21.850000	</startTime>
-        </warplane>
-        <warplane>
-          <preset>	IL2_crash_center_02	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
-          <startTime>	21.650000 21.650000	</startTime>
-        </warplane>
-        <warplane>
-          <preset>	IL2_drown_center	</preset>
-          <position>	0.000000 0.000000 0.000000	</position>
-          <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
-          <startTime>	21.850000 21.850000	</startTime>
+          <possibility>	1.000000	</possibility>
+          <startTime>	25.100000 25.100000	</startTime>
         </warplane>
       </trajectories>
     </scenario>
     <scenario>
-      <name>	zone_destr_CZ1_planes	</name>
       <startTime>	0.000000 0.000000	</startTime>
-      <possibility>	0.000000	</possibility>
-      <interval>	-1.000000	</interval>
+      <possibility>	1.000000	</possibility>
+      <interval>	360	</interval>
+      <arenaPeriod>	0	</arenaPeriod>
+      <name>	zone_destr_CZ1_planes	</name>
       <trajectories>
         <warplane>
           <preset>	zone_destr_CZ1_planes_00	</preset>
@@ -609,10 +602,11 @@
       </trajectories>
     </scenario>
     <scenario>
+      <startTime>	10.000000 40.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <interval>	300	</interval>
+      <arenaPeriod>	0	</arenaPeriod>
       <name>	zone_destr_CZ2_planes	</name>
-      <startTime>	0.000000 38.000000	</startTime>
-      <possibility>	0.000000	</possibility>
-      <interval>	-1.000000	</interval>
       <trajectories>
         <warplane>
           <preset>	zone_destr_CZ2_planes_00	</preset>
@@ -659,10 +653,11 @@
       </trajectories>
     </scenario>
     <scenario>
-      <name>	zone_destr_EZ1_planes	</name>
       <startTime>	0.000000 0.000000	</startTime>
-      <possibility>	0.000000	</possibility>
-      <interval>	-1.000000	</interval>
+      <possibility>	1.000000	</possibility>
+      <interval>	360	</interval>
+      <arenaPeriod>	0	</arenaPeriod>
+      <name>	zone_destr_EZ1_planes	</name>
       <trajectories>
         <warplane>
           <preset>	zone_destr_EZ1_planes_00	</preset>
@@ -675,185 +670,188 @@
           <preset>	zone_destr_EZ1_planes_01	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_EZ1_planes_02	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_EZ1_planes_03	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_EZ1_planes_04	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_EZ1_planes_05	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
       </trajectories>
     </scenario>
     <scenario>
+      <startTime>	10.000000 40.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <interval>	300	</interval>
+      <arenaPeriod>	0	</arenaPeriod>
       <name>	zone_destr_EZ2_planes	</name>
-      <startTime>	0.000000 38.000000	</startTime>
-      <possibility>	0.000000	</possibility>
-      <interval>	-1.000000	</interval>
       <trajectories>
         <warplane>
           <preset>	zone_destr_EZ2_planes_00	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_EZ2_planes_01	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_EZ2_planes_02	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_EZ2_planes_03	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_EZ2_planes_04	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_EZ2_planes_05	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
       </trajectories>
     </scenario>
     <scenario>
-      <name>	zone_destr_WZ1_planes	</name>
       <startTime>	0.000000 0.000000	</startTime>
-      <possibility>	0.000000	</possibility>
-      <interval>	-1.000000	</interval>
+      <possibility>	1.000000	</possibility>
+      <interval>	360	</interval>
+      <arenaPeriod>	0	</arenaPeriod>
+      <name>	zone_destr_WZ1_planes	</name>
       <trajectories>
         <warplane>
           <preset>	zone_destr_WZ1_planes_00	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_WZ1_planes_01	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_WZ1_planes_02	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_WZ1_planes_03	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_WZ1_planes_04	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_WZ1_planes_05	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
       </trajectories>
     </scenario>
     <scenario>
+      <startTime>	10.000000 40.000000	</startTime>
+      <possibility>	1.000000	</possibility>
+      <interval>	300	</interval>
+      <arenaPeriod>	0	</arenaPeriod>
       <name>	zone_destr_WZ2_planes	</name>
-      <startTime>	0.000000 38.000000	</startTime>
-      <possibility>	0.000000	</possibility>
-      <interval>	-1.000000	</interval>
       <trajectories>
         <warplane>
           <preset>	zone_destr_WZ2_planes_00	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_WZ2_planes_01	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_WZ2_planes_02	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_WZ2_planes_03	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_WZ2_planes_04	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
         <warplane>
           <preset>	zone_destr_WZ2_planes_05	</preset>
           <position>	0.000000 0.000000 0.000000	</position>
           <yaw>	0.000000	</yaw>
-          <possibility>	0.000000	</possibility>
+          <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
         </warplane>
       </trajectories>

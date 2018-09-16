@@ -1,4 +1,5 @@
 <R87_T62A.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
     <commander>	radioman	</commander>
     <gunner></gunner>
@@ -83,7 +84,6 @@
     </emblemSlots>
     <hangarShadowTexture>	vehicles/russian/R87_T62A/T62A_HangarShadowMap.dds	</hangarShadowTexture>
     <camouflage>
-      <exclusionMask></exclusionMask>
       <tiling>	2.02 2.02 0.000000 0.000000	</tiling>
     </camouflage>
   </hull>
@@ -905,7 +905,6 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <exclusionMask></exclusionMask>
             <tiling>	0.52 0.25 0.000000 0.000000	</tiling>
           </camouflage>
         </_100mm_D54_TS>
@@ -955,7 +954,6 @@
       <physicsShape>	1.000 0.000 1.000 0.000 0.545 0.220 0.560 0.401 0.589 0.500 0.307 0.500 0.188 0.400 0.396	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
-        <exclusionMask></exclusionMask>
         <tiling>	0.85 0.85 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_1_T62A>

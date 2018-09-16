@@ -3,6 +3,7 @@
 from collections import namedtuple
 from Math import Matrix
 import BigWorld
+import AnimationSequence
 from debug_utils import LOG_WARNING
 FlagSettings = namedtuple('FlagSettings', ['flagStaffModel',
  'flagModel',
@@ -18,6 +19,7 @@ class FlagModel(object):
 
     def __init__(self):
         self.__flagModel = None
+        self.__flagAnimator = None
         self.__flagFashion = None
         self.__flagScaleMatrix = Matrix()
         self.__flagStaffModel = None
@@ -35,8 +37,12 @@ class FlagModel(object):
     def startFlagAnimation(self):
         if self.__flagModel is not None:
             try:
-                animAction = self.__flagModel.action(self.__flagSettings.flagAnim)
-                animAction()
+                clipResource = self.__flagModel.deprecatedGetAnimationClipResource(self.__flagSettings.flagAnim)
+                if clipResource:
+                    loader = AnimationSequence.Loader(clipResource, BigWorld.player().spaceID)
+                    self.__flagAnimator = loader.loadSync()
+                    self.__flagAnimator.bindTo(AnimationSequence.ModelWrapperContainer(self.__flagModel))
+                    self.__flagAnimator.start()
             except Exception:
                 LOG_WARNING('Unable to start "%s" animation action for model' % self.__flagSettings.flagAnim)
 

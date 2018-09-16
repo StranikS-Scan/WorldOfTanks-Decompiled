@@ -31,7 +31,6 @@ class DIALOGS(object):
     DISCONNECT_SUBMIT = '#dialogs:disconnect/submit'
     DISCONNECT_CANCEL = '#dialogs:disconnect/cancel'
     QUIT_TITLE = '#dialogs:quit/title'
-    QUIT_MESSAGE = '#dialogs:quit/message'
     QUIT_SUBMIT = '#dialogs:quit/submit'
     QUIT_CANCEL = '#dialogs:quit/cancel'
     QUITBATTLE_TITLE = '#dialogs:quitBattle/title'
@@ -151,6 +150,7 @@ class DIALOGS(object):
     CONFIRMMODULEDIALOG_REZULTLABEL1 = '#dialogs:confirmModuleDialog/rezultLabel1'
     BUYCONFIRMATION_TITLE = '#dialogs:buyConfirmation/title'
     BUYCONFIRMATION_MESSAGECOMBINE = '#dialogs:buyConfirmation/messageCombine'
+    BUYCONFIRMATION_MESSAGE = '#dialogs:buyConfirmation/message'
     BUYCONFIRMATION_SUBMIT = '#dialogs:buyConfirmation/submit'
     BUYCONFIRMATION_CANCEL = '#dialogs:buyConfirmation/cancel'
     XPTOTMENCHECKBOX_TITLE = '#dialogs:xpToTmenCheckbox/title'
@@ -782,9 +782,13 @@ class DIALOGS(object):
     QUESTSCONFIRMPROGRESSDIALOG_SUBMIT = '#dialogs:questsConfirmProgressDialog/submit'
     QUESTSCONFIRMPROGRESSDIALOG_CANCEL = '#dialogs:questsConfirmProgressDialog/cancel'
     QUESTSDISMISSPROGRESSDIALOG_TITLE = '#dialogs:questsDismissProgressDialog/title'
+    QUESTSCONFIRMDISCARDDIALOG_TITLE = '#dialogs:questsConfirmDiscardDialog/title'
     QUESTSDISMISSPROGRESSDIALOG_MESSAGE = '#dialogs:questsDismissProgressDialog/message'
     QUESTSDISMISSPROGRESSDIALOG_SUBMIT = '#dialogs:questsDismissProgressDialog/submit'
     QUESTSDISMISSPROGRESSDIALOG_CANCEL = '#dialogs:questsDismissProgressDialog/cancel'
+    QUESTSCONFIRMDISCARDDIALOG_MESSAGE = '#dialogs:questsConfirmDiscardDialog/message'
+    QUESTSCONFIRMDISCARDDIALOG_SUBMIT = '#dialogs:questsConfirmDiscardDialog/submit'
+    QUESTSCONFIRMDISCARDDIALOG_CANCEL = '#dialogs:questsConfirmDiscardDialog/cancel'
     EPICBATTLECONFIRMDIALOG_TITLE = '#dialogs:epicBattleConfirmDialog/title'
     EPICBATTLECONFIRMDIALOG_MESSAGE = '#dialogs:epicBattleConfirmDialog/message'
     EPICBATTLECONFIRMDIALOG_SUBMIT = '#dialogs:epicBattleConfirmDialog/submit'
@@ -938,7 +942,6 @@ class DIALOGS(object):
      DISCONNECT_SUBMIT,
      DISCONNECT_CANCEL,
      QUIT_TITLE,
-     QUIT_MESSAGE,
      QUIT_SUBMIT,
      QUIT_CANCEL,
      QUITBATTLE_TITLE,
@@ -1058,6 +1061,7 @@ class DIALOGS(object):
      CONFIRMMODULEDIALOG_REZULTLABEL1,
      BUYCONFIRMATION_TITLE,
      BUYCONFIRMATION_MESSAGECOMBINE,
+     BUYCONFIRMATION_MESSAGE,
      BUYCONFIRMATION_SUBMIT,
      BUYCONFIRMATION_CANCEL,
      XPTOTMENCHECKBOX_TITLE,
@@ -1689,9 +1693,13 @@ class DIALOGS(object):
      QUESTSCONFIRMPROGRESSDIALOG_SUBMIT,
      QUESTSCONFIRMPROGRESSDIALOG_CANCEL,
      QUESTSDISMISSPROGRESSDIALOG_TITLE,
+     QUESTSCONFIRMDISCARDDIALOG_TITLE,
      QUESTSDISMISSPROGRESSDIALOG_MESSAGE,
      QUESTSDISMISSPROGRESSDIALOG_SUBMIT,
      QUESTSDISMISSPROGRESSDIALOG_CANCEL,
+     QUESTSCONFIRMDISCARDDIALOG_MESSAGE,
+     QUESTSCONFIRMDISCARDDIALOG_SUBMIT,
+     QUESTSCONFIRMDISCARDDIALOG_CANCEL,
      EPICBATTLECONFIRMDIALOG_TITLE,
      EPICBATTLECONFIRMDIALOG_MESSAGE,
      EPICBATTLECONFIRMDIALOG_SUBMIT,

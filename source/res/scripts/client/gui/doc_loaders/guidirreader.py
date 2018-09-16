@@ -3,8 +3,8 @@
 import ResMgr
 
 class GuiDirReader(object):
-    SCALEFORM_STARTUP_VIDEO_PATH = 'gui/flash/video'
-    SCALEFORM_STARTUP_VIDEO_MASK = 'video/%s'
+    SCALEFORM_STARTUP_VIDEO_PATH = 'gui/flash/videos'
+    SCALEFORM_STARTUP_VIDEO_MASK = 'videos/%s'
     VIDEO_EXTENSION = 'usm'
 
     @staticmethod

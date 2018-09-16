@@ -312,7 +312,6 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_EXPERIENCE = '#messenger:serviceChannelMessages/battleResults/experience'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FREEXP = '#messenger:serviceChannelMessages/battleResults/freeXP'
     SERVICECHANNELMESSAGES_BATTLERESULTS_CREDITS = '#messenger:serviceChannelMessages/battleResults/credits'
-    SERVICECHANNELMESSAGES_BATTLERESULTS_CREDITS_NOTACCRUED = '#messenger:serviceChannelMessages/battleResults/credits/notAccrued'
     SERVICECHANNELMESSAGES_BATTLERESULTS_GOLD = '#messenger:serviceChannelMessages/battleResults/gold'
     SERVICECHANNELMESSAGES_BATTLERESULTS_CRYSTAL = '#messenger:serviceChannelMessages/battleResults/crystal'
     SERVICECHANNELMESSAGES_BATTLERESULTS_DOUBLEXPFACTOR = '#messenger:serviceChannelMessages/battleResults/doubleXpFactor'
@@ -797,6 +796,11 @@ class MESSENGER(object):
     PERSONALMISSIONS_COMPLETIONTOKENGAIN = '#messenger:personalMissions/completionTokenGain'
     CHAT_PERSONALMESSAGE_WARNINGHEAD = '#messenger:chat/personalMessage/warningHead'
     CHAT_PERSONALMESSAGE_WARNINGBODY = '#messenger:chat/personalMessage/warningBody'
+    SERVICECHANNELMESSAGES_FAILEDPERSONALMISSION = '#messenger:serviceChannelMessages/failedPersonalMission'
+    SERVICECHANNELMESSAGES_FAILEDPERSONALMISSION_OPERATION = '#messenger:serviceChannelMessages/failedPersonalMission/operation'
+    SERVICECHANNELMESSAGES_FAILEDPERSONALMISSION_MISSION = '#messenger:serviceChannelMessages/failedPersonalMission/mission'
+    SERVICECHANNELMESSAGES_FAILEDPERSONALMISSION_MESSAGE = '#messenger:serviceChannelMessages/failedPersonalMission/message'
+    SERVICECHANNELMESSAGES_FAILEDPERSONALMISSION_BUTTON = '#messenger:serviceChannelMessages/failedPersonalMission/button'
     CHAT_ERROR_ENUM = (CHAT_ERROR_NOT_ALLOWED,
      CHAT_ERROR_USER_NOT_FOUND,
      CHAT_ERROR_CANNOT_BAN_ONESELF,

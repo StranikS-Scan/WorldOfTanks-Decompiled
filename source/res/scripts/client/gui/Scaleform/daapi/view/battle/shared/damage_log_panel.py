@@ -371,7 +371,8 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
 
     def isSwitchToVehicle(self):
         observedVehID = self.__vehStateCtrl.getControllingVehicleID()
-        return self.__arenaDP.getPlayerVehicleID() != observedVehID
+        playerVehicleID = self.__arenaDP.getPlayerVehicleID()
+        return playerVehicleID != observedVehID and observedVehID != 0
 
     def _populate(self):
         super(DamageLogPanel, self)._populate()

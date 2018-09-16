@@ -346,3 +346,15 @@ def getLastRecoveryArgs(avatar=None):
         result = None
 
     return result
+
+
+def getVehicleIDAttached(avatar=None):
+    if avatar is None:
+        avatar = BigWorld.player()
+    try:
+        result = avatar.getVehicleAttached().id
+    except AttributeError:
+        LOG_WARNING('Attribute "getVehicleAttached" is not found')
+        result = None
+
+    return result

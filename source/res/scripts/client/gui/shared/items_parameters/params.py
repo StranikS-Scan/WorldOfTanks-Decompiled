@@ -297,7 +297,7 @@ class VehicleParams(_ParameterBase):
         if self._itemDescr.isYawHullAimingAvailable:
             return self.chassisRotationSpeed
         else:
-            return round(math.degrees(items_utils.getTurretRotationSpeed(self._itemDescr, self.__factors)), 2) if not self.__hasTurret() else None
+            return round(math.degrees(items_utils.getGunRotationSpeed(self._itemDescr, self.__factors)), 2) if not self.__hasTurret() else None
 
     @property
     def circularVisionRadius(self):

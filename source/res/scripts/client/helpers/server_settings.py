@@ -261,20 +261,6 @@ class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ('isEnabled', 'per
         return cls()
 
 
-class _WGMoneyOfflineEmergencyConfig(namedtuple('_WGMoneyOfflineEmergencyConfig', ('enabled', 'freeRepair', 'freeMaintenance', 'freeBattles', 'boostersCompensation', 'boostersDisabled'))):
-    __slots__ = ()
-
-    def __new__(cls, enabled=False, freeRepair=False, freeMaintenance=False, freeBattles=False, boostersCompensation=False, boostersDisabled=False):
-        return super(_WGMoneyOfflineEmergencyConfig, cls).__new__(cls, enabled, freeRepair, freeMaintenance, freeBattles, boostersCompensation, boostersDisabled)
-
-    def isEnabled(self):
-        return self.enabled
-
-    @classmethod
-    def defaults(cls):
-        return cls()
-
-
 class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ['maxCombatReserveLevel', 'metaLevel', 'rewards'])):
 
     def asDict(self):
@@ -387,10 +373,6 @@ class ServerSettings(object):
             self.__rankedBattlesSettings = makeTupleByDict(_RankedBattlesConfig, self.__serverSettings['ranked_config'])
         else:
             self.__rankedBattlesSettings = _RankedBattlesConfig.defaults()
-        if 'wgm_offline_emergency_config' in self.__serverSettings:
-            self.__wgmOfflineEmergencyConfig = makeTupleByDict(_WGMoneyOfflineEmergencyConfig, self.__serverSettings['wgm_offline_emergency_config'])
-        else:
-            self.__wgmOfflineEmergencyConfig = _WGMoneyOfflineEmergencyConfig.defaults()
         if 'epic_config' in self.__serverSettings:
             LOG_DEBUG('epic_config', self.__serverSettings['epic_config'])
             self.__epicMetaGameSettings = makeTupleByDict(_EpicMetaGameConfig, self.__serverSettings['epic_config']['epicMetaGame'])
@@ -416,8 +398,6 @@ class ServerSettings(object):
             self.__bwHallOfFame = makeTupleByDict(_BwHallOfFame, serverSettingsDiff['hallOfFame'])
         if 'wgcg' in serverSettingsDiff:
             self.__updateWgcg(serverSettingsDiff)
-        if 'wgm_offline_emergency_config' in serverSettingsDiff:
-            self.__wgmOfflineEmergencyConfig = makeTupleByDict(_WGMoneyOfflineEmergencyConfig, serverSettingsDiff['wgm_offline_emergency_config'])
         if 'epic_config' in serverSettingsDiff:
             self.__updateEpic(serverSettingsDiff)
         if 'telecom_config' in serverSettingsDiff:
@@ -485,10 +465,6 @@ class ServerSettings(object):
         return self.__rankedBattlesSettings
 
     @property
-    def wgmOfflineEmergency(self):
-        return self.__wgmOfflineEmergencyConfig
-
-    @property
     def epicMetaGame(self):
         return self.__epicMetaGameSettings
 
@@ -515,7 +491,7 @@ class ServerSettings(object):
         return self.__getGlobalSetting('disabledPMOperations', dict())
 
     def getDisabledPersonalMissions(self):
-        return self.__getGlobalSetting('disabledPersonalMissions', set())
+        return self.__getGlobalSetting('disabledPersonalMissions', dict())
 
     def isStrongholdsEnabled(self):
         return self.__getGlobalSetting('strongholdSettings', {}).get('isStrongholdsEnabled', False)
@@ -528,9 +504,6 @@ class ServerSettings(object):
 
     def elenUpdateInterval(self):
         return self.__getGlobalSetting('elenSettings', {}).get('elenUpdateInterval', 60)
-
-    def isMarathonEnabled(self):
-        return self.__getGlobalSetting('marathonSettings', {}).get('isMarathonEnabled', True)
 
     def isGoldFishEnabled(self):
         return self.__getGlobalSetting('isGoldFishEnabled', False)

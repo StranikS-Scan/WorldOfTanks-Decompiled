@@ -84,6 +84,7 @@ class TOOLTIPS_CONSTANTS(object):
     PACK_RENT_VEHICLES = 'packRentVehicles'
     UNAVAILABLE_QUEST = 'unavailibleQuest'
     ACTION_PRICE = 'actionPrice'
+    ACTION_XP = 'actionXP'
     SPECIAL = 'special'
     SIMPLE = 'simple'
     COMPLEX = 'complex'
@@ -272,6 +273,7 @@ class TOOLTIPS_CONSTANTS(object):
      REF_SYS_DESCRIPTION,
      REF_SYS_XP_MULTIPLIER,
      ACTION_PRICE,
+     ACTION_XP,
      QUESTS_VEHICLE_BONUSES,
      ENVIRONMENT,
      SQUAD_RESTRICTIONS_INFO,

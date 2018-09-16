@@ -156,15 +156,6 @@ def _getDefaultMessage(normal='', bold=''):
      'bold': bold})
 
 
-@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
-def _isWGMoneyOffline(credit, gold, freeXP, crystal, lobbyContext=None):
-    notAccrued = not any((credit,
-     gold,
-     freeXP,
-     crystal))
-    return notAccrued and lobbyContext.getServerSettings().wgmOfflineEmergency.isEnabled()
-
-
 _MessageData = namedtuple('MessageData', 'data, settings')
 
 class ServiceChannelFormatter(object):
@@ -286,24 +277,16 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                     ctx['xp'] = BigWorld.wg_getIntegralFormat(xp)
                 battleResKey = battleResults.get('isWinner', 0)
                 ctx['xpEx'] = self.__makeXpExString(xp, battleResKey, battleResults.get('xpPenalty', 0), battleResults)
-                gold = battleResults.get(Currency.GOLD, 0)
-                credit = battleResults.get(Currency.CREDITS)
+                ctx[Currency.GOLD] = self.__makeGoldString(battleResults.get(Currency.GOLD, 0))
+                accCredits = battleResults.get(Currency.CREDITS) - battleResults.get('creditsToDraw', 0)
+                if accCredits:
+                    ctx[Currency.CREDITS] = self.__makeCurrencyString(Currency.CREDITS, accCredits)
                 accCrystal = battleResults.get(Currency.CRYSTAL)
                 ctx['crystalStr'] = ''
-                ctx['creditsEx'] = ''
-                ctx[Currency.GOLD] = ''
-                if not _isWGMoneyOffline(credit, gold, battleResults.get('freeXP', 0), accCrystal):
-                    if gold:
-                        ctx[Currency.GOLD] = self.__makeGoldString(gold)
-                    accCredits = credit - battleResults.get('creditsToDraw', 0)
-                    if accCredits:
-                        ctx[Currency.CREDITS] = self.__makeCurrencyString(Currency.CREDITS, accCredits)
-                        ctx['creditsEx'] = self.__makeCreditsExString(accCredits, battleResults.get('creditsPenalty', 0), battleResults.get('creditsContributionIn', 0), battleResults.get('creditsContributionOut', 0))
-                    if accCrystal:
-                        ctx[Currency.CRYSTAL] = self.__makeCurrencyString(Currency.CRYSTAL, accCrystal)
-                        ctx['crystalStr'] = g_settings.htmlTemplates.format('battleResultCrystal', {Currency.CRYSTAL: ctx[Currency.CRYSTAL]})
-                else:
-                    ctx[Currency.CREDITS] = self.__makeWGMoneyOfflineString()
+                if accCrystal:
+                    ctx[Currency.CRYSTAL] = self.__makeCurrencyString(Currency.CRYSTAL, accCrystal)
+                    ctx['crystalStr'] = g_settings.htmlTemplates.format('battleResultCrystal', {Currency.CRYSTAL: ctx[Currency.CRYSTAL]})
+                ctx['creditsEx'] = self.__makeCreditsExString(accCredits, battleResults.get('creditsPenalty', 0), battleResults.get('creditsContributionIn', 0), battleResults.get('creditsContributionOut', 0))
                 guiType = battleResults.get('guiType', 0)
                 ctx['achieves'], ctx['badges'] = self.__makeAchievementsAndBadgesStrings(battleResults)
                 ctx['lock'] = self.__makeVehicleLockString(vehicleNames, battleResults)
@@ -362,6 +345,8 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
         return ' ({0:s})'.format('; '.join(exStrings)) if exStrings else ''
 
     def __makeCreditsExString(self, accCredits, creditsPenalty, creditsContributionIn, creditsContributionOut):
+        if not accCredits:
+            return ''
         formatter = getBWFormatter(Currency.CREDITS)
         exStrings = []
         penalty = sum([creditsPenalty, creditsContributionOut])
@@ -372,15 +357,14 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
         return ' ({0:s})'.format('; '.join(exStrings)) if exStrings else ''
 
     def __makeGoldString(self, gold):
+        if not gold:
+            return ''
         formatter = getBWFormatter(Currency.GOLD)
         return g_settings.htmlTemplates.format(self.__goldTemplateKey, {Currency.GOLD: formatter(gold)})
 
     def __makeCurrencyString(self, currency, credit):
         formatter = getBWFormatter(currency)
         return formatter(credit)
-
-    def __makeWGMoneyOfflineString(self):
-        return text_styles.alert(MESSENGER.SERVICECHANNELMESSAGES_BATTLERESULTS_CREDITS_NOTACCRUED)
 
     def __makeAchievementsAndBadgesStrings(self, battleResults):
         popUpRecords = []
@@ -2558,3 +2542,42 @@ class RankedQuestFormatter(WaitItemsSyncFormatter):
 
     def __packAward(self, key, value, extraKey):
         return '{} {}'.format(i18n.makeString(SYSTEM_MESSAGES.getRankedNotificationBonusName(name=key, extra=extraKey)), self.__awardsStyles.get(key, text_styles.stats)(value))
+
+
+class PersonalMissionFailedFormatter(WaitItemsSyncFormatter):
+    _eventsCache = dependency.descriptor(IEventsCache)
+    _template = 'PersonalMissionFailedMessage'
+
+    @async
+    @process
+    def format(self, message, callback=None):
+        isSynced = yield self._waitForSyncItems()
+        if message.data and isSynced:
+            data = message.data
+            potapovQuestIDs = data.get('questIDs')
+            if potapovQuestIDs:
+                questsDict = {}
+                for questID in potapovQuestIDs:
+                    if questID and personal_missions.g_cache.isPersonalMission(questID):
+                        pmType = personal_missions.g_cache.questByUniqueQuestID(questID)
+                        quest = self._eventsCache.getPersonalMissions().getAllQuests().get(pmType.id)
+                        questsDict.setdefault(pmType.id, [])
+                        questsDict[pmType.id].append(quest)
+
+                for questID, questList in questsDict.iteritems():
+                    quest = first(questList)
+                    operation = self._eventsCache.getPersonalMissions().getAllOperations().get(quest.getOperationID())
+                    ctx = {'questID': questID,
+                     'operation': operation.getShortUserName(),
+                     'missionShortName': quest.getShortUserName(),
+                     'missionName': quest.getUserName()}
+                    formatted = g_settings.msgTemplates.format(self._template, ctx=ctx, data={'savedData': {'questID': questID}})
+                    settings = self._getGuiSettings(message, self._template)
+                    settings.showAt = BigWorld.time()
+                    callback([_MessageData(formatted, settings)])
+
+            else:
+                callback([_MessageData(None, None)])
+        else:
+            callback([_MessageData(None, None)])
+        return

@@ -21,7 +21,6 @@ from account_helpers import ClientInvitations, vehicle_rotation
 from account_helpers import ClientRanked, ClientBadges
 from account_helpers import client_epic_meta_game
 from account_helpers.AccountSettings import CURRENT_VEHICLE
-from account_helpers.settings_core import ISettingsCore
 from account_helpers.settings_core import IntUserSettings
 from account_shared import NotificationItem, readClientServerVersion
 from adisp import process
@@ -35,6 +34,7 @@ from gui.wgnc import g_wgncProvider
 from helpers import dependency
 from helpers import uniprof
 from messenger import MessengerEntry
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils import IHangarSpace
@@ -129,6 +129,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self.isInEpicQueue = False
         self.__onCmdResponse = {}
         self.__onStreamComplete = {}
+        self.__objectsSelectionEnabled = True
+        self.__selectedEntity = None
         return
 
     def onBecomePlayer(self):
@@ -385,12 +387,21 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             LOG_DEBUG('No any ClientSelectableObject to unselect')
 
     def targetFocus(self, entity):
-        if isinstance(entity, ClientSelectableObject) and entity.enabled:
-            self.hangarSpace.onObjectSelected(entity)
+        if self.__objectsSelectionEnabled and isinstance(entity, ClientSelectableObject) and entity.enabled:
+            self.hangarSpace.onMouseEnter(entity)
+            self.__selectedEntity = entity
 
     def targetBlur(self, prevEntity):
-        if isinstance(prevEntity, ClientSelectableObject):
-            self.hangarSpace.onObjectUnselected(prevEntity)
+        if self.__objectsSelectionEnabled and isinstance(prevEntity, ClientSelectableObject):
+            self.hangarSpace.onMouseExit(prevEntity)
+            self.__selectedEntity = None
+        return
+
+    def objectsSelectionEnabled(self, enabled):
+        if not enabled and self.__selectedEntity is not None:
+            self.targetBlur(self.__selectedEntity)
+        self.__objectsSelectionEnabled = enabled
+        return
 
     def onKickedFromQueue(self, queueType):
         LOG_DEBUG('onKickedFromQueue', queueType)
@@ -904,6 +915,16 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         args.extend(personalMissionsIDs)
         self._doCmdIntArr(AccountCommands.CMD_SELECT_POTAPOV_QUESTS, args, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
+    def resetPersonalMissions(self, personalMissionsIDs, questType, callback):
+        args = [questType]
+        args.extend(personalMissionsIDs)
+        self._doCmdIntArr(AccountCommands.CMD_RESET_POTAPOV_QUESTS, args, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
+
+    def pausePersonalMissions(self, personalMissionsIDs, questType, enable, callback):
+        args = [questType, enable]
+        args.extend(personalMissionsIDs)
+        self._doCmdIntArr(AccountCommands.CMD_PAUSE_POTAPOV_QUESTS, args, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
+
     def getPersonalMissionReward(self, personalMissionsIDs, questType, needTamkman=False, tmanNation=0, tmanInnation=0, roleID=1, callback=None):
         arr = [questType,
          personalMissionsIDs,
@@ -1040,6 +1061,7 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
             self.badges.synchronize(isFullSync, diff)
             self.epicMetaGame.synchronize(isFullSync, diff)
             self.__synchronizeServerSettings(diff)
+            self.__synchronizeDisabledPersonalMissions(diff)
             self.__synchronizeEventNotifications(diff)
             self.__synchronizeCacheDict(self.prebattleAutoInvites, diff.get('account', None), 'prebattleAutoInvites', 'replace', events.onPrebattleAutoInvitesChanged)
             self.__synchronizeCacheDict(self.prebattleInvites, diff, 'prebattleInvites', 'update', lambda : events.onPrebattleInvitesChanged(diff))
@@ -1206,6 +1228,25 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
                 else:
                     LOG_WARNING('__synchronizeCacheDict: bad diff=%r for key=%r' % (serverSettingsDiff, key))
+            return
+
+    def __synchronizeDisabledPersonalMissions(self, diffDict):
+        if diffDict is None:
+            return
+        else:
+            serverSettings = self.serverSettings
+            disabledSectionKeys = ('disabledPersonalMissions', 'disabledPMOperations')
+            serverSettingsDiff = diffDict.get('serverSettings', None)
+            if serverSettingsDiff is not None:
+                if isinstance(serverSettingsDiff, dict):
+                    for sectionKey in disabledSectionKeys:
+                        if sectionKey in serverSettingsDiff:
+                            if isinstance(serverSettingsDiff[sectionKey], dict):
+                                serverSettings.setdefault(sectionKey, {})
+                                serverSettings[sectionKey] = serverSettingsDiff[sectionKey]
+                            else:
+                                LOG_WARNING('__synchronizeCacheDict: bad diff=%r for key=%r' % (serverSettingsDiff, sectionKey))
+
             return
 
 

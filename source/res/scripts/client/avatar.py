@@ -31,6 +31,7 @@ import constants
 from AimSound import AimSound
 from AvatarInputHandler import cameras
 from AvatarInputHandler.control_modes import ArcadeControlMode, VideoCameraControlMode, PostMortemControlMode
+from BattleReplay import CallbackDataNames
 from ChatManager import chatManager
 from ClientChat import ClientChat
 from Flock import DebugLine
@@ -218,7 +219,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         DecalMap.g_instance.initGroups(1.0)
         self.__gunDamagedShootSound = None
         if BattleReplay.g_replayCtrl.isPlaying:
-            BattleReplay.g_replayCtrl.setDataCallback('gunDamagedSound', self.__gunDamagedSound)
+            BattleReplay.g_replayCtrl.setDataCallback(CallbackDataNames.GUN_DAMAGE_SOUND, self.__gunDamagedSound)
         self.__aimingBooster = None
         return
 
@@ -339,6 +340,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         uniprof.exitFromRegion('avatar.arena.battle')
         uniprof.enterToRegion('avatar.exiting')
         LOG_DEBUG('[INIT_STEPS] Avatar.onBecomeNonPlayer')
+        fakeSpaceKeeper = BigWorld.Model('')
+        BigWorld.addModel(fakeSpaceKeeper, self.spaceID)
         try:
             if self.gunRotator is not None:
                 self.gunRotator.destroy()
@@ -450,6 +453,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__initProgress = 0
         self.__vehicles = set()
         self.__gunDamagedShootSound = None
+        BigWorld.delModel(fakeSpaceKeeper)
         uniprof.exitFromRegion('avatar.exiting')
         return
 
@@ -605,7 +609,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                         self.base.setDevelopmentFeature('setSignal', 3, '')
                         return True
                     if key == Keys.KEY_C:
-                        self.base.setDevelopmentFeature('navigateTo', 0, cPickle.dumps((tuple(self.inputHandler.getDesiredShotPoint()), None), -1))
+                        self.base.setDevelopmentFeature('navigateTo', 0, cPickle.dumps((tuple(self.inputHandler.getDesiredShotPoint()), None, None), -1))
                         return True
                 if constants.HAS_DEV_RESOURCES and cmdMap.isFired(CommandMapping.CMD_SWITCH_SERVER_MARKER, key) and isDown:
                     self.gunRotator.showServerMarker = not self.gunRotator.showServerMarker
@@ -1550,7 +1554,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
 
     def __gunDamagedSound(self):
         if BattleReplay.g_replayCtrl.isRecording:
-            BattleReplay.g_replayCtrl.serializeCallbackData('gunDamagedSound', ())
+            BattleReplay.g_replayCtrl.serializeCallbackData(CallbackDataNames.GUN_DAMAGE_SOUND, ())
         if self.__gunDamagedShootSound is not None:
             self.__gunDamagedShootSound.play()
         return

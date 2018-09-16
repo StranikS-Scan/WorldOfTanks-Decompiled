@@ -206,7 +206,8 @@ class PM1AwardScreenConditionsFormatter(PM1ConditionsFormatter):
         return {'initData': {'title': text_styles.middleTitle(title),
                       'iconID': res.get('icon'),
                       'progressType': 'regular',
-                      'tooltip': tooltip},
+                      'tooltip': tooltip,
+                      'isInOrGroup': res.get('isInOrGroup', False)},
          'progressData': {'current': 0,
                           'state': QUEST_PROGRESS_STATE.COMPLETED if isCompleted else QUEST_PROGRESS_STATE.FAILED,
                           'goal': 1}}
@@ -267,6 +268,9 @@ class PM1CardConditionsFormatterAdapter(PM1ConditionsFormatterAdapter):
     def __init__(self, event):
         super(PM1CardConditionsFormatterAdapter, self).__init__(event, PM1CardConditionsFormatter())
 
+    def hasProgressForReset(self):
+        return False
+
 
 class PM1BattleConditionsFormatterAdapter(PM1ConditionsFormatterAdapter):
 
@@ -278,3 +282,11 @@ class PM1AwardScreenConditionsFormatterAdapter(PM1ConditionsFormatterAdapter):
 
     def __init__(self, event):
         super(PM1AwardScreenConditionsFormatterAdapter, self).__init__(event, PM1AwardScreenConditionsFormatter())
+
+    def getConditionsData(self, main, add):
+        result = {}
+        if main:
+            result.update({'mainConditions': self.bodyFormat(True)})
+        if add:
+            result.update({'addConditions': self.bodyFormat(False)})
+        return result

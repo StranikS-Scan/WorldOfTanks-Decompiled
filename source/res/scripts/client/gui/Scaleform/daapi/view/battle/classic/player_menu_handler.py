@@ -54,6 +54,7 @@ _OPTION_ICONS = {USER.ADD_TO_FRIENDS: 'addToFriends',
  DYN_SQUAD_OPTION_ID.IN_SQUAD: 'inSquad',
  DYN_SQUAD_OPTION_ID.ACCEPT_INVITATION: 'acceptInvitation',
  DYN_SQUAD_OPTION_ID.REJECT_INVITATION: 'rejectInvitation'}
+_BOT_NO_ACTIONS_OPTION_ID = 'botNoActions'
 
 class PlayerContextMenuInfo(UserContextMenuInfo):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -61,6 +62,7 @@ class PlayerContextMenuInfo(UserContextMenuInfo):
     def __init__(self, databaseID, userName):
         super(PlayerContextMenuInfo, self).__init__(databaseID, userName)
         self.isAlly = self.sessionProvider.getCtx().isAlly(accID=databaseID)
+        self.isBot = databaseID <= 0
 
 
 class PlayerMenuHandler(AbstractContextMenuHandler):
@@ -151,12 +153,15 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
 
     def _generateOptions(self, ctx=None):
         options = []
-        options = self.__addDyncSquadInfo(options)
-        options = self.__addFriendshipInfo(options)
-        options = self.__addIgnoreInfo(options)
-        options = self.__addCommunicationInfo(options)
-        options = self.__addMutedInfo(options)
-        options = self.__addDenunciationsInfo(options)
+        if not self.__userInfo.isBot:
+            options = self.__addDyncSquadInfo(options)
+            options = self.__addFriendshipInfo(options)
+            options = self.__addIgnoreInfo(options)
+            options = self.__addCommunicationInfo(options)
+            options = self.__addMutedInfo(options)
+            options = self.__addDenunciationsInfo(options)
+        else:
+            options = self.__addBotInfo(options)
         return options
 
     @classmethod
@@ -253,6 +258,10 @@ class PlayerMenuHandler(AbstractContextMenuHandler):
         sub = [ make(denunciation, MENU.contextmenu(denunciation), optInitData={'enabled': self.__isAppealsForTopicEnabled(denunciation)}) for denunciation in order ]
         label = '{} {}/{}'.format(i18n.makeString(MENU.CONTEXTMENU_APPEAL), self.__denunciator.getDenunciationsLeft(), DENUNCIATIONS_PER_DAY)
         options.append(make(DENUNCIATIONS.APPEAL, label, optInitData={'enabled': self.__denunciator.isAppealsEnabled()}, optSubMenu=sub))
+        return options
+
+    def __addBotInfo(self, options):
+        options.append(self._makeItem(_BOT_NO_ACTIONS_OPTION_ID, MENU.contextmenu(_BOT_NO_ACTIONS_OPTION_ID), optInitData=self._getOptionInitData(_BOT_NO_ACTIONS_OPTION_ID, False)))
         return options
 
     def __handleHideCursor(self, _):

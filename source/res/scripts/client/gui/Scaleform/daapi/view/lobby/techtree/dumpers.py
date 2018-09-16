@@ -3,6 +3,7 @@
 import gui
 import nations
 from debug_utils import LOG_ERROR
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.techtree import techtree_dp
 from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
 from gui.Scaleform.daapi.view.lobby.techtree.settings import VehicleClassInfo
@@ -139,7 +140,8 @@ class ResearchItemsObjDumper(ResearchBaseDumper):
     def _getItemData(self, node, rootItem):
         nodeCD = node.getNodeCD()
         status, statusLevel = node.getStatus()
-        data = {'longName': node.getLongUserName(),
+        data = super(ResearchItemsObjDumper, self)._getItemData(node, rootItem)
+        data.update({'longName': node.getLongUserName(),
          'smallIconPath': node.getSmallIcon(),
          'earnedXP': node.getEarnedXP(),
          'shopPrice': node.getShopPrice(),
@@ -150,9 +152,8 @@ class ResearchItemsObjDumper(ResearchBaseDumper):
          'showVehicleBtnLabel': node.getPreviewLabel(),
          'showVehicleBtnEnabled': node.isPreviewAllowed(),
          'vehCompareRootData': vc_formatters.getBtnCompareData(rootItem) if nodeCD == rootItem.intCD else {},
-         'vehCompareTreeNodeData': node.getCompareData()}
-        commonData = super(ResearchItemsObjDumper, self)._getItemData(node, rootItem)
-        data.update(commonData)
+         'vehCompareTreeNodeData': node.getCompareData(),
+         'previewAlias': VIEW_ALIAS.LOBBY_RESEARCH})
         return data
 
 
@@ -202,4 +203,5 @@ class NationObjDumper(_BaseDumper):
          'statusLevel': statusLevel,
          'isRemovable': node.isRented(),
          'isPremiumIGR': node.isPremiumIGR(),
-         'vehCompareTreeNodeData': node.getCompareData()}
+         'vehCompareTreeNodeData': node.getCompareData(),
+         'previewAlias': VIEW_ALIAS.LOBBY_TECHTREE}

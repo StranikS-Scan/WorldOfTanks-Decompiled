@@ -129,22 +129,20 @@ def onInit(eventType, eventData, quest, processor):
 def onFinishBattle(eventType, eventData, quest, processor):
     questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
 
-    addCondition = (eventData['avatarResults'].get('markOfMastery', None) ==
-                    questProgress.getProgress(PROGRESS_ID_ADD).getParam("markOfMastery"))
+    brfilter = filter.BattleResultsFilter(eventData)
+    addCondition = bool(eventData['avatarResults']['markOfMastery'] &gt;=
+                        questProgress.getProgress(PROGRESS_ID_ADD).getParam("markOfMastery"))
     if addCondition:
         questProgress.setCompleted(PROGRESS_ID_ADD)
-    if questProgress.isCompleted(PROGRESS_ID_ADD):
         questProgress.increaseUntilComplete(PROGRESS_SERIES, 1)
-    mainCondition = (eventData['avatarResults'].get('markOfMastery', None) &gt;=
-                     questProgress.getProgress(PROGRESS_ID_MAIN).getParam("markOfMastery"))
+    mainCondition = bool(eventData['avatarResults']['markOfMastery'] &gt;=
+                         questProgress.getProgress(PROGRESS_ID_MAIN).getParam("markOfMastery"))
     if mainCondition:
         questProgress.setCompleted(PROGRESS_ID_MAIN)
-    if questProgress.isCompleted(PROGRESS_ID_MAIN):
         questProgress.increaseUntilComplete(PROGRESS_ID_MAIN_SERIES, 1)
 
     eventData['results'].update(processor.checkComplete(questProgress, quest.progressID,
-                                additionalProgressID=PROGRESS_ID_MAIN_SERIES))
-
+                                additionalProgressID=PROGRESS_SERIES))
     processor.setQuestProgress(quest.progressID, questProgress.save())
 
 events = {

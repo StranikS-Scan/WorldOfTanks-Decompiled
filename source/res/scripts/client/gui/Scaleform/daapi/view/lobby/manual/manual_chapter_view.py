@@ -13,6 +13,8 @@ class ManualChapterView(ManualViewBase, ManualChapterViewMeta):
     def __init__(self, ctx=None):
         super(ManualChapterView, self).__init__(ctx)
         self.__chapterIndex = self._ctx['chapterIndex']
+        self._pageIndex = self._ctx.get('pageIndex', None)
+        return
 
     def closeView(self):
         self._close()
@@ -24,5 +26,10 @@ class ManualChapterView(ManualViewBase, ManualChapterViewMeta):
 
     def _populate(self):
         super(ManualChapterView, self)._populate()
-        data = self.manualController.getChapterUIData(self.__chapterIndex)
+        self.setData(self.__chapterIndex, self._pageIndex)
+        g_eventBus.handleEvent(events.ManualEvent(events.ManualEvent.CHAPTER_OPENED), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def setData(self, chapterIndex, pageIndex):
+        data = self.manualController.getChapterUIData(chapterIndex)
         self.as_setInitDataS(data)
+        self.as_showPageS(pageIndex or 0)

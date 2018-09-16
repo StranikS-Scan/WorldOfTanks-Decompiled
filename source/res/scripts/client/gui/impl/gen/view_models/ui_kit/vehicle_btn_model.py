@@ -42,6 +42,7 @@ class VehicleBtnModel(ViewModel):
         self._setBool(5, value)
 
     def _initialize(self):
+        super(VehicleBtnModel, self)._initialize()
         self._addStringProperty('flag', '')
         self._addStringProperty('vehType', '')
         self._addStringProperty('vehLvl', '')

@@ -10,6 +10,7 @@ import random
 import shelve as provider
 from functools import partial
 from Queue import Queue
+from pickle import HIGHEST_PROTOCOL as HIGHEST_PICKLE_PROTOCOL, UnpicklingError
 import BigWorld
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from helpers import getFullClientVersion
@@ -190,7 +191,7 @@ class WorkerThread(threading.Thread):
         self.input_queue.task_done()
         return
 
-    def __run(self, callback, **params):
+    def __run(self, callback, **_):
         callback()
 
 
@@ -326,12 +327,12 @@ class CustomFilesCache(object):
         try:
             self.__mutex.acquire()
             cache = self.__cache
-            accessed_cache = self.__accessedCache
+            accessedCache = self.__accessedCache
             ctime = getSafeDstUTCTime()
-            for k, v in accessed_cache.items():
+            for k, v in accessedCache.items():
                 if v and abs(ctime - v) >= _LIFE_TIME_IN_MEMORY:
                     cache[k] = None
-                    accessed_cache.pop(k, None)
+                    accessedCache.pop(k, None)
                     LOG_DEBUG('Idle. Removing old file from memory.', k)
 
         finally:
@@ -346,29 +347,23 @@ class CustomFilesCache(object):
         self.__worker.add_task(task)
 
     def __onReadLocalFile(self, url, showImmediately):
-        remote_file = None
         key = base64.b32encode(url)
+        startTime = time.time()
+        remoteFile = self.__db[key] if self.__db is not None and key in self.__db else None
+        _LOG_EXECUTING_TIME(startTime, '__onReadLocalFile')
         try:
-            startTime = time.time()
-            if self.__db is not None and self.__db.has_key(key):
-                remote_file = self.__db[key]
-            _LOG_EXECUTING_TIME(startTime, '__onReadLocalFile')
-        except Exception as e:
-            LOG_WARNING("Client couldn't read file.", e, key)
-
-        try:
-            crc, f, ver = remote_file[2:5]
+            crc, f, ver = remoteFile[2:5]
             if crc != binascii.crc32(f) or _CACHE_VERSION != ver:
                 LOG_DEBUG('Old file was found.', url)
                 raise SoftException('Invalid data.')
         except Exception:
-            remote_file = None
+            remoteFile = None
 
         try:
             self.__mutex.acquire()
             cache = self.__cache
-            if remote_file is not None:
-                cache[key] = remote_file
+            if remoteFile is not None:
+                cache[key] = remoteFile
             else:
                 cache.pop(key, None)
                 self.__accessedCache.pop(key, None)
@@ -384,16 +379,10 @@ class CustomFilesCache(object):
         self.__worker.add_task(task)
 
     def __onCheckFile(self, url, showImmediately, headers):
-        res = False
         name = base64.b32encode(url)
-        try:
-            startTime = time.time()
-            if self.__db is not None:
-                res = self.__db.has_key(name)
-            _LOG_EXECUTING_TIME(startTime, '__onCheckFile')
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-
+        startTime = time.time()
+        res = self.__db.has_key(name) if self.__db is not None else None
+        _LOG_EXECUTING_TIME(startTime, '__onCheckFile')
         if res:
             try:
                 self.__mutex.acquire()
@@ -511,7 +500,12 @@ class CustomFilesCache(object):
             if not os.path.isdir(cacheDir):
                 os.makedirs(cacheDir)
             filename = os.path.join(cacheDir, 'icons')
-            self.__db = provider.open(filename, flag='c', writeback=True)
+            try:
+                self.__db = provider.open(filename, protocol=HIGHEST_PICKLE_PROTOCOL, flag='c', writeback=True)
+            except UnpicklingError:
+                LOG_WARNING('__prepareCache, unpickling with highest protocol has been failed, falling back to old protocol')
+                self.__db = provider.open(filename, flag='c', writeback=True)
+
         except Exception:
             LOG_CURRENT_EXCEPTION()
 

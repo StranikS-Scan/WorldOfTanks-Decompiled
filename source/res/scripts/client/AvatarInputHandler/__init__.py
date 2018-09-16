@@ -39,7 +39,7 @@ from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IBootcampController
 from svarog_script.py_component_system import ComponentSystem, ComponentDescriptor
-_INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
+INPUT_HANDLER_CFG = 'gui/avatar_input_handler.xml'
 
 class _CTRL_TYPE(object):
     USUAL = 0
@@ -372,7 +372,6 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         if not self.__curCtrl.isManualBind():
             avatar.positionControl.bindToVehicle(True)
         self.__curCtrl.enable()
-        self.onCameraChanged('arcade')
         tmp = self.__curCtrl.getPreferredAutorotationMode()
         if tmp is not None:
             self.__isAutorotation = tmp
@@ -392,6 +391,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         self.__onArenaStarted(arena.period)
         if not avatar.isObserver() and arena.hasObservers:
             self.__remoteCameraSender = RemoteCameraSender(self)
+        self.onCameraChanged('arcade')
         return
 
     def stop(self):
@@ -693,8 +693,8 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
     def reloadDynamicSettings(self):
         if not constants.HAS_DEV_RESOURCES:
             return
-        ResMgr.purge(_INPUT_HANDLER_CFG)
-        sec = ResMgr.openSection(_INPUT_HANDLER_CFG)
+        ResMgr.purge(INPUT_HANDLER_CFG)
+        sec = ResMgr.openSection(INPUT_HANDLER_CFG)
         self.__dynamicCameraSettings = DynamicCameraSettings(sec['dynamicCameraCommon'])
         try:
             self.__ctrls['sniper'].camera.aimingSystem.reloadConfig(sec['sniperMode']['camera'])
@@ -702,9 +702,9 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
             pass
 
     def _readCfg(self):
-        sec = ResMgr.openSection(_INPUT_HANDLER_CFG)
+        sec = ResMgr.openSection(INPUT_HANDLER_CFG)
         if sec is None:
-            LOG_ERROR('can not open <%s>.' % _INPUT_HANDLER_CFG)
+            LOG_ERROR('can not open <%s>.' % INPUT_HANDLER_CFG)
             return
         else:
             self.__checkSections(sec)
@@ -746,7 +746,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
             if desc[1] is None or desc[2] == _CTRL_TYPE.OPTIONAL or desc[2] == _CTRL_TYPE.DEVELOPMENT and not constants.HAS_DEV_RESOURCES:
                 continue
             if not section.has_key(desc[1]):
-                LOG_ERROR('Invalid section <%s> in <%s>.' % (desc[1], _INPUT_HANDLER_CFG))
+                LOG_ERROR('Invalid section <%s> in <%s>.' % (desc[1], INPUT_HANDLER_CFG))
 
         return
 

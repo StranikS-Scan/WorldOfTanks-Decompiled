@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gameplay/machine.py
 import logging
 import BattleReplay
-from constants import IS_DEVELOPMENT
+from constants import HAS_DEV_RESOURCES
 from frameworks.state_machine import StateMachine
 from gameplay import states
 _logger = logging.getLogger(__name__)
@@ -10,9 +10,6 @@ _logger.addHandler(logging.NullHandler())
 
 class GameplayStateMachine(StateMachine):
     __slots__ = ()
-
-    def __init__(self):
-        super(GameplayStateMachine, self).__init__(start=states.StartState())
 
     @property
     def offline(self):
@@ -34,9 +31,6 @@ class GameplayStateMachine(StateMachine):
 class BattleReplayMachine(StateMachine):
     __slots__ = ()
 
-    def __init__(self):
-        super(BattleReplayMachine, self).__init__(start=states.StartState())
-
     def configure(self):
         initialization = states.BattleReplayInitState()
         initialization.configure()
@@ -53,7 +47,7 @@ class BattleReplayMachine(StateMachine):
 def create():
     if BattleReplay.g_replayCtrl.getAutoStartFileName():
         return BattleReplayMachine()
-    if IS_DEVELOPMENT:
+    if HAS_DEV_RESOURCES:
         try:
             from gui.development.dev_gameplay import DevGameplayStateMachine
         except ImportError:

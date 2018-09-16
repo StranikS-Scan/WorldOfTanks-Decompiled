@@ -3,7 +3,9 @@
 import logging
 import logging.config
 import os
+import BWLogging
 import resource_helper
+from . import handlers
 from . import hooks
 ENV_KEY = 'PY_LOGGING_CFG'
 XML_CFG_FILE = 'logging.xml'
@@ -34,9 +36,7 @@ class LogConfigurator(logging.config.DictConfigurator):
 
 
 def setupFromXML(envKey=ENV_KEY, filename=XML_CFG_FILE, level=logging.INFO):
-    value = os.getenv(envKey, '')
-    if not value:
-        value = filename
+    value = os.getenv(envKey) or filename
     if value:
         config = readXMLConfig(value)
     else:
@@ -48,7 +48,12 @@ def setupFromXML(envKey=ENV_KEY, filename=XML_CFG_FILE, level=logging.INFO):
         configurator.configure()
         configurator.clear()
     else:
+        handler = handlers.WotLogHandler()
+        formatter = handlers.WotFormatter()
+        handler.setFormatter(formatter)
         root = logging.getLogger()
+        root.removeHandler(BWLogging.getBwHandler())
+        root.addHandler(handler)
         root.setLevel(level)
 
 

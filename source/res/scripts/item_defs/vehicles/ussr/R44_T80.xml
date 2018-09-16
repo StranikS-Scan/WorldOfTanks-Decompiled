@@ -1,4 +1,5 @@
 <R44_T80.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
     <commander>	radioman
 			loader	</commander>
@@ -1425,7 +1426,7 @@
             <collisionModelClient>	vehicles/russian/R44_T80/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.58 0.28 0.000000 0.000000	</tiling>
+            <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
           </camouflage>
         </_45mm_20K>
         <_45mm_VT-42>	shared	  <maxAmmo>	100	</maxAmmo>
@@ -1465,7 +1466,7 @@
             <collisionModelClient>	vehicles/russian/R44_T80/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.61 0.31 0.000000 0.000000	</tiling>
+            <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
           </camouflage>
         </_45mm_VT-42>
         <_45mm_VT-43>	shared	  <maxAmmo>	100	</maxAmmo>
@@ -1499,7 +1500,7 @@
             <collisionModelClient>	vehicles/russian/R44_T80/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.73 0.34 0.000000 0.000000	</tiling>
+            <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
           </camouflage>
         </_45mm_VT-43>
         <_37mm_automatic_SH-37>	shared	  <maxAmmo>	120	</maxAmmo>
@@ -1533,7 +1534,7 @@
             <collisionModelClient>	vehicles/russian/R44_T80/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.67 0.31 0.000000 0.000000	</tiling>
+            <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
           </camouflage>
         </_37mm_automatic_SH-37>
       </guns>

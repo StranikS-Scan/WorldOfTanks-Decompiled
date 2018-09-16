@@ -70,6 +70,20 @@ class CurtailingAwardsComposer(QuestsBonusComposer):
         return bonuses
 
 
+class AwardsWindowComposer(CurtailingAwardsComposer):
+
+    @classmethod
+    def _getShortBonusesData(cls, preformattedBonuses, size=AWARDS_SIZES.SMALL):
+        bonuses = []
+        for bonus in preformattedBonuses:
+            shortData = {'name': bonus.userName,
+             'label': bonus.getFormattedLabel(),
+             'imgSource': bonus.getImage(AWARDS_SIZES.SMALL)}
+            bonuses.append(shortData)
+
+        return bonuses
+
+
 class LinkedSetAwardsComposer(CurtailingAwardsComposer):
 
     def __init__(self, displayedAwardsCount, awardsFormatter=None):
@@ -130,29 +144,43 @@ class PackRentVehiclesAwardComposer(CurtailingAwardsComposer):
         return result
 
 
+def _getBonusesWithModifyTokens(bonuses, freeTokenName, addTokensCount, hasPawned):
+    if addTokensCount > 0:
+        newBonuses = []
+        hasFreeTokens = False
+        ctx = {}
+        for bonus in bonuses:
+            ctx = bonus.getContext()
+            if bonus.getName() == 'freeTokens':
+                value = {freeTokenName: {'count': bonus.getCount() + addTokensCount}}
+                newBonuses.append(FreeTokensBonus(value, ctx=ctx, hasPawned=hasPawned))
+                hasFreeTokens = True
+            newBonuses.append(bonus)
+
+        if not hasFreeTokens:
+            value = {freeTokenName: {'count': addTokensCount}}
+            newBonuses.append(FreeTokensBonus(value, ctx=ctx, hasPawned=hasPawned))
+        bonuses = newBonuses
+    return bonuses
+
+
 class PersonalMissionsAwardComposer(CurtailingAwardsComposer):
 
     def __init__(self, displayedAwardsCount, packer=None):
         self._displayedAwardsCount = displayedAwardsCount
         super(PersonalMissionsAwardComposer, self).__init__(displayedAwardsCount, packer or getPersonalMissionAwardPacker())
 
-    def getFormattedBonuses(self, bonuses, size=AWARDS_SIZES.SMALL, gap=0, isObtained=False, pawnedTokensCount=0, obtainedImage='', obtainedImageOffset=0, freeTokenName=''):
-        if pawnedTokensCount > 0:
-            newBonuses = []
-            hasFreeTokens = False
-            ctx = {}
-            for bonus in bonuses:
-                ctx = bonus.getContext()
-                if bonus.getName() == 'freeTokens':
-                    value = {freeTokenName: {'count': bonus.getCount() + pawnedTokensCount}}
-                    newBonuses.append(FreeTokensBonus(value, ctx=ctx, hasPawned=True))
-                    hasFreeTokens = True
-                newBonuses.append(bonus)
+    def getFormattedBonuses(self, bonuses, size=AWARDS_SIZES.SMALL, gap=0, isObtained=False, obtainedImage='', obtainedImageOffset=0):
+        preformattedBonuses = self.getPreformattedBonuses(bonuses)
+        return self._packBonuses(preformattedBonuses, size, gap, isObtained, obtainedImage, obtainedImageOffset)
 
-            if not hasFreeTokens:
-                value = {freeTokenName: {'count': pawnedTokensCount}}
-                newBonuses.append(FreeTokensBonus(value, ctx=ctx, hasPawned=True))
-            bonuses = newBonuses
+    def getPawnedQuestBonuses(self, bonuses, size=AWARDS_SIZES.SMALL, gap=0, isObtained=False, pawnedTokensCount=0, obtainedImage='', obtainedImageOffset=0, freeTokenName=''):
+        bonuses = _getBonusesWithModifyTokens(bonuses, freeTokenName, pawnedTokensCount, True)
+        preformattedBonuses = self.getPreformattedBonuses(bonuses)
+        return self._packBonuses(preformattedBonuses, size, gap, isObtained, obtainedImage, obtainedImageOffset)
+
+    def getReturnTokensQuestBonuses(self, bonuses, size=AWARDS_SIZES.SMALL, gap=0, isObtained=False, returnedTokensCount=0, obtainedImage='', obtainedImageOffset=0, freeTokenName=''):
+        bonuses = _getBonusesWithModifyTokens(bonuses, freeTokenName, returnedTokensCount, False)
         preformattedBonuses = self.getPreformattedBonuses(bonuses)
         return self._packBonuses(preformattedBonuses, size, gap, isObtained, obtainedImage, obtainedImageOffset)
 

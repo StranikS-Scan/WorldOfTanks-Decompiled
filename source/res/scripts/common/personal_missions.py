@@ -18,6 +18,10 @@ class PM_STATE(potapov_quests.PQ_STATE):
     pass
 
 
+class PM_FLAG(potapov_quests.PQ_FLAG):
+    pass
+
+
 PM_BRANCH_TO_FREE_TOKEN_NAME = potapov_quests.PM_BRANCH_TO_FREE_TOKEN_NAME
 PM_BRANCH_TO_FINAL_PAWN_COST = potapov_quests.PM_BRANCH_TO_FINAL_PAWN_COST
 PM_REWARD_BY_DEMAND = potapov_quests.PQ_REWARD_BY_DEMAND

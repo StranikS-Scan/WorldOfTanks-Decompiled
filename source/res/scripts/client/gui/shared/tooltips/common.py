@@ -34,7 +34,7 @@ from gui.Scaleform.daapi.view.lobby.rally.vo_converters import getReserveNameVO,
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.prb_control.items.stronghold_items import SUPPORT_TYPE, REQUISITION_TYPE, HEAVYTRUCKS_TYPE
-from gui.server_events.formatters import TOKEN_SIZES
+from gui.server_events.formatters import TOKEN_SIZES, DISCOUNT_TYPE
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.shared.gui_items import GUI_ITEM_TYPE, ACTION_ENTITY_ITEM
 from gui.shared.tooltips import ToolTipBaseData, TOOLTIP_TYPE, ACTION_TOOLTIPS_TYPE, ToolTipParameterField
@@ -912,6 +912,42 @@ class ActionTooltipData(ToolTipBaseData):
         return self.itemsCache.items.stats.money >= price or isPurchaseAllowed
 
 
+class ActionXPTooltipData(ToolTipBaseData):
+
+    def __init__(self, context):
+        super(ActionXPTooltipData, self).__init__(context, TOOLTIP_TYPE.CONTROL)
+
+    def getDisplayableData(self, newPrice, oldPrice):
+        oldPrice = Money.makeFromMoneyTuple(oldPrice)
+        if not oldPrice.isDefined():
+            oldPrice = Money(credits=0)
+        currency = Currency.CREDITS
+        for currency in Currency.ALL:
+            currencyValue = oldPrice.get(currency)
+            if currencyValue is not None:
+                break
+
+        newPrice = Money.makeFromMoneyTuple(newPrice)
+        if not newPrice.isDefined():
+            newPrice = Money.makeFrom(currency, 0)
+        headerText = i18n.makeString(TOOLTIPS.ACTIONPRICE_HEADER)
+        bodyText = i18n.makeString(TOOLTIPS.ACTIONPRICE_BODY, oldPrice=self.__formatPrice(oldPrice), newPrice=self.__formatPrice(newPrice))
+        return {'header': headerText,
+         'body': bodyText}
+
+    @staticmethod
+    def __formatPrice(price):
+        _ms = makeHtmlString
+        _template = 'html_templates:lobby/quests/actions'
+        _format = BigWorld.wg_getGoldFormat
+        if price.isCurrencyDefined(Currency.GOLD):
+            if price.gold is not None:
+                return _ms(_template, DISCOUNT_TYPE.FREE_XP, {'value': _format(price.gold)})
+            return ''
+        else:
+            return _ms(_template, DISCOUNT_TYPE.XP, {'value': _format(price.credits)}) if price.credits is not None else ''
+
+
 class ToolTipFortWrongTime(ToolTipBaseData):
 
     def __init__(self, context):
@@ -1327,10 +1363,12 @@ class MissionsToken(BlocksTooltipData):
         else:
             blocks.append(formatters.packTextBlockData(text_styles.main(TOOLTIPS.MISSIONS_TOKEN_QUESTS_MULTIPLE), padding={'left': -10,
              'bottom': 6}))
+            listToAdd = ''
             for quest in quests:
                 questName = makeString(MENU.QUOTE, string=quest.getUserName())
-                blocks.append(formatters.packTextBlockData(text_styles.main(makeString(TOOLTIPS.MISSIONS_TOKEN_QUEST, name=text_styles.neutral(questName))), padding={'top': -4}))
+                listToAdd = text_styles.concatStylesToMultiLine(listToAdd, text_styles.main(makeString(TOOLTIPS.MISSIONS_TOKEN_QUEST, name=text_styles.neutral(questName))))
 
+            blocks.append(formatters.packTextBlockData(listToAdd, padding={'top': -4}))
         return formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding={'left': 17,
          'bottom': 13})
 

@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/ui_kit/vehicle_action_btn_model.py
-from frameworks.wulf.gui_constants import ResourceValue
+from frameworks.wulf import Resource
 from frameworks.wulf import ViewModel
 
 class VehicleActionBtnModel(ViewModel):
@@ -25,6 +25,7 @@ class VehicleActionBtnModel(ViewModel):
         self._setBool(2, value)
 
     def _initialize(self):
-        self._addResourceProperty('image', ResourceValue.DEFAULT)
+        super(VehicleActionBtnModel, self)._initialize()
+        self._addResourceProperty('image', Resource.INVALID)
         self._addStringProperty('text', '')
         self._addBoolProperty('visible', False)

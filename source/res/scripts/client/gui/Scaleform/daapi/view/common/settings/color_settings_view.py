@@ -114,6 +114,7 @@ class ColorSettingsView(ColorSettingsViewMeta):
         if self.app is not None:
             self._savedBackgroundAlpha = self.app.getBackgroundAlpha()
             self.app.setBackgroundAlpha(0)
+            self.addListener(GameEvent.ON_BACKGROUND_ALPHA_CHANGE, self.__onExternalBackgroundAlphaChange, EVENT_BUS_SCOPE.GLOBAL)
         self.as_initDataS({'header': text_styles.superPromoTitle(SETTINGS.COLORSETTINGS_VIEW_HEADER),
          'typesHeader': text_styles.highTitle(SETTINGS.COLORSETTINGS_VIEW_SUBTITLE),
          'typesDesc': text_styles.main(SETTINGS.COLORSETTINGS_VIEW_DESCRIPTION),
@@ -137,6 +138,7 @@ class ColorSettingsView(ColorSettingsViewMeta):
     def _dispose(self):
         self.__hideColorPreviewFilter()
         self.settingsCore.clearStorages()
+        self.removeListener(GameEvent.ON_BACKGROUND_ALPHA_CHANGE, self.__onExternalBackgroundAlphaChange, EVENT_BUS_SCOPE.GLOBAL)
         if self.app is not None:
             self.app.setBackgroundAlpha(self._savedBackgroundAlpha)
             if hasattr(self.app, 'leaveGuiControlMode'):
@@ -226,3 +228,9 @@ class ColorSettingsView(ColorSettingsViewMeta):
     def __previewSettings(self, settings):
         for settingName, value in settings.iteritems():
             self.settingsCore.applySetting(settingName, value)
+
+    def __onExternalBackgroundAlphaChange(self, event):
+        self._savedBackgroundAlpha = event.ctx['alpha']
+        self.removeListener(GameEvent.ON_BACKGROUND_ALPHA_CHANGE, self.__onExternalBackgroundAlphaChange, EVENT_BUS_SCOPE.GLOBAL)
+        self.app.setBackgroundAlpha(0)
+        self.addListener(GameEvent.ON_BACKGROUND_ALPHA_CHANGE, self.__onExternalBackgroundAlphaChange, EVENT_BUS_SCOPE.GLOBAL)

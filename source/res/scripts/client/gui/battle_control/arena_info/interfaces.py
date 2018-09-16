@@ -84,6 +84,9 @@ class IArenaVehiclesController(IArenaLoadController, IContactsController):
     def invalidateFogOfWarHiddenVehiclesFlag(self, flag):
         pass
 
+    def invalidateFogOfWarEnabledFlag(self, flag):
+        pass
+
 
 class ITeamsBasesController(IArenaController):
     __slots__ = ()

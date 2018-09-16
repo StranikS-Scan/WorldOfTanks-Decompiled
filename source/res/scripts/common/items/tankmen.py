@@ -376,6 +376,8 @@ class TankmanDescr(object):
             raise SoftException('Skill already leaned (%s)' % skillName)
         if skillName not in skills_constants.ACTIVE_SKILLS:
             raise SoftException('Unknown skill (%s)' % skillName)
+        if self.role != 'commander' and skillName in skills_constants.COMMANDER_SKILLS:
+            raise SoftException('Cannot learn commander skill (%s) for another role (%s)' % (skillName, self.role))
         if self.roleLevel != MAX_SKILL_LEVEL:
             raise SoftException('Main role not fully leaned (%d)' % self.roleLevel)
         if self.__skills and self.__lastSkillLevel != MAX_SKILL_LEVEL:

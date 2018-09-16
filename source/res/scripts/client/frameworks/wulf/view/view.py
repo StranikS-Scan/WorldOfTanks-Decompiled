@@ -73,7 +73,7 @@ class View(PyObjectEntity):
     def createToolTip(self, event):
         return None
 
-    def createPopUp(self, event):
+    def createPopOver(self, event):
         return None
 
     def createContextMenu(self, event):
@@ -111,20 +111,16 @@ class View(PyObjectEntity):
         elif not event.isOn:
             _logger.error('%r: view should be destroyed in the core side by %r', self, event)
             return False
-        elif self.getParentWindow() is None:
-            _logger.error('%r: window is not set as parent', self)
-            return False
         else:
             window = None
             if event.eventType == ViewEventType.TOOLTIP:
                 window = self.createToolTip(event)
-            elif event.eventType == ViewEventType.POPUP:
-                window = self.createPopUp(event)
+            elif event.eventType == ViewEventType.POP_OVER:
+                window = self.createPopOver(event)
             elif event.eventType == ViewEventType.CONTEXT_MENU:
                 window = self.createContextMenu(event)
             if window is not None:
-                _logger.debug('%r: %r is created by %r', self, window, event)
-                window.load()
+                _logger.debug('%r: %r is loaded by %r', self, window, event)
                 return True
-            _logger.warning('%r: window is not created by event %r', self, event)
+            _logger.warning('%r: window is not loaded by event %r', self, event)
             return False

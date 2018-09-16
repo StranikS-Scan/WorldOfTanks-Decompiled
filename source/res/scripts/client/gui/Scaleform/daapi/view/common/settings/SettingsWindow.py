@@ -338,7 +338,7 @@ class SettingsWindow(SettingsWindowMeta):
 
     def __setColorGradingTechnique(self, value=None):
         colorSettingsSelectedTab = AccountSettings.getSettings(COLOR_SETTINGS_TAB_IDX)
-        if colorSettingsSelectedTab is None:
+        if colorSettingsSelectedTab is None or not graphics.isRendererPipelineDeferred():
             colorSettingsSelectedTab = 0
         label = SETTINGS.GRAPHICSSETTINGSOPTIONS_NONE
         image = RES_ICONS.MAPS_ICONS_SETTINGS_COLOR_GRADING_TECHNIQUE_NONE

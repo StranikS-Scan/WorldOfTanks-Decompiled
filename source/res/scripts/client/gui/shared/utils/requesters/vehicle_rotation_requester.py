@@ -25,6 +25,10 @@ class VehicleRotationRequester(AbstractSyncDataRequester, IVehicleRotationReques
     def isInfinite(self, groupNum):
         return self.getBattlesCount(groupNum) == -1
 
+    def unlockedBy(self, groupNum):
+        playGroupsToUnlock = self._groupLocks['unlockedBy']
+        return playGroupsToUnlock.get(groupNum, -1)
+
     @property
     def _groupLocks(self):
         return self.getCacheValue('groupLocks', {'groupBattles': [],

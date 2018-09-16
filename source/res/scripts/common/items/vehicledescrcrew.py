@@ -183,7 +183,7 @@ class VehicleDescrCrew(object):
             else:
                 baseSummLevel, summLevel, numInactive = self._computeSummSkillLevel(skillData, nonCommanderLevelIncrease=nonCommanderLevelIncrease, commanderLevelIncrease=commonLevelIncrease)
                 efficiency = summLevel / (len(self._crewCompactDescrs) * MAX_SKILL_LEVEL)
-                baseAvgLevel = baseSummLevel / len(skillData)
+                baseAvgLevel = baseSummLevel / len(self._crewCompactDescrs)
             skillEfficiencies.append((skillName, efficiency, baseAvgLevel))
 
         return skillEfficiencies

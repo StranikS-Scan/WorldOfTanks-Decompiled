@@ -89,6 +89,8 @@ def onFinishBattle(eventType, eventData, quest, processor):
     questProgress.increaseEveryProgress(PROGRESS_ID_MAIN_SERIES, resultInBattle)
     questProgress.increaseEveryProgress(PROGRESS_ID_ADD_SERIES, resultInBattleAdv, PROGRESS_ID_MAIN_SERIES)
 
+    print "+++++ quest {} {}".format(resultInBattle, resultInBattleAdv)
+
     eventData['results'].update(processor.checkComplete(questProgress, quest.progressID, additionalProgressID=PROGRESS_ID_ADD_SERIES))
 
     processor.setQuestProgress(quest.progressID, questProgress.save())

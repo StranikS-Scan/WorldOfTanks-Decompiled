@@ -154,6 +154,10 @@ def getInterfaceScalesList(size, powerOfTwo=True):
     return result
 
 
+def onInterfaceScaleChanged(scale):
+    BigWorld.onInterfaceScaleChanged(scale)
+
+
 def getNativeResolutionIndex():
     nativeResolution = BigWorld.wg_getNativeScreenResoulution(g_monitorSettings.currentMonitor)
     result = []

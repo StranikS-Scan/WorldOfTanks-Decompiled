@@ -8,8 +8,8 @@ from ..py_object_binder import PyObjectEntity
 class Command(PyObjectEntity):
     __slots__ = ('__event',)
 
-    def __init__(self, name):
-        super(Command, self).__init__(GUI.PyObjectCommand(name))
+    def __init__(self):
+        super(Command, self).__init__(GUI.PyObjectCommand())
         self.__event = Event()
 
     @property

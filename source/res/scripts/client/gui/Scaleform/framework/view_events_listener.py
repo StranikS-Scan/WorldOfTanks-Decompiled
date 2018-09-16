@@ -14,7 +14,7 @@ def _loadViewEventHandler(containerManager, e):
 
 
 def _loadUbViewEventHandler(containerManager, e):
-    containerManager.load(UBViewLoadParams(e.alias, e.viewClass), *e.args, **e.kwargs)
+    containerManager.load(UBViewLoadParams(e.alias, e.viewClass, e.scope), *e.args, **e.kwargs)
 
 
 def _preLoadViewEventHandler(containerManager, e):

@@ -158,11 +158,6 @@ class _ReusableInfo(object):
     def avatars(self):
         return self.__avatars
 
-    @property
-    def isWGMoneyOffline(self):
-        notAccrued = self.__personal.isWGMoneyRelatedZeroEarnings()
-        return notAccrued and self.lobbyContext.getServerSettings().wgmOfflineEmergency.isEnabled()
-
     def getAvatarInfo(self, dbID=0):
         if not dbID:
             dbID = self.__personal.avatar.accountDBID
@@ -220,7 +215,7 @@ class _ReusableInfo(object):
             for (vehicleID, _), data in details.iteritems():
                 vehicleInfo = getVehicleInfo(vehicleID)
                 if not vehicleInfo.intCD:
-                    intCD = getBotInfo(vehicleID).intCD
+                    intCD = vehicleID
                 else:
                     intCD = vehicleInfo.intCD
                 if vehicleInfo.accountDBID == playerDBID or vehicleInfo.team == playerTeam:
@@ -273,6 +268,13 @@ class _ReusableInfo(object):
             info = self.__vehicles.getVehicleSummarizeInfo(player, result)
             info.addAvatarInfo(weakref.proxy(getAvatarInfo(dbID)))
             if playerTeam == player.team:
+                allies.append(info)
+            enemies.append(info)
+
+        bots = self.__common.getBots()
+        for bot in bots.iteritems():
+            info = self.__vehicles.getAIBotVehicleSummarizeInfo(bot[0], bot[1], result)
+            if playerTeam == bot[1].team:
                 allies.append(info)
             enemies.append(info)
 

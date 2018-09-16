@@ -53,7 +53,7 @@ class RemoteCameraSender(InputHandlerCommand):
         if player.isObserver():
             return
         else:
-            vehicle = player.getVehicleAttached()
+            vehicle = player.vehicle if player.vehicle is not None else player.getVehicleAttached()
             if vehicle is None:
                 return
             controlMode = CTRL_MODES.index(cameraName)

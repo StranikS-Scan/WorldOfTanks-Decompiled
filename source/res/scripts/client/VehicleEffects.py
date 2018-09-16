@@ -8,6 +8,7 @@ from debug_utils import LOG_CODEPOINT_WARNING
 from items import vehicles
 from vehicle_systems.tankStructure import TankPartIndexes
 DUMMY_NODE_PREFIX = 'DM'
+MAX_FALLBACK_CHECK_DISTANCE = 10000.0
 HitEffectMapping = namedtuple('HitEffectMapping', ('componentName', 'hitTester'))
 
 class DamageFromShotDecoder(object):
@@ -45,8 +46,15 @@ class DamageFromShotDecoder(object):
                     if hitTestRes >= 0.0:
                         break
 
-                if hitTestRes is None or hitTestRes < 0.0:
-                    continue
+            if hitTestRes is None or hitTestRes < 0.0:
+                newPoint = collisionComponent.collideLocalPoint(compIdx, startPoint, MAX_FALLBACK_CHECK_DISTANCE)
+                if newPoint.length > 0.0:
+                    hitRay = endPoint - startPoint
+                    hitTestRes = hitRay.length
+                    endPoint = newPoint
+                    startPoint = endPoint - hitRay
+            if hitTestRes is None or hitTestRes < 0.0:
+                continue
             minDist = hitTestRes
             hitDir = endPoint - startPoint
             hitDir.normalise()

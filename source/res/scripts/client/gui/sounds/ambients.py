@@ -19,6 +19,7 @@ from gui.sounds.sound_constants import SoundFilters, PLAYING_SOUND_CHECK_PERIOD
 from gui.sounds.sound_utils import SOUND_DEBUG
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+from skeletons.gui.shared.utils import IHangarSpace
 
 def _getViewSoundEnv(view):
     if hasattr(view, '__sound_env__'):
@@ -360,6 +361,7 @@ class GuiAmbientsCtrl(object):
      app_settings.GUI_GLOBAL_SPACE_ID.LOBBY: LobbySpaceEnv,
      app_settings.GUI_GLOBAL_SPACE_ID.BATTLE_LOADING: BattleLoadingSpaceEnv,
      app_settings.GUI_GLOBAL_SPACE_ID.BATTLE: BattleSpaceEnv}
+    hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self, soundsCtrl):
         self._spaceEnv = EmptySpaceEnv(soundsCtrl)
@@ -370,10 +372,12 @@ class GuiAmbientsCtrl(object):
     def init(self):
         g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
         g_appLoader.onGUISpaceLeft += self.__onGUISpaceLeft
+        self.hangarSpace.onSpaceChanged += self.__onSpaceChanged
 
     def fini(self):
         g_appLoader.onGUISpaceEntered -= self.__onGUISpaceEntered
         g_appLoader.onGUISpaceLeft -= self.__onGUISpaceLeft
+        self.hangarSpace.onSpaceChanged -= self.__onSpaceChanged
         self.stopAllSounds()
         if self._spaceEnv is not None:
             self._clearSoundEnv(self._spaceEnv)
@@ -514,3 +518,8 @@ class GuiAmbientsCtrl(object):
     def __onAmbientChanged(self, ambient):
         SOUND_DEBUG('Ambient has been changed', ambient)
         self._restartSounds()
+
+    @staticmethod
+    def __onSpaceChanged():
+        _MC.g_musicController.stopAmbient(True)
+        _MC.g_musicController.stopMusic()

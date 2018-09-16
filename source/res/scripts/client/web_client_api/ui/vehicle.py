@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/ui/vehicle.py
+from itertools import groupby
 from types import NoneType
 from logging import getLogger
 from constants import NC_MESSAGE_PRIORITY
@@ -9,7 +10,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.vehiclePreview20.items_kit_helper import getCDFromId
 from gui.Scaleform.locale.W2C import W2C
 from gui.shared import event_dispatcher
-from gui.shared.money import Money, MONEY_UNDEFINED
+from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from helpers import dependency, i18n
 from helpers.time_utils import getTimestampFromISO, getDateTimeInUTC, utcToLocalDatetime, getDateTimeInLocal
 from items import ITEM_TYPES
@@ -19,6 +20,11 @@ from web_client_api import W2CSchema, Field, w2c
 from soft_exception import SoftException
 from web_client_api.common import ItemPackType, CompensationType, CompensationSpec, ItemPackTypeGroup, ItemPackEntry
 _logger = getLogger(__name__)
+REQUIRED_ITEM_FIELDS = {'type',
+ 'id',
+ 'count',
+ 'groupID'}
+REQUIRED_COMPENSATION_FIELDS = {'type', 'value', 'count'}
 
 class _ItemPackValidationError(SoftException):
     pass
@@ -30,20 +36,80 @@ class _ItemPackEntry(ItemPackEntry):
         return self._replace(**values)
 
 
-def _parseItemsPack(items):
-    specList = items or tuple()
-    requiredFields = {'type',
-     'id',
-     'count',
-     'groupID'}
-    requiredCompensationFields = {'type', 'value', 'count'}
-    if not all((set(requiredFields).issubset(spec) for spec in specList)):
-        raise SoftException('invalid item preview spec')
+def _validateItemsPack(items):
+    _validateItemsRequiredFields(items)
+    _validateItemsPackTypes(items)
+    _validateItemsCompensationRequiredFields(items)
+    _validateItemsCompensation(items)
+    return True
+
+
+def _validateItemsRequiredFields(items):
+    if not all((REQUIRED_ITEM_FIELDS.issubset(item) for item in items)):
+        raise SoftException('Invalid item preview spec')
+
+
+def _validateItemsPackTypes(items):
     validTypes = {v for _, v in ItemPackType.getIterator()}
-    specTypes = {spec['type'] for spec in specList}
+    specTypes = {item['type'] for item in items}
     invalidTypes = specTypes - validTypes
     if invalidTypes:
         raise _ItemPackValidationError('Unexpected item types {}, valid type identifiers: {}'.format(', '.join(invalidTypes), ', '.join(validTypes)))
+
+
+def _validateItemsCompensationRequiredFields(items):
+    for item in items:
+        if 'compensation' in item:
+            for compensationSpec in item['compensation']:
+                if not REQUIRED_COMPENSATION_FIELDS.issubset(compensationSpec):
+                    raise SoftException('Invalid compensation spec')
+                if not CompensationType.hasValue(compensationSpec['type']):
+                    raise SoftException('Unsupported compensation type "{}"'.format(compensationSpec['type']))
+
+
+def _validateItemsCompensation(items):
+    for _, groups in groupby(sorted(items, key=_getItemKey), key=_getItemKey):
+        group = list(groups)
+        if len(group) > 1:
+            item = group[0]
+            for i in range(1, len(group)):
+                if not _equalsCompensations(item, group[i]):
+                    raise SoftException("Compensations isn't equals")
+
+
+def _getItemKey(item):
+    return (item['id'], item['type'])
+
+
+def _equalsCompensations(itemA, itemB):
+    compKey = 'compensation'
+    itemAHasComp = compKey in itemA
+    itemBHasComp = compKey in itemB
+    if not itemAHasComp and not itemBHasComp:
+        return True
+    if itemAHasComp and itemBHasComp:
+        compensationsA = itemA[compKey]
+        compensationsB = itemB[compKey]
+        if len(compensationsA) != len(compensationsB):
+            return False
+        for compA, compB in zip(compensationsA, compensationsB):
+            if compA['type'] != compB['type']:
+                return False
+            compAValue = compA['value']
+            compBValue = compB['value']
+            for currency in Currency.ALL:
+                if currency in compAValue:
+                    if currency not in compBValue:
+                        return False
+                    if compAValue[currency] != compBValue[currency]:
+                        return False
+
+        return True
+    return False
+
+
+def _parseItemsPack(items):
+    specList = items
     result = []
     for spec in specList:
         spec['type'] = str(spec['type'])
@@ -52,10 +118,6 @@ def _parseItemsPack(items):
         if 'compensation' in spec:
             compensations = []
             for compensationSpec in spec['compensation']:
-                if not set(requiredCompensationFields).issubset(compensationSpec):
-                    raise SoftException('invalid compensation spec')
-                if not CompensationType.hasValue(compensationSpec['type']):
-                    raise SoftException('unsupported compensation type "{}"'.format(compensationSpec['type']))
                 compensations.append(CompensationSpec(**compensationSpec))
 
             tempComp = spec.pop('compensation')
@@ -106,7 +168,7 @@ class _VehiclePackPreviewSchema(W2CSchema):
     title = Field(required=True, type=basestring)
     end_date = Field(required=False, type=basestring)
     buy_price = Field(required=True, type=dict, validator=lambda value, _: _buyPriceValidator(value))
-    items = Field(required=True, type=(list, NoneType), validator=lambda value, _: _parseItemsPack(value))
+    items = Field(required=True, type=(list, NoneType), validator=lambda value, _: _validateItemsPack(value))
     back_url = Field(required=False, type=basestring)
     buy_params = Field(required=False, type=dict)
 
@@ -151,7 +213,7 @@ class VehiclePreviewWebApiMixin(object):
     @w2c(_VehiclePreviewSchema, 'vehicle_preview')
     def openVehiclePreview(self, cmd):
         vehicleID = cmd.vehicle_id
-        if self.__validatePreviewVehicle(vehicleID):
+        if self.__validVehiclePreview(vehicleID):
             event_dispatcher.showVehiclePreview(vehTypeCompDescr=vehicleID, previewAlias=self._getVehiclePreviewReturnAlias(cmd), previewBackCb=self._getVehiclePreviewReturnCallback(cmd))
         else:
             _pushInvalidPreviewMessage()
@@ -165,7 +227,7 @@ class VehiclePreviewWebApiMixin(object):
             if item.type in ItemPackTypeGroup.VEHICLE:
                 vehiclesID.append(item.id)
 
-        if vehiclesID and self.__validatePreviewVehiclePack(vehiclesID):
+        if vehiclesID and self.__validVehiclePreviewPack(vehiclesID):
             localEndTime = None
             if cmd.end_date:
                 timestamp = getTimestampFromISO(cmd.end_date)
@@ -183,7 +245,7 @@ class VehiclePreviewWebApiMixin(object):
     def _getVehiclePreviewReturnAlias(self, cmd):
         return VIEW_ALIAS.LOBBY_HANGAR
 
-    def __validatePreviewVehicle(self, intCD):
+    def __validVehiclePreview(self, intCD):
         vehicle = None
         try:
             vehicle = self.itemsCache.items.getStockVehicle(intCD, useInventory=True)
@@ -196,9 +258,9 @@ class VehiclePreviewWebApiMixin(object):
         else:
             return True
 
-    def __validatePreviewVehiclePack(self, vehiclesID):
+    def __validVehiclePreviewPack(self, vehiclesID):
         for vehID in vehiclesID:
-            if not self.__validatePreviewVehicle(vehID):
+            if not self.__validVehiclePreview(vehID):
                 return False
 
         return True

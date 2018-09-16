@@ -261,9 +261,11 @@ class MusicController(object):
         else:
             arena = BigWorld.player().arena
             period = arena.period
-            if (period == ARENA_PERIOD.PREBATTLE or period == ARENA_PERIOD.BATTLE) and self.__isOnArena:
-                if not self.isPlaying(AMBIENT_EVENT_COMBAT):
-                    self.play(AMBIENT_EVENT_COMBAT)
+            if period == ARENA_PERIOD.PREBATTLE or period == ARENA_PERIOD.BATTLE:
+                from BattleReplay import g_replayCtrl
+                if self.__isOnArena and not g_replayCtrl.isTimeWarpInProgress:
+                    if not self.isPlaying(AMBIENT_EVENT_COMBAT):
+                        self.play(AMBIENT_EVENT_COMBAT)
             if period == ARENA_PERIOD.BATTLE and self.__isOnArena:
                 self.play(MUSIC_EVENT_COMBAT)
             elif period == ARENA_PERIOD.AFTERBATTLE:

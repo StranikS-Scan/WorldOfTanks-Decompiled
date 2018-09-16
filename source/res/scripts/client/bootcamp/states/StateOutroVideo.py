@@ -16,7 +16,7 @@ class StateOutroVideo(AbstractState):
         pass
 
     def _doActivate(self):
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_OUTRO_VIDEO, None, {'video': 'video/_bootcampFinish.usm'}), EVENT_BUS_SCOPE.LOBBY)
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOTCAMP_OUTRO_VIDEO, None, {'video': 'videos/_bootcampFinish.usm'}), EVENT_BUS_SCOPE.LOBBY)
         return
 
     def _doDeactivate(self):

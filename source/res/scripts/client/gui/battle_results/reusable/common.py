@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_results/reusable/common.py
 from collections import defaultdict
-from collections import namedtuple
 import ArenaType
+from gui.battle_results.reusable.players import PlayerInfo
 from constants import ARENA_GUI_TYPE, ARENA_BONUS_TYPE, FINISH_REASON
 from debug_utils import LOG_ERROR
 from gui.battle_control import arena_visitor
 from gui.battle_results.reusable import shared
-_BotInfo = namedtuple('BotInfo', 'intCD name')
+from helpers.bots import preprocessBotName
 
 class CommonInfo(shared.UnpackedInfo):
     __slots__ = ('__arenaTypeID', '__winnerTeam', '__finishReason', '__arenaVisitor', '__bots')
@@ -17,11 +17,12 @@ class CommonInfo(shared.UnpackedInfo):
         self.__arenaTypeID = arenaTypeID
         self.__winnerTeam = winnerTeam
         self.__finishReason = finishReason
-        self.__bots = defaultdict(lambda : _BotInfo(0, ''))
+        self.__bots = defaultdict()
         if bots is not None:
-            for vehicleID, info in bots.iteritems():
+            for info in bots.iteritems():
                 if len(info) > 1:
-                    self.__bots[vehicleID] = _BotInfo(*info[:2])
+                    botPlayerInfo = PlayerInfo(team=info[1][0], name=preprocessBotName(info[1][1]))
+                    self.__bots[info[0]] = botPlayerInfo
                 LOG_ERROR('Bot information can not be unpacked', info)
                 break
 
@@ -78,4 +79,7 @@ class CommonInfo(shared.UnpackedInfo):
         return self.__arenaVisitor.getArenaIcon(iconKey)
 
     def getBotInfo(self, vehicleID):
-        return self.__bots[vehicleID]
+        return self.__bots[vehicleID] if vehicleID in self.__bots else None
+
+    def getBots(self):
+        return self.__bots

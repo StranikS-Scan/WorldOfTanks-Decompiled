@@ -183,6 +183,10 @@ def getConditionsDiffStructure(fullConditions, mainConditions):
     return result
 
 
+def hasAnySavedProgresses(savedProgresses):
+    return True if savedProgresses else False
+
+
 def questsSortFunc(a, b):
     res = cmp(a.isCompleted(), b.isCompleted())
     if res:

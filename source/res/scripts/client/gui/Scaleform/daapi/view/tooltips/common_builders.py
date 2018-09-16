@@ -45,6 +45,7 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.REF_SYS_DESCRIPTION, TOOLTIPS_CONSTANTS.REF_SYS_DESCRIPTION_UI, common.ToolTipRefSysDescription(contexts.HangarContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.REF_SYS_XP_MULTIPLIER, TOOLTIPS_CONSTANTS.REF_SYS_XP_MULTIPLIER_UI, common.ToolTipRefSysXPMultiplier(contexts.HangarContext())),
      DefaultFormatBuilder(TOOLTIPS_CONSTANTS.ACTION_PRICE, TOOLTIPS_CONSTANTS.COMPLEX_UI, common.ActionTooltipData(contexts.HangarContext())),
+     DefaultFormatBuilder(TOOLTIPS_CONSTANTS.ACTION_XP, TOOLTIPS_CONSTANTS.COMPLEX_UI, common.ActionXPTooltipData(contexts.HangarContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.QUESTS_VEHICLE_BONUSES, TOOLTIPS_CONSTANTS.COLUMN_FIELDS_UI, common.QuestVehiclesBonusTooltipData(contexts.QuestContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.ENVIRONMENT, TOOLTIPS_CONSTANTS.ENVIRONMENT_UI, common.EnvironmentTooltipData(contexts.HangarContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.SQUAD_RESTRICTIONS_INFO, TOOLTIPS_CONSTANTS.SQUAD_RESTRICTIONS_INFO_UI, common.SquadRestrictionsInfo(contexts.SquadRestrictionContext(None))),

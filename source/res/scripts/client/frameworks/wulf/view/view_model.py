@@ -144,8 +144,8 @@ class ViewModel(PyObjectEntity):
         self.proxy.addResourceField(name, defaultValue)
 
     def _addCommand(self, name):
-        cmd = Command(name)
-        self.proxy.addCommand(cmd.proxy)
+        cmd = Command()
+        self.proxy.addCommand(name, cmd.proxy)
         return cmd
 
     def _initialize(self):

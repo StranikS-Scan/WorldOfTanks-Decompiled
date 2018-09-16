@@ -1,24 +1,23 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/MemoryCriticalController.py
+from functools import partial
 import BigWorld
-from debug_utils import LOG_NOTE, LOG_CURRENT_EXCEPTION, LOG_ERROR
 import Event
+import WWISE
+from debug_utils import LOG_NOTE, LOG_CURRENT_EXCEPTION, LOG_ERROR
 
 class MemoryCriticalController(object):
     ORIGIN_DEFAULT = -1
     messages = property(lambda self: self.__messages)
     originTexQuality = property(lambda self: self.__originTexQuality)
-    originFloraQuality = property(lambda self: self.__originFloraQuality)
-    originTerrainQuality = property(lambda self: self.__originTerrainQuality)
 
     def __init__(self):
         self.__messages = []
         self.__originTexQuality = -1
-        self.__originFloraQuality = -1
-        self.__originTerrainQuality = -1
         self.__needReboot = False
         self.__loweredSettings = []
         self.onMemCrit = Event.Event()
+        self.__selfCheckInProgress = False
 
     def destroy(self):
         if self.onMemCrit is not None:
@@ -30,18 +29,14 @@ class MemoryCriticalController(object):
     def __call__(self):
         if self.__needReboot:
             return
+        WWISE.WW_onMemoryCritical()
+        self.__selfCheckInProgress = False
         self.__needReboot = True
-        self.__loweredSettings = [ t for t in BigWorld.graphicsSettings() if t[0] == 'TEXTURE_QUALITY' or t[0] == 'FLORA_QUALITY' or t[0] == 'TERRAIN_QUALITY' ]
+        self.__loweredSettings = [ t for t in BigWorld.graphicsSettings() if t[0] == 'TEXTURE_QUALITY' ]
         texQuality = BigWorld.getGraphicsSetting('TEXTURE_QUALITY')
-        floraQuality = BigWorld.getGraphicsSetting('FLORA_QUALITY')
-        terrainQuality = BigWorld.getGraphicsSetting('TERRAIN_QUALITY')
         pipelineType = BigWorld.getGraphicsSetting('RENDER_PIPELINE')
         textureSettings = [ t for t in self.__loweredSettings if t[0] == 'TEXTURE_QUALITY' ][0][2]
-        floraSettings = [ t for t in self.__loweredSettings if t[0] == 'FLORA_QUALITY' ][0][2]
-        terrainSettings = [ t for t in self.__loweredSettings if t[0] == 'TERRAIN_QUALITY' ][0][2]
         textureMinQuality = len(textureSettings) - 1
-        floraMinQuality = len(floraSettings) - 1
-        terrainMinQuality = len(terrainSettings) - 1
         if textureSettings[textureMinQuality][0] == 'OFF':
             textureMinQuality -= 1
         while 1:
@@ -49,23 +44,9 @@ class MemoryCriticalController(object):
 
         if textureMinQuality < texQuality:
             textureMinQuality = texQuality
-        while 1:
-            (floraSettings[floraMinQuality][1] is False or pipelineType == 1 and floraSettings[floraMinQuality][2] is True) and floraMinQuality -= 1
-
-        if floraMinQuality < floraQuality:
-            floraMinQuality = floraQuality
-        while 1:
-            (terrainSettings[terrainMinQuality][1] is False or pipelineType == 1 and terrainSettings[terrainMinQuality][2] is True) and terrainMinQuality -= 1
-
-        if terrainMinQuality < terrainQuality:
-            terrainMinQuality = terrainQuality
-        if texQuality < textureMinQuality or floraQuality < floraMinQuality or terrainQuality < terrainMinQuality:
+        if texQuality < textureMinQuality:
             if self.__originTexQuality == -1 and texQuality < textureMinQuality:
                 self.__originTexQuality = texQuality
-            if self.__originFloraQuality == -1 and floraQuality < floraMinQuality:
-                self.__originFloraQuality = floraQuality
-            if self.__originTerrainQuality == -1 and terrainQuality < terrainMinQuality:
-                self.__originTerrainQuality = terrainQuality
         else:
             message = (1, 'insufficient_memory_please_reboot')
             self.__messages.append(message)
@@ -79,22 +60,12 @@ class MemoryCriticalController(object):
         if texQuality < textureMinQuality:
             BigWorld.setGraphicsSetting('TEXTURE_QUALITY', textureMinQuality)
             LOG_NOTE('To save the memory the texture quality setting was force lowered to <%s>.' % textureSettings[textureMinQuality][0])
-        if floraQuality < floraMinQuality:
-            BigWorld.setGraphicsSetting('FLORA_QUALITY', floraMinQuality)
-            LOG_NOTE('To save the memory the flora quality setting was force lowered to <%s>.' % floraSettings[floraMinQuality][0])
-        if terrainQuality < terrainMinQuality:
-            BigWorld.setGraphicsSetting('TERRAIN_QUALITY', terrainMinQuality)
-            LOG_NOTE('To save the memory the terrain quality setting was force lowered to <%s>.' % terrainSettings[terrainMinQuality][0])
         BigWorld.commitPendingGraphicsSettings()
 
     def restore(self):
         toRestore = []
         if self.__originTexQuality != -1:
             toRestore.append(('TEXTURE_QUALITY', self.__originTexQuality))
-        if self.__originFloraQuality != -1:
-            toRestore.append(('FLORA_QUALITY', self.__originFloraQuality))
-        if self.__originTerrainQuality != -1:
-            toRestore.append(('TERRAIN_QUALITY', self.__originTerrainQuality))
         commit = False
         for label, originalIndex in toRestore:
             if self.__setGraphicsSetting(label, self.__originTexQuality):
@@ -105,10 +76,24 @@ class MemoryCriticalController(object):
         if commit:
             BigWorld.commitPendingGraphicsSettings()
             self.__originTexQuality = -1
-            self.__originFloraQuality = -1
-            self.__originTerrainQuality = -1
             self.__needReboot = False
             self.__messages = []
+
+    def startSelfcheck(self):
+        if self.__selfCheckInProgress or self.__needReboot:
+            LOG_NOTE('Cannot start selfcheck.')
+            return
+        self.__selfCheckInProgress = True
+        self.__checkStep(30, 1.0)
+
+    def cleanupCheck(self):
+        BigWorld.wg_free()
+
+    def __checkStep(self, blockSize, dt):
+        if not self.__selfCheckInProgress:
+            return
+        BigWorld.wg_alloc(blockSize * 1024 * 1024)
+        BigWorld.callback(dt, partial(self.__checkStep, blockSize, dt))
 
     @staticmethod
     def __setGraphicsSetting(label, index):

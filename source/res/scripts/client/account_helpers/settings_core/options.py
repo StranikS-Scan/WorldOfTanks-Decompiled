@@ -34,7 +34,7 @@ import nations
 import CommandMapping
 from helpers import i18n
 from Event import Event
-from AvatarInputHandler import _INPUT_HANDLER_CFG, AvatarInputHandler
+from AvatarInputHandler import INPUT_HANDLER_CFG, AvatarInputHandler
 from AvatarInputHandler.DynamicCameras import ArcadeCamera, SniperCamera, StrategicCamera, ArtyCamera
 from AvatarInputHandler.control_modes import PostMortemControlMode, SniperControlMode
 from debug_utils import LOG_NOTE, LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_WARNING
@@ -1453,7 +1453,7 @@ class MouseSetting(ControlSetting):
         self.setting = setting
         self.default = default
         self.masterSwitch = masterSwitch
-        self.__aihSection = ResMgr.openSection(_INPUT_HANDLER_CFG)
+        self.__aihSection = ResMgr.openSection(INPUT_HANDLER_CFG)
 
     def getCamera(self):
         if self._isControlModeAccessible():

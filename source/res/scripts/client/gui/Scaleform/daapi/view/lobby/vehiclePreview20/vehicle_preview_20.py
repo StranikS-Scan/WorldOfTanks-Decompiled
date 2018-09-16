@@ -26,10 +26,13 @@ from gui.shared.event_dispatcher import showWebShop, showOldShop
 from gui.shared.formatters import text_styles
 from helpers import dependency
 from helpers.i18n import makeString as _ms
+from skeletons.gui.game_control import IVehicleComparisonBasket
+from skeletons.gui.game_control import ITradeInController
+from skeletons.gui.game_control import IRestoreController
+from skeletons.gui.game_control import IHeroTankController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.utils import IHangarSpace
-from skeletons.gui.game_control import IVehicleComparisonBasket, ITradeInController, IRestoreController, IHeroTankController
 from web_client_api.common import ItemPackTypeGroup
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',

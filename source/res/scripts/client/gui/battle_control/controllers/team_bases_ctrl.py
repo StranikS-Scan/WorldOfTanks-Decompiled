@@ -96,11 +96,8 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
         return
 
     def stopControl(self):
-        while self.__clientIDs:
-            clientID = self.__clientIDs.pop()
-            for viewCmp in self._viewComponents:
-                viewCmp.removeTeamBase(clientID)
-
+        if self._viewComponents:
+            self.clearViewComponents()
         self.__battleCtx = None
         self.__arenaVisitor = None
         self.__clearUpdateCallbacks()
@@ -215,6 +212,12 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
                 viewCmp.removeTeamsBases()
 
         self.__stopCaptureSounds()
+
+    def clearViewComponents(self):
+        while self.__clientIDs:
+            clientID = self.__clientIDs.pop()
+            for viewCmp in self._viewComponents:
+                viewCmp.removeTeamBase(clientID)
 
     def _teamBaseLeft(self, points, invadersCnt):
         return not points

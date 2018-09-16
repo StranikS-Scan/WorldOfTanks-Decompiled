@@ -290,7 +290,10 @@ class VehicleSeller(ItemProcessor):
             return makeI18nSuccess(localKey, vehName=self.vehicle.userName, gainMoney=formatPrice(self.gainMoney), spendMoney=formatPrice(self.spendMoney), restoreInfo=restoreInfo, type=smType)
         else:
             localKey = 'vehicle_sell/success'
-            smType = SM_TYPE.Selling
+            if not sellForGold:
+                smType = SM_TYPE.Selling
+            else:
+                smType = SM_TYPE.SellingForGold
             if self.isRemovedAfterRent:
                 localKey = 'vehicle_remove/success'
                 smType = SM_TYPE.Remove

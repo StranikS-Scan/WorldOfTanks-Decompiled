@@ -24,6 +24,7 @@ class TooltipWindowModel(ViewModel):
         self._setView(2, value)
 
     def _initialize(self):
+        super(TooltipWindowModel, self)._initialize()
         self._addNumberProperty('x', 10)
         self._addNumberProperty('y', 10)
         self._addViewProperty('content')

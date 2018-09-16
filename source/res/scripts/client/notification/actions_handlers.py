@@ -15,6 +15,7 @@ from gui.battle_results import RequestResultsContext
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
 from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
 from gui.ranked_battles import ranked_helpers
+from gui.server_events.events_dispatcher import showPersonalMission
 from gui.shared import g_eventBus, events, actions, EVENT_BUS_SCOPE, event_dispatcher as shared_events
 from gui.shared.utils import decorators
 from gui.wgcg.clan import contexts as clan_ctxs
@@ -555,6 +556,24 @@ class _OpenNotrecruitedHandler(_ActionHandler):
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_BARRACKS, ctx={'location': BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
+class OpenPersonalMissionHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        notification = model.getNotification(self.getNotType(), entityID)
+        savedData = notification.getSavedData()
+        if savedData is not None:
+            showPersonalMission(missionID=savedData['questID'])
+        return
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -578,7 +597,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _DeclineClanInviteHandler,
  _OpenEventBoardsHandler,
  OpenCustomizationHandler,
- _OpenNotrecruitedHandler)
+ _OpenNotrecruitedHandler,
+ OpenPersonalMissionHandler)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

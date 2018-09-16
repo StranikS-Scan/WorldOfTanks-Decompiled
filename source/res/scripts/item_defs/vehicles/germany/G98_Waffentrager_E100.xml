@@ -1,4 +1,5 @@
 <G98_Waffentrager_E100.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
     <commander></commander>
     <gunner></gunner>
@@ -747,7 +748,6 @@
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <reloadEffect>	reload_automat_reloading_115_152	</reloadEffect>
           <camouflage>
-            <exclusionMask></exclusionMask>
             <tiling>	1 0.5 0.000000 0.000000	</tiling>
           </camouflage>
         </Gun_VK4502P>
@@ -797,7 +797,6 @@
       <physicsShape>	1.000 0.000 0.944 0.000 0.928 0.000 0.674 0.000 0.500 0.500 0.019 0.500 0.000 0.000 0.454	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
-        <exclusionMask></exclusionMask>
         <tiling>	0.895 0.895 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_1_Waffentrager_E100>

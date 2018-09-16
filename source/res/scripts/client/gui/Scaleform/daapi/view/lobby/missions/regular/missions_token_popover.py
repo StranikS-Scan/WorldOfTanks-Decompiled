@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/missions/regular/missions_token_popover.py
 import BigWorld
+from gui import GUI_SETTINGS
 from gui.Scaleform.daapi.view.meta.MissionsTokenPopoverMeta import MissionsTokenPopoverMeta
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -73,8 +74,11 @@ class MissionsTokenPopover(MissionsTokenPopoverMeta):
             descrText = ms(QUESTS.MISSIONS_TOKENPOPOVER_DESCR, name=text_styles.neutral(ms(self._token.getUserName())))
         else:
             descrText = ms(QUESTS.MISSIONS_TOKENPOPOVER_DESCR_SHOP, name=text_styles.neutral(ms(self._token.getUserName())))
+        buyBtnVisible = self._token.isOnSale() or mainQuest.isTokensOnSale()
+        if not GUI_SETTINGS.tokenShopURL:
+            buyBtnVisible = False
         self.as_setStaticDataS({'headerText': text_styles.highTitle(ms(QUESTS.MISSIONS_TOKENPOPOVER_HEADER, name=ms(self._token.getUserName()))),
          'descrText': text_styles.main(descrText),
          'imageSrc': self._token.getImage(TOKEN_SIZES.MEDIUM),
          'buyBtnLabel': QUESTS.MISSIONS_TOKENPOPOVER_BUYBTN_LABEL,
-         'buyBtnVisible': self._token.isOnSale() or mainQuest.isTokensOnSale()})
+         'buyBtnVisible': buyBtnVisible})

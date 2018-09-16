@@ -23,7 +23,6 @@ from skeletons.gui.server_events import IEventsCache
 class AWARDS_SIZES(CONST_CONTAINER):
     SMALL = 'small'
     BIG = 'big'
-    HUGE = 'huge'
 
 
 class COMPLETION_TOKENS_SIZES(CONST_CONTAINER):

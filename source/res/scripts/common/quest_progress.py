@@ -581,6 +581,7 @@ class BaseQuestProgress(object):
                         self.setCompleted(progressID, self.isCompleted(mainID))
                 if progress.getBattlesLimit() < progress.getFailedBattles() + progress.getGoal():
                     if self.isCompleted(mainID):
+                        self.setWasFailed(progressID, True)
                         self.setZero(progressID)
                     else:
                         self.setFailed(progressID)
@@ -618,6 +619,7 @@ class BaseQuestProgress(object):
                 else:
                     self.setFailed(attemptsID)
                     if self.isCompleted(mainProgressID):
+                        self.setWasFailed(attemptsID, True)
                         self.setZero(attemptsID)
         elif not self.isCompleted(attemptsID):
             if value:
@@ -631,13 +633,13 @@ class BaseQuestProgress(object):
 
     def setWasFailed(self, progressID, value):
         progress = self._progressStorage.getProgress(progressID)
-        if progress.isAward() and progress.isMain():
+        if progress.isAward():
             self._progressBeforeFailed = str(self._progressStorage.save())
             self._wasFailed = value
 
     def wasFailed(self, progressID):
         progress = self._progressStorage.getProgress(progressID)
-        if progress.isAward() and progress.isMain():
+        if progress.isAward():
             return self._wasFailed
         else:
             return False

@@ -573,7 +573,7 @@ class StrongholdBattleRoom(FortClanBattleRoomMeta, IUnitListener, IStrongholdLis
         return {'icon': ''.join(('../maps/icons/filters/tanks/', vType, '.png')),
          'filterValue': value,
          'selected': False,
-         'tooltip': makeTooltip('#menu:carousel_tank_filter/{}'.format(vType), '#tank_carousel_filter:tooltip/vehicleTypes/body')}
+         'tooltip': makeTooltip('#menu:carousel_tank_filter/{}'.format(vType), '#fortifications:tooltip/vehicleTypes/body')}
 
     def __setFilters(self, slotIndex, filterState):
         self.__vehTypesInSlotFilters[slotIndex] = filterState

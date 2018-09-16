@@ -83,12 +83,12 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
         self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def onTutorialAcceptBtnClicked(self):
-        if self.__lastTutorState == _PTF.FOUR_FAL_SHOWN:
+        if self.__lastTutorState in (_PTF.MULTIPLE_FAL_SHOWN, _PTF.PM2_MULTIPLE_FAL_SHOWN):
             self.soundManager.playSound(SOUNDS.FOUR_AWARD_LISTS_RECEIVED_CONFIRM)
-        elif self.__lastTutorState == _PTF.ONE_FAL_SHOWN:
+        elif self.__lastTutorState in (_PTF.ONE_FAL_SHOWN, _PTF.PM2_ONE_FAL_SHOWN):
             self.soundManager.playSound(SOUNDS.ONE_AWARD_LIST_RECEIVED_CONFIRM)
         self.__resetToIncomplete()
-        if self.__lastTutorState == _PTF.FOUR_FAL_SHOWN:
+        if self.__lastTutorState in (_PTF.MULTIPLE_FAL_SHOWN, _PTF.PM2_MULTIPLE_FAL_SHOWN):
             if self.__PMCache.getFreeTokensCount(self.getBranch()) >= PM_BRANCH_TO_FINAL_PAWN_COST[self.getBranch()]:
                 showPersonalMissionDetails(self.__getLastQuest().getID())
             else:
@@ -257,8 +257,11 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
             status = text_styles.concatStylesWithSpace(icons.markerBlocked(), text_styles.error(PERSONAL_MISSIONS.STATUSPANEL_STATUS_LOCKED))
         elif chainState.questInProgress is not None:
             quest = chainState.questInProgress
-            isQuestInProgress = True
-            status = text_styles.concatStylesWithSpace(icons.inProgress(), text_styles.tutorial(quest.getUserName()))
+            if quest.isOnPause:
+                status = text_styles.concatStylesWithSpace(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ONPAUSE, 16, 16, -3, 8), text_styles.playerOnline(quest.getUserName()))
+            else:
+                isQuestInProgress = True
+                status = text_styles.concatStylesWithSpace(icons.inProgress(), text_styles.tutorial(quest.getUserName()))
             if quest.areTokensPawned():
                 descr = text_styles.neutral(_ms(PERSONAL_MISSIONS.STATUSPANEL_STATUS_PAWNED, count=quest.getPawnCost(), icon=getHtmlAwardSheetIcon(quest.getQuestBranch())))
             elif quest.isMainCompleted():
@@ -270,7 +273,7 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
                 if pawnCost <= freeSheets:
                     btnEnabled = True
         elif chainState.isFullCompleted:
-            status = text_styles.concatStylesWithSpace(icons.doubleCheckmark(-2), text_styles.bonusAppliedText(_ms(PERSONAL_MISSIONS.STATUSPANEL_STATUS_ALLEXCELLENTDONE, vehicleClass=vehicleClass)))
+            status = text_styles.concatStylesWithSpace(icons.doubleCheckmark(1), text_styles.bonusAppliedText(_ms(PERSONAL_MISSIONS.STATUSPANEL_STATUS_ALLEXCELLENTDONE, vehicleClass=vehicleClass)))
         elif chainState.isCompleted:
             status = text_styles.concatStylesWithSpace(icons.checkmark(-2), text_styles.bonusAppliedText(_ms(PERSONAL_MISSIONS.STATUSPANEL_STATUS_ALLDONE, vehicleClass=vehicleClass)))
         elif not chainState.hasVehicle:
@@ -359,7 +362,6 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
             vehData = getChainVehRequirements(currentOperation, self.getChainID(), useIcons=True)
             label = text_styles.stats(_ms(template, vehData=vehData))
             state = PERSONAL_MISSIONS_ALIASES.OPERATION_CURRENT_STATE
-            tooltip['tooltip'] = TOOLTIPS.PERSONALMISSIONS_OPERATIONTITLE_CURRENTSTATE
         elif not chainState.hasVehicle:
             if self.getBranch() == PM_BRANCH.PERSONAL_MISSION_2:
                 template = PERSONAL_MISSIONS.OPERATIONTITLE_LABEL_NOVEHICLE_PM2
@@ -424,31 +426,36 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
         completedQuests = activeOperation.getCompletedFinalQuests()
         return findFirst(lambda q: q.getID() not in completedQuests, activeOperation.getFinalQuests().values())
 
+    def __getTutorMultipleState(self):
+        return _PTF.MULTIPLE_FAL_SHOWN if self.getBranch() == PM_BRANCH.REGULAR else _PTF.PM2_MULTIPLE_FAL_SHOWN
+
+    def __getTutorSingleState(self):
+        return _PTF.ONE_FAL_SHOWN if self.getBranch() == PM_BRANCH.REGULAR else _PTF.PM2_ONE_FAL_SHOWN
+
     def __checkTutorState(self):
         if self.__callbackID is not None:
             self.__callbackID = None
-        if self.getBranch() == PM_BRANCH.PERSONAL_MISSION_2:
-            return
-        else:
-            storageData = self.__settingsCore.serverSettings.getUIStorage()
-            if not storageData.get(_PTF.FOUR_FAL_SHOWN):
-                activeOperation = self.__PMCache.getIncompleteOperation(self.getBranch())
-                chainsCount = len(activeOperation.getQuests())
-                falCount = self.__PMCache.getFreeTokensCount(self.getBranch())
-                if self.getBranch() == PM_BRANCH.REGULAR:
-                    falGained = falCount - (storageData.get(_PTF.INITIAL_FAL_COUNT) or 0)
-                else:
-                    falGained = falCount
-                finalMissionPawnCost = PM_BRANCH_TO_FINAL_PAWN_COST[self.getBranch()]
-                if len(activeOperation.getCompletedFinalQuests()) == chainsCount - 1:
-                    pawnedFalCount = self.__PMCache.getPawnedTokensCount(self.getBranch())
-                    if falCount >= finalMissionPawnCost:
-                        self.__showTutor(_PTF.FOUR_FAL_SHOWN)
-                    elif falCount + pawnedFalCount >= finalMissionPawnCost:
-                        self.__showTutor(_PTF.FOUR_FAL_SHOWN, showPawned=True)
-                elif not storageData.get(_PTF.ONE_FAL_SHOWN) and falGained > 0:
-                    self.__showTutor(_PTF.ONE_FAL_SHOWN)
-            return
+        storageData = self.__settingsCore.serverSettings.getUIStorage()
+        multipleState = self.__getTutorMultipleState()
+        singleState = self.__getTutorSingleState()
+        if not storageData.get(multipleState):
+            activeOperation = self.__PMCache.getIncompleteOperation(self.getBranch())
+            chainsCount = len(activeOperation.getQuests())
+            falCount = self.__PMCache.getFreeTokensCount(self.getBranch())
+            if self.getBranch() == PM_BRANCH.REGULAR:
+                falGained = falCount - (storageData.get(_PTF.INITIAL_FAL_COUNT) or 0)
+            else:
+                falGained = falCount
+            finalMissionPawnCost = PM_BRANCH_TO_FINAL_PAWN_COST[self.getBranch()]
+            if len(activeOperation.getCompletedFinalQuests()) == chainsCount - 1:
+                pawnedFalCount = self.__PMCache.getPawnedTokensCount(self.getBranch())
+                if falCount >= finalMissionPawnCost:
+                    self.__showTutor(multipleState)
+                elif falCount + pawnedFalCount >= finalMissionPawnCost:
+                    self.__showTutor(multipleState, showPawned=True)
+            elif not storageData.get(singleState) and falGained > 0:
+                self.__showTutor(singleState)
+        return
 
     def __navigateTo(self, operationID=None, chainID=None):
         if operationID is not None:
@@ -464,24 +471,49 @@ class PersonalMissionsPage(LobbySubView, PersonalMissionsPageMeta, PersonalMissi
 
     def __showTutor(self, tutorState, showPawned=False):
         self.__resetToIncomplete()
-        if tutorState == _PTF.ONE_FAL_SHOWN:
+        if tutorState in (_PTF.ONE_FAL_SHOWN, _PTF.PM2_ONE_FAL_SHOWN):
             self.soundManager.playSound(SOUNDS.ONE_AWARD_LIST_RECEIVED)
-            self.as_showFirstAwardSheetObtainedPopupS(True)
+            self.as_showFirstAwardSheetObtainedPopupS(True, self._packFirstShowAwardTutorData())
         else:
             self.soundManager.playSound(SOUNDS.FOUR_AWARD_LISTS_RECEIVED)
-            self.as_showFourAwardSheetsObtainedPopupS(True, self.__packTutorData(showPawned))
+            self.as_showFourAwardSheetsObtainedPopupS(True, self.__packUseFreeSheetsAwardTutorData(showPawned))
         self.__lastTutorState = tutorState
         self.__settingsCore.serverSettings.saveInUIStorage({self.__lastTutorState: True})
 
-    def __packTutorData(self, hasPawned):
+    def _packFirstShowAwardTutorData(self):
+        if self.getBranch() == PM_BRANCH.REGULAR:
+            res = {'icon': RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_AWARD_SHEETS_BRANCH_0_FREE_SHEET_BIG,
+             'title': PERSONAL_MISSIONS.FREESHEETOBTAINEDPOPUP_REGULAR_TITLE,
+             'titleLeft': PERSONAL_MISSIONS.FREESHEETOBTAINEDPOPUP_REGULAR_TITLELEFT,
+             'descrLeft': PERSONAL_MISSIONS.FREESHEETOBTAINEDPOPUP_REGULAR_DESCRLEFT,
+             'titleRight': PERSONAL_MISSIONS.FREESHEETOBTAINEDPOPUP_REGULAR_TITLERIGHT,
+             'descrRight': PERSONAL_MISSIONS.FREESHEETOBTAINEDPOPUP_REGULAR_DESCRRIGHT}
+        else:
+            res = {'icon': RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_AWARD_SHEETS_BRANCH_2_FREE_SHEET_BIG,
+             'title': PERSONAL_MISSIONS.FREESHEETOBTAINEDPOPUP_PM2_TITLE,
+             'titleLeft': PERSONAL_MISSIONS.FREESHEETOBTAINEDPOPUP_PM2_TITLELEFT,
+             'descrLeft': PERSONAL_MISSIONS.FREESHEETOBTAINEDPOPUP_PM2_DESCRLEFT,
+             'titleRight': PERSONAL_MISSIONS.FREESHEETOBTAINEDPOPUP_PM2_TITLERIGHT,
+             'descrRight': PERSONAL_MISSIONS.FREESHEETOBTAINEDPOPUP_PM2_DESCRRIGHT}
+        return res
+
+    def __packUseFreeSheetsAwardTutorData(self, hasPawned):
+        if self.getBranch() == PM_BRANCH.REGULAR:
+            iconSource = RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_REGULAR_ORDER_BLANK
+            freeSheetsDescr = PERSONAL_MISSIONS.FOURFREESHEETSOBTAINEDPOPUP_REGULAR_DESCR
+            freeSheetsPawnedDescr = PERSONAL_MISSIONS.FOURFREESHEETSOBTAINEDPOPUP_REGULAR_PAWNEDDESCR
+        else:
+            iconSource = RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_PM2_ORDER_BLANK
+            freeSheetsDescr = PERSONAL_MISSIONS.FOURFREESHEETSOBTAINEDPOPUP_PM2_DESCR
+            freeSheetsPawnedDescr = PERSONAL_MISSIONS.FOURFREESHEETSOBTAINEDPOPUP_PM2_PAWNEDDESCR
         questName = self.__getLastQuest().getShortUserName()
         if hasPawned:
-            description = _ms(PERSONAL_MISSIONS.FOURFREESHEETSOBTAINEDPOPUP_DESCR2, pawnedCount=self.__PMCache.getPawnedTokensCount(self.getBranch()), questName=questName)
+            description = _ms(freeSheetsPawnedDescr, pawnedCount=self.__PMCache.getPawnedTokensCount(self.getBranch()), questName=questName)
         else:
-            description = _ms(PERSONAL_MISSIONS.FOURFREESHEETSOBTAINEDPOPUP_DESCR1, questName=questName)
+            description = _ms(freeSheetsDescr, questName=questName)
         return {'icon0': {'icon': AwardSheetPresenter.getIcon(AwardSheetPresenter.Size.BIG),
                    'label': 'x' + str(PM_BRANCH_TO_FINAL_PAWN_COST[self.getBranch()])},
-         'icon1': {'icon': RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_ORDER_BLANK,
+         'icon1': {'icon': iconSource,
                    'label': questName},
          'icon2': {'icon': RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_GEAR_BIG,
                    'label': 'x1'},

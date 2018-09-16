@@ -61,7 +61,7 @@ class ValueProgressBuilder(ClientProgressBuilder, quest_progress.ValueProgressBu
 
     @classmethod
     def _getValuesStrategy(cls, clientData):
-        return strategy.ValueProgressGetter
+        return strategy.AverageProgressGetter if isinstance(clientData, DESCRIPTIONS.AVERAGE) else strategy.ValueProgressGetter
 
     @classmethod
     def _createBodyProgress(cls, commonProgress, clientData):

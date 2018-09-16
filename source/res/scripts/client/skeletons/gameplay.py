@@ -3,8 +3,6 @@
 
 
 class GameplayStateID(object):
-    START = 'game.start'
-    STOP = 'game.stop'
     OFFLINE = 'game.offline'
     ONLINE = 'game.online'
     BATTLE_REPLAY = 'game.replay'

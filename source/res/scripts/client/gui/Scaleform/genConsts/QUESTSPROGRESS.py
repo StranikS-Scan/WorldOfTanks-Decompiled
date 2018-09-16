@@ -24,6 +24,7 @@ class QUESTSPROGRESS(object):
     QUEST_DONE_PERFECTLY = 'quest_done_perfectly'
     QUEST_IN_PROGRESS = 'quest_in_progress'
     QUEST_NOT_AVAILABLE = 'quest_not_available'
+    QUEST_ON_PAUSE = 'quest_on_pause'
     SILVER_AT_SPG = 'silver_AT-SPG'
     SILVER_HEAVY_TANK = 'silver_heavyTank'
     SILVER_LIGHT_TANK = 'silver_lightTank'

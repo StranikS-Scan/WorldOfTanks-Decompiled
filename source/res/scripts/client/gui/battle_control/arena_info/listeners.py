@@ -116,7 +116,7 @@ class ArenaVehiclesListener(_Listener):
             arena.onTeamKiller += self.__arena_onTeamKiller
             arena.onInteractiveStats += self.__arena_onInteractiveStats
             arena.onGameModeSpecifcStats += self.__arena_onGameModeSpecifcStats
-            arena.onFogOfWarHiddenVehiclesSet += self.__arena_onFogOfWarHiddenVehiclesSet
+            arena.onFogOfWarEnabled += self.__arena_onFogOfWarEnabled
         return
 
     def stop(self):
@@ -134,7 +134,7 @@ class ArenaVehiclesListener(_Listener):
             arena.onTeamKiller -= self.__arena_onTeamKiller
             arena.onInteractiveStats -= self.__arena_onInteractiveStats
             arena.onGameModeSpecifcStats -= self.__arena_onGameModeSpecifcStats
-            arena.onFogOfWarHiddenVehiclesSet -= self.__arena_onFogOfWarHiddenVehiclesSet
+            arena.onFogOfWarEnabled -= self.__arena_onFogOfWarEnabled
         super(ArenaVehiclesListener, self).stop()
         return
 
@@ -214,7 +214,10 @@ class ArenaVehiclesListener(_Listener):
                 self._invokeListenersMethod('updateVehiclesStats', [(flags, vo)], self._arenaDP)
 
     def __arena_onFogOfWarHiddenVehiclesSet(self, flag):
-        self._invokeListenersMethod('invalidateFogOfWarHiddenVehiclesFlag', flag)
+        pass
+
+    def __arena_onFogOfWarEnabled(self, flag):
+        self._invokeListenersMethod('invalidateFogOfWarEnabledFlag', flag)
 
     def __isRequiredDataExists(self):
         return self._arenaDP is not None and self._arenaDP.isRequiredDataExists()

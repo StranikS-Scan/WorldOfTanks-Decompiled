@@ -10,7 +10,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework.view_events_listener import ViewEventsListener
 from gui.Scaleform.framework.entities.abstract.ApplicationMeta import ApplicationMeta
 from gui.Scaleform.framework.managers.loaders import SFViewLoadParams
-from gui.impl.windows.main_window import MainWindow
+from gui.impl.pub.main_window import MainWindow
 from gui.shared.events import AppLifeCycleEvent, GameEvent, DirectLoadViewEvent
 from gui.shared import EVENT_BUS_SCOPE
 from helpers import dependency
@@ -64,7 +64,9 @@ class AppEntry(Flash, ApplicationMeta):
     guiApp = dependency.descriptor(IGuiLoader)
 
     def __init__(self, userWndFlags, swfName, appNS, daapiBridge=None):
-        super(AppEntry, self).__init__(swfName, path=SCALEFORM_SWF_PATH_V3)
+        self.__mainWnd = MainWindow(userWndFlags, None)
+        self.__mainWnd.load()
+        super(AppEntry, self).__init__(swfName, path=SCALEFORM_SWF_PATH_V3, descriptor=self.__mainWnd.descriptor)
         self.proxy = weakref.proxy(self)
         self._loaderMgr = None
         self._containerMgr = None
@@ -91,8 +93,6 @@ class AppEntry(Flash, ApplicationMeta):
         self.__guiCtrlModeFlags = GUI_CTRL_MODE_FLAG.CURSOR_DETACHED
         self.__daapiBridge = daapiBridge or DAAPIRootBridge()
         self.__daapiBridge.setPyScript(self.proxy)
-        self.__mainWnd = MainWindow(userWndFlags, None)
-        self.__mainWnd.load()
         self.fireEvent(AppLifeCycleEvent(self.__ns, AppLifeCycleEvent.CREATING))
         return
 
@@ -404,9 +404,16 @@ class AppEntry(Flash, ApplicationMeta):
 
     def setBackgroundAlpha(self, value):
         self.movie.backgroundAlpha = value
+        self.fireEvent(GameEvent(GameEvent.ON_BACKGROUND_ALPHA_CHANGE, {'alpha': value}), EVENT_BUS_SCOPE.GLOBAL)
 
     def getBackgroundAlpha(self):
         return self.movie.backgroundAlpha
+
+    def blurBackgroundViews(self, ownLayer, layers, blurAnimRepeatCount):
+        self.as_blurBackgroundViewsS(ownLayer, layers, blurAnimRepeatCount)
+
+    def unblurBackgroundViews(self):
+        self.as_unblurBackgroundViewsS()
 
     def _createManagers(self):
         self._loaderMgr = self._createLoaderManager()

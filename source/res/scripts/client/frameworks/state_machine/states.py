@@ -13,23 +13,23 @@ class StateFlags(object):
     PARALLEL = 16
 
 
-def _filterBaseState(child):
-    return isinstance(child, BaseState)
+def _filterState(child):
+    return isinstance(child, State)
 
 
 def _filterInitialState(child):
-    return isinstance(child, BaseState) and child.isInitial()
+    return isinstance(child, State) and child.isInitial()
 
 
 def _filterBaseTransition(child):
     return isinstance(child, BaseTransition)
 
 
-class BaseState(Node):
+class State(Node):
     __slots__ = ('__stateID', '__flags', '__isEntered')
 
     def __init__(self, stateID='', flags=StateFlags.UNDEFINED):
-        super(BaseState, self).__init__()
+        super(State, self).__init__()
         self.__stateID = stateID
         self.__flags = flags
         self.__isEntered = False
@@ -39,7 +39,7 @@ class BaseState(Node):
 
     def clear(self):
         self.__isEntered = False
-        super(BaseState, self).clear()
+        super(State, self).clear()
 
     def getStateID(self):
         return self.__stateID
@@ -78,22 +78,47 @@ class BaseState(Node):
 
         return
 
+    def getInitial(self):
+        children = self.getChildren(filter_=_filterInitialState)
+        if not children:
+            return None
+        else:
+            if len(children) > 1:
+                raise StateError('State {} should be have one initial state, found {}'.format(self, children))
+            return children[0]
+
     def addChildState(self, state):
-        if not isinstance(state, BaseState):
-            raise StateError('Instance of BaseState class is required')
+        if not isinstance(state, State):
+            raise StateError('Instance of State class is required')
         if self.isFinal():
             raise StateError('Sub-state can not be added to final state')
         self._addChild(state)
 
     def removeChildState(self, state):
-        if not isinstance(state, BaseState):
-            raise StateError('Instance of BaseState class is required')
+        if not isinstance(state, State):
+            raise StateError('Instance of State class is required')
         if self.isFinal():
             raise StateError('Sub-state can not be removed from final state')
         self._removeChild(state)
 
     def getChildrenStates(self):
-        return self.getChildren(filter_=_filterBaseState)
+        return self.getChildren(filter_=_filterState)
+
+    def addTransition(self, transition, target=None):
+        if not isinstance(transition, BaseTransition):
+            raise StateError('Instance of BaseTransition class is required')
+        if target is not None:
+            transition.setTarget(target)
+        self._addChild(transition)
+        return
+
+    def removeTransition(self, transition):
+        if not isinstance(transition, BaseTransition):
+            raise StateError('Instance of BaseTransition class is required')
+        self._removeChild(transition)
+
+    def getTransitions(self):
+        return self.getChildren(filter_=_filterBaseTransition)
 
     def configure(self, *args, **kwargs):
         pass
@@ -121,38 +146,6 @@ class BaseState(Node):
 
     def _onExited(self):
         pass
-
-
-class State(BaseState):
-    __slots__ = ()
-
-    def __init__(self, stateID='', flags=StateFlags.SINGULAR):
-        super(State, self).__init__(stateID=stateID, flags=flags)
-
-    def getInitial(self):
-        children = self.getChildren(filter_=_filterInitialState)
-        if not children:
-            return None
-        else:
-            if len(children) > 1:
-                raise StateError('State {} should be have one initial state, found {}'.format(self, children))
-            return children[0]
-
-    def addTransition(self, transition, target=None):
-        if not isinstance(transition, BaseTransition):
-            raise StateError('Instance of BaseTransition class is required')
-        if target is not None:
-            transition.setTarget(target)
-        self._addChild(transition)
-        return
-
-    def removeTransition(self, transition):
-        if not isinstance(transition, BaseTransition):
-            raise StateError('Instance of BaseTransition class is required')
-        self._removeChild(transition)
-
-    def getTransitions(self):
-        return self.getChildren(filter_=_filterBaseTransition)
 
 
 _SortDirection = namedtuple('_SortDirection', ('ancestor', 'descendant'))
@@ -191,13 +184,13 @@ class _StateTogglingSortKey(object):
     def _cmp(self, other):
         if self.state.getParent() == other.state.getParent():
             parent = self.state.getParent()
-            return cmp(NodesVisitor.getDescendantIndex(self.state, parent, filter_=_filterBaseState), NodesVisitor.getDescendantIndex(other.state, parent, filter_=_filterBaseState))
+            return cmp(NodesVisitor.getDescendantIndex(self.state, parent, filter_=_filterState), NodesVisitor.getDescendantIndex(other.state, parent, filter_=_filterState))
         if NodesVisitor.isDescendantOf(self.state, other.state):
             return self.direction.ancestor
         if NodesVisitor.isDescendantOf(other.state, self.state):
             return self.direction.descendant
         lca = NodesVisitor.getLCA([self.state, other.state], upper=self.state.getMachine())
-        return cmp(NodesVisitor.getDescendantIndex(self.state, lca, filter_=_filterBaseState), NodesVisitor.getDescendantIndex(other.state, lca, filter_=_filterBaseState))
+        return cmp(NodesVisitor.getDescendantIndex(self.state, lca, filter_=_filterState), NodesVisitor.getDescendantIndex(other.state, lca, filter_=_filterState))
 
 
 class StateEnteringSortKey(_StateTogglingSortKey):

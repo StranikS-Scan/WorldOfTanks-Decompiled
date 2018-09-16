@@ -15,6 +15,7 @@
                 <key>	#personal_missions_details:quest_1_3_8_condition_description_vehicleDamage_count	</key>
               </description>
               <classes>	mediumTank	</classes>
+              <attackReason>	0	</attackReason>
               <eventCount></eventCount>
               <greaterOrEqual>	3	</greaterOrEqual>
             </vehicleDamage>
@@ -26,6 +27,7 @@
                 <key>	#personal_missions_details:quest_1_3_8_condition_description_vehicleDamage	</key>
               </description>
               <classes>	mediumTank	</classes>
+              <attackReason>	0	</attackReason>
               <greaterOrEqual>	300	</greaterOrEqual>
             </vehicleDamage>
           </and>
@@ -90,6 +92,7 @@
                 <key>	#personal_missions_details:quest_1_3_8_condition_description_vehicleDamage_count	</key>
               </description>
               <classes>	mediumTank	</classes>
+              <attackReason>	0	</attackReason>
               <eventCount></eventCount>
               <greaterOrEqual>	3	</greaterOrEqual>
             </vehicleDamage>
@@ -101,6 +104,7 @@
                 <key>	#personal_missions_details:quest_1_3_8_condition_description_vehicleDamage	</key>
               </description>
               <classes>	mediumTank	</classes>
+              <attackReason>	0	</attackReason>
               <greaterOrEqual>	300	</greaterOrEqual>
             </vehicleDamage>
             <isAlive></isAlive>
@@ -136,11 +140,13 @@
           <and>
             <vehicleDamage>
               <classes>	mediumTank	</classes>
+              <attackReason>	0	</attackReason>
               <eventCount></eventCount>
               <greaterOrEqual>	3	</greaterOrEqual>
             </vehicleDamage>
             <vehicleDamage>
               <classes>	mediumTank	</classes>
+              <attackReason>	0	</attackReason>
               <greaterOrEqual>	300	</greaterOrEqual>
             </vehicleDamage>
             <isAlive></isAlive>

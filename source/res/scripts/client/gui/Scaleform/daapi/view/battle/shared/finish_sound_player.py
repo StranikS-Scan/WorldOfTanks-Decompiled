@@ -21,7 +21,7 @@ class FinishSoundPlayer(IBattleFieldListener, ITeamBasesListener, IAbstractPerio
     def __init__(self):
         super(FinishSoundPlayer, self).__init__()
         self.__isPlaying = False
-        self.__vehCheckAllowed = not self.sessionProvider.arenaVisitor.hasArenaFogOfWarHiddenVehicles()
+        self.__vehCheckAllowed = not self.sessionProvider.arenaVisitor.isArenaFogOfWarEnabled()
         self.__arenaPeriod = None
         self.__arenaTotalTime = None
         return

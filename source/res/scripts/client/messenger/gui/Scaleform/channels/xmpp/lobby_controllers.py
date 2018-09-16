@@ -215,6 +215,10 @@ class LazyUserRoomController(_ChannelController):
     def exit(self):
         self.proto.messages.leaveFromMUC(self._channel.getID())
 
+    def addMessage(self, message, doFormatting=True):
+        super(LazyUserRoomController, self).addMessage(message, doFormatting=doFormatting)
+        return True
+
     def _sendMsg(self, message):
         self.proto.messages.sendGroupChatMessage(self._channel.getID(), message)
 

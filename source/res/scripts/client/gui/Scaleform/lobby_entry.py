@@ -27,7 +27,7 @@ from gui.Scaleform.managers.SoundManager import SoundManager
 from gui.Scaleform.managers.TweenSystem import TweenManager
 from gui.Scaleform.managers.UtilsManager import UtilsManager
 from gui.Scaleform.managers.voice_chat import LobbyVoiceChatManager
-from gui.impl.windows import UserWindowFlags
+from gui.impl.pub import UserWindowFlags
 from gui.shared import EVENT_BUS_SCOPE
 from gui.app_loader import settings as app_settings
 from helpers import dependency, uniprof

@@ -1,4 +1,5 @@
 <F11_Renault_G1R.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
     <commander>	gunner	</commander>
     <loader></loader>
@@ -189,7 +190,7 @@
           <syncAngle>	30	</syncAngle>
         </wheel>
         <group>
-          <isLeft>	false	</isLeft>
+          <isLeft>	true	</isLeft>
           <template>	WD_L	</template>
           <radius>	0.238281	</radius>
           <startIndex>	1	</startIndex>
@@ -953,7 +954,7 @@
           <syncAngle>	30	</syncAngle>
         </wheel>
         <group>
-          <isLeft>	false	</isLeft>
+          <isLeft>	true	</isLeft>
           <template>	WD_L	</template>
           <radius>	0.238281	</radius>
           <startIndex>	1	</startIndex>

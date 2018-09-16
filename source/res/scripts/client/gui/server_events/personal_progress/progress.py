@@ -55,11 +55,17 @@ class ClientProgress(quest_progress.IProgress):
     def getState(self):
         return self._commonProgress.getState()
 
+    def setState(self, state):
+        self._commonProgress.setState(state)
+
     def markAsCompleted(self):
         self._commonProgress.setState(QUEST_PROGRESS_STATE.COMPLETED)
 
     def getCurrent(self):
         return self._progressGetter.getCurrent(self._commonProgress)
+
+    def hasProgressForReset(self):
+        return self.getCurrent() > 0 and self.getState() != QUEST_PROGRESS_STATE.COMPLETED
 
     def getGoal(self):
         return self._progressGetter.getGoal(self._commonProgress)
@@ -77,6 +83,12 @@ class ClientProgress(quest_progress.IProgress):
 
     def postProcess(self, cache):
         raise NotImplementedError
+
+    def getDisplayType(self):
+        return self._description.displayType
+
+    def getIsInOrGroup(self):
+        return self._description.isInOrGroup
 
     def getFormattedMultiplierValue(self, scope='card'):
         multiplier = self.getMultiplier()
@@ -103,10 +115,13 @@ class HeaderProgress(ClientProgress):
 
     def postProcess(self, cache):
         multiplierValue = self.getMultiplier()
-        if multiplierValue:
-            for progress in cache.itervalues():
-                if progress.isMain() == self.isMain() and progress.getContainerType() == CONTAINER.BODY:
+        state = self.getState()
+        for progress in cache.itervalues():
+            if progress.isMain() == self.isMain() and progress.getContainerType() == CONTAINER.BODY:
+                if multiplierValue:
                     progress.setHeaderMuliplier(multiplierValue)
+                if state:
+                    progress.setState(state)
 
     @classmethod
     def getContainerType(cls):
@@ -147,6 +162,9 @@ class BiathlonProgress(HeaderProgress):
 
     def getBattlesLimit(self):
         return self._commonProgress.getBattlesLimit()
+
+    def hasProgressForReset(self):
+        return len(self._commonProgress.getBattles()) > 0 and self.getState() != QUEST_PROGRESS_STATE.COMPLETED
 
 
 class BodyProgress(ClientProgress):
@@ -315,12 +333,10 @@ class AverageProgress(BodyProgress):
         return self.__counter
 
     def getCurrent(self):
-        current = super(AverageProgress, self).getCurrent()
-        return current / self.getCounter().getGoal()
+        return self._progressGetter.getAverageValue(self._commonProgress, self.getCounter())
 
     def getGoal(self):
-        goal = super(AverageProgress, self).getGoal()
-        return goal / self.getCounter().getGoal()
+        return self._progressGetter.getAverageGoal(self._commonProgress, self.getCounter())
 
 
 class VehicleTypesProgress(BodyProgress):

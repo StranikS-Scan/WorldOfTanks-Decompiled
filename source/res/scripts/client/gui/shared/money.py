@@ -10,6 +10,7 @@ class Currency(CONST_CONTAINER):
     CRYSTAL = 'crystal'
     ALL = (CREDITS, GOLD, CRYSTAL)
     BY_WEIGHT = (GOLD, CRYSTAL, CREDITS)
+    GUI_ALL = (CRYSTAL, GOLD, CREDITS)
     __INDEXES = {c:i for i, c in enumerate(ALL)}
 
     @classmethod

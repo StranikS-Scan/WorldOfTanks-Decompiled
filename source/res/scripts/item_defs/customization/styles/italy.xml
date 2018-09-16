@@ -1,30 +1,90 @@
 <italy.xml>
   <itemGroup>
-    <userString>	#vehicle_customization:styles/main_styles	</userString>
-    <priceGroup>	style gold	</priceGroup>
+    <userString>	#vehicle_customization:styles/rented_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	rented style	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 9 10	</levels>
         <nations>	italy	</nations>
       </include>
     </vehicleFilter>
     <style>
+      <id>	10	</id>
+      <texture>	gui/maps/vehicles/styles/italy.png	</texture>
+      <isRent>	true	</isRent>
+      <rentCount>	100	</rentCount>
+      <userString>	#vehicle_customization:rented_style/italy	</userString>
+      <tags>	vehicleBound	</tags>
+      <outfits>
+        <outfit>
+          <season>	winter	</season>
+          <camouflages>
+            <item>
+              <id>	536	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	summer	</season>
+          <camouflages>
+            <item>
+              <id>	539	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	desert	</season>
+          <camouflages>
+            <item>
+              <id>	541	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
+        </outfit>
+        <outfit>
+          <season>	event	</season>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/main_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	style gold	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	italy	</nations>
+        <levels>	6 8 9 10	</levels>
+      </include>
+    </vehicleFilter>
+    <style>
       <id>	41	</id>
-      <userString>	#vehicle_customization:gold_style/gold_style_01	</userString>
       <texture>	gui/maps/vehicles/styles/style_01.png	</texture>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
+      <userString>	#vehicle_customization:gold_style/gold_style_01	</userString>
       <outfits>
         <outfit>
           <season>	winter	</season>
           <camouflages>
             <item>
               <id>	515	</id>
+              <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
-              <appliedTo>	4368	</appliedTo>
             </item>
           </camouflages>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
           <paints>
             <item>
               <id>	256	</id>
@@ -35,9 +95,6 @@
               <appliedTo>	7	</appliedTo>
             </item>
           </paints>
-          <modifications>
-            <item>	3	</item>
-          </modifications>
           <decals>
             <item>
               <id>	15592	</id>
@@ -58,11 +115,14 @@
           <camouflages>
             <item>
               <id>	516	</id>
+              <appliedTo>	4368	</appliedTo>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
-              <appliedTo>	4368	</appliedTo>
             </item>
           </camouflages>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
           <paints>
             <item>
               <id>	258	</id>
@@ -73,9 +133,6 @@
               <appliedTo>	7	</appliedTo>
             </item>
           </paints>
-          <modifications>
-            <item>	3	</item>
-          </modifications>
           <decals>
             <item>
               <id>	15592	</id>
@@ -96,11 +153,14 @@
           <camouflages>
             <item>
               <id>	517	</id>
+              <appliedTo>	4368	</appliedTo>
               <patternSize>	2	</patternSize>
               <palette>	0	</palette>
-              <appliedTo>	4368	</appliedTo>
             </item>
           </camouflages>
+          <modifications>
+            <item>	3	</item>
+          </modifications>
           <paints>
             <item>
               <id>	260	</id>
@@ -111,9 +171,6 @@
               <appliedTo>	7	</appliedTo>
             </item>
           </paints>
-          <modifications>
-            <item>	3	</item>
-          </modifications>
           <decals>
             <item>
               <id>	15592	</id>
@@ -137,36 +194,36 @@
   </itemGroup>
   <itemGroup>
     <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
     <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
-        <levels>	6 8 9 10	</levels>
         <nations>	italy	</nations>
+        <levels>	6 8 9 10	</levels>
       </include>
     </vehicleFilter>
     <style>
       <id>	151	</id>
-      <userString>	#vehicle_customization:special_style/global_map	</userString>
       <texture>	gui/maps/vehicles/styles/global_map_01.png	</texture>
-      <season>	ALL	</season>
-      <historical>	false	</historical>
+      <userString>	#vehicle_customization:special_style/global_map	</userString>
       <outfits>
         <outfit>
           <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	557	</id>
+              <appliedTo>	4368	</appliedTo>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+            </item>
+          </camouflages>
           <paints>
             <item>
               <id>	287	</id>
               <appliedTo>	30583	</appliedTo>
             </item>
           </paints>
-          <camouflages>
-            <item>
-              <id>	557	</id>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-              <appliedTo>	4368	</appliedTo>
-            </item>
-          </camouflages>
           <decals>
             <item>
               <id>	545	</id>

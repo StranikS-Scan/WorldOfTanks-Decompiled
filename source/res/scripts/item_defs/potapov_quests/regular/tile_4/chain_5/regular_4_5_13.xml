@@ -15,6 +15,7 @@
                 <description>
                   <key>	#personal_missions_details:quest_4_5_13_condition_description_vehicleDamage	</key>
                 </description>
+                <attackReason>	0	</attackReason>
                 <eventCount></eventCount>
                 <greaterOrEqual>	10	</greaterOrEqual>
               </vehicleDamage>
@@ -31,6 +32,7 @@
               <unit>
                 <unitVehicleDamage>
                   <hideInGui></hideInGui>
+                  <attackReason>	0	</attackReason>
                   <eventCount></eventCount>
                   <greaterOrEqual>	10	</greaterOrEqual>
                 </unitVehicleDamage>
@@ -99,6 +101,7 @@
                 <description>
                   <key>	#personal_missions_details:quest_4_5_13_condition_description_vehicleDamage	</key>
                 </description>
+                <attackReason>	0	</attackReason>
                 <eventCount></eventCount>
                 <greaterOrEqual>	10	</greaterOrEqual>
               </vehicleDamage>
@@ -115,6 +118,7 @@
               <unit>
                 <unitVehicleDamage>
                   <hideInGui></hideInGui>
+                  <attackReason>	0	</attackReason>
                   <eventCount></eventCount>
                   <greaterOrEqual>	10	</greaterOrEqual>
                 </unitVehicleDamage>
@@ -160,6 +164,7 @@
           <and>
             <or>
               <vehicleDamage>
+                <attackReason>	0	</attackReason>
                 <eventCount></eventCount>
                 <greaterOrEqual>	10	</greaterOrEqual>
               </vehicleDamage>
@@ -169,6 +174,7 @@
               </results>
               <unit>
                 <unitVehicleDamage>
+                  <attackReason>	0	</attackReason>
                   <eventCount></eventCount>
                   <greaterOrEqual>	10	</greaterOrEqual>
                 </unitVehicleDamage>

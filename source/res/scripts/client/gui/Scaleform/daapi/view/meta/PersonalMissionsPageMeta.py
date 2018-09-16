@@ -43,8 +43,8 @@ class PersonalMissionsPageMeta(View):
     def as_setSelectedBranchIndexS(self, index):
         return self.flashObject.as_setSelectedBranchIndex(index) if self._isDAAPIInited() else None
 
-    def as_showFirstAwardSheetObtainedPopupS(self, useAnim):
-        return self.flashObject.as_showFirstAwardSheetObtainedPopup(useAnim) if self._isDAAPIInited() else None
+    def as_showFirstAwardSheetObtainedPopupS(self, useAnim, data):
+        return self.flashObject.as_showFirstAwardSheetObtainedPopup(useAnim, data) if self._isDAAPIInited() else None
 
     def as_showFourAwardSheetsObtainedPopupS(self, useAnim, data):
         return self.flashObject.as_showFourAwardSheetsObtainedPopup(useAnim, data) if self._isDAAPIInited() else None

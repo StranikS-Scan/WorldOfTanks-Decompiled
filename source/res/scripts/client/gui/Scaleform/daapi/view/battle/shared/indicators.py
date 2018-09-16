@@ -504,9 +504,6 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         self._startTime = BigWorld.serverTime()
         self._switchTimeTable = {}
         self._siegeComponent = None
-        self._isInRecovery = False
-        self._isInProgressCircle = False
-        self._isUnderFire = False
         return
 
     def _populate(self):
@@ -545,17 +542,6 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         engineState = self._devices['engine']
         totalTime = self._switchTimeTable[self._siegeState][engineState]
         self._siegeComponent.invalidate(totalTime, self._switchTime, self._siegeState, engineState, isSmooth)
-
-    def __updateHintView(self):
-        LOG_DEBUG('Updating siege mode: hint')
-        if self._isInPostmortem or self._isObserver:
-            return
-        if self._siegeState not in _SIEGE_STATE.SWITCHING and self._hintsLeft and not self.__areOtherIndicatorsShown():
-            self.as_showHintS(*self.__getHint())
-            self._isHintShown = True
-        elif self._isHintShown or self.__areOtherIndicatorsShown():
-            self.as_hideHintS()
-            self._isHintShown = False
 
     def __updateDevicesView(self):
         LOG_DEBUG('Updating siege mode: devices')
@@ -626,24 +612,6 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
                 self._devices = {'engine': 'normal',
                  'leftTrack': 'normal',
                  'rightTrack': 'normal'}
-            elif state == VEHICLE_VIEW_STATE.RECOVERY:
-                self._isInRecovery = value[0]
-                if self._isEnabled:
-                    self.__updateHintView()
-            elif state == VEHICLE_VIEW_STATE.PROGRESS_CIRCLE:
-                self._isInProgressCircle = value[1]
-                if self._isEnabled:
-                    self.__updateHintView()
-            elif state == VEHICLE_VIEW_STATE.UNDER_FIRE:
-                self._isUnderFire = value
-                if self._isEnabled:
-                    self.__updateHintView()
-
-    def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
-        self._isInPostmortem = True
-
-    def __onRespawnBaseMoving(self):
-        self._isInPostmortem = False
 
     def __onCrosshairPositionChanged(self, *args):
         if not self._isEnabled:
@@ -670,9 +638,6 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
     def __updateDestroyed(self, _):
         self._isEnabled = False
         self.as_setVisibleS(False)
-
-    def __areOtherIndicatorsShown(self):
-        return self._isUnderFire or self._isInRecovery or self._isInProgressCircle
 
 
 class IDirectionIndicator(object):

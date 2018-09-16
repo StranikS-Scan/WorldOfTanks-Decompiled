@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/StepRepairPoint.py
 import BigWorld
+import AnimationSequence
 from Math import Vector2
 from Math import Matrix
 import ResMgr
@@ -33,6 +34,7 @@ class StepRepairPoint(BigWorld.Entity):
             _g_stepRepairPointSettings = _StepRepairPointSettingsCache(settingsData)
         self.__stepRepairPointSoundObject = None
         self.__terrainSelectedArea = None
+        self.__animator = None
         return
 
     def prerequisites(self):
@@ -51,8 +53,12 @@ class StepRepairPoint(BigWorld.Entity):
         self.model.position = self.position
         if _g_stepRepairPointSettings.flagAnim is not None:
             try:
-                animAction = self.model.action(_g_stepRepairPointSettings.flagAnim)
-                animAction()
+                clipResource = self.model.deprecatedGetAnimationClipResource(_g_stepRepairPointSettings.flagAnim)
+                if clipResource:
+                    loader = AnimationSequence.Loader(clipResource, BigWorld.player().spaceID)
+                    self.__animator = loader.loadSync()
+                    self.__animator.bindTo(AnimationSequence.ModelWrapperContainer(self.model))
+                    self.__animator.start()
             except Exception:
                 LOG_WARNING('Unable to start "%s" animation action for model "%s"' % (_g_stepRepairPointSettings.flagAnim, _g_stepRepairPointSettings.flagModel))
 
@@ -67,6 +73,7 @@ class StepRepairPoint(BigWorld.Entity):
             stepRepairPointComponent.removeStepRepairPoint(self)
         self.__stepRepairPointSoundObject.stopAll()
         self.__stepRepairPointSoundObject = None
+        self.__animator = None
         return
 
     def isActiveForPlayerTeam(self):

@@ -200,23 +200,26 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
             except Exception:
                 LOG_DEBUG('ctx has no property "clanAbbrev"')
 
-        options = [self._makeItem(USER.INFO, MENU.contextmenu(USER.INFO))]
-        options = self._addVehicleInfo(options)
-        options = self._addClanProfileInfo(options, userCMInfo)
-        options = self._addFriendshipInfo(options, userCMInfo)
-        options = self._addChannelInfo(options, userCMInfo)
-        options.append(self._makeItem(USER.COPY_TO_CLIPBOARD, MENU.contextmenu(USER.COPY_TO_CLIPBOARD)))
-        options = self._addSquadInfo(options, userCMInfo.isIgnored)
-        options = self._addPrebattleInfo(options, userCMInfo)
-        options = self._addContactsNoteInfo(options, userCMInfo)
-        options = self._addAppealInfo(options)
-        options = self._addIgnoreInfo(options, userCMInfo)
-        options = self._addMutedInfo(options, userCMInfo)
-        options = self._addRejectFriendshipInfo(options, userCMInfo)
-        options = self._addRemoveFromGroupInfo(options, userCMInfo)
-        options = self._addRemoveFriendInfo(options, userCMInfo)
-        options = self._addInviteClanInfo(options, userCMInfo)
-        return options
+        if userCMInfo.isBot:
+            return self._makeAIBotOptions()
+        else:
+            options = [self._makeItem(USER.INFO, MENU.contextmenu(USER.INFO))]
+            options = self._addVehicleInfo(options)
+            options = self._addClanProfileInfo(options, userCMInfo)
+            options = self._addFriendshipInfo(options, userCMInfo)
+            options = self._addChannelInfo(options, userCMInfo)
+            options.append(self._makeItem(USER.COPY_TO_CLIPBOARD, MENU.contextmenu(USER.COPY_TO_CLIPBOARD)))
+            options = self._addSquadInfo(options, userCMInfo.isIgnored)
+            options = self._addPrebattleInfo(options, userCMInfo)
+            options = self._addContactsNoteInfo(options, userCMInfo)
+            options = self._addAppealInfo(options)
+            options = self._addIgnoreInfo(options, userCMInfo)
+            options = self._addMutedInfo(options, userCMInfo)
+            options = self._addRejectFriendshipInfo(options, userCMInfo)
+            options = self._addRemoveFromGroupInfo(options, userCMInfo)
+            options = self._addRemoveFriendInfo(options, userCMInfo)
+            options = self._addInviteClanInfo(options, userCMInfo)
+            return options
 
     def _addIgnoreInfo(self, options, userCMInfo):
         ignoring = USER.REMOVE_FROM_IGNORED if userCMInfo.isIgnored else USER.ADD_TO_IGNORED
@@ -291,6 +294,9 @@ class BaseUserCMHandler(AbstractContextMenuHandler, EventSystemEntity):
                     isEnabled = canHandleClanInvites and not dossier.isClanInviteSent(userCMInfo.databaseID) and not dossier.hasClanApplication(userCMInfo.databaseID)
                 options.append(self._makeItem(USER.SEND_CLAN_INVITE, MENU.contextmenu(USER.SEND_CLAN_INVITE), optInitData={'enabled': isEnabled}))
         return options
+
+    def _makeAIBotOptions(self):
+        return [self._makeItem(USER.VEHICLE_INFO, MENU.contextmenu(USER.VEHICLE_INFO)), self._makeItem(USER.VEHICLE_PREVIEW, MENU.contextmenu(USER.VEHICLE_PREVIEW))]
 
     @process
     def _doSelect(self, prebattleActionName, accountsToInvite=None):
@@ -462,6 +468,7 @@ class UserContextMenuInfo(object):
     def __init__(self, databaseID, userName):
         self.user = self.usersStorage.getUser(databaseID)
         self.databaseID = databaseID
+        self.isBot = databaseID <= 0
         self.canAddToIgnore = True
         self.canDoDenunciations = True
         self.isFriend = False

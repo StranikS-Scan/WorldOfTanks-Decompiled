@@ -9,20 +9,18 @@ from .node import NodesVisitor
 from .observers import BaseStateObserver
 from .observers import StateObserversContainer
 from .transitions import BaseTransition
-from .transitions import ConditionTransition
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 
 class StateMachine(_states.State):
-    __slots__ = ('__isRunning', '__visitor', '__entered', '__observers', '__startState')
+    __slots__ = ('__isRunning', '__visitor', '__entered', '__observers')
 
-    def __init__(self, start=None, stateID=''):
+    def __init__(self, stateID=''):
         super(StateMachine, self).__init__(stateID=stateID)
         self.__isRunning = False
         self.__visitor = NodesVisitor()
         self.__entered = []
         self.__observers = StateObserversContainer()
-        self.__startState = start or _states.State()
 
     @staticmethod
     def isMachine():
@@ -30,20 +28,16 @@ class StateMachine(_states.State):
 
     def start(self, doValidate=True):
         if doValidate:
-            _validateStartState(self.__startState)
             _validateMachine(self)
         if self.__isRunning:
             _logger.debug('%r: Machine is already started', self)
             return
         else:
             self.__isRunning = True
-            transition = ConditionTransition(lambda e: True)
-            self.__startState.addTransition(transition, target=self.getInitial())
-            self.__notify((self.__startState,), True, None)
+            transition = _InitialTransition(target=self.getInitial())
             _logger.debug('%r: Machine is started by %r', self, transition)
             entered = self.__enter((transition,))
-            if entered:
-                self.__notify((self.__startState,), False, None)
+            transition.clear()
             self.__notify(entered, True, None)
             self.__tick()
             return
@@ -53,7 +47,6 @@ class StateMachine(_states.State):
             _logger.debug('%r: Machine is not started', self)
             return
         self.__isRunning = False
-        self.__startState.clear()
         self.__observers.clear()
         del self.__entered[:]
         self.clear()
@@ -208,18 +201,25 @@ class StateMachine(_states.State):
             self.__observers.onStateChanged(stateID, flag, event=event)
 
 
+class _InitialTransition(BaseTransition):
+    __slots__ = ()
+
+    def __init__(self, target):
+        super(_InitialTransition, self).__init__()
+        self.setTarget(target)
+
+    def getSource(self):
+        return _states.State()
+
+    def execute(self, event):
+        return True
+
+
 def _validateTransitionHasLCA(transition, upper=None):
     states = transition.getEnabledStates()
     if states and NodesVisitor.getLCA(states, upper=upper) is None:
         raise StateMachineError('States have no LCA in transition {}'.format(transition))
     return
-
-
-def _validateStartState(state):
-    if not isinstance(state, _states.BaseState):
-        raise StateMachineError('Instance of BaseState class is required for start state')
-    if not state.isNative() or state.getChildrenStates() or state.isFinal() or state.isParallel():
-        raise StateMachineError('Start state should be native without children')
 
 
 def _validateInitialState(state):
@@ -240,7 +240,7 @@ def _validateState(state, machine):
 def _validateMachine(machine):
     _validateInitialState(machine)
     ids = []
-    for state in machine.visitInOrder(lambda item: isinstance(item, _states.BaseState)):
+    for state in machine.visitInOrder(lambda item: isinstance(item, _states.State)):
         if state.isMachine():
             continue
         stateID = state.getStateID()

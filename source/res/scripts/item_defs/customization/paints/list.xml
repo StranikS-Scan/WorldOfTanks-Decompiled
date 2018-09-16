@@ -1,9 +1,11 @@
 <list.xml>
   <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <itemGroup>
-    <priceGroup>	custom paint	</priceGroup>
-    <name>	custom paints	</name>
+    <name>	unhistorical paints	</name>
     <userString>	#vehicle_customization:repaint/color_group_05	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	custom paint	</priceGroup>
     <vehicleFilter>
       <include>
         <levels>	6 8 9 10	</levels>
@@ -12,87 +14,75 @@
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	200	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_01.png	</texture>
       <color>	75 47 79 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_01	</userString>
-      <season>	ALL	</season>
-      <historical>	false	</historical>
     </paint>
     <paint>
       <id>	202	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_03.png	</texture>
       <color>	44 58 92 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_03	</userString>
-      <season>	ALL	</season>
-      <historical>	false	</historical>
     </paint>
     <paint>
       <id>	203	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_04.png	</texture>
       <color>	118 106 20 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_04	</userString>
-      <season>	ALL	</season>
-      <historical>	false	</historical>
     </paint>
     <paint>
       <id>	204	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_05.png	</texture>
       <color>	51 94 94 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_05	</userString>
-      <season>	ALL	</season>
-      <historical>	false	</historical>
     </paint>
     <paint>
       <id>	224	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_07.png	</texture>
       <color>	51 111 51 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_07	</userString>
-      <season>	ALL	</season>
-      <historical>	false	</historical>
     </paint>
     <paint>
       <id>	225	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_08.png	</texture>
       <color>	119 84 19 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_08	</userString>
-      <season>	ALL	</season>
-      <historical>	false	</historical>
     </paint>
     <paint>
       <id>	226	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_09.png	</texture>
       <color>	50 101 152 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_09	</userString>
-      <season>	ALL	</season>
-      <historical>	false	</historical>
     </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
   </itemGroup>
   <itemGroup>
-    <priceGroup>	custom paint notInShop	</priceGroup>
-    <name>	gold style paints	</name>
+    <name>	black widow style paints	</name>
     <userString>	#vehicle_customization:repaint/color_group_02	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	custom paint notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <levels>	6 8 9 10	</levels>
@@ -101,77 +91,73 @@
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	256	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_10.png	</texture>
       <color>	119 132 136 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_10	</userString>
       <season>	winter	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	257	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_11.png	</texture>
       <color>	167 183 184 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_11	</userString>
       <season>	winter	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	258	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_12.png	</texture>
       <color>	39 43 38 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_12	</userString>
       <season>	summer	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	259	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_13.png	</texture>
       <color>	117 111 85 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_13	</userString>
       <season>	summer	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	260	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_14.png	</texture>
       <color>	152 153 123 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_14	</userString>
       <season>	desert	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	261	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_15.png	</texture>
       <color>	142 100 53 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_15	</userString>
       <season>	desert	</season>
-      <historical>	true	</historical>
     </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
   </itemGroup>
   <itemGroup>
-    <name>	WG Fest Paint	</name>
-    <priceGroup>	custom paint notInShop	</priceGroup>
+    <name>	WGFest style paints	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	custom paint notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <levels>	6 8 9 10	</levels>
@@ -180,67 +166,32 @@
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	276	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_20.png	</texture>
       <color>	17 17 34 255	</color>
       <gloss>	0.525	</gloss>
-      <metallic>	0.30	</metallic>
+      <metallic>	0.3	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_20	</userString>
-      <season>	ALL	</season>
-      <historical>	false	</historical>
     </paint>
-  </itemGroup>
-  <itemGroup>
-    <name>	primers	</name>
-    <priceGroup>	historical paint	</priceGroup>
-    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
-    <vehicleFilter>
-      <include>
-        <levels>	6 8 9 10	</levels>
-      </include>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
         <cost>	1	</cost>
       </item>
     </usages>
-    <paint>
-      <id>	275	</id>
-      <texture>	gui/maps/vehicles/repaints/primer_marmot_01.png	</texture>
-      <color>	80 48 48 255	</color>
-      <gloss>	0.4	</gloss>
-      <metallic>	0.230	</metallic>
-      <userString>	#vehicle_customization:repaint/primer_marmot	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
-    </paint>
   </itemGroup>
   <itemGroup>
+    <name>	NY styles paints	</name>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
     <priceGroup>	custom paint notInShop	</priceGroup>
-    <name>	NY style paints	</name>
-    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
     <vehicleFilter>
       <include>
         <levels>	6 8 9 10	</levels>
       </include>
     </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	262	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_16.png	</texture>
@@ -248,8 +199,6 @@
       <gloss>	0.7	</gloss>
       <metallic>	0.95	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_16	</userString>
-      <season>	ALL	</season>
-      <historical>	false	</historical>
     </paint>
     <paint>
       <id>	263	</id>
@@ -258,8 +207,6 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.203	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_17	</userString>
-      <season>	ALL	</season>
-      <historical>	false	</historical>
     </paint>
     <paint>
       <id>	264	</id>
@@ -268,8 +215,6 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.203	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_18	</userString>
-      <season>	ALL	</season>
-      <historical>	false	</historical>
     </paint>
     <paint>
       <id>	265	</id>
@@ -278,40 +223,46 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.203	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_19	</userString>
-      <season>	ALL	</season>
-      <historical>	false	</historical>
     </paint>
-  </itemGroup>
-  <itemGroup>
-    <name>	Rostelecom Paint	</name>
-    <priceGroup>	custom paint notInShop	</priceGroup>
-    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
-    <vehicleFilter>
-      <include>
-        <vehicles>	ussr:R127_T44_100_P	</vehicles>
-      </include>
-    </vehicleFilter>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
         <cost>	1	</cost>
       </item>
     </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	rostelecom style paints	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	custom paint notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R127_T44_100_P	</vehicles>
+      </include>
+    </vehicleFilter>
     <paint>
       <id>	277	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_21.png	</texture>
       <color>	73 87 95 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_21	</userString>
-      <season>	ALL	</season>
-      <historical>	false	</historical>
     </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
   </itemGroup>
   <itemGroup>
-    <name>	Ranked Battle Paint	</name>
-    <priceGroup>	custom paint notInShop	</priceGroup>
+    <name>	ranked battle style paints	</name>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	custom paint notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <levels>	10	</levels>
@@ -320,12 +271,6 @@
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	286	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_22.png	</texture>
@@ -333,8 +278,6 @@
       <gloss>	0.6	</gloss>
       <metallic>	0.222	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_22	</userString>
-      <season>	ALL	</season>
-      <historical>	false	</historical>
     </paint>
     <paint>
       <id>	297	</id>
@@ -343,14 +286,28 @@
       <gloss>	0.6	</gloss>
       <metallic>	0.222	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_25	</userString>
-      <season>	ALL	</season>
-      <historical>	false	</historical>
     </paint>
+    <paint>
+      <id>	298	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_26.png	</texture>
+      <color>	19 30 45 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.222	</metallic>
+      <userString>	#vehicle_customization:repaint/custom_color_26	</userString>
+    </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
   </itemGroup>
   <itemGroup>
     <name>	global map paints	</name>
-    <priceGroup>	legacy notInShop	</priceGroup>
     <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	false	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <levels>	6 8 9 10	</levels>
@@ -359,12 +316,6 @@
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	287	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_23.png	</texture>
@@ -372,25 +323,25 @@
       <gloss>	0.63	</gloss>
       <metallic>	0.235	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_23	</userString>
-      <season>	ALL	</season>
-      <historical>	false	</historical>
     </paint>
-  </itemGroup>
-  <itemGroup>
-    <name>	the battle of kursk paint	</name>
-    <priceGroup>	legacy notInShop	</priceGroup>
-    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
-    <vehicleFilter>
-      <include>
-        <vehicles>	ussr:R154_T_34E_1943	</vehicles>
-      </include>
-    </vehicleFilter>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
         <cost>	1	</cost>
       </item>
     </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	the battle of kursk style paint	</name>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R154_T_34E_1943	</vehicles>
+      </include>
+    </vehicleFilter>
     <paint>
       <id>	296	</id>
       <texture>	gui/maps/vehicles/repaints/custom_color_24.png	</texture>
@@ -398,14 +349,20 @@
       <gloss>	0.52	</gloss>
       <metallic>	0.235	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_24	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
   </itemGroup>
   <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
     <name>	chinese colors	</name>
     <userString>	#vehicle_customization:repaint/color_group_02	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	china	</nations>
@@ -415,174 +372,150 @@
         <vehicles>	china:Ch01_Type59_Gold	</vehicles>
       </exclude>
     </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	160	</id>
       <texture>	gui/maps/vehicles/repaints/china_color_01.png	</texture>
       <color>	60 66 40 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/china_color_01	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	161	</id>
       <texture>	gui/maps/vehicles/repaints/china_color_02.png	</texture>
       <color>	83 87 62 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/china_color_02	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	162	</id>
       <texture>	gui/maps/vehicles/repaints/china_color_03.png	</texture>
       <color>	58 58 48 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/china_color_03	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	163	</id>
       <texture>	gui/maps/vehicles/repaints/china_color_04.png	</texture>
       <color>	116 103 86 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/china_color_04	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	164	</id>
       <texture>	gui/maps/vehicles/repaints/china_color_05.png	</texture>
       <color>	111 97 70 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/china_color_05	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	219	</id>
       <texture>	gui/maps/vehicles/repaints/china_color_06.png	</texture>
       <color>	101 87 69 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/china_color_06	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	268	</id>
       <texture>	gui/maps/vehicles/repaints/china_color_07.png	</texture>
       <color>	54 103 70 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/china_color_07	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
-  </itemGroup>
-  <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
-    <name>	france colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_02	</userString>
-    <vehicleFilter>
-      <include>
-        <nations>	france	</nations>
-        <levels>	6 8 9 10	</levels>
-      </include>
-    </vehicleFilter>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
         <cost>	1	</cost>
       </item>
     </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	france colors	</name>
+    <userString>	#vehicle_customization:repaint/color_group_02	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	france	</nations>
+        <levels>	6 8 9 10	</levels>
+      </include>
+    </vehicleFilter>
     <paint>
       <id>	148	</id>
       <texture>	gui/maps/vehicles/repaints/france_color_01.png	</texture>
       <color>	82 82 56 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/france_color_01	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	149	</id>
       <texture>	gui/maps/vehicles/repaints/france_color_02.png	</texture>
       <color>	109 112 114 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/france_color_02	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	150	</id>
       <texture>	gui/maps/vehicles/repaints/france_color_03.png	</texture>
       <color>	57 61 56 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/france_color_03	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	151	</id>
       <texture>	gui/maps/vehicles/repaints/france_color_04.png	</texture>
       <color>	124 101 78 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/france_color_04	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	152	</id>
       <texture>	gui/maps/vehicles/repaints/france_color_05.png	</texture>
       <color>	73 50 44 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/france_color_05	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	213	</id>
       <texture>	gui/maps/vehicles/repaints/france_color_06.png	</texture>
       <color>	43 60 50 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/france_color_06	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	273	</id>
       <texture>	gui/maps/vehicles/repaints/france_color_07.png	</texture>
       <color>	86 101 116 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/france_color_07	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
   </itemGroup>
   <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
     <name>	germany colors	</name>
     <userString>	#vehicle_customization:repaint/color_group_02	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	germany	</nations>
@@ -592,348 +525,300 @@
         <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian	</vehicles>
       </exclude>
     </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	135	</id>
       <texture>	gui/maps/vehicles/repaints/germany_color_01.png	</texture>
       <color>	80 53 44 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/germany_color_01	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	136	</id>
       <texture>	gui/maps/vehicles/repaints/germany_color_02.png	</texture>
       <color>	124 109 88 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/germany_color_02	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	137	</id>
       <texture>	gui/maps/vehicles/repaints/germany_color_03.png	</texture>
       <color>	49 46 36 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/germany_color_03	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	138	</id>
       <texture>	gui/maps/vehicles/repaints/germany_color_04.png	</texture>
       <color>	47 50 52 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/germany_color_04	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	139	</id>
       <texture>	gui/maps/vehicles/repaints/germany_color_05.png	</texture>
       <color>	52 64 43 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/germany_color_05	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	216	</id>
       <texture>	gui/maps/vehicles/repaints/germany_color_06.png	</texture>
       <color>	48 51 34 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/germany_color_06	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	274	</id>
       <texture>	gui/maps/vehicles/repaints/germany_color_07.png	</texture>
       <color>	118 86 73 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/germany_color_07	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
   </itemGroup>
   <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
     <name>	japan colors	</name>
     <userString>	#vehicle_customization:repaint/color_group_02	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	japan	</nations>
         <levels>	6 8 9 10	</levels>
       </include>
     </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	172	</id>
       <texture>	gui/maps/vehicles/repaints/japan_color_01.png	</texture>
       <color>	96 82 53 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/japan_color_01	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	173	</id>
       <texture>	gui/maps/vehicles/repaints/japan_color_02.png	</texture>
       <color>	79 57 38 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/japan_color_02	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	174	</id>
       <texture>	gui/maps/vehicles/repaints/japan_color_03.png	</texture>
       <color>	35 47 32 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/japan_color_03	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	175	</id>
       <texture>	gui/maps/vehicles/repaints/japan_color_04.png	</texture>
       <color>	111 101 70 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/japan_color_04	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	176	</id>
       <texture>	gui/maps/vehicles/repaints/japan_color_05.png	</texture>
       <color>	52 50 52 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/japan_color_05	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	215	</id>
       <texture>	gui/maps/vehicles/repaints/japan_color_06.png	</texture>
       <color>	60 60 47 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/japan_color_06	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	270	</id>
       <texture>	gui/maps/vehicles/repaints/japan_color_07.png	</texture>
       <color>	86 101 116 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/japan_color_07	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
   </itemGroup>
   <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
     <name>	sweden colors	</name>
     <userString>	#vehicle_customization:repaint/color_group_02	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	sweden	</nations>
         <levels>	6 8 9 10	</levels>
       </include>
     </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	166	</id>
       <texture>	gui/maps/vehicles/repaints/sweden_color_01.png	</texture>
       <color>	53 55 40 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/sweden_color_01	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	167	</id>
       <texture>	gui/maps/vehicles/repaints/sweden_color_02.png	</texture>
       <color>	92 96 92 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/sweden_color_02	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	168	</id>
       <texture>	gui/maps/vehicles/repaints/sweden_color_03.png	</texture>
       <color>	53 53 57 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/sweden_color_03	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	169	</id>
       <texture>	gui/maps/vehicles/repaints/sweden_color_04.png	</texture>
       <color>	113 107 89 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/sweden_color_04	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	170	</id>
       <texture>	gui/maps/vehicles/repaints/sweden_color_05.png	</texture>
       <color>	80 52 44 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/sweden_color_05	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	220	</id>
       <texture>	gui/maps/vehicles/repaints/sweden_color_06.png	</texture>
       <color>	68 58 51 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/sweden_color_06	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	269	</id>
       <texture>	gui/maps/vehicles/repaints/sweden_color_07.png	</texture>
       <color>	50 68 88 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/sweden_color_07	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
-  </itemGroup>
-  <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
-    <name>	uk colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_02	</userString>
-    <vehicleFilter>
-      <include>
-        <nations>	uk	</nations>
-        <levels>	6 8 9 10	</levels>
-      </include>
-    </vehicleFilter>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
         <cost>	1	</cost>
       </item>
     </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	uk colors	</name>
+    <userString>	#vehicle_customization:repaint/color_group_02	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	uk	</nations>
+        <levels>	6 8 9 10	</levels>
+      </include>
+    </vehicleFilter>
     <paint>
       <id>	141	</id>
       <texture>	gui/maps/vehicles/repaints/uk_color_01.png	</texture>
       <color>	50 47 51 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/uk_color_01	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	142	</id>
       <texture>	gui/maps/vehicles/repaints/uk_color_02.png	</texture>
       <color>	58 47 37 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/uk_color_02	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	144	</id>
       <texture>	gui/maps/vehicles/repaints/uk_color_03.png	</texture>
       <color>	66 60 36 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/uk_color_03	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	145	</id>
       <texture>	gui/maps/vehicles/repaints/uk_color_04.png	</texture>
       <color>	104 100 77 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/uk_color_04	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	146	</id>
       <texture>	gui/maps/vehicles/repaints/uk_color_05.png	</texture>
       <color>	66 72 55 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/uk_color_05	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	217	</id>
       <texture>	gui/maps/vehicles/repaints/uk_color_06.png	</texture>
       <color>	53 60 57 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/uk_color_06	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	271	</id>
       <texture>	gui/maps/vehicles/repaints/uk_color_07.png	</texture>
       <color>	86 101 116 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/uk_color_07	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
   </itemGroup>
   <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
     <name>	usa colors	</name>
     <userString>	#vehicle_customization:repaint/color_group_02	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	usa	</nations>
@@ -943,87 +828,75 @@
         <vehicles>	usa:A13_T34_hvy_BF	</vehicles>
       </exclude>
     </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	154	</id>
       <texture>	gui/maps/vehicles/repaints/usa_color_01.png	</texture>
       <color>	52 48 33 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/usa_color_01	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	155	</id>
       <texture>	gui/maps/vehicles/repaints/usa_color_02.png	</texture>
       <color>	75 74 73 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/usa_color_02	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	156	</id>
       <texture>	gui/maps/vehicles/repaints/usa_color_03.png	</texture>
       <color>	78 74 54 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/usa_color_03	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	157	</id>
       <texture>	gui/maps/vehicles/repaints/usa_color_04.png	</texture>
       <color>	57 60 53 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/usa_color_04	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	158	</id>
       <texture>	gui/maps/vehicles/repaints/usa_color_05.png	</texture>
       <color>	116 104 87 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/usa_color_05	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	218	</id>
       <texture>	gui/maps/vehicles/repaints/usa_color_06.png	</texture>
       <color>	55 55 51 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/usa_color_06	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	272	</id>
       <texture>	gui/maps/vehicles/repaints/usa_color_07.png	</texture>
       <color>	86 101 116 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/usa_color_07	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
   </itemGroup>
   <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
     <name>	ussr colors	</name>
     <userString>	#vehicle_customization:repaint/color_group_02	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	ussr	</nations>
@@ -1033,186 +906,156 @@
         <vehicles>	ussr:R61_Object252_BF	</vehicles>
       </exclude>
     </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	129	</id>
       <texture>	gui/maps/vehicles/repaints/ussr_color_01.png	</texture>
       <color>	84 77 49 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/ussr_color_01	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	130	</id>
       <texture>	gui/maps/vehicles/repaints/ussr_color_02.png	</texture>
       <color>	39 43 38 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/ussr_color_02	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	131	</id>
       <texture>	gui/maps/vehicles/repaints/ussr_color_03.png	</texture>
       <color>	95 91 65 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/ussr_color_03	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	132	</id>
       <texture>	gui/maps/vehicles/repaints/ussr_color_04.png	</texture>
       <color>	61 57 31 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/ussr_color_04	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	133	</id>
       <texture>	gui/maps/vehicles/repaints/ussr_color_05.png	</texture>
       <color>	62 60 49 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/ussr_color_05	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	214	</id>
       <texture>	gui/maps/vehicles/repaints/ussr_color_06.png	</texture>
       <color>	48 58 48 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/ussr_color_06	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	267	</id>
       <texture>	gui/maps/vehicles/repaints/ussr_color_07.png	</texture>
       <color>	54 103 70 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/ussr_color_07	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
   </itemGroup>
   <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
     <name>	czech colors	</name>
     <userString>	#vehicle_customization:repaint/color_group_02	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
     <vehicleFilter>
       <include>
         <nations>	czech	</nations>
         <levels>	6 8 9 10	</levels>
       </include>
     </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	210	</id>
       <texture>	gui/maps/vehicles/repaints/czech_color_01.png	</texture>
       <color>	96 94 85 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/czech_color_01	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	211	</id>
       <texture>	gui/maps/vehicles/repaints/czech_color_02.png	</texture>
       <color>	48 69 53 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/czech_color_02	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	212	</id>
       <texture>	gui/maps/vehicles/repaints/czech_color_03.png	</texture>
       <color>	117 111 94 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/czech_color_03	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	227	</id>
       <texture>	gui/maps/vehicles/repaints/czech_color_04.png	</texture>
       <color>	47 50 52 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/czech_color_04	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	228	</id>
       <texture>	gui/maps/vehicles/repaints/czech_color_05.png	</texture>
       <color>	67 46 37 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/czech_color_05	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	229	</id>
       <texture>	gui/maps/vehicles/repaints/czech_color_06.png	</texture>
       <color>	46 54 46 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/czech_color_06	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	266	</id>
       <texture>	gui/maps/vehicles/repaints/czech_color_07.png	</texture>
       <color>	99 84 86 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/czech_color_07	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
-  </itemGroup>
-  <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
-    <name>	italy colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_02	</userString>
-    <vehicleFilter>
-      <include>
-        <nations>	italy	</nations>
-        <levels>	6 8 9 10	</levels>
-      </include>
-    </vehicleFilter>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
         <cost>	1	</cost>
       </item>
     </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	italy colors	</name>
+    <userString>	#vehicle_customization:repaint/color_group_02	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	italy	</nations>
+        <levels>	6 8 9 10	</levels>
+      </include>
+    </vehicleFilter>
     <paint>
       <id>	278	</id>
       <texture>	gui/maps/vehicles/repaints/italy_color_01.png	</texture>
@@ -1220,8 +1063,6 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/italy_color_01	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	279	</id>
@@ -1230,8 +1071,6 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/italy_color_02	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	280	</id>
@@ -1240,8 +1079,6 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/italy_color_03	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	281	</id>
@@ -1250,8 +1087,6 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/italy_color_04	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	282	</id>
@@ -1260,8 +1095,6 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/italy_color_05	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	283	</id>
@@ -1270,8 +1103,6 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/italy_color_06	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	284	</id>
@@ -1280,447 +1111,338 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/italy_color_07	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
-  </itemGroup>
-  <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
-    <name>	poland colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_02	</userString>
-    <vehicleFilter>
-      <include>
-        <nations>	poland	</nations>
-        <levels>	6 8 9 10	</levels>
-      </include>
-    </vehicleFilter>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
         <cost>	1	</cost>
       </item>
     </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	poland colors	</name>
+    <userString>	#vehicle_customization:repaint/color_group_02	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	poland	</nations>
+        <levels>	6 8 9 10	</levels>
+      </include>
+    </vehicleFilter>
     <paint>
       <id>	289	</id>
       <texture>	gui/maps/vehicles/repaints/poland_color_01.png	</texture>
       <color>	132 119 85 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/poland_color_01	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	290	</id>
       <texture>	gui/maps/vehicles/repaints/poland_color_02.png	</texture>
       <color>	71 68 32 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/poland_color_02	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	291	</id>
       <texture>	gui/maps/vehicles/repaints/poland_color_03.png	</texture>
       <color>	71 50 32 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/poland_color_03	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	292	</id>
       <texture>	gui/maps/vehicles/repaints/poland_color_04.png	</texture>
       <color>	65 73 50 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/poland_color_04	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	293	</id>
       <texture>	gui/maps/vehicles/repaints/poland_color_05.png	</texture>
       <color>	50 53 64 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/poland_color_05	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	294	</id>
       <texture>	gui/maps/vehicles/repaints/poland_color_06.png	</texture>
       <color>	145 129 107 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/poland_color_06	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
     <paint>
       <id>	295	</id>
       <texture>	gui/maps/vehicles/repaints/poland_color_07.png	</texture>
       <color>	103 110 109 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/poland_color_07	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
     </paint>
-  </itemGroup>
-  <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
-    <name>	ussr base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
-    <vehicleFilter>
-      <include>
-        <levels>	6 8 9 10	</levels>
-      </include>
-      <exclude>
-        <nations>	ussr	</nations>
-      </exclude>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
         <cost>	1	</cost>
       </item>
     </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	nations base colors	</name>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
     <paint>
       <id>	128	</id>
       <texture>	gui/maps/vehicles/repaints/ussr_base_color.png	</texture>
       <color>	76 76 60 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/ussr_base_color	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	ussr	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </paint>
-  </itemGroup>
-  <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
-    <name>	chinese base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
-    <vehicleFilter>
-      <include>
-        <levels>	6 8 9 10	</levels>
-      </include>
-      <exclude>
-        <nations>	china	</nations>
-      </exclude>
-      <exclude>
-        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
-    <paint>
-      <id>	159	</id>
-      <texture>	gui/maps/vehicles/repaints/china_base_color.png	</texture>
-      <color>	61 82 63 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
-      <userString>	#vehicle_customization:repaint/china_base_color	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
-    </paint>
-  </itemGroup>
-  <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
-    <name>	france base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
-    <vehicleFilter>
-      <include>
-        <levels>	6 8 9 10	</levels>
-      </include>
-      <exclude>
-        <nations>	france	</nations>
-      </exclude>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
-    <paint>
-      <id>	147	</id>
-      <texture>	gui/maps/vehicles/repaints/france_base_color.png	</texture>
-      <color>	51 73 75 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
-      <userString>	#vehicle_customization:repaint/france_base_color	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
-    </paint>
-  </itemGroup>
-  <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
-    <name>	germany base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
-    <vehicleFilter>
-      <include>
-        <levels>	6 8 9 10	</levels>
-      </include>
-      <exclude>
-        <nations>	germany	</nations>
-      </exclude>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	134	</id>
       <texture>	gui/maps/vehicles/repaints/germany_base_color.png	</texture>
       <color>	90 90 90 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/germany_base_color	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	germany	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </paint>
-  </itemGroup>
-  <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
-    <name>	japan base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
-    <vehicleFilter>
-      <include>
-        <levels>	6 8 9 10	</levels>
-      </include>
-      <exclude>
-        <nations>	japan	</nations>
-      </exclude>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
-    <paint>
-      <id>	171	</id>
-      <texture>	gui/maps/vehicles/repaints/japan_base_color.png	</texture>
-      <color>	65 77 56 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
-      <userString>	#vehicle_customization:repaint/japan_base_color	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
-    </paint>
-  </itemGroup>
-  <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
-    <name>	sweden base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
-    <vehicleFilter>
-      <include>
-        <levels>	6 8 9 10	</levels>
-      </include>
-      <exclude>
-        <nations>	sweden	</nations>
-      </exclude>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
-    <paint>
-      <id>	165	</id>
-      <texture>	gui/maps/vehicles/repaints/sweden_base_color.png	</texture>
-      <color>	62 68 54 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
-      <userString>	#vehicle_customization:repaint/sweden_base_color	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
-    </paint>
-  </itemGroup>
-  <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
-    <name>	uk base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
-    <vehicleFilter>
-      <include>
-        <levels>	6 8 9 10	</levels>
-      </include>
-      <exclude>
-        <nations>	uk	</nations>
-      </exclude>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	140	</id>
       <texture>	gui/maps/vehicles/repaints/uk_base_color.png	</texture>
       <color>	117 112 93 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/uk_base_color	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	uk	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </paint>
-  </itemGroup>
-  <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
-    <name>	usa base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
-    <vehicleFilter>
-      <include>
-        <levels>	6 8 9 10	</levels>
-      </include>
-      <exclude>
-        <nations>	usa	</nations>
-      </exclude>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
+    <paint>
+      <id>	147	</id>
+      <texture>	gui/maps/vehicles/repaints/france_base_color.png	</texture>
+      <color>	51 73 75 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/france_base_color	</userString>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	france	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
     <paint>
       <id>	153	</id>
       <texture>	gui/maps/vehicles/repaints/usa_base_color.png	</texture>
       <color>	105 98 77 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/usa_base_color	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	usa	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </paint>
-  </itemGroup>
-  <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
-    <name>	czech base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
-    <vehicleFilter>
-      <include>
-        <levels>	6 8 9 10	</levels>
-      </include>
-      <exclude>
-        <nations>	czech	</nations>
-      </exclude>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
+    <paint>
+      <id>	159	</id>
+      <texture>	gui/maps/vehicles/repaints/china_base_color.png	</texture>
+      <color>	61 82 63 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/china_base_color	</userString>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	china	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <paint>
+      <id>	165	</id>
+      <texture>	gui/maps/vehicles/repaints/sweden_base_color.png	</texture>
+      <color>	62 68 54 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/sweden_base_color	</userString>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	sweden	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
+    <paint>
+      <id>	171	</id>
+      <texture>	gui/maps/vehicles/repaints/japan_base_color.png	</texture>
+      <color>	65 77 56 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/japan_base_color	</userString>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	japan	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
     <paint>
       <id>	221	</id>
       <texture>	gui/maps/vehicles/repaints/czech_base_color.png	</texture>
       <color>	81 74 60 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/czech_base_color	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	czech	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </paint>
-  </itemGroup>
-  <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
-    <name>	italy base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
-    <vehicleFilter>
-      <include>
-        <levels>	6 8 9 10	</levels>
-      </include>
-      <exclude>
-        <nations>	italy	</nations>
-      </exclude>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
-    <usages>
-      <item>
-        <componentType>	ALL	</componentType>
-        <cost>	1	</cost>
-      </item>
-    </usages>
     <paint>
       <id>	285	</id>
       <texture>	gui/maps/vehicles/repaints/italy_base_color.png	</texture>
       <color>	128 113 83 255	</color>
       <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
+      <metallic>	0.23	</metallic>
       <userString>	#vehicle_customization:repaint/italy_base_color	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	italy	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </paint>
-  </itemGroup>
-  <itemGroup>
-    <priceGroup>	historical paint	</priceGroup>
-    <name>	poland base colors	</name>
-    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
-    <vehicleFilter>
-      <include>
-        <levels>	6 8 9 10	</levels>
-      </include>
-      <exclude>
-        <nations>	poland	</nations>
-      </exclude>
-      <exclude>
-        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
-      </exclude>
-    </vehicleFilter>
+    <paint>
+      <id>	288	</id>
+      <texture>	gui/maps/vehicles/repaints/poland_base_color.png	</texture>
+      <color>	79 73 52 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/poland_base_color	</userString>
+      <vehicleFilter>
+        <include>
+          <levels>	6 8 9 10	</levels>
+        </include>
+        <exclude>
+          <nations>	poland	</nations>
+        </exclude>
+        <exclude>
+          <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+        </exclude>
+      </vehicleFilter>
+    </paint>
     <usages>
       <item>
         <componentType>	ALL	</componentType>
         <cost>	1	</cost>
       </item>
     </usages>
+  </itemGroup>
+  <itemGroup>
+    <name>	primers	</name>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	historical paint	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <levels>	6 8 9 10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
     <paint>
-      <id>	288	</id>
-      <texture>	gui/maps/vehicles/repaints/poland_base_color.png	</texture>
-      <color>	79 73 52 255	</color>
-      <gloss>	0.509	</gloss>
-      <metallic>	0.230	</metallic>
-      <userString>	#vehicle_customization:repaint/poland_base_color	</userString>
-      <season>	ALL	</season>
-      <historical>	true	</historical>
+      <id>	275	</id>
+      <texture>	gui/maps/vehicles/repaints/primer_marmot_01.png	</texture>
+      <color>	80 48 48 255	</color>
+      <gloss>	0.4	</gloss>
+      <metallic>	0.23	</metallic>
+      <userString>	#vehicle_customization:repaint/primer_marmot	</userString>
     </paint>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
   </itemGroup>
 </list.xml>

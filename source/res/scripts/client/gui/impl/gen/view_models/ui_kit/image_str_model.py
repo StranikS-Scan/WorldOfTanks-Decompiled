@@ -12,4 +12,5 @@ class ImageStrModel(ViewModel):
         self._setString(0, value)
 
     def _initialize(self):
+        super(ImageStrModel, self)._initialize()
         self._addStringProperty('imgSource', '')

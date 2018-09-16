@@ -146,7 +146,7 @@ class LinkedSetController(ILinkedSetController):
 
     def _isLinkedSetViewOnScene(self):
         app = g_appLoader.getApp()
-        if app:
+        if app is not None and app.containerManager is not None:
             lobbySubContainer = app.containerManager.getContainer(ViewTypes.LOBBY_SUB)
             if lobbySubContainer is not None:
                 searchCriteria = {POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MISSIONS}

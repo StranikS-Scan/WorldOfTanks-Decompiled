@@ -51,6 +51,7 @@ FALLOUT_VEHICLES = 'FALLOUT_VEHICLES'
 GOLD_FISH_LAST_SHOW_TIME = 'goldFishWindowShowCooldown'
 BOOSTERS_FILTER = 'boostersFilter'
 LAST_PROMO_PATCH_VERSION = 'lastPromoPatchVersion'
+LAST_CALENDAR_SHOW_TIMESTAMP = 'lastCalendarShowTimestamp'
 LAST_RESTORE_NOTIFICATION = 'lastRestoreNotification'
 PREVIEW_INFO_PANEL_IDX = 'previewInfoPanelIdx'
 NEW_SETTINGS_COUNTER = 'newSettingsCounter'
@@ -63,7 +64,6 @@ SHOW_CRYSTAL_HEADER_BAND = 'showCrystalHeaderBand'
 ELEN_NOTIFICATIONS = 'elenNotifications'
 RECRUIT_NOTIFICATIONS = 'recruitNotifications'
 SPEAKERS_DEVICE = 'speakersDevice'
-MARATHON_PROMO_SHOWN = 'marathonPromoShown'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
@@ -78,6 +78,7 @@ COLOR_SETTINGS_TAB_IDX = 'colorSettingsTabIdx'
 COLOR_SETTINGS_SHOWS_COUNT = 'colorSettingsShowsCount'
 QUEST_PROGRESS_SHOWS_COUNT = 'questProgressShowsCount'
 APPLIED_COLOR_SETTINGS = 'appliedColorSettings'
+SELECTED_QUEST_IN_REPLAY = 'SELECTED_QUEST_IN_REPLAY'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -442,6 +443,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'PveTriggerShown': False,
                 'isEpicPerformanceWarningClicked': False,
                 LAST_PROMO_PATCH_VERSION: '',
+                LAST_CALENDAR_SHOW_TIMESTAMP: '',
                 LAST_RESTORE_NOTIFICATION: None,
                 'dynamicRange': 0,
                 'soundDevice': 0,
@@ -454,7 +456,6 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'doubleCarouselType': 0,
                 'vehicleCarouselStats': True,
                 'siegeModeHintCounter': 10,
-                MARATHON_PROMO_SHOWN: False,
                 NEW_SETTINGS_COUNTER: {'GameSettings': {'gameplay_epicStandard': True,
                                                         'c11nHistoricallyAccurate': True,
                                                         'hangarCamParallaxEnabled': True,
@@ -478,6 +479,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 COLOR_SETTINGS_TAB_IDX: 0,
                 COLOR_SETTINGS_SHOWS_COUNT: 0,
                 QUEST_PROGRESS_SHOWS_COUNT: 6,
+                SELECTED_QUEST_IN_REPLAY: None,
                 APPLIED_COLOR_SETTINGS: {}},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,

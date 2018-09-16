@@ -7,7 +7,6 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.customization_carousel import CustomizationCarouselDataProvider
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
 from gui.Scaleform.daapi.view.lobby.customization.shared import C11nMode, TABS_ITEM_MAPPING, C11nTabs, getTotalPurchaseInfo
-from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.CustomizationBottomPanelMeta import CustomizationBottomPanelMeta
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -15,8 +14,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.shared.formatters import text_styles, icons, getItemPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
-from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY, ItemPrice
-from gui.shared.money import Currency
+from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.graphics import isRendererPipelineDeferred
 from helpers import dependency
@@ -155,13 +153,6 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             label = _ms(VEHICLE_CUSTOMIZATION.COMMIT_BUY)
         else:
             label = _ms(VEHICLE_CUSTOMIZATION.COMMIT_APPLY)
-        money = self.itemsCache.items.stats.money
-        exchangeRate = self.itemsCache.items.shop.exchangeRate
-        moneyExchanged = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0)
-        minPriceItemAvailable = cartInfo.minPriceItem.isDefined() and (cartInfo.minPriceItem <= money or cartInfo.minPriceItem <= moneyExchanged)
-        canBuy = minPriceItemAvailable or not cartInfo.minPriceItem.isDefined()
-        isApplyEnabled = self.__ctx.isOutfitsModified() and (canBuy or isIngameShopEnabled())
-        shortage = money.getShortage(cartInfo.totalPrice.price)
         tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_BUYDISABLED_BODY
         fromStorageCount = 0
         toByeCount = 0
@@ -178,14 +169,15 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
             tooltip = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_NOTSELECTEDITEMS
         fromStorageCount = text_styles.stats('({})'.format(fromStorageCount))
         toByeCount = text_styles.stats('({})'.format(toByeCount))
-        self.as_setBottomPanelPriceStateS({'buyBtnEnabled': isApplyEnabled,
+        outfitsModified = self.__ctx.isOutfitsModified()
+        self.as_setBottomPanelPriceStateS({'buyBtnEnabled': outfitsModified,
          'buyBtnLabel': label,
          'buyBtnTooltip': tooltip,
          'isHistoric': self.__ctx.currentOutfit.isHistorical(),
          'billVO': {'title': text_styles.highlightText(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_RESULT)),
                     'priceLbl': text_styles.main('{} {}'.format(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_PRICE), toByeCount)),
                     'fromStorageLbl': text_styles.main('{} {}'.format(_ms(VEHICLE_CUSTOMIZATION.BUYPOPOVER_FROMSTORAGE), fromStorageCount)),
-                    'enoughMoney': getItemPricesVO(ItemPrice(shortage, shortage))[0],
+                    'enoughMoney': outfitsModified,
                     'pricePanel': totalPriceVO[0]}})
 
     def __showBill(self):

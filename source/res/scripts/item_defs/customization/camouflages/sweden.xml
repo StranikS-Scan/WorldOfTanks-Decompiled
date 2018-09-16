@@ -1,0 +1,1237 @@
+<sweden.xml>
+  <xmlns:czech0>	ussr	</xmlns:czech0>
+  <xmlns:germany>	germany	</xmlns:germany>
+  <xmlns:usa>	usa	</xmlns:usa>
+  <xmlns:china>	china	</xmlns:china>
+  <xmlns:france>	france	</xmlns:france>
+  <xmlns:uk>	uk	</xmlns:uk>
+  <xmlns:japan>	japan	</xmlns:japan>
+  <xmlns:czech>	czech	</xmlns:czech>
+  <xmlns:sweden>	sweden	</xmlns:sweden>
+  <xmlns:poland>	poland	</xmlns:poland>
+  <xmlns:italy>	italy	</xmlns:italy>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	winter	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo sweden	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15800	</id>
+      <texture>	vehicles/sweden/Camouflage/Sw_Winter_01.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Sw_winter_01/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Sw_winter_01/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	170 172 168 255	</c0>
+          <c1>	59 64 51 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	2.5 2.5 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	1 1 0.000000 0.000000	</S03_Strv_M38>
+        <S05_Strv_M21_29>	1 1 0.9 2.6	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S07_Strv_74>	1 1 0.000000 0.000000	</S07_Strv_74>
+        <S09_L_120_TD>	1 1 0.000000 0.000000	</S09_L_120_TD>
+        <S10_Strv_103_0_Series>	1.8 1.8 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S11_Strv_103B>	5.9 5.9 0.000000 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	3.6 3.6 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	2.3 2.3 0.000000 0.000000	</S13_Leo>
+        <S14_Ikv_103>	10 10 0.000000 0.000000	</S14_Ikv_103>
+        <S16_Kranvagn>	6.4 6.4 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	2.3 2.3 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S18_EMIL_1951_E1>	2.1 2.1 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S20_Ikv_72>	2.9 2.9 0.000000 0.000000	</S20_Ikv_72>
+        <S21_UDES_03>	2.3 2.3 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	3 3 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	1 1 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	winter	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo sweden	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15801	</id>
+      <texture>	vehicles/sweden/Camouflage/Sw_Winter_02.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Sw_winter_02/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Sw_winter_02/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	170 172 168 255	</c0>
+          <c1>	0 0 0 0	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+        <palette>
+          <c0>	144 144 144 255	</c0>
+          <c1>	79 38 38 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+        <palette>
+          <c0>	124 128 131 255	</c0>
+          <c1>	168 171 172 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.3 1.3 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	0.9 0.9 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	3.7 3.7 0.000000 0.000000	</S03_Strv_M38>
+        <S05_Strv_M21_29>	1.1 1.1 0.7 0.2	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1.4 1.4 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S07_Strv_74>	0.9 0.9 0.000000 0.000000	</S07_Strv_74>
+        <S08_Ikv_65_Alt_2>	1 1 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	1.6 1.6 0.000000 2.1	</S09_L_120_TD>
+        <S12_Strv_M40>	4.4 4.4 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	2 2 0.000000 0.000000	</S13_Leo>
+        <S14_Ikv_103>	1.6 1.6 2 0.000000	</S14_Ikv_103>
+        <S15_L_60>	0.5 0.5 4.7 2.6	</S15_L_60>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 1 0.000000	</S17_EMIL_1952_E2>
+        <S18_EMIL_1951_E1>	1.4 1.4 4.7 0.000000	</S18_EMIL_1951_E1>
+        <S20_Ikv_72>	3.7 3.7 0.000000 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	2.2 2.2 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.6 1.6 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	3.7 3.7 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo sweden	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15802	</id>
+      <texture>	vehicles/sweden/Camouflage/Sw_summer_01.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Sw_summer_01/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Sw_summer_01/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	64 69 52 255	</c0>
+          <c1>	64 61 49 255	</c1>
+          <c2>	114 105 77 255	</c2>
+          <c3>	21 23 19 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.9 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	2.8 2.8 3.9 6.7	</S03_Strv_M38>
+        <S05_Strv_M21_29>	2.3 2.3 1.2 0.5	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1.5 1.5 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S07_Strv_74>	1.1 1.1 0.7 4.3	</S07_Strv_74>
+        <S08_Ikv_65_Alt_2>	1.7 1.7 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	1.6 1.6 0.2 0.000000	</S09_L_120_TD>
+        <S10_Strv_103_0_Series>	1.6 1.6 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S11_Strv_103B>	1.8 1.8 1.2 0.9	</S11_Strv_103B>
+        <S12_Strv_M40>	4.1 4.1 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	1.8 1.8 2.1 2.5	</S13_Leo>
+        <S14_Ikv_103>	1.6 1.6 3.5 6.5	</S14_Ikv_103>
+        <S15_L_60>	0.4 0.4 6 4	</S15_L_60>
+        <S16_Kranvagn>	1 1 1.8 1.4	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.4 1.4 3.8 2.7	</S17_EMIL_1952_E2>
+        <S18_EMIL_1951_E1>	1.9 1.9 1.3 3.2	</S18_EMIL_1951_E1>
+        <S19_Sav_M43>	1 1 3 0.000000	</S19_Sav_M43>
+        <S20_Ikv_72>	3.7 3.7 0.6 2.9	</S20_Ikv_72>
+        <S21_UDES_03>	4.8 4.8 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.1 1.1 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.3 2.3 1.8 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo sweden	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15803	</id>
+      <texture>	vehicles/sweden/Camouflage/Sw_summer_02.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Sw_summer_02/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Sw_summer_02/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	69 59 41 255	</c0>
+          <c1>	69 78 61 255	</c1>
+          <c2>	42 49 35 255	</c2>
+          <c3>	108 99 69 255	</c3>
+        </palette>
+        <palette>
+          <c0>	105 105 58 255	</c0>
+          <c1>	63 82 48 255	</c1>
+          <c2>	57 64 43 255	</c2>
+          <c3>	134 132 100 255	</c3>
+        </palette>
+        <palette>
+          <c0>	122 122 80 255	</c0>
+          <c1>	83 85 40 255	</c1>
+          <c2>	30 31 26 255	</c2>
+          <c3>	58 63 33 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	0.8 0.8 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	2.9 2.9 3.3 6	</S03_Strv_M38>
+        <S04_Lago_I>	0.7 0.7 0.000000 1.1	</S04_Lago_I>
+        <S05_Strv_M21_29>	1.8 1.8 3.4 1.7	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S07_Strv_74>	0.9 0.9 0.000000 1.2	</S07_Strv_74>
+        <S08_Ikv_65_Alt_2>	0.8 0.8 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	2.2 2.2 0.000000 0.000000	</S09_L_120_TD>
+        <S11_Strv_103B>	1.2 1.2 1.7 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	3.5 3.5 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	2 2 3.2 4.6	</S13_Leo>
+        <S14_Ikv_103>	1.6 1.6 0.8 0.8	</S14_Ikv_103>
+        <S15_L_60>	0.7 0.7 7.7 4.8	</S15_L_60>
+        <S16_Kranvagn>	0.7 0.7 4.2 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 0.3 0.000000	</S17_EMIL_1952_E2>
+        <S18_EMIL_1951_E1>	1.4 1.4 2.4 0.000000	</S18_EMIL_1951_E1>
+        <S19_Sav_M43>	1.5 1.5 1.7 0.1	</S19_Sav_M43>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	3.2 3.2 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.1 1.1 3.6 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.7 2.7 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	desert	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo sweden	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15804	</id>
+      <texture>	vehicles/sweden/Camouflage/Sw_desert_01.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Sw_desert_01/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Sw_desert_01/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	0 0 0 0	</c0>
+          <c1>	0 0 0 0	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	112 94 58 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.7 1.7 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	5.1 5.1 0.000000 0.000000	</S03_Strv_M38>
+        <S04_Lago_I>	0.7 0.7 0.000000 0.000000	</S04_Lago_I>
+        <S05_Strv_M21_29>	1.8 1.8 2.5 3.2	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1.1 1.1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S08_Ikv_65_Alt_2>	1.1 1.1 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	1.7 1.7 0.000000 0.000000	</S09_L_120_TD>
+        <S10_Strv_103_0_Series>	1.2 1.2 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S11_Strv_103B>	1.3 1.3 0.000000 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	6.8 6.8 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	2 2 2.5 0.000000	</S13_Leo>
+        <S14_Ikv_103>	1.8 1.8 0.000000 0.000000	</S14_Ikv_103>
+        <S15_L_60>	0.5 0.5 3.3 0.000000	</S15_L_60>
+        <S16_Kranvagn>	0.8 0.8 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.4 1.4 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S18_EMIL_1951_E1>	1.5 1.5 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S19_Sav_M43>	1.1 1.1 2.9 0.000000	</S19_Sav_M43>
+        <S20_Ikv_72>	5.1 5.1 1.5 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	3.3 3.3 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.2 1.2 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.6 2.6 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy camo sweden	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15805	</id>
+      <texture>	vehicles/sweden/Camouflage/Sw_desert_02.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Sw_desert_02/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Sw_desert_02/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	82 80 67 255	</c0>
+          <c1>	126 118 103 255	</c1>
+          <c2>	46 48 43 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+        <palette>
+          <c0>	137 118 97 255	</c0>
+          <c1>	85 64 43 255	</c1>
+          <c2>	95 70 46 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+        <palette>
+          <c0>	63 52 39 255	</c0>
+          <c1>	137 132 95 255	</c1>
+          <c2>	63 52 39 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	4.4 4.4 0.000000 0.000000	</S03_Strv_M38>
+        <S04_Lago_I>	0.7 0.7 0.000000 0.000000	</S04_Lago_I>
+        <S05_Strv_M21_29>	1.8 1.8 2.5 3.8	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S07_Strv_74>	1 1 1.8 0.000000	</S07_Strv_74>
+        <S08_Ikv_65_Alt_2>	1.1 1.1 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	1.6 1.6 0.000000 0.000000	</S09_L_120_TD>
+        <S10_Strv_103_0_Series>	1.2 1.2 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S11_Strv_103B>	1.3 1.3 0.000000 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	5.6 5.6 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	2 2 0.000000 0.000000	</S13_Leo>
+        <S14_Ikv_103>	1.6 1.6 0.000000 0.000000	</S14_Ikv_103>
+        <S15_L_60>	0.5 0.5 5.1 4.7	</S15_L_60>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.4 1.4 4.1 0.000000	</S17_EMIL_1952_E2>
+        <S18_EMIL_1951_E1>	1.7 1.7 4.1 0.000000	</S18_EMIL_1951_E1>
+        <S19_Sav_M43>	1.1 1.1 0.000000 2.7	</S19_Sav_M43>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	2.7 2.7 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.2 1.2 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.6 2.6 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	winter	</season>
+    <historical>	false	</historical>
+    <priceGroup>	legacy IGR notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15811	</id>
+      <texture>	vehicles/chinese/Camouflage/IGR_Ch_Winter.dds	</texture>
+      <description>	#vehicle_customization:camouflage/IGR_Ch_Winter/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/IGR_Ch_Winter/label	</userString>
+      <tags>	premiumIGR	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	52 49 38 255	</c0>
+          <c1>	83 71 52 255	</c1>
+          <c2>	125 113 73 255	</c2>
+          <c3>	146 138 106 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.3 1.3 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	1.1 1.1 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	4.9 4.9 0.000000 0.000000	</S03_Strv_M38>
+        <S04_Lago_I>	0.7 0.7 0.000000 0.000000	</S04_Lago_I>
+        <S05_Strv_M21_29>	2 2 0.000000 1.3	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1.1 1.1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S08_Ikv_65_Alt_2>	1.2 1.2 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	1.8 1.8 0.3 0.3	</S09_L_120_TD>
+        <S10_Strv_103_0_Series>	1.1 1.1 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S11_Strv_103B>	1.1 1.1 3.2 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	6.4 6.4 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	1.5 1.5 3.8 0.000000	</S13_Leo>
+        <S14_Ikv_103>	1.6 1.6 0.000000 0.000000	</S14_Ikv_103>
+        <S15_L_60>	0.7 0.7 6.9 5.1	</S15_L_60>
+        <S16_Kranvagn>	0.7 0.7 1.4 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S18_EMIL_1951_E1>	1.4 1.4 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S19_Sav_M43>	1.1 1.1 0.000000 0.000000	</S19_Sav_M43>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	3.7 3.7 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.4 1.4 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.5 2.5 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	false	</historical>
+    <priceGroup>	legacy IGR notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15812	</id>
+      <texture>	vehicles/chinese/Camouflage/IGR_Ch_Summer.dds	</texture>
+      <description>	#vehicle_customization:camouflage/IGR_Ch_Summer/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/IGR_Ch_Summer/label	</userString>
+      <tags>	premiumIGR	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	57 73 47 255	</c0>
+          <c1>	86 70 36 255	</c1>
+          <c2>	49 52 40 255	</c2>
+          <c3>	138 135 104 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.6 1.6 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	1.2 1.2 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	3 3 0.000000 0.000000	</S03_Strv_M38>
+        <S04_Lago_I>	0.8 0.8 0.000000 3.8	</S04_Lago_I>
+        <S05_Strv_M21_29>	1.9 1.9 0.000000 0.000000	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	0.9 0.9 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S08_Ikv_65_Alt_2>	1.1 1.1 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	2.1 2.1 0.4 0.3	</S09_L_120_TD>
+        <S10_Strv_103_0_Series>	1.2 1.2 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S11_Strv_103B>	1.3 1.3 0.000000 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	4.9 4.9 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	1.5 1.5 0.000000 6.6	</S13_Leo>
+        <S14_Ikv_103>	1.6 1.6 2.6 0.000000	</S14_Ikv_103>
+        <S15_L_60>	0.7 0.7 3.7 5.5	</S15_L_60>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.3 1.3 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S18_EMIL_1951_E1>	1.4 1.4 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S19_Sav_M43>	1 1 3.3 0.000000	</S19_Sav_M43>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	3.3 3.3 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.7 1.7 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.2 2.2 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	false	</historical>
+    <priceGroup>	legacy IGR notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15813	</id>
+      <texture>	vehicles/chinese/Camouflage/IGR_Ch_Desert.dds	</texture>
+      <description>	#vehicle_customization:camouflage/IGR_Ch_Desert/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/IGR_Ch_Desert/label	</userString>
+      <tags>	premiumIGR	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	48 49 39 255	</c0>
+          <c1>	111 94 57 255	</c1>
+          <c2>	133 119 87 255	</c2>
+          <c3>	85 67 50 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	0.8 0.8 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	6.5 6.5 0.000000 0.000000	</S03_Strv_M38>
+        <S04_Lago_I>	0.8 0.8 0.000000 0.000000	</S04_Lago_I>
+        <S05_Strv_M21_29>	1.4 1.4 0.000000 0.000000	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S07_Strv_74>	1.1 1.1 2 3.4	</S07_Strv_74>
+        <S08_Ikv_65_Alt_2>	0.9 0.9 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	2 2 0.000000 0.000000	</S09_L_120_TD>
+        <S11_Strv_103B>	1.2 1.2 0.000000 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	6.9 6.9 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	1.5 1.5 3.6 2.1	</S13_Leo>
+        <S14_Ikv_103>	1.6 1.6 2.9 0.000000	</S14_Ikv_103>
+        <S15_L_60>	0.7 0.7 2.2 0.000000	</S15_L_60>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S18_EMIL_1951_E1>	1.5 1.5 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S19_Sav_M43>	1.3 1.3 0.000000 0.000000	</S19_Sav_M43>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	3.4 3.4 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.6 1.6 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	3 3 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15814	</id>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_01.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_01/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Clan_camouflage_01/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	72 48 35 255	</c0>
+          <c1>	101 83 50 255	</c1>
+          <c2>	46 52 40 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.8 1.8 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	1.1 1.1 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	5.1 5.1 0.000000 0.000000	</S03_Strv_M38>
+        <S04_Lago_I>	1.2 1.2 0.000000 0.000000	</S04_Lago_I>
+        <S05_Strv_M21_29>	2.5 2.5 2 0.6	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1.9 1.9 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S07_Strv_74>	1.2 1.2 2.4 1.2	</S07_Strv_74>
+        <S08_Ikv_65_Alt_2>	1.8 1.8 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	1.7 1.7 0.000000 0.000000	</S09_L_120_TD>
+        <S10_Strv_103_0_Series>	1.6 1.6 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S11_Strv_103B>	1.5 1.5 0.000000 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	7.7 7.7 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	3 3 3.3 6	</S13_Leo>
+        <S14_Ikv_103>	1.4 1.4 5.4 3.6	</S14_Ikv_103>
+        <S15_L_60>	0.6 0.6 4.1 0.000000	</S15_L_60>
+        <S16_Kranvagn>	0.7 0.7 3.6 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.6 1.6 3.5 1.5	</S17_EMIL_1952_E2>
+        <S18_EMIL_1951_E1>	1.7 1.7 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S19_Sav_M43>	2 2 3 0.000000	</S19_Sav_M43>
+        <S20_Ikv_72>	2.1 2.1 1.5 0.6	</S20_Ikv_72>
+        <S21_UDES_03>	4.8 4.8 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	2.4 2.4 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	1.8 1.8 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15816	</id>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_3.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_03/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Clan_camouflage_03/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	66 78 58 255	</c0>
+          <c1>	35 43 32 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	1.1 1.1 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	4.6 4.6 0.000000 0.000000	</S03_Strv_M38>
+        <S04_Lago_I>	0.6 0.6 0.000000 0.000000	</S04_Lago_I>
+        <S05_Strv_M21_29>	1.9 1.9 0.000000 0.2	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1.9 1.9 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S08_Ikv_65_Alt_2>	1.6 1.6 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	2 2 0.000000 0.000000	</S09_L_120_TD>
+        <S10_Strv_103_0_Series>	1.1 1.1 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S11_Strv_103B>	1.2 1.2 0.000000 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	4.8 4.8 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	2 2 5 3.1	</S13_Leo>
+        <S14_Ikv_103>	1.6 1.6 0.000000 0.000000	</S14_Ikv_103>
+        <S15_L_60>	0.5 0.5 3 0.000000	</S15_L_60>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.3 1.3 0.7 4.8	</S17_EMIL_1952_E2>
+        <S18_EMIL_1951_E1>	1.4 1.4 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S19_Sav_M43>	1.2 1.2 3.9 4.9	</S19_Sav_M43>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	2.7 2.7 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	0.9 0.9 4 2.1	</S22_Strv_S1>
+        <S23_Strv_81>	2.7 2.7 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15817	</id>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_4.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Clan_camouflage_04/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	58 85 32 255	</c0>
+          <c1>	85 103 52 255	</c1>
+          <c2>	35 46 31 255	</c2>
+          <c3>	108 108 85 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.2 1.2 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	3.6 3.6 0.000000 0.000000	</S03_Strv_M38>
+        <S04_Lago_I>	0.9 0.9 0.000000 0.000000	</S04_Lago_I>
+        <S05_Strv_M21_29>	1.4 1.4 0.5 0.000000	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S08_Ikv_65_Alt_2>	0.9 0.9 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	2 2 0.4 0.000000	</S09_L_120_TD>
+        <S11_Strv_103B>	1 1 0.000000 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	4.8 4.8 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	2 2 6.5 5.3	</S13_Leo>
+        <S14_Ikv_103>	1.2 1.2 0.000000 0.000000	</S14_Ikv_103>
+        <S15_L_60>	0.7 0.7 3.2 0.000000	</S15_L_60>
+        <S16_Kranvagn>	0.8 0.8 0.000000 2.5	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S18_EMIL_1951_E1>	1.3 1.3 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S19_Sav_M43>	1 1 0.000000 0.000000	</S19_Sav_M43>
+        <S20_Ikv_72>	2.7 2.7 1.5 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	3 3 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.1 1.1 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	3.5 3.5 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	summer	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15819	</id>
+      <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
+      <description>	#vehicle_customization:camouflage/summer_camo/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/summer_camo/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	100 80 43 255	</c0>
+          <c1>	64 62 36 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.3 1.3 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	4.8 4.8 0.000000 0.000000	</S03_Strv_M38>
+        <S04_Lago_I>	0.6 0.6 0.000000 0.000000	</S04_Lago_I>
+        <S05_Strv_M21_29>	1.4 1.4 5.4 1.1	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S08_Ikv_65_Alt_2>	0.9 0.9 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	2 2 0.2 0.000000	</S09_L_120_TD>
+        <S10_Strv_103_0_Series>	1.2 1.2 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S11_Strv_103B>	1.3 1.3 0.000000 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	5.2 5.2 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	2 2 5.9 8	</S13_Leo>
+        <S14_Ikv_103>	1.6 1.6 5.4 0.000000	</S14_Ikv_103>
+        <S15_L_60>	0.5 0.5 4.5 6.7	</S15_L_60>
+        <S16_Kranvagn>	0.7 0.7 8 2.2	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S18_EMIL_1951_E1>	1.6 1.6 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S19_Sav_M43>	1.8 1.8 4.5 0.2	</S19_Sav_M43>
+        <S20_Ikv_72>	3.6 3.6 1.5 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	3.3 3.3 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.9 1.9 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.6 2.6 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	winter	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15815	</id>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_2.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_02/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Clan_camouflage_02/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	58 69 50 0	</c0>
+          <c1>	149 153 145 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	0.9 0.9 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	0.7 0.7 2.9 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	3 3 0.000000 0.000000	</S03_Strv_M38>
+        <S04_Lago_I>	0.8 0.8 0.000000 0.000000	</S04_Lago_I>
+        <S05_Strv_M21_29>	1.1 1.1 0.2 0.000000	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S07_Strv_74>	0.7 0.7 0.000000 0.000000	</S07_Strv_74>
+        <S08_Ikv_65_Alt_2>	0.9 0.9 3.7 3.3	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	1.8 1.8 0.000000 0.000000	</S09_L_120_TD>
+        <S10_Strv_103_0_Series>	0.7 0.7 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S11_Strv_103B>	0.7 0.7 0.000000 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	4.5 4.5 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	2 2 0.000000 0.000000	</S13_Leo>
+        <S14_Ikv_103>	1.2 1.2 1.7 4.6	</S14_Ikv_103>
+        <S15_L_60>	0.6 0.6 3.1 2.5	</S15_L_60>
+        <S16_Kranvagn>	0.6 0.6 3.1 2.1	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.1 1.1 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S18_EMIL_1951_E1>	1.1 1.1 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S19_Sav_M43>	0.9 0.9 3.3 0.5	</S19_Sav_M43>
+        <S20_Ikv_72>	2.2 2.2 0.000000 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	2.5 2.5 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.3 1.3 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.3 2.3 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	winter	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15818	</id>
+      <texture>	vehicles/american/Camouflage/Cracked_ice.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Cracked_ice/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Cracked_ice/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	175 177 173 255	</c0>
+          <c1>	0 0 0 0	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.5 1.5 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	3.8 3.8 0.000000 0.000000	</S03_Strv_M38>
+        <S04_Lago_I>	0.7 0.7 0.000000 0.000000	</S04_Lago_I>
+        <S05_Strv_M21_29>	1.8 1.8 0.000000 0.3	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1.5 1.5 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S08_Ikv_65_Alt_2>	1.1 1.1 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	2 2 1 0.7	</S09_L_120_TD>
+        <S10_Strv_103_0_Series>	1.2 1.2 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S11_Strv_103B>	1 1 0.000000 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	4.2 4.2 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	2 2 5.3 4.3	</S13_Leo>
+        <S14_Ikv_103>	1.6 1.6 4.1 3.9	</S14_Ikv_103>
+        <S15_L_60>	0.7 0.7 4 9.8	</S15_L_60>
+        <S16_Kranvagn>	0.7 0.7 2.1 0.1	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S18_EMIL_1951_E1>	1.2 1.2 4.1 3.1	</S18_EMIL_1951_E1>
+        <S19_Sav_M43>	1 1 2.1 5.1	</S19_Sav_M43>
+        <S20_Ikv_72>	3.7 3.7 0.000000 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	2.7 2.7 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.6 1.6 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	1.9 1.9 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	winter	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15825	</id>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_4.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_winter/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	40 71 94 255	</c0>
+          <c1>	143 148 139 255	</c1>
+          <c2>	36 46 47 255	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.2 1.2 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	3.6 3.6 0.000000 0.000000	</S03_Strv_M38>
+        <S04_Lago_I>	0.9 0.9 0.000000 0.000000	</S04_Lago_I>
+        <S05_Strv_M21_29>	1.4 1.4 0.5 0.000000	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S08_Ikv_65_Alt_2>	0.9 0.9 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	2 2 0.4 0.000000	</S09_L_120_TD>
+        <S11_Strv_103B>	1 1 0.000000 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	4.8 4.8 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	2 2 6.5 5.3	</S13_Leo>
+        <S14_Ikv_103>	1.2 1.2 0.000000 0.000000	</S14_Ikv_103>
+        <S15_L_60>	0.7 0.7 3.2 0.000000	</S15_L_60>
+        <S16_Kranvagn>	0.8 0.8 0.000000 2.5	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S18_EMIL_1951_E1>	1.3 1.3 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S19_Sav_M43>	1 1 0.000000 0.000000	</S19_Sav_M43>
+        <S20_Ikv_72>	2.7 2.7 1.5 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	3 3 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.1 1.1 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	3.5 3.5 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/transparent	</userString>
+    <season>	desert	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15820	</id>
+      <texture>	vehicles/german/Camouflage/Desert_camo-05-3.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Desert_camou/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Desert_camou/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	112 96 58 255	</c0>
+          <c1>	0 0 0 0	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.3 1.3 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	0.9 0.9 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	5.4 5.4 0.000000 0.000000	</S03_Strv_M38>
+        <S04_Lago_I>	0.8 0.8 0.000000 0.000000	</S04_Lago_I>
+        <S05_Strv_M21_29>	1.6 1.6 1.1 3.8	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1.2 1.2 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S07_Strv_74>	1.2 1.2 0.000000 2.6	</S07_Strv_74>
+        <S08_Ikv_65_Alt_2>	1.2 1.2 0.1 1.6	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	1.8 1.8 0.1 0.000000	</S09_L_120_TD>
+        <S10_Strv_103_0_Series>	1.2 1.2 0.4 0.000000	</S10_Strv_103_0_Series>
+        <S12_Strv_M40>	8.2 8.2 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	2 2 3.2 0.000000	</S13_Leo>
+        <S14_Ikv_103>	1.6 1.6 2.3 0.000000	</S14_Ikv_103>
+        <S15_L_60>	0.8 0.8 3.4 0.000000	</S15_L_60>
+        <S16_Kranvagn>	0.7 0.7 7.3 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.4 1.4 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S18_EMIL_1951_E1>	1.9 1.9 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S19_Sav_M43>	2 2 2.8 3	</S19_Sav_M43>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	3.3 3.3 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1 1 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.9 2.9 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15821	</id>
+      <texture>	vehicles/sweden/Camouflage/Sweden_Victim.dds	</texture>
+      <description>	#vehicle_customization:camouflage/victim/sweden_black/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/victim/sweden_black/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	22 24 20 255	</c0>
+          <c1>	0 0 0 0	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	0 0 0 0	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.2 1.2 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	2.7 2.7 0.000000 0.000000	</S03_Strv_M38>
+        <S05_Strv_M21_29>	1.6 1.6 1.2 2.1	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S08_Ikv_65_Alt_2>	0.8 0.8 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	1.5 1.5 0.000000 0.000000	</S09_L_120_TD>
+        <S10_Strv_103_0_Series>	1.6 1.6 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S11_Strv_103B>	1.6 1.6 0.000000 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	4.6 4.6 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	2 2 3.8 0.000000	</S13_Leo>
+        <S14_Ikv_103>	1.6 1.6 0.000000 0.000000	</S14_Ikv_103>
+        <S15_L_60>	0.5 0.5 0.000000 0.000000	</S15_L_60>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	2.3 2.3 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	2.9 2.9 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.8 1.8 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.4 2.4 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15822	</id>
+      <texture>	vehicles/sweden/Camouflage/Sweden_Victim.dds	</texture>
+      <description>	#vehicle_customization:camouflage/victim/sweden_gold/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/victim/sweden_gold/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	0 0 0 0	</c0>
+          <c1>	75 71 31 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	130 130 30 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.1 1.1 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	0.8 0.8 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	2.1 2.1 0.000000 0.000000	</S03_Strv_M38>
+        <S04_Lago_I>	0.7 0.7 0.000000 0.000000	</S04_Lago_I>
+        <S05_Strv_M21_29>	1.1 1.1 1.8 2.8	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S08_Ikv_65_Alt_2>	0.9 0.9 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	1.5 1.5 0.000000 0.000000	</S09_L_120_TD>
+        <S10_Strv_103_0_Series>	1.4 1.4 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S11_Strv_103B>	1.6 1.6 0.000000 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	3.6 3.6 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	1.5 1.5 3.9 3.9	</S13_Leo>
+        <S14_Ikv_103>	1.6 1.6 0.000000 0.000000	</S14_Ikv_103>
+        <S15_L_60>	0.5 0.5 1.7 0.000000	</S15_L_60>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.3 1.3 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S19_Sav_M43>	1.2 1.2 0.000000 0.000000	</S19_Sav_M43>
+        <S20_Ikv_72>	4.1 4.1 1.5 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	2.9 2.9 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.8 1.8 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.4 2.4 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15823	</id>
+      <texture>	vehicles/sweden/Camouflage/Sweden_Victim.dds	</texture>
+      <description>	#vehicle_customization:camouflage/victim/sweden_red/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/victim/sweden_red/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	0 0 0 0	</c0>
+          <c1>	61 14 14 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	105 27 27 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.1 1.1 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	0.9 0.9 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	2.2 2.2 0.000000 0.000000	</S03_Strv_M38>
+        <S04_Lago_I>	0.7 0.7 0.000000 0.000000	</S04_Lago_I>
+        <S05_Strv_M21_29>	1.6 1.6 0.000000 0.000000	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S08_Ikv_65_Alt_2>	0.8 0.8 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	1.6 1.6 0.2 0.000000	</S09_L_120_TD>
+        <S10_Strv_103_0_Series>	1.6 1.6 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S11_Strv_103B>	1.6 1.6 0.000000 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	3.8 3.8 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	1.5 1.5 2.8 6.1	</S13_Leo>
+        <S14_Ikv_103>	1.6 1.6 0.000000 0.000000	</S14_Ikv_103>
+        <S15_L_60>	0.5 0.5 7 0.000000	</S15_L_60>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S19_Sav_M43>	1.2 1.2 0.6 0.000000	</S19_Sav_M43>
+        <S20_Ikv_72>	3.2 3.2 1.5 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	2.9 2.9 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.8 1.8 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.4 2.4 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15824	</id>
+      <texture>	vehicles/sweden/Camouflage/Sweden_Victim.dds	</texture>
+      <description>	#vehicle_customization:camouflage/victim/sweden_silver/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/victim/sweden_silver/label	</userString>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	0 0 0 0	</c0>
+          <c1>	61 78 75 255	</c1>
+          <c2>	0 0 0 0	</c2>
+          <c3>	138 138 138 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.1 1.1 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	2.3 2.3 0.000000 0.000000	</S03_Strv_M38>
+        <S04_Lago_I>	0.7 0.7 0.000000 0.000000	</S04_Lago_I>
+        <S05_Strv_M21_29>	1.5 1.5 0.9 2.9	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S08_Ikv_65_Alt_2>	0.8 0.8 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	1.7 1.7 0.000000 0.000000	</S09_L_120_TD>
+        <S10_Strv_103_0_Series>	1.6 1.6 0.000000 0.000000	</S10_Strv_103_0_Series>
+        <S11_Strv_103B>	1.6 1.6 0.000000 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	3.5 3.5 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	1.5 1.5 3.8 4.7	</S13_Leo>
+        <S14_Ikv_103>	1.6 1.6 0.000000 0.000000	</S14_Ikv_103>
+        <S15_L_60>	0.5 0.5 3 1.5	</S15_L_60>
+        <S16_Kranvagn>	0.7 0.7 0.000000 0.000000	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.3 1.3 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S19_Sav_M43>	1.1 1.1 0.000000 0.000000	</S19_Sav_M43>
+        <S20_Ikv_72>	3.6 3.6 1.5 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	2.9 2.9 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.8 1.8 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	2.4 2.4 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	desert	</season>
+    <historical>	true	</historical>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	sweden	</nations>
+      </include>
+      <exclude>
+        <vehicles>	sweden:S23_Strv_81_sabaton	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <camouflage>
+      <id>	15826	</id>
+      <texture>	vehicles/french/Camouflage/Clan_camuflage_4.dds	</texture>
+      <description>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <userString>	#vehicle_customization:camouflage/Clan_camouflage_04_desert/label	</userString>
+      <tags>	vehicleBound	</tags>
+      <invisibilityFactor>	1	</invisibilityFactor>
+      <palettes>
+        <palette>
+          <c0>	85 74 30 255	</c0>
+          <c1>	128 124 57 255	</c1>
+          <c2>	48 47 31 255	</c2>
+          <c3>	133 135 131 255	</c3>
+        </palette>
+      </palettes>
+      <tiling>
+        <S01_Strv_74_A2>	1.2 1.2 0.000000 0.000000	</S01_Strv_74_A2>
+        <S02_Strv_M42>	1 1 0.000000 0.000000	</S02_Strv_M42>
+        <S03_Strv_M38>	3.6 3.6 0.000000 0.000000	</S03_Strv_M38>
+        <S04_Lago_I>	0.9 0.9 0.000000 0.000000	</S04_Lago_I>
+        <S05_Strv_M21_29>	1.4 1.4 0.5 0.000000	</S05_Strv_M21_29>
+        <S06_Ikv_90_Typ_B_Bofors>	1 1 0.000000 0.000000	</S06_Ikv_90_Typ_B_Bofors>
+        <S08_Ikv_65_Alt_2>	0.9 0.9 0.000000 0.000000	</S08_Ikv_65_Alt_2>
+        <S09_L_120_TD>	2 2 0.4 0.000000	</S09_L_120_TD>
+        <S11_Strv_103B>	1 1 0.000000 0.000000	</S11_Strv_103B>
+        <S12_Strv_M40>	4.8 4.8 0.000000 0.000000	</S12_Strv_M40>
+        <S13_Leo>	2 2 6.5 5.3	</S13_Leo>
+        <S14_Ikv_103>	1.2 1.2 0.000000 0.000000	</S14_Ikv_103>
+        <S15_L_60>	0.7 0.7 3.2 0.000000	</S15_L_60>
+        <S16_Kranvagn>	0.8 0.8 0.000000 2.5	</S16_Kranvagn>
+        <S17_EMIL_1952_E2>	1.2 1.2 0.000000 0.000000	</S17_EMIL_1952_E2>
+        <S18_EMIL_1951_E1>	1.3 1.3 0.000000 0.000000	</S18_EMIL_1951_E1>
+        <S19_Sav_M43>	1 1 0.000000 0.000000	</S19_Sav_M43>
+        <S20_Ikv_72>	2.7 2.7 1.5 0.7	</S20_Ikv_72>
+        <S21_UDES_03>	3 3 0.000000 0.000000	</S21_UDES_03>
+        <S22_Strv_S1>	1.1 1.1 0.000000 0.000000	</S22_Strv_S1>
+        <S23_Strv_81>	3.5 3.5 0.000000 0.000000	</S23_Strv_81>
+      </tiling>
+    </camouflage>
+  </itemGroup>
+</sweden.xml>

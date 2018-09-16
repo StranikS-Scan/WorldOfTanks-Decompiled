@@ -9,6 +9,7 @@ from gui.Scaleform.daapi.view.meta.FortVehicleSelectPopoverMeta import FortVehic
 from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.prb_control.entities.base.unit.listener import IUnitListener
 from gui.shared.events import CSVehicleSelectEvent, StrongholdEvent
@@ -78,6 +79,7 @@ class FortVehicleSelectPopover(FortVehicleSelectPopoverMeta, VehicleSelectorBase
         vehicleCriteria = getVehicleCriteria(levelsRange=self._levelsRange, inHangar=not self._isMultiSelect)
         vehicles = self._updateData(self.itemsCache.items.getVehicles(vehicleCriteria), compatiblePredicate=lambda vo: vo['inHangar'])
         self._vehDP.buildList(vehicles)
+        self._updateSortField()
 
     def addButtonClicked(self):
         vehicles = self._vehDP.getSelected()
@@ -108,6 +110,7 @@ class FortVehicleSelectPopover(FortVehicleSelectPopoverMeta, VehicleSelectorBase
     def _initFilter(self, nation=-1, vehicleType='none', isMain=False, level=-1, compatibleOnly=False):
         filtersData = super(FortVehicleSelectPopover, self)._initFilter(nation, vehicleType, isMain, level, compatibleOnly)
         filtersData['togglesDP'] = self.__createFilterToggles()
+        filtersData['nationTooltip'] = makeTooltip(MENU.NATIONS_TITLE, TOOLTIPS.VEHICLESELECTOR_FILTER_NATION)
         if self._showMainBtn:
             entry = 'favorite'
             filtersData['mainBtn'] = {'value': getButtonsAssetPath(entry),

@@ -7,10 +7,12 @@ import BigWorld
 import ArenaType
 from items import vehicles
 import Event
-from constants import ARENA_PERIOD, ARENA_UPDATE
+from constants import ARENA_PERIOD, ARENA_UPDATE, IS_CLIENT
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV, LOG_ERROR
 import arena_component_system.client_arena_component_assembler as assembler
+if IS_CLIENT:
+    from helpers.bots import preprocessBotName
 
 class ClientArena(object):
     __onUpdate = {ARENA_UPDATE.VEHICLE_LIST: '_ClientArena__onVehicleListUpdate',
@@ -149,6 +151,8 @@ class ClientArena(object):
         for infoAsTuple in vehiclesList:
             vehID, info = self.__vehicleInfoAsDict(infoAsTuple)
             vehs[vehID] = info
+            if IS_CLIENT and info['accountDBID'] <= 0:
+                info['name'] = preprocessBotName(info['name'])
 
         self.__rebuildIndexToId()
         self.onNewVehicleListReceived()

@@ -352,6 +352,15 @@ class VehicleArenaInfoVO(object):
     def isActionsDisabled(self):
         return not self.player.accountDBID
 
+    def isChatCommandsDisabled(self, isAlly):
+        if not self.player.accountDBID:
+            if isAlly:
+                return True
+            arena = avatar_getter.getArena()
+            if arena is None or arena.guiType not in (ARENA_GUI_TYPE.RANDOM, ARENA_GUI_TYPE.TRAINING):
+                return True
+        return False
+
     def getTypeInfo(self):
         return (self.vehicleType.classTag, self.vehicleType.level, nations.NAMES[self.vehicleType.nationID])
 

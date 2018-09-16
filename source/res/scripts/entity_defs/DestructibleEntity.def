@@ -34,7 +34,7 @@
     <isDestructibleDestroyed>
       <Type>	BOOL	</Type>
       <Flags>	ALL_CLIENTS	</Flags>
-      <Default>	false	</Default>
+      <Default>	False	</Default>
     </isDestructibleDestroyed>
     <typeID>
       <Type>	UINT8	</Type>
@@ -46,7 +46,7 @@
       <Type>	BOOL	</Type>
       <Flags>	BASE	</Flags>
       <Editable>	true	</Editable>
-      <Default>	0	</Default>
+      <Default>	False	</Default>
     </initActive>
     <linkedMapActivities>
       <Type>	STRING	</Type>

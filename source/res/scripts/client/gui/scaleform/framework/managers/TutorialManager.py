@@ -1,17 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/managers/TutorialManager.py
+import logging
 from collections import defaultdict
-from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.framework.entities.abstract.TutorialManagerMeta import TutorialManagerMeta
 from gui.Scaleform.genConsts.TUTORIAL_TRIGGER_TYPES import TUTORIAL_TRIGGER_TYPES
 from gui.Scaleform.genConsts.TUTORIAL_EFFECT_TYPES import TUTORIAL_EFFECT_TYPES as _EFFECT_TYPES
 from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.Scaleform.genConsts.TUTORIAL_EFFECT_BUILDERS import TUTORIAL_EFFECT_BUILDERS
+_logger = logging.getLogger(__name__)
 try:
     from tutorial.doc_loader import gui_config
 except ImportError:
-    LOG_ERROR('Can not load package tutorial')
+    _logger.error('Can not load package tutorial')
 
     class gui_config(object):
 
@@ -99,7 +100,7 @@ class TutorialManager(TutorialManagerMeta):
         if not self._validate(componentID):
             return False
         elif componentID not in self._components:
-            LOG_ERROR('showInteractiveHint - target component is not on scene!', componentID)
+            _logger.error('showInteractiveHint - target component is not on scene!: %r', componentID)
             return False
         else:
             if 'padding' not in content:
@@ -131,22 +132,22 @@ class TutorialManager(TutorialManagerMeta):
         else:
             animParams = self._config.getItem(componentID).anim.get(animType, None)
             if animParams is None:
-                LOG_ERROR('invalid animation type', animType)
+                _logger.error('invalid animation type: %r', animType)
                 return False
             if componentID in self._components:
                 self.__doShowEffect(componentID, animType, animParams)
             elif componentID not in self._pendingComponentAnimations:
-                LOG_DEBUG('deferring playComponentAnimation (component not yet on scene)', componentID, animType, animParams)
+                _logger.debug('deferring playComponentAnimation (component not yet on scene): %r, %r, %r', componentID, animType, animParams)
                 self._pendingComponentAnimations[componentID] = (animType, animParams)
             else:
-                LOG_ERROR('playComponentAnimation call already deferred - ignoring another one', componentID, animType, animParams)
+                _logger.error('playComponentAnimation call already deferred - ignoring another one: %r, %r, %r', componentID, animType, animParams)
             return True
 
     def stopComponentAnimation(self, componentID, animType):
         if not self._validate(componentID):
             return
         else:
-            LOG_DEBUG('stopComponentAnimation', componentID, animType)
+            _logger.debug('stopComponentAnimation: %r, %r', componentID, animType)
             if componentID in self._components:
                 self.__doHideEffect(componentID, animType)
             else:
@@ -154,27 +155,27 @@ class TutorialManager(TutorialManagerMeta):
                 if deferredAnim is not None:
                     deferredAnimType, _ = deferredAnim
                     if deferredAnimType == animType:
-                        LOG_DEBUG('canceling deferred playComponentAnimation call', componentID, self._pendingComponentAnimations[componentID])
+                        _logger.debug('canceling deferred playComponentAnimation call: %r, %r', componentID, self._pendingComponentAnimations[componentID])
                         del self._pendingComponentAnimations[componentID]
                     else:
-                        LOG_ERROR('last deferred playComponentAnimation call had a different type', componentID, animType, deferredAnimType)
+                        _logger.error('last deferred playComponentAnimation call had a different type: %r, %r, %r', componentID, animType, deferredAnimType)
             return
 
     def showBootcampHint(self, componentID):
         if not self._validate(componentID):
             return False
         if componentID not in self._components:
-            LOG_ERROR('showBootcampHint - target component is not on scene!', componentID)
+            _logger.error('showBootcampHint - target component is not on scene!: %r', componentID)
             return False
         params = self._config.getItem(componentID).bootcampHint
-        LOG_DEBUG('showBootcampHint', componentID, params)
+        _logger.debug('showBootcampHint: %r, %r', componentID, params)
         self.__doShowEffect(componentID, _EFFECT_TYPES.BOOTCAMP_HINT, params)
         return True
 
     def hideBootcampHint(self, componentID):
         if not self._validate(componentID):
             return
-        LOG_DEBUG('hideBootcampHint', componentID)
+        _logger.debug('hideBootcampHint: %r', componentID)
         self.__doHideEffect(componentID, _EFFECT_TYPES.BOOTCAMP_HINT)
 
     def setupViewContextHints(self, viewTutorialID, hintsData):
@@ -185,10 +186,10 @@ class TutorialManager(TutorialManagerMeta):
         self.as_showEffectS(viewTutorialID, '', effectData)
 
     def onComponentFound(self, componentID, viewTutorialID):
-        LOG_DEBUG('onComponentFound', componentID, viewTutorialID)
+        _logger.debug('onComponentFound: %r, %r', componentID, viewTutorialID)
         bindings = self._componentViewBindings[componentID]
         if bindings.desiredUniqueName is not None and bindings.desiredUniqueName != viewTutorialID:
-            LOG_ERROR('ignoring onComponentFound in unexpected view instance - expected', bindings.desiredUniqueName)
+            _logger.error('ignoring onComponentFound in unexpected view instance - expected: %r', bindings.desiredUniqueName)
             return
         else:
             self._components.add(componentID)
@@ -204,7 +205,7 @@ class TutorialManager(TutorialManagerMeta):
             return
 
     def onComponentDisposed(self, componentID):
-        LOG_DEBUG('onComponentDisposed', componentID)
+        _logger.debug('onComponentDisposed: %r', componentID)
         self._components.discard(componentID)
         self._componentViewBindings[componentID].actualUniqueName = None
         self.fireEvent(_Event(_Event.ON_COMPONENT_LOST, targetID=componentID), scope=EVENT_BUS_SCOPE.GLOBAL)
@@ -214,7 +215,7 @@ class TutorialManager(TutorialManagerMeta):
         self.fireEvent(_Event(_Event.ON_TRIGGER_ACTIVATED, targetID=componentID, settingsID=triggerType), scope=EVENT_BUS_SCOPE.GLOBAL)
 
     def onEffectCompleted(self, componentID, effectType):
-        LOG_DEBUG('onEffectCompleted', componentID, effectType)
+        _logger.debug('onEffectCompleted: %r, %r', componentID, effectType)
         eventType = _EFFECT_COMPLETE_EVENTS.get(effectType, None)
         if eventType is not None:
             self.fireEvent(_Event(eventType, targetID=componentID, settingsID=effectType), scope=EVENT_BUS_SCOPE.GLOBAL)
@@ -268,7 +269,7 @@ class TutorialManager(TutorialManagerMeta):
         else:
             component = self._config.getItem(componentID)
             if component is None:
-                LOG_ERROR('Component is not found', componentID)
+                _logger.error('Component is not found: %r', componentID)
                 return False
             return True
 
@@ -292,7 +293,7 @@ class TutorialManager(TutorialManagerMeta):
         viewTutorialID = self.__getComponentViewID(componentID)
         effectBuilder = self._config.getItem(componentID).effectBuilders.get(effectType, '')
         if not effectBuilder:
-            LOG_ERROR('no effect builder specified for effect type', effectType, componentID)
+            _logger.error('no effect builder specified for effect type: %r, %r', effectType, componentID)
         self.as_showEffectS(viewTutorialID, componentID, {'data': effectData,
          'builderLnk': effectBuilder})
 
@@ -306,8 +307,8 @@ class TutorialManager(TutorialManagerMeta):
         for effectType, propertyNames in _COMPONENT_PROPERTY_EFFECTS.iteritems():
             effectProps = {key:props.pop(key) for key in propertyNames if key in props}
             if effectProps:
-                LOG_DEBUG('__doSetComponentProps: triggering AS effect', componentID, effectType, effectProps)
+                _logger.debug('__doSetComponentProps: triggering AS effect: %r, %r, %r', componentID, effectType, effectProps)
                 self.__doShowEffect(componentID, effectType, effectProps)
 
         if props:
-            LOG_ERROR('__doSetComponentProps: unsupported properties:', componentID, props)
+            _logger.error('__doSetComponentProps: unsupported properties: %r, %r', componentID, props)

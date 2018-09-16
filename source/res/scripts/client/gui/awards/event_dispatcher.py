@@ -29,7 +29,3 @@ def showClanJoinAward(clanAbbrev, clanName, clanDbID):
 
 def showTelecomAward(vehicleDesrs, hasCrew, hasBrotherhood):
     showAwardWindow(specialAwards.TelecomAward(vehicleDesrs, hasCrew, hasBrotherhood))
-
-
-def showBloggersBattleAward(awardId, blogger):
-    showAwardWindow(specialAwards.BloggersBattleAward(awardId, blogger))

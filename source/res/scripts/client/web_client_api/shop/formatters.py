@@ -196,7 +196,8 @@ def makeDeviceFormatter(compatVehGetter=None, fittedVehGetter=None, itemsCache=N
 
 def makeEquipmentFormatter(fittedVehGetter=None):
     fields = list(_vehicleArtifactsFieldSet)
-    fields.extend([Field('cooldown', lambda i: i.descriptor.cooldownSeconds), Field('nations', lambda i: [ nations.NAMES[i] for i in sorted(i.descriptor.compatibleNations()) ])])
+    fields.remove(descriptionField)
+    fields.extend([Field('cooldown', lambda i: i.descriptor.cooldownSeconds), Field('nations', lambda i: [ nations.NAMES[i] for i in sorted(i.descriptor.compatibleNations()) ]), Field('description', lambda i: _strsanitize(i.descriptor.description))])
     if fittedVehGetter:
         fields.append(Field('fittedVehicles', lambda i: fittedVehGetter(i.intCD)))
     return Formatter(fields)

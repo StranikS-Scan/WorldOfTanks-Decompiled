@@ -115,6 +115,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
             self.__cameraID = 0
         if self.__viewPointID:
             self._setActive(self.__viewPointID, False)
+            self._setActive(self.__animationID, False)
 
     def setSettings(self):
         if not self.__isAlive:
@@ -357,6 +358,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         else:
             self.__updateViewPointEntry()
             self._setActive(self.__viewPointID, True)
+            self._setActive(self.__animationID, True)
             getter = self.settingsCore.getSetting
             showDirectionLine = GUI_SETTINGS.showDirectionLine and getter(settings_constants.GAME.SHOW_VECTOR_ON_MAP)
             showYawLimit = GUI_SETTINGS.showSectorLines and getter(settings_constants.GAME.SHOW_SECTOR_ON_MAP)
@@ -418,8 +420,9 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         self._invalidateMarkup(True)
 
     def __onMinimapFeedbackReceived(self, eventID, entityID, value):
-        if eventID == FEEDBACK_EVENT_ID.MINIMAP_SHOW_MARKER and entityID == self.__playerVehicleID and self.__animationID:
-            self._invoke(self.__animationID, 'setAnimation', value)
+        if eventID == FEEDBACK_EVENT_ID.MINIMAP_SHOW_MARKER and self.__animationID:
+            if avatar_getter.getVehicleIDAttached() == entityID:
+                self._invoke(self.__animationID, 'setAnimation', value)
 
     def __onVehicleFeedbackReceived(self, eventID, _, value):
         if not self.__isObserver and self.__isAlive and eventID == FEEDBACK_EVENT_ID.VEHICLE_ATTRS_CHANGED and self.__circlesVisibilityState & settings.CIRCLE_TYPE.VIEW_RANGE:
@@ -871,10 +874,12 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             LOG_DEBUG('Location of vehicle entry is not in AoI', entry)
 
     def __onMinimapFeedbackReceived(self, eventID, entityID, value):
-        if eventID == FEEDBACK_EVENT_ID.MINIMAP_SHOW_MARKER and entityID != self.__playerVehicleID and entityID in self._entries:
-            entry = self._entries[entityID]
-            if entry.isInAoI():
-                self._invoke(entry.getID(), 'setAnimation', value)
+        if eventID == FEEDBACK_EVENT_ID.MINIMAP_SHOW_MARKER and entityID != self.__playerVehicleID:
+            if entityID in self._entries:
+                entry = self._entries[entityID]
+                if (self.__isObserver or not avatar_getter.isVehicleAlive()) and avatar_getter.getVehicleIDAttached() == entityID:
+                    return
+                entry.isInAoI() and self._invoke(entry.getID(), 'setAnimation', value)
 
     def __onTeamChanged(self, teamID):
         self.invalidateArenaInfo()

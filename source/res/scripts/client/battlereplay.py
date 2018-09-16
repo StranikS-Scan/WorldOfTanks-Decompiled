@@ -15,6 +15,7 @@ import constants
 import Keys
 import Event
 import AreaDestructibles
+import TriggersManager
 from debug_utils import LOG_ERROR, LOG_DEBUG, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from helpers import EffectsList, isPlayerAvatar, isPlayerAccount, getFullClientVersion
 from PlayerEvents import g_playerEvents
@@ -27,7 +28,6 @@ from skeletons.gameplay import IGameplayLogic, ReplayEventID
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
-import TriggersManager
 
 def _isVideoCameraCtrl(mode):
     from AvatarInputHandler.control_modes import VideoCameraControlMode
@@ -48,6 +48,25 @@ REPLAY_TIME_MARK_REPLAY_FINISHED = 2147483649L
 REPLAY_TIME_MARK_CURRENT_TIME = 2147483650L
 FAST_FORWARD_STEP = 20.0
 _BATTLE_SIMULATION_KEY_PATH = 'development/replayBattleSimulation'
+
+class CallbackDataNames(object):
+    APPLY_ZOOM = 'applyZoom'
+    BC_MARKERS_ONTRIGGERACTIVATED = 'bootcampMarkers_onTriggerActivated'
+    BC_MARKERS_ONTRIGGERDEACTIVATED = 'bootcampMarkers_onTriggerDeactivated'
+    BC_MARKERS_SHOWMARKER = 'bootcampMarkers_showMarker'
+    BC_MARKERS_HIDEMARKER = 'bootcampMarkers_hideMarker'
+    BC_HINT_SHOW = 'bootcampHint_show'
+    BC_HINT_HIDE = 'bootcampHint_hide'
+    BC_HINT_COMPLETE = 'bootcampHint_complete'
+    BC_HINT_CLOSE = 'bootcampHint_close'
+    BC_HINT_ONHIDED = 'bootcampHint_onHided'
+    BW_CHAT2_REPLAY_ACTION_RECEIVED_CALLBACK = 'bw_chat2.onActionReceived'
+    CLIENT_VEHICLE_STATE_GROUP = 'client_vehicle_state_{}'
+    DYN_SQUAD_SEND_ACTION_NAME = 'DynSquad.SendInvitationToSquad'
+    DYN_SQUAD_ACCEPT_ACTION_NAME = 'DynSquad.AcceptInvitationToSquad'
+    DYN_SQUAD_REJECT_ACTION_NAME = 'DynSquad.RejectInvitationToSquad'
+    GUN_DAMAGE_SOUND = 'gunDamagedSound'
+
 
 class BattleReplay(object):
     isPlaying = property(lambda self: self.__replayCtrl.isPlaying())
@@ -97,7 +116,6 @@ class BattleReplay(object):
         self.__replayCtrl.clientVersionDiffersCallback = self.onClientVersionDiffers
         self.__replayCtrl.battleChatMessageCallback = self.onBattleChatMessage
         self.__replayCtrl.lockTargetCallback = self.onLockTarget
-        self.__replayCtrl.cruiseModeCallback = self.onSetCruiseMode
         self.__replayCtrl.equipmentIdCallback = self.onSetEquipmentId
         self.__replayCtrl.warpFinishedCallback = self.__onTimeWarpFinished
         self.__replayCtrl.sniperModeCallback = self.onSniperModeChanged
@@ -177,7 +195,6 @@ class BattleReplay(object):
         self.__replayCtrl.battleChatMessageCallback = None
         self.__replayCtrl.ammoButtonPressedCallback = None
         self.__replayCtrl.lockTargetCallback = None
-        self.__replayCtrl.cruiseModeCallback = None
         self.__replayCtrl.equipmentIdCallback = None
         self.__replayCtrl.warpFinishedCallback = None
         self.__replayCtrl = None
@@ -817,7 +834,11 @@ class BattleReplay(object):
             if common is not None:
                 common['accountCompDescr'] = None
             modifiedResults = (modifiedResults, self.__getArenaVehiclesInfo(), BigWorld.player().arena.statistics)
-            self.__replayCtrl.setArenaStatisticsStr(json.dumps(_JSON_Encode(modifiedResults)))
+            try:
+                self.__replayCtrl.setArenaStatisticsStr(json.dumps(_JSON_Encode(modifiedResults)))
+            except Exception:
+                LOG_ERROR('__onBattleResultsReceived::setArenaStatisticsStr _JSON_Encode error!')
+
         return
 
     def __onAccountBecomePlayer(self):
@@ -859,6 +880,7 @@ class BattleReplay(object):
             self.__wasVideoBeforeRewind = _isVideoCameraCtrl(playerControlMode)
             self.__videoCameraMatrix.set(BigWorld.camera().matrix)
             BigWorld.PyGroundEffectManager().stopAll()
+            BigWorld.wg_clearDecals()
         g_replayEvents.onMuteSound(True)
         self.__enableInGameEffects(False)
         if self.__rewind:
@@ -884,13 +906,6 @@ class BattleReplay(object):
 
     def isFinishedNoPlayCheck(self):
         return self.__isFinished
-
-    def onSetCruiseMode(self, mode):
-        if self.isRecording:
-            self.__replayCtrl.onSetCruiseMode(mode)
-        elif self.isPlaying:
-            from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
-            self.sessionProvider.invalidateVehicleState(VEHICLE_VIEW_STATE.CRUISE_MODE, mode)
 
     def isNeedToPlay(self, entity_id):
         return self.__replayCtrl.isEffectNeedToPlay(entity_id)
@@ -955,7 +970,6 @@ class BattleReplay(object):
         self.__cleanupAfterTimeWarp()
 
     def __cleanupAfterTimeWarp(self):
-        BigWorld.wg_clearDecals()
         self.__warpTime = -1.0
         BigWorld.wg_enableGUIBackground(False, False)
         self.__enableInGameEffects(0.0 < self.__playbackSpeedModifiers[self.__playbackSpeedIdx] < 8.0)

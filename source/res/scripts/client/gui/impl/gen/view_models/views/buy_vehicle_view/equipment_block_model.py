@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/views/buy_vehicle_view/equipment_block_model.py
 import typing
-from frameworks.wulf import Array
-from frameworks.wulf.gui_constants import ResourceValue
+from frameworks.wulf import Resource
 from frameworks.wulf import ViewModel
+from gui.impl.gen.view_models.ui_kit.list_model import ListModel
 from gui.impl.gen.view_models.ui_kit.vehicle_action_btn_model import VehicleActionBtnModel
 from gui.impl.gen.view_models.ui_kit.vehicle_btn_model import VehicleBtnModel
 from gui.impl.gen.view_models.views.buy_vehicle_view.additional_equipment_slot_model import AdditionalEquipmentSlotModel
@@ -12,60 +12,58 @@ class EquipmentBlockModel(ViewModel):
     __slots__ = ('onCancelTradeOffVehicle',)
 
     @property
-    def ammo(self):
+    def totalPrice(self):
         return self._getViewModel(0)
 
     @property
-    def slot(self):
+    def ammo(self):
         return self._getViewModel(1)
 
     @property
-    def vehicleBtn(self):
+    def slot(self):
         return self._getViewModel(2)
 
     @property
-    def vehicleRentBtn(self):
+    def vehicleBtn(self):
         return self._getViewModel(3)
 
     @property
-    def vehicleTradeInBtn(self):
+    def vehicleRentBtn(self):
         return self._getViewModel(4)
 
+    @property
+    def vehicleTradeInBtn(self):
+        return self._getViewModel(5)
+
     def getBuyBtnIsEnabled(self):
-        return self._getBool(5)
-
-    def setBuyBtnIsEnabled(self, value):
-        self._setBool(5, value)
-
-    def getTradeInIsEnabled(self):
         return self._getBool(6)
 
-    def setTradeInIsEnabled(self, value):
+    def setBuyBtnIsEnabled(self, value):
         self._setBool(6, value)
 
+    def getTradeInIsEnabled(self):
+        return self._getBool(7)
+
+    def setTradeInIsEnabled(self, value):
+        self._setBool(7, value)
+
     def getTradeOffVehicleIntCD(self):
-        return self._getNumber(7)
-
-    def setTradeOffVehicleIntCD(self, value):
-        self._setNumber(7, value)
-
-    def getBuyVehicleIntCD(self):
         return self._getNumber(8)
 
-    def setBuyVehicleIntCD(self, value):
+    def setTradeOffVehicleIntCD(self, value):
         self._setNumber(8, value)
 
-    def getSelectedRentTerm(self):
+    def getBuyVehicleIntCD(self):
         return self._getNumber(9)
 
-    def setSelectedRentTerm(self, value):
+    def setBuyVehicleIntCD(self, value):
         self._setNumber(9, value)
 
-    def getTotalPrice(self):
-        return self._getArray(10)
+    def getSelectedRentTerm(self):
+        return self._getNumber(10)
 
-    def setTotalPrice(self, value):
-        self._setArray(10, value)
+    def setSelectedRentTerm(self, value):
+        self._setNumber(10, value)
 
     def getEmtySlotAvailable(self):
         return self._getBool(11)
@@ -116,6 +114,8 @@ class EquipmentBlockModel(ViewModel):
         self._setBool(18, value)
 
     def _initialize(self):
+        super(EquipmentBlockModel, self)._initialize()
+        self._addViewModelProperty('totalPrice', ListModel())
         self._addViewModelProperty('ammo', AdditionalEquipmentSlotModel())
         self._addViewModelProperty('slot', AdditionalEquipmentSlotModel())
         self._addViewModelProperty('vehicleBtn', VehicleBtnModel())
@@ -126,11 +126,10 @@ class EquipmentBlockModel(ViewModel):
         self._addNumberProperty('tradeOffVehicleIntCD', -1)
         self._addNumberProperty('buyVehicleIntCD', 0)
         self._addNumberProperty('selectedRentTerm', 0)
-        self._addArrayProperty('totalPrice', Array())
         self._addBoolProperty('emtySlotAvailable', False)
         self._addBoolProperty('isRestore', False)
         self._addBoolProperty('isSlotAnimPlaying', False)
-        self._addResourceProperty('buyBtnLabel', ResourceValue.DEFAULT)
+        self._addResourceProperty('buyBtnLabel', Resource.INVALID)
         self._addNumberProperty('confirmGoldPrice', 0)
         self._addBoolProperty('popoverIsAvailable', False)
         self._addBoolProperty('showBuyBootcampAnim', False)

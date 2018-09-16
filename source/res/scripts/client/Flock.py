@@ -10,6 +10,7 @@ import BattleReplay
 import SoundGroups
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from Math import Vector3
+import AnimationSequence
 ENVIRONMENT_EFFECTS_CONFIG_FILE = 'scripts/environment_effects.xml'
 
 class DebugGizmo(object):
@@ -101,9 +102,11 @@ class FlockLike(object):
                     FlockLike.__SoundNames[modelName] = soundName
 
         self.__sound = None
+        self._animators = []
         return
 
     def destroy(self):
+        self._animators = None
         self.__sound = None
         return
 
@@ -117,7 +120,7 @@ class FlockLike(object):
 
         return result
 
-    def _loadModels(self, prereqs):
+    def _loadModels(self, prereqs, spaceID):
         try:
             for modelId in prereqs.keys():
                 if modelId in prereqs.failedIDs:
@@ -129,8 +132,13 @@ class FlockLike(object):
                 if self.__sound is None:
                     self._addSound(model)
                 animSpeed = random.uniform(self.animSpeedMin, self.animSpeedMax)
-                model.actionScale = animSpeed
-                model.action('FlockAnimAction')()
+                clipResource = model.deprecatedGetAnimationClipResource('FlockAnimAction')
+                loader = AnimationSequence.Loader(clipResource, spaceID)
+                animator = loader.loadSync()
+                animator.bindTo(AnimationSequence.ModelWrapperContainer(model))
+                animator.speed = animSpeed
+                animator.start()
+                self._animators.append(animator)
 
         except Exception:
             LOG_CURRENT_EXCEPTION()
@@ -188,7 +196,7 @@ class Flock(BigWorld.Entity, FlockLike):
     def onEnterWorld(self, prereqs):
         if BattleReplay.g_replayCtrl.isPlaying or BigWorld.isForwardPipeline():
             return
-        self._loadModels(prereqs)
+        self._loadModels(prereqs, self.spaceID)
         if self.models:
             self._addSound(self.models[0])
         self.__decisionStrategy = self.__doUsualFly
@@ -211,6 +219,7 @@ class Flock(BigWorld.Entity, FlockLike):
         self.__makeDecision()
 
     def onLeaveWorld(self):
+        self._animators = []
         self.models = []
         if self.__decisionCallbackId is not None:
             BigWorld.cancelCallback(self.__decisionCallbackId)

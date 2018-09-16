@@ -10,22 +10,19 @@ from adisp import process
 from gui import SystemMessages, DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.dialogs.FreeXPInfoDialogMeta import FreeXPInfoMeta
-from gui.Scaleform.genConsts.WG_MONEY_ALIASES import WG_MONEY_ALIASES
+from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.SystemMessages import SM_TYPE
-from gui.shared import EVENT_BUS_SCOPE, g_eventBus
-from gui.shared.events import LoadViewEvent
 from helpers import dependency
 from helpers.aop import Aspect, Pointcut, Weaver
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.gui.game_control import IWalletController, IBootcampController
+from skeletons.gui.game_control import IWalletController
 from skeletons.gui.shared import IItemsCache
 _logger = logging.getLogger(__name__)
 
 class WalletController(IWalletController):
     itemsCache = dependency.descriptor(IItemsCache)
     settingsCore = dependency.descriptor(ISettingsCore)
-    bootcampController = dependency.descriptor(IBootcampController)
 
     class STATUS(CONST_CONTAINER):
         SYNCING = 0
@@ -40,13 +37,11 @@ class WalletController(IWalletController):
         self.__useGold = False
         self.__useFreeXP = False
         self.__weaver = None
-        self.__isWGMOfflineEmergency = False
         return
 
     def init(self):
         _logger.debug('WalletController init')
-        g_clientUpdateManager.addCallbacks({'cache.mayConsumeWalletResources': self.__onWalletStatusChanged,
-         'serverSettings.wgm_offline_emergency_config.enabled': self.__onWGMoneyOffline})
+        g_clientUpdateManager.addCallbacks({'cache.mayConsumeWalletResources': self.__onWalletStatusChanged})
 
     def fini(self):
         _logger.debug('WalletController fini')
@@ -54,13 +49,6 @@ class WalletController(IWalletController):
         self.__clearCallback()
         self.__clearWeaver()
         super(WalletController, self).fini()
-
-    def onLobbyInited(self, ctx):
-        wgmOfflineEmergencyConfig = BigWorld.player().serverSettings['wgm_offline_emergency_config']
-        isWGMOfflineEmergency = wgmOfflineEmergencyConfig['enabled']
-        if isWGMOfflineEmergency:
-            self.__clearCallback()
-            self.__onWGMoneyOffline(isWGMOfflineEmergency)
 
     def onLobbyStarted(self, event):
         wallet = BigWorld.player().serverSettings['wallet']
@@ -86,10 +74,10 @@ class WalletController(IWalletController):
 
     @property
     def componentsStatuses(self):
-        return {name:self.__currentStatus for name in ('gold', 'freeXP', 'credits', 'crystal')} if self.__isWGMOfflineEmergency else {'gold': self.__currentStatus if self.__useGold else self.STATUS.AVAILABLE,
+        return {'gold': self.__currentStatus if self.__useGold else self.STATUS.AVAILABLE,
          'freeXP': self.__currentStatus if self.__useFreeXP else self.STATUS.AVAILABLE,
-         'credits': self.__currentStatus if constants.IS_SINGAPORE else self.STATUS.AVAILABLE,
-         'crystal': self.STATUS.AVAILABLE}
+         'credits': self.__currentStatus if not constants.IS_CHINA else self.STATUS.AVAILABLE,
+         'crystal': self.__currentStatus if not constants.IS_CHINA else self.STATUS.AVAILABLE}
 
     @property
     def isSyncing(self):
@@ -126,14 +114,7 @@ class WalletController(IWalletController):
         self.__currentCallbackId = None
         if self.isSyncing:
             self.__processStatus(self.STATUS.NOT_AVAILABLE)
-            message = '#system_messages:wallet/not_available'
-            if constants.IS_SINGAPORE:
-                message += '_asia'
-            if not self.__useFreeXP:
-                message += '_gold'
-            elif not self.__useGold:
-                message += '_freexp'
-            SystemMessages.pushI18nMessage(message, type=SM_TYPE.Warning)
+            self.__sendNotification(status='not_available')
         return
 
     def __clearCallback(self):
@@ -150,44 +131,18 @@ class WalletController(IWalletController):
             if self.isAvailable:
                 self.__clearCallback()
                 if not initialize:
-                    message = '#system_messages:wallet/available'
-                    if constants.IS_SINGAPORE:
-                        message += '_asia'
-                    if not self.__useFreeXP:
-                        message += '_gold'
-                    elif not self.__useGold:
-                        message += '_freexp'
-                    SystemMessages.pushI18nMessage(message, type=SM_TYPE.Information)
+                    self.__sendNotification(status='available')
             elif self.isSyncing and self.__currentCallbackId is None:
                 self.__currentCallbackId = BigWorld.callback(30, self.__processCallback)
         return
 
     def __onWalletStatusChanged(self, available):
-        if not self.__isWGMOfflineEmergency:
-            status = self.__currentStatus
-            if available and not self.isAvailable:
-                status = self.STATUS.AVAILABLE
-            elif not available and self.isAvailable:
-                status = self.STATUS.SYNCING
-            self.__processStatus(status)
-
-    def __onWGMoneyOffline(self, isOffline):
-        wasEnabled = self.__isWGMOfflineEmergency
-        self.__isWGMOfflineEmergency = isOffline
-        if isOffline and not self.bootcampController.isInBootcamp():
-            self.__weaver = self.__weaver or Weaver()
-            self.__weaver.weave(pointcut=ShowWGMOfflineEmergencyPointcut)
-            if not wasEnabled:
-                g_eventBus.handleEvent(LoadViewEvent(WG_MONEY_ALIASES.WG_MONEY_WARNING_VIEW_ALIAS), scope=EVENT_BUS_SCOPE.LOBBY)
-            self.__currentStatus = self.STATUS.NOT_AVAILABLE
-            self.__notify()
-        else:
-            self.cleanWeave((ShowWGMOfflineEmergencyPointcut,))
-            if self.itemsCache.items.stats.mayConsumeWalletResources:
-                status = self.STATUS.AVAILABLE
-            else:
-                status = self.STATUS.SYNCING
-            self.__processStatus(status, True)
+        status = self.__currentStatus
+        if available and not self.isAvailable:
+            status = self.STATUS.AVAILABLE
+        elif not available and self.isAvailable:
+            status = self.STATUS.SYNCING
+        self.__processStatus(status)
 
     def __checkStatus(self, status):
         return self.__currentStatus == status
@@ -200,11 +155,20 @@ class WalletController(IWalletController):
         filters = self.settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
         if filters['isFreeXPInfoDialogShowed']:
             return
-        self.__weaver = self.__weaver or Weaver()
+        self.__weaver = Weaver()
         if self.__weaver.findPointcut(UnlockItemPointcut) == -1:
             self.__weaver.weave(pointcut=UnlockItemPointcut, aspects=[ShowXPInfoDialogAspect(self.cleanWeave)])
         if self.__weaver.findPointcut(ExchangeFreeXPToTankmanPointcut) == -1:
             self.__weaver.weave(pointcut=ExchangeFreeXPToTankmanPointcut, aspects=[ShowXPInfoDialogAspect(self.cleanWeave)])
+
+    def __sendNotification(self, status):
+        msgType = SM_TYPE.Information if status == 'available' else SM_TYPE.Warning
+        if constants.IS_CHINA:
+            if not self.__useFreeXP:
+                status += '_gold'
+            elif not self.__useGold:
+                status += '_freexp'
+        SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.getWalletStatus(status), type=msgType)
 
 
 class ShowXPInfoDialogAspect(Aspect):
@@ -240,17 +204,3 @@ class ExchangeFreeXPToTankmanPointcut(Pointcut):
 
     def __init__(self):
         super(ExchangeFreeXPToTankmanPointcut, self).__init__('gui.Scaleform.daapi.view.lobby.exchange.ExchangeFreeToTankmanXpWindow', 'ExchangeFreeToTankmanXpWindow', '^apply$')
-
-
-class ShowWGMOfflineEmergencyPointcut(Pointcut):
-
-    def __init__(self):
-        super(ShowWGMOfflineEmergencyPointcut, self).__init__('gui.shared', 'event_dispatcher', aspects=(ShowWGMoneyOfflineEmergency(),))
-
-
-class ShowWGMoneyOfflineEmergency(Aspect):
-
-    def atCall(self, cd):
-        super(ShowWGMoneyOfflineEmergency, self).atCall(cd)
-        g_eventBus.handleEvent(LoadViewEvent(WG_MONEY_ALIASES.WG_MONEY_WARNING_VIEW_ALIAS), scope=EVENT_BUS_SCOPE.LOBBY)
-        cd.avoid()

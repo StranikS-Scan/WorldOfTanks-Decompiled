@@ -1737,10 +1737,6 @@ def getVehicleClass(compactDescr):
     return getVehicleClassFromVehicleType(getVehicleType(compactDescr))
 
 
-def getVehicleAlliance(vehTypeCompDescr):
-    return nations.ALLIANCES_TAGS_ORDER[nations.NATION_TO_ALLIANCE_IDS_MAP[parseIntCompactDescr(vehTypeCompDescr)[1]]]
-
-
 def getVehicleClassFromVehicleType(vehicleType):
     for vehClass in VEHICLE_CLASS_TAGS & vehicleType.tags:
         return vehClass

@@ -7,6 +7,7 @@ import BattleReplay
 import BigWorld
 import SoundGroups
 from bootcamp.BootcampConstants import HINT_TYPE
+from BattleReplay import CallbackDataNames
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared import events, g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import BootcampEvent
@@ -160,7 +161,7 @@ class PrimaryHintControllerReplayRecorder(PrimaryHintController):
 
     def show(self):
         super(PrimaryHintControllerReplayRecorder, self).show()
-        self.serializeMethod('bootcampHint_show', (self.id,
+        self.serializeMethod(CallbackDataNames.BC_HINT_SHOW, (self.id,
          self.typeId,
          self._completed,
          self.message,
@@ -168,7 +169,7 @@ class PrimaryHintControllerReplayRecorder(PrimaryHintController):
 
     def hide(self):
         super(PrimaryHintControllerReplayRecorder, self).hide()
-        self.serializeMethod('bootcampHint_hide', (self.id,
+        self.serializeMethod(CallbackDataNames.BC_HINT_HIDE, (self.id,
          self.typeId,
          self._completed,
          self.message,
@@ -176,7 +177,7 @@ class PrimaryHintControllerReplayRecorder(PrimaryHintController):
 
     def complete(self):
         super(PrimaryHintControllerReplayRecorder, self).complete()
-        self.serializeMethod('bootcampHint_complete', (self.id,
+        self.serializeMethod(CallbackDataNames.BC_HINT_COMPLETE, (self.id,
          self.typeId,
          self._completed,
          self.message,
@@ -184,7 +185,7 @@ class PrimaryHintControllerReplayRecorder(PrimaryHintController):
 
     def close(self):
         super(PrimaryHintControllerReplayRecorder, self).close()
-        self.serializeMethod('bootcampHint_close', (self.id,
+        self.serializeMethod(CallbackDataNames.BC_HINT_CLOSE, (self.id,
          self.typeId,
          self._completed,
          self.message,
@@ -192,7 +193,7 @@ class PrimaryHintControllerReplayRecorder(PrimaryHintController):
 
     def onHided(self):
         super(PrimaryHintControllerReplayRecorder, self).onHided()
-        self.serializeMethod('bootcampHint_onHided', (self.id,
+        self.serializeMethod(CallbackDataNames.BC_HINT_ONHIDED, (self.id,
          self.typeId,
          self._completed,
          self.message,
@@ -254,11 +255,11 @@ class ReplayHintPlaySystem:
             del self.__commandBuffer[0]
 
     def replaySubscribe(self):
-        self.replayMethodSubscribe('bootcampHint_show', ReplayHintPlaySystem.COMMAND_SHOW)
-        self.replayMethodSubscribe('bootcampHint_hide', ReplayHintPlaySystem.COMMAND_HIDE)
-        self.replayMethodSubscribe('bootcampHint_complete', ReplayHintPlaySystem.COMMAND_COMPLETE)
-        self.replayMethodSubscribe('bootcampHint_close', ReplayHintPlaySystem.COMMAND_CLOSE)
-        self.replayMethodSubscribe('bootcampHint_onHided', ReplayHintPlaySystem.COMMAND_HIDED)
+        self.replayMethodSubscribe(CallbackDataNames.BC_HINT_SHOW, ReplayHintPlaySystem.COMMAND_SHOW)
+        self.replayMethodSubscribe(CallbackDataNames.BC_HINT_HIDE, ReplayHintPlaySystem.COMMAND_HIDE)
+        self.replayMethodSubscribe(CallbackDataNames.BC_HINT_COMPLETE, ReplayHintPlaySystem.COMMAND_COMPLETE)
+        self.replayMethodSubscribe(CallbackDataNames.BC_HINT_CLOSE, ReplayHintPlaySystem.COMMAND_CLOSE)
+        self.replayMethodSubscribe(CallbackDataNames.BC_HINT_ONHIDED, ReplayHintPlaySystem.COMMAND_HIDED)
 
     def appendCommandBuffer(self, command, id, typeId, completed, message, voiceover):
         mute = BattleReplay.g_replayCtrl.isTimeWarpInProgress

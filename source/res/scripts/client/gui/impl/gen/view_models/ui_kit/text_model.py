@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/ui_kit/text_model.py
-from frameworks.wulf.gui_constants import ResourceValue
+from frameworks.wulf import Resource
 from frameworks.wulf import ViewModel
 
 class TextModel(ViewModel):
@@ -25,6 +25,7 @@ class TextModel(ViewModel):
         self._setBool(2, value)
 
     def _initialize(self):
+        super(TextModel, self)._initialize()
         self._addStringProperty('rawLabel', '')
-        self._addResourceProperty('label', ResourceValue.DEFAULT)
+        self._addResourceProperty('label', Resource.INVALID)
         self._addBoolProperty('isEnabled', False)

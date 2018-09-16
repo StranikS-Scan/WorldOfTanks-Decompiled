@@ -17,7 +17,7 @@ class MarathonEventTooltipData(BlocksTooltipData):
         super(MarathonEventTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
         self._setContentMargin(top=2, bottom=3, left=1, right=1)
         self._setMargins(afterBlock=0)
-        self._setWidth(303)
+        self._setWidth(297)
 
     def _packBlocks(self, questType, prefix, *args, **kwargs):
         self._marathonEvent = self._marathonsCtrl.getMarathon(prefix)
@@ -27,16 +27,13 @@ class MarathonEventTooltipData(BlocksTooltipData):
         state = self._marathonEvent.getState()
         items.append(self._getHeader(state))
         items.append(self._getBody(state))
-        if state != MARATHON_STATE.NOT_STARTED and self._marathonEvent.data.showFlagTooltipBottom:
+        if state != MARATHON_STATE.NOT_STARTED:
             items.append(self._getBottom(state))
         return items
 
     def _getHeader(self, _):
         icon, text = self._marathonEvent.getTooltipHeader()
-        if icon is None:
-            formattedText = '{}'.format(text_styles.main(text))
-        else:
-            formattedText = '{} {}'.format(icons.makeImageTag(icon, width=16, height=16), text_styles.main(text))
+        formattedText = '{} {}'.format(icons.makeImageTag(icon, width=16, height=16), text_styles.main(text))
         return formatters.packImageTextBlockData(title=text_styles.highTitle(_ms(self.__tooltipData.header)), img=self.__iconsData.tooltipHeader, txtPadding=formatters.packPadding(top=25), txtOffset=20, txtGap=-8, desc=formattedText)
 
     def _getBody(self, state):

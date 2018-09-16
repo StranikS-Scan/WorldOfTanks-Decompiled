@@ -1,4 +1,5 @@
 <G06_PzII.xml>
+  <xmlns:xmlref>	http://bwt/xmlref	</xmlns:xmlref>
   <crew>
     <commander>	gunner	</commander>
     <driver></driver>
@@ -673,7 +674,7 @@
             <collisionModelClient>	vehicles/german/G06_PzII/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.49 0.49 0.000000 0.000000	</tiling>
+            <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
           </camouflage>
         </_20mm_KwK_30>
         <_20mm_KwK_38_L55>	shared	  <maxAmmo>	260	</maxAmmo>
@@ -715,7 +716,7 @@
             <collisionModelClient>	vehicles/german/G06_PzII/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.505 0.505 0.000000 0.000000	</tiling>
+            <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
           </camouflage>
         </_20mm_KwK_38_L55>
         <_20mm_Flak_38_L112>	shared	  <maxAmmo>	260	</maxAmmo>
@@ -748,7 +749,7 @@
             <collisionModelClient>	vehicles/german/G06_PzII/collision_client/Gun_02.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.37 0.37 0.000000 0.000000	</tiling>
+            <tiling>	0.37 0.2 0.000000 0.000000	</tiling>
           </camouflage>
         </_20mm_Flak_38_L112>
       </guns>
@@ -845,7 +846,7 @@
             <collisionModelClient>	vehicles/german/G06_PzII/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.88 0.88 0.000000 0.000000	</tiling>
+            <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
           </camouflage>
         </_20mm_KwK_30>
         <_20mm_KwK_38_L55>	shared	  <maxAmmo>	320	</maxAmmo>
@@ -879,7 +880,7 @@
             <collisionModelClient>	vehicles/german/G06_PzII/collision_client/Gun_07.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.325 0.325 0.000000 0.000000	</tiling>
+            <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
           </camouflage>
         </_20mm_KwK_38_L55>
         <_20mm_Flak_38_L112>	shared	  <maxAmmo>	320	</maxAmmo>
@@ -912,7 +913,7 @@
             <collisionModelClient>	vehicles/german/G06_PzII/collision_client/Gun_06.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.895 0.895 0.000000 0.000000	</tiling>
+            <tiling>	0.4 0.2 0.000000 0.000000	</tiling>
           </camouflage>
         </_20mm_Flak_38_L112>
       </guns>

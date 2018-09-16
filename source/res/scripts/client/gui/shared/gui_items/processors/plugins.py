@@ -586,7 +586,7 @@ class PMLockedByVehicle(_EventsCacheValidator):
     def _validate(self):
         for quest in self.quests:
             if quest.getMajorTag() in self._lockedChains:
-                return makeError(self._messageKeyPrefix + 'LOCKED_BY_VEHICLE_QUEST')
+                return makeError(self._messageKeyPrefix + 'LOCKED_BY_VEHICLE_QUEST', questName=quest.getShortUserName())
 
         return makeSuccess()
 
@@ -687,6 +687,17 @@ class PMDismissWithProgressConfirmator(DialogAbstractConfirmator):
 
     def _makeMeta(self):
         return PMConfirmationDialogMeta('questsDismissProgressDialog', messageCtx={'quest': self.quest.getUserName(),
+         'icon': RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_90X84})
+
+
+class PMDiscardConfirmator(DialogAbstractConfirmator):
+
+    def __init__(self, curQuest, activeHandler=None, isEnabled=True):
+        super(PMDiscardConfirmator, self).__init__(activeHandler=activeHandler, isEnabled=isEnabled)
+        self.curQuest = curQuest
+
+    def _makeMeta(self):
+        return PMConfirmationDialogMeta('questsConfirmDiscardDialog', messageCtx={'curQuest': self.curQuest.getUserName(),
          'icon': RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_90X84})
 
 

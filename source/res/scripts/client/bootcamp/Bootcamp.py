@@ -35,7 +35,6 @@ from .BootcampReplayController import BootcampReplayController
 from .BootcampConstants import BOOTCAMP_BATTLE_RESULT_MESSAGE
 from .BootCampEvents import g_bootcampEvents
 from .BootcampContext import Chapter
-from .BootcampTransition import BootcampTransition
 from .BootcampSettings import getBattleSettings
 from .BootcampGarageLessons import GarageLessons
 from .ReloadLobbyHelper import ReloadLobbyHelper
@@ -84,6 +83,7 @@ class Bootcamp(EventSystemEntity):
         self.__chapter = None
         self.__gui = None
         self.__arenaUniqueID = None
+        self.__lobbyReloader = ReloadLobbyHelper()
         self.__battleResults = None
         self.__hangarSpace = None
         self.__hangarSpacePremium = None
@@ -140,6 +140,7 @@ class Bootcamp(EventSystemEntity):
             return
 
     def __cm_onDisconnected(self):
+        self.__lobbyReloader.cancel()
         self.stop(0)
 
     def setAccount(self, account):
@@ -272,7 +273,7 @@ class Bootcamp(EventSystemEntity):
                 self.showActionWaitWindow()
                 yield self.nextFrame()
                 self.__currentState = StateInGarage()
-                ReloadLobbyHelper().reload()
+                self.__lobbyReloader.reload()
                 self.hideActionWaitWindow()
                 self.__currentState.activate()
         else:
@@ -452,10 +453,9 @@ class Bootcamp(EventSystemEntity):
 
     def finishFromGarageLesson(self):
         self.__running = False
-        BootcampTransition.start()
         self.setDefaultHangarSpace()
         self.stop(0)
-        ReloadLobbyHelper().reload()
+        self.__lobbyReloader.reload()
 
     def onOutroVideoStop(self):
         if self.__finalVideoCallback is not None:

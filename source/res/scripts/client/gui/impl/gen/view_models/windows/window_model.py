@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/impl/gen/view_models/windows/window_model.py
-from frameworks.wulf.gui_constants import ResourceValue
+from frameworks.wulf import Resource
 from frameworks.wulf import ViewModel
 
 class WindowModel(ViewModel):
@@ -49,11 +49,12 @@ class WindowModel(ViewModel):
         self._setView(6, value)
 
     def _initialize(self):
+        super(WindowModel, self)._initialize()
         self._addNumberProperty('x', 10)
         self._addNumberProperty('y', 10)
         self._addNumberProperty('height', 10)
         self._addNumberProperty('width', 10)
-        self._addResourceProperty('title', ResourceValue.DEFAULT)
+        self._addResourceProperty('title', Resource.INVALID)
         self._addBoolProperty('canMinimize', False)
         self._addViewProperty('content')
         self.onClosed = self._addCommand('onClosed')

@@ -191,11 +191,12 @@ def packItemTitleDescBlockData(title=None, desc=None, img=None, imgPadding=None,
     return packBlockDataItem(linkage, data, padding)
 
 
-def packRendererTextBlockData(rendererType, dataType, rendererData, title=None, desc=None, rendererPadding=None, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_RENDERER_TEXT_BLOCK_LINKAGE, padding=None):
+def packRendererTextBlockData(rendererType, dataType, rendererData, title=None, desc=None, rendererPadding=None, imgAtLeft=True, titleAtMiddle=False, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_RENDERER_TEXT_BLOCK_LINKAGE, padding=None):
     data = {'rendererData': {'rendererType': rendererType,
                       'data': rendererData,
                       'dataType': dataType},
      'spriteAtLeft': imgAtLeft,
+     'titleAtMiddle': titleAtMiddle,
      'textsAlign': txtAlign}
     if title is not None:
         data['title'] = title

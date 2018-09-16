@@ -132,8 +132,8 @@ def onInit(eventType, eventData, quest, processor):
 def onFinishBattle(eventType, eventData, quest, processor):
     questProgress = quest_progress.BaseQuestProgress(quest.config, processor.getQuestProgress(quest.progressID))
 
-    resultInBattleAdv = bool(eventData['avatarResults'].get('markOfMastery', None) == questProgress.getProgress(PROGRESS_ID_ADD).getParam("markOfMastery"))
-    resultInBattle = bool(eventData['avatarResults'].get('markOfMastery', None) &gt;= questProgress.getProgress(PROGRESS_ID_MAIN).getParam("markOfMastery"))
+    resultInBattleAdv = bool(eventData['avatarResults']['markOfMastery'] == questProgress.getProgress(PROGRESS_ID_ADD).getParam("markOfMastery"))
+    resultInBattle = bool(eventData['avatarResults']['markOfMastery'] &gt;= questProgress.getProgress(PROGRESS_ID_MAIN).getParam("markOfMastery"))
     questProgress.increaseBattleSeriesUntilCompleteOrFail(PROGRESS_ID_MAIN_SERIES, resultInBattle)
     questProgress.increaseBattleSeriesUntilCompleteOrFail(PROGRESS_ID_ADD_SERIES, resultInBattleAdv, PROGRESS_ID_MAIN_SERIES)
 

@@ -78,7 +78,8 @@ _PERSONAL_VEHICLE_VO_META = base.PropertyMeta((('isPrematureLeave', False, 'isPr
  ('killerID', 0, 'killerID'),
  ('vehicleStateStr', '', 'vehicleState'),
  ('vehicleStatePrefixStr', '', 'vehicleStatePrefix'),
- ('vehicleStateSuffixStr', '', 'vehicleStateSuffix')))
+ ('vehicleStateSuffixStr', '', 'vehicleStateSuffix'),
+ ('isKilledByTeamKiller', False, 'isKilledByTeamKiller')))
 _PERSONAL_VEHICLE_VO_META.bind(personal.PersonalVehicleBlock)
 _PERSONAL_PLAYER_NAME_VO_META = base.PropertyMeta((('playerNameStr', '', 'nameLabel'),
  ('playerFullNameStr', '', 'fullNameLabel'),
@@ -142,8 +143,8 @@ _PERSONAL_VO_META = base.DictMeta({'isPremium': False,
  'isStunDataEnabled': False,
  'crystalStr': '0',
  'crystalData': [],
- 'moneyProps': {},
- 'playerRank': 0})
+ 'playerRank': 0,
+ 'isTeamKiller': False})
 _PREMIUM_BUY_VO_META = base.PropertyMeta((('arenaUniqueID', 0, 'clientIndex'), ('creditsDiff', 0, 'creditsDiff'), ('xpDiff', 0, 'xpDiff')))
 _PREMIUM_BUY_VO_META.bind(personal.PremiumBuyBlock)
 _DAMAGE_DETAILS_VO_META = base.PropertyMeta((('damageTotalItems', 0, 'piercings'), ('damageDealtVals', None, 'damageDealtValues'), ('damageDealtNames', None, 'damageDealtNames')))
@@ -186,8 +187,6 @@ _EFFICIENCY_DETAILS_VO_META = base.PropertyMeta((('deathReason', -1, 'deathReaso
  ('tankIcon', '../maps/icons/vehicle/small/noImage.png', 'vehicleIcon'),
  ('vehicleName', i18n.makeString(INGAME_GUI.PLAYERS_PANEL_UNKNOWN_VEHICLE), 'vehicleName')))
 _EFFICIENCY_DETAILS_VO_META.bind(personal.EnemyDetailsBlock)
-_MONEY_PROPS_VO_META = base.PropertyMeta((('isMoneyEnabled', True, 'isMoneyEnabled'), ('moneyEnabledTooltip', '', 'moneyEnabledTooltip'), ('creditsNotAccrueStr', '', 'creditsNotAccrueStr')))
-_MONEY_PROPS_VO_META.bind(personal.MoneyPropsBlock)
 _ACHIEVEMENT_ICON_VO_META = base.PropertyMeta((('big', '', 'big'), ('small', '', 'small')))
 _ACHIEVEMENT_ICON_VO_META.bind(shared.AchievementIcon)
 _ACHIEVEMENT_VO_META = base.PropertyMeta((('type', '', 'type'),
@@ -248,7 +247,7 @@ REGULAR_PERSONAL_STATS_BLOCK.addComponent(15, vehicles.PersonalVehiclesRegularSt
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(16, personal.StunDataFlag('isStunDataEnabled'))
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(17, details.GainCrystalInBattleItem('crystalStr'))
 REGULAR_PERSONAL_STATS_BLOCK.addComponent(18, details.TotalCrystalDetailsBlock(base.ListMeta(), 'crystalData', _RECORD.PERSONAL))
-REGULAR_PERSONAL_STATS_BLOCK.addComponent(19, personal.MoneyPropsBlock(_MONEY_PROPS_VO_META, 'moneyProps', _RECORD.PERSONAL))
+REGULAR_PERSONAL_STATS_BLOCK.addComponent(20, personal.IsTeamKillerFlag('isTeamKiller'))
 _TEAM_PLAYER_VO_META = base.PropertyMeta((('userName', '', 'nameLabel'),
  ('fullName', '', 'fullNameLabel'),
  ('clanAbbrev', '', 'clanLabel'),
@@ -301,6 +300,7 @@ TEAM_ITEM_VO_META = base.PropertyMeta((('achievements', shared.AchievementsBlock
  ('squadID', 0, 'squadIndex'),
  ('isOwnSquad', False, 'isPersonalSquad'),
  ('isTeamKiller', False, 'isTeamKiller'),
+ ('isKilledByTeamKiller', False, 'isKilledByTeamKiller'),
  ('statValues', vehicles.AllRegularVehicleStatValuesBlock(base.ListMeta(), 'statValues'), 'statValues'),
  ('resourceCount', 0, 'fortResource'),
  ('rank', 0, 'rank'),

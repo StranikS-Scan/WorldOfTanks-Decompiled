@@ -584,10 +584,10 @@ class ArcadeControlMode(_GunControlMode):
                     pos = self.camera.aimingSystem.getDesiredShotPoint()
                     if pos is None:
                         pos = self._gunMarker.getPosition()
-            vehicle = BigWorld.player().getVehicleAttached()
-            hitPoint, _ = getShotTargetInfo(vehicle, pos, BigWorld.player().gunRotator)
-            if vehicle.position.distTo(hitPoint) < vehicle.position.distTo(pos):
-                pos = hitPoint
+                    vehicle = BigWorld.player().getVehicleAttached()
+                    hitPoint, _ = getShotTargetInfo(vehicle, pos, BigWorld.player().gunRotator)
+                    if vehicle.position.distTo(hitPoint) < vehicle.position.distTo(pos):
+                        pos = hitPoint
             self._aih.onControlModeChanged(mode, preferredPos=pos, aimingMode=self._aimingMode, saveDist=True, equipmentID=equipmentID)
             return
         elif not self._aih.isSPG:

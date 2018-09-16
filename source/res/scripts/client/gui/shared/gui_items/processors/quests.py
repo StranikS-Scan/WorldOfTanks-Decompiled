@@ -1,22 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/quests.py
 import operator
+import logging
 import BigWorld
 from debug_utils import LOG_DEBUG
 from gui.shared.gui_items.processors import Processor, makeI18nError, makeI18nSuccess, plugins
-from helpers import i18n
 from items import tankmen, ITEM_TYPES
+_logger = logging.getLogger(__name__)
+_logger.addHandler(logging.NullHandler())
 
-class _PMSelect(Processor):
+class _PMRequest(Processor):
 
-    def __init__(self, personalMissions, events_cache, branch):
+    def __init__(self, personalMissions, branch):
         self._branch = branch
         self.__quests = personalMissions
-        deselectedQuests = set(events_cache.getSelectedQuestsForBranch(self._branch).values()).difference(set(personalMissions))
-        super(_PMSelect, self).__init__((plugins.PMValidator(personalMissions), self._getLockedByVehicleValidator(deselectedQuests)))
-
-    def _getLockedByVehicleValidator(self, quests):
-        raise NotImplementedError
+        super(_PMRequest, self).__init__((plugins.PMValidator(personalMissions),))
 
     def _getMessagePrefix(self):
         raise NotImplementedError
@@ -30,28 +28,25 @@ class _PMSelect(Processor):
     def _successHandler(self, code, ctx=None):
         return makeI18nSuccess('%s/success' % self._getMessagePrefix(), questNames=', '.join(self._getQuestsNames()))
 
-    def _request(self, callback):
-        questIDs = self._getQuestsData(methodcaller=operator.methodcaller('getID'))
-        LOG_DEBUG('Make server request to select personal mission', questIDs)
-        BigWorld.player().selectPersonalMissions(questIDs, self._branch, lambda code, errStr: self._response(code, callback, errStr=errStr))
-
     def _getQuestsData(self, methodcaller):
         return [ methodcaller(q) for q in self.__quests ]
 
     def _getQuestsNames(self):
-        return self._getQuestsData(methodcaller=operator.methodcaller('getUserName'))
+        return self._getQuestsData(methodcaller=operator.methodcaller('getShortUserName'))
 
 
-class PMSelect(_PMSelect):
+class PMQuestSelect(_PMRequest):
 
-    def __init__(self, quest, events_cache, branch):
-        quests, oldQuest = self._removeFromSameChain(events_cache.getSelectedQuestsForBranch(branch).values(), quest)
-        selectConfirmatorEnable = oldQuest is not None and oldQuest != quest
-        super(PMSelect, self).__init__(quests, events_cache, branch)
-        self.addPlugins([plugins.PMSlotsValidator(events_cache.getQuestsProgress(self._branch), removedCount=int(oldQuest is not None)),
-         plugins.PMSelectConfirmator(quest, oldQuest, 'questsConfirmDialogShow', isEnabled=selectConfirmatorEnable and oldQuest.getOperationID() not in (5, 6, 7)),
-         plugins.PMSelectConfirmator(quest, oldQuest, 'questsConfirmDialogShowPM2', isEnabled=selectConfirmatorEnable and oldQuest.getOperationID() == 6),
-         plugins.PMProgressResetConfirmator(quest, oldQuest, isEnabled=selectConfirmatorEnable and oldQuest.getOperationID() in (5, 7))])
+    def __init__(self, personalMission, events_cache, branch):
+        quests, oldQuest = self._removeFromSameChain(events_cache.getSelectedQuestsForBranch(branch).values(), personalMission)
+        super(PMQuestSelect, self).__init__(quests, branch)
+        deselectedQuests = set(events_cache.getSelectedQuestsForBranch(self._branch).values()).difference(set(quests))
+        selectConfirmatorEnable = oldQuest is not None and oldQuest != personalMission
+        self.addPlugins([plugins.PMLockedByVehicle(self._branch, deselectedQuests),
+         plugins.PMSlotsValidator(events_cache.getQuestsProgress(self._branch), removedCount=int(oldQuest is not None)),
+         plugins.PMSelectConfirmator(personalMission, oldQuest, 'questsConfirmDialogShow', isEnabled=selectConfirmatorEnable and oldQuest.getOperationID() not in (5, 6, 7)),
+         plugins.PMSelectConfirmator(personalMission, oldQuest, 'questsConfirmDialogShowPM2', isEnabled=selectConfirmatorEnable and oldQuest.getOperationID() == 6),
+         plugins.PMProgressResetConfirmator(personalMission, oldQuest, isEnabled=selectConfirmatorEnable and oldQuest.getOperationID() in (5, 7))])
         return
 
     def _getMessagePrefix(self):
@@ -67,38 +62,60 @@ class PMSelect(_PMSelect):
 
         return (result, removedQuest)
 
+    def _request(self, callback):
+        questIDs = self._getQuestsData(methodcaller=operator.methodcaller('getID'))
+        _logger.debug('Make server request to select personal mission %s', ', '.join([ str(idn) for idn in questIDs ]))
+        BigWorld.player().selectPersonalMissions(questIDs, self._branch, lambda code, errStr: self._response(code, callback, errStr=errStr))
 
-class PMQuestSelect(PMSelect):
+    def _errorHandler(self, code, errStr='', ctx=None):
+        errorI18nKey = '%s/server_error' % self._getMessagePrefix()
+        questNames = ', '.join(self._getQuestsNames())
+        if errStr:
+            errorI18nKey = '%s/%s' % (errorI18nKey, errStr)
+            if errStr == 'LOCKED_BY_VEHICLE_QUEST':
+                questNames = ctx.get('questName', '')
+        return makeI18nError(errorI18nKey, questNames=questNames)
 
-    def _getLockedByVehicleValidator(self, quests):
-        return plugins.PMLockedByVehicle(self._branch, quests)
 
+class PMDiscard(_PMRequest):
 
-class _PMRefuse(_PMSelect):
+    def __init__(self, personalMission, branch):
+        quests = [personalMission]
+        super(PMDiscard, self).__init__(quests, branch)
+        self.addPlugins([plugins.PMDiscardConfirmator(personalMission), plugins.PMLockedByVehicle(branch, quests)])
 
-    def __init__(self, personalMission, events_cache, branch):
-        selectedQuests = events_cache.getSelectedQuestsForBranch(branch)
-        selectedQuests.pop(personalMission.getID(), None)
-        super(_PMRefuse, self).__init__(selectedQuests.values(), events_cache, branch)
-        self.addPlugins([plugins.PMDismissWithProgressConfirmator(personalMission, isEnabled=personalMission.getOperationID() in (5, 7))])
-        return
+    def _request(self, callback):
+        questIDs = self._getQuestsData(methodcaller=operator.methodcaller('getID'))
+        _logger.debug('Make server request to discard personal mission %s', str(questIDs[0]))
+        BigWorld.player().resetPersonalMissions(questIDs, self._branch, lambda code, errStr: self._response(code, callback, errStr=errStr))
 
     def _successHandler(self, code, ctx=None):
-        questsNames = self._getQuestsNames()
-        if questsNames:
-            quests = i18n.makeString('#system_messages:%s/quests' % self._getMessagePrefix(), questNames=', '.join(questsNames))
-        else:
-            quests = i18n.makeString('#system_messages:%s/no_quests' % self._getMessagePrefix())
-        return makeI18nSuccess('%s/success' % self._getMessagePrefix(), quests=quests)
+        questName = self._getQuestsNames()[0]
+        return makeI18nSuccess('%s/success' % self._getMessagePrefix(), quest=questName)
 
     def _getMessagePrefix(self):
         pass
 
 
-class PMRefuse(_PMRefuse):
+class PMPause(_PMRequest):
 
-    def _getLockedByVehicleValidator(self, quests):
-        return plugins.PMLockedByVehicle(self._branch, quests)
+    def __init__(self, personalMission, enable, branch):
+        quests = [personalMission]
+        self._enable = enable
+        super(PMPause, self).__init__(quests, branch)
+
+    def _request(self, callback):
+        questIDs = self._getQuestsData(methodcaller=operator.methodcaller('getID'))
+        _logger.debug('Make server request to pause personal mission %s', str(questIDs[0]))
+        BigWorld.player().pausePersonalMissions(questIDs, self._branch, self._enable, lambda code, errStr: self._response(code, callback, errStr=errStr))
+
+    def _successHandler(self, code, ctx=None):
+        questName = self._getQuestsNames()[0]
+        enable = 'pause' if self._enable else 'unpause'
+        return makeI18nSuccess('%s/success_%s' % (self._getMessagePrefix(), enable), quest=questName)
+
+    def _getMessagePrefix(self):
+        pass
 
 
 class _PMGetReward(Processor):

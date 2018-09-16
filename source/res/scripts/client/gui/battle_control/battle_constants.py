@@ -67,6 +67,7 @@ class VEHICLE_VIEW_STATE(object):
     UNDER_FIRE = 268435456
     RECOVERY = 536870912
     PROGRESS_CIRCLE = 1073741824
+    CLIENT_ONLY = (AUTO_ROTATION, CRUISE_MODE)
 
 
 VEHICLE_DEVICES = ('engine', 'ammoBay', 'gun', 'turretRotator', 'leftTrack', 'rightTrack', 'surveyingDevice', 'radio', 'fuelTank')

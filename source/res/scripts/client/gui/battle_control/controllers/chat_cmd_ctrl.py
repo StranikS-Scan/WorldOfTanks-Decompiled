@@ -368,7 +368,8 @@ class ChatCommandsController(IBattleController):
             if target.isAlive():
                 if player is not None and isPlayerAvatar():
                     vInfo = self.__arenaDP.getVehicleInfo(target.id)
-                    return not vInfo.isActionsDisabled()
+                    isAlly = target.publicInfo['team'] == player.team
+                    return not vInfo.isChatCommandsDisabled(isAlly)
         return False
 
     def __getVehicleDesc(self, vehicleID):

@@ -1884,7 +1884,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         else:
             import VehicleGunRotator
             self.gunRotator = VehicleGunRotator.VehicleGunRotator(self)
-        SoundGroups.LSstartAll()
         self.positionControl = AvatarPositionControl.AvatarPositionControl(self)
         self.__startGUI()
         self.inputHandler.setForcedGuiControlMode(self.__forcedGuiCtrlModeFlags)

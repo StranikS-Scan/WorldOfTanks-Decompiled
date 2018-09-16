@@ -17,7 +17,7 @@ from adisp import process
 from external_strings_utils import _LOGIN_NAME_MIN_LENGTH
 from external_strings_utils import isAccountLoginValid, isPasswordValid, _PASSWORD_MIN_LENGTH, _PASSWORD_MAX_LENGTH
 from gui import DialogsInterface, GUI_SETTINGS, Scaleform
-from gui.Scaleform import getPathForFlash, SCALEFORM_STARTUP_VIDEO_MASK, DEFAULT_VIDEO_BUFFERING_TIME
+from gui.Scaleform import SCALEFORM_SWF_PATH_V3, SCALEFORM_STARTUP_VIDEO_MASK
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import DIALOG_BUTTON_ID
@@ -68,7 +68,7 @@ class BackgroundMode(object):
         self.__lastImage = ''
         self.__show = True
         self.__switchButton = True
-        self.__bufferTime = self.__userPrefs.readFloat(Settings.VIDEO_BUFFERING_TIME, DEFAULT_VIDEO_BUFFERING_TIME)
+        self.__bufferTime = self.__userPrefs.readFloat(Settings.VIDEO_BUFFERING_TIME, 0.5)
         self.__images = self.__getWallpapersList()
         self.__isWindowActive = True
         self.__isWindowInSizeMove = False
@@ -82,6 +82,8 @@ class BackgroundMode(object):
             WWISE.WW_eventGlobal('loginscreen_mute')
 
     def show(self):
+        files = ['/'.join((SCALEFORM_SWF_PATH_V3, _LOGIN_VIDEO_FILE))]
+        ScaleformFileLoader.enableStreaming(files)
         self.__loadFromPrefs()
         if self.__bgMode == _BG_MODE_VIDEO:
             self.__view.as_showLoginVideoS(_LOGIN_VIDEO_FILE, self.__bufferTime, self.__isSoundMuted)
@@ -92,6 +94,7 @@ class BackgroundMode(object):
         self.__applyWindowParams()
 
     def hide(self):
+        ScaleformFileLoader.disableStreaming()
         self.__saveToPrefs()
 
     def toggleMute(self, value):
@@ -338,7 +341,6 @@ class LoginView(LoginPageMeta):
         Windowing.addWindowSizeMoveHandler(self.__onWindowSizeMove)
         self.as_setVersionS(getFullClientVersion())
         self.as_setCopyrightS(_ms(MENU.COPY), _ms(MENU.LEGAL))
-        ScaleformFileLoader.enableStreaming([getPathForFlash(_LOGIN_VIDEO_FILE)])
         self.__backgroundMode.show()
         if self.__capsLockCallbackID is None:
             self.__capsLockCallbackID = BigWorld.callback(0.1, self.__checkUserInputState)
@@ -349,7 +351,6 @@ class LoginView(LoginPageMeta):
 
     @uniprof.regionDecorator(label='offline.login', scope='exit')
     def _dispose(self):
-        ScaleformFileLoader.disableStreaming()
         self.__backgroundMode.hide()
         if self.__capsLockCallbackID is not None:
             BigWorld.cancelCallback(self.__capsLockCallbackID)

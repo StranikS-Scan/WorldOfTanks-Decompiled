@@ -5,8 +5,6 @@ import weakref
 from abc import ABCMeta, abstractmethod
 from collections import defaultdict
 import ArenaType
-import BigWorld
-import GammaWizard
 import gui.awards.event_dispatcher as shared_events
 import personal_missions
 from PlayerEvents import g_playerEvents
@@ -18,13 +16,12 @@ from constants import EVENT_TYPE, INVOICE_ASSET
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.layouts import PERSONAL_MISSIONS_GROUP
-from gui import SystemMessages
 from gui import DialogsInterface
+from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.DialogsInterface import showDialog
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta, I18GammaDialogMeta
-from gui.Scaleform.daapi.view.common.settings.gamma_wizard import GammaWizardView
+from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
@@ -38,11 +35,10 @@ from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.utils import isPopupsWindowsOpenDisabled
-from gui.shared.utils.graphics import isGammaSupported
+from gui.shared.utils.functions import getViewName
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.utils.transport import z_loads
 from gui.sounds.sound_constants import SPEAKERS_CONFIG
-from gui.shared.utils.functions import getViewName
 from helpers import dependency
 from helpers import i18n
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core
@@ -55,7 +51,6 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.sounds import ISoundsController
-import Settings
 
 class AwardController(IAwardController, IGlobalListener):
     refSystem = dependency.descriptor(IRefSystemController)
@@ -87,8 +82,7 @@ class AwardController(IAwardController, IGlobalListener):
          MarkByInvoiceHandler(self),
          MarkByQuestHandler(self),
          SoundDeviceHandler(self),
-         EliteWindowHandler(self),
-         GammaDialogHandler(self)]
+         EliteWindowHandler(self)]
         super(AwardController, self).__init__()
         self.__delayedHandlers = []
         self.__isLobbyLoaded = False
@@ -940,25 +934,3 @@ class SoundDeviceHandler(AwardHandler):
         else:
             _, currentDeviceID = deviceSetting.getSystemState()
             AccountSettings.setFilter(SPEAKERS_DEVICE, currentDeviceID)
-
-
-class GammaDialogHandler(AwardHandler):
-    DEFERRED_RENDER_PIPELINE = 0
-    settingsCore = dependency.descriptor(ISettingsCore)
-
-    def start(self):
-        self.handle()
-
-    def _needToShowAward(self, ctx):
-        if Settings.g_instance.userPrefs.readBool(Settings.KEY_GAMMA_DIALOG_IS_SHOWN, False):
-            return False
-        GammaWizard.resetSettingsUsingDefault(GammaWizardView.DEFAULT_VALUE)
-        return isGammaSupported() and not BigWorld.checkUnattended()
-
-    def _showAward(self, ctx):
-        showDialog(I18GammaDialogMeta('gammaDialog'), self.__dialogCallback)
-        Settings.g_instance.userPrefs.writeBool(Settings.KEY_GAMMA_DIALOG_IS_SHOWN, True)
-
-    def __dialogCallback(self, result):
-        if result:
-            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.GAMMA_WIZARD), EVENT_BUS_SCOPE.DEFAULT)

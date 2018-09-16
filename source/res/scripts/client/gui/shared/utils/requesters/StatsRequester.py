@@ -12,10 +12,6 @@ from skeletons.gui.shared.utils.requesters import IStatsRequester
 class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     wallet = dependency.descriptor(IWalletController)
 
-    @async
-    def _requestCache(self, callback):
-        BigWorld.player().stats.getCache(lambda resID, value: self._response(resID, value, callback))
-
     @property
     def mayConsumeWalletResources(self):
         return bool(self.getCacheValue('mayConsumeWalletResources', 0))
@@ -193,3 +189,7 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     @property
     def oldVehInvIDs(self):
         return self.getCacheValue('oldVehInvIDs', ())
+
+    @async
+    def _requestCache(self, callback):
+        BigWorld.player().stats.getCache(lambda resID, value: self._response(resID, value, callback))

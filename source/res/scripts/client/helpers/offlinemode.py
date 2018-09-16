@@ -117,14 +117,8 @@ def _offlineLoadCheck():
         BigWorld.worldDrawEnabled(True)
         BigWorld.uniprofSceneStart()
         _clearGUI()
-        BigWorld.callback(1.0, _enableSound)
     else:
         BigWorld.callback(1.0, _offlineLoadCheck)
-
-
-def _enableSound():
-    if WWISE.enabled:
-        WWISE.LSstartAll()
 
 
 g_spaceID = 0

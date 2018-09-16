@@ -905,7 +905,6 @@ class MainView(CustomizationMainViewMeta):
         else:
             result = True
         callback(result)
-        self.__onConfirmCloseWindow(result)
 
     def __releaseItemSound(self):
         if self.itemIsPicked:

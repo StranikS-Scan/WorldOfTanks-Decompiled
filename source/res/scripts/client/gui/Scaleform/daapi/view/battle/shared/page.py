@@ -105,6 +105,8 @@ class SharedPage(BattlePageMeta):
         self.addListener(events.GameEvent.BATTLE_LOADING, self.__handleBattleLoading, EVENT_BUS_SCOPE.BATTLE)
         self.addListener(events.GameEvent.SHOW_EXTERNAL_COMPONENTS, self.__handleShowExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(events.GameEvent.HIDE_EXTERNAL_COMPONENTS, self.__handleHideExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(events.GameEvent.SHOW_COLOR_SETTINGS_TIP, self.__handleShowSettingsTip, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(events.GameEvent.HIDE_COLOR_SETTINGS_TIP, self.__handleHideSettingsTip, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.fireEvent(events.GlobalSpaceEvent(events.GlobalSpaceEvent.GO_NEXT))
 
     @uniprof.regionDecorator(label='avatar.show_gui', scope='exit')
@@ -121,6 +123,8 @@ class SharedPage(BattlePageMeta):
         self.removeListener(events.GameEvent.HIDE_CURSOR, self.__handleHideCursor, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.SHOW_EXTERNAL_COMPONENTS, self.__handleShowExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(events.GameEvent.HIDE_EXTERNAL_COMPONENTS, self.__handleHideExternals, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(events.GameEvent.SHOW_COLOR_SETTINGS_TIP, self.__handleShowSettingsTip, scope=EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(events.GameEvent.HIDE_COLOR_SETTINGS_TIP, self.__handleHideSettingsTip, scope=EVENT_BUS_SCOPE.GLOBAL)
         self._stopBattleSession()
         super(SharedPage, self)._dispose()
 
@@ -233,6 +237,7 @@ class SharedPage(BattlePageMeta):
     def __onRespawnBaseMoving(self):
         if not self.sessionProvider.getCtx().isPlayerObserver() and not BattleReplay.g_replayCtrl.isPlaying:
             self.as_setPostmortemTipsVisibleS(False)
+            self._setComponentsVisibility(hidden={_ALIASES.COLOR_SETTINGS_TIP_PANEL})
             self._isInPostmortem = False
 
     def __onPostMortemReload(self):
@@ -261,6 +266,16 @@ class SharedPage(BattlePageMeta):
             component.active(False)
 
         self.sessionProvider.shared.hitDirection.setVisible(False)
+
+    def __handleShowSettingsTip(self, _):
+        alias = _ALIASES.COLOR_SETTINGS_TIP_PANEL
+        if not self.as_isComponentVisibleS(alias):
+            self._setComponentsVisibility(visible={alias})
+
+    def __handleHideSettingsTip(self, _):
+        alias = _ALIASES.COLOR_SETTINGS_TIP_PANEL
+        if self.as_isComponentVisibleS(alias):
+            self._setComponentsVisibility(hidden={alias})
 
 
 class BattlePageBusinessHandler(PackageBusinessHandler):

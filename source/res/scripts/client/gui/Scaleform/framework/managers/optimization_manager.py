@@ -91,8 +91,12 @@ class GraphicsOptimizationManager(GraphicsOptimizationManagerMeta):
             isEnabled = False
         return self.__isUiVisible and isEnabled
 
+    def switchOptimizationEnabled(self, value):
+        self.__optimizer.setEnable(value)
+
     def _populate(self):
         super(GraphicsOptimizationManager, self)._populate()
+        self.as_switchOptimizationEnabledS(self.__optimizer.getEnable())
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.addListener(events.GameEvent.GUI_VISIBILITY, self.__handleGuiVisibility, scope=EVENT_BUS_SCOPE.BATTLE)
 

@@ -54,6 +54,8 @@ class GameEvent(HasCtxEvent):
     SHOW_EXTERNAL_COMPONENTS = 'game/showExternalComponents'
     HIDE_EXTERNAL_COMPONENTS = 'game/hideExternalComponents'
     BATTLE_LOADING = 'game/battleLoading'
+    SHOW_COLOR_SETTINGS_TIP = 'game/showColorSettingsTip'
+    HIDE_COLOR_SETTINGS_TIP = 'game/hideColorSettingsTip'
 
 
 class GUICommonEvent(SharedEvent):
@@ -168,7 +170,6 @@ class ShowDialogEvent(SharedEvent):
     SHOW_USE_AWARD_SHEET_DIALOG = 'useAwardSheetDialog'
     SHOW_CONFIRM_C11N_BUY_DIALOG = 'showConfirmC11nBuyDialog'
     SHOW_CONFIRM_C11N_SELL_DIALOG = 'showConfirmC11nSellDialog'
-    SHOW_GAMMA_DIALOG = 'showGammaDialog'
 
     def __init__(self, meta, handler):
         super(ShowDialogEvent, self).__init__(meta.getEventType())

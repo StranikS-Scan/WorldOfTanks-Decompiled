@@ -109,8 +109,6 @@ class SETTINGS(object):
     SNIPER_MODE_GRASS_ENABLED_DESCRIPTION = '#settings:SNIPER_MODE_GRASS_ENABLED/description'
     SNIPER_MODE_EFFECTS_QUALITY = '#settings:SNIPER_MODE_EFFECTS_QUALITY'
     SNIPER_MODE_EFFECTS_QUALITY_DESCRIPTION = '#settings:SNIPER_MODE_EFFECTS_QUALITY/description'
-    COLOR_GRADING_TECHNIQUE = '#settings:COLOR_GRADING_TECHNIQUE'
-    COLOR_GRADING_TECHNIQUE_DESCRIPTION = '#settings:COLOR_GRADING_TECHNIQUE/description'
     MOTION_BLUR_QUALITY = '#settings:MOTION_BLUR_QUALITY'
     MOTION_BLUR_QUALITY_DESCRIPTION = '#settings:MOTION_BLUR_QUALITY/description'
     EFFECTS_QUALITY = '#settings:EFFECTS_QUALITY'
@@ -140,8 +138,6 @@ class SETTINGS(object):
     REFRESHRATE = '#settings:refreshRate'
     REFRESHRATE_DESCRIPTION = '#settings:refreshRate/description'
     REFRESHRATE_DEFAULT = '#settings:refreshRate/default'
-    COLORFILTERINTENSITY = '#settings:colorFilterIntensity'
-    COLORFILTERINTENSITY_DESCRIPTION = '#settings:colorFilterIntensity/description'
     FOV = '#settings:fov'
     FOV_DESCRIPTION = '#settings:fov/description'
     DYNAMICFOV = '#settings:dynamicFov'
@@ -215,6 +211,8 @@ class SETTINGS(object):
     BORDERLESSSIZE_DESCRIPTION = '#settings:borderlessSize/description'
     GAMMA = '#settings:gamma'
     GAMMABTN_LABEL = '#settings:gammaBtn/label'
+    COLORCORRECTION = '#settings:colorCorrection'
+    COLORCORRECTIONBTN_LABEL = '#settings:colorCorrectionBtn/label'
     CUSTOM_AA_MODE = '#settings:CUSTOM_AA_MODE'
     CUSTOM_AA_MODE_DESCRIPTION = '#settings:CUSTOM_AA_MODE/description'
     MSAA_QUALITY = '#settings:MSAA_QUALITY'
@@ -644,6 +642,20 @@ class SETTINGS(object):
     GAMMAWIZARD_CLOSEBTN = '#settings:gammaWizard/closeBtn'
     GAMMAWIZARD_TOOLTIP_HEADER = '#settings:gammaWizard/tooltip/header'
     GAMMAWIZARD_TOOLTIP_BODY = '#settings:gammaWizard/tooltip/body'
+    COLORSETTINGS_VIEW_HEADER = '#settings:colorSettings/view/header'
+    COLORSETTINGS_VIEW_SUBTITLE = '#settings:colorSettings/view/subTitle'
+    COLORSETTINGS_VIEW_DESCRIPTION = '#settings:colorSettings/view/description'
+    COLORSETTINGS_VIEW_CLOSEBTN = '#settings:colorSettings/view/closeBtn'
+    COLORSETTINGS_VIEW_RESETBTN = '#settings:colorSettings/view/resetBtn'
+    COLORSETTINGS_TAB_DEFAULT = '#settings:colorSettings/tab/default'
+    COLORSETTINGS_TAB_FILTERS = '#settings:colorSettings/tab/filters'
+    COLORSETTINGS_TAB_CUSTOMSETTINGS = '#settings:colorSettings/tab/customSettings'
+    COLORSETTINGS_TAB_FILTERS_INTENSITY = '#settings:colorSettings/tab/filters/intensity'
+    COLORSETTINGS_TAB_CUSTOMSETTINGS_BRIGHTNESS = '#settings:colorSettings/tab/customSettings/brightness'
+    COLORSETTINGS_TAB_CUSTOMSETTINGS_CONTRAST = '#settings:colorSettings/tab/customSettings/contrast'
+    COLORSETTINGS_TAB_CUSTOMSETTINGS_SATURATION = '#settings:colorSettings/tab/customSettings/saturation'
+    COLORSETTINGS_VIEW_BEFORE = '#settings:colorSettings/view/before'
+    COLORSETTINGS_VIEW_AFTER = '#settings:colorSettings/view/after'
     SOUNDS_ACOUSTICTYPE_ENUM = (SOUNDS_ACOUSTICTYPE_ACOUSTICS20,
      SOUNDS_ACOUSTICTYPE_ACOUSTICS51,
      SOUNDS_ACOUSTICTYPE_ACOUSTICS71,
@@ -683,6 +695,43 @@ class SETTINGS(object):
      SOUNDS_SOUNDDEVICE_LAPTOP,
      SOUNDS_SOUNDDEVICE_LAPTOP_HEADER,
      SOUNDS_SOUNDDEVICE_LAPTOP_BODY)
+    GRAPHICSSETTINGSOPTIONS_ENUM = (GRAPHICSSETTINGSOPTIONS_DEFERRED,
+     GRAPHICSSETTINGSOPTIONS_FORWARD,
+     GRAPHICSSETTINGSOPTIONS_ON,
+     GRAPHICSSETTINGSOPTIONS_OFF,
+     GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_16X,
+     GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_8X,
+     GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_4X,
+     GRAPHICSSETTINGSOPTIONS_ANISOTROPIC_2X,
+     GRAPHICSSETTINGSOPTIONS_TRILINEAR,
+     GRAPHICSSETTINGSOPTIONS_BILINEAR,
+     GRAPHICSSETTINGSOPTIONS_POINT,
+     GRAPHICSSETTINGSOPTIONS_CUSTOM,
+     GRAPHICSSETTINGSOPTIONS_ULTRA,
+     GRAPHICSSETTINGSOPTIONS_ULTRA_SD,
+     GRAPHICSSETTINGSOPTIONS_VERY_HIGH,
+     GRAPHICSSETTINGSOPTIONS_MAX,
+     GRAPHICSSETTINGSOPTIONS_MAX_SD,
+     GRAPHICSSETTINGSOPTIONS_VERYHIGH,
+     GRAPHICSSETTINGSOPTIONS_HIGH,
+     GRAPHICSSETTINGSOPTIONS_MEDIUM,
+     GRAPHICSSETTINGSOPTIONS_FAR,
+     GRAPHICSSETTINGSOPTIONS_NEAR,
+     GRAPHICSSETTINGSOPTIONS_LOW,
+     GRAPHICSSETTINGSOPTIONS_LOWEST,
+     GRAPHICSSETTINGSOPTIONS_MIN,
+     GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_3,
+     GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_2,
+     GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_1,
+     GRAPHICSSETTINGSOPTIONS_SHADER_MODEL_0,
+     GRAPHICSSETTINGSOPTIONS_NONE,
+     GRAPHICSSETTINGSOPTIONS_COLORIZATION,
+     GRAPHICSSETTINGSOPTIONS_MUTED,
+     GRAPHICSSETTINGSOPTIONS_CONTRASTY,
+     GRAPHICSSETTINGSOPTIONS_SOFT_COLORS,
+     GRAPHICSSETTINGSOPTIONS_PHOTOCHROMATIC,
+     GRAPHICSSETTINGSOPTIONS_SOFT,
+     GRAPHICSSETTINGSOPTIONS_RANDOM)
 
     @classmethod
     def sounds_acoustictype(cls, key0):
@@ -697,6 +746,15 @@ class SETTINGS(object):
     def sounds_sounddevice(cls, key0):
         outcome = '#settings:sounds/soundDevice/{}'.format(key0)
         if outcome not in cls.SOUNDS_SOUNDDEVICE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getGraphicsSettingsOption(cls, key0):
+        outcome = '#settings:graphicsSettingsOptions/{}'.format(key0)
+        if outcome not in cls.GRAPHICSSETTINGSOPTIONS_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

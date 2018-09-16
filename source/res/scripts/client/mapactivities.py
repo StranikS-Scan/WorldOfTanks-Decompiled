@@ -212,6 +212,7 @@ class WaveImpulse(object):
 
 
 class WarplaneActivity(IMapActivity):
+    FADE_TIME = 450.0
 
     def create(self, settings, startTime):
         self.__isStopped = False
@@ -219,7 +220,6 @@ class WarplaneActivity(IMapActivity):
         self.__curve = None
         self.__model = None
         self.__motor = None
-        self.__sound = None
         self.__particle = (None, None)
         self.__cbID = None
         self.__startTime = startTime
@@ -230,6 +230,9 @@ class WarplaneActivity(IMapActivity):
         self.__firstLaunch = True
         self.__curve = BigWorld.WGActionCurve(self.__settings)
         self.__modelName = self.__curve.getChannelProperty(0, 'modelName').asString
+        ds = self.__curve.getChannelProperty(0, 'wwsoundName')
+        soundName = ds.asString if ds is not None else ''
+        self.__sound = SoundGroups.g_instance.getSound3D(None, soundName)
         BigWorld.loadResourceListBG((self.__modelName,), self.__onModelLoaded)
         return True
 
@@ -282,9 +285,6 @@ class WarplaneActivity(IMapActivity):
                     self.__model.addMotor(self.__motor)
                     self.__motor.restart()
                     self.__endTime = self.__motor.totalTime + self.__startTime
-                if self.__sound is not None:
-                    self.__sound.stopAll()
-                    self.__sound = None
                 self.__fadedIn = False
             self.__model.visible = 1
             self.__startTime += self.__period
@@ -307,9 +307,7 @@ class WarplaneActivity(IMapActivity):
             self.__model = None
             self.__motor = None
             self.__curve = None
-        if self.__sound is not None:
-            self.__sound.stopAll()
-            self.__sound = None
+        self.__sound.stop(self.FADE_TIME)
         if self.__particle[1] is not None and self.__particle[1].pixie is not None:
             self.__particle[0].detach(self.__particle[1].pixie)
             self.__particle[1].destroy()
@@ -318,9 +316,7 @@ class WarplaneActivity(IMapActivity):
         return
 
     def pause(self):
-        if self.__sound is not None:
-            self.__sound.stopAll()
-            self.__sound = None
+        self.__sound.stop(self.FADE_TIME)
         if self.__particle[1] is not None and self.__particle[1].pixie is not None:
             self.__particle[0].detach(self.__particle[1].pixie)
         self.__particle = (None, None)
@@ -346,19 +342,21 @@ class WarplaneActivity(IMapActivity):
             self.__loadEffects()
         if visibility == 1.0 and not self.__fadedIn:
             self.__fadedIn = True
-        elif visibility <= 0.1 and self.__fadedIn or Timer.getTime() > self.__endTime:
-            self.pause()
-            return
-        if self.__sound is not None:
+            self.__sound.play()
             self.__sound.volume = visibility
         else:
-            self.__playSound()
+            if visibility <= 0.1 and self.__fadedIn or Timer.getTime() > self.__endTime:
+                self.pause()
+                return
+            self.__sound.play()
+            self.__sound.volume = visibility
         self.__cbID = BigWorld.callback(0.25, self.__update)
         return
 
     def __onModelLoaded(self, resourceRefs):
         if self.__modelName not in resourceRefs.failedIDs and not self.__isStopped:
             self.__model = resourceRefs[self.__modelName]
+            self.__sound.matrixProvider = self.__model.root
         else:
             LOG_ERROR('Could not load model %s' % self.__modelName)
 
@@ -380,21 +378,6 @@ class WarplaneActivity(IMapActivity):
     def __onParticlesLoaded(self, pixieBG):
         if self.__particle[0] is not None:
             self.__particle[0].attach(pixieBG.pixie)
-        return
-
-    def __playSound(self):
-        ds = self.__curve.getChannelProperty(0, 'wwsoundName')
-        soundName = ds.asString if ds is not None else ''
-        if soundName != '':
-            try:
-                objectName = soundName + ' : ' + str(self.__model.root)
-                self.__sound = SoundGroups.g_instance.WWgetSoundObject(objectName, self.__model.root)
-                self.__sound.play(soundName)
-                self.__sound.volume = 0.0
-            except Exception:
-                self.__sound = None
-                LOG_CURRENT_EXCEPTION()
-
         return
 
 

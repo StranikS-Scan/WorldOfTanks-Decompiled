@@ -43,3 +43,4 @@ class BATTLE_VIEW_ALIASES(object):
     BOOTCAMP_BATTLE_TOP_HINT = 'bootcampBattleTopHint'
     GAME_MESSAGES_PANEL = 'gameMessagesPanel'
     EPIC_RANDOM_SCORE_PANEL = 'epicRandomScorePanel'
+    COLOR_SETTINGS_TIP_PANEL = 'colorSettingsTipPanel'

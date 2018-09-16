@@ -62,7 +62,7 @@
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.01368 0.759472 0.17239	</turret>
+      <turret>	0.000000 0.759472 0.17251	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/russian/R67_M3_LL/collision/Hull.model	</collisionModelServer>
@@ -204,12 +204,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.947591 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.98632 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R67_M3_LL/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R67_M3_LL/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.933481 1.50665	</topRightCarryingPoint>
+      <topRightCarryingPoint>	0.933481 1.50677	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -229,8 +229,8 @@
         <segment2ModelRight>	vehicles/russian/R67_M3_LL/track/segment2.model	</segment2ModelRight>
         <left>	vehicles/russian/R67_M3_LL/track/left.track	</left>
         <right>	vehicles/russian/R67_M3_LL/track/right.track	</right>
-        <segmentLength>	0.143	</segmentLength>
-        <segmentOffset>	0.085	</segmentOffset>
+        <segmentLength>	0.141	</segmentLength>
+        <segmentOffset>	0.117	</segmentOffset>
         <segment2Offset>	0.089	</segment2Offset>
         <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
@@ -238,7 +238,7 @@
           <VTiles>	1	</VTiles>
         </atlas>
       </splineDesc>
-      <trackThickness>	-0.0306	</trackThickness>
+      <trackThickness>	0.0266476	</trackThickness>
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
@@ -410,7 +410,7 @@
         <collisionModelServer>	vehicles/russian/R67_M3_LL/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/russian/R67_M3_LL/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.00345 0.2844 0.779731	</gunPosition>
+      <gunPosition>	0.01023 0.2844 0.7797	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	-0.716859 0.324399 -0.0623101	</rayStart>

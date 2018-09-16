@@ -689,6 +689,14 @@
                     <row>	0.0	</row>
                   </table>
                 </slave>
+                <slave>
+                  <node>	joint_02	</node>
+                  <table>
+                    <row>	-7.856	</row>
+                    <row>	0.0	</row>
+                    <row>	3	</row>
+                  </table>
+                </slave>
               </slaves>
             </master>
           </drivenJoints>
@@ -756,6 +764,14 @@
                     <row>	-11.81	</row>
                     <row>	-7.478	</row>
                     <row>	0.0	</row>
+                  </table>
+                </slave>
+                <slave>
+                  <node>	joint_02	</node>
+                  <table>
+                    <row>	-7.856	</row>
+                    <row>	0.0	</row>
+                    <row>	3	</row>
                   </table>
                 </slave>
               </slaves>

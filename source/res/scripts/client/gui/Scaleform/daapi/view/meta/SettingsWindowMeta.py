@@ -46,6 +46,9 @@ class SettingsWindowMeta(AbstractWindowView):
     def openGammaWizard(self, x, y, size):
         self._printOverrideError('openGammaWizard')
 
+    def openColorSettings(self):
+        self._printOverrideError('openColorSettings')
+
     def as_setDataS(self, settingsData):
         return self.flashObject.as_setData(settingsData) if self._isDAAPIInited() else None
 
@@ -84,3 +87,6 @@ class SettingsWindowMeta(AbstractWindowView):
 
     def as_setInitDataS(self, isWinXP):
         return self.flashObject.as_setInitData(isWinXP) if self._isDAAPIInited() else None
+
+    def as_setColorGradingTechniqueS(self, icon, label):
+        return self.flashObject.as_setColorGradingTechnique(icon, label) if self._isDAAPIInited() else None

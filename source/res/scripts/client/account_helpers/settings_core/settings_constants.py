@@ -24,6 +24,10 @@ class GRAPHICS(CONST_CONTAINER):
     QUALITY_PRESET = 'graphicsQuality'
     DYNAMIC_RENDERER = 'dynamicRenderer'
     COLOR_FILTER_INTENSITY = 'colorFilterIntensity'
+    BRIGHTNESS_CORRECTION = 'brightnessCorrection'
+    CONTRAST_CORRECTION = 'contrastCorrection'
+    SATURATION_CORRECTON = 'saturationCorrection'
+    COLOR_FILTER_SETTING = 'colorFilter'
     COLOR_FILTER_IMAGES = 'colorFilterImages'
     FOV = 'fov'
     DYNAMIC_FOV_ENABLED = 'dynamicFov'
@@ -31,6 +35,7 @@ class GRAPHICS(CONST_CONTAINER):
     DRR_AUTOSCALER_ENABLED = 'DRR_AUTOSCALER_ENABLED'
     RENDER_PIPELINE = 'RENDER_PIPELINE'
     TESSELLATION_SUPPORTED = 'tessellationSupported'
+    COLOR_GRADING_TECHNIQUE = 'COLOR_GRADING_TECHNIQUE'
 
     @classmethod
     def getScreenConstants(cls):
@@ -42,6 +47,18 @@ class GRAPHICS(CONST_CONTAINER):
          cls.REFRESH_RATE,
          cls.DYNAMIC_RENDERER,
          cls.INTERFACE_SCALE)
+
+    @classmethod
+    def getColorSettings(cls):
+        return (cls.COLOR_FILTER_INTENSITY,
+         cls.BRIGHTNESS_CORRECTION,
+         cls.CONTRAST_CORRECTION,
+         cls.COLOR_GRADING_TECHNIQUE,
+         cls.SATURATION_CORRECTON)
+
+    @classmethod
+    def getCustomColorSettings(cls):
+        return (cls.BRIGHTNESS_CORRECTION, cls.CONTRAST_CORRECTION, cls.SATURATION_CORRECTON)
 
 
 class GAME(CONST_CONTAINER):

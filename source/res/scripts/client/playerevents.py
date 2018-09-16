@@ -17,7 +17,6 @@ class _PlayerEvents(object):
         self.onEnqueueRandomFailure = Event.Event()
         self.onEnqueuedRanked = Event.Event()
         self.onDequeuedRanked = Event.Event()
-        self.onEnqueueRankedFailure = Event.Event()
         self.onTutorialEnqueued = Event.Event()
         self.onTutorialDequeued = Event.Event()
         self.onTutorialEnqueueFailure = Event.Event()

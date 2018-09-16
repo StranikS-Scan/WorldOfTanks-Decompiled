@@ -36,42 +36,6 @@
         </effects>
       </variant1>
     </inf_deadtree_touchdown>
-    <inf_deadtree_small_fall>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/inf_deadtree_small_fall.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_deadtree_small_fall>
-    <inf_deadtree_small_touchdown>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/inf_deadtree_small_touchdown.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_down	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_deadtree_small_touchdown>
     <inf_tree_poplar_fall>
       <variant1>
         <stages>
@@ -216,60 +180,6 @@
         </effects>
       </variant1>
     </inf_tree_grapevine_touchdown>
-    <inf_tree_cypress_fall_med>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Conifers/inf_tree_cypress_fall_med.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_tree_cypress_fall_med>
-    <inf_tree_cypress_touchdown_med>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Conifers/inf_tree_cypress_touchdown_med.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_down	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_tree_cypress_touchdown_med>
-    <inf_tree_cypress_fall_small>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Conifers/inf_tree_cypress_fall_small.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_tree_cypress_fall_small>
     <inf_tree_stone_pine_fall_med>
       <variant1>
         <stages>
@@ -486,6 +396,150 @@
         </effects>
       </variant1>
     </tree_Birch_Colored_bush_single_01_touchdown>
+    <tree_Cypress_regular_6m_fall>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Conifers/tree_Cypress_regular_6m_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_creak	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_Cypress_regular_6m_fall>
+    <tree_Cypress_regular_6m_touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Conifers/tree_Cypress_regular_6m_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_down	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_Cypress_regular_6m_touchdown>
+    <tree_Cypress_regular_12m_fall>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Conifers/tree_Cypress_regular_12m_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_creak	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_Cypress_regular_12m_fall>
+    <tree_Cypress_regular_12m_touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Conifers/tree_Cypress_regular_12m_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_down	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_Cypress_regular_12m_touchdown>
+    <tree_Cypress_regular_19m_fall>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Conifers/tree_Cypress_regular_19m_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_creak	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_Cypress_regular_19m_fall>
+    <tree_Cypress_regular_19m_touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Conifers/tree_Cypress_regular_19m_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_down	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_Cypress_regular_19m_touchdown>
+    <tree_BaldCypress_01_fall>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Conifers/tree_BaldCypress_01_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_creak	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_BaldCypress_01_fall>
+    <tree_BaldCypress_01_touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Conifers/tree_BaldCypress_01_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_down	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_BaldCypress_01_touchdown>
     <tree_Acacia_African_01_fall>
       <variant1>
         <stages>
@@ -830,24 +884,6 @@
         </effects>
       </variant1>
     </inf_tree_bush_fall_med>
-    <inf_tree_bush_touchdown_small>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Broadleaves/inf_tree_bush_touchdown_small.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_down	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_tree_bush_touchdown_small>
     <inf_tree_bush_flower_fall_small>
       <variant1>
         <stages>
@@ -1028,42 +1064,6 @@
         </effects>
       </variant1>
     </inf_tree_eucalyptys_touchdown_big>
-    <inf_tree_cypress_fall>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/inf_tree_cypress_fall.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_tree_cypress_fall>
-    <inf_tree_cypress_touchdown>
-      <variant1>
-        <stages>
-          <base>	6.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/inf_tree_cypress_touchdown.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_down	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_tree_cypress_touchdown>
     <inf_tree_oak_dry_fall_med>
       <variant1>
         <stages>
@@ -1350,6 +1350,42 @@
         </effects>
       </variant1>
     </tree_BrokenTree_Burned_02_touchdown>
+    <tree_BrokenTree_Burned_03_fall>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Broadleaves/tree_BrokenTree_Burned_03_fall.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_creak	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_BrokenTree_Burned_03_fall>
+    <tree_BrokenTree_Burned_03_touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/trees/Broadleaves/tree_BrokenTree_Burned_03_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_treefall_down	</wwsound>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </tree_BrokenTree_Burned_03_touchdown>
     <tree_Maple_5m_dry_fall>
       <variant1>
         <stages>
@@ -1566,42 +1602,6 @@
         </effects>
       </variant1>
     </inf_tree_birch_dry_touchdown_big>
-    <inf_deadtree_small_fall>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/inf_deadtree_small_fall.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_deadtree_small_fall>
-    <inf_deadtree_small_touchdown>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/inf_deadtree_small_touchdown.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_down	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_deadtree_small_touchdown>
     <tree_Linden_Town_Dry_16m_fall>
       <variant1>
         <stages>
@@ -2282,60 +2282,6 @@
         </effects>
       </variant1>
     </inf_tree_grapevine_touchdown>
-    <inf_tree_cypress_fall_med>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Conifers/inf_tree_cypress_fall_med.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_tree_cypress_fall_med>
-    <inf_tree_cypress_touchdown_med>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Conifers/inf_tree_cypress_touchdown_med.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_down	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_tree_cypress_touchdown_med>
-    <inf_tree_cypress_fall_small>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/trees/Conifers/inf_tree_cypress_fall_small.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_treefall_creak	</wwsound>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_tree_cypress_fall_small>
     <inf_tree_scots_pine_curved_fall_big>
       <variant1>
         <stages>
@@ -7702,6 +7648,29 @@
         </effects>
       </variant1>
     </inf_env_101_06_WoodenCart_01>
+    <inf_env_101_11_FirewoodPile_02_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_env_101_11_FirewoodPile_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	24	</wood_2>
+              <debrisAmount>	40	</debrisAmount>
+              <weight>	2500	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_env_101_11_FirewoodPile_02_01>
     <inf_env_112_10_AdvertisingPosters_01_02>
       <variant1>
         <stages>
@@ -7997,54 +7966,6 @@
         </effects>
       </variant1>
     </inf_envSU_83_03_OldFurniture_11>
-    <inf_envSU_83_01_StreetSigns2>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envSU_83_01_StreetSigns2.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_1>	30	</wood_1>
-              <debrisAmount>	50	</debrisAmount>
-              <weight>	4800	</weight>
-              <metal_1>	1	</metal_1>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_envSU_83_01_StreetSigns2>
-    <inf_envSU_83_01_StreetSigns2_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envSU_83_01_StreetSigns2.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <metal_1>	1	</metal_1>
-              <wood_1>	30	</wood_1>
-              <debrisAmount>	50	</debrisAmount>
-              <weight>	4800	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_envSU_83_01_StreetSigns2_hit>
     <inf_envSU_83_01_StreetSigns2_01>
       <variant1>
         <stages>
@@ -8093,98 +8014,6 @@
         </effects>
       </variant1>
     </inf_envSU_83_01_StreetSigns2_01_hit>
-    <inf_envSU_83_01_StreetSigns3>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envSU_83_01_StreetSigns3.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_1>	24	</wood_1>
-              <debrisAmount>	50	</debrisAmount>
-              <weight>	4000	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_envSU_83_01_StreetSigns3>
-    <inf_envSU_83_01_StreetSigns3_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envSU_83_01_StreetSigns3.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_1>	24	</wood_1>
-              <debrisAmount>	50	</debrisAmount>
-              <weight>	4000	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_envSU_83_01_StreetSigns3_hit>
-    <inf_envSU_83_01_StreetSigns3_01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envSU_83_01_StreetSigns3.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_1>	24	</wood_1>
-              <debrisAmount>	50	</debrisAmount>
-              <weight>	4000	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_envSU_83_01_StreetSigns3_01>
-    <inf_envSU_83_01_StreetSigns3_01_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_envSU_83_01_StreetSigns3.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_1>	24	</wood_1>
-              <debrisAmount>	50	</debrisAmount>
-              <weight>	4000	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_envSU_83_01_StreetSigns3_01_hit>
     <inf_env_AM_018_Lamppost>
       <variant1>
         <stages>
@@ -8235,52 +8064,6 @@
         </effects>
       </variant1>
     </inf_env_AM_018_Lamppost_hit>
-    <inf_envEU_009_TownEnv_boxes>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_env005_Tun.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_1>	30	</wood_1>
-              <debrisAmount>	50	</debrisAmount>
-              <weight>	4800	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_envEU_009_TownEnv_boxes>
-    <inf_envEU_009_TownEnv_boxes_hit>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_env005_Tun.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_1>	30	</wood_1>
-              <debrisAmount>	50	</debrisAmount>
-              <weight>	4800	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_envEU_009_TownEnv_boxes_hit>
     <inf_bldSU_001_Outhouse_03>
       <variant1>
         <stages>
@@ -8886,52 +8669,6 @@
         </effects>
       </variant1>
     </inf_env_101_10_ChickenCoop>
-    <inf_env_101_10_ChickenCoop_01>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_env_101_10_ChickenCoop.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_2>	30	</wood_2>
-              <debrisAmount>	40	</debrisAmount>
-              <weight>	2500	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_env_101_10_ChickenCoop_01>
-    <inf_env_101_10_ChickenCoop_02>
-      <variant1>
-        <stages>
-          <base>	4.0	</base>
-        </stages>
-        <effects>
-          <pixie>
-            <startKey>	base	</startKey>
-            <file>	particles/Environment/objects/inf_env_101_10_ChickenCoop.xml	</file>
-            <force>	1	</force>
-          </pixie>
-          <destructionSound>
-            <startKey>	base	</startKey>
-            <wwsound>	obj_generative	</wwsound>
-            <params>
-              <wood_2>	24	</wood_2>
-              <debrisAmount>	40	</debrisAmount>
-              <weight>	2500	</weight>
-            </params>
-          </destructionSound>
-        </effects>
-      </variant1>
-    </inf_env_101_10_ChickenCoop_02>
     <inf_env_101_05_Beehive_1>
       <variant1>
         <stages>
@@ -25511,6 +25248,62 @@
         </effects>
       </variant1>
     </inf_env_19_05_Barell_3>
+    <hd_env_SU_018_StreetSigns_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_SU_018_StreetSigns_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+        </effects>
+      </variant1>
+    </hd_env_SU_018_StreetSigns_01>
+    <hd_env_SU_018_StreetSigns_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_SU_018_StreetSigns_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+        </effects>
+      </variant1>
+    </hd_env_SU_018_StreetSigns_02>
+    <hd_env_SU_018_StreetSigns_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_SU_018_StreetSigns_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+        </effects>
+      </variant1>
+    </hd_env_SU_018_StreetSigns_03>
+    <hd_env_SU_018_StreetSigns_04>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_SU_018_StreetSigns_04.xml	</file>
+            <force>	1	</force>
+          </pixie>
+        </effects>
+      </variant1>
+    </hd_env_SU_018_StreetSigns_04>
   </fragiles>
   <structures>
     <inf_bldAM_002_SmallShed_02_ram>

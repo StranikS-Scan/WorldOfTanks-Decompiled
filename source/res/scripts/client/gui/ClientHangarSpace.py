@@ -8,7 +8,6 @@ import MapActivities
 import Math
 import MusicControllerWWISE
 import ResMgr
-import SoundGroups
 import constants
 from PlayerEvents import g_playerEvents
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
@@ -312,7 +311,6 @@ class ClientHangarSpace(object):
             if self.__destroyFunc:
                 self.__destroyFunc()
                 self.__destroyFunc = None
-            SoundGroups.LSstartAll()
         return
 
     def __closeOptimizedRegion(self):

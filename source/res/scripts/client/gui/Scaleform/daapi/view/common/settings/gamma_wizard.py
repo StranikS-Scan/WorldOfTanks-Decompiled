@@ -7,7 +7,6 @@ from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import GameEvent
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
-import Settings
 
 class GammaWizardView(GammaWizardViewMeta):
     MIN_VALUE = 0
@@ -49,7 +48,6 @@ class GammaWizardView(GammaWizardViewMeta):
 
     def _populate(self):
         super(GammaWizardView, self)._populate()
-        Settings.g_instance.userPrefs.writeBool(Settings.KEY_GAMMA_DIALOG_IS_SHOWN, True)
         if self.app is not None:
             self._savedBackgroundAlpha = self.app.getBackgroundAlpha()
             self.app.setBackgroundAlpha(0)

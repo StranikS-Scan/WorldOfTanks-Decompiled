@@ -120,6 +120,18 @@ def getGraphicSettingImages(settingName):
     return result
 
 
+def getGraphicSettingColorSettingsFiletersImages():
+    result = {}
+    data = getGraphicsSetting('COLOR_GRADING_TECHNIQUE')
+    imgPath = '../maps/icons/settings/colorSettings/filterTypes/%s.png'
+    if data is not None:
+        for idx, (label, supported, _, _) in enumerate(data.options):
+            if supported:
+                result[idx] = imgPath % str(label).replace(' ', '_')
+
+    return result
+
+
 def getResolution():
     currWindowSize = g_monitorSettings.currentWindowSize
     width = currWindowSize.width if currWindowSize.width > 0 else MIN_SCREEN_WIDTH
@@ -171,9 +183,13 @@ def isGammaSupported():
             isNativeSelected = False
         return isNativeSelected
     else:
-        pipelineType = BigWorld.getGraphicsSetting('RENDER_PIPELINE')
-        return pipelineType == 0
+        return isRendererPipelineDeferred()
         return
+
+
+def isRendererPipelineDeferred():
+    pipelineType = BigWorld.getGraphicsSetting('RENDER_PIPELINE')
+    return pipelineType == 0
 
 
 class MonitorSettings(object):

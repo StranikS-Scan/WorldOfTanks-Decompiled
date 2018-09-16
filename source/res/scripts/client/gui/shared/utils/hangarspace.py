@@ -89,6 +89,7 @@ class _HangarSpace(object):
         self.__videoCameraController = HangarVideoCameraController()
         self.__inited = False
         self.__spaceInited = False
+        self.__isModelLoaded = False
         self.__isSpacePremium = False
         self.__igrSpaceType = constants.IGR_TYPE.NONE
         self.__delayedIsPremium = False
@@ -103,6 +104,8 @@ class _HangarSpace(object):
         self.onObjectClicked = Event.Event()
         self.onObjectReleased = Event.Event()
         self.onHeroTankReady = Event.Event()
+        self.onVehicleChanged = Event.Event()
+        self.onVehicleChangeStarted = Event.Event()
         self.__isCursorOver3DScene = False
         return
 
@@ -121,6 +124,10 @@ class _HangarSpace(object):
     @property
     def isCursorOver3DScene(self):
         return self.__isCursorOver3DScene
+
+    @property
+    def isModelLoaded(self):
+        return self.__isModelLoaded
 
     def spaceLoading(self):
         return self.__space.spaceLoading()
@@ -175,6 +182,7 @@ class _HangarSpace(object):
             g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
         self.onSpaceDestroy(self.__spaceInited)
         self.__videoCameraController.destroy()
+        self.__isModelLoaded = False
         if self.__spaceInited:
             LOG_DEBUG('_HangarSpace::destroy')
             self.__inited = False
@@ -195,6 +203,8 @@ class _HangarSpace(object):
     @uniprof.regionDecorator(label='hangar.vehicle.loading', scope='enter')
     def updateVehicle(self, vehicle):
         if self.__inited:
+            self.__isModelLoaded = False
+            self.onVehicleChangeStarted()
             Waiting.show('loadHangarSpaceVehicle', True, overlapsUI=False)
             self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.START_LOADING_VEHICLE)
             self.__space.recreateVehicle(vehicle.descriptor, vehicle.modelState)
@@ -209,6 +219,8 @@ class _HangarSpace(object):
 
     def updatePreviewVehicle(self, vehicle):
         if self.__inited:
+            self.__isModelLoaded = False
+            self.onVehicleChangeStarted()
             Waiting.show('loadHangarSpaceVehicle', True, overlapsUI=False)
             self.__space.recreateVehicle(vehicle.descriptor, vehicle.modelState)
             self.__lastUpdatedVehicle = vehicle
@@ -225,10 +237,14 @@ class _HangarSpace(object):
 
     def removeVehicle(self):
         if self.__inited:
+            self.__isModelLoaded = False
+            self.onVehicleChangeStarted()
             Waiting.show('loadHangarSpaceVehicle', overlapsUI=False)
             if self.__space is not None:
                 self.__space.removeVehicle()
             Waiting.hide('loadHangarSpaceVehicle')
+            self.__isModelLoaded = True
+            self.onVehicleChanged()
             self.__lastUpdatedVehicle = None
         return
 
@@ -262,6 +278,8 @@ class _HangarSpace(object):
     @uniprof.regionDecorator(label='hangar.vehicle.loading', scope='exit')
     def __changeDone(self):
         Waiting.hide('loadHangarSpaceVehicle')
+        self.__isModelLoaded = True
+        self.onVehicleChanged()
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.FINISH_LOADING_VEHICLE)
 
     def __delayedRefresh(self):

@@ -51,7 +51,7 @@ from gui.shared.utils.key_mapping import getScaleformKey, getBigworldKey, getBig
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import icons
-from gui.shared.utils.functions import makeTooltip
+from gui.shared.utils.functions import makeTooltip, clamp
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -768,7 +768,15 @@ class DynamicRendererSetting(SettingAbstract):
         BigWorld.setDRRScale(value)
 
 
-class ColorFilterIntensitySetting(SettingAbstract):
+class _AdjustValueSetting(SettingAbstract):
+
+    @classmethod
+    def _adjustValue(cls, value):
+        return clamp(value, 0, 100)
+
+
+class ColorFilterIntensitySetting(_AdjustValueSetting):
+    DEFAULT_FILTER_INTENSITY = 0.25
 
     def _get(self):
         value = round(BigWorld.getColorGradingStrength(), 2) * 100
@@ -778,10 +786,57 @@ class ColorFilterIntensitySetting(SettingAbstract):
         value = float(self._adjustValue(value)) / 100
         BigWorld.setColorGradingStrength(value)
 
-    def _adjustValue(self, value):
-        if value < 25:
-            return 25
-        return 100 if value > 100 else value
+    @classmethod
+    def _adjustValue(cls, value):
+        return clamp(value, 25, 100)
+
+    def getDefaultValue(self):
+        return self.DEFAULT_FILTER_INTENSITY * 100
+
+
+class BrightnessCorrectionSetting(_AdjustValueSetting):
+    DEFAULT_BRIGHTNESS = 0.5
+
+    def _get(self):
+        value = round(BigWorld.getColorBrightness(), 2) * 100
+        return self._adjustValue(value)
+
+    def _set(self, value):
+        value = float(self._adjustValue(value)) / 100
+        BigWorld.setColorBrightness(value)
+
+    def getDefaultValue(self):
+        return self.DEFAULT_BRIGHTNESS * 100
+
+
+class ContrastCorrectionSetting(_AdjustValueSetting):
+    DEFAULT_CONTRAST = 0.5
+
+    def _get(self):
+        value = round(BigWorld.getColorContrast(), 2) * 100
+        return self._adjustValue(value)
+
+    def _set(self, value):
+        value = float(self._adjustValue(value)) / 100
+        BigWorld.setColorContrast(value)
+
+    def getDefaultValue(self):
+        return self.DEFAULT_CONTRAST * 100
+
+
+class SaturationCorrectionSetting(_AdjustValueSetting):
+    DEFAULT_SATURATION = 1
+
+    def _get(self):
+        value = round(BigWorld.getColorSaturation(), 2) * 100
+        return self._adjustValue(value)
+
+    def _set(self, value):
+        value = float(self._adjustValue(value)) / 100
+        BigWorld.setColorSaturation(value)
+
+    def getDefaultValue(self):
+        return self.DEFAULT_SATURATION * 100
 
 
 class LensEffectSetting(StorageDumpSetting):

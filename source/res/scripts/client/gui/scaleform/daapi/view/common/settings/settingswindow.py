@@ -8,11 +8,12 @@ from account_helpers.settings_core.settings_constants import SETTINGS_GROUP
 from debug_utils import LOG_DEBUG, LOG_WARNING
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.common.settings.new_settings_counter import getNewSettings, invalidateSettings
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.SETTINGS import SETTINGS
 from Vibroeffects import VibroManager
 from gui import DialogsInterface, g_guiResetters
 from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
-from gui.shared.utils import flashObject2Dict, decorators
+from gui.shared.utils import flashObject2Dict, decorators, graphics
 from gui.Scaleform.daapi.view.meta.SettingsWindowMeta import SettingsWindowMeta
 from gui.Scaleform.daapi.view.common.settings.SettingsParams import SettingsParams
 from account_helpers.settings_core import settings_constants
@@ -133,6 +134,7 @@ class SettingsWindow(SettingsWindowMeta):
         self._update()
         VibroManager.g_instance.onConnect += self.onVibroManagerConnect
         VibroManager.g_instance.onDisconnect += self.onVibroManagerDisconnect
+        self.settingsCore.onSettingsChanged += self.__onColorSettingsChange
         g_guiResetters.add(self.onRecreateDevice)
         BigWorld.wg_setAdapterOrdinalNotifyCallback(self.onRecreateDevice)
 
@@ -143,6 +145,7 @@ class SettingsWindow(SettingsWindowMeta):
             self.as_setCountersDataS(newSettings)
         self.as_updateVideoSettingsS(self.params.getMonitorSettings())
         self.as_openTabS(_getLastTabIndex())
+        self.__setColorGradingTechnique()
 
     def _dispose(self):
         if self.__redefinedKeyModeEnabled:
@@ -153,6 +156,7 @@ class SettingsWindow(SettingsWindowMeta):
         self.stopAltBulbPreview()
         VibroManager.g_instance.onConnect -= self.onVibroManagerConnect
         VibroManager.g_instance.onDisconnect -= self.onVibroManagerDisconnect
+        self.settingsCore.onSettingsChanged -= self.__onColorSettingsChange
         super(SettingsWindow, self)._dispose()
         return
 
@@ -295,6 +299,9 @@ class SettingsWindow(SettingsWindowMeta):
          'y': y,
          'size': size}), EVENT_BUS_SCOPE.DEFAULT)
 
+    def openColorSettings(self):
+        g_eventBus.handleEvent(events.LoadViewEvent(alias=VIEW_ALIAS.COLOR_SETTING), EVENT_BUS_SCOPE.DEFAULT)
+
     def __updateInterfaceScale(self):
         self.as_updateVideoSettingsS(self.params.getMonitorSettings())
 
@@ -307,3 +314,27 @@ class SettingsWindow(SettingsWindowMeta):
                 break
 
         return self.as_isPresetAppliedS() if isGraphicsQualitySettings else True
+
+    def __onColorSettingsChange(self, diff):
+        if settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE in diff:
+            self.__setColorGradingTechnique(diff.get(settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE, None))
+        return
+
+    def __setColorGradingTechnique(self, value=None):
+        setting = self.settingsCore.options.getSetting(settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE)
+        images = graphics.getGraphicSettingImages(settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE)
+        label = SETTINGS.GRAPHICSSETTINGSOPTIONS_NONE
+        image = None
+        filterIdx = setting.get() if value is None else value
+        if setting is not None:
+            for option in setting.getOptions():
+                currentIdx = option.get('data', 0)
+                if currentIdx == filterIdx:
+                    label = option.get('label')
+                    image = images.get(option.get('data', 0))
+                    break
+
+        if image is None:
+            image = RES_ICONS.MAPS_ICONS_SETTINGS_COLOR_GRADING_TECHNIQUE_NONE
+        self.as_setColorGradingTechniqueS(image, label)
+        return

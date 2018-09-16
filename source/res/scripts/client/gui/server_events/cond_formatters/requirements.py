@@ -18,7 +18,8 @@ from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 
 def packTokens(tokens):
-    return {'tokens': tokens}
+    return {'tokens': tokens,
+     'isNeedShowIcon': False}
 
 
 def relate(relation, value, label):

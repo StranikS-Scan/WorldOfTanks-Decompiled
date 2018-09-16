@@ -65,6 +65,9 @@ DEFAULT_LEVELS_FILTERS = [False] * MAX_VEHICLE_LEVEL
 SHOW_OPT_DEVICE_HINT = 'showOptDeviceHint'
 LAST_BADGES_VISIT = 'lastBadgesVisit'
 ENABLE_RANKED_ANIMATIONS = 'enableRankedAnimations'
+COLOR_SETTINGS_TAB_IDX = 'colorSettingsTabIdx'
+COLOR_SETTINGS_SHOWS_COUNT = 'colorSettingsShowsCount'
+APPLIED_COLOR_SETTINGS = 'appliedColorSettings'
 KNOWN_SELECTOR_BATTLES = 'knownSelectorBattles'
 DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                'shop_current': (-1, STORE_CONSTANTS.VEHICLE, False),
@@ -402,7 +405,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                         'c11nHistoricallyAccurate': True,
                                                         'hangarCamParallaxEnabled': True,
                                                         'hangarCamPeriod': True},
-                                       'GraphicSettings': {'ScreenSettings': {'gammaSetting': True},
+                                       'GraphicSettings': {'ScreenSettings': {'gammaSetting': True,
+                                                                              'colorFilter': True},
                                                            'AdvancedGraphicSettings': {'HAVOK_ENABLED': True,
                                                                                        'TERRAIN_TESSELLATION_ENABLED': True,
                                                                                        'SNIPER_MODE_TERRAIN_TESSELLATION_ENABLED': True}},
@@ -412,7 +416,10 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 SHOW_OPT_DEVICE_HINT: True,
                 'c11nHistoricallyAccurate': True,
                 LAST_BADGES_VISIT: 0,
-                ENABLE_RANKED_ANIMATIONS: True},
+                ENABLE_RANKED_ANIMATIONS: True,
+                COLOR_SETTINGS_TAB_IDX: 0,
+                COLOR_SETTINGS_SHOWS_COUNT: 0,
+                APPLIED_COLOR_SETTINGS: {}},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},

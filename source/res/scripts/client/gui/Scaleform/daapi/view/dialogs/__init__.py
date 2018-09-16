@@ -2,15 +2,13 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/__init__.py
 import BigWorld
 import Event
-from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared.formatters import text_styles
-from helpers import dependency
-from helpers import i18n, time_utils
 from gui import makeHtmlString
-from gui.shared import events
-from gui.shared.money import Currency
+from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.locale.DIALOGS import DIALOGS
+from gui.shared import events
+from helpers import dependency
+from helpers import i18n, time_utils
 from skeletons.gui.shared import IItemsCache
 I18N_PRICE_KEY = '{0:>s}/messagePrice'
 I18N_TITLE_KEY = '{0:>s}/title'
@@ -420,19 +418,3 @@ class CheckBoxDialogMeta(I18nConfirmDialogMeta):
 
     def getViewScopeType(self):
         return ScopeTemplates.DYNAMIC_SCOPE
-
-
-class I18GammaDialogMeta(I18nDialogMeta):
-
-    def __init__(self, key, titleCtx=None, messageCtx=None, meta=None, scope=ScopeTemplates.VIEW_SCOPE):
-        buttons = I18nInfoDialogButtons(key, DIALOG_BUTTON_ID.SUBMIT)
-        super(I18GammaDialogMeta, self).__init__(key, buttons, titleCtx, messageCtx, meta, scope)
-
-    def getMessage(self):
-        header = text_styles.highTitle(_getDialogStr('%s/message/header' % self._key))
-        desc = self._makeString('%s/message/description' % self._key, self._messageCtx)
-        msg = '{}\n\n{}'.format(header, desc)
-        return msg
-
-    def getEventType(self):
-        return events.ShowDialogEvent.SHOW_GAMMA_DIALOG

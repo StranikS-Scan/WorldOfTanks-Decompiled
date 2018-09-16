@@ -167,11 +167,10 @@ class _CurrentVehicle(_CachedVehicle):
             self.onChanged()
 
     def refreshModel(self):
-        if not g_currentPreviewVehicle.isPresent():
-            if self.isPresent() and self.isInHangar() and self.item.modelState:
-                self.hangarSpace.updateVehicle(self.item)
-            else:
-                self.hangarSpace.removeVehicle()
+        if self.isPresent() and self.isInHangar() and self.item.modelState:
+            self.hangarSpace.updateVehicle(self.item)
+        else:
+            self.hangarSpace.removeVehicle()
 
     @property
     def invID(self):

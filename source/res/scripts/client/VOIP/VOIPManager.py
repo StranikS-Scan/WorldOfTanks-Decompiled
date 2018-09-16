@@ -179,7 +179,8 @@ class VOIPManager(VOIPHandler):
         if not self.__initialized:
             self.__needLogginAfterInit = True
         self.__user = [name, password]
-        self.__fsm.update(self)
+        if not self.__needLogginAfterInit:
+            self.__fsm.update(self)
 
     def __loginUser(self, username, password):
         _logger.debug('Login Request: %s', username)

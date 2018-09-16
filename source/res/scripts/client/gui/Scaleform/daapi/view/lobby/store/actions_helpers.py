@@ -455,7 +455,7 @@ class VehPriceActionInfo(ActionInfo):
         for paramName in _params.get(vehicle.type, 'default'):
             if paramName in paramsDict:
                 paramInfo = comparator.getExtendedData(paramName)
-                fmtValue = param_formatter.colorizedFormatParameter(paramInfo, param_formatter.BASE_SCHEME)
+                fmtValue = param_formatter.colorizedFormatParameter(paramInfo, None)
                 if fmtValue is not None:
                     block.append(formatters.packTextParameterBlockData(name=param_formatter.formatVehicleParamName(paramName), value=fmtValue, valueWidth=80, padding=formatters.packPadding(left=-1)))
 

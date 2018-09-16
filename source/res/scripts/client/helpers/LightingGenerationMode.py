@@ -138,11 +138,6 @@ def _offlineLoadCheck():
         BigWorld.callback(1.0, _offlineLoadCheck)
 
 
-def _enableSound():
-    if WWISE.enabled:
-        WWISE.LSstartAll()
-
-
 g_spaceID = 0
 g_avatar = None
 

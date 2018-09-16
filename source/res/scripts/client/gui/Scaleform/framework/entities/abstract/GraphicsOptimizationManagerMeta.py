@@ -19,5 +19,11 @@ class GraphicsOptimizationManagerMeta(BaseDAAPIComponent):
     def isOptimizationEnabled(self, alias):
         self._printOverrideError('isOptimizationEnabled')
 
+    def switchOptimizationEnabled(self, value):
+        self._printOverrideError('switchOptimizationEnabled')
+
     def as_invalidateRectanglesS(self):
         return self.flashObject.as_invalidateRectangles() if self._isDAAPIInited() else None
+
+    def as_switchOptimizationEnabledS(self, value):
+        return self.flashObject.as_switchOptimizationEnabled(value) if self._isDAAPIInited() else None

@@ -6,7 +6,7 @@ import Settings
 import SoundGroups
 import gui
 from debug_utils import LOG_DEBUG, LOG_ERROR
-from gui.Scaleform import getPathForFlash, DEFAULT_VIDEO_BUFFERING_TIME as _DEFAULT_BUFFERING
+from gui.Scaleform import SCALEFORM_SWF_PATH_V3, DEFAULT_VIDEO_BUFFERING_TIME as _DEFAULT_BUFFERING
 from gui.Scaleform.daapi.view.meta.IntroPageMeta import IntroPageMeta
 from gui.doc_loaders.GuiDirReader import GuiDirReader
 from gui.shared import events
@@ -51,7 +51,8 @@ class IntroPage(IntroPageMeta):
     def _populate(self):
         super(IntroPage, self)._populate()
         if self.__movieFiles:
-            ScaleformFileLoader.enableStreaming([ getPathForFlash(v) for v in self.__movieFiles ])
+            files = [ '/'.join((SCALEFORM_SWF_PATH_V3, v)) for v in self.__movieFiles ]
+            ScaleformFileLoader.enableStreaming(files)
             self.__showNextMovie()
         else:
             self.__sendResult(False, 'There is no movie files for broadcast!')

@@ -669,8 +669,3 @@ def loadLightSoundsDB():
 
         WWISE.LSloadEventsDB(lightSoundDB)
         return
-
-
-def LSstartAll():
-    if WWISE.enabled and ENABLE_LS:
-        WWISE.LSstartAll()

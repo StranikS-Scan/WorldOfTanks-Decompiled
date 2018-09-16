@@ -16,6 +16,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.common.report_bug import ReportBugPanel
     from gui.Scaleform.daapi.view.common.settings import SettingsWindow
     from gui.Scaleform.daapi.view.common.settings.gamma_wizard import GammaWizardView
+    from gui.Scaleform.daapi.view.common.settings.color_settings_view import ColorSettingsView
     from gui.Scaleform.daapi.view.common.settings.acoustic_popover import AcousticPopover
     from gui.Scaleform.daapi.view.dialogs.SimpleDialog import SimpleDialog
     from gui.Scaleform.daapi.view.dialogs.bootcamp_dialogs import ExecutionChooserDialog
@@ -28,6 +29,7 @@ def getViewSettings():
      GroupedViewSettings(VIEW_ALIAS.SIMPLE_DIALOG, SimpleDialog, 'simpleDialog.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.SETTINGS_WINDOW, SettingsWindow, 'settingsWindow.swf', ViewTypes.TOP_WINDOW, 'settingsWindow', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
      ViewSettings(VIEW_ALIAS.GAMMA_WIZARD, GammaWizardView, 'gammaWizard.swf', ViewTypes.OVERLAY, VIEW_ALIAS.GAMMA_WIZARD, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VIEW_ALIAS.COLOR_SETTING, ColorSettingsView, 'colorSettings.swf', ViewTypes.OVERLAY, VIEW_ALIAS.COLOR_SETTING, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_EXECUTION_CHOOSER, ExecutionChooserDialog, 'BCDialogWindow.swf', ViewTypes.TOP_WINDOW, None, ScopeTemplates.DYNAMIC_SCOPE, isModal=True),
      GroupedViewSettings(VIEW_ALIAS.ACOUSTIC_POPOVER, AcousticPopover, 'acousticPopover.swf', ViewTypes.TOP_WINDOW, VIEW_ALIAS.ACOUSTIC_POPOVER, VIEW_ALIAS.ACOUSTIC_POPOVER, SETTINGS_WINDOW_SCOPE))
 
@@ -40,7 +42,7 @@ class CommonPackageBusinessHandler(PackageBusinessHandler):
     __slots__ = ()
 
     def __init__(self):
-        listeners = ((VIEW_ALIAS.SETTINGS_WINDOW, self.loadViewByCtxEvent), (VIEW_ALIAS.GAMMA_WIZARD, self.loadViewByCtxEvent))
+        listeners = ((VIEW_ALIAS.SETTINGS_WINDOW, self.loadViewByCtxEvent), (VIEW_ALIAS.GAMMA_WIZARD, self.loadViewByCtxEvent), (VIEW_ALIAS.COLOR_SETTING, self.loadViewByCtxEvent))
         super(CommonPackageBusinessHandler, self).__init__(listeners, scope=EVENT_BUS_SCOPE.DEFAULT)
 
 

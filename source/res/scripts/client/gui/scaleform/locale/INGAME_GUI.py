@@ -523,6 +523,9 @@ class INGAME_GUI(object):
     TRAJECTORYVIEW_HINT_ALTERNATEMODERIGHT = '#ingame_gui:trajectoryView/hint/alternateModeRight'
     STUN_INDICATOR = '#ingame_gui:stun/indicator'
     STUN_SECONDS = '#ingame_gui:stun/seconds'
+    COLORSETTINGSTIPPANEL_HEADER = '#ingame_gui:colorSettingsTipPanel/header'
+    COLORSETTINGSTIPPANEL_DESC = '#ingame_gui:colorSettingsTipPanel/desc'
+    COLORSETTINGSTIPPANEL_BTNLABEL = '#ingame_gui:colorSettingsTipPanel/btnLabel'
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_TURN_BACK,
      CHAT_SHORTCUTS_SUPPORT_ME_WITH_FIRE,
      CHAT_SHORTCUTS_RELOADING_GUN,

@@ -329,7 +329,7 @@ class SettingsWindow(SettingsWindowMeta):
         label = SETTINGS.GRAPHICSSETTINGSOPTIONS_NONE
         image = RES_ICONS.MAPS_ICONS_SETTINGS_COLOR_GRADING_TECHNIQUE_NONE
         if colorSettingsSelectedTab == 2:
-            label = SETTINGS.SOUND_BULBVOICES_SIXTHSENSE
+            label = SETTINGS.COLORSETTINGS_TAB_CUSTOMSETTINGS
             image = RES_ICONS.MAPS_ICONS_SETTINGS_COLOR_GRADING_TECHNIQUE_RANDOM
         elif colorSettingsSelectedTab == 1:
             setting = self.settingsCore.options.getSetting(settings_constants.GRAPHICS.COLOR_GRADING_TECHNIQUE)

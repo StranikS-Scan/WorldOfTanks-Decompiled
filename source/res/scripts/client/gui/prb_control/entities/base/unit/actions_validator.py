@@ -90,7 +90,7 @@ class UnitLevelsValidator(ExceptDevModeValidator):
         if not stats.curTotalLevel:
             return ValidationResult(False, UNIT_RESTRICTION.ZERO_TOTAL_LEVEL)
         roster = self._entity.getRosterSettings()
-        if stats.curTotalLevel < roster.getMinTotalLevel():
+        if self._areVehiclesSelected(stats) and stats.curTotalLevel < roster.getMinTotalLevel():
             return ValidationResult(False, UNIT_RESTRICTION.MIN_TOTAL_LEVEL, {'level': roster.getMinTotalLevel()})
         return ValidationResult(False, UNIT_RESTRICTION.MAX_TOTAL_LEVEL, {'level': roster.getMaxTotalLevel()}) if stats.curTotalLevel > roster.getMaxTotalLevel() else super(UnitLevelsValidator, self)._validate()
 

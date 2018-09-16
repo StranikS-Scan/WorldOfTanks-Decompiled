@@ -47,8 +47,8 @@ class VehicleFootball(BigWorld.ScriptComponent):
 
     def __makeLocalProperties(self):
         self.__ball = None
-        self.__lastRelativeAiming = (0, 0, 0)
-        self.__lastWorldAiming = (0, 0, 0)
+        self.__lastRelativeAiming = (None, None, None)
+        self.__lastWorldAiming = (None, None, None)
         self.__shootHistory = HistoryLogger(self.__logShoot, 30, 1, None)
         self.__antiCheatMetricsData = dict()
         self.__antiCheatMetricsCollector = AntiCheatMetrics.AntiCheatMetricsCollector(self.__antiCheatMetricsData)

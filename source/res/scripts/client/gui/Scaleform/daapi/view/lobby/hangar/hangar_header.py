@@ -372,7 +372,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         eventsData = self._eventsController.getFootballSettingsData()
         isFootballEnabled = self._lobbyContext.getServerSettings().isFootballEnabled()
         isDemonstrator = account_helpers.isDemonstrator(self._itemsCache.items.stats.attributes)
-        wrongBattleType = self.prbEntity.getEntityType() != constants.ARENA_GUI_TYPE.RANDOM
+        wrongBattleType = self.prbEntity.getEntityType() not in (constants.PREBATTLE_TYPE.SQUAD, constants.PREBATTLE_TYPE.EVENT)
         if not isFootballEnabled or isDemonstrator or eventsData is None or not eventsData.hasActiveOrSoonEvents() or wrongBattleType:
             return {'eventQuestsVisible': False}
         else:

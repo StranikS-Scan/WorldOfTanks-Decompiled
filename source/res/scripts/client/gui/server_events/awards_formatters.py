@@ -113,17 +113,17 @@ def getDefaultFormattersMap():
      'dossier': DossierBonusFormatter()}
 
 
-def getFootballFormattersMap():
-    mapping = getDefaultFormattersMap()
-    mapping.update({'battleToken': FootballTokenBonusFormatter()})
-    return mapping
-
-
 def getMisssionsFormattersMap():
     countableIntegralBonusFormatter = CountableIntegralBonusFormatter()
     mapping = getDefaultFormattersMap()
     mapping.update({'slots': countableIntegralBonusFormatter,
      'berths': countableIntegralBonusFormatter})
+    return mapping
+
+
+def getFootballFormattersMap():
+    mapping = getMisssionsFormattersMap()
+    mapping.update({'battleToken': FootballTokenBonusFormatter()})
     return mapping
 
 

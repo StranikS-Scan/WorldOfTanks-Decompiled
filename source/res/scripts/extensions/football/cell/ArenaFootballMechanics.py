@@ -183,14 +183,17 @@ class ArenaFootballMechanics(BigWorld.ScriptComponent):
             maxZ = cageMax.z
             for vehicle in self.__vehiclesEntity:
                 if not vehicle.isDestroyed:
-                    vehPos = vehicle.position
-                    relativeAiming = vehicle.VehicleFootball.getLastRelativeAiming()
-                    worldAiming = vehicle.VehicleFootball.getLastWorldAiming()
+                    vehPos = (vehicle.position[0], vehicle.position[1], vehicle.position[2])
+                    relativeAiming_copy = vehicle.VehicleFootball.getLastRelativeAiming()
+                    relativeAiming = (relativeAiming_copy[0], relativeAiming_copy[1], relativeAiming_copy[2])
+                    worldAiming_copy = vehicle.VehicleFootball.getLastWorldAiming()
+                    worldAiming = (worldAiming_copy[0], worldAiming_copy[1], worldAiming_copy[2])
                     vehiclesPosition.append(((clamp16(vehPos[0], minX, maxX), clamp16(vehPos[1], minY, maxY), clamp16(vehPos[2], minZ, maxZ)), (clamp16(relativeAiming[0], minX, maxX), clamp16(relativeAiming[1], minY, maxY), clamp16(relativeAiming[2], minZ, maxZ)), (clamp16(worldAiming[0], minX, maxX), clamp16(worldAiming[1], minY, maxY), clamp16(worldAiming[2], minZ, maxZ))))
                 vehiclesPosition.append(((0, 0, 0), (0, 0, 0), (0, 0, 0)))
 
             if self.__ballEntity is not None and not self.__ballEntity.isDestroyed:
-                ballPosition = self.__ballEntity.position
+                ballPosition_copy = self.__ballEntity.position
+                ballPosition = (ballPosition_copy[0], ballPosition_copy[1], ballPosition_copy[2])
                 ballPosition = (clamp16(ballPosition[0], minX, maxX), clamp16(ballPosition[1], minY, maxY), clamp16(ballPosition[2], minZ, maxZ))
             else:
                 ballPosition = (0, 0, 0)
@@ -203,7 +206,7 @@ class ArenaFootballMechanics(BigWorld.ScriptComponent):
 
 
 def clamp16(value, minValue, maxValue):
-    return int(round((value - minValue) / (maxValue - minValue) * 65535))
+    return int(round((min(max(value, minValue), maxValue) - minValue) / (maxValue - minValue) * 65535)) if value is not None else 0
 
 
 def packVector3ToByteList(vector, byteList):

@@ -3,6 +3,7 @@
 import BigWorld
 import ResMgr
 import Math
+from debug_utils import LOG_WARNING
 from items import vehicles
 from gui.shared.utils.graphics import isRendererPipelineDeferred
 from helpers import dependency
@@ -244,7 +245,15 @@ class EventEffectsStorage(object):
         res = []
         resourceNames = frozenset(resourceNames)
         for name in resourceNames:
-            res.append(prereqs[name])
+            try:
+                if name not in prereqs.failedIDs:
+                    res.append(prereqs[name])
+                else:
+                    LOG_WARNING('Resource is not found: {}'.format(name))
+                    res.append(None)
+            except ValueError:
+                LOG_WARNING('Resource is not found: {}'.format(name))
+                res.append(None)
 
         return res
 

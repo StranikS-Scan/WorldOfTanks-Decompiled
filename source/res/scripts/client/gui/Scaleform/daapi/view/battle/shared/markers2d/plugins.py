@@ -326,11 +326,11 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
     def invalidatePlayerStatus(self, flags, vInfo, arenaDP):
         self.__setEntityName(vInfo, arenaDP)
 
-    def showStunMarker(self, handle, stunState, leftStunTime, animated):
-        self._invokeMarker(handle, 'updateStatusMarker', stunState, leftStunTime, animated)
+    def showStunMarker(self, vehicleID, handle, stunState, leftStunTime, animated):
+        self._updateStatusMarkerState(vehicleID, leftStunTime > 0, handle, stunState, leftStunTime, animated, False)
 
-    def hideStunMarker(self, handle, stunState, currentlyActiveStatusID, animated):
-        self._invokeMarker(handle, 'hideStatusMarker', stunState, currentlyActiveStatusID, animated)
+    def hideStunMarker(self, vehicleID, handle, stunState, currentlyActiveStatusID, animated):
+        self._updateStatusMarkerState(vehicleID, False, handle, stunState, 0, animated, False)
 
     def _setMarkerInitialState(self, marker, accountDBID=0):
         self.__setupDynamic(marker, accountDBID=accountDBID)
@@ -474,17 +474,17 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             timer.hide()
             timer.clear()
         if stunDuration > 0:
-            timer = StunMarkerTimer(self, handle, stunDuration, stunState=STUN_STATE, animated=True)
+            timer = StunMarkerTimer(self, vehicleID, handle, stunDuration, stunState=STUN_STATE, animated=True)
             self._stunTimers[handle] = timer
             timer.show(True)
 
     def __updatePassiveEngineeringMarker(self, vehicleID, handle, isAttacker, enabled, animated=True):
-        self.__updateStatusMarkerState(vehicleID, enabled, handle, ENGINEER_STATE, enabled, animated, isAttacker)
+        self._updateStatusMarkerState(vehicleID, enabled, handle, ENGINEER_STATE, enabled, animated, isAttacker)
 
     def __statusCompareFunction(self, x, y):
         return x > y
 
-    def __updateStatusMarkerState(self, vehicleID, isShown, handle, statusID, duration, animated, isSourceVehicle):
+    def _updateStatusMarkerState(self, vehicleID, isShown, handle, statusID, duration, animated, isSourceVehicle):
         currentStates = self._markersStates[vehicleID]
         if isShown and statusID not in currentStates:
             currentStates.append(statusID)
@@ -504,10 +504,10 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         statusID = INSPIRING_STATE if isSourceVehicle else INSPIRED_STATE
         if isInactivation is not None:
             hideStatusID = INSPIRED_STATE if isSourceVehicle else INSPIRING_STATE
-            self.__updateStatusMarkerState(vehicleID, False, handle, hideStatusID, duration, animated, isSourceVehicle)
-            self.__updateStatusMarkerState(vehicleID, True, handle, statusID, duration, animated, isSourceVehicle)
+            self._updateStatusMarkerState(vehicleID, False, handle, hideStatusID, duration, animated, isSourceVehicle)
+            self._updateStatusMarkerState(vehicleID, True, handle, statusID, duration, animated, isSourceVehicle)
         else:
-            self.__updateStatusMarkerState(vehicleID, False, handle, statusID, duration, animated, isSourceVehicle)
+            self._updateStatusMarkerState(vehicleID, False, handle, statusID, duration, animated, isSourceVehicle)
         return
 
     def __updateVehicleHealth(self, handle, newHealth, aInfo, attackReasonID):

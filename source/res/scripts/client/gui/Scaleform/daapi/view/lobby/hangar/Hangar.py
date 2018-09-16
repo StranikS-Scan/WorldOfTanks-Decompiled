@@ -71,7 +71,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         dialogsContainer = containerManager.getContainer(ViewTypes.TOP_WINDOW)
         windowsContainer = containerManager.getContainer(ViewTypes.WINDOW)
         browserWindowContainer = containerManager.getContainer(ViewTypes.BROWSER)
-        if not dialogsContainer.getViewCount() and not windowsContainer.getViewCount() and not browserWindowContainer.getViewCount():
+        overlayContainer = containerManager.getContainer(ViewTypes.OVERLAY)
+        if not dialogsContainer.getViewCount() and not windowsContainer.getViewCount() and not browserWindowContainer.getViewCount() and not overlayContainer.getViewCount():
             containerManager.onViewAddedToContainer += self.__onViewAddedToContainer
             self.fireEvent(LobbySimpleEvent(LobbySimpleEvent.SHOW_HELPLAYOUT), scope=EVENT_BUS_SCOPE.LOBBY)
             self.as_showHelpLayoutS()

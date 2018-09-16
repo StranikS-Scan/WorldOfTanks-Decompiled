@@ -89,11 +89,15 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         self._regionID = regionID
         self._areaID = areaID
         self._isVisible = True
-        self.__update()
+        if self.__update():
+            self.__ctx.onPropertySheetShown()
 
     def hide(self):
+        if not self.isVisible:
+            return
         self._isVisible = False
         self.as_hideS()
+        self.__ctx.onPropertySheetHidden()
 
     def onActionBtnClick(self, actionType, applyToAll):
         if actionType == CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_APPLY_TO_ALL_PARTS:
@@ -111,7 +115,6 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             self.__ctx.changeCamouflageColor(self._areaID, self._regionID, paletteIdx)
 
     def onClose(self):
-        self.service.resetHighlighting()
         self.hide()
 
     def setCamouflageScale(self, scale, scaleIndex):
@@ -150,6 +153,8 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             self.__updateExtraPrice()
             self.__autoRentEnabled = g_currentVehicle.item.isAutoRentStyle
             self.as_setDataAndShowS(self.__makeVO())
+            return True
+        return False
 
     def __applyToOtherAreas(self, installItem):
         if self.__ctx.currentTab not in (C11nTabs.PAINT, C11nTabs.CAMOUFLAGE):

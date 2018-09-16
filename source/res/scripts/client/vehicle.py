@@ -801,11 +801,12 @@ class Vehicle(BigWorld.Entity):
     def delModel(self, model):
         highlighter = self.appearance.highlighter
         hlEnabled = highlighter.enabled
+        hlSimpleEdge = highlighter.isSimpleEdge
         if hlEnabled:
-            highlighter.highlight(False)
+            highlighter.removeHighlight()
         super(Vehicle, self).delModel(model)
         if hlEnabled:
-            highlighter.highlight(True)
+            highlighter.highlight(True, hlSimpleEdge)
 
 
 @dependency.replace_none_kwargs(lobbyContext=ILobbyContext)

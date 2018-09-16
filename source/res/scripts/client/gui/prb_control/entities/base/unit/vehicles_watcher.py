@@ -34,7 +34,7 @@ class UnitVehiclesWatcher(object):
         vehCDs = invVehicles.keys()
         pInfo = self.__entity.getPlayerInfo()
         if pInfo.isInSlot:
-            _, unit = self.__entity.getUnit()
+            _, unit = self.__entity.getUnit(safe=False)
             roster = unit.getRoster()
             if not roster.checkVehicleList(vehCDs, pInfo.slotIdx) and not pInfo.isCommander():
                 self.__entity.request(AssignUnitCtx(pInfo.dbID, UNIT_SLOT.REMOVE, 'prebattle/assign'))

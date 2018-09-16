@@ -473,19 +473,21 @@ class AutoMaintenanceFormatter(ServiceChannelFormatter):
                 formatMsgType = 'RepairSysMessage'
             else:
                 formatMsgType = self._getTemplateByCurrency(cost.getCurrency(byWeight=False))
-            itemName = ''
-            if result == AUTO_MAINTENANCE_RESULT.RENT_IS_OVER:
-                cc = vehicles_core.g_cache.customization20()
-                style = cc.styles.get(styleId, None)
-                if style:
-                    itemName = style.userString
-            else:
-                itemName = getUserName(vt)
             msgTmpl = i18n.makeString(self.__messages[result].get(typeID, None))
             if not msgTmpl:
                 LOG_WARNING('Invalid typeID field in message: ', message)
                 return [_MessageData(None, None)]
-            msg = msgTmpl % itemName
+            msg = ''
+            if result == AUTO_MAINTENANCE_RESULT.RENT_IS_OVER:
+                cc = vehicles_core.g_cache.customization20()
+                style = cc.styles.get(styleId, None)
+                if style:
+                    styleName = style.userString
+                    itemName = getShortUserName(vt)
+                    msg = msgTmpl % (styleName, itemName)
+            else:
+                itemName = getUserName(vt)
+                msg = msgTmpl % itemName
             priorityLevel = NotificationPriorityLevel.MEDIUM
             if result == AUTO_MAINTENANCE_RESULT.OK:
                 priorityLevel = NotificationPriorityLevel.LOW

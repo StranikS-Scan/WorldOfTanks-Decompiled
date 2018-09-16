@@ -54,47 +54,11 @@ class _GroupedMissionsView(MissionsGroupedViewMeta):
 
 class MissionsGroupedView(_GroupedMissionsView):
 
-    def onLinkedSetUpdated(self, _):
-        self._filterMissions()
-
-    def openMissionDetailsView(self, eventID, blockID):
-        if blockID == DEFAULTS_GROUPS.LINKEDSET_QUESTS:
-            g_eventBus.handleEvent(events.LoadViewEvent(LINKEDSET_ALIASES.LINKED_SET_DETAILS_CONTAINER_VIEW, ctx={'eventID': eventID}), scope=EVENT_BUS_SCOPE.LOBBY)
-        else:
-            super(MissionsGroupedView, self).openMissionDetailsView(eventID, blockID)
-
-    def useTokenClick(self, eventID):
-        level = 6
-        g_eventBus.handleEvent(events.LoadViewEvent(LINKEDSET_ALIASES.LINKED_SET_VEHICLE_LIST_POPUP_PY, ctx={'infoText': _ms(LINKEDSET.VEHICLE_LIST_POPUP_INFO_TEXT, level=level),
-         'levelsRange': [level],
-         'section': 'linkedset_view_vehicle'}), scope=EVENT_BUS_SCOPE.LOBBY)
-
     def dummyClicked(self, eventType):
         if eventType == 'OpenCategoriesEvent':
             showMissionsCategories()
         else:
             super(MissionsGroupedView, self).dummyClicked(eventType)
-
-    def _populate(self):
-        super(MissionsGroupedView, self)._populate()
-        g_eventBus.addListener(events.MissionsEvent.ON_LINKEDSET_STATE_UPDATED, self.onLinkedSetUpdated, EVENT_BUS_SCOPE.LOBBY)
-
-    def _dispose(self):
-        g_eventBus.removeListener(events.MissionsEvent.ON_LINKEDSET_STATE_UPDATED, self.onLinkedSetUpdated, EVENT_BUS_SCOPE.LOBBY)
-        super(MissionsGroupedView, self)._dispose()
-
-    def _appendBlockDataToResult(self, result, data):
-        if data.blockData.get('blockId', None) == DEFAULTS_GROUPS.LINKEDSET_QUESTS and self._getQuestFilteredCountFromBlockData(data) == 0:
-            return
-        else:
-            result.append(data.blockData)
-            return
-
-    def _getQuestTotalCountFromBlockData(self, data):
-        return 1 if data.blockData.get('blockId', None) == DEFAULTS_GROUPS.LINKEDSET_QUESTS else super(MissionsGroupedView, self)._getQuestTotalCountFromBlockData(data)
-
-    def _getQuestFilteredCountFromBlockData(self, data):
-        return 1 if data.blockData.get('blockId', None) == DEFAULTS_GROUPS.LINKEDSET_QUESTS else super(MissionsGroupedView, self)._getQuestFilteredCountFromBlockData(data)
 
     @staticmethod
     def _getBackground():
@@ -334,6 +298,42 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
 
 
 class MissionsCategoriesView(_GroupedMissionsView):
+
+    def openMissionDetailsView(self, eventID, blockID):
+        if blockID == DEFAULTS_GROUPS.LINKEDSET_QUESTS:
+            g_eventBus.handleEvent(events.LoadViewEvent(LINKEDSET_ALIASES.LINKED_SET_DETAILS_CONTAINER_VIEW, ctx={'eventID': eventID}), scope=EVENT_BUS_SCOPE.LOBBY)
+        else:
+            super(MissionsCategoriesView, self).openMissionDetailsView(eventID, blockID)
+
+    def onLinkedSetUpdated(self, _):
+        self._filterMissions()
+
+    def useTokenClick(self, eventID):
+        level = 6
+        g_eventBus.handleEvent(events.LoadViewEvent(LINKEDSET_ALIASES.LINKED_SET_VEHICLE_LIST_POPUP_PY, ctx={'infoText': _ms(LINKEDSET.VEHICLE_LIST_POPUP_INFO_TEXT, level=level),
+         'levelsRange': [level],
+         'section': 'linkedset_view_vehicle'}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def _populate(self):
+        super(MissionsCategoriesView, self)._populate()
+        g_eventBus.addListener(events.MissionsEvent.ON_LINKEDSET_STATE_UPDATED, self.onLinkedSetUpdated, EVENT_BUS_SCOPE.LOBBY)
+
+    def _dispose(self):
+        g_eventBus.removeListener(events.MissionsEvent.ON_LINKEDSET_STATE_UPDATED, self.onLinkedSetUpdated, EVENT_BUS_SCOPE.LOBBY)
+        super(MissionsCategoriesView, self)._dispose()
+
+    def _appendBlockDataToResult(self, result, data):
+        if data.blockData.get('blockId', None) == DEFAULTS_GROUPS.LINKEDSET_QUESTS and self._getQuestFilteredCountFromBlockData(data) == 0:
+            return
+        else:
+            result.append(data.blockData)
+            return
+
+    def _getQuestTotalCountFromBlockData(self, data):
+        return 1 if data.blockData.get('blockId', None) == DEFAULTS_GROUPS.LINKEDSET_QUESTS else super(MissionsCategoriesView, self)._getQuestTotalCountFromBlockData(data)
+
+    def _getQuestFilteredCountFromBlockData(self, data):
+        return 1 if data.blockData.get('blockId', None) == DEFAULTS_GROUPS.LINKEDSET_QUESTS else super(MissionsCategoriesView, self)._getQuestFilteredCountFromBlockData(data)
 
     @staticmethod
     def _getBackground():

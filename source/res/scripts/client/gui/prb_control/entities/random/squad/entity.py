@@ -127,14 +127,17 @@ class RandomSquadEntity(SquadEntity):
 
     def getCurrentSPGCount(self):
         enableSPGCount = 0
-        _, unit = self.getUnit()
-        unitVehicles = unit.getVehicles()
-        for _, vInfos in unitVehicles.iteritems():
-            for vInfo in vInfos:
-                if vInfo.vehClassIdx == VEHICLE_CLASS_INDICES['SPG']:
-                    enableSPGCount += 1
+        _, unit = self.getUnit(safe=True)
+        if unit is None:
+            return enableSPGCount
+        else:
+            unitVehicles = unit.getVehicles()
+            for _, vInfos in unitVehicles.iteritems():
+                for vInfo in vInfos:
+                    if vInfo.vehClassIdx == VEHICLE_CLASS_INDICES['SPG']:
+                        enableSPGCount += 1
 
-        return enableSPGCount
+            return enableSPGCount
 
     def unit_onUnitVehicleChanged(self, dbID, vehInvID, vehTypeCD):
         super(RandomSquadEntity, self).unit_onUnitVehicleChanged(dbID, vehInvID, vehTypeCD)
@@ -159,7 +162,7 @@ class RandomSquadEntity(SquadEntity):
 
     def _createRosterSettings(self):
         if self._isBalancedSquad:
-            _, unit = self.getUnit()
+            _, unit = self.getUnit(safe=True)
             lowerBound, upperBound = self.getSquadLevelBounds()
             return BalancedSquadDynamicRosterSettings(unit=unit, lowerBound=lowerBound, upperBound=upperBound)
         return super(RandomSquadEntity, self)._createRosterSettings()

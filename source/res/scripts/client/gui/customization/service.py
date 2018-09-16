@@ -126,7 +126,9 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self.onRegionHighlighted = Event.Event(self._eventsManager)
         self.onOutfitChanged = Event.Event(self._eventsManager)
         self.__customizationCtx = None
-        self.__draggingCallbackID = None
+        self._suspendHighlighterCallbackID = None
+        self._isDraggingInProcess = False
+        self._notHandleHighlighterEvent = False
         return
 
     def init(self):
@@ -136,6 +138,8 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self.hangarSpace.onSpaceDestroy += self.__onSpaceDestroy
         self.hangarSpace.onSpaceCreate += self.__onSpaceCreate
         self._isOver3dScene = False
+        self._isDraggingInProcess = False
+        self._notHandleHighlighterEvent = False
 
     def fini(self):
         g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
@@ -247,6 +251,9 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
          'shadowYOffset': shadowYOffset}), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __onRegionHighlighted(self, args):
+        if self._notHandleHighlighterEvent:
+            self._notHandleHighlighterEvent = False
+            return
         areaID, regionID, selected, hovered = (-1,
          -1,
          False,
@@ -270,22 +277,40 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
             self._helper.setSelectingEnabled(self._isOver3dScene)
 
     def __onNotifyCursorDragging(self, event):
-        self.__cleanupCallback()
         if self._helper:
             isDragging = event.ctx.get('isDragging', False)
             if isDragging:
-                self.__draggingCallbackID = BigWorld.callback(self.__FADE_OUT_DELAY, makeCallbackWeak(self.__onSuspendHighlighter))
+                self.__cleanupCallback()
+                self._suspendHighlighterCallbackID = BigWorld.callback(self.__FADE_OUT_DELAY, makeCallbackWeak(self.__onSuspendHighlighter))
+                self._isDraggingInProcess = False
+                g_eventBus.addListener(events.LobbySimpleEvent.NOTIFY_SPACE_MOVED, self.__onSpaceMoving)
             else:
+                g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_SPACE_MOVED, self.__onSpaceMoving)
+                self._notHandleHighlighterEvent = False
+                if self._suspendHighlighterCallbackID and self._isDraggingInProcess:
+                    self._notHandleHighlighterEvent = True
+                self._isDraggingInProcess = False
+                self.__cleanupCallback()
                 self._helper.setSuspended(False)
 
     def __cleanupCallback(self):
-        if self.__draggingCallbackID:
-            BigWorld.cancelCallback(self.__draggingCallbackID)
-            self.__draggingCallbackID = None
+        if self._suspendHighlighterCallbackID:
+            BigWorld.cancelCallback(self._suspendHighlighterCallbackID)
+            self._suspendHighlighterCallbackID = None
         return
 
     def __onSuspendHighlighter(self):
         if self._helper:
             self._helper.setSuspended(True)
-        self.__draggingCallbackID = None
+        self._suspendHighlighterCallbackID = None
         return
+
+    def __onSpaceMoving(self, event):
+        dx = event.ctx.get('dx', 0)
+        dy = event.ctx.get('dy', 0)
+        dz = event.ctx.get('dz', 0)
+        if dx or dy or dz:
+            self._isDraggingInProcess = True
+            self.__cleanupCallback()
+            self.__onSuspendHighlighter()
+            g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_SPACE_MOVED, self.__onSpaceMoving)

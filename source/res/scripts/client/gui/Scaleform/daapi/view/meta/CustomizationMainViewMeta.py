@@ -7,8 +7,8 @@ class CustomizationMainViewMeta(View):
     def showBuyWindow(self):
         self._printOverrideError('showBuyWindow')
 
-    def closeWindow(self):
-        self._printOverrideError('closeWindow')
+    def onCloseWindow(self):
+        self._printOverrideError('onCloseWindow')
 
     def fadeOutAnchors(self, value):
         self._printOverrideError('fadeOutAnchors')
@@ -28,14 +28,14 @@ class CustomizationMainViewMeta(View):
     def onReleaseItem(self):
         self._printOverrideError('onReleaseItem')
 
-    def onClearItem(self):
-        self._printOverrideError('onClearItem')
-
     def onAnchorsShown(self, anchors):
         self._printOverrideError('onAnchorsShown')
 
     def onPressClearBtn(self):
         self._printOverrideError('onPressClearBtn')
+
+    def onPressEscBtn(self):
+        self._printOverrideError('onPressEscBtn')
 
     def as_hideS(self, value):
         return self.flashObject.as_hide(value) if self._isDAAPIInited() else None

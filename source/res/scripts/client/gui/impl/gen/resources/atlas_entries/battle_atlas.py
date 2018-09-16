@@ -1138,7 +1138,7 @@ class BattleAtlas(DynAccessor):
     ussr_R134_Object_252K = 4585
     ussr_R134_Object_252U = 4586
     ussr_R135_T_103 = 4587
-    ussr_R139_IS_2_Sh = 4588
+    ussr_R139_IS_M = 4588
     ussr_R14_SU_5 = 4589
     ussr_R140_M4_Loza = 4590
     ussr_R143_T_29 = 4591

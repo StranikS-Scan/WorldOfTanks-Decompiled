@@ -360,6 +360,7 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         self.__arenaDP = self.sessionProvider.getArenaDP()
         self.__vehStateCtrl = self.sessionProvider.shared.vehicleState
         self.__isVisible = False
+        self.__isFullStatsShown = False
         self.__logViewMode = _VIEW_MODE.SHOW_ALWAYS
         self.__totalDamageContentMask = 0
         self.__totalValues = defaultdict(int)
@@ -367,6 +368,10 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         self.__topLog = _LogViewComponent()
         self.__bottomLog = _LogViewComponent()
         return
+
+    def isSwitchToVehicle(self):
+        observedVehID = self.__vehStateCtrl.getControllingVehicleID()
+        return self.__arenaDP.getPlayerVehicleID() != observedVehID
 
     def _populate(self):
         super(DamageLogPanel, self)._populate()
@@ -390,12 +395,14 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         self.addListener(gui_events.GameEvent.SHOW_EXTENDED_INFO, self._handleShowExtendedInfo, scope=EVENT_BUS_SCOPE.BATTLE)
         self.addListener(gui_events.GameEvent.SHOW_CURSOR, self._handleShowCursor, EVENT_BUS_SCOPE.GLOBAL)
         self.addListener(gui_events.GameEvent.HIDE_CURSOR, self._handleHideCursor, EVENT_BUS_SCOPE.GLOBAL)
+        self.addListener(gui_events.GameEvent.FULL_STATS, self.__handleShowFullStats, scope=EVENT_BUS_SCOPE.BATTLE)
         return
 
     def _dispose(self):
         self.removeListener(gui_events.GameEvent.SHOW_EXTENDED_INFO, self._handleShowExtendedInfo, EVENT_BUS_SCOPE.BATTLE)
         self.removeListener(gui_events.GameEvent.SHOW_CURSOR, self._handleShowCursor, EVENT_BUS_SCOPE.GLOBAL)
         self.removeListener(gui_events.GameEvent.HIDE_CURSOR, self._handleHideCursor, EVENT_BUS_SCOPE.GLOBAL)
+        self.removeListener(gui_events.GameEvent.FULL_STATS, self.__handleShowFullStats, scope=EVENT_BUS_SCOPE.BATTLE)
         if self.__vehStateCtrl is not None:
             self.__vehStateCtrl.onPostMortemSwitched -= self._onPostMortemSwitched
             self.__vehStateCtrl.onVehicleControlling -= self._onVehicleControlling
@@ -461,6 +468,8 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         isEpicBattle = arenaVisitor.gui.isInEpicRange()
         if isEpicBattle:
             return
+        elif self.__isFullStatsShown:
+            return
         else:
             isVisible = True
             if self.sessionProvider.getCtx().isPlayerObserver():
@@ -471,8 +480,7 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
                 if self.__arenaDP is None:
                     isVisible = self.__isVisible
                 else:
-                    observedVehID = self.__vehStateCtrl.getControllingVehicleID()
-                    isVisible = self.__arenaDP.getPlayerVehicleID() == observedVehID
+                    isVisible = not self.isSwitchToVehicle()
             if self.__isVisible != isVisible:
                 self.__isVisible = isVisible
                 self._setSettings(self.__isVisible, bool(self.settingsCore.getSetting(GRAPHICS.COLOR_BLIND)))
@@ -506,6 +514,11 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
 
     def _handleHideCursor(self, _):
         self.as_isDownCtrlButtonS(False)
+
+    def __handleShowFullStats(self, event):
+        self.__isFullStatsShown = event.ctx['isDown']
+        if not self.__isFullStatsShown:
+            self._invalidatePanelVisibility()
 
     def _setTotalValue(self, etype, value):
         if BitmaskHelper.hasAnyBitSet(self.__totalDamageContentMask, etype):

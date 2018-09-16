@@ -504,4 +504,6 @@ class SFApplication(Flash, ApplicationMeta):
         self.updateStage(ctx['width'], ctx['height'], ctx['scale'])
 
     def __cm_onDisconnected(self):
-        self._tutorialMgr.clear()
+        if self._tutorialMgr is not None:
+            self._tutorialMgr.clear()
+        return

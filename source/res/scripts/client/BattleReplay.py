@@ -626,6 +626,7 @@ class BattleReplay(object):
             del vehicle['clanDBID']
             del vehicle['isPrebattleCreator']
             del vehicle['isAvatarReady']
+            del vehicle['outfitCD']
             vehicles[k] = vehicle
 
         return vehicles

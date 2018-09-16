@@ -195,7 +195,7 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
             else:
                 self.__moneyState = _MoneyForPurchase.NOT_ENOUGH
         self.as_setTotalDataS({'totalLabel': text_styles.highTitle(_ms(VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_TOTALCOST, selected=cart.numSelected, total=cart.numApplying)),
-         'enoughMoney': self.__moneyState is not _MoneyForPurchase.NOT_ENOUGH,
+         'enoughMoney': self.__moneyState == _MoneyForPurchase.ENOUGH,
          'inFormationAlert': inFormationAlert,
          'totalPrice': totalPriceVO[0]})
         self.__setBuyButtonState()
@@ -208,7 +208,7 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
             label = VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_BTNBUY
         else:
             label = VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_BTNAPPLY
-        isEnabled = self.__moneyState is not _MoneyForPurchase.NOT_ENOUGH
+        isEnabled = self.__moneyState != _MoneyForPurchase.NOT_ENOUGH
         isAnySelected = purchase + inventory > 0
         if not isAnySelected:
             label = ''

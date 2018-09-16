@@ -74,14 +74,17 @@ class EpicSquadEntity(SquadEntity):
 
     def getCurrentSPGCount(self):
         enableSPGCount = 0
-        _, unit = self.getUnit()
-        unitVehicles = unit.getVehicles()
-        for _, vInfos in unitVehicles.iteritems():
-            for vInfo in vInfos:
-                if vInfo.vehClassIdx == VEHICLE_CLASS_INDICES['SPG']:
-                    enableSPGCount += 1
+        _, unit = self.getUnit(safe=True)
+        if unit is None:
+            return enableSPGCount
+        else:
+            unitVehicles = unit.getVehicles()
+            for _, vInfos in unitVehicles.iteritems():
+                for vInfo in vInfos:
+                    if vInfo.vehClassIdx == VEHICLE_CLASS_INDICES['SPG']:
+                        enableSPGCount += 1
 
-        return enableSPGCount
+            return enableSPGCount
 
     def unit_onUnitVehiclesChanged(self, dbID, vehicles):
         super(EpicSquadEntity, self).unit_onUnitVehiclesChanged(dbID, vehicles)

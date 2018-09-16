@@ -91,11 +91,11 @@ class DynSquadArenaController(object):
                     self.__sentOwnJoinMessage = True
                     self.__squadMembersAlly[voSquadIndex] = squadMembersCount
             elif isAlly:
-                if voSquadIndex in self.__sentAllyCreatePlatoons:
+                if voSquadIndex not in self.__sentAllyCreatePlatoons:
                     self._squadCreatedByAllies(squadNum=voSquadIndex)
                     self.__sentAllyCreatePlatoons.append(voSquadIndex)
                     self.__squadMembersAlly[voSquadIndex] = squadMembersCount
-            elif voSquadIndex in self.__sentEnemyCreatePlatoons:
+            elif voSquadIndex not in self.__sentEnemyCreatePlatoons:
                 self._squadCreatedByEnemies(squadNum=voSquadIndex)
                 self.__sentEnemyCreatePlatoons.append(voSquadIndex)
                 self.__squadMembersEnemy[voSquadIndex] = squadMembersCount

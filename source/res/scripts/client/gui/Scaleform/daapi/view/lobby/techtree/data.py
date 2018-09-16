@@ -476,13 +476,10 @@ class ResearchItemsData(_ItemsData):
 
     def _canSell(self, nodeCD):
         item = self.getItem(nodeCD)
-        if item.isInInventory:
-            if getTypeOfCD(nodeCD) == GUI_ITEM_TYPE.VEHICLE:
-                canSell = item.canSell
-            else:
-                canSell = item.isInstalled(self.getRootItem())
+        if getTypeOfCD(nodeCD) == GUI_ITEM_TYPE.VEHICLE:
+            canSell = item.canSell
         else:
-            canSell = False
+            canSell = item.isInInventory
         return canSell
 
     def _getRootUnlocksDescrs(self, rootItem):

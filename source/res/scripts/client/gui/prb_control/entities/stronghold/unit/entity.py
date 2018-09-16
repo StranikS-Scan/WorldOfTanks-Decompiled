@@ -179,7 +179,7 @@ class StrongholdEntity(UnitEntity):
     def init(self, ctx=None):
         self.storage.release()
         ret = super(StrongholdEntity, self).init(ctx)
-        _, unit = self.getUnit()
+        _, unit = self.getUnit(safe=False)
         if unit._extras.get('rev', 0) > 1:
             self.requestUpdateStronghold()
         unitMgr = prb_getters.getClientUnitMgr()
@@ -264,7 +264,7 @@ class StrongholdEntity(UnitEntity):
             self.requestUpdateStronghold()
 
     def unit_onUnitFlagsChanged(self, prevFlags, nextFlags):
-        _, unit = self.getUnit()
+        _, unit = self.getUnit(safe=False)
         isReady = unit.arePlayersReady(ignored=[settings.CREATOR_SLOT_INDEX])
         flags = unit_items.UnitFlags(nextFlags, prevFlags, isReady)
         isInQueue = flags.isInQueue()
@@ -458,17 +458,20 @@ class StrongholdEntity(UnitEntity):
             self._invokeListeners('onStrongholdDataChanged', header, isFirstBattle, self.__strongholdSettings.getReserve(), self.__strongholdSettings.getReserveOrder())
 
     def getCandidates(self, unitMgrID=None):
-        unitMgrID, unit = self.getUnit(unitMgrID=unitMgrID)
-        players = unit.getPlayers()
-        memberIDs = set((value['accountDBID'] for value in unit.getMembers().itervalues()))
-        dbIDs = set(players.keys()).difference(memberIDs)
-        result = {}
-        for dbID, data in players.iteritems():
-            if dbID not in dbIDs:
-                continue
-            result[dbID] = self._buildPlayerInfo(unitMgrID, unit, dbID, -1, data)
+        unitMgrID, unit = self.getUnit(unitMgrID=unitMgrID, safe=True)
+        if unit is None:
+            return {}
+        else:
+            players = unit.getPlayers()
+            memberIDs = set((value['accountDBID'] for value in unit.getMembers().itervalues()))
+            dbIDs = set(players.keys()).difference(memberIDs)
+            result = {}
+            for dbID, data in players.iteritems():
+                if dbID not in dbIDs:
+                    continue
+                result[dbID] = self._buildPlayerInfo(unitMgrID, unit, dbID, -1, data)
 
-        return result
+            return result
 
     def getStrongholdSettings(self):
         return self.__strongholdSettings
@@ -539,7 +542,7 @@ class StrongholdEntity(UnitEntity):
         return StrongholdActionsHandler(self)
 
     def _getClanMembers(self):
-        _, unit = self.getUnit()
+        _, unit = self.getUnit(safe=False)
         members = [ member['accountDBID'] for member in unit.getMembers().itervalues() ]
         clanMembers = []
         for memberDBID in members:
@@ -590,7 +593,7 @@ class StrongholdEntity(UnitEntity):
         return time_utils.getTimestampFromLocal(val)
 
     def __updateRosterSettings(self):
-        _, unit = self.getUnit()
+        _, unit = self.getUnit(safe=True)
         return StrongholdDynamicRosterSettings(unit, self.__strongholdSettings)
 
     def __onStrongholdUpdate(self, response):

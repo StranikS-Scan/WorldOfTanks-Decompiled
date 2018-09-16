@@ -107,6 +107,8 @@ class CustomizationContext(object):
         self.onCaruselItemUnselected = Event.Event(self._eventsManager)
         self.onCarouselFilter = Event.Event(self._eventsManager)
         self.onCustomizationRegionSelected = Event.Event(self._eventsManager)
+        self.onPropertySheetShown = Event.Event(self._eventsManager)
+        self.onPropertySheetHidden = Event.Event(self._eventsManager)
         return
 
     def changeSeason(self, seasonIdx):
@@ -262,7 +264,7 @@ class CustomizationContext(object):
 
     def caruselItemSelected(self, index, intCD):
         self._selectedCaruselItem = CaruselItemData(index=index, intCD=intCD)
-        if self._selectedRegion.areaId != -1 and self._selectedRegion.regionIdx != -1 and self._selectedCaruselItem.intCD != -1:
+        if self.isRegionSelected() and self._selectedCaruselItem.intCD != -1:
             self.installItem(self._selectedCaruselItem.intCD, self._selectedRegion.areaId, self._selectedRegion.slotType, self._selectedRegion.regionIdx, SEASON_TYPE_TO_IDX[self.currentSeason])
         self.onCaruselItemSelected(index, intCD)
 
@@ -434,6 +436,43 @@ class CustomizationContext(object):
         else:
             self.__carveUpOutfits()
 
+    def isOutfitsModified(self):
+        if self._mode == self._originalMode:
+            if self._mode == C11nMode.STYLE:
+                currentStyle = self.service.getCurrentStyle()
+                if self._modifiedStyle and currentStyle:
+                    return self._modifiedStyle.intCD != currentStyle.intCD
+                return not (self._modifiedStyle is None and currentStyle is None)
+            for season in SeasonType.COMMON_SEASONS:
+                outfit = self._modifiedOutfits[season]
+                currOutfit = self._originalOutfits[season]
+                if not currOutfit.isEqual(outfit) or not outfit.isEqual(currOutfit):
+                    return True
+
+            return False
+        else:
+            if self._mode == C11nMode.CUSTOM:
+                if self.isOutfitsEmpty(self._modifiedOutfits) and self._originalStyle is None:
+                    return False
+            elif self._modifiedStyle is None and self.isOutfitsEmpty(self._originalOutfits):
+                return False
+            return True
+            return
+
+    @staticmethod
+    def isOutfitsEmpty(outfits):
+        outfitsEmpty = True
+        for season in SeasonType.COMMON_SEASONS:
+            outfit = outfits[season]
+            if not outfit.isEmpty():
+                outfitsEmpty = False
+                break
+
+        return outfitsEmpty
+
+    def isRegionSelected(self):
+        return self._selectedRegion.areaId != -1 and self._selectedRegion.regionIdx != -1
+
     def __carveUpOutfits(self):
         for season in SeasonType.COMMON_SEASONS:
             outfit = self.service.getCustomOutfit(season)
@@ -514,37 +553,3 @@ class CustomizationContext(object):
                     visibleTabs[seasonType].add(tabIndex)
 
         self.__visibleTabs = visibleTabs
-
-    def isOutfitsModified(self):
-        if self._mode == self._originalMode:
-            if self._mode == C11nMode.STYLE:
-                currentStyle = self.service.getCurrentStyle()
-                if self._modifiedStyle and currentStyle:
-                    return self._modifiedStyle.intCD != currentStyle.intCD
-                return not (self._modifiedStyle is None and currentStyle is None)
-            for season in SeasonType.COMMON_SEASONS:
-                outfit = self._modifiedOutfits[season]
-                currOutfit = self._originalOutfits[season]
-                if not currOutfit.isEqual(outfit) or not outfit.isEqual(currOutfit):
-                    return True
-
-            return False
-        else:
-            if self._mode == C11nMode.CUSTOM:
-                if self.isOutfitsEmpty(self._modifiedOutfits) and self._originalStyle is None:
-                    return False
-            elif self._modifiedStyle is None and self.isOutfitsEmpty(self._originalOutfits):
-                return False
-            return True
-            return
-
-    @staticmethod
-    def isOutfitsEmpty(outfits):
-        outfitsEmpty = True
-        for season in SeasonType.COMMON_SEASONS:
-            outfit = outfits[season]
-            if not outfit.isEmpty():
-                outfitsEmpty = False
-                break
-
-        return outfitsEmpty

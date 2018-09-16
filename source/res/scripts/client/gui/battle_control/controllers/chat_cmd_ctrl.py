@@ -234,7 +234,7 @@ class ChatCommandsController(IBattleController):
         if cmd is None:
             return
         else:
-            if cmd.isEpicGlobalMessage:
+            if cmd.isEpicGlobalMessage():
                 if soundNotifications and hasattr(soundNotifications, 'play'):
                     soundNotifications.play(EPIC_SOUND.BF_EB_GLOBAL_MESSAGE)
             elif soundNotifications and hasattr(soundNotifications, 'play'):

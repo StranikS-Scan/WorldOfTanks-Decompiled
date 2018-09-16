@@ -708,7 +708,7 @@ class VehicleMarkerAtlas(DynAccessor):
     ussr_R134_Object_252K = 3321
     ussr_R134_Object_252U = 3322
     ussr_R135_T_103 = 3323
-    ussr_R139_IS_2_Sh = 3324
+    ussr_R139_IS_M = 3324
     ussr_R14_SU_5 = 3325
     ussr_R140_M4_Loza = 3326
     ussr_R143_T_29 = 3327

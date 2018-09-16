@@ -51,7 +51,7 @@ def showMissionsElen(eventQuestsID):
 
 
 def showMissionsLinkedSet():
-    showMissions(tab=QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS)
+    showMissions(tab=QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS)
 
 
 def showMissionDetails(missionID, groupID):

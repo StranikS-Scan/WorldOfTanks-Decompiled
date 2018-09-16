@@ -78,7 +78,8 @@ class _AppearanceCache(object):
             if typeDescriptor is None:
                 return
             isAlive = info['isAlive']
-            self.__cacheApperance(vId, _VehicleInfo(typeDescriptor, 1 if isAlive else 0, True if isAlive else False, False, ''))
+            outfitCD = info['outfitCD']
+            self.__cacheApperance(vId, _VehicleInfo(typeDescriptor, 1 if isAlive else 0, True if isAlive else False, False, outfitCD))
             return
 
     def createAppearance(self, vId, vInfo, forceReloadingFromCache):

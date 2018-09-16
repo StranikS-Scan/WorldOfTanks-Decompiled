@@ -2021,7 +2021,7 @@
     <historical>	true	</historical>
     <vehicleFilter>
       <include>
-        <levels>	8 10	</levels>
+        <levels>	6 8 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -2678,7 +2678,7 @@
     <historical>	true	</historical>
     <vehicleFilter>
       <include>
-        <levels>	8 10	</levels>
+        <levels>	6 8 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -3335,7 +3335,7 @@
     <historical>	true	</historical>
     <vehicleFilter>
       <include>
-        <levels>	8 10	</levels>
+        <levels>	6 8 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -4084,6 +4084,8 @@
       <tiling>
         <china:Ch04_T34_1_training0>	9.9 9.9 0.000000 0.000000	</china:Ch04_T34_1_training0>
         <china:Ch04_T34_1_training3>	8.37297 8.37297 0.1 0.6	</china:Ch04_T34_1_training3>
+        <china:Ch04_T34_1_training4>	4.24 4.24 0.49 1.20	</china:Ch04_T34_1_training4>
+        <china:Ch04_T34_17>	3.37 3.37 0.54 1.25	</china:Ch04_T34_17>
         <china:Ch02_Type6219>	7.0 7.0 0.000000 0.000000	</china:Ch02_Type6219>
         <china:Ch02_Type6222>	3.7 3.7 0.000000 0.600000	</china:Ch02_Type6222>
         <china:Ch02_Type6223>	3.7 3.7 0.000000 0.600000	</china:Ch02_Type6223>
@@ -4121,6 +4123,19 @@
         <china:Ch02_Type6276>	8.24324 8.24324 0.48 0.48	</china:Ch02_Type6276>
         <china:Ch01_Type59_Gold66>	3.77027 3.77027 0.000000 0.62987	</china:Ch01_Type59_Gold66>
         <china:Ch01_Type59_Gold81>	1.79459 1.79459 0.2 0.42987	</china:Ch01_Type59_Gold81>
+        <china:Ch01_Type59_Gold31>	7.40 7.40 0.89 0.68	</china:Ch01_Type59_Gold31>
+        <china:Ch01_Type59_Gold89>	2.88 2.88 0.0 0.0	</china:Ch01_Type59_Gold89>
+        <china:Ch01_Type59_Gold93>	7.38 7.38 0.21 0.88	</china:Ch01_Type59_Gold93>
+        <china:Ch02_Type6204>	6.16 6.16 0.89 0.68	</china:Ch02_Type6204>
+        <china:Ch02_Type6208>	6.50 6.50 0.46 0.68	</china:Ch02_Type6208>
+        <china:Ch02_Type6217>	12.5 12.5 0.89 0.68	</china:Ch02_Type6217>
+        <china:Ch02_Type6218>	7.60 7.60 0.67 0.92	</china:Ch02_Type6218>
+        <china:Ch02_Type6245>	6.56 6.56 0.0 0.0	</china:Ch02_Type6245>
+        <china:Ch02_Type6252>	7.60 7.60 1.41 1.06	</china:Ch02_Type6252>
+        <china:Ch02_Type6263>	7.39 7.39 0.89 0.68	</china:Ch02_Type6263>
+        <china:Ch02_Type6272>	3.86 3.86 0.89 0.68	</china:Ch02_Type6272>
+        <china:Ch01_Type59_Gold85>	4.09 4.09 0.89 0.68	</china:Ch01_Type59_Gold85>
+        <china:Ch01_Type59_Gold86>	1.82 1.82 0.89 0.68	</china:Ch01_Type59_Gold86>
         <china:Ch06_Renault_NC310>	3.2 3.2 1.100000 1.100000	</china:Ch06_Renault_NC310>
         <china:Ch06_Renault_NC31_bot0>	3.6 3.6 0.600000 0.500000	</china:Ch06_Renault_NC31_bot0>
         <china:Ch06_Renault_NC31_bot2>	6.5 6.5 0.200000 0.300000	</china:Ch06_Renault_NC31_bot2>
@@ -4142,6 +4157,10 @@
         <china:Ch07_Vickers_MkE_Type_BT268>	8.13784 8.13784 0.000000 0.6	</china:Ch07_Vickers_MkE_Type_BT268>
         <china:Ch01_Type59_Gold23>	4.35946 4.35946 0.1 0.668831	</china:Ch01_Type59_Gold23>
         <china:Ch01_Type59_Gold27>	3.91351 3.91351 0.2 0.1	</china:Ch01_Type59_Gold27>
+        <china:Ch05_T34_25>	3.9 3.9 0.0 0.53	</china:Ch05_T34_25>
+        <china:Ch06_Renault_NC316>	5.22 5.22 0.0 0.0	</china:Ch06_Renault_NC316>
+        <china:Ch06_Renault_NC31_bot6>	3.91351 3.91351 0.2 0.1	</china:Ch06_Renault_NC31_bot6>
+        <china:Ch07_Vickers_MkE_Type_BT266>	3.91351 3.91351 0.09 2.61	</china:Ch07_Vickers_MkE_Type_BT266>
       </tiling>
     </camouflage>
   </itemGroup>
@@ -4196,6 +4215,16 @@
         <china:Ch04_T34_1_training09>	9.18378 9.18378 0.000000 0.000000	</china:Ch04_T34_1_training09>
         <china:Ch04_T34_1_training23>	5.98108 5.98108 0.000000 0.000000	</china:Ch04_T34_1_training23>
         <china:Ch04_T34_1_training29>	5.47027 5.47027 0.000000 0.000000	</china:Ch04_T34_1_training29>
+        <china:Ch04_T34_133>	5.47027 5.47027 0.000000 0.000000	</china:Ch04_T34_133>
+        <china:Ch04_T34_148>	3.8 3.8 0.000000 0.000000	</china:Ch04_T34_148>
+        <china:Ch04_T34_182>	4.8 4.8 0.000000 0.000000	</china:Ch04_T34_182>
+        <china:Ch04_T34_188>	6.2 6.2 0.000000 0.000000	</china:Ch04_T34_188>
+        <china:Ch04_T34_195>	4.2 4.2 0.000000 0.000000	</china:Ch04_T34_195>
+        <china:Ch04_T34_1_training11>	3.5 3.5 0.000000 0.000000	</china:Ch04_T34_1_training11>
+        <china:Ch04_T34_1_training20>	6.0 6.0 0.000000 0.000000	</china:Ch04_T34_1_training20>
+        <china:Ch04_T34_1_training27>	5.6 5.6 0.000000 0.000000	</china:Ch04_T34_1_training27>
+        <china:Ch04_T34_143>	5.0 5.0 0.000000 0.000000	</china:Ch04_T34_143>
+        <china:Ch04_T34_155>	2.5 2.5 0.000000 0.000000	</china:Ch04_T34_155>
         <china:Ch03_WZ-11160>	4.7 4.7 0.000000 0.000000	</china:Ch03_WZ-11160>
         <china:Ch03_WZ-11179>	3.8 3.8 0.000000 0.000000	</china:Ch03_WZ-11179>
         <china:Ch03_WZ-11182>	4.3 4.3 0.000000 0.000000	</china:Ch03_WZ-11182>
@@ -4214,17 +4243,32 @@
         <china:Ch04_T34_103>	4.16487 4.16487 0.000000 0.000000	</china:Ch04_T34_103>
         <china:Ch04_T34_112>	2.42432 2.42432 0.000000 0.000000	</china:Ch04_T34_112>
         <china:Ch04_T34_113>	5.52432 5.52432 0.000000 0.000000	</china:Ch04_T34_113>
+        <china:Ch03_WZ-11155>	3.3 3.3 0.000000 0.000000	</china:Ch03_WZ-11155>
+        <china:Ch03_WZ-11165>	4.2 4.2 0.000000 0.000000	</china:Ch03_WZ-11165>
+        <china:Ch03_WZ-11167>	4.1 4.1 0.000000 0.000000	</china:Ch03_WZ-11167>
+        <china:Ch03_WZ-11184>	3.0 3.0 0.000000 0.000000	</china:Ch03_WZ-11184>
+        <china:Ch03_WZ-11188>	4.3 4.3 0.000000 0.000000	</china:Ch03_WZ-11188>
+        <china:Ch03_WZ-11197>	1.0 1.0 0.000000 0.000000	</china:Ch03_WZ-11197>
+        <china:Ch04_T34_106>	4.4 4.4 0.000000 0.000000	</china:Ch04_T34_106>
+        <china:Ch04_T34_109>	5.52432 5.52432 0.000000 0.000000	</china:Ch04_T34_109>
+        <china:Ch04_T34_117>	3.0 3.0 0.000000 0.000000	</china:Ch04_T34_117>
         <china:Ch03_WZ-11132>	1.8 1.8 0.100000 0.100000	</china:Ch03_WZ-11132>
         <china:Ch03_WZ-11137>	1.5 1.5 0.000000 0.000000	</china:Ch03_WZ-11137>
         <china:Ch03_WZ-11143>	1.7 1.7 0.000000 0.000000	</china:Ch03_WZ-11143>
         <china:Ch03_WZ-11144>	5.2 5.2 0.000000 0.100000	</china:Ch03_WZ-11144>
         <china:Ch03_WZ-11139>	2.62432 2.62432 0.000000 0.000000	</china:Ch03_WZ-11139>
         <china:Ch03_WZ-11142>	4.64054 4.64054 0.000000 0.000000	</china:Ch03_WZ-11142>
+        <china:Ch03_WZ-11122>	3.5 3.5 0.000000 0.000000	</china:Ch03_WZ-11122>
+        <china:Ch03_WZ-11128>	2.2 2.2 0.000000 0.000000	</china:Ch03_WZ-11128>
+        <china:Ch03_WZ-11129>	2.0 2.0 0.000000 0.000000	</china:Ch03_WZ-11129>
         <china:Ch03_WZ-11108>	3.8 3.8 0.000000 0.000000	</china:Ch03_WZ-11108>
         <china:Ch03_WZ-11110>	5.2 5.2 0.000000 0.000000	</china:Ch03_WZ-11110>
         <china:Ch03_WZ-11112>	5.3 5.3 0.2 0.000000	</china:Ch03_WZ-11112>
         <china:Ch03_WZ-11104>	2.70811 2.70811 0.000000 0.000000	</china:Ch03_WZ-11104>
         <china:Ch03_WZ-11120>	4.18919 4.18919 0.000000 0.000000	</china:Ch03_WZ-11120>
+        <china:Ch03_WZ-11100>	3.1 3.1 0.000000 0.000000	</china:Ch03_WZ-11100>
+        <china:Ch03_WZ-11111>	5.3 5.3 0.000000 0.000000	</china:Ch03_WZ-11111>
+        <china:Ch03_WZ-11117>	3.6 3.6 0.000000 0.000000	</china:Ch03_WZ-11117>
       </tiling>
     </camouflage>
   </itemGroup>
@@ -9492,7 +9536,7 @@
     <historical>	false	</historical>
     <vehicleFilter>
       <include>
-        <levels>	8 10	</levels>
+        <levels>	6 8 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -10159,7 +10203,7 @@
     <historical>	false	</historical>
     <vehicleFilter>
       <include>
-        <levels>	8 10	</levels>
+        <levels>	6 8 10	</levels>
       </include>
       <exclude>
         <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
@@ -10225,13 +10269,30 @@
         <china:Ch05_T34_243>	2.3 2.3 0.000000 0.5	</china:Ch05_T34_243>
         <china:Ch04_T34_1_training52>	5.7 5.7 0.2 0.9	</china:Ch04_T34_1_training52>
         <china:Ch05_T34_278>	7.0 7.0 0.0 0.0	</china:Ch05_T34_278>
+        <china:Ch04_T34_1_training39>	5.0 5.0 0.59 0.0	</china:Ch04_T34_1_training39>
+        <china:Ch04_T34_1_training98>	3.94 3.94 0.0 0.0	</china:Ch04_T34_1_training98>
+        <china:Ch05_T34_210>	3.24 3.24 0.0 0.0	</china:Ch05_T34_210>
+        <china:Ch05_T34_232>	5.33 5.33 0.0 0.0	</china:Ch05_T34_232>
+        <china:Ch05_T34_240>	5.44 5.44 0.69 0.0	</china:Ch05_T34_240>
+        <china:Ch05_T34_252>	3.47 3.47 0.63 0.0	</china:Ch05_T34_252>
+        <china:Ch05_T34_256>	5.27 5.27 0.35 0.06	</china:Ch05_T34_256>
+        <china:Ch04_T34_1_training47>	5.39 5.39 0.81 0.0	</china:Ch04_T34_1_training47>
+        <china:Ch04_T34_1_training50>	3.30 3.30 0.0 0.0	</china:Ch04_T34_1_training50>
+        <china:Ch04_T34_1_training60>	7.0 7.0 0.99 0.0	</china:Ch04_T34_1_training60>
+        <china:Ch04_T34_1_training63>	2.55 2.55 0.98 0.0	</china:Ch04_T34_1_training63>
+        <china:Ch04_T34_1_training86>	2.81 2.81 0.81 0.0	</china:Ch04_T34_1_training86>
         <china:Ch04_T34_1_training0>	7.4 7.4 0.000000 0.3	</china:Ch04_T34_1_training0>
         <china:Ch04_T34_1_training3>	6.4 6.4 0.000000 0.1	</china:Ch04_T34_1_training3>
+        <china:Ch04_T34_17>	3.5 3.5 0.000000 0.1	</china:Ch04_T34_17>
+        <china:Ch04_T34_1_training4>	3.87 3.87 0.000000 0.1	</china:Ch04_T34_1_training4>
         <china:Ch03_WZ-11108>	3.9 3.9 0.000000 0.5	</china:Ch03_WZ-11108>
         <china:Ch03_WZ-11110>	6 6 0.000000 2.1	</china:Ch03_WZ-11110>
         <china:Ch03_WZ-11112>	4.3 4.3 0.000000 0.000000	</china:Ch03_WZ-11112>
         <china:Ch03_WZ-11104>	3 3 0.000000 0.5	</china:Ch03_WZ-11104>
         <china:Ch03_WZ-11120>	4.5 4.5 0.000000 0.000000	</china:Ch03_WZ-11120>
+        <china:Ch03_WZ-11100>	2.72 2.72 0.000000 0.000000	</china:Ch03_WZ-11100>
+        <china:Ch03_WZ-11111>	6.35 6.35 0.000000 0.000000	</china:Ch03_WZ-11111>
+        <china:Ch03_WZ-11117>	3.95 3.95 0.000000 0.000000	</china:Ch03_WZ-11117>
         <china:Ch01_Type59>	2.3 2.3 0.9 0.7	</china:Ch01_Type59>
         <china:Ch03_WZ-111>	3 3 0.000000 1.6	</china:Ch03_WZ-111>
         <china:Ch01_Type59_Gold7>	3.7 3.7 0.63 2.6	</china:Ch01_Type59_Gold7>
@@ -10249,6 +10310,10 @@
         <china:Ch01_Type59_Gold4>	6.2 6.2 0.000000 0.6	</china:Ch01_Type59_Gold4>
         <china:Ch02_Type620>	2.9 2.9 0.000000 0.4	</china:Ch02_Type620>
         <china:Ch04_T34_11>	2.9 2.9 0.000000 0.2	</china:Ch04_T34_11>
+        <china:Ch01_Type59_Gold8>	3.6 3.6 0.000000 0.0	</china:Ch01_Type59_Gold8>
+        <china:Ch02_Type625>	6.16 6.16 0.000000 0.0	</china:Ch02_Type625>
+        <china:Ch03_WZ-1110>	3.99 3.99 0.000000 0.0	</china:Ch03_WZ-1110>
+        <china:Ch03_WZ-1119>	2.9 2.9 0.000000 0.0	</china:Ch03_WZ-1119>
         <china:Ch03_WZ-11160>	5.6 5.6 0.7 1.3	</china:Ch03_WZ-11160>
         <china:Ch03_WZ-11179>	3.8 3.8 0.3 1.2	</china:Ch03_WZ-11179>
         <china:Ch03_WZ-11189>	7.2 7.2 0.000000 0.000000	</china:Ch03_WZ-11189>
@@ -10266,12 +10331,25 @@
         <china:Ch04_T34_103>	4.3 4.3 0.000000 0.7	</china:Ch04_T34_103>
         <china:Ch04_T34_112>	2.7 2.7 0.000000 0.9	</china:Ch04_T34_112>
         <china:Ch04_T34_113>	6.1 6.1 0.000000 1.8	</china:Ch04_T34_113>
+        <china:Ch03_WZ-11155>	2.62 2.62 0.000000 1.8	</china:Ch03_WZ-11155>
+        <china:Ch03_WZ-11165>	5.0 5.0 0.000000 1.8	</china:Ch03_WZ-11165>
+        <china:Ch03_WZ-11167>	4.65 4.65 0.000000 1.8	</china:Ch03_WZ-11167>
+        <china:Ch03_WZ-11182>	5.1 5.1 0.000000 1.8	</china:Ch03_WZ-11182>
+        <china:Ch03_WZ-11184>	2.42 2.42 0.000000 1.8	</china:Ch03_WZ-11184>
+        <china:Ch03_WZ-11188>	3.86 3.86 0.000000 1.8	</china:Ch03_WZ-11188>
+        <china:Ch03_WZ-11197>	1.05 1.05 0.000000 1.8	</china:Ch03_WZ-11197>
+        <china:Ch04_T34_106>	4.06 4.06 0.000000 1.8	</china:Ch04_T34_106>
+        <china:Ch04_T34_109>	6.1 6.1 0.000000 1.8	</china:Ch04_T34_109>
+        <china:Ch04_T34_117>	2.49 2.49 0.000000 1.8	</china:Ch04_T34_117>
         <china:Ch03_WZ-11132>	1.8 1.8 0.000000 0.000000	</china:Ch03_WZ-11132>
         <china:Ch03_WZ-11137>	1.4 1.4 0.000000 0.4	</china:Ch03_WZ-11137>
         <china:Ch03_WZ-11143>	1.8 1.8 0.000000 0.2	</china:Ch03_WZ-11143>
         <china:Ch03_WZ-11144>	5.8 5.8 0.000000 1.3	</china:Ch03_WZ-11144>
         <china:Ch03_WZ-11139>	2.5 2.5 0.000000 0.3	</china:Ch03_WZ-11139>
         <china:Ch03_WZ-11142>	4.9 4.9 0.000000 0.000000	</china:Ch03_WZ-11142>
+        <china:Ch03_WZ-11122>	4.0 4.0 0.000000 0.000000	</china:Ch03_WZ-11122>
+        <china:Ch03_WZ-11128>	2.8 2.8 0.000000 0.000000	</china:Ch03_WZ-11128>
+        <china:Ch03_WZ-11129>	2.8 2.8 0.000000 0.000000	</china:Ch03_WZ-11129>
         <china:Ch06_Renault_NC310>	3.2 3.2 0.000000 0.000000	</china:Ch06_Renault_NC310>
         <china:Ch06_Renault_NC31_bot0>	2.6 2.6 0.000000 0.1	</china:Ch06_Renault_NC31_bot0>
         <china:Ch06_Renault_NC31_bot2>	6.7 6.7 0.000000 0.000000	</china:Ch06_Renault_NC31_bot2>
@@ -10293,6 +10371,10 @@
         <china:Ch07_Vickers_MkE_Type_BT268>	6.3 6.3 0.000000 0.7	</china:Ch07_Vickers_MkE_Type_BT268>
         <china:Ch01_Type59_Gold23>	3.2 3.2 0.000000 0.000000	</china:Ch01_Type59_Gold23>
         <china:Ch01_Type59_Gold27>	2.2 2.2 0.000000 0.7	</china:Ch01_Type59_Gold27>
+        <china:Ch05_T34_25>	3.0 3.0 0.000000 0.0	</china:Ch05_T34_25>
+        <china:Ch06_Renault_NC316>	3.75 3.75 0.000000 0.0	</china:Ch06_Renault_NC316>
+        <china:Ch06_Renault_NC31_bot6>	3.8 3.8 0.000000 0.0	</china:Ch06_Renault_NC31_bot6>
+        <china:Ch07_Vickers_MkE_Type_BT266>	3.29 3.29 0.000000 0.0	</china:Ch07_Vickers_MkE_Type_BT266>
         <china:Ch04_T34_161>	5.2 5.2 0.000000 0.5	</china:Ch04_T34_161>
         <china:Ch04_T34_192>	2.6 2.6 0.000000 0.2	</china:Ch04_T34_192>
         <china:Ch04_T34_198>	6.1 6.1 0.000000 0.7	</china:Ch04_T34_198>
@@ -10318,6 +10400,15 @@
         <china:Ch04_T34_1_training09>	9 9 0.000000 0.4	</china:Ch04_T34_1_training09>
         <china:Ch04_T34_1_training23>	5.2 5.2 0.000000 0.6	</china:Ch04_T34_1_training23>
         <china:Ch04_T34_1_training29>	5.9 5.9 0.000000 0.2	</china:Ch04_T34_1_training29>
+        <china:Ch04_T34_133>	6.69 6.69 0.000000 0.2	</china:Ch04_T34_133>
+        <china:Ch04_T34_148>	4.06 4.06 0.5 0.2	</china:Ch04_T34_148>
+        <china:Ch04_T34_182>	4.75 4.75 0.000000 0.2	</china:Ch04_T34_182>
+        <china:Ch04_T34_188>	6.63 6.63 0.88 0.2	</china:Ch04_T34_188>
+        <china:Ch04_T34_195>	3.45 3.45 0.000000 0.2	</china:Ch04_T34_195>
+        <china:Ch04_T34_1_training11>	3.0 3.0 0.000000 0.2	</china:Ch04_T34_1_training11>
+        <china:Ch04_T34_1_training20>	7.38 7.38 0.000000 0.2	</china:Ch04_T34_1_training20>
+        <china:Ch04_T34_1_training27>	7.31 7.31 0.000000 0.2	</china:Ch04_T34_1_training27>
+        <china:Ch04_T34_155>	2.57 2.57 0.000000 0.2	</china:Ch04_T34_155>
         <china:Ch02_Type6219>	5.5 5.5 0.000000 0.1	</china:Ch02_Type6219>
         <china:Ch02_Type6235>	4.4 4.4 0.000000 0.8	</china:Ch02_Type6235>
         <china:Ch02_Type6249>	2.7 2.7 1.5 0.3	</china:Ch02_Type6249>
@@ -10354,6 +10445,20 @@
         <china:Ch02_Type6276>	5.5 5.5 0.48 0.48	</china:Ch02_Type6276>
         <china:Ch01_Type59_Gold66>	2.8 2.8 0.000000 0.000000	</china:Ch01_Type59_Gold66>
         <china:Ch01_Type59_Gold81>	1.1 1.1 0.000000 0.000000	</china:Ch01_Type59_Gold81>
+        <china:Ch01_Type59_Gold31>	6.4 6.4 0.000000 0.000000	</china:Ch01_Type59_Gold31>
+        <china:Ch01_Type59_Gold89>	2.96 2.96 0.000000 0.000000	</china:Ch01_Type59_Gold89>
+        <china:Ch01_Type59_Gold93>	6.06 6.06 0.000000 0.000000	</china:Ch01_Type59_Gold93>
+        <china:Ch02_Type6204>	4.95 4.95 0.000000 0.000000	</china:Ch02_Type6204>
+        <china:Ch02_Type6206>	5.0 5.0 0.000000 0.000000	</china:Ch02_Type6206>
+        <china:Ch02_Type6208>	5.0 5.0 0.000000 0.000000	</china:Ch02_Type6208>
+        <china:Ch02_Type6217>	8.88 8.88 0.000000 0.000000	</china:Ch02_Type6217>
+        <china:Ch02_Type6218>	7.09 7.09 0.000000 0.000000	</china:Ch02_Type6218>
+        <china:Ch02_Type6245>	2.96 2.96 0.000000 0.000000	</china:Ch02_Type6245>
+        <china:Ch02_Type6252>	6.74 6.74 0.89 0.000000	</china:Ch02_Type6252>
+        <china:Ch02_Type6263>	5.64 5.64 0.000000 0.000000	</china:Ch02_Type6263>
+        <china:Ch02_Type6272>	2.68 2.68 0.69 0.000000	</china:Ch02_Type6272>
+        <china:Ch01_Type59_Gold85>	2.96 2.96 0.34 0.000000	</china:Ch01_Type59_Gold85>
+        <china:Ch01_Type59_Gold86>	1.3 1.3 0.000000 0.000000	</china:Ch01_Type59_Gold86>
         <china:Ch02_Type6287>	3.2 3.2 0.000000 0.000000	</china:Ch02_Type6287>
         <china:Ch02_Type6282>	1.9 1.9 0.2 0.2	</china:Ch02_Type6282>
       </tiling>
@@ -10367,7 +10472,7 @@
     <historical>	true	</historical>
     <vehicleFilter>
       <include>
-        <levels>	8 10	</levels>
+        <levels>	6 8 10	</levels>
         <nations>	ussr poland czech china	</nations>
       </include>
       <exclude>
@@ -10590,7 +10695,7 @@
     <historical>	true	</historical>
     <vehicleFilter>
       <include>
-        <levels>	8 10	</levels>
+        <levels>	6 8 10	</levels>
         <nations>	france uk usa sweden	</nations>
       </include>
       <exclude>
@@ -10900,7 +11005,7 @@
     <historical>	true	</historical>
     <vehicleFilter>
       <include>
-        <levels>	8 10	</levels>
+        <levels>	6 8 10	</levels>
         <nations>	germany italy japan	</nations>
       </include>
       <exclude>

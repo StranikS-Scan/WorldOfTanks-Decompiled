@@ -195,23 +195,12 @@ class GroupedEventsBlocksFinder(_EventsBlockBuilder):
 
 
 class MissionsGroupsFinder(GroupedEventsBlocksFinder):
-    linkedSet = dependency.descriptor(ILinkedSetController)
-
-    def __init__(self):
-        super(MissionsGroupsFinder, self).__init__()
-        self.__wasLinkedSetShowed = False
 
     def _createGroupedEventsBlock(self, group):
         return _MissionsGroupQuestsBlockInfo(group)
 
     def _getEventsGroups(self):
         return self.eventsCache.getGroups(filterFunc=lambda g: g.isMarathon())
-
-    def invalidateBlocks(self):
-        super(MissionsGroupsFinder, self).invalidateBlocks()
-        if self.linkedSet.isLinkedSetEnabled() and (self.__wasLinkedSetShowed or not self.linkedSet.isLinkedSetFinished()):
-            self._cache['groupedEvents']['linkedset'] = _LinkedSetQuestsBlockInfo()
-            self.__wasLinkedSetShowed = True
 
 
 class MarathonsDumbFinder(GroupedEventsBlocksFinder):
@@ -224,6 +213,17 @@ class MarathonsDumbFinder(GroupedEventsBlocksFinder):
 
 
 class QuestsGroupsFinder(GroupedEventsBlocksFinder):
+    linkedSet = dependency.descriptor(ILinkedSetController)
+
+    def __init__(self):
+        super(QuestsGroupsFinder, self).__init__()
+        self.__wasLinkedSetShowed = False
+
+    def invalidateBlocks(self):
+        super(QuestsGroupsFinder, self).invalidateBlocks()
+        if self.linkedSet.isLinkedSetEnabled() and (self.__wasLinkedSetShowed or not self.linkedSet.isLinkedSetFinished()):
+            self._cache['groupedEvents']['linkedset'] = _LinkedSetQuestsBlockInfo()
+            self.__wasLinkedSetShowed = True
 
     def _getDefaultBlocks(self):
         return [_MotiveQuestsBlockInfo(), _UngroupedQuestsBlockInfo()]

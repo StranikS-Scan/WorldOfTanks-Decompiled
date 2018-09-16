@@ -16,6 +16,10 @@ class Highlighter(svarog_script.py_component.Component):
     def enabled(self):
         return self.__highlightStatus != self.HIGHLIGHT_OFF
 
+    @property
+    def isSimpleEdge(self):
+        return self.__highlightStatus & self.HIGHLIGHT_SIMPLE != self.HIGHLIGHT_OFF
+
     def __init__(self):
         super(Highlighter, self).__init__()
         self.__vehicle = None
@@ -51,6 +55,12 @@ class Highlighter(svarog_script.py_component.Component):
 
     def destroy(self):
         self.deactivate()
+
+    def removeHighlight(self):
+        if self.__highlightStatus != self.HIGHLIGHT_OFF and self.__vehicle is not None:
+            self.__highlightStatus = self.HIGHLIGHT_OFF
+            BigWorld.wgDelEdgeDetectEntity(self.__vehicle)
+        return
 
     def highlight(self, enable, forceSimpleEdge=False):
         if self.__vehicle is None:

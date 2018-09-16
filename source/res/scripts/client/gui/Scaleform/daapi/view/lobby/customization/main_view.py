@@ -200,6 +200,7 @@ class MainView(CustomizationMainViewMeta):
         self.__propertiesSheet = None
         self._seasonSoundAnimantion = None
         self._vehicleCustomizationAnchorsUpdater = None
+        self._isPropertySheetShown = False
         self.__ctx = None
         self.__renderEnv = None
         return
@@ -218,6 +219,12 @@ class MainView(CustomizationMainViewMeta):
     def onPressClearBtn(self):
         self.__ctx.cancelChanges()
 
+    def onPressEscBtn(self):
+        if self._isPropertySheetShown:
+            self.__clearItem()
+        else:
+            self.onCloseWindow()
+
     def changeVisible(self, value):
         slotType, _, _ = self.__ctx.selectedRegion
         self.__ctx.regionSelected(slotType, -1, -1)
@@ -226,11 +233,6 @@ class MainView(CustomizationMainViewMeta):
     def onReleaseItem(self):
         self.__ctx.caruselItemUnselected()
         self.__releaseItemSound()
-
-    def onClearItem(self):
-        slotType, _, _ = self.__ctx.selectedRegion
-        self.__ctx.regionSelected(slotType, -1, -1)
-        self.__hidePropertiesSheet()
 
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias == VIEW_ALIAS.CUSTOMIZATION_PROPERTIES_SHEET:
@@ -289,12 +291,11 @@ class MainView(CustomizationMainViewMeta):
     def fadeOutAnchors(self, isFadeOut):
         self.fadeAnchorsOut = isFadeOut
 
-    def closeWindow(self):
+    def onCloseWindow(self):
         if self.__ctx.isOutfitsModified():
             DialogsInterface.showDialog(I18nConfirmDialogMeta('customization/close'), self.__onCloseWindow)
         else:
             self.__onCloseWindow(proceed=True)
-        self.__hidePropertiesSheet()
 
     def itemContextMenuDisplayed(self):
         cmHandler = self.app.contextMenuManager.getCurrentHandler()
@@ -302,15 +303,8 @@ class MainView(CustomizationMainViewMeta):
             cmHandler.onSelected += self._itemCtxMenuSelected
 
     def onLobbyClick(self):
-        self.__hidePropertiesSheet()
         if self.__ctx.currentTab in (C11nTabs.EMBLEM, C11nTabs.INSCRIPTION):
-            if self.__locatedOnEmbelem and self.hangarSpace.spaceInited:
-                space = self.hangarSpace.space
-                space.clearSelectedEmblemInfo()
-                space.locateCameraToCustomizationPreview()
-                self.__updateAnchorPositions()
-                self.__locatedOnEmbelem = False
-            self.as_onRegionHighlightedS(-1)
+            self.__clearItem()
 
     def onChangeSize(self):
         self.__updateAnchorPositions()
@@ -371,6 +365,8 @@ class MainView(CustomizationMainViewMeta):
         self.__ctx.onCacheResync += self.__onCacheResync
         self.__ctx.onChangesCanceled += self.__onChangesCanceled
         self.__ctx.onCaruselItemSelected += self.__onCaruselItemSelected
+        self.__ctx.onPropertySheetHidden += self.__onPropertySheetHidden
+        self.__ctx.onPropertySheetShown += self.__onPropertySheetShown
         self.soundManager.playInstantSound(SOUNDS.ENTER)
         self.__viewLifecycleWatcher.start(self.app.containerManager, [_ModalWindowsPopupHandler(), _C11ViewsPopupHandler(self.__hidePropertiesSheet)])
         self.lobbyContext.addHeaderNavigationConfirmator(self.__confirmHeaderNavigation)
@@ -392,6 +388,7 @@ class MainView(CustomizationMainViewMeta):
             self.hangarSpace.space.locateCameraToCustomizationPreview()
         self.__renderEnv = BigWorld.CustomizationEnvironment()
         self.__renderEnv.enable(True)
+        self._isPropertySheetShown = False
 
     def _dispose(self):
         self.fireEvent(events.HangarCustomizationEvent(events.HangarCustomizationEvent.RESET_VEHICLE_MODEL_TRANSFORM), scope=EVENT_BUS_SCOPE.LOBBY)
@@ -424,6 +421,8 @@ class MainView(CustomizationMainViewMeta):
             g_currentVehicle.refreshModel()
         self.__hidePropertiesSheet()
         self.__propertiesSheet = None
+        self.__ctx.onPropertySheetShown -= self.__onPropertySheetShown
+        self.__ctx.onPropertySheetHidden -= self.__onPropertySheetHidden
         self.__ctx.onCaruselItemSelected -= self.__onCaruselItemSelected
         self.__ctx.onChangesCanceled -= self.__onChangesCanceled
         self.__ctx.onCacheResync -= self.__onCacheResync
@@ -491,8 +490,11 @@ class MainView(CustomizationMainViewMeta):
             else:
                 self.__hidePropertiesSheet()
             self.__ctx.regionSelected(slotType, areaId, regionIdx)
-            self.as_onRegionHighlightedS(region)
-            self.__showPropertiesSheet(areaId, slotType, regionIdx)
+            if self.__ctx.isRegionSelected():
+                self.as_onRegionHighlightedS(region)
+                self.__showPropertiesSheet(areaId, slotType, regionIdx)
+            else:
+                self.__clearItem()
             return
 
     def __onSpaceCreateHandler(self):
@@ -509,6 +511,8 @@ class MainView(CustomizationMainViewMeta):
 
     def __onCloseWindow(self, proceed):
         if proceed:
+            if self._isPropertySheetShown:
+                self.__clearItem()
             self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __onCacheResync(self, *_):
@@ -534,6 +538,14 @@ class MainView(CustomizationMainViewMeta):
         if 'isCustomizationEnabled' in diff and not diff.get('isCustomizationEnabled', True):
             SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.CUSTOMIZATION_UNAVAILABLE, type=SystemMessages.SM_TYPE.Warning)
             self.__onCloseWindow(proceed=True)
+
+    def __onPropertySheetShown(self):
+        self._isPropertySheetShown = True
+
+    def __onPropertySheetHidden(self):
+        self.service.resetHighlighting()
+        self.__clearItem()
+        self._isPropertySheetShown = False
 
     def __setSeasonData(self, forceAnim=False):
         seasonRenderersList = []
@@ -641,3 +653,22 @@ class MainView(CustomizationMainViewMeta):
         if self._vehicleCustomizationAnchorsUpdater is not None:
             self._vehicleCustomizationAnchorsUpdater.setInterfaceScale(scale)
         return
+
+    def __resetCameraFocus(self):
+        if self.__locatedOnEmbelem and self.hangarSpace.spaceInited:
+            space = self.hangarSpace.space
+            space.clearSelectedEmblemInfo()
+            space.locateCameraToCustomizationPreview()
+            self.__updateAnchorPositions()
+            self.__locatedOnEmbelem = False
+
+    def __resetUIFocus(self):
+        self.as_onRegionHighlightedS(-1)
+
+    def __clearItem(self):
+        self.__hidePropertiesSheet()
+        if self.__ctx.currentTab in (C11nTabs.EMBLEM, C11nTabs.INSCRIPTION):
+            self.__resetCameraFocus()
+        slotType, _, _ = self.__ctx.selectedRegion
+        self.__ctx.regionSelected(slotType, -1, -1)
+        self.__resetUIFocus()

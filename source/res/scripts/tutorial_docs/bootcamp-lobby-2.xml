@@ -71,6 +71,8 @@
         </set-visible>
         <set-visible>	HeaderCenterBg	  <val>	False	</val>
         </set-visible>
+        <set-visible>	HeaderCenterMenuBg	  <val>	False	</val>
+        </set-visible>
         <show-dialog>	IntroDialog	</show-dialog>
         <play-animation>	CreditsButton	  <type>	tween	</type>
           <wait_for_finish>	True	</wait_for_finish>
@@ -86,6 +88,8 @@
         </set-visible>
         <set-visible>	HeaderCenterBg	  <val>	True	</val>
         </set-visible>
+        <set-visible>	HeaderCenterMenuBg	  <val>	True	</val>
+        </set-visible>
         <play-animation>	MainMenuButtonBar	  <type>	tween	</type>
           <wait_for_finish>	False	</wait_for_finish>
         </play-animation>
@@ -93,6 +97,9 @@
           <wait_for_finish>	False	</wait_for_finish>
         </play-animation>
         <play-animation>	HeaderCenterBg	  <type>	tween	</type>
+          <wait_for_finish>	False	</wait_for_finish>
+        </play-animation>
+        <play-animation>	HeaderCenterMenuBg	  <type>	tween	</type>
           <wait_for_finish>	False	</wait_for_finish>
         </play-animation>
         <play-animation>	MenuHangar	  <type>	tween	</type>

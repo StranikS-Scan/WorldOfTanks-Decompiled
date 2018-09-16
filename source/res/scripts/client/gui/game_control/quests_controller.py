@@ -62,7 +62,9 @@ class _QuestCache(object):
         if not vehicle:
             return []
         vehIntCD = vehicle.intCD
-        if vehIntCD not in self.__cache:
+        if not self.__cache:
+            self.__update()
+        elif vehIntCD not in self.__cache:
             self.__update(vehicle=vehicle)
         return self.__cache.get(vehIntCD, [])
 

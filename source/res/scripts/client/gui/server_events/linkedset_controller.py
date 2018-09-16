@@ -152,7 +152,7 @@ class LinkedSetController(ILinkedSetController):
                 searchCriteria = {POP_UP_CRITERIA.VIEW_ALIAS: VIEW_ALIAS.LOBBY_MISSIONS}
                 lobbyMissions = lobbySubContainer.getView(criteria=searchCriteria)
                 if lobbyMissions:
-                    return lobbyMissions.getCurrentTabAlias() == QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS
+                    return lobbyMissions.getCurrentTabAlias() == QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS
         return False
 
     def _onShowBattleResults(self, _):
@@ -199,7 +199,7 @@ class LinkedSetController(ILinkedSetController):
         BigWorld.player().chooseQuestReward(EVENT_TYPE.TOKEN_QUEST, questID, str(vehicleCD), _callback)
 
     def _onMissionsTabEventsSelected(self, event):
-        if event.ctx == QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS:
+        if event.ctx == QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS:
             self._showNewCompletedQuests()
 
     def _showNewCompletedQuests(self):

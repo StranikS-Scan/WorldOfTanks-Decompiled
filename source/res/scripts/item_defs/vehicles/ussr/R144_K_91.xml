@@ -383,13 +383,13 @@
             </armor_8>
             <gun>	40	</gun>
           </armor>
-          <turretYawLimits>	-90 90	</turretYawLimits>
+          <turretYawLimits>	-110 110	</turretYawLimits>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 5 1 5	</maxPitch>
+            <maxPitch>	0 5 0.0666667 5 0.0888889 9 0.911013 9 0.933333 5 1 5	</maxPitch>
           </pitchLimits>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	6.50846634374826	</reloadTime>
+          <reloadTime>	6.3	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
@@ -491,7 +491,7 @@
     <detailed>
       <engines>
         <V_64>
-          <smplEnginePower>	810	</smplEnginePower>
+          <smplEnginePower>	860	</smplEnginePower>
         </V_64>
       </engines>
       <chassis>

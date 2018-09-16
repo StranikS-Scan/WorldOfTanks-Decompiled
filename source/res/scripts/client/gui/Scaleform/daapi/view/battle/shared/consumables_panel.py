@@ -418,7 +418,6 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             currentTime = item.getTimeRemaining()
             maxTime = item.getTotalTime()
             self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime)
-            self.onPopUpClosed()
             if item.isReusable or item.isAvatar() and item.getStage() != EQUIPMENT_STAGES.PREPARING:
                 glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_SPECIAL if item.isAvatar() else CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN
                 if self.__canApplyingGlowEquipment(item):

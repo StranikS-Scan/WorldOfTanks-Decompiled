@@ -80,7 +80,7 @@ class PublicEntity(ESportEntity):
         self._rosterSettings = self._createRosterSettings()
 
     def _createRosterSettings(self):
-        _, unit = self.getUnit()
+        _, unit = self.getUnit(safe=True)
         return PublicDynamicRosterSettings(unit)
 
     def _createActionsValidator(self):

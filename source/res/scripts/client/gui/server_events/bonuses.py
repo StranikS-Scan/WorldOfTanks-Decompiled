@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/server_events/bonuses.py
 from collections import namedtuple
 from functools import partial
-import re
 import BigWorld
 from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, PERSONAL_QUEST_FREE_TOKEN_NAME
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
@@ -33,24 +32,11 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from gui.shared.tooltips import contexts
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
 _EPIC_AWARD_STATIC_VO_ENTRIES = {'compensationTooltip': QUESTS.BONUSES_COMPENSATION,
  'hasCompensation': False,
- 'align': 'center',
  'highlightType': '',
  'overlayType': ''}
-
-def _augmentEpicAwardVOs(vos, titles=None, descriptions=None):
-    for i in range(0, len(vos)):
-        vos[i].update(_EPIC_AWARD_STATIC_VO_ENTRIES)
-        if titles and titles[i]:
-            vos[i]['title'] = titles[i]
-        if descriptions and descriptions[i]:
-            vos[i]['description'] = descriptions[i]
-
-    return vos
-
 
 def _getAchievement(block, record, value):
     if block == ACHIEVEMENT_BLOCK.RARE:
@@ -129,25 +115,31 @@ class SimpleBonus(object):
     def getList(self):
         return None
 
-    def getRankedAwardVOs(self, iconSize='small', withCounts=False, withKey=False):
+    def __getCommonAwardsVOs(self, iconSize='small', align=TEXT_ALIGN.CENTER, withCounts=False):
         itemInfo = {'imgSource': self.getIconBySize(iconSize),
          'label': self.getIconLabel(),
          'tooltip': self.getTooltip(),
-         'align': TEXT_ALIGN.CENTER}
-        if withKey:
-            itemInfo['itemKey'] = self.getName()
+         'align': align}
         if withCounts:
             if isinstance(self._value, int):
                 itemInfo['count'] = self._value
             else:
                 itemInfo['count'] = 1
+        return itemInfo
+
+    def getRankedAwardVOs(self, iconSize='small', withCounts=False, withKey=False):
+        itemInfo = self.__getCommonAwardsVOs(iconSize=iconSize, withCounts=withCounts)
+        if withKey:
+            itemInfo['itemKey'] = self.getName()
         return [itemInfo]
 
     def getEpicAwardVOs(self, withDescription=False):
-        titles = [i18n.makeString(TOOLTIPS.getAwardHeader(self._name))] if withDescription else None
-        descriptions = [i18n.makeString(TOOLTIPS.getAwardBody(self._name))] if withDescription else None
-        vos = _augmentEpicAwardVOs(self.getRankedAwardVOs(iconSize='big'), titles=titles, descriptions=descriptions)
-        return vos
+        itemInfo = self.__getCommonAwardsVOs(iconSize='big')
+        itemInfo.update(_EPIC_AWARD_STATIC_VO_ENTRIES)
+        if withDescription:
+            itemInfo['title'] = i18n.makeString(TOOLTIPS.getAwardHeader(self._name))
+            itemInfo['description'] = i18n.makeString(TOOLTIPS.getAwardBody(self._name))
+        return [itemInfo]
 
     def getIconBySize(self, size):
         iconName = RES_ICONS.getBonusIcon(size, self.getName())
@@ -414,28 +406,37 @@ class ItemsBonus(SimpleBonus):
     def hasIconFormat(self):
         return True
 
+    def __getCommonAwardsVOs(self, item, count, iconSize='small', align=TEXT_ALIGN.RIGHT, withCounts=False):
+        itemInfo = {'imgSource': item.getBonusIcon(iconSize),
+         'label': text_styles.stats('x{}'.format(count)),
+         'tooltip': self.makeItemTooltip(item),
+         'align': align}
+        if withCounts:
+            itemInfo['count'] = count
+        return itemInfo
+
     def getRankedAwardVOs(self, iconSize='small', withCounts=False, withKey=False):
         result = []
         for item, count in self.getItems().iteritems():
-            itemInfo = {'imgSource': item.getBonusIcon(iconSize),
-             'label': text_styles.stats('x{}'.format(count)),
-             'tooltip': self.makeItemTooltip(item),
-             'align': TEXT_ALIGN.RIGHT}
+            itemInfo = self.__getCommonAwardsVOs(item, count, iconSize=iconSize, withCounts=withCounts)
             if item.itemTypeName == 'optionalDevice':
                 if item.isDeluxe():
                     itemInfo['highlightType'] = SLOT_HIGHLIGHT_TYPES.NO_HIGHLIGHT
                     itemInfo['overlayType'] = SLOT_HIGHLIGHT_TYPES.EQUIPMENT_PLUS
             if withKey:
                 itemInfo['itemKey'] = 'item_{}'.format(item.intCD)
-            if withCounts:
-                itemInfo['count'] = count
             result.append(itemInfo)
 
         return result
 
     def getEpicAwardVOs(self, withDescription=False):
-        vos = _augmentEpicAwardVOs(self.getRankedAwardVOs(iconSize='big'))
-        return vos
+        result = []
+        for item, count in self.getItems().iteritems():
+            itemInfo = self.__getCommonAwardsVOs(item, count, iconSize='big')
+            itemInfo.update(_EPIC_AWARD_STATIC_VO_ENTRIES)
+            result.append(itemInfo)
+
+        return result
 
     @staticmethod
     def makeItemTooltip(item):
@@ -508,35 +509,35 @@ class GoodiesBonus(SimpleBonus):
 
         return result
 
+    def __getCommonAwardsVOs(self, item, count, iconSize='small', align=TEXT_ALIGN.RIGHT, withCounts=False):
+        itemData = {'imgSource': RES_ICONS.getBonusIcon(iconSize, item.boosterGuiType),
+         'label': text_styles.hightlight('x{}'.format(count)),
+         'align': align}
+        itemData.update(self.__itemTooltip(item))
+        if withCounts:
+            itemData['count'] = count
+        return itemData
+
     def getRankedAwardVOs(self, iconSize='small', withCounts=False, withKey=False):
         result = []
         for booster, count in self.getBoosters().iteritems():
             if booster is not None:
-                itemData = {'imgSource': RES_ICONS.getBonusIcon(iconSize, booster.boosterGuiType),
-                 'label': text_styles.hightlight('x{}'.format(count)),
-                 'align': TEXT_ALIGN.RIGHT}
-                itemData.update(self.__itemTooltip(booster))
+                itemData = self.__getCommonAwardsVOs(booster, count, iconSize=iconSize, withCounts=withCounts)
                 if withKey:
                     itemData['itemKey'] = 'booster_{}'.format(booster.boosterID)
-                if withCounts:
-                    itemData['count'] = count
                 result.append(itemData)
 
         return result
 
     def getEpicAwardVOs(self, withDescription=False):
-        titles = list() if withDescription and self._value.keys() else None
-        descriptions = list() if withDescription and self._value.keys() else None
-        if withDescription:
-            bc = contexts.BoosterContext()
-            for key in self._value.keys():
-                boosterData = bc.buildItem(key)
-                desc = re.sub('<(.*?)>', '', boosterData.description)
-                descriptions.append(desc)
-                titles.append(boosterData.userName)
+        result = []
+        for booster, count in self.getBoosters().iteritems():
+            if booster is not None:
+                itemData = self.__getCommonAwardsVOs(booster, count, iconSize='big')
+                itemData.update(_EPIC_AWARD_STATIC_VO_ENTRIES)
+                result.append(itemData)
 
-        vos = _augmentEpicAwardVOs(self.getRankedAwardVOs(iconSize='big'), titles=titles, descriptions=descriptions)
-        return vos
+        return result
 
     @staticmethod
     def __itemTooltip(booster):
@@ -611,23 +612,32 @@ class VehiclesBonus(SimpleBonus):
     def getIconLabel(self):
         pass
 
+    def __getCommonAwardsVOs(self, vehicle, vehInfo, iconSize='small', align=TEXT_ALIGN.RIGHT, withCounts=False):
+        vehicleVO = self.__getVehicleVO(vehicle, vehInfo, partial(RES_ICONS.getBonusIcon, iconSize))
+        vehicleVO.update({'label': self.getIconLabel()})
+        vehicleVO['align'] = align
+        if withCounts:
+            vehicleVO['count'] = 1
+        return vehicleVO
+
     def getRankedAwardVOs(self, iconSize='small', withCounts=False, withKey=False):
         result = []
         for vehicle, vehInfo in self.getVehicles():
-            vehicleVO = self.__getVehicleVO(vehicle, vehInfo, partial(RES_ICONS.getBonusIcon, iconSize))
-            vehicleVO.update({'label': self.getIconLabel()})
-            vehicleVO['align'] = TEXT_ALIGN.RIGHT
+            vehicleVO = self.__getCommonAwardsVOs(vehicle, vehInfo, iconSize=iconSize, withCounts=withCounts)
             if withKey:
                 vehicleVO['itemKey'] = 'vehicle_{}'.format(vehicle.intCD)
-            if withCounts:
-                vehicleVO['count'] = 1
             result.append(vehicleVO)
 
         return result
 
-    def getEpicAwardVOs(self):
-        vos = _augmentEpicAwardVOs(self.getRankedAwardVOs(iconSize='big'))
-        return vos
+    def getEpicAwardVOs(self, withDescription=False):
+        result = []
+        for vehicle, vehInfo in self.getVehicles():
+            vehicleVO = self.__getCommonAwardsVOs(vehicle, vehInfo, iconSize='big')
+            vehicleVO.update(_EPIC_AWARD_STATIC_VO_ENTRIES)
+            result.append(vehicleVO)
+
+        return result
 
     @classmethod
     def getTmanRoleLevel(cls, vehInfo):
@@ -720,37 +730,48 @@ class DossierBonus(SimpleBonus):
     def formattedList(self):
         return self.getAchievements()
 
-    def getRankedAwardVOs(self, iconSize='small', withCounts=False, withKey=False):
-        result = []
+    def __getCommonAwardsVOs(self, block, record, iconSize='small', withCounts=False):
         badgesIconSizes = {'big': BADGES_ICONS.X80,
          'small': BADGES_ICONS.X48}
+        if _isBadge(block):
+            header = i18n.makeString(BADGE.badgeName(record))
+            body = i18n.makeString(BADGE.badgeDescriptor(record))
+            note = i18n.makeString(BADGE.BADGE_NOTE)
+            badgeVO = {'imgSource': getBadgeIconPath(badgesIconSizes[iconSize], record),
+             'label': '',
+             'tooltip': makeTooltip(header, body, note)}
+            if withCounts:
+                badgeVO['count'] = 1
+            return badgeVO
+        else:
+            return None
+
+    def getRankedAwardVOs(self, iconSize='small', withCounts=False, withKey=False):
+        result = []
         for (block, record), _ in self.getRecords().iteritems():
-            if _isBadge(block):
-                header = i18n.makeString(BADGE.badgeName(record))
-                body = i18n.makeString(BADGE.badgeDescriptor(record))
-                note = i18n.makeString(BADGE.BADGE_NOTE)
-                badgeVO = {'imgSource': getBadgeIconPath(badgesIconSizes[iconSize], record),
-                 'label': '',
-                 'tooltip': makeTooltip(header, body, note)}
-                if withKey:
-                    badgeVO['itemKey'] = BADGE.badgeName(record)
-                if withCounts:
-                    badgeVO['count'] = 1
-                result.append(badgeVO)
+            badgeVO = self.__getCommonAwardsVOs(block, record, iconSize=iconSize, withCounts=withCounts)
+            if not badgeVO:
+                continue
+            if withKey:
+                badgeVO['itemKey'] = BADGE.badgeName(record)
+            result.append(badgeVO)
 
         return result
 
     def getEpicAwardVOs(self, withDescription=False):
-        titles = list() if withDescription and self._value.keys() else None
-        descriptions = list() if withDescription and self._value.keys() else None
-        if withDescription:
-            for (block, record), _ in self.getRecords().iteritems():
-                if _isBadge(block):
-                    titles.append(i18n.makeString(BADGE.badgeName(record)))
-                    descriptions.append(i18n.makeString(BADGE.badgeDescriptor(record)))
+        result = []
+        for (block, record), _ in self.getRecords().iteritems():
+            badgeVO = self.__getCommonAwardsVOs(block, record, iconSize='big')
+            if not badgeVO:
+                continue
+            badgeVO['align'] = TEXT_ALIGN.CENTER
+            badgeVO.update(_EPIC_AWARD_STATIC_VO_ENTRIES)
+            if withDescription:
+                badgeVO['title'] = i18n.makeString(BADGE.badgeName(record))
+                badgeVO['description'] = i18n.makeString(BADGE.badgeDescriptor(record))
+            result.append(badgeVO)
 
-        vos = _augmentEpicAwardVOs(self.getRankedAwardVOs(iconSize='big'), titles=titles, descriptions=descriptions)
-        return vos
+        return result
 
     def __getItems(self, filterFunc):
         result = []
@@ -897,40 +918,45 @@ class CustomizationsBonus(SimpleBonus):
     def getCustomizations(self):
         return self._value or []
 
+    def __getCommonAwardsVOs(self, item, data, iconSize='small', align=TEXT_ALIGN.RIGHT, withCounts=False):
+        itemTypeName = item.get('custType')
+        itemID = item.get('id')
+        itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
+        c11nItem = self.c11n.getItemByID(itemTypeID, itemID)
+        count = item.get('value', 1)
+        itemData = {'imgSource': RES_ICONS.getBonusIcon(iconSize, c11nItem.itemTypeName),
+         'label': text_styles.hightlight('x{}'.format(count)),
+         'align': align}
+        itemData.update(self.__itemTooltip(data, isReceived=False))
+        if withCounts:
+            itemData['count'] = count
+        return itemData
+
     def getRankedAwardVOs(self, iconSize='small', withCounts=False, withKey=False):
         result = []
         for item, data in zip(self.getCustomizations(), self.getList()):
-            itemTypeName = item.get('custType')
-            itemID = item.get('id')
-            itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
-            c11nItem = self.c11n.getItemByID(itemTypeID, itemID)
-            count = item.get('value', 1)
-            itemData = {'imgSource': RES_ICONS.getBonusIcon(iconSize, c11nItem.itemTypeName),
-             'label': text_styles.hightlight('x{}'.format(count)),
-             'align': TEXT_ALIGN.RIGHT}
-            itemData.update(self.__itemTooltip(data, isReceived=False))
+            itemData = self.__getCommonAwardsVOs(item, data, iconSize=iconSize, withCounts=withCounts)
             if withKey:
                 itemData['itemKey'] = 'customization_{}'.format(item.get('custType'))
-            if withCounts:
-                itemData['count'] = count
             result.append(itemData)
 
         return result
 
     def getEpicAwardVOs(self, withDescription=False):
-        titles = list() if withDescription and self._value else None
-        descriptions = list() if withDescription and self._value else None
-        if withDescription:
-            for itemData in self.getCustomizations():
-                itemTypeName = itemData.get('custType')
-                itemID = itemData.get('id')
+        result = []
+        for item, data in zip(self.getCustomizations(), self.getList()):
+            itemData = self.__getCommonAwardsVOs(item, data, iconSize='big', align=TEXT_ALIGN.CENTER)
+            itemData.update(_EPIC_AWARD_STATIC_VO_ENTRIES)
+            if withDescription:
+                itemTypeName = item.get('custType')
+                itemID = item.get('id')
                 itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
                 item = self.c11n.getItemByID(itemTypeID, itemID)
-                descriptions.append(item.userType)
-                titles.append(item.userName)
+                itemData['description'] = item.userType
+                itemData['title'] = item.userName
+            result.append(itemData)
 
-        vos = _augmentEpicAwardVOs(self.getRankedAwardVOs(iconSize='big'), titles=titles, descriptions=descriptions)
-        return vos
+        return result
 
     def __itemTooltip(self, data, isReceived):
         return {'isSpecial': True,

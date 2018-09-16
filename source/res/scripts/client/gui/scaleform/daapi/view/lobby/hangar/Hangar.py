@@ -202,12 +202,10 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         return
 
     def __updateEpicWidget(self):
-        from gui.game_control.epic_meta_game_ctrl import DISABLE_EPIC_META_GAME
         if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) and not self.epicWidget:
-            self.as_setHeaderTypeS(HANGAR_ALIASES.EPIC_WIDGET, not DISABLE_EPIC_META_GAME)
-        if not DISABLE_EPIC_META_GAME:
-            if self.epicWidget is not None:
-                self.epicWidget.update()
+            self.as_setHeaderTypeS(HANGAR_ALIASES.EPIC_WIDGET, True)
+        if self.epicWidget is not None:
+            self.epicWidget.update()
         return
 
     def __onWaitingShown(self, event):

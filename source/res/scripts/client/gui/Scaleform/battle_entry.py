@@ -53,8 +53,7 @@ class TopWindowContainer(PopUpContainer):
 
 
 BATTLE_OPTIMIZATION_CONFIG = {BATTLE_VIEW_ALIASES.MINIMAP: OptimizationSetting('minimapAlphaEnabled', True),
- BATTLE_VIEW_ALIASES.DAMAGE_PANEL: OptimizationSetting(),
- BATTLE_VIEW_ALIASES.EPIC_DEPLOYMENT_MAP: OptimizationSetting('minimapAlphaEnabled', True)}
+ BATTLE_VIEW_ALIASES.DAMAGE_PANEL: OptimizationSetting()}
 
 class BattleEntry(SFApplication):
 

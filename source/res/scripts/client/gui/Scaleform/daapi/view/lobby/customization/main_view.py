@@ -384,7 +384,7 @@ class MainView(CustomizationMainViewMeta):
                 self.__locatedOnEmbelem = False
 
     def setEnableMultiselectRegions(self, isEnabled):
-        self.service.setSelectHighlighting(isEnabled)
+        pass
 
     def onChangeSize(self):
         self.__updateAnchorPositions()

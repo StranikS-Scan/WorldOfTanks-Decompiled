@@ -651,6 +651,7 @@ class TOOLTIPS(object):
     HANGAR_STATUS_TORENT = '#tooltips:hangar/status/toRent'
     HANGAR_CREW_RUDY_DOG_HEADER = '#tooltips:hangar/crew/rudy/dog/header'
     HANGAR_CREW_RUDY_DOG_BODY = '#tooltips:hangar/crew/rudy/dog/body'
+    HANGAR_CREW_MORESKILLS = '#tooltips:hangar/crew/moreskills'
     HANGAR_CREW_ASSIGNEDTO = '#tooltips:hangar/crew/assignedTo'
     HANGAR_CREW_NEW_SKILL_AVAILABLE_HEADER = '#tooltips:hangar/crew/new_skill_available/header'
     HANGAR_CREW_NEW_SKILL_AVAILABLE_TEXT = '#tooltips:hangar/crew/new_skill_available/text'

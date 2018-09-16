@@ -2188,7 +2188,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             if AuxiliaryFx.g_instance is not None:
                 AuxiliaryFx.g_instance.execEffect('startTicksEffect')
         if period == ARENA_PERIOD.BATTLE and period > self.__prevArenaPeriod:
-            if self.arenaBonusType == constants.ARENA_BONUS_TYPE.EPIC_BATTLE:
+            if self.arenaBonusType == constants.ARENA_BONUS_TYPE.EPIC_BATTLE and self.__prevArenaPeriod >= 0:
                 self.soundNotifications.play(EPIC_SOUND.BF_EB_START_BATTLE[self.team])
             else:
                 self.soundNotifications.play('start_battle')

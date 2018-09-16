@@ -61,7 +61,8 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
                 removeFromTankEnabled = True
                 break
 
-        availableForPurchase = not item.isHidden and not item.getBuyPrice() == ITEM_PRICE_EMPTY
+        accountMoney = self.itemsCache.items.stats.money
+        availableForPurchase = not item.isHidden and not item.getBuyPrice() == ITEM_PRICE_EMPTY and item.getBuyPrice().price <= accountMoney
         showAlert = len(sellPriceVO[0]) > 1
         tooltipVO = None
         if showAlert:

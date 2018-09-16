@@ -143,7 +143,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
     def _addShellSlot(self, idx, keyCode, sfKeyCode, quantity, clipCapacity, shellIconPath, noShellIconPath, tooltipText):
         self.as_addShellSlotS(idx, keyCode, sfKeyCode, quantity, clipCapacity, shellIconPath, noShellIconPath, tooltipText)
 
-    def _showEquipmentGlow(self, equipmentIndex, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN):
+    def _showEquipmentGlow(self, equipmentIndex, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_ORANGE):
         if equipmentIndex in self.__equipmentsGlowCallbacks:
             BigWorld.cancelCallback(self.__equipmentsGlowCallbacks[equipmentIndex])
             del self.__equipmentsGlowCallbacks[equipmentIndex]
@@ -422,7 +422,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             if item.isReusable or item.isAvatar() and item.getStage() != EQUIPMENT_STAGES.PREPARING:
                 glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_SPECIAL if item.isAvatar() else CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN
                 if self.__canApplyingGlowEquipment(item):
-                    self._showEquipmentGlow(idx, glowType)
+                    self._showEquipmentGlow(idx)
                 elif item.becomeReady:
                     self.as_setGlowS(idx, glowID=glowType)
                 elif idx in self.__equipmentsGlowCallbacks:
@@ -575,8 +575,11 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             return
 
     def __canApplyingGlowEquipment(self, equipment):
-        if equipment.getTag() == 'extinguisher' or equipment.isAvatar():
+        if equipment.getTag() == 'extinguisher':
             correction = True
+            entityName = None
+        elif equipment.isAvatar():
+            correction = False
             entityName = None
         else:
             entityNames = [ name for name, state in equipment.getEntitiesIterator() if state == DEVICE_STATE_DESTROYED ]

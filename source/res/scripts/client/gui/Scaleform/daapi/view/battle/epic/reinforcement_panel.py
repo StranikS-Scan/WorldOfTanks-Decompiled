@@ -37,6 +37,7 @@ class EpicReinforcementPanel(EpicReinforcementPanelMeta, IArenaPeriodController)
         if ctrl is not None:
             ctrl.onTeamRespawnLivesRestored += self.__onTeamRespawnLivesRestored
             ctrl.onRespawnVisibilityChanged += self.__onRespawnVisibilityChanged
+            ctrl.onPlayerRespawnLivesUpdated += self.__onRespawnLivesUpdated
         return
 
     def _dispose(self):
@@ -53,6 +54,13 @@ class EpicReinforcementPanel(EpicReinforcementPanelMeta, IArenaPeriodController)
 
     def __sendTimestamp(self, nextReinforcementTimer):
         self.as_setTimestampS(nextReinforcementTimer, BigWorld.serverTime())
+
+    def __onRespawnLivesUpdated(self, playerLives):
+        self.as_setPlayerLivesS(playerLives)
+        ctrl = self.sessionProvider.dynamic.respawn
+        if ctrl is not None:
+            ctrl.onPlayerRespawnLivesUpdated -= self.__onRespawnLivesUpdated
+        return
 
     def __onPeriodChange(self, period):
         if period == ARENA_PERIOD.BATTLE and not self.__timestampSent:

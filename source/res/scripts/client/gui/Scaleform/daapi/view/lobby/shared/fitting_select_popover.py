@@ -287,8 +287,7 @@ class BattleAbilitySelectPopover(HangarFittingSelectPopover):
 
     def _prepareInitialData(self):
         result = super(BattleAbilitySelectPopover, self)._prepareInitialData()
-        from gui.game_control.epic_meta_game_ctrl import DISABLE_EPIC_META_GAME
-        result['battleAbilitiesButtonVisible'] = not DISABLE_EPIC_META_GAME
+        result['battleAbilitiesButtonVisible'] = True
         if self.__isHintVisible():
             result['listOverlay'] = self.__getAbilityOverlayData()
         return result
@@ -542,6 +541,8 @@ class _HangarLogicProvider(PopoverLogicProvider):
         super(_HangarLogicProvider, self).__init__(slotType, slotIndex, g_currentVehicle.item)
         if slotType == FITTING_TYPES.BOOSTER:
             self._tooltipType = TOOLTIPS_CONSTANTS.BATTLE_BOOSTER
+        elif slotType == FITTING_TYPES.BATTLE_ABILITY:
+            self._tooltipType = TOOLTIPS_CONSTANTS.EPIC_SKILL_SLOT_INFO
         else:
             self._tooltipType = TOOLTIPS_CONSTANTS.HANGAR_MODULE
 

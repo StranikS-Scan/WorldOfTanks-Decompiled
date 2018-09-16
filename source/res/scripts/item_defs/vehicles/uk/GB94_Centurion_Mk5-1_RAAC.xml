@@ -17,6 +17,7 @@
     <firePenalty>	0.303	</firePenalty>
   </invisibility>
   <repairCost>	5.7	</repairCost>
+  <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <crewXpFactor>	1.5	</crewXpFactor>
   <camouflage>
     <priceFactor>	1.6	</priceFactor>
@@ -33,6 +34,8 @@
       <armor_6>	17	</armor_6>
       <armor_7>	28.6	</armor_7>
       <armor_8>	0	</armor_8>
+      <armor_9>	20	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_9>
       <armor_10>	76.2	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       </armor_10>
       <armor_11>	20	</armor_11>
@@ -94,6 +97,7 @@
       <tags></tags>
       <level>	8	</level>
       <price>	33000	</price>
+      <notInShop>	true	</notInShop>
       <armor>
         <leftTrack>	20	</leftTrack>
         <rightTrack>	20	</rightTrack>
@@ -112,7 +116,6 @@
       <maxHealth>	200	</maxHealth>
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
-      <notInShop>	true	</notInShop>
       <models>
         <undamaged>	vehicles/british/GB94_Centurion_Mk5-1_RAAC/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/british/GB94_Centurion_Mk5-1_RAAC/crash/lod0/Chassis.model	</destroyed>
@@ -401,6 +404,7 @@
       <tags></tags>
       <level>	8	</level>
       <price>	30000	</price>
+      <notInShop>	true	</notInShop>
       <armor>
         <armor_1>	152.4	</armor_1>
         <armor_2>	254	</armor_2>
@@ -488,7 +492,6 @@
           </camouflage>
         </_20pdr_Gun_Type_B_1>
       </guns>
-      <notInShop>	true	</notInShop>
       <models>
         <undamaged>	vehicles/british/GB94_Centurion_Mk5-1_RAAC/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/british/GB94_Centurion_Mk5-1_RAAC/crash/lod0/Turret_01.model	</destroyed>
@@ -541,7 +544,6 @@
     <C42_B47>	shared	</C42_B47>
   </radios>
   <clientAdjustmentFactors></clientAdjustmentFactors>
-  <premiumVehicleXPFactor>	0.1	</premiumVehicleXPFactor>
   <physics>
     <detailed>
       <engines>

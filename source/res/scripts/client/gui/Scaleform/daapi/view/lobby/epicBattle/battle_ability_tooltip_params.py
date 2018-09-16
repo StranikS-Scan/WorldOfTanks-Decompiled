@@ -112,17 +112,17 @@ class DisplayLabelMixin(object):
 class NumericLabelMixin(DisplayLabelMixin):
 
     @classmethod
-    def _formatDeltaStringInternal(cls, delta, value, higherIsBetter=True, unitLocalization=None):
+    def _formatDeltaStringInternal(cls, delta, value, higherIsBetter=True, unitLocalization=None, signForValue=_getSignForValue, signForDelta=_getSignForDelta):
         unitLocalization = None if not unitLocalization else i18n.makeString(unitLocalization)
         displayDelta = params_formatters._cutDigits(delta)
         displayValue = params_formatters._cutDigits(value)
         deltaStr = None
         if displayDelta != 0:
-            deltaStr = '{}{}'.format(_getSignForDelta(displayDelta), abs(int(displayDelta) if displayDelta.is_integer() else displayDelta))
+            deltaStr = '{}{}'.format(signForDelta(displayDelta), abs(int(displayDelta) if displayDelta.is_integer() else displayDelta))
             if unitLocalization:
                 deltaStr = '{}{}'.format(deltaStr, unitLocalization)
             deltaStr = _getTextStyleForDelta(displayDelta, higherIsBetter)(deltaStr)
-        valueStr = '{}{}'.format(_getSignForValue(displayValue), abs(int(displayValue) if displayValue.is_integer() else displayValue))
+        valueStr = '{}{}'.format(signForValue(displayValue), abs(int(displayValue) if displayValue.is_integer() else displayValue))
         if unitLocalization:
             valueStr = '{}{}'.format(valueStr, unitLocalization)
         valueStr = NEUTRAL_STYLE(valueStr)
@@ -140,6 +140,13 @@ class SecondsLabelMixin(NumericLabelMixin):
         return cls._formatDeltaStringInternal(delta, value, higherIsBetter, EPIC_BATTLE.ABILITYINFO_UNITS_SECONDS)
 
 
+class AdditionalSecondsLabelMixin(NumericLabelMixin):
+
+    @classmethod
+    def _formatDeltaString(cls, delta, value, higherIsBetter=True):
+        return cls._formatDeltaStringInternal(delta, value, higherIsBetter, EPIC_BATTLE.ABILITYINFO_UNITS_SECONDS, signForValue=_getSignForDelta)
+
+
 class MeterLabelMixin(NumericLabelMixin):
 
     @classmethod
@@ -151,7 +158,7 @@ class PercentageLabelMixin(NumericLabelMixin):
 
     @classmethod
     def _formatDeltaString(cls, delta, value, higherIsBetter=True):
-        return cls._formatDeltaStringInternal(delta * 100, value * 100, higherIsBetter, COMMON.COMMON_PERCENT)
+        return cls._formatDeltaStringInternal(delta * 100, value * 100 - 100, higherIsBetter, COMMON.COMMON_PERCENT, signForValue=_getSignForDelta)
 
 
 class MultiMeterLabelMixin(NumericLabelMixin):
@@ -226,6 +233,10 @@ class DirectSecondsDeltaBarParam(DeltaBarParam, DirectValuesMixin, SecondsLabelM
     pass
 
 
+class AdditionalSecondsDeltaBarParam(DeltaBarParam, DirectValuesMixin, AdditionalSecondsLabelMixin):
+    pass
+
+
 class DirectPercentageDeltaBarParam(DeltaBarParam, DirectValuesMixin, PercentageLabelMixin):
     pass
 
@@ -255,7 +266,8 @@ g_battleAbilityParamsRenderers = {'FixedTextParam': makeRenderer(FixedTextParam.
  'DescDirectMetersTextParam': makeRenderer(DirectMetersTextParam.extendBlocks, higherIsBetter=False),
  'AscDirectNumericDeltaBarParam': makeRenderer(DirectNumericDeltaBarParam.extendBlocks),
  'DescDirectNumericDeltaBarParam': makeRenderer(DirectNumericDeltaBarParam.extendBlocks, higherIsBetter=False),
- 'AscDirectAdditionalSecondsDeltaBarParam': makeRenderer(DirectSecondsDeltaBarParam.extendBlocks),
+ 'AscDirectAdditionalSecondsDeltaBarParam': makeRenderer(AdditionalSecondsDeltaBarParam.extendBlocks),
+ 'AscDirectSecondsDeltaBarParam': makeRenderer(DirectSecondsDeltaBarParam.extendBlocks),
  'DescDirectSecondsDeltaBarParam': makeRenderer(DirectSecondsDeltaBarParam.extendBlocks, higherIsBetter=False),
  'AscDirectPercentageDeltaBarParam': makeRenderer(DirectPercentageDeltaBarParam.extendBlocks),
  'DescDirectPercentageDeltaBarParam': makeRenderer(DirectPercentageDeltaBarParam.extendBlocks, higherIsBetter=False),

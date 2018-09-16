@@ -1119,6 +1119,7 @@ class UnitEntity(_UnitEntity):
 
     def unit_onUnitVehiclesChanged(self, dbID, vehicles):
         vInfos = []
+        isVehicleSelected = False
         for vehInvID, vehTypeCD in vehicles:
             if vehTypeCD:
                 _, nationID, itemID = core_vehicles.parseIntCompactDescr(vehTypeCD)
@@ -1132,8 +1133,9 @@ class UnitEntity(_UnitEntity):
             vInfo = unit_items.VehicleInfo(vehInvID, vehTypeCD, vehLevel, vehClassIdx)
             if dbID == account_helpers.getAccountDatabaseID() and not vInfo.isEmpty():
                 vehicle = self.itemsCache.items.getItemByCD(vInfo.vehTypeCD)
-                if vehicle is not None:
+                if vehicle is not None and not isVehicleSelected:
                     g_currentVehicle.selectVehicle(vehicle.invID)
+                    isVehicleSelected = True
             vInfos.append(vInfo)
 
         self._invokeListeners('onUnitVehiclesChanged', dbID, vInfos)

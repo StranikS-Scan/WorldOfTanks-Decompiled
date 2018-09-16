@@ -22,8 +22,14 @@ class EpicBattlesInfoViewMeta(WrapperViewMeta):
     def onReadIntroBtnClick(self):
         self._printOverrideError('onReadIntroBtnClick')
 
-    def as_setStaticTextsS(self, data):
-        return self.flashObject.as_setStaticTexts(data) if self._isDAAPIInited() else None
+    def onButtonWelcomeAnimationDone(self):
+        self._printOverrideError('onButtonWelcomeAnimationDone')
+
+    def onButtonsElementWelcomeAnimationDone(self):
+        self._printOverrideError('onButtonsElementWelcomeAnimationDone')
+
+    def onMetaElementWelcomeAnimationDone(self):
+        self._printOverrideError('onMetaElementWelcomeAnimationDone')
 
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None

@@ -132,7 +132,7 @@ class EpicBattlePlayerDataComponent(PlayerDataComponent):
         playerId = avatar_getter.getPlayerVehicleID()
         if playerId is not 0 and playerId in args:
             self.__respawnLane = args[playerId]
-            self.onPlayerRespawnLaneUpdated(self.__respawnLane)
+        self.onPlayerRespawnLaneUpdated(self.__respawnLane)
         return
 
     def __getPlayerLives(self):

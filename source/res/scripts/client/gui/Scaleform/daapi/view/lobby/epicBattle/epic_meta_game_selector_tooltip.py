@@ -36,7 +36,6 @@ class EpicMetaGameSelectorTooltip(BlocksTooltipData):
             todayStart, todayEnd = time_utils.getDayTimeBoundsForLocal()
             todayEnd += 1
             tomorrowStart, tomorrowEnd = todayStart + time_utils.ONE_DAY, todayEnd + time_utils.ONE_DAY
-            tomorrowEnd += 1
             todayPeriods = ()
             tomorrowPeriods = ()
             time, status = self.epicController.getSeasonEndTime()
@@ -49,7 +48,6 @@ class EpicMetaGameSelectorTooltip(BlocksTooltipData):
                 tomorrowStr = self._packPeriods(tomorrowPeriods)
                 timeTableBlocks.append(self._packTimeBlock(message=text_styles.main(EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_DISABLED_TIMETABLE_TOMORROW), timeStr=text_styles.stats(tomorrowStr)))
                 items.append(formatters.packBuildUpBlockData(timeTableBlocks, 7, BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
-            time, _ = self.epicController.getSeasonEndTime()
             items.append(self._getTillEndBlock(time_utils.getTimeDeltaFromNow(time_utils.makeLocalServerTime(time))))
             return items
 

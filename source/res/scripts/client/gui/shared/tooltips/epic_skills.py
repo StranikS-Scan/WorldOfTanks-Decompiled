@@ -8,7 +8,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.tooltips import TOOLTIP_TYPE
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips.common import BlocksTooltipData
-from helpers import dependency, i18n
+from helpers import dependency, i18n, int2roman
 from skeletons.gui.game_control import IEpicBattleMetaGameController
 from gui.Scaleform.daapi.view.lobby.epicBattle.battle_ability_tooltip_params import g_battleAbilityParamsRenderers
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -33,7 +33,8 @@ class EpicSkillBaseTooltipData(BlocksTooltipData):
         skillLevel = self._epicMetaGameCtrl.getSkillInformation()[skillID].levels[level]
         title = skillLevel.name
         icon = skillLevel.icon
-        desc = '{} {}'.format(i18n.makeString(EPIC_BATTLE.ABILITYINFO_LEVEL), str(level))
+        romanLvl = int2roman(level)
+        desc = i18n.makeString(EPIC_BATTLE.METAABILITYSCREEN_ABILITY_LEVEL, lvl=romanLvl)
         imgPaddingLeft = 20
         imgPaddingTop = 0
         txtOffset = 85
@@ -79,9 +80,3 @@ class EpicSkillSlotTooltip(EpicSkillBaseTooltipData):
 
     def _packBlocks(self, eqCompDescr, _=None):
         return [formatters.packTitleDescBlock(EPIC_BATTLE.ABILITYINFO_MANAGE_ABILITIES, EPIC_BATTLE.ABILITYINFO_MANAGE_ABILITIES_DESC)] if eqCompDescr == -1 else super(EpicSkillSlotTooltip, self)._packBlocks(_equipmentToEpicSkillConverter(self._epicMetaGameCtrl, eqCompDescr), None)
-
-
-class EpicSkillPopoverTooltip(EpicSkillExtendedTooltip):
-
-    def _packBlocks(self, eqCompDescr, _=None):
-        return super(EpicSkillPopoverTooltip, self)._packBlocks(_equipmentToEpicSkillConverter(self._epicMetaGameCtrl, eqCompDescr), None)

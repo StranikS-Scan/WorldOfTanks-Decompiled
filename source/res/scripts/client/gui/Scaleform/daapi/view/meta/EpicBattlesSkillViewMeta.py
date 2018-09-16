@@ -4,9 +4,6 @@ from gui.Scaleform.daapi.view.meta.WrapperViewMeta import WrapperViewMeta
 
 class EpicBattlesSkillViewMeta(WrapperViewMeta):
 
-    def onCloseBtnClick(self):
-        self._printOverrideError('onCloseBtnClick')
-
     def onEscapePress(self):
         self._printOverrideError('onEscapePress')
 

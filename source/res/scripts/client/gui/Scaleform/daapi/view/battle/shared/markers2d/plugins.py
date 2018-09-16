@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/markers2d/plugins.py
 from functools import partial
+from collections import defaultdict
 import BattleReplay
 import BigWorld
 import constants
@@ -204,11 +205,12 @@ class AreaStaticMarkerPlugin(MarkerPlugin):
 
 class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
     bootcamp = dependency.descriptor(IBootcampController)
-    __slots__ = ('_markers', '_clazz', '__playerVehicleID', '_isSquadIndicatorEnabled', '__showDamageIcon')
+    __slots__ = ('_markers', '_markersStates', '_clazz', '__playerVehicleID', '_isSquadIndicatorEnabled', '__showDamageIcon')
 
     def __init__(self, parentObj, clazz=markers.VehicleMarker):
         super(VehicleMarkerPlugin, self).__init__(parentObj)
         self._markers = {}
+        self._markersStates = defaultdict(list)
         self._clazz = clazz
         self._isSquadIndicatorEnabled = False
         self.__playerVehicleID = 0
@@ -409,11 +411,11 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             elif eventID == _EVENT_ID.VEHICLE_HEALTH:
                 self.__updateVehicleHealth(handle, *value)
             elif eventID == _EVENT_ID.VEHICLE_STUN:
-                self.__updateStunMarker(handle, value)
+                self.__updateStunMarker(vehicleID, handle, value)
             elif eventID == _EVENT_ID.VEHICLE_INSPIRE:
-                self.__updateInspireMarker(handle, **value)
+                self.__updateInspireMarker(vehicleID, handle, **value)
             elif eventID == _EVENT_ID.VEHICLE_PASSIVE_ENGINEERING:
-                self.__updatePassiveEngineeringMarker(handle, *value)
+                self.__updatePassiveEngineeringMarker(vehicleID, handle, *value)
             return
 
     def __onVehicleModelChanged(self, markerID, matrixProvider):
@@ -429,26 +431,39 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
     def __showActionMarker(self, handle, newState):
         self._invokeMarker(handle, 'showActionMarker', newState)
 
-    def __updateStunMarker(self, handle, stunDuration, animated=True):
-        if stunDuration > 0:
-            self._invokeMarker(handle, 'showStatusMarker', STUN_STATE, False, stunDuration, animated)
-        else:
-            self._invokeMarker(handle, 'hideStatusMarker', STUN_STATE, animated)
+    def __updateStunMarker(self, vehicleID, handle, stunDuration, animated=True):
+        self.__updateStatusMarkerState(vehicleID, stunDuration > 0, handle, STUN_STATE, stunDuration, animated, False)
 
-    def __updatePassiveEngineeringMarker(self, handle, isAttacker, enabled, animated=True):
-        if enabled:
-            self._invokeMarker(handle, 'showStatusMarker', ENGINEER_STATE, isAttacker, enabled, animated)
-        else:
-            self._invokeMarker(handle, 'hideStatusMarker', ENGINEER_STATE, animated)
+    def __updatePassiveEngineeringMarker(self, vehicleID, handle, isAttacker, enabled, animated=True):
+        self.__updateStatusMarkerState(vehicleID, enabled, handle, ENGINEER_STATE, enabled, animated, isAttacker)
 
-    def __updateInspireMarker(self, handle, isSourceVehicle, isInactivation, endTime, duration, animated=True):
+    def __statusCompareFunction(self, x, y):
+        return x > y
+
+    def __updateStatusMarkerState(self, vehicleID, isShown, handle, statusID, duration, animated, isSourceVehicle):
+        currentStates = self._markersStates[vehicleID]
+        if isShown and statusID not in currentStates:
+            currentStates.append(statusID)
+            self._markersStates[vehicleID] = currentStates
+        elif not isShown and statusID in currentStates:
+            self._markersStates[vehicleID].remove(statusID)
+        if self._markersStates[vehicleID]:
+            currentStates.sort(reverse=True)
+            self._markersStates[vehicleID] = currentStates
+        currentlyActiveStatusID = self._markersStates[vehicleID][0] if self._markersStates[vehicleID] else -1
+        if isShown:
+            self._invokeMarker(handle, 'showStatusMarker', statusID, isSourceVehicle, duration, currentlyActiveStatusID, animated)
+        else:
+            self._invokeMarker(handle, 'hideStatusMarker', statusID, currentlyActiveStatusID, animated)
+
+    def __updateInspireMarker(self, vehicleID, handle, isSourceVehicle, isInactivation, endTime, duration, animated=True):
         statusID = INSPIRING_STATE if isSourceVehicle else INSPIRED_STATE
         if isInactivation is not None:
             hideStatusID = INSPIRED_STATE if isSourceVehicle else INSPIRING_STATE
-            self._invokeMarker(handle, 'hideStatusMarker', hideStatusID, False)
-            self._invokeMarker(handle, 'showStatusMarker', statusID, isSourceVehicle, duration, animated)
+            self.__updateStatusMarkerState(vehicleID, False, handle, hideStatusID, duration, animated, isSourceVehicle)
+            self.__updateStatusMarkerState(vehicleID, True, handle, statusID, duration, animated, isSourceVehicle)
         else:
-            self._invokeMarker(handle, 'hideStatusMarker', statusID, animated)
+            self.__updateStatusMarkerState(vehicleID, False, handle, statusID, duration, animated, isSourceVehicle)
         return
 
     def __updateVehicleHealth(self, handle, newHealth, aInfo, attackReasonID):

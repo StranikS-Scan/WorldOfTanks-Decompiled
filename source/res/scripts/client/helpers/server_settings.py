@@ -185,6 +185,14 @@ class _StrongholdSettings(namedtuple('_StrongholdSettings', ('wgshHostUrl',))):
         return cls('')
 
 
+class _FrontlineSettings(namedtuple('_FrontlineSettings', ('flHostUrl',))):
+    __slots__ = ()
+
+    @classmethod
+    def defaults(cls):
+        return cls('')
+
+
 class _SpgRedesignFeatures(namedtuple('_SpgRedesignFeatures', ('stunEnabled', 'markTargetAreaEnabled'))):
     __slots__ = ()
 
@@ -338,6 +346,11 @@ class ServerSettings(object):
             self.__strongholdSettings = _StrongholdSettings(settings.get('wgshHostUrl', ''))
         else:
             self.__strongholdSettings = _StrongholdSettings.defaults()
+        if 'frontlineSettings' in self.__serverSettings:
+            settings = self.__serverSettings['frontlineSettings']
+            self.__frontlineSettings = _FrontlineSettings(settings.get('flHostUrl', ''))
+        else:
+            self.__frontlineSettings = _FrontlineSettings.defaults()
         if 'rankedBattles' in self.__serverSettings:
             self.__bwRankedBattles = makeTupleByDict(_BwRankedBattles, self.__serverSettings['rankedBattles'])
         else:
@@ -424,6 +437,10 @@ class ServerSettings(object):
     @property
     def stronghold(self):
         return self.__strongholdSettings
+
+    @property
+    def frontline(self):
+        return self.__frontlineSettings
 
     @property
     def bwRankedBattles(self):

@@ -221,9 +221,13 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
         field = TankmanSkillListField(self, 'skills')
         _, value = field.buildData()
         skills = value
-        for skill in skills:
+        MAX_TANKMAN_POPUP_VISIBLE_SKILLS = 15
+        for skill in skills[:MAX_TANKMAN_POPUP_VISIBLE_SKILLS]:
             commonStatsBlock.append(formatters.packTextParameterBlockData(text_styles.main(skill['label']), text_styles.stats(str(skill['level']) + '%'), valueWidth=90))
 
+        if len(skills) > MAX_TANKMAN_POPUP_VISIBLE_SKILLS:
+            diff = str(len(skills) - MAX_TANKMAN_POPUP_VISIBLE_SKILLS)
+            commonStatsBlock.append(formatters.packAlignedTextBlockData(text=text_styles.middleTitle(makeString(TOOLTIPS.HANGAR_CREW_MORESKILLS, skill_cnt=diff)), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
         items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=5))
         field = TankmanNewSkillCountField(self, '')
         _, newSkillCount = field.buildData()

@@ -16,8 +16,5 @@ class EpicBattlesPrestigeViewMeta(WrapperViewMeta):
     def onBackBtnClick(self):
         self._printOverrideError('onBackBtnClick')
 
-    def as_setStaticTextsS(self, data):
-        return self.flashObject.as_setStaticTexts(data) if self._isDAAPIInited() else None
-
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None

@@ -55,9 +55,6 @@ def showRankedPrimeTimeWindow():
 
 
 def showEpicBattlesAfterBattleWindow(reusableInfo):
-    from gui.game_control.epic_meta_game_ctrl import DISABLE_EPIC_META_GAME
-    if DISABLE_EPIC_META_GAME:
-        return
     g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_AFTER_BATTLE_ALIAS, ctx={'reusableInfo': reusableInfo}), EVENT_BUS_SCOPE.LOBBY)
 
 
@@ -259,9 +256,6 @@ def showVehicleCompare():
 
 
 def showEpicBattleSkillView():
-    from gui.game_control.epic_meta_game_ctrl import DISABLE_EPIC_META_GAME
-    if DISABLE_EPIC_META_GAME:
-        return
     g_eventBus.handleEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_SKILL_ALIAS), scope=EVENT_BUS_SCOPE.LOBBY)
 
 

@@ -20,8 +20,7 @@ from gui.shared.tooltips import TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData
 from gui.shared.tooltips import formatters
 from gui.Scaleform.daapi.view.lobby.epicBattle.epic_meta_level_icon import getEpicMetaIconVODict
-from gui.game_control.epic_meta_game_ctrl import DISABLE_EPIC_META_GAME
-EpicBattlesWidgetVO = namedtuple('EpicBattlesWidgetVO', ('skillPoints', 'calendarStatus', 'showAlert', 'epicMetaLevelIconData'))
+EpicBattlesWidgetVO = namedtuple('EpicBattlesWidgetVO', ('skillPoints', 'calendarStatus', 'canPrestige', 'showAlert', 'epicMetaLevelIconData'))
 EpicBattlesWidgetTooltipVO = namedtuple('EpicBattlesWidgetTooltipVO', ('headline', 'description', 'progressText', 'barPercentage'))
 CalendarStatusVO = namedtuple('EpicBattlesWidgetVO', ('alertIcon', 'buttonIcon', 'buttonLabel', 'buttonVisible', 'buttonTooltip', 'statusText', 'popoverAlias', 'bgVisible', 'shadowFilterVisible'))
 
@@ -29,29 +28,23 @@ class EpicBattlesWidget(EpicBattlesWidgetMeta):
     epicMetaGameCtrl = dependency.descriptor(IEpicBattleMetaGameController)
 
     def onWidgetClick(self):
-        if DISABLE_EPIC_META_GAME:
-            return
         self.fireEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS), EVENT_BUS_SCOPE.LOBBY)
 
     def onSoundTrigger(self, triggerName):
         SoundGroups.g_instance.playSound2D(triggerName)
 
     def update(self):
-        if DISABLE_EPIC_META_GAME:
-            return
         self.as_setDataS(self._buildVO()._asdict())
 
     def _buildVO(self):
-        if DISABLE_EPIC_META_GAME:
-            return None
-        else:
-            status, timeLeft, _ = self.epicMetaGameCtrl.getPrimeTimeStatus()
-            showPrimeTimeAlert = status != PRIME_TIME_STATUS.AVAILABLE
-            pPrestigeLevel, pLevel, _ = self.epicMetaGameCtrl.getPlayerLevelInfo()
-            return EpicBattlesWidgetVO(skillPoints=self.epicMetaGameCtrl.getSkillPoints(), calendarStatus=self.__getStatusBlock(showPrimeTimeAlert, timeLeft)._asdict(), showAlert=not self.epicMetaGameCtrl.isInPrimeTime(), epicMetaLevelIconData=getEpicMetaIconVODict(pPrestigeLevel, pLevel))
+        status, timeLeft, _ = self.epicMetaGameCtrl.getPrimeTimeStatus()
+        showPrimeTimeAlert = status != PRIME_TIME_STATUS.AVAILABLE
+        pPrestigeLevel, pLevel, _ = self.epicMetaGameCtrl.getPlayerLevelInfo()
+        maxMetaLevel = self.epicMetaGameCtrl.getMaxPlayerLevel()
+        return EpicBattlesWidgetVO(skillPoints=self.epicMetaGameCtrl.getSkillPoints(), calendarStatus=self.__getStatusBlock(showPrimeTimeAlert, timeLeft)._asdict(), canPrestige=pLevel == maxMetaLevel, showAlert=not self.epicMetaGameCtrl.isInPrimeTime(), epicMetaLevelIconData=getEpicMetaIconVODict(pPrestigeLevel, pLevel))
 
     def __getStatusBlock(self, showPrimeTimeAlert, timeLeft):
-        return CalendarStatusVO(alertIcon=RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON if showPrimeTimeAlert else None, buttonIcon=RES_ICONS.MAPS_ICONS_BUTTONS_CALENDAR, buttonLabel='', buttonVisible=False, buttonTooltip=None, statusText=self.__getAlertStatusText(timeLeft), popoverAlias=None, bgVisible=not DISABLE_EPIC_META_GAME, shadowFilterVisible=showPrimeTimeAlert if not not DISABLE_EPIC_META_GAME else False)
+        return CalendarStatusVO(alertIcon=RES_ICONS.MAPS_ICONS_LIBRARY_ALERTBIGICON if showPrimeTimeAlert else None, buttonIcon=RES_ICONS.MAPS_ICONS_BUTTONS_CALENDAR, buttonLabel='', buttonVisible=False, buttonTooltip=None, statusText=self.__getAlertStatusText(timeLeft), popoverAlias=None, bgVisible=True, shadowFilterVisible=showPrimeTimeAlert)
 
     def __getAlertStatusText(self, timeLeft):
         timeLeftStr = time_utils.getTillTimeString(timeLeft, EPIC_BATTLE.STATUS_TIMELEFT)

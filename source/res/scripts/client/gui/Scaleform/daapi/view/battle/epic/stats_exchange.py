@@ -120,15 +120,9 @@ class EpicStatisticsDataController(EpicBattleStatisticDataControllerMeta):
             rank = 0
             if self._arenaVisitor.hasPlayerRanks():
                 rank = playerDataComp.playerRank
-            playerLives = 0
-            ctrl = self.sessionProvider.dynamic.respawn
-            if ctrl is not None:
-                playerLives = ctrl.playerLives
             playerData = {'isAttacker': isAttacker,
-             'lives': playerLives,
              'lane': playerDataComp.physicalLane,
-             'rank': rank,
-             'sectorID': playerDataComp.playerSectorID}
+             'rank': rank}
             self.as_updateEpicPlayerStatsS(playerData)
             return
 

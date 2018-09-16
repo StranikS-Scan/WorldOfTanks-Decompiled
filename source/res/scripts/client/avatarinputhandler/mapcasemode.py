@@ -210,6 +210,8 @@ class _AreaStrikeSelector(_DefaultStrikeSelector):
         return
 
     def processSelection(self, position, reset=False):
+        if reset:
+            return True
         direction = Vector2(self.direction.x, self.direction.z)
         direction.normalise()
         BigWorld.player().setEquipmentApplicationPoint(self.equipment.id[1], self.area.position, direction)

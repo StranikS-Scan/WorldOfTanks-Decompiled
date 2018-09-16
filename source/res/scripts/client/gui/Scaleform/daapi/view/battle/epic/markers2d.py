@@ -84,7 +84,7 @@ class EpicMissionsPlugin(EpicMarkerPlugin):
         pass
 
     def _onSpectatorModeChanged(self, mode):
-        self._isInFreeSpectatorMode = True if EPIC_CONSTS.SPECTATOR_MODE_FREECAM else False
+        self._isInFreeSpectatorMode = mode == EPIC_CONSTS.SPECTATOR_MODE_FREECAM
         self._updateHighlight()
 
     def _onVehicleDeployed(self):

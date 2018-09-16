@@ -60,8 +60,6 @@ class EpicMetaGameSkill(object):
         return (self.levels[lvl + 1] for lvl in xrange(maxUnlockedLvlIdx))
 
 
-DISABLE_EPIC_META_GAME = True
-
 class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IGlobalListener):
     itemsCache = dependency.descriptor(IItemsCache)
     battleResultsService = dependency.descriptor(IBattleResultsService)
@@ -292,15 +290,13 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
         self.onPrimeTimeStatusUpdated(status)
 
     def __showBattleResults(self, reusableInfo, composer):
-        if DISABLE_EPIC_META_GAME:
-            return
         if reusableInfo.common.arenaBonusType == ARENA_BONUS_TYPE.EPIC_BATTLE:
             event_dispatcher.showEpicBattlesAfterBattleWindow(reusableInfo)
 
     def __isInValidPrebattle(self):
         if g_prbLoader and g_prbLoader.getDispatcher() and g_prbLoader.getDispatcher().getEntity():
             currentPrbEntity = g_prbLoader.getDispatcher().getEntity().getEntityType()
-            return currentPrbEntity in (QUEUE_TYPE.EPIC, PREBATTLE_TYPE.EPIC_TRAINING)
+            return currentPrbEntity in (QUEUE_TYPE.EPIC, PREBATTLE_TYPE.EPIC, PREBATTLE_TYPE.EPIC_TRAINING)
         else:
             return None
 
@@ -328,7 +324,7 @@ class EpicBattleMetaGameController(IEpicBattleMetaGameController, Notifiable, IG
             for item in battleAbilities.values():
                 for index, skillID in enumerate(slectedSkills):
                     if skillID is not None and skillID >= 0:
-                        if item.innationID == skillInfo[skillID].getMaxUnlockedSkillLevel().eqID:
+                        if skillInfo[skillID].getMaxUnlockedSkillLevel() and item.innationID == skillInfo[skillID].getMaxUnlockedSkillLevel().eqID:
                             selectedItems[index] = item
 
             vehicle.equipment.setBattleAbilityConsumables(BattleAbilityConsumables(*selectedItems))

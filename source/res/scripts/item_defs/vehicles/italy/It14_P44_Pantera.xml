@@ -49,9 +49,9 @@
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
-      <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
-      <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
-      <sensitivityToImpulse>	0.34	</sensitivityToImpulse>
+      <pitchParams>	0.20 36.00 0.36 1.00 0.04 0.26	</pitchParams>
+      <rollParams>	1.00 0.10 36.00 0.36 1.00 0.01 0.26	</rollParams>
+      <sensitivityToImpulse>	0.13	</sensitivityToImpulse>
     </swinging>
     <exhaust>
       <pixie>	diesel_large	</pixie>
@@ -118,7 +118,7 @@
         <lodDist>	MEDIUM	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	germany_01	</textureSet>
-        <size>	0.48 0.68	</size>
+        <size>	0.48 0.78	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -347,7 +347,7 @@
         <lodDist>	MEDIUM	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	germany_01	</textureSet>
-        <size>	0.48 0.68	</size>
+        <size>	0.48 0.78	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -594,7 +594,7 @@
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <reloadTime>	9.6	</reloadTime>
           <aimingTime>	2.2	</aimingTime>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -649,7 +649,7 @@
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <reloadTime>	9.6	</reloadTime>
           <aimingTime>	2.2	</aimingTime>
-          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.14	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -782,7 +782,7 @@
           <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
           <reloadTime>	10.4	</reloadTime>
           <aimingTime>	2.2	</aimingTime>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>
@@ -833,7 +833,7 @@
           <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
           <reloadTime>	10.4	</reloadTime>
           <aimingTime>	2.1	</aimingTime>
-          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <shotDispersionFactors>
             <turretRotation>	0.12	</turretRotation>
             <afterShot>	3.5	</afterShot>

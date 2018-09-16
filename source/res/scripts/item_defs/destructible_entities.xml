@@ -271,7 +271,7 @@
             <id>	structure	</id>
             <destructible>	true	</destructible>
             <gui_node>	HP_gui	</gui_node>
-            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_B1.model	</physics_model>
+            <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_t_B1.model	</physics_model>
             <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_t.model	</visual_model>
           </component>
         </components>
@@ -284,14 +284,14 @@
             <id>	socket	</id>
             <destructible>	false	</destructible>
             <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_s_B1.model	</physics_model>
-            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_s_destr.model	</visual_model>
+            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_s.model	</visual_model>
           </component>
           <component>
             <id>	structure	</id>
             <destructible>	false	</destructible>
             <gui_node>	HP_gui	</gui_node>
             <physics_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_t_d_B3.model	</physics_model>
-            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_t_destr.model	</visual_model>
+            <visual_model>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_t_crash.model	</visual_model>
           </component>
         </components>
       </state>

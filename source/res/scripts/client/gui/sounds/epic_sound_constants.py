@@ -17,16 +17,19 @@ class EPIC_OVERTIME_SOUND_NOTIFICATIONS(object):
 
 
 class EPIC_METAGAME_WWISE_SOUND_EVENTS(object):
-    EB_WELCOME_SCREEN = 'eb_welcome'
+    EB_WELCOME_SCREEN_BUTTON_ANIM = 'eb_welcome_01'
+    EB_WELCOME_SCREEN_MOVE = 'eb_welcome_02'
+    EB_WELCOME_SCREEN_DONE = 'eb_welcome_03'
     EB_ACHIEVED_RANK = 'eb_achieved_rank'
-    EB_LEVEL_REACHED = 'eb_level_reached'
-    EB_ABILITY_UPGRADE = 'eb_ability_upgrade'
+    EB_LEVEL_REACHED = 'eb_level_reached_02'
+    EB_ABILITY_UPGRADE = 'eb_ability_upgrade_02'
+    EB_PRESTIGE_RESET = 'eb_prestige_reset'
 
 
 class EPIC_SOUND(object):
     EPIC_MSG_SOUNDS_ENABLED = True
     PLAY_MSG_RETREAT_SUCCESSFUL = False
-    BF_EB_ABILITY_LIST = ('RECON', 'ARTILLERY', 'BOMBER', 'SMOKE', 'INSPIRE')
+    BF_EB_ABILITY_LIST = ()
     BF_EB_ABILITY_DEPLOYING = 'eb_ability_deployed'
     BF_EB_ABILITY_INSPIRE_DEPLOYED = 'eb_ability_inspire_deployed'
     BF_EB_ABILITY_USED = {'RECON': BF_EB_ABILITY_DEPLOYING,

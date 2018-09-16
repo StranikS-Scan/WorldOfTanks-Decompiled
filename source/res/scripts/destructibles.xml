@@ -2859,8 +2859,8 @@
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	inf_tree_palm_fall_med	</fractureEffect>
-      <touchdownEffect>	inf_tree_palm_fall_touchdown_med	</touchdownEffect>
+      <fractureEffect>	tree_PheonixPalm_Big01_fall	</fractureEffect>
+      <touchdownEffect>	tree_PheonixPalm_Big01_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/palms_cacti/PheonixPalm/PheonixPalm_Big02.srt	</filename>
@@ -2869,8 +2869,8 @@
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	inf_tree_palm_fall_med	</fractureEffect>
-      <touchdownEffect>	inf_tree_palm_fall_touchdown_med	</touchdownEffect>
+      <fractureEffect>	tree_PheonixPalm_Big01_fall	</fractureEffect>
+      <touchdownEffect>	tree_PheonixPalm_Big01_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/palms_cacti/PheonixPalm/PheonixPalm_Big03.srt	</filename>
@@ -2879,8 +2879,8 @@
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	inf_tree_palm_fall_med	</fractureEffect>
-      <touchdownEffect>	inf_tree_palm_fall_touchdown_med	</touchdownEffect>
+      <fractureEffect>	tree_PheonixPalm_Big01_fall	</fractureEffect>
+      <touchdownEffect>	tree_PheonixPalm_Big01_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/palms_cacti/PheonixPalm/PheonixPalm_BigDry01.srt	</filename>
@@ -2889,8 +2889,8 @@
       <physicParams>	800 10 0.26 20000 4000 20 0.15	</physicParams>
       <lifetimeEffect>	none	</lifetimeEffect>
       <lifetimeEffectChance>	0.0	</lifetimeEffectChance>
-      <fractureEffect>	inf_tree_palm_fall_med	</fractureEffect>
-      <touchdownEffect>	inf_tree_palm_fall_touchdown_med	</touchdownEffect>
+      <fractureEffect>	tree_PheonixPalm_Big01_fall	</fractureEffect>
+      <touchdownEffect>	tree_PheonixPalm_Big01_touchdown	</touchdownEffect>
     </entry>
     <entry>
       <filename>	vegetation/palms_cacti/PheonixPalm/PheonixPalm_Medium01.srt	</filename>
@@ -5146,7 +5146,7 @@
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_env418_OldGMercedes1	</effect>
-      <hitEffect>	inf_fuel_env418_OldGMercedes2_15_hit	</hitEffect>
+      <hitEffect>	inf_fuel_env418_OldGMercedes2	</hitEffect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
@@ -5157,7 +5157,7 @@
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_env418_OldGMercedes2	</effect>
-      <hitEffect>	inf_fuel_env418_OldGMercedes2_16_hit	</hitEffect>
+      <hitEffect>	inf_fuel_env418_OldGMercedes2	</hitEffect>
       <effectHP>	HP_module1	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal1	</matName>
@@ -5167,8 +5167,8 @@
       <filename>	content/Environment/hd_env418_OldGMercedes/normal/lod0/hd_env418_OldGMercedes3.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_env418_OldGMercedes3_02	</effect>
-      <hitEffect>	inf_fuel_env418_OldGMercedes2_17_hit	</hitEffect>
+      <effect>	inf_env418_OldGMercedes3	</effect>
+      <hitEffect>	inf_fuel_env418_OldGMercedes2	</hitEffect>
       <effectHP>	HP_module2	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal2	</matName>
@@ -5179,7 +5179,7 @@
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	inf_env418_OldGMercedes4	</effect>
-      <hitEffect>	inf_fuel_env418_OldGMercedes2_18_hit	</hitEffect>
+      <hitEffect>	inf_fuel_env418_OldGMercedes2	</hitEffect>
       <effectHP>	HP_module3	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal3	</matName>
@@ -6109,7 +6109,7 @@
       <filename>	content/GatesAndFences/hd_gaf_026_WoodFence/normal/lod0/hd_gaf_026_WoodFence_Tile_03.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_gaf_026_WoodFence_Tile_01_01	</effect>
+      <effect>	inf_gaf_026_WoodFence_Tile_01	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_wood0	</matName>
@@ -6119,7 +6119,7 @@
       <filename>	content/GatesAndFences/hd_gaf_026_WoodFence/normal/lod0/hd_gaf_026_WoodFence_Tile_04.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_gaf_026_WoodFence_Tile_02_01	</effect>
+      <effect>	inf_gaf_026_WoodFence_Tile_01	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_wood0	</matName>
@@ -7540,7 +7540,7 @@
       <filename>	content/GatesAndFences/hd_gaf_EUGB_002_FieldFence/normal/lod0/hd_gaf_EUGB_002_FieldFence_01.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_gafBR_002_FieldFence1_01	</effect>
+      <effect>	inf_gafBR_002_FieldFence1	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
@@ -7550,7 +7550,7 @@
       <filename>	content/GatesAndFences/hd_gaf_EUGB_002_FieldFence/normal/lod0/hd_gaf_EUGB_002_FieldFence_02.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_gafBR_002_FieldFence1_02	</effect>
+      <effect>	inf_gafBR_002_FieldFence1	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
@@ -7560,7 +7560,7 @@
       <filename>	content/GatesAndFences/hd_gaf_EUGB_002_FieldFence/normal/lod0/hd_gaf_EUGB_002_FieldFence_03.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_gafBR_002_FieldFence1_03	</effect>
+      <effect>	inf_gafBR_002_FieldFence1	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
@@ -7580,7 +7580,7 @@
       <filename>	content/GatesAndFences/hd_gaf_EUGB_002_FieldFence/normal/lod0/hd_gaf_EUGB_002_FieldFence_End.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_gafBR_002_FieldFence1_04	</effect>
+      <effect>	inf_gafBR_002_FieldFence1	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
@@ -7590,7 +7590,7 @@
       <filename>	content/GatesAndFences/hd_gaf_EUGB_002_FieldFence/normal/lod0/hd_gaf_EUGB_002_FieldFence_New_01.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_gafBR_002_FieldFence1_new_01	</effect>
+      <effect>	inf_gafBR_002_FieldFence1_new	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
@@ -7600,7 +7600,7 @@
       <filename>	content/GatesAndFences/hd_gaf_EUGB_002_FieldFence/normal/lod0/hd_gaf_EUGB_002_FieldFence_New_02.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_gafBR_002_FieldFence1_new_02	</effect>
+      <effect>	inf_gafBR_002_FieldFence1_new	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
@@ -7610,7 +7610,7 @@
       <filename>	content/GatesAndFences/hd_gaf_EUGB_002_FieldFence/normal/lod0/hd_gaf_EUGB_002_FieldFence_New_03.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_gafBR_002_FieldFence1_new_03	</effect>
+      <effect>	inf_gafBR_002_FieldFence1_new	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
@@ -8839,7 +8839,7 @@
       <filename>	content/GatesAndFences/hd_gaf_SU_002_BrickFence/normal/lod0/hd_gaf_SU_002_BrickFence_End_02.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_gafSU_92_02_BrickFence_end_01	</effect>
+      <effect>	inf_gafSU_92_02_BrickFence_end	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_stone0	</matName>
@@ -9992,7 +9992,7 @@
       <filename>	content/Environment/hd_env_AM_034_Scaffold/normal/lod0/hd_env_AM_034_Scaffold_02.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_env_AM_034_Scaffold_01	</effect>
+      <effect>	inf_env_AM_034_Scaffold	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_wood0	</matName>
@@ -10002,7 +10002,7 @@
       <filename>	content/Environment/hd_env_AM_034_Scaffold/normal/lod0/hd_env_AM_034_Scaffold_03.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
-      <effect>	inf_env_AM_034_Scaffold_02	</effect>
+      <effect>	inf_env_AM_034_Scaffold	</effect>
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_wood0	</matName>
@@ -10705,7 +10705,7 @@
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
-      <hitEffect>	inf_fuel_mle_UNI_820_EightyEight_01_02_hit	</hitEffect>
+      <hitEffect>	inf_fuel_mle_UNI_820_EightyEight_01	</hitEffect>
     </entry>
     <entry>
       <filename>	content/MilitaryEnvironment/hd_mle_UNI_820_EightyEight/normal/lod0/hd_mle_UNI_820_EightyEight_01.model	</filename>
@@ -11207,6 +11207,17 @@
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
+      <filename>	content/Buildings/hd_bld_UNI_010_WorkshopIndoor/normal/lod0/hd_bld_UNI_010_WorkshopIndoor_02.model	</filename>
+      <health>	10	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_bld_UNI_010_WorkshopIndoor_02	</effect>
+      <hitEffect>	hd_bld_UNI_010_WorkshopIndoor_02_hit	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1	</effectScale>
+      <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
       <filename>	content/Buildings/hd_bld_UNI_010_WorkshopIndoor/normal/lod0/hd_bld_UNI_010_WorkshopIndoor_05.model	</filename>
       <health>	5	</health>
       <decayEffect>	none	</decayEffect>
@@ -11215,6 +11226,17 @@
       <effectHP>	HP_module0	</effectHP>
       <effectScale>	1	</effectScale>
       <matName>	n_metal0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/Buildings/hd_bld_UNI_010_WorkshopIndoor/normal/lod0/hd_bld_UNI_010_WorkshopIndoor_FireStairs_02.model	</filename>
+      <health>	5	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_bld_UNI_010_WorkshopIndoor_FireStairs_02_01	</effect>
+      <hitEffect>	hd_bld_UNI_010_WorkshopIndoor_FireStairs_02_01_hit	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1	</effectScale>
+      <matName>	n_metal2	</matName>
       <lifetimeEffect>	none	</lifetimeEffect>
     </entry>
     <entry>
@@ -11758,6 +11780,17 @@
     </entry>
     <entry>
       <filename>	content/GatesAndFences/hd_gaf_SU_007_AvenueFence/normal/lod0/hd_gaf_SU_007_AvenueFence_02.model	</filename>
+      <health>	15	</health>
+      <decayEffect>	none	</decayEffect>
+      <effect>	hd_gaf_SU_007_AvenueFence_01	</effect>
+      <hitEffect>	hd_gaf_SU_007_AvenueFence_01	</hitEffect>
+      <effectHP>	HP_module0	</effectHP>
+      <effectScale>	1	</effectScale>
+      <matName>	n_stone0	</matName>
+      <lifetimeEffect>	none	</lifetimeEffect>
+    </entry>
+    <entry>
+      <filename>	content/GatesAndFences/hd_gaf_SU_007_AvenueFence/normal/lod0/hd_gaf_SU_007_AvenueFence_03.model	</filename>
       <health>	15	</health>
       <decayEffect>	none	</decayEffect>
       <effect>	hd_gaf_SU_007_AvenueFence_01	</effect>
@@ -12436,74 +12469,74 @@
       <modules>
         <module>
           <matName>	n_stone0_1	</matName>
-          <health>	80	</health>
+          <health>	50	</health>
           <decayEffect>	none	</decayEffect>
-          <ramEffect>	inf_bldAM_039_Amphitheatre_Crash_02	</ramEffect>
-          <hitEffect>	inf_bldAM_039_Amphitheatre_Crash_02_hit	</hitEffect>
-          <effectHP>	HP_module_1	</effectHP>
+          <ramEffect>	bld_19_04_Amphitheatre_02	</ramEffect>
+          <hitEffect>	bld_19_04_Amphitheatre_02	</hitEffect>
+          <effectHP>	HP_module0	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
         <module>
           <matName>	n_stone0_2	</matName>
-          <health>	80	</health>
+          <health>	50	</health>
           <decayEffect>	none	</decayEffect>
-          <ramEffect>	inf_bldAM_039_Amphitheatre_Crash_01	</ramEffect>
-          <hitEffect>	inf_bldAM_039_Amphitheatre_Crash_01_hit	</hitEffect>
-          <effectHP>	HP_module_2	</effectHP>
+          <ramEffect>	bld_19_04_Amphitheatre_01	</ramEffect>
+          <hitEffect>	bld_19_04_Amphitheatre_01	</hitEffect>
+          <effectHP>	HP_module1	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
         <module>
           <matName>	n_stone0_3	</matName>
-          <health>	80	</health>
+          <health>	50	</health>
           <decayEffect>	none	</decayEffect>
-          <ramEffect>	inf_bldAM_039_Amphitheatre_Crash_02_01_ram	</ramEffect>
-          <hitEffect>	inf_bldAM_039_Amphitheatre_Crash_02_01_hit	</hitEffect>
-          <effectHP>	HP_module_3	</effectHP>
+          <ramEffect>	bld_19_04_Amphitheatre_02	</ramEffect>
+          <hitEffect>	bld_19_04_Amphitheatre_02	</hitEffect>
+          <effectHP>	HP_module2	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
         <module>
           <matName>	n_stone0_4	</matName>
-          <health>	80	</health>
+          <health>	50	</health>
           <decayEffect>	none	</decayEffect>
-          <ramEffect>	inf_bldAM_039_Amphitheatre_Crash_02_02_ram	</ramEffect>
-          <hitEffect>	inf_bldAM_039_Amphitheatre_Crash_02_02_hit	</hitEffect>
-          <effectHP>	HP_module_4	</effectHP>
+          <ramEffect>	bld_19_04_Amphitheatre_02	</ramEffect>
+          <hitEffect>	bld_19_04_Amphitheatre_02	</hitEffect>
+          <effectHP>	HP_module3	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
         <module>
           <matName>	n_stone0_5	</matName>
-          <health>	80	</health>
+          <health>	50	</health>
           <decayEffect>	none	</decayEffect>
-          <ramEffect>	inf_bldAM_039_Amphitheatre_Crash_03	</ramEffect>
-          <hitEffect>	inf_bldAM_039_Amphitheatre_Crash_03_hit	</hitEffect>
-          <effectHP>	HP_module_5	</effectHP>
+          <ramEffect>	bld_19_04_Amphitheatre_03	</ramEffect>
+          <hitEffect>	bld_19_04_Amphitheatre_03	</hitEffect>
+          <effectHP>	HP_module4	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
         <module>
           <matName>	n_stone0_6	</matName>
-          <health>	80	</health>
+          <health>	50	</health>
           <decayEffect>	none	</decayEffect>
-          <ramEffect>	inf_bldAM_039_Amphitheatre_Crash_04	</ramEffect>
-          <hitEffect>	inf_bldAM_039_Amphitheatre_Crash_04_hit	</hitEffect>
-          <effectHP>	HP_module_6	</effectHP>
+          <ramEffect>	bld_19_04_Amphitheatre_04	</ramEffect>
+          <hitEffect>	bld_19_04_Amphitheatre_04	</hitEffect>
+          <effectHP>	HP_module5	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
         <module>
           <matName>	n_stone0_7	</matName>
-          <health>	80	</health>
+          <health>	50	</health>
           <decayEffect>	none	</decayEffect>
-          <ramEffect>	inf_bldAM_039_Amphitheatre_Crash_04_01_ram	</ramEffect>
-          <hitEffect>	inf_bldAM_039_Amphitheatre_Crash_04_01_hit	</hitEffect>
-          <effectHP>	HP_module_7	</effectHP>
+          <ramEffect>	bld_19_04_Amphitheatre_04	</ramEffect>
+          <hitEffect>	bld_19_04_Amphitheatre_04	</hitEffect>
+          <effectHP>	HP_module6	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
         <module>
           <matName>	n_stone0_8	</matName>
-          <health>	80	</health>
+          <health>	50	</health>
           <decayEffect>	none	</decayEffect>
-          <ramEffect>	inf_bldAM_039_Amphitheatre_Crash_01_01_ram	</ramEffect>
-          <hitEffect>	inf_bldAM_039_Amphitheatre_Crash_01_01_hit	</hitEffect>
-          <effectHP>	HP_module_8	</effectHP>
+          <ramEffect>	bld_19_04_Amphitheatre_01	</ramEffect>
+          <hitEffect>	bld_19_04_Amphitheatre_01	</hitEffect>
+          <effectHP>	HP_module7	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
       </modules>
@@ -12537,18 +12570,18 @@
         <module>
           <matName>	n_wood0_1	</matName>
           <health>	15	</health>
-          <decayEffect>	inf_building_fire	</decayEffect>
+          <decayEffect>	none	</decayEffect>
           <ramEffect>	inf_mil204_AreaForGun_05	</ramEffect>
-          <hitEffect>	inf_mil204_AreaForGun_05_hit	</hitEffect>
+          <hitEffect>	inf_mil204_AreaForGun_05	</hitEffect>
           <effectHP>	HP_module0	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
         <module>
           <matName>	n_wood0_2	</matName>
           <health>	15	</health>
-          <decayEffect>	inf_building_fire	</decayEffect>
-          <ramEffect>	inf_mil204_AreaForGun_05_01_ram	</ramEffect>
-          <hitEffect>	inf_mil204_AreaForGun_05_01_hit	</hitEffect>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_mil204_AreaForGun_05	</ramEffect>
+          <hitEffect>	inf_mil204_AreaForGun_05	</hitEffect>
           <effectHP>	HP_module1	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
@@ -12560,36 +12593,36 @@
         <module>
           <matName>	n_wood0_1	</matName>
           <health>	15	</health>
-          <decayEffect>	inf_building_fire	</decayEffect>
+          <decayEffect>	none	</decayEffect>
           <ramEffect>	inf_mil204_AreaForGun_01	</ramEffect>
-          <hitEffect>	inf_mil204_AreaForGun_01_hit	</hitEffect>
+          <hitEffect>	inf_mil204_AreaForGun_01	</hitEffect>
           <effectHP>	HP_module0	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
         <module>
           <matName>	n_wood0_2	</matName>
           <health>	15	</health>
-          <decayEffect>	inf_building_fire	</decayEffect>
+          <decayEffect>	none	</decayEffect>
           <ramEffect>	inf_mil204_AreaForGun_02	</ramEffect>
-          <hitEffect>	inf_mil204_AreaForGun_02_hit	</hitEffect>
+          <hitEffect>	inf_mil204_AreaForGun_02	</hitEffect>
           <effectHP>	HP_module1	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
         <module>
           <matName>	n_wood0_3	</matName>
           <health>	15	</health>
-          <decayEffect>	inf_building_fire	</decayEffect>
+          <decayEffect>	none	</decayEffect>
           <ramEffect>	inf_mil204_AreaForGun_03	</ramEffect>
-          <hitEffect>	inf_mil204_AreaForGun_03_hit	</hitEffect>
+          <hitEffect>	inf_mil204_AreaForGun_03	</hitEffect>
           <effectHP>	HP_module2	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
         <module>
           <matName>	n_wood0_4	</matName>
           <health>	15	</health>
-          <decayEffect>	inf_building_fire	</decayEffect>
+          <decayEffect>	none	</decayEffect>
           <ramEffect>	inf_mil204_AreaForGun_04	</ramEffect>
-          <hitEffect>	inf_mil204_AreaForGun_04_hit	</hitEffect>
+          <hitEffect>	inf_mil204_AreaForGun_04	</hitEffect>
           <effectHP>	HP_module3	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
@@ -12601,18 +12634,18 @@
         <module>
           <matName>	n_wood0_1	</matName>
           <health>	15	</health>
-          <decayEffect>	inf_building_fire	</decayEffect>
-          <ramEffect>	inf_mil204_AreaForGun_05_02_ram	</ramEffect>
-          <hitEffect>	inf_mil204_AreaForGun_05_02_hit	</hitEffect>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_mil204_AreaForGun_05	</ramEffect>
+          <hitEffect>	inf_mil204_AreaForGun_05	</hitEffect>
           <effectHP>	HP_module0	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
         <module>
           <matName>	n_wood0_2	</matName>
           <health>	15	</health>
-          <decayEffect>	inf_building_fire	</decayEffect>
-          <ramEffect>	inf_mil204_AreaForGun_05_03_ram	</ramEffect>
-          <hitEffect>	inf_mil204_AreaForGun_05_03_hit	</hitEffect>
+          <decayEffect>	none	</decayEffect>
+          <ramEffect>	inf_mil204_AreaForGun_05	</ramEffect>
+          <hitEffect>	inf_mil204_AreaForGun_05	</hitEffect>
           <effectHP>	HP_module1	</effectHP>
           <effectScale>	1	</effectScale>
         </module>
@@ -16137,56 +16170,6 @@
         </module>
         <module>
           <matName>	n_metal5	</matName>
-          <health>	80	</health>
-          <decayEffect>	none	</decayEffect>
-          <ramEffect>	none	</ramEffect>
-          <hitEffect>	none	</hitEffect>
-          <effectHP>	HP_module0	</effectHP>
-          <effectScale>	1	</effectScale>
-        </module>
-      </modules>
-    </entry>
-    <entry>
-      <filename>	content/MilitaryEnvironment/hd_mle_UNI_824_BigGun/normal/lod0/hd_mle_UNI_824_BigGun_B.model	</filename>
-      <modules>
-        <module>
-          <matName>	n_metal0_1	</matName>
-          <health>	80	</health>
-          <decayEffect>	none	</decayEffect>
-          <ramEffect>	none	</ramEffect>
-          <hitEffect>	none	</hitEffect>
-          <effectHP>	HP_module0	</effectHP>
-          <effectScale>	1	</effectScale>
-        </module>
-        <module>
-          <matName>	n_metal1_3	</matName>
-          <health>	80	</health>
-          <decayEffect>	none	</decayEffect>
-          <ramEffect>	none	</ramEffect>
-          <hitEffect>	none	</hitEffect>
-          <effectHP>	HP_module0	</effectHP>
-          <effectScale>	1	</effectScale>
-        </module>
-        <module>
-          <matName>	n_metal2_6	</matName>
-          <health>	80	</health>
-          <decayEffect>	none	</decayEffect>
-          <ramEffect>	none	</ramEffect>
-          <hitEffect>	none	</hitEffect>
-          <effectHP>	HP_module0	</effectHP>
-          <effectScale>	1	</effectScale>
-        </module>
-        <module>
-          <matName>	n_metal3_4	</matName>
-          <health>	80	</health>
-          <decayEffect>	none	</decayEffect>
-          <ramEffect>	none	</ramEffect>
-          <hitEffect>	none	</hitEffect>
-          <effectHP>	HP_module0	</effectHP>
-          <effectScale>	1	</effectScale>
-        </module>
-        <module>
-          <matName>	n_metal4_5	</matName>
           <health>	80	</health>
           <decayEffect>	none	</decayEffect>
           <ramEffect>	none	</ramEffect>

@@ -759,27 +759,25 @@ class _DestructionSoundEffectDesc(_BaseSoundEvent):
         soundName = self._soundName
         if soundName == '':
             return
-        node = _findTargetNodeSafe(model, self._nodeName)
-        objectName = soundName
-        sound = SoundGroups.g_instance.WWgetSoundObject(objectName, node.actualNode)
-        if sound is None:
-            return
-        elif self._parameters:
+        else:
+            node = _findTargetNodeSafe(model, self._nodeName)
+            objectName = soundName
+            sound = SoundGroups.g_instance.WWgetSoundObject(objectName, node.actualNode)
+            if sound is None:
+                return
             for soundStartParam in self._parameters:
                 sound.setRTPC(soundStartParam.name, soundStartParam.value)
 
             sound.play(soundName)
             self._register(list, node, sound)
             return sound
-        else:
-            return
 
     def __readParameters(self, dataSection):
+        self._parameters = []
         section = dataSection['params']
         if section is None:
             return
         else:
-            self._parameters = []
             for param in section.items():
                 name = 'RTPC_ext_objects_' + param[0].strip()
                 value = param[1].asFloat

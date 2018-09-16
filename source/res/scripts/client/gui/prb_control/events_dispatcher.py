@@ -132,9 +132,7 @@ class EventDispatcher(object):
         self.__fireShowEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_WELCOME_VIEW_ALIAS)
 
     def loadEpicWelcome(self):
-        from gui.game_control.epic_meta_game_ctrl import DISABLE_EPIC_META_GAME
-        if not DISABLE_EPIC_META_GAME:
-            self.__fireShowEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS)
+        self.__fireShowEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS)
 
     def loadRankedUnreachable(self):
         self.__fireShowEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_UNREACHABLE_VIEW_ALIAS)

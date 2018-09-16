@@ -1,0 +1,1045 @@
+<It14_P44_Pantera.xml>
+  <crew>
+    <commander>	radioman	</commander>
+    <gunner></gunner>
+    <driver></driver>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	60	</forward>
+    <backward>	20	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.174	</moving>
+    <still>	0.232	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.348	</firePenalty>
+  </invisibility>
+  <repairCost>	9.0	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.6	</priceFactor>
+    <tiling>	1 1 1 1	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	80	</armor_1>
+      <armor_2>	60	</armor_2>
+      <armor_3>	50	</armor_3>
+      <armor_4>	50	</armor_4>
+      <armor_5>	30	</armor_5>
+      <armor_6>	20	</armor_6>
+      <armor_8>	0	</armor_8>
+      <armor_9>	120	</armor_9>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	24015	</weight>
+    <maxHealth>	1040	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/italy/It14_P44_Pantera/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/italy/It14_P44_Pantera/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/italy/It14_P44_Pantera/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
+      <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	0.34	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	diesel_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <tags>
+        <gasoline>	gas_large	</gasoline>
+      </tags>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.755204 -0.2666	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/italy/It14_P44_Pantera/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/italy/It14_P44_Pantera/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.602711 0.545097 2.30929	</rayStart>
+        <rayEnd>	0.602687 0.381879 2.1937	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.4	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/italy/It14_P44_Pantera/P44_Pantera_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	2.4 2.4 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_It14_P44_Pantera>
+      <userString>	#italy_vehicles:Chassis_It14_P44_Pantera	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	17400	</price>
+      <unlocks>
+        <chassis>	Chassis_It14_P44_Pantera_2	  <cost>	17300	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	10000	</weight>
+      <maxLoad>	46000	</maxLoad>
+      <terrainResistance>	0.9 1.1 2.3	</terrainResistance>
+      <brakeForce>	45000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	50	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.2	</vehicleMovement>
+        <vehicleRotation>	0.2	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	180	</maxHealth>
+      <maxRegenHealth>	135	</maxRegenHealth>
+      <repairCost>	7.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/italy/It14_P44_Pantera/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/italy/It14_P44_Pantera/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/italy/It14_P44_Pantera/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.48 0.68	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3.3	</textureScale>
+      </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.485470 -0.000090 0.000000	</row0>
+            <row1>	-0.000049 1.342020 -0.000001	</row1>
+            <row2>	0.000000 -0.000003 7.860810	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.460446	</radius>
+          <syncAngle>	40	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.135425	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.319565	</radius>
+          <syncAngle>	60	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.278471	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.460446	</radius>
+          <syncAngle>	40	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.13554	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.319881	</radius>
+          <syncAngle>	60	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.278023	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.0643 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/italy/It14_P44_Pantera/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/italy/It14_P44_Pantera/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.30945 1.9397	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <groundNodes>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.005	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.005	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/italy/It14_P44_Pantera/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/italy/It14_P44_Pantera/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/italy/It14_P44_Pantera/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/italy/It14_P44_Pantera/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/italy/It14_P44_Pantera/track/left.track	</left>
+        <right>	vehicles/italy/It14_P44_Pantera/track/right.track	</right>
+        <segmentLength>	0.289628	</segmentLength>
+        <segmentOffset>	0.193411	</segmentOffset>
+        <segment2Offset>	0.141753	</segment2Offset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	0.0175439	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1250	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.65	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.65	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+      </trackNodes>
+    </Chassis_It14_P44_Pantera>
+    <Chassis_It14_P44_Pantera_2>
+      <userString>	#italy_vehicles:Chassis_It14_P44_Pantera_2	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	34200	</price>
+      <armor>
+        <leftTrack>	20	</leftTrack>
+        <rightTrack>	20	</rightTrack>
+      </armor>
+      <weight>	10000	</weight>
+      <maxLoad>	48000	</maxLoad>
+      <terrainResistance>	0.8 1 2.1	</terrainResistance>
+      <brakeForce>	45000	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	54	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.18	</vehicleMovement>
+        <vehicleRotation>	0.18	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	7.5	</repairCost>
+      <models>
+        <undamaged>	vehicles/italy/It14_P44_Pantera/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/italy/It14_P44_Pantera/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/italy/It14_P44_Pantera/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.48 0.68	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3.3	</textureScale>
+      </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.485470 -0.000090 0.000000	</row0>
+            <row1>	-0.000049 1.342020 -0.000001	</row1>
+            <row2>	0.000000 -0.000003 7.860810	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.460446	</radius>
+          <syncAngle>	40	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.135425	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L3	</name>
+          <radius>	0.319565	</radius>
+          <syncAngle>	60	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.278471	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.460446	</radius>
+          <syncAngle>	40	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.13554	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	2	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R3	</name>
+          <radius>	0.319881	</radius>
+          <syncAngle>	60	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.278023	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L3	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.0643 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/italy/It14_P44_Pantera/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/italy/It14_P44_Pantera/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.30945 1.9397	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <groundNodes>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.005	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	6	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.005	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/italy/It14_P44_Pantera/track/segment1.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/italy/It14_P44_Pantera/track/segment1.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/italy/It14_P44_Pantera/track/segment2.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/italy/It14_P44_Pantera/track/segment2.model	</segment2ModelRight>
+        <left>	vehicles/italy/It14_P44_Pantera/track/left.track	</left>
+        <right>	vehicles/italy/It14_P44_Pantera/track/right.track	</right>
+        <segmentLength>	0.289628	</segmentLength>
+        <segmentOffset>	0.193411	</segmentOffset>
+        <segment2Offset>	0.141753	</segment2Offset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	0.0175439	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1250	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.65	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.65	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	1.7	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.8	</backwardElastK>
+        </node>
+      </trackNodes>
+    </Chassis_It14_P44_Pantera_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_It14_P44_Pantera>
+      <userString>	#italy_vehicles:Turret_1_It14_P44_Pantera	</userString>
+      <tags></tags>
+      <level>	7	</level>
+      <price>	22000	</price>
+      <armor>
+        <armor_1>	100	</armor_1>
+        <armor_2>	120	</armor_2>
+        <armor_3>	50	</armor_3>
+        <armor_4>	50	</armor_4>
+        <armor_5>	25	</armor_5>
+        <armor_6>	20	</armor_6>
+        <armor_7>	80	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	60	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	7000	</weight>
+      <maxHealth>	260	</maxHealth>
+      <rotationSpeed>	30	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	140	</maxHealth>
+        <maxRegenHealth>	70	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	370	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <Cannone_da_90_53>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <gun>	Cannone_da_90_74	  <cost>	19000	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <gun>	35	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.402778 5 0.416667 3 0.583333 3 0.597222 5 1 5	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
+          <reloadTime>	9.6	</reloadTime>
+          <aimingTime>	2.2	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <clip>
+            <count>	2	</count>
+            <rate>	30	</rate>
+          </clip>
+          <autoreload>
+            <reloadTime>	8 10	</reloadTime>
+            <revertFraction>	1.0	</revertFraction>
+          </autoreload>
+          <models>
+            <undamaged>	vehicles/italy/It14_P44_Pantera/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/italy/It14_P44_Pantera/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/italy/It14_P44_Pantera/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/italy/It14_P44_Pantera/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/italy/It14_P44_Pantera/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000212761 0.00760833 2.99629	</rayStart>
+              <rayEnd>	0.0152356 -0.00327905 2.99401	</rayEnd>
+              <rayUp>	0.087 0.08 5	</rayUp>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <reloadEffect>	autoloader_reload85_107	</reloadEffect>
+          <effects>	shot_main	</effects>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1 0.5 0.000000 0.000000	</tiling>
+          </camouflage>
+        </Cannone_da_90_53>
+        <Cannone_da_90_74>	shared	  <maxAmmo>	60	</maxAmmo>
+          <unlocks>
+            <turret>	Turret_2_It14_P44_Pantera	  <cost>	16700	</cost>
+            </turret>
+          </unlocks>
+          <armor>
+            <gun>	35	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 5 0.402778 5 0.416667 3 0.583333 3 0.597222 5 1 5	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
+          <reloadTime>	9.6	</reloadTime>
+          <aimingTime>	2.2	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <clip>
+            <count>	2	</count>
+            <rate>	30	</rate>
+          </clip>
+          <autoreload>
+            <reloadTime>	8 10	</reloadTime>
+            <revertFraction>	1.0	</revertFraction>
+          </autoreload>
+          <models>
+            <undamaged>	vehicles/italy/It14_P44_Pantera/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/italy/It14_P44_Pantera/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/italy/It14_P44_Pantera/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/italy/It14_P44_Pantera/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/italy/It14_P44_Pantera/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000212761 0.00777893 5.04604	</rayStart>
+              <rayEnd>	0.0224093 -0.0538816 5.04593	</rayEnd>
+              <rayUp>	0.076 0.074 5	</rayUp>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <effects>	shot_main	</effects>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1 0.5 0.000000 0.000000	</tiling>
+          </camouflage>
+        </Cannone_da_90_74>
+      </guns>
+      <models>
+        <undamaged>	vehicles/italy/It14_P44_Pantera/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/italy/It14_P44_Pantera/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/italy/It14_P44_Pantera/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/italy/It14_P44_Pantera/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/italy/It14_P44_Pantera/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.22138 0.807153	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.975921 0.384359 0.513165	</rayStart>
+          <rayEnd>	-0.804118 0.291032 0.471044	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.4	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.975921 0.384359 0.513165	</rayStart>
+          <rayEnd>	0.804118 0.291032 0.471044	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.4	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-1.01902 0.294561 -1.04587	</rayStart>
+          <rayEnd>	-0.871231 0.182001 -0.97178	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.749	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	1.01902 0.294561 -1.04587	</rayStart>
+          <rayEnd>	0.871231 0.182001 -0.97178	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.749	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+    </Turret_1_It14_P44_Pantera>
+    <Turret_2_It14_P44_Pantera>
+      <userString>	#italy_vehicles:Turret_2_It14_P44_Pantera	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	31400	</price>
+      <unlocks>
+        <vehicle>	It12_Prototipo_Standard_B	  <cost>	149200	</cost>
+        </vehicle>
+      </unlocks>
+      <armor>
+        <armor_1>	120	</armor_1>
+        <armor_2>	150	</armor_2>
+        <armor_3>	60	</armor_3>
+        <armor_4>	60	</armor_4>
+        <armor_5>	30	</armor_5>
+        <armor_6>	20	</armor_6>
+        <armor_7>	90	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	60	</armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	8000	</weight>
+      <maxHealth>	360	</maxHealth>
+      <rotationSpeed>	32	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	140	</maxHealth>
+        <maxRegenHealth>	70	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	380	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <invisibilityFactor>	0.929	</invisibilityFactor>
+      <guns>
+        <Cannone_da_90_53>	shared	  <maxAmmo>	60	</maxAmmo>
+          <armor>
+            <gun>	35	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 8 0.402778 8 0.430556 5.50006 0.569444 5.5 0.597222 8 1 8	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.25	</invisibilityFactorAtShot>
+          <reloadTime>	10.4	</reloadTime>
+          <aimingTime>	2.2	</aimingTime>
+          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <clip>
+            <count>	3	</count>
+            <rate>	24	</rate>
+          </clip>
+          <autoreload>
+            <reloadTime>	8 10 12	</reloadTime>
+            <revertFraction>	1.0	</revertFraction>
+          </autoreload>
+          <models>
+            <undamaged>	vehicles/italy/It14_P44_Pantera/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/italy/It14_P44_Pantera/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/italy/It14_P44_Pantera/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/italy/It14_P44_Pantera/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/italy/It14_P44_Pantera/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000212761 0.00759171 2.996	</rayStart>
+              <rayEnd>	-0.0199231 0.00729121 2.98923	</rayEnd>
+              <rayUp>	0.087 0.08 5	</rayUp>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <reloadEffect>	autoloader_reload85_107	</reloadEffect>
+          <effects>	shot_main	</effects>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1 0.5 0.000000 0.000000	</tiling>
+          </camouflage>
+        </Cannone_da_90_53>
+        <Cannone_da_90_74>	shared	  <maxAmmo>	60	</maxAmmo>
+          <armor>
+            <gun>	35	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 8 0.402778 8 0.430556 5.50006 0.569444 5.5 0.597222 8 1 8	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.225	</invisibilityFactorAtShot>
+          <reloadTime>	10.4	</reloadTime>
+          <aimingTime>	2.1	</aimingTime>
+          <shotDispersionRadius>	0.34	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <clip>
+            <count>	3	</count>
+            <rate>	24	</rate>
+          </clip>
+          <autoreload>
+            <reloadTime>	8 10 11	</reloadTime>
+            <revertFraction>	1.0	</revertFraction>
+          </autoreload>
+          <models>
+            <undamaged>	vehicles/italy/It14_P44_Pantera/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/italy/It14_P44_Pantera/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/italy/It14_P44_Pantera/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/italy/It14_P44_Pantera/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/italy/It14_P44_Pantera/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	-0.000212761 0.00759171 5.046	</rayStart>
+              <rayEnd>	0.0141323 -0.0155004 5.40819	</rayEnd>
+              <rayUp>	0.076 0.074 5	</rayUp>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <effects>	shot_main	</effects>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	1 0.5 0.000000 0.000000	</tiling>
+          </camouflage>
+        </Cannone_da_90_74>
+      </guns>
+      <models>
+        <undamaged>	vehicles/italy/It14_P44_Pantera/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/italy/It14_P44_Pantera/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/italy/It14_P44_Pantera/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/italy/It14_P44_Pantera/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/italy/It14_P44_Pantera/collision_client/Turret_02.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.314 0.84043	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.966014 0.463513 0.481649	</rayStart>
+          <rayEnd>	-0.788626 0.381719 0.438708	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.4	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.966014 0.463513 0.481649	</rayStart>
+          <rayEnd>	0.788626 0.381719 0.438708	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.4	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+        <inscription>
+          <rayStart>	-1.00809 0.350086 -1.04269	</rayStart>
+          <rayEnd>	-0.854545 0.248833 -0.964129	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.749	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </inscription>
+        <inscription>
+          <rayStart>	1.00809 0.350086 -1.04269	</rayStart>
+          <rayEnd>	0.854545 0.248833 -0.964129	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.749	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </inscription>
+      </emblemSlots>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.500 0.500 0.500 0.500 0.500 0.600 0.100 0.500	</physicsShape>
+    </Turret_2_It14_P44_Pantera>
+  </turrets0>
+  <engines>
+    <SPA_344>	shared	  <unlocks>
+        <engine>	Alfa_RA1000I_C_A	  <cost>	17800	</cost>
+        </engine>
+      </unlocks>
+    </SPA_344>
+    <Alfa_RA1000I_C_A>	shared	  <unlocks>
+        <engine>	FIAT_RA1050I_C_A	  <cost>	22500	</cost>
+        </engine>
+      </unlocks>
+    </Alfa_RA1000I_C_A>
+    <FIAT_RA1050I_C_A>	shared	</FIAT_RA1050I_C_A>
+  </engines>
+  <fuelTanks>
+    <Heavy>	shared	</Heavy>
+  </fuelTanks>
+  <radios>
+    <R_F_2_C_A>	shared	  <unlocks>
+        <radio>	R_F_3_M_2	  <cost>	4080	</cost>
+        </radio>
+      </unlocks>
+    </R_F_2_C_A>
+    <R_F_3_M_2>	shared	  <unlocks>
+        <radio>	R_F_4_M	  <cost>	7300	</cost>
+        </radio>
+      </unlocks>
+    </R_F_3_M_2>
+    <R_F_4_M>	shared	</R_F_4_M>
+  </radios>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <SPA_344>
+          <smplEnginePower>	700	</smplEnginePower>
+        </SPA_344>
+        <Alfa_RA1000I_C_A>
+          <smplEnginePower>	850	</smplEnginePower>
+        </Alfa_RA1000I_C_A>
+        <FIAT_RA1050I_C_A>
+          <smplEnginePower>	1000	</smplEnginePower>
+        </FIAT_RA1050I_C_A>
+      </engines>
+      <chassis>
+        <Chassis_It14_P44_Pantera>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.08855	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_It14_P44_Pantera>
+        <Chassis_It14_P44_Pantera_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.0805	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_It14_P44_Pantera_2>
+      </chassis>
+    </detailed>
+  </physics>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	italian_flag	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.898039	</alpha>
+  </emblems>
+</It14_P44_Pantera.xml>

@@ -54,6 +54,9 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from gui.Scaleform.locale.ARENAS import ARENAS
+from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
+from soft_exception import SoftException
 _UNAVAILABLE_DATA_PLACEHOLDER = '--'
 _ITEM_TYPE_TO_TOOLTIP_DICT = {GUI_ITEM_TYPE.SHELL: i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_TYPE_SHELL),
  GUI_ITEM_TYPE.EQUIPMENT: i18n.makeString(TOOLTIPS.ACTIONPRICE_SELL_TYPE_EQUIPMENT),
@@ -138,6 +141,13 @@ class BlocksTooltipData(ToolTipBaseData):
         self.__marginAfterSeparator = _DEFAULT_MARGIN_AFTER_SEPARATOR
         self.__width = 0
 
+    @classmethod
+    def addAdvancedBlock(cls, data, disableAnim):
+        displayableData = data['data']
+        block = formatters.packImageTextBlockData(img=RES_ICONS.MAPS_ICONS_LOBBY_ICONBTNALT, txtOffset=40, padding=formatters.packPadding(bottom=-7, top=-5, left=20 - displayableData['contentMargin']['left']), desc=text_styles.main(TOOLTIPS.ADVANCED_INFO), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_ADVANCED_KEY_BLOCK_LINKAGE)
+        block['data']['animated'] = not disableAnim
+        displayableData['blocksData'].append(block)
+
     def _getContentMargin(self):
         return self.__contentMargin
 
@@ -175,6 +185,12 @@ class BlocksTooltipData(ToolTipBaseData):
          'contentMargin': self._getContentMargin(),
          'width': self._getWidth(),
          'highlightType': self._getHighLightType()}
+
+
+class FakeTooltipData(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(FakeTooltipData, self).__init__(context, TOOLTIP_TYPE.FAKE)
 
 
 class DynamicBlocksTooltipData(BlocksTooltipData):
@@ -893,7 +909,7 @@ class ToolTipFortWrongTime(ToolTipBaseData):
             return {'header': i18n.makeString(TOOLTIPS.FORTWRONGTIME_LOCKTIME_HEADER),
              'body': i18n.makeString(TOOLTIPS.FORTWRONGTIME_LOCKTIME_BODY, timeStart=formatReceivedData(timeStart), timeFinish=formatReceivedData(timeFinish))}
         else:
-            raise AttributeError('%s: Unexpected state: %s' % (self, wrongState))
+            raise SoftException('%s: Unexpected state: %s' % (self, wrongState))
             return
 
 
@@ -1364,3 +1380,16 @@ class VehicleHistoricalReferenceTooltipData(BlocksTooltipData):
         blocks.append(formatters.packTextBlockData(text_styles.main(item.fullDescription), padding={'top': 10}))
         content.append(formatters.packBuildUpBlockData(blocks))
         return content
+
+
+class BattleTraining(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(BattleTraining, self).__init__(context, None)
+        self._setWidth(540)
+        return
+
+    def _packBlocks(self, *args, **kwargs):
+        items = super(BattleTraining, self)._packBlocks(*args, **kwargs)
+        items.append(formatters.packImageTextBlockData(title=text_styles.middleTitle(TOOLTIPS.BATTLETYPES_BATTLETEACHING_HEADER), desc=text_styles.main(i18n.makeString(TOOLTIPS.BATTLETYPES_BATTLETEACHING_BODY, map1=i18n.makeString(ARENAS.C_10_HILLS_NAME), battles=BATTLES_TO_SELECT_RANDOM_MIN_LIMIT))))
+        return items

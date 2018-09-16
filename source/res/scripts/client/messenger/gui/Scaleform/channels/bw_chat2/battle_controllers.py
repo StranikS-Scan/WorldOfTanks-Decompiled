@@ -1,6 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/messenger/gui/Scaleform/channels/bw_chat2/battle_controllers.py
 import functools
+import BigWorld
+from debug_utils import LOG_ERROR
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.events import MessengerEvent
 from helpers import dependency
@@ -16,6 +18,11 @@ from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_errors import ClientError
 from messenger.m_constants import CLIENT_ERROR_ID
 from skeletons.gui.battle_session import IBattleSessionProvider
+from soft_exception import SoftException
+from helpers import i18n
+from gui.battle_control.arena_info.arena_vos import EPIC_BATTLE_KEYS
+from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
+from arena_component_system.sector_base_arena_component import ID_TO_BASENAME
 
 class _check_arena_in_waiting(object):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -46,6 +53,9 @@ class _ChannelController(BattleLayout):
     def getSettings(self):
         return self._channel.getProtoData().settings
 
+    def filterMessage(self, cmd):
+        return True
+
     def clear(self):
         if not self._isSecondaryChannelCtrl:
             self._channel.setJoined(False)
@@ -65,7 +75,7 @@ class _ChannelController(BattleLayout):
         return (isCurrent, message.text) if not doFormatting else (isCurrent, self._mBuilder.setColors(dbID).setName(dbID, message.accountName).setText(message.text).build())
 
     def _formatCommand(self, command):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
 
 class TeamChannelController(_ChannelController):
@@ -92,6 +102,95 @@ class TeamChannelController(_ChannelController):
             dbID = command.getSenderID()
             isCurrent = command.isSender()
             text = self._mBuilder.setColors(dbID).setName(dbID).setText(command.getCommandText()).build()
+        else:
+            text = command.getCommandText()
+        return (isCurrent, text)
+
+
+_EPIC_MINIMAP_ZOOM_MODE_SCALE = 500
+_NONCAPTURED_BASES_FOR_LANE_DICT = {1: {1: 4,
+     2: 1},
+ 2: {1: 5,
+     2: 2},
+ 3: {1: 6,
+     2: 3}}
+
+class EpicTeamChannelController(TeamChannelController):
+
+    def filterMessage(self, cmd):
+        senderID = cmd.getSenderID()
+        sessionProvider = dependency.instance(IBattleSessionProvider)
+        mapsCtrl = sessionProvider.dynamic.maps
+        if mapsCtrl.overviewMapScreenVisible:
+            return True
+        respawnCtrl = sessionProvider.dynamic.respawn
+        if respawnCtrl and respawnCtrl.isRespawnVisible():
+            return True
+        senderVID = sessionProvider.getCtx().getVehIDByAccDBID(senderID)
+
+        def validatePosition(position):
+            minimapCenter = mapsCtrl.getMinimapCenterPosition()
+            halfMinimapWidth = mapsCtrl.getMinimapZoomMode() * _EPIC_MINIMAP_ZOOM_MODE_SCALE
+            diff = position - minimapCenter
+            return False if abs(diff.x) > halfMinimapWidth or abs(diff.z) > halfMinimapWidth else True
+
+        senderInRange = True
+        targetInRange = False
+        if senderVID != BigWorld.player().playerVehicleID:
+            senderPos = mapsCtrl.getVehiclePosition(senderVID)
+            senderInRange = validatePosition(senderPos)
+        if cmd.hasTarget():
+            targetID = cmd.getFirstTargetID()
+            targetPos = mapsCtrl.getVehiclePosition(targetID)
+            targetInRange = validatePosition(targetPos)
+        elif cmd.isOnEpicBattleMinimap():
+            markingPos = cmd.getMarkedPosition()
+            targetInRange = validatePosition(markingPos)
+        return senderInRange or targetInRange
+
+    def __getNameSuffix(self, dbID):
+        suffix = ''
+        componentSystem = self.sessionProvider.arenaVisitor.getComponentSystem()
+        sectorBaseComp = getattr(componentSystem, 'sectorBaseComponent', None)
+        if sectorBaseComp is None:
+            LOG_ERROR('Expected SectorBaseComponent not present!')
+            return suffix
+        else:
+            destructibleEntityComp = getattr(componentSystem, 'destructibleEntityComponent', None)
+            if destructibleEntityComp is None:
+                LOG_ERROR('Expected DestructibleEntityComponent not present!')
+                return suffix
+            senderVID = self.sessionProvider.getCtx().getVehIDByAccDBID(dbID)
+            adp = self.sessionProvider.getArenaDP()
+            vo = adp.getVehicleStats(senderVID)
+            sectorID = vo.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PHYSICAL_SECTOR)
+            lane = vo.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PHYSICAL_LANE)
+            hqActive = False
+            hqs = destructibleEntityComp.destructibleEntities
+            if hqs:
+                hqActive = hqs[hqs.keys()[0]].isActive
+            nonCapturedBases = sectorBaseComp.getNumNonCapturedBasesByLane(lane)
+            if nonCapturedBases == 0 or hqActive and sectorID > 6:
+                suffix = '&lt;' + i18n.makeString(EPIC_BATTLE.ZONE_HEADQUARTERS_TEXT) + '&gt;'
+            elif 0 < nonCapturedBases < 3:
+                suffix = 0 < lane < 4 and '&lt;' + i18n.makeString(EPIC_BATTLE.ZONE_ZONE_TEXT) + ' ' + ID_TO_BASENAME[_NONCAPTURED_BASES_FOR_LANE_DICT[lane][nonCapturedBases]] + '&gt;'
+            return suffix
+
+    def _formatMessage(self, message, doFormatting=True):
+        dbID = message.accountDBID
+        isCurrent = isCurrentPlayer(message.accountDBID)
+        if not doFormatting:
+            return (isCurrent, message.text)
+        suffix = self.__getNameSuffix(dbID)
+        return (isCurrent, self._mBuilder.setColors(dbID).setName(dbID, message.accountName, suffix=suffix).setText(message.text).build())
+
+    def _formatCommand(self, command):
+        isCurrent = False
+        if command.getCommandType() == MESSENGER_COMMAND_TYPE.BATTLE:
+            dbID = command.getSenderID()
+            isCurrent = command.isSender()
+            suffix = self.__getNameSuffix(dbID)
+            text = self._mBuilder.setColors(dbID).setName(dbID, suffix=suffix).setText(command.getCommandText()).build()
         else:
             text = command.getCommandText()
         return (isCurrent, text)

@@ -25,7 +25,8 @@ class StrongholdsRequestHandlers(RequestHandlers):
          WebRequestDataType.STRONGHOLD_UPDATE: self.__updateStronghold,
          WebRequestDataType.STRONGHOLD_STATISTICS: self.__getStrongholdStatistics,
          WebRequestDataType.STRONGHOLD_JOIN_BATTLE: self.__joinBattle,
-         WebRequestDataType.STRONGHOLD_SET_EQUIPMENT_COMMANDER: self.__setEquipmentCommander}
+         WebRequestDataType.STRONGHOLD_SET_EQUIPMENT_COMMANDER: self.__setEquipmentCommander,
+         WebRequestDataType.STRONGHOLD_MATCHMAKING_INFO: self.__matchmakingInfo}
         return handlers
 
     def __assign(self, ctx, callback):
@@ -75,6 +76,9 @@ class StrongholdsRequestHandlers(RequestHandlers):
 
     def __joinBattle(self, ctx, callback, *args, **kwargs):
         self._requester.doRequestEx(ctx, callback, ('wgsh', 'join_room'), self.__getPeripheryIDStr(), ctx.getUnitMgrID())
+
+    def __matchmakingInfo(self, ctx, callback, *args, **kwargs):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'matchmaking_info'), self.__getPeripheryIDStr(), ctx.getUnitMgrID())
 
     def __getStrongholdStatistics(self, ctx, callback):
         return self._requester.doRequestEx(ctx, callback, ('wgsh', 'clan_statistics'), clan_id=ctx.getClanID())

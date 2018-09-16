@@ -3,6 +3,7 @@
 import logging
 import Math
 from AvatarInputHandler.aih_constants import CTRL_MODE_NAME, GUN_MARKER_FLAG, STRATEGIC_CAMERA
+from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 _FLOAT_EPSILON = 0.003
 
@@ -130,13 +131,13 @@ class _GlobalDataDescriptor(object):
 
 def bindRO(bindingID):
     if bindingID not in BINDING_ID.RANGE:
-        raise UserWarning('bindingID is invalid: {}'.format(bindingID))
+        raise SoftException('bindingID is invalid: {}'.format(bindingID))
     return _GlobalDataDescriptor(bindingID, reader=True, writer=False)
 
 
 def bindRW(bindingID):
     if bindingID not in BINDING_ID.RANGE:
-        raise UserWarning('bindingID is invalid: {}'.format(bindingID))
+        raise SoftException('bindingID is invalid: {}'.format(bindingID))
     return _GlobalDataDescriptor(bindingID, reader=True, writer=True)
 
 

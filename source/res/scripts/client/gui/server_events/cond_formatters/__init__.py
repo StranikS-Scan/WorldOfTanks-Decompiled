@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/server_events/cond_formatters/__init__.py
 from collections import namedtuple
 import nations
+from soft_exception import SoftException
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events.conditions import GROUP_TYPE
@@ -263,7 +264,7 @@ def getResultsData(condition):
                 i18nLabelKey = '#quests:details/conditions/cumulative/markOfMastery0'
             else:
                 if condition.relation in (RELATIONS.LS,):
-                    raise Exception('Mark of mastery 0 can be used with greater or equal relation types')
+                    raise SoftException('Mark of mastery 0 can be used with greater or equal relation types')
                 i18nLabelKey = '#quests:details/conditions/cumulative/markOfMastery0/not'
             label, value, relation = i18n.makeString(i18nLabelKey), None, None
         else:

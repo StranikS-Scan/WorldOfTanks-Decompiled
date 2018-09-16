@@ -1,17 +1,19 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/ModuleInfoWindow.py
+from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from gui.Scaleform.daapi.view.meta.ModuleInfoMeta import ModuleInfoMeta
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.framework.entities.View import View
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.formatters import text_styles
 from gui.shared.items_parameters import params_helper, formatters
-from gui.shared.utils import GUN_RELOADING_TYPE, GUN_CAN_BE_CLIP, GUN_CLIP, EXTRA_MODULE_INFO, GUN_AUTO_RELOAD
+from gui.shared.utils import GUN_RELOADING_TYPE, GUN_CAN_BE_CLIP, GUN_CLIP, EXTRA_MODULE_INFO, GUN_AUTO_RELOAD, AUTO_RELOAD_PROP_NAME
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.shared.utils.functions import stripColorTagDescrTags, getAbsoluteUrl
 from helpers import dependency
 from helpers import i18n
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _DEF_SHOT_DISTANCE = 720
@@ -19,6 +21,7 @@ _DEF_SHOT_DISTANCE = 720
 class ModuleInfoWindow(ModuleInfoMeta):
     itemsCache = dependency.descriptor(IItemsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
+    _settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, ctx=None):
         super(ModuleInfoWindow, self).__init__()
@@ -65,6 +68,7 @@ class ModuleInfoWindow(ModuleInfoMeta):
         isChassis = module.itemTypeID == GUI_ITEM_TYPE.CHASSIS
         isOptionalDevice = module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE
         excludedParametersNames = extraParamsInfo.get('excludedParams', tuple())
+        highlightPossible = False
         if isGun:
             if 'maxShotDistance' in moduleParameters:
                 if moduleParameters['maxShotDistance'] >= _DEF_SHOT_DISTANCE:
@@ -76,6 +80,8 @@ class ModuleInfoWindow(ModuleInfoMeta):
             elif gunReloadingType == GUN_AUTO_RELOAD:
                 description = i18n.makeString(MENU.MODULEINFO_AUTORELOADGUNLABEL)
                 extraModuleInfo = RES_ICONS.MAPS_ICONS_MODULES_AUTOLOADERGUN
+                self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.AUTO_RELOAD_MARK_IS_SHOWN: True})
+                highlightPossible = self._settingsCore.serverSettings.checkAutoReloadHighlights(increase=True)
             elif gunReloadingType == GUN_CAN_BE_CLIP:
                 otherParamsInfoList = []
                 for paramName, paramValue in formattedModuleParameters:
@@ -93,8 +99,11 @@ class ModuleInfoWindow(ModuleInfoMeta):
         paramsList = []
         for paramName, paramValue in formattedModuleParameters:
             if paramName not in excludedParametersNames:
-                paramsList.append({'type': formatters.formatModuleParamName(paramName) + '\n',
-                 'value': text_styles.stats(paramValue)})
+                paramRow = {'type': formatters.formatModuleParamName(paramName) + '\n',
+                 'value': text_styles.stats(paramValue)}
+                if highlightPossible and paramName == AUTO_RELOAD_PROP_NAME:
+                    paramRow['highlight'] = True
+                paramsList.append(paramRow)
 
         moduleData['parameters'] = {'headerText': i18n.makeString(MENU.MODULEINFO_PARAMETERSLABEL) if paramsList else '',
          'params': paramsList}

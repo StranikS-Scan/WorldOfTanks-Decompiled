@@ -17,6 +17,10 @@ _VEHICLE_STATUS = settings.VEHICLE_STATUS
 _PLAYER_STATUS = settings.PLAYER_STATUS
 _DELIVERY_STATUS = settings.INVITATION_DELIVERY_STATUS
 _DEFAULT_PLAYER_GROUP = 1
+_DEFAULT_PLAYER_RANK = 0
+_DEFAULT_PHYSICAL_LANE = 1
+_DEFAULT_PHYSICAL_SECTOR = 1
+_DEFAULT_HAS_RESPAWNS = True
 
 class EPIC_RANDOM_KEYS(object):
     PLAYER_GROUP = 'playerGroup'
@@ -30,8 +34,28 @@ class EPIC_RANDOM_KEYS(object):
         return [EPIC_RANDOM_KEYS.PLAYER_GROUP] if static else []
 
 
+class EPIC_BATTLE_KEYS():
+    RANK = 'playerRank'
+    PHYSICAL_LANE = 'physicalLane'
+    PHYSICAL_SECTOR = 'physicalSector'
+    HAS_RESPAWNS = 'hasRespawns'
+
+    @staticmethod
+    def getKeys(static=True):
+        return [] if static else [(EPIC_BATTLE_KEYS.RANK, _DEFAULT_PLAYER_RANK),
+         (EPIC_BATTLE_KEYS.PHYSICAL_LANE, _DEFAULT_PHYSICAL_LANE),
+         (EPIC_BATTLE_KEYS.PHYSICAL_SECTOR, _DEFAULT_PHYSICAL_SECTOR),
+         (EPIC_BATTLE_KEYS.HAS_RESPAWNS, _DEFAULT_HAS_RESPAWNS)]
+
+    @staticmethod
+    def getSortingKeys(static=True):
+        return [EPIC_BATTLE_KEYS.RANK] if not static else []
+
+
 GAMEMODE_SPECIFIC_KEYS = {ARENA_GUI_TYPE.EPIC_RANDOM: EPIC_RANDOM_KEYS,
- ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: EPIC_RANDOM_KEYS}
+ ARENA_GUI_TYPE.EPIC_RANDOM_TRAINING: EPIC_RANDOM_KEYS,
+ ARENA_GUI_TYPE.EPIC_BATTLE: EPIC_BATTLE_KEYS,
+ ARENA_GUI_TYPE.EPIC_TRAINING: EPIC_BATTLE_KEYS}
 
 class GameModeDataVO(object):
     __slots__ = ('__internalData', '__sortingKeys')
@@ -50,6 +74,8 @@ class GameModeDataVO(object):
         for key, value in data.items():
             if key in self.__sortingKeys:
                 invalidate = _INVALIDATE_OP.SORTING
+            if self.__internalData.get(key) and self.__internalData[key] != value:
+                invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.VEHICLE_STATS)
             self.__internalData[key] = value
 
         return invalidate
@@ -232,6 +258,11 @@ class VehicleArenaInfoVO(object):
     def updatePlayerStatus(self, invalidate=_INVALIDATE_OP.NONE, isTeamKiller=None, isSquadMan=None, **kwargs):
         if isTeamKiller:
             status = _PLAYER_STATUS.addIfNot(self.playerStatus, _PLAYER_STATUS.IS_TEAM_KILLER)
+            if self.playerStatus ^ status:
+                self.playerStatus = status
+                invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.PLAYER_STATUS)
+        elif isTeamKiller is not None and not isTeamKiller:
+            status = _PLAYER_STATUS.removeIfHas(self.playerStatus, _PLAYER_STATUS.IS_TEAM_KILLER)
             if self.playerStatus ^ status:
                 self.playerStatus = status
                 invalidate = _INVALIDATE_OP.addIfNot(invalidate, _INVALIDATE_OP.PLAYER_STATUS)
@@ -460,6 +491,11 @@ class VehicleArenaStatsVO(object):
     def clearInteractiveStats(self):
         if self.__interactive is not None:
             self.__interactive.clear()
+        return
+
+    def clearGameModeSpecificStats(self):
+        if self.__gameModeSpecific is not None:
+            self.__gameModeSpecific.clear()
         return
 
     def updateInteractiveStats(self, *args):

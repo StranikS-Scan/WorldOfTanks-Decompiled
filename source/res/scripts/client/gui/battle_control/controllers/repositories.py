@@ -27,6 +27,13 @@ from gui.battle_control.controllers import team_health_bar_ctrl
 from gui.battle_control.controllers import game_messages_ctrl
 from gui.battle_control.controllers import arena_border_ctrl
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
+from gui.battle_control.controllers import epic_respawn_ctrl
+from gui.battle_control.controllers import progress_circle_ctrl
+from gui.battle_control.controllers import epic_maps_ctrl
+from gui.battle_control.controllers import epic_spectator_ctrl
+from gui.battle_control.controllers import epic_missions_ctrl
+from gui.battle_control.controllers import game_notification_ctrl
+from gui.battle_control.controllers import epic_team_bases_ctrl
 
 class BattleSessionSetup(object):
     __slots__ = ('avatar', 'replayCtrl', 'gasAttackMgr', 'sessionProvider')
@@ -171,6 +178,22 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
         return self._repository.getController(BATTLE_CTRL_ID.TEAM_BASES)
 
     @property
+    def progressTimer(self):
+        return self._repository.getController(BATTLE_CTRL_ID.PROGRESS_TIMER)
+
+    @property
+    def maps(self):
+        return self._repository.getController(BATTLE_CTRL_ID.MAPS)
+
+    @property
+    def spectator(self):
+        return self._repository.getController(BATTLE_CTRL_ID.SPECTATOR)
+
+    @property
+    def missions(self):
+        return self._repository.getController(BATTLE_CTRL_ID.EPIC_MISSIONS)
+
+    @property
     def respawn(self):
         return self._repository.getController(BATTLE_CTRL_ID.RESPAWN)
 
@@ -193,6 +216,10 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     @property
     def teamHealthBar(self):
         return self._repository.getController(BATTLE_CTRL_ID.TEAM_HEALTH_BAR)
+
+    @property
+    def gameNotifications(self):
+        return self._repository.getController(BATTLE_CTRL_ID.GAME_NOTIFICATIONS)
 
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
@@ -317,4 +344,22 @@ class ClassicControllersRepository(_ControllersRepositoryByBonuses):
         repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
         repository.addViewController(debug_ctrl.DebugController(), setup)
         repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
+        return repository
+
+
+class EpicControllersRepository(_ControllersRepository):
+    __slots__ = ()
+
+    @classmethod
+    def create(cls, setup):
+        repository = super(EpicControllersRepository, cls).create(setup)
+        repository.addViewController(epic_respawn_ctrl.EpicRespawnsController(setup), setup)
+        repository.addController(progress_circle_ctrl.ProgressTimerController(setup))
+        repository.addViewController(epic_maps_ctrl.MapsController(setup), setup)
+        repository.addViewController(debug_ctrl.DebugController(), setup)
+        repository.addViewController(epic_spectator_ctrl.SpectatorViewController(setup), setup)
+        repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
+        repository.addViewController(game_notification_ctrl.EpicGameNotificationsController(setup), setup)
+        repository.addViewController(epic_missions_ctrl.EpicMissionsController(setup), setup)
+        repository.addArenaViewController(epic_team_bases_ctrl.createEpicTeamsBasesCtrl(setup), setup)
         return repository

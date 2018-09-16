@@ -3,6 +3,7 @@
 from account_helpers import AccountSettings
 from account_helpers.AccountSettings import STATS_REGULAR_SORTING
 from account_helpers.AccountSettings import STATS_SORTIE_SORTING
+from soft_exception import SoftException
 __all__ = ('STATS_REGULAR_SORTING', 'STATS_SORTIE_SORTING', 'writeStatsSorting', 'readStatsSorting')
 
 def writeStatsSorting(bonusType, iconType, sortDirection):
@@ -14,6 +15,6 @@ def writeStatsSorting(bonusType, iconType, sortDirection):
 
 def readStatsSorting(key):
     if key not in (STATS_REGULAR_SORTING, STATS_SORTIE_SORTING):
-        raise UserWarning('Sorting key {} is invalid'.format(key))
+        raise SoftException('Sorting key {} is invalid'.format(key))
     settings = AccountSettings.getSettings(key)
     return (settings.get('iconType'), settings.get('sortDirection'))

@@ -81,7 +81,7 @@ def condition(attributeName, logFunc=None, logStack=True):
             attribute = getattr(args[0], attributeName)
             if not bool(attribute):
                 if logFunc:
-                    logFunc('Method condition failed', args, kwargs, stack=logStack)
+                    logFunc('Method condition failed', func, args, kwargs, stack=logStack)
                 return
             return func(*args, **kwargs)
 

@@ -35,6 +35,11 @@ class WGMCurrencyTooltip(DynamicBlocksTooltipData):
         else:
             return BigWorld.wg_getIntegralFormat(int(self.__data[key])) if key in self.__data else _UNKNOWN_VALUE
 
+    def updateData(self):
+        if self.isVisible() and self.app is not None:
+            self.app.updateTooltip(self.buildToolTip(self._btnType), self.getType())
+        return
+
     def stopUpdates(self):
         self.__requester.clearCallbacks()
         super(WGMCurrencyTooltip, self).stopUpdates()

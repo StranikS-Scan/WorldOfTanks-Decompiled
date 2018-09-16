@@ -28,6 +28,8 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     CAROUSEL_FILTER_2 = 'CAROUSEL_FILTER_2'
     RANKED_CAROUSEL_FILTER_1 = 'RANKED_CAROUSEL_FILTER_1'
     RANKED_CAROUSEL_FILTER_2 = 'RANKED_CAROUSEL_FILTER_2'
+    EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
+    EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
     GUI_START_BEHAVIOR = 'GUI_START_BEHAVIOR'
     EULA_VERSION = 'EULA_VERSION'
     MARKS_ON_GUN = 'MARKS_ON_GUN'
@@ -44,6 +46,11 @@ class SETTINGS_SECTIONS(CONST_CONTAINER):
     ENCYCLOPEDIA_RECOMMENDATIONS_2 = 'ENCYCLOPEDIA_RECOMMENDATIONS_2'
     ENCYCLOPEDIA_RECOMMENDATIONS_3 = 'ENCYCLOPEDIA_RECOMMENDATIONS_3'
     UI_STORAGE = 'UI_STORAGE'
+
+
+class UI_STORAGE_KEYS(CONST_CONTAINER):
+    AUTO_RELOAD_HIGHLIGHTS_COUNTER = 'auto_reload_highlights_count'
+    AUTO_RELOAD_MARK_IS_SHOWN = 'auto_reload_mark_shown'
 
 
 class ServerSettingsManager(object):
@@ -64,6 +71,7 @@ class ServerSettingsManager(object):
                               GAME.INVITES_FROM_FRIENDS: 2,
                               GAME.STORE_RECEIVER_IN_BATTLE: 3,
                               GAME.PLAYERS_PANELS_SHOW_LEVELS: 4,
+                              GAME.SHOW_DAMAGE_ICON: 5,
                               GAME.DYNAMIC_CAMERA: 6,
                               GAME.ENABLE_POSTMORTEM_DELAY: 7,
                               GAME.ENABLE_SERVER_AIM: 8,
@@ -91,7 +99,7 @@ class ServerSettingsManager(object):
                                        GAME.HANGAR_CAM_PARALLAX_ENABLED: 16,
                                        GAME.C11N_HISTORICALLY_ACCURATE: 17}, offsets={GAME.BATTLE_LOADING_INFO: Offset(4, 48),
                                        GAME.BATTLE_LOADING_RANKED_INFO: Offset(15, 98304),
-                                       GAME.HANGAR_CAM_PERIOD: Offset(17, 917504)}),
+                                       GAME.HANGAR_CAM_PERIOD: Offset(18, 1835008)}),
      SETTINGS_SECTIONS.GAMEPLAY: Section(masks={}, offsets={GAME.GAMEPLAY_MASK: Offset(0, 65535)}),
      SETTINGS_SECTIONS.GRAPHICS: Section(masks={GAME.LENS_EFFECT: 1}, offsets={}),
      SETTINGS_SECTIONS.SOUND: Section(masks={}, offsets={SOUND.ALT_VOICES: Offset(0, 255)}),
@@ -191,14 +199,49 @@ class ServerSettingsManager(object):
                                                   'favorite': 5,
                                                   'bonus': 6,
                                                   'event': 7}, offsets={}),
+     SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_1: Section(masks={'ussr': 0,
+                                                      'germany': 1,
+                                                      'usa': 2,
+                                                      'china': 3,
+                                                      'france': 4,
+                                                      'uk': 5,
+                                                      'japan': 6,
+                                                      'czech': 7,
+                                                      'sweden': 8,
+                                                      'poland': 9,
+                                                      'italy': 10,
+                                                      'lightTank': 15,
+                                                      'mediumTank': 16,
+                                                      'heavyTank': 17,
+                                                      'SPG': 18,
+                                                      'AT-SPG': 19,
+                                                      'level_1': 20,
+                                                      'level_2': 21,
+                                                      'level_3': 22,
+                                                      'level_4': 23,
+                                                      'level_5': 24,
+                                                      'level_6': 25,
+                                                      'level_7': 26,
+                                                      'level_8': 27,
+                                                      'level_9': 28,
+                                                      'level_10': 29}, offsets={}),
+     SETTINGS_SECTIONS.EPICBATTLE_CAROUSEL_FILTER_2: Section(masks={'premium': 0,
+                                                      'elite': 1,
+                                                      'rented': 2,
+                                                      'igr': 3,
+                                                      'gameMode': 4,
+                                                      'favorite': 5,
+                                                      'bonus': 6,
+                                                      'event': 7}, offsets={}),
      SETTINGS_SECTIONS.GUI_START_BEHAVIOR: Section(masks={'isFreeXPInfoDialogShowed': 0,
                                             'isRankedWelcomeViewShowed': 1,
                                             'isRankedWelcomeViewStarted': 2,
-                                            'isEpicRandomCheckboxClicked': 3}, offsets={}),
+                                            'isEpicRandomCheckboxClicked': 3,
+                                            'isEpicWelcomeViewShowed': 5}, offsets={}),
      SETTINGS_SECTIONS.EULA_VERSION: Section(masks={}, offsets={'version': Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.MARKS_ON_GUN: Section(masks={}, offsets={GAME.SHOW_MARKS_ON_GUN: Offset(0, 4294967295L)}),
      SETTINGS_SECTIONS.CONTACTS: Section(masks={CONTACTS.SHOW_OFFLINE_USERS: 0,
-                                  CONTACTS.SHOW_OTHERS_CATEGORY: 1}, offsets={}),
+                                  CONTACTS.SHOW_OTHERS_CATEGORY: 1}, offsets={CONTACTS.ANTISPAM_MESSAGES_COUNTER: Offset(2, 28)}),
      SETTINGS_SECTIONS.FALLOUT: Section(masks={'isEnabled': 3,
                                  'isAutomatch': 4,
                                  'hasVehicleLvl8': 5,
@@ -257,8 +300,11 @@ class ServerSettingsManager(object):
      SETTINGS_SECTIONS.ENCYCLOPEDIA_RECOMMENDATIONS_3: Section(masks={}, offsets={'item_5': Offset(0, 36863),
                                                         'item_6': Offset(16, 2415853568L)}),
      SETTINGS_SECTIONS.UI_STORAGE: Section(masks={PM_TUTOR_FIELDS.ONE_FAL_SHOWN: 7,
-                                    PM_TUTOR_FIELDS.FOUR_FAL_SHOWN: 8}, offsets={PM_TUTOR_FIELDS.FIRST_ENTRY_STATE: Offset(0, 3),
-                                    PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: Offset(2, 124)})}
+                                    PM_TUTOR_FIELDS.FOUR_FAL_SHOWN: 8,
+                                    UI_STORAGE_KEYS.AUTO_RELOAD_MARK_IS_SHOWN: 9,
+                                    'disable_animated_tooltip': 10}, offsets={PM_TUTOR_FIELDS.FIRST_ENTRY_STATE: Offset(0, 3),
+                                    PM_TUTOR_FIELDS.INITIAL_FAL_COUNT: Offset(2, 124),
+                                    UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER: Offset(10, 7168)})}
     AIM_MAPPING = {'net': 1,
      'netType': 1,
      'centralTag': 1,
@@ -272,6 +318,7 @@ class ServerSettingsManager(object):
      'gunTagType': 3,
      'reloaderTimer': 3,
      'zoomIndicator': 4}
+    _MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT = 5
 
     def __init__(self, core):
         self._core = weakref.proxy(core)
@@ -323,6 +370,18 @@ class ServerSettingsManager(object):
 
     def saveInUIStorage(self, fields):
         return self.setSections([SETTINGS_SECTIONS.UI_STORAGE], fields)
+
+    def checkAutoReloadHighlights(self, increase=False):
+        key = UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER
+        res = self.getUIStorage().get(key) < self._MAX_AUTO_RELOAD_HIGHLIGHTS_COUNT
+        if res and increase:
+            self.updateUIStorageCounter(key)
+        return res
+
+    def updateUIStorageCounter(self, key, step=1):
+        storageSection = self.getSection(SETTINGS_SECTIONS.UI_STORAGE)
+        if key in storageSection:
+            self.saveInUIStorage({key: storageSection[key] + step})
 
     def getPersonalMissionsFirstEntryState(self):
         return self.getUIStorage({PM_TUTOR_FIELDS.FIRST_ENTRY_STATE: 0})[PM_TUTOR_FIELDS.FIRST_ENTRY_STATE]

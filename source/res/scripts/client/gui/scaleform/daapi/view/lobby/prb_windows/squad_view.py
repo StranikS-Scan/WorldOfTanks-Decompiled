@@ -241,3 +241,19 @@ class EventSquadView(SquadView):
 
     def _getLeaveBtnTooltip(self):
         return TOOLTIPS.SQUADWINDOW_BUTTONS_LEAVEEVENTSQUAD
+
+
+class EpicSquadView(SquadView):
+
+    def _getBattleTypeName(self):
+        return text_styles.main(MESSENGER.DIALOGS_SQUADCHANNEL_BATTLETYPE) + '\n' + i18n.makeString(MENU.HEADERBUTTONS_BATTLE_MENU_EPICBATTLE)
+
+    def _getHeaderMessageParams(self):
+        headerIconSource = RES_ICONS.MAPS_ICONS_SQUAD_EPICBATTLE
+        headerMessageText = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_SQUADCHANNEL_HEADERMSG_EPICBATTLEFORMATIONRESTRICTION))
+        iconXPadding = 0
+        iconYPadding = 0
+        return (headerIconSource,
+         iconXPadding,
+         iconYPadding,
+         headerMessageText)

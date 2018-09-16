@@ -10,7 +10,6 @@ from AvatarInputHandler.cameras import _clampPoint2DInBox2D
 
 class StrategicAimingSystem(IAimingSystem):
     _LOOK_DIR = Vector3(0, -math.cos(0.001), math.sin(0.001))
-    height = property(lambda self: self.__height)
     heightFromPlane = property(lambda self: self.__heightFromPlane)
     planePosition = property(lambda self: self._planePosition)
 
@@ -44,6 +43,10 @@ class StrategicAimingSystem(IAimingSystem):
         self._planePosition.z = targetPos.z
         self._updateMatrix()
 
+    def setYaw(self, yaw):
+        self._matrix = mathUtils.createRotationMatrix((yaw, 0, 0))
+        self._updateMatrix()
+
     def getCamDist(self):
         return self.__camDist
 
@@ -57,6 +60,14 @@ class StrategicAimingSystem(IAimingSystem):
 
     def getZoom(self):
         pass
+
+    @property
+    def height(self):
+        return self.__height
+
+    @height.setter
+    def height(self, value):
+        self.__height = value
 
     def _clampToArenaBB(self):
         bb = BigWorld.player().arena.arenaType.boundingBox

@@ -1184,12 +1184,6 @@ class C11nPriceGroupPriceAll(_ItemsPriceAll):
         return result
 
 
-class MarathonEventModifier(ActionModifier):
-
-    def __init__(self, name, params):
-        super(MarathonEventModifier, self).__init__(name, params, modType=ACTION_MODIFIER_TYPE.DISCOUNT, section=ACTION_SECTION_TYPE.ALL, itemType=GUI_ITEM_TYPE.ACHIEVEMENT)
-
-
 _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('set_EconomicsParams', EconomicsSet),
  ('mul_EconomicsPrices', EconomicsMul),
@@ -1222,10 +1216,7 @@ _MODIFIERS = (('mul_EconomicsParams', EconomicsMul),
  ('mul_PriceGroupPriceAll', C11nPriceGroupPriceAll),
  ('set_GoodiePrice', BoosterPriceSet),
  ('mul_GoodiePrice', BoosterPriceMul),
- ('mul_GoodiePriceAll', BoostersPriceAll),
- ('set_MarathonAnnounce', MarathonEventModifier),
- ('set_MarathonInProgress', MarathonEventModifier),
- ('set_MarathonFinished', MarathonEventModifier))
+ ('mul_GoodiePriceAll', BoostersPriceAll))
 _MODIFIERS_DICT = dict(_MODIFIERS)
 _MODIFIERS_ORDER = dict(((n, idx) for idx, (n, _) in enumerate(_MODIFIERS)))
 

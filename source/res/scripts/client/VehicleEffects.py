@@ -8,6 +8,7 @@ from debug_utils import LOG_CODEPOINT_WARNING
 from items import vehicles
 from vehicle_systems.tankStructure import TankPartIndexes
 DUMMY_NODE_PREFIX = 'DM'
+HitEffectMapping = namedtuple('HitEffectMapping', ('componentName', 'hitTester'))
 
 class DamageFromShotDecoder(object):
     ShotPoint = namedtuple('ShotPoint', ('componentName', 'matrix', 'hitEffectGroup'))

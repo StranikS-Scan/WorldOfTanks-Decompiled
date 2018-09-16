@@ -8,6 +8,8 @@ from messenger.m_constants import BATTLE_CHANNEL
 from messenger.proto.bw_chat2 import find_criteria
 from messenger.proto.bw_chat2.wrappers import CHAT_TYPE
 from messenger.storage import storage_getter
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 
 class LobbyControllersFactory(IControllerFactory):
 
@@ -57,8 +59,13 @@ class BattleControllersFactory(IControllerFactory):
     def factory(self, channel):
         controller = None
         settings = channel.getProtoData().settings
+        sessionProvider = dependency.instance(IBattleSessionProvider)
+        arenaVisitor = sessionProvider.arenaVisitor
         if settings == BATTLE_CHANNEL.TEAM:
-            controller = battle_controllers.TeamChannelController(channel)
+            if arenaVisitor.gui.isInEpicRange():
+                controller = battle_controllers.EpicTeamChannelController(channel)
+            else:
+                controller = battle_controllers.TeamChannelController(channel)
         elif settings == BATTLE_CHANNEL.COMMON:
             controller = battle_controllers.CommonChannelController(channel)
         elif settings == BATTLE_CHANNEL.SQUAD:

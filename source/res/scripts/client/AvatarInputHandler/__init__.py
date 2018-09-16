@@ -15,6 +15,7 @@ import MapCaseMode
 import Math
 import ResMgr
 import RespawnDeathMode
+import epic_battle_death_mode
 import cameras
 import constants
 import control_modes
@@ -63,7 +64,9 @@ _CTRLS_DESC_MAP = {_CTRL_MODE.ARCADE: ('ArcadeControlMode', 'arcadeMode', _CTRL_
  _CTRL_MODE.CAT: ('CatControlMode', None, _CTRL_TYPE.DEVELOPMENT),
  _CTRL_MODE.VIDEO: ('VideoCameraControlMode', 'videoMode', _CTRL_TYPE.OPTIONAL),
  _CTRL_MODE.MAP_CASE: ('MapCaseControlMode', 'strategicMode', _CTRL_TYPE.USUAL),
- _CTRL_MODE.RESPAWN_DEATH: ('RespawnDeathMode', 'postMortemMode', _CTRL_TYPE.USUAL)}
+ _CTRL_MODE.RESPAWN_DEATH: ('RespawnDeathMode', 'postMortemMode', _CTRL_TYPE.USUAL),
+ _CTRL_MODE.DEATH_FREE_CAM: ('DeathFreeCamMode', 'epicVideoMode', _CTRL_TYPE.USUAL)}
+_OVERWRITE_CTRLS_DESC_MAP = {constants.ARENA_BONUS_TYPE.EPIC_BATTLE: {_CTRL_MODE.POSTMORTEM: ('DeathTankFollowMode', 'postMortemMode', _CTRL_TYPE.USUAL)}}
 _DYNAMIC_CAMERAS = (DynamicCameras.ArcadeCamera.ArcadeCamera,
  DynamicCameras.SniperCamera.SniperCamera,
  DynamicCameras.StrategicCamera.StrategicCamera,
@@ -222,8 +225,8 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
         if isRepeat:
             return False
         elif self.__isStarted and self.__isDetached:
-            if CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
-                return self.__curCtrl.handleKeyEvent(isDown, key, mods, event)
+            if self.__curCtrl.alwaysReceiveKeyEvents() and not self.isObserverFPV or CommandMapping.g_instance.isFired(CommandMapping.CMD_CM_LOCK_TARGET, key):
+                self.__curCtrl.handleKeyEvent(isDown, key, mods, event)
             return BigWorld.player().handleKey(isDown, key, mods)
         elif not self.__isStarted or self.__isDetached:
             return False
@@ -264,7 +267,7 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
             else:
                 g_appLoader.detachCursor(settings.APP_NAME_SPACE.SF_BATTLE)
                 result = True
-            self.__curCtrl.setForcedGuiControlMode(not detached)
+            self.__curCtrl.setForcedGuiControlMode(detached)
         elif detached:
             g_appLoader.syncCursor(settings.APP_NAME_SPACE.SF_BATTLE, flags=flags)
         return result
@@ -713,8 +716,15 @@ class AvatarInputHandler(CallbackDelayer, ComponentSystem):
             return sec
 
     def __setupCtrls(self, section):
-        modules = (control_modes, MapCaseMode, RespawnDeathMode)
+        modules = (control_modes,
+         MapCaseMode,
+         RespawnDeathMode,
+         epic_battle_death_mode)
+        bonusType = BigWorld.player().arenaBonusType
+        bonusTypeCtrlsMap = _OVERWRITE_CTRLS_DESC_MAP.get(bonusType, {})
         for name, desc in _CTRLS_DESC_MAP.items():
+            if bonusTypeCtrlsMap.has_key(name):
+                desc = bonusTypeCtrlsMap.get(name)
             try:
                 if desc[2] != _CTRL_TYPE.DEVELOPMENT or desc[2] == _CTRL_TYPE.DEVELOPMENT and constants.HAS_DEV_RESOURCES:
                     if name not in self.__ctrls:
@@ -869,7 +879,7 @@ class _VertScreenshotCamera(object):
         BigWorld.projection().fov = camFov
         BigWorld.projection().nearPlane = max(0.1, camPos.y - 1000.0)
         BigWorld.projection().farPlane = camPos.y + 1000
-        BigWorld.setWatcher('Render/Shadows/qualityPreset', 7)
+        BigWorld.setWatcher('Render/Shadows/qualityPreset', 4)
         BigWorld.setWatcher('Client Settings/Script tick', False)
         BigWorld.setWatcher('Occlusion Culling/Enabled', False)
         BigWorld.setWatcher('Render/Terrain/AdaptiveMesh/cascades enabled', False)

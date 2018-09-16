@@ -9,6 +9,7 @@ from debug_utils import LOG_WARNING
 from gui import InputHandler
 from gui.Scaleform.daapi.view.bootcamp.component_override import BootcampComponentOverride
 from gui.Scaleform.framework.entities.abstract.ContextMenuManagerMeta import ContextMenuManagerMeta
+from soft_exception import SoftException
 _SEPARATOR_ID = 'separate'
 _handlers = {}
 
@@ -16,14 +17,14 @@ def registerHandlers(*handlers):
     handlerTypes = []
     for item in handlers:
         if len(item) < 2:
-            raise ValueError('Item {} is invalid'.format(item))
+            raise SoftException('Item {} is invalid'.format(item))
         handlerType, handler = item[:2]
         if handlerType in _handlers:
-            raise ValueError('Type of handler {} already exists'.format(handlerType))
+            raise SoftException('Type of handler {} already exists'.format(handlerType))
         if isinstance(handler, BootcampComponentOverride):
             handler = handler()
         if not inspect.isclass(handler) or AbstractContextMenuHandler not in inspect.getmro(handler):
-            raise ValueError('Handler {} is invalid'.format(handler))
+            raise SoftException('Handler {} is invalid'.format(handler))
         _handlers[handlerType] = handler
         handlerTypes.append(handlerType)
 

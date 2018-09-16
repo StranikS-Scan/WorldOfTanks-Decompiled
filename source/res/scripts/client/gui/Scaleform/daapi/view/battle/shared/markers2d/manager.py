@@ -14,6 +14,7 @@ from gui.Scaleform.genConsts.ROOT_SWF_CONSTANTS import ROOT_SWF_CONSTANTS
 from gui.shared.utils.plugins import PluginsCollection
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 
 class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.IMarkersManager):
@@ -59,7 +60,7 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
 
     def createMarker(self, symbol, matrixProvider=None, active=True):
         if active and matrixProvider is None:
-            raise UserWarning('Active marker {} must has matrixProvider'.format(symbol))
+            raise SoftException('Active marker {} must has matrixProvider'.format(symbol))
         markerID = self.__canvas.addMarker(matrixProvider, symbol, active)
         self.__ids.add(markerID)
         return markerID
@@ -69,6 +70,12 @@ class MarkersManager(ExternalFlashComponent, VehicleMarkersManagerMeta, plugins.
             self.__canvas.markerSetActive(markerID, active)
         else:
             _logger.error('Marker %d is not added by given ID', markerID)
+
+    def setMarkerSticky(self, markerID, isSticky):
+        self.__canvas.markerSetSticky(markerID, isSticky)
+
+    def setMarkerMinScale(self, markerID, minScale):
+        self.__canvas.markerSetMinScale(markerID, minScale)
 
     def setMarkerMatrix(self, markerID, matrix):
         if markerID in self.__ids:

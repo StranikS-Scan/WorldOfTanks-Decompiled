@@ -10,4 +10,141 @@
     <lineWidth>	2.0	</lineWidth>
     <lineHeight>	3.0	</lineHeight>
   </stunAreaVisual>
+  <stepRepairPoint>
+    <flagModelName>	content/Environment/env_111_04_RepairFlag/normal/lod0/env_111_04_RepairFlag.model	</flagModelName>
+    <radiusModel>	content/Interface/CheckPoint/CheckPoint_yellow_black.visual	</radiusModel>
+    <flagAnim>	RepairFlagAnimAction	</flagAnim>
+    <wwsound>	ambient_static_objects_flag_flapping	</wwsound>
+  </stepRepairPoint>
+  <sectorBase>
+    <flagModelName>	content/MilitaryEnvironment/mle000_BaseFlagstaff/normal/lod0/flag.model	</flagModelName>
+    <flagstaffModelName>	content/MilitaryEnvironment/mle000_BaseFlagstaff/normal/lod0/mle000_BaseFlagstaff01.model	</flagstaffModelName>
+    <radiusModel>	content/Interface/CheckPoint/CheckPoint.model	</radiusModel>
+    <flagAnim>	FlagAnimAction	</flagAnim>
+    <flagstaffFlagHP>	HP_UpFlag	</flagstaffFlagHP>
+    <flagBackgroundTex>	content/MilitaryEnvironment/mle000_BaseFlagstaff/hd_mle000_Baseflagstaff_flag_AM	</flagBackgroundTex>
+    <flagEmblemTex>	system/maps/wg_emblem.dds	</flagEmblemTex>
+    <flagEmblemTexCoords>	0.2 0.4 0.6 0.8	</flagEmblemTexCoords>
+    <flagScale>	3.0 3.0 3.0	</flagScale>
+    <WwsoundBaseCaptureSound>	eb_zone_capture	</WwsoundBaseCaptureSound>
+    <wwsound>	ambient_static_objects_flag_flapping	</wwsound>
+  </sectorBase>
+  <SectorBorderVisual>
+    <modelPath>	content/Interface/border/border_02.model	</modelPath>
+    <overTerrainHeight>	0.5	</overTerrainHeight>
+    <modelSetting>
+      <edgeState>	safe	</edgeState>
+      <scale>	5.0 1.0 1.0	</scale>
+      <spacing>	5.0	</spacing>
+      <color>	0x65643200	</color>
+    </modelSetting>
+    <modelSetting>
+      <edgeState>	danger	</edgeState>
+      <scale>	5.0 1.0 1.0	</scale>
+      <spacing>	5.0	</spacing>
+      <color>	0x64fa0700	</color>
+    </modelSetting>
+  </SectorBorderVisual>
+  <SmokeScreenEffect_lev1>
+    <timeline>
+      <effectEnd>	36000	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/interior/208_smokescreen_lev1.xml	</file>
+        <force>	1	</force>
+        <position>	HP_module_0	</position>
+      </pixie>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </SmokeScreenEffect_lev1>
+  <SmokeScreenEffect_lev2>
+    <timeline>
+      <effectEnd>	36000	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/interior/208_smokescreen_lev2.xml	</file>
+        <force>	1	</force>
+        <position>	HP_module_0	</position>
+      </pixie>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </SmokeScreenEffect_lev2>
+  <SmokeScreenEffect_lev3>
+    <timeline>
+      <effectEnd>	36000	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/interior/208_smokescreen_lev3.xml	</file>
+        <force>	1	</force>
+        <position>	HP_module_0	</position>
+      </pixie>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </SmokeScreenEffect_lev3>
+  <SmokeScreenEffect_lev4>
+    <timeline>
+      <effectEnd>	36000	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/interior/208_smokescreen_lev4.xml	</file>
+        <force>	1	</force>
+        <position>	HP_module_0	</position>
+      </pixie>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </SmokeScreenEffect_lev4>
+  <SmokeScreenEffect_lev5>
+    <timeline>
+      <effectEnd>	36000	</effectEnd>
+    </timeline>
+    <effects>
+      <pixie>
+        <startKey>	start	</startKey>
+        <file>	particles/Environment/interior/208_smokescreen_lev4.xml	</file>
+        <force>	1	</force>
+        <position>	HP_module_0	</position>
+      </pixie>
+      <sound>
+        <dynamic>	true	</dynamic>
+        <startKey>	start	</startKey>
+        <wwsound>	eb_ability_smoke_expl_02	</wwsound>
+        <sound>	/NONE	</sound>
+      </sound>
+    </effects>
+  </SmokeScreenEffect_lev5>
+  <InspireAreaVisual>
+    <visual>	content/Interface/TargetPoint/inspire.model	</visual>
+    <color>	0xffffffff	</color>
+    <enableAccrurateCollision>	False	</enableAccrurateCollision>
+    <maxUpdateInterval>	0.04	</maxUpdateInterval>
+    <overTerrainHeight>	0.5	</overTerrainHeight>
+  </InspireAreaVisual>
 </dynamic_objects.xml>

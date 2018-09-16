@@ -5,6 +5,7 @@ from collections import namedtuple
 import GUI
 from gui.Scaleform.daapi.view.battle.shared.crosshair import settings
 from gui.battle_control.battle_constants import CROSSHAIR_VIEW_ID
+from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 _logger.addHandler(logging.NullHandler())
 
@@ -186,7 +187,7 @@ class GunMarkersComponents(object):
         for component in components:
             name = component.getName()
             if name in self.__components:
-                raise ValueError('Name of component must be unique. {} is already existed'.format(name))
+                raise SoftException('Name of component must be unique. {} is already existed'.format(name))
             self.__components[name] = component
 
     def addView(self, container, name):

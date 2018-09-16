@@ -98,6 +98,10 @@ class USER_TAG(object):
     _CLOSED_CONTACTS = _SHARED_TAGS | {FRIEND}
     _ALL_CONTACTS = _SHARED_TAGS | {IGNORED, IGNORED_TMP, SUB_PENDING_IN}
     _STORED_TO_CACHE = {MUTED}
+    _TRUSTED_TAGS = {FRIEND,
+     CLAN_MEMBER,
+     REFERRER,
+     REFERRAL}
 
     @classmethod
     def filterAllContactsTags(cls, tags):
@@ -114,6 +118,10 @@ class USER_TAG(object):
     @classmethod
     def filterSharedTags(cls, tags):
         return tags & cls._SHARED_TAGS
+
+    @classmethod
+    def filterTrustedTags(cls, tags):
+        return tags & cls._TRUSTED_TAGS
 
 
 class USER_ACTION_ID(object):

@@ -3,6 +3,7 @@
 from gui.Scaleform.daapi.view.battle.shared.stats_exchage import broker
 from gui.battle_control.arena_info.settings import INVITATION_DELIVERY_STATUS
 from gui.battle_control.arena_info.settings import PLAYER_STATUS
+from soft_exception import SoftException
 
 class PlayerStatusComponent(broker.StatusComponent):
 
@@ -22,10 +23,10 @@ class InvitationsExchangeBlock(broker.ExchangeBlock):
         super(InvitationsExchangeBlock, self).__init__(InvitationStatusComponent())
 
     def addSortIDs(self, arenaDP, *flags):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def addTotalStats(self, stats):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
 
 class UserTagsItemData(broker.VehicleComponent):
@@ -76,7 +77,7 @@ class UsersTagsListExchangeData(broker.ExchangeBlock):
         super(UsersTagsListExchangeData, self).__init__(UserTagsItemData(ctx))
 
     def addSortIDs(self, arenaDP, *flags):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def addTotalStats(self, stats):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')

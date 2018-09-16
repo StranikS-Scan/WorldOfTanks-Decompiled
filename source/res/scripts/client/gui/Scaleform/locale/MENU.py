@@ -140,6 +140,10 @@ class MENU(object):
     LOADING_BATTLETYPES_DESC_19 = '#menu:loading/battleTypes/desc/19'
     LOADING_BATTLETYPES_20 = '#menu:loading/battleTypes/20'
     LOADING_BATTLETYPES_DESC_20 = '#menu:loading/battleTypes/desc/20'
+    LOADING_BATTLETYPES_21 = '#menu:loading/battleTypes/21'
+    LOADING_BATTLETYPES_DESC_21 = '#menu:loading/battleTypes/desc/21'
+    LOADING_BATTLETYPES_22 = '#menu:loading/battleTypes/22'
+    LOADING_BATTLETYPES_DESC_22 = '#menu:loading/battleTypes/desc/22'
     LOADING_TEAM1 = '#menu:loading/team1'
     LOADING_TEAM2 = '#menu:loading/team2'
     LOADING_TEAMS_ALLIES = '#menu:loading/teams/allies'
@@ -357,6 +361,7 @@ class MENU(object):
     PREBATTLE_SIDEB = '#menu:prebattle/sideB'
     PREBATTLE_TIMERLABEL = '#menu:prebattle/timerLabel'
     PREBATTLE_TANKLABEL = '#menu:prebattle/tankLabel'
+    PREBATTLE_STARTINGTANKLABEL = '#menu:prebattle/startingTankLabel'
     PREBATTLE_EXITBUTTON = '#menu:prebattle/exitButton'
     PREBATTLE_STARTBUTTON = '#menu:prebattle/startButton'
     PREBATTLE_ALREADY_IN_AWAITING_BATTLE = '#menu:prebattle/already_in_awaiting_battle'
@@ -456,6 +461,7 @@ class MENU(object):
     TANK_PARAMS_FACEFRONTBOARDINMM = '#menu:tank_params/faceFrontBoardInMM'
     TANK_PARAMS_TURRETARMOR = '#menu:tank_params/turretArmor'
     TANK_PARAMS_RELOADTIME = '#menu:tank_params/reloadTime'
+    TANK_PARAMS_AUTORELOADTIME = '#menu:tank_params/autoReloadTime'
     TANK_PARAMS_RELOADTIMESECS = '#menu:tank_params/reloadTimeSecs'
     TANK_PARAMS_PIERCINGPOWER = '#menu:tank_params/piercingPower'
     TANK_PARAMS_DAMAGE = '#menu:tank_params/damage'
@@ -549,6 +555,7 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_TYPES_SQUAD = '#menu:headerButtons/battle/types/squad'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_RANDOMBATTLE = '#menu:headerButtons/battle/types/squad/randomBattle'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_EVENT = '#menu:headerButtons/battle/types/squad/event'
+    HEADERBUTTONS_BATTLE_TYPES_SQUAD_EPIC = '#menu:headerButtons/battle/types/squad/epic'
     HEADERBUTTONS_BATTLE_TYPES_SQUADLEAVEOWNER = '#menu:headerButtons/battle/types/squadLeaveOwner'
     HEADERBUTTONS_BATTLE_TYPES_SQUADLEAVE = '#menu:headerButtons/battle/types/squadLeave'
     HEADERBUTTONS_BATTLE_TYPES_SQUAD_DESCR = '#menu:headerButtons/battle/types/squad/descr'
@@ -590,6 +597,7 @@ class MENU(object):
     HEADERBUTTONS_BATTLE_MENU_BATTLE_SESSION = '#menu:headerButtons/battle/menu/battle_session'
     HEADERBUTTONS_BATTLE_MENU_UNIT = '#menu:headerButtons/battle/menu/unit'
     HEADERBUTTONS_BATTLE_MENU_HISTORICAL = '#menu:headerButtons/battle/menu/historical'
+    HEADERBUTTONS_BATTLE_MENU_EPICBATTLE = '#menu:headerButtons/battle/menu/epicBattle'
     HEADERBUTTONS_HANGAR = '#menu:headerButtons/hangar'
     HEADERBUTTONS_SHOP = '#menu:headerButtons/shop'
     HEADERBUTTONS_BATTLE = '#menu:headerButtons/battle'
@@ -727,6 +735,8 @@ class MENU(object):
     MODULEFITS_REMOVETOOLTIP = '#menu:moduleFits/removeToolTip'
     MODULEFITS_TITLE = '#menu:moduleFits/title'
     OPTIONALDEVICEFITS_TITLE = '#menu:optionalDeviceFits/title'
+    BATTLEABILITY_TITLE = '#menu:battleAbility/title'
+    FITTINGPOPOVER_MANAGEABILITIES = '#menu:fittingPopover/manageAbilities'
     EQUIPMENTFITS_TITLE = '#menu:equipmentFits/title'
     EXCHANGE_TITLE = '#menu:exchange/title'
     EXCHANGE_RATE = '#menu:exchange/rate'
@@ -917,6 +927,7 @@ class MENU(object):
     VEHICLEINFO_PARAMS_HULLARMOR = '#menu:vehicleInfo/params/hullArmor'
     VEHICLEINFO_PARAMS_TURRETARMOR = '#menu:vehicleInfo/params/turretArmor'
     VEHICLEINFO_PARAMS_RELOADTIME = '#menu:vehicleInfo/params/reloadTime'
+    VEHICLEINFO_PARAMS_AUTORELOADTIME = '#menu:vehicleInfo/params/autoReloadTime'
     VEHICLEINFO_PARAMS_PIERCINGPOWER = '#menu:vehicleInfo/params/piercingPower'
     VEHICLEINFO_PARAMS_AVGDAMAGE = '#menu:vehicleInfo/params/avgDamage'
     VEHICLEINFO_PARAMS_AVGPIERCINGPOWER = '#menu:vehicleInfo/params/avgPiercingPower'
@@ -1279,6 +1290,7 @@ class MENU(object):
     CONTEXTMENU_RESTORE = '#menu:contextMenu/restore'
     CONTEXTMENU_UNLOAD = '#menu:contextMenu/unload'
     CONTEXTMENU_CANCELBUY = '#menu:contextMenu/cancelBuy'
+    CONTEXTMENU_UNEQUIP = '#menu:contextMenu/unequip'
     CONTEXTMENU_BUYANDEQUIP = '#menu:contextMenu/buyAndEquip'
     CONTEXTMENU_EQUIP = '#menu:contextMenu/equip'
     CONTEXTMENU_UNLOCK = '#menu:contextMenu/unlock'
@@ -1350,6 +1362,7 @@ class MENU(object):
     FINALSTATISTIC_TABS_COMMONSTATS = '#menu:finalStatistic/tabs/commonStats'
     FINALSTATISTIC_TABS_TEAMSTATS = '#menu:finalStatistic/tabs/teamStats'
     FINALSTATISTIC_TABS_DETAILSSTATS = '#menu:finalStatistic/tabs/detailsStats'
+    FINALSTATISTIC_TABS_EPICSTATS = '#menu:finalStatistic/tabs/epicStats'
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_WIN = '#menu:finalStatistic/commonStats/resultlabel/win'
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_LOSE = '#menu:finalStatistic/commonStats/resultlabel/lose'
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_TIE = '#menu:finalStatistic/commonStats/resultlabel/tie'
@@ -1639,6 +1652,10 @@ class MENU(object):
     CONTEXTMENU_VIEWCLANPROFILE = '#menu:contextMenu/viewClanProfile'
     CONTEXTMENU_COPYCLANNAME = '#menu:contextMenu/copyClanName'
     INFINITYSYMBOL = '#menu:infinitySymbol'
+    HEADERBUTTONS_BATTLE_TYPES_EPICBATTLE = '#menu:headerButtons/battle/types/epicBattle'
+    HEADERBUTTONS_BATTLE_TYPES_EPICBATTLE_DESCR = '#menu:headerButtons/battle/types/epicBattle/descr'
+    HEADERBUTTONS_BATTLE_TYPES_EPIC = '#menu:headerButtons/battle/types/epic'
+    HEADERBUTTONS_BATTLE_TYPES_EPIC_DESCR = '#menu:headerButtons/battle/types/epic/descr'
     ONLINECOUNTER_TOTAL = '#menu:onlineCounter/total'
     ONLINECOUNTER_DELIMITER = '#menu:onlineCounter/delimiter'
     ONLINECOUNTER_UNAVAILABLE = '#menu:onlineCounter/unavailable'
@@ -1689,6 +1706,10 @@ class MENU(object):
     CST_ITEM_CTX_MENU_REMOVEFROMTANK = '#menu:cst_item_ctx_menu/removeFromTank'
     VIEWHEADER_BACKBTN_LABEL = '#menu:viewHeader/backBtn/label'
     VIEWHEADER_CLOSEBTN_LABEL = '#menu:viewHeader/closeBtn/label'
+    INTERNET_PROVIDER_ROSTELECOM_NAME = '#menu:internet_provider/Rostelecom/name'
+    INTERNET_PROVIDER_ROSTELECOM_TARIFF = '#menu:internet_provider/Rostelecom/tariff'
+    INTERNET_PROVIDER_BELTELECOM_NAME = '#menu:internet_provider/Beltelecom/name'
+    INTERNET_PROVIDER_BELTELECOM_TARIFF = '#menu:internet_provider/Beltelecom/tariff'
     CONTEXTMENU_ENUM = (CONTEXTMENU_VEHICLEINFO,
      CONTEXTMENU_VEHICLEINFOEX,
      CONTEXTMENU_GOTONATIONTREE,
@@ -1728,6 +1749,7 @@ class MENU(object):
      CONTEXTMENU_RESTORE,
      CONTEXTMENU_UNLOAD,
      CONTEXTMENU_CANCELBUY,
+     CONTEXTMENU_UNEQUIP,
      CONTEXTMENU_BUYANDEQUIP,
      CONTEXTMENU_EQUIP,
      CONTEXTMENU_UNLOCK,
@@ -1957,6 +1979,7 @@ class MENU(object):
      TANK_PARAMS_FACEFRONTBOARDINMM,
      TANK_PARAMS_TURRETARMOR,
      TANK_PARAMS_RELOADTIME,
+     TANK_PARAMS_AUTORELOADTIME,
      TANK_PARAMS_RELOADTIMESECS,
      TANK_PARAMS_PIERCINGPOWER,
      TANK_PARAMS_DAMAGE,
@@ -2034,7 +2057,9 @@ class MENU(object):
      LOADING_BATTLETYPES_DESC_16,
      LOADING_BATTLETYPES_DESC_17,
      LOADING_BATTLETYPES_DESC_19,
-     LOADING_BATTLETYPES_DESC_20)
+     LOADING_BATTLETYPES_DESC_20,
+     LOADING_BATTLETYPES_DESC_21,
+     LOADING_BATTLETYPES_DESC_22)
     LOADING_BATTLETYPES_ENUM = (LOADING_BATTLETYPES_0,
      LOADING_BATTLETYPES_DESC_0,
      LOADING_BATTLETYPES_1,
@@ -2072,8 +2097,14 @@ class MENU(object):
      LOADING_BATTLETYPES_19,
      LOADING_BATTLETYPES_DESC_19,
      LOADING_BATTLETYPES_20,
-     LOADING_BATTLETYPES_DESC_20)
+     LOADING_BATTLETYPES_DESC_20,
+     LOADING_BATTLETYPES_21,
+     LOADING_BATTLETYPES_DESC_21,
+     LOADING_BATTLETYPES_22,
+     LOADING_BATTLETYPES_DESC_22)
     CST_ITEM_CTX_MENU_ENUM = (CST_ITEM_CTX_MENU_BUY, CST_ITEM_CTX_MENU_SELL, CST_ITEM_CTX_MENU_REMOVEFROMTANK)
+    INTERNET_PROVIDER_ALL_NAME_ENUM = (INTERNET_PROVIDER_ROSTELECOM_NAME, INTERNET_PROVIDER_BELTELECOM_NAME)
+    INTERNET_PROVIDER_ALL_TARIFF_ENUM = (INTERNET_PROVIDER_ROSTELECOM_TARIFF, INTERNET_PROVIDER_BELTELECOM_TARIFF)
 
     @classmethod
     def contextmenu(cls, key0):
@@ -2277,6 +2308,24 @@ class MENU(object):
     def cst_item_ctx_menu(cls, key0):
         outcome = '#menu:cst_item_ctx_menu/{}'.format(key0)
         if outcome not in cls.CST_ITEM_CTX_MENU_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def internetProviderName(cls, key0):
+        outcome = '#menu:internet_provider/{}/name'.format(key0)
+        if outcome not in cls.INTERNET_PROVIDER_ALL_NAME_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def internetProviderTariff(cls, key0):
+        outcome = '#menu:internet_provider/{}/tariff'.format(key0)
+        if outcome not in cls.INTERNET_PROVIDER_ALL_TARIFF_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

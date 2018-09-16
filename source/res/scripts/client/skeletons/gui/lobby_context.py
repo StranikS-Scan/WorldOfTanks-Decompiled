@@ -31,7 +31,7 @@ class ILobbyContext(object):
     def update(self, diff):
         raise NotImplementedError
 
-    def updateBattlesCount(self, battlesCount):
+    def updateBattlesCount(self, battlesCount, epicBattlesCount):
         raise NotImplementedError
 
     def updateGuiCtx(self, ctx):

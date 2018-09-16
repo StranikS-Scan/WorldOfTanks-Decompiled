@@ -88,7 +88,7 @@ class SimplePlugin(IPlugin):
         return self._ctrlMode == CTRL_MODE_NAME.POSTMORTEM
 
     def _isInVideoMode(self):
-        return self._ctrlMode == CTRL_MODE_NAME.VIDEO
+        return self._ctrlMode in (CTRL_MODE_NAME.VIDEO, CTRL_MODE_NAME.DEATH_FREE_CAM)
 
     def _isInRespawnDeath(self):
         return self._ctrlMode == CTRL_MODE_NAME.RESPAWN_DEATH
@@ -161,6 +161,28 @@ class IntervalPlugin(EntriesPlugin):
         self._delEntryEx(uniqueID)
         return
 
+    def _isCallbackExisting(self, uniqueID):
+        return self.__callbackIDs[uniqueID] is not None if uniqueID in self.__callbackIDs else False
+
+    def _clearAllCallbacks(self):
+        for key in self.__callbackIDs:
+            self._delEntryEx(key)
+
+        self.__callbackIDs.clear()
+
+    def _killOtherCallbacks(self, uniqueID):
+        toKill = []
+        for key in self.__callbackIDs:
+            if key != uniqueID:
+                self._delEntryEx(key)
+                self.__callbackIDs[key] = None
+                toKill.append(key)
+
+        for i in range(0, len(toKill)):
+            del self.__callbackIDs[toKill[i]]
+
+        return
+
 
 class AttentionToCellPlugin(IntervalPlugin):
     __slots__ = ('_boundingBox',)
@@ -188,6 +210,21 @@ class AttentionToCellPlugin(IntervalPlugin):
     def _doAttention(self, index, duration):
         raise NotImplementedError
 
-    def __onMinimapFeedbackReceived(self, eventID, _, value):
+    def _doAttentionAtPosition(self, senderID, position, duration):
+        raise NotImplementedError
+
+    def _doAttentionToObjective(self, senderID, hqIdx, duration):
+        raise NotImplementedError
+
+    def _doAttentionToBase(self, senderID, baseIdx, baseName, duration):
+        raise NotImplementedError
+
+    def __onMinimapFeedbackReceived(self, eventID, entityID, value):
         if eventID == FEEDBACK_EVENT_ID.MINIMAP_MARK_CELL:
             self._doAttention(*value)
+        elif eventID == FEEDBACK_EVENT_ID.MINIMAP_MARK_POSITION:
+            self._doAttentionAtPosition(entityID, *value)
+        elif eventID == FEEDBACK_EVENT_ID.MINIMAP_MARK_OBJECTIVE:
+            self._doAttentionToObjective(entityID, *value)
+        elif eventID == FEEDBACK_EVENT_ID.MINIMAP_MARK_BASE:
+            self._doAttentionToBase(entityID, *value)

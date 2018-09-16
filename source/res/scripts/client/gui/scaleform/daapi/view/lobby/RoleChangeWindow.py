@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/RoleChangeWindow.py
 import BigWorld
+from gui.shared.money import Money
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
+from gui.shared.tooltips.formatters import packActionTooltipData
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
@@ -152,6 +155,11 @@ class RoleChangeWindow(RoleChangeMeta):
 
     def __checkMoney(self):
         changeRoleCost = self.itemsCache.items.shop.changeRoleCost
+        defaultChangeRoleCost = self.itemsCache.items.shop.defaults.changeRoleCost
+        if changeRoleCost != defaultChangeRoleCost:
+            discount = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'changeRoleCost', True, Money(gold=changeRoleCost), Money(gold=defaultChangeRoleCost))
+        else:
+            discount = None
         formattedPrice = BigWorld.wg_getIntegralFormat(changeRoleCost)
         actualGold = self.itemsCache.items.stats.gold
         enoughGold = actualGold - changeRoleCost >= 0
@@ -160,7 +168,8 @@ class RoleChangeWindow(RoleChangeMeta):
         else:
             priceString = text_styles.error(formattedPrice)
         priceString += icons.gold()
-        self.as_setPriceS(priceString, enoughGold)
+        self.as_setPriceS(priceString, enoughGold, discount)
+        return
 
     def __setCommonData(self):
         self.as_setCommonDataS({'tankmanModel': _getTankmanVO(self.__tankman),

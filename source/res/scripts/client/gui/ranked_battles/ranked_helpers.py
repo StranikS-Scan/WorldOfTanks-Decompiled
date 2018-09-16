@@ -78,9 +78,10 @@ def buildRankVO(rank, isEnabled=False, hasTooltip=False, imageSize=RANKEDBATTLES
          'label': scoresLabel,
          'newLabel': scoresNewLabel,
          'tooltip': TOOLTIPS.RANKEDBATTLEVIEW_SCOREPOINT}
+    finalImageSrc = rank.getIcon(RANKEDBATTLES_ALIASES.WIDGET_FINAL) if rank.getIsMaxAccRank() else ''
     return {'imageSrc': rank.getIcon(imageSize),
      'smallImageSrc': rank.getIcon(RANKEDBATTLES_ALIASES.WIDGET_SMALL),
-     'finalImageSrc': rank.getIcon(RANKEDBATTLES_ALIASES.WIDGET_FINAL),
+     'finalImageSrc': finalImageSrc,
      'isEnabled': isEnabled,
      'isMaster': isMaster,
      'rankID': str(rank.getID()),

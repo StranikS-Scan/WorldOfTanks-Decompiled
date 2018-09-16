@@ -8,6 +8,7 @@ import Keys
 import Math
 import ResMgr
 import WWISE
+import game_mode_emulator
 g_offlineModeEnabled = False
 g_currentMoveRate = 0.5
 g_gui = None
@@ -137,7 +138,8 @@ def launch(spaceName):
     BigWorld.worldDrawEnabled(False)
     _displayGUI(spaceName)
     spaceID = BigWorld.createSpace()
-    BigWorld.addSpaceGeometryMapping(spaceID, None, spaceName)
+    visibilityMask = game_mode_emulator.gameModeVisibilityMask()
+    BigWorld.addSpaceGeometryMapping(spaceID, None, spaceName, visibilityMask)
     _loadCameraTransforms()
     camera = BigWorld.FreeCamera()
     camera.spaceID = spaceID

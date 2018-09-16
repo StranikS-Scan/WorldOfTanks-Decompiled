@@ -197,7 +197,7 @@ class Rank(object):
      Currency.CREDITS,
      'items']
 
-    def __init__(self, rankID, rankState, points, progress=None, quest=None, finalQuest=None):
+    def __init__(self, rankID, rankState, points, progress=None, quest=None, finalQuest=None, isMaxAccRank=False):
         super(Rank, self).__init__()
         self._rankID = rankID
         self._state = rankState
@@ -206,6 +206,7 @@ class Rank(object):
         self._type = RANK_TYPES.ACCOUNT
         self.__points = points
         self.__finalQuest = finalQuest
+        self.__isMaxAccRank = isMaxAccRank
 
     def __eq__(self, other):
         if self.getID() != other.getID():
@@ -292,6 +293,9 @@ class Rank(object):
     def getBoxIcon(self, size='450x400', boxType='wooden', isOpened=True):
         return RES_ICONS.getRankedBoxIcon(size, boxType, '_opened' if isOpened else '', self._rankID)
 
+    def getIsMaxAccRank(self):
+        return self.__isMaxAccRank
+
 
 class VehicleRank(Rank):
 
@@ -321,6 +325,9 @@ class VehicleRank(Rank):
 
     def getVehicle(self):
         return self.__vehicle
+
+    def getIsMaxAccRank(self):
+        return False
 
 
 class PrimeTime(object):

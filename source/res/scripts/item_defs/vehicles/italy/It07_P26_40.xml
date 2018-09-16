@@ -1,0 +1,1055 @@
+<It07_P26_40.xml>
+  <crew>
+    <commander>	gunner	</commander>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	40	</forward>
+    <backward>	15	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.193	</moving>
+    <still>	0.257	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.386	</firePenalty>
+  </invisibility>
+  <repairCost>	4.2	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.8	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	50	</armor_1>
+      <armor_2>	45	</armor_2>
+      <armor_3>	40	</armor_3>
+      <armor_4>	40	</armor_4>
+      <armor_5>	20	</armor_5>
+      <armor_6>	14	</armor_6>
+      <armor_7>	25	</armor_7>
+      <armor_8>	0	</armor_8>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	13653	</weight>
+    <maxHealth>	256	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	125	</maxHealth>
+      <maxRegenHealth>	85	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/italy/It07_P26_40/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/italy/It07_P26_40/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/italy/It07_P26_40/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
+      <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	0.94	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_medium	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <tags>
+        <diesel>	diesel_medium	</diesel>
+      </tags>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000000 0.653126 0.488082	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/italy/It07_P26_40/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/italy/It07_P26_40/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	0.0564154 0.450178 1.72881	</rayStart>
+        <rayEnd>	0.0564081 0.309239 1.58691	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.46	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-1.20746 0.47426 0.860611	</rayStart>
+        <rayEnd>	-1.04369 0.359473 0.860611	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.618	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+      <inscription>
+        <rayStart>	1.20746 0.47426 0.860611	</rayStart>
+        <rayEnd>	1.04369 0.359473 0.860611	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.618	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/italy/It07_P26_40/P26_40_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	2.8 2.8 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_It07_P26_40>
+      <userString>	#italy_vehicles:Chassis_It07_P26_40	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	2000	</price>
+      <unlocks>
+        <chassis>	Chassis_It07_P26_40_2	  <cost>	1080	</cost>
+        </chassis>
+      </unlocks>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	7000	</weight>
+      <maxLoad>	25500	</maxLoad>
+      <terrainResistance>	1.1 1.5 2.5	</terrainResistance>
+      <brakeForce>	26000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	42	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.26	</vehicleMovement>
+        <vehicleRotation>	0.26	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	70	</maxHealth>
+      <maxRegenHealth>	55	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/italy/It07_P26_40/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/italy/It07_P26_40/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/italy/It07_P26_40/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.38 0.46	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.1	</textureScale>
+      </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.959680 -0.000009 -0.021214	</row0>
+            <row1>	-0.000005 1.342020 -0.000001	</row1>
+            <row2>	-0.031883 -0.000002 5.163200	</row2>
+            <row3>	0.000005 0.000000 0.000052	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.481732	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.14	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.333506	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.217422	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.481732	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.14	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.333506	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.217422	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.07464 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/italy/It07_P26_40/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/italy/It07_P26_40/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.14186 1.73818	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/italy/It07_P26_40/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/italy/It07_P26_40/track/segment.model	</segmentModelRight>
+        <left>	vehicles/italy/It07_P26_40/track/left.track	</left>
+        <right>	vehicles/italy/It07_P26_40/track/right.track	</right>
+        <segmentLength>	0.15	</segmentLength>
+        <segmentOffset>	0.0949248	</segmentOffset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.00496084	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2.2	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	2.2	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+      </trackNodes>
+    </Chassis_It07_P26_40>
+    <Chassis_It07_P26_40_2>
+      <userString>	#italy_vehicles:Chassis_It07_P26_40_2	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4850	</price>
+      <armor>
+        <leftTrack>	15	</leftTrack>
+        <rightTrack>	15	</rightTrack>
+      </armor>
+      <weight>	7000	</weight>
+      <maxLoad>	28000	</maxLoad>
+      <terrainResistance>	1.1 1.3 2.3	</terrainResistance>
+      <brakeForce>	26000	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	46	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.23	</vehicleMovement>
+        <vehicleRotation>	0.23	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	80	</maxHealth>
+      <maxRegenHealth>	60	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/italy/It07_P26_40/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/italy/It07_P26_40/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/italy/It07_P26_40/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	germany_01	</textureSet>
+        <size>	0.38 0.46	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.1	</textureScale>
+      </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.959680 -0.000009 -0.021214	</row0>
+            <row1>	-0.000005 1.342020 -0.000001	</row1>
+            <row2>	-0.031883 -0.000002 5.163200	</row2>
+            <row3>	0.000005 0.000000 0.000052	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.481732	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.14	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L5	</name>
+          <radius>	0.333506	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.217422	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.481732	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.14	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	4	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R5	</name>
+          <radius>	0.333506	</radius>
+          <syncAngle>	20	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.217422	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L5	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	mediumTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.07464 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/italy/It07_P26_40/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/italy/It07_P26_40/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.14186 1.73818	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.1	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/italy/It07_P26_40/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/italy/It07_P26_40/track/segment.model	</segmentModelRight>
+        <left>	vehicles/italy/It07_P26_40/track/left.track	</left>
+        <right>	vehicles/italy/It07_P26_40/track/right.track	</right>
+        <segmentLength>	0.15	</segmentLength>
+        <segmentOffset>	0.0949248	</segmentOffset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.00496084	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1	</forwardElastK>
+          <backwardElastK>	2	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	2.2	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	2.5	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	2.2	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	1.9	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	1.6	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	1.3	</forwardElastK>
+          <backwardElastK>	0.7	</backwardElastK>
+          <offset>	-0.0736842	</offset>
+        </node>
+      </trackNodes>
+    </Chassis_It07_P26_40_2>
+  </chassis>
+  <turrets0>
+    <Turret_1_It07_P26_40>
+      <userString>	#italy_vehicles:Turret_1_It07_P26_40	</userString>
+      <tags></tags>
+      <level>	3	</level>
+      <price>	2200	</price>
+      <armor>
+        <armor_1>	50	</armor_1>
+        <armor_2>	48	</armor_2>
+        <armor_3>	40	</armor_3>
+        <armor_4>	40	</armor_4>
+        <armor_5>	20	</armor_5>
+        <armor_6>	14	</armor_6>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	2800	</weight>
+      <maxHealth>	64	</maxHealth>
+      <rotationSpeed>	36	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	320	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <Cannone_da_47_40>	shared	  <maxAmmo>	120	</maxAmmo>
+          <unlocks>
+            <gun>	Cannone_da_75_32	  <cost>	1800	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -23 1 -23	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
+          <reloadTime>	2.2	</reloadTime>
+          <aimingTime>	1.8	</aimingTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/italy/It07_P26_40/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/italy/It07_P26_40/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/italy/It07_P26_40/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/italy/It07_P26_40/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/italy/It07_P26_40/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+          <recoil>
+            <recoilEffect>	small	</recoilEffect>
+            <lodDist>	MEDIUM	</lodDist>
+            <amplitude>	0.3	</amplitude>
+          </recoil>
+          <effects>	shot_small	</effects>
+          <camouflage>
+            <tiling>	1.2 0.4 0.000000 0.000000	</tiling>
+          </camouflage>
+        </Cannone_da_47_40>
+        <Cannone_da_75_32>	shared	  <maxAmmo>	68	</maxAmmo>
+          <unlocks>
+            <turret>	Turret_2_It07_P26_40	  <cost>	1150	</cost>
+            </turret>
+          </unlocks>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -23 1 -23	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <reloadTime>	4.4	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.16	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/italy/It07_P26_40/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/italy/It07_P26_40/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/italy/It07_P26_40/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/italy/It07_P26_40/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/italy/It07_P26_40/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_medium	</effects>
+          <camouflage>
+            <tiling>	1.2 0.4 0.000000 0.000000	</tiling>
+          </camouflage>
+        </Cannone_da_75_32>
+      </guns>
+      <models>
+        <undamaged>	vehicles/italy/It07_P26_40/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/italy/It07_P26_40/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/italy/It07_P26_40/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/italy/It07_P26_40/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/italy/It07_P26_40/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.307392 0.757187	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.797811 0.440212 0.321137	</rayStart>
+          <rayEnd>	-0.625832 0.347878 0.27761	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.378	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.797811 0.440212 0.321137	</rayStart>
+          <rayEnd>	0.625832 0.347878 0.27761	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.378	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.943 -0.064 1.006 0.000 0.535 0.191 0.631 0.336 0.217 0.500 0.382 0.500 0.236 0.592 0.157	</physicsShape>
+      <camouflage>
+        <tiling>	1.4 0.7 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_It07_P26_40>
+    <Turret_2_It07_P26_40>
+      <userString>	#italy_vehicles:Turret_2_It07_P26_40	</userString>
+      <tags></tags>
+      <level>	4	</level>
+      <price>	4900	</price>
+      <unlocks>
+        <gun>	Cannone_da_75_34	  <cost>	2200	</cost>
+        </gun>
+      </unlocks>
+      <armor>
+        <armor_1>	50	</armor_1>
+        <armor_2>	48	</armor_2>
+        <armor_3>	40	</armor_3>
+        <armor_4>	40	</armor_4>
+        <armor_5>	20	</armor_5>
+        <armor_6>	14	</armor_6>
+        <armor_8>	0	</armor_8>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	3000	</weight>
+      <maxHealth>	94	</maxHealth>
+      <rotationSpeed>	38	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	80	</maxHealth>
+        <maxRegenHealth>	40	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	330	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	60	</maxHealth>
+        <maxRegenHealth>	30	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <Cannone_da_47_40>	shared	  <maxAmmo>	120	</maxAmmo>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -23 1 -23	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.29	</invisibilityFactorAtShot>
+          <reloadTime>	2	</reloadTime>
+          <aimingTime>	1.7	</aimingTime>
+          <shotDispersionRadius>	0.36	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.1	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/italy/It07_P26_40/normal/lod0/Gun_03.model	</undamaged>
+            <destroyed>	vehicles/italy/It07_P26_40/crash/lod0/Gun_03.model	</destroyed>
+            <exploded>	vehicles/italy/It07_P26_40/crash/lod0/Gun_03.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/italy/It07_P26_40/collision/Gun_03.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/italy/It07_P26_40/collision_client/Gun_03.model	</collisionModelClient>
+          </hitTester>
+          <camouflage>
+            <tiling>	1.2 0.4 0.000000 0.000000	</tiling>
+          </camouflage>
+        </Cannone_da_47_40>
+        <Cannone_da_75_32>	shared	  <maxAmmo>	68	</maxAmmo>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -23 1 -23	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <reloadTime>	4	</reloadTime>
+          <aimingTime>	2.2	</aimingTime>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/italy/It07_P26_40/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/italy/It07_P26_40/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/italy/It07_P26_40/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/italy/It07_P26_40/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/italy/It07_P26_40/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_medium	</effects>
+          <camouflage>
+            <tiling>	1.2 0.4 0.000000 0.000000	</tiling>
+          </camouflage>
+        </Cannone_da_75_32>
+        <Cannone_da_75_34>	shared	  <maxAmmo>	68	</maxAmmo>
+          <unlocks>
+            <vehicle>	It11_P43	  <cost>	11850	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <gun>	20	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -23 1 -23	</minPitch>
+            <maxPitch>	0 10 1 10	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.26	</invisibilityFactorAtShot>
+          <reloadTime>	4.2	</reloadTime>
+          <aimingTime>	2.2	</aimingTime>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	4	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <models>
+            <undamaged>	vehicles/italy/It07_P26_40/normal/lod0/Gun_05.model	</undamaged>
+            <destroyed>	vehicles/italy/It07_P26_40/crash/lod0/Gun_05.model	</destroyed>
+            <exploded>	vehicles/italy/It07_P26_40/crash/lod0/Gun_05.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/italy/It07_P26_40/collision/Gun_05.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/italy/It07_P26_40/collision_client/Gun_05.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_medium	</effects>
+          <camouflage>
+            <tiling>	1.2 0.4 0.000000 0.000000	</tiling>
+          </camouflage>
+        </Cannone_da_75_34>
+      </guns>
+      <models>
+        <undamaged>	vehicles/italy/It07_P26_40/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/italy/It07_P26_40/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/italy/It07_P26_40/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/italy/It07_P26_40/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/italy/It07_P26_40/collision_client/Turret_02.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000000 0.261774 0.732039	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.833571 0.394399 0.244988	</rayStart>
+          <rayEnd>	-0.658566 0.308714 0.199952	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.378	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.833571 0.394399 0.244988	</rayStart>
+          <rayEnd>	0.658566 0.308714 0.199952	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.378	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	1.146 -0.191 1.006 0.000 0.573 0.217 0.650 0.363 0.236 0.500 0.338 0.516 0.350 0.707 0.157	</physicsShape>
+      <camouflage>
+        <tiling>	1.4 0.7 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_2_It07_P26_40>
+  </turrets0>
+  <engines>
+    <Maybach_HL_120>	shared	  <unlocks>
+        <engine>	SPA_342	  <cost>	830	</cost>
+        </engine>
+      </unlocks>
+    </Maybach_HL_120>
+    <SPA_342>	shared	  <unlocks>
+        <engine>	Maybach_HL_120_evoluzione	  <cost>	1440	</cost>
+        </engine>
+      </unlocks>
+    </SPA_342>
+    <Maybach_HL_120_evoluzione>	shared	</Maybach_HL_120_evoluzione>
+  </engines>
+  <fuelTanks>
+    <Medium>	shared	</Medium>
+  </fuelTanks>
+  <radios>
+    <R_F_1_C_A>	shared	  <unlocks>
+        <radio>	R_F_2_C_A	  <cost>	1400	</cost>
+        </radio>
+      </unlocks>
+    </R_F_1_C_A>
+    <R_F_2_C_A>	shared	</R_F_2_C_A>
+  </radios>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <Maybach_HL_120>
+          <smplEnginePower>	300	</smplEnginePower>
+        </Maybach_HL_120>
+        <SPA_342>
+          <smplEnginePower>	330	</smplEnginePower>
+        </SPA_342>
+        <Maybach_HL_120_evoluzione>
+          <smplEnginePower>	400	</smplEnginePower>
+        </Maybach_HL_120_evoluzione>
+      </engines>
+      <chassis>
+        <Chassis_It07_P26_40>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_It07_P26_40>
+        <Chassis_It07_P26_40_2>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.10465	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_It07_P26_40_2>
+      </chassis>
+    </detailed>
+  </physics>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	medium	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	italian_flag	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1	</alpha>
+  </emblems>
+</It07_P26_40.xml>

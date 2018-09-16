@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/c11n_constants.py
 import constants
+from soft_exception import SoftException
 RENT_DEFAULT_BATTLES = 50
 MAX_OUTFIT_LENGTH = 1024
 MAX_CAMOUFLAGE_PATTERN_SIZE = 5
 MAX_ITEMS_FOR_BUY_OPERATION = 100
+HIDDEN_CAMOUFLAGE_ID = 1
 
 class CustomizationType(object):
     PAINT = 1
@@ -19,7 +21,8 @@ class CustomizationType(object):
      STYLE,
      MODIFICATION,
      ITEM_GROUP}
-    _SIMPLE_TYPES = (PAINT, CAMOUFLAGE, DECAL)
+    _APPLIED_TO_TYPES = (PAINT, CAMOUFLAGE, DECAL)
+    _INT_TYPES = (STYLE, MODIFICATION)
 
 
 CustomizationTypeNames = {getattr(CustomizationType, k):k for k in dir(CustomizationType) if not k.startswith('_') and k != 'RANGE'}
@@ -122,7 +125,7 @@ class SeasonType(object):
             return SeasonType.SUMMER
         if arenaKind == 2:
             return SeasonType.DESERT
-        raise ValueError('unknown arenaKind', arenaKind)
+        raise SoftException('unknown arenaKind', arenaKind)
 
 
 SeasonTypeNames = {getattr(SeasonType, k):k for k in dir(SeasonType) if not k.startswith('_') and isinstance(getattr(SeasonType, k), int)}
@@ -139,3 +142,10 @@ class ModificationType(object):
 class DecalType(object):
     EMBLEM = 1
     INSCRIPTION = 2
+
+
+class StyleFlags(object):
+    ENABLED = 1
+    INSTALLED = 2
+    EMPTY = 0
+    ACTIVE = ENABLED | INSTALLED

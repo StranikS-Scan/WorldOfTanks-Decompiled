@@ -70,9 +70,9 @@ class BackgroundMode(object):
         self.__switchButton = True
         self.__bufferTime = self.__userPrefs.readFloat(Settings.VIDEO_BUFFERING_TIME, 0.5)
         self.__images = self.__getWallpapersList()
-        self.__isWindowActive = True
-        self.__isWindowInSizeMove = False
+        self.__isWindowAccessible = True
         self.__inSwitchToMode = None
+        self.__delayedVideoStart = False
         return
 
     def showWallpaper(self, showSwitchButton):
@@ -84,14 +84,11 @@ class BackgroundMode(object):
     def show(self):
         files = ['/'.join((SCALEFORM_SWF_PATH_V3, _LOGIN_VIDEO_FILE))]
         ScaleformFileLoader.enableStreaming(files)
-        self.__loadFromPrefs()
-        if self.__bgMode == _BG_MODE_VIDEO:
-            self.__view.as_showLoginVideoS(_LOGIN_VIDEO_FILE, self.__bufferTime, self.__isSoundMuted)
+        self.__isWindowAccessible = Windowing.isWindowAccessible()
+        if not self.__isWindowAccessible:
+            self.__delayedVideoStart = True
         else:
-            self.showWallpaper(self.__switchButton)
-        self.__isWindowActive = Windowing.isActive()
-        self.__isWindowInSizeMove = Windowing.isInSizeMove()
-        self.__applyWindowParams()
+            self.__startBGMode()
 
     def hide(self):
         ScaleformFileLoader.disableStreaming()
@@ -116,29 +113,34 @@ class BackgroundMode(object):
         WWISE.WW_eventGlobal(('loginscreen_music_resume', 'loginscreen_ambient_start')[self.__bgMode])
         if self.__isSoundMuted:
             WWISE.WW_eventGlobal('loginscreen_mute')
-        self.__applyWindowParams()
+        self.__applyWindowAccessibility()
         return
 
     def startVideoSound(self):
         WWISE.WW_eventGlobal('loginscreen_music_start')
         if self.__isSoundMuted:
             WWISE.WW_eventGlobal('loginscreen_mute')
-        self.__applyWindowParams()
+        self.__applyWindowAccessibility()
 
-    def onWindowSizeMove(self, isInSizeMove):
-        if self.__isWindowInSizeMove != isInSizeMove:
-            self.__isWindowInSizeMove = isInSizeMove
-            self.__applyWindowParams()
+    def onWindowAccessibilityChanged(self, isAccessible):
+        if self.__isWindowAccessible == isAccessible:
+            return
+        self.__isWindowAccessible = isAccessible
+        if isAccessible and self.__delayedVideoStart:
+            self.__startBGMode()
+        else:
+            self.__applyWindowAccessibility()
 
-    def onWindowActivation(self, isActive):
-        if self.__isWindowActive != isActive:
-            self.__isWindowActive = isActive
-            self.__applyWindowParams()
+    def __startBGMode(self):
+        self.__loadFromPrefs()
+        if self.__bgMode == _BG_MODE_VIDEO:
+            self.__view.as_showLoginVideoS(_LOGIN_VIDEO_FILE, self.__bufferTime, self.__isSoundMuted)
+        else:
+            self.showWallpaper(self.__switchButton)
 
-    def __applyWindowParams(self):
+    def __applyWindowAccessibility(self):
         if self.__inSwitchToMode == _BG_MODE_VIDEO or not self.__inSwitchToMode and self.__bgMode == _BG_MODE_VIDEO:
-            isActive = self.__isWindowActive and not self.__isWindowInSizeMove
-            if isActive:
+            if self.__isWindowAccessible:
                 self.__view.as_resumePlaybackS()
                 WWISE.WW_eventGlobal('loginscreen_music_resume')
             else:
@@ -337,8 +339,7 @@ class LoginView(LoginPageMeta):
         g_playerEvents.onAccountShowGUI += self._clearLoginView
         g_playerEvents.onEntityCheckOutEnqueued += self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer += self._onAccountBecomeNonPlayer
-        Windowing.addWindowActivationHandler(self.__onWindowActivation)
-        Windowing.addWindowSizeMoveHandler(self.__onWindowSizeMove)
+        Windowing.addWindowAccessibilitynHandler(self.__onWindowAccessibilityChanged)
         self.as_setVersionS(getFullClientVersion())
         self.as_setCopyrightS(_ms(MENU.COPY), _ms(MENU.LEGAL))
         self.__backgroundMode.show()
@@ -359,8 +360,7 @@ class LoginView(LoginPageMeta):
         self.connectionMgr.onKickWhileLoginReceived -= self._onKickedWhileLogin
         self.connectionMgr.onQueued -= self._onHandleQueue
         self._servers.onServersStatusChanged -= self.__updateServersList
-        Windowing.removeWindowActivationHandler(self.__onWindowActivation)
-        Windowing.removeWindowSizeMoveHandler(self.__onWindowSizeMove)
+        Windowing.removeWindowAccessibilityHandler(self.__onWindowAccessibilityChanged)
         g_playerEvents.onAccountShowGUI -= self._clearLoginView
         g_playerEvents.onEntityCheckOutEnqueued -= self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer -= self._onAccountBecomeNonPlayer
@@ -372,11 +372,8 @@ class LoginView(LoginPageMeta):
         View._dispose(self)
         return
 
-    def __onWindowActivation(self, isActive):
-        self.__backgroundMode.onWindowActivation(isActive)
-
-    def __onWindowSizeMove(self, isInSizeMove):
-        self.__backgroundMode.onWindowSizeMove(isInSizeMove)
+    def __onWindowAccessibilityChanged(self, isAccessible):
+        self.__backgroundMode.onWindowAccessibilityChanged(isAccessible)
 
     def _showForm(self):
         self.as_showSimpleFormS(False, None)

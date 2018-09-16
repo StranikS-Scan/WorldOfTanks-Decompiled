@@ -10,6 +10,7 @@ from messenger.proto.xmpp.gloox_constants import ROSTER_CONTEXT
 from messenger.proto.xmpp.log_output import CLIENT_LOG_AREA, g_logOutput
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from messenger.proto.xmpp.xmpp_items import RosterItem, ContactItem
+from soft_exception import SoftException
 
 def _syncRosterItem(storage, jid, name, groups, sub=None, clanInfo=None):
     dbID = jid.getDatabaseID()
@@ -46,7 +47,7 @@ class RosterResultTask(SeqTask):
         pass
 
     def _doRun(self, client):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def sync(self, seq):
         storage = self.usersStorage

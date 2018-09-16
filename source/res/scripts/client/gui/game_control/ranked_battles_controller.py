@@ -311,10 +311,11 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         unburnableStepRanks = settings.unburnableStepRanks
         points = settings.accLadderPts
         result = [Rank(*self.__buildRank(0, 0, currentProgress, maxProgress, lastProgress, unburnableRanks, unburnableStepRanks, points))]
+        maxAccRank = self.getAccRanksTotal()
         for rankID, stepsCount in enumerate(stepsToProgress, 1):
             quest = self.__getQuestForRank(rankID)
             finalQuest = self.__getQuestForMaxRank(rankID)
-            result.append(Rank(quest=quest, finalQuest=finalQuest, *self.__buildRank(rankID, stepsCount, currentProgress, maxProgress, lastProgress, unburnableRanks, unburnableStepRanks, points)))
+            result.append(Rank(quest=quest, finalQuest=finalQuest, isMaxAccRank=(rankID == maxAccRank), *self.__buildRank(rankID, stepsCount, currentProgress, maxProgress, lastProgress, unburnableRanks, unburnableStepRanks, points)))
 
         return result
 

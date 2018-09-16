@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/messenger/doc_loaders/_xml_helpers.py
 import types
 from helpers.html import translation as html_translation
+from soft_exception import SoftException
 
 def _convertVector3ToRGB(xmlCtx, rgb, msg):
     rgb = (int(rgb.x), int(rgb.y), int(rgb.z))
@@ -12,7 +13,7 @@ def _convertVector3ToRGB(xmlCtx, rgb, msg):
     return (rgb[0] << 16) + (rgb[1] << 8) + (rgb[2] << 0)
 
 
-class XMLError(Exception):
+class XMLError(SoftException):
 
     def __init__(self, ctx, message):
         super(XMLError, self).__init__()

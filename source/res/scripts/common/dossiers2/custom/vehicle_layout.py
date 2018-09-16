@@ -9,6 +9,7 @@ from dossiers2.custom.dependencies import FORT_ACHIEVEMENTS_DEPENDENCIES
 from dossiers2.custom.dependencies import GLOBAL_MAP_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import RANKED_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import A30X30_STATS_DEPENDENCIES
+from dossiers2.custom.dependencies import EPIC_BATTLE_STATS_DEPENDENCIES
 TOTAL_BLOCK_LAYOUT = ['creationTime',
  'lastBattleTime',
  'battleLifeTime',
@@ -30,6 +31,7 @@ _globalMapCommonBlockBuilder = StaticSizeBlockBuilder('globalMapCommon', GLOBAL_
 _falloutBlockBuilder = StaticSizeBlockBuilder('fallout', FALLOUT_VEHICLE_BLOCK_LAYOUT, FALLOUT_STATS_DEPENDENCIES, [])
 _rankedBlockBuilder = StaticSizeBlockBuilder('ranked', RANKED_BLOCK_LAYOUT, RANKED_STATS_DEPENDENCIES, [])
 _a30x30BlockBuilder = StaticSizeBlockBuilder('a30x30', A30X30_BLOCK_LAYOUT, A30X30_STATS_DEPENDENCIES, [])
+_epicBattleBlockBuilder = StaticSizeBlockBuilder('epicBattle', EPIC_BATTLE_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxPopUps = ['maxXP', 'maxFrags', 'maxDamage']
 _maxFalloutPopUps = _maxPopUps + ['maxWinPoints', 'maxCoins']
 _max15x15BlockBuilder = StaticSizeBlockBuilder('max15x15', MAX_BLOCK_LAYOUT, {}, _maxPopUps)
@@ -42,6 +44,7 @@ _maxGlobalMapCommonBlockBuilder = StaticSizeBlockBuilder('maxGlobalMapCommon', M
 _maxFalloutBlockBuilder = StaticSizeBlockBuilder('maxFallout', MAX_FALLOUT_BLOCK_LAYOUT, {}, _maxFalloutPopUps)
 _maxRankedBlockBuilder = StaticSizeBlockBuilder('maxRanked', MAX_BLOCK_LAYOUT, {}, _maxPopUps)
 _max30x30BlockBuilder = StaticSizeBlockBuilder('max30x30', MAX_BLOCK_LAYOUT, {}, _maxPopUps)
+_maxEpicBattleBlockBuilder = StaticSizeBlockBuilder('maxEpicBattle', MAX_BLOCK_LAYOUT, {}, _maxPopUps)
 _vehTypeFragsBlockBuilder = DictBlockBuilder('vehTypeFrags', 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
 _rankedSeasonsBlockBuilder = DictBlockBuilder('rankedSeasons', 'II', 'BB', {})
 _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
@@ -238,6 +241,19 @@ FALLOUT_ACHIEVEMENTS_BLOCK_LAYOUT = ['shoulderToShoulder',
  'deleted']
 _falloutAchievementsPopUps = ['falloutDieHard']
 _falloutAchievementsBlockBuilder = StaticSizeBlockBuilder('falloutAchievements', FALLOUT_ACHIEVEMENTS_BLOCK_LAYOUT, {}, _falloutAchievementsPopUps)
+EPIC_BATTLE_ACHIEVEMENTS_BLOCK_LAYOUT = ['occupyingForce',
+ 'ironShield',
+ 'generalOfTheArmy',
+ 'supremeGun',
+ 'smallArmy',
+ 'medalPrimozicCount',
+ 'medalPrimozic']
+_epicBattleAchievementsPopUps = ['occupyingForce',
+ 'ironShield',
+ 'generalOfTheArmy',
+ 'supremeGun',
+ 'smallArmy']
+_epicBattleAchievementsBlockBuilder = StaticSizeBlockBuilder('epicBattleAchievements', EPIC_BATTLE_ACHIEVEMENTS_BLOCK_LAYOUT, {}, _epicBattleAchievementsPopUps)
 _playerInscriptionsBlockBuilder = ListBlockBuilder('inscriptions', 'H', {})
 _playerEmblemsBlockBuilder = ListBlockBuilder('emblems', 'H', {})
 _camouflagesBlockBuilder = ListBlockBuilder('camouflages', 'H', {})
@@ -281,4 +297,7 @@ vehicleDossierLayout = (_a15x15BlockBuilder,
  _maxRankedBlockBuilder,
  _rankedSeasonsBlockBuilder,
  _a30x30BlockBuilder,
- _max30x30BlockBuilder)
+ _max30x30BlockBuilder,
+ _epicBattleBlockBuilder,
+ _maxEpicBattleBlockBuilder,
+ _epicBattleAchievementsBlockBuilder)

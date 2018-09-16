@@ -14,6 +14,7 @@
     <respawnController_redrawVehicleOnRespawn>
       <Arg>	OBJECT_ID	</Arg>
       <Arg>	STRING	</Arg>
+      <Arg>	STRING	</Arg>
     </respawnController_redrawVehicleOnRespawn>
     <respawnController_explodeVehicleBeforeRespawn>
       <Arg>	OBJECT_ID	</Arg>
@@ -44,6 +45,7 @@
   <ClientMethods>
     <redrawVehicleOnRespawn>
       <Arg>	OBJECT_ID	</Arg>
+      <Arg>	STRING	</Arg>
       <Arg>	STRING	</Arg>
     </redrawVehicleOnRespawn>
     <explodeVehicleBeforeRespawn>

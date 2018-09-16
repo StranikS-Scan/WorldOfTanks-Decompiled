@@ -28,7 +28,8 @@ class VehicleRotationRequester(AbstractSyncDataRequester, IVehicleRotationReques
     @property
     def _groupLocks(self):
         return self.getCacheValue('groupLocks', {'groupBattles': [],
-         'isGroupLocked': []})
+         'isGroupLocked': [],
+         'unlockedBy': {}})
 
     @async
     def _requestCache(self, callback):

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/tooltips/tankman.py
 import math
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
-from gui.shared.tooltips import ToolTipDataField, ToolTipAttrField, ToolTipData, TOOLTIP_TYPE
+from gui.shared.tooltips import ToolTipDataField, ToolTipAttrField, ToolTipData, TOOLTIP_TYPE, formatters
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
 from helpers import time_utils
@@ -12,6 +12,9 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.formatters import text_styles, moneyWithIcon
 from shared_utils import findFirst
 from skeletons.gui.shared import IItemsCache
+from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
+from gui import makeHtmlString
+from gui.shared.tooltips.common import BlocksTooltipData
 TANKMAN_DISMISSED = 'dismissed'
 _TIME_FORMAT_UNITS = [('days', time_utils.ONE_DAY), ('hours', time_utils.ONE_HOUR), ('minutes', time_utils.ONE_MINUTE)]
 
@@ -43,7 +46,7 @@ class TankmanRoleBonusesField(ToolTipDataField):
         if tankman:
             _, roleBonuses = tankman.realRoleLevel
             for idx in self.__ids:
-                result += roleBonuses[idx]
+                result += int(math.ceil(float(roleBonuses[idx])))
 
         return result
 
@@ -172,6 +175,77 @@ class TankmanStatusField(ToolTipDataField):
         for role, skills in SKILLS_BY_ROLES.iteritems():
             if skill.name in skills:
                 return role
+
+
+class TankmanTooltipDataBlock(BlocksTooltipData):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def __init__(self, context):
+        super(TankmanTooltipDataBlock, self).__init__(context, TOOLTIP_TYPE.SKILL)
+        self._setWidth(320)
+        self.item = None
+        return
+
+    def _packBlocks(self, *args, **kwargs):
+        items = super(TankmanTooltipDataBlock, self)._packBlocks()
+        item = self.context.buildItem(*args, **kwargs)
+        self.item = item
+        vehicle = None
+        nativeVehicle = self.itemsCache.items.getItemByCD(item.vehicleNativeDescr.type.compactDescr)
+        if item.isInTank:
+            vehicle = self.itemsCache.items.getVehicle(item.vehicleInvID)
+        items.append(formatters.packImageTextBlockData(title=text_styles.highTitle(item.fullUserName), desc=text_styles.main(item.rankUserName)))
+        innerBlock = []
+        if vehicle:
+            innerBlock.append(formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'grayTitle', {'message': makeString(TOOLTIPS.HANGAR_CREW_ASSIGNEDTO)})))
+            innerBlock.append(formatters.packImageTextBlockData(img=vehicle.iconContour, txtGap=-4, padding=formatters.packPadding(bottom=0, top=10, left=0), title=text_styles.stats(vehicle.shortUserName), desc=text_styles.stats('#menu:header/vehicleType/%s' % vehicle.type), flipHorizontal=True))
+        if innerBlock:
+            items.append(formatters.packBuildUpBlockData(innerBlock, padding=formatters.packPadding(left=0, right=50, top=-5, bottom=0), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
+        commonStatsBlock = [formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'grayTitle', {'message': makeString(TOOLTIPS.HANGAR_CREW_SPECIALTY_SKILLS)}))]
+        penalty = self._getBonusValue(item, [TankmanRoleBonusesField.BONUSES.PENALTY])
+        addition = self._getBonusValue(item, [TankmanRoleBonusesField.BONUSES.COMMANDER,
+         TankmanRoleBonusesField.BONUSES.EQUIPMENTS,
+         TankmanRoleBonusesField.BONUSES.DEVICES,
+         TankmanRoleBonusesField.BONUSES.BROTHERHOOD])
+        addition_ = '' if addition == 0 else self._getSign(addition) + str(addition)
+        penalty_ = '' if penalty == 0 else self._getSign(penalty) + str(penalty)
+        if penalty != 0 or addition != 0:
+            addRoleLevels = ' (' + str(item.roleLevel) + addition_ + penalty_ + ')'
+        else:
+            addRoleLevels = ''
+        if not vehicle or nativeVehicle.shortUserName == vehicle.shortUserName:
+            vehicleName = text_styles.main(nativeVehicle.shortUserName)
+        else:
+            vehicleName = text_styles.critical(nativeVehicle.shortUserName)
+        commonStatsBlock.append(formatters.packTextParameterBlockData(text_styles.main(item.roleUserName + ' ') + vehicleName, text_styles.stats(str(item.roleLevel + penalty + addition) + '%' + addRoleLevels), valueWidth=90, padding=formatters.packPadding(left=0, right=0, top=5, bottom=0)))
+        field = TankmanSkillListField(self, 'skills')
+        _, value = field.buildData()
+        skills = value
+        for skill in skills:
+            commonStatsBlock.append(formatters.packTextParameterBlockData(text_styles.main(skill['label']), text_styles.stats(str(skill['level']) + '%'), valueWidth=90))
+
+        items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=5))
+        field = TankmanNewSkillCountField(self, '')
+        _, newSkillCount = field.buildData()
+        if newSkillCount > 0:
+            items.append(formatters.packImageTextBlockData(img='../maps/icons/tankmen/skills/small/new_skill.png', txtOffset=20, padding=formatters.packPadding(bottom=0, top=5, left=0), imgPadding=formatters.packPadding(left=0, top=3), title=makeHtmlString('html_templates:lobby/textStyle', 'goldTextTitle', {'message': makeString(TOOLTIPS.HANGAR_CREW_NEW_SKILL_AVAILABLE_HEADER)}), desc=makeHtmlString('html_templates:lobby/textStyle', 'goldTextField', {'message': makeString(TOOLTIPS.HANGAR_CREW_NEW_SKILL_AVAILABLE_TEXT)})))
+        field = TankmanStatusField(self, '')
+        _, status = field.buildData()
+        if status['header'] != '':
+            items.append(formatters.packImageTextBlockData(title=text_styles.warning(status['header']), desc=makeHtmlString('html_templates:lobby/textStyle', 'statusWarningField', {'message': status['text']})))
+        return items
+
+    def _getSign(self, val):
+        return '' if val < 0 else '+'
+
+    def _getBonusValue(self, tankman, ids):
+        result = 0
+        if tankman:
+            _, roleBonuses = tankman.realRoleLevel
+            for idx in ids:
+                result += roleBonuses[idx]
+
+        return int(result)
 
 
 class TankmanTooltipData(ToolTipData):

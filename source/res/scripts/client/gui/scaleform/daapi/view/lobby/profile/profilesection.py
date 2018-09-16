@@ -7,6 +7,7 @@ from gui.Scaleform.locale.PROFILE import PROFILE
 from gui.Scaleform.genConsts.PROFILE_DROPDOWN_KEYS import PROFILE_DROPDOWN_KEYS
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from soft_exception import SoftException
 
 class ProfileSection(ProfileSectionMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -88,7 +89,7 @@ class ProfileSection(ProfileSectionMeta):
         elif self._battlesType == PROFILE_DROPDOWN_KEYS.EPIC_RANDOM:
             data = accountDossier.getEpicRandomStats()
         else:
-            raise ValueError('ProfileSection: Unknown battle type: ' + self._battlesType)
+            raise SoftException('ProfileSection: Unknown battle type: ' + self._battlesType)
         return data
 
     def _receiveFortDossier(self, accountDossier):

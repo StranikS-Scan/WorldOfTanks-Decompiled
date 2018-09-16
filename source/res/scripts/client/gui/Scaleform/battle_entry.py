@@ -18,6 +18,7 @@ from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from gui.Scaleform.managers.ColorSchemeManager import BattleColorSchemeManager
 from gui.Scaleform.managers.GlobalVarsManager import GlobalVarsManager
 from gui.Scaleform.managers.PopoverManager import PopoverManager
+from gui.Scaleform.framework.managers.ImageManager import ImageManager
 from gui.Scaleform.managers.SoundManager import SoundManager
 from gui.Scaleform.managers.TweenSystem import TweenManager
 from gui.Scaleform.managers.UtilsManager import UtilsManager
@@ -52,7 +53,8 @@ class TopWindowContainer(PopUpContainer):
 
 
 BATTLE_OPTIMIZATION_CONFIG = {BATTLE_VIEW_ALIASES.MINIMAP: OptimizationSetting('minimapAlphaEnabled', True),
- BATTLE_VIEW_ALIASES.DAMAGE_PANEL: OptimizationSetting('minimapAlphaEnabled', True)}
+ BATTLE_VIEW_ALIASES.DAMAGE_PANEL: OptimizationSetting(),
+ BATTLE_VIEW_ALIASES.EPIC_DEPLOYMENT_MAP: OptimizationSetting('minimapAlphaEnabled', True)}
 
 class BattleEntry(SFApplication):
 
@@ -112,7 +114,7 @@ class BattleEntry(SFApplication):
         return ContainerManager(self._loaderMgr, DefaultContainer(ViewTypes.DEFAULT), DefaultContainer(ViewTypes.CURSOR), PopUpContainer(ViewTypes.WINDOW), TopWindowContainer(ViewTypes.TOP_WINDOW, weakref.proxy(self)), DefaultContainer(ViewTypes.SERVICE_LAYOUT), PopUpContainer(ViewTypes.OVERLAY))
 
     def _createToolTipManager(self):
-        tooltip = ToolTip(BATTLE_TOOLTIPS_BUILDERS_PATHS, app_settings.GUI_GLOBAL_SPACE_ID.BATTLE_LOADING)
+        tooltip = ToolTip(BATTLE_TOOLTIPS_BUILDERS_PATHS, {}, app_settings.GUI_GLOBAL_SPACE_ID.BATTLE_LOADING)
         tooltip.setEnvironment(self)
         return tooltip
 
@@ -136,6 +138,9 @@ class BattleEntry(SFApplication):
 
     def _createTutorialManager(self):
         return TutorialManager(None, False, {})
+
+    def _createImageManager(self):
+        return ImageManager()
 
     def _createPopoverManager(self):
         return PopoverManager(EVENT_BUS_SCOPE.BATTLE)

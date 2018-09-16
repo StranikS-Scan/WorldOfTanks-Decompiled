@@ -56,6 +56,7 @@ class GameEvent(HasCtxEvent):
     BATTLE_LOADING = 'game/battleLoading'
     SHOW_COLOR_SETTINGS_TIP = 'game/showColorSettingsTip'
     HIDE_COLOR_SETTINGS_TIP = 'game/hideColorSettingsTip'
+    EPIC_GLOBAL_MSG_CMD = 'game/setGlobalMessageCmd'
 
 
 class GUICommonEvent(SharedEvent):
@@ -275,6 +276,7 @@ class MissionsEvent(HasCtxEvent):
 
 class TrainingSettingsEvent(HasCtxEvent):
     UPDATE_TRAINING_SETTINGS = 'updateTrainingSettings'
+    UPDATE_EPIC_TRAINING_SETTINGS = 'updateEpicTrainingSettings'
 
 
 class TechnicalMaintenanceEvent(HasCtxEvent):

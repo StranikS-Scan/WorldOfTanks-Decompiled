@@ -3,12 +3,13 @@
 import items
 import items.vehicles as iv
 from items.components import shared_components
+from soft_exception import SoftException
 from items.components.c11n_constants import ApplyArea, SeasonType, ItemTags, CustomizationType, MAX_CAMOUFLAGE_PATTERN_SIZE, DecalType
 from typing import List, Dict, Type, Tuple, Optional, Union, TypeVar
 Item = TypeVar('TypeVar')
 
 class BaseCustomizationItem(object):
-    __slots__ = ('id', 'tags', 'filter', 'parentGroup', 'season', 'historical', 'i18n', 'priceGroup', 'requiredToken', 'priceGroupTags')
+    __slots__ = ('id', 'tags', 'filter', 'parentGroup', 'season', 'historical', 'i18n', 'priceGroup', 'requiredToken', 'priceGroupTags', 'maxNumber')
     allSlots = __slots__
     itemType = 0
 
@@ -22,6 +23,7 @@ class BaseCustomizationItem(object):
         self.priceGroup = ''
         self.priceGroupTags = frozenset()
         self.requiredToken = ''
+        self.maxNumber = 0
         if parentGroup and parentGroup.itemPrototype:
             for field in self.allSlots:
                 setattr(self, field, getattr(parentGroup.itemPrototype, field))
@@ -41,13 +43,17 @@ class BaseCustomizationItem(object):
     def isRare(self):
         return ItemTags.RARE in self.tags
 
+    @property
+    def isUnique(self):
+        return self.maxNumber > 0
+
     @classmethod
     def makeIntDescr(cls, itemId):
         return items.makeIntCompactDescrByID('customizationItem', cls.itemType, itemId)
 
     @property
     def compactDescr(self):
-        return self.makeIntDescr(self.id)
+        return self.__class__.makeIntDescr(self.id)
 
     @property
     def userString(self):
@@ -130,7 +136,7 @@ class ModificationItem(BaseCustomizationItem):
 
 class StyleItem(BaseCustomizationItem):
     itemType = CustomizationType.STYLE
-    __slots__ = ('outfits', 'isRent', 'rentCount', 'texture')
+    __slots__ = ('outfits', 'isRent', 'rentCount', 'texture', 'modelsSet')
     allSlots = BaseCustomizationItem.__slots__ + __slots__
 
     def __init__(self, parentGroup=None):
@@ -138,6 +144,7 @@ class StyleItem(BaseCustomizationItem):
         self.isRent = False
         self.rentCount = 1
         self.texture = ''
+        self.modelsSet = ''
         super(StyleItem, self).__init__(parentGroup)
 
     def isVictim(self, color):
@@ -272,9 +279,9 @@ class CustomizationCache(object):
         else:
             itemType, inTypeId = itemId
         if itemType not in self.itemTypes:
-            raise ValueError('Incorrect item type', itemId)
+            raise SoftException('Incorrect item type', itemId)
         if inTypeId not in self.itemTypes[itemType]:
-            raise ValueError('Item not found in cache', itemId)
+            raise SoftException('Item not found in cache', itemId)
         return ItemTags.VEHICLE_BOUND in self.itemTypes[itemType][inTypeId].tags
 
     def splitByVehicleBound(self, itemsDict, vehType):
@@ -340,5 +347,5 @@ class CustomizationCache(object):
 def splitIntDescr(intDescr):
     itemType, customizationType, id = items.parseIntCompactDescr(intDescr)
     if itemType != 12 or customizationType not in CustomizationType.RANGE:
-        raise ValueError('intDescr is not correct customization item int descriptor', intDescr)
+        raise SoftException('intDescr is not correct customization item int descriptor', intDescr)
     return (customizationType, id)

@@ -7,6 +7,7 @@ import quest_xml_source
 from items import _xml, ItemsPrices
 from items.vehicles import VEHICLE_CLASS_TAGS
 from constants import ITEM_DEFS_PATH, IS_CLIENT, IS_WEB, EVENT_TYPE
+from soft_exception import SoftException
 if IS_CLIENT:
     from helpers import i18n
 elif IS_WEB:
@@ -69,7 +70,7 @@ class SeasonCache():
 
     def getSeasonInfo(self, seasonID):
         if seasonID not in self.__seasonsInfo:
-            raise Exception('Invalid season id (%s)' % (seasonID,))
+            raise SoftException('Invalid season id (%s)' % (seasonID,))
         return self.__seasonsInfo[seasonID]
 
     def __readSeasons(self):
@@ -104,7 +105,7 @@ class TileCache(object):
 
     def getTileInfo(self, tileID):
         if tileID not in self.__tilesInfo:
-            raise Exception('Invalid tile id (%s)' % (tileID,))
+            raise SoftException('Invalid tile id (%s)' % (tileID,))
         return self.__tilesInfo[tileID]
 
     def __iter__(self):
@@ -170,7 +171,7 @@ class PQCache(object):
 
     def questByPotapovQuestID(self, potapovQuestID):
         if potapovQuestID not in self.__potapovQuestIDToQuestType:
-            raise Exception('Invalid potapov quest id (%s)' % (potapovQuestID,))
+            raise SoftException('Invalid potapov quest id (%s)' % (potapovQuestID,))
         return self.__potapovQuestIDToQuestType[potapovQuestID]
 
     def hasPotapovQuest(self, potapovQuestID):
@@ -193,7 +194,7 @@ class PQCache(object):
 
     def getPotapovQuestIDByUniqueID(self, uniqueQuestID):
         if uniqueQuestID not in self.__questUniqueIDToPotapovQuestID:
-            raise Exception('Invalid potapov quest name (%s)' % (uniqueQuestID,))
+            raise SoftException('Invalid potapov quest name (%s)' % (uniqueQuestID,))
         return self.__questUniqueIDToPotapovQuestID[uniqueQuestID]
 
     def branchByPotapovQuestID(self, potapovQuestID):
@@ -242,7 +243,7 @@ class PQCache(object):
              'requiredUnlocks': frozenset(map(int, _xml.readString(ctx, qsection, 'requiredUnlocks').split()))}
             rewardByDemand = qsection.readInt('rewardByDemand', 0)
             if rewardByDemand != 0 and rewardByDemand not in PQ_REWARD_BY_DEMAND.keys():
-                raise Exception('Unexpected value for rewardByDemand')
+                raise SoftException('Unexpected value for rewardByDemand')
             basicInfo['rewardByDemand'] = rewardByDemand
             tags = _readTags(ctx, qsection, 'tags')
             basicInfo['tags'] = tags
@@ -364,7 +365,7 @@ class PQType(object):
             return self.vehClasses[0]
         if self.branch == PQ_BRANCH.FALLOUT:
             return self.falloutTypes[0]
-        raise Exception('wrong potapov quest branch: %i' % self.branch)
+        raise SoftException('wrong potapov quest branch: %i' % self.branch)
 
     def maySelectQuest(self, unlockedQuests):
         return len(self.requiredUnlocks - frozenset(unlockedQuests)) == 0

@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/lobby_entry.py
 import BigWorld
 from gui.Scaleform import SCALEFORM_SWF_PATH_V3
-from gui.Scaleform.daapi.settings.config import LOBBY_TOOLTIPS_BUILDERS_PATHS
+from gui.Scaleform.daapi.settings.config import LOBBY_TOOLTIPS_BUILDERS_PATHS, ADVANCED_COMPLEX_TOOLTIPS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.tooltip_mgr import ToolTip
@@ -27,11 +27,10 @@ from gui.Scaleform.managers.SoundManager import SoundManager
 from gui.Scaleform.managers.TweenSystem import TweenManager
 from gui.Scaleform.managers.UtilsManager import UtilsManager
 from gui.Scaleform.managers.voice_chat import LobbyVoiceChatManager
-from gui.shared import EVENT_BUS_SCOPE, events
+from gui.shared import EVENT_BUS_SCOPE
 from gui.app_loader import settings as app_settings
 from helpers import dependency, uniprof
 from skeletons.gui.game_control import IBootcampController
-from Event import Event
 LOBBY_OPTIMIZATION_CONFIG = {VIEW_ALIAS.LOBBY_HEADER: OptimizationSetting(),
  HANGAR_ALIASES.TANK_CAROUSEL: OptimizationSetting(),
  GRAPHICS_OPTIMIZATION_ALIASES.CUSTOMISATION_BOTTOM_PANEL: OptimizationSetting()}
@@ -41,15 +40,6 @@ class LobbyEntry(SFApplication):
 
     def __init__(self, appNS):
         super(LobbyEntry, self).__init__('lobby.swf', appNS)
-        self.__hangarMenuOverride = None
-        self.__headerMenuOverride = None
-        self.__hangarHeaderEnabled = True
-        self.__battleSelectorHintOverride = None
-        self.onHangarMenuOverride = Event()
-        self.onHeaderMenuOverride = Event()
-        self.onHangarHeaderToggle = Event()
-        self.onBattleSelectorHintOverride = Event()
-        return
 
     @property
     def cursorMgr(self):
@@ -59,41 +49,17 @@ class LobbyEntry(SFApplication):
     def waitingManager(self):
         return self.__getWaitingFromContainer()
 
-    @property
-    def hangarMenuOverride(self):
-        return self.__hangarMenuOverride
-
-    @property
-    def headerMenuOverride(self):
-        return self.__headerMenuOverride
-
-    @property
-    def hangarHeaderEnabled(self):
-        return self.__hangarHeaderEnabled
-
-    @property
-    def battleSelectorHintOverride(self):
-        return self.__battleSelectorHintOverride
-
     @uniprof.regionDecorator(label='gui.lobby', scope='enter')
     def afterCreate(self):
         super(LobbyEntry, self).afterCreate()
         from gui.Scaleform.Waiting import Waiting
         Waiting.setWainingViewGetter(self.__getWaitingFromContainer)
-        self.addListener(events.TutorialEvent.OVERRIDE_HANGAR_MENU_BUTTONS, self.__onOverrideHangarMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(events.TutorialEvent.OVERRIDE_HEADER_MENU_BUTTONS, self.__onOverrideHeaderMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(events.TutorialEvent.SET_HANGAR_HEADER_ENABLED, self.__onSetHangarHeaderEnabled, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.addListener(events.TutorialEvent.OVERRIDE_BATTLE_SELECTOR_HINT, self.__onOverrideBattleSelectorHint, scope=EVENT_BUS_SCOPE.LOBBY)
 
     @uniprof.regionDecorator(label='gui.lobby', scope='exit')
     def beforeDelete(self):
         from gui.Scaleform.Waiting import Waiting
         Waiting.setWainingViewGetter(None)
         Waiting.close()
-        self.removeListener(events.TutorialEvent.OVERRIDE_HANGAR_MENU_BUTTONS, self.__onOverrideHangarMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.TutorialEvent.OVERRIDE_HEADER_MENU_BUTTONS, self.__onOverrideHeaderMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.TutorialEvent.SET_HANGAR_HEADER_ENABLED, self.__onSetHangarHeaderEnabled, scope=EVENT_BUS_SCOPE.LOBBY)
-        self.removeListener(events.TutorialEvent.OVERRIDE_BATTLE_SELECTOR_HINT, self.__onOverrideBattleSelectorHint, scope=EVENT_BUS_SCOPE.LOBBY)
         super(LobbyEntry, self).beforeDelete()
         return
 
@@ -104,7 +70,7 @@ class LobbyEntry(SFApplication):
         return ContainerManager(self._loaderMgr, DefaultContainer(ViewTypes.MARKER), DefaultContainer(ViewTypes.DEFAULT), DefaultContainer(ViewTypes.CURSOR), DefaultContainer(ViewTypes.WAITING), PopUpContainer(ViewTypes.WINDOW), PopUpContainer(ViewTypes.BROWSER), PopUpContainer(ViewTypes.TOP_WINDOW), PopUpContainer(ViewTypes.OVERLAY), DefaultContainer(ViewTypes.SERVICE_LAYOUT))
 
     def _createToolTipManager(self):
-        tooltip = ToolTip(LOBBY_TOOLTIPS_BUILDERS_PATHS, app_settings.GUI_GLOBAL_SPACE_ID.BATTLE_LOADING)
+        tooltip = ToolTip(LOBBY_TOOLTIPS_BUILDERS_PATHS, ADVANCED_COMPLEX_TOOLTIPS, app_settings.GUI_GLOBAL_SPACE_ID.BATTLE_LOADING)
         tooltip.setEnvironment(self)
         return tooltip
 
@@ -166,34 +132,3 @@ class LobbyEntry(SFApplication):
 
     def __getWaitingFromContainer(self):
         return self._containerMgr.getView(ViewTypes.WAITING) if self._containerMgr is not None else None
-
-    def __onOverrideHangarMenuButtons(self, event):
-        override = event.targetID
-        if override != self.__hangarMenuOverride:
-            self.__hangarMenuOverride = override
-            self.onHangarMenuOverride()
-
-    def __onOverrideHeaderMenuButtons(self, event):
-        override = event.targetID
-        if override != self.__headerMenuOverride:
-            self.__headerMenuOverride = override
-            self.onHeaderMenuOverride()
-
-    def __onSetHangarHeaderEnabled(self, event):
-        enabled = event.targetID
-        if enabled != self.__hangarHeaderEnabled:
-            self.__hangarHeaderEnabled = enabled
-            self.onHangarHeaderToggle()
-
-    def __onOverrideBattleSelectorHint(self, event):
-        override = event.targetID
-        if override != self.__battleSelectorHintOverride:
-            self.__battleSelectorHintOverride = override
-            self.onBattleSelectorHintOverride()
-
-    def clear(self):
-        self.__hangarMenuOverride = None
-        self.__headerMenuOverride = None
-        self.__hangarHeaderEnabled = True
-        self.__battleSelectorHintOverride = None
-        return

@@ -15,6 +15,8 @@ from gui.shared.items_parameters import params_helper, MAX_RELATIVE_VALUE, forma
 from gui.shared.tooltips.common import BlocksTooltipData
 from helpers.i18n import makeString as _ms
 from items import tankmen
+from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
+from gui import makeHtmlString
 
 class SkillTooltipData(ToolTipData):
 
@@ -34,6 +36,23 @@ class BuySkillTooltipData(SkillTooltipData):
     def __init__(self, context):
         super(BuySkillTooltipData, self).__init__(context)
         self.fields = self.fields + (ToolTipAttrField(self, 'header'),)
+
+
+class SkillTooltipDataBlock(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(SkillTooltipDataBlock, self).__init__(context, TOOLTIP_TYPE.SKILL)
+        self._setWidth(350)
+
+    def _packBlocks(self, *args, **kwargs):
+        items = super(SkillTooltipDataBlock, self)._packBlocks()
+        item = self.context.buildItem(*args, **kwargs)
+        items.append(formatters.packTextBlockData(text=text_styles.highTitle(item.userName)))
+        infoBlock = formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'mainTextSmall', {'message': item.description}))
+        if infoBlock:
+            items.append(formatters.packBuildUpBlockData([infoBlock], padding=formatters.packPadding(left=0, right=58, top=-5, bottom=0), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
+        items.append(formatters.packTextBlockData(text=text_styles.main(ITEM_TYPES.tankman_skills_type(item.type))))
+        return items
 
 
 class TankmanSkillTooltipData(BlocksTooltipData):

@@ -6,7 +6,6 @@ from gui.Scaleform.framework import ScopeTemplates
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from helpers import i18n
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-__author__ = 'd_savitski'
 
 class FreeXPInfoBaseMeta(IDialogMeta):
 
@@ -20,7 +19,7 @@ class FreeXPInfoBaseMeta(IDialogMeta):
         pass
 
     def getViewScopeType(self):
-        return ScopeTemplates.DEFAULT
+        return ScopeTemplates.DEFAULT_SCOPE
 
     def getEventType(self):
         return VIEW_ALIAS.FREE_X_P_INFO_WINDOW

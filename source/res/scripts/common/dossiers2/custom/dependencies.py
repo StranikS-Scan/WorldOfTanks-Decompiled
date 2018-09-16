@@ -283,6 +283,13 @@ def _set_RANKED_STATS_DEPENDENCIES():
      'droppedCapturePoints': [_updateMedalLavrinenko]})
 
 
+EPIC_BATTLE_STATS_DEPENDENCIES = {}
+
+def _set_EPIC_BATTLE_STATS_DEPENDENCIES():
+    global EPIC_BATTLE_STATS_DEPENDENCIES
+    EPIC_BATTLE_STATS_DEPENDENCIES.update({'medalPrimozicCount': [_updateMedalPrimozic]})
+
+
 def _updateMedalCarius(dossierDescr, dossierBlockDescr, key, value, prevValue):
     frags = 0
     for block in ('a15x15', 'a7x7', 'historical', 'fortBattles', 'fortSorties', 'globalMapCommon', 'globalMapMiddle', 'globalMapChampion', 'globalMapAbsolute', 'a30x30'):
@@ -887,6 +894,11 @@ def _updateWinnerLaurels(dossierDescr, dossierBlockDescr, key, value, prevValue)
     return
 
 
+def _updateMedalPrimozic(dossierDescr, dossierBlockDescr, key, value, prevValue):
+    if value > 0:
+        dossierDescr['epicBattleAchievements']['medalPrimozic'] = 1
+
+
 def __getNewMedalClass(medalConfigName, valueToCheck, curMedalClass):
     medalCfg = RECORD_CONFIGS[medalConfigName]
     maxMedalClass = len(medalCfg)
@@ -918,3 +930,4 @@ def init():
     _set_FALLOUT_STATS_DEPENDENCIES()
     _set_RANKED_STATS_DEPENDENCIES()
     _set_RANKED_BADGES_DEPENDENCIES()
+    _set_EPIC_BATTLE_STATS_DEPENDENCIES()

@@ -2,8 +2,9 @@
 # Embedded file name: scripts/client/gui/battle_control/battle_ctx.py
 import Settings
 from gui.battle_control.arena_info import player_format
-from skeletons.gui.battle_session import IBattleContext
-from unit_roster_config import SquadRoster
+from unit_roster_config import SquadRoster, EpicRoster
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider, IBattleContext
 
 class BattleContext(IBattleContext):
 
@@ -71,6 +72,11 @@ class BattleContext(IBattleContext):
             vID = self.__arenaDP.getVehIDByAccDBID(accID)
         return vID and self.__arenaDP.isSquadMan(vID, prebattleID)
 
+    def isGeneral(self, vID=None, accID=None, prebattleID=None):
+        if vID is None:
+            vID = self.__arenaDP.getVehIDByAccDBID(accID)
+        return self.__arenaDP.isGeneral(vID)
+
     def isTeamKiller(self, vID=None, accID=None):
         if vID is None:
             vID = self.__arenaDP.getVehIDByAccDBID(accID)
@@ -117,10 +123,14 @@ class BattleContext(IBattleContext):
 
     def hasSquadRestrictions(self):
         limit = False
+        sessionProvider = dependency.instance(IBattleSessionProvider)
+        arenaVisitor = sessionProvider.arenaVisitor
+        isEpicBattle = arenaVisitor.gui.isEpicBattle()
         vInfo = self.__arenaDP.getVehicleInfo()
+        maxSlots = SquadRoster.MAX_SLOTS if not isEpicBattle else EpicRoster.MAX_SLOTS
         if vInfo.isSquadMan():
             if vInfo.isSquadCreator():
-                limit = self.__arenaDP.getVehiclesCountInPrebattle(vInfo.team, vInfo.prebattleID) >= SquadRoster.MAX_SLOTS
+                limit = self.__arenaDP.getVehiclesCountInPrebattle(vInfo.team, vInfo.prebattleID) >= maxSlots
             else:
                 limit = True
         return limit
@@ -136,6 +146,9 @@ class BattleContext(IBattleContext):
 
     def getArenaScreenIcon(self):
         return self.__arenaDP.getPersonalDescription().getScreenIcon()
+
+    def getArenaRespawnIcon(self):
+        return self.__arenaDP.getPersonalDescription().getRespawnIcon()
 
     def setLastArenaWinStatus(self, winStatus):
         self.__lastArenaWinStatus = winStatus

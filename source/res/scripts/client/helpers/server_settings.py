@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/server_settings.py
+import copy
 import types
 from collections import namedtuple
-import copy
 from Event import Event
 from constants import IS_TUTORIAL_ENABLED, SWITCH_STATE
-from debug_utils import LOG_WARNING, LOG_ERROR
+from debug_utils import LOG_WARNING, LOG_ERROR, LOG_DEBUG
 from gui import GUI_SETTINGS
 from gui.shared.utils.decorators import ReprInjector
 from shared_utils import makeTupleByDict, updateDict
@@ -29,7 +29,8 @@ class _ServerInfo(object):
         return self.dbidMin <= playerDBID <= self.dbidMax
 
 
-class RoamingSettings(namedtuple('RoamingSettings', 'homeCenterID curCenterID servers')):
+class RoamingSettings(namedtuple('RoamingSettings', ('homeCenterID', 'curCenterID', 'servers'))):
+    __slots__ = ()
 
     def getHomeCenterID(self):
         return self.homeCenterID
@@ -111,7 +112,8 @@ class _FileServerSettings(object):
         return cls({})
 
 
-class _RegionalSettings(namedtuple('_RegionalSettings', ['starting_day_of_a_new_week', 'starting_time_of_a_new_day', 'starting_time_of_a_new_game_day'])):
+class _RegionalSettings(namedtuple('_RegionalSettings', ('starting_day_of_a_new_week', 'starting_time_of_a_new_day', 'starting_time_of_a_new_game_day'))):
+    __slots__ = ()
 
     def getWeekStartingDay(self):
         return self.starting_day_of_a_new_week
@@ -127,7 +129,8 @@ class _RegionalSettings(namedtuple('_RegionalSettings', ['starting_day_of_a_new_
         return cls(0, 0, 3)
 
 
-class _ESportCurrentSeason(namedtuple('_ESportSeason', ['eSportSeasonID', 'eSportSeasonStart', 'eSportSeasonFinish'])):
+class _ESportCurrentSeason(namedtuple('_ESportSeason', ('eSportSeasonID', 'eSportSeasonStart', 'eSportSeasonFinish'))):
+    __slots__ = ()
 
     def getID(self):
         return self.eSportSeasonID
@@ -143,10 +146,8 @@ class _ESportCurrentSeason(namedtuple('_ESportSeason', ['eSportSeasonID', 'eSpor
         return cls(0, 0, 0)
 
 
-class _Wgcg(namedtuple('_Wgcg', ['enabled',
- 'url',
- 'type',
- 'loginOnStart'])):
+class _Wgcg(namedtuple('_Wgcg', ('enabled', 'url', 'type', 'loginOnStart'))):
+    __slots__ = ()
 
     def isEnabled(self):
         return self.enabled
@@ -166,6 +167,7 @@ class _Wgcg(namedtuple('_Wgcg', ['enabled',
 
 
 class _ClanProfile(namedtuple('_ClanProfile', ('enabled',))):
+    __slots__ = ()
 
     def isEnabled(self):
         return self.enabled
@@ -176,13 +178,15 @@ class _ClanProfile(namedtuple('_ClanProfile', ('enabled',))):
 
 
 class _StrongholdSettings(namedtuple('_StrongholdSettings', ('wgshHostUrl',))):
+    __slots__ = ()
 
     @classmethod
     def defaults(cls):
         return cls('')
 
 
-class _SpgRedesignFeatures(namedtuple('_SpgRedesignFeatures', ['stunEnabled', 'markTargetAreaEnabled'])):
+class _SpgRedesignFeatures(namedtuple('_SpgRedesignFeatures', ('stunEnabled', 'markTargetAreaEnabled'))):
+    __slots__ = ()
 
     def isStunEnabled(self):
         return self.stunEnabled
@@ -192,33 +196,64 @@ class _SpgRedesignFeatures(namedtuple('_SpgRedesignFeatures', ['stunEnabled', 'm
         return cls(False, False)
 
 
-_BwRankedBattles = namedtuple('_BwRankedBattles', ('rblbHostUrl',))
-_BwRankedBattles.__new__.__defaults__ = (None,)
-_BwHallOfFame = namedtuple('_BwHallOfFame', ('hofHostUrl', 'isHofEnabled', 'isStatusEnabled'))
-_BwHallOfFame.__new__.__defaults__ = (None, False, False)
+class _BwRankedBattles(namedtuple('_BwRankedBattles', ('rblbHostUrl',))):
+    __slots__ = ()
 
-class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ['isEnabled',
- 'peripheryIDs',
- 'winnerRankChanges',
- 'loserRankChanges',
- 'minXP',
- 'unburnableRanks',
- 'unburnableStepRanks',
- 'unburnableVehRanks',
- 'unburnableVehStepRanks',
- 'minLevel',
- 'maxLevel',
- 'accRanks',
- 'accSteps',
- 'vehRanks',
- 'vehSteps',
- 'cycleFinishSeconds',
- 'primeTimes',
- 'seasons',
- 'cycleTimes',
- 'accLadderPts',
- 'vehLadderPts',
- 'shields'])):
+    def __new__(cls, rblbHostUrl=None):
+        return super(_BwRankedBattles, cls).__new__(cls, rblbHostUrl)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
+class _BwHallOfFame(namedtuple('_BwHallOfFame', ('hofHostUrl', 'isHofEnabled', 'isStatusEnabled'))):
+    __slots__ = ()
+
+    def __new__(cls, hofHostUrl=None, isHofEnabled=False, isStatusEnabled=False):
+        return super(_BwHallOfFame, cls).__new__(cls, hofHostUrl, isHofEnabled, isStatusEnabled)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
+class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ('isEnabled', 'peripheryIDs', 'winnerRankChanges', 'loserRankChanges', 'minXP', 'unburnableRanks', 'unburnableStepRanks', 'unburnableVehRanks', 'unburnableVehStepRanks', 'minLevel', 'maxLevel', 'accRanks', 'accSteps', 'vehRanks', 'vehSteps', 'cycleFinishSeconds', 'primeTimes', 'seasons', 'cycleTimes', 'accLadderPts', 'vehLadderPts', 'shields'))):
+    __slots__ = ()
+
+    def __new__(cls, **kwargs):
+        defaults = dict(isEnabled=False, peripheryIDs={}, winnerRankChanges=(), loserRankChanges=(), minXP=0, unburnableRanks={}, unburnableStepRanks={}, unburnableVehRanks={}, unburnableVehStepRanks={}, minLevel=0, maxLevel=0, accRanks=(), accSteps=(), vehRanks=(), vehSteps=(), cycleFinishSeconds=0, primeTimes={}, seasons={}, cycleTimes=(), accLadderPts=(), vehLadderPts=(), shields={})
+        defaults.update(kwargs)
+        return super(_RankedBattlesConfig, cls).__new__(cls, **defaults)
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
+class _WGMoneyOfflineEmergencyConfig(namedtuple('_WGMoneyOfflineEmergencyConfig', ('enabled', 'freeRepair', 'freeMaintenance', 'freeBattles', 'boostersCompensation', 'boostersDisabled'))):
+    __slots__ = ()
+
+    def __new__(cls, enabled=False, freeRepair=False, freeMaintenance=False, freeBattles=False, boostersCompensation=False, boostersDisabled=False):
+        return super(_WGMoneyOfflineEmergencyConfig, cls).__new__(cls, enabled, freeRepair, freeMaintenance, freeBattles, boostersCompensation, boostersDisabled)
+
+    def isEnabled(self):
+        return self.enabled
+
+    @classmethod
+    def defaults(cls):
+        return cls()
+
+
+class _EpicMetaGameConfig(namedtuple('_EpicMetaGameConfig', ['maxCombatReserveLevel', 'metaLevel', 'rewards'])):
 
     def asDict(self):
         return self._asdict()
@@ -229,28 +264,36 @@ class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ['isEnabled',
         return self._replace(**dataToUpdate)
 
 
-_RankedBattlesConfig.__new__.__defaults__ = (False,
- {},
- (),
- (),
- 0,
- {},
- {},
- {},
- {},
- 0,
- 0,
- (),
- (),
- (),
- (),
- 0,
- {},
- {},
- (),
- (),
- (),
- {})
+_EpicMetaGameConfig.__new__.__defaults__ = (0, 0, {})
+
+class _EpicGameConfig(namedtuple('_EpicGameConfig', ['enabled', 'validVehicleLevels', 'season'])):
+
+    def asDict(self):
+        return self._asdict()
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+
+_EpicGameConfig.__new__.__defaults__ = (1, [10], {})
+
+class _TelecomConfig(object):
+    __slots__ = ('__config',)
+
+    def __init__(self, telecomConfig):
+        self.__config = dict(((bundleId, bundleData['operator']) for bundleId, bundleData in telecomConfig['bundles'].iteritems()))
+
+    def getInternetProvider(self, bundleId):
+        if bundleId in self.__config:
+            return self.__config[bundleId]
+        LOG_ERROR('Telecom config: no internet provider info for bundleId: {}.'.format(bundleId))
+
+    @classmethod
+    def defaults(cls):
+        return cls({'bundles': {}})
+
 
 class ServerSettings(object):
 
@@ -298,15 +341,30 @@ class ServerSettings(object):
         if 'rankedBattles' in self.__serverSettings:
             self.__bwRankedBattles = makeTupleByDict(_BwRankedBattles, self.__serverSettings['rankedBattles'])
         else:
-            self.__bwRankedBattles = _BwRankedBattles()
+            self.__bwRankedBattles = _BwRankedBattles.defaults()
         if 'hallOfFame' in self.__serverSettings:
             self.__bwHallOfFame = makeTupleByDict(_BwHallOfFame, self.__serverSettings['hallOfFame'])
         else:
-            self.__bwHallOfFame = _BwHallOfFame()
+            self.__bwHallOfFame = _BwHallOfFame.defaults()
         if 'ranked_config' in self.__serverSettings:
             self.__rankedBattlesSettings = makeTupleByDict(_RankedBattlesConfig, self.__serverSettings['ranked_config'])
         else:
-            self.__rankedBattlesSettings = _RankedBattlesConfig()
+            self.__rankedBattlesSettings = _RankedBattlesConfig.defaults()
+        if 'wgm_offline_emergency_config' in self.__serverSettings:
+            self.__wgmOfflineEmergencyConfig = makeTupleByDict(_WGMoneyOfflineEmergencyConfig, self.__serverSettings['wgm_offline_emergency_config'])
+        else:
+            self.__wgmOfflineEmergencyConfig = _WGMoneyOfflineEmergencyConfig.defaults()
+        if 'epic_config' in self.__serverSettings:
+            LOG_DEBUG('epic_config', self.__serverSettings['epic_config'])
+            self.__epicMetaGameSettings = makeTupleByDict(_EpicMetaGameConfig, self.__serverSettings['epic_config']['epicMetaGame'])
+            self.__epicGameSettings = makeTupleByDict(_EpicGameConfig, self.__serverSettings['epic_config'])
+        else:
+            self.__epicMetaGameSettings = _EpicMetaGameConfig()
+            self.__epicGameSettings = _EpicGameConfig()
+        if 'telecom_config' in self.__serverSettings:
+            self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
+        else:
+            self.__telecomConfig = _TelecomConfig.defaults()
         self.onServerSettingsChange(serverSettings)
 
     def update(self, serverSettingsDiff):
@@ -321,6 +379,12 @@ class ServerSettings(object):
             self.__bwHallOfFame = makeTupleByDict(_BwHallOfFame, serverSettingsDiff['hallOfFame'])
         if 'wgcg' in serverSettingsDiff:
             self.__updateWgcg(serverSettingsDiff)
+        if 'wgm_offline_emergency_config' in serverSettingsDiff:
+            self.__wgmOfflineEmergencyConfig = makeTupleByDict(_WGMoneyOfflineEmergencyConfig, serverSettingsDiff['wgm_offline_emergency_config'])
+        if 'epic_config' in serverSettingsDiff:
+            self.__updateEpic(serverSettingsDiff)
+        if 'telecom_config' in serverSettingsDiff:
+            self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -373,6 +437,25 @@ class ServerSettings(object):
     def rankedBattles(self):
         return self.__rankedBattlesSettings
 
+    @property
+    def wgmOfflineEmergency(self):
+        return self.__wgmOfflineEmergencyConfig
+
+    @property
+    def epicMetaGame(self):
+        return self.__epicMetaGameSettings
+
+    @property
+    def epicBattles(self):
+        return self.__epicGameSettings
+
+    @property
+    def telecomConfig(self):
+        return self.__telecomConfig
+
+    def isEpicBattleEnabled(self):
+        return self.epicBattles.enabled > 0
+
     def isPersonalMissionsEnabled(self):
         return self.isRegularQuestEnabled()
 
@@ -381,6 +464,9 @@ class ServerSettings(object):
 
     def isStrongholdsEnabled(self):
         return self.__getGlobalSetting('strongholdSettings', {}).get('isStrongholdsEnabled', False)
+
+    def isLeaguesEnabled(self):
+        return self.__getGlobalSetting('strongholdSettings', {}).get('isLeaguesEnabled', False)
 
     def isElenEnabled(self):
         return self.__getGlobalSetting('elenSettings', {}).get('isElenEnabled', True)
@@ -447,9 +533,6 @@ class ServerSettings(object):
             state = False
         return state
 
-    def isTemplateMatchmakerEnabled(self):
-        return bool(self.__getGlobalSetting('isTemplateMatchmakerEnabled', True))
-
     def isTankmanRestoreEnabled(self):
         return self.__getGlobalSetting('isTankmanRestoreEnabled', True)
 
@@ -475,3 +558,7 @@ class ServerSettings(object):
 
     def __updateRanked(self, targetSettings):
         self.__rankedBattlesSettings = self.__rankedBattlesSettings.replace(targetSettings['ranked_config'])
+
+    def __updateEpic(self, targetSettings):
+        self.__epicMetaGameSettings = self.__epicMetaGameSettings.replace(targetSettings['epic_config'])
+        self.__epicGameSettings = self.__epicGameSettings.replace(targetSettings['epic_config'])

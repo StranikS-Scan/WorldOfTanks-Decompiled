@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/ops_pack.py
 import struct
 from external_strings_utils import truncate_utf8
+from soft_exception import SoftException
 MAX_PASCAL_STRING_LEN = 65535
 
 def packPascalString(s):
@@ -169,7 +170,7 @@ class OpsUnpacker:
             try:
                 unpackFormat, methodName, specialFormat, additionals, calcSize, packFormat = self._opsFormatDefs[opCode]
             except:
-                raise Exception('%s unpackOps: unknown opcode %s' % (self.__class__, opCode))
+                raise SoftException('%s unpackOps: unknown opcode %s' % (self.__class__, opCode))
 
             method = getattr(self, methodName)
             if unpackFormat or specialFormat:

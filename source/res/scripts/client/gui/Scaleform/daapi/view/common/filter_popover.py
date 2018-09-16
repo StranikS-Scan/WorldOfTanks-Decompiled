@@ -192,3 +192,21 @@ class TankCarouselFilterPopover(VehiclesFilterPopover):
         if constants.IS_KOREA:
             mapping[_SECTION.SPECIALS].append('igr')
         return mapping
+
+
+class BattleTankCarouselFilterPopover(TankCarouselFilterPopover):
+
+    def _getInitialVO(self, filters, xpRateMultiplier):
+        dataVO = super(BattleTankCarouselFilterPopover, self)._getInitialVO(filters, xpRateMultiplier)
+        dataVO['specialSectionVisible'] = False
+        dataVO['hiddenSectionVisible'] = False
+        dataVO['tankTierSectionVisible'] = False
+        dataVO['searchSectionVisible'] = False
+        return dataVO
+
+    def _generateMapping(self, hasRented, hasEvent):
+        mapping = super(BattleTankCarouselFilterPopover, self)._generateMapping(hasRented, hasEvent)
+        mapping[_SECTION.SPECIALS] = []
+        if constants.IS_KOREA:
+            mapping[_SECTION.SPECIALS].append('igr')
+        return mapping

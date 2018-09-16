@@ -5,6 +5,7 @@
 class HANGAR_ALIASES(object):
     TANK_CAROUSEL = 'tankCarousel'
     RANKED_TANK_CAROUSEL = 'rankedTankCarousel'
+    EPICBATTLE_TANK_CAROUSEL = 'epicBattleTankCarousel'
     CREW = 'crew'
     AMMUNITION_PANEL = 'ammunitionPanel'
     RESEARCH_PANEL = 'researchPanel'
@@ -13,6 +14,7 @@ class HANGAR_ALIASES(object):
     HEADER = 'header'
     RANKED_WIDGET = 'rankedWdgt'
     ALERT_MESSAGE_BLOCK = 'alertMessageBlock'
+    EPIC_WIDGET = 'epicWdgt'
     TANK_CAROUSEL_UI = 'TankCarouselUI'
     VEH_PARAM_RENDERER_STATE_SIMPLE_TOP = 'simpleTop'
     VEH_PARAM_RENDERER_STATE_SIMPLE_BOTTOM = 'simpleBottom'

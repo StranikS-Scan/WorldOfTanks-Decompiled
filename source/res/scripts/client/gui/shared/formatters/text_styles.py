@@ -4,6 +4,7 @@ import types
 from helpers import i18n
 from gui import makeHtmlString
 from gui.shared.money import Currency
+from soft_exception import SoftException
 __all__ = ('standard',
  'main',
  'neutral',
@@ -37,7 +38,13 @@ __all__ = ('standard',
  'superPromoTitle',
  'highlightText',
  'unavailable',
- 'missionStatusAvailable')
+ 'missionStatusAvailable',
+ 'epicTitle',
+ 'epicTitleYellow',
+ 'heroTitle',
+ 'heroTitleYellow',
+ 'grandTitle',
+ 'grandTitleYellow')
 
 def _getStyle(style, ctx=None):
     if ctx is None:
@@ -103,12 +110,24 @@ def highTitle(text):
     return _formatText('highTitle', text)
 
 
+def highTitleDisabled(text):
+    return _formatText('highTitleDisabled', text)
+
+
 def goldTextBig(text):
     return _formatText('goldTextBig', text)
 
 
 def creditsTextBig(text):
     return _formatText('creditsTextBig', text)
+
+
+def goldTextNormalCard(text):
+    return _formatText('goldTextNormalCard', text)
+
+
+def creditsTextNormalCard(text):
+    return _formatText('creditsTextNormalCard', text)
 
 
 def expTextBig(text):
@@ -268,6 +287,30 @@ def missionStatusAvailable(text):
     return _formatText('missionStatusAvailable', text)
 
 
+def epicTitle(text):
+    return _formatText('epicTitle', text)
+
+
+def epicTitleYellow(text):
+    return _formatText('epicTitleYellow', text)
+
+
+def heroTitle(text):
+    return _formatText('heroTitle', text)
+
+
+def heroTitleYellow(text):
+    return _formatText('heroTitleYellow', text)
+
+
+def grandTitle(text):
+    return _formatText('grandTitle', text)
+
+
+def grandTitleYellow(text):
+    return _formatText('grandTitleYellow', text)
+
+
 def getRawStyles(names):
     return dict(((name, _getStyle(name)) for name in names))
 
@@ -279,7 +322,7 @@ def getStyles(names):
 def _processStyle(style):
     if hasattr(style, '__iter__'):
         if not style:
-            raise ValueError('Empty sequence')
+            raise SoftException('Empty sequence')
         return _formatText(*style[:1])
     else:
         return _formatText(style)

@@ -71,6 +71,12 @@ class ShellBlockToolTipData(BlocksTooltipData):
         return items
 
 
+class ShellBlockToolTipDataWithBasic(ShellBlockToolTipData):
+
+    def __init__(self, context):
+        super(ShellBlockToolTipDataWithBasic, self).__init__(context, basicDataAllowed=True)
+
+
 class ShellTooltipBlockConstructor(object):
     itemsCache = dependency.descriptor(IItemsCache)
 

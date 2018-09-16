@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/battle_control/view_components.py
 import weakref
 from collections import defaultdict
+from soft_exception import SoftException
 from debug_utils import LOG_WARNING, LOG_ERROR
 from gui.battle_control.battle_constants import VIEW_COMPONENT_RULE
 from gui.battle_control.controllers.interfaces import IBattleController
@@ -45,7 +46,7 @@ class ViewComponentsController(IViewComponentsController):
         self._viewComponents = []
 
 
-class ComponentsBridgeError(Exception):
+class ComponentsBridgeError(SoftException):
     pass
 
 

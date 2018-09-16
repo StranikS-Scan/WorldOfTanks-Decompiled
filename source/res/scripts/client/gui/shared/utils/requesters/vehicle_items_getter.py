@@ -4,6 +4,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_parameters import params
 from items import vehicles, EQUIPMENT_TYPES, ItemsPrices
 from items.components.c11n_constants import DecalType
+from soft_exception import SoftException
 import nations
 
 def _getVehicles(nationID):
@@ -64,6 +65,10 @@ def _getBattleBoosters(nationID):
     return _filterByNationAndEqType(vehicles.g_cache.equipments(), params.EquipmentParams, nationID, EQUIPMENT_TYPES.battleBoosters)
 
 
+def _getBattleAbilities(nationID):
+    return _filterByNationAndEqType(vehicles.g_cache.equipments(), params.EquipmentParams, nationID, EQUIPMENT_TYPES.battleAbilities)
+
+
 def _getOptionalDevices(nationID):
     return _filterByNationAndEqType(vehicles.g_cache.optionalDevices(), params.OptionalDeviceParams, nationID)
 
@@ -107,6 +112,7 @@ _MODULES_GETTERS = {GUI_ITEM_TYPE.VEHICLE: _getVehicles,
  GUI_ITEM_TYPE.SHELL: _getShells,
  GUI_ITEM_TYPE.EQUIPMENT: _getEquipments,
  GUI_ITEM_TYPE.BATTLE_BOOSTER: _getBattleBoosters,
+ GUI_ITEM_TYPE.BATTLE_ABILITY: _getBattleAbilities,
  GUI_ITEM_TYPE.OPTIONALDEVICE: _getOptionalDevices,
  GUI_ITEM_TYPE.PAINT: _getPaints,
  GUI_ITEM_TYPE.CAMOUFLAGE: _getCamouflages,
@@ -127,7 +133,7 @@ def getItemsIterator(data, nationID=None, itemTypeID=None):
     elif itemTypeID in getters:
         itemTypeIDs = (itemTypeID,)
     else:
-        raise UserWarning('itemTypeID is invalid: {}'.format(itemTypeID))
+        raise SoftException('itemTypeID is invalid: {}'.format(itemTypeID))
     if nationID is None:
         nationIDs = nations.INDICES.itervalues()
     else:

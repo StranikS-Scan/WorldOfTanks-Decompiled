@@ -3,7 +3,8 @@
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.tooltips import contexts
 from gui.shared.tooltips import vehicle
-from gui.shared.tooltips.builders import DataBuilder, DefaultFormatBuilder
+from gui.shared.tooltips import advanced
+from gui.shared.tooltips.builders import DataBuilder, DefaultFormatBuilder, AdvancedDataBuilder
 __all__ = ('getTooltipBuilders',)
 
 class InventoryVehicleBuilder(DataBuilder):
@@ -12,8 +13,8 @@ class InventoryVehicleBuilder(DataBuilder):
     def __init__(self, tooltipType, linkage):
         super(InventoryVehicleBuilder, self).__init__(tooltipType, linkage, vehicle.VehicleInfoTooltipData(contexts.InventoryContext()))
 
-    def _buildData(self, intCD, *args):
-        return self._provider.buildToolTip(intCD)
+    def _buildData(self, _advanced, intCD, *args, **kwargs):
+        return super(InventoryVehicleBuilder, self)._buildData(_advanced, intCD)
 
 
 def getTooltipBuilders():
@@ -27,11 +28,11 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.HISTORICAL_VEHICLE, TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI, vehicle.VehicleInfoTooltipData(contexts.HangarContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_SIMPLE_PARAMETERS, TOOLTIPS_CONSTANTS.VEHICLE_PARAMETERS_UI, vehicle.VehicleSimpleParametersTooltipData(contexts.HangarParamContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.BASE_VEHICLE_PARAMETERS, TOOLTIPS_CONSTANTS.VEHICLE_PARAMETERS_UI, vehicle.BaseVehicleAdvancedParametersTooltipData(contexts.BaseHangarParamContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_CMP_PARAMETERS, TOOLTIPS_CONSTANTS.VEHICLE_PARAMETERS_UI, vehicle.BaseVehicleAdvancedParametersTooltipData(contexts.CmpParamContext())),
+     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_CMP_PARAMETERS, TOOLTIPS_CONSTANTS.VEHICLE_PARAMETERS_UI, vehicle.BaseVehicleAdvancedParametersTooltipData(contexts.CmpParamContext()), advanced.VehicleParametersAdvanced(contexts.CmpParamContext()), condition=advanced.VehicleParametersAdvanced.readyForAdvanced),
      DataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_AVG_PARAMETERS, TOOLTIPS_CONSTANTS.VEHICLE_PARAMETERS_UI, vehicle.VehicleAvgParameterTooltipData(contexts.HangarParamContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_ADVANCED_PARAMETERS, TOOLTIPS_CONSTANTS.VEHICLE_PARAMETERS_UI, vehicle.VehicleAdvancedParametersTooltipData(contexts.HangarParamContext())),
+     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_ADVANCED_PARAMETERS, TOOLTIPS_CONSTANTS.VEHICLE_PARAMETERS_UI, vehicle.VehicleAdvancedParametersTooltipData(contexts.HangarParamContext()), advanced.VehicleParametersAdvanced(contexts.HangarParamContext()), condition=advanced.VehicleParametersAdvanced.readyForAdvanced),
      DataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_SIMPLE_PARAMETERS, TOOLTIPS_CONSTANTS.VEHICLE_PARAMETERS_UI, vehicle.VehicleSimpleParametersTooltipData(contexts.PreviewParamContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_AVG_PARAMETERS, TOOLTIPS_CONSTANTS.VEHICLE_PARAMETERS_UI, vehicle.VehicleAvgParameterTooltipData(contexts.PreviewParamContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_ADVANCED_PARAMETERS, TOOLTIPS_CONSTANTS.VEHICLE_PARAMETERS_UI, vehicle.VehicleAdvancedParametersTooltipData(contexts.PreviewParamContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER, TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER_UI, vehicle.VehiclePreviewCrewMemberTooltipData(contexts.PreviewContext())),
+     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_ADVANCED_PARAMETERS, TOOLTIPS_CONSTANTS.VEHICLE_PARAMETERS_UI, vehicle.VehicleAdvancedParametersTooltipData(contexts.PreviewParamContext()), advanced.VehicleParametersAdvanced(contexts.PreviewParamContext()), condition=advanced.VehicleParametersAdvanced.readyForAdvanced),
+     AdvancedDataBuilder(TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER, TOOLTIPS_CONSTANTS.VEHICLE_PREVIEW_CREW_MEMBER_UI, vehicle.VehiclePreviewCrewMemberTooltipData(contexts.PreviewContext()), advanced.TankmanPreviewTooltipAdvanced(contexts.PreviewContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.TECHTREE_VEHICLE_ANNOUNCEMENT, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, vehicle.VehicleAnnouncementParametersTooltipData(contexts.VehicleAnnouncementContext())))

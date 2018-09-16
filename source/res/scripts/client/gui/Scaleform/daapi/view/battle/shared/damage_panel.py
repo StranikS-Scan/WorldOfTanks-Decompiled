@@ -18,6 +18,7 @@ from gui.battle_control.battle_constants import VEHICLE_GUI_ITEMS, AUTO_ROTATION
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE
 from helpers import dependency
 from helpers import i18n
+from shared_utils import CONST_CONTAINER
 from skeletons.gui.battle_session import IBattleSessionProvider
 _STATE_HANDLERS = {VEHICLE_VIEW_STATE.HEALTH: '_updateHealth',
  VEHICLE_VIEW_STATE.SPEED: 'as_updateSpeedS',
@@ -30,63 +31,70 @@ _STATE_HANDLERS = {VEHICLE_VIEW_STATE.HEALTH: '_updateHealth',
  VEHICLE_VIEW_STATE.DEVICES: '_updateDeviceState',
  VEHICLE_VIEW_STATE.REPAIRING: '_updateRepairingDevice',
  VEHICLE_VIEW_STATE.SWITCHING: '_switching',
- VEHICLE_VIEW_STATE.STUN: '_updateStun'}
+ VEHICLE_VIEW_STATE.STUN: '_updateStun',
+ VEHICLE_VIEW_STATE.INSPIRE: '_updateInspire'}
 
-class _IStunAnimPlayer(object):
-
-    def __init__(self):
-        self._hasStun = False
-
-    def showStun(self, time, animated):
-        self._hasStun = True
-
-    def hideStun(self, animated):
-        self._hasStun = False
+class STATUS_ID(CONST_CONTAINER):
+    STUN = 0
+    INSPIRE = 1
 
 
-class _ActionScriptTimer(_IStunAnimPlayer):
+class _IStatusAnimPlayer(object):
 
-    def __init__(self, view):
-        super(_ActionScriptTimer, self).__init__()
+    def __init__(self, statusId, **kwargs):
+        self._statusId = statusId
+        self._hasStatus = False
+
+    def showStatus(self, time, animated):
+        self._hasStatus = True
+
+    def hideStatus(self, animated):
+        self._hasStatus = False
+
+
+class _ActionScriptTimer(_IStatusAnimPlayer):
+
+    def __init__(self, view, statusId):
+        super(_ActionScriptTimer, self).__init__(statusId=statusId)
         self._view = view
 
-    def showStun(self, time, animated):
-        super(_ActionScriptTimer, self).showStun(time, animated)
-        self._view.as_showStunS(time, animated)
+    def showStatus(self, time, animated):
+        super(_ActionScriptTimer, self).showStatus(time, animated)
+        self._view.as_showStatusS(self._statusId, time, animated)
 
-    def hideStun(self, animated):
-        if self._hasStun:
-            self._view.as_hideStunS(animated)
-        super(_ActionScriptTimer, self).hideStun(animated)
+    def hideStatus(self, animated):
+        if self._hasStatus:
+            self._view.as_hideStatusS(self._statusId, animated)
+        super(_ActionScriptTimer, self).hideStatus(animated)
 
 
-class _PythonTimer(PythonTimer, _IStunAnimPlayer):
+class _PythonTimer(PythonTimer, _IStatusAnimPlayer):
 
-    def __init__(self, panel):
-        super(_PythonTimer, self).__init__(panel, 0, 0, 0)
+    def __init__(self, panel, statusId):
+        super(_PythonTimer, self).__init__(panel, 0, 0, 0, 0, statusId=statusId)
         self.__hideAnimated = False
 
-    def showStun(self, totalTime, animated):
-        super(_PythonTimer, self).showStun(totalTime, animated)
+    def showStatus(self, totalTime, animated):
+        super(_PythonTimer, self).showStatus(totalTime, animated)
         self._totalTime = totalTime
         self._startTime = BigWorld.serverTime()
         self._finishTime = self._startTime + totalTime if totalTime else 0
         self.show()
 
-    def hideStun(self, animated):
+    def hideStatus(self, animated):
         self.__hideAnimated = animated
         self.hide()
-        super(_PythonTimer, self).hideStun(animated)
+        super(_PythonTimer, self).hideStatus(animated)
 
     def _showView(self, isBubble):
-        self._panel.as_setStunTimerSnapshotS(self._totalTime)
+        self._panel.as_setStatusTimerSnapshotS(self._statusId, self._totalTime)
 
     def _hideView(self):
-        if self._hasStun:
-            self._panel.as_hideStunS(self.__hideAnimated)
+        if self._hasStatus:
+            self._panel.as_hideStatusS(self._statusId, self.__hideAnimated)
 
     def _setViewSnapshot(self, timeLeft):
-        self._panel.as_setStunTimerSnapshotS(math.ceil(timeLeft))
+        self._panel.as_setStatusTimerSnapshotS(self._statusId, math.ceil(timeLeft))
 
 
 class _TankIndicatorCtrl(object):
@@ -131,7 +139,7 @@ class DamagePanel(DamagePanelMeta):
         self.__maxHealth = 0
         self.__isAutoRotationOn = True
         self.__isAutoRotationShown = False
-        self.__stunAnimPlayer = None
+        self.__statusAnimPlayers = {}
         self.__initialized = False
         return
 
@@ -164,8 +172,9 @@ class DamagePanel(DamagePanelMeta):
         self.__changeVehicleSetting('medkit', None)
         return
 
-    def hideStunImmediate(self):
-        self.__stunAnimPlayer.hideStun(False)
+    def hideStatusImmediate(self):
+        for player in self.__statusAnimPlayers.itervalues():
+            player.hideStatus(False)
 
     def _populate(self):
         super(DamagePanel, self)._populate()
@@ -180,15 +189,15 @@ class DamagePanel(DamagePanelMeta):
                 self.__onVehicleControlling(vehicle)
         self.as_setStaticDataS(i18n.makeString(INGAME_GUI.PLAYER_MESSAGES_TANK_IN_FIRE))
         g_replayEvents.onPause += self.__onReplayPaused
-        if self.sessionProvider.isReplayPlaying:
-            self.__stunAnimPlayer = _PythonTimer(weakref.proxy(self))
-        else:
-            self.__stunAnimPlayer = _ActionScriptTimer(weakref.proxy(self))
+        timerCls = _PythonTimer if self.sessionProvider.isReplayPlaying else _ActionScriptTimer
+        for statusId in STATUS_ID.ALL():
+            self.__statusAnimPlayers[statusId] = timerCls(weakref.proxy(self), statusId)
+
         return
 
     def _dispose(self):
         self.as_resetS()
-        self.hideStunImmediate()
+        self.hideStatusImmediate()
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             ctrl.onVehicleControlling -= self.__onVehicleControlling
@@ -213,11 +222,11 @@ class DamagePanel(DamagePanelMeta):
 
     def _updateCrewDeactivated(self, _):
         self.as_setCrewDeactivatedS()
-        self.hideStunImmediate()
+        self.hideStatusImmediate()
 
     def _updateDestroyed(self, _=None):
         self.as_setVehicleDestroyedS()
-        self.hideStunImmediate()
+        self.hideStatusImmediate()
 
     def _updateHealth(self, health):
         if health <= self.__maxHealth and self.__maxHealth > 0:
@@ -232,13 +241,22 @@ class DamagePanel(DamagePanelMeta):
 
     def _switching(self, _):
         self.as_resetS()
-        self.hideStunImmediate()
+        self.hideStatusImmediate()
 
     def _updateStun(self, stunDuration):
         if stunDuration > 0:
-            self.__stunAnimPlayer.showStun(stunDuration, True)
+            self.__statusAnimPlayers[STATUS_ID.STUN].showStatus(stunDuration, True)
         else:
-            self.__stunAnimPlayer.hideStun(True)
+            self.__statusAnimPlayers[STATUS_ID.STUN].hideStatus(True)
+
+    def _updateInspire(self, values):
+        if values['isInactivation'] is not None:
+            time = values['endTime'] - BigWorld.serverTime()
+            if time > 0:
+                self.__statusAnimPlayers[STATUS_ID.INSPIRE].showStatus(time, True)
+        else:
+            self.__statusAnimPlayers[STATUS_ID.INSPIRE].hideStatus(True)
+        return
 
     def __changeVehicleSetting(self, tag, entityName):
         ctrl = self.sessionProvider.shared.equipments

@@ -177,7 +177,7 @@ class BombersWing(CallbackDelayer):
 
     def __generateRetreatTrajectory(self, idealFlightHeight, bombingEndPosition, bombingDir, bombingEndTime):
         clientArena = BigWorld.player().arena
-        endTrajectoryPosition = clientArena.collideWithSpaceBB(bombingEndPosition, bombingEndPosition + bombingDir * 9000.0)
+        _, endTrajectoryPosition = clientArena.collideWithSpaceBB(bombingEndPosition, bombingEndPosition + bombingDir * 9000.0)
         segmentLength = (endTrajectoryPosition - bombingEndPosition).length / _RETREAT_SUBDIVISION_FACTOR
         firstRetreatPoint = Vector3(bombingEndPosition + bombingDir * _INITIAL_RETREAT_SHIFT)
         positions = [firstRetreatPoint]

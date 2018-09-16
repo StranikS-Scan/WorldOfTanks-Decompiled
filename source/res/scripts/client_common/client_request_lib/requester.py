@@ -226,6 +226,9 @@ class WgshAccessor(BaseAccessor):
     def join_room(self, callback, periphery_id, unit_server_id, fields=None):
         return self._data_source.join_room(callback, periphery_id, unit_server_id, fields=fields)
 
+    def matchmaking_info(self, callback, periphery_id, unit_server_id, fields=None):
+        return self._data_source.matchmaking_info(callback, periphery_id, unit_server_id, fields=fields)
+
     def clan_statistics(self, callback, clan_id, fields=None):
         return self._data_source.clan_statistics(callback, clan_id, fields=fields)
 

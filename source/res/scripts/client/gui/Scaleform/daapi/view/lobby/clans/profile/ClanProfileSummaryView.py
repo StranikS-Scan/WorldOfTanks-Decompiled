@@ -9,12 +9,15 @@ from gui.clans.items import formatField, isValueAvailable, StrongholdStatisticsD
 from gui.clans.clan_helpers import isStrongholdsEnabled
 from gui.clans.formatters import DUMMY_UNAVAILABLE_DATA
 from gui.shared.formatters import icons, text_styles
+from gui.shared.utils.functions import makeTooltip
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
 from gui.shared.events import OpenLinkEvent
 from gui.Scaleform.genConsts.TEXT_MANAGER_STYLES import TEXT_MANAGER_STYLES as _STYLE
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.daapi.view.meta.ClanProfileSummaryViewMeta import ClanProfileSummaryViewMeta
+from gui.shared.view_helpers.image_helper import ImagesFetchCoordinator
+_DIVISIONS = (6, 8, 10)
 
 def _stateVO(showRequestBtn, mainStatus=None, tooltip='', enabledRequestBtn=False, addStatus=None, showPersonalBtn=False):
     return {'isShowRequestBtn': showRequestBtn,
@@ -48,19 +51,15 @@ _STATES = {_RES.NO_RESTRICTIONS: _stateVO(True, enabledRequestBtn=True),
 
 class StrongholdDataReceiver(object):
 
-    def __init__(self, clanDossier, updateCallback):
+    def __init__(self, clanDossier, updateStrongholdCallback):
+        self.__disposed = False
         self.__clanDossier = clanDossier
-        self.__updateCallback = updateCallback
-        self.__strongholdStats = None
-        if self.__updateCallback:
-            self.__updateCallback(self.getStatsVO())
-        return
+        self.__updateStrongholdCallback = updateStrongholdCallback
+        self.__strongholdStats = StrongholdStatisticsData()
+        self.__imagesFetchCoordinator = ImagesFetchCoordinator()
 
     def getStatsVO(self):
-        if self.__strongholdStats:
-            stats = self.__strongholdStats
-        else:
-            stats = StrongholdStatisticsData()
+        stats = self.__strongholdStats
         isActual = stats.hasSorties() or stats.hasFortBattles()
         rows = (('rageLevel10',
           stats.getElo10(),
@@ -86,26 +85,44 @@ class StrongholdDataReceiver(object):
           stats.getStrongholdLevel(),
           True,
           CLANS.CLANPROFILE_SUMMARYVIEW_TOOLTIP_FORT_LEVEL_BODY))
-        excludes = ('rageLevel8', 'rageLevel6') if IS_CHINA else ()
-        return [ {'local': row[0],
-         'value': DUMMY_UNAVAILABLE_DATA if row[1] is None else row[1],
-         'timeExpired': True if row[1] is None else not row[2],
-         'tooltip': row[3]} for row in rows if row[0] not in excludes ]
+        if stats.getLeagues():
+            excludes = ('rageLevel6', 'rageLevel8', 'rageLevel10')
+        else:
+            excludes = ('rageLevel6', 'rageLevel8') if IS_CHINA else ()
+        return [ {'local': key,
+         'value': DUMMY_UNAVAILABLE_DATA if elo is None else elo,
+         'timeExpired': True if elo is None else not actual,
+         'tooltip': tooltip,
+         'isHidden': False} for key, elo, actual, tooltip in rows if key not in excludes ]
+
+    def getLeaguesVO(self):
+        return self.__strongholdStats.getLeagues()
 
     def dispose(self):
+        self.__disposed = True
         self.__clanDossier = None
-        self.__updateCallback = None
+        self.__updateStrongholdCallback = None
         self.__strongholdStats = None
+        self.__imagesFetchCoordinator.fini()
         return
 
     @process
     def updateStrongholdStatistics(self):
-        if not isStrongholdsEnabled():
-            yield lambda callback: callback(True)
-            return
         self.__strongholdStats = yield self.__clanDossier.requestStrongholdStatistics()
-        if self.__updateCallback:
-            self.__updateCallback(self.getStatsVO())
+        if self.__disposed:
+            return
+        leagues = self.__strongholdStats.getLeagues()
+        for league in leagues:
+            emblem = league.get('emblem')
+            league['emblemImage'] = yield self.__imagesFetchCoordinator.fetchImageByUrl(emblem, oneUse=False)
+            if self.__disposed:
+                return
+
+        self.__updateStrongholdStatistics()
+
+    def __updateStrongholdStatistics(self):
+        if self.__updateStrongholdCallback:
+            self.__updateStrongholdCallback(self.getStatsVO(), self.getLeaguesVO())
 
 
 class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
@@ -148,11 +165,13 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
          'isShowClanNavBtn': hasGlobalMap,
          'isShowUrlString': not hasGlobalMap})
         self.as_updateGeneralBlockS(self.__makeGeneralBlock(clanInfo, syncUserInfo=True))
-        self.__strongholdStatsVOReceiver = StrongholdDataReceiver(clanDossier, self.__updateStrongholdBlock)
-        self.__strongholdStatsVOReceiver.updateStrongholdStatistics()
         self.as_updateGlobalMapBlockS(self.__makeGlobalMapBlock(globalMapStats, ratings))
         self.__updateStatus()
-        self._hideWaiting()
+        if isStrongholdsEnabled():
+            self.__strongholdStatsVOReceiver = StrongholdDataReceiver(clanDossier, self.__updateStrongholdBlock)
+            self.__strongholdStatsVOReceiver.updateStrongholdStatistics()
+        else:
+            self._hideWaiting()
 
     def onAccountWebVitalInfoChanged(self, fieldName, value):
         self.__updateStatus()
@@ -205,12 +224,15 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
         super(ClanProfileSummaryView, self)._dispose()
         return
 
-    def __updateStrongholdBlock(self, stats):
+    def __updateStrongholdBlock(self, stats, leagues=None):
+        if leagues:
+            self.as_updateLeaguesBlockS({'leagues': self.__makeLeaguesBlock(leagues)})
         self.as_updateFortBlockS({'isShowHeader': True,
          'header': text_styles.highTitle(CLANS.CLANPROFILE_MAINWINDOWTAB_FORTIFICATION),
          'statBlocks': self.__makeStatsBlock(stats),
          'emptyLbl': '',
          'isActivated': True})
+        self._hideWaiting()
 
     def __makeGeneralBlock(self, clanInfo, syncUserInfo=False):
         stats = [{'local': 'commander',
@@ -276,6 +298,7 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
             isTimeExpired = item.get('timeExpired', False)
             tooltipBody = item.get('tooltip', None)
             textStyle = item.get('textStyle', None)
+            isHidden = item.get('isHidden', None)
             isUseTextStylePattern = textStyle is not None
             valueStyle = text_styles.stats
             localKey = i18n.makeString(CLANS.clanprofile_summaryview_blocklbl(localKey))
@@ -303,9 +326,31 @@ class ClanProfileSummaryView(ClanProfileSummaryViewMeta, UsersInfoHelper):
              'tooltipHeader': tooltipHeader,
              'tooltipBody': i18n.makeString(tooltipBody) if tooltipBody is not None else '',
              'isUseTextStyle': isUseTextStylePattern,
-             'truncateVo': truncateVo})
+             'truncateVo': truncateVo,
+             'isHidden': isHidden})
 
         return lst
+
+    def __makeLeaguesBlock(self, leagues):
+        leaguesVO = []
+        for league in leagues[:len(_DIVISIONS)]:
+            division = league.get('max_vehicle_level')
+            level = division if division in _DIVISIONS else _DIVISIONS[0]
+            imgSource = league.get('emblemImage') or RES_ICONS.getDefaultLeagueIcon(level)
+            elo = league.get('elo')
+            if elo:
+                elo = BigWorld.wg_getNiceNumberFormat(elo)
+                label = text_styles.stats(elo) if league.get('position') else text_styles.standard(elo)
+            else:
+                label = text_styles.standard(DUMMY_UNAVAILABLE_DATA)
+            tooltip = league.get('tooltip')
+            if tooltip:
+                tooltip = makeTooltip(tooltip.get('header'), tooltip.get('body'))
+            leaguesVO.append({'imgSource': imgSource,
+             'label': label,
+             'tooltip': tooltip})
+
+        return leaguesVO
 
     def __updateStatus(self):
         reason = self.webCtrl.getLimits().canSendApplication(self._clanDossier).reason

@@ -7,6 +7,7 @@ from helpers import dependency
 from skeletons.gui.game_control import IGameSessionController
 from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
+from soft_exception import SoftException
 
 def isInRandomQueue():
     return getattr(BigWorld.player(), 'isInRandomQueue', False)
@@ -37,6 +38,10 @@ def isInBootcampAccount(bootcampController=None):
     return bootcampController is not None and bootcampController.isInBootcampAccount()
 
 
+def isInEpicQueue():
+    return getattr(BigWorld.player(), 'isInEpicQueue', False)
+
+
 def getQueueType():
     queueType = 0
     if isInRandomQueue():
@@ -49,6 +54,8 @@ def getQueueType():
         queueType = QUEUE_TYPE.BOOTCAMP
     elif isInSandboxQueue():
         queueType = QUEUE_TYPE.SANDBOX
+    elif isInEpicQueue():
+        queueType = QUEUE_TYPE.EPIC
     return queueType
 
 
@@ -132,7 +139,8 @@ _ARENA_GUI_TYPE_BY_PRB_TYPE = {PREBATTLE_TYPE.SQUAD: ARENA_GUI_TYPE.RANDOM,
  PREBATTLE_TYPE.EVENT: ARENA_GUI_TYPE.EVENT_BATTLES}
 _ARENA_GUI_TYPE_BY_QUEUE_TYPE = {QUEUE_TYPE.RANDOMS: ARENA_GUI_TYPE.RANDOM,
  QUEUE_TYPE.EVENT_BATTLES: ARENA_GUI_TYPE.EVENT_BATTLES,
- QUEUE_TYPE.RANKED: ARENA_GUI_TYPE.RANKED}
+ QUEUE_TYPE.RANKED: ARENA_GUI_TYPE.RANKED,
+ QUEUE_TYPE.EPIC: ARENA_GUI_TYPE.EPIC_BATTLE}
 
 def getArenaGUIType(prbType=None, queueType=None):
     if prbType is None:
@@ -255,7 +263,7 @@ def getUnit(safe=False):
     unitMgr = getClientUnitMgr()
     if not unitMgr:
         if not safe:
-            raise ValueError('Unit manager not found')
+            raise SoftException('Unit manager not found')
         return
     else:
         unit = None
@@ -263,7 +271,7 @@ def getUnit(safe=False):
             unit = unitMgr.unit
         except AttributeError:
             if not safe:
-                raise ValueError('Unit not found')
+                raise SoftException('Unit not found')
 
         return unit
 

@@ -10,7 +10,7 @@ import ResMgr
 import constants
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
 from gui import g_mouseEventHandlers, InputHandler
-from gui.ClientHangarSpace import ClientHangarSpace
+from gui.ClientHangarSpace import ClientHangarSpace, _getHangarPath
 from gui.Scaleform.Waiting import Waiting
 from helpers import dependency, uniprof
 from helpers.statistics import HANGAR_LOADING_STATE
@@ -19,7 +19,7 @@ from skeletons.helpers.statistics import IStatisticsCollector
 from gui import g_keyEventHandlers
 from gui.shared import g_eventBus, events
 _MAX_HANDLERS_IN_Q = 100
-_Q_CHECK_DELAY = 0.5
+_Q_CHECK_DELAY = 0.0
 
 class _execute_after_hangar_space_inited(object):
     __slots__ = ('__queue',)
@@ -188,7 +188,7 @@ class _HangarSpace(object):
             self.__igrSpaceType = self.igrCtrl.getRoomType()
             self.__space.create(isPremium, self.__spaceDone)
             if self.__lastUpdatedVehicle is not None:
-                self.updateVehicle(self.__lastUpdatedVehicle)
+                self.startToUpdateVehicle(self.__lastUpdatedVehicle)
             self.gameSession.onPremiumNotify += self.onPremiumChanged
             g_keyEventHandlers.add(self.__handleKeyEvent)
             g_eventBus.addListener(events.LobbySimpleEvent.NOTIFY_CURSOR_OVER_3DSCENE, self.__onNotifyCursorOver3dScene)
@@ -244,10 +244,15 @@ class _HangarSpace(object):
         if self.__inited:
             self.__isModelLoaded = False
             self.onVehicleChangeStarted()
-            Waiting.show('loadHangarSpaceVehicle', True, overlapsUI=False)
             self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.START_LOADING_VEHICLE)
             self.__space.recreateVehicle(vehicle.descriptor, vehicle.modelState)
             self.__lastUpdatedVehicle = vehicle
+        else:
+            Waiting.hide('loadHangarSpaceVehicle')
+
+    def startToUpdateVehicle(self, vehicle):
+        Waiting.show('loadHangarSpaceVehicle', isSingle=True, overlapsUI=False)
+        self.updateVehicle(vehicle)
 
     def __handleKeyEvent(self, event):
         if event.key == Keys.KEY_LEFTMOUSE:
@@ -293,7 +298,11 @@ class _HangarSpace(object):
         self.__space.setVehicleSelectable(flag)
 
     def onPremiumChanged(self, isPremium, attrs, premiumExpiryTime):
-        self.refreshSpace(isPremium)
+        premiumHangar = _getHangarPath(True, self.__igrSpaceType)
+        defaultHangar = _getHangarPath(False, self.__igrSpaceType)
+        if premiumHangar != defaultHangar:
+            self.refreshSpace(isPremium)
+        self.__isSpacePremium = isPremium
 
     @uniprof.regionDecorator(label='hangar.space.loading', scope='exit')
     def __spaceDone(self):

@@ -60,7 +60,7 @@ class ClientSelectableObject(BigWorld.Entity, ComponentSystem):
     def highlight(self, show):
         if show:
             if not self.__edged and self.__enabled:
-                BigWorld.wgAddEdgeDetectEntity(self, 0, 0, True)
+                BigWorld.wgAddEdgeDetectEntity(self, 0, self.edgeMode, True)
                 self.__edged = True
         elif self.__edged:
             BigWorld.wgDelEdgeDetectEntity(self)

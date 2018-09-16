@@ -48,6 +48,7 @@ class ITEM_TYPES(object):
     EQUIPMENT_DESC = '#item_types:equipment/desc'
     EQUIPMENT_TAGS = '#item_types:equipment/tags'
     BATTLEBOOSTER_NAME = '#item_types:battleBooster/name'
+    BATTLEABILITY_NAME = '#item_types:battleAbility/name'
     TANKMAN_SKILLS_MAIN = '#item_types:tankman/skills/main'
     TANKMAN_ROLES_COMMANDER = '#item_types:tankman/roles/commander'
     TANKMAN_ROLES_DRIVER = '#item_types:tankman/roles/driver'
@@ -213,6 +214,7 @@ class ITEM_TYPES(object):
      TANKMAN_ROLES_RADIOMAN,
      TANKMAN_ROLES_GUNNER,
      TANKMAN_ROLES_LOADER)
+    TANKMAN_SKILLS_TYPE_ENUM = (TANKMAN_SKILLS_TYPE_SKILL, TANKMAN_SKILLS_TYPE_PERK, TANKMAN_SKILLS_TYPE_PERK_COMMON)
     CUSTOMIZATION_ENUM = (CUSTOMIZATION_PAINT,
      CUSTOMIZATION_CAMOUFLAGE,
      CUSTOMIZATION_MODIFICATION,
@@ -260,6 +262,15 @@ class ITEM_TYPES(object):
     def tankman_roles(cls, key0):
         outcome = '#item_types:tankman/roles/{}'.format(key0)
         if outcome not in cls.TANKMAN_ROLES_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def tankman_skills_type(cls, key0):
+        outcome = '#item_types:tankman/skills/type/{}'.format(key0)
+        if outcome not in cls.TANKMAN_SKILLS_TYPE_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

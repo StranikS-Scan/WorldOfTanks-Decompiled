@@ -3,9 +3,9 @@
 from gui.battle_results.reusable import shared
 
 class AvatarInfo(shared.ItemInfo):
-    __slots__ = ('__totalDamaged', '__avatarKills', '__avatarDamaged', '__avatarDamageDealt', '__badge', '__fairplayViolations', '__accRank', '__prevAccRank', '__weakref__')
+    __slots__ = ('__totalDamaged', '__avatarKills', '__avatarDamaged', '__avatarDamageDealt', '__badge', '__fairplayViolations', '__accRank', '__prevAccRank', '__extInfo', '__weakref__')
 
-    def __init__(self, totalDamaged=0, avatarKills=0, avatarDamaged=0, avatarDamageDealt=0, fairplayViolations=None, wasInBattle=True, accRank=None, prevAccRank=None, rankedBadge=0, **kwargs):
+    def __init__(self, totalDamaged=0, avatarKills=0, avatarDamaged=0, avatarDamageDealt=0, fairplayViolations=None, wasInBattle=True, accRank=None, prevAccRank=None, rankedBadge=0, ext=None, **kwargs):
         super(AvatarInfo, self).__init__(wasInBattle=wasInBattle)
         self.__totalDamaged = totalDamaged
         self.__avatarKills = avatarKills
@@ -15,6 +15,7 @@ class AvatarInfo(shared.ItemInfo):
         self.__accRank = accRank
         self.__prevAccRank = prevAccRank
         self.__badge = rankedBadge
+        self.__extInfo = ext
 
     @property
     def totalDamaged(self):
@@ -38,6 +39,10 @@ class AvatarInfo(shared.ItemInfo):
     @property
     def accRank(self):
         return self.__accRank[0] if self.__accRank else 0
+
+    @property
+    def extensionInfo(self):
+        return self.__extInfo
 
     @property
     def prevAccRank(self):

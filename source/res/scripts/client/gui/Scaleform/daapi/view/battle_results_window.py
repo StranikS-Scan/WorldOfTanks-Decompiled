@@ -13,6 +13,7 @@ from gui.shared import event_dispatcher
 from gui.sounds.ambients import BattleResultsEnv
 from helpers import dependency
 from skeletons.gui.battle_results import IBattleResultsService
+from soft_exception import SoftException
 
 def _wrapEmblemUrl(emblemUrl):
     return makeHtmlString('html_templates:lobby/battleResult', 'emblemUrl', {'url': emblemUrl})
@@ -26,9 +27,9 @@ class BattleResultsWindow(BattleResultsMeta):
     def __init__(self, ctx):
         super(BattleResultsWindow, self).__init__()
         if 'arenaUniqueID' not in ctx:
-            raise UserWarning('Key "arenaUniqueID" is not found in context', ctx)
+            raise SoftException('Key "arenaUniqueID" is not found in context', ctx)
         if not ctx['arenaUniqueID']:
-            raise UserWarning('Value of "arenaUniqueID" must be greater than 0')
+            raise SoftException('Value of "arenaUniqueID" must be greater than 0')
         self.__arenaUniqueID = ctx['arenaUniqueID']
         self.__dataSet = False
 
@@ -81,9 +82,9 @@ class BattleResultsWindow(BattleResultsMeta):
     def __handleBattleResultsPosted(self, event):
         ctx = event.ctx
         if 'arenaUniqueID' not in ctx:
-            raise UserWarning('Key "arenaUniqueID" is not found in context', ctx)
+            raise SoftException('Key "arenaUniqueID" is not found in context', ctx)
         if not ctx['arenaUniqueID']:
-            raise UserWarning('Value of "arenaUniqueID" must be greater than 0')
+            raise SoftException('Value of "arenaUniqueID" must be greater than 0')
         if self.__arenaUniqueID == ctx['arenaUniqueID']:
             self.__setBattleResults()
 

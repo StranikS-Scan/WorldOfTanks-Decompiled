@@ -3,19 +3,26 @@
 import logging
 import BigWorld
 import Event
-import SoundGroups
 import Settings
-from VOIP.voip_constants import VOIP_SUPPORTED_API
+import SoundGroups
 import VOIPCommon
+from VOIP.voip_constants import VOIP_SUPPORTED_API
 from VOIPFsm import VOIPFsm, VOIP_FSM_STATE as STATE
 from VOIPHandler import VOIPHandler
-from messenger.m_constants import USER_ACTION_ID, USER_TAG
+from constants import CLIENT_INACTIVITY_TIMEOUT
+from gui.shared.utils import backoff
 from messenger.m_constants import PROTO_TYPE
+from messenger.m_constants import USER_ACTION_ID, USER_TAG
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.shared_find_criteria import MutedFindCriteria
 from messenger.storage import storage_getter
 _logger = logging.getLogger(__name__)
+_logger.addHandler(logging.NullHandler())
+_BACK_OFF_MIN_DELAY = 1
+_BACK_OFF_MAX_DELAY = CLIENT_INACTIVITY_TIMEOUT
+_BACK_OFF_MODIFIER = 1
+_BACK_OFF_EXP_RANDOM_FACTOR = 0.5
 
 class VOIPManager(VOIPHandler):
 
@@ -33,8 +40,11 @@ class VOIPManager(VOIPHandler):
         self.__inTesting = False
         self.__loggedIn = False
         self.__needLogginAfterInit = False
+        self.__normalLogout = False
         self.__loginAttemptsRemained = 2
         self.__fsm = VOIPFsm()
+        self.__expBackOff = backoff.ExpBackoff(_BACK_OFF_MIN_DELAY, _BACK_OFF_MAX_DELAY, _BACK_OFF_MODIFIER, _BACK_OFF_EXP_RANDOM_FACTOR)
+        self.__reLoginCallbackID = None
         self.__activateMicByVoice = False
         self.__captureDevices = []
         self.__currentCaptureDevice = ''
@@ -47,6 +57,7 @@ class VOIPManager(VOIPHandler):
         self.onJoinedChannel = Event.Event()
         self.onLeftChannel = Event.Event()
         self.__fsm.onStateChanged += self.__onStateChanged
+        return
 
     @proto_getter(PROTO_TYPE.BW_CHAT2)
     def bwProto(self):
@@ -58,6 +69,7 @@ class VOIPManager(VOIPHandler):
 
     def destroy(self):
         self.__fsm.onStateChanged -= self.__onStateChanged
+        self.__cancelReloginCallback()
         BigWorld.VOIP.finalise()
         _logger.debug('VOIPManager.Destroy')
 
@@ -182,16 +194,32 @@ class VOIPManager(VOIPHandler):
         if not self.__needLogginAfterInit:
             self.__fsm.update(self)
 
-    def __loginUser(self, username, password):
-        _logger.debug('Login Request: %s', username)
+    def __loginUser(self):
+        _logger.debug('Login Request: %s', self.__user[0])
         cmd = {VOIPCommon.KEY_PARTICIPANT_PROPERTY_FREQUENCY: '100'}
-        BigWorld.VOIP.login(username, password, cmd)
+        BigWorld.VOIP.login(self.__user[0], self.__user[1], cmd)
+
+    def __loginUserOnCallback(self):
+        self.__reLoginCallbackID = None
+        self.__loginUser()
+        return
 
     def __reloginUser(self):
         self.__loginAttemptsRemained -= 1
         _logger.debug('VOIPHandler.ReloginUser. Attempts remained: %d', self.__loginAttemptsRemained)
         if self.__enabled:
             self.__requestCredentials(1)
+
+    def __cancelReloginCallback(self):
+        if self.__reLoginCallbackID is not None:
+            BigWorld.cancelCallback(self.__reLoginCallbackID)
+            self.__reLoginCallbackID = None
+        return
+
+    def __setReloginCallback(self):
+        delay = self.__expBackOff.next()
+        _logger.debug('__setReloginCallback. Next attempt after %d seconds', delay)
+        self.__reLoginCallbackID = BigWorld.callback(delay, self.__loginUserOnCallback)
 
     def logout(self):
         _logger.debug('VOIPManager.Logout')
@@ -201,8 +229,10 @@ class VOIPManager(VOIPHandler):
 
     def __enterChannel(self, channel, password):
         if not self.__initialized and self.__fsm.inNoneState():
+            _logger.debug('VOIPManager.__enterChannel and initialize')
             self.initialize(self.__voipDomain, self.__voipServer)
         if not self.__user[0] and self.isEnabled():
+            _logger.debug('VOIPManager.__enterChannel and requestCreds')
             self.__requestCredentials()
         _logger.debug('VOIPManager.EnterChannel: %s', channel)
         self.__channel = [channel, password]
@@ -332,6 +362,7 @@ class VOIPManager(VOIPHandler):
         self.__fsm.update(self)
 
     def __resetToInitializedState(self):
+        _logger.debug('VOIPManager.__resetToInitializesState')
         if self.__currentChannel != '':
             for dbid in self.__channelUsers.iterkeys():
                 self.onPlayerSpeaking(dbid, False)
@@ -347,7 +378,7 @@ class VOIPManager(VOIPHandler):
         if newState == STATE.INITIALIZED:
             self.__resetToInitializedState()
         elif newState == STATE.LOGGING_IN:
-            self.__loginUser(self.__user[0], self.__user[1])
+            self.__loginUser()
         elif newState == STATE.LOGGED_IN:
             self.__fsm.update(self)
         elif newState == STATE.JOINING_CHANNEL:
@@ -360,9 +391,11 @@ class VOIPManager(VOIPHandler):
         elif newState == STATE.LEAVING_CHANNEL:
             self.__sendLeaveChannelCommand(self.getCurrentChannel())
         elif newState == STATE.LOGGING_OUT:
+            self.__normalLogout = True
             BigWorld.VOIP.logout()
 
     def onVoipInited(self, data):
+        _logger.debug('VOIPManager.onVoipInited')
         returnCode = int(data[VOIPCommon.KEY_RETURN_CODE])
         if returnCode == VOIPCommon.CODE_SUCCESS:
             self.__initialized = True
@@ -409,25 +442,42 @@ class VOIPManager(VOIPHandler):
 
     def onLoginStateChange(self, data):
         returnCode = int(data[VOIPCommon.KEY_RETURN_CODE])
+        statusCode = int(data[VOIPCommon.KEY_STATUS_CODE])
+        statusString = data[VOIPCommon.KEY_STATUS_STRING]
+        _logger.debug('VOIPManager.onLoginStateChange: Return code %s', returnCode)
         if returnCode == VOIPCommon.CODE_SUCCESS:
             state = int(data[VOIPCommon.KEY_STATE])
+            _logger.debug('Return state %s', state)
             if state == VOIPCommon.STATE_LOGGED_IN:
+                _logger.debug('VOIPManager.onLoginStateChange: LOGGED IN')
                 if self.getAPI() == VOIP_SUPPORTED_API.VIVOX:
                     self.bwProto.voipProvider.logVivoxLogin()
                 self.__loggedIn = True
+                self.__expBackOff.reset()
+                if self.__fsm.getState() == STATE.JOINED_CHANNEL:
+                    self.__joinChannel(self.__channel[0], self.__channel[1])
                 self.__fsm.update(self)
             elif state == VOIPCommon.STATE_LOGGED_OUT:
-                self.__loggedIn = False
-                self.__fsm.update(self)
+                _logger.debug('VOIPManager.onLoginStateChange: LOGGED OUT %d - %s', statusCode, statusString)
+                if self.__normalLogout:
+                    _logger.debug('VOIPManager.onLoginStateChange: Normal logout')
+                    self.__normalLogout = False
+                    self.__loggedIn = False
+                    self.__fsm.update(self)
+                elif self.__reLoginCallbackID is None:
+                    _logger.debug('VOIPManager.onLoginStateChange: Network lost logout')
+                    self.__setReloginCallback()
+            elif state == VOIPCommon.STATE_LOGGIN_OUT:
+                _logger.debug('VOIPManager.onLoginStateChange: LOGGING OUT %d - %s', statusCode, statusString)
         else:
             _logger.info('---------------------------')
-            _logger.info("ERROR: '%d' - '%s'", int(data[VOIPCommon.KEY_STATUS_CODE]), data[VOIPCommon.KEY_STATUS_STRING])
+            _logger.info("ERROR: '%d' - '%s'", statusCode, statusString)
             _logger.info('---------------------------')
-            code = int(data[VOIPCommon.KEY_STATUS_CODE])
-            if (code == VOIPCommon.STATUS_WRONG_CREDENTIALS or code == VOIPCommon.STATUS_UNKNOWN_ACCOUNT) and self.__loginAttemptsRemained > 0:
+            if (statusCode == VOIPCommon.STATUS_WRONG_CREDENTIALS or statusCode == VOIPCommon.STATUS_UNKNOWN_ACCOUNT) and self.__loginAttemptsRemained > 0:
                 self.__reloginUser()
             else:
                 self.onFailedToConnect()
+        return
 
     def onSessionAdded(self, data):
         if int(data[VOIPCommon.KEY_RETURN_CODE]) != VOIPCommon.CODE_SUCCESS:
@@ -505,7 +555,7 @@ class VOIPManager(VOIPHandler):
                     self.__restoreMasterVolume()
         self.onPlayerSpeaking(dbid, talking)
 
-    def __me_onChannelEntered(self, uri, pwd):
+    def __me_onChannelEntered(self, uri, pwd, isRejoin):
         if not self.__inTesting:
             self.__enterChannel(uri, pwd)
 

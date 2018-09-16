@@ -7,14 +7,17 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
+from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events, g_eventBus
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName, getUniqueViewName
 from helpers import dependency
+from helpers.aop import pointcutable
 from skeletons.gui.game_control import IHeroTankController
 from skeletons.gui.shared import IItemsCache
+from soft_exception import SoftException
 
 class SETTINGS_TAB_INDEX(object):
     GAME = 0
@@ -49,6 +52,13 @@ def showRankedAwardWindow(rankID, vehicle=None, awards=None):
 
 def showRankedPrimeTimeWindow():
     g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, ctx={}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showEpicBattlesAfterBattleWindow(reusableInfo):
+    from gui.game_control.epic_meta_game_ctrl import DISABLE_EPIC_META_GAME
+    if DISABLE_EPIC_META_GAME:
+        return
+    g_eventBus.handleEvent(events.LoadViewEvent(alias=EPICBATTLES_ALIASES.EPIC_BATTLES_AFTER_BATTLE_ALIAS, ctx={'reusableInfo': reusableInfo}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showVehicleInfo(vehTypeCompDescr):
@@ -185,7 +195,7 @@ def selectVehicleInHangar(itemCD):
     itemsCache = dependency.instance(IItemsCache)
     veh = itemsCache.items.getItemByCD(int(itemCD))
     if not veh.isInInventory:
-        raise UserWarning('Vehicle (itemCD={}) must be in inventory.'.format(itemCD))
+        raise SoftException('Vehicle (itemCD={}) must be in inventory.'.format(itemCD))
     g_currentVehicle.selectVehicle(veh.invID)
     showHangar()
 
@@ -246,3 +256,30 @@ def showSettingsWindow(redefinedKeyMode=False, tabIndex=None, isBattleSettings=F
 
 def showVehicleCompare():
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_COMPARE), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showEpicBattleSkillView():
+    from gui.game_control.epic_meta_game_ctrl import DISABLE_EPIC_META_GAME
+    if DISABLE_EPIC_META_GAME:
+        return
+    g_eventBus.handleEvent(events.LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_SKILL_ALIAS), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+@pointcutable
+def showCrystalWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.CRYSTALS_PROMO_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+
+
+@pointcutable
+def openPaymentLink():
+    g_eventBus.handleEvent(events.OpenLinkEvent(events.OpenLinkEvent.PAYMENT))
+
+
+@pointcutable
+def showExchangeWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.EXCHANGE_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+
+
+@pointcutable
+def showExchangeXPWindow():
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.EXCHANGE_XP_WINDOW), EVENT_BUS_SCOPE.LOBBY)

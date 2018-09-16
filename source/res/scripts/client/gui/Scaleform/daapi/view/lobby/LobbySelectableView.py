@@ -10,7 +10,6 @@ class LobbySelectableView(LobbySubView):
 
     def __init__(self, ctx=None):
         super(LobbySelectableView, self).__init__(ctx)
-        self.__isCursorOver3dScene = g_hangarSpace.isCursorOver3DScene
         self.__selected3DEntity = None
         self.__selected3DEntityOnClick = None
         self.__isMouseDown = False
@@ -47,16 +46,16 @@ class LobbySelectableView(LobbySubView):
         entity.highlight(False)
 
     def _onNotifyCursorOver3dScene(self, event):
-        self.__isCursorOver3dScene = event.ctx.get('isOver3dScene', False)
+        isCursorOver3dScene = event.ctx.get('isOver3dScene', False)
         if self.__selected3DEntity:
-            if self.__isCursorOver3dScene:
+            if isCursorOver3dScene:
                 self._highlight3DEntityAndShowTT(self.__selected3DEntity)
             else:
                 self._fade3DEntityAndHideTT(self.__selected3DEntity)
 
     def _on3DObjectSelected(self, entity):
         self.__selected3DEntity = entity
-        if self.__isCursorOver3dScene and not self.__isMouseDown and entity:
+        if g_hangarSpace.isCursorOver3DScene and not self.__isMouseDown and entity:
             self._highlight3DEntityAndShowTT(entity)
             if entity.mouseOverSoundName:
                 SoundGroups.g_instance.playSound3D(entity.model.root, entity.mouseOverSoundName)
@@ -64,20 +63,20 @@ class LobbySelectableView(LobbySubView):
     def _on3DObjectUnSelected(self, entity):
         self.__selected3DEntity = None
         self.__selected3DEntityOnClick = None
-        if self.__isCursorOver3dScene:
+        if g_hangarSpace.isCursorOver3DScene:
             self._fade3DEntityAndHideTT(entity)
         return
 
     def _on3DObjectClicked(self):
         self.__isMouseDown = True
         self.__selected3DEntityOnClick = self.__selected3DEntity
-        if self.__isCursorOver3dScene:
+        if g_hangarSpace.isCursorOver3DScene:
             if self.__selected3DEntity and hasattr(self.__selected3DEntity, 'onClicked'):
                 self.__selected3DEntity.onClicked()
 
     def _on3DObjectReleased(self):
         self.__isMouseDown = False
-        if self.__isCursorOver3dScene:
+        if g_hangarSpace.isCursorOver3DScene:
             if self.__selected3DEntity and self.__selected3DEntity == self.__selected3DEntityOnClick:
                 if hasattr(self.__selected3DEntity, 'onReleased'):
                     self.__selected3DEntity.onReleased()

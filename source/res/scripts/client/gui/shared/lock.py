@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/lock.py
 import weakref
 from Event import Event
+from soft_exception import SoftException
 
 class AbstractLock(object):
 
@@ -51,7 +52,7 @@ class _LockProxy(AbstractLock):
 
     def lock(self):
         if not self.tryLock():
-            raise AttributeError('Lock is already locked!')
+            raise SoftException('Lock is already locked!')
 
     def unlock(self):
         if self.__isLocked:
@@ -134,7 +135,7 @@ class Lock(AbstractLock):
             try:
                 self.__isLocked = True
                 self.__proxy.lock()
-            except AttributeError as e:
+            except SoftException as e:
                 self.__isLocked = False
                 raise e
 

@@ -3,6 +3,7 @@
 from collections import defaultdict, namedtuple
 import inspect
 import operator
+from soft_exception import SoftException
 from debug_utils import LOG_WARNING
 from gui.shared.utils.decorators import ReprInjector
 
@@ -34,7 +35,7 @@ class StatsComponent(object):
         raise NotImplementedError
 
 
-class StatsComponentError(Exception):
+class StatsComponentError(SoftException):
     pass
 
 
@@ -53,10 +54,10 @@ class StatsItem(StatsComponent):
         return self.__class__(self._field, *self._path)
 
     def addComponent(self, index, component):
-        raise ValueError('StatsItem is not supported method addComponent')
+        raise SoftException('StatsItem is not supported method addComponent')
 
     def getComponent(self, index):
-        raise ValueError('StatsItem is not supported method getComponent')
+        raise SoftException('StatsItem is not supported method getComponent')
 
     def getRecordPath(self):
         return self._path
@@ -222,6 +223,8 @@ def _getPropertySetter(idx):
         if component is not None:
             if isinstance(value, PropertyValue):
                 component.setRecord(value.record, value.reusable)
+            elif isinstance(value, tuple) and len(value) == 2 and isinstance(value[0], tuple):
+                component.setRecord(value[0], value[1])
             else:
                 component.setRecord(value, None)
         return
@@ -254,6 +257,30 @@ class PropertyMeta(DictMeta):
             raise StatsComponentError('Number of items must be more than 1')
 
         super(PropertyMeta, self).__init__(converted)
+
+    def replace(self, *replace):
+        bind = self._bind[:]
+        for item in replace:
+            if not isinstance(item, tuple):
+                raise StatsComponentError('Each item must be tuple in meta')
+            if len(item) != 3:
+                raise StatsComponentError('Number of items must be 3!')
+            searchField, default, attribute = item[:3]
+            for idx, field, _, _ in self._bind:
+                if field == searchField:
+                    bind[idx] = (idx,
+                     field,
+                     attribute,
+                     default)
+                    break
+            else:
+                raise StatsComponentError('Item {} to replace is not found'.format(searchField))
+
+        destination = PropertyMeta(())
+        destination._bind = bind
+        destination._meta = self._meta.copy()
+        destination._unregistered = self._unregistered.copy()
+        return destination
 
     def clone(self):
         auto = []

@@ -84,8 +84,9 @@ class ElenPreviewTooltipData(BlocksTooltipData, IGlobalListener):
             return '{0} {1}'.format(text_styles.main(name), text_styles.standard('{} - {}'.format(pt.getStartLocalTime(), pt.getEndLocalTime())))
 
         def getSortedPrimeTimes(primeTimes):
+            primeTimes = sorted(primeTimes, key=lambda p: int(p.getServer()))
             times = [ getPrimeTimeBlock(pt) for pt in primeTimes ]
-            return sorted(times)
+            return times
 
         primeTimesData = primeTimes.getPrimeTimes()
         validTimes = set((pt for pt in primeTimesData if pt.isActive()))

@@ -13,6 +13,10 @@ from PixieBG import PixieBG
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_OBSOLETE
 from vehicle_systems.tankStructure import TankSoundObjectsIndexes
 from ReplayEvents import g_replayEvents
+from soft_exception import SoftException
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.Scaleform.genConsts.EPIC_CONSTS import EPIC_CONSTS
 import SoundGroups
 COLOR_WHITE = 4294967295L
 _ALLOW_DYNAMIC_LIGHTS = True
@@ -755,19 +759,20 @@ class _DestructionSoundEffectDesc(_BaseSoundEvent):
         soundName = self._soundName
         if soundName == '':
             return
-        else:
-            node = _findTargetNodeSafe(model, self._nodeName)
-            objectName = soundName
-            sound = SoundGroups.g_instance.WWgetSoundObject(objectName, node.actualNode)
-            if sound is None:
-                return
-            if self._parameters is not None:
-                for soundStartParam in self._parameters:
-                    sound.setRTPC(soundStartParam.name, soundStartParam.value)
+        node = _findTargetNodeSafe(model, self._nodeName)
+        objectName = soundName
+        sound = SoundGroups.g_instance.WWgetSoundObject(objectName, node.actualNode)
+        if sound is None:
+            return
+        elif self._parameters:
+            for soundStartParam in self._parameters:
+                sound.setRTPC(soundStartParam.name, soundStartParam.value)
 
             sound.play(soundName)
             self._register(list, node, sound)
             return sound
+        else:
+            return
 
     def __readParameters(self, dataSection):
         section = dataSection['params']
@@ -861,7 +866,7 @@ class _SoundEffectDesc(_EffectDesc):
             elem['sound'].play(soundName)
         elif self._switch_shell_type:
             if self._impactNames is None:
-                raise Exception('impact tags are invalid <%s> <%s> <%s> <%s>' % (self._soundName,
+                raise SoftException('impact tags are invalid <%s> <%s> <%s> <%s>' % (self._soundName,
                  self._soundNames,
                  self._switch_impact_surface,
                  self._switch_shell_type))
@@ -873,6 +878,12 @@ class _SoundEffectDesc(_EffectDesc):
                 soundName = self._impactNames[1]
             elif isPlayerVehicle:
                 soundName = self._impactNames[0]
+                if not BigWorld.entity(playerID).isAlive():
+                    sessionProvider = dependency.instance(IBattleSessionProvider)
+                    if sessionProvider is not None:
+                        spectator = sessionProvider.dynamic.spectator
+                        if spectator is not None and spectator.spectatorViewMode in (EPIC_CONSTS.SPECTATOR_MODE_FREECAM, EPIC_CONSTS.SPECTATOR_MODE_FOLLOW):
+                            soundName = self._impactNames[2]
             else:
                 soundName = self._impactNames[2]
             if hitdir is not None:
@@ -981,7 +992,7 @@ class _ShockWaveEffectDesc(_EffectDesc):
     TYPE = '_ShockWaveEffectDesc'
 
     def __init__(self, dataSection):
-        raise Exception("'shockWave' effect is obsolete, use Dynamic Cameras API instead.")
+        raise SoftException("'shockWave' effect is obsolete, use Dynamic Cameras API instead.")
 
 
 class _PostProcessEffectDesc(_EffectDesc):
@@ -1176,12 +1187,12 @@ def _createEffectDesc(eType, dataSection):
         factoryMethod = _effectDescFactory.get(eType, None)
         if factoryMethod is not None:
             return factoryMethod(dataSection)
-        raise Exception('EffectsList factory has no class associated with type %s.' % eType)
+        raise SoftException('EffectsList factory has no class associated with type %s.' % eType)
         return
 
 
 def _raiseWrongConfig(paramName, effectType):
-    raise Exception('missing or wrong parameter <%s> in effect descriptor <%s>.' % (paramName, effectType))
+    raise SoftException('missing or wrong parameter <%s> in effect descriptor <%s>.' % (paramName, effectType))
 
 
 def __getTransformAlongNormal(localTransform, worldTransform, normal):
@@ -1235,10 +1246,20 @@ class _NodeWithLocal(object):
             local = Math.Matrix()
             local.setIdentity()
         if model.__class__.__name__ == 'Model':
-            try:
-                self.__node = model.node(nodeName, local)
-            except Exception:
-                self.__node = model.node('', local)
+            allAttachmentsChecked = success = False
+            attachmentsChecked = 0
+            while not allAttachmentsChecked and not success:
+                try:
+                    if attachmentsChecked > 0:
+                        self.__node = model.root.attachments[attachmentsChecked - 1].node(nodeName, local)
+                        success = True
+                    else:
+                        self.__node = model.node(nodeName, local)
+                        success = True
+                except Exception:
+                    attachmentsChecked += 1
+                    allAttachmentsChecked = True if not hasattr(model.root, 'attachments') else 1 + len(model.root.attachments) - attachmentsChecked < 1
+                    self.__node = model.node('', local)
 
             self.__localMatrix = None
         else:
@@ -1297,7 +1318,7 @@ def _findTargetModel(model, nodes):
                 break
 
         if not found:
-            raise Exception("can't find model attachments in %s" % nodes[iter])
+            raise SoftException("can't find model attachments in %s" % nodes[iter])
 
     return targetNode
 
@@ -1346,11 +1367,11 @@ def effectsFromSection(section):
         if keyPoints is None:
             keyPoints = __keyPointsFromTimeLineSection(timeLineSection)
         else:
-            raise Exception('Both stages and timeline defined in effect %s' % section.name)
+            raise SoftException('Both stages and timeline defined in effect %s' % section.name)
     if keyPoints is None:
-        raise Exception('Neither stages nor timeline defined in effect %s' % section.name)
+        raise SoftException('Neither stages nor timeline defined in effect %s' % section.name)
     if isinstance(keyPoints, str):
-        raise Exception('Duplicate keypoint %s in effect %s' % (keyPoints, section.name))
+        raise SoftException('Duplicate keypoint %s in effect %s' % (keyPoints, section.name))
     effectsSec = section['effects']
     effectList = EffectsList(effectsSec)
     if section['relatedEffects'] is not None:

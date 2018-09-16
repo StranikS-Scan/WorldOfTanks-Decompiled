@@ -65,12 +65,12 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
         if self.__endWarningIsEnabled and self.__state == COUNTDOWN_STATE.STOP:
             if _BATTLE_END_TIME < totalTime <= self.__endingSoonTime:
                 if not self.__isTicking:
-                    self.__startTicking()
+                    self._startTicking()
                 if totalTime == self.__endingSoonTime:
                     self._callWWISE(_WWISE_EVENTS.BATTLE_ENDING_SOON)
             elif self.__isTicking:
                 self.__stopTicking()
-        self.as_setTotalTimeS('{:02d}'.format(minutes), '{:02d}'.format(seconds))
+        self._sendTime(minutes, seconds)
 
     def setState(self, state):
         self.__state = state
@@ -81,6 +81,9 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
     def showTotalTime(self):
         self.as_showBattleTimerS(True)
 
+    def _sendTime(self, minutes, seconds):
+        self.as_setTotalTimeS('{:02d}'.format(minutes), '{:02d}'.format(seconds))
+
     def _callWWISE(self, wwiseEventName):
         sound = SoundGroups.g_instance.getSound2D(wwiseEventName)
         if sound is not None:
@@ -88,15 +91,18 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
             self.__sounds[wwiseEventName] = sound
         return
 
-    def __startTicking(self):
+    def _setColor(self):
+        self.as_setColorS(self.__isTicking)
+
+    def _startTicking(self):
         self._callWWISE(_WWISE_EVENTS.COUNTDOWN_TICKING)
         self.__isTicking = True
-        self.as_setColorS(self.__isTicking)
+        self._setColor()
 
     def __stopTicking(self):
         self._callWWISE(_WWISE_EVENTS.STOP_TICKING)
         self.__isTicking = False
-        self.as_setColorS(self.__isTicking)
+        self._setColor()
 
     def __validateEndingSoonTime(self):
         return 0 < self.__endingSoonTime < self.__roundLength

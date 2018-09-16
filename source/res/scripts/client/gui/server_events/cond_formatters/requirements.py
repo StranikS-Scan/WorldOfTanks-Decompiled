@@ -16,6 +16,7 @@ from helpers.i18n import makeString as ms
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from soft_exception import SoftException
 
 def packTokens(tokens):
     return {'tokens': tokens,
@@ -67,13 +68,13 @@ class RecursiveFormatter(ConditionsFormatter):
         return result
 
     def _packCondition(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _getFormattedField(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _packConditions(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
 
 class VehicleConditionAdapter(object):
@@ -153,13 +154,13 @@ class AccountRequirementsFormatter(ConditionsFormatter):
         return self.getConditionFormatter('single') if len(group.items) == 1 and first(group.items).getName() not in ('token', 'and', 'or') else self.getConditionFormatter(group.getName())
 
     def _packCondition(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _getFormattedField(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _packConditions(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
 
 class TQAccountRequirementsFormatter(AccountRequirementsFormatter):
@@ -218,13 +219,13 @@ class SingleGroupFormatter(ConditionsFormatter):
         return text_styles.standard if isRequirementMet else text_styles.main
 
     def _packCondition(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _getFormattedField(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _packConditions(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
 
 class RecursiveGroupFormatter(RecursiveFormatter):

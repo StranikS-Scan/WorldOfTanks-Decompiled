@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/messages/fading_messages.py
 import operator
+from soft_exception import SoftException
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.daapi.view.meta.BattleMessageListMeta import BattleMessageListMeta
@@ -111,7 +112,7 @@ class FadingMessages(BattleMessageListMeta):
         if color in _COLOR_TO_METHOD:
             method = _COLOR_TO_METHOD[color]
         else:
-            raise Exception('Can not recognize color for message "{}". List "{}"'.format(key, self.__name))
+            raise SoftException('Can not recognize color for message "{}". List "{}"'.format(key, self.__name))
         LOG_DEBUG('Show message in a battle', self.__name, key)
         operator.methodcaller(method, key, msgText)(self)
         return

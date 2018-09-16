@@ -3,6 +3,7 @@
 import weakref
 from collections import namedtuple
 from constants import PREBATTLE_TYPE
+from constants import IS_DEVELOPMENT
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
@@ -10,6 +11,7 @@ from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.CYBER_SPORT_ALIASES import CYBER_SPORT_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
+from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.locale.CHAT import CHAT
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -24,7 +26,8 @@ from messenger.m_constants import LAZY_CHANNEL
 from skeletons.gui.game_control import IGameSessionController
 TOOLTIP_PRB_DATA = namedtuple('TOOLTIP_PRB_DATA', ('tooltipId', 'label'))
 _SQUAD_TYPE_TO_ALIAS = {PREBATTLE_TYPE.EVENT: PREBATTLE_ALIASES.EVENT_SQUAD_WINDOW_PY,
- PREBATTLE_TYPE.SQUAD: PREBATTLE_ALIASES.SQUAD_WINDOW_PY}
+ PREBATTLE_TYPE.SQUAD: PREBATTLE_ALIASES.SQUAD_WINDOW_PY,
+ PREBATTLE_TYPE.EPIC: PREBATTLE_ALIASES.EPIC_SQUAD_WINDOW_PY}
 _CarouselItemCtx = namedtuple('_CarouselItemCtx', ['label',
  'canClose',
  'isNotified',
@@ -37,6 +40,7 @@ _CarouselItemCtx = namedtuple('_CarouselItemCtx', ['label',
  'tooltipData'])
 _defCarouselItemCtx = _CarouselItemCtx(label=None, canClose=False, isNotified=False, icon=None, order=channel_num_gen.getOrder4Prebattle(), criteria=None, viewType=ViewTypes.WINDOW, openHandler=None, readyData=None, tooltipData=None)
 _LOCKED_SCREENS = (PREBATTLE_ALIASES.TRAINING_ROOM_VIEW_PY, PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY)
+_EPIC_SCREENS = (PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY, PREBATTLE_ALIASES.EPICBATTLE_LIST_VIEW_PY)
 
 class EventDispatcher(object):
     gameSession = dependency.descriptor(IGameSessionController)
@@ -67,6 +71,9 @@ class EventDispatcher(object):
     def isTrainingLoaded(self):
         return self.__getLoadedEvent() in _LOCKED_SCREENS or self.__loadingEvent in _LOCKED_SCREENS
 
+    def isEpicTrainingLoaded(self):
+        return None if not IS_DEVELOPMENT else self.__getLoadedEvent() in _EPIC_SCREENS or self.__loadingEvent in _EPIC_SCREENS
+
     def updateUI(self, loadedAlias=None):
         self.__fireEvent(events.FightButtonEvent(events.FightButtonEvent.FIGHT_BUTTON_UPDATE))
         self.__invalidatePrbEntity(loadedAlias)
@@ -85,6 +92,20 @@ class EventDispatcher(object):
         self.addTrainingToCarousel(False)
         self.__showTrainingRoom()
 
+    def loadEpicTrainingList(self):
+        if not IS_DEVELOPMENT:
+            return
+        self.removeEpicTrainingFromCarousel()
+        self.addEpicTrainingToCarousel()
+        self._showEpicTrainingList()
+
+    def loadEpicTrainingRoom(self):
+        if not IS_DEVELOPMENT:
+            return
+        self.removeTrainingFromCarousel()
+        self.addTrainingToCarousel(False)
+        self.__showEpicTrainingRoom()
+
     def loadBattleSessionWindow(self, prbType):
         self.addSpecBattleToCarousel(prbType)
         self.showBattleSessionWindow()
@@ -96,8 +117,8 @@ class EventDispatcher(object):
         self.__addUnitToCarousel(prbType)
         self.showUnitWindow(prbType)
 
-    def loadStrongholds(self, prbType):
-        self.__addStrongholdsToCarousel(prbType)
+    def loadStrongholds(self):
+        self.__addStrongholdsToCarousel()
         self.showStrongholdsWindow()
 
     def loadSquad(self, prbType, ctx=None, isTeamReady=False):
@@ -109,6 +130,11 @@ class EventDispatcher(object):
 
     def loadRanked(self):
         self.__fireShowEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_WELCOME_VIEW_ALIAS)
+
+    def loadEpicWelcome(self):
+        from gui.game_control.epic_meta_game_ctrl import DISABLE_EPIC_META_GAME
+        if not DISABLE_EPIC_META_GAME:
+            self.__fireShowEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_INFO_ALIAS)
 
     def loadRankedUnreachable(self):
         self.__fireShowEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_UNREACHABLE_VIEW_ALIAS)
@@ -133,6 +159,16 @@ class EventDispatcher(object):
             return
         self.__handleRemoveRequest(clientID, closeWindow=closeWindow)
 
+    def removeEpicTrainingFromCarousel(self, isList=True, closeWindow=True):
+        if not IS_DEVELOPMENT:
+            return
+        clientType = SPECIAL_CLIENT_WINDOWS.EPIC_TRAINING_LIST if isList else SPECIAL_CLIENT_WINDOWS.EPIC_TRAINING_ROOM
+        clientID = channel_num_gen.getClientID4SpecialWindow(clientType)
+        if not clientID:
+            LOG_ERROR('Client ID not found', 'removeEpicTrainingFromCarousel')
+            return
+        self.__handleRemoveRequest(clientID, closeWindow=closeWindow)
+
     def addTrainingToCarousel(self, isList=True):
         self.removeTrainingFromCarousel(not isList, closeWindow=False)
         if isList:
@@ -148,6 +184,24 @@ class EventDispatcher(object):
             LOG_ERROR('Client ID not found', 'addTrainingToCarousel')
             return
         currCarouselItemCtx = _defCarouselItemCtx._replace(label=MENU.HEADERBUTTONS_BATTLE_TYPES_TRAINING, criteria={POP_UP_CRITERIA.VIEW_ALIAS: alias}, viewType=ViewTypes.LOBBY_SUB, openHandler=handler)
+        self.__handleAddPreBattleRequest(clientID, currCarouselItemCtx._asdict())
+
+    def addEpicTrainingToCarousel(self, isList=True):
+        if not IS_DEVELOPMENT:
+            return
+        if isList:
+            clientType = SPECIAL_CLIENT_WINDOWS.EPIC_TRAINING_LIST
+            alias = PREBATTLE_ALIASES.EPICBATTLE_LIST_VIEW_PY
+            handler = self._showEpicTrainingList
+        else:
+            clientType = SPECIAL_CLIENT_WINDOWS.EPIC_TRAINING_ROOM
+            alias = PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY
+            handler = self.__returnToTrainingRoom
+        clientID = channel_num_gen.getClientID4SpecialWindow(clientType)
+        if not clientID:
+            LOG_ERROR('Client ID not found', 'addEpicTrainingToCarousel')
+            return
+        currCarouselItemCtx = _defCarouselItemCtx._replace(label=MENU.HEADERBUTTONS_BATTLE_TYPES_EPICBATTLE, criteria={POP_UP_CRITERIA.VIEW_ALIAS: alias}, viewType=ViewTypes.LOBBY_SUB, openHandler=handler)
         self.__handleAddPreBattleRequest(clientID, currCarouselItemCtx._asdict())
 
     def addSpecBattleToCarousel(self, prbType):
@@ -196,6 +250,10 @@ class EventDispatcher(object):
     def showStrongholdsWindow(self):
         from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
         self.__fireShowEvent(FORTIFICATION_ALIASES.STRONGHOLD_BATTLE_ROOM_WINDOW_ALIAS)
+
+    def showStrongholdsBattleQueue(self):
+        self.removeUnitFromCarousel(PREBATTLE_TYPE.EXTERNAL)
+        self.__fireShowEvent(VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE)
 
     def strongholdsOnTimer(self, data):
         self.__fireEvent(events.StrongholdEvent(events.StrongholdEvent.STRONGHOLD_ON_TIMER, ctx=data), scope=EVENT_BUS_SCOPE.STRONGHOLD)
@@ -279,6 +337,11 @@ class EventDispatcher(object):
             self.__prbDispatcher.doAction()
         return
 
+    def __showEpicTrainingRoom(self):
+        if not IS_DEVELOPMENT:
+            return
+        self.__fireLoadEvent(PREBATTLE_ALIASES.EPIC_TRAINING_ROOM_VIEW_PY)
+
     def __fireEvent(self, event, scope=EVENT_BUS_SCOPE.LOBBY):
         g_eventBus.handleEvent(event, scope)
 
@@ -329,6 +392,11 @@ class EventDispatcher(object):
     def __showTrainingList(self):
         self.__fireLoadEvent(PREBATTLE_ALIASES.TRAINING_LIST_VIEW_PY)
 
+    def _showEpicTrainingList(self):
+        if not IS_DEVELOPMENT:
+            return
+        self.__fireLoadEvent(PREBATTLE_ALIASES.EPICBATTLE_LIST_VIEW_PY)
+
     def __getReadyPrbData(self, isReady):
         return {'isReady': isReady}
 
@@ -364,10 +432,10 @@ class EventDispatcher(object):
         from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
         self.__addUnitToCarouselCommon(prbType, CYBERSPORT.WINDOW_TITLE, CYBER_SPORT_ALIASES.CYBER_SPORT_WINDOW_PY, lambda : self.showUnitWindow(prbType))
 
-    def __addStrongholdsToCarousel(self, prbType):
+    def __addStrongholdsToCarousel(self):
         from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
         from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
-        self.__addUnitToCarouselCommon(prbType, FORTIFICATIONS.SORTIE_INTROVIEW_TITLE, FORTIFICATION_ALIASES.STRONGHOLD_BATTLE_ROOM_WINDOW_ALIAS, self.showStrongholdsWindow)
+        self.__addUnitToCarouselCommon(PREBATTLE_TYPE.EXTERNAL, FORTIFICATIONS.SORTIE_INTROVIEW_TITLE, FORTIFICATION_ALIASES.STRONGHOLD_BATTLE_ROOM_WINDOW_ALIAS, self.showStrongholdsWindow)
 
     def __addUnitToCarouselCommon(self, prbType, label, viewAlias, openHandler):
         clientID = channel_num_gen.getClientID4Prebattle(prbType)

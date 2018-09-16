@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/settings.py
 from collections import namedtuple
+from soft_exception import SoftException
 TUTORIAL_VERSION = '0.3.7'
 DOC_DIRECTORY = 'scripts/tutorial_docs'
 GLOBAL_REFS_FILE_PATH = '{0:>s}/global-refs.xml'.format(DOC_DIRECTORY)
@@ -65,7 +66,7 @@ def createSettingsCollection():
 def createTutorialElement(classPath, init=None):
     imported = __import__(classPath.module, globals(), locals(), [classPath.clazz])
     if not imported:
-        raise ValueError('Can not find class {0.module} in {0.clazz}'.format(classPath))
+        raise SoftException('Can not find class {0.module} in {0.clazz}'.format(classPath))
     clazz = getattr(imported, classPath.clazz)
     if init is None:
         init = classPath.args

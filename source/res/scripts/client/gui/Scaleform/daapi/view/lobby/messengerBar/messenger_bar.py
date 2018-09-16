@@ -14,6 +14,7 @@ from helpers import int2roman, dependency
 from messenger.gui.Scaleform.view.lobby import MESSENGER_VIEW_ALIAS
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.shared import IItemsCache
+from soft_exception import SoftException
 
 def _formatIcon(iconName, width=32, height=32):
     return makeHtmlString('html_templates:lobby/messengerBar', 'iconTemplate', {'iconName': iconName,
@@ -72,7 +73,7 @@ class _CompareBasketListener(object):
         settings = pyEntity.settings
         if settings.type == ViewTypes.WINDOW and settings.alias == VEHICLE_COMPARE_CONSTANTS.VEHICLE_COMPARE_CART_POPOVER:
             if self.__currentCartPopover is not None:
-                raise UserWarning('Attempt to initialize object 2nd time!')
+                raise SoftException('Attempt to initialize object 2nd time!')
             self.__currentCartPopover = pyEntity
             self.__currentCartPopover.onDispose += self.__onCartPopoverDisposed
         return

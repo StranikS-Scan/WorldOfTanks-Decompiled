@@ -17,11 +17,12 @@ from gui.shared.money import MONEY_UNDEFINED, Currency
 from gui.shared.tooltips import formatters
 from gui.shared.tooltips import getComplexStatus, getUnlockPrice, TOOLTIP_TYPE
 from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURRENCY_SETTINGS
-from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME
+from gui.shared.utils import GUN_CLIP, SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME, AIMING_TIME_PROP_NAME, RELOAD_TIME_PROP_NAME, GUN_AUTO_RELOAD, AUTO_RELOAD_PROP_NAME
 from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import VEHICLE_COMPONENT_TYPE_NAMES, ITEM_TYPES
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
@@ -160,6 +161,7 @@ class VehCompareModuleBlockTooltipData(BlocksTooltipData):
 class ModuleTooltipBlockConstructor(object):
     MAX_INSTALLED_LIST_LEN = 10
     CLIP_GUN_MODULE_PARAM = 'vehicleClipGun'
+    AUTO_RELOAD_GUN_MODULE_PARAM = 'autoReloadGun'
     WEIGHT_MODULE_PARAM = 'weight'
     MODULE_PARAMS = {GUI_ITEM_TYPE.CHASSIS: ('maxLoad', 'rotationSpeed', 'weight'),
      GUI_ITEM_TYPE.TURRET: ('armor', 'rotationSpeed', 'circularVisionRadius', 'weight'),
@@ -185,8 +187,17 @@ class ModuleTooltipBlockConstructor(object):
                              'dispertionRadius',
                              'maxShotDistance',
                              AIMING_TIME_PROP_NAME,
-                             'weight')}
-    EXTRA_MODULE_PARAMS = {CLIP_GUN_MODULE_PARAM: (SHELLS_COUNT_PROP_NAME, SHELL_RELOADING_TIME_PROP_NAME, RELOAD_MAGAZINE_TIME_PROP_NAME)}
+                             'weight'),
+     AUTO_RELOAD_GUN_MODULE_PARAM: (AUTO_RELOAD_PROP_NAME,
+                                    'avgPiercingPower',
+                                    'avgDamageList',
+                                    'avgDamagePerMinute',
+                                    'stunMinDurationList',
+                                    'stunMaxDurationList',
+                                    'dispertionRadius',
+                                    AIMING_TIME_PROP_NAME,
+                                    'maxShotDistance',
+                                    'weight')}
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, module, configuration, leftPadding=20, rightPadding=20):
@@ -386,8 +397,13 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
             reloadingType = None
             if module.itemTypeID == GUI_ITEM_TYPE.GUN:
                 reloadingType = module.getReloadingType(vehicle.descriptor if vehicle is not None else None)
+            highlightPossible = False
             if reloadingType == GUN_CLIP:
                 paramsKeyName = self.CLIP_GUN_MODULE_PARAM
+            elif reloadingType == GUN_AUTO_RELOAD and vehicle is not None:
+                serverSettings = dependency.instance(ISettingsCore).serverSettings
+                highlightPossible = serverSettings.checkAutoReloadHighlights(increase=True)
+                paramsKeyName = self.AUTO_RELOAD_GUN_MODULE_PARAM
             paramsList = self.MODULE_PARAMS.get(paramsKeyName, [])
             if vehicle is not None:
                 if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
@@ -401,7 +417,7 @@ class CommonStatsBlockConstructor(ModuleTooltipBlockConstructor):
                         paramInfo = comparator.getExtendedData(paramName)
                         fmtValue = params_formatters.colorizedFormatParameter(paramInfo, self.__colorScheme)
                         if fmtValue is not None:
-                            block.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName(paramName), value=fmtValue, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5)))
+                            block.append(formatters.packTextParameterBlockData(name=params_formatters.formatModuleParamName(paramName), value=fmtValue, valueWidth=self._valueWidth, padding=formatters.packPadding(left=-5), highlight=highlightPossible and paramName == AUTO_RELOAD_PROP_NAME))
 
             else:
                 formattedModuleParameters = params_formatters.getFormattedParamsList(module.descriptor, moduleParams)

@@ -3,6 +3,7 @@
 from constants import CHAT_MESSAGE_MAX_LENGTH, CHAT_MESSAGE_MAX_LENGTH_IN_BATTLE
 from messenger.m_constants import MESSAGES_HISTORY_MAX_LEN
 from messenger.proto.interfaces import IProtoLimits
+from soft_exception import SoftException
 
 class BattleLimits(IProtoLimits):
 
@@ -13,7 +14,7 @@ class BattleLimits(IProtoLimits):
         return MESSAGES_HISTORY_MAX_LEN
 
     def getBroadcastCoolDown(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
 
 class LobbyLimits(IProtoLimits):
@@ -25,7 +26,7 @@ class LobbyLimits(IProtoLimits):
         return MESSAGES_HISTORY_MAX_LEN
 
     def getBroadcastCoolDown(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
 
 class CHANNEL_LIMIT(object):

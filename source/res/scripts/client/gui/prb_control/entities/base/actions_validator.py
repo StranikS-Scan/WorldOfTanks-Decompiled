@@ -6,6 +6,7 @@ from CurrentVehicle import g_currentPreviewVehicle, g_currentVehicle
 from gui.prb_control.items import ValidationResult
 from gui.prb_control.settings import PREBATTLE_RESTRICTION
 import tutorial.loader as tutorialLoader
+from soft_exception import SoftException
 _logger = logging.getLogger(__name__)
 
 class IActionsValidator(object):
@@ -108,7 +109,7 @@ class ActionsValidatorComposite(BaseActionsValidator):
             result = warning.canPlayerDoAction()
             if result is not None:
                 if not result.isValid:
-                    raise UserWarning('Warnings could not be invalid!')
+                    raise SoftException('Warnings could not be invalid!')
                 return result
 
         return super(ActionsValidatorComposite, self)._validate()

@@ -21,7 +21,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.missions.regular.missions_token_popover import MissionsTokenPopover
     from gui.Scaleform.daapi.view.lobby.missions.regular.vehicle_selector import RegularMissionVehicleSelector
     from gui.Scaleform.daapi.view.lobby.missions.regular.vehicle_selector import RegularVehicleSelectorCarousel
-    from gui.Scaleform.daapi.view.lobby.missions.regular.missions_views import MissionsGroupedView, MissionsMarathonView, MissionsCategoriesView, MissionsEventBoardsView, CurrentVehicleMissionsView
+    from gui.Scaleform.daapi.view.lobby.missions.regular.missions_views import MissionsMarathonsView, MissionsCategoriesView, MissionsEventBoardsView, CurrentVehicleMissionsView
     from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_details_container_view import EventBoardsDetailsBrowserView, EventBoardsDetailsVehiclesView, EventBoardsDetailsAwardsView, EventBoardsDetailsBattleView
     from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_browser_overlay import EventBoardsBrowserOverlay
     from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_vehicles_overlay import EventBoardsVehiclesOverlay
@@ -37,8 +37,7 @@ def getViewSettings():
      ViewSettings(EVENTBOARDS_ALIASES.EVENTBOARDS_DETAILS_VEHICLES_ALIAS, EventBoardsVehiclesOverlay, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(EVENTBOARDS_ALIASES.EVENTBOARDS_DETAILS_BATTLE_ALIAS, EventBoardsBattleOverlay, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(EVENTBOARDS_ALIASES.EVENTBOARDS_DETAILS_AWARDS_ALIAS, EventBoardsAwardsOverlay, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, MissionsGroupedView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
-     ViewSettings(QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, MissionsMarathonView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
+     ViewSettings(QUESTS_ALIASES.MISSIONS_MARATHONS_VIEW_PY_ALIAS, MissionsMarathonsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, MissionsEventBoardsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, MissionsCategoriesView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),
      ViewSettings(QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS, CurrentVehicleMissionsView, None, ViewTypes.COMPONENT, None, ScopeTemplates.VIEW_SCOPE),

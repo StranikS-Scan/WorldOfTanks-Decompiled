@@ -45,17 +45,15 @@ class _BestParamsDict(dict):
         return
 
     def addLen(self, key, value):
-        currLen = len(value)
-        values = self.__lengths.setdefault(key, {})
-        currVal = values.get(currLen, 0)
-        values[currLen] = currVal + 1
+        if key in self.__lengths:
+            self.__lengths[key] = min(self.__lengths[key], len(value))
+        else:
+            self.__lengths[key] = len(value)
 
     def toDict(self):
         res = dict(self)
-        for k, values in self.__lengths.iteritems():
-            valuableLengths = [ length for length, count in values.iteritems() if count > 1 ]
-            valuableLengths.append(1)
-            res[k] = self[k][:max(valuableLengths)]
+        for k, valuableLength in self.__lengths.iteritems():
+            res[k] = self[k][:valuableLength]
 
         return res
 

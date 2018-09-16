@@ -14,17 +14,17 @@ from debug_utils import LOG_ERROR
 from gui import makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
-from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.daapi.view.lobby.hof.hof_helpers import getAchievementsTabCounter
 from gui.Scaleform.daapi.view.lobby.store.actions_formatters import getNewActiveActions
 from gui.Scaleform.daapi.view.meta.LobbyHeaderMeta import LobbyHeaderMeta
 from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
+from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecycleHandler, ViewLifecycleWatcher
-from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
+from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -36,6 +36,7 @@ from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, REQUEST_TYPE, UNIT_RESTRICTION, PRE_QUEUE_RESTRICTION
 from gui.server_events import settings as quest_settings
+from gui.shared import event_dispatcher as shared_events
 from gui.shared import events
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -44,9 +45,9 @@ from gui.shared.formatters.currency import getBWFormatter
 from gui.shared.formatters.ranges import toRomanRangeString
 from gui.shared.money import Currency
 from gui.shared.tooltips import formatters
+from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.functions import makeTooltip
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
 from helpers import dependency
 from helpers import i18n, time_utils, isPlayerAccount
@@ -54,11 +55,12 @@ from predefined_hosts import g_preDefinedHosts, PING_STATUSES
 from shared_utils import CONST_CONTAINER
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
+from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.game_control import IEncyclopediaController
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 from skeletons.gui.game_control import IIGRController, IChinaController, IServerStatsController
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.game_control import IWalletController, IGameSessionController, IBoostersController
-from skeletons.gui.game_control import IBootcampController
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
@@ -143,6 +145,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     goodiesCache = dependency.descriptor(IGoodiesCache)
     connectionMgr = dependency.descriptor(IConnectionManager)
     rankedController = dependency.descriptor(IRankedBattlesController)
+    epicController = dependency.descriptor(IEpicBattleMetaGameController)
     bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self):
@@ -207,9 +210,6 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def updataBadgeInfo(self):
         self.__updateBadge()
 
-    def onPayment(self):
-        self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.PAYMENT))
-
     def showLobbyMenu(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MENU), scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -221,20 +221,23 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         else:
             self.as_doDeselectHeaderButtonS(alias)
 
+    def onCrystalClick(self):
+        shared_events.showCrystalWindow()
+
+    def onPayment(self):
+        shared_events.openPaymentLink()
+
     def showExchangeWindow(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.EXCHANGE_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+        shared_events.showExchangeWindow()
 
     def showExchangeXPWindow(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.EXCHANGE_XP_WINDOW), EVENT_BUS_SCOPE.LOBBY)
+        shared_events.showExchangeXPWindow()
 
     def showPremiumDialog(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.PREMIUM_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
     def onPremShopClick(self):
         self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.PREM_SHOP))
-
-    def onCrystalClick(self):
-        self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.CRYSTALS_PROMO_WINDOW), EVENT_BUS_SCOPE.LOBBY)
 
     @process
     def fightClick(self, mapID, actionName):
@@ -261,7 +264,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self._updateHangarMenuData()
         battle_selector_items.create()
         super(LobbyHeader, self)._populate()
-        if self.app.headerMenuOverride is not None:
+        if self.app.tutorialManager.lastHeaderMenuButtonsOverride is not None:
             self.__onOverrideHeaderMenuButtons()
         self._addListeners()
         Waiting.hide('enter')
@@ -312,6 +315,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.eventsCache.onPersonalQuestsVisited += self.__onPersonalVisited
         self.boosters.onBoosterChangeNotify += self.__onUpdateGoodies
         self.rankedController.onUpdated += self.__updateRanked
+        self.epicController.onUpdated += self.__updateEpic
+        self.epicController.onPrimeTimeStatusUpdated += self.__updateEpic
         self.addListener(events.FightButtonEvent.FIGHT_BUTTON_UPDATE, self.__handleFightButtonUpdated, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.CoolDownEvent.PREBATTLE, self.__handleSetPrebattleCoolDown, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.BubbleTooltipEvent.SHOW, self.__showBubbleTooltip, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -343,8 +348,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.settingsCore.onSettingsChanged += self.__onSettingsChanged
         self.encyclopedia.onNewRecommendationReceived += self.__onNewEncyclopediaRecommendation
         self.encyclopedia.onStateChanged += self._updateHangarMenuData
-        self.app.onHangarMenuOverride += self.__onOverrideHangarMenuButtons
-        self.app.onHeaderMenuOverride += self.__onOverrideHeaderMenuButtons
+        self.addListener(events.TutorialEvent.OVERRIDE_HANGAR_MENU_BUTTONS, self.__onOverrideHangarMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.addListener(events.TutorialEvent.OVERRIDE_HEADER_MENU_BUTTONS, self.__onOverrideHeaderMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _removeListeners(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -367,6 +372,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.eventsCache.onProfileVisited -= self.__onProfileVisited
         self.eventsCache.onPersonalQuestsVisited -= self.__onPersonalVisited
         self.rankedController.onUpdated -= self.__updateRanked
+        self.epicController.onUpdated -= self.__updateEpic
+        self.epicController.onPrimeTimeStatusUpdated -= self.__updateEpic
         self.app.containerManager.onViewAddedToContainer -= self.__onViewAddedToContainer
         if constants.IS_SHOW_SERVER_STATS:
             self.serverStats.onStatsReceived -= self.__onStatsReceived
@@ -375,8 +382,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
         self.encyclopedia.onStateChanged -= self._updateHangarMenuData
         self.encyclopedia.onNewRecommendationReceived -= self.__onNewEncyclopediaRecommendation
-        self.app.onHangarMenuOverride -= self.__onOverrideHangarMenuButtons
-        self.app.onHeaderMenuOverride -= self.__onOverrideHeaderMenuButtons
+        self.removeListener(events.TutorialEvent.OVERRIDE_HANGAR_MENU_BUTTONS, self.__onOverrideHangarMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
+        self.removeListener(events.TutorialEvent.OVERRIDE_HEADER_MENU_BUTTONS, self.__onOverrideHeaderMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def __updateServerData(self):
         serverShortName = self.connectionMgr.serverUserNameShort.strip().split(' ')[-1]
@@ -647,6 +654,14 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             return ''
         return makeTooltip(header, body)
 
+    def __getEpicFightBtnTooltipData(self, result):
+        state = result.restriction
+        if state == PRE_QUEUE_RESTRICTION.LIMIT_LEVEL:
+            header = i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDVEHLEVELREQUIRED_HEADER)
+            body = i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_RANKEDVEHLEVELREQUIRED_BODY, level=toRomanRangeString(result.ctx['levels'], 1))
+            return (makeTooltip(header, body), False)
+        return (TOOLTIPS_CONSTANTS.EPIC_SELECTOR_INFO, True)
+
     def __getSandboxTooltipData(self, result):
         state = result.restriction
         return makeTooltip(i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_SANDBOX_INVALID_HEADER), i18n.makeString(MENU.HEADERBUTTONS_FIGHTBTN_TOOLTIP_SANDBOX_INVALID_LEVEL_BODY, levels=toRomanRangeString(result.ctx['levels'], 1))) if state == PRE_QUEUE_RESTRICTION.LIMIT_LEVEL else ''
@@ -674,6 +689,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         isEvent = self.eventsCache.isEventEnabled()
         isRanked = state.isInPreQueue(constants.QUEUE_TYPE.RANKED)
         isSandbox = state.isInPreQueue(constants.QUEUE_TYPE.SANDBOX)
+        isEpic = state.isInPreQueue(constants.QUEUE_TYPE.EPIC)
+        isEpicEnabled = self.lobbyContext.getServerSettings().isEpicBattleEnabled()
         if self.__isHeaderButtonPresent(LobbyHeader.BUTTONS.SQUAD):
             if not isNavigationEnabled:
                 tooltip = ''
@@ -693,24 +710,27 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__isFightBtnDisabled = self._checkFightButtonDisabled(canDo, selected.isFightButtonForcedDisabled())
         if self.__isFightBtnDisabled and not state.hasLockedState:
             if isSandbox:
-                self.as_setFightBtnTooltipS(self.__getSandboxTooltipData(result))
+                self.as_setFightBtnTooltipS(self.__getSandboxTooltipData(result), False)
             elif isEvent and state.isInUnit(constants.PREBATTLE_TYPE.EVENT):
-                self.as_setFightBtnTooltipS(self.__getEventTooltipData())
+                self.as_setFightBtnTooltipS(self.__getEventTooltipData(), False)
             elif isInSquad:
-                self.as_setFightBtnTooltipS(self.__getSquadFightBtnTooltipData(canDoMsg))
-            elif isRanked:
-                self.as_setFightBtnTooltipS(self.__getRankedFightBtnTooltipData(result))
+                self.as_setFightBtnTooltipS(self.__getSquadFightBtnTooltipData(canDoMsg), False)
             elif g_currentPreviewVehicle.isPresent():
-                self.as_setFightBtnTooltipS(self.__getPreviewTooltipData())
+                self.as_setFightBtnTooltipS(self.__getPreviewTooltipData(), False)
+            elif isRanked:
+                self.as_setFightBtnTooltipS(self.__getRankedFightBtnTooltipData(result), False)
+            elif isEpic and isEpicEnabled:
+                tooltipType, isSpecial = self.__getEpicFightBtnTooltipData(result)
+                self.as_setFightBtnTooltipS(tooltipType, isSpecial)
             else:
-                self.as_setFightBtnTooltipS('')
+                self.as_setFightBtnTooltipS('', False)
         else:
-            self.as_setFightBtnTooltipS('')
+            self.as_setFightBtnTooltipS('', False)
         if g_hangarSpace.spaceInited or not self.bootcampController.isInBootcamp():
             self.as_disableFightButtonS(self.__isFightBtnDisabled)
         self.as_setFightButtonS(selected.getFightButtonLabel(state, playerInfo))
         if self.__isHeaderButtonPresent(LobbyHeader.BUTTONS.BATTLE_SELECTOR):
-            eventEnabled = self.rankedController.isAvailable()
+            eventEnabled = self.rankedController.isAvailable() or self.epicController.isAvailable()
             self.as_updateBattleTypeS(i18n.makeString(selected.getLabel()), selected.getSmallIcon(), selected.isSelectorBtnEnabled(), TOOLTIPS.HEADER_BATTLETYPE, TOOLTIP_TYPES.COMPLEX, selected.getData(), eventEnabled, eventEnabled and not WWISE.WG_isMSR())
         else:
             self.as_updateBattleTypeS('', '', False, '', TOOLTIP_TYPES.NONE, '', False, False)
@@ -818,6 +838,9 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def __updateRanked(self):
         self._updatePrebattleControls()
 
+    def __updateEpic(self, *_):
+        self._updatePrebattleControls()
+
     def _updateStrongholdsSelector(self, emblem=None):
         strongholdEnabled = isStrongholdsEnabled()
         if strongholdEnabled:
@@ -866,7 +889,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
              'value': self.TABS.ACADEMY,
              'tooltip': TOOLTIPS.HEADER_BUTTONS_ENCYCLOPEDIA})
         tabDataProvider.append(self._updateStrongholdsSelector(emblem=fortEmblem))
-        override = self.app.hangarMenuOverride
+        override = self.app.tutorialManager.lastHangarMenuButtonsOverride
         if override is not None:
             tabDataProvider[:] = ifilter(lambda item: item['value'] in override, tabDataProvider)
         return tabDataProvider
@@ -877,12 +900,12 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self.__onNewEncyclopediaRecommendation()
         self._updateTabCounters()
 
-    def __onOverrideHangarMenuButtons(self):
+    def __onOverrideHangarMenuButtons(self, _=None):
         self.__hideDisabledTabCounters()
         self._updateHangarMenuData()
 
-    def __onOverrideHeaderMenuButtons(self):
-        menuOverride = self.app.headerMenuOverride
+    def __onOverrideHeaderMenuButtons(self, _=None):
+        menuOverride = self.app.tutorialManager.lastHeaderMenuButtonsOverride
         self.as_setHeaderButtonsS(menuOverride)
         if LobbyHeader.BUTTONS.BATTLE_SELECTOR in menuOverride:
             self._updatePrebattleControls()
@@ -917,6 +940,8 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
             self._updatePrebattleControls()
         if 'isRegularQuestEnabled' in diff:
             self._updateHangarMenuData()
+        if 'epic_config' in diff:
+            self._updatePrebattleControls()
 
     def __updateProfileTabCounter(self):
         if self.lobbyContext.getServerSettings().isHofEnabled():
@@ -1009,15 +1034,15 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.as_doDisableNavigationS()
 
     def __isTabPresent(self, tabID):
-        if self.app is not None:
-            override = self.app.hangarMenuOverride
+        if self.app is not None and self.app.tutorialManager is not None:
+            override = self.app.tutorialManager.lastHangarMenuButtonsOverride
             if override is not None:
                 return tabID in override
         return True
 
     def __isHeaderButtonPresent(self, buttonID):
-        if self.app is not None:
-            override = self.app.headerMenuOverride
+        if self.app is not None and self.app.tutorialManager is not None:
+            override = self.app.tutorialManager.lastHeaderMenuButtonsOverride
             if override is not None:
                 return buttonID in override
         return True

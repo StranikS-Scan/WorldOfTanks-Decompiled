@@ -35,8 +35,18 @@ def readSwingingSettings(xmlCtx, section, cache):
     return shared_components.SwingingSettings(readLodDist(xmlCtx, section, 'swinging/lodDist', cache), _xml.readNonNegativeFloat(xmlCtx, section, 'swinging/sensitivityToImpulse'), _xml.readTupleOfFloats(xmlCtx, section, 'swinging/pitchParams', 6), _xml.readTupleOfFloats(xmlCtx, section, 'swinging/rollParams', 7))
 
 
-def readModels(xmlCtx, section, subsectionName):
-    return shared_components.ModelStatesPaths(_xml.readNonEmptyString(xmlCtx, section, subsectionName + '/undamaged'), _xml.readNonEmptyString(xmlCtx, section, subsectionName + '/destroyed'), _xml.readNonEmptyString(xmlCtx, section, subsectionName + '/exploded'))
+def readModelsSets(xmlCtx, section, subsectionName):
+    undamaged = _xml.readNonEmptyString(xmlCtx, section, subsectionName + '/undamaged')
+    destroyed = _xml.readNonEmptyString(xmlCtx, section, subsectionName + '/destroyed')
+    exploded = _xml.readNonEmptyString(xmlCtx, section, subsectionName + '/exploded')
+    modelsSets = {'default': shared_components.ModelStatesPaths(undamaged, destroyed, exploded)}
+    subsection = section[subsectionName]
+    if subsection:
+        setSection = subsection['sets'] or {}
+        for k, v in setSection.items():
+            modelsSets[k] = shared_components.ModelStatesPaths(_xml.readStringOrNone(xmlCtx, v, 'undamaged') or undamaged, _xml.readStringOrNone(xmlCtx, v, 'destroyed') or destroyed, _xml.readStringOrNone(xmlCtx, v, 'exploded') or exploded)
+
+    return modelsSets
 
 
 def readUserText(section):

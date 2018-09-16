@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/Vibroeffects/EffectsSettings.py
 import ResMgr
+from soft_exception import SoftException
 
 class EffectsSettings(object):
     DELAY_BETWEEN_EFFECTS = 0.1
@@ -66,7 +67,7 @@ class EffectsSettings(object):
     def getEffectPriority(effectName):
         if effectName in EffectsSettings.__effects:
             return EffectsSettings.__effects[effectName].priority
-        raise Exception("Cannot find effect's priority " + effectName)
+        raise SoftException("Cannot find effect's priority " + effectName)
 
     @staticmethod
     def getOverlappedGainMultiplier():
@@ -76,7 +77,7 @@ class EffectsSettings(object):
     def getGroupForEffect(effectName):
         if effectName in EffectsSettings.__effects:
             return EffectsSettings.__effects[effectName].group
-        raise Exception("Cannot find effect's group " + effectName)
+        raise SoftException("Cannot find effect's group " + effectName)
 
     @staticmethod
     def getButtonEffect(buttonType):

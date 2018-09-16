@@ -3,12 +3,15 @@
 from arena_bonus_type_caps import ARENA_BONUS_TYPE_CAPS
 from debug_utils import LOG_WARNING
 from client_arena_component_system import ClientArenaComponentSystem
+from arena_components.player_type_specific_components import getDefaultComponents
 
-def createComponentSystem(bonusType, arenaType):
-    componentSystem = ClientArenaComponentSystem(bonusType, arenaType)
+def createComponentSystem(arena, bonusType, arenaType):
+    componentSystem = ClientArenaComponentSystem(arena, bonusType, arenaType)
     from arena_component_system.assembler_helper import COMPONENT_ASSEMBLER
     if bonusType in COMPONENT_ASSEMBLER:
         COMPONENT_ASSEMBLER[bonusType].assembleComponents(componentSystem)
+    ClientArenaComponentAssembler._addArenaComponents(componentSystem, getDefaultComponents())
+    componentSystem.activate()
     return componentSystem
 
 
@@ -16,10 +19,10 @@ def destroyComponentSystem(componentSystem):
     if componentSystem is None:
         return
     else:
+        componentSystem.destroy()
         from arena_component_system.assembler_helper import COMPONENT_ASSEMBLER
         if componentSystem.bonusType in COMPONENT_ASSEMBLER:
             COMPONENT_ASSEMBLER[componentSystem.bonusType].disassembleComponents(componentSystem)
-        componentSystem.destroy()
         return
 
 

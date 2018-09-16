@@ -38,16 +38,6 @@
       <armor_6>	13	</armor_6>
       <armor_7>	19	</armor_7>
       <armor_8>	0	</armor_8>
-      <commander>	0	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
-      </commander>
-      <gunner_1>	0	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
-      </gunner_1>
-      <driver>	0	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
-      </driver>
-      <loader_1>	0	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
-      </loader_1>
-      <loader_2>	0	  <vehicleDamageFactor>	1.0	</vehicleDamageFactor>
-      </loader_2>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	13000	</weight>
@@ -70,10 +60,10 @@
     </swinging>
     <exhaust>
       <pixie>	gas_medium	</pixie>
-      <nodes>	HP_Track_Exhaus_1	</nodes>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.200058 0.530004 0.47085	</turret>
+      <turret>	0.194816 0.240574 0.28303	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/american/A29_T40/collision/Hull.model	</collisionModelServer>
@@ -85,7 +75,7 @@
         <rayEnd>	0.0131808 0.379611 1.75802	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.3	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <player>
         <rayStart>	-1.44449 0.432868 -1.35764	</rayStart>
@@ -113,7 +103,7 @@
         <rayEnd>	1.24414 0.431414 -1.35587	</rayEnd>
         <rayUp>	0.000000 1 0.000000	</rayUp>
         <size>	0.28	</size>
-        <hideIfDamaged>	true	</hideIfDamaged>
+        <hideIfDamaged>	false	</hideIfDamaged>
         <isMirrored>	true	</isMirrored>
       </player>
     </emblemSlots>
@@ -162,7 +152,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-2.2	</textureScale>
+        <textureScale>	-2.1	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -273,9 +263,9 @@
         <segment2ModelRight>	vehicles/american/A29_T40/track/segment2.model	</segment2ModelRight>
         <left>	vehicles/american/A29_T40/track/left.track	</left>
         <right>	vehicles/american/A29_T40/track/right.track	</right>
-        <segmentLength>	0.146	</segmentLength>
-        <segmentOffset>	0.041	</segmentOffset>
-        <segment2Offset>	0.09	</segment2Offset>
+        <segmentLength>	0.149687	</segmentLength>
+        <segmentOffset>	0.04	</segmentOffset>
+        <segment2Offset>	0.0831325	</segment2Offset>
         <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -291,9 +281,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1096	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -406,7 +393,7 @@
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-2.2	</textureScale>
+        <textureScale>	-2.1	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
@@ -493,9 +480,9 @@
         <segment2ModelRight>	vehicles/american/A29_T40/track/segment2.model	</segment2ModelRight>
         <left>	vehicles/american/A29_T40/track/left.track	</left>
         <right>	vehicles/american/A29_T40/track/right.track	</right>
-        <segmentLength>	0.146	</segmentLength>
-        <segmentOffset>	0.041	</segmentOffset>
-        <segment2Offset>	0.09	</segment2Offset>
+        <segmentLength>	0.149687	</segmentLength>
+        <segmentOffset>	0.04	</segmentOffset>
+        <segment2Offset>	0.0831325	</segment2Offset>
         <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -511,9 +498,6 @@
         <gravity>	-9.8	</gravity>
         <elasticity>	1096	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -680,7 +664,7 @@
             <collisionModelClient>	vehicles/american/A29_T40/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	1.18 0.64 0.000000 0.000000	</tiling>
+            <tiling>	1 0.5 0.000000 0.000000	</tiling>
           </camouflage>
         </_75mm_Howitzer_M1A1>
         <_76mm_AT_Gun_M1918>	shared	  <maxAmmo>	98	</maxAmmo>
@@ -716,7 +700,7 @@
           </hitTester>
           <camouflage>
             <exclusionMask>	vehicles/american/A29_T40/T40_chassis_01_AM.dds	</exclusionMask>
-            <tiling>	1.06 0.49 0.000000 0.000000	</tiling>
+            <tiling>	1 0.5 0.000000 0.000000	</tiling>
           </camouflage>
         </_76mm_AT_Gun_M1918>
         <_105mm_AT_Howitzer_M3>	shared	  <maxAmmo>	50	</maxAmmo>
@@ -750,7 +734,7 @@
             <collisionModelClient>	vehicles/american/A29_T40/collision_client/Gun_04.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.985 0.535 0.000000 0.000000	</tiling>
+            <tiling>	1 0.5 0.000000 0.000000	</tiling>
           </camouflage>
         </_105mm_AT_Howitzer_M3>
         <_57mm_Gun_M1_L50>	shared	  <maxAmmo>	126	</maxAmmo>
@@ -830,13 +814,13 @@
         <collisionModelServer>	vehicles/american/A29_T40/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/american/A29_T40/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.018058 0.53749 -0.44959	</gunPosition>
+      <gunPosition>	0.000266 0.82648 0.186677	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.304 0.100 0.466 0.500 0.239 0.500 0.244 0.491 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_man_trav_01	</wwturretRotatorSoundManual>
       <camouflage>
-        <tiling>	0.505 0.25 0.000000 0.000000	</tiling>
+        <tiling>	0.505 0.289157 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_1_T40>
   </turrets0>

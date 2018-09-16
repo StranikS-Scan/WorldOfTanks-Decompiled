@@ -12,6 +12,7 @@ from gui.server_events.cond_formatters import FormattableField, FORMATTER_IDS, C
 from gui.server_events.conditions import GROUP_TYPE
 from gui.shared.formatters import text_styles
 from helpers import i18n
+from soft_exception import SoftException
 
 class ConditionsFormatter(object):
 
@@ -298,13 +299,13 @@ class MissionsBattleConditionsFormatter(ConditionsFormatter):
         return result
 
     def _packCondition(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _getFormattedField(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _packConditions(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
 
 class _InnerAndGroupFormatter(GroupFormatter):

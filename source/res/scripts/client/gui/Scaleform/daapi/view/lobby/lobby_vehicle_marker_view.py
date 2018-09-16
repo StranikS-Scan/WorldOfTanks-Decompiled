@@ -6,7 +6,7 @@ from gui.Scaleform.daapi.view.meta.LobbyVehicleMarkerViewMeta import LobbyVehicl
 from gui.shared.gui_items.Vehicle import getVehicleClassTag
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.utils.HangarSpace import g_hangarSpace
-from hangar_camera_common import CameraRelatedEvents, CameraMovementStates
+from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 
 class LobbyVehicleMarkerView(LobbyVehicleMarkerViewMeta):
 

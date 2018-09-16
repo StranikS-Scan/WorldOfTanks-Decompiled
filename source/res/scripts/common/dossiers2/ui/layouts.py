@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/dossiers2/ui/layouts.py
 from collections import defaultdict
-from dossiers2.custom.vehicle_layout import FALLOUT_ACHIEVEMENTS_BLOCK_LAYOUT
+from dossiers2.custom.vehicle_layout import FALLOUT_ACHIEVEMENTS_BLOCK_LAYOUT, EPIC_BATTLE_ACHIEVEMENTS_BLOCK_LAYOUT
 import nations
 from constants import DOSSIER_TYPE
 from dossiers2.ui import achievements
@@ -28,13 +28,17 @@ def _fallout(achieveName):
     return (_AB.FALLOUT, achieveName)
 
 
+def _epicBattle(achieveName):
+    return (_AB.EPIC_BATTLE, achieveName)
+
+
 _TANK_EXPERT_PREFIX = 'tankExpert'
 _MECH_ENGINEER_PREFIX = 'mechanicEngineer'
 _HIST_BATTLEFIELD_POSTFIX = 'battlefield'
 TANK_EXPERT_GROUP = [_total(_TANK_EXPERT_PREFIX)]
 MECH_ENGINEER_GROUP = [_total(_MECH_ENGINEER_PREFIX)]
 for _nID, name in enumerate(nations.AVAILABLE_NAMES):
-    if name in ('poland', 'italy'):
+    if name == 'poland':
         continue
     TANK_EXPERT_GROUP.append(_total('%s%d' % (_TANK_EXPERT_PREFIX, _nID)))
     MECH_ENGINEER_GROUP.append(_total('%s%d' % (_MECH_ENGINEER_PREFIX, _nID)))

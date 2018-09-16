@@ -235,6 +235,8 @@ class HitDirectionController(IViewComponentsController):
             return hit
 
     def _isValidHit(self, hitData):
+        if hitData.isNonPlayerAttackReason():
+            return True
         if hitData.isBattleConsumables():
             return False
         return False if self.__damageIndicatorPreset == DAMAGE_INDICATOR_PRESETS.WITHOUT_CRITS and hitData.isCritical() and hitData.getDamage() == 0 else True

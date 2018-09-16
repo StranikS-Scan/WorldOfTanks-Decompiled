@@ -5,6 +5,7 @@ from AvatarInputHandler import aih_global_binding
 from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
 from gui.battle_control import avatar_getter
 from gui.battle_control import event_dispatcher
+from soft_exception import SoftException
 
 class BattleGUIKeyHandler(object):
 
@@ -49,7 +50,7 @@ class BattleGameInputMgr(object):
 
     def registerGuiKeyHandler(self, handler):
         if not isinstance(handler, BattleGUIKeyHandler):
-            raise UserWarning('Handler should extends BattleGUIKeyHandler')
+            raise SoftException('Handler should extends BattleGUIKeyHandler')
         if handler not in self.__keyHandlers:
             self.__keyHandlers.append(handler)
 

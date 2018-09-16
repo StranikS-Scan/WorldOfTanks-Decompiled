@@ -1,12 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/vehicle_systems/tankStructure.py
 from collections import namedtuple
+from soft_exception import SoftException
 
 class ModelStates(object):
     UNDAMAGED = 'undamaged'
     DESTROYED = 'destroyed'
     EXPLODED = 'exploded'
 
+
+ModelsSetParams = namedtuple('ModelsSetParams', ('skin', 'state'))
 
 class TankPartNames(object):
     CHASSIS = 'chassis'
@@ -24,7 +27,7 @@ class TankPartNames(object):
             if n == name:
                 return idx
 
-        raise Exception('Invalid part name!')
+        raise SoftException('Invalid part name!')
 
 
 class DetachedTurretPartNames(object):
@@ -126,5 +129,16 @@ def getCrashedSkeleton(vehicleDesc):
     return result
 
 
-def getPartModelsFromDesc(vehicleDesc, modelStateName):
-    return VehiclePartsTuple(chassis=vehicleDesc.chassis.models.getPathByStateName(modelStateName), hull=vehicleDesc.hull.models.getPathByStateName(modelStateName), turret=vehicleDesc.turret.models.getPathByStateName(modelStateName), gun=vehicleDesc.gun.models.getPathByStateName(modelStateName))
+def getPartModelsFromDesc(vehicleDesc, modelsSetParams):
+    skinName = modelsSetParams.skin
+    paths = []
+    for partName in TankPartNames.ALL:
+        part = getattr(vehicleDesc, partName)
+        if skinName in part.modelsSets:
+            skin = part.modelsSets[skinName]
+        else:
+            skin = part.modelsSets['default']
+        path = skin.getPathByStateName(modelsSetParams.state)
+        paths.append(path)
+
+    return VehiclePartsTuple(*paths)

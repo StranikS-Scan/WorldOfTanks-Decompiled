@@ -93,6 +93,8 @@ def formatTimeToEnd(timeValue, period):
 
 
 def getClanTag(abbrev, color):
+    if isinstance(color, int):
+        color = '#{}'.format(hex(color)[2:].zfill(6))
     return '<font color="{color}">[{abbrev}]</font>'.format(abbrev=abbrev, color=color) if abbrev else ''
 
 
@@ -116,8 +118,16 @@ def timeEndStyle(text):
     return makeHtmlString('html_templates:lobby/elen/status', 'time', {'msg': text})
 
 
+def formatDate(ts, default='--'):
+    return str(BigWorld.wg_getShortDateFormat(ts)) if ts is not None else default
+
+
+def formatTime(ts):
+    return str(BigWorld.wg_getShortTimeFormat(ts))
+
+
 def formatTimeAndDate(ts):
-    return '{0:>s} {1:>s}'.format(BigWorld.wg_getShortDateFormat(ts), BigWorld.wg_getShortTimeFormat(ts))
+    return '{0:>s} {1:>s}'.format(formatDate(ts), formatTime(ts))
 
 
 def niceNumberFormatter(param):
@@ -125,13 +135,26 @@ def niceNumberFormatter(param):
 
 
 _defaultFormatter = niceNumberFormatter
-_specialFormatters = {CALCULATION_METHODS.MAX: {1: formatTimeAndDate}}
+_specialFormatters = {CALCULATION_METHODS.MAX: {1: formatDate}}
+_additionalFormatters = {CALCULATION_METHODS.MAX: {1: {'valueTime': formatTime}}}
 
 def formatParameters(method, params):
     if method in _specialFormatters:
         special = _specialFormatters[method]
         return [ (special[idx](params[idx]) if idx in special else _defaultFormatter(params[idx])) for idx in range(3) ]
     return [ _defaultFormatter(params[idx]) for idx in range(3) ]
+
+
+def formatAdditionalParameters(method, params):
+    if method in _additionalFormatters:
+        additional = _additionalFormatters[method]
+        result = {}
+        for idx in range(3):
+            if idx in additional:
+                result.update({name:func(params[idx]) for name, func in additional[idx].iteritems()})
+
+        return result
+    return {}
 
 
 def formatUpdateTime(recalculationTS):

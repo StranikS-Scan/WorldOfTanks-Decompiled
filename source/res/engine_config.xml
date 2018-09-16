@@ -1,6 +1,6 @@
 <engine_config.xml>
   <personality>	game	</personality>
-  <preferences>	preferences.xml	</preferences>
+  <preferences>	preferences_ct.xml	</preferences>
   <enableBalanceCPU>	true	</enableBalanceCPU>
   <enableServerTimeSync>	true	</enableServerTimeSync>
   <lod>
@@ -129,7 +129,7 @@
     <PS_PERFORMANCE_LOD_MULT>	1.2	</PS_PERFORMANCE_LOD_MULT>
   </ParticleSystem>
   <debug>
-    <fullDump>	true	</fullDump>
+    <fullDump>	false	</fullDump>
     <dxdiag>	true	</dxdiag>
     <framesCount>	0	</framesCount>
     <enableServers>	false	</enableServers>
@@ -170,8 +170,11 @@
       </memoryManager>
       <soundRender>
         <use_config>	false	</use_config>
-        <HDR_lower_threshold>	-50	</HDR_lower_threshold>
-        <max_voices>	120	</max_voices>
+        <HDR_lower_threshold>	-40	</HDR_lower_threshold>
+        <max_voices>	70	</max_voices>
+        <low_sample_rate>	false	</low_sample_rate>
+        <ambients>	true	</ambients>
+        <reverbs>	true	</reverbs>
       </soundRender>
       <voice_soundbanks>
         <project>
@@ -247,6 +250,9 @@
         </project>
         <project>
           <name>	gui_ranked_battles.pck	</name>
+        </project>
+        <project>
+          <name>	epic_battle.pck	</name>
         </project>
         <project>
           <name>	utility.bnk	</name>

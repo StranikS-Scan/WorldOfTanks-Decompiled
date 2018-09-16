@@ -8,7 +8,7 @@ from ClientSelectableObject import ClientSelectableObject
 from helpers.CallbackDelayer import CallbackDelayer, TimeDeltaMeter
 from AvatarInputHandler import cameras, mathUtils
 from gui.Scaleform.Waiting import Waiting
-from hangar_camera_common import CameraMovementStates, CameraRelatedEvents
+from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.shared.utils.HangarSpace import g_hangarSpace
 from skeletons.account_helpers.settings_core import ISettingsCore
@@ -117,13 +117,15 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
 
     @staticmethod
     def switchCamera(clickedObject=None):
-        if not clickedObject:
-            clickedObject = g_hangarSpace.space.getVehicleEntity()
-        if clickedObject is None:
-            return
-        elif clickedObject.state != CameraMovementStates.FROM_OBJECT:
+        if not g_hangarSpace.spaceInited:
             return
         else:
+            if not clickedObject:
+                clickedObject = g_hangarSpace.space.getVehicleEntity()
+            if clickedObject is None:
+                return
+            if clickedObject.state != CameraMovementStates.FROM_OBJECT:
+                return
             for cameraObject in ClientSelectableCameraObject.allCameraObjects:
                 if cameraObject.state != CameraMovementStates.FROM_OBJECT:
                     cameraObject.onDeselect(clickedObject)

@@ -27,7 +27,7 @@ from gui.shared.gui_items.gui_item_economics import ItemPrice, ItemPrices, ITEM_
 from gui.shared.utils import makeSearchableString
 from helpers import i18n, time_utils, dependency
 from items import vehicles, tankmen, customizations, getTypeInfoByName, getTypeOfCompactDescr
-from items.components.c11n_constants import SeasonType, CustomizationType
+from items.components.c11n_constants import SeasonType, CustomizationType, StyleFlags
 from shared_utils import findFirst, CONST_CONTAINER
 from skeletons.gui.game_control import IIGRController
 from skeletons.gui.lobby_context import ILobbyContext
@@ -368,7 +368,7 @@ class Vehicle(FittingItem, HasStrCD):
         for season in SeasonType.SEASONS:
             outfitData = proxy.inventory.getOutfitData(compactDescr, season)
             if outfitData:
-                outfits[season] = cls.itemsFactory.createOutfit(outfitData.compDescr, outfitData.isEnabled, proxy)
+                outfits[season] = cls.itemsFactory.createOutfit(outfitData.compDescr, bool(outfitData.flags & StyleFlags.ENABLED), bool(outfitData.flags & StyleFlags.INSTALLED), proxy)
             outfits[season] = cls.itemsFactory.createOutfit()
 
         return outfits
@@ -377,14 +377,14 @@ class Vehicle(FittingItem, HasStrCD):
     def _parseStyledOutfits(cls, compactDescr, proxy):
         outfits = {}
         outfitData = proxy.inventory.getOutfitData(compactDescr, SeasonType.ALL)
-        if not outfitData or not outfitData.isEnabled:
+        if not outfitData or not bool(outfitData.flags & StyleFlags.ENABLED):
             return outfits
         component = customizations.parseCompDescr(outfitData.compDescr)
         styleIntCD = vehicles.makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, component.styleId)
         style = vehicles.getItemByCompactDescr(styleIntCD)
         for styleSeason in SeasonType.SEASONS:
             compDescr = style.outfits.get(styleSeason).makeCompDescr()
-            outfits[styleSeason] = cls.itemsFactory.createOutfit(compDescr, outfitData.isEnabled, proxy)
+            outfits[styleSeason] = cls.itemsFactory.createOutfit(compDescr, bool(outfitData.flags & StyleFlags.ENABLED), bool(outfitData.flags & StyleFlags.INSTALLED), proxy)
 
         return outfits
 
@@ -496,6 +496,10 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def settings(self):
         return self._settings
+
+    @settings.setter
+    def settings(self, value):
+        self._settings = value
 
     @property
     def lock(self):
@@ -1114,11 +1118,11 @@ class Vehicle(FittingItem, HasStrCD):
         return _sortCrew(crewItems, crewRoles)
 
     def getOutfit(self, season):
-        outfit = self._styledOutfits.get(season) or self._customOutfits.get(season)
-        if outfit and outfit.isEnabled:
-            return outfit
-        outfit = Outfit(isEnabled=True)
-        self.setCustomOutfit(season, outfit)
+        for outfit in (self._styledOutfits.get(season), self._customOutfits.get(season)):
+            if outfit and outfit.isActive():
+                return outfit
+
+        outfit = Outfit(isEnabled=True, isInstalled=True)
         return outfit
 
     def setCustomOutfit(self, season, outfit):

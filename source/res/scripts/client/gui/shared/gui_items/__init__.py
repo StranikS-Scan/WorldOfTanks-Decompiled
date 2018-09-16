@@ -5,7 +5,7 @@ from items import ITEM_TYPE_NAMES, vehicles, ITEM_TYPE_INDICES, EQUIPMENT_TYPES
 from gui.shared.money import Currency
 CLAN_LOCK = 1
 GUI_ITEM_TYPE_NAMES = tuple(ITEM_TYPE_NAMES) + tuple(['reserved'] * (16 - len(ITEM_TYPE_NAMES)))
-GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription')
+GUI_ITEM_TYPE_NAMES += ('dossierAccount', 'dossierVehicle', 'dossierTankman', 'achievement', 'tankmanSkill', 'battleBooster', 'badge', 'battleAbility', 'paint', 'camouflage', 'modification', 'outfit', 'style', 'decal', 'emblem', 'inscription')
 GUI_ITEM_TYPE_INDICES = dict(((n, idx) for idx, n in enumerate(GUI_ITEM_TYPE_NAMES)))
 
 class GUI_ITEM_TYPE(CONST_CONTAINER):
@@ -20,6 +20,7 @@ class GUI_ITEM_TYPE(CONST_CONTAINER):
     OPTIONALDEVICE = GUI_ITEM_TYPE_INDICES['optionalDevice']
     SHELL = GUI_ITEM_TYPE_INDICES['shell']
     EQUIPMENT = GUI_ITEM_TYPE_INDICES['equipment']
+    BATTLE_ABILITY = GUI_ITEM_TYPE_INDICES['battleAbility']
     CUSTOMIZATION = GUI_ITEM_TYPE_INDICES['customizationItem']
     PAINT = GUI_ITEM_TYPE_INDICES['paint']
     CAMOUFLAGE = GUI_ITEM_TYPE_INDICES['camouflage']
@@ -163,6 +164,10 @@ def getVehicleSuitablesByType(vehDescr, itemTypeId, turretPID=0):
         eqs = vehicles.g_cache.equipments()
         current = list()
         descriptorsList = [ eq for eq in eqs.itervalues() if eq.equipmentType == EQUIPMENT_TYPES.battleBoosters and eq.checkCompatibilityWithVehicle(vehDescr)[0] ]
+    elif itemTypeId == GUI_ITEM_TYPE.BATTLE_ABILITY:
+        eqs = vehicles.g_cache.equipments()
+        current = list()
+        descriptorsList = [ eq for eq in eqs.itervalues() if eq.equipmentType == EQUIPMENT_TYPES.battleAbilities and eq.checkCompatibilityWithVehicle(vehDescr) ]
     elif itemTypeId == vehicles._GUN:
         current = [vehDescr.gun.compactDescr]
         for gun in vehDescr.turret.guns:

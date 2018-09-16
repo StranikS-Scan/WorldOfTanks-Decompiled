@@ -4,6 +4,7 @@ import re
 import sys
 import types
 import weakref
+from functools import partial
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR, LOG_DEBUG
 
 def copy(wrapper, wrapped):
@@ -94,6 +95,18 @@ def wrap(func):
         return wrapper
 
 
+def pointcutable(pointcutTag=None):
+    if callable(pointcutTag):
+        return _addPointcutableTag(func=pointcutTag)
+    else:
+        return partial(_addPointcutableTag, tag=pointcutTag) if pointcutTag is not None else _addPointcutableTag
+
+
+def _addPointcutableTag(func, tag=None):
+    setattr(func, '__pointcutable__', tag)
+    return func
+
+
 def _restore(ns, wrapper):
     aspects = getattr(wrapper, '__aspects__', [])
     while aspects:
@@ -103,19 +116,24 @@ def _restore(ns, wrapper):
         setattr(ns, wrapper.__name__, wrapper.__original__)
 
 
-def _search(ns, regexp, match):
-    attrNames = []
+def _regexpCriteria(func, regexp, match):
+    if regexp.match(func.__name__):
+        if match:
+            return True
+    elif not match:
+        return True
+    return False
+
+
+def _pointcutableCriteria(func, pointcutTag):
+    return func.__pointcutable__ == pointcutTag if hasattr(func, '__pointcutable__') else False
+
+
+def _isearch(ns, criteria):
     for attrName in dir(ns):
         attr = getattr(ns, attrName)
-        if not isinstance(attr, (types.FunctionType, types.MethodType)):
-            continue
-        if regexp.match(attrName):
-            if match:
-                attrNames.append(attrName)
-        if not match:
-            attrNames.append(attrName)
-
-    return attrNames
+        if isinstance(attr, (types.FunctionType, types.MethodType)) and criteria(attr):
+            yield attrName
 
 
 def _hasWrappedMethod(clazz, function):
@@ -254,7 +272,7 @@ class Pointcut(list):
     def __del__(self):
         LOG_DEBUG('Pointcut deleted: {0:>s}'.format(self))
 
-    def __init__(self, path, name, filterString, match=True, aspects=()):
+    def __init__(self, path, name, filterString=None, pointcutTag=None, match=True, aspects=()):
         super(Pointcut, self).__init__()
         self.__nsPath = path
         self.__nsName = name
@@ -262,7 +280,11 @@ class Pointcut(list):
         if ns is None:
             return
         else:
-            for item in _search(ns, re.compile(filterString), match):
+            if filterString is not None:
+                criteria = partial(_regexpCriteria, regexp=re.compile(filterString), match=match)
+            else:
+                criteria = partial(_pointcutableCriteria, pointcutTag=pointcutTag)
+            for item in _isearch(ns, criteria):
                 wrapped = wrap(getattr(ns, item))
                 setattr(ns, item, wrapped)
                 self.append(wrapped)
@@ -306,7 +328,7 @@ class Weaver(object):
 
     def weave(self, *args, **kwargs):
         pointcut = kwargs.pop('pointcut', Pointcut)
-        aspects = kwargs.pop('aspects', [])
+        aspects = kwargs.pop('aspects', ())
         avoid = kwargs.pop('avoid', False)
         if isinstance(pointcut, PointcutType):
             try:
@@ -317,7 +339,7 @@ class Weaver(object):
 
         result = len(self.__pointcuts)
         if avoid:
-            aspects = [DummyAspect]
+            aspects = (DummyAspect,)
         for aspect in aspects:
             try:
                 pointcut.addAspect(aspect)

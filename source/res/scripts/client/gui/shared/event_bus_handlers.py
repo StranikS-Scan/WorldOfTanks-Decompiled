@@ -3,13 +3,14 @@
 from functools import partial, wraps
 from types import FunctionType
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
+from soft_exception import SoftException
 
 class EventBusListener(type):
 
     def __new__(mcs, name, bases, namespace):
         cls = type.__new__(mcs, name, bases, namespace)
         if not issubclass(cls, EventSystemEntity):
-            raise ValueError('This meta should be applied only to EventSystemEntity classes')
+            raise SoftException('This meta should be applied only to EventSystemEntity classes')
         try:
             handlers = cls.__event_bus_handlers__.copy()
         except AttributeError:
@@ -23,7 +24,7 @@ class EventBusListener(type):
                 if event not in handlers:
                     handlers[event] = attribute
                 else:
-                    raise ValueError('Event %s is handled multiple times in %s' % (event, cls))
+                    raise SoftException('Event %s is handled multiple times in %s' % (event, cls))
 
         cls.__event_bus_handlers__ = handlers
         cls.__event_bus_bound_handlers__ = {}

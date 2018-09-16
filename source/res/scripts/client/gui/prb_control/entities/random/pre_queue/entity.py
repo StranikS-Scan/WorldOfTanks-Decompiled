@@ -14,6 +14,7 @@ from gui.prb_control.entities.base.pre_queue.entity import PreQueueSubscriber, P
 from gui.prb_control.entities.random.pre_queue.ctx import RandomQueueCtx
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
+from soft_exception import SoftException
 
 class RandomSubscriber(PreQueueSubscriber):
 
@@ -70,7 +71,7 @@ class RandomEntity(PreQueueEntity):
     def _makeQueueCtxByAction(self, action=None):
         invID = g_currentVehicle.invID
         if not invID:
-            raise UserWarning('Inventory ID of vehicle can not be zero')
+            raise SoftException('Inventory ID of vehicle can not be zero')
         if action is not None:
             arenaTypeID = action.mapID
         else:

@@ -11,7 +11,7 @@ from helpers import gEffectsDisabled
 
 def ownVehicleGunPositionGetter():
     ownVehicle = BigWorld.entities.get(BigWorld.player().playerVehicleID, None)
-    if ownVehicle:
+    if ownVehicle and ownVehicle.appearance:
         compoundModel = ownVehicle.appearance.compoundModel
         if compoundModel is None:
             return Math.Vector3(0.0, 0.0, 0.0)
@@ -33,7 +33,7 @@ class ProjectileMover(object):
     def __init__(self):
         self.__projectiles = dict()
         self.salvo = BigWorld.PySalvo(1000, 0, -100)
-        self.__ballistics = BigWorld.PyBallisticsSimulator(BigWorld.player().arena.collideWithSpaceBB, self.__killProjectile, self.__deleteProjectile)
+        self.__ballistics = BigWorld.PyBallisticsSimulator(lambda start, end: BigWorld.player().arena.collideWithSpaceBB(start, end)[1], self.__killProjectile, self.__deleteProjectile)
         if self.__ballistics is not None:
             self.__ballistics.setFixedBallisticsParams(self.__PROJECTILE_HIDING_TIME, self.__PROJECTILE_TIME_AFTER_DEATH, self.__AUTO_SCALE_DISTANCE, constants.SERVER_TICK_LENGTH)
         player = BigWorld.player()
@@ -244,13 +244,16 @@ def collideDynamic(startPoint, endPoint, exceptIDs, skipGun=False):
     return res
 
 
-class ProjectileAwareEntities(object):
-    entities = list()
-
-    @staticmethod
-    def addEntity(entity):
-        ProjectileAwareEntities.entities.append(entity)
-
-    @staticmethod
-    def removeEntity(entity):
-        ProjectileAwareEntities.entities.remove(entity)
+def collideVehiclesAndStaticScene(startPoint, endPoint, vehicles, collisionFlags=128, skipGun=False):
+    testResStatic = BigWorld.wg_collideSegment(BigWorld.player().spaceID, startPoint, endPoint, collisionFlags)
+    testResDynamic = collideDynamic(startPoint, endPoint if testResStatic is None else testResStatic.closestPoint, vehicles, skipGun)
+    if testResStatic is None and testResDynamic is None:
+        return
+    else:
+        distDynamic = 1000000.0
+        if testResDynamic is not None:
+            distDynamic = testResDynamic[0]
+        distStatic = 1000000.0
+        if testResStatic is not None:
+            distStatic = (testResStatic.closestPoint - startPoint).length
+        return (startPoint + (endPoint - startPoint) * distDynamic, testResDynamic[0]) if distDynamic <= distStatic else (testResStatic.closestPoint, None)

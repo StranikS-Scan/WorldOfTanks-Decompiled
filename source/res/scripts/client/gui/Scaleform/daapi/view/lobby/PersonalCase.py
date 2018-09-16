@@ -246,6 +246,12 @@ class PersonalCaseDataProvider(object):
     def getCommonData(self, callback):
         items = self.itemsCache.items
         tankman = items.getTankman(self.tmanInvID)
+        changeRoleCost = items.shop.changeRoleCost
+        defaultChangeRoleCost = items.shop.defaults.changeRoleCost
+        if changeRoleCost != defaultChangeRoleCost:
+            discount = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'changeRoleCost', True, Money(gold=changeRoleCost), Money(gold=defaultChangeRoleCost))
+        else:
+            discount = None
         rate = items.shop.freeXPToTManXPRate
         if rate:
             toNextPrcLeft = roundByModulo(tankman.getNextLevelXpCost(), rate)
@@ -291,7 +297,8 @@ class PersonalCaseDataProvider(object):
          'dismissEnabled': True,
          'unloadEnabled': True,
          'changeRoleEnabled': changeRoleEnabled,
-         'tooltipChangeRole': tooltipChangeRole})
+         'tooltipChangeRole': tooltipChangeRole,
+         'actionChangeRole': discount})
         return
 
     def getTabsButtons(self, showDocumentTab):

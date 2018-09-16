@@ -3,8 +3,9 @@
 import collections
 from WeakMethod import WeakMethod
 from goodie_constants import GOODIE_STATE, MAX_ACTIVE_GOODIES, GOODIE_NOTIFICATION_TYPE
+from soft_exception import SoftException
 
-class GoodieException(Exception):
+class GoodieException(SoftException):
     pass
 
 
@@ -127,13 +128,13 @@ class Goodies(object):
             self.__removeCallback(goodieID)
             return
 
-    def __updateCounter(self, goodieDefinition, counter):
-        goodie = goodieDefinition.createGoodie(counter=counter)
+    def __updateCounter(self, goodieDefinition, counter, state=None, notificationType=GOODIE_NOTIFICATION_TYPE.REMOVED):
+        goodie = goodieDefinition.createGoodie(counter=counter, state=state)
         if goodie is None:
             return
         else:
             self.actualGoodies[goodieDefinition.uid] = goodie
-            self.__updateCallback(goodie, GOODIE_NOTIFICATION_TYPE.REMOVED)
+            self.__updateCallback(goodie, notificationType)
             return
 
     def __update(self, goodieID):
@@ -270,6 +271,12 @@ class Goodies(object):
             self.actualGoodies[goodieID] = goodie
             self.__updateCallback(goodie)
             return goodie
+
+    def deactivateAll(self):
+        active_goodies = [ (goodieID, goodie) for goodieID, goodie in self.actualGoodies.iteritems() if goodie.isActive() ]
+        for goodieID, goodie in active_goodies:
+            defined = self.definedGoodies[goodieID]
+            self.__updateCounter(defined, goodie.counter, GOODIE_STATE.INACTIVE, GOODIE_NOTIFICATION_TYPE.DISABLED)
 
     def activeIds(self):
         return set(self.resourceIndex.itervalues())

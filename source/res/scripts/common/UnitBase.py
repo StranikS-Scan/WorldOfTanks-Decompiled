@@ -5,13 +5,14 @@ import copy
 import weakref
 from collections import namedtuple
 from items import vehicles
-from constants import VEHICLE_CLASS_INDICES, PREBATTLE_TYPE, QUEUE_TYPE
+from constants import VEHICLE_CLASS_INDICES, PREBATTLE_TYPE, QUEUE_TYPE, INVITATION_TYPE
 from UnitRoster import BaseUnitRosterSlot, _BAD_CLASS_INDEX, buildNamesDict, reprBitMaskFromDict
-from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster
+from unit_roster_config import SquadRoster, UnitRoster, SpecRoster, FalloutClassicRoster, FalloutMultiteamRoster, EventRoster, EpicRoster
 from ops_pack import OpsUnpacker, packPascalString, unpackPascalString, initOpsFormatDef
 from unit_helpers.ExtrasHandler import EmptyExtrasHandler, ClanBattleExtrasHandler
 from unit_helpers.ExtrasHandler import SquadExtrasHandler, ExternalExtrasHandler
 from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
+from collections import defaultdict
 UnitVehicle = namedtuple('UnitVehicle', ('vehInvID', 'vehTypeCompDescr', 'vehLevel', 'vehClassIdx'))
 
 class UNIT_MGR_STATE:
@@ -35,6 +36,7 @@ class UNIT_FLAGS:
     IS_EXTERNAL_LOCK = 512
     IS_DYNAMIC = 1024
     ARENA_FINISHED = 2048
+    KEEP_OFFLINE_ROSTER = 4096
     DEFAULT = 0
     PRE_QUEUE = 0
     PRE_SEARCH = 0
@@ -164,6 +166,7 @@ class UNIT_ERROR:
     BAD_ARENA_BONUS_TYPE = 99
     UNIT_CHANGED_LEADER = 100
     FAIL_EXT_UNIT_QUEUE_START = 101
+    WRONG_VEHICLE = 102
 
 
 OK = UNIT_ERROR.OK
@@ -272,6 +275,7 @@ class UNIT_NOTIFY_CMD:
     APPROVED_VEHICLE_LIST = 12
     REMOVED_VEHICLE = 13
     UPD_VEHICLE_DESCRS = 14
+    REMOVED_VEHICLE_MAX_SPG_EXCEED = 15
 
 
 class CLIENT_UNIT_CMD:
@@ -317,6 +321,7 @@ class UNIT_MGR_FLAGS:
     FALLOUT_MULTITEAM = 512
     EVENT = 1024
     EXTERNAL = 2048
+    EPIC = 4096
 
 
 def _prebattleTypeFromFlags(flags):
@@ -324,6 +329,8 @@ def _prebattleTypeFromFlags(flags):
         return PREBATTLE_TYPE.FALLOUT
     elif flags & UNIT_MGR_FLAGS.EVENT:
         return PREBATTLE_TYPE.EVENT
+    elif flags & UNIT_MGR_FLAGS.EPIC:
+        return PREBATTLE_TYPE.EPIC
     elif flags & UNIT_MGR_FLAGS.SQUAD:
         return PREBATTLE_TYPE.SQUAD
     elif flags & UNIT_MGR_FLAGS.SPEC_BATTLE:
@@ -349,6 +356,17 @@ def _entityNameFromFlags(flags):
         return 'UnitMgr'
 
 
+def _invitationTypeFromFlags(flags):
+    if flags & UNIT_MGR_FLAGS.EPIC:
+        return INVITATION_TYPE.EPIC
+    elif flags & (UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM):
+        return INVITATION_TYPE.FALLOUT
+    elif flags & UNIT_MGR_FLAGS.SQUAD:
+        return INVITATION_TYPE.SQUAD
+    else:
+        return INVITATION_TYPE.SQUAD if flags == UNIT_MGR_FLAGS.DEFAULT else None
+
+
 class ROSTER_TYPE:
     UNIT_ROSTER = 0
     FALLOUT_CLASSIC_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.FALLOUT_CLASSIC
@@ -357,7 +375,8 @@ class ROSTER_TYPE:
     SPEC_ROSTER = UNIT_MGR_FLAGS.SPEC_BATTLE
     EVENT_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.EVENT
     EXTERNAL_ROSTER = UNIT_MGR_FLAGS.EXTERNAL
-    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | UNIT_MGR_FLAGS.EXTERNAL
+    EPIC_ROSTER = UNIT_MGR_FLAGS.SQUAD | UNIT_MGR_FLAGS.EPIC
+    _MASK = SQUAD_ROSTER | SPEC_ROSTER | UNIT_MGR_FLAGS.FALLOUT_CLASSIC | UNIT_MGR_FLAGS.FALLOUT_MULTITEAM | UNIT_MGR_FLAGS.EVENT | UNIT_MGR_FLAGS.EXTERNAL | UNIT_MGR_FLAGS.EPIC
 
 
 class EXTRAS_HANDLER_TYPE:
@@ -375,7 +394,8 @@ ROSTER_TYPE_TO_CLASS = {ROSTER_TYPE.UNIT_ROSTER: UnitRoster,
  ROSTER_TYPE.FALLOUT_CLASSIC_ROSTER: FalloutClassicRoster,
  ROSTER_TYPE.FALLOUT_MULTITEAM_ROSTER: FalloutMultiteamRoster,
  ROSTER_TYPE.EVENT_ROSTER: EventRoster,
- ROSTER_TYPE.EXTERNAL_ROSTER: SpecRoster}
+ ROSTER_TYPE.EXTERNAL_ROSTER: SpecRoster,
+ ROSTER_TYPE.EPIC_ROSTER: EpicRoster}
 EXTRAS_HANDLER_TYPE_TO_HANDLER = {EXTRAS_HANDLER_TYPE.EMPTY: EmptyExtrasHandler,
  EXTRAS_HANDLER_TYPE.SQUAD: SquadExtrasHandler,
  EXTRAS_HANDLER_TYPE.SPEC_BATTLE: ClanBattleExtrasHandler,
@@ -1090,9 +1110,9 @@ class UnitBase(OpsUnpacker):
         for veh in vehList:
             res, slotChosenIdx = self._roster.checkVehicle(veh.vehTypeCompDescr, unitSlotIdx)
             if not res:
-                return False
+                return (False, veh.vehInvID)
 
-        return True
+        return (True, None)
 
     def __packPlayerData(self, accountDBID, **kwargs):
         packed = struct.pack(self._PLAYER_DATA, accountDBID, kwargs.get('accountID', 0), kwargs.get('timeJoin', 0), kwargs.get('role', 0), kwargs.get('igrType', 0), kwargs.get('rating', 0), kwargs.get('peripheryID', 0), kwargs.get('clanDBID', 0))

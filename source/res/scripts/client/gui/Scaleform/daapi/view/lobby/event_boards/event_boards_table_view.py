@@ -177,6 +177,7 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
         buttonEnabled = False
         buttonLabel = TOOLTIPS.ELEN_BUTTON_REGISTRATION_STARTED_HEADER
         buttonTooltip = makeTooltip(buttonLabel, TOOLTIPS.ELEN_BUTTON_REGISTRATION_STARTED_BODY)
+        method = event.getMethod()
         if event.isFinished():
             if not joined:
                 title = getStatusTitleStyle(_ms(EVENT_BOARDS.EXCEL_PARTICIPATE_NOTPARTICIPATED))
@@ -206,7 +207,6 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
         else:
             title, tooltip, buttonVisible = makeCantJoinReasonTextVO(event, self.__playerData)
         if joined and outOfScore and notFull and not event.isFinished():
-            method = event.getMethod()
             amount = myInfo.fullData.getLastInLeaderboardValue()
             parameter = event.getObjectiveParameter()
             titleTooltip = makeParameterTooltipVO(method, amount, parameter)
@@ -219,7 +219,7 @@ class EventBoardsTableView(LobbySubView, EventBoardsTableViewMeta):
             p1 = myInfo.fullData.getP1()
             p2 = myInfo.fullData.getP2()
             p3 = myInfo.fullData.getP3()
-            self.as_setStatusDataS(makeEventBoardsTableViewStatusVO(title, tooltip, playerName, p1, p2, p3, showPoints, buttonLabel, buttonTooltip, buttonVisible, buttonEnabled, titleTooltip))
+            self.as_setStatusDataS(makeEventBoardsTableViewStatusVO(title, tooltip, playerName, p1, p2, p3, showPoints, buttonLabel, buttonTooltip, buttonVisible, buttonEnabled, titleTooltip, method))
         return
 
     def __calculateRewardCategories(self, rewardGroups, leaderboardViewSize):

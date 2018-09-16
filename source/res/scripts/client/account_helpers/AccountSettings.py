@@ -16,6 +16,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from gui.Scaleform.genConsts.MISSIONS_CONSTANTS import MISSIONS_CONSTANTS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from soft_exception import SoftException
 KEY_FILTERS = 'filters'
 KEY_SETTINGS = 'settings'
 KEY_FAVORITES = 'favorites'
@@ -29,6 +30,9 @@ PM_SELECTOR_FILTER = 'PM_SELECTOR_FILTER'
 RANKED_CAROUSEL_FILTER_1 = 'RANKED_CAROUSEL_FILTER_1'
 RANKED_CAROUSEL_FILTER_2 = 'RANKED_CAROUSEL_FILTER_2'
 RANKED_CAROUSEL_FILTER_CLIENT_1 = 'RANKED_CAROUSEL_FILTER_CLIENT_1'
+EPICBATTLE_CAROUSEL_FILTER_1 = 'EPICBATTLE_CAROUSEL_FILTER_1'
+EPICBATTLE_CAROUSEL_FILTER_2 = 'EPICBATTLE_CAROUSEL_FILTER_2'
+EPICBATTLE_CAROUSEL_FILTER_CLIENT_1 = 'EPICBATTLE_CAROUSEL_FILTER_CLIENT_1'
 BARRACKS_FILTER = 'barracks_filter'
 ORDERS_FILTER = 'ORDERS_FILTER'
 CURRENT_VEHICLE = 'current'
@@ -199,6 +203,41 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                           'favorite': False,
                                           'bonus': False},
                RANKED_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
+               EPICBATTLE_CAROUSEL_FILTER_1: {'ussr': False,
+                                              'germany': False,
+                                              'usa': False,
+                                              'china': False,
+                                              'france': False,
+                                              'uk': False,
+                                              'japan': False,
+                                              'czech': False,
+                                              'sweden': False,
+                                              'poland': False,
+                                              'italy': False,
+                                              'lightTank': False,
+                                              'mediumTank': False,
+                                              'heavyTank': False,
+                                              'SPG': False,
+                                              'AT-SPG': False,
+                                              'level_1': False,
+                                              'level_2': False,
+                                              'level_3': False,
+                                              'level_4': False,
+                                              'level_5': False,
+                                              'level_6': False,
+                                              'level_7': False,
+                                              'level_8': True,
+                                              'level_9': False,
+                                              'level_10': False},
+               EPICBATTLE_CAROUSEL_FILTER_2: {'premium': False,
+                                              'elite': False,
+                                              'igr': False,
+                                              'rented': True,
+                                              'event': True,
+                                              'gameMode': False,
+                                              'favorite': False,
+                                              'bonus': False},
+               EPICBATTLE_CAROUSEL_FILTER_CLIENT_1: {'searchNameVehicle': ''},
                MISSION_SELECTOR_FILTER: {'inventory': False},
                PM_SELECTOR_FILTER: {'inventory': False},
                BARRACKS_FILTER: {'nation': -1,
@@ -210,7 +249,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                GUI_START_BEHAVIOR: {'isFreeXPInfoDialogShowed': False,
                                     'isRankedWelcomeViewShowed': False,
                                     'isRankedWelcomeViewStarted': False,
-                                    'isEpicRandomCheckboxClicked': False},
+                                    'isEpicRandomCheckboxClicked': False,
+                                    'isEpicWelcomeViewShowed': False},
                EULA_VERSION: {'version': 0},
                FORT_MEMBER_TUTORIAL: {'wasShown': False},
                IGR_PROMO: {'wasShown': False},
@@ -341,6 +381,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'ingameHelpVersion': -1,
                 'isColorBlind': False,
                 'useServerAim': False,
+                'showDamageIcon': True,
                 'showVehiclesCounter': True,
                 'minimapAlpha': 0,
                 'minimapSize': 1,
@@ -349,6 +390,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'minimapMaxViewRange': True,
                 'minimapDrawRange': True,
                 'minimapAlphaEnabled': False,
+                'epicMinimapZoom': 1.5,
                 'increasedZoom': True,
                 'sniperModeByShift': True,
                 'nationalVoices': False,
@@ -404,7 +446,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 NEW_SETTINGS_COUNTER: {'GameSettings': {'gameplay_epicStandard': True,
                                                         'c11nHistoricallyAccurate': True,
                                                         'hangarCamParallaxEnabled': True,
-                                                        'hangarCamPeriod': True},
+                                                        'hangarCamPeriod': True,
+                                                        'showDamageIcon': True},
                                        'GraphicSettings': {'ScreenSettings': {'gammaSetting': True,
                                                                               'colorFilter': True},
                                                            'AdvancedGraphicSettings': {'HAVOK_ENABLED': True,
@@ -924,7 +967,7 @@ class AccountSettings(object):
     @staticmethod
     def __setValue(name, value, setting):
         if name not in DEFAULT_VALUES[setting]:
-            raise UserWarning('Default value "{}" is not found in "{}"'.format(name, type))
+            raise SoftException('Default value "{}" is not found in "{}"'.format(name, type))
         if AccountSettings.__getValue(name, setting) != value:
             fds = AccountSettings.__readSection(AccountSettings.__readUserSection(), setting)
             if DEFAULT_VALUES[setting][name] != value:

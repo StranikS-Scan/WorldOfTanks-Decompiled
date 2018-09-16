@@ -14,6 +14,7 @@ from gui.shared.events import GameEvent
 from gui.battle_control import avatar_getter
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.Scaleform.daapi.view.battle.shared.ribbons_aggregator import DAMAGE_SOURCE
 _RIBBON_SOUNDS_ENABLED = True
 _SHOW_RIBBON_SOUND_NAME = 'show_ribbon'
 _HIDE_RIBBON_SOUND_NAME = 'hide_ribbon'
@@ -75,7 +76,10 @@ def _enemyDetectionRibbonFormatter(ribbon, arenaDP, updater):
 
 
 def _singleVehRibbonFormatter(ribbon, arenaDP, updater):
-    vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
+    if ribbon.getDamageSource() == DAMAGE_SOURCE.PLAYER:
+        vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
+    else:
+        vehicleName, vehicleClassTag = '', ribbon.getDamageSource()
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=BigWorld.wg_getIntegralFormat(ribbon.getExtraValue()))
 
 
@@ -93,9 +97,12 @@ def _criticalHitRibbonFormatter(ribbon, arenaDP, updater):
 
 
 def _receivedCriticalHitRibbonFormatter(ribbon, arenaDP, updater):
-    vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
-    if arenaDP.getPlayerVehicleID() == ribbon.getVehicleID():
-        vehicleName = ''
+    if ribbon.getDamageSource() == DAMAGE_SOURCE.PLAYER:
+        vehicleName, vehicleClassTag = _getVehicleData(arenaDP, ribbon.getVehicleID())
+        if arenaDP.getPlayerVehicleID() == ribbon.getVehicleID():
+            vehicleName = ''
+    else:
+        vehicleName, vehicleClassTag = '', ribbon.getDamageSource()
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=_formatCounter(ribbon.getExtraValue()))
 
 
@@ -104,6 +111,12 @@ def _killRibbonFormatter(ribbon, arenaDP, updater):
     value = ribbon.getExtraValue()
     leftFieldStr = BigWorld.wg_getIntegralFormat(value) if value else ''
     updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), vehName=vehicleName, vehType=vehicleClassTag, leftFieldStr=leftFieldStr)
+
+
+def _epicEventRibbonFormatter(ribbon, arenaDP, updater):
+    value = ribbon.getExtraValue()
+    leftFieldStr = BigWorld.wg_getIntegralFormat(value) if value else ''
+    updater(ribbonID=ribbon.getID(), ribbonType=ribbon.getType(), leftFieldStr=leftFieldStr)
 
 
 _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
@@ -123,7 +136,15 @@ _RIBBONS_FMTS = {_BET.CAPTURE: _baseRibbonFormatter,
  _BET.RECEIVED_RAM: _receivedRamRibbonFormatter,
  _BET.RECEIVED_BURN: _singleVehRibbonFormatter,
  _BET.RECEIVED_WORLD_COLLISION: _singleVehRibbonFormatter,
- _BET.STUN: _singleVehRibbonFormatter}
+ _BET.STUN: _singleVehRibbonFormatter,
+ _BET.VEHICLE_RECOVERY: _epicEventRibbonFormatter,
+ _BET.ENEMY_SECTOR_CAPTURED: _epicEventRibbonFormatter,
+ _BET.DESTRUCTIBLE_DAMAGED: _epicEventRibbonFormatter,
+ _BET.DESTRUCTIBLE_DESTROYED: _epicEventRibbonFormatter,
+ _BET.DESTRUCTIBLES_DEFENDED: _epicEventRibbonFormatter,
+ _BET.DEFENDER_BONUS: _epicEventRibbonFormatter,
+ _BET.BASE_CAPTURE_BLOCKED: _baseRibbonFormatter,
+ _BET.ASSIST_BY_ABILITY: _singleVehRibbonFormatter}
 
 class BattleRibbonsPanel(RibbonsPanelMeta):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
@@ -273,4 +294,12 @@ class BattleRibbonsPanel(RibbonsPanelMeta):
          [_BET.RECEIVED_BURN, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.RECEIVED_BURN))],
          [_BET.RECEIVED_RAM, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.RECEIVED_RAM))],
          [_BET.RECEIVED_WORLD_COLLISION, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.RECEIVED_WORLD_COLLISION))],
-         [_BET.STUN, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.STUN))]], self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName)
+         [_BET.STUN, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.STUN))],
+         [_BET.VEHICLE_RECOVERY, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.VEHICLE_RECOVERY))],
+         [_BET.ENEMY_SECTOR_CAPTURED, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.ENEMY_SECTOR_CAPTURED))],
+         [_BET.DESTRUCTIBLE_DAMAGED, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.DESTRUCTIBLE_DAMAGED))],
+         [_BET.DESTRUCTIBLE_DESTROYED, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.DESTRUCTIBLE_DESTROYED))],
+         [_BET.DESTRUCTIBLES_DEFENDED, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.DESTRUCTIBLES_DEFENDED))],
+         [_BET.DEFENDER_BONUS, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.DEFENDER_BONUS))],
+         [_BET.BASE_CAPTURE_BLOCKED, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.DEFENCE))],
+         [_BET.ASSIST_BY_ABILITY, i18n.makeString(INGAME_GUI.efficiencyribbons(_BET.ASSIST_BY_ABILITY))]], self.__isExtendedAnim, self.__enabled, self.__isWithRibbonName, self.__isWithVehName)

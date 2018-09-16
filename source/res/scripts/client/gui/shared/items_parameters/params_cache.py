@@ -12,6 +12,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION
 from items import vehicles, ITEM_TYPES, EQUIPMENT_TYPES
 from items.vehicles import getVehicleType
 from gui.shared.utils import GUN_NORMAL, GUN_CAN_BE_CLIP, GUN_CLIP, GUN_CAN_BE_AUTO_RELOAD, GUN_AUTO_RELOAD
+from soft_exception import SoftException
 PrecachedShell = namedtuple('PrecachedShell', 'guns params')
 PrecachedEquipment = namedtuple('PrecachedEquipment', 'nations params')
 PrecachedOptionalDevice = namedtuple('PrecachedOptionalDevice', 'weight nations')
@@ -67,7 +68,7 @@ def _getVehicleSuitablesByType(vehicleType, itemTypeId, turretPID=0):
                     result.append(shot.shell)
 
     else:
-        raise UserWarning('Type ID {} is not supported'.format(itemTypeId))
+        raise SoftException('Type ID {} is not supported'.format(itemTypeId))
     return result
 
 

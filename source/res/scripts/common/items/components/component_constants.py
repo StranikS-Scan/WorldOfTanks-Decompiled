@@ -1,12 +1,24 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/components/component_constants.py
 import collections
+from soft_exception import SoftException
 Autoreload = collections.namedtuple('Autoreload', 'reloadTime revertFraction')
 UNDEFINED_ITEM_TYPE_ID = 0
 ZERO_FLOAT = 0.0
 ZERO_INT = 0
 EMPTY_STRING = ''
 EMPTY_TUPLE = ()
+
+class _ReadOnlyDict(dict):
+
+    def __setitem__(self, key, value):
+        raise SoftException('ReadOnlyDict set item attempt %s=>%s' % (key, value))
+
+    def update(self, E=None, **F):
+        raise SoftException('ReadOnlyDict update attempt %s, %s' % (E, F))
+
+
+EMPTY_DICT = _ReadOnlyDict()
 EMPTY_TAGS = frozenset()
 LEVEL = 1
 DEFAULT_ARMOR_HOMOGENIZATION = 1.0

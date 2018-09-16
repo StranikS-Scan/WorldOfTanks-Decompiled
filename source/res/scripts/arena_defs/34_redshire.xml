@@ -57,7 +57,9 @@
     <scenario>
       <startTime>	0.000000 0.000000	</startTime>
       <possibility>	100.000000	</possibility>
-      <period>	450	</period>
+      <interval>	450	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	himmelsdorf_bomber	</name>
       <trajectories>
         <warplane>
           <preset>	himmelsdorf_bomber_1	</preset>
@@ -65,7 +67,7 @@
           <yaw>	-179.999954	</yaw>
           <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
-          <period>	0	</period>
+          <interval>	0	</interval>
         </warplane>
         <warplane>
           <preset>	himmelsdorf_bomber_2	</preset>
@@ -73,7 +75,7 @@
           <yaw>	-179.999954	</yaw>
           <possibility>	1.000000	</possibility>
           <startTime>	5.000000 5.000000	</startTime>
-          <period>	0	</period>
+          <interval>	0	</interval>
         </warplane>
         <warplane>
           <preset>	himmelsdorf_bomber_3	</preset>
@@ -81,7 +83,7 @@
           <yaw>	-179.999954	</yaw>
           <possibility>	1.000000	</possibility>
           <startTime>	11.000000 30.000000	</startTime>
-          <period>	0	</period>
+          <interval>	0	</interval>
         </warplane>
         <warplane>
           <preset>	himmelsdorf_bomber_4	</preset>
@@ -89,14 +91,16 @@
           <yaw>	-179.999954	</yaw>
           <possibility>	1.000000	</possibility>
           <startTime>	5.000000 5.000000	</startTime>
-          <period>	0	</period>
+          <interval>	0	</interval>
         </warplane>
       </trajectories>
     </scenario>
     <scenario>
       <startTime>	0.000000 0.000000	</startTime>
       <possibility>	100.000000	</possibility>
-      <period>	0.00000	</period>
+      <interval>	0.00000	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	redshire_zepelin	</name>
       <trajectories>
         <warplane>
           <preset>	redshire_zepelin_1	</preset>

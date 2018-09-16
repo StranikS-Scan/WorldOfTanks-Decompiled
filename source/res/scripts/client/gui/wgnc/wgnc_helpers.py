@@ -7,7 +7,7 @@ def parseSize(sizeStr):
         try:
             size = map(int, sizeStr.split('x'))
             if len(size) != 2:
-                raise ValueError
+                return
         except ValueError:
             LOG_ERROR('Failed to parse size: %s' % sizeStr)
             size = None

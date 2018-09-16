@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/TechnicalMaintenance.py
 from CurrentVehicle import g_currentVehicle
 from adisp import process
-from debug_utils import LOG_DEBUG
 from gui import SystemMessages, DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.locale.MENU import MENU
@@ -113,7 +112,6 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
 
     def populateTechnicalMaintenance(self):
         money = self.itemsCache.items.stats.money
-        goldShellsForCredits = self.itemsCache.items.shop.isEnabledBuyingGoldShellsForCredits
         data = {Currency.CREDITS: money.getSignValue(Currency.CREDITS),
          Currency.GOLD: money.getSignValue(Currency.GOLD)}
         if g_currentVehicle.isPresent():
@@ -137,13 +135,18 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
              'casseteFieldText': cassetteText,
              'shells': [],
              'infoAfterShellBlock': ''})
+            sellGoldShellsForCredits = self.itemsCache.items.shop.isEnabledBuyingGoldShellsForCredits
             shells = data['shells']
             for shell in vehicle.shells:
                 if shell.isHidden:
                     continue
-                buyPrice = shell.getBuyPrice()
-                prices = shell.buyPrices.getSum().price
+                if sellGoldShellsForCredits:
+                    prices = shell.buyPrices.getSum().price
+                else:
+                    prices = shell.buyPrices.itemPrice.price
+                currency = shell.buyPrices.itemPrice.price.getCurrency(byWeight=True)
                 action = None
+                buyPrice = shell.getBuyPrice()
                 if buyPrice.isActionPrice():
                     action = packItemActionTooltipData(shell)
                 shells.append({'id': str(shell.intCD),
@@ -153,9 +156,8 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
                  'userCount': shell.defaultCount,
                  'step': cassetteCount,
                  'inventoryCount': shell.inventoryCount,
-                 'goldShellsForCredits': goldShellsForCredits,
                  'prices': prices.toMoneyTuple(),
-                 'currency': buyPrice.getCurrency(byWeight=True),
+                 'currency': currency,
                  'ammoName': shell.longUserNameAbbr,
                  'tableName': shell.getShortInfo(vehicle, True),
                  'maxAmmo': vehicle.gun.maxAmmo,
@@ -177,7 +179,6 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
 
     def populateTechnicalMaintenanceEquipment(self, eId1=None, currency1=None, eId2=None, currency2=None, eId3=None, currency3=None, slotIndex=None):
         items = self.itemsCache.items
-        goldEqsForCredits = items.shop.isEnabledBuyingGoldEqsForCredits
         vehicle = g_currentVehicle.item
         money = self.itemsCache.items.stats.money
         installedItems = vehicle.equipment.regularConsumables
@@ -204,7 +205,10 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
                 fits.append(self.__getStatus(module.mayInstall(vehicle, i)[1]))
 
             buyPrice = module.getBuyPrice()
-            prices = module.buyPrices.getSum().price
+            if items.shop.isEnabledBuyingGoldEqsForCredits:
+                prices = module.buyPrices.getSum().price
+            else:
+                prices = module.buyPrices.itemPrice.price
             inventoryCount = module.inventoryCount
             index = None
             if module in selectedItems:
@@ -230,7 +234,6 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
              'vehicleCount': len(module.getInstalledVehicles(inventoryVehicles)),
              'count': inventoryCount,
              'fits': fits,
-             'goldEqsForCredits': goldEqsForCredits,
              'userCredits': money.toDict(),
              'actionPriceData': action,
              'moduleLabel': module.getGUIEmblemID()})
@@ -265,14 +268,14 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         shellsLayout = []
         eqsLayout = []
         for shell in shells:
-            buyGoldShellForCredits = shell.goldShellsForCredits and shell.prices[1] > 0 and shell.currency == Currency.CREDITS
+            buyGoldShellForCredits = shell.prices[1] > 0 and shell.currency == Currency.CREDITS
             shellsLayout.append(int(shell.id) if not buyGoldShellForCredits else -int(shell.id))
             shellsLayout.append(int(shell.userCount))
 
         for ei in equipment:
             if ei is not None:
                 intCD = int(ei.id)
-                buyGoldEqForCredits = ei.goldEqsForCredits and ei.prices[1] > 0 and ei.currency == Currency.CREDITS
+                buyGoldEqForCredits = ei.prices[1] > 0 and ei.currency == Currency.CREDITS
                 eqsLayout.append(intCD if not buyGoldEqForCredits else -intCD)
                 eqsLayout.append(1)
             eqsLayout.append(0)
@@ -317,7 +320,6 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
                 self.__currentVehicleId = g_currentVehicle.item.intCD
 
     def __setVehicleLayouts(self, vehicle, shellsLayout=None, eqsLayout=None):
-        LOG_DEBUG('setVehicleLayouts', shellsLayout, eqsLayout)
         shellsLayout = shellsLayout or []
         eqsLayout = eqsLayout or []
         ItemsActionsFactory.doAction(ItemsActionsFactory.SET_VEHICLE_LAYOUT, vehicle, shellsLayout, eqsLayout, skipConfirm=self._skipConfirm)

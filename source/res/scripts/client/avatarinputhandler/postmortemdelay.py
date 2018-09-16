@@ -3,7 +3,7 @@
 import math
 import BigWorld
 import Math
-from AvatarInputHandler.DynamicCameras.ArcadeCamera import ArcadeCamera
+from AvatarInputHandler.DynamicCameras.ArcadeCamera import ArcadeCamera, mathUtils
 from PlayerEvents import g_playerEvents
 from constants import ARENA_PERIOD
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG
@@ -18,6 +18,7 @@ class PostmortemDelay(object):
     def __init__(self, arcadeCamera, onKillerVisionStart, onStop):
         self.__killerVehicleID = None
         self.__bActive = False
+        self.__mouseInputEnabled = False
         self.__bChoiceWindowActive = False
         self.__bFadeScreenActive = False
         self.__bKillerVisionActive = False
@@ -57,6 +58,7 @@ class PostmortemDelay(object):
             self.__showChoiceWindow(False)
             self.__fadeScreen(bFade=False)
             self.__bKillerVisionActive = False
+            self.__mouseInputEnabled = False
             try:
                 self.__moveCameraTo(BigWorld.player().playerVehicleID)
             except Exception:
@@ -73,6 +75,10 @@ class PostmortemDelay(object):
                 LOG_CURRENT_EXCEPTION()
 
             return
+
+    def handleMouseEvent(self, dx, dy, dz):
+        if self.__bActive and self.__mouseInputEnabled:
+            self.__arcadeCamera.update(dx, dy, mathUtils.clamp(-1, 1, dz))
 
     def __fadeScreen(self, bFade=True):
         if self.__bFadeScreenActive == bFade:
@@ -131,8 +137,9 @@ class PostmortemDelay(object):
         self.__cbIDWait = None
         if self.__killerVehicleID is None:
             self.__killerVehicleID = BigWorld.player().inputHandler.getKillerVehicleID()
-        if self.__killerVehicleID is None:
-            self.stop()
+        if not self.__killerVehicleID or self.__killerVehicleID and not BigWorld.entity(self.__killerVehicleID):
+            self.__mouseInputEnabled = True
+            self.__cbIDWait = BigWorld.callback(self.KILLER_VISION_TIME, self.stop)
             return
         else:
             self.__startKillerVision()
@@ -150,6 +157,7 @@ class PostmortemDelay(object):
     def __onKillerVisionFinished(self):
         self.__cbIDWait = None
         self.__bKillerVisionActive = False
+        self.__mouseInputEnabled = False
         self.__moveCameraTo(BigWorld.player().playerVehicleID)
         self.__showChoiceWindow()
         return

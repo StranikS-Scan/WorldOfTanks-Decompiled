@@ -10,10 +10,10 @@ from gui.shared.gui_items.Vehicle import Vehicle
 from skeletons.gui.lobby_context import ILobbyContext
 
 class PlayerPrbInfo(object):
-    __slots__ = ('accID', 'name', 'dbID', 'state', 'time', 'vehCompDescr', 'igrType', 'clanDBID', 'clanAbbrev', 'roster', 'isCreator', 'regionCode', 'badges')
+    __slots__ = ('accID', 'name', 'dbID', 'state', 'time', 'vehCompDescr', 'igrType', 'clanDBID', 'clanAbbrev', 'roster', 'isCreator', 'regionCode', 'badges', 'group')
     lobbyContext = dependency.descriptor(ILobbyContext)
 
-    def __init__(self, accID, name='', dbID=0, state=PREBATTLE_ACCOUNT_STATE.UNKNOWN, time=0.0, vehCompDescr=0, igrType=0, clanDBID=0, clanAbbrev='', roster=0, entity=None, badges=None):
+    def __init__(self, accID, name='', dbID=0, state=PREBATTLE_ACCOUNT_STATE.UNKNOWN, time=0.0, vehCompDescr=0, igrType=0, clanDBID=0, clanAbbrev='', roster=0, entity=None, badges=None, group=0):
         self.accID = accID
         self.name = name
         self.dbID = dbID
@@ -25,6 +25,7 @@ class PlayerPrbInfo(object):
         self.clanAbbrev = clanAbbrev
         self.roster = roster
         self.badges = BadgesHelper(badges or [])
+        self.group = group
         if entity is not None:
             self.isCreator = entity.isCommander(pDatabaseID=self.dbID)
         else:

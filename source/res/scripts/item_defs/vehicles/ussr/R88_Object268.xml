@@ -64,8 +64,8 @@
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
-      <pitchParams>	0.20 34.00 0.40 1.00 0.05 0.32	</pitchParams>
-      <rollParams>	1.00 0.20 34.00 0.40 1.00 0.05 0.32	</rollParams>
+      <pitchParams>	0.16 34.00 0.40 1.00 0.05 0.32	</pitchParams>
+      <rollParams>	1.00 0.16 34.00 0.40 1.00 0.05 0.32	</rollParams>
       <sensitivityToImpulse>	0.17	</sensitivityToImpulse>
     </swinging>
     <exhaust>
@@ -244,7 +244,7 @@
         <left>	vehicles/russian/R88_Object268/track/left.track	</left>
         <right>	vehicles/russian/R88_Object268/track/right.track	</right>
         <segmentLength>	0.144	</segmentLength>
-        <segmentOffset>	0.08	</segmentOffset>
+        <segmentOffset>	0.219	</segmentOffset>
         <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -255,26 +255,17 @@
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
-        <maxAmplitude>	0.2	</maxAmplitude>
-        <maxOffset>	0.2	</maxOffset>
+        <maxAmplitude>	0.05	</maxAmplitude>
+        <maxOffset>	0.05	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
           <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	1.2	</backwardElastK>
           <offset>	-0.088	</offset>
-        </node>
-        <node>
-          <isLeft>	false	</isLeft>
-          <name>	Track_VD_R0	</name>
-          <forwardElastK>	0.75	</forwardElastK>
-          <backwardElastK>	1.5	</backwardElastK>
         </node>
         <node>
           <isLeft>	true	</isLeft>
@@ -298,16 +289,10 @@
           <offset>	-0.088	</offset>
         </node>
         <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L0	</name>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
           <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	1.5	</backwardElastK>
-        </node>
-        <node>
-          <isLeft>	true	</isLeft>
-          <name>	Track_VD_L1	</name>
-          <forwardElastK>	1.5	</forwardElastK>
-          <backwardElastK>	0.75	</backwardElastK>
         </node>
         <node>
           <isLeft>	false	</isLeft>
@@ -342,6 +327,18 @@
           <forwardElastK>	0.75	</forwardElastK>
           <backwardElastK>	1.8	</backwardElastK>
           <offset>	-0.088	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.75	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
         </node>
       </trackNodes>
       <groundNodes>

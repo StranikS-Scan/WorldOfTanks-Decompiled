@@ -8,6 +8,7 @@ from gui.wgcg.base.contexts import CommonWebRequestCtx
 from gui.wgcg.clan.contexts import WebRequestBaseCtx
 from gui.wgcg.settings import WebRequestDataType
 from shared_utils import makeTupleByDict
+from soft_exception import SoftException
 _STRONGHOLD_REQUEST_TYPE = WebRequestDataType
 
 @ReprInjector.withParent()
@@ -39,6 +40,9 @@ class StrongholdStatisticsCtx(WebRequestBaseCtx):
 
     def isAuthorizationRequired(self):
         return True
+
+    def isCaching(self):
+        return False
 
 
 class StrongholdRequestCtx(CommonWebRequestCtx):
@@ -321,7 +325,7 @@ class StrongholdUpdateCtx(StrongholdRequestCtx):
 
     @classmethod
     def fromPrbCtx(cls, prbCtx):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
 
 class StrongholdSendInvitesCtx(StrongholdRequestCtx):
@@ -355,4 +359,14 @@ class StrongholdJoinBattleCtx(StrongholdRequestCtx):
 
     @classmethod
     def fromPrbCtx(cls, prbCtx):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
+
+
+class StrongholdMatchmakingInfoCtx(StrongholdRequestCtx):
+
+    def getRequestType(self):
+        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_MATCHMAKING_INFO
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx):
+        raise SoftException('This method should not be reached in this context')

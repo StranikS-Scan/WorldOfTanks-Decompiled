@@ -3,6 +3,8 @@
 from gui.Scaleform.daapi.view.lobby.header.LobbyHeader import LobbyHeader
 from gui.Scaleform.Waiting import Waiting
 from gui.prb_control.events_dispatcher import g_eventDispatcher
+from gui.shared import events
+from gui.shared.event_bus import EVENT_BUS_SCOPE
 from bootcamp.BootCampEvents import g_bootcampEvents
 from bootcamp.Bootcamp import g_bootcamp
 from bootcamp.aop.in_garage import PointcutBattleSelectorHintText
@@ -25,7 +27,7 @@ class BCLobbyHeader(LobbyHeader):
 
     def _populate(self):
         super(BCLobbyHeader, self)._populate()
-        if self.app.battleSelectorHintOverride is not None:
+        if self.app.tutorialManager.lastBattleSelectorHintOverride is not None:
             self.__onOverrideBattleSelectorHint()
         return
 
@@ -52,14 +54,14 @@ class BCLobbyHeader(LobbyHeader):
 
     def _addListeners(self):
         super(BCLobbyHeader, self)._addListeners()
-        self.app.onBattleSelectorHintOverride += self.__onOverrideBattleSelectorHint
+        self.addListener(events.TutorialEvent.OVERRIDE_BATTLE_SELECTOR_HINT, self.__onOverrideBattleSelectorHint, scope=EVENT_BUS_SCOPE.LOBBY)
 
     def _removeListeners(self):
         super(BCLobbyHeader, self)._removeListeners()
-        self.app.onBattleSelectorHintOverride -= self.__onOverrideBattleSelectorHint
+        self.removeListener(events.TutorialEvent.OVERRIDE_BATTLE_SELECTOR_HINT, self.__onOverrideBattleSelectorHint, scope=EVENT_BUS_SCOPE.LOBBY)
 
-    def __onOverrideBattleSelectorHint(self):
-        enableOverride = self.app.battleSelectorHintOverride == 'bootcamp'
+    def __onOverrideBattleSelectorHint(self, _=None):
+        enableOverride = self.app.tutorialManager.lastBattleSelectorHintOverride == 'bootcamp'
         isOverrideEnabled = self.__battleSelectorHintPointcutIndex is not None
         if enableOverride != isOverrideEnabled:
             if enableOverride:

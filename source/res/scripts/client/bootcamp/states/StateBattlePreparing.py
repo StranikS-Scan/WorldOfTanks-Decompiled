@@ -22,6 +22,7 @@ from gui import GUI_CTRL_MODE_FLAG as _CTRL_FLAG
 from gui.app_loader import g_appLoader, settings as app_settings
 from gui.Scaleform.daapi.view.bootcamp.BCBattleLoadingSpaceEnv import BCBattleLoadingSpaceEnv
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from soft_exception import SoftException
 
 class StateBattlePreparing(AbstractState):
     soundController = dependency.instance(ISoundsController)
@@ -153,10 +154,10 @@ class StateBattlePreparing(AbstractState):
         pass
 
     def _doDeactivate(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _doActivate(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def __onBootcampGoNext(self):
         LOG_DEBUG_DEV_BOOTCAMP('__onBootcampGoNext')

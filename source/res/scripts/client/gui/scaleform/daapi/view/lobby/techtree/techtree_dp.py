@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/techtree_dp.py
 from collections import defaultdict, namedtuple
 import operator
+from soft_exception import SoftException
 from constants import IS_DEVELOPMENT
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import GUI_NATIONS_ORDER_INDEX
@@ -18,7 +19,7 @@ import nations
 import ResMgr
 from skeletons.gui.shared import IItemsCache
 
-class _ConfigError(Exception):
+class _ConfigError(SoftException):
 
     def __init__(self, ctx, msg):
         super(_ConfigError, self).__init__()

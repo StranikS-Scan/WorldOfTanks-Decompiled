@@ -16,6 +16,9 @@ class CONTAINER_NAME(object):
     ALIVE_VEHICLES = 'aliveVehicles'
     PERSONAL = 'personal'
     FLAGS = 'flags'
+    ZONES = 'zones'
+    PROTECTION_ZONE = 'landing_zone'
+    HQS = 'hqs'
 
 
 class ENTRY_SYMBOL_NAME(object):
@@ -28,6 +31,8 @@ class ENTRY_SYMBOL_NAME(object):
     BOOTCAMP_TARGET = 'BootcampTargetEntry'
     ARTILLERY_ENTRY = 'ArtilleryEntry'
     BOMBER_ENTRY = 'BomberEntry'
+    RECON_ENTRY = 'ReconEntry'
+    SMOKE_ENTRY = 'SmokeEntry'
     VEHICLE = 'VehicleEntry'
     VIEW_POINT = 'ViewPointEntry'
     DEAD_POINT = 'DeadPointEntry'
@@ -37,7 +42,19 @@ class ENTRY_SYMBOL_NAME(object):
     VIEW_RANGE_CIRCLES = 'ViewRangeCirclesEntry'
     ANIMATION = 'AnimationEntry'
     MARK_CELL = 'CellFlashEntry'
+    MARK_OBJECTIVE_DEF = 'PositionDefendEntry'
+    MARK_OBJECTIVE_ATK = 'PositionAttackEntry'
+    MARK_POSITION = 'PositionFlashEntry'
     ARTY_MARKER = 'ArtyMarkerMinimapEntry'
+    EPIC_SECTOR_BASE = 'SectorBaseEntry'
+    EPIC_SECTOR = 'SectorEntry'
+    EPIC_SECTOR_OVERLAY = 'SectorOverlayEntry'
+    EPIC_HQ = 'HeadquarterEntry'
+    EPIC_FLP = 'FrontLinePointEntry'
+    EPIC_REPAIR = 'ResupplyEntry'
+    EPIC_PROTECTION_ZONE = 'LandingZoneEntry'
+    EPIC_DEPLOY_SECTOR_BASE = 'SectorBaseEntryDeployment'
+    EPIC_DEPLOY_HQ = 'HeadquarterEntryDeployment'
 
 
 class TRANSFORM_FLAG(object):
@@ -77,7 +94,9 @@ class VIEW_RANGE_CIRCLES_AS3_DESCR(object):
 
 
 EQ_MARKER_TO_SYMBOL = {'artillery': ENTRY_SYMBOL_NAME.ARTILLERY_ENTRY,
- 'bomber': ENTRY_SYMBOL_NAME.BOMBER_ENTRY}
+ 'bomber': ENTRY_SYMBOL_NAME.BOMBER_ENTRY,
+ 'recon': ENTRY_SYMBOL_NAME.RECON_ENTRY,
+ 'smoke': ENTRY_SYMBOL_NAME.SMOKE_ENTRY}
 
 class ADDITIONAL_FEATURES(BitmaskHelper):
     OFF = 0

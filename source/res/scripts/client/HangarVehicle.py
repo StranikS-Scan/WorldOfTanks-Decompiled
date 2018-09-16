@@ -1,14 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/HangarVehicle.py
 import Math
-from hangar_camera_common import CameraMovementStates
+from gui.hangar_cameras.hangar_camera_common import CameraMovementStates
 from ClientSelectableCameraVehicle import ClientSelectableCameraVehicle
-import WWISE
 from gui.shared.utils.HangarSpace import g_hangarSpace
 
 class HangarVehicle(ClientSelectableCameraVehicle):
-    _SOUND_STATE_MAIN_TANK = '_main'
-    _SOUND_START_MOVING_TO_MAIN = 'hangar_premium_2018_camera_fly_backward'
 
     def __init__(self):
         self.selectionId = ''
@@ -33,25 +30,20 @@ class HangarVehicle(ClientSelectableCameraVehicle):
         super(HangarVehicle, self).__init__()
         return
 
-    def prerequisites(self):
-        return []
-
     def onEnterWorld(self, prereqs):
         super(HangarVehicle, self).onEnterWorld(prereqs)
+        g_hangarSpace.onSpaceCreate += self.__onSpaceCreated
         self.enable(False)
         self.setState(CameraMovementStates.ON_OBJECT)
-        WWISE.WW_setState(self._SOUND_GROUP_HANGAR_TANK_VIEW, '{}{}'.format(self._SOUND_GROUP_HANGAR_TANK_VIEW, self._SOUND_STATE_MAIN_TANK))
 
-    def _onSpaceCreated(self):
-        super(HangarVehicle, self)._onSpaceCreated()
+    def onLeaveWorld(self):
+        g_hangarSpace.onSpaceCreate -= self.__onSpaceCreated
+        super(HangarVehicle, self).onLeaveWorld()
+
+    def __onSpaceCreated(self):
+        self.enable(False)
         self.setState(CameraMovementStates.ON_OBJECT)
         self.cameraPivot = g_hangarSpace.space.camera.pivotPosition
 
     def _setStartValues(self):
         pass
-
-    def _getMovingSound(self):
-        return self._SOUND_START_MOVING_TO_MAIN
-
-    def _getNextMusicState(self):
-        return self._SOUND_STATE_MAIN_TANK

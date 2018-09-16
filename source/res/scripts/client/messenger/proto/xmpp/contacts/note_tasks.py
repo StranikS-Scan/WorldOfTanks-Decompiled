@@ -7,6 +7,7 @@ from messenger.proto.xmpp import errors
 from messenger.proto.xmpp.contacts.tasks import TASK_RESULT, ContactTask, SeqTask
 from messenger.proto.xmpp.extensions import contact_note
 from messenger.proto.xmpp.xmpp_constants import CONTACT_LIMIT
+from soft_exception import SoftException
 
 def canNoteAutoDelete(contact):
     return contact.getNote() and not USER_TAG.filterSharedTags(contact.getTags())
@@ -50,7 +51,7 @@ class _NoteTask(ContactTask):
         return self._result
 
     def _doSync(self, name, groups=None, sub=None, clanInfo=None):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _update(self, note):
         user = self._getUser(protoType=None)

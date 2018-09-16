@@ -5,8 +5,9 @@ from gui.shared.events import ComponentEvent
 from shared_utils import findFirst
 from gui.Scaleform.framework.entities.DisposableEntity import DisposableEntity
 from gui.Scaleform.framework import ScopeTemplates
+from soft_exception import SoftException
 
-class ScopeControllerError(StandardError):
+class ScopeControllerError(SoftException):
     pass
 
 
@@ -96,7 +97,7 @@ class ScopeController(DisposableEntity):
         elif key is not None:
             return self.getLoadingViewByKey(key) is not None
         else:
-            raise ValueError('pyView or pyView alias can not be None!')
+            raise SoftException('pyView or pyView alias can not be None!')
             return
 
     def addView(self, pyView, addAsGlobal):
@@ -112,7 +113,7 @@ class ScopeController(DisposableEntity):
 
     def addLoadingView(self, pyView, addAsGlobal):
         if pyView is None:
-            raise ValueError('pyView can not be None!')
+            raise SoftException('pyView can not be None!')
         if addAsGlobal:
             pyView.onDispose += self._handleViewDispose
             self.__loadingViews.append(pyView)

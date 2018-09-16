@@ -26,6 +26,7 @@ from nations import NAMES
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from soft_exception import SoftException
 _MARK_ON_GUN_MIN_LVL = 5
 
 class ProfileTechnique(ProfileTechniqueMeta):
@@ -240,7 +241,7 @@ class ProfileTechnique(ProfileTechniqueMeta):
             achievementsList = self.__getAchievementsList(stats, vehDossier)
             specialRankedStats.append(self.__packAchievement(stats, vehDossier, HONORED_RANK_RECORD))
         else:
-            raise ValueError('Profile Technique: Unknown battle type: ' + self._battlesType)
+            raise SoftException('Profile Technique: Unknown battle type: ' + self._battlesType)
         if achievementsList is not None:
             achievementsList.insert(0, specialRankedStats)
             achievementsList.insert(1, specialMarksStats)

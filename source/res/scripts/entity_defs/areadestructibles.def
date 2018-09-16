@@ -3,7 +3,6 @@
     <Interface>	ArtilleryController	</Interface>
     <Interface>	BomberController	</Interface>
     <Interface>	ProjectileController	</Interface>
-    <Interface>	VehicleDetector	</Interface>
   </Implements>
   <Properties>
     <chunkID>
@@ -74,6 +73,8 @@
     <_components></_components>
     <_AreaDestructibles__wgDestructibles></_AreaDestructibles__wgDestructibles>
     <_AreaDestructibles__pendingJobs></_AreaDestructibles__pendingJobs>
+    <_TimerManager__unpersistedTimers></_TimerManager__unpersistedTimers>
+    <_ProximityManager__data></_ProximityManager__data>
   </TempProperties>
   <ClientMethods></ClientMethods>
   <CellMethods>
@@ -113,13 +114,6 @@
       <Arg>	INT8	</Arg>
       <Arg>	DESTRUCTIBLE_ATTACK_INFO	</Arg>
     </damageDestructible>
-    <receiveMiss>
-      <Arg>	SHOT_ID	</Arg>
-      <Arg>	UINT16	</Arg>
-    </receiveMiss>
-    <receiveAttackResults>
-      <Arg>	ATTACK_RESULTS	</Arg>
-    </receiveAttackResults>
     <receiveTaggedDestructibleKill>
       <Arg>	UINT8	</Arg>
     </receiveTaggedDestructibleKill>
@@ -128,7 +122,6 @@
     <createCellNearHere>
       <Arg>	MAILBOX	</Arg>
     </createCellNearHere>
-    <reset></reset>
     <smartDestroy></smartDestroy>
   </BaseMethods>
   <shouldBackup>	false	</shouldBackup>

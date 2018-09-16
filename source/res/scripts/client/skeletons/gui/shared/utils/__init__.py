@@ -36,6 +36,10 @@ class IItemsRequester(requesters.IRequester):
     def badges(self):
         raise NotImplementedError
 
+    @property
+    def epicMetaGame(self):
+        raise NotImplementedError
+
     def requestUserDossier(self, databaseID, callback):
         raise NotImplementedError
 

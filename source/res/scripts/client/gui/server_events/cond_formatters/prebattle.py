@@ -12,6 +12,7 @@ from gui.shared.utils.functions import makeTooltip
 from helpers import i18n
 from items.vehicles import CAMOUFLAGE_KINDS
 from shared_utils import findFirst
+from soft_exception import SoftException
 ICON_SIZE = 24
 VERTICAL_SPACE = -9
 
@@ -36,13 +37,13 @@ class MissionsPreBattleConditionsFormatter(MissionsBattleConditionsFormatter):
         return result
 
     def _packCondition(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _getFormattedField(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _packConditions(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
 
 class _BattleBonusTypeFormatter(ConditionFormatter):

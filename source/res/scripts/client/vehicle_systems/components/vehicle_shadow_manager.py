@@ -5,24 +5,20 @@ from svarog_script.py_component import Component
 
 class VehicleShadowManager(Component):
 
-    def __init__(self, playerTargetChangeEvent=None):
+    def __init__(self, compound=None, playerTargetChangeEvent=None):
         super(VehicleShadowManager, self).__init__()
-        self.__vehicleID = None
         self.__compoundModel = None
         self.__playerTargetChangeEvent = playerTargetChangeEvent
+        if compound is not None:
+            self.registerCompoundModel(compound)
         return
 
-    def isVehicleAvailable(self, player):
-        return player.getVehicleAttached() is not None
-
     def changePlayerTarget(self, isStatic):
-        player = BigWorld.player()
-        vehicle = player.getVehicleAttached()
-        if self.isVehicleAvailable(player):
-            self.__vehicleID = vehicle.id
-            BigWorld.setPlayerTarget(vehicle.appearance.compoundModel)
+        vehicle = BigWorld.player().getVehicleAttached()
+        if vehicle is not None:
+            self.updatePlayerTarget(vehicle.appearance.compoundModel)
         else:
-            BigWorld.setPlayerTarget(None)
+            self.updatePlayerTarget(None)
         return
 
     def activate(self):
@@ -32,13 +28,12 @@ class VehicleShadowManager(Component):
     def deactivate(self):
         if self.__playerTargetChangeEvent:
             self.__playerTargetChangeEvent -= self.changePlayerTarget
-        self.unregisterCompoundModel(self.__compoundModel)
-        if BigWorld.player().getVehicleAttached().id == self.__vehicleID:
-            BigWorld.setPlayerTarget(None)
+        if self.__compoundModel is not None:
+            BigWorld.resetPlayerTargetFrom(self.__compoundModel)
         return
 
     def updatePlayerTarget(self, compoundModel):
-        BigWorld.setPlayerTarget(compoundModel)
+        BigWorld.setPlayerTargetTo(compoundModel)
 
     def registerCompoundModel(self, compoundModel):
         self.__compoundModel = compoundModel
@@ -46,6 +41,12 @@ class VehicleShadowManager(Component):
 
     def unregisterCompoundModel(self, compoundModel):
         BigWorld.unregisterShadowCaster(compoundModel)
+
+    def reattachCompoundModel(self, vehicle, oldCompoundModel, newCompoundModel):
+        self.unregisterCompoundModel(oldCompoundModel)
+        self.registerCompoundModel(newCompoundModel)
+        if BigWorld.player().getVehicleAttached() is vehicle:
+            self.updatePlayerTarget(newCompoundModel)
 
     def destroy(self):
         pass

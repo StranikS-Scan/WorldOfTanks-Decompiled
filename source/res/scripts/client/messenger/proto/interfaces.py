@@ -65,6 +65,15 @@ class IBattleCommandFactory(object):
     def createByCellIdx(self, cellIdx):
         return None
 
+    def createByPosition(self, position):
+        return None
+
+    def createByObjectiveIndex(self, idx, isAtk):
+        return None
+
+    def createByBaseIndex(self, idx, name, isAtk):
+        return None
+
     def create4Reload(self, isCassetteClip, timeLeft, quantity):
         return None
 

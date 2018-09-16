@@ -7,13 +7,14 @@ from gui.shared.utils import backoff
 from messenger import g_settings
 from messenger.formatters.users_messages import getBroadcastIsInCoolDownMessage
 from messenger.gui.Scaleform.channels.layout import LobbyLayout
-from messenger.m_constants import PROTO_TYPE, CLIENT_ACTION_ID
+from messenger.m_constants import PROTO_TYPE, CLIENT_ACTION_ID, USER_TAG
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
 from messenger.proto.xmpp.gloox_constants import ERROR_TYPE
 from messenger.proto.xmpp.jid import makeContactJID
 from messenger.proto.xmpp.messages.formatters import XmppLobbyMessageBuilder, XmppLobbyUsersChatBuilder
 from messenger.proto.xmpp.xmpp_constants import MESSAGE_LIMIT
+from messenger.storage import storage_getter
 _LAZY_EXIT_DELAY = 10.0
 _BACK_OFF_MIN_DELAY = 60
 _BACK_OFF_MAX_DELAY = 1200
@@ -102,6 +103,10 @@ class ChatSessionController(_ChannelController):
         super(ChatSessionController, self).__init__(channel, XmppLobbyUsersChatBuilder())
         self._isHistoryRqRequired = True
 
+    @storage_getter('users')
+    def usersStorage(self):
+        return None
+
     def isJoined(self):
         return self._channel.isJoined() and not self._isHistoryRqRequired
 
@@ -118,6 +123,19 @@ class ChatSessionController(_ChannelController):
         if self._isHistoryRqRequired:
             self._isHistoryRqRequired = False
             self._onConnectStateChanged(self._channel)
+
+    def hasUntrustedMembers(self):
+        getter = self.usersStorage.getUser
+        for member in self._channel.getMembers():
+            user = getter(member.getID().getDatabaseID())
+            if user is None:
+                return True
+            if user.isCurrentPlayer():
+                continue
+            if not USER_TAG.filterTrustedTags(user.getTags()):
+                return True
+
+        return False
 
     def _addListeners(self):
         super(ChatSessionController, self)._addListeners()

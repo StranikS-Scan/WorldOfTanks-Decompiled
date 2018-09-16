@@ -20,6 +20,7 @@ from gui.Scaleform.daapi.view.dialogs.ConfirmModuleMeta import LocalSellModuleMe
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeXpMeta, ExchangeCreditsMeta, RestoreExchangeCreditsMeta
 from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.shared import IItemsCache
+from soft_exception import SoftException
 
 def showMessage(scopeMsg, msg, item, msgType=SystemMessages.SM_TYPE.Error, **kwargs):
     kwargs['userString'] = item.userName
@@ -258,10 +259,10 @@ class InstallItemAction(BuyAction):
     def installItem(self, itemCD, rootCD, state):
         itemTypeID, _, __ = vehicles.parseIntCompactDescr(itemCD)
         if itemTypeID not in GUI_ITEM_TYPE.VEHICLE_MODULES:
-            raise UserWarning('Specified type (itemTypeID={}) is not type of module'.format(itemTypeID))
+            raise SoftException('Specified type (itemTypeID={}) is not type of module'.format(itemTypeID))
         vehicle = self.itemsCache.items.getItemByCD(rootCD)
         if not vehicle.isInInventory:
-            raise UserWarning('Vehicle (intCD={}) must be in inventory'.format(rootCD))
+            raise SoftException('Vehicle (intCD={}) must be in inventory'.format(rootCD))
         item = self.itemsCache.items.getItemByCD(itemCD)
         conflictedEqs = item.getConflictedEquipments(vehicle)
         RequestState.sent(state)
@@ -289,10 +290,10 @@ class BuyAndInstallItemAction(InstallItemAction):
     def buyAndInstallItem(self, itemCD, rootCD, state):
         itemTypeID, _, __ = vehicles.parseIntCompactDescr(itemCD)
         if itemTypeID not in GUI_ITEM_TYPE.VEHICLE_MODULES:
-            raise UserWarning('Specified type (itemTypeID={}) is not type of module'.format(itemTypeID))
+            raise SoftException('Specified type (itemTypeID={}) is not type of module'.format(itemTypeID))
         vehicle = self.itemsCache.items.getItemByCD(rootCD)
         if not vehicle.isInInventory:
-            raise UserWarning('Vehicle (intCD={}) must be in inventory'.format(rootCD))
+            raise SoftException('Vehicle (intCD={}) must be in inventory'.format(rootCD))
         item = self.itemsCache.items.getItemByCD(itemCD)
         conflictedEqs = item.getConflictedEquipments(vehicle)
         if not self._mayObtainForMoney(item) and self._mayObtainWithMoneyExchange(item):
@@ -348,7 +349,7 @@ class SetVehicleModuleAction(BuyAction):
                     Waiting.hide('installEquipment')
                     if not result.success:
                         return
-            if not self.__isRemove and not newComponentItem.isInInventory:
+            if not self.__isRemove and not newComponentItem.isInInventory and not newComponentItem.itemTypeID == GUI_ITEM_TYPE.BATTLE_ABILITY:
                 conflictedEqs = newComponentItem.getConflictedEquipments(vehicle)
                 if not self._mayObtainForMoney(newComponentItem) and self._mayObtainWithMoneyExchange(newComponentItem):
                     isOk, _ = yield DialogsInterface.showDialog(ExchangeCreditsMeta(newComponentItem.intCD, vehicle.intCD))

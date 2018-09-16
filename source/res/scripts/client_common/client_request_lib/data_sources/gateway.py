@@ -451,6 +451,10 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/join/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
         return self._request_data(callback, url, get_data={}, method='POST')
 
+    def matchmaking_info(self, callback, periphery_id, unit_server_id, fields=None):
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/matchmaking_info/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        return self._request_data(callback, url, get_data={}, method='GET')
+
     def user_season_statistics(self, callback, fields=None):
         url = '/ranked/user_season_statistics/'
         return self._request_data(callback, url, get_data={}, method='GET')

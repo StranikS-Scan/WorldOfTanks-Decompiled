@@ -61,10 +61,10 @@
     </swinging>
     <exhaust>
       <pixie>	gas_medium	</pixie>
-      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2 HP_Track_Exhaus_3 HP_Track_Exhaus_4	</nodes>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.458482 0.313397	</turret>
+      <turret>	0.000000 0.481451 0.313394	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/british/GB60_Covenanter/collision/Hull.model	</collisionModelServer>
@@ -76,7 +76,7 @@
         <rayEnd>	0.51202 0.0700902 2.28054	</rayEnd>
         <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.25	</size>
-        <hideIfDamaged>	false	</hideIfDamaged>
+        <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/british/GB60_Covenanter/Covenanter_HangarShadowMap.dds	</hangarShadowTexture>
@@ -122,8 +122,8 @@
         <segmentModelRight>	vehicles/british/GB60_Covenanter/track/segment.model	</segmentModelRight>
         <left>	vehicles/british/GB60_Covenanter/track/left.track	</left>
         <right>	vehicles/british/GB60_Covenanter/track/right.track	</right>
-        <segmentLength>	0.097	</segmentLength>
-        <segmentOffset>	0.13	</segmentOffset>
+        <segmentLength>	0.083	</segmentLength>
+        <segmentOffset>	0.182331	</segmentOffset>
         <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -206,18 +206,15 @@
           <maxOffset>	0.1	</maxOffset>
         </group>
       </groundNodes>
-      <trackThickness>	-0.0046	</trackThickness>
+      <trackThickness>	-0.0152306	</trackThickness>
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.12	</maxAmplitude>
+        <maxAmplitude>	0.14	</maxAmplitude>
         <maxOffset>	0.14	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -258,7 +255,7 @@
           <name>	Track_VT_L4	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
-          <offset>	-0.143	</offset>
+          <offset>	-0.142105	</offset>
           <leftSibling>	Track_VT_L3	</leftSibling>
           <rightSibling>	Track_VT_L5	</rightSibling>
         </node>
@@ -285,7 +282,7 @@
           <name>	Track_VT_L7	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	1.9	</backwardElastK>
-          <offset>	-0.122	</offset>
+          <offset>	-0.100877	</offset>
           <leftSibling>	Track_VT_L6	</leftSibling>
           <rightSibling>	Track_VT_L8	</rightSibling>
         </node>
@@ -302,28 +299,28 @@
           <name>	Track_VD_R0	</name>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.7	</backwardElastK>
-          <offset>	-0.184	</offset>
+          <offset>	0.000000	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.7	</backwardElastK>
-          <offset>	-0.184	</offset>
+          <offset>	0.000000	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
           <forwardElastK>	1.7	</forwardElastK>
           <backwardElastK>	0.85	</backwardElastK>
-          <offset>	-0.092	</offset>
+          <offset>	0.000000	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
           <forwardElastK>	1.7	</forwardElastK>
           <backwardElastK>	0.85	</backwardElastK>
-          <offset>	-0.092	</offset>
+          <offset>	0.000000	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
@@ -365,7 +362,7 @@
           <name>	Track_VT_R4	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
-          <offset>	-0.143	</offset>
+          <offset>	-0.142105	</offset>
           <leftSibling>	Track_VT_R3	</leftSibling>
           <rightSibling>	Track_VT_R5	</rightSibling>
         </node>
@@ -392,7 +389,7 @@
           <name>	Track_VT_R7	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	1.9	</backwardElastK>
-          <offset>	-0.122	</offset>
+          <offset>	-0.100877	</offset>
           <leftSibling>	Track_VT_R6	</leftSibling>
           <rightSibling>	Track_VT_R8	</rightSibling>
         </node>
@@ -411,12 +408,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.907352 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.908892 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB60_Covenanter/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB60_Covenanter/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.14087 1.60901	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.12633 1.63772	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -463,8 +460,8 @@
         <segmentModelRight>	vehicles/british/GB60_Covenanter/track/segment.model	</segmentModelRight>
         <left>	vehicles/british/GB60_Covenanter/track/left.track	</left>
         <right>	vehicles/british/GB60_Covenanter/track/right.track	</right>
-        <segmentLength>	0.097	</segmentLength>
-        <segmentOffset>	0.13	</segmentOffset>
+        <segmentLength>	0.083	</segmentLength>
+        <segmentOffset>	0.182331	</segmentOffset>
         <lodDist>	SPLINE_TRACK	</lodDist>
         <atlas>
           <UTiles>	1	</UTiles>
@@ -547,18 +544,15 @@
           <maxOffset>	0.1	</maxOffset>
         </group>
       </groundNodes>
-      <trackThickness>	-0.0046	</trackThickness>
+      <trackThickness>	-0.0152306	</trackThickness>
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	true	</linkBones>
-        <maxAmplitude>	0.12	</maxAmplitude>
+        <maxAmplitude>	0.14	</maxAmplitude>
         <maxOffset>	0.14	</maxOffset>
         <gravity>	-9.8	</gravity>
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -599,7 +593,7 @@
           <name>	Track_VT_L4	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
-          <offset>	-0.143	</offset>
+          <offset>	-0.142105	</offset>
           <leftSibling>	Track_VT_L3	</leftSibling>
           <rightSibling>	Track_VT_L5	</rightSibling>
         </node>
@@ -626,7 +620,7 @@
           <name>	Track_VT_L7	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	1.9	</backwardElastK>
-          <offset>	-0.122	</offset>
+          <offset>	-0.100877	</offset>
           <leftSibling>	Track_VT_L6	</leftSibling>
           <rightSibling>	Track_VT_L8	</rightSibling>
         </node>
@@ -643,28 +637,28 @@
           <name>	Track_VD_R0	</name>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.7	</backwardElastK>
-          <offset>	-0.184	</offset>
+          <offset>	0.000000	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
           <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.7	</backwardElastK>
-          <offset>	-0.184	</offset>
+          <offset>	0.000000	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L1	</name>
           <forwardElastK>	1.7	</forwardElastK>
           <backwardElastK>	0.85	</backwardElastK>
-          <offset>	-0.092	</offset>
+          <offset>	0.000000	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VD_R1	</name>
           <forwardElastK>	1.7	</forwardElastK>
           <backwardElastK>	0.85	</backwardElastK>
-          <offset>	-0.092	</offset>
+          <offset>	0.000000	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
@@ -706,7 +700,7 @@
           <name>	Track_VT_R4	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
-          <offset>	-0.143	</offset>
+          <offset>	-0.142105	</offset>
           <leftSibling>	Track_VT_R3	</leftSibling>
           <rightSibling>	Track_VT_R5	</rightSibling>
         </node>
@@ -733,7 +727,7 @@
           <name>	Track_VT_R7	</name>
           <forwardElastK>	0.7	</forwardElastK>
           <backwardElastK>	1.9	</backwardElastK>
-          <offset>	-0.122	</offset>
+          <offset>	-0.100877	</offset>
           <leftSibling>	Track_VT_R6	</leftSibling>
           <rightSibling>	Track_VT_R8	</rightSibling>
         </node>
@@ -752,12 +746,12 @@
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.907352 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.908892 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/british/GB60_Covenanter/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB60_Covenanter/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.14087 1.60901	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.12633 1.63772	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -844,7 +838,7 @@
             <collisionModelClient>	vehicles/british/GB60_Covenanter/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
-            <tiling>	0.49 0.49 0.000000 0.000000	</tiling>
+            <tiling>	0.8 0.4 0.000000 0.000000	</tiling>
           </camouflage>
         </_2pdr_Gun_Mk_X>
         <_40mm_Pom_Pom>	shared	  <maxAmmo>	200	</maxAmmo>
@@ -929,13 +923,13 @@
         <collisionModelServer>	vehicles/british/GB60_Covenanter/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB60_Covenanter/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.015997 0.313288 0.654896	</gunPosition>
+      <gunPosition>	0.017223 0.331666 0.693142	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	0.778195 0.555815 0.243954	</rayStart>
           <rayEnd>	0.646807 0.415664 0.188323	</rayEnd>
           <rayUp>	-0.860548 0.478798 -0.17381	</rayUp>
-          <size>	0.25	</size>
+          <size>	0.21	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
@@ -943,19 +937,19 @@
           <rayStart>	-0.778195 0.555815 0.243954	</rayStart>
           <rayEnd>	-0.646807 0.415664 0.188323	</rayEnd>
           <rayUp>	0.860548 0.478798 -0.173811	</rayUp>
-          <size>	0.25	</size>
+          <size>	0.21	</size>
           <hideIfDamaged>	true	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	0.810673 0.43154 -0.551564	</rayStart>
-          <rayEnd>	0.739429 0.362129 -0.541242	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.66	</size>
+          <rayStart>	0.858298 0.393674 -0.539318	</rayStart>
+          <rayEnd>	0.788151 0.323226 -0.52852	</rayEnd>
+          <rayUp>	-0.616954 0.781644 0.0916502	</rayUp>
+          <size>	0.6	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.958 -0.059 1.036 0.000 0.497 0.303 1.000 0.667 0.232 0.495 0.362 0.500 0.085 0.100 0.000	</physicsShape>
+      <physicsShape>	0.992 -0.030 1.052 0.000 0.497 0.280 1.000 0.667 0.232 0.495 0.362 0.500 0.085 0.100 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
         <tiling>	0.955 0.955 0.000000 0.000000	</tiling>
@@ -1155,13 +1149,13 @@
         <collisionModelServer>	vehicles/british/GB60_Covenanter/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/british/GB60_Covenanter/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	-0.00968 0.313288 0.704896	</gunPosition>
+      <gunPosition>	0.000067 0.336664 0.699193	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	0.784533 0.548997 0.246141	</rayStart>
           <rayEnd>	0.653146 0.408846 0.190511	</rayEnd>
           <rayUp>	-0.860548 0.478798 -0.17381	</rayUp>
-          <size>	0.25	</size>
+          <size>	0.21	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
@@ -1169,19 +1163,19 @@
           <rayStart>	-0.784533 0.548997 0.246141	</rayStart>
           <rayEnd>	-0.653145 0.408845 0.190511	</rayEnd>
           <rayUp>	0.860548 0.478798 -0.17381	</rayUp>
-          <size>	0.25	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <size>	0.21	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <inscription>
-          <rayStart>	0.00344938 0.64321 -1.52022	</rayStart>
-          <rayEnd>	0.00344938 0.53552 -1.35169	</rayEnd>
-          <rayUp>	0.000000 1 0.000000	</rayUp>
-          <size>	0.64	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <rayStart>	0.918348 0.413175 -0.485024	</rayStart>
+          <rayEnd>	0.778056 0.272282 -0.463428	</rayEnd>
+          <rayUp>	-0.616955 0.781644 0.0916503	</rayUp>
+          <size>	0.536	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </inscription>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	0.932 -0.176 1.166 0.000 0.439 0.256 1.000 0.723 0.303 0.500 0.528 0.500 0.055 0.100 0.000	</physicsShape>
+      <physicsShape>	1.086 -0.030 1.052 0.000 0.497 0.280 1.000 0.667 0.232 0.495 0.362 0.500 0.085 0.100 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
     </Turret_2_GB60_Covenanter>
   </turrets0>

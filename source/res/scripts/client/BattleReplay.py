@@ -29,6 +29,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
+from soft_exception import SoftException
 import TriggersManager
 
 def _isVideoCameraCtrl(mode):
@@ -478,9 +479,6 @@ class BattleReplay(object):
     def getGunPitch(self):
         return self.__replayCtrl.gunPitch
 
-    def getGunReloadAmountLeft(self):
-        return self.__replayCtrl.getGunReloadAmountLeft()
-
     def setGunReloadTime(self, startTime, duration):
         self.__replayCtrl.setGunReloadTime(startTime, duration)
 
@@ -499,7 +497,7 @@ class BattleReplay(object):
 
     def getArenaPeriod(self):
         if not self.isPlaying:
-            raise UserWarning('Replay is not playing')
+            raise SoftException('Replay is not playing')
         ret = self.__replayCtrl.arenaPeriod
         if ret not in (constants.ARENA_PERIOD.IDLE,
          constants.ARENA_PERIOD.WAITING,
@@ -510,7 +508,7 @@ class BattleReplay(object):
 
     def getArenaLength(self):
         if not self.isPlaying:
-            raise UserWarning('Replay is not playing')
+            raise SoftException('Replay is not playing')
         return self.__replayCtrl.arenaLength
 
     def setPlayerVehicleID(self, vehicleID):
@@ -746,6 +744,13 @@ class BattleReplay(object):
         g_appLoader.onGUISpaceEntered += self.__onGUISpaceEntered
         g_appLoader.showLogin()
 
+    def setControllingCamera(self):
+        if self.isControllingCamera:
+            controlMode = self.getControlMode()
+            self.onControlModeChanged('arcade')
+            self.__replayCtrl.isControllingCamera = False
+            self.onControlModeChanged(controlMode)
+
     def __onGUISpaceEntered(self, spaceID):
         if spaceID != settings.GUI_GLOBAL_SPACE_ID.LOGIN:
             return
@@ -782,6 +787,9 @@ class BattleReplay(object):
 
     def setResultingFileName(self, fileName, overwriteExisting=False):
         self.__replayCtrl.setResultingFileName(fileName or '', overwriteExisting)
+
+    def timeWarp(self, time):
+        self.__timeWarp(time)
 
     def __showInfoMessage(self, msg, args=None):
         if not self.isTimeWarpInProgress:

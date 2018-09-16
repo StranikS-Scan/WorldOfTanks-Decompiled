@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/shared/money.py
 from collections import namedtuple
 from shared_utils import CONST_CONTAINER
+from soft_exception import SoftException
 
 class Currency(CONST_CONTAINER):
     CREDITS = 'credits'
@@ -83,9 +84,9 @@ class Money(object):
 
     def exchange(self, currency, toCurrency, rate, default=None):
         if currency == toCurrency:
-            raise UserWarning('Currencies are same: {}'.format(toCurrency))
+            raise SoftException('Currencies are same: {}'.format(toCurrency))
         if currency not in self.__values:
-            raise UserWarning('Current is not found: {}'.format(currency))
+            raise SoftException('Current is not found: {}'.format(currency))
         value = self.get(toCurrency, 0) + self.get(currency) * rate
         copy = self.__values.copy()
         self.__setValue(copy, currency, default)

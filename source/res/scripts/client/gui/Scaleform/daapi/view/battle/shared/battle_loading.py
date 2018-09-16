@@ -74,12 +74,15 @@ class BattleLoading(BaseBattleLoadingMeta, IArenaVehiclesController):
             BigWorld.wg_enableGUIBackground(False, True)
         super(BattleLoading, self)._disposeWithReloading()
 
+    def _getBattlesCount(self):
+        return self.lobbyContext.getBattlesCount()
+
     def _setTipsInfo(self):
         arenaDP = self._battleCtx.getArenaDP()
         battlesCount = DEFAULT_BATTLES_COUNT
         if not isBattleLoadingShowed():
             if self.lobbyContext.getBattlesCount() is not None:
-                battlesCount = self.lobbyContext.getBattlesCount()
+                battlesCount = self._getBattlesCount()
             classTag, vLvl, nation = arenaDP.getVehicleInfo().getTypeInfo()
             criteria = tips.getTipsCriteria(self._arenaVisitor)
             criteria.setBattleCount(battlesCount)

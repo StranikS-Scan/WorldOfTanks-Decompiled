@@ -9,8 +9,9 @@ import constants
 import PlayerEvents
 import MusicControllerWWISE
 from ReplayEvents import g_replayEvents
-from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_DEBUG
+from debug_utils import LOG_ERROR, LOG_WARNING, LOG_DEBUG
 from helpers import i18n
+from soft_exception import SoftException
 from vehicle_systems.tankStructure import TankPartNames
 ENABLE_LS = True
 ENABLE_ENGINE_N_TRACKS = True
@@ -61,19 +62,13 @@ class SoundModes(object):
 
         def getIsValid(self, soundModes):
             if self.__isValid is None:
-                self.__isValid = self.__validate(soundModes)
+                self.__isValid = True
+                for soundBankName, soundPath in self.wwbanksToBeLoaded:
+                    pathToCheck = soundPath if soundPath != '' else '%s/%s' % (SoundModes.MEDIA_PATH, soundBankName)
+                    if not ResMgr.isFile(pathToCheck):
+                        self.__isValid = False
+
             return self.__isValid
-
-        def __validate(self, soundModes):
-            prevMode = soundModes.currentMode
-            for soundBankName, soundPath in self.wwbanksToBeLoaded:
-                pathToCheck = soundPath if soundPath != '' else '%s/%s' % (SoundModes.MEDIA_PATH, soundBankName)
-                if not ResMgr.isFile(pathToCheck):
-                    return False
-
-            result = soundModes.setMode(self.name)
-            soundModes.setMode(prevMode)
-            return result
 
         def __repr__(self):
             return 'SoundModeDesc<name=%s; lang=%s; visible=%s>' % (self.name, self.voiceLanguage, not self.invisible)
@@ -177,21 +172,12 @@ class SoundModes(object):
                 yield SoundModes.NationalPresetDesc(nationalPresetSec)
 
     def setMode(self, modeName):
-        languageSet = False
-        try:
-            languageSet = self.__setMode(modeName)
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-
+        languageSet = self.__setMode(modeName)
         if not languageSet:
             defaultVoiceLanguage = ''
             if SoundModes.DEFAULT_MODE_NAME in self.__modes:
                 defaultVoiceLanguage = self.__modes[SoundModes.DEFAULT_MODE_NAME].voiceLanguage
-            try:
-                WWISE.setLanguage(defaultVoiceLanguage)
-            except Exception:
-                LOG_CURRENT_EXCEPTION()
-
+            WWISE.setLanguage(defaultVoiceLanguage)
             self.__currentMode = SoundModes.DEFAULT_MODE_NAME
         return languageSet
 
@@ -203,10 +189,7 @@ class SoundModes(object):
             return True
         self.__currentMode = modeName
         modeDesc = self.__modes[modeName]
-        languageSet = WWISE.setLanguage(modeDesc.voiceLanguage)
-        if not languageSet:
-            LOG_WARNING('Sound: Internal WWISE error in WWISE::setLanguage')
-            return False
+        WWISE.setLanguage(modeDesc.voiceLanguage)
         return True
 
     def setCurrentNation(self, nation, genderSwitch=CREW_GENDER_SWITCHES.DEFAULT):
@@ -416,7 +399,7 @@ class SoundGroups(object):
 
     def setEnableStatus(self, status):
         if status not in SOUND_ENABLE_STATUS_VALUES:
-            raise UserWarning('Status {} is out of range(3)'.format(status))
+            raise SoftException('Status {} is out of range(3)'.format(status))
         self.__enableStatus = status
         self.savePreferences()
 
@@ -499,12 +482,6 @@ class SoundGroups(object):
 
     def preloadSoundGroups(self, arenaName):
         MusicControllerWWISE.init(arenaName)
-
-    def loadSoundBank(self, name):
-        WWISE.WG_loadSoundBank(name)
-
-    def unLoadSoundBank(self, name):
-        WWISE.WG_unLoadSoundBank(name)
 
     def getSound3D(self, node, event):
         if DEBUG_TRACE_SOUND is True:
@@ -644,10 +621,6 @@ class SoundGroups(object):
 
     def setSwitch(self, group, switch):
         WWISE.WW_setSwitch(group, switch)
-
-
-def reloadSoundBanks():
-    pass
 
 
 def loadLightSoundsDB():

@@ -126,6 +126,7 @@ def getGuiServicesConfig(manager):
     from gui import shared
     from gui import sounds
     from gui import Scaleform as _sf
+    from gui import hangar_cameras
     from skeletons.gui.lobby_context import ILobbyContext
     manager.addConfig(shared.getSharedServices)
     manager.addConfig(game_control.getGameControllersConfig)
@@ -139,4 +140,5 @@ def getGuiServicesConfig(manager):
     manager.addConfig(goodies.getGoodiesCacheConfig)
     manager.addConfig(battle_results.getBattleResultsServiceConfig)
     manager.addConfig(customization.getCustomizationServiceConfig)
+    manager.addConfig(hangar_cameras.getHangarCamerasConfig)
     manager.addInstance(ILobbyContext, lobby_context.LobbyContext(), finalizer='clear')

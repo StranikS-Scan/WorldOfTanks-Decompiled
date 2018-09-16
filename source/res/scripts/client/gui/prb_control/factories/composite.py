@@ -6,6 +6,7 @@ from gui.prb_control.factories.PreQueueFactory import PreQueueFactory
 from gui.prb_control.factories.LegacyFactory import LegacyFactory
 from gui.prb_control.factories.UnitFactory import UnitFactory
 from gui.prb_control.settings import CTRL_ENTITY_TYPE, FUNCTIONAL_FLAG
+from soft_exception import SoftException
 _ORDER_TO_CREATE = (CTRL_ENTITY_TYPE.LEGACY, CTRL_ENTITY_TYPE.UNIT, CTRL_ENTITY_TYPE.PREQUEUE)
 
 class ControlFactoryComposite(ControlFactory):
@@ -46,7 +47,7 @@ class ControlFactoryComposite(ControlFactory):
         return
 
     def createLeaveCtx(self, flags=FUNCTIONAL_FLAG.UNDEFINED, entityType=0):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def createStateEntity(self, entity):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')

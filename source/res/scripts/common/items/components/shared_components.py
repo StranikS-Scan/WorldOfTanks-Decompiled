@@ -4,6 +4,7 @@ from collections import namedtuple
 from constants import IS_CLIENT, IS_WEB
 from items.components import component_constants
 from items.components import path_builder
+from soft_exception import SoftException
 if IS_CLIENT:
     from helpers import i18n
 elif IS_WEB:
@@ -14,7 +15,7 @@ else:
 
         @classmethod
         def makeString(cls, key):
-            raise EnvironmentError('Unexpected call "i18n.makeString"')
+            raise SoftException('Unexpected call "i18n.makeString"')
 
 
 __all__ = ('MaterialInfo', 'DEFAULT_MATERIAL_INFO', 'EmblemSlot', 'LodSettings', 'NodesAndGroups', 'Camouflage', 'DEFAULT_CAMOUFLAGE', 'SwingingSettings', 'I18nComponent', 'DeviceHealth', 'ModelStatesPaths')
@@ -137,5 +138,5 @@ class ModelStatesPaths(object):
     def getPathByStateName(self, stateName):
         path = getattr(self, stateName, None)
         if path is None:
-            raise ValueError('State {} is not found'.format(stateName))
+            raise SoftException('State {} is not found'.format(stateName))
         return path

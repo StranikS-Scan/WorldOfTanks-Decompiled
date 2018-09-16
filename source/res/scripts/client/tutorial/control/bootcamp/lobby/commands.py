@@ -2,24 +2,26 @@
 # Embedded file name: scripts/client/tutorial/control/bootcamp/lobby/commands.py
 from tutorial.loader import g_loader
 from tutorial.logger import LOG_ERROR
-from gui.shared import g_eventBus
-from gui.shared.event_bus import EVENT_BUS_SCOPE
-from gui.shared.events import TutorialEvent
+from gui.app_loader import g_appLoader
 
 def overrideHangarMenuButtons(buttonsListVarID=None):
-    g_eventBus.handleEvent(TutorialEvent(TutorialEvent.OVERRIDE_HANGAR_MENU_BUTTONS, targetID=_getListByVarID(buttonsListVarID)), scope=EVENT_BUS_SCOPE.LOBBY)
+    _getTutorialManager().overrideHangarMenuButtons(_getListByVarID(buttonsListVarID))
 
 
 def overrideHeaderMenuButtons(buttonsListVarID=None):
-    g_eventBus.handleEvent(TutorialEvent(TutorialEvent.OVERRIDE_HEADER_MENU_BUTTONS, targetID=_getListByVarID(buttonsListVarID)), scope=EVENT_BUS_SCOPE.LOBBY)
+    _getTutorialManager().overrideHeaderMenuButtons(_getListByVarID(buttonsListVarID))
 
 
 def setHangarHeaderEnabled(enabled):
-    g_eventBus.handleEvent(TutorialEvent(TutorialEvent.SET_HANGAR_HEADER_ENABLED, targetID=enabled), scope=EVENT_BUS_SCOPE.LOBBY)
+    _getTutorialManager().setHangarHeaderEnabled(enabled)
 
 
 def overrideBattleSelectorHint(overrideType=None):
-    g_eventBus.handleEvent(TutorialEvent(TutorialEvent.OVERRIDE_BATTLE_SELECTOR_HINT, targetID=overrideType), scope=EVENT_BUS_SCOPE.LOBBY)
+    _getTutorialManager().overrideBattleSelectorHint(overrideType)
+
+
+def _getTutorialManager():
+    return g_appLoader.getApp().tutorialManager
 
 
 def _getListByVarID(varID):

@@ -9,6 +9,7 @@ from ids_generators import SequenceIDGenerator
 from messenger import g_settings
 from messenger.proto.xmpp.xmpp_constants import XMPP_MUC_CHANNEL_TYPE
 from skeletons.connection_mgr import IConnectionManager
+from soft_exception import SoftException
 
 class BareJID(object):
     __slots__ = ('_node', '_domain')
@@ -35,7 +36,7 @@ class BareJID(object):
         elif isinstance(jid, BareJID):
             self._node, self._domain, tail = jid.getNode(), jid.getDomain(), jid.getResource()
         else:
-            raise ValueError('JID can be specified as string or as instance of JID class.')
+            raise SoftException('JID can be specified as string or as instance of JID class.')
         return tail
 
     def getBareJID(self):
@@ -58,7 +59,7 @@ class BareJID(object):
 
     def setDomain(self, domain):
         if not domain:
-            raise UserWarning('Domain no empty')
+            raise SoftException('Domain no empty')
         self._domain = domain.lower()
 
     def getResource(self):

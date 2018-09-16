@@ -3,8 +3,9 @@
 import stringprep
 import types
 import unicodedata
+from soft_exception import SoftException
 
-class XmppStringPrepError(StandardError):
+class XmppStringPrepError(SoftException):
     pass
 
 

@@ -13,6 +13,11 @@ class MARKER_SYMBOL_NAME(object):
     SAFE_ZONE_MARKER = 'SafeZoneIndicatorUI'
     STATIC_OBJECT_MARKER = 'StaticObjectMarker'
     STATIC_ARTY_MARKER = 'StaticArtyMarkerUI'
+    SECTOR_BASE_TYPE = 'SectorBaseMarkerUI'
+    HEADQUARTER_TYPE = 'HeadquarterMarkerUI'
+    STEP_REPAIR_MARKER_TYPE = 'ResupplyMarkerUI'
+    WAYPOINT_MARKER = 'SectorWaypointMarkerUI'
+    SECTOR_WARNING_MARKER = 'SectorWarningMarkerUI'
 
 
 class DAMAGE_TYPE(object):

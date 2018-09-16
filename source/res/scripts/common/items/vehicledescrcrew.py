@@ -3,6 +3,7 @@
 import tankmen
 from debug_utils import *
 from qualifiers import CREW_ROLE
+from soft_exception import SoftException
 _DO_DEBUG_LOG = False
 
 class VehicleDescrCrew(object):
@@ -25,6 +26,7 @@ class VehicleDescrCrew(object):
         self._commanderIdx = skills['commander'][0][0]
         self.__factorsDirty = True
         self._levelIncreaseByVehicle = 0.0
+        self._crewRolesFactor = 1.0
         skillData = skills.get('brotherhood')
         if skillData is None or len(skillData) != len(crewCompactDescrs):
             self._levelIncreaseByBrotherhood = 0.0
@@ -92,6 +94,10 @@ class VehicleDescrCrew(object):
     def onCollectFactors(self, factors):
         if self._levelIncreaseByVehicle != factors['crewLevelIncrease']:
             self._levelIncreaseByVehicle = factors['crewLevelIncrease']
+            self._factorsDirty = True
+        crewRolesFactor = factors['crewRolesFactor']
+        if self._crewRolesFactor != crewRolesFactor:
+            self._crewRolesFactor = crewRolesFactor
             self._factorsDirty = True
         if self._factorsDirty:
             self._buildFactors()
@@ -209,37 +215,57 @@ class VehicleDescrCrew(object):
         return
 
     def _updateCommanderFactors(self, factor, baseAvgLevel):
+        factor *= self._crewRolesFactor
         self._factors['circularVisionRadius'] = factor
         if _DO_DEBUG_LOG:
-            LOG_DEBUG("Factor/baseAvgLevel of skill '%s': (%s, %s)" % ('commander', factor, baseAvgLevel))
+            LOG_DEBUG("Factor/baseAvgLevel/crewRolesFactor of skill '%s': (%s, %s, %s)" % ('commander',
+             factor,
+             baseAvgLevel,
+             self._crewRolesFactor))
 
     def _updateRadiomanFactors(self, factor, baseAvgLevel):
+        factor *= self._crewRolesFactor
         self._factors['radio/distance'] = factor
         if _DO_DEBUG_LOG:
-            LOG_DEBUG("Factor/baseAvgLevel of skill '%s': (%s, %s)" % ('radioman', factor, baseAvgLevel))
+            LOG_DEBUG("Factor/baseAvgLevel/crewRolesFactor of skill '%s': (%s, %s, %s)" % ('radioman',
+             factor,
+             baseAvgLevel,
+             self._crewRolesFactor))
 
     def _updateDriverFactors(self, factor, baseAvgLevel):
+        factor *= self._crewRolesFactor
         factor = 1.0 / factor
         r = self._terrainResistanceFactors
         r[0] *= factor
         r[1] *= factor
         r[2] *= factor
         if _DO_DEBUG_LOG:
-            LOG_DEBUG("Factor/baseAvgLevel of skill '%s': (%s, %s)" % ('driver', factor, baseAvgLevel))
+            LOG_DEBUG("Factor/baseAvgLevel/crewRolesFactor of skill '%s': (%s, %s, %s)" % ('driver',
+             factor,
+             baseAvgLevel,
+             self._crewRolesFactor))
 
     def _updateLoaderFactors(self, factor, baseAvgLevel):
+        factor *= self._crewRolesFactor
         self._factors['gun/reloadTime'] = 1.0 / factor
         if _DO_DEBUG_LOG:
-            LOG_DEBUG("Factor/baseAvgLevel of skill '%s': (%s, %s)" % ('loader', factor, baseAvgLevel))
+            LOG_DEBUG("Factor/baseAvgLevel/crewRolesFactor of skill '%s': (%s, %s, %s)" % ('loader',
+             factor,
+             baseAvgLevel,
+             self._crewRolesFactor))
 
     def _updateGunnerFactors(self, factor, baseAvgLevel):
+        factor *= self._crewRolesFactor
         factors = self._factors
         factors['turret/rotationSpeed'] = factor
         factors['gun/rotationSpeed'] = factor
         factors['gun/aimingTime'] = 1.0 / factor
         self._shotDispFactor = 1.0 / factor
         if _DO_DEBUG_LOG:
-            LOG_DEBUG("Factor/baseAvgLevel of skill '%s': (%s, %s)" % ('gunner', factor, baseAvgLevel))
+            LOG_DEBUG("Factor/baseAvgLevel/crewRolesFactor of skill '%s': (%s, %s, %s)" % ('gunner',
+             factor,
+             baseAvgLevel,
+             self._crewRolesFactor))
 
     def _updateRepairFactors(self, factor, baseAvgLevel):
         self._factors['repairSpeed'] = factor
@@ -345,15 +371,15 @@ class VehicleDescrCrew(object):
         MAX_SKILL_LEVEL = tankmen.MAX_SKILL_LEVEL
         PERKS = tankmen.PERKS
         if len(crewCompactDescrs) != len(crewRoles):
-            raise Exception(makeError('wrong number or tankmen'))
+            raise SoftException(makeError('wrong number or tankmen'))
         res = {}
         idxInCrew = 0
         for compactDescr, roles in zip(crewCompactDescrs, crewRoles):
             descr = tankmen.TankmanDescr(compactDescr, True)
             if descr.nationID != vehicleNationID:
-                raise Exception(makeError('wrong tankman nation'))
+                raise SoftException(makeError('wrong tankman nation'))
             if descr.role != roles[0]:
-                raise Exception(makeError('wrong tankman role'))
+                raise SoftException(makeError('wrong tankman role'))
             factor, addition = descr.efficiencyOnVehicle(vehicleDescr)
             activeSkills = set()
             level = descr.roleLevel * factor + addition

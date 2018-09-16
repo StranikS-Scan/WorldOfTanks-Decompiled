@@ -86,6 +86,22 @@ class IDynamicControllersLocator(object):
         raise NotImplementedError
 
     @property
+    def progressTimer(self):
+        raise NotImplementedError
+
+    @property
+    def maps(self):
+        raise NotImplementedError
+
+    @property
+    def spectator(self):
+        raise NotImplementedError
+
+    @property
+    def missions(self):
+        raise NotImplementedError
+
+    @property
     def respawn(self):
         raise NotImplementedError
 
@@ -459,6 +475,9 @@ class IBattleContext(object):
     def getArenaScreenIcon(self):
         raise NotImplementedError
 
+    def getArenaRespawnIcon(self):
+        raise NotImplementedError
+
     def setLastArenaWinStatus(self, winStatus):
         raise NotImplementedError
 
@@ -560,7 +579,7 @@ class IBattleSessionProvider(object):
     def updateAvatarPrivateStats(self, stats):
         raise NotImplementedError
 
-    def addHitDirection(self, hitDirYaw, attackerID, damage, isBlocked, critFlags, isHighExplosive, damagedID):
+    def addHitDirection(self, hitDirYaw, attackerID, damage, isBlocked, critFlags, isHighExplosive, damagedID, attackReasonID):
         raise NotImplementedError
 
     def startVehicleVisual(self, vProxy, isImmediate=False):

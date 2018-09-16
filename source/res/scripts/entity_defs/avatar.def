@@ -8,7 +8,11 @@
     <Interface>	AvatarClientProxy	</Interface>
     <Interface>	AvatarObserver	</Interface>
     <Interface>	TeamHealthBar_Avatar	</Interface>
+    <Interface>	ProtectionZoneController_Avatar	</Interface>
+    <Interface>	RecoveryMechanic_Avatar	</Interface>
+    <Interface>	DestructibleEntity_Avatar	</Interface>
     <Interface>	RespawnController_Avatar	</Interface>
+    <Interface>	AvatarEpic	</Interface>
   </Implements>
   <Volatile>
     <position></position>
@@ -113,6 +117,10 @@
       </Type>
       <Flags>	CELL_PRIVATE	</Flags>
     </ammo>
+    <ammoViews>
+      <Type>	AVATAR_AMMO_VIEWS	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </ammoViews>
     <cp>
       <Type>	PYTHON	</Type>
       <Flags>	CELL_PRIVATE	</Flags>
@@ -157,6 +165,7 @@
     <_entityExtraUserData></_entityExtraUserData>
     <_extras></_extras>
     <_avatarClientProxy></_avatarClientProxy>
+    <_components></_components>
   </TempProperties>
   <ClientMethods>
     <update>
@@ -202,6 +211,7 @@
       <Arg>	INT32	</Arg>
       <Arg>	UINT16	</Arg>
       <Arg>	UINT8	</Arg>
+      <Arg>	INT16	</Arg>
       <Arg>	INT16	</Arg>
     </updateVehicleAmmo>
     <onSwitchViewpoint>
@@ -260,6 +270,7 @@
       <Arg>	BOOL	</Arg>
       <Arg>	BOOL	</Arg>
       <Arg>	OBJECT_ID	</Arg>
+      <Arg>	UINT8	</Arg>
     </showOwnVehicleHitDirection>
     <showVehicleDamageInfo>
       <Arg>	OBJECT_ID	</Arg>
@@ -279,7 +290,7 @@
       <Arg>	ARRAY	  <of>	UINT64	</of>
       </Arg>
     </showShotResults>
-    <updateBomberTrajectory>
+    <updatePlaneTrajectory>
       <Arg>	UINT16	</Arg>
       <Arg>	UINT8	</Arg>
       <Arg>	FLOAT64	</Arg>
@@ -289,7 +300,7 @@
       <Arg>	VECTOR3	</Arg>
       <Arg>	VECTOR2	</Arg>
       <Arg>	BOOL	</Arg>
-    </updateBomberTrajectory>
+    </updatePlaneTrajectory>
     <showHittingArea>
       <Arg>	UINT16	</Arg>
       <Arg>	VECTOR3	</Arg>
@@ -400,6 +411,14 @@
       <Arg>	VECTOR3	</Arg>
       <Arg>	FLOAT32	</Arg>
     </onCollisionWithVehicle>
+    <onSmoke>
+      <Arg>	ARRAY	  <of>	SMOKE_INFO	</of>
+      </Arg>
+    </onSmoke>
+    <onCombatEquipmentShotLaunched>
+      <Arg>	UINT16	</Arg>
+      <Arg>	VECTOR3	</Arg>
+    </onCombatEquipmentShotLaunched>
   </ClientMethods>
   <CellMethods>
     <autoAim>
@@ -524,9 +543,9 @@
       <Arg>	UINT8	</Arg>
       <Arg>	FLOAT32	</Arg>
     </grantRagePoints>
-    <receiveAttackResults>
+    <harm_receiveAttackResults>
       <Arg>	ATTACK_RESULTS	</Arg>
-    </receiveAttackResults>
+    </harm_receiveAttackResults>
     <activateGasAttack>
       <Arg>	FLOAT32	</Arg>
     </activateGasAttack>
@@ -537,6 +556,7 @@
       <Arg>	UINT64	</Arg>
       <Arg>	UINT8	</Arg>
     </updateOwnVehicleAuxPhysicsDataAndGear>
+    <sendAmmoStatusToClient></sendAmmoStatusToClient>
   </CellMethods>
   <BaseMethods>
     <kickSelf>
@@ -655,6 +675,7 @@
       <Arg>	INT8	</Arg>
       <Arg>	UINT8	</Arg>
     </onRoundFinished>
+    <leaveDisconnected></leaveDisconnected>
     <setVehicleDevelopmentFeature>
       <Exposed></Exposed>
       <Arg>	OBJECT_ID	</Arg>

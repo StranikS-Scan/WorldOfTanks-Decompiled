@@ -1,6 +1,6 @@
 <hk_config.xml>
-  <preset>
-    <name>	default	</name>
+  <physics_preset>
+    <name>	physics	</name>
     <decomposition>
       <primaryMethod>	0	</primaryMethod>
       <reduceMethod>	2	</reduceMethod>
@@ -31,14 +31,20 @@
     </decomposition>
     <common>
       <dynamicDecompositionMethod>	2	</dynamicDecompositionMethod>
-      <dashHeight>	1.000000	</dashHeight>
-      <dashYOffset>	0.500000	</dashYOffset>
-      <makeHullDash>	false	</makeHullDash>
-      <makeTurretDash>	false	</makeTurretDash>
-      <tankDetailsCutOffRadius>	0.020000	</tankDetailsCutOffRadius>
-      <tankDetailsLOD>	3	</tankDetailsLOD>
       <exportMethod>	0	</exportMethod>
       <maxDecompositionTimeout>	60	</maxDecompositionTimeout>
+      <makeTankDetails>	true	</makeTankDetails>
     </common>
-  </preset>
+  </physics_preset>
+  <collision_preset>
+    <name>	collision	</name>
+    <common>
+      <dynamicDecompositionMethod>	2	</dynamicDecompositionMethod>
+      <exportMethod>	1	</exportMethod>
+      <maxDecompositionTimeout>	60	</maxDecompositionTimeout>
+      <makeTankDetails>	false	</makeTankDetails>
+    </common>
+  </collision_preset>
+  <numModelsToLoadInOneBlock>	100	</numModelsToLoadInOneBlock>
+  <numModelsToLoadInOneBlock>	100	</numModelsToLoadInOneBlock>
 </hk_config.xml>

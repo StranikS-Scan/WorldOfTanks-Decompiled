@@ -19,6 +19,7 @@ from items.vehicles import makeIntCompactDescrByID
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from items.components.c11n_constants import SeasonType
 
 class _ServiceItemShopMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -71,8 +72,12 @@ class _ServiceHelpersMixin(object):
         return g_currentVehicle.item.getCustomOutfit(season)
 
     def getCurrentStyle(self):
-        outfit = g_currentVehicle.item.getStyledOutfit(1)
+        outfit = g_currentVehicle.item.getStyledOutfit(SeasonType.WINTER)
         return self.getItemByID(GUI_ITEM_TYPE.STYLE, outfit.id) if outfit else None
+
+    def isCurrentStyleInstalled(self):
+        outfit = g_currentVehicle.item.getStyledOutfit(SeasonType.WINTER)
+        return outfit and outfit.isActive()
 
     @process('buyItem')
     def buyItems(self, item, count, vehicle=None):
@@ -134,14 +139,24 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self._eventsManager.clear()
 
     def startHighlighter(self, mode=HighlightingMode.PAINT_REGIONS):
-        entity = g_hangarSpace.getVehicleEntity()
         self._mode = mode
+        isLoaded = False
+        entity = g_hangarSpace.getVehicleEntity()
+        if entity and entity.appearance:
+            entity.appearance.loadState.subscribe(self.resumeHighlighter, self.suspendHighlighter)
+            isLoaded = entity.appearance.isLoaded()
+        if not isLoaded:
+            self._needHelperRestart = True
+            return
         if self._helper:
             self._helper.setSelectionMode(self._mode)
         else:
             self._helper = BigWorld.PyCustomizationHelper(entity, self._mode, self.__onRegionHighlighted)
 
     def stopHighlighter(self):
+        entity = g_hangarSpace.getVehicleEntity()
+        if entity and entity.appearance:
+            entity.appearance.loadState.unsubscribe(self.resumeHighlighter, self.suspendHighlighter)
         self._helper = None
         self._needHelperRestart = False
         self._anchorPositions = None

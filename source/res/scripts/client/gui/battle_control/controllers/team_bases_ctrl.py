@@ -4,6 +4,8 @@ from collections import defaultdict
 import BattleReplay
 import BigWorld
 import SoundGroups
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 from constants import TEAMS_IN_ARENA
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.battle_control.arena_info.interfaces import ITeamsBasesController
@@ -17,7 +19,8 @@ _UPDATE_POINTS_DELAY = 1.0
 _ENEMY_OFFSET_DISABLED_BY_GAMEPLAY = ('assault',
  'assault2',
  'domination',
- 'domination30x30')
+ 'domination30x30',
+ 'epic')
 
 def makeClientTeamBaseID(team, baseID):
     if baseID is None:
@@ -47,6 +50,9 @@ class ITeamBasesListener(object):
     def stopTeamBaseCapturing(self, clientID, points):
         pass
 
+    def blockTeamBaseCapturing(self, clientID, points):
+        pass
+
     def setTeamBaseCaptured(self, clientID, playerTeam):
         pass
 
@@ -61,6 +67,7 @@ class ITeamBasesListener(object):
 
 
 class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController):
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
     __slots__ = ('__battleCtx', '__arenaVisitor', '__clientIDs', '__points', '__sounds', '__callbackIDs', '__snap', '__captured')
 
     def __init__(self):
@@ -81,8 +88,12 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
     def startControl(self, battleCtx, arenaVisitor):
         self.__battleCtx = battleCtx
         self.__arenaVisitor = arenaVisitor
+        feedback = self.sessionProvider.shared.feedback
+        if feedback is not None:
+            feedback.onRoundFinished += self.__onRoundFinished
         g_playerEvents.onTeamChanged += self.__onTeamChanged
         g_playerEvents.onRoundFinished += self.__onRoundFinished
+        return
 
     def stopControl(self):
         while self.__clientIDs:
@@ -98,6 +109,9 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
         self.__points.clear()
         self.__sounds.clear()
         self.__snap.clear()
+        feedback = self.sessionProvider.shared.feedback
+        if feedback is not None:
+            feedback.onRoundFinished -= self.__onRoundFinished
         g_playerEvents.onTeamChanged -= self.__onTeamChanged
         g_playerEvents.onRoundFinished -= self.__onRoundFinished
         return
@@ -148,7 +162,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
          timeLeft,
          invadersCnt,
          capturingStopped)
-        if not points:
+        if self._teamBaseLeft(points, invadersCnt):
             if clientID in self.__clientIDs:
                 if not invadersCnt:
                     self.__clearUpdateCallback(clientID)
@@ -164,13 +178,11 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
             if clientID in self.__clientIDs:
                 if capturingStopped:
                     for viewCmp in self._viewComponents:
-                        viewCmp.stopTeamBaseCapturing(clientID, points)
+                        viewCmp.blockTeamBaseCapturing(clientID, points)
 
             else:
                 self.__clientIDs.add(clientID)
-                for viewCmp in self._viewComponents:
-                    viewCmp.addCapturingTeamBase(clientID, playerTeam, points, self._getProgressRate(), timeLeft, invadersCnt, capturingStopped)
-
+                self._addCapturingTeamBase(clientID, playerTeam, points, timeLeft, invadersCnt, capturingStopped)
                 self.__addUpdateCallback(clientID)
             if not capturingStopped:
                 self.__playCaptureSound(playerTeam, baseTeam)
@@ -203,6 +215,29 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
                 viewCmp.removeTeamsBases()
 
         self.__stopCaptureSounds()
+
+    def _teamBaseLeft(self, points, invadersCnt):
+        return not points
+
+    def _removeBarEntry(self, clientID, baseTeam):
+        self.__clientIDs.remove(clientID)
+        self.__stopCaptureSound(baseTeam)
+
+    def _containsClientID(self, clientID):
+        return clientID in self.__clientIDs
+
+    def _getPoints(self, clientID):
+        return self.__points[clientID]
+
+    def _getSnapDictForClientID(self, clientID):
+        return self.__snap[clientID]
+
+    def _setSnapForClientID(self, clientID, points, rate, timeLeft):
+        self.__snap[clientID] = (points, rate, timeLeft)
+
+    def _addCapturingTeamBase(self, clientID, playerTeam, points, timeLeft, invadersCnt, capturingStopped):
+        for viewCmp in self._viewComponents:
+            viewCmp.addCapturingTeamBase(clientID, playerTeam, points, self._getProgressRate(), timeLeft, invadersCnt, capturingStopped)
 
     def __onTeamChanged(self, teamID):
         for clientID in self.__clientIDs:
@@ -253,10 +288,12 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
         for team in teams:
             self.__stopCaptureSound(team)
 
-    def __updatePoints(self, clientID):
+    def _updatePoints(self, clientID):
         if clientID not in self.__clientIDs:
             return
-        points, timeLeft, invadersCnt, _ = self.__points[clientID]
+        points, timeLeft, invadersCnt, stopped = self.__points[clientID]
+        if stopped:
+            return
         rate = self._getProgressRate()
         if self._viewComponents and self.__snap[clientID] != (points, rate, timeLeft) and points > 0:
             self.__snap[clientID] = (points, rate, timeLeft)
@@ -265,7 +302,7 @@ class BattleTeamsBasesController(ITeamsBasesController, ViewComponentsController
 
     def __tickToUpdatePoints(self, clientID):
         self.__callbackIDs.pop(clientID, None)
-        self.__updatePoints(clientID)
+        self._updatePoints(clientID)
         self.__addUpdateCallback(clientID)
         return
 

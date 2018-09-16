@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/ScopeTemplates.py
+from soft_exception import SoftException
 from gui.Scaleform.framework import ViewTypes
 
 class SCOPE_TYPE(object):
@@ -25,7 +26,7 @@ class SimpleScope(object):
         self.__dependencedScopes = []
         self._setParentScope(parentScope)
         if self.__scopeType is None:
-            raise Exception('Scope for %s can not be None!' % str(self))
+            raise SoftException('Scope for %s can not be None!' % str(self))
         if self.__parentScope is not None:
             self.__parentScope.addDependencedScope(self)
         return
@@ -35,7 +36,7 @@ class SimpleScope(object):
 
     def _setParentScope(self, parentScope):
         if self.__parentScope is not None:
-            raise Exception('parent scope can be set at one time only!')
+            raise SoftException('parent scope can be set at one time only!')
         self.__parentScope = parentScope
         if self.__parentScope is not None:
             self.__parentScope.addDependencedScope(self)
@@ -71,16 +72,16 @@ class MultipleScope(SimpleScope):
 
     def __init__(self, scopeType, parentScopes):
         if not parentScopes:
-            raise Exception('parentScopes list can not be empty')
+            raise SoftException('parentScopes list can not be empty')
         if len(parentScopes) == 1:
-            raise Exception('MultipleScope can not have an only one parent')
+            raise SoftException('MultipleScope can not have an only one parent')
         super(MultipleScope, self).__init__(scopeType, parentScopes[0])
         i = 1
         while i < len(parentScopes):
             if parentScopes[i] is not None:
                 parentScopes[i].addDependencedScope(self)
             else:
-                raise Exception('One of parents is None!')
+                raise SoftException('One of parents is None!')
             i += 1
 
         return

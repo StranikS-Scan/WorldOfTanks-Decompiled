@@ -9,11 +9,12 @@ from constants import EQUIPMENT_STAGES
 from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
 from gui import TANKMEN_ROLES_ORDER_DICT
+from gui.Scaleform.daapi.view.battle.shared.timers_common import PythonTimer
 from gui.Scaleform.daapi.view.meta.ConsumablesPanelMeta import ConsumablesPanelMeta
 from gui.Scaleform.genConsts.CONSUMABLES_PANEL_SETTINGS import CONSUMABLES_PANEL_SETTINGS
 from gui.Scaleform.locale.INGAME_GUI import INGAME_GUI
 from gui.Scaleform.managers.battle_input import BattleGUIKeyHandler
-from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM, GUN_RELOADING_VALUE_TYPE
+from gui.battle_control.battle_constants import VEHICLE_DEVICE_IN_COMPLEX_ITEM
 from gui.battle_control.battle_constants import VEHICLE_VIEW_STATE, DEVICE_STATE_DESTROYED
 from gui.battle_control.controllers.consumables.equipment_ctrl import IgnoreEntitySelection
 from gui.battle_control.controllers.consumables.equipment_ctrl import NeedEntitySelection, InCooldownError
@@ -57,6 +58,37 @@ def _isEquipmentAvailableToUse(eq):
     return eq.isAvailableToUse
 
 
+class _PythonReloadTicker(PythonTimer):
+
+    def __init__(self, panel):
+        super(_PythonReloadTicker, self).__init__(panel, 0, 0, 0, 0, interval=0.1)
+        self.__index = 0
+
+    def _hideView(self):
+        pass
+
+    def _showView(self, isBubble):
+        pass
+
+    def startAnimation(self, index, actualTime, baseTime):
+        self.__index = index
+        self._stopTick()
+        if actualTime > 0:
+            self._totalTime = baseTime
+            self._finishTime = BigWorld.serverTime() + actualTime
+            self.show()
+
+    def _setViewSnapshot(self, timeLeft):
+        if self._totalTime > 0:
+            timeGone = self._totalTime - timeLeft
+            progressInPercents = float(timeGone) / self._totalTime * 100
+            self._panel.as_setCoolDownPosAsPercentS(self.__index, progressInPercents)
+
+    def _stopTick(self):
+        super(_PythonReloadTicker, self)._stopTick()
+        self._panel.as_setCoolDownPosAsPercentS(self.__index, 100.0)
+
+
 class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)
     lobbyContext = dependency.descriptor(ILobbyContext)
@@ -66,8 +98,12 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         self.__cds = [None] * PANEL_MAX_LENGTH
         self.__mask = 0
         self.__keys = {}
-        self.__currentOrderIdx = -1
+        self.__currentActivatedSlotIdx = -1
         self.__equipmentsGlowCallbacks = {}
+        if self.sessionProvider.isReplayPlaying:
+            self.__reloadTicker = _PythonReloadTicker(self)
+        else:
+            self.__reloadTicker = None
         return
 
     def onClickedToSlot(self, bwKey):
@@ -107,12 +143,12 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
     def _addShellSlot(self, idx, keyCode, sfKeyCode, quantity, clipCapacity, shellIconPath, noShellIconPath, tooltipText):
         self.as_addShellSlotS(idx, keyCode, sfKeyCode, quantity, clipCapacity, shellIconPath, noShellIconPath, tooltipText)
 
-    def _showEquipmentGlow(self, equipmentIndex):
+    def _showEquipmentGlow(self, equipmentIndex, glowType=CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN):
         if equipmentIndex in self.__equipmentsGlowCallbacks:
             BigWorld.cancelCallback(self.__equipmentsGlowCallbacks[equipmentIndex])
             del self.__equipmentsGlowCallbacks[equipmentIndex]
         else:
-            self.as_setGlowS(equipmentIndex, False)
+            self.as_setGlowS(equipmentIndex, glowID=glowType)
         self.__equipmentsGlowCallbacks[equipmentIndex] = BigWorld.callback(_EQUIPMENT_GLOW_TIME, partial(self.__hideEquipmentGlowCallback, equipmentIndex))
 
     def __addListeners(self):
@@ -348,11 +384,10 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
     def __onGunReloadTimeSet(self, currShellCD, state):
         if currShellCD in self.__cds:
             index = self.__cds.index(currShellCD)
-            valueType = state.getValueType()
-            if valueType == GUN_RELOADING_VALUE_TYPE.TIME:
+            if self.__reloadTicker:
+                self.__reloadTicker.startAnimation(index, state.getActualValue(), state.getBaseValue())
+            else:
                 self.as_setCoolDownTimeS(index, state.getActualValue(), state.getBaseValue(), state.getTimePassed(), not state.isReloadingFinished())
-            elif valueType == GUN_RELOADING_VALUE_TYPE.PERCENT:
-                self.as_setCoolDownPosAsPercentS(index, state.getActualValue())
         else:
             LOG_ERROR('Ammo is not found in panel', currShellCD, self.__cds)
 
@@ -362,9 +397,10 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
     def __onEquipmentAdded(self, intCD, item):
         if item:
             if item.isAvatar():
-                self.__addOrderSlot(intCD, item)
+                idx = self.__genNextIdx(ORDERS_FULL_MASK, ORDERS_START_IDX)
             else:
-                self.__addEquipmentSlot(intCD, item)
+                idx = self.__genNextIdx(EQUIPMENT_FULL_MASK, EQUIPMENT_START_IDX)
+            self.__addEquipmentSlot(intCD, idx, item)
         else:
             idx = self.__genNextIdx(EQUIPMENT_FULL_MASK + ORDERS_FULL_MASK, EQUIPMENT_START_IDX)
             self.__cds[idx] = intCD
@@ -373,9 +409,6 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             snap = self.__cds[EQUIPMENT_START_IDX:EQUIPMENT_END_IDX + 1]
             if snap == EMPTY_EQUIPMENTS_SLICE:
                 self.as_showEquipmentSlotsS(False)
-            snap = self.__cds[ORDERS_START_IDX:ORDERS_END_IDX + 1]
-            if snap == EMPTY_ORDERS_SLICE:
-                self.as_showOrdersSlotsS(False)
         return
 
     def __onEquipmentUpdated(self, intCD, item):
@@ -384,20 +417,22 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             quantity = item.getQuantity()
             currentTime = item.getTimeRemaining()
             maxTime = item.getTotalTime()
-            if item.isAvatar():
-                self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime)
-                self.__updateOrderSlot(idx, item)
-                self.onPopUpClosed()
-            else:
-                self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime)
-                self.onPopUpClosed()
-                if item.isReusable:
-                    if self.__canApplyingGlowEquipment(item):
-                        self._showEquipmentGlow(idx)
-                    elif item.becomeReady:
-                        self.as_setGlowS(idx, isGreen=True)
-                    elif idx in self.__equipmentsGlowCallbacks:
-                        self.__clearEquipmentGlow(idx)
+            self.as_setItemTimeQuantityInSlotS(idx, quantity, currentTime, maxTime)
+            self.onPopUpClosed()
+            if item.isReusable or item.isAvatar() and item.getStage() != EQUIPMENT_STAGES.PREPARING:
+                glowType = CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN_SPECIAL if item.isAvatar() else CONSUMABLES_PANEL_SETTINGS.GLOW_ID_GREEN
+                if self.__canApplyingGlowEquipment(item):
+                    self._showEquipmentGlow(idx, glowType)
+                elif item.becomeReady:
+                    self.as_setGlowS(idx, glowID=glowType)
+                elif idx in self.__equipmentsGlowCallbacks:
+                    self.__clearEquipmentGlow(idx)
+            if item.getStage() == EQUIPMENT_STAGES.PREPARING:
+                self.__currentActivatedSlotIdx = idx
+                self.as_setEquipmentActivatedS(idx)
+            elif item.getStage() != EQUIPMENT_STAGES.PREPARING and self.__currentActivatedSlotIdx == idx:
+                self.__currentActivatedSlotIdx = -1
+                self.as_setEquipmentActivatedS(-1)
         else:
             LOG_ERROR('Equipment is not found in panel', intCD, self.__cds)
 
@@ -412,8 +447,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         if intCD in self.__cds:
             self.as_setCoolDownTimeSnapshotS(self.__cds.index(intCD), timeLeft, isBaseTime, isFlash)
 
-    def __addEquipmentSlot(self, intCD, item):
-        idx = self.__genNextIdx(EQUIPMENT_FULL_MASK, EQUIPMENT_START_IDX)
+    def __addEquipmentSlot(self, intCD, idx, item):
         self.__cds[idx] = intCD
         descriptor = item.getDescriptor()
         iconPath = self._getEquipmentIconPath() % descriptor.icon[0]
@@ -437,30 +471,6 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             bwKey, sfKey = (None, None)
         self.as_addEquipmentSlotS(idx, bwKey, sfKey, tag, item.getQuantity(), item.getTimeRemaining(), item.getTotalTime(), iconPath, toolTip)
         return None
-
-    def __addOrderSlot(self, intCD, item):
-        idx = self.__genNextIdx(ORDERS_FULL_MASK, ORDERS_START_IDX)
-        self.__cds[idx] = intCD
-        descriptor = item.getDescriptor()
-        iconPath = self._getEquipmentIconPath() % descriptor.icon[0]
-        toolTip = TOOLTIP_FORMAT.format(descriptor.userString, descriptor.description)
-        bwKey, sfKey = self.__genKey(idx)
-        self.__keys[bwKey] = partial(self.__handleEquipmentPressed, intCD)
-        maxTime = item.getTotalTime()
-        self.as_addOrderSlotS(idx, bwKey, sfKey, item.getQuantity(), iconPath, toolTip, item.getStage() in (EQUIPMENT_STAGES.READY, EQUIPMENT_STAGES.PREPARING), item.isQuantityUsed(), item.getTimeRemaining(), maxTime)
-        self.__updateOrderSlot(idx, item)
-
-    def __updateOrderSlot(self, idx, item):
-        if item.isReady:
-            self.as_setOrderAvailableS(idx, True)
-        elif item.getStage() == EQUIPMENT_STAGES.PREPARING:
-            self.__currentOrderIdx = idx
-            self.as_setOrderActivatedS(idx)
-        else:
-            self.as_setOrderAvailableS(idx, False)
-        if item.getStage() != EQUIPMENT_STAGES.PREPARING and self.__currentOrderIdx == idx:
-            self.__currentOrderIdx = -1
-            self.as_setOrderActivatedS(-1)
 
     def __onOptionalDeviceAdded(self, intCD, descriptor, isOn):
         idx = self.__genNextIdx(OPT_DEVICE_FULL_MASK, OPT_DEVICE_START_IDX)
@@ -490,7 +500,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
         self.__cds = [None] * PANEL_MAX_LENGTH
         self.__mask = 0
         self.__keys.clear()
-        self.__currentOrderIdx = -1
+        self.__currentActivatedSlotIdx = -1
         self.as_resetS()
         return
 
@@ -565,7 +575,7 @@ class ConsumablesPanel(ConsumablesPanelMeta, BattleGUIKeyHandler):
             return
 
     def __canApplyingGlowEquipment(self, equipment):
-        if equipment.getTag() == 'extinguisher':
+        if equipment.getTag() == 'extinguisher' or equipment.isAvatar():
             correction = True
             entityName = None
         else:

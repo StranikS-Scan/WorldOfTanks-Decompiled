@@ -89,7 +89,9 @@
     <scenario>
       <startTime>	120.000000 330.000000	</startTime>
       <possibility>	50.000000	</possibility>
-      <period>	0.000000	</period>
+      <interval>	0.000000	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	train	</name>
       <trajectories>
         <warplane>
           <preset>	train	</preset>
@@ -97,7 +99,7 @@
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
-          <period>	200.000000	</period>
+          <interval>	200.000000	</interval>
         </warplane>
         <warplane>
           <preset>	train2	</preset>
@@ -105,7 +107,7 @@
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
           <startTime>	1.600000 1.600000	</startTime>
-          <period>	200.000000	</period>
+          <interval>	200.000000	</interval>
         </warplane>
         <warplane>
           <preset>	train1	</preset>
@@ -113,7 +115,7 @@
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
           <startTime>	2.550000 2.550000	</startTime>
-          <period>	200.000000	</period>
+          <interval>	200.000000	</interval>
         </warplane>
         <warplane>
           <preset>	train3	</preset>
@@ -121,7 +123,7 @@
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
           <startTime>	3.500000 3.500000	</startTime>
-          <period>	200.000000	</period>
+          <interval>	200.000000	</interval>
         </warplane>
         <warplane>
           <preset>	train4	</preset>
@@ -129,7 +131,7 @@
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
           <startTime>	4.450000 4.450000	</startTime>
-          <period>	200.000000	</period>
+          <interval>	200.000000	</interval>
         </warplane>
       </trajectories>
     </scenario>

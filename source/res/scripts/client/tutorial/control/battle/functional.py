@@ -22,7 +22,9 @@ from tutorial.control.functional import FunctionalConditions
 from tutorial.control.functional import FunctionalShowDialogEffect
 from tutorial.data.chapter import ChapterProgress
 from tutorial.gui import GUI_EFFECT_NAME
-from tutorial.logger import LOG_ERROR, LOG_DEBUG, LOG_CURRENT_EXCEPTION
+from tutorial.logger import LOG_ERROR
+from tutorial.logger import LOG_DEBUG
+from tutorial.logger import LOG_CURRENT_EXCEPTION
 from tutorial.logger import LOG_REQUEST
 
 class _IMarker(object):

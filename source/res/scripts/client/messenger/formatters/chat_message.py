@@ -25,11 +25,11 @@ class _BattleMessageBuilder(object):
         self._ctx['messageColor'] = getter('battle/message').getHexStr('unknown')
         return self
 
-    def setName(self, dbID, pName=None):
+    def setName(self, dbID, pName=None, suffix=''):
         if pName is not None:
             pName = i18n.encodeUtf8(pName)
         name = self.sessionProvider.getCtx().getPlayerFullName(accID=dbID, pName=pName)
-        self._ctx['playerName'] = unicode(name, 'utf-8')
+        self._ctx['playerName'] = unicode(name + suffix, 'utf-8')
         return self
 
     def setText(self, text):

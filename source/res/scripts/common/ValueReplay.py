@@ -2,6 +2,7 @@
 # Embedded file name: scripts/common/ValueReplay.py
 from bit_coder import BitCoder
 import struct
+from soft_exception import SoftException
 
 def makeFactor10(factor):
     return int(round(factor * 10))
@@ -149,7 +150,7 @@ class ValueReplay:
 
     def __setitem__(self, key, value):
         if self.__connector.index(key) not in self.__appliedValues or key == self.__recordName or key in self.__tags:
-            raise Exception('Cannot overload item %s:%s' % (key, value))
+            raise SoftException('Cannot overload item %s:%s' % (key, value))
         self.__overiddenValues[key] = value
 
     def __getitem__(self, item):
@@ -167,7 +168,7 @@ class ValueReplay:
 
     def __delitem__(self, key):
         if self.__connector.index(key) not in self.__appliedValues or key == self.__recordName or key in self.__tags:
-            raise Exception('Unexpected arg %s' % (key,))
+            raise SoftException('Unexpected arg %s' % (key,))
         del self.__overiddenValues[key]
 
     def __add__(self, other):
@@ -194,7 +195,7 @@ class ValueReplay:
     def tag(self, other):
         idx = self.__validate(other)
         if self.__tags:
-            raise Exception('Just one tag is allowed %s, %s' % (other, self.__tags))
+            raise SoftException('Just one tag is allowed %s, %s' % (other, self.__tags))
         self.__appliedValues.add(idx)
         self.__connector[other] = self.__tags[other] = self.__OPERATORS[self.TAG](self, other, None)
         self.__replay.append(ValueReplay.makeStepCompDescr(self.TAG, idx))
@@ -203,7 +204,7 @@ class ValueReplay:
     def applyFactorToTag(self, other):
         idx = self.__validate(other)
         if not self.__tags:
-            raise Exception('There is no any tagged values %s' % (other,))
+            raise SoftException('There is no any tagged values %s' % (other,))
         self.__appliedValues.add(idx)
         self.__connector[self.__recordName] = self.__OPERATORS[self.FACTOR](self, other, None)
         self.__replay.append(ValueReplay.makeStepCompDescr(self.FACTOR, idx))
@@ -228,7 +229,7 @@ class ValueReplay:
 
     def __iter__(self):
         if not self.__replay:
-            raise Exception('Invalid usage of __iter__')
+            raise SoftException('Invalid usage of __iter__')
         finalResult = 0
         tags = self.__tags
         connector = self.__connector
@@ -249,7 +250,7 @@ class ValueReplay:
 
     def __contains__(self, item):
         if not self.__replay:
-            raise Exception('Invalid usage of __contains__')
+            raise SoftException('Invalid usage of __contains__')
         connector = self.__connector
         for replay in self.__replay:
             _, idx = ValueReplay.parseStepCompDescr(replay)
@@ -261,22 +262,22 @@ class ValueReplay:
 
     def __checkParam(self, param):
         if param == self.__recordName:
-            raise Exception('Invalid usage %s. Cannot apply wrapped value to itself.' % (param,))
+            raise SoftException('Invalid usage %s. Cannot apply wrapped value to itself.' % (param,))
 
     def __validate(self, param1, param2=None, initial=False):
         self.__checkParam(param1)
         self.__checkParam(param2)
         if not initial and not self.__appliedValues:
-            raise Exception('Invalid usage %s. Call __setInitial before.' % (param1,))
+            raise SoftException('Invalid usage %s. Call __setInitial before.' % (param1,))
         idx = self.__connector.index(param1, param2)
         if idx in self.__appliedValues:
-            raise Exception('Unexpected arg (%s,%s). Argument has been already applied.' % (param1, param2))
+            raise SoftException('Unexpected arg (%s,%s). Argument has been already applied.' % (param1, param2))
         return idx
 
     def __setInitial(self, other):
         idx = self.__validate(other, initial=True)
         if self.__appliedValues or self.__replay:
-            raise Exception('Invalid usage %s' % (other,))
+            raise SoftException('Invalid usage %s' % (other,))
         self.__appliedValues.add(idx)
         self.__connector[self.__recordName] = self.__OPERATORS[self.SET](self, other, None)
         self.__replay.append(ValueReplay.makeStepCompDescr(self.SET, idx))

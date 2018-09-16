@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/messenger/proto/bw_chat2/limits.py
 from messenger.proto.interfaces import IProtoLimits
 from messenger_common_chat2 import MESSENGER_LIMITS
+from soft_exception import SoftException
 
 class ArenaLimits(IProtoLimits):
 
@@ -36,10 +37,10 @@ class FindUserLimits(IProtoLimits):
         return MESSENGER_LIMITS.FIND_USERS_BY_NAME_REQUEST_COOLDOWN_SEC
 
     def getBroadcastCoolDown(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def getHistoryMaxLength(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def getMessageMaxLength(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')

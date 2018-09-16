@@ -1,10 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/expressions.py
+from soft_exception import SoftException
 import cStringIO
 import tokenize
 import token
 
-class ParserException(Exception):
+class ParserException(SoftException):
 
     def __init__(self, message):
         super(ParserException, self).__init__(message)

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/server_events/bonuses.py
 from collections import namedtuple
 from functools import partial
+import re
 import BigWorld
 from constants import EVENT_TYPE as _ET, DOSSIER_TYPE, PERSONAL_QUEST_FREE_TOKEN_NAME
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
@@ -32,7 +33,24 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from gui.shared.tooltips import contexts
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
+_EPIC_AWARD_STATIC_VO_ENTRIES = {'compensationTooltip': QUESTS.BONUSES_COMPENSATION,
+ 'hasCompensation': False,
+ 'align': 'center',
+ 'highlightType': '',
+ 'overlayType': ''}
+
+def _augmentEpicAwardVOs(vos, titles=None, descriptions=None):
+    for i in range(0, len(vos)):
+        vos[i].update(_EPIC_AWARD_STATIC_VO_ENTRIES)
+        if titles and titles[i]:
+            vos[i]['title'] = titles[i]
+        if descriptions and descriptions[i]:
+            vos[i]['description'] = descriptions[i]
+
+    return vos
+
 
 def _getAchievement(block, record, value):
     if block == ACHIEVEMENT_BLOCK.RARE:
@@ -124,6 +142,12 @@ class SimpleBonus(object):
             else:
                 itemInfo['count'] = 1
         return [itemInfo]
+
+    def getEpicAwardVOs(self, withDescription=False):
+        titles = [i18n.makeString(TOOLTIPS.getAwardHeader(self._name))] if withDescription else None
+        descriptions = [i18n.makeString(TOOLTIPS.getAwardBody(self._name))] if withDescription else None
+        vos = _augmentEpicAwardVOs(self.getRankedAwardVOs(iconSize='big'), titles=titles, descriptions=descriptions)
+        return vos
 
     def getIconBySize(self, size):
         iconName = RES_ICONS.getBonusIcon(size, self.getName())
@@ -409,6 +433,10 @@ class ItemsBonus(SimpleBonus):
 
         return result
 
+    def getEpicAwardVOs(self, withDescription=False):
+        vos = _augmentEpicAwardVOs(self.getRankedAwardVOs(iconSize='big'))
+        return vos
+
     @staticmethod
     def makeItemTooltip(item):
         description = item.fullDescription
@@ -496,6 +524,20 @@ class GoodiesBonus(SimpleBonus):
 
         return result
 
+    def getEpicAwardVOs(self, withDescription=False):
+        titles = list() if withDescription and self._value.keys() else None
+        descriptions = list() if withDescription and self._value.keys() else None
+        if withDescription:
+            bc = contexts.BoosterContext()
+            for key in self._value.keys():
+                boosterData = bc.buildItem(key)
+                desc = re.sub('<(.*?)>', '', boosterData.description)
+                descriptions.append(desc)
+                titles.append(boosterData.userName)
+
+        vos = _augmentEpicAwardVOs(self.getRankedAwardVOs(iconSize='big'), titles=titles, descriptions=descriptions)
+        return vos
+
     @staticmethod
     def __itemTooltip(booster):
         return {'isSpecial': True,
@@ -582,6 +624,10 @@ class VehiclesBonus(SimpleBonus):
             result.append(vehicleVO)
 
         return result
+
+    def getEpicAwardVOs(self):
+        vos = _augmentEpicAwardVOs(self.getRankedAwardVOs(iconSize='big'))
+        return vos
 
     @classmethod
     def getTmanRoleLevel(cls, vehInfo):
@@ -693,6 +739,18 @@ class DossierBonus(SimpleBonus):
                 result.append(badgeVO)
 
         return result
+
+    def getEpicAwardVOs(self, withDescription=False):
+        titles = list() if withDescription and self._value.keys() else None
+        descriptions = list() if withDescription and self._value.keys() else None
+        if withDescription:
+            for (block, record), _ in self.getRecords().iteritems():
+                if _isBadge(block):
+                    titles.append(i18n.makeString(BADGE.badgeName(record)))
+                    descriptions.append(i18n.makeString(BADGE.badgeDescriptor(record)))
+
+        vos = _augmentEpicAwardVOs(self.getRankedAwardVOs(iconSize='big'), titles=titles, descriptions=descriptions)
+        return vos
 
     def __getItems(self, filterFunc):
         result = []
@@ -858,6 +916,21 @@ class CustomizationsBonus(SimpleBonus):
             result.append(itemData)
 
         return result
+
+    def getEpicAwardVOs(self, withDescription=False):
+        titles = list() if withDescription and self._value else None
+        descriptions = list() if withDescription and self._value else None
+        if withDescription:
+            for itemData in self.getCustomizations():
+                itemTypeName = itemData.get('custType')
+                itemID = itemData.get('id')
+                itemTypeID = GUI_ITEM_TYPE_INDICES.get(itemTypeName)
+                item = self.c11n.getItemByID(itemTypeID, itemID)
+                descriptions.append(item.userType)
+                titles.append(item.userName)
+
+        vos = _augmentEpicAwardVOs(self.getRankedAwardVOs(iconSize='big'), titles=titles, descriptions=descriptions)
+        return vos
 
     def __itemTooltip(self, data, isReceived):
         return {'isSpecial': True,

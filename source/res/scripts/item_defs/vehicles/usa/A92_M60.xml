@@ -6,8 +6,8 @@
     <loader>	radioman	</loader>
   </crew>
   <speedLimits>
-    <forward>	48.3	</forward>
-    <backward>	20	</backward>
+    <forward>	50	</forward>
+    <backward>	23	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.091	</moving>
@@ -395,14 +395,14 @@
             </armor_6>
             <gun>	45	</gun>
           </armor>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <shotDispersionRadius>	0.33	</shotDispersionRadius>
           <reloadTime>	8.8	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.1	</turretRotation>
+            <turretRotation>	0.08	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	1.8	</aimingTime>
+          <aimingTime>	1.6	</aimingTime>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <effects>	shot_large	</effects>
           <models>
@@ -491,7 +491,7 @@
     <detailed>
       <engines>
         <Continental_AVDS-1790-2>
-          <smplEnginePower>	792.9609	</smplEnginePower>
+          <smplEnginePower>	950	</smplEnginePower>
         </Continental_AVDS-1790-2>
       </engines>
       <chassis>

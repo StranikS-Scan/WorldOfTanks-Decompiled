@@ -125,6 +125,7 @@
     <MS-1_bot>	211	</MS-1_bot>
     <V-12-5_shortened>	212	</V-12-5_shortened>
     <T-26_bot>	213	</T-26_bot>
+    <V-54-6_FL>	60000	</V-54-6_FL>
     <V-5_IGR>	60001	</V-5_IGR>
     <V-2IS_IGR>	60002	</V-2IS_IGR>
     <V-54-6_IGR>	60003	</V-54-6_IGR>
@@ -2445,5 +2446,22 @@
       <rpm_min>	240	</rpm_min>
       <rpm_max>	2480	</rpm_max>
     </M-50T_IGR>
+    <V-54-6_FL>
+      <userString>	#ussr_vehicles:V-54-6_FL	</userString>
+      <tags>	diesel	</tags>
+      <level>	9	</level>
+      <price>	82300	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	760	</power>
+      <weight>	700	</weight>
+      <maxHealth>	370	</maxHealth>
+      <maxRegenHealth>	185	</maxRegenHealth>
+      <repairCost>	9	</repairCost>
+      <fireStartingChance>	0.12	</fireStartingChance>
+      <rpm_min>	317	</rpm_min>
+      <rpm_max>	2248	</rpm_max>
+    </V-54-6_FL>
   </shared>
 </engines.xml>

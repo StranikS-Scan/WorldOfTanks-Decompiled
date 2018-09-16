@@ -119,6 +119,8 @@ class EmptyStatRow(StatRow):
 def makeStatRow(label='', column1=None, column2=None, column3=None, column4=None, htmlKey=''):
     if column2 is not None:
         lineType = WIDE_STAT_ROW
+    elif not any((column2, column3, column4)):
+        lineType = None
     else:
         lineType = NORMAL_STAT_ROW
     if label:

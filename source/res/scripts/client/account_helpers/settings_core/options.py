@@ -58,6 +58,7 @@ from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.web import IWebController
 from skeletons.gui.sounds import ISoundsController
+from gui import makeHtmlString
 
 class APPLY_METHOD(object):
     NORMAL = 'normal'
@@ -2380,6 +2381,27 @@ class GraphicsQuality(SettingAbstract):
 
     def _set(self, value):
         pass
+
+
+class ShowDamageIconSetting(StorageAccountSetting):
+    ShowDamageIconPackStruct = namedtuple('ShowDamageIconPackStruct', 'current options extraData')
+
+    def getExtraData(self):
+        lineBreak = '<br/>'
+        templateName = 'html_templates:lobby/tooltips/settings_show_damage_icon'
+        showDamageIconTooltipContent = makeHtmlString(templateName, 'ricochet') + lineBreak
+        showDamageIconTooltipContent += makeHtmlString(templateName, 'trackDamage') + lineBreak
+        showDamageIconTooltipContent += makeHtmlString(templateName, 'criticalDamage') + lineBreak
+        showDamageIconTooltipContent += makeHtmlString(templateName, 'blocked')
+        return {'checkBoxLabel': i18n.makeString(SETTINGS.GAME_SHOWDAMAGEICON),
+         'tooltip': makeTooltip(i18n.makeString(TOOLTIPS.SHOWDAMAGEICON_HEADER), showDamageIconTooltipContent)}
+
+    def pack(self):
+        res = self.ShowDamageIconPackStruct(self._get(), self._getOptions(), self.getExtraData())._asdict()
+        return res
+
+    def getDefaultValue(self):
+        return True
 
 
 class IncreasedZoomSetting(StorageAccountSetting):

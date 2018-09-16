@@ -8,6 +8,9 @@ from ReplayEvents import g_replayEvents
 from constants import ATTACK_REASON_INDICES as _AR_INDICES
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.battle_control.arena_info.arena_vos import EPIC_BATTLE_KEYS
 
 class _ENTITY_TYPE(object):
     UNKNOWN = 'unknown'
@@ -23,22 +26,31 @@ _ATTACK_REASON_CODE = {_AR_INDICES['shot']: 'DEATH_FROM_SHOT',
  _AR_INDICES['world_collision']: 'DEATH_FROM_WORLD_COLLISION',
  _AR_INDICES['death_zone']: 'DEATH_FROM_DEATH_ZONE',
  _AR_INDICES['drowning']: 'DEATH_FROM_DROWNING',
- _AR_INDICES['overturn']: 'DEATH_FROM_OVERTURN'}
+ _AR_INDICES['overturn']: 'DEATH_FROM_OVERTURN',
+ _AR_INDICES['artillery_protection']: 'DEATH_FROM_ARTILLERY_PROTECTION',
+ _AR_INDICES['artillery_sector']: 'DEATH_FROM_SECTOR_PROTECTION',
+ _AR_INDICES['bombers']: 'DEATH_FROM_SECTOR_BOMBERS',
+ _AR_INDICES['recovery']: 'DEATH_FROM_RECOVERY',
+ _AR_INDICES['artillery_eq']: 'DEATH_FROM_SHOT',
+ _AR_INDICES['bomber_eq']: 'DEATH_FROM_SHOT'}
 _PLAYER_KILL_ENEMY_SOUND = 'enemy_killed_by_player'
 _PLAYER_KILL_ALLY_SOUND = 'ally_killed_by_player'
 _ALLY_KILLED_SOUND = 'ally_killed_by_enemy'
 
 class BattleMessagesController(IBattleController):
-    __slots__ = ('__battleCtx', '__eManager', '_buffer', '_isUIPopulated', 'onShowVehicleMessageByCode', 'onShowVehicleMessageByKey', 'onShowVehicleErrorByKey', 'onShowPlayerMessageByCode', 'onShowPlayerMessageByKey', '__weakref__')
+    __slots__ = ('_battleCtx', '_arenaDP', '_arenaVisitor', '_eManager', '_buffer', '_isUIPopulated', 'onShowVehicleMessageByCode', 'onShowVehicleMessageByKey', 'onShowVehicleErrorByKey', 'onShowPlayerMessageByCode', 'onShowPlayerMessageByKey', 'onShowDestructibleEntityMessageByCode', '__weakref__')
 
     def __init__(self, setup):
-        self.__battleCtx = weakref.proxy(setup.battleCtx)
-        self.__eManager = Event.EventManager()
-        self.onShowVehicleMessageByCode = Event.Event(self.__eManager)
-        self.onShowVehicleMessageByKey = Event.Event(self.__eManager)
-        self.onShowVehicleErrorByKey = Event.Event(self.__eManager)
-        self.onShowPlayerMessageByCode = Event.Event(self.__eManager)
-        self.onShowPlayerMessageByKey = Event.Event(self.__eManager)
+        self._battleCtx = weakref.proxy(setup.battleCtx)
+        self._arenaDP = weakref.proxy(setup.arenaDP)
+        self._arenaVisitor = weakref.proxy(setup.arenaVisitor)
+        self._eManager = Event.EventManager()
+        self.onShowVehicleMessageByCode = Event.Event(self._eManager)
+        self.onShowVehicleMessageByKey = Event.Event(self._eManager)
+        self.onShowVehicleErrorByKey = Event.Event(self._eManager)
+        self.onShowPlayerMessageByCode = Event.Event(self._eManager)
+        self.onShowPlayerMessageByKey = Event.Event(self._eManager)
+        self.onShowDestructibleEntityMessageByCode = Event.Event(self._eManager)
         self._buffer = []
         self._isUIPopulated = False
 
@@ -49,8 +61,29 @@ class BattleMessagesController(IBattleController):
         pass
 
     def stopControl(self):
-        self.__eManager.clear()
-        self.__battleCtx = None
+        self._eManager.clear()
+        self._battleCtx = None
+        self._arenaDP = None
+        self._arenaVisitor = None
+        return
+
+    def showDestructibleEntityDestroyedMessage(self, avatar, destructibleID, attackerID):
+        try:
+            playerVehicleID = avatar.playerVehicleID
+        except AttributeError:
+            return
+
+        sound = None
+        if attackerID == playerVehicleID:
+            code = 'DESTRUCTIBLE_DESTROYED_SELF'
+            sound = _PLAYER_KILL_ENEMY_SOUND
+        elif BigWorld.player().team == 1:
+            code = 'DESTRUCTIBLE_DESTROYED_ALLY'
+        else:
+            code = 'DESTRUCTIBLE_DESTROYED_ENEMY'
+        if sound is not None:
+            avatar.soundNotifications.play(sound)
+        self.onShowDestructibleEntityMessageByCode(code, destructibleID, attackerID)
         return
 
     def showVehicleKilledMessage(self, avatar, targetID, attackerID, equipmentID, reason):
@@ -62,7 +95,7 @@ class BattleMessagesController(IBattleController):
         isMyVehicle = targetID == playerVehicleID
         if isMyVehicle:
             return
-        elif targetID == attackerID and self.__battleCtx.isObserver(targetID):
+        elif targetID == attackerID and self._battleCtx.isObserver(targetID):
             return
         else:
             if not avatar.isVehicleAlive:
@@ -92,14 +125,14 @@ class BattleMessagesController(IBattleController):
         return
 
     def showAllyHitMessage(self, vehicleID=None):
-        self.onShowPlayerMessageByKey('ALLY_HIT', {'entity': self.__battleCtx.getPlayerFullName(vID=vehicleID)}, (('entity', vehicleID),))
+        self.onShowPlayerMessageByKey('ALLY_HIT', {'entity': self._battleCtx.getPlayerFullName(vID=vehicleID)}, (('entity', vehicleID),))
 
     def __getEntityString(self, avatar, entityID):
         if entityID == avatar.playerVehicleID:
             return _ENTITY_TYPE.SELF
-        if self.__battleCtx.isAlly(entityID):
+        if self._battleCtx.isAlly(entityID):
             return _ENTITY_TYPE.ALLY
-        return _ENTITY_TYPE.ENEMY if self.__battleCtx.isEnemy(entityID) else _ENTITY_TYPE.UNKNOWN
+        return _ENTITY_TYPE.ENEMY if self._battleCtx.isEnemy(entityID) else _ENTITY_TYPE.UNKNOWN
 
     def __getDamageInfo(self, avatar, code, entityID, targetID):
         target = self.__getEntityString(avatar, targetID)
@@ -152,6 +185,11 @@ class BattleMessagesPlayer(BattleMessagesController):
             return
         super(BattleMessagesPlayer, self).showVehicleKilledMessage(avatar, targetID, attackerID, equipmentID, reason)
 
+    def showDestructibleEntityDestroyedMessage(self, avatar, destructibleID, attackerID):
+        if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
+            return
+        super(BattleMessagesPlayer, self).showDestructibleEntityDestroyedMessage(avatar, destructibleID, attackerID)
+
     def showVehicleDamageInfo(self, avatar, code, targetID, entityID, extra, equipmentID):
         if BattleReplay.g_replayCtrl.isTimeWarpInProgress:
             return
@@ -182,9 +220,60 @@ class BattleMessagesPlayer(BattleMessagesController):
         self.showInfoMessage(message, withBuffer=True, args=args)
 
 
+class EpicBattleMessagesPlayer(BattleMessagesPlayer):
+
+    def showVehicleKilledMessage(self, avatar, targetID, attackerID, equipmentID, reason):
+        if not self._messageIsAllowedInEpicBattle(targetID, attackerID):
+            return
+        super(EpicBattleMessagesPlayer, self).showVehicleKilledMessage(avatar, targetID, attackerID, equipmentID, reason)
+
+    def _messageIsAllowedInEpicBattle(self, targetID, attackerID):
+        componentSystem = self._arenaVisitor.getComponentSystem()
+        if componentSystem is not None:
+            playerDataComp = getattr(componentSystem, 'playerDataComponent', None)
+            if playerDataComp is not None:
+                voTarget = self._arenaDP.getVehicleStats(targetID)
+                voAttacker = self._arenaDP.getVehicleStats(attackerID)
+                targetLane = voTarget.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PHYSICAL_LANE)
+                attackerLane = voAttacker.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PHYSICAL_LANE)
+                playerLane = playerDataComp.physicalLane
+                if playerLane != targetLane and playerLane != attackerLane:
+                    return False
+        return True
+
+
+class EpicBattleMessagesController(BattleMessagesController):
+
+    def showVehicleKilledMessage(self, avatar, targetID, attackerID, equipmentID, reason):
+        if not self._messageIsAllowedInEpicBattle(targetID, attackerID):
+            return
+        super(EpicBattleMessagesController, self).showVehicleKilledMessage(avatar, targetID, attackerID, equipmentID, reason)
+
+    def _messageIsAllowedInEpicBattle(self, targetID, attackerID):
+        componentSystem = self._arenaVisitor.getComponentSystem()
+        if componentSystem is not None:
+            playerDataComp = getattr(componentSystem, 'playerDataComponent', None)
+            if playerDataComp is not None:
+                voTarget = self._arenaDP.getVehicleStats(targetID)
+                voAttacker = self._arenaDP.getVehicleStats(attackerID)
+                targetLane = voTarget.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PHYSICAL_LANE)
+                attackerLane = voAttacker.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.PHYSICAL_LANE)
+                playerLane = playerDataComp.physicalLane
+                if playerLane != targetLane and playerLane != attackerLane:
+                    return False
+        return True
+
+
 def createBattleMessagesCtrl(setup):
-    if setup.isReplayPlaying:
-        ctrl = BattleMessagesPlayer(setup)
+    sessionProvider = dependency.instance(IBattleSessionProvider)
+    arenaVisitor = sessionProvider.arenaVisitor
+    if not arenaVisitor.gui.isInEpicRange():
+        if setup.isReplayPlaying:
+            ctrl = BattleMessagesPlayer(setup)
+        else:
+            ctrl = BattleMessagesController(setup)
+    elif setup.isReplayPlaying:
+        ctrl = EpicBattleMessagesPlayer(setup)
     else:
-        ctrl = BattleMessagesController(setup)
+        ctrl = EpicBattleMessagesController(setup)
     return ctrl

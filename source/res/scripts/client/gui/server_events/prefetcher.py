@@ -17,6 +17,7 @@ from gui.shared.utils import mapTextureToTheMemory, getImageSize
 from helpers import getClientLanguage, dependency
 from helpers.i18n import makeString as ms
 from skeletons.gui.lobby_context import ILobbyContext
+from soft_exception import SoftException
 _DEFAULT_TOKENS_STYLES = [ title.split('/')[-1] for title in QUESTS.TOKEN_DEFAULT_ENUM ]
 _DEFAULT_DECORATIONS = [ title.split('_')[-1].replace('.png', '') for title in RES_ICONS.MAPS_ICONS_MISSIONS_DECORATIONS_DECORATION_ENUM ]
 
@@ -94,7 +95,7 @@ class TokenImagesSubRequester(SubRequester):
         _, expectedSize = ticket
         actualSize = '{}x{}'.format(*getImageSize(content))
         if expectedSize != actualSize:
-            raise ValueError('Downloaded image has invalid size')
+            raise SoftException('Downloaded image has invalid size')
         self._storage[ticket] = content
 
     def _tickets(self):
@@ -166,7 +167,7 @@ class DecorationRequester(SubRequester):
         _, expectedSize = ticket
         actualSize = '{}x{}'.format(*getImageSize(content))
         if actualSize != expectedSize:
-            raise ValueError('Downloaded image has invalid size')
+            raise SoftException('Downloaded image has invalid size')
         self._storage[ticket] = content
 
     def _tickets(self):
@@ -184,7 +185,7 @@ class DecorationRequester(SubRequester):
                 if str(decorationID) not in _DEFAULT_DECORATIONS:
                     decorations.append((decorationID, DECORATION_SIZES.BONUS))
             if quest.getType() not in EVENT_TYPE.SHARED_QUESTS:
-                for size in (DECORATION_SIZES.CARDS, DECORATION_SIZES.DETAILS):
+                for size in (DECORATION_SIZES.CARDS, DECORATION_SIZES.DETAILS, DECORATION_SIZES.DETAILS_EX):
                     decorations.append((decorationID, size))
 
         for action in self._eventsCache.getActions().itervalues():

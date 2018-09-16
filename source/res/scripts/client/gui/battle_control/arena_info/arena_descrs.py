@@ -138,6 +138,9 @@ class DefaultArenaGuiDescription(IArenaGuiDescription):
     def getScreenIcon(self):
         return self._visitor.getArenaIcon(settings.SCREEN_MAP_IMAGE_RES_PATH)
 
+    def getRespawnIcon(self):
+        return self._visitor.getArenaIcon(settings.RESPAWN_MAP_IMAGE_RES_PATH)
+
     def getGuiEventType(self):
         pass
 
@@ -268,6 +271,22 @@ class BootcampBattleDescription(ArenaWithLabelDescription):
         pass
 
 
+class EpicBattlesDescription(ArenaWithLabelDescription):
+    __slots__ = ()
+
+    def getWinString(self, isInBattle=True):
+        return functions.getBattleSubTypeWinText(self._visitor.type.getID(), self._team)
+
+    def isInvitationEnabled(self):
+        replayCtrl = BattleReplay.g_replayCtrl
+        return not replayCtrl.isPlaying or replayCtrl.isBattleSimulation
+
+    def getTeamName(self, team):
+        from epic_constants import EPIC_BATTLE_TEAM_ID
+        from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
+        return EPIC_BATTLE.TEAM1NAME if team == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER else EPIC_BATTLE.TEAM2NAME
+
+
 def createDescription(arenaVisitor):
     guiVisitor = arenaVisitor.gui
     if guiVisitor.isRandomBattle() or guiVisitor.isTrainingBattle():
@@ -276,6 +295,8 @@ def createDescription(arenaVisitor):
         description = TutorialBattleDescription(arenaVisitor)
     elif guiVisitor.isBootcampBattle():
         description = BootcampBattleDescription(arenaVisitor)
+    elif guiVisitor.isInEpicRange():
+        description = EpicBattlesDescription(arenaVisitor)
     elif guiVisitor.hasLabel():
         description = ArenaWithLabelDescription(arenaVisitor)
     else:

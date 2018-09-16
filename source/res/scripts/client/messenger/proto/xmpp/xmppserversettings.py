@@ -7,6 +7,7 @@ from gui.shared.utils import getPlayerDatabaseID
 from messenger.proto.interfaces import IProtoSettings
 from messenger.proto.xmpp.gloox_constants import CONNECTION_IMPL_TYPE
 from messenger.proto.xmpp.jid import ContactJID
+from soft_exception import SoftException
 _NUMBER_OF_ITEMS_IN_SAMPLE = 2
 
 def _makeSample(*args):
@@ -79,7 +80,7 @@ class XmppServerSettings(IProtoSettings):
         usersService = self.getChannelByType(XMPP_MUC_CHANNEL_TYPE.USERS)
         if usersService:
             return usersService['hostname']
-        raise AssertionError('users room service is not set')
+        raise SoftException('users room service is not set')
 
     def update(self, data):
         if 'xmpp_connections' in data:
@@ -137,7 +138,7 @@ class XmppServerSettings(IProtoSettings):
         if databaseID is None:
             databaseID = getPlayerDatabaseID()
         if not databaseID:
-            raise UserWarning("Player's databaseID can not be empty")
+            raise SoftException("Player's databaseID can not be empty")
         jid = ContactJID()
         jid.setNode(databaseID)
         jid.setDomain(self.domain)

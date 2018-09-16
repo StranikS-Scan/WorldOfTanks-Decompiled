@@ -626,3 +626,21 @@ class IBadgesRequester(IRequester):
     @property
     def selected(self):
         raise NotImplementedError
+
+
+class IEpicMetaGameRequester(IRequester):
+
+    @property
+    def playerLevelInfo(self):
+        raise NotImplementedError
+
+    @property
+    def skillPoints(self):
+        raise NotImplementedError
+
+    def selectedSkills(self, vehicleCD):
+        raise NotImplementedError
+
+    @property
+    def skillLevels(self):
+        raise NotImplementedError

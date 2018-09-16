@@ -3,6 +3,7 @@
 import nations
 from items import _xml
 from constants import IS_CLIENT, IS_CELLAPP, ITEM_DEFS_PATH
+from soft_exception import SoftException
 if IS_CLIENT:
     import ResMgr
     from helpers import i18n
@@ -27,7 +28,7 @@ SIMPLE_ITEM_TYPE_NAMES = ('vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehi
 SIMPLE_ITEM_TYPE_INDICES = tuple((ITEM_TYPE_INDICES[x] for x in SIMPLE_ITEM_TYPE_NAMES))
 VEHICLE_COMPONENT_TYPE_NAMES = ('vehicleChassis', 'vehicleTurret', 'vehicleGun', 'vehicleEngine', 'vehicleFuelTank', 'vehicleRadio')
 VEHICLE_COMPONENT_TYPE_INDICES = tuple((ITEM_TYPE_INDICES[x] for x in VEHICLE_COMPONENT_TYPE_NAMES))
-EQUIPMENT_TYPE_NAMES = ('regular', 'battleBoosters')
+EQUIPMENT_TYPE_NAMES = ('regular', 'battleBoosters', 'battleAbilities')
 
 class EQUIPMENT_TYPES(dict):
 
@@ -141,6 +142,8 @@ def init(preloadEverything, pricesToCollect=None):
     stun.init()
     from items import vehicles
     vehicles.init(preloadEverything, pricesToCollect)
+    from items import avatars
+    avatars.init()
     from items import tankmen
     tankmen.init(preloadEverything)
     from . import qualifiers
@@ -163,13 +166,13 @@ def getTypeOfCompactDescr(compactDescr):
         if itemTypeID == 0:
             itemTypeID = int(compactDescr >> 24 & 255)
             if 0 != itemTypeID <= 15:
-                raise Exception("value is not a 'compact descriptor'")
+                raise SoftException("value is not a 'compact descriptor'")
     else:
         itemTypeID = ord(compactDescr[0]) & 15
         if itemTypeID == 0:
             itemTypeID = ord(compactDescr[1])
     if itemTypeID >= len(ITEM_TYPE_NAMES):
-        raise Exception("value is not a 'compact descriptor'")
+        raise SoftException("value is not a 'compact descriptor'")
     return itemTypeID
 
 

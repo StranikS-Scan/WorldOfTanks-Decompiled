@@ -22,8 +22,12 @@ class ChannelComponent(ChannelComponentMeta):
         self._controller = weakref.ref(controller)
         if self.flashObject:
             self.as_setJoinedS(controller.isJoined())
+        if self.flashObject:
+            self.as_setLastUnsentMessageS(controller.getMemInputText())
 
     def removeController(self):
+        if self.flashObject and self._controller():
+            self._controller().setMemInputText(self.as_getLastUnsentMessageS())
         self._controller = lambda : None
         if self.flashObject:
             self.as_setJoinedS(False)
@@ -36,6 +40,8 @@ class ChannelComponent(ChannelComponentMeta):
     def minimize(self):
         ctrl = self._controller()
         if ctrl:
+            if self.flashObject:
+                ctrl.setMemInputText(self.as_getLastUnsentMessageS())
             ctrl.deactivate()
 
     def getMessageMaxLength(self):

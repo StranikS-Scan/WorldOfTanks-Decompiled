@@ -4,6 +4,7 @@ import weakref
 import sys
 from functools import partial
 from debug_utils import *
+from soft_exception import SoftException
 
 class TASK_STATUS():
     RUNNING = 0
@@ -41,7 +42,7 @@ def _createScriptRoutine(fn, *args, **kwargs):
     return generator()
 
 
-class ScriptInterrupt(Exception):
+class ScriptInterrupt(SoftException):
 
     def __init__(self, handler):
         self.handler = handler
@@ -624,7 +625,7 @@ class ScriptTask(object):
         self.subtasks.remove(task)
 
     def process(self):
-        raise Exception('Task must implement process method')
+        raise SoftException('Task must implement process method')
 
     def suspend(self, cancel):
         pass

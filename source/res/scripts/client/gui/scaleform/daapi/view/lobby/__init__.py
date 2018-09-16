@@ -38,7 +38,7 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.eliteWindow.EliteWindow import EliteWindow
     from gui.Scaleform.daapi.view.lobby.AwardWindow import AwardWindow
     from gui.Scaleform.daapi.view.lobby.AwardWindow import MissionAwardWindow
-    from gui.Scaleform.daapi.view.lobby.battle_queue import BattleQueue
+    from gui.Scaleform.daapi.view.lobby.battle_queue import BattleQueue, BattleStrongholdsQueue
     from gui.Scaleform.daapi.view.lobby.BrowserWindow import BrowserWindow
     from gui.Scaleform.daapi.view.lobby.Browser import Browser
     from gui.Scaleform.daapi.view.lobby.components.CalendarComponent import CalendarComponent
@@ -83,6 +83,7 @@ def getViewSettings():
     return (ViewSettings(VIEW_ALIAS.LOBBY, LobbyView, 'lobbyPage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE, False, (ContainerSettings(ViewTypes.LOBBY_SUB, containers.DefaultContainer), ContainerSettings(ViewTypes.LOBBY_TOP_SUB, containers.PopUpContainer))),
      ViewSettings(VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, LobbyVehicleMarkerView, 'lobbyVehicleMarkerView.swf', ViewTypes.MARKER, VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BATTLE_QUEUE, BattleQueue, 'battleQueue.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BATTLE_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, BattleStrongholdsQueue, 'battleStrongholdsQueue.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_CUSTOMIZATION, CustomizationMainView, 'customizationMainView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_CUSTOMIZATION, ScopeTemplates.LOBBY_SUB_SCOPE),
      ConditionalViewSettings(VIEW_ALIAS.VEHICLE_PREVIEW, BootcampComponentOverride(VehiclePreview, BCVehiclePreview), 'vehiclePreview.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
      ConditionalViewSettings(VIEW_ALIAS.HERO_VEHICLE_PREVIEW, BootcampComponentOverride(HeroVehiclePreview, BCVehiclePreview), 'vehiclePreview.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.HERO_VEHICLE_PREVIEW, ScopeTemplates.LOBBY_SUB_SCOPE),
@@ -149,6 +150,7 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
     def __init__(self):
         listeners = ((VIEW_ALIAS.AWARD_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_QUEUE, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_RESULTS, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BROWSER_WINDOW_MODAL, self.loadViewByCtxEvent),
@@ -160,8 +162,8 @@ class LobbyPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.LOBBY_VEHICLE_MARKER_VIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_CUSTOMIZATION, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_PREVIEW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.HERO_VEHICLE_PREVIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.AUTHORS_VIEW, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.HERO_VEHICLE_PREVIEW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_COMPARE, self.loadViewByCtxEvent),
          (VIEW_ALIAS.VEHICLE_COMPARE_MAIN_CONFIGURATOR, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOBBY_MENU, self.loadViewByCtxEvent),

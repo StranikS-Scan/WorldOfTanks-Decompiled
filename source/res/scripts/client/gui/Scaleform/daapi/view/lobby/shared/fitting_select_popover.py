@@ -1,12 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/shared/fitting_select_popover.py
 import BigWorld
+from account_helpers.settings_core.ServerSettingsManager import UI_STORAGE_KEYS
 from gui import g_htmlTemplates
 from constants import MAX_VEHICLE_LEVEL
 from gui.Scaleform.daapi.view.meta.FittingSelectPopoverMeta import FittingSelectPopoverMeta
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.FITTING_TYPES import FITTING_TYPES
+from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.formatters.text_styles import builder as str_builder
@@ -17,7 +19,7 @@ from gui.shared.items_parameters import params_helper
 from gui.shared.items_parameters.formatters import formatModuleParamName, formatParameter
 from gui.shared.utils import decorators, EXTRA_MODULE_INFO
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
-from gui.shared.event_dispatcher import showBattleBoosterBuyDialog
+from gui.shared.event_dispatcher import showBattleBoosterBuyDialog, showEpicBattleSkillView
 from helpers import dependency, i18n
 from helpers.i18n import makeString as _ms
 from gui.shared.formatters import text_styles, getItemPricesVOWithReason
@@ -25,6 +27,7 @@ from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.shared import event_dispatcher as shared_events
 from items import getTypeInfoByName
+from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 from account_helpers.AccountSettings import AccountSettings, SHOW_OPT_DEVICE_HINT
 from skeletons.gui.game_control import IBootcampController
@@ -39,21 +42,27 @@ _POPOVER_SECOND_TAB_IDX = 1
 _TAB_IDS = (_POPOVER_FIRST_TAB_IDX, _POPOVER_SECOND_TAB_IDX)
 _POPOVER_OVERLAY_VEH_LVL_RANGE = range(4, MAX_VEHICLE_LEVEL)
 
-def _extendByModuleData(targetData, module, vehDescr):
-    moduleType = module.itemTypeID
+def _extendByModuleData(targetData, vehicleModule, vehDescr):
+    moduleType = vehicleModule.itemTypeID
     values, names = [], []
-    paramsData = params_helper.getParameters(module)
-    for paramName in _PARAMS_LISTS[moduleType]:
+    paramsData = params_helper.getParameters(vehicleModule, vehDescr)
+    paramsList = _PARAMS_LISTS[moduleType]
+    if vehicleModule.itemTypeID == GUI_ITEM_TYPE.GUN and vehicleModule.isAutoReloadable(vehDescr):
+        paramsList = paramsList[:-1] + ('autoReloadTime',)
+        serverSettings = dependency.instance(ISettingsCore).serverSettings
+        if serverSettings.checkAutoReloadHighlights():
+            targetData['highlightedParameterIdx'] = 2
+    for paramName in paramsList:
         value = paramsData.get(paramName)
         if value is not None:
             values.append(_formatValuesString(formatParameter(paramName, value)))
             names.append(formatModuleParamName(paramName))
 
-    targetData['level'] = module.level
+    targetData['level'] = vehicleModule.level
     targetData['paramValues'] = '\n'.join(values)
     targetData['paramNames'] = '\n'.join(names)
-    targetData['name'] = text_styles.middleTitle(module.userName)
-    targetData[EXTRA_MODULE_INFO] = module.getExtraIconInfo(vehDescr)
+    targetData['name'] = text_styles.middleTitle(vehicleModule.userName)
+    targetData[EXTRA_MODULE_INFO] = vehicleModule.getExtraIconInfo(vehDescr)
     return
 
 
@@ -91,6 +100,15 @@ def _extendByBattleBoosterData(targetData, module, vehicle):
     targetData['buyButtonLabel'] = MENU.BOOSTERFITTINGRENDERER_BUYBUTTON
     targetData['buyButtonTooltip'] = ''
     targetData['buyButtonVisible'] = targetData['isSelected']
+
+
+def _extendByBattleAbilityData(targetData, ability, slotIndex):
+    targetData['slotIndex'] = slotIndex
+    targetData['desc'] = text_styles.main(ability.shortDescription)
+    targetData['name'] = text_styles.stats(ability.userName)
+    targetData['level'] = ability.level
+    targetData['removeButtonLabel'] = EPIC_BATTLE.FITTINGSELECTPOPOVER_REMOVEBUTTON
+    targetData['changeOrderButtonLabel'] = EPIC_BATTLE.FITTINGSELECTPOPOVER_CHANGEORDER
 
 
 def _extendHighlightData(targetData, highlight):
@@ -172,6 +190,7 @@ class CommonFittingSelectPopover(FittingSelectPopoverMeta):
     def _populate(self):
         super(CommonFittingSelectPopover, self)._populate()
         self.as_updateS(self._prepareInitialData())
+        self.__logicProvider.resetCounters()
 
     def _dispose(self):
         self.__vehicle = None
@@ -206,6 +225,11 @@ class CommonFittingSelectPopover(FittingSelectPopoverMeta):
             rendererName = FITTING_TYPES.OPTIONAL_DEVICE_FITTING_ITEM_RENDERER
             rendererDataClass = FITTING_TYPES.OPTIONAL_DEVICE_RENDERER_DATA_CLASS_NAME
             width = FITTING_TYPES.LARGE_POPOVER_WIDTH
+        elif self._slotType == FITTING_TYPES.BATTLE_ABILITY:
+            title = MENU.BATTLEABILITY_TITLE
+            rendererName = FITTING_TYPES.BATTLE_ABILITY_ITEM_RENDERER
+            rendererDataClass = FITTING_TYPES.BATTLE_ABILITY_RENDERER_DATA_CLASS_NAME
+            width = FITTING_TYPES.SHORT_POPOVER_WIDTH
         else:
             title = _ms(MENU.MODULEFITS_TITLE, moduleName=getTypeInfoByName(self._slotType)['userString'], vehicleName=self.__vehicle.userName if self.__vehicle is not None else '')
             rendererDataClass = FITTING_TYPES.MODULE_FITTING_RENDERER_DATA_CLASS_NAME
@@ -214,6 +238,11 @@ class CommonFittingSelectPopover(FittingSelectPopoverMeta):
                 width = FITTING_TYPES.MEDUIM_POPOVER_WIDTH
             elif self._slotType == FITTING_TYPES.VEHICLE_RADIO:
                 rendererName = FITTING_TYPES.RADIO_FITTING_ITEM_RENDERER
+                width = FITTING_TYPES.SHORT_POPOVER_WIDTH
+            elif self._slotType == FITTING_TYPES.BATTLE_ABILITY:
+                title = MENU.BATTLEABILITY_TITLE
+                rendererName = FITTING_TYPES.BATTLE_ABILITY_ITEM_RENDERER
+                rendererDataClass = FITTING_TYPES.BATTLE_ABILITY_RENDERER_DATA_CLASS_NAME
                 width = FITTING_TYPES.SHORT_POPOVER_WIDTH
             else:
                 rendererName = FITTING_TYPES.GUN_TURRET_FITTING_ITEM_RENDERER
@@ -247,6 +276,39 @@ class HangarFittingSelectPopover(CommonFittingSelectPopover):
 
     def _getSlotIndex(self):
         return self.__slotIndex
+
+
+class BattleAbilitySelectPopover(HangarFittingSelectPopover):
+    itemsCache = dependency.descriptor(IItemsCache)
+
+    def onManageBattleAbilitiesClicked(self):
+        showEpicBattleSkillView()
+        self.destroy()
+
+    def _prepareInitialData(self):
+        result = super(BattleAbilitySelectPopover, self)._prepareInitialData()
+        from gui.game_control.epic_meta_game_ctrl import DISABLE_EPIC_META_GAME
+        result['battleAbilitiesButtonVisible'] = not DISABLE_EPIC_META_GAME
+        if self.__isHintVisible():
+            result['listOverlay'] = self.__getAbilityOverlayData()
+        return result
+
+    def _getDescText(self):
+        result = text_styles.main(i18n.makeString(EPIC_BATTLE.FITTINGSELECTPOPOVERBATTKEABILITY_DESCTEXT))
+        return result
+
+    def __getAbilityOverlayData(self):
+        icon = RES_ICONS.MAPS_ICONS_MODULES_BATTLEABILITYLISTOVERLAY
+        data = {'icon': icon,
+         'titleText': text_styles.highTitle(EPIC_BATTLE.FITTINGSELECTPOPOVERBATTKEABILITY_TITLETEXT),
+         'descText': self._getDescText(),
+         'okBtnLabel': '',
+         'displayOkBtn': False,
+         'isClickEnabled': False}
+        return data
+
+    def __isHintVisible(self):
+        return not self.itemsCache.items.getItems(GUI_ITEM_TYPE.BATTLE_ABILITY, REQ_CRITERIA.UNLOCKED)
 
 
 class OptionalDeviceSelectPopover(HangarFittingSelectPopover):
@@ -298,7 +360,9 @@ class OptionalDeviceSelectPopover(HangarFittingSelectPopover):
         data = {'icon': icon,
          'titleText': text_styles.highTitle(MENU.FITTINGSELECTPOPOVER_TITLETEXT),
          'descText': self._getDescText(),
-         'okBtnLabel': i18n.makeString(MENU.FITTINGSELECTPOPOVER_OKBTNLABEL)}
+         'okBtnLabel': i18n.makeString(MENU.FITTINGSELECTPOPOVER_OKBTNLABEL),
+         'displayOkBtn': True,
+         'isClickEnabled': True}
         return data
 
     def __isHintVisible(self):
@@ -357,6 +421,7 @@ class BattleBoosterSelectPopover(HangarFittingSelectPopover):
 
 class PopoverLogicProvider(object):
     itemsCache = dependency.descriptor(IItemsCache)
+    _settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, slotType, slotIndex, vehicle):
         self._slotType = slotType
@@ -366,6 +431,7 @@ class PopoverLogicProvider(object):
         self.__modulesList = None
         self._selectedIdx = -1
         self._tabIndex = 0
+        self._needToResetCounters = False
         return
 
     def getSelectedIdx(self):
@@ -382,15 +448,24 @@ class PopoverLogicProvider(object):
         return NotImplemented
 
     def setTab(self, tabIndex):
+        tabSwitched = self._tabIndex != tabIndex
         self._tabIndex = tabIndex
-        self._selectedIdx = -1
-        if self.__modulesList is not None:
+        if self.__modulesList is not None and tabSwitched:
+            self._selectedIdx = -1
             self.__modulesList = self._buildList()
         return
 
     def dispose(self):
         self._vehicle = None
         return
+
+    def resetCounters(self):
+        if self._needToResetCounters:
+            self._settingsCore.serverSettings.saveInUIStorage({UI_STORAGE_KEYS.AUTO_RELOAD_MARK_IS_SHOWN: True})
+
+    def _checkCounters(self, vehicleModule):
+        if vehicleModule.itemTypeID == GUI_ITEM_TYPE.GUN and not self._needToResetCounters and vehicleModule.isAutoReloadable(self._vehicle.descriptor):
+            self._needToResetCounters = True
 
     def _buildCommonModuleData(self, module, reason):
         return {'id': module.intCD,
@@ -413,14 +488,19 @@ class PopoverLogicProvider(object):
              'exchangeRate': self.itemsCache.items.shop.exchangeRate,
              'currXP': currXp,
              'totalXP': currXp + self.itemsCache.items.stats.freeXP}
-            for idx, module in enumerate(data):
-                isInstalled = module.isInstalled(self._vehicle, self._slotIndex)
+            hasAutoLoaderHighlights = False
+            for idx, vehicleModule in enumerate(data):
+                isInstalled = vehicleModule.isInstalled(self._vehicle, self._slotIndex)
                 if isInstalled:
                     self._selectedIdx = idx
-                moduleData = self._buildModuleData(module, isInstalled, stats)
-                self.__extendByTypeSpecificData(moduleData, module)
+                moduleData = self._buildModuleData(vehicleModule, isInstalled, stats)
+                self.__extendByTypeSpecificData(moduleData, vehicleModule)
                 modulesList.append(moduleData)
+                if 'highlightedParameterIdx' in moduleData:
+                    hasAutoLoaderHighlights = True
 
+            if hasAutoLoaderHighlights:
+                self._settingsCore.serverSettings.updateUIStorageCounter(UI_STORAGE_KEYS.AUTO_RELOAD_HIGHLIGHTS_COUNTER)
         return modulesList
 
     def _getSuitableItems(self, typeId):
@@ -437,30 +517,23 @@ class PopoverLogicProvider(object):
             criteria = REQ_CRITERIA.BATTLE_BOOSTER.OPTIONAL_DEVICE_EFFECT if self._tabIndex == _POPOVER_FIRST_TAB_IDX else REQ_CRITERIA.BATTLE_BOOSTER.CREW_EFFECT
         elif typeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
             criteria = REQ_CRITERIA.OPTIONAL_DEVICE.SIMPLE if self._tabIndex == _POPOVER_FIRST_TAB_IDX else REQ_CRITERIA.OPTIONAL_DEVICE.DELUXE
+        elif typeID == GUI_ITEM_TYPE.BATTLE_ABILITY:
+            criteria = REQ_CRITERIA.UNLOCKED
         else:
             criteria = REQ_CRITERIA.EMPTY
         return criteria
 
-    def __buildParams(self, module):
-        values, names = [], []
-        paramsData = params_helper.getParameters(module)
-        for paramName in _PARAMS_LISTS[self._slotType]:
-            value = paramsData.get(paramName)
-            if value is not None:
-                values.append(_formatValuesString(formatParameter(paramName, value)))
-                names.append(formatModuleParamName(paramName))
-
-        return ('\n'.join(values), '\n'.join(names))
-
-    def __extendByTypeSpecificData(self, moduleData, module):
-        if module.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
-            _extendByArtefactData(moduleData, module, self._slotIndex)
-        elif module.itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES:
-            _extendByModuleData(moduleData, module, self._vehicle.descriptor)
+    def __extendByTypeSpecificData(self, moduleData, vehicleModule):
+        if vehicleModule.itemTypeID in GUI_ITEM_TYPE.ARTEFACTS:
+            _extendByArtefactData(moduleData, vehicleModule, self._slotIndex)
+        elif vehicleModule.itemTypeID in GUI_ITEM_TYPE.VEHICLE_MODULES:
+            _extendByModuleData(moduleData, vehicleModule, self._vehicle.descriptor)
         if self._slotType == FITTING_TYPES.OPTIONAL_DEVICE:
-            _extendByOptionalDeviceData(moduleData, module)
+            _extendByOptionalDeviceData(moduleData, vehicleModule)
         elif self._slotType == FITTING_TYPES.BOOSTER:
-            _extendByBattleBoosterData(moduleData, module, self._vehicle)
+            _extendByBattleBoosterData(moduleData, vehicleModule, self._vehicle)
+        elif self._slotType == FITTING_TYPES.BATTLE_ABILITY:
+            _extendByBattleAbilityData(moduleData, vehicleModule, self._slotIndex)
 
 
 class _HangarLogicProvider(PopoverLogicProvider):
@@ -490,28 +563,29 @@ class _HangarLogicProvider(PopoverLogicProvider):
                 ItemsActionsFactory.doAction(ItemsActionsFactory.SET_VEHICLE_LAYOUT, self._vehicle, None, None, battleBooster)
         return
 
-    def _buildModuleData(self, module, isInstalledInSlot, stats):
-        itemPrice = module.buyPrices.itemPrice
-        inInventory = module.isInInventory
-        isInstalled = module.isInstalled(self._vehicle)
+    def _buildModuleData(self, vehicleModule, isInstalledInSlot, stats):
+        itemPrice = vehicleModule.buyPrices.itemPrice
+        inInventory = vehicleModule.isInInventory
+        isInstalled = vehicleModule.isInstalled(self._vehicle)
         isBought = inInventory or isInstalled
-        isEnoughMoney, purchaseReason = module.mayPurchase(stats['money'])
-        if module.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not isInstalled and module.hasSimilarDevicesInstalled(self._vehicle) and isEnoughMoney:
+        isEnoughMoney, purchaseReason = vehicleModule.mayPurchase(stats['money'])
+        if vehicleModule.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE and not isInstalled and vehicleModule.hasSimilarDevicesInstalled(self._vehicle) and isEnoughMoney:
             isFit, reason = False, GUI_ITEM_ECONOMY_CODE.ITEM_IS_DUPLICATED
         elif isBought:
-            isFit, reason = module.mayInstall(self._vehicle, self._slotIndex)
+            isFit, reason = vehicleModule.mayInstall(self._vehicle, self._slotIndex)
             if reason == 'already installed' or isFit:
                 isFit, reason = True, GUI_ITEM_ECONOMY_CODE.UNDEFINED
         else:
             isFit, reason = isEnoughMoney, purchaseReason
             if not isFit:
                 if GUI_ITEM_ECONOMY_CODE.isMoneyError(reason):
-                    isFit = module.mayPurchaseWithExchange(stats['money'], stats['exchangeRate'])
+                    isFit = vehicleModule.mayPurchaseWithExchange(stats['money'], stats['exchangeRate'])
         if reason != GUI_ITEM_ECONOMY_CODE.UNLOCK_ERROR:
-            installReason = _getInstallReason(module, self._vehicle, reason, self._slotIndex)
+            installReason = _getInstallReason(vehicleModule, self._vehicle, reason, self._slotIndex)
         else:
             installReason = reason
-        moduleData = self._buildCommonModuleData(module, installReason)
+        self._checkCounters(vehicleModule)
+        moduleData = self._buildCommonModuleData(vehicleModule, installReason)
         moduleData.update({'targetVisible': isBought,
          'showPrice': not isBought,
          'isSelected': isInstalledInSlot,
@@ -519,6 +593,9 @@ class _HangarLogicProvider(PopoverLogicProvider):
          'removeButtonLabel': MENU.MODULEFITS_REMOVENAME,
          'removeButtonTooltip': MENU.MODULEFITS_REMOVETOOLTIP,
          'itemPrices': getItemPricesVOWithReason(reason, itemPrice)})
+        if vehicleModule.itemTypeID == GUI_ITEM_TYPE.BATTLE_ABILITY:
+            moduleData['disabled'] = isInstalled and not isInstalledInSlot
+            moduleData['showPrice'] = False
         return moduleData
 
 
@@ -559,13 +636,14 @@ class _PreviewLogicProvider(PopoverLogicProvider):
     def setModule(self, newId, oldId, isRemove):
         g_currentPreviewVehicle.installComponent(int(newId))
 
-    def _buildModuleData(self, module, isInstalled, _):
-        isFit, reason = module.mayInstall(self._vehicle, 0)
-        moduleData = self._buildCommonModuleData(module, reason)
+    def _buildModuleData(self, vehicleModule, isInstalled, _):
+        isFit, reason = vehicleModule.mayInstall(self._vehicle, 0)
+        moduleData = self._buildCommonModuleData(vehicleModule, reason)
         moduleData.update({'targetVisible': isInstalled,
          'showPrice': False,
          'isSelected': isInstalled,
          'disabled': not isFit,
          'removeButtonLabel': MENU.MODULEFITS_REMOVENAME,
          'removeButtonTooltip': MENU.MODULEFITS_REMOVETOOLTIP})
+        self._checkCounters(vehicleModule)
         return moduleData

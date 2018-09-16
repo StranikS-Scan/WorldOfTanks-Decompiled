@@ -12,6 +12,7 @@ import zlib
 import BigWorld
 import Event
 from debug_utils import LOG_WARNING, LOG_CURRENT_EXCEPTION, LOG_ERROR
+from soft_exception import SoftException
 
 class CacheIO(object):
 
@@ -182,10 +183,10 @@ class _AsyncIO(RedirectIO):
         t.start()
 
     def _doWrite(self, dst):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _doRead(self, src):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
 
 class PickleIO(RedirectIO):
@@ -343,10 +344,10 @@ class ShelfLocalCache(object):
         return
 
     def _doWrite(self, dst):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _doRead(self, src):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _onRead(self, src):
         if src is not None:

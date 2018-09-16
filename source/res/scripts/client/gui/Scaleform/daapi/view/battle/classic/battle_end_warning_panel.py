@@ -45,7 +45,7 @@ class BattleEndWarningPanel(BattleEndWarningPanelMeta, IAbstractPeriodView):
             self.as_setTextInfoS(_ms(_WARNING_TEXT_KEY))
             self.as_setStateS(True)
             self.__isShown = True
-        if totalTime <= self.__appearTime - self.__duration and self.__isShown:
+        if (totalTime <= self.__appearTime - self.__duration or totalTime > self.__appearTime) and self.__isShown:
             self.as_setStateS(False)
             self.__isShown = False
 

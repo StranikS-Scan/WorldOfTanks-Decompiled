@@ -7,6 +7,7 @@ from debug_utils import LOG_ERROR, LOG_WARNING, LOG_DEBUG
 from gui.Scaleform.daapi.view.meta.WindowViewMeta import WindowViewMeta
 from gui.doc_loaders.WindowsStoredDataLoader import WindowsStoredDataLoader
 from messenger.ext.channel_num_gen import isClientIDValid
+from soft_exception import SoftException
 WindowGeometry = namedtuple('WindowGeometry', ('x', 'y', 'width', 'height'))
 
 class DATA_TYPE(object):
@@ -60,9 +61,9 @@ class stored_window(object):
 
     def __call__(self, clazz):
         if not hasattr(clazz, '__mro__'):
-            raise Exception('First argument is not class')
+            raise SoftException('First argument is not class')
         if WindowViewMeta not in clazz.__mro__:
-            raise Exception('Class must be extends WindowViewMeta')
+            raise SoftException('Class must be extends WindowViewMeta')
 
         def wrapPopulate(func):
 

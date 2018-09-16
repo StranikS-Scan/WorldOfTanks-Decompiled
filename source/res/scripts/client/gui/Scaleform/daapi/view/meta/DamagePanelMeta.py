@@ -64,11 +64,11 @@ class DamagePanelMeta(BaseDAAPIComponent):
     def as_setPlaybackSpeedS(self, value):
         return self.flashObject.as_setPlaybackSpeed(value) if self._isDAAPIInited() else None
 
-    def as_showStunS(self, time, animated):
-        return self.flashObject.as_showStun(time, animated) if self._isDAAPIInited() else None
+    def as_showStatusS(self, statusID, time, animated):
+        return self.flashObject.as_showStatus(statusID, time, animated) if self._isDAAPIInited() else None
 
-    def as_hideStunS(self, animated):
-        return self.flashObject.as_hideStun(animated) if self._isDAAPIInited() else None
+    def as_hideStatusS(self, statusID, animated):
+        return self.flashObject.as_hideStatus(statusID, animated) if self._isDAAPIInited() else None
 
-    def as_setStunTimerSnapshotS(self, timeLeft):
-        return self.flashObject.as_setStunTimerSnapshot(timeLeft) if self._isDAAPIInited() else None
+    def as_setStatusTimerSnapshotS(self, statusID, timeLeft):
+        return self.flashObject.as_setStatusTimerSnapshot(statusID, timeLeft) if self._isDAAPIInited() else None

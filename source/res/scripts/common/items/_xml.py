@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/_xml.py
 from functools import wraps, partial
+from soft_exception import SoftException
 _g_floats = {'count': 0}
 _g_intTuples = {'count': 0}
 _g_floatTuples = {'count': 0}
@@ -61,7 +62,7 @@ def raiseWrongXml(xmlContext, subsectionName, msg):
         fileName = xmlContext[1] + ('/' + fileName if fileName else '')
         xmlContext = xmlContext[0]
 
-    raise Exception("error in '" + fileName + "': " + msg)
+    raise SoftException("error in '" + fileName + "': " + msg)
     return
 
 
@@ -84,6 +85,21 @@ def getSubsection(xmlCtx, section, subsectionName, throwIfMissing=True):
     if subsection is None and throwIfMissing:
         raiseWrongSection(xmlCtx, subsectionName if subsectionName else section.name)
     return subsection
+
+
+def getSubSectionWithContext(xmlCtx, section, subsectionName, throwIfMissing=True):
+    subsection = getSubsection(xmlCtx, section, subsectionName, throwIfMissing)
+    subXmlCtx = (xmlCtx, subsectionName)
+    return (subXmlCtx, subsection)
+
+
+def getItemsWithContext(xmlCtx, section, selectSubSectionName=None):
+    return [ (subsectionName, ((xmlCtx, subsectionName), subsection)) for subsectionName, subsection in section.items() if selectSubSectionName is None or selectSubSectionName == subsectionName ]
+
+
+def getChildrenWithContext(xmlCtx, section, subsectionName, throwIfMissing=True):
+    subXmlCtx, subsection = getSubSectionWithContext(xmlCtx, section, subsectionName, throwIfMissing)
+    return getItemsWithContext(subXmlCtx, subsection)
 
 
 def readString(xmlCtx, section, subsectionName):

@@ -6,6 +6,7 @@ from constants import ITEM_DEFS_PATH, KNOWN_QUALIFIER_CONDITION_PARAMS
 from itertools import chain
 from debug_utils import *
 from ._qualifier import QUALIFIER_TYPE, parseQualifier, CREW_ROLE, QUALIFIER_TYPE_NAMES
+from soft_exception import SoftException
 _XML_FILE = os.path.join(ITEM_DEFS_PATH, 'qualifiers.xml')
 g_cache = None
 
@@ -18,7 +19,7 @@ class QualifiersCache(object):
     def fromXmlFile(cls, xmlPath):
         root = ResMgr.openSection(xmlPath)
         if root is None:
-            raise Exception('Wrong xml with item qualifiers={0}'.format(xmlPath))
+            raise SoftException('Wrong xml with item qualifiers={0}'.format(xmlPath))
         res = []
         for name, section in root.items():
             if name != 'qualifier':

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/bootcamp/BootcampGarageLessons.py
 from ResMgr import openSection
+from soft_exception import SoftException
 XML_BATTLE_RESULTS_PATH = 'scripts/bootcamp_docs/garage_lessons/battle_results.xml'
 
 class _FillStruct(object):
@@ -47,7 +48,7 @@ class GarageLessons:
     def getBattleResult(self, lessonId):
         if lessonId in self.__battleResults:
             return self.__battleResults[lessonId]
-        raise Exception('Battle results not found. Lesson - {0}.'.format(lessonId))
+        raise SoftException('Battle results not found. Lesson - {0}.'.format(lessonId))
 
     def readBattleResultsData(self, datas, section):
         for _, dataSection in section.items():
@@ -62,7 +63,7 @@ class GarageLessons:
     def readBattleResultsFile(self, path):
         resultsConfig = openSection(path)
         if resultsConfig is None:
-            raise Exception("Can't open config file (%s)" % path)
+            raise SoftException("Can't open config file (%s)" % path)
         for name, section in resultsConfig.items():
             if name == 'lesson':
                 lesson_id = section['id'].asInt

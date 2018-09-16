@@ -15,6 +15,7 @@ from gui.shared.money import Currency
 from gui.shared.tooltips.formatters import packActionTooltipData
 from helpers import i18n, dependency
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from skeletons.gui.game_control import IEpicBattleMetaGameController
 
 def _getIconHtmlTagForCurrency(currency):
     getter = getattr(icons, currency)
@@ -397,12 +398,36 @@ class BuyAndInstallItemProcessor(ModuleBuyer):
             super(BuyAndInstallItemProcessor, self)._request(callback)
 
 
+class BattleAbilityInstaller(ModuleInstallProcessor):
+
+    def __init__(self, vehicle, item, slotIdx, install=True, conflictedEqs=None, skipConfirm=False):
+        super(BattleAbilityInstaller, self).__init__(vehicle, item, (GUI_ITEM_TYPE.BATTLE_ABILITY,), slotIdx, install, conflictedEqs, skipConfirm=skipConfirm)
+
+    def _request(self, callback):
+        epicMetaGameCtrl = dependency.instance(IEpicBattleMetaGameController)
+        selectedSkill = next((skillID for skillID, levels in epicMetaGameCtrl.getAllUnlockedSkillLevelsBySkillId().iteritems() if self.item.innationID in (level.eqID for level in levels)), -1)
+        currentSkills = epicMetaGameCtrl.getSelectedSkills(self.vehicle.intCD)
+        previousSkill = currentSkills[self.slotIdx] if len(currentSkills) >= self.slotIdx else -1
+        for idx, skillID in enumerate(currentSkills):
+            if idx == self.slotIdx:
+                if self.install:
+                    currentSkills[idx] = selectedSkill
+                else:
+                    currentSkills[idx] = -1
+            if skillID == selectedSkill and skillID != -1:
+                currentSkills[idx] = previousSkill
+
+        epicMetaGameCtrl.changeEquippedSkills(currentSkills, self.vehicle.intCD, lambda code: self._response(code, callback))
+
+
 def getInstallerProcessor(vehicle, newComponentItem, slotIdx=0, install=True, isUseMoney=False, conflictedEqs=None, skipConfirm=False):
     if newComponentItem.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
         return EquipmentInstaller(vehicle, newComponentItem, slotIdx, install, conflictedEqs, skipConfirm)
     if newComponentItem.itemTypeID == GUI_ITEM_TYPE.OPTIONALDEVICE:
         return OptDeviceInstaller(vehicle, newComponentItem, slotIdx, install, isUseMoney, conflictedEqs, skipConfirm)
-    return TurretInstaller(vehicle, newComponentItem, conflictedEqs, skipConfirm) if newComponentItem.itemTypeID == GUI_ITEM_TYPE.TURRET else OtherModuleInstaller(vehicle, newComponentItem, conflictedEqs, skipConfirm)
+    if newComponentItem.itemTypeID == GUI_ITEM_TYPE.TURRET:
+        return TurretInstaller(vehicle, newComponentItem, conflictedEqs, skipConfirm)
+    return BattleAbilityInstaller(vehicle, newComponentItem, slotIdx, install, conflictedEqs, skipConfirm) if newComponentItem.itemTypeID == GUI_ITEM_TYPE.BATTLE_ABILITY else OtherModuleInstaller(vehicle, newComponentItem, conflictedEqs, skipConfirm)
 
 
 def getPreviewInstallerProcessor(vehicle, newComponentItem, conflictedEqs=None):

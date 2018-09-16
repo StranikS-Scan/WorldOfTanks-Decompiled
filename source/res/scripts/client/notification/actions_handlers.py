@@ -27,6 +27,7 @@ from predefined_hosts import g_preDefinedHosts
 from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.game_control import IBrowserController, IRankedBattlesController
 from skeletons.gui.web import IWebController
+from soft_exception import SoftException
 
 class _ActionHandler(object):
 
@@ -40,7 +41,7 @@ class _ActionHandler(object):
 
     def handleAction(self, model, entityID, action):
         if action not in self.getActions():
-            raise UserWarning('Handler does not handle action {0}'.format(action))
+            raise SoftException('Handler does not handle action {0}'.format(action))
 
 
 class _OpenEventBoardsHandler(_ActionHandler):

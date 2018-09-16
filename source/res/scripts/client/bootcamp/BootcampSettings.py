@@ -5,6 +5,7 @@ import ResMgr
 from BootcampConstants import HINT_TYPE, HINT_NAMES
 from helpers.i18n import makeString
 from debug_utils_bootcamp import LOG_CURRENT_EXCEPTION_BOOTCAMP, LOG_ERROR_BOOTCAMP
+from soft_exception import SoftException
 
 class _HintParamType(object):
     FLOAT = 0
@@ -127,7 +128,7 @@ class BattleSettings(object):
                     elif valueType == _HintParamType.INT:
                         singleHint[keyParam] = hintSection[keyParam].asInt
                     else:
-                        raise Exception('Unknown hint param type (%d)', valueType)
+                        raise SoftException('Unknown hint param type (%d)', valueType)
 
         if hintSection.has_key('cooldown_after'):
             singleHint['cooldown_after'] = hintSection['cooldown_after'].asFloat
@@ -148,7 +149,7 @@ class BattleSettings(object):
     def __loadDefaults(self):
         defaultSettingsConfig = ResMgr.openSection(BattleSettings.DEFAULTS_XML_PATH)
         if not defaultSettingsConfig:
-            raise Exception("Can't open defaults config file (%s)" % BattleSettings.DEFAULTS_XML_PATH)
+            raise SoftException("Can't open defaults config file (%s)" % BattleSettings.DEFAULTS_XML_PATH)
         hints = self.__defaults['hints']
         for sectionName in ('primary_hints', 'secondary_hints'):
             hintsSection = defaultSettingsConfig[sectionName]
@@ -166,7 +167,7 @@ class BattleSettings(object):
     def __loadConfig(self):
         settingsConfig = ResMgr.openSection(BattleSettings.SETTINGS_XML_PATH)
         if not settingsConfig:
-            raise Exception("Can't open defaults config file (%s)" % BattleSettings.SETTINGS_XML_PATH)
+            raise SoftException("Can't open defaults config file (%s)" % BattleSettings.SETTINGS_XML_PATH)
         for name, xmlSection in settingsConfig.items():
             if name == 'lesson':
                 lessonId = xmlSection['id'].asInt

@@ -80,7 +80,20 @@ class StoreItemsTab(object):
         shop = self._items.shop
         prices = self._getItemPrices(item)
         actionPrcs = self._getActionAllPercents(item)
-        areCreditAndGoldDiscountsEqual = actionPrcs.get(Currency.CREDITS) == actionPrcs.get(Currency.GOLD)
+        showActionGoldAndCredits = False
+        actionPercent = []
+        if actionPrcs.isDefined():
+            actionPrices = []
+            for currency in Currency.ALL:
+                actionPrice = actionPrcs.get(currency, None)
+                if actionPrice is not None:
+                    actionPrices.append(actionPrice)
+                    actionPrcValue = actionPrice
+                else:
+                    actionPrcValue = 0
+                actionPercent.append('-{}'.format(actionPrcValue))
+
+            showActionGoldAndCredits = not actionPrices.count(actionPrices[0]) == len(actionPrices)
         return {'id': str(item.intCD),
          'name': self._getItemName(item),
          'desc': item.getShortInfo(),
@@ -108,8 +121,8 @@ class StoreItemsTab(object):
          EXTRA_MODULE_INFO: extraModuleInfo,
          'vehCompareData': _getBtnVehCompareData(item) if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE else {},
          'highlightType': self._getItemHighlightType(item),
-         'showActionGoldAndCredits': actionPrcs.isDefined() and not areCreditAndGoldDiscountsEqual,
-         'actionPercent': [ '-{}'.format(actionPrcs.get(currency, 0)) for currency in Currency.ALL ],
+         'showActionGoldAndCredits': showActionGoldAndCredits,
+         'actionPercent': actionPercent,
          'notForSaleText': '' if item.isForSale else MENU.SHOP_TABLE_NOTFORSALE}
 
     def _getItemTypeIcon(self, item):

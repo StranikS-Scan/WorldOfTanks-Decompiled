@@ -66,7 +66,7 @@ class ConfirmBoosterDialog(ConfirmItemWindowMeta):
              'currency': self.meta.getCurrency(),
              'defaultValue': DEFAULT_VALUE,
              'maxAvailableCount': self.meta.getMaxAvailableItemsCount(),
-             'isActionNow': itemPrices.hasAltPrice(),
+             'hasSeveralPrices': itemPrices.hasAltPrice(),
              'boosterData': self.__makeBoosterVO(booster),
              'linkage': CONFIRM_DIALOG_ALIASES.BOOSTER_ICON})
         else:

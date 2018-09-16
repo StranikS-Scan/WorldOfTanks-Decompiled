@@ -194,7 +194,7 @@ class EventBoardsController(IEventBoardController, IEventBoardsListener):
                 eventID = event.getEventID()
                 if isTabVisited and event.isStarted() and not event.isFinished():
                     visited.add(eventID)
-                if event.isAtBeginnig():
+                if event.isAtBeginning():
                     if eventID not in started:
                         SystemMessages.pushMessage(_ms(EVENT_BOARDS.NOTIFICATION_EVENTSTARTED_BODY, eventName=event.getName()), messageData={'header': _ms(EVENT_BOARDS.NOTIFICATION_EVENTSTARTED_HEADER)}, type=SM_TYPE.OpenEventBoards)
                         started.add(eventID)

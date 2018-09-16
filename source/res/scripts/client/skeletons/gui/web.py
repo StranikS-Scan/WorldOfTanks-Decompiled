@@ -28,6 +28,9 @@ class IWebController(object):
     def getClanDossier(self, clanDbID=None):
         raise NotImplementedError
 
+    def login(self, callback):
+        raise NotImplementedError
+
     def resyncLogin(self, forceLogin=False):
         raise NotImplementedError
 

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/chat_shared.py
+from soft_exception import SoftException
 import time
 import constants
 import zlib
@@ -409,7 +410,77 @@ CHAT_COMMANDS = Enumeration('chatCommands', [('initAck', {'chnlCmd': 0}),
    'argsCnt': 0,
    'cooldown': {'period': 5.0,
                 'side': __COOLDOWN_CHECK_ALL},
-   'msgText': '#ingame_gui:chat_shortcuts/reloading_unavailable'})], instance=AttributeEnumItem)
+   'msgText': '#ingame_gui:chat_shortcuts/reloading_unavailable'}),
+ ('ATTENTIONTOPOSITION', {'battleCmd': 1,
+   'argsCnt': 2,
+   'cooldown': {'period': __BATTLE_COMMANDS_DEFAULT_COOLDOWN,
+                'side': __COOLDOWN_CHECK_ALL},
+   'msgText': '#ingame_gui:chat_shortcuts/attention_to_position'}),
+ ('ATTENTIONTOOBJECTIVE_ATK', {'battleCmd': 1,
+   'argsCnt': 1,
+   'cooldown': {'period': __BATTLE_COMMANDS_DEFAULT_COOLDOWN,
+                'side': __COOLDOWN_CHECK_ALL},
+   'msgText': '#ingame_gui:chat_shortcuts/attention_to_objective_atk'}),
+ ('ATTENTIONTOOBJECTIVE_DEF', {'battleCmd': 1,
+   'argsCnt': 1,
+   'cooldown': {'period': __BATTLE_COMMANDS_DEFAULT_COOLDOWN,
+                'side': __COOLDOWN_CHECK_ALL},
+   'msgText': '#ingame_gui:chat_shortcuts/attention_to_objective_def'}),
+ ('ATTENTIONTOBASE_ATK', {'battleCmd': 1,
+   'argsCnt': 2,
+   'cooldown': {'period': __BATTLE_COMMANDS_DEFAULT_COOLDOWN,
+                'side': __COOLDOWN_CHECK_ALL},
+   'msgText': '#ingame_gui:chat_shortcuts/attention_to_base_atk'}),
+ ('ATTENTIONTOBASE_DEF', {'battleCmd': 1,
+   'argsCnt': 1,
+   'cooldown': {'period': __BATTLE_COMMANDS_DEFAULT_COOLDOWN,
+                'side': __COOLDOWN_CHECK_ALL},
+   'msgText': '#ingame_gui:chat_shortcuts/attention_to_base_def'}),
+ ('EPIC_GLOBAL_SAVETANKS_ATK', {'battleCmd': 1,
+   'argsCnt': 0,
+   'cooldown': {'period': __BATTLE_COMMANDS_DEFAULT_COOLDOWN,
+                'side': __COOLDOWN_CHECK_ALL},
+   'msgText': '#ingame_gui:chat_shortcuts/global_msg/atk/save_tanks'}),
+ ('EPIC_GLOBAL_SAVETANKS_DEF', {'battleCmd': 1,
+   'argsCnt': 0,
+   'cooldown': {'period': __BATTLE_COMMANDS_DEFAULT_COOLDOWN,
+                'side': __COOLDOWN_CHECK_ALL},
+   'msgText': '#ingame_gui:chat_shortcuts/global_msg/def/save_tanks'}),
+ ('EPIC_GLOBAL_TIME_ATK', {'battleCmd': 1,
+   'argsCnt': 0,
+   'cooldown': {'period': __BATTLE_COMMANDS_DEFAULT_COOLDOWN,
+                'side': __COOLDOWN_CHECK_ALL},
+   'msgText': '#ingame_gui:chat_shortcuts/global_msg/atk/time'}),
+ ('EPIC_GLOBAL_TIME_DEF', {'battleCmd': 1,
+   'argsCnt': 0,
+   'cooldown': {'period': __BATTLE_COMMANDS_DEFAULT_COOLDOWN,
+                'side': __COOLDOWN_CHECK_ALL},
+   'msgText': '#ingame_gui:chat_shortcuts/global_msg/def/time'}),
+ ('EPIC_GLOBAL_HQ_ATK', {'battleCmd': 1,
+   'argsCnt': 0,
+   'cooldown': {'period': __BATTLE_COMMANDS_DEFAULT_COOLDOWN,
+                'side': __COOLDOWN_CHECK_ALL},
+   'msgText': '#ingame_gui:chat_shortcuts/global_msg/atk/focus_hq'}),
+ ('EPIC_GLOBAL_HQ_DEF', {'battleCmd': 1,
+   'argsCnt': 0,
+   'cooldown': {'period': __BATTLE_COMMANDS_DEFAULT_COOLDOWN,
+                'side': __COOLDOWN_CHECK_ALL},
+   'msgText': '#ingame_gui:chat_shortcuts/global_msg/def/focus_hq'}),
+ ('EPIC_GLOBAL_WEST', {'battleCmd': 1,
+   'argsCnt': 0,
+   'cooldown': {'period': __BATTLE_COMMANDS_DEFAULT_COOLDOWN,
+                'side': __COOLDOWN_CHECK_ALL},
+   'msgText': '#ingame_gui:chat_shortcuts/global_msg/lane/west'}),
+ ('EPIC_GLOBAL_CENTER', {'battleCmd': 1,
+   'argsCnt': 0,
+   'cooldown': {'period': __BATTLE_COMMANDS_DEFAULT_COOLDOWN,
+                'side': __COOLDOWN_CHECK_ALL},
+   'msgText': '#ingame_gui:chat_shortcuts/global_msg/lane/center'}),
+ ('EPIC_GLOBAL_EAST', {'battleCmd': 1,
+   'argsCnt': 0,
+   'cooldown': {'period': __BATTLE_COMMANDS_DEFAULT_COOLDOWN,
+                'side': __COOLDOWN_CHECK_ALL},
+   'msgText': '#ingame_gui:chat_shortcuts/global_msg/lane/east'})], instance=AttributeEnumItem)
 CHAT_MEMBER_STATUSES = Enumeration('chatMemberStatuses', ['available', 'inBattle'])
 CHAT_MEMBER_BAN_TYPE = Enumeration('chatMemberBanType', ['none', 'readonly', 'full'])
 CHAT_MEMBER_ROLE = Enumeration('chatMemberRole', ['member', 'visitor', 'moderator'])
@@ -769,7 +840,16 @@ _g_chatCommandProcessors = {CHAT_COMMANDS.BAN: BanCommandProcessor(),
  CHAT_COMMANDS.ATTENTIONTOCELL: NoArgsCommandProcessor(CHAT_COMMANDS.ATTENTIONTOCELL),
  CHAT_COMMANDS.ATTACKENEMY: OneStringArgCommandProcessor(CHAT_COMMANDS.ATTACKENEMY),
  CHAT_COMMANDS.USERBAN: UserBanCommandProcessor(),
- CHAT_COMMANDS.USERUNBAN: UserUnbanCommandProcessor()}
+ CHAT_COMMANDS.USERUNBAN: UserUnbanCommandProcessor(),
+ CHAT_COMMANDS.EPIC_GLOBAL_SAVETANKS_ATK: NoArgsCommandProcessor(CHAT_COMMANDS.EPIC_GLOBAL_SAVETANKS_ATK),
+ CHAT_COMMANDS.EPIC_GLOBAL_SAVETANKS_DEF: NoArgsCommandProcessor(CHAT_COMMANDS.EPIC_GLOBAL_SAVETANKS_DEF),
+ CHAT_COMMANDS.EPIC_GLOBAL_TIME_ATK: NoArgsCommandProcessor(CHAT_COMMANDS.EPIC_GLOBAL_TIME_ATK),
+ CHAT_COMMANDS.EPIC_GLOBAL_TIME_DEF: NoArgsCommandProcessor(CHAT_COMMANDS.EPIC_GLOBAL_TIME_DEF),
+ CHAT_COMMANDS.EPIC_GLOBAL_HQ_ATK: NoArgsCommandProcessor(CHAT_COMMANDS.EPIC_GLOBAL_HQ_ATK),
+ CHAT_COMMANDS.EPIC_GLOBAL_HQ_DEF: NoArgsCommandProcessor(CHAT_COMMANDS.EPIC_GLOBAL_HQ_DEF),
+ CHAT_COMMANDS.EPIC_GLOBAL_WEST: NoArgsCommandProcessor(CHAT_COMMANDS.EPIC_GLOBAL_WEST),
+ CHAT_COMMANDS.EPIC_GLOBAL_CENTER: NoArgsCommandProcessor(CHAT_COMMANDS.EPIC_GLOBAL_CENTER),
+ CHAT_COMMANDS.EPIC_GLOBAL_EAST: NoArgsCommandProcessor(CHAT_COMMANDS.EPIC_GLOBAL_EAST)}
 
 def initChatCooldownData():
     cooldDownData = {}
@@ -950,9 +1030,10 @@ class ChatActionHandlers(object):
         handlers -= handler
 
 
-class ChatError(Exception):
+class ChatError(SoftException):
 
     def __init__(self, response=None, auxMessage=None, messageArgs=None):
+        SoftException.__init__(self)
         self.__response = CHAT_RESPONSES.internalError if response is None else response
         self.__auxMessage = auxMessage
         self._messageArgs = messageArgs

@@ -168,7 +168,7 @@ class _CurrentVehicle(_CachedVehicle):
 
     def refreshModel(self):
         if self.isPresent() and self.isInHangar() and self.item.modelState:
-            self.hangarSpace.updateVehicle(self.item)
+            self.hangarSpace.startToUpdateVehicle(self.item)
         else:
             self.hangarSpace.removeVehicle()
 

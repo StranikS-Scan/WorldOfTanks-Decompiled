@@ -124,7 +124,7 @@ class _ReusableInfo(object):
 
     @property
     def canUpgradeToPremium(self):
-        return self.__premiumState & PREMIUM_STATE.BUY_ENABLED > 0 and self.__premiumState & PREMIUM_STATE.HAS_ALREADY == 0 and not self.isPostBattlePremium and self.__common.arenaBonusType in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_RANDOM) and self.__personal.getXPDiff() > 0 and self.__personal.getCreditsDiff() > 0
+        return self.__premiumState & PREMIUM_STATE.BUY_ENABLED > 0 and self.__premiumState & PREMIUM_STATE.HAS_ALREADY == 0 and not self.isPostBattlePremium and self.__common.arenaBonusType in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.EPIC_RANDOM, ARENA_BONUS_TYPE.EPIC_BATTLE) and self.__personal.getXPDiff() > 0 and self.__personal.getCreditsDiff() > 0
 
     @property
     def canResourceBeFaded(self):
@@ -157,6 +157,11 @@ class _ReusableInfo(object):
     @property
     def avatars(self):
         return self.__avatars
+
+    @property
+    def isWGMoneyOffline(self):
+        notAccrued = self.__personal.isWGMoneyRelatedZeroEarnings()
+        return notAccrued and self.lobbyContext.getServerSettings().wgmOfflineEmergency.isEnabled()
 
     def getAvatarInfo(self, dbID=0):
         if not dbID:

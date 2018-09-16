@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/unit_roster_config.py
-from constants import IS_CHINA
+from constants import IS_CHINA, VEHICLE_CLASSES
 from UnitRoster import BaseUnitRoster, BaseUnitRosterSlot, BaseUnitRosterLimits
 
 class UnitRosterSlot(BaseUnitRosterSlot):
@@ -28,6 +28,10 @@ class RosterSlot8(BaseUnitRosterSlot):
 
 class RosterSlot10(BaseUnitRosterSlot):
     DEFAULT_LEVELS = (1, 10)
+
+
+class EpicSlot(BaseUnitRosterSlot):
+    DEFAULT_LEVELS = (8, 8)
 
 
 class SquadRoster(BaseUnitRoster):
@@ -73,3 +77,13 @@ class EventRoster(BaseUnitRoster):
     SLOT_TYPE = RosterSlot10
     DEFAULT_SLOT_PACK = RosterSlot10().pack()
     LIMITS_TYPE = BaseUnitRosterLimits
+
+
+class EpicRoster(BaseUnitRoster):
+    MAX_SLOTS = 3
+    MAX_EMPTY_SLOTS = 2
+    SLOT_TYPE = EpicSlot
+    DEFAULT_SLOT_PACK = EpicSlot().pack()
+    LIMITS_TYPE = BaseUnitRosterLimits
+    MIN_VEHICLES = 1
+    MAX_VEHICLES = 10000

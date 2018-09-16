@@ -5,9 +5,10 @@ from debug_utils import LOG_ERROR
 from gui.prb_control import settings, prb_getters
 from gui.prb_control.entities.base.ctx import PrbCtrlRequestCtx
 from gui.prb_control.entities.base.requester import IUnitRequestProcessor
-from gui.wgcg.strongholds.contexts import StrongholdLeaveCtx, StrongholdAssignCtx, StrongholdChangeOpenedCtx, StrongholdSetVehicleCtx, StrongholdSetReadyCtx, StrongholdKickPlayerCtx, StrongholdBattleQueueCtx, StrongholdGiveLeadershipCtx, StrongholdSetReserveCtx, StrongholdSendInvitesCtx, StrongholdUnassignCtx, StrongholdUnsetReserveCtx, StrongholdJoinBattleCtx, StrongholdSetEquipmentCommanderCtx
+from gui.wgcg.strongholds.contexts import StrongholdLeaveCtx, StrongholdAssignCtx, StrongholdChangeOpenedCtx, StrongholdSetVehicleCtx, StrongholdSetReadyCtx, StrongholdKickPlayerCtx, StrongholdBattleQueueCtx, StrongholdGiveLeadershipCtx, StrongholdSetReserveCtx, StrongholdSendInvitesCtx, StrongholdUnassignCtx, StrongholdUnsetReserveCtx, StrongholdJoinBattleCtx, StrongholdSetEquipmentCommanderCtx, StrongholdMatchmakingInfoCtx
 from helpers import dependency
 from skeletons.gui.web import IWebController
+from soft_exception import SoftException
 
 class StrongholdUnitRequestProcessor(IUnitRequestProcessor):
     clansCtrl = dependency.descriptor(IWebController)
@@ -27,7 +28,8 @@ class StrongholdUnitRequestProcessor(IUnitRequestProcessor):
          REQUEST_TYPE.UNSET_RESERVE: StrongholdUnsetReserveCtx,
          REQUEST_TYPE.SEND_INVITE: StrongholdSendInvitesCtx,
          REQUEST_TYPE.JOIN: StrongholdJoinBattleCtx,
-         REQUEST_TYPE.SET_EQUIPMENT_COMMANDER: StrongholdSetEquipmentCommanderCtx}
+         REQUEST_TYPE.SET_EQUIPMENT_COMMANDER: StrongholdSetEquipmentCommanderCtx,
+         REQUEST_TYPE.MATCHMAKING_INFO: StrongholdMatchmakingInfoCtx}
 
     def fini(self):
         self.__unitContextRemap.clear()
@@ -41,7 +43,7 @@ class StrongholdUnitRequestProcessor(IUnitRequestProcessor):
         self._sendNextRequest(ctx, chain)
 
     def doRawRequest(self, methodName, *args, **kwargs):
-        raise UserWarning('NOT IMPLEMENTED FOR StrongholdUnitRequestProcessor')
+        raise SoftException('NOT IMPLEMENTED FOR StrongholdUnitRequestProcessor')
 
     @process
     def _sendRequest(self, ctx, methodName, chain, callback, *args, **kwargs):

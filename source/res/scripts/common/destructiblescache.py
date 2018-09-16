@@ -10,6 +10,7 @@ from material_kinds import EFFECT_MATERIALS, EFFECT_MATERIAL_INDEXES_BY_NAMES
 from constants import IS_CLIENT, IS_CELLAPP, IS_DEVELOPMENT, DESTRUCTIBLE_MATKIND
 from debug_utils import *
 import items
+from soft_exception import SoftException
 if IS_CLIENT:
     from helpers import EffectsList
 if IS_CLIENT or IS_CELLAPP:
@@ -39,12 +40,12 @@ class DestructiblesCache():
         if IS_CLIENT:
             sec = ResMgr.openSection(DESTRUCTIBLES_EFFECTS_FILE)
             if not sec:
-                raise Exception("Fail to read '%s'" % DESTRUCTIBLES_EFFECTS_FILE)
+                raise SoftException("Fail to read '%s'" % DESTRUCTIBLES_EFFECTS_FILE)
             self.__effects = _readDestructiblesEffects(sec)
             ResMgr.purge(DESTRUCTIBLES_EFFECTS_FILE, True)
         sec = ResMgr.openSection(DESTRUCTIBLES_CONFIG_FILE)
         if not sec:
-            raise Exception("Fail to read '%s'" % DESTRUCTIBLES_CONFIG_FILE)
+            raise SoftException("Fail to read '%s'" % DESTRUCTIBLES_CONFIG_FILE)
         self.__defaultLifetimeEffectChance = sec.readFloat('defaultLifetimeEffectChance')
         self.__unitVehicleMass = sec.readFloat('unitVehicleMass')
         if not IS_CLIENT or IS_DEVELOPMENT:
@@ -277,7 +278,7 @@ class DestructiblesCache():
             if tag in CUSTOM_DESTRUCTIBLE_TAGS:
                 desc['achievementTag'] = tag
             else:
-                raise Exception("Wrong achievement tag '%s' in destructible '%s'" % (tag, section.readString('filename')))
+                raise SoftException("Wrong achievement tag '%s' in destructible '%s'" % (tag, section.readString('filename')))
 
     def _getEffect(self, effectName, effectCategory, needLogErrors=True):
         if not effectName:
@@ -399,7 +400,7 @@ def _readProjectilePiercingPowerReduction(section):
             reductionFactor = float(val[0])
             minReduction = float(val[1])
         except:
-            raise Exception('Wrong of missing value of %s/%s' % (section.name, matName))
+            raise SoftException('Wrong of missing value of %s/%s' % (section.name, matName))
 
         res.append((reductionFactor, minReduction))
 
@@ -410,7 +411,7 @@ def _readFloatArray(sec, count=None):
     arrayStr = sec.readString('')
     strArr = arrayStr.split()
     if count is not None and len(strArr) != count:
-        raise Exception('Error reading float array from section %s' % sec.name)
+        raise SoftException('Error reading float array from section %s' % sec.name)
     return tuple(map(float, strArr))
 
 
@@ -418,7 +419,7 @@ def _readIntArray(sec, count):
     arrayStr = sec.readString('')
     strArr = arrayStr.split()
     if len(strArr) != count:
-        raise Exception('Error reading int array from section %s' % sec.name)
+        raise SoftException('Error reading int array from section %s' % sec.name)
     return tuple(map(int, strArr))
 
 
@@ -426,7 +427,7 @@ def _readStringArray(sec, count):
     arrayStr = sec.readString('')
     strArr = arrayStr.split()
     if len(strArr) != count:
-        raise Exception('Error reading int array from section %s' % sec.name)
+        raise SoftException('Error reading int array from section %s' % sec.name)
     return strArr
 
 

@@ -156,7 +156,8 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
             data.update({'icon': vehicle.iconContour,
              'vShortName': vehicle.shortUserName,
              'vLevel': int2roman(vehicle.level),
-             'vType': vehicle.type})
+             'vType': vehicle.type,
+             'isCurrentPayer': playerInfo.isCurrentPlayer()})
         self.as_setPlayerStateS(team, assigned, data)
         if playerInfo.isCurrentPlayer():
             self.as_toggleReadyBtnS(not playerInfo.isReady())

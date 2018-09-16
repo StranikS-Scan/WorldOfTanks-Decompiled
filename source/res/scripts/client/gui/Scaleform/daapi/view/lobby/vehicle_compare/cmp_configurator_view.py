@@ -5,7 +5,7 @@ from adisp import process
 from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.hangar.AmmunitionPanel import getFittingSlotsData, getAmmo, HANGAR_FITTING_SLOTS, ARTEFACTS_SLOTS, FITTING_MODULES
+from gui.Scaleform.daapi.view.lobby.hangar.AmmunitionPanel import getFittingSlotsData, getAmmo, VEHICLE_FITTING_SLOTS, ARTEFACTS_SLOTS, FITTING_MODULES
 from gui.Scaleform.daapi.view.lobby.shared.fitting_slot_vo import FittingSlotVO
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_base import VehicleCompareConfiguratorBaseView
@@ -114,7 +114,7 @@ def _getSlotDataIndexes(slots):
     return indexes
 
 
-_SLOT_DATA_INDEXES = _getSlotDataIndexes(HANGAR_FITTING_SLOTS)
+_SLOT_DATA_INDEXES = _getSlotDataIndexes(VEHICLE_FITTING_SLOTS)
 
 class _CmpOptDeviceRemover(ModuleProcessor):
 
@@ -188,16 +188,15 @@ class _ConfigFittingSlotVO(FittingSlotVO):
                     else:
                         self['highlight'] = affectsAtTTC
                         self['bgHighlightType'] = SLOT_HIGHLIGHT_TYPES.BATTLE_BOOSTER
-        elif slotType == FITTING_TYPES.OPTIONAL_DEVICE:
-            vehicleModule = findFirst(lambda item: item.isInstalled(vehicle, slotId), modulesData)
-            for battleBooster in vehicle.equipment.battleBoosterConsumables:
-                if battleBooster is not None and battleBooster.isOptionalDeviceCompatible(vehicleModule):
-                    self['highlight'] = True
-                    break
-
-            vehicleModule = super(_ConfigFittingSlotVO, self)._prepareModule(modulesData, vehicle, slotType, slotId)
         else:
             vehicleModule = super(_ConfigFittingSlotVO, self)._prepareModule(modulesData, vehicle, slotType, slotId)
+            if slotType == FITTING_TYPES.OPTIONAL_DEVICE:
+                moduleInSlot = findFirst(lambda item: item.isInstalled(vehicle, slotId), modulesData)
+                for battleBooster in vehicle.equipment.battleBoosterConsumables:
+                    if battleBooster is not None and battleBooster.isOptionalDeviceCompatible(moduleInSlot):
+                        self['highlight'] = True
+                        break
+
         return vehicleModule
 
 
@@ -397,7 +396,7 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
     def onResetToDefault(self):
         self.__updateSkillsData()
         self.__parametersView.init(self._container.getCurrentVehicle())
-        self.__updateSlotsData(HANGAR_FITTING_SLOTS)
+        self.__updateSlotsData(VEHICLE_FITTING_SLOTS)
         self.as_setTopModulesSelectedS(self._container.isTopModulesSelected())
         self.__updateCrewLvl()
         self.__updateCrewAttentionIcon()
@@ -486,7 +485,7 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
         self.as_setTopModulesSelectedS(topModulesSelected)
         self.__updateCrewAttentionIcon()
         self.__updateSkillsData()
-        self.__updateSlotsData(HANGAR_FITTING_SLOTS)
+        self.__updateSlotsData(VEHICLE_FITTING_SLOTS)
         initialVehicle, _ = self._container.getInitialVehicleData()
         self.__parametersView.init(currentVehicle, initialVehicle)
 
@@ -509,7 +508,7 @@ class VehicleCompareConfiguratorView(LobbySubView, VehicleCompareConfiguratorVie
     def __updateSlotsData(self, slotsTypes):
         newVoData = getFittingSlotsData(self._container.getCurrentVehicle(), slotsTypes, _ConfigFittingSlotVO)
         for slotType in slotsTypes:
-            indexesRange = _SLOT_DATA_INDEXES[HANGAR_FITTING_SLOTS.index(slotType)]
+            indexesRange = _SLOT_DATA_INDEXES[VEHICLE_FITTING_SLOTS.index(slotType)]
             for idx in indexesRange:
                 newSlotData = newVoData.pop(0)
                 slotDataID = newSlotData.get('id', 0)

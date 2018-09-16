@@ -11,9 +11,10 @@ import dossiers2.custom.tankmen_dossier1_updater
 from VersionUpdater import VersionUpdaterBase
 from wotdecorators import singleton
 from debug_utils import LOG_DEBUG_DEV
-ACCOUNT_DOSSIER_VERSION = 109
+from soft_exception import SoftException
+ACCOUNT_DOSSIER_VERSION = 110
 ACCOUNT_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromAccountDossier%d'
-VEHICLE_DOSSIER_VERSION = 99
+VEHICLE_DOSSIER_VERSION = 100
 VEHICLE_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromVehicleDossier%d'
 TANKMAN_DOSSIER_VERSION = 66
 TANKMAN_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromTankmanDossier%d'
@@ -2508,6 +2509,86 @@ def __updateFromAccountDossier108(compDescr):
     return (109, updateCtx['dossierCompDescr'])
 
 
+def __updateFromAccountDossier109(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'a15x15Cut',
+     'rareAchievements',
+     'total',
+     'a7x7Cut',
+     'max15x15',
+     'max7x7',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'historicalAchievements',
+     'historicalCut',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortBattlesCut',
+     'fortSorties',
+     'maxFortSorties',
+     'fortSortiesCut',
+     'fortBattlesInClan',
+     'maxFortBattlesInClan',
+     'fortSortiesInClan',
+     'maxFortSortiesInClan',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'achievementsRated7x7',
+     'rated7x7Cut',
+     'globalMapMiddle',
+     'globalMapChampion',
+     'globalMapAbsolute',
+     'maxGlobalMapMiddle',
+     'maxGlobalMapChampion',
+     'maxGlobalMapAbsolute',
+     'globalMapCommonCut',
+     'fallout',
+     'falloutCut',
+     'maxFallout',
+     'falloutAchievements',
+     'ranked',
+     'maxRanked',
+     'rankedCuts',
+     'rankedSeasons',
+     'rankedCurrent',
+     'rankedPrevious',
+     'maxRankedCurrent',
+     'maxRankedPrevious',
+     'rankedCurrentCut',
+     'rankedPreviousCut',
+     'rankedCurrentCycle',
+     'rankedPreviousCycle',
+     'a30x30',
+     'a30x30Cut',
+     'max30x30',
+     'markOfMasteryCut',
+     'playerBadges']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    addBlock(updateCtx, 'epicBattle')
+    addBlock(updateCtx, 'epicBattleCut')
+    addBlock(updateCtx, 'maxEpicBattle')
+    addBlock(updateCtx, 'epicBattleAchievements')
+    setVersion(updateCtx, 110)
+    return (110, updateCtx['dossierCompDescr'])
+
+
 def __updateFromVehicleDossier64(compDescr):
     blocksLayout = ['a15x15',
      'a15x15_2',
@@ -4064,6 +4145,57 @@ def __updateFromVehicleDossier98(compDescr):
     addBlock(updateCtx, 'max30x30')
     setVersion(updateCtx, 99)
     return (99, updateCtx['dossierCompDescr'])
+
+
+def __updateFromVehicleDossier99(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'total',
+     'max15x15',
+     'max7x7',
+     'inscriptions',
+     'emblems',
+     'camouflages',
+     'compensation',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortSorties',
+     'maxFortSorties',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'globalMapCommon',
+     'maxGlobalMapCommon',
+     'fallout',
+     'maxFallout',
+     'ranked',
+     'maxRanked',
+     'rankedSeasons',
+     'a30x30',
+     'max30x30']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    addBlock(updateCtx, 'epicBattle')
+    addBlock(updateCtx, 'maxEpicBattle')
+    addBlock(updateCtx, 'epicBattleAchievements')
+    setVersion(updateCtx, 100)
+    return (100, updateCtx['dossierCompDescr'])
 
 
 def __bootstrapTankmanDossierFrom(ver, compDescr):

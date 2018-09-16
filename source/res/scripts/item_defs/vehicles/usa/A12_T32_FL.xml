@@ -1,0 +1,583 @@
+<A12_T32_FL.xml>
+  <crew>
+    <commander></commander>
+    <gunner></gunner>
+    <driver></driver>
+    <radioman></radioman>
+    <loader></loader>
+    <loader></loader>
+  </crew>
+  <speedLimits>
+    <forward>	35	</forward>
+    <backward>	14	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.051	</moving>
+    <still>	0.102	</still>
+    <camouflageBonus>	0.02	</camouflageBonus>
+    <camouflageNetBonus>	0.05	</camouflageNetBonus>
+    <firePenalty>	0.153	</firePenalty>
+  </invisibility>
+  <repairCost>	7.92	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	1.6	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	127	</armor_1>
+      <armor_2>	95	</armor_2>
+      <armor_3>	76	</armor_3>
+      <armor_4>	51	</armor_4>
+      <armor_5>	0	</armor_5>
+      <armor_6>	51	</armor_6>
+      <armor_7>	76	</armor_7>
+      <armor_8>	51	</armor_8>
+      <armor_9>	25	</armor_9>
+      <armor_10>	13	</armor_10>
+      <armor_11>	38	</armor_11>
+      <armor_12>	76	</armor_12>
+      <armor_13>	38	</armor_13>
+      <armor_14>	25	</armor_14>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	30000	</weight>
+    <maxHealth>	1120	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	240	</maxHealth>
+      <maxRegenHealth>	160	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/american/A12_T32/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/american/A12_T32/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/american/A12_T32/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.26 38.00 0.34 1.00 0.04 0.27	</pitchParams>
+      <rollParams>	1.00 0.26 38.00 0.34 1.00 0.04 0.27	</rollParams>
+      <sensitivityToImpulse>	0.3	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_large	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.000304 0.49782 0.501575	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/american/A12_T32/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/american/A12_T32/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.0256588 0.426453 2.36029	</rayStart>
+        <rayEnd>	-0.0256588 0.248157 2.26967	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	0.0192067 0.183409 2.72611	</rayStart>
+        <rayEnd>	0.0192067 0.0216051 2.60855	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.8	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/american/A12_T32/T32_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1.12 1.12 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_A12_T32_FL>
+      <userString>	#usa_vehicles:Chassis_A12_T32_FL	</userString>
+      <tags></tags>
+      <level>	8	</level>
+      <price>	30000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	25	</leftTrack>
+        <rightTrack>	25	</rightTrack>
+      </armor>
+      <weight>	12000	</weight>
+      <maxLoad>	60500	</maxLoad>
+      <terrainResistance>	1.1 1.5 2.7	</terrainResistance>
+      <brakeForce>	36500	</brakeForce>
+      <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
+      <rotationSpeed>	25	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.21	</vehicleMovement>
+        <vehicleRotation>	0.21	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	165	</maxRegenHealth>
+      <repairCost>	5.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/american/A12_T32/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/american/A12_T32/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/american/A12_T32/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	FAR	</lodDist>
+        <bufferPrefs>	largeTank	</bufferPrefs>
+        <textureSet>	usa_03	</textureSet>
+        <size>	0.56 0.72	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-2.16	</textureScale>
+      </tracks>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.34519	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+        </group>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.34519	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.347702	</radius>
+          <syncAngle>	27.692	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.178977	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L7	</name>
+          <radius>	0.353029	</radius>
+          <syncAngle>	27.692	</syncAngle>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.347702	</radius>
+          <syncAngle>	27.692	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.178977	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	6	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R7	</name>
+          <radius>	0.353029	</radius>
+          <syncAngle>	27.692	</syncAngle>
+        </wheel>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L7	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	largeTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 1.14449 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A12_T32/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A12_T32/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	1.42926 2.33777	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	4.836290 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.428570 0.000000	</row1>
+            <row2>	0.000000 0.000000 9.283970	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.07	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	7	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.1	</minOffset>
+          <maxOffset>	0.07	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/american/A12_T32/track/segment1_L.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/american/A12_T32/track/segment1_R.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/american/A12_T32/track/segment2_L.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/american/A12_T32/track/segment2_R.model	</segment2ModelRight>
+        <left>	vehicles/american/A12_T32/track/left.track	</left>
+        <right>	vehicles/american/A12_T32/track/right.track	</right>
+        <segmentLength>	0.135	</segmentLength>
+        <segmentOffset>	0.112	</segmentOffset>
+        <segment2Offset>	0.07	</segment2Offset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.015	</maxAmplitude>
+        <maxOffset>	0.01	</maxOffset>
+        <gravity>	-9	</gravity>
+        <elasticity>	1000	</elasticity>
+        <damping>	2	</damping>
+        <forwardElastK>	1	</forwardElastK>
+        <backwardElastK>	1	</backwardElastK>
+        <offset>	0.000000	</offset>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	0.73	</forwardElastK>
+          <backwardElastK>	1.15	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	0.73	</forwardElastK>
+          <backwardElastK>	1.15	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <elasticity>	1060	</elasticity>
+          <damping>	2	</damping>
+          <forwardElastK>	2.73	</forwardElastK>
+          <backwardElastK>	0.6	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <elasticity>	1060	</elasticity>
+          <damping>	2	</damping>
+          <forwardElastK>	2.73	</forwardElastK>
+          <backwardElastK>	0.6	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.076	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <backwardElastK>	2.4	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <backwardElastK>	2.6	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L6	</name>
+          <backwardElastK>	2.8	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.076	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <backwardElastK>	1.8	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <backwardElastK>	2	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <backwardElastK>	2.4	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <backwardElastK>	2.6	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R6	</name>
+          <backwardElastK>	2.8	</backwardElastK>
+          <offset>	-0.051	</offset>
+        </node>
+      </trackNodes>
+      <trackThickness>	-0.0168	</trackThickness>
+    </Chassis_A12_T32_FL>
+  </chassis>
+  <turrets0>
+    <Turret_1_A12_T32_FL>
+      <userString>	#usa_vehicles:Turret_1_A12_T32_FL	</userString>
+      <tags></tags>
+      <level>	9	</level>
+      <price>	50000	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	298	</armor_1>
+        <armor_2>	197	</armor_2>
+        <armor_3>	197	</armor_3>
+        <armor_4>	152	</armor_4>
+        <armor_5>	152	</armor_5>
+        <armor_6>	152	</armor_6>
+        <armor_7>	101	</armor_7>
+        <armor_8>	76.2	</armor_8>
+        <armor_9>	25	</armor_9>
+        <armor_10>	0	</armor_10>
+        <armor_11>	101	</armor_11>
+        <armor_12>	152	</armor_12>
+        <armor_13>	76.2	</armor_13>
+        <armor_14>	298	</armor_14>
+        <armor_15>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_15>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	12200	</weight>
+      <maxHealth>	430	</maxHealth>
+      <rotationSpeed>	25	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	150	</maxHealth>
+        <maxRegenHealth>	75	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	400	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	100	</maxHealth>
+        <maxRegenHealth>	50	</maxRegenHealth>
+        <repairCost>	2.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <_105mm_Gun_T5E1_FL>	shared	  <maxAmmo>	43	</maxAmmo>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.366894 10 0.430556 5 0.569444 5 0.633106 10 1 10	</maxPitch>
+          </pitchLimits>
+          <reloadTime>	10.6	</reloadTime>
+          <shotDispersionRadius>	0.41	</shotDispersionRadius>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	4.0	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <armor>
+            <armor_1>	298	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	203	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	152.4	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
+            <armor_5>	35	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_5>
+            <armor_6>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_6>
+            <armor_9>	298	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_9>
+            <gun>	45	</gun>
+          </armor>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
+          <models>
+            <undamaged>	vehicles/american/A12_T32/normal/lod0/Gun_04.model	</undamaged>
+            <destroyed>	vehicles/american/A12_T32/crash/lod0/Gun_04.model	</destroyed>
+            <exploded>	vehicles/american/A12_T32/crash/lod0/Gun_04.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/american/A12_T32/collision/Gun_04.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/american/A12_T32/collision_client/Gun_04.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0069845 0.00348404 2.95125	</rayStart>
+              <rayEnd>	-0.424489 0.00827416 2.9446	</rayEnd>
+              <rayUp>	0.104 0.101 3	</rayUp>
+              <size>	0.6	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.52 0.52 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_105mm_Gun_T5E1_FL>
+      </guns>
+      <models>
+        <undamaged>	vehicles/american/A12_T32/normal/lod0/Turret_02.model	</undamaged>
+        <destroyed>	vehicles/american/A12_T32/crash/lod0/Turret_02.model	</destroyed>
+        <exploded>	vehicles/american/A12_T32/crash/lod0/Turret_02.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/american/A12_T32/collision/Turret_02.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/american/A12_T32/collision_client/Turret_02.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.000126 0.393811 1.00628	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-1.02213 0.692338 -1.54862	</rayStart>
+          <rayEnd>	-0.45438 0.561653 -1.4052	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	false	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	1.40746 0.735957 -0.17113	</rayStart>
+          <rayEnd>	0.811536 0.676691 -0.134428	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.32	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.958 -0.019 0.932 0.000 0.556 0.056 0.703 0.674 0.459 0.500 0.000 0.500 0.000 0.100 0.000	</physicsShape>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <camouflage>
+        <tiling>	0.595 0.595 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_A12_T32_FL>
+  </turrets0>
+  <engines>
+    <Continental_AV-1790-3_FL>	shared	</Continental_AV-1790-3_FL>
+  </engines>
+  <fuelTanks>
+    <Large>	shared	</Large>
+  </fuelTanks>
+  <radios>
+    <SCR_528_FL>	shared	</SCR_528_FL>
+  </radios>
+  <physics>
+    <detailed>
+      <engines>
+        <Continental_AV-1790-3_FL>
+          <smplEnginePower>	845.8249	</smplEnginePower>
+        </Continental_AV-1790-3_FL>
+      </engines>
+      <chassis>
+        <Chassis_A12_T32_FL>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.12075	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_A12_T32_FL>
+      </chassis>
+    </detailed>
+  </physics>
+  <clientAdjustmentFactors>
+    <guns>
+      <_105mm_Gun_T5E1_FL>
+        <delta>	1.25592	</delta>
+      </_105mm_Gun_T5E1_FL>
+    </guns>
+    <armour>	0.985043868	</armour>
+  </clientAdjustmentFactors>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	large	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	usa_star	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	0.82	</alpha>
+  </emblems>
+</A12_T32_FL.xml>

@@ -168,6 +168,7 @@ class MESSENGER(object):
     DIALOGS_SQUADCHANNEL_HEADERMSG_SQUADFORMATION = '#messenger:dialogs/squadChannel/headerMsg/squadFormation'
     DIALOGS_SQUADCHANNEL_HEADERMSG_SQUADFORMATIONRESTRICTION = '#messenger:dialogs/squadChannel/headerMsg/squadFormationRestriction'
     DIALOGS_SQUADCHANNEL_HEADERMSG_EVENTFORMATIONRESTRICTION = '#messenger:dialogs/squadChannel/headerMsg/eventFormationRestriction'
+    DIALOGS_SQUADCHANNEL_HEADERMSG_EPICBATTLEFORMATIONRESTRICTION = '#messenger:dialogs/squadChannel/headerMsg/epicBattleFormationRestriction'
     DIALOGS_SQUADCHANNEL_HEADERMSG_DYNSQUAD = '#messenger:dialogs/squadChannel/headerMsg/dynSquad'
     DIALOGS_BSCHANNEL_CONTEXT_KICKPLAYER = '#messenger:dialogs/bsChannel/context/kickPlayer'
     DIALOGS_TEAMCHANNEL_BUTTONS_DISMISS = '#messenger:dialogs/teamChannel/buttons/dismiss'
@@ -311,6 +312,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_EXPERIENCE = '#messenger:serviceChannelMessages/battleResults/experience'
     SERVICECHANNELMESSAGES_BATTLERESULTS_FREEXP = '#messenger:serviceChannelMessages/battleResults/freeXP'
     SERVICECHANNELMESSAGES_BATTLERESULTS_CREDITS = '#messenger:serviceChannelMessages/battleResults/credits'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_CREDITS_NOTACCRUED = '#messenger:serviceChannelMessages/battleResults/credits/notAccrued'
     SERVICECHANNELMESSAGES_BATTLERESULTS_GOLD = '#messenger:serviceChannelMessages/battleResults/gold'
     SERVICECHANNELMESSAGES_BATTLERESULTS_CRYSTAL = '#messenger:serviceChannelMessages/battleResults/crystal'
     SERVICECHANNELMESSAGES_BATTLERESULTS_DOUBLEXPFACTOR = '#messenger:serviceChannelMessages/battleResults/doubleXpFactor'
@@ -767,6 +769,8 @@ class MESSENGER(object):
     CHAT_TOXICMESSAGES_BLOCKEDMESSAGE = '#messenger:chat/toxicMessages/blockedMessage'
     BATTLE_TOOLTIPS_TOXICMESSAGE = '#messenger:battle/toolTips/toxicMessage'
     PERSONALMISSIONS_COMPLETIONTOKENGAIN = '#messenger:personalMissions/completionTokenGain'
+    CHAT_PERSONALMESSAGE_WARNINGHEAD = '#messenger:chat/personalMessage/warningHead'
+    CHAT_PERSONALMESSAGE_WARNINGBODY = '#messenger:chat/personalMessage/warningBody'
     CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,
      CLIENT_ERROR_SHARED_NOT_CONNECTED,

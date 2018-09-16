@@ -95,6 +95,7 @@ class SettingsCore(ISettingsCore):
          (GAME.HANGAR_CAM_PERIOD, options.HangarCamPeriodSetting(GAME.HANGAR_CAM_PERIOD, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.HANGAR_CAM_PARALLAX_ENABLED, options.HangarCamParallaxEnabledSetting(GAME.HANGAR_CAM_PARALLAX_ENABLED, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.ENABLE_SERVER_AIM, options.StorageAccountSetting(GAME.ENABLE_SERVER_AIM, storage=GAME_SETTINGS_STORAGE)),
+         (GAME.SHOW_DAMAGE_ICON, options.ShowDamageIconSetting(GAME.SHOW_DAMAGE_ICON, storage=GAME_SETTINGS_STORAGE)),
          (GAME.MINIMAP_ALPHA, options.StorageAccountSetting(GAME.MINIMAP_ALPHA, storage=GAME_SETTINGS_STORAGE)),
          (GAME.ENABLE_POSTMORTEM_DELAY, options.PostMortemDelaySetting(GAME.ENABLE_POSTMORTEM_DELAY, storage=GAME_SETTINGS_STORAGE)),
          (GAME.SHOW_VEHICLES_COUNTER, options.StorageAccountSetting(GAME.SHOW_VEHICLES_COUNTER, storage=GAME_SETTINGS_STORAGE)),

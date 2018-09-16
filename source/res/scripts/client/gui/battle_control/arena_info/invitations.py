@@ -2,13 +2,15 @@
 # Embedded file name: scripts/client/gui/battle_control/arena_info/invitations.py
 import BattleReplay
 from adisp import process
-from constants import PREBATTLE_TYPE, INVITATION_TYPE
+from constants import INVITATION_TYPE
 from gui.battle_control.arena_info.settings import INVITATION_DELIVERY_STATUS
 from gui.battle_control.requests.context import SendInvitesCtx
 from gui.prb_control import prbInvitesProperty
 from ids_generators import SequenceIDGenerator
 from skeletons.gui.battle_session import ISquadInvitationsHandler
-from unit_roster_config import SquadRoster
+from unit_roster_config import SquadRoster, EpicRoster
+from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 _STATUS = INVITATION_DELIVERY_STATUS
 _SEND_ACTION_NAME = 'DynSquad.SendInvitationToSquad'
 _ACCEPT_ACTION_NAME = 'DynSquad.AcceptInvitationToSquad'
@@ -37,12 +39,16 @@ class SquadInvitationsFilter(object):
     def updatePersonalInfo(self, arenaDP):
         vInfoVO = arenaDP.getVehicleInfo()
         playerInfo = vInfoVO.player
+        sessionProvider = dependency.instance(IBattleSessionProvider)
+        arenaVisitor = sessionProvider.arenaVisitor
+        isEpicBattle = arenaVisitor.gui.isEpicBattle()
         self.__isReceivingProhibited = playerInfo.forbidInBattleInvitations
         self.__isSendingProhibited = False
         if vInfoVO.isInSquad():
             if playerInfo.isPrebattleCreator:
                 count = arenaDP.getVehiclesCountInPrebattle(vInfoVO.team, vInfoVO.prebattleID)
-                self.__isSendingProhibited = count >= SquadRoster.MAX_SLOTS
+                maxSlots = SquadRoster.MAX_SLOTS if not isEpicBattle else EpicRoster.MAX_SLOTS
+                self.__isSendingProhibited = count >= maxSlots
             else:
                 self.__isSendingProhibited = True
 
@@ -123,7 +129,7 @@ class SquadInvitationsFilter(object):
         return
 
     def __isInviteValid(self, invite):
-        if invite.type != PREBATTLE_TYPE.SQUAD:
+        if invite.type not in {INVITATION_TYPE.SQUAD, INVITATION_TYPE.EPIC}:
             return False
         if not invite.isSameBattle(self.__arenaUniqueID):
             return False
@@ -177,7 +183,7 @@ class _SquadInvitationsHandler(ISquadInvitationsHandler):
                 return item.receiverDBID
 
         for invite in invites:
-            if invite.type == INVITATION_TYPE.SQUAD and getter(invite) == playerID:
+            if invite.type in {INVITATION_TYPE.SQUAD, INVITATION_TYPE.EPIC} and getter(invite) == playerID:
                 return invite.clientID
 
         return None

@@ -127,6 +127,10 @@ def updateAccountDossier(dossierDescr, battleResults, dossierXP, vehDossiers, ma
         for record in maxValuesChanged:
             dossierDescr['maxRanked'][record] = maxVehResults[record]
 
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_MAX_EPIC_BATTLE):
+        for record in maxValuesChanged:
+            dossierDescr['maxEpicBattle'][record] = maxVehResults[record]
+
     for vehTypeCompDescr, (_, vehDossierDescr) in vehDossiers.iteritems():
         __updateAccountDossierCuts(dossierDescr, battleResults, dossierXP, vehTypeCompDescr, vehDossierDescr)
 
@@ -230,6 +234,11 @@ def __updateDossierCommonPart(dossierType, dossierDescr, results, dossierXP, win
         __updateAggregatedValues(dossierDescr.expand('fortBattles'), dossierDescr.expand('fortBattles'), results, dossierXP, frags8p, winnerTeam)
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_RANKED):
         __updateAggregatedValues(dossierDescr.expand('ranked'), dossierDescr.expand('ranked'), results, dossierXP, frags8p)
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_EPIC_BATTLE):
+        __updateAggregatedValues(dossierDescr.expand('epicBattle'), dossierDescr.expand('epicBattle'), results, dossierXP, frags8p)
+        for record in ['deathCount']:
+            dossierDescr['epicBattle'][record] += results[record]
+
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_ACHIEVEMENTS, BONUS_CAPS.DOSSIER_ACHIEVEMENTS_FALLOUT):
         for recordDBID in results['achievements']:
             __processArenaAchievement(dossierDescr, recordDBID)
@@ -253,6 +262,8 @@ def __updateDossierCommonPart(dossierType, dossierDescr, results, dossierXP, win
             maxValuesChanged = __updateMaxValues(dossierDescr.expand('maxGlobalMapCommon'), results, dossierXP)
     if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_MAXFALLOUT):
         maxValuesChanged = __updateMaxValues(dossierDescr.expand('maxFallout'), results, dossierXP)
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_MAX_EPIC_BATTLE):
+        maxValuesChanged = __updateMaxValues(dossierDescr.expand('maxEpicBattle'), results, dossierXP)
     return (maxValuesChanged, frags8p)
 
 
@@ -490,6 +501,10 @@ def __updateAccountDossierCuts(dossierDescr, results, dossierXP, vehTypeCompDesc
         if vehDossierDescr['achievements']['markOfMastery'] != 0:
             markOfMasteryCut = dossierDescr['markOfMasteryCut']
             markOfMasteryCut[vehTypeCompDescr] = vehDossierDescr['achievements']['markOfMastery']
+    if BONUS_CAPS.checkAny(bonusType, BONUS_CAPS.DOSSIER_EPIC_BATTLE):
+        epicBattleAccountDossierCut = dossierDescr['epicBattleCut']
+        epicBattleVehicleDossier = vehDossierDescr['epicBattle']
+        epicBattleAccountDossierCut[vehTypeCompDescr] = (epicBattleVehicleDossier['battlesCount'], epicBattleVehicleDossier['wins'], epicBattleVehicleDossier['xp'])
 
 
 def __updateTankmanDossierImpl(dossierDescr, results):

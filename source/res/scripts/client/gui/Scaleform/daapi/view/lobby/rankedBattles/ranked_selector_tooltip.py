@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/ranked_selector_tooltip.py
+import BigWorld
 from gui.Scaleform import MENU
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
@@ -12,6 +13,7 @@ from gui.shared.formatters.time_formatters import formatDate
 from helpers import dependency, i18n, time_utils
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.game_control import IRankedBattlesController
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 _TOOLTIP_MIN_WIDTH = 280
 
 class RankedSelectorTooltip(BlocksTooltipData):
@@ -70,3 +72,31 @@ class RankedSelectorTooltip(BlocksTooltipData):
 
     def _getTillEndBlock(self, timeLeft):
         return formatters.packTextBlockData(text_styles.main(RANKED_BATTLES.SELECTORTOOLTIP_TILLEND) + ' ' + text_styles.stats(time_utils.getTillTimeString(timeLeft, MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY)))
+
+
+class RankedUnavailableTooltip(BlocksTooltipData):
+    rankedController = dependency.descriptor(IRankedBattlesController)
+
+    def __init__(self, context):
+        super(RankedUnavailableTooltip, self).__init__(context, None)
+        self._setWidth(540)
+        return
+
+    def _packBlocks(self, *args, **kwargs):
+        items = super(RankedUnavailableTooltip, self)._packBlocks(*args, **kwargs)
+        hasSuitableVehicles = self.rankedController.hasSuitableVehicles()
+        tooltipData = TOOLTIPS.BATTLETYPES_RANKED
+        header = i18n.makeString(tooltipData + '/header')
+        bodyKey = tooltipData + '/body'
+        body = i18n.makeString(bodyKey)
+        nextSeason = self.rankedController.getNextSeason()
+        if hasSuitableVehicles:
+            if self.rankedController.isFrozen():
+                additionalInfo = i18n.makeString(bodyKey + '/frozen')
+            elif nextSeason is not None:
+                additionalInfo = i18n.makeString(bodyKey + '/coming', date=BigWorld.wg_getShortDateFormat(time_utils.makeLocalServerTime(nextSeason.getStartDate())))
+            else:
+                additionalInfo = i18n.makeString(bodyKey + '/disabled')
+            body = '%s\n\n%s' % (body, additionalInfo)
+        items.append(formatters.packImageTextBlockData(title=text_styles.middleTitle(header), desc=text_styles.main(body)))
+        return items

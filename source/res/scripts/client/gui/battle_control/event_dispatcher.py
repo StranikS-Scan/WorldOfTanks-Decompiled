@@ -30,6 +30,10 @@ def setRadialMenuCmd(key, isDown):
     g_eventBus.handleEvent(GameEvent(GameEvent.RADIAL_MENU_CMD, _makeKeyCtx(key=key, isDown=isDown)), scope=_SCOPE)
 
 
+def setGlobalMessageCmd(key, isDown):
+    g_eventBus.handleEvent(GameEvent(GameEvent.EPIC_GLOBAL_MSG_CMD, _makeKeyCtx(key=key, isDown=isDown)), scope=_SCOPE)
+
+
 def toggleGUIVisibility():
     g_eventBus.handleEvent(GameEvent(GameEvent.TOGGLE_GUI), scope=_SCOPE)
 

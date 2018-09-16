@@ -12,6 +12,7 @@ from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from helpers import dependency
 from items.components.c11n_constants import SeasonType
 from skeletons.gui.customization import ICustomizationService
+from soft_exception import SoftException
 PropertySheetSeasonButtonRenderers = namedtuple('PropertySheetSeasonButtonRenderers', 'rendererVOs')
 PropertySheetSeasonButtonRenderers.__new__.__defaults__ = None
 PropertySheetButtonRendererInfo = namedtuple('PropertySheetButtonRendererInfo', ('itemIntCD', 'isPurchaseRequired', 'showGlow'))
@@ -112,7 +113,7 @@ class SeasonIconFactory(object):
             if iconFactory.getSeasonType() == season:
                 return iconFactory
 
-        raise ValueError('SeasonIconFactory unknown season', season)
+        raise SoftException('SeasonIconFactory unknown season', season)
 
     @staticmethod
     def getIcon(season, state):

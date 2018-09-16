@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/stun.py
+from soft_exception import SoftException
 from items import _xml
 import ResMgr
 _CONFIG_FILE = 'scripts/item_defs/vehicles/common/stun.xml'
@@ -45,4 +46,4 @@ def init():
 
 def _validateValue1inf(keyName, value):
     if value < 1:
-        raise Exception('invalid value for "%s": %s (it should be in range [1, +inf])' % (keyName, value))
+        raise SoftException('invalid value for "%s": %s (it should be in range [1, +inf])' % (keyName, value))

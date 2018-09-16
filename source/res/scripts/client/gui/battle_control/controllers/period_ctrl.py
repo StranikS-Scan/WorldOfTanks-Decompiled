@@ -69,7 +69,7 @@ class ITimersBar(object):
 
 
 class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
-    __slots__ = ('_callbackID', '_period', '_endTime', '_length', '_sound', '_cdState', '_ttState', '_isNotified', '_totalTime', '_countdown', '_playingTime', '_switcherState', '_battleCtx', '_arenaVisitor')
+    __slots__ = ('_callbackID', '_period', '_endTime', '_length', '_sound', '_cdState', '_ttState', '_isNotified', '_totalTime', '_countdown', '_playingTime', '_switcherState', '_battleCtx', '_arenaVisitor', '_timeNotifications')
 
     def __init__(self):
         super(ArenaPeriodController, self).__init__()
@@ -87,6 +87,7 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
         self._playingTime = 0
         self._battleCtx = None
         self._arenaVisitor = None
+        self._timeNotifications = []
         return
 
     def getControllerID(self):
@@ -128,6 +129,13 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
             viewCmp.setTotalTime(self._totalTime)
 
         return
+
+    def addRemainingTimeNotification(self, minutes, seconds, callback):
+        conValid = self._totalTime <= minutes * 60 + seconds
+        self._timeNotifications.append((minutes,
+         seconds,
+         callback,
+         conValid))
 
     def getEndTime(self):
         return self._endTime
@@ -172,6 +180,22 @@ class ArenaPeriodController(IArenaPeriodController, ViewComponentsController):
         self._totalTime = totalTime
         for viewCmp in self._viewComponents:
             viewCmp.setTotalTime(totalTime)
+
+        minutes, seconds = divmod(int(totalTime), 60)
+        for idx in range(len(self._timeNotifications)):
+            m, s, f, state = self._timeNotifications[idx]
+            condValid = totalTime <= m * 60 + s
+            if condValid and not state:
+                f(minutes, seconds)
+                self._timeNotifications[idx] = (m,
+                 s,
+                 f,
+                 True)
+            if state and not condValid:
+                self._timeNotifications[idx] = (m,
+                 s,
+                 f,
+                 False)
 
     def _hideTotalTime(self):
         for viewCmp in self._viewComponents:

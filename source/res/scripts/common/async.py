@@ -3,6 +3,7 @@
 import sys
 import weakref
 from collections import deque
+from soft_exception import SoftException
 import BigWorld
 from BWUtil import AsyncReturn
 from functools import wraps, partial
@@ -94,6 +95,17 @@ def _isNextTickPending():
     return BigWorld.isNextTickPending()
 
 
+@async
+def delayWhileTickPending(maxTicksToDelay=1, timeout=0.1, logID=None):
+    for n in xrange(maxTicksToDelay):
+        if not _isNextTickPending():
+            LOG_DEBUG_DEV('delayWhileTickPending', logID, n)
+            break
+        yield await(delay(timeout))
+    else:
+        LOG_DEBUG('delayWhileTickPending reached maxTicksToDelay', logID, maxTicksToDelay)
+
+
 def delayable(maxTicksToDelay=1, timeout=0.1):
 
     def decorator(func):
@@ -101,14 +113,7 @@ def delayable(maxTicksToDelay=1, timeout=0.1):
         @wraps(func)
         @async
         def wrapper(*args, **kwargs):
-            for n in xrange(maxTicksToDelay):
-                if not _isNextTickPending():
-                    break
-                LOG_DEBUG_DEV('DELAYABLE isNextTickPending', func, n + 1)
-                yield await(delay(timeout))
-            else:
-                LOG_DEBUG('DELAYABLE reached maxTicksToDelay', func, maxTicksToDelay)
-
+            yield delayWhileTickPending(maxTicksToDelay, timeout, logID=func)
             func(*args, **kwargs)
 
         return wrapper
@@ -116,11 +121,31 @@ def delayable(maxTicksToDelay=1, timeout=0.1):
     return decorator
 
 
-class TimeoutError(Exception):
+@async
+def distributeLoopOverTicks(loopIterator, minPerTick=None, maxPerTick=None, logID=None, tickLength=0.1):
+    numStatements = 0
+    countInTick = 0
+    delayedCount = 0
+    for _ in loopIterator:
+        countInTick += 1
+        numStatements += 1
+        reachedMin = minPerTick is None or countInTick >= minPerTick
+        reachedMax = maxPerTick is not None and countInTick >= maxPerTick
+        if reachedMax or reachedMin and _isNextTickPending():
+            yield await(delay(tickLength))
+            countInTick = 0
+            delayedCount += 1
+
+    if logID is not None:
+        LOG_DEBUG('distributeLoopOverTicks logID/numStatements/delayedCount', logID, numStatements, delayedCount)
+    return
+
+
+class TimeoutError(SoftException):
     pass
 
 
-class BrokenPromiseError(Exception):
+class BrokenPromiseError(SoftException):
     pass
 
 

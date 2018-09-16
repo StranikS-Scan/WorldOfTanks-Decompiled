@@ -31,7 +31,7 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IVehicleComparisonBasket, ITradeInController, IRestoreController, IHeroTankController, IBootcampController
 from skeletons.gui.shared import IItemsCache
-from hangar_camera_common import CameraRelatedEvents, CameraMovementStates
+from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from HeroTank import HeroTank
 CREW_INFO_TAB_ID = 'crewInfoTab'
 FACT_SHEET_TAB_ID = 'factSheetTab'

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/base/pre_queue/entity.py
+from soft_exception import SoftException
 from constants import QUEUE_TYPE
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages
@@ -50,7 +51,7 @@ class PreQueueEntryPoint(BasePrbEntryPoint):
         return JoinPreQueueModeCtx(self.__queueType, flags=self.getFunctionalFlags())
 
     def create(self, ctx, callback=None):
-        raise Exception('QueueEntry is not create entity')
+        raise SoftException('QueueEntry is not create entity')
 
     def join(self, ctx, callback=None):
         result = True

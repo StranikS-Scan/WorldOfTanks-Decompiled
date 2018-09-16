@@ -15,6 +15,7 @@ from tutorial.doc_loader import loadDescriptorData
 from tutorial.hints_manager import HintsManager
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from skeletons.gui.game_control import IBootcampController
+from soft_exception import SoftException
 _SETTINGS = _settings.TUTORIAL_SETTINGS
 _LOBBY_DISPATCHER = _settings.TUTORIAL_LOBBY_DISPATCHER
 _BATTLE_DISPATCHER = _settings.TUTORIAL_BATTLE_DISPATCHER
@@ -152,7 +153,7 @@ class TutorialLoader(object):
     def goToLobby(self):
         databaseID = account_helpers.getAccountDatabaseID()
         if not databaseID:
-            raise UserWarning('Acoount database ID is not defined')
+            raise SoftException('Acoount database ID is not defined')
         isFirstStart = databaseID not in self.__loggedDBIDs
         self.__loggedDBIDs.add(databaseID)
         state = {'isFirstStart': isFirstStart,

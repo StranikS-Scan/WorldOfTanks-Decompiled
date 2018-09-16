@@ -150,7 +150,7 @@ def applyCamouflage(vehicle, select, factory=None):
         if camo:
             season = first(camo.seasons)
             outfit = vehicle.getCustomOutfit(season)
-            outfit = outfit or factory.createOutfit(isEnabled=True)
+            outfit = outfit or factory.createOutfit(isEnabled=True, isInstalled=True)
             outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE).set(camo)
             vehicle.setCustomOutfit(season, outfit)
     else:

@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/material_kinds.py
 import ResMgr
+from soft_exception import SoftException
 IDS_BY_NAMES = None
 GROUND_STRENGTHS_BY_IDS = None
 EFFECT_MATERIALS = ('ground', 'stone', 'wood', 'metal', 'snow', 'sand', 'water')
@@ -58,7 +59,7 @@ def _init():
 
 
 def _raiseWrongXml(fileName, msg):
-    raise Exception("error in '" + fileName + "': " + msg)
+    raise SoftException("error in '" + fileName + "': " + msg)
 
 
 _init()

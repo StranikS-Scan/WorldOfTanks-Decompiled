@@ -55,6 +55,7 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_ALLY_BASE_CAPTURED_BY_NOTIFICATION = '#ingame_gui:player_messages/ally_base_captured_by_notification'
     PLAYER_MESSAGES_ENEMY_BASE_CAPTURED_BY_NOTIFICATION = '#ingame_gui:player_messages/enemy_base_captured_by_notification'
     PLAYER_MESSAGES_BASE_CAPTURED_BY_NOTIFICATION = '#ingame_gui:player_messages/base_captured_by_notification'
+    PLAYER_MESSAGES_BASE_CAPTURE_BLOCKED = '#ingame_gui:player_messages/base_capture_blocked'
     PLAYER_MESSAGES_ALLIED_TEAM_NAME = '#ingame_gui:player_messages/allied_team_name'
     PLAYER_MESSAGES_ENEMY_TEAM_NAME = '#ingame_gui:player_messages/enemy_team_name'
     PLAYER_MESSAGES_POSTMORTEM_CAPTION = '#ingame_gui:player_messages/postmortem_caption'
@@ -88,9 +89,32 @@ class INGAME_GUI(object):
     CHAT_SHORTCUTS_ATTENTION_TO_CELL = '#ingame_gui:chat_shortcuts/attention_to_cell'
     CHAT_SHORTCUTS_SPG_AIM_AREA = '#ingame_gui:chat_shortcuts/spg_aim_area'
     CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING = '#ingame_gui:chat_shortcuts/spg_aim_area_reloading'
+    CHAT_SHORTCUTS_ATTENTION_TO_POSITION = '#ingame_gui:chat_shortcuts/attention_to_position'
+    CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_ATK = '#ingame_gui:chat_shortcuts/attention_to_objective_atk'
+    CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF = '#ingame_gui:chat_shortcuts/attention_to_objective_def'
+    CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK = '#ingame_gui:chat_shortcuts/attention_to_base_atk'
+    CHAT_SHORTCUTS_ATTENTION_TO_BASE_DEF = '#ingame_gui:chat_shortcuts/attention_to_base_def'
+    CHAT_SHORTCUTS_GLOBAL_MSG_ATK_SAVE_TANKS = '#ingame_gui:chat_shortcuts/global_msg/atk/save_tanks'
+    CHAT_SHORTCUTS_GLOBAL_MSG_DEF_SAVE_TANKS = '#ingame_gui:chat_shortcuts/global_msg/def/save_tanks'
+    CHAT_SHORTCUTS_GLOBAL_MSG_ATK_TIME = '#ingame_gui:chat_shortcuts/global_msg/atk/time'
+    CHAT_SHORTCUTS_GLOBAL_MSG_DEF_TIME = '#ingame_gui:chat_shortcuts/global_msg/def/time'
+    CHAT_SHORTCUTS_GLOBAL_MSG_LANE_WEST = '#ingame_gui:chat_shortcuts/global_msg/lane/west'
+    CHAT_SHORTCUTS_GLOBAL_MSG_LANE_CENTER = '#ingame_gui:chat_shortcuts/global_msg/lane/center'
+    CHAT_SHORTCUTS_GLOBAL_MSG_LANE_EAST = '#ingame_gui:chat_shortcuts/global_msg/lane/east'
+    CHAT_SHORTCUTS_GLOBAL_MSG_ATK_FOCUS_HQ = '#ingame_gui:chat_shortcuts/global_msg/atk/focus_hq'
+    CHAT_SHORTCUTS_GLOBAL_MSG_DEF_FOCUS_HQ = '#ingame_gui:chat_shortcuts/global_msg/def/focus_hq'
     CHAT_SHORTCUTS_ATTACK_ENEMY = '#ingame_gui:chat_shortcuts/attack_enemy'
     CHAT_SHORTCUTS_ATTACK_ENEMY_RELOADING = '#ingame_gui:chat_shortcuts/attack_enemy_reloading'
+    CHAT_EXAMPLE_GLOBAL_MSG_DEF_SAVE_TANKS = '#ingame_gui:chat_example/global_msg/def/save_tanks'
     MARKER_METERS = '#ingame_gui:marker/meters'
+    CHAT_EXAMPLE_GLOBAL_MSG_ATK_SAVE_TANKS = '#ingame_gui:chat_example/global_msg/atk/save_tanks'
+    CHAT_EXAMPLE_GLOBAL_MSG_ATK_TIME = '#ingame_gui:chat_example/global_msg/atk/time'
+    CHAT_EXAMPLE_GLOBAL_MSG_DEF_TIME = '#ingame_gui:chat_example/global_msg/def/time'
+    CHAT_EXAMPLE_GLOBAL_MSG_LANE_WEST = '#ingame_gui:chat_example/global_msg/lane/west'
+    CHAT_EXAMPLE_GLOBAL_MSG_LANE_CENTER = '#ingame_gui:chat_example/global_msg/lane/center'
+    CHAT_EXAMPLE_GLOBAL_MSG_LANE_EAST = '#ingame_gui:chat_example/global_msg/lane/east'
+    CHAT_EXAMPLE_GLOBAL_MSG_ATK_FOCUS_HQ = '#ingame_gui:chat_example/global_msg/atk/focus_hq'
+    CHAT_EXAMPLE_GLOBAL_MSG_DEF_FOCUS_HQ = '#ingame_gui:chat_example/global_msg/def/focus_hq'
     CHAT_EXAMPLE_SUPPORT_ME_WITH_FIRE = '#ingame_gui:chat_example/support_me_with_fire'
     CHAT_EXAMPLE_RELOADING_GUN = '#ingame_gui:chat_example/reloading_gun'
     CHAT_EXAMPLE_RELOADING_CASSETTE = '#ingame_gui:chat_example/reloading_cassette'
@@ -317,6 +341,22 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_DEATH_FROM_SHOT_ENEMY_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ENEMY_ENEMY'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_ENEMY_ENEMY_ARTILLERY = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ENEMY_ENEMY_ARTILLERY'
     PLAYER_MESSAGES_DEATH_FROM_SHOT_ENEMY_ENEMY_BOMBER = '#ingame_gui:player_messages/DEATH_FROM_SHOT_ENEMY_ENEMY_BOMBER'
+    PLAYER_MESSAGES_DEATH_FROM_ARTILLERY_ENEMY_SUICIDE = '#ingame_gui:player_messages/DEATH_FROM_ARTILLERY_ENEMY_SUICIDE'
+    PLAYER_MESSAGES_DEATH_FROM_ARTILLERY_ALLY_SUICIDE = '#ingame_gui:player_messages/DEATH_FROM_ARTILLERY_ALLY_SUICIDE'
+    PLAYER_MESSAGES_DEATH_FROM_BOMBER_ENEMY_SUICIDE = '#ingame_gui:player_messages/DEATH_FROM_BOMBER_ENEMY_SUICIDE'
+    PLAYER_MESSAGES_DEATH_FROM_BOMBER_ALLY_SUICIDE = '#ingame_gui:player_messages/DEATH_FROM_BOMBER_ALLY_SUICIDE'
+    PLAYER_MESSAGES_DEATH_FROM_ARTILLERY_ALLY_ALLY = '#ingame_gui:player_messages/DEATH_FROM_ARTILLERY_ALLY_ALLY'
+    PLAYER_MESSAGES_DEATH_FROM_ARTILLERY_ALLY_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_ARTILLERY_ALLY_ENEMY'
+    PLAYER_MESSAGES_DEATH_FROM_ARTILLERY_ENEMY_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_ARTILLERY_ENEMY_ENEMY'
+    PLAYER_MESSAGES_DEATH_FROM_ARTILLERY_ENEMY_ALLY = '#ingame_gui:player_messages/DEATH_FROM_ARTILLERY_ENEMY_ALLY'
+    PLAYER_MESSAGES_DEATH_FROM_RECOVERY_ENEMY_SUICIDE = '#ingame_gui:player_messages/DEATH_FROM_RECOVERY_ENEMY_SUICIDE'
+    PLAYER_MESSAGES_DEATH_FROM_RECOVERY_ALLY_SUICIDE = '#ingame_gui:player_messages/DEATH_FROM_RECOVERY_ALLY_SUICIDE'
+    PLAYER_MESSAGES_DEATH_FROM_ARTILLERY_PROTECTION_UNKNOWN_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_ARTILLERY_PROTECTION_UNKNOWN_ENEMY'
+    PLAYER_MESSAGES_DEATH_FROM_ARTILLERY_PROTECTION_UNKNOWN_ALLY = '#ingame_gui:player_messages/DEATH_FROM_ARTILLERY_PROTECTION_UNKNOWN_ALLY'
+    PLAYER_MESSAGES_DEATH_FROM_SECTOR_PROTECTION_UNKNOWN_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_SECTOR_PROTECTION_UNKNOWN_ENEMY'
+    PLAYER_MESSAGES_DEATH_FROM_SECTOR_PROTECTION_UNKNOWN_ALLY = '#ingame_gui:player_messages/DEATH_FROM_SECTOR_PROTECTION_UNKNOWN_ALLY'
+    PLAYER_MESSAGES_DEATH_FROM_SECTOR_BOMBERS_UNKNOWN_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_SECTOR_BOMBERS_UNKNOWN_ENEMY'
+    PLAYER_MESSAGES_DEATH_FROM_SECTOR_BOMBERS_UNKNOWN_ALLY = '#ingame_gui:player_messages/DEATH_FROM_SECTOR_BOMBERS_UNKNOWN_ALLY'
     VEHICLE_MESSAGES_DEATH_FROM_FIRE = '#ingame_gui:vehicle_messages/DEATH_FROM_FIRE'
     POSTMORTEM_MESSAGES_DEATH_FROM_FIRE = '#ingame_gui:postmortem_messages/DEATH_FROM_FIRE'
     PLAYER_MESSAGES_DEATH_FROM_INACTIVE_CREW_AT_SHOT = '#ingame_gui:player_messages/DEATH_FROM_INACTIVE_CREW_AT_SHOT'
@@ -345,8 +385,14 @@ class INGAME_GUI(object):
     PLAYER_MESSAGES_DEATH_FROM_DROWNING_ENEMY_ENEMY = '#ingame_gui:player_messages/DEATH_FROM_DROWNING_ENEMY_ENEMY'
     PLAYER_MESSAGES_COMBAT_EQUIPMENT_READY_ARTILLERY = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_READY_ARTILLERY'
     PLAYER_MESSAGES_COMBAT_EQUIPMENT_READY_BOMBER = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_READY_BOMBER'
+    PLAYER_MESSAGES_COMBAT_EQUIPMENT_READY_RECON = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_READY_RECON'
+    PLAYER_MESSAGES_COMBAT_EQUIPMENT_READY_SMOKE = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_READY_SMOKE'
+    PLAYER_MESSAGES_COMBAT_EQUIPMENT_READY_INSPIRE = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_READY_INSPIRE'
     PLAYER_MESSAGES_COMBAT_EQUIPMENT_USED_ARTILLERY = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_USED_ARTILLERY'
     PLAYER_MESSAGES_COMBAT_EQUIPMENT_USED_BOMBER = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_USED_BOMBER'
+    PLAYER_MESSAGES_COMBAT_EQUIPMENT_USED_RECON = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_USED_RECON'
+    PLAYER_MESSAGES_COMBAT_EQUIPMENT_USED_SMOKE = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_USED_SMOKE'
+    PLAYER_MESSAGES_COMBAT_EQUIPMENT_USED_INSPIRE = '#ingame_gui:player_messages/COMBAT_EQUIPMENT_USED_INSPIRE'
     VEHICLE_MESSAGES_DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE = '#ingame_gui:vehicle_messages/DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE'
     POSTMORTEM_MESSAGES_DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE = '#ingame_gui:postmortem_messages/DEATH_FROM_WORLD_COLLISION_SELF_SUICIDE'
     VEHICLE_MESSAGES_DEATH_FROM_WORLD_COLLISION_ENEMY_SELF = '#ingame_gui:vehicle_messages/DEATH_FROM_WORLD_COLLISION_ENEMY_SELF'
@@ -461,6 +507,7 @@ class INGAME_GUI(object):
     EFFICIENCYRIBBONS_RECEIVEDRAM = '#ingame_gui:efficiencyRibbons/receivedRam'
     EFFICIENCYRIBBONS_RECEIVEDWORLDCOLLISION = '#ingame_gui:efficiencyRibbons/receivedWorldCollision'
     EFFICIENCYRIBBONS_ASSISTSTUN = '#ingame_gui:efficiencyRibbons/assistStun'
+    EFFICIENCYRIBBONS_VEHICLERECOVERY = '#ingame_gui:efficiencyRibbons/vehicleRecovery'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING'
     DAMAGELOG_SHELLTYPE_HIGH_EXPLOSIVE = '#ingame_gui:damageLog/shellType/HIGH_EXPLOSIVE'
     DAMAGELOG_SHELLTYPE_ARMOR_PIERCING_HE = '#ingame_gui:damageLog/shellType/ARMOR_PIERCING_HE'
@@ -480,6 +527,7 @@ class INGAME_GUI(object):
     RESPAWNVIEW_NEXTVEHICLENAME = '#ingame_gui:respawnView/nextVehicleName'
     RESPAWNVIEW_EMPTYSLOTINFO = '#ingame_gui:respawnView/emptySlotInfo'
     RESPAWNVIEW_EMPTYSLOTINFOTOOLTIP = '#ingame_gui:respawnView/emptySlotInfoTooltip'
+    RESPAWNVIEW_CLASSNOTAVAILABLE = '#ingame_gui:respawnView/classNotAvailable'
     FLAGNOTIFICATION_FLAGCAPTURED = '#ingame_gui:flagNotification/flagCaptured'
     FLAGNOTIFICATION_FLAGINBASE = '#ingame_gui:flagNotification/flagInbase'
     FLAGNOTIFICATION_FLAGDELIVERED = '#ingame_gui:flagNotification/flagDelivered'
@@ -512,12 +560,27 @@ class INGAME_GUI(object):
     BATTLEMESSENGER_TOXIC_BLACKLIST_CANT_ADD_IN_BLACKLIST_BODY = '#ingame_gui:battleMessenger/toxic/blackList/CANT_ADD_IN_BLACKLIST/body'
     BATTLEMESSENGER_TOXIC_BLACKLIST_REMOVE_FROM_BLACKLIST_HEADER = '#ingame_gui:battleMessenger/toxic/blackList/REMOVE_FROM_BLACKLIST/header'
     BATTLEMESSENGER_TOXIC_BLACKLIST_REMOVE_FROM_BLACKLIST_BODY = '#ingame_gui:battleMessenger/toxic/blackList/REMOVE_FROM_BLACKLIST/body'
+    PLAYER_MESSAGES_DESTRUCTIBLE_DESTROYED_SELF = '#ingame_gui:player_messages/DESTRUCTIBLE_DESTROYED_SELF'
+    PLAYER_MESSAGES_DESTRUCTIBLE_DESTROYED_ALLY = '#ingame_gui:player_messages/DESTRUCTIBLE_DESTROYED_ALLY'
+    PLAYER_MESSAGES_DESTRUCTIBLE_DESTROYED_ENEMY = '#ingame_gui:player_messages/DESTRUCTIBLE_DESTROYED_ENEMY'
     SIEGEMODE_HINT_PRESS = '#ingame_gui:siegeMode/hint/press'
     SIEGEMODE_HINT_FORMODE_0 = '#ingame_gui:siegeMode/hint/forMode/0'
     SIEGEMODE_HINT_FORMODE_1 = '#ingame_gui:siegeMode/hint/forMode/1'
     SIEGEMODE_HINT_FORMODE_2 = '#ingame_gui:siegeMode/hint/forMode/2'
     SIEGEMODE_HINT_FORMODE_3 = '#ingame_gui:siegeMode/hint/forMode/3'
     SIEGEMODE_HINT_NOBINDING = '#ingame_gui:siegeMode/hint/noBinding'
+    EFFICIENCYRIBBONS_ENEMYSECTORCAPTURED = '#ingame_gui:efficiencyRibbons/enemySectorCaptured'
+    EFFICIENCYRIBBONS_DESTRUCTIBLEDAMAGED = '#ingame_gui:efficiencyRibbons/destructibleDamaged'
+    EFFICIENCYRIBBONS_DESTRUCTIBLEDESTROYED = '#ingame_gui:efficiencyRibbons/destructibleDestroyed'
+    EFFICIENCYRIBBONS_DESTRUCTIBLESDEFENDED = '#ingame_gui:efficiencyRibbons/destructiblesDefended'
+    EFFICIENCYRIBBONS_DEFENDERBONUS = '#ingame_gui:efficiencyRibbons/defenderBonus'
+    EFFICIENCYRIBBONS_ASSISTBYABILITY = '#ingame_gui:efficiencyRibbons/assistByAbility'
+    RECOVERY_HINT1 = '#ingame_gui:recovery/hint1'
+    RECOVERY_HINT2 = '#ingame_gui:recovery/hint2'
+    RECOVERY_COOLDOWN = '#ingame_gui:recovery/cooldown'
+    ATTACKREASON_ARTILLERYPROTECTION = '#ingame_gui:attackReason/artilleryProtection'
+    ATTACKREASON_ARTILLERY_SECTOR = '#ingame_gui:attackReason/artillery_sector'
+    ATTACKREASON_BOMBERS = '#ingame_gui:attackReason/bombers'
     TRAJECTORYVIEW_HINT_NOBINDINGKEY = '#ingame_gui:trajectoryView/hint/noBindingKey'
     TRAJECTORYVIEW_HINT_ALTERNATEMODELEFT = '#ingame_gui:trajectoryView/hint/alternateModeLeft'
     TRAJECTORYVIEW_HINT_ALTERNATEMODERIGHT = '#ingame_gui:trajectoryView/hint/alternateModeRight'
@@ -544,9 +607,32 @@ class INGAME_GUI(object):
      CHAT_SHORTCUTS_ATTENTION_TO_CELL,
      CHAT_SHORTCUTS_SPG_AIM_AREA,
      CHAT_SHORTCUTS_SPG_AIM_AREA_RELOADING,
+     CHAT_SHORTCUTS_ATTENTION_TO_POSITION,
+     CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_ATK,
+     CHAT_SHORTCUTS_ATTENTION_TO_OBJECTIVE_DEF,
+     CHAT_SHORTCUTS_ATTENTION_TO_BASE_ATK,
+     CHAT_SHORTCUTS_ATTENTION_TO_BASE_DEF,
+     CHAT_SHORTCUTS_GLOBAL_MSG_ATK_SAVE_TANKS,
+     CHAT_SHORTCUTS_GLOBAL_MSG_DEF_SAVE_TANKS,
+     CHAT_SHORTCUTS_GLOBAL_MSG_ATK_TIME,
+     CHAT_SHORTCUTS_GLOBAL_MSG_DEF_TIME,
+     CHAT_SHORTCUTS_GLOBAL_MSG_LANE_WEST,
+     CHAT_SHORTCUTS_GLOBAL_MSG_LANE_CENTER,
+     CHAT_SHORTCUTS_GLOBAL_MSG_LANE_EAST,
+     CHAT_SHORTCUTS_GLOBAL_MSG_ATK_FOCUS_HQ,
+     CHAT_SHORTCUTS_GLOBAL_MSG_DEF_FOCUS_HQ,
      CHAT_SHORTCUTS_ATTACK_ENEMY,
      CHAT_SHORTCUTS_ATTACK_ENEMY_RELOADING)
-    CHAT_EXAMPLE_ENUM = (CHAT_EXAMPLE_SUPPORT_ME_WITH_FIRE,
+    CHAT_EXAMPLE_ENUM = (CHAT_EXAMPLE_GLOBAL_MSG_DEF_SAVE_TANKS,
+     CHAT_EXAMPLE_GLOBAL_MSG_ATK_SAVE_TANKS,
+     CHAT_EXAMPLE_GLOBAL_MSG_ATK_TIME,
+     CHAT_EXAMPLE_GLOBAL_MSG_DEF_TIME,
+     CHAT_EXAMPLE_GLOBAL_MSG_LANE_WEST,
+     CHAT_EXAMPLE_GLOBAL_MSG_LANE_CENTER,
+     CHAT_EXAMPLE_GLOBAL_MSG_LANE_EAST,
+     CHAT_EXAMPLE_GLOBAL_MSG_ATK_FOCUS_HQ,
+     CHAT_EXAMPLE_GLOBAL_MSG_DEF_FOCUS_HQ,
+     CHAT_EXAMPLE_SUPPORT_ME_WITH_FIRE,
      CHAT_EXAMPLE_RELOADING_GUN,
      CHAT_EXAMPLE_RELOADING_CASSETTE,
      CHAT_EXAMPLE_RELOADING_READY,
@@ -582,7 +668,14 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_RECEIVEDRAM,
      EFFICIENCYRIBBONS_RECEIVEDWORLDCOLLISION,
      EFFICIENCYRIBBONS_ASSISTSTUN,
-     EFFICIENCYRIBBONS_STUN)
+     EFFICIENCYRIBBONS_VEHICLERECOVERY,
+     EFFICIENCYRIBBONS_STUN,
+     EFFICIENCYRIBBONS_ENEMYSECTORCAPTURED,
+     EFFICIENCYRIBBONS_DESTRUCTIBLEDAMAGED,
+     EFFICIENCYRIBBONS_DESTRUCTIBLEDESTROYED,
+     EFFICIENCYRIBBONS_DESTRUCTIBLESDEFENDED,
+     EFFICIENCYRIBBONS_DEFENDERBONUS,
+     EFFICIENCYRIBBONS_ASSISTBYABILITY)
     SIEGEMODE_HINT_FORMODE_ENUM = (SIEGEMODE_HINT_FORMODE_0,
      SIEGEMODE_HINT_FORMODE_1,
      SIEGEMODE_HINT_FORMODE_2,

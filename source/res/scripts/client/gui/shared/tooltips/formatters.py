@@ -51,13 +51,15 @@ def packAlignedTextBlockData(text, align, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_T
      'useHtml': True}, padding)
 
 
-def packTextParameterBlockData(name, value, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_BLOCK_LINKAGE, valueWidth=-1, gap=5, padding=None):
+def packTextParameterBlockData(name, value, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TEXT_PARAMETER_BLOCK_LINKAGE, valueWidth=-1, gap=5, padding=None, highlight=False):
     data = {'name': name,
      'value': value}
     if valueWidth != -1:
         data['valueWidth'] = valueWidth
     if gap != -1:
         data['gap'] = gap
+    if highlight:
+        data['highlight'] = True
     return packBlockDataItem(linkage, data, padding)
 
 
@@ -133,7 +135,7 @@ def packResultBlockData(title, text):
     return packBuildUpBlockData([packTextBlockData(title, True, BATTLE_RESULT_TYPES.TOOLTIP_RESULT_TTILE_LEFT_LINKAGE), packTextBlockData(text, True, BATTLE_RESULT_TYPES.TOOLTIP_ICON_TEXT_PARAMETER_LINKAGE)])
 
 
-def packImageTextBlockData(title=None, desc=None, img=None, imgPadding=None, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', ignoreImageSize=False, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding=None, descPadding=None):
+def packImageTextBlockData(title=None, desc=None, img=None, imgPadding=None, imgAtLeft=True, txtPadding=None, txtGap=0, txtOffset=-1, txtAlign='left', ignoreImageSize=False, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE, padding=None, descPadding=None, flipHorizontal=False):
     data = {'spriteAtLeft': imgAtLeft,
      'textsAlign': txtAlign,
      'ignoreImageSize': ignoreImageSize}
@@ -153,6 +155,8 @@ def packImageTextBlockData(title=None, desc=None, img=None, imgPadding=None, img
         data['textsOffset'] = txtOffset
     if descPadding is not None:
         data['descPadding'] = descPadding
+    if flipHorizontal:
+        data['flipHorizontal'] = flipHorizontal
     return packBlockDataItem(linkage, data, padding)
 
 

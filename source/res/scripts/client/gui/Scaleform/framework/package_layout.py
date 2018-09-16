@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/package_layout.py
 import importlib
+from soft_exception import SoftException
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.framework import g_entitiesFactories, ViewTypes
 from gui.Scaleform.framework.managers import context_menu
@@ -145,21 +146,21 @@ class PackageImporter(object):
             settings = imported.getViewSettings()
         except AttributeError:
             LOG_CURRENT_EXCEPTION()
-            raise Exception('Package {0} does not have method getViewSettings'.format(path))
+            raise SoftException('Package {0} does not have method getViewSettings'.format(path))
 
         aliases = g_entitiesFactories.initSettings(settings)
         try:
             handlers = imported.getContextMenuHandlers()
         except AttributeError:
             LOG_CURRENT_EXCEPTION()
-            raise Exception('Package {0} does not have method getContextMenuHandlers'.format(path))
+            raise SoftException('Package {0} does not have method getContextMenuHandlers'.format(path))
 
         contextMenuTypes = context_menu.registerHandlers(*handlers)
         try:
             handlers = imported.getBusinessHandlers()
         except AttributeError:
             LOG_CURRENT_EXCEPTION()
-            raise Exception('Package {0} does not have method getBusinessHandlers'.format(path))
+            raise SoftException('Package {0} does not have method getBusinessHandlers'.format(path))
 
         processed = set()
         for handler in handlers:
@@ -167,7 +168,7 @@ class PackageImporter(object):
                 for h in processed:
                     h.fini()
 
-                raise Exception('Package {0} has invalid business handler {1}'.format(path, handler.__class__.__name__))
+                raise SoftException('Package {0} has invalid business handler {1}'.format(path, handler.__class__.__name__))
             handler.init()
             processed.add(handler)
 

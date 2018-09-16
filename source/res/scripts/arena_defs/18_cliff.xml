@@ -65,7 +65,9 @@
     <scenario>
       <startTime>	30.000000 60.000000	</startTime>
       <possibility>	1.000000	</possibility>
-      <period>	150.000000	</period>
+      <interval>	150.000000	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	cliff_bomber	</name>
       <trajectories>
         <warplane>
           <preset>	cliff_bomber_clin_1	</preset>

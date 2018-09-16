@@ -73,7 +73,7 @@ class ConfirmCustomizationItemDialog(ConfirmItemWindowMeta):
              'currency': currency,
              'defaultValue': self.meta.getDefaultValue(item),
              'maxAvailableCount': self.meta.getMaxAvailableItemsCount(item),
-             'isActionNow': hasAlternativePrice,
+             'hasSeveralPrices': hasAlternativePrice,
              'smallSlotVO': smallSlotVO}
             self.as_setDataS(resultData)
         else:

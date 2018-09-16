@@ -8,6 +8,7 @@ from debug_utils import LOG_DEBUG, LOG_WARNING
 from . import goodie_constants
 from . import goodie_helpers
 from items.vehicles import makeVehicleTypeCompDescrByName
+from soft_exception import SoftException
 _CONFIG_FILE = 'scripts/server_xml/goodies.xml'
 g_cache = None
 
@@ -23,7 +24,7 @@ def _readGoodieResource(section):
             value, isPercentage = XmlConfigReader.parsePercentage(v)
             return (t, value, isPercentage)
 
-    raise Exception('Goodie without any resources')
+    raise SoftException('Goodie without any resources')
 
 
 def _readGoodieTarget(reader, subsectionName):
@@ -75,11 +76,11 @@ def _readPrice(reader, subsectionName):
 def _validator(uid, variety, resource, price):
     t, value, isPercentage = resource
     if value < 0:
-        raise Exception('Bad goodie %d value (negative) %d' % uid % value)
+        raise SoftException('Bad goodie %d value (negative) %d' % uid % value)
     if variety == goodie_constants.GOODIE_VARIETY.DISCOUNT and isPercentage and value > 100:
-        raise Exception('Bad goodie %d value %d' % uid % value)
+        raise SoftException('Bad goodie %d value %d' % uid % value)
     if price is not None and price <= 0:
-        raise Exception('Bad goodie %d price (negative or zero) %d' % uid % price)
+        raise SoftException('Bad goodie %d price (negative or zero) %d' % uid % price)
     return
 
 
@@ -99,10 +100,10 @@ def _readGoodies(reader, subsectionName):
             elif v == 'booster':
                 variety = goodie_constants.GOODIE_VARIETY.BOOSTER
             else:
-                raise Exception('No <uid> parameter')
+                raise SoftException('No <uid> parameter')
             uid = int(uid)
             if uid < 0:
-                raise Exception('No <uid> parameter')
+                raise SoftException('No <uid> parameter')
             isEnabled = packet.readInt('enabled', 1)
             if isEnabled == 0:
                 enabled = False

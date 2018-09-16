@@ -78,3 +78,6 @@ class StrongholdPermissions(UnitPermissions):
 
     def isEquipmentCommander(self):
         return self._roles & UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS > 0
+
+    def canCreateSquad(self):
+        return False

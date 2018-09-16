@@ -6,14 +6,18 @@ from gui.shared.utils.TimeInterval import TimeInterval
 class TimerComponent(object):
     __slots__ = ('_panel', '_typeID', '_viewID', '_totalTime', '_startTime', '_finishTime')
 
-    def __init__(self, panel, typeID, viewID, totalTime, startTime=None):
-        super(TimerComponent, self).__init__()
+    def __init__(self, panel, typeID, viewID, totalTime, finishTime, startTime=None, **kwargs):
+        super(TimerComponent, self).__init__(**kwargs)
         self._panel = panel
         self._typeID = typeID
         self._viewID = viewID
         self._totalTime = totalTime
-        self._startTime = startTime or BigWorld.serverTime()
-        self._finishTime = self._startTime + totalTime if totalTime else 0
+        if finishTime:
+            self._startTime = finishTime - totalTime
+            self._finishTime = finishTime
+        else:
+            self._startTime = BigWorld.serverTime()
+            self._finishTime = self._startTime + totalTime
 
     def __repr__(self):
         return 'TimerComponent(typeID = {}, viewID = {}, totalTime = {})'.format(self._typeID, self._viewID, self._totalTime)
@@ -62,9 +66,9 @@ class TimerComponent(object):
 class PythonTimer(TimerComponent):
     __slots__ = ('_timeInterval', '__weakref__')
 
-    def __init__(self, panel, typeID, viewID, totalTime, startTime=None):
-        super(PythonTimer, self).__init__(panel, typeID, viewID, totalTime, startTime)
-        self._timeInterval = TimeInterval(1.0, self, '_tick')
+    def __init__(self, panel, typeID, viewID, totalTime, finishTime, startTime=None, interval=1.0, **kwargs):
+        super(PythonTimer, self).__init__(panel, typeID, viewID, totalTime, finishTime, startTime, **kwargs)
+        self._timeInterval = TimeInterval(interval, self, '_tick')
 
     def clear(self):
         self._timeInterval.stop()

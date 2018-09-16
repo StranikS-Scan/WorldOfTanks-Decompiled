@@ -52,23 +52,14 @@ class ConsumablesPanelMeta(BaseDAAPIComponent):
     def as_addOptionalDeviceSlotS(self, idx, timeRemaining, iconPath, tooltipText):
         return self.flashObject.as_addOptionalDeviceSlot(idx, timeRemaining, iconPath, tooltipText) if self._isDAAPIInited() else None
 
-    def as_addOrderSlotS(self, idx, keyCode, sfKeyCode, quantity, iconPath, tooltipText, available, quantityVisible, timeRemaining, maxTime):
-        return self.flashObject.as_addOrderSlot(idx, keyCode, sfKeyCode, quantity, iconPath, tooltipText, available, quantityVisible, timeRemaining, maxTime) if self._isDAAPIInited() else None
-
-    def as_setOrderAvailableS(self, idx, available):
-        return self.flashObject.as_setOrderAvailable(idx, available) if self._isDAAPIInited() else None
-
-    def as_setOrderActivatedS(self, idx):
-        return self.flashObject.as_setOrderActivated(idx) if self._isDAAPIInited() else None
-
-    def as_showOrdersSlotsS(self, show):
-        return self.flashObject.as_showOrdersSlots(show) if self._isDAAPIInited() else None
-
-    def as_setGlowS(self, idx, isGreen):
-        return self.flashObject.as_setGlow(idx, isGreen) if self._isDAAPIInited() else None
+    def as_setGlowS(self, idx, glowID):
+        return self.flashObject.as_setGlow(idx, glowID) if self._isDAAPIInited() else None
 
     def as_hideGlowS(self, idx):
         return self.flashObject.as_hideGlow(idx) if self._isDAAPIInited() else None
+
+    def as_setEquipmentActivatedS(self, idx):
+        return self.flashObject.as_setEquipmentActivated(idx) if self._isDAAPIInited() else None
 
     def as_handleAsReplayS(self):
         return self.flashObject.as_handleAsReplay() if self._isDAAPIInited() else None

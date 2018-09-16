@@ -9,7 +9,7 @@ from client_request_lib.exceptions import ResponseCodes
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui import SystemMessages
-from gui.clans.clan_helpers import isStrongholdsEnabled
+from gui.clans.clan_helpers import isStrongholdsEnabled, isLeaguesEnabled
 from gui.prb_control import prb_getters
 from gui.prb_control import settings
 from gui.prb_control.entities.base.unit.entity import UnitEntity, UnitEntryPoint, UnitBrowserEntryPoint, UnitBrowserEntity
@@ -34,7 +34,7 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES as I18N_SYSTEM_MESSAGES
 from gui.shared.utils.requesters.abstract import Response
-from gui.wgcg.strongholds.contexts import StrongholdJoinBattleCtx, StrongholdUpdateCtx
+from gui.wgcg.strongholds.contexts import StrongholdJoinBattleCtx, StrongholdUpdateCtx, StrongholdMatchmakingInfoCtx
 from helpers import time_utils, i18n
 from UnitBase import UNIT_ERROR, UNIT_ROLE
 _CREATION_TIMEOUT = 30
@@ -138,7 +138,7 @@ class StrongholdBrowserEntity(UnitBrowserEntity):
         return False
 
     def _loadUnit(self):
-        g_eventDispatcher.loadStrongholds(self._prbType)
+        g_eventDispatcher.loadStrongholds()
 
     def _unloadUnit(self):
         g_eventDispatcher.removeUnitFromCarousel(self._prbType)
@@ -186,7 +186,6 @@ class StrongholdEntity(UnitEntity):
         if unitMgr:
             unitMgr.onUnitResponseReceived += self.onUnitResponseReceived
             unitMgr.onUnitNotifyReceived += self.onUnitNotifyReceived
-        g_eventDispatcher.loadHangar()
         self.__strongholdSettings.init()
         self.__strongholdUpdateEventsMapping = {'header': self.__onUpdateHeader,
          'timer': self.__onUpdateTimer,
@@ -194,6 +193,10 @@ class StrongholdEntity(UnitEntity):
          'reserve': self.__onUpdateReserve}
         playerInfo = self.getPlayerInfo()
         self.__isInSlot = playerInfo.isInSlot
+        if isLeaguesEnabled() and self.hasLockedState():
+            g_eventDispatcher.showStrongholdsBattleQueue()
+        else:
+            g_eventDispatcher.loadStrongholds()
         return ret
 
     def fini(self, ctx=None, woEvents=False):
@@ -285,6 +288,8 @@ class StrongholdEntity(UnitEntity):
             self._invokeListeners('onCommanderIsReady', True)
         elif prevFlags != nextFlags and nextFlags == 0:
             self._invokeListeners('onCommanderIsReady', False)
+        if isLeaguesEnabled() and self.hasLockedState():
+            g_eventDispatcher.showStrongholdsBattleQueue()
         return
 
     def unit_onUnitExtraChanged(self, extras):
@@ -362,6 +367,10 @@ class StrongholdEntity(UnitEntity):
             self.setCoolDown(ctx.getRequestType(), ctx.getCooldown())
         self._invokeListeners('onStrongholdDoBattleQueue', self.isFirstBattle(), False, self.__strongholdSettings.getReserveOrder())
         super(StrongholdEntity, self).doBattleQueue(ctx, callback)
+
+    def getMatchmakingInfo(self, callback=None):
+        ctx = StrongholdMatchmakingInfoCtx(prb_getters.getUnitMgrID())
+        self._requestsProcessor.doRequest(ctx, 'matchmakingInfo', callback=callback)
 
     def setReserve(self, ctx, callback=None):
         pPermissions = self.getPermissions()
@@ -659,35 +668,30 @@ class StrongholdEntity(UnitEntity):
 
     def __processResponseMessage(self, response):
         if isinstance(response, Response):
-            txtMsg = ''
-            notificationType = None
-            data = response.getData()
             hasErrors = response.getCode() != ResponseCodes.NO_ERRORS
             if hasErrors and response.extraCode not in SUCCESS_STATUSES:
                 self.__errorCount += 1
                 if self.canShowMaintenance():
                     self._invokeListeners('onStrongholdMaintenance', True)
-                else:
-                    return False
-            else:
-                self.__errorCount = 0
+                    return True
+                return False
+            self.__errorCount = 0
+            data = response.getData()
             if isinstance(data, dict):
-                webReqID = data.pop('web_request_id', None)
-                if 'extra_data' in data:
-                    extra_data = data['extra_data']
-                    if isinstance(extra_data, dict):
-                        data = extra_data
-                    else:
-                        data = {'description': extra_data}
-                txtMsg = data.pop('description', '') or data.pop('title', '')
-                notificationType = SM_TYPE.lookup(data.pop('notification_type', ''))
+                webReqID = data.get('web_request_id')
                 if webReqID is not None:
-                    LOG_DEBUG('Web response requestID = ' + str(webReqID))
+                    LOG_DEBUG('Web response requestID = {}'.format(webReqID))
                     self.__waitingManager.onResponseWebReqID(webReqID)
-            if txtMsg:
-                if not notificationType or notificationType not in [SM_TYPE.Error, SM_TYPE.Warning, SM_TYPE.Information]:
-                    notificationType = SM_TYPE.Error
-                SystemMessages.pushMessage(txtMsg, type=notificationType)
+                if 'extra_data' in data:
+                    data = data['extra_data']
+                    if not isinstance(data, dict):
+                        data = {'description': data}
+                txtMsg = data.get('description') or data.get('title')
+                if txtMsg:
+                    notificationType = SM_TYPE.lookup(data.get('notification_type'))
+                    if notificationType not in [SM_TYPE.Error, SM_TYPE.Warning, SM_TYPE.Information]:
+                        notificationType = SM_TYPE.Error
+                    SystemMessages.pushMessage(txtMsg, type=notificationType)
             if response.getCode() != ResponseCodes.NO_ERRORS:
                 self.__waitingManager.onResponseError()
         return True

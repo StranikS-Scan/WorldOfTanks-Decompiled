@@ -77,6 +77,9 @@ class BattleSessionProvider(IBattleSessionProvider):
         ctrl = self.__sharedRepo.ammo
         if ctrl is not None:
             ctrl.setGunSettings(vDesc.gun)
+        ctrl = self.__sharedRepo.equipments
+        if ctrl is not None:
+            ctrl.notifyPlayerVehicleSet()
         ctrl = self.__sharedRepo.vehicleState
         if ctrl is not None:
             ctrl.setPlayerVehicle(vID)
@@ -110,8 +113,8 @@ class BattleSessionProvider(IBattleSessionProvider):
         ctrl = self.__sharedRepo.equipments
         if ctrl is not None:
             ctrl.clear(False)
-            for intCD, quantity, stage, timeRemaining in extraData.orderedEquipment:
-                ctrl.setEquipment(intCD, quantity, stage, timeRemaining)
+            for intCD, quantity, stage, timeRemaining, totalTime in extraData.orderedEquipment:
+                ctrl.setEquipment(intCD, quantity, stage, timeRemaining, totalTime)
 
         ctrl = self.__sharedRepo.optionalDevices
         if ctrl is not None:
@@ -295,14 +298,16 @@ class BattleSessionProvider(IBattleSessionProvider):
             ctrl.update(stats)
         return
 
-    def addHitDirection(self, hitDirYaw, attackerID, damage, isBlocked, critFlags, isHighExplosive, damagedID):
+    def addHitDirection(self, hitDirYaw, attackerID, damage, isBlocked, critFlags, isHighExplosive, damagedID, attackReasonID):
         hitDirectionCtrl = self.__sharedRepo.hitDirection
         if hitDirectionCtrl is not None:
             atackerVehInfo = self.__arenaDP.getVehicleInfo(attackerID)
             atackerVehType = atackerVehInfo.vehicleType
             isAlly = self.__arenaDP.isAllyTeam(atackerVehInfo.team)
             playerVehType = self.__arenaDP.getVehicleInfo(damagedID).vehicleType
-            hitDirectionCtrl.addHit(HitData(yaw=hitDirYaw, attackerID=attackerID, isAlly=isAlly, damage=damage, attackerVehName=atackerVehType.shortNameWithPrefix, isBlocked=isBlocked, attackerVehClassTag=atackerVehType.classTag, critFlags=critFlags, playerVehMaxHP=playerVehType.maxHealth, isHighExplosive=isHighExplosive))
+            hitData = HitData(yaw=hitDirYaw, attackerID=attackerID, isAlly=isAlly, damage=damage, attackerVehName=atackerVehType.shortNameWithPrefix, isBlocked=isBlocked, attackerVehClassTag=atackerVehType.classTag, critFlags=critFlags, playerVehMaxHP=playerVehType.maxHealth, isHighExplosive=isHighExplosive, attackReasonID=attackReasonID)
+            if not hitData.isNonPlayerAttackReason() and not hitData.isBattleAbilityConsumable():
+                hitDirectionCtrl.addHit(hitData)
         return
 
     def startVehicleVisual(self, vProxy, isImmediate=False):
@@ -322,9 +327,15 @@ class BattleSessionProvider(IBattleSessionProvider):
 
     def handleShortcutChatCommand(self, key):
         ctrl = self.__sharedRepo.chatCommands
-        if ctrl is not None:
+        if ctrl is None:
+            return
+        else:
+            if self.__arenaVisitor.gui.isInEpicRange():
+                mapCtrl = self.dynamic.maps
+                if not mapCtrl or mapCtrl.overviewMapScreenVisible:
+                    return
             ctrl.handleShortcutChatCommand(key)
-        return
+            return
 
     def __pe_onBattleResultsReceived(self, isActiveVehicle, _):
         if isActiveVehicle and not BattleReplay.g_replayCtrl.isPlaying:

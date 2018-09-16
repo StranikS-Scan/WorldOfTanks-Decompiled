@@ -12,12 +12,10 @@ from gui.shared.utils.HangarSpace import g_hangarSpace
 class HeroTank(ClientSelectableCameraVehicle):
     appearance = property(lambda self: self.__vAppearance)
     _heroTankCtrl = dependency.descriptor(IHeroTankController)
-    _SOUND_STATE_PROMO_TANK = '_proposal'
-    _SOUND_START_MOVING_TO_PROMO = 'hangar_premium_2018_camera_fly_forward'
 
     def __init__(self):
-        ClientSelectableCameraVehicle.__init__(self)
         self.__heroTankName = ''
+        ClientSelectableCameraVehicle.__init__(self)
 
     def onEnterWorld(self, prereqs):
         super(HeroTank, self).onEnterWorld(prereqs)
@@ -52,9 +50,3 @@ class HeroTank(ClientSelectableCameraVehicle):
 
     def _onVehicleDestroy(self):
         g_eventBus.handleEvent(events.HangarVehicleEvent(events.HangarVehicleEvent.ON_HERO_TANK_DESTROY, ctx={'entity': self}), scope=EVENT_BUS_SCOPE.LOBBY)
-
-    def _getMovingSound(self):
-        return self._SOUND_START_MOVING_TO_PROMO
-
-    def _getNextMusicState(self):
-        return self._SOUND_STATE_PROMO_TANK

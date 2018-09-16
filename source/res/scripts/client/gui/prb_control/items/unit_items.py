@@ -15,6 +15,7 @@ from gui.shared.utils.decorators import ReprInjector
 from gui.shared.utils.requesters import REQ_CRITERIA
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from soft_exception import SoftException
 
 class PlayerUnitInfo(object):
     __slots__ = ('dbID', 'unitMgrID', 'unit', 'name', 'rating', 'role', 'accID', 'vehDict', 'isReady', 'isInSlot', 'slotIdx', 'regionCode', 'clanDBID', 'clanAbbrev', 'timeJoin', 'igrType', 'badges')
@@ -393,7 +394,7 @@ class SupportedRosterSettings(object):
     def last(cls, prbType):
         if prbType in _SUPPORTED_ROSTER_SETTINGS:
             return PredefinedRosterSettings(_SUPPORTED_ROSTER_SETTINGS[prbType][-1])
-        raise KeyError('Unit type is not supported {0}'.format(prbType))
+        raise SoftException('Unit type is not supported {0}'.format(prbType))
 
     @classmethod
     def list(cls, prbType):
@@ -404,7 +405,7 @@ class SupportedRosterSettings(object):
                 result.append(PredefinedRosterSettings(rosterTypeID))
 
             return result
-        raise KeyError('Unit type is not supported {0}'.format(prbType))
+        raise SoftException('Unit type is not supported {0}'.format(prbType))
 
 
 def getUnitCandidatesComparator():

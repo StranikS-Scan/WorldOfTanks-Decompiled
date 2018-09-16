@@ -13,6 +13,7 @@ from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from gui.shared.gui_items.dossier.factories import getAchievementFactory, _SequenceAchieveFactory
 from gui.shared.gui_items.dossier.achievements.MarkOfMasteryAchievement import MarkOfMasteryAchievement, MASTERY_IS_NOT_ACHIEVED, isMarkOfMasteryAchieved
 from skeletons.gui.shared import IItemsCache
+from soft_exception import SoftException
 UNAVAILABLE_MARKS_OF_MASTERY = (-1, -1, -1, -1)
 _BATTLE_SECTION = ACHIEVEMENT_SECTIONS_INDICES[ACHIEVEMENT_SECTION.BATTLE]
 _EPIC_SECTION = ACHIEVEMENT_SECTIONS_INDICES[ACHIEVEMENT_SECTION.EPIC]
@@ -760,6 +761,56 @@ class AccountEpicRandomStatsBlock(EpicRandomStatsBlock, _VehiclesStatsBlock, _Ma
         return self.VehiclesDossiersCut(battlesCount, wins, xp)
 
 
+class EpicBattleStatsBlock(_BattleStatsBlock, _Battle2StatsBlock, _MaxStatsBlock, _AchievementsBlock):
+
+    def __init__(self, dossier):
+        _BattleStatsBlock.__init__(self, dossier)
+        _Battle2StatsBlock.__init__(self, dossier)
+        _MaxStatsBlock.__init__(self, dossier)
+        _AchievementsBlock.__init__(self, dossier)
+
+    def getBattlesCountVer2(self):
+        return self.getBattlesCount() - self.getBattlesCountBefore8_8()
+
+    def getBattlesCountVer3(self):
+        return self.getBattlesCount() - self.getBattlesCountBefore9_0()
+
+    def getXpBefore8_8(self):
+        pass
+
+    def getBattlesCountBefore8_8(self):
+        pass
+
+    def getBattlesCountBefore9_0(self):
+        pass
+
+    def _getStatsBlock(self, dossier):
+        return dossier.getDossierDescr()['epicBattle']
+
+    def _getStats2Block(self, dossier):
+        return dossier.getDossierDescr()['epicBattle']
+
+    def _getStatsMaxBlock(self, dossier):
+        return dossier.getDossierDescr()['maxEpicBattle']
+
+    def _getAcceptableAchieves(self):
+        return layouts.getAchievementsByMode(ACHIEVEMENT_MODE.EPIC_BATTLE)
+
+
+class AccountEpicBattleStatsBlock(EpicBattleStatsBlock, _VehiclesStatsBlock, _MaxVehicleStatsBlock):
+
+    def __init__(self, dossier):
+        EpicBattleStatsBlock.__init__(self, dossier)
+        _VehiclesStatsBlock.__init__(self, dossier)
+        _MaxVehicleStatsBlock.__init__(self, dossier)
+
+    def _getVehDossiersCut(self, dossier):
+        return dossier.getDossierDescr()['epicBattleCut']
+
+    def _packVehicle(self, battlesCount=0, wins=0, markOfMastery=None, xp=0):
+        return self.VehiclesDossiersCut(battlesCount, wins, xp)
+
+
 class TotalStatsBlock(_BattleStatsBlock, _Battle2StatsBlock, _MaxStatsBlock, _AchievementsBlock):
 
     def __init__(self, dossier, statsBlocks=None):
@@ -832,7 +883,7 @@ class AccountTotalStatsBlock(TotalStatsBlock, _VehiclesStatsBlock, _MaxVehicleSt
         _MaxVehicleStatsBlock.__init__(self, dossier)
 
     def _packVehicle(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def getVehicles(self):
         vehs = {}
@@ -1496,6 +1547,9 @@ class AccountDossierStats(_DossierStats):
     def getEpicRandomStats(self):
         return AccountEpicRandomStatsBlock(self._getDossierItem())
 
+    def getEpicBattleStats(self):
+        return AccountEpicBattleStatsBlock(self._getDossierItem())
+
 
 class VehicleDossierStats(_DossierStats):
 
@@ -1549,6 +1603,9 @@ class VehicleDossierStats(_DossierStats):
 
     def getEpicRandomStats(self):
         return EpicRandomStatsBlock(self._getDossierItem())
+
+    def getEpicBattleStats(self):
+        return EpicBattleStatsBlock(self._getDossierItem())
 
 
 class TankmanDossierStats(_DossierStats):

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/AmmunitionPanel.py
+import logging
 from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS
 from CurrentVehicle import g_currentVehicle
 from gui import makeHtmlString
@@ -8,6 +9,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.shared.fitting_slot_vo import FittingSlotVO, HangarFittingSlotVO
 from gui.Scaleform.daapi.view.meta.AmmunitionPanelMeta import AmmunitionPanelMeta
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
@@ -20,13 +22,16 @@ from helpers import i18n, dependency
 from skeletons.gui.shared import IItemsCache
 ARTEFACTS_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.OPTIONALDEVICE], GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.EQUIPMENT])
 _BOOSTERS_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_BOOSTER],)
+_ABILITY_SLOTS = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.BATTLE_ABILITY],)
 FITTING_MODULES = (GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.CHASSIS],
  GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.TURRET],
  GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.GUN],
  GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.ENGINE],
  GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.RADIO])
 FITTING_SLOTS = FITTING_MODULES + ARTEFACTS_SLOTS
-HANGAR_FITTING_SLOTS = FITTING_SLOTS + _BOOSTERS_SLOTS
+HANGAR_FITTING_SLOTS = FITTING_SLOTS + _BOOSTERS_SLOTS + _ABILITY_SLOTS
+VEHICLE_FITTING_SLOTS = FITTING_SLOTS + _BOOSTERS_SLOTS
+_logger = logging.getLogger(__name__)
 
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getFittingSlotsData(vehicle, slotsRange, VoClass=None, itemsCache=None):
@@ -41,6 +46,10 @@ def getFittingSlotsData(vehicle, slotsRange, VoClass=None, itemsCache=None):
         if slotType in _BOOSTERS_SLOTS:
             for slotId in xrange(BATTLE_BOOSTER_LAYOUT_SIZE):
                 devices.append(VoClass(data, vehicle, slotType, slotId, tooltipType=TOOLTIPS_CONSTANTS.BATTLE_BOOSTER))
+
+        if slotType in _ABILITY_SLOTS:
+            for slotId, _ in enumerate(vehicle.equipment.battleAbilityConsumables.getIntCDs()):
+                devices.append(VoClass(data, vehicle, slotType, slotId, tooltipType=TOOLTIPS_CONSTANTS.EPIC_SKILL_SLOT_INFO))
 
         devices.append(VoClass(data, vehicle, slotType, tooltipType=TOOLTIPS_CONSTANTS.HANGAR_MODULE))
 
@@ -73,6 +82,9 @@ class AmmunitionPanel(AmmunitionPanelMeta):
         self.fireEvent(LoadViewEvent(VIEW_ALIAS.TECHNICAL_MAINTENANCE), EVENT_BUS_SCOPE.LOBBY)
 
     def showCustomization(self):
+        if not g_currentVehicle.hangarSpace.spaceInited or not g_currentVehicle.hangarSpace.isModelLoaded:
+            _logger.warning('Space or vehicle is not presented, could not show customization view, return')
+            return
         self.fireEvent(LoadViewEvent(VIEW_ALIAS.LOBBY_CUSTOMIZATION), EVENT_BUS_SCOPE.LOBBY)
 
     def toRentContinue(self):
@@ -86,6 +98,9 @@ class AmmunitionPanel(AmmunitionPanelMeta):
         if itemCD is not None and int(itemCD) > 0:
             shared_events.showModuleInfo(itemCD, g_currentVehicle.item.descriptor)
         return
+
+    def showBattleAbilityView(self):
+        self.fireEvent(LoadViewEvent(EPICBATTLES_ALIASES.EPIC_BATTLES_SKILL_ALIAS), EVENT_BUS_SCOPE.LOBBY)
 
     def _populate(self):
         super(AmmunitionPanel, self)._populate()

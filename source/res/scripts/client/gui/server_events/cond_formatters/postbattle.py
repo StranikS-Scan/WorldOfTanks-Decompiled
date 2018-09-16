@@ -15,6 +15,7 @@ from gui.server_events.conditions import GROUP_TYPE
 from gui.server_events.formatters import RELATIONS_SCHEME
 from gui.shared.gui_items.dossier import factories
 from helpers import i18n
+from soft_exception import SoftException
 
 def _packAchieveElement(achieveRecordID):
     _, achieveName = DB_ID_TO_RECORD[achieveRecordID]
@@ -323,13 +324,13 @@ class PersonalMissionsConditionsFormatter(ConditionsFormatter):
         return result
 
     def _packCondition(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _getFormattedField(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _packConditions(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
 
 class PersonalMissionsPostBattleConditionsFormatter(PersonalMissionsConditionsFormatter):

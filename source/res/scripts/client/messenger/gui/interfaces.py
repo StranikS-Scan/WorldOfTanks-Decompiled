@@ -140,6 +140,9 @@ class IChannelController(IEntityController):
     def isEnabled(self):
         return True
 
+    def hasUntrustedMembers(self):
+        return False
+
 
 class IBattleChannelView(object):
 

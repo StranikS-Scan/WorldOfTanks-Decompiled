@@ -16,6 +16,7 @@ from gui.game_control.AOGAS import AOGAS_NOTIFY_PERIOD
 from gui.game_control.GameSessionController import GameSessionController
 from constants import PREBATTLE_TYPE_NAMES
 from bootcamp.aop import common
+from soft_exception import SoftException
 _MS_IN_SEC = 1000
 _BC_MESSAGE_VIEW_TYPE = ViewTypes.OVERLAY
 
@@ -242,4 +243,4 @@ class _BattleSelectorHint(_SelectorItem):
         return True
 
     def _update(self, state):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')

@@ -3,8 +3,9 @@
 import time
 from Goodie import Goodie
 from goodie_constants import GOODIE_VARIETY, GOODIE_STATE
+from soft_exception import SoftException
 
-class OverLimitException(Exception):
+class OverLimitException(SoftException):
     pass
 
 
@@ -66,7 +67,7 @@ class GoodieDefinition(object):
                 else:
                     if self.variety == GOODIE_VARIETY.BOOSTER:
                         return resource.__class__(self.value.increase(resource.value))
-                    raise Exception('Programming error, Goodie is not a discount or booster' % self.variety)
+                    raise SoftException('Programming error, Goodie is not a discount or booster' % self.variety)
 
         return
 

@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/vehicle_systems/model_assembler.py
 import math
 from collections import namedtuple
+from soft_exception import SoftException
 from AvatarInputHandler import mathUtils
 import BigWorld
 from CustomEffectManager import CustomEffectManager
@@ -22,12 +23,12 @@ from helpers import DecalMap
 import WoT
 DEFAULT_MAX_LOD_PRIORITY = None
 
-def prepareCompoundAssembler(vehicleDesc, modelStateName, spaceID, isTurretDetached=False):
-    if constants.IS_DEVELOPMENT and modelStateName not in VehicleDamageState.MODEL_STATE_NAMES:
-        raise Exception('Invalid modelStateName %s, must be in %s' % (modelStateName, VehicleDamageState.MODEL_STATE_NAMES))
+def prepareCompoundAssembler(vehicleDesc, modelsSetParams, spaceID, isTurretDetached=False):
+    if constants.IS_DEVELOPMENT and modelsSetParams.state not in VehicleDamageState.MODEL_STATE_NAMES:
+        raise SoftException('Invalid modelStateName %s, must be in %s' % (modelsSetParams.state, VehicleDamageState.MODEL_STATE_NAMES))
     if spaceID is None:
         spaceID = BigWorld.player().spaceID
-    partModels = getPartModelsFromDesc(vehicleDesc, modelStateName)
+    partModels = getPartModelsFromDesc(vehicleDesc, modelsSetParams)
     chassis, hull, turret, gun = partModels
     assembler = BigWorld.CompoundAssembler()
     assembler.addRootPart(chassis, TankPartNames.CHASSIS)

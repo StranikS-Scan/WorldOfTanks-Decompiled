@@ -14,6 +14,7 @@ from items.item_price import getNextSlotPrice, getNextBerthPackPrice
 from persistent_caches import SimpleCache
 from SyncController import SyncController
 from PlayerEvents import g_playerEvents as events
+from soft_exception import SoftException
 _VEHICLE = items.ITEM_TYPE_INDICES['vehicle']
 _CHASSIS = items.ITEM_TYPE_INDICES['vehicleChassis']
 _TURRET = items.ITEM_TYPE_INDICES['vehicleTurret']
@@ -113,7 +114,7 @@ class Shop(object):
     def getSellPrice(self, buyPrice, sellPriceModifiers, itemTypeID):
         shopRev, exchangeRate, exchangeRateForShellsAndEqs, _, sellPriceFactor, sellForGold = sellPriceModifiers
         if shopRev != self.__getCacheRevision():
-            raise UserWarning('Shop cache is not actual')
+            raise SoftException('Shop cache is not actual')
         if itemTypeID in (_SHELL, _EQUIPMENT):
             exchangeRate = exchangeRateForShellsAndEqs
         if sellForGold:

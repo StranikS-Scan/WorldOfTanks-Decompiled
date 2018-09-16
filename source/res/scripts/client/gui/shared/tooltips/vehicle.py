@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/vehicle.py
 import collections
-from BigWorld import wg_getIntegralFormat as _int
+import BigWorld
 import constants
 from debug_utils import LOG_ERROR
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
@@ -31,6 +31,7 @@ from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
 _EQUIPMENT = 'equipment'
 _OPTION_DEVICE = 'optionalDevice'
 _BATTLE_BOOSTER = 'battleBooster'
@@ -432,6 +433,7 @@ class HeaderBlockConstructor(VehicleTooltipBlockConstructor):
 
 
 class TelecomBlockConstructor(VehicleTooltipBlockConstructor):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, vehicle, valueWidth, leftPadding, rightPadding):
         super(TelecomBlockConstructor, self).__init__(vehicle, None, leftPadding, rightPadding)
@@ -439,7 +441,12 @@ class TelecomBlockConstructor(VehicleTooltipBlockConstructor):
         return
 
     def construct(self):
-        return [formatters.packTextBlockData(text=text_styles.main(TOOLTIPS.VEHICLE_DEAL_TELECOM_MAIN))] if self.vehicle.isTelecom else []
+        if self.vehicle.isTelecom:
+            serverSettings = self.lobbyContext.getServerSettings()
+            provider = BigWorld.player().inventory.getProviderForVehInvId(self.vehicle.invID, serverSettings)
+            telecomText = _ms(TOOLTIPS.VEHICLE_DEAL_TELECOM_MAIN, tariff=_ms(MENU.internetProviderTariff(provider)), provider=_ms(MENU.internetProviderName(provider)))
+            return [formatters.packTextBlockData(text=text_styles.main(telecomText))]
+        return []
 
 
 class PriceBlockConstructor(VehicleTooltipBlockConstructor):
@@ -479,13 +486,13 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
             if xp:
                 xpValue = self.vehicle.xp
                 if xpValue:
-                    xPText = text_styles.expText(_int(xpValue))
+                    xPText = text_styles.expText(BigWorld.wg_getIntegralFormat(xpValue))
                     icon = ICON_TEXT_FRAMES.FREE_XP if self.vehicle.isPremium else ICON_TEXT_FRAMES.XP
                     block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_XP), value=xPText, icon=icon, valueWidth=self._valueWidth, padding=paddings))
             if dailyXP:
                 attrs = self.itemsCache.items.stats.attributes
                 if attrs & constants.ACCOUNT_ATTR.DAILY_MULTIPLIED_XP and self.vehicle.dailyXPFactor > 0:
-                    dailyXPText = text_styles.main(text_styles.expText('x' + _int(self.vehicle.dailyXPFactor)))
+                    dailyXPText = text_styles.main(text_styles.expText('x' + BigWorld.wg_getIntegralFormat(self.vehicle.dailyXPFactor)))
                     block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_DAILYXPFACTOR), value=dailyXPText, icon=ICON_TEXT_FRAMES.DOUBLE_XP_FACTOR, valueWidth=self._valueWidth, padding=paddings))
             if unlockPrice:
                 isAvailable, cost, need = getUnlockPrice(self.vehicle.intCD, parentCD)
@@ -524,7 +531,7 @@ class PriceBlockConstructor(VehicleTooltipBlockConstructor):
                 sellPrice = self.vehicle.sellPrices.itemPrice.price
                 sellCurrency = sellPrice.getCurrency(byWeight=True)
                 currencyTextFormatter = getattr(text_styles, sellCurrency, text_styles.credits)
-                sellPriceText = currencyTextFormatter(_int(sellPrice.get(sellCurrency, 0)))
+                sellPriceText = currencyTextFormatter(BigWorld.wg_getIntegralFormat(sellPrice.get(sellCurrency, 0)))
                 sellPriceIcon = sellCurrency
                 block.append(formatters.packTextParameterWithIconBlockData(name=text_styles.main(TOOLTIPS.VEHICLE_SELL_PRICE), value=sellPriceText, icon=sellPriceIcon, valueWidth=self._valueWidth, padding=paddings))
             if minRentPrice and not self.vehicle.isPremiumIGR:
@@ -697,6 +704,7 @@ class ClanLockAdditionalStatsBlockConstructor(LockAdditionalStatsBlockConstructo
 
 
 class StatusBlockConstructor(VehicleTooltipBlockConstructor):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def construct(self):
         block = []
@@ -797,6 +805,10 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                 return
             if state == Vehicle.VEHICLE_STATE.ROTATION_GROUP_UNLOCKED:
                 header, text = getComplexStatus('#tooltips:vehicleStatus/%s' % state, groupNum=vehicle.rotationGroupNum, battlesLeft=getBattlesLeft(vehicle))
+            elif state == Vehicle.VEHICLE_STATE.DEAL_IS_OVER:
+                serverSettings = self.lobbyContext.getServerSettings()
+                provider = BigWorld.player().inventory.getProviderForVehInvId(vehicle.invID, serverSettings)
+                header, text = getComplexStatus('#tooltips:vehicleStatus/%s' % state, provider=_ms(MENU.internetProviderName(provider)))
             else:
                 header, text = getComplexStatus('#tooltips:vehicleStatus/%s' % state)
                 if header is None and text is None:

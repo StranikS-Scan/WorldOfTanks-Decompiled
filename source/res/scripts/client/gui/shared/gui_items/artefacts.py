@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/artefacts.py
 from debug_utils import LOG_CURRENT_EXCEPTION
-from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
+from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE, GUI_ITEM_ECONOMY_CODE
 from gui.shared.gui_items.fitting_item import FittingItem
 from gui.shared.gui_items.Tankman import isSkillLearnt
 from gui.shared.gui_items.gui_item_economics import ItemPrice, ITEM_PRICE_EMPTY
@@ -12,6 +12,8 @@ from items.tankmen import PERKS
 from gui.Scaleform.locale.ARTEFACTS import ARTEFACTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from helpers import i18n
+from soft_exception import SoftException
+from items.vehicles import ABILITY_SLOTS_BY_VEHICLE_CLASS, getVehicleClassFromVehicleType
 _TAG_NOT_FOR_SALE = 'notForSale'
 _TAG_CREW_BATTLE_BOOSTER = 'crewSkillBattleBooster'
 _TAG_OPT_DEVICE_DELUXE = 'deluxe'
@@ -210,7 +212,7 @@ class BattleBooster(Equipment):
 
     def getCrewBoosterDescription(self, isPerkReplace, formatter=None):
         if not self.isCrewBooster():
-            raise UserWarning('This description is only for Crew Booster!')
+            raise SoftException('This description is only for Crew Booster!')
         action = i18n.makeString(ARTEFACTS.CREWBATTLEBOOSTER_DESCR_REPLACE if isPerkReplace else ARTEFACTS.CREWBATTLEBOOSTER_DESCR_BOOST)
         if self.getAffectedSkillName() in PERKS:
             skillOrPerk = i18n.makeString(ARTEFACTS.CREWBATTLEBOOSTER_DESCR_PERK)
@@ -226,13 +228,13 @@ class BattleBooster(Equipment):
 
     def getCrewBoosterAction(self, isPerkReplace):
         if not self.isCrewBooster():
-            raise UserWarning('This action description is only for Crew Booster!')
+            raise SoftException('This action description is only for Crew Booster!')
         token = _TOKEN_CREW_PERK_REPLACE if isPerkReplace else _TOKEN_CREW_PERK_BOOST
         return i18n.makeString(ARTEFACTS.getCrewActionForBattleBooster(self.name, token))
 
     def getOptDeviceBoosterDescription(self, vehicle, valueFormatter=None):
         if self.isCrewBooster():
-            raise UserWarning('This description is only for Opt. Dev. Booster!')
+            raise SoftException('This description is only for Opt. Dev. Booster!')
         deviceType = _TOKEN_OPT_DEVICE_SIMPLE
         if vehicle is not None:
             for device in vehicle.optDevices:
@@ -246,6 +248,55 @@ class BattleBooster(Equipment):
 
     def _getShortInfo(self, vehicle=None, expanded=False):
         return self.getCrewBoosterDescription(isPerkReplace=False, formatter=None) if self.isCrewBooster() else self.getOptDeviceBoosterDescription(vehicle=None, valueFormatter=None)
+
+    def _getAltPrice(self, buyPrice, proxy):
+        return MONEY_UNDEFINED
+
+
+class BattleAbility(Equipment):
+    __slots__ = ('_level', '_unlocked')
+
+    def __init__(self, *args, **kwargs):
+        super(BattleAbility, self).__init__(*args, **kwargs)
+        self.itemTypeID = GUI_ITEM_TYPE.BATTLE_ABILITY
+        self._level = 0
+
+    @property
+    def level(self):
+        return self._level
+
+    @property
+    def userType(self):
+        return i18n.makeString(ITEM_TYPES.BATTLEABILITY_NAME)
+
+    @property
+    def itemTypeName(self):
+        return GUI_ITEM_TYPE_NAMES[self.itemTypeID]
+
+    @property
+    def shortDescription(self):
+        return self.descriptor.shortDescription
+
+    def setLevel(self, value):
+        self._level = value
+
+    def isInstalled(self, vehicle, slotIdx=None):
+        return vehicle.equipment.battleAbilityConsumables.containsIntCD(self.intCD, slotIdx)
+
+    def getInstalledVehicles(self, vehicles):
+        result = set()
+        for vehicle in vehicles:
+            if self.isInstalled(vehicle):
+                result.add(vehicle)
+
+        return result
+
+    def mayPurchase(self, money):
+        return (False, GUI_ITEM_ECONOMY_CODE.ITEM_NO_PRICE)
+
+    def mayInstall(self, vehicle, slotIdx=None):
+        myInstall = slotIdx < ABILITY_SLOTS_BY_VEHICLE_CLASS[getVehicleClassFromVehicleType(vehicle.descriptor.type)]
+        return (True, None) if myInstall else (False, 'slot index exceeds limit of vehicle class')
 
     def _getAltPrice(self, buyPrice, proxy):
         return MONEY_UNDEFINED

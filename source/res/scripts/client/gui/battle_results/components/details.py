@@ -162,6 +162,8 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
     __slots__ = ()
 
     def setRecord(self, result, reusable):
+        if reusable.isWGMoneyOffline:
+            return self.__setRecordWithWGMoneyOffline()
         baseCredits, premiumCredits, goldRecords, autoRecords = result
         isTotalShown = False
         self.__addBaseCredits(baseCredits, premiumCredits)
@@ -183,6 +185,9 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         self.__addAutoCompletion('autoEquip', autoRecords, 'autoEquipCredits', 'autoEquipGold')
         self._addEmptyRow()
         self.__addTotalResults(baseCredits, premiumCredits, goldRecords, autoRecords)
+
+    def __setRecordWithWGMoneyOffline(self):
+        self._addStatsRow(label='wgmOfflineEmergency', htmlKey='wgmoney_offline_label')
 
     def __addStatsItem(self, label, baseRecords, premiumRecords, *names):
         baseValue = baseRecords.getRecord(*names)
@@ -263,9 +268,10 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
         credit = autoRecords.getRecord(creditsRecord)
         gold = autoRecords.getRecord(goldRecord)
         columns = {'column1': style.makeCreditsLabel(credit, canBeFaded=not self.isPremium),
-         'column3': style.makeCreditsLabel(credit, canBeFaded=self.isPremium),
-         'column2': style.makeGoldLabel(gold, canBeFaded=not self.isPremium),
-         'column4': style.makeGoldLabel(gold, canBeFaded=self.isPremium)}
+         'column3': style.makeCreditsLabel(credit, canBeFaded=self.isPremium)}
+        if gold:
+            columns.update({'column2': style.makeGoldLabel(gold, canBeFaded=not self.isPremium),
+             'column4': style.makeGoldLabel(gold, canBeFaded=self.isPremium)})
         self._addStatsRow(label, **columns)
 
     def __addTotalResults(self, baseCredits, premiumCredits, goldRecords, autoRecords):
@@ -281,13 +287,29 @@ class MoneyDetailsBlock(_EconomicsDetailsBlock):
 
 
 class XPDetailsBlock(_EconomicsDetailsBlock):
-    __slots__ = ()
+    __slots__ = ('__addStatsRowMethod',)
+
+    def __init__(self, meta=None, field='', *path):
+        super(XPDetailsBlock, self).__init__(meta, field, *path)
+        self.__addStatsRowMethod = None
+        return
+
+    def clear(self):
+        self.__addStatsRowMethod = None
+        super(XPDetailsBlock, self).clear()
+        return
 
     def setRecord(self, result, reusable):
         baseXP, premiumXP, baseFreeXP, premiumFreeXP = result
+        if reusable.isWGMoneyOffline:
+            self.__addStatsRowMethod = self.__addStatsRowOverrideForWGMoneyOffline
+        else:
+            self.__addStatsRowMethod = self._addStatsRow
         self.__addBaseXPs(baseXP, premiumXP, baseFreeXP, premiumFreeXP)
         self.__addComplexXPsItemIfExists('noPenalty', baseXP, premiumXP, baseFreeXP, premiumFreeXP, 'achievementXP', 'achievementFreeXP')
         self.__addXPsItem('friendlyFirePenalty', baseXP, premiumXP, 'originalXPPenalty')
+        if reusable.common.arenaVisitor.gui.isInEpicRange():
+            self.__addXPsItem('playerRankXP', baseXP, premiumXP, 'playerRankXPFactor100')
         self.__addIGRFactor(baseXP)
         self.__addDailyXPFactor(baseXP)
         self.__addBoosterXPs(baseXP, premiumXP, baseFreeXP, premiumFreeXP)
@@ -304,16 +326,22 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
             self._addEmptyRow()
         self.__addXPsViolationPenalty()
         self.__addTotalResults(baseXP, premiumXP, baseFreeXP, premiumFreeXP)
+        self.__addStatsRowMethod = None
+        return
+
+    def __addStatsRowOverrideForWGMoneyOffline(self, label, column1=None, htmlKey='', **kwargs):
+        value = style.makeStatRow(label, column1=column1, htmlKey=htmlKey)
+        self.addNextComponent(base.DirectStatsItem('', value))
 
     def __addXPsItem(self, label, baseXP, premiumXP, xpRecord):
         columns = {'column1': style.makeXpLabel(baseXP.getRecord(xpRecord), canBeFaded=not self.isPremium),
          'column3': style.makeXpLabel(premiumXP.getRecord(xpRecord), canBeFaded=self.isPremium)}
-        self._addStatsRow(label, **columns)
+        self.__addStatsRowMethod(label, **columns)
 
     def __addFreeXPsItem(self, label, baseFreeXP, premiumFreeXP, freeXPRecord):
         columns = {'column2': style.makeFreeXpLabel(baseFreeXP.getRecord(freeXPRecord), canBeFaded=not self.isPremium),
          'column4': style.makeFreeXpLabel(premiumFreeXP.getRecord(freeXPRecord), canBeFaded=self.isPremium)}
-        self._addStatsRow(label, **columns)
+        self.__addStatsRowMethod(label, **columns)
 
     def __addComplexXPsItem(self, label, baseXP, premiumXP, baseFreeXP, premiumFreeXP, xpRecord, freeXPRecord, htmlKey=''):
         baseCanBeFaded = not self.isPremium
@@ -322,7 +350,7 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
          'column3': style.makeXpLabel(premiumXP.getRecord(xpRecord), canBeFaded=premiumCanBeFaded),
          'column2': style.makeFreeXpLabel(baseFreeXP.getRecord(freeXPRecord), canBeFaded=baseCanBeFaded),
          'column4': style.makeFreeXpLabel(premiumFreeXP.getRecord(freeXPRecord), canBeFaded=premiumCanBeFaded)}
-        self._addStatsRow(label, htmlKey=htmlKey, **columns)
+        self.__addStatsRowMethod(label, htmlKey=htmlKey, **columns)
 
     def __addXPsItemIfExists(self, label, baseXP, premiumXP, xpRecord):
         if baseXP.getRecord(xpRecord) or premiumXP.getRecord(xpRecord):
@@ -359,7 +387,7 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
          'column3': style.makeXpLabel(premiumXPValue, canBeFaded=premiumCanBeFaded),
          'column2': style.makeFreeXpLabel(baseFreeXPValue, canBeFaded=baseCanBeFaded),
          'column4': style.makeFreeXpLabel(premiumFreeXPValue, canBeFaded=premiumCanBeFaded)}
-        self._addStatsRow(label, htmlKey=htmlKey, **columns)
+        self.__addStatsRowMethod(label, htmlKey=htmlKey, **columns)
 
     def __addBoosterXPs(self, baseXP, premiumXP, baseFreeXP, premiumFreeXP):
         baseXPValue = baseXP.getRecord('boosterXP', 'boosterXPFactor100')
@@ -373,7 +401,7 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
              'column3': style.makeXpLabel(premiumXPValue, canBeFaded=premiumCanBeFaded),
              'column2': style.makeFreeXpLabel(baseFreeXPValue, canBeFaded=baseCanBeFaded),
              'column4': style.makeFreeXpLabel(premiumFreeXPValue, canBeFaded=premiumCanBeFaded)}
-            self._addStatsRow('boosters', **columns)
+            self.__addStatsRowMethod('boosters', **columns)
 
     def __addEventXPs(self, baseXP, premiumXP, baseFreeXP, premiumFreeXP):
         baseXPValue = baseXP.findRecord('eventXPList_') + baseXP.findRecord('eventXPFactor100List_')
@@ -387,14 +415,13 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
              'column3': style.makeXpLabel(premiumXPValue, canBeFaded=premiumCanBeFaded),
              'column2': style.makeFreeXpLabel(baseFreeXPValue, canBeFaded=baseCanBeFaded),
              'column4': style.makeFreeXpLabel(premiumFreeXPValue, canBeFaded=premiumCanBeFaded)}
-            self._addStatsRow('event', **columns)
+            self.__addStatsRowMethod('event', **columns)
 
     def __addXPsViolationPenalty(self):
         if self.penaltyDetails is not None:
             name, penalty = self.penaltyDetails
             penalty = style.makePercentLabel(penalty)
-            value = style.makeStatRow('fairPlayViolation/{}'.format(name), column1=penalty, column2=penalty, column3=penalty, column4=penalty)
-            self.addNextComponent(base.DirectStatsItem('', value))
+            self.__addStatsRowMethod('fairPlayViolation/{}'.format(name), column1=penalty, column2=penalty, column3=penalty, column4=penalty)
         return
 
     def __addIGRFactor(self, baseXP):
@@ -408,7 +435,7 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
         factor = baseXP.getFactor('dailyXPFactor10')
         if factor > 1:
             value = style.makeDailyXPFactorValue(factor)
-            self._addStatsRow('firstWin', column1=value, column2=value, column3=value, column4=value)
+            self.__addStatsRowMethod('firstWin', column1=value, column2=value, column3=value, column4=value)
 
     def __getSquadXPDetails(self, baseXP, premiumXP):
         squadXP = baseXP.getRecord('squadXPFactor100')
@@ -425,7 +452,7 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
             label = 'squadXP'
         columns = {'column1': baseLabel,
          'column3': premiumLabel}
-        self._addStatsRow(label, **columns)
+        self.__addStatsRowMethod(label, **columns)
         return
 
     def __addReferralSystemFactor(self, baseXP, premiumXP, baseFreeXP, premiumFreeXP):
@@ -439,7 +466,7 @@ class XPDetailsBlock(_EconomicsDetailsBlock):
          'column3': style.makeXpLabel(premiumXP.getRecord('xp'), canBeFaded=premiumCanBeFaded),
          'column2': style.makeFreeXpLabel(baseFreeXP.getRecord('freeXP'), canBeFaded=baseCanBeFaded),
          'column4': style.makeFreeXpLabel(premiumFreeXP.getRecord('freeXP'), canBeFaded=premiumCanBeFaded)}
-        self._addStatsRow('total', htmlKey='lightText', **columns)
+        self.__addStatsRowMethod('total', htmlKey='lightText', **columns)
 
 
 class CrystalDetailsBlock(_EconomicsDetailsBlock):

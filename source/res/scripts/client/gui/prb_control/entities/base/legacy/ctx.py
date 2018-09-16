@@ -113,6 +113,64 @@ class AssignLegacyCtx(LegacyRequestCtx):
         super(AssignLegacyCtx, self).onResponseReceived(code)
 
 
+@ReprInjector.withParent(('__roster', 'roster'), ('__fromLane', 'fromLane'), ('__toLane', 'toLane'), ('getPrbTypeName', 'prbType'), ('getWaitingID', 'waitingID'))
+class GroupSwapInTeamLegacyCtx(LegacyRequestCtx):
+    __slots__ = ('__roster', '__fromLane', '__toLane')
+
+    def __init__(self, roster, fLane, tLane, waitingID=''):
+        super(GroupSwapInTeamLegacyCtx, self).__init__(entityType=prb_getters.getPrebattleType(), waitingID=waitingID)
+        self.__roster = roster
+        self.__fromLane = fLane
+        self.__toLane = tLane
+
+    def getRoster(self):
+        return self.__roster
+
+    def getGroups(self):
+        return (self.__fromLane, self.__toLane)
+
+    def getRequestType(self):
+        return _REQUEST_TYPE.EPIC_SWAP_IN_TEAM
+
+
+@ReprInjector.withParent(('__lane', 'toLane'), ('getPrbTypeName', 'prbType'), ('getWaitingID', 'waitingID'))
+class GroupSwapBetweenTeamLegacyCtx(LegacyRequestCtx):
+    __slots__ = ('__lane',)
+
+    def __init__(self, lane, waitingID=''):
+        super(GroupSwapBetweenTeamLegacyCtx, self).__init__(entityType=prb_getters.getPrebattleType(), waitingID=waitingID)
+        self.__lane = lane
+
+    def getGroup(self):
+        return self.__lane
+
+    def getRequestType(self):
+        return _REQUEST_TYPE.EPIC_SWAP_BETWEEN_TEAM
+
+
+@ReprInjector.withParent(('__pID', 'pID'), ('__roster', 'roster'), ('__group', 'group'), ('getPrbTypeName', 'prbType'), ('getWaitingID', 'waitingID'))
+class GroupAssignLegacyCtx(LegacyRequestCtx):
+    __slots__ = ('__pID', '__roster', '__group')
+
+    def __init__(self, pID, roster, group, waitingID=''):
+        super(GroupAssignLegacyCtx, self).__init__(entityType=prb_getters.getPrebattleType(), waitingID=waitingID)
+        self.__group = group
+        self.__pID = pID
+        self.__roster = roster
+
+    def getPlayerID(self):
+        return self.__pID
+
+    def getRoster(self):
+        return self.__roster
+
+    def getRequestType(self):
+        return _REQUEST_TYPE.ASSIGN
+
+    def getGroup(self):
+        return self.__group
+
+
 @ReprInjector.withParent(('__team', 'team'), ('__isReadyState', 'isReadyState'), 'getPrbTypeName', ('getWaitingID', 'waitingID'), ('__isForced', 'isForced'), ('__gamePlayMask', 'gamePlayMask'))
 class SetTeamStateCtx(LegacyRequestCtx):
     __slots__ = ('__team', '__isReadyState', '__gamePlayMask')

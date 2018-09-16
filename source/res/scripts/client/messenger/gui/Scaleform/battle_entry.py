@@ -199,10 +199,13 @@ class BattleEntry(IGUIEntry):
 
     def __me_onCommandReceived(self, command):
         controller = self.__channelsCtrl.getController(command.getClientID())
-        if controller:
-            controller.addCommand(command)
-        else:
+        if controller is None:
             LOG_ERROR('Controller not found', command)
+            return
+        else:
+            if controller.filterMessage(command):
+                controller.addCommand(command)
+            return
 
     def __me_onErrorReceived(self, error):
         self.__showErrorMessage(error.getMessage())

@@ -1,0 +1,73 @@
+<destructible_entity_effects.xml>
+  <destruction_effects>
+    <destruction_effect>
+      <name>	v1_destruction	</name>
+      <timeline>
+        <effectEnd>	36000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Environment/scenarios/208_LRG_explosion.xml	</file>
+          <position>	HP_module_0	</position>
+        </pixie>
+        <sound>
+          <startKey>	start	</startKey>
+          <wwsound>	eb_big_turret_explosion	</wwsound>
+          <sound>	/NONE	</sound>
+        </sound>
+      </effects>
+    </destruction_effect>
+    <destruction_effect>
+      <name>	lrg_destruction	</name>
+      <timeline>
+        <effectEnd>	36000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Environment/scenarios/208_LRG_explosion.xml	</file>
+          <position>	HP_module_0	</position>
+        </pixie>
+        <sound>
+          <dynamic>	true	</dynamic>
+          <startKey>	start	</startKey>
+          <wwsound>	eb_big_turret_explosion	</wwsound>
+          <sound>	/NONE	</sound>
+        </sound>
+      </effects>
+    </destruction_effect>
+  </destruction_effects>
+  <victory_effects>
+    <victory_effect>
+      <name>	lrg_victory_shot	</name>
+      <timeline>
+        <effectEnd>	50000	</effectEnd>
+      </timeline>
+      <effects>
+        <pixie>
+          <startKey>	start	</startKey>
+          <file>	particles/Tank/shots/shot_lrg_artillery.xml	</file>
+          <position>	HP_module_1	</position>
+        </pixie>
+        <sound>
+          <dynamic>	true	</dynamic>
+          <startKey>	start	</startKey>
+          <wwsound>	eb_big_turret_firing	</wwsound>
+          <sound>	/NONE	</sound>
+        </sound>
+      </effects>
+    </victory_effect>
+  </victory_effects>
+  <map_activities>
+    <map_activity_list>
+      <name>	hq1_activity_list	</name>
+      <activities>
+        <activity>	V1_activity_west	</activity>
+        <activity>	V1_steamjet_big	</activity>
+        <activity>	V1_steamCatapult_cylinder	</activity>
+        <activity>	NatDay_CN_plane_flying	</activity>
+      </activities>
+    </map_activity_list>
+  </map_activities>
+</destructible_entity_effects.xml>

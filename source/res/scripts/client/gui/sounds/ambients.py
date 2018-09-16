@@ -82,7 +82,7 @@ class SoundEvent(Notifiable):
 
     def setParam(self, paramName, value):
         self._params[paramName] = value
-        _MC.g_musicController.setEventParam(self._soundEventID, paramName, int(value))
+        _MC.g_musicController.setEventParam(paramName, int(value))
 
     def _getNotificationDelta(self):
         return PLAYING_SOUND_CHECK_PERIOD if self._isStarted else 0

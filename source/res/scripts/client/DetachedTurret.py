@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/DetachedTurret.py
+from soft_exception import SoftException
 from AvatarInputHandler import mathUtils
 import BigWorld
 import Math
@@ -351,7 +352,7 @@ class SynchronousDetachment(VehicleEnterTimer):
             import traceback
             lines = [ l for l in traceback.format_stack() if '__init__' in l ]
             if not lines:
-                raise Exception('SynchronousDetachment._directTick() requires to be called from __init__()')
+                raise SoftException('SynchronousDetachment._directTick() requires to be called from __init__()')
             self.transferInputs(vehicle, turret)
             turret.filter.ignoreNextReset = True
         self.__finished = True

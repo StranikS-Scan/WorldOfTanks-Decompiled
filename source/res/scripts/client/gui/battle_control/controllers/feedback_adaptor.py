@@ -194,8 +194,23 @@ class BattleFeedbackAdaptor(IBattleController):
     def invalidateStun(self, vehicleID, stunDuration):
         self.onVehicleFeedbackReceived(_FET.VEHICLE_STUN, vehicleID, stunDuration)
 
+    def invalidateInspire(self, vehicleID, data):
+        self.onVehicleFeedbackReceived(_FET.VEHICLE_INSPIRE, vehicleID, data)
+
+    def invalidatePassiveEngineering(self, vehicleID, data):
+        self.onVehicleFeedbackReceived(_FET.VEHICLE_PASSIVE_ENGINEERING, vehicleID, data)
+
     def markCellOnMinimap(self, cell):
         self.onMinimapFeedbackReceived(_FET.MINIMAP_MARK_CELL, 0, (cell, _CELL_BLINKING_DURATION))
+
+    def markPositionOnMinimap(self, senderID, position):
+        self.onMinimapFeedbackReceived(_FET.MINIMAP_MARK_POSITION, senderID, (position, _CELL_BLINKING_DURATION))
+
+    def markObjectiveOnMinimap(self, senderID, hqIdx):
+        self.onMinimapFeedbackReceived(_FET.MINIMAP_MARK_OBJECTIVE, senderID, (hqIdx, _CELL_BLINKING_DURATION))
+
+    def markBaseOnMinimap(self, senderID, baseIdx, baseName):
+        self.onMinimapFeedbackReceived(_FET.MINIMAP_MARK_BASE, senderID, (baseIdx, baseName, _CELL_BLINKING_DURATION))
 
     def showVehicleDamagedDevices(self, vehicleID, criticalExtras, destroyedExtras):
         totalExtras = self.__arenaVisitor.vehicles.getVehicleExtras(vehicleID)
@@ -227,6 +242,17 @@ class BattleFeedbackAdaptor(IBattleController):
 
     def getDevelopmentInfo(self, code):
         return self.__devInfo[code] if code in self.__devInfo else None
+
+    def setVehicleRecoveryState(self, vehicleID, activated, state, timerDuration, endOfTimer):
+        attrs = (activated,
+         state,
+         timerDuration,
+         endOfTimer)
+        self.onVehicleFeedbackReceived(_FET.VEHICLE_RECOVERY_STATE_UPDATE, vehicleID, attrs)
+
+    def setVehicleRecoveryCanceled(self, vehicleID):
+        self.onVehicleFeedbackReceived(_FET.VEHICLE_RECOVERY_CANCELED, vehicleID, None)
+        return
 
     def _setVehicleHealthChanged(self, vehicleID, newHealth, attackerID, attackReasonID):
         if attackerID:

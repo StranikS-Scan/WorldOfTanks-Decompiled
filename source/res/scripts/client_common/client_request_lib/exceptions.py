@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/client_request_lib/exceptions.py
-
+from soft_exception import SoftException
 
 class ResponseCodes(object):
     NO_ERRORS = 0
@@ -47,7 +47,7 @@ class ResponseCodes(object):
     ACCOUNT_IN_COOLDOWN = 43
 
 
-class BaseRequestError(Exception):
+class BaseRequestError(SoftException):
 
     def __init__(self, *args, **kwargs):
         if 'extra_data' in kwargs:

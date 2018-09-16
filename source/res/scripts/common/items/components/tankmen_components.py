@@ -4,6 +4,7 @@ from items.components import component_constants
 from items.components import legacy_stuff
 from items.components import shared_components
 from items.components import skills_constants
+from soft_exception import SoftException
 
 class GROUP_TAG(object):
     PASSPORT_REPLACEMENT_FORBIDDEN = 'passportReplacementForbidden'
@@ -72,7 +73,7 @@ class RanksSet(object):
     def getIDByName(self, name):
         if name in self.__rankIDsByNames:
             return self.__rankIDsByNames[name]
-        raise KeyError('Name of rank "{}" is not found'.format(name))
+        raise SoftException('Name of rank "{}" is not found'.format(name))
 
     def generator(self):
         for rank in self.__ranks:
@@ -127,7 +128,7 @@ class RoleRanks(legacy_stuff.LegacyStuff):
 
     def setRanksIDs(self, roleName, roleIDs):
         if roleName not in skills_constants.ROLES:
-            raise KeyError('Role {} is not found'.format(roleName))
+            raise SoftException('Role {} is not found'.format(roleName))
         self.__ranks[roleName] = roleIDs
 
 

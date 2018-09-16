@@ -81,6 +81,7 @@ class GAME(CONST_CONTAINER):
     ENABLE_POSTMORTEM_DELAY = 'enablePostMortemDelay'
     REPLAY_ENABLED = 'replayEnabled'
     ENABLE_SERVER_AIM = 'useServerAim'
+    SHOW_DAMAGE_ICON = 'showDamageIcon'
     SHOW_VEHICLES_COUNTER = 'showVehiclesCounter'
     SHOW_MARKS_ON_GUN = 'showMarksOnGun'
     DYNAMIC_CAMERA = 'dynamicCamera'
@@ -253,6 +254,7 @@ class BATTLE_BORDER_MAP(CONST_CONTAINER):
 class CONTACTS(CONST_CONTAINER):
     SHOW_OFFLINE_USERS = 'showOfflineUsers'
     SHOW_OTHERS_CATEGORY = 'showOthersCategory'
+    ANTISPAM_MESSAGES_COUNTER = 'antispamMessagesCounter'
 
 
 class SETTINGS_GROUP(CONST_CONTAINER):
@@ -264,3 +266,7 @@ class SETTINGS_GROUP(CONST_CONTAINER):
     MARKERS_SETTINGS = 'MarkerSettings'
     OTHER_SETTINGS = 'OtherSettings'
     FEEDBACK_SETTINGS = 'FeedbackSettings'
+
+
+class UI_STORAGE(CONST_CONTAINER):
+    DISABLE_ANIMATED_TOOLTIP = 'disable_animated_tooltip'

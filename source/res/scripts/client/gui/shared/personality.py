@@ -80,6 +80,7 @@ def onAccountShowGUI(ctx):
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.SHOW_GUI)
     ServicesLocator.lobbyContext.onAccountShowGUI(ctx)
     yield ServicesLocator.itemsCache.update(CACHE_SYNC_REASON.SHOW_GUI, notify=False)
+    Waiting.show('enter')
     ServicesLocator.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.QUESTS_SYNC)
     ServicesLocator.eventsCache.start()
     yield ServicesLocator.eventsCache.update()

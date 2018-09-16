@@ -9,6 +9,7 @@ class LOBBY_HELP(object):
     HEADER_SQUAD_BUTTON = '#lobby_help:header/squad-button'
     HEADER_BATTLETYPE_BUTTON = '#lobby_help:header/battleType-button'
     HEADER_FINANCE_BLOCK = '#lobby_help:header/finance-block'
+    VEHICLE_COMPARE = '#lobby_help:vehicle/compare'
     CHAT_SERVICE_CHANNEL = '#lobby_help:chat/service-channel'
     CHAT_CONTACTS_CHANNEL = '#lobby_help:chat/contacts-channel'
     CHANNELCAROUSEL_CHANNELS = '#lobby_help:channelCarousel/channels'

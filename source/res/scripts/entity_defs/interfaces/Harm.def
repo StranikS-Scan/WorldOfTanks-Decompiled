@@ -57,5 +57,12 @@
     <harm_receiveAttackResults>
       <Arg>	ATTACK_RESULTS	</Arg>
     </harm_receiveAttackResults>
+    <harm_onCombatEquipmentShootingStarted>
+      <Arg>	UINT8	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	ARRAY	  <of>	SHOT_ID	</of>
+      </Arg>
+    </harm_onCombatEquipmentShootingStarted>
   </CellMethods>
 </Harm.def>

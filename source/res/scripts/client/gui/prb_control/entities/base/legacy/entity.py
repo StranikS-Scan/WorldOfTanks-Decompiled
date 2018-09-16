@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/prb_control/entities/base/legacy/entity.py
 import BigWorld
 import account_helpers
+from soft_exception import SoftException
 from PlayerEvents import g_playerEvents
 from constants import PREBATTLE_ACCOUNT_STATE, REQUEST_COOLDOWN, PREBATTLE_ERRORS
 from debug_utils import LOG_ERROR, LOG_DEBUG
@@ -87,7 +88,7 @@ class LegacyIntroEntryPoint(BasePrbEntryPoint):
         return JoinLegacyModeCtx(self._prbType)
 
     def create(self, ctx, callback=None):
-        raise Exception('PrbIntro is not create entity')
+        raise SoftException('PrbIntro is not create entity')
 
     def join(self, ctx, callback=None):
         if ctx.isForced():

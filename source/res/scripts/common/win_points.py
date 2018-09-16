@@ -3,6 +3,7 @@
 import ResMgr
 from constants import FLAG_TYPES
 from items import vehicles
+from soft_exception import SoftException
 _CONFIG_FILE = 'scripts/item_defs/win_points.xml'
 
 class DamageSettings(object):
@@ -22,7 +23,7 @@ class WinPointsTeamOrSoloSettings(object):
             name = name.upper()
             flagTypeId = getattr(FLAG_TYPES, name, None)
             if flagTypeId is None:
-                raise Exception('Unknown flag type name (%s)' % (name,))
+                raise SoftException('Unknown flag type name (%s)' % (name,))
             self.pointsForFlag[flagTypeId] = subsection.asInt
 
         self.pointsForOneResource = section['winPointsForOneResource'].asInt

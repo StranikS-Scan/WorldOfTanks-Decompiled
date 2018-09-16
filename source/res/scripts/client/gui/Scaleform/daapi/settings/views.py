@@ -64,6 +64,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     VEHICLE_BUY_WINDOW = 'vehicleBuyWindow'
     VEHICLE_RESTORE_WINDOW = 'vehicleRestoreWindow'
     BATTLE_QUEUE = 'battleQueue'
+    BATTLE_STRONGHOLDS_QUEUE = 'battleStrongholdsQueue'
     BATTLE_LOADING = 'battleLoading'
     TUTORIAL_LOADING = 'tutorialLoading'
     TECHNICAL_MAINTENANCE = 'technicalMaintenance'
@@ -80,8 +81,8 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BROWSER_WINDOW_MODAL = 'browserWindowModal'
     DEMONSTRATOR_WINDOW = 'demonstratorWindow'
     VEHICLE_PREVIEW = 'vehiclePreview'
-    HERO_VEHICLE_PREVIEW = 'heroVehiclePreview'
     AUTHORS_VIEW = 'authorsView'
+    HERO_VEHICLE_PREVIEW = 'heroVehiclePreview'
     VEHICLE_COMPARE = 'vehicleCompare'
     VEHICLE_COMPARE_MAIN_CONFIGURATOR = 'vehicleCompareConfigurator'
     LOBBY_ACADEMY = 'academy'
@@ -117,6 +118,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     RESERVE_SELECT_POPOVER = 'reserveSelectPopover'
     BOOSTER_SELECT_POPOVER = 'boosterSelectPopover'
     OPT_DEVICES_SELECT_POPOVER = 'optDevicesSelectPopover'
+    BATTLE_ABILITY_SELECT_POPOVER = 'battleAbilitySelectPopover'
     SHOP_TABLE = 'shopTable'
     MINIMAP_LOBBY = 'minimapLobby'
     MINIMAP_GRID = 'minimapGridLobby'
@@ -156,6 +158,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     DEV_BATTLE_PAGE = 'devBattlePage'
     BADGES_PAGE = 'badgesPage'
     EPIC_RANDOM_PAGE = 'epicRandomPage'
+    EPIC_BATTLE_PAGE = 'epicBattlePage'
     EVENT_BATTLE_PAGE = 'classicBattlePage'
     RANKED_BATTLE_PAGE = 'rankedBattlePage'
     MISSION_AWARD_WINDOW = 'missionAwardWindow'
@@ -195,4 +198,5 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
      DEV_BATTLE_PAGE,
      EVENT_BATTLE_PAGE,
      RANKED_BATTLE_PAGE,
-     BOOTCAMP_BATTLE_PAGE)
+     BOOTCAMP_BATTLE_PAGE,
+     EPIC_BATTLE_PAGE)

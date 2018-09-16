@@ -91,6 +91,7 @@ class DECORATION_SIZES(CONST_CONTAINER):
     BONUS = '300x110'
     DISCOUNT = '480x280'
     DETAILS = '750x250'
+    DETAILS_EX = '750x264'
 
 
 class UiElement(object):
@@ -158,13 +159,9 @@ def makeUniquePath(path, name):
 
 def formatStrDiscount(discountVal):
     dt = discountVal.discountType
-    dn = discountVal.discountName
     if dt == DISCOUNT_TYPE.PERCENT or dt == DISCOUNT_TYPE.TRADE_IN_PERCENT:
         if dt == DISCOUNT_TYPE.PERCENT:
-            if isinstance(dn, types.StringTypes) and dn == 'marathon':
-                txtKey = QUESTS.ACTION_DISCOUNT_DISCOUNTUPTOTEXT
-            else:
-                txtKey = QUESTS.ACTION_DISCOUNT_DISCOUNTTEXT
+            txtKey = QUESTS.ACTION_DISCOUNT_DISCOUNTTEXT
         else:
             txtKey = QUESTS.ACTION_DISCOUNT_TRADEINLABELTEXT
         return '{} {}'.format(i18n.makeString(txtKey), i18n.makeString(QUESTS.ACTION_DISCOUNT_PERCENT, value=discountVal.discountValue))
@@ -185,6 +182,18 @@ def formatPercentValue(value):
 
 def formatVehicleLevel(value):
     return makeHtmlString('html_templates:lobby/quests/actions', 'vehicleLevel', {'value': value})
+
+
+def formatCreditPriceNormalCard(value):
+    value = BigWorld.wg_getIntegralFormat(value)
+    icon = gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICON_1, vSpace=-1)
+    return '{} {}'.format(text_styles.creditsTextNormalCard(value), icon)
+
+
+def formatGoldPriceNormalCard(value):
+    value = BigWorld.wg_getIntegralFormat(value)
+    icon = gui_icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_GOLDICON_1, vSpace=-1)
+    return '{} {}'.format(text_styles.goldTextNormalCard(value), icon)
 
 
 def formatGoldPrice(value):

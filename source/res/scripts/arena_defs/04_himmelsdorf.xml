@@ -74,7 +74,9 @@
     <scenario>
       <startTime>	0.000000 0.000000	</startTime>
       <possibility>	100.000000	</possibility>
-      <period>	0.000000	</period>
+      <interval>	0.000000	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	himmelsdorf_bomber	</name>
       <trajectories>
         <warplane>
           <preset>	himmelsdorf_bomber_1	</preset>
@@ -82,7 +84,7 @@
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
           <startTime>	0.000000 0.000000	</startTime>
-          <period>	200.000000	</period>
+          <interval>	200.000000	</interval>
         </warplane>
         <warplane>
           <preset>	himmelsdorf_bomber_2	</preset>
@@ -90,7 +92,7 @@
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
           <startTime>	5.000000 5.000000	</startTime>
-          <period>	200.000000	</period>
+          <interval>	200.000000	</interval>
         </warplane>
         <warplane>
           <preset>	himmelsdorf_bomber_3	</preset>
@@ -98,7 +100,7 @@
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
           <startTime>	11.000000 30.000000	</startTime>
-          <period>	200.000000	</period>
+          <interval>	200.000000	</interval>
         </warplane>
         <warplane>
           <preset>	himmelsdorf_bomber_4	</preset>
@@ -106,7 +108,7 @@
           <yaw>	0.000000	</yaw>
           <possibility>	1.000000	</possibility>
           <startTime>	5.000000 5.000000	</startTime>
-          <period>	200.000000	</period>
+          <interval>	200.000000	</interval>
         </warplane>
       </trajectories>
     </scenario>

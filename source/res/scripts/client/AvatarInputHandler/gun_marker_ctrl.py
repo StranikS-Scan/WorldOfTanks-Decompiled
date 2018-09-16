@@ -22,6 +22,9 @@ _MIN_PIERCING_DIST = 100.0
 _MAX_PIERCING_DIST = 500.0
 _LERP_RANGE_PIERCING_DIST = _MAX_PIERCING_DIST - _MIN_PIERCING_DIST
 _BASE_PIERCING_PERCENT = 100.0
+_ENABLED_MAX_PROJECTION_CHECK = True
+_MAX_PROJECTION_ANGLE = math.radians(60.0)
+_MAX_PROJECTION_ANGLE_COS = math.cos(_MAX_PROJECTION_ANGLE)
 _logger = logging.getLogger(__name__)
 
 def _computePiercingPowerAtDistImpl(dist, maxDist, p100, p500):
@@ -198,7 +201,7 @@ class _CrosshairShotResults(object):
             return _SHOT_RESULT.UNDEFINED
         else:
             entity = collision.entity
-            if entity.__class__.__name__ != 'Vehicle':
+            if entity.__class__.__name__ not in ('Vehicle', 'DestructibleEntity'):
                 return _SHOT_RESULT.UNDEFINED
             if entity.health <= 0 or entity.publicInfo['team'] == excludeTeam:
                 return _SHOT_RESULT.UNDEFINED
@@ -563,7 +566,8 @@ class _DefaultGunMarkerController(_GunMarkerController):
                 replayCtrl.setArcadeGunMarkerSize(size)
             elif self._gunMarkerType == _MARKER_TYPE.CLIENT:
                 replayCtrl.setArcadeGunMarkerSize(size)
-        worldMatrix = _makeWorldMatrix(positionMatrix)
+        positionMatrixForScale = self.__checkAndRecalculateIfPositionInExtremeProjection(positionMatrix)
+        worldMatrix = _makeWorldMatrix(positionMatrixForScale)
         currentSize = _calcScale(worldMatrix, size) * self.__screenRatio
         idealSize = _calcScale(worldMatrix, idealSize) * self.__screenRatio
         self.__sizeFilter.update(currentSize, idealSize)
@@ -582,6 +586,26 @@ class _DefaultGunMarkerController(_GunMarkerController):
 
     def __onScaleChanged(self, scale):
         _setupGunMarkerSizeLimits(self._dataProvider, scale=scale)
+
+    def __checkAndRecalculateIfPositionInExtremeProjection(self, positionMatrix):
+        if not _ENABLED_MAX_PROJECTION_CHECK:
+            return positionMatrix
+        camera = BigWorld.camera()
+        cameraDirection = camera.direction
+        cameraPosition = camera.position
+        shotDirection = positionMatrix.applyToOrigin() - cameraPosition
+        shotDistance = shotDirection.length
+        shotDirection.normalise()
+        dotProduct = cameraDirection.dot(shotDirection)
+        if -_MAX_PROJECTION_ANGLE_COS < dotProduct < _MAX_PROJECTION_ANGLE_COS:
+            rotationMatrix = Math.Matrix()
+            rotationMatrix.setRotateY(_MAX_PROJECTION_ANGLE_COS)
+            rotationMatrix.postMultiply(BigWorld.camera().invViewMatrix)
+            newShotDirection = rotationMatrix.applyToAxis(2)
+            newShotPosition = cameraPosition + shotDistance * newShotDirection
+            positionMatrix = Math.Matrix()
+            positionMatrix.setTranslate(newShotPosition)
+        return positionMatrix
 
 
 class _SPGGunMarkerController(_GunMarkerController):

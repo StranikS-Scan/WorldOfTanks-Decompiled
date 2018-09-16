@@ -162,18 +162,18 @@ class SharedPage(BattlePageMeta):
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             if ctrl.isInPostmortem:
-                self.__onPostMortemSwitched(noRespawnPossible=False, respawnAvailable=False)
-            ctrl.onPostMortemSwitched += self.__onPostMortemSwitched
+                self._onPostMortemSwitched(noRespawnPossible=False, respawnAvailable=False)
+            ctrl.onPostMortemSwitched += self._onPostMortemSwitched
             ctrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
-        aih_global_binding.subscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self.__onAvatarCtrlModeChanged)
+        aih_global_binding.subscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self._onAvatarCtrlModeChanged)
         return
 
     def _stopBattleSession(self):
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
-            ctrl.onPostMortemSwitched -= self.__onPostMortemSwitched
+            ctrl.onPostMortemSwitched -= self._onPostMortemSwitched
             ctrl.onRespawnBaseMoving -= self.__onRespawnBaseMoving
-        aih_global_binding.unsubscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self.__onAvatarCtrlModeChanged)
+        aih_global_binding.unsubscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self._onAvatarCtrlModeChanged)
         for alias, _ in self.__componentsConfig.getViewsConfig():
             self.sessionProvider.removeViewComponent(alias)
 
@@ -230,7 +230,7 @@ class SharedPage(BattlePageMeta):
         if not self.as_isComponentVisibleS(alias):
             self._setComponentsVisibility(visible={alias})
 
-    def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
+    def _onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         if not self.sessionProvider.getCtx().isPlayerObserver() and not BattleReplay.g_replayCtrl.isPlaying:
             self.as_setPostmortemTipsVisibleS(True)
         if not self.sessionProvider.getCtx().isPlayerObserver():
@@ -253,7 +253,7 @@ class SharedPage(BattlePageMeta):
     def __handleHideCursor(self, _):
         self.as_toggleCtrlPressFlagS(False)
 
-    def __onAvatarCtrlModeChanged(self, ctrlMode):
+    def _onAvatarCtrlModeChanged(self, ctrlMode):
         if not self._isVisible or self._fsToggling or self._blToggling:
             return
         self._changeCtrlMode(ctrlMode)
@@ -290,10 +290,10 @@ class BattlePageBusinessHandler(PackageBusinessHandler):
     __slots__ = ()
 
     def __init__(self, *aliases):
-        listeners = [ (alias, self.__loadPage) for alias in aliases ]
+        listeners = [ (alias, self._loadPage) for alias in aliases ]
         super(BattlePageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_BATTLE, EVENT_BUS_SCOPE.BATTLE)
 
-    def __loadPage(self, event):
+    def _loadPage(self, event):
         page = self.findViewByAlias(ViewTypes.DEFAULT, event.name)
         if page is not None:
             page.reload()

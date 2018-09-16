@@ -7,7 +7,7 @@ import BigWorld
 import TriggersManager
 from TriggersManager import TRIGGER_TYPE
 from vehicle_systems import model_assembler
-from vehicle_systems.tankStructure import getPartModelsFromDesc, TankPartNames
+from vehicle_systems.tankStructure import getPartModelsFromDesc, TankPartNames, ModelsSetParams
 from vehicle_systems.stricted_loading import loadingPriority
 
 def testAllocate(spaceID):
@@ -67,7 +67,7 @@ class CrashedTrackController(object):
         self.__setupTracksHiding()
 
     def __setupTrackAssembler(self, entity):
-        modelNames = getPartModelsFromDesc(self.__vehicleDesc, 'destroyed')
+        modelNames = getPartModelsFromDesc(self.__vehicleDesc, ModelsSetParams(None, 'destroyed'))
         compoundAssembler = BigWorld.CompoundAssembler()
         compoundAssembler.addRootPart(modelNames.chassis, TankPartNames.CHASSIS, entity.filter.groundPlacingMatrix)
         compoundAssembler.assemblerName = TankPartNames.CHASSIS

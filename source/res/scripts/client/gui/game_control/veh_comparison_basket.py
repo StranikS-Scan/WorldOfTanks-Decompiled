@@ -18,6 +18,7 @@ from items.vehicles import VehicleDescr
 from skeletons.gui.game_control import IVehicleComparisonBasket, IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from soft_exception import SoftException
 PARAMS_AFFECTED_TANKMEN_SKILLS = ('camouflage', 'brotherhood', 'commander_eagleEye', 'driver_virtuoso', 'driver_badRoadsKing', 'radioman_inventor', 'radioman_finder')
 MAX_VEHICLES_TO_COMPARE_COUNT = 20
 _NO_EQUIPMENT_LAYOUT = [None, None, None]
@@ -207,13 +208,13 @@ class _VehCompareData(object):
 
     def setCrewData(self, crewLvl, skills):
         if crewLvl not in CREW_TYPES.ALL:
-            raise UserWarning('Unsupported crew level type: {}'.format(crewLvl))
+            raise SoftException('Unsupported crew level type: {}'.format(crewLvl))
         self.__crewLvl = crewLvl
         self.__crewSkills = skills
 
     def setInventoryCrewData(self, crewLvl, value):
         if crewLvl not in CREW_TYPES.ALL:
-            raise UserWarning('Unsupported crew level type: {}'.format(crewLvl))
+            raise SoftException('Unsupported crew level type: {}'.format(crewLvl))
         self.__inventoryCrewSkills = value
         self.__inventoryCrewLvl = crewLvl
 
@@ -384,7 +385,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
     def applyNewParameters(self, index, vehicle, crewLvl, crewSkills, selectedShellIndex=0):
         vehCompareData = self.__vehicles[index]
         if vehCompareData.getVehicleCD() != vehicle.intCD:
-            raise UserWarning('Int-type compact descriptor are different')
+            raise SoftException('Int-type compact descriptor are different')
         isChanged = False
         copyVehicle = Vehicle(_makeStrCD(vehicle), proxy=self.itemsCache.items)
         copyVehicle.setOutfits(vehicle)
@@ -420,7 +421,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
     @_ErrorNotification
     def addVehicle(self, vehicleCompactDesr, initParameters=None):
         if not isinstance(vehicleCompactDesr, (int, float)):
-            raise UserWarning('Int-type compact descriptor is invalid: '.format(vehicleCompactDesr))
+            raise SoftException('Int-type compact descriptor is invalid: '.format(vehicleCompactDesr))
         if self.__canBeAdded():
             vehCmpData = self._createVehCompareData(vehicleCompactDesr, initParameters)
             if vehCmpData:

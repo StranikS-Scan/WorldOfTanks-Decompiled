@@ -91,8 +91,8 @@ class LobbyHeaderMeta(BaseDAAPIComponent):
     def as_showBubbleTooltipS(self, message, duration):
         return self.flashObject.as_showBubbleTooltip(message, duration) if self._isDAAPIInited() else None
 
-    def as_setFightBtnTooltipS(self, tooltip):
-        return self.flashObject.as_setFightBtnTooltip(tooltip) if self._isDAAPIInited() else None
+    def as_setFightBtnTooltipS(self, tooltip, isSpecial):
+        return self.flashObject.as_setFightBtnTooltip(tooltip, isSpecial) if self._isDAAPIInited() else None
 
     def as_updateOnlineCounterS(self, clusterStats, regionStats, tooltip, isAvailable):
         return self.flashObject.as_updateOnlineCounter(clusterStats, regionStats, tooltip, isAvailable) if self._isDAAPIInited() else None

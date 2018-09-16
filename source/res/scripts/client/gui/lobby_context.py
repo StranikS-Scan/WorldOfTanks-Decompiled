@@ -23,6 +23,7 @@ class LobbyContext(ILobbyContext):
         self.__arenaUniqueIDs = {}
         self.__serverSettings = ServerSettings({})
         self.__battlesCount = None
+        self.__epicBattlesCount = None
         self.__clientArenaIDGenerator = Int32IDGenerator()
         self.__headerNavigationConfirmators = set()
         return
@@ -64,8 +65,12 @@ class LobbyContext(ILobbyContext):
     def getBattlesCount(self):
         return self.__battlesCount
 
-    def updateBattlesCount(self, battlesCount):
+    def getEpicBattlesCount(self):
+        return self.__epicBattlesCount
+
+    def updateBattlesCount(self, battlesCount, epicBattlesCount):
         self.__battlesCount = battlesCount
+        self.__epicBattlesCount = epicBattlesCount
 
     def update(self, diff):
         if self.__serverSettings:
@@ -92,6 +97,8 @@ class LobbyContext(ILobbyContext):
         return self.__serverSettings
 
     def setServerSettings(self, serverSettings):
+        if self.__serverSettings:
+            self.__serverSettings.clear()
         self.__serverSettings = ServerSettings(serverSettings)
 
     def getPlayerFullName(self, pName, clanInfo=None, clanAbbrev=None, regionCode=None, pDBID=None):

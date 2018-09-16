@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/arena_info/vos_collections.py
 from gui.shared.sort_key import SortKey
-from gui.battle_control.arena_info.arena_vos import EPIC_RANDOM_KEYS
+from gui.battle_control.arena_info.arena_vos import EPIC_RANDOM_KEYS, EPIC_BATTLE_KEYS
 
 class VehicleInfoSortKey(SortKey):
     __slots__ = ('vInfoVO', 'vStatsVO')
@@ -114,6 +114,31 @@ class RankSortKey(VehicleInfoSortKey):
             return result
         result = cmp(xvInfoVO.vehicleType, yvInfoVO.vehicleType)
         return result if result else cmp(xvInfoVO.player, yvInfoVO.player)
+
+
+class EpicRankSortKey(VehicleInfoSortKey):
+    __slots__ = ()
+
+    def _cmp(self, other):
+        xvInfoVO = self.vInfoVO
+        yvInfoVO = other.vInfoVO
+        xvStatsVO = self.vStatsVO
+        yvStatsVO = other.vStatsVO
+        result = cmp(xvInfoVO.team, yvInfoVO.team)
+        if result:
+            return result
+        else:
+            xvrank = xvStatsVO.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.RANK)
+            yvrank = yvStatsVO.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.RANK)
+            if xvrank is None:
+                xvrank = 0
+            if yvrank is None:
+                yvrank = 0
+            result = cmp(yvrank, xvrank)
+            if result:
+                return result
+            result = cmp(yvStatsVO.frags, xvStatsVO.frags)
+            return result if result else cmp(xvInfoVO.player, yvInfoVO.player)
 
 
 class _Collection(object):

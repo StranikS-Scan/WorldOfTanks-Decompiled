@@ -6,8 +6,8 @@ import sys
 import BigWorld
 import ResMgr
 import PlayerEvents
-import SoundGroups
 from constants import ARENA_PERIOD
+import SoundGroups
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from helpers.PixieBG import PixieBG
 
@@ -26,10 +26,19 @@ class Timer(object):
         return Timer.__timeMethod()
 
 
-class IMapActivity(object):
+class BaseMapActivity(object):
+    arenaPeriod = property(lambda self: self._arenaPeriod)
+    name = property(lambda self: self._name)
 
-    def create(self, settings, startTime):
-        pass
+    def __init__(self):
+        self._startTime = sys.maxint
+        self._interval = 0.0
+        self._arenaPeriod = 0
+        self._name = ''
+
+    def create(self, settings):
+        self._settings = settings
+        self._arenaPeriod = settings.readInt('arenaPeriod', 0)
 
     def destroy(self):
         self.stop()
@@ -46,14 +55,20 @@ class IMapActivity(object):
     def isActive(self):
         return False
 
-    def isPeriodic(self):
-        return False
+    def isRepeating(self):
+        return self._interval > 0.0
 
     def isOver(self):
         return False
 
-    def name(self):
-        pass
+    def setStartTime(self, startTime):
+        self._startTime = startTime
+
+    def _readInterval(self):
+        self._interval = self._settings.readFloat('interval', 0.0)
+
+    def _readName(self):
+        self._name = self._settings.readString('name', '')
 
 
 class MapActivities(object):
@@ -63,21 +78,24 @@ class MapActivities(object):
         self.__isOnArena = False
         self.__pendingActivities = []
         self.__currActivities = []
+        self.__arenaPeriod = None
+        PlayerEvents.g_playerEvents.onAvatarBecomePlayer += self.__onAvatarBecomePlayer
         PlayerEvents.g_playerEvents.onArenaPeriodChange += self.__onArenaPeriodChange
-        PlayerEvents.g_playerEvents.onAvatarBecomeNonPlayer += self._onAvatarBecomeNonPlayer
+        PlayerEvents.g_playerEvents.onAvatarBecomeNonPlayer += self.__onAvatarBecomeNonPlayer
         PlayerEvents.g_playerEvents.onAvatarReady += self.__onAvatarReady
         return
 
     def destroy(self):
         self.stop()
+        PlayerEvents.g_playerEvents.onAvatarBecomePlayer -= self.__onAvatarBecomePlayer
         PlayerEvents.g_playerEvents.onArenaPeriodChange -= self.__onArenaPeriodChange
-        PlayerEvents.g_playerEvents.onAvatarBecomeNonPlayer -= self._onAvatarBecomeNonPlayer
+        PlayerEvents.g_playerEvents.onAvatarBecomeNonPlayer -= self.__onAvatarBecomeNonPlayer
         PlayerEvents.g_playerEvents.onAvatarReady -= self.__onAvatarReady
 
-    def start(self, name):
-        for activity in self.__pendingActivities:
-            if activity.name() == name:
-                activity.setStartTime(Timer.getTime())
+    def start(self, name, targetTime):
+        for _, activity in self.__pendingActivities:
+            if activity.name == name:
+                activity.setStartTime(targetTime)
 
     def stop(self):
         if self.__cbID is not None:
@@ -86,7 +104,7 @@ class MapActivities(object):
         for activity in self.__currActivities:
             activity.stop()
 
-        for activity in self.__pendingActivities:
+        for _, activity in self.__pendingActivities:
             activity.stop()
 
         del self.__currActivities[:]
@@ -110,33 +128,43 @@ class MapActivities(object):
                 startTimes.append(-1)
             startTimes.append(Timer.getTime() + chooser(timeframe[0], timeframe[1]))
 
-        self.__generateActivities(settings, startTimes)
+        self.__generateActivities(settings)
+        self.__setStartTimes(startTimes)
+        self.__startArenaPeriodSpecificActivities(0, 0)
         if self.__cbID is not None:
             BigWorld.cancelCallback(self.__cbID)
             self.__cbID = None
         self.__onPeriodicTimer()
         return
 
-    def generateArenaActivities(self, startTimes):
-        arenaType = BigWorld.player().arena.arenaType
-        Timer.init()
-        self.__generateActivities(arenaType.mapActivitiesSection, startTimes)
+    def generateArenaActivitiesTests(self):
+        self.__generateArenaActivities()
 
-    def __generateActivities(self, settings, startTimes):
+    def __generateArenaActivities(self):
+        Timer.init()
+        arenaType = BigWorld.player().arena.arenaType
+        self.__generateActivities(arenaType.mapActivitiesSection)
+
+    def __generateActivities(self, settings):
         self.__pendingActivities = []
-        if settings is None or len(startTimes) != len(settings.items()):
+        if settings is None:
             return
         else:
-            i = -1
             for activityType, activityXML in settings.items():
-                i += 1
-                startTime = startTimes[i]
                 activity = _createActivity(activityType)
                 if activity is not None:
-                    if activity.create(activityXML, startTime):
-                        self.__pendingActivities.append(activity)
+                    if activity.create(activityXML):
+                        self.__pendingActivities.append((sys.maxint, activity))
 
             return
+
+    def __setStartTimes(self, startTimes):
+        startTimeLength = len(startTimes)
+        if startTimeLength != len(self.__pendingActivities):
+            return
+        for index in range(startTimeLength):
+            _, activity = self.__pendingActivities[index]
+            self.__pendingActivities[index] = (startTimes[index], activity)
 
     def __onPeriodicTimer(self):
         self.__cbID = None
@@ -145,21 +173,38 @@ class MapActivities(object):
                 activity.stop()
                 self.__currActivities.remove(activity)
 
-        for activity in self.__pendingActivities:
-            if activity.canStart():
-                activity.start()
-                if not activity.isPeriodic():
-                    self.__currActivities.append(activity)
-                    self.__pendingActivities.remove(activity)
+        for time, activity in self.__pendingActivities:
+            if activity.arenaPeriod == self.__arenaPeriod or activity.arenaPeriod == 0:
+                if activity.canStart():
+                    activity.start()
+                    if not activity.isRepeating():
+                        self.__currActivities.append(activity)
+                        self.__pendingActivities.remove((time, activity))
 
         self.__cbID = BigWorld.callback(0.1, self.__onPeriodicTimer)
         return
 
+    def __onAvatarBecomePlayer(self):
+        self.__generateArenaActivities()
+
     def __onArenaPeriodChange(self, period, periodEndTime, periodLength, periodAdditionalInfo):
-        isOnArena = period in (ARENA_PERIOD.PREBATTLE, ARENA_PERIOD.BATTLE)
-        if isOnArena and not self.__isOnArena:
-            self.generateArenaActivities(periodAdditionalInfo)
+        isOnArena = period in (ARENA_PERIOD.PREBATTLE, ARENA_PERIOD.BATTLE, ARENA_PERIOD.AFTERBATTLE)
+        if period in (ARENA_PERIOD.PREBATTLE, ARENA_PERIOD.BATTLE):
+            self.__setStartTimes(periodAdditionalInfo)
         self.__isOnArena = isOnArena
+        self.__arenaPeriod = period
+        if self.__isOnArena:
+            periodStartTime = periodEndTime - periodLength
+            self.__startArenaPeriodSpecificActivities(period, periodStartTime)
+
+    def __startArenaPeriodSpecificActivities(self, period, periodStartTime):
+        for relativeStartTime, activity in self.__pendingActivities:
+            if activity.arenaPeriod == period:
+                passedPeriodTime = periodStartTime - Timer.getTime()
+                if relativeStartTime < passedPeriodTime:
+                    self.__pendingActivities.remove((relativeStartTime, activity))
+                else:
+                    activity.setStartTime(periodStartTime + relativeStartTime)
 
     def __onAvatarReady(self):
         if self.__cbID is not None:
@@ -168,7 +213,7 @@ class MapActivities(object):
         self.__onPeriodicTimer()
         return
 
-    def _onAvatarBecomeNonPlayer(self):
+    def __onAvatarBecomeNonPlayer(self):
         self.__isOnArena = False
         self.stop()
 
@@ -211,24 +256,26 @@ class WaveImpulse(object):
         return
 
 
-class WarplaneActivity(IMapActivity):
+class WarplaneActivity(BaseMapActivity):
     FADE_TIME = 450.0
 
-    def create(self, settings, startTime):
+    def __init__(self):
+        BaseMapActivity.__init__(self)
+        self.__endTime = sys.maxint
+
+    def create(self, settings):
+        BaseMapActivity.create(self, settings)
         self.__isStopped = False
-        self.__settings = settings
         self.__curve = None
         self.__model = None
         self.__motor = None
         self.__particle = (None, None)
         self.__cbID = None
-        self.__startTime = startTime
         self.__fadedIn = False
-        self.__period = self.__settings.readFloat('period', 0.0)
-        self.__possibility = self.__settings.readFloat('possibility', 1.0)
+        self.__possibility = self._settings.readFloat('possibility', 1.0)
         self.clampStartTime()
         self.__firstLaunch = True
-        self.__curve = BigWorld.WGActionCurve(self.__settings)
+        self.__curve = BigWorld.WGActionCurve(self._settings)
         self.__modelName = self.__curve.getChannelProperty(0, 'modelName').asString
         ds = self.__curve.getChannelProperty(0, 'wwsoundName')
         soundName = ds.asString if ds is not None else ''
@@ -240,32 +287,29 @@ class WarplaneActivity(IMapActivity):
         return self.__model is not None
 
     def canStart(self):
-        return self.__startTime != -1.0 and Timer.getTime() >= self.__startTime and self.__model is not None
-
-    def isPeriodic(self):
-        return self.__period > 0.0
+        return self._startTime != -1.0 and Timer.getTime() >= self._startTime and self.__model is not None
 
     def isOver(self):
         return Timer.getTime() > self.__endTime
 
     def clampStartTime(self):
-        if self.isPeriodic() and Timer.getTime() > self.__startTime:
-            self.__startTime = math.floor((Timer.getTime() - self.__startTime) / self.__period) * self.__period + self.__startTime
+        if self.isRepeating() and Timer.getTime() > self._startTime:
+            self._startTime += math.floor((Timer.getTime() - self._startTime) / self._interval) * self._interval
 
     def setStartTime(self, parentStartTime):
         if not self.__firstLaunch:
             self.pause()
-        timeFrame = self.__settings.readVector2('startTime')
-        self.__startTime = parentStartTime + random.uniform(timeFrame[0], timeFrame[1])
+        timeFrame = self._settings.readVector2('startTime')
+        self._startTime = parentStartTime + random.uniform(timeFrame[0], timeFrame[1])
         self.clampStartTime()
 
     def setPeriod(self, period):
-        self.__period = period
+        self._interval = period
 
     def start(self):
         self.__isStopped = False
-        if self.isPeriodic() and self.__possibility < random.uniform(0.0, 1.0):
-            self.__startTime += self.__period
+        if self.isRepeating() and self.__possibility < random.uniform(0.0, 1.0):
+            self._startTime += self._interval
             return
         else:
             if self.__firstLaunch is True:
@@ -273,21 +317,21 @@ class WarplaneActivity(IMapActivity):
                 self.__model.forceReflect = True
                 self.__motor = BigWorld.WGWarplaneMotor(self.__curve, 0)
                 self.__model.addMotor(self.__motor)
-                self.__endTime = self.__motor.totalTime + self.__startTime
+                self.__endTime = self.__motor.totalTime + self._startTime
                 if self.__endTime <= Timer.getTime():
                     self.__fadedIn = True
                 else:
-                    self.__motor.restart(Timer.getTime() - self.__startTime)
+                    self.__motor.restart(Timer.getTime() - self._startTime)
                 self.__firstLaunch = False
             else:
                 self.pause()
                 if self.__motor is not None:
                     self.__model.addMotor(self.__motor)
-                    self.__motor.restart()
-                    self.__endTime = self.__motor.totalTime + self.__startTime
+                    self.__motor.restart(Timer.getTime() - self._startTime)
+                    self.__endTime = self.__motor.totalTime + self._startTime
                 self.__fadedIn = False
             self.__model.visible = 1
-            self.__startTime += self.__period
+            self._startTime += self._interval
             if self.__cbID is not None:
                 BigWorld.cancelCallback(self.__cbID)
                 self.__cbID = None
@@ -340,16 +384,13 @@ class WarplaneActivity(IMapActivity):
         visibility = self.__motor.warplaneAlpha
         if visibility > 0.7:
             self.__loadEffects()
-        if visibility == 1.0 and not self.__fadedIn:
+        if visibility > 0.1 and not self.__fadedIn:
             self.__fadedIn = True
             self.__sound.play()
             self.__sound.volume = visibility
-        else:
-            if visibility <= 0.1 and self.__fadedIn or Timer.getTime() > self.__endTime:
-                self.pause()
-                return
-            self.__sound.play()
-            self.__sound.volume = visibility
+        elif visibility <= 0.1 and self.__fadedIn or Timer.getTime() > self.__endTime:
+            self.pause()
+            return
         self.__cbID = BigWorld.callback(0.25, self.__update)
         return
 
@@ -381,20 +422,19 @@ class WarplaneActivity(IMapActivity):
         return
 
 
-class ExplosionActivity(IMapActivity):
+class ExplosionActivity(BaseMapActivity):
 
-    def create(self, settings, startTime):
+    def create(self, settings):
+        BaseMapActivity.create(self, settings)
         self.__isStopped = False
-        self.__settings = settings
         self.__model = None
         self.__sound = None
         self.__cbID = None
-        self.__startTime = startTime
         self.__fadedIn = False
-        self.__period = self.__settings.readFloat('period', 0.0)
-        self.__possibility = self.__settings.readFloat('possibility', 1.0)
-        self.__position = self.__settings.readVector3('position', (0.0, 0.0, 0.0))
-        curveSettings = BigWorld.WGActionCurve(self.__settings)
+        self._readInterval()
+        self.__possibility = self._settings.readFloat('possibility', 1.0)
+        self.__position = self._settings.readVector3('position', (0.0, 0.0, 0.0))
+        curveSettings = BigWorld.WGActionCurve(self._settings)
         self.__soundName = None
         self.__soundName = curveSettings.getChannelProperty(0, 'wwsoundName')
         if self.__soundName is not None:
@@ -428,32 +468,29 @@ class ExplosionActivity(IMapActivity):
         return self.__model is not None
 
     def canStart(self):
-        return Timer.getTime() >= self.__startTime and self.__model is not None
-
-    def isPeriodic(self):
-        return self.__period > 0.0
+        return Timer.getTime() >= self._startTime and self.__model is not None
 
     def isOver(self):
         return self.__isOver
 
     def clampStartTime(self):
-        if self.isPeriodic() and Timer.getTime() > self.__startTime:
-            self.__startTime = math.floor((Timer.getTime() - self.__startTime) / self.__period) * self.__period + self.__startTime
+        if self.isRepeating() and Timer.getTime() > self._startTime:
+            self._startTime = math.floor((Timer.getTime() - self._startTime) / self._interval) * self._interval + self._startTime
 
     def setStartTime(self, parentStartTime):
         if not self.__firstLaunch:
             self.pause()
-        timeFrame = self.__settings.readVector2('startTime')
-        self.__startTime = parentStartTime + random.uniform(timeFrame[0], timeFrame[1])
+        timeFrame = self._settings.readVector2('startTime')
+        self._startTime = parentStartTime + random.uniform(timeFrame[0], timeFrame[1])
         self.clampStartTime()
 
-    def setPeriod(self, period):
-        self.__period = period
+    def setPeriod(self, interval):
+        self._interval = interval
 
     def start(self):
         self.__isOver = False
-        if self.isPeriodic() and self.__possibility < random.uniform(0.0, 1.0):
-            self.__startTime += self.__period
+        if self.isRepeating() and self.__possibility < random.uniform(0.0, 1.0):
+            self._startTime += self._interval
             return
         else:
             if self.__firstLaunch is True:
@@ -463,7 +500,7 @@ class ExplosionActivity(IMapActivity):
             else:
                 self.pause()
             self.__model.visible = 1
-            self.__startTime += self.__period
+            self._startTime += self._interval
             if self.__cbID is not None:
                 BigWorld.cancelCallback(self.__cbID)
                 self.__cbID = None
@@ -544,54 +581,41 @@ class ExplosionActivity(IMapActivity):
         return
 
 
-class ScenarioActivity(IMapActivity):
+class ScenarioActivity(BaseMapActivity):
 
     def __init__(self):
+        BaseMapActivity.__init__(self)
         self.__cbID = None
         self.__currentActivities = []
         self.__pendingActivities = []
-        self.__startTime = sys.maxint
-        self.__period = 0.0
-        self.__name = ''
         return
 
-    def name(self):
-        return self.__name
-
-    def create(self, settings, startTime):
+    def create(self, settings):
+        BaseMapActivity.create(self, settings)
         trajectories = settings['trajectories']
         if trajectories is None:
             return
         else:
-            self.__period = settings.readFloat('period', 0.0)
-            self.__name = settings.readString('name', '')
-            if self.__name == '':
-                if startTime == -1:
-                    return False
-            if self.__period > -1.0:
-                self.__startTime = startTime
+            self._readInterval()
+            self._readName()
             for activityType, activityXML in trajectories.items():
                 activity = _createActivity(activityType)
                 if activity is not None:
-                    activity.create(activityXML, sys.maxint)
+                    activity.create(activityXML)
                     self.__pendingActivities.append(activity)
 
             return True
 
-    def clampStartTime(self):
-        if self.isPeriodic() and Timer.getTime() > self.__startTime:
-            self.__startTime = math.floor((Timer.getTime() - self.__startTime) / self.__period) * self.__period + self.__startTime
-
     def setStartTime(self, time):
-        self.__startTime = time
+        self._startTime = time
 
     def start(self):
         self.__pendingActivities.extend(self.__currentActivities)
         self.__currentActivities = []
         for activity in self.__pendingActivities:
-            activity.setStartTime(self.__startTime)
+            activity.setStartTime(self._startTime)
 
-        self.__startTime += self.__period
+        self._startTime += self._interval
         if self.__cbID is not None:
             BigWorld.cancelCallback(self.__cbID)
             self.__cbID = None
@@ -613,17 +637,18 @@ class ScenarioActivity(IMapActivity):
         return
 
     def canStart(self):
-        return Timer.getTime() >= self.__startTime
+        return Timer.getTime() >= self._startTime
 
     def isActive(self):
-        return Timer.getTime() >= self.__startTime
+        return Timer.getTime() >= self._startTime and (len(self.__pendingActivities) != 0 or len(self.__currentActivities) != 0)
 
-    def isPeriodic(self):
-        return self.__period > 0.0
+    def isOver(self):
+        over = Timer.getTime() >= self._startTime and all(map(lambda subActivity: subActivity.isOver(), self.__currentActivities + self.__pendingActivities))
+        return over
 
     def __onPeriodicTimer(self):
         self.__cbID = None
-        if not self.isPeriodic():
+        if not self.isRepeating():
             for activity in self.__currentActivities:
                 if activity.isOver():
                     activity.stop()
@@ -632,7 +657,7 @@ class ScenarioActivity(IMapActivity):
         for activity in self.__pendingActivities:
             if activity.canStart():
                 activity.start()
-                if not activity.isPeriodic():
+                if not activity.isRepeating():
                     self.__currentActivities.append(activity)
                     self.__pendingActivities.remove(activity)
 
@@ -649,9 +674,9 @@ def _createActivity(typeName):
         return ExplosionActivity() if typeName == 'explosion' else None
 
 
-def startActivity(name):
+def startActivity(name, timeOffset=0.0):
     global g_mapActivities
-    g_mapActivities.start(name)
+    g_mapActivities.start(name, Timer.getTime() + timeOffset)
 
 
 g_mapActivities = MapActivities()

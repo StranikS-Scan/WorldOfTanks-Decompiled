@@ -7,6 +7,7 @@ import Settings
 import i18n
 import constants
 from debug_utils import LOG_CURRENT_EXCEPTION
+from soft_exception import SoftException
 VERSION_FILE_PATH = '../version.xml'
 
 def gEffectsDisabled():
@@ -146,16 +147,16 @@ _g_alphabetOrderExcept = {1105: 1077.5,
 
 def _getSymOrderIdx(symbol):
     if not isinstance(symbol, types.UnicodeType):
-        raise UserWarning('')
+        raise SoftException('')
     symIdx = ord(symbol)
     return _g_alphabetOrderExcept.get(symIdx, symIdx)
 
 
 def strcmp(word1, word2):
     if not isinstance(word1, types.UnicodeType):
-        raise UserWarning('First argument should be unicode')
+        raise SoftException('First argument should be unicode')
     if not isinstance(word2, types.UnicodeType):
-        raise UserWarning('Second argument should be unicode')
+        raise SoftException('Second argument should be unicode')
     for sym1, sym2 in zip(word1, word2):
         if sym1 != sym2:
             return int(round(_getSymOrderIdx(sym1) - _getSymOrderIdx(sym2)))

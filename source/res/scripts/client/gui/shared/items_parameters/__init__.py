@@ -120,7 +120,7 @@ def calcShellParams(descriptors):
 def getEquipmentParameters(eqpDescr):
     params = dict()
     eqDescrType = type(eqpDescr)
-    if eqDescrType is artefacts.Artillery:
+    if eqDescrType is artefacts.RageArtillery:
         shellDescr = vehicles.getItemByCompactDescr(eqpDescr.shellCompactDescr)
         params.update({'damage': (shellDescr.damage[0],) * 2,
          'piercingPower': eqpDescr.piercingPower,
@@ -128,7 +128,7 @@ def getEquipmentParameters(eqpDescr):
          'shotsNumberRange': eqpDescr.shotsNumber,
          'areaRadius': eqpDescr.areaRadius,
          'artDelayRange': eqpDescr.delay})
-    elif eqDescrType is artefacts.Bomber:
+    elif eqDescrType is artefacts.RageBomber:
         shellDescr = vehicles.getItemByCompactDescr(eqpDescr.shellCompactDescr)
         params.update({'bombDamage': (shellDescr.damage[0],) * 2,
          'piercingPower': eqpDescr.piercingPower,

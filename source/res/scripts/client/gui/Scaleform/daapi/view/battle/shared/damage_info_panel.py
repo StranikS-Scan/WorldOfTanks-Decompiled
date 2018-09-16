@@ -7,6 +7,9 @@ from gui.Scaleform.genConsts.DAMAGE_INFO_PANEL_CONSTS import DAMAGE_INFO_PANEL_C
 from gui.battle_control.battle_constants import FEEDBACK_EVENT_ID as _EVENT_ID
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+from gui.battle_control import avatar_getter
+from AvatarInputHandler import AvatarInputHandler
+from AvatarInputHandler.aih_constants import CTRL_MODE_NAME
 _DEVICE_NAME_TO_ID = {'gunHealth': DAMAGE_INFO_PANEL_CONSTS.GUN,
  'turretRotatorHealth': DAMAGE_INFO_PANEL_CONSTS.TURRET_ROTATOR,
  'surveyingDeviceHealth': DAMAGE_INFO_PANEL_CONSTS.SURVEYING_DEVICE,
@@ -98,6 +101,10 @@ class DamageInfoPanel(DamageInfoPanelMeta):
         if vehicleState is not None:
             vehicleState.onPostMortemSwitched += self.__onPostMortemSwitched
             vehicleState.onVehicleControlling += self.__onVehicleControlling
+        handler = avatar_getter.getInputHandler()
+        if handler is not None:
+            if isinstance(handler, AvatarInputHandler):
+                handler.onCameraChanged += self.__onCameraChanged
         return
 
     def _dispose(self):
@@ -108,6 +115,10 @@ class DamageInfoPanel(DamageInfoPanelMeta):
         feedback = self.sessionProvider.shared.feedback
         if feedback is not None:
             feedback.onVehicleFeedbackReceived -= self.__onVehicleFeedbackReceived
+        handler = avatar_getter.getInputHandler()
+        if handler is not None:
+            if isinstance(handler, AvatarInputHandler):
+                handler.onCameraChanged -= self.__onCameraChanged
         self.__devicesSnap.clear()
         self.__isInFire = False
         super(DamageInfoPanel, self)._dispose()
@@ -193,3 +204,7 @@ class DamageInfoPanel(DamageInfoPanelMeta):
 
     def __onVehicleControlling(self, vehicle):
         self.__hide()
+
+    def __onCameraChanged(self, mode, vehicleID=0):
+        if mode in {CTRL_MODE_NAME.RESPAWN_DEATH, CTRL_MODE_NAME.POSTMORTEM}:
+            self.__hide()

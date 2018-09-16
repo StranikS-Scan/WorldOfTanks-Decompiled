@@ -15,6 +15,7 @@ from gui.server_events.formatters import TOKEN_SIZES
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip
 from helpers import i18n
+from soft_exception import SoftException
 MAX_ACHIEVEMENTS_IN_TOOLTIP = 5
 CARD_FIELDS_FORMATTERS = {FORMATTER_IDS.SIMPLE_TITLE: formatters.minimizedTitleFormat,
  FORMATTER_IDS.CUMULATIVE: formatters.minimizedTitleCumulativeFormat,
@@ -303,10 +304,10 @@ class CardTokenConditionFormatter(ConditionsFormatter):
          'isDetailed': False}
 
     def _packCondition(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _getFormattedField(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
 
 class DetailedCardTokenConditionFormatter(CardTokenConditionFormatter):

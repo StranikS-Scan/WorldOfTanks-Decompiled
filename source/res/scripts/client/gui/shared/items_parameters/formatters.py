@@ -82,8 +82,8 @@ ITEMS_PARAMS_LIST = {ITEM_TYPES.vehicleRadio: ('radioDistance', 'weight'),
  ITEM_TYPES.vehicleEngine: ('enginePower', 'fireStartingChance', 'weight'),
  ITEM_TYPES.vehicleTurret: ('armor', 'rotationSpeed', 'circularVisionRadius', 'weight'),
  ITEM_TYPES.vehicle: VEHICLE_PARAMS,
- ITEM_TYPES.equipment: {artefacts.Artillery: ('damage', 'piercingPower', 'caliber', 'shotsNumberRange', 'areaRadius', 'artDelayRange'),
-                        artefacts.Bomber: ('bombDamage', 'piercingPower', 'bombsNumberRange', 'areaSquare', 'flyDelayRange')},
+ ITEM_TYPES.equipment: {artefacts.RageArtillery: ('damage', 'piercingPower', 'caliber', 'shotsNumberRange', 'areaRadius', 'artDelayRange'),
+                        artefacts.RageBomber: ('bombDamage', 'piercingPower', 'bombsNumberRange', 'areaSquare', 'flyDelayRange')},
  ITEM_TYPES.shell: ('caliber', 'avgPiercingPower', 'damage', 'stunMinDuration', 'stunMaxDuration', 'explosionRadius'),
  ITEM_TYPES.optionalDevice: ('weight',),
  ITEM_TYPES.vehicleGun: ('caliber',
@@ -159,15 +159,39 @@ _niceListFormat = {'rounder': BigWorld.wg_getNiceNumberFormat,
 _integralFormat = {'rounder': BigWorld.wg_getIntegralFormat}
 _percentFormat = {'rounder': lambda v: '%d%%' % v}
 
-def _autoReloadPreprocessor(reloadTimes):
+def _autoReloadPreprocessor(reloadTimes, rowStates):
     times = []
-    for minSlotTime, maxSlotTime in reloadTimes:
-        if minSlotTime == maxSlotTime:
-            times.append(minSlotTime)
-        LOG_ERROR('Different auto-reload times for same gun and slot')
-        return None
+    states = []
+    for idx, slotTime in enumerate(reloadTimes):
+        if isinstance(slotTime, (float, int)) or slotTime is None:
+            times.append(slotTime)
+            if rowStates:
+                states.append(rowStates[idx])
+            continue
+        if isinstance(slotTime, tuple):
+            minSlotTime, maxSlotTime = slotTime
+            if minSlotTime == maxSlotTime:
+                times.append(minSlotTime)
+                if rowStates:
+                    states.append(rowStates[idx][0])
+            else:
+                LOG_ERROR('Different auto-reload times for same gun and slot')
+                return
 
-    return ((min(times), max(times)), '-') if len(times) > _COUNT_OF_AUTO_RELOAD_SLOTS_TIMES_TO_SHOW_IN_INFO else (times, '/')
+    if len(times) > _COUNT_OF_AUTO_RELOAD_SLOTS_TIMES_TO_SHOW_IN_INFO:
+        if states:
+            minTime, maxTime = min(times), max(times)
+            minState, maxState = (None, None)
+            for idx, time in enumerate(times):
+                if time == minTime:
+                    minState = states[idx]
+                if time == maxTime:
+                    maxState = states[idx]
+
+            return ((min(times), max(times)), '-', (minState, maxState))
+        return ((min(times), max(times)), '-', None)
+    else:
+        return (times, '/', states if states else None)
 
 
 FORMAT_SETTINGS = {'relativePower': _integralFormat,
@@ -290,6 +314,8 @@ def _applyFormat(value, state, settings, doSmartRound, colorScheme):
         value = _cutDigits(value)
     if isinstance(value, str):
         paramStr = value
+    elif value is None:
+        paramStr = '--'
     else:
         paramStr = settings['rounder'](value)
     if state is not None and colorScheme is not None:
@@ -303,7 +329,7 @@ def formatParameter(parameterName, paramValue, parameterState=None, colorScheme=
     doSmartRound = allowSmartRound and parameterName in _SMART_ROUND_PARAMS
     preprocessor = settings.get('preprocessor')
     if preprocessor:
-        values, separator = preprocessor(paramValue)
+        values, separator, parameterState = preprocessor(paramValue, parameterState)
     else:
         values = paramValue
         separator = None
@@ -394,6 +420,6 @@ def getAllParametersTitles():
 
 
 def _cutDigits(value):
-    if value > 99:
+    if abs(value) > 99:
         return round(value)
-    return round(value, 1) if value > 9 else round(value, 2)
+    return round(value, 1) if abs(value) > 9 else round(value, 2)

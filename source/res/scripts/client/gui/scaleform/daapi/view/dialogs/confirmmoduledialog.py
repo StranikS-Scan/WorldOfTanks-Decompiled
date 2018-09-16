@@ -56,12 +56,12 @@ class ConfirmModuleDialog(ConfirmItemWindowMeta):
             defaultPrices = self.meta.getDefaultPrices(item)
             currency = self.meta.getCurrency(item)
             setCurrencies = actualPrices.toSignDict()
-            hasAlternativePrice = len(setCurrencies) > 1
-            if hasAlternativePrice and Currency.CREDITS in setCurrencies:
+            hasSeveralPrices = len(setCurrencies) > 1
+            if hasSeveralPrices and Currency.CREDITS in setCurrencies:
                 if item.itemTypeID == GUI_ITEM_TYPE.SHELL:
-                    hasAlternativePrice = shop.isEnabledBuyingGoldShellsForCredits
+                    hasSeveralPrices = shop.isEnabledBuyingGoldShellsForCredits
                 elif item.itemTypeID == GUI_ITEM_TYPE.EQUIPMENT:
-                    hasAlternativePrice = shop.isEnabledBuyingGoldEqsForCredits
+                    hasSeveralPrices = shop.isEnabledBuyingGoldEqsForCredits
             icon = self.__getIcon(item)
             extraData = item.getExtraIconInfo()
             action = None
@@ -76,7 +76,7 @@ class ConfirmModuleDialog(ConfirmItemWindowMeta):
              'currency': currency,
              'defaultValue': self.meta.getDefaultValue(item),
              'maxAvailableCount': self.meta.getMaxAvailableItemsCount(item),
-             'isActionNow': hasAlternativePrice,
+             'hasSeveralPrices': hasSeveralPrices,
              'moduleLabel': item.getGUIEmblemID(),
              'level': item.level,
              'linkage': CONFIRM_DIALOG_ALIASES.MODULE_ICON,

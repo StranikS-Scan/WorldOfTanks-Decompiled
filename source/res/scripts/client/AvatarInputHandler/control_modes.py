@@ -9,6 +9,7 @@ import GUI
 import Keys
 import Math
 import ResMgr
+from items import _xml
 import SoundGroups
 import TriggersManager
 import VideoCamera
@@ -20,6 +21,7 @@ from AvatarInputHandler.StrategicCamerasInterpolator import StrategicCamerasInte
 from DynamicCameras import SniperCamera, StrategicCamera, ArcadeCamera, ArtyCamera
 from PostmortemDelay import PostmortemDelay
 from ProjectileMover import collideDynamicAndStatic
+from AimingSystems import getShotTargetInfo
 from TriggersManager import TRIGGER_TYPE
 from constants import AIMING_MODE
 from debug_utils import LOG_DEBUG, LOG_CURRENT_EXCEPTION
@@ -49,6 +51,9 @@ class IControlMode(object):
 
     def handleKeyEvent(self, isDown, key, mods, event=None):
         pass
+
+    def alwaysReceiveKeyEvents(self):
+        return False
 
     def handleMouseEvent(self, dx, dy, dz):
         pass
@@ -118,6 +123,7 @@ class IControlMode(object):
 
 
 class _GunControlMode(IControlMode):
+    isEnabled = property(lambda self: self._isEnabled)
     aimingMode = property(lambda self: self._aimingMode)
     camera = property(lambda self: self._cam)
     _aimOffset = aih_global_binding.bindRW(aih_global_binding.BINDING_ID.AIM_OFFSET)
@@ -125,6 +131,7 @@ class _GunControlMode(IControlMode):
     def __init__(self, dataSection, avatarInputHandler, mode=CTRL_MODE_NAME.ARCADE, isStrategic=False):
         self._aih = weakref.proxy(avatarInputHandler)
         self._defaultOffset = dataSection.readVector2('defaultOffset')
+        self._cameraTransitionDurations = _readCameraTransitionSettings(dataSection['camera'])
         self._gunMarker = gun_marker_ctrl.createGunMarker(isStrategic)
         self._isEnabled = False
         self._cam = None
@@ -577,6 +584,10 @@ class ArcadeControlMode(_GunControlMode):
                     pos = self.camera.aimingSystem.getDesiredShotPoint()
                     if pos is None:
                         pos = self._gunMarker.getPosition()
+            vehicle = BigWorld.player().getVehicleAttached()
+            hitPoint, _ = getShotTargetInfo(vehicle, pos, BigWorld.player().gunRotator)
+            if vehicle.position.distTo(hitPoint) < vehicle.position.distTo(pos):
+                pos = hitPoint
             self._aih.onControlModeChanged(mode, preferredPos=pos, aimingMode=self._aimingMode, saveDist=True, equipmentID=equipmentID)
             return
         elif not self._aih.isSPG:
@@ -618,7 +629,6 @@ class _TrajectoryControlMode(_GunControlMode):
     def destroy(self):
         self.disable()
         self.__delTrajectoryDrawer()
-        self._cam.writeUserPreferences()
         super(_TrajectoryControlMode, self).destroy()
 
     def enable(self, **args):
@@ -643,6 +653,7 @@ class _TrajectoryControlMode(_GunControlMode):
         if self.__trajectoryDrawerClbk is not None:
             BigWorld.cancelCallback(self.__trajectoryDrawerClbk)
             self.__trajectoryDrawerClbk = None
+        self._cam.writeUserPreferences()
         return
 
     def setObservedVehicle(self, vehicleID):
@@ -738,6 +749,8 @@ class _TrajectoryControlMode(_GunControlMode):
         try:
             R = self.camera.aimingSystem.getDesiredShotPoint()
             if R is None:
+                return
+            if BigWorld.player().getVehicleAttached() is None:
                 return
             r0, v0, _ = BigWorld.player().gunRotator.getShotParams(R, True)
             self.__trajectoryDrawer.update(R, r0, v0, self.__updateInterval)
@@ -1012,6 +1025,7 @@ class PostMortemControlMode(IControlMode):
         self.__postmortemDelay = None
         self.__isObserverMode = False
         self.__videoControlModeAvailable = dataSection.readBool('videoModeAvailable', constants.HAS_DEV_RESOURCES)
+        self._cameraTransitionDurations = _readCameraTransitionSettings(dataSection['camera'])
         self._targetCtrlModeAfterDelay = None
         self.__altTargetMode = None
         return
@@ -1036,8 +1050,11 @@ class PostMortemControlMode(IControlMode):
             self.__selfVehicleID = player.playerVehicleID
             self.__isObserverMode = 'observer' in player.vehicleTypeDescriptor.type.tags
             self.__curVehicleID = self.__selfVehicleID
-        self.__cam.enable(None, False, args.get('postmortemParams'))
-        self.__cam.vehicleMProv = BigWorld.player().consistentMatrices.attachedVehicleMatrix
+        camTransitionParams = {'cameraTransitionDuration': args.get('transitionDuration', -1),
+         'camMatrix': args.get('camMatrix', None)}
+        self.__cam.enable(None, False, args.get('postmortemParams'), None, None, camTransitionParams)
+        newVehicle = args.get('newVehicleID', None)
+        self.__cam.vehicleMProv = BigWorld.player().consistentMatrices.attachedVehicleMatrix if newVehicle is None else BigWorld.entities.get(newVehicle).matrix
         self.__connectToArena()
         _setCameraFluency(self.__cam.camera, self.__CAM_FLUENCY)
         self.__isEnabled = True
@@ -1076,8 +1093,8 @@ class PostMortemControlMode(IControlMode):
         if arena is not None:
             arena.onVehicleKilled -= self.__onArenaVehicleKilled
         BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged -= self.__onMatrixBound
-        self._destroyPostmortemDelay()
         self.__isEnabled = False
+        self._destroyPostmortemDelay()
         self.__disconnectFromArena()
         self.__cam.disable()
         self.__curVehicleID = None
@@ -1125,6 +1142,7 @@ class PostMortemControlMode(IControlMode):
     def handleMouseEvent(self, dx, dy, dz):
         GUI.mcursor().position = self.__aimOffset
         if self.__postmortemDelay is not None:
+            self.__postmortemDelay.handleMouseEvent(dx, dy, dz)
             return True
         else:
             self.__cam.update(dx, dy, mathUtils.clamp(-1, 1, dz))
@@ -1147,7 +1165,7 @@ class PostMortemControlMode(IControlMode):
             return
         else:
             self.selectPlayer(None)
-            BigWorld.player().inputHandler.onControlModeChanged(targetMode, prevModeName=CTRL_MODE_NAME.POSTMORTEM, camMatrix=Math.Matrix(self.camera.camera.invViewMatrix), curVehicleID=self.__curVehicleID)
+            BigWorld.player().inputHandler.onControlModeChanged(targetMode, prevModeName=CTRL_MODE_NAME.POSTMORTEM, camMatrix=Math.Matrix(self.camera.camera.invViewMatrix), curVehicleID=self.__curVehicleID, transitionDuration=self._cameraTransitionDurations[targetMode])
             return
 
     def _destroyPostmortemDelay(self):
@@ -1162,12 +1180,15 @@ class PostMortemControlMode(IControlMode):
     def _onPostmortemDelayStop(self):
         self.__cam.vehicleMProv = BigWorld.player().consistentMatrices.attachedVehicleMatrix
         self.__aih.onPostmortemKillerVisionExit()
-        self._destroyPostmortemDelay()
-        if self._targetCtrlModeAfterDelay is None:
-            self._switchToCtrlMode(self.altTargetMode)
+        if not self.__isEnabled:
+            return
         else:
-            self._switchToCtrlMode(self._targetCtrlModeAfterDelay)
-        return
+            self._destroyPostmortemDelay()
+            if self._targetCtrlModeAfterDelay is None:
+                self._switchToCtrlMode(self.altTargetMode)
+            else:
+                self._switchToCtrlMode(self._targetCtrlModeAfterDelay)
+            return
 
     def __onArenaVehicleKilled(self, targetID, attackerID, equipmentID, reason):
         if self.curPostmortemDelay is not None or self.__altTargetMode is None:
@@ -1556,6 +1577,21 @@ def getFocalPoint():
     end = start + direction.scale(100000.0)
     point = collideDynamicAndStatic(start, end, (BigWorld.player().playerVehicleID,), 0)
     return point[0] if point is not None else AimingSystems.shootInSkyPoint(start, direction)
+
+
+def _readCameraTransitionSettings(cameraDataSec):
+    targetModeToDurationMap = dict.fromkeys(CTRL_MODES, -1.0)
+    if cameraDataSec is None:
+        return targetModeToDurationMap
+    else:
+        transitionSettings = cameraDataSec['transitionSettings']
+        if transitionSettings is None:
+            return targetModeToDurationMap
+        for _, (_, durationSection) in _xml.getItemsWithContext(None, transitionSettings, 'transitionDuration'):
+            targetMode = durationSection.readString('controlModeName')
+            targetModeToDurationMap[targetMode] = durationSection.readFloat('duration', -1.0)
+
+        return targetModeToDurationMap
 
 
 def _sign(val):

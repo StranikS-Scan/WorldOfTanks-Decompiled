@@ -7,10 +7,9 @@ from constants import RESPAWN_TYPES
 from gui.battle_control.avatar_getter import getSoundNotifications
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from items import vehicles
-from helpers import dependency
-from skeletons.gui.battle_session import IBattleSessionProvider
 from gui.battle_control.view_components import ViewComponentsController
-_Vehicle = namedtuple('_Vehicle', ('intCD', 'type'))
+from PlayerEvents import g_playerEvents
+_Vehicle = namedtuple('_Vehicle', ('intCD', 'type', 'settings'))
 _RespawnInfo = namedtuple('_RespawnInfo', ('vehicleID', 'respawnTime', 'respawnType', 'autoRespawnTime'))
 
 class IRespawnView(object):
@@ -33,11 +32,14 @@ class IRespawnView(object):
     def setLimits(self, respawnLimits):
         pass
 
+    def setBattleCtx(self, battleCtx):
+        pass
+
 
 _RESPAWN_SOUND_ID = 'start_battle'
 
 class RespawnsController(ViewComponentsController):
-    __slots__ = ('__weakref__', '__isUIInited', '__vehicles', '__cooldowns', '__respawnInfo', '__timerCallback', '__eManager', 'onRespawnVisibilityChanged', 'onVehicleDeployed', 'onRespawnInfoUpdated', 'onPlayerRespawnLivesUpdated', 'onTeamRespawnLivesRestored', '__isUiShown', '__isShowUiAllowed', '__limits', '__playerRespawnLives', '__respawnSoundNotificationRequest')
+    __slots__ = ('__weakref__', '__isUIInited', '__vehicles', '__cooldowns', '__respawnInfo', '__timerCallback', '__eManager', 'onRespawnVisibilityChanged', 'onVehicleDeployed', 'onRespawnInfoUpdated', 'onPlayerRespawnLivesUpdated', 'onTeamRespawnLivesRestored', 'onRespawnVehiclesUpdated', '__isUiShown', '__isShowUiAllowed', '__limits', '__playerRespawnLives', '__respawnSoundNotificationRequest', '__battleCtx')
     showUiAllowed = property(lambda self: self.__isShowUiAllowed, lambda self, value: self.__setShowUiAllowed(value))
     respawnInfo = property(lambda self: self.__respawnInfo)
     playerLives = property(lambda self: self.__playerRespawnLives)
@@ -55,23 +57,24 @@ class RespawnsController(ViewComponentsController):
         self.__isShowUiAllowed = False
         self.__playerRespawnLives = -1
         self.__respawnSoundNotificationRequest = False
+        self.__battleCtx = setup.battleCtx
         self.__eManager = Event.EventManager()
         self.onRespawnVisibilityChanged = Event.Event(self.__eManager)
         self.onVehicleDeployed = Event.Event(self.__eManager)
         self.onRespawnInfoUpdated = Event.Event(self.__eManager)
         self.onPlayerRespawnLivesUpdated = Event.Event(self.__eManager)
         self.onTeamRespawnLivesRestored = Event.Event(self.__eManager)
+        self.onRespawnVehiclesUpdated = Event.Event(self.__eManager)
         return
 
     def getControllerID(self):
         return BATTLE_CTRL_ID.RESPAWN
 
-    def startControl(self, *args):
-        sessionProvider = dependency.instance(IBattleSessionProvider)
-        feedback = sessionProvider.shared.feedback
-        feedback.onRoundFinished += self.__onRoundFinished
+    def startControl(self):
+        g_playerEvents.onRoundFinished += self.__onRoundFinished
 
     def stopControl(self):
+        g_playerEvents.onRoundFinished -= self.__onRoundFinished
         self.__stopTimer()
         self.clearViewComponents()
         self.__vehicles = None
@@ -85,6 +88,8 @@ class RespawnsController(ViewComponentsController):
         if not self._viewComponents:
             return
         self.__refresh()
+        for viewCmp in self._viewComponents:
+            viewCmp.setBattleCtx(self.__battleCtx)
 
     def respawnPlayer(self):
         BigWorld.player().base.respawnController_performRespawn()
@@ -112,7 +117,9 @@ class RespawnsController(ViewComponentsController):
         self.__vehicles = []
         for v in vehsList:
             descr = vehicles.getVehicleType(v['compDescr'])
-            self.__vehicles.append(_Vehicle(descr.compactDescr, descr))
+            self.__vehicles.append(_Vehicle(descr.compactDescr, descr, v['settings']))
+
+        self.onRespawnVehiclesUpdated(self.__vehicles)
 
     def updateRespawnCooldowns(self, cooldowns):
         self.__cooldowns = cooldowns
@@ -143,30 +150,7 @@ class RespawnsController(ViewComponentsController):
     def getLimits(self):
         return self.__limits
 
-    def __setShowUiAllowed(self, value):
-        self.__isShowUiAllowed = value
-        self.__refresh()
-
-    def __triggerRespawnSoundNotification(self):
-        getSoundNotifications().play(_RESPAWN_SOUND_ID)
-
-    def __onRoundFinished(self, *args):
-        self.__hide()
-
-    def __refresh(self):
-        if self.__respawnInfo is None or self._viewComponents is None:
-            return
-        else:
-            if self.__respawnInfo is not None and not self.__isUiShown and self.__isShowUiAllowed:
-                self.__show()
-            elif self.__isUiShown and not self.__isShowUiAllowed:
-                self.__hide()
-            elif self.__isUiShown:
-                self.__stopTimer()
-                self.__startTimer()
-            return
-
-    def __show(self):
+    def _show(self):
         if not self._viewComponents:
             return
         if not self.__isUIInited:
@@ -184,7 +168,32 @@ class RespawnsController(ViewComponentsController):
         self.__startTimer()
         self.__isUiShown = True
 
+    def __setShowUiAllowed(self, value):
+        self.__isShowUiAllowed = value
+        self.__refresh()
+
+    def __triggerRespawnSoundNotification(self):
+        getSoundNotifications().play(_RESPAWN_SOUND_ID)
+
+    def __onRoundFinished(self, *args):
+        self.__hide()
+
+    def __refresh(self):
+        if self.__respawnInfo is None or self._viewComponents is None:
+            return
+        else:
+            if self.__respawnInfo is not None and not self.__isUiShown and self.__isShowUiAllowed:
+                self._show()
+            elif self.__isUiShown and not self.__isShowUiAllowed:
+                self.__hide()
+            elif self.__isUiShown:
+                self.__stopTimer()
+                self.__startTimer()
+            return
+
     def __hide(self):
+        if not self.__isUiShown:
+            return
         self.__stopTimer()
         if not self._viewComponents:
             return

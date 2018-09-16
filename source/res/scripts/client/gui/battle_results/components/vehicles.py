@@ -12,9 +12,19 @@ from gui.shared.formatters import text_styles
 from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.lobby_context import ILobbyContext
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from epic_constants import EPIC_BATTLE_TEAM_ID
 _STAT_VALUES_VO_REPLACER = {'damageAssisted': 'damageAssistedSelf',
  'damageAssistedStun': 'damageAssistedStunSelf'}
 _STAT_STUN_FIELD_NAMES = ('damageAssistedStun', 'stunNum', 'stunDuration')
+
+def _getStunFilter():
+    lobbyContext = dependency.instance(ILobbyContext)
+    filters = ()
+    if not lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled():
+        filters += _STAT_STUN_FIELD_NAMES
+    return filters
+
 
 class TeamPlayerNameBlock(shared.PlayerNameBlock):
     __slots__ = ('igrType',)
@@ -28,7 +38,7 @@ class TeamPlayerNameBlock(shared.PlayerNameBlock):
 
 
 class RegularVehicleStatsBlock(base.StatsBlock):
-    __slots__ = ('_isObserver', 'achievements', 'achievementsCount', 'vehicleState', 'vehicleStatePrefix', 'vehicleStateSuffix', 'killerID', 'deathReason', 'isPrematureLeave', 'vehicleName', 'vehicleShortName', 'vehicleIcon', 'vehicleSort', 'isPersonal', 'isTeamKiller', 'kills', 'tkills', 'realKills', 'xp', 'damageDealt', 'vehicles', 'playerID', 'player', 'statValues', 'fortResource', 'squadIndex', 'isPersonalSquad', 'xpSort', 'intCD', 'rank', 'rankIcon', 'badge', 'badgeIcon')
+    __slots__ = ('_isObserver', 'achievements', 'achievementsCount', 'vehicleState', 'vehicleStatePrefix', 'vehicleStateSuffix', 'killerID', 'deathReason', 'isPrematureLeave', 'vehicleName', 'vehicleShortName', 'vehicleIcon', 'vehicleSort', 'isPersonal', 'isTeamKiller', 'kills', 'tkills', 'realKills', 'xp', 'damageDealt', 'vehicles', 'playerID', 'player', 'statValues', 'fortResource', 'squadIndex', 'isPersonalSquad', 'xpSort', 'intCD', 'rank', 'rankIcon', 'badge', 'badgeIcon', 'playerRank', 'respawns')
 
     def __init__(self, meta=None, field='', *path):
         super(RegularVehicleStatsBlock, self).__init__(meta, field, *path)
@@ -50,15 +60,18 @@ class RegularVehicleStatsBlock(base.StatsBlock):
             self.badgeIcon = style.makeBadgeIcon(self.badge)
         else:
             self.badgeIcon = None
-        self._setVehicleInfo(result.vehicle)
+        self._processVehicles(result)
         self._setPlayerInfo(player)
         self._setTotalStats(result, noPenalties)
-        self._setVehiclesStats(result)
+        self._setVehiclesStats(result, reusable)
         if not self.isPersonal or noPenalties:
             self._setAchievements(result, reusable)
         if not self._isObserver:
             self._setVehicleState(result, reusable)
         return
+
+    def _processVehicles(self, result):
+        self._setVehicleInfo(result.vehicle)
 
     def _setVehicleInfo(self, vehicle):
         if vehicle is not None:
@@ -87,8 +100,8 @@ class RegularVehicleStatsBlock(base.StatsBlock):
             self.xp = 0
             self.xpSort = 0
 
-    def _setVehiclesStats(self, result):
-        self.statValues = (self.isPersonal, result.getVehiclesIterator())
+    def _setVehiclesStats(self, result, reusable):
+        self.statValues = ((self.isPersonal, result.getVehiclesIterator()), reusable)
 
     def _setAchievements(self, result, reusable):
         achievements = result.getAchievements()
@@ -136,16 +149,55 @@ class RankedBattlesVehicleStatsBlock(RegularVehicleStatsBlock):
         self.rank = prevRank
 
 
+class EpicVehicleStatsBlock(RegularVehicleStatsBlock):
+    __slots__ = ('playerRank', 'respawns', '__allAdded')
+
+    def __init__(self, meta=None, field='', *path):
+        super(EpicVehicleStatsBlock, self).__init__(meta, field, *path)
+        self.vehicles = []
+        self.__allAdded = False
+
+    def _processVehicles(self, result):
+        for vehicleInfo in result.vehicles:
+            self._setVehicleInfo(vehicleInfo.vehicle)
+
+    def _setVehicleInfo(self, vehicle):
+        self.vehicles.append({'icon': getIconPath(vehicle.name),
+         'label': vehicle.shortUserName})
+
+    def setRecord(self, result, reusable):
+        super(EpicVehicleStatsBlock, self).setRecord(result, reusable)
+        self.playerRank = 0
+        if 'playerRank' in result.avatar.extensionInfo:
+            self.playerRank = result.avatar.extensionInfo['playerRank']['rank']
+        self.respawns = result.respawns
+
+    def getVO(self):
+        if len(self.vehicles) > 1 and not self.__allAdded:
+            self.vehicles.insert(0, {'label': i18n.makeString(BATTLE_RESULTS.ALLVEHICLES),
+             'icon': RES_ICONS.MAPS_ICONS_LIBRARY_EPICVEHICLESALL})
+            self.__allAdded = True
+        return super(EpicVehicleStatsBlock, self).getVO()
+
+
 class RegularVehicleStatValuesBlock(base.StatsBlock):
-    __slots__ = ('_isPersonal', 'shots', 'hits', 'explosionHits', 'damageDealt', 'sniperDamageDealt', 'directHitsReceived', 'piercingsReceived', 'noDamageDirectHitsReceived', 'explosionHitsReceived', 'damageBlockedByArmor', 'teamHitsDamage', 'spotted', 'damagedKilled', 'damageAssisted', 'damageAssistedStun', 'stunNum', 'stunDuration', 'capturePoints', 'mileage', '__rawDamageAssistedStun', '__rawStunNum')
+    __slots__ = ('_isPersonal', '_filters', 'shots', 'hits', 'explosionHits', 'damageDealt', 'sniperDamageDealt', 'directHitsReceived', 'piercingsReceived', 'noDamageDirectHitsReceived', 'explosionHitsReceived', 'damageBlockedByArmor', 'teamHitsDamage', 'spotted', 'damagedKilled', 'damageAssisted', 'damageAssistedStun', 'stunNum', 'stunDuration', 'capturePoints', 'mileage', '__rawDamageAssistedStun', '__rawStunNum')
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def setPersonal(self, flag):
         self._isPersonal = flag
 
+    def addFilters(self, filters):
+        if not hasattr(self, '_filters'):
+            self._filters = set()
+        filters = filters if isinstance(filters, (list, tuple)) else [filters]
+        self._filters.update(filters)
+
     def setRecord(self, result, reusable):
         self.__rawDamageAssistedStun = result.damageAssistedStun
         self.__rawStunNum = result.stunNum
+        if self.__rawStunNum == 0:
+            self.addFilters(_STAT_STUN_FIELD_NAMES)
         self.shots = style.getIntegralFormatIfNoEmpty(result.shots)
         self.hits = (result.directHits, result.piercings)
         self.explosionHits = style.getIntegralFormatIfNoEmpty(result.explosionHits)
@@ -168,17 +220,76 @@ class RegularVehicleStatValuesBlock(base.StatsBlock):
 
     def getVO(self):
         vo = []
-        isStunEnabled = self.lobbyContext.getServerSettings().spgRedesignFeatures.isStunEnabled()
         for component in self._components:
             field = component.getField()
-            showStunNum = False
-            if isStunEnabled:
-                showStunNum = self.__rawStunNum > 0
-            if showStunNum and field == 'stunNum' or showStunNum and field == 'damageAssistedStun' or showStunNum and field == 'stunDuration' or field not in _STAT_STUN_FIELD_NAMES:
-                value = component.getVO()
-                if self._isPersonal and field in _STAT_VALUES_VO_REPLACER:
-                    field = _STAT_VALUES_VO_REPLACER[field]
-                vo.append(style.makeStatValue(field, value))
+            if field in list(self._filters):
+                continue
+            value = component.getVO()
+            if self._isPersonal and field in _STAT_VALUES_VO_REPLACER:
+                field = _STAT_VALUES_VO_REPLACER[field]
+            vo.append(style.makeStatValue(field, value))
+
+        return vo
+
+
+class EpicVehicleStatValuesBlock(base.StatsBlock):
+    __slots__ = ('_team', '_isPersonal', '_filters', 'shots', 'hits', 'explosionHits', 'damageDealt', 'sniperDamageDealt', 'destructiblesDamageDealt', 'equipmentDamageDealt', 'directHitsReceived', 'piercingsReceived', 'noDamageDirectHitsReceived', 'explosionHitsReceived', 'damageBlockedByArmor', 'teamHitsDamage', 'spotted', 'damagedKilled', 'damageAssisted', 'equipmentDamageAssisted', 'damageAssistedStun', 'stunNum', 'capturePoints', 'timesDestroyed', 'teamSpecificStat', '__rawDamageAssistedStun', '__rawStunNum')
+
+    def setPersonal(self, flag):
+        self._isPersonal = flag
+
+    def addFilters(self, filters):
+        if not hasattr(self, '_filters'):
+            self._filters = set()
+        filters = filters if isinstance(filters, (list, tuple)) else [filters]
+        self._filters.update(filters)
+
+    def setRecord(self, result, reusable):
+        self.timesDestroyed = str(result.deathCount)
+        self._team = result.player.team
+        if self._team == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER:
+            self.teamSpecificStat = str(result.numCaptured) + '/' + str(result.numDestroyed)
+        else:
+            self.teamSpecificStat = str(result.numDefended) + '/' + str(result.numDestructiblesDefended)
+        self.__rawDamageAssistedStun = result.damageAssistedStun
+        self.__rawStunNum = result.stunNum
+        if self.__rawStunNum == 0:
+            self.addFilters(_STAT_STUN_FIELD_NAMES)
+        self.shots = style.getIntegralFormatIfNoEmpty(result.shots)
+        self.hits = (result.directHits, result.piercings)
+        self.explosionHits = style.getIntegralFormatIfNoEmpty(result.explosionHits)
+        self.damageDealt = style.getIntegralFormatIfNoEmpty(result.damageDealt)
+        self.sniperDamageDealt = style.getIntegralFormatIfNoEmpty(result.sniperDamageDealt)
+        self.destructiblesDamageDealt = style.getIntegralFormatIfNoEmpty(result.destructiblesDamageDealt)
+        self.equipmentDamageDealt = style.getIntegralFormatIfNoEmpty(result.equipmentDamageDealt)
+        self.directHitsReceived = style.getIntegralFormatIfNoEmpty(result.directHitsReceived)
+        self.piercingsReceived = style.getIntegralFormatIfNoEmpty(result.piercingsReceived)
+        self.noDamageDirectHitsReceived = style.getIntegralFormatIfNoEmpty(result.noDamageDirectHitsReceived)
+        self.explosionHitsReceived = style.getIntegralFormatIfNoEmpty(result.explosionHitsReceived)
+        self.damageBlockedByArmor = style.getIntegralFormatIfNoEmpty(result.damageBlockedByArmor)
+        self.teamHitsDamage = (result.tkills, result.tdamageDealt)
+        self.spotted = style.getIntegralFormatIfNoEmpty(result.spotted)
+        self.damagedKilled = (result.damaged, result.kills)
+        self.damageAssisted = style.getIntegralFormatIfNoEmpty(result.damageAssisted)
+        self.equipmentDamageAssisted = style.getIntegralFormatIfNoEmpty(result.equipmentDamageAssisted)
+        self.damageAssistedStun = style.getIntegralFormatIfNoEmpty(result.damageAssistedStun)
+        self.stunNum = style.getIntegralFormatIfNoEmpty(result.stunNum)
+        self.capturePoints = (result.capturePoints, result.droppedCapturePoints)
+
+    def getVO(self):
+        vo = []
+        _TEAM_SPECIFIC_STAT_REPLACE = {EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER: 'atkObjectives',
+         EPIC_BATTLE_TEAM_ID.TEAM_DEFENDER: 'defObjectives'}
+        for component in self._components:
+            field = component.getField()
+            if field in self._filters:
+                continue
+            if field == 'teamSpecificStat':
+                field = _TEAM_SPECIFIC_STAT_REPLACE[self._team]
+            value = component.getVO()
+            if self._isPersonal and field in _STAT_VALUES_VO_REPLACER:
+                field = _STAT_VALUES_VO_REPLACER[field]
+            vo.append(style.makeStatValue(field, value))
 
         return vo
 
@@ -189,9 +300,26 @@ class AllRegularVehicleStatValuesBlock(base.StatsBlock):
     def setRecord(self, result, reusable):
         isPersonal, iterator = result
         add = self.addNextComponent
+        stunFilter = _getStunFilter()
         for vehicle in iterator:
             block = RegularVehicleStatValuesBlock()
             block.setPersonal(isPersonal)
+            block.addFilters(stunFilter)
+            block.setRecord(vehicle, reusable)
+            add(block)
+
+
+class AllEpicVehicleStatValuesBlock(base.StatsBlock):
+    __slots__ = ()
+
+    def setRecord(self, result, reusable):
+        isPersonal, iterator = result
+        add = self.addNextComponent
+        stunFilter = _getStunFilter()
+        for vehicle in iterator:
+            block = EpicVehicleStatValuesBlock()
+            block.setPersonal(isPersonal)
+            block.addFilters(stunFilter)
             block.setRecord(vehicle, reusable)
             add(block)
 
@@ -202,9 +330,26 @@ class PersonalVehiclesRegularStatsBlock(base.StatsBlock):
     def setRecord(self, result, reusable):
         info = reusable.getPersonalVehiclesInfo(result)
         add = self.addNextComponent
+        stunFilter = _getStunFilter()
         for data in info.getVehiclesIterator():
             block = RegularVehicleStatValuesBlock()
             block.setPersonal(True)
+            block.addFilters(stunFilter)
+            block.setRecord(data, reusable)
+            add(block)
+
+
+class PersonalVehiclesEpicStatsBlock(base.StatsBlock):
+    __slots__ = ()
+
+    def setRecord(self, result, reusable):
+        info = reusable.getPersonalVehiclesInfo(result)
+        add = self.addNextComponent
+        stunFilter = _getStunFilter()
+        for data in info.getVehiclesIterator():
+            block = EpicVehicleStatValuesBlock()
+            block.setPersonal(True)
+            block.addFilters(stunFilter)
             block.setRecord(data, reusable)
             add(block)
 
@@ -250,6 +395,13 @@ class RankedBattlesTeamStatsBlock(TeamStatsBlock):
 
     def __init__(self, meta=None, field='', *path):
         super(RankedBattlesTeamStatsBlock, self).__init__(RankedBattlesVehicleStatsBlock, meta, field, *path)
+
+
+class EpicTeamStatsBlock(TeamStatsBlock):
+    __slots__ = ()
+
+    def __init__(self, meta=None, field='', *path):
+        super(EpicTeamStatsBlock, self).__init__(EpicVehicleStatsBlock, meta, field, *path)
 
 
 class TwoTeamsStatsBlock(shared.BiDiStatsBlock):

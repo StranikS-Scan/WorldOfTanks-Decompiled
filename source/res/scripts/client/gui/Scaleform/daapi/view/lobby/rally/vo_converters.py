@@ -738,10 +738,5 @@ def makeTableHeaderVO(currentPlayerCount, maxPlayerCount, currentLegCount, maxLe
       'showSeparator': False}]
 
 
-__directionMap = {'A': FORTIFICATIONS.STRONGHOLDDIRECTION_A,
- 'B': FORTIFICATIONS.STRONGHOLDDIRECTION_B,
- 'C': FORTIFICATIONS.STRONGHOLDDIRECTION_C,
- 'D': FORTIFICATIONS.STRONGHOLDDIRECTION_D}
-
 def getDirection(direction):
-    return i18n.makeString(__directionMap[direction])
+    return i18n.makeString(FORTIFICATIONS.getDirection(direction) or direction)

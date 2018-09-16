@@ -112,6 +112,10 @@
       <value>	10	</value>
     </musicStopPredelay>
   </wwmusicDroneSetup>
+  <capturePointsLimit>	100	</capturePointsLimit>
+  <defencePointsLimit>	100	</defencePointsLimit>
+  <resetLocalTeamKillerAtRespawn>	False	</resetLocalTeamKillerAtRespawn>
+  <leaveDisconnectedTimeout>	-1	</leaveDisconnectedTimeout>
   <gameplayTypes>
     <ctf>
       <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
@@ -153,6 +157,76 @@
       <battleEndWarningDuration>	5	</battleEndWarningDuration>
       <battleEndingSoonTime>	60	</battleEndingSoonTime>
     </bootcamp>
+    <epic>
+      <stopVehiclesAtArenaFreeze>	True	</stopVehiclesAtArenaFreeze>
+      <addGameTimePerDestructible>	0	</addGameTimePerDestructible>
+      <enabledChatCommandFlags>	EPIC_BATTLE_COMMANDS	</enabledChatCommandFlags>
+      <unlockUnusedVehiclesOnLeave>	True	</unlockUnusedVehiclesOnLeave>
+      <frontLinesAlgorithm>
+        <defenderTeam>	2	</defenderTeam>
+        <columnWidth>	50	</columnWidth>
+        <frontEdgeExtendColumns>	1	</frontEdgeExtendColumns>
+        <frontDropPerColumn>	35	</frontDropPerColumn>
+        <outlierFraction>	0.2	</outlierFraction>
+        <outlierVerticalDistance>	300	</outlierVerticalDistance>
+        <intrusionVerticalTolerance>	-10000	</intrusionVerticalTolerance>
+        <intrusionCheckExtendBounds>	150	</intrusionCheckExtendBounds>
+      </frontLinesAlgorithm>
+      <sectorSettings>
+        <transitionTime>	60	</transitionTime>
+        <maxStayTime>	30	</maxStayTime>
+        <destructionDuration>	7	</destructionDuration>
+        <closedZoneFireDelay>	4	</closedZoneFireDelay>
+        <numBombs>	20	</numBombs>
+        <bombingHeight>	70.	</bombingHeight>
+        <bombingWidth>	50.	</bombingWidth>
+        <maxRandomBombsPerTarget>	3	</maxRandomBombsPerTarget>
+        <bombShellNation>	germany	</bombShellNation>
+        <bombShellName>	sector_bomber_shell	</bombShellName>
+        <protectionZone>
+          <maxStayTime>	5.0	</maxStayTime>
+          <numberOfTurrets>	2	</numberOfTurrets>
+          <minShootingTime>	15.0	</minShootingTime>
+          <shotPiercingPower>	45.0	</shotPiercingPower>
+          <minShootingInterval>	1.0	</minShootingInterval>
+          <shotShellNation>	germany	</shotShellNation>
+          <shotShellName>	sector_artillery_shell	</shotShellName>
+          <shotRadius>	5.0	</shotRadius>
+          <shotDuration>	1.0	</shotDuration>
+          <minTurretShootInterval>	2.0	</minTurretShootInterval>
+        </protectionZone>
+      </sectorSettings>
+      <epicSectorSettings>
+        <addGameTimePerCapture>	120. 120.	</addGameTimePerCapture>
+        <addGameTimeAllCaptured>	120.	</addGameTimeAllCaptured>
+        <frontLineInit>	400.	</frontLineInit>
+        <transitionFrontLineBoundBackward>	300.	</transitionFrontLineBoundBackward>
+        <transitionFrontLineBoundForward>	250.	</transitionFrontLineBoundForward>
+        <defenderMotivationFactors>	1.0 0.625 0.375	</defenderMotivationFactors>
+        <overtimeMaxFrontlineOffset>	-600.	</overtimeMaxFrontlineOffset>
+      </epicSectorSettings>
+      <winnerIfTimeout>	2	</winnerIfTimeout>
+      <winnerIfExtermination>	2	</winnerIfExtermination>
+      <playerGroupLimit>	13	</playerGroupLimit>
+      <respawnType>	epic	</respawnType>
+      <ironShieldDefenderTeam>	2	</ironShieldDefenderTeam>
+      <defenderBonusTeam>	2	</defenderBonusTeam>
+      <defenderBonusInterval>	300	</defenderBonusInterval>
+      <battleEndWarningAppearTime>	300	</battleEndWarningAppearTime>
+      <battleEndWarningDuration>	15	</battleEndWarningDuration>
+      <battleEndingSoonTime>	60	</battleEndingSoonTime>
+      <capturePointsLimit>	200	</capturePointsLimit>
+      <defencePointsLimit>	200	</defencePointsLimit>
+      <recoveryMechanic>
+        <recoveryCounter>	15	</recoveryCounter>
+        <recoveryBlockingCounter>	30	</recoveryBlockingCounter>
+      </recoveryMechanic>
+      <overtimeMechanic>
+        <overtimeLimit>	90	</overtimeLimit>
+      </overtimeMechanic>
+      <resetLocalTeamKillerAtRespawn>	True	</resetLocalTeamKillerAtRespawn>
+      <leaveDisconnectedTimeout>	300	</leaveDisconnectedTimeout>
+    </epic>
     <sandbox>
       <battleEndWarningAppearTime>	120	</battleEndWarningAppearTime>
       <battleEndWarningDuration>	5	</battleEndWarningDuration>

@@ -2,10 +2,12 @@
 # Embedded file name: scripts/client/account_helpers/Inventory.py
 import collections
 from functools import partial
+import logging
 import AccountCommands
 import items
 from shared_utils.account_helpers.diff_utils import synchronizeDicts
 from items import vehicles, tankmen
+_logger = logging.getLogger(__name__)
 _VEHICLE = items.ITEM_TYPE_INDICES['vehicle']
 _CHASSIS = items.ITEM_TYPE_INDICES['vehicleChassis']
 _TURRET = items.ITEM_TYPE_INDICES['vehicleTurret']
@@ -318,6 +320,27 @@ class Inventory(object):
                 proxy = None
             self.__account._doCmdInt3(AccountCommands.CMD_ADD_TMAN_XP, tmanInvID, xp, 0, proxy)
             return
+
+    def getProviderForVehInvId(self, vehInvId, serverSettings):
+        if not self.__cache:
+            _logger.warning('Local cache is empty, cannot get provider name.')
+            return ''
+        elif 'telecomOrders' not in self.__cache:
+            _logger.warning('telecomOrders key is missing.')
+            return ''
+        foundBundleId = None
+        telecomOrders = self.__cache['telecomOrders']
+        for bundle in telecomOrders.itervalues():
+            bundleId, vehInvIds = bundle
+            if vehInvId in vehInvIds:
+                foundBundleId = bundleId
+                break
+
+        if foundBundleId is None:
+            _logger.warning('Cannot find bundleId for vehicle with invId=%d.', vehInvId)
+            return ''
+        else:
+            return serverSettings.telecomConfig.getInternetProvider(foundBundleId)
 
     def __onGetItemsResponse(self, itemTypeIdx, callback, resultID):
         if resultID < 0:

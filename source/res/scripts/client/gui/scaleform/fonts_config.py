@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/fonts_config.py
+from soft_exception import SoftException
 from debug_utils import LOG_NOTE
 from gui.Scaleform import SCALEFORM_FONT_CONFIG_PATH, SCALEFORM_FONT_LIB_PATH, SCALEFORM_DEFAULT_CONFIG_NAME
 import ResMgr
@@ -62,7 +63,7 @@ class FontConfigMap(object):
                     fontStyle |= FONT_STYLE_NAMES[name]
                 except KeyError:
                     LOG_NOTE('Available font style flags are:', FONT_STYLE_NAMES.keys())
-                    raise Exception("Flag isn't correct: {0:>s}.".format(name))
+                    raise SoftException("Flag isn't correct: {0:>s}.".format(name))
 
         scaleFactor = section.readFloat('scaleFactor', 1.0)
         aliases[embedded] = (runtime, fontStyle, scaleFactor)
@@ -77,11 +78,11 @@ class FontConfigMap(object):
                 if fontconfig.has_key('name'):
                     configName = fontconfig.readString('name')
                 else:
-                    raise Exception('You must specify the name of the configuration')
+                    raise SoftException('You must specify the name of the configuration')
                 if fontconfig.has_key('fontlib'):
                     fontlib = fontconfig.readString('fontlib')
                 else:
-                    raise Exception('You must specify the font library file')
+                    raise SoftException('You must specify the font library file')
                 if fontconfig.has_key('map'):
                     fontmap = fontconfig['map']
                     for t, alias in fontmap.items():

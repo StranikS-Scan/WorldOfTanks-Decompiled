@@ -99,9 +99,17 @@ class VehiclesInfo(shared.UnpackedInfo):
             items = []
         info = shared.VehicleSummarizeInfo(vehicleID, player)
         getItemByCD = self.itemsCache.items.getItemByCD
+
+        def getVehicleResult(intCD):
+            for veh in result:
+                if veh['typeCompDescr'] == intCD:
+                    return veh
+
+            return None
+
         for idx, item in enumerate(items):
             if idx >= len(result):
                 continue
-            info.addVehicleInfo(shared.VehicleDetailedInfo.makeForVehicle(vehicleID, getItemByCD(item.intCD), weakref.proxy(player), result[idx]))
+            info.addVehicleInfo(shared.VehicleDetailedInfo.makeForVehicle(vehicleID, getItemByCD(item.intCD), weakref.proxy(player), getVehicleResult(item.intCD)))
 
         return info

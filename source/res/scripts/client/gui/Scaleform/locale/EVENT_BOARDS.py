@@ -197,6 +197,7 @@ class EVENT_BOARDS(object):
     SERVER_LIST = '#event_boards:server/list'
     SERVER_NOSUITABLE_HEADER = '#event_boards:server/noSuitable/header'
     SERVER_NOSUITABLE_BODY = '#event_boards:server/noSuitable/body'
+    SERVER_NOSUITABLE_SERVER = '#event_boards:server/noSuitable/server'
     ORDERS_TITLE = '#event_boards:orders/title'
     VEHICLES_VEHICLE = '#event_boards:vehicles/vehicle'
     VEHICLES_VEHICLE_TOOLTIP = '#event_boards:vehicles/vehicle/tooltip'

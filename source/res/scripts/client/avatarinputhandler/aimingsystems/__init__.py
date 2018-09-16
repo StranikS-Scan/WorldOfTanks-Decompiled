@@ -2,14 +2,17 @@
 # Embedded file name: scripts/client/AvatarInputHandler/AimingSystems/__init__.py
 import math
 from functools import wraps
+import logging.handlers
 import BigWorld
 import Math
 from Math import Vector3
 from AvatarInputHandler import mathUtils
 from AvatarInputHandler.mathUtils import MatrixProviders
-from ProjectileMover import collideDynamicAndStatic
+from constants import SERVER_TICK_LENGTH, SHELL_TRAJECTORY_EPSILON_CLIENT
+from ProjectileMover import collideDynamicAndStatic, collideVehiclesAndStaticScene
+from projectile_trajectory import computeProjectileTrajectory
 from vehicle_systems.tankStructure import TankPartNames
-from debug_utils import LOG_CODEPOINT_WARNING
+_logger = logging.getLogger(__name__)
 
 class IAimingSystem(object):
     matrix = property(lambda self: self._matrix)
@@ -70,7 +73,14 @@ def getGunJointMat(vehicleTypeDescriptor, turretMatrix, gunPitch, overrideTurret
     return gunMat
 
 
-def getPlayerTurretMats(turretYaw=0.0, gunPitch=0.0, overrideTurretLocalZ=None):
+def getGunCameraJointMat(vehicleTypeDescriptor, turretMatrix, gunPitch):
+    gunOffset = Vector3(vehicleTypeDescriptor.turret.gunCamPosition)
+    gunMat = mathUtils.createRTMatrix(Vector3(0, gunPitch, 0), gunOffset)
+    gunMat.postMultiply(turretMatrix)
+    return gunMat
+
+
+def getPlayerTurretMats(turretYaw=0.0, gunPitch=0.0, overrideTurretLocalZ=None, useGunCamPosition=False):
     player = BigWorld.player()
     if player.isObserver() and player.getVehicleAttached() is not None:
         vehicleTypeDescriptor = player.getVehicleAttached().typeDescriptor
@@ -83,7 +93,10 @@ def getPlayerTurretMats(turretYaw=0.0, gunPitch=0.0, overrideTurretLocalZ=None):
         vehicleMatrix = player.inputHandler.steadyVehicleMatrixCalculator.stabilisedMProv
         correctGunPitch = 0.0
     turretMat = getTurretJointMat(vehicleTypeDescriptor, vehicleMatrix, turretYaw, overrideTurretLocalZ)
-    gunMat = getGunJointMat(vehicleTypeDescriptor, turretMat, correctGunPitch, overrideTurretLocalZ)
+    if not useGunCamPosition:
+        gunMat = getGunJointMat(vehicleTypeDescriptor, turretMat, correctGunPitch, overrideTurretLocalZ)
+    else:
+        gunMat = getGunCameraJointMat(vehicleTypeDescriptor, turretMat, correctGunPitch)
     if not isPitchHullAimingAvailable:
         return (turretMat, gunMat)
     else:
@@ -105,6 +118,10 @@ def getPlayerGunMat(turretYaw=0.0, gunPitch=0.0, overrideTurretLocalZ=None):
 
 def getCenteredPlayerGunMat(turretYaw=0.0, gunPitch=0.0):
     return getPlayerTurretMats(turretYaw, gunPitch, 0.0)[1]
+
+
+def getSniperCameraPlayerGunMat(turretYaw=0.0, gunPitch=0.0):
+    return getPlayerTurretMats(turretYaw, gunPitch, useGunCamPosition=True)[1]
 
 
 def getTurretMatrixProvider(vehicleTypeDescriptor, vehicleMatrixProvider, turretYawMatrixProvider):
@@ -182,6 +199,51 @@ def _trackcalls(func):
     return wrapper
 
 
+def getShotTargetInfo(vehicle, preferredTargetPoint, gunRotator):
+    shotPos, shotVec, gravity = gunRotator.getShotParams(preferredTargetPoint, True)
+    typeDescriptor = vehicle.typeDescriptor
+    shotDescriptor = typeDescriptor.shot
+    maxDist = shotDescriptor.maxDistance
+    collideWithArenaBB = BigWorld.player().arena.collideWithArenaBB
+    prevPos = shotPos
+    prevVelocity = shotVec
+    dt = 0.0
+    maxDistCheckFlag = False
+    while True:
+        dt += SERVER_TICK_LENGTH
+        checkPoints = computeProjectileTrajectory(prevPos, prevVelocity, gravity, SERVER_TICK_LENGTH, SHELL_TRAJECTORY_EPSILON_CLIENT)
+        prevCheckPoint = prevPos
+        bBreak = False
+        for curCheckPoint in checkPoints:
+            testRes = collideVehiclesAndStaticScene(prevCheckPoint, curCheckPoint, (vehicle.id,))
+            if testRes is not None:
+                dir_ = testRes[0] - prevCheckPoint
+                endPos = testRes[0]
+                bBreak = True
+                break
+            _, intersection = collideWithArenaBB(prevCheckPoint, curCheckPoint)
+            if intersection is not None:
+                maxDistCheckFlag = True
+                dir_ = intersection - prevCheckPoint
+                endPos = intersection
+                bBreak = True
+                break
+            prevCheckPoint = curCheckPoint
+
+        if bBreak:
+            break
+        prevPos = shotPos + shotVec.scale(dt) + gravity.scale(dt * dt * 0.5)
+        prevVelocity = shotVec + gravity.scale(dt)
+
+    dir_.normalise()
+    if maxDistCheckFlag:
+        if endPos.distTo(shotPos) >= maxDist:
+            dir_ = endPos - shotPos
+            dir_.normalise()
+            endPos = shotPos + dir_.scale(maxDist)
+    return (endPos, dir_)
+
+
 @_trackcalls
 def shootInSkyPoint(startPos, direction):
     dirFromCam = direction
@@ -202,16 +264,16 @@ def shootInSkyPoint(startPos, direction):
     cosAngle = dirAtCam.dot(dirFromCam)
     a = shotDesc.maxDistance
     b = shotPos.distTo(start)
-    try:
-        dist = b * cosAngle + math.sqrt(b * b * (cosAngle * cosAngle - 1) + a * a)
-    except Exception:
-        dist = shotDesc.maxDistance
-        LOG_CODEPOINT_WARNING()
-
-    if dist < 0.0:
+    quadraticSubEquation = b * b * (cosAngle * cosAngle - 1) + a * a
+    if quadraticSubEquation >= 0:
+        dist = b * cosAngle + math.sqrt(quadraticSubEquation)
+        if dist < 0.0:
+            dist = shotDesc.maxDistance
+    else:
+        _logger.warning("The point at distance from vehicle's gun can't be calculated. The maximum distance is set.")
         dist = shotDesc.maxDistance
     finalPoint = start + dirFromCam.scale(dist)
-    intersecPoint = BigWorld.player().arena.collideWithSpaceBB(start, finalPoint)
+    _, intersecPoint = BigWorld.player().arena.collideWithSpaceBB(start, finalPoint)
     if intersecPoint is not None:
         finalPoint = intersecPoint
     return finalPoint

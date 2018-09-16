@@ -1,11 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/battle_control/controllers/game_messages_ctrl.py
 import weakref
+from collections import namedtuple
 from PlayerEvents import g_playerEvents
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.view_components import IViewComponentsController
 from helpers import dependency
 from skeletons.gui.battle_session import IBattleSessionProvider
+
+class PlayerMessageData(namedtuple('playerMessageData', ('messageType', 'length', 'priority', 'msgData'))):
+
+    def getDict(self):
+        return self._asdict()
+
 
 class GameMessagesController(IViewComponentsController):
     sessionProvider = dependency.descriptor(IBattleSessionProvider)

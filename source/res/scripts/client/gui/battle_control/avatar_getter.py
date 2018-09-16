@@ -334,3 +334,15 @@ def getHealthPercentage(avatar=None):
         return [0.0, 0.0]
 
     return hp
+
+
+def getLastRecoveryArgs(avatar=None):
+    if avatar is None:
+        avatar = BigWorld.player()
+    try:
+        result = avatar.getLastRecoveryArgs()
+    except AttributeError:
+        LOG_WARNING('Attribute "getLastRecoveryArgs" is not found')
+        result = None
+
+    return result

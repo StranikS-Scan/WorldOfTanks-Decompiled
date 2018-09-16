@@ -15,8 +15,8 @@ class CurrencyTooltipBuilder(DataBuilder):
         self.__btnType = btnType
         return
 
-    def _buildData(self, *args):
-        return super(CurrencyTooltipBuilder, self)._buildData(self.__btnType)
+    def _buildData(self, advanced, *args):
+        return super(CurrencyTooltipBuilder, self)._buildData(advanced, self.__btnType)
 
 
 def getTooltipBuilders():

@@ -40,20 +40,22 @@
   </gameplayTypes>
   <mapActivities>
     <warplane>
+      <arenaPeriod>	3	</arenaPeriod>
       <preset>	fishing_bay_curve	</preset>
       <position>	0.000000 20.000000 0.000000	</position>
       <yaw>	0.000000	</yaw>
       <possibility>	1.000000	</possibility>
       <startTime>	100.000000 200.000000	</startTime>
-      <period>	300.000000	</period>
+      <interval>	300.000000	</interval>
     </warplane>
     <warplane>
+      <arenaPeriod>	3	</arenaPeriod>
       <preset>	fishing_bay_curve1	</preset>
       <position>	0.000000 20.000000 0.000000	</position>
       <yaw>	90.000000	</yaw>
       <possibility>	1.000000	</possibility>
       <startTime>	300.000000 400.000000	</startTime>
-      <period>	340.000000	</period>
+      <interval>	340.000000	</interval>
     </warplane>
   </mapActivities>
 </36_fishing_bay.xml>

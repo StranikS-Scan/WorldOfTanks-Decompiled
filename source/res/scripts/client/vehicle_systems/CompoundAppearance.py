@@ -21,7 +21,7 @@ from vehicle_systems.components import engine_state
 from vehicle_systems.stricted_loading import makeCallbackWeak, loadingPriority
 from vehicle_systems.vehicle_damage_state import VehicleDamageState
 from vehicle_systems.components.CrashedTracks import CrashedTrackController
-from vehicle_systems.tankStructure import VehiclePartsTuple, TankNodeNames, ColliderTypes, TankPartNames, TankPartIndexes
+from vehicle_systems.tankStructure import VehiclePartsTuple, TankNodeNames, ColliderTypes, TankPartNames, TankPartIndexes, ModelsSetParams
 from vehicle_systems.components.vehicleDecal import VehicleDecal
 from helpers.CallbackDelayer import CallbackDelayer
 from helpers import bound_effects
@@ -72,6 +72,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
     isUnderwater = property(lambda self: self.waterSensor.isUnderWater)
     waterHeight = property(lambda self: self.waterSensor.waterHeight)
     damageState = property(lambda self: self.__currentDamageState)
+    modelsSetParams = property(lambda self: ModelsSetParams(self.__outfit.modelsSet, self.__currentDamageState.modelState))
     frameTimeStamp = 0
     rightTrackScroll = property(lambda self: self.__rightTrackScroll)
     leftTrackScroll = property(lambda self: self.__leftTrackScroll)
@@ -164,8 +165,11 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
 
     def prerequisites(self, typeDescriptor, vID, health, isCrewActive, isTurretDetached, outfitCD):
         self.__currentDamageState.update(health, isCrewActive, False)
-        self.__outfit = Outfit(outfitCD)
-        out = camouflages.getCamoPrereqs(self.__outfit, typeDescriptor)
+        self.__vID = vID
+        self.__typeDesc = typeDescriptor
+        self.__isTurretDetached = isTurretDetached
+        self.__prepareOutfit(outfitCD)
+        out = camouflages.getCamoPrereqs(self.__outfit, self.__typeDesc)
         splineDesc = typeDescriptor.chassis.splineDesc
         if splineDesc is not None:
             out.append(splineDesc.segmentModelLeft)
@@ -174,9 +178,6 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
                 out.append(splineDesc.segment2ModelLeft)
             if splineDesc.segment2ModelRight is not None:
                 out.append(splineDesc.segment2ModelRight)
-        self.__vID = vID
-        self.__typeDesc = typeDescriptor
-        self.__isTurretDetached = isTurretDetached
         self.__terrainMatKindLodDistance = typeDescriptor.chassis.traces.lodDist
         return out
 
@@ -189,7 +190,6 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         if self.frictionAudition is not None:
             self.frictionAudition.setVehicleMatrix(vehicle.matrix)
         self.highlighter.setVehicle(vehicle)
-        self.__prepareOutfit()
         self.__applyVehicleOutfit()
         return
 
@@ -264,7 +264,6 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
                  (TankPartNames.getIdx(TankPartNames.GUN), self.compoundModel.node(gunNodeName)))
                 self.collisions.connect(self.id, ColliderTypes.VEHICLE_COLLIDER, collisionData)
             self.__activated = True
-            self.shadowManager.registerCompoundModel(self.__compoundModel)
             return
 
     def deactivate(self, stopEffects=True):
@@ -553,15 +552,13 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.trackCrashAudition.playCrashSound(isLeft, True)
         return
 
-    def __prepareOutfit(self):
-        if self.__vehicle:
-            if self.__outfit.isEmpty():
-                self.__outfit = Outfit(self.__vehicle.publicInfo['outfit'])
-        else:
-            self.__outfit = Outfit()
-        if not self.__vehicle.isPlayerVehicle and BigWorld.player().isC11nHistorical:
-            if not self.__outfit.isHistorical():
-                self.__outfit = Outfit()
+    def __prepareOutfit(self, outfitCD):
+        if self.__outfit:
+            return
+        outfit = Outfit(outfitCD)
+        player = BigWorld.player()
+        forceHistorical = player.isC11nHistorical and player.playerVehicleID != self.__vID and not outfit.isHistorical()
+        self.__outfit = Outfit() if forceHistorical else outfit
 
     def __applyVehicleOutfit(self):
         camouflages.updateFashions(self.__fashions, self.__typeDesc, self.__currentDamageState.isCurrentModelDamaged, self.__outfit)
@@ -570,9 +567,9 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         return self.collisions.getBoundingBox(partIdx) if self.collisions is not None else (Math.Vector3(0.0, 0.0, 0.0), Math.Vector3(0.0, 0.0, 0.0), 0)
 
     def __requestModelsRefresh(self):
-        currentModelState = self.__currentDamageState.modelState
-        assembler = model_assembler.prepareCompoundAssembler(self.__typeDesc, currentModelState, self.__vehicle.spaceID, self.__vehicle.isTurretDetached)
-        BigWorld.loadResourceListBG((assembler,), makeCallbackWeak(self.__onModelsRefresh, currentModelState), loadingPriority(self.__vehicle.id))
+        modelsSetParams = self.modelsSetParams
+        assembler = model_assembler.prepareCompoundAssembler(self.__typeDesc, modelsSetParams, self.__vehicle.spaceID, self.__vehicle.isTurretDetached)
+        BigWorld.loadResourceListBG((assembler,), makeCallbackWeak(self.__onModelsRefresh, modelsSetParams.state), loadingPriority(self.__vehicle.id))
 
     def __onModelsRefresh(self, modelState, resourceList):
         if BattleReplay.isFinished():
@@ -585,10 +582,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             vehicle = self.__vehicle
             newCompoundModel = resourceList[self.__typeDesc.name]
             self.deactivate(False)
-            self.shadowManager.unregisterCompoundModel(self.__compoundModel)
-            self.shadowManager.registerCompoundModel(newCompoundModel)
-            if BigWorld.player().getVehicleAttached() is self.__vehicle:
-                self.shadowManager.updatePlayerTarget(newCompoundModel)
+            self.shadowManager.reattachCompoundModel(vehicle, self.__compoundModel, newCompoundModel)
             self.__compoundModel = newCompoundModel
             self.__isTurretDetached = vehicle.isTurretDetached
             self.__prepareSystemsForDamagedVehicle(vehicle, self.__isTurretDetached)
@@ -690,8 +684,8 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             vehicle = self.__vehicle
             if self.peripheralsController is not None:
                 self.peripheralsController.update(vehicle, self.__crashedTracksCtrl)
-            if not vehicle.isAlive():
-                return
+                if not vehicle.isAlive():
+                    return
             distanceFromPlayer = self.lodCalculator.lodDistance
             self.__updateCurrTerrainMatKinds()
             if not self.__vehicle.isPlayerVehicle:
@@ -819,10 +813,9 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
 
     def __attachSplodge(self, splodge):
         node = self.__compoundModel.node(TankPartNames.HULL)
-        if splodge is not None and self.__splodge is None:
+        if splodge:
             self.__splodge = splodge
             node.attach(splodge)
-        return
 
     def __disableStipple(self):
         self.compoundModel.stipple = False

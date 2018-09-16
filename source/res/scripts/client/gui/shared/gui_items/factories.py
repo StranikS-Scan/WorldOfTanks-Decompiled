@@ -8,7 +8,7 @@ from gui.shared.gui_items.customization.c11n_items import Customization, Paint, 
 from gui.shared.gui_items.customization.outfit import Outfit
 from gui.shared.gui_items.dossier import TankmanDossier, AccountDossier, VehicleDossier
 from gui.shared.gui_items.vehicle_modules import Shell, VehicleGun, VehicleChassis, VehicleEngine, VehicleRadio, VehicleTurret, VehicleFuelTank
-from gui.shared.gui_items.artefacts import Equipment, BattleBooster, OptionalDevice
+from gui.shared.gui_items.artefacts import Equipment, BattleBooster, BattleAbility, OptionalDevice
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.badge import Badge
@@ -38,6 +38,8 @@ class GuiItemFactory(IGuiItemsFactory):
         descriptor = vehicles.getItemByCompactDescr(intCompactDescr)
         if descriptor.equipmentType == EQUIPMENT_TYPES.battleBoosters:
             cls = BattleBooster
+        elif descriptor.equipmentType == EQUIPMENT_TYPES.battleAbilities:
+            cls = BattleAbility
         else:
             cls = Equipment
         return cls(intCompactDescr, proxy, isBoughtForCredits)
@@ -104,14 +106,15 @@ class GuiItemFactory(IGuiItemsFactory):
             cls = Customization
         return cls(intCompactDescr, proxy)
 
-    def createOutfit(self, strCompactDescr=None, isEnabled=False, proxy=None):
-        return Outfit(strCompactDescr, isEnabled, proxy)
+    def createOutfit(self, strCompactDescr=None, isEnabled=False, isInstalled=False, proxy=None):
+        return Outfit(strCompactDescr, isEnabled, isInstalled, proxy)
 
 
 _ITEM_TYPES_MAPPING = {_NONE_GUI_ITEM_TYPE: lambda *args, **kwargs: None,
  GUI_ITEM_TYPE.SHELL: GuiItemFactory.createShell,
  GUI_ITEM_TYPE.EQUIPMENT: GuiItemFactory.createEquipment,
  GUI_ITEM_TYPE.BATTLE_BOOSTER: GuiItemFactory.createEquipment,
+ GUI_ITEM_TYPE.BATTLE_ABILITY: GuiItemFactory.createEquipment,
  GUI_ITEM_TYPE.OPTIONALDEVICE: GuiItemFactory.createOptionalDevice,
  GUI_ITEM_TYPE.GUN: GuiItemFactory.createVehicleGun,
  GUI_ITEM_TYPE.CHASSIS: GuiItemFactory.createVehicleChassis,

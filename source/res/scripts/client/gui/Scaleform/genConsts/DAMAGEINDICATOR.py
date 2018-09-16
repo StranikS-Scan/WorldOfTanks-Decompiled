@@ -4,12 +4,14 @@
 
 class DAMAGEINDICATOR(object):
     AMMO_CIRCLE = 'ammoCircle'
+    ARTILLERY = 'artillery'
     AT_SPG = 'AT-SPG'
     BLOCK_CIRCLE = 'blockCircle'
     BLOCKED_BIG = 'blockedBig'
     BLOCKED_MEDIUM = 'blockedMedium'
     BLOCKED_SMALL = 'blockedSmall'
     BLOCKED_STANDARD = 'blockedStandard'
+    BOMBER = 'bomber'
     COMMANDER_CIRCLE = 'commanderCircle'
     CRIT = 'crit'
     CRIT_BLIND = 'critBlind'

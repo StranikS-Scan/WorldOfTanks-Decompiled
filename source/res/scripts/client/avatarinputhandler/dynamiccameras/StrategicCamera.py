@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/AvatarInputHandler/DynamicCameras/StrategicCamera.py
 import math
+from collections import namedtuple
 import BattleReplay
 import BigWorld
 import Math
@@ -17,13 +18,13 @@ from debug_utils import LOG_WARNING, LOG_ERROR
 from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from skeletons.account_helpers.settings_core import ISettingsCore
+_DistRangeSetting = namedtuple('_DistRangeSetting', ['minArenaSize', 'distRange', 'acceleration'])
 
 def getCameraAsSettingsHolder(settingsDataSec):
     return StrategicCamera(settingsDataSec)
 
 
 class StrategicCamera(ICamera, CallbackDelayer):
-    _CAMERA_YAW = 0.0
     _DYNAMIC_ENABLED = True
     ABSOLUTE_VERTICAL_FOV = math.radians(60.0)
     _SMOOTHING_PIVOT_DELTA_FACTOR = 6.0
@@ -45,7 +46,9 @@ class StrategicCamera(ICamera, CallbackDelayer):
         CallbackDelayer.__init__(self)
         self.__positionOscillator = None
         self.__positionNoiseOscillator = None
+        self.__activeDistRangeSettings = None
         self.__dynamicCfg = CameraDynamicConfig()
+        self.__cameraYaw = 0.0
         self.__readCfg(dataSec)
         self.__cam = BigWorld.CursorCamera()
         self.__cam.isHangar = False
@@ -68,7 +71,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.__cam.turningHalfLife = -1
         self.__cam.pivotPosition = Math.Vector3(0.0, self.__camDist, 0.0)
         aimingSystemClass = StrategicAimingSystemRemote if BigWorld.player().isObserver() else StrategicAimingSystem
-        self.__aimingSystem = aimingSystemClass(self.__cfg['distRange'][0], StrategicCamera._CAMERA_YAW)
+        self.__aimingSystem = aimingSystemClass(self.__cfg['distRange'][0], self.__cameraYaw)
 
     def destroy(self):
         CallbackDelayer.destroy(self)
@@ -83,9 +86,13 @@ class StrategicCamera(ICamera, CallbackDelayer):
     def enable(self, targetPos, saveDist):
         self.__prevTime = BigWorld.time()
         self.__aimingSystem.enable(targetPos)
-        srcMat = mathUtils.createRotationMatrix((0.0, -math.pi * 0.499, 0.0))
+        self.__activeDistRangeSettings = self.__getActiveDistRangeForArena()
+        if self.__activeDistRangeSettings is not None:
+            self.__aimingSystem.height = self.__getDistRange()[0]
+        srcMat = mathUtils.createRotationMatrix((self.__cameraYaw, -math.pi * 0.499, 0.0))
         self.__cam.source = srcMat
         if not saveDist:
+            self.__updateCamDistCfg()
             self.__camDist = self.__cfg['camDist']
         self.__cam.pivotPosition = Math.Vector3(0.0, self.__camDist, 0.0)
         camTarget = Math.MatrixProduct()
@@ -100,6 +107,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.__cameraUpdate()
         self.delayCallback(0.0, self.__cameraUpdate)
         self.__needReset = 1
+        return
 
     def disable(self):
         if self.__aimingSystem is not None:
@@ -117,7 +125,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.moveToPosition(pos)
 
     def setMaxDist(self):
-        distRange = self.__cfg['distRange']
+        distRange = self.__getDistRange()
         if len(distRange) > 1:
             self.__camDist = distRange[1]
 
@@ -141,6 +149,9 @@ class StrategicCamera(ICamera, CallbackDelayer):
 
     def update(self, dx, dy, dz, updatedByKeyboard=False):
         self.__curSense = self.__cfg['keySensitivity'] if updatedByKeyboard else self.__cfg['sensitivity']
+        standardMaxDist = self.__cfg['distRange'][1]
+        if self.__camDist > standardMaxDist:
+            self.__curSense *= 1.0 + (self.__camDist - self.__cfg['distRange'][1]) * self.__getCameraAcceleration()
         self.__autoUpdatePosition = updatedByKeyboard
         self.__dxdydz = Vector3(dx, dy, dz)
 
@@ -181,7 +192,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         adjustedImpulse, noiseMagnitude = self.__dynamicCfg.adjustImpulse(impulse, reason)
         impulseFlatDir = Vector3(adjustedImpulse.x, 0, adjustedImpulse.z)
         impulseFlatDir.normalise()
-        cameraYawMat = mathUtils.createRotationMatrix(Vector3(-StrategicCamera._CAMERA_YAW, 0.0, 0.0))
+        cameraYawMat = mathUtils.createRotationMatrix(Vector3(-self.__cameraYaw, 0.0, 0.0))
         impulseLocal = cameraYawMat.applyVector(impulseFlatDir * (-1 * adjustedImpulse.length))
         self.__positionOscillator.applyImpulse(impulseLocal)
         self.__applyNoiseImpulse(noiseMagnitude)
@@ -250,10 +261,11 @@ class StrategicCamera(ICamera, CallbackDelayer):
                     self.__needReset = 2
         else:
             self.__aimingSystem.handleMovement(self.__dxdydz.x * self.__curSense, -self.__dxdydz.y * self.__curSense)
+        distRange = self.__getDistRange()
         self.__calcSmoothingPivotDelta(deltaTime)
         self.__camDist -= self.__dxdydz.z * float(self.__curSense)
         self.__camDist = self.__aimingSystem.overrideCamDist(self.__camDist)
-        distRange = self.__cfg['distRange']
+        distRange = self.__getDistRange()
         maxPivotHeight = distRange[1] - distRange[0]
         self.__camDist = mathUtils.clamp(0, maxPivotHeight, self.__camDist)
         self.__cfg['camDist'] = self.__camDist
@@ -302,6 +314,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         bcfg['sensitivity'] = readFloat(dataSec, 'sensitivity', 0.005, 10, 0.025)
         bcfg['scrollSensitivity'] = readFloat(dataSec, 'scrollSensitivity', 0.005, 10, 0.025)
         bcfg['distRange'] = readVec2(dataSec, 'distRange', (1, 1), (10000, 10000), (2, 30))
+        bcfg['distRangeForArenaSize'] = self.__readDynamicDistRangeData(dataSec)
         ds = Settings.g_instance.userPrefs[Settings.KEY_CONTROL_MODE]
         if ds is not None:
             ds = ds['strategicMode/camera']
@@ -319,6 +332,7 @@ class StrategicCamera(ICamera, CallbackDelayer):
         cfg['sensitivity'] = bcfg['sensitivity']
         cfg['scrollSensitivity'] = bcfg['scrollSensitivity']
         cfg['distRange'] = bcfg['distRange']
+        cfg['distRangeForArenaSize'] = bcfg['distRangeForArenaSize']
         cfg['camDist'] = ucfg['camDist']
         cfg['keySensitivity'] *= ucfg['keySensitivity']
         cfg['sensitivity'] *= ucfg['sensitivity']
@@ -329,4 +343,48 @@ class StrategicCamera(ICamera, CallbackDelayer):
         self.__dynamicCfg.readImpulsesConfig(dynamicsSection)
         self.__positionOscillator = createOscillatorFromSection(dynamicsSection['oscillator'], False)
         self.__positionNoiseOscillator = createOscillatorFromSection(dynamicsSection['randomNoiseOscillatorFlat'], False)
+        return
+
+    def __readDynamicDistRangeData(self, dataSec):
+        section = dataSec['dynamicDistRanges']
+        dynamicDistRanges = []
+        if section is None:
+            return dynamicDistRanges
+        else:
+            value = section['dynamicDistRange']
+            minArenaSize = readFloat(dataSec, 'minArenaSize', 0.1, 2000, 2000.0)
+            distRange = readVec2(value, 'distRangeOverride', 0.1, 100, (40, 300))
+            acceleration = readFloat(dataSec, 'acceleration', 0.1, 100, 0.1)
+            dynamicDistRanges.append(_DistRangeSetting(minArenaSize, distRange, acceleration))
+            return dynamicDistRanges
+
+    def __getActiveDistRangeForArena(self):
+        bb = BigWorld.player().arena.arenaType.boundingBox
+        arenaBottomLeft = bb[0]
+        arenaUpperRight = bb[1]
+        arenaX = arenaUpperRight[0] - arenaBottomLeft[0]
+        arenaZ = arenaUpperRight[1] - arenaBottomLeft[1]
+        arenaSize = min(arenaX, arenaZ)
+        availableDistRanges = self.__cfg['distRangeForArenaSize']
+        currentDistRange = None
+        choosenArenaMinSize = 0
+        for pt in availableDistRanges:
+            if arenaSize >= pt.minArenaSize and pt.minArenaSize > choosenArenaMinSize:
+                choosenArenaMinSize = pt.minArenaSize
+                currentDistRange = pt
+
+        return currentDistRange
+
+    def __getDistRange(self):
+        return self.__cfg['distRange'] if not self.__activeDistRangeSettings else self.__activeDistRangeSettings.distRange
+
+    def __getCameraAcceleration(self):
+        return 0 if not self.__activeDistRangeSettings else self.__activeDistRangeSettings.acceleration
+
+    def __updateCamDistCfg(self):
+        ds = Settings.g_instance.userPrefs[Settings.KEY_CONTROL_MODE]
+        if ds is not None:
+            ds = ds['strategicMode/camera']
+        distRange = self.__getDistRange()
+        self.__cfg['camDist'] = self.__userCfg['camDist'] = readFloat(ds, 'camDist', 0, distRange[1] - distRange[0], 0)
         return

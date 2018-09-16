@@ -11,7 +11,7 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.CYBER_SPORT_SLOT_SELECTED, TOOLTIPS_CONSTANTS.SELECTED_VEHICLE_UI, cybersport.CybersportSlotSelectedToolTipData(contexts.CyberSportUnitContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.CYBER_SPORT_SELECTED_VEHICLE, TOOLTIPS_CONSTANTS.SELECTED_VEHICLE_UI, cybersport.CybersportSelectedVehicleToolTipData(contexts.CyberSportUnitContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.SELECTED_VEHICLE_TRADEOFF, TOOLTIPS_CONSTANTS.SELECTED_VEHICLE_UI, cybersport.CybersportSelectedVehicleToolTipData(contexts.CyberSportUnitContext())),
-     DataBuilder(TOOLTIPS_CONSTANTS.CYBER_SPORT_TEAM, TOOLTIPS_CONSTANTS.UNIT_COMMAND, cybersport.CybersportSelectedVehicleToolTipData(contexts.CyberSportUnitContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.CYBER_SPORT_TEAM, TOOLTIPS_CONSTANTS.UNIT_COMMAND, cybersport.CybersportUnitToolTipData(contexts.CyberSportUnitContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.CYBER_SPORT_UNIT_LEVEL, TOOLTIPS_CONSTANTS.UNIT_LEVEL_UI, cybersport.CybersportUnitLevelToolTipData(contexts.CyberSportUnitContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.CYBER_SPORT_VEHICLE_NOT_READY, TOOLTIPS_CONSTANTS.SELECTED_VEHICLE_UI, cybersport.CybersportSlotSelectedToolTipData(contexts.CyberSportUnitContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.SQUAD_SLOT_VEHICLE_SELECTED, TOOLTIPS_CONSTANTS.SELECTED_VEHICLE_UI, cybersport.SquadSlotSelectedToolTipData(contexts.CyberSportUnitContext())))

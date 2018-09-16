@@ -512,6 +512,9 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         self._isInPostmortem = False
         self._isObserver = False
         self._siegeComponent = None
+        self._isInRecovery = False
+        self._isInProgressCircle = False
+        self._isUnderFire = False
         return
 
     def _populate(self):
@@ -572,10 +575,10 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         LOG_DEBUG('Updating siege mode: hint')
         if self._isInPostmortem or self._isObserver:
             return
-        if self._siegeState not in _SIEGE_STATE.SWITCHING and self._hintsLeft:
+        if self._siegeState not in _SIEGE_STATE.SWITCHING and self._hintsLeft and not self.__areOtherIndicatorsShown():
             self.as_showHintS(*self.__getHint())
             self._isHintShown = True
-        elif self._isHintShown:
+        elif self._isHintShown or self.__areOtherIndicatorsShown():
             self.as_hideHintS()
             self._isHintShown = False
 
@@ -631,20 +634,37 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
         return
 
     def __onVehicleStateUpdated(self, state, value):
-        if not self._isEnabled:
-            return
-        if state == VEHICLE_VIEW_STATE.SIEGE_MODE:
-            self.__updateSiegeState(*value)
-        elif state == VEHICLE_VIEW_STATE.DEVICES:
-            self.__updateDevicesState(*value)
-        elif state == VEHICLE_VIEW_STATE.DESTROYED:
-            self.__updateDestroyed(value)
-        elif state == VEHICLE_VIEW_STATE.CREW_DEACTIVATED:
-            self.__updateDestroyed(value)
-        elif state == VEHICLE_VIEW_STATE.SWITCHING:
+        if state == VEHICLE_VIEW_STATE.SWITCHING:
             self._devices = {'engine': 'normal',
              'leftTrack': 'normal',
              'rightTrack': 'normal'}
+        else:
+            if not self._isEnabled:
+                return
+            if state == VEHICLE_VIEW_STATE.SIEGE_MODE:
+                self.__updateSiegeState(*value)
+            elif state == VEHICLE_VIEW_STATE.DEVICES:
+                self.__updateDevicesState(*value)
+            elif state == VEHICLE_VIEW_STATE.DESTROYED:
+                self.__updateDestroyed(value)
+            elif state == VEHICLE_VIEW_STATE.CREW_DEACTIVATED:
+                self.__updateDestroyed(value)
+            elif state == VEHICLE_VIEW_STATE.SWITCHING:
+                self._devices = {'engine': 'normal',
+                 'leftTrack': 'normal',
+                 'rightTrack': 'normal'}
+            elif state == VEHICLE_VIEW_STATE.RECOVERY:
+                self._isInRecovery = value[0]
+                if self._isEnabled:
+                    self.__updateHintView()
+            elif state == VEHICLE_VIEW_STATE.PROGRESS_CIRCLE:
+                self._isInProgressCircle = value[1]
+                if self._isEnabled:
+                    self.__updateHintView()
+            elif state == VEHICLE_VIEW_STATE.UNDER_FIRE:
+                self._isUnderFire = value
+                if self._isEnabled:
+                    self.__updateHintView()
 
     def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         self._isInPostmortem = True
@@ -694,6 +714,9 @@ class SiegeModeIndicator(SiegeModeIndicatorMeta):
             keyText = makeHtmlString('html_templates:battle/siegeMode', 'toggle', ctx={'key': keyName})
             return (keyText, pressText, hintText)
         return ('', '', text_styles.tutorial(INGAME_GUI.SIEGEMODE_HINT_NOBINDING))
+
+    def __areOtherIndicatorsShown(self):
+        return self._isUnderFire or self._isInRecovery or self._isInProgressCircle
 
 
 class IDirectionIndicator(object):

@@ -15,4 +15,4 @@ class HangarSoundSchema(W2CSchema):
 
 
 def createHangarSoundHandler(handlerFunc, finiHandlerFunc=None):
-    return createCommandHandler('hangarSound', HangarSoundSchema, handlerFunc, finiHandlerFunc)
+    return createCommandHandler('hangar_sound', HangarSoundSchema, handlerFunc, finiHandlerFunc)

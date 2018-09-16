@@ -14,6 +14,7 @@ from messenger_common_chat2 import ADMIN_CHAT_COMMANDS_BY_NAMES as _COMMANDS_BY_
 from messenger_common_chat2 import messageArgs
 from messenger_common_chat2 import MESSENGER_ERRORS as _ERRORS
 from messenger.storage import storage_getter
+from soft_exception import SoftException
 
 @ReprInjector.simple('id', 'args', 'tail')
 class _ParsingResult(object):
@@ -29,14 +30,14 @@ class _ParsingResult(object):
         return False
 
     def getError(self):
-        raise RuntimeError('That routine can not be invoked in this class')
+        raise SoftException('That routine can not be invoked in this class')
 
     def _next(self):
         return self.tail.pop(0)
 
 
 class _ParsingError(_ParsingResult):
-    __slots__ = ('i18nKey',)
+    __slots__ = ('id', 'i18nKey')
 
     def __init__(self, errorID, args=None, i18nKey=None):
         super(_ParsingError, self).__init__(args)

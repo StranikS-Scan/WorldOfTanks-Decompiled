@@ -7,6 +7,7 @@ from constants import FAIRPLAY_VIOLATIONS_NAMES, FAIRPLAY_VIOLATIONS_MASKS
 from items.components.c11n_constants import CustomizationType
 from debug_utils import *
 from typing import Union, Tuple
+from soft_exception import SoftException
 
 class AmmoIterator(object):
 
@@ -46,10 +47,12 @@ class LayoutIterator(object):
 def getAmmoDiff(ammo1, ammo2):
     diff = collections.defaultdict(int)
     for compDescr, count in AmmoIterator(ammo1):
-        diff[abs(compDescr)] += count
+        if compDescr != 0:
+            diff[abs(compDescr)] += count
 
     for compDescr, count in AmmoIterator(ammo2):
-        diff[abs(compDescr)] -= count
+        if compDescr != 0:
+            diff[abs(compDescr)] -= count
 
     return diff
 
@@ -94,6 +97,18 @@ def getFairPlayViolationName(violationsMask):
         return None
 
 
+def getCustomizationItem(custType, custID):
+    custTypeID = getattr(CustomizationType, str(custType).upper(), None)
+    if not custTypeID:
+        return (None, 'Invalid customization type')
+    else:
+        c11nItems = vehicles.g_cache.customization20().itemTypes.get(custTypeID, None)
+        if not c11nItems:
+            return (None, 'Unknown customization type')
+        c11nItem = c11nItems.get(custID)
+        return (None, 'Invalid customization item id') if not c11nItem else (c11nItem, '')
+
+
 def validateCustomizationItem(custData):
     custID = custData.get('id', None)
     custType = custData.get('custType', None)
@@ -103,17 +118,12 @@ def validateCustomizationItem(custData):
         return (False, 'Cust id is not specified')
     elif not custType:
         return (False, 'Cust type is not specified')
+    elif value == 0 or not isinstance(value, int):
+        return (False, 'Invalid value')
     else:
-        custTypeId = getattr(CustomizationType, str(custType).upper(), None)
-        if not custTypeId:
-            return (False, 'Invalid customization type')
-        elif value == 0 or not isinstance(value, int):
-            return (False, 'Invalid value')
-        c20cache = vehicles.g_cache.customization20()
-        c11nItems = c20cache.itemTypes[custTypeId]
-        c11nItem = c11nItems.get(custID)
+        c11nItem, errStr = getCustomizationItem(custType, custID)
         if not c11nItem:
-            return (False, 'Invalid customization item id')
+            return (False, errStr)
         if vehTypeCompDescr is not None:
             itemTypeID, vehNationID, vehInnationID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
             if itemTypeID != ITEM_TYPES.vehicle:
@@ -211,16 +221,16 @@ def readClientServerVersion():
     fileName = 'scripts/entity_defs/Account.def'
     section = ResMgr.openSection(fileName)
     if section is None:
-        raise Exception('Cannot open ' + fileName)
+        raise SoftException('Cannot open ' + fileName)
     for attrName, section in section['Properties'].items():
         if not attrName.startswith('requiredVersion_'):
             continue
         version = section.readString('Default')
         if not version:
-            raise Exception('Subsection Account.def/Properties/%s/Default is missing or empty' % attrName)
+            raise SoftException('Subsection Account.def/Properties/%s/Default is missing or empty' % attrName)
         section = None
         ResMgr.purge(fileName)
         return (attrName, version)
 
-    raise Exception('Field Account.def/Properties/requiredVersion_* is not found')
+    raise SoftException('Field Account.def/Properties/requiredVersion_* is not found')
     return

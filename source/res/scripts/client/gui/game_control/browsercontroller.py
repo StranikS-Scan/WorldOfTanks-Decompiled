@@ -17,6 +17,7 @@ from gui.shared.events import LoadViewEvent, BrowserEvent
 from gui.shared.utils.functions import getViewName
 from ids_generators import SequenceIDGenerator
 from skeletons.gui.game_control import IBrowserController
+from soft_exception import SoftException
 
 class BrowserController(IBrowserController):
     _BROWSER_TEXTURE = 'BrowserBg'
@@ -100,7 +101,7 @@ class BrowserController(IBrowserController):
             texture = self._BROWSER_TEXTURE
             app = g_appLoader.getApp()
             if app is None:
-                raise UserWarning('Application can not be None')
+                raise SoftException('Application can not be None')
             browser = WebBrowser(webBrowserID, app, texture, size, url, handlers=self.__filters)
             self.__browsers[browserID] = browser
             if self.__isCreatingBrowser():

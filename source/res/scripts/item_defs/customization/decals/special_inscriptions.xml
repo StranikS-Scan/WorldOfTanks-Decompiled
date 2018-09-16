@@ -320,4 +320,21 @@
       <userString>	#vehicle_customization:inscription/special/special_194	</userString>
     </decal>
   </itemGroup>
+  <itemGroup>
+    <name>	Clans and global map emblems for 121B	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <historical>	true	</historical>
+    <vehicleFilter>
+      <include>
+        <vehicles>	china:Ch25_121_mod_1971B	</vehicles>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	548	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_195.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_195	</userString>
+    </decal>
+  </itemGroup>
 </special_inscriptions.xml>

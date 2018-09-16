@@ -9,7 +9,7 @@ from adisp import async, process as adisp_process
 from AvatarInputHandler import cameras
 from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core.settings_constants import GRAPHICS, GAME
-from hangar_camera_common import CameraRelatedEvents
+from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from gui import DialogsInterface, g_tankActiveCamouflage, SystemMessages
 from gui.app_loader import g_appLoader
 from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID as _SPACE_ID
@@ -165,6 +165,7 @@ class MainView(CustomizationMainViewMeta):
         self._lastTab = C11nTabs.PAINT
         self._originalStyle = None
         self._modifiedStyle = None
+        self._isCurrentStyleInstalled = False
         self._originalOutfits = {}
         self._modifiedOutfits = {}
         self._currentOutfit = None
@@ -305,7 +306,7 @@ class MainView(CustomizationMainViewMeta):
         self.refreshOutfit()
         self.as_setBottomPanelTabsDataS({'tabData': self.__getItemTabsData(),
          'selectedTab': self._tabIndex})
-        self._carouselDP.selectItem(self._modifiedStyle)
+        self._carouselDP.selectItem()
         self.__setBuyingPanelData()
         self.__setHeaderInitData()
 
@@ -416,7 +417,7 @@ class MainView(CustomizationMainViewMeta):
         return OutfitInfo(self._originalStyle, self._modifiedStyle)
 
     def getPurchaseItems(self):
-        return getCustomPurchaseItems(self.getOutfitsInfo()) if self._mode == C11nMode.CUSTOM else getStylePurchaseItems(self.getStyleInfo())
+        return getCustomPurchaseItems(self.getOutfitsInfo()) if self._mode == C11nMode.CUSTOM else getStylePurchaseItems(self.getStyleInfo(), self._isCurrentStyleInstalled)
 
     def getItemInventoryCount(self, item):
         return getItemInventoryCount(item, self.getOutfitsInfo()) if self._mode == C11nMode.CUSTOM else getStyleInventoryCount(item, self.getStyleInfo())
@@ -472,7 +473,7 @@ class MainView(CustomizationMainViewMeta):
                     slot.remove(pItem.regionID)
             groupHasItems[pItem.group] = True
 
-        if self._mode == C11nMode.CUSTOM and bool(self._originalStyle):
+        if self._mode == C11nMode.CUSTOM:
             groupHasItems[self._currentSeason] = True
         empty = self.service.getEmptyOutfit()
         for season in SeasonType.COMMON_SEASONS:
@@ -541,14 +542,17 @@ class MainView(CustomizationMainViewMeta):
         self.service.onOutfitChanged += self.__onOutfitChanged
         g_eventBus.addListener(CameraRelatedEvents.IDLE_CAMERA, self.__onNotifyHangarCameraIdleStateChanged)
         g_hangarSpace.onSpaceCreate += self.__onSpaceCreateHandler
+        g_hangarSpace.onSpaceDestroy += self.__onSpaceDestroyHandler
         g_hangarSpace.onSpaceRefresh += self.__onSpaceRefreshHandler
         self.service.onRegionHighlighted += self.__onRegionHighlighted
         self.itemsCache.onSyncCompleted += self.__onCacheResync
         self.__carveUpOutfits()
-        if self._modifiedStyle:
+        if self._originalStyle and self._isCurrentStyleInstalled:
             self._mode = C11nMode.STYLE
-        else:
+        elif self._originalOutfits[self._currentSeason].isInstalled():
             self._mode = C11nMode.CUSTOM
+        else:
+            self._mode = C11nMode.STYLE
         self._carouselDP = CustomizationCarouselDataProvider(g_currentVehicle, self._carouseItemWrapper, self)
         self._carouselDP.setFlashObject(self.as_getDataProviderS())
         self._carouselDP.setEnvironment(self.app)
@@ -585,12 +589,14 @@ class MainView(CustomizationMainViewMeta):
         self.service.onOutfitChanged -= self.__onOutfitChanged
         g_eventBus.removeListener(CameraRelatedEvents.IDLE_CAMERA, self.__onNotifyHangarCameraIdleStateChanged)
         g_hangarSpace.onSpaceCreate -= self.__onSpaceCreateHandler
+        g_hangarSpace.onSpaceDestroy -= self.__onSpaceDestroyHandler
         g_hangarSpace.onSpaceRefresh -= self.__onSpaceRefreshHandler
         self.service.onRegionHighlighted -= self.__onRegionHighlighted
         self.itemsCache.onSyncCompleted -= self.__onCacheResync
         if g_currentVehicle.item:
             g_tankActiveCamouflage[g_currentVehicle.item.intCD] = self._currentSeason
             g_currentVehicle.refreshModel()
+        self._isCurrentStyleInstalled = False
         super(MainView, self)._dispose()
         return
 
@@ -648,16 +654,28 @@ class MainView(CustomizationMainViewMeta):
     def __carveUpOutfits(self):
         for season in SeasonType.COMMON_SEASONS:
             outfit = self.service.getCustomOutfit(season)
-            self._originalOutfits[season] = outfit.copy()
             self._modifiedOutfits[season] = outfit.copy()
+            if outfit.isInstalled():
+                self._originalOutfits[season] = outfit.copy()
+            self._originalOutfits[season] = self.service.getEmptyOutfit()
+            for slot in self._modifiedOutfits[season].slots():
+                for idx in range(slot.capacity()):
+                    item = slot.getItem(idx)
+                    if item and item.isHidden and item.fullInventoryCount(g_currentVehicle.item) == 0:
+                        slot.remove(idx)
 
         style = self.service.getCurrentStyle()
-        self._originalStyle = style
-        self._modifiedStyle = style
-        if style:
-            self._currentOutfit = style.getOutfit(self._currentSeason)
+        self._isCurrentStyleInstalled = self.service.isCurrentStyleInstalled()
+        if self._isCurrentStyleInstalled:
+            self._originalStyle = style
+            self._modifiedStyle = style
         else:
-            self._currentOutfit = self._modifiedOutfits[self._currentSeason]
+            self._originalStyle = None
+            if style and style.isHidden and style.fullInventoryCount(g_currentVehicle.item) == 0:
+                self._modifiedStyle = None
+            else:
+                self._modifiedStyle = style
+        return
 
     def __updateAnchorPositions(self, _=None):
         self.as_setAnchorPositionsS(self._getUpdatedAnchorPositions())
@@ -682,6 +700,10 @@ class MainView(CustomizationMainViewMeta):
         Waiting.hide('loadHangarSpace')
         self.refreshOutfit()
         self.__updateAnchorPositions()
+
+    def __onSpaceDestroyHandler(self, _):
+        Waiting.hide('loadHangarSpace')
+        self.__onConfirmCloseWindow(proceed=True)
 
     def __onSpaceRefreshHandler(self):
         Waiting.show('loadHangarSpace')
@@ -749,7 +771,13 @@ class MainView(CustomizationMainViewMeta):
         else:
             label = _ms(VEHICLE_CUSTOMIZATION.COMMIT_APPLY)
             self.as_hideBuyingPanelS()
-        isApplyEnabled = cartInfo.minPriceItem.isDefined() and cartInfo.minPriceItem <= accountMoney or cartInfo.isAtLeastOneItemFromInventory or cartInfo.isAtLeastOneItemDismantled or self._mode == C11nMode.CUSTOM and bool(self._originalStyle)
+        isAtLeastOneOufitNotEmpty = False
+        for season in SeasonType.COMMON_SEASONS:
+            if not self._modifiedOutfits[season].isEmpty():
+                isAtLeastOneOufitNotEmpty = True
+                break
+
+        isApplyEnabled = cartInfo.minPriceItem.isDefined() and cartInfo.minPriceItem <= accountMoney or cartInfo.isAtLeastOneItemFromInventory or cartInfo.isAtLeastOneItemDismantled or self._mode == C11nMode.CUSTOM and not self._originalOutfits[self._currentSeason].isInstalled() and isAtLeastOneOufitNotEmpty
         shortage = self.itemsCache.items.stats.money.getShortage(cartInfo.totalPrice.price)
         self.as_setBottomPanelHeaderS({'buyBtnEnabled': isApplyEnabled,
          'buyBtnLabel': label,
@@ -880,6 +908,8 @@ class MainView(CustomizationMainViewMeta):
         visibleTabs = []
         anchorsData = g_currentVehicle.hangarSpace.getSlotPositions()
         for tabIdx in C11nTabs.VISIBLE:
+            if tabIdx == C11nTabs.CAMOUFLAGE and g_currentVehicle.item.descriptor.type.hasCustomDefaultCamouflage:
+                continue
             itemTypeID = TABS_ITEM_MAPPING[tabIdx]
             data = self._carouselDP.getSeasonAndTabData(tabIdx, self._currentSeason)
             if not data.itemCount:

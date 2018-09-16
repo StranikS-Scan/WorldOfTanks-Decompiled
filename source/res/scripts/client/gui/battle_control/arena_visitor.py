@@ -91,6 +91,7 @@ class _ArenaTypeSkeleton(object):
     squadTeamNumbers = []
     boundingBox = ((0, 0), (0, 0))
     minimap = ''
+    overviewmap = ''
     winPointsSettings = None
     battleCountdownTimerSound = ''
     roundLength = 0
@@ -222,6 +223,10 @@ class _ArenaTypeVisitor(IArenaVisitor):
     def getMinimapTexture(self):
         return self._arenaType.minimap
 
+    @catch_attribute_exception(default=_ArenaTypeSkeleton.overviewmap)
+    def getOverviewMapTexture(self):
+        return self._arenaType.overviewmap
+
     @catch_attribute_exception(default=_ArenaTypeSkeleton.winPointsSettings)
     def getWinPointsSettings(self):
         return self._arenaType.winPointsSettings
@@ -294,6 +299,12 @@ class _ArenaGuiTypeVisitor(IArenaVisitor):
     def isBootcampBattle(self):
         return self._guiType == _GUI_TYPE.BOOTCAMP
 
+    def isInEpicRange(self):
+        return self._guiType in _GUI_TYPE.EPIC_RANGE
+
+    def isEpicBattle(self):
+        return self._guiType == _GUI_TYPE.EPIC_BATTLE
+
     def hasLabel(self):
         return self._guiType != _GUI_TYPE.UNKNOWN and self._guiType in _GUI_TYPE_LABEL.LABELS
 
@@ -328,6 +339,18 @@ class _ArenaBonusTypeVisitor(IArenaVisitor):
 
     def hasGameEndMessage(self):
         return _CAPS.checkAny(self._bonusType, _CAPS.VICTORY_DEFEAT_MESSAGE)
+
+    def hasSectors(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.SECTOR_MECHANICS)
+
+    def hasDestructibleEntities(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.DESTRUCTIBLE_ENTITIES)
+
+    def hasStepRepairPoints(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.STEP_REPAIR_MECHANIC)
+
+    def hasPlayerRanks(self):
+        return _CAPS.checkAny(self._bonusType, _CAPS.PLAYER_RANK_MECHANICS)
 
 
 class _ArenaExtraDataVisitor(IArenaVisitor):
@@ -465,6 +488,18 @@ class _ClientArenaVisitor(IClientArenaVisitor):
 
     def hasPlayerGroups(self):
         return self._arena.arenaType.numPlayerGroups > 0
+
+    def hasSectors(self):
+        return self._bonus.hasSectors()
+
+    def hasStepRepairPoints(self):
+        return self._bonus.hasStepRepairPoints()
+
+    def hasPlayerRanks(self):
+        return self._bonus.hasPlayerRanks()
+
+    def hasDestructibleEntities(self):
+        return self._bonus.hasDestructibleEntities()
 
     def isSoloTeam(self, team):
         return False

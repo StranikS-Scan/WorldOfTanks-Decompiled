@@ -29,7 +29,7 @@ _CTRL_MODE = aih_constants.CTRL_MODE_NAME
 _TO_FLASH_SYMBOL_NAME_MAPPING = {STUN_AREA_STATIC_MARKER: settings.ENTRY_SYMBOL_NAME.ARTY_MARKER}
 
 class PersonalEntriesPlugin(common.SimplePlugin):
-    __slots__ = ('__isAlive', '__isObserver', '__playerVehicleID', '__viewPointID', '__animationID', '__deadPointID', '__cameraID', '__cameraIDs', '__yawLimits', '__circlesID', '__circlesVisibilityState', '__killerVehicleID')
+    __slots__ = ('__isAlive', '__isObserver', '__playerVehicleID', '__viewPointID', '__animationID', '__deadPointID', '__cameraID', '__cameraIDs', '__yawLimits', '__circlesID', '__circlesVisibilityState', '__killerVehicleID', '__defaultViewRangeCircleSize')
 
     def __init__(self, parentObj):
         super(PersonalEntriesPlugin, self).__init__(parentObj)
@@ -45,6 +45,7 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         self.__circlesID = None
         self.__circlesVisibilityState = 0
         self.__killerVehicleID = 0
+        self.__defaultViewRangeCircleSize = None
         return
 
     def start(self):
@@ -108,6 +109,13 @@ class PersonalEntriesPlugin(common.SimplePlugin):
         self._updateDeadPointEntry()
         self._invalidateMarkup()
 
+    def clearCamera(self):
+        if self.__cameraID:
+            self._setActive(self.__cameraID, False)
+            self.__cameraID = 0
+        if self.__viewPointID:
+            self._setActive(self.__viewPointID, False)
+
     def setSettings(self):
         if not self.__isAlive:
             self.__hideDirectionLine()
@@ -169,6 +177,9 @@ class PersonalEntriesPlugin(common.SimplePlugin):
                 else:
                     self.__removeViewRangeCircle()
             self._updateCirlcesState()
+
+    def setDefaultViewRangeCircleSize(self, size):
+        self.__defaultViewRangeCircleSize = size
 
     def __onKillerVisionEnter(self, killerVehicleID):
         self.__killerVehicleID = killerVehicleID
@@ -257,8 +268,9 @@ class PersonalEntriesPlugin(common.SimplePlugin):
             matrix = matrix_factory.makeDefaultCameraMatrix()
         else:
             matrix = matrix_factory.makeDefaultCameraMatrix()
+        enableCameraEntry = self._enableCameraEntryInCtrlMode(self._ctrlMode)
         for entryID in self.__cameraIDs.itervalues():
-            if activateID == entryID:
+            if activateID == entryID and enableCameraEntry:
                 self._setMatrix(entryID, matrix)
                 if self.__cameraID != entryID:
                     self._setActive(entryID, True)
@@ -289,14 +301,18 @@ class PersonalEntriesPlugin(common.SimplePlugin):
             self._setActive(self.__circlesID, isActive)
             self._setMatrix(self.__circlesID, ownMatrix)
             return
-        transformProps = settings.TRANSFORM_FLAG.DEFAULT
-        transformProps ^= settings.TRANSFORM_FLAG.NO_ROTATION
-        self.__circlesVisibilityState = 0
-        self.__circlesID = self._addEntry(_S_NAME.VIEW_RANGE_CIRCLES, _C_NAME.PERSONAL, matrix=ownMatrix, active=isActive, transformProps=transformProps)
-        bottomLeft, upperRight = self._arenaVisitor.type.getBoundingBox()
-        arenaWidth = upperRight[0] - bottomLeft[0]
-        arenaHeight = upperRight[1] - bottomLeft[1]
-        self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_INIT_ARENA_SIZE, arenaWidth, arenaHeight)
+        else:
+            transformProps = settings.TRANSFORM_FLAG.DEFAULT
+            transformProps ^= settings.TRANSFORM_FLAG.NO_ROTATION
+            self.__circlesVisibilityState = 0
+            self.__circlesID = self._addEntry(_S_NAME.VIEW_RANGE_CIRCLES, _C_NAME.PERSONAL, matrix=ownMatrix, active=isActive, transformProps=transformProps)
+            width, height = self.__defaultViewRangeCircleSize, self.__defaultViewRangeCircleSize
+            if self.__defaultViewRangeCircleSize is None:
+                bottomLeft, upperRight = self._arenaVisitor.type.getBoundingBox()
+                width = upperRight[0] - bottomLeft[0]
+                height = upperRight[1] - bottomLeft[1]
+            self._invoke(self.__circlesID, settings.VIEW_RANGE_CIRCLES_AS3_DESCR.AS_INIT_ARENA_SIZE, width, height)
+            return
 
     def _getViewPointID(self):
         return self.__viewPointID
@@ -617,6 +633,12 @@ class ArenaVehiclesPlugin(common.EntriesPlugin, IVehiclesAndPositionsController)
             guiLabel = arenaDP.getPlayerGuiProps(vehicleID, vInfo.team).name()
             self.__setGUILabel(entry, guiLabel)
 
+    def getVehiclePosition(self, vehicleID):
+        if vehicleID not in self._entries:
+            return Math.Vector3(-99999.9, -99999.9, -99999.9)
+        entry = self._entries[vehicleID]
+        return Math.Vector3(-99999.9, -99999.9, -99999.9) if not entry.isInAoI() else Math.Matrix(entry.getMatrix()).translation
+
     def updatePositions(self, iterator):
         handled = set()
         for vInfo, position in iterator():
@@ -879,6 +901,15 @@ class TeleportPlugin(common.AttentionToCellPlugin):
             result = BigWorld.collide(player.spaceID, (position[0], 1000.0, position[2]), (position[0], -1000.0, position[2]))
             player.base.vehicle_teleport((position[0], result[0][1], position[2]), 0)
         return
+
+    def _doAttentionAtPosition(self, senderID, position, duration):
+        pass
+
+    def _doAttentionToObjective(self, senderID, hqIdx, duration):
+        pass
+
+    def _doAttentionToBase(self, senderID, baseIdx, baseName, duration):
+        pass
 
 
 class EquipmentsPlugin(common.IntervalPlugin):

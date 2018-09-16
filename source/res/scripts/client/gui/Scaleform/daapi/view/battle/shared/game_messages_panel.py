@@ -8,14 +8,6 @@ from gui.battle_results.components.common import makeRegularFinishResultLabel, _
 from gui.shared.utils import toUpper
 from helpers import i18n
 
-class GAME_MESSAGE_PRIORITY(object):
-    HIGH = 0
-    LOW = 1
-    DEFAULT = 2
-
-
-DEFAULT_MESSAGE_LENGTH = 5000
-
 class PlayerMessageData(namedtuple('playerMessageData', ('messageType', 'length', 'priority', 'msgData'))):
 
     def getDict(self):
@@ -37,5 +29,5 @@ class GameMessagesPanel(GameMessagesPanelMeta):
                 messageType = GAME_MESSAGES_CONSTS.DEFEAT
         endGameMsgData = {'title': toUpper(i18n.makeString(_FULL_RESULT_LABEL.format(messageType))),
          'subTitle': toUpper(makeRegularFinishResultLabel(reason, messageType))}
-        msg = PlayerMessageData(messageType, DEFAULT_MESSAGE_LENGTH, GAME_MESSAGE_PRIORITY.HIGH, endGameMsgData)
+        msg = PlayerMessageData(messageType, GAME_MESSAGES_CONSTS.DEFAULT_MESSAGE_LENGTH, GAME_MESSAGES_CONSTS.GAME_MESSAGE_PRIORITY_HIGH, endGameMsgData)
         self._addMessage(msg.getDict())

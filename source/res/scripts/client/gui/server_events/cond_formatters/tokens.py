@@ -6,6 +6,7 @@ from gui.server_events.formatters import TOKEN_SIZES
 from gui.shared.formatters import text_styles
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
+from soft_exception import SoftException
 _PreFormattedTokenCondition = namedtuple('_PreFormattedTokenCondition', 'tokenID, styleID, eventID, needCount')
 
 class PreFormattedTokenCondition(_PreFormattedTokenCondition):
@@ -57,13 +58,13 @@ class TokensConditionFormatter(ConditionsFormatter):
         return result
 
     def _packCondition(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _getFormattedField(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _packConditions(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
 
 class TokensMarathonFormatter(object):

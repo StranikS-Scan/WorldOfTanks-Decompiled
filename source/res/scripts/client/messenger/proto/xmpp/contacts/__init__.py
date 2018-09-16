@@ -114,7 +114,7 @@ class _UserPresence(ClientHolder):
         self.sendPresence()
 
 
-class _VoipHandler(object):
+class VoipHandler(object):
 
     @storage_getter('users')
     def usersStorage(self):
@@ -134,8 +134,8 @@ class _VoipHandler(object):
         events.onChannelEntered -= self.__voip_onChannelEntered
         events.onChannelLeft -= self.__voip_onChannelLeft
 
-    def __voip_onChannelEntered(self, uri, _):
-        if self.playerCtx.getCachedItem('lastVoipUri') != uri:
+    def __voip_onChannelEntered(self, uri, _, isRejoin):
+        if self.playerCtx.getCachedItem('lastVoipUri') != uri and not isRejoin:
             self.usersStorage.removeTags({USER_TAG.MUTED}, MutedOnlyFindCriteria())
             g_messengerEvents.users.onUsersListReceived({USER_TAG.MUTED})
         else:
@@ -160,7 +160,7 @@ class ContactsManager(ClientEventsHandler):
         self.__subsRestrictions = sub_helper.SubscriptionsRestrictions()
         self.__presence = _UserPresence()
         self.__presence.addListeners()
-        self.__voip = _VoipHandler()
+        self.__voip = VoipHandler()
         self.__voip.addListeners()
         g_messengerEvents.onPluginConnectFailed += self.__me_onPluginConnectFailed
         self.usersStorage.onRestoredFromCache += self.__us_onRestoredFromCache

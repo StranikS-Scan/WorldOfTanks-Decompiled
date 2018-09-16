@@ -5,7 +5,7 @@ from helpers import dependency
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.shared import IItemsCache
 from gui.shared.gui_items import GUI_ITEM_TYPE
-BATTLE_BOOSTER_SLOT_IDX = vehicles.NUM_EQUIPMENT_SLOTS_BY_TYPE[EQUIPMENT_TYPES.regular]
+from soft_exception import SoftException
 EQUIPMENT_LAYOUT_SIZE = vehicles.NUM_EQUIPMENT_SLOTS
 DEFAULT_EQUIPMENT_LAYOUT = [0] * EQUIPMENT_LAYOUT_SIZE
 REGULAR_EQUIPMENT_LAYOUT_SIZE = vehicles.NUM_EQUIPMENT_SLOTS_BY_TYPE[EQUIPMENT_TYPES.regular]
@@ -19,7 +19,7 @@ class _VehicleConsumables(object):
     def __init__(self, *args):
         if args:
             if len(args) != self._getDefaultSize():
-                raise UserWarning('Length of arguments is not valid')
+                raise SoftException('Length of arguments is not valid')
             self.__consumables = []
             for item in args:
                 self._validateType(item)
@@ -73,7 +73,7 @@ class _VehicleConsumables(object):
 
     def _validateIndex(self, idx):
         if idx >= self._getDefaultSize():
-            raise UserWarning('Index {} exceeds the layout size!'.format(idx))
+            raise SoftException('Index {} exceeds the layout size!'.format(idx))
 
     def _getDefaultSize(self):
         raise NotImplementedError
@@ -87,7 +87,7 @@ class RegularEquipmentConsumables(_VehicleConsumables):
 
     def _validateType(self, item):
         if item is not None and item.itemTypeID != GUI_ITEM_TYPE.EQUIPMENT:
-            raise UserWarning('The item {} is not valid equipment!'.format(item))
+            raise SoftException('The item {} is not valid equipment!'.format(item))
         return
 
     def _getDefaultSize(self):
@@ -99,20 +99,43 @@ class BattleBoosterConsumables(_VehicleConsumables):
 
     def _validateType(self, item):
         if item is not None and item.itemTypeID != GUI_ITEM_TYPE.BATTLE_BOOSTER:
-            raise UserWarning('The item {} is not valid battle booster!'.format(item))
+            raise SoftException('The item {} is not valid battle booster!'.format(item))
         return
 
     def _getDefaultSize(self):
         return BATTLE_BOOSTER_LAYOUT_SIZE
 
 
+class BattleAbilityConsumables(_VehicleConsumables):
+    __slots__ = ('_defaultSize',)
+
+    def __init__(self, *args):
+        if args:
+            self._defaultSize = len(args)
+        else:
+            self._defaultSize = 0
+        super(BattleAbilityConsumables, self).__init__(*args)
+
+    def setDefaultSize(self, defaultSize):
+        self._defaultSize = defaultSize
+
+    def _validateType(self, item):
+        if item is not None and item.itemTypeID != GUI_ITEM_TYPE.BATTLE_ABILITY:
+            raise SoftException('The item {} is not valid battle booster!'.format(item))
+        return
+
+    def _getDefaultSize(self):
+        return self._defaultSize
+
+
 class VehicleEquipment(object):
-    __slots__ = ('__regularConsumables', '__boosterConsumables')
+    __slots__ = ('__regularConsumables', '__boosterConsumables', '__battleAbilityConsumables')
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
     def __init__(self, itemRequesterProxy, eqsInvData=None):
         self.__regularConsumables = RegularEquipmentConsumables()
         self.__boosterConsumables = BattleBoosterConsumables()
+        self.__battleAbilityConsumables = BattleAbilityConsumables()
         inventoryData = eqsInvData if eqsInvData else DEFAULT_EQUIPMENT_LAYOUT
         self.__parseEqs(inventoryData, itemRequesterProxy)
 
@@ -124,11 +147,18 @@ class VehicleEquipment(object):
     def battleBoosterConsumables(self):
         return self.__boosterConsumables
 
+    @property
+    def battleAbilityConsumables(self):
+        return self.__battleAbilityConsumables
+
     def setRegularConsumables(self, consumables):
         self.__regularConsumables = consumables
 
     def setBattleBoosterConsumables(self, consumables):
         self.__boosterConsumables = consumables
+
+    def setBattleAbilityConsumables(self, consumables):
+        self.__battleAbilityConsumables = consumables
 
     def getConsumablesIntCDs(self, default=0):
         intCDs = self.regularConsumables.getIntCDs(default)
@@ -138,16 +168,20 @@ class VehicleEquipment(object):
     def __parseEqs(self, inventoryData, proxy):
         layoutListSize = len(inventoryData)
         if layoutListSize > vehicles.NUM_EQUIPMENT_SLOTS:
-            raise UserWarning('Size of layout is invalid')
+            raise SoftException('Size of layout is invalid')
         if layoutListSize < REGULAR_EQUIPMENT_LAYOUT_SIZE:
             inventoryData += [0] * (REGULAR_EQUIPMENT_LAYOUT_SIZE - layoutListSize)
             layoutListSize = REGULAR_EQUIPMENT_LAYOUT_SIZE
+        typeToInstance = {EQUIPMENT_TYPES.regular: self.__regularConsumables,
+         EQUIPMENT_TYPES.battleBoosters: self.__boosterConsumables}
         for i in range(layoutListSize):
             intCD = inventoryData[i]
             item = self.itemsFactory.createEquipment(abs(intCD), proxy, intCD < 0) if intCD != 0 else None
-            if i < BATTLE_BOOSTER_SLOT_IDX:
-                self.__regularConsumables[i] = item
-            self.__boosterConsumables[i - BATTLE_BOOSTER_SLOT_IDX] = item
+            for eqType in reversed(vehicles.EQUIPMENTS_ORDER):
+                slotStartIdx = vehicles.SLOT_START_OFFSET_BY_TYPE[eqType]
+                if i >= slotStartIdx:
+                    typeToInstance[eqType][i - slotStartIdx] = item
+                    break
 
         return
 
@@ -185,40 +219,31 @@ class EquipmentLayoutHelper(_LayoutHelper):
         return self.__collectedLayout
 
     def getRegularRawLayout(self):
-        return self.__collectedLayout[:REGULAR_EQUIPMENT_LAYOUT_SIZE * LAYOUT_ITEM_SIZE]
+        return self.getRawLayoutByEquipmentType(EQUIPMENT_TYPES.regular)
 
     def getBattleBoosterRawLayout(self):
-        return self.__collectedLayout[-BATTLE_BOOSTER_LAYOUT_SIZE * LAYOUT_ITEM_SIZE:]
+        return self.getRawLayoutByEquipmentType(EQUIPMENT_TYPES.battleBoosters)
+
+    def getRawLayoutByEquipmentType(self, eqType):
+        slotStartIdx = vehicles.SLOT_START_OFFSET_BY_TYPE[eqType]
+        return self.__collectedLayout[LAYOUT_ITEM_SIZE * slotStartIdx:slotStartIdx + LAYOUT_ITEM_SIZE * vehicles.NUM_EQUIPMENT_SLOTS_BY_TYPE[eqType]]
 
     def __collectLayout(self, eqsLayout, battleBoosterLayout):
-        if battleBoosterLayout is not None and eqsLayout is not None:
-            result = eqsLayout[:]
-            result.extend(battleBoosterLayout)
-        elif eqsLayout is not None:
-            result = eqsLayout[:]
-            result.extend(self.__getBattleBoosterLayoutFromInv(self._vehicle))
-        elif battleBoosterLayout is not None:
-            result = self.__getRegularEquipmentLayoutFromInv(self._vehicle)
-            result.extend(battleBoosterLayout)
-        else:
-            result = self.__expandLayout(self.__getEqsLayoutFromInv(self._vehicle))
+        invLayout = self.itemsCache.items.inventory.getVehicleData(self._vehicle.invID).eqsLayout
+        layoutToEqType = ((eqsLayout, EQUIPMENT_TYPES.regular), (battleBoosterLayout, EQUIPMENT_TYPES.battleBoosters))
+        result = []
+        for layout, eqType in layoutToEqType:
+            if layout is None:
+                slotStartIdx = vehicles.SLOT_START_OFFSET_BY_TYPE[eqType]
+                numSlots = vehicles.NUM_EQUIPMENT_SLOTS_BY_TYPE[eqType]
+                if len(invLayout) < slotStartIdx + numSlots:
+                    eqs = [0] * numSlots
+                else:
+                    eqs = invLayout[slotStartIdx:slotStartIdx + numSlots]
+                result.extend(self.__expandLayout(eqs))
+            result.extend(layout[:])
+
         return result
-
-    def __getBattleBoosterLayoutFromInv(self, vehicle):
-        eqsLayout = self.__getEqsLayoutFromInv(vehicle)
-        if len(eqsLayout) < EQUIPMENT_LAYOUT_SIZE:
-            eqs = [0] * BATTLE_BOOSTER_LAYOUT_SIZE
-        else:
-            eqs = eqsLayout[-BATTLE_BOOSTER_LAYOUT_SIZE:]
-        return self.__expandLayout(eqs)
-
-    def __getRegularEquipmentLayoutFromInv(self, vehicle):
-        eqsLayout = self.__getEqsLayoutFromInv(vehicle)
-        if len(eqsLayout) < REGULAR_EQUIPMENT_LAYOUT_SIZE:
-            eqs = [0] * REGULAR_EQUIPMENT_LAYOUT_SIZE
-        else:
-            eqs = eqsLayout[:REGULAR_EQUIPMENT_LAYOUT_SIZE]
-        return self.__expandLayout(eqs)
 
     @staticmethod
     def __expandLayout(eqs):
@@ -227,7 +252,3 @@ class EquipmentLayoutHelper(_LayoutHelper):
             result.extend((eq, 1 if eq else 0))
 
         return result
-
-    def __getEqsLayoutFromInv(self, vehicle):
-        vehInvData = self.itemsCache.items.inventory.getVehicleData(vehicle.invID)
-        return vehInvData.eqsLayout

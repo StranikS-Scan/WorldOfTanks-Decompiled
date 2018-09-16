@@ -22,5 +22,8 @@ class FittingSelectPopoverMeta(SmartPopOverView):
     def listOverlayClosed(self):
         self._printOverrideError('listOverlayClosed')
 
+    def onManageBattleAbilitiesClicked(self):
+        self._printOverrideError('onManageBattleAbilitiesClicked')
+
     def as_updateS(self, data):
         return self.flashObject.as_update(data) if self._isDAAPIInited() else None

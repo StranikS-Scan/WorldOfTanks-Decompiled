@@ -21,6 +21,7 @@ INFINITY_STR_VALUE = 'infinity'
 TIPS_IMAGE_SOURCE = '../maps/icons/battleLoading/tips/%s.png'
 TIPS_GROUPS_SOURCE = '../maps/icons/battleLoading/groups/%s.png'
 TIPS_PATTERN_PARTS_COUNT = 8
+EPIC_TIPS_PATTERN_PARTS_COUNT = 3
 BATTLE_CONDITIONS_PARTS_COUNT = 2
 _FoundTip = namedtuple('_FoundTip', 'status, body, icon')
 
@@ -76,6 +77,21 @@ class RandomTipsCriteria(_TipsCriteria):
         else:
             tip = _FoundTip('', '', '')
         return tip
+
+
+class EpicBattleTipsCriteria(RandomTipsCriteria):
+
+    def find(self):
+        iterator = self.__getTipsIterator(self._count)
+        if iterator is not None:
+            tip = _FoundTip(*next(iterator))
+        else:
+            tip = _FoundTip('', '', '')
+        return tip
+
+    def __getTipsIterator(self, battlesCount):
+        tipsItems = _getEpicBattleConditionedTips(battlesCount)
+        return rnd_choice_loop(*tipsItems) if tipsItems > 0 else None
 
 
 _SANDBOX_GEOMETRY_INDEX = ('100_thepit', '10_hills')
@@ -171,7 +187,9 @@ def getTipsCriteria(arenaVisitor):
         return EventTipsCriteria()
     if arenaVisitor.gui.isRankedBattle():
         return RankedTipsCriteria()
-    return EpicRandomTipsCriteria() if arenaVisitor.gui.isEpicRandomBattle() else RandomTipsCriteria()
+    if arenaVisitor.gui.isEpicRandomBattle():
+        return EpicRandomTipsCriteria()
+    return EpicBattleTipsCriteria() if arenaVisitor.gui.isInEpicRange() else RandomTipsCriteria()
 
 
 def getTipsIterator(arenaGuiType, battlesCount, vehicleType, vehicleNation, vehicleLvl):
@@ -226,6 +244,33 @@ def _readTips():
     return result
 
 
+def _readEpicTips():
+    result = defaultdict(list)
+    tipsPattern = re.compile('^epicTip(\\d+)')
+    try:
+        translator = i18n.g_translators['tips']
+    except IOError:
+        LOG_CURRENT_EXCEPTION()
+        return result
+
+    for key in translator._catalog.iterkeys():
+        if key:
+            sreMatch = tipsPattern.match(key)
+            if sreMatch is not None and sreMatch.groups():
+                strTipsConditions = key.split('/')
+                if len(strTipsConditions) == EPIC_TIPS_PATTERN_PARTS_COUNT:
+                    _, status, battlesCountConditions = strTipsConditions
+                    battlesCountConditions = battlesCountConditions.split('_')
+                    if len(battlesCountConditions) == BATTLE_CONDITIONS_PARTS_COUNT:
+                        minBattlesCount = _getIntValue(battlesCountConditions[0])
+                        maxBattlesCount = _getIntValue(battlesCountConditions[1])
+                        if minBattlesCount is not None and maxBattlesCount is not None:
+                            battleCondition = (minBattlesCount, maxBattlesCount)
+                            result[battleCondition].append((i18n.makeString('#tips:%s' % status), i18n.makeString('#tips:%s' % key), ''))
+
+    return result
+
+
 def _getTipIcon(tipID, group):
     currentTipImage = TIPS_IMAGE_SOURCE % tipID
     return currentTipImage if currentTipImage in RES_ICONS.MAPS_ICONS_BATTLELOADING_TIPS_ENUM else TIPS_GROUPS_SOURCE % group
@@ -245,6 +290,7 @@ def _getIntValue(strCondition):
 
 
 _predefinedTips = _readTips()
+_predefinedEpicTips = _readEpicTips()
 
 def _getConditionedTips(arenaGuiType, battlesCount, vehicleType, vehicleNation, vehicleLvl):
     result = []
@@ -259,5 +305,19 @@ def _getConditionedTips(arenaGuiType, battlesCount, vehicleType, vehicleNation, 
             for nation in (vehicleNation, ALL):
                 for level in (str(vehicleLvl), ALL):
                     result.extend(vehicleTypeConditions[arenaGuiType][vehType][nation][level])
+
+    return result
+
+
+def _getEpicBattleConditionedTips(battlesCount):
+    result = []
+    battlesCountConditions = []
+    for item in _predefinedEpicTips.iteritems():
+        (minBattlesCount, maxBattlesCount), _ = item
+        if minBattlesCount <= battlesCount <= maxBattlesCount:
+            battlesCountConditions.append(item)
+
+    for _, vehicleTypeConditions in battlesCountConditions:
+        result.extend(vehicleTypeConditions)
 
     return result

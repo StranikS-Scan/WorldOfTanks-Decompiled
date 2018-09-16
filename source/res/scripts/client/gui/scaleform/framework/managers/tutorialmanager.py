@@ -52,7 +52,27 @@ class TutorialManager(TutorialManagerMeta):
             self._config = gui_config.readConfig(path)
         else:
             self._config = None
+        self.__hangarMenuButtonsOverride = None
+        self.__headerMenuButtonsOverride = None
+        self.__hangarHeaderEnabled = True
+        self.__battleSelectorHintOverride = None
         return
+
+    @property
+    def lastHangarMenuButtonsOverride(self):
+        return self.__hangarMenuButtonsOverride
+
+    @property
+    def lastHeaderMenuButtonsOverride(self):
+        return self.__headerMenuButtonsOverride
+
+    @property
+    def hangarHeaderEnabled(self):
+        return self.__hangarHeaderEnabled
+
+    @property
+    def lastBattleSelectorHintOverride(self):
+        return self.__battleSelectorHintOverride
 
     def getViewTutorialID(self, name):
         return None if not self._isEnabled else name
@@ -199,9 +219,34 @@ class TutorialManager(TutorialManagerMeta):
             self.fireEvent(_Event(eventType, targetID=componentID, settingsID=effectType), scope=EVENT_BUS_SCOPE.GLOBAL)
         return
 
+    def overrideHangarMenuButtons(self, buttonsList=None):
+        if buttonsList != self.__hangarMenuButtonsOverride:
+            self.__hangarMenuButtonsOverride = buttonsList
+            self.fireEvent(_Event(_Event.OVERRIDE_HANGAR_MENU_BUTTONS, targetID=buttonsList), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def overrideHeaderMenuButtons(self, buttonsList=None):
+        if buttonsList != self.__headerMenuButtonsOverride:
+            self.__headerMenuButtonsOverride = buttonsList
+            self.fireEvent(_Event(_Event.OVERRIDE_HEADER_MENU_BUTTONS, targetID=buttonsList), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def setHangarHeaderEnabled(self, enabled):
+        if enabled != self.__hangarHeaderEnabled:
+            self.__hangarHeaderEnabled = enabled
+            self.fireEvent(_Event(_Event.SET_HANGAR_HEADER_ENABLED, targetID=enabled), scope=EVENT_BUS_SCOPE.LOBBY)
+
+    def overrideBattleSelectorHint(self, overrideType=None):
+        if overrideType != self.__battleSelectorHintOverride:
+            self.__battleSelectorHintOverride = overrideType
+            self.fireEvent(_Event(_Event.OVERRIDE_BATTLE_SELECTOR_HINT, targetID=overrideType), scope=EVENT_BUS_SCOPE.LOBBY)
+
     def clear(self):
+        self.__hangarMenuButtonsOverride = None
+        self.__headerMenuButtonsOverride = None
+        self.__hangarHeaderEnabled = True
+        self.__battleSelectorHintOverride = None
         self._componentProps.clear()
         self._pendingComponentAnimations.clear()
+        return
 
     def _populate(self):
         super(TutorialManager, self)._populate()

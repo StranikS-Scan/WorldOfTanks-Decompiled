@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/qualifiers/_qualifier.py
+from soft_exception import SoftException
 from _xml import *
 
 class QUALIFIER_TYPE:
@@ -32,7 +33,7 @@ def parseCrewRoleName(section):
     else:
         name = section.asString.lower()
         if name not in CREW_ROLE.RANGE:
-            raise Exception('Wrong crew role name {0}'.format(name))
+            raise SoftException('Wrong crew role name {0}'.format(name))
         return name
 
 
@@ -40,7 +41,7 @@ def _parseMainSkill(section):
     conditionFunc, conditionParams = parseCondition(section)
     description = section['conditionDescription']
     if conditionFunc is not None and description is None:
-        raise Exception('conditionDescription is required tag if condition is specified')
+        raise SoftException('conditionDescription is required tag if condition is specified')
     isPercent, value = parseValue(section)
     return MainSkillQualifier(section['id'].asString, value, isPercent, conditionFunc, conditionParams, parseCrewRoleName(section['crewRole']), '' if description is None else description.asString)
 
@@ -50,10 +51,10 @@ _PARSERS = {QUALIFIER_TYPE.MAIN_SKILL: _parseMainSkill}
 def parseQualifier(section):
     qualifierType = section['type'].asString
     if qualifierType not in _PARSERS:
-        raise Exception('Qualifier "{0}" is not supported.'.format(qualifierType))
+        raise SoftException('Qualifier "{0}" is not supported.'.format(qualifierType))
     res = _PARSERS[qualifierType](section)
     if not res or not all((res.id, res.qualifierType)) or res.value is None:
-        raise Exception('Bonus attributes (id, type, value) are required.')
+        raise SoftException('Bonus attributes (id, type, value) are required.')
     return res
 
 

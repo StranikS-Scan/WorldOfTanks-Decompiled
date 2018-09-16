@@ -2,8 +2,9 @@
 # Embedded file name: scripts/client/helpers/dependency.py
 import functools
 import inspect
-from debug_utils import LOG_DEBUG
+from debug_utils import LOG_DEBUG, LOG_WARNING
 from ids_generators import SequenceIDGenerator
+from soft_exception import SoftException
 _g_manager = None
 _MAX_ORDER_NUMBER = 32767
 _orderGen = SequenceIDGenerator(lowBound=0, highBound=_MAX_ORDER_NUMBER)
@@ -15,6 +16,10 @@ def configure(config):
     _g_manager = DependencyManager()
     _g_manager.addConfig(config)
     return _g_manager
+
+
+def replaceInstance(class_, obj, finalizer=None):
+    _g_manager.replaceInstance(class_, obj, finalizer)
 
 
 def clear():
@@ -66,7 +71,7 @@ class replace_none_kwargs(object):
         return wrapper
 
 
-class DependencyError(Exception):
+class DependencyError(SoftException):
     pass
 
 
@@ -89,6 +94,16 @@ class DependencyManager(object):
         self._validate(class_)
         self.__services[class_] = _DependencyItem(order=_orderGen.next(), service=obj, finalizer=finalizer)
         LOG_DEBUG('Instance of service is added', class_, obj)
+
+    def replaceInstance(self, class_, obj, finalizer=None):
+        if class_ not in self.__services:
+            LOG_WARNING('No implementation found for Service {} prior to replace!'.format(class_))
+        else:
+            self.__services[class_].finalize()
+            self.__services[class_].clear()
+            self.__services.pop(class_, None)
+        self.addInstance(class_, obj, finalizer)
+        return
 
     def addRuntime(self, class_, creator, finalizer=None):
         self._validate(class_)
@@ -170,7 +185,7 @@ class _DependencyItem(object):
 
 
 class _RuntimeItem(_DependencyItem):
-    __slots__ = ('__isCreatorInvoked', '__creator')
+    __slots__ = ('__isCreatorInvoked', '__creator', '_service', '_order')
 
     def __init__(self, creator, finalizer=None):
         super(_RuntimeItem, self).__init__(finalizer=finalizer)

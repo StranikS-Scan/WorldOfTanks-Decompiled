@@ -21,10 +21,17 @@ class LobbyLayout(IChannelController):
         self._isNotifyInit = False
         self._isNotifyDestroy = False
         self._addListeners()
+        self._memInputText = ''
         return
 
     def __del__(self):
         LOG_DEBUG('Channel controller deleted:', self)
+
+    def getMemInputText(self):
+        return self._memInputText
+
+    def setMemInputText(self, message):
+        self._memInputText = message
 
     def getChannel(self):
         return self._channel
@@ -216,7 +223,7 @@ class BattleLayout(IChannelController):
                 fillColor = FILL_COLORS.BROWN
             else:
                 fillColor = FILL_COLORS.BLACK
-            self._view.addMessage(text, fillColor=fillColor, accountDBID=message.accountDBID)
+        self._view.addMessage(text, fillColor=fillColor, accountDBID=message.accountDBID)
         return True
 
     def addCommand(self, command):

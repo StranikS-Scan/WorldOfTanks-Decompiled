@@ -4,6 +4,7 @@ import weakref
 import math
 from collections import namedtuple
 import BigWorld
+import Event
 import Math
 import VehicleStickers
 import Vehicular
@@ -21,18 +22,50 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from vehicle_systems import camouflages
 from vehicle_systems.components.vehicle_shadow_manager import VehicleShadowManager
-from vehicle_systems.tankStructure import TankPartNames, ColliderTypes
+from vehicle_systems.tankStructure import ModelsSetParams, TankPartNames, ColliderTypes
 from vehicle_systems.tankStructure import VehiclePartsTuple
 from svarog_script.py_component_system import ComponentDescriptor, ComponentSystem
 from vehicle_systems.stricted_loading import makeCallbackWeak
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
-from hangar_camera_common import CameraMovementStates, CameraRelatedEvents
+from gui.hangar_cameras.hangar_camera_common import CameraMovementStates, CameraRelatedEvents
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.ClientHangarSpace import hangarCFG
 _HANGAR_UNDERGUN_EMBLEM_ANGLE_SHIFT = math.pi / 4
 EmblemSlotHelper = namedtuple('EmblemSlotHelper', ['tankAreaSlot', 'tankAreaId', 'worldMatrix'])
 EmblemPositionParams = namedtuple('EmblemPositionParams', ['position', 'direction', 'emblemDescription'])
 Anchor = namedtuple('Anchor', ['pos', 'normal'])
+
+class _LoadStateNotifier(object):
+    __em = Event.EventManager()
+
+    def __init__(self, loaded=False):
+        self._onLoaded = Event.Event(self.__em)
+        self._onUnloaded = Event.Event(self.__em)
+        self.__loaded = loaded
+
+    def destroy(self):
+        self.__em.clear()
+
+    @property
+    def isLoaded(self):
+        return self.__loaded
+
+    def subscribe(self, onLoadCallback, onUnloadCallback):
+        self._onLoaded += onLoadCallback
+        self._onUnloaded += onUnloadCallback
+
+    def unsubscribe(self, onLoadCallback, onUnloadCallback):
+        self._onLoaded -= onLoadCallback
+        self._onUnloaded -= onUnloadCallback
+
+    def load(self):
+        self.__loaded = True
+        BigWorld.callback(0.0, makeCallbackWeak(self._onLoaded))
+
+    def unload(self):
+        self.__loaded = False
+        self._onUnloaded()
+
 
 class HangarVehicleAppearance(ComponentSystem):
     __ROOT_NODE_NAME = 'V'
@@ -47,7 +80,7 @@ class HangarVehicleAppearance(ComponentSystem):
 
     def __init__(self, spaceId, vEntity):
         ComponentSystem.__init__(self)
-        self.__isLoaded = False
+        self.__loadState = _LoadStateNotifier()
         self.__curBuildInd = 0
         self.__vDesc = None
         self.__vState = None
@@ -65,6 +98,7 @@ class HangarVehicleAppearance(ComponentSystem):
         self.__onLoadedCallback = None
         self.__vehicleStickers = None
         self.__isVehicleDestroyed = False
+        self.__outfit = None
         self.shadowManager = None
         cfg = hangarCFG()
         self.__currentEmblemsAlpha = cfg['emblems_alpha_undamaged']
@@ -79,12 +113,13 @@ class HangarVehicleAppearance(ComponentSystem):
         self.shadowManager = VehicleShadowManager()
         self.shadowManager.updatePlayerTarget(None)
         self.__onLoadedCallback = callback
-        self.__isLoaded = False
+        self.__outfit = self.__getActiveOutfit()
+        self.__loadState.unload()
         self.__startBuild(vDesc, vState)
         return
 
     def remove(self):
-        self.__isLoaded = False
+        self.__loadState.unload()
         self.__vDesc = None
         self.__vState = None
         self.__isVehicleDestroyed = False
@@ -95,9 +130,10 @@ class HangarVehicleAppearance(ComponentSystem):
             BigWorld.removeCameraCollider(self.collisions.getColliderID())
         return
 
-    def refresh(self):
-        if self.__isLoaded:
-            self.__isLoaded = False
+    def refresh(self, outfit=None):
+        if self.__loadState.isLoaded and self.__vDesc:
+            self.__loadState.unload()
+            self.__outfit = outfit or self.__outfit
             self.__startBuild(self.__vDesc, self.__vState)
 
     def destroy(self):
@@ -105,7 +141,9 @@ class HangarVehicleAppearance(ComponentSystem):
         ComponentSystem.destroy(self)
         self.__vDesc = None
         self.__vState = None
-        self.__isLoaded = False
+        self.__loadState.unload()
+        self.__loadState.destroy()
+        self.__loadState = None
         self.__curBuildInd = 0
         self.__vEntity = None
         self.settingsCore.onSettingsChanged -= self.__onSettingsChanged
@@ -114,11 +152,15 @@ class HangarVehicleAppearance(ComponentSystem):
         return
 
     @property
+    def loadState(self):
+        return self.__loadState
+
+    @property
     def fakeShadowDefinedInHullTexture(self):
         return self.__vDesc.hull.hangarShadowTexture if self.__vDesc else None
 
     def isLoaded(self):
-        return self.__isLoaded
+        return self.__loadState.isLoaded
 
     def computeVehicleHeight(self):
         gunLength = 0.0
@@ -144,7 +186,6 @@ class HangarVehicleAppearance(ComponentSystem):
 
     def __startBuild(self, vDesc, vState):
         self.__curBuildInd += 1
-        self.__vDesc = vDesc
         self.__vState = vState
         self.__resources = {}
         self.__vehicleStickers = None
@@ -155,8 +196,8 @@ class HangarVehicleAppearance(ComponentSystem):
         else:
             self.__currentEmblemsAlpha = cfg['emblems_alpha_damaged']
             self.__isVehicleDestroyed = True
-        outfit = self.__getActiveOutfit()
-        resources = camouflages.getCamoPrereqs(outfit, vDesc)
+        self.__vDesc = vDesc
+        resources = camouflages.getCamoPrereqs(self.__outfit, vDesc)
         splineDesc = vDesc.chassis.splineDesc
         if splineDesc is not None:
             resources.append(splineDesc.segmentModelLeft)
@@ -170,7 +211,7 @@ class HangarVehicleAppearance(ComponentSystem):
             if splineDesc.segment2ModelRight is not None:
                 resources.append(splineDesc.segment2ModelRight)
         from vehicle_systems import model_assembler
-        resources.append(model_assembler.prepareCompoundAssembler(self.__vDesc, self.__vState, self.__spaceId))
+        resources.append(model_assembler.prepareCompoundAssembler(self.__vDesc, ModelsSetParams(self.__outfit.modelsSet, self.__vState), self.__spaceId))
         g_eventBus.handleEvent(CameraRelatedEvents(CameraRelatedEvents.VEHICLE_LOADING, ctx={'started': True,
          'vEntityId': self.__vEntity.id}), scope=EVENT_BUS_SCOPE.DEFAULT)
         cfg = hangarCFG()
@@ -195,6 +236,8 @@ class HangarVehicleAppearance(ComponentSystem):
         return
 
     def __onResourcesLoaded(self, buildInd, resourceRefs):
+        if not self.__vDesc:
+            return
         if buildInd != self.__curBuildInd:
             return
         failedIDs = resourceRefs.failedIDs
@@ -245,8 +288,7 @@ class HangarVehicleAppearance(ComponentSystem):
             model_assembler.setupSplineTracks(chassisFashion, self.__vDesc, self.__vEntity.model, self.__resources)
             self.wheelsAnimator = model_assembler.createWheelsAnimator(self.__vEntity.model, self.__vDesc, None)
             self.trackNodesAnimator = model_assembler.createTrackNodesAnimator(self.__vEntity.model, self.__vDesc, self.wheelsAnimator)
-            outfit = self.__getActiveOutfit()
-            self.updateCustomization(outfit)
+            self.updateCustomization(self.__outfit)
             dirtEnabled = BigWorld.WG_dirtEnabled() and 'HD' in self.__vDesc.type.tags
             if dirtEnabled:
                 dirtHandlers = [BigWorld.PyDirtHandler(True, self.__vEntity.model.node(TankPartNames.CHASSIS).position.y),
@@ -364,7 +406,7 @@ class HangarVehicleAppearance(ComponentSystem):
         if buildIdx != self.__curBuildInd:
             return
         else:
-            self.__isLoaded = True
+            self.__loadState.load()
             if self.__onLoadedCallback is not None:
                 self.__onLoadedCallback()
                 self.__onLoadedCallback = None
@@ -501,8 +543,12 @@ class HangarVehicleAppearance(ComponentSystem):
             self.__fashions[fashionIdx].addMaterialHandler(camoHandler)
             self.__fashions[fashionIdx].addMaterialHandler(repaintHandler)
 
-    def updateCustomization(self, outfit):
+    def updateCustomization(self, outfit=None):
         if self.__isVehicleDestroyed:
+            return
+        outfit = outfit or self.itemsFactory.createOutfit()
+        if self.__outfit.modelsSet != outfit.modelsSet:
+            self.refresh(outfit)
             return
         self.__updateCamouflage(outfit)
         self.__updatePaint(outfit)

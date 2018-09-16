@@ -11,6 +11,7 @@ from gui.shared.formatters import text_styles
 from helpers import dependency
 from helpers import i18n
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
 
 class ResearchAward(ExplosionBackAward):
 
@@ -164,6 +165,7 @@ class ClanJoinAward(AwardAbstract):
 
 class TelecomAward(AwardAbstract):
     itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, vehicleDesrs, hasCrew, hasBrotherhood):
         super(TelecomAward, self).__init__()
@@ -205,8 +207,15 @@ class TelecomAward(AwardAbstract):
                 descriptionKey = MENU.AWARDWINDOW_TELECOMAWARD_DESCRIPTION
         else:
             descriptionKey = MENU.AWARDWINDOW_TELECOMAWARD_DESCRIPTION_WITHOUTCREW
+        if self.__vehicleDesrs:
+            serverSettings = self.lobbyContext.getServerSettings()
+            vehInvId = self.itemsCache.items.getItemByCD(self.__vehicleDesrs[0]).invID
+            provider = BigWorld.player().inventory.getProviderForVehInvId(vehInvId, serverSettings)
+            tariff = i18n.makeString(MENU.internetProviderTariff(provider))
+        else:
+            tariff = ''
         premText = text_styles.neutral(MENU.AWARDWINDOW_TELECOMAWARD_DESCRIPTION_PREM)
-        description = i18n.makeString(descriptionKey, vehicles=vehicles, prem=premText)
+        description = i18n.makeString(descriptionKey, tariff=tariff, vehicles=vehicles, prem=premText)
         return text_styles.main(description)
 
     def getAdditionalText(self):

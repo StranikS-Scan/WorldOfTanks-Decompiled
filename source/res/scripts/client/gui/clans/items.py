@@ -326,14 +326,14 @@ class ClanRatingsData(_ClanRatingsData, FieldsCheckerMixin):
     def getWinsRatioAvg(self):
         if self.battles_count_avg > 0:
             return self.wins_ratio_avg
-        raise ZeroDivisionError
+        raise ZeroDivisionError()
 
     @fmtZeroDivisionValue()
     @fmtUnavailableValue(fields=('xp_avg', 'battles_count_avg'))
     def getBattlesPerformanceAvg(self):
         if self.battles_count_avg > 0:
             return self.xp_avg
-        raise ZeroDivisionError
+        raise ZeroDivisionError()
 
     @fmtUnavailableValue(fields=('gm_elo_rating_10_rank',))
     def getGlobalMapEloRatingRank10(self):
@@ -614,8 +614,15 @@ _StrongholdStatisticsData = namedtuple('ClanStrongholdData', ['elo_10',
  'elo_6',
  'sorties_in_28_days',
  'fort_battles_in_28_days',
- 'stronghold_level'])
-_StrongholdStatisticsData.__new__.__defaults__ = (None, None, None, None, None, None)
+ 'stronghold_level',
+ 'leagues'])
+_StrongholdStatisticsData.__new__.__defaults__ = (None,
+ None,
+ None,
+ None,
+ None,
+ None,
+ [])
 
 class StrongholdStatisticsData(_StrongholdStatisticsData, FieldsCheckerMixin):
 
@@ -642,6 +649,9 @@ class StrongholdStatisticsData(_StrongholdStatisticsData, FieldsCheckerMixin):
     @simpleFormatter(int2roman)
     def getStrongholdLevel(self):
         return self.stronghold_level
+
+    def getLeagues(self):
+        return self.leagues
 
     def hasSorties(self):
         return self.sorties_in_28_days and self.sorties_in_28_days > 0
@@ -751,14 +761,14 @@ class AccountClanRatingsData(_AccountClanRatingsData, FieldsCheckerMixin):
     def getBattleXpAvg(self):
         if self.battles_count > 0:
             return self.battle_avg_xp
-        raise ZeroDivisionError
+        raise ZeroDivisionError()
 
     @fmtZeroDivisionValue()
     @fmtUnavailableValue(fields=('battle_avg_performance', 'battles_count'))
     def getBattlesPerformanceAvg(self):
         if self.battles_count > 0:
             return _toPercents(self.battle_avg_performance)
-        raise ZeroDivisionError
+        raise ZeroDivisionError()
 
     @fmtUnavailableValue(fields=('xp_amount',))
     def getXp(self):

@@ -22,7 +22,8 @@ class DebugGizmo(object):
 
     def __del__(self):
         BigWorld.player().delModel(self.model)
-        self.model.delMotor(self.motor)
+        if self.model.motors:
+            self.model.delMotor(self.motor)
 
     def visible(self, show):
         self.model.visible = show
@@ -33,6 +34,9 @@ class DebugGizmo(object):
     def attachToPosition(self, pos):
         self.model.motors = ()
         self.model.position = pos
+
+    def setMatrix(self, matrix):
+        self.motor.signal = matrix
 
 
 class DebugLine(object):

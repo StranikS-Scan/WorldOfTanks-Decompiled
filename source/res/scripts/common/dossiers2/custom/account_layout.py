@@ -11,6 +11,7 @@ from dossiers2.custom.dependencies import GLOBAL_MAP_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import RANKED_STATS_DEPENDENCIES
 from dossiers2.custom.dependencies import RANKED_BADGES_DEPENDENCIES
 from dossiers2.custom.dependencies import A30X30_STATS_DEPENDENCIES
+from dossiers2.custom.dependencies import EPIC_BATTLE_STATS_DEPENDENCIES
 from battle_statistics_layouts import *
 TOTAL_BLOCK_LAYOUT = ['creationTime',
  'lastBattleTime',
@@ -41,6 +42,7 @@ _rankedPreviousBlockBuilder = StaticSizeBlockBuilder('rankedPrevious', RANKED_BL
 _rankedCurrentCycleBlockBuilder = StaticSizeBlockBuilder('rankedCurrentCycle', RANKED_BLOCK_LAYOUT, {}, [])
 _rankedPreviousCycleBlockBuilder = StaticSizeBlockBuilder('rankedPreviousCycle', RANKED_BLOCK_LAYOUT, {}, [])
 _a30x30BlockBuilder = StaticSizeBlockBuilder('a30x30', A30X30_BLOCK_LAYOUT, A30X30_STATS_DEPENDENCIES, [])
+_epicBattleBlockBuilder = StaticSizeBlockBuilder('epicBattle', EPIC_BATTLE_BLOCK_LAYOUT, EPIC_BATTLE_STATS_DEPENDENCIES, [])
 _max15x15BlockBuilder = StaticSizeBlockBuilder('max15x15', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _max7x7BlockBuilder = StaticSizeBlockBuilder('max7x7', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxRated7x7BlockBuilder = StaticSizeBlockBuilder('maxRated7x7', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
@@ -57,6 +59,7 @@ _maxRankedBlockBuilder = StaticSizeBlockBuilder('maxRanked', MAX_AND_BEST_VEHICL
 _maxRankedCurrentBlockBuilder = StaticSizeBlockBuilder('maxRankedCurrent', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _maxRankedPreviousBlockBuilder = StaticSizeBlockBuilder('maxRankedPrevious', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _max30x30BlockBuilder = StaticSizeBlockBuilder('max30x30', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
+_maxEpicBattleBlockBuilder = StaticSizeBlockBuilder('maxEpicBattle', MAX_AND_BEST_VEHICLE_BLOCK_LAYOUT, {}, [])
 _vehTypeFragsBlockBuilder = DictBlockBuilder('vehTypeFrags', 'I', 'H', VEH_TYPE_FRAGS_DEPENDENCIES)
 _a15x15CutBlockBuilder = DictBlockBuilder('a15x15Cut', 'I', 'III', {})
 _a7x7CutBlockBuilder = DictBlockBuilder('a7x7Cut', 'I', 'IIIIIII', {})
@@ -71,6 +74,7 @@ _rankedCurrentCutBlockBuilder = DictBlockBuilder('rankedCurrentCut', 'I', 'III',
 _rankedPreviousCutBlockBuilder = DictBlockBuilder('rankedPreviousCut', 'I', 'III', {})
 _a30x30CutBlockBuilder = DictBlockBuilder('a30x30Cut', 'I', 'III', {})
 _markOfMasteryCut = DictBlockBuilder('markOfMasteryCut', 'I', 'B', {})
+_epicBattleCutBlockBuilder = DictBlockBuilder('epicBattleCut', 'I', 'III', {})
 _ACHIEVEMENTS15X15_BLOCK_LAYOUT = ['fragsBeast',
  'sniperSeries',
  'maxSniperSeries',
@@ -504,6 +508,16 @@ _falloutAchievementsPopUps = ['shoulderToShoulder',
  'bannerman',
  'falloutDieHard']
 _falloutAchievementsBlockBuilder = StaticSizeBlockBuilder('falloutAchievements', FALLOUT_ACHIEVEMENTS_BLOCK_LAYOUT, {}, _falloutAchievementsPopUps)
+EPIC_BATTLE_ACHIEVEMENTS_BLOCK_LAYOUT = ['occupyingForce',
+ 'ironShield',
+ 'generalOfTheArmy',
+ 'supremeGun',
+ 'smallArmy',
+ 'medalPrimozicCount',
+ 'medalPrimozic',
+ 'frontlineMedal']
+_epicBattleAchievementsPopUps = ['medalPrimozic', 'frontlineMedal']
+_epicBattleAchievementsBlockBuilder = StaticSizeBlockBuilder('epicBattleAchievements', EPIC_BATTLE_ACHIEVEMENTS_BLOCK_LAYOUT, EPIC_BATTLE_STATS_DEPENDENCIES, _epicBattleAchievementsPopUps)
 accountDossierLayout = (_a15x15BlockBuilder,
  _a15x15_2BlockBuilder,
  _clanBlockBuilder,
@@ -569,7 +583,11 @@ accountDossierLayout = (_a15x15BlockBuilder,
  _a30x30CutBlockBuilder,
  _max30x30BlockBuilder,
  _markOfMasteryCut,
- _playerBadgesBlockBuilder)
+ _playerBadgesBlockBuilder,
+ _epicBattleBlockBuilder,
+ _epicBattleCutBlockBuilder,
+ _maxEpicBattleBlockBuilder,
+ _epicBattleAchievementsBlockBuilder)
 ACCOUNT_DOSSIER_BLOCKS = {b.name:b for b in accountDossierLayout}
 ACCOUNT_DOSSIER_STATIC_BLOCKS = frozenset((b.name for b in accountDossierLayout if type(b) == StaticSizeBlockBuilder))
 ACCOUNT_DOSSIER_BINARY_SET_BLOCKS = [ b.name for b in accountDossierLayout if type(b) == BinarySetDossierBlockBuilder ]

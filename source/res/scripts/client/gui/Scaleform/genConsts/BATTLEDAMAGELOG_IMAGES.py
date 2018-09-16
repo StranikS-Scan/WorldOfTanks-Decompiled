@@ -28,3 +28,5 @@ class BATTLEDAMAGELOG_IMAGES(object):
     WHITE_ICON_LIGHTTANK_16X16 = 'whiteIconLightTank16x16'
     WHITE_ICON_MEDIUM_TANK_16X16 = 'whiteIconMediumTank16x16'
     WHITE_ICON_SPG_16X16 = 'whiteIconSPG16x16'
+    DAMAGELOG_AIRSTRIKE_16X16 = 'damageLog_airstrike_16x16'
+    DAMAGELOG_ARTILLERY_16X16 = 'damageLog_artillery_16x16'

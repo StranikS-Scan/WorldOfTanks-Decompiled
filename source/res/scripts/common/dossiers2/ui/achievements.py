@@ -3,6 +3,7 @@
 import resource_helper
 from debug_utils import LOG_CURRENT_EXCEPTION
 from constants import IS_WEB
+from soft_exception import SoftException
 BATTLE_HERO_TEXTS = {'warrior': '#achievements:warrior',
  'invader': '#achievements:invader',
  'sniper': '#achievements:sniper',
@@ -26,6 +27,7 @@ class ACHIEVEMENT_BLOCK:
     CLAN = 'clanAchievements'
     RATED_7X7 = 'achievementsRated7x7'
     FALLOUT = 'falloutAchievements'
+    EPIC_BATTLE = 'epicBattleAchievements'
     ALL = (CLIENT,
      TOTAL,
      TEAM_7X7,
@@ -37,7 +39,8 @@ class ACHIEVEMENT_BLOCK:
      CLAN,
      RATED_7X7,
      SINGLE_7X7,
-     FALLOUT)
+     FALLOUT,
+     EPIC_BATTLE)
 
 
 class ACHIEVEMENT_MODE:
@@ -46,7 +49,8 @@ class ACHIEVEMENT_MODE:
     HISTORICAL = 4
     RATED_7X7 = 8
     RANKED = 22
-    ALL = RANDOM | TEAM_7X7 | HISTORICAL | RATED_7X7 | RANKED
+    EPIC_BATTLE = 16
+    ALL = RANDOM | TEAM_7X7 | HISTORICAL | RATED_7X7 | RANKED | EPIC_BATTLE
 
 
 class ACHIEVEMENT_TYPE:
@@ -99,6 +103,7 @@ _MODE_CONVERTER = {'random': ACHIEVEMENT_MODE.RANDOM,
  '7x7': ACHIEVEMENT_MODE.TEAM_7X7,
  'historical': ACHIEVEMENT_MODE.HISTORICAL,
  'rated7x7': ACHIEVEMENT_MODE.RATED_7X7,
+ 'epic_battle': ACHIEVEMENT_MODE.EPIC_BATTLE,
  'all': ACHIEVEMENT_MODE.ALL}
 ACHIEVEMENTS = {}
 ACHIEVEMENT_SECTIONS_ORDER = (_AS.BATTLE,
@@ -146,13 +151,13 @@ def init(achievesMappingXmlPath):
                 continue
             block, name = tuple(item.name.split(':'))
             if block not in ACHIEVEMENT_BLOCK.ALL:
-                raise Exception('Unknown block name', (block, name))
+                raise SoftException('Unknown block name', (block, name))
             if 'type' not in item.value or item.value['type'] not in ACHIEVEMENT_TYPE.ALL:
-                raise Exception('Unknown achievement type', (block, name), item.value)
+                raise SoftException('Unknown achievement type', (block, name), item.value)
             if 'section' not in item.value or item.value['section'] not in ACHIEVEMENT_SECTION.ALL:
-                raise Exception('Unknown achievement section', (block, name), item.value)
+                raise SoftException('Unknown achievement section', (block, name), item.value)
             if 'mode' not in item.value or item.value['mode'] not in _MODE_CONVERTER:
-                raise Exception('Unknown achievement mode', (block, name), item.value)
+                raise SoftException('Unknown achievement mode', (block, name), item.value)
             value = dict(item.value)
             value['mode'] = _MODE_CONVERTER[item.value['mode']]
             if 'weight' not in value:

@@ -5,10 +5,15 @@ import ResMgr
 from constants import IS_BOT, IS_WEB, IS_CLIENT, ARENA_TYPE_XML_PATH, ARENA_GUI_TYPE_LABEL
 from constants import ARENA_GAMEPLAY_IDS, TEAMS_IN_ARENA, ARENA_GAMEPLAY_NAMES, IS_DEVELOPMENT
 from constants import IS_CELLAPP, IS_BASEAPP
+from constants import CHAT_COMMAND_FLAGS
+from coordinate_system import AXIS_ALIGNED_DIRECTION
 from items.vehicles import CAMOUFLAGE_KINDS
 from debug_utils import LOG_CURRENT_EXCEPTION
 from items import _xml
 from typing import Dict
+from soft_exception import SoftException
+from collections import defaultdict
+from data_structures import DictObj
 from Math import Vector2
 if IS_CLIENT:
     from helpers import i18n
@@ -57,18 +62,18 @@ def init():
     global g_gameplaysMask
     rootSection = ResMgr.openSection(_LIST_XML)
     if rootSection is None:
-        raise Exception("Can't open '%s'" % _LIST_XML)
+        raise SoftException("Can't open '%s'" % _LIST_XML)
     defaultXml = ResMgr.openSection(_DEFAULT_XML)
     if defaultXml is None:
-        raise Exception("Can't open '%s'" % _DEFAULT_XML)
+        raise SoftException("Can't open '%s'" % _DEFAULT_XML)
     defaultGameplayTypesXml = defaultXml['gameplayTypes']
     if defaultGameplayTypesXml is None or not defaultGameplayTypesXml:
-        raise Exception("No defaults for 'gameplayTypes'")
+        raise SoftException("No defaults for 'gameplayTypes'")
     geometriesSet = set()
     for key, value in rootSection.items():
         geometryID = value.readInt('id')
         if geometryID in geometriesSet:
-            raise Exception('Geometry ID=%d is not unique' % geometryID)
+            raise SoftException('Geometry ID=%d is not unique' % geometryID)
         geometriesSet.add(geometryID)
         __buildCache(geometryID, value.readString('name'), defaultXml)
 
@@ -86,7 +91,7 @@ class ArenaType(object):
         self.__gameplayCfg = gameplayCfg
         self.__gameplayCfg['id'] = gameplayCfg['gameplayID'] << 16 | geometryCfg['geometryID']
         if self.maxPlayersInTeam < self.minPlayersInTeam:
-            raise Exception("'maxPlayersInTeam' value < 'minPlayersInTeam' value")
+            raise SoftException("'maxPlayersInTeam' value < 'minPlayersInTeam' value")
 
     def __getattr__(self, name):
         return self.__gameplayCfg[name] if name in self.__gameplayCfg else self.__geometryCfg.get(name, None)
@@ -106,7 +111,7 @@ def __buildCache(geometryID, geometryName, defaultXml):
     sectionName = ARENA_TYPE_XML_PATH + geometryName + '.xml'
     section = ResMgr.openSection(sectionName)
     if section is None:
-        raise Exception("Can't open '%s'" % sectionName)
+        raise SoftException("Can't open '%s'" % sectionName)
     geometryCfg = __readGeometryCfg(geometryID, geometryName, section, defaultXml)
     if geometryCfg['isDevelopment'] and not IS_DEVELOPMENT:
         return
@@ -126,20 +131,20 @@ def __readGeometryCfg(geometryID, geometryName, section, defaultXml):
         cfg = {}
         cfg['geometryID'] = geometryID
         cfg['geometryName'] = geometryName
-        cfg['geometry'] = __readString('geometry', section, defaultXml)
-        cfg['boundingBox'] = __readBoundingBox(section)
+        cfg['geometry'] = _readString('geometry', section, defaultXml)
+        cfg['boundingBox'] = _readBoundingBox(section)
         cfg['spaceBoundingBox'] = __calcSpaceBoundingBox(cfg['boundingBox'])
         cfg['weatherPresets'] = __readWeatherPresets(section)
         cfg['vehicleCamouflageKind'] = __readVehicleCamouflageKind(section)
         cfg['isDevelopment'] = __readBool('isDevelopment', section, defaultXml, False)
         if IS_CELLAPP or IS_BASEAPP:
-            cfg['estimatedLoad'] = __readFloat('estimatedLoad', section, defaultXml, ARENA_ESTIMATED_LOAD_DEFAULT)
+            cfg['estimatedLoad'] = _readFloat('estimatedLoad', section, defaultXml, ARENA_ESTIMATED_LOAD_DEFAULT)
         if IS_CLIENT or IS_WEB:
-            cfg['name'] = i18n.makeString(__readString('name', section, defaultXml))
+            cfg['name'] = i18n.makeString(_readString('name', section, defaultXml))
         if IS_CLIENT:
-            cfg['umbraEnabled'] = __readInt('umbraEnabled', section, defaultXml)
-            cfg['defaultReverbPreset'] = __readString('defaultReverbPreset', section, defaultXml).strip()
-            cfg['batchingEnabled'] = __readInt('batchingEnabled', section, defaultXml)
+            cfg['umbraEnabled'] = _readInt('umbraEnabled', section, defaultXml)
+            cfg['defaultReverbPreset'] = _readString('defaultReverbPreset', section, defaultXml).strip()
+            cfg['batchingEnabled'] = _readInt('batchingEnabled', section, defaultXml)
             cfg['waterTexScale'] = section.readFloat('water/texScale', 0.5)
             cfg['waterFreqX'] = section.readFloat('water/freqX', 1.0)
             cfg['waterFreqZ'] = section.readFloat('water/freqZ', 1.0)
@@ -147,7 +152,7 @@ def __readGeometryCfg(geometryID, geometryName, section, defaultXml):
         cfg.update(__readCommonCfg(section, defaultXml, True, {}))
     except Exception as e:
         LOG_CURRENT_EXCEPTION()
-        raise Exception("Wrong arena type XML '%s' : %s" % (geometryName, str(e)))
+        raise SoftException("Wrong arena type XML '%s' : %s" % (geometryName, str(e)))
 
     return cfg
 
@@ -160,18 +165,18 @@ def __readGameplayCfgs(geometryName, section, defaultXml, geometryCfg):
             return [{'gameplayID': gameplayID,
               'gameplayName': gameplayName}]
         if not section['gameplayTypes']:
-            raise Exception("no 'gameplayTypes' section")
+            raise SoftException("no 'gameplayTypes' section")
         cfgs = []
         defaultGameplayTypesXml = defaultXml['gameplayTypes']
         for name, subsection in section['gameplayTypes'].items():
             defaultSubsection = defaultGameplayTypesXml[name]
             if defaultSubsection is None:
-                raise Exception("no defaults for '%s'" % name)
+                raise SoftException("no defaults for '%s'" % name)
             cfgs.append(__readGameplayCfg(name, subsection, defaultSubsection, geometryCfg))
 
     except Exception as e:
         LOG_CURRENT_EXCEPTION()
-        raise Exception("Wrong arena type XML '%s' : %s" % (geometryName, e))
+        raise SoftException("Wrong arena type XML '%s' : %s" % (geometryName, e))
 
     return cfgs
 
@@ -184,14 +189,14 @@ def __readGameplayCfg(gameplayName, section, defaultXml, geometryCfg):
         for setting in ('battleEndWarningAppearTime', 'battleEndWarningDuration', 'battleEndingSoonTime'):
             cfg[setting] = 0
             if not gameplayName.startswith('fallout') and __hasKey(setting, section, defaultXml):
-                cfg[setting] = __readInt(setting, section, defaultXml)
+                cfg[setting] = _readInt(setting, section, defaultXml)
 
         if gameplayName == 'nations':
-            raise Exception('national battles are disabled')
+            raise SoftException('national battles are disabled')
         cfg.update(__readCommonCfg(section, defaultXml, False, geometryCfg))
     except Exception as e:
         LOG_CURRENT_EXCEPTION()
-        raise Exception("wrong gameplay section '%s' : %s" % (gameplayName, e))
+        raise SoftException("wrong gameplay section '%s' : %s" % (gameplayName, e))
 
     return cfg
 
@@ -209,19 +214,19 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
     if raiseIfMissing or __hasKey('minTeamsInArena', section, defaultXml):
         cfg['minTeamsInArena'] = __readTeamsCount('minTeamsInArena', section, defaultXml)
     if raiseIfMissing or __hasKey('runDelay', section, defaultXml):
-        cfg['runDelay'] = __readInt('runDelay', section, defaultXml)
+        cfg['runDelay'] = _readInt('runDelay', section, defaultXml)
     if raiseIfMissing or __hasKey('roundLength', section, defaultXml):
-        cfg['roundLength'] = __readInt('roundLength', section, defaultXml)
+        cfg['roundLength'] = _readInt('roundLength', section, defaultXml)
     if raiseIfMissing or __hasKey('winnerIfTimeout', section, defaultXml):
-        cfg['winnerIfTimeout'] = __readInt('winnerIfTimeout', section, defaultXml)
+        cfg['winnerIfTimeout'] = _readInt('winnerIfTimeout', section, defaultXml)
     if raiseIfMissing or __hasKey('winnerIfExtermination', section, defaultXml):
-        cfg['winnerIfExtermination'] = __readInt('winnerIfExtermination', section, defaultXml)
+        cfg['winnerIfExtermination'] = _readInt('winnerIfExtermination', section, defaultXml)
     if raiseIfMissing or __hasKey('artilleryPreparationChance', section, defaultXml):
-        cfg['artilleryPreparationChance'] = __readFloat('artilleryPreparationChance', section, defaultXml)
+        cfg['artilleryPreparationChance'] = _readFloat('artilleryPreparationChance', section, defaultXml)
     if raiseIfMissing or section.has_key('mapActivities'):
         cfg['mapActivitiesTimeframes'] = __readMapActivitiesTimeframes(section)
     if raiseIfMissing or section.has_key('boundingBox'):
-        cfg['boundingBox'] = __readBoundingBox(section)
+        cfg['boundingBox'] = _readBoundingBox(section)
     maxTeamsInArena = cfg.get('maxTeamsInArena', geometryCfg.get('maxTeamsInArena', None))
     cfg.update(__readWinPoints(section))
     cfg.update(__readGameplayPoints(section, geometryCfg))
@@ -229,20 +234,62 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
     cfg['teamSpawnPoints'] = __readTeamSpawnPoints(section, maxTeamsInArena)
     cfg['squadTeamNumbers'], cfg['soloTeamNumbers'] = __readTeamNumbers(section, maxTeamsInArena)
     if raiseIfMissing or __hasKey('numPlayerGroups', section, defaultXml):
-        cfg['numPlayerGroups'] = __readInt('numPlayerGroups', section, defaultXml, 0)
+        cfg['numPlayerGroups'] = _readInt('numPlayerGroups', section, defaultXml, 0)
     if raiseIfMissing or __hasKey('playerGroupLimit', section, defaultXml):
-        cfg['playerGroupLimit'] = __readInt('playerGroupLimit', section, defaultXml, 0)
+        cfg['playerGroupLimit'] = _readInt('playerGroupLimit', section, defaultXml, 0)
     if raiseIfMissing or __hasKey('crystalRewardFactor', section, defaultXml):
-        cfg['crystalRewardFactor'] = __readFloat('crystalRewardFactor', section, defaultXml, 1.0)
+        cfg['crystalRewardFactor'] = _readFloat('crystalRewardFactor', section, defaultXml, 1.0)
     if raiseIfMissing or __hasKey('respawnType', section, defaultXml):
-        cfg['respawnType'] = __readString('respawnType', section, defaultXml, '')
+        cfg['respawnType'] = _readString('respawnType', section, defaultXml, '')
+    if raiseIfMissing or __hasKey('unlockUnusedVehiclesOnLeave', section, defaultXml):
+        cfg['unlockUnusedVehiclesOnLeave'] = __readBool('unlockUnusedVehiclesOnLeave', section, defaultXml, False)
+    if raiseIfMissing or __hasKey('numDestructiblesToDestroyForWin', section, defaultXml):
+        cfg['numDestructiblesToDestroyForWin'] = _readInt('numDestructiblesToDestroyForWin', section, defaultXml, 0)
+    if raiseIfMissing or __hasKey('addGameTimePerDestructible', section, defaultXml):
+        cfg['addGameTimePerDestructible'] = _readFloat('addGameTimePerDestructible', section, defaultXml, 0.0)
+    if __hasKey('sectorSettings', section, defaultXml):
+        cfg['sectorSettings'] = SectorSettings('sectorSettings', section, defaultXml)
+    if __hasKey('epicSectorSettings', section, defaultXml):
+        cfg['epicSectorSettings'] = EpicSectorSettings('epicSectorSettings', section, defaultXml)
+    if __hasKey('epicSectorGrid', section, defaultXml):
+        cfg['epicSectorGrid'] = EpicSectorGrid('epicSectorGrid', section, defaultXml)
+    if __hasKey('frontLinesAlgorithm', section, defaultXml):
+        cfg['frontLinesAlgorithm'] = FrontLinesAlgorithmSettings(section, defaultXml)
+    if __hasKey('frontLinesGeometry', section, defaultXml):
+        cfg['frontLinesGeometry'] = FrontLinesGeometrySettings(section, defaultXml)
+    if __hasKey('recoveryMechanic', section, defaultXml):
+        cfg['recoveryMechanic'] = RecoveryMechanicSettings(section, defaultXml)
+    if __hasKey('overtimeMechanic', section, defaultXml):
+        cfg['overtimeMechanic'] = OvertimeMechanicSettings(section, defaultXml)
+    if raiseIfMissing or __hasKey('capturePointsLimit', section, defaultXml):
+        cfg['capturePointsLimit'] = _readInt('capturePointsLimit', section, defaultXml, -1)
+    if raiseIfMissing or __hasKey('defencePointsLimit', section, defaultXml):
+        cfg['defencePointsLimit'] = _readInt('defencePointsLimit', section, defaultXml, -1)
+    if raiseIfMissing or __hasKey('ironShieldDefenderTeam', section, defaultXml):
+        cfg['ironShieldDefenderTeam'] = _readInt('ironShieldDefenderTeam', section, defaultXml, 0)
+    if raiseIfMissing or __hasKey('defenderBonusTeam', section, defaultXml):
+        cfg['defenderBonusTeam'] = _readInt('defenderBonusTeam', section, defaultXml, 0)
+    if raiseIfMissing or __hasKey('defenderBonusInterval', section, defaultXml):
+        cfg['defenderBonusInterval'] = _readInt('defenderBonusInterval', section, defaultXml, 0)
+    if raiseIfMissing or __hasKey('enabledChatCommandFlags', section, defaultXml):
+        cfg['enabledChatCommandFlags'] = __readChatCommandFlags('enabledChatCommandFlags', section, defaultXml)
+    if __hasKey('recon', section, defaultXml):
+        cfg['recon'] = ReconSettings(section['recon'])
+    if raiseIfMissing or __hasKey('resetLocalTeamKillerAtRespawn', section, defaultXml):
+        cfg['resetLocalTeamKillerAtRespawn'] = __readBool('resetLocalTeamKillerAtRespawn', section, defaultXml)
+    if raiseIfMissing or __hasKey('stopVehiclesAtArenaFreeze', section, defaultXml):
+        cfg['stopVehiclesAtArenaFreeze'] = __readBool('stopVehiclesAtArenaFreeze', section, defaultXml, False)
+    if raiseIfMissing or __hasKey('leaveDisconnectedTimeout', section, defaultXml):
+        cfg['leaveDisconnectedTimeout'] = _readInt('leaveDisconnectedTimeout', section, defaultXml, -1)
     if IS_CLIENT or IS_WEB:
         if raiseIfMissing or __hasKey('description', section, defaultXml):
-            cfg['description'] = i18n.makeString(__readString('description', section, defaultXml))
+            cfg['description'] = i18n.makeString(_readString('description', section, defaultXml))
         if raiseIfMissing or __hasKey('minimap', section, defaultXml):
-            cfg['minimap'] = __readString('minimap', section, defaultXml)
+            cfg['minimap'] = _readString('minimap', section, defaultXml)
+        if __hasKey('overviewmap', section, defaultXml):
+            cfg['overviewmap'] = _readString('overviewmap', section, defaultXml)
         if raiseIfMissing or __hasKey('wwambientSound', section, defaultXml):
-            cfg['ambientSound'] = __readString('wwambientSound', section, defaultXml)
+            cfg['ambientSound'] = _readString('wwambientSound', section, defaultXml)
         musicSetup = None
         if raiseIfMissing or __hasKey('wwmusicSetup', section, defaultXml):
             musicSetup = __readWWmusicSection(section, defaultXml)
@@ -252,7 +299,7 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         if raiseIfMissing or __hasKey(wwmusicDroneSetup, section, defaultXml):
             cfg[wwmusicDroneSetup] = __readWWmusicDroneSection(wwmusicDroneSetup, section, defaultXml)
         if raiseIfMissing or __hasKey('wwbattleCountdownTimerSound', section, defaultXml):
-            cfg['battleCountdownTimerSound'] = __readString('wwbattleCountdownTimerSound', section, defaultXml)
+            cfg['battleCountdownTimerSound'] = _readString('wwbattleCountdownTimerSound', section, defaultXml)
         if raiseIfMissing or section.has_key('mapActivities'):
             cfg['mapActivitiesSection'] = section['mapActivities']
         if section.has_key('soundRemapping'):
@@ -265,7 +312,7 @@ def __readCommonCfg(section, defaultXml, raiseIfMissing, geometryCfg):
         if raiseIfMissing or __hasKey('battleScenarios', section, defaultXml):
             cfg['battleScenarios'] = __readBattleScenarios(section, defaultXml)
         if raiseIfMissing or __hasKey('waypoints', section, defaultXml):
-            cfg['waypoints'] = __readString('waypoints', section, defaultXml)
+            cfg['waypoints'] = _readString('waypoints', section, defaultXml)
     return cfg
 
 
@@ -311,7 +358,7 @@ def __readWWmusicDroneSection(wwmusicDroneSetup, section, defaultXml):
                     for gameplayType in ARENA_GAMEPLAY_NAMES:
                         outcome[settingName][arenaTypeLabel, gameplayType] = settingValue
 
-        raise Exception('"{}" section missed the key "{}"!'.format(settingName, valueTag))
+        raise SoftException('"{}" section missed the key "{}"!'.format(settingName, valueTag))
 
     return outcome
 
@@ -320,7 +367,7 @@ def __hasKey(key, xml, defaultXml):
     return xml.has_key(key) or defaultXml.has_key(key)
 
 
-def __readString(key, xml, defaultXml, defaultValue=None):
+def _readString(key, xml, defaultXml, defaultValue=None):
     if xml.has_key(key):
         return xml.readString(key)
     elif defaultXml.has_key(key):
@@ -328,7 +375,7 @@ def __readString(key, xml, defaultXml, defaultValue=None):
     elif defaultValue is not None:
         return defaultValue
     else:
-        raise Exception("missing key '%s'" % key)
+        raise SoftException("missing key '%s'" % key)
         return
 
 
@@ -340,11 +387,11 @@ def __readStrings(key, xml, defaultXml, defaultValue=None):
     elif defaultValue is not None:
         return defaultValue
     else:
-        raise Exception("missing key '%s'" % key)
+        raise SoftException("missing key '%s'" % key)
         return
 
 
-def __readInt(key, xml, defaultXml, defaultValue=None):
+def _readInt(key, xml, defaultXml, defaultValue=None):
     if xml.has_key(key):
         return xml.readInt(key)
     elif defaultXml.has_key(key):
@@ -352,11 +399,11 @@ def __readInt(key, xml, defaultXml, defaultValue=None):
     elif defaultValue is not None:
         return defaultValue
     else:
-        raise Exception("missing key '%s'" % key)
+        raise SoftException("missing key '%s'" % key)
         return
 
 
-def __readFloat(key, xml, defaultXml, defaultValue=None):
+def _readFloat(key, xml, defaultXml, defaultValue=None):
     if xml.has_key(key):
         return xml.readFloat(key)
     elif defaultXml.has_key(key):
@@ -364,7 +411,7 @@ def __readFloat(key, xml, defaultXml, defaultValue=None):
     elif defaultValue is not None:
         return defaultValue
     else:
-        raise Exception("missing key '%s'" % key)
+        raise SoftException("missing key '%s'" % key)
         return
 
 
@@ -376,21 +423,196 @@ def __readBool(key, xml, defaultXml, defaultValue=None):
     elif defaultValue is not None:
         return defaultValue
     else:
-        raise Exception("missing key '%s'" % key)
+        raise SoftException("missing key '%s'" % key)
         return
 
 
-def __readBoundingBox(section):
+def _readFloatArray(key, tag, xml, defaultXml, defaultValue=None):
+    if xml.has_key(key):
+        return xml[key].readFloats(tag)
+    elif defaultXml.has_key(key):
+        return defaultXml[key].readFloats(tag)
+    elif defaultValue is not None:
+        return defaultValue
+    else:
+        raise SoftException("missing key '%s'" % key)
+        return
+
+
+def _readBoundingBox(section):
     bottomLeft = section.readVector2('boundingBox/bottomLeft')
     upperRight = section.readVector2('boundingBox/upperRight')
     if bottomLeft[0] >= upperRight[0] or bottomLeft[1] >= upperRight[1]:
-        raise Exception("wrong 'boundingBox' values")
+        raise SoftException("wrong 'boundingBox' values")
     return (bottomLeft, upperRight)
 
 
 def __calcSpaceBoundingBox(arenaBoundingBox):
     ARENA_EXTENT = 100
     return (arenaBoundingBox[0] - Vector2(ARENA_EXTENT, ARENA_EXTENT), arenaBoundingBox[1] + Vector2(ARENA_EXTENT, ARENA_EXTENT))
+
+
+def __readChatCommandFlags(name, section, defaultXml):
+    if section[name]:
+        flagsAsWhitespaceSeparatedString = section.readString(name)
+    else:
+        flagsAsWhitespaceSeparatedString = defaultXml.readString(name)
+    flagsAsListOfStrings = flagsAsWhitespaceSeparatedString.split()
+    flagsAsListOfValues = [ CHAT_COMMAND_FLAGS.FLAG_BY_NAME[flagStr] for flagStr in flagsAsListOfStrings ]
+    flagsMask = 0
+    for flag in flagsAsListOfValues:
+        flagsMask |= flag
+
+    return flagsMask
+
+
+class ReconSettings(object):
+
+    def __init__(self, section):
+        self.flyDirections = self._readXmlReconFlyDirections(section['flyDirections'])
+
+    def _readXmlReconFlyDirections(self, section):
+        flyDirections = {}
+        for name, value in section.items():
+            if name == 'flyDirection':
+                team = value.readInt('team')
+                direction = value.readVector3('direction')
+                flyDirections[team] = direction
+
+        return flyDirections
+
+
+class FrontLinesGeometrySettings(object):
+
+    def __init__(self, section, defaultXml):
+        dcfg = self._readXmlFronts(defaultXml['frontLinesGeometry'])
+        cfg = self._readXmlFronts(section['frontLinesGeometry'])
+        dcfg.update(cfg)
+        self.fronts = dcfg
+
+    def _readXmlFronts(self, section):
+        fronts = {}
+        if section is not None:
+            for name, value in section.items():
+                if name == 'front':
+                    playerGroup = value.readInt('playerGroup')
+                    settings = dict(direction=value.readVector2('direction'), bounds=_readBoundingBox(value))
+                    fronts[playerGroup] = DictObj(settings)
+
+        return fronts
+
+
+class FrontLinesAlgorithmSettings(object):
+
+    def __init__(self, section, defaultXml):
+        dcfg = self._readXmlSettings(defaultXml['frontLinesAlgorithm'])
+        cfg = self._readXmlSettings(section['frontLinesAlgorithm'])
+        dcfg.update(cfg)
+        self.__dict__ = dcfg
+
+    def _readFloats(self, section, *names):
+        return {name:section.readFloat(name) for name in names}
+
+    def _readInts(self, section, *names):
+        return {name:section.readInt(name) for name in names}
+
+    def _readXmlSettings(self, section):
+        settings = {}
+        if section is not None:
+            settings.update(self._readFloats(section, 'columnWidth', 'frontDropPerColumn', 'outlierFraction', 'outlierVerticalDistance', 'intrusionVerticalTolerance', 'intrusionCheckExtendBounds'))
+            settings.update(self._readInts(section, 'defenderTeam', 'frontEdgeExtendColumns'))
+        return settings
+
+
+class RecoveryMechanicSettings(object):
+
+    def __init__(self, section, defaultXml):
+        dcfg = self._readXmlSettings(defaultXml['recoveryMechanic'])
+        cfg = self._readXmlSettings(section['recoveryMechanic'])
+        dcfg.update(cfg)
+        self.__dict__ = dcfg
+
+    def _readInts(self, section, *names):
+        return {name:section.readInt(name) for name in names}
+
+    def _readXmlSettings(self, section):
+        settings = {}
+        if section is not None:
+            settings.update(self._readInts(section, 'recoveryCounter', 'recoveryBlockingCounter'))
+        return settings
+
+
+class OvertimeMechanicSettings(object):
+
+    def __init__(self, section, defaultXml):
+        dcfg = self._readXmlSettings(defaultXml['overtimeMechanic'])
+        cfg = self._readXmlSettings(section['overtimeMechanic'])
+        dcfg.update(cfg)
+        self.__dict__ = dcfg
+
+    def _readInts(self, section, *names):
+        return {name:section.readInt(name) for name in names}
+
+    def _readXmlSettings(self, section):
+        settings = {}
+        if section is not None:
+            settings.update(self._readInts(section, 'overtimeLimit'))
+        return settings
+
+
+class SectorProtectionZoneSettings(object):
+
+    def __init__(self, key, section, defaultXml):
+        self.numberOfTurrets = _readInt(key + '/numberOfTurrets', section, defaultXml, 2)
+        self.maxStayTime = _readFloat(key + '/maxStayTime', section, defaultXml, 5.0)
+        self.minShootingTime = _readFloat(key + '/minShootingTime', section, defaultXml, 15.0)
+        self.minShootingInterval = _readFloat(key + '/minShootingInterval', section, defaultXml, 1.0)
+        self.shotShellNation = _readString(key + '/shotShellNation', section, defaultXml, 'germany')
+        self.shotShellName = _readString(key + '/shotShellName', section, defaultXml, 'sector_artillery_shell')
+        self.shotPiercingPower = _readFloat(key + '/shotPiercingPower', section, defaultXml, 45.0)
+        self.shotRadius = _readFloat(key + '/shotRadius', section, defaultXml, 5.0)
+        self.shotDuration = _readFloat(key + '/shotDuration', section, defaultXml, 1.0)
+        self.minTurretShootInterval = _readFloat(key + '/minTurretShootInterval', section, defaultXml, 2.0)
+
+
+class SectorSettings(object):
+
+    def __init__(self, key, section, defaultXml):
+        self.transitionTime = _readFloat(key + '/transitionTime', section, defaultXml, 60.0)
+        self.maxStayTime = _readFloat(key + '/maxStayTime', section, defaultXml, 30.0)
+        self.destructionDuration = _readFloat(key + '/destructionDuration', section, defaultXml, 5.0)
+        self.closedZoneFireDelay = _readFloat(key + '/closedZoneFireDelay', section, defaultXml, 4.0)
+        self.numBombs = _readInt(key + '/numBombs', section, defaultXml, 10)
+        self.bombingHeight = _readFloat(key + '/bombingHeight', section, defaultXml, 70.0)
+        self.bombingWidth = _readFloat(key + '/bombingWidth', section, defaultXml, 50.0)
+        self.maxRandomBombsPerTarget = _readInt(key + '/maxRandomBombsPerTarget', section, defaultXml, 3)
+        self.bombShellNation = _readString(key + '/bombShellNation', section, defaultXml, 'germany')
+        self.bombShellName = _readString(key + '/bombShellName', section, defaultXml, 'sector_bomber_shell')
+        self.protectionZone = SectorProtectionZoneSettings('sectorSettings/protectionZone', section, defaultXml)
+
+
+class EpicSectorSettings(object):
+
+    def __init__(self, key, section, defaultXml):
+        addGameTimeString = _readString(key + '/addGameTimePerCapture', section, defaultXml, '')
+        self.addGameTimePerCapture = [ float(s) for s in addGameTimeString.split() ]
+        self.addGameTimeAllCaptured = _readFloat(key + '/addGameTimeAllCaptured', section, defaultXml, 0.0)
+        self.frontLineInit = _readFloat(key + '/frontLineInit', section, defaultXml, 400.0)
+        self.transitionFrontLineBoundBackward = _readFloat(key + '/transitionFrontLineBoundBackward', section, defaultXml, 300.0)
+        self.transitionFrontLineBoundForward = _readFloat(key + '/transitionFrontLineBoundForward', section, defaultXml, 250.0)
+        defenderMotivationFactorsString = _readString(key + '/defenderMotivationFactors', section, defaultXml, '')
+        self.defenderMotivationFactors = [ float(s) for s in defenderMotivationFactorsString.split() ]
+        self.overtimeMaxFrontlineOffset = _readFloat(key + '/overtimeMaxFrontlineOffset', section, defaultXml, -600.0)
+
+
+class EpicSectorGrid(object):
+
+    def __init__(self, key, section, defaultXml):
+        mainDirectionName = section.readString(key + '/mainDirection', '-Z')
+        self.mainDirection = AXIS_ALIGNED_DIRECTION.FROM_NAME[mainDirectionName]
+        self.bordersZ = sorted(_readFloatArray(key + '/bordersZ', 'border', section, defaultXml))
+        self.bordersX = sorted(_readFloatArray(key + '/bordersX', 'border', section, defaultXml))
+        self.owningTeam = section.readInt(key + '/owningTeam', 1)
 
 
 def __readWeatherPresets(section):
@@ -430,11 +652,11 @@ def __readBattleScenarios(section, defaultSection):
         if name == 'level':
             level = subsection.readInt('id')
             if level in res:
-                raise Exception('duplicate level %d' % level)
+                raise SoftException('duplicate level %d' % level)
             if subsection.has_key('scenario'):
                 res[level] = subsection.readStrings('scenario')
             else:
-                raise Exception('missing scenarios for level %d' % level)
+                raise SoftException('missing scenarios for level %d' % level)
 
     return res
 
@@ -443,28 +665,28 @@ def __readVehicleCamouflageKind(section):
     kindName = section.readString('vehicleCamouflageKind')
     kind = CAMOUFLAGE_KINDS.get(kindName)
     if kind is None:
-        raise Exception("missing or wrong section 'vehicleCamouflageKind'")
+        raise SoftException("missing or wrong section 'vehicleCamouflageKind'")
     return kind
 
 
 def __readMinPlayersInTeam(section, defaultXml):
-    minPlayersInTeam = __readInt('minPlayersInTeam', section, defaultXml)
+    minPlayersInTeam = _readInt('minPlayersInTeam', section, defaultXml)
     if minPlayersInTeam < 0:
-        raise Exception("wrong 'minPlayersInTeam' value")
+        raise SoftException("wrong 'minPlayersInTeam' value")
     return minPlayersInTeam
 
 
 def __readMaxPlayersInTeam(section, defaultXml):
-    maxPlayersInTeam = __readInt('maxPlayersInTeam', section, defaultXml)
+    maxPlayersInTeam = _readInt('maxPlayersInTeam', section, defaultXml)
     if maxPlayersInTeam < 0:
-        raise Exception("wrong 'maxPlayersInTeam' value")
+        raise SoftException("wrong 'maxPlayersInTeam' value")
     return maxPlayersInTeam
 
 
 def __readTeamsCount(key, section, defaultXml):
-    value = __readInt(key, section, defaultXml)
+    value = _readInt(key, section, defaultXml)
     if not TEAMS_IN_ARENA.MIN_TEAMS <= value <= TEAMS_IN_ARENA.MAX_TEAMS:
-        raise Exception('Invalid teams in arena')
+        raise SoftException('Invalid teams in arena')
     return value
 
 
@@ -476,12 +698,12 @@ def __readTeamNumbers(section, maxTeamsInArena):
     squadTeamNumbers = set([ int(v) for v in section.readString('squadTeamNumbers', '').split() ])
     soloTeamNumbers = set([ int(v) for v in section.readString('soloTeamNumbers', '').split() ])
     if len(squadTeamNumbers) + len(soloTeamNumbers) != maxTeamsInArena:
-        raise Exception('Number of squad (%d) and solo (%d) teams must be equal to maxTeamsInArena (%d)' % (len(squadTeamNumbers), len(soloTeamNumbers), maxTeamsInArena))
+        raise SoftException('Number of squad (%d) and solo (%d) teams must be equal to maxTeamsInArena (%d)' % (len(squadTeamNumbers), len(soloTeamNumbers), maxTeamsInArena))
     if len(squadTeamNumbers & soloTeamNumbers) > 0:
-        raise Exception('Squad and solo team numbers contains identical team numbers (%s)' % str(squadTeamNumbers & soloTeamNumbers))
+        raise SoftException('Squad and solo team numbers contains identical team numbers (%s)' % str(squadTeamNumbers & soloTeamNumbers))
     allTeamNumbers = squadTeamNumbers | soloTeamNumbers
     if min(allTeamNumbers) < 1 or max(allTeamNumbers) > TEAMS_IN_ARENA.MAX_TEAMS:
-        raise Exception('Invalid team number. Must be between 1 and %d.' % TEAMS_IN_ARENA.MAX_TEAMS)
+        raise SoftException('Invalid team number. Must be between 1 and %d.' % TEAMS_IN_ARENA.MAX_TEAMS)
     return (squadTeamNumbers, soloTeamNumbers)
 
 
@@ -493,19 +715,15 @@ def __readMapActivitiesTimeframes(section):
     for activityXML in mapActivitiesXML.values():
         startTimes = activityXML.readVector2('startTime')
         if (startTimes[0] >= 0) != (startTimes[1] >= 0):
-            raise Exception("wrong subsection 'mapActivities/startTime'. All values of startTime must have same sign")
+            raise SoftException("wrong subsection 'mapActivities/startTime'. All values of startTime must have same sign")
         possibility = activityXML.readFloat('possibility', 1.0)
-        visibilityMask = activityXML.readInt('visibilityMask', 255)
-        timeframes.append((startTimes[0],
-         startTimes[1],
-         possibility,
-         visibilityMask))
+        timeframes.append((startTimes[0], startTimes[1], possibility))
 
     return timeframes
 
 
 def __readDefaultGroundEffect(section, defaultXml):
-    defaultGroundEff = __readString('defaultGroundEffect', section, defaultXml).strip()
+    defaultGroundEff = _readString('defaultGroundEffect', section, defaultXml).strip()
     if defaultGroundEff == '':
         return None
     else:
@@ -552,7 +770,7 @@ def __readTeamBasePositions(section, maxTeamsInArena):
                 try:
                     id = int(name[8:])
                 except:
-                    raise Exception("wrong subsection 'teamBasePositions/team%s/%s'" % (teamIdx, s.name))
+                    raise SoftException("wrong subsection 'teamBasePositions/team%s/%s'" % (teamIdx, s.name))
 
                 teamBase[id] = value.readVector2('')
 
@@ -570,7 +788,7 @@ def __readTeamSpawnPoints(section, maxTeamsInArena, nodeNameTemplate='team%d', r
             s = section[nodeNameTemplate % teamIdx]
             if s is None:
                 if required:
-                    raise Exception("missing 'teamSpawnPoints/%s'" % (nodeNameTemplate % teamIdx))
+                    raise SoftException("missing 'teamSpawnPoints/%s'" % (nodeNameTemplate % teamIdx))
             for value in s.values():
                 teamSpawnPoint.append(value.readVector2(''))
 
@@ -582,6 +800,7 @@ def __readGameplayPoints(section, geometryCfg):
     aps = []
     rps = {}
     rsps = []
+    swps = []
     repairPointIDByGUID = geometryCfg.setdefault('repairPointIDByGUID', {})
     for name, value in section.items():
         if name == 'flagSpawnPoint':
@@ -615,11 +834,15 @@ def __readGameplayPoints(section, geometryCfg):
              'reuseCount': value.readInt('reuseCount'),
              'team': value.readInt('team'),
              'guid': value.readString('guid')})
+        if name == 'sectorWayPoint':
+            swps.append({'position': value.readVector3('position'),
+             'team': value.readInt('team')})
 
     cfg = {'flagSpawnPoints': sps,
      'flagAbsorptionPoints': aps,
      'repairPoints': rps,
-     'resourcePoints': rsps}
+     'resourcePoints': rsps,
+     'sectorWayPoints': swps}
     return cfg
 
 

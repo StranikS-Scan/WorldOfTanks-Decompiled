@@ -1,6 +1,5 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/BattleTypeSelectPopover.py
-import BigWorld
 from adisp import process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
@@ -8,20 +7,23 @@ from gui.Scaleform.daapi.view.meta.BattleTypeSelectPopoverMeta import BattleType
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
-from gui.Scaleform.locale.ARENAS import ARENAS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.prb_control.settings import PREBATTLE_ACTION_NAME, BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
+from gui.prb_control.settings import PREBATTLE_ACTION_NAME
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared.events import LoadViewEvent
-from gui.shared.utils.functions import makeTooltip
-from helpers import i18n, dependency, time_utils
+from skeletons.gui.game_control import IEpicBattleMetaGameController
+from helpers import i18n, dependency
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.lobby_context import ILobbyContext
+from gui.ranked_battles.constants import PRIME_TIME_STATUS
+from gui.Scaleform.locale.EPIC_BATTLE import EPIC_BATTLE
+from gui.shared.utils.functions import makeTooltip
 
 class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
     eventsCache = dependency.descriptor(IEventsCache)
     rankedController = dependency.descriptor(IRankedBattlesController)
+    epicQueueController = dependency.descriptor(IEpicBattleMetaGameController)
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _=None):
@@ -42,6 +44,8 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
             isSpecial = False
             if itemData == PREBATTLE_ACTION_NAME.RANDOM:
                 tooltip = TOOLTIPS.BATTLETYPES_STANDART
+            elif itemData == PREBATTLE_ACTION_NAME.EPIC:
+                tooltip, isSpecial = self.__getEpicAvailabilityData()
             elif itemData == PREBATTLE_ACTION_NAME.RANKED:
                 tooltip, isSpecial = self.__getRankedAvailabilityData()
             elif itemData == PREBATTLE_ACTION_NAME.E_SPORT:
@@ -58,7 +62,8 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
             elif itemData == PREBATTLE_ACTION_NAME.BATTLE_TUTORIAL:
                 tooltip = TOOLTIPS.BATTLETYPES_BATTLETUTORIAL
             elif itemData == PREBATTLE_ACTION_NAME.SANDBOX:
-                tooltip = makeTooltip(TOOLTIPS.BATTLETYPES_BATTLETEACHING_HEADER, i18n.makeString(TOOLTIPS.BATTLETYPES_BATTLETEACHING_BODY, map1=i18n.makeString(ARENAS.C_10_HILLS_NAME), battles=BATTLES_TO_SELECT_RANDOM_MIN_LIMIT))
+                isSpecial = True
+                tooltip = TOOLTIPS_CONSTANTS.BATTLE_TRAINING
             result = {'isSpecial': isSpecial,
              'tooltip': tooltip}
             return result
@@ -81,21 +86,13 @@ class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
 
     def __getRankedAvailabilityData(self):
         hasSuitableVehicles = self.rankedController.hasSuitableVehicles()
-        if self.rankedController.isAvailable() and hasSuitableVehicles:
-            return (TOOLTIPS_CONSTANTS.RANKED_SELECTOR_INFO, True)
-        else:
-            tooltipData = TOOLTIPS.BATTLETYPES_RANKED
-            header = i18n.makeString(tooltipData + '/header')
-            bodyKey = tooltipData + '/body'
-            body = i18n.makeString(bodyKey)
-            nextSeason = self.rankedController.getNextSeason()
-            if hasSuitableVehicles:
-                if self.rankedController.isFrozen():
-                    additionalInfo = i18n.makeString(bodyKey + '/frozen')
-                elif nextSeason is not None:
-                    additionalInfo = i18n.makeString(bodyKey + '/coming', date=BigWorld.wg_getShortDateFormat(time_utils.makeLocalServerTime(nextSeason.getStartDate())))
-                else:
-                    additionalInfo = i18n.makeString(bodyKey + '/disabled')
-                body = '%s\n\n%s' % (body, additionalInfo)
-            res = makeTooltip(header, body)
-            return (res, False)
+        return (TOOLTIPS_CONSTANTS.RANKED_SELECTOR_INFO, True) if self.rankedController.isAvailable() and hasSuitableVehicles else (TOOLTIPS_CONSTANTS.RANKED_UNAVAILABLE_INFO, True)
+
+    def __getEpicAvailabilityData(self):
+        status, _, _ = self.epicQueueController.getPrimeTimeStatus()
+        if status == PRIME_TIME_STATUS.NOT_AVAILABLE:
+            return (TOOLTIPS_CONSTANTS.EPIC_SELECTOR_INFO, True)
+        header = i18n.makeString(EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_ENABLED_HEADER)
+        body = i18n.makeString(EPIC_BATTLE.SELECTORTOOLTIP_EPICBATTLE_ENABLED_BODY)
+        res = makeTooltip(header, body)
+        return (res, False)

@@ -11,14 +11,15 @@ from skeletons.gui.battle_session import IBattleSessionProvider
 _MAX_INVADERS_COUNT = 3
 
 class _TeamBaseSettingItem(object):
-    __slots__ = ('_weight', '_color', '_capturing', '_captured', 'captured', '_arenaTypeID', '_team', '_baseID', '_subTypeBaseID')
+    __slots__ = ('_weight', '_color', '_capturing', '_captured', 'captured', '_blocked', '_arenaTypeID', '_team', '_baseID', '_subTypeBaseID')
 
-    def __init__(self, weight, color, capturing, captured):
+    def __init__(self, weight, color, capturing, captured, blocked):
         super(_TeamBaseSettingItem, self).__init__()
         self._weight = weight
         self._color = color
         self._capturing = capturing
         self._captured = captured
+        self._blocked = blocked
         self._arenaTypeID = 0
         self._team = 0
         self._baseID = 0
@@ -39,6 +40,9 @@ class _TeamBaseSettingItem(object):
     def getCapturingString(self, points):
         return self._capturing % (self._subTypeBaseID, points)
 
+    def getBlockedString(self):
+        return self._blocked
+
     def getCapturedString(self):
         return self._captured % self._subTypeBaseID
 
@@ -49,23 +53,27 @@ class _TeamBaseSettingItem(object):
 _SETTINGS_TO_TEAM = {0: (2,
      'red',
      i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_ALLY_BASE_CAPTURED_BY_NOTIFICATION),
-     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_ALLY_BASE_CAPTURED_NOTIFICATION)),
+     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_ALLY_BASE_CAPTURED_NOTIFICATION),
+     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURE_BLOCKED)),
  3: (1,
      'green',
      i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_ENEMY_BASE_CAPTURED_BY_NOTIFICATION),
-     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_ENEMY_BASE_CAPTURED_NOTIFICATION))}
+     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_ENEMY_BASE_CAPTURED_NOTIFICATION),
+     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURE_BLOCKED))}
 _SETTINGS_TO_CONTROL_POINT = {0: (4,
      'red',
      i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURED_BY_NOTIFICATION),
-     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURED_NOTIFICATION)),
+     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURED_NOTIFICATION),
+     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURE_BLOCKED)),
  3: (3,
      'green',
      i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURED_BY_NOTIFICATION),
-     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURED_NOTIFICATION))}
+     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURED_NOTIFICATION),
+     i18n.makeString(I18N_INGAME_GUI.PLAYER_MESSAGES_BASE_CAPTURE_BLOCKED))}
 
 def _getSettingItem(clientID, ownTeam, arenaTypeID):
     baseTeam, baseID = team_bases_ctrl.parseClientTeamBaseID(clientID)
-    itemSettings = (0, 'green', '%s %s', '%s %s')
+    itemSettings = (0, 'green', '%s %s', '%s %s', '%s %s')
     key = baseTeam ^ ownTeam
     if isControlPointExists(arenaTypeID):
         if key in _SETTINGS_TO_CONTROL_POINT:
@@ -93,7 +101,10 @@ class TeamBasesPanel(TeamBasesPanelMeta, team_bases_ctrl.ITeamBasesListener):
         self.as_addS(clientID, item.getWeight(), item.getColor(), title, points, time_utils.getTimeLeftFormat(timeLeft), self.__getInvadersCountStr(invadersCnt))
         self.__basesDict[clientID] = item
         if capturingStopped:
-            self.stopTeamBaseCapturing(clientID, points)
+            if invadersCnt > 0:
+                self.blockTeamBaseCapturing(clientID, points)
+            else:
+                self.stopTeamBaseCapturing(clientID, points)
 
     def addCapturedTeamBase(self, clientID, playerTeam, timeLeft, invadersCnt):
         item = _getSettingItem(clientID, playerTeam, self.sessionProvider.arenaVisitor.type.getID())
@@ -108,6 +119,14 @@ class TeamBasesPanel(TeamBasesPanelMeta, team_bases_ctrl.ITeamBasesListener):
         else:
             capturingString = item.getCapturingString(points)
             self.as_updateCaptureDataS(clientID, points, rate, time_utils.getTimeLeftFormat(timeLeft), self.__getInvadersCountStr(invadersCnt), capturingString)
+            return
+
+    def blockTeamBaseCapturing(self, clientID, points):
+        item = self.__basesDict.get(clientID, None)
+        if not item:
+            return
+        else:
+            self.as_updateCaptureDataS(clientID, points, 0, '-:-', '-', item.getBlockedString())
             return
 
     def stopTeamBaseCapturing(self, clientID, points):

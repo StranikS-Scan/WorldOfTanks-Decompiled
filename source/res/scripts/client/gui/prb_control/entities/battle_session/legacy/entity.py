@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/prb_control/entities/battle_session/legacy/entity.py
+from soft_exception import SoftException
 from constants import PREBATTLE_TYPE, QUEUE_TYPE
 from gui import SystemMessages
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES as I18N_SYSTEM_MESSAGES
@@ -32,7 +33,7 @@ class BattleSessionListEntryPoint(LegacyEntryPoint):
         return JoinLegacyModeCtx(PREBATTLE_TYPE.CLAN)
 
     def create(self, ctx, callback=None):
-        raise Exception('BattleSession can be created through the web only')
+        raise SoftException('BattleSession can be created through the web only')
 
     def join(self, ctx, callback=None):
         g_eventDispatcher.loadBattleSessionList()
@@ -47,7 +48,7 @@ class BattleSessionEntryPoint(LegacyEntryPoint):
         super(BattleSessionEntryPoint, self).__init__(FUNCTIONAL_FLAG.BATTLE_SESSION)
 
     def create(self, ctx, callback=None):
-        raise Exception('BattleSession can be created through the web only')
+        raise SoftException('BattleSession can be created through the web only')
 
     def join(self, ctx, callback=None):
         prbID = ctx.getID()

@@ -13,9 +13,6 @@ class HangarHeaderMeta(BaseDAAPIComponent):
     def showBeginnerQuests(self):
         self._printOverrideError('showBeginnerQuests')
 
-    def showMarathonQuests(self):
-        self._printOverrideError('showMarathonQuests')
-
     def showEventQuests(self, eventQuestsID):
         self._printOverrideError('showEventQuests')
 

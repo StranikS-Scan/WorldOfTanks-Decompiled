@@ -6,7 +6,7 @@ import BigWorld
 import BattleReplay
 import Math
 import ResMgr
-from CombatEquipmentManager import CombatEquipmentManager
+from avatar_components.CombatEquipmentManager import CombatEquipmentManager
 from debug_utils import LOG_WARNING
 from helpers import dependency
 from helpers import CallbackDelayer

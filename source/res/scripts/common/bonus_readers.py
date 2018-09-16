@@ -8,6 +8,7 @@ from invoices_helpers import checkAccountDossierOperation
 from items import vehicles, tankmen
 from items.components.c11n_constants import SeasonType
 from constants import EVENT_TYPE, DOSSIER_TYPE, IS_DEVELOPMENT
+from soft_exception import SoftException
 __all__ = ['getBonusReaders', 'readUTC', 'SUPPORTED_BONUSES']
 
 def getBonusReaders(bonusTypes):
@@ -17,13 +18,13 @@ def getBonusReaders(bonusTypes):
 def timeDataToUTC(timeData, default=None):
     try:
         if timeData is None:
-            raise Exception('Wrong timeData')
+            raise SoftException('Wrong timeData')
         if timeData != '':
             timeData = int(calendar.timegm(time.strptime(timeData, '%d.%m.%Y %H:%M')))
         else:
             return default
     except:
-        raise Exception('Invalid format (%s). Format must be like %s, for example 23.01.2011 00:00.' % (timeData, "'%d.%m.%Y %H:%M'"))
+        raise SoftException('Invalid format (%s). Format must be like %s, for example 23.01.2011 00:00.' % (timeData, "'%d.%m.%Y %H:%M'"))
 
     return timeData
 
@@ -33,7 +34,7 @@ def readUTC(section, field, default=None):
     try:
         return timeDataToUTC(timeData, default)
     except Exception as e:
-        raise Exception('Invalid field %s: %s' % (field, e))
+        raise SoftException('Invalid field %s: %s' % (field, e))
 
 
 def __readBonus_bool(bonus, name, section):
@@ -48,14 +49,14 @@ def __readBonus_string_set(bonus, name, section):
 def __readBonus_int(bonus, name, section):
     value = section.asInt
     if value < 0:
-        raise Exception('Negative value (%s)' % name)
+        raise SoftException('Negative value (%s)' % name)
     bonus[name] = section.asInt
 
 
 def __readBonus_factor(bonus, name, section):
     value = section.asFloat
     if value < 0:
-        raise Exception('Negative value (%s)' % name)
+        raise SoftException('Negative value (%s)' % name)
     bonus[name] = value
 
 
@@ -64,7 +65,7 @@ def __readBonus_equipment(bonus, _name, section):
     cache = vehicles.g_cache
     eqID = cache.equipmentIDs().get(eqName)
     if eqID is None:
-        raise Exception("Unknown equipment '%s'" % eqName)
+        raise SoftException("Unknown equipment '%s'" % eqName)
     eqCompDescr = cache.equipments()[eqID].compactDescr
     count = 1
     if section.has_key('count'):
@@ -78,7 +79,7 @@ def __readBonus_optionalDevice(bonus, _name, section):
     cache = vehicles.g_cache
     odID = cache.optionalDeviceIDs().get(name)
     if odID is None:
-        raise Exception("Unknown optional device '%s'" % name)
+        raise SoftException("Unknown optional device '%s'" % name)
     odCompDescr = cache.optionalDevices()[odID].compactDescr
     count = 1
     if section.has_key('count'):
@@ -92,9 +93,9 @@ def __readBonus_item(bonus, _name, section):
     try:
         descr = vehicles.getItemByCompactDescr(compDescr)
         if descr.itemTypeName not in items.SIMPLE_ITEM_TYPE_NAMES:
-            raise Exception('Wrong compact descriptor (%d). Not simple item.' % compDescr)
+            raise SoftException('Wrong compact descriptor (%d). Not simple item.' % compDescr)
     except:
-        raise Exception('Wrong compact descriptor (%d)' % compDescr)
+        raise SoftException('Wrong compact descriptor (%d)' % compDescr)
 
     count = 1
     if section.has_key('count'):
@@ -146,9 +147,9 @@ def __readBonus_tankmen(bonus, vehTypeCompDescr, section):
                 if type(vehTypeCompDescr) == int:
                     _, vehNationID, vehicleTypeID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
                     if vehNationID != tman.nationID or vehicleTypeID != tman.vehicleTypeID:
-                        raise Exception('Vehicle and tankman mismatch.')
+                        raise SoftException('Vehicle and tankman mismatch.')
             except Exception as e:
-                raise Exception('Invalid tankmen compact descr. Error: %s' % (e,))
+                raise SoftException('Invalid tankmen compact descr. Error: %s' % (e,))
 
             lst.append(tmanDescr)
             continue
@@ -175,10 +176,10 @@ def __readBonus_tankmen(bonus, vehTypeCompDescr, section):
             if type(vehTypeCompDescr) == int:
                 _, vehNationID, vehicleTypeID = vehicles.parseIntCompactDescr(vehTypeCompDescr)
                 if vehNationID != tmanData['nationID'] or vehicleTypeID != tmanData['vehicleTypeID']:
-                    raise Exception('Vehicle and tankman mismatch.')
+                    raise SoftException('Vehicle and tankman mismatch.')
             lst.append(tmanData)
         except Exception as e:
-            raise Exception('%s: %s' % (e, tmanData))
+            raise SoftException('%s: %s' % (e, tmanData))
 
     bonus['tankmen'] = lst
     return
@@ -221,9 +222,13 @@ def __readBonus_customizations(bonus, _name, section):
             custData['vehTypeCompDescr'] = vehicles.makeIntCompactDescrByID('vehicle', *vehicles.g_list.getIDsByName(subsection.readString('boundVehicle', '')))
         elif subsection.has_key('boundToCurrentVehicle'):
             custData['boundToCurrentVehicle'] = True
+        if subsection.has_key('customCompensation'):
+            credits = subsection['customCompensation'].readInt('credits', 0)
+            gold = subsection['customCompensation'].readInt('gold', 0)
+            custData['customCompensation'] = (credits, gold)
         isValid, item = validateCustomizationItem(custData)
         if not isValid:
-            raise Exception(item)
+            raise SoftException(item)
         lst.append(custData)
 
     bonus['customizations'] = lst
@@ -262,7 +267,7 @@ def __readBonus_expires(id, expires, section):
         else:
             expires['at'] = readUTC(section, 'expires')
             if expires['at'] is None:
-                raise Exception('Invalid expiry time for %s' % id)
+                raise SoftException('Invalid expiry time for %s' % id)
         return
 
 
@@ -272,7 +277,7 @@ def __readBonus_dossier(bonus, _name, section):
     if section.has_key('type'):
         operation = section['type'].asString
     if operation not in ('add', 'append', 'set'):
-        raise Exception('Invalid dossier record %s' % operation)
+        raise SoftException('Invalid dossier record %s' % operation)
     strValue = section['value'].asString
     value = int(strValue) if strValue not in ('timestamp',) else strValue
     unique = False
@@ -284,9 +289,9 @@ def __readBonus_dossier(bonus, _name, section):
     if dossierType == DOSSIER_TYPE.ACCOUNT:
         isValid, message = checkAccountDossierOperation(dossierType, blockName, record, operation)
         if not isValid:
-            raise Exception('Invalid dossier bonus %s: %s' % (blockName + ':' + record, message))
+            raise SoftException('Invalid dossier bonus %s: %s' % (blockName + ':' + record, message))
     else:
-        raise Exception('Dossier type %s not supported in bonus reader' % dossierType)
+        raise SoftException('Dossier type %s not supported in bonus reader' % dossierType)
     bonus.setdefault('dossier', {}).setdefault(dossierType, {})[blockName, record] = {'value': value,
      'unique': unique,
      'type': operation}
@@ -296,13 +301,13 @@ def __readBonus_optional(bonusReaders, bonusRange, bonus, section, hasOneOf, isO
     subBonus = __readBonusSubSection(bonusReaders, bonusRange, section)
     probabilityAttr = section['probability']
     if not isOneOf and probabilityAttr is None:
-        raise Exception('Missing probability attribute in optional')
+        raise SoftException('Missing probability attribute in optional')
     if probabilityAttr is None:
         probability = 0
     else:
         probability = probabilityAttr.asInt / 100.0
     if not 0 <= probability <= 100:
-        raise Exception('Probability is out of range: {}'.format(probability))
+        raise SoftException('Probability is out of range: {}'.format(probability))
     if isOneOf:
         bonus.setdefault('oneof', []).append((probability, subBonus))
     else:
@@ -335,7 +340,7 @@ def __readBonus_oneof(bonusReaders, bonusRange, bonus, section, hasOneOf, isOneO
     if abs(1.0 - lastProbability) < 1e-06:
         oneOfTemp[-1] = (1.0, lastSubBonus)
     else:
-        raise Exception('Sum of probabilities > 100')
+        raise SoftException('Sum of probabilities > 100')
     if hasOneOf:
         bonus.setdefault('groups', []).append({'oneof': oneOfTemp})
     else:
@@ -411,7 +416,7 @@ def __readBonusSubSection(bonusReaders, bonusRange, section, isOneOf=False):
         bonus = {}
         for name, sub in section.items():
             if isOneOf and name != 'optional' and name != 'name':
-                raise Exception('The only possible subsection of oneof is optional')
+                raise SoftException('The only possible subsection of oneof is optional')
             elif name in __PROBABILITY_READERS:
                 if __PROBABILITY_READERS[name](bonusReaders, bonusRange, bonus, sub, hasOneOf, isOneOf):
                     hasOneOf = True
@@ -429,9 +434,9 @@ def __readBonusSubSection(bonusReaders, bonusRange, section, isOneOf=False):
                 bonus['compensation'] = sub.readBool('', False)
                 continue
             elif name not in bonusReaders:
-                raise Exception('Bonus not in bonus readers {}'.format(name))
+                raise SoftException('Bonus not in bonus readers {}'.format(name))
             elif bonusRange is not None and name not in bonusRange:
-                raise Exception('Bonus {} is not in the range: ({})'.format(name, bonusRange))
+                raise SoftException('Bonus {} is not in the range: ({})'.format(name, bonusRange))
             bonusReaders[name](bonus, name, sub)
 
         return bonus

@@ -12,9 +12,12 @@ from gui.battle_control.arena_info import squad_finder
 from gui.battle_control.arena_info import vos_collections
 from gui.battle_control.battle_constants import MULTIPLE_TEAMS_TYPE
 from gui.battle_control.battle_constants import PLAYER_GUI_PROPS
-from helpers import dependency
+from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.battle_session import IArenaDataProvider
+from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
+from gui.battle_control.arena_info.arena_vos import EPIC_BATTLE_KEYS
+from constants import PLAYER_RANK
 _logger = logging.getLogger(__name__)
 _OP = settings.INVALIDATE_OP
 _INVITATION_STATUS = settings.INVITATION_DELIVERY_STATUS
@@ -248,6 +251,13 @@ class ArenaDataProvider(IArenaDataProvider):
             if self.__playerVehicleID in self.__vInfoVOs:
                 prebattleID = self.__vInfoVOs[self.__playerVehicleID].prebattleID
         return self.__getStateFlag(vID, 'isSquadMan', playerTeam=self.__playerTeam, prebattleID=prebattleID)
+
+    def isGeneral(self, vID):
+        sessionProvider = dependency.instance(IBattleSessionProvider)
+        arenaDP = sessionProvider.getArenaDP()
+        vo = arenaDP.getVehicleStats(vID)
+        rank = vo.gameModeSpecific.getValue(EPIC_BATTLE_KEYS.RANK)
+        return True if rank == PLAYER_RANK.GENERAL else False
 
     def isTeamKiller(self, vID):
         return self.__getStateFlag(vID, 'isTeamKiller', playerTeam=self.__playerTeam)

@@ -13,6 +13,7 @@ from Queue import Queue
 import BigWorld
 from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
 from helpers import getFullClientVersion
+from soft_exception import SoftException
 _MIN_LIFE_TIME = 900
 _MAX_LIFE_TIME = 86400
 _LIFE_TIME_IN_MEMORY = 1200
@@ -232,7 +233,9 @@ class WorkerThread(threading.Thread):
             except urllib2.HTTPError as e:
                 LOG_WARNING('Http error. Code: %d, url: %s' % (e.code, url))
             except urllib2.URLError as e:
-                LOG_WARNING('Url error. Reason: %s, url: %s' % (str(e.reason), url))
+                LOG_WARNING('Url error. Reason: %s, url: %s' % (str(e.reason) if isinstance(e.reason, basestring) else 'unknown', url))
+            except ValueError as e:
+                LOG_WARNING('Value error. Reason: %s, url: %s' % (e, url))
             except Exception as e:
                 LOG_ERROR("Client couldn't download file.", e, url)
 
@@ -442,7 +445,7 @@ class CustomFilesCache(object):
             crc, f, ver = data[2:5]
             if crc != binascii.crc32(f) or _CACHE_VERSION != ver:
                 LOG_DEBUG('Old file was found.', url)
-                raise Exception('Invalid data.')
+                raise SoftException('Invalid data.')
         except Exception:
             data = None
 

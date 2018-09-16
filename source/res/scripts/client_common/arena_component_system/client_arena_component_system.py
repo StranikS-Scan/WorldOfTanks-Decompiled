@@ -11,7 +11,7 @@ from svarog_script.py_component_system import ComponentSystem
 class ClientArenaComponent(Component):
 
     def __init__(self, componentSystem):
-        self.__componentSystem = weakref.ref(componentSystem)
+        self._componentSystem = weakref.ref(componentSystem)
         self._onUpdate = {}
         self._eventManager = Event.EventManager()
 
@@ -26,21 +26,22 @@ class ClientArenaComponent(Component):
         return
 
     def addSyncDataCallback(self, syncDataObjectType, key, handler):
-        self.__componentSystem().addSyncDataObjectCallback(syncDataObjectType, key, handler)
+        self._componentSystem().addSyncDataObjectCallback(syncDataObjectType, key, handler)
 
     def removeSyncDataCallback(self, syncDataObjectType, key, handler):
-        self.__componentSystem().removeSyncDataObjectCallback(syncDataObjectType, key, handler)
+        self._componentSystem().removeSyncDataObjectCallback(syncDataObjectType, key, handler)
 
     def getSyncDataObjectData(self, syncDataObjectType, key):
-        return self.__componentSystem().getSyncDataObjectData(syncDataObjectType, key)
+        return self._componentSystem().getSyncDataObjectData(syncDataObjectType, key)
 
 
 class ClientArenaComponentSystem(ComponentSystem):
 
-    def __init__(self, bonusType, arenaType):
+    def __init__(self, arena, bonusType, arenaType):
         ComponentSystem.__init__(self)
         self.bonusType = bonusType
         self.arenaType = arenaType
+        self.arena = weakref.ref(arena)
         self._onUpdate = {ARENA_UPDATE.SYNC_OBJECTS: self.__onFullSyncObjectReceived,
          ARENA_UPDATE.SYNC_OBJECTS_DIFF: self.__onSyncObjectUpdateReceived}
         self.__syncDataObjects = {}

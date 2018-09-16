@@ -347,7 +347,7 @@ class DisconnectMeta(I18nInfoDialogMeta):
         self.isBan = isBan
         self.expiryTime = expiryTime
         if hasattr(BigWorld.player(), 'setForcedGuiControlMode'):
-            BigWorld.player().setForcedGuiControlMode(True)
+            BigWorld.player().setForcedGuiControlMode(False)
 
     def getCallbackWrapper(self, callback):
 

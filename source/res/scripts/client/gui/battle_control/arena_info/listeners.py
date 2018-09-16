@@ -109,6 +109,7 @@ class ArenaVehiclesListener(_Listener):
             arena.onVehicleAdded += self.__arena_onVehicleAdded
             arena.onVehicleUpdated += self.__arena_onVehicleUpdated
             arena.onVehicleKilled += self.__arena_onVehicleKilled
+            arena.onVehicleRecovered += self.__arena_onVehicleRecovered
             arena.onAvatarReady += self.__arena_onAvatarReady
             arena.onNewStatisticsReceived += self.__arena_onNewStatisticsReceived
             arena.onVehicleStatisticsUpdate += self.__arena_onVehicleStatisticsUpdate
@@ -126,6 +127,7 @@ class ArenaVehiclesListener(_Listener):
             arena.onVehicleAdded -= self.__arena_onVehicleAdded
             arena.onVehicleUpdated -= self.__arena_onVehicleUpdated
             arena.onVehicleKilled -= self.__arena_onVehicleKilled
+            arena.onVehicleRecovered -= self.__arena_onVehicleRecovered
             arena.onAvatarReady -= self.__arena_onAvatarReady
             arena.onNewStatisticsReceived -= self.__arena_onNewStatisticsReceived
             arena.onVehicleStatisticsUpdate -= self.__arena_onVehicleStatisticsUpdate
@@ -171,6 +173,11 @@ class ArenaVehiclesListener(_Listener):
         if flags != INVALIDATE_OP.NONE:
             self._invokeListenersMethod('invalidateVehicleStatus', flags, vo, self._arenaDP)
 
+    def __arena_onVehicleRecovered(self, vehID, *args):
+        flags, vo = self._arenaDP.updateVehicleStatus(vehID, self._visitor.vehicles.getVehicleInfo(vehID))
+        if flags != INVALIDATE_OP.NONE:
+            self._invokeListenersMethod('invalidateVehicleStatus', flags, vo, self._arenaDP)
+
     def __arena_onAvatarReady(self, vehicleID):
         flags, vo = self._arenaDP.updateVehicleStatus(vehicleID, self._visitor.vehicles.getVehicleInfo(vehicleID))
         if flags != INVALIDATE_OP.NONE:
@@ -185,7 +192,7 @@ class ArenaVehiclesListener(_Listener):
         if flags != INVALIDATE_OP.NONE:
             self._invokeListenersMethod('updateVehiclesStats', [(flags, vo)], self._arenaDP)
 
-    def __arena_onTeamKiller(self, vehicleID):
+    def __arena_onTeamKiller(self, vehicleID, value):
         flags, vo = self._arenaDP.updatePlayerStatus(vehicleID, self._visitor.vehicles.getVehicleInfo(vehicleID))
         if flags != INVALIDATE_OP.NONE:
             self._invokeListenersMethod('invalidatePlayerStatus', flags, vo, self._arenaDP)

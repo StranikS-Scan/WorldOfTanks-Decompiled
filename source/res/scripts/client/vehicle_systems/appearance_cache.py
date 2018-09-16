@@ -147,7 +147,7 @@ class _AppearanceCache(object):
         return appearance and appearance.isAlive == isAlive
 
     def __validate(self, cachedInfo, newInfo):
-        valid = cachedInfo.typeDescr.type.name == newInfo.typeDescr.type.name
+        valid = cachedInfo.typeDescr.type.name == newInfo.typeDescr.type.name and cachedInfo.outfitCD == newInfo.outfitCD
         return valid
 
 

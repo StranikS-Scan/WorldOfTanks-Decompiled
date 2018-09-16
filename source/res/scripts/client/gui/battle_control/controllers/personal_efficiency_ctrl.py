@@ -61,6 +61,18 @@ class _DamageEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     def isShellGold(self):
         return self.__damage.isShellGold()
 
+    def isProtectionZoneDamage(self, primary=True):
+        return self.__damage.isProtectionZone(primary=primary)
+
+    def isArtilleryEqDamage(self, primary=True):
+        return self.__damage.isArtilleryEq(primary=primary)
+
+    def isBomberEqDamage(self, primary=True):
+        return self.__damage.isBomberEq(primary=primary)
+
+    def isBombersDamage(self, primary=True):
+        return self.__damage.isBombers(primary=primary)
+
     def getShellType(self):
         return self.__damage.getShellType()
 
@@ -90,8 +102,46 @@ class _CriticalHitsEfficiencyInfo(_FeedbackEventEfficiencyInfo):
     def isShellGold(self):
         return self.__critsExtra.isShellGold()
 
+    def isProtectionZoneDamage(self, primary=True):
+        return self.__critsExtra.isProtectionZone(primary=primary)
+
+    def isArtilleryEqDamage(self, primary=True):
+        return self.__critsExtra.isArtilleryEq(primary=primary)
+
+    def isBomberEqDamage(self, primary=True):
+        return self.__critsExtra.isBomberEq(primary=primary)
+
+    def isBombersDamage(self, primary=True):
+        return self.__critsExtra.isBombers(primary=primary)
+
     def getShellType(self):
         return self.__critsExtra.getShellType()
+
+
+class _DestructibleDamagedEfficiencyInfo(_FeedbackEventEfficiencyInfo):
+    __slots__ = ('__damage',)
+
+    def __init__(self, etype, event):
+        super(_DestructibleDamagedEfficiencyInfo, self).__init__(etype, event)
+        self.__damage = event.getExtra()
+
+    def getDamage(self):
+        return self.__damage
+
+    def isProtectionZoneDamage(self):
+        return False
+
+    def isArtilleryEqDamage(self, primary=True):
+        return False
+
+    def isBomberEqDamage(self, primary=True):
+        return False
+
+    def isBombersDamage(self):
+        return False
+
+    def isShot(self):
+        return True
 
 
 _AGGREGATED_DAMAGE_EFFICIENCY_TYPES = (_ETYPE.DAMAGE,
@@ -103,6 +153,7 @@ _FEEDBACK_EVENT_TYPE_TO_PERSONAL_EFFICIENCY_TYPE = {_FET.PLAYER_DAMAGED_HP_ENEMY
  _FET.PLAYER_USED_ARMOR: (_ETYPE.BLOCKED_DAMAGE, _DamageEfficiencyInfo),
  _FET.ENEMY_DAMAGED_HP_PLAYER: (_ETYPE.RECEIVED_DAMAGE, _DamageEfficiencyInfo),
  _FET.ENEMY_DAMAGED_DEVICE_PLAYER: (_ETYPE.RECEIVED_CRITICAL_HITS, _CriticalHitsEfficiencyInfo),
+ _FET.DESTRUCTIBLE_DAMAGED: (_ETYPE.DAMAGE, _DestructibleDamagedEfficiencyInfo),
  _FET.PLAYER_ASSIST_TO_STUN_ENEMY: (_ETYPE.STUN, _DamageEfficiencyInfo)}
 
 def _createEfficiencyInfoFromFeedbackEvent(event):

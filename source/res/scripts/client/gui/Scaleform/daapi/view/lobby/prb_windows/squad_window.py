@@ -94,3 +94,15 @@ class EventSquadWindow(SquadWindow):
 
     def _getSquadViewAlias(self):
         return PREBATTLE_ALIASES.EVENT_SQUAD_VIEW_PY
+
+
+class EpicSquadWindow(SquadWindow):
+
+    def _getTitle(self):
+        return ''.join((i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD), i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_SQUAD_EPIC)))
+
+    def getPrbType(self):
+        return PREBATTLE_TYPE.EPIC
+
+    def _getSquadViewAlias(self):
+        return PREBATTLE_ALIASES.EPIC_SQUAD_VIEW_PY

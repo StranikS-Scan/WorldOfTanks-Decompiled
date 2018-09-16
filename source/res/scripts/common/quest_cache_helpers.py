@@ -4,6 +4,7 @@ import time
 from constants import EVENT_TYPE, IS_CLIENT
 from debug_utils import LOG_WARNING
 import quest_xml_source
+from soft_exception import SoftException
 if IS_CLIENT:
     from helpers import i18n
 else:
@@ -30,9 +31,9 @@ def readQuestsFromFile(filePath, eventType):
             info = node.info
             questID = info.get('id', None)
             if not questID:
-                raise Exception('questID is not set for a quest in {}, eventType: {}'.format(filePath, _getEventName(eventType)))
+                raise SoftException('questID is not set for a quest in {}, eventType: {}'.format(filePath, _getEventName(eventType)))
             if questID in questIDs:
-                raise Exception('duplicate questID: {} in {}, eventType: {}'.format(questID, filePath, _getEventName(eventType)))
+                raise SoftException('duplicate questID: {} in {}, eventType: {}'.format(questID, filePath, _getEventName(eventType)))
             questIDs.add(questID)
             questData = info.get('questClientData', None)
             if questData is None:

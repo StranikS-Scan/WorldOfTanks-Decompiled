@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/goodies/GoodieValue.py
+from soft_exception import SoftException
 from math import floor, ceil
 
 class GoodieValue(object):
@@ -11,23 +12,23 @@ class GoodieValue(object):
             self.value = int(value)
         else:
             if value < 0:
-                raise Exception('Bad goodie value <%s>' % value)
+                raise SoftException('Bad goodie value <%s>' % value)
             self.value = float(value) / 100
 
     def __lt__(self, other):
         if self.isAbsolute == other.isAbsolute:
             return self.value < other.value
-        raise Exception('Comparison of absolute and percent values')
+        raise SoftException('Comparison of absolute and percent values')
 
     def __gt__(self, other):
         if self.isAbsolute == other.isAbsolute:
             return self.value > other.value
-        raise Exception('Comparison of absolute and percent values')
+        raise SoftException('Comparison of absolute and percent values')
 
     def __eq__(self, other):
         if self.isAbsolute == other.isAbsolute:
             return self.value == other.value
-        raise Exception('Comparison of absolute and percent values')
+        raise SoftException('Comparison of absolute and percent values')
 
     @staticmethod
     def percent(value):
@@ -47,7 +48,7 @@ class GoodieValue(object):
         if self.isAbsolute:
             result = int(x) - self.value
             if result < 0:
-                raise Exception('Goodie is negative %d > %d' % (self.value, x))
+                raise SoftException('Goodie is negative %d > %d' % (self.value, x))
             return result
         else:
             return int(floor(x - float(x) * self.value))

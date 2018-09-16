@@ -29,35 +29,49 @@ _BATTLE_EVENT_TO_PLAYER_FEEDBACK_EVENT = {_BET.KILL: _FET.PLAYER_KILLED_ENEMY,
  _BET.STUN_ASSIST: _FET.PLAYER_ASSIST_TO_STUN_ENEMY,
  _BET.BASE_CAPTURE_POINTS: _FET.PLAYER_CAPTURED_BASE,
  _BET.BASE_CAPTURE_DROPPED: _FET.PLAYER_DROPPED_CAPTURE,
+ _BET.BASE_CAPTURE_BLOCKED: _FET.PLAYER_BLOCKED_CAPTURE,
  _BET.TANKING: _FET.PLAYER_USED_ARMOR,
  _BET.RECEIVED_DAMAGE: _FET.ENEMY_DAMAGED_HP_PLAYER,
  _BET.RECEIVED_CRIT: _FET.ENEMY_DAMAGED_DEVICE_PLAYER,
- _BET.TARGET_VISIBILITY: _FET.VEHICLE_VISIBILITY_CHANGED}
+ _BET.TARGET_VISIBILITY: _FET.VEHICLE_VISIBILITY_CHANGED,
+ _BET.ENEMY_SECTOR_CAPTURED: _FET.ENEMY_SECTOR_CAPTURED,
+ _BET.DESTRUCTIBLE_DAMAGED: _FET.DESTRUCTIBLE_DAMAGED,
+ _BET.DESTRUCTIBLE_DESTROYED: _FET.DESTRUCTIBLE_DESTROYED,
+ _BET.DESTRUCTIBLES_DEFENDED: _FET.DESTRUCTIBLES_DEFENDED,
+ _BET.DEFENDER_BONUS: _FET.DEFENDER_BONUS,
+ _BET.SMOKE_ASSIST: _FET.SMOKE_ASSIST,
+ _BET.INSPIRE_ASSIST: _FET.INSPIRE_ASSIST}
 _PLAYER_FEEDBACK_EXTRA_DATA_CONVERTERS = {_FET.PLAYER_DAMAGED_HP_ENEMY: _unpackDamage,
  _FET.PLAYER_ASSIST_TO_KILL_ENEMY: _unpackDamage,
  _FET.PLAYER_CAPTURED_BASE: _unpackInteger,
  _FET.PLAYER_DROPPED_CAPTURE: _unpackInteger,
+ _FET.PLAYER_BLOCKED_CAPTURE: _unpackInteger,
  _FET.PLAYER_USED_ARMOR: _unpackDamage,
  _FET.PLAYER_DAMAGED_DEVICE_ENEMY: _unpackCrits,
  _FET.ENEMY_DAMAGED_HP_PLAYER: _unpackDamage,
  _FET.ENEMY_DAMAGED_DEVICE_PLAYER: _unpackCrits,
  _FET.PLAYER_ASSIST_TO_STUN_ENEMY: _unpackDamage,
- _FET.VEHICLE_VISIBILITY_CHANGED: _unpackVisibility}
+ _FET.VEHICLE_VISIBILITY_CHANGED: _unpackVisibility,
+ _FET.DESTRUCTIBLE_DAMAGED: _unpackInteger,
+ _FET.DESTRUCTIBLES_DEFENDED: _unpackInteger,
+ _FET.SMOKE_ASSIST: _unpackDamage,
+ _FET.INSPIRE_ASSIST: _unpackDamage}
 
 def _getShellType(shellTypeID):
     return None if shellTypeID == NONE_SHELL_TYPE else SHELL_TYPES_LIST[shellTypeID]
 
 
 class _DamageExtra(object):
-    __slots__ = ('__damage', '__attackReasonID', '__isBurst', '__shellType', '__isShellGold')
+    __slots__ = ('__damage', '__attackReasonID', '__isBurst', '__shellType', '__isShellGold', '__secondaryAttackReasonID')
 
-    def __init__(self, damage=0, attackReasonID=0, isBurst=False, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False):
+    def __init__(self, damage=0, attackReasonID=0, isBurst=False, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=0):
         super(_DamageExtra, self).__init__()
         self.__damage = damage
         self.__attackReasonID = attackReasonID
         self.__isBurst = bool(isBurst)
         self.__shellType = _getShellType(shellTypeID)
         self.__isShellGold = bool(shellIsGold)
+        self.__secondaryAttackReasonID = secondaryAttackReasonID
 
     def getDamage(self):
         return self.__damage
@@ -86,8 +100,23 @@ class _DamageExtra(object):
     def isWorldCollision(self):
         return self.isAttackReason(ATTACK_REASON.WORLD_COLLISION)
 
+    def isProtectionZone(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isAttackReason(ATTACK_REASON.ARTILLERY_SECTOR) if primary else self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_SECTOR)
+
+    def isArtilleryEq(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.ARTILLERY_EQ) if primary else self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_EQ)
+
+    def isBomberEq(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.BOMBER_EQ) if primary else self.isSecondaryAttackReason(ATTACK_REASON.BOMBER_EQ)
+
+    def isBombers(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.BOMBERS) if primary else self.isSecondaryAttackReason(ATTACK_REASON.BOMBERS)
+
     def isAttackReason(self, attackReason):
         return ATTACK_REASONS[self.__attackReasonID] == attackReason
+
+    def isSecondaryAttackReason(self, attackReason):
+        return ATTACK_REASONS[self.__secondaryAttackReasonID] == attackReason
 
 
 class _VisibilityExtra(object):
@@ -106,14 +135,15 @@ class _VisibilityExtra(object):
 
 
 class _CritsExtra(object):
-    __slots__ = ('__critsCount', '__shellType', '__isShellGold', '__attackReasonID')
+    __slots__ = ('__critsCount', '__shellType', '__isShellGold', '__attackReasonID', '__secondaryAttackReasonID')
 
-    def __init__(self, critsCount=0, attackReasonID=0, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False):
+    def __init__(self, critsCount=0, attackReasonID=0, shellTypeID=NONE_SHELL_TYPE, shellIsGold=False, secondaryAttackReasonID=0):
         super(_CritsExtra, self).__init__()
         self.__critsCount = critsCount
         self.__attackReasonID = attackReasonID
         self.__shellType = _getShellType(shellTypeID)
         self.__isShellGold = bool(shellIsGold)
+        self.__secondaryAttackReasonID = secondaryAttackReasonID
 
     def getCritsCount(self):
         return self.__critsCount
@@ -135,6 +165,21 @@ class _CritsExtra(object):
 
     def isWorldCollision(self):
         return self.isAttackReason(ATTACK_REASON.WORLD_COLLISION)
+
+    def isProtectionZone(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isAttackReason(ATTACK_REASON.ARTILLERY_SECTOR) if primary else self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_PROTECTION) or self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_SECTOR)
+
+    def isArtilleryEq(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.ARTILLERY_EQ) if primary else self.isSecondaryAttackReason(ATTACK_REASON.ARTILLERY_EQ)
+
+    def isBomberEq(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.BOMBER_EQ) if primary else self.isSecondaryAttackReason(ATTACK_REASON.BOMBER_EQ)
+
+    def isBombers(self, primary=True):
+        return self.isAttackReason(ATTACK_REASON.BOMBERS) if primary else self.isSecondaryAttackReason(ATTACK_REASON.BOMBERS)
+
+    def isSecondaryAttackReason(self, attackReason):
+        return ATTACK_REASONS[self.__secondaryAttackReasonID] == attackReason
 
     def isAttackReason(self, attackReason):
         return ATTACK_REASONS[self.__attackReasonID] == attackReason

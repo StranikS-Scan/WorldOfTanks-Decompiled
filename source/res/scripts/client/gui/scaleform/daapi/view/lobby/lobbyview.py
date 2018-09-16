@@ -12,11 +12,12 @@ from gui.Scaleform.framework.managers.view_lifecycle_watcher import IViewLifecyc
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.PREBATTLE_ALIASES import PREBATTLE_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
+from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.shared import EVENT_BUS_SCOPE, events, g_eventBus
 from gui.shared.events import BootcampEvent
-from hangar_camera_common import CameraRelatedEvents
+from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from helpers import i18n, dependency, uniprof
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
@@ -46,9 +47,11 @@ class _LobbySubViewsLifecycleHandler(IViewLifecycleHandler):
      VIEW_ALIAS.LOBBY_RESEARCH,
      VIEW_ALIAS.LOBBY_TECHTREE,
      VIEW_ALIAS.BATTLE_QUEUE,
+     VIEW_ALIAS.BATTLE_STRONGHOLDS_QUEUE,
      VIEW_ALIAS.LOBBY_ACADEMY,
      RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS,
-     RANKEDBATTLES_ALIASES.RANKED_BATTLES_BROWSER_VIEW)
+     RANKEDBATTLES_ALIASES.RANKED_BATTLES_BROWSER_VIEW,
+     EPICBATTLES_ALIASES.EPIC_BATTLES_SKILL_ALIAS)
 
     def __init__(self):
         super(_LobbySubViewsLifecycleHandler, self).__init__([ ViewKey(alias) for alias in self.__SUB_VIEWS ])
@@ -114,7 +117,8 @@ class LobbyView(LobbyPageMeta):
         self.__viewLifecycleWatcher.start(self.app.containerManager, [viewLifecycleHandler])
         self.igrCtrl.onIgrTypeChanged += self.__onIgrTypeChanged
         battlesCount = self.itemsCache.items.getAccountDossier().getTotalStats().getBattlesCount()
-        self.lobbyContext.updateBattlesCount(battlesCount)
+        epicBattlesCount = self.itemsCache.items.getAccountDossier().getEpicBattleStats().getBattlesCount()
+        self.lobbyContext.updateBattlesCount(battlesCount, epicBattlesCount)
         self.fireEvent(events.GUICommonEvent(events.GUICommonEvent.LOBBY_VIEW_LOADED))
         self.bwProto.voipController.invalidateMicrophoneMute()
 

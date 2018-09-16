@@ -129,6 +129,9 @@ class HeroCardFormatter(ActionCardFormatter):
 
 class NormalCardFormatter(ActionCardFormatter):
 
+    def _getHeaderData(self):
+        return self.discount.getAutoDescription(useBigIco=False, forNormalCard=True)
+
     def _getExtras(self, *args, **kwargs):
         return {'linkage': STORE_CONSTANTS.ACTION_CARD_NORMAL_LINKAGE}
 

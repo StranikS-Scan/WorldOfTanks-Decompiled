@@ -9,6 +9,7 @@ import Math
 import ResMgr
 import WWISE
 from debug_utils import LOG_DEBUG, LOG_ERROR
+import game_mode_emulator
 g_lightGenModeEnabled = False
 g_currentMoveRate = 0.5
 g_gui = None
@@ -155,7 +156,8 @@ def launch(spaceName):
     guitext = 'Client Lighting Generation Mode\n  entering: %s' % spaceName
     _displayGUI(guitext)
     spaceID = BigWorld.createSpace()
-    BigWorld.addSpaceGeometryMapping(spaceID, None, spaceName)
+    visibilityMask = game_mode_emulator.gameModeVisibilityMask()
+    BigWorld.addSpaceGeometryMapping(spaceID, None, spaceName, visibilityMask)
     _loadCameraTransforms()
     camera = BigWorld.FreeCamera()
     camera.spaceID = spaceID

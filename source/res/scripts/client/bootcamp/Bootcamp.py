@@ -6,7 +6,7 @@ from collections import namedtuple
 import BigWorld
 import BattleReplay
 import TriggersManager
-import SoundGroups
+import WWISE
 import MusicControllerWWISE as MC
 from account_helpers.AccountSettings import CURRENT_VEHICLE, AccountSettings
 from account_helpers.settings_core.settings_constants import BATTLE_EVENTS
@@ -284,9 +284,7 @@ class Bootcamp(EventSystemEntity):
             self.__chapter = Chapter()
         if self.__gui is None:
             self.__gui = BootcampGUI()
-        for bankName in self.BOOTCAMP_SOUND_BANKS:
-            SoundGroups.g_instance.loadSoundBank(bankName)
-
+        WWISE.loadSoundPool(self.BOOTCAMP_SOUND_BANKS, 14, 'Bootcamp')
         self.sessionProvider.getCtx().setPlayerFullNameFormatter(_BCNameFormatter())
         return
 
@@ -321,9 +319,7 @@ class Bootcamp(EventSystemEntity):
             self.__replayController.fini()
             self.__replayController = None
         MC.g_musicController.stopAmbient(True)
-        for bankName in self.BOOTCAMP_SOUND_BANKS:
-            SoundGroups.g_instance.unLoadSoundBank(bankName)
-
+        WWISE.unloadSoundPool()
         self.sessionProvider.getCtx().resetPlayerFullNameFormatter()
         return
 
@@ -550,6 +546,9 @@ class Bootcamp(EventSystemEntity):
 
     def isResearchFreeLesson(self):
         return self.getLessonNum() >= self.getContextIntParameter('researchFreeLesson')
+
+    def isEnableDamageIcon(self):
+        return self.getLessonNum() >= self.getContextIntParameter('enableDamageIconLesson')
 
     def checkBigConsumablesIconsLesson(self):
         return self.__lessonId == self.getContextIntParameter('researchSecondVehicleLesson')

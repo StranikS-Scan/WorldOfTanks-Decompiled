@@ -13,9 +13,7 @@ from vehicle_systems.components.vehicle_shadow_manager import VehicleShadowManag
 from helpers import gEffectsDisabled
 import Vehicular
 import DataLinks
-from vehicle_systems.tankStructure import TankPartNames
-from vehicle_systems.tankStructure import TankNodeNames
-from vehicle_systems.tankStructure import TankPartIndexes
+from vehicle_systems.tankStructure import TankPartNames, TankNodeNames, TankPartIndexes
 TANK_FRICTION_EVENT = 'collision_tank_friction_pc'
 VEHICLE_PRIORITY_GROUP = 1
 
@@ -45,7 +43,7 @@ class _CompoundAssembler(VehicleAssemblerAbstract):
 
     def prerequisites(self, typeDescriptor, vID, health=1, isCrewActive=True, isTurretDetached=False, outfitCD=''):
         prereqs = self.__appearance.prerequisites(typeDescriptor, vID, health, isCrewActive, isTurretDetached, outfitCD)
-        compoundAssembler = prepareCompoundAssembler(typeDescriptor, self.__appearance.damageState.modelState, BigWorld.player().spaceID, isTurretDetached)
+        compoundAssembler = prepareCompoundAssembler(typeDescriptor, self.__appearance.modelsSetParams, BigWorld.player().spaceID, isTurretDetached)
         if not isTurretDetached:
             bspModels = ((TankPartNames.getIdx(TankPartNames.CHASSIS), typeDescriptor.chassis.hitTester.bspModelName),
              (TankPartNames.getIdx(TankPartNames.HULL), typeDescriptor.hull.hitTester.bspModelName),
@@ -114,13 +112,14 @@ class PanzerAssemblerWWISE(_CompoundAssembler):
                 appearance.peripheralsController = PeripheralsController()
         self.__createTrackCrashControl(appearance)
         appearance.highlighter = Highlighter()
-        appearance.shadowManager = VehicleShadowManager(BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged)
         compoundModel = appearance.compoundModel
         isLodTopPriority = isPlayer
         lodCalcInst = Vehicular.LodCalculator(DataLinks.linkMatrixTranslation(appearance.compoundModel.matrix), True, VEHICLE_PRIORITY_GROUP, isLodTopPriority)
         appearance.lodCalculator = lodCalcInst
         lodLink = DataLinks.createFloatLink(lodCalcInst, 'lodDistance')
         lodStateLink = lodCalcInst.lodStateLink
+        matrixBinding = BigWorld.player().consistentMatrices.onVehicleMatrixBindingChanged
+        appearance.shadowManager = VehicleShadowManager(compoundModel, matrixBinding)
         isDamaged = appearance.damageState.isCurrentModelDamaged
         if not isDamaged:
             self.__assembleNonDamagedOnly(appearance, isPlayer, lodLink, lodStateLink)

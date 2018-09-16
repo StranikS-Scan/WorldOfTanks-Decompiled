@@ -78,6 +78,10 @@
     </scene>
     <scene>	Research	  <post-effects>
         <set-gui-item-criteria>	ResearchItemNodeCriteria	</set-gui-item-criteria>
+        <close-view>
+          <type>	topWindow	</type>
+          <alias>	vehicleBuyWindow	</alias>
+        </close-view>
       </post-effects>
       <runtime-effects>
         <request-exclusive-hint>	ResearchItemNode	  <condition>

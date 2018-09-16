@@ -7,6 +7,7 @@ from constants import ITEM_DEFS_PATH
 from debug_utils import LOG_CURRENT_EXCEPTION
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from skeletons.gui.shared.utils.requesters import IBadgesRequester
+from soft_exception import SoftException
 _BADGES_XML_PATH = ITEM_DEFS_PATH + 'badges.xml'
 
 def _readBadges(xmlPath):
@@ -16,9 +17,9 @@ def _readBadges(xmlPath):
         try:
             item = resource_helper.readItem(ctx, subSection, name='badge')
             if not item.name:
-                raise Exception('No name for badge is provided', item.name)
+                raise SoftException('No name for badge is provided', item.name)
             if 'id' not in item.value:
-                raise Exception('No ID for badge is provided', item.value)
+                raise SoftException('No ID for badge is provided', item.value)
             value = dict(item.value)
             if 'weight' not in value:
                 value['weight'] = -1.0

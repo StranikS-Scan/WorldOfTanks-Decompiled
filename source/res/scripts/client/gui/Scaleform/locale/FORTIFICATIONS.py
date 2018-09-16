@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/locale/FORTIFICATIONS.py
-
+from debug_utils import LOG_WARNING
 
 class FORTIFICATIONS(object):
     SORTIE_INTROVIEW_TITLE = '#fortifications:sortie/introView/title'
@@ -110,3 +110,21 @@ class FORTIFICATIONS(object):
     ORDERS_TACTICAL_TRAINING_2_0 = '#fortifications:orders/TACTICAL_TRAINING_2_0'
     ORDERS_ADDITIONAL_BRIEFING_2_0 = '#fortifications:orders/ADDITIONAL_BRIEFING_2_0'
     ORDERS_MILITARY_EXERCISES_2_0 = '#fortifications:orders/MILITARY_EXERCISES_2_0'
+    BATTLEQUEUE_YOURTEAM = '#fortifications:battleQueue/yourTeam'
+    BATTLEQUEUE_POSITION = '#fortifications:battleQueue/position'
+    BATTLEQUEUE_CLANPOSITION = '#fortifications:battleQueue/clanPosition'
+    BATTLEQUEUE_SEARCHENEMY = '#fortifications:battleQueue/searchEnemy'
+    BATTLEQUEUE_WAITBATTLE = '#fortifications:battleQueue/waitBattle'
+    STRONGHOLDDIRECTION_ENUM = (STRONGHOLDDIRECTION_A,
+     STRONGHOLDDIRECTION_B,
+     STRONGHOLDDIRECTION_C,
+     STRONGHOLDDIRECTION_D)
+
+    @classmethod
+    def getDirection(cls, direction):
+        outcome = '#fortifications:strongholddirection/{}'.format(direction)
+        if outcome not in cls.STRONGHOLDDIRECTION_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome

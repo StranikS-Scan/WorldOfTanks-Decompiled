@@ -6,6 +6,7 @@ import os
 import base64
 import BigWorld
 import constants
+from soft_exception import SoftException
 
 class SimpleCache(object):
 
@@ -34,7 +35,7 @@ class SimpleCache(object):
 
     def getFileName(self):
         if self.__account is None:
-            raise UserWarning('Account is not defined')
+            raise SoftException('Account is not defined')
         return cacheFileName(self.__account, self.__cacheType, self.__cacheName)
 
     def get(self):

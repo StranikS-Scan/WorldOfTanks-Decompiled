@@ -46,6 +46,9 @@ class WeakMethod(ref):
             return ref.__ne__(self, other) or self._func_ref != other._func_ref
         return True
 
+    def __repr__(self):
+        return self._func_ref.__repr__()
+
     __hash__ = ref.__hash__
 
 
@@ -66,3 +69,6 @@ class WeakMethodProxy(object):
 
     def __hash__(self):
         return self._methodRef.__hash__()
+
+    def __repr__(self):
+        return self._methodRef.__repr__()

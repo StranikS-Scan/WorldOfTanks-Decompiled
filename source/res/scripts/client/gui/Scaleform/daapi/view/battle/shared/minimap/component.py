@@ -106,6 +106,9 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
     def getPlugins(self):
         return self.__plugins
 
+    def getComponent(self):
+        return self.__component
+
     def _populate(self):
         super(MinimapComponent, self)._populate()
         sessionProvider = dependency.instance(IBattleSessionProvider)
@@ -143,14 +146,28 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
             setup['teleport'] = plugins.TeleportPlugin
         return setup
 
+    def _createFlashComponent(self):
+        return GUI.WGMinimapFlashAS3(self.app.movie, settings.MINIMAP_COMPONENT_PATH)
+
+    def _getMinimapSize(self):
+        return minimap_utils.MINIMAP_SIZE
+
+    def _getFlashName(self):
+        pass
+
+    def _getMinimapTexture(self, arenaVisitor):
+        return _IMAGE_PATH_FORMATTER.format(arenaVisitor.type.getMinimapTexture())
+
+    def _processMinimapSize(self, minSize, maxSize):
+        pass
+
     def __createComponent(self, arenaVisitor):
-        self.__component = GUI.WGMinimapFlashAS3(self.app.movie, settings.MINIMAP_COMPONENT_PATH)
+        self.__component = self._createFlashComponent()
         if self.__component is None:
             return False
         else:
             self.__component.wg_inputKeyMode = 2
-            self.app.component.addChild(self.__component, 'minimap')
-            self.__component.mapSize = Math.Vector2(minimap_utils.MINIMAP_SIZE)
+            self.app.component.addChild(self.__component, self._getFlashName())
             bl, tr = arenaVisitor.type.getBoundingBox()
             if arenaVisitor.gui.isBootcampBattle():
                 topRightX = tr[0]
@@ -166,7 +183,9 @@ class MinimapComponent(MinimapMeta, IMinimapComponent):
                     bl = (bottomLeftY, bottomLeftY)
                     tr = (topRightY, topRightY)
             self.__component.setArenaBB(bl, tr)
-            self.as_setBackgroundS(_IMAGE_PATH_FORMATTER.format(arenaVisitor.type.getMinimapTexture()))
+            self._processMinimapSize(bl, tr)
+            self.__component.mapSize = Math.Vector2(self._getMinimapSize())
+            self.as_setBackgroundS(self._getMinimapTexture(arenaVisitor))
             return True
 
     def __destroyComponent(self):

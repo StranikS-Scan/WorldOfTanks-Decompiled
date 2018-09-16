@@ -14,7 +14,7 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
     VEH_DATA = namedtuple('VEH_DATA', ('compDescr', 'descriptor', 'invID', 'repair', 'crew', 'lock', 'settings', 'shells', 'shellsLayout', 'eqs', 'eqsLayout'))
     ITEM_DATA = namedtuple('ITEM_DATA', ('compDescr', 'descriptor', 'count'))
     TMAN_DATA = namedtuple('TMAN_DATA', ('compDescr', 'descriptor', 'vehicle', 'invID'))
-    OUTFIT_DATA = namedtuple('OUTFIT_DATA', ('compDescr', 'isEnabled'))
+    OUTFIT_DATA = namedtuple('OUTFIT_DATA', ('compDescr', 'flags'))
 
     def __init__(self):
         super(InventoryRequester, self).__init__()
@@ -160,8 +160,8 @@ class InventoryRequester(AbstractSyncDataRequester, IInventoryRequester):
             vehicleOutfits = outfitsData.get(intCD, {})
             if season not in vehicleOutfits:
                 return None
-            compDescr, isEnabled = vehicleOutfits.get(season)
-            item = cache[intCD, season] = self.OUTFIT_DATA(compDescr, isEnabled)
+            compDescr, flags = vehicleOutfits.get(season)
+            item = cache[intCD, season] = self.OUTFIT_DATA(compDescr, flags)
             return item
 
     def __getTankmenData(self, inventoryID=None):

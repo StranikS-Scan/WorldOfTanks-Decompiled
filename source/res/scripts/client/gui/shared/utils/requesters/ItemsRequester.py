@@ -257,7 +257,7 @@ class RESEARCH_CRITERIA(object):
 class ItemsRequester(IItemsRequester):
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
-    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges):
+    def __init__(self, inventory, stats, dossiers, goodies, shop, recycleBin, vehicleRotation, ranked, badges, epicMetaGame):
         self.__inventory = inventory
         self.__stats = stats
         self.__dossiers = dossiers
@@ -267,6 +267,7 @@ class ItemsRequester(IItemsRequester):
         self.__recycleBin = recycleBin
         self.__ranked = ranked
         self.__badges = badges
+        self.__epicMetaGame = epicMetaGame
         self.__itemsCache = defaultdict(dict)
         self.__vehCustomStateCache = defaultdict(dict)
 
@@ -306,6 +307,10 @@ class ItemsRequester(IItemsRequester):
     def badges(self):
         return self.__badges
 
+    @property
+    def epicMetaGame(self):
+        return self.__epicMetaGame
+
     @async
     @process
     def request(self, callback=None):
@@ -333,10 +338,13 @@ class ItemsRequester(IItemsRequester):
         Waiting.show('download/badges')
         yield self.__badges.request()
         Waiting.hide('download/badges')
+        Waiting.show('download/epicMetaGame')
+        yield self.epicMetaGame.request()
+        Waiting.hide('download/epicMetaGame')
         callback(self)
 
     def isSynced(self):
-        return self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced()
+        return (self.__stats.isSynced() and self.__inventory.isSynced() and self.__recycleBin.isSynced() and self.__shop.isSynced() and self.__dossiers.isSynced() and self.__goodies.isSynced() and self.__vehicleRotation.isSynced() and self.ranked.isSynced(), self.epicMetaGame.isSynced())
 
     @async
     @process
@@ -383,13 +391,14 @@ class ItemsRequester(IItemsRequester):
         self.__recycleBin.clear()
         self.__ranked.clear()
         self.__badges.clear()
+        self.epicMetaGame.clear()
 
     def invalidateCache(self, diff=None):
         invalidate = defaultdict(set)
         if diff is None:
             LOG_DEBUG('Gui items cache full invalidation')
             for itemTypeID, cache in self.__itemsCache.iteritems():
-                if itemTypeID not in (GUI_ITEM_TYPE.ACCOUNT_DOSSIER, GUI_ITEM_TYPE.VEHICLE_DOSSIER):
+                if itemTypeID not in (GUI_ITEM_TYPE.ACCOUNT_DOSSIER, GUI_ITEM_TYPE.VEHICLE_DOSSIER, GUI_ITEM_TYPE.BATTLE_ABILITY):
                     cache.clear()
 
         else:

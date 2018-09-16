@@ -14,6 +14,7 @@ from messenger_common_chat2 import BATTLE_CHAT_COMMANDS_BY_NAMES
 from messenger_common_chat2 import MESSENGER_ACTION_IDS as _ACTIONS
 from messenger_common_chat2 import messageArgs, BATTLE_CHAT_COMMANDS
 from skeletons.gui.battle_session import IBattleSessionProvider
+import Math
 _TARGETED_CMD_NAMES = ('ATTACKENEMY', 'TURNBACK', 'FOLLOWME', 'HELPMEEX', 'SUPPORTMEWITHFIRE', 'STOP')
 _PUBLIC_CMD_NAMES = ('ATTACKENEMY', 'SUPPORTMEWITHFIRE', 'POSITIVE', 'NEGATIVE', 'RELOADING_READY', 'RELOADING_UNAVAILABLE', 'HELPME', 'RELOADINGGUN', 'RELOADING_CASSETE', 'RELOADING_READY_CASSETE')
 _PRIVATE_CMD_NAMES = ('TURNBACK', 'FOLLOWME', 'HELPMEEX', 'STOP')
@@ -21,6 +22,15 @@ _SHOW_MARKER_CMD_NAMES = ('ATTACKENEMY', 'SUPPORTMEWITHFIRE')
 _ENEMY_TARGET_CMD_NAMES = ('ATTACKENEMY', 'SUPPORTMEWITHFIRE')
 _MINIMAP_CMD_NAMES = ('ATTENTIONTOCELL', 'SPG_AIM_AREA')
 _SPG_AIM_CMD_NAMES = ('SPG_AIM_AREA', 'ATTACKENEMY')
+_EPIC_GLOBAL_CMD_NAMES = {'EPIC_GLOBAL_SAVETANKS_ATK',
+ 'EPIC_GLOBAL_SAVETANKS_DEF',
+ 'EPIC_GLOBAL_TIME_ATK',
+ 'EPIC_GLOBAL_TIME_DEF',
+ 'EPIC_GLOBAL_HQ_ATK',
+ 'EPIC_GLOBAL_HQ_DEF',
+ 'EPIC_GLOBAL_WEST',
+ 'EPIC_GLOBAL_CENTER',
+ 'EPIC_GLOBAL_EAST'}
 _TARGETED_CMD_IDS = []
 _PUBLIC_CMD_IDS = []
 _PRIVATE_CMD_IDS = []
@@ -28,6 +38,10 @@ _SHOW_MARKER_CMD_IDS = []
 _ENEMY_TARGET_CMD_IDS = []
 _MINIMAP_CMD_IDS = []
 _SPG_AIM_CMD_IDS = []
+_MINIMAP_MARK_POSITION_ID = 0
+_MINIMAP_MARK_OBJECTIVE_IDS = []
+_MINIMAP_MARK_BASE_IDS = []
+_GLOBAL_MESSAGE_IDS = []
 for cmd in BATTLE_CHAT_COMMANDS:
     cmdID = cmd.id
     cmdName = cmd.name
@@ -45,6 +59,14 @@ for cmd in BATTLE_CHAT_COMMANDS:
         _MINIMAP_CMD_IDS.append(cmdID)
     if cmdName in _SPG_AIM_CMD_NAMES:
         _SPG_AIM_CMD_IDS.append(cmdID)
+    if cmdName == 'ATTENTIONTOPOSITION':
+        _MINIMAP_MARK_POSITION_ID = cmdID
+    if cmdName in ('ATTENTIONTOOBJECTIVE_ATK', 'ATTENTIONTOOBJECTIVE_DEF'):
+        _MINIMAP_MARK_OBJECTIVE_IDS.append(cmdID)
+    if cmdName in ('ATTENTIONTOBASE_ATK', 'ATTENTIONTOBASE_DEF'):
+        _MINIMAP_MARK_BASE_IDS.append(cmdID)
+    if cmdName in _EPIC_GLOBAL_CMD_NAMES:
+        _GLOBAL_MESSAGE_IDS.append(cmdID)
 
 class _OutCmdDecorator(OutChatCommand):
     __slots__ = ('_name',)
@@ -137,8 +159,40 @@ class _ReceivedCmdDecorator(ReceivedBattleChatCommand):
     def isSPGAimCommand(self):
         return self._commandID in _SPG_AIM_CMD_IDS
 
+    def getMarkedPosition(self):
+        return Math.Vector3(self._protoData['int32Arg1'], 0, self._protoData['floatArg1'])
+
+    def getMarkedObjective(self):
+        return self._protoData['int32Arg1']
+
+    def getMarkedBase(self):
+        return self._protoData['int32Arg1']
+
+    def getMarkedBaseName(self):
+        return self._protoData['strArg1']
+
     def isOnMinimap(self):
         return self._commandID in _MINIMAP_CMD_IDS
+
+    def isOnEpicBattleMinimap(self):
+        cmdArray = [_MINIMAP_MARK_POSITION_ID,
+         _MINIMAP_MARK_OBJECTIVE_IDS[0],
+         _MINIMAP_MARK_OBJECTIVE_IDS[1],
+         _MINIMAP_MARK_BASE_IDS[0],
+         _MINIMAP_MARK_BASE_IDS[1]]
+        return self._commandID in cmdArray
+
+    def isMarkedPosition(self):
+        return self._commandID == _MINIMAP_MARK_POSITION_ID
+
+    def isMarkedObjective(self):
+        return self._commandID in _MINIMAP_MARK_OBJECTIVE_IDS
+
+    def isMarkedBase(self):
+        return self._commandID in _MINIMAP_MARK_BASE_IDS
+
+    def isEpicGlobalMessage(self):
+        return self._commandID in _GLOBAL_MESSAGE_IDS
 
     def hasTarget(self):
         return self._commandID in _TARGETED_CMD_IDS
@@ -195,6 +249,12 @@ class BattleCommandFactory(IBattleCommandFactory):
             decorator = _OutCmdDecorator(name)
         return decorator
 
+    def createByGlobalMsgName(self, actionID, baseName=''):
+        decorator = None
+        if _GLOBAL_MESSAGE_IDS:
+            decorator = _OutCmdDecorator(actionID, messageArgs(strArg1=baseName))
+        return decorator
+
     def createByNameTarget(self, name, targetID):
         decorator = None
         if name in BATTLE_CHAT_COMMANDS_BY_NAMES:
@@ -203,6 +263,26 @@ class BattleCommandFactory(IBattleCommandFactory):
 
     def createByCellIdx(self, cellIdx):
         return _OutCmdDecorator('ATTENTIONTOCELL', messageArgs(int32Arg1=cellIdx))
+
+    def createByPosition(self, position):
+        decorator = None
+        if _MINIMAP_MARK_POSITION_ID:
+            decorator = _OutCmdDecorator('ATTENTIONTOPOSITION', messageArgs(int32Arg1=position.x, floatArg1=position.z))
+        return decorator
+
+    def createByObjectiveIndex(self, idx, isAtk):
+        decorator = None
+        key = 'ATTENTIONTOOBJECTIVE_ATK' if isAtk else 'ATTENTIONTOOBJECTIVE_DEF'
+        if _MINIMAP_MARK_OBJECTIVE_IDS:
+            decorator = _OutCmdDecorator(key, messageArgs(int32Arg1=idx))
+        return decorator
+
+    def createByBaseIndex(self, idx, name, isAtk):
+        decorator = None
+        key = 'ATTENTIONTOBASE_ATK' if isAtk else 'ATTENTIONTOBASE_DEF'
+        if _MINIMAP_MARK_BASE_IDS:
+            decorator = _OutCmdDecorator(key, messageArgs(int32Arg1=idx, strArg1=name))
+        return decorator
 
     def create4Reload(self, isCassetteClip, timeLeft, quantity):
         name = 'RELOADINGGUN'

@@ -46,7 +46,9 @@ class IntSettingsRequester(object):
      'FEEDBACK_DAMAGE_LOG': 83,
      'FEEDBACK_BATTLE_EVENTS': 84,
      'FEEDBACK_BORDER_MAP': 85,
-     'UI_STORAGE': 86}
+     'UI_STORAGE': 86,
+     'EPICBATTLE_CAROUSEL_FILTER_1': 87,
+     'EPICBATTLE_CAROUSEL_FILTER_2': 88}
 
     def __init__(self):
         self.__cache = dict()

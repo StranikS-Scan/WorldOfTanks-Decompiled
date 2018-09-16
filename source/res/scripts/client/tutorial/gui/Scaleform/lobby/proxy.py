@@ -21,6 +21,7 @@ from tutorial.gui import GUIProxy, GUI_EFFECT_NAME
 from tutorial.gui.Scaleform.items_manager import ItemsManager
 from tutorial.gui.Scaleform.effects_player import GUIEffectScope
 from gui.app_loader import sf_lobby
+from soft_exception import SoftException
 _TEvent = events.TutorialEvent
 _EventClassByTriggerType = {TUTORIAL_TRIGGER_TYPES.CLICK_TYPE: (ClickEvent, 'Player has clicked'),
  TUTORIAL_TRIGGER_TYPES.CLICK_OUTSIDE_TYPE: (ClickOutsideEvent, 'Player has clicked outside'),
@@ -48,10 +49,10 @@ class SfLobbyProxy(GUIProxy):
         return None
 
     def getViewSettings(self):
-        raise Exception('Routine getViewSettings must be implemented')
+        raise SoftException('Routine getViewSettings must be implemented')
 
     def getViewsAliases(self):
-        raise Exception('Routine getViewsAliases must be implemented')
+        raise SoftException('Routine getViewsAliases must be implemented')
 
     def invokeCommand(self, command):
         self._commands.invoke(None, command)

@@ -27,6 +27,7 @@ from gui.shared.formatters import text_styles
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.server_events import IEventsCache
+from soft_exception import SoftException
 _EventsBlockData = namedtuple('EventsBlockData', 'filteredCount totalCount blockData')
 _MAIN_QUEST_AWARDS_COUNT = 6
 _BIG_TOKENS_TRESHOLD = 2
@@ -44,7 +45,7 @@ def getGroupPackerByContextID(contextID, proxy):
             group = groups.get(contextID)
             if group:
                 if group.isMarathon():
-                    return _MissionsGroupQuestsBlockInfo(group)
+                    return _MarathonQuestsBlockInfo(group)
                 return _GroupedEventsBlockInfo(group)
         return
 
@@ -187,22 +188,13 @@ class GroupedEventsBlocksFinder(_EventsBlockBuilder):
         raise NotImplementedError
 
 
-class MissionsGroupsFinder(GroupedEventsBlocksFinder):
+class MarathonsGroupsFinder(GroupedEventsBlocksFinder):
 
     def _createGroupedEventsBlock(self, group):
-        return _MissionsGroupQuestsBlockInfo(group)
+        return _MarathonQuestsBlockInfo(group)
 
     def _getEventsGroups(self):
         return self.eventsCache.getGroups(filterFunc=lambda g: g.isMarathon())
-
-
-class MarathonsDumbFinder(GroupedEventsBlocksFinder):
-
-    def _createGroupedEventsBlock(self, group):
-        return []
-
-    def _getEventsGroups(self):
-        return {}
 
 
 class QuestsGroupsFinder(GroupedEventsBlocksFinder):
@@ -380,7 +372,7 @@ class _GroupedEventsBlockInfo(_MinimizableEventsBlockInfo):
                     'visible': linkedActionID is not None}}
 
     def getDetailedTitle(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _getDescrBlock(self):
         minStartTime = min([ q.getStartTime() for q in self._suitableEvents ])
@@ -423,20 +415,20 @@ class _GroupedQuestsBlockInfo(_GroupedEventsBlockInfo):
         return data
 
 
-class _MissionsGroupQuestsBlockInfo(_GroupedEventsBlockInfo):
+class _MarathonQuestsBlockInfo(_GroupedEventsBlockInfo):
 
     def __init__(self, group):
-        super(_MissionsGroupQuestsBlockInfo, self).__init__(group)
+        super(_MarathonQuestsBlockInfo, self).__init__(group)
         self._mainQuest = None
         return
 
     def clear(self):
         self._mainQuest = None
-        super(_MissionsGroupQuestsBlockInfo, self).clear()
+        super(_MarathonQuestsBlockInfo, self).clear()
         return
 
     def getDetailedTitle(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _findEvents(self, srvEvents):
         suitableEvents = self._group.getGroupContent(srvEvents)
@@ -454,7 +446,7 @@ class _MissionsGroupQuestsBlockInfo(_GroupedEventsBlockInfo):
          'bodyLinkage': QUESTS_ALIASES.MISSION_PACK_MARATHON_BODY_LINKAGE}
 
     def _getDescrBlock(self):
-        data = super(_MissionsGroupQuestsBlockInfo, self)._getDescrBlock()
+        data = super(_MarathonQuestsBlockInfo, self)._getDescrBlock()
         if self._mainQuest:
             data.update({'descr': text_styles.main(self._mainQuest.getDescription())})
         return data
@@ -511,7 +503,7 @@ class _UngroupedQuestsBlockInfo(_MinimizableEventsBlockInfo):
         return {'title': self.getTitle()}
 
     def getDetailedTitle(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     @classmethod
     def _getGuiLinkages(cls):
@@ -555,7 +547,7 @@ class _MotiveQuestsBlockInfo(_MinimizableEventsBlockInfo):
         return {'title': self.getTitle()}
 
     def getDetailedTitle(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     @classmethod
     def _getGuiLinkages(cls):
@@ -594,7 +586,7 @@ class _VehicleQuestsBlockInfo(_EventsBlockInfo):
          'tankInfo': tankInfo}
 
     def getDetailedTitle(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _findEvents(self, srvEvents):
         return filter(self.__applyFilter, srvEvents.itervalues())
@@ -634,16 +626,16 @@ class _ElenBlockInfo(_EventsBlockInfo):
         return {'title': self._event.getName()}
 
     def getTitle(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def getDetailedTitle(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def buildEventsBlockData(self, srvEvents, filterFunc):
         return _EventsBlockData(1, 1, self._getVO())
 
     def _findEvents(self, srvEvents):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _getHeaderData(self):
         eventInfo = EventHeader(self._event, self._playerData)

@@ -54,7 +54,7 @@ class _SquadBonusInfo(object):
 
 
 class _PersonalAvatarInfo(object):
-    __slots__ = ('__accountDBID', '__clanDBID', '__team', '__isPrematureLeave', '__fairplayViolations', '__squadBonusInfo', '__winnerIfDraw', '__eligibleForCrystalRewards')
+    __slots__ = ('__accountDBID', '__clanDBID', '__team', '__isPrematureLeave', '__fairplayViolations', '__squadBonusInfo', '__winnerIfDraw', '__eligibleForCrystalRewards', '__extInfo')
 
     def __init__(self, accountDBID=0, clanDBID=0, team=0, isPrematureLeave=False, fairplayViolations=None, squadBonusInfo=None, winnerIfDraw=0, eligibleForCrystalRewards=False, **kwargs):
         super(_PersonalAvatarInfo, self).__init__()
@@ -66,6 +66,8 @@ class _PersonalAvatarInfo(object):
         self.__fairplayViolations = shared.FairplayViolationsInfo(*(fairplayViolations or ()))
         self.__squadBonusInfo = _SquadBonusInfo(**(squadBonusInfo or {}))
         self.__winnerIfDraw = winnerIfDraw
+        self.__extInfo = kwargs.get('ext', None)
+        return
 
     @property
     def accountDBID(self):
@@ -90,6 +92,10 @@ class _PersonalAvatarInfo(object):
     @property
     def eligibleForCrystalRewards(self):
         return self.__eligibleForCrystalRewards
+
+    @property
+    def extensionInfo(self):
+        return self.__extInfo
 
     def getPersonalSquadFlags(self, vehicles):
         vehicleID = vehicles.getVehicleID(self.__accountDBID)
@@ -172,7 +178,7 @@ class _FreeXPReplayRecords(records.ReplayRecords):
 
 
 class _EconomicsRecordsChains(object):
-    __slots__ = ('_baseCredits', '_premiumCredits', '_goldRecords', '_autoRecords', '_baseXP', '_premiumXP', '_baseFreeXP', '_premiumFreeXP', '_fortResource', '_crystal', '_crystalDetails')
+    __slots__ = ('_baseCredits', '_premiumCredits', '_goldRecords', '_autoRecords', '_baseXP', '_premiumXP', '_baseFreeXP', '_premiumFreeXP', '_fortResource', '_crystal', '_crystalDetails', '_zeroEarnings')
 
     def __init__(self):
         super(_EconomicsRecordsChains, self).__init__()
@@ -186,9 +192,13 @@ class _EconomicsRecordsChains(object):
         self._premiumFreeXP = records.RecordsIterator()
         self._crystal = records.RecordsIterator()
         self._crystalDetails = []
+        self._zeroEarnings = False
 
     def getBaseCreditsRecords(self):
         return self._baseCredits
+
+    def isZeroEarnings(self):
+        return self._zeroEarnings
 
     def getPremiumCreditsRecords(self):
         return self._premiumCredits
@@ -219,6 +229,10 @@ class _EconomicsRecordsChains(object):
 
     def addResults(self, _, results):
         connector = ValueReplayConnector(VEH_FULL_RESULTS, results)
+        self._zeroEarnings = not any((results.get('credits'),
+         results.get('gold'),
+         results.get('freeXP'),
+         results.get('crystal')))
         self._addMoneyResults(connector, results)
         self._addXPResults(connector, results)
         self._addCrystalResults(connector, results)
@@ -267,7 +281,7 @@ class _EconomicsRecordsChains(object):
         return
 
     def _addCrystalResults(self, connector, results):
-        if Currency.CRYSTAL in results and results[Currency.CRYSTAL] is not None:
+        if 'crystalReplay' in results and results['crystalReplay'] is not None:
             replay = ValueReplay(connector, recordName=Currency.CRYSTAL, replay=results['crystalReplay'])
             self._crystal.addRecords(records.ReplayRecords(replay, Currency.CRYSTAL))
             self._addCrystalDetails(replay)
@@ -360,6 +374,9 @@ class PersonalInfo(shared.UnpackedInfo):
 
     def getBaseCreditsRecords(self):
         return self.__economicsRecords.getBaseCreditsRecords()
+
+    def isWGMoneyRelatedZeroEarnings(self):
+        return self.__economicsRecords.isZeroEarnings()
 
     def getPremiumCreditsRecords(self):
         return self.__economicsRecords.getPremiumCreditsRecords()

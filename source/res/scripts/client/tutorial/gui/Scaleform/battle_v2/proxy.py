@@ -12,6 +12,7 @@ from gui.shared import g_eventBus, events, EVENT_BUS_SCOPE
 from helpers import dependency
 from helpers import i18n
 from skeletons.gui.battle_session import IBattleSessionProvider
+from soft_exception import SoftException
 from tutorial.doc_loader import gui_config
 from tutorial.gui import GUIProxy, GUI_EFFECT_NAME
 from tutorial.gui.Scaleform import effects_player as _shared_player
@@ -131,7 +132,7 @@ class SfBattleProxy(GUIProxy):
         pass
 
     def goToScene(self, sceneID):
-        raise RuntimeError('Battle tutorial has one scene only.')
+        raise SoftException('Battle tutorial has one scene only.')
 
     def playEffect(self, effectName, args):
         return self.__effects.play(effectName, args)

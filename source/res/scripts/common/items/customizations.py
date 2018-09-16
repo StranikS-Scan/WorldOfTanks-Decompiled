@@ -1,10 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/customizations.py
 from cStringIO import StringIO
+from string import lower
 import varint
 import ResMgr
 from collections import namedtuple, OrderedDict, defaultdict
-from items.components.c11n_constants import ApplyArea, SeasonType, CustomizationType
+from soft_exception import SoftException
+from items.components.c11n_constants import ApplyArea, SeasonType, CustomizationType, CustomizationTypeNames, HIDDEN_CAMOUFLAGE_ID
 from items.components import c11n_components as cn
 from constants import IS_CELLAPP, IS_BASEAPP
 from typing import List, Dict, Type, Tuple, Any, TypeVar, Optional, MutableMapping
@@ -17,20 +19,25 @@ class FieldTypes(object):
     VARINT = 2
     CUSTOM_TYPE_OFFSET = 128
     TYPED_ARRAY = 64
+    APPLY_AREA_ENUM = 32
 
 
-FieldType = namedtuple('FieldType', 'type default deprecated')
+FieldType = namedtuple('FieldType', 'type default deprecated  weak_equal_ignored')
 
 def arrayField(itemType, default=None):
-    return FieldType(FieldTypes.TYPED_ARRAY | itemType, default or [], False)
+    return FieldType(FieldTypes.TYPED_ARRAY | itemType, default or [], False, False)
 
 
 def intField(default=0):
-    return FieldType(FieldTypes.VARINT, default, False)
+    return FieldType(FieldTypes.VARINT, default, False, False)
+
+
+def applyAreaEnumField(default=0):
+    return FieldType(FieldTypes.APPLY_AREA_ENUM, default, False, True)
 
 
 def customFieldType(customType):
-    return FieldType(FieldTypes.CUSTOM_TYPE_OFFSET * customType, None, False)
+    return FieldType(FieldTypes.CUSTOM_TYPE_OFFSET * customType, None, False, False)
 
 
 def intArrayField(default=None):
@@ -41,7 +48,7 @@ def customArrayField(customType, default=None):
     return arrayField(FieldTypes.CUSTOM_TYPE_OFFSET * customType, default)
 
 
-class SerializationException(Exception):
+class SerializationException(SoftException):
     pass
 
 
@@ -141,6 +148,8 @@ class ComponentBinSerializer(object):
     def __serialize(self, value, itemType):
         if itemType == FieldTypes.VARINT:
             return varint.encode(value)
+        if itemType == FieldTypes.APPLY_AREA_ENUM:
+            return varint.encode(value)
         if itemType & FieldTypes.TYPED_ARRAY:
             return self.__serializeArray(value, itemType ^ FieldTypes.TYPED_ARRAY)
         if itemType >= FieldTypes.CUSTOM_TYPE_OFFSET:
@@ -173,6 +182,8 @@ class ComponentBinDeserializer(object):
             if valueMap & offset:
                 ftype = t.type
                 if ftype == FieldTypes.VARINT:
+                    value = varint.decode_stream(io)
+                elif ftype == FieldTypes.APPLY_AREA_ENUM:
                     value = varint.decode_stream(io)
                 elif ftype & FieldTypes.TYPED_ARRAY:
                     value = self.__decodeArray(ftype ^ FieldTypes.TYPED_ARRAY)
@@ -223,6 +234,8 @@ class ComponentXmlSerializer(object):
     def __serialize(self, current, value, itemType):
         if itemType == FieldTypes.VARINT:
             current.text = str(value)
+        elif itemType == FieldTypes.APPLY_AREA_ENUM:
+            current.text = str(value)
         elif itemType & FieldTypes.TYPED_ARRAY:
             self.__serializeArray(current, value, itemType ^ FieldTypes.TYPED_ARRAY)
         elif itemType >= FieldTypes.CUSTOM_TYPE_OFFSET:
@@ -251,6 +264,8 @@ class ComponentXmlDeserializer(object):
                 continue
             if ftype == FieldTypes.VARINT:
                 value = section.readInt(fname)
+            elif ftype == FieldTypes.APPLY_AREA_ENUM:
+                value = self.__decodeApplyAreaEnum(section.readString(fname))
             elif ftype & FieldTypes.TYPED_ARRAY:
                 itemType = ftype ^ FieldTypes.TYPED_ARRAY
                 value = self.__decodeArray(itemType, (ctx, fname), section[fname])
@@ -277,10 +292,28 @@ class ComponentXmlDeserializer(object):
 
         return result
 
+    def __decodeApplyAreaEnum(self, value):
+        result = []
+        for item in value.split(' '):
+            try:
+                itemValue = int(item)
+            except:
+                itemValue = getattr(ApplyArea, item, None)
+                if not isinstance(itemValue, int):
+                    raise SerializationException("Invalid item '{0}'".format(item))
+                if itemValue is None or itemValue not in ApplyArea.RANGE:
+                    raise SerializationException("Unsupported item '{0}'".format(item))
+
+            if itemValue in result:
+                raise SerializationException('Duplicated item {0} with value {1}'.format(item, itemValue))
+            result.append(itemValue)
+
+        return reduce(int.__or__, result)
+
 
 class PaintComponent(SerializableComponent):
     customType = 1
-    fields = OrderedDict((('id', intField()), ('appliedTo', intField(ApplyArea.USER_PAINT_ALLOWED_REGIONS_VALUE))))
+    fields = OrderedDict((('id', intField()), ('appliedTo', applyAreaEnumField(ApplyArea.USER_PAINT_ALLOWED_REGIONS_VALUE))))
     __slots__ = ('id', 'appliedTo')
 
     def __init__(self, id=0, appliedTo=ApplyArea.USER_PAINT_ALLOWED_REGIONS_VALUE):
@@ -298,7 +331,7 @@ class CamouflageComponent(SerializableComponent):
     customType = 2
     fields = OrderedDict((('id', intField()),
      ('patternSize', intField(1)),
-     ('appliedTo', intField(ApplyArea.CAMOUFLAGE_REGIONS_VALUE)),
+     ('appliedTo', applyAreaEnumField(ApplyArea.CAMOUFLAGE_REGIONS_VALUE)),
      ('palette', intField())))
     __slots__ = ('id', 'patternSize', 'appliedTo', 'palette')
 
@@ -312,7 +345,7 @@ class CamouflageComponent(SerializableComponent):
 
 class DecalComponent(SerializableComponent):
     customType = 3
-    fields = OrderedDict((('id', intField()), ('appliedTo', intField(ApplyArea.NONE))))
+    fields = OrderedDict((('id', intField()), ('appliedTo', applyAreaEnumField(ApplyArea.NONE))))
     __slots__ = ('id', 'appliedTo')
 
     def __init__(self, id=0, appliedTo=ApplyArea.NONE):
@@ -359,6 +392,11 @@ class CustomizationOutfit(SerializableComponent):
         return None
 
     def makeCompDescr(self):
+        for typeId in CustomizationType._APPLIED_TO_TYPES:
+            componentsAttrName = '{}s'.format(lower(CustomizationTypeNames[typeId]))
+            components = CustomizationOutfit.applyAreaBitmaskToDict(getattr(self, componentsAttrName))
+            setattr(self, componentsAttrName, CustomizationOutfit.shrinkAreaBitmask(components))
+
         return makeCompDescr(self)
 
     @property
@@ -372,8 +410,9 @@ class CustomizationOutfit(SerializableComponent):
             i = 1
             while i <= c.appliedTo:
                 if c.appliedTo & i:
-                    res[i] = c.copy()
-                    res[i].appliedTo = 0
+                    cpy = c.copy()
+                    cpy.appliedTo = 0
+                    res.setdefault(i, []).append(cpy)
                 i *= 2
 
         return res
@@ -381,8 +420,9 @@ class CustomizationOutfit(SerializableComponent):
     @staticmethod
     def shrinkAreaBitmask(components):
         grouped = {}
-        for at, i in components.iteritems():
-            grouped.setdefault(i, []).append(at)
+        for at, lst in components.iteritems():
+            for i in lst:
+                grouped.setdefault(i, []).append(at)
 
         res = []
         for item, group in grouped.iteritems():
@@ -404,11 +444,11 @@ class CustomizationOutfit(SerializableComponent):
         selfItems[:] = [ i for i in selfItems if i.appliedTo != 0 ]
         selfItems.extend(otherItems)
 
-    def dismountComponents(self, applyArea, dismountTypes=CustomizationType._SIMPLE_TYPES):
+    def dismountComponents(self, applyArea, dismountTypes=CustomizationType._APPLIED_TO_TYPES):
         outfitComponents = (self.paints, self.camouflages, self.decals)
         toMove = defaultdict(int)
         areas = [ i for i in ApplyArea.RANGE if i & applyArea ]
-        for c11nType, components in zip(CustomizationType._SIMPLE_TYPES, outfitComponents):
+        for c11nType, components in zip(CustomizationType._APPLIED_TO_TYPES, outfitComponents):
             if c11nType not in dismountTypes:
                 continue
             for component in components:
@@ -420,6 +460,23 @@ class CustomizationOutfit(SerializableComponent):
             components[:] = [ c for c in components if c.appliedTo != 0 ]
 
         return dict(toMove)
+
+    def countComponents(self, componentId, typeId):
+        result = 0
+        if typeId in CustomizationType._APPLIED_TO_TYPES:
+            outfitComponents = getattr(self, '{}s'.format(lower(CustomizationTypeNames[typeId])))
+            for component in outfitComponents:
+                if componentId == component.id:
+                    for area in ApplyArea.RANGE:
+                        if area & component.appliedTo:
+                            result += 1
+
+        elif typeId in CustomizationType._INT_TYPES:
+            if typeId == CustomizationType.STYLE and self.styleId == componentId:
+                result += 1
+            elif typeId == CustomizationType.MODIFICATION and componentId in self.modifications:
+                result += 1
+        return result
 
 
 _CUSTOMIZATION_CLASSES = {t.customType:t for t in SerializableComponent.__subclasses__()}
@@ -437,7 +494,7 @@ def parseOutfitDescr(outfitDescr):
         return CustomizationOutfit()
     outfit = parseCompDescr(outfitDescr)
     if outfit.customType != CustomizationOutfit.customType:
-        raise ValueError('Wrong customization item type')
+        raise SoftException('Wrong customization item type')
     return outfit
 
 
@@ -451,7 +508,7 @@ def parseBattleOutfit(outfit, cache, arenaKind, bonusType):
 if IS_CELLAPP or IS_BASEAPP:
     _itemType = TypeVar('_itemType', bound=cn.BaseCustomizationItem)
 
-def getAllItemsFromOutfit(cc, outfit):
+def getAllItemsFromOutfit(cc, outfit, ignoreHiddenCamouflage=True):
     result = defaultdict(int)
     for i in outfit.modifications:
         result[cn.ModificationItem.makeIntDescr(i)] = 1
@@ -465,6 +522,8 @@ def getAllItemsFromOutfit(cc, outfit):
         result[cn.PaintItem.makeIntDescr(p.id)] += cc.paints[p.id].getAmount(p.appliedTo)
 
     for ce in outfit.camouflages:
+        if ignoreHiddenCamouflage and ce.id == HIDDEN_CAMOUFLAGE_ID:
+            continue
         for i in ApplyArea.RANGE:
             if i & ce.appliedTo:
                 result[cn.CamouflageItem.makeIntDescr(ce.id)] += 1
@@ -516,7 +575,7 @@ class OutfitLogEntry(object):
     @staticmethod
     def __getItemCompDescr(storage, area, cdFormatter):
         i = storage.get(area)
-        return 0 if not i else cdFormatter(i.id)
+        return 0 if not i else cdFormatter(i[0].id)
 
     def __getPaintCd(self, area):
         return OutfitLogEntry.__getItemCompDescr(self._paints, area, cn.PaintItem.makeIntDescr)

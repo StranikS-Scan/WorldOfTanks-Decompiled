@@ -10,6 +10,7 @@ from gui.shared.items_parameters import params, RELATIVE_PARAMS, MAX_RELATIVE_VA
 from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator
 from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params_cache import g_paramsCache
+from gui.shared.utils import AUTO_RELOAD_PROP_NAME
 from helpers import dependency
 from items import vehicles, ITEM_TYPES
 from shared_utils import findFirst, first
@@ -23,7 +24,22 @@ _ITEM_TYPE_HANDLERS = {ITEM_TYPES.vehicleRadio: params.RadioParams,
  ITEM_TYPES.equipment: params.EquipmentParams,
  ITEM_TYPES.optionalDevice: params.OptionalDeviceParams,
  ITEM_TYPES.vehicle: params.VehicleParams}
-RELATIVE_POWER_PARAMS = ('avgDamage', 'avgPiercingPower', 'stunMinDuration', 'stunMaxDuration', 'reloadTime', 'reloadTimeSecs', 'gunRotationSpeed', 'turretRotationSpeed', 'turretYawLimits', 'pitchLimits', 'gunYawLimits', 'clipFireRate', 'aimingTime', 'shotDispersionAngle', 'avgDamagePerMinute')
+RELATIVE_POWER_PARAMS = ('avgDamage',
+ 'avgPiercingPower',
+ 'stunMinDuration',
+ 'stunMaxDuration',
+ 'reloadTime',
+ AUTO_RELOAD_PROP_NAME,
+ 'reloadTimeSecs',
+ 'gunRotationSpeed',
+ 'turretRotationSpeed',
+ 'turretYawLimits',
+ 'pitchLimits',
+ 'gunYawLimits',
+ 'clipFireRate',
+ 'aimingTime',
+ 'shotDispersionAngle',
+ 'avgDamagePerMinute')
 RELATIVE_ARMOR_PARAMS = ('maxHealth', 'hullArmor', 'turretArmor')
 RELATIVE_MOBILITY_PARAMS = ('vehicleWeight', 'enginePower', 'enginePowerPerTon', 'speedLimits', 'chassisRotationSpeed', 'switchOnTime', 'switchOffTime')
 RELATIVE_CAMOUFLAGE_PARAMS = ('invisibilityStillFactor', 'invisibilityMovingFactor')
@@ -159,7 +175,7 @@ def camouflageComparator(vehicle, camo, factory=None):
         season = first(camo.seasons)
         outfit = vehicle.getOutfit(season)
         if not outfit:
-            outfit = factory.createOutfit(isEnabled=True)
+            outfit = factory.createOutfit(isEnabled=True, isInstalled=True)
             vehicle.setCustomOutfit(season, outfit)
         slot = outfit.hull.slotFor(GUI_ITEM_TYPE.CAMOUFLAGE)
         oldCamo = slot.getItem()

@@ -3,17 +3,23 @@
 import math
 import struct
 import weakref
+import BigWorld
 import CommandMapping
 import Math
 from battleground.StunAreaManager import g_stunAreaManager
 from debug_utils import LOG_ERROR
 from gui.battle_control import avatar_getter, minimap_utils
-from gui.battle_control.battle_constants import BATTLE_CTRL_ID, GUN_RELOADING_VALUE_TYPE
+from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 from gui.battle_control.controllers.interfaces import IBattleController
 from messenger import MessengerEntry
 from messenger.m_constants import MESSENGER_COMMAND_TYPE, PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
+from gui.sounds.epic_sound_constants import EPIC_SOUND
+import Vehicle
+import DestructibleEntity
+from helpers import isPlayerAvatar
+from epic_constants import EPIC_BATTLE_TEAM_ID
 
 class CHAT_COMMANDS(object):
     ATTACK = 'ATTACK'
@@ -29,6 +35,15 @@ class CHAT_COMMANDS(object):
     ATTACKENEMY = 'ATTACKENEMY'
     STOP = 'STOP'
     SPG_AIM_AREA = 'SPG_AIM_AREA'
+    GLOBAL_SAVE_TANKS_ATK = 'EPIC_GLOBAL_SAVETANKS_ATK'
+    GLOBAL_TIME_ATK = 'EPIC_GLOBAL_TIME_ATK'
+    GLOBAL_FOCUSHQ_ATK = 'EPIC_GLOBAL_HQ_ATK'
+    GLOBAL_SAVE_TANKS_DEF = 'EPIC_GLOBAL_SAVETANKS_DEF'
+    GLOBAL_TIME_DEF = 'EPIC_GLOBAL_TIME_DEF'
+    GLOBAL_FOCUSHQ_DEF = 'EPIC_GLOBAL_HQ_DEF'
+    GLOBAL_LANE_WEST = 'EPIC_GLOBAL_WEST'
+    GLOBAL_LANE_CENTER = 'EPIC_GLOBAL_CENTER'
+    GLOBAL_LANE_EAST = 'EPIC_GLOBAL_EAST'
 
 
 KB_MAPPING = {CHAT_COMMANDS.ATTACKENEMY: CommandMapping.CMD_CHAT_SHORTCUT_ATTACK_MY_TARGET,
@@ -44,10 +59,20 @@ TARGET_ACTIONS = [CHAT_COMMANDS.FOLLOWME,
  CHAT_COMMANDS.SUPPORTMEWITHFIRE,
  CHAT_COMMANDS.ATTACKENEMY,
  CHAT_COMMANDS.STOP]
+EPIC_GLOBAL_ACTIONS = [CHAT_COMMANDS.GLOBAL_SAVE_TANKS_ATK,
+ CHAT_COMMANDS.GLOBAL_TIME_ATK,
+ CHAT_COMMANDS.GLOBAL_FOCUSHQ_ATK,
+ CHAT_COMMANDS.GLOBAL_SAVE_TANKS_DEF,
+ CHAT_COMMANDS.GLOBAL_TIME_DEF,
+ CHAT_COMMANDS.GLOBAL_FOCUSHQ_DEF,
+ CHAT_COMMANDS.GLOBAL_LANE_WEST,
+ CHAT_COMMANDS.GLOBAL_LANE_CENTER,
+ CHAT_COMMANDS.GLOBAL_LANE_EAST]
 DEFAULT_CUT = 'default'
 ALLY_CUT = 'ally'
 ENEMY_CUT = 'enemy'
 ENEMY_SPG_CUT = 'enemy_spg'
+OBJECTIVE_CUT = 'objective'
 TARGET_TRANSLATION_MAPPING = {CHAT_COMMANDS.ATTACKENEMY: {ALLY_CUT: CHAT_COMMANDS.FOLLOWME,
                              ENEMY_CUT: CHAT_COMMANDS.SUPPORTMEWITHFIRE,
                              ENEMY_SPG_CUT: CHAT_COMMANDS.ATTACKENEMY},
@@ -87,7 +112,6 @@ class ChatCommandsController(IBattleController):
 
     def handleShortcutChatCommand(self, key):
         cmdMap = CommandMapping.g_instance
-        import BigWorld
         player = BigWorld.player()
         target = BigWorld.target()
         for chatCmd, keyboardCmd in KB_MAPPING.iteritems():
@@ -97,7 +121,9 @@ class ChatCommandsController(IBattleController):
                 if crosshairType != DEFAULT_CUT and chatCmd in TARGET_TRANSLATION_MAPPING and crosshairType in TARGET_TRANSLATION_MAPPING[chatCmd]:
                     action = TARGET_TRANSLATION_MAPPING[chatCmd][crosshairType]
                 if action in TARGET_ACTIONS:
-                    if crosshairType != DEFAULT_CUT:
+                    if crosshairType == OBJECTIVE_CUT:
+                        self.sendAttentionToObjective(target.destructibleEntityID, player.team == EPIC_BATTLE_TEAM_ID.TEAM_ATTACKER)
+                    elif crosshairType != DEFAULT_CUT:
                         self.handleChatCommand(action, targetID=target.id)
                 else:
                     self.handleChatCommand(action)
@@ -118,6 +144,8 @@ class ChatCommandsController(IBattleController):
     def handleChatCommand(self, action, targetID=None):
         if action in TARGET_ACTIONS:
             self.sendTargetedCommand(action, targetID)
+        elif action in EPIC_GLOBAL_ACTIONS:
+            self.sendEpicGlobalCommand(action)
         elif action == CHAT_COMMANDS.RELOADINGGUN:
             self.sendReloadingCommand()
         else:
@@ -131,6 +159,29 @@ class ChatCommandsController(IBattleController):
             else:
                 LOG_ERROR('Minimap command not found', cellIdx)
 
+    def sendAttentionToPosition(self, position):
+        if avatar_getter.isForcedGuiControlMode():
+            command = self.proto.battleCmd.createByPosition(position)
+            if command:
+                self.__sendChatCommand(command)
+            else:
+                LOG_ERROR('Minimap command not found', position)
+
+    def sendAttentionToObjective(self, hqIdx, isAtk):
+        command = self.proto.battleCmd.createByObjectiveIndex(hqIdx, isAtk)
+        if command:
+            self.__sendChatCommand(command)
+        else:
+            LOG_ERROR('Minimap command not found', hqIdx)
+
+    def sendAttentionToBase(self, baseIdx, baseName, isAtk):
+        if avatar_getter.isForcedGuiControlMode():
+            command = self.proto.battleCmd.createByBaseIndex(baseIdx, baseName, isAtk)
+            if command:
+                self.__sendChatCommand(command)
+            else:
+                LOG_ERROR('Minimap command not found', baseIdx)
+
     def sendCommand(self, cmdName):
         if not avatar_getter.isVehicleAlive():
             return
@@ -139,6 +190,13 @@ class ChatCommandsController(IBattleController):
             self.__sendChatCommand(command)
         else:
             LOG_ERROR('Command is not found', cmdName)
+
+    def sendEpicGlobalCommand(self, cmdName, baseName=''):
+        command = self.proto.battleCmd.createByGlobalMsgName(cmdName, baseName)
+        if command:
+            self.__sendChatCommand(command)
+        else:
+            LOG_ERROR('Global Command is not found', cmdName)
 
     def sendTargetedCommand(self, cmdName, targetID):
         if not avatar_getter.isVehicleAlive():
@@ -156,9 +214,6 @@ class ChatCommandsController(IBattleController):
         if not avatar_getter.isPlayerOnArena():
             return
         state = self.__ammo.getGunReloadingState()
-        if state.getValueType() != GUN_RELOADING_VALUE_TYPE.TIME:
-            LOG_ERROR('Chat reloading command is not allowed')
-            return
         command = self.proto.battleCmd.create4Reload(self.__ammo.getGunSettings().isCassetteClip(), math.ceil(state.getTimeLeft()), self.__ammo.getShellsQuantityLeft())
         if command:
             self.__sendChatCommand(command)
@@ -166,16 +221,23 @@ class ChatCommandsController(IBattleController):
             LOG_ERROR('Can not create reloading command')
 
     def __getReloadTime(self):
-        reloadTime = 0
         reloadState = self.__ammo.getGunReloadingState()
-        if reloadState.getValueType() == GUN_RELOADING_VALUE_TYPE.TIME:
-            reloadTime = reloadState.getTimeLeft()
+        reloadTime = reloadState.getTimeLeft()
         return reloadTime
 
     def __playSound(self, cmd):
         soundNotifications = avatar_getter.getSoundNotifications()
         if soundNotifications and hasattr(soundNotifications, 'play'):
             soundNotifications.play(cmd.getSoundEventName())
+        if cmd is None:
+            return
+        else:
+            if cmd.isEpicGlobalMessage:
+                if soundNotifications and hasattr(soundNotifications, 'play'):
+                    soundNotifications.play(EPIC_SOUND.BF_EB_GLOBAL_MESSAGE)
+            elif soundNotifications and hasattr(soundNotifications, 'play'):
+                soundNotifications.play(cmd.getSoundEventName())
+            return
 
     def __findVehicleInfoByDatabaseID(self, dbID):
         result = None
@@ -242,31 +304,50 @@ class ChatCommandsController(IBattleController):
     def __me_onCommandReceived(self, cmd):
         if cmd.getCommandType() != MESSENGER_COMMAND_TYPE.BATTLE:
             return
-        if cmd.isOnMinimap():
-            if cmd.isSPGAimCommand():
-                try:
-                    coordX, coordY, coordZ = struct.unpack('<fffif', cmd.getCommandData()['strArg1'])[:3]
-                except struct.error as e:
-                    LOG_ERROR('The following command can not be unpacked: ', e)
-                    return
-
-                senderID = cmd.getSenderID()
-                g_stunAreaManager.manageStunArea(Math.Vector3(coordX, coordY, coordZ), senderID)
-            else:
-                self.__feedback.markCellOnMinimap(cmd.getCellIndex())
-        elif cmd.isPrivate():
-            self.__handlePrivateCommand(cmd)
         else:
-            self.__playSound(cmd)
-            if cmd.isPublic():
-                self.__handlePublicCommand(cmd)
+            controller = MessengerEntry.g_instance.gui.channelsCtrl.getController(cmd.getClientID())
+            if controller is None:
+                LOG_ERROR('Controller not found', cmd)
+                return
+            if not controller.filterMessage(cmd):
+                return
+            if cmd.isOnMinimap():
+                if cmd.isSPGAimCommand():
+                    try:
+                        coordX, coordY, coordZ = struct.unpack('<fffif', cmd.getCommandData()['strArg1'])[:3]
+                    except struct.error as e:
+                        LOG_ERROR('The following command can not be unpacked: ', e)
+                        return
+
+                    senderID = cmd.getSenderID()
+                    g_stunAreaManager.manageStunArea(Math.Vector3(coordX, coordY, coordZ), senderID)
+                else:
+                    self.__feedback.markCellOnMinimap(cmd.getCellIndex())
+            elif cmd.isOnEpicBattleMinimap():
+                if cmd.isMarkedPosition():
+                    self.__feedback.markPositionOnMinimap(cmd.getSenderID(), cmd.getMarkedPosition())
+                elif cmd.isMarkedObjective():
+                    self.__feedback.markObjectiveOnMinimap(cmd.getSenderID(), cmd.getMarkedObjective())
+                elif cmd.isMarkedBase():
+                    self.__feedback.markBaseOnMinimap(cmd.getSenderID(), cmd.getMarkedBase(), cmd.getMarkedBaseName())
+            elif cmd.isEpicGlobalMessage():
+                self.__playSound(cmd)
+            elif cmd.isPrivate():
+                self.__handlePrivateCommand(cmd)
             else:
-                self.__handleSimpleCommand(cmd)
+                self.__playSound(cmd)
+                if cmd.isPublic():
+                    self.__handlePublicCommand(cmd)
+                else:
+                    self.__handleSimpleCommand(cmd)
+            return
 
     def __getCrosshairType(self, player, target):
         outcome = DEFAULT_CUT
         if self.__isTargetCorrect(player, target):
-            if target.publicInfo.team == player.team:
+            if isinstance(target, DestructibleEntity.DestructibleEntity):
+                outcome = OBJECTIVE_CUT
+            elif target.publicInfo['team'] == player.team:
                 outcome = ALLY_CUT
             elif 'SPG' in self.__getCurrentVehicleDesc(player)['vehicleType'].type.tags:
                 outcome = ENEMY_SPG_CUT
@@ -275,8 +356,10 @@ class ChatCommandsController(IBattleController):
         return outcome
 
     def __isTargetCorrect(self, player, target):
-        import Vehicle
-        from helpers import isPlayerAvatar
+        if target is not None and isinstance(target, DestructibleEntity.DestructibleEntity):
+            if target.isAlive():
+                if player is not None and isPlayerAvatar():
+                    return True
         if target is not None and isinstance(target, Vehicle.Vehicle):
             if target.isAlive():
                 if player is not None and isPlayerAvatar():

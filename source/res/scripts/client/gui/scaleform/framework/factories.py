@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/factories.py
+from soft_exception import SoftException
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 from gui.Scaleform.framework.entities.BaseDAAPIModule import BaseDAAPIModule
@@ -19,9 +20,9 @@ class EntityFactory(object):
         clazz = settings.clazz
         alias = settings.alias
         if not alias:
-            raise Exception('Invalid alias in settings {0}'.format(settings))
+            raise SoftException('Invalid alias in settings {0}'.format(settings))
         if clazz is None:
-            raise Exception('Invalid class in settings {0}'.format(settings))
+            raise SoftException('Invalid class in settings {0}'.format(settings))
         return
 
     def create(self, settings, *args, **kwargs):
@@ -47,7 +48,7 @@ class DAAPIModuleFactory(EntityFactory):
     def validate(self, settings):
         super(DAAPIModuleFactory, self).validate(settings)
         if BaseDAAPIModule not in getattr(settings.clazz, '__mro__', tuple()):
-            raise Exception('Class does not extend BaseDAAPIModule in settings {0}'.format(settings))
+            raise SoftException('Class does not extend BaseDAAPIModule in settings {0}'.format(settings))
 
     def castType(self, clazz):
         return isinstance(clazz, DAAPIModuleType)
@@ -69,9 +70,9 @@ class ViewFactory(DAAPIModuleFactory):
         super(ViewFactory, self).validate(settings)
         url = settings.url
         if not url:
-            raise Exception('Invalid url in settings {0}'.format(settings))
+            raise SoftException('Invalid url in settings {0}'.format(settings))
         if View not in getattr(settings.clazz, '__mro__', tuple()):
-            raise Exception('Class does not extend View in settings {0}'.format(settings))
+            raise SoftException('Class does not extend View in settings {0}'.format(settings))
 
     def create(self, settings, *args, **kwargs):
         pyEntity = super(ViewFactory, self).create(settings, *args, **kwargs)
@@ -118,13 +119,13 @@ class EntitiesFactories(object):
     def addSettings(self, settings):
         viewType = settings.type
         if viewType not in self.__viewTypes:
-            raise Exception('Invalid type in settings {0}'.format(settings))
+            raise SoftException('Invalid type in settings {0}'.format(settings))
         factory = self.__factories[self.__viewTypes[viewType]]
         factory.validate(settings)
         alias = settings.alias
         eventType = settings.event
         if alias in self.__settings:
-            raise Exception('Alias {0} is already added to settings'.format(alias))
+            raise SoftException('Alias {0} is already added to settings'.format(alias))
         self.__settings[alias] = settings
         if eventType:
             self.__eventToAlias[eventType] = alias

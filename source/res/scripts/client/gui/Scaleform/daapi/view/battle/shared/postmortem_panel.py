@@ -25,7 +25,13 @@ _ATTACK_REASON_CODE_TO_MSG = {ATTACK_REASON_INDICES['shot']: 'DEATH_FROM_SHOT',
  ATTACK_REASON_INDICES['world_collision']: 'DEATH_FROM_WORLD_COLLISION',
  ATTACK_REASON_INDICES['death_zone']: 'DEATH_FROM_DEATH_ZONE',
  ATTACK_REASON_INDICES['drowning']: 'DEATH_FROM_DROWNING',
- ATTACK_REASON_INDICES['overturn']: 'DEATH_FROM_WORLD_COLLISION'}
+ ATTACK_REASON_INDICES['overturn']: 'DEATH_FROM_WORLD_COLLISION',
+ ATTACK_REASON_INDICES['artillery_protection']: 'DEATH_FROM_ARTILLERY_PROTECTION',
+ ATTACK_REASON_INDICES['artillery_sector']: 'DEATH_FROM_SECTOR_PROTECTION',
+ ATTACK_REASON_INDICES['bombers']: 'DEATH_FROM_SECTOR_BOMBERS',
+ ATTACK_REASON_INDICES['recovery']: 'DEATH_FROM_RECOVERY',
+ ATTACK_REASON_INDICES['artillery_eq']: 'DEATH_FROM_SHOT',
+ ATTACK_REASON_INDICES['bomber_eq']: 'DEATH_FROM_SHOT'}
 
 class _ENTITIES_POSTFIX(object):
     UNKNOWN = '_UNKNOWN'
@@ -155,16 +161,16 @@ class _SummaryPostmortemPanel(_BasePostmortemPanel):
 
 
 class PostmortemPanel(_SummaryPostmortemPanel):
-    __slots__ = ('__playerInfo', '__isPlayerVehicle', '__maxHealth', '__healthPercent', '__isInPostmortem', '__deathAlreadySet', '__isColorBlind')
+    __slots__ = ('__playerInfo', '_isPlayerVehicle', '__maxHealth', '__healthPercent', '__isInPostmortem', '_deathAlreadySet', '__isColorBlind')
 
     def __init__(self):
         super(PostmortemPanel, self).__init__()
         self.__playerInfo = None
-        self.__isPlayerVehicle = False
+        self._isPlayerVehicle = False
         self.__maxHealth = 0
         self.__healthPercent = 0
         self.__isInPostmortem = False
-        self.__deathAlreadySet = False
+        self._deathAlreadySet = False
         self.__isColorBlind = self.settingsCore.getSetting('isColorBlind')
         return
 
@@ -196,7 +202,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
         return
 
     def _deathInfoReceived(self):
-        self.__updateVehicleInfo()
+        self._updateVehicleInfo()
 
     def __setHealthPercent(self, health):
         self.__healthPercent = normalizeHealthPercent(health, self.__maxHealth)
@@ -206,15 +212,15 @@ class PostmortemPanel(_SummaryPostmortemPanel):
 
     def __onVehicleControlling(self, vehicle):
         self.__maxHealth = vehicle.typeDescriptor.maxHealth
-        self.__isPlayerVehicle = vehicle.isPlayerVehicle
+        self._isPlayerVehicle = vehicle.isPlayerVehicle
         self.__setHealthPercent(vehicle.health)
-        self.__updateVehicleInfo()
+        self._updateVehicleInfo()
 
     def __onVehicleStateUpdated(self, state, value):
         if state == VEHICLE_VIEW_STATE.HEALTH:
             if self.__maxHealth != 0 and self.__maxHealth > value:
                 self.__setHealthPercent(value)
-                self.__updateVehicleInfo()
+                self._updateVehicleInfo()
         elif state == VEHICLE_VIEW_STATE.PLAYER_INFO:
             self.__setPlayerInfo(value)
         elif state == VEHICLE_VIEW_STATE.SWITCHING:
@@ -223,23 +229,23 @@ class PostmortemPanel(_SummaryPostmortemPanel):
 
     def __onPostMortemSwitched(self, noRespawnPossible, respawnAvailable):
         self.__isInPostmortem = True
-        self.__updateVehicleInfo()
+        self._updateVehicleInfo()
 
     def __onRespawnBaseMoving(self):
         self.__isInPostmortem = False
         self.__deathAlreadySet = False
         self.resetDeathInfo()
 
-    def __updateVehicleInfo(self):
+    def _updateVehicleInfo(self):
         if not self.__isInPostmortem:
             return
-        if self.__isPlayerVehicle:
-            self.__showOwnDeathInfo()
+        if self._isPlayerVehicle:
+            self._showOwnDeathInfo()
         else:
-            self.__showPlayerInfo()
+            self._showPlayerInfo()
 
-    def __showOwnDeathInfo(self):
-        if self.__deathAlreadySet:
+    def _showOwnDeathInfo(self):
+        if self._deathAlreadySet:
             self.as_showDeadReasonS()
         else:
             deathInfo = self.getDeathInfo()
@@ -259,7 +265,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
                     vehLvl = vehImg = vehClass = vehName = None
                 reason = self.__makeReasonInfo(deathInfo)
                 self.as_setDeadReasonInfoS(reason, showVehicle, vehLvl, vehImg, vehClass, vehName)
-                self.__deathAlreadySet = True
+                self._deathAlreadySet = True
             else:
                 self.as_setDeadReasonInfoS('', False, None, None, None, None)
         return
@@ -294,7 +300,7 @@ class PostmortemPanel(_SummaryPostmortemPanel):
 
         return reason
 
-    def __showPlayerInfo(self):
+    def _showPlayerInfo(self):
         ctx = {'name': self.__playerInfo.playerFullName,
          'health': self.__healthPercent}
         template = 'other'
@@ -304,5 +310,5 @@ class PostmortemPanel(_SummaryPostmortemPanel):
     def __onSettingsChanged(self, diff):
         if GRAPHICS.COLOR_BLIND in diff:
             self.__isColorBlind = diff[GRAPHICS.COLOR_BLIND]
-            self.__deathAlreadySet = False
-            self.__updateVehicleInfo()
+            self._deathAlreadySet = False
+            self._updateVehicleInfo()

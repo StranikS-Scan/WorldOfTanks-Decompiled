@@ -122,6 +122,12 @@ class _ReceivedHitVehicleVOBuilder(_VehicleVOBuilder):
         if info.getArenaVehicleID() == arenaDP.getPlayerVehicleID() and info.isRam():
             vehicleVO.vehicleName = ''
             vehicleVO.vehicleTypeImg = ''
+        if info.isProtectionZoneDamage() or info.isProtectionZoneDamage(primary=False) or info.isArtilleryEqDamage() or info.isArtilleryEqDamage(primary=False):
+            vehicleVO.vehicleName = ''
+            vehicleVO.vehicleTypeImg = _IMAGES.DAMAGELOG_ARTILLERY_16X16
+        elif info.isBombersDamage() or info.isBombersDamage(primary=False) or info.isBomberEqDamage() or info.isBomberEqDamage(primary=False):
+            vehicleVO.vehicleName = ''
+            vehicleVO.vehicleTypeImg = _IMAGES.DAMAGELOG_AIRSTRIKE_16X16
 
 
 class _ShellVOModel(_VOModel):
@@ -239,7 +245,7 @@ class _DamageActionImgVOBuilder(_ActionImgVOBuilder):
         self._wcIcon = wcIcon
 
     def _getImage(self, info):
-        if info.isShot():
+        if info.isShot() or info.isProtectionZoneDamage() or info.isBombersDamage() or info.isArtilleryEqDamage() or info.isBomberEqDamage():
             return self._shotIcon
         if info.isFire():
             return self._fireIcon
@@ -451,21 +457,26 @@ class DamageLogPanel(BattleDamageLogPanelMeta):
         self.__bottomLog.addToLog(events)
 
     def _invalidatePanelVisibility(self):
-        isVisible = True
-        if self.sessionProvider.getCtx().isPlayerObserver():
+        arenaVisitor = self.sessionProvider.arenaVisitor
+        isEpicBattle = arenaVisitor.gui.isInEpicRange()
+        if isEpicBattle:
+            return
+        else:
             isVisible = True
-        elif self.__vehStateCtrl is None:
-            isVisible = self.__isVisible
-        elif self.__vehStateCtrl.isInPostmortem:
-            if self.__arenaDP is None:
+            if self.sessionProvider.getCtx().isPlayerObserver():
+                isVisible = True
+            elif self.__vehStateCtrl is None:
                 isVisible = self.__isVisible
-            else:
-                observedVehID = self.__vehStateCtrl.getControllingVehicleID()
-                isVisible = self.__arenaDP.getPlayerVehicleID() == observedVehID
-        if self.__isVisible != isVisible:
-            self.__isVisible = isVisible
-            self._setSettings(self.__isVisible, bool(self.settingsCore.getSetting(GRAPHICS.COLOR_BLIND)))
-        return
+            elif self.__vehStateCtrl.isInPostmortem:
+                if self.__arenaDP is None:
+                    isVisible = self.__isVisible
+                else:
+                    observedVehID = self.__vehStateCtrl.getControllingVehicleID()
+                    isVisible = self.__arenaDP.getPlayerVehicleID() == observedVehID
+            if self.__isVisible != isVisible:
+                self.__isVisible = isVisible
+                self._setSettings(self.__isVisible, bool(self.settingsCore.getSetting(GRAPHICS.COLOR_BLIND)))
+            return
 
     def _onSettingsChanged(self, diff):
         for key in _TOTAL_DAMAGE_SETTINGS_TO_CONTENT_MASK.iterkeys():

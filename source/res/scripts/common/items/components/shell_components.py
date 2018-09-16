@@ -52,6 +52,16 @@ class HighExplosiveType(ShellType):
         return 'HighExplosiveType(explosionRadius={}, explosionDamageFactor={}, explosionDamageAbsorptionFactor={}, explosionEdgeDamageFactor={})'.format(self.explosionRadius, self.explosionDamageFactor, self.explosionDamageAbsorptionFactor, self.explosionEdgeDamageFactor)
 
 
+class SmokeType(ShellType):
+    __slots__ = ()
+
+    def __init__(self, name):
+        super(SmokeType, self).__init__(name)
+
+    def __repr__(self):
+        pass
+
+
 class Stun(object):
     __slots__ = ('stunRadius', 'stunDuration', 'stunFactor', 'guaranteedStunDuration', 'damageDurationCoeff', 'guaranteedStunEffect', 'damageEffectCoeff')
 
@@ -77,4 +87,6 @@ def createShellType(typeName):
         shellType = HollowChargeType(typeName)
     elif typeName == SHELL_TYPES.HIGH_EXPLOSIVE:
         shellType = HighExplosiveType(typeName)
+    elif typeName == SHELL_TYPES.SMOKE:
+        shellType = SmokeType(typeName)
     return shellType

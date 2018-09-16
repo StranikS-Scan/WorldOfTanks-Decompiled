@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/bootcamp/BootcampUIConfig.py
 from copy import copy
 import ResMgr
+from soft_exception import SoftException
 g_defaultBattleRibbonsSettings = {'damage': False,
  'kill': False,
  'armor': False,
@@ -14,7 +15,7 @@ XML_CONFIG_PATH = 'scripts/bootcamp_docs/battle_page_visibility.xml'
 def readUISettingsFile(path):
     settingsConfig = ResMgr.openSection(path)
     if settingsConfig is None:
-        raise Exception("Can't open config file (%s)" % path)
+        raise SoftException("Can't open config file (%s)" % path)
     allPrebattleSettings = {}
     allRibbonsSettings = {}
     for name, section in settingsConfig.items():

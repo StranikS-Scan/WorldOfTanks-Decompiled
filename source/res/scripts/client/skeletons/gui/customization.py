@@ -84,6 +84,9 @@ class ICustomizationService(object):
     def getCurrentStyle(self):
         raise NotImplementedError
 
+    def isCurrentStyleInstalled(self):
+        raise NotImplementedError
+
     def buyItems(self, items, vehicle=None):
         raise NotImplementedError
 

@@ -30,12 +30,8 @@ def showPersonalMissionsChain(operationID, chainID):
      'chainID': chainID}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showMissionsGrouped(missionID=None, groupID=None, anchor=None):
-    showMissions(tab=QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, missionID=missionID, groupID=groupID, anchor=anchor)
-
-
-def showMissionsMarathon():
-    showMissions(tab=QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS)
+def showMissionsMarathons(missionID=None, groupID=None, anchor=None):
+    showMissions(tab=QUESTS_ALIASES.MISSIONS_MARATHONS_VIEW_PY_ALIAS, missionID=missionID, groupID=groupID, anchor=anchor)
 
 
 def showMissionsCategories(missionID=None, groupID=None, anchor=None):
@@ -84,9 +80,9 @@ def showMission(eventID, eventType=None):
             groupContent = group.getGroupContent(quests)
             mainQuest = group.getMainQuest(groupContent)
             if mainQuest and quest.getID() != mainQuest.getID():
-                showMissionsGrouped(missionID=quest.getID(), groupID=group.getID(), anchor=group.getID())
+                showMissionsMarathons(missionID=quest.getID(), groupID=group.getID(), anchor=group.getID())
             else:
-                showMissionsGrouped(anchor=group.getID())
+                showMissionsMarathons(anchor=group.getID())
         else:
             showMissionsCategories(missionID=quest.getID(), groupID=quest.getGroupID(), anchor=quest.getGroupID())
     return

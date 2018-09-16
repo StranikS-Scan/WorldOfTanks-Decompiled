@@ -9,7 +9,7 @@ from gui.battle_results.components import base
 from gui.battle_results.components import shared
 from gui.battle_results.components import style
 from gui.shared.crits_mask_parser import CRIT_MASK_SUB_TYPES
-from gui.shared.formatters import numbers
+from gui.shared.formatters import numbers, icons
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items.Vehicle import getIconPath, getSmallIconPath, getTypeBigIconPath
 from gui.shared.utils.functions import makeTooltip
@@ -59,6 +59,14 @@ class PlayerNoClanFlag(base.StatsItem):
         return not reusable.getPlayerInfo().clanDBID
 
 
+class PlayerRank(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, value, reusable):
+        avatarInfo = reusable.getAvatarInfo()
+        return avatarInfo.extensionInfo['playerRank']['rank'] if 'playerRank' in avatarInfo.extensionInfo else 0
+
+
 class PersonalPlayerNameBlock(shared.PlayerNameBlock):
     __slots__ = ()
 
@@ -88,6 +96,14 @@ class PersonalVehicleTypeIconsBlock(base.StatsBlock):
     def setRecord(self, result, reusable):
         for _, item in reusable.personal.getVehicleItemsIterator():
             self.addNextComponent(base.DirectStatsItem('', getTypeBigIconPath(item.type, False)))
+
+
+class EpicVehicleNamesBlock(PersonalVehicleNamesBlock):
+    __slots__ = ()
+
+    def setRecord(self, result, reusable):
+        self.addNextComponent(base.DirectStatsItem('', i18n.makeString(BATTLE_RESULTS.ALLVEHICLES)))
+        super(EpicVehicleNamesBlock, self).setRecord(result, reusable)
 
 
 class PersonalVehicleBlock(base.StatsBlock):
@@ -132,6 +148,16 @@ class PersonalVehiclesBlock(base.StatsBlock):
             component.setVehicle(item)
             component.setRecord(result[intCD], reusable)
             self.addComponent(self.getNextComponentIndex(), component)
+
+
+class EpicVehiclesBlock(PersonalVehiclesBlock):
+    __slots__ = ()
+
+    def setRecord(self, result, reusable):
+        component = PersonalVehicleBlock()
+        component.vehicleIcon = RES_ICONS.MAPS_ICONS_LIBRARY_EPICVEHICLESALL
+        self.addNextComponent(component)
+        super(EpicVehiclesBlock, self).setRecord(result, reusable)
 
 
 class DamageDetailsBlock(base.StatsBlock):
@@ -358,28 +384,34 @@ class TotalEfficiencyDetailsHeader(base.StatsBlock):
 
     def setRecord(self, result, reusable):
         info = reusable.getPersonalVehiclesInfo(result)
-        value = info.kills
-        self.kills = numbers.formatInt(value, _UNDEFINED_EFFICIENCY_VALUE)
-        self.killsTooltip = self.__makeEfficiencyHeaderTooltip('summKill', value)
-        value = info.damageDealt
-        self.damageDealt = numbers.makeStringWithThousandSymbol(value)
-        self.damageDealtTooltip = self.__makeEfficiencyHeaderTooltip('summDamage', value)
-        value = info.critsCount
-        self.criticalDamages = numbers.formatInt(value, _UNDEFINED_EFFICIENCY_VALUE)
-        self.criticalDamagesTooltip = self.__makeEfficiencyHeaderTooltip('summCrits', value)
-        value = info.damageBlockedByArmor
-        self.damageBlockedByArmor = numbers.makeStringWithThousandSymbol(value)
-        self.damageBlockedTooltip = self.__makeEfficiencyHeaderTooltip('summArmor', value)
-        value = info.damageAssisted
-        self.damageAssisted = numbers.makeStringWithThousandSymbol(value)
-        self.damageAssistedTooltip = self.__makeEfficiencyHeaderTooltip('summAssist', value)
-        value = info.damageAssistedStun
-        self.damageAssistedStun = numbers.makeStringWithThousandSymbol(value)
-        self.damageAssistedStunTooltip = self.__makeEfficiencyHeaderTooltip('summStun', value)
-        value = info.spotted
-        self.spotted = numbers.formatInt(value, _UNDEFINED_EFFICIENCY_VALUE)
-        self.spottedTooltip = self.__makeEfficiencyHeaderTooltip('summSpotted', value)
-        self.hasEfficencyStats = info.kills + info.damageDealt + info.critsCount + info.critsCount + info.damageBlockedByArmor + info.damageAssisted + info.damageAssistedStun + info.spotted > 0
+        if info is None:
+            from debug_utils import LOG_ERROR
+            LOG_ERROR('ERROR: TotalEfficiencyDetailsHeader:setRecord: getPersonalVehiclesInfo returned NONE!')
+            return
+        else:
+            value = info.kills
+            self.kills = numbers.formatInt(value, _UNDEFINED_EFFICIENCY_VALUE)
+            self.killsTooltip = self.__makeEfficiencyHeaderTooltip('summKill', value)
+            value = info.damageDealt
+            self.damageDealt = numbers.makeStringWithThousandSymbol(value)
+            self.damageDealtTooltip = self.__makeEfficiencyHeaderTooltip('summDamage', value)
+            value = info.critsCount
+            self.criticalDamages = numbers.formatInt(value, _UNDEFINED_EFFICIENCY_VALUE)
+            self.criticalDamagesTooltip = self.__makeEfficiencyHeaderTooltip('summCrits', value)
+            value = info.damageBlockedByArmor
+            self.damageBlockedByArmor = numbers.makeStringWithThousandSymbol(value)
+            self.damageBlockedTooltip = self.__makeEfficiencyHeaderTooltip('summArmor', value)
+            value = info.damageAssisted
+            self.damageAssisted = numbers.makeStringWithThousandSymbol(value)
+            self.damageAssistedTooltip = self.__makeEfficiencyHeaderTooltip('summAssist', value)
+            value = info.damageAssistedStun
+            self.damageAssistedStun = numbers.makeStringWithThousandSymbol(value)
+            self.damageAssistedStunTooltip = self.__makeEfficiencyHeaderTooltip('summStun', value)
+            value = info.spotted
+            self.spotted = numbers.formatInt(value, _UNDEFINED_EFFICIENCY_VALUE)
+            self.spottedTooltip = self.__makeEfficiencyHeaderTooltip('summSpotted', value)
+            self.hasEfficencyStats = info.kills + info.damageDealt + info.critsCount + info.critsCount + info.damageBlockedByArmor + info.damageAssisted + info.damageAssistedStun + info.spotted > 0
+            return
 
     @classmethod
     def __makeEfficiencyHeaderTooltip(cls, key, value):
@@ -457,3 +489,19 @@ class PersonalAccountDBID(base.StatsItem):
 
     def _convert(self, value, reusable):
         return reusable.personal.avatar.accountDBID
+
+
+class MoneyPropsBlock(base.StatsBlock):
+    __slots__ = ('isMoneyEnabled', 'moneyEnabledTooltip', 'creditsNotAccrueStr')
+
+    def __init__(self, meta=None, field='', *path):
+        super(MoneyPropsBlock, self).__init__(meta, field, *path)
+        self.isMoneyEnabled = True
+        self.moneyEnabledTooltip = ''
+        self.creditsNotAccrueStr = ''
+
+    def setRecord(self, result, reusable):
+        self.isMoneyEnabled = not reusable.isWGMoneyOffline
+        self.moneyEnabledTooltip = makeTooltip(' '.join((icons.alert(-3), i18n.makeString(TOOLTIPS.BATTLERESULTS_MONEYALERT_HEADER))), TOOLTIPS.BATTLERESULTS_MONEYALERT_BODY, None, None)
+        self.creditsNotAccrueStr = text_styles.alert(BATTLE_RESULTS.COMMON_CREDITS_NOTACCRUED)
+        return

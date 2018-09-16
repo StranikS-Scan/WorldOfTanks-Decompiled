@@ -6,6 +6,7 @@ from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.bw import cooldown
 from messenger.proto.search_processor import SearchProcessor
+from soft_exception import SoftException
 
 class SearchChannelsProcessor(SearchProcessor):
 
@@ -51,7 +52,7 @@ class SearchChannelsProcessor(SearchProcessor):
         return CHANNEL_SEARCH_RESULTS_LIMIT
 
     def getSearchCoolDown(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def __cm_onSearchTokenComplete(self, requestID, result):
         self._onSearchTokenComplete(requestID, result)

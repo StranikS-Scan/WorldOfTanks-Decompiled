@@ -80,16 +80,24 @@ def addpackage(sitedir, name, known_paths):
         return
 
     with f:
+        resolveToAbs = False
         for n, line in enumerate(f):
             if line.startswith('#'):
+                continue
+            if line.startswith('@'):
+                resolveToAbs = True
                 continue
             try:
                 if line.startswith(('import ', 'import\t')):
                     exec line
                     continue
                 line = line.rstrip()
-                dir = os.path.join(sitedir, line)
-                if dir not in known_paths and resMgrDirExists(dir):
+                relativeDir = os.path.join(sitedir, line)
+                if resolveToAbs:
+                    dir = ResMgr.resolveToAbsolutePath(relativeDir)
+                else:
+                    dir = relativeDir
+                if dir not in known_paths and resMgrDirExists(relativeDir):
                     sys.path.append(dir)
                     known_paths.add(dir)
             except Exception as err:

@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/BaseDAAPIModule.py
+from soft_exception import SoftException
 from debug_utils import LOG_ERROR
 from gui.Scaleform.framework.entities.abstract.BaseDAAPIModuleMeta import BaseDAAPIModuleMeta
 
@@ -28,7 +29,7 @@ class BaseDAAPIModule(BaseDAAPIModuleMeta):
             try:
                 self.turnDAAPIon(setScript, movieClip)
             except Exception:
-                raise Exception('Can not initialize daapi in ' + str(self))
+                raise SoftException('Can not initialize daapi in ' + str(self))
 
             if autoPopulate:
                 if self.isCreated():

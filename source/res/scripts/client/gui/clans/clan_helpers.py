@@ -738,7 +738,21 @@ def isStrongholdsEnabled(lobbyContext=None):
         try:
             settings = lobbyContext.getServerSettings()
             return settings.isStrongholdsEnabled()
-        except Exception:
+        except (AttributeError, TypeError):
+            return False
+
+        return
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def isLeaguesEnabled(lobbyContext=None):
+    if lobbyContext is None:
+        return False
+    else:
+        try:
+            settings = lobbyContext.getServerSettings()
+            return settings.isLeaguesEnabled()
+        except (AttributeError, TypeError):
             return False
 
         return

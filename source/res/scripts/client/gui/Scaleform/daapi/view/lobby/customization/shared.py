@@ -149,11 +149,11 @@ def getOutfitWithoutItems(outfitsInfo, intCD, count):
         yield (season, outfitCompare.original)
 
 
-def getStylePurchaseItems(styleInfo):
+def getStylePurchaseItems(styleInfo, isOriginalStyleInstalled):
     purchaseItems = []
     original = styleInfo.original
     modified = styleInfo.modified
-    if modified and not original or modified and original.id != modified.id:
+    if modified and not original or modified and original.id != modified.id or modified and original.id == modified.id and not isOriginalStyleInstalled:
         inventoryCount = styleInfo.modified.fullInventoryCount(g_currentVehicle.item)
         isFromInventory = inventoryCount > 0
         purchaseItems.append(PurchaseItem(modified, modified.getBuyPrice(), areaID=None, slot=None, regionID=None, selected=True, group=AdditionalPurchaseGroups.STYLES_GROUP_ID, isFromInventory=isFromInventory, isDismantling=False))

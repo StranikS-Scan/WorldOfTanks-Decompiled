@@ -9,9 +9,11 @@ from gui.prb_control.settings import CTRL_ENTITY_TYPE_NAMES as _C_NAMES
 from gui.prb_control.storages.local_storage import LocalStorage
 from gui.prb_control.storages.prb_storage import TrainingStorage
 from gui.prb_control.storages.ranked_storage import RankedStorage
+from gui.prb_control.storages.epic_storage import EpicStorage
 from gui.prb_control.storages.sandbox_storage import SandboxStorage
 from gui.prb_control.storages.stronghold_storage import StrongholdStorage
 from helpers.ro_property import ROPropertyMeta
+from soft_exception import SoftException
 __all__ = ('legacy_storage_getter', 'prequeue_storage_getter', 'PrbStorageDecorator')
 
 def _makeUniqueName(ctrlName, entityName):
@@ -20,27 +22,29 @@ def _makeUniqueName(ctrlName, entityName):
 
 def _makeQueueName(queueType):
     if queueType not in _Q_NAMES:
-        raise ValueError('Queue type is invalid {}'.format(queueType))
+        raise SoftException('Queue type is invalid {}'.format(queueType))
     return _makeUniqueName(_C_NAMES[_C_TYPE.PREQUEUE], _Q_NAMES[queueType])
 
 
 def _makeLegacyName(legacyType):
     if legacyType not in _P_TYPE.LEGACY_PREBATTLES:
-        raise ValueError('Legacy type is invalid {}'.format(legacyType))
+        raise SoftException('Legacy type is invalid {}'.format(legacyType))
     return _makeUniqueName(_C_NAMES[_C_TYPE.LEGACY], _P_NAMES[legacyType])
 
 
 _PRB_STORAGE = {_makeLegacyName(_P_TYPE.TRAINING): TrainingStorage(),
  _makeQueueName(_Q_TYPE.SANDBOX): SandboxStorage(),
  _makeQueueName(_Q_TYPE.RANKED): RankedStorage(),
- _makeQueueName(_Q_TYPE.EXTERNAL_UNITS): StrongholdStorage()}
+ _makeQueueName(_Q_TYPE.EPIC): EpicStorage(),
+ _makeQueueName(_Q_TYPE.EXTERNAL_UNITS): StrongholdStorage(),
+ _makeLegacyName(_P_TYPE.EPIC_TRAINING): TrainingStorage()}
 
 class _storage_getter(object):
 
     def __init__(self, name):
         super(_storage_getter, self).__init__()
         if name not in _PRB_STORAGE:
-            raise ValueError('Storage "{}" not found'.format(name))
+            raise SoftException('Storage "{}" not found'.format(name))
         self.__name = name
 
     def __call__(self, *args):

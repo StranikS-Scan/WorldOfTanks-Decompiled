@@ -52,5 +52,5 @@ class ClanEmblemsHelper(ImageHelper):
         svrSettings = self.lobbyContext.getServerSettings()
         url = svrSettings.fileServer.getClanEmblemBySize(clanDbID, size) if svrSettings is not None else None
         cb = partial(handler, clanDbID)
-        self.requestImageByUrl(url, (size, size), cb, self.getDefaultClanEmblem)
+        self.requestImageByUrl(url, cb, (size, size), self.getDefaultClanEmblem)
         return

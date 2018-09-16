@@ -109,9 +109,10 @@ class BaseRallyMainWindow(BaseRallyMainWindowMeta, IGlobalListener):
             return
 
     def _showLeadershipNotification(self):
-        if self.prbEntity.getShowLeadershipNotification():
+        if self.prbEntity is not None and self.prbEntity.getShowLeadershipNotification():
             self.as_showWaitingS(WAITING.PREBATTLE_GIVELEADERSHIP, {})
             self._leadershipNotificationCallback = BigWorld.callback(self.LEADERSHIP_NOTIFICATION_TIME, self._cancelLeadershipNotification)
+        return
 
     def _clearLeadershipNotification(self):
         if self._leadershipNotificationCallback is not None:

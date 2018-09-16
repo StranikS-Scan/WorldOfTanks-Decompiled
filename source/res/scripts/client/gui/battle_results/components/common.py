@@ -36,6 +36,15 @@ def makeRegularFinishResultLabel(finishReason, teamResult):
     return i18n.makeString(_FINISH_REASON_LABEL.format(''.join((str(finishReason), str(teamResult))))) if finishReason == FINISH_REASON.EXTERMINATION else i18n.makeString(_FINISH_REASON_LABEL.format(finishReason))
 
 
+def makeEpicBattleFinishResultLabel(finishReason, teamResult):
+    if finishReason is FINISH_REASON.TIMEOUT:
+        finishReason = FINISH_REASON.DESTROYED_OBJECTS
+        teamResult = _TEAM_RESULT.DEFEAT
+    elif finishReason is FINISH_REASON.DESTROYED_OBJECTS:
+        teamResult = _TEAM_RESULT.WIN
+    return i18n.makeString(_FINISH_REASON_LABEL.format(''.join((str(finishReason), str(teamResult))))) if finishReason in {FINISH_REASON.EXTERMINATION, FINISH_REASON.TIMEOUT, FINISH_REASON.DESTROYED_OBJECTS} else i18n.makeString(_FINISH_REASON_LABEL.format(finishReason))
+
+
 class RankInfoHelper(object):
     rankedController = dependency.descriptor(IRankedBattlesController)
     __TITLE_LABEL_MAP = {(RANK_CHANGE_STATES.RANK_EARNED, True): RANKED_BATTLES.BATTLERESULT_RANKEARNED,
@@ -361,6 +370,41 @@ class ArenaDurationItem(base.StatsItem):
         return converted
 
 
+class ObjectivesReachedVO(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, record, reusable):
+        if record and 'extCommon' in record:
+            yes = i18n.makeString(BATTLE_RESULTS.DETAILS_TIME_VAL_YES)
+            no = i18n.makeString(BATTLE_RESULTS.DETAILS_TIME_VAL_NO)
+            reached = yes if record['extCommon']['destructibleEntity']['numStarted'] > 0 else no
+        else:
+            reached = ''
+        return style.makeTimeStatsVO(self._field, reached)
+
+
+class ObjectivesDestroyedVO(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, record, reusable):
+        if record and 'extCommon' in record:
+            destroyed = str(record['extCommon']['destructibleEntity']['numDestroyed'])
+        else:
+            destroyed = '0'
+        return style.makeTimeStatsVO(self._field, destroyed)
+
+
+class BasesCapturedVO(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, record, reusable):
+        if record and 'extCommon' in record:
+            captured = str(record['extCommon']['sector']['numCaptured'])
+        else:
+            captured = '0'
+        return style.makeTimeStatsVO(self._field, captured)
+
+
 class ArenaDurationVO(ArenaDurationItem):
     __slots__ = ()
 
@@ -429,6 +473,30 @@ class StrongholdBattleFinishResultBlock(RegularFinishResultBlock):
             if sessionCtx.extractLastArenaWinStatus() is not None:
                 sessionCtx.setLastArenaWinStatus(WinStatus(winStatus))
         self.finishReasonLabel = makeRegularFinishResultLabel(reusable.common.finishReason, teamResult)
+        self.shortResultLabel = teamResult
+        self.fullResultLabel = _FULL_RESULT_LABEL.format(teamResult)
+        return
+
+
+class EpicBattleBattleFinishResultBlock(RegularFinishResultBlock):
+    __slots__ = ('finishReasonLabel', 'shortResultLabel', 'fullResultLabel')
+    sessionProvider = dependency.descriptor(IBattleSessionProvider)
+
+    def setRecord(self, result, reusable):
+        teamResult = reusable.getPersonalTeamResult()
+        team = reusable.getPersonalTeam()
+        winnerIfDraw = reusable.personal.avatar.winnerIfDraw
+        if teamResult == _TEAM_RESULT.DRAW and winnerIfDraw:
+            if team == winnerIfDraw:
+                teamResult = _TEAM_RESULT.WIN
+                winStatus = WinStatus.WIN
+            else:
+                teamResult = _TEAM_RESULT.DEFEAT
+                winStatus = WinStatus.LOSE
+            sessionCtx = self.sessionProvider.getCtx()
+            if sessionCtx.extractLastArenaWinStatus() is not None:
+                sessionCtx.setLastArenaWinStatus(WinStatus(winStatus))
+        self.finishReasonLabel = makeEpicBattleFinishResultLabel(reusable.common.finishReason, teamResult)
         self.shortResultLabel = teamResult
         self.fullResultLabel = _FULL_RESULT_LABEL.format(teamResult)
         return

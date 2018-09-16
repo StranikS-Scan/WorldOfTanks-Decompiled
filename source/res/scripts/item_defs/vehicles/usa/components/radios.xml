@@ -32,6 +32,7 @@
     <AN_VRC_12A>	70	</AN_VRC_12A>
     <T23radio>	1000	</T23radio>
     <Development_Radio>	65535	</Development_Radio>
+    <SCR_528_FL>	60000	</SCR_528_FL>
     <AN-ARC-27_IGR>	60001	</AN-ARC-27_IGR>
     <SCR_619_IGR>	60002	</SCR_619_IGR>
     <SCR_528A1_IGR>	60003	</SCR_528A1_IGR>
@@ -509,5 +510,17 @@
       <maxRegenHealth>	150	</maxRegenHealth>
       <repairCost>	3	</repairCost>
     </AN-VRC-7_IGR>
+    <SCR_528_FL>
+      <userString>	#usa_vehicles:SCR_528_FL	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	54000	</price>
+      <notInShop>	true	</notInShop>
+      <weight>	80	</weight>
+      <distance>	745	</distance>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	150	</maxRegenHealth>
+      <repairCost>	3	</repairCost>
+    </SCR_528_FL>
   </shared>
 </radios.xml>

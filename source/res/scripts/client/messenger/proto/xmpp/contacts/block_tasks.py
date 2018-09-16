@@ -10,6 +10,7 @@ from messenger.proto.xmpp.jid import ContactJID
 from messenger.proto.xmpp.log_output import g_logOutput, CLIENT_LOG_AREA
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from messenger.proto.xmpp.xmpp_items import BlockItem, TmpBlockItem
+from soft_exception import SoftException
 
 def _syncBlockItem(storage, jid, name='', dbID=0, clanInfo=None):
     dbID = jid.getDatabaseID()
@@ -51,7 +52,7 @@ class _BlockItemTask(ContactTask):
         return self._result
 
     def _doSync(self, name, groups=None, sub=None, clanInfo=None):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
 
 class BlockListResultTask(SeqTask):
@@ -176,4 +177,4 @@ class SyncBlockItemTask(IQTask):
         return self._result
 
     def _doRun(self, client):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')

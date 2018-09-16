@@ -1,12 +1,12 @@
 <root>
   <Paths>
-    <Path>./res_mods/1.0.0.3</Path>
-    <Path mode="recursive" mask="*.wotmod" root="res">./mods/1.0.0.3</Path>
+    <Path cacheSubdirs="true">./res_mods/1.0.1 Common Test</Path>
+    <Path mode="recursive" mask="*.wotmod" root="res">./mods/1.0.1 Common Test</Path>
     <Packages>
       <Package type="sd,hd">./res/packages/shared_content-part2.pkg</Package>
       <Package type="sd,hd">./res/packages/shared_content-part1.pkg</Package>
-      <Package type="hd">./res/packages/shared_content_hd-part1.pkg</Package>
       <Package type="hd">./res/packages/shared_content_hd-part2.pkg</Package>
+      <Package type="hd">./res/packages/shared_content_hd-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/shared_content_sandbox-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/shared_content_sandbox-part2.pkg</Package>
       <Package type="hd">./res/packages/shared_content_sandbox_hd-part1.pkg</Package>
@@ -16,6 +16,8 @@
       <Package type="hd">./res/packages/01_karelia_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/02_malinovka.pkg</Package>
       <Package type="hd">./res/packages/02_malinovka_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/03_campania_big.pkg</Package>
+      <Package type="hd">./res/packages/03_campania_big_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/04_himmelsdorf.pkg</Package>
       <Package type="hd">./res/packages/04_himmelsdorf_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/05_prohorovka.pkg</Package>
@@ -26,6 +28,7 @@
       <Package type="hd">./res/packages/07_lakeville_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/08_ruinberg.pkg</Package>
       <Package type="hd">./res/packages/08_ruinberg_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/1001_frontline_testmap.pkg</Package>
       <Package type="sd,hd">./res/packages/101_dday.pkg</Package>
       <Package type="hd">./res/packages/101_dday_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/10_hills.pkg</Package>
@@ -44,6 +47,8 @@
       <Package type="hd">./res/packages/18_cliff_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/19_monastery.pkg</Package>
       <Package type="hd">./res/packages/19_monastery_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/208_bf_epic_normandy.pkg</Package>
+      <Package type="hd">./res/packages/208_bf_epic_normandy_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/212_epic_random_valley.pkg</Package>
       <Package type="hd">./res/packages/212_epic_random_valley_hd.pkg</Package>
       <Package type="sd,hd">./res/packages/23_westfeld.pkg</Package>
@@ -74,6 +79,8 @@
       <Package type="hd">./res/packages/63_tundra_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/hangar_v3.pkg</Package>
       <Package type="hd">./res/packages/hangar_v3_hd.pkg</Package>
+      <Package type="sd,hd">./res/packages/hangar_victory_day.pkg</Package>
+      <Package type="hd">./res/packages/hangar_victory_day_hd.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part1.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/audioww-part2.pkg</Package>
       <Package type="sandbox,sd,hd">./res/packages/gui.pkg</Package>

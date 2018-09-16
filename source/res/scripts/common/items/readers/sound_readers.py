@@ -8,12 +8,13 @@ from items import _xml
 from items.components import component_constants
 from items.components import sound_components
 from items.readers import shared_readers
+from soft_exception import SoftException
 
 def readWWTripleSoundConfig(section):
     if IS_DEVELOPMENT:
         for name in ('sound', 'soundPC', 'soundNPC'):
             if section.has_key(name):
-                raise ValueError('Section "[hull|engine]/{}" is no longer supported'.format(name))
+                raise SoftException('Section "[hull|engine]/{}" is no longer supported'.format(name))
 
     return sound_components.WWTripleSoundConfig(intern(section.readString('wwsound', component_constants.EMPTY_STRING)), intern(section.readString('wwsoundPC', component_constants.EMPTY_STRING)), intern(section.readString('wwsoundNPC', component_constants.EMPTY_STRING)))
 

@@ -13,6 +13,7 @@ from gui.shared.formatters import text_styles
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.server_events import IEventsCache
+from soft_exception import SoftException
 
 def reqStyle(_):
     return text_styles.main
@@ -87,13 +88,13 @@ class MissionsAccountRequirementsFormatter(ConditionsFormatter):
         return formattedBranch
 
     def _packCondition(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _packConditions(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _getFormattedField(self, *args, **kwargs):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
 
 class _TokenRequirementFormatter(ConditionFormatter):

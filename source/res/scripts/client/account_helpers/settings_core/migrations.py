@@ -21,6 +21,7 @@ def _initializeDefaultSettings(core, data, initialized):
      GAME.STORE_RECEIVER_IN_BATTLE: core.options.getSetting(GAME.STORE_RECEIVER_IN_BATTLE).getDefaultValue(),
      GAME.REPLAY_ENABLED: core.getSetting(GAME.REPLAY_ENABLED),
      GAME.ENABLE_SERVER_AIM: core.getSetting(GAME.ENABLE_SERVER_AIM),
+     GAME.SHOW_DAMAGE_ICON: core.getSetting(GAME.SHOW_DAMAGE_ICON),
      GAME.SHOW_VEHICLES_COUNTER: core.getSetting(GAME.SHOW_VEHICLES_COUNTER),
      GAME.MINIMAP_ALPHA: core.getSetting(GAME.MINIMAP_ALPHA),
      GAME.PLAYERS_PANELS_SHOW_LEVELS: core.getSetting(GAME.PLAYERS_PANELS_SHOW_LEVELS)}
@@ -393,6 +394,10 @@ def _migrateTo40(core, data, initialized):
     data['gameExtData'][GAME.HANGAR_CAM_PARALLAX_ENABLED] = True
 
 
+def _migrateTo41(core, data, initialized):
+    data['gameData'][GAME.SHOW_DAMAGE_ICON] = True
+
+
 _versions = ((1,
   _initializeDefaultSettings,
   True,
@@ -547,6 +552,10 @@ _versions = ((1,
   False),
  (40,
   _migrateTo40,
+  False,
+  False),
+ (41,
+  _migrateTo41,
   False,
   False))
 

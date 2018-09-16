@@ -1,0 +1,28 @@
+<player_ranks.xml>
+  <DEFAULT>
+    <BasicThreshold>
+      <private>
+        <threshold>	200	</threshold>
+      </private>
+      <sergeant>
+        <threshold>	400	</threshold>
+      </sergeant>
+      <captain>
+        <threshold>	600	</threshold>
+      </captain>
+      <major>
+        <threshold>	800	</threshold>
+      </major>
+      <general>
+        <threshold>	1000	</threshold>
+      </general>
+    </BasicThreshold>
+    <bonus>
+      <private>	10	</private>
+      <sergeant>	25	</sergeant>
+      <captain>	50	</captain>
+      <major>	100	</major>
+      <general>	200	</general>
+    </bonus>
+  </DEFAULT>
+</player_ranks.xml>

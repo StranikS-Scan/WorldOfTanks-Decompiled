@@ -73,10 +73,11 @@ class VOIPChatProvider(bw2_provider.ResponseDictHandler, IVOIPChatProvider):
     def __onChannelEntered(self, _, args):
         url = args['strArg1']
         pwd = args['strArg2']
+        isRejoin = args['int32Arg1']
         if not url or not pwd or self.__channelParams[0] == url:
             return
         self.__channelParams = (url, pwd)
-        g_messengerEvents.voip.onChannelEntered(url, pwd)
+        g_messengerEvents.voip.onChannelEntered(url, pwd, isRejoin)
 
     def __onChannelLeft(self, ids, args):
         g_messengerEvents.voip.onChannelLeft()

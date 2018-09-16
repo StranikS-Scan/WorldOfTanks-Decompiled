@@ -4,6 +4,7 @@ from gui.battle_control.controllers.repositories import BattleSessionSetup
 from gui.battle_control.controllers.repositories import SharedControllersLocator
 from gui.battle_control.controllers.repositories import DynamicControllersLocator
 from gui.battle_control.controllers.repositories import ClassicControllersRepository
+from gui.battle_control.controllers.repositories import EpicControllersRepository
 from gui.battle_control.controllers.repositories import SharedControllersRepository
 __all__ = ('createShared', 'createDynamic', 'BattleSessionSetup', 'SharedControllersLocator', 'DynamicControllersLocator')
 
@@ -13,7 +14,9 @@ def createShared(setup):
 
 def createDynamic(setup):
     guiVisitor = setup.arenaVisitor.gui
-    if not guiVisitor.isTutorialBattle():
+    if guiVisitor.isInEpicRange():
+        repository = EpicControllersRepository.create(setup)
+    elif not guiVisitor.isTutorialBattle():
         repository = ClassicControllersRepository.create(setup)
     else:
         repository = None

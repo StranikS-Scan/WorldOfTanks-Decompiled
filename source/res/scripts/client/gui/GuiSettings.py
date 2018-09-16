@@ -7,6 +7,7 @@ import resource_helper
 from debug_utils import LOG_NOTE, LOG_CURRENT_EXCEPTION
 from helpers import getClientLanguage, time_utils
 from gui import macroses
+from soft_exception import SoftException
 GUI_SETTINGS_FILE_PATH = 'gui/gui_settings.xml'
 VIDEO_SETTINGS_FILE_PATH = 'gui/video_settings.xml'
 MovingTextProps = namedtuple('MovingTextProps', 'show internalBrowser')
@@ -203,10 +204,10 @@ class GuiSettings(object):
                         value[key] = self.__applyMacros(mValue)
 
                     return value
-                raise AttributeError("Unsupported macros '{0}', not found in {1}".format(macros, simpleMacroses))
+                raise SoftException("Unsupported macros '{0}', not found in {1}".format(macros, simpleMacroses))
             if macrosKey in dictValue:
                 return self.__applyMacros(dictValue[macrosKey])
             if 'default' in dictValue:
                 return self.__applyMacros(dictValue['default'])
-            raise AttributeError("Incorrect section in {0}, dict {1} with macros '{2}' should contains item '{3}' or 'default'".format(GUI_SETTINGS_FILE_PATH, dictValue, macros, macrosKey))
+            raise SoftException("Incorrect section in {0}, dict {1} with macros '{2}' should contains item '{3}' or 'default'".format(GUI_SETTINGS_FILE_PATH, dictValue, macros, macrosKey))
         return value

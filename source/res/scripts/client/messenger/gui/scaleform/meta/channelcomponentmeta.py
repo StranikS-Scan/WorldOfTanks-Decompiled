@@ -19,14 +19,14 @@ class ChannelComponentMeta(BaseDAAPIComponent):
     def onLinkClick(self, linkCode):
         self._printOverrideError('onLinkClick')
 
-    def getLastUnsentMessage(self):
-        self._printOverrideError('getLastUnsentMessage')
-
-    def setLastUnsentMessage(self, message):
-        self._printOverrideError('setLastUnsentMessage')
-
     def as_setJoinedS(self, flag):
         return self.flashObject.as_setJoined(flag) if self._isDAAPIInited() else None
 
     def as_addMessageS(self, message):
         return self.flashObject.as_addMessage(message) if self._isDAAPIInited() else None
+
+    def as_getLastUnsentMessageS(self):
+        return self.flashObject.as_getLastUnsentMessage() if self._isDAAPIInited() else None
+
+    def as_setLastUnsentMessageS(self, message):
+        return self.flashObject.as_setLastUnsentMessage(message) if self._isDAAPIInited() else None

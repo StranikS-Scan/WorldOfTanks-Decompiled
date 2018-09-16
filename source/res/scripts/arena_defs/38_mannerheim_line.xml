@@ -66,7 +66,9 @@
     <scenario>
       <startTime>	10.000000 10.000000	</startTime>
       <possibility>	100.000000	</possibility>
-      <period>	410.000000	</period>
+      <interval>	410.000000	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	mannerheim_shell_flight	</name>
       <trajectories>
         <warplane>
           <preset>	mannerheim_shell_flight_1	</preset>
@@ -248,7 +250,9 @@
     <scenario>
       <startTime>	10.000000 10.000000	</startTime>
       <possibility>	100.000000	</possibility>
-      <period>	410.000000	</period>
+      <interval>	410.000000	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	mannerheim_shell_explosion	</name>
       <trajectories>
         <warplane>
           <preset>	mannerheim_shell_explosion_1	</preset>
@@ -430,7 +434,9 @@
     <scenario>
       <startTime>	0.000000 0.000000	</startTime>
       <possibility>	50.000000	</possibility>
-      <period>	0.000000	</period>
+      <interval>	0.000000	</interval>
+      <arenaPeriod>	3	</arenaPeriod>
+      <name>	mannerheim_airplane	</name>
       <trajectories>
         <warplane>
           <preset>	mannerheim_airplane_fly	</preset>

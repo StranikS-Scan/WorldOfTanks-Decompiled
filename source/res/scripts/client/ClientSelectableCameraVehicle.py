@@ -2,18 +2,14 @@
 # Embedded file name: scripts/client/ClientSelectableCameraVehicle.py
 import Math
 import BigWorld
-import WWISE
-import SoundGroups
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from gui.hangar_vehicle_appearance import HangarVehicleAppearance
 from vehicle_systems.tankStructure import ModelStates
 from vehicle_systems.tankStructure import TankPartIndexes
 from gui.ClientHangarSpace import hangarCFG
-from gui.shared.utils.HangarSpace import g_hangarSpace
 
 class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
     appearance = property(lambda self: self.__vAppearance)
-    _SOUND_GROUP_HANGAR_TANK_VIEW = 'STATE_hangar_tank_view'
 
     def __init__(self):
         ClientSelectableCameraObject.__init__(self)
@@ -23,34 +19,34 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         self.__fakeShadowModel = None
         self.__shadowModelFashion = None
         self.__isVehicleLoaded = False
+        self.__vAppearance = HangarVehicleAppearance(self.spaceID, self)
         return
+
+    def prerequisites(self):
+        cfg = hangarCFG()
+        if 'shadow_model_name' in cfg:
+            modelNames = (cfg['shadow_model_name'],)
+            return modelNames
 
     def onEnterWorld(self, prereqs):
         super(ClientSelectableCameraVehicle, self).onEnterWorld(prereqs)
-        if self.__vAppearance is None:
-            self.__vAppearance = HangarVehicleAppearance(self.spaceID, self)
-            self.recreateVehicle(None, ModelStates.UNDAMAGED, lambda : None)
-        g_hangarSpace.onSpaceCreate += self._onSpaceCreated
-        return
-
-    def _onSpaceCreated(self):
-        self.__createFakeShadow()
+        cfg = hangarCFG()
+        if 'shadow_model_name' in cfg:
+            shadowName = cfg['shadow_model_name']
+            if shadowName not in prereqs.failedIDs:
+                self.__createFakeShadow(prereqs[shadowName])
 
     def onLeaveWorld(self):
-        g_hangarSpace.onSpaceCreate -= self._onSpaceCreated
         if self.__vAppearance:
             self.__vAppearance.destroy()
             self.__vAppearance = None
         self.typeDescriptor = None
         self.__shadowModelFashion = None
-        if self.__fakeShadowModel:
+        if self.__fakeShadowModel is not None and self.__fakeShadowModel in BigWorld.models():
             BigWorld.delModel(self.__fakeShadowModel)
             self.__fakeShadowModel = None
         super(ClientSelectableCameraVehicle, self).onLeaveWorld()
         return
-
-    def prerequisites(self):
-        return []
 
     def recreateVehicle(self, typeDescriptor=None, state=ModelStates.UNDAMAGED, callback=None):
         if typeDescriptor is not None:
@@ -68,10 +64,10 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
 
     def _onVehicleLoaded(self):
         self.__updateFakeShadowAccordingToAppearance()
+        self.__isVehicleLoaded = True
         if self.__onLoadedCallback is not None:
             self.__onLoadedCallback()
             self.__onLoadedCallback = None
-        self.__isVehicleLoaded = True
         return
 
     def _getModelHeight(self):
@@ -88,25 +84,18 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
     def isVehicleLoaded(self):
         return self.__isVehicleLoaded
 
-    def _getMovingSound(self):
-        return None
-
-    def _getNextMusicState(self):
-        return None
-
     def setSelectable(self, flag):
         if flag:
             self.targetCaps = []
         else:
             self.targetCaps = [0]
 
-    def __createFakeShadow(self):
+    def __createFakeShadow(self, model):
         cfg = hangarCFG()
-        shadowName = cfg.get('shadow_model_name', None)
-        if shadowName and not self.__fakeShadowModel:
+        if self.__fakeShadowModel is None:
+            self.__fakeShadowModel = model
             self.__shadowModelFashion = BigWorld.WGTextureFashion()
-            self.__fakeShadowModel = BigWorld.Model(shadowName)
-            BigWorld.addModel(self.__fakeShadowModel)
+            BigWorld.addModel(self.__fakeShadowModel, self.spaceID)
             shadowModelYOffset = cfg['shadow_forward_y_offset'] if BigWorld.getGraphicsSetting('RENDER_PIPELINE') == 1 else cfg['shadow_deferred_y_offset']
             self.__fakeShadowModel.position = Math.Vector3(self.position.x, self.position.y + shadowModelYOffset, self.position.z)
             self.__fakeShadowModel.yaw = self.yaw
@@ -115,18 +104,15 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         return
 
     def __updateFakeShadowAccordingToAppearance(self):
-        if not self.__shadowModelFashion:
+        if self.__shadowModelFashion is None or self.__fakeShadowModel is None:
             return
-        cfg = hangarCFG()
-        if self.__vAppearance and self.__vAppearance.isLoaded():
-            appearanceTexture = self.__vAppearance.fakeShadowDefinedInHullTexture
-            shadowMapTexFileName = appearanceTexture if appearanceTexture else cfg['shadow_default_texture_name']
         else:
-            shadowMapTexFileName = cfg['shadow_empty_texture_name']
-        if shadowMapTexFileName:
-            self.__shadowModelFashion.setTexture(shadowMapTexFileName, 'diffuseMap')
-
-    def _startCameraMovement(self):
-        SoundGroups.g_instance.playSound2D(self._getMovingSound())
-        WWISE.WW_setState(self._SOUND_GROUP_HANGAR_TANK_VIEW, '{}{}'.format(self._SOUND_GROUP_HANGAR_TANK_VIEW, self._getNextMusicState()))
-        super(ClientSelectableCameraVehicle, self)._startCameraMovement()
+            cfg = hangarCFG()
+            if self.__vAppearance is not None and self.__vAppearance.isLoaded():
+                appearanceTexture = self.__vAppearance.fakeShadowDefinedInHullTexture
+                shadowMapTexFileName = appearanceTexture if appearanceTexture else cfg['shadow_default_texture_name']
+            else:
+                shadowMapTexFileName = cfg['shadow_empty_texture_name']
+            if shadowMapTexFileName:
+                self.__shadowModelFashion.setTexture(shadowMapTexFileName, 'diffuseMap')
+            return

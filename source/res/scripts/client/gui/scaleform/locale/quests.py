@@ -910,6 +910,7 @@ class QUESTS(object):
     DETAILS_DOSSIER_21_BATTLESCOUNT = '#quests:details/dossier/21/battlesCount'
     DETAILS_DOSSIER_22_BATTLESCOUNT = '#quests:details/dossier/22/battlesCount'
     DETAILS_DOSSIER_24_BATTLESCOUNT = '#quests:details/dossier/24/battlesCount'
+    DETAILS_DOSSIER_27_BATTLESCOUNT = '#quests:details/dossier/27/battlesCount'
     DETAILS_MODIFIERS_TITLE_DISCOUNT = '#quests:details/modifiers/title/discount'
     DETAILS_MODIFIERS_TITLE_SELLING = '#quests:details/modifiers/title/selling'
     DETAILS_MODIFIERS_TITLE_AVAILABILITY = '#quests:details/modifiers/title/availability'
@@ -1376,7 +1377,6 @@ class QUESTS(object):
     ACTION_BUTTON_TRADEINSELLPRICEFACTOR = '#quests:action/button/tradeInSellPriceFactor'
     ACTION_DISCOUNT_MORE = '#quests:action/discount/more'
     ACTION_DISCOUNT_DISCOUNTTEXT = '#quests:action/discount/discountText'
-    ACTION_DISCOUNT_DISCOUNTUPTOTEXT = '#quests:action/discount/discountUpToText'
     ACTION_DISCOUNT_TRADEINLABELTEXT = '#quests:action/discount/tradeInLabelText'
     ACTION_DISCOUNT_PERCENT = '#quests:action/discount/percent'
     ACTION_DISCOUNT_MODIFIER = '#quests:action/discount/modifier'
@@ -1426,19 +1426,6 @@ class QUESTS(object):
     PERSONALMISSION_VEHICLESELECTOR_TITLE = '#quests:personalMission/vehicleSelector/title'
     QUEST_CONDITION_DOT = '#quests:quest/condition/dot'
     QUEST_CONDITION_OR = '#quests:quest/condition/or'
-    ACTIONCARD_TITLE_SET_MARATHONANNOUNCE = '#quests:actionCard/title/set_MarathonAnnounce'
-    ACTION_AUTO_SET_MARATHONANNOUNCE = '#quests:action/auto/set_MarathonAnnounce'
-    ACTION_FULL_SET_MARATHONANNOUNCE = '#quests:action/full/set_MarathonAnnounce'
-    ACTION_BUTTON_SET_MARATHONANNOUNCE = '#quests:action/button/set_MarathonAnnounce'
-    ACTIONCARD_TITLE_SET_MARATHONINPROGRESS = '#quests:actionCard/title/set_MarathonInProgress'
-    ACTION_AUTO_SET_MARATHONINPROGRESS = '#quests:action/auto/set_MarathonInProgress'
-    ACTION_FULL_SET_MARATHONINPROGRESS = '#quests:action/full/set_MarathonInProgress'
-    ACTION_BUTTON_SET_MARATHONINPROGRESS = '#quests:action/button/set_MarathonInProgress'
-    ACTIONCARD_TITLE_SET_MARATHONFINISHED = '#quests:actionCard/title/set_MarathonFinished'
-    ACTION_AUTO_SET_MARATHONFINISHED = '#quests:action/auto/set_MarathonFinished'
-    ACTION_HERO_FULL_SET_MARATHONFINISHED = '#quests:action/hero/full/set_MarathonFinished'
-    ACTION_BUTTON_SET_MARATHONFINISHED = '#quests:action/button/set_MarathonFinished'
-    ACTION_MARATHON_ANNOUNCETIME = '#quests:action/marathon/announceTime'
     TOKEN_DEFAULT_ENUM = (TOKEN_DEFAULT_USSR,
      TOKEN_DEFAULT_GERMANY,
      TOKEN_DEFAULT_USA,
@@ -1725,7 +1712,6 @@ class QUESTS(object):
      ACTION_BUTTON_TRADEINSELLPRICEFACTOR,
      ACTION_DISCOUNT_MORE,
      ACTION_DISCOUNT_DISCOUNTTEXT,
-     ACTION_DISCOUNT_DISCOUNTUPTOTEXT,
      ACTION_DISCOUNT_TRADEINLABELTEXT,
      ACTION_DISCOUNT_PERCENT,
      ACTION_DISCOUNT_MODIFIER,
@@ -1760,17 +1746,7 @@ class QUESTS(object):
      ACTION_BOOSTER_BOOSTER_CREW_XP,
      ACTION_BOOSTER_BOOSTER_CREDITS,
      ACTION_BOOSTER_BOOSTER_REPAIR,
-     ACTION_EXCHANGERATE_GOLD2CREDIT,
-     ACTION_AUTO_SET_MARATHONANNOUNCE,
-     ACTION_FULL_SET_MARATHONANNOUNCE,
-     ACTION_BUTTON_SET_MARATHONANNOUNCE,
-     ACTION_AUTO_SET_MARATHONINPROGRESS,
-     ACTION_FULL_SET_MARATHONINPROGRESS,
-     ACTION_BUTTON_SET_MARATHONINPROGRESS,
-     ACTION_AUTO_SET_MARATHONFINISHED,
-     ACTION_HERO_FULL_SET_MARATHONFINISHED,
-     ACTION_BUTTON_SET_MARATHONFINISHED,
-     ACTION_MARATHON_ANNOUNCETIME)
+     ACTION_EXCHANGERATE_GOLD2CREDIT)
     DETAILS_DOSSIER_ALL_ENUM = (DETAILS_DOSSIER_RANDOM_XP,
      DETAILS_DOSSIER_RANDOM_MAXXP,
      DETAILS_DOSSIER_RANDOM_WINS,
@@ -1900,7 +1876,8 @@ class QUESTS(object):
      DETAILS_DOSSIER_20_BATTLESCOUNT,
      DETAILS_DOSSIER_21_BATTLESCOUNT,
      DETAILS_DOSSIER_22_BATTLESCOUNT,
-     DETAILS_DOSSIER_24_BATTLESCOUNT)
+     DETAILS_DOSSIER_24_BATTLESCOUNT,
+     DETAILS_DOSSIER_27_BATTLESCOUNT)
 
     @classmethod
     def getTokenTitle(cls, style):

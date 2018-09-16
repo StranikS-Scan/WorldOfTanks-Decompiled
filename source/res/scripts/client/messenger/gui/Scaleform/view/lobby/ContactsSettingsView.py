@@ -37,9 +37,9 @@ class ContactsSettingsView(ContactsSettingsViewMeta):
 
     def _getInitDataObject(self):
         defaults = AccountSettings.getFilterDefault(CONTACTS)
-        self.__startData = self.settingsCore.serverSettings.getSection(CONTACTS, defaults)
-        self.__startData['showOfflineUsers'] = bool(self.__startData['showOfflineUsers'])
-        self.__startData['showOthersCategory'] = bool(self.__startData['showOthersCategory'])
+        startData = self.settingsCore.serverSettings.getSection(CONTACTS, defaults)
+        self.__startData = {'showOfflineUsers': bool(startData['showOfflineUsers']),
+         'showOthersCategory': bool(startData['showOthersCategory'])}
         self.__currentData = self.__startData.copy()
         baseData = self._getDefaultInitData(MESSENGER.MESSENGER_CONTACTS_VIEW_SETTINGS_MAINLABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_SETTINGS_BTNOK_LABEL, MESSENGER.MESSENGER_CONTACTS_VIEW_SETTINGS_BTNCANCEL_LABEL, MESSENGER.CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_APPLY, MESSENGER.CONTACTS_SETTINGSVIEW_TOOLTIPS_BTNS_CLOSE)
         baseData['mainData'] = self.__startData

@@ -408,7 +408,11 @@ class _DetailedMissionInfo(_MissionInfo):
         return (criteria, extraConditions)
 
     def _getUIDecoration(self):
-        return self.eventsCache.prefetcher.getMissionDecoration(self.event.getIconID(), DECORATION_SIZES.DETAILS)
+        decoration = self.eventsCache.prefetcher.getMissionDecoration(self.event.getIconID(), DECORATION_SIZES.DETAILS_EX)
+        if decoration:
+            return decoration
+        decoration = self.eventsCache.prefetcher.getMissionDecoration(self.event.getIconID(), DECORATION_SIZES.DETAILS)
+        return decoration if decoration else RES_ICONS.MAPS_ICONS_QUESTS_DECORATIONS_DEFAULT_750X264
 
     def _getInfo(self, statusData, isAvailable, errorMsg, mainQuest=None):
         data = super(_DetailedMissionInfo, self)._getInfo(statusData, isAvailable, errorMsg, mainQuest)

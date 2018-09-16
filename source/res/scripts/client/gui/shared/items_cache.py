@@ -14,7 +14,9 @@ from gui.shared.utils.requesters import RecycleBinRequester
 from gui.shared.utils.requesters import VehicleRotationRequester
 from gui.shared.utils.requesters.badges_requester import BadgesRequester
 from gui.shared.utils.requesters.RankedRequester import RankedRequester
+from gui.shared.utils.requesters.EpicMetaGameRequester import EpicMetaGameRequester
 from skeletons.gui.shared import IItemsCache
+from soft_exception import SoftException
 
 class CACHE_SYNC_REASON(object):
     SHOW_GUI, CLIENT_UPDATE, SHOP_RESYNC, INVENTORY_RESYNC, DOSSIER_RESYNC, STATS_RESYNC = range(1, 7)
@@ -25,7 +27,7 @@ class ItemsCache(IItemsCache):
     def __init__(self):
         super(ItemsCache, self).__init__()
         goodies = GoodiesRequester()
-        self.__items = ItemsRequester.ItemsRequester(InventoryRequester(), StatsRequester(), DossierRequester(), goodies, ShopRequester(goodies), RecycleBinRequester(), VehicleRotationRequester(), RankedRequester(), BadgesRequester())
+        self.__items = ItemsRequester.ItemsRequester(InventoryRequester(), StatsRequester(), DossierRequester(), goodies, ShopRequester(goodies), RecycleBinRequester(), VehicleRotationRequester(), RankedRequester(), BadgesRequester(), EpicMetaGameRequester())
         self.__waitForSync = False
         self.__syncFailed = False
         self.onSyncStarted = Event()
@@ -68,7 +70,7 @@ class ItemsCache(IItemsCache):
         return self.items.clear()
 
     def request(self, callback):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _onResync(self, reason):
         if not self.__waitForSync:

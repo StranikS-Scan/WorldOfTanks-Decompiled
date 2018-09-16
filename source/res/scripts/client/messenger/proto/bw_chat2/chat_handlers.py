@@ -389,6 +389,18 @@ class BattleChatCommandHandler(bw2_provider.ResponseDictHandler, IBattleCommandF
     def createByCellIdx(self, cellIdx):
         return self.__factory.createByCellIdx(cellIdx)
 
+    def createByPosition(self, position):
+        return self.__factory.createByPosition(position)
+
+    def createByObjectiveIndex(self, idx, isAtk):
+        return self.__factory.createByObjectiveIndex(idx, isAtk)
+
+    def createByBaseIndex(self, idx, name, isAtk):
+        return self.__factory.createByBaseIndex(idx, name, isAtk)
+
+    def createByGlobalMsgName(self, actionID, baseName=''):
+        return self.__factory.createByGlobalMsgName(actionID, baseName)
+
     def create4Reload(self, isCassetteClip, timeLeft, quantity):
         return self.__factory.create4Reload(isCassetteClip, timeLeft, quantity)
 

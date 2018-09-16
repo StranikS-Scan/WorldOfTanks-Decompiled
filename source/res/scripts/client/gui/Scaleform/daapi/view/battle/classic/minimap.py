@@ -76,6 +76,10 @@ class GlobalSettingsPlugin(common.SimplePlugin):
         self.setSettings()
         return previousSettings
 
+    def _toogleVisible(self):
+        self.__isVisible = not self.__isVisible
+        self._parentObj.as_setVisibleS(self.__isVisible)
+
     def __saveSettings(self):
         AccountSettings.setSettings(self.__currentSizeSettings, self.__sizeIndex)
 
@@ -84,10 +88,6 @@ class GlobalSettingsPlugin(common.SimplePlugin):
         if self.__sizeIndex != newIndex:
             LOG_DEBUG('Try to change size index of minimap by step', newIndex)
             self._parentObj.as_setSizeS(newIndex)
-
-    def __toogleVisible(self):
-        self.__isVisible = not self.__isVisible
-        self._parentObj.as_setVisibleS(self.__isVisible)
 
     def __handleKey(self, key):
         if self._parentObj.isModalViewShown():
@@ -98,7 +98,7 @@ class GlobalSettingsPlugin(common.SimplePlugin):
         elif cmdMap.isFired(CommandMapping.CMD_MINIMAP_SIZE_UP, key):
             self.__setSizeByStep(1)
         elif cmdMap.isFired(CommandMapping.CMD_MINIMAP_VISIBLE, key):
-            self.__toogleVisible()
+            self._toogleVisible()
 
     def __handleRepeatKeyEvent(self, event):
         if MessengerEntry.g_instance.gui.isFocused():

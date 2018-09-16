@@ -13,22 +13,24 @@ COLOR_WHITE = 4294967295L
 class CombatSelectedArea(object):
     position = property(lambda self: self.__matrix.translation)
 
-    def __init__(self):
+    def __init__(self, enableConstrainToArenaBounds=False):
         self.__terrainSelectedArea = None
         self.__pixelQuad = None
         self.__terrainRotatedArea = None
         self.__fakeModel = None
+        self.__overTerrainHeight = OVER_TERRAIN_HEIGHT
         self.__matrix = None
         self.__rotateModelNode = None
         self.__color = None
         self.__size = None
+        self.__enableConstrainToArenaBounds = enableConstrainToArenaBounds
         return
 
     def setup(self, position, direction, size, visualPath, color, marker):
         self.__fakeModel = model = BigWorld.Model('')
         rootNode = model.node('')
         self.__terrainSelectedArea = area = BigWorld.PyTerrainSelectedArea()
-        area.setup(visualPath, size, OVER_TERRAIN_HEIGHT, color)
+        area.setup(visualPath, size, self.__overTerrainHeight, color)
         area.enableAccurateCollision(True)
         area.setYCutOffDistance(MARKER_HEIGHT)
         rootNode.attach(area)
@@ -56,7 +58,7 @@ class CombatSelectedArea(object):
             objectSize = Math.Vector2(10.0, 10.0)
             self.__rotateModelNode = self.__fakeModel.node('', mathUtils.createRTMatrix(Math.Vector3(-self.__matrix.yaw, 0.0, 0.0), Math.Vector3((-self.__size.x - objectSize.x) * 0.5, 0.0, (self.__size.y + objectSize.y) * 0.5)))
             self.__terrainRotatedArea = area = BigWorld.PyTerrainSelectedArea()
-            area.setup(DEFAULT_ROTATE_MODEL, objectSize, OVER_TERRAIN_HEIGHT, self.__color)
+            area.setup(DEFAULT_ROTATE_MODEL, objectSize, self.__overTerrainHeight, self.__color)
             area.enableAccurateCollision(True)
             area.setYCutOffDistance(MARKER_HEIGHT)
             self.__rotateModelNode.attach(area)
@@ -65,12 +67,39 @@ class CombatSelectedArea(object):
             self.__terrainRotatedArea = None
         return
 
+    def setConstrainToArenaBounds(self, enable):
+        self.__enableConstrainToArenaBounds = enable
+
+    def setOverTerrainOffset(self, offset):
+        if self.__terrainSelectedArea is not None:
+            self.__terrainSelectedArea.setOverTerrainOffset(offset)
+        if self.__terrainRotatedArea is not None:
+            self.__terrainRotatedArea.setOverTerrainOffset(offset)
+        return
+
     def relocate(self, position, direction):
         if position is None:
             return
         else:
             self.__matrix.setRotateYPR((direction.yaw, 0, 0))
             self.__matrix.translation = position
+            if self.__enableConstrainToArenaBounds:
+                halfX = self.__size.x * 0.5
+                halfY = self.__size.y * 0.5
+                corners = {(halfX, 0, halfY),
+                 (-halfX, 0, halfY),
+                 (-halfX, 0, -halfY),
+                 (halfX, 0, -halfY)}
+                transformedCorners = map(lambda corner: self.__matrix.applyPoint(corner), corners)
+                arena = BigWorld.player().arena
+                correction = Math.Vector3(0)
+                for transformedCorner in transformedCorners:
+                    if not arena.isPointInsideArenaBB(transformedCorner):
+                        correctedPoint = arena.getClosestPointOnArenaBB(transformedCorner)
+                        correction.x = max(correction.x, correctedPoint.x - transformedCorner.x, key=abs)
+                        correction.z = max(correction.z, correctedPoint.z - transformedCorner.z, key=abs)
+
+                self.__matrix.translation = position + correction
             self.__terrainSelectedArea.updateHeights()
             if self.__terrainRotatedArea:
                 self.__terrainRotatedArea.updateHeights()

@@ -22,6 +22,7 @@ from gui.prb_control.settings import FUNCTIONAL_FLAG, PREBATTLE_ACTION_NAME
 from gui.prb_control.storages import prequeue_storage_getter
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
+from soft_exception import SoftException
 
 class SandboxSubscriber(PreQueueSubscriber):
 
@@ -110,7 +111,7 @@ class SandboxEntity(PreQueueEntity):
     def _makeQueueCtxByAction(self, action=None):
         invID = g_currentVehicle.invID
         if not invID:
-            raise UserWarning('Inventory ID of vehicle can not be zero')
+            raise SoftException('Inventory ID of vehicle can not be zero')
         return SandboxQueueCtx(invID, waitingID='prebattle/join')
 
     def _goToQueueUI(self):

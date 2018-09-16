@@ -1,0 +1,558 @@
+<It04_Fiat_3000.xml>
+  <crew>
+    <commander>	gunner
+			radioman
+			loader	</commander>
+    <driver></driver>
+  </crew>
+  <speedLimits>
+    <forward>	21	</forward>
+    <backward>	8	</backward>
+  </speedLimits>
+  <invisibility>
+    <moving>	0.178	</moving>
+    <still>	0.237	</still>
+    <camouflageBonus>	0.03	</camouflageBonus>
+    <camouflageNetBonus>	0.1	</camouflageNetBonus>
+    <firePenalty>	0.356	</firePenalty>
+  </invisibility>
+  <repairCost>	0	</repairCost>
+  <crewXpFactor>	1.0	</crewXpFactor>
+  <camouflage>
+    <priceFactor>	0.2	</priceFactor>
+    <tiling>	1 1 0 0	</tiling>
+    <exclusionMask></exclusionMask>
+  </camouflage>
+  <hull>
+    <armor>
+      <armor_1>	16	</armor_1>
+      <armor_2>	16	</armor_2>
+      <armor_3>	16	</armor_3>
+      <armor_4>	16	</armor_4>
+      <armor_5>	8	</armor_5>
+      <armor_6>	8	</armor_6>
+      <armor_8>	0	</armor_8>
+      <armor_9>	6	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+      </armor_9>
+    </armor>
+    <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+    <weight>	3890	</weight>
+    <maxHealth>	96	</maxHealth>
+    <ammoBayHealth>
+      <maxHealth>	65	</maxHealth>
+      <maxRegenHealth>	45	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+    </ammoBayHealth>
+    <models>
+      <undamaged>	vehicles/italy/It04_Fiat_3000/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/italy/It04_Fiat_3000/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/italy/It04_Fiat_3000/crash/lod0/Hull.model	</exploded>
+    </models>
+    <swinging>
+      <lodDist>	FAR	</lodDist>
+      <pitchParams>	0.34 38.00 0.36 1.00 0.05 0.34	</pitchParams>
+      <rollParams>	1.00 0.34 38.00 0.36 1.00 0.06 0.40	</rollParams>
+      <sensitivityToImpulse>	0.44	</sensitivityToImpulse>
+    </swinging>
+    <exhaust>
+      <pixie>	gas_small	</pixie>
+      <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+    </exhaust>
+    <turretPositions>
+      <turret>	0.002 0.431804 0.34724	</turret>
+    </turretPositions>
+    <hitTester>
+      <collisionModelServer>	vehicles/italy/It04_Fiat_3000/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/italy/It04_Fiat_3000/collision_client/Hull.model	</collisionModelClient>
+    </hitTester>
+    <emblemSlots>
+      <clan>
+        <rayStart>	-0.00448652 0.0975657 1.49578	</rayStart>
+        <rayEnd>	-0.00448652 -0.0889956 1.42371	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
+        <size>	0.32	</size>
+        <hideIfDamaged>	true	</hideIfDamaged>
+      </clan>
+      <inscription>
+        <rayStart>	-0.630999 0.239171 0.202229	</rayStart>
+        <rayEnd>	-0.431001 0.239171 0.202229	</rayEnd>
+        <rayUp>	0.000000 1 0.000000	</rayUp>
+        <size>	0.536	</size>
+        <hideIfDamaged>	false	</hideIfDamaged>
+      </inscription>
+    </emblemSlots>
+    <hangarShadowTexture>	vehicles/italy/It04_Fiat_3000/Fiat_3000_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	2 1 0.000000 0.000000	</tiling>
+    </camouflage>
+  </hull>
+  <chassis>
+    <Chassis_It04_Fiat_3000>
+      <userString>	#italy_vehicles:Chassis_It04_Fiat_3000	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <leftTrack>	5	</leftTrack>
+        <rightTrack>	5	</rightTrack>
+      </armor>
+      <weight>	1200	</weight>
+      <maxLoad>	6500	</maxLoad>
+      <terrainResistance>	0.8 0.9 1.8	</terrainResistance>
+      <brakeForce>	5900	</brakeForce>
+      <rotationIsAroundCenter>	false	</rotationIsAroundCenter>
+      <rotationSpeed>	50	</rotationSpeed>
+      <shotDispersionFactors>
+        <vehicleMovement>	0.38	</vehicleMovement>
+        <vehicleRotation>	0.38	</vehicleRotation>
+      </shotDispersionFactors>
+      <bulkHealthFactor>	3.0	</bulkHealthFactor>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	40	</maxRegenHealth>
+      <repairCost>	1.0	</repairCost>
+      <models>
+        <undamaged>	vehicles/italy/It04_Fiat_3000/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/italy/It04_Fiat_3000/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/italy/It04_Fiat_3000/crash/lod0/Chassis.model	</exploded>
+      </models>
+      <traces>
+        <lodDist>	MEDIUM	</lodDist>
+        <bufferPrefs>	mediumTank	</bufferPrefs>
+        <textureSet>	usa_02	</textureSet>
+        <size>	0.3 0.32	</size>
+      </traces>
+      <tracks>
+        <lodDist>	MEDIUM_TRACK	</lodDist>
+        <leftMaterial>	track_mat_L_skinned	</leftMaterial>
+        <rightMaterial>	track_mat_R_skinned	</rightMaterial>
+        <textureScale>	-3.3	</textureScale>
+      </tracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	2.408780 0.000017 0.002841	</row0>
+            <row1>	0.000012 1.342020 -0.000077	</row1>
+            <row2>	0.001785 -0.000212 3.481630	</row2>
+            <row3>	-0.000040 0.000000 0.000061	</row3>
+          </transform>
+        </decal>
+      </AODecals>
+      <wheels>
+        <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.41412	</radius>
+          <syncAngle>	18	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	WD_L	</template>
+          <radius>	0.0781145	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L6	</name>
+          <radius>	0.344868	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	true	</isLeft>
+          <template>	W_L	</template>
+          <radius>	0.103494	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.41412	</radius>
+          <syncAngle>	18	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	WD_R	</template>
+          <radius>	0.0781145	</radius>
+          <startIndex>	1	</startIndex>
+          <count>	5	</count>
+        </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R6	</name>
+          <radius>	0.344868	</radius>
+          <syncAngle>	22.5	</syncAngle>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.103494	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+        </group>
+      </wheels>
+      <drivingWheels>	WD_L0 WD_L6	</drivingWheels>
+      <effects>
+        <lodDist>	MEDIUM	</lodDist>
+        <mud>	smallTankMud	</mud>
+      </effects>
+      <wwsoundPC>	treads_type_pc	</wwsoundPC>
+      <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
+      <hullPosition>	0.000000 0.974056 0.000000	</hullPosition>
+      <hitTester>
+        <collisionModelServer>	vehicles/italy/It04_Fiat_3000/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/italy/It04_Fiat_3000/collision_client/Chassis.model	</collisionModelClient>
+      </hitTester>
+      <topRightCarryingPoint>	0.695453 1.04295	</topRightCarryingPoint>
+      <maxClimbAngle>	25	</maxClimbAngle>
+      <navmeshGirth>	6.0	</navmeshGirth>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.05	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	8	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.05	</minOffset>
+          <maxOffset>	0.05	</maxOffset>
+        </group>
+      </groundNodes>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/italy/It04_Fiat_3000/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/italy/It04_Fiat_3000/track/segment.model	</segmentModelRight>
+        <segment2ModelLeft>	vehicles/italy/It04_Fiat_3000/track/segment.model	</segment2ModelLeft>
+        <segment2ModelRight>	vehicles/italy/It04_Fiat_3000/track/segment.model	</segment2ModelRight>
+        <left>	vehicles/italy/It04_Fiat_3000/track/left.track	</left>
+        <right>	vehicles/italy/It04_Fiat_3000/track/right.track	</right>
+        <segmentLength>	0.136	</segmentLength>
+        <segmentOffset>	0.143606	</segmentOffset>
+        <segment2Offset>	0.000000	</segment2Offset>
+        <lodDist>	SPLINE_TRACK	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <trackThickness>	-0.00490857	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	false	</linkBones>
+        <maxAmplitude>	0.1	</maxAmplitude>
+        <maxOffset>	0.1	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1100	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	1	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.0281553	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L1	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.0281553	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L2	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.0281553	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L3	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.0281553	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L4	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.0281553	</offset>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VT_L5	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.0281553	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R0	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.1	</backwardElastK>
+          <offset>	-0.0281553	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R1	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.2	</backwardElastK>
+          <offset>	-0.0281553	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R2	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.6	</backwardElastK>
+          <offset>	-0.0281553	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R3	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	1.9	</backwardElastK>
+          <offset>	-0.0281553	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R4	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2.2	</backwardElastK>
+          <offset>	-0.0281553	</offset>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VT_R5	</name>
+          <forwardElastK>	0.9	</forwardElastK>
+          <backwardElastK>	2.5	</backwardElastK>
+          <offset>	-0.0281553	</offset>
+        </node>
+      </trackNodes>
+    </Chassis_It04_Fiat_3000>
+  </chassis>
+  <turrets0>
+    <Turret_1_It04_Fiat_3000>
+      <userString>	#italy_vehicles:Turret_1_It04_Fiat_3000	</userString>
+      <tags></tags>
+      <level>	1	</level>
+      <price>	0	</price>
+      <notInShop>	true	</notInShop>
+      <armor>
+        <armor_1>	16	</armor_1>
+        <armor_2>	16	</armor_2>
+        <armor_3>	16	</armor_3>
+        <armor_4>	16	</armor_4>
+        <armor_5>	8	</armor_5>
+        <armor_6>	8	</armor_6>
+        <armor_7>	16	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	16	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_9>
+      </armor>
+      <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
+      <weight>	200	</weight>
+      <maxHealth>	24	</maxHealth>
+      <rotationSpeed>	34	</rotationSpeed>
+      <turretRotatorHealth>
+        <maxHealth>	50	</maxHealth>
+        <maxRegenHealth>	25	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </turretRotatorHealth>
+      <circularVisionRadius>	280	</circularVisionRadius>
+      <surveyingDeviceHealth>
+        <maxHealth>	30	</maxHealth>
+        <maxRegenHealth>	15	</maxRegenHealth>
+        <repairCost>	1.0	</repairCost>
+      </surveyingDeviceHealth>
+      <guns>
+        <Cannone_da_37_20>	shared	  <maxAmmo>	237	</maxAmmo>
+          <unlocks>
+            <gun>	Cannone_da_37_40	  <cost>	40	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <gun>	10	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.430556 10 0.458333 5 0.513889 5 0.541667 10 1 10	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
+          <reloadTime>	2.6	</reloadTime>
+          <shotDispersionRadius>	0.5	</shotDispersionRadius>
+          <models>
+            <undamaged>	vehicles/italy/It04_Fiat_3000/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/italy/It04_Fiat_3000/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/italy/It04_Fiat_3000/crash/lod0/Gun_01.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/italy/It04_Fiat_3000/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/italy/It04_Fiat_3000/collision_client/Gun_01.model	</collisionModelClient>
+          </hitTester>
+        </Cannone_da_37_20>
+        <Cannone_da_37_40>	shared	  <maxAmmo>	68	</maxAmmo>
+          <unlocks>
+            <vehicle>	It06_M14_41	  <cost>	270	</cost>
+            </vehicle>
+            <vehicle>	It05_Carro_L6_40	  <cost>	270	</cost>
+            </vehicle>
+          </unlocks>
+          <armor>
+            <gun>	10	</gun>
+          </armor>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 10 0.430556 10 0.458333 5 0.513889 5 0.541667 10 1 10	</maxPitch>
+          </pitchLimits>
+          <invisibilityFactorAtShot>	0.255	</invisibilityFactorAtShot>
+          <reloadTime>	2.8	</reloadTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
+          <models>
+            <undamaged>	vehicles/italy/It04_Fiat_3000/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/italy/It04_Fiat_3000/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/italy/It04_Fiat_3000/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/italy/It04_Fiat_3000/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/italy/It04_Fiat_3000/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+        </Cannone_da_37_40>
+      </guns>
+      <models>
+        <undamaged>	vehicles/italy/It04_Fiat_3000/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/italy/It04_Fiat_3000/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/italy/It04_Fiat_3000/crash/lod0/Turret_01.model	</exploded>
+      </models>
+      <hitTester>
+        <collisionModelServer>	vehicles/italy/It04_Fiat_3000/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/italy/It04_Fiat_3000/collision_client/Turret_01.model	</collisionModelClient>
+      </hitTester>
+      <gunPosition>	0.196663 0.298249 0.430145	</gunPosition>
+      <emblemSlots>
+        <player>
+          <rayStart>	-0.530688 0.312762 0.262346	</rayStart>
+          <rayEnd>	-0.361626 0.288462 0.158295	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+        </player>
+        <player>
+          <rayStart>	0.530688 0.312762 0.262346	</rayStart>
+          <rayEnd>	0.361626 0.288462 0.158295	</rayEnd>
+          <rayUp>	-0.0180944 0.9994 0.0295397	</rayUp>
+          <size>	0.3	</size>
+          <hideIfDamaged>	true	</hideIfDamaged>
+          <isMirrored>	true	</isMirrored>
+        </player>
+      </emblemSlots>
+      <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
+      <showEmblemsOnGun>	false	</showEmblemsOnGun>
+      <physicsShape>	0.983 0.000 1.006 0.000 0.650 0.038 0.625 0.472 0.623 0.500 0.166 0.500 0.180 0.420 0.217	</physicsShape>
+      <camouflage>
+        <tiling>	0.6 0.6 0.000000 0.000000	</tiling>
+      </camouflage>
+    </Turret_1_It04_Fiat_3000>
+  </turrets0>
+  <engines>
+    <FIAT_604>	shared	</FIAT_604>
+  </engines>
+  <fuelTanks>
+    <Small>	shared	</Small>
+  </fuelTanks>
+  <radios>
+    <R_F_C_R>	shared	</R_F_C_R>
+  </radios>
+  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <physics>
+    <detailed>
+      <engines>
+        <FIAT_604>
+          <smplEnginePower>	63	</smplEnginePower>
+        </FIAT_604>
+      </engines>
+      <chassis>
+        <Chassis_It04_Fiat_3000>
+          <grounds>
+            <ground>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </ground>
+            <sand>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </sand>
+            <wood>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </wood>
+            <snow>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </snow>
+            <stone>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </stone>
+            <metal>
+              <medium>
+                <rollingFriction>	0.07245	</rollingFriction>
+              </medium>
+            </metal>
+          </grounds>
+        </Chassis_It04_Fiat_3000>
+      </chassis>
+    </detailed>
+  </physics>
+  <effects>
+    <collision></collision>
+    <damagedStateGroup>	small	</damagedStateGroup>
+  </effects>
+  <emblems>
+    <default>	italian_flag	</default>
+    <lodDist>	MEDIUM	</lodDist>
+    <alpha>	1	</alpha>
+  </emblems>
+</It04_Fiat_3000.xml>

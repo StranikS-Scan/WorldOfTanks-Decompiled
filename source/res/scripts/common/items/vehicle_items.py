@@ -4,6 +4,7 @@ import functools
 import Math
 from ModelHitTester import ModelHitTester
 from constants import SHELL_TYPES
+from soft_exception import SoftException
 from items import ITEM_TYPES, ITEM_TYPE_NAMES, makeIntCompactDescrByID
 from items.basic_item import BasicItem
 from items.components import component_constants
@@ -71,7 +72,7 @@ class VehicleItem(BasicItem):
 
 @add_shallow_copy('unlocks')
 class InstallableItem(VehicleItem):
-    __slots__ = ('weight', 'models', 'materials', 'hitTester', 'unlocks', 'armorHomogenization', 'camouflage', 'healthParams', 'sounds', 'emblemSlots')
+    __slots__ = ('weight', 'modelsSets', 'models', 'materials', 'hitTester', 'unlocks', 'armorHomogenization', 'camouflage', 'healthParams', 'sounds', 'emblemSlots')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(InstallableItem, self).__init__(typeID, componentID, componentName, compactDescr, level=level, status=VEHICLE_ITEM_STATUS.EMPTY)
@@ -81,6 +82,7 @@ class InstallableItem(VehicleItem):
         self.armorHomogenization = component_constants.DEFAULT_ARMOR_HOMOGENIZATION
         self.materials = None
         self.hitTester = None
+        self.modelsSets = None
         self.models = None
         self.camouflage = shared_components.DEFAULT_CAMOUFLAGE
         self.sounds = None
@@ -188,11 +190,12 @@ class Radio(InstallableItem):
 
 @add_shallow_copy()
 class Turret(InstallableItem):
-    __slots__ = ('gunPosition', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius')
+    __slots__ = ('gunPosition', 'rotationSpeed', 'turretRotatorHealth', 'surveyingDeviceHealth', 'invisibilityFactor', 'primaryArmor', 'ceilless', 'showEmblemsOnGun', 'guns', 'turretRotatorSoundManual', 'turretRotatorSoundGear', 'AODecals', 'turretDetachmentEffects', 'physicsShape', 'circularVisionRadius', 'gunCamPosition')
 
     def __init__(self, typeID, componentID, componentName, compactDescr, level=1):
         super(Turret, self).__init__(typeID, componentID, componentName, compactDescr, level)
         self.gunPosition = None
+        self.gunCamPosition = None
         self.rotationSpeed = component_constants.ZERO_FLOAT
         self.turretRotatorHealth = None
         self.surveyingDeviceHealth = None
@@ -247,7 +250,7 @@ class Gun(InstallableItem):
 
 @add_shallow_copy('variantName')
 class Hull(BasicItem):
-    __slots__ = ('variantName', 'hitTester', 'materials', 'weight', 'maxHealth', 'ammoBayHealth', 'armorHomogenization', 'turretPositions', 'turretHardPoints', 'variantMatch', 'fakeTurrets', 'emblemSlots', 'models', 'swinging', 'customEffects', 'AODecals', 'camouflage', 'hangarShadowTexture', 'primaryArmor')
+    __slots__ = ('variantName', 'hitTester', 'materials', 'weight', 'maxHealth', 'ammoBayHealth', 'armorHomogenization', 'turretPositions', 'turretHardPoints', 'variantMatch', 'fakeTurrets', 'emblemSlots', 'modelsSets', 'models', 'swinging', 'customEffects', 'AODecals', 'camouflage', 'hangarShadowTexture', 'primaryArmor')
 
     def __init__(self):
         super(Hull, self).__init__(component_constants.UNDEFINED_ITEM_TYPE_ID, component_constants.ZERO_INT, component_constants.EMPTY_STRING, component_constants.ZERO_INT)
@@ -264,6 +267,7 @@ class Hull(BasicItem):
         self.primaryArmor = component_constants.EMPTY_TUPLE
         self.turretHardPoints = component_constants.EMPTY_TUPLE
         self.emblemSlots = component_constants.EMPTY_TUPLE
+        self.modelsSets = None
         self.models = None
         self.swinging = None
         self.customEffects = component_constants.EMPTY_TUPLE
@@ -317,7 +321,7 @@ def createInstallableItem(itemTypeID, nationID, itemID, name):
     if itemTypeID in _TYPE_ID_TO_CLASS:
         clazz = _TYPE_ID_TO_CLASS[itemTypeID]
         return clazz(itemTypeID, (nationID, itemID), name, makeIntCompactDescrByID(ITEM_TYPE_NAMES[itemTypeID], nationID, itemID))
-    raise ValueError('Item can not be created by type {}'.format(itemTypeID))
+    raise SoftException('Item can not be created by type {}'.format(itemTypeID))
 
 
 def createChassis(nationID, componentID, name):

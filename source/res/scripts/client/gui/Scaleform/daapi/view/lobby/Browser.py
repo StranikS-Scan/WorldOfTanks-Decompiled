@@ -9,6 +9,7 @@ from gui.shared.formatters import icons
 from helpers import i18n, dependency
 from skeletons.gui.game_control import IBrowserController
 from web_client_api.WebCommandHandler import WebCommandHandler
+from soft_exception import SoftException
 
 class Browser(BrowserMeta):
     browserCtrl = dependency.descriptor(IBrowserController)
@@ -28,7 +29,7 @@ class Browser(BrowserMeta):
         self.__browserID = browserID
         self.__browser = self.browserCtrl.getBrowser(self.__browserID)
         if self.__browser is None:
-            raise UserWarning('Cannot find browser')
+            raise SoftException('Cannot find browser')
         self.__webCommandHandler = WebCommandHandler(self.__browserID, alias, self)
         if webHandlersMap is not None:
             self.__webCommandHandler.addHandlers(webHandlersMap)
@@ -148,7 +149,7 @@ class Browser(BrowserMeta):
             self.removeListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
             self.__browser = self.browserCtrl.getBrowser(self.__browserID)
             if self.__browser is None:
-                raise UserWarning('Cannot find browser')
+                raise SoftException('Cannot find browser')
             self.__prepareBrowser()
         return
 

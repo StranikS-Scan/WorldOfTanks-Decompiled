@@ -15,7 +15,7 @@ from gui.shared import EVENT_BUS_SCOPE, events
 from gui.shared.events import GameEvent
 from gui.shared.formatters import text_styles
 from gui.shared.utils import flashObject2Dict, graphics
-from hangar_camera_common import CameraRelatedEvents
+from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents
 from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
 

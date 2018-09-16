@@ -7,6 +7,7 @@ import SoundGroups
 from bootcamp.BootcampConstants import HINT_TYPE, HINT_NAMES
 from debug_utils_bootcamp import LOG_CURRENT_EXCEPTION_BOOTCAMP
 from HintControllers import createPrimaryHintController, createSecondaryHintController, createReplayPlayHintSystem
+from soft_exception import SoftException
 from HintsBase import HINT_COMMAND
 from HintsMove import HintMove, HintMoveTurret, HintNoMove, HintNoMoveTurret, HintMoveToMarker
 from HintsScenario import HintAllyShoot, HintUselessConsumable, HintExitGameArea, HintAvoidAndDestroy, HintStartNarrative, HintSectorClear, HintSniperOnDistance, HintLowHP
@@ -69,12 +70,12 @@ class HintSystem(object):
                         continue
                     cls = HintSystem.hintsBattleClasses.get(hintTypeId, None)
                     if cls is None:
-                        raise Exception('Hint not implemented (%s)' % HINT_NAMES[hintTypeId])
+                        raise SoftException('Hint not implemented (%s)' % HINT_NAMES[hintTypeId])
                     hint = cls(avatar, hintParams)
                 else:
                     cls = HintSystem.hintsLobbyClasses.get(hintTypeId, None)
                     if cls is None:
-                        raise Exception('Hint not implemented (%s)' % HINT_NAMES[hintTypeId])
+                        raise SoftException('Hint not implemented (%s)' % HINT_NAMES[hintTypeId])
                     hint = cls(hintParams)
                 timeCompleted = hintParams.get('time_completed', 2.0)
                 cooldownAfter = hintParams.get('cooldown_after', 2.0)
@@ -118,7 +119,7 @@ class HintSystem(object):
                             break
 
                     if correspondedHint is None:
-                        raise UserWarning('Not found corresponded hint')
+                        raise SoftException('Not found corresponded hint')
                     self.__hintsNotCompleted.remove(correspondedHint)
                     self.__hintsCompleted.append(createPrimaryHintController(self, hintId, typeId, True, timeCompleted, cooldownTimeout, message, voiceover))
             if commandId == HINT_COMMAND.HIDE:

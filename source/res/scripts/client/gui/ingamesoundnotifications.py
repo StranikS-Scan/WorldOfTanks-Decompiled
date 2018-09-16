@@ -99,7 +99,10 @@ class IngameSoundNotifications(object):
                             continue
                         self.__lastEnqueuedTime[soundPath] = time
                         if rules == 1:
-                            self.__clearQueue(category)
+                            clearActiveEvents = True
+                            if self.__activeEvents[category] is not None:
+                                clearActiveEvents = False
+                            self.__clearQueue(category, clearActiveEvents)
                             queues[category].append(queueItem)
                         elif rules == 2:
                             queues[category].insert(0, queueItem)
@@ -145,9 +148,10 @@ class IngameSoundNotifications(object):
 
         return False
 
-    def __clearQueue(self, category):
+    def __clearQueue(self, category, clearActiveEvents=True):
         if self.__activeEvents[category] is not None:
-            self.__activeEvents[category] = None
+            if clearActiveEvents is True:
+                self.__activeEvents[category] = None
         self.__soundQueues[category] = []
         return
 
@@ -160,7 +164,9 @@ class IngameSoundNotifications(object):
                     BigWorld.callback(0.01, lambda : self.__onSoundEnd(category, sound))
                 else:
                     self.__activeEvents[category] = None
-                    BigWorld.callback(0.01, partial(self.__playFirstFromQueue, category))
+                    queue = self.__soundQueues[category]
+                    if queue:
+                        BigWorld.callback(0.01, partial(self.__playFirstFromQueue, category))
             elif sound.state.find('playing') != -1:
                 BigWorld.callback(0.01, lambda : self.__onSoundEnd(category, sound))
             else:

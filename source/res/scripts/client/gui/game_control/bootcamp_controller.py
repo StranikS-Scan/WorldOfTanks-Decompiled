@@ -107,6 +107,9 @@ class BootcampController(IBootcampController):
     def getLessonNum(self):
         return g_bootcamp.getLessonNum()
 
+    def isEnableDamageIcon(self):
+        return g_bootcamp.isEnableDamageIcon()
+
     def getCheckpoint(self):
         return g_bootcamp.getCheckpoint()
 

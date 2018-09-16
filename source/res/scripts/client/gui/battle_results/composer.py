@@ -25,10 +25,7 @@ class StatsComposer(IStatsComposer):
     def __init__(self, reusable, common, personal, teams, text, animation=None):
         super(StatsComposer, self).__init__()
         self._block = base.StatsBlock(templates.TOTAL_VO_META)
-        if reusable.common.isMultiTeamMode:
-            self._block.addNextComponent(templates.MULTI_TEAM_TABS_BLOCK.clone())
-        else:
-            self._block.addNextComponent(templates.REGULAR_TABS_BLOCK.clone())
+        self._registerTabs(reusable)
         self._block.addNextComponent(text)
         self._block.addNextComponent(templates.VEHICLE_PROGRESS_STATS_BLOCK.clone())
         self._block.addNextComponent(templates.QUESTS_PROGRESS_STATS_BLOCK.clone())
@@ -61,11 +58,26 @@ class StatsComposer(IStatsComposer):
             animation = None
         return animation
 
+    def _registerTabs(self, reusable):
+        if reusable.common.isMultiTeamMode:
+            self._block.addNextComponent(templates.MULTI_TEAM_TABS_BLOCK.clone())
+        else:
+            self._block.addNextComponent(templates.REGULAR_TABS_BLOCK.clone())
+
 
 class RegularStatsComposer(StatsComposer):
 
     def __init__(self, reusable):
         super(RegularStatsComposer, self).__init__(reusable, templates.REGULAR_COMMON_STATS_BLOCK.clone(), templates.REGULAR_PERSONAL_STATS_BLOCK.clone(), templates.REGULAR_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
+
+
+class EpicStatsComposer(StatsComposer):
+
+    def __init__(self, reusable):
+        super(EpicStatsComposer, self).__init__(reusable, templates.EPIC_COMMON_STATS_BLOCK.clone(), templates.EPIC_PERSONAL_STATS_BLOCK.clone(), templates.EPIC_TEAMS_STATS_BLOCK.clone(), templates.REGULAR_TEXT_STATS_BLOCK.clone())
+
+    def _registerTabs(self, reusable):
+        self._block.addNextComponent(templates.EPIC_TABS_BLOCK.clone())
 
 
 class CyberSportStatsComposer(StatsComposer):
@@ -151,6 +163,8 @@ def createComposer(reusable):
         composer = RankedBattlesStatsComposer(reusable)
     elif bonusType == ARENA_BONUS_TYPE.BOOTCAMP:
         composer = BootcampStatsComposer(reusable)
+    elif bonusType == ARENA_BONUS_TYPE.EPIC_BATTLE:
+        composer = EpicStatsComposer(reusable)
     else:
         composer = RegularStatsComposer(reusable)
     return composer

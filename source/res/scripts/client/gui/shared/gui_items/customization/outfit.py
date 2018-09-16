@@ -34,11 +34,11 @@ def scaffold():
 
 
 class Outfit(HasStrCD):
-    __slots__ = ('_id', '_styleDescr', '_containers', '_isEnabled')
+    __slots__ = ('_id', '_styleDescr', '_containers', '_isEnabled', '_isInstalled')
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
     itemsCache = dependency.descriptor(IItemsCache)
 
-    def __init__(self, strCompactDescr=None, isEnabled=False, proxy=None):
+    def __init__(self, strCompactDescr=None, isEnabled=False, isInstalled=False, proxy=None):
         super(Outfit, self).__init__(strCompactDescr)
         self._containers = {}
         if strCompactDescr:
@@ -52,6 +52,7 @@ class Outfit(HasStrCD):
         else:
             self._styleDescr = None
         self._isEnabled = isEnabled
+        self._isInstalled = isInstalled
         for container in scaffold():
             container.unpack(component, proxy)
             self._containers[container.getAreaID()] = container
@@ -68,7 +69,7 @@ class Outfit(HasStrCD):
         return component
 
     def copy(self):
-        return self.itemsFactory.createOutfit(self.pack().makeCompDescr(), isEnabled=self._isEnabled, proxy=self.itemsCache.items)
+        return self.itemsFactory.createOutfit(self.pack().makeCompDescr(), isEnabled=self._isEnabled, isInstalled=self._isInstalled, proxy=self.itemsCache.items)
 
     def diff(self, other):
         result = Outfit()
@@ -115,6 +116,10 @@ class Outfit(HasStrCD):
     def misc(self):
         return self.getContainer(Area.MISC)
 
+    @property
+    def modelsSet(self):
+        return self._styleDescr.modelsSet if self._styleDescr else ''
+
     def containers(self):
         for container in self._containers.itervalues():
             yield container
@@ -141,6 +146,12 @@ class Outfit(HasStrCD):
 
     def isEnabled(self):
         return self._isEnabled
+
+    def isInstalled(self):
+        return self._isInstalled
+
+    def isActive(self):
+        return self._isEnabled and self._isInstalled
 
     def clear(self):
         for container in self._containers.itervalues():

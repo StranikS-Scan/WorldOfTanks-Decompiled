@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/account_helpers/AccountValidator.py
+from soft_exception import SoftException
 import BigWorld
 import constants
 from adisp import process, async
@@ -7,10 +8,11 @@ from helpers import dependency
 from items import vehicles, tankmen, ITEM_TYPE_NAMES
 from debug_utils import LOG_WARNING, LOG_ERROR
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from items.components.c11n_constants import StyleFlags
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 
-class ValidateException(Exception):
+class ValidateException(SoftException):
 
     def __init__(self, msg, code, itemData):
         super(ValidateException, self).__init__(msg)
@@ -95,8 +97,8 @@ class AccountValidator(object):
         for vehCD, outfitsData in c11nData.get(constants.CustomizationInvData.OUTFITS, {}).iteritems():
             for outfitData in outfitsData.itervalues():
                 try:
-                    outfitCD, isEnabled = outfitData
-                    self.itemsFactory.createOutfit(outfitCD, isEnabled)
+                    outfitCD, flags = outfitData
+                    self.itemsFactory.createOutfit(outfitCD, bool(flags & StyleFlags.ENABLED), bool(flags & StyleFlags.INSTALLED))
                 except Exception as e:
                     raise ValidateException(e.message, self.CODES.INVENTORY_OUTFIT_MISMATCH, self.__packItemData(GUI_ITEM_TYPE.CUSTOMIZATION, (vehCD, outfitData)))
 

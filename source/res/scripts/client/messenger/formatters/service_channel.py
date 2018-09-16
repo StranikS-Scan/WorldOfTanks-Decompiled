@@ -52,6 +52,7 @@ from messenger.m_constants import MESSENGER_I18N_FILE
 from shared_utils import BoundMethodWeakref, findFirst, first
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 _EOL = '\n'
@@ -115,6 +116,15 @@ def _getRaresAchievementsStirngs(battleResults):
 def _getDefaultMessage(normal='', bold=''):
     return g_settings.msgTemplates.format(_DEFAULT_MESSAGE, {'normal': normal,
      'bold': bold})
+
+
+@dependency.replace_none_kwargs(lobbyContext=ILobbyContext)
+def _isWGMoneyOffline(credit, gold, freeXP, crystal, lobbyContext=None):
+    notAccrued = not any((credit,
+     gold,
+     freeXP,
+     crystal))
+    return notAccrued and lobbyContext.getServerSettings().wgmOfflineEmergency.isEnabled()
 
 
 _MessageData = namedtuple('MessageData', 'data, settings')
@@ -229,7 +239,7 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                 ctx = {'arenaName': i18n.makeString(arenaType.name),
                  'vehicleNames': 'N/A',
                  'xp': '0',
-                 'credits': '0'}
+                 Currency.CREDITS: '0'}
                 vehicleNames = {intCD:self.itemsCache.items.getItemByCD(intCD) for intCD in battleResults.get('playerVehicles', {}).keys()}
                 ctx['vehicleNames'] = ', '.join(map(operator.attrgetter('userName'), sorted(vehicleNames.values())))
                 xp = battleResults.get('xp')
@@ -237,16 +247,24 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                     ctx['xp'] = BigWorld.wg_getIntegralFormat(xp)
                 battleResKey = battleResults.get('isWinner', 0)
                 ctx['xpEx'] = self.__makeXpExString(xp, battleResKey, battleResults.get('xpPenalty', 0), battleResults)
-                ctx[Currency.GOLD] = self.__makeGoldString(battleResults.get(Currency.GOLD, 0))
-                accCredits = battleResults.get(Currency.CREDITS) - battleResults.get('creditsToDraw', 0)
-                if accCredits:
-                    ctx[Currency.CREDITS] = self.__makeCurrencyString(Currency.CREDITS, accCredits)
+                gold = battleResults.get(Currency.GOLD, 0)
+                credit = battleResults.get(Currency.CREDITS)
                 accCrystal = battleResults.get(Currency.CRYSTAL)
                 ctx['crystalStr'] = ''
-                if accCrystal:
-                    ctx[Currency.CRYSTAL] = self.__makeCurrencyString(Currency.CRYSTAL, accCrystal)
-                    ctx['crystalStr'] = g_settings.htmlTemplates.format('battleResultCrystal', {Currency.CRYSTAL: ctx[Currency.CRYSTAL]})
-                ctx['creditsEx'] = self.__makeCreditsExString(accCredits, battleResults.get('creditsPenalty', 0), battleResults.get('creditsContributionIn', 0), battleResults.get('creditsContributionOut', 0))
+                ctx['creditsEx'] = ''
+                ctx[Currency.GOLD] = ''
+                if not _isWGMoneyOffline(credit, gold, battleResults.get('freeXP', 0), accCrystal):
+                    if gold:
+                        ctx[Currency.GOLD] = self.__makeGoldString(gold)
+                    accCredits = credit - battleResults.get('creditsToDraw', 0)
+                    if accCredits:
+                        ctx[Currency.CREDITS] = self.__makeCurrencyString(Currency.CREDITS, accCredits)
+                        ctx['creditsEx'] = self.__makeCreditsExString(accCredits, battleResults.get('creditsPenalty', 0), battleResults.get('creditsContributionIn', 0), battleResults.get('creditsContributionOut', 0))
+                    if accCrystal:
+                        ctx[Currency.CRYSTAL] = self.__makeCurrencyString(Currency.CRYSTAL, accCrystal)
+                        ctx['crystalStr'] = g_settings.htmlTemplates.format('battleResultCrystal', {Currency.CRYSTAL: ctx[Currency.CRYSTAL]})
+                else:
+                    ctx[Currency.CREDITS] = self.__makeWGMoneyOfflineString()
                 guiType = battleResults.get('guiType', 0)
                 ctx['achieves'], ctx['badges'] = self.__makeAchievementsAndBadgesStrings(battleResults)
                 ctx['lock'] = self.__makeVehicleLockString(vehicleNames, battleResults)
@@ -305,8 +323,6 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
         return ' ({0:s})'.format('; '.join(exStrings)) if exStrings else ''
 
     def __makeCreditsExString(self, accCredits, creditsPenalty, creditsContributionIn, creditsContributionOut):
-        if not accCredits:
-            return ''
         formatter = getBWFormatter(Currency.CREDITS)
         exStrings = []
         penalty = sum([creditsPenalty, creditsContributionOut])
@@ -317,14 +333,15 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
         return ' ({0:s})'.format('; '.join(exStrings)) if exStrings else ''
 
     def __makeGoldString(self, gold):
-        if not gold:
-            return ''
         formatter = getBWFormatter(Currency.GOLD)
         return g_settings.htmlTemplates.format(self.__goldTemplateKey, {Currency.GOLD: formatter(gold)})
 
     def __makeCurrencyString(self, currency, credit):
         formatter = getBWFormatter(currency)
         return formatter(credit)
+
+    def __makeWGMoneyOfflineString(self):
+        return text_styles.alert(MESSENGER.SERVICECHANNELMESSAGES_BATTLERESULTS_CREDITS_NOTACCRUED)
 
     def __makeAchievementsAndBadgesStrings(self, battleResults):
         popUpRecords = []
@@ -2056,6 +2073,7 @@ class GoodieDisabledFormatter(GoodieFormatter):
 
 class TelecomStatusFormatter(ServiceChannelFormatter):
     itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     @classmethod
     def __getVehicleNames(cls, vehTypeCompDescrs):
@@ -2077,7 +2095,15 @@ class TelecomStatusFormatter(ServiceChannelFormatter):
 
     def __getMessageContext(self, data):
         key = 'vehicleUnblocked' if data['orderStatus'] else 'vehicleBlocked'
-        msgctx = {'vehicles': self.__getVehicleNames(data['vehTypeCompDescrs'])}
+        vehTypeDescrs = data['vehTypeCompDescrs']
+        if vehTypeDescrs:
+            serverSettings = self.lobbyContext.getServerSettings()
+            vehInvID = self.itemsCache.items.getItemByCD(vehTypeDescrs[0]).invID
+            provider = BigWorld.player().inventory.getProviderForVehInvId(vehInvID, serverSettings)
+        else:
+            provider = ''
+        msgctx = {'vehicles': self.__getVehicleNames(vehTypeDescrs),
+         'provider': i18n.makeString(MENU.internetProviderName(provider))}
         ctx = {}
         for txtBlock in ('title', 'comment', 'subcomment'):
             ctx[txtBlock] = i18n.makeString('#system_messages:telecom/notifications/{0:s}/{1:s}'.format(key, txtBlock), **msgctx)
@@ -2148,6 +2174,7 @@ class TelecomReceivedInvoiceFormatter(InvoiceReceivedFormatter):
 
 
 class TelecomRemovedInvoiceFormatter(TelecomReceivedInvoiceFormatter):
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def _getMessageTemplateKey(self, data):
         pass
@@ -2164,8 +2191,19 @@ class TelecomRemovedInvoiceFormatter(TelecomReceivedInvoiceFormatter):
             return removedVehNames
 
     def _getMessageContext(self, data, vehicleNames):
+        provider = ''
+        if 'data' in data and 'vehicles' in data['data']:
+            vehicles = data['data']['vehicles']
+            for vehCompDescr in vehicles.iterkeys():
+                if vehCompDescr < 0:
+                    serverSettings = self.lobbyContext.getServerSettings()
+                    vehInvID = self.itemsCache.items.getItemByCD(abs(vehCompDescr)).invID
+                    provider = BigWorld.player().inventory.getProviderForVehInvId(vehInvID, serverSettings)
+                    break
+
         return {'vehicles': ', '.join(vehicleNames),
-         'datetime': self._getOperationTimeString(data)}
+         'datetime': self._getOperationTimeString(data),
+         'tariff': i18n.makeString(MENU.internetProviderTariff(provider))}
 
 
 class PrbVehicleKickFormatter(ServiceChannelFormatter):

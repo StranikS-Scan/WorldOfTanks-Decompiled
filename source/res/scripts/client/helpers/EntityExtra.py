@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/EntityExtra.py
+from soft_exception import SoftException
 from debug_utils import LOG_CURRENT_EXCEPTION
 
 class EntityExtra(object):
@@ -15,7 +16,7 @@ class EntityExtra(object):
 
     def startFor(self, entity, args=None):
         if entity.extras.has_key(self.index):
-            raise Exception("the extra '%s' is already started" % self.name)
+            raise SoftException("the extra '%s' is already started" % self.name)
         d = self._newData(entity)
         entity.extras[self.index] = d
         try:
@@ -83,7 +84,7 @@ class EntityExtra(object):
         pass
 
     def _raiseWrongConfig(self, paramName, containerName):
-        raise Exception("missing or wrong parameter <%s> (entity extra '%s' in '%s')" % (paramName, self.name, containerName))
+        raise SoftException("missing or wrong parameter <%s> (entity extra '%s' in '%s')" % (paramName, self.name, containerName))
 
     def _newData(self, entity):
         return {'extra': self,

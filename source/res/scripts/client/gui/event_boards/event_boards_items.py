@@ -353,7 +353,7 @@ class EventSettings(object):
     def getStartDateTs(self):
         return event_boards_timer.getTimeStampFromDate(self.__startDate)
 
-    def isAtBeginnig(self):
+    def isAtBeginning(self):
         startTs = self.getStartDateTs()
         duration = (self.getEndDateTs() - startTs) * self.EVENT_STARTED_DURATION_PERCENTAGE
         passed = event_boards_timer.getCurrentUTCTimeTs() - startTs
@@ -461,8 +461,9 @@ class EventSettings(object):
         return self.__getImage(self.__promoBonuses, RES_ICONS.MAPS_ICONS_EVENTBOARDS_BLANK_EVENT_PROMO_REWARD_BLANK)
 
     def __requestImage(self, url):
-        if url:
-            BigWorld.player().customFilesCache.get(url, self.__onImageReceive)
+        bwPlayer = BigWorld.player()
+        if url and bwPlayer:
+            bwPlayer.customFilesCache.get(url, self.__onImageReceive)
 
     def __onImageReceive(self, url, img):
         if img:

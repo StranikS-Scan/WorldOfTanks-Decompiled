@@ -10,6 +10,7 @@ from helpers import dependency
 from helpers.CallbackDelayer import CallbackDelayer
 from constants import SERVER_TICK_LENGTH, SHELL_TRAJECTORY_EPSILON_CLIENT, AIMING_MODE, VEHICLE_SIEGE_STATE
 import ProjectileMover
+from ClientArena import CollisionResult
 from projectile_trajectory import getShotAngles
 from projectile_trajectory import computeProjectileTrajectory
 import BattleReplay
@@ -217,7 +218,7 @@ class VehicleGunRotator(object):
             return
         if self.__clientMode:
             self.__time = BigWorld.time()
-            self.__stopTrackingOnServer()
+            self.stopTrackingOnServer()
         if self.__showServerMarker:
             self.__avatar.inputHandler.showGunMarker2(self.__clientMode)
 
@@ -328,7 +329,7 @@ class VehicleGunRotator(object):
         self.__prevSentShotPoint = shotPoint
         return
 
-    def __stopTrackingOnServer(self):
+    def stopTrackingOnServer(self):
         self.__avatar.base.vehicle_stopTrackingWithGun(self.__turretYaw, self.__gunPitch)
         self.__prevSentShotPoint = None
         return
@@ -339,10 +340,10 @@ class VehicleGunRotator(object):
             if angle is not None and angle < self.__AIMING_PERFECTION_RANGE:
                 self.__aimingPerfectionStartTime = BigWorld.time()
             else:
-                self.__stopTrackingOnServer()
+                self.stopTrackingOnServer()
         elif BigWorld.time() - self.__aimingPerfectionStartTime > self.__AIMING_PERFECTION_DELAY:
             self.__aimingPerfectionStartTime = None
-            self.__stopTrackingOnServer()
+            self.stopTrackingOnServer()
         return
 
     def __updateShotPointOnServer(self, shotPoint):
@@ -356,7 +357,7 @@ class VehicleGunRotator(object):
                     self.__aimingPerfectionStartTime = None
                     self.__trackPointOnServer(shotPoint)
             elif shotPoint is None:
-                self.__stopTrackingOnServer()
+                self.stopTrackingOnServer()
             else:
                 self.__trackPointOnServer(shotPoint)
             return
@@ -570,14 +571,20 @@ class VehicleGunRotator(object):
                     endPos = testRes[0]
                     bBreak = True
                     break
-                pos = collideWithSpaceBB(prevCheckPoint, curCheckPoint)
-                if pos is not None:
+                collisionResult, intersection = collideWithSpaceBB(prevCheckPoint, curCheckPoint)
+                if collisionResult is CollisionResult.INTERSECTION:
                     collData = None
                     maxDistCheckFlag = True
-                    direction = pos - prevCheckPoint
-                    endPos = pos
+                    direction = intersection - prevCheckPoint
+                    endPos = intersection
                     bBreak = True
                     break
+                elif collisionResult is CollisionResult.OUTSIDE:
+                    collData = None
+                    maxDistCheckFlag = True
+                    direction = prevVelocity
+                    endPos = prevPos + prevVelocity
+                    bBreak = True
                 prevCheckPoint = curCheckPoint
 
             if bBreak:

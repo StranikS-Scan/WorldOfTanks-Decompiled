@@ -5,6 +5,7 @@ import BigWorld
 from Math import Vector2, Matrix
 from constants import IS_DEVELOPMENT, IS_CLIENT, IS_BOT
 from debug_utils import LOG_DEBUG
+from soft_exception import SoftException
 
 class ModelHitTester(object):
     __slots__ = ('__bspModel', '__bspModelName', '__bspModelDown', '__bspModelNameDown', '__bspModelUp', '__bspModelNameUp', 'bbox', 'bboxDown', 'bboxUp')
@@ -21,7 +22,7 @@ class ModelHitTester(object):
             modelTag = 'collisionModelClient' if IS_CLIENT or IS_BOT else 'collisionModelServer'
             self.__bspModelName = dataSection.readString(modelTag)
             if not self.__bspModelName:
-                raise Exception('<%s> is missing or wrong' % modelTag)
+                raise SoftException('<%s> is missing or wrong' % modelTag)
             modelTagDown = modelTag + 'Down'
             self.__bspModelNameDown = dataSection.readString(modelTagDown)
             modelTagUp = modelTag + 'Up'
@@ -49,19 +50,19 @@ class ModelHitTester(object):
         else:
             bspModel = BigWorld.WGBspCollisionModel()
             if not bspModel.setModelName(self.bspModelName):
-                raise Exception("wrong collision model '%s'" % self.bspModelName)
+                raise SoftException("wrong collision model '%s'" % self.bspModelName)
             self.__bspModel = bspModel
             self.bbox = bspModel.getBoundingBox()
             if self.__bspModelNameDown:
                 bspModel = BigWorld.WGBspCollisionModel()
                 if not bspModel.setModelName(self.__bspModelNameDown):
-                    raise Exception("wrong collision model '%s'" % self.__bspModelNameDown)
+                    raise SoftException("wrong collision model '%s'" % self.__bspModelNameDown)
                 self.__bspModelDown = bspModel
                 self.bboxDown = bspModel.getBoundingBox()
             if self.__bspModelNameUp:
                 bspModel = BigWorld.WGBspCollisionModel()
                 if not bspModel.setModelName(self.__bspModelNameUp):
-                    raise Exception("wrong collision model '%s'" % self.__bspModelNameUp)
+                    raise SoftException("wrong collision model '%s'" % self.__bspModelNameUp)
                 self.__bspModelUp = bspModel
                 self.bboxUp = bspModel.getBoundingBox()
             return

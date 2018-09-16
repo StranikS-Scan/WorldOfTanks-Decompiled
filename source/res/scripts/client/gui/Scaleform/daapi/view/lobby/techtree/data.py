@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/data.py
+from soft_exception import SoftException
 from AccountCommands import LOCK_REASON
 from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR
@@ -30,7 +31,7 @@ class _ItemsData(object):
         if dumper is not None and isinstance(dumper, _BaseDumper):
             self._dumper = dumper
         else:
-            raise Exception('Dumper is invalid.')
+            raise SoftException('Dumper is invalid.')
         self._nodes = []
         self._nodesIdx = {}
         self._items = itemsCache.items

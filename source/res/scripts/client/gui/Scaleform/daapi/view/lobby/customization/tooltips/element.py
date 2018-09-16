@@ -88,8 +88,8 @@ class ElementTooltip(BlocksTooltipData):
         if bonus:
             camo = self._item if not camo else camo
             items.append(self._packBonusBlock(bonus, camo))
-        if not (self._item.isHistorical() and not self._item.fullDescription):
-            items.append(self._packHistoricBlock())
+        if not self._item.isHistorical() or self._item.fullDescription:
+            items.append(self._packDescriptionBlock())
         if not self._isQuestReward:
             items.append(self._packInventoryBlock())
         if not self._item.isUnlocked:
@@ -196,7 +196,7 @@ class ElementTooltip(BlocksTooltipData):
         seasonString = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_INFOTYPE_LOCKED_SUMMER
         return formatters.packImageTextBlockData(title=text_styles.middleTitleLocked(_ms(titleString)), desc=text_styles.locked(_ms(seasonString)), img=RES_ICONS.MAPS_ICONS_LIBRARY_INFOTYPE_LOCKED)
 
-    def _packHistoricBlock(self):
+    def _packDescriptionBlock(self):
         if self._item.isHistorical():
             img = None
             title = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_DESCRIPTION_HISTORIC_TRUE
@@ -207,6 +207,8 @@ class ElementTooltip(BlocksTooltipData):
             desc = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_TOOLTIP_DESCRIPTION_HISTORIC_FALSE_DESCRIPTION
         blocks = [formatters.packImageTextBlockData(title=text_styles.middleTitle(title), img=img, imgPadding={'left': -3,
           'top': -4}), formatters.packTextBlockData(text=text_styles.main(desc))]
+        if not self._item.isHistorical() and self._item.fullDescription:
+            blocks.insert(0, formatters.packTextBlockData(text=text_styles.main(self._item.fullDescription), padding={'bottom': 40}))
         return formatters.packBuildUpBlockData(blocks, gap=-6 if img is not None else 3, padding={'bottom': -5})
 
     def _packSuitableBlock(self):

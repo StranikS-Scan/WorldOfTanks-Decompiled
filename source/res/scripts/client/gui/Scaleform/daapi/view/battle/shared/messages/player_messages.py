@@ -5,6 +5,12 @@ from debug_utils import LOG_DEBUG
 from gui.Scaleform.daapi.view.battle.shared.messages import fading_messages
 from gui.battle_control import avatar_getter
 from items import vehicles
+from gui.sounds.epic_sound_constants import EPIC_SOUND
+_ID_TO_DESTRUCTIBLE_ENTITY_NAME = {1: '1',
+ 2: '2',
+ 3: '3',
+ 4: '4',
+ 5: '5'}
 
 class PlayerMessages(fading_messages.FadingMessages):
 
@@ -20,6 +26,7 @@ class PlayerMessages(fading_messages.FadingMessages):
         if ctrl is not None:
             ctrl.onShowPlayerMessageByCode += self.__onShowPlayerMessageByCode
             ctrl.onShowPlayerMessageByKey += self.__onShowPlayerMessageByKey
+            ctrl.onShowDestructibleEntityMessageByCode += self.__onShowDestructibleEntityMessageByCode
         ctrl = self.sessionProvider.shared.equipments
         if ctrl is not None:
             ctrl.onEquipmentUpdated += self.__onCombatEquipmentUpdated
@@ -33,6 +40,7 @@ class PlayerMessages(fading_messages.FadingMessages):
         if ctrl is not None:
             ctrl.onShowPlayerMessageByCode -= self.__onShowPlayerMessageByCode
             ctrl.onShowPlayerMessageByKey -= self.__onShowPlayerMessageByKey
+            ctrl.onShowDestructibleEntityMessageByCode -= self.__onShowDestructibleEntityMessageByCode
         ctrl = self.sessionProvider.shared.equipments
         if ctrl is not None:
             ctrl.onEquipmentUpdated -= self.__onCombatEquipmentUpdated
@@ -41,6 +49,12 @@ class PlayerMessages(fading_messages.FadingMessages):
             arena.onCombatEquipmentUsed -= self.__onCombatEquipmentUsed
         super(PlayerMessages, self)._removeGameListeners()
         return
+
+    def __onShowDestructibleEntityMessageByCode(self, code, entityID, attackerID):
+        LOG_DEBUG('onShowDestructibleEntityMessage', code, entityID, attackerID)
+        getFullName = self.sessionProvider.getCtx().getPlayerFullName
+        self.showMessage(code, {'target': _ID_TO_DESTRUCTIBLE_ENTITY_NAME[entityID],
+         'attacker': getFullName(attackerID, showClan=False)})
 
     def __onShowPlayerMessageByCode(self, code, postfix, targetID, attackerID, equipmentID):
         LOG_DEBUG('onShowPlayerMessage', code, postfix, targetID, attackerID, equipmentID)
@@ -57,7 +71,10 @@ class PlayerMessages(fading_messages.FadingMessages):
         self.showMessage(key, args, extra)
 
     def __onCombatEquipmentUpdated(self, _, item):
-        if item.getPrevStage() in (EQUIPMENT_STAGES.DEPLOYING, EQUIPMENT_STAGES.UNAVAILABLE, EQUIPMENT_STAGES.COOLDOWN) and item.getStage() == EQUIPMENT_STAGES.READY:
+        if item.getPrevStage() in (EQUIPMENT_STAGES.DEPLOYING,
+         EQUIPMENT_STAGES.UNAVAILABLE,
+         EQUIPMENT_STAGES.COOLDOWN,
+         EQUIPMENT_STAGES.SHARED_COOLDOWN) and item.getStage() == EQUIPMENT_STAGES.READY:
             postfix = item.getDescriptor().name.split('_')[0].upper()
             self.showMessage('COMBAT_EQUIPMENT_READY', {}, postfix=postfix)
 
@@ -69,4 +86,15 @@ class PlayerMessages(fading_messages.FadingMessages):
             if equipment is not None:
                 postfix = equipment.name.split('_')[0].upper()
                 self.showMessage('COMBAT_EQUIPMENT_USED', {'player': getFullName(shooterID, showClan=False)}, extra=(('player', shooterID),), postfix=postfix)
+        else:
+            equipment = vehicles.g_cache.equipments().get(eqID)
+            if equipment is None:
+                return
+            postfix = equipment.name.split('_')[0].upper()
+            if postfix in EPIC_SOUND.BF_EB_ABILITY_LIST:
+                soundNotifications = avatar_getter.getSoundNotifications()
+                if soundNotifications is not None:
+                    notification = EPIC_SOUND.BF_EB_ABILITY_USED.get(postfix, None)
+                    if notification is not None:
+                        soundNotifications.play(notification)
         return

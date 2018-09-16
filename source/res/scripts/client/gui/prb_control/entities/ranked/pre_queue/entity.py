@@ -29,6 +29,7 @@ from helpers import dependency, i18n
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.connection_mgr import IConnectionManager
+from soft_exception import SoftException
 
 class RankedSubscriber(PreQueueSubscriber):
 
@@ -157,7 +158,7 @@ class RankedEntity(PreQueueEntity):
     def _makeQueueCtxByAction(self, action=None):
         invID = g_currentVehicle.invID
         if not invID:
-            raise UserWarning('Inventory ID of vehicle can not be zero')
+            raise SoftException('Inventory ID of vehicle can not be zero')
         return RankedQueueCtx(invID, waitingID='prebattle/join')
 
     def _goToQueueUI(self):

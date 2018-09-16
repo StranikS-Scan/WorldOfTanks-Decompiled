@@ -286,6 +286,10 @@ class Style(Customization):
         return self.descriptor.rentCount if self.isRentable else 0
 
     @property
+    def modelsSet(self):
+        return self.descriptor.modelsSet
+
+    @property
     def userType(self):
         return i18n.makeString(VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_RENT) if self.isRentable else i18n.makeString(VEHICLE_CUSTOMIZATION.CAROUSEL_SWATCH_STYLE_PERMANENT)
 

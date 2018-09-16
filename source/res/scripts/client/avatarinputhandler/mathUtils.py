@@ -40,6 +40,10 @@ def createSRTMatrix(scale, rotation, translation):
     return result
 
 
+def setTranslation(matrix, translation):
+    matrix.translation = translation
+
+
 clamp = lambda minVal, maxVal, val: (minVal if val < minVal else maxVal if val > maxVal else val)
 
 def clampVector3(minVal, maxVal, val):
@@ -202,6 +206,13 @@ def easeInOutCirc(t, c, d):
     return c / 2.0 * (math.sqrt(1.0 - t * t) + 1)
 
 
+def squareInOut(a, b, t):
+    if t <= 0.5:
+        return 2.0 * t * t
+    t -= 0.5
+    return 2.0 * t * (1.0 - t) + 0.5
+
+
 class Easing(object):
     value = property(lambda self: self.__value)
     a = property(lambda self: self.__a)
@@ -238,6 +249,10 @@ class Easing(object):
     @staticmethod
     def squareEasing(a, b, duration):
         return Easing(a, b, squareOut, duration)
+
+    @staticmethod
+    def squareEasingInOut(start, end, duration):
+        return Easing(start, end, squareInOut, duration)
 
     @staticmethod
     def exponentialEasing(start, end, duration):

@@ -26,6 +26,8 @@ class TOOLTIPS(object):
     HANGAR_AMMO_PANEL_DEVICE_EMPTY = '#tooltips:hangar/ammo_panel/device/empty'
     HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY = '#tooltips:hangar/ammo_panel/equipment/empty'
     HANGAR_AMMO_PANEL_BATTLEBOOSTER_EMPTY = '#tooltips:hangar/ammo_panel/battleBooster/empty'
+    HANGAR_MAINTENANCE = '#tooltips:hangar/maintenance'
+    HANGAR_AMMO_PANEL_BATTLEABILITY_EMPTY = '#tooltips:hangar/ammo_panel/battleAbility/empty'
     HEADER_ACCOUNT = '#tooltips:header/account'
     HEADER_SQUAD = '#tooltips:header/squad'
     HEADER_EVENTSQUAD = '#tooltips:header/eventSquad'
@@ -110,7 +112,6 @@ class TOOLTIPS(object):
     HANGAR_HEADER_PERSONALQUESTS_COMPLETED = '#tooltips:hangar/header/personalQuests/completed'
     HANGAR_HEADER_PERSONALQUESTS_AVAILABLE = '#tooltips:hangar/header/personalQuests/available'
     HANGAR_HEADER_PERSONALQUESTS_DONE = '#tooltips:hangar/header/personalQuests/done'
-    MARATHON_OFF = '#tooltips:marathon/off'
     MISSIONS_VEHICLE_SELECTOR_LIST = '#tooltips:missions/vehicle_selector/list'
     MISSIONS_VEHICLE_SELECTOR_SELECT = '#tooltips:missions/vehicle_selector/select'
     BATTLETYPES_STRONGHOLDS = '#tooltips:battleTypes/strongholds'
@@ -363,6 +364,10 @@ class TOOLTIPS(object):
     EPICRANDOMSTANDARDNOTIFICATION_HEADER = '#tooltips:epicRandomStandardNotification/header'
     EPICRANDOMSTANDARDNOTIFICATION_BODY = '#tooltips:epicRandomStandardNotification/body'
     EPICRANDOMSTANDARDNOTIFICATION_ATTENTION = '#tooltips:epicRandomStandardNotification/attention'
+    EPICBATTLEWIDGET_HEADER = '#tooltips:epicBattleWidget/header'
+    EPICBATTLEWIDGET_DESC = '#tooltips:epicBattleWidget/desc'
+    EPICBATTLEWIDGET_BODY_MAXMETALEVEL_PRESTIGE = '#tooltips:epicBattleWidget/body/maxMetaLevel/prestige'
+    EPICBATTLEWIDGET_BODY_MAXMETALEVEL_MAXPRESTIGE = '#tooltips:epicBattleWidget/body/maxMetaLevel/maxPrestige'
     BATTLEBORDERMAPMODEBUTTONBAR_INFO_HEADER = '#tooltips:battleBorderMapModeButtonBar/info/header'
     BATTLEBORDERMAPMODEBUTTONBAR_INFO_BODY = '#tooltips:battleBorderMapModeButtonBar/info/body'
     BATTLEBORDERMAPTYPEBUTTONBAR_INFO_HEADER = '#tooltips:battleBorderMapTypeButtonBar/info/header'
@@ -696,6 +701,8 @@ class TOOLTIPS(object):
     HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY_BODY = '#tooltips:hangar/ammo_panel/equipment/empty/body'
     HANGAR_AMMO_PANEL_BATTLEBOOSTER_EMPTY_HEADER = '#tooltips:hangar/ammo_panel/battleBooster/empty/header'
     HANGAR_AMMO_PANEL_BATTLEBOOSTER_EMPTY_BODY = '#tooltips:hangar/ammo_panel/battleBooster/empty/body'
+    HANGAR_AMMO_PANEL_BATTLEABILITY_EMPTY_HEADER = '#tooltips:hangar/ammo_panel/battleAbility/empty/header'
+    HANGAR_AMMO_PANEL_BATTLEABILITY_EMPTY_BODY = '#tooltips:hangar/ammo_panel/battleAbility/empty/body'
     MODULEFITS_CREDITS_ERROR_HEADER = '#tooltips:moduleFits/credits_error/header'
     MODULEFITS_CREDITS_ERROR_TEXT = '#tooltips:moduleFits/credits_error/text'
     MODULEFITS_GOLD_ERROR_HEADER = '#tooltips:moduleFits/gold_error/header'
@@ -1378,6 +1385,8 @@ class TOOLTIPS(object):
     BATTLERESULTS_EFFICIENCYHEADER_SUMMKILL = '#tooltips:battleResults/efficiencyHeader/summKill'
     BATTLERESULTS_EFFICIENCYHEADER_SUMMSTUN = '#tooltips:battleResults/efficiencyHeader/summStun'
     BATTLERESULTS_EFFICIENCYHEADER_VALUE = '#tooltips:battleResults/efficiencyHeader/value'
+    BATTLERESULTS_MONEYALERT_HEADER = '#tooltips:battleResults/moneyAlert/header'
+    BATTLERESULTS_MONEYALERT_BODY = '#tooltips:battleResults/moneyAlert/body'
     CONTACT_STATUS_INBATTLE_UNKNOWN = '#tooltips:Contact/status/inBattle/unknown'
     CONTACT_STATUS_INBATTLE_RANDOM = '#tooltips:Contact/status/inBattle/random'
     CONTACT_STATUS_INBATTLE_TRAINING = '#tooltips:Contact/status/inBattle/training'
@@ -1694,6 +1703,7 @@ class TOOLTIPS(object):
     TANK_PARAMS_DESC_HULLARMOR = '#tooltips:tank_params/desc/hullArmor'
     TANK_PARAMS_DESC_TURRETARMOR = '#tooltips:tank_params/desc/turretArmor'
     TANK_PARAMS_DESC_RELOADTIME = '#tooltips:tank_params/desc/reloadTime'
+    TANK_PARAMS_DESC_AUTORELOADTIME = '#tooltips:tank_params/desc/autoReloadTime'
     TANK_PARAMS_DESC_RELOADTIMESECS = '#tooltips:tank_params/desc/reloadTimeSecs'
     TANK_PARAMS_DESC_PIERCINGPOWER = '#tooltips:tank_params/desc/piercingPower'
     TANK_PARAMS_DESC_AVGPIERCINGPOWER = '#tooltips:tank_params/desc/avgPiercingPower'
@@ -1934,6 +1944,97 @@ class TOOLTIPS(object):
     QUESTS_VEHICLES_HEADER = '#tooltips:quests/vehicles/header'
     QUESTS_VEHICLES_DESCRIPTION = '#tooltips:quests/vehicles/description'
     QUESTS_VEHICLES_BOTTOM = '#tooltips:quests/vehicles/bottom'
+    ADVANCED_INFO = '#tooltips:advanced/info'
+    ADVANCED_SERVICE = '#tooltips:advanced/service'
+    ADVANCED_HOLLOW_CHARGE = '#tooltips:advanced/HOLLOW_CHARGE'
+    ADVANCED_HIGH_EXPLOSIVE = '#tooltips:advanced/HIGH_EXPLOSIVE'
+    ADVANCED_ARMOR_PIERCING = '#tooltips:advanced/ARMOR_PIERCING'
+    ADVANCED_ARMOR_PIERCING_CR = '#tooltips:advanced/ARMOR_PIERCING_CR'
+    ADVANCED_LARGEREPAIRKIT = '#tooltips:advanced/largeRepairkit'
+    ADVANCED_LARGEMEDKIT = '#tooltips:advanced/largeMedkit'
+    ADVANCED_RATION = '#tooltips:advanced/ration'
+    ADVANCED_AUTOEXTINGUISHERS = '#tooltips:advanced/autoExtinguishers'
+    ADVANCED_SMALLREPAIRKIT = '#tooltips:advanced/smallRepairkit'
+    ADVANCED_SMALLMEDKIT = '#tooltips:advanced/smallMedkit'
+    ADVANCED_HANDEXTINGUISHERS = '#tooltips:advanced/handExtinguishers'
+    ADVANCED_ENHANCEDOIL = '#tooltips:advanced/enhancedOil'
+    ADVANCED_GASOLINE100 = '#tooltips:advanced/gasoline100'
+    ADVANCED_GASOLINE105 = '#tooltips:advanced/gasoline105'
+    ADVANCED_REMOVEDRPMLIMITER = '#tooltips:advanced/removedRpmLimiter'
+    ADVANCED_TOOLBOX = '#tooltips:advanced/toolbox'
+    ADVANCED_ENHANCEDAIMDRIVES = '#tooltips:advanced/enhancedAimDrives'
+    ADVANCED_STEREOSCOPE = '#tooltips:advanced/stereoscope'
+    ADVANCED_COATEDOPTICS = '#tooltips:advanced/coatedOptics'
+    ADVANCED_CAMOUFLAGENET = '#tooltips:advanced/camouflageNet'
+    ADVANCED_ANTIFRAGMENTATIONLINING = '#tooltips:advanced/antifragmentationLining'
+    ADVANCED_RAMMER = '#tooltips:advanced/rammer'
+    ADVANCED_GROUSERS = '#tooltips:advanced/grousers'
+    ADVANCED_CARBONDIOXIDE = '#tooltips:advanced/carbonDioxide'
+    ADVANCED_STEELROLLERS = '#tooltips:advanced/steelRollers'
+    ADVANCED_IMPROVEDVENTILATION = '#tooltips:advanced/improvedVentilation'
+    ADVANCED_AIMINGSTABILIZER = '#tooltips:advanced/aimingStabilizer'
+    ADVANCED_WETCOMBATPACK = '#tooltips:advanced/wetCombatPack'
+    ADVANCED_FILTERCYCLONE = '#tooltips:advanced/filterCyclone'
+    ADVANCED_VEHICLEGUN = '#tooltips:advanced/vehicleGun'
+    ADVANCED_VEHICLERADIO = '#tooltips:advanced/vehicleRadio'
+    ADVANCED_VEHICLEENGINE = '#tooltips:advanced/vehicleEngine'
+    ADVANCED_VEHICLECHASSIS = '#tooltips:advanced/vehicleChassis'
+    ADVANCED_VEHICLETURRET = '#tooltips:advanced/vehicleTurret'
+    ADVANCED_COMMANDER = '#tooltips:advanced/commander'
+    ADVANCED_DRIVER = '#tooltips:advanced/driver'
+    ADVANCED_RADIOMAN = '#tooltips:advanced/radioman'
+    ADVANCED_LOADER = '#tooltips:advanced/loader'
+    ADVANCED_GUNNER = '#tooltips:advanced/gunner'
+    ADVANCED_REPAIR = '#tooltips:advanced/repair'
+    ADVANCED_FIREFIGHTING = '#tooltips:advanced/fireFighting'
+    ADVANCED_CAMOUFLAGE = '#tooltips:advanced/camouflage'
+    ADVANCED_BROTHERHOOD = '#tooltips:advanced/brotherhood'
+    ADVANCED_COMMANDER_TUTOR = '#tooltips:advanced/commander_tutor'
+    ADVANCED_COMMANDER_EAGLEEYE = '#tooltips:advanced/commander_eagleEye'
+    ADVANCED_COMMANDER_UNIVERSALIST = '#tooltips:advanced/commander_universalist'
+    ADVANCED_COMMANDER_EXPERT = '#tooltips:advanced/commander_expert'
+    ADVANCED_COMMANDER_SIXTHSENSE = '#tooltips:advanced/commander_sixthSense'
+    ADVANCED_GUNNER_RANCOROUS = '#tooltips:advanced/gunner_rancorous'
+    ADVANCED_GUNNER_GUNSMITH = '#tooltips:advanced/gunner_gunsmith'
+    ADVANCED_GUNNER_SNIPER = '#tooltips:advanced/gunner_sniper'
+    ADVANCED_GUNNER_SMOOTHTURRET = '#tooltips:advanced/gunner_smoothTurret'
+    ADVANCED_DRIVER_RAMMINGMASTER = '#tooltips:advanced/driver_rammingMaster'
+    ADVANCED_DRIVER_BADROADSKING = '#tooltips:advanced/driver_badRoadsKing'
+    ADVANCED_DRIVER_TIDYPERSON = '#tooltips:advanced/driver_tidyPerson'
+    ADVANCED_DRIVER_VIRTUOSO = '#tooltips:advanced/driver_virtuoso'
+    ADVANCED_DRIVER_SMOOTHDRIVING = '#tooltips:advanced/driver_smoothDriving'
+    ADVANCED_RADIOMAN_FINDER = '#tooltips:advanced/radioman_finder'
+    ADVANCED_RADIOMAN_LASTEFFORT = '#tooltips:advanced/radioman_lastEffort'
+    ADVANCED_RADIOMAN_INVENTOR = '#tooltips:advanced/radioman_inventor'
+    ADVANCED_RADIOMAN_RETRANSMITTER = '#tooltips:advanced/radioman_retransmitter'
+    ADVANCED_LOADER_INTUITION = '#tooltips:advanced/loader_intuition'
+    ADVANCED_LOADER_DESPERADO = '#tooltips:advanced/loader_desperado'
+    ADVANCED_LOADER_PEDANT = '#tooltips:advanced/loader_pedant'
+    ADVANCED_ECONOMYBONDS = '#tooltips:advanced/economyBonds'
+    ADVANCED_ECONOMYTANKEXPERIENCE = '#tooltips:advanced/economyTankExperience'
+    ADVANCED_ECONOMYCONVERTEXP = '#tooltips:advanced/economyConvertExp'
+    ADVANCED_ECONOMYCREDITS = '#tooltips:advanced/economyCredits'
+    ADVANCED_ECONOMYGOLD = '#tooltips:advanced/economyGold'
+    ADVANCED_RELATIVEPOWER = '#tooltips:advanced/relativePower'
+    ADVANCED_RELATIVEARMOR = '#tooltips:advanced/relativeArmor'
+    ADVANCED_RELATIVEMOBILITY = '#tooltips:advanced/relativeMobility'
+    ADVANCED_RELATIVECAMOUFLAGE = '#tooltips:advanced/relativeCamouflage'
+    ADVANCED_RELATIVEVISIBILITY = '#tooltips:advanced/relativeVisibility'
+    ADVANCED_EQUIPMENT = '#tooltips:advanced/equipment'
+    ADVANCED_INSTRUCTIONS = '#tooltips:advanced/instructions'
+    ADVANCED_ECONOMYPREMIUM = '#tooltips:advanced/economyPremium'
+    ADVANCED_ECONOMYPREMIUM_HEADER = '#tooltips:advanced/economyPremium/header'
+    ADVANCED_GAMEMODERANDOM = '#tooltips:advanced/gamemodeRandom'
+    ADVANCED_GAMEMODETEAM = '#tooltips:advanced/gamemodeTeam'
+    ADVANCED_GAMEMODESTRONGHOLD = '#tooltips:advanced/gamemodeStronghold'
+    ADVANCED_GAMEMODESPECIAL = '#tooltips:advanced/gamemodeSpecial'
+    ADVANCED_GAMEMODETRAINING = '#tooltips:advanced/gamemodeTraining'
+    ADVANCED_RANKED = '#tooltips:advanced/ranked'
+    ADVANCED_BATTLETEACHING = '#tooltips:advanced/battleTeaching'
+    ADVANCED_HEADER_SHELLTYPE_HOLLOW_CHARGE = '#tooltips:advanced/header/shellType/HOLLOW_CHARGE'
+    ADVANCED_HEADER_SHELLTYPE_HIGH_EXPLOSIVE = '#tooltips:advanced/header/shellType/HIGH_EXPLOSIVE'
+    ADVANCED_HEADER_SHELLTYPE_ARMOR_PIERCING = '#tooltips:advanced/header/shellType/ARMOR_PIERCING'
+    ADVANCED_HEADER_SHELLTYPE_ARMOR_PIERCING_CR = '#tooltips:advanced/header/shellType/ARMOR_PIERCING_CR'
     CREW_ROLECHANGEFORBID_HEADER = '#tooltips:crew/roleChangeForbid/header'
     CREW_ROLECHANGEFORBID_TEXT = '#tooltips:crew/roleChangeForbid/text'
     CREW_ROLECHANGE_HEADER = '#tooltips:crew/roleChange/header'
@@ -2243,19 +2344,13 @@ class TOOLTIPS(object):
     CUSTOMIZATION_SCROLLBAR_BOOKMARK_HEADER = '#tooltips:customization/scrollbar/bookmark/header'
     CUSTOMIZATION_NONHISTORICINDICATOR_HEADER = '#tooltips:customization/nonHistoricIndicator/header'
     CUSTOMIZATION_NONHISTORICINDICATOR_BODY = '#tooltips:customization/nonHistoricIndicator/body'
-    MARATHON_HEADER = '#tooltips:marathon/header'
-    MARATHON_BODY = '#tooltips:marathon/body'
-    MARATHON_BODY_EXTRA = '#tooltips:marathon/body/extra'
-    MARATHON_STATE_START = '#tooltips:marathon/state/start'
-    MARATHON_STATE_END = '#tooltips:marathon/state/end'
-    MARATHON_STATE_COMPLETE = '#tooltips:marathon/state/complete'
-    MARATHON_EXTRA_STATE_STEPS = '#tooltips:marathon/extra_state/steps'
-    MARATHON_EXTRA_STATE_COMPLETED = '#tooltips:marathon/extra_state/completed'
-    MARATHON_EXTRA_STATE_DISCOUNT = '#tooltips:marathon/extra_state/discount'
-    MARATHON_OFF_HEADER = '#tooltips:marathon/off/header'
-    MARATHON_OFF_BODY = '#tooltips:marathon/off/body'
-    MARATHON_ERROR_BATTLE_TYPE = '#tooltips:marathon/error/battle_type'
-    MARATHON_ERROR_VEH_TYPE = '#tooltips:marathon/error/veh_type'
+    SHOWDAMAGEICON_HEADER = '#tooltips:showDamageIcon/header'
+    SHOWDAMAGEICON_ENEMYRICOCHET = '#tooltips:showDamageIcon/enemyRicochet'
+    SHOWDAMAGEICON_CRITICALDAMAGE = '#tooltips:showDamageIcon/criticalDamage'
+    SHOWDAMAGEICON_TRACKDAMAGE = '#tooltips:showDamageIcon/trackDamage'
+    SHOWDAMAGEICON_BLOCKED = '#tooltips:showDamageIcon/blocked'
+    BATTLESESSION_ALERT_HEADER = '#tooltips:battleSession/alert/header'
+    BATTLESESSION_ALERT_BODY = '#tooltips:battleSession/alert/body'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,
@@ -2348,6 +2443,7 @@ class TOOLTIPS(object):
      TANK_PARAMS_DESC_HULLARMOR,
      TANK_PARAMS_DESC_TURRETARMOR,
      TANK_PARAMS_DESC_RELOADTIME,
+     TANK_PARAMS_DESC_AUTORELOADTIME,
      TANK_PARAMS_DESC_RELOADTIMESECS,
      TANK_PARAMS_DESC_PIERCINGPOWER,
      TANK_PARAMS_DESC_AVGPIERCINGPOWER,
@@ -2595,6 +2691,101 @@ class TOOLTIPS(object):
      ELEN_EXCEL_INFOPARAM_WINS_NATION_BODY,
      ELEN_EXCEL_INFOPARAM_WINS_LEVEL_BODY,
      ELEN_EXCEL_INFOPARAM_WINS_CLASS_BODY)
+    ADVANCED_ENUM = (ADVANCED_INFO,
+     ADVANCED_SERVICE,
+     ADVANCED_HOLLOW_CHARGE,
+     ADVANCED_HIGH_EXPLOSIVE,
+     ADVANCED_ARMOR_PIERCING,
+     ADVANCED_ARMOR_PIERCING_CR,
+     ADVANCED_LARGEREPAIRKIT,
+     ADVANCED_LARGEMEDKIT,
+     ADVANCED_RATION,
+     ADVANCED_AUTOEXTINGUISHERS,
+     ADVANCED_SMALLREPAIRKIT,
+     ADVANCED_SMALLMEDKIT,
+     ADVANCED_HANDEXTINGUISHERS,
+     ADVANCED_ENHANCEDOIL,
+     ADVANCED_GASOLINE100,
+     ADVANCED_GASOLINE105,
+     ADVANCED_REMOVEDRPMLIMITER,
+     ADVANCED_TOOLBOX,
+     ADVANCED_ENHANCEDAIMDRIVES,
+     ADVANCED_STEREOSCOPE,
+     ADVANCED_COATEDOPTICS,
+     ADVANCED_CAMOUFLAGENET,
+     ADVANCED_ANTIFRAGMENTATIONLINING,
+     ADVANCED_RAMMER,
+     ADVANCED_GROUSERS,
+     ADVANCED_CARBONDIOXIDE,
+     ADVANCED_STEELROLLERS,
+     ADVANCED_IMPROVEDVENTILATION,
+     ADVANCED_AIMINGSTABILIZER,
+     ADVANCED_WETCOMBATPACK,
+     ADVANCED_FILTERCYCLONE,
+     ADVANCED_VEHICLEGUN,
+     ADVANCED_VEHICLERADIO,
+     ADVANCED_VEHICLEENGINE,
+     ADVANCED_VEHICLECHASSIS,
+     ADVANCED_VEHICLETURRET,
+     ADVANCED_COMMANDER,
+     ADVANCED_DRIVER,
+     ADVANCED_RADIOMAN,
+     ADVANCED_LOADER,
+     ADVANCED_GUNNER,
+     ADVANCED_REPAIR,
+     ADVANCED_FIREFIGHTING,
+     ADVANCED_CAMOUFLAGE,
+     ADVANCED_BROTHERHOOD,
+     ADVANCED_COMMANDER_TUTOR,
+     ADVANCED_COMMANDER_EAGLEEYE,
+     ADVANCED_COMMANDER_UNIVERSALIST,
+     ADVANCED_COMMANDER_EXPERT,
+     ADVANCED_COMMANDER_SIXTHSENSE,
+     ADVANCED_GUNNER_RANCOROUS,
+     ADVANCED_GUNNER_GUNSMITH,
+     ADVANCED_GUNNER_SNIPER,
+     ADVANCED_GUNNER_SMOOTHTURRET,
+     ADVANCED_DRIVER_RAMMINGMASTER,
+     ADVANCED_DRIVER_BADROADSKING,
+     ADVANCED_DRIVER_TIDYPERSON,
+     ADVANCED_DRIVER_VIRTUOSO,
+     ADVANCED_DRIVER_SMOOTHDRIVING,
+     ADVANCED_RADIOMAN_FINDER,
+     ADVANCED_RADIOMAN_LASTEFFORT,
+     ADVANCED_RADIOMAN_INVENTOR,
+     ADVANCED_RADIOMAN_RETRANSMITTER,
+     ADVANCED_LOADER_INTUITION,
+     ADVANCED_LOADER_DESPERADO,
+     ADVANCED_LOADER_PEDANT,
+     ADVANCED_ECONOMYBONDS,
+     ADVANCED_ECONOMYTANKEXPERIENCE,
+     ADVANCED_ECONOMYCONVERTEXP,
+     ADVANCED_ECONOMYCREDITS,
+     ADVANCED_ECONOMYGOLD,
+     ADVANCED_RELATIVEPOWER,
+     ADVANCED_RELATIVEARMOR,
+     ADVANCED_RELATIVEMOBILITY,
+     ADVANCED_RELATIVECAMOUFLAGE,
+     ADVANCED_RELATIVEVISIBILITY,
+     ADVANCED_EQUIPMENT,
+     ADVANCED_INSTRUCTIONS,
+     ADVANCED_ECONOMYPREMIUM,
+     ADVANCED_ECONOMYPREMIUM_HEADER,
+     ADVANCED_GAMEMODERANDOM,
+     ADVANCED_GAMEMODETEAM,
+     ADVANCED_GAMEMODESTRONGHOLD,
+     ADVANCED_GAMEMODESPECIAL,
+     ADVANCED_GAMEMODETRAINING,
+     ADVANCED_RANKED,
+     ADVANCED_BATTLETEACHING,
+     ADVANCED_HEADER_SHELLTYPE_HOLLOW_CHARGE,
+     ADVANCED_HEADER_SHELLTYPE_HIGH_EXPLOSIVE,
+     ADVANCED_HEADER_SHELLTYPE_ARMOR_PIERCING,
+     ADVANCED_HEADER_SHELLTYPE_ARMOR_PIERCING_CR)
+    ADVANCED_HEADER_SHELLTYPE_ENUM = (ADVANCED_HEADER_SHELLTYPE_HOLLOW_CHARGE,
+     ADVANCED_HEADER_SHELLTYPE_HIGH_EXPLOSIVE,
+     ADVANCED_HEADER_SHELLTYPE_ARMOR_PIERCING,
+     ADVANCED_HEADER_SHELLTYPE_ARMOR_PIERCING_CR)
     CUSTOMIZATION_TABS_ALL_BODY_ENUM = (CUSTOMIZATION_TABS_PAINT_BODY,
      CUSTOMIZATION_TABS_CAMOUFLAGE_BODY,
      CUSTOMIZATION_TABS_EMBLEM_BODY,
@@ -2875,6 +3066,24 @@ class TOOLTIPS(object):
     def elen_excel_infoparam_wins_all_body(cls, key0):
         outcome = '#tooltips:elen/excel/infoParam/wins/{}/body'.format(key0)
         if outcome not in cls.ELEN_EXCEL_INFOPARAM_WINS_ALL_BODY_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getAdvancedDescription(cls, key):
+        outcome = '#tooltips:advanced/{}'.format(key)
+        if outcome not in cls.ADVANCED_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getAdvancedHeaderShellType(cls, key):
+        outcome = '#tooltips:advanced/header/shellType/{}'.format(key)
+        if outcome not in cls.ADVANCED_HEADER_SHELLTYPE_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

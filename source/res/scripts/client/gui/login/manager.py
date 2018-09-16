@@ -18,6 +18,7 @@ from predefined_hosts import g_preDefinedHosts, AUTO_LOGIN_QUERY_ENABLED, AUTO_L
 from skeletons.connection_mgr import IConnectionManager
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.login_manager import ILoginManager
+from soft_exception import SoftException
 _PERIPHERY_DEFAULT_LIFETIME = 15 * ONE_MINUTE
 
 class Manager(ILoginManager):
@@ -153,10 +154,10 @@ class Manager(ILoginManager):
 
     @staticmethod
     def getAvailableSocialNetworks():
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def initiateSocialLogin(self, socialNetworkName, serverName, rememberUser, isRegistration):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def _getHost(self, authMethod, hostName):
         if hostName != AUTO_LOGIN_QUERY_URL:

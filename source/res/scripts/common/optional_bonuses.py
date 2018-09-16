@@ -5,6 +5,7 @@ import copy
 import time
 from constants import EVENT_TYPE
 from items import tankmen
+from soft_exception import SoftException
 
 def walkBonuses(bonusWithProbabilities, visitor):
     result = visitor.resultHolder(bonusWithProbabilities)
@@ -215,7 +216,7 @@ class TrackVisitor(NodeVisitor):
             if next(self.__track):
                 return [bonusValue]
 
-        raise Exception('Unreachable code, oneof probability bug %s' % value)
+        raise SoftException('Unreachable code, oneof probability bug %s' % value)
 
     def onAllOf(self, bonus, value):
         deeper = []
@@ -266,7 +267,7 @@ class ProbabilityVisitor(NodeVisitor):
                 break
 
         if selectedIdx is None:
-            raise Exception('Unreachable code, oneof probability bug %s' % value)
+            raise SoftException('Unreachable code, oneof probability bug %s' % value)
         if not self.__nodeAcceptor.accept(selectedValue):
             accept = self.__nodeAcceptor.accept
             altList = list(enumerate(value))
@@ -348,7 +349,7 @@ class FilterVisitor(NodeVisitor):
             bonus['tankmen'] = tankmenList
         if self.__eventType in EVENT_TYPE.LIKE_TOKEN_QUESTS and name == 'customization':
             if 'boundToCurrentVehicle' in value:
-                raise Exception("Unsupported tag 'boundToCurrentVehicle' in 'like token' quests")
+                raise SoftException("Unsupported tag 'boundToCurrentVehicle' in 'like token' quests")
 
     @staticmethod
     def resultHolder(result):

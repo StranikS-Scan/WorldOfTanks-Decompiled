@@ -21,6 +21,6 @@ class BCQuestsView(BCQuestsViewMeta):
         voData = {'premiumText': time + ' ' + makeString('#menu:header/account/premium/%s' % timeKey),
          'goldText': str(bonuses['gold']),
          'showRewards': bonuses['showRewards'],
-         'goldIcon': RES_ICONS.MAPS_ICONS_BOOTCAMP_REWARDS_BCGOLD,
-         'premiumIcon': RES_ICONS.MAPS_ICONS_BOOTCAMP_REWARDS_BCPREMIUM3D}
+         'premiumIcon': RES_ICONS.MAPS_ICONS_BOOTCAMP_REWARDS_BCPREMIUM3D,
+         'goldIcon': RES_ICONS.MAPS_ICONS_BOOTCAMP_REWARDS_BCGOLD}
         self.as_setDataS(voData)

@@ -302,7 +302,7 @@ class _TopLeaderboard(object):
         elif self.__eventType == _et.VEHICLE:
             vehicle = self.itemsCache.items.getItemByCD(self.__value)
             name = vehicle.name.split(':', 1)[-1].lower()
-            return RES_ICONS.getEventBoardTank(name)
+            return RES_ICONS.getEventBoardTank(name) or RES_ICONS.MAPS_ICONS_EVENTBOARDS_TANKS_DEFAULT_IMAGE
         else:
             return None
 
@@ -423,6 +423,7 @@ class EventInfo(object):
             return result
         if finished or event.getPrimeTimes().isEmpty():
             return result
+        availableServers = sorted(availableServers, key=lambda p: int(p.getServer()))
         if not isAvailableServer and isAvailableAnyServer and self._playerState.getPlayerState() == _es.JOINED:
             buttons = [ {'label': str(self._lobbyContext.getPeripheryName(int(pt.getServer()), False)),
              'server': pt.getServer(),
@@ -433,7 +434,8 @@ class EventInfo(object):
         elif not isAvailableServer and self._playerState.getPlayerState() == _es.JOINED:
             primeTime = min(primeTimes, key=lambda pt: pt.timeToActive())
             server = str(self._lobbyContext.getPeripheryName(int(primeTime.getServer()), False))
-            description = _ms(EVENT_BOARDS.SERVER_NOSUITABLE_BODY, time=primeTime.getStartLocalTime(), server=server)
+            nonSuitableServer = text_styles.neutral(_ms(EVENT_BOARDS.SERVER_NOSUITABLE_SERVER, time=primeTime.getStartLocalTime(), server=server))
+            description = text_styles.main(_ms(EVENT_BOARDS.SERVER_NOSUITABLE_BODY, data=nonSuitableServer))
             result = {'reloginBlock': {'title': EVENT_BOARDS.SERVER_NOSUITABLE_HEADER,
                               'description': description,
                               'descriptionTooltip': self.__getPrimeTimesTooltip()},

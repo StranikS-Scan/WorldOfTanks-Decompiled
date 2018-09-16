@@ -4,10 +4,9 @@ import BigWorld
 import nations
 from gui import GUI_NATIONS_ORDER_INDEX_REVERSED
 from gui.shared.gui_items.Vehicle import getSmallIconPath, Vehicle, VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED
-from helpers import int2roman
+from helpers import int2roman, dependency
 from helpers.i18n import makeString as _ms
 from debug_utils import LOG_ERROR
-from items.vehicles import getVehicleType
 from gui.shared.formatters import text_styles
 from gui.shared.utils.functions import makeTooltip
 from gui.server_events.awards_formatters import QuestsBonusComposer, getEventBoardsAwardPacker
@@ -15,11 +14,11 @@ from gui.Scaleform.genConsts.EVENTBOARDS_ALIASES import EVENTBOARDS_ALIASES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.EVENT_BOARDS import EVENT_BOARDS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.Scaleform.daapi.view.lobby.event_boards.formaters import formatErrorTextWithIcon, formatOkTextWithIcon, formatNotAvailableTextWithIcon, formatParameters, getFullName, getString, getClanTag
+from gui.Scaleform.daapi.view.lobby.event_boards.formaters import formatErrorTextWithIcon, formatOkTextWithIcon, formatNotAvailableTextWithIcon, formatParameters, getFullName, getString, getClanTag, getStatusTitleStyle, formatAdditionalParameters, formatDate, formatTime
 from gui.event_boards.event_boards_items import EVENT_TYPE, ExcelItem, PlayerEventsData, EventSettings, OBJECTIVE_PARAMETERS as _op, PLAYER_STATE_REASON as _psr, CALCULATION_METHODS as _cm
 from gui.Scaleform import getNationsFilterAssetPath
 from nations import AVAILABLE_NAMES
-from gui.Scaleform.daapi.view.lobby.event_boards.formaters import getStatusTitleStyle
+from skeletons.gui.shared import IItemsCache
 
 class EVENT_BOARDS_GROUP_TYPES(object):
     GOLD = 1
@@ -34,15 +33,16 @@ _CATEGORY_NAMES = {EVENT_BOARDS_GROUP_TYPES.GOLD: 'gold',
  EVENT_BOARDS_GROUP_TYPES.BRONZE: 'bronze',
  EVENT_BOARDS_GROUP_TYPES.IRON: 'iron',
  EVENT_BOARDS_GROUP_TYPES.WOOD: 'wood'}
-FORMATS = {EVENT_TYPE.NATION: ('#nations:{}', '../maps/icons/filters/nationsMedium/{}.png'),
- EVENT_TYPE.LEVEL: ('#menu:levels/{}', '../maps/icons/filters/levels/level_{}.png'),
- EVENT_TYPE.CLASS: ('#quests:classes/{}', '../maps/icons/filters/tanks/{}.png')}
+FORMATS = {EVENT_TYPE.NATION: ('#nations:{}', '../maps/icons/filters/nationsMedium/{}.png', None),
+ EVENT_TYPE.LEVEL: ('#menu:levels/{}', '../maps/icons/filters/levels/level_{}.png', None),
+ EVENT_TYPE.CLASS: ('#quests:classes/{}', '../maps/icons/filters/tanks/{}.png', '../maps/icons/vehicleTypes/big/{}.png')}
 
 def _vehicleHeaderCreator(vehicleCDStr):
-    vehicleCD = int(vehicleCDStr)
-    vehicle = getVehicleType(vehicleCD)
-    title = vehicle.shortUserString
-    iconPath = 'premium' if bool('premium' in vehicle.tags) else 'simple'
+    itemsCache = dependency.instance(IItemsCache)
+    vehicle = itemsCache.items.getItemByCD(int(vehicleCDStr))
+    title = vehicle.shortUserName
+    iconName = '{type}{elite}.png'.format(type=vehicle.type, elite='_elite' if vehicle.isPremium else '')
+    iconPath = RES_ICONS.maps_icons_vehicletypes_big(iconName)
     txtLevel = int2roman(vehicle.level)
     return (title, iconPath, txtLevel)
 
@@ -52,9 +52,9 @@ def makeTableViewHeaderVO(eType, value, eventName, status=None, statusTooltip=No
         title, icon, level = _vehicleHeaderCreator(value)
         popoverAlias = EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_VEHICLES_ALIAS
     else:
-        _title, _icon = FORMATS[eType]
+        _title, _, _icon = FORMATS[eType]
         title = _ms(_title.format(value))
-        icon = _icon.format(value)
+        icon = _icon.format(value) if _icon else None
         level = None
         popoverAlias = EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_ALIAS
     return {'title': title,
@@ -126,7 +126,8 @@ def makeEventBoardsTableDataVO(rewardCategories, method):
             clanAbbrev = currentPlayerData.getClanTag()
             clanColor = currentPlayerData.getClanColor()
             rank = currentPlayerData.getRank()
-            formattedParameters = formatParameters(method, (currentPlayerData.getP1(), currentPlayerData.getP2(), currentPlayerData.getP3()))
+            params = (currentPlayerData.getP1(), currentPlayerData.getP2(), currentPlayerData.getP3())
+            formattedParameters = formatParameters(method, params)
             player = {'position': rank,
              'value1': formattedParameters[0],
              'value2': formattedParameters[1],
@@ -135,6 +136,8 @@ def makeEventBoardsTableDataVO(rewardCategories, method):
                         'fullName': getFullName(name, clanAbbrev, clanColor),
                         'userName': name,
                         'clanAbbrev': getClanTag(clanAbbrev, clanColor)}}
+            additionalParameters = formatAdditionalParameters(method, params)
+            player.update(additionalParameters)
             if isIndividual:
                 player['icons'] = rewardsFormatter.getFormattedBonuses(rewards[min(rank, len(rewards)) - 1])
                 player['rendererLinkage'] = EVENTBOARDS_ALIASES.TOP_PLAYER_AWARD_RENDERER
@@ -151,7 +154,7 @@ def makeParameterTooltipVO(method, amount, parameter):
     return makeTooltip(header=_ms(EVENT_BOARDS.TOOLTIP_TOP_NOREWARDGROUP), body=_ms(EVENT_BOARDS.tooltip_top_description_all(maxOrSum, parameter), number=int(amount))) if parameter in parametersWithTooltip and amount is not None else None
 
 
-def makeEventBoardsTableViewStatusVO(title, tooltip, info, value1, value2, value3, showPoints, buttonLabel, buttonTooltip, buttonVisible, buttonEnabled, titleTooltip):
+def makeEventBoardsTableViewStatusVO(title, tooltip, info, value1, value2, value3, showPoints, buttonLabel, buttonTooltip, buttonVisible, buttonEnabled, titleTooltip, method):
     buttonTop = not title
     result = {'title': title,
      'titleTooltip': tooltip,
@@ -164,8 +167,9 @@ def makeEventBoardsTableViewStatusVO(title, tooltip, info, value1, value2, value
     if showPoints:
         result.update({'info': text_styles.playerOnline(info),
          'value1': text_styles.vehicleStatusSimpleText(getString(value1)),
-         'value2': text_styles.main(getString(value2)),
-         'value3': text_styles.main(getString(value3, '0'))})
+         'value2': text_styles.main(getString(value2) if method != _cm.MAX else formatDate(value2)),
+         'value3': text_styles.main(getString(value3, '0')),
+         'valueTime': None if method != _cm.MAX else formatTime(value2)})
     return result
 
 
@@ -183,7 +187,7 @@ def makeAwardGroupDataTooltipVO(rewardCategories, enabledAncors):
 
 
 def makeFiltersVO(eventType, filters, selected=None, category=None):
-    tooltip, value = FORMATS[eventType]
+    tooltip, value, _ = FORMATS[eventType]
     data = [ {'id': str(lid),
      'value': value.format(f),
      'tooltip': makeTooltip(tooltip.format(f), '#event_boards:{0}/tooltip/{1}'.format(category, eventType)) if category else _ms(tooltip.format(f)),
@@ -300,17 +304,12 @@ def vehicleValueGetter(vehicle, field):
 
 def makePrimeTimesTooltipVO(primeTimes, currentPeripheryID, getNameFunc):
     ptList = []
+    primeTimes = sorted(primeTimes, key=lambda p: int(p.getServer()))
     for pt in primeTimes:
         peripheryID = int(pt.getServer())
         name = str(getNameFunc(peripheryID, False))
-        current = peripheryID == currentPeripheryID
-        if current:
-            formatter = text_styles.neutral
-        elif pt.isActive():
-            formatter = text_styles.main
-        else:
-            formatter = text_styles.standard
-        ptList.append('{} {} - {}'.format(name, pt.getStartLocalTime(), pt.getEndLocalTime()))
+        timePeriod = '{} - {}'.format(pt.getStartLocalTime(), pt.getEndLocalTime())
+        ptList.append('{} {}'.format(text_styles.main(name + ':'), text_styles.standard(timePeriod)))
 
-    body = '\n'.join([ formatter(msg) for msg in sorted(ptList) ])
+    body = '\n'.join(ptList)
     return makeTooltip(_ms(TOOLTIPS.ELEN_CONDITION_PRIMETIME), body)

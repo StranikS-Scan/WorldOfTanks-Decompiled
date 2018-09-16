@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client_common/client_request_lib/data_sources/fetcher.py
-
+from soft_exception import SoftException
 
 class FakeResponse(object):
 
@@ -28,7 +28,7 @@ def fetchURL(url, callback, headers=None, timeout=30, method='GET', postData='')
 
         headers = res
     if not isinstance(data, str) and data is not None:
-        raise Exception('Unsupported parameter {}'.format(data))
+        raise SoftException('Unsupported parameter {}'.format(data))
     methods = {'GET': requests.get,
      'PUT': requests.put,
      'POST': requests.post,
@@ -37,6 +37,6 @@ def fetchURL(url, callback, headers=None, timeout=30, method='GET', postData='')
     if method in methods:
         response = methods[method](url, headers=headers, data=data, verify=False, stream=True)
     else:
-        raise Exception('Unsupported method {}'.format(method))
+        raise SoftException('Unsupported method {}'.format(method))
     callback(FakeResponse(response))
     return

@@ -32,6 +32,10 @@ class BaseCustomizationItemXmlReader(object):
             target.priceGroup = section.readString('priceGroup')
         if section.has_key('requiredToken'):
             target.requiredToken = section.readString('requiredToken')
+        if section.has_key('maxNumber'):
+            target.maxNumber = ix.readPositiveInt(xmlCtx, section, 'maxNumber')
+            if target.maxNumber <= 0:
+                ix.raiseWrongXml(xmlCtx, 'maxNumber', 'should not be less then 1')
         if IS_CLIENT or IS_WEB:
             self._readClientOnlyFromXml(target, xmlCtx, section)
 
@@ -211,6 +215,8 @@ class StyleXmlReader(BaseCustomizationItemXmlReader):
         super(StyleXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)
         if section.has_key('texture'):
             target.texture = section.readString('texture')
+        if section.has_key('modelsSet'):
+            target.modelsSet = section.readString('modelsSet')
 
 
 def readCustomizationCacheFromXml(cache, folder):

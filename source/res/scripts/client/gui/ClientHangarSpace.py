@@ -15,7 +15,7 @@ from gui.Scaleform.framework.managers.optimization_manager import GraphicsOptimi
 from helpers import dependency
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.game_control import IIGRController
-from hangar_camera_manager import HangarCameraManager
+from gui.hangar_cameras.hangar_camera_manager import HangarCameraManager
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 _DEFAULT_SPACES_PATH = 'spaces'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
@@ -209,11 +209,18 @@ class ClientHangarSpace(object):
         return
 
     def recreateVehicle(self, vDesc, vState, onVehicleLoadedCallback=None):
-        vehicle = BigWorld.entity(self.__vEntityId)
-        if onVehicleLoadedCallback is None:
-            onVehicleLoadedCallback = self.__onVehicleLoadedCallback
-        vehicle.recreateVehicle(vDesc, vState, onVehicleLoadedCallback)
-        return
+        if not self.__vEntityId:
+            return
+        else:
+            vehicle = BigWorld.entity(self.__vEntityId)
+            if not vehicle:
+                if onVehicleLoadedCallback:
+                    onVehicleLoadedCallback()
+                return
+            if onVehicleLoadedCallback is None:
+                onVehicleLoadedCallback = self.__onVehicleLoadedCallback
+            vehicle.recreateVehicle(vDesc, vState, onVehicleLoadedCallback)
+            return
 
     def removeVehicle(self):
         vehicle = BigWorld.entity(self.__vEntityId)
@@ -236,11 +243,15 @@ class ClientHangarSpace(object):
                 entity.setSelectable(flag)
 
     def updateVehicleCustomization(self, outfit):
-        outfit = outfit or self.itemsFactory.createOutfit()
-        self.getVehicleEntity().appearance.updateCustomization(outfit)
+        vEntity = self.getVehicleEntity()
+        if vEntity is not None and vEntity.isVehicleLoaded:
+            outfit = outfit or self.itemsFactory.createOutfit()
+            vEntity.appearance.updateCustomization(outfit)
+        return
 
     def getCentralPointForArea(self, areaId):
-        return self.getVehicleEntity().appearance.getCentralPointForArea(areaId)
+        vEntity = self.getVehicleEntity()
+        return vEntity.appearance.getCentralPointForArea(areaId) if vEntity is not None and vEntity.isVehicleLoaded else None
 
     def destroy(self):
         self.__onLoadedCallback = None
@@ -255,10 +266,11 @@ class ClientHangarSpace(object):
         return self.__waitCallback is not None
 
     def getSlotPositions(self):
-        return self.getVehicleEntity().appearance.getSlotPositions()
+        vEntity = self.getVehicleEntity()
+        return vEntity.appearance.getSlotPositions() if vEntity is not None and vEntity.isVehicleLoaded else None
 
     def getVehicleEntity(self):
-        return BigWorld.entities[self.__vEntityId]
+        return BigWorld.entity(self.__vEntityId)
 
     @property
     def vehicleEntityId(self):

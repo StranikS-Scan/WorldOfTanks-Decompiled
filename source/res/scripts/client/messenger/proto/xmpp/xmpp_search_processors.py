@@ -16,6 +16,7 @@ from messenger.proto.xmpp.XmppCooldownManager import XmppCooldownManager
 from messenger.proto.xmpp.extensions.search import ChannelSearchQuery, ChannelsListHandler, NicknamePrefixSearchQuery, NicknamePrefixSearchHandler
 from messenger.ext import checkAccountName
 from messenger.storage import storage_getter
+from soft_exception import SoftException
 
 class SearchChannelsProcessor(SearchProcessor, ClientEventsHandler):
 
@@ -47,13 +48,13 @@ class SearchChannelsProcessor(SearchProcessor, ClientEventsHandler):
         return CHANNEL_LIMIT.MAX_SEARCH_RESULTS
 
     def unregisterHandlers(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def registerHandlers(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def getSearchCoolDown(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def __onIQReceived(self, iqID, iqType, pyGlooxTag):
         if self._lastRequestID != iqID:
@@ -125,10 +126,10 @@ class SearchUsersProcessor(SearchProcessor, ClientEventsHandler):
         return self.__limits.getMaxResultSize()
 
     def unregisterHandlers(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def registerHandlers(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')
 
     def __onIQReceived(self, iqID, iqType, pyGlooxTag):
         if self._lastRequestID != iqID:

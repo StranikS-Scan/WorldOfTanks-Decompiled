@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/quest_xml_source.py
+from soft_exception import SoftException
 from copy import deepcopy
 from pprint import pformat
 import time
@@ -87,14 +88,14 @@ class Source(object):
         ResMgr.purge(path)
         section = ResMgr.openSection(path)
         if section is None:
-            raise Exception("Can not open '%s'" % path)
+            raise SoftException("Can not open '%s'" % path)
         return {} if not section.has_key('quests') else self.__readXML(section['quests'], curTime, gStartTime, gFinishTime)
 
     def readFromInternalFile(self, path, curTime):
         ResMgr.purge(path)
         section = ResMgr.openSection(path)
         if section is None:
-            raise Exception("Can not open '%s'" % path)
+            raise SoftException("Can not open '%s'" % path)
         return {} if not section.has_key('quests') else self.__readXML(section['quests'], curTime)
 
     def __readXML(self, section, curTime, gStartTime=DEFAULT_QUEST_START_TIME, gFinishTime=DEFAULT_QUEST_FINISH_TIME):
@@ -163,16 +164,16 @@ class Source(object):
                 commonNode.addChild(bonusLimitNode)
             if eventType in EVENT_TYPE.LIKE_BATTLE_QUESTS:
                 if (cumulative or unit or vehicleKills) and inrow:
-                    raise Exception('battleQuest: Unexpected tags (vehicleKills, cumulative, unit/cumulative) with inrow')
+                    raise SoftException('battleQuest: Unexpected tags (vehicleKills, cumulative, unit/cumulative) with inrow')
                 if not (cumulative or unit or vehicleKills or bonusLimit or battles) and (daily or groupBy):
-                    raise Exception('battleQuest: daily and groupBy should be used with cumulative, unit, vehicleKills, bonusLimit or battles tags')
+                    raise SoftException('battleQuest: daily and groupBy should be used with cumulative, unit, vehicleKills, bonusLimit or battles tags')
                 if battles and not battleCount:
-                    raise Exception('Invalid battles section')
+                    raise SoftException('Invalid battles section')
             elif eventType in EVENT_TYPE.LIKE_TOKEN_QUESTS:
                 if cumulative or unit or vehicleKills or groupBy or battles:
-                    raise Exception('tokenQuest: Unexpected tags (cumulative, unit, vehicleKills, groupBy, battles)')
+                    raise SoftException('tokenQuest: Unexpected tags (cumulative, unit, vehicleKills, groupBy, battles)')
                 if not bonusLimit and daily:
-                    raise Exception('tokenQuest: daily should be used with bonusLimit tag')
+                    raise SoftException('tokenQuest: daily should be used with bonusLimit tag')
             mainNode.bonus = walkBonuses(readBonusSection(availableBonuses, questSection['bonus'], eventType), FilterVisitor(eventType))
             mainNode.bonusDelayed = walkBonuses(readBonusSection(availableBonuses, questSection['bonusDelayed'], eventType), FilterVisitor(eventType))
             questClientData = dict(info)
@@ -198,7 +199,7 @@ class Source(object):
     def __readHeader(self, eventType, questSection, curTime, gStartTime, gFinishTime):
         id = questSection.readString('id', '')
         if not id:
-            raise Exception('Quest id must be specified.')
+            raise SoftException('Quest id must be specified.')
         if questSection.has_key('name'):
             questName = self.__readMetaSection(questSection['name'])
         else:
@@ -219,19 +220,19 @@ class Source(object):
         makeIntervals = lambda intervals: tuple((makeHM(v) for v in intervals.split('_')))
         activeTimeIntervals = [ makeIntervals(i) for i in intervalsInString ]
         if announceTime < gStartTime:
-            raise Exception('Invalid announce time. announceTime:%s < gStartTime:%s' % (announceTime, gStartTime))
+            raise SoftException('Invalid announce time. announceTime:%s < gStartTime:%s' % (announceTime, gStartTime))
         if startTime < announceTime:
-            raise Exception('Invalid announce time. startTime:%s < announceTime:%s' % (startTime, announceTime))
+            raise SoftException('Invalid announce time. startTime:%s < announceTime:%s' % (startTime, announceTime))
         if startTime < gStartTime:
-            raise Exception('Invalid start time. startTime:%s < gStartTime:%s' % (startTime, gStartTime))
+            raise SoftException('Invalid start time. startTime:%s < gStartTime:%s' % (startTime, gStartTime))
         if finishTime > gFinishTime:
-            raise Exception('Invalid finish time. finishTime:%s > gFinishTime:%s' % (finishTime, gFinishTime))
+            raise SoftException('Invalid finish time. finishTime:%s > gFinishTime:%s' % (finishTime, gFinishTime))
         if progressExpiryTime < finishTime:
-            raise Exception('Invalid progress expiry time. progressExpiryTime:%s < finishTime:%s' % (progressExpiryTime, finishTime))
+            raise SoftException('Invalid progress expiry time. progressExpiryTime:%s < finishTime:%s' % (progressExpiryTime, finishTime))
         requiredToken = questSection.readString('requiredToken', '')
         if eventType == EVENT_TYPE.PERSONAL_QUEST:
             if not requiredToken:
-                raise Exception('Personal quest must contain tag <requiredToken> with not empty token')
+                raise SoftException('Personal quest must contain tag <requiredToken> with not empty token')
         runFlags = []
         if questSection.has_key('run'):
             for flagName, flagValue in questSection['run'].items():
@@ -267,12 +268,12 @@ class Source(object):
 
         if eventType == EVENT_TYPE.RANKED_QUEST:
             if finishTime > curTime + _YEAR:
-                raise Exception("'finishTime' section is missing or too far into the future", info['id'])
+                raise SoftException("'finishTime' section is missing or too far into the future", info['id'])
             seasonSectionName = 'conditions/common/season'
             if questSection.has_key(seasonSectionName):
                 season = questSection[seasonSectionName].asInt
             else:
-                raise Exception("'season' condition is compulsory", info['id'])
+                raise SoftException("'season' condition is compulsory", info['id'])
             cycleSectionName = 'conditions/common/cycle'
             if questSection.has_key(cycleSectionName):
                 cycle = questSection[cycleSectionName].asInt
@@ -286,7 +287,7 @@ class Source(object):
 
     def __readGroupContent(self, questSection):
         if not questSection.has_key('groupContent'):
-            raise Exception("'groupContent' section is compulsory")
+            raise SoftException("'groupContent' section is compulsory")
         return questSection.readString('groupContent').split()
 
     def __getConditionReaders(self, eventType):
@@ -431,7 +432,7 @@ class Source(object):
     def __readCondition_groupBy(self, _, section, node):
         s = section.asString
         if s not in ('vehicle', 'nation', 'class', 'level'):
-            raise Exception('Unknown groupBy name %s' % s)
+            raise SoftException('Unknown groupBy name %s' % s)
         node.addChild(s)
 
     def __readCondition_installedModules(self, _, section, node):
@@ -442,7 +443,7 @@ class Source(object):
                 nationID = nations.INDICES[nationName]
             else:
                 if node.name != 'optionalDevice':
-                    raise Exception('module must be like nation:inNationName')
+                    raise SoftException('module must be like nation:inNationName')
                 name = module
             if node.name == 'guns':
                 nationModules = vehicles.g_cache.guns(nationID)
@@ -459,26 +460,26 @@ class Source(object):
                 modules.add(vehicles.g_cache.optionalDevices()[idx].compactDescr)
                 break
             else:
-                raise Exception('Unknown tag %s' % node.name)
+                raise SoftException('Unknown tag %s' % node.name)
             for descr in nationModules.itervalues():
                 if descr.name == name:
                     modules.add(descr.compactDescr)
                     break
             else:
-                raise Exception('Unknown module(%s) %s' % (node.name, module))
+                raise SoftException('Unknown module(%s) %s' % (node.name, module))
 
         node.addChild(modules)
 
     def __readCritName(self, _, section, node):
         critName = section.asString
         if critName not in vehicles.VEHICLE_DEVICE_TYPE_NAMES + vehicles.VEHICLE_TANKMAN_TYPE_NAMES:
-            raise Exception('Invalid crit name (%s)' % critName)
+            raise SoftException('Invalid crit name (%s)' % critName)
         node.addChild(critName)
 
     def __readCondition_cumulative(self, _, section, node):
         for name, sub in section.items():
             if name not in battle_results_shared.VEH_FULL_RESULTS.names() and name not in battle_results_shared.VEH_BASE_RESULTS.names():
-                raise Exception("Unsupported misc variable '%s'" % name)
+                raise SoftException("Unsupported misc variable '%s'" % name)
             node.addChild((name, int(sub.asFloat)))
 
     def __readBattleResultsConditionList(self, conditionReaders, section, node):
@@ -511,7 +512,7 @@ class Source(object):
             values = achievement.split(':')
             if len(values) == 2:
                 dossierRecordDBIDs.add(RECORD_DB_IDS[values[0], values[1]])
-            raise Exception('Invalid achievement format (%s). Must be blockName:record.' % achievement)
+            raise SoftException('Invalid achievement format (%s). Must be blockName:record.' % achievement)
 
         node.addChild(dossierRecordDBIDs)
 
@@ -522,7 +523,7 @@ class Source(object):
         rammingConditions = set([ rammingCondition for rammingCondition in section.asString.split() ])
         for rammingCondition in rammingConditions:
             if rammingCondition not in ('stayedAlive', 'dealtMoreDamage'):
-                raise Exception('Unsupported kill by ramming condition %s, must be one of (%s %s)' % (rammingCondition, 'stayedAlive', 'dealtMoreDamage'))
+                raise SoftException('Unsupported kill by ramming condition %s, must be one of (%s %s)' % (rammingCondition, 'stayedAlive', 'dealtMoreDamage'))
 
         node.addChild(rammingConditions)
 
@@ -538,16 +539,16 @@ class Source(object):
                     if rec in blockBuilder.recordsLayout or rec.startswith('tankExpert') or rec.startswith('mechanicEngineer'):
                         break
             else:
-                raise Exception('Invalid dossier record %s' % (record,))
+                raise SoftException('Invalid dossier record %s' % (record,))
 
         else:
-            raise Exception('Old or invalid dossier record format (%s)' % (record,))
+            raise SoftException('Old or invalid dossier record format (%s)' % (record,))
         node.addChild(record)
 
     def __readCondition_keyResults(self, _, section, node):
         name = section.asString
         if name not in battle_results_shared.VEH_BASE_RESULTS.names() and name not in battle_results_shared.COMMON_RESULTS.names() and name not in battle_results_shared.VEH_FULL_RESULTS.names() and name not in battle_results_shared.AVATAR_BASE_RESULTS.names() and name not in battle_results_shared.AVATAR_FULL_RESULTS.names():
-            raise Exception("Unsupported battle result variable '%s'" % name)
+            raise SoftException("Unsupported battle result variable '%s'" % name)
         node.addChild(name)
 
     def __readCondition_true(self, _, section, node):
@@ -569,7 +570,7 @@ class Source(object):
     def __readCondition_attackReason(self, _, section, node):
         attackReason = section.asInt
         if not 0 <= attackReason < len(ATTACK_REASONS):
-            raise Exception('Invalid attack reason index')
+            raise SoftException('Invalid attack reason index')
         node.addChild(section.asInt)
 
     def __readCondition_set(self, _, section, node):
@@ -578,7 +579,7 @@ class Source(object):
     def __readCondition_IGRType(self, _, section, node):
         igrType = section.asInt
         if igrType not in IGR_TYPE.RANGE:
-            raise Exception('Invalid IGR type %s' % (igrType,))
+            raise SoftException('Invalid IGR type %s' % (igrType,))
         node.addChild(igrType)
 
     def __readBattleFilter_GeometryNames(self, _, section, node):
@@ -590,7 +591,7 @@ class Source(object):
                     arenaIDs.append(id)
 
             if initialLen == len(arenaIDs):
-                raise Exception('Unknown geometry name %s' % geometryName)
+                raise SoftException('Unknown geometry name %s' % geometryName)
 
         node.addChild(set(arenaIDs))
 
@@ -598,7 +599,7 @@ class Source(object):
         res = set()
         for bonusType in section.asString.split():
             if int(bonusType) not in ARENA_BONUS_TYPE.RANGE:
-                raise Exception('Unknown bonus type %s' % bonusType)
+                raise SoftException('Unknown bonus type %s' % bonusType)
             res.add(int(bonusType))
 
         node.addChild(res)
@@ -616,7 +617,7 @@ class Source(object):
         for level in section.asString.split():
             if 1 <= int(level) <= 10:
                 res.add(int(level))
-            raise Exception('Unsupported vehicle level %s' % level)
+            raise SoftException('Unsupported vehicle level %s' % level)
 
         node.addChild(res)
 

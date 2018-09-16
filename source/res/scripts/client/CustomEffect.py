@@ -7,6 +7,7 @@ from items import _xml
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from helpers.PixieNode import EffectNode
 from helpers import EffectsList
+from soft_exception import SoftException
 gTemplates = {}
 gNodes = {}
 gConstantGroup = {}
@@ -508,7 +509,7 @@ class ExhaustEffectDescriptor(EffectDescriptorBase):
         return ExhaustMainSelector(effectDescriptor, args, self.nodes) if effectDescriptor is not None else None
 
     def getActiveEffects(self, effects, args):
-        raise AssertionError('This function should not be called by hand.')
+        raise SoftException('This function should not be called by hand.')
 
 
 class EffectSettings(object):

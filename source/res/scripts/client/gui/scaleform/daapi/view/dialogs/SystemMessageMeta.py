@@ -5,6 +5,7 @@ from gui.Scaleform.daapi.view.dialogs import IDialogMeta
 from gui.Scaleform.locale.AOGAS import AOGAS
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.shared import events
+from soft_exception import SoftException
 from web_stubs import i18n
 
 class SESSION_CONTROL_TYPE(object):
@@ -56,4 +57,4 @@ class SystemMessageMeta(IDialogMeta):
         return
 
     def getViewScopeType(self):
-        raise UserWarning('This method should not be reached in this context')
+        raise SoftException('This method should not be reached in this context')

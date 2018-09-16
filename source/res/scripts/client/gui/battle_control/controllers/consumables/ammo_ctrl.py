@@ -9,7 +9,7 @@ import Event
 from constants import VEHICLE_SETTING
 from debug_utils import LOG_CODEPOINT_WARNING, LOG_ERROR
 from gui.battle_control import avatar_getter
-from gui.battle_control.battle_constants import SHELL_SET_RESULT, CANT_SHOOT_ERROR, BATTLE_CTRL_ID, GUN_RELOADING_VALUE_TYPE, SHELL_QUANTITY_UNKNOWN
+from gui.battle_control.battle_constants import SHELL_SET_RESULT, CANT_SHOOT_ERROR, BATTLE_CTRL_ID, SHELL_QUANTITY_UNKNOWN
 from gui.battle_control.controllers.interfaces import IBattleController
 from gui.shared.utils.MethodsRules import MethodsRules
 from gui.shared.utils.decorators import ReprInjector
@@ -68,9 +68,6 @@ class IGunReloadingSnapshot(object):
     def clear(self):
         raise NotImplementedError
 
-    def getValueType(self):
-        raise NotImplementedError
-
     def isReloading(self):
         raise NotImplementedError
 
@@ -116,9 +113,6 @@ class ReloadingTimeSnapshot(IGunReloadingSnapshot):
         self._updateTime = 0.0
         self._waitReloadingStartResponse = False
 
-    def getValueType(self):
-        return GUN_RELOADING_VALUE_TYPE.TIME
-
     def isReloading(self):
         return True if self._waitReloadingStartResponse else self._actualTime > 0
 
@@ -157,12 +151,11 @@ class ReloadingTimeState(ReloadingTimeSnapshot, IGunReloadingState):
 
     def setTimes(self, actualTime, baseTime):
         if actualTime > 0:
-            if self._actualTime <= 0:
-                correction = baseTime - actualTime
-                if correction > _TIME_CORRECTION_THRESHOLD:
-                    self._startTime = BigWorld.timeExact() - correction
-                else:
-                    self._startTime = BigWorld.timeExact()
+            correction = baseTime - actualTime
+            if correction > _TIME_CORRECTION_THRESHOLD:
+                self._startTime = BigWorld.timeExact() - correction
+            else:
+                self._startTime = BigWorld.timeExact()
             self._updateTime = BigWorld.timeExact()
         else:
             self._startTime = 0.0
@@ -171,77 +164,6 @@ class ReloadingTimeState(ReloadingTimeSnapshot, IGunReloadingState):
             self.stopPredicateReloading()
         self._actualTime = actualTime
         self._baseTime = baseTime
-
-
-@ReprInjector.simple(('getActualValue', 'actual'), ('isReloading', 'reloading'))
-class ReloadingPercentSnapshot(IGunReloadingSnapshot):
-    __slots__ = ('__percent',)
-
-    def __init__(self, percent=0.0):
-        super(ReloadingPercentSnapshot, self).__init__()
-        self.__percent = percent
-
-    def clear(self):
-        self.__percent = 0.0
-
-    def getValueType(self):
-        return GUN_RELOADING_VALUE_TYPE.PERCENT
-
-    def getActualValue(self):
-        return self.__percent
-
-    def getBaseValue(self):
-        return _HUNDRED_PERCENT
-
-    def isReloading(self):
-        return self.getActualValue() > 0
-
-    def isReloadingFinished(self):
-        return self.getActualValue() == 0
-
-
-class ReloadingPercentState(IGunReloadingState):
-    __slots__ = ('__getter',)
-
-    def __init__(self, getter=None):
-        super(ReloadingPercentState, self).__init__()
-        if getter is None:
-
-            def getter():
-                pass
-
-        self.__getter = getter
-        return
-
-    def clear(self):
-        pass
-
-    def clearGetter(self):
-        self.__getter = lambda : 0
-
-    def getSnapshot(self):
-        return ReloadingPercentSnapshot(percent=self.getActualValue())
-
-    def getValueType(self):
-        return GUN_RELOADING_VALUE_TYPE.PERCENT
-
-    def getActualValue(self):
-        return round(_HUNDRED_PERCENT * self.__getter())
-
-    def getBaseValue(self):
-        return _HUNDRED_PERCENT
-
-    def isReloading(self):
-        return self.getActualValue() > 0
-
-    def isReloadingFinished(self):
-        return self.getActualValue() == 0
-
-    def startPredictedReloading(self):
-        pass
-
-    def stopPredicateReloading(self):
-        pass
 
 
 _IGNORED_RELOADING_TIME = 0.15
@@ -617,51 +539,23 @@ class AmmoReplayRecorder(AmmoController):
 
 
 class AmmoReplayPlayer(AmmoController):
-    __slots__ = ('__callbackID', '__isActivated', '__percent', '__replayCtrl')
+    __slots__ = ('__replayCtrl',)
 
     def __init__(self, replayCtrl):
+        super(AmmoReplayPlayer, self).__init__()
         self.__replayCtrl = replayCtrl
-        super(AmmoReplayPlayer, self).__init__(reloadingState=ReloadingPercentState(replayCtrl.getGunReloadAmountLeft))
-        self.__callbackID = None
-        self.__isActivated = False
-        self.__percent = None
         self.__replayCtrl.onAmmoSettingChanged += self.__onAmmoSettingChanged
-        return
 
     def clear(self, leave=True):
         if leave:
-            self._reloadingState.clearGetter()
             if self.__replayCtrl is not None:
-                if self.__callbackID is not None:
-                    BigWorld.cancelCallback(self.__callbackID)
-                    self.__callbackID = None
                 self.__replayCtrl.onAmmoSettingChanged -= self.__onAmmoSettingChanged
                 self.__replayCtrl = None
         super(AmmoReplayPlayer, self).clear(leave)
         return
 
-    def setGunReloadTime(self, timeLeft, baseTime):
-        self.__percent = None
-        self.triggerReloadEffect(timeLeft, baseTime)
-        if not self.__isActivated:
-            self.__isActivated = True
-            self.__timeLoop()
-        return
-
     def changeSetting(self, intCD, avatar=None):
         return False
-
-    def __timeLoop(self):
-        self.__callbackID = None
-        self.__tick()
-        self.__callbackID = BigWorld.callback(0.1, self.__timeLoop)
-        return
-
-    def __tick(self):
-        percent = self._reloadingState.getActualValue()
-        if self.__percent != percent:
-            self.__percent = percent
-            self.onGunReloadTimeSet(self.getCurrentShellCD(), self._reloadingState.getSnapshot())
 
     @MethodsRules.delayable('setShells')
     def __onAmmoSettingChanged(self, idx):

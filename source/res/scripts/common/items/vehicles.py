@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/items/vehicles.py
+from soft_exception import SoftException
 from collections import namedtuple
 from math import radians, cos, atan, pi, isnan, degrees
 from functools import partial
@@ -19,11 +20,11 @@ from items.readers import shared_readers
 from items.readers import sound_readers
 from items import vehicle_items
 from items._xml import cachedFloat
-from constants import IS_BOT, IS_WEB, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE, IS_DEVELOPMENT
+from constants import IS_BOT, IS_WEB, ITEM_DEFS_PATH, SHELL_TYPES, VEHICLE_SIEGE_STATE, VEHICLE_MODE
 from constants import IGR_TYPE, IS_RENTALS_ENABLED, IS_CELLAPP, IS_BASEAPP, IS_CLIENT
-from debug_utils import LOG_DEBUG, LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
+from debug_utils import LOG_WARNING, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from items.stun import g_cfg as stunConfig
-import deepUpdate
+from items import common_extras
 if IS_CLIENT:
     import ResMgr
 else:
@@ -47,12 +48,17 @@ VEHICLE_CLASS_TAGS = frozenset(('lightTank',
  'heavyTank',
  'SPG',
  'AT-SPG'))
-VEHICLE_MODULE_TAGS_FOR_BALANCE_WEIGHT = frozenset(('vehicle',
- 'gun',
- 'turret',
- 'engine',
- 'chassis',
- 'radio'))
+ABILITY_SLOTS_BY_VEHICLE_CLASS = {'lightTank': 3,
+ 'SPG': 3,
+ 'AT-SPG': 2,
+ 'mediumTank': 1,
+ 'heavyTank': 1}
+
+def getNumAbilitySlots(vehicleType):
+    vehClass = getVehicleClassFromVehicleType(vehicleType)
+    return ABILITY_SLOTS_BY_VEHICLE_CLASS[vehClass]
+
+
 VEHICLE_DEVICE_TYPE_NAMES = ('engine',
  'ammoBay',
  'fuelTank',
@@ -73,6 +79,8 @@ NUM_EQUIPMENT_SLOTS_BY_TYPE = {items.EQUIPMENT_TYPES.regular: 3,
 NUM_EQUIPMENT_SLOTS = sum(NUM_EQUIPMENT_SLOTS_BY_TYPE.itervalues())
 EQUIPMENTS_ORDER = (items.EQUIPMENT_TYPES.regular, items.EQUIPMENT_TYPES.battleBoosters)
 EQUIPMENTS_ORDER_TYPE_BY_IDX = sum([ (eqType,) * NUM_EQUIPMENT_SLOTS_BY_TYPE[eqType] for eqType in EQUIPMENTS_ORDER ], tuple())
+SLOT_START_OFFSET_BY_TYPE = {eqType:sum((NUM_EQUIPMENT_SLOTS_BY_TYPE[EQUIPMENTS_ORDER[idx]] for idx in EQUIPMENTS_ORDER[0:typeRange])) for typeRange, eqType in enumerate(EQUIPMENTS_ORDER)}
+NUM_SHELLS_SLOTS = 3
 CAMOUFLAGE_KINDS = {'winter': 0,
  'summer': 1,
  'desert': 2}
@@ -119,6 +127,7 @@ VEHICLE_ATTRIBUTE_FACTORS = {'engine/power': 1.0,
  'ramming': 1.0,
  'crewLevelIncrease': 0.0,
  'crewChanceToHitFactor': 1.0,
+ 'crewRolesFactor': 1.0,
  'stunResistanceEffect': 0.0,
  'stunResistanceDuration': 0.0}
 _g_prices = None
@@ -226,16 +235,16 @@ class VehicleDescriptor(object):
             if position is None:
                 position = descr['kind']
             elif position != descr['kind']:
-                raise ValueError('wrong camouflage kind = %d' % position)
+                raise SoftException('wrong camouflage kind = %d' % position)
             cd = self.type.compactDescr
             if cd in descr['deny'] or descr['allow'] and cd not in descr['allow']:
-                raise ValueError('camouflage = %d is incompatible with vehicle' % cd)
+                raise SoftException('camouflage = %d is incompatible with vehicle' % cd)
             startTime = int(startTime / 60) * 60
             if startTime < _CUSTOMIZATION_EPOCH:
-                raise ValueError('wrong camouflage start time = %d' % startTime)
+                raise SoftException('wrong camouflage start time = %d' % startTime)
             durationDays = int(durationDays)
             if not 0 <= durationDays <= 255:
-                raise ValueError('wrong camouflage duration = %d' % durationDays)
+                raise SoftException('wrong camouflage duration = %d' % durationDays)
         self.camouflages = p[:position] + ((camouflageID, startTime, durationDays),) + p[position + 1:]
         return
 
@@ -254,19 +263,19 @@ class VehicleDescriptor(object):
             group = groups[groupName]
             nations = group[3]
             if nations is not None and self.type.customizationNationID not in nations:
-                raise Exception('emblem nation mismatch')
+                raise SoftException('emblem nation mismatch')
             allow, deny = group[4:6]
             cd = self.type.compactDescr
             if cd in deny:
-                raise Exception('emblem is incompatible with vehicle')
+                raise SoftException('emblem is incompatible with vehicle')
             if allow and cd not in allow:
-                raise Exception('emblem is incompatible with vehicle')
+                raise SoftException('emblem is incompatible with vehicle')
             startTime = int(startTime / 60) * 60
             if startTime < _CUSTOMIZATION_EPOCH:
-                raise Exception('wrong emblem start time')
+                raise SoftException('wrong emblem start time')
             durationDays = int(durationDays)
             if not 0 <= durationDays <= 255:
-                raise Exception('wrong emblem duration')
+                raise SoftException('wrong emblem duration')
         self.playerEmblems = p[:position] + ((emblemID, startTime, durationDays),) + p[position + 1:]
         return
 
@@ -288,15 +297,15 @@ class VehicleDescriptor(object):
                 allow, deny = customization['inscriptionGroups'][groupName][3:5]
                 cd = self.type.compactDescr
                 if cd in deny:
-                    raise Exception('inscription is incompatible with vehicle')
+                    raise SoftException('inscription is incompatible with vehicle')
                 if allow and cd not in allow:
-                    raise Exception('inscription is incompatible with vehicle')
+                    raise SoftException('inscription is incompatible with vehicle')
                 startTime = int(startTime / 60) * 60
                 if startTime < _CUSTOMIZATION_EPOCH:
-                    raise Exception('wrong inscription start time')
+                    raise SoftException('wrong inscription start time')
                 durationDays = int(durationDays)
                 if not 0 <= durationDays <= 255:
-                    raise Exception('wrong inscription duration')
+                    raise SoftException('wrong inscription duration')
             self.playerInscriptions = p[:position] + ((inscriptionID,
               startTime,
               durationDays,
@@ -445,7 +454,7 @@ class VehicleDescriptor(object):
         itemTypeID, nationID, compID = parseIntCompactDescr(compactDescr)
         itemTypeName = items.ITEM_TYPE_NAMES[itemTypeID]
         if nationID != self.type.id[0]:
-            raise Exception('incompatible nation of component')
+            raise SoftException('incompatible nation of component')
         if itemTypeName == 'vehicleGun':
             return self.__installGun(compID, positionIndex)
         if itemTypeName == 'vehicleChassis':
@@ -759,7 +768,7 @@ class VehicleDescriptor(object):
         if newGunDescr is None and turretPositionIdx in self.hull.fakeTurrets['lobby']:
             newGunDescr, turretDescr, hullDescr = self.__selectTurretForGun(gunID, turretPositionIdx)
         if newGunDescr is None:
-            raise KeyError
+            raise SoftException
         self.turrets[turretPositionIdx] = (turretDescr, newGunDescr)
         self.hull = hullDescr
         self.__updateAttributes()
@@ -939,12 +948,6 @@ class VehicleDescriptor(object):
         for turretDescr, gunDescr in self.turrets:
             self.maxHealth += turretDescr.maxHealth
 
-        if IS_BASEAPP or IS_WEB:
-            bpl = type.balanceByComponentLevels
-            modMul = g_cache.commonConfig['balanceModulesWeightMultipliers']
-            vmw = g_cache.commonConfig['balanceByVehicleModule'].get(self.type.name, None)
-            vehicleBalance = (vmw if vmw else bpl[self.level]) * modMul['vehicle']
-            self.balanceWeight = (vehicleBalance + bpl[self.gun.level] * modMul['gun'] + bpl[self.turret.level] * modMul['turret'] + bpl[self.engine.level] * modMul['engine'] + bpl[chassis.level] * modMul['chassis'] + bpl[self.radio.level] * modMul['radio']) * type.balanceByClass
         if IS_CLIENT or IS_CELLAPP or IS_WEB or IS_BOT:
             weight, maxWeight = self.__computeWeight()
             trackCenterOffset = chassis.topRightCarryingPoint[0]
@@ -991,7 +994,7 @@ class VehicleDescriptor(object):
             if not chassis.rotationIsAroundCenter:
                 rotationEnergy -= trackCenterOffset * weight * chassis.specificFriction / defResistance
                 if rotationEnergy <= 0.0:
-                    raise Exception('wrong parameters of rotation of ' + type.name)
+                    raise SoftException('wrong parameters of rotation of ' + type.name)
             if chassis.rotationSpeedLimit is not None:
                 rotationSpeedLimit = min(rotationSpeedLimit, chassis.rotationSpeedLimit)
             physics['rotationSpeedLimit'] = rotationSpeedLimit
@@ -1088,9 +1091,9 @@ def isVehicleDescr(descr):
 
 class VehicleType(object):
     currentReadingVeh = None
-    __slots__ = ('name', 'id', 'compactDescr', 'mode', 'tags', 'level', 'hasSiegeMode', 'hasCustomDefaultCamouflage', 'customizationNationID', 'speedLimits', 'repairCost', 'crewXpFactor', 'premiumVehicleXPFactor', 'xpFactor', 'creditsFactor', 'freeXpFactor', 'healthBurnPerSec', 'healthBurnPerSecLossFraction', 'invisibility', 'invisibilityDeltas', 'crewRoles', 'extras', 'extrasDict', 'devices', 'tankmen', 'balanceByClass', 'balanceByComponentLevels', 'i18nInfo', 'damageStickersLodDist', 'heavyCollisionEffectVelocities', 'effects', 'camouflage', 'emblemsLodDist', 'emblemsAlpha', '_prereqs', 'clientAdjustmentFactors', 'defaultPlayerEmblemID', '_defEmblem', '_defEmblems', 'unlocks', 'chassis', 'engines', 'fuelTanks', 'radios', 'turrets', 'hulls', 'installableComponents', 'unlocksDescrs', 'autounlockedItems', 'collisionEffectVelocities', 'isRotationStill', 'useHullZ', 'siegeModeParams', 'hullAimingParams', 'overmatchMechanicsVer', 'xphysics', 'repaintParameters')
+    __slots__ = ('name', 'id', 'compactDescr', 'mode', 'tags', 'level', 'hasSiegeMode', 'hasCustomDefaultCamouflage', 'customizationNationID', 'speedLimits', 'repairCost', 'crewXpFactor', 'premiumVehicleXPFactor', 'xpFactor', 'creditsFactor', 'freeXpFactor', 'healthBurnPerSec', 'healthBurnPerSecLossFraction', 'invisibility', 'invisibilityDeltas', 'crewRoles', 'extras', 'extrasDict', 'devices', 'tankmen', 'i18nInfo', 'damageStickersLodDist', 'heavyCollisionEffectVelocities', 'effects', 'camouflage', 'emblemsLodDist', 'emblemsAlpha', '_prereqs', 'clientAdjustmentFactors', 'defaultPlayerEmblemID', '_defEmblem', '_defEmblems', 'unlocks', 'chassis', 'engines', 'fuelTanks', 'radios', 'turrets', 'hulls', 'installableComponents', 'unlocksDescrs', 'autounlockedItems', 'collisionEffectVelocities', 'isRotationStill', 'useHullZ', 'siegeModeParams', 'hullAimingParams', 'overmatchMechanicsVer', 'xphysics', 'repaintParameters')
 
-    def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT, standalone=False):
+    def __init__(self, nationID, basicInfo, xmlPath, vehMode=VEHICLE_MODE.DEFAULT):
         self.name = basicInfo.name
         self.id = (nationID, basicInfo.id)
         self.compactDescr = basicInfo.compactDescr
@@ -1135,10 +1138,6 @@ class VehicleType(object):
             self.extrasDict = commonConfig['extrasDict']
             self.devices = commonConfig['_devices']
             self.tankmen = _selectCrewExtras(self.crewRoles, self.extrasDict)
-        if IS_BASEAPP or IS_WEB:
-            classTag = tuple(VEHICLE_CLASS_TAGS & self.tags)[0]
-            self.balanceByClass = commonConfig['balanceByVehicleClasses'][classTag]
-            self.balanceByComponentLevels = commonConfig['balanceByComponentLevels']
         if IS_CLIENT or IS_WEB:
             self.i18nInfo = basicInfo.i18n
         if IS_CLIENT:
@@ -1174,9 +1173,6 @@ class VehicleType(object):
         unlocksDescrs = []
         self.unlocks = _readUnlocks(xmlCtx, section, 'unlocks', unlocksDescrs)
         defHull = _readHull((xmlCtx, 'hull'), _xml.getSubsection(xmlCtx, section, 'hull'))
-        if standalone:
-            savedMode = VehicleType.currentReadingVeh.mode
-            VehicleType.currentReadingVeh.mode = VEHICLE_MODE.SIEGE
         self.chassis = _readInstallableComponents(xmlCtx, section, 'chassis', nationID, _readChassis, _readChassisLocals, g_cache.chassis(nationID), g_cache.chassisIDs(nationID), unlocksDescrs)
         self.engines = _readInstallableComponents(xmlCtx, section, 'engines', nationID, _readEngine, _readEngineLocal, g_cache.engines(nationID), g_cache.engineIDs(nationID), unlocksDescrs)
         self.fuelTanks = _readInstallableComponents(xmlCtx, section, 'fuelTanks', nationID, _readFuelTank, _defaultLocalReader, g_cache.fuelTanks(nationID), g_cache.fuelTankIDs(nationID), unlocksDescrs)
@@ -1187,8 +1183,6 @@ class VehicleType(object):
             turretsList.append(turrets)
 
         self.turrets = tuple(turretsList)
-        if standalone:
-            VehicleType.currentReadingVeh.mode = savedMode
         self.hulls = (defHull,)
         if section.has_key('hull/variants'):
             self.hulls += _readHullVariants((xmlCtx, 'hull/variants'), section['hull/variants'], defHull, self.chassis, self.turrets)
@@ -1277,11 +1271,11 @@ class VehicleType(object):
                     itemID = g_cache.radioIDs(nationID)[itemName]
             except Exception:
                 LOG_CURRENT_EXCEPTION()
-                raise Exception("wrong name '%s' in <unlocks> of '%s'" % (itemName, self.name))
+                raise SoftException("wrong name '%s' in <unlocks> of '%s'" % (itemName, self.name))
 
             compactDescr = makeIntCompactDescrByID(itemTypeName, nationID, itemID)
             if itemTypeName != 'vehicle' and compactDescr not in self.installableComponents:
-                raise Exception("component '%s' in <unlocks> is not for '%s'" % (itemName, self.name))
+                raise SoftException("component '%s' in <unlocks> is not for '%s'" % (itemName, self.name))
             reqItems.setdefault(compactDescr, set()).update(descr[3:])
             destList.append((descr[0], compactDescr))
 
@@ -1367,30 +1361,13 @@ class Cache(object):
         vt = self.__vehicles.get(id)
         if vt:
             return vt
-        vt = self.__loadVehicle(nationID, vehicleTypeID, vehMode, standalone=False)
-        self.__vehicles[id] = vt
-        return vt
-
-    def __loadVehicle(self, nationID, vehicleTypeID, vehMode=VEHICLE_MODE.DEFAULT, standalone=False):
         nation = nations.NAMES[nationID]
         basicInfo = g_list.getList(nationID)[vehicleTypeID]
         xmlName = basicInfo.name.split(':')[1] + VEHICLE_MODE_FILE_SUFFIX[vehMode]
         xmlPath = _VEHICLE_TYPE_XML_PATH + nation + '/' + xmlName + '.xml'
-        return VehicleType(nationID, basicInfo, xmlPath, vehMode, standalone)
-
-    def reloadVehicle(self, nationID, vehicleTypeID, vehMode=VEHICLE_MODE.DEFAULT):
-        if not IS_DEVELOPMENT:
-            return
-        mem_vt = self.vehicle(nationID, vehicleTypeID, vehMode)
-        xml_vt = self.__loadVehicle(nationID, vehicleTypeID, vehMode, standalone=True)
-        deepUpdate.deepUpdate(mem_vt, xml_vt)
-
-    def tuneupVehicle(self, vehTypeJSON, nationID, vehicleTypeID, vehMode=VEHICLE_MODE.DEFAULT):
-        if not IS_DEVELOPMENT:
-            return
-        LOG_DEBUG('tuneup:', nationID, vehicleTypeID, vehTypeJSON)
-        mem_vt = self.vehicle(nationID, vehicleTypeID, vehMode)
-        deepUpdate.deepUpdate(mem_vt, vehTypeJSON)
+        vt = VehicleType(nationID, basicInfo, xmlPath, vehMode)
+        self.__vehicles[id] = vt
+        return vt
 
     def chassis(self, nationID):
         return self.__getList(nationID, 'chassis')
@@ -1601,6 +1578,7 @@ class VehicleList(object):
 
     def __init__(self):
         self.__ids = {}
+        typeCompDescrsByLevel = {level:[] for level in range(1, 11)}
         list = []
         for nation in nations.NAMES:
             if nation not in nations.AVAILABLE_NAMES:
@@ -1614,13 +1592,20 @@ class VehicleList(object):
             list.append(descrs)
             nationID = nations.INDICES[nation]
             self.__ids.update(dict(((d.name, (nationID, d.id)) for d in descrs.itervalues())))
+            for descr in descrs.itervalues():
+                typeCompDescrsByLevel[descr.level].append(descr.compactDescr)
+
             ResMgr.purge(xmlPath, True)
 
         self.__nations = tuple(list)
+        self.__typeCompDescrsByLevel = {level:frozenset(vehTypeCompDescrs) for level, vehTypeCompDescrs in typeCompDescrsByLevel.iteritems()}
         return
 
     def getList(self, nationID):
         return self.__nations[nationID]
+
+    def getTypeCompDescrsByLevel(self, level):
+        return self.__typeCompDescrsByLevel[level]
 
     def isVehicleExisting(self, name):
         return name in self.__ids
@@ -1631,12 +1616,12 @@ class VehicleList(object):
             if fullName in self.__ids:
                 return self.__ids[fullName]
 
-        raise Exception("unknown vehicle name '%s'" % name)
+        raise SoftException("unknown vehicle name '%s'" % name)
 
     def getIDsByName(self, name):
         ids = self.__ids.get(name)
         if ids is None:
-            raise Exception("unknown vehicle type name '%s'" % name)
+            raise SoftException("unknown vehicle type name '%s'" % name)
         return ids
 
     def __readVehicleList(self, nation, section, xmlPath):
@@ -2069,7 +2054,8 @@ def _readHull(xmlCtx, section):
     if IS_CLIENT or IS_BOT:
         item.emblemSlots = shared_readers.readEmblemSlots(xmlCtx, section, 'emblemSlots')
     if IS_CLIENT:
-        item.models = shared_readers.readModels(xmlCtx, section, 'models')
+        item.modelsSets = shared_readers.readModelsSets(xmlCtx, section, 'models')
+        item.models = item.modelsSets['default']
         item.swinging = shared_readers.readSwingingSettings(xmlCtx, section, g_cache)
         item.customEffects = (__readExhaustEffect(xmlCtx, section),)
         item.AODecals = _readAODecals(xmlCtx, section, 'AODecals')
@@ -2136,7 +2122,8 @@ def _readHullVariants(xmlCtx, section, defHull, chassis, turrets):
             if name == 'base':
                 continue
             if name == 'models':
-                variant.models = shared_readers.readModels(ctx, section, 'models')
+                modelsSets = shared_readers.readModelsSets(ctx, section, 'models')
+                variant.models = modelsSets['default']
                 continue
             if name == 'hitTester':
                 variant.hitTester = _readHitTester(ctx, section, 'hitTester')
@@ -2268,7 +2255,8 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
         trackNodes = chassis_readers.readTrackNodes(xmlCtx, section)
         if section.has_key('camouflage'):
             item.camouflage = shared_readers.readCamouflage(xmlCtx, section, 'camouflage', default=shared_components.DEFAULT_CAMOUFLAGE)
-        item.models = shared_readers.readModels(xmlCtx, section, 'models')
+        item.modelsSets = shared_readers.readModelsSets(xmlCtx, section, 'models')
+        item.models = item.modelsSets['default']
         item.traces = chassis_readers.readTraces(xmlCtx, section, item.topRightCarryingPoint[0], g_cache)
         item.tracks = chassis_readers.readTrackMaterials(xmlCtx, section, g_cache)
         item.groundNodes = shared_components.NodesAndGroups(nodes=groundNodes, groups=groundGroups)
@@ -2280,7 +2268,7 @@ def _readChassis(xmlCtx, section, item, unlocksDescrs=None, _=None):
         item.effects = {'lodDist': shared_readers.readLodDist(xmlCtx, section, 'effects/lodDist', g_cache)}
         sounds = sound_readers.readWWTripleSoundConfig(section)
         if sounds.isEmpty():
-            raise Exception('chassis sound tags are wrong for vehicle ' + item.name)
+            raise SoftException('chassis sound tags are wrong for vehicle ' + item.name)
         item.sounds = sounds
         item.wheels = chassis_components.WheelsConfig(shared_readers.readLodDist(xmlCtx, section, 'wheels/lodDist', g_cache), wheelGroups, wheels)
         item.customEffects = (CustomEffectsDescriptor.getDescriptor(section, g_cache._customEffects['slip'], xmlCtx, 'effects/mud'),)
@@ -2535,6 +2523,8 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
     item.level = _readLevel(xmlCtx, section)
     item.hitTester = _readHitTester(xmlCtx, section, 'hitTester')
     item.gunPosition = _xml.readVector3(xmlCtx, section, 'gunPosition')
+    if section.has_key('gunCamPosition'):
+        item.gunCamPosition = _xml.readVector3(xmlCtx, section, 'gunCamPosition')
     item.materials = _readArmor(xmlCtx, section, 'armor')
     item.weight = _xml.readNonNegativeFloat(xmlCtx, section, 'weight')
     item.healthParams = shared_components.DeviceHealth(_xml.readInt(xmlCtx, section, 'maxHealth', 1))
@@ -2557,7 +2547,8 @@ def _readTurret(xmlCtx, section, item, unlocksDescrs=None, _=None):
         item.emblemSlots = shared_readers.readEmblemSlots(xmlCtx, section, 'emblemSlots')
     if IS_CLIENT:
         item.ceilless = section.readBool('ceilless', False)
-        item.models = shared_readers.readModels(xmlCtx, section, 'models')
+        item.modelsSets = shared_readers.readModelsSets(xmlCtx, section, 'models')
+        item.models = item.modelsSets['default']
         if section.has_key('camouflage'):
             item.camouflage = shared_readers.readCamouflage(xmlCtx, section, 'camouflage', default=shared_components.DEFAULT_CAMOUFLAGE)
         item.turretRotatorSoundManual = _xml.readString(xmlCtx, section, 'wwturretRotatorSoundManual')
@@ -2619,7 +2610,8 @@ def _readGun(xmlCtx, section, item, unlocksDescrs=None, _=None):
         item.i18n = shared_readers.readUserText(section)
     if IS_CLIENT:
         if section.has_key('models'):
-            item.models = shared_readers.readModels(xmlCtx, section, 'models')
+            item.modelsSets = shared_readers.readModelsSets(xmlCtx, section, 'models')
+            item.models = item.modelsSets['default']
         effName = _xml.readNonEmptyString(xmlCtx, section, 'effects')
         eff = g_cache._gunEffects.get(effName)
         if eff is None:
@@ -2786,12 +2778,14 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
         invisibilityFactorAtShot = _xml.readFraction(xmlCtx, section, 'invisibilityFactorAtShot')
     if IS_CLIENT:
         if not section.has_key('models'):
+            modelsSets = sharedItem.modelsSets
             models = sharedItem.models
             if models is None:
                 _xml.raiseWrongSection(xmlCtx, 'models')
         else:
             hasOverride = True
-            models = shared_readers.readModels(xmlCtx, section, 'models')
+            modelsSets = shared_readers.readModelsSets(xmlCtx, section, 'models')
+            models = modelsSets['default']
         if not section.has_key('effects'):
             effects = sharedItem.effects
         else:
@@ -2891,6 +2885,7 @@ def _readGunLocals(xmlCtx, section, sharedItem, unlocksDescrs, turretCompactDesc
                 tags = tags.union(('autoreload',))
             item.tags = tags
         if IS_CLIENT:
+            item.modelsSets = modelsSets
             item.models = models
             item.effects = effects
             item.recoil = recoil
@@ -3029,8 +3024,8 @@ def _readShell(xmlCtx, section, name, nationID, shellTypeID, icons):
         if shell.icon is None:
             _xml.raiseWrongXml(xmlCtx, 'icon', "unknown icon '%s'" % v)
     _readPriceForItem(xmlCtx, section, shell.compactDescr)
-    if IS_CELLAPP:
-        shell.isGold = 'gold' in _xml.readPrice(xmlCtx, section, 'price')
+    if IS_CELLAPP or IS_WEB:
+        shell.isGold = 'gold' in _xml.readPrice(xmlCtx, section, 'price') or section.readBool('improved', False)
     kind = intern(_xml.readNonEmptyString(xmlCtx, section, 'kind'))
     shellType = shell_components.createShellType(kind)
     if shellType is None:
@@ -3089,7 +3084,8 @@ _shellKinds = (SHELL_TYPES.HOLLOW_CHARGE,
  SHELL_TYPES.HIGH_EXPLOSIVE,
  SHELL_TYPES.ARMOR_PIERCING,
  SHELL_TYPES.ARMOR_PIERCING_HE,
- SHELL_TYPES.ARMOR_PIERCING_CR)
+ SHELL_TYPES.ARMOR_PIERCING_CR,
+ SHELL_TYPES.SMOKE)
 
 def _defaultLocalReader(xmlCtx, section, sharedItem, unlocksDescrs, parentItem=None):
     if not section.has_key('unlocks'):
@@ -3648,7 +3644,7 @@ def _readCommonConfig(xmlCtx, section):
         res['defaultTurretDetachmentEffects'] = _readTurretDetachmentEffects(xmlCtx, section, 'defaultTurretDetachmentEffects')
         res['miscParams']['explosionCandleVolumes'] = [ float(f) for f in _xml.readString(xmlCtx, section, 'miscParams/explosionCandleVolumes').split() ]
     if IS_CLIENT or IS_CELLAPP:
-        res['extras'], res['extrasDict'] = _readExtras(xmlCtx, section, 'extras')
+        res['extras'], res['extrasDict'] = common_extras.readExtras(xmlCtx, section, 'extras', 'vehicle_extras')
         res['materials'], res['_autoDamageKindMaterials'] = _readMaterials(xmlCtx, section, 'materials', res['extrasDict'])
         res['deviceExtraIndexToTypeIndex'], res['tankmanExtraIndexToTypeIndex'] = _readDeviceTypes(xmlCtx, section, 'deviceExtras', res['extrasDict'])
         res['_devices'] = frozenset((res['extras'][idx] for idx in res['deviceExtraIndexToTypeIndex'].iterkeys()))
@@ -3660,59 +3656,10 @@ def _readCommonConfig(xmlCtx, section):
     elif IS_WEB:
         res['materials'], res['_autoDamageKindMaterials'] = _readMaterials(xmlCtx, section, 'materials', None)
     if IS_BOT:
-        res['extras'], res['extrasDict'] = _readExtras(xmlCtx, section, 'extras')
+        res['extras'], res['extrasDict'] = common_extras.readExtras(xmlCtx, section, 'extras', 'vehicle_extras')
         res['deviceExtraIndexToTypeIndex'], res['tankmanExtraIndexToTypeIndex'] = _readDeviceTypes(xmlCtx, section, 'deviceExtras', res['extrasDict'])
         res['_devices'] = frozenset((res['extras'][idx] for idx in res['deviceExtraIndexToTypeIndex'].iterkeys()))
-    if IS_BASEAPP or IS_WEB:
-        res['balanceByVehicleModule'] = _readVehicleModulesWeights(xmlCtx, section)
-        res['balanceByComponentLevels'] = (None,) + _xml.readTupleOfFloats(xmlCtx, section, 'balance/byComponentLevels', 10)
-        res['balanceByVehicleClasses'] = {}
-        for classTag in VEHICLE_CLASS_TAGS:
-            res['balanceByVehicleClasses'][classTag] = _xml.readFloat(xmlCtx, section, 'balance/byVehicleClasses/' + classTag)
-
-        res['balanceModulesWeightMultipliers'] = {}
-        for moduleTag in VEHICLE_MODULE_TAGS_FOR_BALANCE_WEIGHT:
-            res['balanceModulesWeightMultipliers'][moduleTag] = _xml.readFloat(xmlCtx, section, 'balance/modulesWeightMultipliers/' + moduleTag)
-
-    if IS_BASEAPP:
-        res['balanceBySquadSize'] = (0.0,) + _xml.readTupleOfFloats(xmlCtx, section, 'balance/bySquadSize', 3)
     return res
-
-
-def _readVehicleModulesWeights(xmlContext, section):
-    weights = {}
-    if not section.has_key('balance/byVehicleModule'):
-        return weights
-    for name, sect in _xml.getChildren(xmlContext, section, 'balance/byVehicleModule'):
-        typeName = _xml.readNonEmptyString(xmlContext, sect, '')
-        g_list.getIDsByName(typeName)
-        weights[typeName] = _xml.readFloat(xmlContext, sect, 'weight')
-
-    return weights
-
-
-def _readExtras(xmlCtx, section, subsectionName):
-    import vehicle_extras as mod
-    noneExtra = mod.NoneExtra('_NoneExtra', 0, '', None)
-    extras = [noneExtra]
-    extrasDict = {noneExtra.name: noneExtra}
-    for extraName, extraSection in _xml.getChildren(xmlCtx, section, subsectionName):
-        extraName = intern(extraName)
-        ctx = (xmlCtx, subsectionName + '/' + extraName)
-        if extrasDict.has_key(extraName):
-            _xml.raiseWrongXml(ctx, '', 'name is not unique')
-        clientName, sep, serverName = extraSection.asString.partition(':')
-        className = (clientName if IS_CLIENT or IS_BOT else serverName).strip()
-        classObj = getattr(mod, className, None)
-        if classObj is None:
-            _xml.raiseWrongXml(ctx, '', "class '%s' is not found in '%s'" % (className, mod.__name__))
-        extra = classObj(extraName, len(extras), xmlCtx[1], extraSection)
-        extras.append(extra)
-        extrasDict[extraName] = extra
-
-    if len(extras) > 200:
-        _xml.raiseWrongXml(xmlCtx, subsectionName, 'too many extras')
-    return (tuple(extras), extrasDict)
 
 
 def _readDeviceTypes(xmlCtx, section, subsectionName, extrasDict):
@@ -3799,12 +3746,12 @@ def _joinCustomizationParams(nationID, commonDescr, customDescr):
     if not IS_CLIENT:
         if 'inscriptionColors' not in customDescr:
             if 'inscriptionColors' not in commonDescr:
-                raise Exception('inscriptionColors is not specified for nation=%s' % (nations.NAMES[nationID],))
+                raise SoftException('inscriptionColors is not specified for nation=%s' % (nations.NAMES[nationID],))
             customDescr['inscriptionColors'] = commonDescr['inscriptionColors']
     for name in ('inscriptionGroups', 'inscriptions', 'camouflageGroups', 'camouflages'):
         intersection = set(commonDescr[name].iterkeys()).intersection(customDescr[name].iterkeys())
         if intersection:
-            raise Exception('there is unexpected intersection in %s, %s (%s)' % (name, nationID, intersection))
+            raise SoftException('there is unexpected intersection in %s, %s (%s)' % (name, nationID, intersection))
         customDescr[name].update(commonDescr[name])
 
     return customDescr
@@ -4334,7 +4281,7 @@ def _descrByID(descrList, id):
         if descr.id[1] == id:
             return descr
 
-    raise KeyError
+    raise SoftException
 
 
 def _findDescrByID(descrList, id):

@@ -2486,7 +2486,7 @@
     </style>
   </itemGroup>
   <itemGroup>
-    <priceGroup>	23feb style	</priceGroup>
+    <priceGroup>	special style notInShop	</priceGroup>
     <vehicleFilter>
       <include>
         <tags>	premium	</tags>
@@ -2500,17 +2500,17 @@
       </exclude>
     </vehicleFilter>
     <style>
-      <id>	137	</id>
-      <userString>	#vehicle_customization:special_style/23feb	</userString>
-      <texture>	gui/maps/vehicles/styles/23feb.png	</texture>
+      <id>	140	</id>
+      <userString>	#vehicle_customization:special_style/brw_winner	</userString>
+      <texture>	gui/maps/vehicles/styles/brw_winner.png	</texture>
       <season>	ALL	</season>
-      <historical>	true	</historical>
+      <historical>	false	</historical>
       <outfits>
         <outfit>
-          <season>	winter	</season>
+          <season>	ALL	</season>
           <camouflages>
             <item>
-              <id>	534	</id>
+              <id>	558	</id>
               <patternSize>	1	</patternSize>
               <palette>	0	</palette>
               <appliedTo>	4368	</appliedTo>
@@ -2518,71 +2518,30 @@
           </camouflages>
           <decals>
             <item>
-              <id>	195	</id>
+              <id>	15874	</id>
+              <appliedTo>	48	</appliedTo>
+            </item>
+            <item>
+              <id>	549	</id>
               <appliedTo>	192	</appliedTo>
             </item>
             <item>
-              <id>	195	</id>
+              <id>	15874	</id>
+              <appliedTo>	768	</appliedTo>
+            </item>
+            <item>
+              <id>	549	</id>
               <appliedTo>	3072	</appliedTo>
             </item>
             <item>
-              <id>	195	</id>
+              <id>	15874	</id>
+              <appliedTo>	12288	</appliedTo>
+            </item>
+            <item>
+              <id>	549	</id>
               <appliedTo>	49152	</appliedTo>
             </item>
           </decals>
-        </outfit>
-        <outfit>
-          <season>	summer	</season>
-          <camouflages>
-            <item>
-              <id>	533	</id>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-              <appliedTo>	4368	</appliedTo>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	195	</id>
-              <appliedTo>	192	</appliedTo>
-            </item>
-            <item>
-              <id>	195	</id>
-              <appliedTo>	3072	</appliedTo>
-            </item>
-            <item>
-              <id>	195	</id>
-              <appliedTo>	49152	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	desert	</season>
-          <camouflages>
-            <item>
-              <id>	535	</id>
-              <patternSize>	1	</patternSize>
-              <palette>	0	</palette>
-              <appliedTo>	4368	</appliedTo>
-            </item>
-          </camouflages>
-          <decals>
-            <item>
-              <id>	195	</id>
-              <appliedTo>	192	</appliedTo>
-            </item>
-            <item>
-              <id>	195	</id>
-              <appliedTo>	3072	</appliedTo>
-            </item>
-            <item>
-              <id>	195	</id>
-              <appliedTo>	49152	</appliedTo>
-            </item>
-          </decals>
-        </outfit>
-        <outfit>
-          <season>	event	</season>
         </outfit>
       </outfits>
     </style>

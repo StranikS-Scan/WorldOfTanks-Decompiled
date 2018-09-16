@@ -7,6 +7,7 @@ import ResMgr
 from collections import namedtuple
 import types
 from debug_utils import LOG_CURRENT_EXCEPTION
+from soft_exception import SoftException
 
 class RESOURCE_ITEM_TYPE(object):
     BOOL = 'bool'
@@ -23,7 +24,7 @@ class RESOURCE_ITEM_TYPE(object):
     CLASS = 'class'
 
 
-class ResourceError(Exception):
+class ResourceError(SoftException):
 
     def __init__(self, ctx, message):
         super(ResourceError, self).__init__()

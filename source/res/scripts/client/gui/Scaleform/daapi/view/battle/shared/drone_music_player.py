@@ -39,8 +39,11 @@ def _initCondition(func):
 
 
 class _Severity(CONST_CONTAINER):
-    MEDIUM = 1
-    LOW = 2
+    NONE = 0
+    LOW = 1
+    MEDIUM = 2
+    HIGH = 3
+    VERY_HIGH = 4
 
 
 class _MusicID(CONST_CONTAINER):
@@ -108,8 +111,8 @@ class _Condition(IBattleFieldListener, IAbstractPeriodView, ITeamBasesListener):
 
 class _TimeRemainedCondition(_Condition):
 
-    def __init__(self, criticalValue):
-        super(_TimeRemainedCondition, self).__init__(criticalValue, _Severity.MEDIUM)
+    def __init__(self, criticalValue, severity=_Severity.MEDIUM):
+        super(_TimeRemainedCondition, self).__init__(criticalValue, severity)
         self.__period = None
         self.__totalTime = None
         return
@@ -125,6 +128,14 @@ class _TimeRemainedCondition(_Condition):
                 self.__totalTime = None
                 return False
         return self._isCriticalAchieved()
+
+    @property
+    def _totalTime(self):
+        return self.__totalTime
+
+    @property
+    def _period(self):
+        return self.__period
 
     def _isCriticalAchieved(self):
         if self.__period is not None and self.__totalTime is not None:
@@ -198,15 +209,19 @@ class _BaseCaptureCondition(_Condition):
     def __init__(self, criticalValue, severity):
         super(_BaseCaptureCondition, self).__init__(criticalValue, severity)
         self.__pointsToBase = {}
-        self.__stopCapturingCooldown = None
+        self._stopCapturingCooldown = None
         return
 
     def dispose(self):
         super(_BaseCaptureCondition, self).dispose()
-        if self.__stopCapturingCooldown is not None:
-            BigWorld.cancelCallback(self.__stopCapturingCooldown)
-            self.__stopCapturingCooldown = None
+        if self._stopCapturingCooldown is not None:
+            BigWorld.cancelCallback(self._stopCapturingCooldown)
+            self._stopCapturingCooldown = None
         return
+
+    @property
+    def _pointsToBase(self):
+        return self.__pointsToBase
 
     @_initCondition
     def setNoBaseCapturing(self):
@@ -255,22 +270,22 @@ class _BaseCaptureCondition(_Condition):
     def _validatePoints(self):
         criticalPointsCount, musicStopPredelay = self.criticalValue
         for points in self.__pointsToBase.itervalues():
-            if self.__stopCapturingCooldown is not None and points:
-                BigWorld.cancelCallback(self.__stopCapturingCooldown)
+            if self._stopCapturingCooldown is not None and points:
+                BigWorld.cancelCallback(self._stopCapturingCooldown)
                 LOG_DEBUG('[Drone] Base Capturing. Cooldown stopped')
-                self.__stopCapturingCooldown = None
+                self._stopCapturingCooldown = None
                 return False
             if points >= criticalPointsCount:
                 return self._updateValidValue(True)
 
-        if self.isSatisfied() and self.__stopCapturingCooldown is None:
+        if self.isSatisfied() and self._stopCapturingCooldown is None:
             LOG_DEBUG('[Drone] Base Capturing. Stop music cooldown has been started')
-            self.__stopCapturingCooldown = BigWorld.callback(musicStopPredelay, partial(self.__onCooldownOver, time.time()))
+            self._stopCapturingCooldown = BigWorld.callback(musicStopPredelay, partial(self._onCooldownOver, time.time()))
         return False
 
-    def __onCooldownOver(self, startTime):
+    def _onCooldownOver(self, startTime):
         LOG_DEBUG('[Drone] Cooldown ended. {} seconds passed. Music will be stopped.'.format(time.time() - startTime))
-        self.__stopCapturingCooldown = None
+        self._stopCapturingCooldown = None
         if self._updateValidValue(False):
             self.onValidChangedInternally()
         return
@@ -423,7 +438,7 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
                 if self.__isProperBattlePeroid():
                     if self._initialized:
                         if satisfiedChanged:
-                            self.__validateConditions()
+                            self._validateConditions()
                     else:
                         self.__checkFullInitialization()
             LOG_ERROR('Listener method not found', condition, event)
@@ -437,7 +452,7 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
 
     def __onConditionChangedItself(self):
         if self.__isProperBattlePeroid():
-            self.__validateConditions()
+            self._validateConditions()
 
     def __checkFullInitialization(self):
         allInited = True
@@ -445,15 +460,15 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
             if condition.isInitialized():
                 if condition.isSatisfied() and condition.getSeverity() == _Severity.MEDIUM:
                     self._initialized = True
-                    self.__validateConditions()
+                    self._validateConditions()
                     return
             allInited = False
 
         if allInited:
             self._initialized = True
-            self.__validateConditions()
+            self._validateConditions()
 
-    def __validateConditions(self):
+    def _validateConditions(self):
         isPlaying = self.__isMusicCurrentlyPlaying()
         satisfied = [ c for c in self._conditions if c.isSatisfied() ]
         if satisfied:
@@ -473,7 +488,7 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
     def __checkInitialization(self):
         if self.__isProperBattlePeroid():
             if self._initialized:
-                self.__validateConditions()
+                self._validateConditions()
             else:
                 self.__checkFullInitialization()
 
@@ -492,3 +507,16 @@ class DroneMusicPlayer(IBattleFieldListener, IAbstractPeriodView, ITeamBasesList
 
     def __isMusicCurrentlyPlaying(self):
         return self.__playingMusicID is not None
+
+    @property
+    def _playingMusicID(self):
+        return self.__playingMusicID
+
+    def _setPlayingMusicID(self, playingMusicID):
+        self.__playingMusicID = playingMusicID
+
+    def _playMusic(self):
+        self.__playMusic()
+
+    def _stopMusic(self):
+        self.__stopMusic()

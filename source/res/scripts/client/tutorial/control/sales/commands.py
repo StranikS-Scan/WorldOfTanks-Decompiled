@@ -3,7 +3,6 @@
 from account_helpers.AccountSettings import AccountSettings, DEFAULT_VEHICLE_TYPES_FILTER, DEFAULT_LEVELS_FILTERS
 from gui import SystemMessages
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
-from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared import g_eventBus
 from gui.shared.events import OpenLinkEvent
 from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
@@ -31,10 +30,6 @@ def buyBerths():
 
 def createClan():
     g_eventBus.handleEvent(OpenLinkEvent(OpenLinkEvent.CLAN_CREATE))
-
-
-def showMarathonPage():
-    showMissionsMarathon()
 
 
 def configureShopForEquipment():

@@ -15,6 +15,10 @@ def getDefaultDeathZonesCodes():
     return {DEATH_ZONES.STATIC: _TIMER_STATES.DEATH_ZONE}
 
 
+def getDefaultDeathZonesTexts():
+    return {DEATH_ZONES.STATIC: ''}
+
+
 def getTimerViewTypeID(level):
     if level == 'critical':
         typeID = _TIMER_STATES.CRITICAL_VIEW
@@ -29,7 +33,7 @@ def getTimerViewTypeID(level):
 class FrontendMapping(object):
     __slots__ = ('__miscStatuses', '__deathZonesCodes', '__deathZonesSounds')
 
-    def __init__(self, miscStatuses=None, deathZonesCodes=None, deathZonesSoundIDs=None):
+    def __init__(self, miscStatuses=None, deathZonesCodes=None, deathZonesSoundIDs=None, deathZonesTexts=None):
         super(FrontendMapping, self).__init__()
         self.__miscStatuses = miscStatuses or getDefaultMiscStatuses()
         self.__deathZonesCodes = deathZonesCodes or getDefaultDeathZonesCodes()

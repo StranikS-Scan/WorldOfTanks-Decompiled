@@ -234,9 +234,6 @@
         <gravity>	-7.1	</gravity>
         <elasticity>	1000	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
@@ -417,7 +414,7 @@
         <maxRegenHealth>	85	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	400	</circularVisionRadius>
+      <circularVisionRadius>	420	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	120	</maxHealth>
         <maxRegenHealth>	60	</maxRegenHealth>
@@ -442,9 +439,9 @@
           </pitchLimits>
           <invisibilityFactorAtShot>	0.209	</invisibilityFactorAtShot>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	10.2	</reloadTime>
+          <reloadTime>	8.7	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -523,7 +520,7 @@
     </Turret_1_Ch25_121_mod_1971B>
   </turrets0>
   <engines>
-    <_12150L7>	shared	</_12150L7>
+    <_12150L7B>	shared	</_12150L7B>
   </engines>
   <fuelTanks>
     <Large>	shared	</Large>
@@ -534,9 +531,9 @@
   <physics>
     <detailed>
       <engines>
-        <_12150L7>
-          <smplEnginePower>	613.2231	</smplEnginePower>
-        </_12150L7>
+        <_12150L7B>
+          <smplEnginePower>	700	</smplEnginePower>
+        </_12150L7B>
       </engines>
       <chassis>
         <Chassis_Ch25_121_mod_1971B>

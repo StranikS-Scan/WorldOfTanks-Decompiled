@@ -12,6 +12,7 @@ from gui.prb_control.entities.e_sport.unit.public.entity import PublicBrowserEnt
 from gui.prb_control.entities.event.squad.entity import EventBattleSquadEntity, EventBattleSquadEntryPoint
 from gui.prb_control.entities.stronghold.unit.entity import StrongholdEntity, StrongholdEntryPoint, StrongholdBrowserEntryPoint, StrongholdBrowserEntity
 from gui.prb_control.entities.random.squad.entity import RandomSquadEntity, RandomSquadEntryPoint
+from gui.prb_control.entities.epic.squad.entity import EpicSquadEntity, EpicSquadEntryPoint
 from gui.prb_control.items import PlayerDecorator, FunctionalState
 from gui.prb_control.settings import FUNCTIONAL_FLAG
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, CTRL_ENTITY_TYPE
@@ -23,6 +24,7 @@ _SUPPORTED_ENTRY_BY_ACTION = {PREBATTLE_ACTION_NAME.SQUAD: RandomSquadEntryPoint
  PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST: StrongholdBrowserEntryPoint}
 _SUPPORTED_ENTRY_BY_TYPE = {PREBATTLE_TYPE.SQUAD: RandomSquadEntryPoint,
  PREBATTLE_TYPE.EVENT: EventBattleSquadEntryPoint,
+ PREBATTLE_TYPE.EPIC: EpicSquadEntryPoint,
  PREBATTLE_TYPE.UNIT: PublicEntryPoint,
  PREBATTLE_TYPE.EXTERNAL: StrongholdEntryPoint}
 _SUPPORTED_INTRO_BY_TYPE = {PREBATTLE_TYPE.E_SPORT_COMMON: ESportIntroEntity}
@@ -30,6 +32,7 @@ _SUPPORTED_BROWSER_BY_TYPE = {PREBATTLE_TYPE.UNIT: PublicBrowserEntity,
  PREBATTLE_TYPE.EXTERNAL: StrongholdBrowserEntity}
 _SUPPORTED_UNIT_BY_TYPE = {PREBATTLE_TYPE.SQUAD: RandomSquadEntity,
  PREBATTLE_TYPE.EVENT: EventBattleSquadEntity,
+ PREBATTLE_TYPE.EPIC: EpicSquadEntity,
  PREBATTLE_TYPE.UNIT: PublicEntity,
  PREBATTLE_TYPE.EXTERNAL: StrongholdEntity}
 

@@ -4,6 +4,7 @@ import os
 import types
 from functools import partial
 from debug_utils import LOG_WRAPPED_CURRENT_EXCEPTION, LOG_ERROR
+from soft_exception import SoftException
 CLEAR_TRACE = True
 
 class CallbackDispatcher(object):
@@ -42,7 +43,7 @@ class CallbackDispatcher(object):
 
 if CLEAR_TRACE:
 
-    class AdispException(Exception):
+    class AdispException(SoftException):
         pass
 
 

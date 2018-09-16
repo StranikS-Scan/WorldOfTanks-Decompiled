@@ -282,6 +282,9 @@ class VehicleStateController(IBattleController):
 
     def switchToOther(self, vehicleID):
         if self.__vehicleID == vehicleID or vehicleID is None:
+            if not vehicleID:
+                self.__vehicleID = 0
+                self.notifyStateChanged(VEHICLE_VIEW_STATE.SWITCHING, 0)
             return
         else:
             self.notifyStateChanged(VEHICLE_VIEW_STATE.SWITCHING, vehicleID)

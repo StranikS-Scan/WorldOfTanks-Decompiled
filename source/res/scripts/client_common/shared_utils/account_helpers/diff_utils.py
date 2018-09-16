@@ -18,6 +18,8 @@ def synchronizeDicts(diff, cache, parentKey='', changeList=None, defaultCacheTyp
             elif k[1] == '_d':
                 keys_d.append(k)
                 deletes += 1
+                if changeList is not None:
+                    changeList[k[0] + k[1]] = diff[k]
                 continue
         keys_u.append(k)
         updates += 1

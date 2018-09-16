@@ -116,6 +116,10 @@ def init(scriptConfig, engineConfig, userPreferences, loadingScreenGUI=None):
         RSSDownloader.init()
         items.clearXMLCache()
         SoundGroups.loadLightSoundsDB()
+        import player_ranks
+        player_ranks.init()
+        import destructible_entities
+        destructible_entities.init()
         try:
             from LightFx import LightManager
             LightManager.g_instance = LightManager.LightManager()

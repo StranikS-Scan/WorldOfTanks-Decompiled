@@ -24,3 +24,6 @@ class ClanProfileSummaryViewMeta(ClanProfileBaseView):
 
     def as_updateGlobalMapBlockS(self, data):
         return self.flashObject.as_updateGlobalMapBlock(data) if self._isDAAPIInited() else None
+
+    def as_updateLeaguesBlockS(self, data):
+        return self.flashObject.as_updateLeaguesBlock(data) if self._isDAAPIInited() else None

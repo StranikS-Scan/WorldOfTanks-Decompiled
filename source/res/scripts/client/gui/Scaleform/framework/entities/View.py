@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/framework/entities/View.py
 from collections import namedtuple
 import WWISE
+from soft_exception import SoftException
 from debug_utils import LOG_DEBUG, LOG_ERROR, LOG_WARNING
 import SoundGroups
 from gui.Scaleform.framework.entities.abstract.AbstractViewMeta import AbstractViewMeta
@@ -209,9 +210,9 @@ class View(AbstractViewMeta):
                 if scope != ScopeTemplates.DYNAMIC_SCOPE:
                     self.__scope = scope
                 else:
-                    raise Exception('View.__scope cannot be a ScopeTemplates.DYNAMIC value. This value might have only settings.scope for {} view.'.format(self.alias))
+                    raise SoftException('View.__scope cannot be a ScopeTemplates.DYNAMIC value. This value might have only settings.scope for {} view.'.format(self.alias))
             else:
-                raise Exception('You can not change a non-dynamic scope. Declare ScopeTemplates.DYNAMIC in settings for {} view'.format(self.alias))
+                raise SoftException('You can not change a non-dynamic scope. Declare ScopeTemplates.DYNAMIC in settings for {} view'.format(self.alias))
         else:
             LOG_ERROR('Can not change a current scope, until unimplemented __settings ')
         return
@@ -243,7 +244,7 @@ class View(AbstractViewMeta):
                     viewTutorialID = tutorialManager.getViewTutorialID(self.__key.name)
                     tutorialManager.setupViewContextHints(viewTutorialID, hintsData)
             else:
-                LOG_ERROR('Hint layout is nor defined', hintID)
+                LOG_ERROR('Hint layout is not defined', hintID)
         return
 
     def onFocusIn(self, alias):

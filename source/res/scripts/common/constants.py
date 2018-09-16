@@ -133,7 +133,7 @@ class WOT_GAMEPLAY:
     ON = 1
 
 
-ARENA_GAMEPLAY_NAMES = ('ctf', 'domination', 'assault', 'nations', 'ctf2', 'domination2', 'assault2', 'fallout', 'fallout2', 'fallout3', 'fallout4', 'ctf30x30', 'domination30x30', 'sandbox', 'bootcamp', 'epic')
+ARENA_GAMEPLAY_NAMES = ('ctf', 'domination', 'assault', 'nations', 'ctf2', 'domination2', 'assault2', 'fallout', 'fallout2', 'fallout3', 'fallout4', 'ctf30x30', 'domination30x30', 'sandbox', 'bootcamp', 'epic', 'football')
 ARENA_GAMEPLAY_IDS = dict(((value, index) for index, value in enumerate(ARENA_GAMEPLAY_NAMES)))
 
 class ARENA_GUI_TYPE:
@@ -304,6 +304,13 @@ class ARENA_UPDATE:
     VIEW_POINTS = 26
     FOG_OF_WAR = 27
     VEHICLE_RECOVERED = 28
+    FOOTBALL_OVERTIME_POINTS = 29
+    FOOTBALL_GOAL_SCORED = 30
+    FOOTBALL_BALL_DROP = 31
+    FOOTBALL_GOAL_TIMELINE = 32
+    FOOTBALL_RETURN_TO_PLAY = 33
+    FOOTBALL_WINNER_DECLARED = 34
+    FOOTBALL_FADE_OUT_OVERLAY = 35
 
 
 class ARENA_SYNC_OBJECTS:
@@ -431,7 +438,10 @@ class PREBATTLE_TYPE:
      FALLOUT,
      EVENT)
     CREATE_FROM_WEB = (UNIT, SQUAD, EXTERNAL)
-    CREATE_EX_FROM_SERVER = (SQUAD, CLAN, EPIC)
+    CREATE_EX_FROM_SERVER = (SQUAD,
+     CLAN,
+     EPIC,
+     EVENT)
     CREATE_EX_FROM_WEB = (SQUAD, CLAN)
     EPIC_PREBATTLES = (EPIC, EPIC_TRAINING)
     REMOVED = (COMPANY, CLUBS)
@@ -1089,6 +1099,7 @@ class INVOICE_ASSET:
     FREE_XP = 5
     FORT_RESOURCE = 6
     CRYSTAL = 7
+    FB18 = 99
 
 
 CHANNEL_SEARCH_RESULTS_LIMIT = 50
@@ -1668,7 +1679,11 @@ class INVITATION_TYPE:
     SQUAD = PREBATTLE_TYPE.SQUAD
     EPIC = PREBATTLE_TYPE.EPIC
     FALLOUT = PREBATTLE_TYPE.FALLOUT
-    RANGE = (SQUAD, FALLOUT, EPIC)
+    EVENT = PREBATTLE_TYPE.EVENT
+    RANGE = (SQUAD,
+     FALLOUT,
+     EPIC,
+     EVENT)
 
 
 class REPAIR_FLAGS:

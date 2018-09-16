@@ -336,6 +336,7 @@
     </registerObserver>
     <sendFinalStats>
       <Arg>	PYTHON	</Arg>
+      <IsMulticast>	true	</IsMulticast>
     </sendFinalStats>
     <onClientConnected>
       <Arg>	BOOL	</Arg>
@@ -343,6 +344,7 @@
     <onBattleRunning>
       <Arg>	BOOL	</Arg>
       <Arg>	BOOL	</Arg>
+      <IsMulticast>	true	</IsMulticast>
     </onBattleRunning>
     <sendStateToOwnClient>
       <Exposed></Exposed>

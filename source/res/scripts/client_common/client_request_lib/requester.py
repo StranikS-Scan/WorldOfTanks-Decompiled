@@ -271,6 +271,9 @@ class WGElenAccessor(BaseAccessor):
     def get_player_data(self, callback, fields=None):
         return self._data_source.get_player_data(callback, fields=fields)
 
+    def get_football_events_data(self, callback, fields=None):
+        return self._data_source.get_football_events_data(callback, fields=fields)
+
 
 class WgrmsAccessor(BaseAccessor):
 

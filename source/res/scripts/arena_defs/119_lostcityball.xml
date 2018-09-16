@@ -1,0 +1,611 @@
+<119_lostcityball.xml>
+  <name>	#football2018:arena_119_lostcityball_name	</name>
+  <description>	#football2018:arena_119_lostcityball_description	</description>
+  <geometry>	spaces/119_lostcityball	</geometry>
+  <roundLength>	420	</roundLength>
+  <maxPlayersInTeam>	7	</maxPlayersInTeam>
+  <boundingBox>
+    <bottomLeft>	-150.551132 -153.307098	</bottomLeft>
+    <upperRight>	249.448868 246.692902	</upperRight>
+  </boundingBox>
+  <minimap>	spaces/119_lostcityball/mmap.dds	</minimap>
+  <vehicleCamouflageKind>	summer	</vehicleCamouflageKind>
+  <umbraEnabled>	1	</umbraEnabled>
+  <wwmusicSetup>
+    <wwmusicLoading>	ev_football_music_loading_screen	</wwmusicLoading>
+    <wwmusicIntensive>	ev_football_music_battle	</wwmusicIntensive>
+    <wwmusicRelaxed>	ev_football_music_battle	</wwmusicRelaxed>
+    <wwmusicStop></wwmusicStop>
+    <wwmusicEndbattleStop></wwmusicEndbattleStop>
+    <wwmusicResultWin>	h22_music_result_victory	</wwmusicResultWin>
+    <wwmusicResultDrawn>	h22_music_result_defeat	</wwmusicResultDrawn>
+    <wwmusicResultDefeat>	h22_music_result_defeat	</wwmusicResultDefeat>
+  </wwmusicSetup>
+  <wwmusicDroneSetup>
+    <timeRemained>
+      <value>	120	</value>
+    </timeRemained>
+  </wwmusicDroneSetup>
+  <wwambientSound>	ev_football_wind_desert	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	ev_football.bnk	</bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	expl.bnk	</bank>
+      <bank>	eng_continental_R975.bnk	</bank>
+      <bank>	eng_gaz_aa.bnk	</bank>
+      <bank>	eng_hetzer.bnk	</bank>
+      <bank>	combat_atmosphere.bnk	</bank>
+      <bank>	explosive_objects.bnk	</bank>
+      <bank>	mechanisms.bnk	</bank>
+      <bank>	objects.bnk	</bank>
+      <bank>	plane.bnk	</bank>
+    </unloadBanks>
+    <events>
+      <event>
+        <name>	time_buzzer_01	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	time_buzzer_02	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	time_over	</name>
+        <mod>	ev_football_end_time_game	</mod>
+      </event>
+      <event>
+        <name>	music_combat	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	ue_stop_loadscreen_music	</name>
+        <mod>	ev_football_utilitie_event	</mod>
+      </event>
+      <event>
+        <name>	base_capture_1	</name>
+        <mod>	ev_football_goal_in_our_gate	</mod>
+      </event>
+      <event>
+        <name>	base_capture_2	</name>
+        <mod>	ev_football_goal_in_enemy_gate	</mod>
+      </event>
+      <event>
+        <name>	wpn_meduim_PC	</name>
+        <mod>	wpn_main_PC	</mod>
+        <modAUX>	ev_football_wpn_main_pc	</modAUX>
+      </event>
+      <event>
+        <name>	wpn_meduim_NPC	</name>
+        <mod>	ev_football_wpn_main_npc	</mod>
+      </event>
+      <event>
+        <name>	wpn_large_extra_PC	</name>
+        <mod>	wpn_large_PC	</mod>
+        <modAUX>	ev_football_wpn_large_pc	</modAUX>
+      </event>
+      <event>
+        <name>	wpn_large_extra_NPC	</name>
+        <mod>	ev_football_wpn_large_npc	</mod>
+      </event>
+      <event>
+        <name>	wpn_small_PC	</name>
+        <mod>	wpn_meduim_PC	</mod>
+        <modAUX>	ev_football_wpn_medium_pc	</modAUX>
+      </event>
+      <event>
+        <name>	wpn_small_NPC	</name>
+        <mod>	ev_football_wpn_medium_npc	</mod>
+      </event>
+      <event>
+        <name>	vo_flt_combat_reserve	</name>
+        <mod>	ev_football_nitro_full_pc	</mod>
+      </event>
+      <event>
+        <name>	imp_surface_automatic_NPC	</name>
+        <mod>	imp_surface_automatic_NPC	</mod>
+        <modAUX>	ev_football_impacts_medium_npc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_small_NPC	</name>
+        <mod>	imp_surface_small_NPC	</mod>
+        <modAUX>	ev_football_impacts_medium_npc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_medium_NPC	</name>
+        <mod>	imp_surface_medium_NPC	</mod>
+        <modAUX>	ev_football_impacts_medium_npc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_main_NPC	</name>
+        <mod>	imp_surface_main_NPC	</mod>
+        <modAUX>	ev_football_impacts_main_npc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_large_NPC	</name>
+        <mod>	imp_surface_large_NPC	</mod>
+        <modAUX>	ev_football_impacts_large_npc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_huge_NPC	</name>
+        <mod>	imp_surface_huge_NPC	</mod>
+        <modAUX>	ev_football_impacts_large_npc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_automatic_PC	</name>
+        <mod>	imp_surface_automatic_PC	</mod>
+        <modAUX>	ev_football_impacts_pc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_small_PC	</name>
+        <mod>	imp_surface_small_PC	</mod>
+        <modAUX>	ev_football_impacts_pc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_medium_PC	</name>
+        <mod>	imp_surface_medium_PC	</mod>
+        <modAUX>	ev_football_impacts_pc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_main_PC	</name>
+        <mod>	imp_surface_main_PC	</mod>
+        <modAUX>	ev_football_impacts_pc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_large_PC	</name>
+        <mod>	imp_surface_large_PC	</mod>
+        <modAUX>	ev_football_impacts_pc	</modAUX>
+      </event>
+      <event>
+        <name>	imp_surface_huge_PC	</name>
+        <mod>	imp_surface_huge_PC	</mod>
+        <modAUX>	ev_football_impacts_pc	</modAUX>
+      </event>
+      <event>
+        <name>	eng_v55_pc	</name>
+        <mod>	ev_football_nitro_progress_pc	</mod>
+        <modAUX>	eng_v55_pc	</modAUX>
+      </event>
+      <event>
+        <name>	eng_Ford_GAA_pc	</name>
+        <mod>	ev_football_nitro_progress_pc	</mod>
+        <modAUX>	eng_Ford_GAA_pc	</modAUX>
+      </event>
+      <event>
+        <name>	eng_ContinentalR_pc	</name>
+        <mod>	ev_football_nitro_progress_pc	</mod>
+        <modAUX>	eng_ContinentalR_pc	</modAUX>
+      </event>
+      <event>
+        <name>	vo_ally_killed_by_player	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_ammo_bay_damaged	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_armor_not_pierced_by_player	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_armor_ricochet_by_player	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_commander_killed	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_crew_deactivated	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_damage_by_near_explosion_by_enemy	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_damage_by_near_explosion_by_player	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_driver_killed	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_fire_started_by_player	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_hp_damaged_by_explosion_at_direct_hit_by_player	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_hp_damaged_by_projectile_and_chassis_damaged_by_player	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_hp_damaged_by_projectile_and_gun_damaged_by_player	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_hp_damaged_by_projectile_by_player	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_killed	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_killed_by_player	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_attempt_and_chassis_damaged_by_player	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_attempt_and_gun_damaged_by_player	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_no_attempt_and_chassis_damaged_by_player	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_no_attempt_and_gun_damaged_by_player	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_enemy_no_hp_damage_at_no_attempt_by_player	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_engine_damaged	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_engine_destroyed	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_engine_functional	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_fire_started	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_fire_stopped	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_fuel_tank_damaged	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_gun_damaged	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_gun_destroyed	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_gun_functional	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_gunner_killed	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_loader_killed	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_radio_damaged	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_radioman_killed	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_start_battle	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_surveying_devices_crit_damaged	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_surveying_devices_damaged	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_surveying_devices_destroyed	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_surveying_devices_functional	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_target_captured	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_target_lost	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_target_unlocked	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_track_damaged	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_track_destroyed	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_track_functional	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_track_functional_can_move	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_turret_rotator_damaged	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_turret_rotator_destroyed	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_turret_rotator_functional	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+      <event>
+        <name>	vo_vehicle_destroyed	</name>
+        <mod>	ev_football_collision_silence	</mod>
+      </event>
+    </events>
+    <switches>
+      <switch>
+        <name>	SWITCH_ext_impact_surface	</name>
+        <mod>	SWITCH_mod_impact_surface_football	</mod>
+        <states>
+          <state>
+            <name>	SWITCH_ext_impact_surface_ground	</name>
+            <mod>	SWITCH_mod_impact_surface_football_ground	</mod>
+          </state>
+          <state>
+            <name>	SWITCH_ext_impact_surface_metal	</name>
+            <mod>	SWITCH_mod_impact_surface_football_metal	</mod>
+          </state>
+          <state>
+            <name>	SWITCH_ext_impact_surface_sand	</name>
+            <mod>	SWITCH_mod_impact_surface_football_sand	</mod>
+          </state>
+          <state>
+            <name>	SWITCH_ext_impact_surface_snow	</name>
+            <mod>	SWITCH_mod_impact_surface_football_snow	</mod>
+          </state>
+          <state>
+            <name>	SWITCH_ext_impact_surface_stone	</name>
+            <mod>	SWITCH_mod_impact_surface_football_stone	</mod>
+          </state>
+          <state>
+            <name>	SWITCH_ext_impact_surface_water	</name>
+            <mod>	SWITCH_mod_impact_surface_football_water	</mod>
+          </state>
+          <state>
+            <name>	SWITCH_ext_impact_surface_wood	</name>
+            <mod>	SWITCH_mod_impact_surface_football_wood	</mod>
+          </state>
+        </states>
+      </switch>
+    </switches>
+  </soundRemapping>
+  <water>
+    <texScale>	0	</texScale>
+    <freqX>	0	</freqX>
+    <freqZ>	0	</freqZ>
+  </water>
+  <gameplayTypes>
+    <football>
+      <ballSpawnPoint>	51.837 8 50.892	</ballSpawnPoint>
+      <fieldPosition>	51.837 1.209 50.892	</fieldPosition>
+      <battleEndWarningAppearTime>	60	</battleEndWarningAppearTime>
+      <cellModel>	scripts/extensions/football/item_defs/ServerCollision_119.xml	</cellModel>
+      <cellPosition>	0 0 0	</cellPosition>
+    </football>
+  </gameplayTypes>
+  <roadMap></roadMap>
+  <explicitRequestOnly>	true	</explicitRequestOnly>
+  <mapActivities>
+    <scenario>
+      <startTime>	0.000000 0.000000	</startTime>
+      <possibility>	100.000000	</possibility>
+      <interval>	-1	</interval>
+      <name>	goalToRed	</name>
+      <trajectories>
+        <warplane>
+          <preset>	ball_fireworks_2	</preset>
+          <position>	-114.681999 16.000000 29.414000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	ball_fireworks_2	</preset>
+          <position>	-114.681999 16.000000 50.414001	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	ball_fireworks_2	</preset>
+          <position>	-114.681999 16.000000 71.414001	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	ball_fireworks_short_2	</preset>
+          <position>	-108.681999 16.000000 61.414001	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	ball_fireworks_short_2	</preset>
+          <position>	-108.681999 16.000000 39.414001	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	0.000000 0.000000	</startTime>
+      <possibility>	100.000000	</possibility>
+      <interval>	1000000.0	</interval>
+      <period>	-1	</period>
+      <name>	autogoalToRed	</name>
+      <trajectories>
+        <warplane>
+          <preset>	ball_fail	</preset>
+          <position>	-114.681999 17.000000 29.414000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	ball_fail	</preset>
+          <position>	-114.681999 17.000000 50.414001	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	ball_fail	</preset>
+          <position>	-114.681999 17.000000 71.414001	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	ball_fail	</preset>
+          <position>	-108.681999 17.000000 61.414001	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	ball_fail	</preset>
+          <position>	-108.681999 17.000000 39.414001	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	0.000000 0.000000	</startTime>
+      <possibility>	100.000000	</possibility>
+      <interval>	1000000.0	</interval>
+      <period>	-1	</period>
+      <name>	goalToBlue	</name>
+      <trajectories>
+        <warplane>
+          <preset>	ball_fireworks_1	</preset>
+          <position>	215.500000 16.000000 29.414000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	ball_fireworks_1	</preset>
+          <position>	215.500000 16.000000 50.414001	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	ball_fireworks_1	</preset>
+          <position>	215.500000 16.000000 71.414001	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	ball_fireworks_short_1	</preset>
+          <position>	209.000000 16.000000 61.414001	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	ball_fireworks_short_1	</preset>
+          <position>	209.000000 16.000000 39.414001	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+    <scenario>
+      <startTime>	0.000000 0.000000	</startTime>
+      <possibility>	100.000000	</possibility>
+      <interval>	1000000.0	</interval>
+      <period>	-1	</period>
+      <name>	autogoalToBlue	</name>
+      <trajectories>
+        <warplane>
+          <preset>	ball_fail_blue	</preset>
+          <position>	215.500000 17.000000 29.414000	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	ball_fail_blue	</preset>
+          <position>	215.500000 17.000000 50.414001	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	ball_fail_blue	</preset>
+          <position>	215.500000 17.000000 71.414001	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	ball_fail_blue	</preset>
+          <position>	209.000000 17.000000 61.414001	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+        <warplane>
+          <preset>	ball_fail_blue	</preset>
+          <position>	209.000000 17.000000 39.414001	</position>
+          <yaw>	0.000000	</yaw>
+          <possibility>	1.000000	</possibility>
+          <startTime>	0.000000 0.000000	</startTime>
+        </warplane>
+      </trajectories>
+    </scenario>
+  </mapActivities>
+</119_lostcityball.xml>

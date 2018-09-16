@@ -135,3 +135,12 @@ class EventBoardsGetHangarFlagCtx(EventBoardsRequestCtx):
 
     def getRequestType(self):
         return WebRequestDataType.EVENT_BOARDS_GET_HANGAR_FLAG
+
+
+class EventBoardsGetFootballEventDataCtx(EventBoardsGetEventDataCtx):
+
+    def isAuthorizationRequired(self):
+        return False
+
+    def getRequestType(self):
+        return WebRequestDataType.EVENT_BOARDS_GET_FOOTBALL_EVENTS_DATA

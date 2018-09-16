@@ -112,6 +112,9 @@
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/french/F33_S_35CA/S_35CA_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1 1 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_S_35CA>
@@ -634,7 +637,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.6 0.3 0.000000 0.000000	</tiling>
+            <tiling>	1 0.5 0.000000 0.000000	</tiling>
           </camouflage>
         </_17_pdr_Gan_MK.II>
         <Canon_de_105_mle_1930_Schneider_AC>	shared	  <maxAmmo>	42	</maxAmmo>
@@ -684,7 +687,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.8 0.4 0.000000 0.000000	</tiling>
+            <tiling>	1 0.5 0.000000 0.000000	</tiling>
           </camouflage>
         </Canon_de_105_mle_1930_Schneider_AC>
         <_90mm_canon_DCA_30_CA>	shared	  <maxAmmo>	65	</maxAmmo>
@@ -735,7 +738,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.9 0.5 0.000000 0.000000	</tiling>
+            <tiling>	1 0.5 0.000000 0.000000	</tiling>
           </camouflage>
         </_90mm_canon_DCA_30_CA>
       </guns>

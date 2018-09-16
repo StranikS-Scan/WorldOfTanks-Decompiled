@@ -122,6 +122,7 @@
     <Gun_PzIV>	255	</Gun_PzIV>
     <Gun_VK4502P>	256	</Gun_VK4502P>
     <Gun_Auf_Panther>	257	</Gun_Auf_Panther>
+    <_210mm_KwK44_L55_sport>	501	</_210mm_KwK44_L55_sport>
     <_88mm_KwK_43_L71A_IGR>	60001	</_88mm_KwK_43_L71A_IGR>
     <_88mm_KwK_43_L71_IGR>	60002	</_88mm_KwK_43_L71_IGR>
     <_105mm_KwK46_L68_IGR>	60003	</_105mm_KwK46_L68_IGR>
@@ -7818,5 +7819,48 @@
         </_128mm_SprG18>
       </shots>
     </_128mm_KwK44_L55_IGR>
+    <_210mm_KwK44_L55_sport>
+      <userString>	#football2018:E100_sport_gun_name	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	310000	</price>
+      <impulse>	0.56	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.46	</amplitude>
+        <recoilEffect>	large	</recoilEffect>
+      </recoil>
+      <effects>	shot_large_mb	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -24.0 1.0 -24.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	26.25	</rotationSpeed>
+      <reloadTime>	14.77714285714290	</reloadTime>
+      <maxAmmo>	48	</maxAmmo>
+      <aimingTime>	2.85714285714286	</aimingTime>
+      <weight>	3480	</weight>
+      <maxHealth>	220	</maxHealth>
+      <maxRegenHealth>	110	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.377142857142857	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	3.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_210mm_Sprg18_sport>
+          <defaultPortion>	1.00	</defaultPortion>
+          <speed>	920	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	10000	</maxDistance>
+          <piercingPower>	105 105	</piercingPower>
+        </_210mm_Sprg18_sport>
+      </shots>
+    </_210mm_KwK44_L55_sport>
   </shared>
 </guns.xml>

@@ -45,6 +45,10 @@ def makeEpicBattleFinishResultLabel(finishReason, teamResult):
     return i18n.makeString(_FINISH_REASON_LABEL.format(''.join((str(finishReason), str(teamResult))))) if finishReason in {FINISH_REASON.EXTERMINATION, FINISH_REASON.TIMEOUT, FINISH_REASON.DESTROYED_OBJECTS} else i18n.makeString(_FINISH_REASON_LABEL.format(finishReason))
 
 
+def makeFootballFinishResultLabel(finishReason, teamResult):
+    return i18n.makeString(_FINISH_REASON_LABEL.format(''.join((str(finishReason), str(teamResult))))) if finishReason == FINISH_REASON.EXTERMINATION else i18n.makeString(_FINISH_REASON_LABEL.format(finishReason))
+
+
 class RankInfoHelper(object):
     rankedController = dependency.descriptor(IRankedBattlesController)
     __TITLE_LABEL_MAP = {(RANK_CHANGE_STATES.RANK_EARNED, True): RANKED_BATTLES.BATTLERESULT_RANKEARNED,
@@ -502,6 +506,23 @@ class EpicBattleBattleFinishResultBlock(RegularFinishResultBlock):
         self.shortResultLabel = teamResult
         self.fullResultLabel = _FULL_RESULT_LABEL.format(teamResult)
         return
+
+
+class FootballBattleFinishResultBlock(RegularFinishResultBlock):
+    __slots__ = ('finishReasonLabel', 'shortResultLabel', 'fullResultLabel')
+
+    def __init__(self, meta=None, field='', *path):
+        super(FootballBattleFinishResultBlock, self).__init__(meta, field, *path)
+        self.finishReasonLabel = None
+        self.shortResultLabel = None
+        self.fullResultLabel = None
+        return
+
+    def setRecord(self, result, reusable):
+        teamResult = reusable.getFootballPersonalTeamResult()
+        self.finishReasonLabel = makeFootballFinishResultLabel(reusable.common.finishReason, teamResult)
+        self.shortResultLabel = teamResult
+        self.fullResultLabel = _FULL_RESULT_LABEL.format(teamResult)
 
 
 class AllyTeamClanTitle(base.StatsItem):

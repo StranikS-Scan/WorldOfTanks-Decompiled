@@ -305,6 +305,10 @@ class HangarParamContext(BaseHangarParamContext):
         super(HangarParamContext, self).__init__(True)
         self.formatters = NO_BONUS_SIMPLIFIED_SCHEME
 
+    def getComparator(self):
+        vehicle = g_currentVehicle.item
+        return params_helper.noSkillsVehicleComparator(vehicle) if vehicle.isEvent else super(HangarParamContext, self).getComparator()
+
 
 class PreviewParamContext(HangarParamContext):
 

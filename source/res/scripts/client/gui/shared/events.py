@@ -507,6 +507,7 @@ class OpenLinkEvent(SharedEvent):
     GLOBAL_MAP_PROMO = 'globalMapPromo'
     PREM_SHOP = 'premShopURL'
     TOKEN_SHOP = 'tokenShopUrl'
+    BUFFON_CARD_PURCHASE = 'buffonCardPurchaseURL'
 
     def __init__(self, eventType, url='', title='', params=None):
         super(OpenLinkEvent, self).__init__(eventType)

@@ -1506,6 +1506,11 @@
       <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
     </model>
     <model>
+      <modelName>	vegetation/Conifers/Spruce_Dry_Arctic/Spruce_Dry_Arctic_ragged_top_33m.srt	</modelName>
+      <offset>	0.000000 20.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_coniferous_comb_big_01	</wwsound>
+    </model>
+    <model>
       <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Autumn_Arctic/Bush_Wild_Autumn_Arctic_5m_Big.srt	</modelName>
       <offset>	0.000000 1.000000 0.000000	</offset>
       <wwsound>	ambient_trees_without_foliage_bush_big_01	</wwsound>
@@ -1600,6 +1605,150 @@
     </dowe>
   </birds>
   <mapActivities>
+    <ball_fail>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <wwsoundName>	ev_football_scenario_fireworks_short	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Events/vfx_football_2018_goal_fail.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	0 0 0	</position>
+        <speed0>	0.1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	0 0 1	</position>
+        <speed0>	0.1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </ball_fail>
+    <ball_fail_blue>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <wwsoundName>	ev_football_scenario_fireworks_short	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Events/vfx_football_2018_goal_fail.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	0 0 0	</position>
+        <speed0>	0.1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	0 0 1	</position>
+        <speed0>	0.1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </ball_fail_blue>
+    <ball_fireworks_1>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <wwsoundName>	ev_football_scenario_fireworks_long	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Events/vfx_football_2018_goal_fireworks.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	0 1 0	</position>
+        <speed0>	0.1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	0 1 1	</position>
+        <speed0>	0.1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </ball_fireworks_1>
+    <ball_fireworks_short_1>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <wwsoundName></wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Events/vfx_football_2018_goal_fireworks_short.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	0 1 0	</position>
+        <speed0>	0.1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	0 1 1	</position>
+        <speed0>	0.1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </ball_fireworks_short_1>
+    <ball_fireworks_2>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <wwsoundName>	ev_football_scenario_fireworks_long	</wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Events/vfx_football_2018_goal_fireworks.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	0 1 0	</position>
+        <speed0>	0.1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	0 1 1	</position>
+        <speed0>	0.1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </ball_fireworks_2>
+    <ball_fireworks_short_2>
+      <channel0>
+        <modelName>	content/Environment/env_null_model/null_model.model	</modelName>
+        <rollMagnitude>	1.000000	</rollMagnitude>
+        <rollRelaxation>	1.000000	</rollRelaxation>
+        <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
+        <oscillationFreqVert>	1.000000	</oscillationFreqVert>
+        <tesselationFactor>	50	</tesselationFactor>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
+        <wwsoundName></wwsoundName>
+        <effectHardpoint>	HP_module_0	</effectHardpoint>
+        <effectName>	particles/Events/vfx_football_2018_goal_fireworks_short.xml	</effectName>
+      </channel0>
+      <point>
+        <position>	0 1 0	</position>
+        <speed0>	0.1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+      <point>
+        <position>	0 1 1	</position>
+        <speed0>	0.1	</speed0>
+        <oscillation0>	0.500000 0.500000	</oscillation0>
+      </point>
+    </ball_fireworks_short_2>
     <campania_sc1_bomber1>
       <channel0>
         <modelName>	content/Environment/env713_BF109G/normal/lod0/env713_BF109G.model	</modelName>

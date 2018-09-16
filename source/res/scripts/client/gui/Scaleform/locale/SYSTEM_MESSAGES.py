@@ -269,6 +269,7 @@ class SYSTEM_MESSAGES(object):
     LOGIN_TO_OTHER_GAME_WEB = '#system_messages:login_to_other_game_web'
     RECRUIT_WINDOW_SERVER_ERROR = '#system_messages:recruit_window/server_error'
     RECRUIT_WINDOW_SUCCESS = '#system_messages:recruit_window/success'
+    FOOTBALL_RECRUIT_WINDOW_SUCCESS = '#system_messages:football_recruit_window/success'
     RECRUIT_WINDOW_FINANCIAL_SUCCESS = '#system_messages:recruit_window/financial_success'
     RECRUIT_WINDOW_NOT_ENOUGH_CREDITS = '#system_messages:recruit_window/not_enough_credits'
     RECRUIT_WINDOW_NOT_ENOUGH_GOLD = '#system_messages:recruit_window/not_enough_gold'
@@ -1008,6 +1009,7 @@ class SYSTEM_MESSAGES(object):
     RANKED_NOTIFICATION_NOTAVAILABLE = '#system_messages:ranked/notification/notAvailable'
     RANKED_NOTIFICATION_AVAILABLE = '#system_messages:ranked/notification/available'
     TOKENS_NOTIFICATION_MARK_ACQUIRED = '#system_messages:tokens/notification/mark_acquired'
+    TOKENS_NOTIFICATION_FOOTBALL_CARD_ACQUIRED = '#system_messages:tokens/notification/football_card_acquired'
     EPICBATTLES_NOTIFICATION_PRIMETIME = '#system_messages:epicBattles/notification/primeTime'
     EPICBATTLES_NOTIFICATION_NOTAVAILABLE = '#system_messages:epicBattles/notification/notAvailable'
     EPICBATTLES_NOTIFICATION_AVAILABLE = '#system_messages:epicBattles/notification/available'
@@ -1293,6 +1295,7 @@ class SYSTEM_MESSAGES(object):
      LOGIN_TO_OTHER_GAME_WEB,
      RECRUIT_WINDOW_SERVER_ERROR,
      RECRUIT_WINDOW_SUCCESS,
+     FOOTBALL_RECRUIT_WINDOW_SUCCESS,
      RECRUIT_WINDOW_FINANCIAL_SUCCESS,
      RECRUIT_WINDOW_NOT_ENOUGH_CREDITS,
      RECRUIT_WINDOW_NOT_ENOUGH_GOLD,
@@ -2032,6 +2035,7 @@ class SYSTEM_MESSAGES(object):
      RANKED_NOTIFICATION_NOTAVAILABLE,
      RANKED_NOTIFICATION_AVAILABLE,
      TOKENS_NOTIFICATION_MARK_ACQUIRED,
+     TOKENS_NOTIFICATION_FOOTBALL_CARD_ACQUIRED,
      EPICBATTLES_NOTIFICATION_PRIMETIME,
      EPICBATTLES_NOTIFICATION_NOTAVAILABLE,
      EPICBATTLES_NOTIFICATION_AVAILABLE)

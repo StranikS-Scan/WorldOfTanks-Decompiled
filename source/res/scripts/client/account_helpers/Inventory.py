@@ -321,6 +321,32 @@ class Inventory(object):
             self.__account._doCmdInt3(AccountCommands.CMD_ADD_TMAN_XP, tmanInvID, xp, 0, proxy)
             return
 
+    def fb18OpenPackets(self, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID)
+            else:
+                proxy = None
+            self.__account._doCmdInt3(AccountCommands.CMD_GENERATE_FOOTBALL_CARDS, 0, 0, 0, proxy)
+            return
+
+    def fb18RecruitBuffon(self, vehIntCD, callback=None):
+        if self.__ignore:
+            if callback is not None:
+                callback(AccountCommands.RES_NON_PLAYER)
+            return
+        else:
+            if callback is not None:
+                proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, ext)
+            else:
+                proxy = None
+            self.__account._doCmdInt3(AccountCommands.CMD_RECRUIT_BUFFON, vehIntCD, 0, 0, proxy)
+            return
+
     def getProviderForVehInvId(self, vehInvId, serverSettings):
         if not self.__cache:
             _logger.warning('Local cache is empty, cannot get provider name.')

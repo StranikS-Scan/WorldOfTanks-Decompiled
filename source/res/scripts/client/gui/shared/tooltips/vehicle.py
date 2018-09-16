@@ -30,8 +30,11 @@ from gui.shared.tooltips.common import BlocksTooltipData, makePriceBlock, CURREN
 from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import ITradeInController
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
+from gui.Scaleform.locale.FOOTBALL2018 import FOOTBALL2018
+from gui import makeHtmlString
 _EQUIPMENT = 'equipment'
 _OPTION_DEVICE = 'optionalDevice'
 _BATTLE_BOOSTER = 'battleBooster'
@@ -87,14 +90,19 @@ class VehicleInfoTooltipData(BlocksTooltipData):
         telecomBlock = TelecomBlockConstructor(vehicle, valueWidth, leftPadding, rightPadding).construct()
         if telecomBlock:
             items.append(formatters.packBuildUpBlockData(telecomBlock, padding=leftRightPadding))
-        priceBlock, invalidWidth = PriceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct()
-        if priceBlock:
-            self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
-            items.append(formatters.packBuildUpBlockData(priceBlock, gap=textGap, padding=blockPadding))
+        if not vehicle.isFootball:
+            priceBlock, invalidWidth = PriceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct()
+            if priceBlock:
+                self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
+                items.append(formatters.packBuildUpBlockData(priceBlock, gap=textGap, padding=blockPadding))
         simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
         if simplifiedStatsBlock:
             items.append(formatters.packBuildUpBlockData(simplifiedStatsBlock, gap=-4, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE, padding=leftRightPadding))
-        if not vehicle.isRotationGroupLocked:
+        if vehicle.isFootball:
+            footballBlock = FootballBlockConstructor(vehicle, valueWidth, leftPadding, rightPadding).construct()
+            if footballBlock:
+                items.append(formatters.packBuildUpBlockData(footballBlock, padding=leftRightPadding, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_LINKAGE))
+        elif not vehicle.isRotationGroupLocked:
             commonStatsBlock = CommonStatsBlockConstructor(vehicle, paramsConfig, valueWidth, leftPadding, rightPadding).construct()
             if commonStatsBlock:
                 items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=textGap, padding=blockPadding))
@@ -411,6 +419,7 @@ class VehicleTooltipBlockConstructor(object):
 
 
 class HeaderBlockConstructor(VehicleTooltipBlockConstructor):
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def construct(self):
         block = []
@@ -424,8 +433,35 @@ class HeaderBlockConstructor(VehicleTooltipBlockConstructor):
         nameStr = text_styles.highTitle(self.vehicle.userName)
         typeStr = text_styles.main(vehicleType)
         levelStr = text_styles.concatStylesWithSpace(text_styles.stats(int2roman(self.vehicle.level)), text_styles.standard(_ms(TOOLTIPS.VEHICLE_LEVEL)))
-        icon = getTypeBigIconPath(self.vehicle.type, self.vehicle.isElite)
-        headerBlocks.append(formatters.packImageTextBlockData(title=nameStr, desc=text_styles.concatStylesToMultiLine(levelStr + ' ' + typeStr, ''), img=icon, imgPadding=formatters.packPadding(left=10, top=-15), txtGap=-2, txtOffset=99, padding=formatters.packPadding(top=15, bottom=-15 if self.vehicle.isFavorite else -21)))
+        if self.vehicle.isFootball:
+            icon = RES_ICONS.MAPS_ICONS_FE18_FOOTBALL_STRIKER
+            descLine = _ms(FOOTBALL2018.MESSAGES_INFOTYPE_DESC)
+            dueDate = self.eventsCache.getEventDueDate()
+            imgSrc = makeHtmlString('html_templates:lobby/tooltips', 'tooltip_football_avail')
+            if dueDate is not None:
+                dateStr = BigWorld.wg_getShortDateFormat(float(dueDate))
+            else:
+                dateStr = ''
+            availLine = imgSrc + _ms(FOOTBALL2018.MESSAGES_INFOTYPE_AVAILABILITY, dateStr=dateStr)
+            sportsTypeStr = ''
+            if self.vehicle.isFootballStriker:
+                sportsTypeStr = FOOTBALL2018.SPORT_ROLE_STRIKER
+                icon = RES_ICONS.MAPS_ICONS_FE18_FOOTBALL_STRIKER
+            elif self.vehicle.isFootballMidfielder:
+                sportsTypeStr = FOOTBALL2018.SPORT_ROLE_MIDFIELDER
+                icon = RES_ICONS.MAPS_ICONS_FE18_FOOTBALL_MIDFIELDER
+            elif self.vehicle.isFootballDefender:
+                sportsTypeStr = FOOTBALL2018.SPORT_ROLE_DEFENDER
+                icon = RES_ICONS.MAPS_ICONS_FE18_FOOTBALL_DEFENDER
+            fullDesc = text_styles.stats(sportsTypeStr) + '\n\n' + text_styles.main(descLine) + '\n' + text_styles.premiumVehicleName(availLine)
+            linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_FOOTBALL_BLOCK_LINKAGE
+            imgTopPadding = -8
+        else:
+            imgTopPadding = -15
+            icon = getTypeBigIconPath(self.vehicle.type, self.vehicle.isElite)
+            fullDesc = text_styles.premiumVehicleName(levelStr + ' ' + typeStr)
+            linkage = BLOCKS_TOOLTIP_TYPES.TOOLTIP_IMAGETEXT_BLOCK_LINKAGE
+        headerBlocks.append(formatters.packImageTextBlockData(title=nameStr, desc=fullDesc, img=icon, imgPadding=formatters.packPadding(left=10, top=imgTopPadding), txtGap=-2, txtOffset=99, padding=formatters.packPadding(top=15, bottom=-15 if self.vehicle.isFavorite else -21), linkage=linkage, imagePath=icon))
         if self.vehicle.isFavorite:
             headerBlocks.append(formatters.packImageTextBlockData(title=text_styles.neutral(TOOLTIPS.VEHICLE_FAVORITE), img=RES_ICONS.MAPS_ICONS_TOOLTIP_MAIN_TYPE, imgPadding=formatters.packPadding(top=-15), imgAtLeft=False, txtPadding=formatters.packPadding(left=10), txtAlign=BLOCKS_TOOLTIP_TYPES.ALIGN_RIGHT, padding=formatters.packPadding(top=-28, bottom=-27)))
         block.append(formatters.packBuildUpBlockData(headerBlocks, stretchBg=False, linkage=bgLinkage, padding=formatters.packPadding(left=-self.leftPadding)))
@@ -447,6 +483,32 @@ class TelecomBlockConstructor(VehicleTooltipBlockConstructor):
             telecomText = _ms(TOOLTIPS.VEHICLE_DEAL_TELECOM_MAIN, tariff=_ms(MENU.internetProviderTariff(provider)), provider=_ms(MENU.internetProviderName(provider)))
             return [formatters.packTextBlockData(text=text_styles.main(telecomText))]
         return []
+
+
+class FootballBlockConstructor(VehicleTooltipBlockConstructor):
+
+    def __init__(self, vehicle, valueWidth, leftPadding, rightPadding):
+        super(FootballBlockConstructor, self).__init__(vehicle, None, leftPadding, rightPadding)
+        self._valueWidth = valueWidth
+        return
+
+    def construct(self):
+        if self.vehicle.isFootball:
+            titleStr = None
+            descStr = None
+            if self.vehicle.isFootballStriker:
+                titleStr = FOOTBALL2018.SPORT_ROLE_STRIKER
+                descStr = FOOTBALL2018.SPORT_ROLE_STRIKER_DESC
+            elif self.vehicle.isFootballMidfielder:
+                titleStr = FOOTBALL2018.SPORT_ROLE_MIDFIELDER
+                descStr = FOOTBALL2018.SPORT_ROLE_MIDFIELDER_DESC
+            elif self.vehicle.isFootballDefender:
+                titleStr = FOOTBALL2018.SPORT_ROLE_DEFENDER
+                descStr = FOOTBALL2018.SPORT_ROLE_DEFENDER_DESC
+            imageBlock = formatters.packImageTextBlockData(title=text_styles.middleTitle(_ms(titleStr)), desc=text_styles.main(_ms(descStr)), img=RES_ICONS.MAPS_ICONS_TOOLTIP_FOOTBALL_BG, imgPadding=formatters.packPadding(left=0, top=-15), txtGap=5, txtOffset=20, padding=formatters.packPadding(left=-19, right=20))
+            return [imageBlock]
+        else:
+            return []
 
 
 class PriceBlockConstructor(VehicleTooltipBlockConstructor):
@@ -601,7 +663,10 @@ class SimplifiedStatsBlockConstructor(VehicleTooltipBlockConstructor):
     def construct(self):
         block = []
         if self.configuration.params:
-            comparator = params_helper.idealCrewComparator(self.vehicle)
+            if self.vehicle.isEvent:
+                comparator = params_helper.noSkillsVehicleComparator(self.vehicle)
+            else:
+                comparator = params_helper.idealCrewComparator(self.vehicle)
             stockParams = params_helper.getParameters(self.itemsCache.items.getStockVehicle(self.vehicle.intCD))
             for paramName in RELATIVE_PARAMS:
                 paramInfo = comparator.getExtendedData(paramName)

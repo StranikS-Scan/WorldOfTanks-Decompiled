@@ -126,6 +126,8 @@ def onAccountShowGUI(ctx):
     if serverSettings.isElenEnabled():
         yield ServicesLocator.eventsController.getEvents(onlySettings=True, onLogin=True, prefetchKeyArtBig=False)
         yield ServicesLocator.eventsController.getHangarFlag(onLogin=True)
+    if serverSettings.isFootballEnabled():
+        yield ServicesLocator.eventsController.getFootballEvents()
 
 
 def onAccountBecomeNonPlayer():
@@ -308,6 +310,8 @@ def onDisconnected():
     Waiting.cancelCallback()
     if ServicesLocator.lobbyContext.getServerSettings().isElenEnabled():
         ServicesLocator.eventsController.cleanEventsData()
+    if ServicesLocator.lobbyContext.getServerSettings().isFootballEnabled():
+        ServicesLocator.eventsController.cleanFootballEventsData()
     BigWorld.purgeUrlRequestCache()
 
 

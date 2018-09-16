@@ -32,18 +32,31 @@ class ElenPreviewTooltipData(BlocksTooltipData, IGlobalListener):
         self._setMargins(afterBlock=0)
         self._setWidth(297)
 
-    def _packBlocks(self, *args, **kwargs):
-        eventsController = self._eventsController
-        items = super(ElenPreviewTooltipData, self)._packBlocks()
+    def _isRegistered(self, currentEvent):
+        return self._eventsController.getHangarFlagData().isRegistered(currentEvent.getEventID())
+
+    def _primeTimeTitleValid(self):
+        return TOOLTIPS.HANGAR_ELEN_PRIMETIME_VALID
+
+    def _primeTimeTitleInvalid(self):
+        return TOOLTIPS.HANGAR_ELEN_PRIMETIME_INVALID
+
+    def _getCurrentEvent(self):
         vehicle = g_currentVehicle.item
-        eventsData = eventsController.getEventsSettingsData()
-        currentEvent = eventsData.getEventForVehicle(vehicle.intCD)
-        isRegistered = self._eventsController.getHangarFlagData().isRegistered(currentEvent.getEventID())
+        eventsData = self._eventsController.getEventsSettingsData()
+        return eventsData.getEventForVehicle(vehicle.intCD)
+
+    def _packBlocks(self, *args, **kwargs):
+        items = super(ElenPreviewTooltipData, self)._packBlocks()
+        currentEvent = self._getCurrentEvent()
+        isRegistered = self._isRegistered(currentEvent)
         items.append(self._getHeader(currentEvent))
         primeTimes = currentEvent.getPrimeTimes()
         if not primeTimes.isEmpty() and isRegistered:
             items.append(self._getPrimeTimes(primeTimes))
-        items.append(self._getBottom(currentEvent))
+        bottom = self._getBottom(currentEvent)
+        if bottom:
+            items.append(bottom)
         return items
 
     def _getHeader(self, currentEvent):
@@ -98,14 +111,14 @@ class ElenPreviewTooltipData(BlocksTooltipData, IGlobalListener):
             for primeTime in getSortedPrimeTimes(validTimes):
                 result += primeTime + '\n'
 
-            blocks.append(formatters.packImageTextBlockData(title=text_styles.middleTitle(TOOLTIPS.HANGAR_ELEN_PRIMETIME_VALID), desc=result, padding=formatters.packPadding(left=20, top=3, bottom=bottomPadding)))
+            blocks.append(formatters.packImageTextBlockData(title=text_styles.middleTitle(self._primeTimeTitleValid()), desc=result, padding=formatters.packPadding(left=20, top=3, bottom=bottomPadding)))
         if invalidTimes:
             topPadding = -8 if validTimes else 3
             result = ''
             for primeTime in getSortedPrimeTimes(invalidTimes):
                 result += primeTime + '\n'
 
-            blocks.append(formatters.packImageTextBlockData(title=text_styles.middleTitle(TOOLTIPS.HANGAR_ELEN_PRIMETIME_INVALID), desc=result, padding=formatters.packPadding(left=20, top=topPadding, bottom=18)))
+            blocks.append(formatters.packImageTextBlockData(title=text_styles.middleTitle(self._primeTimeTitleInvalid()), desc=result, padding=formatters.packPadding(left=20, top=topPadding, bottom=18)))
         return formatters.packBuildUpBlockData(blocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE)
 
     def _getBottom(self, currentEvent):

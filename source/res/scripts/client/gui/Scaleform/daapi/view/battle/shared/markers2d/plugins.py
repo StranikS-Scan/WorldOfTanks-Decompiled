@@ -9,6 +9,7 @@ from Math import Matrix
 from PlayerEvents import g_playerEvents
 from account_helpers.settings_core.settings_constants import MARKERS, GRAPHICS, GAME
 from battleground.StunAreaManager import STUN_AREA_STATIC_MARKER
+from constants import ARENA_GUI_TYPE
 from gui.Scaleform.daapi.view.battle.shared.markers2d import markers
 from gui.Scaleform.daapi.view.battle.shared.markers2d import settings
 from gui.Scaleform.daapi.view.battle.shared.markers2d.timer import StunMarkerTimer
@@ -124,7 +125,23 @@ class SettingsPlugin(MarkerPlugin):
                 continue
             colorBlindSchemes[name] = colors.getSubSchemeToFlash(name, GuiColorsLoader.COLOR_BLIND_SUB_SCHEME)
 
+        arenaDP = self.sessionProvider.getArenaDP()
+        arenaType = self.sessionProvider.arenaVisitor.getArenaGuiType()
+        isEventBattle = arenaType == ARENA_GUI_TYPE.EVENT_BATTLES
+        if arenaDP is not None and isEventBattle:
+            isInvertedColor = arenaDP.isInvertedColors()
+            if isInvertedColor:
+                defaultSchemes['vm_ally']['alias_color'] = 'red'
+                colorBlindSchemes['vm_ally']['alias_color'] = 'red'
+                defaultSchemes['vm_enemy']['alias_color'] = 'green'
+                colorBlindSchemes['vm_enemy']['alias_color'] = 'green'
+                defaultSchemes['vm_enemy']['rgba'] = (75, 126, 220, 255)
+                colorBlindSchemes['vm_enemy']['rgba'] = (75, 126, 220, 255)
+            else:
+                defaultSchemes['vm_ally']['rgba'] = (75, 126, 220, 255)
+                colorBlindSchemes['vm_ally']['rgba'] = (75, 126, 220, 255)
         self._parentObj.setColorsSchemes(defaultSchemes, colorBlindSchemes)
+        return
 
     def __onSettingsChanged(self, diff):
         if GRAPHICS.COLOR_BLIND in diff:
@@ -359,8 +376,16 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
         else:
             squadIndex = 0
         hunting = VehicleActions.isHunting(vInfo.events)
-        self._invokeMarker(markerID, 'setVehicleInfo', vType.classTag, vType.iconPath, nameParts.vehicleName, vType.level, nameParts.playerFullName, nameParts.playerName, nameParts.clanAbbrev, nameParts.regionCode, vType.maxHealth, guiProps.name(), hunting, squadIndex, i18n.makeString(INGAME_GUI.STUN_SECONDS))
+        footballRole = vType.footballRole
+        if footballRole is not None:
+            vehicleClass = footballRole
+            vehicleLevel = 0
+        else:
+            vehicleClass = vType.classTag
+            vehicleLevel = vType.level
+        self._invokeMarker(markerID, 'setVehicleInfo', vehicleClass, vType.iconPath, nameParts.vehicleName, vehicleLevel, nameParts.playerFullName, nameParts.playerName, nameParts.clanAbbrev, nameParts.regionCode, vType.maxHealth, guiProps.name(), hunting, squadIndex, i18n.makeString(INGAME_GUI.STUN_SECONDS))
         self._invokeMarker(markerID, 'update')
+        return
 
     def __setupDynamic(self, marker, accountDBID=0):
         if accountDBID:

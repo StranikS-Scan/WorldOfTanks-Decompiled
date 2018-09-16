@@ -71,5 +71,16 @@
       </arrow>
       <equal-actions>	True	</equal-actions>
     </hint>
+    <hint>	FootballFilterHint	  <item-id>	FootballFilterBtn	</item-id>
+      <text>	_(#football2018:footballFilterBtn/hint)	</text>
+      <arrow>
+        <direction>	R	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <condition>
+        <global-active>	_HaveNewFilterHint	</global-active>
+      </condition>
+      <equal-actions>	True	</equal-actions>
+    </hint>
   </hints>
 </once-only-hints.xml>

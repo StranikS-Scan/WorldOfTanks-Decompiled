@@ -30,6 +30,7 @@ LOBBY_TOOLTIPS_BUILDERS_PATHS = (('gui.Scaleform.daapi.view.tooltips.achievement
  ('gui.Scaleform.daapi.view.tooltips.cybersport_builders', _TOOLTIPS.CYBER_SPORT_SET),
  ('gui.Scaleform.daapi.view.tooltips.elen_builders', _TOOLTIPS.ELEN_SET),
  ('gui.Scaleform.daapi.view.tooltips.epic_battle_builders', _TOOLTIPS.EPIC_BATTLE_SET),
+ ('gui.Scaleform.daapi.view.tooltips.football_builders', _TOOLTIPS.FOOTBALL_SET),
  ('gui.Scaleform.daapi.view.tooltips.fortifications_builder', (_TOOLTIPS.DIRECT_MODULE,)),
  ('gui.Scaleform.daapi.view.tooltips.personal_missions_builders', _TOOLTIPS.PERSONAL_MISSION_SET),
  ('gui.Scaleform.daapi.view.tooltips.quests_builders', _TOOLTIPS.QUESTS_SET),

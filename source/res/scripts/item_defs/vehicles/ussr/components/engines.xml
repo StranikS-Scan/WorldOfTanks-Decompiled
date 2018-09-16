@@ -129,6 +129,7 @@
     <V-12-5_shortened>	212	</V-12-5_shortened>
     <T-26_bot>	213	</T-26_bot>
     <V-5_W>	214	</V-5_W>
+    <V-55_sport>	500	</V-55_sport>
     <V-5_IGR>	60001	</V-5_IGR>
     <V-2IS_IGR>	60002	</V-2IS_IGR>
     <V-54-6_IGR>	60003	</V-54-6_IGR>
@@ -2517,5 +2518,22 @@
       <rpm_min>	240	</rpm_min>
       <rpm_max>	2480	</rpm_max>
     </M-50T_IGR>
+    <V-55_sport>
+      <userString>	#football2018:T62A_sport_engine_name	</userString>
+      <tags>	diesel	</tags>
+      <level>	10	</level>
+      <notInShop>	true	</notInShop>
+      <price>	132000	</price>
+      <wwsoundPC>	eng_v55_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_v55_npc	</wwsoundNPC>
+      <power>	1500	</power>
+      <weight>	700	</weight>
+      <maxHealth>	360	</maxHealth>
+      <maxRegenHealth>	180	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <fireStartingChance>	0.1	</fireStartingChance>
+      <rpm_min>	365	</rpm_min>
+      <rpm_max>	2104	</rpm_max>
+    </V-55_sport>
   </shared>
 </engines.xml>

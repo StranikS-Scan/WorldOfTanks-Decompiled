@@ -131,11 +131,11 @@ def getGuiServicesConfig(manager):
     from gui import impl
     from skeletons.gui.lobby_context import ILobbyContext
     manager.addConfig(shared.getSharedServices)
+    manager.addConfig(server_events.getServerEventsConfig)
     manager.addConfig(game_control.getGameControllersConfig)
     manager.addConfig(_sf.getScaleformConfig)
     manager.addConfig(impl.getGuiImplConfig)
     manager.addConfig(login.getLoginManagerConfig)
-    manager.addConfig(server_events.getServerEventsConfig)
     manager.addConfig(server_events.getLinkedSetController)
     manager.addConfig(battle_control.getBattleSessionConfig)
     manager.addConfig(sounds.getSoundsConfig)

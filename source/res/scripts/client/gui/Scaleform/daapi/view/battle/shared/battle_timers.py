@@ -70,7 +70,7 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
                 if totalTime == self.__endingSoonTime:
                     self._callWWISE(_WWISE_EVENTS.BATTLE_ENDING_SOON)
             elif self.__isTicking:
-                self.__stopTicking()
+                self._stopTicking()
         self._sendTime(minutes, seconds)
 
     def setState(self, state):
@@ -100,7 +100,7 @@ class BattleTimer(BattleTimerMeta, IAbstractPeriodView):
         self.__isTicking = True
         self._setColor()
 
-    def __stopTicking(self):
+    def _stopTicking(self):
         self._callWWISE(_WWISE_EVENTS.STOP_TICKING)
         self.__isTicking = False
         self._setColor()

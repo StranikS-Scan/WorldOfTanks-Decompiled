@@ -162,7 +162,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BADGES_PAGE = 'badgesPage'
     EPIC_RANDOM_PAGE = 'epicRandomPage'
     EPIC_BATTLE_PAGE = 'epicBattlePage'
-    EVENT_BATTLE_PAGE = 'classicBattlePage'
+    EVENT_BATTLE_PAGE = 'footballBattlePage'
     RANKED_BATTLE_PAGE = 'rankedBattlePage'
     MISSION_AWARD_WINDOW = 'missionAwardWindow'
     CRYSTALS_PROMO_WINDOW = 'crystalsPromoWindow'
@@ -196,6 +196,8 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     BOOTCAMP_QUEUE_DIALOG = 'bootcampQueueDialog'
     BOOTCAMP_LOGIN_QUEUE = 'bootcampLoginQueue'
     BOOTCAMP_EXECUTION_CHOOSER = 'bootcampExecutionChooser'
+    FOOTBALL_CARD_COLLECTION = 'cardCollection'
+    FOOTBALL_BUFFON_RECRUITMENT_PANEL = 'buffonRecruitment'
     LOADINGS = (BATTLE_LOADING, TUTORIAL_LOADING)
     BATTLE_PAGES = (CLASSIC_BATTLE_PAGE,
      TUTORIAL_BATTLE_PAGE,

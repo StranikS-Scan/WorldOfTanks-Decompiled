@@ -99,6 +99,9 @@ class PreQueueEntity(BasePreQueueEntity, ListenersCollection):
     def getQueueType(self):
         return self._queueType
 
+    def setQueueType(self, queueType):
+        self._queueType = queueType
+
     def doAction(self, action=None):
         if not self.isInQueue():
             self.queue(self._makeQueueCtxByAction(action))

@@ -15,6 +15,9 @@ from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui import makeHtmlString
 from gui.shared.tooltips.common import BlocksTooltipData
+from CurrentVehicle import g_currentVehicle
+from gui.Scaleform.locale.FOOTBALL2018 import FOOTBALL2018
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 TANKMAN_DISMISSED = 'dismissed'
 _TIME_FORMAT_UNITS = [('days', time_utils.ONE_DAY), ('hours', time_utils.ONE_HOUR), ('minutes', time_utils.ONE_MINUTE)]
 
@@ -198,7 +201,12 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
         innerBlock = []
         if vehicle:
             innerBlock.append(formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'grayTitle', {'message': makeString(TOOLTIPS.HANGAR_CREW_ASSIGNEDTO)})))
-            innerBlock.append(formatters.packImageTextBlockData(img=vehicle.iconContour, txtGap=-4, padding=formatters.packPadding(bottom=0, top=10, left=0), title=text_styles.stats(vehicle.shortUserName), desc=text_styles.stats('#menu:header/vehicleType/%s' % vehicle.type), flipHorizontal=True))
+            footballRole = vehicle.getFootballRole()
+            if footballRole is not None:
+                vehType = footballRole
+            else:
+                vehType = vehicle.type
+            innerBlock.append(formatters.packImageTextBlockData(img=vehicle.iconContour, txtGap=-4, padding=formatters.packPadding(bottom=0, top=10, left=0), title=text_styles.stats(vehicle.shortUserName), desc=text_styles.stats('#menu:header/vehicleType/%s' % vehType), flipHorizontal=True))
         if innerBlock:
             items.append(formatters.packBuildUpBlockData(innerBlock, padding=formatters.packPadding(left=0, right=50, top=-5, bottom=0), linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
         commonStatsBlock = [formatters.packTextBlockData(text=makeHtmlString('html_templates:lobby/textStyle', 'grayTitle', {'message': makeString(TOOLTIPS.HANGAR_CREW_SPECIALTY_SKILLS)}))]
@@ -231,8 +239,11 @@ class TankmanTooltipDataBlock(BlocksTooltipData):
         items.append(formatters.packBuildUpBlockData(commonStatsBlock, gap=5))
         field = TankmanNewSkillCountField(self, '')
         _, newSkillCount = field.buildData()
-        if newSkillCount > 0:
+        isEvent = g_currentVehicle.item.isEvent
+        if newSkillCount > 0 and not isEvent:
             items.append(formatters.packImageTextBlockData(img='../maps/icons/tankmen/skills/small/new_skill.png', txtOffset=20, padding=formatters.packPadding(bottom=0, top=5, left=0), imgPadding=formatters.packPadding(left=0, top=3), title=makeHtmlString('html_templates:lobby/textStyle', 'goldTextTitle', {'message': makeString(TOOLTIPS.HANGAR_CREW_NEW_SKILL_AVAILABLE_HEADER)}), desc=makeHtmlString('html_templates:lobby/textStyle', 'goldTextField', {'message': makeString(TOOLTIPS.HANGAR_CREW_NEW_SKILL_AVAILABLE_TEXT)})))
+        elif isEvent:
+            items.append(formatters.packImageTextBlockData(img=RES_ICONS.MAPS_ICONS_LIBRARY_ICON_ALERT_32X32, txtOffset=80, padding=formatters.packPadding(bottom=5, top=2, left=5), imgPadding=formatters.packPadding(bottom=10, left=30, top=5), title=makeHtmlString('html_templates:lobby/textStyle', 'alertText', {'message': makeString(FOOTBALL2018.FOOTBALL_CREW_SKILLS_DISABLED)}), txtAlign='center'))
         field = TankmanStatusField(self, '')
         _, status = field.buildData()
         if status['header'] != '':

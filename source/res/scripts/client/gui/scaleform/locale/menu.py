@@ -174,6 +174,9 @@ class MENU(object):
     TANKMEN_HEAVYTANK = '#menu:tankmen/heavyTank'
     TANKMEN_AT_SPG = '#menu:tankmen/AT-SPG'
     TANKMEN_SPG = '#menu:tankmen/SPG'
+    TANKMEN_ROLE_DEFENDER = '#menu:tankmen/role_defender'
+    TANKMEN_ROLE_STRIKER = '#menu:tankmen/role_striker'
+    TANKMEN_ROLE_MIDFIELDER = '#menu:tankmen/role_midfielder'
     TANKMANPERSONALCASE_TITLE = '#menu:tankmanPersonalCase/title'
     TANKMANPERSONALCASE_RANK = '#menu:tankmanPersonalCase/rank'
     TANKMANPERSONALCASE_NAME = '#menu:tankmanPersonalCase/name'
@@ -524,6 +527,7 @@ class MENU(object):
     TANK_PARAMS_STUNMINDURATION = '#menu:tank_params/stunMinDuration'
     DESCRIPTIONS_VEHICLE = '#menu:descriptions/vehicle'
     DESCRIPTIONS_VEHICLEGUN = '#menu:descriptions/vehicleGun'
+    DESCRIPTIONS_VEHICLEGUN_AUTORELOAD = '#menu:descriptions/vehicleGun/autoReload'
     DESCRIPTIONS_VEHICLETURRET = '#menu:descriptions/vehicleTurret'
     DESCRIPTIONS_VEHICLEENGINE = '#menu:descriptions/vehicleEngine'
     DESCRIPTIONS_VEHICLECHASSIS = '#menu:descriptions/vehicleChassis'
@@ -670,6 +674,9 @@ class MENU(object):
     HEADER_VEHICLETYPE_HEAVYTANK = '#menu:header/vehicleType/heavyTank'
     HEADER_VEHICLETYPE_AT_SPG = '#menu:header/vehicleType/AT-SPG'
     HEADER_VEHICLETYPE_SPG = '#menu:header/vehicleType/SPG'
+    HEADER_VEHICLETYPE_ROLE_DEFENDER = '#menu:header/vehicleType/role_defender'
+    HEADER_VEHICLETYPE_ROLE_MIDFIELDER = '#menu:header/vehicleType/role_midfielder'
+    HEADER_VEHICLETYPE_ROLE_STRIKER = '#menu:header/vehicleType/role_striker'
     HEADER_VEHICLETYPE_ELITE_LIGHTTANK = '#menu:header/vehicleType/elite/lightTank'
     HEADER_VEHICLETYPE_ELITE_MEDIUMTANK = '#menu:header/vehicleType/elite/mediumTank'
     HEADER_VEHICLETYPE_ELITE_HEAVYTANK = '#menu:header/vehicleType/elite/heavyTank'
@@ -1373,6 +1380,11 @@ class MENU(object):
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_TIE = '#menu:finalStatistic/commonStats/resultlabel/tie'
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_TECHWIN = '#menu:finalStatistic/commonStats/resultlabel/techWin'
     FINALSTATISTIC_COMMONSTATS_RESULTLABEL_ENDED = '#menu:finalStatistic/commonStats/resultlabel/ended'
+    FINALSTATISTIC_COMMONSTATS_RESULTLABEL_FOOTBALL_2_WIN = '#menu:finalStatistic/commonStats/resultlabel/football_2_win'
+    FINALSTATISTIC_COMMONSTATS_RESULTLABEL_FOOTBALL_2_LOSE = '#menu:finalStatistic/commonStats/resultlabel/football_2_lose'
+    FINALSTATISTIC_COMMONSTATS_RESULTLABEL_FOOTBALL_TIE = '#menu:finalStatistic/commonStats/resultlabel/football_tie'
+    FINALSTATISTIC_COMMONSTATS_RESULTLABEL_FOOTBALL_1_WIN = '#menu:finalStatistic/commonStats/resultlabel/football_1_win'
+    FINALSTATISTIC_COMMONSTATS_RESULTLABEL_FOOTBALL_1_LOSE = '#menu:finalStatistic/commonStats/resultlabel/football_1_lose'
     BROWSER_WINDOW_TITLE = '#menu:browser/window/title'
     BROWSER_DATAUNAVAILABLE_HEADER = '#menu:browser/dataUnavailable/header'
     BROWSER_DATAUNAVAILABLE_DESCRIPTION = '#menu:browser/dataUnavailable/description'
@@ -2059,6 +2071,9 @@ class MENU(object):
      TANKMEN_HEAVYTANK,
      TANKMEN_AT_SPG,
      TANKMEN_SPG,
+     TANKMEN_ROLE_DEFENDER,
+     TANKMEN_ROLE_STRIKER,
+     TANKMEN_ROLE_MIDFIELDER,
      TANKMEN_LOCKREASON_INBATTLE,
      TANKMEN_LOCKREASON_PREBATTLE,
      TANKMEN_LOCKREASON_BROKEN)

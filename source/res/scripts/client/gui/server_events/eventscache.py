@@ -270,7 +270,10 @@ class EventsCache(IEventsCache):
 
     def getEventBattles(self):
         battles = self.__getEventBattles()
-        return EventBattles(battles.get('vehicleTags', set()), battles.get('vehicles', []), bool(battles.get('enabled', 0)), battles.get('arenaTypeID')) if battles else EventBattles(set(), [], 0, None)
+        return EventBattles(battles.get('vehicleTags', set()), battles.get('vehicles', []), bool(battles.get('enabled', 0)), battles.get('arenaTypeID'), battles.get('dueDate')) if battles else EventBattles(set(), [], 0, None, None)
+
+    def getEventDueDate(self):
+        return self.getEventBattles().dueDate
 
     def isEventEnabled(self):
         return len(self.__getEventBattles()) > 0 and len(self.getEventVehicles()) > 0

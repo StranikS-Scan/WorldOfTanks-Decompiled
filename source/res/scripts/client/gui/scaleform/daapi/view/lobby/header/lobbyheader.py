@@ -132,6 +132,11 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         PERSONAL_MISSIONS_PAGE = VIEW_ALIAS.PERSONAL_MISSIONS_PAGE
 
     RANKED_WELCOME_VIEW_DISABLE_CONTROLS = BUTTONS.ALL()
+
+    class FE18_SUB_VIEWS(CONST_CONTAINER):
+        LOBBY_FE18_COLLECTIONS = VIEW_ALIAS.FOOTBALL_CARD_COLLECTION
+        LOBBY_FE18_BUFFON_RECRUITMENT = VIEW_ALIAS.FOOTBALL_BUFFON_RECRUITMENT_PANEL
+
     itemsCache = dependency.descriptor(IItemsCache)
     wallet = dependency.descriptor(IWalletController)
     gameSession = dependency.descriptor(IGameSessionController)
@@ -274,6 +279,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__viewLifecycleWatcher.start(self.app.containerManager, [_RankedBattlesWelcomeViewLifecycleHandler(self)])
         if self.bootcampController.isInBootcamp():
             self.as_disableFightButtonS(self.__isFightBtnDisabled)
+        self.__updateFE18SquadButton()
         self._onPopulateEnd()
         return
 
@@ -583,6 +589,19 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         if pyEntity.viewType is ViewTypes.LOBBY_SUB:
             if pyEntity.alias in self.TABS.ALL():
                 self.__setCurrentScreen(pyEntity.alias)
+            self.__updateFE18Visibility(pyEntity.settings.alias)
+
+    def __updateFE18Visibility(self, alias):
+        isShowMainMenu = alias not in self.FE18_SUB_VIEWS.ALL()
+        self.as_updateFE18AvailableS(True)
+        self.as_updateFE18VisibilityS(isShowMainMenu)
+
+    def __onFE18StateChanged(self, _):
+        pass
+
+    def __updateFE18SquadButton(self):
+        btnSourse = RES_ICONS.MAPS_ICONS_FE18_FOOTBALL_LOBBY_HEADER if self.eventsCache.isEventEnabled() else ''
+        self.as_setFE18DataS(btnSourse)
 
     def __getContainer(self, viewType):
         return self.app.containerManager.getContainer(viewType) if self.app is not None and self.app.containerManager is not None else None
@@ -796,6 +815,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self._updateTabCounters()
         self.updateMoneyStats()
         self.updateXPInfo()
+        self.__updateFE18SquadButton()
 
     def __onEventsVisited(self, counters=None):
         if counters is not None:

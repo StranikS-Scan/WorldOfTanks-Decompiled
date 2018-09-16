@@ -15,7 +15,8 @@ def getFilterSetupContexts(xpRateMultiplier):
      'elite': FilterSetupContext(asset='elite_small_icon'),
      'premium': FilterSetupContext(asset='prem_small_icon'),
      'igr': FilterSetupContext(asset='premium_small'),
-     'bonus': FilterSetupContext(ctx={'multiplier': xpRateMultiplier}, asset='bonus_x{multiplier}')}
+     'bonus': FilterSetupContext(ctx={'multiplier': xpRateMultiplier}, asset='bonus_x{multiplier}'),
+     'event': FilterSetupContext()}
 
 
 def getFilterPopoverSetupContexts(xpRateMultiplier):
@@ -23,4 +24,5 @@ def getFilterPopoverSetupContexts(xpRateMultiplier):
      'elite': FilterSetupContext(asset='elite_small_icon'),
      'premium': FilterSetupContext(asset='prem_small_icon'),
      'igr': FilterSetupContext(asset='premium_igr_small'),
-     'bonus': FilterSetupContext(ctx={'multiplier': xpRateMultiplier}, asset='bonus_x')}
+     'bonus': FilterSetupContext(ctx={'multiplier': xpRateMultiplier}, asset='bonus_x'),
+     'event': FilterSetupContext()}

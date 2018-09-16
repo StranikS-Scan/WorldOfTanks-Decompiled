@@ -195,8 +195,12 @@ class TIPS(object):
     TIP184_TECHNICALADVICE_INTERFACE_0_INFINITY_ALL_ALL_ALL_ALL = '#tips:tip184/technicalAdvice/interface/0_infinity/all/all/all/all'
     SANDBOX0 = '#tips:sandbox0'
     SANDBOX1 = '#tips:sandbox1'
-    EVENTTITLE = '#tips:eventTitle'
-    EVENTMESSAGE = '#tips:eventMessage'
+    EVENT_0_TITLE = '#tips:event/0/title'
+    EVENT_0_BODY = '#tips:event/0/body'
+    EVENT_1_TITLE = '#tips:event/1/title'
+    EVENT_1_BODY = '#tips:event/1/body'
+    EVENT_2_TITLE = '#tips:event/2/title'
+    EVENT_2_BODY = '#tips:event/2/body'
     EPICRANDOM_0_TITLE = '#tips:epicRandom/0/title'
     EPICRANDOM_0_BODY = '#tips:epicRandom/0/body'
     RANKED_0_TITLE = '#tips:ranked/0/title'
@@ -251,6 +255,7 @@ class TIPS(object):
     EPICTIP21_HIDDENFEATURES_15_INFINITY = '#tips:epicTip21/hiddenFeatures/15_infinity'
     EPICTIP22_HIDDENFEATURES_15_INFINITY = '#tips:epicTip22/hiddenFeatures/15_infinity'
     EPICTIP23_HIDDENFEATURES_15_INFINITY = '#tips:epicTip23/hiddenFeatures/15_infinity'
+    EVENT_ALL_BODY_ENUM = (EVENT_0_BODY, EVENT_1_BODY, EVENT_2_BODY)
     EPICRANDOM_ALL_TITLE_ENUM = (EPICRANDOM_0_TITLE,)
     RANKED_ALL_BODY_ENUM = (RANKED_0_BODY,
      RANKED_1_BODY,
@@ -266,6 +271,7 @@ class TIPS(object):
      RANKED_11_BODY,
      RANKED_12_BODY)
     EPICRANDOM_ALL_BODY_ENUM = (EPICRANDOM_0_BODY,)
+    EVENT_ALL_TITLE_ENUM = (EVENT_0_TITLE, EVENT_1_TITLE, EVENT_2_TITLE)
     RANKED_ALL_TITLE_ENUM = (RANKED_0_TITLE,
      RANKED_1_TITLE,
      RANKED_2_TITLE,
@@ -311,6 +317,24 @@ class TIPS(object):
     def getEpicRandomTipBody(cls, tipNum):
         outcome = '#tips:epicRandom/{}/body'.format(tipNum)
         if outcome not in cls.EPICRANDOM_ALL_BODY_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getEventTipTitle(cls, tipNum):
+        outcome = '#tips:event/{}/title'.format(tipNum)
+        if outcome not in cls.EVENT_ALL_TITLE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getEventTipBody(cls, tipNum):
+        outcome = '#tips:event/{}/body'.format(tipNum)
+        if outcome not in cls.EVENT_ALL_BODY_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

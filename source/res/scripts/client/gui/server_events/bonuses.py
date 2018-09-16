@@ -33,6 +33,7 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.game_control import IFootballMetaGame
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
 _EPIC_AWARD_STATIC_VO_ENTRIES = {'compensationTooltip': QUESTS.BONUSES_COMPENSATION,
  'hasCompensation': False,
@@ -303,9 +304,13 @@ class TokensBonus(SimpleBonus):
     def getCount(self):
         return sum((v.get('count', 0) for v in self._value.values()))
 
+    def isFootball(self):
+        return all(('fb18' in v for v in self._value))
+
 
 class BattleTokensBonus(TokensBonus):
     eventsCache = dependency.descriptor(IEventsCache)
+    footballMetaGame = dependency.descriptor(IFootballMetaGame)
 
     def __init__(self, name, value, isCompensation=False, ctx=None):
         super(TokensBonus, self).__init__(name, value, isCompensation)
@@ -319,8 +324,13 @@ class BattleTokensBonus(TokensBonus):
         for tokenID, _ in self._value.iteritems():
             complexToken = parseComplexToken(tokenID)
             if complexToken.isDisplayable:
-                userName = self._getUserName(complexToken.styleID)
-                result.append(i18n.makeString(TOOLTIPS.MISSIONS_TOKEN_HEADER, name=userName))
+                _, tooltipHeader, _ = self.footballMetaGame.getTokenInfo(tokenID)
+                if tooltipHeader is None:
+                    userName = self._getUserName(complexToken.styleID)
+                    preformatted = i18n.makeString(TOOLTIPS.MISSIONS_TOKEN_HEADER, name=userName)
+                else:
+                    preformatted = tooltipHeader
+                result.append(preformatted)
 
         return ', '.join(result) if result else None
 
@@ -729,7 +739,7 @@ class DossierBonus(SimpleBonus):
         return result
 
     def format(self):
-        return ', '.join(self.formattedList())
+        return ', '.join([ achievement.getUserName() for achievement in self.getAchievements() ])
 
     def formattedList(self):
         return self.getAchievements()
@@ -895,7 +905,7 @@ class RefSystemTankmenBonus(TankmenBonus):
 
 class CustomizationsBonus(SimpleBonus):
     c11n = dependency.descriptor(ICustomizationService)
-    INFOTIP_ARGS_ORDER = ('intCD', 'value', 'boundVehicle', 'boundToCurrentVehicle')
+    INFOTIP_ARGS_ORDER = ('intCD', 'hideInventory')
 
     def getList(self):
         result = []
@@ -915,7 +925,8 @@ class CustomizationsBonus(SimpleBonus):
              'value': value,
              'valueStr': valueStr,
              'boundVehicle': boundVehicle,
-             'boundToCurrentVehicle': boundToCurrentVehicle})
+             'boundToCurrentVehicle': boundToCurrentVehicle,
+             'hideInventory': True})
 
         return result
 
@@ -931,7 +942,7 @@ class CustomizationsBonus(SimpleBonus):
         itemData = {'imgSource': RES_ICONS.getBonusIcon(iconSize, c11nItem.itemTypeName),
          'label': text_styles.hightlight('x{}'.format(count)),
          'align': align}
-        itemData.update(self.__itemTooltip(data, isReceived=False))
+        itemData.update(self.__itemTooltip(data))
         if withCounts:
             itemData['count'] = count
         return itemData
@@ -962,10 +973,10 @@ class CustomizationsBonus(SimpleBonus):
 
         return result
 
-    def __itemTooltip(self, data, isReceived):
+    def __itemTooltip(self, data):
         return {'isSpecial': True,
          'specialAlias': TOOLTIPS_CONSTANTS.TECH_CUSTOMIZATION_ITEM,
-         'specialArgs': [ data[o] for o in self.INFOTIP_ARGS_ORDER ] + [isReceived]}
+         'specialArgs': [ data[o] for o in self.INFOTIP_ARGS_ORDER ]}
 
 
 class BoxBonus(SimpleBonus):

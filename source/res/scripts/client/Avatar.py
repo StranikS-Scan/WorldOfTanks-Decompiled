@@ -101,6 +101,7 @@ class _CRUISE_CONTROL_MODE(object):
 
 _SHOT_WAITING_MAX_TIMEOUT = 0.2
 _SHOT_WAITING_MIN_TIMEOUT = 0.12
+FOOTBALL_TEAM_EFFECT_OFFSET = 10
 
 class _MOVEMENT_FLAGS(object):
     FORWARD = 1
@@ -938,6 +939,18 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             self.onLockTarget(AimSound.TARGET_LOST, not lossReasonFlags & TARGET_LOST_FLAGS.KILLED_BY_ME)
         TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.AUTO_AIM_AT_VEHICLE)
 
+    def onFootballPlayerReset(self):
+        self.gunRotator.reset()
+        Vehicle.Vehicle.resetPenalty()
+        self.inputHandler.resetDirectionFootball()
+        self.cell.autoAim(0)
+        self.inputHandler.setAimingMode(False, AIMING_MODE.TARGET_LOCK)
+        self.gunRotator.clientMode = True
+        self.__autoAimVehID = 0
+        self.__cruiseControlMode = _CRUISE_CONTROL_MODE.NONE
+        self.__updateCruiseControlPanel()
+        TriggersManager.g_manager.deactivateTrigger(TRIGGER_TYPE.AUTO_AIM_AT_VEHICLE)
+
     def updateVehicleHealth(self, vehicleID, health, deathReasonID, isCrewActive, isRespawn):
         rawHealth = health
         health = max(0, health)
@@ -1310,7 +1323,14 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                     replayCtrl = BattleReplay.g_replayCtrl
                     if (gunFirePos - refStartPoint).length > 50.0 and (gunFirePos - BigWorld.camera().position).length < 50.0 and replayCtrl.isPlaying:
                         velocity = velocity.length * gunMatrix.applyVector((0, 0, 1))
-            effectsDescr = vehicles.g_cache.shotEffects[effectsIndex]
+            if self.guiSessionProvider.arenaVisitor.gui.isEventBattle():
+                arenaDataProvider = self.guiSessionProvider.getArenaDP()
+                if arenaDataProvider.getVehicleInfo(shooterID).team == 1:
+                    effectsDescr = vehicles.g_cache.shotEffects[effectsIndex + FOOTBALL_TEAM_EFFECT_OFFSET]
+                else:
+                    effectsDescr = vehicles.g_cache.shotEffects[effectsIndex]
+            else:
+                effectsDescr = vehicles.g_cache.shotEffects[effectsIndex]
             self.__projectileMover.add(shotID, effectsDescr, gravity, refStartPoint, velocity, startPoint, maxShotDist, shooterID, BigWorld.camera().position)
             if isRicochet:
                 self.__projectileMover.hold(shotID)
@@ -2176,6 +2196,9 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             return
 
     def __onArenaPeriodChange(self, period, periodEndTime, periodLength, periodAdditionalInfo):
+        if self.__prevArenaPeriod == ARENA_PERIOD.BATTLE and period == ARENA_PERIOD.PREBATTLE:
+            if not self.isObserver():
+                self.onFootballPlayerReset()
         self.__setIsOnArena(period == ARENA_PERIOD.BATTLE)
         if period == ARENA_PERIOD.PREBATTLE and period > self.__prevArenaPeriod:
             LightManager.GameLights.startTicks()
@@ -2449,7 +2472,10 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         self.__physicsMode = newMode
 
     def __isPlayerInSquad(self, vehicleId):
-        return self.arena is not None and self.arena.guiType in (constants.ARENA_GUI_TYPE.RANDOM, constants.ARENA_GUI_TYPE.EPIC_RANDOM, constants.ARENA_GUI_TYPE.EPIC_BATTLE) and self.guiSessionProvider.getArenaDP().isSquadMan(vID=vehicleId)
+        return self.arena is not None and self.arena.guiType in (constants.ARENA_GUI_TYPE.RANDOM,
+         constants.ARENA_GUI_TYPE.EPIC_RANDOM,
+         constants.ARENA_GUI_TYPE.EVENT_BATTLES,
+         constants.ARENA_GUI_TYPE.EPIC_BATTLE) and self.guiSessionProvider.getArenaDP().isSquadMan(vID=vehicleId)
 
     def __getAdditiveShotDispersionFactor(self, descriptor):
         if self.__aimingBooster is not None:

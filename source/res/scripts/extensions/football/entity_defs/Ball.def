@@ -1,0 +1,99 @@
+<Ball.def>
+  <Volatile>
+    <position></position>
+    <yaw></yaw>
+    <roll></roll>
+    <pitch></pitch>
+  </Volatile>
+  <Properties>
+    <arenaTypeID>
+      <Type>	INT32	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </arenaTypeID>
+    <arenaUniqueID>
+      <Type>	UINT64	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </arenaUniqueID>
+    <velocity>
+      <Type>	VECTOR3	</Type>
+      <Flags>	CELL_PUBLIC	</Flags>
+    </velocity>
+    <angularVelocity>
+      <Type>	VECTOR3	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </angularVelocity>
+    <vehicleCompDescr>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+    </vehicleCompDescr>
+    <lastAttackerID>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </lastAttackerID>
+    <assistID>
+      <Type>	OBJECT_ID	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </assistID>
+    <arena>
+      <Type>	MAILBOX	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </arena>
+    <energy>
+      <Type>	ARRAY	  <of>	FLOAT32	</of>
+      </Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </energy>
+    <allowStaticEffect>
+      <Type>	BOOL	</Type>
+      <Flags>	CELL_PRIVATE	</Flags>
+    </allowStaticEffect>
+  </Properties>
+  <CellMethods>
+    <applyForceToCOM>
+      <Arg>	VECTOR3	</Arg>
+    </applyForceToCOM>
+    <receiveShot>
+      <Arg>	ATTACKER_INFO	</Arg>
+      <Arg>	SHOT_ID	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	VECTOR3	</Arg>
+    </receiveShot>
+    <receiveExplosion>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	FLOAT32	</Arg>
+      <Arg>	UINT8	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	OBJECT_ID	</Arg>
+    </receiveExplosion>
+    <teleportTo>
+      <Arg>	VECTOR3	</Arg>
+    </teleportTo>
+    <pushIfIdle></pushIfIdle>
+    <freezeBall>
+      <Arg>	BOOL	</Arg>
+    </freezeBall>
+    <waitAndExplodeBall></waitAndExplodeBall>
+  </CellMethods>
+  <BaseMethods>
+    <smartDestroy></smartDestroy>
+  </BaseMethods>
+  <ClientMethods>
+    <showDamageFromShot>
+      <Arg>	OBJECT_ID	</Arg>
+      <Arg>	VECTOR3	</Arg>
+      <Arg>	UINT8	</Arg>
+    </showDamageFromShot>
+    <showRam>
+      <Arg>	VECTOR3	</Arg>
+    </showRam>
+    <playSoundOnCollision>
+      <Arg>	UINT8	</Arg>
+    </playSoundOnCollision>
+    <explodeBall>
+      <Arg>	VECTOR3	</Arg>
+    </explodeBall>
+  </ClientMethods>
+</Ball.def>

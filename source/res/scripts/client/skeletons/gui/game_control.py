@@ -841,3 +841,43 @@ class IManualController(IGameController):
 
     def runBootcamp(self):
         raise NotImplementedError
+
+
+class IFootballMetaGame(IGameController):
+    onPacketsOpened = None
+    onMilestoneReached = None
+    onPacketsUpdated = None
+    onBuffonRecruited = None
+
+    def getGuiDataStorage(self):
+        raise NotImplementedError
+
+    def getTokenInfo(self, tokenID):
+        raise NotImplementedError
+
+    def getDecks(self):
+        raise NotImplementedError
+
+    def getPackets(self):
+        raise NotImplementedError
+
+    def getProgress(self):
+        raise NotImplementedError
+
+    def hasPackets(self):
+        raise NotImplementedError
+
+    def isBuffonAvailable(self):
+        raise NotImplementedError
+
+    def isBuffonRecruited(self):
+        raise NotImplementedError
+
+    def getMilestone(self):
+        raise NotImplementedError
+
+    def openPackets(self):
+        raise NotImplementedError
+
+    def recruitBuffon(self, vehicleIntCD):
+        raise NotImplementedError

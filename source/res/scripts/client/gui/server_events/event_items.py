@@ -28,7 +28,8 @@ from skeletons.gui.server_events import IEventsCache
 EventBattles = namedtuple('EventBattles', ['vehicleTags',
  'vehicles',
  'enabled',
- 'arenaTypeID'])
+ 'arenaTypeID',
+ 'dueDate'])
 
 class DEFAULTS_GROUPS(object):
     FOR_CURRENT_VEHICLE = 'currentlyAvailable'

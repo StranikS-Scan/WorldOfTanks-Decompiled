@@ -69,3 +69,4 @@ from EFC2016Achievement import EFC2016Achievement
 from MarkI100Years import MarkI100Years
 from HonoredRankAchievement import HonoredRankAchievement
 from RankedBattlesHeroAchievement import RankedBattlesHeroAchievement
+from FE18StageAchievement import FE18StageAchievement

@@ -14,6 +14,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.customization.packers import pickPacker
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER, VEHICLE_TAGS
 from gui.shared.items_parameters import params_helper, formatters as params_formatters
 from gui.shared.items_parameters.params_helper import SimplifiedBarVO
@@ -96,15 +97,20 @@ class ElementTooltip(BlocksTooltipData):
         self._setMargins(afterBlock=14)
         self._setWidth(387)
         self._item = None
-        self._isQuestReward = False
+        self._hideInventory = False
+        self._specialArgs = None
         return
 
     def _packBlocks(self, *args):
         itemIntCD = first(args)
-        if len(args) == 1:
-            self._isQuestReward = False
+        if len(args) > 1:
+            self._hideInventory = args[1]
         else:
-            self._isQuestReward = True
+            self._hideInventory = False
+        if len(args) > 2:
+            self._specialArgs = args[2]
+        else:
+            self._specialArgs = []
         self._item = self.itemsCache.items.getItemByCD(itemIntCD)
         return self._packItemBlocks()
 
@@ -128,7 +134,7 @@ class ElementTooltip(BlocksTooltipData):
             items.append(self._packBonusBlock(bonus, camo))
         if not self._item.isHistorical() or self._item.fullDescription:
             items.append(self._packDescriptionBlock())
-        if not self._isQuestReward:
+        if not self._hideInventory:
             items.append(self._packInventoryBlock())
         if not self._item.isUnlocked:
             items.append(self._packLockedBlock())
@@ -210,7 +216,11 @@ class ElementTooltip(BlocksTooltipData):
         width = 102
         if self._item.isWide():
             width = 204 if self._item.itemTypeName == 'inscription' else 278
-        return formatters.packImageBlockData(img=self._item.icon, align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=width, height=102, padding={'bottom': 2})
+        if self._specialArgs:
+            component = pickPacker(self._item.itemTypeID).getRawComponent()(*self._specialArgs)
+        else:
+            component = None
+        return formatters.packImageBlockData(img=self._item.getIconApplied(component), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=width, height=102, padding={'bottom': 2})
 
     def _packBonusBlock(self, bonus, camo):
         blocks = []

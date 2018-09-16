@@ -6,7 +6,7 @@ import constants
 import personal_missions
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages, makeHtmlString
-from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData, getAwardsWindowBonuses, getPersonalMissionAwardsFormatter
+from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData, getAwardsWindowBonuses, getPersonalMissionAwardsFormatter, getFootballAwardsWindowBonuses
 from gui.Scaleform.genConsts.AWARDWINDOW_CONSTANTS import AWARDWINDOW_CONSTANTS
 from gui.Scaleform.genConsts.BOOSTER_CONSTANTS import BOOSTER_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
@@ -27,6 +27,7 @@ from items.components.shared_components import i18n
 from shared_utils import findFirst
 from skeletons.gui.server_events import IEventsCache
 from gui.server_events.awards_formatters import AWARDS_SIZES
+from gui.Scaleform.locale.FOOTBALL2018 import FOOTBALL2018
 AwardsRibbonInfo = namedtuple('AwardsRibbonInfo', ['awardForCompleteText',
  'isAwardForCompleteVisible',
  'awardReceivedText',
@@ -191,6 +192,9 @@ class MissionAwardAbstract(AwardAbstract):
 
     def handleCurrentButton(self):
         pass
+
+    def isShowOrangeBtn(self):
+        return False
 
 
 class ExplosionBackAward(AwardAbstract):
@@ -608,3 +612,46 @@ class OperationUnlockedAward(MissionAward):
 
     def handleBodyButton(self):
         self._proxyEvent(self._nextOperation.getID(), 1)
+
+
+class FootballMissionAward(MissionAward):
+
+    def getBackgroundImage(self):
+        return RES_ICONS.MAPS_ICONS_FE18_FE18_REWARD_WINDOW_IMAGE
+
+    def getDescription(self):
+        pass
+
+    def getCurrentQuestHeader(self):
+        return makeHtmlString('html_templates:lobby/textStyle', 'alignText', {'align': 'center',
+         'message': text_styles.main(_ms(FOOTBALL2018.MISSION_WINDOW_CARDS_REWARDS_TEXT, mission=text_styles.stats(self._quest.getUserName())))})
+
+    def getMainStatusText(self):
+        pass
+
+    def getMainStatusIcon(self):
+        pass
+
+    def getNextButtonText(self):
+        return _ms(FOOTBALL2018.MISSION_WINDOW_OPEN_CARD_COLLECTION_BUTTON_TEXT)
+
+    def getNextButtonTooltip(self):
+        return makeTooltip(FOOTBALL2018.MISSION_WINDOW_BUTTON_TOOLTIP, FOOTBALL2018.MISSION_WINDOW_BUTTON_TOOLTIP_BODY)
+
+    def getAwards(self):
+        bonuses = getMissionInfoData(self._quest).getSubstituteBonuses()
+        return getFootballAwardsWindowBonuses(bonuses)
+
+    def handleNextButton(self):
+        if self._proxyEvent is not None:
+            self._proxyEvent()
+        return
+
+    def getAvailableText(self):
+        pass
+
+    def isNextAvailable(self):
+        return True
+
+    def isShowOrangeBtn(self):
+        return True

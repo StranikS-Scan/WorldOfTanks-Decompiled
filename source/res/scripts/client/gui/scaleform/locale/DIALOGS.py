@@ -46,6 +46,10 @@ class DIALOGS(object):
     QUITBATTLE_DESERTER_MESSAGE = '#dialogs:quitBattle/deserter/message'
     QUITBATTLE_DESERTER_SUBMIT = '#dialogs:quitBattle/deserter/submit'
     QUITBATTLE_DESERTER_CANCEL = '#dialogs:quitBattle/deserter/cancel'
+    QUITBATTLEEVENT_DESERTER_TITLE = '#dialogs:quitBattleEvent/deserter/title'
+    QUITBATTLEEVENT_DESERTER_MESSAGE = '#dialogs:quitBattleEvent/deserter/message'
+    QUITBATTLEEVENT_DESERTER_SUBMIT = '#dialogs:quitBattleEvent/deserter/submit'
+    QUITBATTLEEVENT_DESERTER_CANCEL = '#dialogs:quitBattleEvent/deserter/cancel'
     QUITBATTLEIGR_TITLE = '#dialogs:quitBattleIGR/title'
     QUITBATTLEIGR_MESSAGE = '#dialogs:quitBattleIGR/message'
     QUITBATTLEIGR_SUBMIT = '#dialogs:quitBattleIGR/submit'
@@ -940,6 +944,10 @@ class DIALOGS(object):
      QUITBATTLE_DESERTER_MESSAGE,
      QUITBATTLE_DESERTER_SUBMIT,
      QUITBATTLE_DESERTER_CANCEL,
+     QUITBATTLEEVENT_DESERTER_TITLE,
+     QUITBATTLEEVENT_DESERTER_MESSAGE,
+     QUITBATTLEEVENT_DESERTER_SUBMIT,
+     QUITBATTLEEVENT_DESERTER_CANCEL,
      QUITBATTLEIGR_TITLE,
      QUITBATTLEIGR_MESSAGE,
      QUITBATTLEIGR_SUBMIT,

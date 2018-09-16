@@ -93,6 +93,9 @@ class IEventsCache(object):
     def getEventBattles(self):
         raise NotImplementedError
 
+    def getEventDueDate(self):
+        raise NotImplementedError
+
     def isEventEnabled(self):
         raise NotImplementedError
 

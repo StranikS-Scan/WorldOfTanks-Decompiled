@@ -23,6 +23,7 @@ class TOOLTIPS(object):
     SQUADWINDOW_DOMINATION_VEHICLESINFOICON = '#tooltips:squadWindow/domination/vehiclesInfoIcon'
     LOBBYMENU_VERSIONINFOBUTTON = '#tooltips:lobbyMenu/versionInfoButton'
     CYBERSPORT_ROSTERSLOTSETTINGS_HEADERTEXT = '#tooltips:cyberSport/rosterSlotSettings/headerText'
+    HANGAR_UNLOCKBUTTON = '#tooltips:hangar/unlockButton'
     HANGAR_AMMO_PANEL_DEVICE_EMPTY = '#tooltips:hangar/ammo_panel/device/empty'
     HANGAR_AMMO_PANEL_EQUIPMENT_EMPTY = '#tooltips:hangar/ammo_panel/equipment/empty'
     HANGAR_AMMO_PANEL_BATTLEBOOSTER_EMPTY = '#tooltips:hangar/ammo_panel/battleBooster/empty'

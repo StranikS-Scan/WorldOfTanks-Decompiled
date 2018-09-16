@@ -123,6 +123,9 @@
       <include>
         <nations>	france	</nations>
       </include>
+      <exclude>
+        <vehicles>	france:F88_AMX_13_105_sport	</vehicles>
+      </exclude>
     </vehicleFilter>
     <style>
       <id>	3	</id>
@@ -181,7 +184,7 @@
         <nations>	germany	</nations>
       </include>
       <exclude>
-        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian	</vehicles>
+        <vehicles>	germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian germany:G56_E-100_sport	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>
@@ -472,7 +475,7 @@
         <nations>	ussr	</nations>
       </include>
       <exclude>
-        <vehicles>	ussr:R61_Object252_BF	</vehicles>
+        <vehicles>	ussr:R61_Object252_BF ussr:R87_T62A_sport	</vehicles>
       </exclude>
     </vehicleFilter>
     <style>

@@ -32,6 +32,7 @@ from gui.ranked_battles.ranked_models import PostBattleRankInfo
 from gui.server_events.awards_formatters import CompletionTokensBonusFormatter
 from gui.server_events.bonuses import VehiclesBonus
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
+from gui.server_events.events_helpers import hasFootballQuests
 from gui.shared import formatters as shared_fmts
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.currency import getBWFormatter
@@ -313,6 +314,8 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
                 templateName = self.__battleResultKeys[battleResKey]
                 bgIconSource = None
                 arenaUniqueID = battleResults.get('arenaUniqueID', 0)
+                if guiType == ARENA_GUI_TYPE.EVENT_BATTLES:
+                    bgIconSource = 'EVENT'
                 formatted = g_settings.msgTemplates.format(templateName, ctx=ctx, data={'timestamp': arenaCreateTime,
                  'savedData': arenaUniqueID}, bgIconSource=bgIconSource)
                 settings = self._getGuiSettings(message, templateName)
@@ -525,9 +528,12 @@ class AchievementFormatter(ServiceChannelFormatter):
         achievesList, badgesList = [], []
         achieves = message.data.get('popUpRecords')
         if achieves is not None:
-            for block, name in achieves:
+            for (block, name), value in achieves.iteritems():
                 if block == BADGES_BLOCK:
                     badgesList.append(i18n.makeString(BADGE.badgeName(name)))
+                achieve = getAchievementFactory((block, name)).create(value)
+                if achieve is not None:
+                    achievesList.append(achieve.getUserName())
                 achievesList.append(i18n.makeString('#achievements:{0:s}'.format(name)))
 
         rares = [ rareID for rareID in message.data.get('rareAchievements', []) if rareID > 0 ]
@@ -634,7 +640,8 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
      INVOICE_ASSET.CRYSTAL: '_formatAmount',
      INVOICE_ASSET.PREMIUM: '_formatAmount',
      INVOICE_ASSET.FREE_XP: '_formatAmount',
-     INVOICE_ASSET.DATA: '_formatData'}
+     INVOICE_ASSET.DATA: '_formatData',
+     INVOICE_ASSET.FB18: '_formatFB18Data'}
     __currencyToInvoiceAsset = {Currency.GOLD: INVOICE_ASSET.GOLD,
      Currency.CREDITS: INVOICE_ASSET.CREDITS,
      Currency.CRYSTAL: INVOICE_ASSET.CRYSTAL}
@@ -653,7 +660,8 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
      INVOICE_ASSET.CRYSTAL: 'crystalInvoiceReceived',
      INVOICE_ASSET.PREMIUM: 'premiumInvoiceReceived',
      INVOICE_ASSET.FREE_XP: 'freeXpInvoiceReceived',
-     INVOICE_ASSET.DATA: 'dataInvoiceReceived'}
+     INVOICE_ASSET.DATA: 'dataInvoiceReceived',
+     INVOICE_ASSET.FB18: 'fb18InvoiceReceived'}
     __i18nPiecesString = '#{0:s}:serviceChannelMessages/invoiceReceived/pieces'.format(MESSENGER_I18N_FILE)
     __i18nCrewString = '#{0:s}:serviceChannelMessages/invoiceReceived/crewOnVehicle'.format(MESSENGER_I18N_FILE)
     __i18nCrewWithLvlDroppedString = '#{0:s}:serviceChannelMessages/invoiceReceived/crewWithLvlDroppedToBarracks'.format(MESSENGER_I18N_FILE)
@@ -907,6 +915,24 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
          'desc': self.__getL10nDescription(data),
          'op': '<br/>'.join(operations)})
 
+    def _formatFB18Data(self, assetType, data):
+        dataEx = data.get('data', {})
+        if not dataEx:
+            return None
+        else:
+            operations = []
+            fb18compensation = dataEx.get('fb18compensation')
+            if fb18compensation:
+                cardsAmount = fb18compensation.get('amount')
+                if cardsAmount:
+                    operations.append(g_settings.htmlTemplates.format('fb18Cards', ctx={'amount': BigWorld.wg_getIntegralFormat(abs(cardsAmount))}))
+                creditsCompenstation = fb18compensation.get('credits')
+                if creditsCompenstation:
+                    operations.append(g_settings.htmlTemplates.format('fb18Credits', ctx={'amount': BigWorld.wg_getIntegralFormat(abs(creditsCompenstation))}))
+            return None if not operations else g_settings.msgTemplates.format(self._getMessageTemplateKey(assetType), ctx={'at': self._getOperationTimeString(data),
+             'desc': self.__getL10nDescription(data),
+             'op': '<br/>'.join(operations)})
+
     def __getSlotsString(self, slots):
         if slots > 0:
             template = 'slotsAccruedInvoiceReceived'
@@ -938,7 +964,11 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                             else:
                                 addBadgesStrings.append(ms(BADGE.badgeName(name)))
                         elif block != ACHIEVEMENT_BLOCK.RARE:
-                            addDossierStrings.append(ms('#achievements:{0:s}'.format(name)))
+                            achieve = getAchievementFactory((block, name)).create(recData['actualValue'])
+                            if achieve is not None:
+                                addDossierStrings.append(achieve.getUserName())
+                            else:
+                                addDossierStrings.append(ms('#achievements:{0:s}'.format(name)))
 
             addDossiers = [ rare for rare in rares if rare > 0 ]
             if addDossiers:
@@ -953,6 +983,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                 self.__dossierResult.append(g_settings.htmlTemplates.format('badgeAchievement', ctx={'badges': ', '.join(addBadgesStrings)}))
             if removedBadgesStrings:
                 self.__dossierResult.append(g_settings.htmlTemplates.format('removedBadgeAchievement', ctx={'badges': ', '.join(removedBadgesStrings)}))
+        return
 
     def __getDossierString(self):
         return '<br/>'.join(self.__dossierResult)
@@ -1692,7 +1723,11 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
                 return
             fmt = self.formatQuestAchieves(data, asBattleFormatter=False)
             if fmt is not None:
-                settings = self._getGuiSettings(message, self._getTemplateName(completedQuestIDs))
+                if hasFootballQuests(completedQuestIDs):
+                    priority = NotificationPriorityLevel.LOW
+                else:
+                    priority = None
+                settings = self._getGuiSettings(message, self._getTemplateName(completedQuestIDs), priorityLevel=priority)
                 formatted = g_settings.msgTemplates.format(self._getTemplateName(completedQuestIDs), {'achieves': fmt})
         callback([_MessageData(formatted, settings)])
         return

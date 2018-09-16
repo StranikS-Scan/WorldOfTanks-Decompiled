@@ -595,6 +595,7 @@ class _PreBattleDispatcher(ListenersCollection):
         if created is not None:
             if created.getEntityFlags() & FUNCTIONAL_FLAG.SET_GLOBAL_LISTENERS > 0:
                 created.addMutualListeners(self)
+            self.__entity.fini(ctx=ctx)
             self.__entity = created
             self.__prevEntity = NotSupportedEntity()
             flag = self.__entity.init(ctx=ctx)

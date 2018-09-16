@@ -24,6 +24,7 @@ class _SECTION(CONST_CONTAINER):
 
 
 _VEHICLE_LEVEL_FILTERS = [ 'level_{}'.format(level) for level in VEHICLE_LEVELS ]
+EVENT = 'event'
 
 class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -102,8 +103,14 @@ class VehiclesFilterPopover(TankCarouselFilterPopoverMeta):
              'selected': isSelected(entry)})
 
         for entry in mapping[_SECTION.HIDDEN]:
-            dataVO['hidden'].append({'label': text_styles.standard('#tank_carousel_filter:popover/checkbox/{}'.format(entry)),
-             'tooltip': makeTooltip('#tank_carousel_filter:tooltip/{}/header'.format(entry), '#tank_carousel_filter:tooltip/{}/body'.format(entry)),
+            if entry == EVENT:
+                hiddenLabel = text_styles.standard('#football2018:football_filter_checkbox_label')
+                toolTip = makeTooltip('#football2018:tooltip_event_header', '#football2018:tooltip_event_body')
+            else:
+                hiddenLabel = text_styles.standard('#tank_carousel_filter:popover/checkbox/{}'.format(entry))
+                toolTip = makeTooltip('#tank_carousel_filter:tooltip/{}/header'.format(entry), '#tank_carousel_filter:tooltip/{}/body'.format(entry))
+            dataVO['hidden'].append({'label': hiddenLabel,
+             'tooltip': toolTip,
              'selected': isSelected(entry)})
 
         for entry in mapping[_SECTION.SPECIALS]:

@@ -6,14 +6,16 @@ from debug_utils import LOG_CURRENT_EXCEPTION, LOG_ERROR
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 from gui.shared.gui_items import GUI_ITEM_TYPE
+from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.items_parameters import params, RELATIVE_PARAMS, MAX_RELATIVE_VALUE
 from gui.shared.items_parameters.comparator import VehiclesComparator, ItemsComparator
 from gui.shared.items_parameters.functions import getBasicShell
 from gui.shared.items_parameters.params_cache import g_paramsCache
 from gui.shared.utils import AUTO_RELOAD_PROP_NAME
 from helpers import dependency
-from items import vehicles, ITEM_TYPES
+from items import vehicles, ITEM_TYPES, tankmen
 from shared_utils import findFirst, first
+from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 _ITEM_TYPE_HANDLERS = {ITEM_TYPES.vehicleRadio: params.RadioParams,
  ITEM_TYPES.vehicleEngine: params.EngineParams,
@@ -162,6 +164,23 @@ def artifactRemovedComparator(vehicle, item, slotIdx):
 
 def vehiclesComparator(comparableVehicle, vehicle):
     return VehiclesComparator(params.VehicleParams(comparableVehicle).getParamsDict(), params.VehicleParams(vehicle).getParamsDict(), suitableArtefacts=g_paramsCache.getCompatibleArtefacts(vehicle.descriptor))
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def noSkillsVehicleComparator(vehicle, itemsCache=None):
+    stockVehicle = itemsCache.items.getStockVehicle(vehicle.intCD, useInventory=True)
+    nationID, vehicleTypeID = stockVehicle.descriptor.type.id
+    if stockVehicle:
+        vehCrew = vehicle.crew
+        for idx, (vehCrewRoleIdx, vehCrewRole) in enumerate(vehCrew):
+            if vehCrewRole:
+                tMan = Tankman(tankmen.generateCompactDescr(tankmen.generatePassport(nationID), vehicleTypeID, vehCrewRole.role, vehCrewRole.roleLevel))
+                stockVehicle.crew[idx] = (vehCrewRoleIdx, tMan)
+
+        vehicle = stockVehicle
+    else:
+        LOG_ERROR("Couldn't generate stock vehicle {}".format(vehicle.intCD))
+    return idealCrewComparator(vehicle)
 
 
 def itemsComparator(currentItem, otherItem, vehicleDescr=None):

@@ -685,7 +685,7 @@ class GunParams(WeightedParam):
 
     @property
     def autoReloadTime(self):
-        return tuple(reversed(self._getRawParams().get(AUTO_RELOAD_PROP_NAME))) if self._vehicleDescr is not None else None
+        return tuple(reversed(self._getRawParams().get(AUTO_RELOAD_PROP_NAME)))
 
     def getParamsDict(self):
         stunConditionParams = (STUN_DURATION_PROP_NAME, GUARANTEED_STUN_DURATION_PROP_NAME)

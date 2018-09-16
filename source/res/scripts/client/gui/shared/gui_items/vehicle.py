@@ -85,7 +85,12 @@ class VEHICLE_TAGS(CONST_CONTAINER):
     UNRECOVERABLE = 'unrecoverable'
     CREW_LOCKED = 'lockCrew'
     OUTFIT_LOCKED = 'lockOutfit'
+    ROLE_STRIKER = 'role_striker'
+    ROLE_MIDFIELDER = 'role_midfielder'
+    ROLE_DEFENDER = 'role_defender'
 
+
+VEHICLE_FOOTBALL_ROLES = frozenset((VEHICLE_TAGS.ROLE_DEFENDER, VEHICLE_TAGS.ROLE_MIDFIELDER, VEHICLE_TAGS.ROLE_STRIKER))
 
 class Vehicle(FittingItem, HasStrCD):
     __slots__ = ('__descriptor', '__customState', '_inventoryID', '_xp', '_dailyXPFactor', '_isElite', '_isFullyElite', '_clanLock', '_isUnique', '_rentPackages', '_hasRentPackages', '_isDisabledForBuy', '_isSelected', '_restorePrice', '_canTradeIn', '_canTradeOff', '_tradeOffPriceFactor', '_tradeOffPrice', '_searchableUserName', '_personalDiscountPrice', '_rotationGroupNum', '_rotationBattlesLeft', '_isRotationGroupLocked', '_isInfiniteRotationGroup', '_settings', '_lock', '_repairCost', '_health', '_gun', '_turret', '_engine', '_chassis', '_radio', '_fuelTank', '_optDevices', '_shells', '_equipment', '_equipmentLayout', '_bonuses', '_crewIndices', '_crew', '_lastCrew', '_hasModulesToSelect', '_customOutfits', '_styledOutfits')
@@ -851,6 +856,25 @@ class Vehicle(FittingItem, HasStrCD):
         return self.isPremiumIGR and self.igrCtrl.getRoomType() != constants.IGR_TYPE.PREMIUM
 
     @property
+    def isFootballDefender(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.EVENT) and checkForTags(self.tags, VEHICLE_TAGS.ROLE_DEFENDER)
+
+    @property
+    def isFootballMidfielder(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.EVENT) and checkForTags(self.tags, VEHICLE_TAGS.ROLE_MIDFIELDER)
+
+    @property
+    def isFootballStriker(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.EVENT) and checkForTags(self.tags, VEHICLE_TAGS.ROLE_STRIKER)
+
+    @property
+    def isFootball(self):
+        return checkForTags(self.tags, VEHICLE_TAGS.EVENT)
+
+    def getFootballRole(self):
+        return getFootballRole(self.tags)
+
+    @property
     def name(self):
         return self.descriptor.type.name
 
@@ -1348,6 +1372,14 @@ def getOrderByVehicleClass(className=None):
 
 def getVehicleClassTag(tags):
     subSet = vehicles.VEHICLE_CLASS_TAGS & tags
+    result = None
+    if subSet:
+        result = list(subSet).pop()
+    return result
+
+
+def getFootballRole(tags):
+    subSet = VEHICLE_FOOTBALL_ROLES & tags
     result = None
     if subSet:
         result = list(subSet).pop()

@@ -80,6 +80,9 @@
       </clan>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/chinese/Ch21_T34/T34_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1 1 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_Ch21_T34>
@@ -913,7 +916,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.415 0.415 0.000000 0.000000	</tiling>
+            <tiling>	0.5 0.25 0.000000 0.000000	</tiling>
           </camouflage>
         </_76mm_F-34>
       </guns>
@@ -962,7 +965,7 @@
       <physicsShape>	1.046 -0.026 1.094 0.000 0.654 0.000 0.875 0.428 0.355 0.500 0.317 0.500 0.236 0.544 0.000	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
-        <tiling>	0.58 0.58 0.000000 0.000000	</tiling>
+        <tiling>	0.5 0.25 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_1_Ch21_T34>
     <Turret_2_Ch21_T34>
@@ -1049,7 +1052,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.445 0.445 0.000000 0.000000	</tiling>
+            <tiling>	0.5 0.25 0.000000 0.000000	</tiling>
           </camouflage>
         </_76mm_F-34>
         <_57mm_55-57FG>	shared	  <maxAmmo>	100	</maxAmmo>
@@ -1099,7 +1102,7 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
           <camouflage>
-            <tiling>	0.625 0.625 0.000000 0.000000	</tiling>
+            <tiling>	0.5 0.25 0.000000 0.000000	</tiling>
           </camouflage>
         </_57mm_55-57FG>
       </guns>
@@ -1148,7 +1151,7 @@
       <physicsShape>	1.072 0.022 1.094 0.000 0.690 0.010 0.897 0.433 0.456 0.500 0.317 0.500 0.236 0.544 0.078	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
       <camouflage>
-        <tiling>	0.595 0.595 0.000000 0.000000	</tiling>
+        <tiling>	0.5 0.25 0.000000 0.000000	</tiling>
       </camouflage>
     </Turret_2_Ch21_T34>
   </turrets0>

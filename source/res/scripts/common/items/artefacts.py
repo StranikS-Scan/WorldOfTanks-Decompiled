@@ -416,22 +416,50 @@ class RemovedRpmLimiter(Equipment):
 
 
 class Afterburning(Equipment):
-    __slots__ = ('enginePowerFactor', 'durationSeconds')
+    __slots__ = ('maxAmount', 'deployTime', 'consumePerSec', 'cooldownTime', 'rechargePerSec', 'enginePowerFactor', 'powerFactorPerUnit', 'instantPowerIncrease', 'maxSpeedFactor')
 
     def __init__(self):
         super(Afterburning, self).__init__()
+        self.maxAmount = component_constants.ZERO_INT
+        self.deployTime = component_constants.ZERO_FLOAT
+        self.consumePerSec = component_constants.ZERO_INT
+        self.cooldownTime = component_constants.ZERO_FLOAT
+        self.rechargePerSec = component_constants.ZERO_INT
         self.enginePowerFactor = component_constants.ZERO_FLOAT
-        self.durationSeconds = component_constants.ZERO_INT
+        self.powerFactorPerUnit = component_constants.ZERO_FLOAT
+        self.instantPowerIncrease = True
+        self.maxSpeedFactor = component_constants.ZERO_FLOAT
 
     def _readConfig(self, xmlCtx, section):
+        self.maxAmount = _xml.readInt(xmlCtx, section, 'maxAmount', 0)
+        self.deployTime = _xml.readPositiveFloat(xmlCtx, section, 'deployTime')
+        self.consumePerSec = _xml.readInt(xmlCtx, section, 'consumePerSec', 0)
+        self.cooldownTime = _xml.readPositiveFloat(xmlCtx, section, 'cooldownTime')
+        self.rechargePerSec = _xml.readInt(xmlCtx, section, 'rechargePerSec', 0)
         self.enginePowerFactor = _xml.readPositiveFloat(xmlCtx, section, 'enginePowerFactor')
-        self.durationSeconds = _xml.readInt(xmlCtx, section, 'durationSeconds', 1)
+        self.powerFactorPerUnit = _xml.readPositiveFloat(xmlCtx, section, 'powerFactorPerUnit')
+        self.instantPowerIncrease = _xml.readBool(xmlCtx, section, 'instantPowerIncrease')
+        self.maxSpeedFactor = _xml.readPositiveFloat(xmlCtx, section, 'maxSpeedFactor')
 
     def updateVehicleAttrFactors(self, vehicleDescr, factors, aspect):
         try:
             factors['engine/power'] *= self.enginePowerFactor
+            factors['vehicle/maxSpeed'] *= self.maxSpeedFactor
         except:
             pass
+
+
+class LastChance(Equipment):
+    __slots__ = ('cooldownTime', 'recharge', 'reuseCount')
+
+    def __init__(self):
+        super(LastChance, self).__init__()
+        self.cooldownTime = component_constants.ZERO_FLOAT
+        self.recharge = component_constants.ZERO_INT
+
+    def _readConfig(self, xmlCtx, section):
+        self.cooldownTime = _xml.readPositiveFloat(xmlCtx, section, 'cooldownTime')
+        self.recharge = _xml.readInt(xmlCtx, section, 'recharge', 2)
 
 
 class RageEquipmentConfigReader(object):

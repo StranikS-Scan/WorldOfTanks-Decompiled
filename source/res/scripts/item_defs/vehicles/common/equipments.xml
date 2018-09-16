@@ -226,6 +226,33 @@
     <script>	Stimulator	  <crewLevelIncrease>	10	</crewLevelIncrease>
     </script>
   </hotCoffee>
+  <afterburning>
+    <id>	14	</id>
+    <userString>	#artefacts:afterburning/name	</userString>
+    <description>	#artefacts:afterburning/descr	</description>
+    <icon>	afterburning 0 0	</icon>
+    <notInShop>	True	</notInShop>
+    <price>	15000	</price>
+    <tags>	trigger	</tags>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+        <vehicle>
+          <tags>	afterburning_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	Afterburning	  <maxAmount>	1000	</maxAmount>
+      <deployTime>	20	</deployTime>
+      <consumePerSec>	150	</consumePerSec>
+      <cooldownTime>	2	</cooldownTime>
+      <rechargePerSec>	50	</rechargePerSec>
+      <enginePowerFactor>	1.6	</enginePowerFactor>
+      <powerFactorPerUnit>	0.001	</powerFactorPerUnit>
+      <instantPowerIncrease>	True	</instantPowerIncrease>
+      <maxSpeedFactor>	2	</maxSpeedFactor>
+    </script>
+  </afterburning>
   <ration_china>
     <id>	15	</id>
     <userString>	#artefacts:ration_china/name	</userString>
@@ -3811,4 +3838,24 @@
       <resupplyShellsFactor>	1.5	</resupplyShellsFactor>
     </script>
   </passive_engineering_level5>
+  <lastchance>
+    <id>	179	</id>
+    <userString>	#artefacts:lastchance/name	</userString>
+    <description>	#artefacts:lastchance/descr	</description>
+    <icon>	lastchance 0 0	</icon>
+    <price>	15000	</price>
+    <tags>	trigger	</tags>
+    <notInShop>	true	</notInShop>
+    <vehicleFilter>
+      <include>
+        <nations>	ussr	</nations>
+        <vehicle>
+          <tags>	lastchance_user	</tags>
+        </vehicle>
+      </include>
+    </vehicleFilter>
+    <script>	LastChance	  <cooldownTime>	40.0	</cooldownTime>
+      <recharge>	2	</recharge>
+    </script>
+  </lastchance>
 </equipments.xml>

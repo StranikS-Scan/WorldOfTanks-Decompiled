@@ -2692,4 +2692,40 @@
       </effects>
     </variant1>
   </dynamicCollision>
+  <afterburning>
+    <variant1>
+      <stages>
+        <fire>	1.0	</fire>
+        <noEmission>	0.5	</noEmission>
+      </stages>
+      <effects>
+        <sound>
+          <startKey>	fire	</startKey>
+          <endKey>	noEmission	</endKey>
+          <stopSyncVisual>	true	</stopSyncVisual>
+          <wwsoundPC>	ev_football_nitro_start_pc	</wwsoundPC>
+          <wwsoundNPC>	ev_football_nitro_start_npc	</wwsoundNPC>
+        </sound>
+        <sound>
+          <startKey>	noEmission	</startKey>
+          <stopSyncVisual>	false	</stopSyncVisual>
+          <wwsoundPC>	ev_football_nitro_stop_pc	</wwsoundPC>
+          <wwsoundNPC>	ev_football_nitro_stop_npc	</wwsoundNPC>
+        </sound>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles\Events\vfx_football_2018_ground_slip.xml	</file>
+          <position>	HP_Track_LRear	</position>
+        </pixie>
+        <pixie>
+          <startKey>	fire	</startKey>
+          <file>	particles\Events\vfx_football_2018_ground_slip.xml	</file>
+          <position>	HP_Track_RRear	</position>
+        </pixie>
+        <stopEmission>
+          <startKey>	noEmission	</startKey>
+        </stopEmission>
+      </effects>
+    </variant1>
+  </afterburning>
 </vehicle_effects.xml>

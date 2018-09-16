@@ -159,6 +159,10 @@ class VehicleGun(VehicleModule):
 
         return result
 
+    def _getShortInfoKey(self, vehicleDescr=None):
+        key = super(VehicleGun, self)._getShortInfoKey()
+        return '/'.join((key, 'autoReload')) if self.isAutoReloadable(vehicleDescr) else key
+
 
 class VehicleEngine(VehicleModule):
     __slots__ = ()

@@ -8,6 +8,7 @@ from gui.server_events import awards, events_helpers
 from gui.shared import g_eventBus, events, event_dispatcher as shared_events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
+from gui.Scaleform.genConsts.HANGAR_ALIASES import HANGAR_ALIASES
 
 def showPQSeasonAwardsWindow(questsType):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW, ctx={'questsType': questsType}), EVENT_BUS_SCOPE.LOBBY)
@@ -112,6 +113,14 @@ def showTankwomanAward(questID, tankmanData):
      'fnGroup': tankmanData.fnGroupID,
      'lnGroup': tankmanData.lnGroupID,
      'iGroupID': tankmanData.iGroupID}), EVENT_BUS_SCOPE.LOBBY)
+
+
+def showCardCollection():
+    g_eventBus.handleEvent(events.LoadViewEvent(HANGAR_ALIASES.FOOTBALL_CARD_COLLECTION), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showFootballAward(quest, ctx):
+    shared_events.showMissionAwardWindow(awards.FootballMissionAward(quest, ctx, showCardCollection))
 
 
 def showMissionAward(quest, ctx):

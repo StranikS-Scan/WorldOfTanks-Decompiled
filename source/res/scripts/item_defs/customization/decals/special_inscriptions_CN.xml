@@ -14,6 +14,11 @@
     <userString>	#vehicle_customization:inscription/special	</userString>
     <priceGroup>	legacy notInShop	</priceGroup>
     <type>	INSCRIPTION	</type>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+      </exclude>
+    </vehicleFilter>
     <decal>
       <id>	161	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_177.dds	</texture>
@@ -30,6 +35,11 @@
     <userString>	#vehicle_customization:inscription/special	</userString>
     <priceGroup>	legacy inscriptions common	</priceGroup>
     <type>	INSCRIPTION	</type>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+      </exclude>
+    </vehicleFilter>
     <decal>
       <id>	163	</id>
       <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_179.dds	</texture>

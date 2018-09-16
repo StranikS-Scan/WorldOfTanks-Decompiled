@@ -17,7 +17,7 @@ from gui.shared.utils.decorators import process
 from helpers import time_utils, i18n, dependency
 from shared_utils import CONST_CONTAINER
 from skeletons.gui.server_events import IEventsCache
-from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX
+from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, FOOTBALL2018_PREFIX
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui.server_events.conditions import getProgressFromQuestWithSingleAccumulative
@@ -279,6 +279,14 @@ def hasAtLeastOneCompletedQuest(quests):
 
 def isAllQuestsCompleted(quests):
     return all((quest.isCompleted() for quest in quests))
+
+
+def isFootball(eventID):
+    return eventID.startswith(FOOTBALL2018_PREFIX)
+
+
+def hasFootballQuests(eventsIDs):
+    return any((isFootball(eventID) for eventID in eventsIDs))
 
 
 def isMarathon(eventID):

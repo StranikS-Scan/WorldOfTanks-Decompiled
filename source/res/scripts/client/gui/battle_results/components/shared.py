@@ -69,6 +69,21 @@ class WasInEpicBattleItem(base.StatsItem):
         return value['common']['bonusType'] == ARENA_BONUS_TYPE.EPIC_BATTLE
 
 
+class WasInFootballBattleItem(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, value, reusable):
+        from constants import ARENA_BONUS_TYPE
+        return value['common']['bonusType'] == ARENA_BONUS_TYPE.EVENT_BATTLES
+
+
+class FootballBattleScoreItem(base.StatsItem):
+    __slots__ = ()
+
+    def _convert(self, value, reusable):
+        return value['common']['footballScore']
+
+
 class SortingBlock(base.StatsBlock):
     __slots__ = ('__setting', 'criteria', 'direction')
 

@@ -4,6 +4,7 @@ from functools import partial
 import BigWorld
 from adisp import process
 from async import async, await
+from debug_utils import LOG_ERROR
 from gui.Scaleform.locale.LINKEDSET import LINKEDSET
 from gui import DialogsInterface
 from gui.Scaleform.Waiting import Waiting
@@ -32,10 +33,12 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, icons
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IReloginController, IMarathonEventController, IBrowserController
+from skeletons.gui.game_control import IReloginController, IBrowserController
 from skeletons.gui.server_events import IEventsCache
 from gui.Scaleform.genConsts.LINKEDSET_ALIASES import LINKEDSET_ALIASES
 from gui.server_events.event_items import DEFAULTS_GROUPS
+from skeletons.gui.lobby_context import ILobbyContext
+from gui.Scaleform.framework import g_entitiesFactories
 
 class _GroupedMissionsView(MissionsGroupedViewMeta):
 
@@ -81,8 +84,8 @@ class MissionsGroupedView(_GroupedMissionsView):
 
 class MissionsMarathonView(MissionsMarathonViewMeta):
     _browserCtrl = dependency.descriptor(IBrowserController)
-    _marathonCtrl = dependency.descriptor(IMarathonEventController)
     eventsCache = dependency.descriptor(IEventsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self):
         super(MissionsMarathonView, self).__init__()
@@ -103,7 +106,7 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
     def reload(self):
         browser = self._browserCtrl.getBrowser(self.__browserID)
         if browser is not None:
-            url = yield self._marathonCtrl.getUrl()
+            url = self.lobbyContext.getServerSettings().footballHostUrl()
             if url:
                 browser.doNavigate(url)
         else:
@@ -114,6 +117,24 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
         super(MissionsMarathonView, self)._populate()
         Waiting.hide('loadPage')
         BigWorld.callback(0.01, self.as_loadBrowserS)
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+
+    def _dispose(self):
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+        super(MissionsMarathonView, self)._dispose()
+
+    def __onServerSettingChanged(self, diff):
+        if 'footballSettings' in diff and 'isFootballEnabled' in diff['footballSettings']:
+            enabled = diff['footballSettings']['isFootballEnabled']
+            if not enabled:
+                self.__showDisabledDlg()
+            else:
+                self.reload()
+
+    @process
+    def __showDisabledDlg(self):
+        yield DialogsInterface.showI18nInfoDialog('elenDisabled')
+        g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
     def viewSize(self, width, height):
         self._width = width
@@ -122,14 +143,20 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
     @process
     def _onRegisterFlashComponent(self, viewPy, alias):
         if alias == VIEW_ALIAS.BROWSER:
-            url = yield self._marathonCtrl.getURL()
-            browserID = yield self._browserCtrl.load(url=url, useBrowserWindow=False, browserSize=(self._width, self._height))
-            self.__browserID = browserID
-            viewPy.init(browserID, createMarathonWebHandlers(), alias=alias)
-            browser = self._browserCtrl.getBrowser(browserID)
-            if browser is not None:
-                browser.setAllowAutoLoadingScreen(False)
-                browser.onReadyToShowContent = self.__removeLoadingScreen
+            if self.__browserID is None:
+                url = self.lobbyContext.getServerSettings().footballHostUrl()
+                browserID = yield self._browserCtrl.load(url=url, useBrowserWindow=False, browserSize=(self._width, self._height))
+                self.__browserID = browserID
+                viewPy.init(browserID, createMarathonWebHandlers(), alias=alias)
+                browser = self._browserCtrl.getBrowser(browserID)
+                if browser is not None:
+                    browser.useSpecialKeys = False
+                    browser.allowRightClick = True
+                    browser.skipEscape = False
+                    browser.setAllowAutoLoadingScreen(False)
+                    browser.onReadyToShowContent = self.__removeLoadingScreen
+            else:
+                LOG_ERROR('Attamt to initialize browser 2nd time!')
         return
 
     def closeView(self):
@@ -154,7 +181,7 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
         self._builder.invalidateBlocks()
 
     def setActive(self, value):
-        self.as_loadBrowserS()
+        self.reload()
 
 
 class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
@@ -187,7 +214,6 @@ class MissionsEventBoardsView(MissionsEventBoardsViewMeta):
     def serverClick(self, eventID, serverID):
 
         def doJoin():
-            from gui.Scaleform.framework import g_entitiesFactories
             g_eventBus.handleEvent(g_entitiesFactories.makeLoadEvent('missions'), scope=EVENT_BUS_SCOPE.LOBBY)
 
         reloginCtrl = dependency.instance(IReloginController)

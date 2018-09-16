@@ -31,16 +31,17 @@ from items import vehicles, sabaton_crew, tankmen
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
-from vehicle_systems import appearance_cache
-from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
-from vehicle_systems.stricted_loading import loadingPriority
 from soft_exception import SoftException
+from vehicle_systems import appearance_cache
+from vehicle_systems.stricted_loading import loadingPriority
+from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes
 LOW_ENERGY_COLLISION_D = 0.3
 HIGH_ENERGY_COLLISION_D = 0.6
 _g_waitingVehicle = dict()
 _VALKYRIE_SOUND_MODES = {(6, 205): 'valkyrie1',
  (6, 206): 'valkyrie2'}
 _GIANLUIGI_BUFFON_VEH_NAME = 'italy:It13_Progetto_M35_mod_46'
+FOOTBALL_TEAM_EFFECT_OFFSET = 10
 
 class _Vector4Provider(object):
     __slots__ = ('_v',)
@@ -105,11 +106,13 @@ class Vehicle(BigWorld.Entity):
         self.__isEnteringWorld = False
         self.__turretDetachmentConfirmed = False
         self.__speedInfo = _VehicleSpeedProvider()
+        self.__highlightCylinder = None
         self.assembler = None
         _g_waitingVehicle[self.id] = weakref.ref(self)
         self.respawnCompactDescr = None
         self.respawnOutfitCompactDescr = None
         self.__prevStunInfo = 0.0
+        self.stunInfo = 0.0
         return
 
     def __del__(self):
@@ -121,6 +124,12 @@ class Vehicle(BigWorld.Entity):
             self.stopVisual()
         vehicles.reload()
         self.respawn(self.publicInfo.compDescr)
+
+    def resetGunTurret(self):
+        syncGunAngles = getattr(self.filter, 'syncGunAngles', None)
+        if syncGunAngles:
+            syncGunAngles(0.0, 0.0)
+        return
 
     def prerequisites(self, respawnCompactDescr=None):
         if self.respawnCompactDescr is not None:
@@ -138,6 +147,11 @@ class Vehicle(BigWorld.Entity):
             self.typeDescriptor = self.getDescr(respawnCompactDescr)
             forceReloading = respawnCompactDescr is not None
             self.appearance, _, prereqs = appearance_cache.createAppearance(self.id, self.typeDescriptor, self.health, self.isCrewActive, self.isTurretDetached, outfitDescr, forceReloading)
+            if self.guiSessionProvider.arenaVisitor.gui.isEventBattle():
+                eventEffectsStorage = self.guiSessionProvider.dynamic.footballCtrl.eventEffectsStorage
+                if eventEffectsStorage is not None:
+                    self.__highlightCylinder = eventEffectsStorage.getHighlightCylinderForEntity(self)
+                    prereqs.extend(self.__highlightCylinder.prerequisites())
             return (loadingPriority(self.id), prereqs)
 
     def getDescr(self, respawnCompactDescr):
@@ -166,6 +180,16 @@ class Vehicle(BigWorld.Entity):
 
         return
 
+    @staticmethod
+    def resetPenalty():
+        for vRef in _g_waitingVehicle.values():
+            if vRef is not None:
+                vehicle = vRef()
+                if vehicle is not None:
+                    vehicle.resetGunTurret()
+
+        return
+
     def onEnterWorld(self, prereqs):
         self.__prereqs = prereqs
         self.__isEnteringWorld = True
@@ -178,13 +202,20 @@ class Vehicle(BigWorld.Entity):
             self.cell.sendStateToOwnClient()
         player.initSpace()
         self.__isEnteringWorld = False
+        if self.__highlightCylinder is not None:
+            self.__highlightCylinder.keepPrereqs(prereqs)
         if self.respawnCompactDescr:
             LOG_DEBUG('respawn compact descr is still valid, request reloading of tank resources')
             BigWorld.callback(0.0, lambda : Vehicle.respawnVehicle(self.id, self.respawnCompactDescr))
+        return
 
     def onLeaveWorld(self):
+        if self.__highlightCylinder is not None:
+            self.__highlightCylinder.destroy()
+        self.__highlightCylinder = None
         self.__stopExtras()
         BigWorld.player().vehicle_onLeaveWorld(self)
+        return
 
     def showShooting(self, burstCount, isPredictedShot=False):
         blockShooting = self.siegeState is not None and self.siegeState != VEHICLE_SIEGE_STATE.ENABLED and self.siegeState != VEHICLE_SIEGE_STATE.DISABLED
@@ -208,7 +239,14 @@ class Vehicle(BigWorld.Entity):
         if not self.isStarted:
             return
         else:
-            effectsDescr = vehicles.g_cache.shotEffects[effectsIndex]
+            if self.guiSessionProvider.arenaVisitor.gui.isEventBattle():
+                arenaDataProvider = self.guiSessionProvider.getArenaDP()
+                if arenaDataProvider.getVehicleInfo(attackerID).team == 1:
+                    effectsDescr = vehicles.g_cache.shotEffects[effectsIndex + FOOTBALL_TEAM_EFFECT_OFFSET]
+                else:
+                    effectsDescr = vehicles.g_cache.shotEffects[effectsIndex]
+            else:
+                effectsDescr = vehicles.g_cache.shotEffects[effectsIndex]
             maxHitEffectCode, decodedPoints, maxDamagedComponent = DamageFromShotDecoder.decodeHitPoints(points, self.appearance.collisions)
             hasPiercedHit = DamageFromShotDecoder.hasDamaged(maxHitEffectCode)
             firstHitDir = Math.Vector3(0)
@@ -580,6 +618,14 @@ class Vehicle(BigWorld.Entity):
         if hasattr(self.filter, 'allowStrafeCompensation'):
             self.filter.allowStrafeCompensation = not self.isPlayerVehicle
         self.isStarted = True
+        if self.__highlightCylinder is not None:
+
+            def _createMatrixProvider(entity):
+                translationOnlyMP = Math.WGTranslationOnlyMP()
+                translationOnlyMP.source = entity.matrix
+                return translationOnlyMP
+
+            self.__highlightCylinder.attachTo(_createMatrixProvider(self))
         if not self.appearance.isObserver:
             self.show(True)
         self.set_publicStateModifiers()
@@ -654,6 +700,8 @@ class Vehicle(BigWorld.Entity):
         self.appearance.deactivate()
         self.appearance = None
         self.isStarted = False
+        if self.__highlightCylinder is not None:
+            self.__highlightCylinder.detach()
         self.__speedInfo.reset()
         return stippleModel
 
@@ -666,6 +714,9 @@ class Vehicle(BigWorld.Entity):
             va = self.appearance
             va.changeDrawPassVisibility(drawFlags)
             va.showStickers(show)
+        if self.__highlightCylinder is not None:
+            self.__highlightCylinder.visible = show
+        return
 
     def addCameraCollider(self):
         if self.appearance is not None:

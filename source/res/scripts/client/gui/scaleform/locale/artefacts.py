@@ -281,6 +281,10 @@ class ARTEFACTS(object):
     PASSIVE_ENGINEERING_DESCR = '#artefacts:passive_engineering/descr'
     PASSIVE_ENGINEERING_SHORTDESCR = '#artefacts:passive_engineering/shortDescr'
     PASSIVE_ENGINEERING_LONGDESCR = '#artefacts:passive_engineering/longDescr'
+    DEFENDERABILITY_NAME = '#artefacts:defenderAbility/name'
+    DEFENDERABILITY_DESCR = '#artefacts:defenderAbility/descr'
+    LASTCHANCE_NAME = '#artefacts:lastchance/name'
+    LASTCHANCE_DESCR = '#artefacts:lastchance/descr'
     ALL_ACTION_ENUM = (CAMOUFLAGEBATTLEBOOSTER_ACTION_PERK,
      CAMOUFLAGEBATTLEBOOSTER_ACTION_BOOST,
      SMOOTHTURRETBATTLEBOOSTER_ACTION_PERK,

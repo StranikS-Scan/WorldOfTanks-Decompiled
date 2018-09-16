@@ -29,6 +29,7 @@ from nations import INDICES as NATIONS_INDICES, NAMES as NATIONS_NAMES
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
+from gui.Scaleform.locale.FOOTBALL2018 import FOOTBALL2018
 MAX_PLAYER_COUNT_ALL = 0
 
 def getPlayerStatus(slotState, pInfo):
@@ -81,13 +82,19 @@ def makeVehicleBasicVO(vehicle, levelsRange=None, vehicleTypes=None):
             enabled, tooltip = False, TOOLTIPS.VEHICLESELECTOR_OVERFLOWLEVEL
         elif vehicleTypes is not None and vehicle.type not in vehicleTypes:
             enabled, tooltip = False, TOOLTIPS.VEHICLESELECTOR_INCOMPATIBLETYPE
+        if vehicle.isFootball:
+            vehicleLevel = 0
+            vehicleType = vehicle.getFootballRole()
+        else:
+            vehicleLevel = vehicle.level
+            vehicleType = vehicle.type
         return {'intCD': vehicle.intCD,
          'nationID': vehicle.nationID,
          'name': vehicle.name,
          'userName': vehicle.userName,
          'shortUserName': vehicle.shortUserName,
-         'level': vehicle.level,
-         'type': vehicle.type,
+         'level': vehicleLevel,
+         'type': vehicleType,
          'typeIndex': VEHICLE_TABLE_TYPES_ORDER_INDICES_REVERSED[vehicle.type],
          'smallIconPath': '../maps/icons/vehicle/small/{0}.png'.format(vehicle.name.replace(':', '-')),
          'isReadyToFight': True,
@@ -362,9 +369,7 @@ def _getSlotsData(unitMgrID, fullData, app=None, levelsRange=None, checkForVehic
             isVisibleAdtMsg = player and player.isCurrentPlayer() and not vehicle
             additionMsg = ''
             if isVisibleAdtMsg:
-                eventsCache = dependency.instance(IEventsCache)
-                vehiclesNames = [ veh.userName for veh in eventsCache.getEventVehicles() ]
-                additionMsg = text_styles.main(i18n.makeString(MESSENGER.DIALOGS_EVENTSQUAD_VEHICLE, vehName=', '.join(vehiclesNames)))
+                additionMsg = text_styles.main(i18n.makeString(FOOTBALL2018.DIALOG_EVENT_SQUAD_VEHICLE))
             slot.update({'isVisibleAdtMsg': isVisibleAdtMsg,
              'additionalMsg': additionMsg})
         slots.append(slot)

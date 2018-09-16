@@ -13,7 +13,7 @@ class BCHangarHeader(HangarHeader):
     def showPersonalQuests(self):
         self.showQuestsWindow()
 
-    def showCommonQuests(self):
+    def showCommonQuests(self, questID):
         self.showQuestsWindow()
 
     def _addQuestsToHeaderVO(self, headerVO, _):

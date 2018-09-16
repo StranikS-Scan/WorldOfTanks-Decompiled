@@ -33,7 +33,9 @@ from helpers import dependency, uniprof
 from skeletons.gui.game_control import IBootcampController
 LOBBY_OPTIMIZATION_CONFIG = {VIEW_ALIAS.LOBBY_HEADER: OptimizationSetting(),
  HANGAR_ALIASES.TANK_CAROUSEL: OptimizationSetting(),
- GRAPHICS_OPTIMIZATION_ALIASES.CUSTOMISATION_BOTTOM_PANEL: OptimizationSetting()}
+ GRAPHICS_OPTIMIZATION_ALIASES.CUSTOMISATION_BOTTOM_PANEL: OptimizationSetting(),
+ VIEW_ALIAS.FOOTBALL_CARD_COLLECTION: OptimizationSetting(),
+ VIEW_ALIAS.FOOTBALL_BUFFON_RECRUITMENT_PANEL: OptimizationSetting()}
 
 class LobbyEntry(SFApplication):
     bootcampCtrl = dependency.descriptor(IBootcampController)

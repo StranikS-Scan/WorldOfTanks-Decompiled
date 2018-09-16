@@ -306,19 +306,17 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         return
 
     def __makeSetOnOtherTankPartsRendererVO(self):
+        extraPriceCurrency = ''
+        extraPriceText = ''
         if not self._isItemAppliedToAll:
             currPartName = VEHICLE_CUSTOMIZATION.getSheetVehPartName(getCustomizationTankPartName(self._areaID, self._regionID))
             titleText = text_styles.standard(_ms(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_TITLE_APPLIEDTO, elementType=text_styles.neutral(currPartName)))
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_APPLYTOWHOLETANK
             actionBtnIconSrc = ''
-            extraPriceText = ''
-            extraPriceCurrency = ''
         else:
             titleText = text_styles.neutral(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_TITLE_ALLTANKPAINTED)
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_CANCEL
             actionBtnIconSrc = RES_ICONS.MAPS_ICONS_LIBRARY_ASSET_1
-            extraPriceCurrency = ''
-            extraPriceText = ''
             if self._extraMoney:
                 extraPriceCurrency = self._extraMoney.getCurrency()
                 if self._extraMoney.get(extraPriceCurrency):
@@ -405,20 +403,18 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
         activeSeason = SEASON_TYPE_TO_NAME.get(self.__ctx.currentSeason)
         actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_APPLYTOALLMAPS
         actionBtnIconSrc = ''
+        extraPriceText = ''
+        extraPriceCurrency = ''
         if self._isItemAppliedToAll:
             actionBtnLabel = VEHICLE_CUSTOMIZATION.PROPERTYSHEET_ACTIONBTN_REMOVE_SEASONS
             actionBtnIconSrc = RES_ICONS.MAPS_ICONS_LIBRARY_ASSET_1
             titleText = text_styles.neutral(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_TITLE_ALLMAPS)
-            extraPriceCurrency = ''
-            extraPriceText = ''
             if self._extraMoney:
                 extraPriceCurrency = self._extraMoney.getCurrency()
                 if self._extraMoney.get(extraPriceCurrency):
                     extraPriceText = '{}{}'.format(currency.getStyle(extraPriceCurrency)('+'), currency.applyAll(extraPriceCurrency, self._extraMoney.get(extraPriceCurrency)))
         else:
             titleText = text_styles.standard(_ms(VEHICLE_CUSTOMIZATION.PROPERTYSHEET_TITLE_APPLIEDTOMAP, mapType=text_styles.neutral(VEHICLE_CUSTOMIZATION.getSheetSeasonName(activeSeason))))
-            extraPriceText = ''
-            extraPriceCurrency = ''
         return {'titleText': titleText,
          'iconSrc': RES_ICONS.getSeasonIcon(activeSeason),
          'actionBtnLabel': actionBtnLabel,
@@ -427,7 +423,8 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
          'actionType': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_ACTION_APPLY_TO_ALL_SEASONS,
          'rendererLnk': CUSTOMIZATION_ALIASES.CUSTOMIZATION_SHEET_BTN_RENDERER_UI,
          'extraPriceText': extraPriceText,
-         'extraPriceIcon': extraPriceCurrency}
+         'extraPriceIcon': extraPriceCurrency,
+         'btnEnabled': not g_currentVehicle.isOnlyForEventBattles()}
 
     def __makeStyleRendererVO(self):
         seasonItemData = []
@@ -439,9 +436,10 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
                 seasonUnique = set()
                 outfit = self._currentStyle.getOutfit(season)
                 items = []
-                for item in outfit.items():
+                for item, component in outfit.itemsFull():
                     if item.intCD not in seasonUnique:
-                        items.append({'image': item.icon,
+                        items.append({'image': item.getIconApplied(component),
+                         'specialArgs': item.getSpecialArgs(component),
                          'isWide': item.isWide(),
                          'intCD': item.intCD})
                     allUnique.add(item.intCD)

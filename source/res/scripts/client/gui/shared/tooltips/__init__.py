@@ -24,6 +24,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     EQUIPMENT = 'equipment'
     EFFICIENCY = 'efficiency'
     FORTIFICATIONS = 'fortification'
+    FOOTBALL = 'football'
     IGR = 'igr'
     CYBER_SPORT = 'cyberSport'
     MAP = 'map'

@@ -56,6 +56,8 @@ class CONDITION_ICON(CONST_CONTAINER):
     FOLDER = 'folder'
     BARREL_MARK = 'barrel_mark'
     RAM = 'ram'
+    FB18_GOALS = 'goals'
+    FB18_ASSISTS = 'assists'
 
 
 UNSUPORTED_BATTLE_RESUTLS_KEYS = ('finishReason', 'gold', 'creditsToDraw', 'orderFreeXPFactor100', 'orderXPFactor100', 'winPoints', 'creditsContributionIn', 'achievementXP', 'igrXPFactor10', 'aogasFactor10', 'originalCreditsContributionIn', 'originalCreditsPenalty', 'originalTMenXP', 'boosterCredits', 'originalGold', 'avatarDamaged', 'team', 'deathCount', 'isAnyHitReceivedWhileCapturing', 'boosterCreditsFactor100', 'premiumCreditsFactor10', 'orderFortResource', 'originalCreditsContributionOut', 'factualXP', 'creditsContributionOut', 'orderTMenXP', 'orderFreeXP', 'boosterXP', 'avatarKills', 'boosterTMenXPFactor100', 'resourceAbsorbed', 'credits', 'tkillRating', 'creditsPenalty', 'percentFromSecondBestDamage', 'avatarDamageDealt', 'factualFreeXP', 'dailyXPFactor10', 'damageRating', 'repair', 'xpPenalty', 'fairplayFactor10', 'subtotalTMenXP', 'boosterXPFactor100', 'refSystemXPFactor10', 'originalXPPenalty', 'orderTMenXPFactor100', 'originalFortResource', 'subtotalXP', 'originalFreeXP', 'orderXP', 'premiumVehicleXP', 'flagCapture', 'premiumVehicleXPFactor100', 'factualCredits', 'inBattleMaxKillingSeries', 'subtotalFreeXP', 'achievementFreeXP', 'subtotalCredits', 'killsBeforeTeamWasDamaged', 'boosterTMenXP', 'premiumXPFactor10', 'personalFortResource', 'typeCompDescr', 'deathReason', 'damageBeforeTeamWasDamaged', 'achievementCredits', 'isPremium', 'committedSuicide', 'rolloutsCount', 'index', 'subtotalGold', 'appliedPremiumCreditsFactor10', 'orderFortResourceFactor100', 'isTeamKiller', 'firstDamageTime', 'tmenXP', 'boosterFreeXP', 'appliedPremiumXPFactor10', 'boosterFreeXPFactor100', 'subtotalFortResource', 'orderCreditsFactor100', 'battleNum', 'aimerSeries')
@@ -131,7 +133,9 @@ BATTLE_RESULTS_KEYS = {'capturePoints': CONDITION_ICON.BASE_CAPTURE,
  'spottedBeforeWeBecameSpotted': CONDITION_ICON.DISCOVER,
  'isEnemyBaseCaptured': CONDITION_ICON.BASE_CAPTURE,
  'isAnyOurCrittedInnerModules': CONDITION_ICON.SURVIVE,
- 'isNotSpotted': CONDITION_ICON.SURVIVE}
+ 'isNotSpotted': CONDITION_ICON.SURVIVE,
+ 'assists': CONDITION_ICON.FB18_ASSISTS,
+ 'goals': CONDITION_ICON.FB18_GOALS}
 BATTLE_RESULTS_AGGREGATED_KEYS = {tuple(sorted(['damagedVehicleCntAssistedTrack', 'damagedVehicleCntAssistedRadio'])): CONDITION_ICON.ASSIST_RADIO,
  tuple(sorted(['killsAssistedTrack', 'killsAssistedRadio'])): CONDITION_ICON.ASSIST_RADIO,
  tuple(sorted(['damageAssistedStun', 'damageAssistedTrack'])): CONDITION_ICON.ASSIST,

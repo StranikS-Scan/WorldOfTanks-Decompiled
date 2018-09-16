@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/cond_formatters/prebattle.py
 from constants import ARENA_BONUS_TYPE
+from gui.Scaleform.locale.FOOTBALL2018 import FOOTBALL2018
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import formatters
@@ -55,12 +56,16 @@ class _BattleBonusTypeFormatter(ConditionFormatter):
             labelKey = QUESTS.MISSIONDETAILS_CONDITIONS_BATTLEBONUSTYPE
             data = formatters.packMissionBonusTypeElements(bonusTypes)
             iconsList = ''.join([ iconData.icon for iconData in data ])
-            if len(bonusTypes) == 1 and findFirst(None, bonusTypes) in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.RANKED):
+            if len(bonusTypes) == 1 and findFirst(None, bonusTypes) in (ARENA_BONUS_TYPE.REGULAR, ARENA_BONUS_TYPE.RANKED, ARENA_BONUS_TYPE.EVENT_BATTLES):
                 label = text_styles.main(data[0].iconLabel)
             else:
                 label = text_styles.main(labelKey)
             bTypes = ', '.join([ iconData.iconLabel for iconData in data ])
-            tooltipBody = i18n.makeString(QUESTS.MISSIONDETAILS_CONDITIONS_BATTLEBONUSTYPE_BODY, battleBonusTypes=bTypes)
+            if len(bonusTypes) == 1 and findFirst(None, bonusTypes) == ARENA_BONUS_TYPE.EVENT_BATTLES:
+                labelKey = FOOTBALL2018.MISSIONDETAILS_CONDITIONS_TOOLTIPHEADER
+                tooltipBody = i18n.makeString(FOOTBALL2018.MISSIONDETAILS_CONDITIONS_TOOLTIPBODY)
+            else:
+                tooltipBody = i18n.makeString(QUESTS.MISSIONDETAILS_CONDITIONS_BATTLEBONUSTYPE_BODY, battleBonusTypes=bTypes)
             result.append(formatters.packMissionPrebattleCondition(label, iconsList, makeTooltip(labelKey, tooltipBody)))
         return result
 

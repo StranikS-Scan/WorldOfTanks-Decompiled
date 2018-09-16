@@ -16,7 +16,9 @@
     <historical>	true	</historical>
     <type>	EMBLEM	</type>
     <vehicleFilter>
-      <include></include>
+      <exclude>
+        <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+      </exclude>
     </vehicleFilter>
     <decal>
       <id>	15617	</id>
@@ -121,7 +123,9 @@
     <historical>	true	</historical>
     <type>	EMBLEM	</type>
     <vehicleFilter>
-      <include></include>
+      <exclude>
+        <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+      </exclude>
     </vehicleFilter>
     <decal>
       <id>	15671	</id>
@@ -145,9 +149,7 @@
     <priceGroup>	legacy emblems	</priceGroup>
     <historical>	true	</historical>
     <type>	EMBLEM	</type>
-    <vehicleFilter>
-      <include></include>
-    </vehicleFilter>
+    <vehicleFilter></vehicleFilter>
     <decal>
       <id>	15713	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_48.dds	</texture>
@@ -167,6 +169,11 @@
       <id>	15716	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_59.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_59	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15717	</id>
@@ -447,91 +454,181 @@
       <id>	15772	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_60.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_60	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15773	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_61.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_61	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15774	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_62.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_62	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15775	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_63.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_63	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15776	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_64.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_64	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15777	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_65.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_65	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15778	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_66.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_66	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15779	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_67.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_67	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15780	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_68.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_68	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15781	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_69.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_69	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15782	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_70.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_70	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15783	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_71.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_71	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15784	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_72.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_72	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15785	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_73.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_73	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15786	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_74.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_74	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15787	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_75.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_75	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15788	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_76.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_76	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15789	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_77.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_77	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15790	</id>
@@ -542,6 +639,11 @@
       <id>	15791	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_79.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_79	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15792	</id>
@@ -587,21 +689,41 @@
       <id>	15800	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_88.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_88	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15801	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_89.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_89	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15802	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_90.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_90	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15803	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_91.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_91	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15804	</id>
@@ -617,21 +739,41 @@
       <id>	15806	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_94.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_94	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15807	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_95.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_95	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15808	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_96.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_96	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15809	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_97.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_97	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15810	</id>
@@ -722,36 +864,71 @@
       <id>	15827	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_115.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_115	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15828	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_116.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_116	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15829	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_117.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_117	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15830	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_118.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_118	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15831	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_119.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_119	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15832	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_120.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_120	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
     <decal>
       <id>	15833	</id>
       <texture>	gui/maps/vehicles/decals/player_stickers/signs/sticker_121.dds	</texture>
       <userString>	#vehicle_customization:emblem/group4/signs_121	</userString>
+      <vehicleFilter>
+        <exclude>
+          <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+        </exclude>
+      </vehicleFilter>
     </decal>
   </itemGroup>
   <itemGroup>
@@ -760,7 +937,9 @@
     <priceGroup>	legacy IGR notInShop	</priceGroup>
     <type>	EMBLEM	</type>
     <vehicleFilter>
-      <include></include>
+      <exclude>
+        <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+      </exclude>
     </vehicleFilter>
     <tags>	premiumIGR	</tags>
     <decal>
@@ -830,7 +1009,9 @@
     <priceGroup>	legacy notInShop	</priceGroup>
     <type>	EMBLEM	</type>
     <vehicleFilter>
-      <include></include>
+      <exclude>
+        <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+      </exclude>
     </vehicleFilter>
     <decal>
       <id>	15859	</id>
@@ -845,7 +1026,9 @@
     <historical>	true	</historical>
     <type>	EMBLEM	</type>
     <vehicleFilter>
-      <include></include>
+      <exclude>
+        <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+      </exclude>
     </vehicleFilter>
     <decal>
       <id>	15873	</id>
@@ -865,7 +1048,9 @@
     <priceGroup>	legacy notInShop	</priceGroup>
     <type>	EMBLEM	</type>
     <vehicleFilter>
-      <include></include>
+      <exclude>
+        <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+      </exclude>
     </vehicleFilter>
     <decal>
       <id>	15888	</id>
@@ -894,7 +1079,9 @@
     <priceGroup>	legacy notInShop	</priceGroup>
     <type>	EMBLEM	</type>
     <vehicleFilter>
-      <include></include>
+      <exclude>
+        <vehicles>	ussr:R87_T62A_sport france:F88_AMX_13_105_sport germany:G56_E-100_sport	</vehicles>
+      </exclude>
     </vehicleFilter>
     <decal>
       <id>	15898	</id>

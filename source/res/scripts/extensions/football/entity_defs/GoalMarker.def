@@ -1,0 +1,25 @@
+<GoalMarker.def>
+  <Volatile>
+    <position></position>
+    <yaw></yaw>
+  </Volatile>
+  <Properties>
+    <teamNumber>
+      <Type>	UINT8	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </teamNumber>
+    <modelName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Default>	content/Environment/env_118_lostcityball/normal/lod0/env_118_Goal_Arrow.model	</Default>
+    </modelName>
+  </Properties>
+  <ClientMethods></ClientMethods>
+  <Distribution>
+    <Cell>	false	</Cell>
+    <Client>	true	</Client>
+    <Base>	false	</Base>
+  </Distribution>
+</GoalMarker.def>

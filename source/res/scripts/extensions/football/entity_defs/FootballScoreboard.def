@@ -1,0 +1,32 @@
+<FootballScoreboard.def>
+  <Volatile>
+    <position></position>
+    <yaw></yaw>
+  </Volatile>
+  <Properties>
+    <modelName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Default>	content/Environment/hd_env_UNI_068_InformationTable/normal/lod0/hd_env_UNI_068_InformationTable.model	</Default>
+    </modelName>
+    <modelNameBlueDigitPanel>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Default>	content/Environment/hd_env_UNI_071_DigitalScoreBoard/normal/lod0/hd_env_UNI_071_DigitalScoreBoard_Lamina_Blue.model	</Default>
+    </modelNameBlueDigitPanel>
+    <modelNameRedDigitPanel>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Default>	content/Environment/hd_env_UNI_071_DigitalScoreBoard/normal/lod0/hd_env_UNI_071_DigitalScoreBoard_Lamina_Red.model	</Default>
+    </modelNameRedDigitPanel>
+  </Properties>
+  <ClientMethods></ClientMethods>
+  <Distribution>
+    <Cell>	false	</Cell>
+    <Client>	true	</Client>
+    <Base>	false	</Base>
+  </Distribution>
+</FootballScoreboard.def>

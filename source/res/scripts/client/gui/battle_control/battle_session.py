@@ -162,7 +162,7 @@ class BattleSessionProvider(IBattleSessionProvider):
         return
 
     def getExitResult(self):
-        if not self.__isReplayPlaying and not self.__arenaVisitor.gui.isTrainingBattle() and not self.__arenaVisitor.gui.isEventBattle():
+        if not self.__isReplayPlaying and not self.__arenaVisitor.gui.isTrainingBattle():
             vInfo = self.__arenaDP.getVehicleInfo()
             vStats = self.__arenaDP.getVehicleStats()
             if self.__arenaVisitor.hasRespawns():
@@ -323,6 +323,18 @@ class BattleSessionProvider(IBattleSessionProvider):
         ctrl = self.__sharedRepo.feedback
         if ctrl is not None:
             ctrl.stopVehicleVisual(vehicleID, isPlayerVehicle)
+        return
+
+    def startPhysicalObjectVisual(self, eProxy, isImmediate=False):
+        ctrl = self.__sharedRepo.feedback
+        if ctrl is not None:
+            ctrl.startPhysicalObjectVisual(eProxy, isImmediate)
+        return
+
+    def stopPhysicalObjectVisual(self, entityID):
+        ctrl = self.__sharedRepo.feedback
+        if ctrl is not None:
+            ctrl.stopPhysicalObjectVisual(entityID)
         return
 
     def handleShortcutChatCommand(self, key):

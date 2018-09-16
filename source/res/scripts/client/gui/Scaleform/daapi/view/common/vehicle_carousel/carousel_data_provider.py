@@ -5,6 +5,7 @@ from dossiers2.ui.achievements import MARK_ON_GUN_RECORD
 from gui import GUI_NATIONS_ORDER_INDEX, makeHtmlString
 from gui.Scaleform import getButtonsAssetPath
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
+from gui.Scaleform.locale.FOOTBALL2018 import FOOTBALL2018
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.formatters import icons, text_styles
 from gui.shared.formatters.time_formatters import RentLeftFormatter
@@ -62,6 +63,13 @@ def getVehicleDataVO(vehicle):
         bonusImage = getButtonsAssetPath('bonus_x{}'.format(vehicle.dailyXPFactor))
     else:
         bonusImage = ''
+    sportsTypeStr = ''
+    if vehicle.isFootballStriker:
+        sportsTypeStr = FOOTBALL2018.SPORT_ROLE_STRIKER
+    elif vehicle.isFootballMidfielder:
+        sportsTypeStr = FOOTBALL2018.SPORT_ROLE_MIDFIELDER
+    elif vehicle.isFootballDefender:
+        sportsTypeStr = FOOTBALL2018.SPORT_ROLE_DEFENDER
     label = vehicle.shortUserName if vehicle.isPremiumIGR else vehicle.userName
     labelStyle = text_styles.premiumVehicleName if vehicle.isPremium else text_styles.vehicleName
     return {'id': vehicle.invID,
@@ -85,7 +93,8 @@ def getVehicleDataVO(vehicle):
      'clickEnabled': vehicle.isInInventory,
      'alpha': 1,
      'infoImgSrc': getVehicleStateIcon(vState),
-     'isCritInfo': vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL}
+     'isCritInfo': vStateLvl == Vehicle.VEHICLE_STATE_LEVEL.CRITICAL,
+     'sportsType': sportsTypeStr}
 
 
 class CarouselDataProvider(SortableDAAPIDataProvider):

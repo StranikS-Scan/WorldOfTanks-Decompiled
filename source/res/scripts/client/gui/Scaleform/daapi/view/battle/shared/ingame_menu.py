@@ -145,12 +145,19 @@ class IngameMenu(IngameMenuMeta, BattleGUIKeyHandler):
             igrType = exitResult.playerInfo.igrType
         else:
             igrType = constants.IGR_TYPE.NONE
-        if constants.IS_KOREA and GUI_SETTINGS.igrEnabled and igrType != constants.IGR_TYPE.NONE:
+        isEventBattle = self.sessionProvider.arenaVisitor.gui.isEventBattle()
+        if isEventBattle:
+            i18nKey = 'quitBattleEvent'
+        elif constants.IS_KOREA and GUI_SETTINGS.igrEnabled and igrType != constants.IGR_TYPE.NONE:
             i18nKey = 'quitBattleIGR'
         else:
             i18nKey = 'quitBattle'
         if exitResult.isDeserter:
-            result = yield DialogsInterface.showDialog(IngameDeserterDialogMeta(i18nKey + '/deserter', focusedID=DIALOG_BUTTON_ID.CLOSE))
+            if isEventBattle:
+                imagePath = RES_ICONS.MAPS_ICONS_BATTLE_DESERTERLEAVEBATTLEEVENT
+            else:
+                imagePath = RES_ICONS.MAPS_ICONS_BATTLE_DESERTERLEAVEBATTLE
+            result = yield DialogsInterface.showDialog(IngameDeserterDialogMeta(i18nKey + '/deserter', focusedID=DIALOG_BUTTON_ID.CLOSE, imagePath=imagePath))
         elif BattleReplay.isPlaying():
             result = yield DialogsInterface.showDialog(I18nConfirmDialogMeta('quitReplay', focusedID=DIALOG_BUTTON_ID.CLOSE))
         else:

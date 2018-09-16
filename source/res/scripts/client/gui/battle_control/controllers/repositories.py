@@ -26,6 +26,7 @@ from gui.battle_control.controllers import view_points_ctrl
 from gui.battle_control.controllers import team_health_bar_ctrl
 from gui.battle_control.controllers import game_messages_ctrl
 from gui.battle_control.controllers import arena_border_ctrl
+from gui.battle_control.controllers import football_ctrl
 from skeletons.gui.battle_session import ISharedControllersLocator, IDynamicControllersLocator
 from gui.battle_control.controllers import epic_respawn_ctrl
 from gui.battle_control.controllers import progress_circle_ctrl
@@ -221,6 +222,14 @@ class DynamicControllersLocator(_ControllersLocator, IDynamicControllersLocator)
     def gameNotifications(self):
         return self._repository.getController(BATTLE_CTRL_ID.GAME_NOTIFICATIONS)
 
+    @property
+    def footballCtrl(self):
+        return self._repository.getController(BATTLE_CTRL_ID.FOOTBALL_CTRL)
+
+    @property
+    def footballEntitiesCtrl(self):
+        return self._repository.getController(BATTLE_CTRL_ID.FOOTBALL_ENTITIES_CTRL)
+
 
 class _EmptyRepository(interfaces.IBattleControllersRepository):
     __slots__ = ()
@@ -362,4 +371,19 @@ class EpicControllersRepository(_ControllersRepository):
         repository.addViewController(game_notification_ctrl.EpicGameNotificationsController(setup), setup)
         repository.addViewController(epic_missions_ctrl.EpicMissionsController(setup), setup)
         repository.addArenaViewController(epic_team_bases_ctrl.createEpicTeamsBasesCtrl(setup), setup)
+        return repository
+
+
+class EventControllersRepository(_ControllersRepositoryByBonuses):
+    __slots__ = ()
+
+    @classmethod
+    def create(cls, setup):
+        repository = super(EventControllersRepository, cls).create(setup)
+        repository.addArenaController(dyn_squad_functional.DynSquadFunctional(setup), setup)
+        repository.addViewController(debug_ctrl.DebugController(), setup)
+        repository.addArenaViewController(battle_field_ctrl.BattleFieldCtrl(), setup)
+        repository.addArenaViewController(football_ctrl.FootballCtrl(), setup)
+        repository.addArenaViewController(football_ctrl.FootballPeriodCtrl(), setup)
+        repository.addArenaViewController(football_ctrl.FootballEntitiesController(), setup)
         return repository

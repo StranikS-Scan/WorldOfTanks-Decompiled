@@ -172,7 +172,7 @@ class ArenaWithBasesDescription(DefaultArenaGuiDescription):
     def isInvitationEnabled(self):
         guiVisitor = self._visitor.gui
         replayCtrl = BattleReplay.g_replayCtrl
-        return (not replayCtrl.isPlaying or replayCtrl.isBattleSimulation) and (guiVisitor.isRandomBattle() or guiVisitor.isTrainingBattle() and IS_DEVELOPMENT)
+        return (not replayCtrl.isPlaying or replayCtrl.isBattleSimulation) and (guiVisitor.isRandomBattle() or guiVisitor.isEventBattle() or guiVisitor.isTrainingBattle() and IS_DEVELOPMENT)
 
     def isQuestEnabled(self):
         guiVisitor = self._visitor.gui
@@ -289,7 +289,7 @@ class EpicBattlesDescription(ArenaWithLabelDescription):
 
 def createDescription(arenaVisitor):
     guiVisitor = arenaVisitor.gui
-    if guiVisitor.isRandomBattle() or guiVisitor.isTrainingBattle():
+    if guiVisitor.isRandomBattle() or guiVisitor.isEventBattle() or guiVisitor.isTrainingBattle():
         description = ArenaWithBasesDescription(arenaVisitor)
     elif guiVisitor.isTutorialBattle():
         description = TutorialBattleDescription(arenaVisitor)

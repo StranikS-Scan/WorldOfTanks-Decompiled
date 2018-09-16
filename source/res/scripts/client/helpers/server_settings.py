@@ -497,6 +497,12 @@ class ServerSettings(object):
     def elenUpdateInterval(self):
         return self.__getGlobalSetting('elenSettings', {}).get('elenUpdateInterval', 60)
 
+    def isFootballEnabled(self):
+        return self.__getGlobalSetting('footballSettings', {}).get('isFootballEnabled', False)
+
+    def footballHostUrl(self):
+        return self.__getGlobalSetting('footballSettings', {}).get('hostUrl', '')
+
     def isGoldFishEnabled(self):
         return self.__getGlobalSetting('isGoldFishEnabled', False)
 

@@ -157,6 +157,7 @@
     <_130mm_S-70_fallout>	205	</_130mm_S-70_fallout>
     <_37mm_Gochkins_bot>	209	</_37mm_Gochkins_bot>
     <_37mm_B-3_bot>	210	</_37mm_B-3_bot>
+    <_115mm_D54_TS_sport>	500	</_115mm_D54_TS_sport>
     <_152mm_BL-10_IGR>	60001	</_152mm_BL-10_IGR>
     <_100mm_LB-1_IGR>	60002	</_100mm_LB-1_IGR>
     <_122mm_BL-9_IGR>	60003	</_122mm_BL-9_IGR>
@@ -9864,5 +9865,49 @@
         </_130mm_UOF-482>
       </shots>
     </_130mm_S-70_IGR>
+    <_115mm_D54_TS_sport>
+      <userString>	#football2018:T62A_sport_gun_name	</userString>
+      <tags></tags>
+      <level>	10	</level>
+      <price>	242700	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.44	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.56	</amplitude>
+        <recoilEffect>	main	</recoilEffect>
+      </recoil>
+      <effects>	shot_medium_mb	</effects>
+      <reloadEffect>	reload85_107	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -20.0 1.0 -20.0	</minPitch>
+        <maxPitch>	0.0 5.0 1.0 5.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <rotationSpeed>	33.25	</rotationSpeed>
+      <reloadTime>	7.14285714285714	</reloadTime>
+      <maxAmmo>	50	</maxAmmo>
+      <aimingTime>	2.85714285714286	</aimingTime>
+      <weight>	2800	</weight>
+      <maxHealth>	200	</maxHealth>
+      <maxRegenHealth>	100	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.388571428571429	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_115mm_3UOF10_sport>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	900	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	50 50	</piercingPower>
+        </_115mm_3UOF10_sport>
+      </shots>
+    </_115mm_D54_TS_sport>
   </shared>
 </guns.xml>

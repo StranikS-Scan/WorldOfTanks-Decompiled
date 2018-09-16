@@ -139,6 +139,9 @@ class Customization(FittingItem):
     def icon(self):
         return self.descriptor.texture.replace('gui/', '../', 1)
 
+    def getIconApplied(self, component):
+        return self.icon
+
     def isHistorical(self):
         return self.descriptor.historical
 
@@ -175,6 +178,10 @@ class Customization(FittingItem):
     def getGUIEmblemID(self):
         pass
 
+    @staticmethod
+    def getSpecialArgs(component):
+        return None
+
 
 class Paint(Customization):
 
@@ -210,6 +217,13 @@ class Camouflage(Customization):
     def icon(self):
         return camoIconTemplate(self.texture, _CAMO_SWATCH_WIDTH, _CAMO_SWATCH_HEIGHT, first(self.palettes))
 
+    def getIconApplied(self, component):
+        if component:
+            palette = self.palettes[component.palette]
+        else:
+            palette = first(self.palettes)
+        return camoIconTemplate(self.texture, _CAMO_SWATCH_WIDTH, _CAMO_SWATCH_HEIGHT, palette)
+
     @property
     def tiling(self):
         return self.descriptor.tiling
@@ -221,6 +235,13 @@ class Camouflage(Customization):
     @property
     def palettes(self):
         return self.descriptor.palettes
+
+    @staticmethod
+    def getSpecialArgs(component):
+        return [component.id,
+         component.patternSize,
+         component.appliedTo,
+         component.palette]
 
 
 class Modification(Customization):

@@ -145,7 +145,19 @@
         <visionRadius>	0.5	</visionRadius>
       </gameplayFactors>
     </overturn>
+    <footballOverturn>	NoneExtra : FootballOverturn	  <isOnboardShotAllowed>	true	</isOnboardShotAllowed>
+      <gameplayFactors>
+        <reloadTime>	2.0	</reloadTime>
+        <turretRotationSpeed>	0.5	</turretRotationSpeed>
+        <gunRotationSpeed>	0.5	</gunRotationSpeed>
+        <aimingTime>	2.0	</aimingTime>
+        <shotDispersion>	2.0	</shotDispersion>
+        <visionRadius>	0.5	</visionRadius>
+      </gameplayFactors>
+    </footballOverturn>
     <drowning>	NoneExtra : Drowning	</drowning>
+    <afterburning>	Afterburning : Afterburning	  <effect>	afterburning	</effect>
+    </afterburning>
     <engineHealth>	DamageMarker : EngineHealth	  <sounds>
         <critical>	engine_damaged	</critical>
         <destroyed>	engine_destroyed	</destroyed>
@@ -274,6 +286,7 @@
     </loader2Health>
     <siegeMode>	NoneExtra : SiegeMode	</siegeMode>
     <tuner>	NoneExtra: Tuner	</tuner>
+    <lastchance>	LastChance : LastChance	</lastchance>
   </extras>
   <deviceExtras>
     <devices>

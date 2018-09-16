@@ -10,6 +10,7 @@ from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.locale.FOOTBALL2018 import FOOTBALL2018
 from gui.server_events import events_helpers
 from gui.server_events.awards_formatters import TokenBonusFormatter
 from gui.server_events.bonuses import CustomizationsBonus
@@ -33,6 +34,15 @@ class _StringTokenBonusFormatter(TokenBonusFormatter):
         return [ _ms(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=b.userName) for b in result ]
 
 
+class _FootballStringTokenBonusFormatter(_StringTokenBonusFormatter):
+
+    def format(self, bonus):
+        result = super(_FootballStringTokenBonusFormatter, self).format(bonus)
+        if bonus.isFootball():
+            return [ _ms(FOOTBALL2018.QUESTS_FOOTBALL_CARD) for _ in result ]
+        return result
+
+
 class QuestsPreviewTooltipData(BlocksTooltipData):
     _eventsCache = dependency.descriptor(IEventsCache)
     _questController = dependency.descriptor(IQuestsController)
@@ -54,7 +64,7 @@ class QuestsPreviewTooltipData(BlocksTooltipData):
                 bonusNames = []
                 for bonus in quest.getBonuses():
                     if bonus.getName() == 'battleToken':
-                        bonusNames.extend(_StringTokenBonusFormatter().format(bonus))
+                        bonusNames.extend(_FootballStringTokenBonusFormatter().format(bonus))
                     bonusFormat = bonus.format()
                     if bonusFormat:
                         if isinstance(bonus, CustomizationsBonus):

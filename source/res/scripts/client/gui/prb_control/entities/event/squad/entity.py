@@ -7,6 +7,7 @@ from gui.prb_control.entities.event.squad.actions_handler import EventBattleSqua
 from gui.prb_control.entities.event.squad.actions_validator import EventBattleSquadActionsValidator
 from gui.prb_control.items import SelectResult
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, FUNCTIONAL_FLAG
+from gui.shared.gui_items.Vehicle import VEHICLE_FOOTBALL_ROLES
 
 class EventBattleSquadEntryPoint(SquadEntryPoint):
 
@@ -22,6 +23,14 @@ class EventBattleSquadEntity(SquadEntity):
     def __init__(self):
         super(EventBattleSquadEntity, self).__init__(FUNCTIONAL_FLAG.EVENT, PREBATTLE_TYPE.EVENT)
 
+    def unit_onUnitVehiclesChanged(self, dbID, vehicles):
+        super(EventBattleSquadEntity, self).unit_onUnitVehiclesChanged(dbID, vehicles)
+        self.invalidateVehicleStates()
+
+    def unit_onUnitVehicleChanged(self, dbID, vehInvID, vehTypeCD):
+        super(EventBattleSquadEntity, self).unit_onUnitVehicleChanged(dbID, vehInvID, vehTypeCD)
+        self.invalidateVehicleStates()
+
     def getQueueType(self):
         return QUEUE_TYPE.EVENT_BATTLES
 
@@ -32,8 +41,25 @@ class EventBattleSquadEntity(SquadEntity):
             return SelectResult(True)
         return super(EventBattleSquadEntity, self).doSelectAction(action)
 
+    def hasSlotForRole(self, role):
+        _, unit = self.getUnit()
+        unitVehicles = unit.getVehicles()
+        for _, vInfos in unitVehicles.iteritems():
+            for vInfo in vInfos:
+                vehicle = self.itemsCache.items.getItemByCD(vInfo.vehTypeCompDescr)
+                if vehicle.getFootballRole() == role:
+                    return False
+
+        return True
+
     def _createActionsValidator(self):
         return EventBattleSquadActionsValidator(self)
 
     def _createActionsHandler(self):
         return EventBattleSquadActionsHandler(self)
+
+    def _vehicleStateCondition(self, v):
+        if not v.isFootball:
+            return False
+        availableRoles = [ role for role in VEHICLE_FOOTBALL_ROLES if self.hasSlotForRole(role) ]
+        return False if v.getFootballRole() not in availableRoles else super(EventBattleSquadEntity, self)._vehicleStateCondition(v)

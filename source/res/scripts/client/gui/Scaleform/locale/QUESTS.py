@@ -5,6 +5,7 @@ from debug_utils import LOG_WARNING
 class QUESTS(object):
     BONUSES_COMPENSATION = '#quests:bonuses/compensation'
     MISSIONS_TAB_MARATHONS = '#quests:missions/tab/marathons'
+    MISSIONS_TAB_GROUPED = '#quests:missions/tab/grouped'
     MISSIONS_TAB_EVENTBOARDS = '#quests:missions/tab/eventBoards'
     MISSIONS_TAB_CATEGORIES = '#quests:missions/tab/categories'
     MISSIONS_TAB_CURRENTVEHICLE = '#quests:missions/tab/currentVehicle'
@@ -983,6 +984,9 @@ class QUESTS(object):
     MISSIONS_TAB_LABEL_MARATHONS = '#quests:missions/tab/label/marathons'
     MISSIONS_TAB_MARATHONS_HEADER = '#quests:missions/tab/marathons/header'
     MISSIONS_TAB_MARATHONS_BODY = '#quests:missions/tab/marathons/body'
+    MISSIONS_TAB_LABEL_GROUPED = '#quests:missions/tab/label/grouped'
+    MISSIONS_TAB_GROUPED_HEADER = '#quests:missions/tab/grouped/header'
+    MISSIONS_TAB_GROUPED_BODY = '#quests:missions/tab/grouped/body'
     MISSIONS_TAB_MISSIONS_HEADER = '#quests:missions/tab/missions/header'
     MISSIONS_TAB_MISSIONS_BODY = '#quests:missions/tab/missions/body'
     MISSIONS_TAB_LABEL_MISSIONS = '#quests:missions/tab/label/missions'
@@ -1121,6 +1125,8 @@ class QUESTS(object):
     TOKEN_DEFAULT_LEAFLET = '#quests:token/default/leaflet'
     TOKEN_DEFAULT_WHEEL = '#quests:token/default/wheel'
     TOKEN_DEFAULT_BOX = '#quests:token/default/box'
+    TOKEN_DEFAULT_BUFFON = '#quests:token/default/buffon'
+    TOKEN_DEFAULT_CARD = '#quests:token/default/card'
     BONUSNAME_CREDITS = '#quests:bonusName/credits'
     BONUSNAME_GOLD = '#quests:bonusName/gold'
     BONUSNAME_CRYSTAL = '#quests:bonusName/crystal'
@@ -1514,7 +1520,9 @@ class QUESTS(object):
      TOKEN_DEFAULT_FOLDER,
      TOKEN_DEFAULT_LEAFLET,
      TOKEN_DEFAULT_WHEEL,
-     TOKEN_DEFAULT_BOX)
+     TOKEN_DEFAULT_BOX,
+     TOKEN_DEFAULT_BUFFON,
+     TOKEN_DEFAULT_CARD)
     DETAILS_DOSSIER_ALL_ENUM = (DETAILS_DOSSIER_RANDOM_XP,
      DETAILS_DOSSIER_RANDOM_MAXXP,
      DETAILS_DOSSIER_RANDOM_WINS,

@@ -132,6 +132,12 @@ class Outfit(HasStrCD):
                 for item in slot.values():
                     yield item
 
+    def itemsFull(self):
+        for container in self._containers.itervalues():
+            for slot in container.slots():
+                for _, item, component in slot.items():
+                    yield (item, component)
+
     def slots(self):
         for container in self._containers.itervalues():
             for slot in container.slots():

@@ -66,3 +66,6 @@ class CustomizationMainViewMeta(View):
 
     def as_enableDNDS(self, value):
         return self.flashObject.as_enableDND(value) if self._isDAAPIInited() else None
+
+    def as_eventLayoutS(self, value):
+        return self.flashObject.as_eventLayout(value) if self._isDAAPIInited() else None

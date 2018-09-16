@@ -53,7 +53,14 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.hangar.epic_battles_widget import EpicBattlesWidget
     from gui.Scaleform.daapi.view.lobby.manual.manual_main_view import ManualMainView
     from gui.Scaleform.daapi.view.lobby.manual.manual_chapter_view import ManualChapterView
+    from gui.Scaleform.daapi.view.lobby.hangar.football_card_collection_panel import CardCollection
+    from gui.Scaleform.daapi.view.lobby.hangar.football_card_collection_panel import OpenPacketsScreen
+    from gui.Scaleform.daapi.view.lobby.hangar.football_buffon_recruitment_panel import BuffonRecruitment
+    from gui.Scaleform.daapi.view.lobby.hangar.football_buffon_lobby_button import BuffonLobbyButton
+    from gui.Scaleform.daapi.view.lobby.hangar.football_evt_panel import FootballEventPanel
     return (ConditionalViewSettings(VIEW_ALIAS.LOBBY_HANGAR, BootcampComponentOverride(Hangar, BCHangar), 'hangar.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.LOBBY_HANGAR, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.FOOTBALL_CARD_COLLECTION, CardCollection, 'feCardCollection.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.FOOTBALL_CARD_COLLECTION, ScopeTemplates.LOBBY_SUB_SCOPE),
+     ViewSettings(VIEW_ALIAS.FOOTBALL_BUFFON_RECRUITMENT_PANEL, BuffonRecruitment, 'feBuffonRecruitment.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.FOOTBALL_BUFFON_RECRUITMENT_PANEL, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_ACADEMY, Academy, 'academyView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_ACADEMY, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.LOBBY_STRONGHOLD, StrongholdView, 'StrongholdView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.LOBBY_STRONGHOLD, ScopeTemplates.LOBBY_SUB_SCOPE),
      ViewSettings(VIEW_ALIAS.BROWSER_VIEW, BrowserView, 'browserView.swf', ViewTypes.LOBBY_SUB, VIEW_ALIAS.BROWSER_VIEW, ScopeTemplates.LOBBY_SUB_SCOPE, True),
@@ -81,7 +88,10 @@ def getViewSettings():
      ConditionalViewSettings(HANGAR_ALIASES.CREW, BootcampComponentOverride(Crew, BCCrew), None, ViewTypes.COMPONENT, None, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(HANGAR_ALIASES.RANKED_WIDGET, RankedBattlesWidget, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(HANGAR_ALIASES.ALERT_MESSAGE_BLOCK, AlertMessageBlock, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(HANGAR_ALIASES.EPIC_WIDGET, EpicBattlesWidget, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
+     ViewSettings(HANGAR_ALIASES.EPIC_WIDGET, EpicBattlesWidget, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(HANGAR_ALIASES.FOOTBALL_BUFFON_LOBBY_BUTTON, BuffonLobbyButton, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(HANGAR_ALIASES.FOOTBALL_EVENT_PANEL, FootballEventPanel, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
+     ViewSettings(HANGAR_ALIASES.FOOTBALL_CARDS_PACKET_SCREEN, OpenPacketsScreen, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE))
 
 
 def getBusinessHandlers():
@@ -107,7 +117,9 @@ class HangarPackageBusinessHandler(PackageBusinessHandler):
          (VIEW_ALIAS.VEHICLES_FILTER_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.BATTLE_ABILITY_SELECT_POPOVER, self.loadViewByCtxEvent),
          (VIEW_ALIAS.WIKI_VIEW, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.MANUAL_CHAPTER_VIEW, self.loadViewByCtxEvent))
+         (VIEW_ALIAS.MANUAL_CHAPTER_VIEW, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.FOOTBALL_CARD_COLLECTION, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.FOOTBALL_BUFFON_RECRUITMENT_PANEL, self.loadViewByCtxEvent))
         super(HangarPackageBusinessHandler, self).__init__(listeners, app_settings.APP_NAME_SPACE.SF_LOBBY, EVENT_BUS_SCOPE.LOBBY)
 
     def loadAcademy(self, event):

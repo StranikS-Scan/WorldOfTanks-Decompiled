@@ -481,6 +481,10 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         url = '/wgelen/v1/get_events_data'
         return self._request_data(callback, url, method='GET')
 
+    def get_football_events_data(self, callback, fields=None):
+        url = '/wgelen/football/v1/get_events_data'
+        return self._request_data(callback, url, method='GET')
+
     def get_hangar_flag(self, callback, fields=None):
         url = '/wgelen/v1/get_hangar_flag'
         return self._request_data(callback, url, method='GET')

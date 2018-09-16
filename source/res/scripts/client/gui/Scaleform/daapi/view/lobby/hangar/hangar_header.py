@@ -1,15 +1,20 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/hangar_header.py
 import constants
+import account_helpers
 from CurrentVehicle import g_currentVehicle
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.missions.regular import missions_page
 from gui.Scaleform.daapi.view.meta.HangarHeaderMeta import HangarHeaderMeta
+from gui.Scaleform.genConsts.QUEST_INFORMER_BUTTON_COLORS import QUEST_INFORMER_BUTTON_COLORS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.locale.FOOTBALL2018 import FOOTBALL2018
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events.events_dispatcher import showMissionsForCurrentVehicle, showPersonalMission, showMissionsElen, showMissionsMarathon
+from gui.shared.events import LoadViewEvent
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip
 from gui.shared import events
@@ -90,23 +95,37 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         super(HangarHeader, self).__init__()
         self._currentVehicle = None
         self._personalQuestID = None
+        self.__commonQuestsVisible = True
+        self.__showEventAsCommon = False
         return
 
     def showPersonalQuests(self):
         showPersonalMission(missionID=self._personalQuestID)
 
-    def showCommonQuests(self):
-        missions_page.setHideDoneFilter()
-        showMissionsForCurrentVehicle()
+    def showCommonQuests(self, questID):
+        if self.__commonQuestsVisible:
+            missions_page.setHideDoneFilter()
+            showMissionsForCurrentVehicle()
+        elif self.__showEventAsCommon:
+            self.showEventQuests(questID)
 
     def showEventQuests(self, eventQuestsID):
-        showMissionsElen(eventQuestsID)
+        if self._currentVehicle and self._currentVehicle.isEvent():
+            showMissionsMarathon()
+        else:
+            showMissionsElen(eventQuestsID)
 
     def showMarathonQuests(self):
         showMissionsMarathon()
 
     def onUpdateHangarFlag(self):
         self.update()
+
+    def onUpdateFootballEvents(self):
+        self.update()
+
+    def onFootballWidgetClick(self):
+        self.fireEvent(LoadViewEvent(VIEW_ALIAS.FOOTBALL_CARD_COLLECTION), EVENT_BUS_SCOPE.LOBBY)
 
     def update(self, *args):
         self._personalQuestID = None
@@ -144,8 +163,24 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def _makeHeaderVO(self):
         if self.app.tutorialManager.hangarHeaderEnabled and self._currentVehicle.isPresent():
             vehicle = self._currentVehicle.item
+            if self._currentVehicle.isEvent():
+                icon = ''
+                sportsTypeStr = ''
+                if vehicle.isFootballStriker:
+                    icon = RES_ICONS.MAPS_ICONS_FE18_STRIKER_ICON_SM
+                    sportsTypeStr = FOOTBALL2018.SPORT_ROLE_STRIKER
+                elif vehicle.isFootballMidfielder:
+                    icon = RES_ICONS.MAPS_ICONS_FE18_MIDFIELD_ICON_SM
+                    sportsTypeStr = FOOTBALL2018.SPORT_ROLE_MIDFIELDER
+                elif vehicle.isFootballDefender:
+                    icon = RES_ICONS.MAPS_ICONS_FE18_DEFENDER_ICON_SM
+                    sportsTypeStr = FOOTBALL2018.SPORT_ROLE_DEFENDER
+                imgTag = icons.makeImageTag(icon, width=14, height=14, vSpace=-1)
+                tankStatus = imgTag + text_styles.stats(_ms(sportsTypeStr))
+            else:
+                tankStatus = text_styles.stats(MENU.levels_roman(vehicle.level))
             headerVO = {'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
-             'tankInfo': text_styles.concatStylesToMultiLine(text_styles.promoSubTitle(vehicle.shortUserName), text_styles.stats(MENU.levels_roman(vehicle.level))),
+             'tankInfo': text_styles.concatStylesToMultiLine(text_styles.promoSubTitle(vehicle.shortUserName), tankStatus),
              'isPremIGR': vehicle.isPremiumIGR,
              'isVisible': True,
              'isBeginner': False}
@@ -155,10 +190,15 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return headerVO
 
     def _addQuestsToHeaderVO(self, headerVO, vehicle):
-        headerVO.update(self.__getBattleQuestsVO(vehicle))
-        headerVO.update(self.__getPersonalQuestsVO(vehicle))
-        headerVO.update(self.__getMarathonQuestsVO(vehicle))
-        headerVO.update(self.__getElenQuestsVO(vehicle))
+        if vehicle.isEvent:
+            yellowFlagVO = self.__getFootballYellowFlagData(vehicle)
+            headerVO.update(yellowFlagVO)
+            headerVO.update(self.__getFootballGreenFlagData(vehicle, self.__commonQuestsVisible))
+        else:
+            headerVO.update(self.__getBattleQuestsVO(vehicle))
+            headerVO.update(self.__getPersonalQuestsVO(vehicle))
+            headerVO.update(self.__getMarathonQuestsVO(vehicle))
+            headerVO.update(self.__getElenQuestsVO(vehicle))
 
     def __onServerSettingChanged(self, diff):
         if 'elenSettings' in diff:
@@ -181,7 +221,9 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
          'commonQuestsIcon': commonQuestsIcon,
          'commonQuestsTooltip': TOOLTIPS_CONSTANTS.QUESTS_PREVIEW,
          'commonQuestsEnable': totalCount > 0,
-         'commonQuestsVisible': True}
+         'commonQuestsVisible': True,
+         'commonQuestsColor': QUEST_INFORMER_BUTTON_COLORS.FLAG_BLUE,
+         'commonQuestsTooltipIsSpecial': True}
 
     def __getMarathonQuestsVO(self, vehicle):
         flagVO = self._marathonCtrl.getMarathonFlagState(vehicle)
@@ -252,7 +294,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         isElenEnabled = ServicesLocator.lobbyContext.getServerSettings().isElenEnabled()
         dataError = eventsData is None or hangarFlagData is None
         if dataError or not isElenEnabled or not eventsData.hasActiveEvents() or hangarFlagData.isSpecialAccount():
-            return {'isEvent': False}
+            return {'eventQuestsVisible': False}
         else:
             currentEvent = eventsData.getEventForVehicle(vehicle.intCD)
             if currentEvent is not None and currentEvent.isStarted() and not currentEvent.isFinished():
@@ -262,19 +304,19 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                 regIsFinished = currentEvent.isRegistrationFinished()
                 notValidEvent = regIsFinished and not isRegistered or hangarFlagData.wasCanceled(eventId)
                 if notValidEvent and not hasAnotherActiveEvents:
-                    return {'isEvent': False}
+                    return {'eventQuestsVisible': False}
                 if notValidEvent and hasAnotherActiveEvents:
                     enable = False
                 else:
                     enable = True
             else:
                 if not eventsData.hasActiveEventsByState(hangarFlagData.getHangarFlags()):
-                    return {'isEvent': False}
+                    return {'eventQuestsVisible': False}
                 eventId = None
                 enable = False
             if enable:
-                eventQuestsTooltip = TOOLTIPS_CONSTANTS.EVENT_QUESTS_PREVIEW
                 eventQuestsTooltipIsSpecial = True
+                eventQuestsTooltip = TOOLTIPS_CONSTANTS.EVENT_QUESTS_PREVIEW
                 battleType = currentEvent.getBattleType()
                 wrongBattleType = self.prbEntity.getEntityType() != battleType
                 inSquadState = self.prbDispatcher.getFunctionalState().isInUnit(constants.PREBATTLE_TYPE.SQUAD)
@@ -299,12 +341,12 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
                     eventQuestsIcon = RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_CROSS
             else:
                 if not eventsData.hasActiveEvents():
-                    return {'isEvent': False}
+                    return {'eventQuestsVisible': False}
                 eventQuestsTooltip = TOOLTIPS.HANGAR_ELEN_BOTTOM_NOEVENTS
                 eventQuestsTooltipIsSpecial = False
                 eventQuestsLabel = '--'
                 eventQuestsIcon = RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_CUP_DISABLE_ICON
-            res = {'isEvent': True,
+            res = {'eventQuestsVisible': True,
              'eventQuestsEnable': enable,
              'eventQuestsIcon': eventQuestsIcon,
              'eventQuestsLabel': eventQuestsLabel,
@@ -315,3 +357,55 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def __onSetHangarHeaderEnabled(self, _=None):
         self.update()
+
+    def __getFootballYellowFlagData(self, vehicle):
+        vo = self.__getBattleQuestsVO(vehicle)
+        isEnabled = vo['commonQuestsEnable']
+        vo['personalQuestsVisible'] = False
+        vo['commonQuestsIcon'] = RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_FOOTBALL_ICON if isEnabled else RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_FOOTBALL_DISABLE_ICON
+        vo['commonQuestsColor'] = QUEST_INFORMER_BUTTON_COLORS.FLAG_YELLOW
+        vo['commonQuestsVisible'] = isEnabled
+        self.__commonQuestsVisible = isEnabled
+        return vo
+
+    def __getFootballGreenFlagData(self, vehicle, yellowFlagVisible):
+        eventsData = self._eventsController.getFootballSettingsData()
+        isFootballEnabled = self._lobbyContext.getServerSettings().isFootballEnabled()
+        isDemonstrator = account_helpers.isDemonstrator(self._itemsCache.items.stats.attributes)
+        wrongBattleType = self.prbEntity.getEntityType() != constants.ARENA_GUI_TYPE.RANDOM
+        if not isFootballEnabled or isDemonstrator or eventsData is None or not eventsData.hasActiveOrSoonEvents() or wrongBattleType:
+            return {'eventQuestsVisible': False}
+        else:
+            voToken = 'event' if yellowFlagVisible else 'common'
+            if not yellowFlagVisible:
+                self.__showEventAsCommon = True
+            currentEvent = eventsData.getEventForVehicle(vehicle.intCD)
+            if currentEvent is None:
+                return {'{}QuestsEnable'.format(voToken): False,
+                 '{}QuestsIcon'.format(voToken): RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_CUP_DISABLE_ICON,
+                 '{}QuestsLabel'.format(voToken): '--',
+                 '{}QuestsTooltip'.format(voToken): TOOLTIPS.MARATHON_OFF,
+                 '{}QuestsTooltipIsSpecial'.format(voToken): False,
+                 '{}QuestsColor'.format(voToken): QUEST_INFORMER_BUTTON_COLORS.FLAG_FOOTBALL_GREEN,
+                 '{}QuestsVisible'.format(voToken): True,
+                 '{}QuestsID'.format(voToken): None}
+            noServer = not currentEvent.isAvailableServer(self._connectionMgr.peripheryID)
+            if noServer:
+                label = icons.makeImageTag(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_ALERT_ICON)
+            elif currentEvent.isActive():
+                stage = currentEvent.getEventID()[-1]
+                stageIcon = RES_ICONS.getFootballGreenFlagStage(stage)
+                if stageIcon is not None:
+                    label = icons.makeImageTag(stageIcon, width=19, height=18)
+                else:
+                    label = icons.makeImageTag(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_ALERT_ICON)
+            else:
+                label = icons.makeImageTag(RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_TIME_ICON)
+            return {'{}QuestsEnable'.format(voToken): True,
+             '{}QuestsIcon'.format(voToken): RES_ICONS.MAPS_ICONS_EVENTBOARDS_FLAGICONS_CUP_ICON,
+             '{}QuestsLabel'.format(voToken): label,
+             '{}QuestsTooltip'.format(voToken): TOOLTIPS_CONSTANTS.FOOTBALL_GREEN_FLAG,
+             '{}QuestsTooltipIsSpecial'.format(voToken): True,
+             '{}QuestsColor'.format(voToken): QUEST_INFORMER_BUTTON_COLORS.FLAG_FOOTBALL_GREEN,
+             '{}QuestsVisible'.format(voToken): True,
+             '{}QuestsID'.format(voToken): None}

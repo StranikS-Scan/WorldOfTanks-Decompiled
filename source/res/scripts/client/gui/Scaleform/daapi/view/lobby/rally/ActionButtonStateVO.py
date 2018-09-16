@@ -4,6 +4,7 @@ from gui.Scaleform.locale.CYBERSPORT import CYBERSPORT
 from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.Scaleform.locale.FOOTBALL2018 import FOOTBALL2018
 from gui.prb_control.settings import UNIT_RESTRICTION
 from gui.shared.formatters import text_styles, icons
 from helpers import i18n
@@ -59,7 +60,8 @@ class ActionButtonStateVO(dict):
          UNIT_RESTRICTION.UNIT_INACTIVE_PERIPHERY_UNDEF: (CYBERSPORT.WINDOW_UNIT_MESSAGE_INACTIVEPERIPHERY, {}),
          UNIT_RESTRICTION.UNIT_INACTIVE_PERIPHERY_SORTIE: (CYBERSPORT.WINDOW_UNIT_MESSAGE_INACTIVEPERIPHERYSORTIE, {}),
          UNIT_RESTRICTION.UNIT_INACTIVE_PERIPHERY_BATTLE: (CYBERSPORT.WINDOW_UNIT_MESSAGE_INACTIVEPERIPHERYBATTLE, {}),
-         UNIT_RESTRICTION.UNIT_WAITINGFORDATA: (TOOLTIPS.STRONGHOLDS_TIMER_WAITINGFORDATA, {})}
+         UNIT_RESTRICTION.UNIT_WAITINGFORDATA: (TOOLTIPS.STRONGHOLDS_TIMER_WAITINGFORDATA, {}),
+         UNIT_RESTRICTION.FOOTBALL_INCONSISTENT: BoundMethodWeakref(self._footballInconsistentMessage)}
         self.__WARNING_UNIT_MESSAGES = {UNIT_RESTRICTION.XP_PENALTY_VEHICLE_LEVELS: (MESSENGER.DIALOGS_SQUAD_MESSAGE_VEHICLES_DIFFERENTLEVELS, {})}
         stateKey, stateCtx = self.__getState()
         self['stateString'] = self.__stateTextStyleFormatter(i18n.makeString(stateKey, **stateCtx))
@@ -94,6 +96,12 @@ class ActionButtonStateVO(dict):
     def _rotationGroupBlockMessage(self):
         from CurrentVehicle import g_currentVehicle
         return (CYBERSPORT.WINDOW_UNIT_MESSAGE_VEHICLEINNOTREADY_ROTATIONGROUPLOCKED, {'groupNum': g_currentVehicle.item.rotationGroupNum})
+
+    def _footballInconsistentMessage(self):
+        from CurrentVehicle import g_currentVehicle
+        role = g_currentVehicle.item.getFootballRole()
+        roleName = i18n.makeString(FOOTBALL2018.getRole(role))
+        return (self.__getNotAvailableIcon() + i18n.makeString(FOOTBALL2018.RESTRICTION_INCONSISTENT, role=roleName), {})
 
     def _notInSlotMessage(self):
         return (CYBERSPORT.WINDOW_UNIT_MESSAGE_CANDIDATE, {}) if self.__canTakeSlot else (CYBERSPORT.WINDOW_UNIT_MESSAGE_UNITISFULL, {})

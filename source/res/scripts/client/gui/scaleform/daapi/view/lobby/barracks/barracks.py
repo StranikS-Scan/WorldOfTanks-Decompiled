@@ -57,6 +57,11 @@ def _packTankmanData(tankman, itemsCache=None):
         slot = None
         isInSelfVehicle = True
         isInSelfVehicleType = True
+    footballRole = tankmanVehicle.getFootballRole()
+    if footballRole is not None:
+        tankType = footballRole
+    else:
+        tankType = tankmanVehicle.type
     data = {'firstName': tankman.firstUserName,
      'lastName': tankman.lastUserName,
      'rank': tankman.rankUserName,
@@ -71,7 +76,7 @@ def _packTankmanData(tankman, itemsCache=None):
      'nationID': tankman.nationID,
      'typeID': tankmanVehicle.innationID,
      'roleType': tankman.descriptor.role,
-     'tankType': tankmanVehicle.type,
+     'tankType': tankType,
      'inTank': tankman.isInTank,
      'compact': str(tankman.invID),
      'lastSkillLevel': tankman.descriptor.lastSkillLevel,

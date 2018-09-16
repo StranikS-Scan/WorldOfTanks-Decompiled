@@ -383,6 +383,7 @@ class MainView(CustomizationMainViewMeta):
         self._vehicleCustomizationAnchorsUpdater.startUpdater(self.settingsCore.interfaceScale.get())
         self.__ctx.refreshOutfit()
         self.settingsCore.interfaceScale.onScaleExactlyChanged += self.__onInterfaceScaleChanged
+        self.as_eventLayoutS(g_currentVehicle.isOnlyForEventBattles())
         self.fireEvent(CameraRelatedEvents(CameraRelatedEvents.FORCE_DISABLE_IDLE_PARALAX_MOVEMENT, ctx={'isDisable': True}), EVENT_BUS_SCOPE.LOBBY)
         if self.hangarSpace.spaceInited:
             self.hangarSpace.space.locateCameraToCustomizationPreview()
@@ -601,10 +602,18 @@ class MainView(CustomizationMainViewMeta):
 
     def __setHeaderInitData(self):
         vehicle = g_currentVehicle.item
-        self.as_setHeaderDataS({'tankTier': str(int2roman(vehicle.level)),
+        if g_currentVehicle.isEvent():
+            isElite = False
+            tankLevel = ''
+            tankType = vehicle.getFootballRole()
+        else:
+            isElite = vehicle.isElite
+            tankLevel = str(int2roman(vehicle.level))
+            tankType = vehicle.type
+        self.as_setHeaderDataS({'tankTier': tankLevel,
          'tankName': vehicle.shortUserName,
-         'tankType': '{}_elite'.format(vehicle.type) if vehicle.isElite else vehicle.type,
-         'isElite': vehicle.isElite,
+         'tankType': '{}_elite'.format(tankType) if isElite else tankType,
+         'isElite': isElite,
          'closeBtnTooltip': VEHICLE_CUSTOMIZATION.CUSTOMIZATION_HEADERCLOSEBTN})
 
     def __showPropertiesSheet(self, areaId, slotId, regionId):

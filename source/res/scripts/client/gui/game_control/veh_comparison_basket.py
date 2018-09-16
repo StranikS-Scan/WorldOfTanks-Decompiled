@@ -25,7 +25,7 @@ _NO_EQUIPMENT_LAYOUT = [None, None, None]
 _NO_CREW_SKILLS = set()
 _DEF_SHELL_INDEX = 0
 _ChangedData = namedtuple('_ChangedData', ('addedIDXs', 'addedCDs', 'removedIDXs', 'removedCDs', 'isFullChanged'))
-_COMPARE_INVALID_CRITERIA = ~REQ_CRITERIA.VEHICLE.EVENT_BATTLE | ~REQ_CRITERIA.SECRET
+_COMPARE_INVALID_CRITERIA = ~REQ_CRITERIA.SECRET
 
 def getVehicleCriteriaForComparing():
     return _COMPARE_INVALID_CRITERIA

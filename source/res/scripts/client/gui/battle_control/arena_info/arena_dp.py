@@ -2,7 +2,8 @@
 # Embedded file name: scripts/client/gui/battle_control/arena_info/arena_dp.py
 import logging
 import operator
-from constants import TEAMS_IN_ARENA
+from constants import TEAMS_IN_ARENA, ARENA_GUI_TYPE
+from event_special_effects import TeamType
 from shared_utils import first
 from gui.battle_control import avatar_getter
 from gui.battle_control.arena_info import arena_descrs
@@ -23,7 +24,7 @@ _OP = settings.INVALIDATE_OP
 _INVITATION_STATUS = settings.INVITATION_DELIVERY_STATUS
 
 class ArenaDataProvider(IArenaDataProvider):
-    __slots__ = ('__playerTeam', '__playerVehicleID', '__vInfoVOs', '__vStatsVOs', '__playersVIDs', '__weakref__', '__teamsOnArena', '__squadFinder', '__description', '__invitationStatuses')
+    __slots__ = ('__playerTeam', '__playerVehicleID', '__physicalObjectIDs', '__vInfoVOs', '__vStatsVOs', '__playersVIDs', '__weakref__', '__teamsOnArena', '__squadFinder', '__description', '__invitationStatuses', '__invertedColors')
     lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, setup):
@@ -31,12 +32,15 @@ class ArenaDataProvider(IArenaDataProvider):
         self.__playerTeam = avatar_getter.getPlayerTeam(avatar=setup.avatar)
         self.__teamsOnArena = setup.arenaVisitor.type.getTeamsOnArenaRange()
         self.__playerVehicleID = avatar_getter.getPlayerVehicleID(setup.avatar)
+        self.__physicalObjectIDs = []
         self.__vInfoVOs = {}
         self.__vStatsVOs = arena_vos.VehicleArenaStatsDict()
         self.__playersVIDs = {}
         self.__invitationStatuses = {}
         self.__squadFinder = squad_finder.createSquadFinder(setup.arenaVisitor)
         self.__description = arena_descrs.createDescription(setup.arenaVisitor)
+        self.__invertedColors = None
+        return
 
     def __del__(self):
         _logger.debug('Deleted: %r', self)
@@ -54,6 +58,7 @@ class ArenaDataProvider(IArenaDataProvider):
         self.clearStats()
         self.__description.clear()
         self.__invitationStatuses.clear()
+        self.__physicalObjectIDs = []
 
     def defaultInfo(self):
         self.clearInfo()
@@ -210,6 +215,13 @@ class ArenaDataProvider(IArenaDataProvider):
             self.__tryToGetRequiredData()
         return self.__playerVehicleID
 
+    def addPhysicalObjectID(self, entityID):
+        if entityID not in self.__physicalObjectIDs:
+            self.__physicalObjectIDs.append(entityID)
+
+    def getPhysicalObjectsID(self):
+        return self.__physicalObjectIDs
+
     def getVehicleInfo(self, vID=None):
         if vID is None:
             vID = self.getPlayerVehicleID()
@@ -242,6 +254,9 @@ class ArenaDataProvider(IArenaDataProvider):
             if self.isTeamKiller(vID=vID):
                 return PLAYER_GUI_PROPS.teamKiller
             return PLAYER_GUI_PROPS.ally
+        return PLAYER_GUI_PROPS.enemy
+
+    def getPhysicalObjectGuiProps(self, entityID):
         return PLAYER_GUI_PROPS.enemy
 
     def isSquadMan(self, vID, prebattleID=None):
@@ -300,6 +315,19 @@ class ArenaDataProvider(IArenaDataProvider):
 
     def getEnemiesVehiclesNumber(self):
         return vos_collections.EnemyItemsCollection().count(self)
+
+    def isInvertedColors(self):
+        if self.__invertedColors is None:
+            self.__invertedColors = False
+            sessionProvider = dependency.instance(IBattleSessionProvider)
+            arenaType = sessionProvider.arenaVisitor.getArenaGuiType()
+            if arenaType is not None and arenaType == ARENA_GUI_TYPE.EVENT_BATTLES:
+                vehInfo = self.getVehicleInfo()
+                if vehInfo is not None:
+                    playerTeam = vehInfo.team
+                    if playerTeam in TeamType.PLAYABLE:
+                        self.__invertedColors = vehInfo.team == TeamType.TEAM_RED
+        return self.__invertedColors
 
     def __findSquads(self, exclude=None):
         result = []

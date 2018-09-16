@@ -18,9 +18,15 @@ from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.server_events import IEventsCache
+from gui.shared.tutorial_helper import getTutorialGlobalStorage
+_HAVE_NEW_FILTER_HINT = '_HaveNewFilterHint'
+_EVENT_ID_STRING = 'event'
+_EVENT_ID_INDEX = 2
 
 class TankCarousel(TankCarouselMeta):
     itemsCache = dependency.descriptor(IItemsCache)
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self):
         super(TankCarousel, self).__init__()
@@ -69,6 +75,7 @@ class TankCarousel(TankCarouselMeta):
         super(TankCarousel, self)._populate()
         g_playerEvents.onBattleResultsReceived += self.__onFittingUpdate
         self.app.loaderManager.onViewLoaded += self.__onViewLoaded
+        self.eventsCache.onSyncCompleted += self.__onEventsSyncCompleted
         g_clientUpdateManager.addCallbacks({'stats.credits': self.__onFittingUpdate,
          'stats.gold': self.__onFittingUpdate,
          'stats.vehicleSellsLeft': self.__onFittingUpdate,
@@ -78,11 +85,17 @@ class TankCarousel(TankCarouselMeta):
         self.as_rowCountS(setting.getRowCount())
         setting = self.settingsCore.options.getSetting(settings_constants.GAME.DOUBLE_CAROUSEL_TYPE)
         self.as_setSmallDoubleCarouselS(setting.enableSmallCarousel())
+        self.__updateFilterEntitiesList()
         self.as_initCarouselFilterS(self._getInitialFilterVO(getFilterSetupContexts(self.itemsCache.items.shop.dailyXPFactor)))
+        tutorStorage = getTutorialGlobalStorage()
+        if tutorStorage is not None:
+            tutorStorage.setValue(_HAVE_NEW_FILTER_HINT, self.eventsCache.isEventEnabled())
+        return
 
     def _dispose(self):
-        g_playerEvents.onBattleResultsReceived -= self.__onFittingUpdate
+        self.eventsCache.onSyncCompleted -= self.__onEventsSyncCompleted
         self.app.loaderManager.onViewLoaded -= self.__onViewLoaded
+        g_playerEvents.onBattleResultsReceived -= self.__onFittingUpdate
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(TankCarousel, self)._dispose()
 
@@ -103,7 +116,8 @@ class TankCarousel(TankCarouselMeta):
         filtersVO = {'mainBtn': {'value': getButtonsAssetPath('params'),
                      'tooltip': '#tank_carousel_filter:tooltip/params'},
          'hotFilters': [],
-         'isVisible': self._getFiltersVisible()}
+         'isVisible': self._getFiltersVisible(),
+         'hasEventFilter': self.eventsCache.isEventEnabled()}
         for entry in self._usedFilters:
             filterCtx = contexts.get(entry, FilterSetupContext())
             filtersVO['hotFilters'].append({'id': entry,
@@ -126,3 +140,17 @@ class TankCarousel(TankCarouselMeta):
     def __onViewLoaded(self, view, *args, **kwargs):
         if view.alias == VIEW_ALIAS.TANK_CAROUSEL_FILTER_POPOVER:
             view.setTankCarousel(self)
+
+    def __onEventsSyncCompleted(self, *args):
+        self.__updateFilterEntitiesList()
+        self.as_initCarouselFilterS(self._getInitialFilterVO(getFilterSetupContexts(self.itemsCache.items.shop.dailyXPFactor)))
+
+    def __updateFilterEntitiesList(self):
+        filtersList = list(self._usedFilters)
+        if self.eventsCache.isEventEnabled():
+            if _EVENT_ID_STRING not in self._usedFilters:
+                filtersList.insert(_EVENT_ID_INDEX, _EVENT_ID_STRING)
+                self._usedFilters = filtersList
+        elif _EVENT_ID_STRING in self._usedFilters:
+            filtersList.remove(_EVENT_ID_STRING)
+            self._usedFilters = filtersList

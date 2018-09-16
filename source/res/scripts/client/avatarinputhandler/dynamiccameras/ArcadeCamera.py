@@ -151,6 +151,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__focalPointDist = 1.0
         self.__autoUpdateDxDyDz = Vector3(0.0)
         self.__updatedByKeyboard = False
+        self.__originalVehicleMatrix = None
         if defaultOffset is not None:
             self.__defaultAimOffset = defaultOffset
             self.__cam = BigWorld.HomingCamera(self.__adCfg['enable'])
@@ -171,6 +172,7 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
         self.__onChangeControlMode = onChangeControlMode
         self.__postmortemMode = postmortemMode
         targetMat = self.getTargetMProv()
+        self.__originalVehicleMatrix = Math.Matrix(targetMat)
         aimingSystemClass = ArcadeAimingSystemRemote if BigWorld.player().isObserver() else ArcadeAimingSystem
         self.__aimingSystem = aimingSystemClass(self.__refineVehicleMProv(targetMat), pivotPos.y, pivotPos.z, self.__calcAimMatrix(), self.__cfg['angleRange'], not postmortemMode)
         if self.__adCfg['enable']:
@@ -200,6 +202,13 @@ class ArcadeCamera(ICamera, CallbackDelayer, TimeDeltaMeter):
     def setToVehicleDirection(self):
         matrix = Math.Matrix(self.getTargetMProv())
         self.setYawPitch(matrix.yaw, matrix.pitch)
+
+    def setToVehicleDirectionFootball(self):
+        if self.__aimingSystem is not None:
+            self.setCameraDistance(self.__cfg['distRange'][1])
+            self.__aimingSystem.pitch = self.__cfg['startAngle']
+            self.setYawPitch(self.__originalVehicleMatrix.yaw, self.__originalVehicleMatrix.pitch)
+        return
 
     def destroy(self):
         self.settingsCore.onSettingsChanged -= self.__handleSettingsChange

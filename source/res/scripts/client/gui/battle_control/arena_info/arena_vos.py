@@ -142,7 +142,7 @@ class PlayerInfoVO(object):
 
 
 class VehicleTypeInfoVO(object):
-    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth')
+    __slots__ = ('compactDescr', 'shortName', 'name', 'level', 'iconName', 'iconPath', 'isObserver', 'isPremiumIGR', 'guiName', 'shortNameWithPrefix', 'classTag', 'nationID', 'turretYawLimits', 'maxHealth', 'footballRole')
 
     def __init__(self, vehicleType=None, **kwargs):
         super(VehicleTypeInfoVO, self).__init__()
@@ -183,6 +183,7 @@ class VehicleTypeInfoVO(object):
             vName = vehicleType.name
             self.iconName = settings.makeVehicleIconName(vName)
             self.iconPath = settings.makeContourIconSFPath(vName)
+            self.footballRole = Vehicle.getFootballRole(tags)
         else:
             vehicleName = i18n.makeString(settings.UNKNOWN_VEHICLE_NAME)
             self.compactDescr = 0
@@ -200,6 +201,7 @@ class VehicleTypeInfoVO(object):
             self.iconPath = settings.UNKNOWN_CONTOUR_ICON_SF_PATH
             self.shortNameWithPrefix = vehicleName
             self.maxHealth = None
+            self.footballRole = None
         return
 
     def getClassName(self):
@@ -395,7 +397,7 @@ class VehicleArenaInfoVO(object):
 
 
 class VehicleArenaInteractiveStatsVO(object):
-    __slots__ = ('xp', 'damageDealt', 'capturePts', 'flagActions', 'winPoints', 'deathCount', 'resourceAbsorbed', 'stopRespawn', 'equipmentDamage', 'equipmentKills', 'teamWinPoints', 'team')
+    __slots__ = ('xp', 'damageDealt', 'capturePts', 'flagActions', 'winPoints', 'deathCount', 'resourceAbsorbed', 'stopRespawn', 'equipmentDamage', 'equipmentKills', 'teamWinPoints', 'team', 'args')
 
     def __init__(self, xp=0, damageDealt=0, capturePts=0, flagActions=None, winPoints=0, deathCount=0, resourceAbsorbed=0, stopRespawn=False, equipmentDamage=0, equipmentKills=0, *args):
         super(VehicleArenaInteractiveStatsVO, self).__init__()
@@ -410,6 +412,7 @@ class VehicleArenaInteractiveStatsVO(object):
         self.equipmentDamage = equipmentDamage
         self.equipmentKills = equipmentKills
         self.teamWinPoints = 0
+        self.args = args
 
     def clear(self):
         self.xp = 0
@@ -439,6 +442,7 @@ class VehicleArenaInteractiveStatsVO(object):
         self.stopRespawn = self.stopRespawn or stopRespawn
         self.equipmentDamage += equipmentDamage
         self.equipmentKills += equipmentKills
+        self.args = args
         return result
 
     def getCapturedFlags(self):

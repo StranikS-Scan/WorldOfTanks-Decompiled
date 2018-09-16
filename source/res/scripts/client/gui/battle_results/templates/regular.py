@@ -67,7 +67,9 @@ _COMMON_VO_META = base.DictMeta({'iconType': 'tank',
  'uiVisibility': 0,
  'eligibleForCrystalRewards': False,
  'rank': None,
- 'epicMode': False})
+ 'epicMode': False,
+ 'eventMode': False,
+ 'footballScore': ''})
 _CLAN_COMMON_VO_META = base.PropertyMeta((('clanDBID', -1, 'clanDBID'), ('clanAbbrev', '', 'clanAbbrev')))
 _CLAN_COMMON_VO_META.bind(common.ClanInfoBlock)
 CLANS_COMMON_VO_META = base.PropertyMeta((('allies', common.ClanInfoBlock(field='allies'), 'allies'), ('enemies', common.ClanInfoBlock(field='enemies'), 'enemies')))

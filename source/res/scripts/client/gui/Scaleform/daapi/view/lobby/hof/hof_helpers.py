@@ -337,8 +337,7 @@ def getHofDisabledKeys():
 
 
 def showDisabledDialog():
-    DialogsInterface.showI18nInfoDialog('hofDisabled', None)
-    return
+    DialogsInterface.showI18nInfoDialog('hofDisabled', lambda result: None)
 
 
 def onServerSettingsChange(browserView, diff):

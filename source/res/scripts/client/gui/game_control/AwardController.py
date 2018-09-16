@@ -30,6 +30,7 @@ from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.ranked_battles import ranked_helpers
 from gui.server_events import events_dispatcher as quests_events
+from gui.server_events.events_helpers import isFootball, hasFootballQuests
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
 from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import Vehicle
@@ -42,6 +43,7 @@ from gui.sounds.sound_constants import SPEAKERS_CONFIG
 from helpers import dependency
 from helpers import i18n
 from items import ITEM_TYPE_INDICES, getTypeOfCompactDescr, vehicles as vehicles_core
+from items import football_config
 from messenger.formatters import NCContextItemFormatter, TimeFormatter
 from messenger.formatters.service_channel import TelecomReceivedInvoiceFormatter
 from messenger.proto.events import g_messengerEvents
@@ -51,6 +53,20 @@ from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.sounds import ISoundsController
+
+def countFootballCards(tokens):
+    cards = 0
+    for tokenName, tokenData in tokens.iteritems():
+        packet = (0,)
+        if tokenName in football_config.CARDS_BY_TOKEN:
+            packet = football_config.CARDS_BY_TOKEN.get(tokenName, packet)
+        elif tokenName == football_config.BUFFON_TOKEN:
+            packet = (1,)
+        count = tokenData.get('count', 0)
+        cards += sum(packet) * count
+
+    return cards
+
 
 class AwardController(IAwardController, IGlobalListener):
     refSystem = dependency.descriptor(IRefSystemController)
@@ -332,20 +348,32 @@ class MarkByInvoiceHandler(ServiceChannelHandler):
 
     def _showAward(self, ctx):
         invoiceData = ctx[1].data
+        fb18 = {}
         if 'assetType' in invoiceData and invoiceData['assetType'] == INVOICE_ASSET.DATA:
             if 'data' in invoiceData:
                 data = invoiceData['data']
                 if 'tokens' in data:
                     tokensDict = data['tokens']
                     for tokenName, tokenData in tokensDict.iteritems():
+                        if 'fb18' in tokenName:
+                            fb18.update({tokenName: tokenData})
+                            continue
                         if tokenName.startswith('img:'):
                             count = tokenData.get('count', 0)
                             if count:
                                 self._showWindow(count)
 
+        cards = countFootballCards(fb18)
+        if cards:
+            self._showFb18Window(cards)
+
     @staticmethod
     def _showWindow(tokenCount):
         SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
+
+    @staticmethod
+    def _showFb18Window(count):
+        SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_FOOTBALL_CARD_ACQUIRED, count=count, type=SystemMessages.SM_TYPE.footballCardAcquired)
 
 
 class MarkByQuestHandler(ServiceChannelHandler):
@@ -360,17 +388,29 @@ class MarkByQuestHandler(ServiceChannelHandler):
 
     def _showAward(self, ctx):
         messageData = ctx[1].data
+        fb18 = {}
         if 'tokens' in messageData:
             tokensDict = messageData['tokens']
             for tokenName, tokenData in tokensDict.iteritems():
                 if tokenName.startswith('img:'):
+                    if 'fb18' in tokenName:
+                        fb18.update({tokenName: tokenData})
+                        continue
                     count = tokenData.get('count', 0)
                     if count:
                         self._showWindow(count)
 
+        cards = countFootballCards(fb18)
+        if cards:
+            self._showFb18Window(cards)
+
     @staticmethod
     def _showWindow(tokenCount):
         SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
+
+    @staticmethod
+    def _showFb18Window(count):
+        SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_FOOTBALL_CARD_ACQUIRED, count=count, type=SystemMessages.SM_TYPE.footballCardAcquired)
 
 
 class MotiveQuestsWindowHandler(ServiceChannelHandler):
@@ -394,13 +434,16 @@ class QuestBoosterAwardHandler(ServiceChannelHandler):
 
     def _showAward(self, ctx):
         data = ctx[1].data
-        goodies = data.get('goodies', {})
-        for boosterID in goodies:
-            booster = self.goodiesCache.getBooster(boosterID)
-            if booster is not None and booster.enabled:
-                shared_events.showBoosterAward(booster)
+        if hasFootballQuests(data.get('completedQuestIDs', ())):
+            return
+        else:
+            goodies = data.get('goodies', {})
+            for boosterID in goodies:
+                booster = self.goodiesCache.getBooster(boosterID)
+                if booster is not None and booster.enabled:
+                    shared_events.showBoosterAward(booster)
 
-        return
+            return
 
 
 class BoosterAfterBattleAwardHandler(ServiceChannelHandler):
@@ -442,7 +485,10 @@ class BattleQuestsAutoWindowHandler(ServiceChannelHandler):
 
     @staticmethod
     def _showWindow(quest, context):
-        quests_events.showMissionAward(quest, context)
+        if isFootball(quest.getID()):
+            quests_events.showFootballAward(quest, context)
+        else:
+            quests_events.showMissionAward(quest, context)
 
     @staticmethod
     def _isAppropriate(quest):

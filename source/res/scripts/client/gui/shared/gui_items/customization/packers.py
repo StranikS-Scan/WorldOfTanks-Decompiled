@@ -52,6 +52,10 @@ class CustomizationPacker(object):
         intCD = makeIntCompactDescrByID('customizationItem', cType, componentID)
         return cls.itemsFactory.createCustomization(intCD, proxy)
 
+    @staticmethod
+    def getRawComponent():
+        raise NotImplementedError
+
 
 class PaintPacker(CustomizationPacker):
 
@@ -76,6 +80,10 @@ class PaintPacker(CustomizationPacker):
             comp.id = paint.id
             comp.appliedTo = region
 
+    @staticmethod
+    def getRawComponent():
+        return PaintComponent
+
 
 class CamouflagePacker(CustomizationPacker):
 
@@ -98,6 +106,10 @@ class CamouflagePacker(CustomizationPacker):
         for region, camo, comp in slot.items():
             comp.id = camo.id
             comp.appliedTo = region
+
+    @staticmethod
+    def getRawComponent():
+        return CamouflageComponent
 
 
 class DecalPacker(CustomizationPacker):
@@ -127,6 +139,10 @@ class DecalPacker(CustomizationPacker):
             comp.id = decal.id
             comp.appliedTo = region
 
+    @staticmethod
+    def getRawComponent():
+        return DecalComponent
+
 
 class ModificationPacker(CustomizationPacker):
 
@@ -147,3 +163,7 @@ class ModificationPacker(CustomizationPacker):
         if not slot.isEmpty():
             mod = slot.getItem()
             slot.set(mod, component=mod.id)
+
+    @staticmethod
+    def getRawComponent():
+        return None

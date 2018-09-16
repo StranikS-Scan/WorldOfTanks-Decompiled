@@ -19,6 +19,12 @@ class BATTLE_RESULTS(object):
     FINISH_REASON_1WIN = '#battle_results:finish/reason/1win'
     FINISH_REASON_1LOSE = '#battle_results:finish/reason/1lose'
     FINISH_REASON_1TIE = '#battle_results:finish/reason/1tie'
+    COMMON_DETAILS_FOOTBALLSCORE = '#battle_results:common/details/footballScore'
+    FINISH_REASON_1FOOTBALL_2_WIN = '#battle_results:finish/reason/1football_2_win'
+    FINISH_REASON_1FOOTBALL_2_LOSE = '#battle_results:finish/reason/1football_2_lose'
+    FINISH_REASON_1FOOTBALL_TIE = '#battle_results:finish/reason/1football_tie'
+    FINISH_REASON_1FOOTBALL_1_WIN = '#battle_results:finish/reason/1football_1_win'
+    FINISH_REASON_1FOOTBALL_1_LOSE = '#battle_results:finish/reason/1football_1_lose'
     FINISH_REASON_2 = '#battle_results:finish/reason/2'
     FINISH_REASON_3 = '#battle_results:finish/reason/3'
     FINISH_REASON_4 = '#battle_results:finish/reason/4'
@@ -227,6 +233,10 @@ class BATTLE_RESULTS(object):
     TEAM_STATS_LABELS_TIMESDESTROYED = '#battle_results:team/stats/labels_timesDestroyed'
     TEAM_STATS_LABELS_FLAGS = '#battle_results:team/stats/labels_flags'
     TEAM_STATS_LABELS_DEATHS = '#battle_results:team/stats/labels_deaths'
+    TEAM_STATS_LABELS_GOALS = '#battle_results:team/stats/labels_goals'
+    TEAM_STATS_LABELS_SELFGOALS = '#battle_results:team/stats/labels_selfGoals'
+    TEAM_STATS_LABELS_ASSISTS = '#battle_results:team/stats/labels_assists'
+    TEAM_STATS_LABELS_PRODUCTIVITYPOINTS = '#battle_results:team/stats/labels_productivityPoints'
     TEAM_STATS_MILEAGE = '#battle_results:team/stats/mileage'
     TEAM_STATS_CLOSE = '#battle_results:team/stats/close'
     TEAM_RANKHEADER_HEADER = '#battle_results:team/rankHeader/header'
@@ -312,6 +322,10 @@ class BATTLE_RESULTS(object):
     GETPREMIUMPOPOVER_ACTIONBTN_LABEL = '#battle_results:getPremiumPopover/actionBtn/label'
     GETPREMIUMPOPOVER_PREM = '#battle_results:getPremiumPopover/prem'
     GETPREMIUMPOPOVER_AWARD = '#battle_results:getPremiumPopover/award'
+    TEAM_FOOTBALLGOALS_HEADER = '#battle_results:team/footballGoals/header'
+    TEAM_FOOTBALLGOALS_BODY = '#battle_results:team/footballGoals/body'
+    TEAM_FOOTBALLASSISTS_HEADER = '#battle_results:team/footballAssists/header'
+    TEAM_FOOTBALLASSISTS_BODY = '#battle_results:team/footballAssists/body'
     DETAILS_TIME_LBL_ENUM = (DETAILS_TIME_LBL_OBJECTIVESREACHED,
      DETAILS_TIME_LBL_OBJECTIVESDESTROYED,
      DETAILS_TIME_LBL_BASESCAPTURED,
@@ -363,6 +377,10 @@ class BATTLE_RESULTS(object):
      TEAM_STATS_LABELS_TIMESDESTROYED,
      TEAM_STATS_LABELS_FLAGS,
      TEAM_STATS_LABELS_DEATHS,
+     TEAM_STATS_LABELS_GOALS,
+     TEAM_STATS_LABELS_SELFGOALS,
+     TEAM_STATS_LABELS_ASSISTS,
+     TEAM_STATS_LABELS_PRODUCTIVITYPOINTS,
      TEAM_STATS_LABELS_DESTROYRECOVERYRATIO,
      TEAM_STATS_LABELS_ATKOBJECTIVES,
      TEAM_STATS_LABELS_DEFOBJECTIVES)

@@ -33,7 +33,6 @@ from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items import getTypeOfCompactDescr
 from skeletons.gui.event_boards_controllers import IEventBoardController
-from skeletons.gui.game_control import IMarathonEventController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 from gui.server_events.events_helpers import isLinkedSet
@@ -44,7 +43,7 @@ TabData = namedtuple('TabData', ('alias',
  'label'))
 TABS_DATA_ORDERED = (TabData(QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_EVENTBOARDS, QUESTS.MISSIONS_TAB_EVENTBOARDS_DISABLED, _ms(QUESTS.MISSIONS_TAB_LABEL_EVENTBOARDS)),
  TabData(QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_MARATHONS, QUESTS.MISSIONS_TAB_MARATHONS, _ms(QUESTS.MISSIONS_TAB_LABEL_MARATHONS)),
- TabData(QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_MARATHONS, QUESTS.MISSIONS_TAB_MARATHONS, _ms(QUESTS.MISSIONS_TAB_LABEL_MARATHONS)),
+ TabData(QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_GROUPED, QUESTS.MISSIONS_TAB_GROUPED, _ms(QUESTS.MISSIONS_TAB_LABEL_GROUPED)),
  TabData(QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS, QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_CATEGORIES, QUESTS.MISSIONS_TAB_CATEGORIES, _ms(QUESTS.MISSIONS_TAB_LABEL_CATEGORIES)),
  TabData(QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_PY_ALIAS, QUESTS_ALIASES.CURRENT_VEHICLE_MISSIONS_VIEW_LINKAGE, QUESTS.MISSIONS_TAB_CURRENTVEHICLE, QUESTS.MISSIONS_TAB_CURRENTVEHICLE, _ms(QUESTS.MISSIONS_TAB_LABEL_CURRENTVEHICLE)))
 
@@ -59,7 +58,6 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     eventsController = dependency.descriptor(IEventBoardController)
-    marathonCtrl = dependency.descriptor(IMarathonEventController)
 
     def __init__(self, ctx):
         super(MissionsPage, self).__init__(ctx)
@@ -153,7 +151,11 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             if not elenEnabled or not self.eventsController.hasEvents():
                 self.__currentTabAlias = None
         if not self.__currentTabAlias:
-            if elenEnabled and self.eventsController.hasEvents():
+            eventsData = self.eventsController.getFootballSettingsData()
+            isFootballEvents = eventsData and eventsData.getEvents()
+            if self.lobbyContext.getServerSettings().isFootballEnabled() and isFootballEvents:
+                self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS
+            elif elenEnabled and self.eventsController.hasEvents():
                 self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS
             elif findFirst(lambda group: group.isMarathon(), self.eventsCache.getGroups().itervalues()):
                 self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS
@@ -214,6 +216,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
         data = []
         tabs = []
         isElenEnabled = self.lobbyContext.getServerSettings().isElenEnabled()
+        isFootball = self.lobbyContext.getServerSettings().isFootballEnabled()
         for tabData in TABS_DATA_ORDERED:
             alias = tabData.alias
             tab = {'label': tabData.label,
@@ -221,7 +224,7 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
             header_tab = {'alias': alias,
              'linkage': tabData.linkage,
              'tooltip': tabData.tooltip}
-            if alias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and (not self.eventsController.hasEvents() or not isElenEnabled) or alias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS and not self.marathonCtrl.isEnabled() or alias == QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS and self.marathonCtrl.isEnabled():
+            if alias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and (not self.eventsController.hasEvents() or not isElenEnabled) or alias == QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS and not isFootball or alias == QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS and isFootball:
                 if alias == self.__currentTabAlias:
                     self.__currentTabAlias = QUESTS_ALIASES.MISSIONS_CATEGORIES_VIEW_PY_ALIAS
                 continue

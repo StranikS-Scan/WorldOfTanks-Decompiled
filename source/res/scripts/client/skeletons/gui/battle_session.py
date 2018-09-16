@@ -113,6 +113,14 @@ class IDynamicControllersLocator(object):
     def battleField(self):
         raise NotImplementedError
 
+    @property
+    def footballCtrl(self):
+        raise NotImplementedError
+
+    @property
+    def footballEntitiesCtrl(self):
+        raise NotImplementedError
+
 
 class ISquadInvitationsHandler(object):
     __slots__ = ()
@@ -346,6 +354,9 @@ class IArenaDataProvider(object):
     def getPlayerGuiProps(self, vID, team):
         raise NotImplementedError
 
+    def getPhysicalObjectGuiProps(self, entityID):
+        raise NotImplementedError
+
     def isSquadMan(self, vID, prebattleID=None):
         raise NotImplementedError
 
@@ -377,6 +388,9 @@ class IArenaDataProvider(object):
         raise NotImplementedError
 
     def getEnemiesVehiclesNumber(self):
+        raise NotImplementedError
+
+    def isInvertedColors(self):
         raise NotImplementedError
 
 
@@ -586,6 +600,12 @@ class IBattleSessionProvider(object):
         raise NotImplementedError
 
     def stopVehicleVisual(self, vehicleID, isPlayerVehicle):
+        raise NotImplementedError
+
+    def startPhysicalObjectVisual(self, eProxy, isImmediate=False):
+        raise NotImplementedError
+
+    def stopPhysicalObjectVisual(self, entityID):
         raise NotImplementedError
 
     def handleShortcutChatCommand(self, key):

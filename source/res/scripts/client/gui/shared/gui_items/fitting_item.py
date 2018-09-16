@@ -206,21 +206,9 @@ class FittingItem(GUIItem, HasIntCD):
     def isInInventory(self):
         return self.inventoryCount > 0
 
-    def _getShortInfo(self, vehicle=None, expanded=False):
-        try:
-            description = i18n.makeString('#menu:descriptions/' + self.itemTypeName + ('Full' if expanded else ''))
-            vehicleDescr = vehicle.descriptor if vehicle is not None else None
-            params = params_helper.getParameters(self, vehicleDescr)
-            formattedParametersDict = dict(formatters.getFormattedParamsList(self.descriptor, params))
-            if self.itemTypeName == vehicles._VEHICLE:
-                formattedParametersDict['caliber'] = BigWorld.wg_getIntegralFormat(self.descriptor.gun.shots[0].shell.caliber)
-            result = description % formattedParametersDict
-            return result
-        except Exception:
-            LOG_CURRENT_EXCEPTION()
-            return ''
-
-        return
+    @property
+    def isFootball(self):
+        return False
 
     def getShortInfo(self, vehicle=None, expanded=False):
         return '' if not GUI_SETTINGS.technicalInfo else self._getShortInfo(vehicle, expanded)
@@ -357,6 +345,23 @@ class FittingItem(GUIItem, HasIntCD):
 
     def _sortByType(self, other):
         pass
+
+    def _getShortInfo(self, vehicle=None, expanded=False):
+        try:
+            description = i18n.makeString(self._getShortInfoKey() + ('Full' if expanded else ''))
+            vehicleDescr = vehicle.descriptor if vehicle is not None else None
+            params = params_helper.getParameters(self, vehicleDescr)
+            formattedParametersDict = dict(formatters.getFormattedParamsList(self.descriptor, params))
+            result = description % formattedParametersDict
+            return result
+        except Exception:
+            LOG_CURRENT_EXCEPTION()
+            return ''
+
+        return
+
+    def _getShortInfoKey(self):
+        return '#menu:descriptions/' + self.itemTypeName
 
     def __cmp__(self, other):
         if other is None:

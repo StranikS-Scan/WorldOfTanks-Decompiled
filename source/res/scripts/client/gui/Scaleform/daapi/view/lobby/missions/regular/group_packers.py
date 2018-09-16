@@ -10,8 +10,10 @@ from gui.Scaleform.daapi.settings import BUTTON_LINKAGES
 from gui.Scaleform.daapi.view.lobby.event_boards.event_helpers import EventInfo, EventHeader
 from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import MarathonAwardComposer
 from gui.Scaleform.daapi.view.lobby.missions.missions_helper import getMissionInfoData
+from gui.Scaleform.genConsts.FOOTBAL2018_CONSTANTS import FOOTBAL2018_CONSTANTS
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.locale.FOOTBALL2018 import FOOTBALL2018
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.MOTIVATION_QUESTS import MOTIVATION_QUESTS
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -24,6 +26,7 @@ from gui.server_events.event_items import DEFAULTS_GROUPS
 from gui.server_events.events_helpers import missionsSortFunc
 from gui.server_events.formatters import DECORATION_SIZES
 from gui.shared.formatters import text_styles
+from gui.shared.formatters.icons import makeImageTag
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.linkedset import ILinkedSetController
@@ -602,13 +605,34 @@ class _VehicleQuestsBlockInfo(_EventsBlockInfo):
 
     def getTitleBlock(self):
         tankInfo = ''
-        tankType = ''
+        tankTypeImg = ''
         item = g_currentVehicle.item
         if item is not None:
-            tankInfo = text_styles.concatStylesToMultiLine(text_styles.promoSubTitle(item.userName), text_styles.stats(MENU.levels_roman(item.level)))
-            tankType = '../maps/icons/vehicleTypes/big/%s.png' % item.type
+            tankType = ''
+            if g_currentVehicle.isEvent():
+                icon = ''
+                sportsTypeStr = ''
+                if item.isFootballStriker:
+                    icon = RES_ICONS.MAPS_ICONS_FE18_STRIKER_ICON_SM
+                    sportsTypeStr = FOOTBALL2018.SPORT_ROLE_STRIKER
+                    tankType = FOOTBAL2018_CONSTANTS.ROLE_STRIKER
+                elif item.isFootballMidfielder:
+                    icon = RES_ICONS.MAPS_ICONS_FE18_MIDFIELD_ICON_SM
+                    sportsTypeStr = FOOTBALL2018.SPORT_ROLE_MIDFIELDER
+                    tankType = FOOTBAL2018_CONSTANTS.ROLE_MIDFIELDER
+                elif item.isFootballDefender:
+                    icon = RES_ICONS.MAPS_ICONS_FE18_DEFENDER_ICON_SM
+                    sportsTypeStr = FOOTBALL2018.SPORT_ROLE_DEFENDER
+                    tankType = FOOTBAL2018_CONSTANTS.ROLE_DEFENDER
+                imgTag = makeImageTag(icon, width=14, height=14, vSpace=-1)
+                tankStatus = imgTag + text_styles.stats(_ms(sportsTypeStr))
+            else:
+                tankStatus = text_styles.stats(MENU.levels_roman(item.level))
+                tankType = item.type
+            tankInfo = text_styles.concatStylesToMultiLine(text_styles.promoSubTitle(item.userName), tankStatus)
+            tankTypeImg = '../maps/icons/vehicleTypes/big/%s.png' % tankType
         return {'title': self.getTitle(),
-         'tankType': tankType,
+         'tankType': tankTypeImg,
          'tankInfo': tankInfo}
 
     def getDetailedTitle(self):

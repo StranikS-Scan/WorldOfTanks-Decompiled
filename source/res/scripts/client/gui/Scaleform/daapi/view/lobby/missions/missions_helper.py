@@ -17,7 +17,7 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.server_events import events_helpers
-from gui.server_events.awards_formatters import AWARDS_SIZES
+from gui.server_events.awards_formatters import AWARDS_SIZES, getFootballAwardPacker
 from gui.server_events.cond_formatters.prebattle import MissionsPreBattleConditionsFormatter
 from gui.server_events.cond_formatters.requirements import AccountRequirementsFormatter, TQAccountRequirementsFormatter
 from gui.server_events.conditions import GROUP_TYPE
@@ -44,6 +44,8 @@ _detailedCardTokenConditionFormatter = cards_formatters.DetailedCardTokenConditi
 _cardAwardsFormatter = CurtailingAwardsComposer(CARD_AWARDS_COUNT)
 _detailedCardAwardsFormatter = DetailedCardAwardComposer(DETAILED_CARD_AWARDS_COUNT)
 _awardsWindowBonusFormatter = CurtailingAwardsComposer(sys.maxint)
+_footballAwardsBonusFormatter = CurtailingAwardsComposer(CARD_AWARDS_COUNT, getFootballAwardPacker())
+_footballDetailedAwardsFormatter = DetailedCardAwardComposer(DETAILED_CARD_AWARDS_COUNT, getFootballAwardPacker())
 _personalMissionsConditionsFormatter = PMCardConditionsFormatter()
 _personalMissionsAwardsFormatter = PersonalMissionsAwardComposer(DETAILED_CARD_AWARDS_COUNT)
 _linkedSetAwardsComposer = LinkedSetAwardsComposer(LINKED_SET_CARD_AWARDS_COUNT)
@@ -297,7 +299,7 @@ class _MissionInfo(QuestInfoModel):
 
     def _getAwards(self, mainQuest=None):
         if self.__formattedBonuses is None:
-            self.__formattedBonuses = _cardAwardsFormatter.getFormattedBonuses(self._substituteBonuses(mainQuest))
+            self.__formattedBonuses = _footballAwardsBonusFormatter.getFormattedBonuses(self._substituteBonuses(mainQuest))
         return {'awards': self.__formattedBonuses}
 
     def _getConditions(self):
@@ -518,7 +520,7 @@ class _DetailedMissionInfo(_MissionInfo):
         return _accountReqsFormatter.format(self.event.accountReqs, self.event)
 
     def _getAwards(self, mainQuest=None):
-        return {'awards': _detailedCardAwardsFormatter.getFormattedBonuses(self._substituteBonuses(mainQuest))}
+        return {'awards': _footballDetailedAwardsFormatter.getFormattedBonuses(self._substituteBonuses(mainQuest))}
 
     def _getTitle(self, title):
         return text_styles.promoSubTitle(title)
@@ -573,7 +575,7 @@ class _DetailedPersonalMissionInfo(_MissionInfo):
 
     def getVehicleRequirementsCriteria(self):
         extraConditions = []
-        criteria = REQ_CRITERIA.INVENTORY
+        criteria = REQ_CRITERIA.INVENTORY | ~REQ_CRITERIA.VEHICLE.EVENT
         criteria |= REQ_CRITERIA.VEHICLE.LEVELS(range(self.event.getVehMinLevel(), constants.MAX_VEHICLE_LEVEL + 1))
         criteria |= REQ_CRITERIA.VEHICLE.CLASSES(self.event.getVehicleClasses())
         return (criteria, extraConditions)
@@ -796,6 +798,14 @@ def getDetailedMissionData(event):
 
 def getAwardsWindowBonuses(bonuses):
     result = _awardsWindowBonusFormatter.getFormattedBonuses(bonuses, AWARDS_SIZES.BIG)
+    while len(result) % AWARDS_PER_SINGLE_PAGE != 0 and len(result) > AWARDS_PER_SINGLE_PAGE:
+        result.append({})
+
+    return result
+
+
+def getFootballAwardsWindowBonuses(bonuses):
+    result = _footballAwardsBonusFormatter.getFormattedBonuses(bonuses, AWARDS_SIZES.BIG)
     while len(result) % AWARDS_PER_SINGLE_PAGE != 0 and len(result) > AWARDS_PER_SINGLE_PAGE:
         result.append({})
 

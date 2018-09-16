@@ -207,7 +207,12 @@ class PrebattleWindow(PrebattleWindowMeta, ILegacyListener):
                 vContourIcon = vehicle.iconContour
                 vShortName = vehicle.shortUserName
                 vLevel = int2roman(vehicle.level)
-                vType = vehicle.type
+                footballRole = vehicle.getFootballRole()
+                if footballRole is None:
+                    vType = vehicle.type
+                else:
+                    vType = footballRole
+                    vLevel = ''
             result.append({'accID': account.accID,
              'dbID': account.dbID,
              'userName': account.name,

@@ -422,8 +422,7 @@ class _PreDefinedHostList(object):
                         else:
                             self._urlMap[urlToken] = idx
                     self._nameMap[app.name] = idx
-                    if app.peripheryID:
-                        self._peripheryMap[app.peripheryID] = idx
+                    self._peripheryMap[app.peripheryID] = idx
                     self._hosts.append(app)
 
             self._isDataLoaded = True

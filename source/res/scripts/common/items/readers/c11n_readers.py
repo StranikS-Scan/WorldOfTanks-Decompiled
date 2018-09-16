@@ -163,7 +163,7 @@ class CamouflageXmlReader(BaseCustomizationItemXmlReader):
                     res.append(iv._readColor((pctx, 'palette %s' % (j,)), psection, cname))
 
                 palettes.append(res)
-                target.palettes = tuple(palettes)
+            target.palettes = tuple(palettes)
 
     def _readClientOnlyFromXml(self, target, xmlCtx, section):
         super(CamouflageXmlReader, self)._readClientOnlyFromXml(target, xmlCtx, section)

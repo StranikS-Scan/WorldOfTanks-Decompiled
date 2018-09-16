@@ -84,20 +84,10 @@ class SimpleBonusFormatter(OldStyleBonusFormatter):
         return result
 
 
-class NY18BonusFormatter(OldStyleBonusFormatter):
-    _newYearController = dependency.descriptor(INewYearController)
-
-    def accumulateBonuses(self, bonus):
-        for tokenID, token in bonus.getTokens().iteritems():
-            if tokenID in self._newYearController.boxStorage.getDescriptors():
-                self._result.append(formatters._packIconTextElement(label='x{}'.format(token.count) if token.count > 1 else '', icon=RES_ICONS.MAPS_ICONS_NY_BONUSES_SMALL_BOX, dataType='#ny:hangar/bonusInfo/tooltip', iconAutoSize=True))
-
-
 def getFormattersMap(event):
     return {'dossier': DossierFormatter(),
      'customizations': CustomizationsFormatter(),
-     'vehicles': VehiclesFormatter(event),
-     'battleToken': NY18BonusFormatter()}
+     'vehicles': VehiclesFormatter(event)}
 
 
 class OldStyleAwardsPacker(AwardsPacker):

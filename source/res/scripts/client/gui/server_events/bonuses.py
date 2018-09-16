@@ -16,6 +16,7 @@ from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.settings import getBadgeIconPath, BADGES_ICONS
+from gui.server_events.formatters import parseComplexToken
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES
 from gui.shared.gui_items.Tankman import getRoleUserName, calculateRoleLevel, Tankman
@@ -29,6 +30,7 @@ from items import vehicles, tankmen
 from shared_utils import makeTupleByDict
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.goodies import IGoodiesCache
+from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 _CUSTOMIZATIONS_SCALE = 44.0 / 128
 
@@ -289,6 +291,7 @@ class TokensBonus(SimpleBonus):
 
 
 class BattleTokensBonus(TokensBonus):
+    eventsCache = dependency.descriptor(IEventsCache)
 
     def __init__(self, name, value, isCompensation=False, ctx=None):
         super(TokensBonus, self).__init__(name, value, isCompensation)
@@ -296,6 +299,20 @@ class BattleTokensBonus(TokensBonus):
 
     def isShowInGUI(self):
         return True
+
+    def formatValue(self):
+        result = []
+        for tokenID, _ in self._value.iteritems():
+            complexToken = parseComplexToken(tokenID)
+            if complexToken.isDisplayable:
+                userName = self._getUserName(complexToken.styleID)
+                result.append(i18n.makeString(TOOLTIPS.MISSIONS_TOKEN_HEADER, name=userName))
+
+        return ', '.join(result) if result else None
+
+    def _getUserName(self, styleID):
+        webCache = self.eventsCache.prefetcher
+        return i18n.makeString(webCache.getTokenInfo(styleID))
 
 
 def personalMissionsTokensFactory(name, value, isCompensation=False, ctx=None):

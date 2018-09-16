@@ -46,6 +46,7 @@ class TOOLTIP_TYPE(CONST_CONTAINER):
     RANKED_SELECTOR_INFO = 'rankedSelectorInfo'
     VEHICLE_ELITE_BONUS = 'vehicleEliteBonus'
     VEHICLE_HISTORICAL_REFERENCE = 'vehicleHistoricalReference'
+    MARATHON = 'marathon'
 
 
 class TOOLTIP_COMPONENT(CONST_CONTAINER):

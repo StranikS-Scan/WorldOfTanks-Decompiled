@@ -110,6 +110,7 @@ class TOOLTIPS(object):
     HANGAR_HEADER_PERSONALQUESTS_COMPLETED = '#tooltips:hangar/header/personalQuests/completed'
     HANGAR_HEADER_PERSONALQUESTS_AVAILABLE = '#tooltips:hangar/header/personalQuests/available'
     HANGAR_HEADER_PERSONALQUESTS_DONE = '#tooltips:hangar/header/personalQuests/done'
+    MARATHON_OFF = '#tooltips:marathon/off'
     MISSIONS_VEHICLE_SELECTOR_LIST = '#tooltips:missions/vehicle_selector/list'
     MISSIONS_VEHICLE_SELECTOR_SELECT = '#tooltips:missions/vehicle_selector/select'
     BATTLETYPES_STRONGHOLDS = '#tooltips:battleTypes/strongholds'
@@ -2242,6 +2243,19 @@ class TOOLTIPS(object):
     CUSTOMIZATION_SCROLLBAR_BOOKMARK_HEADER = '#tooltips:customization/scrollbar/bookmark/header'
     CUSTOMIZATION_NONHISTORICINDICATOR_HEADER = '#tooltips:customization/nonHistoricIndicator/header'
     CUSTOMIZATION_NONHISTORICINDICATOR_BODY = '#tooltips:customization/nonHistoricIndicator/body'
+    MARATHON_HEADER = '#tooltips:marathon/header'
+    MARATHON_BODY = '#tooltips:marathon/body'
+    MARATHON_BODY_EXTRA = '#tooltips:marathon/body/extra'
+    MARATHON_STATE_START = '#tooltips:marathon/state/start'
+    MARATHON_STATE_END = '#tooltips:marathon/state/end'
+    MARATHON_STATE_COMPLETE = '#tooltips:marathon/state/complete'
+    MARATHON_EXTRA_STATE_STEPS = '#tooltips:marathon/extra_state/steps'
+    MARATHON_EXTRA_STATE_COMPLETED = '#tooltips:marathon/extra_state/completed'
+    MARATHON_EXTRA_STATE_DISCOUNT = '#tooltips:marathon/extra_state/discount'
+    MARATHON_OFF_HEADER = '#tooltips:marathon/off/header'
+    MARATHON_OFF_BODY = '#tooltips:marathon/off/body'
+    MARATHON_ERROR_BATTLE_TYPE = '#tooltips:marathon/error/battle_type'
+    MARATHON_ERROR_VEH_TYPE = '#tooltips:marathon/error/veh_type'
     ELEN_SUMMARY_RANK_ENUM = (ELEN_SUMMARY_RANK_1,
      ELEN_SUMMARY_RANK_2,
      ELEN_SUMMARY_RANK_3,

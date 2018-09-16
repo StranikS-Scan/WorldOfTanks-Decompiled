@@ -100,10 +100,10 @@
       <terrainResistance>	0.4 0.5 1	</terrainResistance>
       <brakeForce>	35000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	40	</rotationSpeed>
+      <rotationSpeed>	46	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.2	</vehicleMovement>
-        <vehicleRotation>	0.2	</vehicleRotation>
+        <vehicleMovement>	0.16	</vehicleMovement>
+        <vehicleRotation>	0.16	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -364,7 +364,7 @@
         <Cannone_da_90_50_T119E1>	shared	  <maxAmmo>	45	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -20 1 -20	</minPitch>
-            <maxPitch>	0 8 0.430556 8 0.45 4 0.55 4 0.569444 8 1 8	</maxPitch>
+            <maxPitch>	0 9 0.427778 9 0.45 4 0.55 4 0.572222 9 1 9	</maxPitch>
           </pitchLimits>
           <armor>
             <armor_1>	80	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -384,9 +384,9 @@
             <gun>	45	</gun>
           </armor>
           <shotDispersionRadius>	0.33	</shotDispersionRadius>
-          <reloadTime>	40	</reloadTime>
+          <reloadTime>	9.6	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.13	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	3.5	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
@@ -398,7 +398,7 @@
             <rate>	30	</rate>
           </clip>
           <autoreload>
-            <reloadTime>	8.5 10 14	</reloadTime>
+            <reloadTime>	8 9 12	</reloadTime>
             <revertFraction>	1.0	</revertFraction>
           </autoreload>
           <models>
@@ -484,7 +484,13 @@
   <radios>
     <R528>	shared	</R528>
   </radios>
-  <clientAdjustmentFactors></clientAdjustmentFactors>
+  <clientAdjustmentFactors>
+    <guns>
+      <Cannone_da_90_50_T119E1>
+        <delta>	1.1	</delta>
+      </Cannone_da_90_50_T119E1>
+    </guns>
+  </clientAdjustmentFactors>
   <physics>
     <detailed>
       <engines>

@@ -34,6 +34,7 @@ def getGameControllersConfig(manager):
     from gui.game_control.epic_mode_controller import EpicModeController as _Epic
     from gui.game_control.bootcamp_controller import BootcampController as _Bootcamp
     from gui.game_control.hero_tank_controller import HeroTankController as _HeroTankController
+    from gui.marathon.marathon_event_controller import MarathonEventController as _MarathonEventController
     from skeletons.gui import game_control as _interface
     tracker = GameStateTracker()
     tracker.init()
@@ -72,6 +73,7 @@ def getGameControllersConfig(manager):
     _config(_interface.IRankedBattlesController, _Ranked())
     _config(_interface.IEpicModeController, _Epic())
     _config(_interface.IHeroTankController, _HeroTankController())
+    _config(_interface.IMarathonEventController, _MarathonEventController())
     if constants.IS_CHINA:
         _config(_interface.IChinaController, _China())
     else:

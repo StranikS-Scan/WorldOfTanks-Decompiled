@@ -72,6 +72,7 @@ class TOOLTIPS_CONSTANTS(object):
     CYBER_SPORT_VEHICLE_NOT_READY = 'cyberSportVehicleNotReady'
     SQUAD_SLOT_VEHICLE_SELECTED = 'squadSlotVehicleSelected'
     SORTIE_DIVISION = 'sortieDivision'
+    MARATHON_QUESTS_PREVIEW = 'marathonQuestsPreview'
     QUESTS_PREVIEW = 'questsPreview'
     EVENT_QUESTS_PREVIEW = 'EventQuestsPreview'
     PERSONAL_QUESTS_PREVIEW = 'presonalQuestsPreview'
@@ -299,6 +300,7 @@ class TOOLTIPS_CONSTANTS(object):
      MISSION_VEHICLE_TYPE,
      ADDITIONAL_AWARDS,
      UNAVAILABLE_QUEST]
+    MARATHON_SET = [MARATHON_QUESTS_PREVIEW]
     TANKMAN_SET = [TANKMAN,
      TANKMAN_SKILL,
      TANKMAN_NEW_SKILL,

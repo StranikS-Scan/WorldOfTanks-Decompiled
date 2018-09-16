@@ -180,4 +180,40 @@
       <mirror>	true	</mirror>
     </decal>
   </itemGroup>
+  <itemGroup>
+    <name>	Anniversary NA and EU	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <type>	EMBLEM	</type>
+    <historical>	false	</historical>
+    <vehicleFilter></vehicleFilter>
+    <decal>
+      <id>	544	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_369.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_369	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	Global Map Emblem	</name>
+    <userString>	#vehicle_customization:emblem/special	</userString>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <type>	EMBLEM	</type>
+    <historical>	false	</historical>
+    <vehicleFilter>
+      <include>
+        <tags>	premium	</tags>
+        <levels>	8	</levels>
+      </include>
+      <include>
+        <levels>	10	</levels>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	545	</id>
+      <texture>	gui/maps/vehicles/decals/player_stickers/special/sticker_370.dds	</texture>
+      <userString>	#vehicle_customization:emblem/special/sticker_370	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
 </special_emblems.xml>

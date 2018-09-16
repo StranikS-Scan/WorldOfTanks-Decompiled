@@ -7,7 +7,8 @@ from strongholds import createStrongholdsBattleHandler
 from request import createRequestHandler
 from context_menu import createContextMenuHandler
 from clan_management import createClanManagementHandler
+from marathon import createMarathonHandler
 from ranked_battles import createRankedBattlesHandler
 from vehicles import createVehiclesHandler
 from command import WebCommandSchema, instantiateCommand, CommandHandler, W2CSchema, Field
-__all__ = ('createNotificationHandler', 'createSoundHandler', 'createHangarSoundHandler', 'createOpenWindowHandler', 'createCloseWindowHandler', 'createOpenTabHandler', 'createStrongholdsBattleHandler', 'createRequestHandler', 'createContextMenuHandler', 'createClanManagementHandler', 'createRankedBattlesHandler', 'createVehiclesHandler', 'WebCommandSchema', 'instantiateCommand', 'CommandHandler', 'W2CSchema', 'Field')
+__all__ = ('createNotificationHandler', 'createSoundHandler', 'createHangarSoundHandler', 'createOpenWindowHandler', 'createCloseWindowHandler', 'createOpenTabHandler', 'createStrongholdsBattleHandler', 'createRequestHandler', 'createContextMenuHandler', 'createClanManagementHandler', 'createMarathonHandler', 'createRankedBattlesHandler', 'createVehiclesHandler', 'WebCommandSchema', 'instantiateCommand', 'CommandHandler', 'W2CSchema', 'Field')

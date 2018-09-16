@@ -44,7 +44,7 @@ def getGroupPackerByContextID(contextID, proxy):
             group = groups.get(contextID)
             if group:
                 if group.isMarathon():
-                    return _MarathonQuestsBlockInfo(group)
+                    return _MissionsGroupQuestsBlockInfo(group)
                 return _GroupedEventsBlockInfo(group)
         return
 
@@ -187,13 +187,22 @@ class GroupedEventsBlocksFinder(_EventsBlockBuilder):
         raise NotImplementedError
 
 
-class MarathonsGroupsFinder(GroupedEventsBlocksFinder):
+class MissionsGroupsFinder(GroupedEventsBlocksFinder):
 
     def _createGroupedEventsBlock(self, group):
-        return _MarathonQuestsBlockInfo(group)
+        return _MissionsGroupQuestsBlockInfo(group)
 
     def _getEventsGroups(self):
         return self.eventsCache.getGroups(filterFunc=lambda g: g.isMarathon())
+
+
+class MarathonsDumbFinder(GroupedEventsBlocksFinder):
+
+    def _createGroupedEventsBlock(self, group):
+        return []
+
+    def _getEventsGroups(self):
+        return {}
 
 
 class QuestsGroupsFinder(GroupedEventsBlocksFinder):
@@ -414,16 +423,16 @@ class _GroupedQuestsBlockInfo(_GroupedEventsBlockInfo):
         return data
 
 
-class _MarathonQuestsBlockInfo(_GroupedEventsBlockInfo):
+class _MissionsGroupQuestsBlockInfo(_GroupedEventsBlockInfo):
 
     def __init__(self, group):
-        super(_MarathonQuestsBlockInfo, self).__init__(group)
+        super(_MissionsGroupQuestsBlockInfo, self).__init__(group)
         self._mainQuest = None
         return
 
     def clear(self):
         self._mainQuest = None
-        super(_MarathonQuestsBlockInfo, self).clear()
+        super(_MissionsGroupQuestsBlockInfo, self).clear()
         return
 
     def getDetailedTitle(self):
@@ -445,7 +454,7 @@ class _MarathonQuestsBlockInfo(_GroupedEventsBlockInfo):
          'bodyLinkage': QUESTS_ALIASES.MISSION_PACK_MARATHON_BODY_LINKAGE}
 
     def _getDescrBlock(self):
-        data = super(_MarathonQuestsBlockInfo, self)._getDescrBlock()
+        data = super(_MissionsGroupQuestsBlockInfo, self)._getDescrBlock()
         if self._mainQuest:
             data.update({'descr': text_styles.main(self._mainQuest.getDescription())})
         return data

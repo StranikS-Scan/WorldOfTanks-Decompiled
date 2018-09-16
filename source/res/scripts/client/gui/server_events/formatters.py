@@ -158,9 +158,13 @@ def makeUniquePath(path, name):
 
 def formatStrDiscount(discountVal):
     dt = discountVal.discountType
+    dn = discountVal.discountName
     if dt == DISCOUNT_TYPE.PERCENT or dt == DISCOUNT_TYPE.TRADE_IN_PERCENT:
         if dt == DISCOUNT_TYPE.PERCENT:
-            txtKey = QUESTS.ACTION_DISCOUNT_DISCOUNTTEXT
+            if isinstance(dn, types.StringTypes) and dn == 'marathon':
+                txtKey = QUESTS.ACTION_DISCOUNT_DISCOUNTUPTOTEXT
+            else:
+                txtKey = QUESTS.ACTION_DISCOUNT_DISCOUNTTEXT
         else:
             txtKey = QUESTS.ACTION_DISCOUNT_TRADEINLABELTEXT
         return '{} {}'.format(i18n.makeString(txtKey), i18n.makeString(QUESTS.ACTION_DISCOUNT_PERCENT, value=discountVal.discountValue))

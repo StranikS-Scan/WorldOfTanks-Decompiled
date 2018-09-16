@@ -697,3 +697,49 @@ class IBootcampController(IGameController):
 
     def finishBootcamp(self):
         raise NotImplementedError
+
+
+class IMarathonEventController(IGameController):
+    onFlagUpdateNotify = None
+
+    def isEnabled(self):
+        raise NotImplementedError
+
+    def isAvailable(self):
+        raise NotImplementedError
+
+    def getMarathonFlagState(self, vehicle):
+        raise NotImplementedError
+
+    def checkForWarnings(self, vehicle):
+        raise NotImplementedError
+
+    def getState(self):
+        raise NotImplementedError
+
+    def getMarathonProgress(self):
+        raise NotImplementedError
+
+    def getQuestsData(self, prefix=None, postfix=None):
+        raise NotImplementedError
+
+    def getTokensData(self, prefix=None, postfix=None):
+        raise NotImplementedError
+
+    def getMarathonQuests(self):
+        raise NotImplementedError
+
+    def getFormattedRemainingTime(self):
+        raise NotImplementedError
+
+    def getExtraDaysToBuy(self):
+        raise NotImplementedError
+
+    def isVehicleObtained(self):
+        raise NotImplementedError
+
+    def getMarathonDiscount(self):
+        raise NotImplementedError
+
+    def getURL(self, callback):
+        raise NotImplementedError

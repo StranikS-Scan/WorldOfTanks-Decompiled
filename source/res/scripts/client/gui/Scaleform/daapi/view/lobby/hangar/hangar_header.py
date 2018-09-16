@@ -9,7 +9,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
-from gui.server_events.events_dispatcher import showMissionsForCurrentVehicle, showPersonalMission, showMissionsElen
+from gui.server_events.events_dispatcher import showMissionsForCurrentVehicle, showPersonalMission, showMissionsElen, showMissionsMarathon
 from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
@@ -17,7 +17,7 @@ from helpers.i18n import makeString as _ms
 from gui.shared.personality import ServicesLocator
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.server_events import IEventsCache
-from skeletons.gui.game_control import IQuestsController
+from skeletons.gui.game_control import IQuestsController, IMarathonEventController
 from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.connection_mgr import IConnectionManager
 from gui.prb_control import prb_getters
@@ -82,6 +82,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     _eventsController = dependency.descriptor(IEventBoardController)
     _connectionMgr = dependency.descriptor(IConnectionManager)
     _lobbyContext = dependency.descriptor(ILobbyContext)
+    _marathonCtrl = dependency.descriptor(IMarathonEventController)
 
     def __init__(self):
         super(HangarHeader, self).__init__()
@@ -98,6 +99,9 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
 
     def showEventQuests(self, eventQuestsID):
         showMissionsElen(eventQuestsID)
+
+    def showMarathonQuests(self):
+        showMissionsMarathon()
 
     def onUpdateHangarFlag(self):
         self.update()
@@ -118,10 +122,12 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         if self._eventsController:
             self._eventsController.addListener(self)
         self.app.onHangarHeaderToggle += self.update
+        self._marathonCtrl.onFlagUpdateNotify += self.update
         self._lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
 
     def _dispose(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
+        self._marathonCtrl.onFlagUpdateNotify -= self.update
         self._eventsCache.onSyncCompleted -= self.update
         self._eventsCache.onProgressUpdated -= self.update
         self._currentVehicle = None
@@ -149,6 +155,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
     def _addQuestsToHeaderVO(self, headerVO, vehicle):
         headerVO.update(self.__getBattleQuestsVO(vehicle))
         headerVO.update(self.__getPersonalQuestsVO(vehicle))
+        headerVO.update(self.__getMarathonQuestsVO(vehicle))
         headerVO.update(self.__getElenQuestsVO(vehicle))
 
     def __onServerSettingChanged(self, diff):
@@ -173,6 +180,14 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
          'commonQuestsTooltip': TOOLTIPS_CONSTANTS.QUESTS_PREVIEW,
          'commonQuestsEnable': totalCount > 0,
          'commonQuestsVisible': True}
+
+    def __getMarathonQuestsVO(self, vehicle):
+        flagVO = self._marathonCtrl.getMarathonFlagState(vehicle)
+        return {'marathonQuestsIcon': flagVO['flagHeaderIcon'],
+         'marathonQuestsStateIcon': flagVO['flagStateIcon'],
+         'marathonQuestsTooltip': flagVO['tooltip'],
+         'marathonQuestsEnable': flagVO['enable'],
+         'marathonQuestsVisible': flagVO['visible']}
 
     def __getPersonalQuestsVO(self, vehicle):
         if not self._lobbyContext.getServerSettings().isPersonalMissionsEnabled():

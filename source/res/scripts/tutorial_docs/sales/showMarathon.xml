@@ -1,0 +1,17 @@
+<showMarathon.xml>
+  <default-scene>	DefaultScene	</default-scene>
+  <initial-scene>	DefaultScene	</initial-scene>
+  <scenes>
+    <scene>	DefaultScene	  <post-effects>
+        <clear-scene></clear-scene>
+        <invoke-gui-cmd>	ShowMarathonPage	</invoke-gui-cmd>
+        <refuse-training></refuse-training>
+      </post-effects>
+      <runtime-effects></runtime-effects>
+      <gui-items></gui-items>
+    </scene>
+  </scenes>
+  <has-id></has-id>
+  <triggers></triggers>
+  <vars></vars>
+</showMarathon.xml>

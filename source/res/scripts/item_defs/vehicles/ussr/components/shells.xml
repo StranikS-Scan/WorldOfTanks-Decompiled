@@ -2359,21 +2359,22 @@
       <devices>	180	</devices>
     </damage>
   </_130mm_53_VBR_482>
-  <_130mm_3BM_experimental>
+  <_130mm_3VBK>
     <id>	162	</id>
-    <userString>	#ussr_vehicles:_130mm_3BM_experimental	</userString>
-    <icon>	ap_cr	</icon>
+    <userString>	#ussr_vehicles:_130mm_3VBK	</userString>
+    <icon>	hc	</icon>
     <price>	5200	</price>
     <improved>	true	</improved>
-    <kind>	ARMOR_PIERCING_CR	</kind>
+    <kind>	HOLLOW_CHARGE	</kind>
     <caliber>	130	</caliber>
     <isTracer>	true	</isTracer>
-    <effects>	largeAPCR	</effects>
+    <effects>	largeHollowCharge	</effects>
     <damage>
       <armor>	490	</armor>
       <devices>	180	</devices>
     </damage>
-  </_130mm_3BM_experimental>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_130mm_3VBK>
   <_130mm_53_VOF_482V>
     <id>	163	</id>
     <userString>	#ussr_vehicles:_130mm_53_VOF_482V	</userString>

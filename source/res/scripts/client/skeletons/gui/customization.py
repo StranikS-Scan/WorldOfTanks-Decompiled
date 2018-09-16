@@ -12,6 +12,9 @@ class ICustomizationService(object):
     def fini(self):
         raise NotImplementedError
 
+    def showCustomization(self):
+        raise NotImplementedError
+
     def getCtx(self):
         raise NotImplementedError
 

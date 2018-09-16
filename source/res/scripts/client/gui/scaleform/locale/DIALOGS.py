@@ -309,8 +309,12 @@ class DIALOGS(object):
     BARRACKSEXPANDNOTENOUGHMONEY_MESSAGE = '#dialogs:barracksExpandNotEnoughMoney/message'
     BARRACKSEXPANDNOTENOUGHMONEY_SUBMIT = '#dialogs:barracksExpandNotEnoughMoney/submit'
     BARRACKSEXPANDNOTENOUGHMONEY_CANCEL = '#dialogs:barracksExpandNotEnoughMoney/cancel'
-    EULA_P1 = '#dialogs:eula/p1'
-    EULA_P2 = '#dialogs:eula/p2'
+    EULA_DEFAULT_P1 = '#dialogs:eula/default/p1'
+    EULA_DEFAULT_P2 = '#dialogs:eula/default/p2'
+    EULA_ASIA_P1 = '#dialogs:eula/asia/p1'
+    EULA_ASIA_P2 = '#dialogs:eula/asia/p2'
+    EULA_NA_P1 = '#dialogs:eula/na/p1'
+    EULA_NA_P2 = '#dialogs:eula/na/p2'
     CONFIRMUNLOCK_TITLE = '#dialogs:confirmUnlock/title'
     CONFIRMUNLOCK_ITEM_MESSAGE = '#dialogs:confirmUnlock/item/message'
     CONFIRMUNLOCK_VEHICLE_MESSAGE = '#dialogs:confirmUnlock/vehicle/message'
@@ -1199,8 +1203,12 @@ class DIALOGS(object):
      BARRACKSEXPANDNOTENOUGHMONEY_MESSAGE,
      BARRACKSEXPANDNOTENOUGHMONEY_SUBMIT,
      BARRACKSEXPANDNOTENOUGHMONEY_CANCEL,
-     EULA_P1,
-     EULA_P2,
+     EULA_DEFAULT_P1,
+     EULA_DEFAULT_P2,
+     EULA_ASIA_P1,
+     EULA_ASIA_P2,
+     EULA_NA_P1,
+     EULA_NA_P2,
      CONFIRMUNLOCK_TITLE,
      CONFIRMUNLOCK_ITEM_MESSAGE,
      CONFIRMUNLOCK_VEHICLE_MESSAGE,

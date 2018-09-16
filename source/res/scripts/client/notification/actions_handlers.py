@@ -28,6 +28,7 @@ from skeletons.gui.battle_results import IBattleResultsService
 from skeletons.gui.game_control import IBrowserController, IRankedBattlesController
 from skeletons.gui.web import IWebController
 from soft_exception import SoftException
+from skeletons.gui.customization import ICustomizationService
 
 class _ActionHandler(object):
 
@@ -523,6 +524,7 @@ class SecurityLinkHandler(_ActionHandler):
 
 
 class OpenCustomizationHandler(_ActionHandler):
+    service = dependency.descriptor(ICustomizationService)
 
     @classmethod
     def getNotType(cls):
@@ -534,7 +536,7 @@ class OpenCustomizationHandler(_ActionHandler):
 
     def handleAction(self, model, entityID, action):
         super(OpenCustomizationHandler, self).handleAction(model, entityID, action)
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_CUSTOMIZATION), scope=EVENT_BUS_SCOPE.LOBBY)
+        self.service.showCustomization()
 
 
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,

@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/AmmunitionPanel.py
 import logging
-import BigWorld
 from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from gui.prb_control.entities.listener import IGlobalListener
 from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS
@@ -80,11 +79,6 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
     itemsCache = dependency.descriptor(IItemsCache)
     service = dependency.descriptor(ICustomizationService)
 
-    def __init__(self):
-        super(AmmunitionPanel, self).__init__()
-        self.__showCustomizationCallbackId = None
-        return
-
     def update(self):
         self._update()
 
@@ -92,16 +86,7 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
         self.fireEvent(LoadViewEvent(VIEW_ALIAS.TECHNICAL_MAINTENANCE), EVENT_BUS_SCOPE.LOBBY)
 
     def showCustomization(self):
-        if not g_currentVehicle.hangarSpace.spaceInited or not g_currentVehicle.hangarSpace.isModelLoaded:
-            _logger.warning('Space or vehicle is not presented, could not show customization view, return')
-            return
-        self.service.moveHangarVehicleToCustomizationRoom()
-        self.__showCustomizationCallbackId = BigWorld.callback(0.0, self.__showCustomization)
-
-    def __showCustomization(self):
-        self.__showCustomizationCallbackId = None
-        self.fireEvent(LoadViewEvent(VIEW_ALIAS.LOBBY_CUSTOMIZATION), EVENT_BUS_SCOPE.LOBBY)
-        return
+        self.service.showCustomization()
 
     def toRentContinue(self):
         if g_currentVehicle.isPresent():
@@ -125,13 +110,9 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
         self.update()
 
     def _dispose(self):
-        if self.__showCustomizationCallbackId is not None:
-            BigWorld.cancelCallback(self.__showCustomizationCallbackId)
-            self.__showCustomizationCallbackId = None
         self.stopGlobalListening()
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(AmmunitionPanel, self)._dispose()
-        return
 
     def _update(self):
         if g_currentVehicle.isPresent():

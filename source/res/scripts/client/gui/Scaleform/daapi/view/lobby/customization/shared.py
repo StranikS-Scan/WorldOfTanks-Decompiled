@@ -175,17 +175,19 @@ def getStyleInventoryCount(item, styleInfo=None):
     inventoryCount = item.fullInventoryCount(g_currentVehicle.item)
     if not styleInfo:
         return inventoryCount
-    original = styleInfo.original
-    modified = styleInfo.modified
-    if not item.isRentable:
-        if modified and modified.intCD == item.intCD:
-            inventoryCount -= 1
-        if original and original.intCD == item.intCD:
-            inventoryCount += 1
-    elif original and original.intCD == item.intCD:
-        if g_currentVehicle.item.getStyledOutfit(SeasonType.SUMMER).isEnabled():
-            inventoryCount += 1
-    return max(0, inventoryCount)
+    else:
+        original = styleInfo.original
+        modified = styleInfo.modified
+        if not item.isRentable:
+            if modified and modified.intCD == item.intCD:
+                inventoryCount -= 1
+            if original and original.intCD == item.intCD:
+                inventoryCount += 1
+        elif original and original.intCD == item.intCD:
+            styledOutfit = g_currentVehicle.item.getStyledOutfit(SeasonType.SUMMER)
+            if styledOutfit is not None and styledOutfit.isEnabled():
+                inventoryCount += 1
+        return max(0, inventoryCount)
 
 
 def getTotalPurchaseInfo(purchaseItems):

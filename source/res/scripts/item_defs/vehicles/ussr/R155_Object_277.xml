@@ -10,11 +10,11 @@
     <backward>	15	</backward>
   </speedLimits>
   <invisibility>
-    <moving>	0.049	</moving>
-    <still>	0.097	</still>
+    <moving>	0.06	</moving>
+    <still>	0.12	</still>
     <camouflageBonus>	0.02	</camouflageBonus>
     <camouflageNetBonus>	0.05	</camouflageNetBonus>
-    <firePenalty>	0.146	</firePenalty>
+    <firePenalty>	0.18	</firePenalty>
   </invisibility>
   <repairCost>	11.5	</repairCost>
   <crewXpFactor>	1.0	</crewXpFactor>
@@ -810,7 +810,7 @@
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	12000	</weight>
       <maxHealth>	440	</maxHealth>
-      <rotationSpeed>	26	</rotationSpeed>
+      <rotationSpeed>	27	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	170	</maxHealth>
         <maxRegenHealth>	85	</maxRegenHealth>
@@ -849,14 +849,14 @@
             <maxPitch>	0 5.5 0.361111 5.5 0.430556 3 0.569444 3 0.638889 5.5 1 5.5	</maxPitch>
           </pitchLimits>
           <invisibilityFactorAtShot>	0.153	</invisibilityFactorAtShot>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <reloadTime>	11.5	</reloadTime>
+          <shotDispersionRadius>	0.38	</shotDispersionRadius>
+          <reloadTime>	12.5	</reloadTime>
           <shotDispersionFactors>
             <turretRotation>	0.08	</turretRotation>
             <afterShot>	4.0	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
-          <aimingTime>	2.5	</aimingTime>
+          <aimingTime>	2.7	</aimingTime>
           <models>
             <undamaged>	vehicles/russian/R155_Object_277/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R155_Object_277/crash/lod0/Gun_01.model	</destroyed>

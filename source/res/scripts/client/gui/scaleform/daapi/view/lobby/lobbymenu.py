@@ -27,6 +27,7 @@ from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.events import LoadViewEvent
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.Scaleform.framework import ViewTypes
+from gui.prb_control import prbEntityProperty
 
 def _getVersionMessage(promo):
     return {'message': '{0} {1}'.format(text_styles.main(i18n.makeString(MENU.PROMO_PATCH_MESSAGE)), text_styles.stats(getShortClientVersion())),
@@ -42,6 +43,10 @@ class LobbyMenu(LobbyMenuMeta):
     lobbyContext = dependency.descriptor(ILobbyContext)
     gameplay = dependency.descriptor(IGameplayLogic)
     manualController = dependency.descriptor(IManualController)
+
+    @prbEntityProperty
+    def prbEntity(self):
+        pass
 
     def versionInfoClick(self):
         self.promo.showVersionsPatchPromo()
@@ -120,12 +125,15 @@ class LobbyMenu(LobbyMenuMeta):
             self.as_showBootcampButtonS(False)
         if events.isPlayerEntityChanging:
             self.as_showBootcampButtonS(False)
-        if not self.manualController.isActivated() or self.bootcamp.isInBootcamp():
+        if not self.manualController.isActivated() or self.bootcamp.isInBootcamp() or self.__isInQueue():
             self.as_showManualButtonS(False)
 
     def _dispose(self):
         self.__removeListeners()
         super(LobbyMenu, self)._dispose()
+
+    def __isInQueue(self):
+        return self.prbEntity and self.prbEntity.isInQueue()
 
     def __updateNewSettingsCount(self):
         userLogin = getattr(BigWorld.player(), 'name', '')

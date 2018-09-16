@@ -95,7 +95,7 @@ class Menu(DynAccessor):
                     body = 1704
                     header = 1703
 
-            nextButton_ = 4883
+            nextButton_ = 4887
 
         okButton = 1631
 
@@ -128,7 +128,7 @@ class Menu(DynAccessor):
                     __slots__ = ()
                     rent = 1681
 
-                experience_ = 4884
+                experience_ = 4888
                 slot = 1679
                 training = 1682
 
@@ -152,7 +152,7 @@ class Menu(DynAccessor):
                     body = 1716
                     header = 1715
 
-            nextButton_ = 4885
+            nextButton_ = 4889
 
             class nextButtonAward(DynAccessor):
                 __slots__ = ()
@@ -162,7 +162,7 @@ class Menu(DynAccessor):
                     body = 1719
                     header = 1718
 
-            nextButtonAward_ = 4886
+            nextButtonAward_ = 4890
             sideConditionCompleted = 1711
             sideConditionNotCompleted = 1712
 
@@ -267,7 +267,7 @@ class Menu(DynAccessor):
                 withBrotherhood = 1692
                 withoutCrew = 1693
 
-            description_ = 4887
+            description_ = 4891
             header = 1690
             subdescription = 1696
             vehicles = 1695
@@ -600,7 +600,7 @@ class Menu(DynAccessor):
 
             statsBlockTitle = 1456
 
-        personalCase_ = 4888
+        personalCase_ = 4892
         profileVehicleCompare = 1472
         rejectFriendship = 1414
         rejectInvitationToSquad = 1479
@@ -844,7 +844,7 @@ class Menu(DynAccessor):
                 label = 849
                 value = 850
 
-        available_ = 4889
+        available_ = 4893
         cancel = 848
         change = 845
         pay = 846
@@ -892,7 +892,7 @@ class Menu(DynAccessor):
             __slots__ = ()
             crystal = 1857
 
-        descText_ = 4890
+        descText_ = 4894
         okBtnLabel = 1855
         titleText = 1854
 
@@ -1136,7 +1136,7 @@ class Menu(DynAccessor):
             c_8 = 754
             c_9 = 755
 
-        level_ = 4891
+        level_ = 4895
         notificationSign = 805
         serverInfo = 745
 
@@ -1193,7 +1193,7 @@ class Menu(DynAccessor):
                     c_14 = 684
                     c_15 = 685
 
-                fallout_ = 4892
+                fallout_ = 4896
                 historical = 690
                 squad = 686
                 standart = 681
@@ -1209,13 +1209,13 @@ class Menu(DynAccessor):
                     __slots__ = ()
                     descr = 1814
 
-                epic_ = 4893
+                epic_ = 4897
 
                 class epicBattle(DynAccessor):
                     __slots__ = ()
                     descr = 1812
 
-                epicBattle_ = 4894
+                epicBattle_ = 4898
                 eventSquad = 660
                 fallout = 676
                 fort = 1574
@@ -1225,13 +1225,13 @@ class Menu(DynAccessor):
                     __slots__ = ()
                     descr = 672
 
-                historicalBattles_ = 4895
+                historicalBattles_ = 4899
 
                 class historicalBattlesLeave(DynAccessor):
                     __slots__ = ()
                     descr = 673
 
-                historicalBattlesLeave_ = 4896
+                historicalBattlesLeave_ = 4900
 
                 class leaveFort(DynAccessor):
                     __slots__ = ()
@@ -1263,10 +1263,10 @@ class Menu(DynAccessor):
                         season = 636
                         until = 638
 
-                    availability_ = 4897
+                    availability_ = 4901
                     descr = 635
 
-                ranked_ = 4898
+                ranked_ = 4902
 
                 class rankedLeave(DynAccessor):
                     __slots__ = ()
@@ -1278,7 +1278,7 @@ class Menu(DynAccessor):
                     __slots__ = ()
                     descr = 664
 
-                spec_ = 4899
+                spec_ = 4903
                 specLeave = 666
 
                 class squad(DynAccessor):
@@ -1288,21 +1288,21 @@ class Menu(DynAccessor):
                     event = 648
                     randomBattle = 647
 
-                squad_ = 4900
+                squad_ = 4904
                 squadBattle = 654
 
                 class squadLeave(DynAccessor):
                     __slots__ = ()
                     descr = 653
 
-                squadLeave_ = 4901
+                squadLeave_ = 4905
                 squadLeaveOwner = 650
 
                 class standart(DynAccessor):
                     __slots__ = ()
                     descr = 632
 
-                standart_ = 4902
+                standart_ = 4906
 
                 class standartLeave(DynAccessor):
                     __slots__ = ()
@@ -1314,7 +1314,7 @@ class Menu(DynAccessor):
                     __slots__ = ()
                     descr = 656
 
-                training_ = 4903
+                training_ = 4907
                 trainingLeave = 661
                 trainingLeaveOwner = 658
 
@@ -1322,10 +1322,10 @@ class Menu(DynAccessor):
                     __slots__ = ()
                     descr = 668
 
-                unit_ = 4904
+                unit_ = 4908
                 unitLeave = 670
 
-        battle_ = 4905
+        battle_ = 4909
         browser = 732
 
         class btnLabel(DynAccessor):
@@ -2039,7 +2039,7 @@ class Menu(DynAccessor):
                 __slots__ = ()
                 footnote = 999
 
-            maxShotDistance_ = 4906
+            maxShotDistance_ = 4910
 
             class noPiercingDistance(DynAccessor):
                 __slots__ = ()
@@ -2048,7 +2048,7 @@ class Menu(DynAccessor):
                     __slots__ = ()
                     maxDistance = 1001
 
-                footnote_ = 4907
+                footnote_ = 4911
 
             piercingDistance = 997
             piercingDistanceHeader = 996
@@ -2165,7 +2165,7 @@ class Menu(DynAccessor):
                     __slots__ = ()
                     tooltip = 471
 
-                defaultInviteText_ = 4908
+                defaultInviteText_ = 4912
                 isOnline = 469
                 mailingList = 468
 
@@ -2262,7 +2262,7 @@ class Menu(DynAccessor):
                     treasurer = 868
                     vice_leader = 866
 
-                position_ = 4909
+                position_ = 4913
 
             fights = 876
             lastBattleDateTitle = 861
@@ -3054,7 +3054,7 @@ class Menu(DynAccessor):
                 __slots__ = ()
                 c_not = 352
 
-            xpMultReceived_ = 4910
+            xpMultReceived_ = 4914
 
     class tankmanPersonalCase(DynAccessor):
         __slots__ = ()
@@ -3141,7 +3141,7 @@ class Menu(DynAccessor):
             __slots__ = ()
             price = 301
 
-        free_ = 4911
+        free_ = 4915
         scool = 299
         title = 297
         trainingTo = 302
@@ -3308,7 +3308,7 @@ class Menu(DynAccessor):
                     CN = 1620
                     KR = 1621
 
-                invalid_ = 4912
+                invalid_ = 4916
                 ours = 1622
 
     class vehicle(DynAccessor):

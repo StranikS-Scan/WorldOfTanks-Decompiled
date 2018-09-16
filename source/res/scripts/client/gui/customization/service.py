@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/customization/service.py
 import math
+import logging
 import BigWorld
 import Event
 from CurrentVehicle import g_currentVehicle
@@ -23,6 +24,8 @@ from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.shared.utils import IHangarSpace
 from items.components.c11n_constants import SeasonType
 from vehicle_systems.stricted_loading import makeCallbackWeak
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+_logger = logging.getLogger(__name__)
 
 class _ServiceItemShopMixin(object):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -129,6 +132,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self._suspendHighlighterCallbackID = None
         self._isDraggingInProcess = False
         self._notHandleHighlighterEvent = False
+        self.__showCustomizationCallbackId = None
         return
 
     def init(self):
@@ -149,7 +153,21 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         self.hangarSpace.onSpaceCreate -= self.__onSpaceCreate
         self.stopHighlighter()
         self._eventsManager.clear()
-        self.__cleanupCallback()
+        self.__cleanupSuspendHighlighterCallback()
+        if self.__showCustomizationCallbackId is not None:
+            BigWorld.cancelCallback(self.__showCustomizationCallbackId)
+            self.__showCustomizationCallbackId = None
+        return
+
+    def showCustomization(self):
+        if not g_currentVehicle.hangarSpace.spaceInited or not g_currentVehicle.hangarSpace.isModelLoaded:
+            _logger.warning('Space or vehicle is not presented, could not show customization view, return')
+            return
+        else:
+            if self.__showCustomizationCallbackId is None:
+                self.moveHangarVehicleToCustomizationRoom()
+                self.__showCustomizationCallbackId = BigWorld.callback(0.0, self.__showCustomization)
+            return
 
     def getCtx(self):
         if not self.__customizationCtx:
@@ -280,7 +298,7 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         if self._helper:
             isDragging = event.ctx.get('isDragging', False)
             if isDragging:
-                self.__cleanupCallback()
+                self.__cleanupSuspendHighlighterCallback()
                 self._suspendHighlighterCallbackID = BigWorld.callback(self.__FADE_OUT_DELAY, makeCallbackWeak(self.__onSuspendHighlighter))
                 self._isDraggingInProcess = False
                 g_eventBus.addListener(events.LobbySimpleEvent.NOTIFY_SPACE_MOVED, self.__onSpaceMoving)
@@ -290,10 +308,10 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
                 if self._suspendHighlighterCallbackID and self._isDraggingInProcess:
                     self._notHandleHighlighterEvent = True
                 self._isDraggingInProcess = False
-                self.__cleanupCallback()
+                self.__cleanupSuspendHighlighterCallback()
                 self._helper.setSuspended(False)
 
-    def __cleanupCallback(self):
+    def __cleanupSuspendHighlighterCallback(self):
         if self._suspendHighlighterCallbackID:
             BigWorld.cancelCallback(self._suspendHighlighterCallbackID)
             self._suspendHighlighterCallbackID = None
@@ -311,6 +329,11 @@ class CustomizationService(_ServiceItemShopMixin, _ServiceHelpersMixin, ICustomi
         dz = event.ctx.get('dz', 0)
         if dx or dy or dz:
             self._isDraggingInProcess = True
-            self.__cleanupCallback()
+            self.__cleanupSuspendHighlighterCallback()
             self.__onSuspendHighlighter()
             g_eventBus.removeListener(events.LobbySimpleEvent.NOTIFY_SPACE_MOVED, self.__onSpaceMoving)
+
+    def __showCustomization(self):
+        self.__showCustomizationCallbackId = None
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_CUSTOMIZATION), scope=EVENT_BUS_SCOPE.LOBBY)
+        return

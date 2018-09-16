@@ -32,6 +32,7 @@ class ItemTags(object):
     PREMIUM_IGR = 'premiumIGR'
     IGR = 'IGR'
     RARE = 'rare'
+    HIDDEN_IN_UI = 'hiddenInUI'
 
 
 class ApplyArea(object):

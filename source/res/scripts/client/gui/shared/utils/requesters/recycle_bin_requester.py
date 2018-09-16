@@ -30,7 +30,7 @@ class VehicleRestoreInfo(_VehicleRestoreInfo):
         return self.restoreType == RESTORE_VEHICLE_TYPE.ACTION or self.isLimited() and self.getRestoreTimeLeft() > 0
 
     def __getTimeGone(self):
-        return float(time_utils.getTimeDeltaTilNow(time_utils.makeLocalServerTime(self.changedAt))) if self.changedAt else 0
+        return float(time_utils.getTimeDeltaTillNow(time_utils.makeLocalServerTime(self.changedAt))) if self.changedAt else 0
 
 
 class RecycleBinRequester(AbstractSyncDataRequester, IRecycleBinRequester):
@@ -58,7 +58,7 @@ class RecycleBinRequester(AbstractSyncDataRequester, IRecycleBinRequester):
         filteredBuffer = {}
         tankmenBuffer = self.recycleBin.get('tankmen', {}).get('buffer', {})
         for tankmanId, (strCD, dismissedAt) in tankmenBuffer.iteritems():
-            if time_utils.getTimeDeltaTilNow(dismissedAt) < maxDuration:
+            if time_utils.getTimeDeltaTillNow(dismissedAt) < maxDuration:
                 filteredBuffer[tankmanId] = (strCD, dismissedAt)
 
         return dict(((k * -1, v) for k, v in filteredBuffer.iteritems()))

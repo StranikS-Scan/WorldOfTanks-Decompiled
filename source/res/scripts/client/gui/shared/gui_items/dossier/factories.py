@@ -209,6 +209,7 @@ _ACHIEVEMENTS_BY_NAME = {(_AB.TOTAL, 'warrior'): _CustomAchieveFactory.get(_as.W
  (_AB.SINGLE, 'FE18OpenPlayOff'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
  (_AB.SINGLE, 'FE18OpenFinalStage'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
  (_AB.SINGLE, 'FE18OpenFirstPlace'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
+ (_AB.SINGLE, 'medalKursk'): _AchieveFactory.get(_abstract_achievements.QuestAchievement),
  (_AB.TEAM_7X7, 'geniusForWarMedal'): _CustomAchieveFactory.get(_as.GeniusForWarAchievement),
  (_AB.TEAM_7X7, 'wolfAmongSheepMedal'): _CustomAchieveFactory.get(_as.WolfAmongSheepAchievement),
  (_AB.TEAM_7X7, 'fightingReconnaissanceMedal'): _CustomAchieveFactory.get(_as.FightingReconnaissanceAchievement),

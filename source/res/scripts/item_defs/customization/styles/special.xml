@@ -1221,4 +1221,48 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	special style notInShop	</priceGroup>
+    <vehicleFilter>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <style>
+      <id>	188	</id>
+      <texture>	gui/maps/vehicles/styles/battle_of_kursk_02.png	</texture>
+      <isRent>	false	</isRent>
+      <rentCount>	0	</rentCount>
+      <userString>	#vehicle_customization:special_style/battle_of_kursk_02	</userString>
+      <description>	#vehicle_customization:special_style/battle_of_kursk_02_desc	</description>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	576	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4368	</appliedTo>
+            </item>
+          </camouflages>
+          <decals>
+            <item>
+              <id>	569	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	568	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </special.xml>

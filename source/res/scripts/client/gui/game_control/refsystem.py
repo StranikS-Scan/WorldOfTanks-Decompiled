@@ -418,7 +418,7 @@ class _RefItem(object):
 
     def getBonus(self):
         if self.isConfirmedFirstBattle():
-            delta = time_utils.getTimeDeltaTilNow(self.__firstBattleTime)
+            delta = time_utils.getTimeDeltaTillNow(self.__firstBattleTime)
             try:
                 maxXPPool = _getMaxReferralXPPool()
                 periodTime = 0

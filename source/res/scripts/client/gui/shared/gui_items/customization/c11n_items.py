@@ -172,6 +172,9 @@ class Customization(FittingItem):
     def isRare(self):
         return self.descriptor.isRare()
 
+    def isHiddenInUI(self):
+        return self.descriptor.isHiddenInUI()
+
     def fullInventoryCount(self, vehicle):
         return self.inventoryCount + self.boundInventoryCount.get(vehicle.intCD, 0)
 

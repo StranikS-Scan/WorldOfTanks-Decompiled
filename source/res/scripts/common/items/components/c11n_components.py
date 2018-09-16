@@ -43,6 +43,9 @@ class BaseCustomizationItem(object):
     def isRare(self):
         return ItemTags.RARE in self.tags
 
+    def isHiddenInUI(self):
+        return ItemTags.HIDDEN_IN_UI in self.tags
+
     @property
     def isUnique(self):
         return self.maxNumber > 0

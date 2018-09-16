@@ -67,6 +67,9 @@ class ServerEventAbstract(object):
     def isHidden(self):
         return self._data.get('hidden', False) or not self.__isForCurrentPeriphery()
 
+    def isShowedPostBattle(self):
+        return self._data.get('showPostBattleStat', False)
+
     def getWeekDays(self):
         return self._data.get('weekDays', set())
 
@@ -107,6 +110,9 @@ class ServerEventAbstract(object):
 
     def getDescription(self):
         return getLocalizedData(self._data, 'description')
+
+    def getTimeFromStartTillNow(self):
+        return time_utils.getTimeDeltaTillNow(self.getStartTime())
 
     def getStartTimeLeft(self):
         return time_utils.getTimeDeltaFromNowInLocal(self.getStartTime())

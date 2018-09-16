@@ -21,7 +21,7 @@ DEFAULT_MAX_TANKMEN_BUFFER_LENGTH = 100
 @dependency.replace_none_kwargs(itemsCache=IItemsCache)
 def getTankmenRestoreInfo(tankman, itemsCache=None):
     config = itemsCache.items.shop.tankmenRestoreConfig
-    dismissalLength = time_utils.getTimeDeltaTilNow(tankman.dismissedAt)
+    dismissalLength = time_utils.getTimeDeltaTillNow(tankman.dismissedAt)
     price = config.cost if dismissalLength >= config.freeDuration else MONEY_UNDEFINED
     return (price, config.billableDuration - dismissalLength)
 
@@ -173,7 +173,7 @@ class RestoreController(IRestoreController, Notifiable):
         if lastRestoreNotification is None:
             showMessage = True
         else:
-            showMessage = time_utils.getTimeDeltaTilNow(lastRestoreNotification) >= time_utils.ONE_DAY
+            showMessage = time_utils.getTimeDeltaTillNow(lastRestoreNotification) >= time_utils.ONE_DAY
         if vehicles and showMessage and not self.__checkForNotify:
             AccountSettings.setSettings(LAST_RESTORE_NOTIFICATION, time.time())
             SystemMessages.pushI18nMessage('#system_messages:restoreController/hasLimitedRestoreVehicles', type=SystemMessages.SM_TYPE.Warning)

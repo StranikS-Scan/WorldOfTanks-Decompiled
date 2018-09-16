@@ -11,7 +11,7 @@ from debug_utils import LOG_WARNING
 from gui.clans import formatters as clans_fmts
 from gui.clans.settings import MAX_CLAN_MEMBERS_COUNT, CLAN_INVITE_STATES_SORT_RULES, CLAN_INVITE_STATES
 from debug_utils import LOG_ERROR
-from helpers.time_utils import getTimeDeltaTilNow, ONE_DAY
+from helpers.time_utils import getTimeDeltaTillNow, ONE_DAY
 
 def _getTimestamp(datetimeValue):
     return time_utils.getTimestampFromUTC(datetimeValue.timetuple())
@@ -712,7 +712,7 @@ class ClanMemberData(_ClanMemberData, FieldsCheckerMixin):
 
     @fmtUnavailableValue(fields=('joined_at',))
     def getDaysInClan(self):
-        return getTimeDeltaTilNow(self.getJoiningTime()) / ONE_DAY
+        return getTimeDeltaTillNow(self.getJoiningTime()) / ONE_DAY
 
     @fmtDelegat(path='ratings.getGlobalRating')
     def getGlobalRating(self):

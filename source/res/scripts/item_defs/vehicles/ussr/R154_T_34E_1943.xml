@@ -49,6 +49,13 @@
       <undamaged>	vehicles/russian/R154_T_34E_1943/normal/lod0/Hull.model	</undamaged>
       <destroyed>	vehicles/russian/R154_T_34E_1943/crash/lod0/Hull.model	</destroyed>
       <exploded>	vehicles/russian/R154_T_34E_1943/crash/lod0/Hull.model	</exploded>
+      <sets>
+        <KurskBattle>
+          <undamaged>	vehicles/russian/R154_T_34E_1943/_skins/KurskBattle/normal/lod0/Hull.model	</undamaged>
+          <destroyed>	vehicles/russian/R154_T_34E_1943/_skins/KurskBattle/crash/lod0/Hull.model	</destroyed>
+          <exploded>	vehicles/russian/R154_T_34E_1943/_skins/KurskBattle/crash/lod0/Hull.model	</exploded>
+        </KurskBattle>
+      </sets>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -110,6 +117,13 @@
         <undamaged>	vehicles/russian/R154_T_34E_1943/normal/lod0/Chassis.model	</undamaged>
         <destroyed>	vehicles/russian/R154_T_34E_1943/crash/lod0/Chassis.model	</destroyed>
         <exploded>	vehicles/russian/R154_T_34E_1943/crash/lod0/Chassis.model	</exploded>
+        <sets>
+          <KurskBattle>
+            <undamaged>	vehicles/russian/R154_T_34E_1943/_skins/KurskBattle/normal/lod0/Chassis.model	</undamaged>
+            <destroyed>	vehicles/russian/R154_T_34E_1943/_skins/KurskBattle/crash/lod0/Chassis.model	</destroyed>
+            <exploded>	vehicles/russian/R154_T_34E_1943/_skins/KurskBattle/crash/lod0/Chassis.model	</exploded>
+          </KurskBattle>
+        </sets>
       </models>
       <traces>
         <lodDist>	MEDIUM	</lodDist>
@@ -521,6 +535,13 @@
             <undamaged>	vehicles/russian/R154_T_34E_1943/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R154_T_34E_1943/crash/lod0/Gun_01.model	</destroyed>
             <exploded>	vehicles/russian/R154_T_34E_1943/crash/lod0/Gun_01.model	</exploded>
+            <sets>
+              <KurskBattle>
+                <undamaged>	vehicles/russian/R154_T_34E_1943/_skins/KurskBattle/normal/lod0/Gun_01.model	</undamaged>
+                <destroyed>	vehicles/russian/R154_T_34E_1943/_skins/KurskBattle/crash/lod0/Gun_01.model	</destroyed>
+                <exploded>	vehicles/russian/R154_T_34E_1943/_skins/KurskBattle/crash/lod0/Gun_01.model	</exploded>
+              </KurskBattle>
+            </sets>
           </models>
           <hitTester>
             <collisionModelServer>	vehicles/russian/R154_T_34E_1943/collision/Gun_01.model	</collisionModelServer>
@@ -542,6 +563,13 @@
         <undamaged>	vehicles/russian/R154_T_34E_1943/normal/lod0/Turret_01.model	</undamaged>
         <destroyed>	vehicles/russian/R154_T_34E_1943/crash/lod0/Turret_01.model	</destroyed>
         <exploded>	vehicles/russian/R154_T_34E_1943/crash/lod0/Turret_01.model	</exploded>
+        <sets>
+          <KurskBattle>
+            <undamaged>	vehicles/russian/R154_T_34E_1943/_skins/KurskBattle/normal/lod0/Turret_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R154_T_34E_1943/_skins/KurskBattle/crash/lod0/Turret_01.model	</destroyed>
+            <exploded>	vehicles/russian/R154_T_34E_1943/_skins/KurskBattle/crash/lod0/Turret_01.model	</exploded>
+          </KurskBattle>
+        </sets>
       </models>
       <hitTester>
         <collisionModelServer>	vehicles/russian/R154_T_34E_1943/collision/Turret_01.model	</collisionModelServer>

@@ -2583,7 +2583,7 @@ class LoginServerSelectionSetting(PreferencesSetting):
     def __init__(self, key):
         super(LoginServerSelectionSetting, self).__init__()
         self.__key = key
-        self.__value = Settings.g_instance.userPrefs.readBool(self.__key, True)
+        self.__value = Settings.g_instance.userPrefs.readBool(self.__key, False)
 
     def _savePrefsCallback(self, _):
         Settings.g_instance.userPrefs.writeBool(self.__key, self.__value)

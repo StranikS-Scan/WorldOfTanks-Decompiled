@@ -16,6 +16,7 @@ from gui.shared.gui_items.processors import quests as quests_proc
 from gui.shared.utils.decorators import process
 from helpers import time_utils, i18n, dependency
 from shared_utils import CONST_CONTAINER
+from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.server_events import IEventsCache
 from gui.server_events.events_constants import LINKEDSET_GROUP_PREFIX, MARATHON_GROUP_PREFIX, FOOTBALL2018_PREFIX
 from helpers.i18n import makeString as _ms
@@ -287,6 +288,11 @@ def isFootball(eventID):
 
 def hasFootballQuests(eventsIDs):
     return any((isFootball(eventID) for eventID in eventsIDs))
+
+
+def getMarathonPrefix(eventID):
+    marathonsCtrl = dependency.instance(IMarathonEventsController)
+    return marathonsCtrl.getPrefix(eventID)
 
 
 def isMarathon(eventID):

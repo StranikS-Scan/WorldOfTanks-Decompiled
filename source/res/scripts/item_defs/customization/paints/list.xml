@@ -370,6 +370,32 @@
     </paint>
   </itemGroup>
   <itemGroup>
+    <name>	the battle of kursk paint	</name>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R154_T_34E_1943	</vehicles>
+      </include>
+    </vehicleFilter>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+    <paint>
+      <id>	296	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_24.png	</texture>
+      <color>	64 69 48 255	</color>
+      <gloss>	0.52	</gloss>
+      <metallic>	0.235	</metallic>
+      <userString>	#vehicle_customization:repaint/custom_color_24	</userString>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+    </paint>
+  </itemGroup>
+  <itemGroup>
     <priceGroup>	historical paint	</priceGroup>
     <name>	chinese colors	</name>
     <userString>	#vehicle_customization:repaint/color_group_02	</userString>

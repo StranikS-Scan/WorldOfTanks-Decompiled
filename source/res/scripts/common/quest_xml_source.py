@@ -261,7 +261,8 @@ class Source(object):
          'priority': questSection.readInt('priority', 0),
          'uiDecoration': questSection.readInt('uiDecoration', 0),
          'peripheryIDs': {int(p) for p in onlyForPeripheriesList.split()} if onlyForPeripheriesList else set(),
-         'runFlags': runFlags}
+         'runFlags': runFlags,
+         'showPostBattleStat': questSection.readBool('showPostBattleStat', False)}
         if eventType == EVENT_TYPE.MOTIVE_QUEST:
             extraSubsectionsNames = ('advice', 'requirements', 'congratulation')
             for subsectionName in extraSubsectionsNames:

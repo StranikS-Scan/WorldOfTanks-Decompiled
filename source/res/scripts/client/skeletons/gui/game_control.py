@@ -708,7 +708,44 @@ class IBootcampController(IGameController):
         raise NotImplementedError
 
 
-class IMarathonEventController(IGameController):
+class IMarathonEventsController(IGameController):
+    onFlagUpdateNotify = None
+
+    def addMarathon(self, data):
+        raise NotImplementedError
+
+    def delMarathon(self, prefix):
+        raise NotImplementedError
+
+    def getMarathon(self, prefix):
+        raise NotImplementedError
+
+    def getMarathons(self):
+        raise NotImplementedError
+
+    def getPrimaryMarathon(self):
+        raise NotImplementedError
+
+    def getFirstAvailableMarathon(self):
+        raise NotImplementedError
+
+    def getPrefix(self, eventID):
+        raise NotImplementedError
+
+    def getShowedPostBattleQuests(self):
+        raise NotImplementedError
+
+    def getQuestsData(self, prefix=None, postfix=None):
+        raise NotImplementedError
+
+    def getTokensData(self, prefix=None, postfix=None):
+        raise NotImplementedError
+
+    def isAnyActive(self):
+        raise NotImplementedError
+
+
+class IMarathonEventController(object):
     onFlagUpdateNotify = None
 
     def isEnabled(self):
@@ -750,7 +787,7 @@ class IMarathonEventController(IGameController):
     def getMarathonDiscount(self):
         raise NotImplementedError
 
-    def getURL(self, callback):
+    def getUrl(self, callback):
         raise NotImplementedError
 
 

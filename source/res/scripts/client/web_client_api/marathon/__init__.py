@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/marathon/__init__.py
+from gui.marathon.marathon_constants import MARATHONS_DATA
 from helpers import dependency
-from skeletons.gui.game_control import IMarathonEventController
+from skeletons.gui.game_control import IMarathonEventsController
 from web_client_api import w2c, w2capi, Field, W2CSchema
 
 class _MarathonSchema(W2CSchema):
@@ -10,11 +11,11 @@ class _MarathonSchema(W2CSchema):
 
 @w2capi(name='user_data', key='action')
 class MarathonWebApi(W2CSchema):
-    ctrl = dependency.descriptor(IMarathonEventController)
+    marathonsCtrl = dependency.descriptor(IMarathonEventsController)
 
     @w2c(_MarathonSchema, 'get_tokens')
     def handleGetTokens(self, command):
-        tokens = self.ctrl.getTokensData()
+        tokens = self.marathonsCtrl.getTokensData()
         if hasattr(command, 'ids') and command.ids:
             tokens = {k:v for k, v in tokens.iteritems() if k in command.ids}
         return {'token_list': tokens,
@@ -22,7 +23,7 @@ class MarathonWebApi(W2CSchema):
 
     @w2c(_MarathonSchema, 'get_quests')
     def handleGetQuests(self, command):
-        quests = self.ctrl.getQuestsData()
+        quests = self.marathonsCtrl.getQuestsData()
         if hasattr(command, 'ids') and command.ids:
             quests = {k:v for k, v in quests.iteritems() if k in command.ids}
         return {'quest_list': quests,

@@ -17,6 +17,8 @@ from gui.Scaleform.genConsts.PROFILE_CONSTANTS import PROFILE_CONSTANTS
 from gui.Scaleform.genConsts.MISSIONS_CONSTANTS import MISSIONS_CONSTANTS
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from soft_exception import SoftException
+from skeletons.account_helpers.settings_core import ISettingsCore
+from helpers import dependency
 KEY_FILTERS = 'filters'
 KEY_SETTINGS = 'settings'
 KEY_FAVORITES = 'favorites'
@@ -509,7 +511,8 @@ def _recursiveStep(defaultDict, savedDict, finalDict):
 
 class AccountSettings(object):
     onSettingsChanging = Event.Event()
-    version = 34
+    version = 35
+    settingsCore = dependency.descriptor(ISettingsCore)
     __cache = {'login': None,
      'section': None}
     __isFirstRun = True
@@ -877,6 +880,8 @@ class AccountSettings(object):
                 SoundGroups.g_instance.setVolume('music', maxVolume)
                 SoundGroups.g_instance.setVolume('music_hangar', maxVolume)
                 SoundGroups.g_instance.savePreferences()
+            if currVersion < 35:
+                AccountSettings.settingsCore.applySetting('loginServerSelection', False)
             ads.writeInt('version', AccountSettings.version)
         return
 

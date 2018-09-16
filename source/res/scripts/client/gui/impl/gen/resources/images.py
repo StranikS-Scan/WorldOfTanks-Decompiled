@@ -734,126 +734,137 @@ class Images(DynAccessor):
                         reserve_inprogress_24 = 2512
                         ussr_T62A = 2513
 
+                    class hangarFlag(DynAccessor):
+                        __slots__ = ()
+                        flag_blue = 2514
+                        flag_fgreen = 2515
+                        flag_fyellow = 2516
+                        flag_green = 2517
+                        flag_italy = 2518
+                        flag_khacki = 2519
+                        flag_kursk = 2520
+                        flag_red = 2521
+
                     class marathon(DynAccessor):
                         __slots__ = ()
-                        alert_icon = 2514
-                        cup_disable_icon = 2515
-                        cup_icon = 2516
-                        icon_flag = 2517
-                        ok_icon = 2518
-                        sale_icon = 2519
-                        time_icon = 2520
+                        alert_icon = 2522
+                        cup_disable_icon = 2523
+                        cup_icon = 2524
+                        icon_flag = 2525
+                        ok_icon = 2526
+                        sale_icon = 2527
+                        time_icon = 2528
 
                     class marksOnGun(DynAccessor):
                         __slots__ = ()
-                        mark_1 = 2521
-                        mark_2 = 2522
-                        mark_3 = 2523
+                        mark_1 = 2529
+                        mark_2 = 2530
+                        mark_3 = 2531
 
                     class outline(DynAccessor):
                         __slots__ = ()
-                        beginner = 2524
-                        plus = 2525
-                        quests_all_done = 2526
-                        quests_available = 2527
-                        quests_disabled = 2528
-                        reward = 2529
+                        beginner = 2532
+                        plus = 2533
+                        quests_all_done = 2534
+                        quests_available = 2535
+                        quests_disabled = 2536
+                        reward = 2537
 
                     class proficiency(DynAccessor):
                         __slots__ = ()
-                        class_icons_1 = 2530
-                        class_icons_1_small = 2531
-                        class_icons_2 = 2532
-                        class_icons_2_small = 2533
-                        class_icons_3 = 2534
-                        class_icons_3_small = 2535
-                        class_icons_4 = 2536
-                        class_icons_4_small = 2537
+                        class_icons_1 = 2538
+                        class_icons_1_small = 2539
+                        class_icons_2 = 2540
+                        class_icons_2_small = 2541
+                        class_icons_3 = 2542
+                        class_icons_3_small = 2543
+                        class_icons_4 = 2544
+                        class_icons_4_small = 2545
 
                     class qualifiers(DynAccessor):
                         __slots__ = ()
 
                         class c_16x16(DynAccessor):
                             __slots__ = ()
-                            all = 2538
-                            camouflage = 2539
-                            commander = 2540
-                            driver = 2541
-                            gunner = 2542
-                            loader = 2543
-                            radioman = 2544
+                            all = 2546
+                            camouflage = 2547
+                            commander = 2548
+                            driver = 2549
+                            gunner = 2550
+                            loader = 2551
+                            radioman = 2552
 
                         class c_42x42(DynAccessor):
                             __slots__ = ()
-                            all = 2545
-                            camouflage = 2546
-                            commander = 2547
-                            driver = 2548
-                            gunner = 2549
-                            loader = 2550
-                            radioman = 2551
+                            all = 2553
+                            camouflage = 2554
+                            commander = 2555
+                            driver = 2556
+                            gunner = 2557
+                            loader = 2558
+                            radioman = 2559
 
                         class c_48x48(DynAccessor):
                             __slots__ = ()
-                            camouflage = 2552
+                            camouflage = 2560
 
                     class store(DynAccessor):
                         __slots__ = ()
-                        condition_off = 2553
-                        condition_on = 2554
+                        condition_off = 2561
+                        condition_on = 2562
 
                     class userStatus(DynAccessor):
                         __slots__ = ()
-                        busy = 2555
-                        busyBlind = 2556
-                        mob = 2557
-                        offline = 2558
-                        online = 2559
-                        web = 2560
-                        wotb = 2561
-                        wotg = 2562
-                        wowp = 2563
-                        wows = 2564
+                        busy = 2563
+                        busyBlind = 2564
+                        mob = 2565
+                        offline = 2566
+                        online = 2567
+                        web = 2568
+                        wotb = 2569
+                        wotg = 2570
+                        wowp = 2571
+                        wows = 2572
 
                         class small(DynAccessor):
                             __slots__ = ()
-                            busy = 2565
-                            busyBlind = 2566
-                            mob = 2567
-                            offline = 2568
-                            online = 2569
-                            web = 2570
-                            wotb = 2571
-                            wotg = 2572
-                            wowp = 2573
-                            wows = 2574
+                            busy = 2573
+                            busyBlind = 2574
+                            mob = 2575
+                            offline = 2576
+                            online = 2577
+                            web = 2578
+                            wotb = 2579
+                            wotg = 2580
+                            wowp = 2581
+                            wows = 2582
 
                 class quests(DynAccessor):
                     __slots__ = ()
 
                     class tiles(DynAccessor):
                         __slots__ = ()
-                        tile_1_1_color_over = 2575
-                        tile_1_1_color_up = 2576
-                        tile_1_1_gray_over = 2577
-                        tile_1_1_gray_up = 2578
-                        tile_1_1_tooltip = 2579
-                        tile_1_2_color_over = 2580
-                        tile_1_2_color_up = 2581
-                        tile_1_2_gray_over = 2582
-                        tile_1_2_gray_up = 2583
-                        tile_1_2_tooltip = 2584
-                        tile_1_3_color_over = 2585
-                        tile_1_3_color_up = 2586
-                        tile_1_3_gray_over = 2587
-                        tile_1_3_gray_up = 2588
-                        tile_1_3_tooltip = 2589
-                        tile_1_4_color_over = 2590
-                        tile_1_4_color_up = 2591
-                        tile_1_4_gray_over = 2592
-                        tile_1_4_gray_up = 2593
-                        tile_1_4_tooltip = 2594
-                        tile_2_5_color_over = 2595
-                        tile_2_5_color_up = 2596
-                        tile_2_5_gray_over = 2597
-                        tile_2_5_gray_up = 2598
+                        tile_1_1_color_over = 2583
+                        tile_1_1_color_up = 2584
+                        tile_1_1_gray_over = 2585
+                        tile_1_1_gray_up = 2586
+                        tile_1_1_tooltip = 2587
+                        tile_1_2_color_over = 2588
+                        tile_1_2_color_up = 2589
+                        tile_1_2_gray_over = 2590
+                        tile_1_2_gray_up = 2591
+                        tile_1_2_tooltip = 2592
+                        tile_1_3_color_over = 2593
+                        tile_1_3_color_up = 2594
+                        tile_1_3_gray_over = 2595
+                        tile_1_3_gray_up = 2596
+                        tile_1_3_tooltip = 2597
+                        tile_1_4_color_over = 2598
+                        tile_1_4_color_up = 2599
+                        tile_1_4_gray_over = 2600
+                        tile_1_4_gray_up = 2601
+                        tile_1_4_tooltip = 2602
+                        tile_2_5_color_over = 2603
+                        tile_2_5_color_up = 2604
+                        tile_2_5_gray_over = 2605
+                        tile_2_5_gray_up = 2606

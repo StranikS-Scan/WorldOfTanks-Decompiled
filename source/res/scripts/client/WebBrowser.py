@@ -445,9 +445,9 @@ class WebBrowser(object):
         LOG_BROWSER('setLoadingScreenVisible', visible)
         self.onLoadingStateChange(visible, True)
 
-    def setAllowAutoLoadingScreen(self, enabled):
-        LOG_BROWSER('setAllowAutoLoadingScreen', enabled)
-        self.__allowAutoLoadingScreenChange = enabled
+    def setAllowAutoLoadingScreen(self, showLoadingWheel):
+        LOG_BROWSER('setAllowAutoLoadingScreen', showLoadingWheel)
+        self.__allowAutoLoadingScreenChange = showLoadingWheel
 
     def changeTitle(self, title):
         self.onTitleChange(title)

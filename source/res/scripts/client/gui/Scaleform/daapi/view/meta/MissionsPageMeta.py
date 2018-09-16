@@ -7,7 +7,7 @@ class MissionsPageMeta(View):
     def resetFilters(self):
         self._printOverrideError('resetFilters')
 
-    def onTabSelected(self, alias):
+    def onTabSelected(self, alias, prefix):
         self._printOverrideError('onTabSelected')
 
     def onClose(self):

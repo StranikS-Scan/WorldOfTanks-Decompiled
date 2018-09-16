@@ -81,6 +81,7 @@ class _NavigationInfo(object):
         self.random = PMInfo(None, None, None)
         self.__selectedPQType = _QA.SEASON_VIEW_TAB_RANDOM
         self._missionsTab = None
+        self._marathonPrefix = None
         self._vehicleSelectorFilters = {}
         return
 
@@ -122,8 +123,14 @@ class _NavigationInfo(object):
     def getMissionsTab(self):
         return self._missionsTab
 
+    def getMarathonPrefix(self):
+        return self._marathonPrefix
+
     def setMissionsTab(self, tabID):
         self._missionsTab = tabID
+
+    def setMarathonPrefix(self, marathonPrefix):
+        self._marathonPrefix = marathonPrefix
 
     def getVehicleSelectorFilters(self):
         return self._vehicleSelectorFilters

@@ -218,14 +218,16 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
     def __makeVO(self):
         currentElement = self._currentStyle if self._slotID == GUI_ITEM_TYPE.STYLE else self._currentItem
         titleText, descrText = self.__getTitleDescrTexts(currentElement)
-        emptySlotVO = None
+        slotImgSrc = ''
         if not currentElement:
-            emptySlotVO = {'imgIconSrc': RES_ICONS.MAPS_ICONS_LIBRARY_TANKITEM_BUY_TANK_POPOVER_SMALL}
+            slotImgSrc = RES_ICONS.MAPS_ICONS_LIBRARY_TANKITEM_BUY_TANK_POPOVER_SMALL
+        elif self._slotID == GUI_ITEM_TYPE.STYLE and self._currentStyle.isHiddenInUI():
+            slotImgSrc = self._currentStyle.icon
         vo = {'intCD': -1 if not currentElement else currentElement.intCD,
          'titleImageSrc': self.__getTitleImage(),
          'titleText': titleText,
          'descrText': descrText,
-         'emptySlotVO': emptySlotVO,
+         'slotImgSrc': slotImgSrc,
          'renderers': self.__makeRenderersVOs() if currentElement else []}
         return vo
 
@@ -280,7 +282,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             renderers.append(self.__makeSetOnOtherTankPartsRendererVO())
         elif self._slotID == GUI_ITEM_TYPE.EMBLEM or self._slotID == GUI_ITEM_TYPE.INSCRIPTION or self._slotID == GUI_ITEM_TYPE.MODIFICATION:
             renderers.append(self.__makeSetOnOtherSeasonsRendererVO())
-        elif self._slotID == GUI_ITEM_TYPE.STYLE:
+        elif self._slotID == GUI_ITEM_TYPE.STYLE and not self._currentStyle.isHiddenInUI():
             vo = self.__makeStyleRendererVO()
             if vo is not None:
                 renderers += vo
@@ -437,7 +439,7 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
                 outfit = self._currentStyle.getOutfit(season)
                 items = []
                 for item, component in outfit.itemsFull():
-                    if item.intCD not in seasonUnique:
+                    if item.intCD not in seasonUnique and not item.isHiddenInUI():
                         items.append({'image': item.getIconApplied(component),
                          'specialArgs': item.getSpecialArgs(component),
                          'isWide': item.isWide(),

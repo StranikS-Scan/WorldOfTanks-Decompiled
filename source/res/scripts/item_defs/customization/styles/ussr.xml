@@ -232,4 +232,52 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:styles/special_styles	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	special style notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R154_T_34E_1943	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	184	</id>
+      <texture>	gui/maps/vehicles/styles/battle_of_kursk_01.png	</texture>
+      <isRent>	false	</isRent>
+      <rentCount>	0	</rentCount>
+      <userString>	#vehicle_customization:special_style/battle_of_kursk_01	</userString>
+      <description>	#vehicle_customization:special_style/battle_of_kursk_01_desc	</description>
+      <season>	ALL	</season>
+      <historical>	true	</historical>
+      <modelsSet>	KurskBattle	</modelsSet>
+      <tags>	hiddenInUI	</tags>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <paints>
+            <item>
+              <id>	296	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+          <camouflages>
+            <item>
+              <id>	575	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	256	</appliedTo>
+            </item>
+            <item>
+              <id>	1	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	16	</appliedTo>
+            </item>
+          </camouflages>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </ussr.xml>

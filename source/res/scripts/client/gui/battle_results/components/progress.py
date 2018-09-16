@@ -241,6 +241,7 @@ class QuestsProgressBlock(base.StatsBlock):
 
             from gui.Scaleform.daapi.view.lobby.server_events import events_helpers
             quests = self.eventsCache.getQuests()
+            quests.update(self.eventsCache.getHiddenQuests(lambda q: q.isShowedPostBattle()))
             commonQuests, personalMissions = [], {}
             for qID, qProgress in questsProgress.iteritems():
                 pGroupBy, pPrev, pCur = qProgress

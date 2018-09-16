@@ -17,10 +17,15 @@ class BCHangarHeader(HangarHeader):
         self.showQuestsWindow()
 
     def _addQuestsToHeaderVO(self, headerVO, _):
-        headerVO.update(self.__getFakeQuestData())
+        headerVO['quests'] = [self.__getFakeQuestData()]
 
     def __getFakeQuestData(self):
-        return {'commonQuestsLabel': '',
-         'commonQuestsIcon': RES_ICONS.questsStateIconOutline('available'),
-         'commonQuestsTooltip': '',
-         'commonQuestsEnable': True}
+        return {'questFlagId': 'battleQuests',
+         'flagContainerId': 1,
+         'label': '',
+         'flag': RES_ICONS.MAPS_ICONS_LIBRARY_HANGARFLAG_FLAG_BLUE,
+         'icon': RES_ICONS.questsStateIconOutline('available'),
+         'tooltip': '',
+         'tooltipIsSpecial': False,
+         'visible': True,
+         'enable': True}

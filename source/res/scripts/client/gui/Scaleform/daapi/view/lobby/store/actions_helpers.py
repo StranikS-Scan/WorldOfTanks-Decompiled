@@ -14,7 +14,7 @@ from gui.server_events.formatters import formatStrDiscount, formatPercentValue, 
 from gui.shared.formatters import icons
 from gui.server_events import settings as quest_settings
 from helpers import i18n, dependency, time_utils
-from skeletons.gui.game_control import IMarathonEventController
+from skeletons.gui.game_control import IMarathonEventsController
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
@@ -839,7 +839,11 @@ class ComingSoonActionInfo(ActionInfo):
 
 
 class MarathonEventActionInfo(ActionInfo):
-    _marathonCtrl = dependency.descriptor(IMarathonEventController)
+    _marathonsCtrl = dependency.descriptor(IMarathonEventsController)
+
+    def __init__(self):
+        super(MarathonEventActionInfo, self).__init__()
+        self._marathonCtrl = self._marathonsCtrl.getPrimaryMarathon()
 
     def getTitle(self):
         return i18n.makeString(QUESTS.ACTIONCARD_TITLE_SET_MARATHONINPROGRESS)

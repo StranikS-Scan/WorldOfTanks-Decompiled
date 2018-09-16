@@ -131,7 +131,7 @@ class ElementTooltip(BlocksTooltipData):
 
         if bonus:
             camo = self._item if not camo else camo
-            items.append(self._packBonusBlock(bonus, camo))
+            items.append(self._packBonusBlock(bonus, camo, self._item.itemTypeID == GUI_ITEM_TYPE.STYLE))
         if not self._item.isHistorical() or self._item.fullDescription:
             items.append(self._packDescriptionBlock())
         if not self._hideInventory:
@@ -222,13 +222,14 @@ class ElementTooltip(BlocksTooltipData):
             component = None
         return formatters.packImageBlockData(img=self._item.getIconApplied(component), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, width=width, height=102, padding={'bottom': 2})
 
-    def _packBonusBlock(self, bonus, camo):
+    def _packBonusBlock(self, bonus, camo, isStyle=False):
         blocks = []
         vehicle = g_currentVehicle.item
         bonusPercent = bonus.getFormattedValue(vehicle)
         blocks.append(formatters.packImageTextBlockData(title=text_styles.bonusLocalInfoTipText(text_styles.concatStylesToSingleLine('+', bonusPercent)), img=RES_ICONS.MAPS_ICONS_LIBRARY_QUALIFIERS_48X48_CAMOUFLAGE, imgPadding={'left': 12,
          'top': -8}, txtPadding={'top': -4}, txtOffset=69))
-        blocks.append(formatters.packTextBlockData(text=text_styles.main(camo.bonus.description), padding={'top': -46,
+        bonusDescr = camo.bonus.description if not isStyle else VEHICLE_CUSTOMIZATION.BONUS_STYLE
+        blocks.append(formatters.packTextBlockData(text=text_styles.main(bonusDescr), padding={'top': -46,
          'left': 110}))
         stockVehicle = self.itemsCache.items.getStockVehicle(vehicle.intCD)
         comparator = params_helper.camouflageComparator(vehicle, camo)

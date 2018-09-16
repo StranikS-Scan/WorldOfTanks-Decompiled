@@ -4,6 +4,7 @@ import constants
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
+from gui.marathon.marathon_constants import MARATHONS_DATA
 from gui.server_events import awards, events_helpers
 from gui.shared import g_eventBus, events, event_dispatcher as shared_events, EVENT_BUS_SCOPE
 from helpers import dependency
@@ -14,10 +15,11 @@ def showPQSeasonAwardsWindow(questsType):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW, ctx={'questsType': questsType}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showMissions(tab=None, missionID=None, groupID=None, anchor=None, showMissionDetails=True):
+def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, anchor=None, showMissionDetails=True):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MISSIONS, ctx={'tab': tab,
      'eventID': missionID,
      'groupID': groupID,
+     'marathonPrefix': marathonPrefix,
      'anchor': anchor,
      'showMissionDetails': showMissionDetails}), scope=EVENT_BUS_SCOPE.LOBBY)
 
@@ -35,8 +37,8 @@ def showMissionsGrouped(missionID=None, groupID=None, anchor=None):
     showMissions(tab=QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, missionID=missionID, groupID=groupID, anchor=anchor)
 
 
-def showMissionsMarathon():
-    showMissions(tab=QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS)
+def showMissionsMarathon(marathonPrefix=MARATHONS_DATA[0].prefix):
+    showMissions(tab=QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, marathonPrefix=marathonPrefix)
 
 
 def showMissionsCategories(missionID=None, groupID=None, anchor=None):
@@ -80,6 +82,10 @@ def showMission(eventID, eventType=None):
     eventsCache = dependency.instance(IEventsCache)
     quests = eventsCache.getQuests()
     quest = quests.get(eventID)
+    if quest is None:
+        prefix = events_helpers.getMarathonPrefix(eventID)
+        if prefix is not None:
+            showMissionsMarathon(marathonPrefix=prefix)
     if eventType is not None and eventType == constants.EVENT_TYPE.PERSONAL_MISSION:
         showPersonalMission(eventID)
     elif quest is not None:

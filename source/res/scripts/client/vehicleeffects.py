@@ -63,7 +63,7 @@ class DamageFromShotDecoder(object):
     @staticmethod
     def decodeSegment(segment, collisionComponent):
         if collisionComponent is None:
-            return ('',
+            return (-1,
              int(segment & 255),
              None,
              None)

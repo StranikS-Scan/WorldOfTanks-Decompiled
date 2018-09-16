@@ -383,14 +383,16 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
             hitStates = MARKER_HIT_STATE
             if eventID in hitStates:
                 newState = 'hit'
+                iconAnimation = ''
                 stateText = ''
                 stateData = hitStates.get(eventID)
                 if stateData is not None:
                     newState = stateData[0]
-                    stateText = i18n.makeString(stateData[1])
-                self.__updateMarkerState(handle, newState, value, stateText)
+                    iconAnimation = stateData[1]
+                    stateText = i18n.makeString(stateData[2])
+                self.__updateMarkerState(handle, newState, value, stateText, iconAnimation)
             elif eventID == _EVENT_ID.VEHICLE_DEAD:
-                self.__updateMarkerState(handle, 'dead', value, '')
+                self.__updateMarkerState(handle, 'dead', value)
             elif eventID == _EVENT_ID.VEHICLE_SHOW_MARKER:
                 self.__showActionMarker(handle, value)
             elif eventID == _EVENT_ID.VEHICLE_HEALTH:
@@ -402,8 +404,8 @@ class VehicleMarkerPlugin(MarkerPlugin, IArenaVehiclesController):
     def __onVehicleModelChanged(self, markerID, matrixProvider):
         self._setMarkerMatrix(markerID, matrixProvider)
 
-    def __updateMarkerState(self, handle, newState, isImmediate, text):
-        self._invokeMarker(handle, 'updateState', newState, isImmediate, text)
+    def __updateMarkerState(self, handle, newState, isImmediate, text='', iconAnimation=''):
+        self._invokeMarker(handle, 'updateState', newState, isImmediate, text, iconAnimation)
 
     def __showActionMarker(self, handle, newState):
         self._invokeMarker(handle, 'showActionMarker', newState)

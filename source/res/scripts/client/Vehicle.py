@@ -225,7 +225,10 @@ class Vehicle(BigWorld.Entity):
                         eventID = _GUI_EVENT_ID.VEHICLE_RICOCHET
                     elif maxHitEffectCode == VEHICLE_HIT_EFFECT.CRITICAL_HIT:
                         if maxDamagedComponent == TankPartNames.CHASSIS:
-                            eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS
+                            if damageFactor:
+                                eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS_PIERCED
+                            else:
+                                eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT_CHASSIS
                         else:
                             eventID = _GUI_EVENT_ID.VEHICLE_CRITICAL_HIT
                     elif hasPiercedHit:

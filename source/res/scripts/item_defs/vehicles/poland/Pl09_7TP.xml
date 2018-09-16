@@ -1555,6 +1555,43 @@
         <repairCost>	1.0	</repairCost>
       </surveyingDeviceHealth>
       <guns>
+        <_37mm_Bofors_wz_37>	shared	  <maxAmmo>	70	</maxAmmo>
+          <unlocks>
+            <gun>	_47mm_QFSA	  <cost>	75	</cost>
+            </gun>
+          </unlocks>
+          <armor>
+            <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	3.6	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.5	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 12 1 12	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/poland/Pl09_7TP/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/poland/Pl09_7TP/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/poland/Pl09_7TP/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/poland/Pl09_7TP/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/poland/Pl09_7TP/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_small_mb	</effects>
+        </_37mm_Bofors_wz_37>
         <_47mm_QFSA>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
             <armor_1>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
@@ -1656,6 +1693,39 @@
       </surveyingDeviceHealth>
       <invisibilityFactor>	0.905	</invisibilityFactor>
       <guns>
+        <_37mm_Bofors_wz_37>	shared	  <maxAmmo>	70	</maxAmmo>
+          <armor>
+            <armor_1>	18	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <gun>	10	</gun>
+          </armor>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <reloadTime>	3.4	</reloadTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.14	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <aimingTime>	2.3	</aimingTime>
+          <invisibilityFactorAtShot>	0.3	</invisibilityFactorAtShot>
+          <turretYawLimits>	-180 180	</turretYawLimits>
+          <pitchLimits>
+            <minPitch>	0 -20 1 -20	</minPitch>
+            <maxPitch>	0 12 1 12	</maxPitch>
+          </pitchLimits>
+          <models>
+            <undamaged>	vehicles/poland/Pl09_7TP/normal/lod0/Gun_06.model	</undamaged>
+            <destroyed>	vehicles/poland/Pl09_7TP/crash/lod0/Gun_06.model	</destroyed>
+            <exploded>	vehicles/poland/Pl09_7TP/crash/lod0/Gun_06.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/poland/Pl09_7TP/collision/Gun_06.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/poland/Pl09_7TP/collision_client/Gun_06.model	</collisionModelClient>
+          </hitTester>
+          <effects>	shot_small_mb	</effects>
+        </_37mm_Bofors_wz_37>
         <_47mm_QFSA>	shared	  <maxAmmo>	50	</maxAmmo>
           <armor>
             <armor_1>	18	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>

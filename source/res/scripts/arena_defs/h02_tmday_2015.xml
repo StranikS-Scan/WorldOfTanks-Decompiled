@@ -1,0 +1,28 @@
+<h02_tmday_2015.xml>
+  <wwmusic>	h02_music_silence	</wwmusic>
+  <wwambientSound>	h02_ambient	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	ambient.bnk	</bank>
+      <bank>	hangar_h02_tmday_2015.bnk	</bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	hangar_premium_2018.bnk	</bank>
+    </unloadBanks>
+    <events>
+      <event>
+        <name>	ambient_nature_birds_flock_of_pigeons	</name>
+        <mod>	h02_silence	</mod>
+      </event>
+    </events>
+  </soundRemapping>
+  <mapActivities></mapActivities>
+  <roadMap></roadMap>
+  <gameplayTypes>
+    <ctf></ctf>
+  </gameplayTypes>
+  <boundingBox>
+    <bottomLeft>	-100.000000 -100.000000	</bottomLeft>
+    <upperRight>	100.000000 100.000000	</upperRight>
+  </boundingBox>
+</h02_tmday_2015.xml>

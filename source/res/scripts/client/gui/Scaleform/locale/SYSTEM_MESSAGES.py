@@ -277,6 +277,7 @@ class SYSTEM_MESSAGES(object):
     RECRUIT_WINDOW_NOT_ENOUGH_SPACE = '#system_messages:recruit_window/not_enough_space'
     RECRUIT_WINDOW_DISCONNECTED_FROM_CENTER = '#system_messages:recruit_window/disconnected_from_center'
     RECRUIT_WINDOW_FORBIDDEN = '#system_messages:recruit_window/FORBIDDEN'
+    NOTRECRUIT_WINDOW_SUCCESS = '#system_messages:notrecruit_window/success'
     EQUIP_TANKMAN_SUCCESS = '#system_messages:equip_tankman/success'
     EQUIP_TANKMAN_SERVER_ERROR = '#system_messages:equip_tankman/server_error'
     EQUIP_TANKMAN_INVALID_VEHICLE = '#system_messages:equip_tankman/invalid_vehicle'
@@ -1303,6 +1304,7 @@ class SYSTEM_MESSAGES(object):
      RECRUIT_WINDOW_NOT_ENOUGH_SPACE,
      RECRUIT_WINDOW_DISCONNECTED_FROM_CENTER,
      RECRUIT_WINDOW_FORBIDDEN,
+     NOTRECRUIT_WINDOW_SUCCESS,
      EQUIP_TANKMAN_SUCCESS,
      EQUIP_TANKMAN_SERVER_ERROR,
      EQUIP_TANKMAN_INVALID_VEHICLE,

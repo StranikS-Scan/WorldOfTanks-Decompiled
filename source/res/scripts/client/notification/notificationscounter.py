@@ -3,7 +3,7 @@
 from gui.prb_control import prbInvitesProperty
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
-from notification.settings import NOTIFICATION_GROUP
+from gui.shared.notifications import NotificationGroup
 
 class _GroupCounter(object):
 
@@ -43,7 +43,7 @@ class _InfoGroupCounter(_GroupCounter):
 
     @classmethod
     def getGroupID(cls):
-        return NOTIFICATION_GROUP.INFO
+        return NotificationGroup.INFO
 
 
 class _InviteGroupCounter(_GroupCounter):
@@ -59,14 +59,14 @@ class _InviteGroupCounter(_GroupCounter):
 
     @classmethod
     def getGroupID(cls):
-        return NOTIFICATION_GROUP.INVITE
+        return NotificationGroup.INVITE
 
 
 class _OfferGroupCounter(_GroupCounter):
 
     @classmethod
     def getGroupID(cls):
-        return NOTIFICATION_GROUP.OFFER
+        return NotificationGroup.OFFER
 
 
 class _CounterCollection(object):

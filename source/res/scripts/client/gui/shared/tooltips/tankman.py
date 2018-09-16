@@ -1,7 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/tooltips/tankman.py
 import math
+from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
+from gui.shared.gui_items import Tankman
 from gui.shared.tooltips import ToolTipDataField, ToolTipAttrField, ToolTipData, TOOLTIP_TYPE, formatters
 from gui.shared.gui_items.Vehicle import Vehicle
 from helpers import dependency
@@ -175,6 +177,36 @@ class TankmanStatusField(ToolTipDataField):
         for role, skills in SKILLS_BY_ROLES.iteritems():
             if skill.name in skills:
                 return role
+
+
+class NotRecruitedTooltipData(BlocksTooltipData):
+
+    def __init__(self, ctx):
+        super(NotRecruitedTooltipData, self).__init__(ctx, TOOLTIP_TYPE.NOT_RECRUITED_TANKMAN)
+        self._setWidth(320)
+        self.item = None
+        return
+
+    def _packBlocks(self, *args, **kwargs):
+        items = super(NotRecruitedTooltipData, self)._packBlocks()
+        item = self.context.buildItem(*args)
+        self.item = item
+        blocks = list()
+        blocks.append(formatters.packImageTextBlockData(title=text_styles.highTitle(item.getFullUserName()), desc=text_styles.main(item.getLabel())))
+        blocks.append(formatters.packImageBlockData(img=item.getBigIcon(), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
+        blocks.append(formatters.packSeparatorBlockData())
+        blocks.append(formatters.packTextBlockData(text_styles.main(item.getDescription()), useHtml=True, padding=formatters.packPadding(top=20, bottom=7)))
+        if item.getLearntSkills():
+            blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_SKILLSTITLE), useHtml=True, padding=formatters.packPadding(top=10, bottom=10)))
+            skills = item.getLearntSkills()
+            blocks.append(formatters.packImageListParameterBlockData(listIconSrc=[ Tankman.getSkillIconPath(skillName=skillName, size='big') for skillName in skills ], columnWidth=52, rowHeight=52, verticalGap=10, horizontalGap=10, padding=formatters.packPadding(bottom=10)))
+        expiryTime = item.getExpiryTime()
+        if expiryTime:
+            blocks.append(formatters.packTextBlockData(text_styles.middleTitle(TOOLTIPS.NOTRECRUITEDTANKMAN_EXPIRETITLE), useHtml=True, padding=formatters.packPadding(top=10, bottom=2)))
+            expireDateStr = makeString(TOOLTIPS.NOTRECRUITEDTANKMAN_USEBEFORE, date=expiryTime)
+            blocks.append(formatters.packTextParameterWithIconBlockData(name=text_styles.premiumVehicleName(expireDateStr), value='', icon=ICON_TEXT_FRAMES.RENTALS, padding=formatters.packPadding(left=-60, bottom=-18), iconYOffset=3))
+        items.append(formatters.packBuildUpBlockData(blocks, padding=formatters.packPadding(bottom=-10)))
+        return items
 
 
 class TankmanTooltipDataBlock(BlocksTooltipData):

@@ -10,13 +10,11 @@ import AreaDestructibles
 import ArenaType
 import BattleReplay
 import DestructiblesCache
-import SoundGroups
 import TriggersManager
 import constants
-import nations
 import physics_shared
 from AvatarInputHandler.aih_constants import ShakeReason
-from SoundGroups import CREW_GENDER_SWITCHES
+from special_sound import setSpecialVoice
 from TriggersManager import TRIGGER_TYPE
 from VehicleEffects import DamageFromShotDecoder
 from constants import SPT_MATKIND
@@ -27,7 +25,7 @@ from gun_rotation_shared import decodeGunAngles
 from helpers import dependency
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import SoundStartParam
-from items import vehicles, sabaton_crew, tankmen
+from items import vehicles
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
@@ -38,9 +36,6 @@ from soft_exception import SoftException
 LOW_ENERGY_COLLISION_D = 0.3
 HIGH_ENERGY_COLLISION_D = 0.6
 _g_waitingVehicle = dict()
-_VALKYRIE_SOUND_MODES = {(6, 205): 'valkyrie1',
- (6, 206): 'valkyrie2'}
-_GIANLUIGI_BUFFON_VEH_NAME = 'italy:It13_Progetto_M35_mod_46'
 
 class _Vector4Provider(object):
     __slots__ = ('_v',)
@@ -617,27 +612,8 @@ class Vehicle(BigWorld.Entity):
             arena = getattr(player, 'arena', None)
             if arena is not None:
                 crewGroup = arena.vehicles[self.id]['crewGroup']
-            vehicleTypeID = self.typeDescriptor.type.id
-            nationID, _ = vehicleTypeID
-            LOG_DEBUG("Refreshing current vehicle's national voices", nationID)
-            groupID, isFemaleCrewCommander, isPremium = tankmen.unpackCrewParams(crewGroup)
-            if nationID == nations.INDICES['sweden'] and tankmen.hasTagInTankmenGroup(nationID, groupID, isPremium, sabaton_crew.SABATON_VEH_NAME):
-                SoundGroups.g_instance.setSwitch(CREW_GENDER_SWITCHES.GROUP, CREW_GENDER_SWITCHES.MALE)
-                SoundGroups.g_instance.soundModes.setMode('sabaton')
-                return
-            if nationID == nations.INDICES['italy'] and tankmen.hasTagInTankmenGroup(nationID, groupID, isPremium, _GIANLUIGI_BUFFON_VEH_NAME):
-                SoundGroups.g_instance.setSwitch(CREW_GENDER_SWITCHES.GROUP, CREW_GENDER_SWITCHES.MALE)
-                SoundGroups.g_instance.soundModes.setMode('buffon')
-                return
-            if vehicleTypeID in _VALKYRIE_SOUND_MODES and self.id == player.playerVehicleID:
-                SoundGroups.g_instance.soundModes.setMode(_VALKYRIE_SOUND_MODES[vehicleTypeID])
-                return
-            genderSwitch = CREW_GENDER_SWITCHES.DEFAULT
-            if SoundGroups.g_instance.soundModes.currentNationalPreset[1]:
-                if isFemaleCrewCommander:
-                    genderSwitch = CREW_GENDER_SWITCHES.FEMALE
-            nation = nations.NAMES[nationID]
-            SoundGroups.g_instance.soundModes.setCurrentNation(nation, genderSwitch)
+            vehicleType = self.typeDescriptor.type
+            setSpecialVoice(crewGroup, vehicleType, self.id == player.playerVehicleID)
             return
 
     def stopVisual(self, showStipple=False):

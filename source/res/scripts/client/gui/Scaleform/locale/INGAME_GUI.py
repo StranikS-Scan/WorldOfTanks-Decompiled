@@ -600,33 +600,12 @@ class INGAME_GUI(object):
     BATTLEPROGRESS_HINT_PRESS = '#ingame_gui:battleProgress/hint/press'
     BATTLEPROGRESS_HINT_DESCRIPTION = '#ingame_gui:battleProgress/hint/description'
     BATTLEPROGRESS_HINT_NOBINDINGKEY = '#ingame_gui:battleProgress/hint/noBindingKey'
-    CHAT_EXAMPLE_ENUM = (CHAT_EXAMPLE_GLOBAL_MSG_DEF_SAVE_TANKS,
-     CHAT_EXAMPLE_GLOBAL_MSG_ATK_SAVE_TANKS,
-     CHAT_EXAMPLE_GLOBAL_MSG_ATK_TIME,
-     CHAT_EXAMPLE_GLOBAL_MSG_DEF_TIME,
-     CHAT_EXAMPLE_GLOBAL_MSG_LANE_WEST,
-     CHAT_EXAMPLE_GLOBAL_MSG_LANE_CENTER,
-     CHAT_EXAMPLE_GLOBAL_MSG_LANE_EAST,
-     CHAT_EXAMPLE_GLOBAL_MSG_ATK_FOCUS_HQ,
-     CHAT_EXAMPLE_GLOBAL_MSG_DEF_FOCUS_HQ,
-     CHAT_EXAMPLE_SUPPORT_ME_WITH_FIRE,
-     CHAT_EXAMPLE_RELOADING_GUN,
-     CHAT_EXAMPLE_RELOADING_CASSETTE,
-     CHAT_EXAMPLE_RELOADING_READY,
-     CHAT_EXAMPLE_TURN_BACK,
-     CHAT_EXAMPLE_RELOADING_READY_CASSETTE,
-     CHAT_EXAMPLE_RELOADING_UNAVAILABLE,
-     CHAT_EXAMPLE_STOP,
-     CHAT_EXAMPLE_HELP_ME,
-     CHAT_EXAMPLE_HELP_ME_EX,
-     CHAT_EXAMPLE_FOLLOW_ME,
-     CHAT_EXAMPLE_ATTACK,
-     CHAT_EXAMPLE_BACK_TO_BASE,
-     CHAT_EXAMPLE_POSITIVE,
-     CHAT_EXAMPLE_NEGATIVE,
-     CHAT_EXAMPLE_ATTENTION_TO_CELL,
-     CHAT_EXAMPLE_ATTACK_ENEMY,
-     CHAT_EXAMPLE_SPG_AIM_AREA)
+    REWARDWINDOW_WINHEADERTEXT = '#ingame_gui:rewardWindow/winHeaderText'
+    REWARDWINDOW_BASE_SUBHEADERTEXT = '#ingame_gui:rewardWindow/base/subHeaderText'
+    REWARDWINDOW_BASE_HEADERTEXT = '#ingame_gui:rewardWindow/base/headerText'
+    REWARDWINDOW_BASE_DESCTEXT = '#ingame_gui:rewardWindow/base/descText'
+    REWARDWINDOW_BASE_BTNLABEL = '#ingame_gui:rewardWindow/base/btnLabel'
+    REWARDWINDOW_ALL_DESCTEXT_ENUM = (REWARDWINDOW_BASE_DESCTEXT,)
     CHAT_SHORTCUTS_ENUM = (CHAT_SHORTCUTS_TURN_BACK,
      CHAT_SHORTCUTS_SUPPORT_ME_WITH_FIRE,
      CHAT_SHORTCUTS_RELOADING_GUN,
@@ -661,10 +640,13 @@ class INGAME_GUI(object):
      CHAT_SHORTCUTS_GLOBAL_MSG_DEF_FOCUS_HQ,
      CHAT_SHORTCUTS_ATTACK_ENEMY,
      CHAT_SHORTCUTS_ATTACK_ENEMY_RELOADING)
+    REWARDWINDOW_ALL_SUBHEADERTEXT_ENUM = (REWARDWINDOW_BASE_SUBHEADERTEXT,)
+    REWARDWINDOW_ALL_BTNLABEL_ENUM = (REWARDWINDOW_BASE_BTNLABEL,)
     SIEGEMODE_HINT_FORMODE_ENUM = (SIEGEMODE_HINT_FORMODE_0,
      SIEGEMODE_HINT_FORMODE_1,
      SIEGEMODE_HINT_FORMODE_2,
      SIEGEMODE_HINT_FORMODE_3)
+    REWARDWINDOW_ALL_HEADERTEXT_ENUM = (REWARDWINDOW_BASE_HEADERTEXT,)
     EFFICIENCYRIBBONS_ENUM = (EFFICIENCYRIBBONS_ARMOR,
      EFFICIENCYRIBBONS_CAPTURE,
      EFFICIENCYRIBBONS_DAMAGE,
@@ -690,6 +672,33 @@ class INGAME_GUI(object):
      EFFICIENCYRIBBONS_DESTRUCTIBLESDEFENDED,
      EFFICIENCYRIBBONS_DEFENDERBONUS,
      EFFICIENCYRIBBONS_ASSISTBYABILITY)
+    CHAT_EXAMPLE_ENUM = (CHAT_EXAMPLE_GLOBAL_MSG_DEF_SAVE_TANKS,
+     CHAT_EXAMPLE_GLOBAL_MSG_ATK_SAVE_TANKS,
+     CHAT_EXAMPLE_GLOBAL_MSG_ATK_TIME,
+     CHAT_EXAMPLE_GLOBAL_MSG_DEF_TIME,
+     CHAT_EXAMPLE_GLOBAL_MSG_LANE_WEST,
+     CHAT_EXAMPLE_GLOBAL_MSG_LANE_CENTER,
+     CHAT_EXAMPLE_GLOBAL_MSG_LANE_EAST,
+     CHAT_EXAMPLE_GLOBAL_MSG_ATK_FOCUS_HQ,
+     CHAT_EXAMPLE_GLOBAL_MSG_DEF_FOCUS_HQ,
+     CHAT_EXAMPLE_SUPPORT_ME_WITH_FIRE,
+     CHAT_EXAMPLE_RELOADING_GUN,
+     CHAT_EXAMPLE_RELOADING_CASSETTE,
+     CHAT_EXAMPLE_RELOADING_READY,
+     CHAT_EXAMPLE_TURN_BACK,
+     CHAT_EXAMPLE_RELOADING_READY_CASSETTE,
+     CHAT_EXAMPLE_RELOADING_UNAVAILABLE,
+     CHAT_EXAMPLE_STOP,
+     CHAT_EXAMPLE_HELP_ME,
+     CHAT_EXAMPLE_HELP_ME_EX,
+     CHAT_EXAMPLE_FOLLOW_ME,
+     CHAT_EXAMPLE_ATTACK,
+     CHAT_EXAMPLE_BACK_TO_BASE,
+     CHAT_EXAMPLE_POSITIVE,
+     CHAT_EXAMPLE_NEGATIVE,
+     CHAT_EXAMPLE_ATTENTION_TO_CELL,
+     CHAT_EXAMPLE_ATTACK_ENEMY,
+     CHAT_EXAMPLE_SPG_AIM_AREA)
 
     @classmethod
     def chat_shortcuts(cls, key0):
@@ -722,6 +731,42 @@ class INGAME_GUI(object):
     def siegeModeHint(cls, mode):
         outcome = '#ingame_gui:siegeMode/hint/forMode/{}'.format(mode)
         if outcome not in cls.SIEGEMODE_HINT_FORMODE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getRewardWindowHeader(cls, eventName):
+        outcome = '#ingame_gui:rewardWindow/{}/headerText'.format(eventName)
+        if outcome not in cls.REWARDWINDOW_ALL_HEADERTEXT_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getRewardWindowSubHeader(cls, eventName):
+        outcome = '#ingame_gui:rewardWindow/{}/subHeaderText'.format(eventName)
+        if outcome not in cls.REWARDWINDOW_ALL_SUBHEADERTEXT_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getRewardWindowBtnLabel(cls, eventName):
+        outcome = '#ingame_gui:rewardWindow/{}/btnLabel'.format(eventName)
+        if outcome not in cls.REWARDWINDOW_ALL_BTNLABEL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getRewardWindowDescText(cls, eventName):
+        outcome = '#ingame_gui:rewardWindow/{}/descText'.format(eventName)
+        if outcome not in cls.REWARDWINDOW_ALL_DESCTEXT_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

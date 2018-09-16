@@ -54,3 +54,7 @@ class DEVELOPMENT(object):
     WULF_WTYPESDEMO_CONTEXTMENU_OPENINFODIALOG = '#development:wulf/wTypesDemo/contextMenu/openInfoDialog'
     WULF_WTYPESDEMO_CONTEXTMENU_OPENCONFIRMDIALOG = '#development:wulf/wTypesDemo/contextMenu/openConfirmDialog'
     WULF_WTYPESDEMO_CONTEXTMENU_OPENOVERLAY = '#development:wulf/wTypesDemo/contextMenu/openOverlay'
+    WULF_DEMOWINDOW_TITLE = '#development:wulf/demoWindow/title'
+    WULF_SERVICEWINDOWDEMO_TITLE = '#development:wulf/serviceWindowDemo/title'
+    WULF_STANDARTWINDOWDEMO_TITLE = '#development:wulf/standartWindowDemo/title'
+    WULF_WINDOWTYPESDEMO_TITLE = '#development:wulf/windowTypesDemo/title'

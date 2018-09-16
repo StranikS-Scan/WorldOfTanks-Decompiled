@@ -6,10 +6,21 @@ from items.components import shared_components
 from items.components import skills_constants
 from soft_exception import SoftException
 
+class SPECIAL_VOICE_TAG(object):
+    BUFFON = 'buffonSpecialVoice'
+    SABATON = 'sabatonSpecialVoice'
+    ALL = (BUFFON, SABATON)
+
+
+class SPECIAL_CREW_TAG(object):
+    SABATON = 'sabatonCrew'
+    ALL = (SABATON,)
+
+
 class GROUP_TAG(object):
     PASSPORT_REPLACEMENT_FORBIDDEN = 'passportReplacementForbidden'
     RESTRICTIONS = (PASSPORT_REPLACEMENT_FORBIDDEN,)
-    RANGE = RESTRICTIONS + tuple(skills_constants.ROLES)
+    RANGE = RESTRICTIONS + tuple(skills_constants.ROLES) + SPECIAL_VOICE_TAG.ALL + SPECIAL_CREW_TAG.ALL
 
 
 class Rank(legacy_stuff.LegacyStuff):
@@ -148,7 +159,7 @@ class NationGroup(legacy_stuff.LegacyStuff):
         self.__roles = roles
 
     def __repr__(self):
-        return 'NationGroup(isFemales={}, notInShop={}, weight={})'.format(self.__isFemales, self.__notInShop, self.__weight)
+        return 'NationGroup(name={}, isFemales={}, notInShop={}, weight={}, tags={}, roles={})'.format(self.__name, self.__isFemales, self.__notInShop, self.__weight, self.__tags, self.__roles)
 
     @property
     def name(self):
@@ -201,6 +212,10 @@ class NationGroup(legacy_stuff.LegacyStuff):
     @property
     def roles(self):
         return self.__roles
+
+    @property
+    def rolesList(self):
+        return list(self.__roles)
 
     @property
     def isUnique(self):

@@ -333,6 +333,16 @@ class Shop(object):
         self.__account._doCmdInt4(AccountCommands.CMD_BUY_TMAN, self.__getCacheRevision(), vehTypeCompDescr, roleIdx, tmanCostTypeIdx, proxy)
         return
 
+    def buyTokenTankman(self, nationIdx, innationIdx, role, tokenName, callback):
+        vehTypeCompDescr = vehicles.makeIntCompactDescrByID('vehicle', nationIdx, innationIdx)
+        roleIdx = tankmen.SKILL_INDICES[role]
+        if callback is not None:
+            proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, ext.get('tmanInvID', None), ext.get('tmanCompDescr', None))
+        else:
+            proxy = None
+        self.__account._doCmdInt2Str(AccountCommands.CMD_TMAN_RECRUIT, vehTypeCompDescr, roleIdx, tokenName, proxy)
+        return
+
     def buyGoodie(self, goodieID, count, forGold, callback):
         if self.__ignore:
             if callback is not None:

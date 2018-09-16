@@ -5,13 +5,15 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.marathon.marathon_constants import DEFAULT_MARATHON_PREFIX
-from gui.server_events import awards, events_helpers
+from gui.server_events import awards, events_helpers, recruit_helper
 from gui.shared import g_eventBus, events, event_dispatcher as shared_events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
+from shared_utils import first
 OPERATIONS = {PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_1_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS_OPERATIONS_PAGE_ALIAS,
  PERSONAL_MISSIONS_ALIASES.PERONAL_MISSIONS_OPERATIONS_SEASON_2_ID: PERSONAL_MISSIONS_ALIASES.PERSONAL_MISSIONS2_OPERATIONS_PAGE_ALIAS}
+_EVENTS_REWARD_WINDOW = {}
 
 def showPQSeasonAwardsWindow(questsType):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW, ctx={'questsType': questsType}), EVENT_BUS_SCOPE.LOBBY)
@@ -151,10 +153,32 @@ def showTankwomanAward(questID, tankmanData):
      'iGroupID': tankmanData.iGroupID}), EVENT_BUS_SCOPE.LOBBY)
 
 
+@dependency.replace_none_kwargs(eventsCache=IEventsCache)
+def showRecruitWindow(recruitID, eventsCache=None):
+    recruitData = recruit_helper.getRecruitInfo(recruitID)
+    if recruitData.getSourceID() == recruit_helper.RecruitSourceID.TANKWOMAN:
+        quest = eventsCache.getPersonalMissions().getAllQuests()[int(recruitID)]
+        bonus = quest.getTankmanBonus()
+        needToGetTankman = quest.needToGetAddReward() and not bonus.isMain or quest.needToGetMainReward() and bonus.isMain
+        if needToGetTankman and bonus.tankman is not None:
+            showTankwomanAward(quest.getID(), first(bonus.tankman.getTankmenData()))
+    else:
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.TOKEN_RECRUIT_WINDOW, ctx={'tokenName': recruitID,
+         'tokenData': recruitData}), EVENT_BUS_SCOPE.LOBBY)
+    return
+
+
 def showMissionAward(quest, ctx):
-    missionAward = awards.MissionAward(quest, ctx, showMissionsForCurrentVehicle)
-    if missionAward.getAwards():
-        shared_events.showMissionAwardWindow(missionAward)
+    eventName = recruit_helper.getSourceIdFromQuest(quest.getID())
+    if eventName in _EVENTS_REWARD_WINDOW:
+        ctx['quest'] = quest
+        ctx['eventName'] = eventName
+        rewardWindow = _EVENTS_REWARD_WINDOW[eventName](ctx)
+        rewardWindow.load()
+    else:
+        missionAward = awards.MissionAward(quest, ctx, showMissionsForCurrentVehicle)
+        if missionAward.getAwards():
+            shared_events.showMissionAwardWindow(missionAward)
 
 
 def showPersonalMissionAward(quest, ctx):

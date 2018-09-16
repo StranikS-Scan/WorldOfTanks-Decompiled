@@ -7,6 +7,7 @@ from gui.Scaleform.daapi.view.common.filter_contexts import getFilterSetupContex
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_data_provider import CarouselDataProvider
 from gui.Scaleform.daapi.view.common.vehicle_carousel.carousel_filter import CarouselFilter
 from gui.Scaleform.daapi.view.meta.BattleTankCarouselMeta import BattleTankCarouselMeta
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.utils.functions import makeTooltip
 from gui.Scaleform.genConsts.BATTLE_VIEW_ALIASES import BATTLE_VIEW_ALIASES
 from helpers.i18n import makeString as _ms
@@ -39,7 +40,7 @@ def getEpicVehicleDataVO(vehicle):
      'vehicleTypeIcon': (respawn_utils.VEHICLE_ELITE_TYPE_TEMPLATE if vehicle.isElite else respawn_utils.VEHICLE_TYPE_TEMPLATE) % vehicle.type,
      'isElite': vehicle.isElite,
      'isPremium': vehicle.isPremium,
-     'vehicleLevelIcon': respawn_utils.VEHICLE_LEVEL_TEMPLATE % vehicle.level,
+     'vehicleLevelIcon': RES_ICONS.getLevelIcon(vehicle.level),
      'favorite': vehicle.isFavorite,
      'enabled': True,
      'cooldown': '',

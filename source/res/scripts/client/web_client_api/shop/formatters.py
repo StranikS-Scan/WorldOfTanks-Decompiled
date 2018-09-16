@@ -16,8 +16,8 @@ _COLOR_TAG_CLOSE = '{colorTagClose}'
 def _strsanitize(s):
     if not isinstance(s, unicode):
         s = s.decode('utf-8')
-    s = s.replace(u'\r\n', ' ').replace(u'\n', ' ').replace(u'\t', ' ').replace(u'"', '\\"').replace(u'`', '\\u0060')
-    return _WHITESPACE_RE.sub(s, u' ')
+    s = s.replace(u'\r\n', ' ').replace(u'\n', ' ').replace(u'\t', ' ').replace(u'\\', '\\u005c').replace(u'"', '\\u0022').replace(u'`', '\\u0060').encode('utf-8')
+    return _WHITESPACE_RE.sub(s, ' ')
 
 
 def _pathsanitize(s):
@@ -75,12 +75,12 @@ Field = namedtuple('Field', ('name', 'getter'))
 idField = Field('id', lambda i: i.intCD)
 nameField = Field('name', lambda i: _strsanitize(i.userName))
 nationField = Field('nation', lambda i: i.nationName)
-nationNameField = Field('nationName', lambda i: i.nationUserName)
+nationNameField = Field('nationName', lambda i: _strsanitize(i.nationUserName))
 typeField = Field('type', lambda i: i.type)
-typeNameField = Field('typeName', lambda i: i.typeUserName)
+typeNameField = Field('typeName', lambda i: _strsanitize(i.typeUserName))
 descriptionField = Field('description', lambda i: _strsanitize(i.fullDescription))
-shortDescriptionSpecialField = Field('shortDescriptionSpecial', lambda i: i.shortDescriptionSpecial)
-longDescriptionSpecialField = Field('longDescriptionSpecial', lambda i: i.longDescriptionSpecial)
+shortDescriptionSpecialField = Field('shortDescriptionSpecial', lambda i: _strsanitize(i.shortDescriptionSpecial))
+longDescriptionSpecialField = Field('longDescriptionSpecial', lambda i: _strsanitize(i.longDescriptionSpecial))
 inventoryCountField = Field('inventoryCount', lambda i: i.inventoryCount)
 buyPriceField = Field('buyPrice', lambda i: _formatPrice(i.buyPrices.itemPrice))
 sellPriceField = Field('sellPrice', lambda i: _formatPrice(i.sellPrices.itemPrice))
@@ -127,7 +127,7 @@ def makeVehicleFormatter(includeInventoryFields=False, itemsCache=None):
     isPremiumField = Field('isPremium', lambda i: i.isPremium)
     levelField = Field('level', lambda i: i.level)
     isUnlockedField = Field('isUnlocked', lambda i: i.isUnlocked)
-    shortName = Field('shortName', lambda i: i.shortUserName)
+    shortName = Field('shortName', lambda i: _strsanitize(i.shortUserName))
 
     def isTradeInAvailable(vehicle):
         tradeIn = itemsCache.items.shop.tradeIn
@@ -223,13 +223,13 @@ def makeBattleBoosterFormatter(fittedVehGetter=None):
                 key = ITEM_TYPES.TANKMAN_SKILLS_TYPE_SKILL_SHORT
         else:
             key = ITEM_TYPES.OPTIONALDEVICE_NAME
-        return i18n.makeString(key)
+        return _strsanitize(i18n.makeString(key))
 
     def formatBoosterDescription(i):
-        return i.getCrewBoosterDescription(False) if i.isCrewBooster() else i.getOptDeviceBoosterDescription(vehicle=None, valueFormatter=_formatValueToColorTag)
+        return _strsanitize(i.getCrewBoosterDescription(False)) if i.isCrewBooster() else _strsanitize(i.getOptDeviceBoosterDescription(vehicle=None, valueFormatter=_formatValueToColorTag))
 
     fields.extend([Field('affectedSkill', formatAffectedSkill),
-     Field('affectedSkillName', lambda i: i.getAffectedSkillUserName()),
+     Field('affectedSkillName', lambda i: _strsanitize(i.getAffectedSkillUserName())),
      Field('boosterType', formatBoosterType),
      Field('boosterTypeName', formatBoosterTypeName),
      Field('description', formatBoosterDescription)])
@@ -242,7 +242,7 @@ def makeBoosterFormatter():
     fields = [Field('id', lambda booster: booster.boosterID),
      Field('inventoryCount', lambda booster: booster.count),
      Field('kpi', lambda booster: _formatKPI(booster.kpi)),
-     Field('description', lambda booster: booster.getBonusDescription(valueFormatter=_formatValueToColorTag)),
+     Field('description', lambda booster: _strsanitize(booster.getBonusDescription(valueFormatter=_formatValueToColorTag))),
      shortDescriptionSpecialField,
      longDescriptionSpecialField,
      Field('duration', lambda booster: booster.effectTime),
@@ -256,7 +256,7 @@ def makeBoosterFormatter():
 def makeModuleFormatter():
     fields = [idField,
      Field('name', lambda i: _strsanitize(i.longUserName)),
-     Field('type', lambda i: i.descriptor.itemTypeName),
+     Field('type', lambda i: _strsanitize(i.descriptor.itemTypeName)),
      techNameField,
      nationField,
      buyPriceField,

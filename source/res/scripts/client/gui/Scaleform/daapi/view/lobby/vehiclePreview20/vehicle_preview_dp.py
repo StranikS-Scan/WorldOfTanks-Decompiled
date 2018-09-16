@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehiclePreview20/vehicle_preview_dp.py
 import logging
 import nations
-from gui.Scaleform.daapi.view.battle.shared.respawn import respawn_utils
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -38,7 +37,7 @@ def _createVehicleVO(rawItem, itemsCache):
      'label': label,
      'nation': nation,
      'hasCompensation': getCompensateItemsCount(rawItem, itemsCache) > 0,
-     'level': respawn_utils.VEHICLE_LEVEL_TEMPLATE % vehicle.level,
+     'level': RES_ICONS.getLevelIcon(vehicle.level),
      'tankType': Vehicle.getTypeSmallIconPath(vehicle.type, vehicle.isElite)}
 
 

@@ -112,6 +112,12 @@ class CyberSportUnitsListView(CyberSportUnitsListMeta):
             self.__refreshDetails(selectedIdx)
         if selectedIdx is not None:
             self.as_selectByIndexS(selectedIdx)
+        if self._searchDP.collection:
+            self.as_setDummyVisibleS(False)
+        else:
+            self.as_setDummyVisibleS(True)
+            self.as_setDummyS({'htmlText': text_styles.main(CYBERSPORT.WINDOW_UNITLISTVIEW_NOITEMS),
+             'alignCenter': True})
         return
 
     def __setDetails(self, vo):

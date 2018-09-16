@@ -610,6 +610,10 @@ def getSkillSmallIconPath(skillName):
     return '../maps/icons/tankmen/skills/small/%s' % getSkillIconName(skillName)
 
 
+def getSkillIconPath(skillName, size='big'):
+    return '../maps/icons/tankmen/skills/{}/{}.png'.format(size, skillName)
+
+
 def getSkillUserName(skillName):
     return tankmen.getSkillsConfig().getSkill(skillName).userString
 

@@ -8,7 +8,7 @@ import WWISE
 import account_helpers
 import constants
 from CurrentVehicle import g_currentVehicle, g_currentPreviewVehicle
-from account_helpers.AccountSettings import AccountSettings, BOOSTERS, KNOWN_SELECTOR_BATTLES, NEW_LOBBY_TAB_COUNTER
+from account_helpers.AccountSettings import AccountSettings, BOOSTERS, KNOWN_SELECTOR_BATTLES, NEW_LOBBY_TAB_COUNTER, RECRUIT_NOTIFICATIONS
 from adisp import process
 from debug_utils import LOG_ERROR
 from gui import makeHtmlString
@@ -37,6 +37,7 @@ from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME, REQUEST_TYPE, UNIT_RESTRICTION, PRE_QUEUE_RESTRICTION
 from gui.server_events import settings as quest_settings
+from gui.server_events import recruit_helper
 from gui.shared import event_dispatcher as shared_events
 from gui.shared import events
 from gui.shared.ClanCache import g_clanCache
@@ -367,6 +368,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.addListener(events.TutorialEvent.OVERRIDE_HANGAR_MENU_BUTTONS, self.__onOverrideHangarMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.TutorialEvent.OVERRIDE_HEADER_MENU_BUTTONS, self.__onOverrideHeaderMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
         self.addListener(events.LobbyHeaderMenuEvent.MENY_HIDE, self.__onHideMenuBar, scope=EVENT_BUS_SCOPE.LOBBY)
+        AccountSettings.onSettingsChanging += self.__onAccountSettingsChanging
 
     def _removeListeners(self):
         g_clientUpdateManager.removeObjectCallbacks(self)
@@ -402,6 +404,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.removeListener(events.TutorialEvent.OVERRIDE_HANGAR_MENU_BUTTONS, self.__onOverrideHangarMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.TutorialEvent.OVERRIDE_HEADER_MENU_BUTTONS, self.__onOverrideHeaderMenuButtons, scope=EVENT_BUS_SCOPE.LOBBY)
         self.removeListener(events.LobbyHeaderMenuEvent.MENY_HIDE, self.__onHideMenuBar, scope=EVENT_BUS_SCOPE.LOBBY)
+        AccountSettings.onSettingsChanging -= self.__onAccountSettingsChanging
 
     def __updateIngameShopState(self):
         newIngameShopEnabled = isIngameShopEnabled()
@@ -803,6 +806,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         self.__onEventsVisited()
         self.__onProfileVisited()
         self.__updatePersonalTabCounter()
+        self.__updateRecruitsTabCounter(self.TABS.BARRACKS)
 
     def __handleFightButtonUpdated(self, _):
         self._updatePrebattleControls()
@@ -1013,6 +1017,13 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         else:
             self.__hideCounter(alias)
 
+    def __updateRecruitsTabCounter(self, alias):
+        counter = recruit_helper.getNewRecruitsCounter()
+        if counter:
+            self.__setCounter(alias, counter)
+        else:
+            self.__hideCounter(alias)
+
     def __onUpdateGoodies(self, *args):
         self.__setClanInfo(g_clanCache.clanInfo)
 
@@ -1098,3 +1109,7 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
         for tabID in self.__shownCounters.copy():
             if not self.__isTabPresent(tabID):
                 self.__hideCounter(tabID)
+
+    def __onAccountSettingsChanging(self, key, _):
+        if key == RECRUIT_NOTIFICATIONS:
+            self.__updateRecruitsTabCounter(self.TABS.BARRACKS)

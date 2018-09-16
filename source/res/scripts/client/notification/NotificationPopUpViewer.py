@@ -1,13 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/notification/NotificationPopUpViewer.py
 from gui.Scaleform.daapi.view.meta.NotificationPopUpViewerMeta import NotificationPopUpViewerMeta
-from gui.shared.notifications import NotificationPriorityLevel
+from gui.shared.notifications import NotificationPriorityLevel, NotificationGroup
 from helpers import dependency
 from messenger import g_settings
 from messenger.formatters import TimeFormatter
 from notification import NotificationMVC
 from notification.BaseNotificationView import BaseNotificationView
-from notification.settings import NOTIFICATION_STATE, NOTIFICATION_GROUP
+from notification.settings import NOTIFICATION_STATE
 from skeletons.connection_mgr import IConnectionManager
 
 class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView):
@@ -71,7 +71,7 @@ class NotificationPopUpViewer(NotificationPopUpViewerMeta, BaseNotificationView)
 
     def __onNotificationReceived(self, notification):
         if self._model.getDisplayState() == NOTIFICATION_STATE.POPUPS:
-            if notification.isNotify() and (notification.getGroup() != NOTIFICATION_GROUP.INFO or notification.getPriorityLevel() == NotificationPriorityLevel.LOW):
+            if notification.isNotify() and (notification.getGroup() != NotificationGroup.INFO or notification.getPriorityLevel() == NotificationPriorityLevel.LOW):
                 self._model.incrementNotifiedMessagesCount(*notification.getCounterInfo())
             if NotificationMVC.g_instance.getAlertController().isAlertShowing():
                 self.__pendingMessagesQueue.append(notification)

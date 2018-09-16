@@ -2,15 +2,16 @@
 # Embedded file name: scripts/client/messenger/doc_loaders/html_templates.py
 import types
 from debug_utils import LOG_WARNING
-from gui.shared.notifications import NotificationPriorityLevel
+from gui.shared.notifications import NotificationPriorityLevel, NotificationGroup
 from helpers.html import translation as html_translation, templates
 
 class _MessageTemplate(templates.Template):
 
-    def __init__(self, source, data, priority):
+    def __init__(self, source, data, priority, groupID):
         super(_MessageTemplate, self).__init__({'message': source})
         self.data = data
         self.priority = priority
+        self.groupID = groupID
 
     def format(self, ctx=None, data=None):
         vo = self.data.copy()
@@ -47,8 +48,11 @@ class MessageTemplates(templates.XMLCollection):
     def priority(self, key):
         return self[key].priority
 
+    def groupID(self, key):
+        return self[key].groupID
+
     def __missing__(self, key):
-        self[key] = value = _MessageTemplate(key, {}, NotificationPriorityLevel.MEDIUM)
+        self[key] = value = _MessageTemplate(key, {}, NotificationPriorityLevel.MEDIUM, NotificationGroup.INFO)
         return value
 
     def _make(self, source):
@@ -65,6 +69,10 @@ class MessageTemplates(templates.XMLCollection):
         if priority not in NotificationPriorityLevel.RANGE:
             LOG_WARNING('Priority is invalid', sourceID, priority)
             priority = NotificationPriorityLevel.MEDIUM
+        groupID = source.readString('groupID', NotificationGroup.INFO)
+        if groupID not in NotificationGroup.ALL:
+            LOG_WARNING('GroupID is invalid', sourceID, groupID)
+            groupID = NotificationGroup.INFO
         message = html_translation(source.readString('message'))
         section = source['filters']
         if section is None:
@@ -88,7 +96,7 @@ class MessageTemplates(templates.XMLCollection):
                 buttonTypes.add(buttonType)
                 layout.append(button)
 
-        return _MessageTemplate(message, data, priority)
+        return _MessageTemplate(message, data, priority, groupID)
 
     def _makeButtonData(self, sourceID, section):
         action = section.readString('action')

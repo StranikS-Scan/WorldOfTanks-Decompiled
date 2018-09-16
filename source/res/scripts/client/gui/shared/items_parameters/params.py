@@ -59,7 +59,8 @@ _FACTOR_TO_SKILL_PENALTY_MAP = {'turret/rotationSpeed': ('turretRotationSpeed', 
                     'avgDamagePerMinute',
                     'relativePower',
                     'reloadTimeSecs',
-                    'clipFireRate'),
+                    'clipFireRate',
+                    'autoReloadTime'),
  'gun/aimingTime': ('aimingTime',),
  'vehicle/rotationSpeed': ('chassisRotationSpeed', 'relativeMobility'),
  'chassis/terrainResistance': ('chassisRotationSpeed', 'relativeMobility'),
@@ -455,7 +456,8 @@ class VehicleParams(_ParameterBase):
          'switchOnTime',
          'switchOffTime',
          'switchTime',
-         AUTO_RELOAD_PROP_NAME)
+         AUTO_RELOAD_PROP_NAME,
+         RELOAD_TIME_PROP_NAME)
         stunConditionParams = ('stunMaxDuration', 'stunMinDuration')
         result = _ParamsDictProxy(self, preload, conditions=((conditionalParams, lambda v: v is not None), (stunConditionParams, lambda s: _isStunParamVisible(self._itemDescr.shot.shell))))
         return result

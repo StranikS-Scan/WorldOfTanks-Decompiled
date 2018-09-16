@@ -1,5 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/server_events/events_helpers.py
+import operator
 import time
 import BigWorld
 from constants import EVENT_TYPE
@@ -302,6 +303,22 @@ class AwardSheetPresenter(object):
     def getPawnedIcon(cls, branch=None):
         branchID = branch if branch is not None else cls.__navigation.getBranch()
         return RES_ICONS.getPawnedSheetImg(branchID)
+
+
+def getTankmanRewardQuests():
+    eventsCache = dependency.instance(IEventsCache)
+    for _, o in sorted(eventsCache.getPersonalMissions().getAllOperations().iteritems(), key=operator.itemgetter(0)):
+        if o.isUnlocked():
+            operationName = _ms('#personal_missions:operations/title%d' % o.getID())
+            for classifier in o.getIterationChain():
+                _, quests = o.getChainByClassifierAttr(classifier)
+                for _, q in sorted(quests.iteritems(), key=operator.itemgetter(0)):
+                    bonus = q.getTankmanBonus()
+                    needToGetTankman = q.needToGetAddReward() and not bonus.isMain or q.needToGetMainReward() and bonus.isMain
+                    if needToGetTankman and bonus.tankman is not None:
+                        yield (q, operationName)
+
+    return
 
 
 def _getlocalizeLinkedSetQuestString(localizedKey, quest):

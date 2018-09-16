@@ -70,7 +70,9 @@ class QuestsRecruitWindow(QuestRecruitWindowMeta):
              'name': Tankman.getFullUserName(selectedNationID, firstNameID, lastNameID),
              'nation': nationName,
              'rank': Tankman.getRankUserName(selectedNationID, rankID),
-             'backAnimationData': self.__getBackAnimationData(faceIcon)})
+             'backAnimationData': self.__getBackAnimationData(faceIcon),
+             'bgImage': '',
+             'tankmanIcon': faceIcon})
         self.__currentSelectedNationID = selectedNationID
 
     def __getBackAnimationData(self, faceIcon):

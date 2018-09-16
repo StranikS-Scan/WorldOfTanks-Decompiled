@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/login/EULADispatcher.py
 import ResMgr
-from constants import CURRENT_REALM, IS_SINGAPORE, IS_NORTH_AMERICA
 from debug_utils import LOG_ERROR, LOG_WARNING, LOG_CURRENT_EXCEPTION
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -78,8 +77,7 @@ class EULADispatcher(EventSystemEntity):
         return
 
     def __readEULAShort(self):
-        keySuffix = CURRENT_REALM if IS_NORTH_AMERICA or IS_SINGAPORE else ''
-        return makeHtmlString('html_templates:lobby/dialogs', 'eula{}'.format(keySuffix), {'eulaURL': GUI_SETTINGS.eula.url.format(getClientLanguage())})
+        return makeHtmlString('html_templates:lobby/dialogs', 'eula', {'eulaURL': GUI_SETTINGS.eula.url.format(getClientLanguage())})
 
     def __readEULAFull(self):
         if not GUI_SETTINGS.eula.full:

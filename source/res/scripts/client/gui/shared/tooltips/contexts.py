@@ -9,6 +9,7 @@ from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.server_events import recruit_helper
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import getTankmanSkill
@@ -407,6 +408,12 @@ class TankmanHangarContext(HangarContext):
 
     def buildItem(self, invID):
         return self.itemsCache.items.getTankman(int(invID))
+
+
+class NotRecruitedTankmanContext(HangarContext):
+
+    def buildItem(self, recruitID):
+        return recruit_helper.getRecruitInfo(recruitID)
 
 
 class TechTreeContext(ShopContext):

@@ -312,7 +312,7 @@ class SniperCamera(ICamera, CallbackDelayer):
         self.__aimOffset = aimOffset
         self.__binoculars.setMaskCenter(binocularsOffset.x, binocularsOffset.y)
         player = BigWorld.player()
-        if allowModeChange and (self.__isPositionUnderwater(self.__aimingSystem.matrix.translation) or player.isGunLocked):
+        if allowModeChange and (self.__isPositionUnderwater(self.__aimingSystem.matrix.translation) or player.isGunLocked and not player.isObserverFPV):
             self.__onChangeControlMode(False)
             return -1
 

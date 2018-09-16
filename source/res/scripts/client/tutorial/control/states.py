@@ -62,9 +62,8 @@ class TutorialStateWaitScene(_TutorialState):
         nextScene, isInScene = self._tutorial.getNextScene(self._gui.getSceneID())
         if isInScene:
             self._tutorial.setFunctionalScene(nextScene)
-            postEffects = nextScene.getPostEffects()
-            postEffects = [ item for item in postEffects if functional.FunctionalConditions(item.getConditions()).allConditionsOk() ]
             self._isAllowedToSwitch = True
+            postEffects = nextScene.getPostEffects()
             if postEffects:
                 self._tutorial.storeEffectsInQueue(postEffects)
             else:

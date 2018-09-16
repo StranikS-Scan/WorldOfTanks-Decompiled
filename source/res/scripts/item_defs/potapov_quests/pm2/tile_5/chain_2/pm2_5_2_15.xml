@@ -74,6 +74,29 @@ pass
           <limit>	5	</limit>
         </token>
       </bonus>
+      <bonusDelayed>
+        <dossier>
+          <name>	achievements:tankwomenProgress	</name>
+          <value>	1	</value>
+          <type>	add	</type>
+        </dossier>
+        <berths>	1	</berths>
+        <tankmen>
+          <tman>
+            <isPremium>	true	</isPremium>
+            <isFemale>	true	</isFemale>
+            <role>	commander	</role>
+            <roleLevel>	100	</roleLevel>
+            <freeXP>	210063	</freeXP>
+            <fnGroupID>	1	</fnGroupID>
+            <lnGroupID>	1	</lnGroupID>
+            <iGroupID>	1	</iGroupID>
+            <nationID>	0	</nationID>
+            <vehicleTypeID>	0	</vehicleTypeID>
+            <freeSkills>	brotherhood	</freeSkills>
+          </tman>
+        </tankmen>
+      </bonusDelayed>
     </potapovQuest>
     <potapovQuest>
       <enabled>	true	</enabled>

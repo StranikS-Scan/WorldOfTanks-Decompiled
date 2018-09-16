@@ -297,11 +297,13 @@ class CustomizationPropertiesSheet(CustomizationPropertiesSheetMeta):
             appliedIems = tuple((it for it in self.__ctx.getPurchaseItems() if not it.isDismantling and it.item.intCD == self._currentItem.intCD))
             if self.__ctx.currentTab in (C11nTabs.PAINT, C11nTabs.CAMOUFLAGE):
                 appliedIems = tuple((it for it in appliedIems if it.group == self.__ctx.currentSeason))
-            purchaseItems = tuple((it for it in appliedIems if not it.isFromInventory))
-            fromInventoryItems = tuple((it for it in appliedIems if it.isFromInventory))
+            outfit = self.__ctx.originalOutfit
+            slotData = outfit.getContainer(self._areaID).slotFor(self._slotID).getSlotData(self._regionID)
+            isCurrentlyApplied = slotData.item == self._currentItem
             itemCache = self.itemsCache.items.getItemByCD(self._currentItem.intCD)
+            inventoryCount = itemCache.inventoryCount
             appliedItemPrice = itemCache.getBuyPrice()
-            extraInventoryCount = max(0, len(purchaseItems) - int(not fromInventoryItems))
+            extraInventoryCount = max(0, len(appliedIems) - max(inventoryCount, int(not isCurrentlyApplied)))
             self._extraMoney = appliedItemPrice.price * extraInventoryCount
         else:
             self._extraMoney = None

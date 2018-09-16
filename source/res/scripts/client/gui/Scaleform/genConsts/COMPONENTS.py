@@ -47,6 +47,7 @@ class COMPONENTS(object):
     MEDIUM_TANK = 'mediumTank'
     MEDIUM_TANK_ELITE = 'mediumTank_elite'
     ORANGE_BIG_NORMAL = 'orange_big_normal'
+    SEPARATOR = 'separator'
     SPG = 'SPG'
     SPG_ELITE = 'SPG_elite'
     XP_ICON_1 = 'XpIcon_1'

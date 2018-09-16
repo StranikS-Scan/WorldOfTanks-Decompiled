@@ -5,6 +5,7 @@
 class TOOLTIPS_CONSTANTS(object):
     DEFAULT = 'default'
     TANKMAN = 'tankman'
+    TANKMAN_NOT_RECRUITED = 'tankmanNotRecruited'
     CONTACT = 'contact'
     BATTLE_STATS_ACHIEVS = 'battleStatsAchievementData'
     ACHIEVEMENT = 'achievement'
@@ -80,6 +81,7 @@ class TOOLTIPS_CONSTANTS(object):
     MISSION_VEHICLE = 'missionVehicle'
     MISSION_VEHICLE_TYPE = 'missionVehicleType'
     ADDITIONAL_AWARDS = 'additionalAwards'
+    PACK_RENT_VEHICLES = 'packRentVehicles'
     UNAVAILABLE_QUEST = 'unavailibleQuest'
     ACTION_PRICE = 'actionPrice'
     SPECIAL = 'special'
@@ -318,12 +320,14 @@ class TOOLTIPS_CONSTANTS(object):
      MISSION_VEHICLE,
      MISSION_VEHICLE_TYPE,
      ADDITIONAL_AWARDS,
+     PACK_RENT_VEHICLES,
      UNAVAILABLE_QUEST]
     MARATHON_SET = [MARATHON_QUESTS_PREVIEW]
     TANKMAN_SET = [TANKMAN,
      TANKMAN_SKILL,
      TANKMAN_NEW_SKILL,
-     TANKMAN_SKILL_EXTENDED]
+     TANKMAN_SKILL_EXTENDED,
+     TANKMAN_NOT_RECRUITED]
     RANKED_SET = [RANKED_BATTLES_RANK,
      RANKED_STEP,
      RANKED_CALENDAR_DAY_INFO,

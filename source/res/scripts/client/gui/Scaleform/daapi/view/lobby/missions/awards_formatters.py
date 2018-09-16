@@ -4,7 +4,7 @@ from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events import finders
-from gui.server_events.awards_formatters import QuestsBonusComposer, AWARDS_SIZES, PreformattedBonus, getPersonalMissionAwardPacker, getOperationPacker, formatCountLabel, LABEL_ALIGN, getLinkedSetAwardPacker
+from gui.server_events.awards_formatters import QuestsBonusComposer, AWARDS_SIZES, PreformattedBonus, getPersonalMissionAwardPacker, getOperationPacker, formatCountLabel, LABEL_ALIGN, getLinkedSetAwardPacker, PACK_RENT_VEHICLES_BONUS
 from gui.server_events.bonuses import FreeTokensBonus
 from gui.shared.formatters import text_styles
 from helpers import i18n, dependency
@@ -97,6 +97,37 @@ class DetailedCardAwardComposer(CurtailingAwardsComposer):
         preformattedBonuses = self.getPreformattedBonuses(bonuses)
         size = AWARDS_SIZES.SMALL if len(preformattedBonuses) > bigAwardsCount else AWARDS_SIZES.BIG
         return self._packBonuses(preformattedBonuses, size)
+
+
+class PackRentVehiclesAwardComposer(CurtailingAwardsComposer):
+
+    def _packBonuses(self, preformattedBonuses, size):
+        bonusCount = len(preformattedBonuses)
+        mergedBonuses = []
+        packRentVehicles = None
+        for index, bonus in enumerate(preformattedBonuses):
+            if bonus.bonusName == PACK_RENT_VEHICLES_BONUS:
+                packRentVehicles = preformattedBonuses.pop(index)
+                break
+
+        awardsCount = self._displayedAwardsCount
+        if packRentVehicles:
+            awardsCount -= 1
+        if bonusCount > awardsCount:
+            sliceIdx = awardsCount - 1
+            displayBonuses = preformattedBonuses[:sliceIdx]
+            mergedBonuses = preformattedBonuses[sliceIdx:]
+        else:
+            displayBonuses = preformattedBonuses
+        result = []
+        for b in displayBonuses:
+            result.append(self._packBonus(b, size))
+
+        if packRentVehicles:
+            result.append(self._packBonus(packRentVehicles, size))
+        if mergedBonuses:
+            result.append(self._packMergedBonuses(mergedBonuses, size))
+        return result
 
 
 class PersonalMissionsAwardComposer(CurtailingAwardsComposer):

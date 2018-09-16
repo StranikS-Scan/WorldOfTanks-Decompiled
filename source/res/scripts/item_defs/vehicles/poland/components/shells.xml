@@ -36,6 +36,35 @@
       <devices>	27	</devices>
     </damage>
   </_20mm_z_pociskiem_wybuchowo_ulepszony>
+  <_20mm_z_pociskiem_wybuchowo_B>
+    <id>	69	</id>
+    <userString>	#poland_vehicles:_20mm_z_pociskiem_wybuchowo_B	</userString>
+    <icon>	ap	</icon>
+    <price>	3	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	20	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	autoArmorPiercing	</effects>
+    <damage>
+      <armor>	11	</armor>
+      <devices>	27	</devices>
+    </damage>
+  </_20mm_z_pociskiem_wybuchowo_B>
+  <_20mm_z_pociskiem_wybuchowo_ulepszony_B>
+    <id>	70	</id>
+    <userString>	#poland_vehicles:_20mm_z_pociskiem_wybuchowo_ulepszony_B	</userString>
+    <icon>	ap	</icon>
+    <price>	400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	20	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	autoArmorPiercing	</effects>
+    <damage>
+      <armor>	11	</armor>
+      <devices>	27	</devices>
+    </damage>
+  </_20mm_z_pociskiem_wybuchowo_ulepszony_B>
   <_37mm_AP_Bofors>
     <id>	48	</id>
     <userString>	#poland_vehicles:_37mm_AP_Bofors	</userString>
@@ -344,6 +373,51 @@
       <devices>	100	</devices>
     </damage>
   </_75mm_Sprg.18L_K>
+  <_75mm_APCBC_K>
+    <id>	36	</id>
+    <userString>	#poland_vehicles:_75mm_APCBC_K	</userString>
+    <icon>	ap	</icon>
+    <price>	74	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mainArmorPiercing	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_APCBC_K>
+  <_Gr_38_HL_A_K>
+    <id>	37	</id>
+    <userString>	#poland_vehicles:_Gr_38_HL_A_K	</userString>
+    <icon>	hc	</icon>
+    <price>	2800	</price>
+    <improved>	true	</improved>
+    <kind>	HOLLOW_CHARGE	</kind>
+    <caliber>	75	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHollowCharge	</effects>
+    <damage>
+      <armor>	110	</armor>
+      <devices>	100	</devices>
+    </damage>
+    <piercingPowerLossFactorByDistance>	0.05	</piercingPowerLossFactorByDistance>
+  </_Gr_38_HL_A_K>
+  <_75mm_Sprg.18_K>
+    <id>	38	</id>
+    <userString>	#poland_vehicles:_75mm_Sprg.18_K	</userString>
+    <icon>	he	</icon>
+    <price>	68	</price>
+    <kind>	HIGH_EXPLOSIVE	</kind>
+    <caliber>	75	</caliber>
+    <explosionRadius>	1.06	</explosionRadius>
+    <isTracer>	true	</isTracer>
+    <effects>	mediumHighExplosive	</effects>
+    <damage>
+      <armor>	175	</armor>
+      <devices>	100	</devices>
+    </damage>
+  </_75mm_Sprg.18_K>
   <_75mm_Pzgr39_K>
     <id>	39	</id>
     <userString>	#poland_vehicles:_75mm_Pzgr39_K	</userString>

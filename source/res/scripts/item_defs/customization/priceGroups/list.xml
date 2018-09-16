@@ -345,7 +345,7 @@
     <tags>	football styles	</tags>
     <price>	1750	  <gold></gold>
     </price>
-    <notInShop>	False	</notInShop>
+    <notInShop>	True	</notInShop>
   </priceGroup>
   <priceGroup>
     <id>	91	</id>
@@ -400,6 +400,14 @@
     <name>	sabaton inscriptions notInShop	</name>
     <tags>	sabaton inscriptions notInShop	</tags>
     <price>	200	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	99	</id>
+    <name>	inscriptions notInShop	</name>
+    <tags>	inscriptions notInShop	</tags>
+    <price>	50	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
   </priceGroup>
@@ -468,12 +476,20 @@
     <notInShop>	True	</notInShop>
   </priceGroup>
   <priceGroup>
+    <id>	98	</id>
+    <name>	camouflages notInShop	</name>
+    <tags>	camouflages notInShop	</tags>
+    <price>	50	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
     <id>	85	</id>
     <name>	football emblems 100	</name>
     <tags>	football emblems	</tags>
     <price>	100	  <gold></gold>
     </price>
-    <notInShop>	False	</notInShop>
+    <notInShop>	True	</notInShop>
   </priceGroup>
   <priceGroup>
     <id>	86	</id>
@@ -481,7 +497,7 @@
     <tags>	football emblems	</tags>
     <price>	150	  <gold></gold>
     </price>
-    <notInShop>	False	</notInShop>
+    <notInShop>	True	</notInShop>
   </priceGroup>
   <priceGroup>
     <id>	87	</id>
@@ -489,13 +505,21 @@
     <tags>	football emblems	</tags>
     <price>	200	  <gold></gold>
     </price>
-    <notInShop>	False	</notInShop>
+    <notInShop>	True	</notInShop>
   </priceGroup>
   <priceGroup>
     <id>	95	</id>
     <name>	sabaton emblems notInShop	</name>
     <tags>	sabaton emblems notInShop	</tags>
     <price>	200	  <gold></gold>
+    </price>
+    <notInShop>	True	</notInShop>
+  </priceGroup>
+  <priceGroup>
+    <id>	97	</id>
+    <name>	emblems notInShop	</name>
+    <tags>	emblems notInShop	</tags>
+    <price>	50	  <gold></gold>
     </price>
     <notInShop>	True	</notInShop>
   </priceGroup>

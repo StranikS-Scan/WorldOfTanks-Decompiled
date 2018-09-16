@@ -118,10 +118,10 @@ class ItemsWebApiMixin(object):
         if not self.__cachesInitialized:
             self.updateMappingCaches()
         criteria = _parseCriteriaSpec(cmd.type, cmd.criteria)
-        allowed_fields = set(cmd.fields) if cmd.fields else None
+        allowedFields = set(cmd.fields) if cmd.fields else None
         if not criteria.lookInInventory():
             criteria |= _EXTRA_ITEMS_CRITERIA_MAP.get(cmd.type, REQ_CRITERIA.EMPTY)
-        result = [ self.__getFormatter(cmd.type, criteria).format(item, allowed_fields) for item in self.__collectItems(cmd.type, criteria) ]
+        result = [ self.__getFormatter(cmd.type, criteria).format(item, allowedFields) for item in self.__collectItems(cmd.type, criteria) ]
         return result
 
     def __getFormatter(self, itemType, criteria):

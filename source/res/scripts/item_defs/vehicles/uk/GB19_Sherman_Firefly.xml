@@ -253,9 +253,6 @@
         <gravity>	-5	</gravity>
         <elasticity>	1254	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
@@ -1251,9 +1248,6 @@
         <gravity>	-5	</gravity>
         <elasticity>	1254	</elasticity>
         <damping>	2	</damping>
-        <forwardElastK>	1	</forwardElastK>
-        <backwardElastK>	1	</backwardElastK>
-        <offset>	0.000000	</offset>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VD_L0	</name>
@@ -1333,16 +1327,6 @@
           <leftSibling>	Track_VT_L1	</leftSibling>
         </node>
       </trackNodes>
-      <AODecals>
-        <decal>
-          <transform>
-            <row0>	3.568850 0.000000 0.000000	</row0>
-            <row1>	0.000000 1.439640 0.000000	</row1>
-            <row2>	0.000000 0.000000 7.373900	</row2>
-            <row3>	0.000000 0.000000 0.000000	</row3>
-          </transform>
-        </decal>
-      </AODecals>
       <physicalTracks>
         <left>
           <segmentsCount>	180	</segmentsCount>
@@ -2091,6 +2075,16 @@
           </sourceCollisionHullPoints>
         </right>
       </physicalTracks>
+      <AODecals>
+        <decal>
+          <transform>
+            <row0>	3.568850 0.000000 0.000000	</row0>
+            <row1>	0.000000 1.439640 0.000000	</row1>
+            <row2>	0.000000 0.000000 7.373900	</row2>
+            <row3>	0.000000 0.000000 0.000000	</row3>
+          </transform>
+        </decal>
+      </AODecals>
     </Chassis_GB19_Sherman_Firefly_2>
   </chassis>
   <turrets0>

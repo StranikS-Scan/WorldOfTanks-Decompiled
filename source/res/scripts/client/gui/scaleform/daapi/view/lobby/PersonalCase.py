@@ -292,7 +292,8 @@ class PersonalCaseDataProvider(object):
         if changeRoleEnabled:
             tooltipChangeRole = makeTooltip(TOOLTIPS.CREW_ROLECHANGE_HEADER, TOOLTIPS.CREW_ROLECHANGE_TEXT)
         else:
-            tooltipChangeRole = makeTooltip(TOOLTIPS.CREW_ROLECHANGEFORBID_HEADER, TOOLTIPS.CREW_ROLECHANGEFORBID_TEXT)
+            roleStr = i18n.makeString(TOOLTIPS.crewRole(td.role))
+            tooltipChangeRole = makeTooltip(TOOLTIPS.CREW_ROLECHANGEFORBID_HEADER, i18n.makeString(TOOLTIPS.CREW_ROLECHANGEFORBID_TEXT, role=roleStr))
         showDocumentTab = not td.getRestrictions().isPassportReplacementForbidden()
         bonuses = tankman.realRoleLevel[1]
         modifiers = []

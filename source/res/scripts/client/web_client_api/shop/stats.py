@@ -53,8 +53,6 @@ class BalanceWebApiMixin(object):
          'paidRemovalCostGold': lambda stats: stats.paidRemovalCost,
          'exchangeRate': lambda stats: stats.exchangeRate,
          'dailyXPFactor': lambda stats: stats.dailyXPFactor,
-         'sellPriceFactor': lambda stats: stats.tradeIn.sellPriceFactor,
-         'minAcceptableSellPrice': lambda stats: stats.tradeIn.minAcceptableSellPrice,
          'clanCreationCost': lambda stats: stats.clanCreationCost}
         currentStats = self.itemsCache.items.shop
         defaultStats = self.itemsCache.items.shop.defaults

@@ -37,6 +37,7 @@ class LABEL_ALIGN(CONST_CONTAINER):
     CENTER = 'center'
 
 
+PACK_RENT_VEHICLES_BONUS = 'packRentVehicleBonus'
 AWARD_IMAGES = {AWARDS_SIZES.SMALL: {Currency.CREDITS: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_CREDITS,
                       Currency.GOLD: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_GOLD,
                       Currency.CRYSTAL: RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_SMALL_CRYSTAL,
@@ -146,6 +147,12 @@ def getLinkedSetFormattersMap():
     return mapping
 
 
+def getPackRentVehiclesFormattersMap():
+    mapping = getDefaultFormattersMap()
+    mapping.update({'vehicles': RentVehiclesBonusFormatter()})
+    return mapping
+
+
 def getDefaultAwardFormatter():
     return AwardsPacker(getDefaultFormattersMap())
 
@@ -160,6 +167,10 @@ def getLinkedSetAwardPacker():
 
 def getEventBoardsAwardPacker():
     return AwardsPacker(getEventBoardsFormattersMap())
+
+
+def getPackRentVehiclesAwardPacker():
+    return AwardsPacker(getPackRentVehiclesFormattersMap())
 
 
 def getPersonalMissionAwardPacker():
@@ -470,7 +481,12 @@ class VehiclesBonusFormatter(SimpleBonusFormatter):
 
     def _format(self, bonus):
         result = []
-        for vehicle, vehInfo in bonus.getVehicles():
+        result.extend(self._formatVehicle(bonus, bonus.getVehicles()))
+        return result
+
+    def _formatVehicle(self, bonus, vehicles):
+        result = []
+        for vehicle, vehInfo in vehicles:
             compensation = bonus.compensation(vehicle)
             if compensation:
                 formatter = SimpleBonusFormatter()
@@ -528,6 +544,58 @@ class VehiclesBonusFormatter(SimpleBonusFormatter):
                 return True
 
         return False
+
+
+class RentVehiclesBonusFormatter(VehiclesBonusFormatter):
+
+    def _format(self, bonus):
+        result = []
+        rentVehicles = []
+        restVehicles = []
+        for vehicle, vehInfo in bonus.getVehicles():
+            if bonus.isRentVehicle(vehInfo):
+                rentVehicles.append((vehicle, vehInfo))
+            restVehicles.append((vehicle, vehInfo))
+
+        result.extend(self._formatRent(bonus, rentVehicles))
+        result.extend(self._formatVehicle(bonus, restVehicles))
+        return result
+
+    def _formatRent(self, bonus, vehicles):
+        result = []
+        if not vehicles:
+            return result
+        if len(vehicles) == 1:
+            result.append(self._formatVehicle(bonus, vehicles))
+        else:
+            result.append(PreformattedBonus(bonusName=PACK_RENT_VEHICLES_BONUS, label=formatCountLabel(len(vehicles)), labelFormatter=text_styles.stats, images=self._getRentImages(), isSpecial=True, specialAlias=TOOLTIPS_CONSTANTS.PACK_RENT_VEHICLES, specialArgs=self._getRentArgs(bonus, vehicles)))
+        return result
+
+    @classmethod
+    def _getRentImages(cls):
+        result = {}
+        for size in AWARDS_SIZES.ALL():
+            image = RES_ICONS.getRentVehicleAwardIcon(size)
+            result[size] = image
+
+        return result
+
+    @classmethod
+    def _getRentArgs(cls, bonus, vehicles):
+        rentArgs = []
+        for vehicle, vehInfo in vehicles:
+            rentDays = bonus.getRentDays(vehInfo)
+            rentBattles = bonus.getRentBattles(vehInfo)
+            rentWins = bonus.getRentWins(vehInfo)
+            shortData = {'vehicleName': vehicle.userName,
+             'isPremium': vehicle.isPremium,
+             'vehicleType': vehicle.type,
+             'rentDays': rentDays,
+             'rentBattles': rentBattles,
+             'rentWins': rentWins}
+            rentArgs.append(shortData)
+
+        return rentArgs
 
 
 class LinkedSetVehiclesBonusFormatter(VehiclesBonusFormatter):
@@ -740,6 +808,8 @@ class ItemsBonusFormatter(SimpleBonusFormatter):
                     alias = TOOLTIPS_CONSTANTS.BATTLE_CONSUMABLE
                 elif item.itemTypeID == GUI_ITEM_TYPE.SHELL:
                     alias = TOOLTIPS_CONSTANTS.AWARD_SHELL
+                elif item.itemTypeID == GUI_ITEM_TYPE.BATTLE_BOOSTER:
+                    alias = TOOLTIPS_CONSTANTS.AWARD_BATTLE_BOOSTER
                 else:
                     alias = TOOLTIPS_CONSTANTS.AWARD_MODULE
                 highlightType = None

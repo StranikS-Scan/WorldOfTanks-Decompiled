@@ -10,6 +10,7 @@ from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.FORTIFICATION_ALIASES import FORTIFICATION_ALIASES
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
+from gui.Scaleform.genConsts.BARRACKS_CONSTANTS import BARRACKS_CONSTANTS
 from gui.battle_results import RequestResultsContext
 from gui.clans.clan_helpers import showAcceptClanInviteDialog
 from gui.prb_control import prbInvitesProperty, prbDispatcherProperty
@@ -539,6 +540,21 @@ class OpenCustomizationHandler(_ActionHandler):
         self.service.showCustomization()
 
 
+class _OpenNotrecruitedHandler(_ActionHandler):
+
+    @classmethod
+    def getNotType(cls):
+        return NOTIFICATION_TYPE.MESSAGE
+
+    @classmethod
+    def getActions(cls):
+        pass
+
+    def handleAction(self, model, entityID, action):
+        super(_OpenNotrecruitedHandler, self).handleAction(model, entityID, action)
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_BARRACKS, ctx={'location': BARRACKS_CONSTANTS.LOCATION_FILTER_NOT_RECRUITED}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
 _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  ShowTutorialBattleHistoryHandler,
  ShowFortBattleResultsHandler,
@@ -561,7 +577,8 @@ _AVAILABLE_HANDLERS = (ShowBattleResultsHandler,
  _AcceptClanInviteHandler,
  _DeclineClanInviteHandler,
  _OpenEventBoardsHandler,
- OpenCustomizationHandler)
+ OpenCustomizationHandler,
+ _OpenNotrecruitedHandler)
 
 class NotificationsActionsHandlers(object):
     __slots__ = ('__single', '__multi')

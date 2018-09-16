@@ -19,6 +19,7 @@ from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
+from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from gui.shared import event_dispatcher, events, event_bus_handlers, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showWebShop, showOldShop
@@ -197,15 +198,15 @@ class VehiclePreview20(LobbySelectableView, VehiclePreview20Meta):
             vehicleTitle = text_styles.playerOnline('%s %s, %s' % (_ms(MENU.header_vehicletype(vehicle.type)), _ms(VEHICLE_PREVIEW.INFOPANEL_LEVEL, level=_ms(MENU.header_level(vehicle.level))), _ms(MENU.nations(vehicle.nationName))))
         if vehicle.isPremiumIGR:
             vehicleTitle = makeHtmlString('html_templates:igr/premium-vehicle', 'name', {'vehicle': vehicleTitle})
-        showCompareBtnState, _ = resolveStateTooltip(self.comparisonBasket, vehicle, '', '')
+        compareBtnEnabled, compareBtnTooltip = resolveStateTooltip(self.comparisonBasket, vehicle, VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_ADDTOCOMPARE, VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_DISABLED)
         result = {'closeBtnLabel': VEHICLE_PREVIEW.HEADER_CLOSEBTN_LABEL,
          'backBtnLabel': VEHICLE_PREVIEW.HEADER_BACKBTN_LABEL,
          'backBtnDescrLabel': self.__getBackBtnLabel(),
          'vehicleTitle': vehicleTitle,
          'vehicleName': vehicle.descriptor.type.shortUserString.upper(),
-         'isPremiumIGR': vehicle.isPremiumIGR,
          'showCloseBtn': self._showCloseBtn,
-         'showCompareBtn': showCompareBtnState}
+         'compareBtnTooltip': compareBtnTooltip,
+         'showCompareBtn': compareBtnEnabled}
         return result
 
     def __getBackBtnLabel(self):

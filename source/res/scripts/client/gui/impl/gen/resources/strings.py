@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/impl/gen/resources/strings.py
 from .strings_entries.development import Development
 from .strings_entries.faq import Faq
+from .strings_entries.ingame_gui import IngameGui
 from .strings_entries.menu import Menu
 from .strings_entries.store import Store
 
@@ -9,5 +10,6 @@ class Strings(object):
     __slots__ = ()
     development = Development()
     faq = Faq()
+    ingame_gui = IngameGui()
     menu = Menu()
     store = Store()

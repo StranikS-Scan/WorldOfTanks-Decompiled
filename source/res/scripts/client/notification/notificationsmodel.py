@@ -7,11 +7,12 @@ from notification.settings import NOTIFICATION_STATE
 
 class NotificationsModel(object):
 
-    def __init__(self, counter):
+    def __init__(self, counter, firstEntry=True):
         self.__currentDisplayState = None
         self.__collection = NotificationsCollection()
         self.__listeners = NotificationsListeners()
         self.__counter = counter
+        self.__firstEnrty = firstEntry
         self.onDisplayStateChanged = Event.Event()
         self.onNotificationReceived = Event.Event()
         self.onNotificationUpdated = Event.Event()
@@ -72,6 +73,9 @@ class NotificationsModel(object):
 
     def getNotifiedMessagesCount(self, group=None):
         return self.__counter.count(group)
+
+    def getFirstEntry(self):
+        return self.__firstEnrty
 
     def setup(self):
         self.__collection.default()

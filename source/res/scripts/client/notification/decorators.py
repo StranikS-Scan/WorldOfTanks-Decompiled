@@ -7,7 +7,7 @@ from gui.clans.formatters import ClanSingleNotificationHtmlTextFormatter, ClanMu
 from gui.clans.settings import CLAN_APPLICATION_STATES, CLAN_INVITE_STATES
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.formatters.invites import getPrbInviteHtmlFormatter
-from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings
+from gui.shared.notifications import NotificationPriorityLevel, NotificationGuiSettings, NotificationGroup
 from helpers import dependency
 from helpers import i18n
 from messenger import g_settings
@@ -15,7 +15,7 @@ from messenger.formatters.users_messages import makeFriendshipRequestText
 from messenger.m_constants import PROTO_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
-from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE, NOTIFICATION_GROUP
+from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
 from notification.settings import makePathToIcon
 from gui.wgnc.settings import WGNC_DEFAULT_ICON, WGNC_POP_UP_BUTTON_WIDTH
 from helpers import time_utils
@@ -70,7 +70,7 @@ class _NotificationDecorator(object):
         return NOTIFICATION_TYPE.UNDEFINED
 
     def getGroup(self):
-        return NOTIFICATION_GROUP.INFO
+        return NotificationGroup.INFO
 
     def getSettings(self):
         return self._settings
@@ -167,6 +167,9 @@ class MessageDecorator(_NotificationDecorator):
     def getType(self):
         return NOTIFICATION_TYPE.MESSAGE
 
+    def getGroup(self):
+        return self._settings.groupID
+
     def update(self, formatted):
         super(MessageDecorator, self).update(formatted)
         self._make(formatted)
@@ -213,7 +216,7 @@ class PrbInviteDecorator(_NotificationDecorator):
         return NOTIFICATION_TYPE.INVITE
 
     def getGroup(self):
-        return NOTIFICATION_GROUP.INVITE
+        return NotificationGroup.INVITE
 
     def update(self, entity):
         super(PrbInviteDecorator, self).update(entity)
@@ -276,7 +279,7 @@ class FriendshipRequestDecorator(_NotificationDecorator):
         return NOTIFICATION_TYPE.FRIENDSHIP_RQ
 
     def getGroup(self):
-        return NOTIFICATION_GROUP.INVITE
+        return NotificationGroup.INVITE
 
     def getOrder(self):
         return (self.showAt(), self._receivedAt)
@@ -408,7 +411,7 @@ class _ClanBaseDecorator(_NotificationDecorator):
         return self.getID()
 
     def getGroup(self):
-        return NOTIFICATION_GROUP.INVITE
+        return NotificationGroup.INVITE
 
 
 class _ClanDecorator(_ClanBaseDecorator):

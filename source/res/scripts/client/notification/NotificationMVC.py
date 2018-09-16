@@ -12,10 +12,11 @@ class _NotificationMVC(object):
         self.__alertsController = None
         self.__actionsHandlers = None
         self.__unreadMessagesCounter = NotificationsCounter()
+        self.__firstEntry = True
         return
 
     def initialize(self):
-        self.__model = NotificationsModel(self.__unreadMessagesCounter)
+        self.__model = NotificationsModel(self.__unreadMessagesCounter, self.__firstEntry)
         self.__actionsHandlers = NotificationsActionsHandlers()
         self.__alertsController = AlertController(self.__model)
 
@@ -34,9 +35,11 @@ class _NotificationMVC(object):
         self.__model.cleanUp()
         self.__alertsController = None
         self.__actionsHandlers = None
+        self.__firstEntry = False
         if resetCounter:
             self.__unreadMessagesCounter.clear()
             self.__unreadMessagesCounter = NotificationsCounter()
+            self.__firstEntry = True
         self.__model = None
         return
 

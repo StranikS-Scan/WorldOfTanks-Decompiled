@@ -34,7 +34,9 @@ SM_TYPE = Enumeration('System message type', ['Error',
  'OpenEventBoards',
  'tokenWithMarkAcquired',
  'PaymentMethodLink',
- 'PaymentMethodUnlink'])
+ 'PaymentMethodUnlink',
+ 'RecruitGift',
+ 'RecruitReminder'])
 CURRENCY_TO_SM_TYPE = {Currency.CREDITS: SM_TYPE.PurchaseForCredits,
  Currency.GOLD: SM_TYPE.PurchaseForGold,
  Currency.CRYSTAL: SM_TYPE.PurchaseForCrystal}

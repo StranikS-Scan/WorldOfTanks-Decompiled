@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/RoleChangeWindow.py
 import BigWorld
+import constants
 from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.ingame_shop import showBuyGoldForCrew
 from gui.shared.money import Money
@@ -36,10 +37,13 @@ def _getTankmanVO(tankman):
      'roleIcon': packedTankman['iconRole']['medium']}
 
 
+def _isSameRole(tankman, role):
+    td = tankman.descriptor
+    return True if td.role == role else False
+
+
 def _isRoleAvailableToChange(tankman, role):
     td = tankman.descriptor
-    if td.role == role:
-        return False
     return False if not tankmen.tankmenGroupHasRole(td.nationID, td.gid, td.isPremium, role) else True
 
 
@@ -112,14 +116,19 @@ class RoleChangeWindow(RoleChangeMeta):
                 sameTankmen = len(roleTankmen)
                 roleSlotIsTaken = _isRoleSlotTaken(roleTankmen, selectedVehicle, mainRole)
                 roleStr = Tankman.getRoleUserName(mainRole)
-                isAvailable = _isRoleAvailableToChange(self.__tankman, mainRole)
+                isCurrent = _isSameRole(self.__tankman, mainRole)
+                if isCurrent:
+                    isAvailable = False
+                else:
+                    isAvailable = _isRoleAvailableToChange(self.__tankman, mainRole)
                 data.append({'id': mainRole,
                  'name': roleStr,
                  'icon': Tankman.getRoleMediumIconPath(mainRole),
                  'available': isAvailable,
                  'tooltip': _getTooltip(self.__tankman, mainRole),
                  'warningHeader': _getTooltipHeader(sameTankmen, isAvailable),
-                 'warningBody': _getTooltipBody(sameTankmen, isAvailable, roleSlotIsTaken, roleStr, selectedVehicle)})
+                 'warningBody': _getTooltipBody(sameTankmen, isAvailable, roleSlotIsTaken, roleStr, selectedVehicle),
+                 'current': isCurrent})
 
         self.as_setRolesS(data)
 
@@ -188,6 +197,10 @@ class RoleChangeWindow(RoleChangeMeta):
     def __getVehiclesData(self, nationID, nativeVehicleCD):
         items = []
         criteria = REQ_CRITERIA.NATIONS([nationID]) | REQ_CRITERIA.UNLOCKED
+        if not constants.IS_IGR_ENABLED:
+            criteria |= ~REQ_CRITERIA.VEHICLE.IS_PREMIUM_IGR
+        if constants.IS_DEVELOPMENT:
+            criteria |= ~REQ_CRITERIA.VEHICLE.IS_BOT
         vehicles = self.itemsCache.items.getVehicles(criteria)
         vehiclesData = vehicles.values()
         if nativeVehicleCD not in vehicles:

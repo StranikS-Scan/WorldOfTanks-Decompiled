@@ -3,10 +3,11 @@
 import operator
 from gui.server_events.events_dispatcher import showTankwomanAward
 from gui.shared.formatters import text_styles
-from helpers.i18n import makeString as _ms
 from gui.Scaleform.daapi.view.meta.TankgirlsPopoverMeta import TankgirlsPopoverMeta
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
+from gui.server_events import events_helpers
 from helpers import dependency
+from helpers.i18n import makeString as _ms
 from shared_utils import first
 from skeletons.gui.server_events import IEventsCache
 
@@ -28,6 +29,12 @@ class TankgirlsPopover(TankgirlsPopoverMeta):
 
     def __update(self):
         tankwomenQuests = []
+        for quest, opName in events_helpers.getTankmanRewardQuests():
+            tankwomenQuests.append({'id': str(quest.getID()),
+             'operationLabel': text_styles.standard(opName),
+             'missionLabel': text_styles.main(quest.getShortUserName()),
+             'recruitBtnLabel': PERSONAL_MISSIONS.PERSONALMISSIONS_TANKGIRLSPOPOVER_RECRUITBTN})
+
         for _, o in sorted(self.__eventsCache.getPersonalMissions().getAllOperations().iteritems(), key=operator.itemgetter(0)):
             if o.isUnlocked():
                 operationName = _ms('#personal_missions:operations/title%d' % o.getID())

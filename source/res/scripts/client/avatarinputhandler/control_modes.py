@@ -557,7 +557,7 @@ class ArcadeControlMode(_GunControlMode):
             self.__activateAlternateMode(worldPos)
 
     def onChangeControlModeByScroll(self):
-        if self._cam.getUserConfigValue('sniperModeByShift'):
+        if not _isEnabledChangeModeByScroll(self._cam, self._aih):
             return
         else:
             self.__activateAlternateMode(pos=None, bByScroll=True)
@@ -962,7 +962,7 @@ class SniperControlMode(_GunControlMode):
         return self.getPreferredAutorotationMode() is not False
 
     def onChangeControlModeByScroll(self, switchToClosestDist=True):
-        if self._cam.getUserConfigValue('sniperModeByShift'):
+        if not _isEnabledChangeModeByScroll(self._cam, self._aih):
             return
         self._aih.onControlModeChanged(CTRL_MODE_NAME.ARCADE, preferredPos=self.camera.aimingSystem.getDesiredShotPoint(), turretYaw=self._cam.aimingSystem.turretYaw, gunPitch=self._cam.aimingSystem.gunPitch, aimingMode=self._aimingMode, closesDist=switchToClosestDist)
 
@@ -1616,3 +1616,7 @@ def _swap(data, index1, index2):
     tmp = data[index1]
     data[index1] = data[index2]
     data[index2] = tmp
+
+
+def _isEnabledChangeModeByScroll(camera, aih):
+    return not camera.getUserConfigValue('sniperModeByShift') or aih.isObserverFPV

@@ -65,6 +65,7 @@ class VIEW_ALIAS(COMMON_VIEW_ALIAS):
     RECRUIT_WINDOW = 'recruitWindow'
     CREW_ABOUT_DOG_WINDOW = 'aboutDogWindow'
     QUESTS_RECRUIT_WINDOW = 'questsRecruitWindow'
+    TOKEN_RECRUIT_WINDOW = 'tokenRecruitWindow'
     EXCHANGE_WINDOW = 'exchangeWindow'
     PROFILE_WINDOW = 'profileWindow'
     EXCHANGE_XP_WINDOW = 'exchangeXPWindow'

@@ -26,8 +26,7 @@ def getStorageItemDescr(item):
         return _generateDescr(item, i18n.makeString(STORAGE.SHELLCOMPATIBLE_LABEL), STORAGE.SHELLCOMPATIBLE_MOREGUNS, ('shellGuns',), _MAX_COMPATIBLE_GUNS_COUNT)
     elif itemType == GUI_ITEM_TYPE.BATTLE_BOOSTER:
         if item.isCrewBooster():
-            template = g_htmlTemplates['html_templates:lobby/popovers']['crewBattleBooster']
-            desc = item.getCrewBoosterDescription(False, template.source)
+            desc = item.shortDescriptionSpecial
             return text_styles.main(desc)
         return text_styles.main(item.getOptDeviceBoosterDescription(None, text_styles.bonusAppliedText))
     else:

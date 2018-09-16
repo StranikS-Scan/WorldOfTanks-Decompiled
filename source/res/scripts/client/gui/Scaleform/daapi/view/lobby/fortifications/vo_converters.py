@@ -48,8 +48,8 @@ def makeStrongholdsSlotsVOs(unitEntity, unitMgrID=None, app=None, maxPlayerCount
     slotsInPlayersMatching = unitEntity.getSlotsInPlayersMatching()
     unitInPlayersMatchingMode = unitEntity.inPlayersMatchingMode()
     for idx, slot in enumerate(slots):
-        if idx > maxPlayerCount - 1:
-            continue
+        if slot['isLocked']:
+            break
         vehTypesInSlot = vehTypesInSlotFilters.get(idx, 0)
         vehiclesInSlot = vehiclesInSlotFilters.get(idx, [])
         if slot['selectedVehicle'] and not slot['isFreezed'] and not slot['isCommanderState']:

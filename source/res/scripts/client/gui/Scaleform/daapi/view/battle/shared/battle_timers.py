@@ -64,9 +64,7 @@ class PreBattleTimer(PrebattleTimerMeta, IAbstractPeriodView, IArenaVehiclesCont
             self.__setTimeShitCallback()
 
     def invalidateVehicleStatus(self, flags, vo, arenaDP):
-        self.__notReadyCount = sum([ not vInfo.isReady() for vInfo in arenaDP.getVehiclesInfoIterator() ])
-        if self._state == COUNTDOWN_STATE.WAIT:
-            self.as_setTimerS(self.__notReadyCount)
+        pass
 
     def hideCountdown(self, state, speed):
         self.as_setMessageS(i18n.makeString(_STATE_TO_MESSAGE[state]))

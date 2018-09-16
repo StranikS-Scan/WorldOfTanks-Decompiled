@@ -25,6 +25,7 @@ from Event import Event
 from PlayerEvents import g_playerEvents
 from connection_mgr import LOGIN_STATUS, INVALID_TOKEN2_EXPIRED
 _PERIPHERY_DEFAULT_LIFETIME = 15 * ONE_MINUTE
+_LIMIT_LOGIN_COUNT = 5
 _logger = logging.getLogger(__name__)
 
 class Manager(ILoginManager):
@@ -113,6 +114,8 @@ class Manager(ILoginManager):
             self._preferences.clear()
             self._preferences.writeLoginInfo()
             return
+        loginCount = self._preferences.get('loginCount', 0)
+        self._preferences['loginCount'] = 1 if loginCount >= _LIMIT_LOGIN_COUNT else loginCount + 1
         if self._preferences['remember_user']:
             self._preferences['name'] = name
             self._preferences['token2'] = token2

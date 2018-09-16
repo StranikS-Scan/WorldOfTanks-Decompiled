@@ -8,6 +8,7 @@ class TOOLTIPS(object):
     HEADER_BUTTONS_PERSONALMISSIONS = '#tooltips:header/buttons/personalMissions'
     BARRACKS_TANKMEN_UNLOAD = '#tooltips:barracks/tankmen/unload'
     BARRACKS_TANKMEN_DISMISS = '#tooltips:barracks/tankmen/dismiss'
+    BARRACKS_TANKMEN_RECRUIT = '#tooltips:barracks/tankmen/recruit'
     TANKS_CAROUSEL_BUY_SLOT = '#tooltips:tanks_carousel/buy_slot'
     TANKS_CAROUSEL_BUY_VEHICLE = '#tooltips:tanks_carousel/buy_vehicle'
     TANKS_CAROUSEL_BUY_VEHICLE_NEW = '#tooltips:tanks_carousel/buy_vehicle_new'
@@ -850,6 +851,8 @@ class TOOLTIPS(object):
     BARRACKS_TANKMEN_UNLOAD_BODY = '#tooltips:barracks/tankmen/unload/body'
     BARRACKS_TANKMEN_DISMISS_HEADER = '#tooltips:barracks/tankmen/dismiss/header'
     BARRACKS_TANKMEN_DISMISS_BODY = '#tooltips:barracks/tankmen/dismiss/body'
+    BARRACKS_TANKMEN_RECRUIT_HEADER = '#tooltips:barracks/tankmen/recruit/header'
+    BARRACKS_TANKMEN_RECRUIT_BODY = '#tooltips:barracks/tankmen/recruit/body'
     BARRACKS_TANKMEN_RECOVERYBTN_HEADER = '#tooltips:barracks/tankmen/recoveryBtn/header'
     BARRACKS_TANKMEN_RECOVERY_HEADER = '#tooltips:barracks/tankmen/recovery/header'
     BARRACKS_TANKMEN_RECOVERY_FREE_BODY = '#tooltips:barracks/tankmen/recovery/free/body'
@@ -1876,6 +1879,7 @@ class TOOLTIPS(object):
     VEHICLEPREVIEW_HISTORICALREFERENCE_TITLE = '#tooltips:vehiclePreview/historicalReference/title'
     VEHICLEPREVIEW_SHOPPACK_TITLE = '#tooltips:vehiclePreview/shopPack/title'
     VEHICLEPREVIEW_SHOPPACK_DESC = '#tooltips:vehiclePreview/shopPack/desc'
+    VEHICLEPREVIEW_SHOPPACK_CONTENT = '#tooltips:vehiclePreview/shopPack/content'
     VEHICLEPREVIEW_SHOPPACK_DATETIMETOOLTIP_HEADER = '#tooltips:vehiclePreview/shopPack/dateTimeTooltip/header'
     VEHICLEPREVIEW_SHOPPACK_DATETIMETOOLTIP_BODY = '#tooltips:vehiclePreview/shopPack/dateTimeTooltip/body'
     VEHICLEPREVIEW_BOXTOOLTIP_HEADER = '#tooltips:vehiclePreview/boxTooltip/header'
@@ -2148,6 +2152,11 @@ class TOOLTIPS(object):
     ADVANCED_HEADER_SHELLTYPE_ARMOR_PIERCING_CR = '#tooltips:advanced/header/shellType/ARMOR_PIERCING_CR'
     CREW_ROLECHANGEFORBID_HEADER = '#tooltips:crew/roleChangeForbid/header'
     CREW_ROLECHANGEFORBID_TEXT = '#tooltips:crew/roleChangeForbid/text'
+    CREW_ROLE_COMMANDER = '#tooltips:crew/role/commander'
+    CREW_ROLE_DRIVER = '#tooltips:crew/role/driver'
+    CREW_ROLE_RADIOMAN = '#tooltips:crew/role/radioman'
+    CREW_ROLE_LOADER = '#tooltips:crew/role/loader'
+    CREW_ROLE_GUNNER = '#tooltips:crew/role/gunner'
     CREW_ROLECHANGE_HEADER = '#tooltips:crew/roleChange/header'
     CREW_ROLECHANGE_TEXT = '#tooltips:crew/roleChange/text'
     PERSONALMISSIONS_FREESHEET_TITLE = '#tooltips:personalMissions/freeSheet/title'
@@ -2529,6 +2538,21 @@ class TOOLTIPS(object):
     STORAGE_MAINMENU_IN_HANGAR_BODY = '#tooltips:storage/mainMenu/in_hangar/body'
     STORAGE_MAINMENU_PERSONAL_RESERVES_HEADER = '#tooltips:storage/mainMenu/personal_reserves/header'
     STORAGE_MAINMENU_PERSONAL_RESERVES_BODY = '#tooltips:storage/mainMenu/personal_reserves/body'
+    NOTRECRUITEDTANKMAN_SKILLSTITLE = '#tooltips:notrecruitedtankman/skillsTitle'
+    NOTRECRUITEDTANKMAN_EXPIRETITLE = '#tooltips:notrecruitedtankman/expireTitle'
+    NOTRECRUITEDTANKMAN_USEBEFORE = '#tooltips:notrecruitedtankman/useBefore'
+    NOTRECRUITEDTANKMAN_BASE_LABEL = '#tooltips:notrecruitedtankman/base/label'
+    NOTRECRUITEDTANKMAN_BASE_DESC = '#tooltips:notrecruitedtankman/base/desc'
+    NOTRECRUITEDTANKMAN_BUFFON_LABEL = '#tooltips:notrecruitedtankman/buffon/label'
+    NOTRECRUITEDTANKMAN_BUFFON_DESC = '#tooltips:notrecruitedtankman/buffon/desc'
+    NOTRECRUITEDTANKMAN_TANKWOMAN_LABEL = '#tooltips:notrecruitedtankman/tankwoman/label'
+    NOTRECRUITEDTANKMAN_TANKWOMAN_DESC = '#tooltips:notrecruitedtankman/tankwoman/desc'
+    QUESTS_AWARDS_VEHICLERENT_HEADER = '#tooltips:quests/awards/vehicleRent/header'
+    QUESTS_AWARDS_VEHICLERENT_EXPIRE = '#tooltips:quests/awards/vehicleRent/expire'
+    QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS = '#tooltips:quests/awards/vehicleRent/rentLeft/rentDays'
+    QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTBATTLES = '#tooltips:quests/awards/vehicleRent/rentLeft/rentBattles'
+    QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTWINS = '#tooltips:quests/awards/vehicleRent/rentLeft/rentWins'
+    QUESTS_AWARDS_VEHICLERENT_BOTTOM = '#tooltips:quests/awards/vehicleRent/bottom'
     HEADER_BUTTONS_ALL_CLICKDESC_ENUM = (HEADER_BUTTONS_CRYSTAL_CLICKDESC,
      HEADER_BUTTONS_GOLD_CLICKDESC,
      HEADER_BUTTONS_CREDITS_CLICKDESC,
@@ -2584,6 +2608,12 @@ class TOOLTIPS(object):
      CONTACT_STATUS_INBATTLE_HISTORICAL,
      CONTACT_STATUS_INBATTLE_FORTIFICATIONS,
      CONTACT_STATUS_INBATTLE_SPECIAL)
+    CREW_ROLE_ENUM = (CREW_ROLE_COMMANDER,
+     CREW_ROLE_DRIVER,
+     CREW_ROLE_RADIOMAN,
+     CREW_ROLE_LOADER,
+     CREW_ROLE_GUNNER)
+    QUESTS_AWARDS_VEHICLERENT_RENTLEFT_ENUM = (QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTDAYS, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTBATTLES, QUESTS_AWARDS_VEHICLERENT_RENTLEFT_RENTWINS)
     ADVANCED_HEADER_SHELLTYPE_ENUM = (ADVANCED_HEADER_SHELLTYPE_HOLLOW_CHARGE,
      ADVANCED_HEADER_SHELLTYPE_HIGH_EXPLOSIVE,
      ADVANCED_HEADER_SHELLTYPE_ARMOR_PIERCING,
@@ -2776,6 +2806,7 @@ class TOOLTIPS(object):
      ELEN_EXCEL_ADDPARAM_SUMALL_DAMAGEDEALT_BODY,
      ELEN_EXCEL_ADDPARAM_SUMALL_DAMAGEASSISTED_BODY,
      ELEN_EXCEL_ADDPARAM_SUMALL_WINS_BODY)
+    NOTRECRUITEDTANKMAN_ALL_DESC_ENUM = (NOTRECRUITEDTANKMAN_BASE_DESC, NOTRECRUITEDTANKMAN_BUFFON_DESC, NOTRECRUITEDTANKMAN_TANKWOMAN_DESC)
     ELEN_TASK_EVENTTYPE_FULL_ENUM = (ELEN_TASK_EVENTTYPE_FULL_NATION, ELEN_TASK_EVENTTYPE_FULL_LEVEL, ELEN_TASK_EVENTTYPE_FULL_CLASS)
     AWARDITEM_ALL_HEADER_ENUM = (AWARDITEM_CREDITS_HEADER,
      AWARDITEM_CRYSTAL_HEADER,
@@ -2965,6 +2996,7 @@ class TOOLTIPS(object):
      LEVEL_8,
      LEVEL_9,
      LEVEL_10)
+    NOTRECRUITEDTANKMAN_ALL_LABEL_ENUM = (NOTRECRUITEDTANKMAN_BASE_LABEL, NOTRECRUITEDTANKMAN_BUFFON_LABEL, NOTRECRUITEDTANKMAN_TANKWOMAN_LABEL)
     ELEN_EXCEL_INFOPARAM_WINS_ALL_BODY_ENUM = (ELEN_EXCEL_INFOPARAM_WINS_VEHICLE_BODY,
      ELEN_EXCEL_INFOPARAM_WINS_NATION_BODY,
      ELEN_EXCEL_INFOPARAM_WINS_LEVEL_BODY,
@@ -3238,6 +3270,15 @@ class TOOLTIPS(object):
             return outcome
 
     @classmethod
+    def crewRole(cls, role):
+        outcome = '#tooltips:crew/role/{}'.format(role)
+        if outcome not in cls.CREW_ROLE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
     def elen_excel_objparam_all_all_header(cls, key0, key1):
         outcome = '#tooltips:elen/excel/objParam/{}/{}/header'.format(key0, key1)
         if outcome not in cls.ELEN_EXCEL_OBJPARAM_ALL_ALL_HEADER_ENUM:
@@ -3340,6 +3381,33 @@ class TOOLTIPS(object):
     def getItemBoxTooltip(cls, itemTypeName):
         outcome = '#tooltips:vehiclePreview/boxTooltip/{}/header'.format(itemTypeName)
         if outcome not in cls.VEHICLEPREVIEW_BOXTOOLTIP_ALL_HEADER_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getNotRecruitedTankmanEventLabel(cls, eventName):
+        outcome = '#tooltips:notrecruitedtankman/{}/label'.format(eventName)
+        if outcome not in cls.NOTRECRUITEDTANKMAN_ALL_LABEL_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getNotRecruitedTankmanEventDesc(cls, eventName):
+        outcome = '#tooltips:notrecruitedtankman/{}/desc'.format(eventName)
+        if outcome not in cls.NOTRECRUITEDTANKMAN_ALL_DESC_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getRentLeftTypeLabel(cls, rentType):
+        outcome = '#tooltips:quests/awards/vehicleRent/rentLeft/{}'.format(rentType)
+        if outcome not in cls.QUESTS_AWARDS_VEHICLERENT_RENTLEFT_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

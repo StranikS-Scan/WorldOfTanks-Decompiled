@@ -28,6 +28,9 @@ class BarracksMeta(View):
     def openPersonalCase(self, value, tabNumber):
         self._printOverrideError('openPersonalCase')
 
+    def onCountersVisited(self, visitedIds):
+        self._printOverrideError('onCountersVisited')
+
     def as_setTankmenS(self, data):
         return self.flashObject.as_setTankmen(data) if self._isDAAPIInited() else None
 
@@ -36,3 +39,9 @@ class BarracksMeta(View):
 
     def as_setTankmenFilterS(self, nation, role, tankType, location, nationID):
         return self.flashObject.as_setTankmenFilter(nation, role, tankType, location, nationID) if self._isDAAPIInited() else None
+
+    def as_switchFilterEnableS(self, nationEnable, roleEnable, typeEnable):
+        return self.flashObject.as_switchFilterEnable(nationEnable, roleEnable, typeEnable) if self._isDAAPIInited() else None
+
+    def as_setCountersDataS(self, countersData):
+        return self.flashObject.as_setCountersData(countersData) if self._isDAAPIInited() else None

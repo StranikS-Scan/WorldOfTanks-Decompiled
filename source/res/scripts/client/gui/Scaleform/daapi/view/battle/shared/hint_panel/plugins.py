@@ -253,6 +253,8 @@ class SiegeIndicatorHintPlugin(HintPanelPlugin):
 
     def __onPostMortemSwitched(self, *args):
         self.__isInPostmortem = True
+        self._parentObj.removeBtnHint(CommandMapping.CMD_CM_VEHICLE_SWITCH_AUTOROTATION)
+        self.__isHintShown = False
 
     def __onRespawnBaseMoving(self):
         self.__isInPostmortem = False

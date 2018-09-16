@@ -8,8 +8,9 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from messenger.formatters import TimeFormatter
 from notification import NotificationMVC
 from notification.BaseNotificationView import BaseNotificationView
-from notification.settings import LIST_SCROLL_STEP_FACTOR, NOTIFICATION_STATE, NOTIFICATION_GROUP
+from notification.settings import LIST_SCROLL_STEP_FACTOR, NOTIFICATION_STATE
 from gui.shared.formatters import icons
+from gui.shared.notifications import NotificationGroup
 from helpers.i18n import makeString as _ms
 
 class NotificationListView(NotificationsListMeta, BaseNotificationView):
@@ -17,14 +18,14 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
     def __init__(self, _):
         super(NotificationListView, self).__init__()
         self.setModel(NotificationMVC.g_instance.getModel())
-        self.__currentGroup = NOTIFICATION_GROUP.INFO
+        self.__currentGroup = NotificationGroup.INFO
         self.__countersLabels = [''] * 3
 
     def onClickAction(self, typeID, entityID, action):
         NotificationMVC.g_instance.handleAction(typeID, self._getNotificationID(entityID), action)
 
     def onGroupChange(self, groupIdx):
-        self.__currentGroup = NOTIFICATION_GROUP.ALL[groupIdx]
+        self.__currentGroup = NotificationGroup.ALL[groupIdx]
         self.__setNotificationList()
         self.__updateCounters()
 
@@ -52,12 +53,12 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         super(NotificationListView, self)._dispose()
 
     def __setInitData(self):
-        if self._model.getNotifiedMessagesCount(NOTIFICATION_GROUP.INVITE) > 0:
-            self.__currentGroup = NOTIFICATION_GROUP.INVITE
+        if self._model.getNotifiedMessagesCount(NotificationGroup.INVITE) > 0:
+            self.__currentGroup = NotificationGroup.INVITE
         else:
-            self.__currentGroup = NOTIFICATION_GROUP.INFO
+            self.__currentGroup = NotificationGroup.INFO
         self.as_setInitDataS({'scrollStepFactor': LIST_SCROLL_STEP_FACTOR,
-         'btnBarSelectedIdx': NOTIFICATION_GROUP.ALL.index(self.__currentGroup),
+         'btnBarSelectedIdx': NotificationGroup.ALL.index(self.__currentGroup),
          'tabsData': {'tabs': [self.__makeTabItemVO(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INFORMATION_16X16, 16, 16, -4, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INFO), self.__makeTabItemVO(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_INVITATIONS_24X16, 24, 16, -5, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_INVITES), self.__makeTabItemVO(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_NOTIF_FILTERS_GIFT_16X16, 16, 16, -4, 0), TOOLTIPS.NOTIFICATIONSVIEW_TAB_OFFERS)]}})
 
     def __updateCounters(self):
@@ -65,7 +66,7 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         def formatCount(count):
             return str(count) if count > 0 else ''
 
-        counts = [ formatCount(self._model.getNotifiedMessagesCount(group)) for group in NOTIFICATION_GROUP.ALL ]
+        counts = [ formatCount(self._model.getNotifiedMessagesCount(group)) for group in NotificationGroup.ALL ]
         if self.__countersLabels != counts:
             self.__countersLabels = counts
             self.as_updateCountersS(counts)
@@ -74,7 +75,7 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
         messages = self.__getMessagesList()
         self.as_setMessagesListS({'messages': messages,
          'emptyListText': self.__getEmptyListMsg(len(messages) > 0),
-         'btnBarSelectedIdx': NOTIFICATION_GROUP.ALL.index(self.__currentGroup)})
+         'btnBarSelectedIdx': NotificationGroup.ALL.index(self.__currentGroup)})
         self._model.resetNotifiedMessagesCount(self.__currentGroup)
 
     def __getMessagesList(self):
@@ -89,8 +90,8 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
             NotificationMVC.g_instance.getAlertController().showAlertMessage(notification)
         if notification.getGroup() == self.__currentGroup:
             self.as_appendMessageS(self.__getListVO(notification))
-        elif notification.getGroup() == NOTIFICATION_GROUP.INVITE:
-            self.__currentGroup = NOTIFICATION_GROUP.INVITE
+        elif notification.getGroup() == NotificationGroup.INVITE:
+            self.__currentGroup = NotificationGroup.INVITE
             self.__setNotificationList()
         elif notification.isNotify():
             self._model.incrementNotifiedMessagesCount(*notification.getCounterInfo())
@@ -102,8 +103,8 @@ class NotificationListView(NotificationsListMeta, BaseNotificationView):
                 self.__setNotificationList()
             else:
                 self.as_updateMessageS(self.__getListVO(notification))
-        elif notification.getGroup() == NOTIFICATION_GROUP.INVITE:
-            self.__currentGroup = NOTIFICATION_GROUP.INVITE
+        elif notification.getGroup() == NotificationGroup.INVITE:
+            self.__currentGroup = NotificationGroup.INVITE
             self.__setNotificationList()
         elif isStateChanged and notification.isNotify():
             self._model.incrementNotifiedMessagesCount(*notification.getCounterInfo())

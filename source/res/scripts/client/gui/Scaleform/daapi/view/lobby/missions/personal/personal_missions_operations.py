@@ -63,7 +63,7 @@ class PersonalMissionOperations(LobbySubView, PersonalMissionOperationsMeta, Per
                     enabled = False
                 elif o.isFullCompleted():
                     state = PERSONAL_MISSIONS_ALIASES.OPERATION_COMPLETE_FULL_STATE
-                elif o.isCompleted():
+                elif o.isAwardAchieved():
                     state = PERSONAL_MISSIONS_ALIASES.OPERATION_COMPLETE_STATE
                 elif o.isInProgress():
                     state = PERSONAL_MISSIONS_ALIASES.OPERATION_CURRENT_STATE

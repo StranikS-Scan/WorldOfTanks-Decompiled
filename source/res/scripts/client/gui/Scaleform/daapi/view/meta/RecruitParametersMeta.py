@@ -16,6 +16,9 @@ class RecruitParametersMeta(BaseDAAPIComponent):
     def onTankmanRoleChanged(self, roleID):
         self._printOverrideError('onTankmanRoleChanged')
 
+    def setPredefinedTankman(self, tmanParams):
+        self._printOverrideError('setPredefinedTankman')
+
     def as_setVehicleClassDataS(self, data):
         return self.flashObject.as_setVehicleClassData(data) if self._isDAAPIInited() else None
 

@@ -156,7 +156,7 @@ class ClassicPage(SharedPage):
         if ctrlMode != CTRL_MODE_NAME.POSTMORTEM:
             ctrl = self.sessionProvider.shared.vehicleState
             vehicle = ctrl.getControllingVehicle()
-            if vehicle.typeDescriptor.hasSiegeMode:
+            if vehicle and vehicle.typeDescriptor.hasSiegeMode:
                 components.add(BATTLE_VIEW_ALIASES.SIEGE_MODE_INDICATOR)
         if ctrlMode == CTRL_MODE_NAME.VIDEO:
             self._setComponentsVisibility(hidden=components)

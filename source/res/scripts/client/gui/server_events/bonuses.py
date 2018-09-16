@@ -612,6 +612,9 @@ class VehiclesBonus(SimpleBonus):
 
         return result
 
+    def isRentVehicle(self, vehInfo):
+        return True if self.getRentBattles(vehInfo) or self.getRentDays(vehInfo) or self.getRentWins(vehInfo) else False
+
     def compensation(self, vehicle):
         bonuses = []
         if not vehicle.isPurchased:

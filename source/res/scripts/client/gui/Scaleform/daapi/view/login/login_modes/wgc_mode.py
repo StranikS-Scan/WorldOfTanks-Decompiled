@@ -5,20 +5,18 @@ from gui.Scaleform.locale.MENU import MENU
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.account_helpers.settings_core import ISettingsCore
-from skeletons.connection_mgr import IConnectionManager
 from account_helpers.settings_core.settings_constants import GAME
 from base_mode import BaseMode
 from predefined_hosts import g_preDefinedHosts
+from connection_mgr import LOGIN_STATUS, INVALID_TOKEN2_EXPIRED
 _g_firstEntry = True
 
 class WgcMode(BaseMode):
     _settingsCore = dependency.descriptor(ISettingsCore)
-    _connectionMgr = dependency.descriptor(IConnectionManager)
 
     def __init__(self, wgcStoredUserSelected, *args):
         super(WgcMode, self).__init__(*args)
         self.__wgcStoredUserSelected = wgcStoredUserSelected
-        self.__autoLogin = False
         self._fallbackMode.setRememberPassword(False)
         self._fallbackMode.resetToken()
 
@@ -29,10 +27,9 @@ class WgcMode(BaseMode):
     def init(self):
         global _g_firstEntry
         self._loginManager.addOnWgcErrorListener(self.__onWgcError)
-        self._connectionMgr.onLoggedOn += self.__onLoggedOn
         if self.__wgcStoredUserSelected:
-            self.__autoLogin = _g_firstEntry and not self._settingsCore.getSetting(GAME.LOGIN_SERVER_SELECTION)
-            if self.__autoLogin:
+            autoLogin = _g_firstEntry and not self._settingsCore.getSetting(GAME.LOGIN_SERVER_SELECTION)
+            if autoLogin:
                 self._loginManager.tryWgcLogin()
             _g_firstEntry = False
         else:
@@ -40,7 +37,6 @@ class WgcMode(BaseMode):
 
     def destroy(self):
         self._loginManager.removeOnWgcErrorListener(self.__onWgcError)
-        self._connectionMgr.onLoggedOn -= self.__onLoggedOn
         self._fallbackMode.destroy()
         super(WgcMode, self).destroy()
 
@@ -70,14 +66,16 @@ class WgcMode(BaseMode):
     def doSocialLogin(self, *args):
         self._fallbackMode.doSocialLogin(*args)
 
+    def skipRejectionError(self, loginStatus, responseData):
+        if self.__wgcStoredUserSelected:
+            errorMsg = responseData.get('errorMessage', '')
+            return loginStatus == LOGIN_STATUS.SESSION_END and errorMsg in INVALID_TOKEN2_EXPIRED
+        return self._fallbackMode.skipRejectionError(loginStatus, responseData)
+
     def __onWgcError(self):
         self.__stop()
         self._view.as_setLoginWarningS(_ms(MENU.LOGIN_SOCIAL_STATUS_WGC_ERROR))
         g_preDefinedHosts.requestPing()
-
-    def __onLoggedOn(self, _):
-        if self.__autoLogin:
-            g_preDefinedHosts.resetPingResult()
 
     def __stop(self):
         if self.__wgcStoredUserSelected:

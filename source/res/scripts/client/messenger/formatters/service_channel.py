@@ -18,6 +18,7 @@ from dossiers2.custom.records import DB_ID_TO_RECORD
 from dossiers2.ui.achievements import ACHIEVEMENT_BLOCK, BADGES_BLOCK
 from dossiers2.ui.layouts import IGNORED_BY_BATTLE_RESULTS
 from gui import GUI_SETTINGS
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.BADGE import BADGE
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.MENU import MENU
@@ -30,6 +31,7 @@ from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.ranked_models import PostBattleRankInfo
 from gui.server_events.awards_formatters import CompletionTokensBonusFormatter
 from gui.server_events.bonuses import VehiclesBonus
+from gui.server_events.recruit_helper import getSourceIdFromQuest
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
 from gui.shared import formatters as shared_fmts
 from gui.shared.formatters import text_styles
@@ -59,6 +61,9 @@ from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from items.components.c11n_constants import CustomizationType, DecalType
 _EOL = '\n'
 _DEFAULT_MESSAGE = 'defaultMessage'
+_RENT_TYPES = {'time': 'rentDays',
+ 'battles': 'rentBattles',
+ 'wins': 'rentWins'}
 
 def _getTimeStamp(message):
     if message.createdAt is not None:
@@ -1049,16 +1054,19 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             vInfo.append(i18n.makeString(action))
         else:
             if 'rent' in vehData:
-                rentTime = vehData['rent'].get('time', None)
-                rentDays = None
-                if rentTime:
-                    if rentTime == float('inf'):
-                        pass
-                    elif rentTime <= time_utils.DAYS_IN_YEAR:
-                        rentDays = int(rentTime)
-                if rentDays:
-                    rentDays = g_settings.htmlTemplates.format('rentDays', {'value': str(rentDays)})
-                    vInfo.append(rentDays)
+                rentData = vehData['rent']
+                rentLeftCount = 0
+                rentTypeName = None
+                for rentType in _RENT_TYPES:
+                    rentTypeValue = rentData.get(rentType, 0)
+                    if rentTypeValue > 0 and rentTypeValue != float('inf'):
+                        rentTypeName = _RENT_TYPES[rentType]
+                        rentLeftCount = int(rentTypeValue)
+                        break
+
+                if rentTypeName is not None and rentLeftCount > 0:
+                    rentLeftStr = i18n.makeString(TOOLTIPS.getRentLeftTypeLabel(rentTypeName), count=rentLeftCount)
+                    vInfo.append(rentLeftStr)
             crewLevel = VehiclesBonus.getTmanRoleLevel(vehData)
             if crewLevel is not None and crewLevel > VehiclesBonus.DEFAULT_CREW_LVL:
                 if 'crewInBarracks' in vehData and vehData['crewInBarracks']:
@@ -1468,7 +1476,7 @@ class ClientSysMessageFormatter(ServiceChannelFormatter):
         formatted = g_settings.msgTemplates.format(templateKey, ctx=ctx)
         return [_MessageData(formatted, self._getGuiSettings(args, templateKey))]
 
-    def _getGuiSettings(self, data, key=None, priorityLevel=None):
+    def _getGuiSettings(self, data, key=None, priorityLevel=None, groupID=None):
         if isinstance(data, types.TupleType) and data:
             auxData = data[0][:]
             if len(data[0]) > 1 and priorityLevel is None:
@@ -1477,7 +1485,9 @@ class ClientSysMessageFormatter(ServiceChannelFormatter):
             auxData = []
         if priorityLevel is None:
             priorityLevel = g_settings.msgTemplates.priority(key)
-        return NotificationGuiSettings(self.isNotify(), priorityLevel=priorityLevel, auxData=auxData)
+        if groupID is None:
+            groupID = g_settings.msgTemplates.groupID(key)
+        return NotificationGuiSettings(self.isNotify(), priorityLevel=priorityLevel, auxData=auxData, groupID=groupID)
 
 
 class PremiumAccountExpiryFormatter(ClientSysMessageFormatter):
@@ -1707,6 +1717,10 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
             data = message.data or {}
             completedQuestIDs = data.get('completedQuestIDs', set())
             completedQuestIDs.update(data.get('rewardsGottenQuestIDs', set()))
+            if getSourceIdFromQuest(first(completedQuestIDs, '')):
+                result = yield RecruitQuestsFormatter().format(message)
+                callback(result)
+                return
             if ranked_helpers.isRankedQuestID(first(completedQuestIDs, '')):
                 result = yield RankedQuestFormatter(forToken=True).format(message)
                 callback(result)
@@ -1830,7 +1844,7 @@ class TokenQuestsFormatter(WaitItemsSyncFormatter):
 
             regex = re.search('pt_final_s(\\d)_t(\\d)_badge', quest.getID())
             if regex:
-                operationID = int(regex.group(1))
+                operationID = int(regex.group(2))
                 operations = self._eventsCache.getPersonalMissions().getAllOperations()
                 if operationID in operations:
                     operation = operations[operationID]
@@ -2137,6 +2151,34 @@ class RefSystemQuestsFormatter(TokenQuestsFormatter):
 
     @property
     def _templateName(self):
+        pass
+
+
+class RecruitQuestsFormatter(WaitItemsSyncFormatter):
+    _eventsCache = dependency.descriptor(IEventsCache)
+
+    @async
+    @process
+    def format(self, message, callback):
+        isSynced = yield self._waitForSyncItems()
+        formatted, settings = (None, None)
+        if isSynced:
+            data = message.data or {}
+            fmt = TokenQuestsFormatter.formatQuestAchieves(data, asBattleFormatter=False)
+            if fmt is not None:
+                operationTime = message.sentTime
+                if operationTime:
+                    fDatetime = TimeFormatter.getLongDatetimeFormat(time_utils.makeLocalServerTime(operationTime))
+                else:
+                    fDatetime = 'N/A'
+                formatted = g_settings.msgTemplates.format(self._getTemplateName(), ctx={'at': fDatetime,
+                 'desc': '',
+                 'op': fmt})
+                settings = self._getGuiSettings(message, self._getTemplateName())
+        callback([_MessageData(formatted, settings)])
+        return
+
+    def _getTemplateName(self):
         pass
 
 

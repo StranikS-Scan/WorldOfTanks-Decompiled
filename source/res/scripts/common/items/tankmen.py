@@ -32,6 +32,8 @@ COMMANDER_ADDITION_RATIO = 10
 _MAX_FREE_XP = 2000000000
 _LEVELUP_K1 = 50.0
 _LEVELUP_K2 = 100.0
+RECRUIT_TMAN_TOKEN_PREFIX = 'tman_template'
+MAX_SKILLS_IN_RECRUIT_TOKEN = 10
 
 def init(preloadEverything):
     if preloadEverything:
@@ -804,3 +806,139 @@ def _calcFirstSkillXpCost():
 
 
 _g_totalFirstSkillXpCost = _calcFirstSkillXpCost()
+
+def getRecruitInfoFromToken(tokenName):
+    parts = tokenName.split(':')
+    if len(parts) != 10:
+        return None
+    elif parts[0] != RECRUIT_TMAN_TOKEN_PREFIX:
+        return None
+    else:
+        try:
+            result = {'nations': [],
+             'isPremium': False,
+             'group': '',
+             'freeSkills': [],
+             'skills': [],
+             'freeXP': 0,
+             'lastSkillLevel': MAX_SKILL_LEVEL,
+             'roleLevel': MAX_SKILL_LEVEL,
+             'sourceID': ''}
+            if parts[1] == '':
+                result['nations'] = nations.INDICES.values()
+            else:
+                nationNames = parts[1].split('!')
+                if len(nationNames) != len(set(nationNames)):
+                    return None
+                for nation in nationNames:
+                    if nation not in nations.AVAILABLE_NAMES:
+                        return None
+                    result['nations'].append(nations.INDICES[nation])
+
+            if parts[2] == '' or parts[2] == 'true':
+                result['isPremium'] = True
+            elif parts[2] != 'false':
+                return None
+            for nation in result['nations']:
+                if len(filter(lambda g: g.name == parts[3], getNationGroups(nation, result['isPremium']))) != 1:
+                    return None
+
+            result['group'] = parts[3]
+            if parts[4] != '':
+                freeXP = int(parts[4])
+                if freeXP < 0 or freeXP > _MAX_FREE_XP:
+                    return None
+                result['freeXP'] = freeXP
+            if parts[5] != '':
+                skills = parts[5].split('!')
+                if len(skills) > MAX_SKILLS_IN_RECRUIT_TOKEN:
+                    return None
+                if len(skills) != len(set(skills)):
+                    return None
+                for skill in skills:
+                    if skill not in skills_constants.ACTIVE_SKILLS:
+                        return None
+                    result['skills'].append(skill)
+
+            if parts[6] != '':
+                lastSkillLevel = int(parts[6])
+                if lastSkillLevel < 0 or lastSkillLevel > MAX_SKILL_LEVEL:
+                    return None
+                result['lastSkillLevel'] = lastSkillLevel
+            if parts[7] != '':
+                freeSkills = parts[7].split('!')
+                if len(freeSkills) > MAX_SKILLS_IN_RECRUIT_TOKEN:
+                    return None
+                if len(freeSkills) != len(set(freeSkills)):
+                    return None
+                for skill in freeSkills:
+                    if skill not in skills_constants.ACTIVE_SKILLS:
+                        return None
+                    result['freeSkills'].append(skill)
+
+            if parts[8] != '':
+                roleLevel = int(parts[8])
+                if roleLevel < MIN_ROLE_LEVEL or roleLevel > MAX_SKILL_LEVEL:
+                    return None
+                result['roleLevel'] = roleLevel
+            sourceID = parts[9]
+            if sourceID == '':
+                return None
+            result['sourceID'] = sourceID
+        except ValueError:
+            return None
+
+        return result
+
+
+def generateRecruitToken(group, sourceID, nationList=(), isPremium=True, freeXP=0, skills=(), lastSkillLevel=MAX_SKILL_LEVEL, freeSkills=(), roleLevel=MAX_SKILL_LEVEL):
+    tokenParts = [RECRUIT_TMAN_TOKEN_PREFIX]
+    selectedNations = set()
+    if len(nationList) == 0:
+        selectedNations = set(nations.AVAILABLE_NAMES)
+    else:
+        for nation in nationList:
+            if nation not in nations.AVAILABLE_NAMES:
+                return None
+            selectedNations.add(nation)
+
+    if len(selectedNations) == len(nations.AVAILABLE_NAMES):
+        tokenParts.append('')
+    else:
+        tokenParts.append('!'.join(selectedNations))
+    tokenParts.append('' if isPremium else 'false')
+    for nation in selectedNations:
+        if len(filter(lambda g: g.name == group, getNationGroups(nations.INDICES[nation], isPremium))) != 1:
+            return None
+
+    tokenParts.append(group)
+    if freeXP < 0 or freeXP > _MAX_FREE_XP:
+        return None
+    else:
+        tokenParts.append('' if freeXP == 0 else str(freeXP))
+        selectedSkills = set()
+        for skill in skills:
+            if skill not in skills_constants.ACTIVE_SKILLS:
+                return None
+            selectedSkills.add(skill)
+
+        if len(selectedSkills) > MAX_SKILLS_IN_RECRUIT_TOKEN:
+            return None
+        tokenParts.append('!'.join(selectedSkills))
+        if lastSkillLevel < 0 or lastSkillLevel > MAX_SKILL_LEVEL:
+            return None
+        tokenParts.append('' if lastSkillLevel == MAX_SKILL_LEVEL else str(lastSkillLevel))
+        selectedFreeSkills = set()
+        for skill in freeSkills:
+            if skill not in skills_constants.ACTIVE_SKILLS:
+                return None
+            selectedFreeSkills.add(skill)
+
+        if len(selectedFreeSkills) > MAX_SKILLS_IN_RECRUIT_TOKEN:
+            return None
+        tokenParts.append('!'.join(selectedFreeSkills))
+        if roleLevel < MIN_ROLE_LEVEL or roleLevel > MAX_SKILL_LEVEL:
+            return None
+        tokenParts.append('' if roleLevel == MAX_SKILL_LEVEL else str(roleLevel))
+        tokenParts.append(sourceID)
+        return ':'.join(tokenParts)

@@ -8,11 +8,12 @@ from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.game_control.restore_contoller import getTankmenRestoreInfo
 from gui.shared.formatters import formatPrice, formatPriceForCurrency, text_styles, icons
 from gui.shared.gui_items import GUI_ITEM_TYPE, Tankman
-from gui.shared.gui_items.processors import Processor, ItemProcessor, makeI18nSuccess, makeI18nError, plugins
+from gui.shared.gui_items.processors import Processor, ItemProcessor, makeI18nSuccess, makeSuccess, makeI18nError, plugins
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
 from helpers import dependency
+from gui import makeHtmlString
 from items import tankmen, makeIntCompactDescrByID
-from items.tankmen import SKILL_INDICES, SKILL_NAMES
+from items.tankmen import SKILL_INDICES, SKILL_NAMES, getSkillsConfig
 from skeletons.gui.game_control import IRestoreController
 
 def _getSysMsgType(price):
@@ -78,6 +79,34 @@ class TankmanRecruit(Processor):
     def __getSysMsgType(self):
         tmanCost = self.__getRecruitPrice(self.tmanCostTypeIdx)
         return CURRENCY_TO_SM_TYPE.get(tmanCost.getCurrency(byWeight=False), SM_TYPE.Information)
+
+
+class TankmanTokenRecruit(Processor):
+
+    def __init__(self, nationID, vehTypeID, role, tokenName, tokenData):
+        vehicle = self.itemsCache.items.getItemByCD(makeIntCompactDescrByID('vehicle', nationID, vehTypeID))
+        super(TankmanTokenRecruit, self).__init__([plugins.VehicleCrewLockedValidator(vehicle), plugins.IsLongDisconnectedFromCenter()])
+        self.nationID = nationID
+        self.vehTypeID = vehTypeID
+        self.role = role
+        self.tokenName = tokenName
+        self.recruitInfo = tokenData
+        self.vehicleName = vehicle.shortUserName
+
+    def _errorHandler(self, code, errStr='', ctx=None):
+        return makeI18nError('recruit_window/%s' % errStr, defaultSysMsgKey='recruit_window/server_error', auxData=ctx)
+
+    def _successHandler(self, code, ctx=None):
+        html = makeHtmlString(path='html_templates:lobby/processors/system_messages', key='recruit', ctx={'fullName': self.recruitInfo.getFullUserName(),
+         'rank': Tankman.getRankUserName(self.nationID, self.recruitInfo.getRankID()),
+         'role': getSkillsConfig().getSkill(self.role).userString,
+         'vehicleName': self.vehicleName,
+         'roleLevel': self.recruitInfo.getRoleLevel()})
+        return makeSuccess(html, msgType=SM_TYPE.Information, auxData=ctx)
+
+    def _request(self, callback):
+        LOG_DEBUG('Make server request to recruit notrecruit tankman (by token):', self.nationID, self.vehTypeID, self.role)
+        BigWorld.player().shop.buyTokenTankman(self.nationID, self.vehTypeID, self.role, self.tokenName, lambda code, tmanInvID, tmanCompDescr: self._response(code, callback, ctx=tmanInvID))
 
 
 class TankmanEquip(Processor):

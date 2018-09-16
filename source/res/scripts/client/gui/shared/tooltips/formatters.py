@@ -6,6 +6,7 @@ from gui.Scaleform.genConsts.BATTLE_RESULT_TYPES import BATTLE_RESULT_TYPES
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
+from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.ranked_battles.ranked_helpers import buildRankVO
 from gui.shared.formatters import text_styles
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE, ACTION_TOOLTIPS_STATE
@@ -316,12 +317,14 @@ def packItemRentActionTooltipData(item, rentPackage):
      'rentPackage': rentPackage['days']}
 
 
-def packImageListParameterBlockData(listIconSrc, columnWidth, rowHeight, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None):
+def packImageListParameterBlockData(listIconSrc, columnWidth, rowHeight, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None, verticalGap=0, horizontalGap=0):
     return packBlockDataItem(linkage, {'dataType': 'String',
      'rendererType': 'ImageRendererUI',
      'listIconSrc': listIconSrc,
      'columnWidth': columnWidth,
-     'rowHeight': rowHeight}, padding)
+     'rowHeight': rowHeight,
+     'verticalGap': verticalGap,
+     'horizontalGap': horizontalGap}, padding)
 
 
 def packQuestAwardsBlockData(listData, columnWidth, rowHeight, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_TILE_LIST_BLOCK_LINKAGE, padding=None):
@@ -406,3 +409,7 @@ def packMoneyAndXpBlocks(tooltipBlocks, btnType, valueBlocks):
     actionBlocks.append(packAlignedTextBlockData(text=text_styles.standard(TOOLTIPS.getHeaderBtnClickDesc(btnType)), align=BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
     tooltipBlocks.append(packBuildUpBlockData(actionBlocks))
     return tooltipBlocks
+
+
+def packSeparatorBlockData():
+    return packImageBlockData(img=RES_ICONS.MAPS_ICONS_LIBRARY_SEPARATOR, align=BLOCKS_TOOLTIP_TYPES.ALIGN_LEFT, padding=packPadding(top=-40))

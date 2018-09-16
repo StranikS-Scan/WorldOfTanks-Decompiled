@@ -53,7 +53,6 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
         if g_currentVehicle.isPresent():
             self.__currentVehicleId = g_currentVehicle.item.intCD
-        g_currentVehicle.item.equipmentLayout.setRegularConsumables(g_currentVehicle.item.equipment.regularConsumables)
         self.populateTechnicalMaintenance()
         self.populateTechnicalMaintenanceEquipmentDefaults()
         self.setupContextHints(TUTORIAL.TECHNICAL_MAINTENANCE)
@@ -94,7 +93,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
     def updateEquipmentCurrency(self, equipmentIndex, currency):
         key = 'currency%d' % (int(equipmentIndex) + 1)
         params = {key: currency}
-        self.__seveCurrentLayout(**params)
+        self.__saveCurrentLayout(**params)
 
     @decorators.process('loadStats')
     def setRefillSettings(self, intCD, repair, load, equip):
@@ -252,7 +251,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
                 setup.append(e.intCD)
             setup.append(None)
 
-        self.__seveCurrentLayout(eId1=eId1, currency1=currency1, eId2=eId2, currency2=currency2, eId3=eId3, currency3=currency3)
+        self.__saveCurrentLayout(eId1=eId1, currency1=currency1, eId2=eId2, currency2=currency2, eId3=eId3, currency3=currency3)
         self._setEquipment(installed, setup, modules)
         return
 
@@ -326,7 +325,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         ItemsActionsFactory.doAction(ItemsActionsFactory.SET_VEHICLE_LAYOUT, vehicle, shellsLayout, eqsLayout, skipConfirm=self._skipConfirm)
         self.destroy()
 
-    def __seveCurrentLayout(self, **kwargs):
+    def __saveCurrentLayout(self, **kwargs):
         self.__layout.update(kwargs)
 
     def __resetEquipment(self, event):

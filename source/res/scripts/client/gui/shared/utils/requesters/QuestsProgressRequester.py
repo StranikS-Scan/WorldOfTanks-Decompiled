@@ -15,6 +15,10 @@ class _QuestsProgressRequester(AbstractSyncDataRequester):
     def getTokenExpiryTime(self, tokenID):
         return self.__getToken(tokenID).expireTime
 
+    def getTokenNames(self):
+        tokens = self.__getTokensData()
+        return tokens.keys()
+
     @async
     def _requestCache(self, callback=None):
         BigWorld.player().questProgress.getCache(lambda resID, value: self._response(resID, value, callback))

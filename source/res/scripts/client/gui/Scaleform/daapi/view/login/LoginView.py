@@ -253,16 +253,17 @@ class LoginView(LoginPageMeta):
 
     def _onLoginRejected(self, loginStatus, responseData):
         Waiting.hide('login')
-        if loginStatus == LOGIN_STATUS.LOGIN_REJECTED_BAN:
-            self.__loginRejectedBan(responseData)
-        elif loginStatus == LOGIN_STATUS.LOGIN_REJECTED_RATE_LIMITED:
-            self.__loginRejectedRateLimited()
-        elif loginStatus in (LOGIN_STATUS.LOGIN_REJECTED_BAD_DIGEST, LOGIN_STATUS.LOGIN_BAD_PROTOCOL_VERSION):
-            self.__loginRejectedUpdateNeeded()
-        elif loginStatus == LOGIN_STATUS.NOT_SET and self.__customLoginStatus is not None:
-            self.__loginRejectedWithCustomState()
-        else:
-            self.as_setErrorMessageS(_ms('#menu:login/status/' + loginStatus), _STATUS_TO_INVALID_FIELDS_MAPPING[loginStatus])
+        if not self._loginMode.skipRejectionError(loginStatus, responseData):
+            if loginStatus == LOGIN_STATUS.LOGIN_REJECTED_BAN:
+                self.__loginRejectedBan(responseData)
+            elif loginStatus == LOGIN_STATUS.LOGIN_REJECTED_RATE_LIMITED:
+                self.__loginRejectedRateLimited()
+            elif loginStatus in (LOGIN_STATUS.LOGIN_REJECTED_BAD_DIGEST, LOGIN_STATUS.LOGIN_BAD_PROTOCOL_VERSION):
+                self.__loginRejectedUpdateNeeded()
+            elif loginStatus == LOGIN_STATUS.NOT_SET and self.__customLoginStatus is not None:
+                self.__loginRejectedWithCustomState()
+            else:
+                self.as_setErrorMessageS(_ms('#menu:login/status/' + loginStatus), _STATUS_TO_INVALID_FIELDS_MAPPING[loginStatus])
             self.__clearFields(_STATUS_TO_INVALID_FIELDS_MAPPING[loginStatus])
         self._dropLoginQueue(loginStatus)
         return

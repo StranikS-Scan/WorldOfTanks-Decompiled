@@ -18,11 +18,19 @@ class Views(object):
         pass
 
     @property
+    def rewardWindowContent(self):
+        pass
+
+    @property
     def buyVehicleView(self):
         pass
 
     @property
     def standardWindow(self):
+        pass
+
+    @property
+    def backportTooltipContent(self):
         pass
 
     @property

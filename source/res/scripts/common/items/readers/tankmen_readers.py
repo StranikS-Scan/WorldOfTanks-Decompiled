@@ -102,13 +102,13 @@ def _readGroupRoles(xmlCtx, section, subsectionName):
     return frozenset(tags)
 
 
-def _readTankmenGroup(xmlCtx, subsection, firstNames, lastNames, icons):
+def _readTankmenGroup(xmlCtx, groupName, subsection, firstNames, lastNames, icons):
     if IS_CLIENT or IS_WEB:
         parseName = _parseName
         parseIcon = _parseIcon
     else:
         parseName = parseIcon = None
-    return tankmen_components.NationGroup(subsection.asString, 'female' == _xml.readNonEmptyString(xmlCtx, subsection, 'sex'), subsection.readBool('notInShop', False), _readIDs((xmlCtx, 'firstNames'), _xml.getChildren(xmlCtx, subsection, 'firstNames'), firstNames, parseName), _readIDs((xmlCtx, 'lastNames'), _xml.getChildren(xmlCtx, subsection, 'lastNames'), lastNames, parseName), _readIDs((xmlCtx, 'icons'), _xml.getChildren(xmlCtx, subsection, 'icons'), icons, parseIcon), _xml.readNonNegativeFloat(xmlCtx, subsection, 'weight'), _readGroupTags((xmlCtx, 'tags'), subsection, 'tags'), _readGroupRoles((xmlCtx, 'roles'), subsection, 'roles'))
+    return tankmen_components.NationGroup(groupName, 'female' == _xml.readNonEmptyString(xmlCtx, subsection, 'sex'), subsection.readBool('notInShop', False), _readIDs((xmlCtx, 'firstNames'), _xml.getChildren(xmlCtx, subsection, 'firstNames'), firstNames, parseName), _readIDs((xmlCtx, 'lastNames'), _xml.getChildren(xmlCtx, subsection, 'lastNames'), lastNames, parseName), _readIDs((xmlCtx, 'icons'), _xml.getChildren(xmlCtx, subsection, 'icons'), icons, parseIcon), _xml.readNonNegativeFloat(xmlCtx, subsection, 'weight'), _readGroupTags((xmlCtx, 'tags'), subsection, 'tags'), _readGroupRoles((xmlCtx, 'roles'), subsection, 'roles'))
 
 
 def _readNationConfigSection(xmlCtx, section):
@@ -121,7 +121,7 @@ def _readNationConfigSection(xmlCtx, section):
         totalWeight = 0.0
         for sname, subsection in _xml.getChildren(xmlCtx, section, kindName):
             ctx = (xmlCtx, kindName + '/' + sname)
-            group = _readTankmenGroup(ctx, subsection, firstNames, lastNames, icons)
+            group = _readTankmenGroup(ctx, sname, subsection, firstNames, lastNames, icons)
             totalWeight += group.weight
             groups.append(group)
 

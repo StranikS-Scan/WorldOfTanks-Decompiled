@@ -6,17 +6,21 @@ from collections import defaultdict
 from adisp import process
 from debug_utils import LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.locale.CLANS import CLANS
+from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.clans.clan_account_profile import SYNC_KEYS
 from gui.clans.clan_helpers import ClanListener, isInClanEnterCooldown
 from gui.clans.settings import CLAN_APPLICATION_STATES
 from gui.prb_control import prbInvitesProperty
 from gui.prb_control.entities.listener import IGlobalListener
+from gui.server_events import recruit_helper
 from gui.shared.utils import showInvitationInWindowsBar
 from gui.shared.view_helpers.UsersInfoHelper import UsersInfoHelper
+from gui.shared.notifications import NotificationPriorityLevel
 from gui.wgcg.clan.contexts import GetClanInfoCtx
 from gui.wgnc import g_wgncProvider, g_wgncEvents, wgnc_settings
 from gui.wgnc.settings import WGNC_DATA_PROXY_TYPE
-from helpers import time_utils, i18n
+from gui import SystemMessages
+from helpers import time_utils, i18n, dependency
 from messenger.m_constants import PROTO_TYPE, USER_ACTION_ID
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
@@ -24,6 +28,7 @@ from messenger.proto.xmpp.xmpp_constants import XMPP_ITEM_TYPE
 from notification import tutorial_helper
 from notification.decorators import MessageDecorator, PrbInviteDecorator, FriendshipRequestDecorator, WGNCPopUpDecorator, ClanAppsDecorator, ClanInvitesDecorator, ClanAppActionDecorator, ClanInvitesActionDecorator, ClanSingleAppDecorator, ClanSingleInviteDecorator
 from notification.settings import NOTIFICATION_TYPE, NOTIFICATION_BUTTON_STATE
+from skeletons.gui.login_manager import ILoginManager
 
 class _NotificationListener(object):
 
@@ -652,6 +657,28 @@ class BattleTutorialListener(_NotificationListener, IGlobalListener):
             return
 
 
+class RecruitNotificationListener(_NotificationListener):
+    loginManager = dependency.descriptor(ILoginManager)
+    _INCREASE_LIMIT_LOGIN = 5
+
+    def start(self, model):
+        result = super(RecruitNotificationListener, self).start(model)
+        if model is not None and model.getFirstEntry():
+            recruits = recruit_helper.getAllRecruitsInfo(sortByExpireTime=True)
+            for recruitInfo in recruits:
+                if recruitInfo.getExpiryTimeStamp() > 0:
+                    self.__pushMessage(len(recruits), recruitInfo.getExpiryTime())
+                    break
+
+        return result
+
+    def __pushMessage(self, count, time):
+        priority = NotificationPriorityLevel.LOW
+        if self.loginManager.getPreference('loginCount') == self._INCREASE_LIMIT_LOGIN:
+            priority = NotificationPriorityLevel.MEDIUM
+        SystemMessages.pushMessage(i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_RECRUITREMINDER_TEXT, count=count, date=time), SystemMessages.SM_TYPE.RecruitReminder, priority=priority)
+
+
 class NotificationsListeners(_NotificationListener):
 
     def __init__(self):
@@ -660,7 +687,8 @@ class NotificationsListeners(_NotificationListener):
          PrbInvitesListener(),
          FriendshipRqsListener(),
          _WGNCListenersContainer(),
-         BattleTutorialListener())
+         BattleTutorialListener(),
+         RecruitNotificationListener())
 
     def start(self, model):
         for listener in self.__listeners:

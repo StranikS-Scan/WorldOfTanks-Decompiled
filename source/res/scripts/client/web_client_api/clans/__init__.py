@@ -22,19 +22,22 @@ class ClansWebApi(object):
             if member.isOnline():
                 onlineCount += 1
 
-        return {'all_members': len(members),
+        return {'action': 'members_online',
+         'all_members': len(members),
          'online_members': onlineCount}
 
     @w2c(W2CSchema, name='members_status')
     def membersStatus(self, cmd):
         members = g_clanCache.clanMembers
-        return {'members_status': self._getStatuses(members)}
+        return {'action': 'members_status',
+         'members_status': self._getStatuses(members)}
 
     @w2c(W2CSchema, name='friends_status')
     def friendsStatus(self, cmd):
         storage = g_clanCache.usersStorage
         friends = storage.getList(MutualFriendsFindCriteria(), iterator=storage.getClanMembersIterator(False))
-        return {'friends_status': self._getStatuses(friends)}
+        return {'action': 'friends_status',
+         'friends_status': self._getStatuses(friends)}
 
     def _getStatuses(self, users):
         statuses = {}

@@ -5,7 +5,7 @@ from gui.shared.tooltips import contexts
 from gui.shared.tooltips import skill
 from gui.shared.tooltips import tankman
 from gui.shared.tooltips import advanced
-from gui.shared.tooltips.builders import AdvancedDataBuilder, ConditionBuilder
+from gui.shared.tooltips.builders import AdvancedDataBuilder, ConditionBuilder, DataBuilder
 __all__ = ('getTooltipBuilders',)
 
 class TankmanTooltipBuilder(AdvancedDataBuilder):
@@ -16,6 +16,16 @@ class TankmanTooltipBuilder(AdvancedDataBuilder):
 
     def _buildData(self, _advanced, invID, *args, **kwargs):
         return super(TankmanTooltipBuilder, self)._buildData(_advanced, invID)
+
+
+class NotRecruitedTankmanTooltipBuilder(DataBuilder):
+    __slots__ = ()
+
+    def __init__(self, tooltipType, linkage):
+        super(NotRecruitedTankmanTooltipBuilder, self).__init__(tooltipType, linkage, tankman.NotRecruitedTooltipData(contexts.NotRecruitedTankmanContext()))
+
+    def _buildData(self, _advanced, invID, *args, **kwargs):
+        return super(NotRecruitedTankmanTooltipBuilder, self)._buildData(_advanced, invID)
 
 
 class TankmanNewSkillTooltipBuilder(ConditionBuilder):
@@ -31,6 +41,7 @@ class TankmanNewSkillTooltipBuilder(ConditionBuilder):
 
 def getTooltipBuilders():
     return (TankmanTooltipBuilder(TOOLTIPS_CONSTANTS.TANKMAN, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
+     NotRecruitedTankmanTooltipBuilder(TOOLTIPS_CONSTANTS.TANKMAN_NOT_RECRUITED, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI),
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.TANKMAN_SKILL, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, skill.SkillTooltipDataBlock(contexts.PersonalCaseContext(fieldsToExclude=('count',))), advanced.SkillTooltipAdvanced(contexts.PersonalCaseContext(fieldsToExclude=('count',)))),
      TankmanNewSkillTooltipBuilder(TOOLTIPS_CONSTANTS.TANKMAN_NEW_SKILL, TOOLTIPS_CONSTANTS.TANKMEN_BUY_SKILL_UI),
      AdvancedDataBuilder(TOOLTIPS_CONSTANTS.TANKMAN_SKILL_EXTENDED, TOOLTIPS_CONSTANTS.TANKMAN_SKILL_EXTENDED_UI, skill.TankmanSkillTooltipData(contexts.HangarParamContext()), advanced.SkillExtendedTooltipAdvanced(contexts.HangarParamContext())))

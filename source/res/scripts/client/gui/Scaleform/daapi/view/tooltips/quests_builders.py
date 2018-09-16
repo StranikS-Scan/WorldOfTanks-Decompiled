@@ -12,4 +12,5 @@ def getTooltipBuilders():
      DataBuilder(TOOLTIPS_CONSTANTS.MISSION_VEHICLE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, quests.MissionVehiclesConditionTooltipData(contexts.QuestContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.MISSION_VEHICLE_TYPE, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, quests.MissionVehiclesTypeTooltipData(contexts.QuestContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.ADDITIONAL_AWARDS, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, quests.AdditionalAwardTooltipData(contexts.QuestContext())),
+     DataBuilder(TOOLTIPS_CONSTANTS.PACK_RENT_VEHICLES, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, quests.RentVehicleAwardTooltipData(contexts.QuestContext())),
      DataBuilder(TOOLTIPS_CONSTANTS.UNAVAILABLE_QUEST, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI, quests.UnavailableQuestTooltipData(contexts.QuestContext())))

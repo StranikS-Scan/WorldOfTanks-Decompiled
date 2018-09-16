@@ -16,6 +16,7 @@ from skeletons.gui.shared import IItemsCache
 class TOOLTIP_TYPE(CONST_CONTAINER):
     VEHICLE = 'vehicle'
     TANKMAN = 'tankman'
+    NOT_RECRUITED_TANKMAN = 'notRecruitedTankman'
     SKILL = 'skill'
     ACHIEVEMENT = 'achievement'
     ACHIEVEMENT_ATTR = 'achievementAttr'

@@ -61,6 +61,7 @@ TRAJECTORY_VIEW_HINT_COUNTER = 'trajectoryViewHintCounter'
 PROFILE_TECHNIQUE_MEMBER = 'profileTechniqueMember'
 SHOW_CRYSTAL_HEADER_BAND = 'showCrystalHeaderBand'
 ELEN_NOTIFICATIONS = 'elenNotifications'
+RECRUIT_NOTIFICATIONS = 'recruitNotifications'
 SPEAKERS_DEVICE = 'speakersDevice'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
@@ -482,7 +483,8 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 NEW_LOBBY_TAB_COUNTER: {}},
  KEY_NOTIFICATIONS: {ELEN_NOTIFICATIONS: {MISSIONS_CONSTANTS.ELEN_EVENT_STARTED_NOTIFICATION: set(),
                                           MISSIONS_CONSTANTS.ELEN_EVENT_FINISHED_NOTIFICATION: set(),
-                                          MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()}}}
+                                          MISSIONS_CONSTANTS.ELEN_EVENT_TAB_VISITED: set()},
+                     RECRUIT_NOTIFICATIONS: set()}}
 
 def _filterAccountSection(dataSec):
     for key, section in dataSec.items()[:]:

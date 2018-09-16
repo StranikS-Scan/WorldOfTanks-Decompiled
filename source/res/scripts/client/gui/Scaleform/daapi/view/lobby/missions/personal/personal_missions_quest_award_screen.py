@@ -147,18 +147,18 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
                         'rendererHeight': 80,
                         'awards': self.__packAwards(detailedData)}}
         dataVO.update(self.__packQuestsConditions(detailedData))
-        if self._nextQuest:
-            if self._addReward:
+        if self._addReward:
+            if self._nextQuest:
                 nextQuestTitle = _PM.QUESTAWARDSCREEN_NEXTQUEST_TITLE_QUESTACCEPT
                 nextQuestText = self._nextQuest.getUserName()
                 dataVO.update({'nextQuestText': text_styles.promoTitle(nextQuestText),
                  'nextQuestTitle': text_styles.highlightText(nextQuestTitle)})
             else:
-                dataVO.update(self.__getQuestImproveTitleData(self._quest))
-        elif self._addReward:
-            chainName = getTypeShortUserName(self._quest.getQuestClassifier().classificationAttr)
-            nextQuestTitle = _ms(_PM.STATUSPANEL_STATUS_ALLDONE, vehicleClass=chainName)
-            dataVO.update({'nextQuestTitle': text_styles.highlightText(nextQuestTitle)})
+                chainName = getTypeShortUserName(self._quest.getQuestClassifier().classificationAttr)
+                nextQuestTitle = _ms(_PM.STATUSPANEL_STATUS_ALLDONE, vehicleClass=chainName)
+                dataVO.update({'nextQuestTitle': text_styles.highlightText(nextQuestTitle)})
+        elif self._isAwardListUsed and isFinal:
+            dataVO.update({'nextQuestTitle': text_styles.highlightText(QUESTS.PERSONALMISSION_STATUS_LASTDONEWITHPAWN)})
         else:
             dataVO.update(self.__getQuestImproveTitleData(self._quest))
         if showExtraBtn:
@@ -173,7 +173,9 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
     def __packQuestsConditions(self, detailedData):
         formatter = detailedData.getAwardScreenConditionsFormatter()
         mainBody = formatter.bodyFormat(isMain=True)
-        addBody = formatter.bodyFormat(isMain=False)
+        addBody = []
+        if self._addReward:
+            addBody = formatter.bodyFormat(isMain=False)
         return {'mainConditions': mainBody,
          'addConditions': addBody}
 
@@ -221,5 +223,5 @@ class PersonalMissionsQuestAwardScreen(PersonalMissionsQuestAwardScreenMeta):
 
     @staticmethod
     def __getQuestImproveTitleData(quest):
-        return {'nextQuestTitle': text_styles.highlightText(QUESTS.PERSONALMISSION_STATUS_LASTDONEWITHPAWN)} if quest.isFinal() else {'nextQuestText': text_styles.promoTitle(quest.getUserName()),
+        return {'nextQuestText': text_styles.promoTitle(quest.getUserName()),
          'nextQuestTitle': text_styles.highlightText(_PM.QUESTAWARDSCREEN_NEXTQUEST_TITLE_QUESTIMPROVE)}

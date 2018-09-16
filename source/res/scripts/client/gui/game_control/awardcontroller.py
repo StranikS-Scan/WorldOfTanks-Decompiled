@@ -24,11 +24,12 @@ from gui.Scaleform.daapi.view.dialogs import I18PunishmentDialogMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
+from gui.Scaleform.locale.MESSENGER import MESSENGER
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.prb_control.settings import BATTLES_TO_SELECT_RANDOM_MIN_LIMIT
 from gui.ranked_battles import ranked_helpers
-from gui.server_events import events_dispatcher as quests_events
+from gui.server_events import events_dispatcher as quests_events, recruit_helper
 from gui.server_events.finders import PM_FINAL_TOKEN_QUEST_IDS_BY_OPERATION_ID, getBranchByOperationId, BRANCH_TO_OPERATION_IDS, CHAMPION_BADGES_BY_BRANCH
 from gui.shared import EVENT_BUS_SCOPE, g_eventBus, events
 from gui.shared.gui_items.Tankman import Tankman
@@ -81,6 +82,7 @@ class AwardController(IAwardController, IGlobalListener):
          RankedQuestsHandler(self),
          MarkByInvoiceHandler(self),
          MarkByQuestHandler(self),
+         RecruitHandler(self),
          SoundDeviceHandler(self),
          EliteWindowHandler(self)]
         super(AwardController, self).__init__()
@@ -371,6 +373,37 @@ class MarkByQuestHandler(ServiceChannelHandler):
     @staticmethod
     def _showWindow(tokenCount):
         SystemMessages.pushI18nMessage(SYSTEM_MESSAGES.TOKENS_NOTIFICATION_MARK_ACQUIRED, count=tokenCount, type=SystemMessages.SM_TYPE.tokenWithMarkAcquired)
+
+
+class RecruitHandler(ServiceChannelHandler):
+
+    def __init__(self, awardCtrl):
+        super(RecruitHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
+        self.__questTypes = [SYS_MESSAGE_TYPE.battleResults.index(), SYS_MESSAGE_TYPE.tokenQuests.index(), SYS_MESSAGE_TYPE.invoiceReceived.index()]
+
+    def _needToShowAward(self, ctx):
+        _, message = ctx
+        return message is not None and message.type in self.__questTypes and message.data is not None
+
+    def _showAward(self, ctx):
+        messageData = ctx[1].data
+        if 'data' in messageData:
+            data = messageData['data']
+        else:
+            data = messageData
+        tokensDict = data.get('tokens', {})
+        for tokenName in tokensDict:
+            recruitInfo = recruit_helper.getRecruitInfo(tokenName)
+            if recruitInfo is not None:
+                self._showWindow(recruitInfo.getLabel())
+                return
+
+        return
+
+    @staticmethod
+    def _showWindow(eventKey):
+        event = i18n.makeString(eventKey)
+        SystemMessages.pushMessage(i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_RECRUITGIFT_TEXT, event=event), SystemMessages.SM_TYPE.RecruitGift, messageData={'header': i18n.makeString(MESSENGER.SERVICECHANNELMESSAGES_RECRUITGIFT_HEADER)})
 
 
 class MotiveQuestsWindowHandler(ServiceChannelHandler):

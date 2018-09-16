@@ -70,6 +70,9 @@ class BaseMode(object):
     def changeAccount(self):
         pass
 
+    def skipRejectionError(self, *args):
+        return False
+
     def switchBgMode(self):
         if self._viewBackground is not None:
             self._viewBackground.switch()

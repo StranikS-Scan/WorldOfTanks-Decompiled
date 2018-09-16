@@ -133,7 +133,7 @@ class SettingsWindow(SettingsWindowMeta):
         newSettings = getNewSettings()
         if newSettings:
             self.as_setCountersDataS(newSettings)
-        self.as_updateVideoSettingsS(self.__currentSettings)
+        self.as_updateVideoSettingsS(self.params.getMonitorSettings())
         self.as_openTabS(_getLastTabIndex())
 
     def _dispose(self):

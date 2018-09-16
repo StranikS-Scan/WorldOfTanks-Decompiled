@@ -48,11 +48,6 @@ class EVENT_BOARDS(object):
     CONDITION_VEHICLE_CHOSEN = '#event_boards:condition/vehicle/chosen'
     CONDITION_VEHICLE_EXIST = '#event_boards:condition/vehicle/exist'
     CONDITION_VEHICLE_MISSING = '#event_boards:condition/vehicle/missing'
-    TOP_OBJECTIVEPARAMETER_XP = '#event_boards:top/objectiveParameter/xp'
-    TOP_OBJECTIVEPARAMETER_ORIGINALXP = '#event_boards:top/objectiveParameter/originalXP'
-    TOP_OBJECTIVEPARAMETER_DAMAGEDEALT = '#event_boards:top/objectiveParameter/damageDealt'
-    TOP_OBJECTIVEPARAMETER_DAMAGEASSISTED = '#event_boards:top/objectiveParameter/damageAssisted'
-    TOP_OBJECTIVEPARAMETER_WINS = '#event_boards:top/objectiveParameter/wins'
     TOP_PARTICIPATION_NOTFULL = '#event_boards:top/participation/notfull'
     TOP_PARTICIPATION_NOTPARTICIPATED = '#event_boards:top/participation/notParticipated'
     TOP_PARTICIPATION_NOTINTOP = '#event_boards:top/participation/notintop'
@@ -113,6 +108,7 @@ class EVENT_BOARDS(object):
     SUMMARY_PARAM_SUMALL_XP = '#event_boards:summary/param/sumAll/xp'
     SUMMARY_PARAM_SUMALL_DAMAGEDEALT = '#event_boards:summary/param/sumAll/damageDealt'
     SUMMARY_PARAM_SUMALL_DAMAGEASSISTED = '#event_boards:summary/param/sumAll/damageAssisted'
+    SUMMARY_PARAM_SUMALL_WINS = '#event_boards:summary/param/sumAll/wins'
     SUMMARY_PARAM_SUMN_ORIGINALXP = '#event_boards:summary/param/sumN/originalXP'
     SUMMARY_PARAM_SUMN_XP = '#event_boards:summary/param/sumN/xp'
     SUMMARY_PARAM_SUMN_DAMAGEDEALT = '#event_boards:summary/param/sumN/damageDealt'
@@ -276,6 +272,7 @@ class EVENT_BOARDS(object):
      SUMMARY_PARAM_SUMALL_XP,
      SUMMARY_PARAM_SUMALL_DAMAGEDEALT,
      SUMMARY_PARAM_SUMALL_DAMAGEASSISTED,
+     SUMMARY_PARAM_SUMALL_WINS,
      SUMMARY_PARAM_SUMN_ORIGINALXP,
      SUMMARY_PARAM_SUMN_XP,
      SUMMARY_PARAM_SUMN_DAMAGEDEALT,
@@ -323,11 +320,6 @@ class EVENT_BOARDS(object):
      TASK_EVENTTYPE_CLASS,
      TASK_EVENTTYPE_ALL,
      TASK_EVENTTYPE_NATION)
-    TOP_OBJECTIVEPARAMETER_ENUM = (TOP_OBJECTIVEPARAMETER_XP,
-     TOP_OBJECTIVEPARAMETER_ORIGINALXP,
-     TOP_OBJECTIVEPARAMETER_DAMAGEDEALT,
-     TOP_OBJECTIVEPARAMETER_DAMAGEASSISTED,
-     TOP_OBJECTIVEPARAMETER_WINS)
     TIME_PERIOD_ENUM = (TIME_PERIOD_DAY, TIME_PERIOD_HOUR, TIME_PERIOD_MINUTE)
     TIME_DAY_ENUM = (TIME_DAY_TODAY, TIME_DAY_TOMORROW, TIME_DAY_YESTERDAY)
     DATETIME_MONTHS_ENUM = (DATETIME_MONTHS_1,
@@ -438,15 +430,6 @@ class EVENT_BOARDS(object):
     def task_eventtype(cls, key0):
         outcome = '#event_boards:task/eventtype/{}'.format(key0)
         if outcome not in cls.TASK_EVENTTYPE_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def top_objectiveparameter(cls, key0):
-        outcome = '#event_boards:top/objectiveParameter/{}'.format(key0)
-        if outcome not in cls.TOP_OBJECTIVEPARAMETER_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

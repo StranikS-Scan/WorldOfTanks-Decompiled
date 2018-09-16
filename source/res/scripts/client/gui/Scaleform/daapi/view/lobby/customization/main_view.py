@@ -4,6 +4,7 @@ from collections import namedtuple
 import struct
 import BigWorld
 import GUI
+import Math
 from adisp import async, process as adisp_process
 from AvatarInputHandler import cameras
 from CurrentVehicle import g_currentVehicle
@@ -117,13 +118,15 @@ class _VehicleCustomizationAnchorsUpdater(object):
             for displayObject in displayObjects:
                 if hasattr(displayObject, 'slotData'):
                     customSlotId = CustomizationSlotIdVO(displayObject.slotData.slotId.areaId, displayObject.slotData.slotId.slotId, displayObject.slotData.slotId.regionId)
+                    normal = Math.Vector3(0, 0, 0)
                     if isRegionObjects:
                         region = getRegionBySlotId(customSlotId)
                         anchorWorldPos = self.__service.getPointForRegionLeaderLine(region)
                     else:
                         anchorWorldPos = self.__service.getPointForAnchorLeaderLine(customSlotId.areaId, customSlotId.slotId, customSlotId.regionId)
+                        normal = self.__service.getNormalForAnchorLeaderLine(customSlotId.areaId, customSlotId.slotId, customSlotId.regionId)
                     if anchorWorldPos is not None:
-                        uid = self.__vehicleCustomizationAnchors.addAnchor(anchorWorldPos, displayObject, not isRegionObjects)
+                        uid = self.__vehicleCustomizationAnchors.addAnchor(anchorWorldPos, normal, displayObject, not isRegionObjects)
                         processedObjectIds.add(uid)
 
             delAnchors = self.__processedAnchors - processedObjectIds
@@ -153,7 +156,6 @@ class MainView(CustomizationMainViewMeta):
         super(MainView, self).__init__()
         self.__viewLifecycleWatcher = ViewLifecycleWatcher()
         self.fadeAnchorsOut = False
-        self.anchorMinScale = 0.75
         self._currentSeason = SeasonType.SUMMER
         self._tabIndex = C11nTabs.PAINT
         self._lastTab = C11nTabs.PAINT
@@ -613,7 +615,6 @@ class MainView(CustomizationMainViewMeta):
                         if anchorData is not None:
                             anchorPosData.append(anchorData)
 
-        anchorPosData.sort(key=lambda pos: pos.angleToCamera)
         for zIdx, posData in enumerate(anchorPosData):
             anchorVOs.append(CustomizationAnchorPositionVO(zIdx, posData.slotId._asdict())._asdict())
 
@@ -889,13 +890,16 @@ class MainView(CustomizationMainViewMeta):
         self.as_cameraAutoRotateChangedS(isIdle)
 
     @async
+    @adisp_process
     def __confirmHeaderNavigation(self, callback):
         purchaseItems = self.getPurchaseItems()
         cart = getTotalPurchaseInfo(purchaseItems)
         if cart.numTotal:
-            DialogsInterface.showI18nConfirmDialog('customization/close', callback)
+            result = yield DialogsInterface.showI18nConfirmDialog('customization/close')
         else:
-            callback(True)
+            result = True
+        callback(result)
+        self.__onConfirmCloseWindow(result)
 
     def __releaseItemSound(self):
         if self.itemIsPicked:

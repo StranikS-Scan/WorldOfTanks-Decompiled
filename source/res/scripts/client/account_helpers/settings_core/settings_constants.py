@@ -16,6 +16,8 @@ class GRAPHICS(CONST_CONTAINER):
     TRIPLE_BUFFERED = 'tripleBuffered'
     COLOR_BLIND = 'isColorBlind'
     GRAPHICS_QUALITY_HD_SD = 'graphicsQualityHDSD'
+    GRAPHICS_QUALITY_HD_SD_HIGH = 'graphicsQualityHDSDHigh'
+    IS_SD_QUALITY = 'isSDQuality'
     GRAPHICS_SETTINGS_LIST = 'qualityOrder'
     PRESETS = 'presets'
     QUALITY_PRESET = 'graphicsQuality'

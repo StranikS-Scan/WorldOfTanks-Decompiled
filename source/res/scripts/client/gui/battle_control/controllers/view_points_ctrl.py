@@ -10,6 +10,7 @@ from gui.battle_control.arena_info.vos_collections import AllyItemsCollection, S
 from gui.battle_control.arena_info.vos_collections import AliveItemsCollection
 from gui.battle_control.arena_info.vos_collections import SpawnGroupVehicleInfoSortKey
 from gui.battle_control.arena_info.vos_collections import SquadmanSpawnGroupVehicleInfoSortKey
+from gui.battle_control.arena_info.vos_collections import RankedVehicleInfoSortKey
 from gui.battle_control.battle_constants import BATTLE_CTRL_ID
 
 class ViewPointsController(IViewPointsController):
@@ -30,9 +31,7 @@ class ViewPointsController(IViewPointsController):
 
     def startControl(self, battleCtx, arenaVisitor):
         self.__points = arenaVisitor.getArenaViewPoints()
-        if arenaVisitor.getArenaType().numPlayerGroups > 0 and arenaVisitor.gui.isEpicRandomBattle():
-            self.__normalSortKey = SpawnGroupVehicleInfoSortKey
-            self.__squadManSortKey = SquadmanSpawnGroupVehicleInfoSortKey
+        self.__defineSortKeys(arenaVisitor)
 
     def stopControl(self):
         self.__points = None
@@ -121,3 +120,10 @@ class ViewPointsController(IViewPointsController):
             self.__currentVehicleID = vehOrPointId
             BigWorld.player().positionControl.switchViewpoint(False, vehOrPointId)
             return True
+
+    def __defineSortKeys(self, arenaVisitor):
+        if arenaVisitor.getArenaType().numPlayerGroups > 0 and arenaVisitor.gui.isEpicRandomBattle():
+            self.__normalSortKey = SpawnGroupVehicleInfoSortKey
+            self.__squadManSortKey = SquadmanSpawnGroupVehicleInfoSortKey
+        elif arenaVisitor.gui.isRankedBattle():
+            self.__normalSortKey = RankedVehicleInfoSortKey

@@ -75,6 +75,7 @@ class Manager(ILoginManager):
                 return
             serverName = self._getHost(authMethod, serverName)
         self.connectionMgr.initiateConnection(loginParams, password, serverName)
+        self.connectionMgr.setLastLogin(email)
         return
 
     def initiateRelogin(self, login, token2, serverName):

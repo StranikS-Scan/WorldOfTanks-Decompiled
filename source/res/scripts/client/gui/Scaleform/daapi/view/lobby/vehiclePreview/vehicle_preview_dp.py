@@ -32,7 +32,7 @@ class IVehPreviewDataProvider(object):
     def getBuyType(self, vehicle):
         return NotImplementedError
 
-    def getBottomPanelData(self, item, isHeroTank=False):
+    def getBottomPanelData(self, item, isHeroTank=False, isBootCamp=False):
         return NotImplementedError
 
     def getBuyingPanelData(self, item, data=None, isHeroTank=False):
@@ -51,7 +51,7 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
     def getBuyType(self, vehicle):
         return factory.BUY_VEHICLE if vehicle.isUnlocked else factory.UNLOCK_ITEM
 
-    def getBottomPanelData(self, item, isHeroTank=False):
+    def getBottomPanelData(self, item, isHeroTank=False, isBootCamp=False):
         isBuyingAvailable = not isHeroTank and (not item.isHidden or item.isRentable or item.isRestorePossible())
         if isBuyingAvailable or isHeroTank:
             if item.canTradeIn:
@@ -60,13 +60,15 @@ class DefaultVehPreviewDataProvider(IVehPreviewDataProvider):
                 buyingLabel = ''
         else:
             buyingLabel = text_styles.tutorial(VEHICLE_PREVIEW.BUYINGPANEL_ALERTLABEL)
+        vcData = None if isBootCamp else self.__getVehCompareData(item)
+        vcIcon = None if isBootCamp else makeImageTag(RES_ICONS.MAPS_ICONS_BUTTONS_VEHICLECOMPAREBTN, 30, 24, -27)
         return {'buyingLabel': buyingLabel,
          'isBuyingAvailable': isBuyingAvailable,
          'isCanTrade': item.canTradeIn,
          'showStatusInfoTooltip': item.hasModulesToSelect,
          'vehicleId': item.intCD,
-         'vehCompareData': self.__getVehCompareData(item),
-         'vehCompareIcon': makeImageTag(RES_ICONS.MAPS_ICONS_BUTTONS_VEHICLECOMPAREBTN, 30, 24, -27)}
+         'vehCompareData': vcData,
+         'vehCompareIcon': vcIcon}
 
     def __getVehCompareData(self, vehicle):
         state, tooltip = resolveStateTooltip(self.comparisonBasket, vehicle, enabledTooltip=VEH_COMPARE.VEHPREVIEW_COMPAREVEHICLEBTN_TOOLTIPS_ADDTOCOMPARE, fullTooltip=VEH_COMPARE.STORE_COMPAREVEHICLEBTN_TOOLTIPS_DISABLED)

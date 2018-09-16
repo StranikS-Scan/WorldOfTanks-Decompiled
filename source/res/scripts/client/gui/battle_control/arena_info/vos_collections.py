@@ -49,6 +49,14 @@ class SpawnGroupVehicleInfoSortKey(VehicleInfoSortKey):
         return result if result else super(SpawnGroupVehicleInfoSortKey, self)._cmp(other)
 
 
+class RankedVehicleInfoSortKey(VehicleInfoSortKey):
+    __slots__ = ()
+
+    def _cmp(self, other):
+        result = cmp(other.vInfoVO.ranked.rank, self.vInfoVO.ranked.rank)
+        return result if result else super(RankedVehicleInfoSortKey, self)._cmp(other)
+
+
 class SquadmanSpawnGroupVehicleInfoSortKey(SpawnGroupVehicleInfoSortKey):
     __slots__ = ('prebattleID',)
 

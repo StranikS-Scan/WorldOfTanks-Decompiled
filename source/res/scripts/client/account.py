@@ -885,6 +885,12 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         self._doCmdIntArrStrArr(AccountCommands.CMD_BAN_UNBAN_USER, intArr, strArr, proxy)
         return
 
+    def logClientSystem(self, stats):
+        self.base.logClientSystem(stats)
+
+    def logClientSessionStats(self, stats):
+        self.base.logClientSessionStats(stats)
+
     def logUXEvents(self, intArr):
         if self.lobbyContext.needLogUXEvents:
             return

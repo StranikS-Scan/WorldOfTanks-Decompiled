@@ -1315,6 +1315,61 @@
       <offset>	0.000000 0.000000 0.000000	</offset>
       <wwsound>	ambient_burn_static_big	</wwsound>
     </model>
+    <model>
+      <modelName>	particles/Environment/interior/14_siegfried_line_fire_thick.xml	</modelName>
+      <offset>	0.000000 2.000000 0.000000	</offset>
+      <wwsound>	amb_map_burn_static_big	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Birch_Dry_Frost/Birch_Dry_Frost_17m.srt	</modelName>
+      <offset>	0.000000 10.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_without_foliage_tree_big_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Birch_Dry_Frost/Birch_Dry_Frost_16m.srt	</modelName>
+      <offset>	0.000000 6.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_without_foliage_tree_big_02	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Conifers/Scots_Pine_Frost/Scots_Pine_Frost_22m.srt	</modelName>
+      <offset>	0.000000 18.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_coniferous_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Conifers/Scots_Pine_Frost/Scots_Pine_Frost_Curved.srt	</modelName>
+      <offset>	-1.000000 15.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_coniferous_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Broadleaves/Shrubs/Bush_Wild_Autumn_Frost/Bush_Wild_Autumn_Frost_10m_Bend.srt	</modelName>
+      <offset>	0.000000 2.000000 0.000000	</offset>
+      <wwsound>	ambient_trees_yellow_dry_comb_small_01	</wwsound>
+    </model>
+    <model>
+      <modelName>	particles/content_deferred/GFX_models/environment/05_prohorovka/Fire_monastery_big.model	</modelName>
+      <offset>	0.000000 1.000000 0.000000	</offset>
+      <wwsound>	amb_map_burn_static_big	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Hangars/Scots_Pine/Scots_Pine_0.srt	</modelName>
+      <offset>	0.000000 15.000000 0.000000	</offset>
+      <wwsound>	hangar_premium_2018_trees_coniferous_comb	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Hangars/Scots_Pine/Scots_Pine_1.srt	</modelName>
+      <offset>	0.000000 15.000000 -2.000000	</offset>
+      <wwsound>	hangar_premium_2018_trees_coniferous	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Hangars/Scots_Pine/Scots_Pine_2.srt	</modelName>
+      <offset>	0.000000 15.000000 -2.000000	</offset>
+      <wwsound>	hangar_premium_2018_trees_coniferous	</wwsound>
+    </model>
+    <model>
+      <modelName>	vegetation/Hangars/Scots_Pine/Scots_Pine_3.srt	</modelName>
+      <offset>	4.000000 15.000000 0.000000	</offset>
+      <wwsound>	hangar_premium_2018_trees_coniferous	</wwsound>
+    </model>
   </lightSounds>
   <birds>
     <seagull>
@@ -1392,7 +1447,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	30	</tesselationFactor>
         <alphaFadeDistances>	25.000000 25.000000	</alphaFadeDistances>
-        <wwsoundName>	none	</wwsoundName>
+        <wwsoundName>	amb_map_07_lakeville_flock_ducks_silence	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	none	</effectName>
       </channel0>
@@ -1430,7 +1485,7 @@
         <oscillationFreqVert>	0.980000	</oscillationFreqVert>
         <tesselationFactor>	30	</tesselationFactor>
         <alphaFadeDistances>	25.000000 25.000000	</alphaFadeDistances>
-        <wwsoundName>	none	</wwsoundName>
+        <wwsoundName>	amb_map_07_lakeville_flock_ducks_silence	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	none	</effectName>
       </channel0>
@@ -1462,7 +1517,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	30	</tesselationFactor>
         <alphaFadeDistances>	25.000000 25.000000	</alphaFadeDistances>
-        <wwsoundName>	none	</wwsoundName>
+        <wwsoundName>	amb_map_07_lakeville_flock_ducks_silence	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	none	</effectName>
       </channel0>
@@ -1500,7 +1555,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	30	</tesselationFactor>
         <alphaFadeDistances>	25.000000 25.000000	</alphaFadeDistances>
-        <wwsoundName>	none	</wwsoundName>
+        <wwsoundName>	amb_map_07_lakeville_flock_ducks_silence	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	none	</effectName>
       </channel0>
@@ -1538,7 +1593,7 @@
         <oscillationFreqVert>	1.010000	</oscillationFreqVert>
         <tesselationFactor>	30	</tesselationFactor>
         <alphaFadeDistances>	25.000000 25.000000	</alphaFadeDistances>
-        <wwsoundName>	none	</wwsoundName>
+        <wwsoundName>	amb_map_07_lakeville_flock_ducks_silence	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	none	</effectName>
       </channel0>
@@ -1576,7 +1631,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	30	</tesselationFactor>
         <alphaFadeDistances>	25.000000 25.000000	</alphaFadeDistances>
-        <wwsoundName>	none	</wwsoundName>
+        <wwsoundName>	amb_map_07_lakeville_flock_ducks_silence	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	none	</effectName>
       </channel0>
@@ -1614,7 +1669,7 @@
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	30	</tesselationFactor>
         <alphaFadeDistances>	25.000000 25.000000	</alphaFadeDistances>
-        <wwsoundName>	none	</wwsoundName>
+        <wwsoundName>	amb_map_07_lakeville_flock_ducks_silence	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	none	</effectName>
       </channel0>
@@ -2047,7 +2102,7 @@
         <oscillationFreqHorz>	1.000000	</oscillationFreqHorz>
         <oscillationFreqVert>	1.000000	</oscillationFreqVert>
         <tesselationFactor>	50	</tesselationFactor>
-        <alphaFadeDistances>	5.000000 0.000000	</alphaFadeDistances>
+        <alphaFadeDistances>	0.000000 0.000000	</alphaFadeDistances>
         <wwsoundName>	amb_map_13_erlenberg_aircraft	</wwsoundName>
         <effectHardpoint>	HP_module_0	</effectHardpoint>
         <effectName>	particles/Environment/scenarios/13_plane_flight.xml	</effectName>
@@ -2078,7 +2133,7 @@
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>
       <point>
-        <position>	-60.736362 21.345884 -569.503723	</position>
+        <position>	-40.736000 14.346000 -600.504028	</position>
         <speed0>	100.000000	</speed0>
         <oscillation0>	0.500000 0.500000	</oscillation0>
       </point>

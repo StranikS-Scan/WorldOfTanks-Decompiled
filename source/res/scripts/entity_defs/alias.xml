@@ -13,6 +13,75 @@
       </regionCCU>
     </Properties>
   </SERVER_STATISTICS>
+  <CLIENT_SYSTEM>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
+    <Properties>	&gt;	  <isLaptop>
+        <Type>	UINT8	</Type>
+      </isLaptop>
+      <cpuVendor>
+        <Type>	UINT8	</Type>
+      </cpuVendor>
+      <cpuCores>
+        <Type>	UINT8	</Type>
+      </cpuCores>
+      <cpuFreq>
+        <Type>	INT16	</Type>
+      </cpuFreq>
+      <gpuVendor>
+        <Type>	UINT8	</Type>
+      </gpuVendor>
+      <gpuMemory>
+        <Type>	INT16	</Type>
+      </gpuMemory>
+      <mainMemory>
+        <Type>	INT32	</Type>
+      </mainMemory>
+      <os>
+        <Type>	INT32	</Type>
+      </os>
+      <graphicsEngine>
+        <Type>	UINT8	</Type>
+      </graphicsEngine>
+      <cpuScore>
+        <Type>	INT32	</Type>
+      </cpuScore>
+      <gpuScore>
+        <Type>	INT16	</Type>
+      </gpuScore>
+      <osBit>
+        <Type>	UINT8	</Type>
+      </osBit>
+      <hasMods>
+        <Type>	UINT8	</Type>
+      </hasMods>
+      <cpuFamily>
+        <Type>	UINT32	</Type>
+      </cpuFamily>
+      <gpuFamily>
+        <Type>	UINT32	</Type>
+      </gpuFamily>
+      <crashed>
+        <Type>	UINT64	</Type>
+      </crashed>
+      <contentType>
+        <Type>	UINT8	</Type>
+      </contentType>
+      <gpuDriverVersion>
+        <Type>	INT64	</Type>
+      </gpuDriverVersion>
+      <graphicsAPIID>
+        <Type>	UINT32	</Type>
+      </graphicsAPIID>
+      <multiGPU>
+        <Type>	UINT8	</Type>
+      </multiGPU>
+      <cpuName>
+        <Type>	STRING	</Type>
+      </cpuName>
+      <hangarFirstLoadingTime>
+        <Type>	FLOAT	</Type>
+      </hangarFirstLoadingTime>
+    </Properties>
+  </CLIENT_SYSTEM>
   <CLIENT_STATISTICS>	FIXED_DICT	  <AllowNone>	true	</AllowNone>
     <Properties>
       <fpsMin>
@@ -60,33 +129,6 @@
       <lag>
         <Type>	UINT8	</Type>
       </lag>
-      <isLaptop>
-        <Type>	UINT8	</Type>
-      </isLaptop>
-      <cpuVendor>
-        <Type>	UINT8	</Type>
-      </cpuVendor>
-      <cpuCores>
-        <Type>	UINT8	</Type>
-      </cpuCores>
-      <cpuFreq>
-        <Type>	INT16	</Type>
-      </cpuFreq>
-      <gpuVendor>
-        <Type>	UINT8	</Type>
-      </gpuVendor>
-      <gpuMemory>
-        <Type>	INT16	</Type>
-      </gpuMemory>
-      <mainMemory>
-        <Type>	INT32	</Type>
-      </mainMemory>
-      <os>
-        <Type>	INT32	</Type>
-      </os>
-      <graphicsEngine>
-        <Type>	UINT8	</Type>
-      </graphicsEngine>
       <graphicsPreset>
         <Type>	UINT8	</Type>
       </graphicsPreset>
@@ -99,30 +141,12 @@
       <windowMode>
         <Type>	UINT8	</Type>
       </windowMode>
-      <cpuScore>
-        <Type>	INT32	</Type>
-      </cpuScore>
-      <gpuScore>
-        <Type>	INT16	</Type>
-      </gpuScore>
       <drrScale>
         <Type>	UINT8	</Type>
       </drrScale>
-      <osBit>
-        <Type>	UINT8	</Type>
-      </osBit>
       <gameSessionDuration>
         <Type>	INT16	</Type>
       </gameSessionDuration>
-      <hasMods>
-        <Type>	UINT8	</Type>
-      </hasMods>
-      <cpuFamily>
-        <Type>	UINT32	</Type>
-      </cpuFamily>
-      <gpuFamily>
-        <Type>	UINT32	</Type>
-      </gpuFamily>
       <cameraPos>
         <Type>	VECTOR3	</Type>
       </cameraPos>
@@ -141,27 +165,27 @@
       <loadingTime>
         <Type>	UINT32	</Type>
       </loadingTime>
-      <crashed>
-        <Type>	UINT64	</Type>
-      </crashed>
-      <contentType>
-        <Type>	UINT8	</Type>
-      </contentType>
       <dynamicDRR>
         <Type>	UINT8	</Type>
       </dynamicDRR>
-      <gpuDriverVersion>
-        <Type>	INT64	</Type>
-      </gpuDriverVersion>
       <soundQuality>
         <Type>	UINT8	</Type>
       </soundQuality>
-      <graphicsAPIID>
-        <Type>	UINT32	</Type>
-      </graphicsAPIID>
+      <graphicsSettings>
+        <Type>	UINT64	</Type>
+      </graphicsSettings>
       <hangarLoadingTime>
         <Type>	FLOAT	</Type>
       </hangarLoadingTime>
+      <lastArenaUniqueID>
+        <Type>	UINT64	</Type>
+      </lastArenaUniqueID>
+      <lastArenaTypeID>
+        <Type>	UINT32	</Type>
+      </lastArenaTypeID>
+      <lastArenaTeam>
+        <Type>	UINT16	</Type>
+      </lastArenaTeam>
     </Properties>
   </CLIENT_STATISTICS>
   <QUEUE_INFO>	PYTHON	</QUEUE_INFO>

@@ -28,19 +28,20 @@ class BCResearchItemsData(ResearchItemsData):
 
     def _addNode(self, nodeCD, node):
         state = node.getState()
-        if self.__overrideResearch:
-            if not NODE_STATE.inInventory(state):
-                state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.NOT_CLICKABLE)
-            if self.getRootCD() == self.__firstVehicleNode:
-                if self.__secondVehicleResearch:
-                    if nodeCD == self.__secondVehicleNode:
+        if not NODE_STATE.isAnnouncement(state):
+            if self.__overrideResearch:
+                if not NODE_STATE.inInventory(state):
+                    state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.NOT_CLICKABLE)
+                if self.getRootCD() == self.__firstVehicleNode:
+                    if self.__secondVehicleResearch:
+                        if nodeCD == self.__secondVehicleNode:
+                            return -1
+                    if not NODE_STATE.inInventory(state) and not NODE_STATE.isInstalled(state) and nodeCD != self.__moduleNodeCD and nodeCD != self.__secondVehicleNode:
                         return -1
-                if not NODE_STATE.inInventory(state) and not NODE_STATE.isInstalled(state) and nodeCD != self.__moduleNodeCD and nodeCD != self.__secondVehicleNode:
-                    return -1
-        item = self._items.getItemByCD(nodeCD)
-        if item.level in DISABLED_TANK_LEVELS and NODE_STATE.isAvailable2Buy(state):
-            state = NODE_STATE.add(state, NODE_STATE_FLAGS.PURCHASE_DISABLED)
-        node.setState(state)
+            item = self._items.getItemByCD(nodeCD)
+            if item.level in DISABLED_TANK_LEVELS and NODE_STATE.isAvailable2Buy(state):
+                state = NODE_STATE.add(state, NODE_STATE_FLAGS.PURCHASE_DISABLED)
+            node.setState(state)
         return super(BCResearchItemsData, self)._addNode(nodeCD, node)
 
     def _addTopNode(self, nodeCD, node):

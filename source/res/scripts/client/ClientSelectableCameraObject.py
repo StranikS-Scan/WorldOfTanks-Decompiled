@@ -150,7 +150,7 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         self.stopCallback(self.__update)
         self.enable(True)
         if newSelectedObject and newSelectedObject == g_hangarSpace.space.getVehicleEntity():
-            newSelectedObject.cameraUpcomingDuration = self.cameraUpcomingDuration * (self.__curTime if self.__curTime else 1.0)
+            newSelectedObject.cameraUpcomingDuration = self.cameraUpcomingDuration
 
     def setState(self, state):
         self.__state = state
@@ -210,7 +210,7 @@ class ClientSelectableCameraObject(ClientSelectableObject, CallbackDelayer, Time
         if not self.settingsCore.getSetting('dynamicFov'):
             return
         _, minFov, maxFov = self.settingsCore.getSetting('fov')
-        distConstr = g_hangarSpace.space.getCameraLocation()['camConstraints'][2][0]
+        distConstr = g_hangarSpace.space.getCameraLocation()['camConstraints'][2]
         relativeDist = (self.__goalDistance - distConstr[0]) / (distConstr[1] - distConstr[0])
         self.__startFov = BigWorld.projection().fov
         self.__goalFov = mathUtils.lerp(math.radians(minFov), math.radians(maxFov), relativeDist)

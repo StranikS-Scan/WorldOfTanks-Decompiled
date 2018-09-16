@@ -11,6 +11,8 @@ from shared_utils import first
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
 from gui.Scaleform.framework import ViewTypes
+from gui.shared.tooltips.formatters import packActionTooltipData
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 
 class CustomizationOptions(object):
     BUY = 'buy'
@@ -60,11 +62,20 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
                 break
 
         availableForPurchase = not item.isHidden and not item.getBuyPrice() == ITEM_PRICE_EMPTY
+        showAlert = len(sellPriceVO[0]) > 1
+        tooltipVO = None
+        if showAlert:
+            tooltipVO = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ITEM, str(item.intCD), False, item.sellPrices.getSum().price, item.sellPrices.getSum().defPrice)
+            price = sellPriceVO[0]['price']
+            sellPriceVO[0] = {}
+            sellPriceVO[0]['price'] = price
         return [self._makeItem(CustomizationOptions.BUY, MENU.cst_item_ctx_menu(CustomizationOptions.BUY), {'data': {'price': first(buyPriceVO)} if availableForPurchase else None,
           'enabled': availableForPurchase}, None, 'CurrencyContextMenuItem'),
          self._makeSeparator(),
          self._makeItem(CustomizationOptions.SELL, MENU.cst_item_ctx_menu(CustomizationOptions.SELL), {'data': {'price': first(sellPriceVO)} if availableForSale else None,
-          'enabled': availableForSale}, None, 'CurrencyContextMenuItem'),
+          'enabled': availableForSale,
+          'showAlert': showAlert,
+          'tooltipVO': tooltipVO}, None, 'CurrencyContextMenuItem'),
          self._makeSeparator(),
          self._makeItem(CustomizationOptions.REMOVE_FROM_TANK, MENU.cst_item_ctx_menu(CustomizationOptions.REMOVE_FROM_TANK), {'enabled': removeFromTankEnabled})]
 

@@ -75,6 +75,12 @@ class PrbInviteWrapper(_PrbInviteData):
         result.showAt = 0
         return result
 
+    def __eq__(self, other):
+        if isinstance(other, PrbInviteWrapper) and self.clientID == other.clientID and self.createTime == other.createTime and self.type == other.type and self.creatorDBID == other.creatorDBID and self.receiverDBID == other.receiverDBID and self.state == other.state and self.count == other.count and self.peripheryID == other.peripheryID and self.prebattleID == other.prebattleID:
+            if self.id == other.id:
+                return True
+        return False
+
     @property
     def senderFullName(self):
         fullName = self.lobbyContext.getPlayerFullName(self.creator, clanAbbrev=self.creatorClanAbbrev, pDBID=self.creatorDBID, regionCode=self.lobbyContext.getRegionCode(self.creatorDBID))

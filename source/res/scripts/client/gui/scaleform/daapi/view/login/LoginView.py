@@ -6,6 +6,7 @@ import weakref
 from collections import defaultdict, namedtuple
 import WWISE
 import BigWorld
+import Windowing
 import ResMgr
 import ScaleformFileLoader
 import Settings
@@ -69,6 +70,10 @@ class BackgroundMode(object):
         self.__switchButton = True
         self.__bufferTime = self.__userPrefs.readFloat(Settings.VIDEO_BUFFERING_TIME, DEFAULT_VIDEO_BUFFERING_TIME)
         self.__images = self.__getWallpapersList()
+        self.__isWindowActive = True
+        self.__isWindowInSizeMove = False
+        self.__inSwitchToMode = None
+        return
 
     def showWallpaper(self, showSwitchButton):
         self.__view.as_showWallpaperS(self.__show, self.__randomImage(), showSwitchButton, self.__isSoundMuted)
@@ -82,6 +87,9 @@ class BackgroundMode(object):
             self.__view.as_showLoginVideoS(_LOGIN_VIDEO_FILE, self.__bufferTime, self.__isSoundMuted)
         else:
             self.showWallpaper(self.__switchButton)
+        self.__isWindowActive = Windowing.isActive()
+        self.__isWindowInSizeMove = Windowing.isInSizeMove()
+        self.__applyWindowParams()
 
     def hide(self):
         WWISE.WW_eventGlobalSync(('loginscreen_music_stop_longfade', 'loginscreen_ambient_stop')[self.__bgMode])
@@ -93,6 +101,7 @@ class BackgroundMode(object):
 
     def fadeSound(self):
         WWISE.WW_eventGlobalSync(('loginscreen_music_pause', 'loginscreen_ambient_stop')[self.__bgMode])
+        self.__inSwitchToMode = _BG_MODE_VIDEO if self.__bgMode != _BG_MODE_VIDEO else _BG_MODE_WALLPAPER
 
     def switch(self):
         if self.__bgMode != _BG_MODE_VIDEO:
@@ -101,14 +110,38 @@ class BackgroundMode(object):
         else:
             self.__bgMode = _BG_MODE_WALLPAPER
             self.__view.as_showWallpaperS(self.__show, self.__randomImage(), self.__switchButton, self.__isSoundMuted)
+        self.__inSwitchToMode = None
         WWISE.WW_eventGlobalSync(('loginscreen_music_resume', 'loginscreen_ambient_start')[self.__bgMode])
         if self.__isSoundMuted:
             WWISE.WW_eventGlobalSync('loginscreen_mute')
+        self.__applyWindowParams()
+        return
 
     def startVideoSound(self):
         WWISE.WW_eventGlobalSync('loginscreen_music_start')
         if self.__isSoundMuted:
             WWISE.WW_eventGlobalSync('loginscreen_mute')
+        self.__applyWindowParams()
+
+    def onWindowSizeMove(self, isInSizeMove):
+        if self.__isWindowInSizeMove != isInSizeMove:
+            self.__isWindowInSizeMove = isInSizeMove
+            self.__applyWindowParams()
+
+    def onWindowActivation(self, isActive):
+        if self.__isWindowActive != isActive:
+            self.__isWindowActive = isActive
+            self.__applyWindowParams()
+
+    def __applyWindowParams(self):
+        if self.__inSwitchToMode == _BG_MODE_VIDEO or not self.__inSwitchToMode and self.__bgMode == _BG_MODE_VIDEO:
+            isActive = self.__isWindowActive and not self.__isWindowInSizeMove
+            if isActive:
+                self.__view.as_resumePlaybackS()
+                WWISE.WW_eventGlobalSync('loginscreen_music_resume')
+            else:
+                self.__view.as_pausePlaybackS()
+                WWISE.WW_eventGlobalSync('loginscreen_music_pause')
 
     def __loadFromPrefs(self):
         if self.__userPrefs.has_key(Settings.KEY_LOGINPAGE_PREFERENCES):
@@ -187,6 +220,7 @@ class LoginView(LoginPageMeta):
     def onLogin(self, userName, password, serverName, isSocialToken2Login):
         BigWorld.WGC_disable()
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.LOGIN, True)
+        self.statsCollector.needCollectSystemData(True)
         self._autoSearchVisited = serverName == AUTO_LOGIN_QUERY_URL
         self.__customLoginStatus = None
         result = self.__validateCredentials(userName.lower().strip(), password.strip(), bool(self.loginManager.getPreference('token2')))
@@ -225,6 +259,7 @@ class LoginView(LoginPageMeta):
         else:
             serverName = serverName['data']
             self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.LOGIN, True)
+            self.statsCollector.needCollectSystemData(True)
             self._autoSearchVisited = serverName == AUTO_LOGIN_QUERY_URL
             self.__customLoginStatus = None
             self.loginManager.initiateLogin('', '', serverName, False, False)
@@ -300,6 +335,8 @@ class LoginView(LoginPageMeta):
         g_playerEvents.onAccountShowGUI += self._clearLoginView
         g_playerEvents.onEntityCheckOutEnqueued += self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer += self._onAccountBecomeNonPlayer
+        Windowing.addWindowActivationHandler(self.__onWindowActivation)
+        Windowing.addWindowSizeMoveHandler(self.__onWindowSizeMove)
         self.as_setVersionS(getFullClientVersion())
         self.as_setCopyrightS(_ms(MENU.COPY), _ms(MENU.LEGAL))
         ScaleformFileLoader.enableStreaming([getPathForFlash(_LOGIN_VIDEO_FILE)])
@@ -322,6 +359,8 @@ class LoginView(LoginPageMeta):
         self.connectionMgr.onKickWhileLoginReceived -= self._onKickedWhileLogin
         self.connectionMgr.onQueued -= self._onHandleQueue
         self._servers.onServersStatusChanged -= self.__updateServersList
+        Windowing.removeWindowActivationHandler(self.__onWindowActivation)
+        Windowing.removeWindowSizeMoveHandler(self.__onWindowSizeMove)
         g_playerEvents.onAccountShowGUI -= self._clearLoginView
         g_playerEvents.onEntityCheckOutEnqueued -= self._onEntityCheckoutEnqueued
         g_playerEvents.onAccountBecomeNonPlayer -= self._onAccountBecomeNonPlayer
@@ -332,6 +371,12 @@ class LoginView(LoginPageMeta):
         self._entityEnqueueCancelCallback = None
         View._dispose(self)
         return
+
+    def __onWindowActivation(self, isActive):
+        self.__backgroundMode.onWindowActivation(isActive)
+
+    def __onWindowSizeMove(self, isInSizeMove):
+        self.__backgroundMode.onWindowSizeMove(isInSizeMove)
 
     def _showForm(self):
         self.as_showSimpleFormS(False, None)

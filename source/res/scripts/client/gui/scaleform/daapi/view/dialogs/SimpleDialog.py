@@ -16,11 +16,13 @@ class SimpleDialog(SimpleDialogMeta):
         self.__timerCallbackID = None
         self.__handler = handler
         self.__dialogScope = dialogScope
+        self.__isProcessed = False
         return
 
     def __callHandler(self, buttonID):
         if self.__handler is not None:
             self.__handler(buttonID == DIALOG_BUTTON_ID.SUBMIT)
+            self.__isProcessed = True
         return
 
     def getCurrentScope(self):
@@ -44,6 +46,8 @@ class SimpleDialog(SimpleDialogMeta):
         if self.__timerCallbackID is not None:
             BigWorld.cancelCallback(self.__timerCallbackID)
             self.__timerCallbackID = None
+        if not self.__isProcessed:
+            self.__callHandler(DIALOG_BUTTON_ID.CLOSE)
         self.__message = None
         self.__title = None
         self.__buttons = None

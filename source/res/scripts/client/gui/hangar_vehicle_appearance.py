@@ -21,7 +21,7 @@ from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from vehicle_systems import camouflages
 from vehicle_systems.components.vehicle_shadow_manager import VehicleShadowManager
-from vehicle_systems.tankStructure import TankPartNames, TankPartIndexes, ColliderTypes
+from vehicle_systems.tankStructure import TankPartNames, ColliderTypes
 from vehicle_systems.tankStructure import VehiclePartsTuple
 from svarog_script.py_component_system import ComponentDescriptor, ComponentSystem
 from vehicle_systems.stricted_loading import makeCallbackWeak
@@ -30,10 +30,8 @@ from hangar_camera_common import CameraMovementStates, CameraRelatedEvents
 from gui.shared import g_eventBus, EVENT_BUS_SCOPE
 from gui.ClientHangarSpace import hangarCFG
 _HANGAR_UNDERGUN_EMBLEM_ANGLE_SHIFT = math.pi / 4
-EmblemSlotHelper = namedtuple('EmblemSlotHelper', ['tankAreaSlot',
- 'tankAreaId',
- 'bspModel',
- 'worldMatrix'])
+EmblemSlotHelper = namedtuple('EmblemSlotHelper', ['tankAreaSlot', 'tankAreaId', 'worldMatrix'])
+EmblemPositionParams = namedtuple('EmblemPositionParams', ['position', 'direction', 'emblemDescription'])
 Anchor = namedtuple('Anchor', ['pos', 'normal'])
 
 class HangarVehicleAppearance(ComponentSystem):
@@ -83,6 +81,18 @@ class HangarVehicleAppearance(ComponentSystem):
         self.__onLoadedCallback = callback
         self.__isLoaded = False
         self.__startBuild(vDesc, vState)
+        return
+
+    def remove(self):
+        self.__isLoaded = False
+        self.__vDesc = None
+        self.__vState = None
+        self.__isVehicleDestroyed = False
+        self.__vEntity.model = None
+        if self.shadowManager:
+            self.shadowManager.updatePlayerTarget(None)
+        if self.collisions:
+            BigWorld.removeCameraCollider(self.collisions.getColliderID())
         return
 
     def refresh(self):
@@ -225,24 +235,24 @@ class HangarVehicleAppearance(ComponentSystem):
     def __assembleModel(self):
         from vehicle_systems import model_assembler
         resources = self.__resources
-        self.__model = resources[self.__vDesc.name]
+        self.__vEntity.model = resources[self.__vDesc.name]
         if not self.__isVehicleDestroyed:
             self.__fashions = VehiclePartsTuple(BigWorld.WGVehicleFashion(False), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion())
             model_assembler.setupTracksFashion(self.__fashions.chassis, self.__vDesc, self.__isVehicleDestroyed)
-            self.__model.setupFashions(self.__fashions)
+            self.__vEntity.model.setupFashions(self.__fashions)
             self.__initMaterialHandlers()
             chassisFashion = self.__fashions.chassis
-            model_assembler.setupSplineTracks(chassisFashion, self.__vDesc, self.__model, self.__resources)
-            self.wheelsAnimator = model_assembler.createWheelsAnimator(self.__model, self.__vDesc, None)
-            self.trackNodesAnimator = model_assembler.createTrackNodesAnimator(self.__model, self.__vDesc, self.wheelsAnimator)
+            model_assembler.setupSplineTracks(chassisFashion, self.__vDesc, self.__vEntity.model, self.__resources)
+            self.wheelsAnimator = model_assembler.createWheelsAnimator(self.__vEntity.model, self.__vDesc, None)
+            self.trackNodesAnimator = model_assembler.createTrackNodesAnimator(self.__vEntity.model, self.__vDesc, self.wheelsAnimator)
             outfit = self.__getActiveOutfit()
             self.updateCustomization(outfit)
             dirtEnabled = BigWorld.WG_dirtEnabled() and 'HD' in self.__vDesc.type.tags
             if dirtEnabled:
-                dirtHandlers = [BigWorld.PyDirtHandler(True, self.__model.node(TankPartNames.CHASSIS).position.y),
-                 BigWorld.PyDirtHandler(False, self.__model.node(TankPartNames.HULL).position.y),
-                 BigWorld.PyDirtHandler(False, self.__model.node(TankPartNames.TURRET).position.y),
-                 BigWorld.PyDirtHandler(False, self.__model.node(TankPartNames.GUN).position.y)]
+                dirtHandlers = [BigWorld.PyDirtHandler(True, self.__vEntity.model.node(TankPartNames.CHASSIS).position.y),
+                 BigWorld.PyDirtHandler(False, self.__vEntity.model.node(TankPartNames.HULL).position.y),
+                 BigWorld.PyDirtHandler(False, self.__vEntity.model.node(TankPartNames.TURRET).position.y),
+                 BigWorld.PyDirtHandler(False, self.__vEntity.model.node(TankPartNames.GUN).position.y)]
                 modelHeight, _ = self.computeVehicleHeight()
                 self.dirtComponent = Vehicular.DirtComponent(dirtHandlers, modelHeight)
                 for fashionIdx, _ in enumerate(TankPartNames.ALL):
@@ -251,7 +261,7 @@ class HangarVehicleAppearance(ComponentSystem):
                 self.dirtComponent.setBase()
         else:
             self.__fashions = VehiclePartsTuple(BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion(), BigWorld.WGBaseFashion())
-            self.__model.setupFashions(self.__fashions)
+            self.__vEntity.model.setupFashions(self.__fashions)
             self.wheelsAnimator = None
             self.trackNodesAnimator = None
             self.dirtComponent = None
@@ -274,10 +284,10 @@ class HangarVehicleAppearance(ComponentSystem):
             if gunPitch is None:
                 gunPitch = 0.0
         turretYawMatrix = mathUtils.createRotationMatrix((turretYaw, 0.0, 0.0))
-        self.__model.node(TankPartNames.TURRET, turretYawMatrix)
+        self.__vEntity.model.node(TankPartNames.TURRET, turretYawMatrix)
         gunPitchMatrix = mathUtils.createRotationMatrix((0.0, gunPitch, 0.0))
-        self.__model.node(TankPartNames.GUN, gunPitchMatrix)
-        return self.__model
+        self.__vEntity.model.node(TankPartNames.GUN, gunPitchMatrix)
+        return
 
     def __onItemsCacheSyncCompleted(self, updateReason, _):
         if updateReason == CACHE_SYNC_REASON.DOSSIER_RESYNC and self.__vehicleStickers is not None and self.__getThisVehicleDossierInsigniaRank() != self.__vehicleStickers.getCurrentInsigniaRank():
@@ -296,7 +306,7 @@ class HangarVehicleAppearance(ComponentSystem):
             insigniaRank = self.__getThisVehicleDossierInsigniaRank()
         self.__vehicleStickers = VehicleStickers.VehicleStickers(self.__vDesc, insigniaRank, outfit)
         self.__vehicleStickers.alpha = self.__currentEmblemsAlpha
-        self.__vehicleStickers.attach(self.__model, self.__isVehicleDestroyed, False)
+        self.__vehicleStickers.attach(self.__vEntity.model, self.__isVehicleDestroyed, False)
         BigWorld.player().stats.get('clanDBID', self.__onClanDBIDRetrieved)
         return
 
@@ -304,23 +314,23 @@ class HangarVehicleAppearance(ComponentSystem):
         self.__vehicleStickers.setClanID(clanID)
 
     def __setupModel(self, buildIdx):
-        model = self.__assembleModel()
+        self.__assembleModel()
         cfg = hangarCFG()
         matrix = mathUtils.createSRTMatrix(Math.Vector3(cfg['v_scale'], cfg['v_scale'], cfg['v_scale']), Math.Vector3(self.__vEntity.yaw, self.__vEntity.pitch, self.__vEntity.roll), self.__vEntity.position)
-        model.matrix = matrix
-        self.__doFinalSetup(buildIdx, model)
+        self.__vEntity.model.matrix = matrix
+        self.__doFinalSetup(buildIdx)
         self.__vEntity.typeDescriptor = self.__vDesc
         gunColBox = self.collisions.getBoundingBox(TankPartNames.getIdx(TankPartNames.GUN) + 3)
         center = 0.5 * (gunColBox[1] - gunColBox[0])
         gunoffset = Math.Matrix()
         gunoffset.setTranslate((0.0, 0.0, center.z + gunColBox[0].z))
-        gunLink = mathUtils.MatrixProviders.product(gunoffset, model.node(TankPartNames.GUN))
-        collisionData = ((TankPartNames.getIdx(TankPartNames.CHASSIS), model.matrix),
-         (TankPartNames.getIdx(TankPartNames.HULL), model.node(TankPartNames.HULL)),
-         (TankPartNames.getIdx(TankPartNames.TURRET), model.node(TankPartNames.TURRET)),
-         (TankPartNames.getIdx(TankPartNames.GUN), model.node(TankPartNames.GUN)))
+        gunLink = mathUtils.MatrixProviders.product(gunoffset, self.__vEntity.model.node(TankPartNames.GUN))
+        collisionData = ((TankPartNames.getIdx(TankPartNames.CHASSIS), self.__vEntity.model.matrix),
+         (TankPartNames.getIdx(TankPartNames.HULL), self.__vEntity.model.node(TankPartNames.HULL)),
+         (TankPartNames.getIdx(TankPartNames.TURRET), self.__vEntity.model.node(TankPartNames.TURRET)),
+         (TankPartNames.getIdx(TankPartNames.GUN), self.__vEntity.model.node(TankPartNames.GUN)))
         self.collisions.connect(self.__vEntity.id, ColliderTypes.VEHICLE_COLLIDER, collisionData)
-        collisionData = ((TankPartNames.getIdx(TankPartNames.GUN) + 1, model.node(TankPartNames.HULL)), (TankPartNames.getIdx(TankPartNames.GUN) + 2, model.node(TankPartNames.TURRET)), (TankPartNames.getIdx(TankPartNames.GUN) + 3, gunLink))
+        collisionData = ((TankPartNames.getIdx(TankPartNames.GUN) + 1, self.__vEntity.model.node(TankPartNames.HULL)), (TankPartNames.getIdx(TankPartNames.GUN) + 2, self.__vEntity.model.node(TankPartNames.TURRET)), (TankPartNames.getIdx(TankPartNames.GUN) + 3, gunLink))
         self.collisions.connect(self.__vEntity.id, ColliderTypes.HANGAR_VEHICLE_COLLIDER, collisionData)
         self.__reloadColliderType(self.__vEntity.state)
         self.__reloadShadowManagerTarget(self.__vEntity.state)
@@ -341,66 +351,63 @@ class HangarVehicleAppearance(ComponentSystem):
             BigWorld.removeCameraCollider(self.collisions.getColliderID())
 
     def __reloadShadowManagerTarget(self, state):
-        if not self.shadowManager or not self.__model:
+        if not self.shadowManager or not self.__vEntity.model:
             return
         else:
             if state == CameraMovementStates.ON_OBJECT:
-                self.shadowManager.updatePlayerTarget(self.__model)
+                self.shadowManager.updatePlayerTarget(self.__vEntity.model)
             elif state == CameraMovementStates.MOVING_TO_OBJECT:
                 self.shadowManager.updatePlayerTarget(None)
             return
 
-    def __doFinalSetup(self, buildIdx, model):
+    def __doFinalSetup(self, buildIdx):
         if buildIdx != self.__curBuildInd:
             return
         else:
-            self.__vEntity.model = model
             self.__isLoaded = True
-            self.__vEntity.canDoHitTest(True)
             if self.__onLoadedCallback is not None:
                 self.__onLoadedCallback()
                 self.__onLoadedCallback = None
             if self.__vDesc is not None and 'observer' in self.__vDesc.type.tags:
-                model.visible = False
+                self.__vEntity.model.visible = False
             return
 
     def getSlotPositions(self):
         slots = {area:{GUI_ITEM_TYPE.INSCRIPTION: [],
          GUI_ITEM_TYPE.EMBLEM: []} for area in Area.ALL}
-        hullEmblemSlots = EmblemSlotHelper(self.__vDesc.hull.emblemSlots, Area.HULL, self.__vDesc.hull.models.undamaged, Math.Matrix(self.__model.node(TankPartNames.HULL)))
+        hullEmblemSlots = EmblemSlotHelper(self.__vDesc.hull.emblemSlots, Area.HULL, Math.Matrix(self.__vEntity.model.node(TankPartNames.HULL)))
         if self.__vDesc.turret.showEmblemsOnGun:
-            turretEmblemSlots = EmblemSlotHelper(self.__vDesc.turret.emblemSlots, Area.GUN, self.__vDesc.gun.models.undamaged, Math.Matrix(self.__model.node(TankPartNames.GUN)))
+            turretEmblemSlots = EmblemSlotHelper(self.__vDesc.turret.emblemSlots, Area.GUN, Math.Matrix(self.__vEntity.model.node(TankPartNames.GUN)))
         else:
-            turretEmblemSlots = EmblemSlotHelper(self.__vDesc.turret.emblemSlots, Area.TURRET, self.__vDesc.turret.models.undamaged, Math.Matrix(self.__model.node(TankPartNames.TURRET)))
+            turretEmblemSlots = EmblemSlotHelper(self.__vDesc.turret.emblemSlots, Area.TURRET, Math.Matrix(self.__vEntity.model.node(TankPartNames.TURRET)))
         for emblemSlotHelper in (hullEmblemSlots, turretEmblemSlots):
             for emblemSlot in emblemSlotHelper.tankAreaSlot:
                 startPos = emblemSlot.rayStart
                 endPos = emblemSlot.rayEnd
-                direction = endPos - startPos
-                direction.normalise()
-                hitResults = self.__model.collide(emblemSlotHelper.tankAreaId, startPos, endPos)
-                normal = emblemSlotHelper.worldMatrix.applyVector(hitResults[1])
-                hitPos = emblemSlotHelper.worldMatrix.applyPoint(startPos)
+                normal = startPos - endPos
+                normal.normalise()
+                worldEmblemNormal = emblemSlotHelper.worldMatrix.applyVector(normal)
+                sub = endPos - startPos
+                half = sub / 2.0
+                midPos = startPos + half
+                worldEmblemPos = emblemSlotHelper.worldMatrix.applyPoint(midPos)
                 container = slots[emblemSlotHelper.tankAreaId]
                 if emblemSlot.type == 'inscription':
-                    container[GUI_ITEM_TYPE.INSCRIPTION].append(Anchor(hitPos, normal))
+                    container[GUI_ITEM_TYPE.INSCRIPTION].append(Anchor(worldEmblemPos, worldEmblemNormal))
                 if emblemSlot.type == 'player':
-                    container[GUI_ITEM_TYPE.EMBLEM].append(Anchor(hitPos, normal))
+                    container[GUI_ITEM_TYPE.EMBLEM].append(Anchor(worldEmblemPos, worldEmblemNormal))
 
         return slots
 
     def getEmblemPos(self, onHull, emblemType, emblemIdx):
         if onHull:
-            hitPartIndex = TankPartIndexes.HULL
             emblemsDesc = self.__vDesc.hull.emblemSlots
-            worldMat = Math.Matrix(self.__model.node(TankPartNames.HULL))
+            worldMat = Math.Matrix(self.__vEntity.model.node(TankPartNames.HULL))
         else:
             if self.__vDesc.turret.showEmblemsOnGun:
-                node = self.__model.node(TankPartNames.GUN)
-                hitPartIndex = TankPartIndexes.GUN
+                node = self.__vEntity.model.node(TankPartNames.GUN)
             else:
-                node = self.__model.node(TankPartNames.TURRET)
-                hitPartIndex = TankPartIndexes.TURRET
+                node = self.__vEntity.model.node(TankPartNames.TURRET)
             emblemsDesc = self.__vDesc.turret.emblemSlots
             worldMat = Math.Matrix(node)
         desiredEmblems = [ emblem for emblem in emblemsDesc if emblem.type == emblemType ]
@@ -408,50 +415,45 @@ class HangarVehicleAppearance(ComponentSystem):
             return None
         else:
             emblem = desiredEmblems[emblemIdx]
-            dir = emblem[1] - emblem[0]
-            dir.normalise()
-            startPos = emblem[0] - dir * 5
-            endPos = emblem[1] + dir * 5
-            collideRes = self.__model.collide(hitPartIndex, startPos, endPos)
-            distanceFromStart, normal = collideRes[0], collideRes[1]
-            if distanceFromStart > -1:
-                hitPos = startPos + dir * distanceFromStart
-                hitPos = worldMat.applyPoint(hitPos)
-                dir = -worldMat.applyVector(normal)
-                dir.normalise()
-                upVecWorld = worldMat.applyVector(emblem[2])
-                upVecWorld.normalise()
-                if abs(dir.pitch - math.pi / 2) < 0.1:
-                    dir = Math.Vector3(0, -1, 0) + upVecWorld * 0.01
-                    dir.normalise()
-                dir = self.__correctEmblemLookAgainstGun(hitPos, dir, upVecWorld, emblem)
-                return (hitPos, dir, emblem)
-            return None
-            return None
+            direction = emblem[1] - emblem[0]
+            direction.normalise()
+            startPos = emblem[0]
+            endPos = emblem[1]
+            sub = endPos - startPos
+            half = sub / 2.0
+            hitPos = startPos + half
+            hitPos = worldMat.applyPoint(hitPos)
+            upVecWorld = worldMat.applyVector(emblem[2])
+            upVecWorld.normalise()
+            if abs(direction.pitch - math.pi / 2) < 0.1:
+                direction = Math.Vector3(0, -1, 0) + upVecWorld * 0.01
+                direction.normalise()
+            direction = self.__correctEmblemLookAgainstGun(hitPos, direction, upVecWorld, emblem)
+            return EmblemPositionParams(hitPos, direction, emblem)
 
     def getCentralPointForArea(self, areaIdx):
 
         def _getBBCenter(tankPartName):
             partIdx = TankPartNames.getIdx(tankPartName)
-            boundingBox = Math.Matrix(self.__model.getBoundsForPart(partIdx))
+            boundingBox = Math.Matrix(self.__vEntity.model.getBoundsForPart(partIdx))
             bbCenter = boundingBox.applyPoint((0.5, 0.5, 0.5))
             return bbCenter
 
         if areaIdx == ApplyArea.HULL:
-            trackLeftUpFront = self.__model.node('HP_TrackUp_LFront').position
-            trackRightUpRear = self.__model.node('HP_TrackUp_RRear').position
+            trackLeftUpFront = self.__vEntity.model.node('HP_TrackUp_LFront').position
+            trackRightUpRear = self.__vEntity.model.node('HP_TrackUp_RRear').position
             position = (trackLeftUpFront + trackRightUpRear) / 2.0
             bbCenter = _getBBCenter(TankPartNames.HULL)
-            turretJointPosition = self.__model.node('HP_turretJoint').position
+            turretJointPosition = self.__vEntity.model.node('HP_turretJoint').position
             position.y = min(turretJointPosition.y, bbCenter.y)
         elif areaIdx == ApplyArea.TURRET:
             position = _getBBCenter(TankPartNames.TURRET)
-            position.y = self.__model.node('HP_gunJoint').position.y
+            position.y = self.__vEntity.model.node('HP_gunJoint').position.y
         elif areaIdx == ApplyArea.GUN_2:
-            position = self.__model.node('HP_gunJoint').position
+            position = self.__vEntity.model.node('HP_gunJoint').position
         elif areaIdx == ApplyArea.GUN:
-            gunJointPos = self.__model.node('HP_gunJoint').position
-            gunFirePos = self.__model.node('HP_gunFire').position
+            gunJointPos = self.__vEntity.model.node('HP_gunJoint').position
+            gunFirePos = self.__vEntity.model.node('HP_gunFire').position
             position = (gunFirePos + gunJointPos) / 2.0
         else:
             position = _getBBCenter(TankPartNames.CHASSIS)
@@ -480,7 +482,7 @@ class HangarVehicleAppearance(ComponentSystem):
             return dir
         dirRot = Math.Matrix()
         angle = _HANGAR_UNDERGUN_EMBLEM_ANGLE_SHIFT
-        turretMat = Math.Matrix(self.__model.node(TankPartNames.TURRET))
+        turretMat = Math.Matrix(self.__vEntity.model.node(TankPartNames.TURRET))
         fromTurretToHit = hitPos - turretMat.translation
         gunDir = turretMat.applyVector(Math.Vector3(0, 0, 1))
         if Math.Vector3(0, 1, 0).dot(gunDir * fromTurretToHit) < 0:

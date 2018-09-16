@@ -11,28 +11,33 @@ from gui.Scaleform.genConsts.EVENTBOARDS_ALIASES import EVENTBOARDS_ALIASES
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.EVENT_BOARDS import EVENT_BOARDS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.event_boards.event_boards_items import CALCULATION_METHODS as _cm, OBJECTIVE_PARAMETERS as _op, EVENT_TYPE as _et
+from gui.event_boards.event_boards_items import CALCULATION_METHODS as _cm, OBJECTIVE_PARAMETERS as _op, EVENT_TYPE as _et, WOODEN_RIBBON
 from skeletons.gui.shared import IItemsCache
 _PARAMETER_VALUE_GETTER = {_op.ORIGINALXP: 'getExp',
  _op.XP: 'getExp',
  _op.DAMAGEDEALT: 'getDamage',
- _op.DAMAGEASSISTED: 'getAssistedDamage'}
+ _op.DAMAGEASSISTED: 'getAssistedDamage',
+ _op.WINS: 'getWinRate'}
 _AVERAGE_ICON_BY_PARAMETER = {_op.ORIGINALXP: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_EXP_POPUP,
  _op.XP: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_EXP_POPUP,
  _op.DAMAGEDEALT: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_DAMAGE_POPUP,
- _op.DAMAGEASSISTED: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_ASSIST_POPUP}
+ _op.DAMAGEASSISTED: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_ASSIST_POPUP,
+ _op.WINS: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_WIN_POPUP}
 _MAX_ICON_BY_PARAMETER = {_op.ORIGINALXP: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_EXP_MAX_POPUP,
  _op.XP: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_EXP_MAX_POPUP,
  _op.DAMAGEDEALT: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_DAMAG_MAX_POPUP,
- _op.DAMAGEASSISTED: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_ASSIST_MAX_POPUP}
+ _op.DAMAGEASSISTED: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_ASSIST_MAX_POPUP,
+ _op.WINS: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_WIN_POPUP}
 _SUM_ICON_BY_PARAMETER = {_op.ORIGINALXP: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_EXP_SUM_POPUP,
  _op.XP: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_EXP_SUM_POPUP,
  _op.DAMAGEDEALT: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_DAMAG_SUM_POPUP,
- _op.DAMAGEASSISTED: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_ASSIST_POPUP}
+ _op.DAMAGEASSISTED: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_ASSIST_POPUP,
+ _op.WINS: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_WIN_POPUP}
 _ICON_BY_PARAMETER = {_op.ORIGINALXP: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_EXP2_POPUP,
  _op.XP: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_EXP2_POPUP,
  _op.DAMAGEDEALT: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_DAMAG2_POPUP,
- _op.DAMAGEASSISTED: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_ASSIST2_POPUP}
+ _op.DAMAGEASSISTED: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_ASSIST2_POPUP,
+ _op.WINS: RES_ICONS.MAPS_ICONS_EVENTBOARDS_POPUPICONS_WIN2_POPUP}
 ICON_ALPHA_USED_IN_CALCULATION = 1.0
 ICON_ALPHA_NOT_USED_IN_CALCULATION = 0.2
 
@@ -72,20 +77,18 @@ class _Summary(object):
 
     def getExperienceBlock(self):
         event = self._event
-        infos = self._excelItem.getInfo()
         eventType = self._event.getType()
         method = event.getMethod()
         op = event.getObjectiveParameter()
         opName = EVENT_BOARDS.summary_param_all(method, op)
-        infos = infos if type(infos) is list else [infos]
-        opValue = sum((_getParameterValue(op, info) for info in infos))
+        opValue = self._excelItem.getP1()
         rank = self._excelItem.getRank()
         battles = self._excelItem.getP3()
         battleIcon = self._iconByType[op]
-        groupPos = self.__getGroupPos()
+        groupPos = self.__getRibbon()
         positionTooltip = makeTooltip(TOOLTIPS.elen_summary_rank(groupPos) if groupPos else TOOLTIPS.ELEN_SUMMARY_RANK_NORANK)
         battleTooltip = makeTooltip(TOOLTIPS.ELEN_SUMMARY_BATTLES_HEADER, TOOLTIPS.elen_summary_battles_all_body(eventType))
-        experienceTooltip = makeTooltip(TOOLTIPS.elen_summary_objparam_all_all_header(method, op), TOOLTIPS.elen_summary_objparam_all_all_body(method, op))
+        experienceTooltip = makeTooltip(TOOLTIPS.elen_excel_objparam_all_all_header(method, op), TOOLTIPS.elen_excel_objparam_all_all_body(method, op))
         return {'experienceValue': str(opValue),
          'experience': opName,
          'position': _ms(EVENT_BOARDS.SUMMARY_POSITION, position=str(rank)),
@@ -134,9 +137,11 @@ class _Summary(object):
     def _getTableHeaderData(self):
         return {}
 
-    def __getGroupPos(self):
-        reward = self._event.getRewardsByRank().getRewardByRank(self._leaderboardId)
-        return reward.getRewardCategoryNumber(self._excelItem.getRank())
+    def __getRibbon(self):
+        rank = self._excelItem.getRank()
+        rewards = self._event.getRewardsByRank().getRewardByRank(self._leaderboardId)
+        ribbon = rewards.getRewardCategoryNumber(rank)
+        return WOODEN_RIBBON if ribbon is None and rank <= self._event.getLeaderboardViewSize() else ribbon
 
     def _getStatusTooltip(self):
         leaderboard = self._leaderboard
@@ -224,7 +229,8 @@ class _SummaryTable(_Summary):
     _TableIconByParameter = {_op.ORIGINALXP: RES_ICONS.MAPS_ICONS_EVENTBOARDS_TABLEICONS_EXP2,
      _op.XP: RES_ICONS.MAPS_ICONS_EVENTBOARDS_TABLEICONS_EXP2,
      _op.DAMAGEDEALT: RES_ICONS.MAPS_ICONS_EVENTBOARDS_TABLEICONS_DAMAG2,
-     _op.DAMAGEASSISTED: RES_ICONS.MAPS_ICONS_EVENTBOARDS_TABLEICONS_ASSIST2}
+     _op.DAMAGEASSISTED: RES_ICONS.MAPS_ICONS_EVENTBOARDS_TABLEICONS_ASSIST2,
+     _op.WINS: RES_ICONS.MAPS_ICONS_EVENTBOARDS_TABLEICONS_WIN2}
 
     def isTable(self):
         return True

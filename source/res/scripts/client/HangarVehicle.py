@@ -9,13 +9,13 @@ from gui.shared.utils.HangarSpace import g_hangarSpace
 class HangarVehicle(ClientSelectableCameraVehicle):
     _SOUND_STATE_MAIN_TANK = '_main'
     _SOUND_START_MOVING_TO_MAIN = 'hangar_premium_2018_camera_fly_backward'
-    _SOUND_GROUP_HANGAR_TANK_VIEW = 'STATE_hangar_tank_view'
 
     def __init__(self):
         self.selectionId = ''
         self.clickSoundName = ''
         self.releaseSoundName = ''
         self.mouseOverSoundName = ''
+        self.edgeMode = 2
         self.modelName = ''
         self.cameraShift = Math.Vector3(0.0, 0.0, 0.0)
         self.cameraPivot = Math.Vector3(0.0, 0.0, 0.0)

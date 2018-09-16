@@ -66,6 +66,10 @@ def getNationBigFlagIcon(nation, forVehicle):
         return None
 
 
+def getLevelBackgroundIcon():
+    return RES_ICONS.MAPS_ICONS_EVENTBOARDS_BACKGROUNDS_LEVEL_TYPE_BACKGROUND
+
+
 def getNationText(nation):
     return _ms(NATIONS.all(nation))
 

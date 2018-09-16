@@ -155,7 +155,6 @@ class ConnectionManager(IConnectionManager):
         return
 
     def __setConnectionData(self, params, password):
-        self.__lastLoginName = params['login']
         self.__connectionMethod = params['auth_method']
         params['auth_realm'] = constants.AUTH_REALM
         m = hashlib.md5()
@@ -270,3 +269,6 @@ class ConnectionManager(IConnectionManager):
             LOG_DEBUG('Version mismatch. Client is "%s", server needs "%s".' % (clientVersion, serverVersion))
             self.onRejected(LOGIN_STATUS.LOGIN_BAD_PROTOCOL_VERSION, {})
             BigWorld.disconnect()
+
+    def setLastLogin(self, email):
+        self.__lastLoginName = email

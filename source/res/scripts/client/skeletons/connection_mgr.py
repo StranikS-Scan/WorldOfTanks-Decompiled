@@ -66,3 +66,6 @@ class IConnectionManager(object):
 
     def checkClientServerVersions(self, clientVersion, serverVersion):
         raise NotImplementedError
+
+    def setLastLogin(self, email):
+        raise NotImplementedError

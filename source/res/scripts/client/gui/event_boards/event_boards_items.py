@@ -74,6 +74,7 @@ class EVENT_DATE_TYPE(CONST_CONTAINER):
 
 
 EVENTS_TYPES = EVENT_TYPE.ALL()
+WOODEN_RIBBON = 5
 
 class EventBoardsSettings(object):
 

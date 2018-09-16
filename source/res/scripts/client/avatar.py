@@ -1610,9 +1610,8 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
     def leaveArena(self):
         LOG_DEBUG('Avatar.leaveArena')
         from helpers import statistics
+        self.statsCollector.noteLastArenaData(self.arenaTypeID, self.arenaUniqueID, self.team)
         self.statsCollector.noteHangarLoadingState(statistics.HANGAR_LOADING_STATE.CONNECTED, True)
-        stats = self.statsCollector.getStatistics()
-        LOG_DEBUG(stats)
         try:
             if self.__projectileMover is not None:
                 self.__projectileMover.destroy()
@@ -1624,7 +1623,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         g_playerEvents.isPlayerEntityChanging = True
         g_playerEvents.onPlayerEntityChanging()
         self.__setIsOnArena(False)
-        self.base.leaveArena(stats if self.lobbyContext.collectUiStats and stats else None)
+        self.base.leaveArena(None)
         replayCtrl = BattleReplay.g_replayCtrl
         if replayCtrl.isPlaying:
             BigWorld.callback(0.0, replayCtrl.stop)

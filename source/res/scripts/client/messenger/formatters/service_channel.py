@@ -73,12 +73,14 @@ def _extendCustomizationData(newData, extendable):
         for customizationItem in customizations:
             custType = customizationItem['custType']
             custValue = customizationItem['value']
-            custIsPermanent = customizationItem['isPermanent']
-            if custValue < 0:
-                extendable.append(i18n.makeString('#system_messages:customization/removed/%s' % custType))
-            if custIsPermanent and custValue > 1:
-                extendable.append(i18n.makeString('#system_messages:customization/added/%sValue' % custType, custValue))
-            extendable.append(i18n.makeString('#system_messages:customization/added/%s' % custType))
+            if custValue > 0:
+                operation = 'added'
+            else:
+                operation = 'removed'
+            custValue = abs(custValue)
+            if custValue > 1:
+                extendable.append(i18n.makeString('#system_messages:customization/{}/{}Value'.format(operation, custType), custValue))
+            extendable.append(i18n.makeString('#system_messages:customization/{}/{}'.format(operation, custType)))
 
         return
 

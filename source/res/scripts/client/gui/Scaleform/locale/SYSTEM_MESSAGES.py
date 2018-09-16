@@ -207,16 +207,21 @@ class SYSTEM_MESSAGES(object):
     CUSTOMIZATION_ADDED_MODIFICATION = '#system_messages:customization/added/modification'
     CUSTOMIZATION_ADDED_STYLE = '#system_messages:customization/added/style'
     CUSTOMIZATION_ADDED_DECAL = '#system_messages:customization/added/decal'
-    CUSTOMIZATION_REMOVED_PAINT = '#system_messages:customization/removed/paint'
-    CUSTOMIZATION_REMOVED_CAMOUFLAGE = '#system_messages:customization/removed/camouflage'
-    CUSTOMIZATION_REMOVED_MODIFICATION = '#system_messages:customization/removed/modification'
-    CUSTOMIZATION_REMOVED_STYLE = '#system_messages:customization/removed/style'
-    CUSTOMIZATION_REMOVED_DECAL = '#system_messages:customization/removed/decal'
     CUSTOMIZATION_ADDED_PAINTVALUE = '#system_messages:customization/added/paintValue'
     CUSTOMIZATION_ADDED_CAMOUFLAGEVALUE = '#system_messages:customization/added/camouflageValue'
     CUSTOMIZATION_ADDED_MODIFICATIONVALUE = '#system_messages:customization/added/modificationValue'
     CUSTOMIZATION_ADDED_STYLEVALUE = '#system_messages:customization/added/styleValue'
     CUSTOMIZATION_ADDED_DECALVALUE = '#system_messages:customization/added/decalValue'
+    CUSTOMIZATION_REMOVED_PAINT = '#system_messages:customization/removed/paint'
+    CUSTOMIZATION_REMOVED_CAMOUFLAGE = '#system_messages:customization/removed/camouflage'
+    CUSTOMIZATION_REMOVED_MODIFICATION = '#system_messages:customization/removed/modification'
+    CUSTOMIZATION_REMOVED_STYLE = '#system_messages:customization/removed/style'
+    CUSTOMIZATION_REMOVED_DECAL = '#system_messages:customization/removed/decal'
+    CUSTOMIZATION_REMOVED_PAINTVALUE = '#system_messages:customization/removed/paintValue'
+    CUSTOMIZATION_REMOVED_CAMOUFLAGEVALUE = '#system_messages:customization/removed/camouflageValue'
+    CUSTOMIZATION_REMOVED_MODIFICATIONVALUE = '#system_messages:customization/removed/modificationValue'
+    CUSTOMIZATION_REMOVED_STYLEVALUE = '#system_messages:customization/removed/styleValue'
+    CUSTOMIZATION_REMOVED_DECALVALUE = '#system_messages:customization/removed/decalValue'
     BONUSES_BOOSTER_VALUE = '#system_messages:bonuses/booster/value'
     CHECKOUT_ERROR = '#system_messages:checkout_error'
     ANOTHER_PERIPHERY = '#system_messages:another_periphery'
@@ -1297,16 +1302,21 @@ class SYSTEM_MESSAGES(object):
      CUSTOMIZATION_ADDED_MODIFICATION,
      CUSTOMIZATION_ADDED_STYLE,
      CUSTOMIZATION_ADDED_DECAL,
-     CUSTOMIZATION_REMOVED_PAINT,
-     CUSTOMIZATION_REMOVED_CAMOUFLAGE,
-     CUSTOMIZATION_REMOVED_MODIFICATION,
-     CUSTOMIZATION_REMOVED_STYLE,
-     CUSTOMIZATION_REMOVED_DECAL,
      CUSTOMIZATION_ADDED_PAINTVALUE,
      CUSTOMIZATION_ADDED_CAMOUFLAGEVALUE,
      CUSTOMIZATION_ADDED_MODIFICATIONVALUE,
      CUSTOMIZATION_ADDED_STYLEVALUE,
      CUSTOMIZATION_ADDED_DECALVALUE,
+     CUSTOMIZATION_REMOVED_PAINT,
+     CUSTOMIZATION_REMOVED_CAMOUFLAGE,
+     CUSTOMIZATION_REMOVED_MODIFICATION,
+     CUSTOMIZATION_REMOVED_STYLE,
+     CUSTOMIZATION_REMOVED_DECAL,
+     CUSTOMIZATION_REMOVED_PAINTVALUE,
+     CUSTOMIZATION_REMOVED_CAMOUFLAGEVALUE,
+     CUSTOMIZATION_REMOVED_MODIFICATIONVALUE,
+     CUSTOMIZATION_REMOVED_STYLEVALUE,
+     CUSTOMIZATION_REMOVED_DECALVALUE,
      BONUSES_BOOSTER_VALUE,
      CHECKOUT_ERROR,
      ANOTHER_PERIPHERY,

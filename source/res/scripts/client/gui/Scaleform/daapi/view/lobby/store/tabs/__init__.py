@@ -3,8 +3,8 @@
 import constants
 from gui import makeHtmlString
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.formatters import resolveStateTooltip
-from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
 from gui.prb_control.settings import VEHICLE_LEVELS
@@ -12,6 +12,7 @@ from gui.shared.formatters import text_styles, icons
 from gui.shared.formatters.time_formatters import RentLeftFormatter, getTimeLeftInfo
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import VEHICLE_TYPES_ORDER
+from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICES_EMPTY
 from gui.shared.money import MONEY_UNDEFINED, Currency, Money
 from gui.shared.utils import EXTRA_MODULE_INFO
@@ -21,7 +22,6 @@ from helpers.i18n import makeString
 from items import ITEM_TYPE_INDICES
 from skeletons.gui.game_control import IVehicleComparisonBasket
 from skeletons.gui.shared import IItemsCache
-from gui.shared.gui_items.Vehicle import Vehicle
 
 def _getBtnVehCompareData(vehicle):
     comparisonBasket = dependency.instance(IVehicleComparisonBasket)
@@ -80,6 +80,7 @@ class StoreItemsTab(object):
         shop = self._items.shop
         prices = self._getItemPrices(item)
         actionPrcs = self._getActionAllPercents(item)
+        areCreditAndGoldDiscountsEqual = actionPrcs.get(Currency.CREDITS) == actionPrcs.get(Currency.GOLD)
         return {'id': str(item.intCD),
          'name': self._getItemName(item),
          'desc': item.getShortInfo(),
@@ -107,7 +108,7 @@ class StoreItemsTab(object):
          EXTRA_MODULE_INFO: extraModuleInfo,
          'vehCompareData': _getBtnVehCompareData(item) if item.itemTypeID == GUI_ITEM_TYPE.VEHICLE else {},
          'highlightType': self._getItemHighlightType(item),
-         'showActionGoldAndCredits': actionPrcs.isDefined(),
+         'showActionGoldAndCredits': actionPrcs.isDefined() and not areCreditAndGoldDiscountsEqual,
          'actionPercent': [ '-{}'.format(actionPrcs.get(currency, 0)) for currency in Currency.ALL ],
          'notForSaleText': '' if item.isForSale else MENU.SHOP_TABLE_NOTFORSALE}
 

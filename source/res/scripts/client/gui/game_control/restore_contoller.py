@@ -6,7 +6,6 @@ from operator import itemgetter
 import BigWorld
 import Event
 from account_helpers.AccountSettings import AccountSettings, LAST_RESTORE_NOTIFICATION
-from debug_utils import LOG_DEBUG
 from gui import SystemMessages
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import MONEY_UNDEFINED
@@ -50,7 +49,6 @@ class RestoreController(IRestoreController, Notifiable):
         self.__waitNextUpdate = False
         self.onRestoreChangeNotify = Event.Event(self.__eventManager)
         self.onTankmenBufferUpdated = Event.Event(self.__eventManager)
-        LOG_DEBUG('PATCH FOR WOTD-91767 IS APPLIED')
         return
 
     def init(self):

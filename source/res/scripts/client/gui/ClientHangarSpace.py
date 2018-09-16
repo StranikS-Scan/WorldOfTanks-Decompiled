@@ -24,55 +24,59 @@ _SERVER_CMD_CHANGE_HANGAR_PREM = 'cmd_change_hangar_prem'
 
 def _getDefaultHangarPath(isPremium):
     if isPremium:
-        template = '%s/hangar_premium_v2'
+        template = '%s/hangar_v3'
     else:
-        template = '%s/hangar_v2'
+        template = '%s/hangar_v3'
     return template % _DEFAULT_SPACES_PATH
 
 
-_HANGAR_UNDERGUN_EMBLEM_ANGLE_SHIFT = math.pi / 4
-_CAMOUFLAGE_MIN_INTENSITY = 1.0
+def _getHangarPath(isPremium, isPremIGR):
+    global _HANGAR_CFGS
+    global _EVENT_HANGAR_PATHS
+    if isPremium in _EVENT_HANGAR_PATHS:
+        return _EVENT_HANGAR_PATHS[isPremium]
+    return _HANGAR_CFGS[_getDefaultHangarPath(False)][_IGR_HANGAR_PATH_KEY] if isPremIGR else _getDefaultHangarPath(isPremium)
+
+
+def _getHangarKey(path):
+    return path.lower()
+
+
+def _getHangarType(isPremium):
+    return 'premium' if isPremium else 'basic'
+
+
 _CFG = {}
-_DEFAULT_CFG = {}
 _HANGAR_CFGS = {}
 _EVENT_HANGAR_PATHS = {}
-_EVENT_HANGAR_VISIBILITY_MASK = {}
+_IGR_HANGAR_PATH_KEY = 'igrPremHangarPath' + ('CN' if constants.IS_CHINA else '')
 
 def hangarCFG():
     global _CFG
     return _CFG
 
 
-def readHangarSettings(igrKey, path=None):
-    global _HANGAR_CFGS
-    global _DEFAULT_CFG
-    global _CFG
+def _readHangarSettings():
     hangarsXml = ResMgr.openSection('gui/hangars.xml')
-    for isPremium in (False, True):
-        spacePath = path if path else _getDefaultHangarPath(isPremium)
-        settingsXmlPath = spacePath + '/space.settings'
+    paths = [ path for path, _ in ResMgr.openSection(_DEFAULT_SPACES_PATH).items() ]
+    configset = {}
+    for folderName in paths:
+        spacePath = '{prefix}/{node}'.format(prefix=_DEFAULT_SPACES_PATH, node=folderName)
+        spaceKey = _getHangarKey(spacePath)
+        settingsXmlPath = '{path}/{file}/{sec}'.format(path=spacePath, file='space.settings', sec='hangarSettings')
         ResMgr.purge(settingsXmlPath, True)
         settingsXml = ResMgr.openSection(settingsXmlPath)
-        settingsXml = settingsXml['hangarSettings']
-        cfg = {'path': spacePath,
-         'cam_yaw_constr': Math.Vector2(-180, 180),
-         'cam_pitch_constr': Math.Vector2(-70, -5),
-         'decal_cam_fluency': 0.2}
-        loadConfig(cfg, settingsXml)
+        if settingsXml is None:
+            continue
+        cfg = {}
         loadConfigValue('shadow_model_name', hangarsXml, hangarsXml.readString, cfg)
         loadConfigValue('shadow_default_texture_name', hangarsXml, hangarsXml.readString, cfg)
         loadConfigValue('shadow_empty_texture_name', hangarsXml, hangarsXml.readString, cfg)
-        loadConfigValue(igrKey, hangarsXml, hangarsXml.readString, cfg)
-        _DEFAULT_CFG[getSpaceType(isPremium)] = cfg
-        _HANGAR_CFGS[spacePath.lower()] = settingsXml
+        loadConfigValue(_IGR_HANGAR_PATH_KEY, hangarsXml, hangarsXml.readString, cfg)
+        loadConfig(cfg, settingsXml)
+        configset[spaceKey] = cfg
 
-    for folderName, _ in ResMgr.openSection(_DEFAULT_SPACES_PATH).items():
-        settingsXml = ResMgr.openSection(_DEFAULT_SPACES_PATH + '/' + folderName + '/space.settings/hangarSettings')
-        if settingsXml is not None:
-            _HANGAR_CFGS[('spaces/' + folderName).lower()] = settingsXml
-
-    _CFG = copy.copy(_DEFAULT_CFG[getSpaceType(False)])
-    return
+    return configset
 
 
 def loadConfig(cfg, xml, defaultCfg=None):
@@ -145,16 +149,13 @@ def loadConfigValue(name, xml, fn, cfg, defaultCfg=None):
     return
 
 
-def getSpaceType(isPremium):
-    return 'premium' if isPremium else 'basic'
-
-
 class ClientHangarSpace(object):
     igrCtrl = dependency.descriptor(IIGRController)
     settingsCore = dependency.descriptor(ISettingsCore)
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
 
     def __init__(self, onVehicleLoadedCallback):
+        global _HANGAR_CFGS
         self.__spaceId = None
         self.__cameraManager = None
         self.__waitCallback = None
@@ -163,32 +164,26 @@ class ClientHangarSpace(object):
         self.__spaceMappingId = None
         self.__onLoadedCallback = None
         self.__vEntityId = None
-        self.__igrHangarPathKey = 'igrPremHangarPath' + ('CN' if constants.IS_CHINA else '')
         self.__selectedEmblemInfo = None
         self.__showMarksOnGun = False
         self.__prevDirection = 0.0
         self.__onVehicleLoadedCallback = onVehicleLoadedCallback
-        readHangarSettings(self.__igrHangarPathKey)
         self.__gfxOptimizerMgr = None
         self.__optimizerID = None
+        _HANGAR_CFGS = _readHangarSettings()
         return
 
     def create(self, isPremium, onSpaceLoadedCallback=None):
-        global _EVENT_HANGAR_PATHS
+        global _CFG
         BigWorld.worldDrawEnabled(False)
         BigWorld.wg_setSpecialFPSMode()
         self.__onLoadedCallback = onSpaceLoadedCallback
         self.__spaceId = BigWorld.createSpace()
-        hType = getSpaceType(isPremium)
-        _CFG = copy.copy(_DEFAULT_CFG[hType])
-        spacePath = _DEFAULT_CFG[hType]['path']
-        LOG_DEBUG('load hangar: hangar type = <{0:>s}>, space = <{1:>s}>'.format(hType, spacePath))
-        if self.igrCtrl.getRoomType() == constants.IGR_TYPE.PREMIUM:
-            if _CFG.get(self.__igrHangarPathKey) is not None:
-                spacePath = _CFG[self.__igrHangarPathKey]
-        if isPremium in _EVENT_HANGAR_PATHS:
-            spacePath = _EVENT_HANGAR_PATHS[isPremium]
-        safeSpacePath = _DEFAULT_CFG[hType]['path']
+        isIGR = self.igrCtrl.getRoomType() == constants.IGR_TYPE.PREMIUM
+        spacePath = _getHangarPath(isPremium, isIGR)
+        spaceType = _getHangarType(isPremium)
+        LOG_DEBUG('load hangar: hangar type = <{0:>s}>, space = <{1:>s}>'.format(spaceType, spacePath))
+        safeSpacePath = _getDefaultHangarPath(False)
         if ResMgr.openSection(spacePath) is None:
             LOG_ERROR('Failed to load hangar from path: %s; default hangar will be loaded instead' % spacePath)
             spacePath = safeSpacePath
@@ -206,10 +201,8 @@ class ClientHangarSpace(object):
                 LOG_CURRENT_EXCEPTION()
                 return
 
-        readHangarSettings('igrPremHangarPath' + ('CN' if constants.IS_CHINA else ''), spacePath)
-        spacePathLC = spacePath.lower()
-        if spacePathLC in _HANGAR_CFGS:
-            loadConfig(_CFG, _HANGAR_CFGS[spacePathLC], _CFG)
+        spaceKey = _getHangarKey(spacePath)
+        _CFG = copy.deepcopy(_HANGAR_CFGS[spaceKey])
         self.__vEntityId = BigWorld.createEntity('HangarVehicle', self.__spaceId, 0, _CFG['v_start_pos'], (_CFG['v_start_angles'][2], _CFG['v_start_angles'][1], _CFG['v_start_angles'][0]), dict())
         self.__cameraManager = HangarCameraManager(self.__spaceId)
         self.__cameraManager.init()
@@ -224,19 +217,15 @@ class ClientHangarSpace(object):
 
     def recreateVehicle(self, vDesc, vState, onVehicleLoadedCallback=None):
         vehicle = BigWorld.entity(self.__vEntityId)
-        if vehicle is not None:
-            vehicle.canDoHitTest(False)
         if onVehicleLoadedCallback is None:
             onVehicleLoadedCallback = self.__onVehicleLoadedCallback
         vehicle.recreateVehicle(vDesc, vState, onVehicleLoadedCallback)
         return
 
     def removeVehicle(self):
-        try:
-            BigWorld.entities[self.__vEntityId].model = None
-        except KeyError:
-            pass
-
+        vehicle = BigWorld.entity(self.__vEntityId)
+        if vehicle is not None:
+            vehicle.removeVehicle()
         self.__selectedEmblemInfo = None
         return
 
@@ -375,7 +364,6 @@ class _ClientHangarSpacePathOverride(object):
             _EVENT_HANGAR_PATHS[isPremium] = path
         elif _EVENT_HANGAR_PATHS.has_key(isPremium):
             del _EVENT_HANGAR_PATHS[isPremium]
-        readHangarSettings('igrPremHangarPath' + ('CN' if constants.IS_CHINA else ''), path)
         if isReload:
             g_hangarSpace.refreshSpace(g_hangarSpace.isPremium, True)
         return

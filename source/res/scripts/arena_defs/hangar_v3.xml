@@ -1,0 +1,19 @@
+<hangar_v3.xml>
+  <wwmusic>	hangar_premium_2018_music	</wwmusic>
+  <wwambientSound>	hangar_premium_2018_wind_summer	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	hangar_premium_2018.bnk	</bank>
+      <bank>	ambient.bnk	</bank>
+      <bank>	env_Forest.bnk	</bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	hangar_v2.bnk	</bank>
+    </unloadBanks>
+  </soundRemapping>
+  <boundingBox>
+    <bottomLeft>	-100.000000 -100.000000	</bottomLeft>
+    <upperRight>	95.357201 95.357201	</upperRight>
+  </boundingBox>
+  <mapActivities></mapActivities>
+</hangar_v3.xml>

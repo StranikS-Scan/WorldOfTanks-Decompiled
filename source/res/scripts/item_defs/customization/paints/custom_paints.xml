@@ -178,7 +178,7 @@
   <itemGroup>
     <name>	WG Fest Paint	</name>
     <priceGroup>	custom paint notInShop	</priceGroup>
-    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <vehicleFilter>
       <include>
         <tags>	premium	</tags>
@@ -304,7 +304,7 @@
   <itemGroup>
     <name>	Rostelecom Paint	</name>
     <priceGroup>	custom paint notInShop	</priceGroup>
-    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
     <vehicleFilter>
       <include>
         <vehicles>	ussr:R127_T44_100_P	</vehicles>
@@ -323,6 +323,35 @@
       <gloss>	0.509	</gloss>
       <metallic>	0.230	</metallic>
       <userString>	#vehicle_customization:repaint/custom_color_21	</userString>
+      <season>	ALL	</season>
+      <historical>	false	</historical>
+    </paint>
+  </itemGroup>
+  <itemGroup>
+    <name>	Ranked Battle Paint	</name>
+    <priceGroup>	custom paint notInShop	</priceGroup>
+    <userString>	#vehicle_customization:repaint/color_group_04	</userString>
+    <vehicleFilter>
+      <include>
+        <levels>	10	</levels>
+      </include>
+      <exclude>
+        <vehicles>	china:Ch01_Type59_Gold germany:G119_Panzer58_BF germany:G114_Rheinmetall_Skorpian usa:A13_T34_hvy_BF ussr:R61_Object252_BF	</vehicles>
+      </exclude>
+    </vehicleFilter>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+    <paint>
+      <id>	286	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_22.png	</texture>
+      <color>	17 17 34 255	</color>
+      <gloss>	0.6	</gloss>
+      <metallic>	0.222	</metallic>
+      <userString>	#vehicle_customization:repaint/custom_color_22	</userString>
       <season>	ALL	</season>
       <historical>	false	</historical>
     </paint>

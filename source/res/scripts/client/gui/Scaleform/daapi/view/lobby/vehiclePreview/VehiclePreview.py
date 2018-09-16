@@ -29,7 +29,7 @@ from gui.shared.utils.HangarSpace import g_hangarSpace
 from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
-from skeletons.gui.game_control import IVehicleComparisonBasket, ITradeInController, IRestoreController, IHeroTankController
+from skeletons.gui.game_control import IVehicleComparisonBasket, ITradeInController, IRestoreController, IHeroTankController, IBootcampController
 from skeletons.gui.shared import IItemsCache
 from hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from HeroTank import HeroTank
@@ -58,6 +58,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     tradeIn = dependency.descriptor(ITradeInController)
     restores = dependency.descriptor(IRestoreController)
     heroTanks = dependency.descriptor(IHeroTankController)
+    bootcamp = dependency.descriptor(IBootcampController)
 
     def __init__(self, ctx=None, skipConfirm=False):
         LobbySelectableView.__init__(self, ctx)
@@ -278,7 +279,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
 
     def __getBottomPanelData(self):
         item = g_currentPreviewVehicle.item
-        return self.__previewDP.getBottomPanelData(item, self.__isHeroTank)
+        isBootCamp = self.bootcamp.isInBootcamp()
+        return self.__previewDP.getBottomPanelData(item, isHeroTank=self.__isHeroTank, isBootCamp=isBootCamp)
 
     def __getInfoData(self, selectedTabInd):
         return {'selectedTab': selectedTabInd,

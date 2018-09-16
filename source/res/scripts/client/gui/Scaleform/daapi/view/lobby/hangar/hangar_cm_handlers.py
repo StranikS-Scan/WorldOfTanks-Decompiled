@@ -198,6 +198,7 @@ class VehicleContextMenuHandler(SimpleVehicleCMHandler):
             isEventVehicle = vehicle.isOnlyForEventBattles
             if accDossier:
                 wasInBattleSet = set(accDossier.getTotalStats().getVehicles().keys())
+                wasInBattleSet.update(accDossier.getGlobalMapStats().getVehicles().keys())
                 if vehicle.intCD in wasInBattleSet:
                     vehicleWasInBattle = True
             if vehicle is not None:

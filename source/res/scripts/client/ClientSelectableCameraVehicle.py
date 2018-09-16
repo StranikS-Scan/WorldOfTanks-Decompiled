@@ -2,6 +2,8 @@
 # Embedded file name: scripts/client/ClientSelectableCameraVehicle.py
 import Math
 import BigWorld
+import WWISE
+import SoundGroups
 from ClientSelectableCameraObject import ClientSelectableCameraObject
 from gui.hangar_vehicle_appearance import HangarVehicleAppearance
 from vehicle_systems.tankStructure import ModelStates
@@ -11,6 +13,7 @@ from gui.shared.utils.HangarSpace import g_hangarSpace
 
 class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
     appearance = property(lambda self: self.__vAppearance)
+    _SOUND_GROUP_HANGAR_TANK_VIEW = 'STATE_hangar_tank_view'
 
     def __init__(self):
         ClientSelectableCameraObject.__init__(self)
@@ -57,6 +60,11 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
             self.__vAppearance.recreate(self.typeDescriptor, state, self._onVehicleLoaded)
         self.__updateFakeShadowAccordingToAppearance()
         return
+
+    def removeVehicle(self):
+        if self.__vAppearance:
+            self.__vAppearance.remove()
+        self.__updateFakeShadowAccordingToAppearance()
 
     def _onVehicleLoaded(self):
         self.__updateFakeShadowAccordingToAppearance()
@@ -117,3 +125,8 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
             shadowMapTexFileName = cfg['shadow_empty_texture_name']
         if shadowMapTexFileName:
             self.__shadowModelFashion.setTexture(shadowMapTexFileName, 'diffuseMap')
+
+    def _startCameraMovement(self):
+        SoundGroups.g_instance.playSound2D(self._getMovingSound())
+        WWISE.WW_setState(self._SOUND_GROUP_HANGAR_TANK_VIEW, '{}{}'.format(self._SOUND_GROUP_HANGAR_TANK_VIEW, self._getNextMusicState()))
+        super(ClientSelectableCameraVehicle, self)._startCameraMovement()

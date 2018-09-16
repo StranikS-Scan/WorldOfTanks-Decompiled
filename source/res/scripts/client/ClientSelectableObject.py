@@ -52,9 +52,6 @@ class ClientSelectableObject(BigWorld.Entity, ComponentSystem):
         self.highlight(False)
         return
 
-    def canDoHitTest(self, dotest):
-        self.icanDoHitTest = dotest
-
     def enable(self, enabled):
         self.__enabled = enabled
         if not self.__enabled:

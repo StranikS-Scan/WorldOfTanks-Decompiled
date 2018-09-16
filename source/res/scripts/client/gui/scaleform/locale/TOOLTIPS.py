@@ -309,6 +309,7 @@ class TOOLTIPS(object):
     ACTIONPRICE_CHANGEPRICE_HEADER = '#tooltips:actionPrice/changePrice/header'
     ACTIONPRICE_CHANGEPRICE_BODY = '#tooltips:actionPrice/changePrice/body'
     ACTIONPRICE_SELL_BODY = '#tooltips:actionPrice/sell/body'
+    ACTIONPRICE_SELL_BODY_SIMPLE = '#tooltips:actionPrice/sell/body/simple'
     ACTIONPRICE_SELL_TYPE_VEHICLE = '#tooltips:actionPrice/sell/type/vehicle'
     ACTIONPRICE_SELL_TYPE_MODULE = '#tooltips:actionPrice/sell/type/module'
     ACTIONPRICE_SELL_TYPE_EQUIPMENT = '#tooltips:actionPrice/sell/type/equipment'
@@ -2036,46 +2037,6 @@ class TOOLTIPS(object):
     ELEN_SUMMARY_RANK_3 = '#tooltips:elen/summary/rank/3'
     ELEN_SUMMARY_RANK_4 = '#tooltips:elen/summary/rank/4'
     ELEN_SUMMARY_RANK_NORANK = '#tooltips:elen/summary/rank/noRank'
-    ELEN_SUMMARY_OBJPARAM_MAX_ORIGINALXP_HEADER = '#tooltips:elen/summary/objParam/max/originalXP/header'
-    ELEN_SUMMARY_OBJPARAM_MAX_ORIGINALXP_BODY = '#tooltips:elen/summary/objParam/max/originalXP/body'
-    ELEN_SUMMARY_OBJPARAM_MAX_XP_HEADER = '#tooltips:elen/summary/objParam/max/xp/header'
-    ELEN_SUMMARY_OBJPARAM_MAX_XP_BODY = '#tooltips:elen/summary/objParam/max/xp/body'
-    ELEN_SUMMARY_OBJPARAM_MAX_DAMAGEDEALT_HEADER = '#tooltips:elen/summary/objParam/max/damageDealt/header'
-    ELEN_SUMMARY_OBJPARAM_MAX_DAMAGEDEALT_BODY = '#tooltips:elen/summary/objParam/max/damageDealt/body'
-    ELEN_SUMMARY_OBJPARAM_MAX_DAMAGEASSISTED_HEADER = '#tooltips:elen/summary/objParam/max/damageAssisted/header'
-    ELEN_SUMMARY_OBJPARAM_MAX_DAMAGEASSISTED_BODY = '#tooltips:elen/summary/objParam/max/damageAssisted/body'
-    ELEN_SUMMARY_OBJPARAM_SUMALL_ORIGINALXP_HEADER = '#tooltips:elen/summary/objParam/sumAll/originalXP/header'
-    ELEN_SUMMARY_OBJPARAM_SUMALL_ORIGINALXP_BODY = '#tooltips:elen/summary/objParam/sumAll/originalXP/body'
-    ELEN_SUMMARY_OBJPARAM_SUMALL_XP_HEADER = '#tooltips:elen/summary/objParam/sumAll/xp/header'
-    ELEN_SUMMARY_OBJPARAM_SUMALL_XP_BODY = '#tooltips:elen/summary/objParam/sumAll/xp/body'
-    ELEN_SUMMARY_OBJPARAM_SUMALL_DAMAGEDEALT_HEADER = '#tooltips:elen/summary/objParam/sumAll/damageDealt/header'
-    ELEN_SUMMARY_OBJPARAM_SUMALL_DAMAGEDEALT_BODY = '#tooltips:elen/summary/objParam/sumAll/damageDealt/body'
-    ELEN_SUMMARY_OBJPARAM_SUMALL_DAMAGEASSISTED_HEADER = '#tooltips:elen/summary/objParam/sumAll/damageAssisted/header'
-    ELEN_SUMMARY_OBJPARAM_SUMALL_DAMAGEASSISTED_BODY = '#tooltips:elen/summary/objParam/sumAll/damageAssisted/body'
-    ELEN_SUMMARY_OBJPARAM_SUMN_ORIGINALXP_HEADER = '#tooltips:elen/summary/objParam/sumN/originalXP/header'
-    ELEN_SUMMARY_OBJPARAM_SUMN_ORIGINALXP_BODY = '#tooltips:elen/summary/objParam/sumN/originalXP/body'
-    ELEN_SUMMARY_OBJPARAM_SUMN_XP_HEADER = '#tooltips:elen/summary/objParam/sumN/xp/header'
-    ELEN_SUMMARY_OBJPARAM_SUMN_XP_BODY = '#tooltips:elen/summary/objParam/sumN/xp/body'
-    ELEN_SUMMARY_OBJPARAM_SUMN_DAMAGEDEALT_HEADER = '#tooltips:elen/summary/objParam/sumN/damageDealt/header'
-    ELEN_SUMMARY_OBJPARAM_SUMN_DAMAGEDEALT_BODY = '#tooltips:elen/summary/objParam/sumN/damageDealt/body'
-    ELEN_SUMMARY_OBJPARAM_SUMN_DAMAGEASSISTED_HEADER = '#tooltips:elen/summary/objParam/sumN/damageAssisted/header'
-    ELEN_SUMMARY_OBJPARAM_SUMN_DAMAGEASSISTED_BODY = '#tooltips:elen/summary/objParam/sumN/damageAssisted/body'
-    ELEN_SUMMARY_OBJPARAM_SUMSEQN_ORIGINALXP_HEADER = '#tooltips:elen/summary/objParam/sumSeqN/originalXP/header'
-    ELEN_SUMMARY_OBJPARAM_SUMMSEQN_ORIGINALXP_HEADER = '#tooltips:elen/summary/objParam/sumMSeqN/originalXP/header'
-    ELEN_SUMMARY_OBJPARAM_SUMSEQN_ORIGINALXP_BODY = '#tooltips:elen/summary/objParam/sumSeqN/originalXP/body'
-    ELEN_SUMMARY_OBJPARAM_SUMMSEQN_ORIGINALXP_BODY = '#tooltips:elen/summary/objParam/sumMSeqN/originalXP/body'
-    ELEN_SUMMARY_OBJPARAM_SUMSEQN_XP_HEADER = '#tooltips:elen/summary/objParam/sumSeqN/xp/header'
-    ELEN_SUMMARY_OBJPARAM_SUMMSEQN_XP_HEADER = '#tooltips:elen/summary/objParam/sumMSeqN/xp/header'
-    ELEN_SUMMARY_OBJPARAM_SUMSEQN_XP_BODY = '#tooltips:elen/summary/objParam/sumSeqN/xp/body'
-    ELEN_SUMMARY_OBJPARAM_SUMMSEQN_XP_BODY = '#tooltips:elen/summary/objParam/sumMSeqN/xp/body'
-    ELEN_SUMMARY_OBJPARAM_SUMSEQN_DAMAGEDEALT_HEADER = '#tooltips:elen/summary/objParam/sumSeqN/damageDealt/header'
-    ELEN_SUMMARY_OBJPARAM_SUMMSEQN_DAMAGEDEALT_HEADER = '#tooltips:elen/summary/objParam/sumMSeqN/damageDealt/header'
-    ELEN_SUMMARY_OBJPARAM_SUMSEQN_DAMAGEDEALT_BODY = '#tooltips:elen/summary/objParam/sumSeqN/damageDealt/body'
-    ELEN_SUMMARY_OBJPARAM_SUMMSEQN_DAMAGEDEALT_BODY = '#tooltips:elen/summary/objParam/sumMSeqN/damageDealt/body'
-    ELEN_SUMMARY_OBJPARAM_SUMSEQN_DAMAGEASSISTED_HEADER = '#tooltips:elen/summary/objParam/sumSeqN/damageAssisted/header'
-    ELEN_SUMMARY_OBJPARAM_SUMMSEQN_DAMAGEASSISTED_HEADER = '#tooltips:elen/summary/objParam/sumMSeqN/damageAssisted/header'
-    ELEN_SUMMARY_OBJPARAM_SUMSEQN_DAMAGEASSISTED_BODY = '#tooltips:elen/summary/objParam/sumSeqN/damageAssisted/body'
-    ELEN_SUMMARY_OBJPARAM_SUMMSEQN_DAMAGEASSISTED_BODY = '#tooltips:elen/summary/objParam/sumMSeqN/damageAssisted/body'
     ELEN_SUMMARY_ADDPARAM_WINRATE_HEADER = '#tooltips:elen/summary/addParam/winRate/header'
     ELEN_SUMMARY_ADDPARAM_WINRATE_BODY = '#tooltips:elen/summary/addParam/winRate/body'
     ELEN_SUMMARY_ADDPARAM_FRAGS_HEADER = '#tooltips:elen/summary/addParam/frags/header'
@@ -2180,20 +2141,20 @@ class TOOLTIPS(object):
     ELEN_EXCEL_OBJPARAM_SUMN_DAMAGEASSISTED_HEADER = '#tooltips:elen/excel/objParam/sumN/damageAssisted/header'
     ELEN_EXCEL_OBJPARAM_SUMN_DAMAGEASSISTED_BODY = '#tooltips:elen/excel/objParam/sumN/damageAssisted/body'
     ELEN_EXCEL_OBJPARAM_SUMSEQN_ORIGINALXP_HEADER = '#tooltips:elen/excel/objParam/sumSeqN/originalXP/header'
-    ELEN_EXCEL_OBJPARAM_SUMMSEQN_ORIGINALXP_HEADER = '#tooltips:elen/excel/objParam/sumMSeqN/originalXP/header'
     ELEN_EXCEL_OBJPARAM_SUMSEQN_ORIGINALXP_BODY = '#tooltips:elen/excel/objParam/sumSeqN/originalXP/body'
-    ELEN_EXCEL_OBJPARAM_SUMMSEQN_ORIGINALXP_BODY = '#tooltips:elen/excel/objParam/sumMSeqN/originalXP/body'
     ELEN_EXCEL_OBJPARAM_SUMSEQN_XP_HEADER = '#tooltips:elen/excel/objParam/sumSeqN/xp/header'
-    ELEN_EXCEL_OBJPARAM_SUMMSEQN_XP_HEADER = '#tooltips:elen/excel/objParam/sumMSeqN/xp/header'
     ELEN_EXCEL_OBJPARAM_SUMSEQN_XP_BODY = '#tooltips:elen/excel/objParam/sumSeqN/xp/body'
-    ELEN_EXCEL_OBJPARAM_SUMMSEQN_XP_BODY = '#tooltips:elen/excel/objParam/sumMSeqN/xp/body'
     ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEDEALT_HEADER = '#tooltips:elen/excel/objParam/sumSeqN/damageDealt/header'
-    ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEDEALT_HEADER = '#tooltips:elen/excel/objParam/sumMSeqN/damageDealt/header'
     ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEDEALT_BODY = '#tooltips:elen/excel/objParam/sumSeqN/damageDealt/body'
-    ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEDEALT_BODY = '#tooltips:elen/excel/objParam/sumMSeqN/damageDealt/body'
     ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEASSISTED_HEADER = '#tooltips:elen/excel/objParam/sumSeqN/damageAssisted/header'
-    ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEASSISTED_HEADER = '#tooltips:elen/excel/objParam/sumMSeqN/damageAssisted/header'
     ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEASSISTED_BODY = '#tooltips:elen/excel/objParam/sumSeqN/damageAssisted/body'
+    ELEN_EXCEL_OBJPARAM_SUMMSEQN_ORIGINALXP_HEADER = '#tooltips:elen/excel/objParam/sumMSeqN/originalXP/header'
+    ELEN_EXCEL_OBJPARAM_SUMMSEQN_ORIGINALXP_BODY = '#tooltips:elen/excel/objParam/sumMSeqN/originalXP/body'
+    ELEN_EXCEL_OBJPARAM_SUMMSEQN_XP_HEADER = '#tooltips:elen/excel/objParam/sumMSeqN/xp/header'
+    ELEN_EXCEL_OBJPARAM_SUMMSEQN_XP_BODY = '#tooltips:elen/excel/objParam/sumMSeqN/xp/body'
+    ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEDEALT_HEADER = '#tooltips:elen/excel/objParam/sumMSeqN/damageDealt/header'
+    ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEDEALT_BODY = '#tooltips:elen/excel/objParam/sumMSeqN/damageDealt/body'
+    ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEASSISTED_HEADER = '#tooltips:elen/excel/objParam/sumMSeqN/damageAssisted/header'
     ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEASSISTED_BODY = '#tooltips:elen/excel/objParam/sumMSeqN/damageAssisted/body'
     ELEN_EXCEL_OBJPARAM_SUMALL_ORIGINALXP_HEADER = '#tooltips:elen/excel/objParam/sumAll/originalXP/header'
     ELEN_EXCEL_OBJPARAM_SUMALL_ORIGINALXP_BODY = '#tooltips:elen/excel/objParam/sumAll/originalXP/body'
@@ -2276,46 +2237,6 @@ class TOOLTIPS(object):
      ELEN_SUMMARY_RANK_3,
      ELEN_SUMMARY_RANK_4,
      ELEN_SUMMARY_RANK_NORANK)
-    ELEN_SUMMARY_OBJPARAM_ALL_ALL_HEADER_ENUM = (ELEN_SUMMARY_OBJPARAM_MAX_ORIGINALXP_HEADER,
-     ELEN_SUMMARY_OBJPARAM_MAX_XP_HEADER,
-     ELEN_SUMMARY_OBJPARAM_MAX_DAMAGEDEALT_HEADER,
-     ELEN_SUMMARY_OBJPARAM_MAX_DAMAGEASSISTED_HEADER,
-     ELEN_SUMMARY_OBJPARAM_SUMALL_ORIGINALXP_HEADER,
-     ELEN_SUMMARY_OBJPARAM_SUMALL_XP_HEADER,
-     ELEN_SUMMARY_OBJPARAM_SUMALL_DAMAGEDEALT_HEADER,
-     ELEN_SUMMARY_OBJPARAM_SUMALL_DAMAGEASSISTED_HEADER,
-     ELEN_SUMMARY_OBJPARAM_SUMN_ORIGINALXP_HEADER,
-     ELEN_SUMMARY_OBJPARAM_SUMN_XP_HEADER,
-     ELEN_SUMMARY_OBJPARAM_SUMN_DAMAGEDEALT_HEADER,
-     ELEN_SUMMARY_OBJPARAM_SUMN_DAMAGEASSISTED_HEADER,
-     ELEN_SUMMARY_OBJPARAM_SUMSEQN_ORIGINALXP_HEADER,
-     ELEN_SUMMARY_OBJPARAM_SUMMSEQN_ORIGINALXP_HEADER,
-     ELEN_SUMMARY_OBJPARAM_SUMSEQN_XP_HEADER,
-     ELEN_SUMMARY_OBJPARAM_SUMMSEQN_XP_HEADER,
-     ELEN_SUMMARY_OBJPARAM_SUMSEQN_DAMAGEDEALT_HEADER,
-     ELEN_SUMMARY_OBJPARAM_SUMMSEQN_DAMAGEDEALT_HEADER,
-     ELEN_SUMMARY_OBJPARAM_SUMSEQN_DAMAGEASSISTED_HEADER,
-     ELEN_SUMMARY_OBJPARAM_SUMMSEQN_DAMAGEASSISTED_HEADER)
-    ELEN_SUMMARY_OBJPARAM_ALL_ALL_BODY_ENUM = (ELEN_SUMMARY_OBJPARAM_MAX_ORIGINALXP_BODY,
-     ELEN_SUMMARY_OBJPARAM_MAX_XP_BODY,
-     ELEN_SUMMARY_OBJPARAM_MAX_DAMAGEDEALT_BODY,
-     ELEN_SUMMARY_OBJPARAM_MAX_DAMAGEASSISTED_BODY,
-     ELEN_SUMMARY_OBJPARAM_SUMALL_ORIGINALXP_BODY,
-     ELEN_SUMMARY_OBJPARAM_SUMALL_XP_BODY,
-     ELEN_SUMMARY_OBJPARAM_SUMALL_DAMAGEDEALT_BODY,
-     ELEN_SUMMARY_OBJPARAM_SUMALL_DAMAGEASSISTED_BODY,
-     ELEN_SUMMARY_OBJPARAM_SUMN_ORIGINALXP_BODY,
-     ELEN_SUMMARY_OBJPARAM_SUMN_XP_BODY,
-     ELEN_SUMMARY_OBJPARAM_SUMN_DAMAGEDEALT_BODY,
-     ELEN_SUMMARY_OBJPARAM_SUMN_DAMAGEASSISTED_BODY,
-     ELEN_SUMMARY_OBJPARAM_SUMSEQN_ORIGINALXP_BODY,
-     ELEN_SUMMARY_OBJPARAM_SUMMSEQN_ORIGINALXP_BODY,
-     ELEN_SUMMARY_OBJPARAM_SUMSEQN_XP_BODY,
-     ELEN_SUMMARY_OBJPARAM_SUMMSEQN_XP_BODY,
-     ELEN_SUMMARY_OBJPARAM_SUMSEQN_DAMAGEDEALT_BODY,
-     ELEN_SUMMARY_OBJPARAM_SUMMSEQN_DAMAGEDEALT_BODY,
-     ELEN_SUMMARY_OBJPARAM_SUMSEQN_DAMAGEASSISTED_BODY,
-     ELEN_SUMMARY_OBJPARAM_SUMMSEQN_DAMAGEASSISTED_BODY)
     ELEN_SUMMARY_PARAM_ALL_ALL_HEADER_ENUM = (ELEN_SUMMARY_PARAM_MAX_ORIGINALXP_HEADER,
      ELEN_SUMMARY_PARAM_MAX_XP_HEADER,
      ELEN_SUMMARY_PARAM_MAX_DAMAGEDEALT_HEADER,
@@ -2571,12 +2492,12 @@ class TOOLTIPS(object):
      ELEN_EXCEL_OBJPARAM_SUMN_DAMAGEDEALT_HEADER,
      ELEN_EXCEL_OBJPARAM_SUMN_DAMAGEASSISTED_HEADER,
      ELEN_EXCEL_OBJPARAM_SUMSEQN_ORIGINALXP_HEADER,
-     ELEN_EXCEL_OBJPARAM_SUMMSEQN_ORIGINALXP_HEADER,
      ELEN_EXCEL_OBJPARAM_SUMSEQN_XP_HEADER,
-     ELEN_EXCEL_OBJPARAM_SUMMSEQN_XP_HEADER,
      ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEDEALT_HEADER,
-     ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEDEALT_HEADER,
      ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEASSISTED_HEADER,
+     ELEN_EXCEL_OBJPARAM_SUMMSEQN_ORIGINALXP_HEADER,
+     ELEN_EXCEL_OBJPARAM_SUMMSEQN_XP_HEADER,
+     ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEDEALT_HEADER,
      ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEASSISTED_HEADER,
      ELEN_EXCEL_OBJPARAM_SUMALL_ORIGINALXP_HEADER,
      ELEN_EXCEL_OBJPARAM_SUMALL_XP_HEADER,
@@ -2592,12 +2513,12 @@ class TOOLTIPS(object):
      ELEN_EXCEL_OBJPARAM_SUMN_DAMAGEDEALT_BODY,
      ELEN_EXCEL_OBJPARAM_SUMN_DAMAGEASSISTED_BODY,
      ELEN_EXCEL_OBJPARAM_SUMSEQN_ORIGINALXP_BODY,
-     ELEN_EXCEL_OBJPARAM_SUMMSEQN_ORIGINALXP_BODY,
      ELEN_EXCEL_OBJPARAM_SUMSEQN_XP_BODY,
-     ELEN_EXCEL_OBJPARAM_SUMMSEQN_XP_BODY,
      ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEDEALT_BODY,
-     ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEDEALT_BODY,
      ELEN_EXCEL_OBJPARAM_SUMSEQN_DAMAGEASSISTED_BODY,
+     ELEN_EXCEL_OBJPARAM_SUMMSEQN_ORIGINALXP_BODY,
+     ELEN_EXCEL_OBJPARAM_SUMMSEQN_XP_BODY,
+     ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEDEALT_BODY,
      ELEN_EXCEL_OBJPARAM_SUMMSEQN_DAMAGEASSISTED_BODY,
      ELEN_EXCEL_OBJPARAM_SUMALL_ORIGINALXP_BODY,
      ELEN_EXCEL_OBJPARAM_SUMALL_XP_BODY,
@@ -2669,24 +2590,6 @@ class TOOLTIPS(object):
     def elen_summary_rank(cls, key0):
         outcome = '#tooltips:elen/summary/rank/{}'.format(key0)
         if outcome not in cls.ELEN_SUMMARY_RANK_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def elen_summary_objparam_all_all_header(cls, key0, key1):
-        outcome = '#tooltips:elen/summary/objParam/{}/{}/header'.format(key0, key1)
-        if outcome not in cls.ELEN_SUMMARY_OBJPARAM_ALL_ALL_HEADER_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def elen_summary_objparam_all_all_body(cls, key0, key1):
-        outcome = '#tooltips:elen/summary/objParam/{}/{}/body'.format(key0, key1)
-        if outcome not in cls.ELEN_SUMMARY_OBJPARAM_ALL_ALL_BODY_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

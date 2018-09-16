@@ -138,7 +138,7 @@ class ResearchItemsObjDumper(ResearchBaseDumper):
 
     def _getItemData(self, node, rootItem):
         nodeCD = node.getNodeCD()
-        status = statusLevel = node.getStatus()
+        status, statusLevel = node.getStatus()
         data = {'longName': node.getLongUserName(),
          'smallIconPath': node.getSmallIcon(),
          'earnedXP': node.getEarnedXP(),

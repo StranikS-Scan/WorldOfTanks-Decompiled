@@ -127,34 +127,33 @@ class ModelStickers(object):
         self.__parentNode.attach(self.__stickerModel)
         replayCtrl = BattleReplay.g_replayCtrl
         accountRep = _getAccountRepository()
-        if not accountRep:
-            LOG_ERROR('Failed to attach stickers to the vehicle - account repository is not initialized')
-            return
-        else:
-            for slotType, _ in self.__slotsByType.iteritems():
-                if slotType != SlotTypes.CLAN or self.__clanID == 0 or replayCtrl.isPlaying and replayCtrl.isOffline:
-                    if slotType != SlotTypes.CLAN:
-                        self.__doAttachStickers(slotType)
-                if slotType == SlotTypes.CLAN:
-                    serverSettings = self.lobbyContext.getServerSettings()
-                    if serverSettings is not None and serverSettings.roaming.isInRoaming() or self.__isLoadingClanEmblems:
-                        continue
-                    self.__isLoadingClanEmblems = True
-                    fileCache = accountRep.customFilesCache
-                    fileServerSettings = accountRep.fileServerSettings
-                    clanEmblems = fileServerSettings.get('clan_emblems')
-                    if clanEmblems is None:
-                        continue
-                    try:
-                        url = clanEmblems['url_template'] % self.__clanID
-                    except Exception:
-                        LOG_ERROR('Failed to attach stickers to the vehicle - server returned incorrect url format: %s' % clanEmblems['url_template'])
-                        continue
+        for slotType, _ in self.__slotsByType.iteritems():
+            if slotType != SlotTypes.CLAN or self.__clanID == 0 or replayCtrl.isPlaying and replayCtrl.isOffline:
+                if slotType != SlotTypes.CLAN:
+                    self.__doAttachStickers(slotType)
+            if slotType == SlotTypes.CLAN:
+                serverSettings = self.lobbyContext.getServerSettings()
+                if serverSettings is not None and serverSettings.roaming.isInRoaming() or self.__isLoadingClanEmblems:
+                    continue
+                if not accountRep:
+                    LOG_WARNING('Failed to attach clan sticker to the vehicle - account repository is not initialized')
+                    continue
+                self.__isLoadingClanEmblems = True
+                fileCache = accountRep.customFilesCache
+                fileServerSettings = accountRep.fileServerSettings
+                clanEmblems = fileServerSettings.get('clan_emblems')
+                if clanEmblems is None:
+                    continue
+                try:
+                    url = clanEmblems['url_template'] % self.__clanID
+                except Exception:
+                    LOG_ERROR('Failed to attach stickers to the vehicle - server returned incorrect url format: %s' % clanEmblems['url_template'])
+                    continue
 
-                    clanCallback = stricted_loading.makeCallbackWeak(self.__onClanEmblemLoaded)
-                    fileCache.get(url, clanCallback)
+                clanCallback = stricted_loading.makeCallbackWeak(self.__onClanEmblemLoaded)
+                fileCache.get(url, clanCallback)
 
-            return
+        return
 
     def detachStickers(self):
         if self.__model is None:

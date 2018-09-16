@@ -183,11 +183,14 @@ class ActionModifier(object):
 
 class _DiscountsListAction(ActionModifier):
     __meta__ = ABCMeta
-    MAX_VEH_COUNT = 10
     DEFAULT_PRICE_MULT = 1.0
 
     @abstractmethod
     def _getParamName(self, idx):
+        pass
+
+    @abstractmethod
+    def _getParamPattern(self):
         pass
 
     @abstractmethod
@@ -200,12 +203,19 @@ class _DiscountsListAction(ActionModifier):
 
     def _parse(self):
         result = {}
-        for idx in xrange(self.MAX_VEH_COUNT):
-            paramName = self._getParamName(idx)
-            if paramName in self._params:
-                item = self._makeResultItem(self._params[paramName])
-                if item is not None:
-                    result[item] = float(self._params.get(self._getMultName(idx), self.DEFAULT_PRICE_MULT))
+        namePattern = self._getParamPattern()
+        if namePattern:
+            patternLen = len(namePattern)
+            for paramName in self._params:
+                if paramName.startswith(namePattern):
+                    try:
+                        idx = int(paramName[patternLen:])
+                    except ValueError:
+                        return result
+
+                    item = self._makeResultItem(self._params[paramName])
+                    if item is not None:
+                        result[item] = float(self._params.get(self._getMultName(idx), self.DEFAULT_PRICE_MULT))
 
         return result
 
@@ -303,6 +313,9 @@ class _ItemsPrice(_DiscountsListAction, _PriceOpAbstract):
 
     def _getParamName(self, idx):
         return 'itemName%d' % idx
+
+    def _getParamPattern(self):
+        pass
 
     def _getMultName(self, idx):
         return 'price%d' % idx
@@ -436,6 +449,9 @@ class _VehiclePrice(_ItemsPrice):
     def _getParamName(self, idx):
         return 'vehName%d' % idx
 
+    def _getParamPattern(self):
+        pass
+
 
 class _VehicleRentPrice(_VehiclePrice):
 
@@ -455,14 +471,21 @@ class _VehicleRentPrice(_VehiclePrice):
 
     def _parse(self):
         result = {}
-        for idx in xrange(self.MAX_VEH_COUNT):
-            paramName = self._getParamName(idx)
-            if paramName in self._params:
-                item = self._makeResultItem(self._params[paramName])
-                if item is not None:
-                    for rentPackage in item.rentPackages:
-                        rentDays = rentPackage['days']
-                        result[item, rentDays] = float(self._params.get(self._getMultName(idx), self.DEFAULT_PRICE_MULT))
+        namePattern = self._getParamPattern()
+        if namePattern:
+            patternLen = len(namePattern)
+            for paramName in self._params:
+                if paramName.startswith(namePattern):
+                    try:
+                        idx = int(paramName[patternLen:])
+                    except ValueError:
+                        return result
+
+                    item = self._makeResultItem(self._params[paramName])
+                    if item is not None:
+                        for rentPackage in item.rentPackages:
+                            rentDays = rentPackage['days']
+                            result[item, rentDays] = float(self._params.get(self._getMultName(idx), self.DEFAULT_PRICE_MULT))
 
         return result
 
@@ -515,6 +538,9 @@ class _ShellPrice(_ItemsPrice):
 
     def _getParamName(self, idx):
         return 'shellName%d' % idx
+
+    def _getParamPattern(self):
+        pass
 
     def _makeResultItem(self, shellName):
         shellNation, shellName = shellName.split(':')
@@ -1004,6 +1030,9 @@ class _BoosterPrice(_DiscountsListAction, _PriceOpAbstract):
     def _getParamName(self, idx):
         return 'goodieID%d' % idx
 
+    def _getParamPattern(self):
+        pass
+
     def _getMultName(self, idx):
         return 'price%d' % idx
 
@@ -1075,15 +1104,26 @@ class _C11nPrice(_ItemsPrice):
     def _getParamName(self, idx):
         return 'name%d' % idx
 
+    def _getParamPattern(self):
+        pass
+
     def _parse(self):
         result = {}
-        for idx in xrange(self.MAX_VEH_COUNT):
-            paramName = self._getParamName(idx)
-            if paramName in self._params:
-                priceGroup = self._params[paramName]
-                items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CUSTOMIZATIONS, REQ_CRITERIA.CUSTOMIZATION.PRICE_GROUP(priceGroup))
-                for item in items.itervalues():
-                    result[item] = float(self._params.get(self._getMultName(idx), self.DEFAULT_PRICE_MULT))
+        namePattern = self._getParamPattern()
+        if namePattern:
+            patternLen = len(namePattern)
+            for paramName in self._params:
+                if paramName.startswith(namePattern):
+                    try:
+                        idx = int(paramName[patternLen:])
+                    except ValueError:
+                        return result
+
+                    priceGroup = self._params[paramName]
+                    criteria = _COMMON_CRITERIA | REQ_CRITERIA.CUSTOMIZATION.PRICE_GROUP(priceGroup)
+                    items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CUSTOMIZATIONS, criteria)
+                    for item in items.itervalues():
+                        result[item] = float(self._params.get(self._getMultName(idx), self.DEFAULT_PRICE_MULT))
 
         return result
 
@@ -1103,15 +1143,26 @@ class C11nPriceGroupPriceByTagMul(C11nPriceGroupPriceMul):
     def _getParamName(self, idx):
         return 'tag%d' % idx
 
+    def _getParamPattern(self):
+        pass
+
     def _parse(self):
         result = {}
-        for idx in xrange(self.MAX_VEH_COUNT):
-            paramName = self._getParamName(idx)
-            if paramName in self._params:
-                tag = self._params[paramName]
-                items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CUSTOMIZATIONS, REQ_CRITERIA.CUSTOMIZATION.PRICE_GROUP_TAG(tag))
-                for item in items.itervalues():
-                    result[item] = float(self._params.get(self._getMultName(idx), self.DEFAULT_PRICE_MULT))
+        namePattern = self._getParamPattern()
+        if namePattern:
+            patternLen = len(namePattern)
+            for paramName in self._params:
+                if paramName.startswith(namePattern):
+                    try:
+                        idx = int(paramName[patternLen:])
+                    except ValueError:
+                        return result
+
+                    tag = self._params[paramName]
+                    criteria = _COMMON_CRITERIA | REQ_CRITERIA.CUSTOMIZATION.PRICE_GROUP_TAG(tag)
+                    items = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CUSTOMIZATIONS, criteria)
+                    for item in items.itervalues():
+                        result[item] = float(self._params.get(self._getMultName(idx), self.DEFAULT_PRICE_MULT))
 
         return result
 

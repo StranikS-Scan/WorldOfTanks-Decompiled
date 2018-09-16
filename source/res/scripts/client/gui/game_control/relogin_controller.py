@@ -1,9 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/relogin_controller.py
 from debug_utils import LOG_DEBUG
+from helpers import dependency
 from skeletons.gui.game_control import IReloginController
+from skeletons.helpers.statistics import IStatisticsCollector
 
 class ReloginController(IReloginController):
+    statsCollector = dependency.descriptor(IStatisticsCollector)
 
     def __init__(self):
         super(ReloginController, self).__init__()
@@ -30,6 +33,7 @@ class ReloginController(IReloginController):
     def __onReloginStopped(self, isCompleted):
         if self.__reloginStoppedHandler is not None:
             self.__reloginStoppedHandler(isCompleted)
+        self.statsCollector.needCollectSystemData(True)
         LOG_DEBUG('Relogin finished', isCompleted)
         return
 

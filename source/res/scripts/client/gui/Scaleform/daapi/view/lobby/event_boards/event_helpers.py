@@ -18,13 +18,13 @@ from gui.shared.formatters import text_styles, icons
 from gui.shared.gui_items.Vehicle import VEHICLE_CLASS_NAME
 from gui.server_events.bonuses import getEventBoardsBonusObj
 from gui.event_boards import event_boards_timer
-from gui.event_boards.event_boards_items import CALCULATION_METHODS as _cm, OBJECTIVE_PARAMETERS as _op, EVENT_TYPE as _et, PLAYER_STATE_REASON as _psr, EVENT_STATE as _es, EVENT_DATE_TYPE
+from gui.event_boards.event_boards_items import CALCULATION_METHODS as _cm, OBJECTIVE_PARAMETERS as _op, EVENT_TYPE as _et, PLAYER_STATE_REASON as _psr, EVENT_STATE as _es, EVENT_DATE_TYPE, WOODEN_RIBBON
 from gui.Scaleform.genConsts.EVENTBOARDS_ALIASES import EVENTBOARDS_ALIASES
 from gui.Scaleform.locale.EVENT_BOARDS import EVENT_BOARDS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.daapi.view.lobby.event_boards.event_boards_vos import makeCantJoinReasonTextVO, makeParameterTooltipVO, makePrimeTimesTooltipVO
-from gui.Scaleform.daapi.view.lobby.event_boards.formaters import formatVehicleNameWithTypeIcon, getNationEmblemIcon, getNationBigFlagIcon, getNationText, vehicleTypeText, formatTimeToEnd, formatErrorTextWithIcon, formatOkTextWithIcon, formatTimeAndDate, formatUpdateTime, formatAllertTextWithIcon, formatAttentionTextWithIcon, timeEndStyle
+from gui.Scaleform.daapi.view.lobby.event_boards.formaters import formatVehicleNameWithTypeIcon, getNationEmblemIcon, getNationBigFlagIcon, getNationText, vehicleTypeText, formatTimeToEnd, formatErrorTextWithIcon, formatOkTextWithIcon, formatTimeAndDate, formatUpdateTime, formatAllertTextWithIcon, formatAttentionTextWithIcon, timeEndStyle, getLevelBackgroundIcon
 from gui import GUI_NATIONS
 from helpers.time_utils import ONE_MINUTE
 LEVELS_RANGE = range(MIN_VEHICLE_LEVEL, MAX_VEHICLE_LEVEL + 1)
@@ -265,7 +265,7 @@ class _TopLeaderboard(object):
             vehicle = items.getItemByCD(self.__value)
             return getNationBigFlagIcon(vehicle.nationName, True)
         else:
-            return None
+            return getLevelBackgroundIcon() if self.__eventType in (_et.LEVEL, _et.CLASS) else None
 
     def __getRibbonTooltip(self):
         category = self.__rewardByRank.getRewardCategoryNumber(self._top.getMyPosition())
@@ -307,16 +307,15 @@ class _TopLeaderboard(object):
             return None
 
     def __getRaitingType(self):
-        parameter = self._event.getObjectiveParameter()
-        return _ms(EVENT_BOARDS.top_objectiveparameter(parameter))
+        method = self._event.getMethod()
+        op = self._event.getObjectiveParameter()
+        return _ms(TOOLTIPS.elen_excel_objparam_all_all_header(method, op))
 
     def __getRibbon(self):
-        woodRibbon = 5
-        reward = self._event.getRewardsByRank().getRewardByRank(self.__leaderboardId)
-        ribbon = reward.getRewardCategoryNumber(self._top.getMyPosition())
-        if ribbon is None and self._top.getMyPosition() < self._event.getLeaderboardViewSize():
-            ribbon = woodRibbon
-        return ribbon
+        rank = self._top.getMyPosition()
+        rewards = self._event.getRewardsByRank().getRewardByRank(self.__leaderboardId)
+        ribbon = rewards.getRewardCategoryNumber(rank)
+        return WOODEN_RIBBON if ribbon is None and rank <= self._event.getLeaderboardViewSize() else ribbon
 
     def __getMyPosititon(self):
         event = self._event
@@ -505,8 +504,8 @@ class EventInfo(object):
         return EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_VEHICLES_ALIAS if self._event.getType() == _et.VEHICLE else EVENTBOARDS_ALIASES.RESULT_FILTER_POPOVER_ALIAS
 
     def __getTaskIcon(self, iconNum):
+        method = self._event.getMethod()
         if iconNum == 1:
-            method = self._event.getMethod()
             parameter = self._event.getObjectiveParameter()
             if parameter == _op.WINS:
                 return RES_ICONS.MAPS_ICONS_EVENTBOARDS_LANDINGICONS_SIGNIFICATIVE_WINS_COUNT
@@ -515,9 +514,13 @@ class EventInfo(object):
             return RES_ICONS.getEventBoardSignificative(parameter, maxOrSum)
         elif iconNum == 2:
             cardinality = self._event.getCardinality()
+            if method == _cm.SUMMSEQN:
+                return RES_ICONS.MAPS_ICONS_EVENTBOARDS_LANDINGICONS_EVENTTYPE_BATTLE_M_N
+            if method == _cm.MAX:
+                return RES_ICONS.MAPS_ICONS_EVENTBOARDS_LANDINGICONS_EVENTTYPE_BATTLE_1
             if cardinality is None or cardinality <= 0 or cardinality > 20:
                 return RES_ICONS.MAPS_ICONS_EVENTBOARDS_LANDINGICONS_EVENTTYPE_BATTLE_SUM
-            return RES_ICONS.getEventBoardBattleNum(str(cardinality))
+            return RES_ICONS.getEventBoardBattleNum(cardinality)
         else:
             eventType = self._event.getType()
             return RES_ICONS.getEventBoardRating(eventType)

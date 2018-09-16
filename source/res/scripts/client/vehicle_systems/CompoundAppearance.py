@@ -150,6 +150,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         self.__weaponEnergy = 0.0
         self.__activated = False
         self.__systemStarted = False
+        self.__outfit = None
         self.__vID = 0
         self.__isAlive = True
         self.__isTurretDetached = False
@@ -163,8 +164,8 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
 
     def prerequisites(self, typeDescriptor, vID, health, isCrewActive, isTurretDetached, outfitCD):
         self.__currentDamageState.update(health, isCrewActive, False)
-        outfit = Outfit(outfitCD)
-        out = camouflages.getCamoPrereqs(outfit, typeDescriptor)
+        self.__outfit = Outfit(outfitCD)
+        out = camouflages.getCamoPrereqs(self.__outfit, typeDescriptor)
         splineDesc = typeDescriptor.chassis.splineDesc
         if splineDesc is not None:
             out.append(splineDesc.segmentModelLeft)
@@ -188,6 +189,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
         if self.frictionAudition is not None:
             self.frictionAudition.setVehicleMatrix(vehicle.matrix)
         self.highlighter.setVehicle(vehicle)
+        self.__prepareOutfit()
         self.__applyVehicleOutfit()
         return
 
@@ -551,19 +553,14 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             self.trackCrashAudition.playCrashSound(isLeft, True)
         return
 
-    def __getVehicleOutfit(self):
-        if not self.__vehicle:
-            return Outfit()
-        outfitCD = self.__vehicle.publicInfo['outfit']
-        outfit = Outfit(outfitCD)
-        if not (self.__vehicle.isPlayerVehicle or outfit.isHistorical()):
-            if BigWorld.player().isC11nHistorical:
-                outfit = Outfit()
-        return outfit
+    def __prepareOutfit(self):
+        self.__outfit = self.__outfit or Outfit(self.__vehicle.publicInfo['outfit'] if self.__vehicle else Outfit())
+        if not self.__vehicle.isPlayerVehicle and BigWorld.player().isC11nHistorical:
+            if not self.__outfit.isHistorical():
+                self.__outfit = Outfit()
 
     def __applyVehicleOutfit(self):
-        outfit = self.__getVehicleOutfit()
-        camouflages.updateFashions(self.__fashions, self.__typeDesc, self.__currentDamageState.isCurrentModelDamaged, outfit)
+        camouflages.updateFashions(self.__fashions, self.__typeDesc, self.__currentDamageState.isCurrentModelDamaged, self.__outfit)
 
     def getBounds(self, partIdx):
         return self.collisions.getBoundingBox(partIdx) if self.collisions is not None else (Math.Vector3(0.0, 0.0, 0.0), Math.Vector3(0.0, 0.0, 0.0), 0)
@@ -799,8 +796,7 @@ class CompoundAppearance(ComponentSystem, CallbackDelayer):
             return
         else:
             insigniaRank = self.__vehicle.publicInfo['marksOnGun']
-            outfit = self.__getVehicleOutfit()
-            self.__vehicleStickers = VehicleStickers(self.__typeDesc, insigniaRank, outfit)
+            self.__vehicleStickers = VehicleStickers(self.__typeDesc, insigniaRank, self.__outfit)
             clanID = BigWorld.player().arena.vehicles[self.__vehicle.id]['clanDBID']
             self.__vehicleStickers.setClanID(clanID)
             return

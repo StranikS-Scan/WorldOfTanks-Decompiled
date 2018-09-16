@@ -6,7 +6,7 @@ import Event
 import Keys
 import ResMgr
 import constants
-from debug_utils import LOG_DEBUG
+from debug_utils import LOG_DEBUG, LOG_DEBUG_DEV
 from gui import g_mouseEventHandlers, InputHandler
 from gui.ClientHangarSpace import ClientHangarSpace
 from gui.Scaleform.Waiting import Waiting
@@ -248,7 +248,16 @@ class _HangarSpace(object):
         Waiting.hide('loadHangarSpace')
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.FINISH_LOADING_SPACE)
         self.statsCollector.noteHangarLoadingState(HANGAR_LOADING_STATE.HANGAR_READY, showSummaryNow=True)
+        stats = self.statsCollector.getStatistics()
+        player = BigWorld.player()
+        if player is not None:
+            LOG_DEBUG_DEV(stats)
+            if stats['system'] and hasattr(player, 'logClientSystem'):
+                BigWorld.player().logClientSystem(stats['system'])
+            if stats['session'] and hasattr(player, 'logClientSessionStats'):
+                BigWorld.player().logClientSessionStats(stats['session'])
         self.onHeroTankReady()
+        return
 
     @uniprof.regionDecorator(label='hangar.vehicle.loading', scope='exit')
     def __changeDone(self):

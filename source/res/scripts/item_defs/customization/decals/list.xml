@@ -6232,6 +6232,45 @@
       <userString>	#vehicle_customization:inscription/special/special_190	</userString>
     </decal>
   </itemGroup>
+  <itemGroup>
+    <name>	ranked	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <priceGroup>	legacy notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <vehicleFilter>
+      <include>
+        <levels>	10	</levels>
+      </include>
+    </vehicleFilter>
+    <decal>
+      <id>	192	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_191.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_191	</userString>
+    </decal>
+    <decal>
+      <id>	193	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_192.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_192	</userString>
+    </decal>
+    <decal>
+      <id>	194	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_193.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_193	</userString>
+    </decal>
+  </itemGroup>
+  <itemGroup>
+    <name>	23feb	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <priceGroup>	23feb inscriptions notInShop	</priceGroup>
+    <type>	INSCRIPTION	</type>
+    <historical>	true	</historical>
+    <vehicleFilter></vehicleFilter>
+    <decal>
+      <id>	195	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_194.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_194	</userString>
+    </decal>
+  </itemGroup>
   <xmlns:czech0>	ussr	</xmlns:czech0>
   <xmlns:germany>	germany	</xmlns:germany>
   <xmlns:usa>	usa	</xmlns:usa>

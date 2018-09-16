@@ -209,16 +209,18 @@ class HangarCameraManager(object):
         if not isinstance(vEntity, HangarVehicle):
             return False
         else:
-            targetPosDirEmblem = vEntity.appearance.getEmblemPos(onHull, emblemType, emblemIdx)
-            if targetPosDirEmblem is None:
+            emblemPositionParams = vEntity.appearance.getEmblemPos(onHull, emblemType, emblemIdx)
+            if emblemPositionParams is None:
                 return False
-            targetPos, direction, emblemDesc = targetPosDirEmblem
+            position = emblemPositionParams.position
+            direction = emblemPositionParams.direction
+            emblemPositionParams = emblemPositionParams.emblemDescription
             from gui.ClientHangarSpace import hangarCFG
             cfg = hangarCFG()
-            emblemSize = emblemDesc[3] * cfg['v_scale']
+            emblemSize = emblemPositionParams[3] * cfg['v_scale']
             halfF = emblemSize / (2 * relativeSize)
             dist = halfF / math.tan(BigWorld.projection().fov / 2)
-            self.setCameraLocation(targetPos, Math.Vector3(0, 0, 0), direction.yaw, -direction.pitch, dist, None, False)
+            self.setCameraLocation(position, Math.Vector3(0, 0, 0), direction.yaw, -direction.pitch, dist, None, False)
             self.__locatedOnEmbelem = True
             return True
 

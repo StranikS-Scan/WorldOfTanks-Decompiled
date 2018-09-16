@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/header/BattleTypeSelectPopover.py
 import BigWorld
+from adisp import process
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.header import battle_selector_items
 from gui.Scaleform.daapi.view.meta.BattleTypeSelectPopoverMeta import BattleTypeSelectPopoverMeta
@@ -16,15 +17,21 @@ from gui.shared.utils.functions import makeTooltip
 from helpers import i18n, dependency, time_utils
 from skeletons.gui.game_control import IRankedBattlesController
 from skeletons.gui.server_events import IEventsCache
+from skeletons.gui.lobby_context import ILobbyContext
 
 class BattleTypeSelectPopover(BattleTypeSelectPopoverMeta):
     eventsCache = dependency.descriptor(IEventsCache)
     rankedController = dependency.descriptor(IRankedBattlesController)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _=None):
         super(BattleTypeSelectPopover, self).__init__()
 
+    @process
     def selectFight(self, actionName):
+        navigationPossible = yield self.lobbyContext.isHeaderNavigationPossible()
+        if not navigationPossible:
+            return
         battle_selector_items.getItems().select(actionName)
 
     def getTooltipData(self, itemData, itemIsDisabled):

@@ -6,7 +6,7 @@ from gui.shared.gui_items.gui_item import HasStrCD
 from vehicle_systems.tankStructure import TankPartIndexes
 from items.components.c11n_constants import ApplyArea, CustomizationType
 from items.customizations import parseCompDescr, CustomizationOutfit
-from items.vehicles import makeIntCompactDescrByID
+from items.vehicles import makeIntCompactDescrByID, getItemByCompactDescr
 from helpers import dependency
 from shared_utils import isEmpty
 from skeletons.gui.shared import IItemsCache
@@ -34,7 +34,7 @@ def scaffold():
 
 
 class Outfit(HasStrCD):
-    __slots__ = ('_id', '_containers', '_isEnabled')
+    __slots__ = ('_id', '_styleDescr', '_containers', '_isEnabled')
     itemsFactory = dependency.descriptor(IGuiItemsFactory)
     itemsCache = dependency.descriptor(IItemsCache)
 
@@ -46,12 +46,18 @@ class Outfit(HasStrCD):
         else:
             component = CustomizationOutfit()
         self._id = component.styleId
+        if self._id:
+            intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, self._id)
+            self._styleDescr = getItemByCompactDescr(intCD)
+        else:
+            self._styleDescr = None
         self._isEnabled = isEnabled
         for container in scaffold():
             container.unpack(component, proxy)
             self._containers[container.getAreaID()] = container
 
         self.invalidate()
+        return
 
     def pack(self):
         component = CustomizationOutfit()
@@ -125,11 +131,7 @@ class Outfit(HasStrCD):
                 yield slot
 
     def isHistorical(self):
-        if self._id:
-            intCD = makeIntCompactDescrByID('customizationItem', CustomizationType.STYLE, self._id)
-            style = self.itemsFactory.createCustomization(intCD)
-            return style.isHistorical()
-        return all((item.isHistorical() for item in self.items()))
+        return self._styleDescr.historical if self._styleDescr else all((item.isHistorical() for item in self.items()))
 
     def isEmpty(self):
         return isEmpty(self.items())

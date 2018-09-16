@@ -2303,6 +2303,26 @@ class GraphicsQualityNote(SettingAbstract):
         pass
 
 
+class GraphicsHigtQualityNote(SettingAbstract):
+    note = '{0}{1}  {2}{3}'.format("<font face='$FieldFont' size='13' color='#595950'>", i18n.makeString(SETTINGS.GRAPHICSQUALITYHDSD_SD), icons.alert(), '</font>')
+    _GRAPHICS_QUALITY_TYPES = {CONTENT_TYPE.SD_TEXTURES: note}
+
+    def _get(self):
+        return self._GRAPHICS_QUALITY_TYPES.get(ResMgr.activeContentType(), '')
+
+    def _set(self, value):
+        pass
+
+
+class GraphicsQuality(SettingAbstract):
+
+    def _get(self):
+        return ResMgr.activeContentType() == CONTENT_TYPE.SD_TEXTURES
+
+    def _set(self, value):
+        pass
+
+
 class IncreasedZoomSetting(StorageAccountSetting):
     IncreasedZoomPackStruct = namedtuple('IncreasedZoomPackStruct', 'current options extraData')
 

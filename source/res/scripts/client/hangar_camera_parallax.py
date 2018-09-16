@@ -99,8 +99,10 @@ class HangarCameraParallax(CallbackDelayer, TimeDeltaMeter):
         if Waiting.isVisible():
             return True
         currentYaw = Math.Matrix(self.__camera.invViewMatrix).yaw
+        currentPitch = Math.Matrix(self.__camera.invViewMatrix).pitch
         goalYaw = Math.Matrix(self.__camera.source).yaw
-        return True if abs(goalYaw - currentYaw) > 0.001 else False
+        goalPitch = -Math.Matrix(self.__camera.source).pitch
+        return True if abs(goalYaw - currentYaw) > 0.001 or abs(goalPitch - currentPitch) > 0.001 else False
 
     def __getClampedCursor(self):
         cursorPosition = GUI.mcursor().position

@@ -227,7 +227,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._vehicles = []
         self.__resetSortedIndices()
         self._vehicleItems = []
-        self._randomStats = self._syncRandomStats()
+        self._syncRandomStats()
         vehicleIcons = []
         for vehicle in self._itemsCache.items.getVehicles(self._baseCriteria).itervalues():
             vehicleIcons.append(vehicle.icon)
@@ -270,7 +270,7 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
     def _updateVehicleItems(self, vehiclesCollection):
         updateIndices = []
         updateVehicles = []
-        self._randomStats = self._syncRandomStats()
+        self._syncRandomStats()
         for newVehicle in vehiclesCollection:
             for idx, oldVehicle in enumerate(self._vehicles):
                 if oldVehicle.intCD == newVehicle.intCD:

@@ -76,6 +76,7 @@ def _enable_all_pointcuts(config):
     _configure_invitation_pointcuts()
     _configure_personal_missions_pointcuts()
     _dynamic_squads.ParametrizeInitPointcut()
+    _dynamic_squads.RemoveShowInvitesFlagPointcut()
     _dynamic_squads.DisableGameSettingPointcut()
     _dynamic_squads.InviteReceivedMessagePointcut()
     _promo_controller.ShowPromoBrowserPointcut()

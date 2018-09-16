@@ -32,7 +32,7 @@
     <requiredVersion_92300>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ct_0.9.23	</Default>
+      <Default>	ct_0.9.23_2	</Default>
     </requiredVersion_92300>
     <name>
       <Type>	STRING	</Type>
@@ -381,6 +381,14 @@
       <Arg>	UINT64	</Arg>
       <Arg>	UINT8	</Arg>
     </onKickedFromArena>
+    <logClientSystem>
+      <Exposed></Exposed>
+      <Arg>	CLIENT_SYSTEM	</Arg>
+    </logClientSystem>
+    <logClientSessionStats>
+      <Exposed></Exposed>
+      <Arg>	CLIENT_STATISTICS	</Arg>
+    </logClientSessionStats>
     <logStreamCorruption>
       <Arg>	INT16	</Arg>
       <Arg>	INT32	</Arg>

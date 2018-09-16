@@ -195,13 +195,16 @@ class ISoundEventChecker(IGameController):
 class IHeroTankController(IGameController):
     onUpdated = None
 
-    def getCurrentTankOnScene(self):
+    def getRandomTankCD(self):
         raise NotImplementedError
 
-    def getRandomTank(self):
+    def getCurrentTankCD(self):
         raise NotImplementedError
 
-    def getLinkByTankName(self, tankName=''):
+    def getCurrentTankStyleId(self):
+        raise NotImplementedError
+
+    def getCurrentRelatedURL(self):
         raise NotImplementedError
 
 

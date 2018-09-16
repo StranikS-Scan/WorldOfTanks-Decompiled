@@ -138,7 +138,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
 
     def onBuyOrResearchClick(self):
         if self.__isHeroTank:
-            url = self.heroTanks.getLinkByTankName()
+            url = self.heroTanks.getCurrentRelatedURL()
             self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url=url))
         else:
             self.__previewDP.buyAction(self._actionType, self._vehicleCD, self._skipConfirm)

@@ -85,7 +85,7 @@ class ModelStickers(object):
                         texParams = TextureParams(sticker.texture, '', sticker.isMirrored)
                         self.__texParamsBySlotType[slotType].append(texParams)
                         continue
-                    elif slotType == SlotTypes.PLAYER:
+                    elif slotType == SlotTypes.PLAYER and not stickers.isLocked(descIdx):
                         emblemsCache = playerEmblemsCache
                         emblemID = vDesc.type.defaultPlayerEmblemID
                     else:

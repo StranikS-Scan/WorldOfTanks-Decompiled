@@ -2,7 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/Hangar.py
 from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core.ServerSettingsManager import SETTINGS_SECTIONS
-from constants import QUEUE_TYPE
+from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.Waiting import Waiting
@@ -135,15 +135,15 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __switchCarousels(self):
         prevCarouselAlias = self.__currentCarouselAlias
-        if self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
-            linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI
-            newCarouselAlias = HANGAR_ALIASES.RANKED_TANK_CAROUSEL
-        elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC):
-            linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI
-            newCarouselAlias = HANGAR_ALIASES.EPICBATTLE_TANK_CAROUSEL
-        else:
-            linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI
-            newCarouselAlias = HANGAR_ALIASES.TANK_CAROUSEL
+        linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI
+        newCarouselAlias = HANGAR_ALIASES.TANK_CAROUSEL
+        if self.prbDispatcher is not None:
+            if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
+                linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI
+                newCarouselAlias = HANGAR_ALIASES.RANKED_TANK_CAROUSEL
+            elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EPIC):
+                linkage = HANGAR_ALIASES.TANK_CAROUSEL_UI
+                newCarouselAlias = HANGAR_ALIASES.EPICBATTLE_TANK_CAROUSEL
         if prevCarouselAlias != newCarouselAlias:
             self.as_setCarouselS(linkage, newCarouselAlias)
             self.__currentCarouselAlias = newCarouselAlias
@@ -167,27 +167,29 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             self.researchPanel.setNavigationEnabled(not self.prbDispatcher.getFunctionalState().isNavigationDisabled())
         return
 
-    def __updateHeader(self):
-        if self.prbDispatcher is not None and not self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED) and not self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) and not self.headerComponent:
-            self.as_setDefaultHeaderS()
+    def __updateHeaderWidget(self):
+        if self.prbDispatcher is not None:
+            if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED) and not self.rankedWidget:
+                self.as_setHeaderTypeS(HANGAR_ALIASES.RANKED_WIDGET, True)
+            elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EPIC) and not self.epicWidget:
+                self.as_setHeaderTypeS(HANGAR_ALIASES.EPIC_WIDGET, True)
+            elif not self.headerComponent:
+                self.as_setDefaultHeaderS()
         if self.headerComponent is not None:
             self.headerComponent.update()
-        return
-
-    def __updateCrew(self):
-        if self.crewPanel is not None:
-            self.crewPanel.updateTankmen()
-        return
-
-    def __updateRankedWidget(self):
-        if self.prbDispatcher is not None and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED) and not self.rankedWidget:
-            self.as_setHeaderTypeS(HANGAR_ALIASES.RANKED_WIDGET, True)
+        if self.epicWidget is not None:
+            self.epicWidget.update()
         if self.rankedWidget is not None:
             vehicle = g_currentVehicle.item
             ranks = self.rankedController.getAllRanksChain(vehicle)
             currentRank = self.rankedController.getCurrentRank(vehicle)
             lastRank = self.rankedController.getLastRank(vehicle)
             self.rankedWidget.update(ranks, currentRank, lastRank)
+        return
+
+    def __updateCrew(self):
+        if self.crewPanel is not None:
+            self.crewPanel.updateTankmen()
         return
 
     def __updateAlertMessage(self):
@@ -199,13 +201,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
                 self.alertMessage.updateTimeLeft(timeLeft)
         else:
             self.as_setAlertMessageBlockVisibleS(False)
-        return
-
-    def __updateEpicWidget(self):
-        if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) and not self.epicWidget:
-            self.as_setHeaderTypeS(HANGAR_ALIASES.EPIC_WIDGET, True)
-        if self.epicWidget is not None:
-            self.epicWidget.update()
         return
 
     def __onWaitingShown(self, event):
@@ -285,7 +280,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             self.__onEntityChanged()
 
     def onUnitPlayersListChanged(self):
-        self.__updateHeader()
+        self.__updateHeaderWidget()
 
     def onPrbEntitySwitched(self):
         self.__onEntityChanged()
@@ -300,7 +295,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateAmmoPanel()
 
     def onRankedUpdate(self):
-        self.__updateRankedWidget()
+        self.__updateHeaderWidget()
 
     def _onPopulateEnd(self):
         pass
@@ -312,7 +307,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
             self.as_setAlertMessageBlockVisibleS(status != PRIME_TIME_STATUS.AVAILABLE)
 
     def __onEpicSkillsUpdate(self, *_):
-        self.__updateEpicWidget()
+        self.__updateHeaderWidget()
         self.__updateAmmoPanel()
 
     def __updateAll(self):
@@ -323,11 +318,9 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateParams()
         self.__updateVehicleInResearchPanel()
         self.__updateNavigationInResearchPanel()
-        self.__updateHeader()
+        self.__updateHeaderWidget()
         self.__updateCrew()
-        self.__updateRankedWidget()
         self.__updateAlertMessage()
-        self.__updateEpicWidget()
         Waiting.hide('updateVehicle')
 
     def __onCurrentVehicleChanged(self):
@@ -336,10 +329,8 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateAmmoPanel()
         self.__updateParams()
         self.__updateVehicleInResearchPanel()
-        self.__updateHeader()
+        self.__updateHeaderWidget()
         self.__updateCrew()
-        self.__updateRankedWidget()
-        self.__updateEpicWidget()
         Waiting.hide('updateVehicle')
 
     def __onSpaceRefresh(self):
@@ -360,7 +351,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __onIgrTypeChanged(self, *args):
         self.__updateVehicleInResearchPanel()
-        self.__updateHeader()
+        self.__updateHeaderWidget()
         self.__updateParams()
 
     def __updateState(self):
@@ -378,11 +369,9 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateState()
         self.__updateAmmoPanel()
         self.__switchCarousels()
-        self.__updateRankedWidget()
         self.__updateAlertMessage()
-        self.__updateEpicWidget()
         self.__updateNavigationInResearchPanel()
-        self.__updateHeader()
+        self.__updateHeaderWidget()
         self.__switchCarousels()
 
     def __onVehicleClientStateChanged(self, vehicles):
@@ -390,7 +379,7 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __onServerSettingChanged(self, diff):
         if 'isRegularQuestEnabled' in diff:
-            self.__updateHeader()
+            self.__updateHeaderWidget()
         if 'isCustomizationEnabled' in diff:
             self.__updateState()
 

@@ -156,6 +156,7 @@ class StatisticsCollector(IStatisticsCollector):
         result = {'system': None,
          'session': None}
         stat = BigWorld.wg_getClientStatistics()
+        BigWorld.wg_clearCrashedState()
         if not stat:
             return result
         else:

@@ -101,6 +101,7 @@ class CamouflagePacker(CustomizationPacker):
 
 
 class DecalPacker(CustomizationPacker):
+    _LOCK_SUBCOMP_ID = 0
 
     @staticmethod
     def pack(slot, component):
@@ -114,8 +115,11 @@ class DecalPacker(CustomizationPacker):
             appliedTo = subcomp.appliedTo & region
             if appliedTo:
                 slotIdx = regions.index(appliedTo)
-                item = cls.create(subcomp, CustomizationType.DECAL, proxy)
-                slot.set(item, slotIdx, component=subcomp)
+                if subcomp.id == DecalPacker._LOCK_SUBCOMP_ID:
+                    slot.lock(slotIdx)
+                else:
+                    item = cls.create(subcomp, CustomizationType.DECAL, proxy)
+                    slot.set(item, slotIdx, component=subcomp)
 
     @classmethod
     def invalidate(cls, slot):

@@ -14,7 +14,7 @@ from debug_utils import LOG_DEBUG_DEV
 from soft_exception import SoftException
 ACCOUNT_DOSSIER_VERSION = 110
 ACCOUNT_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromAccountDossier%d'
-VEHICLE_DOSSIER_VERSION = 100
+VEHICLE_DOSSIER_VERSION = 101
 VEHICLE_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromVehicleDossier%d'
 TANKMAN_DOSSIER_VERSION = 66
 TANKMAN_DOSSIER_UPDATE_FUNCTION_TEMPLATE = '__updateFromTankmanDossier%d'
@@ -4196,6 +4196,70 @@ def __updateFromVehicleDossier99(compDescr):
     addBlock(updateCtx, 'epicBattleAchievements')
     setVersion(updateCtx, 100)
     return (100, updateCtx['dossierCompDescr'])
+
+
+def __updateFromVehicleDossier100(compDescr):
+    blocksLayout = ['a15x15',
+     'a15x15_2',
+     'clan',
+     'clan2',
+     'company',
+     'company2',
+     'a7x7',
+     'achievements',
+     'vehTypeFrags',
+     'total',
+     'max15x15',
+     'max7x7',
+     'inscriptions',
+     'emblems',
+     'camouflages',
+     'compensation',
+     'achievements7x7',
+     'historical',
+     'maxHistorical',
+     'uniqueAchievements',
+     'fortBattles',
+     'maxFortBattles',
+     'fortSorties',
+     'maxFortSorties',
+     'fortAchievements',
+     'singleAchievements',
+     'clanAchievements',
+     'rated7x7',
+     'maxRated7x7',
+     'globalMapCommon',
+     'maxGlobalMapCommon',
+     'fallout',
+     'maxFallout',
+     'falloutAchievements',
+     'ranked',
+     'maxRanked',
+     'rankedSeasons',
+     'a30x30',
+     'max30x30',
+     'epicBattle',
+     'maxEpicBattle',
+     'epicBattleAchievements']
+    updateCtx = {'dossierCompDescr': compDescr,
+     'blockSizeFormat': 'H',
+     'versionFormat': 'H',
+     'blocksLayout': blocksLayout}
+    getHeader(updateCtx)
+    recordsPacking = {'maxDamage': (3, 'H'),
+     'maxFrags': (2, 'B'),
+     'maxXP': (0, 'H')}
+    oldValues = getStaticSizeBlockRecordValues(updateCtx, 'epicBattleAchievements', recordsPacking)
+    if oldValues:
+        newValues = getStaticSizeBlockRecordValues(updateCtx, 'max30x30', recordsPacking)
+        if newValues:
+            setStaticSizeBlockRecordValues(updateCtx, 'max30x30', recordsPacking, {name:max(oldValues.get(name, 0), newValues.get(name, 0)) for name in recordsPacking.iterkeys()})
+        else:
+            oldBlockCompDescr = getBlockCompDescr(updateCtx, 'epicBattleAchievements')
+            setBlockCompDescr(updateCtx, 'max30x30', oldBlockCompDescr)
+    setBlockCompDescr(updateCtx, 'epicBattleAchievements', '')
+    setVersion(updateCtx, 101)
+    return (101, updateCtx['dossierCompDescr'])
 
 
 def __bootstrapTankmanDossierFrom(ver, compDescr):

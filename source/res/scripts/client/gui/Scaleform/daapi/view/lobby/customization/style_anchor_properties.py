@@ -15,9 +15,9 @@ from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 
 class StyleDataVO(AnchorDataVO):
-    __slots__ = ('seasonalItemData', 'itemText', 'itemCount', 'showProlongationCB', 'autoProlongationCBLabel', 'autoProlongationCBSelected')
+    __slots__ = ('seasonalItemData', 'itemText', 'itemCount', 'showProlongationCB', 'autoProlongationCBLabel', 'autoProlongationCBSelected', 'is3DStyle')
 
-    def __init__(self, name, desc, isEmpty, itemRendererVO, seasonalItemData, itemText, itemCount, showProlongationCB, autoProlongationCBLabel, autoProlongationCBSelected):
+    def __init__(self, name, desc, isEmpty, itemRendererVO, seasonalItemData, itemText, itemCount, showProlongationCB, autoProlongationCBLabel, autoProlongationCBSelected, is3DStyle):
         super(StyleDataVO, self).__init__(name, desc, isEmpty, itemRendererVO)
         self.seasonalItemData = seasonalItemData
         self.itemText = itemText
@@ -25,6 +25,7 @@ class StyleDataVO(AnchorDataVO):
         self.showProlongationCB = showProlongationCB
         self.autoProlongationCBLabel = autoProlongationCBLabel
         self.autoProlongationCBSelected = autoProlongationCBSelected
+        self.is3DStyle = is3DStyle
 
     def asDict(self):
         dataDict = super(StyleDataVO, self).asDict()
@@ -34,6 +35,7 @@ class StyleDataVO(AnchorDataVO):
         dataDict['showProlongationCB'] = self.showProlongationCB
         dataDict['autoProlongationCBLabel'] = self.autoProlongationCBLabel
         dataDict['autoProlongationCBSelected'] = self.autoProlongationCBSelected
+        dataDict['is3DStyle'] = self.is3DStyle
         return dataDict
 
 
@@ -50,6 +52,7 @@ class StyleAnchorProperties(CustomizationStyleAnchorPropertiesMeta):
     def _getData(self):
         seasonItemData = []
         allUnique = set()
+        is3DStyle = False
         if self._item:
             for season in SEASONS_ORDER:
                 seasonName = SEASON_TYPE_TO_NAME.get(season)
@@ -68,6 +71,7 @@ class StyleAnchorProperties(CustomizationStyleAnchorPropertiesMeta):
                 seasonItemData.append({'season': text_styles.main(VEHICLE_CUSTOMIZATION.getSeasonName(seasonName)),
                  'itemRendererVOs': items})
 
+            is3DStyle = bool(self._item.modelsSet)
         itemText = _ms(VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_STYLE_ITEMS)
         name = self._name
         desc = self._desc
@@ -80,7 +84,7 @@ class StyleAnchorProperties(CustomizationStyleAnchorPropertiesMeta):
         autoProlongationCBLabel = VEHICLE_CUSTOMIZATION.CUSTOMIZATION_POPOVER_STYLE_AUTOPROLONGATIONLABEL
         if self._item is not None and self._item.isRentable:
             showProlongationCB = True
-        return StyleDataVO(name, desc, self._isEmpty, itemData, seasonItemData, itemText, len(allUnique), showProlongationCB, autoProlongationCBLabel, g_currentVehicle.item.isAutoRentStyle).asDict()
+        return StyleDataVO(name, desc, self._isEmpty, itemData, seasonItemData, itemText, len(allUnique), showProlongationCB, autoProlongationCBLabel, g_currentVehicle.item.isAutoRentStyle, is3DStyle).asDict()
 
     @decorators.process('loadStats')
     def __setAutoRent(self, autoRent):

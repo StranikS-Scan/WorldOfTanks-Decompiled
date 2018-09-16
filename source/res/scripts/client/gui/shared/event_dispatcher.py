@@ -105,7 +105,7 @@ def showHangar():
 
 def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None):
     heroTankCtrl = dependency.instance(IHeroTankController)
-    heroTankCD = heroTankCtrl.getCurrentTankOnScene()
+    heroTankCD = heroTankCtrl.getCurrentTankCD()
     if heroTankCD and heroTankCD == vehTypeCompDescr:
         goToHeroTankOnScene(vehTypeCompDescr, previewAlias)
     else:

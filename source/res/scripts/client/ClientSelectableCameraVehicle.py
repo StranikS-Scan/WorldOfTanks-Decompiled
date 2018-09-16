@@ -19,7 +19,6 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         self.__fakeShadowModel = None
         self.__shadowModelFashion = None
         self.__isVehicleLoaded = False
-        self.__vAppearance = HangarVehicleAppearance(self.spaceID, self)
         return
 
     def prerequisites(self):
@@ -52,7 +51,9 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         if typeDescriptor is not None:
             self.typeDescriptor = typeDescriptor
         self.__onLoadedCallback = callback
-        if self.typeDescriptor is not None and self.__vAppearance is not None:
+        if self.typeDescriptor is not None:
+            if self.__vAppearance is None:
+                self.__vAppearance = self._createAppearance()
             self.__vAppearance.recreate(self.typeDescriptor, state, self._onVehicleLoaded)
         self.__updateFakeShadowAccordingToAppearance()
         return
@@ -61,6 +62,9 @@ class ClientSelectableCameraVehicle(ClientSelectableCameraObject):
         if self.__vAppearance:
             self.__vAppearance.remove()
         self.__updateFakeShadowAccordingToAppearance()
+
+    def _createAppearance(self):
+        return HangarVehicleAppearance(self.spaceID, self)
 
     def _onVehicleLoaded(self):
         self.__updateFakeShadowAccordingToAppearance()

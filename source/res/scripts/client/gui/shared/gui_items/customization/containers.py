@@ -71,7 +71,7 @@ class OutfitContainer(object):
 
 
 class MultiSlot(object):
-    __slots__ = ('_regions', '_slotType', '_items', '_components')
+    __slots__ = ('_regions', '_slotType', '_items', '_components', '_locks')
 
     def __init__(self, slotType, regions):
         super(MultiSlot, self).__init__()
@@ -79,6 +79,7 @@ class MultiSlot(object):
         self._slotType = slotType
         self._items = {}
         self._components = {}
+        self._locks = {}
 
     def getType(self):
         return self._slotType
@@ -108,6 +109,9 @@ class MultiSlot(object):
             component = emptyComponent(self._slotType)
         self._items[idx] = Pair(item=item, component=component)
 
+    def lock(self, idx=0):
+        self._locks[idx] = True
+
     def remove(self, idx):
         self._items.pop(idx)
 
@@ -116,6 +120,9 @@ class MultiSlot(object):
 
     def isEmpty(self):
         return not self._items
+
+    def isLocked(self, idx=0):
+        return self._locks.get(idx, False)
 
     def items(self):
         for idx, pair in self._items.iteritems():

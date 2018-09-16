@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/hero_tank_controller.py
 import random
+from collections import namedtuple
 import Event
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.items_cache import CACHE_SYNC_REASON
@@ -10,6 +11,8 @@ from skeletons.gui.game_control import IHeroTankController, IBootcampController
 from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 _HERO_VEHICLES = 'hero_vehicles'
+_HeroTankInfo = namedtuple('_HeroTankInfo', ('url', 'styleID'))
+_HeroTankInfo.__new__.__defaults__ = ('', None)
 
 class HeroTankController(IHeroTankController):
     itemsCache = dependency.descriptor(IItemsCache)
@@ -20,8 +23,9 @@ class HeroTankController(IHeroTankController):
         self.__data = {}
         self.__invVehsIntCD = []
         self.__isEnabled = False
-        self.__currentTankOnScene = ''
+        self.__currentTankCD = None
         self.onUpdated = Event.Event()
+        return
 
     def init(self):
         self.itemsCache.onSyncCompleted += self.__updateInventoryVehsData
@@ -41,16 +45,26 @@ class HeroTankController(IHeroTankController):
     def isEnabled(self):
         return self.__isEnabled and not self.bootcampController.isInBootcamp()
 
-    def getRandomTank(self):
-        return self.__getNameFromCD(self.__randomChoice()) if self.isEnabled() else ''
-
-    def getLinkByTankName(self, tankName=''):
+    def getRandomTankCD(self):
         if self.isEnabled():
-            searchTankName = tankName or self.__currentTankOnScene
-            return self.__data.get(searchTankName, '')
+            items = self.__data.keys() or [None]
+            self.__currentTankCD = random.choice(items)
+        else:
+            self.__currentTankCD = None
+        return self.__currentTankCD
 
-    def getCurrentTankOnScene(self):
-        return self.__currentTankOnScene
+    def getCurrentTankCD(self):
+        return self.__currentTankCD
+
+    def getCurrentTankStyleId(self):
+        return self.__data[self.__currentTankCD].styleID if self.__currentTankCD in self.__data else None
+
+    def getCurrentRelatedURL(self):
+        if self.isEnabled():
+            vehicleCD = self.__currentTankCD
+            if vehicleCD in self.__data:
+                return self.__data[vehicleCD].url
+            return ''
 
     def __fullUpdate(self):
         self.__invVehsIntCD = []
@@ -67,7 +81,7 @@ class HeroTankController(IHeroTankController):
                 self.__fullUpdate()
                 self.__updateSettings()
                 for vehIntCD in vehDiff:
-                    if vehIntCD == self.__currentTankOnScene:
+                    if vehIntCD == self.__currentTankCD:
                         self.onUpdated()
 
             return
@@ -82,17 +96,5 @@ class HeroTankController(IHeroTankController):
         heroVehsDict = self.lobbyContext.getServerSettings().getHeroVehicles()
         self.__isEnabled = heroVehsDict.get('isEnabled', False)
         if 'vehicles' in heroVehsDict:
-            self.__data = {k:v for k, v in heroVehsDict['vehicles'].iteritems() if k not in self.__invVehsIntCD}
-
-    def __randomChoice(self):
-        items = self.__data.keys()
-        if items:
-            self.__currentTankOnScene = random.choice(self.__data.keys())
-        else:
-            self.__currentTankOnScene = ''
-        return self.__currentTankOnScene
-
-    def __getNameFromCD(self, cd):
-        if cd:
-            veh = self.itemsCache.items.getItemByCD(cd)
-            return veh.name
+            heroVehicles = heroVehsDict['vehicles']
+            self.__data = {k:_HeroTankInfo(**v) for k, v in heroVehicles.iteritems() if k not in self.__invVehsIntCD}

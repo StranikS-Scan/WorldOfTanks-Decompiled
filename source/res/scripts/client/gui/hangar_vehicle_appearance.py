@@ -113,7 +113,7 @@ class HangarVehicleAppearance(ComponentSystem):
         self.shadowManager = VehicleShadowManager()
         self.shadowManager.updatePlayerTarget(None)
         self.__onLoadedCallback = callback
-        self.__outfit = self.__getActiveOutfit()
+        self.__outfit = self._getActiveOutfit()
         self.__loadState.unload()
         self.__startBuild(vDesc, vState)
         return
@@ -261,9 +261,8 @@ class HangarVehicleAppearance(ComponentSystem):
             self.__showMarksOnGun = not diff['showMarksOnGun']
             self.refresh()
 
-    def __getActiveOutfit(self):
-        from HeroTank import HeroTank
-        if g_currentPreviewVehicle.isPresent() or not g_currentVehicle.isPresent() or isinstance(self.__vEntity, HeroTank):
+    def _getActiveOutfit(self):
+        if g_currentPreviewVehicle.isPresent() or not g_currentVehicle.isPresent():
             return self.itemsFactory.createOutfit()
         else:
             vehicle = g_currentVehicle.item

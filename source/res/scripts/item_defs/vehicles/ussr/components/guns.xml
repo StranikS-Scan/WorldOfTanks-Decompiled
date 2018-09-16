@@ -145,6 +145,7 @@
     <_152mm_M_53_A>	174	</_152mm_M_53_A>
     <_122mm_D_25BM>	175	</_122mm_D_25BM>
     <_152mm_M_51>	176	</_152mm_M_51>
+    <_152mm_M-10_W>	177	</_152mm_M-10_W>
     <Gun_01_KV>	200	</Gun_01_KV>
     <Gun_T-50-2>	201	</Gun_T-50-2>
     <Observer>	202	</Observer>
@@ -8163,6 +8164,64 @@
         </_152mm_53-OF-530>
       </shots>
     </_152mm_M-10>
+    <_152mm_M-10_W>
+      <userString>	#ussr_vehicles:_152mm_M-10_W	</userString>
+      <tags></tags>
+      <level>	6	</level>
+      <price>	60000	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.62	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.14	</amplitude>
+        <recoilEffect>	huge	</recoilEffect>
+      </recoil>
+      <effects>	shot_huge	</effects>
+      <reloadEffect>	reload115_152	</reloadEffect>
+      <turretYawLimits>	-180 180	</turretYawLimits>
+      <pitchLimits>
+        <minPitch>	0.0 -28.0 1.0 -28.0	</minPitch>
+        <maxPitch>	0.0 8.0 1.0 8.0	</maxPitch>
+      </pitchLimits>
+      <rotationSpeed>	23.625	</rotationSpeed>
+      <reloadTime>	25.3942857142857	</reloadTime>
+      <maxAmmo>	32	</maxAmmo>
+      <aimingTime>	4.0	</aimingTime>
+      <weight>	2300	</weight>
+      <maxHealth>	184	</maxHealth>
+      <maxRegenHealth>	92	</maxRegenHealth>
+      <repairCost>	10	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.685714285714286	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.16	</turretRotation>
+        <afterShot>	4.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_152mm_53-G-530>
+          <defaultPortion>	0.30	</defaultPortion>
+          <speed>	525	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	110 66	</piercingPower>
+        </_152mm_53-G-530>
+        <_152mm_MPB_1915>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	525	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	136 128	</piercingPower>
+        </_152mm_MPB_1915>
+        <_152mm_53-OF-530>
+          <defaultPortion>	0.70	</defaultPortion>
+          <speed>	525	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	720	</maxDistance>
+          <piercingPower>	86 86	</piercingPower>
+        </_152mm_53-OF-530>
+      </shots>
+    </_152mm_M-10_W>
     <_152mm_ML-20_mod_1937>
       <userString>	#ussr_vehicles:_152mm_ML-20_mod_1937	</userString>
       <shortUserString>	#ussr_vehicles:_152mm_ML-20_mod_1937_short	</shortUserString>

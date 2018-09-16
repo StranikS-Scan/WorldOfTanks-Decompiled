@@ -199,4 +199,36 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <priceGroup>	kv2_w style	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R152_KV2_W	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	170	</id>
+      <userString>	#vehicle_customization:special_style/kv2_w	</userString>
+      <description>	#vehicle_customization:special_style/kv2_w_description	</description>
+      <texture>	gui/maps/vehicles/styles/kv2_w.png	</texture>
+      <season>	ALL	</season>
+      <historical>	false	</historical>
+      <modelsSet>	WH	</modelsSet>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <decals>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	13104	</appliedTo>
+            </item>
+            <item>
+              <id>	0	</id>
+              <appliedTo>	52416	</appliedTo>
+            </item>
+          </decals>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </ussr.xml>

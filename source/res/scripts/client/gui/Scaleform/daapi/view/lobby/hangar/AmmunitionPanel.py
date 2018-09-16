@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/AmmunitionPanel.py
 import logging
-from constants import QUEUE_TYPE
+from constants import QUEUE_TYPE, PREBATTLE_TYPE
 from gui.prb_control.entities.listener import IGlobalListener
 from items.vehicles import NUM_OPTIONAL_DEVICE_SLOTS
 from CurrentVehicle import g_currentVehicle
@@ -158,4 +158,4 @@ class AmmunitionPanel(AmmunitionPanelMeta, IGlobalListener):
             self.as_showBattleAbilitiesAlertS(False)
 
     def __getSlotsRange(self):
-        return HANGAR_FITTING_SLOTS if self.prbDispatcher is not None and self.prbDispatcher.getEntity().getCtrlType() == CTRL_ENTITY_TYPE.PREQUEUE and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) else VEHICLE_FITTING_SLOTS
+        return HANGAR_FITTING_SLOTS if self.prbDispatcher is not None and self.prbDispatcher.getEntity().getCtrlType() == CTRL_ENTITY_TYPE.PREQUEUE and self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EPIC) else VEHICLE_FITTING_SLOTS

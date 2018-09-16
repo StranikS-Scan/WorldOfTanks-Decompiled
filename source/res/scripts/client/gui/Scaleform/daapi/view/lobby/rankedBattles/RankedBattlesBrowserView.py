@@ -5,11 +5,11 @@ from adisp import process
 from debug_utils import LOG_ERROR
 from gui.ranked_battles.ranked_helpers import getRankedBattlesUrl
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
-from gui.Scaleform.daapi.view.lobby.rankedBattles.web_handlers import createRankedBattlesWebHandlers
 from gui.Scaleform.daapi.view.meta.RankedBattlesBrowserViewMeta import RankedBattlesBrowserViewMeta
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.game_control import IBrowserController
+from web_client_api.ranked_battles import createRankedBattlesWebHandlers
 
 class RankedBattlesBrowserView(RankedBattlesBrowserViewMeta):
     browserCtrl = dependency.descriptor(IBrowserController)
@@ -43,7 +43,7 @@ class RankedBattlesBrowserView(RankedBattlesBrowserViewMeta):
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(RankedBattlesBrowserView, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == VIEW_ALIAS.BROWSER:
-            viewPy.init(self.__browserId, createRankedBattlesWebHandlers(), alias=self.alias)
+            viewPy.init(self.__browserId, createRankedBattlesWebHandlers(ctx=self.__ctx), alias=self.alias)
 
     @process
     def __loadBrowser(self, width, height):

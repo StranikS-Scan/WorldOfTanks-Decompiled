@@ -618,7 +618,7 @@ class Vehicle(BigWorld.Entity):
         if hasattr(self.filter, 'allowStrafeCompensation'):
             self.filter.allowStrafeCompensation = not self.isPlayerVehicle
         self.isStarted = True
-        if self.__highlightCylinder is not None:
+        if self.__highlightCylinder is not None and not self.appearance.isObserver:
 
             def _createMatrixProvider(entity):
                 translationOnlyMP = Math.WGTranslationOnlyMP()

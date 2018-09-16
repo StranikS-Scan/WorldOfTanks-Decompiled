@@ -116,6 +116,8 @@ class VehicleFootball(BigWorld.ScriptComponent):
         if not self.isFootballEvent():
             return
         vehicle = self.entity
+        if vehicle.isObserver():
+            return
         vehicle.gunRotator.setTargetVehicle(0)
         vehicle._lockGun(GUN_LOCK_FLAGS.OVERTURN)
         vehicle.gunRotator._VehicleGunRotator__impl.gunPitch = 0.0

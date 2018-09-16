@@ -1944,6 +1944,7 @@ class VEHICLE_CUSTOMIZATION(object):
     SPECIAL_STYLE_FOOTBALL_4SALE1 = '#vehicle_customization:special_style/football_4sale1'
     SPECIAL_STYLE_FOOTBALL_META = '#vehicle_customization:special_style/football_meta'
     SPECIAL_STYLE_FOOTBALL_GIFT = '#vehicle_customization:special_style/football_gift'
+    SPECIAL_STYLE_50TP_PROTOTYP_WINGEDHUSSAR = '#vehicle_customization:special_style/50TP_prototyp_WingedHussar'
     CUSTOMIZATION_POPOVER_STYLE_WINTER = '#vehicle_customization:customization/popover/style/winter'
     CUSTOMIZATION_POPOVER_STYLE_SUMMER = '#vehicle_customization:customization/popover/style/summer'
     CUSTOMIZATION_POPOVER_STYLE_DESERT = '#vehicle_customization:customization/popover/style/desert'

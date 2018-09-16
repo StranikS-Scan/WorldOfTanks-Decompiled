@@ -113,6 +113,7 @@ class GAME(CONST_CONTAINER):
     VEHICLE_CAROUSEL_STATS = 'vehicleCarouselStats'
     MINIMAP_ALPHA_ENABLED = 'minimapAlphaEnabled'
     C11N_HISTORICALLY_ACCURATE = 'c11nHistoricallyAccurate'
+    LOGIN_SERVER_SELECTION = 'loginServerSelection'
 
 
 class TUTORIAL(CONST_CONTAINER):

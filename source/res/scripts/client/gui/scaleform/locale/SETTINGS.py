@@ -186,6 +186,7 @@ class SETTINGS(object):
     GAME_HANGARCAMCHECKBOX = '#settings:game/hangarCamCheckbox'
     GAME_DYNAMICCAMERA = '#settings:game/dynamicCamera'
     GAME_C11NHISTORICALLYACCURATE = '#settings:game/c11nHistoricallyAccurate'
+    GAME_LOGINSERVERSELECTION = '#settings:game/loginServerSelection'
     MONITOR = '#settings:monitor'
     MONITOR_DESCRIPTION = '#settings:monitor/description'
     WINDOWSIZE = '#settings:windowSize'

@@ -8,6 +8,19 @@ class ILoginManager(object):
     def servers(self):
         raise NotImplementedError
 
+    @property
+    def wgcAvailable(self):
+        raise NotImplementedError
+
+    def checkWgcAvailability(self):
+        raise NotImplementedError
+
+    def addOnWgcErrorListener(self, listener):
+        raise NotImplementedError
+
+    def removeOnWgcErrorListener(self, listener):
+        raise NotImplementedError
+
     def init(self):
         raise NotImplementedError
 
@@ -18,6 +31,9 @@ class ILoginManager(object):
         raise NotImplementedError
 
     def initiateSocialLogin(self, socialNetworkName, serverName, rememberUser, isRegistration):
+        raise NotImplementedError
+
+    def tryWgcLogin(self):
         raise NotImplementedError
 
     def initiateRelogin(self, login, token2, serverName):

@@ -216,12 +216,18 @@ class _PingRequester(object):
         self.__pingPerformedCallback = pingPerformedCallback
         self.__isRequestPingInProgress = False
         self.__lastUpdateTime = 0
+        self.__skipNextResult = False
         self.__setPingCallback = False
         try:
             BigWorld.WGPinger.setOnPingCallback(self.__pingCallback)
             self.__setPingCallback = True
         except AttributeError:
             LOG_CURRENT_EXCEPTION()
+
+    def resetPingResult(self):
+        self.__lastUpdateTime = 0
+        if self.__isRequestPingInProgress:
+            self.__skipNextResult = True
 
     def request(self, peripheries, forced=False):
         if _isReplay('Ping'):
@@ -263,11 +269,14 @@ class _PingRequester(object):
         return
 
     def __pingCallback(self, result):
+        self.__isRequestPingInProgress = False
+        if self.__skipNextResult:
+            self.__skipNextResult = False
+            return
         LOG_DEBUG('Ping performed {}'.format(result))
         self.__updatePing(result)
 
     def __updatePing(self, pingData, state=None):
-        self.__isRequestPingInProgress = False
         self.__lastUpdateTime = time.time()
         for rKey, pData in self.__pingResult.iteritems():
             self.__pingResult[rKey] = PingData(pData.value, PING_STATUSES.UNDEFINED)
@@ -341,6 +350,9 @@ class _PreDefinedHostList(object):
 
     def requestPing(self, forced=False):
         self.__pingRequester.request(self._hosts, forced)
+
+    def resetPingResult(self):
+        self.__pingRequester.resetPingResult()
 
     def getPingResult(self):
         return self.__pingRequester.result()

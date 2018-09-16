@@ -22,9 +22,6 @@ class LoginPageMeta(View):
     def onSetRememberPassword(self, remember):
         self._printOverrideError('onSetRememberPassword')
 
-    def onExitFromAutoLogin(self):
-        self._printOverrideError('onExitFromAutoLogin')
-
     def doUpdate(self):
         self._printOverrideError('doUpdate')
 
@@ -46,23 +43,17 @@ class LoginPageMeta(View):
     def isLoginInvalid(self, login):
         self._printOverrideError('isLoginInvalid')
 
-    def showLegal(self):
-        self._printOverrideError('showLegal')
-
     def startListenCsisUpdate(self, startListenCsis):
         self._printOverrideError('startListenCsisUpdate')
 
     def saveLastSelectedServer(self, server):
         self._printOverrideError('saveLastSelectedServer')
 
+    def showLegal(self):
+        self._printOverrideError('showLegal')
+
     def changeAccount(self):
         self._printOverrideError('changeAccount')
-
-    def switchBgMode(self):
-        self._printOverrideError('switchBgMode')
-
-    def setMute(self, value):
-        self._printOverrideError('setMute')
 
     def onVideoLoaded(self):
         self._printOverrideError('onVideoLoaded')
@@ -73,8 +64,14 @@ class LoginPageMeta(View):
     def videoLoadingFailed(self):
         self._printOverrideError('videoLoadingFailed')
 
-    def as_setDefaultValuesS(self, loginName, pwd, rememberPwd, rememberPwdVisible, isIgrCredentialsReset, showRecoveryLink):
-        return self.flashObject.as_setDefaultValues(loginName, pwd, rememberPwd, rememberPwdVisible, isIgrCredentialsReset, showRecoveryLink) if self._isDAAPIInited() else None
+    def switchBgMode(self):
+        self._printOverrideError('switchBgMode')
+
+    def setMute(self, value):
+        self._printOverrideError('setMute')
+
+    def as_setDefaultValuesS(self, data):
+        return self.flashObject.as_setDefaultValues(data) if self._isDAAPIInited() else None
 
     def as_setErrorMessageS(self, msg, errorCode):
         return self.flashObject.as_setErrorMessage(msg, errorCode) if self._isDAAPIInited() else None
@@ -85,23 +82,29 @@ class LoginPageMeta(View):
     def as_setCopyrightS(self, copyrightVal, legalInfo):
         return self.flashObject.as_setCopyright(copyrightVal, legalInfo) if self._isDAAPIInited() else None
 
+    def as_setLoginWarningS(self, value):
+        return self.flashObject.as_setLoginWarning(value) if self._isDAAPIInited() else None
+
     def as_showWallpaperS(self, isShow, path, showSwitcher, isMuted):
         return self.flashObject.as_showWallpaper(isShow, path, showSwitcher, isMuted) if self._isDAAPIInited() else None
 
     def as_showLoginVideoS(self, path, bufferTime, isMuted):
         return self.flashObject.as_showLoginVideo(path, bufferTime, isMuted) if self._isDAAPIInited() else None
 
+    def as_setLoginWarningHideS(self):
+        return self.flashObject.as_setLoginWarningHide() if self._isDAAPIInited() else None
+
     def as_setCapsLockStateS(self, isActive):
         return self.flashObject.as_setCapsLockState(isActive) if self._isDAAPIInited() else None
+
+    def as_setKeyboardLangS(self, value):
+        return self.flashObject.as_setKeyboardLang(value) if self._isDAAPIInited() else None
 
     def as_pausePlaybackS(self):
         return self.flashObject.as_pausePlayback() if self._isDAAPIInited() else None
 
     def as_resumePlaybackS(self):
         return self.flashObject.as_resumePlayback() if self._isDAAPIInited() else None
-
-    def as_setKeyboardLangS(self, value):
-        return self.flashObject.as_setKeyboardLang(value) if self._isDAAPIInited() else None
 
     def as_doAutoLoginS(self):
         return self.flashObject.as_doAutoLogin() if self._isDAAPIInited() else None
@@ -115,8 +118,8 @@ class LoginPageMeta(View):
     def as_showSimpleFormS(self, isShow, socialList):
         return self.flashObject.as_showSimpleForm(isShow, socialList) if self._isDAAPIInited() else None
 
-    def as_showSocialFormS(self, haveToken, userName, icoPath, socialId):
-        return self.flashObject.as_showSocialForm(haveToken, userName, icoPath, socialId) if self._isDAAPIInited() else None
+    def as_showFilledLoginFormS(self, data):
+        return self.flashObject.as_showFilledLoginForm(data) if self._isDAAPIInited() else None
 
     def as_resetPasswordS(self):
         return self.flashObject.as_resetPassword() if self._isDAAPIInited() else None

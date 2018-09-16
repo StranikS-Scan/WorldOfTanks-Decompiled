@@ -106,6 +106,8 @@ class ARENAS(object):
     C_212_EPIC_RANDOM_VALLEY_NAME = '#arenas:212_epic_random_valley/name'
     C_212_EPIC_RANDOM_VALLEY_DESCRIPTION = '#arenas:212_epic_random_valley/description'
     C_115_SWEDEN_NAME = '#arenas:115_sweden/name'
+    C_208_BF_EPIC_NORMANDY_NAME = '#arenas:208_bf_epic_normandy/name'
+    C_208_BF_EPIC_NORMANDY_DESCRIPTION = '#arenas:208_bf_epic_normandy/description'
     TYPE_EPIC_NAME = '#arenas:type/epic/name'
     TYPE_EPIC_DESCRIPTION1 = '#arenas:type/epic/description1'
     TYPE_EPIC_DESCRIPTION2 = '#arenas:type/epic/description2'

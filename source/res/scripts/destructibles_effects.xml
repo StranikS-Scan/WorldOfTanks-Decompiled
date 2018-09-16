@@ -2776,6 +2776,44 @@
     </tree_Spruce_24m_touchdown>
   </trees>
   <fallingAtoms>
+    <hd_env_EU_443_LinenFlag_left_fracture>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_EU_443_LinenFlag_left_fracture.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_pole_metall_crack	</wwsound>
+            <params></params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_EU_443_LinenFlag_left_fracture>
+    <hd_env_EU_443_LinenFlag_left_touchdown>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/hd_env_EU_443_LinenFlag_left_touchdown.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_pole_metall_touch	</wwsound>
+            <params></params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_env_EU_443_LinenFlag_left_touchdown>
     <inf_env_112_09_StreetLamp_fracture>
       <variant1>
         <stages>
@@ -22837,6 +22875,106 @@
         </effects>
       </variant1>
     </inf_envSU_008_ArmyTech01_Zis5_01>
+    <inf_mle_SU_003_He111_Rooftop_01>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_mle_SU_003_He111_Rooftop_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	49	</metal_1>
+              <metal_2>	22.86	</metal_2>
+              <glass>	9.79	</glass>
+              <debrisAmount>	50	</debrisAmount>
+              <weight>	8000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_mle_SU_003_He111_Rooftop_01>
+    <inf_mle_SU_003_He111_Rooftop_01_hit>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_mle_SU_003_He111_Rooftop_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	49	</metal_1>
+              <metal_2>	22.86	</metal_2>
+              <glass>	9.79	</glass>
+              <debrisAmount>	50	</debrisAmount>
+              <weight>	8000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_mle_SU_003_He111_Rooftop_01_hit>
+    <inf_mle_SU_003_He111_Vertical_01>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_mle_SU_003_He111_Vertical_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	49	</metal_1>
+              <metal_2>	22.86	</metal_2>
+              <glass>	9.79	</glass>
+              <debrisAmount>	60	</debrisAmount>
+              <weight>	8000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_mle_SU_003_He111_Vertical_01>
+    <inf_mle_SU_003_He111_Vertical_01_hit>
+      <variant1>
+        <stages>
+          <base>	35.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_mle_SU_003_He111_Vertical_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <metal_1>	49	</metal_1>
+              <metal_2>	22.86	</metal_2>
+              <glass>	9.79	</glass>
+              <debrisAmount>	60	</debrisAmount>
+              <weight>	8000	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_mle_SU_003_He111_Vertical_01_hit>
     <inf_env_SU_027_StalinistSixtyFive>
       <variant1>
         <stages>
@@ -26985,6 +27123,29 @@
         </effects>
       </variant1>
     </hd_env_SU_018_StreetSigns_04>
+    <inf_gafBR_002_FieldFence1_new>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_gafBR_002_FieldFence1_new.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <stone_2>	35	</stone_2>
+              <debrisAmount>	70	</debrisAmount>
+              <weight>	5300	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_gafBR_002_FieldFence1_new>
     <hd_bld_UNI_008_WorkshopNew_Wall_01>
       <variant1>
         <stages>
@@ -27033,8 +27194,124 @@
         </effects>
       </variant1>
     </hd_bld_UNI_008_WorkshopNew_Wall_Corner_01>
+    <hd_bld_UNI_008_WorkshopNew_Doors_Big_01_3_fragile>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/buildings/hd_bld_UNI_008_WorkshopNew_Doors_Big_01_3.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_1>	77.99	</wood_1>
+              <wood_2>	30.97	</wood_2>
+              <debrisAmount>	75.37	</debrisAmount>
+              <weight>	8059.71	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </hd_bld_UNI_008_WorkshopNew_Doors_Big_01_3_fragile>
   </fragiles>
   <structures>
+    <inf_mil204_AreaForGun_01>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_mil204_AreaForGun_01.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	58.65	</wood_2>
+              <debrisAmount>	77.64	</debrisAmount>
+              <weight>	6526.71	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_mil204_AreaForGun_01>
+    <inf_mil204_AreaForGun_02>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_mil204_AreaForGun_02.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	58.65	</wood_2>
+              <debrisAmount>	77.64	</debrisAmount>
+              <weight>	6526.71	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_mil204_AreaForGun_02>
+    <inf_mil204_AreaForGun_03>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_mil204_AreaForGun_03.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	58.65	</wood_2>
+              <debrisAmount>	77.64	</debrisAmount>
+              <weight>	6526.71	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_mil204_AreaForGun_03>
+    <inf_mil204_AreaForGun_04>
+      <variant1>
+        <stages>
+          <base>	4.0	</base>
+        </stages>
+        <effects>
+          <pixie>
+            <startKey>	base	</startKey>
+            <file>	particles/Environment/objects/inf_mil204_AreaForGun_04.xml	</file>
+            <force>	1	</force>
+          </pixie>
+          <destructionSound>
+            <startKey>	base	</startKey>
+            <wwsound>	obj_generative	</wwsound>
+            <params>
+              <wood_2>	58.65	</wood_2>
+              <debrisAmount>	77.64	</debrisAmount>
+              <weight>	6526.71	</weight>
+            </params>
+          </destructionSound>
+        </effects>
+      </variant1>
+    </inf_mil204_AreaForGun_04>
     <hd_gaf_SU_007_AvenueFence_02>
       <variant1>
         <stages>

@@ -48,7 +48,7 @@ class LOGIN_STATUS(object):
     LOGIN_REJECTED_RATE_LIMITED = 'LOGIN_REJECTED_RATE_LIMITED'
 
 
-_INVALID_PASSWORD_TOKEN2_EXPIRED = 'Invalid token2'
+INVALID_TOKEN2_EXPIRED = ('Token2 expires time', 'Invalid token2')
 
 class ConnectionData(object):
 
@@ -136,27 +136,26 @@ class ConnectionManager(IConnectionManager):
             if stage == 1:
                 if self.__connectionMethod == CONNECTION_METHOD.TOKEN and 'token2' in responseData:
                     self.__swtichToToken2(responseData['token2'])
-                BigWorld.WGC_onServerResponse(True)
                 self.onLoggedOn(responseData)
                 self.onConnected()
         else:
             if self.__retryConnectionCallbackID is None:
                 status_ = self.__connectionStatus
-                if responseData.get('errorMessage', '') == _INVALID_PASSWORD_TOKEN2_EXPIRED:
+                errorMsg = responseData.get('errorMessage', '')
+                if errorMsg in INVALID_TOKEN2_EXPIRED:
                     status_ = LOGIN_STATUS.SESSION_END
-                    BigWorld.WGC_onToken2Expired()
                 self.onRejected(status_, responseData)
             if status == LOGIN_STATUS.LOGIN_REJECTED_RATE_LIMITED:
                 self.__reconnect()
             if stage == 6:
-                BigWorld.WGC_onServerResponse(False)
                 self.onDisconnected()
                 g_playerEvents.onDisconnected()
         return
 
     def __setConnectionData(self, params, password):
         self.__connectionMethod = params['auth_method']
-        params['auth_realm'] = constants.AUTH_REALM
+        if 'auth_realm' not in params:
+            params['auth_realm'] = constants.AUTH_REALM
         m = hashlib.md5()
         m.update(params['session'])
         params['session'] = m.hexdigest()

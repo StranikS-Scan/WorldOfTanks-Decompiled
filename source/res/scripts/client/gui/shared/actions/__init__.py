@@ -153,7 +153,7 @@ class ConnectToPeriphery(Action):
         return super(ConnectToPeriphery, self).isRunning()
 
     def invoke(self):
-        self.__wgcLogin = BigWorld.WGC_processingState() == WGC_STATE.READY_TO_LOGIN
+        self.__wgcLogin = self.loginManager.checkWgcAvailability()
         if self.__host and (self.__credentials or self.__wgcLogin):
             if not self.__wgcLogin:
                 if len(self.__credentials) < 2:

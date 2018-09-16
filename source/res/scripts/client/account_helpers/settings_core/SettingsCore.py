@@ -139,6 +139,7 @@ class SettingsCore(ISettingsCore):
          (GAME.DOUBLE_CAROUSEL_TYPE, options.DoubleCarouselTypeSetting(GAME.DOUBLE_CAROUSEL_TYPE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.VEHICLE_CAROUSEL_STATS, options.VehicleCarouselStatsSetting(GAME.VEHICLE_CAROUSEL_STATS, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GAME.C11N_HISTORICALLY_ACCURATE, options.C11nHistoricallyAccurateSetting(GAME.C11N_HISTORICALLY_ACCURATE, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
+         (GAME.LOGIN_SERVER_SELECTION, options.LoginServerSelectionSetting(GAME.LOGIN_SERVER_SELECTION)),
          (GAME.MINIMAP_ALPHA_ENABLED, options.StorageAccountSetting(GAME.MINIMAP_ALPHA_ENABLED, storage=EXTENDED_GAME_SETTINGS_STORAGE)),
          (GRAPHICS.MONITOR, options.MonitorSetting(storage=VIDEO_SETTINGS_STORAGE)),
          (GRAPHICS.WINDOW_SIZE, options.WindowSizeSetting(storage=VIDEO_SETTINGS_STORAGE)),

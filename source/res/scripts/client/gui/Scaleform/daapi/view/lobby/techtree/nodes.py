@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/nodes.py
-from gui.Scaleform.daapi.view.lobby.techtree.settings import DEFAULT_UNLOCK_PROPS
+from gui.Scaleform.daapi.view.lobby.techtree.settings import DEFAULT_UNLOCK_PROPS, NODE_STATE
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.formatters.time_formatters import RentLeftFormatter
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
@@ -169,7 +169,7 @@ class RealNode(ExposedNode):
         return self.__item.isPremiumIGR
 
     def isPreviewAllowed(self):
-        return self.__item.isInInventory or self.__item.isPreviewAllowed()
+        return self.__item.isInInventory and NODE_STATE.isVehicleCanBeChanged(self.getState()) or self.__item.isPreviewAllowed()
 
     def getPreviewLabel(self):
         label = ''

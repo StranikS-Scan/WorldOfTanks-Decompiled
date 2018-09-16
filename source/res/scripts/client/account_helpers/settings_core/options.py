@@ -2576,3 +2576,24 @@ class BattleBorderMapType(GroupSetting):
 
     def getDefaultValue(self):
         return self.TYPE_WALL
+
+
+class LoginServerSelectionSetting(PreferencesSetting):
+
+    def __init__(self, key):
+        super(LoginServerSelectionSetting, self).__init__()
+        self.__key = key
+        self.__value = Settings.g_instance.userPrefs.readBool(self.__key, True)
+
+    def _savePrefsCallback(self, _):
+        Settings.g_instance.userPrefs.writeBool(self.__key, self.__value)
+
+    def _readPrefsCallback(self, key, value):
+        if key == self.__key:
+            self.__value = value
+
+    def _set(self, value):
+        self.__value = value
+
+    def _get(self):
+        return self.__value

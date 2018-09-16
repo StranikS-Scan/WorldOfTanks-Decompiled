@@ -4,12 +4,12 @@ from gui.impl.gen_utils import DynAccessor
 
 class Components(DynAccessor):
     __slots__ = ()
-    checkbox_disable = 3445
-    checkbox_hover = 3446
-    checkbox_selection = 3447
-    checkbox_up = 3448
-    item_active_arrow = 3449
-    item_active_arrow_down = 3450
-    item_active_background = 3451
-    item_active_highlight = 3452
-    item_active_shine = 3453
+    checkbox_disable = 3447
+    checkbox_hover = 3448
+    checkbox_selection = 3449
+    checkbox_up = 3450
+    item_active_arrow = 3451
+    item_active_arrow_down = 3452
+    item_active_background = 3453
+    item_active_highlight = 3454
+    item_active_shine = 3455

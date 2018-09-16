@@ -26,9 +26,9 @@ def getViewSettings():
     return (ViewSettings(VIEW_ALIAS.INTRO_VIDEO, IntroPage, 'introPage.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.LOGIN, LoginView, 'login.swf', ViewTypes.DEFAULT, None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.EULA, EULADlg, 'EULADlg.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canDrag=False),
+     GroupedViewSettings(VIEW_ALIAS.LEGAL_INFO_WINDOW, LegalInfoWindow, 'legalInfoWindow.swf', ViewTypes.WINDOW, 'legalInfoWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      GroupedViewSettings(VIEW_ALIAS.EULA_FULL, EULADlg, 'EULAFullDlg.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, isModal=True, canClose=False, canDrag=False),
      GroupedViewSettings(VIEW_ALIAS.LOGIN_QUEUE, LoginQueue, 'LoginQueueWindow.swf', ViewTypes.TOP_WINDOW, '', None, ScopeTemplates.DEFAULT_SCOPE, canClose=False),
-     GroupedViewSettings(VIEW_ALIAS.LEGAL_INFO_WINDOW, LegalInfoWindow, 'legalInfoWindow.swf', ViewTypes.WINDOW, 'legalInfoWindow', None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.RSS_NEWS_FEED, RssNewsFeed, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(VIEW_ALIAS.BOOTCAMP_INTRO, BCIntroPage, 'BCIntroVideo.swf', ViewTypes.TOP_WINDOW, None, ScopeTemplates.DEFAULT_SCOPE))
 
@@ -43,8 +43,8 @@ class LoginPackageBusinessHandler(PackageBusinessHandler):
         listeners = ((VIEW_ALIAS.EULA, self.loadViewByCtxEvent),
          (VIEW_ALIAS.EULA_FULL, self.loadViewByCtxEvent),
          (VIEW_ALIAS.INTRO_VIDEO, self.loadViewByCtxEvent),
-         (VIEW_ALIAS.LEGAL_INFO_WINDOW, self.loadViewByCtxEvent),
          (VIEW_ALIAS.LOGIN, self.loadViewByCtxEvent),
+         (VIEW_ALIAS.LEGAL_INFO_WINDOW, self.loadViewByCtxEvent),
          (LoginEventEx.SET_LOGIN_QUEUE, self.__showLoginQueue),
          (LoginEventEx.SET_AUTO_LOGIN, self.__showLoginQueue),
          (LoginCreateEvent.CREATE_ACC, self.__createAccount),

@@ -280,6 +280,8 @@ class SharedPage(BattlePageMeta):
 
     def __handleHideSettingsTip(self, _):
         alias = _ALIASES.COLOR_SETTINGS_TIP_PANEL
+        if self._isBattleLoading:
+            self._blToggling.discard(alias)
         if self.as_isComponentVisibleS(alias):
             self._setComponentsVisibility(hidden={alias})
 

@@ -11090,4 +11090,60 @@
       </tiling>
     </camouflage>
   </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <invisibilityFactor>	1	</invisibilityFactor>
+    <priceGroup>	wh camo notInShop	</priceGroup>
+    <historical>	false	</historical>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R152_KV2_W	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	562	</id>
+      <texture>	vehicles/russian/Camouflage/kv2_w.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/kv2_w/label	</userString>
+      <description>	#vehicle_customization:camouflage/kv2_w/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	63 68 68 255	</c0>
+          <c1>	118 124 122 255	</c1>
+          <c2>	155 153 153 255	</c2>
+          <c3>	53 53 53 255	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+  </itemGroup>
+  <itemGroup>
+    <userString>	#vehicle_customization:camouflage/opaque	</userString>
+    <season>	ALL	</season>
+    <invisibilityFactor>	1	</invisibilityFactor>
+    <priceGroup>	wh camo notInShop	</priceGroup>
+    <historical>	false	</historical>
+    <vehicleFilter>
+      <include>
+        <vehicles>	france:F05_BDR_G1B	</vehicles>
+      </include>
+    </vehicleFilter>
+    <camouflage>
+      <id>	563	</id>
+      <texture>	vehicles/french/Camouflage/bdr_g1b_w.dds	</texture>
+      <userString>	#vehicle_customization:camouflage/bdr_g1b_w/label	</userString>
+      <description>	#vehicle_customization:camouflage/bdr_g1b_w/description	</description>
+      <scales>	1.3 1 0.7	</scales>
+      <palettes>
+        <palette>
+          <c0>	45 45 45 255	</c0>
+          <c1>	91 85 77 255	</c1>
+          <c2>	91 85 77 255	</c2>
+          <c3>	160 160 160 255	</c3>
+        </palette>
+      </palettes>
+      <tiling></tiling>
+    </camouflage>
+  </itemGroup>
 </camouflages.xml>

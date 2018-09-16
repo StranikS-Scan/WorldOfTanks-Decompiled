@@ -1,11 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/frameworks/wulf/view/view.py
+import logging
 import typing
 import Event
 import GUI
+from frameworks.wulf.view.view_event import ViewEvent
 from .view_model import ViewModel
 from ..py_object_binder import PyObjectEntity
-from ..gui_constants import ViewFlags, ViewStatus
+from ..gui_constants import ViewFlags, ViewStatus, ViewEventType
+_logger = logging.getLogger(__name__)
 
 class View(PyObjectEntity):
     __slots__ = ('_proxy', '__viewModel', '__args', '__kwargs', 'onStatusChanged')
@@ -17,6 +20,9 @@ class View(PyObjectEntity):
         self.onStatusChanged = Event.Event()
         self.__args = args
         self.__kwargs = kwargs
+
+    def __repr__(self):
+        return '{}(uniqueID={}, layoutID={})'.format(self.__class__.__name__, self.uniqueID, self.layoutID)
 
     @property
     def layoutID(self):
@@ -64,6 +70,15 @@ class View(PyObjectEntity):
     def hide(self):
         self.proxy.hide()
 
+    def createToolTip(self, event):
+        return None
+
+    def createPopUp(self, event):
+        return None
+
+    def createContextMenu(self, event):
+        return None
+
     def _initialize(self, *args, **kwargs):
         pass
 
@@ -84,3 +99,32 @@ class View(PyObjectEntity):
     def _cViewStatusChanged(self, oldStatus, newStatus):
         self._swapStates(oldStatus, newStatus)
         self.onStatusChanged(newStatus)
+
+    def _cOnViewEventReceived(self, cppObject):
+        event = ViewEvent(cppObject)
+        if not event.eventType:
+            _logger.error('%r: type of event is not defined in view event', self)
+            return False
+        elif not event.contentID:
+            _logger.error('%r: contentID is not defined in view event', self)
+            return False
+        elif not event.isOn:
+            _logger.error('%r: view should be destroyed in the core side by %r', self, event)
+            return False
+        elif self.getParentWindow() is None:
+            _logger.error('%r: window is not set as parent', self)
+            return False
+        else:
+            window = None
+            if event.eventType == ViewEventType.TOOLTIP:
+                window = self.createToolTip(event)
+            elif event.eventType == ViewEventType.POPUP:
+                window = self.createPopUp(event)
+            elif event.eventType == ViewEventType.CONTEXT_MENU:
+                window = self.createContextMenu(event)
+            if window is not None:
+                _logger.debug('%r: %r is created by %r', self, window, event)
+                window.load()
+                return True
+            _logger.warning('%r: window is not created by event %r', self, event)
+            return False

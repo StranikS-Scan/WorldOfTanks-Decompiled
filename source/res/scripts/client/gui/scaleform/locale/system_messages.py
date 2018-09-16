@@ -537,6 +537,7 @@ class SYSTEM_MESSAGES(object):
     BATTLEBOOSTER_BUY_VEHICLE_LOCKED = '#system_messages:battleBooster_buy/vehicle_locked'
     BATTLEBOOSTER_BUY_INVALID_VEHICLE = '#system_messages:battleBooster_buy/invalid_vehicle'
     BATTLEBOOSTER_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE = '#system_messages:battleBooster_buy/error_not_for_this_vehicle_type'
+    MULTIPLESELLING_SUCCESS = '#system_messages:multipleSelling/success'
     SHELL_SELL_SUCCESS = '#system_messages:shell_sell/success'
     SHELL_SELL_INVALID_MODULE = '#system_messages:shell_sell/invalid_module'
     SHELL_SELL_SERVER_ERROR = '#system_messages:shell_sell/server_error'
@@ -1563,6 +1564,7 @@ class SYSTEM_MESSAGES(object):
      BATTLEBOOSTER_BUY_VEHICLE_LOCKED,
      BATTLEBOOSTER_BUY_INVALID_VEHICLE,
      BATTLEBOOSTER_BUY_ERROR_NOT_FOR_THIS_VEHICLE_TYPE,
+     MULTIPLESELLING_SUCCESS,
      SHELL_SELL_SUCCESS,
      SHELL_SELL_INVALID_MODULE,
      SHELL_SELL_SERVER_ERROR,

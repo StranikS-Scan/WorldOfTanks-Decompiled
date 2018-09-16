@@ -7,6 +7,35 @@
     <he_premium>	HIGH_EXPLOSIVE_PREMIUM.png 0 0	</he_premium>
     <hc>	HOLLOW_CHARGE.png 0 0	</hc>
   </icons>
+  <_20mm_z_pociskiem_wybuchowo_B>
+    <id>	69	</id>
+    <userString>	#poland_vehicles:_20mm_z_pociskiem_wybuchowo_B	</userString>
+    <icon>	ap	</icon>
+    <price>	3	</price>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	20	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	autoArmorPiercing	</effects>
+    <damage>
+      <armor>	11	</armor>
+      <devices>	27	</devices>
+    </damage>
+  </_20mm_z_pociskiem_wybuchowo_B>
+  <_20mm_z_pociskiem_wybuchowo_ulepszony_B>
+    <id>	70	</id>
+    <userString>	#poland_vehicles:_20mm_z_pociskiem_wybuchowo_ulepszony_B	</userString>
+    <icon>	ap	</icon>
+    <price>	400	</price>
+    <improved>	true	</improved>
+    <kind>	ARMOR_PIERCING	</kind>
+    <caliber>	20	</caliber>
+    <isTracer>	true	</isTracer>
+    <effects>	autoArmorPiercing	</effects>
+    <damage>
+      <armor>	11	</armor>
+      <devices>	27	</devices>
+    </damage>
+  </_20mm_z_pociskiem_wybuchowo_ulepszony_B>
   <_75mm_Pzgr39L>
     <id>	24	</id>
     <userString>	#poland_vehicles:_75mm_Pzgr39L	</userString>

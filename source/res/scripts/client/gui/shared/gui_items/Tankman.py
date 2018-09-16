@@ -10,6 +10,18 @@ from gui.shared.gui_items.gui_item import HasStrCD, GUIItem
 from items.components import skills_constants
 from items.vehicles import VEHICLE_CLASS_TAGS
 
+class CrewTypes(object):
+    SKILL_100 = 100
+    SKILL_75 = 75
+    SKILL_50 = 50
+    CURRENT = -1
+    ALL = (SKILL_100,
+     SKILL_75,
+     SKILL_50,
+     CURRENT)
+    CREW_AVAILABLE_SKILLS = (SKILL_50, SKILL_75, SKILL_100)
+
+
 class TankmenCollection(ItemsCollection):
 
     def _filterItem(self, item, nation=None, role=None, isInTank=None):

@@ -1,9 +1,69 @@
 <guns.xml>
   <ids>
     <_75mm_KwK_L70>	0	</_75mm_KwK_L70>
+    <_20mm_n_k_m_20_A>	1	</_20mm_n_k_m_20_A>
     <_122_mm_wz_43_50>	3	</_122_mm_wz_43_50>
   </ids>
   <shared>
+    <_20mm_n_k_m_20_A>
+      <userString>	#poland_vehicles:_20mm_n_k_m_20_A	</userString>
+      <tags></tags>
+      <level>	2	</level>
+      <price>	3160	</price>
+      <notInShop>	true	</notInShop>
+      <impulse>	0.06	</impulse>
+      <recoil>
+        <lodDist>	MEDIUM	</lodDist>
+        <amplitude>	0.1	</amplitude>
+        <recoilEffect>	auto	</recoilEffect>
+      </recoil>
+      <effects>	shot_auto	</effects>
+      <reloadEffect>	reload12_25	</reloadEffect>
+      <pitchLimits>
+        <minPitch>	0.0 -25.0 1.0 -25.0	</minPitch>
+        <maxPitch>	0.0 7.0 1.0 7.0	</maxPitch>
+      </pitchLimits>
+      <turretYawLimits>	-13 13	</turretYawLimits>
+      <rotationSpeed>	40	</rotationSpeed>
+      <reloadTime>	4.04	</reloadTime>
+      <maxAmmo>	250	</maxAmmo>
+      <aimingTime>	4.04	</aimingTime>
+      <clip>
+        <count>	10	</count>
+        <rate>	320	</rate>
+      </clip>
+      <burst>
+        <count>	2	</count>
+        <rate>	320	</rate>
+      </burst>
+      <weight>	57	</weight>
+      <maxHealth>	50	</maxHealth>
+      <maxRegenHealth>	25	</maxRegenHealth>
+      <repairCost>	0.5	</repairCost>
+      <invisibilityFactorAtShot>	0.1	</invisibilityFactorAtShot>
+      <shotDispersionRadius>	0.4	</shotDispersionRadius>
+      <shotDispersionFactors>
+        <turretRotation>	0.08	</turretRotation>
+        <afterShot>	1.0	</afterShot>
+        <whileGunDamaged>	2.0	</whileGunDamaged>
+      </shotDispersionFactors>
+      <shots>
+        <_20mm_z_pociskiem_wybuchowo_B>
+          <defaultPortion>	1.0	</defaultPortion>
+          <speed>	820	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	400	</maxDistance>
+          <piercingPower>	43 33	</piercingPower>
+        </_20mm_z_pociskiem_wybuchowo_B>
+        <_20mm_z_pociskiem_wybuchowo_ulepszony_B>
+          <defaultPortion>	0.0	</defaultPortion>
+          <speed>	858	</speed>
+          <gravity>	9.81	</gravity>
+          <maxDistance>	400	</maxDistance>
+          <piercingPower>	55 44	</piercingPower>
+        </_20mm_z_pociskiem_wybuchowo_ulepszony_B>
+      </shots>
+    </_20mm_n_k_m_20_A>
     <_75mm_KwK_L70>
       <userString>	#poland_vehicles:_75mm_KwK_L70	</userString>
       <tags></tags>

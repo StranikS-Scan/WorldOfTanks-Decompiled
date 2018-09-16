@@ -99,6 +99,8 @@ class ToolTipBaseData(object):
         super(ToolTipBaseData, self).__init__()
         self._context = context
         self._toolTipType = toolTipType
+        self.calledBy = None
+        return
 
     @sf_lobby
     def app(self):

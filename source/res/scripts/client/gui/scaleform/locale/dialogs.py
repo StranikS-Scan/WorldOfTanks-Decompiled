@@ -46,10 +46,6 @@ class DIALOGS(object):
     QUITBATTLE_DESERTER_MESSAGE = '#dialogs:quitBattle/deserter/message'
     QUITBATTLE_DESERTER_SUBMIT = '#dialogs:quitBattle/deserter/submit'
     QUITBATTLE_DESERTER_CANCEL = '#dialogs:quitBattle/deserter/cancel'
-    QUITBATTLEEVENT_DESERTER_TITLE = '#dialogs:quitBattleEvent/deserter/title'
-    QUITBATTLEEVENT_DESERTER_MESSAGE = '#dialogs:quitBattleEvent/deserter/message'
-    QUITBATTLEEVENT_DESERTER_SUBMIT = '#dialogs:quitBattleEvent/deserter/submit'
-    QUITBATTLEEVENT_DESERTER_CANCEL = '#dialogs:quitBattleEvent/deserter/cancel'
     QUITBATTLEIGR_TITLE = '#dialogs:quitBattleIGR/title'
     QUITBATTLEIGR_MESSAGE = '#dialogs:quitBattleIGR/message'
     QUITBATTLEIGR_SUBMIT = '#dialogs:quitBattleIGR/submit'
@@ -794,6 +790,10 @@ class DIALOGS(object):
     BOOSTERSWINDOW_ACTIVATIONCONFIRMATION_MESSAGE = '#dialogs:boostersWindow/activationConfirmation/message'
     BOOSTERSWINDOW_ACTIVATIONCONFIRMATION_SUBMIT = '#dialogs:boostersWindow/activationConfirmation/submit'
     BOOSTERSWINDOW_ACTIVATIONCONFIRMATION_CANCEL = '#dialogs:boostersWindow/activationConfirmation/cancel'
+    BOOSTERSWINDOW_REPLACECONFIRMATION_TITLE = '#dialogs:boostersWindow/replaceConfirmation/title'
+    BOOSTERSWINDOW_REPLACECONFIRMATION_MESSAGE = '#dialogs:boostersWindow/replaceConfirmation/message'
+    BOOSTERSWINDOW_REPLACECONFIRMATION_SUBMIT = '#dialogs:boostersWindow/replaceConfirmation/submit'
+    BOOSTERSWINDOW_REPLACECONFIRMATION_CANCEL = '#dialogs:boostersWindow/replaceConfirmation/cancel'
     CLANCONFIRMJOINING_TITLE = '#dialogs:clanConfirmJoining/title'
     CLANCONFIRMJOINING_MESSAGE = '#dialogs:clanConfirmJoining/message'
     CLANCONFIRMJOINING_MESSAGE_CLANNAME = '#dialogs:clanConfirmJoining/message/clanName'
@@ -897,6 +897,11 @@ class DIALOGS(object):
     HOFDISABLED_TITLE = '#dialogs:hofDisabled/title'
     HOFDISABLED_MESSAGE = '#dialogs:hofDisabled/message'
     HOFDISABLED_CANCEL = '#dialogs:hofDisabled/cancel'
+    INGAMESHOPDISABLED_TITLE = '#dialogs:ingameShopDisabled/title'
+    INGAMESHOPDISABLED_MESSAGE = '#dialogs:ingameShopDisabled/message'
+    INGAMESHOPDISABLED_CANCEL = '#dialogs:ingameShopDisabled/cancel'
+    CUSTOMIZATIONCONFIRMSELL_TITLE = '#dialogs:customizationConfirmSell/title'
+    CUSTOMIZATIONCONFIRMSELL_MESSAGE = '#dialogs:customizationConfirmSell/message'
     LEAVEEVENT_TITLE = '#dialogs:leaveEvent/title'
     LEAVEEVENT_MESSAGE = '#dialogs:leaveEvent/message'
     LEAVEEVENT_SUBMIT = '#dialogs:leaveEvent/submit'
@@ -944,10 +949,6 @@ class DIALOGS(object):
      QUITBATTLE_DESERTER_MESSAGE,
      QUITBATTLE_DESERTER_SUBMIT,
      QUITBATTLE_DESERTER_CANCEL,
-     QUITBATTLEEVENT_DESERTER_TITLE,
-     QUITBATTLEEVENT_DESERTER_MESSAGE,
-     QUITBATTLEEVENT_DESERTER_SUBMIT,
-     QUITBATTLEEVENT_DESERTER_CANCEL,
      QUITBATTLEIGR_TITLE,
      QUITBATTLEIGR_MESSAGE,
      QUITBATTLEIGR_SUBMIT,
@@ -1692,6 +1693,10 @@ class DIALOGS(object):
      BOOSTERSWINDOW_ACTIVATIONCONFIRMATION_MESSAGE,
      BOOSTERSWINDOW_ACTIVATIONCONFIRMATION_SUBMIT,
      BOOSTERSWINDOW_ACTIVATIONCONFIRMATION_CANCEL,
+     BOOSTERSWINDOW_REPLACECONFIRMATION_TITLE,
+     BOOSTERSWINDOW_REPLACECONFIRMATION_MESSAGE,
+     BOOSTERSWINDOW_REPLACECONFIRMATION_SUBMIT,
+     BOOSTERSWINDOW_REPLACECONFIRMATION_CANCEL,
      CLANCONFIRMJOINING_TITLE,
      CLANCONFIRMJOINING_MESSAGE,
      CLANCONFIRMJOINING_MESSAGE_CLANNAME,
@@ -1795,6 +1800,11 @@ class DIALOGS(object):
      HOFDISABLED_TITLE,
      HOFDISABLED_MESSAGE,
      HOFDISABLED_CANCEL,
+     INGAMESHOPDISABLED_TITLE,
+     INGAMESHOPDISABLED_MESSAGE,
+     INGAMESHOPDISABLED_CANCEL,
+     CUSTOMIZATIONCONFIRMSELL_TITLE,
+     CUSTOMIZATIONCONFIRMSELL_MESSAGE,
      LEAVEEVENT_TITLE,
      LEAVEEVENT_MESSAGE,
      LEAVEEVENT_SUBMIT,

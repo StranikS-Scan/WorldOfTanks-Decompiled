@@ -6,7 +6,6 @@ from messenger.m_constants import SCH_CLIENT_MSG_TYPE
 SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.serverRebootCancelled.index(): _sc.ServerRebootCancelledFormatter(),
  _SM_TYPE.battleResults.index(): _sc.BattleResultsFormatter(),
- _SM_TYPE.goldReceived.index(): _sc.GoldReceivedFormatter(),
  _SM_TYPE.invoiceReceived.index(): _sc.InvoiceReceivedFormatter(),
  _SM_TYPE.adminTextMessage.index(): _sc.AdminMessageFormatter(),
  _SM_TYPE.accountTypeChanged.index(): _sc.AccountTypeChangedFormatter(),
@@ -46,7 +45,8 @@ SERVER_FORMATTERS = {_SM_TYPE.serverReboot.index(): _sc.ServerRebootFormatter(),
  _SM_TYPE.rankedQuests.index(): _sc.RankedQuestFormatter(),
  _SM_TYPE.bootcamp.index(): _sc.BootcampResultsFormatter(),
  _SM_TYPE.prbVehicleMaxSpgKick.index(): _sc.PrbVehicleMaxSpgKickFormatter(),
- _SM_TYPE.hangarQuests.index(): _sc.TokenQuestsFormatter()}
+ _SM_TYPE.hangarQuests.index(): _sc.TokenQuestsFormatter(),
+ _SM_TYPE.currencyUpdate.index(): _sc.CurrencyUpdateFormatter()}
 CLIENT_FORMATTERS = {SCH_CLIENT_MSG_TYPE.SYS_MSG_TYPE: _sc.ClientSysMessageFormatter(),
  SCH_CLIENT_MSG_TYPE.PREMIUM_ACCOUNT_EXPIRY_MSG: _sc.PremiumAccountExpiryFormatter(),
  SCH_CLIENT_MSG_TYPE.AOGAS_NOTIFY_TYPE: _sc.AOGASNotifyFormatter(),

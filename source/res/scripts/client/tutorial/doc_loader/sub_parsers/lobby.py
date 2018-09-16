@@ -65,6 +65,10 @@ def readFreeXPChangedTriggerSection(xmlCtx, section, chapter, triggerID):
     return triggers.FreeXPChangedTrigger(triggerID)
 
 
+def readIsIngameShopEnabledSection(xmlCtx, section, chapter, triggerID):
+    return triggers.IsIngameShopEnabledTrigger(triggerID)
+
+
 def readSwitchToRandomSection(xmlCtx, section, flags, conditions):
     return effects.SimpleEffect(effects.EFFECT_TYPE.ENTER_QUEUE, conditions=conditions)
 

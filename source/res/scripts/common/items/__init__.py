@@ -2,7 +2,7 @@
 # Embedded file name: scripts/common/items/__init__.py
 import nations
 from items import _xml
-from constants import IS_CLIENT, IS_CELLAPP, ITEM_DEFS_PATH
+from constants import IS_CLIENT, ITEM_DEFS_PATH
 from soft_exception import SoftException
 if IS_CLIENT:
     import ResMgr

@@ -251,19 +251,19 @@ class SfLobbyProxy(GUIProxy):
         return
 
     def __onViewLoaded(self, pyEntity, _):
-        if pyEntity.settings.type is ViewTypes.LOBBY_SUB:
-            pageName = pyEntity.settings.alias
+        if pyEntity.viewType is ViewTypes.LOBBY_SUB:
+            pageName = pyEntity.alias
             sceneID = self.config.getSceneID(pageName)
             LOG_DEBUG('GUI.onPageReady', sceneID)
             if sceneID is not None:
                 self.onPageReady(sceneID)
-        self.onViewLoaded(pyEntity.settings.alias)
+        self.onViewLoaded(pyEntity.alias)
         pyEntity.onDispose += self.__onViewDisposed
         return
 
     def __onViewDisposed(self, pyEntity):
         pyEntity.onDispose -= self.__onViewDisposed
-        self.onViewDisposed(pyEntity.settings.alias)
+        self.onViewDisposed(pyEntity.alias)
 
     def __onViewLoadError(self, key, msg, item):
         if item is not None:

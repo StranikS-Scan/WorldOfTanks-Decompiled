@@ -1,7 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/game_loading.py
+import logging
 import GUI
-from debug_utils import LOG_DEBUG
 from gui import g_guiResetters
 from gui.Scaleform.daapi.view.external_components import ExternalFlashComponent
 from gui.Scaleform.daapi.view.external_components import ExternalFlashSettings
@@ -11,6 +11,7 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.shared.utils import graphics
 from helpers import getFullClientVersion, getClientOverride, getClientLanguage
 from helpers import uniprof
+_logger = logging.getLogger(__name__)
 
 class GameLoading(ExternalFlashComponent, GameLoadingMeta):
 
@@ -42,7 +43,7 @@ class GameLoading(ExternalFlashComponent, GameLoadingMeta):
         self.as_setProgressS(value)
 
     def addMessage(self, message):
-        LOG_DEBUG(message)
+        _logger.info(message)
 
     def reset(self):
         self.as_setProgressS(0)

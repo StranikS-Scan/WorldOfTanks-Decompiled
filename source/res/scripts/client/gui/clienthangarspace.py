@@ -3,6 +3,7 @@
 import copy
 import json
 import math
+from logging import getLogger
 import BigWorld
 import Math
 import MusicControllerWWISE
@@ -17,22 +18,38 @@ from skeletons.gui.game_control import IIGRController
 from gui.hangar_cameras.hangar_camera_manager import HangarCameraManager
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.map_activities import IMapActivities
+from time_switched_hangar_provider import TimeSwitchedHangarProvider
 from skeletons.gui.shared.utils import IHangarSpace
 _DEFAULT_SPACES_PATH = 'spaces'
+_DEFAULT_HANGAR_NAME = 'hangar_v3'
 _SERVER_CMD_CHANGE_HANGAR = 'cmd_change_hangar'
 _SERVER_CMD_CHANGE_HANGAR_PREM = 'cmd_change_hangar_prem'
+_SERVER_CMD_ACTIVATE_HANGAR_DAY_NIGHT_EVENT = 'cmd_activate_hangar_day_night_event'
 _CUSTOMIZATION_HANGAR_SETTINGS_SEC = 'customizationHangarSettings'
+_EVENT_HANGAR_DAY_NIGHT = None
+
+def _makeHangarPath(hangarName):
+    return '%s/%s' % (_DEFAULT_SPACES_PATH, hangarName)
+
 
 def _getDefaultHangarPath(isPremium):
-    return '%s/hangar_v3' % _DEFAULT_SPACES_PATH
+    return _makeHangarPath(_DEFAULT_HANGAR_NAME)
 
 
 def _getHangarPath(isPremium, isPremIGR):
     global _HANGAR_CFGS
     global _EVENT_HANGAR_PATHS
+    global _EVENT_HANGAR_DAY_NIGHT
     if isPremium in _EVENT_HANGAR_PATHS:
         return _EVENT_HANGAR_PATHS[isPremium]
-    return _HANGAR_CFGS[_getDefaultHangarPath(False)][_IGR_HANGAR_PATH_KEY] if isPremIGR else _getDefaultHangarPath(isPremium)
+    elif _EVENT_HANGAR_DAY_NIGHT is not None:
+        hangarName = _EVENT_HANGAR_DAY_NIGHT.get()
+        if not hangarName:
+            LOG_ERROR('Hangar name not set. Use default hangar instead.')
+            hangarName = _DEFAULT_HANGAR_NAME
+        return _makeHangarPath(hangarName)
+    else:
+        return _HANGAR_CFGS[_getDefaultHangarPath(False)][_IGR_HANGAR_PATH_KEY] if isPremIGR else _getDefaultHangarPath(isPremium)
 
 
 def _getHangarKey(path):
@@ -47,6 +64,7 @@ _CFG = {}
 _HANGAR_CFGS = {}
 _EVENT_HANGAR_PATHS = {}
 _IGR_HANGAR_PATH_KEY = 'igrPremHangarPath' + ('CN' if constants.IS_CHINA else '')
+_logger = getLogger(__name__)
 
 def hangarCFG():
     global _CFG
@@ -81,6 +99,7 @@ def _readHangarSettings():
             _loadCustomizationConfig(customizationCfg, customizationXmlSection)
             cfg[_CUSTOMIZATION_HANGAR_SETTINGS_SEC] = customizationCfg
         configset[spaceKey] = cfg
+        _validateConfigValues(cfg)
 
     return configset
 
@@ -145,6 +164,12 @@ def loadConfig(cfg, xml, defaultCfg=None):
         cfg['v_start_angles'][i] = math.radians(cfg['v_start_angles'][i])
 
     return
+
+
+def _validateConfigValues(cfg):
+    if cfg['cam_pitch_constr'][0] <= -90.0:
+        _logger.warning('incorrect value - cam_pitch_constr[0] must be greater than -90 degrees!')
+        cfg['cam_pitch_constr'][0] = -89.9
 
 
 def _loadCustomizationConfig(cfg, xml):
@@ -405,6 +430,7 @@ class _ClientHangarSpacePathOverride(object):
         _EVENT_HANGAR_PATHS = {}
 
     def __onEventNotificationsChanged(self, diff):
+        global _EVENT_HANGAR_DAY_NIGHT
         isPremium = self.hangarSpace.isPremium
         hasChanged = False
         for notification in diff['removed']:
@@ -418,11 +444,14 @@ class _ClientHangarSpacePathOverride(object):
                     del _EVENT_HANGAR_PATHS[True]
                 if isPremium:
                     hasChanged = True
+            if notification['type'] == _SERVER_CMD_ACTIVATE_HANGAR_DAY_NIGHT_EVENT:
+                _EVENT_HANGAR_DAY_NIGHT = None
 
         for notification in diff['added']:
             if not notification['data']:
                 continue
             path = None
+            data = None
             try:
                 data = json.loads(notification['data'])
                 path = data['hangar']
@@ -437,6 +466,9 @@ class _ClientHangarSpacePathOverride(object):
                 _EVENT_HANGAR_PATHS[True] = path
                 if isPremium:
                     hasChanged = True
+            if notification['type'] == _SERVER_CMD_ACTIVATE_HANGAR_DAY_NIGHT_EVENT:
+                if data is not None:
+                    _EVENT_HANGAR_DAY_NIGHT = TimeSwitchedHangarProvider(data)
 
         if hasChanged and self.hangarSpace.inited:
             self.hangarSpace.refreshSpace(isPremium, True)

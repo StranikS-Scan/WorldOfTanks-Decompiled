@@ -14,6 +14,7 @@ from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
 from gui.Scaleform.daapi.view.lobby.rally.BaseRallyListView import BaseRallyListView
 from gui.Scaleform.daapi.view.lobby.strongholds.web_handlers import createStrongholdsWebHandlers
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
+from shared_utils import BoundMethodWeakref
 
 class StrongholdBattlesListView(BaseRallyListView):
     browserCtrl = dependency.descriptor(IBrowserController)
@@ -50,7 +51,7 @@ class StrongholdBattlesListView(BaseRallyListView):
     def _onRegisterFlashComponent(self, viewPy, alias):
         super(StrongholdBattlesListView, self)._onRegisterFlashComponent(viewPy, alias)
         if alias == VIEW_ALIAS.BROWSER:
-            viewPy.init(self.__browserId, createStrongholdsWebHandlers(onBrowserOpen=self.addChildBrowserAlias))
+            viewPy.init(self.__browserId, createStrongholdsWebHandlers(onBrowserOpen=BoundMethodWeakref(self.addChildBrowserAlias)))
             self.__browserCreated = True
 
     @process

@@ -8,10 +8,16 @@ from gui.InputHandler import g_instance as g_inputHandler
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.BrowserViewMeta import BrowserViewMeta
+from gui.Scaleform.locale.WAITING import WAITING
 from gui.shared import events, EVENT_BUS_SCOPE
 from helpers import dependency
 from skeletons.gui.game_control import IBrowserController
 from skeletons.gui.lobby_context import ILobbyContext
+
+def makeBrowserParams(waitingMessage=WAITING.LOADCONTENT, isTransparent=False):
+    return {'waitingMessage': waitingMessage,
+     'isTransparent': isTransparent}
+
 
 class BrowserView(LobbySubView, BrowserViewMeta):
     __background_alpha__ = 1.0

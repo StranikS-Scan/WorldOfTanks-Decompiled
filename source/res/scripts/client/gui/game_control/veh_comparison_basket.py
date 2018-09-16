@@ -7,6 +7,7 @@ import Event
 from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages
 from gui.SystemMessages import SM_TYPE
+from gui.shared.gui_items.Tankman import CrewTypes
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.Vehicle import Vehicle
@@ -124,17 +125,6 @@ def _indexCanBePerformed(func):
     return __wrapper
 
 
-class CREW_TYPES(object):
-    SKILL_100 = 100
-    SKILL_75 = 75
-    SKILL_50 = 50
-    CURRENT = -1
-    ALL = (SKILL_100,
-     SKILL_75,
-     SKILL_50,
-     CURRENT)
-
-
 class CONFIGURATION_TYPES(object):
     BASIC = 'basic'
     CURRENT = 'current'
@@ -181,8 +171,8 @@ class _VehCompareData(object):
         self.__isInInventory = False
         self.__isFromCache = isFromCache
         self.__invVehStrCD = None
-        self.__crewLvl = CREW_TYPES.SKILL_100
-        self.__inventoryCrewLvl = CREW_TYPES.SKILL_100
+        self.__crewLvl = CrewTypes.SKILL_100
+        self.__inventoryCrewLvl = CrewTypes.SKILL_100
         self.__crewSkills = self.getStockCrewSkills()
         self.__inventoryCrewSkills = self.getStockCrewSkills()
         self.__intCD = vehicleIntCD
@@ -207,13 +197,13 @@ class _VehCompareData(object):
         self.__invVehStrCD = value
 
     def setCrewData(self, crewLvl, skills):
-        if crewLvl not in CREW_TYPES.ALL:
+        if crewLvl not in CrewTypes.ALL:
             raise SoftException('Unsupported crew level type: {}'.format(crewLvl))
         self.__crewLvl = crewLvl
         self.__crewSkills = skills
 
     def setInventoryCrewData(self, crewLvl, value):
-        if crewLvl not in CREW_TYPES.ALL:
+        if crewLvl not in CrewTypes.ALL:
             raise SoftException('Unsupported crew level type: {}'.format(crewLvl))
         self.__inventoryCrewSkills = value
         self.__inventoryCrewLvl = crewLvl
@@ -261,7 +251,7 @@ class _VehCompareData(object):
         return self.__intCD
 
     def getStockCrewLvl(self):
-        return CREW_TYPES.SKILL_100
+        return CrewTypes.SKILL_100
 
     def getStockCrewSkills(self):
         return _NO_CREW_SKILLS.copy()
@@ -405,7 +395,7 @@ class VehComparisonBasket(IVehicleComparisonBasket):
         if vehCompareData.getEquipment() != newEqs:
             isChanged = True
             vehCompareData.setEquipment(newEqs)
-        if crewLvl != CREW_TYPES.SKILL_100 and crewLvl != CREW_TYPES.CURRENT:
+        if crewLvl != CrewTypes.SKILL_100 and crewLvl != CrewTypes.CURRENT:
             crewSkills = _NO_CREW_SKILLS.copy()
         if vehCompareData.getCrewData() != (crewLvl, crewSkills):
             vehCompareData.setCrewData(crewLvl, crewSkills)
@@ -469,6 +459,10 @@ class VehComparisonBasket(IVehicleComparisonBasket):
 
         self.__vehicles = []
         self.__applyChanges(removedIDXs=range(len(removedCDs) - 1, -1, -1), removedCDs=removedCDs)
+
+    @property
+    def maxVehiclesToCompare(self):
+        return MAX_VEHICLES_TO_COMPARE_COUNT
 
     def isFull(self):
         return self.__isFull
@@ -540,9 +534,9 @@ class VehComparisonBasket(IVehicleComparisonBasket):
             if defCrewData is not None:
                 vehCmpData.setCrewData(*defCrewData)
             elif vehicle.isInInventory:
-                vehCmpData.setCrewData(CREW_TYPES.CURRENT, _getCrewSkills(vehicle))
+                vehCmpData.setCrewData(CrewTypes.CURRENT, _getCrewSkills(vehicle))
             else:
-                vehCmpData.setCrewData(CREW_TYPES.SKILL_100, _NO_CREW_SKILLS.copy())
+                vehCmpData.setCrewData(CrewTypes.SKILL_100, _NO_CREW_SKILLS.copy())
             if defEquipment is not None:
                 vehCmpData.setEquipment(defEquipment)
             elif vehicle.isInInventory:
@@ -631,8 +625,8 @@ class VehComparisonBasket(IVehicleComparisonBasket):
                                 self.__updateInventoryCrewData(vehCompareData, vehicle)
                                 if not isCachedVehInInv:
                                     crewLevel, crewSkills = vehCompareData.getCrewData()
-                                    if crewLevel == CREW_TYPES.CURRENT:
-                                        vehCompareData.setCrewData(CREW_TYPES.SKILL_100, crewSkills)
+                                    if crewLevel == CrewTypes.CURRENT:
+                                        vehCompareData.setCrewData(CrewTypes.SKILL_100, crewSkills)
                                 changedIDXs.add(idx)
                             else:
                                 if isModulesOrDeviceChanged:
@@ -673,9 +667,9 @@ class VehComparisonBasket(IVehicleComparisonBasket):
     @classmethod
     def __updateInventoryCrewData(cls, vehCompareData, vehicle):
         if vehicle.isInInventory:
-            vehCompareData.setInventoryCrewData(CREW_TYPES.CURRENT, _getCrewSkills(vehicle))
+            vehCompareData.setInventoryCrewData(CrewTypes.CURRENT, _getCrewSkills(vehicle))
         else:
-            vehCompareData.setInventoryCrewData(CREW_TYPES.SKILL_100, _NO_CREW_SKILLS.copy())
+            vehCompareData.setInventoryCrewData(CrewTypes.SKILL_100, _NO_CREW_SKILLS.copy())
 
     def __onServerSettingChanged(self, diff):
         if 'isVehiclesCompareEnabled' in diff:

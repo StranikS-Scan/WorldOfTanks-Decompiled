@@ -10,8 +10,10 @@ from gui import SystemMessages
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.AchievementsUtils import AchievementsUtils
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.PersonalCaseMeta import PersonalCaseMeta
 from gui.Scaleform.locale.MENU import MENU
+from gui.ingame_shop import showBuyGoldForCrew
 from gui.prb_control.dispatcher import g_prbLoader
 from gui.prb_control.entities.listener import IGlobalListener
 from gui.shared import EVENT_BUS_SCOPE, events
@@ -21,7 +23,7 @@ from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.dossier import dumpDossier
 from gui.shared.gui_items.processors.tankman import TankmanDismiss, TankmanUnload, TankmanRetraining, TankmanAddSkill, TankmanChangePassport
-from gui.shared.gui_items.serializers import packTankman, packVehicle
+from gui.shared.gui_items.serializers import packTankman, packVehicle, packTraining
 from gui.shared.money import Money
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
@@ -31,17 +33,21 @@ from gui.shared.utils.requesters import REQ_CRITERIA
 from helpers import dependency
 from helpers import i18n, strcmp
 from items import tankmen
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 
 class PersonalCase(PersonalCaseMeta, IGlobalListener):
     itemsCache = dependency.descriptor(IItemsCache)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, ctx=None):
         super(PersonalCase, self).__init__()
         self.tmanInvID = ctx.get('tankmanID')
         self.tabIndex = ctx.get('page', -1)
         self.dataProvider = PersonalCaseDataProvider(self.tmanInvID)
+        tankman = self.itemsCache.items.getTankman(self.tmanInvID)
+        self.vehicle = self.itemsCache.items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
 
     def onClientChanged(self, diff):
         inventory = diff.get('inventory', {})
@@ -131,10 +137,14 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
             SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
 
     @decorators.process('retraining')
-    def retrainingTankman(self, inventoryID, innationID, tankmanCostTypeIdx):
+    def retrainingTankman(self, inventoryID, tankmanCostTypeIdx):
+        operationCost = self.itemsCache.items.shop.tankmanCost[tankmanCostTypeIdx].get('gold', 0)
+        currentGold = self.itemsCache.items.stats.gold
+        if currentGold < operationCost and isIngameShopEnabled():
+            showBuyGoldForCrew(operationCost)
+            return
         tankman = self.itemsCache.items.getTankman(int(inventoryID))
-        vehicleToRecpec = self.itemsCache.items.getItem(GUI_ITEM_TYPE.VEHICLE, tankman.nationID, int(innationID))
-        proc = TankmanRetraining(tankman, vehicleToRecpec, tankmanCostTypeIdx)
+        proc = TankmanRetraining(tankman, self.vehicle, tankmanCostTypeIdx)
         result = yield proc.request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
@@ -154,7 +164,17 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
             return
 
     @decorators.process('updating')
-    def changeTankmanPassport(self, invengoryID, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup):
+    def changeTankmanPassport(self, inventoryID, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup):
+        items = self.itemsCache.items
+        tankman = items.getTankman(inventoryID)
+        if tankman.descriptor.isFemale:
+            passportChangeCost = items.shop.passportFemaleChangeCost
+        else:
+            passportChangeCost = items.shop.passportChangeCost
+        currentGold = self.itemsCache.items.stats.gold
+        if currentGold < passportChangeCost and isIngameShopEnabled():
+            showBuyGoldForCrew(passportChangeCost)
+            return
 
         def checkFlashInt(value):
             return None if value == -1 else value
@@ -162,7 +182,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
         firstNameID = checkFlashInt(firstNameID)
         lastNameID = checkFlashInt(lastNameID)
         iconID = checkFlashInt(iconID)
-        tankman = self.itemsCache.items.getTankman(int(invengoryID))
+        tankman = self.itemsCache.items.getTankman(int(inventoryID))
         result = yield TankmanChangePassport(tankman, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup).request()
         if result.userMsg:
             SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
@@ -177,6 +197,10 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
 
     def openExchangeFreeToTankmanXpWindow(self):
         self.fireEvent(events.LoadViewEvent(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, getViewName(VIEW_ALIAS.EXCHANGE_FREE_TO_TANKMAN_XP_WINDOW, self.tmanInvID), {'tankManId': self.tmanInvID}), EVENT_BUS_SCOPE.LOBBY)
+
+    def changeRetrainVehicle(self, intCD):
+        self.vehicle = self.itemsCache.items.getItemByCD(intCD)
+        self.__setRetrainingData()
 
     def dropSkills(self):
         self.fireEvent(LoadViewEvent(VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, getViewName(VIEW_ALIAS.TANKMAN_SKILLS_DROP_WINDOW, self.tmanInvID), {'tankmanID': self.tmanInvID}), EVENT_BUS_SCOPE.LOBBY)
@@ -209,7 +233,7 @@ class PersonalCase(PersonalCaseMeta, IGlobalListener):
 
     @decorators.process('updating')
     def __setRetrainingData(self):
-        data = yield self.dataProvider.getRetrainingData()
+        data = yield self.dataProvider.getRetrainingData(self.vehicle)
         self.as_setRetrainingDataS(data)
 
     @decorators.process('updating')
@@ -340,7 +364,7 @@ class PersonalCaseDataProvider(object):
         return text_styles.standard(i18n.makeString(locale))
 
     @async
-    def getRetrainingData(self, callback):
+    def getRetrainingData(self, targetVehicle, callback):
         items = self.itemsCache.items
         tankman = items.getTankman(self.tmanInvID)
         nativeVehicleCD = tankman.vehicleNativeDescr.type.compactDescr
@@ -359,16 +383,13 @@ class PersonalCaseDataProvider(object):
             vDescr = vehicle.descriptor
             for role in vDescr.type.crewRoles:
                 if tDescr.role == role[0]:
-                    result.append({'innationID': vehicle.innationID,
+                    result.append({'intCD': vehicle.intCD,
                      'vehicleType': vehicle.type,
                      'userName': vehicle.shortUserName})
                     break
 
-        shopPrices, action = items.shop.getTankmanCostWithDefaults()
-        callback({'money': items.stats.money.toMoneyTuple(),
-         'tankmanCost': shopPrices,
-         'action': action,
-         'vehicles': result})
+        callback({'vehicles': result,
+         'retrainButtonsData': packTraining(targetVehicle, [tankman])})
 
     @async
     def getSkillsData(self, callback):
@@ -386,6 +407,8 @@ class PersonalCaseDataProvider(object):
         else:
             shopPrice = items.shop.passportChangeCost
             defaultPrice = items.shop.defaults.passportChangeCost
+        currentGold = self.itemsCache.items.stats.gold
+        enableSubmitButton = shopPrice <= currentGold or isIngameShopEnabled()
         action = None
         if shopPrice != defaultPrice:
             action = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'passportChangeCost', True, Money(gold=shopPrice), Money(gold=defaultPrice))
@@ -394,7 +417,8 @@ class PersonalCaseDataProvider(object):
          'action': action,
          'firstnames': self.__getDocGroupValues(tankman, config, operator.attrgetter('firstNamesList'), config.getFirstName),
          'lastnames': self.__getDocGroupValues(tankman, config, operator.attrgetter('lastNamesList'), config.getLastName),
-         'icons': self.__getDocGroupValues(tankman, config, operator.attrgetter('iconsList'), config.getIcon, sortNeeded=False)})
+         'icons': self.__getDocGroupValues(tankman, config, operator.attrgetter('iconsList'), config.getIcon, sortNeeded=False),
+         'enableSubmitButton': enableSubmitButton})
         return
 
     @staticmethod

@@ -49,12 +49,14 @@ class _I18nConvertedFlags(object):
     USER_STRING = 1
     SHORT_STRING = 2
     DESCRIPTION = 4
+    SHORT_DESCRIPTION_SPECIAL = 8
+    LONG_DESCRIPTION_SPECIAL = 16
 
 
 class I18nComponent(object):
-    __slots__ = ('__userString', '__shortString', '__description', '__converted')
+    __slots__ = ('__userString', '__shortString', '__description', '__converted', '__shortDescriptionSpecial', '__longDescriptionSpecial')
 
-    def __init__(self, userStringKey, descriptionKey, shortStringKey=''):
+    def __init__(self, userStringKey, descriptionKey, shortStringKey='', shortDescriptionSpecialKey='', longDescriptionSpecialKey=''):
         super(I18nComponent, self).__init__()
         self.__userString = userStringKey
         if shortStringKey:
@@ -63,6 +65,14 @@ class I18nComponent(object):
             self.__shortString = component_constants.EMPTY_STRING
         self.__description = descriptionKey
         self.__converted = _I18nConvertedFlags.UNDEFINED
+        if shortDescriptionSpecialKey:
+            self.__shortDescriptionSpecial = shortDescriptionSpecialKey
+        else:
+            self.__shortDescriptionSpecial = component_constants.EMPTY_STRING
+        if longDescriptionSpecialKey:
+            self.__longDescriptionSpecial = longDescriptionSpecialKey
+        else:
+            self.__longDescriptionSpecial = component_constants.EMPTY_STRING
 
     @property
     def userString(self):
@@ -84,6 +94,20 @@ class I18nComponent(object):
             self.__description = i18n.makeString(self.__description)
             self.__converted |= _I18nConvertedFlags.DESCRIPTION
         return self.__description
+
+    @property
+    def shortDescriptionSpecial(self):
+        if self.__converted & _I18nConvertedFlags.SHORT_DESCRIPTION_SPECIAL == 0:
+            self.__shortDescriptionSpecial = i18n.makeString(self.__shortDescriptionSpecial)
+            self.__converted |= _I18nConvertedFlags.SHORT_DESCRIPTION_SPECIAL
+        return self.__shortDescriptionSpecial
+
+    @property
+    def longDescriptionSpecial(self):
+        if self.__converted & _I18nConvertedFlags.LONG_DESCRIPTION_SPECIAL == 0:
+            self.__longDescriptionSpecial = i18n.makeString(self.__longDescriptionSpecial)
+            self.__converted |= _I18nConvertedFlags.LONG_DESCRIPTION_SPECIAL
+        return self.__longDescriptionSpecial
 
 
 class I18nExposedComponent(I18nComponent):

@@ -1,9 +1,15 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/gui_items/serializers.py
 import cPickle
+import math
+import collections
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
+from gui.shared.money import Money, Currency
+from helpers import dependency
 from items.components import skills_constants
 from gui.shared.gui_items.fitting_item import ICONS_MASK
 from gui.shared.gui_items import Tankman, Vehicle
+from skeletons.gui.shared import IItemsCache
 
 def packTankmanSkill(skill, isPermanent=False, tankman=None):
     if skill.roleType in skills_constants.ACTIVE_SKILLS or skill.roleType in skills_constants.ROLES:
@@ -152,3 +158,100 @@ def packVehicle(vehicle):
      'isBroken': vehicle.isBroken,
      'isAlive': vehicle.isAlive})
     return result
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def packDropSkill(tankman, itemsCache=None):
+    items = itemsCache.items
+    vehicle = items.getItemByCD(tankman.vehicleNativeDescr.type.compactDescr)
+    currentMoney = items.stats.money
+    prices = items.shop.dropSkillsCost.values()
+    trainingCosts = [ Money(credits=price[Currency.CREDITS] or None, gold=price[Currency.GOLD] or None) for price in prices ]
+    defaultCosts = [ Money(credits=price[Currency.CREDITS] or None, gold=price[Currency.GOLD] or None) for price in items.shop.defaults.dropSkillsCost.itervalues() ]
+    states = [ cost <= currentMoney or cost.get(Currency.GOLD) is not None and isIngameShopEnabled() for cost in trainingCosts ]
+    factors = [ price['xpReuseFraction'] for price in prices ]
+    tankmanLevels = [ math.floor(tankman.efficiencyRoleLevel * factor) for factor in factors ]
+    result = [ {'level': '{}%'.format(int(lvl)),
+     'enabled': state,
+     'price': [cost.getCurrency(), cost.getSignValue(cost.getCurrency())],
+     'isMoneyEnough': cost <= currentMoney,
+     'isNativeVehicle': True,
+     'nation': vehicle.nationName,
+     'showAction': cost != defCost} for lvl, state, cost, defCost in zip(tankmanLevels, states, trainingCosts, defaultCosts) ]
+    return result
+
+
+_ButtonData = collections.namedtuple('ButtonData', 'moneyDefault, moneyActual, trainingLevel, state, nativeVehicle')
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def packTraining(vehicle, crew=None, itemsCache=None):
+    items = itemsCache.items
+    currentMoney = items.stats.money
+    trainingCostsActual = items.shop.tankmanCost
+    trainingCostsDefault = items.shop.defaults.tankmanCost
+    if crew is not None:
+        tankmansTrainingData = (_getTrainingButtonsForTankman(trainingCostsActual, trainingCostsDefault, currentMoney, vehicle, tankman) for tankman in crew)
+    else:
+        tankmansTrainingData = (_getTrainingButtonsForTankman(trainingCostsActual, trainingCostsDefault, currentMoney),)
+    result = []
+    for buttons in zip(*tankmansTrainingData):
+        defaultPrice = min((button.moneyDefault for button in buttons))
+        actualPrice = max((button.moneyActual for button in buttons))
+        buttonMinLevel = min((button.trainingLevel for button in buttons))
+        buttonMaxLevel = max((button.trainingLevel for button in buttons))
+        buttonState = any((button.state for button in buttons))
+        allNative = all((button.nativeVehicle for button in buttons))
+        isRange = crew is not None and len(crew) > 1 and buttonMinLevel != buttonMaxLevel
+        currency = actualPrice.getCurrency()
+        price = actualPrice.getSignValue(actualPrice.getCurrency())
+        result.append({'level': _formatLevel(buttonMinLevel, buttonMaxLevel, isRange),
+         'enabled': buttonState,
+         'price': [currency, price],
+         'isMoneyEnough': currentMoney >= actualPrice or currency == Currency.GOLD and isIngameShopEnabled(),
+         'isNativeVehicle': allNative,
+         'nation': vehicle.nationName if vehicle is not None else None,
+         'showAction': actualPrice != defaultPrice})
+
+    return result
+
+
+def _getTrainingButtonsForTankman(costsActual, costsDefault, currentMoney, vehicle=None, tankman=None):
+    ingameShopEnabled = isIngameShopEnabled()
+    trainingButtonsData = []
+    defaults = vehicle is None or tankman is None
+    roleLevel = 0
+    sameVehicle = True
+    sameVehicleType = True
+    if not defaults:
+        roleLevel = tankman.roleLevel
+        sameVehicle = vehicle.intCD == tankman.vehicleNativeDescr.type.compactDescr
+        sameVehicleType = sameVehicle if sameVehicle else vehicle.type == tankman.vehicleNativeType
+    for costActual, costDefault in zip(costsActual, costsDefault):
+        moneyDefault = Money(credits=costDefault[Currency.CREDITS] or None, gold=costDefault[Currency.GOLD] or None)
+        moneyActual = Money(credits=costActual[Currency.CREDITS] or None, gold=costActual[Currency.GOLD] or None)
+        trainingLevel = defaultTrainingLevel = costActual['roleLevel']
+        buttonState = moneyActual <= currentMoney or moneyActual.get(Currency.GOLD) is not None and ingameShopEnabled
+        if not defaults:
+            baseRoleLoss = costActual['baseRoleLoss']
+            classChangeRoleLoss = costActual['classChangeRoleLoss']
+            if sameVehicle:
+                trainingLossMultiplier = 0.0
+            elif sameVehicleType:
+                trainingLossMultiplier = baseRoleLoss
+            else:
+                trainingLossMultiplier = baseRoleLoss + classChangeRoleLoss
+            trainingLevel = roleLevel - roleLevel * trainingLossMultiplier
+            if trainingLevel < defaultTrainingLevel or sameVehicle:
+                trainingLevel = defaultTrainingLevel
+            buttonState = buttonState and (trainingLevel > roleLevel if sameVehicle else trainingLevel >= defaultTrainingLevel)
+        trainingButtonsData.append(_ButtonData(moneyDefault, moneyActual, trainingLevel, buttonState, sameVehicle))
+
+    return trainingButtonsData
+
+
+def _makeMoneyFromTankmanCost(cost):
+    return Money(credits=cost[Currency.CREDITS] or None, gold=cost[Currency.GOLD] or None)
+
+
+def _formatLevel(minLvl, maxLvl, isRange):
+    return '{}-{}%'.format(int(minLvl), int(maxLvl)) if isRange else '{}%'.format(int(maxLvl))

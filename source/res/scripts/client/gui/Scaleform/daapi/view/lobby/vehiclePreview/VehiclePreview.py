@@ -8,11 +8,14 @@ from account_helpers.AccountSettings import PREVIEW_INFO_PANEL_IDX
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.LobbySelectableView import LobbySelectableView
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled, getBuyVehiclesUrl
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.daapi.view.lobby.vehiclePreview.vehicle_preview_dp import DefaultVehPreviewDataProvider
 from gui.Scaleform.daapi.view.meta.VehiclePreviewMeta import VehiclePreviewMeta
 from gui.Scaleform.framework import g_entitiesFactories
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.Scaleform.genConsts.STORE_TYPES import STORE_TYPES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.Scaleform.genConsts.VEHPREVIEW_CONSTANTS import VEHPREVIEW_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
@@ -20,8 +23,10 @@ from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.locale.VEHICLE_PREVIEW import VEHICLE_PREVIEW
+from gui.ingame_shop import canBuyGoldForVehicleThroughWeb
 from gui.shared import event_dispatcher, events, event_bus_handlers, EVENT_BUS_SCOPE
 from gui.shared.economics import getGUIPrice
+from gui.shared.event_dispatcher import showWebShop, showOldShop
 from gui.shared.formatters import text_styles, icons
 from gui.shared.money import Currency
 from gui.shared.tooltips.formatters import getActionPriceData
@@ -29,15 +34,11 @@ from gui.shared.utils.functions import makeTooltip
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IVehicleComparisonBasket, ITradeInController, IRestoreController, IHeroTankController, IBootcampController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraMovementStates
 from HeroTank import HeroTank
 from skeletons.gui.shared.utils import IHangarSpace
-CREW_INFO_TAB_ID = 'crewInfoTab'
-FACT_SHEET_TAB_ID = 'factSheetTab'
-TAB_ORDER = [FACT_SHEET_TAB_ID, CREW_INFO_TAB_ID]
-TAB_DATA_MAP = {FACT_SHEET_TAB_ID: (VEHPREVIEW_CONSTANTS.FACT_SHEET_LINKAGE, VEHICLE_PREVIEW.INFOPANEL_TAB_FACTSHEET_NAME),
- CREW_INFO_TAB_ID: (VEHPREVIEW_CONSTANTS.CREW_INFO_LINKAGE, VEHICLE_PREVIEW.INFOPANEL_TAB_CREWINFO_NAME)}
 _ButtonState = namedtuple('_ButtonState', 'enabled, price, label, isAction, currencyIcon, action, tooltip')
 _BACK_BTN_LABELS = {VIEW_ALIAS.LOBBY_HANGAR: 'hangar',
  VIEW_ALIAS.LOBBY_STORE: 'shop',
@@ -59,6 +60,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
     restores = dependency.descriptor(IRestoreController)
     heroTanks = dependency.descriptor(IHeroTankController)
     bootcamp = dependency.descriptor(IBootcampController)
+    lobbyContext = dependency.descriptor(ILobbyContext)
     hangarSpace = dependency.descriptor(IHangarSpace)
 
     def __init__(self, ctx=None, skipConfirm=False):
@@ -68,6 +70,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self._vehicleCD = ctx['itemCD']
         self.__vehicleStrCD = ctx.get('vehicleStrCD')
         self._previousBackAlias = ctx.get('previousBackAlias')
+        self._previewBackCb = ctx.get('previewBackCb')
         self._backAlias = ctx.get('previewAlias', VIEW_ALIAS.LOBBY_HANGAR)
         self.__manageVehicleModel = ctx.get('manageVehicleModel', False)
         if 'previewAppearance' in ctx:
@@ -97,6 +100,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.comparisonBasket.onChange += self.__onCompareBasketChanged
         self.comparisonBasket.onSwitchChange += self.__updateHeaderData
         self.restores.onRestoreChangeNotify += self.__onRestoreChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
         self.hangarSpace.onSpaceCreate += self.__onHangarCreateOrRefresh
         self.hangarSpace.setVehicleSelectable(True)
         if g_currentPreviewVehicle.isPresent():
@@ -114,6 +118,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.comparisonBasket.onChange -= self.__onCompareBasketChanged
         self.comparisonBasket.onSwitchChange -= self.__updateHeaderData
         self.restores.onRestoreChangeNotify -= self.__onRestoreChanged
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
         self.hangarSpace.onSpaceCreate -= self.__onHangarCreateOrRefresh
         self.hangarSpace.setVehicleSelectable(self.__keepVehicleSelectionEnabled)
         self.removeListener(CameraRelatedEvents.CAMERA_ENTITY_UPDATED, self.handleSelectedEntityUpdated)
@@ -122,6 +127,7 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             g_currentPreviewVehicle.resetAppearance()
         if self._backAlias == VIEW_ALIAS.VEHICLE_PREVIEW:
             g_currentVehicle.refreshModel()
+        self._previewBackCb = None
         self.__previewDP = None
         LobbySelectableView._dispose(self)
         if self.__vehAppearanceChanged:
@@ -129,7 +135,10 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         return
 
     def closeView(self):
-        event_dispatcher.showHangar()
+        if self._previewBackCb:
+            self._previewBackCb()
+        else:
+            event_dispatcher.showHangar()
 
     def onBackClick(self):
         self.__processBackClick()
@@ -142,7 +151,11 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             url = self.heroTanks.getCurrentRelatedURL()
             self.fireEvent(events.OpenLinkEvent(events.OpenLinkEvent.SPECIFIED, url=url))
         else:
-            self.__previewDP.buyAction(self._actionType, self._vehicleCD, self._skipConfirm)
+            vehicle = g_currentPreviewVehicle.item
+            if canBuyGoldForVehicleThroughWeb(vehicle):
+                event_dispatcher.showVehicleBuyDialog(vehicle, previousAlias=VIEW_ALIAS.VEHICLE_PREVIEW)
+            else:
+                self.__previewDP.buyAction(self._actionType, self._vehicleCD, self._skipConfirm)
 
     def onCompareClick(self):
         self.comparisonBasket.addVehicle(self._vehicleCD, initParameters={'strCD': g_currentPreviewVehicle.item.descriptor.makeCompactDescr()})
@@ -187,13 +200,19 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
             self.__updateHeaderData()
 
     def __onInventoryChanged(self, *arg):
-        if not g_currentPreviewVehicle.isPresent():
+        if not g_currentPreviewVehicle.isPresent() and self.bootcamp.isInBootcamp():
             event_dispatcher.selectVehicleInHangar(self._vehicleCD)
 
     def __onRestoreChanged(self, vehicles):
         if g_currentPreviewVehicle.isPresent():
             if self._vehicleCD in vehicles:
                 self._updateBtnState()
+
+    def __onServerSettingsChanged(self, diff):
+        if self.lobbyContext.getServerSettings().isIngameDataChangedInDiff(diff, 'isEnabled'):
+            self._updateBtnState()
+        if self.lobbyContext.getServerSettings().isIngamePreviewEnabled():
+            self.__processBackClick()
 
     def __updateStatus(self):
         if g_currentPreviewVehicle.hasModulesToSelect():
@@ -232,6 +251,8 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
                     formatter = text_styles.errCurrencyTextBig
                     if isBuyingAvailable:
                         tooltip = _buildBuyButtonTooltip('notEnoughGold')
+                        if isIngameShopEnabled():
+                            mayObtainForMoney = True
             else:
                 currencyIcon = RES_ICONS.MAPS_ICONS_LIBRARY_CREDITSICONBIG
                 formatter = text_styles.creditsTextBig if mayObtainForMoney else text_styles.errCurrencyTextBig
@@ -331,7 +352,9 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
         self.destroy()
 
     def __processBackClick(self, ctx=None):
-        if self._backAlias == VIEW_ALIAS.LOBBY_RESEARCH:
+        if self._previewBackCb:
+            self._previewBackCb()
+        elif self._backAlias == VIEW_ALIAS.LOBBY_RESEARCH:
             event_dispatcher.showResearchView(self._vehicleCD)
         elif self._backAlias == VIEW_ALIAS.VEHICLE_PREVIEW:
             entity = ctx.get('entity', None) if ctx else None
@@ -340,6 +363,12 @@ class VehiclePreview(LobbySelectableView, VehiclePreviewMeta):
                 event_dispatcher.showVehiclePreview(descriptor.type.compactDescr, previewAlias=self._previousBackAlias)
             else:
                 event_dispatcher.showHangar()
+        elif self._backAlias == VIEW_ALIAS.LOBBY_STORE:
+            if isIngameShopEnabled():
+                showWebShop(url=getBuyVehiclesUrl())
+            else:
+                showOldShop(ctx={'tabId': STORE_TYPES.SHOP,
+                 'component': STORE_CONSTANTS.VEHICLE})
         else:
             event = g_entitiesFactories.makeLoadEvent(self._backAlias, {'isBackEvent': True})
             self.fireEvent(event, scope=EVENT_BUS_SCOPE.LOBBY)

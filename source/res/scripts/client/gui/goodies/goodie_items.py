@@ -1,8 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/goodies/goodie_items.py
+import time
 import BigWorld
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE, GOODIE_STATE, GOODIE_VARIETY, GOODIE_TARGET_TYPE
 from gui import GUI_SETTINGS
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.Scaleform.locale.RES_SHOP import RES_SHOP
+from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.gui_items import GUI_ITEM_ECONOMY_CODE, KPI
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -20,6 +24,7 @@ _BOOSTER_QUALITY_SOURCE_PATH = '../maps/icons/boosters/booster_quality_%s.png'
 _BOOSTER_TYPE_LOCALE = '#menu:booster/userName/%s'
 _BOOSTER_DESCRIPTION_LOCALE = '#menu:booster/description/%s'
 _BOOSTER_QUALITY_LOCALE = '#menu:booster/quality/%s'
+_BOOSTER_BONUS_LOCALE = '#menu:booster/bonus/%s'
 MAX_ACTIVE_BOOSTERS_COUNT = 3
 
 class BOOSTER_QUALITY_NAMES(CONST_CONTAINER):
@@ -279,15 +284,29 @@ class Booster(_Goodie):
 
     @property
     def description(self):
-        return _ms(_BOOSTER_DESCRIPTION_LOCALE % self.boosterGuiType, effectValue=self.getFormattedValue(text_styles.neutral)) + _ms(MENU.BOOSTER_DESCRIPTION_EFFECTTIME, effectTime=self.getEffectTimeStr())
+        return self.getDescription(valueFormatter=text_styles.neutral)
+
+    @property
+    def shortDescriptionSpecial(self):
+        return _ms(TOOLTIPS.BOOSTERSWINDOW_BOOSTER_SHORTDESCRIPTIONSPECIAL)
+
+    @property
+    def longDescriptionSpecial(self):
+        return _ms(TOOLTIPS.BOOSTERSWINDOW_BOOSTER_LONGDESCRIPTIONSPECIAL)
 
     @property
     def kpi(self):
         kpiList = []
         name = GOODIE_TYPE_TO_KPI_NAME_MAP.get(self.boosterType)
         if name is not None:
-            kpiList.append(KPI(name, 1.0 + self.effectValue / 100.0, KPI.Type.FACTOR))
+            kpiList.append(KPI(name, 1.0 + self.effectValue / 100.0, KPI.Type.MUL))
         return kpiList
+
+    def getDescription(self, valueFormatter=None):
+        return _ms(_BOOSTER_DESCRIPTION_LOCALE % self.boosterGuiType, effectValue=self.getFormattedValue(valueFormatter)) + _ms(MENU.BOOSTER_DESCRIPTION_EFFECTTIME, effectTime=self.getEffectTimeStr())
+
+    def getBonusDescription(self, valueFormatter=None):
+        return _ms(_BOOSTER_BONUS_LOCALE % self.boosterGuiType, effectValue=self.getFormattedValue(valueFormatter), effectHours=self.getEffectTimeStr(hoursOnly=True))
 
     def getCooldownAsPercent(self):
         percent = 0
@@ -305,11 +324,14 @@ class Booster(_Goodie):
     def getShortLeftTimeStr(self):
         return time_utils.getTillTimeString(self.getUsageLeftTime(), MENU.TIME_TIMEVALUESHORT)
 
-    def getEffectTimeStr(self):
-        return time_utils.getTillTimeString(self.effectTime, MENU.TIME_TIMEVALUE)
+    def getEffectTimeStr(self, hoursOnly=False):
+        return _ms(MENU.VEHICLEPREVIEW_TIMELEFTSHORT_HOURS, hour=time.strftime('%H', time.gmtime(self.effectTime)).lstrip('0')) if hoursOnly else time_utils.getTillTimeString(self.effectTime, MENU.TIME_TIMEVALUE)
 
     def getQualityIcon(self):
         return _BOOSTER_QUALITY_SOURCE_PATH % self.quality
+
+    def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
+        return RES_SHOP.getBoosterIcon(size, self.boosterGuiType)
 
     def getExpiryDate(self):
         return BigWorld.wg_getLongDateFormat(self.expiryTime) if self.expiryTime is not None else ''

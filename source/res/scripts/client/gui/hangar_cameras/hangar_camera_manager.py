@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/hangar_cameras/hangar_camera_manager.py
 import math
 from functools import partial
+from logging import getLogger
 import BigWorld
 import Math
 import Keys
@@ -15,6 +16,7 @@ from gui.hangar_cameras.hangar_camera_common import CameraRelatedEvents, CameraM
 from gui.hangar_cameras.hangar_camera_idle import HangarCameraIdle
 from gui.hangar_cameras.hangar_camera_parallax import HangarCameraParallax
 from AvatarInputHandler.cameras import FovExtended
+_logger = getLogger(__name__)
 
 class HangarCameraYawFilter(object):
 
@@ -361,10 +363,14 @@ class HangarCameraManager(object):
         from gui.ClientHangarSpace import hangarCFG
         cfg = hangarCFG()
         entity = BigWorld.entities.get(self.__currentEntityId)
-        modelLength = entity.getModelLength() if entity and hasattr(entity, 'getModelLength') else 0.0
+        modelLength = entity.getModelLength() if entity is not None and hasattr(entity, 'getModelLength') else 0.0
         minDist = max(modelLength * cfg['cam_min_dist_vehicle_hull_length_k'], cfg['cam_dist_constr'][0])
-        maxDist = entity.cameraMaxDistance if entity and hasattr(entity, 'cameraMaxDistance') else cfg['cam_dist_constr'][1]
+        maxDist = entity.cameraMaxDistance if entity is not None and hasattr(entity, 'cameraMaxDistance') else cfg['cam_dist_constr'][1]
+        if maxDist < minDist:
+            _logger.warning('incorrect values - camera MAX distance < camera MIN distance, use min distance as max')
+            maxDist = minDist
         self.__camConstraints[2] = (minDist, maxDist)
+        return
 
     def __getCameraPivotDistance(self):
         from gui.ClientHangarSpace import hangarCFG

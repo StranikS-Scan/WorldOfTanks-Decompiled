@@ -61,6 +61,7 @@ class DataBuilder(SimpleBuilder):
     def __init__(self, tooltipType, linkage, provider):
         super(DataBuilder, self).__init__(tooltipType, linkage)
         self._provider = provider
+        self._provider.calledBy = tooltipType
 
     def build(self, manager, formatType, advanced_, *args, **kwargs):
         data = self._buildData(advanced_, *args, **kwargs)

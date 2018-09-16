@@ -2,7 +2,9 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/vehicle_modules.py
 import BigWorld
 from constants import SHELL_TYPES
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.shared.items_parameters.params_cache import g_paramsCache
 import nations
 from helpers import i18n
@@ -38,6 +40,9 @@ class VehicleModule(FittingItem):
 
     def getGUIEmblemID(self):
         return self.itemTypeName
+
+    def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
+        return RES_SHOP.getModuleIcon(size, self.itemTypeName)
 
 
 class VehicleChassis(VehicleModule):
@@ -284,6 +289,10 @@ class Shell(FittingItem):
         return ICONS_MASK[:-4] % {'type': self.itemTypeName,
          'subtype': '',
          'unicName': self.descriptor.icon[0]}
+
+    def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
+        name = super(Shell, self).getShopIcon(size)
+        return RES_SHOP.getShellIcon(size, name) if RES_SHOP.hasShellIcon(size, name) else None
 
     def getGUIEmblemID(self):
         return self.type

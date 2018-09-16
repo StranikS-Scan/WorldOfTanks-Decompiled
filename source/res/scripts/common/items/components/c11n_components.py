@@ -70,6 +70,14 @@ class BaseCustomizationItem(object):
     def description(self):
         return self.i18n.description if self.i18n else ''
 
+    @property
+    def shortDescriptionSpecial(self):
+        return self.i18n.shortDescriptionSpecial if self.i18n else ''
+
+    @property
+    def longDescriptionSpecial(self):
+        return self.i18n.longDescriptionSpecial if self.i18n else ''
+
 
 class PaintItem(BaseCustomizationItem):
     itemType = CustomizationType.PAINT

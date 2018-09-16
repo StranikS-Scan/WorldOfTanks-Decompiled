@@ -25,27 +25,23 @@ class BasicItem(legacy_stuff.LegacyStuff):
 
     @property
     def userString(self):
-        if self.i18n is not None:
-            return self.i18n.userString
-        else:
-            return ''
-            return
+        return self.i18n.userString if self.i18n is not None else ''
 
     @property
     def shortUserString(self):
-        if self.i18n is not None:
-            return self.i18n.shortString
-        else:
-            return ''
-            return
+        return self.i18n.shortString if self.i18n is not None else ''
 
     @property
     def description(self):
-        if self.i18n is not None:
-            return self.i18n.description
-        else:
-            return ''
-            return
+        return self.i18n.description if self.i18n is not None else ''
+
+    @property
+    def shortDescriptionSpecial(self):
+        return self.i18n.shortDescriptionSpecial if self.i18n is not None else ''
+
+    @property
+    def longDescriptionSpecial(self):
+        return self.i18n.longDescriptionSpecial if self.i18n is not None else ''
 
     def copy(self):
         component = self.__class__(self.typeID, self.id, self.name, self.compactDescr)

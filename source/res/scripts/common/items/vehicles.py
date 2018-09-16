@@ -1246,6 +1246,14 @@ class VehicleType(object):
         return self.i18nInfo.description
 
     @property
+    def shortDescriptionSpecial(self):
+        return self.i18nInfo.shortDescriptionSpecial
+
+    @property
+    def longDescriptionSpecial(self):
+        return self.i18nInfo.longDescriptionSpecial
+
+    @property
     def isCustomizationLocked(self):
         return 'lockOutfit' in self.tags
 

@@ -19,7 +19,7 @@ class PersonalCaseMeta(AbstractWindowView):
     def getRetrainingData(self):
         self._printOverrideError('getRetrainingData')
 
-    def retrainingTankman(self, inventoryID, innationID, tankmanCostTypeIndex):
+    def retrainingTankman(self, inventoryID, tankmanCostTypeIndex):
         self._printOverrideError('retrainingTankman')
 
     def getSkillsData(self):
@@ -36,6 +36,9 @@ class PersonalCaseMeta(AbstractWindowView):
 
     def changeTankmanPassport(self, invengoryID, firstNameID, firstNameGroup, lastNameID, lastNameGroup, iconID, iconGroup):
         self._printOverrideError('changeTankmanPassport')
+
+    def changeRetrainVehicle(self, intCD):
+        self._printOverrideError('changeRetrainVehicle')
 
     def openExchangeFreeToTankmanXpWindow(self):
         self._printOverrideError('openExchangeFreeToTankmanXpWindow')

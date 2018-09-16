@@ -4,5 +4,8 @@ from gui.Scaleform.framework.entities.abstract.AbstractWindowView import Abstrac
 
 class CrystalsPromoWindowMeta(AbstractWindowView):
 
+    def onOpenShop(self):
+        self._printOverrideError('onOpenShop')
+
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None

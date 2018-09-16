@@ -7,10 +7,8 @@ import threading
 from functools import partial
 from collections import namedtuple
 from debug_utils import LOG_DEBUG
-from helpers import threads, getFullClientVersion, http, time_utils, local_cache
-_CLIENT_VERSION = getFullClientVersion()
+from helpers import threads, http, time_utils, local_cache
 _TIMEOUT = 10.0
-_REMOTE_DATA_CACHE_VERSION = 1
 
 class LIFE_TIME(object):
     MIN = time_utils.QUARTER_HOUR
@@ -46,7 +44,7 @@ class _HttpOpenUrlJob(threads.Job):
         self.__callback = callback
 
     def doWork(self, worker):
-        response = http.openUrl(self.__url, self.__lastModified)
+        response = http.openUrl(self.__url, modified=self.__lastModified)
         self.__callback(response.getData(), response.getLastModified(), response.getExpires())
 
 
@@ -187,7 +185,7 @@ class _RemoteDataDownloader(object):
                 lastModified = record.lastModified
             else:
                 lastModified = None
-            self._pools[poolName]._putJob(jobType(page, lastModified, partial(self.__onResponseReceived, poolName, page, callback)))
+            self._pools[poolName].putJob(jobType(page, lastModified, partial(self.__onResponseReceived, poolName, page, callback)))
         else:
             callback(record.data)
         return

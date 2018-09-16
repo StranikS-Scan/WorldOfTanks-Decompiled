@@ -133,18 +133,6 @@ class EVENT_BOARDS(object):
     TIME_DAY_TODAY = '#event_boards:time/day/today'
     TIME_DAY_TOMORROW = '#event_boards:time/day/tomorrow'
     TIME_DAY_YESTERDAY = '#event_boards:time/day/yesterday'
-    DATETIME_MONTHS_1 = '#event_boards:dateTime/months/1'
-    DATETIME_MONTHS_2 = '#event_boards:dateTime/months/2'
-    DATETIME_MONTHS_3 = '#event_boards:dateTime/months/3'
-    DATETIME_MONTHS_4 = '#event_boards:dateTime/months/4'
-    DATETIME_MONTHS_5 = '#event_boards:dateTime/months/5'
-    DATETIME_MONTHS_6 = '#event_boards:dateTime/months/6'
-    DATETIME_MONTHS_7 = '#event_boards:dateTime/months/7'
-    DATETIME_MONTHS_8 = '#event_boards:dateTime/months/8'
-    DATETIME_MONTHS_9 = '#event_boards:dateTime/months/9'
-    DATETIME_MONTHS_10 = '#event_boards:dateTime/months/10'
-    DATETIME_MONTHS_11 = '#event_boards:dateTime/months/11'
-    DATETIME_MONTHS_12 = '#event_boards:dateTime/months/12'
     TIME_TIMETO_START = '#event_boards:time/timeTo/start'
     TIME_TIMETO_END = '#event_boards:time/timeTo/end'
     TIME_TIMETO_ENDREGISTRATION = '#event_boards:time/timeTo/endRegistration'
@@ -293,18 +281,6 @@ class EVENT_BOARDS(object):
      TASK_SELECTION_SUMALL,
      TASK_SELECTION_SUMSEQN,
      TASK_SELECTION_SUMMSEQN)
-    DATETIME_MONTHS_ENUM = (DATETIME_MONTHS_1,
-     DATETIME_MONTHS_2,
-     DATETIME_MONTHS_3,
-     DATETIME_MONTHS_4,
-     DATETIME_MONTHS_5,
-     DATETIME_MONTHS_6,
-     DATETIME_MONTHS_7,
-     DATETIME_MONTHS_8,
-     DATETIME_MONTHS_9,
-     DATETIME_MONTHS_10,
-     DATETIME_MONTHS_11,
-     DATETIME_MONTHS_12)
     SUMMARY_DESCRIPTION_SUMN_ENUM = (SUMMARY_DESCRIPTION_SUMN_NATION,
      SUMMARY_DESCRIPTION_SUMN_LEVEL,
      SUMMARY_DESCRIPTION_SUMN_CLASS,
@@ -449,15 +425,6 @@ class EVENT_BOARDS(object):
     def time_day(cls, key0):
         outcome = '#event_boards:time/day/{}'.format(key0)
         if outcome not in cls.TIME_DAY_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def datetime_months(cls, key0):
-        outcome = '#event_boards:dateTime/months/{}'.format(key0)
-        if outcome not in cls.DATETIME_MONTHS_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

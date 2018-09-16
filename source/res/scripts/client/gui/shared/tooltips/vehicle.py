@@ -61,6 +61,8 @@ def _makeModuleFitTooltipError(reason):
     return '#tooltips:moduleFits/{}'.format(reason)
 
 
+_SHORTEN_TOOLTIP_CASES = ('shopVehicle',)
+
 class VehicleInfoTooltipData(BlocksTooltipData):
 
     def __init__(self, context):
@@ -92,7 +94,8 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             items.append(formatters.packBuildUpBlockData(telecomBlock, padding=leftRightPadding))
         if not vehicle.isFootball:
             priceBlock, invalidWidth = PriceBlockConstructor(vehicle, statsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct()
-            if priceBlock:
+            shouldBeCut = self.calledBy and self.calledBy in _SHORTEN_TOOLTIP_CASES
+            if priceBlock and not shouldBeCut:
                 self._setWidth(_TOOLTIP_MAX_WIDTH if invalidWidth else _TOOLTIP_MIN_WIDTH)
                 items.append(formatters.packBuildUpBlockData(priceBlock, gap=textGap, padding=blockPadding))
         simplifiedStatsBlock = SimplifiedStatsBlockConstructor(vehicle, paramsConfig, leftPadding, rightPadding).construct()
@@ -119,8 +122,8 @@ class VehicleInfoTooltipData(BlocksTooltipData):
             statsBlockConstructor = AdditionalStatsBlockConstructor
         items.append(formatters.packBuildUpBlockData(statsBlockConstructor(vehicle, paramsConfig, self.context.getParams(), valueWidth, leftPadding, rightPadding).construct(), gap=textGap, padding=blockPadding))
         if not vehicle.isRotationGroupLocked:
-            statusBlock = StatusBlockConstructor(vehicle, statusConfig).construct()
-            if statusBlock:
+            statusBlock, operationError = StatusBlockConstructor(vehicle, statusConfig).construct()
+            if statusBlock and not (operationError and shouldBeCut):
                 items.append(formatters.packBuildUpBlockData(statusBlock, padding=blockPadding))
             else:
                 self._setContentMargin(bottom=bottomPadding)
@@ -377,6 +380,7 @@ class VehicleTradeInTooltipData(ToolTipBaseData):
 
 class VehicleTradeInPriceTooltipData(ToolTipBaseData):
     tradeIn = dependency.descriptor(ITradeInController)
+    itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, context):
         super(VehicleTradeInPriceTooltipData, self).__init__(context, TOOLTIP_TYPE.VEHICLE)
@@ -386,12 +390,13 @@ class VehicleTradeInPriceTooltipData(ToolTipBaseData):
             return {}
         tradeInVehicle = self.context.buildItem(tradeInVehicleCD)
         itemPrice = tradeInVehicle.buyPrices.itemPrice
+        statsMoney = self.itemsCache.items.stats.money
         bodyParts = []
         if tradeInVehicle.buyPrices.itemPrice.isActionPrice():
-            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_OLDPRICE, gold=moneyWithIcon(itemPrice.defPrice, currType=Currency.GOLD)))
-            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_NEWPRICE, gold=moneyWithIcon(itemPrice.price, currType=Currency.GOLD)))
+            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_OLDPRICE, gold=moneyWithIcon(itemPrice.defPrice, currType=Currency.GOLD), statsMoney=statsMoney))
+            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_NEWPRICE, gold=moneyWithIcon(itemPrice.price, currType=Currency.GOLD, statsMoney=statsMoney)))
         else:
-            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_PRICE, gold=moneyWithIcon(itemPrice.price, currType=Currency.GOLD)))
+            bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_PRICE, gold=moneyWithIcon(itemPrice.price, currType=Currency.GOLD, statsMoney=statsMoney)))
         if tradeOffVehicleCD < 0:
             tradeOffVehicleName = i18n.makeString(TOOLTIPS.TRADE_VEHICLE_NOVEHICLE)
             resultPrice = itemPrice.price
@@ -402,7 +407,7 @@ class VehicleTradeInPriceTooltipData(ToolTipBaseData):
         bodyParts.append(i18n.makeString(TOOLTIPS.TRADE_VEHICLE_TOCHANGE, vehicleName=text_styles.playerOnline(tradeOffVehicleName)))
         return {'header': i18n.makeString(TOOLTIPS.TRADE_VEHICLE_HEADER, vehicleName=tradeInVehicle.userName),
          'body': '\n'.join(bodyParts),
-         'result': i18n.makeString(TOOLTIPS.TRADE_VEHICLE_RESULT, gold=moneyWithIcon(resultPrice, currType=Currency.GOLD))}
+         'result': i18n.makeString(TOOLTIPS.TRADE_VEHICLE_RESULT, gold=moneyWithIcon(resultPrice, currType=Currency.GOLD, statsMoney=statsMoney))}
 
 
 class VehicleTooltipBlockConstructor(object):
@@ -776,7 +781,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
         isClanLock = self.vehicle.clanLock or None
         isDisabledInRoaming = self.vehicle.isDisabledInRoaming
         if isClanLock or isDisabledInRoaming:
-            return block
+            return (block, False)
         else:
             if self.configuration.node is not None:
                 result = self.__getTechTreeVehicleStatus(self.configuration, self.vehicle)
@@ -804,7 +809,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                     block.append(formatters.packTextBlockData(text=text_styles.standard(text)))
                 else:
                     block.append(formatters.packAlignedTextBlockData(header, BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER))
-            return block
+            return (block, result and result.get('operationError') is not None)
 
     def __getTechTreeVehicleStatus(self, config, vehicle):
         nodeState = int(config.node.state)
@@ -846,6 +851,7 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
             isUnlocked = vehicle.isUnlocked
             mayObtain, reason = vehicle.mayObtainForMoney(self.itemsCache.items.stats.money)
             msg = None
+            operationError = False
             if not isUnlocked:
                 msg = 'notUnlocked'
             elif isInInventory:
@@ -858,11 +864,13 @@ class StatusBlockConstructor(VehicleTooltipBlockConstructor):
                     msg = 'notEnoughCredits'
                 else:
                     msg = 'operationError'
-            if msg is not None:
+                    operationError = True
+            if msg:
                 header, text = getComplexStatus('#tooltips:vehicleStatus/%s' % msg)
                 return {'header': header,
                  'text': text,
-                 'level': level}
+                 'level': level,
+                 'operationError': operationError}
             return
         else:
             state, level = vehicle.getState()

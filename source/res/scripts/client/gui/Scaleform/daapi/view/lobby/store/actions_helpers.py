@@ -68,7 +68,7 @@ class ActionInfo(EventInfoModel):
 
     def getID(self):
         if not self._id:
-            self._id = '{}/{}/{}'.format(self.event.getID(), self.discount.getName(), self.discount.getParamName())
+            self._id = '/'.join((self.event.getID(), self.discount.getName(), self.discount.getParamName()))
         return self._id
 
     def isAvailable(self):
@@ -85,6 +85,12 @@ class ActionInfo(EventInfoModel):
 
     def getFinishTime(self):
         return self.event.getFinishTime()
+
+    def getExactStartTime(self):
+        return self.event.getData().get('startTime', time.time())
+
+    def getExactFinishTime(self):
+        return self.event.getData().get('finishTime', time.time())
 
     def getTitle(self):
         return self.event.getUserName()
@@ -251,7 +257,7 @@ class ActionInfo(EventInfoModel):
         return formatPercentValue(discount.discountValue) if discount else None
 
     def _formatFinishTime(self):
-        return '{} {}'.format(text_styles.main(i18n.makeString(QUESTS.ACTION_TIME_FINISH)), BigWorld.wg_getShortDateFormat(self.getFinishTime()))
+        return ' '.join((text_styles.main(i18n.makeString(QUESTS.ACTION_TIME_FINISH)), BigWorld.wg_getShortDateFormat(self.getFinishTime())))
 
     def _getActiveDateTimeString(self):
         if self.event.getFinishTimeLeft() <= time_utils.ONE_DAY:
@@ -262,7 +268,7 @@ class ActionInfo(EventInfoModel):
                 fmt = i18n.makeString(QUESTS.ITEM_TIMER_TILLFINISH_SHORTFORMAT)
             fmt %= {'hours': time.strftime('%H', gmtime),
              'min': time.strftime('%M', gmtime)}
-            return '{} {}'.format(text_styles.main(i18n.makeString(QUESTS.ACTION_TIME_LEFT)), fmt)
+            return ' '.join((text_styles.main(i18n.makeString(QUESTS.ACTION_TIME_LEFT)), fmt))
         return self._formatFinishTime()
 
     def __modifyName(self, stepName):
@@ -391,7 +397,7 @@ class VehPriceActionInfo(ActionInfo):
             return ''
         values = {'vehicles': vehicles,
          'discount': discValue}
-        paramName = '{}/{}'.format(self.discount.getParamName(), paramKey)
+        paramName = '/'.join((self.discount.getParamName(), paramKey))
         return self._getShortDescription(paramName, **values)
 
     def getAdditionalDescription(self, useBigIco=False, forHeroCard=False):
@@ -994,12 +1000,22 @@ _MODIFIERS_DICT = {'mul_EconomicsParams': EconomicsActionsInfo,
  'mul_EconomicsPrices': EconomicsActionsInfo,
  'set_EconomicsPrices': EconomicsActionsInfo,
  'set_TradeInParams': EconomicsActionsInfo,
+ 'set_VehPrice': VehPriceActionInfo,
+ 'mul_VehPriceNation': VehPriceActionInfo,
+ 'mul_VehPriceAll': VehPriceActionInfo,
  'cond_VehPrice': VehPriceActionInfo,
  'mul_VehPrice': VehPriceActionInfo,
  'mul_VehRentPrice': VehRentActionInfo,
  'mul_EquipmentPriceAll': EquipmentActionInfo,
+ 'mul_EquipmentPrice': EquipmentActionInfo,
+ 'set_EquipmentPrice': EquipmentActionInfo,
  'mul_OptionalDevicePriceAll': OptDeviceActionInfo,
+ 'mul_OptionalDevicePrice': OptDeviceActionInfo,
+ 'set_OptionalDevicePrice': OptDeviceActionInfo,
  'mul_ShellPriceAll': ShellPriceActionInfo,
+ 'set_ShellPrice': ShellPriceActionInfo,
+ 'mul_ShellPriceNation': ShellPriceActionInfo,
+ 'mul_ShellPrice': ShellPriceActionInfo,
  'set_PriceGroupPrice': C11nPriceGroupPriceActionInfo,
  'mul_PriceGroupPrice': C11nPriceGroupPriceActionInfo,
  'mul_PriceGroupPriceByTag': C11nPriceGroupPriceActionInfo,

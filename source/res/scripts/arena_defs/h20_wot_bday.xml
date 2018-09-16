@@ -1,0 +1,22 @@
+<h20_wot_bday.xml>
+  <wwmusic>	hangar_h20_music	</wwmusic>
+  <wwambientSound>	hangar_h20_ambient	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	ambient.bnk	</bank>
+      <bank>	hangar_h20_wot_bday_2018.bnk	</bank>
+      <bank>	env_Forest.bnk	</bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	hangar_premium_2018.bnk	</bank>
+    </unloadBanks>
+  </soundRemapping>
+  <boundingBox>
+    <bottomLeft>	-100.000000 -193.750000	</bottomLeft>
+    <upperRight>	162.500000 68.750000	</upperRight>
+  </boundingBox>
+  <gameplayTypes>
+    <ctf></ctf>
+  </gameplayTypes>
+  <mapActivities></mapActivities>
+</h20_wot_bday.xml>

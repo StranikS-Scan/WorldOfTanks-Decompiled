@@ -3,7 +3,9 @@
 from account_helpers.AccountSettings import AccountSettings, BOOSTERS_FILTER
 from goodies.goodie_constants import GOODIE_RESOURCE_TYPE
 from gui.Scaleform.daapi.view.lobby.boosters.booster_tabs import TabsContainer, TABS_IDS, getGuiCount
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.genConsts.TEXT_ALIGN import TEXT_ALIGN
+from helpers import dependency
 from helpers.i18n import makeString as _ms
 from gui.Scaleform.daapi.view.meta.BoostersWindowMeta import BoostersWindowMeta
 from gui.goodies.goodie_items import MAX_ACTIVE_BOOSTERS_COUNT, BOOSTER_QUALITY_NAMES
@@ -14,6 +16,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.shared.utils.functions import makeTooltip
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from shared_utils import BitmaskHelper
+from skeletons.gui.lobby_context import ILobbyContext
 
 class FILTER_STATE(BitmaskHelper):
     ALL = 0
@@ -32,6 +35,7 @@ class FILTER_STATE(BitmaskHelper):
 
 
 class BoostersWindow(BoostersWindowMeta):
+    lobbyContext = dependency.descriptor(ILobbyContext)
     __metaclass__ = event_bus_handlers.EventBusListener
 
     def __init__(self, ctx=None):
@@ -62,6 +66,8 @@ class BoostersWindow(BoostersWindowMeta):
 
     def _populate(self):
         super(BoostersWindow, self)._populate()
+        serverSettings = self.lobbyContext.getServerSettings()
+        serverSettings.onServerSettingsChange += self.__onServerSettingsChanged
         self.__tabsContainer.init()
         self.__tabsContainer.onTabsUpdate += self.__onTabsUpdate
         self.__setFilters(AccountSettings.getFilter(BOOSTERS_FILTER))
@@ -78,6 +84,8 @@ class BoostersWindow(BoostersWindowMeta):
         self.__tabsContainer = None
         self.__qualities = None
         self.__boosterTypes = None
+        serverSettings = self.lobbyContext.getServerSettings()
+        serverSettings.onServerSettingsChange -= self.__onServerSettingsChanged
         super(BoostersWindow, self)._dispose()
         return
 
@@ -136,7 +144,7 @@ class BoostersWindow(BoostersWindowMeta):
         currentTab = self.__tabsContainer.currentTab
         self.as_setDataS({'isHaveNotInfo': currentTab.getCount() == 0,
          'noInfoData': self.__packNoInfo(),
-         'tabsLabels': [self.__getInventoryTabLabel(), self.__getQuestsTabLabel(), self.__getShopTabLabel()],
+         'tabsLabels': [self.__getInventoryTabLabel(), self.__getShopTabLabel()],
          'activeText': self.__getActiveText(),
          'filterState': filterState,
          'tabIndex': currentTab.getID()})
@@ -144,10 +152,6 @@ class BoostersWindow(BoostersWindowMeta):
     def __getInventoryTabLabel(self):
         inventory = self.__tabsContainer.inventoryTab
         return _ms(MENU.BOOSTERSWINDOW_TABS_AVAILABLELABEL, count=self.__getFormattedCount(inventory))
-
-    def __getQuestsTabLabel(self):
-        quests = self.__tabsContainer.questsTab
-        return _ms(MENU.BOOSTERSWINDOW_TABS_NOTAVAILABLELABEL, count=self.__getFormattedCount(quests))
 
     def __getShopTabLabel(self):
         shop = self.__tabsContainer.shopTab
@@ -178,3 +182,7 @@ class BoostersWindow(BoostersWindowMeta):
     @event_bus_handlers.eventBusHandler(events.HideWindowEvent.HIDE_BOOSTERS_WINDOW, EVENT_BUS_SCOPE.LOBBY)
     def __handleBoostersWindowClose(self, _):
         self.destroy()
+
+    def __onServerSettingsChanged(self, diff):
+        if 'ingameShop' in diff and isIngameShopEnabled():
+            self.destroy()

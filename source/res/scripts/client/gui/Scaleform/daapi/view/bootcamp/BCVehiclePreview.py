@@ -1,17 +1,16 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCVehiclePreview.py
-from gui.Scaleform.daapi.view.meta.BCVehiclePreviewMeta import BCVehiclePreviewMeta
+from gui.Scaleform.daapi.view.lobby.vehiclePreview.VehiclePreview import VehiclePreview
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.shared import event_dispatcher
 from bootcamp.Bootcamp import DISABLED_TANK_LEVELS
 from bootcamp.Bootcamp import g_bootcamp
 from CurrentVehicle import g_currentPreviewVehicle
 
-class BCVehiclePreview(BCVehiclePreviewMeta):
+class BCVehiclePreview(VehiclePreview):
 
     def __init__(self, ctx=None):
         super(BCVehiclePreview, self).__init__(ctx, skipConfirm=True)
-        self._showVehInfoPanel = False
         self._showHeaderCloseBtn = False
         self._disableBuyButton = False
 

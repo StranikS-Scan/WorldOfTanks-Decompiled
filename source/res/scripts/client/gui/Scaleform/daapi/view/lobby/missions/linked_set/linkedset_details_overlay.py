@@ -20,6 +20,7 @@ from gui.shared import events
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.server_events.events_helpers import hasAtLeastOneAvailableQuest, isAllQuestsCompleted
 from gui.Scaleform.locale.MENU import MENU
+from gui.Scaleform.locale.STORAGE import STORAGE
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui import makeHtmlString
@@ -269,13 +270,13 @@ class LinkedSetDetailsOverlay(LinkedSetDetailsOverlayMeta):
     def _setupFlashAnimTexts(self):
         if not self._isSetupedFlashAnimTexts:
             self.as_setDataVideoS({'headerServiceText': MENU.HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_EQUIPMENT_LABEL,
-             'headerDepotText': MENU.STORETAB_INVENTORY,
+             'headerDepotText': STORAGE.STORAGE_SECTIONTITLE,
              'headerConfirmSaleText': DIALOGS.SELLMODULECONFIRMATION_TITLE,
              'headerEquipmentText': MENU.OPTIONALDEVICEFITS_TITLE,
              'btnBattleText': MENU.HEADERBUTTONS_BATTLE,
              'btnAcceptText': MENU.HANGAR_AMMUNITIONPANEL_TECHNICALMAITENANCE_BUTTONS_APPLY,
              'btnResearchText': MENU.CONTEXTMENU_UNLOCK,
-             'btnStoreText': MENU.HEADERBUTTONS_SHOP,
+             'btnStoreText': MENU.HEADERBUTTONS_STORAGE,
              'btnSellText': DIALOGS.SELLMODULECONFIRMATION_SUBMIT,
              'btnCancelText': DIALOGS.SELLCONFIRMATION_CANCEL,
              'txtTotalText': MENU.AMMORELOAD_TOTALCOST,

@@ -252,6 +252,7 @@ def start():
         except Exception:
             LOG_CURRENT_EXCEPTION()
 
+        WebBrowser.initExternalCache()
         return
 
 
@@ -321,6 +322,7 @@ def fini():
         if g_scenario is not None:
             g_scenario.fini()
         g_onBeforeSendEvent = None
+        WebBrowser.destroyExternalCache()
         return
 
 

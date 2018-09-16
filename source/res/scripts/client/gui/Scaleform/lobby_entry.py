@@ -6,7 +6,7 @@ from gui.Scaleform.daapi.settings.config import LOBBY_TOOLTIPS_BUILDERS_PATHS, A
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.tooltip_mgr import ToolTip
-from gui.Scaleform.framework.application import SFApplication
+from gui.Scaleform.framework.application import AppEntry
 from gui.Scaleform.framework.managers import LoaderManager, ContainerManager
 from gui.Scaleform.framework.managers.CacheManager import CacheManager
 from gui.Scaleform.framework.managers.ImageManager import ImageManager
@@ -27,6 +27,7 @@ from gui.Scaleform.managers.SoundManager import SoundManager
 from gui.Scaleform.managers.TweenSystem import TweenManager
 from gui.Scaleform.managers.UtilsManager import UtilsManager
 from gui.Scaleform.managers.voice_chat import LobbyVoiceChatManager
+from gui.impl.windows import UserWindowFlags
 from gui.shared import EVENT_BUS_SCOPE
 from gui.app_loader import settings as app_settings
 from helpers import dependency, uniprof
@@ -37,11 +38,11 @@ LOBBY_OPTIMIZATION_CONFIG = {VIEW_ALIAS.LOBBY_HEADER: OptimizationSetting(),
  VIEW_ALIAS.FOOTBALL_CARD_COLLECTION: OptimizationSetting(),
  VIEW_ALIAS.FOOTBALL_BUFFON_RECRUITMENT_PANEL: OptimizationSetting()}
 
-class LobbyEntry(SFApplication):
+class LobbyEntry(AppEntry):
     bootcampCtrl = dependency.descriptor(IBootcampController)
 
     def __init__(self, appNS):
-        super(LobbyEntry, self).__init__('lobby.swf', appNS)
+        super(LobbyEntry, self).__init__(UserWindowFlags.LOBBY_MAIN_WND, 'lobby.swf', appNS)
 
     @property
     def cursorMgr(self):

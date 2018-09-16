@@ -17,6 +17,7 @@ from gui.Scaleform.daapi.view.lobby.missions.missions_helper import HIDE_DONE, H
 from gui.Scaleform.daapi.view.lobby.missions.regular import group_packers
 from gui.Scaleform.daapi.view.meta.MissionsPageMeta import MissionsPageMeta
 from gui.Scaleform.daapi.view.meta.MissionsViewBaseMeta import MissionsViewBaseMeta
+from gui.Scaleform.daapi.view.lobby.missions.regular.sound_constants import TASKS_SOUND_SPACE
 from gui.Scaleform.framework.entities.DAAPIDataProvider import ListDAAPIDataProvider
 from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.locale.QUESTS import QUESTS
@@ -59,6 +60,7 @@ def setHideDoneFilter():
 
 class MissionsPage(LobbySubView, MissionsPageMeta):
     __sound_env__ = LobbySubViewEnv
+    _COMMON_SOUND_SPACE = TASKS_SOUND_SPACE
     eventsCache = dependency.descriptor(IEventsCache)
     lobbyContext = dependency.descriptor(ILobbyContext)
     eventsController = dependency.descriptor(IEventBoardController)

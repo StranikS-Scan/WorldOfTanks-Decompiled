@@ -6,6 +6,7 @@ from CurrentVehicle import g_currentVehicle
 from debug_utils import LOG_CURRENT_EXCEPTION, LOG_DEBUG, LOG_ERROR
 from gui.Scaleform.daapi.view.lobby.techtree import nodes
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
+from gui.ingame_shop import canBuyGoldForItemThroughWeb
 from gui.prb_control import prbDispatcherProperty
 from gui.Scaleform.daapi.view.lobby.techtree.dumpers import _BaseDumper
 from gui.shared.economics import getGUIPrice
@@ -53,7 +54,7 @@ class _ItemsData(object):
 
     def _checkMoney(self, state, nodeCD):
         state = NODE_STATE.removeIfHas(state, NODE_STATE_FLAGS.ENOUGH_MONEY)
-        if self._mayObtainForMoney(nodeCD):
+        if canBuyGoldForItemThroughWeb(nodeCD) or self._mayObtainForMoney(nodeCD):
             state |= NODE_STATE_FLAGS.ENOUGH_MONEY
         return state
 
@@ -264,7 +265,7 @@ class _ItemsData(object):
         if state < 0:
             return node.getState()
         node.setState(state)
-        if self._mayObtainForMoney(node.getNodeCD()):
+        if canBuyGoldForItemThroughWeb(node.getNodeCD()) or self._mayObtainForMoney(node.getNodeCD()):
             state = NODE_STATE.add(state, NODE_STATE_FLAGS.ENOUGH_MONEY)
         else:
             state = NODE_STATE.remove(state, NODE_STATE_FLAGS.ENOUGH_MONEY)
@@ -289,7 +290,7 @@ class _ItemsData(object):
             state = node.getState()
             nodeID = node.getNodeCD()
             node.setGuiPrice(getGUIPrice(self.getItem(nodeID), self._stats.money, self._items.shop.exchangeRate))
-            if self._mayObtainForMoney(nodeID):
+            if canBuyGoldForItemThroughWeb(nodeID) or self._mayObtainForMoney(nodeID):
                 state = NODE_STATE.add(state, NODE_STATE_FLAGS.ENOUGH_MONEY)
             else:
                 state = NODE_STATE.remove(state, NODE_STATE_FLAGS.ENOUGH_MONEY)
@@ -502,7 +503,7 @@ class ResearchItemsData(_ItemsData):
                     state |= NODE_STATE_FLAGS.IN_INVENTORY
                 if self._canSell(nodeCD):
                     state |= NODE_STATE_FLAGS.CAN_SELL
-            elif self._mayObtainForMoney(nodeCD):
+            elif canBuyGoldForItemThroughWeb(nodeCD) or self._mayObtainForMoney(nodeCD):
                 state |= NODE_STATE_FLAGS.ENOUGH_MONEY
             if nodeCD in self._wereInBattle:
                 state |= NODE_STATE_FLAGS.WAS_IN_BATTLE
@@ -728,7 +729,7 @@ class NationTreeData(_ItemsData):
                 state |= NODE_STATE_FLAGS.IN_INVENTORY
                 if self._canSell(nodeCD):
                     state |= NODE_STATE_FLAGS.CAN_SELL
-            elif self._mayObtainForMoney(nodeCD):
+            elif canBuyGoldForItemThroughWeb(nodeCD) or self._mayObtainForMoney(nodeCD):
                 state |= NODE_STATE_FLAGS.ENOUGH_MONEY
             if nodeCD in self._wereInBattle:
                 state |= NODE_STATE_FLAGS.WAS_IN_BATTLE

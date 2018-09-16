@@ -226,6 +226,19 @@ class _BwHallOfFame(namedtuple('_BwHallOfFame', ('hofHostUrl', 'isHofEnabled', '
         return cls()
 
 
+class _BwIngameShop(namedtuple('_BwIngameShop', ('hostUrl', 'shopMode', 'isStorageEnabled', 'isPreviewEnabled'))):
+
+    def replace(self, data):
+        allowedFields = self._fields
+        dataToUpdate = dict(((k, v) for k, v in data.iteritems() if k in allowedFields))
+        return self._replace(**dataToUpdate)
+
+
+_BwIngameShop.__new__.__defaults__ = ('',
+ 'disabled',
+ False,
+ False)
+
 class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ('isEnabled', 'peripheryIDs', 'winnerRankChanges', 'loserRankChanges', 'minXP', 'unburnableRanks', 'unburnableStepRanks', 'unburnableVehRanks', 'unburnableVehStepRanks', 'minLevel', 'maxLevel', 'accRanks', 'accSteps', 'vehRanks', 'vehSteps', 'cycleFinishSeconds', 'primeTimes', 'seasons', 'cycleTimes', 'accLadderPts', 'vehLadderPts', 'shields'))):
     __slots__ = ()
 
@@ -365,6 +378,10 @@ class ServerSettings(object):
             self.__bwHallOfFame = makeTupleByDict(_BwHallOfFame, self.__serverSettings['hallOfFame'])
         else:
             self.__bwHallOfFame = _BwHallOfFame.defaults()
+        if 'ingameShop' in self.__serverSettings:
+            self.__bwIngameShop = makeTupleByDict(_BwIngameShop, self.__serverSettings['ingameShop'])
+        else:
+            self.__bwIngameShop = _BwIngameShop()
         if 'ranked_config' in self.__serverSettings:
             self.__rankedBattlesSettings = makeTupleByDict(_RankedBattlesConfig, self.__serverSettings['ranked_config'])
         else:
@@ -404,6 +421,8 @@ class ServerSettings(object):
             self.__updateEpic(serverSettingsDiff)
         if 'telecom_config' in serverSettingsDiff:
             self.__telecomConfig = _TelecomConfig(self.__serverSettings['telecom_config'])
+        if 'ingameShop' in serverSettingsDiff:
+            self.__updateIngameShop(serverSettingsDiff)
         self.onServerSettingsChange(serverSettingsDiff)
 
     def clear(self):
@@ -506,6 +525,25 @@ class ServerSettings(object):
     def isGoldFishEnabled(self):
         return self.__getGlobalSetting('isGoldFishEnabled', False)
 
+    def isIngameStorageEnabled(self):
+        return self.__bwIngameShop.isStorageEnabled
+
+    def isIngamePreviewEnabled(self):
+        return self.__bwIngameShop.isPreviewEnabled
+
+    @property
+    def ingameShop(self):
+        return self.__bwIngameShop
+
+    def isIngameDataChangedInDiff(self, diff, fieldName=None):
+        if 'ingameShop' in diff:
+            if fieldName is not None:
+                if fieldName in diff['ingameShop']:
+                    return True
+            else:
+                return True
+        return False
+
     def isTutorialEnabled(self):
         return self.__getGlobalSetting('isTutorialEnabled', IS_TUTORIAL_ENABLED)
 
@@ -597,3 +635,6 @@ class ServerSettings(object):
     def __updateEpic(self, targetSettings):
         self.__epicMetaGameSettings = self.__epicMetaGameSettings.replace(targetSettings['epic_config'])
         self.__epicGameSettings = self.__epicGameSettings.replace(targetSettings['epic_config'])
+
+    def __updateIngameShop(self, targetSettings):
+        self.__bwIngameShop = self.__bwIngameShop.replace(targetSettings['ingameShop'])

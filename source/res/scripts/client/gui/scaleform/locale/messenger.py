@@ -372,9 +372,14 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BOOTCAMP_NO_AWARDS = '#messenger:serviceChannelMessages/bootcamp/no_awards'
     SERVICECHANNELMESSAGES_BOOTCAMP_DEVICES = '#messenger:serviceChannelMessages/bootcamp/devices'
     SERVICECHANNELMESSAGES_BOOTCAMP_CREW = '#messenger:serviceChannelMessages/bootcamp/crew'
-    SERVICECHANNELMESSAGES_GOLDRECEIVED_FINANCIAL_TRANSACTION = '#messenger:serviceChannelMessages/goldReceived/financial_transaction'
-    SERVICECHANNELMESSAGES_GOLDRECEIVED_DATE = '#messenger:serviceChannelMessages/goldReceived/date'
-    SERVICECHANNELMESSAGES_GOLDRECEIVED_RECEIVED = '#messenger:serviceChannelMessages/goldReceived/received'
+    SERVICECHANNELMESSAGES_CURRENCYUPDATE_FINANCIAL_TRANSACTION = '#messenger:serviceChannelMessages/currencyUpdate/financial_transaction'
+    SERVICECHANNELMESSAGES_CURRENCYUPDATE_DATE = '#messenger:serviceChannelMessages/currencyUpdate/date'
+    SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_CREDITS = '#messenger:serviceChannelMessages/currencyUpdate/received/credits'
+    SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_GOLD = '#messenger:serviceChannelMessages/currencyUpdate/received/gold'
+    SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_CRYSTAL = '#messenger:serviceChannelMessages/currencyUpdate/received/crystal'
+    SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_CREDITS = '#messenger:serviceChannelMessages/currencyUpdate/debited/credits'
+    SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_GOLD = '#messenger:serviceChannelMessages/currencyUpdate/debited/gold'
+    SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_CRYSTAL = '#messenger:serviceChannelMessages/currencyUpdate/debited/crystal'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_GOLDACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/goldAccrued'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_GOLDDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/goldDebited'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_CRYSTALACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/crystalAccrued'
@@ -390,6 +395,7 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_ACHIEVEMENTRECEIVED_MESSAGE = '#messenger:serviceChannelMessages/achievementReceived/message'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_INVOICE = '#messenger:serviceChannelMessages/invoiceReceived/invoice'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_ITEMSACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/itemsAccrued'
+    SERVICECHANNELMESSAGES_INVOICERECEIVED_ITEMSINSTALLED = '#messenger:serviceChannelMessages/invoiceReceived/itemsInstalled'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_ITEMSDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/itemsDebited'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_VEHICLESACCRUED = '#messenger:serviceChannelMessages/invoiceReceived/vehiclesAccrued'
     SERVICECHANNELMESSAGES_INVOICERECEIVED_VEHICLESDEBITED = '#messenger:serviceChannelMessages/invoiceReceived/vehiclesDebited'
@@ -479,11 +485,14 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_RESTORE = '#messenger:serviceChannelMessages/sysMsg/titles/restore'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_DISMANTLING = '#messenger:serviceChannelMessages/sysMsg/titles/dismantling'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_SELLING = '#messenger:serviceChannelMessages/sysMsg/titles/selling'
+    SERVICECHANNELMESSAGES_SYSMSG_TITLES_MULTIPLESELLING = '#messenger:serviceChannelMessages/sysMsg/titles/multipleSelling'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_REMOVE = '#messenger:serviceChannelMessages/sysMsg/titles/remove'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_REPAIR = '#messenger:serviceChannelMessages/sysMsg/titles/repair'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_CUSTOMIZATION = '#messenger:serviceChannelMessages/sysMsg/titles/customization'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_PRIMETIME = '#messenger:serviceChannelMessages/sysMsg/titles/primeTime'
     SERVICECHANNELMESSAGES_SYSMSG_TITLES_RANKEDBATTLESAVAILABLE = '#messenger:serviceChannelMessages/sysMsg/titles/rankedBattlesAvailable'
+    SERVICECHANNELMESSAGES_SYSMSG_TITLES_PAYMENTMETHODLINK = '#messenger:serviceChannelMessages/sysMsg/titles/paymentMethodLink'
+    SERVICECHANNELMESSAGES_SYSMSG_TITLES_PAYMENTMETHODUNLINK = '#messenger:serviceChannelMessages/sysMsg/titles/paymentMethodUnlink'
     SERVICECHANNELMESSAGES_PREBATTLE_BATTLETYPE_TOURNAMENT = '#messenger:serviceChannelMessages/prebattle/battleType/tournament'
     SERVICECHANNELMESSAGES_PREBATTLE_BATTLETYPE_CLAN = '#messenger:serviceChannelMessages/prebattle/battleType/clan'
     SERVICECHANNELMESSAGES_PREBATTLE_BATTLETYPE_PREBATTLE = '#messenger:serviceChannelMessages/prebattle/battleType/prebattle'
@@ -593,6 +602,7 @@ class MESSENGER(object):
     CLIENT_ERROR_COMMAND_GENERIC_ERROR = '#messenger:client_error/command/generic_error'
     CLIENT_ERROR_ACTION_IN_COOLDOWN = '#messenger:client_error/action/in_cooldown'
     CLIENT_ERROR_ACTION_IN_COOLDOWN_WO_PERIOD = '#messenger:client_error/action/in_cooldown_wo_period'
+    CLIENT_ERROR_SHARED_TRY_LATER = '#messenger:client_error/shared/TRY_LATER'
     CLIENT_ERROR_SHARED_GENERIC = '#messenger:client_error/shared/GENERIC'
     CLIENT_ERROR_SHARED_LOCKED = '#messenger:client_error/shared/LOCKED'
     CLIENT_ERROR_SHARED_NOT_CONNECTED = '#messenger:client_error/shared/NOT_CONNECTED'
@@ -796,7 +806,14 @@ class MESSENGER(object):
      CHAT_ACTION_BROADCAST_BATTLE_MESSAGE,
      CHAT_ACTION_FIND_USERS_BY_NAME,
      CHAT_ACTION_GET_VOIP_CREDENTIALS)
-    CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_GENERIC,
+    SERVICECHANNELMESSAGES_CURRENCYUPDATE_ALL_ENUM = (SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_CREDITS,
+     SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_GOLD,
+     SERVICECHANNELMESSAGES_CURRENCYUPDATE_RECEIVED_CRYSTAL,
+     SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_CREDITS,
+     SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_GOLD,
+     SERVICECHANNELMESSAGES_CURRENCYUPDATE_DEBITED_CRYSTAL)
+    CLIENT_ERROR_SHARED_ENUM = (CLIENT_ERROR_SHARED_TRY_LATER,
+     CLIENT_ERROR_SHARED_GENERIC,
      CLIENT_ERROR_SHARED_LOCKED,
      CLIENT_ERROR_SHARED_NOT_CONNECTED,
      CLIENT_ERROR_SHARED_WRONG_ARGS,
@@ -982,6 +999,15 @@ class MESSENGER(object):
     def rankedShieldStateChange(cls, key0):
         outcome = '#messenger:serviceChannelMessages/battleResults/rankedState/shield/{}'.format(key0)
         if outcome not in cls.SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_SHIELD_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def currencyUpdateSelect(cls, operationName, currencyCode):
+        outcome = '#messenger:serviceChannelMessages/currencyUpdate/{}/{}'.format(operationName, currencyCode)
+        if outcome not in cls.SERVICECHANNELMESSAGES_CURRENCYUPDATE_ALL_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

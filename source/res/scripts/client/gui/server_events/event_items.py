@@ -572,7 +572,7 @@ class Action(ServerEventAbstract):
                 modifiers = m.splitModifiers()
                 for modifier in modifiers:
                     if modifier.getName() in result:
-                        result[modifier.getName()].extend([ActionData(modifier, priority, uiDecoration)])
+                        result[modifier.getName()].append(ActionData(modifier, priority, uiDecoration))
                     result[modifier.getName()] = [ActionData(modifier, priority, uiDecoration)]
 
             return result

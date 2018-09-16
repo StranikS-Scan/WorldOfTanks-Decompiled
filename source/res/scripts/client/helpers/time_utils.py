@@ -1,11 +1,13 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/helpers/time_utils.py
+import re
 import calendar
 import datetime
 import time
 import BigWorld
 from debug_utils import LOG_CURRENT_EXCEPTION
 from helpers import i18n
+from soft_exception import SoftException
 DAYS_IN_YEAR = 365
 HOURS_IN_DAY = 24
 ONE_MINUTE = 60
@@ -153,6 +155,20 @@ def getTimeStructInLocal(timestamp):
     return time.localtime(timestamp)
 
 
+_ISO8601_UTC_ONLY_PATTERN = re.compile('^(?P<timestamp>\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\d:\\d\\d)(?P<microseconds>.\\d+)?(?:z|\\+00:00)?$', re.IGNORECASE)
+
+def getTimestampFromISO(timeISO):
+    matchObject = _ISO8601_UTC_ONLY_PATTERN.match(timeISO)
+    if matchObject is None:
+        raise SoftException('Invalid timestamp "{}", use ISO 8601 format without time zone instead.'.format(timeISO))
+    groupDict = matchObject.groupdict()
+    timestamp = groupDict['timestamp']
+    microseconds = groupDict['microseconds']
+    dt = datetime.datetime.strptime(timestamp, '%Y-%m-%dT%H:%M:%S')
+    dt = dt.replace(microsecond=int(microseconds[1:]) if microseconds else 0)
+    return (dt - getDateTimeInUTC(0)).total_seconds()
+
+
 def getTimestampFromUTC(timeStructInUTC):
     return calendar.timegm(timeStructInUTC)
 
@@ -249,6 +265,10 @@ def getTimeLeftFormat(timeLeft, useMinutes=True, useHours=False):
         templateParts.insert(0, '%H')
     template = ':'.join(templateParts)
     return time.strftime(template, time.gmtime(timeLeft))
+
+
+def timestampToISO(timestamp):
+    return getDateTimeInUTC(timestamp).replace(microsecond=0).isoformat()
 
 
 class ActivityIntervalsIterator(object):

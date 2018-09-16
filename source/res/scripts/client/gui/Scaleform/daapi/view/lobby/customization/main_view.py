@@ -630,7 +630,7 @@ class MainView(CustomizationMainViewMeta):
         for tabIdx in self.__ctx.visibleTabs:
             itemTypeID = TABS_ITEM_MAPPING[tabIdx]
             typeName = GUI_ITEM_TYPE_NAMES[itemTypeID]
-            showPlus = not self.__ctx.checkSlotsFilling(itemTypeID, self.__ctx.currentSeason)
+            showPlus = not self.__checkSlotsFilling(itemTypeID, self._currentSeason)
             data.append({'label': _ms(ITEM_TYPES.customizationPlural(typeName)),
              'tooltip': makeTooltip(ITEM_TYPES.customizationPlural(typeName), TOOLTIPS.customizationItemTab(typeName)),
              'id': tabIdx})

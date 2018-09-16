@@ -45,6 +45,7 @@ class TOOLTIPS_CONSTANTS(object):
     SHOP_MODULE = 'shopModule'
     SHOP_BATTLE_BOOSTER = 'shopBattleBooster'
     AWARD_MODULE = 'awardModule'
+    AWARD_BATTLE_BOOSTER = 'awardBattleBooster'
     TANKMAN_SKILL = 'tankmanSkill'
     TANKMAN_NEW_SKILL = 'tankmanNewSkill'
     EFFICIENCY_PARAM = 'efficiencyParam'
@@ -52,7 +53,6 @@ class TOOLTIPS_CONSTANTS(object):
     MAP = 'map'
     SETTINGS_CONTROL = 'control'
     SETTINGS_BUTTON = 'settingsButton'
-    CUSTOMIZATION_ITEM = 'customizationItem'
     TECH_CUSTOMIZATION_ITEM = 'techCustomizationItem'
     TECH_CUSTOMIZATION_HISTORIC_ITEM = 'techCustomizationHistoricItem'
     VEHICLE_FILTER = 'vehicleFilter'
@@ -251,6 +251,7 @@ class TOOLTIPS_CONSTANTS(object):
      MARK_OF_MASTERY,
      ACHIEVEMENT_ATTR]
     BOOSTERS_SET = [INVENTORY_BATTLE_BOOSTER,
+     AWARD_BATTLE_BOOSTER,
      BATTLE_BOOSTER,
      SHOP_BATTLE_BOOSTER,
      BATTLE_BOOSTER_COMPARE,

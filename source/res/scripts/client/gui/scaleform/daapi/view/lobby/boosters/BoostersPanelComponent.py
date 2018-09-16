@@ -32,11 +32,17 @@ class BoostersPanelComponent(SlotsPanelMeta):
         self._isPanelInactive = True
         self._wasPopulated = False
         self._slotsMap = {}
+        self._slotProps = None
+        return
 
     def setSettings(self, isPanelInactive=True):
         self._isPanelInactive = isPanelInactive
         if self._wasPopulated:
             self._buildList()
+
+    def setSlotProps(self, slotProps):
+        self._slotProps = slotProps
+        self.as_setPanelPropsS(self._slotProps or _GUI_SLOTS_PROPS)
 
     def getBoosterSlotID(self, idx):
         return self._slotsMap.get(int(idx), None)
@@ -94,7 +100,7 @@ class BoostersPanelComponent(SlotsPanelMeta):
             self._slotsMap[idx], slotLinkage = self.getEmptySlotParams(idx, addAndActiveBoostersCount)
             result.append(self.__makeEmptyBoosterVO(idx, slotLinkage, icon))
 
-        self.as_setPanelPropsS(_GUI_SLOTS_PROPS)
+        self.as_setPanelPropsS(self._slotProps or _GUI_SLOTS_PROPS)
         self.as_setSlotsS(result)
 
     def getEmptySlotParams(self, idx, addAndActiveBoostersCount):

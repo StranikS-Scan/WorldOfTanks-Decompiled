@@ -48,7 +48,7 @@ from football_hangar_common import getHangarBuffonTooltip
 class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     __background_alpha__ = 0.0
     __SOUND_SETTINGS = CommonSoundSpaceSettings(name='hangar', entranceStates={customizationSounds.STATE_PLACE: customizationSounds.STATE_PLACE_GARAGE,
-     STATE_HANGAR_FILTERED: '{}_off'.format(STATE_HANGAR_FILTERED)}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True)
+     STATE_HANGAR_FILTERED: '{}_off'.format(STATE_HANGAR_FILTERED)}, exitStates={}, persistentSounds=(), stoppableSounds=(), priorities=(), autoStart=True, enterEvent='', exitEvent='')
     rankedController = dependency.descriptor(IRankedBattlesController)
     epicSkillsController = dependency.descriptor(IEpicBattleMetaGameController)
     itemsCache = dependency.descriptor(IItemsCache)

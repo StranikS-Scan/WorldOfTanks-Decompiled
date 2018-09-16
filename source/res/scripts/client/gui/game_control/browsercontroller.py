@@ -1,10 +1,10 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/game_control/BrowserController.py
+import logging
 import BigWorld
 import Event
-from WebBrowser import WebBrowser, LOG_BROWSER
+from WebBrowser import WebBrowser
 from adisp import async, process
-from debug_utils import LOG_WARNING
 from gui import GUI_SETTINGS
 from gui.Scaleform.Waiting import Waiting
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -18,6 +18,7 @@ from gui.shared.utils.functions import getViewName
 from ids_generators import SequenceIDGenerator
 from skeletons.gui.game_control import IBrowserController
 from soft_exception import SoftException
+_logger = logging.getLogger(__name__)
 
 class BrowserController(IBrowserController):
     _BROWSER_TEXTURE = 'BrowserBg'
@@ -105,15 +106,15 @@ class BrowserController(IBrowserController):
             browser = WebBrowser(webBrowserID, app, texture, size, url, handlers=self.__filters)
             self.__browsers[browserID] = browser
             if self.__isCreatingBrowser():
-                LOG_BROWSER('CTRL: Queueing a browser creation: ', browserID, url)
+                _logger.debug('CTRL: Queueing a browser creation: %r - %s', browserID, url)
                 self.__pendingBrowsers[browserID] = ctx
             else:
                 self.__createBrowser(ctx)
         elif browserID in self.__pendingBrowsers:
-            LOG_BROWSER('CTRL: Re-queuing a browser creation, overriding: ', browserID, url)
+            _logger.debug('CTRL: Re-queuing a browser creation, overriding: %r - %s', browserID, url)
             self.__pendingBrowsers[browserID] = ctx
         elif browserID in self.__browsers:
-            LOG_BROWSER('CTRL: Re-navigating an existing browser: ', browserID, url)
+            _logger.debug('CTRL: Re-navigating an existing browser: %r - %s', browserID, url)
             browser = self.__browsers[browserID]
             browser.navigate(url)
             browser.changeTitle(title)
@@ -128,7 +129,7 @@ class BrowserController(IBrowserController):
 
     def delBrowser(self, browserID):
         if browserID in self.__browsers:
-            LOG_BROWSER('CTRL: Deleting a browser: ', browserID)
+            _logger.debug('CTRL: Deleting a browser: %s', browserID)
             browser = self.__browsers.pop(browserID)
             self.__clearCallbacks(browserID, browser, True)
             browser.destroy()
@@ -144,7 +145,7 @@ class BrowserController(IBrowserController):
         return self.__creatingBrowserID is not None
 
     def __createDone(self, ctx):
-        LOG_BROWSER('CTRL: Finished creating a browser: ', self.__creatingBrowserID)
+        _logger.debug('CTRL: Finished creating a browser: %s', self.__creatingBrowserID)
         if ctx['showCreateWaiting']:
             Waiting.hide('browser/init')
 
@@ -157,11 +158,11 @@ class BrowserController(IBrowserController):
 
     def __createBrowser(self, ctx):
         browserID = ctx['browserID']
-        LOG_BROWSER('CTRL: Creating a browser: ', browserID, ctx['url'])
+        _logger.debug('CTRL: Creating a browser: %r - %s', browserID, ctx['url'])
         self.__creatingBrowserID = browserID
         browser = self.__browsers[browserID]
         if not browser.create():
-            LOG_BROWSER('CTRL: Failed the create step: ', browserID)
+            _logger.debug('CTRL: Failed the create step: %r', browserID)
             self.delBrowser(browserID)
             self.__tryCreateNextPendingBrowser()
             return
@@ -169,13 +170,13 @@ class BrowserController(IBrowserController):
             self.onBrowserAdded(browserID)
 
             def createBrowserTimeout():
-                LOG_BROWSER('CTRL: Browser create timed out')
+                _logger.debug('CTRL: Browser create timed out')
                 createNextBrowser()
 
             timeoutid = BigWorld.callback(30.0, createBrowserTimeout)
 
             def createNextBrowser():
-                LOG_BROWSER('CTRL: Triggering create of next browser from: ', browserID)
+                _logger.debug('CTRL: Triggering create of next browser from: %s', browserID)
                 BigWorld.cancelCallback(timeoutid)
                 creation = self.__browserCreationCallbacks.pop(browserID, None)
                 if creation is not None:
@@ -184,17 +185,17 @@ class BrowserController(IBrowserController):
                 return
 
             def failedCreationCallback(url):
-                LOG_BROWSER('CTRL: Failed a creation: ', browserID, url)
+                _logger.debug('CTRL: Failed a creation: %r - %s', browserID, url)
                 self.__clearCallbacks(browserID, self.__browsers[browserID], False)
                 self.delBrowser(browserID)
 
             def successfulCreationCallback(url, isLoaded, httpStatusCode=None):
-                LOG_BROWSER('CTRL: Ready to show: ', browserID, isLoaded, url)
+                _logger.debug('CTRL: Ready to show: %r - %r - %s', browserID, isLoaded, url)
                 self.__clearCallbacks(browserID, self.__browsers[browserID], False)
                 if isLoaded:
                     self.__showBrowser(browserID, ctx)
                 else:
-                    LOG_WARNING('Browser request url was not loaded!', url)
+                    _logger.warning('Browser request url %s was not loaded!', url)
                 g_eventBus.handleEvent(BrowserEvent(BrowserEvent.BROWSER_CREATED, ctx=ctx))
                 self.__createDone(ctx)
 
@@ -243,7 +244,7 @@ class BrowserController(IBrowserController):
         return
 
     def __showBrowser(self, browserID, ctx):
-        LOG_BROWSER('CTRL: Showing a browser: ', browserID, ctx['url'])
+        _logger.debug('CTRL: Showing a browser: %r - %s', browserID, ctx['url'])
         if ctx.get('showWindow'):
             alias = ctx['alias']
             g_eventBus.handleEvent(LoadViewEvent(alias, getViewName(alias, browserID), ctx=ctx), EVENT_BUS_SCOPE.LOBBY)

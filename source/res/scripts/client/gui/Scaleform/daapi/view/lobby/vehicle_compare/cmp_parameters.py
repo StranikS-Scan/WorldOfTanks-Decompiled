@@ -2,8 +2,10 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_parameters.py
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
-from gui.game_control.veh_comparison_basket import CONFIGURATION_TYPES, CREW_TYPES
+from gui.game_control.veh_comparison_basket import CONFIGURATION_TYPES
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items import vehicle_adjusters
+from gui.shared.gui_items.Tankman import CrewTypes
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.items_parameters import formatters
 from gui.shared.items_parameters.comparator import rateParameterState, PARAM_STATE, VehiclesComparator, getParamExtendedData
@@ -154,7 +156,7 @@ class _VehCompareParametersData(object):
                 if sameSkills:
                     skillsDict[idx] = sameSkills
 
-            if crewLvl == CREW_TYPES.CURRENT:
+            if crewLvl == CrewTypes.CURRENT:
                 levelsByIndexes, nativeVehiclesByIndexes = cmp_helpers.getVehCrewInfo(self.__vehicle.intCD)
                 defRoleLevel = None
             else:
@@ -186,13 +188,13 @@ class _VehCompareParametersData(object):
             camouflageInvalid = True
         if equipInvalid:
             for i, eq in enumerate(equipment):
-                cmp_helpers.installEquipmentOnVehicle(self.__vehicle, eq, i)
+                vehicle_adjusters.installEquipment(self.__vehicle, eq, i)
 
             self.__equipment = equipment
             isDifferent = True
         if battleBoosterInvalid:
             self.__battleBooster = battleBooster
-            cmp_helpers.installBattleBoosterOnVehicle(self.__vehicle, battleBooster.intCD)
+            vehicle_adjusters.installBattleBoosterOnVehicle(self.__vehicle, battleBooster.intCD)
             isDifferent = True
         if camouflageInvalid:
             cmp_helpers.applyCamouflage(self.__vehicle, hasCamouflage)

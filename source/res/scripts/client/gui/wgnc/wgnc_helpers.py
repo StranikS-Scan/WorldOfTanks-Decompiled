@@ -5,7 +5,7 @@ from debug_utils import LOG_ERROR
 def parseSize(sizeStr):
     if sizeStr:
         try:
-            size = map(int, sizeStr.split('x'))
+            size = tuple(map(int, sizeStr.split('x')))
             if len(size) != 2:
                 return
         except ValueError:

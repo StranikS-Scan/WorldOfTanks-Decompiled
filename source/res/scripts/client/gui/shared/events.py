@@ -408,6 +408,11 @@ class BootcampEvent(SharedEvent):
         self.eventArg = eventArg
 
 
+class ShopEvent(HasCtxEvent):
+    CONFIRM_TRADE_IN = 'confirmTradeIn'
+    SELECT_RENT_TERM = 'selectRentTerm'
+
+
 class MessengerEvent(HasCtxEvent):
     PRB_CHANNEL_CTRL_INITED = 'prbChannelCtrlInited'
     PRB_CHANNEL_CTRL_DESTROYED = 'prbChannelCtrlDestroyed'
@@ -484,6 +489,13 @@ class StrongholdEvent(HasCtxEvent):
     STRONGHOLD_DEACTIVATED = 'strongholdDeactivated'
     STRONGHOLD_DATA_UNAVAILABLE = 'strongholdDataUnavailable'
     STRONGHOLD_ON_TIMER = 'strongholdOnTimer'
+
+
+class IngameShopEvent(HasCtxEvent):
+    INGAMESHOP_ACTIVATED = 'ingameshopActivated'
+    INGAMESHOP_DEACTIVATED = 'ingameshopDeactivated'
+    INGAMESHOP_DATA_UNAVAILABLE = 'ingameshopDataUnavailable'
+    INGAMESHOP_ON_TIMER = 'ingameshopOnTimer'
 
 
 class OpenLinkEvent(SharedEvent):
@@ -591,3 +603,7 @@ class ManualEvent(HasCtxEvent):
 class HangarCustomizationEvent(HasCtxEvent):
     CHANGE_VEHICLE_MODEL_TRANSFORM = 'hangarCustomization/changeVehicleModelTransform'
     RESET_VEHICLE_MODEL_TRANSFORM = 'hangarCustomization/resetVehicleModelTransform'
+
+
+class StorageEvent(HasCtxEvent):
+    SELECT_MODULE_FOR_SELL = 'storage/forSellView/selectModule'

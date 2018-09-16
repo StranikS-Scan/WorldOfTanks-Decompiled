@@ -149,3 +149,6 @@ def _getNoClanEmblemPath(size):
      NO_EMBLEM_NAME_PREFIX,
      size,
      size)
+
+
+AccessTokenData = namedtuple('AccessTokenData', ('accessToken', 'expiresAt'))

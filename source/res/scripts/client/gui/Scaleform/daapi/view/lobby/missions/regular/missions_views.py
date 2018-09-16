@@ -159,7 +159,7 @@ class MissionsMarathonView(MissionsMarathonViewMeta):
                 browser.useSpecialKeys = False
                 browser.allowRightClick = True
                 browser.skipEscape = False
-                browser.setAllowAutoLoadingScreen(showLoadingWheel=False)
+                browser.setAllowAutoLoadingScreen(False)
                 browser.onReadyToShowContent = self.__removeLoadingScreen
         return
 

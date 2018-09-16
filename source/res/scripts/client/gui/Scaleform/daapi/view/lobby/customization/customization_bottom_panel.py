@@ -7,6 +7,7 @@ from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.lobby.customization.customization_carousel import CustomizationCarouselDataProvider
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
 from gui.Scaleform.daapi.view.lobby.customization.shared import C11nMode, TABS_ITEM_MAPPING, C11nTabs, getTotalPurchaseInfo
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.CustomizationBottomPanelMeta import CustomizationBottomPanelMeta
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -158,7 +159,8 @@ class CustomizationBottomPanel(CustomizationBottomPanelMeta):
         exchangeRate = self.itemsCache.items.shop.exchangeRate
         moneyExchanged = money.exchange(Currency.GOLD, Currency.CREDITS, exchangeRate, default=0)
         minPriceItemAvailable = cartInfo.minPriceItem.isDefined() and (cartInfo.minPriceItem <= money or cartInfo.minPriceItem <= moneyExchanged)
-        isApplyEnabled = (minPriceItemAvailable or not cartInfo.minPriceItem.isDefined()) and self.__ctx.isOutfitsModified()
+        canBuy = minPriceItemAvailable or not cartInfo.minPriceItem.isDefined()
+        isApplyEnabled = self.__ctx.isOutfitsModified() and (canBuy or isIngameShopEnabled())
         shortage = money.getShortage(cartInfo.totalPrice.price)
         fromStorageCount = 0
         toByeCount = 0

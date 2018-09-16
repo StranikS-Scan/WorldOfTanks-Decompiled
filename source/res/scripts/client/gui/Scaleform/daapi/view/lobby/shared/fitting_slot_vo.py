@@ -27,6 +27,7 @@ class FittingSlotVO(dict):
         else:
             ttType = tooltipType or TOOLTIPS_CONSTANTS.PREVIEW_MODULE
         self['tooltip'] = ''
+        self['name'] = ''
         self['tooltipType'] = ttType
         self['slotType'] = slotType
         self['removable'] = True
@@ -50,6 +51,7 @@ class FittingSlotVO(dict):
             self['id'] = vehicleModule.intCD
             self['removable'] = vehicleModule.isRemovable
             self['moduleLabel'] = vehicleModule.getGUIEmblemID()
+            self['name'] = vehicleModule.userName
         self._setNewCounter(vehicleModule, vehicle)
         return
 

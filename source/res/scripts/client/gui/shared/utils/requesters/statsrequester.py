@@ -7,10 +7,12 @@ from gui.shared.money import Money, Currency
 from gui.shared.utils.requesters.abstract import AbstractSyncDataRequester
 from helpers import time_utils, dependency
 from skeletons.gui.game_control import IWalletController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared.utils.requesters import IStatsRequester
 
 class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     wallet = dependency.descriptor(IWalletController)
+    lobbyContext = dependency.descriptor(ILobbyContext)
 
     @property
     def mayConsumeWalletResources(self):
@@ -87,6 +89,12 @@ class StatsRequester(AbstractSyncDataRequester, IStatsRequester):
     @property
     def isPremium(self):
         return isPremiumAccount(self.attributes)
+
+    @property
+    def isIngameShopEnabled(self):
+        shopMode = self.lobbyContext.getServerSettings().ingameShop.shopMode
+        shopFeatureKey = '/wot/game/apply_feature/shop2_0'
+        return shopMode == 'enabled' or shopMode == 'restricted' and shopFeatureKey in self.SPA
 
     @property
     def isTeamKiller(self):

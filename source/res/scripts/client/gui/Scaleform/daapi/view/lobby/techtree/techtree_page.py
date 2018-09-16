@@ -12,15 +12,19 @@ from gui.Scaleform.daapi.view.lobby.techtree import dumpers
 from gui.Scaleform.daapi.view.lobby.techtree.data import NationTreeData
 from gui.Scaleform.daapi.view.lobby.techtree.settings import SelectedNation
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
+from gui.Scaleform.daapi.view.lobby.techtree.sound_constants import TECHTREE_SOUND_SPACE
 from gui.Scaleform.daapi.view.meta.TechTreeMeta import TechTreeMeta
+from gui.ingame_shop import canBuyGoldForVehicleThroughWeb
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from gui.sounds.ambients import LobbySubViewEnv
+from gui.shared import event_dispatcher as shared_events
 _HEIGHT_LESS_THAN_SPECIFIED_TO_OVERRIDE = 768
 _HEIGHT_LESS_THAN_SPECIFIED_OVERRIDE_TAG = 'height_less_768'
 
 class TechTree(TechTreeMeta):
     __sound_env__ = LobbySubViewEnv
+    _COMMON_SOUND_SPACE = TECHTREE_SOUND_SPACE
 
     def __init__(self, ctx=None):
         super(TechTree, self).__init__(NationTreeData(dumpers.NationObjDumper()))
@@ -50,7 +54,12 @@ class TechTree(TechTreeMeta):
         ItemsActionsFactory.doAction(ItemsActionsFactory.UNLOCK_ITEM, int(unlockCD), int(vehCD), int(unlockIdx), int(xpCost))
 
     def request4Buy(self, itemCD):
-        ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, int(itemCD))
+        itemCD = int(itemCD)
+        vehicle = self.itemsCache.items.getItemByCD(itemCD)
+        if canBuyGoldForVehicleThroughWeb(vehicle):
+            shared_events.showVehicleBuyDialog(vehicle)
+        else:
+            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, itemCD)
 
     def request4VehCompare(self, vehCD):
         self.cmpBasket.addVehicle(int(vehCD))

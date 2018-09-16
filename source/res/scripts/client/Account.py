@@ -1237,7 +1237,7 @@ class _AccountRepository(object):
         self.clanMembers = {}
         self.eventsData = {}
         self.personalMissionsLock = {}
-        self.customFilesCache = CustomFilesCache.CustomFilesCache()
+        self.customFilesCache = CustomFilesCache.CustomFilesCache('custom_data')
         self.eventNotifications = []
         self.intUserSettings = IntUserSettings.IntUserSettings()
         self.prebattleInvitations = ClientInvitations.ClientInvitations(events)

@@ -14,10 +14,12 @@ from gui.ClientUpdateManager import g_clientUpdateManager
 from helpers import dependency
 from helpers.i18n import makeString
 from skeletons.gui.lobby_context import ILobbyContext
+from gui.Scaleform.daapi.view.lobby.profile.sound_constants import ACHIEVEMENTS_SOUND_SPACE
 
 class ProfilePage(LobbySubView, ProfileMeta):
     __sound_env__ = LobbySubViewEnv
     lobbyContext = dependency.descriptor(ILobbyContext)
+    _COMMON_SOUND_SPACE = ACHIEVEMENTS_SOUND_SPACE
 
     def __init__(self, ctx=None):
         self.__ctx = ctx

@@ -319,6 +319,7 @@ MONEY_UNDEFINED = Money()
 MONEY_ZERO_CREDITS = Money(credits=0)
 MONEY_ZERO_GOLD = Money(gold=0)
 MONEY_ZERO_CRYSTAL = Money(crystal=0)
+ZERO_MONEY = Money(**{c:0 for c in Currency.ALL})
 
 class MoneySet(tuple):
 

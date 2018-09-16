@@ -25,7 +25,6 @@ from items.components.c11n_constants import SeasonType
 from items.vehicles import VEHICLE_CLASS_TAGS
 from helpers import dependency, int2roman
 from helpers.i18n import makeString as _ms
-from shared_utils import first
 from skeletons.account_helpers.settings_core import ISettingsCore
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
@@ -102,7 +101,7 @@ class ElementTooltip(BlocksTooltipData):
         return
 
     def _packBlocks(self, *args):
-        itemIntCD = first(args)
+        itemIntCD = int(args[0])
         if len(args) > 1:
             self._hideInventory = args[1]
         else:

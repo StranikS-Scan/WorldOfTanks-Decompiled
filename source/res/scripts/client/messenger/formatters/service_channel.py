@@ -8,7 +8,6 @@ from Queue import Queue
 from collections import namedtuple
 import ArenaType
 import BigWorld
-import account_helpers
 import constants
 import personal_missions
 from adisp import async, process
@@ -551,17 +550,20 @@ class AchievementFormatter(ServiceChannelFormatter):
             return
 
 
-class GoldReceivedFormatter(ServiceChannelFormatter):
+class CurrencyUpdateFormatter(ServiceChannelFormatter):
 
     def format(self, message, *args):
         data = message.data
-        gold = data.get(Currency.GOLD, None)
-        formatter = getBWFormatter(Currency.GOLD)
-        transactionTime = data.get('date', None)
-        if gold and transactionTime:
-            formatted = g_settings.msgTemplates.format('goldReceived', {'date': TimeFormatter.getLongDatetimeFormat(transactionTime),
-             Currency.GOLD: formatter(account_helpers.convertGold(gold))})
-            return [_MessageData(formatted, self._getGuiSettings(message, 'goldReceived'))]
+        currencyCode = data['currency_code']
+        amountDelta = data['amount_delta']
+        transactionTime = data['date']
+        if currencyCode and amountDelta and transactionTime:
+            ms = i18n.makeString
+            xmlKey = 'currencyUpdate'
+            formatted = g_settings.msgTemplates.format(xmlKey, ctx={'date': TimeFormatter.getLongDatetimeFormat(transactionTime),
+             'currency': ms(MESSENGER.currencyUpdateSelect(operationName='debited' if amountDelta < 0 else 'received', currencyCode=currencyCode)),
+             'amount': abs(amountDelta)}, data={'icon': currencyCode.title() + 'Icon'})
+            return [_MessageData(formatted, self._getGuiSettings(message, xmlKey))]
         else:
             return [_MessageData(None, None)]
 
@@ -874,6 +876,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                 operations.append(self.__getItemsString(items))
             tmen = dataEx.get('tankmen', [])
             vehicles = dataEx.get('vehicles', {})
+            vehicleItems = {}
             if vehicles:
                 result = self._getVehiclesString(vehicles)
                 if result:
@@ -883,7 +886,14 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                     operations.append(comptnStr)
                 for v in vehicles.itervalues():
                     tmen.extend(v.get('tankmen', []))
+                    items = v.get('items', {})
+                    for intCD, count in items.iteritems():
+                        if intCD in vehicleItems:
+                            vehicleItems[intCD] += count
+                        vehicleItems[intCD] = count
 
+            if vehicleItems:
+                operations.append(self.__getItemsString(vehicleItems, installed=True))
             if tmen:
                 operations.append(self._getTankmenString(tmen))
             slots = dataEx.get('slots')
@@ -1024,7 +1034,7 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
             ctx['amount'] = BigWorld.wg_getIntegralFormat(abs(amount))
         return g_settings.htmlTemplates.format(self.__operationTemplateKeys[templateKey], ctx=ctx)
 
-    def __getItemsString(self, items):
+    def __getItemsString(self, items, installed=False):
         accrued = []
         debited = []
         for itemCompactDescr, count in items.iteritems():
@@ -1042,7 +1052,11 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
 
         result = ''
         if accrued:
-            result = g_settings.htmlTemplates.format('itemsAccruedInvoiceReceived', ctx={'items': ', '.join(accrued)})
+            if installed:
+                templateId = 'itemsInstalledInvoiceReceived'
+            else:
+                templateId = 'itemsAccruedInvoiceReceived'
+            result = g_settings.htmlTemplates.format(templateId, ctx={'items': ', '.join(accrued)})
         if debited:
             if result:
                 result += '<br/>'

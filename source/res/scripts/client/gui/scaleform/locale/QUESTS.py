@@ -1402,6 +1402,7 @@ class QUESTS(object):
     ACTION_DISCOUNT_MODIFIER = '#quests:action/discount/modifier'
     ACTION_DISCOUNT_XP = '#quests:action/discount/xp'
     ACTION_CHAIN_HINT_REMOVALCOST = '#quests:action/chain/hint/removalCost'
+    ACTION_CHAIN_HINT_SHELLSPRICE = '#quests:action/chain/hint/shellsPrice'
     ACTION_CHAIN_HINT_OPENPERSONALCASE = '#quests:action/chain/hint/openPersonalCase'
     ACTION_CHAIN_HINT_CHANGEROLE = '#quests:action/chain/hint/changeRole'
     ACTION_CHAIN_HINT_DROPSKILLS = '#quests:action/chain/hint/dropSkills'
@@ -1890,6 +1891,7 @@ class QUESTS(object):
      ACTION_DISCOUNT_MODIFIER,
      ACTION_DISCOUNT_XP,
      ACTION_CHAIN_HINT_REMOVALCOST,
+     ACTION_CHAIN_HINT_SHELLSPRICE,
      ACTION_CHAIN_HINT_OPENPERSONALCASE,
      ACTION_CHAIN_HINT_CHANGEROLE,
      ACTION_CHAIN_HINT_DROPSKILLS,

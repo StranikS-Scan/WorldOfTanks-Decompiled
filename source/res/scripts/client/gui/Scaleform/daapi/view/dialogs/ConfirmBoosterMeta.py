@@ -2,16 +2,14 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/dialogs/ConfirmBoosterMeta.py
 import math
 from Event import EventManager, Event
+from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta
 from gui.Scaleform.framework import ScopeTemplates
 from gui.shared import events
-from gui.shared.gui_items.processors.goodies import BoosterBuyer
-from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
-from gui.ClientUpdateManager import g_clientUpdateManager
-from gui.shared.utils.decorators import process
+from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from gui.shared.money import Money, Currency, CurrencyCollection
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
-from gui import SystemMessages
 from helpers import dependency
 from skeletons.gui.goodies import IGoodiesCache
 MAX_BOOSTERS_FOR_OPERATION = 1000000
@@ -57,11 +55,8 @@ class BuyBoosterMeta(I18nConfirmDialogMeta):
     def getPrices(self):
         return self.__booster.buyPrices
 
-    @process('buyItem')
     def submit(self, count, currency):
-        result = yield BoosterBuyer(self.__booster, count, currency).request()
-        if result.userMsg:
-            SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+        ActionsFactory.doAction(ActionsFactory.BUY_BOOSTER, self.__booster, count, currency)
 
     def __onStatsChanged(self, stats):
         newValues = Money.extractMoneyDict(stats)

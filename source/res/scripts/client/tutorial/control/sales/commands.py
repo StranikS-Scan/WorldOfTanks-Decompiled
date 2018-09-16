@@ -1,34 +1,21 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/sales/commands.py
 from account_helpers.AccountSettings import AccountSettings, DEFAULT_VEHICLE_TYPES_FILTER, DEFAULT_LEVELS_FILTERS
-from gui import SystemMessages
 from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
+from gui.game_control.calendar_controller import CalendarInvokeOrigin
 from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared import g_eventBus
 from gui.shared.events import OpenLinkEvent
-from gui.shared.gui_items.processors.common import TankmanBerthsBuyer
-from gui.shared.gui_items.processors.vehicle import VehicleSlotBuyer
-from gui.shared.utils import decorators
+from gui.shared.gui_items.items_actions import factory as ActionsFactory
 from helpers import dependency
 from skeletons.gui.game_control import ICalendarController
-from gui.game_control.calendar_controller import CalendarInvokeOrigin
-from skeletons.gui.shared import IItemsCache
 
-@decorators.process('buySlot')
 def buySlots():
-    result = yield VehicleSlotBuyer().request()
-    if result.userMsg:
-        SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+    ActionsFactory.doAction(ActionsFactory.BUY_VEHICLE_SLOT)
 
 
-@decorators.process('buyBerths')
 def buyBerths():
-    itemsCache = dependency.instance(IItemsCache)
-    items = itemsCache.items
-    berthPrice, berthsCount = items.shop.getTankmanBerthPrice(items.stats.tankmenBerthsCount)
-    result = yield TankmanBerthsBuyer(berthPrice, berthsCount).request()
-    if result.userMsg:
-        SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
+    ActionsFactory.doAction(ActionsFactory.BUY_BERTHS)
 
 
 def createClan():

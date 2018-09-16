@@ -53,6 +53,7 @@ class TechnicalMaintenance(TechnicalMaintenanceMeta):
         g_currentVehicle.onChanged += self.__onCurrentVehicleChanged
         if g_currentVehicle.isPresent():
             self.__currentVehicleId = g_currentVehicle.item.intCD
+        g_currentVehicle.item.equipmentLayout.setRegularConsumables(g_currentVehicle.item.equipment.regularConsumables)
         self.populateTechnicalMaintenance()
         self.populateTechnicalMaintenanceEquipmentDefaults()
         self.setupContextHints(TUTORIAL.TECHNICAL_MAINTENANCE)

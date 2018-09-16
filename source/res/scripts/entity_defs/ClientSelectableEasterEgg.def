@@ -1,4 +1,16 @@
 <ClientSelectableEasterEgg.def>
   <Parent>	ClientSelectableObject	</Parent>
-  <Properties></Properties>
+  <Properties>
+    <imageName>
+      <Type>	STRING	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+    </imageName>
+    <multiLanguageSupport>
+      <Type>	BOOL	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Default>	false	</Default>
+    </multiLanguageSupport>
+  </Properties>
 </ClientSelectableEasterEgg.def>

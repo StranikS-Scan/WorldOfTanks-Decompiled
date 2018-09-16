@@ -1,7 +1,8 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/ui/techtree.py
+from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from helpers import dependency
-from gui.shared import event_dispatcher
+from gui.shared import event_dispatcher, events
 from skeletons.gui.shared import IItemsCache
 from web_client_api import W2CSchema, w2c, Field
 
@@ -18,4 +19,6 @@ class TechTreeTabWebApiMixin(object):
 
     @w2c(_OpenTechTreeSchema, 'research')
     def openResearch(self, cmd):
-        event_dispatcher.showResearchView(cmd.vehicle_id)
+        vehicle = self.itemsCache.items.getStockVehicle(cmd.vehicle_id)
+        exitEvent = events.LoadViewEvent(VIEW_ALIAS.LOBBY_TECHTREE, ctx={'nation': vehicle.nationName})
+        event_dispatcher.showResearchView(cmd.vehicle_id, exitEvent=exitEvent)

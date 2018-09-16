@@ -1,9 +1,27 @@
 <engines.xml>
   <ids>
     <Maybach_HL_230P30A>	0	</Maybach_HL_230P30A>
+    <Polski_FIAT_122BC>	1	</Polski_FIAT_122BC>
     <W_12_5>	3	</W_12_5>
   </ids>
   <shared>
+    <Polski_FIAT_122BC>
+      <userString>	#poland_vehicles:Polski_FIAT_122BC	</userString>
+      <tags>	gasoline	</tags>
+      <level>	1	</level>
+      <price>	300	</price>
+      <notInShop>	true	</notInShop>
+      <wwsoundPC>	eng_gaz_aa_pc	</wwsoundPC>
+      <wwsoundNPC>	eng_gaz_aa_npc	</wwsoundNPC>
+      <power>	42	</power>
+      <weight>	250	</weight>
+      <maxHealth>	25	</maxHealth>
+      <maxRegenHealth>	17	</maxRegenHealth>
+      <repairCost>	1	</repairCost>
+      <fireStartingChance>	0.2	</fireStartingChance>
+      <rpm_min>	442	</rpm_min>
+      <rpm_max>	2184	</rpm_max>
+    </Polski_FIAT_122BC>
     <Maybach_HL_230P30A>
       <userString>	#poland_vehicles:Maybach_HL_230P30A	</userString>
       <tags>	gasoline	</tags>

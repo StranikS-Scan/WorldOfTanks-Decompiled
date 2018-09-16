@@ -3,21 +3,41 @@
 import weakref
 import urlparse
 import functools
+import logging
 import BigWorld
 import Keys
 import helpers
 from gui.Scaleform.managers.Cursor import Cursor
 from gui.shared import event_dispatcher
 from Event import Event, EventManager
-from debug_utils import _doLog, LOG_ERROR, LOG_CURRENT_EXCEPTION, LOG_DEBUG
-from constants import IS_DEVELOPMENT
-_BROWSER_LOGGING = True
+from debug_utils import LOG_CURRENT_EXCEPTION
+from gui import GUI_SETTINGS
+from web.cache.web_cache import WebExternalCache
+_logger = logging.getLogger(__name__)
 _BROWSER_KEY_LOGGING = False
 _WOT_CLIENT_PARAM_NAME = 'wot_client_param'
+_WOT_RESOURCE_CUSTOM_SCHEME = 'wotdata'
+_WEB_CACHE_FOLDER = 'web_cache'
+_WEB_MANIFEST_KEY = 'webManifestURL'
+_g_webCache = None
 
-def LOG_BROWSER(msg, *kargs):
-    if _BROWSER_LOGGING and IS_DEVELOPMENT:
-        _doLog('BROWSER', msg, kargs)
+def initExternalCache():
+    global _g_webCache
+    if _g_webCache is None:
+        _logger.info('WebExternalCache init')
+        _g_webCache = WebExternalCache(_WEB_CACHE_FOLDER)
+        _g_webCache.load()
+        _g_webCache.prefetchStart(GUI_SETTINGS.lookup(_WEB_MANIFEST_KEY))
+    return
+
+
+def destroyExternalCache():
+    global _g_webCache
+    if _g_webCache is not None:
+        _g_webCache.close()
+        _g_webCache = None
+        _logger.info('WebExternalCache destroyed')
+    return
 
 
 class WebBrowser(object):
@@ -33,33 +53,39 @@ class WebBrowser(object):
     isSuccessfulLoad = property(lambda self: self.__successfulLoad)
     skipEscape = property(lambda self: self.__skipEscape)
     ignoreKeyEvents = property(lambda self: self.__ignoreKeyEvents)
+    ignoreAltKey = property(lambda self: self.__ignoreAltKey)
     useSpecialKeys = property(lambda self: self.__useSpecialKeys)
     allowRightClick = property(lambda self: self.__allowRightClick)
     allowMouseWheel = property(lambda self: self.__allowMouseWheel)
 
     @skipEscape.setter
     def skipEscape(self, value):
-        LOG_BROWSER('skipEscape set %s (was: %s)' % (value, self.__skipEscape))
+        _logger.debug('skipEscape set %s (was: %s)', value, self.__skipEscape)
         self.__skipEscape = value
 
     @ignoreKeyEvents.setter
     def ignoreKeyEvents(self, value):
-        LOG_BROWSER('ignoreKeyEvents set %s (was: %s)' % (value, self.__ignoreKeyEvents))
+        _logger.debug('ignoreKeyEvents set %s (was: %s)', value, self.__ignoreKeyEvents)
         self.__ignoreKeyEvents = value
+
+    @ignoreAltKey.setter
+    def ignoreAltKey(self, value):
+        _logger.debug('ignoreAltKey set %s (was: %s)', value, self.__ignoreAltKey)
+        self.__ignoreAltKey = value
 
     @useSpecialKeys.setter
     def useSpecialKeys(self, value):
-        LOG_BROWSER('useSpecialKeys set %s (was: %s)' % (value, self.__useSpecialKeys))
+        _logger.debug('useSpecialKeys set %s (was: %s)', value, self.__useSpecialKeys)
         self.__useSpecialKeys = value
 
     @allowRightClick.setter
     def allowRightClick(self, value):
-        LOG_BROWSER('allowRightClick set %s (was: %s)' % (value, self.__allowRightClick))
+        _logger.debug('allowRightClick set %s (was: %s)', value, self.__allowRightClick)
         self.__allowRightClick = value
 
     @allowMouseWheel.setter
     def allowMouseWheel(self, value):
-        LOG_BROWSER('allowMouseWheel set %s (was: %s)' % (value, self.__allowMouseWheel))
+        _logger.debug('allowMouseWheel set %s (was: %s)', value, self.__allowMouseWheel)
         self.__allowMouseWheel = value
 
     def __init__(self, browserID, uiObj, texName, size, url='about:blank', isFocused=False, handlers=None):
@@ -77,6 +103,7 @@ class WebBrowser(object):
         self.__navigationFilters = handlers or set()
         self.__skipEscape = True
         self.__ignoreKeyEvents = False
+        self.__ignoreAltKey = False
         self.__useSpecialKeys = True
         self.__allowRightClick = False
         self.__allowMouseWheel = True
@@ -94,15 +121,15 @@ class WebBrowser(object):
         self.onFailedCreation = Event(self.__eventMgr)
         self.onCanCreateNewBrowser = Event(self.__eventMgr)
         self.onUserRequestToClose = Event(self.__eventMgr)
-        LOG_BROWSER('INIT ', self.__baseUrl, texName, size, self.__browserID)
+        _logger.info('INIT %s texture: %s, size %s, id: %s', self.__baseUrl, texName, size, self.__browserID)
         return
 
     def create(self):
-        LOG_BROWSER('CREATE ', self.__baseUrl, self.__browserID)
+        _logger.debug('CREATE %s - %r', self.__baseUrl, self.__browserID)
         clientLanguage = helpers.getClientLanguage()
         self.__browser = BigWorld.createBrowser(self.__browserID, clientLanguage)
         if self.__browser is None:
-            LOG_BROWSER('create() NO BROWSER WAS CREATED', self.__baseUrl)
+            _logger.debug('create() NO BROWSER WAS CREATED: %s', self.__baseUrl)
             return False
         else:
             self.__browser.script = EventListener(self)
@@ -117,7 +144,7 @@ class WebBrowser(object):
 
             def injectBrowserKeyEvent(me, e):
                 if _BROWSER_KEY_LOGGING:
-                    LOG_BROWSER('injectBrowserKeyEvent', (e.key,
+                    _logger.debug('injectBrowserKeyEvent: %s', (e.key,
                      e.isKeyDown(),
                      e.isAltDown(),
                      e.isShiftDown(),
@@ -199,7 +226,7 @@ class WebBrowser(object):
              lambda me, e: None))
 
     def ready(self, success):
-        LOG_BROWSER('READY ', success, self.__baseUrl, self.__browserID)
+        _logger.debug('READY %r %s %r', success, self.__baseUrl, self.__browserID)
         self.__ui = weakref.ref(self.__uiObj)
         self.__readyToShow = False
         self.__successfulLoad = False
@@ -220,7 +247,7 @@ class WebBrowser(object):
             self.onReady(self.__browser.url, success)
         else:
             self.__isNavigationComplete = True
-            LOG_BROWSER(' FAILED ', self.__baseUrl, self.__browserID)
+            _logger.debug(' FAILED %s - %r', self.__baseUrl, self.__browserID)
             self.onFailedCreation(self.__baseUrl)
 
     def updateSize(self, size):
@@ -238,7 +265,7 @@ class WebBrowser(object):
         self.__eventMgr.clear()
         self.__eventMgr = None
         if self.__browser is not None:
-            LOG_BROWSER('DESTROYED ', self.__baseUrl, self.__browserID)
+            _logger.debug('DESTROYED %s - %r', self.__baseUrl, self.__browserID)
             self.__browser.script.clear()
             self.__browser.script = None
             self.__browser.resetScaleformRender(self.__uiObj.movie, self.__texName)
@@ -267,7 +294,7 @@ class WebBrowser(object):
 
     def refresh(self, ignoreCache=True):
         if BigWorld.time() - self.__loadStartTime < 0.5:
-            LOG_BROWSER('refresh - called too soon')
+            _logger.debug('refresh - called too soon')
             return
         if self.hasBrowser:
             self.__browser.reload()
@@ -284,7 +311,7 @@ class WebBrowser(object):
             self.__browser.sendMessage(message)
 
     def doNavigate(self, url):
-        LOG_BROWSER('doNavigate', url)
+        _logger.debug('doNavigate %s', url)
         self.__baseUrl = url
         if self.hasBrowser:
             self.__browser.script.newNavigation()
@@ -301,7 +328,7 @@ class WebBrowser(object):
 
     def navigateStop(self):
         if BigWorld.time() - self.__loadStartTime < 0.5:
-            LOG_BROWSER('navigateStop - called too soon')
+            _logger.debug('navigateStop - called too soon')
             return
         if self.hasBrowser:
             self.__browser.stop()
@@ -334,6 +361,8 @@ class WebBrowser(object):
          e.isAltDown(),
          e.isShiftDown(),
          e.isCtrlDown())
+        if self.__ignoreAltKey and e.key in (Keys.KEY_LALT, Keys.KEY_RALT):
+            return False
         if not (self.hasBrowser and self.enableUpdate):
             return False
         if not self.allowRightClick and e.key == Keys.KEY_RIGHTMOUSE:
@@ -345,7 +374,7 @@ class WebBrowser(object):
             self.__browser.injectKeyModifiers(e)
             return False
         if _BROWSER_KEY_LOGGING:
-            LOG_BROWSER('handleKeyEvent', keyState)
+            _logger.debug('handleKeyEvent %s', keyState)
         if self.ignoreKeyEvents and e.key not in (Keys.KEY_LEFTMOUSE, Keys.KEY_RIGHTMOUSE):
             return False
         if e.key in (Keys.KEY_ESCAPE, Keys.KEY_SYSRQ):
@@ -411,7 +440,7 @@ class WebBrowser(object):
 
     def addFilter(self, handler):
         if handler in self.__navigationFilters:
-            LOG_ERROR('Navigation filter is already added', handler)
+            _logger.error('Navigation filter is already added: %r', handler)
         else:
             self.__navigationFilters.add(handler)
 
@@ -419,7 +448,7 @@ class WebBrowser(object):
         if handler in self.__navigationFilters:
             self.__navigationFilters.discard(handler)
         else:
-            LOG_ERROR("Trying to delete navigation filter which doesn't exist", handler)
+            _logger.error("Trying to delete navigation filter which doesn't exist: %r", handler)
 
     def filterNavigation(self, url):
         query = urlparse.urlparse(url).query
@@ -432,22 +461,26 @@ class WebBrowser(object):
                 stopNavigation |= result.stopNavigation
                 closeBrowser |= result.closeBrowser
                 if result.stopNavigation:
-                    LOG_DEBUG('Navigation filter triggered navigation stop:', handler)
+                    _logger.debug('Navigation filter triggered navigation stop: %s', handler)
                 if result.closeBrowser:
-                    LOG_DEBUG('Navigation filter triggered browser close:', handler)
+                    _logger.debug('Navigation filter triggered browser close: %s', handler)
             except Exception:
                 LOG_CURRENT_EXCEPTION()
 
         self.__isCloseTriggered = closeBrowser
         return stopNavigation
 
+    def onResourceLoadRequest(self, url):
+        result = urlparse.urlparse(url)
+        return result.netloc + result.path if result.scheme == _WOT_RESOURCE_CUSTOM_SCHEME else _g_webCache.get(url)
+
     def setLoadingScreenVisible(self, visible):
-        LOG_BROWSER('setLoadingScreenVisible', visible)
+        _logger.debug('setLoadingScreenVisible %s', visible)
         self.onLoadingStateChange(visible, True)
 
-    def setAllowAutoLoadingScreen(self, showLoadingWheel):
-        LOG_BROWSER('setAllowAutoLoadingScreen', showLoadingWheel)
-        self.__allowAutoLoadingScreenChange = showLoadingWheel
+    def setAllowAutoLoadingScreen(self, enabled):
+        _logger.debug('setAllowAutoLoadingScreen %s', enabled)
+        self.__allowAutoLoadingScreenChange = enabled
 
     def changeTitle(self, title):
         self.onTitleChange(title)
@@ -456,7 +489,7 @@ class WebBrowser(object):
         if url == self.__browser.url:
             self.__isNavigationComplete = False
             self.__loadStartTime = BigWorld.time()
-            LOG_BROWSER('onLoadStart', self.__browser.url)
+            _logger.debug('onLoadStart %s', self.__browser.url)
             self.onLoadStart(self.__browser.url)
             self.__readyToShow = False
             self.__successfulLoad = False
@@ -466,11 +499,11 @@ class WebBrowser(object):
             self.__isNavigationComplete = True
             self.__successfulLoad = isLoaded
             if not self.__processDelayedNavigation():
-                LOG_BROWSER('onLoadEnd', self.__browser.url, isLoaded, httpStatusCode)
+                _logger.debug('onLoadEnd %s - %r - %r', self.__browser.url, isLoaded, httpStatusCode)
                 self.onLoadEnd(self.__browser.url, isLoaded, httpStatusCode)
 
     def __onLoadingStateChange(self, isLoading):
-        LOG_BROWSER('onLoadingStateChange', isLoading, self.__allowAutoLoadingScreenChange)
+        _logger.debug('onLoadingStateChange %r - %r', isLoading, self.__allowAutoLoadingScreenChange)
         self.onLoadingStateChange(isLoading, self.__allowAutoLoadingScreenChange)
         if self.__isCloseTriggered:
             event_dispatcher.hideWebBrowser(self.__browserID)
@@ -479,7 +512,7 @@ class WebBrowser(object):
 
     def __onReadyToShowContent(self, url):
         if url == self.__browser.url:
-            LOG_BROWSER('onReadyToShowContent', self.__browser.url)
+            _logger.debug('onReadyToShowContent %s', self.__browser.url)
             self.__readyToShow = True
             self.onReadyToShowContent(self.__browser.url)
 
@@ -500,7 +533,7 @@ class WebBrowser(object):
 
     def __onTitleChange(self, title):
         if self.__isValidTitle(title):
-            LOG_BROWSER('onTitleChange', title, self.__browser.url)
+            _logger.debug('onTitleChange %s : %s', title, self.__browser.url)
             self.onTitleChange(title)
 
     def __onCursorUpdated(self):
@@ -553,7 +586,7 @@ class EventListener(object):
         self.onCursorUpdated()
 
     def onChangeTitle(self, title):
-        LOG_BROWSER('onChangeTitle', title)
+        _logger.debug('onChangeTitle %s', title)
         self.onTitleChange(title)
 
     def ready(self, success):
@@ -561,27 +594,27 @@ class EventListener(object):
 
     def onBeginLoadingFrame(self, frameId, isMainFrame, url):
         if isMainFrame:
-            LOG_BROWSER('onBeginLoadingFrame(isMainFrame)', url)
+            _logger.debug('onBeginLoadingFrame(isMainFrame) %s', url)
             self.onLoadStart(url)
             if self.__urlFailed:
                 self.onLoadEnd(url, False)
 
     def onFailLoadingFrame(self, frameId, isMainFrame, url, errorCode, errorDesc):
         if isMainFrame:
-            LOG_BROWSER('onFailLoadingFrame(isMainFrame)', url, errorCode, errorDesc)
+            _logger.debug('onFailLoadingFrame(isMainFrame) %s, %r, %r', url, errorCode, errorDesc)
             self.__urlFailed = True
 
     def onFinishLoadingFrame(self, frameId, isMainFrame, url, httpStatusCode):
         if isMainFrame:
-            LOG_BROWSER('onFinishLoadingFrame(isMainFrame)', url, httpStatusCode)
+            _logger.debug('onFinishLoadingFrame(isMainFrame) %s, %r', url, httpStatusCode)
             self.onLoadEnd(url, not self.__urlFailed, httpStatusCode)
 
     def onBrowserLoadingStateChange(self, isLoading):
-        LOG_BROWSER('onBrowserLoadingStateChange()', isLoading)
+        _logger.debug('onBrowserLoadingStateChange() %r', isLoading)
         self.onLoadingStateChange(isLoading)
 
     def onDocumentReady(self, url):
-        LOG_BROWSER('onDocumentReady', url)
+        _logger.debug('onDocumentReady %s', url)
         self.onDOMReady(url)
 
     def onAddConsoleMessage(self, message, lineNumber, source):
@@ -590,14 +623,17 @@ class EventListener(object):
     def onFilterNavigation(self, url):
         return self.__browserProxy.filterNavigation(url)
 
+    def onResourceLoadRequest(self, url):
+        return self.__browserProxy.onResourceLoadRequest(url)
+
     def onWhitelistMiss(self, isMainFrame, failedURL):
         if isMainFrame:
-            LOG_BROWSER('onWhitelistMiss(isMainFrame)', failedURL)
+            _logger.debug('onWhitelistMiss(isMainFrame) %s', failedURL)
             self.onLoadStart(failedURL)
             self.onLoadEnd(failedURL, False)
 
     def onShowCreatedWebView(self, url, isPopup):
-        LOG_BROWSER('onShowCreatedWebView', url, isPopup)
+        _logger.debug('onShowCreatedWebView %s %r', url, isPopup)
 
 
 class WebBrowserManager(object):

@@ -3,6 +3,8 @@
 
 
 class TANK_CAROUSEL_FILTER(object):
+    TOOLTIP_PARAMS = '#tank_carousel_filter:tooltip/params'
+    TOOLTIP_INVENTORY = '#tank_carousel_filter:tooltip/inventory'
     CHECKBOX_INVENTORY = '#tank_carousel_filter:checkbox/inventory'
     POPOVER_TITLE = '#tank_carousel_filter:popover/title'
     POPOVER_LABEL_NATIONS = '#tank_carousel_filter:popover/label/nations'

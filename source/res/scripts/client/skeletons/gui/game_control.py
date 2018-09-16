@@ -194,8 +194,12 @@ class ISoundEventChecker(IGameController):
 
 class IHeroTankController(IGameController):
     onUpdated = None
+    onInteractive = None
 
     def getRandomTankCD(self):
+        raise NotImplementedError
+
+    def setInteractive(self, interactive):
         raise NotImplementedError
 
     def getCurrentTankCD(self):
@@ -358,6 +362,10 @@ class IVehicleComparisonBasket(IGameController):
         raise NotImplementedError
 
     def removeAllVehicles(self):
+        raise NotImplementedError
+
+    @property
+    def maxVehiclesToCompare(self):
         raise NotImplementedError
 
     def isFull(self):

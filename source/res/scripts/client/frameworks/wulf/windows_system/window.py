@@ -12,15 +12,24 @@ class Window(PyObjectEntity):
     __slots__ = ('onStatusChanged',)
 
     def __init__(self, wndFlags, decorator, content=None, parent=None):
-        decorator.getViewModel().setContent(content)
+        if decorator is not None:
+            decorator.getViewModel().setContent(content)
+            contentProxy = decorator.proxy
+        elif content is not None:
+            contentProxy = content.proxy
+        else:
+            contentProxy = None
         parentWndProxy = None if parent is None else parent.proxy
-        super(Window, self).__init__(GUI.PyObjectWindow(wndFlags, decorator.proxy, parentWndProxy))
+        super(Window, self).__init__(GUI.PyObjectWindow(wndFlags, contentProxy, parentWndProxy))
         self.onStatusChanged = Event.Event()
         return
 
+    def __repr__(self):
+        return '{}(uniqueID={}, content={})'.format(self.__class__.__name__, self.uniqueID, self.content)
+
     @property
     def content(self):
-        return self.proxy.content.getViewModel().getContent()
+        return self.proxy.content.getViewModel().getContent() if self.proxy.content is not None else None
 
     @property
     def parent(self):
@@ -84,5 +93,5 @@ class Window(PyObjectEntity):
         self._cWindowStatusChanged(self.windowStatus, WindowStatus.DESTROYED)
         self.unbind()
 
-    def _cWindowStatusChanged(self, oldStatus, newStatus):
+    def _cWindowStatusChanged(self, _, newStatus):
         self.onStatusChanged(newStatus)

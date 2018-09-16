@@ -1,21 +1,30 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/shop/formatters.py
-from collections import namedtuple
 import re
-from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_helpers import isVehicleTopConfiguration
+from collections import namedtuple
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.shared.gui_items import KPI, CREW_SKILL_TO_KPI_NAME_MAP
-from helpers import dependency, i18n
+from helpers import dependency, i18n, time_utils
 from items.components.skills_constants import PERKS
 from skeletons.gui.shared import IItemsCache
 import nations
 _WHITESPACE_RE = re.compile('\\s+')
+_COLOR_TAG_OPEN = '{colorTagOpen}'
+_COLOR_TAG_CLOSE = '{colorTagClose}'
 
 def _strsanitize(s):
     if not isinstance(s, unicode):
         s = s.decode('utf-8')
-    s = s.replace(u'\r\n', ' ').replace(u'\n', ' ').replace(u'\t', ' ').replace(u'"', '\\"').replace(u'`', '\\`')
+    s = s.replace(u'\r\n', ' ').replace(u'\n', ' ').replace(u'\t', ' ').replace(u'"', '\\u0022').replace(u'`', '\\u0060').replace(u'\\', '\\u005c')
     return _WHITESPACE_RE.sub(s, u' ')
+
+
+def _pathsanitize(s):
+    s = s or ''
+    if s.startswith('..'):
+        s = 'gui' + s[2:]
+    return s
 
 
 def _formatPrice(itemPrice):
@@ -34,56 +43,100 @@ def _formatFloat(val):
 def _formatKPI(kpiList):
 
     def formatKPIValue(kpi):
-        if kpi.type is KPI.Type.OR:
+        if kpi.type is KPI.Type.ONE_OF:
             return _formatKPI(kpi.value)
-        return _formatFloat(kpi.value) if kpi.type in {KPI.Type.FACTOR, KPI.Type.VALUE} else kpi.value
+        return _formatFloat(kpi.value) if kpi.type in {KPI.Type.MUL, KPI.Type.ADD} else kpi.value
 
     return [ {'name': kpi.name,
      'type': kpi.type,
-     'value': formatKPIValue(kpi)} for kpi in kpiList if kpi.value != 1.0 ]
+     'value': formatKPIValue(kpi)} for kpi in kpiList ]
+
+
+def _formatActionParams(actionInfo):
+    return actionInfo.discount.getParams()
+
+
+def _formatValueToColorTag(value):
+    return _COLOR_TAG_OPEN + value + _COLOR_TAG_CLOSE
+
+
+def _formatTechName(value):
+    parts = value.split(':')
+    return parts[1] if len(parts) > 1 else value
+
+
+def _formatImagePaths(item):
+    return {'small': _pathsanitize(item.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_SMALL)),
+     'medium': _pathsanitize(item.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_MEDIUM)),
+     'large': _pathsanitize(item.getShopIcon(size=STORE_CONSTANTS.ICON_SIZE_LARGE))}
 
 
 Field = namedtuple('Field', ('name', 'getter'))
 idField = Field('id', lambda i: i.intCD)
 nameField = Field('name', lambda i: _strsanitize(i.userName))
 nationField = Field('nation', lambda i: i.nationName)
-nationNameField = Field('nationName', lambda i: i.nationUserName)
+nationNameField = Field('nationName', lambda i: _strsanitize(i.nationUserName))
 typeField = Field('type', lambda i: i.type)
-typeNameField = Field('typeName', lambda i: i.typeUserName)
+typeNameField = Field('typeName', lambda i: _strsanitize(i.typeUserName))
 descriptionField = Field('description', lambda i: _strsanitize(i.fullDescription))
+shortDescriptionSpecialField = Field('shortDescriptionSpecial', lambda i: _strsanitize(i.shortDescriptionSpecial))
+longDescriptionSpecialField = Field('longDescriptionSpecial', lambda i: _strsanitize(i.longDescriptionSpecial))
 inventoryCountField = Field('inventoryCount', lambda i: i.inventoryCount)
 buyPriceField = Field('buyPrice', lambda i: _formatPrice(i.buyPrices.itemPrice))
 sellPriceField = Field('sellPrice', lambda i: _formatPrice(i.sellPrices.itemPrice))
 tagsField = Field('tags', lambda i: list(i.tags))
 kpiField = Field('kpi', lambda i: _formatKPI(i.kpi))
+techNameField = Field('techName', lambda i: _formatTechName(i.name))
+imagesField = Field('images', _formatImagePaths)
 _vehicleComponentsFieldSet = (idField,
  nameField,
+ techNameField,
  buyPriceField,
  sellPriceField,
  descriptionField,
- inventoryCountField)
+ inventoryCountField,
+ shortDescriptionSpecialField,
+ longDescriptionSpecialField,
+ imagesField)
 _vehicleArtifactsFieldSet = _vehicleComponentsFieldSet + (tagsField, kpiField)
 
 class Formatter(object):
+    __slots__ = ('__fields',)
 
     def __init__(self, fields):
         self.__fields = fields
 
     def format(self, item):
-        data = {}
-        for field in self.__fields:
-            data[field.name] = field.getter(item)
-
-        return data
+        return {field.name:field.getter(item) for field in self.__fields}
 
 
-def makeVehicleFormatter(includeInventoryFields=False):
+def makeActionFormatter():
+    fields = [Field('id', lambda actionInfo: actionInfo.getID()),
+     Field('startDate', lambda actionInfo: time_utils.timestampToISO(actionInfo.getExactStartTime())),
+     Field('endDate', lambda actionInfo: time_utils.timestampToISO(actionInfo.getExactFinishTime())),
+     Field('name', lambda actionInfo: _strsanitize(actionInfo.getTitle())),
+     Field('description', lambda actionInfo: _strsanitize(actionInfo.event.getDescription())),
+     Field('triggerChainID', lambda actionInfo: actionInfo.getTriggerChainID()),
+     Field('type', lambda actionInfo: actionInfo.discount.getName()),
+     Field('params', _formatActionParams)]
+    return Formatter(fields)
+
+
+@dependency.replace_none_kwargs(itemsCache=IItemsCache)
+def makeVehicleFormatter(includeInventoryFields=False, itemsCache=None):
     isPremiumField = Field('isPremium', lambda i: i.isPremium)
     levelField = Field('level', lambda i: i.level)
-    techNameField = Field('techName', lambda i: i.name.split(':')[1])
     isUnlockedField = Field('isUnlocked', lambda i: i.isUnlocked)
+    shortName = Field('shortName', lambda i: _strsanitize(i.shortUserName))
+
+    def isTradeInAvailable(vehicle):
+        tradeIn = itemsCache.items.shop.tradeIn
+        return tradeIn.isEnabled and vehicle.level in tradeIn.allowedVehicleLevels and vehicle.intCD not in tradeIn.forbiddenVehicles
+
+    isTradeInAvailableField = Field('isTradeInAvailable', isTradeInAvailable)
     fields = [idField,
      nameField,
+     shortName,
      techNameField,
      nationField,
      nationNameField,
@@ -91,12 +144,15 @@ def makeVehicleFormatter(includeInventoryFields=False):
      typeNameField,
      levelField,
      descriptionField,
+     shortDescriptionSpecialField,
+     longDescriptionSpecialField,
      isPremiumField,
      buyPriceField,
      sellPriceField,
-     isUnlockedField]
+     isUnlockedField,
+     imagesField,
+     isTradeInAvailableField]
     if includeInventoryFields:
-        isTopConfigurationField = Field('isTopConfiguration', isVehicleTopConfiguration)
         shellFormatter = makeShellFormatter(includeCount=True)
         shellsField = Field('shells', lambda i: [ shellFormatter.format(s) for s in i.shells ])
         moduleFormatter = makeModuleFormatter()
@@ -117,8 +173,7 @@ def makeVehicleFormatter(includeInventoryFields=False):
 
         readinessField = Field('readiness', formatReadiness)
         isFavoriteField = Field('isFavorite', lambda i: i.isFavorite)
-        fields.extend([isTopConfigurationField,
-         shellsField,
+        fields.extend([shellsField,
          modulesField,
          devicesField,
          equipmentField,
@@ -168,13 +223,16 @@ def makeBattleBoosterFormatter(fittedVehGetter=None):
                 key = ITEM_TYPES.TANKMAN_SKILLS_TYPE_SKILL_SHORT
         else:
             key = ITEM_TYPES.OPTIONALDEVICE_NAME
-        return i18n.makeString(key)
+        return _strsanitize(i18n.makeString(key))
+
+    def formatBoosterDescription(i):
+        return _strsanitize(i.getCrewBoosterDescription(False)) if i.isCrewBooster() else _strsanitize(i.getOptDeviceBoosterDescription(vehicle=None, valueFormatter=_formatValueToColorTag))
 
     fields.extend([Field('affectedSkill', formatAffectedSkill),
-     Field('affectedSkillName', lambda i: i.getAffectedSkillUserName()),
+     Field('affectedSkillName', lambda i: _strsanitize(i.getAffectedSkillUserName())),
      Field('boosterType', formatBoosterType),
      Field('boosterTypeName', formatBoosterTypeName),
-     Field('description', lambda i: i.getCrewBoosterDescription(False) if i.isCrewBooster() else _strsanitize(i.fullDescription))])
+     Field('description', formatBoosterDescription)])
     if fittedVehGetter:
         fields.append(Field('fittedVehicles', lambda i: fittedVehGetter(i.intCD)))
     return Formatter(fields)
@@ -184,21 +242,27 @@ def makeBoosterFormatter():
     fields = [Field('id', lambda booster: booster.boosterID),
      Field('inventoryCount', lambda booster: booster.count),
      Field('kpi', lambda booster: _formatKPI(booster.kpi)),
-     Field('description', lambda booster: booster.description),
+     Field('description', lambda booster: _strsanitize(booster.getBonusDescription(valueFormatter=_formatValueToColorTag))),
+     shortDescriptionSpecialField,
+     longDescriptionSpecialField,
      Field('duration', lambda booster: booster.effectTime),
      Field('type', lambda booster: booster.boosterGuiType),
      nameField,
-     buyPriceField]
+     buyPriceField,
+     imagesField]
     return Formatter(fields)
 
 
 def makeModuleFormatter():
     fields = [idField,
      Field('name', lambda i: _strsanitize(i.longUserName)),
-     Field('type', lambda i: i.descriptor.itemTypeName),
+     Field('type', lambda i: _strsanitize(i.descriptor.itemTypeName)),
+     techNameField,
+     nationField,
      buyPriceField,
      sellPriceField,
-     inventoryCountField]
+     inventoryCountField,
+     imagesField]
     return Formatter(fields)
 
 
@@ -208,7 +272,10 @@ def makeShellFormatter(includeCount=False):
      inventoryCountField,
      sellPriceField,
      buyPriceField,
-     typeField]
+     typeField,
+     nationField,
+     techNameField,
+     imagesField]
     if includeCount:
         fields.append(Field('count', lambda i: i.count))
     return Formatter(fields)
@@ -221,7 +288,9 @@ def makeCrewFormatter():
 
 def makePremiumPackFormatter():
     fields = [nameField,
+     shortDescriptionSpecialField,
+     longDescriptionSpecialField,
      Field('buyPrice', lambda pack: _formatPrice(pack.buyPrice)),
      Field('duration', lambda pack: pack.duration),
-     Field('id', lambda pack: pack.duration)]
+     Field('id', lambda pack: pack.id)]
     return Formatter(fields)

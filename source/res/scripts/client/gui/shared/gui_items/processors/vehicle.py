@@ -263,7 +263,7 @@ class VehicleSeller(ItemProcessor):
         self.optDevs = optDevs
         self.inventory = inventory
         self.isCrewDismiss = isCrewDismiss
-        self.isDismantlingForMoney = len(self.__dismantlingForMoneyDevices(vehicle, optDevs)) > 0
+        self.isDismantlingForMoney = len(getDismantlingToInventoryDevices(vehicle, optDevs)) > 0
         self.isRemovedAfterRent = vehicle.isRented
         return
 
@@ -318,41 +318,38 @@ class VehicleSeller(ItemProcessor):
         LOG_DEBUG('Make server request:', self.vehicle.invID, isSellShells, isSellEqs, isSellFromInv, isSellOptDevs, self.isDismantlingForMoney, self.isCrewDismiss, itemsFromVehicle, itemsFromInventory)
         BigWorld.player().inventory.sellVehicle(self.vehicle.invID, self.isCrewDismiss, itemsFromVehicle, itemsFromInventory, lambda code: self._response(code, callback))
 
-    def __dismantlingForMoneyDevices(self, vehicle, optDevicesToSell):
-        result = []
-        if vehicle is None:
-            return result
-        else:
-            optDevicesToSell = [ dev.intCD for dev in optDevicesToSell ]
-            for dev in vehicle.optDevices:
-                if dev is None:
-                    continue
-                if not dev.isRemovable and dev.intCD not in optDevicesToSell:
-                    result.append(dev)
-
-            return result
-
-    def __getGainSpendMoney(self, vehicle, vehShells, vehEqs, vehOptDevs, inventory):
+    def __getGainSpendMoney(self, vehicle, vehShells, vehEqs, optDevicesToSell, inventory):
         moneyGain = vehicle.sellPrices.itemPrice.price
         for shell in vehShells:
             moneyGain += shell.sellPrices.itemPrice.price * shell.count
 
-        for module in vehEqs + vehOptDevs:
+        for module in vehEqs + optDevicesToSell:
             moneyGain += module.sellPrices.itemPrice.price
 
         for module in inventory:
             moneyGain += module.sellPrices.itemPrice.price * module.inventoryCount
 
-        dismantlingDevices = self.__dismantlingForMoneyDevices(vehicle, vehOptDevs)
-        moneySpend = MONEY_UNDEFINED
-        for dev in dismantlingDevices:
-            moneySpend += dev.getRemovalPrice(self.itemsCache.items).price
-
+        dismantlingToInventoryDevices = getDismantlingToInventoryDevices(vehicle, optDevicesToSell)
+        moneySpend = calculateSpendMoney(self.itemsCache.items, dismantlingToInventoryDevices)
         return (moneyGain, moneySpend)
 
     def __accumulatePrice(self, result, price, count=1):
         result += price * count
         return result
+
+
+def getDismantlingToInventoryDevices(vehicle, optDevicesToSell):
+    optDevicesToSell = {dev.intCD for dev in optDevicesToSell}
+    vehDevices = vehicle.optDevices if vehicle is not None else []
+    return [ dev for dev in vehDevices if dev and not dev.isRemovable and dev.intCD not in optDevicesToSell ]
+
+
+def calculateSpendMoney(items, dismantlingToInventoryDevices):
+    moneySpend = MONEY_UNDEFINED
+    for dev in dismantlingToInventoryDevices:
+        moneySpend += dev.getRemovalPrice(items).price
+
+    return moneySpend
 
 
 class VehicleSettingsProcessor(ItemProcessor):

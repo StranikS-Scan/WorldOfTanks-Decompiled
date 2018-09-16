@@ -32,6 +32,9 @@ class ToolTip(ToolTipMgrMeta):
     def show(self, data, linkage):
         self.as_showS(data, linkage, self.__fastRedraw)
 
+    def hide(self):
+        self.as_hideS()
+
     def handleKeyEvent(self, event):
         tooltipType = self.__tooltipID
         altPressed = event.key == Keys.KEY_LALT or event.key == Keys.KEY_RALT

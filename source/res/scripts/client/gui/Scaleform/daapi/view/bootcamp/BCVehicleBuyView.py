@@ -1,9 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCVehicleBuyView.py
 from Event import Event
-from gui.Scaleform.daapi.view.meta.BCVehicleBuyViewMeta import BCVehicleBuyViewMeta
+from gui.Scaleform.framework.entities.BaseDAAPIComponent import BaseDAAPIComponent
 
-class BCVehicleBuyView(BCVehicleBuyViewMeta):
+class BCVehicleBuyView(BaseDAAPIComponent):
 
     def __init__(self):
         super(BCVehicleBuyView, self).__init__()

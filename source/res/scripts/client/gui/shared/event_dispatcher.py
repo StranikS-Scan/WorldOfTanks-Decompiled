@@ -1,22 +1,33 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/shared/event_dispatcher.py
+import urlparse
 from adisp import process
 from debug_utils import LOG_WARNING
 from CurrentVehicle import HeroTankPreviewAppearance
+from gui import SystemMessages
+from gui.Scaleform.genConsts.STORAGE_CONSTANTS import STORAGE_CONSTANTS
+from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.app_loader import g_appLoader
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nInfoDialogMeta
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import getWebShopURL, isIngameShopEnabled
+from gui.Scaleform.framework.entities.View import ViewKey
 from gui.Scaleform.genConsts.CLANS_ALIASES import CLANS_ALIASES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.genConsts.EPICBATTLES_ALIASES import EPICBATTLES_ALIASES
 from gui.prb_control.settings import CTRL_ENTITY_TYPE
 from gui.shared import events, g_eventBus
+from gui.shared.money import MONEY_UNDEFINED
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.notifications import NotificationPriorityLevel
 from gui.shared.utils import isPopupsWindowsOpenDisabled
 from gui.shared.utils.functions import getViewName, getUniqueViewName
 from helpers import dependency
 from helpers.aop import pointcutable
+from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IHeroTankController
 from skeletons.gui.shared import IItemsCache
+from skeletons.gui.lobby_context import ILobbyContext
 from soft_exception import SoftException
 
 class SETTINGS_TAB_INDEX(object):
@@ -63,7 +74,7 @@ def showEpicBattlesAfterBattleWindow(reusableInfo):
 
 
 def showVehicleInfo(vehTypeCompDescr):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_INFO_WINDOW, getViewName(VIEW_ALIAS.VEHICLE_INFO_WINDOW, vehTypeCompDescr), ctx={'vehicleCompactDescr': int(vehTypeCompDescr)}), EVENT_BUS_SCOPE.LOBBY)
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_INFO_WINDOW, getViewName(VIEW_ALIAS.VEHICLE_INFO_WINDOW, int(vehTypeCompDescr)), ctx={'vehicleCompactDescr': int(vehTypeCompDescr)}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showModuleInfo(itemCD, vehicleDescr):
@@ -76,11 +87,14 @@ def showVehicleSellDialog(vehInvID):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_SELL_DIALOG, ctx={'vehInvID': int(vehInvID)}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showVehicleBuyDialog(vehicle, isTradeIn=False):
-    alias = VIEW_ALIAS.VEHICLE_RESTORE_WINDOW if vehicle.isRestoreAvailable() else VIEW_ALIAS.VEHICLE_BUY_WINDOW
-    g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx={'nationID': vehicle.nationID,
+def showVehicleBuyDialog(vehicle, isTradeIn=False, previousAlias=None):
+    from gui.impl.views.lobby.buy_vehicle_view import BuyVehicleWindow
+    ctx = {'nationID': vehicle.nationID,
      'itemID': vehicle.innationID,
-     'isTradeIn': isTradeIn}), EVENT_BUS_SCOPE.LOBBY)
+     'isTradeIn': isTradeIn,
+     'previousAlias': previousAlias}
+    window = BuyVehicleWindow(ctx=ctx)
+    window.load()
 
 
 def showBattleBoosterBuyDialog(battleBoosterIntCD, install=False):
@@ -88,8 +102,8 @@ def showBattleBoosterBuyDialog(battleBoosterIntCD, install=False):
      'install': install}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showResearchView(vehTypeCompDescr):
-    exitEvent = events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR)
+def showResearchView(vehTypeCompDescr, exitEvent=None):
+    exitEvent = exitEvent or events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR)
     loadEvent = events.LoadViewEvent(VIEW_ALIAS.LOBBY_RESEARCH, ctx={'rootCD': vehTypeCompDescr,
      'exit': exitEvent})
     g_eventBus.handleEvent(loadEvent, scope=EVENT_BUS_SCOPE.LOBBY)
@@ -110,15 +124,58 @@ def showHangar():
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_HANGAR), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
-def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None):
+def showWebShop(url=None, customPath=None):
+    app = g_appLoader.getApp()
+    if url is None:
+        url = getWebShopURL()
+        if customPath is not None:
+            url = urlparse.urljoin(url, customPath)
+    if app is not None and app.containerManager is not None:
+        viewKey = ViewKey(VIEW_ALIAS.LOBBY_STORE)
+        browserWindow = app.containerManager.getViewByKey(viewKey)
+        if browserWindow is not None:
+            browserWindow.destroy()
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STORE, ctx={'url': url}), scope=EVENT_BUS_SCOPE.LOBBY)
+    return
+
+
+def showOldShop(ctx=None):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STORE_OLD, ctx=ctx), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showStorage(defaultSection=STORAGE_CONSTANTS.FOR_SELL):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_STORAGE, ctx={'defaultSection': defaultSection}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showOldVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None):
+    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_PREVIEW, ctx={'itemCD': vehTypeCompDescr,
+     'previewAlias': previewAlias,
+     'vehicleStrCD': vehStrCD,
+     'previewBackCb': previewBackCb}), scope=EVENT_BUS_SCOPE.LOBBY)
+
+
+def showVehiclePreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, vehStrCD=None, previewBackCb=None, itemsPack=None, price=MONEY_UNDEFINED, oldPrice=None, title='', endTime=None, buyParams=None):
     heroTankCtrl = dependency.instance(IHeroTankController)
     heroTankCD = heroTankCtrl.getCurrentTankCD()
     if heroTankCD and heroTankCD == vehTypeCompDescr:
         goToHeroTankOnScene(vehTypeCompDescr, previewAlias)
     else:
-        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_PREVIEW, ctx={'itemCD': vehTypeCompDescr,
-         'previewAlias': previewAlias,
-         'vehicleStrCD': vehStrCD}), scope=EVENT_BUS_SCOPE.LOBBY)
+        lobbyContext = dependency.instance(ILobbyContext)
+        if lobbyContext.getServerSettings().isIngamePreviewEnabled():
+            g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.VEHICLE_PREVIEW_20, ctx={'itemCD': vehTypeCompDescr,
+             'previewAlias': previewAlias,
+             'vehicleStrCD': vehStrCD,
+             'previewBackCb': previewBackCb,
+             'itemsPack': itemsPack,
+             'price': price,
+             'oldPrice': oldPrice,
+             'title': title,
+             'endTime': endTime,
+             'buyParams': buyParams}), scope=EVENT_BUS_SCOPE.LOBBY)
+        elif itemsPack:
+            SystemMessages.pushMessage(text=_ms(MESSENGER.CLIENT_ERROR_SHARED_TRY_LATER), type=SystemMessages.SM_TYPE.Error, priority=NotificationPriorityLevel.MEDIUM)
+        else:
+            showOldVehiclePreview(vehTypeCompDescr, previewAlias, vehStrCD, previewBackCb)
 
 
 def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR):
@@ -135,7 +192,12 @@ def goToHeroTankOnScene(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR):
 
 
 def showHeroTankPreview(vehTypeCompDescr, previewAlias=VIEW_ALIAS.LOBBY_HANGAR, previousBackAlias=None, objectSelectionEnabled=True):
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.HERO_VEHICLE_PREVIEW, ctx={'itemCD': vehTypeCompDescr,
+    lobbyContext = dependency.instance(ILobbyContext)
+    if lobbyContext.getServerSettings().isIngamePreviewEnabled():
+        alias = VIEW_ALIAS.HERO_VEHICLE_PREVIEW_20
+    else:
+        alias = VIEW_ALIAS.HERO_VEHICLE_PREVIEW
+    g_eventBus.handleEvent(events.LoadViewEvent(alias, ctx={'itemCD': vehTypeCompDescr,
      'previewAlias': previewAlias,
      'previewAppearance': HeroTankPreviewAppearance(),
      'isHeroTank': True,
@@ -219,10 +281,11 @@ def showPremiumWindow(arenaUniqueID=0, premiumBonusesDiff=None):
 
 
 def showBoostersWindow(tabID=None):
-    ctx = {}
-    if tabID is not None:
-        ctx['tabID'] = tabID
-    g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTERS_WINDOW, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
+    if isIngameShopEnabled():
+        showStorage(STORAGE_CONSTANTS.PERSONAL_RESERVES)
+    else:
+        ctx = {'tabID': tabID} if tabID is not None else {}
+        g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BOOSTERS_WINDOW, ctx=ctx), EVENT_BUS_SCOPE.LOBBY)
     return
 
 

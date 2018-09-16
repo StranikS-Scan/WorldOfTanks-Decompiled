@@ -13,8 +13,5 @@ class SkillDropMeta(AbstractWindowView):
     def as_setDataS(self, data):
         return self.flashObject.as_setData(data) if self._isDAAPIInited() else None
 
-    def as_setGoldS(self, value):
-        return self.flashObject.as_setGold(value) if self._isDAAPIInited() else None
-
-    def as_setCreditsS(self, value):
-        return self.flashObject.as_setCredits(value) if self._isDAAPIInited() else None
+    def as_updateRetrainButtonsDataS(self, data):
+        return self.flashObject.as_updateRetrainButtonsData(data) if self._isDAAPIInited() else None

@@ -95,6 +95,9 @@ class GoodiesCache(IGoodiesCache):
         boosterDescription = self._items.shop.boosters.get(boosterID, None)
         return self.__makeGoodie(boosterID, boosterDescription)
 
+    def haveBooster(self, boosterID):
+        return boosterID in self._items.shop.boosters
+
     def getDiscount(self, discoutID):
         discountDescription = self._items.shop.discounts.get(discoutID, None)
         return self.__makeGoodie(discoutID, discountDescription)

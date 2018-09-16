@@ -1,0 +1,78 @@
+<h15_gamescom_2016.xml>
+  <wwmusic>	hangar_h15_silence	</wwmusic>
+  <wwambientSound>	hangar_h15_ambient	</wwambientSound>
+  <soundRemapping>
+    <loadBanks>
+      <bank>	ambient.bnk	</bank>
+      <bank>	hangar_h15_gamescom_2016.bnk	</bank>
+      <bank>	env_Forest.bnk	</bank>
+    </loadBanks>
+    <unloadBanks>
+      <bank>	hangar_premium_2018.bnk	</bank>
+    </unloadBanks>
+  </soundRemapping>
+  <roadMap></roadMap>
+  <gameplayTypes>
+    <ctf></ctf>
+  </gameplayTypes>
+  <boundingBox>
+    <bottomLeft>	-50.000000 0.000000	</bottomLeft>
+    <upperRight>	150.000000 200.000000	</upperRight>
+  </boundingBox>
+  <mapActivities>
+    <warplane>
+      <preset>	h15_gamescom_2016_tram_1	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	15.000000 35.000000	</startTime>
+      <interval>	120.000000	</interval>
+    </warplane>
+    <warplane>
+      <preset>	h15_gamescom_2016_tram_2	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	50.000000 65.000000	</startTime>
+      <interval>	120.000000	</interval>
+    </warplane>
+    <warplane>
+      <preset>	h15_gamescom_2016_tram_3	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	0.000000 20	</startTime>
+      <interval>	180.000000	</interval>
+    </warplane>
+    <warplane>
+      <preset>	h15_gamescom_2016_tram_4	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	1.000000	</possibility>
+      <startTime>	10.000000 30.000000	</startTime>
+      <interval>	180.000000	</interval>
+    </warplane>
+    <warplane>
+      <preset>	h15_gamescom_car_parking_01	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	0.850000	</possibility>
+      <startTime>	20.000000 50.000000	</startTime>
+    </warplane>
+    <warplane>
+      <preset>	h15_gamescom_car_parking_02	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	0.850000	</possibility>
+      <startTime>	35.000000 40.000000	</startTime>
+    </warplane>
+    <warplane>
+      <preset>	h15_gamescom_car_parking_03	</preset>
+      <position>	0.000000 0.000000 0.000000	</position>
+      <yaw>	0.000000	</yaw>
+      <possibility>	0.950000	</possibility>
+      <startTime>	5.000000 40.000000	</startTime>
+      <interval>	180.000000	</interval>
+    </warplane>
+  </mapActivities>
+</h15_gamescom_2016.xml>

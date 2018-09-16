@@ -32,7 +32,7 @@
     <requiredVersion_10200>
       <Type>	STRING	</Type>
       <Flags>	BASE_AND_CLIENT	</Flags>
-      <Default>	ru_1.0.2_6	</Default>
+      <Default>	ru_1.0.2_7	</Default>
     </requiredVersion_10200>
     <name>
       <Type>	STRING	</Type>
@@ -450,6 +450,11 @@
       <Arg>	INT32	</Arg>
       <Arg>	PYTHON	</Arg>
     </processWGMoneyResponse>
+    <processReceiptServiceNotification>
+      <Arg>	MAILBOX	</Arg>
+      <Arg>	INT32	</Arg>
+      <Arg>	PYTHON	</Arg>
+    </processReceiptServiceNotification>
     <extraWriteToDB>
       <Arg>	UINT8	</Arg>
     </extraWriteToDB>

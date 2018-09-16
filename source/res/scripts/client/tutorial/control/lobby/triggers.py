@@ -5,14 +5,16 @@ import dossiers2
 from AccountCommands import RES_SUCCESS
 from CurrentVehicle import g_currentVehicle
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 from tutorial.control import game_vars, g_tutorialWeaver
 from tutorial.control.lobby import aspects
 from tutorial.control.triggers import Trigger, TriggerWithValidateVar, TriggerWithSubscription
 from tutorial.logger import LOG_ERROR
-__all__ = ('BonusTrigger', 'BattleCountRequester', 'ItemUnlockedTrigger', 'ItemInInventoryTrigger', 'ItemInstalledTrigger', 'EquipmentInstalledTrigger', 'CurrentVehicleChangedTrigger', 'FreeVehicleSlotChangedTrigger', 'PremiumPeriodChangedTrigger', 'PremiumDiscountUseTrigger')
+__all__ = ('BonusTrigger', 'BattleCountRequester', 'ItemUnlockedTrigger', 'ItemInInventoryTrigger', 'ItemInstalledTrigger', 'EquipmentInstalledTrigger', 'CurrentVehicleChangedTrigger', 'FreeVehicleSlotChangedTrigger', 'PremiumPeriodChangedTrigger', 'PremiumDiscountUseTrigger', 'IsIngameShopEnabledTrigger')
 
 class BonusTrigger(Trigger):
 
@@ -321,3 +323,26 @@ class TimerTrigger(TriggerWithValidateVar):
         self.__timerCallback = None
         self.toggle(isOn=True)
         return
+
+
+class IsIngameShopEnabledTrigger(Trigger):
+    lobbyContext = dependency.descriptor(ILobbyContext)
+
+    def run(self):
+        self.isRunning = True
+        if not self.isSubscribed:
+            self.isSubscribed = True
+            self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingChanged
+        self.toggle(isOn=self.isOn())
+
+    def isOn(self, *args):
+        return isIngameShopEnabled()
+
+    def clear(self):
+        super(IsIngameShopEnabledTrigger, self).clear()
+        self.isSubscribed = False
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingChanged
+
+    def __onServerSettingChanged(self, diff):
+        if 'ingameShop' in diff and isIngameShopEnabled():
+            self.toggle(isOn=self.isOn())

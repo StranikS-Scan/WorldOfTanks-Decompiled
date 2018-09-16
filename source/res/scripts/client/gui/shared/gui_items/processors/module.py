@@ -2,20 +2,22 @@
 # Embedded file name: scripts/client/gui/shared/gui_items/processors/module.py
 import BigWorld
 import AccountCommands
-from gui import makeHtmlString
-from gui.shared.gui_items.vehicle_modules import VehicleTurret, VehicleGun
-from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from debug_utils import LOG_DEBUG, LOG_UNEXPECTED
+from gui import makeHtmlString
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE, CURRENCY_TO_SM_TYPE_DISMANTLING
+from gui.shared.formatters import formatPrice, icons, getBWFormatter
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.gui_items.gui_item_economics import getItemBuyPrice
-from gui.shared.gui_items.processors import ItemProcessor, makeI18nSuccess, makeI18nError, VehicleItemProcessor, plugins, makeSuccess
-from gui.shared.formatters import formatPrice, icons, getBWFormatter
+from gui.shared.gui_items.processors import ItemProcessor, makeI18nSuccess, makeI18nError, VehicleItemProcessor, plugins, makeSuccess, Processor
+from gui.shared.gui_items.vehicle_modules import VehicleTurret, VehicleGun
 from gui.shared.money import Currency
+from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 from gui.shared.tooltips.formatters import packActionTooltipData
 from helpers import i18n, dependency
-from skeletons.gui.shared.gui_items import IGuiItemsFactory
 from skeletons.gui.game_control import IEpicBattleMetaGameController
+from skeletons.gui.shared.gui_items import IGuiItemsFactory
+from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
+MULTIPLE_SELLING_TEMPLATE = 'multipleSelling/%s'
 
 def _getIconHtmlTagForCurrency(currency):
     getter = getattr(icons, currency)
@@ -121,6 +123,30 @@ class ModuleSeller(ModuleTradeProcessor):
     def _request(self, callback):
         LOG_DEBUG('Make server request to sell item', self.item, self.count)
         BigWorld.player().inventory.sell(self.item.itemTypeID, self.item.intCD, self.count, lambda code: self._response(code, callback))
+
+
+class MultipleModulesSeller(Processor):
+
+    def __init__(self, items, plugs=None):
+        super(MultipleModulesSeller, self).__init__(plugs)
+        self.__items = items
+
+    def _successHandler(self, code, ctx=None):
+        return makeI18nSuccess((MULTIPLE_SELLING_TEMPLATE % 'success'), type=SM_TYPE.MultipleSelling, **self._getMsgCtx())
+
+    def _getPrice(self):
+        price = ITEM_PRICE_EMPTY
+        for _, itemCD, count in self.__items:
+            item = self.itemsCache.items.getItemByCD(itemCD)
+            price = price + item.sellPrices.itemPrice * count
+
+        return price
+
+    def _getMsgCtx(self):
+        return {'money': formatPrice(self._getPrice().price)}
+
+    def _request(self, callback):
+        BigWorld.player().inventory.sellMultiple(self.__items, lambda code: self._response(code, callback))
 
 
 class ModuleInstallProcessor(ModuleProcessor, VehicleItemProcessor):

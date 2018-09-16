@@ -1,6 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/recruitWindow/RecruitWindow.py
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
+from gui.ingame_shop import showBuyGoldForCrew
+from gui.shared.gui_items.serializers import packTraining
 from gui.shared.tooltips import ACTION_TOOLTIPS_TYPE
 import nations
 import constants
@@ -29,7 +32,7 @@ class RecruitWindow(RecruitWindowMeta):
         super(RecruitWindow, self).__init__()
         self._initData = ctx.get('data', None)
         self._menuEnabled = ctx.get('menuEnabled', False)
-        self._currentVehicleInvId = ctx.get('currentVehicleId', -1)
+        self._currentVehicleInvId = ctx.get('currentVehicleId', None)
         return
 
     def _populate(self):
@@ -43,12 +46,12 @@ class RecruitWindow(RecruitWindowMeta):
 
     def onGoldChange(self, value):
         if self._currentVehicleInvId is not None:
-            self.as_setGoldChangedS(self.itemsCache.items.stats.gold)
+            self.as_setRecruitButtonsEnableStateS(*self.__getRetrainButtonsEnableFlags())
         return
 
     def onCreditsChange(self, value):
         if self._currentVehicleInvId is not None:
-            self.as_setCreditsChangedS(value)
+            self.as_setRecruitButtonsEnableStateS(*self.__getRetrainButtonsEnableFlags())
         return
 
     def onInventoryChanged(self, inventory):
@@ -86,8 +89,13 @@ class RecruitWindow(RecruitWindowMeta):
          'academyUpgradeActionPriceData': academyUpgradeAction,
          'data': self._initData,
          'menuEnabled': self._menuEnabled}
-        self.flashObject.as_initData(data)
+        self.as_initDataS(data)
+        self.as_setRecruitButtonsEnableStateS(*self.__getRetrainButtonsEnableFlags())
         return
+
+    def __getRetrainButtonsEnableFlags(self):
+        vehicle = self.itemsCache.items.getVehicle(self._currentVehicleInvId) if self._currentVehicleInvId is not None else None
+        return [ option['enabled'] for option in reversed(packTraining(vehicle)) ]
 
     def updateAllDropdowns(self, nationID, tankType, typeID, roleType):
         nationsDP = [{'id': None,
@@ -233,10 +241,17 @@ class RecruitWindow(RecruitWindowMeta):
 
     @decorators.process('recruting')
     def buyTankman(self, nationID, vehTypeID, role, studyType, slot):
-        if slot is not None and slot != -1:
-            vehicle = self.itemsCache.items.getVehicle(self._currentVehicleInvId)
-            yield self.__buyAndEquipTankman(vehicle, int(slot), int(studyType))
+        studyTypeIdx = int(studyType)
+        studyGoldCost = self.itemsCache.items.shop.tankmanCost[studyTypeIdx][Currency.GOLD] or 0
+        currentMoney = self.itemsCache.items.stats.money
+        if currentMoney.gold < studyGoldCost and isIngameShopEnabled():
+            showBuyGoldForCrew(studyGoldCost)
+            return
         else:
-            yield self.__buyTankman(int(nationID), int(vehTypeID), role, int(studyType))
-        self.onWindowClose()
-        return
+            if slot is not None and slot != -1:
+                vehicle = self.itemsCache.items.getVehicle(self._currentVehicleInvId)
+                yield self.__buyAndEquipTankman(vehicle, int(slot), studyTypeIdx)
+            else:
+                yield self.__buyTankman(int(nationID), int(vehTypeID), role, studyTypeIdx)
+            self.onWindowClose()
+            return

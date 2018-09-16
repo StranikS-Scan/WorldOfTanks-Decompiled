@@ -1,19 +1,18 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_helpers.py
 import operator
-from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_top_modules import TopModulesChecker
-from gui.game_control.veh_comparison_basket import PARAMS_AFFECTED_TANKMEN_SKILLS
 from helpers import dependency
 from items import tankmen
-from items.components.c11n_components import SeasonType
-from debug_utils import LOG_WARNING
+from shared_utils import first
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
+from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_top_modules import TopModulesChecker
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from gui.app_loader import g_appLoader
+from gui.game_control.veh_comparison_basket import PARAMS_AFFECTED_TANKMEN_SKILLS
 from gui.shared.gui_items import GUI_ITEM_TYPE_NAMES, GUI_ITEM_TYPE
 from gui.shared.gui_items.Tankman import Tankman
-from shared_utils import first
+from items.components.c11n_components import SeasonType
 from skeletons.gui.customization import ICustomizationService
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.shared.gui_items import IGuiItemsFactory
@@ -90,32 +89,6 @@ def createTankmans(crewData):
     return [ (strCD[0], Tankman(strCD[1]) if strCD[1] else None) for strCD in crewData ]
 
 
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def installEquipmentOnVehicle(vehicle, intCD, slotIndex, itemsCache=None):
-    if intCD and itemsCache is not None:
-        equipment = itemsCache.items.getItemByCD(int(intCD))
-    else:
-        equipment = None
-    if equipment:
-        success, reason = equipment.mayInstall(vehicle, slotIndex)
-        if not success:
-            LOG_WARNING('Equipment could not installed, reason: '.format(reason))
-            return
-    vehicle.equipment.regularConsumables[slotIndex] = equipment
-    vehicle.equipmentLayout.regularConsumables[slotIndex] = equipment
-    return
-
-
-@dependency.replace_none_kwargs(itemsCache=IItemsCache)
-def installBattleBoosterOnVehicle(vehicle, intCD, itemsCache=None):
-    if intCD and itemsCache is not None:
-        booster = itemsCache.items.getItemByCD(int(intCD))
-    else:
-        booster = None
-    vehicle.equipment.battleBoosterConsumables[0] = booster
-    return
-
-
 def isEquipmentSame(equipment1, equipment2):
     if equipment1 is None or equipment2 is None:
         return False
@@ -174,9 +147,9 @@ def getVehicleModules(vehicle):
 
 def getVehicleTopModules(vehicle):
     checker = TopModulesChecker(vehicle)
-    topMoudles = checker.process()
+    topModules = checker.process()
     checker.clear()
-    return sorted(topMoudles, key=lambda module: MODULES_INSTALLING_ORDER.index(module.itemTypeID))
+    return sorted(topModules, key=lambda module: MODULES_INSTALLING_ORDER.index(module.itemTypeID))
 
 
 def isVehicleTopConfiguration(vehicle):

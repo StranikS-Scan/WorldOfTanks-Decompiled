@@ -30,9 +30,12 @@ class TankmanBerthsBuyer(Processor):
 
 class PremiumAccountBuyer(Processor):
 
-    def __init__(self, period, price, arenaUniqueID=0, withoutBenefits=False):
+    def __init__(self, period, price, arenaUniqueID=0, withoutBenefits=False, requireConfirm=True):
         self.wasPremium = self.itemsCache.items.stats.isPremium
-        super(PremiumAccountBuyer, self).__init__((self.__getConfirmator(withoutBenefits, period, price), plugins.MoneyValidator(Money(gold=price))))
+        plugList = [plugins.MoneyValidator(Money(gold=price))]
+        if requireConfirm:
+            plugList.insert(0, self.__getConfirmator(withoutBenefits, period, price))
+        super(PremiumAccountBuyer, self).__init__(plugList)
         self.premiumPrice = price
         self.period = period
         self.arenaUniqueID = arenaUniqueID

@@ -15,11 +15,14 @@ class WindowsManager(PyObjectEntity):
     def destroy(self):
         self.unbind()
 
-    def getView(self, layoutID):
-        return self.proxy.getPyView(layoutID)
+    def getView(self, uniqueID):
+        return self.proxy.getPyView(uniqueID)
 
-    def getWindow(self, layoutID):
-        return self.proxy.getPyWindow(layoutID)
+    def getViewByLayoutID(self, layoutID):
+        return self.proxy.getPyViewByLayoutID(layoutID)
+
+    def getWindow(self, uniqueID):
+        return self.proxy.getPyWindow(uniqueID)
 
     def loadView(self, layoutID, viewClass, *args, **kwargs):
         pyView = self.getView(layoutID)

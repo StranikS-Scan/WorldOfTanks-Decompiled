@@ -5,15 +5,17 @@ from account_helpers.AccountSettings import AccountSettings
 from debug_utils import LOG_ERROR, LOG_CURRENT_EXCEPTION
 from gui import SystemMessages, makeHtmlString
 from gui.ClientUpdateManager import g_clientUpdateManager
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.VehicleSellDialogMeta import VehicleSellDialogMeta
 from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.locale.DIALOGS import DIALOGS
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
+from gui.ingame_shop import showBuyGoldForEquipment
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.tankmen import formatDeletedTankmanStr
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.gui_items.processors.vehicle import VehicleSeller
+from gui.shared.gui_items.processors.vehicle import VehicleSeller, calculateSpendMoney, getDismantlingToInventoryDevices
 from gui.shared.gui_items.vehicle_modules import Shell
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.money import Currency, MONEY_UNDEFINED
@@ -33,8 +35,10 @@ class VehicleSellDialog(VehicleSellDialogMeta):
 
     def __init__(self, ctx=None):
         super(VehicleSellDialog, self).__init__()
-        self.vehInvID = ctx.get('vehInvID', {})
-        self.controlNumber = None
+        self.__vehInvID = ctx.get('vehInvID', {})
+        self.__controlNumber = None
+        self.__spendMoney = MONEY_UNDEFINED
+        self.__checkUsefulTankman = False
         return
 
     def onWindowClose(self):
@@ -53,7 +57,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         g_clientUpdateManager.addCurrencyCallback(Currency.GOLD, self.onSetGoldHndlr)
         self.itemsCache.onSyncCompleted += self.__shopResyncHandler
         items = self.itemsCache.items
-        vehicle = items.getVehicle(self.vehInvID)
+        vehicle = items.getVehicle(self.__vehInvID)
         sellPrice = vehicle.sellPrices.itemPrice.price
         sellCurrency = sellPrice.getCurrency(byWeight=True)
         sellForGold = sellCurrency == Currency.GOLD
@@ -61,16 +65,12 @@ class VehicleSellDialog(VehicleSellDialogMeta):
         priceTextValue = _ms(DIALOGS.VEHICLESELLDIALOG_PRICE_SIGN_ADD) + _ms(BigWorld.wg_getIntegralFormat(sellPrice.getSignValue(sellCurrency)))
         currencyIcon = CURRENCIES_CONSTANTS.GOLD if sellForGold else CURRENCIES_CONSTANTS.CREDITS
         invVehs = items.getVehicles(REQ_CRITERIA.INVENTORY)
-        if vehicle.isPremium or vehicle.level >= 3:
-            self.as_visibleControlBlockS(True)
-            self.__initCtrlQuestion()
-        else:
-            self.as_visibleControlBlockS(False)
+        self.checkControlQuestion(self.__checkUsefulTankman)
         modules = items.getItems(criteria=REQ_CRITERIA.VEHICLE.SUITABLE([vehicle]) | REQ_CRITERIA.INVENTORY).values()
         shells = items.getItems(criteria=REQ_CRITERIA.VEHICLE.SUITABLE([vehicle], [GUI_ITEM_TYPE.SHELL]) | REQ_CRITERIA.INVENTORY).values()
         otherVehsShells = set()
         for invVeh in invVehs.itervalues():
-            if invVeh.invID != self.vehInvID:
+            if invVeh.invID != self.__vehInvID:
                 for shot in invVeh.descriptor.gun.shots:
                     otherVehsShells.add(shot.shell.compactDescr)
 
@@ -120,6 +120,7 @@ class VehicleSellDialog(VehicleSellDialogMeta):
          'crewLabel': _ms(DIALOGS.VEHICLESELLDIALOG_CREW_LABEL),
          'crewTooltip': crewTooltip,
          'barracksDropDownData': barracksDropDownData}
+        currentGoldBalance = self.itemsCache.items.stats.money.get(Currency.GOLD, 0)
         onVehicleOptionalDevices = []
         for o in vehicle.optDevices:
             if o is not None:
@@ -131,11 +132,15 @@ class VehicleSellDialog(VehicleSellDialogMeta):
                 removeAction = None
                 if removalPrice.isActionPrice():
                     removeAction = packActionTooltipData(ACTION_TOOLTIPS_TYPE.ECONOMICS, 'paidRemovalCost', True, removalPrice.price, removalPrice.defPrice)
+                removalPriceInGold = removalPrice.price.get(Currency.GOLD, 0)
+                enoughGold = currentGoldBalance >= removalPriceInGold
+                if enoughGold:
+                    currentGoldBalance -= removalPriceInGold
                 data = {'intCD': o.intCD,
                  'isRemovable': o.isRemovable,
                  'userName': o.userName,
                  'sellPrice': itemPrice.price.toMoneyTuple(),
-                 'toInventory': True,
+                 'toInventory': enoughGold,
                  'action': action,
                  'removePrice': removalPrice.price.toMoneyTuple(),
                  'removeActionPrice': removeAction}
@@ -211,48 +216,52 @@ class VehicleSellDialog(VehicleSellDialogMeta):
          'battleBoostersOnVehicle': onVehicleBattleBoosters})
         return
 
-    def setUserInput(self, value):
-        if value == self.controlNumber:
-            self.as_enableButtonS(True)
+    def onChangeConfiguration(self, optDevicesToStorage):
+        self.__updateSpendMoneyByOptDevicesToStorage(optDevicesToStorage)
+        self.checkControlQuestion(self.__checkUsefulTankman)
+
+    def checkControlQuestion(self, checkTankman):
+        self.__checkUsefulTankman = checkTankman
+        if self.__useCtrlQuestion(self.__getCurrentVehicle(), self.__checkUsefulTankman):
+            self.as_visibleControlBlockS(True)
+            self.setUserInput('')
         else:
-            self.as_enableButtonS(False)
+            self.as_visibleControlBlockS(False)
+            self.setUserInput(self.__controlNumber)
+
+    def setUserInput(self, userInput):
+        goldEnough = self.__enoughCurrency(Currency.GOLD)
+        crystalEnough = self.__enoughCurrency(Currency.CRYSTAL)
+        controlNumberValid = userInput == self.__controlNumber
+        self.as_enableButtonS(controlNumberValid and crystalEnough and (goldEnough or isIngameShopEnabled()))
 
     def setResultCredit(self, isGold, value):
-        self.controlNumber = str(value)
+        self.__controlNumber = str(value)
         question = self.__getControlQuestion(isGold)
-        self.as_setControlQuestionDataS(isGold, self.controlNumber, question)
+        self.as_setControlQuestionDataS(isGold, self.__controlNumber, question)
 
     def _dispose(self):
         super(VehicleSellDialog, self)._dispose()
         self.itemsCache.onSyncCompleted -= self.__shopResyncHandler
         g_clientUpdateManager.removeCurrencyCallback(Currency.GOLD, self.onSetGoldHndlr)
 
-    def checkControlQuestion(self, dismiss):
-        items = self.itemsCache.items
-        vehicle = items.getVehicle(self.vehInvID)
-        checkUsefullTankmen = False
-        for tankman in vehicle.crew:
-            if tankman[1]:
-                if tankman[1].roleLevel >= 100 or tankman[1].skills:
-                    checkUsefullTankmen = dismiss
-                    break
-
-        if vehicle.isPremium or vehicle.level >= 3 or checkUsefullTankmen:
-            self.as_visibleControlBlockS(True)
-            self.__initCtrlQuestion()
-        else:
-            self.as_visibleControlBlockS(False)
-
     def onSetGoldHndlr(self, gold):
         self.as_checkGoldS(gold)
 
     @decorators.process('sellVehicle')
-    def __doSellVehicle(self, vehicle, shells, eqs, optDevs, inventory, isDismissCrew):
-        result = yield VehicleSeller(vehicle, shells, eqs, optDevs, inventory, isDismissCrew).request()
-        if result.userMsg:
-            SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+    def __doSellVehicle(self, vehicle, shells, eqs, optDevicesToSell, inventory, isDismissCrew):
+        vehicleSeller = VehicleSeller(vehicle, shells, eqs, optDevicesToSell, inventory, isDismissCrew)
+        currentMoneyGold = self.itemsCache.items.stats.money.get(Currency.GOLD, 0)
+        spendMoneyGold = vehicleSeller.spendMoney.get(Currency.GOLD, 0)
+        if isIngameShopEnabled() and currentMoneyGold < spendMoneyGold:
+            showBuyGoldForEquipment(spendMoneyGold)
+        else:
+            result = yield vehicleSeller.request()
+            if result.userMsg:
+                SystemMessages.pushMessage(result.userMsg, type=result.sysMsgType)
+            self.destroy()
 
-    def sell(self, vehicleCD, shells, eqs, optDevs, inventory, isDismissCrew):
+    def sell(self, vehicleCD, shells, eqs, optDevicesToSell, inventory, isDismissCrew):
 
         def getItem(data):
             return self.itemsCache.items.getItemByCD(int(data['intCD']))
@@ -264,26 +273,43 @@ class VehicleSellDialog(VehicleSellDialogMeta):
             vehicle = self.itemsCache.items.getItemByCD(int(vehicleCD))
             shells = [ getShellItem(flashObject2Dict(shell)) for shell in shells ]
             eqs = [ getItem(flashObject2Dict(eq)) for eq in eqs ]
-            optDevs = [ getItem(flashObject2Dict(dev)) for dev in optDevs ]
+            optDevicesToSell = [ getItem(flashObject2Dict(dev)) for dev in optDevicesToSell ]
             inventory = [ getItem(flashObject2Dict(module)) for module in inventory ]
-            self.__doSellVehicle(vehicle, shells, eqs, optDevs, inventory, isDismissCrew)
+            self.__doSellVehicle(vehicle, shells, eqs, optDevicesToSell, inventory, isDismissCrew)
         except Exception:
             LOG_ERROR('There is error while selling vehicle')
             LOG_CURRENT_EXCEPTION()
 
-    def __initCtrlQuestion(self):
-        self.as_enableButtonS(False)
+    @staticmethod
+    def __useCtrlQuestion(vehicle, checkUsefulTankman=True):
+        if vehicle.level >= 3 or vehicle.isPremium:
+            return True
+        if checkUsefulTankman:
+            for _, tankman in vehicle.crew:
+                if tankman and (tankman.roleLevel >= 100 or tankman.skills):
+                    return True
+
+        return False
 
     def __getControlQuestion(self, usingGold=False):
         if usingGold:
-            currencyFormatter = BigWorld.wg_getGoldFormat(long(self.controlNumber))
+            currencyFormatter = BigWorld.wg_getGoldFormat(long(self.__controlNumber))
         else:
-            currencyFormatter = BigWorld.wg_getIntegralFormat(long(self.controlNumber))
+            currencyFormatter = BigWorld.wg_getIntegralFormat(long(self.__controlNumber))
         question = makeHtmlString('html_templates:lobby/dialogs', 'vehicleSellQuestion', {'controlNumber': currencyFormatter})
         return question
 
+    def __enoughCurrency(self, currency):
+        return self.__spendMoney.get(currency, 0) <= self.itemsCache.items.stats.money.get(currency, 0)
+
     def __shopResyncHandler(self, reason, diff):
-        vehicle = self.itemsCache.items.getVehicle(self.vehInvID)
+        vehicle = self.__getCurrentVehicle()
         if reason == CACHE_SYNC_REASON.SHOP_RESYNC or vehicle is not None and vehicle.rentalIsActive:
             self.onWindowClose()
         return
+
+    def __getCurrentVehicle(self):
+        return self.itemsCache.items.getVehicle(self.__vehInvID)
+
+    def __updateSpendMoneyByOptDevicesToStorage(self, optDevicesToSell):
+        self.__spendMoney = calculateSpendMoney(self.itemsCache.items, getDismantlingToInventoryDevices(self.__getCurrentVehicle(), optDevicesToSell))

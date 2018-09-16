@@ -1764,6 +1764,7 @@ class CONTENT_TYPE:
     INCOMPLETE = 3
     TUTORIAL = 4
     SANDBOX = 5
+    CEF = 6
 
 
 class DEATH_ZONES:

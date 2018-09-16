@@ -8,15 +8,17 @@ from gui import DialogsInterface
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.view.dialogs.ExchangeDialogMeta import ExchangeCreditsSingleItemMeta, ExchangeCreditsMultiItemsMeta, InfoItemBase
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
+from gui.Scaleform.daapi.view.lobby.store.browser.ingameshop_helpers import isIngameShopEnabled
 from gui.Scaleform.daapi.view.meta.CustomizationBuyWindowMeta import CustomizationBuyWindowMeta
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
+from gui.ingame_shop import showBuyGoldForCustomization
 from gui.shared.formatters import text_styles, icons, getItemPricesVO
 from gui.shared.gui_items import GUI_ITEM_TYPE
-from gui.shared.money import Currency
 from gui.shared.events import LobbyHeaderMenuEvent
 from gui.shared.event_bus import EVENT_BUS_SCOPE
+from gui.shared.money import Currency
 from helpers import dependency
 from helpers.i18n import makeString as _ms
 from items.components.c11n_constants import SeasonType
@@ -81,6 +83,12 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
 
     @process
     def buy(self):
+        if self.__moneyState is _MoneyForPurchase.NOT_ENOUGH:
+            if isIngameShopEnabled():
+                cart = getTotalPurchaseInfo(self.__purchaseItems)
+                totalPriceGold = cart.totalPrice.price.get(Currency.GOLD, 0)
+                showBuyGoldForCustomization(totalPriceGold)
+            return
         if self.__moneyState is _MoneyForPurchase.ENOUGH_WITH_EXCHANGE:
             if self.__isStyle:
                 item = self.__purchaseItems[0].item
@@ -208,7 +216,7 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
             label = VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_BTNBUY
         else:
             label = VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_BTNAPPLY
-        isEnabled = self.__moneyState != _MoneyForPurchase.NOT_ENOUGH
+        isEnabled = self.__moneyState is not _MoneyForPurchase.NOT_ENOUGH or isIngameShopEnabled()
         isAnySelected = purchase + inventory > 0
         if not isAnySelected:
             label = ''

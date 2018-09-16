@@ -804,7 +804,8 @@ class BattleReplay(object):
             if allPlayersVehicles is not None:
                 for playerVehicles in allPlayersVehicles.itervalues():
                     for vehicle in playerVehicles:
-                        vehicle['damageEventList'] = None
+                        if vehicle is not None:
+                            vehicle['damageEventList'] = None
 
             personals = modifiedResults.get('personal', None)
             if personals is not None:

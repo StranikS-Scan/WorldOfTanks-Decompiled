@@ -26,11 +26,13 @@ class _StrongholdsJoinBattleSchema(W2CSchema):
 class StrongholdsWebApi(object):
 
     @w2c(W2CSchema, 'open_list')
+    @process
     def handleOpenList(self, cmd):
         dispatcher = g_prbLoader.getDispatcher()
         yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST))
 
     @w2c(W2CSchema, 'battle_chosen')
+    @process
     def handleBattleChosen(self, cmd):
         dispatcher = g_prbLoader.getDispatcher()
 
@@ -41,6 +43,7 @@ class StrongholdsWebApi(object):
         yield dispatcher.create(CreateUnitCtx(PREBATTLE_TYPE.EXTERNAL, waitingID='prebattle/create', onTimeoutCallback=onTimeout))
 
     @w2c(_StrongholdsJoinBattleSchema, 'join_battle')
+    @process
     def handleJoinBattle(self, cmd):
 
         @process

@@ -10,8 +10,10 @@ from AccountCommands import LOCK_REASON, VEHICLE_SETTINGS_FLAG
 from account_shared import LayoutIterator
 from constants import WIN_XP_FACTOR_MODE
 from gui import makeHtmlString
+from gui.Scaleform.genConsts.STORE_CONSTANTS import STORE_CONSTANTS
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
+from gui.Scaleform.locale.RES_SHOP import RES_SHOP
 from gui.prb_control import prb_getters
 from gui.prb_control.settings import PREBATTLE_SETTING_NAME
 from gui.shared.economics import calcRentPackages, getActionPrc, calcVehicleRestorePrice
@@ -224,7 +226,7 @@ class Vehicle(FittingItem, HasStrCD):
         if tradeInData is not None and tradeInData.isEnabled and self.isPremium and not self.isPremiumIGR:
             self._tradeOffPriceFactor = tradeInData.sellPriceFactor
             tradeInLevels = tradeInData.allowedVehicleLevels
-            self._canTradeIn = not self.isPurchased and not self.isHidden and self.isUnlocked and not self.isRestorePossible() and self.level in tradeInLevels
+            self._canTradeIn = not self.isInInventory and not self.isHidden and self.isUnlocked and not self.isRestorePossible() and self.level in tradeInLevels and not self.isRented
             self._canTradeOff = self.isPurchased and not self.canNotBeSold and self.intCD not in tradeInData.forbiddenVehicles and self.level in tradeInLevels
             if self.canTradeOff:
                 self._tradeOffPrice = Money(gold=int(math.ceil(self.tradeOffPriceFactor * self.buyPrices.itemPrice.price.gold)))
@@ -413,6 +415,10 @@ class Vehicle(FittingItem, HasStrCD):
     @property
     def iconUniqueLight(self):
         return getUniqueIconPath(self.name, withLightning=True)
+
+    def getShopIcon(self, size=STORE_CONSTANTS.ICON_SIZE_MEDIUM):
+        name = self.name.split(':')[1]
+        return RES_SHOP.getVehicleIcon(size, name) if RES_SHOP.hasVehicleIcon(size, name) else None
 
     @property
     def shellsLayoutIdx(self):
@@ -898,7 +904,18 @@ class Vehicle(FittingItem, HasStrCD):
 
     @property
     def fullDescription(self):
-        return self.descriptor.type.description if self.descriptor.type.description.find('_descr') == -1 else ''
+        description = self.descriptor.type.description
+        return description if description.find('_descr') == -1 else ''
+
+    @property
+    def shortDescriptionSpecial(self):
+        description = self.descriptor.type.shortDescriptionSpecial
+        return description if description.find('_short_special') == -1 else ''
+
+    @property
+    def longDescriptionSpecial(self):
+        description = self.descriptor.type.longDescriptionSpecial
+        return description if description.find('_long_special') == -1 else ''
 
     @property
     def tags(self):

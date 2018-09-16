@@ -34,6 +34,7 @@ _RequestData = namedtuple('_RequestData', ['pattern',
  'count',
  'isReset',
  'isRecommended'])
+RATINGS_NOT_FOUND_ERROR = 404
 
 def showClanInviteSystemMsg(userName, isSuccess, code):
     if isSuccess:
@@ -563,7 +564,6 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
         ctx = AccountInvitesCtx(accountDbID=self.__accountDbID, offset=offset, limit=count, statuses=self.__statuses, getTotalCount=isReset)
         result = yield self._requester.sendRequest(ctx, allowDelay=True)
         invites = ctx.getDataObj(result.data)
-        success = result.isSuccess()
         self.__lastStatus = result.isSuccess()
         if isReset:
             self.__totalCount = ctx.getTotalCount(result.data)
@@ -574,18 +574,13 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
                 clansIDs = [ item.getClanDbID() for item in invites ]
                 ctx = ClanRatingsCtx(clansIDs)
                 result = yield self._requester.sendRequest(ctx, allowDelay=True)
-                if result.isSuccess():
+                if result.getCode() != RATINGS_NOT_FOUND_ERROR:
                     clanRatings = dict(((item.getClanDbID(), item) for item in ctx.getDataObj(result.data)))
                 else:
                     clanRatings = {}
-                    success = False
                 ctx = ClansInfoCtx(clansIDs)
                 result = yield self._requester.sendRequest(ctx, allowDelay=True)
-                if result.isSuccess():
-                    clanInfo = dict(((item.getDbID(), item) for item in ctx.getDataObj(result.data)))
-                else:
-                    clanInfo = {}
-                    success = False
+                clanInfo = dict(((item.getDbID(), item) for item in ctx.getDataObj(result.data)))
                 for item in clanInfo.itervalues():
                     self.getUserName(item.getLeaderDbID())
 
@@ -599,12 +594,7 @@ class ClanPersonalInvitesPaginator(ListPaginator, UsersInfoHelper):
                     temp.add(item.getDbID())
                     self.__senderNameMapping[senderID] = temp
 
-                if success:
-                    self.__invitesCache = [ ClanPersonalInviteWrapper(invite, clanInfo.get(invite.getClanDbID(), items.ClanExtInfoData()), clanRatings.get(invite.getClanDbID(), items.ClanRatingsData()), self.getUserName(getSenderID(invite))) for invite in invites ]
-                else:
-                    self.__invitesCache = []
-                    self.__lastStatus = False
-                    self.revertOffset()
+                self.__invitesCache = [ ClanPersonalInviteWrapper(invite, clanInfo.get(invite.getClanDbID(), items.ClanExtInfoData()), clanRatings.get(invite.getClanDbID(), items.ClanRatingsData()), self.getUserName(getSenderID(invite))) for invite in invites ]
             else:
                 self.__invitesCache = []
         else:

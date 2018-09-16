@@ -9,6 +9,7 @@ from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.gui_items import GUI_ITEM_TYPE
 from helpers import dependency
 from skeletons.gui.game_control import IWalletController, IVehicleComparisonBasket, IRentalsController, IRestoreController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
 INV_ITEM_VCDESC_KEY = 'compDescr'
 CACHE_VEHS_LOCK_KEY = 'vehsLock'
@@ -43,9 +44,11 @@ class _Listener(object):
 
 
 class _StatsListener(_Listener):
+    lobbyContext = dependency.instance(ILobbyContext)
 
     def startListen(self, page):
         super(_StatsListener, self).startListen(page)
+        self.lobbyContext.getServerSettings().onServerSettingsChange += self.__onServerSettingsChanged
         g_clientUpdateManager.addCallbacks({CREDITS_DIFF_KEY: self._onCreditsUpdate,
          GOLD_DIFF_KEY: self._onGoldUpdate,
          FREE_XP_DIFF_KEY: self._onFreeXPUpdate,
@@ -54,6 +57,7 @@ class _StatsListener(_Listener):
          ELITE_DIFF_KEY: self._onEliteVehiclesUpdate})
 
     def stopListen(self):
+        self.lobbyContext.getServerSettings().onServerSettingsChange -= self.__onServerSettingsChanged
         g_clientUpdateManager.removeObjectCallbacks(self)
         super(_StatsListener, self).stopListen()
 
@@ -74,6 +78,11 @@ class _StatsListener(_Listener):
 
     def _onUnlocksUpdate(self, unlocks):
         self._page.invalidateUnlocks(unlocks)
+
+    def __onServerSettingsChanged(self, diff):
+        if self.lobbyContext.getServerSettings().isIngameDataChangedInDiff(diff, 'isEnabled'):
+            self._onGoldUpdate(None)
+        return
 
 
 class _ItemsCacheListener(_Listener):

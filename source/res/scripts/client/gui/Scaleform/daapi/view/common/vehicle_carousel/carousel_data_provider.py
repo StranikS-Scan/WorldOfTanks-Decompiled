@@ -172,6 +172,17 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
             self._updateVehicleItems(newVehiclesCollection.values())
         return
 
+    def setShowStats(self, showVehicleStats):
+        self._showVehicleStats = showVehicleStats
+
+    def findVehicleFilteredIndex(self, vehicle):
+        try:
+            vehicleIdx = self._vehicles.index(vehicle)
+            filteredIdx = self._filteredIndices.index(vehicleIdx)
+            return filteredIdx
+        except ValueError:
+            return -1
+
     def buildList(self):
         self.clear()
         self._buildVehicleItems()
@@ -196,18 +207,10 @@ class CarouselDataProvider(SortableDAAPIDataProvider):
         self._filteredIndices += self._getAdditionalItemsIndexes()
         needUpdate = prevFilteredIndices != self._filteredIndices or prevSelectedIdx != self._selectedIdx
         if needUpdate:
-            self.flashObject.as_setFilter(self._filteredIndices)
+            self._filterByIndices()
 
-    def setShowStats(self, showVehicleStats):
-        self._showVehicleStats = showVehicleStats
-
-    def findVehicleFilteredIndex(self, vehicle):
-        try:
-            vehicleIdx = self._vehicles.index(vehicle)
-            filteredIdx = self._filteredIndices.index(vehicleIdx)
-            return filteredIdx
-        except ValueError:
-            return -1
+    def _filterByIndices(self):
+        self.flashObject.as_setFilter(self._filteredIndices)
 
     def _getSortedIndices(self):
         return self._getCachedSortedIndices(False)

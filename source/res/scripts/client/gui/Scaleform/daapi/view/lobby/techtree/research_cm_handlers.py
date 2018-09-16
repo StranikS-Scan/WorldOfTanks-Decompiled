@@ -7,6 +7,7 @@ from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.framework.entities.EventSystemEntity import EventSystemEntity
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
+from gui.ingame_shop import canBuyGoldForVehicleThroughWeb
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from helpers import dependency
@@ -111,6 +112,13 @@ class ResearchVehicleContextMenuHandler(SimpleVehicleCMHandler):
 
     def compareVehicle(self):
         self.comparisonBasket.addVehicle(self._nodeCD)
+
+    def buyVehicle(self):
+        vehicle = self.itemsCache.items.getItemByCD(self._nodeCD)
+        if canBuyGoldForVehicleThroughWeb(vehicle):
+            shared_events.showVehicleBuyDialog(vehicle)
+        else:
+            super(ResearchVehicleContextMenuHandler, self).buyVehicle()
 
     def _initFlashValues(self, ctx):
         self._nodeCD = int(ctx.nodeCD)

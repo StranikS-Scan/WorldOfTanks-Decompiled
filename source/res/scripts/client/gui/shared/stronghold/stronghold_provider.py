@@ -31,8 +31,8 @@ class ClientStrongholdProvider(IGlobalListener):
         g_eventBus.addListener(events.StrongholdEvent.STRONGHOLD_ACTIVATED, self.__onStrongholdsActivate, EVENT_BUS_SCOPE.STRONGHOLD)
         g_eventBus.addListener(events.StrongholdEvent.STRONGHOLD_DEACTIVATED, self.__onStrongholdsDeactivate, EVENT_BUS_SCOPE.STRONGHOLD)
         from gui.Scaleform.daapi.view.lobby.strongholds.web_handlers import createStrongholdsWebHandlers
-        ShowInBrowserItem.addWebHandler('stronghold', createStrongholdsWebHandlers(True))
-        OpenInternalBrowser.addWebHandler('stronghold', createStrongholdsWebHandlers(True))
+        ShowInBrowserItem.addWebHandler('stronghold', createStrongholdsWebHandlers())
+        OpenInternalBrowser.addWebHandler('stronghold', createStrongholdsWebHandlers())
 
     def stop(self):
         self.stopGlobalListening()

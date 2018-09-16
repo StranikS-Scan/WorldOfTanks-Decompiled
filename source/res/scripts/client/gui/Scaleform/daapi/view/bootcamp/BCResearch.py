@@ -71,7 +71,7 @@ class BCResearch(Research):
         if nationData['module'] == unlockCD:
             super(BCResearch, self).request4Unlock(unlockCD, vehCD, unlockIdx, xpCost)
         elif nationData['vehicle_second'] == unlockCD:
-            shared_events.showVehiclePreview(int(unlockCD), self.alias)
+            shared_events.showOldVehiclePreview(int(unlockCD), self.alias)
         else:
             super(BCResearch, self).request4Unlock(unlockCD, vehCD, unlockIdx, xpCost)
 
@@ -80,7 +80,7 @@ class BCResearch(Research):
         if nationData['module'] == itemCD:
             super(BCResearch, self).request4Buy(itemCD)
         elif nationData['vehicle_second'] == itemCD:
-            shared_events.showVehiclePreview(int(itemCD), self.alias)
+            shared_events.showOldVehiclePreview(int(itemCD), self.alias)
         else:
             super(BCResearch, self).request4Buy(itemCD)
 
@@ -114,7 +114,7 @@ class BCResearch(Research):
         itemsCache = dependency.instance(IItemsCache)
         vehicle = itemsCache.items.getItemByCD(int(itemCD))
         if vehicle.isPreviewAllowed():
-            shared_events.showVehiclePreview(int(itemCD), self.alias)
+            shared_events.showOldVehiclePreview(int(itemCD), self.alias)
         elif vehicle.isInInventory:
             shared_events.selectVehicleInHangar(itemCD)
 

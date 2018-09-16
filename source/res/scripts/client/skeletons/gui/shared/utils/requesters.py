@@ -123,6 +123,10 @@ class IStatsRequester(IRequester):
         raise NotImplementedError
 
     @property
+    def isIngameShopEnabled(self):
+        raise NotImplementedError
+
+    @property
     def isTeamKiller(self):
         raise NotImplementedError
 
@@ -510,6 +514,12 @@ class IShopRequester(IShopCommonStats, IRequester):
         raise NotImplementedError
 
     def bestGoody(self, goodies):
+        raise NotImplementedError
+
+    def getVehicleSlotsItemPrice(self, currentSlotsCount):
+        raise NotImplementedError
+
+    def getTankmanCostItemPrices(self):
         raise NotImplementedError
 
 

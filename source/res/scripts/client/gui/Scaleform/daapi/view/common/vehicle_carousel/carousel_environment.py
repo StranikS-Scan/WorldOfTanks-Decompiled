@@ -22,7 +22,34 @@ _CAROUSEL_FILTERS = ('bonus', 'favorite', 'elite', 'premium')
 if constants.IS_KOREA:
     _CAROUSEL_FILTERS += ('igr',)
 
-class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener):
+def formatCountString(currentVehiclesCount, totalVehiclesCount):
+    style = text_styles.error if currentVehiclesCount == 0 else text_styles.stats
+    return '{} / {}'.format(style(currentVehiclesCount), text_styles.main(totalVehiclesCount))
+
+
+class ICarouselEnvironment(object):
+
+    @property
+    def filter(self):
+        return None
+
+    def applyFilter(self):
+        pass
+
+    def blinkCounter(self):
+        pass
+
+    def formatCountVehicles(self):
+        pass
+
+    def hasRentedVehicles(self):
+        return False
+
+    def hasEventVehicles(self):
+        return False
+
+
+class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener, ICarouselEnvironment):
     rentals = dependency.descriptor(IRentalsController)
     igrCtrl = dependency.descriptor(IIGRController)
     clanLock = dependency.descriptor(IClanLockController)
@@ -87,7 +114,7 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener):
             self.as_hideCounterS()
 
     def formatCountVehicles(self):
-        return self._formatCountString(self._carouselDP.getCurrentVehiclesCount(), self._carouselDP.getTotalVehiclesCount())
+        return formatCountString(self._carouselDP.getCurrentVehiclesCount(), self._carouselDP.getTotalVehiclesCount())
 
     def blinkCounter(self):
         self.as_blinkCounterS()
@@ -153,11 +180,6 @@ class CarouselEnvironment(CarouselEnvironmentMeta, IGlobalListener):
             setting = self.settingsCore.options.getSetting(settings_constants.GAME.VEHICLE_CAROUSEL_STATS)
             self._carouselDP.setShowStats(setting.get())
             self._carouselDP.updateVehicles()
-
-    @staticmethod
-    def _formatCountString(currentVehiclesCount, totalVehiclesCount):
-        style = text_styles.error if currentVehiclesCount == 0 else text_styles.stats
-        return '{} / {}'.format(style(currentVehiclesCount), text_styles.main(totalVehiclesCount))
 
     def __updateRent(self, vehicles):
         self.updateVehicles(vehicles)

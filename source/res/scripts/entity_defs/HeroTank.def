@@ -1,3 +1,11 @@
 <HeroTank.def>
   <Parent>	ClientSelectableCameraVehicle	</Parent>
+  <Properties>
+    <markerHeightFactor>
+      <Type>	FLOAT	</Type>
+      <Flags>	ALL_CLIENTS	</Flags>
+      <Editable>	true	</Editable>
+      <Default>	1.0	</Default>
+    </markerHeightFactor>
+  </Properties>
 </HeroTank.def>

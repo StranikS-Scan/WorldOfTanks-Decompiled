@@ -28,14 +28,11 @@ class SimpleMixCollection(ComposedActionsCollection):
     def _composeActions(self, actions, compositionKey='mixed'):
         result = []
         for action in actions:
-            addedToExisting = False
             for resultAction in result:
                 if self._canCompose(resultAction, action):
                     resultAction.setComposition(self._buildCompositionName(compositionKey))
-                    addedToExisting = True
                     break
-
-            if not addedToExisting:
+            else:
                 result.append(action)
 
         return result
@@ -50,7 +47,6 @@ class SimpleMixCollection(ComposedActionsCollection):
             for marker in self._groupMarkers:
                 if paramName.find(marker) >= 0:
                     result.setdefault(marker, []).append(action)
-                    continue
 
         if sum(map(len, result.values())) != len(self._actions):
             LOG_WARNING('Incorrect separation of actions, count of elements in groups is not equal to origin count')

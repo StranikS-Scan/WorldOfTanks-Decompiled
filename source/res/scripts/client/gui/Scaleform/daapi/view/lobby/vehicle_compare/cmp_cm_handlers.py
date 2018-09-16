@@ -5,6 +5,7 @@ from gui.Scaleform.daapi.view.lobby.hangar.hangar_cm_handlers import SimpleVehic
 from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.VEH_COMPARE import VEH_COMPARE
+from gui.ingame_shop import canBuyGoldForVehicleThroughWeb
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.gui_items.items_actions import factory as ItemsActionsFactory
 from helpers import dependency
@@ -37,7 +38,11 @@ class CommonContextMenuHandler(SimpleVehicleCMHandler):
         shared_events.showVehicleSellDialog(self.__getVehicle(self.vehCD).invID)
 
     def buyVehicle(self):
-        ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, self.vehCD)
+        vehicle = self.itemsCache.items.getItemByCD(self.vehCD)
+        if canBuyGoldForVehicleThroughWeb(vehicle):
+            shared_events.showVehicleBuyDialog(vehicle)
+        else:
+            ItemsActionsFactory.doAction(ItemsActionsFactory.BUY_VEHICLE, self.vehCD)
 
     def researchVehicle(self):
         unlockProp = g_techTreeDP.getUnlockProps(self.vehCD)
@@ -60,7 +65,11 @@ class CommonContextMenuHandler(SimpleVehicleCMHandler):
                 label = MENU.CONTEXTMENU_BUYORTRADEIN
             else:
                 label = MENU.CONTEXTMENU_BUY
-            options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': vehicle.mayObtainWithMoneyExchange(items.stats.money, items.shop.exchangeRate)}))
+            if canBuyGoldForVehicleThroughWeb(vehicle):
+                btnEnabled = True
+            else:
+                btnEnabled = vehicle.mayObtainWithMoneyExchange(items.stats.money, items.shop.exchangeRate)
+            options.append(self._makeItem(VEHICLE.BUY, label, {'enabled': btnEnabled}))
         else:
             isAvailableToUnlock, _, _ = g_techTreeDP.isVehicleAvailableToUnlock(self.vehCD)
             options.append(self._makeItem(VEHICLE.RESEARCH, MENU.contextmenu(VEHICLE.RESEARCH), {'enabled': isAvailableToUnlock}))

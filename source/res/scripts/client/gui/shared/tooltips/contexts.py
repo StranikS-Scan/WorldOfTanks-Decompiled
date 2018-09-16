@@ -748,3 +748,18 @@ class InventoryBattleBoosterContext(ShopBattleBoosterContext):
         value = super(InventoryBattleBoosterContext, self).getStatusConfiguration(item)
         value.checkBuying = False
         return value
+
+
+class AwardBattleBoosterContext(InventoryBattleBoosterContext):
+
+    def getStatsConfiguration(self, item):
+        value = super(AwardBattleBoosterContext, self).getStatsConfiguration(item)
+        value.isAwardWindow = True
+        value.inventoryCount = False
+        value.vehiclesCount = False
+        return value
+
+    def getStatusConfiguration(self, item):
+        value = super(AwardBattleBoosterContext, self).getStatusConfiguration(item)
+        value.isAwardWindow = True
+        return value

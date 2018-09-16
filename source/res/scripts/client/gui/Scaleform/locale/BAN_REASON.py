@@ -17,3 +17,5 @@ class BAN_REASON(object):
     SPAM_PROTECTION = '#ban_reason:spam_protection'
     PORTAL_DELETION_REQUEST = '#ban_reason:portal_deletion_request'
     LOGIN_PRIORITY_CHEAT = '#ban_reason:login_priority_cheat'
+    SUSPENDED = '#ban_reason:suspended'
+    UNSUSPENDING = '#ban_reason:unsuspending'

@@ -169,10 +169,12 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
 
     def __updateHeaderWidget(self):
         if self.prbDispatcher is not None:
-            if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED) and not self.rankedWidget:
-                self.as_setHeaderTypeS(HANGAR_ALIASES.RANKED_WIDGET, True)
-            elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EPIC) and not self.epicWidget:
-                self.as_setHeaderTypeS(HANGAR_ALIASES.EPIC_WIDGET, True)
+            if self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.RANKED):
+                if not self.rankedWidget:
+                    self.as_setHeaderTypeS(HANGAR_ALIASES.RANKED_WIDGET, True)
+            elif self.prbDispatcher.getFunctionalState().isInPreQueue(QUEUE_TYPE.EPIC) or self.prbDispatcher.getFunctionalState().isInUnit(PREBATTLE_TYPE.EPIC):
+                if not self.epicWidget:
+                    self.as_setHeaderTypeS(HANGAR_ALIASES.EPIC_WIDGET, True)
             elif not self.headerComponent:
                 self.as_setDefaultHeaderS()
         if self.headerComponent is not None:

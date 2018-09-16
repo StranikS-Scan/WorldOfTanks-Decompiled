@@ -328,7 +328,7 @@ class Ball(PhysicalObject):
             momentumMagnitude *= _SHOCKWAVE_MOMENTUM_SCALE_DEFENDER
         momentum = dir_ * momentumMagnitude * (1 + dist.length / damageRadius)
         physics = self.physics
-        if momentum > _MAX_SPEED_CAP_SPLASH_DAMAGE * dir_:
+        if momentum.length > _MAX_SPEED_CAP_SPLASH_DAMAGE * dir_.length:
             physics.velocity = Math.Vector3(0, 0, 0)
             self.velocity = Math.Vector3(0, 0, 0)
             physics.angVelocity = Math.Vector3(0, 0, 0)

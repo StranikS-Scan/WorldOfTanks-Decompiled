@@ -42,9 +42,9 @@ class ArenaFootballMechanics(BigWorld.ScriptComponent):
         self.__historyLogger = None
         settings = ArenaType.g_cache[self.entity.cellTypeID].football
         points = self.__readCell(settings.cellModel)
-        points = [ x + settings.cellPosition for x in points ]
         x, y, z = zip(*points)
-        self.__cageBounds = (Math.Vector3(min(x), min(y), min(z)), Math.Vector3(max(x), max(y), max(z)))
+        cageExtension = 0.3
+        self.__cageBounds = (Math.Vector3(min(x) - cageExtension, min(y) - cageExtension, min(z) - cageExtension), Math.Vector3(max(x) + cageExtension, max(y) + cageExtension, max(z) + cageExtension))
         return
 
     def __readCell(self, fileName):

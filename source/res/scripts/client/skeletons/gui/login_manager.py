@@ -33,7 +33,7 @@ class ILoginManager(object):
     def initiateSocialLogin(self, socialNetworkName, serverName, rememberUser, isRegistration):
         raise NotImplementedError
 
-    def tryWgcLogin(self):
+    def tryWgcLogin(self, serverName=None):
         raise NotImplementedError
 
     def initiateRelogin(self, login, token2, serverName):

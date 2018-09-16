@@ -68,8 +68,8 @@ class SocialMode(BaseMode):
         socialList = self._loginManager.getAvailableSocialNetworks()
         lastLoginType = self._loginManager.getPreference('login_type')
         if lastLoginType in socialList and self.rememberUser:
-            self._view.as_showFilledLoginFormS({'haveToken': self.isToken2,
-             'userName': self.login,
+            self._view.as_showFilledLoginFormS({'haveToken': self.isToken2(),
+             'userName': self._loginManager.getPreference('name'),
              'icoPath': makeHtmlString('html_templates:socialNetworkLogin', 'transparentLogo', {'socialNetwork': lastLoginType}),
              'socialId': lastLoginType})
         else:

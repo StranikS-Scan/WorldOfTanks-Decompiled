@@ -355,24 +355,16 @@ class ArenaFootballMechanics(BigWorld.ScriptComponent):
             attackerTeam = attackerPlayerInfo['team']
             bSelfGoalSideOfField = attackerTeam == fp['ballSides'][0]
             if bRammedBall:
-                redGoalPosition = self.__getGoalSpawnPositions(RED_GOAL_POS)
-                blueGoalPosition = self.__getGoalSpawnPositions(BLUE_GOAL_POS)
-                if attackerTeam == 1:
-                    goalDir = redGoalPosition - blueGoalPosition
-                    goalDir.normalise()
-                else:
-                    goalDir = blueGoalPosition - redGoalPosition
-                    goalDir.normalise()
-                ownGoalDir = attackerDirection.dot(goalDir)
                 if bSelfGoalSideOfField:
-                    if ownGoalDir > OWN_GOAL_DIRECTION_DELTA and attackerSpeed > SPEED_REQUIRED_FOR_OWN_GOAL:
-                        fp['potentialOwnGoal'] = True
-                        fp['ownGoalVehID'] = attackerID
-                    else:
+                    if fp['lastAttackerID'] == 0:
                         fp['potentialOwnGoal'] = False
+                        fp['lastAttackerID'] = attackerID
+                        fp['ownGoalVehID'] = attackerID
+                        fp['assistID'] = assistID
                 else:
                     fp['potentialOwnGoal'] = False
                     fp['lastAttackerID'] = attackerID
+                    fp['ownGoalVehID'] = attackerID
                     fp['assistID'] = assistID
             elif bSplash:
                 if bSelfGoalSideOfField:

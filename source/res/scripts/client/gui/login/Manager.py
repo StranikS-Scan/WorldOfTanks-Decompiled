@@ -107,6 +107,8 @@ class Manager(ILoginManager):
 
     def _onLoggedOn(self, responseData):
         if self.wgcAvailable and self.__wgcManager.onLoggedOn(responseData):
+            self._preferences.clear()
+            self._preferences.writeLoginInfo()
             return
         name = responseData.get('name', 'UNKNOWN')
         token2 = responseData.get('token2', '')
@@ -189,15 +191,20 @@ class Manager(ILoginManager):
         else:
             _logger.warning('Try to removeOnWgcErrorListener while WGC is not available')
 
-    def tryWgcLogin(self):
+    def tryWgcLogin(self, serverName=None):
         if not self.wgcAvailable:
             _logger.warning('WGC is not available, no possibility to login via it, so return')
             return
-        selectedServer = self.__servers.selectedServer
-        if not selectedServer:
-            _logger.warning('No server was selected when WGC connect happened, so return')
-        hostName = self._getHost(CONNECTION_METHOD.TOKEN, selectedServer['data'])
-        self.__wgcManager.login(hostName)
+        else:
+            if serverName is None:
+                selectedServer = self.__servers.selectedServer
+                if not selectedServer:
+                    _logger.warning('No server was selected when WGC connect happened, so return')
+                    return
+                serverName = selectedServer['data']
+            hostName = self._getHost(CONNECTION_METHOD.TOKEN, serverName)
+            self.__wgcManager.login(hostName)
+            return
 
     def checkWgcAvailability(self):
         return self.__tryInitWgcManager() if self.__wgcManager is None else self.__wgcManager.checkWgcAvailability()

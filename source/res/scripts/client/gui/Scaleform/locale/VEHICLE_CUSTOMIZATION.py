@@ -875,6 +875,7 @@ class VEHICLE_CUSTOMIZATION(object):
     EMBLEM_SPECIAL_STICKER_380 = '#vehicle_customization:emblem/special/sticker_380'
     EMBLEM_SPECIAL_STICKER_381 = '#vehicle_customization:emblem/special/sticker_381'
     EMBLEM_SPECIAL_STICKER_382 = '#vehicle_customization:emblem/special/sticker_382'
+    EMBLEM_SPECIAL_STICKER_395 = '#vehicle_customization:emblem/special/sticker_395'
     EMBLEM_SPECIAL_STICKER_384 = '#vehicle_customization:emblem/special/sticker_384'
     EMBLEM_SPECIAL_STICKER_385 = '#vehicle_customization:emblem/special/sticker_385'
     EMBLEM_SPECIAL_STICKER_386 = '#vehicle_customization:emblem/special/sticker_386'

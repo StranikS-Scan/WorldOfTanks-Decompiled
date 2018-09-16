@@ -484,6 +484,26 @@
     </decal>
   </itemGroup>
   <itemGroup>
+    <name>	Marathon September	</name>
+    <userString>	#vehicle_customization:inscription/special	</userString>
+    <season>	ALL	</season>
+    <historical>	true	</historical>
+    <priceGroup>	inscriptions notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <nations>	uk	</nations>
+        <levels>	6 7 8 9 10	</levels>
+      </include>
+    </vehicleFilter>
+    <type>	INSCRIPTION	</type>
+    <decal>
+      <id>	600	</id>
+      <texture>	gui/maps/vehicles/decals/inscriptions/special/inscription_211.dds	</texture>
+      <userString>	#vehicle_customization:inscription/special/special_211	</userString>
+      <mirror>	false	</mirror>
+    </decal>
+  </itemGroup>
+  <itemGroup>
     <name>	Tanksmen day	</name>
     <userString>	#vehicle_customization:inscription/special	</userString>
     <season>	ALL	</season>

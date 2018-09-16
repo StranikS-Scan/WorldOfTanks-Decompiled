@@ -95,6 +95,11 @@ class DISPLAY_TYPE:
     NONE = 'none'
 
 
+class MULTIPLIER_TYPE:
+    ATTEMPTS = 'attempts'
+    PROGRESS = 'progress'
+
+
 class IClientDescription(object):
 
     @classmethod

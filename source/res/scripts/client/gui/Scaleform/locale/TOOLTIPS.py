@@ -2532,6 +2532,8 @@ class TOOLTIPS(object):
     MARATHON_OFF_BODY = '#tooltips:marathon/off/body'
     MARATHON_ERROR_BATTLE_TYPE = '#tooltips:marathon/error/battle_type'
     MARATHON_ERROR_VEH_TYPE = '#tooltips:marathon/error/veh_type'
+    SEPTEMBER_HEADER = '#tooltips:september/header'
+    SEPTEMBER_BODY = '#tooltips:september/body'
     XPEXCHANGEWINDOW_GOLD_GOLDAFTEREXCHANGE_HEADER = '#tooltips:xpExchangewindow/gold/goldAfterExchange/header'
     XPEXCHANGEWINDOW_GOLD_GOLDAFTEREXCHANGE_BODY = '#tooltips:xpExchangewindow/gold/goldAfterExchange/body'
     STORAGE_MAINMENU_FOR_SELL_HEADER = '#tooltips:storage/mainMenu/for_sell/header'

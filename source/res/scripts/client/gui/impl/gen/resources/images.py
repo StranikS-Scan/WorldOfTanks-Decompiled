@@ -844,224 +844,225 @@ class Images(DynAccessor):
                         __slots__ = ()
                         flag_bloggers = 3320
                         flag_blue = 3321
-                        flag_fgreen = 3322
-                        flag_fyellow = 3323
-                        flag_green = 3324
-                        flag_italy = 3325
-                        flag_khacki = 3326
-                        flag_kursk = 3327
-                        flag_red = 3328
-                        flag_vinous = 3329
+                        flag_britain = 3322
+                        flag_fgreen = 3323
+                        flag_fyellow = 3324
+                        flag_green = 3325
+                        flag_italy = 3326
+                        flag_khacki = 3327
+                        flag_kursk = 3328
+                        flag_red = 3329
+                        flag_vinous = 3330
 
                     class marathon(DynAccessor):
                         __slots__ = ()
-                        alert_icon = 3330
-                        cup_disable_icon = 3331
-                        cup_icon = 3332
-                        icon_diz = 3333
-                        icon_flag = 3334
-                        icon_like = 3335
-                        ok_icon = 3336
-                        sale_icon = 3337
-                        time_icon = 3338
+                        alert_icon = 3331
+                        cup_disable_icon = 3332
+                        cup_icon = 3333
+                        icon_diz = 3334
+                        icon_flag = 3335
+                        icon_like = 3336
+                        ok_icon = 3337
+                        sale_icon = 3338
+                        time_icon = 3339
 
                     class marksOnGun(DynAccessor):
                         __slots__ = ()
-                        mark_1 = 3339
-                        mark_2 = 3340
-                        mark_3 = 3341
+                        mark_1 = 3340
+                        mark_2 = 3341
+                        mark_3 = 3342
 
                     class outline(DynAccessor):
                         __slots__ = ()
-                        beginner = 3342
-                        plus = 3343
-                        quests_all_done = 3344
-                        quests_available = 3345
-                        quests_disabled = 3346
-                        reward = 3347
+                        beginner = 3343
+                        plus = 3344
+                        quests_all_done = 3345
+                        quests_available = 3346
+                        quests_disabled = 3347
+                        reward = 3348
 
                     class proficiency(DynAccessor):
                         __slots__ = ()
-                        class_icons_1 = 3348
-                        class_icons_1_small = 3349
-                        class_icons_2 = 3350
-                        class_icons_2_small = 3351
-                        class_icons_3 = 3352
-                        class_icons_3_small = 3353
-                        class_icons_4 = 3354
-                        class_icons_4_small = 3355
+                        class_icons_1 = 3349
+                        class_icons_1_small = 3350
+                        class_icons_2 = 3351
+                        class_icons_2_small = 3352
+                        class_icons_3 = 3353
+                        class_icons_3_small = 3354
+                        class_icons_4 = 3355
+                        class_icons_4_small = 3356
 
                     class qualifiers(DynAccessor):
                         __slots__ = ()
 
                         class c_16x16(DynAccessor):
                             __slots__ = ()
-                            all = 3356
-                            camouflage = 3357
-                            commander = 3358
-                            driver = 3359
-                            gunner = 3360
-                            loader = 3361
-                            radioman = 3362
+                            all = 3357
+                            camouflage = 3358
+                            commander = 3359
+                            driver = 3360
+                            gunner = 3361
+                            loader = 3362
+                            radioman = 3363
 
                         class c_42x42(DynAccessor):
                             __slots__ = ()
-                            all = 3363
-                            camouflage = 3364
-                            commander = 3365
-                            driver = 3366
-                            gunner = 3367
-                            loader = 3368
-                            radioman = 3369
+                            all = 3364
+                            camouflage = 3365
+                            commander = 3366
+                            driver = 3367
+                            gunner = 3368
+                            loader = 3369
+                            radioman = 3370
 
                         class c_48x48(DynAccessor):
                             __slots__ = ()
-                            camouflage = 3370
+                            camouflage = 3371
 
                     class referral(DynAccessor):
                         __slots__ = ()
-                        box_icon_1 = 3371
-                        referralHand_1 = 3372
-                        referralHandPlus_1 = 3373
-                        referralSmallHand_1 = 3374
+                        box_icon_1 = 3372
+                        referralHand_1 = 3373
+                        referralHandPlus_1 = 3374
+                        referralSmallHand_1 = 3375
 
                     class store(DynAccessor):
                         __slots__ = ()
-                        condition_off = 3375
-                        condition_on = 3376
+                        condition_off = 3376
+                        condition_on = 3377
 
                     class userStatus(DynAccessor):
                         __slots__ = ()
-                        busy = 3377
-                        busyBlind = 3378
-                        mob = 3379
-                        offline = 3380
-                        online = 3381
-                        web = 3382
-                        wotb = 3383
-                        wotg = 3384
-                        wowp = 3385
-                        wows = 3386
+                        busy = 3378
+                        busyBlind = 3379
+                        mob = 3380
+                        offline = 3381
+                        online = 3382
+                        web = 3383
+                        wotb = 3384
+                        wotg = 3385
+                        wowp = 3386
+                        wows = 3387
 
                         class small(DynAccessor):
                             __slots__ = ()
-                            busy = 3387
-                            busyBlind = 3388
-                            mob = 3389
-                            offline = 3390
-                            online = 3391
-                            web = 3392
-                            wotb = 3393
-                            wotg = 3394
-                            wowp = 3395
-                            wows = 3396
+                            busy = 3388
+                            busyBlind = 3389
+                            mob = 3390
+                            offline = 3391
+                            online = 3392
+                            web = 3393
+                            wotb = 3394
+                            wotg = 3395
+                            wowp = 3396
+                            wows = 3397
 
                 class quests(DynAccessor):
                     __slots__ = ()
 
                     class tiles(DynAccessor):
                         __slots__ = ()
-                        tile_1_1_color_over = 3397
-                        tile_1_1_color_up = 3398
-                        tile_1_1_gray_over = 3399
-                        tile_1_1_gray_up = 3400
-                        tile_1_1_tooltip = 3401
-                        tile_1_2_color_over = 3402
-                        tile_1_2_color_up = 3403
-                        tile_1_2_gray_over = 3404
-                        tile_1_2_gray_up = 3405
-                        tile_1_2_tooltip = 3406
-                        tile_1_3_color_over = 3407
-                        tile_1_3_color_up = 3408
-                        tile_1_3_gray_over = 3409
-                        tile_1_3_gray_up = 3410
-                        tile_1_3_tooltip = 3411
-                        tile_1_4_color_over = 3412
-                        tile_1_4_color_up = 3413
-                        tile_1_4_gray_over = 3414
-                        tile_1_4_gray_up = 3415
-                        tile_1_4_tooltip = 3416
-                        tile_2_5_color_over = 3417
-                        tile_2_5_color_up = 3418
-                        tile_2_5_gray_over = 3419
-                        tile_2_5_gray_up = 3420
+                        tile_1_1_color_over = 3398
+                        tile_1_1_color_up = 3399
+                        tile_1_1_gray_over = 3400
+                        tile_1_1_gray_up = 3401
+                        tile_1_1_tooltip = 3402
+                        tile_1_2_color_over = 3403
+                        tile_1_2_color_up = 3404
+                        tile_1_2_gray_over = 3405
+                        tile_1_2_gray_up = 3406
+                        tile_1_2_tooltip = 3407
+                        tile_1_3_color_over = 3408
+                        tile_1_3_color_up = 3409
+                        tile_1_3_gray_over = 3410
+                        tile_1_3_gray_up = 3411
+                        tile_1_3_tooltip = 3412
+                        tile_1_4_color_over = 3413
+                        tile_1_4_color_up = 3414
+                        tile_1_4_gray_over = 3415
+                        tile_1_4_gray_up = 3416
+                        tile_1_4_tooltip = 3417
+                        tile_2_5_color_over = 3418
+                        tile_2_5_color_up = 3419
+                        tile_2_5_gray_over = 3420
+                        tile_2_5_gray_up = 3421
 
                 class vehicleTypes(DynAccessor):
                     __slots__ = ()
 
                     class big(DynAccessor):
                         __slots__ = ()
-                        AT_SPG = 3428
-                        AT_SPG_elite = 3429
-                        heavyTank = 3430
-                        heavyTank_elite = 3431
-                        lightTank = 3432
-                        lightTank_elite = 3433
-                        mediumTank = 3434
-                        mediumTank_elite = 3435
-                        SPG = 3436
-                        SPG_elite = 3437
+                        AT_SPG = 3429
+                        AT_SPG_elite = 3430
+                        heavyTank = 3431
+                        heavyTank_elite = 3432
+                        lightTank = 3433
+                        lightTank_elite = 3434
+                        mediumTank = 3435
+                        mediumTank_elite = 3436
+                        SPG = 3437
+                        SPG_elite = 3438
 
                     class elite(DynAccessor):
                         __slots__ = ()
-                        AT_SPG = 3438
-                        heavyTank = 3439
-                        lightTank = 3440
-                        mediumTank = 3441
-                        SPG = 3442
+                        AT_SPG = 3439
+                        heavyTank = 3440
+                        lightTank = 3441
+                        mediumTank = 3442
+                        SPG = 3443
 
                     class gold(DynAccessor):
                         __slots__ = ()
-                        AT_SPG = 3443
-                        heavyTank = 3444
-                        lightTank = 3445
-                        mediumTank = 3446
-                        SPG = 3447
+                        AT_SPG = 3444
+                        heavyTank = 3445
+                        lightTank = 3446
+                        mediumTank = 3447
+                        SPG = 3448
 
                     class green(DynAccessor):
                         __slots__ = ()
-                        at_spg = 3448
-                        heavyTank = 3449
-                        lightTank = 3450
-                        mediumTank = 3451
-                        spg = 3452
+                        at_spg = 3449
+                        heavyTank = 3450
+                        lightTank = 3451
+                        mediumTank = 3452
+                        spg = 3453
 
                     class outline(DynAccessor):
                         __slots__ = ()
-                        AT_SPG = 3453
-                        heavyTank = 3454
-                        inactive_Alliance_France = 3455
-                        inactive_Alliance_Germany = 3456
-                        inactive_Alliance_USA = 3457
-                        inactive_Alliance_USSR = 3458
-                        inactive_AT_SPG = 3459
-                        inactive_heavyTank = 3460
-                        inactive_lightTank = 3461
-                        inactive_mediumTank = 3462
-                        inactive_SPG = 3463
-                        lightTank = 3464
-                        mediumTank = 3465
-                        SPG = 3466
+                        AT_SPG = 3454
+                        heavyTank = 3455
+                        inactive_Alliance_France = 3456
+                        inactive_Alliance_Germany = 3457
+                        inactive_Alliance_USA = 3458
+                        inactive_Alliance_USSR = 3459
+                        inactive_AT_SPG = 3460
+                        inactive_heavyTank = 3461
+                        inactive_lightTank = 3462
+                        inactive_mediumTank = 3463
+                        inactive_SPG = 3464
+                        lightTank = 3465
+                        mediumTank = 3466
+                        SPG = 3467
 
                     class red(DynAccessor):
                         __slots__ = ()
-                        at_spg = 3467
-                        heavyTank = 3468
-                        lightTank = 3469
-                        mediumTank = 3470
-                        spg = 3471
+                        at_spg = 3468
+                        heavyTank = 3469
+                        lightTank = 3470
+                        mediumTank = 3471
+                        spg = 3472
 
                     class silver_24x30(DynAccessor):
                         __slots__ = ()
-                        AT_SPG = 3472
-                        heavyTank = 3473
-                        lightTank = 3474
-                        mediumTank = 3475
-                        SPG = 3476
+                        AT_SPG = 3473
+                        heavyTank = 3474
+                        lightTank = 3475
+                        mediumTank = 3476
+                        SPG = 3477
 
                 class windows(DynAccessor):
                     __slots__ = ()
 
                     class rewardWindow(DynAccessor):
                         __slots__ = ()
-                        awardRibbon = 3477
+                        awardRibbon = 3478

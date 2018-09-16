@@ -520,11 +520,13 @@ class BaseQuestProgress(object):
             if progress.getState() not in QUEST_PROGRESS_STATE.COMPLETED_STATES:
                 mulCfg = progress.getParam('multiplier')
                 if mulCfg:
-                    p = next(mulCfg.iteritems())
-                    needMultiply = self.isCompleted(p[0])
-                    if needMultiply:
-                        value *= p[1]
-                    self._progressStorage._wasMultiplied = needMultiply
+                    task = mulCfg.get('task')
+                    if task:
+                        task_id, multiplier = next(task.iteritems())
+                        needMultiply = self.isCompleted(task_id)
+                        if needMultiply:
+                            value *= multiplier
+                        self._progressStorage._wasMultiplied = needMultiply
                 progress += value
                 if progress.getValue() >= progress.getGoal():
                     self.setCompleted(progressID, isMainProgressCompleted)

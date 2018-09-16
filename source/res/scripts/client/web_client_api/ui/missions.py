@@ -1,6 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/web_client_api/ui/missions.py
 from helpers import dependency
+from gui.marathon.marathon_constants import MARATHONS_DATA
 from personal_missions import PM_BRANCH
 from skeletons.gui.event_boards_controllers import IEventBoardController
 from skeletons.gui.game_control import IMarathonEventsController
@@ -11,6 +12,10 @@ from gui.server_events import events_dispatcher as server_events
 class _PersonalMissionsSchema(W2CSchema):
     branch = Field(required=True, type=basestring, validator=lambda v, _: v in PM_BRANCH.NAME_TO_TYPE)
     operation_id = Field(required=False, type=int)
+
+
+class _MarathonMissionsSchema(W2CSchema):
+    prefix = Field(required=True, type=basestring, validator=lambda v, _: v in {m.prefix for m in MARATHONS_DATA})
 
 
 class MissionsWebApiMixin(object):
@@ -40,6 +45,10 @@ class MissionsWebApiMixin(object):
         elenController = dependency.instance(IEventBoardController)
         if serverSettings.isElenEnabled() and elenController.hasEvents():
             server_events.showMissionsElen()
+
+    @w2c(_MarathonMissionsSchema, 'missions_marathon')
+    def openMissionMarathon(self, cmd):
+        server_events.showMissionsMarathon(cmd.prefix)
 
 
 class PersonalMissionsWebApiMixin(object):

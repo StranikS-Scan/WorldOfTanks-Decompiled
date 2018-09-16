@@ -113,6 +113,8 @@ def onFinishBattle(eventType, eventData, quest, processor):
                   ('achievements', 'medalKolobanov'),
                   ('achievements', 'medalFadin'),
                   ('achievements', 'medalDeLanglade'),
+                  ('achievements', 'medalGore'),
+                  ('achievements', 'huntsman'),
                   ('achievements', 'medalTamadaYoshio')]
 
     medalDescriptors = []

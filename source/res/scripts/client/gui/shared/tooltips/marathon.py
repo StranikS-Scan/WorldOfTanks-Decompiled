@@ -17,7 +17,7 @@ class MarathonEventTooltipData(BlocksTooltipData):
         super(MarathonEventTooltipData, self).__init__(context, TOOLTIP_TYPE.QUESTS)
         self._setContentMargin(top=2, bottom=3, left=1, right=1)
         self._setMargins(afterBlock=0)
-        self._setWidth(297)
+        self._setWidth(303)
 
     def _packBlocks(self, questType, prefix, *args, **kwargs):
         self._marathonEvent = self._marathonsCtrl.getMarathon(prefix)

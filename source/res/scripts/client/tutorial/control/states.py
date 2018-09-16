@@ -1,7 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/tutorial/control/states.py
 from tutorial.control import TutorialProxyHolder
-from tutorial.control import functional
 from tutorial.logger import LOG_DEBUG
 STATE_LOADING = 0
 STATE_WAIT_SCENE = 1

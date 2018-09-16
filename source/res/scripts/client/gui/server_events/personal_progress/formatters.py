@@ -4,7 +4,6 @@ from collections import namedtuple
 import BigWorld
 from constants import QUEST_PROGRESS_STATE
 from gui.Scaleform.genConsts.QUEST_PROGRESS_BASE import QUEST_PROGRESS_BASE
-from gui.Scaleform.locale.BATTLE_RESULTS import BATTLE_RESULTS
 from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.server_events.cond_formatters.mixed_formatters import StringPersonalMissionConditionsFormatter
@@ -123,9 +122,9 @@ class PostBattleConditionsFormatter(object):
     def getMultiplierDescription(self):
         if self.__wasMultiplied and self.__hasBattleProgress:
             for progress in self.__storage.getBodyProgresses().itervalues():
-                multiplierValue = progress.getMultiplierValue()
-                if multiplierValue:
-                    return text_styles.concatStylesToSingleLine(text_styles.neutral(i18n.makeString(BATTLE_RESULTS.PERSONALQUEST_BONUS_MULTIPLIER, value=multiplierValue)), ' ', text_styles.main(i18n.makeString(BATTLE_RESULTS.PERSONALQUEST_BONUS_DESCR, value=multiplierValue)))
+                multiplier = progress.getMultiplier()
+                if multiplier:
+                    return progress.getFormattedMultiplierValue('postBattle')
 
     def __getQuestDescrText(self, isMain):
         if isMain:

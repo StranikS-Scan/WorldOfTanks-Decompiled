@@ -225,8 +225,6 @@ class PERSONAL_MISSIONS(object):
     TASKDETAILSVIEW_BTNLABEL_RETURNAWARDSHEETS = '#personal_missions:taskDetailsView/btnLabel/returnAwardSheets'
     TASKDETAILSVIEW_ADDITIONALCONDITIONS = '#personal_missions:taskDetailsView/additionalConditions'
     TASKDETAILSVIEW_MAINCONDITIONS = '#personal_missions:taskDetailsView/mainConditions'
-    CONDITIONS_MULTIPLIER = '#personal_missions:conditions/multiplier'
-    CONDITIONS_MULTIPLIER_DESCRIPTION = '#personal_missions:conditions/multiplier/description'
     CONDITIONS_ORGROUP = '#personal_missions:conditions/orGroup'
     ALLIANCE_0_NAME = '#personal_missions:alliance/0/name'
     ALLIANCE_1_NAME = '#personal_missions:alliance/1/name'
@@ -265,6 +263,12 @@ class PERSONAL_MISSIONS(object):
     CONDITIONS_COMPLETED_BOTTOMLABEL = '#personal_missions:conditions/completed/bottomLabel'
     CONDITIONS_LIMITER_LABEL = '#personal_missions:conditions/limiter/label'
     QUESTPROGRESSTRACKING_TRACKINGSTATUS = '#personal_missions:questProgressTracking/trackingStatus'
+    BONUS_MULTIPLIER_PROGRESS = '#personal_missions:bonus/multiplier/progress'
+    BONUS_DESCR_PROGRESS_CARD = '#personal_missions:bonus/descr/progress/card'
+    BONUS_DESCR_PROGRESS_POSTBATTLE = '#personal_missions:bonus/descr/progress/postBattle'
+    BONUS_MULTIPLIER_ATTEMPTS = '#personal_missions:bonus/multiplier/attempts'
+    BONUS_DESCR_ATTEMPTS_CARD = '#personal_missions:bonus/descr/attempts/card'
+    BONUS_DESCR_ATTEMPTS_POSTBATTLE = '#personal_missions:bonus/descr/attempts/postBattle'
     PERSONALMISSIONFIRSTENTRYVIEW_ITEMALL_DESCR_ENUM = (PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_DESCR,
      PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_BLOCKS_0_DESCR,
      PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_BLOCKS_1_DESCR,
@@ -329,6 +333,10 @@ class PERSONAL_MISSIONS(object):
      CHAINTOOLTIPDATA_DESCRIPTION_TEXT_ALLIANCE1,
      CHAINTOOLTIPDATA_DESCRIPTION_TEXT_ALLIANCE2,
      CHAINTOOLTIPDATA_DESCRIPTION_TEXT_ALLIANCE3)
+    BONUS_DESCR_ALL_ENUM = (BONUS_DESCR_PROGRESS_CARD,
+     BONUS_DESCR_PROGRESS_POSTBATTLE,
+     BONUS_DESCR_ATTEMPTS_CARD,
+     BONUS_DESCR_ATTEMPTS_POSTBATTLE)
     PERSONALMISSIONFIRSTENTRYVIEW_ITEMALL_WARNING_ENUM = (PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_WARNING, PERSONALMISSIONFIRSTENTRYVIEW_ITEM2_WARNING)
     PERSONALMISSIONFIRSTENTRYVIEW_ITEMALL_HEADER_ENUM = (PERSONALMISSIONFIRSTENTRYVIEW_ITEM0_HEADER,
      PERSONALMISSIONFIRSTENTRYVIEW_ITEM1_HEADER,
@@ -370,6 +378,15 @@ class PERSONAL_MISSIONS(object):
     def getAllianceChainTooltipDescr(cls, key0):
         outcome = '#personal_missions:chainTooltipData/description/text/alliance{}'.format(key0)
         if outcome not in cls.CHAINTOOLTIPDATA_DESCRIPTION_TEXT_ALLIANCE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getMultiplierDescr(cls, key0, key1):
+        outcome = '#personal_missions:bonus/descr/{}/{}'.format(key0, key1)
+        if outcome not in cls.BONUS_DESCR_ALL_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

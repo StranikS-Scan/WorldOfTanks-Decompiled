@@ -163,12 +163,12 @@ class MissionsPage(LobbySubView, MissionsPageMeta):
     def _initialize(self, ctx=None):
         ctx = ctx or {}
         requestedTab = ctx.get('tab')
+        self._marathonPrefix = ctx.get('marathonPrefix') or caches.getNavInfo().getMarathonPrefix()
         if requestedTab:
             self.__currentTabAlias = requestedTab
         else:
             elenEnabled = self.lobbyContext.getServerSettings().isElenEnabled()
             self.__currentTabAlias = caches.getNavInfo().getMissionsTab()
-            self._marathonPrefix = ctx.get('marathonPrefix') or caches.getNavInfo().getMarathonPrefix()
             if self.__currentTabAlias == QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS and (not elenEnabled or not self.eventsController.hasEvents()):
                 self.__currentTabAlias = None
             if not self.__currentTabAlias:

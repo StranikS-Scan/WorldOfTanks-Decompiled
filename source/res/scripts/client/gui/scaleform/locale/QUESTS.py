@@ -4,6 +4,7 @@ from debug_utils import LOG_WARNING
 
 class QUESTS(object):
     BONUSES_COMPENSATION = '#quests:bonuses/compensation'
+    MISSIONS_TAB_SEPTEMBER = '#quests:missions/tab/september'
     MISSIONS_TAB_KURSK = '#quests:missions/tab/kursk'
     MISSIONS_TAB_BLOGGERS = '#quests:missions/tab/bloggers'
     MISSIONS_TAB_MARATHONS = '#quests:missions/tab/marathons'
@@ -996,6 +997,10 @@ class QUESTS(object):
     MISSIONS_TAB_BLOGGERS_DISABLED_BODY = '#quests:missions/tab/bloggers/disabled/body'
     MISSIONS_TAB_MARATHONS_HEADER = '#quests:missions/tab/marathons/header'
     MISSIONS_TAB_MARATHONS_BODY = '#quests:missions/tab/marathons/body'
+    MISSIONS_TAB_LABEL_SEPTEMBER = '#quests:missions/tab/label/september'
+    MISSIONS_TAB_SEPTEMBER_HEADER = '#quests:missions/tab/september/header'
+    MISSIONS_TAB_SEPTEMBER_DISABLED = '#quests:missions/tab/september/disabled'
+    MISSIONS_TAB_SEPTEMBER_BODY = '#quests:missions/tab/september/body'
     MISSIONS_TAB_MISSIONS_HEADER = '#quests:missions/tab/missions/header'
     MISSIONS_TAB_MISSIONS_BODY = '#quests:missions/tab/missions/body'
     MISSIONS_TAB_LABEL_MISSIONS = '#quests:missions/tab/label/missions'

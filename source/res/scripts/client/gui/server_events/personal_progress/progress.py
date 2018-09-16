@@ -10,7 +10,7 @@ from gui.Scaleform.locale.PERSONAL_MISSIONS import PERSONAL_MISSIONS
 from gui.shared.formatters import text_styles
 from helpers import i18n
 from helpers.time_utils import ONE_MINUTE
-from personal_missions_constants import CONTAINER, DISPLAY_TYPE
+from personal_missions_constants import CONTAINER, DISPLAY_TYPE, MULTIPLIER_TYPE
 from shared_utils import first
 _logger = logging.getLogger(__name__)
 PARAMS_KEYS = {'vehicleHealthFactor': BigWorld.wg_getNiceNumberFormat,
@@ -67,9 +67,9 @@ class ClientProgress(quest_progress.IProgress):
     def getRest(self):
         return max(self.getGoal() - self.getCurrent(), 0)
 
-    def getMultiplierValue(self):
+    def getMultiplier(self):
         multiplierData = self._commonProgress.getParam('multiplier')
-        return first(multiplierData.values()) if multiplierData else None
+        return multiplierData
 
     @classmethod
     def getContainerType(cls):
@@ -77,6 +77,16 @@ class ClientProgress(quest_progress.IProgress):
 
     def postProcess(self, cache):
         raise NotImplementedError
+
+    def getFormattedMultiplierValue(self, scope='card'):
+        multiplier = self.getMultiplier()
+        if multiplier:
+            multiplierValue = first(multiplier['task'].values())
+            descr = text_styles.main(i18n.makeString(PERSONAL_MISSIONS.getMultiplierDescr(multiplier['type'], scope), value=multiplierValue))
+            if multiplier['type'] == MULTIPLIER_TYPE.ATTEMPTS:
+                return text_styles.concatStylesToSingleLine(text_styles.neutral(i18n.makeString(PERSONAL_MISSIONS.BONUS_MULTIPLIER_ATTEMPTS)), ' ', descr)
+            if multiplier['type'] == MULTIPLIER_TYPE.PROGRESS:
+                return text_styles.concatStylesToSingleLine(text_styles.neutral(i18n.makeString(PERSONAL_MISSIONS.BONUS_MULTIPLIER_PROGRESS, value=multiplierValue)), ' ', descr)
 
     def _getOrderType(self):
         return QUEST_PROGRESS_BASE.MAIN_ORDER_TYPE if self._commonProgress.isMain() else QUEST_PROGRESS_BASE.ADD_ORDER_TYPE
@@ -92,7 +102,7 @@ class HeaderProgress(ClientProgress):
         return
 
     def postProcess(self, cache):
-        multiplierValue = self.getMultiplierValue()
+        multiplierValue = self.getMultiplier()
         if multiplierValue:
             for progress in cache.itervalues():
                 if progress.isMain() == self.isMain() and progress.getContainerType() == CONTAINER.BODY:
@@ -140,7 +150,7 @@ class BiathlonProgress(HeaderProgress):
 
 
 class BodyProgress(ClientProgress):
-    __slots__ = ClientProgress.__slots__ + ('__metricsWrapper', '__templateID', '_generalQuestID', '__timeLeft', '__limiter', '__headerMultiplierValue')
+    __slots__ = ClientProgress.__slots__ + ('__metricsWrapper', '__templateID', '_generalQuestID', '__timeLeft', '__limiter', '__headerMultiplier')
 
     def __init__(self, commonProgress, description, templateID):
         super(BodyProgress, self).__init__(commonProgress, description)
@@ -149,7 +159,7 @@ class BodyProgress(ClientProgress):
         self._generalQuestID = None
         self.__timeLeft = None
         self.__limiter = None
-        self.__headerMultiplierValue = None
+        self.__headerMultiplier = None
         return
 
     def acceptWrappersVisitors(self, wrappersVisitors):
@@ -158,8 +168,8 @@ class BodyProgress(ClientProgress):
                 for wrapper, isTopMetric in wrappersVisitor.getWrappers():
                     self.__metricsWrapper.addMetricWrapper(wrapper, isTopMetric)
 
-    def setHeaderMuliplier(self, multiplierValue):
-        self.__headerMultiplierValue = multiplierValue
+    def setHeaderMuliplier(self, multiplier):
+        self.__headerMultiplier = multiplier
 
     def getLimiter(self):
         return self.__limiter
@@ -246,7 +256,7 @@ class BodyProgress(ClientProgress):
          'description': self.getDescription(),
          'iconID': self.getIconID(),
          'orderType': self._getOrderType(),
-         'multiplier': self.__getMultiplier(),
+         'multiplier': self.getFormattedMultiplierValue(),
          'progressType': self.getProgressType(),
          'topMetricIndex': self.__metricsWrapper.getTopMetricIdx(),
          'isInOrGroup': self._description.isInOrGroup}
@@ -260,8 +270,8 @@ class BodyProgress(ClientProgress):
     def getProgressType(self):
         return 'cumulative' if self._commonProgress.isCumulative() else 'regular'
 
-    def getMultiplierValue(self):
-        return super(BodyProgress, self).getMultiplierValue() or self.__headerMultiplierValue
+    def getMultiplier(self):
+        return super(BodyProgress, self).getMultiplier() or self.__headerMultiplier
 
     def __localizeDescr(self):
         descr = ''
@@ -280,12 +290,6 @@ class BodyProgress(ClientProgress):
             _logger.error('Wrong localization key (possible percent sign is not escaped): %s', '#personal_missions_2_details:%s_description_%s' % (self._generalQuestID, self.__limiter.getProgressID()))
 
         return limiter
-
-    def __getMultiplier(self):
-        multiplierValue = self.getMultiplierValue()
-        if multiplierValue:
-            multiplierStr = text_styles.neutral(i18n.makeString(PERSONAL_MISSIONS.CONDITIONS_MULTIPLIER, value=multiplierValue))
-            return '%s %s' % (multiplierStr, i18n.makeString(PERSONAL_MISSIONS.CONDITIONS_MULTIPLIER_DESCRIPTION, value=multiplierValue))
 
 
 class AverageProgress(BodyProgress):

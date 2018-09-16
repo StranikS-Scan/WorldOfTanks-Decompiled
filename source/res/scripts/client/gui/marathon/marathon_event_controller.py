@@ -83,6 +83,9 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
     def isAnyEnabled(self):
         return any((marathon.isEnabled() for marathon in self.__marathons))
 
+    def clear(self):
+        del self.__marathons[:]
+
     def fini(self):
         self.__stop()
         super(MarathonEventsController, self).fini()
@@ -247,9 +250,12 @@ class MarathonEvent(object):
          'enable': self.isAvailable(),
          'visible': self.isEnabled()}
 
-    def checkForWarnings(self, _):
+    def checkForWarnings(self, vehicle):
         wrongBattleType = self.prbEntity.getEntityType() != constants.ARENA_GUI_TYPE.RANDOM
-        return MARATHON_WARNING.WRONG_BATTLE_TYPE if wrongBattleType else ''
+        if wrongBattleType:
+            return MARATHON_WARNING.WRONG_BATTLE_TYPE
+        wrongVehicleLevel = vehicle.level < self.data.minVehicleLevel
+        return MARATHON_WARNING.WRONG_VEH_TYPE if wrongVehicleLevel else ''
 
     def isVehicleObtained(self):
         return self.__vehInInventory
@@ -326,7 +332,7 @@ class MarathonEvent(object):
         if groupStartTimeLeft <= zeroTime < groupFinishTimeLeft:
             self.__isEnabled = True
             self.__isAvailable = True
-            if not self.getMarathonQuests():
+            if not self.data.hasQuests:
                 self.__state = MARATHON_STATE.IN_PROGRESS
                 return self.__state
         firstQuestStartTimeLeft, firstQuestFinishTimeLeft = self.__getQuestTimeInterval()
@@ -342,7 +348,8 @@ class MarathonEvent(object):
         self.__suspendFlag = False
         quests = self._eventsCache.getHiddenQuests(self.__marathonFilterFunc)
         if quests:
-            sortedIndexList = sorted(quests)
+            tokenPrefixLen = len(self.data.tokenPrefix)
+            sortedIndexList = sorted(quests, key=lambda questName: int(filter(str.isdigit, str(questName[tokenPrefixLen:]))))
             for q in sortedIndexList:
                 if self.data.suspend in q:
                     self.__suspendFlag = True

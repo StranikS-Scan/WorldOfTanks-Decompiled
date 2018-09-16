@@ -2,7 +2,6 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/battle/shared/crosshair/plugins.py
 import math
 from collections import defaultdict
-from functools import partial
 import BigWorld
 import CommandMapping
 from AvatarInputHandler import gun_marker_ctrl
@@ -235,7 +234,7 @@ class EventBusPlugin(CrosshairPlugin):
 
 
 class AmmoPlugin(CrosshairPlugin):
-    __slots__ = ('__guiSettings', '__burstSize', '__shellsInClip', '__autoReloadCallbackID')
+    __slots__ = ('__guiSettings', '__burstSize', '__shellsInClip', '__autoReloadCallbackID', '__autoReloadSnapshot', '__scaledInterval')
     bootcampController = dependency.descriptor(IBootcampController)
 
     def __init__(self, parentObj):
@@ -243,6 +242,8 @@ class AmmoPlugin(CrosshairPlugin):
         self.__guiSettings = None
         self.__shellsInClip = 0
         self.__autoReloadCallbackID = None
+        self.__autoReloadSnapshot = None
+        self.__scaledInterval = None
         return
 
     def start(self):
@@ -306,23 +307,48 @@ class AmmoPlugin(CrosshairPlugin):
             self.__notifyAutoLoader(state)
 
     def __notifyAutoLoader(self, state):
+        actualTime = state.getActualValue()
+        baseTime = state.getBaseValue()
         if self.__shellsInClip == 0 and state.isReloading():
-            baseTime = actualTime = self.__guiSettings.getClipInterval()
-            self.__autoReloadCallbackID = BigWorld.callback(actualTime, partial(self.__autoReloadLastShotCallback, state.getBaseValue() - baseTime))
-            self._parentObj.as_autoloaderUpdateS(0, 0)
-        else:
-            actualTime = state.getActualValue()
-            baseTime = state.getBaseValue()
+            timeGone = baseTime - actualTime
+            clipInterval = self.__guiSettings.getClipInterval()
+            if clipInterval > timeGone:
+                actualTime = clipInterval - timeGone
+                baseTime = clipInterval
+                if self.__autoReloadCallbackID is not None:
+                    BigWorld.cancelCallback(self.__autoReloadCallbackID)
+                self.__autoReloadCallbackID = BigWorld.callback(actualTime, self.__autoReloadFirstShellCallback)
+                self.__scaledInterval = clipInterval
+                self._parentObj.as_autoloaderUpdateS(0, 0)
+            else:
+                self._parentObj.as_autoloaderUpdateS(actualTime, self.__reCalcFirstShellAutoReload(baseTime))
+                actualTime = baseTime = 0
+            self.__autoReloadSnapshot = state
         self._parentObj.as_setAutoloaderReloadingS(actualTime, baseTime)
+        return
 
-    def __autoReloadLastShotCallback(self, timeLeft):
+    def __autoReloadFirstShellCallback(self):
+        timeLeft = min(self.__autoReloadSnapshot.getTimeLeft(), self.__autoReloadSnapshot.getActualValue())
         self._parentObj.as_autoloaderUpdateS(timeLeft, timeLeft)
         self.__autoReloadCallbackID = None
         return
 
-    def __onGunAutoReloadTimeSet(self, timeLeft, baseTime, stunned):
-        if self.__shellsInClip > 0 or timeLeft == 0:
-            self._parentObj.as_autoloaderUpdateS(timeLeft, baseTime, isStun=stunned, isTimerOn=True)
+    def __onGunAutoReloadTimeSet(self, state, stunned):
+        if not self.__autoReloadCallbackID:
+            timeLeft = min(state.getTimeLeft(), state.getActualValue())
+            baseValue = state.getBaseValue()
+            if self.__shellsInClip == 0:
+                baseValue = self.__reCalcFirstShellAutoReload(baseValue)
+            self._parentObj.as_autoloaderUpdateS(timeLeft, baseValue, isStun=stunned, isTimerOn=True)
+        self.__autoReloadSnapshot = state
+
+    def __reCalcFirstShellAutoReload(self, baseTime):
+        if not self.__scaledInterval:
+            return baseTime
+        newScaledInterval = self.__scaledInterval * baseTime / self.__autoReloadSnapshot.getBaseValue()
+        result = baseTime - newScaledInterval
+        self.__scaledInterval = newScaledInterval
+        return result
 
     def __onShellsUpdated(self, _, quantity, quantityInClip, result):
         if not result & SHELL_SET_RESULT.CURRENT:

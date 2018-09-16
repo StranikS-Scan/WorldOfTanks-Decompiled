@@ -405,9 +405,9 @@ class AmmoController(MethodsRules, IBattleController):
         if not isIgnored:
             self.onGunReloadTimeSet(self.__currShellCD, self._reloadingState.getSnapshot())
 
-    def setGunAutoReloadTime(self, timeLeft, baseTime, stunned):
+    def setGunAutoReloadTime(self, timeLeft, baseTime, isSlowed):
         self._autoReloadingState.setTimes(timeLeft, baseTime)
-        self.__notifyAboutAutoReloadTimeChanges(stunned)
+        self.__notifyAboutAutoReloadTimeChanges(isSlowed)
         if self.__gunSettings.reloadEffect is not None:
             shellCounts = self.__ammo[self.__currShellCD]
             shellsInClip = shellCounts[1]
@@ -579,8 +579,8 @@ class AmmoController(MethodsRules, IBattleController):
                 self.__gunSettings.reloadEffect.shotFail()
         return
 
-    def __notifyAboutAutoReloadTimeChanges(self, stunned):
-        self.onGunAutoReloadTimeSet(min(self._autoReloadingState.getTimeLeft(), self._autoReloadingState.getActualValue()), self._autoReloadingState.getBaseValue(), stunned)
+    def __notifyAboutAutoReloadTimeChanges(self, isSlowed):
+        self.onGunAutoReloadTimeSet(self._autoReloadingState.getSnapshot(), isSlowed)
 
 
 class AmmoReplayRecorder(AmmoController):

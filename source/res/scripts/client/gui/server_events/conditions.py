@@ -1322,10 +1322,11 @@ class VehicleKills(_VehsListCondition):
         return 'VehicleKills<%s=%d>' % (self._relation, self._relationValue)
 
 
-class VehicleKillsCumulative(_Cumulativable, VehicleKills):
+class VehicleKillsCumulative(VehicleKills, _Cumulativable):
 
     def __init__(self, path, data, bonusCond):
-        super(VehicleKills, self).__init__('vehicleKillsCumulative', dict(data), path)
+        super(VehicleKillsCumulative, self).__init__(path, dict(data))
+        self._name = 'vehicleKillsCumulative'
         self._bonus = weakref.proxy(bonusCond)
 
     def __repr__(self):
@@ -1382,7 +1383,8 @@ class VehicleDamage(_CountOrTotalEventsCondition):
 class VehicleDamageCumulative(VehicleDamage, _Cumulativable):
 
     def __init__(self, path, data, bonusCond):
-        super(VehicleDamageCumulative, self).__init__('vehicleDamageCumulative', dict(data), path)
+        super(VehicleDamageCumulative, self).__init__(path, dict(data))
+        self._name = 'vehicleDamageCumulative'
         self._bonus = weakref.proxy(bonusCond)
 
     def __repr__(self):
@@ -1422,7 +1424,8 @@ class VehicleStun(_CountOrTotalEventsCondition):
 class VehicleStunCumulative(VehicleStun, _Cumulativable):
 
     def __init__(self, path, data, bonusCond):
-        super(VehicleStunCumulative, self).__init__('vehicleStunCumulative', dict(data), path)
+        super(VehicleStunCumulative, self).__init__(path, dict(data))
+        self._name = 'vehicleStunCumulative'
         self._bonus = weakref.proxy(bonusCond)
 
     def __repr__(self):

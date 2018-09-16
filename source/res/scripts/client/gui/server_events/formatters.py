@@ -5,7 +5,7 @@ import types
 from collections import namedtuple
 import BigWorld
 import ArenaType
-from constants import ARENA_BONUS_TYPE
+from constants import ARENA_BONUS_TYPE, GAMEPLAY_NAMES_WITH_DISABLED_QUESTS
 from gui import makeHtmlString
 from gui.Scaleform.locale.QUESTS import QUESTS
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
@@ -330,11 +330,13 @@ def packMissionkMapElement(arenaTypeID):
 
 def getMapName(arenaTypeID):
     if arenaTypeID not in ArenaType.g_cache:
-        return None
+        return
     else:
         arenaType = ArenaType.g_cache[arenaTypeID]
         if arenaType.gameplayName != 'ctf':
-            label = '%s (%s)' % (arenaType.name, i18n.makeString('#arenas:type/%s/name' % arenaType.gameplayName))
+            label = None
+            if arenaType.gameplayName not in GAMEPLAY_NAMES_WITH_DISABLED_QUESTS:
+                label = '%s (%s)' % (arenaType.name, i18n.makeString('#arenas:type/%s/name' % arenaType.gameplayName))
         else:
             label = arenaType.name
         return label

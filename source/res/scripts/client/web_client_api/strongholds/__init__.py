@@ -8,7 +8,7 @@ from helpers import dependency
 from gui import DialogsInterface
 from gui.SystemMessages import pushMessage, SM_TYPE
 from gui.prb_control.dispatcher import g_prbLoader
-from gui.prb_control.entities.base.ctx import PrbAction
+from gui.prb_control.entities.base.ctx import PrbAction, LeavePrbAction
 from gui.prb_control.entities.stronghold.unit.ctx import CreateUnitCtx, JoinUnitCtx
 from gui.prb_control.formatters import messages
 from gui.prb_control.settings import PREBATTLE_ACTION_NAME
@@ -30,6 +30,12 @@ class StrongholdsWebApi(object):
     def handleOpenList(self, cmd):
         dispatcher = g_prbLoader.getDispatcher()
         yield dispatcher.doSelectAction(PrbAction(PREBATTLE_ACTION_NAME.STRONGHOLDS_BATTLES_LIST))
+
+    @w2c(W2CSchema, 'leave_mode')
+    @process
+    def handleLeaveMode(self, cmd):
+        dispatcher = g_prbLoader.getDispatcher()
+        yield dispatcher.doLeaveAction(LeavePrbAction(isExit=True))
 
     @w2c(W2CSchema, 'battle_chosen')
     @process

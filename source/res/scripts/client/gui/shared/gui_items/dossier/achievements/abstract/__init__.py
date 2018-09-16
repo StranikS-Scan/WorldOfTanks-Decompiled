@@ -13,6 +13,7 @@ from RegularAchievement import RegularAchievement
 from SeriesAchievement import SeriesAchievement
 from RegularExtAchievement import RegularExtAchievement
 from SimpleProgressAchievement import SimpleProgressAchievement
+from StageAchievement import StageAchievement
 from skeletons.gui.server_events import IEventsCache
 
 class DeprecatedAchievement(Deprecated, RegularAchievement):
@@ -52,4 +53,4 @@ def getCompletedPersonalMissionsCount(branch, classifiers):
     return result
 
 
-__all__ = ('ClassProgressAchievement', 'HistoricalAchievement', 'NationSpecificAchievement', 'RareAchievement', 'RegularAchievement', 'RegularExtAchievement', 'SeriesAchievement', 'SimpleProgressAchievement', 'DeprecatedAchievement', 'QuestAchievement', 'isRareAchievement', 'isSeriesAchievement', 'achievementHasVehiclesList')
+__all__ = ('ClassProgressAchievement', 'HistoricalAchievement', 'NationSpecificAchievement', 'RareAchievement', 'RegularAchievement', 'RegularExtAchievement', 'SeriesAchievement', 'SimpleProgressAchievement', 'DeprecatedAchievement', 'QuestAchievement', 'isRareAchievement', 'isSeriesAchievement', 'achievementHasVehiclesList', 'StageAchievement')

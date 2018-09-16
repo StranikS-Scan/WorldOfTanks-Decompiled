@@ -158,6 +158,15 @@ class _ShowInBrowserParser(SectionParser):
         return proxy_data.ShowInBrowserItem(url, size, title, showRefresh, webClientHandler, titleKey=titleKey, isSolidBorder=isSolidBorder)
 
 
+class _ShowBloggersAward(SectionParser):
+
+    def getTagName(self):
+        pass
+
+    def parse(self, section):
+        return proxy_data.ShowBloggersAwardItem(section.readInt('award_id'), section.readString('blogger'))
+
+
 class _ProxyDataItemsParser(ParsersCollection):
 
     def getTagName(self):
@@ -186,4 +195,5 @@ class ProxyDataItemParser_v2(_ProxyDataItemsParser):
          _ClanInviteAcceptedParser(),
          _EncyclopediaContentParser(),
          _ShowInBrowserParser(),
-         _ShowPromoParser()))
+         _ShowPromoParser(),
+         _ShowBloggersAward()))

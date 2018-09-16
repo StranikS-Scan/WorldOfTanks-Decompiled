@@ -56,6 +56,28 @@ class Menu(DynAccessor):
     class awardWindow(DynAccessor):
         __slots__ = ()
 
+        class bloggersAward(DynAccessor):
+            __slots__ = ()
+
+            class description(DynAccessor):
+                __slots__ = ()
+                badge = 2382
+                emblem = 2378
+                exp = 2380
+                inscription = 2379
+                medal = 2377
+                style = 2381
+
+            description_ = 2376
+            header = 2375
+
+            class name(DynAccessor):
+                __slots__ = ()
+                amway = 2384
+                jove = 2385
+                lebwa = 2386
+                usha = 2383
+
         class boosterAward(DynAccessor):
             __slots__ = ()
 
@@ -274,6 +296,7 @@ class Menu(DynAccessor):
 
         class title(DynAccessor):
             __slots__ = ()
+            bloggersAward = 2374
             boosterAward = 2324
             credits = 2280
             info = 2284
@@ -380,71 +403,71 @@ class Menu(DynAccessor):
 
         class bonus(DynAccessor):
             __slots__ = ()
-            booster_credits = 2469
-            booster_crew_xp = 2466
-            booster_free_xp = 2463
-            booster_xp = 2460
+            booster_credits = 2482
+            booster_crew_xp = 2479
+            booster_free_xp = 2476
+            booster_xp = 2473
 
         class description(DynAccessor):
             __slots__ = ()
-            booster_credits = 2468
-            booster_crew_xp = 2465
-            booster_free_xp = 2462
-            booster_repair = 2471
-            booster_xp = 2459
-            effectTime = 2472
+            booster_credits = 2481
+            booster_crew_xp = 2478
+            booster_free_xp = 2475
+            booster_repair = 2484
+            booster_xp = 2472
+            effectTime = 2485
 
         class quality(DynAccessor):
             __slots__ = ()
-            big = 2475
-            medium = 2474
-            small = 2473
+            big = 2488
+            medium = 2487
+            small = 2486
 
         class userName(DynAccessor):
             __slots__ = ()
-            booster_credits = 2467
-            booster_crew_xp = 2464
-            booster_free_xp = 2461
-            booster_repair = 2470
-            booster_xp = 2458
+            booster_credits = 2480
+            booster_crew_xp = 2477
+            booster_free_xp = 2474
+            booster_repair = 2483
+            booster_xp = 2471
 
     class boosterBuyWindow(DynAccessor):
         __slots__ = ()
-        buyButtonLabel = 2516
-        buyCount = 2519
-        cancelButtonLabel = 2517
-        inHangarCount = 2520
-        rearmCheckboxLabel = 2522
-        totalLabel = 2518
-        totalPrice = 2521
-        windowTitle = 2515
+        buyButtonLabel = 2529
+        buyCount = 2532
+        cancelButtonLabel = 2530
+        inHangarCount = 2533
+        rearmCheckboxLabel = 2535
+        totalLabel = 2531
+        totalPrice = 2534
+        windowTitle = 2528
 
     class boosterFittingRenderer(DynAccessor):
         __slots__ = ()
-        buyButton = 2503
-        removeButton = 2504
+        buyButton = 2516
+        removeButton = 2517
 
     class boosterInstallWindow(DynAccessor):
         __slots__ = ()
-        cantWorkStatus = 2501
-        installButton = 2502
-        message = 2500
-        title = 2499
+        cantWorkStatus = 2514
+        installButton = 2515
+        message = 2513
+        title = 2512
 
     class boosterSelectPopover(DynAccessor):
         __slots__ = ()
-        rearmCheckBoxLabel = 2496
+        rearmCheckBoxLabel = 2509
 
         class tabs(DynAccessor):
             __slots__ = ()
-            forCrew = 2497
-            forEquipment = 2498
+            forCrew = 2510
+            forEquipment = 2511
 
-        title = 2495
+        title = 2508
 
     class boostersWindow(DynAccessor):
         __slots__ = ()
-        activeBoosters = 2447
+        activeBoosters = 2460
 
         class boostersTable(DynAccessor):
             __slots__ = ()
@@ -454,46 +477,46 @@ class Menu(DynAccessor):
 
                 class empty(DynAccessor):
                     __slots__ = ()
-                    message = 2457
+                    message = 2470
 
                 class notFound(DynAccessor):
                     __slots__ = ()
-                    message = 2456
-                    title = 2455
+                    message = 2469
+                    title = 2468
 
         class boostersTableRenderer(DynAccessor):
             __slots__ = ()
-            activateBtnLabel = 2452
-            buyBtnLabel = 2453
-            goToQuestBtnLabel = 2454
-            header = 2448
-            questForOpen = 2451
-            time = 2449
-            undefineTime = 2450
+            activateBtnLabel = 2465
+            buyBtnLabel = 2466
+            goToQuestBtnLabel = 2467
+            header = 2461
+            questForOpen = 2464
+            time = 2462
+            undefineTime = 2463
 
         class closeBtn(DynAccessor):
             __slots__ = ()
-            label = 2440
+            label = 2453
 
         class levelFilters(DynAccessor):
             __slots__ = ()
-            label = 2442
+            label = 2455
 
         class returnBtn(DynAccessor):
             __slots__ = ()
-            label = 2441
+            label = 2454
 
         class tabs(DynAccessor):
             __slots__ = ()
-            availableLabel = 2444
-            buyLabel = 2446
-            notAvailableLabel = 2445
+            availableLabel = 2457
+            buyLabel = 2459
+            notAvailableLabel = 2458
 
-        title = 2439
+        title = 2452
 
         class typeFilters(DynAccessor):
             __slots__ = ()
-            label = 2443
+            label = 2456
 
     class browser(DynAccessor):
         __slots__ = ()
@@ -575,7 +598,7 @@ class Menu(DynAccessor):
         cancelBuy = 2072
         clanInfo = 2046
         compare = 2108
-        copyClanName = 2479
+        copyClanName = 2492
         copyToClipBoard = 2058
         createContactNote = 2105
         createEventSquad = 2084
@@ -657,7 +680,7 @@ class Menu(DynAccessor):
         vehicleRestore = 2043
         vehicleSell = 2038
         vehicleUncheck = 2041
-        viewClanProfile = 2478
+        viewClanProfile = 2491
         withdrawInvitationToSquad = 2115
 
     copy = 710
@@ -667,25 +690,25 @@ class Menu(DynAccessor):
 
         class promoWindow(DynAccessor):
             __slots__ = ()
-            closebtn = 2513
-            header = 2505
-            openShopBtnLabel = 2514
-            subDescr0 = 2508
-            subDescr1 = 2510
-            subDescr2 = 2512
-            subTitle0 = 2507
-            subTitle1 = 2509
-            subTitle2 = 2511
-            title = 2506
+            closebtn = 2526
+            header = 2518
+            openShopBtnLabel = 2527
+            subDescr0 = 2521
+            subDescr1 = 2523
+            subDescr2 = 2525
+            subTitle0 = 2520
+            subTitle1 = 2522
+            subTitle2 = 2524
+            title = 2519
 
     class cst_item_ctx_menu(DynAccessor):
         __slots__ = ()
-        allowSale = 2536
-        buy = 2531
-        information = 2534
-        prohibitSale = 2535
-        removeFromTank = 2533
-        sell = 2532
+        allowSale = 2549
+        buy = 2544
+        information = 2547
+        prohibitSale = 2548
+        removeFromTank = 2546
+        sell = 2545
 
     class currentVehicleStatus(DynAccessor):
         __slots__ = ()
@@ -853,11 +876,11 @@ class Menu(DynAccessor):
 
         class description(DynAccessor):
             __slots__ = ()
-            vehicle = 2477
+            vehicle = 2490
 
         class userName(DynAccessor):
             __slots__ = ()
-            vehicle = 2476
+            vehicle = 2489
 
     class equipmentFits(DynAccessor):
         __slots__ = ()
@@ -931,11 +954,11 @@ class Menu(DynAccessor):
 
         class descText(DynAccessor):
             __slots__ = ()
-            crystal = 2528
+            crystal = 2541
 
-        descText_ = 2527
-        okBtnLabel = 2526
-        titleText = 2525
+        descText_ = 2540
+        okBtnLabel = 2539
+        titleText = 2538
 
     class fortification(DynAccessor):
         __slots__ = ()
@@ -1049,17 +1072,17 @@ class Menu(DynAccessor):
 
         class battle_quests_label(DynAccessor):
             __slots__ = ()
-            active = 2489
-            inactive = 2490
+            active = 2502
+            inactive = 2503
 
-        million = 2488
+        million = 2501
 
         class personal_quests_label(DynAccessor):
             __slots__ = ()
-            active = 2491
-            all_done = 2494
-            empty = 2492
-            inactive = 2493
+            active = 2504
+            all_done = 2507
+            empty = 2505
+            inactive = 2506
 
     class header(DynAccessor):
         __slots__ = ()
@@ -1252,15 +1275,15 @@ class Menu(DynAccessor):
 
                 class epic(DynAccessor):
                     __slots__ = ()
-                    descr = 2484
+                    descr = 2497
 
-                epic_ = 2483
+                epic_ = 2496
 
                 class epicBattle(DynAccessor):
                     __slots__ = ()
-                    descr = 2482
+                    descr = 2495
 
-                epicBattle_ = 2481
+                epicBattle_ = 2494
                 eventSquad = 1284
                 fallout = 1300
                 fort = 2216
@@ -1467,7 +1490,7 @@ class Menu(DynAccessor):
         __slots__ = ()
         info = 2188
 
-    infinitySymbol = 2480
+    infinitySymbol = 2493
 
     class ingame_menu(DynAccessor):
         __slots__ = ()
@@ -1495,13 +1518,23 @@ class Menu(DynAccessor):
 
         class Beltelecom(DynAccessor):
             __slots__ = ()
-            name = 2541
-            tariff = 2542
+            name = 2554
+            tariff = 2555
+
+        class Kazakhtelecom(DynAccessor):
+            __slots__ = ()
+            name = 2558
+            tariff = 2559
+
+        class Kyivstar(DynAccessor):
+            __slots__ = ()
+            name = 2556
+            tariff = 2557
 
         class Rostelecom(DynAccessor):
             __slots__ = ()
-            name = 2539
-            tariff = 2540
+            name = 2552
+            tariff = 2553
 
     class inventory(DynAccessor):
         __slots__ = ()
@@ -2152,9 +2185,9 @@ class Menu(DynAccessor):
 
     class onlineCounter(DynAccessor):
         __slots__ = ()
-        delimiter = 2486
-        total = 2485
-        unavailable = 2487
+        delimiter = 2499
+        total = 2498
+        unavailable = 2500
 
     opponents = 2185
 
@@ -2167,8 +2200,8 @@ class Menu(DynAccessor):
 
         class tabs(DynAccessor):
             __slots__ = ()
-            deluxe = 2524
-            simple = 2523
+            deluxe = 2537
+            simple = 2536
 
     class prebattle(DynAccessor):
         __slots__ = ()
@@ -2375,28 +2408,28 @@ class Menu(DynAccessor):
 
         class patch(DynAccessor):
             __slots__ = ()
-            message = 2428
-            title = 2427
+            message = 2441
+            title = 2440
 
         class teaser(DynAccessor):
             __slots__ = ()
-            title = 2434
+            title = 2447
 
         class teaserTimeFormat(DynAccessor):
             __slots__ = ()
-            days = 2430
-            hours = 2431
-            lessMin = 2433
-            min = 2432
+            days = 2443
+            hours = 2444
+            lessMin = 2446
+            min = 2445
 
-        toArchive = 2429
+        toArchive = 2442
 
     class PromoPremiumIgrWindow(DynAccessor):
         __slots__ = ()
-        applyButtonLabel = 2438
-        text = 2437
-        title = 2436
-        windowTitle = 2435
+        applyButtonLabel = 2451
+        text = 2450
+        title = 2449
+        windowTitle = 2448
 
     class pveSandbox(DynAccessor):
         __slots__ = ()
@@ -2409,7 +2442,7 @@ class Menu(DynAccessor):
             title = 1342
             units = 1343
 
-    quote = 2529
+    quote = 2542
 
     class rating(DynAccessor):
         __slots__ = ()
@@ -2439,40 +2472,40 @@ class Menu(DynAccessor):
 
     class ReferralManagementWindow(DynAccessor):
         __slots__ = ()
-        closeBtnLabel = 2380
-        description = 2377
+        closeBtnLabel = 2393
+        description = 2390
 
         class infoHeader(DynAccessor):
             __slots__ = ()
-            haveNotTank = 2375
-            haveTank = 2376
+            haveNotTank = 2388
+            haveTank = 2389
 
-        invitedPlayers = 2378
-        inviteManagementLink = 2379
+        invitedPlayers = 2391
+        inviteManagementLink = 2392
 
         class progressIndicator(DynAccessor):
             __slots__ = ()
-            complete = 2390
-            progress = 2389
+            complete = 2403
+            progress = 2402
 
-        progressNotAvailable = 2391
+        progressNotAvailable = 2404
 
         class referralsTable(DynAccessor):
             __slots__ = ()
 
             class createSquadBtn(DynAccessor):
                 __slots__ = ()
-                label = 2387
+                label = 2400
 
-            emptyLine = 2388
-            exp = 2382
-            expMultiplier = 2383
-            leftDays = 2386
-            leftHours = 2385
-            leftTime = 2384
-            nick = 2381
+            emptyLine = 2401
+            exp = 2395
+            expMultiplier = 2396
+            leftDays = 2399
+            leftHours = 2398
+            leftTime = 2397
+            nick = 2394
 
-        title = 2374
+        title = 2387
 
     class ReferralReferralsIntroWindow(DynAccessor):
         __slots__ = ()
@@ -2482,35 +2515,35 @@ class Menu(DynAccessor):
 
             class body(DynAccessor):
                 __slots__ = ()
-                phenix = 2404
-                referrals = 2403
+                phenix = 2417
+                referrals = 2416
 
-            squad_text = 2405
-            title = 2402
+            squad_text = 2418
+            title = 2415
 
     class ReferralReferrerIntroWindow(DynAccessor):
         __slots__ = ()
 
         class applyButton(DynAccessor):
             __slots__ = ()
-            label = 2393
+            label = 2406
 
         class textBlock_body(DynAccessor):
             __slots__ = ()
-            invite_block = 2396
-            referrals_block = 2400
-            squad_block = 2398
+            invite_block = 2409
+            referrals_block = 2413
+            squad_block = 2411
 
-        textBlock_link = 2401
+        textBlock_link = 2414
 
         class textBlock_title(DynAccessor):
             __slots__ = ()
-            invite_block = 2395
-            referrals_block = 2399
-            squad_block = 2397
+            invite_block = 2408
+            referrals_block = 2412
+            squad_block = 2410
 
-        titleMessage = 2394
-        windowTitle = 2392
+        titleMessage = 2407
+        windowTitle = 2405
 
     class repair(DynAccessor):
         __slots__ = ()
@@ -3246,31 +3279,31 @@ class Menu(DynAccessor):
 
     class techtree(DynAccessor):
         __slots__ = ()
-        Announcement = 2530
+        Announcement = 2543
 
     class Time(DynAccessor):
         __slots__ = ()
 
         class timeValue(DynAccessor):
             __slots__ = ()
-            days = 2415
-            hours = 2416
-            lessMin = 2418
-            min = 2417
+            days = 2428
+            hours = 2429
+            lessMin = 2431
+            min = 2430
 
         class timeValueShort(DynAccessor):
             __slots__ = ()
-            days = 2419
-            hours = 2420
-            lessMin = 2422
-            min = 2421
+            days = 2432
+            hours = 2433
+            lessMin = 2435
+            min = 2434
 
         class timeValueWithSecs(DynAccessor):
             __slots__ = ()
-            days = 2423
-            hours = 2424
-            lessMin = 2426
-            min = 2425
+            days = 2436
+            hours = 2437
+            lessMin = 2439
+            min = 2438
 
     class trade(DynAccessor):
         __slots__ = ()
@@ -3378,8 +3411,8 @@ class Menu(DynAccessor):
 
         class igrRentLeft(DynAccessor):
             __slots__ = ()
-            days = 2406
-            hours = 2407
+            days = 2419
+            hours = 2420
 
         class rentLeft(DynAccessor):
             __slots__ = ()
@@ -3488,19 +3521,19 @@ class Menu(DynAccessor):
 
     class vehiclePreview(DynAccessor):
         __slots__ = ()
-        endTime = 2408
+        endTime = 2421
 
         class timeLeft(DynAccessor):
             __slots__ = ()
-            hours = 2409
-            lessMin = 2411
-            min = 2410
+            hours = 2422
+            lessMin = 2424
+            min = 2423
 
         class timeLeftShort(DynAccessor):
             __slots__ = ()
-            hours = 2412
-            lessMin = 2414
-            min = 2413
+            hours = 2425
+            lessMin = 2427
+            min = 2426
 
     class vehiclesCarousel(DynAccessor):
         __slots__ = ()
@@ -3525,8 +3558,8 @@ class Menu(DynAccessor):
 
         class backBtn(DynAccessor):
             __slots__ = ()
-            label = 2537
+            label = 2550
 
         class closeBtn(DynAccessor):
             __slots__ = ()
-            label = 2538
+            label = 2551

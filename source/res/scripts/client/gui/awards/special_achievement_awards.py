@@ -1,5 +1,7 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/awards/special_achievement_awards.py
+import logging
+from collections import namedtuple
 import BigWorld
 from gui.Scaleform.locale.CLANS import CLANS
 from gui.Scaleform.locale.MENU import MENU
@@ -8,10 +10,44 @@ from gui.goodies.goodie_items import _BOOSTER_DESCRIPTION_LOCALE
 from gui.server_events.awards import AwardAbstract, ExplosionBackAward
 from gui.shared import event_dispatcher as shared_events
 from gui.shared.formatters import text_styles
+from gui.shared.gui_items.dossier.achievements.abstract import RegularAchievement
 from helpers import dependency
 from helpers import i18n
-from skeletons.gui.shared import IItemsCache
 from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
+
+class _AWARD(object):
+    MEDAL = 1
+    EMBLEM = 2
+    INSCRIPTION = 3
+    EXP = 4
+    STYLE = 5
+    BADGE = 6
+
+
+class _BLOGGER(object):
+    USHA = 'Usha'
+    JOVE = 'Jove'
+    LEBWA = 'LeBwa'
+    AMWAY = 'Amway921'
+
+
+_BLOGGERS = {_BLOGGER.USHA,
+ _BLOGGER.JOVE,
+ _BLOGGER.LEBWA,
+ _BLOGGER.AMWAY}
+_BLOGGERS_NAMES = {_BLOGGER.USHA: MENU.AWARDWINDOW_BLOGGERSAWARD_NAME_USHA,
+ _BLOGGER.AMWAY: MENU.AWARDWINDOW_BLOGGERSAWARD_NAME_AMWAY,
+ _BLOGGER.JOVE: MENU.AWARDWINDOW_BLOGGERSAWARD_NAME_JOVE,
+ _BLOGGER.LEBWA: MENU.AWARDWINDOW_BLOGGERSAWARD_NAME_LEBWA}
+_BloggerAward = namedtuple('BloggerAward', ('icon', 'text'))
+_BLOGGERS_AWARDS = {_AWARD.MEDAL: _BloggerAward(lambda blogger: '%s/%s.png' % (RegularAchievement.ICON_PATH_180X180, ''.join(('streamersEvent', blogger))), lambda blogger: i18n.makeString(MENU.AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_MEDAL, blogger=i18n.makeString(_BLOGGERS_NAMES[blogger]))),
+ _AWARD.EMBLEM: _BloggerAward(RES_ICONS.getBloggerEmblem, lambda blogger: i18n.makeString(MENU.AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_EMBLEM, blogger=i18n.makeString(_BLOGGERS_NAMES[blogger]))),
+ _AWARD.INSCRIPTION: _BloggerAward(RES_ICONS.getBloggerInscription, lambda blogger: i18n.makeString(MENU.AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_INSCRIPTION, blogger=i18n.makeString(_BLOGGERS_NAMES[blogger]))),
+ _AWARD.EXP: _BloggerAward(lambda blogger: RES_ICONS.MAPS_ICONS_BLOGGERS_EXPDOUBLE, lambda blogger: i18n.makeString(MENU.AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_EXP, blogger=i18n.makeString(_BLOGGERS_NAMES[blogger]))),
+ _AWARD.STYLE: _BloggerAward(lambda blogger: RES_ICONS.MAPS_ICONS_BLOGGERS_CUSTOMSTYLE, lambda blogger: i18n.makeString(MENU.AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_STYLE, blogger=i18n.makeString(_BLOGGERS_NAMES[blogger]))),
+ _AWARD.BADGE: _BloggerAward(RES_ICONS.getBloggerBadge, lambda blogger: i18n.makeString(MENU.AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_BADGE, blogger=i18n.makeString(_BLOGGERS_NAMES[blogger])))}
+_logger = logging.getLogger(__name__)
 
 class ResearchAward(ExplosionBackAward):
 
@@ -182,7 +218,7 @@ class TelecomAward(AwardAbstract):
         return details
 
     def getWindowTitle(self):
-        return i18n.makeString(MENU.AWARDWINDOW_TITLE_SPECIALACHIEVEMENT)
+        return i18n.makeString(MENU.AWARDWINDOW_TITLE_INFO)
 
     def getBackgroundImage(self):
         return RES_ICONS.MAPS_ICONS_REFERRAL_AWARDBACK
@@ -233,3 +269,43 @@ class TelecomAward(AwardAbstract):
         if hasattr(item, 'invID'):
             g_currentVehicle.selectVehicle(item.invID)
         shared_events.showHangar()
+
+
+class BloggersBattleAward(ExplosionBackAward):
+
+    def __init__(self, awardId, blogger):
+        super(BloggersBattleAward, self).__init__()
+        self._awardId = _AWARD.MEDAL
+        self._blogger = _BLOGGER.USHA
+        if self.__checkAward(awardId):
+            self._awardId = awardId
+        if self.__checkBlogger(blogger):
+            self._blogger = blogger
+
+    def getWindowTitle(self):
+        return i18n.makeString(MENU.AWARDWINDOW_TITLE_BLOGGERSAWARD)
+
+    def getAwardImage(self):
+        return _BLOGGERS_AWARDS[self._awardId].icon(self._blogger)
+
+    def getHeader(self):
+        return text_styles.alignText(text_styles.superPromoTitle(MENU.AWARDWINDOW_BLOGGERSAWARD_HEADER), 'center')
+
+    def getDescription(self):
+        return text_styles.alignText(text_styles.main(i18n.makeString(MENU.AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION, awardName=i18n.makeString(_BLOGGERS_AWARDS[self._awardId].text(self._blogger)))), 'center')
+
+    def clear(self):
+        self._awardId = None
+        return
+
+    def __checkAward(self, awardId):
+        if _AWARD.MEDAL <= awardId <= _AWARD.BADGE:
+            return True
+        _logger.warning('Bloggers award ID = %d is out of range %d-%d', awardId, _AWARD.MEDAL, _AWARD.BADGE)
+        return False
+
+    def __checkBlogger(self, blogger):
+        if blogger in _BLOGGERS:
+            return True
+        _logger.warning('Incorrect blogger name %s. Should be one of %s', blogger, str(_BLOGGERS))
+        return False

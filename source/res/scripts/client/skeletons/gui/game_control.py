@@ -331,9 +331,6 @@ class IPromoController(IGameController):
     def setUnreadPromoCount(self, count):
         raise NotImplementedError
 
-    def showBubbleTooltip(self):
-        raise NotImplementedError
-
 
 class IEventsNotificationsController(IGameController):
     onEventNotificationsChanged = None
@@ -763,7 +760,10 @@ class IMarathonEventsController(IGameController):
     def getTokensData(self, prefix=None, postfix=None):
         raise NotImplementedError
 
-    def isAnyActive(self):
+    def isAnyAvailable(self):
+        raise NotImplementedError
+
+    def isAnyEnabled(self):
         raise NotImplementedError
 
 

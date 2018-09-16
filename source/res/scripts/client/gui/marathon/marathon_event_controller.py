@@ -3,21 +3,26 @@
 import time
 import Event
 import constants
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import MARATHON_PROMO_SHOWN
 from adisp import process, async
 from debug_utils import LOG_ERROR
 from gui import GUI_SETTINGS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
+from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.game_control.links import URLMarcos
-from gui.marathon.marathon_constants import MARATHONS_DATA, MARATHON_STATE, MAP_FLAG_HEADER_ICON, MARATHON_WARNING, PROGRESS_TOOLTIP_HEADER, COUNTDOWN_TOOLTIP_HEADER, ZERO_TIME
+from gui.marathon.marathon_constants import MARATHONS_DATA, MARATHON_STATE, MARATHON_WARNING, PROGRESS_TOOLTIP_HEADER, COUNTDOWN_TOOLTIP_HEADER, ZERO_TIME, TEXT_TOOLTIP_HEADER
 from gui.prb_control import prbEntityProperty
+from gui.server_events.events_dispatcher import showMissionsMarathon
 from gui.shared.formatters import text_styles
 from gui.shared.utils.scheduled_notifications import Notifiable, PeriodicNotifier
-from helpers import dependency
+from helpers import dependency, i18n
 from helpers.i18n import makeString as _ms
-from helpers.time_utils import ONE_DAY, ONE_HOUR
+from helpers.time_utils import ONE_DAY, ONE_HOUR, getTimeStructInLocal
 from skeletons.gui.game_control import IMarathonEventsController, IBootcampController
+from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.server_events import IEventsCache
 
 class MarathonEventsController(IMarathonEventsController, Notifiable):
@@ -67,13 +72,16 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
         return result
 
     def getQuestsData(self, prefix=None, postfix=None):
-        return self.getPrimaryMarathon().getQuestsData(prefix, postfix) if self.isAnyActive() else {}
+        return self.getPrimaryMarathon().getQuestsData(prefix, postfix) if self.isAnyAvailable() else {}
 
     def getTokensData(self, prefix=None, postfix=None):
-        return self.getPrimaryMarathon().getTokensData(prefix, postfix) if self.isAnyActive() else {}
+        return self.getPrimaryMarathon().getTokensData(prefix, postfix) if self.isAnyAvailable() else {}
 
-    def isAnyActive(self):
+    def isAnyAvailable(self):
         return any((marathon.isAvailable() for marathon in self.__marathons))
+
+    def isAnyEnabled(self):
+        return any((marathon.isEnabled() for marathon in self.__marathons))
 
     def fini(self):
         self.__stop()
@@ -92,6 +100,9 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
         self._eventsCache.onSyncCompleted += self.__onSyncCompleted
         self._eventsCache.onProgressUpdated += self.__onSyncCompleted
         self.__onSyncCompleted()
+
+    def onLobbyInited(self, event):
+        self.__showMarathon()
 
     def __onSyncCompleted(self, *args):
         self.__checkEvents()
@@ -129,10 +140,20 @@ class MarathonEventsController(IMarathonEventsController, Notifiable):
 
         return None
 
+    def __showMarathon(self):
+        if not self.__mustShow():
+            return
+        showMissionsMarathon()
+        AccountSettings.setSettings(MARATHON_PROMO_SHOWN, True)
+
+    def __mustShow(self):
+        return not AccountSettings.getSettings(MARATHON_PROMO_SHOWN) and self.getPrimaryMarathon().isAvailable()
+
 
 class MarathonEvent(object):
     _eventsCache = dependency.descriptor(IEventsCache)
     _bootcamp = dependency.descriptor(IBootcampController)
+    _lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, data):
         super(MarathonEvent, self).__init__()
@@ -144,6 +165,7 @@ class MarathonEvent(object):
         self.__suspendFlag = False
         self.__quest = None
         self.__group = None
+        self.__postfix = None
         self.__urlMacros = URLMarcos()
         self.__baseUrl = GUI_SETTINGS.lookup(data.url)
         return
@@ -168,6 +190,9 @@ class MarathonEvent(object):
             yield lambda clb: clb(None)
         else:
             url = yield self.__urlMacros.parse(self.__baseUrl)
+            if self.__postfix:
+                url += self.__postfix
+                self.__postfix = None
             callback(url)
         return
 
@@ -175,7 +200,8 @@ class MarathonEvent(object):
         return self.__isEnabled and not self._bootcamp.isInBootcamp()
 
     def isAvailable(self):
-        return self.__isAvailable
+        isMarathonEnabled = self._lobbyContext.getServerSettings().isMarathonEnabled()
+        return self.__isAvailable and isMarathonEnabled
 
     def getTooltipData(self):
         return self.__data.tooltips
@@ -208,8 +234,10 @@ class MarathonEvent(object):
     def getTooltipHeader(self):
         if self.data.tooltipHeaderType == PROGRESS_TOOLTIP_HEADER:
             return self.getFormattedDaysStatus()
+        elif self.data.tooltipHeaderType == COUNTDOWN_TOOLTIP_HEADER:
+            return self.getFormattedRemainingTime()
         else:
-            return self.getFormattedRemainingTime() if self.data.tooltipHeaderType == COUNTDOWN_TOOLTIP_HEADER else None
+            return self.getFormattedStartFinishText() if self.data.tooltipHeaderType == TEXT_TOOLTIP_HEADER else (None, None)
 
     def getMarathonFlagState(self, vehicle):
         return {'flagHeaderIcon': self.__getHangarFlagHeaderIcon(),
@@ -250,6 +278,18 @@ class MarathonEvent(object):
             text = text_styles.main(_ms(TOOLTIPS.MARATHON_STATE_COMPLETE))
         return (icon, text)
 
+    def showOnce(self, postfix):
+        self.__postfix = postfix
+
+    def getFormattedStartFinishText(self):
+        startDate, finishDate = self.__getGroupStartFinishTime()
+        startDateStruct = getTimeStructInLocal(startDate)
+        finishDateStruct = getTimeStructInLocal(finishDate)
+        startDateText = text_styles.main(_ms(TOOLTIPS.BLOGGERS_DATE, day=startDateStruct.tm_mday, month=i18n.makeString(MENU.datetime_months(startDateStruct.tm_mon)), hour=startDateStruct.tm_hour, minutes=i18n.makeString('%02d', startDateStruct.tm_min)))
+        finishDateText = text_styles.main(_ms(TOOLTIPS.BLOGGERS_DATE, day=finishDateStruct.tm_mday, month=i18n.makeString(MENU.datetime_months(startDateStruct.tm_mon)), hour=finishDateStruct.tm_hour, minutes=i18n.makeString('%02d', finishDateStruct.tm_min)))
+        text = text_styles.main(_ms(TOOLTIPS.BLOGGERS_SUBTITLE, startDate=startDateText, finishDate=finishDateText))
+        return (None, text)
+
     def getExtraDaysToBuy(self):
         if self.__state == MARATHON_STATE.FINISHED:
             _, groupFinishTimeLeft = self.__getGroupTimeInterval()
@@ -286,6 +326,9 @@ class MarathonEvent(object):
         if groupStartTimeLeft <= zeroTime < groupFinishTimeLeft:
             self.__isEnabled = True
             self.__isAvailable = True
+            if not self.getMarathonQuests():
+                self.__state = MARATHON_STATE.IN_PROGRESS
+                return self.__state
         firstQuestStartTimeLeft, firstQuestFinishTimeLeft = self.__getQuestTimeInterval()
         if firstQuestStartTimeLeft > zeroTime:
             self.__state = MARATHON_STATE.NOT_STARTED
@@ -339,14 +382,23 @@ class MarathonEvent(object):
         return progress
 
     def __getHangarFlagHeaderIcon(self):
-        for key, imgPath in MAP_FLAG_HEADER_ICON.iteritems():
+        if not self.data.showFlagIcons:
+            return ''
+        if self.__businessSwitcher():
+            return self.data.icons.mapFlagHeaderIcon[MARATHON_STATE.DISABLED_STATE]
+        for key, imgPath in self.data.icons.mapFlagHeaderIcon.iteritems():
             if self.__state in key:
                 return imgPath
 
     def __getHangarFlagMain(self):
         return self.data.icons.mainHangarFlag
 
+    def __businessSwitcher(self):
+        return not getattr(self._lobbyContext.getServerSettings(), self.data.businessSwitcher)() if self.data.businessSwitcher is not None else False
+
     def __getHangarFlagStateIcon(self, vehicle):
+        if not self.data.showFlagIcons or self.__businessSwitcher():
+            return ''
         if self.__state not in MARATHON_STATE.ENABLED_STATE:
             return ''
         if self.__vehInInventory:
@@ -408,5 +460,11 @@ class MarathonEvent(object):
     def __getQuestTimeInterval(self):
         if self.__quest:
             return (self.__quest.getStartTimeLeft(), self.__quest.getFinishTimeLeft())
+        zeroTime = ZERO_TIME
+        return (zeroTime, zeroTime)
+
+    def __getGroupStartFinishTime(self):
+        if self.__group:
+            return (self.__group.getStartTimePure(), self.__group.getFinishTimePure())
         zeroTime = ZERO_TIME
         return (zeroTime, zeroTime)

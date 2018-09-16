@@ -26,24 +26,25 @@
   </camouflage>
   <hull>
     <armor>
-      <armor_1>	170	</armor_1>
-      <armor_2>	160	</armor_2>
-      <armor_3>	150	</armor_3>
+      <armor_1>	185	</armor_1>
+      <armor_2>	170	</armor_2>
+      <armor_3>	160	</armor_3>
       <armor_4>	90	</armor_4>
       <armor_5>	30	</armor_5>
-      <armor_6>	130	</armor_6>
-      <armor_7>	120	</armor_7>
+      <armor_6>	140	</armor_6>
+      <armor_7>	130	</armor_7>
       <armor_8>	0	</armor_8>
       <armor_9>	8	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       </armor_9>
-      <armor_10>	220	</armor_10>
-      <armor_11>	190	</armor_11>
-      <armor_12>	140	</armor_12>
+      <armor_10>	230	</armor_10>
+      <armor_11>	260	</armor_11>
+      <armor_12>	150	</armor_12>
       <armor_13>	20	</armor_13>
       <armor_14>	110	</armor_14>
       <armor_15>	100	</armor_15>
+      <armor_16>	120	</armor_16>
     </armor>
-    <primaryArmor>	armor_1 armor_6 armor_4	</primaryArmor>
+    <primaryArmor>	armor_1 armor_16 armor_4	</primaryArmor>
     <weight>	26943	</weight>
     <maxHealth>	1920	</maxHealth>
     <ammoBayHealth>
@@ -121,7 +122,7 @@
         <lodDist>	MEDIUM	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	ussr_R124	</textureSet>
-        <size>	0.55 1.54	</size>
+        <size>	0.55 1.9	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
@@ -858,21 +859,22 @@
       <price>	66000	</price>
       <notInShop>	true	</notInShop>
       <armor>
-        <armor_1>	300	</armor_1>
-        <armor_2>	260	</armor_2>
+        <armor_1>	330	</armor_1>
+        <armor_2>	280	</armor_2>
         <armor_3>	140	</armor_3>
         <armor_4>	90	</armor_4>
         <armor_5>	50	</armor_5>
         <armor_6>	30	</armor_6>
-        <armor_7>	240	</armor_7>
+        <armor_7>	260	</armor_7>
         <armor_8>	0	</armor_8>
-        <armor_9>	210	</armor_9>
-        <armor_10>	180	</armor_10>
+        <armor_9>	230	</armor_9>
+        <armor_10>	195	</armor_10>
         <armor_11>	160	</armor_11>
         <armor_12>	120	</armor_12>
         <armor_13>	70	</armor_13>
         <armor_14>	120	</armor_14>
         <armor_15>	100	</armor_15>
+        <armor_16>	210	</armor_16>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	13000	</weight>
@@ -892,7 +894,7 @@
       <guns>
         <_122mm_M62_T2_A>	shared	  <maxAmmo>	40	</maxAmmo>
           <armor>
-            <armor_1>	300	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	330	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
             <armor_3>	140	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
@@ -900,18 +902,20 @@
             </armor_4>
             <armor_5>	50	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_5>
-            <armor_7>	240	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_7>	270	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_7>
-            <armor_9>	210	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_9>	240	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_9>
-            <armor_10>	180	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_10>	210	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_10>
-            <armor_11>	160	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_11>	180	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_11>
             <armor_12>	120	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_12>
             <armor_13>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_13>
+            <armor_14>	300	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_14>
             <gun>	10	</gun>
           </armor>
           <turretYawLimits>	-180 180	</turretYawLimits>

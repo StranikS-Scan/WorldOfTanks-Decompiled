@@ -71,14 +71,14 @@ def makeString(key, *args, **kwargs):
     if args:
         try:
             return GUI.getTranslatedText(key, args)
-        except TypeError:
+        except (TypeError, ValueError):
             LOG_WARNING("Arguments do not match string read by key '%s': %s", (key, args))
             return key
 
     elif kwargs:
         try:
             return GUI.getTranslatedText(key, kwargs)
-        except TypeError:
+        except (TypeError, ValueError):
             LOG_WARNING("Arguments do not match string read by key '%s': %s", (key, kwargs))
             return key
 

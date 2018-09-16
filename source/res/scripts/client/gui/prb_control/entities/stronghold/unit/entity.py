@@ -306,6 +306,7 @@ class StrongholdEntity(UnitEntity):
             LOG_DEBUG('force wgsh request on end of battle (r,x):', regularBattleEnd, wgshBattleEnd)
             self.__strongholdSettings.forceCleanData()
             self.requestUpdateStronghold()
+            self.requestSlotVehicleFilters()
         if flags.isExternalLegionariesMatchingChanged():
             self.__onExternalLegionariesMatchingToggle(flags.isInExternalLegionariesMatching())
         super(StrongholdEntity, self).unit_onUnitFlagsChanged(prevFlags, nextFlags)
@@ -359,7 +360,6 @@ class StrongholdEntity(UnitEntity):
     def unit_onUnitMembersListChanged(self):
         playerInfo = self.getPlayerInfo()
         self.__isInSlot = playerInfo.isInSlot
-        self._updatePlayersMatchingSlots()
         super(StrongholdEntity, self).unit_onUnitMembersListChanged()
 
     def request(self, ctx, callback=None):
@@ -631,17 +631,6 @@ class StrongholdEntity(UnitEntity):
             return
         self.__slotVehicleFilters = response.getData()
         self._invokeListeners('onSlotVehileFiltersChanged')
-
-    def _updatePlayersMatchingSlots(self):
-        slotsIDsWithPlayers = []
-        unitMgrID, unit = self.getUnit(unitMgrID=self.getID(), safe=True)
-        for slotInfo in self.getSlotsIterator(unitMgrID, unit):
-            if slotInfo.player is not None:
-                slotsIDsWithPlayers.append(slotInfo.index)
-
-        newSlotVehicleFilters = [ slotVehicleFilter for slotVehicleFilter in self.__slotVehicleFilters if slotVehicleFilter['slot_id'] not in slotsIDsWithPlayers ]
-        self.__slotVehicleFilters = newSlotVehicleFilters
-        return
 
     def _createActionsValidator(self):
         return StrongholdActionsValidator(self)

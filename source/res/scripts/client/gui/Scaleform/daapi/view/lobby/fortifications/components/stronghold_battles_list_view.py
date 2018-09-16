@@ -11,12 +11,12 @@ from gui.clans.clan_helpers import getStrongholdUrl
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.framework import ViewTypes
 from gui.Scaleform.locale.FORTIFICATIONS import FORTIFICATIONS
-from gui.Scaleform.daapi.view.lobby.rally.BaseRallyListView import BaseRallyListView
 from gui.Scaleform.daapi.view.lobby.strongholds.web_handlers import createStrongholdsWebHandlers
+from gui.Scaleform.daapi.view.meta.StrongholdBattlesListViewMeta import StrongholdBattlesListViewMeta
 from gui.Scaleform.framework.managers.containers import POP_UP_CRITERIA
 from shared_utils import BoundMethodWeakref
 
-class StrongholdBattlesListView(BaseRallyListView):
+class StrongholdBattlesListView(StrongholdBattlesListViewMeta):
     browserCtrl = dependency.descriptor(IBrowserController)
 
     def __init__(self):
@@ -24,12 +24,19 @@ class StrongholdBattlesListView(BaseRallyListView):
         self.childBrowsers = []
         self.__browserId = 0
         self.__browserCreated = False
+        self.__hasFocus = False
+        self.__browser = None
+        return
 
     def addChildBrowserAlias(self, browserAlias):
         self.childBrowsers.append(browserAlias)
 
     def viewSize(self, width, height):
         self.__loadBrowser(width, height)
+
+    def onFocusChange(self, hasFocus):
+        self.__hasFocus = hasFocus
+        self.__updateSkipEscape()
 
     def _populate(self):
         super(StrongholdBattlesListView, self)._populate()
@@ -59,12 +66,18 @@ class StrongholdBattlesListView(BaseRallyListView):
         battlesListUrl = getStrongholdUrl('battlesListUrl')
         if battlesListUrl is not None:
             self.__browserId = yield self.browserCtrl.load(url=battlesListUrl, useBrowserWindow=False, showBrowserCallback=self.__showBrowser, browserSize=(width, height))
-        browser = self.browserCtrl.getBrowser(self.__browserId)
-        if browser:
-            browser.useSpecialKeys = False
+        self.__browser = self.browserCtrl.getBrowser(self.__browserId)
+        if self.__browser is not None:
+            self.__browser.useSpecialKeys = False
+            self.__updateSkipEscape()
         else:
             LOG_ERROR('Setting "StrongholdsBattlesListUrl" missing!')
         return
 
     def __showBrowser(self):
         BigWorld.callback(0.01, self.as_loadBrowserS)
+
+    def __updateSkipEscape(self):
+        if self.__browser is not None:
+            self.__browser.skipEscape = not self.__hasFocus
+        return

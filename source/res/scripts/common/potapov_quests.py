@@ -190,6 +190,9 @@ class PQCache(object):
     def hasPotapovQuest(self, potapovQuestID):
         return potapovQuestID in self.__potapovQuestIDToQuestType
 
+    def getPotapovQuests(self):
+        return self.__potapovQuestIDToQuestType
+
     def questByUniqueQuestID(self, uniqueQuestID):
         return self.questByPotapovQuestID(self.getPotapovQuestIDByUniqueID(uniqueQuestID))
 

@@ -10,69 +10,69 @@ class Store(DynAccessor):
 
         class bootcamp(DynAccessor):
             __slots__ = ()
-            topCommanderFree = 2550
+            topCommanderFree = 2567
 
-        buyBtn = 2557
+        buyBtn = 2574
 
         class checkBox(DynAccessor):
             __slots__ = ()
-            withoutCrew = 2553
+            withoutCrew = 2570
 
-        countCrewLbl = 2554
-        crewInVehicle = 2568
+        countCrewLbl = 2571
+        crewInVehicle = 2585
 
         class equipment(DynAccessor):
             __slots__ = ()
-            ammo = 2555
-            slot = 2556
+            ammo = 2572
+            slot = 2573
 
-        exchange = 2558
-        freeSlot = 2549
+        exchange = 2575
+        freeSlot = 2566
 
         class priceDescription(DynAccessor):
             __slots__ = ()
-            full = 2544
-            rent = 2545
-            restore = 2546
-            tradeIn = 2547
+            full = 2561
+            rent = 2562
+            restore = 2563
+            tradeIn = 2564
 
-        rentBtnLabel30Days = 2563
-        rentBtnLabel3Days = 2561
-        rentBtnLabel7Days = 2562
-        rentBtnLabelAny = 2565
-        restore = 2559
+        rentBtnLabel30Days = 2580
+        rentBtnLabel3Days = 2578
+        rentBtnLabel7Days = 2579
+        rentBtnLabelAny = 2582
+        restore = 2576
 
         class slot(DynAccessor):
             __slots__ = ()
-            c_0 = 2548
-            c_1 = 2551
-            c_2 = 2552
+            c_0 = 2565
+            c_1 = 2568
+            c_2 = 2569
 
-        termSlotUnlim = 2564
-        title = 2543
+        termSlotUnlim = 2581
+        title = 2560
 
         class toggleBtn(DynAccessor):
             __slots__ = ()
-            buy = 2567
-            rent = 2566
+            buy = 2584
+            rent = 2583
 
-        tradeInBtnLabel = 2560
+        tradeInBtnLabel = 2577
 
     class congradulationAnim(DynAccessor):
         __slots__ = ()
-        showPreviewBtn = 2578
-        titleLabel = 2577
+        showPreviewBtn = 2595
+        titleLabel = 2594
 
     class rentalTermSelectionPopover(DynAccessor):
         __slots__ = ()
-        termSlot30Days = 2574
-        termSlot3Days = 2572
-        termSlot7Days = 2573
-        termSlotAny = 2575
-        termSlotUnlim = 2576
-        titleLabel = 2571
+        termSlot30Days = 2591
+        termSlot3Days = 2589
+        termSlot7Days = 2590
+        termSlotAny = 2592
+        termSlotUnlim = 2593
+        titleLabel = 2588
 
     class sellConfirmationPopover(DynAccessor):
         __slots__ = ()
-        priceLabel = 2570
-        titleLabel = 2569
+        priceLabel = 2587
+        titleLabel = 2586

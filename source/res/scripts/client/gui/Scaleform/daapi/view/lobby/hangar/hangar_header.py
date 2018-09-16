@@ -308,7 +308,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_PERSONAL, RES_ICONS.MAPS_ICONS_QUESTS_HEADERFLAGICONS_PERSONAL, result)
 
     def __onServerSettingChanged(self, diff):
-        if 'elenSettings' in diff:
+        if 'elenSettings' in diff or 'marathonSettings' in diff:
             self.update()
 
     def __getBattleQuestsVO(self, vehicle):
@@ -332,7 +332,7 @@ class HangarHeader(HangarHeaderMeta, IGlobalListener, IEventBoardsListener):
         if marathonEvent:
             flagVO = marathonEvent.getMarathonFlagState(vehicle)
             if flagVO['visible']:
-                quests = [self._headerQuestFormaterVo(flagVO['enable'], flagVO['flagHeaderIcon'], '', HANGAR_HEADER_QUESTS.QUEST_TYPE_MARATHON, flag=flagVO['flagMain'], stateIcon=flagVO['flagStateIcon'], questID=marathonEvent.prefix, tooltip=flagVO['tooltip'], isTooltipSpecial=True)]
+                quests = [self._headerQuestFormaterVo(flagVO['enable'], flagVO['flagHeaderIcon'], '', HANGAR_HEADER_QUESTS.QUEST_TYPE_MARATHON, flag=flagVO['flagMain'], stateIcon=flagVO['flagStateIcon'], questID=marathonEvent.prefix, tooltip=flagVO['tooltip'], isTooltipSpecial=flagVO['enable'])]
                 return self._wrapQuestGroup(HANGAR_HEADER_QUESTS.QUEST_GROUP_MARATHON, '', quests)
         return None
 

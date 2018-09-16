@@ -19,26 +19,23 @@ def showPQSeasonAwardsWindow(questsType):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.QUESTS_SEASON_AWARDS_WINDOW, ctx={'questsType': questsType}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, anchor=None, showMissionDetails=True):
+def showMissions(tab=None, missionID=None, groupID=None, marathonPrefix=None, marathonPostfix=None, anchor=None, showDetails=True):
     g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.LOBBY_MISSIONS, ctx={'tab': tab,
      'eventID': missionID,
      'groupID': groupID,
      'marathonPrefix': marathonPrefix,
+     'marathonPostfix': marathonPostfix,
      'anchor': anchor,
-     'showMissionDetails': showMissionDetails}), scope=EVENT_BUS_SCOPE.LOBBY)
+     'showMissionDetails': showDetails}), scope=EVENT_BUS_SCOPE.LOBBY)
 
 
 def canOpenPMPage(branch=None, operationID=None, missionID=None):
-    _lobbyContext = dependency.instance(ILobbyContext)
-    result = True
-    if branch:
-        result &= _lobbyContext.getServerSettings().isPersonalMissionsEnabled(branch)
-    if operationID:
-        disbl = _lobbyContext.getServerSettings().getDisabledPMOperations().keys()
-        result &= operationID not in disbl
-    if missionID:
-        result &= missionID not in _lobbyContext.getServerSettings().getDisabledPersonalMissions()
-    return result
+    serverSettings = dependency.instance(ILobbyContext).getServerSettings()
+    if branch and not serverSettings.isPersonalMissionsEnabled(branch):
+        return False
+    if operationID and operationID in serverSettings.getDisabledPMOperations():
+        return False
+    return False if missionID and missionID in serverSettings.getDisabledPersonalMissions() else True
 
 
 def showPersonalMission(missionID=None):
@@ -65,8 +62,8 @@ def showMissionsGrouped(missionID=None, groupID=None, anchor=None):
     showMissions(tab=QUESTS_ALIASES.MISSIONS_GROUPED_VIEW_PY_ALIAS, missionID=missionID, groupID=groupID, anchor=anchor)
 
 
-def showMissionsMarathon(marathonPrefix=DEFAULT_MARATHON_PREFIX):
-    showMissions(tab=QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, marathonPrefix=marathonPrefix)
+def showMissionsMarathon(marathonPrefix=DEFAULT_MARATHON_PREFIX, marathonPostfix=''):
+    showMissions(tab=QUESTS_ALIASES.MISSIONS_MARATHON_VIEW_PY_ALIAS, marathonPrefix=marathonPrefix, marathonPostfix=marathonPostfix)
 
 
 def showMissionsCategories(missionID=None, groupID=None, anchor=None):
@@ -78,7 +75,7 @@ def showMissionsForCurrentVehicle(missionID=None, groupID=None, anchor=None):
 
 
 def showMissionsElen(eventQuestsID=None):
-    showMissions(tab=QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, missionID=eventQuestsID, groupID=eventQuestsID, showMissionDetails=False)
+    showMissions(tab=QUESTS_ALIASES.MISSIONS_EVENT_BOARDS_VIEW_PY_ALIAS, missionID=eventQuestsID, groupID=eventQuestsID, showDetails=False)
 
 
 def showMissionsLinkedSet():

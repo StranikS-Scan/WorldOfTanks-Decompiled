@@ -1601,6 +1601,19 @@ class MENU(object):
     AWARDWINDOW_PERSONALMISSION_NEXTBUTTONAWARD = '#menu:awardWindow/personalMission/nextButtonAward'
     AWARDWINDOW_PERSONALMISSION_NEXTBUTTONAWARD_TOOLTIP_HEADER = '#menu:awardWindow/personalMission/nextButtonAward/tooltip/header'
     AWARDWINDOW_PERSONALMISSION_NEXTBUTTONAWARD_TOOLTIP_BODY = '#menu:awardWindow/personalMission/nextButtonAward/tooltip/body'
+    AWARDWINDOW_TITLE_BLOGGERSAWARD = '#menu:awardWindow/title/bloggersAward'
+    AWARDWINDOW_BLOGGERSAWARD_HEADER = '#menu:awardWindow/bloggersAward/header'
+    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION = '#menu:awardWindow/bloggersAward/description'
+    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_MEDAL = '#menu:awardWindow/bloggersAward/description/medal'
+    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_EMBLEM = '#menu:awardWindow/bloggersAward/description/emblem'
+    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_INSCRIPTION = '#menu:awardWindow/bloggersAward/description/inscription'
+    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_EXP = '#menu:awardWindow/bloggersAward/description/exp'
+    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_STYLE = '#menu:awardWindow/bloggersAward/description/style'
+    AWARDWINDOW_BLOGGERSAWARD_DESCRIPTION_BADGE = '#menu:awardWindow/bloggersAward/description/badge'
+    AWARDWINDOW_BLOGGERSAWARD_NAME_USHA = '#menu:awardWindow/bloggersAward/name/usha'
+    AWARDWINDOW_BLOGGERSAWARD_NAME_AMWAY = '#menu:awardWindow/bloggersAward/name/amway'
+    AWARDWINDOW_BLOGGERSAWARD_NAME_JOVE = '#menu:awardWindow/bloggersAward/name/jove'
+    AWARDWINDOW_BLOGGERSAWARD_NAME_LEBWA = '#menu:awardWindow/bloggersAward/name/lebwa'
     REFERRALMANAGEMENTWINDOW_TITLE = '#menu:ReferralManagementWindow/title'
     REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVENOTTANK = '#menu:ReferralManagementWindow/infoHeader/haveNotTank'
     REFERRALMANAGEMENTWINDOW_INFOHEADER_HAVETANK = '#menu:ReferralManagementWindow/infoHeader/haveTank'
@@ -1770,6 +1783,10 @@ class MENU(object):
     INTERNET_PROVIDER_ROSTELECOM_TARIFF = '#menu:internet_provider/Rostelecom/tariff'
     INTERNET_PROVIDER_BELTELECOM_NAME = '#menu:internet_provider/Beltelecom/name'
     INTERNET_PROVIDER_BELTELECOM_TARIFF = '#menu:internet_provider/Beltelecom/tariff'
+    INTERNET_PROVIDER_KYIVSTAR_NAME = '#menu:internet_provider/Kyivstar/name'
+    INTERNET_PROVIDER_KYIVSTAR_TARIFF = '#menu:internet_provider/Kyivstar/tariff'
+    INTERNET_PROVIDER_KAZAKHTELECOM_NAME = '#menu:internet_provider/Kazakhtelecom/name'
+    INTERNET_PROVIDER_KAZAKHTELECOM_TARIFF = '#menu:internet_provider/Kazakhtelecom/tariff'
     DATETIME_WEEKDAYS_SHORT_ENUM = (DATETIME_WEEKDAYS_SHORT_1,
      DATETIME_WEEKDAYS_SHORT_2,
      DATETIME_WEEKDAYS_SHORT_3,
@@ -2166,8 +2183,14 @@ class MENU(object):
      LEVELS_ROMAN_9,
      LEVELS_ROMAN_10)
     HANGAR_HEADER_BATTLE_QUESTS_LABEL_ENUM = (HANGAR_HEADER_BATTLE_QUESTS_LABEL_ACTIVE, HANGAR_HEADER_BATTLE_QUESTS_LABEL_INACTIVE)
-    INTERNET_PROVIDER_ALL_NAME_ENUM = (INTERNET_PROVIDER_ROSTELECOM_NAME, INTERNET_PROVIDER_BELTELECOM_NAME)
-    INTERNET_PROVIDER_ALL_TARIFF_ENUM = (INTERNET_PROVIDER_ROSTELECOM_TARIFF, INTERNET_PROVIDER_BELTELECOM_TARIFF)
+    INTERNET_PROVIDER_ALL_NAME_ENUM = (INTERNET_PROVIDER_ROSTELECOM_NAME,
+     INTERNET_PROVIDER_BELTELECOM_NAME,
+     INTERNET_PROVIDER_KYIVSTAR_NAME,
+     INTERNET_PROVIDER_KAZAKHTELECOM_NAME)
+    INTERNET_PROVIDER_ALL_TARIFF_ENUM = (INTERNET_PROVIDER_ROSTELECOM_TARIFF,
+     INTERNET_PROVIDER_BELTELECOM_TARIFF,
+     INTERNET_PROVIDER_KYIVSTAR_TARIFF,
+     INTERNET_PROVIDER_KAZAKHTELECOM_TARIFF)
     TANKMEN_ENUM = (TANKMEN_LIGHTTANK,
      TANKMEN_MEDIUMTANK,
      TANKMEN_HEAVYTANK,

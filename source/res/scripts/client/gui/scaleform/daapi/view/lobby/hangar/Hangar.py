@@ -74,7 +74,6 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
     def hideTeaser(self):
         self.__teaser.stop(byUser=True)
         self.__teaser = None
-        self._promoController.showBubbleTooltip()
         return
 
     def onTeaserClick(self):
@@ -249,9 +248,9 @@ class Hangar(LobbySelectableView, HangarMeta, IGlobalListener):
         self.__updateState()
         return
 
-    def __onTeaserReceived(self, teaserData, callback):
+    def __onTeaserReceived(self, teaserData, showCallback, closeCallback):
         if self.__teaser is None:
-            self.__teaser = TeaserViewer(self, callback)
+            self.__teaser = TeaserViewer(self, showCallback, closeCallback)
         self.__teaser.show(teaserData, self._promoController.getPromoCount())
         return
 

@@ -24,6 +24,7 @@ class WGNC_DATA_PROXY_TYPE(object):
     CLAN_APP_DECLINED_FOR_MEMBERS = 24
     CLAN_APP_ACCEPTED_FOR_MEMBERS = 32
     SHOW_PROMO_TEASER = 64
+    SHOW_BLOGGERS_AWARD = 80
 
 
 WGNC_POP_UP_PRIORITIES = ('low', 'medium', 'high')
@@ -38,7 +39,10 @@ _WGNC_ICON_TO_LOCAL = {'information': WGNC_DEFAULT_ICON,
  'eventIcon': 'EventIcon',
  'shBattleResult': 'FortBattleResult',
  'sally_result': 'SallyResult',
- 'sh_resource': 'FortResource'}
+ 'sh_resource': 'FortResource',
+ 'hand': 'bloggers/referralSmallHand',
+ 'hand_plus': 'bloggers/referralSmallHandPlus',
+ 'thumb_up': 'bloggers/thumb_up'}
 
 def convertToLocalIcon(icon):
     result = WGNC_DEFAULT_ICON

@@ -59,7 +59,7 @@ class BasicFreeSheetTooltip(BlocksTooltipData):
     def _packBlocks(self, *args, **kwargs):
         blocks = super(BasicFreeSheetTooltip, self)._packBlocks(*args, **kwargs)
         campaign = self.context.buildItem(*args, **kwargs)
-        topItems = [formatters.packTextBlockData(text_styles.highTitle(_ms(TOOLTIPS.PERSONALMISSIONS_FREESHEET_TITLE, campaignNum=campaign.getID()))), formatters.packImageBlockData(AwardSheetPresenter.getIcon(AwardSheetPresenter.Size.BIG), BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-5, bottom=11))]
+        topItems = [formatters.packTextBlockData(text_styles.highTitle(_ms(TOOLTIPS.PERSONALMISSIONS_FREESHEET_TITLE, campaignName=campaign.getUserName()))), formatters.packImageBlockData(AwardSheetPresenter.getIcon(AwardSheetPresenter.Size.BIG), BLOCKS_TOOLTIP_TYPES.ALIGN_CENTER, padding=formatters.packPadding(top=-5, bottom=11))]
         blocks.append(formatters.packBuildUpBlockData(topItems))
         infoBlock = self._getInfoBlock()
         if infoBlock is not None:

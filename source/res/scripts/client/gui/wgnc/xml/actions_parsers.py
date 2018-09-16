@@ -44,7 +44,7 @@ class _OpenWindowParser(SectionParser):
         pass
 
     def parse(self, section):
-        return actions.OpenWindow(self._readString('name', section), self._readString('target', section))
+        return actions.OpenWindow(name=self._readString('name', section), target=self._readString('target', section))
 
 
 class _ReplaceButtonsAction(SectionParser):

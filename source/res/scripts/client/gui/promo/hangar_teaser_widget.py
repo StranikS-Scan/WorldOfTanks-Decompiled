@@ -17,7 +17,7 @@ class TeaserViewer(object):
     _TIMER_PERIOD = 0.1
     _SALE_PROMO_TYPE = 'hot_stock'
 
-    def __init__(self, view, showCallback):
+    def __init__(self, view, showCallback, closeCallback):
         self.__viewProxy = weakref.proxy(view)
         self.__teaserData = None
         self.__promoCount = 0
@@ -25,6 +25,7 @@ class TeaserViewer(object):
         self.__callbackID = None
         self.__imagePath = None
         self.__showCallback = showCallback
+        self.__closeCallback = closeCallback
         return
 
     def show(self, teaserData, promoCount):
@@ -37,6 +38,7 @@ class TeaserViewer(object):
         logAction = PromoLogActions.CLOSED_BY_USER if byUser else PromoLogActions.KILLED_BY_SYSTEM
         dependency.instance(IPromoLogger).logTeaserAction(self.__teaserData, action=logAction)
         self.__stopTimer()
+        self.__closeCallback(byUser)
         self.__teaserData = None
         return
 

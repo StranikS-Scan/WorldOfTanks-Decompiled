@@ -529,6 +529,9 @@ class ServerSettings(object):
     def elenUpdateInterval(self):
         return self.__getGlobalSetting('elenSettings', {}).get('elenUpdateInterval', 60)
 
+    def isMarathonEnabled(self):
+        return self.__getGlobalSetting('marathonSettings', {}).get('isMarathonEnabled', True)
+
     def isGoldFishEnabled(self):
         return self.__getGlobalSetting('isGoldFishEnabled', False)
 

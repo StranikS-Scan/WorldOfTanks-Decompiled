@@ -63,6 +63,7 @@ SHOW_CRYSTAL_HEADER_BAND = 'showCrystalHeaderBand'
 ELEN_NOTIFICATIONS = 'elenNotifications'
 RECRUIT_NOTIFICATIONS = 'recruitNotifications'
 SPEAKERS_DEVICE = 'speakersDevice'
+MARATHON_PROMO_SHOWN = 'marathonPromoShown'
 DEFAULT_QUEUE = 'defaultQueue'
 STORE_TAB = 'store_tab'
 STATS_REGULAR_SORTING = 'statsSorting'
@@ -453,6 +454,7 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                 'doubleCarouselType': 0,
                 'vehicleCarouselStats': True,
                 'siegeModeHintCounter': 10,
+                MARATHON_PROMO_SHOWN: False,
                 NEW_SETTINGS_COUNTER: {'GameSettings': {'gameplay_epicStandard': True,
                                                         'c11nHistoricallyAccurate': True,
                                                         'hangarCamParallaxEnabled': True,

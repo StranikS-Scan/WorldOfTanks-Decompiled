@@ -234,10 +234,10 @@ class BodyProgress(ClientProgress):
         return self._commonProgress.isCumulative()
 
     def getDescription(self):
-        description = i18n.makeString(('#personal_missions_2_details:%s_description_%s' % (self._generalQuestID, self.getProgressID())), **self.getLocalizationValues())
+        description = self.__localizeDescr()
         if self.__limiter:
             warningText = i18n.makeString(PERSONAL_MISSIONS.CONDITIONS_LIMITER_LABEL)
-            limiterDescription = i18n.makeString(('#personal_missions_2_details:%s_description_%s' % (self._generalQuestID, self.__limiter.getProgressID())), **self.__limiter.getLocalizationValues())
+            limiterDescription = self.__localizeLimiter()
             description = '%s\n%s %s' % (description, text_styles.alert(warningText), limiterDescription)
         return description
 
@@ -262,6 +262,24 @@ class BodyProgress(ClientProgress):
 
     def getMultiplierValue(self):
         return super(BodyProgress, self).getMultiplierValue() or self.__headerMultiplierValue
+
+    def __localizeDescr(self):
+        descr = ''
+        try:
+            descr = i18n.makeString(('#personal_missions_2_details:%s_description_%s' % (self._generalQuestID, self.getProgressID())), **self.getLocalizationValues())
+        except ValueError:
+            _logger.error('Wrong localization key (possible percent sign is not escaped): %s', '#personal_missions_2_details:%s_description_%s' % (self._generalQuestID, self.getProgressID()))
+
+        return descr
+
+    def __localizeLimiter(self):
+        limiter = ''
+        try:
+            limiter = i18n.makeString(('#personal_missions_2_details:%s_description_%s' % (self._generalQuestID, self.__limiter.getProgressID())), **self.__limiter.getLocalizationValues())
+        except ValueError:
+            _logger.error('Wrong localization key (possible percent sign is not escaped): %s', '#personal_missions_2_details:%s_description_%s' % (self._generalQuestID, self.__limiter.getProgressID()))
+
+        return limiter
 
     def __getMultiplier(self):
         multiplierValue = self.getMultiplierValue()

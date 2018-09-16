@@ -61,6 +61,7 @@ class PromoController(IPromoController):
         self.__browserCreationCallbacks = {}
         self.__browserWatchers = {}
         self.__isInHangar = False
+        self.__isTeaserOpen = False
         self.__em = EventManager()
         self.onNewTeaserReceived = Event(self.__em)
         self.onPromoCountChanged = Event(self.__em)
@@ -99,7 +100,7 @@ class PromoController(IPromoController):
 
     def setNewTeaserData(self, teaserData):
         timestamp = teaserData['timestamp']
-        if self.__lastUpdateTimeMark < timestamp and not self.__isPromoOpen:
+        if self.__lastUpdateTimeMark < timestamp and not self.__isPromoOpen and not self.__isTeaserOpen:
             self.__updateTeaserData(teaserData)
 
     def showFieldPost(self):
@@ -138,7 +139,12 @@ class PromoController(IPromoController):
         else:
             self.__pendingPromo = _PromoData(url, closeCallback, source)
 
-    def showBubbleTooltip(self):
+    def __onTeaserClosed(self, byUser=False):
+        self.__isTeaserOpen = False
+        if byUser:
+            self.__showBubbleTooltip()
+
+    def __showBubbleTooltip(self):
         storageData = self.__settingsCore.serverSettings.getUIStorage()
         if not storageData.get(UI_STORAGE_KEYS.FIELD_POST_HINT_IS_SHOWN):
             showBubbleTooltip(i18n.makeString(TOOLTIPS.HEADER_VERSIONINFOHINT))
@@ -162,7 +168,7 @@ class PromoController(IPromoController):
 
     def __onPromoClosed(self, **kwargs):
         self.__isPromoOpen = False
-        self.showBubbleTooltip()
+        self.__showBubbleTooltip()
         if self.__externalCloseCallback:
             self.__externalCloseCallback()
         self.__requestPromoCount()
@@ -196,12 +202,13 @@ class PromoController(IPromoController):
         if self.isActive():
             self.__battlesFromLastTeaser = 0
             self.__hasPendingTeaser = False
-            self.onNewTeaserReceived(self.__promoData, self.__onTeaserShown)
+            self.onNewTeaserReceived(self.__promoData, self.__onTeaserShown, self.__onTeaserClosed)
         else:
             _logger.warning('Impossible to show teaser, functionality is disabled')
 
     @process
     def __onTeaserShown(self, promoID):
+        self.__isTeaserOpen = True
         yield self.__webController.sendRequest(PromoSendTeaserShownRequestCtx(promoID))
 
     def __tryToShowTeaser(self):
@@ -217,6 +224,7 @@ class PromoController(IPromoController):
         self.__isPromoOpen = False
         self.__currentVersionBrowserID = None
         self.__externalCloseCallback = None
+        self.__isTeaserOpen = False
         self.eventsNotification.onEventNotificationsChanged -= self.__onEventNotification
         g_eventBus.removeListener(BrowserEvent.BROWSER_CREATED, self.__handleBrowserCreated)
         self.__browserCreationCallbacks = {}
@@ -295,10 +303,12 @@ class PromoController(IPromoController):
     def __addAuthParams(self, url, callback):
         if not url or not self.__webController:
             callback(url)
-        accessTokenData = yield self.__webController.getAccessTokenData(force=True)
-        params = {'access_token': str(accessTokenData.accessToken),
-         'spa_id': BigWorld.player().databaseID}
-        callback(url_formatters.addParamsToUrlQuery(url, params))
+        if self.__webController:
+            accessTokenData = yield self.__webController.getAccessTokenData(force=True)
+            if accessTokenData:
+                params = {'access_token': str(accessTokenData.accessToken),
+                 'spa_id': BigWorld.player().databaseID}
+                callback(url_formatters.addParamsToUrlQuery(url, params))
 
     def __onViewLoaded(self, pyView, _):
         if self.__isLobbyInited:

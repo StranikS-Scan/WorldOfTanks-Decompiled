@@ -25,6 +25,7 @@ class CONTEXT_MENU_HANDLER_TYPE(object):
     VEH_COMPARE = 'vehCompare'
     CUSTOM_USER = 'customUser'
     CUSTOMIZATION_ITEM = 'customizationItem'
+    STRONGHOLD_USER = 'strongholdUser'
     NY_TOY = 'nyToy'
     NY_CURRENT_TOY = 'nyCurrentToy'
     NY_TOY_SLOT = 'nyToySlot'

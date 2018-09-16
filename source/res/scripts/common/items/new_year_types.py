@@ -316,13 +316,6 @@ def _readToy(section):
     cfg['setting'] = setting = section.readString('setting')
     if setting not in NATIONAL_SETTINGS:
         raise Exception("Wrong toy national setting '%s'" % setting)
-    if IS_CLIENT:
-        cfg['icon'] = section.readString('icon')
-        cfg['slotIcon'] = section.readString('slotIcon')
-        cfg['model'] = section.readString('model')
-        cfg['name'] = section.readString('name')
-        cfg['regularEffect'] = section.readString('regularEffect')
-        cfg['hangingEffect'] = section.readString('hangingEffect')
     return cfg
 
 

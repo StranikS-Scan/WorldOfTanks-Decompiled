@@ -8,7 +8,6 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.SystemMessages import SM_TYPE, CURRENCY_TO_SM_TYPE
 from gui.shared.formatters import formatPrice, formatGoldPrice, text_styles, icons
 from gui.shared.gui_items.processors import Processor, makeError, makeSuccess, makeI18nError, makeI18nSuccess, plugins
-from gui.shared.gui_items.customization.c11n_items import Camouflage, Modification, Style
 from gui.shared.money import Money, Currency
 
 class TankmanBerthsBuyer(Processor):
@@ -206,19 +205,15 @@ class CustomizationsBuyer(Processor):
         return buyPrice * self.count
 
     def _getMsgCtx(self):
-        itemTypeName = ''
-        if type(self.item) is not Camouflage:
-            itemTypeName = self.item.userType
-        return {'itemType': itemTypeName,
+        return {'itemType': self.item.userType,
          'itemName': self.item.userName,
          'count': BigWorld.wg_getIntegralFormat(int(self.count)),
          'money': formatPrice(self._getTotalPrice())}
 
     def _successHandler(self, code, ctx=None):
-        messageType = MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_BUY_2
-        sysMsgType = CURRENCY_TO_SM_TYPE.get(self.item.buyPrices.itemPrice.price, SM_TYPE.PurchaseForGold)
-        if type(self.item) in (Camouflage, Modification, Style):
-            messageType = MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_BUY_1
+        currency = self.item.buyPrices.itemPrice.price.getCurrency(byWeight=True)
+        messageType = MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_BUY
+        sysMsgType = CURRENCY_TO_SM_TYPE.get(currency, SM_TYPE.PurchaseForGold)
         SystemMessages.pushI18nMessage(messageType, type=sysMsgType, **self._getMsgCtx())
         return makeSuccess(auxData=ctx)
 
@@ -247,18 +242,13 @@ class CustomizationsSeller(Processor):
         return sellPrice * self.count
 
     def _getMsgCtx(self):
-        itemTypeName = ''
-        if type(self.item) is not Camouflage:
-            itemTypeName = self.item.userType
-        return {'itemType': itemTypeName,
+        return {'itemType': self.item.userType,
          'itemName': self.item.userName,
          'count': BigWorld.wg_getIntegralFormat(int(self.count)),
          'money': formatPrice(self._getTotalPrice())}
 
     def _successHandler(self, code, ctx=None):
-        messageType = MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_SELL_2
-        if type(self.item) in (Camouflage, Modification, Style):
-            messageType = MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_SELL_1
+        messageType = MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_SELL
         SystemMessages.pushI18nMessage(messageType, type=SM_TYPE.Selling, **self._getMsgCtx())
         return makeSuccess(auxData=ctx)
 

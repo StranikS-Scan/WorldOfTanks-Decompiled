@@ -5,7 +5,7 @@ from gui.shared.utils.decorators import ReprInjector
 from gui.prb_control.entities.base.unit.permissions import UnitPermissions
 from constants import CLAN_MEMBER_FLAGS
 
-@ReprInjector.simple(('_clanRoles', 'clanRoles'), ('_isLegionary', 'isLegionary'), ('_strongholdManageReservesRoles', 'strongholdManageReservesRoles'), ('_strongholdStealLeadershipRoles', 'strongholdStealLeadershipRoles'), ('_isInSlot', 'isInSlot'), ('_isInIdle', 'isInIdle'), ('_isFreezed', 'isFreezed'))
+@ReprInjector.simple(('_clanRoles', 'clanRoles'), ('_isLegionary', 'isLegionary'), ('_strongholdManageReservesRoles', 'strongholdManageReservesRoles'), ('_strongholdStealLeadershipRoles', 'strongholdStealLeadershipRoles'), ('_isInSlot', 'isInSlot'), ('_isInIdle', 'isInIdle'), ('_isEquipmentCommander', 'isEquipmentCommander'), ('_isFreezed', 'isFreezed'))
 class StrongholdPermissions(UnitPermissions):
 
     def __init__(self, roles=UNIT_ROLE.DEFAULT, flags=UNIT_FLAGS.DEFAULT, isCurrentPlayer=False, isPlayerReady=False, hasLockedState=False, clanRoles=None, strongholdManageReservesRoles=None, isLegionary=False, isInSlot=False, isInIdle=False, isFreezed=False, strongholdStealLeadershipRoles=None):
@@ -71,10 +71,16 @@ class StrongholdPermissions(UnitPermissions):
         return False
 
     def canChangeUnitState(self):
-        return self._roles & UNIT_ROLE.CREATOR == UNIT_ROLE.CREATOR
+        return self.isCommander(self._roles) and not self._isLegionary
 
     def canSendInvite(self):
         return not self._isLegionary
 
     def canKick(self):
         return self.isCommander(self._roles) and not self._isLegionary
+
+    def canChangeExtraEquipmentRole(self):
+        return self.isCommander(self._roles) and not self._isLegionary and self.isNotFreezed()
+
+    def isEquipmentCommander(self):
+        return self._roles & UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS > 0

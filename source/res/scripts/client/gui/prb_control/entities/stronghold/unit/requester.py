@@ -3,7 +3,7 @@
 from debug_utils import LOG_ERROR
 from helpers import dependency
 from adisp import process
-from gui.clans.contexts import StrongholdLeaveCtx, StrongholdAssignCtx, StrongholdChangeOpenedCtx, StrongholdSetVehicleCtx, StrongholdSetReadyCtx, StrongholdKickPlayerCtx, StrongholdBattleQueueCtx, StrongholdGiveLeadershipCtx, StrongholdSetReserveCtx, StrongholdSendInvitesCtx, StrongholdUnassignCtx, StrongholdUnsetReserveCtx, StrongholdJoinBattleCtx
+from gui.clans.contexts import StrongholdLeaveCtx, StrongholdAssignCtx, StrongholdChangeOpenedCtx, StrongholdSetVehicleCtx, StrongholdSetReadyCtx, StrongholdKickPlayerCtx, StrongholdBattleQueueCtx, StrongholdGiveLeadershipCtx, StrongholdSetReserveCtx, StrongholdSendInvitesCtx, StrongholdUnassignCtx, StrongholdUnsetReserveCtx, StrongholdJoinBattleCtx, StrongholdSetEquipmentCommanderCtx
 from gui.prb_control import settings, prb_getters
 from gui.prb_control.entities.base.ctx import PrbCtrlRequestCtx
 from gui.prb_control.entities.base.requester import IUnitRequestProcessor
@@ -26,7 +26,8 @@ class StrongholdUnitRequestProcessor(IUnitRequestProcessor):
          REQUEST_TYPE.SET_RESERVE: StrongholdSetReserveCtx,
          REQUEST_TYPE.UNSET_RESERVE: StrongholdUnsetReserveCtx,
          REQUEST_TYPE.SEND_INVITE: StrongholdSendInvitesCtx,
-         REQUEST_TYPE.JOIN: StrongholdJoinBattleCtx}
+         REQUEST_TYPE.JOIN: StrongholdJoinBattleCtx,
+         REQUEST_TYPE.SET_EQUIPMENT_COMMANDER: StrongholdSetEquipmentCommanderCtx}
 
     def fini(self):
         self.__unitContextRemap.clear()

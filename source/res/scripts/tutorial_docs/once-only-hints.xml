@@ -44,5 +44,16 @@
       </condition>
       <equal-actions>	True	</equal-actions>
     </hint>
+    <hint>	HaveNewBadgeHint	  <item-id>	NewBadgeHintBtn	</item-id>
+      <text>	_(#menu:header/account/popover/tutorial/newBadge)	</text>
+      <arrow>
+        <direction>	B	</direction>
+        <loop>	True	</loop>
+      </arrow>
+      <condition>
+        <global-active>	_HaveNewBadge	</global-active>
+      </condition>
+      <equal-actions>	True	</equal-actions>
+    </hint>
   </hints>
 </once-only-hints.xml>

@@ -62,7 +62,7 @@ class _Summary(object):
 
     def getHeader(self):
         recalculationTS = self._leaderboard.getLastLeaderboardRecalculationTS()
-        status = formatUpdateTime(recalculationTS)
+        status = formatUpdateTime(recalculationTS) if not self._event.isFinished() else ''
         title = getFullName(self._excelItem.getName(), self._excelItem.getClanTag(), self._excelItem.getClanColor())
         return {'title': title,
          'description': self._getDescription(),
@@ -70,7 +70,7 @@ class _Summary(object):
          'status': status,
          'isTable': self.isTable(),
          'isSquad': self._event.getIsSquadAllowed(),
-         'statusTooltip': self._getStatusTooltip()}
+         'statusTooltip': self._getStatusTooltip() if not self._event.isFinished() else ''}
 
     def getExperienceBlock(self):
         event = self._event

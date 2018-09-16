@@ -116,12 +116,14 @@ class GLOBAL_FLAG(object):
     IN_QUEUE = '_InTutorialQueue'
     ALL_BONUSES_RECEIVED = '_AllBonusesReceived'
     MAY_PAWN_PERSONAL_MISSION = '_MayPawnPersonalMission'
+    HAVE_NEW_BADGE = '_HaveNewBadge'
     ALL = (IS_FLAGS_RESET,
      SHOW_HISTORY,
      HISTORY_NOT_AVAILABLE,
      IN_QUEUE,
      ALL_BONUSES_RECEIVED,
-     MAY_PAWN_PERSONAL_MISSION)
+     MAY_PAWN_PERSONAL_MISSION,
+     HAVE_NEW_BADGE)
 
 
 class GlobalStorage(object):

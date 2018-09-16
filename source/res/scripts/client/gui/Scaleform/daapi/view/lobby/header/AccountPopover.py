@@ -21,25 +21,33 @@ from gui.shared import events
 from gui.shared.ClanCache import g_clanCache
 from gui.shared.event_bus import EVENT_BUS_SCOPE
 from gui.shared.formatters import text_styles, icons
+from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.shared.utils.requesters import REQ_CRITERIA
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
 from helpers import dependency
 from helpers import isPlayerAccount
 from helpers.i18n import makeString
 from skeletons.gui.game_control import IRefSystemController
-from skeletons.gui.lobby_context import ILobbyContext
 from skeletons.gui.shared import IItemsCache
+from tutorial.hints_manager import HINT_SHOWN_STATUS
+HAVE_NEW_BADGE = '_HaveNewBadge'
+HINT_ID = 'HaveNewBadgeHint'
 
 class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmblemsHelper):
     itemsCache = dependency.descriptor(IItemsCache)
     refSystem = dependency.descriptor(IRefSystemController)
-    lobbyContext = dependency.descriptor(ILobbyContext)
 
     def __init__(self, _):
         super(AccountPopover, self).__init__()
         self.__clanData = None
         self.__infoBtnEnabled = True
         self.__achieves = []
+        self.__tutorStorage = None
+        hintShown = self.settingsCore.serverSettings.getOnceOnlyHintsSetting(HINT_ID)
+        if hintShown != HINT_SHOWN_STATUS:
+            self.__tutorStorage = getTutorialGlobalStorage()
+            if self.__tutorStorage is not None:
+                self.__tutorStorage.setValue(HAVE_NEW_BADGE, self.__checkNewBadges())
         return
 
     def openBoostersWindow(self, idx):
@@ -72,9 +80,12 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
         self.destroy()
 
     def openBadgesWindow(self):
+        if self.__tutorStorage is not None:
+            self.__tutorStorage.setValue(HAVE_NEW_BADGE, False)
         from gui.shared import g_eventBus
         g_eventBus.handleEvent(events.LoadViewEvent(VIEW_ALIAS.BADGES_PAGE, ctx={}), scope=EVENT_BUS_SCOPE.LOBBY)
         self.destroy()
+        return
 
     def onUnitFlagsChanged(self, flags, timeLeft):
         self.__updateButtonsStates()
@@ -304,3 +315,12 @@ class AccountPopover(AccountPopoverMeta, IGlobalListener, ClanListener, ClanEmbl
             self.as_setReferralDataS({'invitedText': makeString(MENU.HEADER_ACCOUNT_POPOVER_REFERRAL_INVITED, referrersNum=len(self.refSystem.getReferrals())),
              'moreInfoText': makeString(MENU.HEADER_ACCOUNT_POPOVER_REFERRAL_MOREINFO),
              'isLinkBtnEnabled': self.__infoBtnEnabled})
+
+    def __checkNewBadges(self):
+        result = False
+        for badge in self.itemsCache.items.getBadges().itervalues():
+            if badge.isNew():
+                result = True
+                break
+
+        return result

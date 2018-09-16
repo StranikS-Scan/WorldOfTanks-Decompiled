@@ -171,7 +171,7 @@ class SharedPage(BattlePageMeta):
         ctrl = self.sessionProvider.shared.vehicleState
         if ctrl is not None:
             if ctrl.isInPostmortem:
-                self.__onPostMortemSwitched()
+                self.__onPostMortemSwitched(noRespawnPossible=False, respawnAvailable=False)
             ctrl.onPostMortemSwitched += self.__onPostMortemSwitched
             ctrl.onRespawnBaseMoving += self.__onRespawnBaseMoving
         aih_global_binding.subscribe(aih_global_binding.BINDING_ID.CTRL_MODE_NAME, self.__onAvatarCtrlModeChanged)

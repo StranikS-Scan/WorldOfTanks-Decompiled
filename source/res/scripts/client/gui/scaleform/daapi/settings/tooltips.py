@@ -5,12 +5,13 @@ from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_calendar_day_tooltip im
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_calendar_steps_tooltip import RankedCalendarStepsTooltip
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_selector_tooltip import RankedSelectorTooltip
 from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_step_tooltip import RankedStepTooltip
+from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.shared.tooltips import vehicle, tankman, seasons, skill, shell, module, achievement, cybersport, common, contexts, battle_consumable, tutorial, fortifications, boosters, veh_cmp, quests, ranked, battle_booster, bootcamp, personal_missions, elen, new_year
 from gui.shared.tooltips.filter import VehicleFilterTooltip
-from gui.shared.tooltips.wgm_currency import WGMGoldCurrencyTooltip, WGMCreditsCurrencyTooltip
-DYNAMIC_TOOLTIPS = {TOOLTIPS_CONSTANTS.GOLD_STATS: WGMGoldCurrencyTooltip(contexts.ToolTipContext(None)),
- TOOLTIPS_CONSTANTS.CREDITS_STATS: WGMCreditsCurrencyTooltip(contexts.ToolTipContext(None))}
+from gui.shared.tooltips.wgm_currency import WGMCurrencyTooltip
+DYNAMIC_TOOLTIPS = {TOOLTIPS_CONSTANTS.GOLD_STATS: WGMCurrencyTooltip(contexts.ToolTipContext(None)),
+ TOOLTIPS_CONSTANTS.CREDITS_STATS: WGMCurrencyTooltip(contexts.ToolTipContext(None))}
 TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_UI,
                               'method': lambda invID, isCurrentVehicle=None: tankman.TankmanTooltipData(contexts.TankmanHangarContext()).buildToolTip(invID),
                               'complex': None},
@@ -53,6 +54,9 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
  TOOLTIPS_CONSTANTS.TECHTREE_VEHICLE: {'tooltip': TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI,
                                        'method': vehicle.VehicleInfoTooltipData(contexts.TechTreeContext()).buildToolTip,
                                        'complex': None},
+ TOOLTIPS_CONSTANTS.TECHTREE_VEHICLE_ANNOUNCEMENT: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                                    'method': vehicle.VehicleAnnouncementParametersTooltipData(contexts.VehicleAnnouncementContext()).buildToolTip,
+                                                    'complex': None},
  TOOLTIPS_CONSTANTS.SHOP_VEHICLE: {'tooltip': TOOLTIPS_CONSTANTS.VEHICLE_INFO_UI,
                                    'method': lambda intCD, inventoryCount=0, vehicleCount=0: vehicle.VehicleInfoTooltipData(contexts.ShopContext()).buildToolTip(intCD),
                                    'complex': None},
@@ -351,14 +355,23 @@ TOOLTIPS = {TOOLTIPS_CONSTANTS.TANKMAN: {'tooltip': TOOLTIPS_CONSTANTS.TANKMEN_U
                                                'method': common.SettingKeySwitchMode(contexts.ToolTipContext(None)).buildToolTip,
                                                'complex': None},
  TOOLTIPS_CONSTANTS.GOLD_STATS: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
-                                 'method': DYNAMIC_TOOLTIPS[TOOLTIPS_CONSTANTS.GOLD_STATS].buildToolTip,
+                                 'method': lambda btnType=CURRENCIES_CONSTANTS.GOLD: DYNAMIC_TOOLTIPS[TOOLTIPS_CONSTANTS.GOLD_STATS].buildToolTip(btnType=btnType),
                                  'complex': None},
  TOOLTIPS_CONSTANTS.CREDITS_STATS: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
-                                    'method': DYNAMIC_TOOLTIPS[TOOLTIPS_CONSTANTS.CREDITS_STATS].buildToolTip,
+                                    'method': lambda btnType=CURRENCIES_CONSTANTS.CREDITS: DYNAMIC_TOOLTIPS[TOOLTIPS_CONSTANTS.CREDITS_STATS].buildToolTip(btnType=btnType),
                                     'complex': None},
  TOOLTIPS_CONSTANTS.CRYSTAL_INFO: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
-                                   'method': common.HeaderCrystalInfo(contexts.ToolTipContext(None)).buildToolTip,
+                                   'method': lambda btnType=CURRENCIES_CONSTANTS.CRYSTAL: common.HeaderMoneyAndXpTooltipData(contexts.ToolTipContext(None)).buildToolTip(btnType=btnType),
                                    'complex': None},
+ TOOLTIPS_CONSTANTS.CREDITS_INFO: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                   'method': lambda btnType=CURRENCIES_CONSTANTS.CREDITS: common.HeaderMoneyAndXpTooltipData(contexts.ToolTipContext(None)).buildToolTip(btnType=btnType),
+                                   'complex': None},
+ TOOLTIPS_CONSTANTS.GOLD_INFO: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                'method': lambda btnType=CURRENCIES_CONSTANTS.GOLD: common.HeaderMoneyAndXpTooltipData(contexts.ToolTipContext(None)).buildToolTip(btnType=btnType),
+                                'complex': None},
+ TOOLTIPS_CONSTANTS.FREEXP_INFO: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
+                                  'method': lambda btnType=CURRENCIES_CONSTANTS.FREE_XP: common.HeaderMoneyAndXpTooltipData(contexts.ToolTipContext(None)).buildToolTip(btnType=btnType),
+                                  'complex': None},
  TOOLTIPS_CONSTANTS.RANKED_CALENDAR_DAY_INFO: {'tooltip': TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI,
                                                'method': RankedCalendarDayTooltip(contexts.ToolTipContext(None)).buildToolTip,
                                                'complex': None},

@@ -820,6 +820,14 @@ class IRankedRequester(IRequester):
     def seasonStepsCount(self):
         raise NotImplementedError
 
+    @property
+    def shields(self):
+        raise NotImplementedError
+
+    @property
+    def clientShields(self):
+        raise NotImplementedError
+
 
 class IBadgesRequester(IRequester):
     """Class provides tor badges data"""

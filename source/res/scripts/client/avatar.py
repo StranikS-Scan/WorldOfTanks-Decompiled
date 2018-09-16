@@ -682,7 +682,7 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
                 if not isGuiEnabled and cmdMap.isFiredList(xrange(CommandMapping.CMD_AMMO_CHOICE_1, CommandMapping.CMD_AMMO_CHOICE_0 + 1), key) and isDown and mods == 0:
                     gui_event_dispatcher.choiceConsumable(key)
                     return True
-                if cmdMap.isFired(CommandMapping.CMD_RADIAL_MENU_SHOW, key) and self.__isVehicleAlive:
+                if cmdMap.isFired(CommandMapping.CMD_RADIAL_MENU_SHOW, key):
                     gui_event_dispatcher.setRadialMenuCmd(key, isDown)
                     return True
                 if cmdMap.isFiredList((CommandMapping.CMD_CHAT_SHORTCUT_ATTACK,
@@ -762,13 +762,14 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
         return
 
     def set_isGunLocked(self, prev):
-        if self.isGunLocked:
-            self.gunRotator.lock(True)
-            if not isinstance(self.inputHandler.ctrl, ArcadeControlMode) and not isinstance(self.inputHandler.ctrl, VideoCameraControlMode):
-                self.inputHandler.setAimingMode(False, AIMING_MODE.USER_DISABLED)
-                self.inputHandler.onControlModeChanged('arcade', preferredPos=self.inputHandler.getDesiredShotPoint())
-        else:
-            self.gunRotator.lock(False)
+        if not self.isObserver():
+            if self.isGunLocked:
+                self.gunRotator.lock(True)
+                if not isinstance(self.inputHandler.ctrl, ArcadeControlMode) and not isinstance(self.inputHandler.ctrl, VideoCameraControlMode):
+                    self.inputHandler.setAimingMode(False, AIMING_MODE.USER_DISABLED)
+                    self.inputHandler.onControlModeChanged('arcade', preferredPos=self.inputHandler.getDesiredShotPoint())
+            else:
+                self.gunRotator.lock(False)
 
     def set_ownVehicleGear(self, prev):
         pass
@@ -1946,7 +1947,6 @@ class PlayerAvatar(BigWorld.Entity, ClientChat, CombatEquipmentManager, AvatarOb
             clientVisibilityFlags |= ClientVisibilityFlags.OBSERVER_OBJECTS
         ClientVisibilityFlags.updateSpaceVisibility(self.spaceID, clientVisibilityFlags)
         g_playerEvents.onAvatarReady()
-        BigWorld.enableLoadingTimer(False)
         BigWorld.callback(10.0, partial(BigWorld.pauseDRRAutoscaling, False))
         appearance_cache.onSpaceLoaded()
         self.__projectileMover.setSpaceID(self.spaceID)

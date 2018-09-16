@@ -5,19 +5,21 @@ from operator import itemgetter
 import BigWorld
 import operator
 import Event
+import constants
 import ranked_common
 from adisp import async, process
 from constants import ARENA_BONUS_TYPE, EVENT_TYPE
-from dossiers2.custom.account_layout import RANKED_BADGES_BLOCK_LAYOUT
 from gui.Scaleform.genConsts.BLOCKS_TOOLTIP_TYPES import BLOCKS_TOOLTIP_TYPES
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
 from gui.ranked_battles import ranked_helpers
+from gui.ranked_battles.awards_formatters import getRankedQuestsOrderedAwards
 from gui.ranked_battles.constants import PRIME_TIME_STATUS
 from gui.ranked_battles.ranked_models import RankedSeason, Rank, VehicleRank, RANK_STATE, RankStep, RankProgress, RankedDossier
 from gui.ranked_battles.ranked_models import PrimeTime, RANK_CHANGE_STATES
-from debug_utils import LOG_WARNING, LOG_DEBUG
+from debug_utils import LOG_WARNING
+from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.shared import event_dispatcher, events, EVENT_BUS_SCOPE, g_eventBus
 from gui.shared.gui_items.Vehicle import Vehicle
 from gui.shared.utils.requesters import REQ_CRITERIA
@@ -48,6 +50,8 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         self.onPrimeTimeStatusUpdated = Event.Event()
         self.__arenaBattleResultsWasShown = set()
         self.__awardWindowWasShown = False
+        self.__fakeWebLeague = None
+        return
 
     def init(self):
         super(RankedBattlesController, self).init()
@@ -120,10 +124,13 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         isCurrent, seasonInfo = ranked_common.getRankedSeason(settings.asDict())
         if isCurrent:
             _, _, seasonID, _ = seasonInfo
-            currPoints = self.itemsCache.items.ranked.ladderPoints
+            currPoints = self.getLadderPoints()
             return RankedSeason(seasonInfo, settings.seasons.get(seasonID, {}), self.__getRankedDossier(), currPoints)
         else:
             return None
+
+    def getLadderPoints(self):
+        return self.itemsCache.items.ranked.ladderPoints
 
     def getNextSeason(self):
         now = time_utils.getServerRegionalTime()
@@ -233,36 +240,51 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
                 BigWorld.player().ranked.setClientVehRank(vehCD, *currentProgress)
         return
 
+    def setLastShields(self):
+        rank = self.getCurrentRank()
+        shieldStatus = self.getShieldStatus(rank=rank)
+        if shieldStatus:
+            _, shieldHp, _, _, _ = shieldStatus
+            BigWorld.player().ranked.setClientShields([rank.getID(), shieldHp])
+
     @async
     @process
     def getLeagueData(self, callback):
-        if self.clansController.getAccountProfile():
-            result = yield self.clansController.getClanDossier().requestRankedPosition()
-            if result is not None:
-                result = result.get('results')
+        if not self.__fakeWebLeague or not constants.IS_DEVELOPMENT:
+            if self.clansController.getAccountProfile():
+                result = yield self.clansController.getClanDossier().requestRankedPosition()
+                if result is not None:
+                    result = result.get('results')
+            else:
+                result = None
         else:
-            result = None
+            result = self.__fakeWebLeague
         callback(result)
         return
 
     def getLeagueAwards(self):
         isCurrent, seasonInfo = ranked_common.getRankedSeason(self.__getSettings().asDict())
         result = []
+        percentTotal = 0
         if isCurrent:
             _, _, seasonID, _ = seasonInfo
             seasonQuests = self.eventsCache.getHiddenQuests(lambda q: q.getType() == EVENT_TYPE.TOKEN_QUEST and ranked_helpers.isRankedQuestID(q.getID()))
             for qID in sorted(seasonQuests):
                 season, cohort, percent = ranked_helpers.getRankedDataFromTokenQuestID(qID)
+                percentTotal += percent
                 if season == seasonID:
                     quest = seasonQuests[qID]
                     awards = []
                     for bonus in quest.getBonuses():
-                        awards.extend(bonus.getRankedAwardVOs())
+                        awards.extend(bonus.getRankedAwardVOs(iconSize='big'))
 
                     result.append({'cohortNumber': cohort,
                      'playersPercent': percent,
                      'awards': awards})
 
+        result.append({'cohortNumber': 0,
+         'playersPercent': 100 - percentTotal,
+         'awards': []})
         return result
 
     def openWebLeaguePage(self, ctx=None):
@@ -369,14 +391,20 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
 
         return result
 
-    def runQuest(self, quest):
+    def runQuests(self, quests):
         """
-        Starts quest completion process.
+        Start quests completion process
+        :param quests: list of gui.sever_events.event_items.RankedQuest
+        :return:
         """
-        if not quest.isCompleted():
-            BigWorld.player().runQuest(quest.getType(), quest.getID(), lambda *args: None)
-        else:
+        notCompletedQuests = []
+        for quest in quests:
+            if not quest.isCompleted():
+                notCompletedQuests.append(quest.getID())
             LOG_WARNING('Quest is already completed: ', quest.getID())
+
+        if notCompletedQuests:
+            BigWorld.player().runQuest(EVENT_TYPE.RANKED_QUEST, notCompletedQuests, lambda *args: None)
 
     def getQuestsForCycle(self, cycleID, completedOnly=False):
         if completedOnly:
@@ -400,10 +428,10 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
 
     def awardWindowShouldBeShown(self, rankChangeInfo):
         if rankChangeInfo.stepChanges > 0:
-            if rankChangeInfo.vehRank > 0 and rankChangeInfo.vehStep == 0:
+            if rankChangeInfo.vehRank - rankChangeInfo.prevVehRank > 0:
                 return True
             rankedData = self.itemsCache.items.ranked
-            if rankedData.maxRankWithAwardReceived[0] < rankChangeInfo.accRank and rankChangeInfo.accStep == 0 and rankedData.maxRank == (rankChangeInfo.accRank, rankChangeInfo.accStep):
+            if rankedData.maxRankWithAwardReceived[0] < rankChangeInfo.accRank and rankedData.maxRank[0] == rankChangeInfo.accRank:
                 return True
         return False
 
@@ -419,7 +447,10 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         stepToJudge = changeInfo.vehStep or changeInfo.accStep
         if stepChanges > 0:
             if stepToJudge:
-                state = RANK_CHANGE_STATES.STEP_EARNED
+                if stepChanges > 1:
+                    state = RANK_CHANGE_STATES.STEPS_EARNED
+                else:
+                    state = RANK_CHANGE_STATES.STEP_EARNED
             else:
                 state = RANK_CHANGE_STATES.RANK_EARNED
         elif stepChanges < 0:
@@ -531,15 +562,6 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
 
         return False
 
-    def getPrevRanks(self, accRank, vehRank, rankChange):
-        """
-          calculates previous rank based on battle results:
-          params:
-          accRank and vehRank - account and vehicle ranks after battle in format (rank, step)
-          rankChange - change of step or rank in current battle -1 if step or rank was lost, 1 if was gain, 0 otherwise
-        """
-        return (accRank, vehRank) if not rankChange else ranked_common.getPrevRanks(accRank, vehRank, rankChange, self.__getSettings().asDict(), {})
-
     def getCycleRewards(self, cycleID):
         """
         return rewards received for maximum rank in cycle. Is supposed to be used for past cycles only
@@ -599,6 +621,103 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
     def getSuitableVehicleLevels(self):
         rankedConfigData = self.__getSettings()
         return (rankedConfigData.minLevel, rankedConfigData.maxLevel)
+
+    def getShieldStatus(self, rank, isStatic=False):
+        shieldsConfig = self.__getSettings().shields
+        shields = self.itemsCache.items.ranked.shields
+        prevShields = self.itemsCache.items.ranked.clientShields
+        rankID = rank.getID()
+        shieldConfig = shieldsConfig.get(rankID, None)
+        if shieldConfig is not None:
+            if isStatic:
+                hp = shieldConfig[1]
+                return (hp,
+                 hp,
+                 hp,
+                 RANKEDBATTLES_ALIASES.SHIELD_ENABLED,
+                 None)
+            accShield = shields.get(rankID, None)
+            _, maxHP = shieldConfig
+            shieldState = RANKEDBATTLES_ALIASES.SHIELD_DISABLED
+            newShieldState = None
+            if not rank.isCurrent() and accShield is not None:
+                hp, _ = accShield
+                if hp > 0:
+                    shieldState = RANKEDBATTLES_ALIASES.SHIELD_ENABLED
+                    newShieldState = RANKEDBATTLES_ALIASES.SHIELD_ENABLED
+                return (hp,
+                 hp,
+                 maxHP,
+                 shieldState,
+                 newShieldState)
+            if accShield is not None:
+                accPrevShieldHP = prevShields.get(rankID, None)
+                hp, _ = accShield
+                if accPrevShieldHP is None:
+                    LOG_WARNING('Info about rank shield not available for', rankID, ' in clientShields')
+                    accPrevShieldHP = hp
+                if accPrevShieldHP == hp:
+                    if hp > 0:
+                        shieldState = RANKEDBATTLES_ALIASES.SHIELD_ENABLED
+                        newShieldState = RANKEDBATTLES_ALIASES.SHIELD_ENABLED
+                elif accPrevShieldHP < hp:
+                    if accPrevShieldHP == 0:
+                        shieldState = RANKEDBATTLES_ALIASES.SHIELD_FULL_RENEW
+                        newShieldState = RANKEDBATTLES_ALIASES.SHIELD_ENABLED
+                    else:
+                        shieldState = RANKEDBATTLES_ALIASES.SHIELD_RENEW
+                        newShieldState = RANKEDBATTLES_ALIASES.SHIELD_ENABLED
+                elif accPrevShieldHP > hp:
+                    if hp == 0:
+                        shieldState = RANKEDBATTLES_ALIASES.SHIELD_LOSE
+                        newShieldState = RANKEDBATTLES_ALIASES.SHIELD_DISABLED
+                    else:
+                        shieldState = RANKEDBATTLES_ALIASES.SHIELD_LOSE_STEP
+                        newShieldState = RANKEDBATTLES_ALIASES.SHIELD_ENABLED
+                return (accPrevShieldHP,
+                 hp,
+                 maxHP,
+                 shieldState,
+                 newShieldState)
+        return
+
+    def getCurrentCycleStats(self):
+        return self.itemsCache.items.getAccountDossier().getDossierDescr()['rankedCurrentCycle']
+
+    def getRanksTops(self, isLoser=False, stepDiff=None):
+        settings = self.__getSettings()
+        rankChanges = settings.loserRankChanges if isLoser else settings.winnerRankChanges
+        if stepDiff is None:
+            return len(rankChanges)
+        else:
+            if stepDiff == RANKEDBATTLES_ALIASES.STEP_VALUE_EARN:
+                total = sum((1 for i in rankChanges if i > 0))
+            elif stepDiff == RANKEDBATTLES_ALIASES.STEP_VALUE_NO_CHANGE:
+                total = sum((1 for i in rankChanges if i == 0))
+            else:
+                total = sum((1 for i in rankChanges if i < 0))
+            return total
+
+    def showRankedAwardWindow(self, rankInfo, vehicle):
+        self.__awardWindowWasShown = True
+        completedQuests = []
+        prevAwardReceivedRankID = self.itemsCache.items.ranked.maxRankWithAwardReceived[0] + 1
+        rankID = rankInfo.vehRank + rankInfo.accRank
+        while rankID >= prevAwardReceivedRankID:
+            rank = self.getRank(prevAwardReceivedRankID, vehicle=vehicle)
+            rankQuest = rank.getQuest()
+            if rankQuest is not None:
+                completedQuests.append(rankQuest)
+            prevAwardReceivedRankID += 1
+
+        if completedQuests:
+            event_dispatcher.showRankedAwardWindow(rankID, vehicle=vehicle, awards=getRankedQuestsOrderedAwards(completedQuests, size=AWARDS_SIZES.BIG))
+        return
+
+    def setWebLeague(self, league=0, position=0):
+        if constants.IS_DEVELOPMENT:
+            self.__fakeWebLeague = {'league': league,
+             'position': position}
 
     def __clear(self):
         lobbyContext = dependency.instance(ILobbyContext)
@@ -737,20 +856,15 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         if arenaBonusType == ARENA_BONUS_TYPE.RANKED and arenaUniqueID not in self.__arenaBattleResultsWasShown:
             rankInfo = reusableInfo.personal.getRankInfo()
             vehicle = first(reusableInfo.personal.getVehicleItemsIterator())[1]
-            if self.awardWindowShouldBeShown(rankInfo):
-                self.__awardWindowWasShown = True
-                event_dispatcher.showRankedAwardWindow(rankInfo.vehRank + rankInfo.accRank, vehicle=vehicle)
-            else:
-                self.__awardWindowWasShown = False
-                rankedResultsVO = composer.getResultsTeamsVO()
-                event_dispatcher.showRankedBattleResultsWindow(rankedResultsVO, vehicle, rankInfo)
+            rankedResultsVO = composer.getResultsTeamsVO()
+            event_dispatcher.showRankedBattleResultsWindow(rankedResultsVO, vehicle, rankInfo)
             self.__arenaBattleResultsWasShown.add(reusableInfo.arenaUniqueID)
         else:
-            LOG_DEBUG('Ranked Overlay windows will not be shown, received arenaBonusType: ', arenaBonusType)
+            LOG_WARNING('Ranked Overlay windows will not be shown, received arenaBonusType: ', arenaBonusType)
 
     def __updateRanked(self, diff):
         changes = set(diff.keys())
-        changes -= {'clientRank', 'clientVehRanks'}
+        changes -= {'clientRank', 'clientVehRanks', 'clientShields'}
         if changes:
             self.onUpdated()
             self.__resetTimer()
@@ -774,15 +888,3 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
     def __timerUpdate(self):
         status, _ = self.getPrimeTimeStatus()
         self.onPrimeTimeStatusUpdated(status)
-
-    def getRanksTops(self, isLoser=False, earned=False, notRecieved=False, lost=False):
-        _STEP_EARNED = 1
-        _STEP_NOT_CHANGED = 0
-        _STEP_LOST = -1
-        settings = self.__getSettings()
-        rankChanges = settings.loserRankChanges if isLoser else settings.winnerRankChanges
-        if earned:
-            return rankChanges.count(_STEP_EARNED)
-        if notRecieved:
-            return rankChanges.count(_STEP_NOT_CHANGED)
-        return rankChanges.count(_STEP_LOST) if lost else len(rankChanges)

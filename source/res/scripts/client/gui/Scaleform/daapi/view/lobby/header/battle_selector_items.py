@@ -290,7 +290,7 @@ class _BattleSelectorItems(object):
             LOG_ERROR('Can not invoke action', action)
 
     def getVOs(self):
-        return (map(lambda item: item.getVO(), filter(lambda item: item.isVisible(), sorted(self.__items.itervalues()))), self.__isDemonstrator, self.__isDemoButtonEnabled)
+        return ([ item.getVO() for item in sorted(self.__items.itervalues()) if item.isVisible() ], self.__isDemonstrator, self.__isDemoButtonEnabled)
 
     def getItems(self):
         return self.__items
@@ -389,7 +389,7 @@ class _RankedItem(_SelectorItem):
                 return text_styles.main(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_FROZEN))
             currentSeason = self.rankedController.getCurrentSeason()
             if currentSeason is not None:
-                return text_styles.main(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_SEASON, season=currentSeason.getUserName() or currentSeason.getNumber(), cycle=currentSeason.getCycleOrdinalNumber()))
+                return text_styles.main(i18n.makeString(MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_SEASON, season=currentSeason.getUserName() or currentSeason.getNumber()))
             nextSeason = self.rankedController.getNextSeason()
             if nextSeason is not None:
                 message = MENU.HEADERBUTTONS_BATTLE_TYPES_RANKED_AVAILABILITY_UNTIL

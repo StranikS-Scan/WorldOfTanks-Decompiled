@@ -133,6 +133,7 @@ class ClanRequestsController(RequestsController):
          CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_UPDATE: self.__updateStronghold,
          CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_STATISTICS: self.__getStrongholdStatistics,
          CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_JOIN_BATTLE: self.__joinBattle,
+         CLAN_REQUESTED_DATA_TYPE.STRONGHOLD_SET_EQUIPMENT_COMMANDER: self.__setEquipmentCommander,
          CLAN_REQUESTED_DATA_TYPE.RANKED_LEAGUE_POSITION: self.__getRankedPosition,
          CLAN_REQUESTED_DATA_TYPE.HOF_USER_INFO: self.__hofUserInfo,
          CLAN_REQUESTED_DATA_TYPE.HOF_USER_EXCLUDE: self.__hofUserExclude,
@@ -356,6 +357,9 @@ class ClanRequestsController(RequestsController):
 
     def __setReserve(self, ctx, callback, *args, **kwargs):
         self._requester.doRequestEx(ctx, callback, ('wgsh', 'lock_reserve'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getReserveID())
+
+    def __setEquipmentCommander(self, ctx, callback, *args, **kwargs):
+        self._requester.doRequestEx(ctx, callback, ('wgsh', 'set_equipment_commander'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getPlayerID())
 
     def __unsetReserve(self, ctx, callback, *args, **kwargs):
         self._requester.doRequestEx(ctx, callback, ('wgsh', 'unlock_reserve'), self.__getPeripheryIDStr(), ctx.getUnitMgrID(), ctx.getReserveID())

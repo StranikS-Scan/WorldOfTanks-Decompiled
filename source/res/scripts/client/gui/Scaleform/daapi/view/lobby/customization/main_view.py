@@ -9,12 +9,14 @@ from AvatarInputHandler import cameras, mathUtils
 from CurrentVehicle import g_currentVehicle
 from account_helpers.settings_core.settings_constants import GRAPHICS
 from gui import DialogsInterface, g_tankActiveCamouflage, makeHtmlString, SystemMessages
+from gui.app_loader import g_appLoader
+from gui.app_loader.settings import GUI_GLOBAL_SPACE_ID as _SPACE_ID
 from gui.customization.shared import chooseMode
 from gui.ClientUpdateManager import g_clientUpdateManager
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.dialogs import I18nConfirmDialogMeta, DIALOG_BUTTON_ID, HtmlMessageLocalDialogMeta
 from gui.Scaleform.daapi.view.lobby.customization import CustomizationItemCMHandler
-from gui.Scaleform.daapi.view.lobby.customization.customization_carousel import CustomizationCarouselDataProvider
+from gui.Scaleform.daapi.view.lobby.customization.customization_carousel import CustomizationCarouselDataProvider, comparisonKey
 from gui.Scaleform.daapi.view.lobby.customization.customization_cm_handlers import CustomizationOptions
 from gui.Scaleform.daapi.view.lobby.customization.customization_item_vo import buildCustomizationItemDataVO
 from gui.Scaleform.daapi.view.lobby.customization.shared import C11N_MODE, CUSTOMIZATION_POPOVER_ALIASES, TABS_ITEM_MAPPING, CUSTOMIZATION_TABS, SEASON_IDX_TO_TYPE, SEASON_TYPE_TO_NAME, SEASONS_ORDER, OutfitInfo, getCustomPurchaseItems, getStylePurchaseItems, getTotalPurchaseInfo, getOutfitWithoutItem, getItemInventoryCount, getStyleInventoryCount, AdditionalPurchaseGroups
@@ -118,6 +120,7 @@ class MainView(CustomizationMainViewMeta):
         self._isDeferredRenderer = True
         self.__anchorPositionCallbackID = None
         self._state = {}
+        self._needFullRebuild = False
         self.__hangarSpace = g_hangarSpace.space
         self.__locatedOnEmbelem = False
         self.itemIsPicked = False
@@ -171,6 +174,9 @@ class MainView(CustomizationMainViewMeta):
             self._carouselDP.buildList(self._tabIndex, self._currentSeason, refresh=False)
             self.as_setCarouselDataS(self._buildCustomizationCarouselDataVO())
         self._carouselDP.refresh()
+
+    def refreshHotFilters(self):
+        self.as_setCarouselFiltersDataS({'hotFilters': [self._carouselDP.getOwnedFilter(), self._carouselDP.getAppliedFilter()]})
 
     def refreshOutfit(self):
         """ Apply any changes to the vehicle's 3d model.
@@ -238,7 +244,7 @@ class MainView(CustomizationMainViewMeta):
         self.refreshOutfit()
         self.__setBuyingPanelData()
         self.__setHeaderInitData()
-        self.refreshCarousel(rebuild=False)
+        self.refreshCarousel(rebuild=self._carouselDP.getAppliedFilter() or self._carouselDP.getOwnedFilter())
 
     def clearCustomizationItem(self, areaId, slotId, regionId, seasonIdx):
         """ Removes the item from the given region.
@@ -253,7 +259,7 @@ class MainView(CustomizationMainViewMeta):
         self.__setAnchorsInitData(self._tabIndex, doRegions, True)
         self.__setBuyingPanelData()
         self.__setHeaderInitData()
-        self.refreshCarousel(rebuild=False)
+        self.refreshCarousel(rebuild=self._carouselDP.getAppliedFilter() or self._carouselDP.getOwnedFilter())
 
     def switchToCustom(self, updateUI=True):
         """ Turn on the Custom customization mode
@@ -311,6 +317,7 @@ class MainView(CustomizationMainViewMeta):
         """
         self.clearFilter()
         self.refreshFilterData()
+        self.refreshHotFilters()
         self.refreshCarousel(rebuild=True)
 
     def clearFilter(self):
@@ -333,9 +340,9 @@ class MainView(CustomizationMainViewMeta):
             return {'items': []}
         items = []
         for outfit in self._modifiedOutfits.itervalues():
-            items.extend((item.intCD for item in outfit.items() if not item.isHistorical()))
+            items.extend((item for item in outfit.items() if not item.isHistorical()))
 
-        return {'items': items}
+        return {'items': [ item.intCD for item in sorted(items, key=comparisonKey) ]}
 
     def removeItems(self, *intCDs):
         """ Remove the given item from every outfit.
@@ -355,7 +362,7 @@ class MainView(CustomizationMainViewMeta):
         self.__setHeaderInitData()
         self.__setBuyingPanelData()
         self.as_refreshAnchorPropertySheetS()
-        self.refreshCarousel(rebuild=False)
+        self.refreshCarousel(rebuild=self._carouselDP.getAppliedFilter() or self._carouselDP.getOwnedFilter())
         return
 
     def updatePropertySheetButtons(self, areaId, slotId, regionId):
@@ -431,14 +438,17 @@ class MainView(CustomizationMainViewMeta):
     def getCurrentTab(self):
         return self._tabIndex
 
-    def getAppliedItems(self):
+    def getAppliedItems(self, isOriginal=True):
+        outfits = self._originalOutfits if isOriginal else self._modifiedOutfits
+        style = self._originalStyle if isOriginal else self._modifiedStyle
+        seasons = SeasonType.COMMON_SEASONS if isOriginal else (self._currentSeason,)
         appliedItems = set()
-        for seasonType in SeasonType.COMMON_SEASONS:
-            originalOutfit = self._originalOutfits[seasonType]
-            appliedItems.update((i.intCD for i in originalOutfit.items()))
+        for seasonType in seasons:
+            outfit = outfits[seasonType]
+            appliedItems.update((i.intCD for i in outfit.items()))
 
-        if self._originalStyle:
-            appliedItems.add(self._originalStyle.intCD)
+        if style:
+            appliedItems.add(style.intCD)
         return appliedItems
 
     def isItemInOutfit(self, item):
@@ -449,6 +459,7 @@ class MainView(CustomizationMainViewMeta):
     @process('buyAndInstall')
     def buyAndExit(self, purchaseItems):
         self.itemsCache.onSyncCompleted -= self.__onCacheResync
+        cart = getTotalPurchaseInfo(purchaseItems)
         groupHasItems = {AdditionalPurchaseGroups.STYLES_GROUP_ID: False,
          SeasonType.WINTER: False,
          SeasonType.SUMMER: False,
@@ -486,8 +497,7 @@ class MainView(CustomizationMainViewMeta):
                 SystemMessages.pushI18nMessage(result.userMsg, type=result.sysMsgType)
 
         if not errorCount:
-            cart = getTotalPurchaseInfo(purchaseItems)
-            if cart.numSelected > 0 and cart.totalPrice.price > Money(None, None, None):
+            if cart.totalPrice != ITEM_PRICE_EMPTY:
                 msgCtx = {'money': formatPrice(cart.totalPrice.price),
                  'count': cart.numSelected}
                 SystemMessages.pushI18nMessage(MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_CUSTOMIZATIONSBUY, type=SM_TYPE.Information, **msgCtx)
@@ -497,12 +507,12 @@ class MainView(CustomizationMainViewMeta):
         else:
             self.__onCacheResync()
         self.itemsCache.onSyncCompleted += self.__onCacheResync
-        return
 
     @process('sellItem')
     def sellItem(self, intCD, shouldSell):
         if not shouldSell:
             return
+        self._needFullRebuild = self._carouselDP.getOwnedFilter()
         item = self.itemsCache.items.getItemByCD(intCD)
         if item.fullInventoryCount(g_currentVehicle.item):
             yield CustomizationsSeller(g_currentVehicle.item, item).request()
@@ -545,8 +555,9 @@ class MainView(CustomizationMainViewMeta):
         self.refreshOutfit()
 
     def _dispose(self):
-        self.__releaseItemSound()
-        self.soundManager.playInstantSound(SOUNDS.EXIT)
+        if g_appLoader.getSpaceID() != _SPACE_ID.LOGIN:
+            self.__releaseItemSound()
+            self.soundManager.playInstantSound(SOUNDS.EXIT)
         if self.__locatedOnEmbelem:
             self.__hangarSpace.clearSelectedEmblemInfo()
             self.__hangarSpace.locateCameraToPreview()
@@ -618,13 +629,9 @@ class MainView(CustomizationMainViewMeta):
         
         :return: CustomizationCarouselDataVO with information on bookmarks.
         """
-        isZeroCount = False
-        if self._carouselDP.itemCount == 0:
-            displayString = makeHtmlString('html_templates:lobby/customization', 'filterCounterZero', {'displayCount': str(self._carouselDP.itemCount),
-             'totalCount': str(self._carouselDP.totalItemCount)})
-            isZeroCount = True
-        else:
-            displayString = '{}/{}'.format(self._carouselDP.itemCount, self._carouselDP.totalItemCount)
+        isZeroCount = self._carouselDP.itemCount == 0
+        countStyle = text_styles.error if isZeroCount else text_styles.main
+        displayString = text_styles.main('{} / {}'.format(countStyle(str(self._carouselDP.itemCount)), str(self._carouselDP.totalItemCount)))
         shouldShow = self._carouselDP.itemCount < self._carouselDP.totalItemCount
         return CustomizationCarouselDataVO(displayString, isZeroCount, shouldShow, itemLayoutSize=self._carouselDP.getItemSizeData(), bookmarks=self._carouselDP.getBookmarkData())._asdict()
 
@@ -635,7 +642,8 @@ class MainView(CustomizationMainViewMeta):
             showUnsupportedAlert = not self._isDeferredRenderer
         else:
             showUnsupportedAlert = False
-        return buildCustomizationItemDataVO(item, itemInventoryCount, showUnsupportedAlert=showUnsupportedAlert)
+        isCurrentlyApplied = itemCD in self._carouselDP.getCurrentlyApplied()
+        return buildCustomizationItemDataVO(item, itemInventoryCount, showUnsupportedAlert=showUnsupportedAlert, isCurrentlyApplied=isCurrentlyApplied)
 
     def __carveUpOutfits(self):
         """ Fill up the internal structures with vehicle's outfits.
@@ -687,7 +695,10 @@ class MainView(CustomizationMainViewMeta):
             self._carouselDP.setHistoricalFilter(kwargs['historic'])
         if 'inventory' in kwargs:
             self._carouselDP.setOwnedFilter(kwargs['inventory'])
+        if 'applied' in kwargs:
+            self._carouselDP.setAppliedFilter(kwargs['applied'])
         self.refreshCarousel(rebuild=True)
+        self.refreshHotFilters()
 
     def __onOutfitChanged(self):
         self.refreshOutfit()
@@ -704,8 +715,11 @@ class MainView(CustomizationMainViewMeta):
         self.__setBuyingPanelData()
         if self._mode == C11N_MODE.CUSTOM:
             self.as_hideAnchorPropertySheetS()
-        self.refreshCarousel(rebuild=False)
+        else:
+            self.as_refreshAnchorPropertySheetS()
+        self.refreshCarousel(rebuild=self._needFullRebuild)
         self.refreshOutfit()
+        self._needFullRebuild = False
 
     def __preserveState(self):
         self._state.update(modifiedStyle=self._modifiedStyle, modifiedOutfits={season:outfit.copy() for season, outfit in self._modifiedOutfits.iteritems()})
@@ -713,6 +727,8 @@ class MainView(CustomizationMainViewMeta):
     def __restoreState(self):
         self._modifiedStyle = self._state.get('modifiedStyle')
         self._modifiedOutfits = self._state.get('modifiedOutfits')
+        if self._modifiedStyle:
+            self._modifiedStyle = self.itemsCache.items.getItemByCD(self._modifiedStyle.intCD)
         self._state.clear()
 
     def __onServerSettingChanged(self, diff):
@@ -790,6 +806,18 @@ class MainView(CustomizationMainViewMeta):
          'defaultStyleLabel': VEHICLE_CUSTOMIZATION.DEFAULTSTYLE_LABEL,
          'carouselInitData': self.__getCarouselInitData(),
          'switcherInitData': self.__getSwitcherInitData()})
+        self.as_setCarouselFiltersInitDataS({'popoverAlias': VIEW_ALIAS.CUSTOMIZATION_FILTER_POPOVER,
+         'mainBtn': {'value': RES_ICONS.MAPS_ICONS_BUTTONS_FILTER,
+                     'tooltip': VEHICLE_CUSTOMIZATION.CAROUSEL_FILTER_MAINBTN},
+         'hotFilters': [{'value': RES_ICONS.MAPS_ICONS_CUSTOMIZATION_STORAGE_ICON,
+                         'tooltip': VEHICLE_CUSTOMIZATION.CAROUSEL_FILTER_STORAGEBTN,
+                         'selected': self._carouselDP.getOwnedFilter()}, {'value': RES_ICONS.MAPS_ICONS_BUTTONS_EQUIPPED_ICON,
+                         'tooltip': VEHICLE_CUSTOMIZATION.CAROUSEL_FILTER_EQUIPPEDBTN,
+                         'selected': self._carouselDP.getAppliedFilter()}]})
+
+    def onSelectHotFilter(self, index, value):
+        (self._carouselDP.setOwnedFilter, self._carouselDP.setAppliedFilter)[index](value)
+        self.refreshCarousel(rebuild=True)
 
     def __getSwitcherInitData(self):
         """ Switcher is a style/custom selector.
@@ -822,9 +850,7 @@ class MainView(CustomizationMainViewMeta):
 
     @staticmethod
     def __getCarouselInitData():
-        return {'icoFilter': RES_ICONS.MAPS_ICONS_BUTTONS_FILTER,
-         'message': '{}{}\n{}'.format(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, vSpace=-3), text_styles.neutral(VEHICLE_CUSTOMIZATION.CAROUSEL_MESSAGE_HEADER), text_styles.main(VEHICLE_CUSTOMIZATION.CAROUSEL_MESSAGE_DESCRIPTION)),
-         'filterTooltip': VEHICLE_CUSTOMIZATION.CAROUSEL_FILTER}
+        return {'message': '{}{}\n{}'.format(icons.makeImageTag(RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED, vSpace=-3), text_styles.neutral(VEHICLE_CUSTOMIZATION.CAROUSEL_MESSAGE_HEADER), text_styles.main(VEHICLE_CUSTOMIZATION.CAROUSEL_MESSAGE_DESCRIPTION))}
 
     def __getAnchorPositionData(self, slotId, region):
         if self._tabIndex in CUSTOMIZATION_TABS.REGIONS:

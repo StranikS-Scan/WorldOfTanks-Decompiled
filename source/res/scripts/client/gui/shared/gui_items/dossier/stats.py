@@ -597,11 +597,8 @@ class _StoredRankedSeasonsStatsBlock(_RankedSeasonsStatsBlock):
         return total
 
     def __getPreviousSeasonData(self):
-        prevSeasonID = 0
-        for seasonID, cycleID in self._stats.iterkeys():
-            if seasonID > prevSeasonID and cycleID == 0:
-                prevSeasonID = seasonID
-
+        seasonIDs = [ seasonID for seasonID, cycleID in self._stats.iterkeys() if cycleID == 0 ]
+        prevSeasonID = max(seasonIDs) if seasonIDs else 0
         return self._stats.get((prevSeasonID, 0))
 
 

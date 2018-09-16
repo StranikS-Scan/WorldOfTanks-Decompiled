@@ -8,6 +8,7 @@ from tutorial.control.functional import FunctionalConditions
 from tutorial.data.hints import HintProps
 from tutorial.doc_loader.parsers import HintsParser
 from tutorial.gui.Scaleform.hints.proxy import HintsProxy
+HINT_SHOWN_STATUS = 1
 _DESCRIPTOR_PATH = '{0:>s}/once-only-hints.xml'.format(settings.DOC_DIRECTORY)
 
 class HintsManager(object):
@@ -51,13 +52,13 @@ class HintsManager(object):
             hint = self._data.hintForItem(itemID)
             if hint is not None:
                 self._data.markAsShown(hint)
-                self.settingsCore.serverSettings.setOnceOnlyHintsSettings({hint['hintID']: 1})
+                self.settingsCore.serverSettings.setOnceOnlyHintsSettings({hint['hintID']: HINT_SHOWN_STATUS})
             return
 
     def __loadHintsData(self):
         LOG_DEBUG('Hints are loading')
         shownHints = self.settingsCore.serverSettings.getOnceOnlyHintsSettings()
-        shownHints = [ key for key, value in shownHints.iteritems() if value == 1 ]
+        shownHints = [ key for key, value in shownHints.iteritems() if value == HINT_SHOWN_STATUS ]
         self._data = HintsParser.parse(_DESCRIPTOR_PATH, shownHints)
 
     def __showHint(self, hint):

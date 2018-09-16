@@ -25,7 +25,7 @@ def _readRole(xmlCtx, section, subsectionName):
 
 def _readBrotherhoodSkill(xmlCtx, section, subsectionName):
     skill, xmlCtx, section = _readSkillBasics(xmlCtx, section, subsectionName)
-    return skills_components.BrotherhoodSkill(skill, _xml.readInt(xmlCtx, section, 'crewLevelIncrease', component_constants.ZERO_INT))
+    return skills_components.BrotherhoodSkill(skill, _xml.readFloat(xmlCtx, section, 'crewLevelIncrease', component_constants.ZERO_FLOAT))
 
 
 def _readCommanderTutorSkill(xmlCtx, section, subsectionName):

@@ -1,11 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/common/account_shared.py
-import time
 import collections
 import re
-import nations
 from items import vehicles, ITEM_TYPES
-from constants import IGR_TYPE, FAIRPLAY_VIOLATIONS_NAMES, FAIRPLAY_VIOLATIONS_MASKS
+from constants import FAIRPLAY_VIOLATIONS_NAMES, FAIRPLAY_VIOLATIONS_MASKS
 from items.components.c11n_constants import CustomizationType
 from debug_utils import *
 if IS_CELLAPP or IS_BASEAPP:
@@ -86,60 +84,6 @@ def currentWeekPlayDaysCount(curTime, newDayStart, newWeekStart):
     return curWeekPlayDaysCnt
 
 
-def getCustomizedComponentInIGR(igrCustomizationLayout, vehInvID, custType, accountIGRType, position, defID):
-    if custType == 'camouflages':
-        default = (None, vehicles._CUSTOMIZATION_EPOCH, 0)
-    elif custType == 'emblems':
-        default = (defID, vehicles._CUSTOMIZATION_EPOCH, 0)
-    elif custType == 'inscriptions':
-        default = (None,
-         vehicles._CUSTOMIZATION_EPOCH,
-         0,
-         0)
-    else:
-        assert False
-    vehInfo = igrCustomizationLayout.get(vehInvID, None)
-    if vehInfo is None:
-        return default
-    else:
-        igrTypeInfo = vehInfo.get(accountIGRType, None)
-        if igrTypeInfo is None:
-            return default
-        customInfo = igrTypeInfo.get(custType, None)
-        return default if customInfo is None else customInfo.get(position, default)
-
-
-def getIGRCustomizedVehCompDescr(igrCustomizationLayout, vehInvID, accountIGRType, vehCompDescr):
-    if accountIGRType == IGR_TYPE.NONE:
-        return vehCompDescr
-    else:
-        vehDescr = vehicles.VehicleDescr(vehCompDescr)
-        defID = vehDescr.type.defaultPlayerEmblemID
-        for propName, positions in (('playerInscriptions', 4), ('playerEmblems', 4), ('camouflages', 3)):
-            propValue = getattr(vehDescr, propName, None)
-            if propValue is None:
-                continue
-            for pos in range(0, positions):
-                if propName == 'playerEmblems':
-                    data = getCustomizedComponentInIGR(igrCustomizationLayout, vehInvID, 'emblems', accountIGRType, pos, defID)
-                    if data[0] != defID:
-                        vehDescr.setPlayerEmblem(pos, *data)
-                if propName == 'playerInscriptions':
-                    data = getCustomizedComponentInIGR(igrCustomizationLayout, vehInvID, 'inscriptions', accountIGRType, pos, None)
-                    if data[0] is not None:
-                        vehDescr.setPlayerInscription(pos, *data)
-                if propName == 'camouflages':
-                    data = getCustomizedComponentInIGR(igrCustomizationLayout, vehInvID, 'camouflages', accountIGRType, pos, None)
-                    if data[0] is not None:
-                        vehDescr.setCamouflage(pos, *data)
-
-        return vehDescr.makeCompactDescr()
-
-
-def getCustomizedVehCompDescr(igrLayout, vehInvID, accountIGRType, vehCompDescr):
-    return getIGRCustomizedVehCompDescr(igrLayout, vehInvID, accountIGRType, vehCompDescr)
-
-
 def getFairPlayViolationName(violationsMask):
     if violationsMask == 0:
         return None
@@ -149,37 +93,6 @@ def getFairPlayViolationName(violationsMask):
                 return name
 
         return None
-
-
-def getCamouflageIGRType(nationID, camouflageID):
-    if camouflageID is None:
-        return IGR_TYPE.NONE
-    else:
-        descr = vehicles.g_cache.customization(nationID)['camouflages'].get(camouflageID)
-        if descr is None:
-            raise Exception('Wrong camouflage idx')
-        return descr['igrType']
-
-
-def getPlayerInscriptionIGRType(nationID, inscriptionID):
-    if inscriptionID is None:
-        return IGR_TYPE.NONE
-    else:
-        customizationCache = vehicles.g_cache.customization(nationID)
-        descr = customizationCache['inscriptions'].get(inscriptionID)
-        if descr is None:
-            raise Exception('Wrong inscription id')
-        return descr[1]
-
-
-def getPlayerEmblemIGRType(emblemID):
-    if emblemID is None:
-        return IGR_TYPE.NONE
-    else:
-        descr = vehicles.g_cache.playerEmblems()[1].get(emblemID)
-        if descr is None:
-            raise Exception('Wrong emblem idx')
-        return descr[1]
 
 
 def validateCustomizationItem(custData):

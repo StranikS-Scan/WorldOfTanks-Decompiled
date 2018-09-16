@@ -20,6 +20,8 @@ _PING_BACK_OFF_MIN_DELAY = 60
 _PING_BACK_OFF_MAX_DELAY = 1200
 _PING_BACK_OFF_MODIFIER = 30
 _PING_BACK_OFF_EXP_RANDOM_FACTOR = 5
+_FIELD_ACCESS_TOKEN = 'access_token'
+_FIELD_EXPIRES_IN = 'expires_in'
 
 @ReprInjector.simple(('getStateID', 'state'))
 class _ClanState(object):
@@ -361,7 +363,16 @@ class ClanAvailableState(_ClanWebState):
                     if result.isSuccess():
                         nextLoginState = LOGIN_STATE.LOGGED_ON
                         data = result.getData()
-                        self.__accessTokenData = AccessTokenData(data['access_token'], responseTime + float(data['expires_in']))
+                        accessToken = data.get(_FIELD_ACCESS_TOKEN, None)
+                        if accessToken is not None:
+                            expiresIn = data.get(_FIELD_EXPIRES_IN, 0)
+                            if expiresIn is None:
+                                LOG_WARNING('Login success but ExpiresIn not defined! Use default value == 0!')
+                            else:
+                                responseTime += float(expiresIn)
+                            self.__accessTokenData = AccessTokenData(accessToken, responseTime)
+                        else:
+                            LOG_WARNING('Login success but AccessToken not defined!')
                     else:
                         nextLoginState = LOGIN_STATE.LOGGED_OFF
             else:

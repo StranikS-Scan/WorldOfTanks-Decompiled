@@ -700,6 +700,7 @@ class MENU(object):
     HEADER_ACCOUNT_POPOVER_ACHIEVES_RATING = '#menu:header/account/popover/achieves/rating'
     HEADER_ACCOUNT_POPOVER_ACHIEVES_BATTLES = '#menu:header/account/popover/achieves/battles'
     HEADER_ACCOUNT_POPOVER_ACHIEVES_WINS = '#menu:header/account/popover/achieves/wins'
+    HEADER_ACCOUNT_POPOVER_TUTORIAL_NEWBADGE = '#menu:header/account/popover/tutorial/newBadge'
     HEADER_NOTIFICATIONSIGN = '#menu:header/notificationSign'
     MODULEFITS_NEED_GUN = '#menu:moduleFits/need_gun'
     MODULEFITS_CENTER_UNAVAILABLE = '#menu:moduleFits/center_unavailable'
@@ -1283,6 +1284,8 @@ class MENU(object):
     CONTEXTMENU_KICKPLAYERFROMPREBATTLE = '#menu:contextMenu/kickPlayerFromPrebattle'
     CONTEXTMENU_KICKPLAYERFROMUNIT = '#menu:contextMenu/kickPlayerFromUnit'
     CONTEXTMENU_GIVELEADERSHIP = '#menu:contextMenu/giveLeadership'
+    CONTEXTMENU_TAKEEQUIPMENTCOMMANDER = '#menu:contextMenu/takeEquipmentCommander'
+    CONTEXTMENU_GIVEEQUIPMENTCOMMANDER = '#menu:contextMenu/giveEquipmentCommander'
     CONTEXTMENU_TAKELEADERSHIP = '#menu:contextMenu/takeLeadership'
     CONTEXTMENU_CREATESQUAD = '#menu:contextMenu/createSquad'
     CONTEXTMENU_CREATEEVENTSQUAD = '#menu:contextMenu/createEventSquad'
@@ -1679,6 +1682,7 @@ class MENU(object):
     FITTINGSELECTPOPOVER_DESCTEXT = '#menu:fittingSelectPopover/descText'
     FITTINGSELECTPOPOVER_DESCTEXT_CRYSTAL = '#menu:fittingSelectPopover/descText/crystal'
     QUOTE = '#menu:quote'
+    TECHTREE_ANNOUNCEMENT = '#menu:techtree/Announcement'
     CST_ITEM_CTX_MENU_BUY = '#menu:cst_item_ctx_menu/buy'
     CST_ITEM_CTX_MENU_SELL = '#menu:cst_item_ctx_menu/sell'
     CST_ITEM_CTX_MENU_REMOVEFROMTANK = '#menu:cst_item_ctx_menu/removeFromTank'
@@ -1727,6 +1731,8 @@ class MENU(object):
      CONTEXTMENU_KICKPLAYERFROMPREBATTLE,
      CONTEXTMENU_KICKPLAYERFROMUNIT,
      CONTEXTMENU_GIVELEADERSHIP,
+     CONTEXTMENU_TAKEEQUIPMENTCOMMANDER,
+     CONTEXTMENU_GIVEEQUIPMENTCOMMANDER,
      CONTEXTMENU_TAKELEADERSHIP,
      CONTEXTMENU_CREATESQUAD,
      CONTEXTMENU_CREATEEVENTSQUAD,

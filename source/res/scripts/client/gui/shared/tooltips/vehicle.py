@@ -31,6 +31,7 @@ from helpers import i18n, time_utils, int2roman, dependency
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import ITradeInController
 from skeletons.gui.shared import IItemsCache
+from gui.Scaleform.daapi.view.lobby.techtree.techtree_dp import g_techTreeDP
 _EQUIPMENT = 'equipment'
 _OPTION_DEVICE = 'optionalDevice'
 _BATTLE_BOOSTER = 'battleBooster'
@@ -40,6 +41,7 @@ _ROLE_BONUS_TYPE = 'role'
 _EXTRA_BONUS_TYPE = 'extra'
 _TOOLTIP_MIN_WIDTH = 420
 _TOOLTIP_MAX_WIDTH = 460
+_TOOLTIP_ANNOUNCEMENT_MAX_WIDTH = 310
 _CREW_TOOLTIP_PARAMS = {Tankman.ROLES.COMMANDER: {'paramName': TOOLTIPS.VEHICLEPREVIEW_CREW_INFLUENCE_RECONNAISSANCE,
                            'commanderPercents': '10%',
                            'crewPercents': '1%'},
@@ -168,6 +170,19 @@ class VehicleSimpleParametersTooltipData(BaseVehicleParametersTooltipData):
         valueLeftPadding = -3 if icon else 6
         blocks.append(formatters.packTitleDescParameterWithIconBlockData(title, text_styles.warning(_ms(TOOLTIPS.VEHICLEPARAMS_TITLE_VALUETEMPLATE, value=value)), icon=icon, desc=desc, valueAtRight=True, iconPadding=formatters.packPadding(left=0, top=6), valuePadding=formatters.packPadding(left=valueLeftPadding, top=4)))
         return blocks
+
+
+class VehicleAnnouncementParametersTooltipData(BlocksTooltipData):
+
+    def __init__(self, context):
+        super(VehicleAnnouncementParametersTooltipData, self).__init__(context, TOOLTIP_TYPE.VEHICLE)
+        self._setWidth(_TOOLTIP_ANNOUNCEMENT_MAX_WIDTH)
+
+    def _packBlocks(self, *args, **kwargs):
+        announcement = self.context.buildItem(*args, **kwargs)
+        items = super(VehicleAnnouncementParametersTooltipData, self)._packBlocks()
+        items.append(formatters.packTextBlockData(text_styles.main(_ms(announcement.tooltip))))
+        return items
 
 
 class BaseVehicleAdvancedParametersTooltipData(BaseVehicleParametersTooltipData):

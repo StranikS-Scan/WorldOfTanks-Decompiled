@@ -6,6 +6,7 @@ from account_helpers.AccountSettings import GUI_START_BEHAVIOR
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.RankedBattlesWelcomeViewMeta import RankedBattlesWelcomeViewMeta
+from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.ranked_battles.constants import SOUND
@@ -21,9 +22,6 @@ class RankedBattlesWelcomeView(LobbySubView, RankedBattlesWelcomeViewMeta):
     rankedController = dependency.descriptor(IRankedBattlesController)
     __background_alpha__ = 0.5
 
-    def __init__(self, ctx=None):
-        super(RankedBattlesWelcomeView, self).__init__()
-
     def onEscapePress(self):
         self.__close()
 
@@ -36,9 +34,9 @@ class RankedBattlesWelcomeView(LobbySubView, RankedBattlesWelcomeViewMeta):
     def onAnimationFinished(self, forced):
         if forced:
             self.soundManager.playSound(SOUND.ANIMATION_WINDOW_CLOSED)
-        filters = self.__getFilters()
-        filters['isRankedWelcomeViewShowed'] = True
-        self.__setFilters(filters)
+        stateFlags = self.__getShowStateFlags()
+        stateFlags['isRankedWelcomeViewShowed'] = True
+        self.__setShowStateFlags(stateFlags)
 
     def onSoundTrigger(self, eventName):
         self.soundManager.playSound(eventName)
@@ -48,13 +46,13 @@ class RankedBattlesWelcomeView(LobbySubView, RankedBattlesWelcomeViewMeta):
         self.as_setDataS(self.__getData())
 
     def __getData(self):
-        filters = self.__getFilters()
-        isCompleted = filters['isRankedWelcomeViewStarted']
-        filters['isRankedWelcomeViewStarted'] = True
-        self.__setFilters(filters)
+        stateFlags = self.__getShowStateFlags()
+        isCompleted = stateFlags['isRankedWelcomeViewStarted']
+        stateFlags['isRankedWelcomeViewStarted'] = True
+        self.__setShowStateFlags(stateFlags)
         rulePositive, ruleNegative = self.__getRules()
-        ranks = [ RES_ICONS.getRankIcon('114x160', i) for i in xrange(1, 6) ]
-        ranks.append(RES_ICONS.MAPS_ICONS_RANKEDBATTLES_RANKS_114X160_RANKVEHMASTER)
+        self.rankedController.getRanksChain()
+        ranks = [ rank.getIcon('big') for rank in self.rankedController.getRanksChain() if rank.getID() > 0 ]
         return {'header': text_styles.superPromoTitle(RANKED_BATTLES.WELCOMESCREEN_HEADER),
          'rules': [{'image': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_RANKEDBATTESVIEW_ICN_TANKS,
                     'description': text_styles.hightlight(RANKED_BATTLES.WELCOMESCREEN_LEFTRULE),
@@ -66,6 +64,7 @@ class RankedBattlesWelcomeView(LobbySubView, RankedBattlesWelcomeViewMeta):
          'ranks': ranks,
          'rulePositive': rulePositive,
          'ruleNegative': ruleNegative,
+         'rankDescription': text_styles.superPromoTitle(RANKED_BATTLES.WELCOMESCREEN_RANKDESCR),
          'ranksDescription': text_styles.promoSubTitle(RANKED_BATTLES.WELCOMESCREEN_RANKSDESCR),
          'equalityText': RANKED_BATTLES.WELCOMESCREEN_EQUALITYTEXT,
          'rulesDelimeterText': text_styles.promoSubTitle(RANKED_BATTLES.WELCOMESCREEN_RULESDELIMETER),
@@ -77,8 +76,8 @@ class RankedBattlesWelcomeView(LobbySubView, RankedBattlesWelcomeViewMeta):
          'isComplete': bool(isCompleted)}
 
     def __getRules(self):
-        topWinNum = self.rankedController.getRanksChanges(isLoser=False).count(1)
-        topLoserNum = self.rankedController.getRanksChanges(isLoser=True).count(1)
+        topWinNum = self.rankedController.getRanksTops(isLoser=False, stepDiff=RANKEDBATTLES_ALIASES.STEP_VALUE_EARN)
+        topLoserNum = self.rankedController.getRanksTops(isLoser=True, stepDiff=RANKEDBATTLES_ALIASES.STEP_VALUE_EARN)
         teamStr = text_styles.bonusAppliedText(RANKED_BATTLES.WELCOMESCREEN_POSITIVE_TEAM)
         descr = text_styles.hightlight(RANKED_BATTLES.WELCOMESCREEN_POSITIVE_BODY)
         rulePositive = {'image': RES_ICONS.getRankedPostBattleTopIcon(topWinNum),
@@ -98,9 +97,9 @@ class RankedBattlesWelcomeView(LobbySubView, RankedBattlesWelcomeViewMeta):
         SoundGroups.g_instance.playSound2D(SOUND.ANIMATION_WINDOW_CLOSED)
         self.destroy()
 
-    def __getFilters(self):
+    def __getShowStateFlags(self):
         defaults = AccountSettings.getFilterDefault(GUI_START_BEHAVIOR)
         return self.settingsCore.serverSettings.getSection(GUI_START_BEHAVIOR, defaults)
 
-    def __setFilters(self, filters):
+    def __setShowStateFlags(self, filters):
         self.settingsCore.serverSettings.setSectionSettings(GUI_START_BEHAVIOR, filters)

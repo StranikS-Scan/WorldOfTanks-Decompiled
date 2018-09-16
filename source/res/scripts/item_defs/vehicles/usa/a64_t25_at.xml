@@ -68,7 +68,7 @@
       <nodes>	HP_Track_Exhaus_1	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.2242 0.643718 1.6132	</turret>
+      <turret>	0.2242 0.79767 1.6132	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/american/A64_T25_AT/collision/Hull.model	</collisionModelServer>
@@ -279,7 +279,7 @@
           <VTiles>	1	</VTiles>
         </atlas>
       </splineDesc>
-      <trackThickness>	-0.0297	</trackThickness>
+      <trackThickness>	0.0121	</trackThickness>
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
@@ -291,7 +291,7 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
-          <forwardElastK>	0.6	</forwardElastK>
+          <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
           <offset>	-0.129	</offset>
         </node>
@@ -304,14 +304,14 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L1	</name>
-          <forwardElastK>	0.6	</forwardElastK>
+          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	1.9	</backwardElastK>
           <offset>	-0.071	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L2	</name>
-          <forwardElastK>	0.6	</forwardElastK>
+          <forwardElastK>	0.95	</forwardElastK>
           <backwardElastK>	2.2	</backwardElastK>
           <offset>	-0.071	</offset>
         </node>
@@ -343,21 +343,21 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
-          <forwardElastK>	0.6	</forwardElastK>
+          <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
           <offset>	-0.129	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R1	</name>
-          <forwardElastK>	0.6	</forwardElastK>
+          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	1.9	</backwardElastK>
           <offset>	-0.071	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R2	</name>
-          <forwardElastK>	0.6	</forwardElastK>
+          <forwardElastK>	0.95	</forwardElastK>
           <backwardElastK>	2.2	</backwardElastK>
           <offset>	-0.071	</offset>
         </node>
@@ -489,7 +489,7 @@
       <AODecals>
         <decal>
           <transform>
-            <row0>	4.348270 0.000000 0.000000	</row0>
+            <row0>	4.359700 0.000000 0.000000	</row0>
             <row1>	0.000000 1.350000 0.000000	</row1>
             <row2>	0.000000 0.000000 7.180820	</row2>
             <row3>	0.000000 0.000000 0.000000	</row3>
@@ -530,7 +530,7 @@
           <VTiles>	1	</VTiles>
         </atlas>
       </splineDesc>
-      <trackThickness>	-0.0297	</trackThickness>
+      <trackThickness>	0.0121	</trackThickness>
       <trackNodes>
         <enable>	true	</enable>
         <linkBones>	false	</linkBones>
@@ -542,7 +542,7 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L0	</name>
-          <forwardElastK>	0.6	</forwardElastK>
+          <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
           <offset>	-0.129	</offset>
         </node>
@@ -555,14 +555,14 @@
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L1	</name>
-          <forwardElastK>	0.6	</forwardElastK>
+          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	1.9	</backwardElastK>
           <offset>	-0.071	</offset>
         </node>
         <node>
           <isLeft>	true	</isLeft>
           <name>	Track_VT_L2	</name>
-          <forwardElastK>	0.6	</forwardElastK>
+          <forwardElastK>	0.95	</forwardElastK>
           <backwardElastK>	2.2	</backwardElastK>
           <offset>	-0.071	</offset>
         </node>
@@ -594,21 +594,21 @@
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R0	</name>
-          <forwardElastK>	0.6	</forwardElastK>
+          <forwardElastK>	0.85	</forwardElastK>
           <backwardElastK>	1.6	</backwardElastK>
           <offset>	-0.129	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R1	</name>
-          <forwardElastK>	0.6	</forwardElastK>
+          <forwardElastK>	1	</forwardElastK>
           <backwardElastK>	1.9	</backwardElastK>
           <offset>	-0.071	</offset>
         </node>
         <node>
           <isLeft>	false	</isLeft>
           <name>	Track_VT_R2	</name>
-          <forwardElastK>	0.6	</forwardElastK>
+          <forwardElastK>	0.95	</forwardElastK>
           <backwardElastK>	2.2	</backwardElastK>
           <offset>	-0.071	</offset>
         </node>

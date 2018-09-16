@@ -287,71 +287,125 @@ class RankedResultsTeamStatsBlock(shared.BiDiStatsBlock):
 class RankedResultsTeamDataStatsBlock(base.StatsBlock):
     """Block contains one Team data to show in team list for RankedBattlesBattleResults."""
     __slots__ = ('title', 'titleAlpha', 'teamList')
-    _TEAM_MEMBERS_NUMBER = 15
 
     def setRecord(self, result, reusable):
+        """
+        Set block record
+        :param result: list of VehicleSummarizeInfo
+        :param reusable: battleResult reusable info
+        :return: list of RankedResultsTeamPartDataStatsBlock.getVO()
+        """
         helper = common.RankInfoHelper(reusable)
         winTeam = reusable.common.winnerTeam
-        teamId = None
-        topBound = helper.getLoserBounds(True)
-        xpAtBorder = None
-        topList = RankedResultsTeamPartDataStatsBlock()
-        bottomList = RankedResultsTeamPartDataStatsBlock()
+        playerTeam = reusable.personal.avatar.team
+        lists = []
+        listsSteps = []
+        isWon = False
         personalDBID = reusable.personal.avatar.accountDBID
         topListBlink = False
-        bottomListBlink = False
+        playerCount = 0
+        lastXP = 0
+        xpAtBorder = 0
+        lastListIdx = 0
+        standoffInfo = None
         for idx, item in enumerate(result):
-            if teamId is None:
-                teamId = item.player.team
-                topBound = helper.getTopBoundForTeam(teamId)
-            if idx < topBound:
-                dataList = topList
-                standoff = helper.getStandoff(isTop=True, xp=item.xp, xpToCompare=helper.getMinXp(), team=teamId)
-                xpAtBorder = item.xp
-                if not topListBlink and item.player.dbID == personalDBID:
+            isPlayer = item.player.dbID == personalDBID
+            if playerCount == 0:
+                isWon = self.__getIsWinTeam(currentTeam=item.player.team, winTeam=winTeam, playerTeam=playerTeam)
+                lists, listsSteps = self.__createListsAndSteps(listsData=helper.getListsData(isLoser=not isWon))
+            listIdx = self.__getPlayerListIndex(playerIndex=idx, listsSteps=listsSteps)
+            dataList = lists[listIdx]
+            if lastListIdx != listIdx:
+                xpAtBorder = lastXP
+            isTopList = dataList.isTopList()
+            if isPlayer:
+                stepChanges = reusable.personal.getRankInfo().stepChanges
+                standoff = helper.getPlayerStandoff(team=playerTeam, position=idx, stepChanges=stepChanges)
+                if isTopList and not topListBlink:
                     topListBlink = True
+                    dataList.setListBlink(True)
             else:
-                dataList = bottomList
-                standoff = helper.getStandoff(isTop=False, xp=item.xp, xpToCompare=xpAtBorder, team=teamId)
-                if not bottomListBlink and item.player.dbID == personalDBID and not standoff:
-                    bottomListBlink = True
+                standoffInfo = helper.getStandoff(isTop=isTopList, xp=item.xp, xpToCompare=xpAtBorder, position=idx, isLoser=not isWon, lastStandoffInfo=standoffInfo)
+                standoff, _ = standoffInfo
+            lastXP = item.xp
             listItem = RankedResultsListItemStatsBlock()
             listItem.setRecord((item, standoff), reusable)
             dataList.appendPlayer(listItem.getVO())
+            playerCount += 1
 
-        self.__fillIncompleteTeam(topBound, helper.getPlayerNumber(), topList, bottomList)
-        isWon = winTeam == teamId
-        topList.setResources(isWon, True, topListBlink, helper)
-        bottomList.setResources(isWon, False, bottomListBlink, helper)
+        if playerCount == 0:
+            if not winTeam:
+                isWon = False
+            else:
+                isWon = playerTeam != winTeam
+            lists, listsSteps = self.__createListsAndSteps(listsData=helper.getListsData(isLoser=not isWon))
+        self.__fillIncompleteTeam(playerCount, helper.getPlayerNumber(), lists, listsSteps)
         if isWon:
             self.title = text_styles.highTitle(RANKED_BATTLES.BATTLERESULT_WINNERS)
             self.titleAlpha = 1.0
         else:
             self.title = text_styles.highTitle(RANKED_BATTLES.BATTLERESULT_LOSERS)
             self.titleAlpha = 0.6
-        self.teamList = list()
-        if topList.getPlayersNumber() > 0:
-            self.teamList.append(topList.getVO())
-        if bottomList.getPlayersNumber() > 0:
-            self.teamList.append(bottomList.getVO())
+        self.teamList = []
+        for listOfPlayers in lists:
+            if listOfPlayers.getPlayersNumber() > 0:
+                self.teamList.append(listOfPlayers.getVO())
+
         return
 
+    def __getIsWinTeam(self, currentTeam, playerTeam, winTeam):
+        if not winTeam:
+            isWon = False
+        else:
+            isPlayerTeam = playerTeam == currentTeam
+            if isPlayerTeam:
+                isWon = winTeam == playerTeam
+            else:
+                isWon = winTeam != playerTeam
+        return isWon
+
     @staticmethod
-    def __fillIncompleteTeam(topBound, maxCount, topList, bottomList):
+    def __fillIncompleteTeam(membersCount, maxCount, lists, listsSteps):
         """
         This method is necessary for development needs.
         Both teams should be normally 15vs15, but in development case the number can be less.
         We should fill with empty data to show layout correctly.
         """
-        membersNumber = topList.getPlayersNumber() + bottomList.getPlayersNumber()
-        for idx in range(membersNumber, maxCount):
-            dataList = topList if idx < topBound else bottomList
+        for idx in range(membersCount, maxCount):
+            listIndex = RankedResultsTeamDataStatsBlock.__getPlayerListIndex(playerIndex=idx, listsSteps=listsSteps)
+            dataList = lists[listIndex]
             dataList.appendPlayer(RankedResultsListItemStatsBlock().getVO())
+
+    @staticmethod
+    def __getPlayerListIndex(playerIndex, listsSteps):
+        indx = 0
+        for indx, value in enumerate(listsSteps):
+            if playerIndex < value:
+                return indx
+
+        return indx
+
+    @staticmethod
+    def __createListsAndSteps(listsData):
+        lists = []
+        count = len(listsData)
+        i = 0
+        listsSteps = []
+        step = 0
+        while i < count:
+            listBlock = RankedResultsTeamPartDataStatsBlock()
+            listBlock.setListResources(listsData[i], i == 0)
+            lists.append(listBlock)
+            step += listBlock.getListCapacity()
+            listsSteps.append(step)
+            i += 1
+
+        return (lists, listsSteps)
 
 
 class RankedResultsTeamPartDataStatsBlock(base.StatsBlock):
     """Block contains one part of team data: Tops or Bottoms."""
-    __slots__ = ('listData', 'backgroundType', 'backgroundBlink', 'icon', 'capacity', 'isColorBlind')
+    __slots__ = ('listData', 'backgroundType', 'backgroundBlink', 'icon', 'capacity', 'isColorBlind', 'iconType')
     settingsCore = dependency.descriptor(ISettingsCore)
 
     def __init__(self, meta=None, field='', *path):
@@ -360,6 +414,7 @@ class RankedResultsTeamPartDataStatsBlock(base.StatsBlock):
         self.backgroundType = ''
         self.backgroundBlink = False
         self.icon = ''
+        self.iconType = ''
         self.capacity = 0
         self.isColorBlind = False
 
@@ -369,11 +424,29 @@ class RankedResultsTeamPartDataStatsBlock(base.StatsBlock):
     def getPlayersNumber(self):
         return len(self.listData)
 
-    def setResources(self, isWon, isTopList, isBlink, rankInfoHelper):
-        self.backgroundBlink = isBlink
-        self.capacity, self.icon, self.backgroundType = rankInfoHelper.getCapacityWithResources(not isWon, isTopList)
+    def setListResources(self, listInfo, isTopList=False):
+        """
+        Populate list resources
+        :param listInfo: tuple of capacity and resources info (see __getRankBounds())
+        :param isBlink: enable blink animation
+        :param isTopList: this is TOP list or not
+        """
+        self.capacity, resources = listInfo
+        self.iconType, self.backgroundType, iconMethod = resources
+        self.icon = ''
+        if isTopList:
+            self.icon = iconMethod(self.capacity)
         if self.backgroundType == RANKEDBATTLES_ALIASES.BACKGROUND_STATE_LOSE:
             self.isColorBlind = self.settingsCore.getSetting('isColorBlind')
+
+    def setListBlink(self, isBlink):
+        self.backgroundBlink = isBlink
+
+    def getListCapacity(self):
+        return self.capacity
+
+    def isTopList(self):
+        return not self.icon == ''
 
 
 class RankedResultsListItemStatsBlock(base.StatsBlock):

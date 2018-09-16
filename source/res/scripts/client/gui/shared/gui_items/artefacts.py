@@ -70,7 +70,7 @@ class VehicleArtefact(FittingItem):
     @property
     def crewLevelIncrease(self):
         """ Value of crew role levels increasing. """
-        return 0 if not self.isStimulator else self.descriptor.crewLevelIncrease
+        return 0.0 if not self.isStimulator else self.descriptor.crewLevelIncrease
 
     @property
     def isRemovingStun(self):

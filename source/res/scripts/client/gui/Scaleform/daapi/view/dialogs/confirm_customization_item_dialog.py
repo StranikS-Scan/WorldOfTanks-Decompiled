@@ -58,19 +58,23 @@ class ConfirmCustomizationItemDialog(ConfirmItemWindowMeta):
             action = None
             if actualPrices != defaultPrices:
                 action = self.meta.getActionVO(item)
-            iconWidth = 59
+            iconWidth = iconHeight = 59
             if item.isWide():
                 iconWidth = 118 if item.itemTypeID == GUI_ITEM_TYPE.INSCRIPTION else 161
+            smallSlotVO = {'itemIcon': item.icon,
+             'isBgVisible': False,
+             'isFrameVisible': True,
+             'iconWidth': iconWidth,
+             'iconHeight': iconHeight}
             resultData = {'id': item.intCD,
              'price': getMoneyVO(actualPrices),
              'actionPriceData': action,
-             'icon': item.icon,
              'name': item.userName,
              'currency': currency,
              'defaultValue': self.meta.getDefaultValue(item),
              'maxAvailableCount': self.meta.getMaxAvailableItemsCount(item),
              'isActionNow': hasAlternativePrice,
-             'iconWidth': iconWidth}
+             'smallSlotVO': smallSlotVO}
             self.as_setDataS(resultData)
         else:
             LOG_ERROR("Couldn't find given customization item: ", self.meta.getItem())

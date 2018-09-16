@@ -46,7 +46,7 @@ from skeletons.gui.game_control import IRefSystemController, IAwardController, I
 from skeletons.gui.goodies import IGoodiesCache
 from skeletons.gui.server_events import IEventsCache
 from skeletons.gui.shared import IItemsCache
-from skeletons.new_year import INewYearController, ILootBoxManager
+from skeletons.new_year import INewYearController
 from gui.shared.utils.functions import getViewName
 from items.new_year_types import NY_STATE
 
@@ -375,23 +375,19 @@ class MotiveQuestsWindowHandler(ServiceChannelHandler):
 
 class QuestBoosterAwardHandler(ServiceChannelHandler):
     goodiesCache = dependency.descriptor(IGoodiesCache)
-    lootboxManager = dependency.descriptor(ILootBoxManager)
 
     def __init__(self, awardCtrl):
         super(QuestBoosterAwardHandler, self).__init__(SYS_MESSAGE_TYPE.tokenQuests.index(), awardCtrl)
 
     def _showAward(self, ctx):
-        if self.lootboxManager.isQuestBoosterAwardWindowBlocked:
-            return
-        else:
-            data = ctx[1].data
-            goodies = data.get('goodies', {})
-            for boosterID in goodies:
-                booster = self.goodiesCache.getBooster(boosterID)
-                if booster is not None and booster.enabled:
-                    shared_events.showBoosterAward(booster)
+        data = ctx[1].data
+        goodies = data.get('goodies', {})
+        for boosterID in goodies:
+            booster = self.goodiesCache.getBooster(boosterID)
+            if booster is not None and booster.enabled:
+                shared_events.showBoosterAward(booster)
 
-            return
+        return
 
 
 class BoosterAfterBattleAwardHandler(ServiceChannelHandler):
@@ -916,8 +912,7 @@ class RankedQuestsHandler(MultiTypeServiceChannelHandler):
         if season is not None:
             g_eventBus.handleEvent(events.LoadViewEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE, ctx={'quest': quest,
              'awards': data,
-             'closeClb': self.__unlock,
-             'season': season}), scope=EVENT_BUS_SCOPE.LOBBY)
+             'closeClb': self.__unlock}), scope=EVENT_BUS_SCOPE.LOBBY)
         else:
             self.__unlock()
         return

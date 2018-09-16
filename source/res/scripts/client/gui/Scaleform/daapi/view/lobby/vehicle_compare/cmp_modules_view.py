@@ -1,11 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/vehicle_compare/cmp_modules_view.py
 from adisp import process
-from constants import IS_DEVELOPMENT
 from debug_utils import LOG_WARNING, LOG_DEBUG, LOG_ERROR
-from gui.Scaleform.daapi.view.lobby.techtree import dumpers
+from gui.Scaleform.daapi.view.lobby.techtree import dumpers, nodes
 from gui.Scaleform.daapi.view.lobby.techtree.data import ResearchItemsData
-from gui.Scaleform.daapi.view.lobby.techtree.settings import USE_XML_DUMPING
 from gui.Scaleform.daapi.view.lobby.vehicle_compare import cmp_helpers
 from gui.Scaleform.daapi.view.lobby.vehicle_compare.cmp_configurator_base import VehicleCompareConfiguratorBaseView
 from gui.Scaleform.daapi.view.meta.VehicleModulesViewMeta import VehicleModulesViewMeta
@@ -202,12 +200,10 @@ class _PreviewItemsData(ResearchItemsData):
                 state = NODE_STATE_FLAGS.UNLOCKED
                 if inventoryVehicle.isInInventory:
                     state |= NODE_STATE_FLAGS.IN_INVENTORY
-        return {'id': nodeCD,
-         'state': state,
-         'unlockProps': unlockProps,
-         'displayInfo': {'path': path,
-                         'renderer': renderer,
-                         'level': level}}
+        displayInfo = {'path': path,
+         'renderer': renderer,
+         'level': level}
+        return nodes.RealNode(nodeCD, guiItem, 0, state, displayInfo, unlockProps=unlockProps)
 
     def _loadTopLevel(self, rootItem, unlockStats):
         pass
@@ -339,11 +335,7 @@ class VehicleModulesView(VehicleModulesViewMeta, VehicleCompareConfiguratorBaseV
         if self.__nodeDataGenerator is not None:
             self.__nodeDataGenerator.setVehicle(vehicle=self.__vehicle)
         else:
-            if USE_XML_DUMPING and IS_DEVELOPMENT:
-                dumper = dumpers.ResearchItemsXMLDumper()
-            else:
-                dumper = dumpers.ResearchBaseDumper()
-            self.__nodeDataGenerator = _PreviewItemsData(dumper, self.__vehicle)
+            self.__nodeDataGenerator = _PreviewItemsData(dumpers.ResearchBaseDumper(), self.__vehicle)
         self.__updateModulesData()
         self.__initialModulesIDs = set(getInstalledModulesCDs(self.__vehicle))
         self.as_setItemS(AVAILABLE_NAMES[self.__vehicle.nationID], self.__nodes)

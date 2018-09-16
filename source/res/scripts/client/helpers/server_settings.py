@@ -203,7 +203,8 @@ class _RankedBattlesConfig(namedtuple('_RankedBattlesConfig', ['isEnabled',
  'seasons',
  'cycleTimes',
  'accLadderPts',
- 'vehLadderPts'])):
+ 'vehLadderPts',
+ 'shields'])):
 
     def asDict(self):
         return self._asdict()
@@ -234,7 +235,8 @@ _RankedBattlesConfig.__new__.__defaults__ = (False,
  {},
  (),
  (),
- ())
+ (),
+ {})
 
 class ServerSettings(object):
 

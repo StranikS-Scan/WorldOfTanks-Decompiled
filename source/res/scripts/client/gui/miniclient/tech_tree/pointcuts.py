@@ -6,7 +6,7 @@ from helpers import aop
 class OnTechTreePopulate(aop.Pointcut):
 
     def __init__(self):
-        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.techtree.TechTree', 'TechTree', '_populate', aspects=(aspects.OnTechTreePopulate,))
+        aop.Pointcut.__init__(self, 'gui.Scaleform.daapi.view.lobby.techtree.techtree_page', 'TechTree', '_populate', aspects=(aspects.OnTechTreePopulate,))
 
 
 class OnBuyVehicle(aop.Pointcut):

@@ -384,6 +384,7 @@ class TankmanSkill(GUIItem):
             tdescr = tankman.descriptor
             skills = tdescr.skills
             self._isFemale = tankman.isFemale
+            self._isPermanent = False
             if self._name in skills:
                 if skills.index(self._name) == len(skills) - 1:
                     self._level = tdescr.lastSkillLevel
@@ -393,13 +394,12 @@ class TankmanSkill(GUIItem):
             self._roleType = self.__getSkillRoleType(skillName)
             self._isActive = self.__getSkillActivity(tankman)
             self._isEnable = self.__getEnabledSkill(tankman)
-            self._isPermanent = False
         else:
             self._isFemale = False
+            self._isPermanent = False
             self._roleType = None
             self._isActive = False
             self._isEnable = False
-            self._isPermanent = False
         return
 
     def __getEnabledSkill(self, tankman):

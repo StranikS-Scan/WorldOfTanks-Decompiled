@@ -34,7 +34,7 @@ class _StringTokenBonusFormatter(TokenBonusFormatter):
         outcome = []
         for tokenID, token in bonus.getTokens().iteritems():
             if tokenID in self._newYearController.boxStorage.getDescriptors():
-                (outcome.append(_ms('#ny:hangar/bonusFlagInfo/tooltip/text', count=token.count)),)
+                outcome.append(_ms('#ny:hangar/bonusFlagInfo/tooltip/text', count=token.count))
 
         result = super(_StringTokenBonusFormatter, self).format(bonus)
         outcome.extend([ _ms(TOOLTIPS.QUESTS_BONUSES_TOKEN_HEADER, userName=b.userName) for b in result ])

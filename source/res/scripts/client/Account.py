@@ -952,8 +952,8 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
         proxy = lambda requestID, resultID, errorStr, ext={}: callback(resultID, errorStr, ext)
         self._doCmdStr(AccountCommands.CMD_QUERY_BALANCE_INFO, '', proxy)
 
-    def runQuest(self, questType, questID, callback):
-        self._doCmdIntStr(AccountCommands.CMD_RUN_QUEST, questType, questID, lambda requestID, resultID, errorStr: callback(resultID))
+    def runQuest(self, questType, questIDs, callback):
+        self._doCmdIntStrArr(AccountCommands.CMD_RUN_QUEST, questType, questIDs, lambda requestID, resultID, errorStr: callback(resultID))
 
     def pawnFreeAwardList(self, questType, questID, callback):
         args = [questType, questID]
@@ -984,6 +984,9 @@ class PlayerAccount(BigWorld.Entity, ClientChat):
 
     def _doCmdIntArr(self, cmd, arr, callback):
         return self.__doCmd('doCmdIntArr', cmd, callback, arr)
+
+    def _doCmdIntStrArr(self, cmd, int1, strArr, callback):
+        return self.__doCmd('doCmdIntStrArr', cmd, callback, int1, strArr)
 
     def _doCmdIntArrStrArr(self, cmd, intArr, strArr, callback):
         return self.__doCmd('doCmdIntArrStrArr', cmd, callback, intArr, strArr)

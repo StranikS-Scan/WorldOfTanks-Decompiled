@@ -7,10 +7,9 @@ from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from items import getTypeInfoByName
 from items.vehicles import VEHICLE_CLASS_TAGS
 import nations
-__all__ = ('USE_XML_DUMPING', 'NODE_STATE', 'RequestState', 'SelectedNation', 'UnlockProps', 'makeDefUnlockProps', 'VehicleClassInfo', 'MAX_PATH_LIMIT', 'RESEARCH_ITEMS', 'TREE_SHARED_REL_FILE_PATH', 'NATION_TREE_REL_FILE_PATH')
+__all__ = ('NODE_STATE', 'RequestState', 'SelectedNation', 'UnlockProps', 'DEFAULT_UNLOCK_PROPS', 'VehicleClassInfo', 'MAX_PATH_LIMIT', 'RESEARCH_ITEMS', 'TREE_SHARED_REL_FILE_PATH', 'NATION_TREE_REL_FILE_PATH')
 TREE_SHARED_REL_FILE_PATH = 'gui/flash/techtree/tree-shared.xml'
 NATION_TREE_REL_FILE_PATH = 'gui/flash/techtree/%s-tree.xml'
-USE_XML_DUMPING = False
 _VEHICLE_TYPE_NAME = GUI_ITEM_TYPE_NAMES[GUI_ITEM_TYPE.VEHICLE]
 RESEARCH_ITEMS = (GUI_ITEM_TYPE.GUN,
  GUI_ITEM_TYPE.TURRET,
@@ -115,6 +114,10 @@ class NODE_STATE:
         return state & NODE_STATE_FLAGS.CAN_TRADE_OFF
 
     @classmethod
+    def isAnnouncement(cls, state):
+        return state & NODE_STATE_FLAGS.ANNOUNCEMENT
+
+    @classmethod
     def printStates(cls, state):
         states = []
         for k, v in NODE_STATE_FLAGS.__dict__.iteritems():
@@ -144,16 +147,14 @@ class UnlockStats(namedtuple('UnlockStats', 'unlocked xps freeXP')):
 
 class UnlockProps(namedtuple('UnlockProps', 'parentID unlockIdx xpCost required')):
 
-    def _makeTuple(self):
+    def makeTuple(self):
         return (self.parentID,
          self.unlockIdx,
          self.xpCost,
          list(self.required))
 
 
-def makeDefUnlockProps():
-    return UnlockProps(0, -1, 0, set())
-
+DEFAULT_UNLOCK_PROPS = UnlockProps(0, -1, 0, set())
 
 class SelectedNation(object):
     __index = None

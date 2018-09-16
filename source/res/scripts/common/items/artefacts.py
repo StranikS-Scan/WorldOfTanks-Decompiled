@@ -164,10 +164,7 @@ class StaticFactorDevice(OptionalDevice):
             attrDict = getattr(vehicleDescr, self.__attr[0])
             attrName = self.__attr[1]
         val = attrDict[attrName]
-        if isinstance(val, int):
-            attrDict[attrName] = int(val * self.__factor)
-        else:
-            attrDict[attrName] = val * self.__factor
+        attrDict[attrName] = val * self.__factor
         miscAttrs = vehicleDescr.miscAttrs
         miscAttrs['stunResistanceEffect'] += self.stunResistanceEffect
         miscAttrs['stunResistanceDuration'] += self.stunResistanceDuration
@@ -194,10 +191,7 @@ class StaticAdditiveDevice(OptionalDevice):
             attrDict = getattr(vehicleDescr, self.__attr[0])
             attrName = self.__attr[1]
         val = attrDict[attrName]
-        if isinstance(val, int):
-            attrDict[attrName] = int(val + self.__value)
-        else:
-            attrDict[attrName] = val + self.__value
+        attrDict[attrName] = val + self.__value
         miscAttrs = vehicleDescr.miscAttrs
         miscAttrs['stunResistanceEffect'] += self.stunResistanceEffect
         miscAttrs['stunResistanceDuration'] += self.stunResistanceDuration
@@ -363,10 +357,10 @@ class Stimulator(Equipment):
 
     def __init__(self):
         super(Stimulator, self).__init__()
-        self.crewLevelIncrease = component_constants.ZERO_INT
+        self.crewLevelIncrease = component_constants.ZERO_FLOAT
 
     def _readConfig(self, xmlCtx, section):
-        self.crewLevelIncrease = _xml.readInt(xmlCtx, section, 'crewLevelIncrease', 1)
+        self.crewLevelIncrease = _xml.readFloat(xmlCtx, section, 'crewLevelIncrease', component_constants.ZERO_FLOAT)
 
 
 class Repairkit(Equipment):
@@ -375,7 +369,7 @@ class Repairkit(Equipment):
     def __init__(self):
         super(Repairkit, self).__init__()
         self.repairAll = False
-        self.bonusValue = component_constants.ZERO_INT
+        self.bonusValue = component_constants.ZERO_FLOAT
 
     def _readConfig(self, xmlCtx, section):
         self.repairAll = section.readBool('repairAll', False)

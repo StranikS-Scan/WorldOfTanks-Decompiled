@@ -156,6 +156,9 @@ class ContinuousNumberingFinder(_SquadFinder):
                 for vehicleID in vehiclesIDs:
                     yield (vehicleID, self._squadIndices[prebattleID])
 
+    def findSquadSizes(self):
+        raise UserWarning('Deprecated sclass method called- code should not be reached')
+
 
 def createSquadFinder(arenaVisitor):
     teams = arenaVisitor.type.getTeamsOnArenaRange()

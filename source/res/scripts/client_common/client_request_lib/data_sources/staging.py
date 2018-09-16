@@ -1228,6 +1228,29 @@ class StagingDataAccessor(base.BaseDataAccessor):
 
         return self._request_data(inner_callback, 'wgsh', url, method='PATCH', postData=post_data)
 
+    def set_equipment_commander(self, callback, periphery_id, unit_server_id, target_account_id, fields=None):
+        """
+        Sets given account_id as equipment commander
+        
+            .. _prebattle info API method:
+            https://stash.wargaming.net/projects/CLANWARS/repos/wgsh/browse/docs/unit_api/api.md
+        """
+        try:
+            periphery_id = int(periphery_id)
+            unit_server_id = int(unit_server_id)
+        except (TypeError, ValueError):
+            error = exceptions.BadRequest()
+            return callback({'description': error.description}, error.status_code, error.response_code)
+
+        url = '/unit_api/periphery/{periphery_id}/units/{unit_server_id}/members/{account_id}/equipment_commander'.format(periphery_id=periphery_id, unit_server_id=unit_server_id, account_id=self._account)
+        post_data = {'equipment_commander_id': target_account_id}
+
+        @preprocess_callback(callback, 'wgsh')
+        def inner_callback(data):
+            return data or {}
+
+        return self._request_data(inner_callback, 'wgsh', url, method='PATCH', postData=post_data)
+
     def leave_room(self, callback, periphery_id, unit_server_id, fields=None):
         """
         leave current user from room

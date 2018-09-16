@@ -9,8 +9,9 @@ class HonoredRankAchievement(RegularAchievement):
         super(HonoredRankAchievement, self).__init__('honoredRank', _AB.CLIENT, dossier, value)
 
     def getIcons(self):
-        return {self.ICON_TYPE.IT_180X180: '../maps/icons/rankedBattles/ranks/114x160/rankVehMaster.png',
-         self.ICON_TYPE.IT_67X71: '../maps/icons/rankedBattles/ranks/58x80/rankVehMaster.png'}
+        iconName = self._getIconName()
+        return {self.ICON_TYPE.IT_180X180: '%s/%s.png' % (self.ICON_PATH_180X180, iconName),
+         self.ICON_TYPE.IT_67X71: '%s/%s.png' % (self.ICON_PATH_67X71, iconName)}
 
     @classmethod
     def checkIsInDossier(cls, block, name, dossier):

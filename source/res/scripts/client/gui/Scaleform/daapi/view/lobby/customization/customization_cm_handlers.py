@@ -1,12 +1,12 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/customization_cm_handlers.py
-from CurrentVehicle import g_currentVehicle
 from Event import Event
 from gui.Scaleform.framework.managers.context_menu import AbstractContextMenuHandler
 from gui.Scaleform.locale.MENU import MENU
 from gui.shared.formatters import getItemPricesVO
 from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from helpers import dependency
+from items.components.c11n_constants import SeasonType
 from shared_utils import first
 from skeletons.gui.shared import IItemsCache
 from skeletons.gui.customization import ICustomizationService
@@ -58,12 +58,12 @@ class CustomizationItemCMHandler(AbstractContextMenuHandler):
         sellPriceVO = getItemPricesVO(item.getSellPrice())
         inventoryCount = self._c11nView.getItemInventoryCount(item)
         availableForSale = inventoryCount > 0 and item.getSellPrice() != ITEM_PRICE_EMPTY and not item.isRentable and not item.isHidden
-        outfit = self._c11nView.getCurrentOutfit()
         style = self._c11nView.getModifiedStyle()
         removeFromTankEnabled = style.intCD == item.intCD if style is not None else False
-        for item_check in outfit.items():
-            if item_check.intCD == item.intCD:
+        for outfit in (self._c11nView.getModifiedOutfit(season) for season in SeasonType.COMMON_SEASONS):
+            if outfit.has(item):
                 removeFromTankEnabled = True
+                break
 
         availableForPurchase = not item.isHidden and item.getBuyPrice() != ITEM_PRICE_EMPTY
         return [self._makeItem(CustomizationOptions.BUY, MENU.cst_item_ctx_menu(CustomizationOptions.BUY), {'data': {'price': first(buyPriceVO)} if availableForPurchase else None,

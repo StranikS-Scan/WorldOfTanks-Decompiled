@@ -25,7 +25,12 @@ MAIN_AWARD_TEXT = {1: PERSONAL_MISSIONS.PERSONALMISSIONSPLANREGION_MAINAWARD_ENG
  2: PERSONAL_MISSIONS.PERSONALMISSIONSPLANREGION_MAINAWARD_HULL,
  3: PERSONAL_MISSIONS.PERSONALMISSIONSPLANREGION_MAINAWARD_CHASSIS,
  4: PERSONAL_MISSIONS.PERSONALMISSIONSPLANREGION_MAINAWARD_GUN,
- 5: PERSONAL_MISSIONS.PERSONALMISSIONSPLANREGION_MAINAWARD_RADIO}
+ 5: PERSONAL_MISSIONS.PERSONALMISSIONSPLANREGION_MAINAWARD_RADIO,
+ 6: PERSONAL_MISSIONS.PERSONALMISSIONSPLANREGION_MAINAWARD_HULLANDTURRET}
+HT_CHAIN_ID = 2
+OPERATION_ID_T55A = 3
+OPERATION_ID_OBJECT = 4
+MAIN_AWARD_TEXT_ID_HULL = 6
 
 class PersonalMissionsMapView(PersonalMissionsMapViewMeta, PersonalMissionsNavigation):
 
@@ -99,5 +104,9 @@ class PersonalMissionsMapView(PersonalMissionsMapViewMeta, PersonalMissionsNavig
         tokenAward = findFirst(lambda q: q.getName() == 'completionTokens', quest.getBonuses(isMain=True))
         formatter = getPersonalMissionAwardsFormatter()
         mainAwards = formatter.getFormattedBonuses((tokenAward,), size=COMPLETION_TOKENS_SIZES.HUGE, obtainedImage=RES_ICONS.MAPS_ICONS_PERSONALMISSIONS_OPERATIONS_STATES_COMPLETED, obtainedImageOffset=0)
-        return {'mainAwardText': _ms(MAIN_AWARD_TEXT[self.getChainID()]),
+        if self.getChainID() == HT_CHAIN_ID and (self.getOperationID() == OPERATION_ID_T55A or self.getOperationID() == OPERATION_ID_OBJECT):
+            mainAwardTextID = MAIN_AWARD_TEXT_ID_HULL
+        else:
+            mainAwardTextID = self.getChainID()
+        return {'mainAwardText': _ms(MAIN_AWARD_TEXT[mainAwardTextID]),
          'mainAward': first(mainAwards)}

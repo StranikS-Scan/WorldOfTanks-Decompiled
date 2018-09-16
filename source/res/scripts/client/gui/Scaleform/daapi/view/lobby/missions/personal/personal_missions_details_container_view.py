@@ -10,20 +10,11 @@ from gui.Scaleform.genConsts.QUESTS_ALIASES import QUESTS_ALIASES
 from gui.Scaleform.genConsts.TOOLTIPS_CONSTANTS import TOOLTIPS_CONSTANTS
 from gui.server_events import events_helpers
 from gui.shared import events, event_bus_handlers, EVENT_BUS_SCOPE
+from gui.shared.tutorial_helper import getTutorialGlobalStorage
 from gui.shared.utils import decorators
 from helpers import dependency
 from skeletons.gui.server_events import IEventsCache
 MAY_PAWN_PERSONAL_MISSION = '_MayPawnPersonalMission'
-
-def getTutorialGlobalStorage():
-    try:
-        from tutorial.control.context import GlobalStorage
-    except ImportError:
-        LOG_ERROR('Can not load package tutorial')
-        GlobalStorage = None
-
-    return GlobalStorage
-
 
 class PersonalMissionDetailsContainerView(LobbySubView, PersonalMissionDetailsContainerViewMeta):
     eventsCache = dependency.descriptor(IEventsCache)

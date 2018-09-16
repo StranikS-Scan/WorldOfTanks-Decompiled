@@ -300,9 +300,11 @@ def _getSlotsData(unitMgrID, fullData, app=None, levelsRange=None, checkForVehic
             restrictions = []
         rating = ''
         isLegionaries = False
+        role = 0
         if player is not None:
             isLegionaries = player.isLegionary()
             rating = BigWorld.wg_getIntegralFormat(player.rating)
+            role = player.role
         if maxPlayerCount == MAX_PLAYER_COUNT_ALL or playerCount < maxPlayerCount:
             isLocked = False
         else:
@@ -323,7 +325,8 @@ def _getSlotsData(unitMgrID, fullData, app=None, levelsRange=None, checkForVehic
          'isFallout': isFallout,
          'rating': rating,
          'isLegionaries': isLegionaries,
-         'isLocked': isLocked}
+         'isLocked': isLocked,
+         'role': role}
         if unit.isSquad():
             eventsCache = dependency.instance(IEventsCache)
             if eventsCache.isBalancedSquadEnabled():

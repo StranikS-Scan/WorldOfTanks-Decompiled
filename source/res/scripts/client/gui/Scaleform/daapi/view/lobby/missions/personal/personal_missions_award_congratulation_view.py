@@ -38,7 +38,7 @@ class PersonalMissionAwardCongratulationView(PersonalMissionsNavigation, Persona
          'subtitleLabel': self.__getSubtitleLabel(),
          'bigBtnLabel': PERSONAL_MISSIONS.AWARDCONGRATULATIONVIEW_BUTTON_LABEL})
         self.__update()
-        self.soundManager.playSound(SOUNDS.TANK_AWARD_WINDOW)
+        self.soundManager.playInstantSound(SOUNDS.TANK_AWARD_WINDOW)
         self.soundManager.setRTPC(SOUNDS.RTCP_OVERLAY, SOUNDS.MAX_MISSIONS_ZOOM)
 
     def _destroy(self):

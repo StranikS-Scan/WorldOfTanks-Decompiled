@@ -6,7 +6,7 @@ import BigWorld
 import constants
 from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.view.lobby.missions import cards_formatters
-from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CardAwardComposer, DetailedCardAwardComposer, PersonalMissionsAwardComposer
+from gui.Scaleform.daapi.view.lobby.missions.awards_formatters import CurtailingAwardsComposer, DetailedCardAwardComposer, PersonalMissionsAwardComposer
 from gui.Scaleform.daapi.view.lobby.missions.cards_formatters import PMCardConditionsFormatter
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_ALIASES import PERSONAL_MISSIONS_ALIASES
 from gui.Scaleform.genConsts.PERSONAL_MISSIONS_BUTTONS import PERSONAL_MISSIONS_BUTTONS
@@ -40,9 +40,9 @@ _cardCondFormatter = cards_formatters.CardBattleConditionsFormatters()
 _detailedCardCondFormatter = cards_formatters.DetailedCardBattleConditionsFormatters()
 _cardTokenConditionFormatter = cards_formatters.CardTokenConditionFormatter()
 _detailedCardTokenConditionFormatter = cards_formatters.DetailedCardTokenConditionFormatter()
-_cardAwardsFormatter = CardAwardComposer(CARD_AWARDS_COUNT)
+_cardAwardsFormatter = CurtailingAwardsComposer(CARD_AWARDS_COUNT)
 _detailedCardAwardsFormatter = DetailedCardAwardComposer(DETAILED_CARD_AWARDS_COUNT)
-_awardsWindowBonusFormatter = CardAwardComposer(sys.maxint)
+_awardsWindowBonusFormatter = CurtailingAwardsComposer(sys.maxint)
 _personalMissionsConditionsFormatter = PMCardConditionsFormatter()
 _personalMissionsAwardsFormatter = PersonalMissionsAwardComposer(DETAILED_CARD_AWARDS_COUNT)
 HIDE_DONE = 'hideDone'

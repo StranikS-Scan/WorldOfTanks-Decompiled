@@ -8,6 +8,7 @@ from items import vehicles, ITEM_TYPES
 from items.components import skills_components
 from items.components import skills_constants
 from items.components import tankmen_components
+from items.components import component_constants
 from items.readers import skills_readers
 from items.readers import tankmen_readers
 from items.passports import PassportCache, passport_generator, maxAttempts, distinctFrom, acceptOn
@@ -229,25 +230,25 @@ def compareMastery(tankmanDescr1, tankmanDescr2):
 
 
 def commanderTutorXpBonusFactorForCrew(crew, ammo):
-    tutorLevel = 0
+    tutorLevel = component_constants.ZERO_FLOAT
     haveBrotherhood = True
     for t in crew:
         if t.role == 'commander':
             tutorLevel = t.skillLevel('commander_tutor')
             if not tutorLevel:
-                return 0.0
+                return component_constants.ZERO_FLOAT
         if t.skillLevel('brotherhood') != MAX_SKILL_LEVEL:
             haveBrotherhood = False
 
     skillsConfig = getSkillsConfig()
     if haveBrotherhood:
         tutorLevel += skillsConfig.getSkill('brotherhood').crewLevelIncrease
-    equipCrewLevelIncrease = 0
+    equipCrewLevelIncrease = component_constants.ZERO_FLOAT
     cache = vehicles.g_cache
     for compDescr, count in AmmoIterator(ammo):
         itemTypeIdx, _, itemIdx = vehicles.parseIntCompactDescr(compDescr)
         if itemTypeIdx == ITEM_TYPES.equipment:
-            equipCrewLevelIncrease += getattr(cache.equipments()[itemIdx], 'crewLevelIncrease', 0)
+            equipCrewLevelIncrease += getattr(cache.equipments()[itemIdx], 'crewLevelIncrease', component_constants.ZERO_FLOAT)
 
     tutorLevel += equipCrewLevelIncrease
     return tutorLevel * skillsConfig.getSkill('commander_tutor').xpBonusFactorPerLevel

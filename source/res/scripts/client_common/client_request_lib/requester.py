@@ -1594,6 +1594,41 @@ class WgshAccessor(BaseAccessor):
         """
         return self._data_source.give_leadership(callback, periphery_id, unit_server_id, target_account_id, fields=fields)
 
+    def set_equipment_commander(self, callback, periphery_id, unit_server_id, target_account_id, fields=None):
+        """
+        make player a equipment commander and call `callback`
+        with following information after response is parsed:
+        
+            - `result` is result data
+            - `status_code` is http status code of response (RESTful one)
+            - `response_code` is unique response code
+        
+        :Example:
+        
+        >>> def printer (*args, **kwargs):
+                pprint(args)
+        ...
+        >>> requester.wgsh.set_equipment_commander(printer, 101, 1)
+        (
+            {}
+            200,
+            0
+        )
+        
+        :param callback: callback function which will be called when data
+                        would be obtained
+        :param periphery_id: periphery id on which unit is expected
+        :param unit_server_id: internal server unit id. unique in periphery session
+        :param target_account_id: account id to make a leader
+        :param fields: field set to obtain (optional param)
+        :type callback: function
+        :type periphery_id: integer
+        :type unit_server_id: integer
+        :type target_account_id: integer
+        :type fields: list of strings
+        """
+        return self._data_source.set_equipment_commander(callback, periphery_id, unit_server_id, target_account_id, fields=fields)
+
     def leave_room(self, callback, periphery_id, unit_server_id, fields=None):
         """
         make player a leader and call `callback`

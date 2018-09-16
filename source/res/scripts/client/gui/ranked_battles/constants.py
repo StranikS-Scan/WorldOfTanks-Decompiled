@@ -35,19 +35,31 @@ class SOUND(object):
     SEASON_RESULT_AWARD_ANIMATION = 'gui_rb_rank_reward'
     SEASON_RESULT_BUTTON_ANIMATION = 'gui_rb_rank_exactly'
     ANIMATION_WINDOW_CLOSED = 'gui_rb_rank_Exit_input_animation'
+    SHIELD_DAMAGED = 'gui_rb_rank_shield_damage_small'
+    SHIELD_LOST = 'gui_rb_rank_shield_break_small'
+    SHIELD_HEALED = 'gui_rb_rank_shield_restore_small'
+    SHIELD_RECEIVED = 'gui_rb_rank_shield_receive_small'
+    POST_BATTLE_SHIELD_DAMAGED = 'gui_rb_rank_shield_damage'
+    POST_BATTLE_SHIELD_LOST = 'gui_rb_rank_shield_break'
+    POST_BATTLE_SHIELD_HEALED = 'gui_rb_rank_shield_restore'
+    POST_BATTLE_SHIELD_RECEIVED = 'gui_rb_rank_shield_receive'
 
     @staticmethod
     def getRankEarnedEvent(rankID):
+        if rankID > 5:
+            rankID = 5
         return 'gui_rb_rank_{}'.format(rankID)
 
     @staticmethod
     def getBoxAnimationEvent(boxType, number):
-        if number == 5:
+        if number >= 5:
             number = 'max'
         return 'gui_rb_rank_{}_box_{}'.format(boxType, number)
 
     @staticmethod
     def getRankAwardAnimationEvent(rankID):
+        if rankID > 5:
+            rankID = 5
         return 'gui_rb_rank_{}_postmortem'.format(rankID)
 
 

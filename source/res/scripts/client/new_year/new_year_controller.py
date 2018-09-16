@@ -22,7 +22,6 @@ from items.new_year_types import TOY_TYPES, INVALID_TOY_ID, calculateCraftCost, 
 from messenger.m_constants import PROTO_TYPE, SCH_CLIENT_MSG_TYPE
 from messenger.proto import proto_getter
 from messenger.proto.events import g_messengerEvents
-from new_year.new_year_binder import NewYearBinder
 from new_year.new_year_toy import ToyItemInfo
 from new_year.requester import ny_contexts
 from new_year.requester.new_year_requester import NYRequestController
@@ -99,11 +98,6 @@ class _NYContainersStorage(_NYBaseStorage):
 
     def fini(self):
         super(_NYContainersStorage, self).fini()
-        self._openingItemId = None
-        return
-
-    def clear(self):
-        super(_NYContainersStorage, self).clear()
         self._openingItemId = None
         return
 
@@ -763,11 +757,9 @@ class NewYearController(INewYearController):
 
     def init(self):
         self.__buildCache()
-        NewYearBinder.start()
 
     def fini(self):
         self.__clear()
-        NewYearBinder.stop()
         self.__clearHandlers()
         self.__boxStorage.fini()
         self.__sysMsgsHandler.fini()

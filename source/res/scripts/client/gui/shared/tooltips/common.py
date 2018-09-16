@@ -8,6 +8,7 @@ import BigWorld
 import ResMgr
 import ArenaType
 import constants
+from gui.Scaleform.genConsts.CURRENCIES_CONSTANTS import CURRENCIES_CONSTANTS
 from gui.Scaleform.genConsts.ICON_TEXT_FRAMES import ICON_TEXT_FRAMES
 from gui.Scaleform.genConsts.NY_CONSTANTS import NY_CONSTANTS
 from gui.Scaleform.genConsts.SLOT_HIGHLIGHT_TYPES import SLOT_HIGHLIGHT_TYPES
@@ -1208,29 +1209,50 @@ class SettingKeySwitchMode(BlocksTooltipData):
         return tooltipBlocks
 
 
-class HeaderCrystalInfo(BlocksTooltipData):
+class HeaderMoneyAndXpTooltipData(BlocksTooltipData):
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self, ctx):
-        super(HeaderCrystalInfo, self).__init__(ctx, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI)
-        self._setContentMargin(top=20, left=20, bottom=18, right=20)
+        super(HeaderMoneyAndXpTooltipData, self).__init__(ctx, TOOLTIPS_CONSTANTS.BLOCKS_DEFAULT_UI)
+        self._setContentMargin(top=17, left=20, bottom=18, right=13)
         self._setMargins(afterBlock=0)
-        self._setWidth(280)
+        self._setWidth(290)
+        self._btnType = None
+        return
 
     def _packBlocks(self, *args, **kwargs):
-        tooltipBlocks = super(HeaderCrystalInfo, self)._packBlocks(*args, **kwargs)
-        titleBlocks = list()
-        titleBlocks.append(formatters.packTitleDescBlock(text_styles.middleTitle(TOOLTIPS.HEADER_BUTTONS_CRYSTAL_TITLE), text_styles.standard(TOOLTIPS.HEADER_BUTTONS_CRYSTAL_CURRENCYDESC), padding=formatters.packPadding(bottom=15)))
-        tooltipBlocks.append(formatters.packBuildUpBlockData(titleBlocks))
-        valueBlocks = list()
-        valueBlock = formatters.packTextParameterWithIconBlockData(text_styles.crystal(TOOLTIPS.HEADER_BUTTONS_CRYSTAL_AVAILABLE), text_styles.crystal(BigWorld.wg_getIntegralFormat(self.itemsCache.items.stats.money.crystal)), Currency.CRYSTAL, padding=formatters.packPadding(bottom=15), valueWidth=84)
-        valueBlocks.append(valueBlock)
-        tooltipBlocks.append(formatters.packBuildUpBlockData(valueBlocks, linkage=BLOCKS_TOOLTIP_TYPES.TOOLTIP_BUILDUP_BLOCK_WHITE_BG_LINKAGE))
-        decsBlocks = list()
-        decsBlocks.append(formatters.packTextBlockData(text_styles.main(TOOLTIPS.HEADER_BUTTONS_CRYSTAL_FIRSTDESC), padding=formatters.packPadding(bottom=10)))
-        decsBlocks.append(formatters.packTextBlockData(text_styles.standard(TOOLTIPS.HEADER_BUTTONS_CRYSTAL_SECONDDESC)))
-        tooltipBlocks.append(formatters.packBuildUpBlockData(decsBlocks))
-        return tooltipBlocks
+        tooltipBlocks = super(HeaderMoneyAndXpTooltipData, self)._packBlocks(*args, **kwargs)
+        self._btnType = kwargs.get('btnType', None)
+        if self._btnType is None:
+            LOG_ERROR('HeaderMoneyAndXpTooltipData empty btnType!')
+            return tooltipBlocks
+        else:
+            valueBlock = formatters.packMoneyAndXpValueBlock(value=self._getValue(), icon=self._getIcon(), iconYoffset=self._getIconYOffset())
+            return formatters.packMoneyAndXpBlocks(tooltipBlocks, btnType=self._btnType, valueBlocks=[valueBlock])
+
+    def _getValue(self):
+        valueStr = '0'
+        if self._btnType == CURRENCIES_CONSTANTS.GOLD:
+            valueStr = text_styles.gold(BigWorld.wg_getIntegralFormat(self.itemsCache.items.stats.money.gold))
+        elif self._btnType == CURRENCIES_CONSTANTS.CREDITS:
+            valueStr = text_styles.credits(BigWorld.wg_getIntegralFormat(self.itemsCache.items.stats.money.credits))
+        elif self._btnType == CURRENCIES_CONSTANTS.CRYSTAL:
+            valueStr = text_styles.crystal(BigWorld.wg_getIntegralFormat(self.itemsCache.items.stats.money.crystal))
+        elif self._btnType == CURRENCIES_CONSTANTS.FREE_XP:
+            valueStr = text_styles.expText(BigWorld.wg_getIntegralFormat(self.itemsCache.items.stats.actualFreeXP))
+        return valueStr
+
+    def _getIconYOffset(self):
+        offset = 2
+        if self._btnType == CURRENCIES_CONSTANTS.CRYSTAL:
+            offset = 1
+        return offset
+
+    def _getIcon(self):
+        icon = self._btnType
+        if self._btnType == CURRENCIES_CONSTANTS.FREE_XP:
+            icon = 'eliteXP'
+        return icon
 
 
 class MissionsToken(BlocksTooltipData):

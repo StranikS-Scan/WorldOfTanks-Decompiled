@@ -364,11 +364,11 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
     def __updateState(self):
         state = g_currentVehicle.getViewState()
         self.as_setCrewEnabledS(state.isCrewOpsEnabled())
-        if state.isOnlyForEventBattles():
-            customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_BODY))
-        else:
+        isC11nEnabled = self.lobbyContext.getServerSettings().isCustomizationEnabled() and state.isCustomizationEnabled() and not state.isOnlyForEventBattles()
+        if isC11nEnabled:
             customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_BODY))
-        isC11nEnabled = self.lobbyContext.getServerSettings().isCustomizationEnabled() and state.isCustomizationEnabled()
+        else:
+            customizationTooltip = makeTooltip(_ms(TOOLTIPS.HANGAR_TUNING_DISABLED_HEADER), _ms(TOOLTIPS.HANGAR_TUNING_DISABLED_BODY))
         self.as_setupAmmunitionPanelS(state.isMaintenanceEnabled(), makeTooltip(_ms(TOOLTIPS.HANGAR_MAINTENANCE_HEADER), _ms(TOOLTIPS.HANGAR_MAINTENANCE_BODY)), isC11nEnabled, customizationTooltip)
         self.as_setControlsVisibleS(state.isUIShown())
 
@@ -379,6 +379,7 @@ class Hangar(LobbySubView, HangarMeta, IGlobalListener):
         self.__updateAlertMessage()
         self.__updateNavigationInResearchPanel()
         self.__updateHeader()
+        self.__switchCarousels()
 
     def __onVehicleClientStateChanged(self, vehicles):
         self.__updateAmmoPanel()

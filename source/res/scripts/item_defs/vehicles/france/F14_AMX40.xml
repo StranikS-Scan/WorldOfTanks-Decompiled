@@ -40,6 +40,7 @@
       <armor_13>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       </armor_13>
       <armor_14>	60	</armor_14>
+      <armor_15>	0	</armor_15>
     </armor>
     <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
     <weight>	12750	</weight>
@@ -61,11 +62,14 @@
       <sensitivityToImpulse>	0.68	</sensitivityToImpulse>
     </swinging>
     <exhaust>
-      <pixie>	gas_medium	</pixie>
+      <pixie>	diesel_medium	</pixie>
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
+      <tags>
+        <gasoline>	gas_medium	</gasoline>
+      </tags>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.67 0.379155	</turret>
+      <turret>	0.000000 0.737213 0.377734	</turret>
     </turretPositions>
     <hitTester>
       <collisionModelServer>	vehicles/french/F14_AMX40/collision/Hull.model	</collisionModelServer>
@@ -73,35 +77,38 @@
     </hitTester>
     <emblemSlots>
       <clan>
-        <rayStart>	-0.665655 0.44798 2.26382	</rayStart>
-        <rayEnd>	-0.718968 0.0748864 2.12981	</rayEnd>
-        <rayUp>	-0.0977416 0.0122199 -0.995137	</rayUp>
+        <rayStart>	-0.444415 0.489961 2.25666	</rayStart>
+        <rayEnd>	-0.446974 0.101005 2.16335	</rayEnd>
+        <rayUp>	0.000000 0.000000 -1	</rayUp>
         <size>	0.24	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </clan>
       <inscription>
-        <rayStart>	1.04942 0.600311 0.762362	</rayStart>
-        <rayEnd>	0.854989 0.251517 0.739203	</rayEnd>
-        <rayUp>	-0.899512 0.436403 -0.0207461	</rayUp>
-        <size>	0.7	</size>
+        <rayStart>	-0.954259 0.553462 0.686767	</rayStart>
+        <rayEnd>	-0.845627 0.38592 0.675412	</rayEnd>
+        <rayUp>	0.868955 0.494689 0.0141726	</rayUp>
+        <size>	0.645	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
       <inscription>
-        <rayStart>	-1.04942 0.600311 0.762362	</rayStart>
-        <rayEnd>	-0.854989 0.251517 0.739203	</rayEnd>
-        <rayUp>	0.899512 0.436403 -0.0207459	</rayUp>
-        <size>	0.7	</size>
+        <rayStart>	0.954259 0.553462 0.686767	</rayStart>
+        <rayEnd>	0.845627 0.38592 0.675412	</rayEnd>
+        <rayUp>	-0.868544 0.495601 -0.00322354	</rayUp>
+        <size>	0.645	</size>
         <hideIfDamaged>	false	</hideIfDamaged>
       </inscription>
     </emblemSlots>
     <hangarShadowTexture>	vehicles/french/F14_AMX40/AMX40_HangarShadowMap.dds	</hangarShadowTexture>
+    <camouflage>
+      <tiling>	1.8 1.8 0.000000 0.000000	</tiling>
+    </camouflage>
   </hull>
   <chassis>
     <Chassis_AMX40>
       <userString>	#france_vehicles:Chassis_AMX40	</userString>
       <tags></tags>
       <level>	3	</level>
-      <price>	1750.0	</price>
+      <price>	1750	</price>
       <unlocks>
         <chassis>	Chassis_AMX40_2	  <cost>	1025	</cost>
         </chassis>
@@ -133,39 +140,43 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	usa_02	</textureSet>
-        <size>	0.32 0.32	</size>
+        <size>	0.38 0.32	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.44	</textureScale>
+        <textureScale>	-3	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.26049	</radius>
+          <syncAngle>	30	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L1	</name>
           <radius>	0.333348	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.26049	</radius>
+          <syncAngle>	30	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R1	</name>
           <radius>	0.333348	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -185,16 +196,16 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	smallTankMud	</mud>
+        <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.881599 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/french/F14_AMX40/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F14_AMX40/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.991322 1.45456	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.0181 1.55982	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -207,6 +218,71 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F14_AMX40/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F14_AMX40/track/segment.model	</segmentModelRight>
+        <left>	vehicles/french/F14_AMX40/track/left.track	</left>
+        <right>	vehicles/french/F14_AMX40/track/right.track	</right>
+        <segmentLength>	0.148	</segmentLength>
+        <segmentOffset>	0.202	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	0.0005	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.02	</maxAmplitude>
+        <maxOffset>	0.02	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1200	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+      </trackNodes>
     </Chassis_AMX40>
     <Chassis_AMX40_2>
       <userString>	#france_vehicles:Chassis_AMX40_2	</userString>
@@ -240,39 +316,43 @@
         <lodDist>	FAR	</lodDist>
         <bufferPrefs>	mediumTank	</bufferPrefs>
         <textureSet>	usa_02	</textureSet>
-        <size>	0.32 0.32	</size>
+        <size>	0.38 0.32	</size>
       </traces>
       <tracks>
         <lodDist>	MEDIUM_TRACK	</lodDist>
         <leftMaterial>	track_mat_L_skinned	</leftMaterial>
         <rightMaterial>	track_mat_R_skinned	</rightMaterial>
-        <textureScale>	-1.44	</textureScale>
+        <textureScale>	-3	</textureScale>
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
           <radius>	0.26049	</radius>
+          <syncAngle>	30	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L1	</name>
           <radius>	0.333348	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R0	</name>
           <radius>	0.26049	</radius>
+          <syncAngle>	30	</syncAngle>
         </wheel>
         <wheel>
           <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_R1	</name>
           <radius>	0.333348	</radius>
+          <syncAngle>	27.6923	</syncAngle>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
@@ -292,16 +372,16 @@
       <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
-        <mud>	smallTankMud	</mud>
+        <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.9 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.881599 0.000000	</hullPosition>
       <hitTester>
         <collisionModelServer>	vehicles/french/F14_AMX40/collision/Chassis.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F14_AMX40/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.991322 1.45456	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.0181 1.55982	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -314,6 +394,71 @@
           </transform>
         </decal>
       </AODecals>
+      <splineDesc>
+        <segmentModelLeft>	vehicles/french/F14_AMX40/track/segment.model	</segmentModelLeft>
+        <segmentModelRight>	vehicles/french/F14_AMX40/track/segment.model	</segmentModelRight>
+        <left>	vehicles/french/F14_AMX40/track/left.track	</left>
+        <right>	vehicles/french/F14_AMX40/track/right.track	</right>
+        <segmentLength>	0.148	</segmentLength>
+        <segmentOffset>	0.202	</segmentOffset>
+        <lodDist>	MEDIUM	</lodDist>
+        <atlas>
+          <UTiles>	1	</UTiles>
+          <VTiles>	1	</VTiles>
+        </atlas>
+      </splineDesc>
+      <groundNodes>
+        <group>
+          <template>	Track_L	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	true	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+        <group>
+          <template>	Track_R	</template>
+          <startIndex>	0	</startIndex>
+          <count>	4	</count>
+          <isLeft>	false	</isLeft>
+          <minOffset>	-0.06	</minOffset>
+          <maxOffset>	0.06	</maxOffset>
+        </group>
+      </groundNodes>
+      <trackThickness>	0.0005	</trackThickness>
+      <trackNodes>
+        <enable>	true	</enable>
+        <linkBones>	true	</linkBones>
+        <maxAmplitude>	0.02	</maxAmplitude>
+        <maxOffset>	0.02	</maxOffset>
+        <gravity>	-9.8	</gravity>
+        <elasticity>	1200	</elasticity>
+        <damping>	2	</damping>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R0	</name>
+          <forwardElastK>	1.5	</forwardElastK>
+          <backwardElastK>	1.5	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	true	</isLeft>
+          <name>	Track_VD_L1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+        <node>
+          <isLeft>	false	</isLeft>
+          <name>	Track_VD_R1	</name>
+          <forwardElastK>	2	</forwardElastK>
+          <backwardElastK>	0.75	</backwardElastK>
+        </node>
+      </trackNodes>
     </Chassis_AMX40_2>
   </chassis>
   <turrets0>
@@ -321,7 +466,7 @@
       <userString>	#france_vehicles:Turret_1_AMX40	</userString>
       <tags></tags>
       <level>	3	</level>
-      <price>	1850.0	</price>
+      <price>	1850	</price>
       <armor>
         <armor_1>	70	</armor_1>
         <armor_2>	70	</armor_2>
@@ -332,6 +477,8 @@
         <armor_7>	0	</armor_7>
         <armor_8>	0	</armor_8>
         <armor_9>	40	</armor_9>
+        <armor_16>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+        </armor_16>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2250	</weight>
@@ -357,10 +504,12 @@
           <armor>
             <armor_1>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	10	</gun>
           </armor>
           <reloadTime>	2.3	</reloadTime>
@@ -394,10 +543,12 @@
           <armor>
             <armor_1>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	60	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	70	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
             <armor_3>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	10	</gun>
           </armor>
           <shotDispersionFactors>
@@ -433,26 +584,25 @@
         <collisionModelServer>	vehicles/french/F14_AMX40/collision/Turret_01.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F14_AMX40/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.33 0.610797	</gunPosition>
+      <gunPosition>	0.0014 0.302872 0.639829	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.813654 0.301137 0.148139	</rayStart>
-          <rayEnd>	-0.415637 0.295575 0.108777	</rayEnd>
+          <rayStart>	-0.798719 0.34594 0.16345	</rayStart>
+          <rayEnd>	-0.411806 0.266542 0.100269	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </player>
         <player>
-          <rayStart>	0.814841 0.320627 0.133392	</rayStart>
-          <rayEnd>	0.416822 0.315064 0.0940293	</rayEnd>
+          <rayStart>	0.798719 0.34594 0.16345	</rayStart>
+          <rayEnd>	0.411806 0.266542 0.100269	</rayEnd>
           <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
-          <hideIfDamaged>	false	</hideIfDamaged>
-          <isMirrored>	true	</isMirrored>
+          <hideIfDamaged>	true	</hideIfDamaged>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 0.000 1.249 0.000 0.709 0.150 0.618 0.350 0.587 0.500 0.500 0.500 0.246 0.699 0.327	</physicsShape>
+      <physicsShape>	1.000 0.000 1.070 0.000 1.155 0.248 0.618 0.350 0.587 0.500 0.500 0.500 0.246 0.699 0.327	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
     </Turret_1_AMX40>
     <Turret_2_AMX40>
@@ -466,14 +616,20 @@
       </unlocks>
       <armor>
         <armor_1>	80	</armor_1>
-        <armor_2>	40	</armor_2>
+        <armor_2>	30	</armor_2>
         <armor_3>	60	</armor_3>
         <armor_4>	60	</armor_4>
-        <armor_5>	40	</armor_5>
-        <armor_6>	30	</armor_6>
-        <armor_7>	0	</armor_7>
-        <armor_8>	20	</armor_8>
-        <armor_9>	80	</armor_9>
+        <armor_5>	20	</armor_5>
+        <armor_6>	20	</armor_6>
+        <armor_7>	80	</armor_7>
+        <armor_8>	0	</armor_8>
+        <armor_9>	40	</armor_9>
+        <armor_10>	60	</armor_10>
+        <armor_12>	40	</armor_12>
+        <armor_13>	40	</armor_13>
+        <armor_14>	40	</armor_14>
+        <armor_15>	30	</armor_15>
+        <armor_16>	40	</armor_16>
       </armor>
       <primaryArmor>	armor_1 armor_3 armor_4	</primaryArmor>
       <weight>	2500	</weight>
@@ -504,6 +660,8 @@
             </armor_2>
             <armor_3>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	10	</gun>
           </armor>
           <reloadTime>	2.3	</reloadTime>
@@ -537,6 +695,8 @@
             </armor_2>
             <armor_3>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	10	</gun>
           </armor>
           <shotDispersionFactors>
@@ -570,6 +730,8 @@
             </armor_2>
             <armor_3>	40	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
+            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_4>
             <gun>	20	</gun>
           </armor>
           <shotDispersionRadius>	0.46	</shotDispersionRadius>
@@ -594,6 +756,7 @@
             <collisionModelServer>	vehicles/french/F14_AMX40/collision/Gun_05.model	</collisionModelServer>
             <collisionModelClient>	vehicles/french/F14_AMX40/collision_client/Gun_05.model	</collisionModelClient>
           </hitTester>
+          <effects>	shot_medium	</effects>
         </_75mm_SA32>
       </guns>
       <models>
@@ -605,26 +768,26 @@
         <collisionModelServer>	vehicles/french/F14_AMX40/collision/Turret_02.model	</collisionModelServer>
         <collisionModelClient>	vehicles/french/F14_AMX40/collision_client/Turret_02.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.03 0.420327	</gunPosition>
+      <gunPosition>	-0.001065 0.152776 0.964281	</gunPosition>
       <emblemSlots>
         <player>
-          <rayStart>	-0.671352 0.566767 0.0747224	</rayStart>
-          <rayEnd>	-0.420997 0.254802 0.0747234	</rayEnd>
-          <rayUp>	0.779911 0.62589 -0.000000	</rayUp>
+          <rayStart>	-0.679701 0.267044 0.198817	</rayStart>
+          <rayEnd>	-0.596792 0.204752 0.176869	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
-          <hideIfDamaged>	true	</hideIfDamaged>
+          <hideIfDamaged>	false	</hideIfDamaged>
         </player>
         <player>
-          <rayStart>	0.927395 0.398116 -0.00368713	</rayStart>
-          <rayEnd>	0.549757 0.307675 0.0922837	</rayEnd>
-          <rayUp>	-0.0162165 0.997689 -0.0659887	</rayUp>
+          <rayStart>	0.739677 0.272171 0.184236	</rayStart>
+          <rayEnd>	0.614157 0.22573 0.121054	</rayEnd>
+          <rayUp>	0.000000 1 0.000000	</rayUp>
           <size>	0.24	</size>
           <hideIfDamaged>	false	</hideIfDamaged>
           <isMirrored>	true	</isMirrored>
         </player>
       </emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
-      <physicsShape>	1.000 -0.008 1.000 -0.023 0.480 0.139 0.671 0.471 0.474 0.500 0.425 0.766 0.488 0.477 0.000	</physicsShape>
+      <physicsShape>	0.945 -0.077 1.038 -0.020 0.788 0.100 0.512 0.471 0.518 0.500 0.108 0.225 0.137 0.459 0.202	</physicsShape>
       <wwturretRotatorSoundManual>	tur_mech_trav	</wwturretRotatorSoundManual>
     </Turret_2_AMX40>
   </turrets0>

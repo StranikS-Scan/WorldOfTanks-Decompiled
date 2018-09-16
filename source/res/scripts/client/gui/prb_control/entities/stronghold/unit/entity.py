@@ -318,6 +318,22 @@ class StrongholdEntity(UnitEntity):
             pInfo = self.getPlayerInfo(dbID=playerID)
             if not pInfo.isCommander() and pInfo.isCurrentPlayer():
                 SystemMessages.pushMessage(i18n.makeString(I18N_SYSTEM_MESSAGES.UNIT_WARNINGS_ANOTHER_PLAYER_BECOME_COMMANDER), type=SM_TYPE.Warning)
+        userNoLongerEquipmentCommander = prevRoleFlags & UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS > 0 and not nextRoleFlags & UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS > 0
+        userBecomesEquipmentCommander = nextRoleFlags & UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS > 0 and not prevRoleFlags & UNIT_ROLE.CAN_USE_EXTRA_EQUIPMENTS > 0
+        if not userBecomesEquipmentCommander and not userNoLongerEquipmentCommander:
+            return
+        pInfo = self.getPlayerInfo(dbID=playerID)
+        if userNoLongerEquipmentCommander and pInfo.isCurrentPlayer():
+            SystemMessages.pushMessage(i18n.makeString(I18N_SYSTEM_MESSAGES.UNIT_WARNINGS_ANOTHER_PLAYER_BECOME_EQUIPMENT_COMMANDER), type=SM_TYPE.Warning)
+            return
+        if userBecomesEquipmentCommander and pInfo.isCurrentPlayer():
+            SystemMessages.pushMessage(i18n.makeString(I18N_SYSTEM_MESSAGES.UNIT_NOTIFICATION_PLAYER_BECOME_EQUIPMENT_COMMANDER), type=SM_TYPE.Information)
+            return
+        myPInfo = self.getPlayerInfo()
+        userEquipmentRoleChanged = userBecomesEquipmentCommander or userNoLongerEquipmentCommander
+        if userEquipmentRoleChanged and not pInfo.isCurrentPlayer() and myPInfo.isCommander():
+            SystemMessages.pushMessage(i18n.makeString(I18N_SYSTEM_MESSAGES.UNIT_WARNINGS_ANOTHER_PLAYER_BECOME_EQUIPMENT_COMMANDER), type=SM_TYPE.Warning)
+            return
 
     def unit_onUnitMembersListChanged(self):
         playerInfo = self.getPlayerInfo()
@@ -382,6 +398,10 @@ class StrongholdEntity(UnitEntity):
             return
         self._requestsProcessor.doRequest(ctx, 'deactivateReserve', callback=callback)
         self.setCoolDown(settings.REQUEST_TYPE.UNSET_RESERVE, coolDown=ctx.getCooldown())
+
+    def setEquipmentCommander(self, ctx, callback=None):
+        self._requestsProcessor.doRequest(ctx, 'setEquipmentCommander', callback=callback)
+        self.setCoolDown(settings.REQUEST_TYPE.SET_EQUIPMENT_COMMANDER, coolDown=ctx.getCooldown())
 
     def assign(self, ctx, callback=None):
         if self.isInCoolDown(settings.REQUEST_TYPE.ASSIGN):
@@ -462,7 +482,6 @@ class StrongholdEntity(UnitEntity):
         for dbID, data in players.iteritems():
             if dbID not in dbIDs:
                 continue
-            result[dbID] = unit_items.PlayerUnitInfo(dbID, unitMgrID, unit, **data)
             result[dbID] = self._buildPlayerInfo(unitMgrID, unit, dbID, -1, data)
 
         return result
@@ -566,7 +585,8 @@ class StrongholdEntity(UnitEntity):
         RQ_TYPE = settings.REQUEST_TYPE
         handlers = super(StrongholdEntity, self)._getRequestHandlers()
         handlers.update({RQ_TYPE.SET_RESERVE: self.setReserve,
-         RQ_TYPE.UNSET_RESERVE: self.unsetReserve})
+         RQ_TYPE.UNSET_RESERVE: self.unsetReserve,
+         RQ_TYPE.SET_EQUIPMENT_COMMANDER: self.setEquipmentCommander})
         return handlers
 
     def _buildPlayerInfo(self, unitMgrID, unit, dbID, slotIdx=-1, data=None):

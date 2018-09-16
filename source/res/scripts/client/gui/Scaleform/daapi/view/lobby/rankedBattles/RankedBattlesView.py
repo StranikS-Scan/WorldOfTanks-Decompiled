@@ -1,25 +1,22 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/RankedBattlesView.py
-import BigWorld
-from CurrentVehicle import g_currentVehicle
 from gui.Scaleform.daapi import LobbySubView
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
 from gui.Scaleform.daapi.view.meta.RankedBattlesViewMeta import RankedBattlesViewMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
-from gui.ranked_battles.ranked_models import RANK_STATUS
+from gui.ranked_battles.constants import PRIME_TIME_STATUS
+from gui.ranked_battles.ranked_helpers import buildRankVO
 from gui.server_events.events_dispatcher import showMissionDetails
 from gui.shared import EVENT_BUS_SCOPE
 from gui.shared import events, g_eventBus
-from gui.shared.formatters import text_styles
+from gui.shared.formatters import text_styles, icons
 from gui.shared.utils.functions import makeTooltip
-from helpers import i18n, dependency, int2roman
+from helpers import i18n, dependency
 from helpers import time_utils
 from helpers.i18n import makeString as _ms
 from skeletons.gui.game_control import IRankedBattlesController
-from gui.ranked_battles.ranked_models import VehicleRank
-from gui.ranked_battles.constants import PRIME_TIME_STATUS
 from skeletons.gui.shared import IItemsCache
 
 class _AWARD_BLOCK_IDS:
@@ -32,9 +29,6 @@ class RankedBattlesView(LobbySubView, RankedBattlesViewMeta):
     __background_alpha__ = 0.5
     itemsCache = dependency.descriptor(IItemsCache)
     rankedController = dependency.descriptor(IRankedBattlesController)
-
-    def __init__(self, ctx=None):
-        super(RankedBattlesView, self).__init__()
 
     def onEscapePress(self):
         self.__close()
@@ -63,8 +57,7 @@ class RankedBattlesView(LobbySubView, RankedBattlesViewMeta):
         super(RankedBattlesView, self)._dispose()
 
     def __setData(self, leagueData=None):
-        season = self.rankedController.getCurrentSeason()
-        self.as_setDataS({'header': text_styles.superPromoTitle(RANKED_BATTLES.RANKEDBATTLEVIEW_TITLE) % {'cycle': season.getCycleOrdinalNumber()},
+        self.as_setDataS({'header': text_styles.superPromoTitle(RANKED_BATTLES.RANKEDBATTLEVIEW_TITLE),
          'closeLbl': RANKED_BATTLES.RANKEDBATTLEVIEW_CLOSEBTN,
          'closeDescr': RANKED_BATTLES.RANKEDBATTLEVIEW_CLOSEBTNDESCR,
          'playVideoLbl': RANKED_BATTLES.RANKEDBATTLEVIEW_PLAYVIDEOBTN,
@@ -101,77 +94,36 @@ class RankedBattlesView(LobbySubView, RankedBattlesViewMeta):
          'shadowFilterVisible': showPrimeTimeAlert}
 
     def __buildProgressData(self):
-        result = []
-        subBlockArrow = {'linkage': 'DisabledRankArrowUI'}
         if self.rankedController.isAccountMastered():
-            vehicle = g_currentVehicle.item
-            currentRank = self.rankedController.getCurrentRank(vehicle)
-            nextRank = self.rankedController.getRank(currentRank.getID() + 1, vehicle)
-            result.append(self.__packRank(currentRank, True))
-            progress = nextRank.getProgress()
-            result.append(self.__getStepsProgressSubBlock(len(progress.getAcquiredSteps()), len(progress.getSteps())))
-            awards = nextRank.getAwardsVOs()
-            result.append(self.__packRank(nextRank, True, awards=awards))
+            rank = self.rankedController.getCurrentRank()
+            result = [self.__packProgressInfo(RES_ICONS.MAPS_ICONS_RANKEDBATTLES_ICON_VICTORY, text_styles.vehicleName(_ms(RANKED_BATTLES.RANKEDBATTLEVIEW_PROGRESSBLOCK_FINALRANK))), self.__packRank(rank), self.__packProgressInfo(RES_ICONS.MAPS_ICONS_RANKEDBATTLES_ICON_FINAL_CUP_150X100, text_styles.vehicleName(_ms(RANKED_BATTLES.RANKEDBATTLEVIEW_PROGRESSBLOCK_CONTINUE)))]
         else:
-            currentRank = self.rankedController.getCurrentRank()
-            nextRank = self.rankedController.getRank(currentRank.getID() + 1)
-            for rank in self.rankedController.getRanksChain():
-                if rank.getID() == 0:
-                    continue
-                isBig = rank.isCurrent()
-                awards = []
-                if rank.getID() == nextRank.getID():
-                    isBig = True
-                    progress = nextRank.getProgress()
-                    result.append(self.__getStepsProgressSubBlock(len(progress.getAcquiredSteps()), len(progress.getSteps()), showDescription=bool(rank.getID() > 1)))
-                    if not rank.isRewardClaimed():
-                        awards = rank.getAwardsVOs()
-                elif rank.getID() > 1:
-                    result.append(subBlockArrow)
-                result.append(self.__packRank(rank, isBig, awards=awards))
-
+            result = [ self.__packRank(rank) for rank in self.rankedController.getRanksChain() if rank.getID() != 0 ]
         return result
 
-    def __packRank(self, rank, isBig, awards=None):
-        descriptionIcon = RES_ICONS.MAPS_ICONS_LIBRARY_ATTENTIONICONFILLED
-        isAchieved = rank.getStatus() == RANK_STATUS.ACHIEVED
-        isMaster = isinstance(rank, VehicleRank)
-        imageBG = ''
-        description = ''
-        if awards is None:
-            awards = []
-        imageBig = ''
-        imageSmall = ''
-        rankCount = ''
-        if isBig:
-            imageBig = rank.getIcon('big')
-            isTransparent = False
-            if isAchieved:
-                imageBG = RES_ICONS.MAPS_ICONS_RANKEDBATTLES_RANKEDBATTESVIEW_PIC_ICON_RANK_SHINE_364X364
-                if isMaster:
-                    rankCount = BigWorld.wg_getIntegralFormat(rank.getSerialID())
-                else:
-                    description = text_styles.standard(RANKED_BATTLES.RANKEDBATTLEVIEW_PROGRESSBLOCK_CURRENTRANK)
-            elif isMaster:
-                description = text_styles.standard(rank.getUserName())
-        else:
-            imageSmall = rank.getIcon('small')
-            isTransparent = True
-        if rank.isMax() and description == '' and not isMaster:
-            description = text_styles.standard(RANKED_BATTLES.RANKEDBATTLEVIEW_PROGRESSBLOCK_BESTRANK)
+    def __packRank(self, rank):
+        isCurrent = rank.isCurrent()
+        isFinal = isCurrent and rank.getID() == self.rankedController.getAccRanksTotal()
+        bgImage = ''
+        if isCurrent or isFinal:
+            bgImage = RES_ICONS.MAPS_ICONS_RANKEDBATTLES_RANKEDBATTESVIEW_PIC_ICON_RANK_SHINE_364X364
+        imageSize = RANKEDBATTLES_ALIASES.WIDGET_SMALL
+        if isCurrent:
+            imageSize = RANKEDBATTLES_ALIASES.WIDGET_HUGE if isFinal else RANKEDBATTLES_ALIASES.WIDGET_BIG
+        shieldStatus = self.rankedController.getShieldStatus(rank=rank, isStatic=True) if not isFinal else None
         return {'linkage': 'RankUI',
-         'rankData': {'rankVO': {'rankID': str(rank.getID()),
-                                 'imageSrc': imageBig,
-                                 'smallImageSrc': imageSmall,
-                                 'isEnabled': isAchieved,
-                                 'isMaster': isMaster,
-                                 'rankCount': rankCount},
-                      'isBig': isBig,
-                      'imageBG': imageBG,
-                      'description': description,
-                      'awardPreviews': awards,
-                      'isTransparent': isTransparent,
-                      'curIcon': descriptionIcon if description and rank.isCurrent() and rank.canBeLost() else ''}}
+         'rankData': {'rankVO': buildRankVO(rank, isEnabled=rank.isAcquired(), imageSize=imageSize, shieldStatus=shieldStatus, showShieldLabel=False, showLadderPoints=True),
+                      'isBig': isCurrent or isFinal,
+                      'isFinal': isFinal,
+                      'imageBG': bgImage,
+                      'description': '',
+                      'isTransparent': not isCurrent,
+                      'curIcon': ''}}
+
+    def __packProgressInfo(self, image, description):
+        return {'linkage': 'ProgressInfoBlockUI',
+         'infoData': {'image': image,
+                      'description': description}}
 
     def __getStepsProgressSubBlock(self, completedSteps, totalSteps, showDescription=True):
         if showDescription:
@@ -200,17 +152,14 @@ class RankedBattlesView(LobbySubView, RankedBattlesViewMeta):
                 if None in progress:
                     currCount, total, _, _ = progress[None]
                     consolationQuestBattlesLeft = total - currCount
-        seasonInfo = self.rankedController.getCurrentSeason()
-        seasonData = {'passedCycles': seasonInfo.getPassedCyclesNumber(),
-         'totalCycles': len(seasonInfo.getAllCycles())}
-        return _AwardsBlockBuilder.pack(leagueData, consolationQuestBattlesLeft, seasonData)
+        battlesPlayed = self.rankedController.getCurrentCycleStats()['battlesCount']
+        return _AwardsBlockBuilder.pack(leagueData, consolationQuestBattlesLeft, battlesPlayed)
 
     def __getStatusText(self):
         season = self.rankedController.getCurrentSeason()
         endTimeStr = self.__getTillTimeString(season.getCycleEndDate())
-        cycleNumber = season.getCycleOrdinalNumber()
         key = RANKED_BATTLES.RANKEDBATTLEVIEW_STATUSBLOCK_STATUSTEXT
-        return text_styles.stats(i18n.makeString(key, cycleNumber=cycleNumber)) + endTimeStr
+        return text_styles.stats(i18n.makeString(key)) + endTimeStr
 
     def __getAlertStatusText(self, timeLeft):
         timeLeftStr = time_utils.getTillTimeString(timeLeft, RANKED_BATTLES.STATUS_TIMELEFT)
@@ -228,24 +177,31 @@ class RankedBattlesView(LobbySubView, RankedBattlesViewMeta):
 class _AwardsBlockBuilder(object):
 
     @classmethod
-    def pack(cls, leagueData, battlesLeft, seasonData):
-        return [cls.__packWebLeagueBlock(leagueData), cls.__packQuestAwardBlock(battlesLeft), cls.__packSeasonAwardBlock(seasonData)]
+    def pack(cls, leagueData, battlesLeft, battlesPlayed):
+        return [cls.__packWebLeagueBlock(leagueData, battlesPlayed), cls.__packQuestAwardBlock(battlesLeft), cls.__packSeasonAwardBlock()]
 
     @classmethod
-    def __packWebLeagueBlock(cls, leagueData):
-        if leagueData is not None:
-            leagueNumber = leagueData.get('league', 0)
-            if leagueNumber > 0:
-                leagueNumber = int2roman(leagueNumber)
+    def __packWebLeagueBlock(cls, leagueData, battlesPlayed):
+        if battlesPlayed > 0:
+            if leagueData is not None and 'league' in leagueData:
+                leagueNumber = leagueData['league']
+                image = RES_ICONS.getRankedWebLeagueIcon('medium', leagueNumber)
+                if leagueNumber > 0:
+                    headerKey = RANKED_BATTLES.RANKEDBATTLEVIEW_AWARDBLOCK_POINTS_CURRLEAGUEHEADER
+                else:
+                    headerKey = RANKED_BATTLES.RANKEDBATTLEVIEW_AWARDBLOCK_POINTS_NOPRISEHEADER
             else:
-                leagueNumber = _ms(RANKED_BATTLES.RANKEDBATTLEVIEW_AWARDBLOCK_EMPTYLEAGUE)
-            description = text_styles.main(RANKED_BATTLES.RANKEDBATTLEVIEW_AWARDBLOCK_POINTS_DESCRIPTION)
-            value = text_styles.promoTitle(leagueNumber)
+                image = RES_ICONS.MAPS_ICONS_RANKEDBATTLES_ICON_FINAL_CUP_150X100
+                headerKey = RANKED_BATTLES.RANKEDBATTLEVIEW_AWARDBLOCK_POINTS_NOLEAGUEHEADER
+            description = ''
+            value = '{} {} {}'.format(text_styles.main(RANKED_BATTLES.RANKEDBATTLEVIEW_AWARDBLOCK_POINTS_TOTALLABEL), text_styles.stats(dependency.instance(IItemsCache).items.ranked.ladderPoints), icons.makeImageTag(RES_ICONS.MAPS_ICONS_RANKEDBATTLES_LADDER_POINT, 24, 24, -7, 0))
         else:
+            image = RES_ICONS.MAPS_ICONS_RANKEDBATTLES_RANKEDBATTESVIEW_ICON_RANKS_LADDERS_208X100
+            headerKey = RANKED_BATTLES.RANKEDBATTLEVIEW_AWARDBLOCK_POINTS_HEADER
             description = text_styles.main(RANKED_BATTLES.RANKEDBATTLEVIEW_AWARDBLOCK_POINTSALT_DESCRIPTION)
             value = ''
-        return cls.__packBlockData(_AWARD_BLOCK_IDS.WEB_LEAGUE, {'image': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_RANKEDBATTESVIEW_ICON_RANKS_LADDERS_208X100,
-         'header': text_styles.highTitle(RANKED_BATTLES.RANKEDBATTLEVIEW_AWARDBLOCK_POINTS_HEADER),
+        return cls.__packBlockData(_AWARD_BLOCK_IDS.WEB_LEAGUE, {'image': image,
+         'header': text_styles.highTitle(headerKey),
          'description': description,
          'value': value})
 
@@ -264,15 +220,11 @@ class _AwardsBlockBuilder(object):
          'isAvailable': battlesLeft is not None})
 
     @classmethod
-    def __packSeasonAwardBlock(cls, seasonData):
-        passedCycles = text_styles.promoTitle(seasonData['passedCycles'])
-        totalCycles = text_styles.highTitle(seasonData['totalCycles'])
-        delimiter = text_styles.highTitle(' / ')
-        value = passedCycles + delimiter + totalCycles
+    def __packSeasonAwardBlock(cls):
         return cls.__packBlockData(_AWARD_BLOCK_IDS.SEASON_AWARDS, {'image': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_RANKEDBATTESVIEW_GIFT_BOX_208X100,
          'header': text_styles.highTitle(RANKED_BATTLES.RANKEDBATTLEVIEW_AWARDBLOCK_SEASONAWARD_HEADER),
          'description': text_styles.main(RANKED_BATTLES.RANKEDBATTLEVIEW_AWARDBLOCK_SEASONAWARD_DESCRIPTION),
-         'value': text_styles.promoTitle(value)})
+         'value': ''})
 
     @classmethod
     def __packBlockData(cls, blockID, data):

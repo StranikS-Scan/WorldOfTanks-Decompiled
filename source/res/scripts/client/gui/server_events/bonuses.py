@@ -18,7 +18,7 @@ from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.Scaleform.settings import getBadgeIconPath, BADGES_ICONS
 from gui.shared.formatters import text_styles
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_INDICES
-from gui.shared.gui_items.Tankman import getRoleUserName, calculateRoleLevel
+from gui.shared.gui_items.Tankman import getRoleUserName, calculateRoleLevel, Tankman
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.money import Currency, Money
 from gui.shared.utils.functions import makeTooltip, stripColorTagDescrTags
@@ -588,6 +588,11 @@ class VehiclesBonus(SimpleBonus):
         if 'noCrew' not in vehInfo:
             if 'crewLvl' in vehInfo:
                 return calculateRoleLevel(vehInfo.get('crewLvl', cls.DEFAULT_CREW_LVL), vehInfo.get('crewFreeXP', 0))
+            if 'tankmen' in vehInfo:
+                for tman in vehInfo['tankmen']:
+                    if tman['role'] == Tankman.ROLES.COMMANDER:
+                        return calculateRoleLevel(tman.get('roleLevel', cls.DEFAULT_CREW_LVL), tman.get('freeXP', 0))
+
         return None
 
     @staticmethod
@@ -878,8 +883,8 @@ class CustomizationsBonus(SimpleBonus):
 
 
 class BoxBonus(SimpleBonus):
-    __rankedIconSizes = {'big': '450x400',
-     'small': '100x88'}
+    __rankedIconSizes = {'big': '100x88',
+     'small': '48x48'}
 
     class HANDLER_NAMES:
         RANKED = 'ranked'

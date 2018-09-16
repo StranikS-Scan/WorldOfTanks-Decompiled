@@ -1,14 +1,17 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/hangar/ranked_battles_widget.py
-import BigWorld
 import SoundGroups
 from CurrentVehicle import g_currentVehicle
 from PlayerEvents import g_playerEvents
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import ENABLE_RANKED_ANIMATIONS
 from gui.Scaleform.daapi.view.meta.RankedBattlesWidgetMeta import RankedBattlesWidgetMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
+from gui.ranked_battles.awards_formatters import getRankedQuestsOrderedAwards
 from gui.ranked_battles.constants import SOUND, RANK_TYPES
-from gui.ranked_battles.ranked_models import VehicleRank
+from gui.ranked_battles.ranked_helpers import buildRankVO
+from gui.server_events.awards_formatters import AWARDS_SIZES
 from gui.shared import events, EVENT_BUS_SCOPE
 from gui.shared.event_dispatcher import showRankedAwardWindow
 from gui.shared.formatters import text_styles
@@ -40,30 +43,8 @@ class _RankedWidgetSoundManager(object):
         self.__sound = None
         self.__isHangarBlocked = False
         g_playerEvents.onBattleResultsReceived += self.switchHangarLock
-        self._eventSoundMap = {self.CALLER.POST_BATTLE: {RANKEDBATTLES_ALIASES.RANK_LOST_STATE: SOUND.RANK_LOST_POST_BATTLE,
-                                   RANKEDBATTLES_ALIASES.STEP_JUST_RECEIVED_STATE: SOUND.STEP_EARNED_POST_BATTLE,
-                                   RANKEDBATTLES_ALIASES.STEP_JUST_LOST_STATE: SOUND.STEP_LOST_POST_BATTLE,
-                                   RANKEDBATTLES_ALIASES.STEP_NOT_RECEIVED_STATE: SOUND.STEP_NOT_CHANGED_POST_BATTLE,
-                                   RANKEDBATTLES_ALIASES.RANK_RECEIVE_STATE: SOUND.RANK_EARNED_POST_BATTLE},
-         self.CALLER.HANGAR: {RANKEDBATTLES_ALIASES.RANK_LOST_STATE: SOUND.RANK_LOST,
-                              RANKEDBATTLES_ALIASES.STEP_JUST_RECEIVED_STATE: SOUND.STEP_EARNED,
-                              RANKEDBATTLES_ALIASES.STEP_JUST_LOST_STATE: SOUND.STEP_LOST}}
         self.__initBlockingSounds()
         return
-
-    def setSoundForEvent(self, eventType, rank=None, caller=None):
-        if self.__callerBlocked(caller) or self.__eventShouldBeIgnored(eventType):
-            return
-        if eventType in self._STEP_CHANGED_EVENTS and self.__sound in self._RANK_CHANGED_SOUNDS:
-            return
-        if eventType == RANKEDBATTLES_ALIASES.RANK_RECEIVE_STATE and eventType not in self.__getSoundMap(caller):
-            if rank.getType() == RANK_TYPES.VEHICLE:
-                soundName = SOUND.VEH_RANK_EARNED
-            else:
-                soundName = SOUND.getRankEarnedEvent(rank.getID())
-        else:
-            soundName = self.__getSoundMap(caller).get(eventType)
-        self.__sound = soundName
 
     def switchHangarLock(self, *args, **kwargs):
         self.__isHangarBlocked = kwargs.get('isLocked', True)
@@ -82,9 +63,6 @@ class _RankedWidgetSoundManager(object):
         self.__blockingSounds = {k:self._STEP_CHANGED_EVENTS for k in self._RANK_CHANGED_SOUNDS}
         stepUnchangedStates = (RANKEDBATTLES_ALIASES.STEP_NOT_RECEIVED_STATE,)
         self.__blockingSounds.update({k:stepUnchangedStates for k in self._STEP_CHANGED_SOUNDS})
-
-    def __getSoundMap(self, caller):
-        return self._eventSoundMap.get(caller, {})
 
     def __callerBlocked(self, caller):
         return self.__isHangarBlocked and caller == self.CALLER.HANGAR
@@ -105,21 +83,39 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
 
     def update(self, ranks, currentRank, lastRank):
         self._currentRank = currentRank
-        self.as_setDataS(self._buildData(ranks, currentRank, lastRank))
-        self._soundMgr.play()
+        result = self._buildData(ranks, currentRank, lastRank)
+        self.as_setDataS(result)
 
     def onSoundTrigger(self, triggerName):
         self._soundMgr.playInstantSound(triggerName, self._soundCallerType)
 
     def onWidgetClick(self):
         self.fireEvent(events.LoadViewEvent(RANKEDBATTLES_ALIASES.RANKED_BATTLES_VIEW_ALIAS), EVENT_BUS_SCOPE.LOBBY)
-        if self._currentRank is not None and not self._currentRank.isRewardClaimed():
-            showRankedAwardWindow(self._currentRank.getID(), showNext=False)
-            self.rankedController.runQuest(self._currentRank.getQuest())
+        if self._currentRank is not None:
+            completedQuests = []
+            receivedRanks = 0
+            rankID = self._currentRank.getID()
+            vehicle = g_currentVehicle.item
+            while rankID > 0:
+                rank = self.rankedController.getRank(rankID, vehicle=vehicle)
+                haveNotClaimedAward = not rank.isRewardClaimed()
+                if haveNotClaimedAward:
+                    rankQuest = rank.getQuest()
+                    if rankQuest is not None:
+                        completedQuests.append(rankQuest)
+                    rankID -= 1
+                    receivedRanks += 1
+                break
+
+            if completedQuests:
+                self.rankedController.runQuests(completedQuests)
+            if receivedRanks > 0:
+                showRankedAwardWindow(self._currentRank.getID(), awards=getRankedQuestsOrderedAwards(completedQuests, size=AWARDS_SIZES.BIG))
         return
 
     def onAnimationFinished(self):
         self.rankedController.setLastRank(g_currentVehicle.item)
+        self.rankedController.setLastShields()
 
     def _checkClaim(self):
         return True
@@ -127,14 +123,101 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
     def _isHuge(self):
         return False
 
+    def _isAutoPlay(self):
+        return True
+
     def _hasAdditionalRankInfo(self):
         return True
 
     def _getCountLabel(self, rank):
         pass
 
+    def _getFirstRankReceiveStateData(self, currentRank):
+        """
+        Return First rank first time received VO
+        :param currentRank:
+        :return:
+        """
+        state = RANKEDBATTLES_ALIASES.FIRST_RANK_RECEIVE_STATE
+        steps = self._buildProgress(currentRank)
+        infoText = text_styles.hightlight(_ms(RANKED_BATTLES.RANKEDBATTLESWIDGET_INITTEXT, battles=str(len(steps))))
+        nextInfoText = text_styles.hightlight(_ms(RANKED_BATTLES.RANKEDBATTLESWIDGET_NEWRANKCONGRAT))
+        rankLeftVO = self._buildRankVO(currentRank, True)
+        return self._buildVO(state, infoText=infoText, rankLeftVO=rankLeftVO, steps=steps, nextInfoText=nextInfoText, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(currentRank, True), steps=self._buildProgress(currentRank)))
+
+    def _getFirstRankReachiveStateData(self, currentRank, nextRank, newStepsState=None, changeAcquired=False):
+        """
+        Return VO of first rank with was reachieved by player
+        :param currentRank:
+        :param nextRank:
+        :param newStepsState: newSteps state override
+        :param changeAcquired: apply newStepsState only to acquired steps
+        :return:
+        """
+        state = RANKEDBATTLES_ALIASES.FIRST_RANK_REACHIVE_STATE
+        steps = self._buildProgress(currentRank)
+        infoText = ''
+        if not self._isHuge():
+            infoText = text_styles.hightlight(_ms(RANKED_BATTLES.RANKEDBATTLESWIDGET_INITTEXT, battles=str(len(steps))))
+        nextInfoText = ''
+        rankRightVO = self._buildRankVO(currentRank, True)
+        newRankVO = self._buildRankVO(nextRank)
+        newCountText = nextRank.getProgress().getUserStr()
+        newSteps = self._buildProgress(nextRank, newStepsState=newStepsState, changeAcquired=changeAcquired)
+        return self._buildVO(state, infoText=infoText, rankRightVO=rankRightVO, newRankVO=newRankVO, steps=steps, newSteps=newSteps, nextInfoText=nextInfoText, newCountText=newCountText, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(currentRank, True), rankRightVO=self._buildRankVO(nextRank), steps=self._buildProgress(nextRank, newStepsState=newStepsState, changeAcquired=changeAcquired)))
+
+    def _getRankReceiveForFirstTimeData(self, lastRank, currentRank):
+        """
+        Return VO of first time visited rank
+        :param lastRank:
+        :param currentRank:
+        :return:
+        """
+        state = RANKEDBATTLES_ALIASES.RANK_RECEIVE_FOR_FIRST_TIME_STATE
+        infoText = text_styles.hightlight(_ms(RANKED_BATTLES.RANKEDBATTLESWIDGET_NEWRANKCONGRAT))
+        steps = self._buildProgress(currentRank)
+        countText = currentRank.getProgress().getUserStr()
+        nextCountText = currentRank.getProgress().getNewUserStr()
+        rankLeftVO = self._buildRankVO(lastRank, True)
+        rankRightVO = self._buildRankVO(currentRank)
+        return self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, infoText=infoText, steps=steps, countText=countText, nextCountText=nextCountText, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(lastRank, True), rankRightVO=self._buildRankVO(currentRank), steps=self._buildProgress(currentRank)))
+
+    def _getReachievedReceiveStateData(self, lastRank, currentRank, nextRank, stepsState=None, newStepsState=None, changeAcquired=False):
+        """
+        Show animation with rank changing WITHOUT the ability to click and receive awards
+        :param lastRank:
+        :param currentRank:
+        :param nextRank:
+        :param stepsState:
+        :param newStepsState: override for newSteps's state
+        :param changeAcquired: is newStepsState useful only for acquired steps
+        :return:
+        """
+        state = RANKEDBATTLES_ALIASES.RANK_RECEIVE_STATE
+        steps = self._buildProgress(currentRank, newStepsState=stepsState)
+        countText = currentRank.getProgress().getUserStr()
+        nextCountText = currentRank.getProgress().getNewUserStr()
+        rankLeftVO = self._buildRankVO(lastRank, True)
+        rankRightVO = self._buildRankVO(currentRank)
+        newSteps = self._buildProgress(nextRank, newStepsState=newStepsState, changeAcquired=changeAcquired)
+        newCountText = nextRank.getProgress().getUserStr()
+        newRankVO = self._buildRankVO(nextRank)
+        return self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, newRankVO=newRankVO, steps=steps, newSteps=newSteps, countText=countText, nextCountText=nextCountText, newCountText=newCountText, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(currentRank), rankRightVO=self._buildRankVO(nextRank), steps=self._buildProgress(nextRank, newStepsState=newStepsState, changeAcquired=changeAcquired)))
+
+    def _getLadderPointReceiveData(self, maxRank, vehRank, currentRank):
+        state = RANKEDBATTLES_ALIASES.ANIM_ACHIEVE_LADDER_POINT
+        points = self.rankedController.getLadderPoints()
+        rankLeftVO = self._buildRankVO(maxRank, True, ladderPoints=(points - 1, points), showLadderPoints=True)
+        rankRightVO = self._buildRankVO(vehRank, isEnabled=True)
+        steps = self._buildProgress(currentRank)
+        newSteps = self._buildProgress(vehRank)
+        countText = ''
+        newCountText = ''
+        return self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, steps=steps, newSteps=newSteps, countText=countText, newCountText=newCountText, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(maxRank, True, ladderPoints=(points - 1, points), showLadderPoints=True), rankRightVO=self._buildRankVO(vehRank, isEnabled=True), steps=self._buildProgress(vehRank)))
+
     def _buildData(self, ranks, currentRank, lastRank):
         currentRankID = currentRank.getID()
+        lastRankID = lastRank.getID()
         if currentRankID == 0:
             state = RANKEDBATTLES_ALIASES.RANK_INIT_STATE
             nextRank = ranks[currentRankID + 1]
@@ -142,75 +225,68 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
             infoText = text_styles.hightlight(_ms(RANKED_BATTLES.RANKEDBATTLESWIDGET_INITTEXT, battles=str(len(steps))))
             countText = self._getCountLabel(nextRank)
             rankLeftVO = self._buildRankVO(nextRank)
-            return self._buildVO(state, infoText=infoText, rankLeftVO=rankLeftVO, steps=steps, countText=countText)
+            return [self._buildVO(state, infoText=infoText, rankLeftVO=rankLeftVO, steps=steps, countText=countText, finalState=self._buildFinalState(state, self._buildRankVO(nextRank), steps=self._buildProgress(nextRank)))]
         else:
+            maxAccRankID = self.rankedController.getAccRanksTotal()
             skipNewRankCheck = currentRankID == 1 and self.rankedController.wasAwardWindowShown() and not self._isHuge()
             if currentRank.isNewForPlayer() and not skipNewRankCheck:
                 if lastRank.isAcquired():
-                    self._addSoundEvent(RANKEDBATTLES_ALIASES.RANK_RECEIVE_STATE, currentRank)
-                    if currentRankID == 1 and not self._isHuge():
-                        state = RANKEDBATTLES_ALIASES.FIRST_RANK_RECEIVE_STATE
-                        steps = self._buildProgress(currentRank)
-                        infoText = text_styles.hightlight(_ms(RANKED_BATTLES.RANKEDBATTLESWIDGET_INITTEXT, battles=str(len(steps))))
-                        nextInfoText = text_styles.hightlight(_ms(RANKED_BATTLES.RANKEDBATTLESWIDGET_NEWRANKCONGRAT))
-                        rankLeftVO = self._buildRankVO(currentRank, True)
-                        return self._buildVO(state, infoText=infoText, rankLeftVO=rankLeftVO, steps=steps, nextInfoText=nextInfoText)
-                    if not self._checkClaim() or currentRank.isRewardClaimed() or self._isHuge() and currentRankID == 1:
-                        nextRank = ranks[currentRankID + 1]
-                        if self._isHuge():
-                            state = RANKEDBATTLES_ALIASES.RANK_RECEIVE_HUGE_STATE
-                            steps = self._buildProgress(nextRank)
-                            countText = ''
-                            nextCountText = nextRank.getProgress().getNewUserStr()
-                            rankLeftVO = self._buildRankVO(currentRank, True)
-                            rankRightVO = self._buildRankVO(currentRank, True)
-                        else:
-                            state = RANKEDBATTLES_ALIASES.RANK_RECEIVE_STATE
-                            steps = self._buildProgress(currentRank)
-                            countText = currentRank.getProgress().getUserStr()
-                            nextCountText = currentRank.getProgress().getNewUserStr()
-                            rankLeftVO = self._buildRankVO(lastRank, True)
-                            rankRightVO = self._buildRankVO(currentRank)
-                        newSteps = self._buildProgress(nextRank)
-                        newCountText = nextRank.getProgress().getUserStr()
-                        newRankVO = self._buildRankVO(nextRank)
-                        return self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, newRankVO=newRankVO, steps=steps, newSteps=newSteps, countText=countText, nextCountText=nextCountText, newCountText=newCountText)
-                    state = RANKEDBATTLES_ALIASES.RANK_RECEIVE_FOR_FIRST_TIME_STATE
-                    infoText = text_styles.hightlight(_ms(RANKED_BATTLES.RANKEDBATTLESWIDGET_NEWRANKCONGRAT))
-                    steps = self._buildProgress(currentRank)
-                    countText = currentRank.getProgress().getUserStr()
-                    nextCountText = currentRank.getProgress().getNewUserStr()
-                    rankLeftVO = self._buildRankVO(lastRank, True)
-                    rankRightVO = self._buildRankVO(currentRank)
-                    return self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, infoText=infoText, steps=steps, countText=countText, nextCountText=nextCountText)
+                    isJumpOverRank = currentRankID - lastRankID > 1
+                    if currentRankID > maxAccRankID:
+                        return [self._getLadderPointReceiveData(maxRank=ranks[maxAccRankID], vehRank=ranks[currentRankID + 1], currentRank=currentRank)]
+                    if currentRankID == 1:
+                        if self._isHuge() or currentRank.isRewardClaimed():
+                            return [self._getFirstRankReachiveStateData(currentRank=ranks[1], nextRank=ranks[2])]
+                        return [self._getFirstRankReceiveStateData(currentRank=currentRank)]
+                    if not self._checkClaim() or currentRank.isRewardClaimed():
+                        states = []
+                        if isJumpOverRank:
+                            tmpRankID = lastRankID + 1
+                            while tmpRankID <= currentRankID:
+                                if tmpRankID == 1:
+                                    states.append(self._getFirstRankReachiveStateData(currentRank=ranks[1], nextRank=ranks[2], newStepsState=RANKEDBATTLES_ALIASES.STEP_RECEIVED_BLINK_STATE, changeAcquired=True))
+                                else:
+                                    states.append(self._getReachievedReceiveStateData(lastRank=ranks[tmpRankID - 1], currentRank=ranks[tmpRankID], nextRank=ranks[tmpRankID + 1], stepsState=RANKEDBATTLES_ALIASES.STEP_RECEIVED_STATE, newStepsState=RANKEDBATTLES_ALIASES.STEP_RECEIVED_BLINK_STATE, changeAcquired=tmpRankID == currentRankID))
+                                tmpRankID += 1
+
+                            return states
+                        return [self._getReachievedReceiveStateData(lastRank=lastRank, currentRank=currentRank, nextRank=ranks[currentRankID + 1])]
+                    if isJumpOverRank:
+                        states = []
+                        tmpRankID = lastRankID + 1
+                        while tmpRankID <= currentRankID:
+                            if tmpRankID == currentRankID:
+                                states.append(self._getRankReceiveForFirstTimeData(lastRank=ranks[tmpRankID - 1], currentRank=ranks[tmpRankID]))
+                            elif tmpRankID == 1:
+                                states.append(self._getFirstRankReachiveStateData(currentRank=ranks[1], nextRank=ranks[2], newStepsState=RANKEDBATTLES_ALIASES.STEP_RECEIVED_BLINK_STATE, changeAcquired=True))
+                            else:
+                                states.append(self._getReachievedReceiveStateData(lastRank=ranks[tmpRankID - 1], currentRank=ranks[tmpRankID], nextRank=ranks[tmpRankID + 1], stepsState=RANKEDBATTLES_ALIASES.STEP_RECEIVED_STATE, newStepsState=RANKEDBATTLES_ALIASES.STEP_RECEIVED_BLINK_STATE))
+                            tmpRankID += 1
+
+                        return states
+                    return [self._getRankReceiveForFirstTimeData(lastRank=lastRank, currentRank=currentRank)]
                 if lastRank.isLost():
-                    self._addSoundEvent(RANKEDBATTLES_ALIASES.RANK_LOST_STATE)
                     if lastRank.getType() == RANK_TYPES.VEHICLE and lastRank.isMax():
                         nextRank = ranks[lastRank.getID()]
                     else:
                         nextRank = ranks[lastRank.getID() + 1]
+                    state = RANKEDBATTLES_ALIASES.RANK_LOST_STATE
+                    steps = self._buildProgress(nextRank)
+                    countText = ''
                     if self._isHuge():
-                        state = RANKEDBATTLES_ALIASES.RANK_LOST_HUGE_STATE
-                        steps = self._buildProgress(lastRank)
-                        countText = ''
-                        nextCountText = lastRank.getProgress().getNewUserStr()
-                    else:
-                        state = RANKEDBATTLES_ALIASES.RANK_LOST_STATE
-                        steps = self._buildProgress(nextRank)
                         countText = nextRank.getProgress().getUserStr()
-                        nextCountText = nextRank.getProgress().getNewUserStr()
+                    nextCountText = nextRank.getProgress().getNewUserStr()
                     newSteps = self._buildProgress(lastRank)
                     newCountText = lastRank.getProgress().getUserStr()
                     rankLeftVO = self._buildRankVO(lastRank, True)
                     rankRightVO = self._buildRankVO(nextRank)
                     newRankVO = self._buildRankVO(currentRank, True)
-                    return self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, newRankVO=newRankVO, steps=steps, newSteps=newSteps, countText=countText, nextCountText=nextCountText, newCountText=newCountText)
+                    return [self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, newRankVO=newRankVO, steps=steps, newSteps=newSteps, countText=countText, nextCountText=nextCountText, newCountText=newCountText, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(currentRank, True), rankRightVO=self._buildRankVO(lastRank), steps=self._buildProgress(lastRank)))]
             if self._checkClaim() and not currentRank.isRewardClaimed():
                 state = RANKEDBATTLES_ALIASES.NEW_RANK_CONGRAT_STATE
                 infoText = text_styles.hightlight(_ms(RANKED_BATTLES.RANKEDBATTLESWIDGET_NEWRANKCONGRAT))
                 rankLeftVO = self._buildRankVO(currentRank, True)
-                return self._buildVO(state, infoText=infoText, rankLeftVO=rankLeftVO, steps=None)
-            state = RANKEDBATTLES_ALIASES.RANK_IDLE_STATE
+                return [self._buildVO(state, infoText=infoText, rankLeftVO=rankLeftVO, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(currentRank, True)))]
             nextRank = ranks[currentRankID + 1]
             steps = self._buildProgress(nextRank)
             showText = True
@@ -224,11 +300,48 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
                     countText = ''
                 else:
                     countText = text_styles.stats(_ms(RANKED_BATTLES.RANKEDBATTLESWIDGET_NOCHANGES))
-            rankLeftVO = self._buildRankVO(currentRank, True)
-            rankRightVO = self._buildRankVO(nextRank)
-            return self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, steps=steps, countText=countText)
+            shieldStatus = self.rankedController.getShieldStatus(currentRank)
+            if shieldStatus is not None:
+                prevShieldHP, shiedHP, maxHP, shieldState, _ = shieldStatus
+                if shieldState == RANKEDBATTLES_ALIASES.SHIELD_ENABLED:
+                    if shiedHP < maxHP:
+                        state = RANKEDBATTLES_ALIASES.ANIM_SHIELD_NOT_FULL
+                    else:
+                        state = RANKEDBATTLES_ALIASES.RANK_IDLE_STATE
+                elif shieldState == RANKEDBATTLES_ALIASES.SHIELD_RENEW:
+                    state = RANKEDBATTLES_ALIASES.ANIM_SHIELD_RENEW
+                elif shieldState == RANKEDBATTLES_ALIASES.SHIELD_FULL_RENEW:
+                    state = RANKEDBATTLES_ALIASES.ANIM_SHIELD_FULL_RENEW
+                elif shieldState == RANKEDBATTLES_ALIASES.SHIELD_LOSE:
+                    if prevShieldHP == maxHP:
+                        state = RANKEDBATTLES_ALIASES.ANIM_SHIELD_LOSE_FROM_FULL
+                    else:
+                        state = RANKEDBATTLES_ALIASES.ANIM_SHIELD_LOSE
+                elif shieldState == RANKEDBATTLES_ALIASES.SHIELD_LOSE_STEP:
+                    if prevShieldHP == maxHP:
+                        state = RANKEDBATTLES_ALIASES.ANIM_SHIELD_LOSE_STEP_FROM_FULL
+                    else:
+                        state = RANKEDBATTLES_ALIASES.ANIM_SHIELD_LOSE_STEP
+                else:
+                    state = RANKEDBATTLES_ALIASES.RANK_IDLE_STATE
+            else:
+                state = RANKEDBATTLES_ALIASES.RANK_IDLE_STATE
+            if RANKEDBATTLES_ALIASES.RANK_IDLE_STATE and currentRankID >= maxAccRankID:
+                ladderPoints = (self.rankedController.getLadderPoints(), None)
+                rankLeftVO = self._buildRankVO(ranks[maxAccRankID], True, showLadderPoints=True, ladderPoints=ladderPoints)
+                finalLeftVO = self._buildRankVO(ranks[maxAccRankID], True, showLadderPoints=True, ladderPoints=ladderPoints)
+                rankRightVO = self._buildRankVO(ranks[maxAccRankID + 1])
+                finalRightVO = self._buildRankVO(ranks[maxAccRankID + 1])
+                countText = ''
+            else:
+                rankLeftVO = self._buildRankVO(currentRank, True)
+                finalLeftVO = self._buildRankVO(currentRank, True)
+                rankRightVO = self._buildRankVO(nextRank)
+                finalRightVO = self._buildRankVO(nextRank)
+            isShieldOneRankState = state in RANKEDBATTLES_ALIASES.ANIM_SHIELD_ONE_RANK_STATES
+            return [self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, steps=steps, countText=countText, finalState=self._buildFinalState(state, rankLeftVO=finalLeftVO, rankRightVO=None if isShieldOneRankState else finalRightVO, steps=None if isShieldOneRankState else self._buildProgress(nextRank)))]
 
-    def _buildVO(self, state, infoText='', nextInfoText='', rankLeftVO=None, rankRightVO=None, newRankVO=None, countText='', nextCountText='', steps=None, newCountText='', newSteps=None):
+    def _buildVO(self, state, infoText='', nextInfoText='', rankLeftVO=None, rankRightVO=None, newRankVO=None, countText='', nextCountText='', steps=None, newCountText='', newSteps=None, finalState=None):
         return {'state': state,
          'infoText': infoText,
          'nextInfoText': nextInfoText,
@@ -241,106 +354,113 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
          'newStepsContainerVO': {'countText': newCountText,
                                  'nextCountText': '',
                                  'steps': newSteps or ()},
-         'isHuge': self._isHuge()}
+         'isHuge': self._isHuge(),
+         'autoPlay': self._isAutoPlay(),
+         'finalState': finalState,
+         'animationEnabled': self._isAnimationEnabled()}
 
-    def _buildRankVO(self, rank, isEnabled=False):
-        isMaster = False
-        rankCount = ''
-        if isinstance(rank, VehicleRank):
-            isMaster = True
-            if self._hasAdditionalRankInfo() and rank.isAcquired():
-                rankCount = BigWorld.wg_getIntegralFormat(rank.getSerialID())
-        imageSize = 'huge' if self._isHuge() else 'medium'
-        return {'imageSrc': rank.getIcon(imageSize),
-         'smallImageSrc': rank.getIcon('small'),
-         'isEnabled': isEnabled,
-         'isMaster': isMaster,
-         'rankID': str(rank.getID()),
-         'rankCount': rankCount,
-         'hasTooltip': self._hasAdditionalRankInfo()}
+    def _buildRankVO(self, rank, isEnabled=False, ladderPoints=None, showLadderPoints=False):
+        return buildRankVO(rank=rank, isEnabled=isEnabled, imageSize=RANKEDBATTLES_ALIASES.WIDGET_HUGE if self._isHuge() else RANKEDBATTLES_ALIASES.WIDGET_MEDIUM, hasTooltip=self._hasAdditionalRankInfo(), shieldStatus=self.rankedController.getShieldStatus(rank), shieldAnimated=True, showLadderPoints=showLadderPoints, ladderPoints=ladderPoints)
 
-    def _buildProgress(self, rank):
+    def _buildProgress(self, rank, newStepsState=None, changeAcquired=False):
+        """
+        Build steps progress
+        :param rank:
+        :param newStepsState: override for rank's steps progress
+        :param changeAcquired: if not None then newStepsState applying only for acquired steps
+        :return:
+        """
         result = []
         progress = rank.getProgress()
         if progress is None:
             return result
         else:
             for step in progress.getSteps():
-                if step.isAcquired():
-                    stepState = RANKEDBATTLES_ALIASES.STEP_RECEIVED_STATE
-                    if step.isNewForPlayer():
-                        stepState = RANKEDBATTLES_ALIASES.STEP_JUST_RECEIVED_STATE
-                        self._addSoundEvent(stepState)
-                        if rank.isNewForPlayer():
-                            stepState = RANKEDBATTLES_ALIASES.STEP_JUST_RECEIVED_SHORT_STATE
+                if not changeAcquired and newStepsState is not None:
+                    stepState = newStepsState
+                elif step.isAcquired():
+                    if changeAcquired and newStepsState is not None:
+                        stepState = newStepsState
+                    else:
+                        stepState = RANKEDBATTLES_ALIASES.STEP_RECEIVED_STATE
+                        if step.isNewForPlayer():
+                            stepState = RANKEDBATTLES_ALIASES.STEP_JUST_RECEIVED_STATE
+                            if rank.isNewForPlayer():
+                                stepState = RANKEDBATTLES_ALIASES.STEP_JUST_RECEIVED_SHORT_STATE
                 elif step.isLost():
                     stepState = RANKEDBATTLES_ALIASES.STEP_NOT_RECEIVED_STATE
                     if step.isNewForPlayer() and not rank.isLost():
                         stepState = RANKEDBATTLES_ALIASES.STEP_JUST_LOST_STATE
-                        self._addSoundEvent(stepState)
                 else:
                     stepState = RANKEDBATTLES_ALIASES.STEP_NOT_RECEIVED_STATE
-                    self._addSoundEvent(stepState)
                 result.append({'state': stepState})
 
             return result
 
-    def _addSoundEvent(self, event, rank=None):
-        if not self._isMuted():
-            self._soundMgr.setSoundForEvent(event, rank, self._soundCallerType)
+    def _buildFinalState(self, state, rankLeftVO, rankRightVO=None, steps=None):
+        return None
 
-    def _isMuted(self):
-        return False
+    def _isAnimationEnabled(self):
+        return True
 
 
-class RankedBattleResultsFinalWidget(RankedBattlesWidget):
+class RankedBattleResultsWidget(RankedBattlesWidget):
 
     def __init__(self):
-        super(RankedBattleResultsFinalWidget, self).__init__()
+        super(RankedBattleResultsWidget, self).__init__()
         self._soundCallerType = self._soundMgr.CALLER.POST_BATTLE
+
+    def _dispose(self):
+        self._soundMgr.switchHangarLock(isLocked=False)
+        super(RankedBattleResultsWidget, self)._dispose()
 
     def onWidgetClick(self):
         pass
 
-    def _getCountLabel(self, rank):
-        return rank.getProgress().getUserStr() if rank.hasProgress() else ''
-
-    def _dispose(self):
-        self._soundMgr.switchHangarLock(isLocked=False)
-        super(RankedBattleResultsFinalWidget, self)._dispose()
-
     def _checkClaim(self):
+        return False
+
+    def _isHuge(self):
+        return True
+
+    def _buildVO(self, state, infoText='', nextInfoText='', rankLeftVO=None, rankRightVO=None, newRankVO=None, countText='', nextCountText='', steps=None, newCountText='', newSteps=None, finalState=None):
+        vo = super(RankedBattleResultsWidget, self)._buildVO(state, infoText, nextInfoText, rankLeftVO, rankRightVO, newRankVO, countText, nextCountText, steps, newCountText, newSteps, finalState)
+        return vo
+
+    def _isAutoPlay(self):
         return False
 
     def _hasAdditionalRankInfo(self):
         return False
 
-    def _isMuted(self):
-        return True
+    def _buildFinalState(self, state, rankLeftVO, rankRightVO=None, steps=None):
+        rankLeftVO = self.__setFinalState(rankLeftVO)
+        rankLeftVO['isEnabled'] = state != RANKEDBATTLES_ALIASES.RANK_INIT_STATE
+        if rankRightVO is not None:
+            rankRightVO = self.__setFinalState(rankRightVO)
+        if steps is not None:
+            for step in steps:
+                state = step['state']
+                if state in RANKEDBATTLES_ALIASES.STEP_RECEIVED_STATES:
+                    step['state'] = RANKEDBATTLES_ALIASES.STEP_RECEIVED_STATE
+                step['state'] = RANKEDBATTLES_ALIASES.STEP_NOT_RECEIVED_STATE
 
-    def _buildVO(self, state, infoText='', nextInfoText='', rankLeftVO=None, rankRightVO=None, newRankVO=None, countText='', nextCountText='', steps=None, newCountText='', newSteps=None):
-        vo = super(RankedBattleResultsFinalWidget, self)._buildVO(state, infoText, nextInfoText, rankLeftVO, rankRightVO, newRankVO, countText, nextCountText, steps, newCountText, newSteps)
-        if vo['state'] == RANKEDBATTLES_ALIASES.RANK_INIT_STATE:
-            vo['infoText'] = ''
-        return vo
+        return self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, steps=steps)
 
+    def __setFinalState(self, rank):
+        shield = rank.get('shield', None)
+        if shield is not None:
+            if shield['newState'] is not None:
+                shield['state'] = shield['newState']
+                shield['newState'] = None
+                rank['shield'] = shield
+        scoreData = rank.get('scoreData', None)
+        if scoreData is not None:
+            if scoreData['newLabel'] != '':
+                scoreData['label'] = scoreData['newLabel']
+                scoreData['newLabel'] = ''
+                rank['scoreData'] = scoreData
+        return rank
 
-class RankedBattleResultsWidget(RankedBattleResultsFinalWidget):
-
-    def _isHuge(self):
-        return True
-
-    def _getCountLabel(self, rank):
-        pass
-
-    def _buildVO(self, state, infoText='', nextInfoText='', rankLeftVO=None, rankRightVO=None, newRankVO=None, countText='', nextCountText='', steps=None, newCountText='', newSteps=None):
-        vo = super(RankedBattleResultsWidget, self)._buildVO(state, infoText, nextInfoText, rankLeftVO, rankRightVO, newRankVO, countText, nextCountText, steps, newCountText, newSteps)
-        if vo['state'] not in (RANKEDBATTLES_ALIASES.RANK_IDLE_STATE, RANKEDBATTLES_ALIASES.RANK_INIT_STATE):
-            vo['newStepsContainerVO'] = vo['stepsContainerVO']
-            vo['stepsContainerVO'] = {'countText': '',
-             'nextCountText': '',
-             'steps': ()}
-        return vo
-
-    def _isMuted(self):
-        return False
+    def _isAnimationEnabled(self):
+        return bool(AccountSettings.getSettings(ENABLE_RANKED_ANIMATIONS))

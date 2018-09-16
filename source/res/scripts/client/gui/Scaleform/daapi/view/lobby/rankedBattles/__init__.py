@@ -21,7 +21,6 @@ def getViewSettings():
     from gui.Scaleform.daapi.view.lobby.rankedBattles.RankedBattlesAwardsView import RankedBattlesAwardsView
     from gui.Scaleform.daapi.view.lobby.rankedBattles.RankedBattlesBrowserView import RankedBattlesBrowserView
     from gui.Scaleform.daapi.view.lobby.hangar.ranked_battles_widget import RankedBattleResultsWidget
-    from gui.Scaleform.daapi.view.lobby.hangar.ranked_battles_widget import RankedBattleResultsFinalWidget
     from gui.Scaleform.daapi.view.lobby.rankedBattles.RankedBattlesSeasonCompleteView import RankedBattlesSeasonCompleteView
     from gui.Scaleform.daapi.view.lobby.rankedBattles.RankedBattlesStageCompleteView import RankedBattlesStageCompleteView
     from gui.Scaleform.daapi.view.lobby.rankedBattles.ranked_battles_prime_time_view import RankedBattlesPrimeTimeView
@@ -36,7 +35,6 @@ def getViewSettings():
      ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE, RankedBattlesSeasonCompleteView, RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE_UI, ViewTypes.OVERLAY, RANKEDBATTLES_ALIASES.RANKED_BATTLES_SEASON_COMPLETE, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
      ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLES_STAGE_COMPLETE, RankedBattlesStageCompleteView, RANKEDBATTLES_ALIASES.RANKED_BATTLES_STAGE_COMPLETE_UI, ViewTypes.OVERLAY, RANKEDBATTLES_ALIASES.RANKED_BATTLES_STAGE_COMPLETE, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True),
      ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLE_RESULTS_WIDGET, RankedBattleResultsWidget, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
-     ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLE_RESULTS_FINAL_WIDGET, RankedBattleResultsFinalWidget, None, ViewTypes.COMPONENT, None, ScopeTemplates.DEFAULT_SCOPE),
      ViewSettings(RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, RankedBattlesPrimeTimeView, RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME_UI, ViewTypes.LOBBY_SUB, RANKEDBATTLES_ALIASES.RANKED_BATTLE_PRIME_TIME, ScopeTemplates.LOBBY_TOP_SUB_SCOPE, True))
 
 

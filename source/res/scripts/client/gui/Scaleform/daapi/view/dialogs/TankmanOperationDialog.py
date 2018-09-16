@@ -165,7 +165,7 @@ class RestoreTankmanDialog(_TankmanOperationDialogBase):
             currencyTextFrame = self._CURRENCY_TO_TEXT_FRAME[currencyName]
             restorePriceStr = str(currency.getBWFormatter(currencyName)(restorePrice.getSignValue(currencyName)))
             isEnoughMoney = self.itemsCache.items.stats.money.get(currencyName, 0) >= restorePrice.get(currencyName, 0)
-            if self._showPeriodEndWarning:
+            if self._showPeriodEndWarning and restorePrice.isSet(Currency.GOLD):
                 daysCount = lengthInHours / time_utils.HOURS_IN_DAY
                 warningTexts.append(text_styles.alert(_ms(DIALOGS.RESTORETANKMAN_NEWPERIODWARNING, daysCount=daysCount)))
             if constants.IS_KOREA and restorePrice.isSet(Currency.GOLD):

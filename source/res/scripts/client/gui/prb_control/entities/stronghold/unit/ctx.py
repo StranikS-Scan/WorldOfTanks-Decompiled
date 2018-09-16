@@ -130,3 +130,24 @@ class JoinUnitCtx(TimeoutCtx):
         onErrorCallback = self.__onErrorCallback
         if onErrorCallback and callable(onErrorCallback):
             onErrorCallback(errorData)
+
+
+@ReprInjector.withParent(('__databaseID', 'databaseID'))
+class GiveEquipmentCommanderCtx(UnitRequestCtx):
+    """
+    Context for giving equipment commandership to other player
+    """
+    __slots__ = ('__databaseID',)
+
+    def __init__(self, databaseID, waitingID=''):
+        super(GiveEquipmentCommanderCtx, self).__init__(waitingID=waitingID)
+        self.__databaseID = databaseID
+
+    def getRequestType(self):
+        return _REQUEST_TYPE.SET_EQUIPMENT_COMMANDER
+
+    def getPlayerID(self):
+        """
+        Getter for database ID of player to kick
+        """
+        return self.__databaseID

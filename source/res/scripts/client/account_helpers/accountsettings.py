@@ -63,6 +63,8 @@ MISSIONS_PAGE = 'missions_page'
 DEFAULT_VEHICLE_TYPES_FILTER = [False] * len(VEHICLE_CLASSES)
 DEFAULT_LEVELS_FILTERS = [False] * MAX_VEHICLE_LEVEL
 SHOW_OPT_DEVICE_HINT = 'showOptDeviceHint'
+LAST_BADGES_VISIT = 'lastBadgesVisit'
+ENABLE_RANKED_ANIMATIONS = 'enableRankedAnimations'
 CHRISTMAS_BOXES = 'christmasBoxes'
 CHRISTMAS_STARTED_AWARDS_SHOWN = 'christmasStartedAwardsShown'
 CHRISTMAS_FINISHED_AWARDS_SHOWN = 'christmasFinishedAwardsShown'
@@ -413,7 +415,9 @@ DEFAULT_VALUES = {KEY_FILTERS: {STORE_TAB: 0,
                                                         'c11nHistoricallyAccurate': True}},
                 TRAJECTORY_VIEW_HINT_COUNTER: 10,
                 SHOW_OPT_DEVICE_HINT: True,
-                'c11nHistoricallyAccurate': True},
+                'c11nHistoricallyAccurate': True,
+                LAST_BADGES_VISIT: 0,
+                ENABLE_RANKED_ANIMATIONS: True},
  KEY_COUNTERS: {NEW_HOF_COUNTER: {PROFILE_CONSTANTS.HOF_ACHIEVEMENTS_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VEHICLES_BUTTON: True,
                                   PROFILE_CONSTANTS.HOF_VIEW_RATING_BUTTON: True},

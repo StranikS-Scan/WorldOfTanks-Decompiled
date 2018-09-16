@@ -131,18 +131,18 @@ class ViewPointsController(IViewPointsController):
             self.__currentVehicleID = None
             BigWorld.player().positionControl.switchViewpoint(True, vehOrPointId)
             return True
-        elif vehOrPointId == self.__currentVehicleID:
-            LOG_DEBUG('Skip switch to current vehicle!')
-            return True
         else:
             vehicleInfo = self.__arenaDP.getVehicleInfo(vehOrPointId)
             if vehicleInfo.isObserver():
                 LOG_DEBUG('Skip switch to observer vehicle!')
                 return False
-            elif vehOrPointId != self.__arenaDP.getPlayerVehicleID() and not vehicleInfo.isAlive():
+            if vehOrPointId == self.__currentVehicleID:
+                LOG_DEBUG('Skip switch to current vehicle!')
+                return True
+            if vehOrPointId != self.__arenaDP.getPlayerVehicleID() and not vehicleInfo.isAlive():
                 LOG_DEBUG('Skip switch to dead vehicle!')
                 return False
-            elif not self.__arenaDP.isAllyTeam(vehicleInfo.team) and not self.__arenaDP.isPlayerObserver():
+            if not self.__arenaDP.isAllyTeam(vehicleInfo.team) and not self.__arenaDP.isPlayerObserver():
                 LOG_DEBUG('Skip switch to enemy vehicle!')
                 return False
             self.__currentViewPointID = None

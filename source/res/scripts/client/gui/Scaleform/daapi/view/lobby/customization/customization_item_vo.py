@@ -6,7 +6,7 @@ from gui.shared.gui_items.gui_item_economics import ITEM_PRICE_EMPTY
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.utils import toUpper
 
-def buildCustomizationItemDataVO(item, count, plainView=False, showDetailItems=True, forceLocked=False, showUnsupportedAlert=False):
+def buildCustomizationItemDataVO(item, count, plainView=False, showDetailItems=True, forceLocked=False, showUnsupportedAlert=False, isCurrentlyApplied=False):
     """ Build a CustomizationCarouselRendererVO out of the given item.
     """
     hasBonus = item.bonus is not None and not plainView
@@ -18,20 +18,22 @@ def buildCustomizationItemDataVO(item, count, plainView=False, showDetailItems=T
     isNonHistoric = not item.isHistorical()
     if item.itemTypeID in (GUI_ITEM_TYPE.MODIFICATION, GUI_ITEM_TYPE.STYLE):
         titleStyle = text_styles.boosterText if item.itemTypeID == GUI_ITEM_TYPE.STYLE and item.isRentable else text_styles.counter
-        extraName = text_styles.concatStylesToMultiLine(titleStyle(toUpper(item.userType)), text_styles.promoTitle(item.userName))
+        extraTitle = titleStyle(toUpper(item.userType))
+        extraName = text_styles.bonusLocalText(item.userName)
     else:
-        extraName = ''
+        extraTitle = extraName = ''
     if item.itemTypeID == GUI_ITEM_TYPE.STYLE:
         extraIcon = RES_ICONS.MAPS_ICONS_QUESTS_BONUSES_BIG_STYLE
     else:
         extraIcon = ''
-    return CustomizationCarouselRendererVO(item.intCD, item.itemTypeID, item.isWide(), item.icon, hasBonus, locked, buyPrice, count, item.isRentable, showDetailItems, isNonHistoric, showUnsupportedAlert, extraName=extraName, extraIcon=extraIcon, showRareIcon=item.isRare()).asDict()
+    isEquipped = isCurrentlyApplied
+    return CustomizationCarouselRendererVO(item.intCD, item.itemTypeID, item.isWide(), item.icon, hasBonus, locked, buyPrice, count, item.isRentable, showDetailItems, isNonHistoric, showUnsupportedAlert, extraTitle=extraTitle, extraName=extraName, extraIcon=extraIcon, showRareIcon=item.isRare(), isEquipped=isEquipped).asDict()
 
 
 class CustomizationCarouselRendererVO(object):
-    __slots__ = ('intCD', 'typeId', 'isWide', 'icon', 'hasBonus', 'locked', 'buyPrice', 'quantity', 'isRental', 'showDetailItems', 'isNonHistoric', 'showAlert', 'buyOperationAllowed', 'extraName', 'extraIcon', 'showRareIcon')
+    __slots__ = ('intCD', 'typeId', 'isWide', 'icon', 'hasBonus', 'locked', 'buyPrice', 'quantity', 'isRental', 'showDetailItems', 'isNonHistoric', 'showAlert', 'buyOperationAllowed', 'extraTitle', 'extraName', 'extraIcon', 'showRareIcon', 'isEquipped')
 
-    def __init__(self, intCD, typeId, isWide, icon, hasBonus, locked, buyPrice, quantity=None, isRental=False, showDetailItems=True, isNonHistoric=False, showAlert=False, buyOperationAllowed=True, extraName='', extraIcon='', showRareIcon=False):
+    def __init__(self, intCD, typeId, isWide, icon, hasBonus, locked, buyPrice, quantity=None, isRental=False, showDetailItems=True, isNonHistoric=False, showAlert=False, buyOperationAllowed=True, extraTitle='', extraName='', extraIcon='', showRareIcon=False, isEquipped=False):
         self.intCD = intCD
         self.typeId = typeId
         self.isWide = isWide
@@ -45,9 +47,11 @@ class CustomizationCarouselRendererVO(object):
         self.isNonHistoric = isNonHistoric
         self.showAlert = showAlert
         self.buyOperationAllowed = buyOperationAllowed
+        self.extraTitle = extraTitle
         self.extraName = extraName
         self.extraIcon = extraIcon
         self.showRareIcon = showRareIcon
+        self.isEquipped = isEquipped
 
     def asDict(self):
         """
@@ -65,10 +69,12 @@ class CustomizationCarouselRendererVO(object):
          'isNonHistoric': self.isNonHistoric,
          'showAlert': self.showAlert,
          'buyOperationAllowed': self.buyOperationAllowed,
-         'showRareIcon': self.showRareIcon}
+         'showRareIcon': self.showRareIcon,
+         'isEquipped': self.isEquipped}
         if self.extraIcon:
             ret.update(styleIcon=self.extraIcon)
-        if self.extraName:
+        if self.extraTitle and self.extraName:
+            ret.update(styleTitle=self.extraTitle)
             ret.update(styleName=self.extraName)
         if self.quantity:
             ret.update(quantity=str(self.quantity))

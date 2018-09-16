@@ -3,8 +3,8 @@
 import math
 import random
 import weakref
-import Math
 import BigWorld
+import Math
 import AreaDestructibles
 import ArenaType
 import BattleReplay
@@ -16,8 +16,8 @@ import nations
 import physics_shared
 from AvatarInputHandler.aih_constants import ShakeReason
 from ModelHitTester import segmentMayHitVehicle, SegmentCollisionResult, SegmentCollisionResultExt
-from TriggersManager import TRIGGER_TYPE
 from SoundGroups import CREW_GENDER_SWITCHES
+from TriggersManager import TRIGGER_TYPE
 from VehicleEffects import DamageFromShotDecoder
 from constants import SPT_MATKIND
 from constants import VEHICLE_HIT_EFFECT, VEHICLE_SIEGE_STATE
@@ -28,12 +28,12 @@ from helpers import dependency
 from helpers.EffectMaterialCalculation import calcSurfaceMaterialNearPoint
 from helpers.EffectsList import SoundStartParam
 from items import vehicles, sabaton_crew
+from items.tankmen import hasTagInTankmenGroup, unpackCrewParams
 from material_kinds import EFFECT_MATERIAL_INDEXES_BY_NAMES, EFFECT_MATERIALS
 from skeletons.gui.battle_session import IBattleSessionProvider
 from skeletons.gui.lobby_context import ILobbyContext
 from vehicle_systems import appearance_cache
 from vehicle_systems.tankStructure import TankPartNames
-from items.tankmen import hasTagInTankmenGroup, unpackCrewParams
 LOW_ENERGY_COLLISION_D = 0.3
 HIGH_ENERGY_COLLISION_D = 0.6
 _g_waitingVehicle = dict()
@@ -316,6 +316,7 @@ class Vehicle(BigWorld.Entity):
             curr = frozenset(self.publicStateModifiers)
             self.__prevPublicStateModifiers = curr
             self.__updateModifiers(curr.difference(prev), prev.difference(curr))
+            self.updateStunInfo()
 
     def set_engineMode(self, prev):
         if self.isStarted and self.isAlive():

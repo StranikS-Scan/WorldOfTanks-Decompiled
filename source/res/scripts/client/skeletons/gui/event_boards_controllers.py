@@ -39,6 +39,11 @@ class IEventBoardController(object):
         """
         raise NotImplementedError
 
+    def cleanEventsData(self):
+        """Clean all wgelen data on logout.
+        """
+        raise NotImplementedError
+
     @async
     @process
     def joinEvent(self, eventID, callback):

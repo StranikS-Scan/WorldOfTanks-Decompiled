@@ -588,6 +588,15 @@ class GatewayDataAccessor(base.BaseDataAccessor):
         return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
          'unit_server_id': int}, method='PATCH', post_data=post_data)
 
+    def set_equipment_commander(self, callback, periphery_id, unit_server_id, target_account_id, fields=None):
+        """
+        request WGSH to make player a leader
+        """
+        url = '/wgsh/periphery/{periphery_id}/units/{unit_server_id}/equipment_commander/'.format(periphery_id=periphery_id, unit_server_id=unit_server_id)
+        post_data = {'equipment_commander_id': target_account_id}
+        return self._request_data(callback, url, get_data={}, converters={'periphery_id': int,
+         'unit_server_id': int}, method='POST', post_data=post_data)
+
     def leave_room(self, callback, periphery_id, unit_server_id, fields=None):
         """
         request WGSH to leave current user from room

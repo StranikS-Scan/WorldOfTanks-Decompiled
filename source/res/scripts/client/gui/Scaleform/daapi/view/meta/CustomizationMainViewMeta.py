@@ -1,5 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/CustomizationMainViewMeta.py
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 from gui.Scaleform.framework.entities.View import View
 
 class CustomizationMainViewMeta(View):
@@ -76,6 +80,9 @@ class CustomizationMainViewMeta(View):
     def onReleaseItem(self):
         self._printOverrideError('onReleaseItem')
 
+    def onSelectHotFilter(self, index, value):
+        self._printOverrideError('onSelectHotFilter')
+
     def as_showBuyingPanelS(self):
         return self.flashObject.as_showBuyingPanel() if self._isDAAPIInited() else None
 
@@ -117,6 +124,18 @@ class CustomizationMainViewMeta(View):
         :param data: Represented by CustomizationCarouselDataVO (AS)
         """
         return self.flashObject.as_setCarouselData(data) if self._isDAAPIInited() else None
+
+    def as_setCarouselFiltersInitDataS(self, data):
+        """
+        :param data: Represented by TankCarouselFilterInitVO (AS)
+        """
+        return self.flashObject.as_setCarouselFiltersInitData(data) if self._isDAAPIInited() else None
+
+    def as_setCarouselFiltersDataS(self, data):
+        """
+        :param data: Represented by TankCarouselFilterSelectedVO (AS)
+        """
+        return self.flashObject.as_setCarouselFiltersData(data) if self._isDAAPIInited() else None
 
     def as_setFilterDataS(self, data):
         """

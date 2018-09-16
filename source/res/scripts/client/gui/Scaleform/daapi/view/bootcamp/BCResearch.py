@@ -1,11 +1,11 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/bootcamp/BCResearch.py
-from gui.Scaleform.daapi.view.lobby.techtree.Research import Research
+from gui.Scaleform.daapi.view.lobby.techtree.research_page import Research
 from gui.Scaleform.daapi.view.lobby.techtree.data import ResearchItemsData
 from gui.Scaleform.genConsts.RESEARCH_ALIASES import RESEARCH_ALIASES
 from gui.shared import events, EVENT_BUS_SCOPE
 from bootcamp.Bootcamp import g_bootcamp, DISABLED_TANK_LEVELS
-from debug_utils import LOG_ERROR, LOG_DEBUG
+from debug_utils import LOG_DEBUG
 from skeletons.gui.shared import IItemsCache
 from helpers import dependency
 from gui.Scaleform.daapi.settings.views import VIEW_ALIAS
@@ -13,8 +13,6 @@ from gui.shared import event_dispatcher as shared_events
 from bootcamp.BootcampGarage import g_bootcampGarage
 from gui.Scaleform.genConsts.NODE_STATE_FLAGS import NODE_STATE_FLAGS
 from gui.Scaleform.daapi.view.lobby.techtree.settings import NODE_STATE
-from gui.Scaleform.daapi.view.lobby.techtree.settings import USE_XML_DUMPING
-from constants import IS_DEVELOPMENT
 from gui.Scaleform.daapi.view.lobby.techtree import dumpers
 
 class BCResearchItemsData(ResearchItemsData):
@@ -30,7 +28,7 @@ class BCResearchItemsData(ResearchItemsData):
         self.__moduleNodeCD = nationData['module']
 
     def _addNode(self, nodeCD, node):
-        state = node['state']
+        state = node.getState()
         if self.__overrideResearch:
             if nodeCD == self.__secondVehicleNode:
                 g_bootcampGarage.setSecondVehicleNode(node)
@@ -47,17 +45,17 @@ class BCResearchItemsData(ResearchItemsData):
         item = self._items.getItemByCD(nodeCD)
         if item.level in DISABLED_TANK_LEVELS and NODE_STATE.isAvailable2Buy(state):
             state = NODE_STATE.add(state, NODE_STATE_FLAGS.PURCHASE_DISABLED)
-        node['state'] = state
+        node.setState(state)
         return super(BCResearchItemsData, self)._addNode(nodeCD, node)
 
     def _addTopNode(self, nodeCD, node):
-        state = node['state']
+        state = node.getState()
         if self.__overrideResearch:
             if not NODE_STATE.inInventory(state):
                 state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.NOT_CLICKABLE)
         if nodeCD != self.__firstVehicleNode:
             state = NODE_STATE.addIfNot(state, NODE_STATE_FLAGS.LOCKED)
-        node['state'] = state
+        node.setState(state)
         return super(BCResearchItemsData, self)._addTopNode(nodeCD, node)
 
 
@@ -65,11 +63,7 @@ class BCResearch(Research):
 
     def __init__(self, ctx=None):
         super(BCResearch, self).__init__(ctx, skipConfirm=True)
-        if USE_XML_DUMPING and IS_DEVELOPMENT:
-            dumper = dumpers.ResearchItemsXMLDumper()
-        else:
-            dumper = dumpers.ResearchItemsObjDumper()
-        self._data = BCResearchItemsData(dumper)
+        self._data = BCResearchItemsData(dumpers.ResearchItemsObjDumper())
         self._resolveLoadCtx(ctx=ctx)
 
     def request4Info(self, itemCD, rootCD):

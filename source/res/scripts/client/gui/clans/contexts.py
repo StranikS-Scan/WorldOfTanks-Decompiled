@@ -1134,6 +1134,32 @@ class StrongholdGiveLeadershipCtx(StrongholdRequestCtx):
         return self.__pID
 
 
+class StrongholdSetEquipmentCommanderCtx(StrongholdRequestCtx):
+    """
+    Context for giving equipment commander to other player
+    """
+    __slots__ = ('__pID',)
+
+    def __init__(self, pID=None, **kwargs):
+        super(StrongholdSetEquipmentCommanderCtx, self).__init__(**kwargs)
+        self.__pID = pID
+
+    @classmethod
+    def fromPrbCtx(cls, prbCtx, unitMgrId):
+        waitingID = prbCtx.getWaitingID()
+        pID = prbCtx.getPlayerID()
+        return cls(pID, unitMgrId=unitMgrId, waitingID=waitingID)
+
+    def getRequestType(self):
+        return _STRONGHOLD_REQUEST_TYPE.STRONGHOLD_SET_EQUIPMENT_COMMANDER
+
+    def getPlayerID(self):
+        """
+        Getter for player's ID
+        """
+        return self.__pID
+
+
 class StrongholdUpdateCtx(StrongholdRequestCtx):
     """
     Context for update data from wgsh

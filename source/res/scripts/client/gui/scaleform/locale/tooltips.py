@@ -14,8 +14,6 @@ class TOOLTIPS(object):
     BARRACKS_TANKMEN_DISMISS = '#tooltips:barracks/tankmen/dismiss'
     TANKS_CAROUSEL_BUY_SLOT = '#tooltips:tanks_carousel/buy_slot'
     TANKS_CAROUSEL_BUY_VEHICLE = '#tooltips:tanks_carousel/buy_vehicle'
-    FILTER_POPOVER_SHOWONLYFILTERS_HISTORIC = '#tooltips:filter/popover/showonlyfilters/historic'
-    FILTER_POPOVER_SHOWONLYFILTERS_ACQUIRED = '#tooltips:filter/popover/showonlyfilters/acquired'
     BATTLERESULTS_FORTRESOURCE_RESULTSSHAREBTN = '#tooltips:battleResults/FortResource/resultsShareBtn'
     PRIVATEQUESTS_AWARDSBUTTON = '#tooltips:privateQuests/awardsButton'
     PRIVATEQUESTS_BACKBUTTON = '#tooltips:privateQuests/backButton'
@@ -131,6 +129,7 @@ class TOOLTIPS(object):
     ELEN_BUTTON_REGISTRATION_STARTED = '#tooltips:elen/button/registration/started'
     ELEN_BUTTON_REGISTRATION_NOTSTARTED = '#tooltips:elen/button/registration/notStarted'
     CUSTOMIZATION_NONHISTORICINDICATOR = '#tooltips:customization/nonHistoricIndicator'
+    RANKEDBATTLEVIEW_SCOREPOINT = '#tooltips:rankedBattleView/scorePoint'
     TEMPLATE_DAYS_SHORT = '#tooltips:template/days/short'
     TEMPLATE_HOURS_SHORT = '#tooltips:template/hours/short'
     TEMPLATE_MINUTES_SHORT = '#tooltips:template/minutes/short'
@@ -441,6 +440,7 @@ class TOOLTIPS(object):
     BATTLETYPES_RANKED_RANK_NAME = '#tooltips:battleTypes/ranked/rank/name'
     BATTLETYPES_RANKED_RANK_PERMANENT = '#tooltips:battleTypes/ranked/rank/permanent'
     BATTLETYPES_RANKED_RANK_CANBELOST = '#tooltips:battleTypes/ranked/rank/canBeLost'
+    BATTLETYPES_RANKED_HAVESHIELD = '#tooltips:battleTypes/ranked/haveShield'
     BATTLETYPES_RANKED_RANK_CANTBELOST = '#tooltips:battleTypes/ranked/rank/cantBeLost'
     BATTLETYPES_RANKED_RANK_REWARD = '#tooltips:battleTypes/ranked/rank/reward'
     BATTLETYPES_RANKED_RANK_AWARD_RECEIVED = '#tooltips:battleTypes/ranked/rank/award/received'
@@ -449,6 +449,7 @@ class TOOLTIPS(object):
     BATTLETYPES_RANKED_RANK_STATUS_LOST = '#tooltips:battleTypes/ranked/rank/status/lost'
     BATTLETYPES_RANKED_RANK_CONDITIONS = '#tooltips:battleTypes/ranked/rank/conditions'
     BATTLETYPES_RANKED_RANK_CONDITIONS_FIRST = '#tooltips:battleTypes/ranked/rank/conditions/first'
+    BATTLETYPES_RANKED_VEHRANK_CONDITIONS = '#tooltips:battleTypes/ranked/vehRank/conditions'
     BATTLETYPES_RANKED_VEHRANK_ACHIEVEDCOUNT = '#tooltips:battleTypes/ranked/vehRank/achievedCount'
     BATTLETYPES_RANKED_STEPSCOUNT_1 = '#tooltips:battleTypes/ranked/stepsCount/1'
     BATTLETYPES_RANKED_STEPSCOUNT_2 = '#tooltips:battleTypes/ranked/stepsCount/2'
@@ -586,11 +587,20 @@ class TOOLTIPS(object):
     HEADER_BUTTONS_GOLD_ACTION_BODY = '#tooltips:header/buttons/gold/action/body'
     HEADER_BUTTONS_FREEXP_HEADER = '#tooltips:header/buttons/freeXP/header'
     HEADER_BUTTONS_FREEXP_BODY = '#tooltips:header/buttons/freeXP/body'
+    HEADER_BUTTONS_CRYSTAL_HEADER = '#tooltips:header/buttons/crystal/header'
+    HEADER_BUTTONS_CRYSTAL_BODY = '#tooltips:header/buttons/crystal/body'
+    HEADER_BUTTONS_AVAILABLE = '#tooltips:header/buttons/available'
     HEADER_BUTTONS_CRYSTAL_TITLE = '#tooltips:header/buttons/crystal/title'
-    HEADER_BUTTONS_CRYSTAL_CURRENCYDESC = '#tooltips:header/buttons/crystal/currencyDesc'
-    HEADER_BUTTONS_CRYSTAL_AVAILABLE = '#tooltips:header/buttons/crystal/available'
     HEADER_BUTTONS_CRYSTAL_FIRSTDESC = '#tooltips:header/buttons/crystal/firstDesc'
-    HEADER_BUTTONS_CRYSTAL_SECONDDESC = '#tooltips:header/buttons/crystal/secondDesc'
+    HEADER_BUTTONS_CRYSTAL_CLICKDESC = '#tooltips:header/buttons/crystal/clickDesc'
+    HEADER_BUTTONS_GOLD_TITLE = '#tooltips:header/buttons/gold/title'
+    HEADER_BUTTONS_GOLD_CLICKDESC = '#tooltips:header/buttons/gold/clickDesc'
+    HEADER_BUTTONS_CREDITS_TITLE = '#tooltips:header/buttons/credits/title'
+    HEADER_BUTTONS_CREDITS_FIRSTDESC = '#tooltips:header/buttons/credits/firstDesc'
+    HEADER_BUTTONS_CREDITS_CLICKDESC = '#tooltips:header/buttons/credits/clickDesc'
+    HEADER_BUTTONS_FREEXP_TITLE = '#tooltips:header/buttons/freeXP/title'
+    HEADER_BUTTONS_FREEXP_FIRSTDESC = '#tooltips:header/buttons/freeXP/firstDesc'
+    HEADER_BUTTONS_FREEXP_CLICKDESC = '#tooltips:header/buttons/freeXP/clickDesc'
     HEADER_ACCOUNTPOPOVER_INVITEBTN_HEADER = '#tooltips:header/accountPopover/inviteBtn/header'
     HEADER_ACCOUNTPOPOVER_INVITEBTN_BODY = '#tooltips:header/accountPopover/inviteBtn/body'
     HEADER_ACCOUNTPOPOVER_SEARCHCLAN_HEADER = '#tooltips:header/accountPopover/searchClan/header'
@@ -610,8 +620,8 @@ class TOOLTIPS(object):
     HANGAR_MAINTENANCE_BODY = '#tooltips:hangar/maintenance/body'
     HANGAR_TUNING_HEADER = '#tooltips:hangar/tuning/header'
     HANGAR_TUNING_BODY = '#tooltips:hangar/tuning/body'
-    HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_HEADER = '#tooltips:hangar/tuning/disabledForEventVehicle/header'
-    HANGAR_TUNING_DISABLEDFOREVENTVEHICLE_BODY = '#tooltips:hangar/tuning/disabledForEventVehicle/body'
+    HANGAR_TUNING_DISABLED_HEADER = '#tooltips:hangar/tuning/disabled/header'
+    HANGAR_TUNING_DISABLED_BODY = '#tooltips:hangar/tuning/disabled/body'
     HANGAR_MENU_HEADER = '#tooltips:hangar/menu/header'
     HANGAR_MENU_BODY = '#tooltips:hangar/menu/body'
     HANGAR_STATUS_TORENT = '#tooltips:hangar/status/toRent'
@@ -1240,6 +1250,8 @@ class TOOLTIPS(object):
     FORTIFICATION_SORTIE_SLOT_VEHICLE_NOTREADY_TEMPORALLY_BODY = '#tooltips:fortification/sortie/slot/vehicle/notReady/temporally/body'
     FORTIFICATION_SORTIE_REMOVEBTN_HEADER = '#tooltips:fortification/sortie/removeBtn/header'
     FORTIFICATION_SORTIE_REMOVEBTN_BODY = '#tooltips:fortification/sortie/removeBtn/body'
+    FORTIFICATION_SORTIE_GUNNERICON_HEADER = '#tooltips:fortification/sortie/gunnerIcon/header'
+    FORTIFICATION_SORTIE_GUNNERICON_BODY = '#tooltips:fortification/sortie/gunnerIcon/body'
     FORTIFICATION_SORTIE_TAKEPLACEFIRSTTIMEBTN_HEADER = '#tooltips:fortification/sortie/takePlaceFirstTimeBtn/header'
     FORTIFICATION_SORTIE_TAKEPLACEFIRSTTIMEBTN_BODY = '#tooltips:fortification/sortie/takePlaceFirstTimeBtn/body'
     FORTIFICATION_SORTIE_SELECTVEHICLE_HEADER = '#tooltips:fortification/sortie/selectVehicle/header'
@@ -1618,6 +1630,8 @@ class TOOLTIPS(object):
     AWARDITEM_ONEOF_RANKEDCYCLE_BODY = '#tooltips:awardItem/oneof/rankedCycle/body'
     AWARDITEM_ONEOF_RANKEDSEASON_HEADER = '#tooltips:awardItem/oneof/rankedSeason/header'
     AWARDITEM_ONEOF_RANKEDSEASON_BODY = '#tooltips:awardItem/oneof/rankedSeason/body'
+    RANKEDBATTLEVIEW_SCOREPOINT_HEADER = '#tooltips:rankedBattleView/scorePoint/header'
+    RANKEDBATTLEVIEW_SCOREPOINT_BODY = '#tooltips:rankedBattleView/scorePoint/body'
     CUSTOMIZATION_HEADERCLOSEBTN_HEADER = '#tooltips:customization/headerCloseBtn/header'
     CUSTOMIZATION_HEADERCLOSEBTN_BODY = '#tooltips:customization/headerCloseBtn/body'
     CUSTOMIZATION_NOTENOUGHRESOURCES_HEADER = '#tooltips:customization/notEnoughResources/header'
@@ -2218,11 +2232,11 @@ class TOOLTIPS(object):
     ELEN_CONDITION_BATTLETYPE_NOTRANDOM = '#tooltips:elen/condition/battletype/notrandom'
     ACTIONPRICE_BUYPRICE_DEFAULTPRICE = '#tooltips:actionPrice/buyPrice/defaultPrice'
     ACTIONPRICE_BUYPRICE_ACTIONPRICE = '#tooltips:actionPrice/buyPrice/actionPrice'
+    TECHTREE_ANNOUNCEMENT_HT = '#tooltips:techtree/Announcement_HT'
+    TECHTREE_ANNOUNCEMENT_MT = '#tooltips:techtree/Announcement_MT'
     CUSTOMIZATION_SCROLLBAR_BOOKMARK_HEADER = '#tooltips:customization/scrollbar/bookmark/header'
     CUSTOMIZATION_NONHISTORICINDICATOR_HEADER = '#tooltips:customization/nonHistoricIndicator/header'
     CUSTOMIZATION_NONHISTORICINDICATOR_BODY = '#tooltips:customization/nonHistoricIndicator/body'
-    FILTER_POPOVER_SHOWONLYFILTERS_HISTORIC_BODY = '#tooltips:filter/popover/showonlyfilters/historic/body'
-    FILTER_POPOVER_SHOWONLYFILTERS_ACQUIRED_BODY = '#tooltips:filter/popover/showonlyfilters/acquired/body'
     ACTIONPRICE_RENTPRICE_DEFAULTPRICE = '#tooltips:actionPrice/rentPrice/defaultPrice'
     ACTIONPRICE_RENTPRICE_1DAY = '#tooltips:actionPrice/rentPrice/1day'
     ACTIONPRICE_RENTPRICE_3DAY = '#tooltips:actionPrice/rentPrice/3day'
@@ -2610,6 +2624,15 @@ class TOOLTIPS(object):
      CUSTOMIZATION_TABS_EMBLEM_BODY,
      CUSTOMIZATION_TABS_INSCRIPTION_BODY,
      CUSTOMIZATION_TABS_MODIFICATION_BODY)
+    HEADER_BUTTONS_ALL_CLICKDESC_ENUM = (HEADER_BUTTONS_CRYSTAL_CLICKDESC,
+     HEADER_BUTTONS_GOLD_CLICKDESC,
+     HEADER_BUTTONS_CREDITS_CLICKDESC,
+     HEADER_BUTTONS_FREEXP_CLICKDESC)
+    HEADER_BUTTONS_ALL_FIRSTDESC_ENUM = (HEADER_BUTTONS_CRYSTAL_FIRSTDESC, HEADER_BUTTONS_CREDITS_FIRSTDESC, HEADER_BUTTONS_FREEXP_FIRSTDESC)
+    HEADER_BUTTONS_ALL_TITLE_ENUM = (HEADER_BUTTONS_CRYSTAL_TITLE,
+     HEADER_BUTTONS_GOLD_TITLE,
+     HEADER_BUTTONS_CREDITS_TITLE,
+     HEADER_BUTTONS_FREEXP_TITLE)
 
     @classmethod
     def elen_summary_rank(cls, key0):
@@ -2903,6 +2926,33 @@ class TOOLTIPS(object):
     def customizationItemTab(cls, typeName):
         outcome = '#tooltips:customization/tabs/{}/body'.format(typeName)
         if outcome not in cls.CUSTOMIZATION_TABS_ALL_BODY_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getHeaderBtnClickDesc(cls, btnType):
+        outcome = '#tooltips:header/buttons/{}/clickDesc'.format(btnType)
+        if outcome not in cls.HEADER_BUTTONS_ALL_CLICKDESC_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getHeaderBtnDesc(cls, btnType):
+        outcome = '#tooltips:header/buttons/{}/firstDesc'.format(btnType)
+        if outcome not in cls.HEADER_BUTTONS_ALL_FIRSTDESC_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def getHeaderBtnTitle(cls, btnType):
+        outcome = '#tooltips:header/buttons/{}/title'.format(btnType)
+        if outcome not in cls.HEADER_BUTTONS_ALL_TITLE_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

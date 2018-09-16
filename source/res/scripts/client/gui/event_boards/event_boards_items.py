@@ -98,6 +98,11 @@ class EventBoardsSettings(object):
     def fini(self):
         self.__eventsSettings.fini()
 
+    def cleanEventsData(self):
+        self.__eventsSettings.cleanData()
+        self.__playerEventsData.cleanData()
+        self.__myEventsTop.cleanData()
+
 
 class EventsSettings(object):
     EXPECTED_FIELDS = ['battle_type',
@@ -143,6 +148,12 @@ class EventsSettings(object):
     def fini(self):
         for event in self.__events:
             event.removeImages()
+
+    def cleanData(self):
+        for event in self.__events:
+            event.removeImages()
+
+        self.__events = []
 
     def setData(self, rawData):
         oldEvents = {event.getEventID():event for event in self.__events}
@@ -275,7 +286,8 @@ class EventSettings(object):
 
     def removeImages(self):
         for image in self.__images.values():
-            removeTextureFromMemory(image)
+            if image:
+                removeTextureFromMemory(image)
 
     def setData(self, rawData):
         self.__eventID = rawData['event_id']
@@ -750,6 +762,12 @@ class PlayerEventsData(object):
         self.__eventsList = None
         return
 
+    def cleanData(self):
+        self.__winRate = None
+        self.__allBattlesCount = None
+        self.__eventsList = []
+        return
+
     def setData(self, rawData):
         if not self.__isDataStructureValid(rawData):
             if rawData:
@@ -862,6 +880,10 @@ class MyEventsTop(object):
     EXPECTED_FIELDS_ITEM_META = ['recalculation_interval', 'last_leaderboard_recalculation_ts', 'next_leaderboard_recalculation_ts']
 
     def __init__(self):
+        self.__myEventsTopList = []
+        self.__myEventsTopMeta = defaultdict()
+
+    def cleanData(self):
         self.__myEventsTopList = []
         self.__myEventsTopMeta = defaultdict()
 
@@ -1514,6 +1536,10 @@ class HangarFlagData(object):
     def __init__(self):
         self.__isSpecialAccount = False
         self.__hangarFlags = defaultdict()
+
+    def cleanEventsData(self):
+        self.__isSpecialAccount = False
+        self.__hangarFlags.clear()
 
     def setData(self, rawData):
         if not self.__isDataStructureValid(rawData):

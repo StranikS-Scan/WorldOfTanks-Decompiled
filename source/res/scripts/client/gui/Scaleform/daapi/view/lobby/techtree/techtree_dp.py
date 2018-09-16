@@ -1,13 +1,14 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/techtree/techtree_dp.py
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 import operator
 from constants import IS_DEVELOPMENT
 from debug_utils import LOG_ERROR, LOG_DEBUG
 from gui import GUI_NATIONS_ORDER_INDEX
+from gui.Scaleform.daapi.view.lobby.techtree.nodes import BaseNode
 from gui.Scaleform.daapi.view.lobby.techtree.settings import TREE_SHARED_REL_FILE_PATH, UnlockStats
 from gui.Scaleform.daapi.view.lobby.techtree.settings import NATION_TREE_REL_FILE_PATH
-from gui.Scaleform.daapi.view.lobby.techtree.settings import makeDefUnlockProps
+from gui.Scaleform.daapi.view.lobby.techtree.settings import DEFAULT_UNLOCK_PROPS
 from gui.Scaleform.daapi.view.lobby.techtree.settings import UnlockProps
 from gui.shared.gui_items import GUI_ITEM_TYPE, GUI_ITEM_TYPE_NAMES
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
@@ -39,8 +40,30 @@ DISPLAY_SETTINGS = {'hasRoot': 'readBool',
  'nodeRendererName': 'readString'}
 _VEHICLE = GUI_ITEM_TYPE.VEHICLE
 _VEHICLE_TYPE_NAME = GUI_ITEM_TYPE_NAMES[_VEHICLE]
+_AnnouncementInfo = namedtuple('_AnnouncementInfo', ('userString',
+ 'tooltip',
+ 'tags',
+ 'level',
+ 'icon',
+ 'isElite'))
 
 class _TechTreeDataProvider(object):
+    """
+    Class performs following operations:
+    - reads shared parameters for trees from file TREE_SHARED_REL_FILE_PATH;
+    - reads node's display information from XML-files
+        (specified nations.AVAILABLE_NAMES) that are specified for each tree of nation.
+    
+    Provides the following methods to draw nation tree:
+    - getDisplayInfo.
+    - getTopLevel. Gets parents: vehicles that provide access to given vehicle.
+    - getNextLevel. Gets child: vehicles that available from given vehicle.
+    - isNext2Unlock. Is given vehicle is next to unlock.
+    - getNext2UnlockByItems. Returns list of vehicle are available to unlock.
+    - getAvailableNations.
+    - getAnnouncement*. These operations allow you to get announcement vehicles.
+    """
+    __slots__ = ('__loaded', '__availableNations', '__override', '__displayInfo', '__displaySettings', '__topLevels', '__topItems', '__nextLevels', '__unlockPrices', '__announcements', '__announcementCDToName', '__nextAnnouncements', '__nodes', '__nextTypeIDs')
     itemsCache = dependency.descriptor(IItemsCache)
 
     def __init__(self):
@@ -51,13 +74,296 @@ class _TechTreeDataProvider(object):
         self._clear()
         return
 
+    def load(self, isReload=False):
+        """ Reads node's display information from XML-files that are specified for
+        each tree of nation and builds xml string for each vehicle listed in xml files.
+        :param isReload: is force clear xml file cache and rebuild xml strings.
+        :return: True if xml file was loaded, otherwise - False.
+        """
+        if self.__loaded and not isReload:
+            return False
+        LOG_DEBUG('Tech tree data is being loaded')
+        self._clear()
+        try:
+            try:
+                shared = self.__readShared(clearCache=isReload)
+                for nation in self.__availableNations:
+                    info = self.__readNation(shared, nation, clearCache=isReload)
+                    self.__displayInfo[nations.INDICES[nation]] = info
+
+            except _ConfigError as error:
+                LOG_ERROR(error)
+
+        finally:
+            self.__makeAbsoluteCoordinates()
+            self.__loaded = True
+
+        return True
+
+    def setOverride(self, override=''):
+        """ If @param override is different from already set __override,
+        it resets __loaded flag and sets new __override value.
+        :param override: string containing new name of settings that should be overridden.
+        """
+        if self.__override != override:
+            self.__override = override
+            self.__loaded = False
+
+    def getDisplaySettings(self, nationID):
+        """ Gets display settings that defined in grid.
+        :param nationID: integer containing ID of nation.
+        :return: { <setting name> : <setting value>, ... }. Available settings see in tree_shared.xml.
+        """
+        try:
+            result = self.__displaySettings[nationID]
+        except KeyError:
+            result = {}
+
+        return result
+
+    def getNationTreeIterator(self, nationID):
+        """ Get iterator to get nodes and display information by specified nation.
+        :param nationID: integer containing ID of nation.
+        :return: generator.
+        """
+        if nationID >= len(self.__nodes):
+            LOG_ERROR('Nation ID is out of range', nationID)
+            return
+        else:
+            nodes = self.__nodes[nationID]
+            if nodes is None:
+                LOG_ERROR('Nodes is not found', nationID)
+                return
+            displayInfo = self.__displayInfo[nationID]
+            if displayInfo is None:
+                LOG_ERROR('Display info is not found', nationID)
+                return
+            for node in sorted(nodes.itervalues(), key=lambda item: item.order):
+                yield (node, displayInfo[node.nodeCD].copy())
+
+            return
+
+    def getTopLevel(self, vTypeCD):
+        """ Gets top level vehicles, which are parents for given vehicle.
+        :param vTypeCD: int-type vehicle compact descriptor.
+        :return: set( <vehicle type compact descr>, ... )
+        """
+        return self.__topLevels[vTypeCD]
+
+    def getNextLevel(self, vTypeCD):
+        """ Gets next level vehicles, which are children for given vehicle.
+        :param vTypeCD: int-type vehicle compact descriptor.
+        :return: set( <vehicle type compact descr>, ... )
+        """
+        return self.__nextLevels[vTypeCD].keys()
+
+    def isNext2Unlock(self, vTypeCD, unlocked=set(), xps=None, freeXP=0):
+        """ Is given vehicle is next to unlock. "next to unlock" - all required
+        items are unlocked. If vehicle is available in a few vehicles, than
+        returns compact descriptor for parent vehicle where min XP cost.
+        NOTE: if xps is defined than searches vehicles for which enough experience
+        and available.
+        :param vTypeCD: compact descriptor of vehicle (int).
+        :param unlocked: set of unlocked items (int compact descriptor).
+        :param xps: dict of vehicles XPs { int compact descriptor : xp, ... }
+        :param freeXP: value of free XP.
+        :return: (<is available>, <instance of UnlockProps>).
+        """
+        topLevel = self.getTopLevel(vTypeCD)
+        available = False
+        topIDs = set()
+        compare = []
+        result = DEFAULT_UNLOCK_PROPS
+        for parentCD in topLevel:
+            nextLevel = self.__nextLevels[parentCD]
+            idx, xpCost, required = nextLevel[vTypeCD]
+            if required.issubset(unlocked) and parentCD in unlocked:
+                topIDs.add(parentCD)
+                compare.append(UnlockProps(parentCD, idx, xpCost, topIDs))
+                available = True
+            if not result.xpCost or result.xpCost > xpCost:
+                result = UnlockProps(parentCD, idx, xpCost, set())
+
+        if available:
+            result = self._findNext2Unlock(compare, xps=xps, freeXP=freeXP)
+        return (available, result)
+
+    def getNext2UnlockByItems(self, itemCDs, unlocked=set(), xps=None, freeXP=0):
+        """ Returns list of vehicle are available to unlock (all required
+        items are unlocked) by unlocked items.
+        NOTE: if xps is defined than searches vehicles for which enough experience
+            and available.
+        :param itemCDs: list of unlocked items which determine available vehicles.
+        :param unlocked: set of unlocked items (int compact descriptor).
+        :param xps: dict of vehicles XPs { int compact descriptor : xp, ... }
+        :param freeXP: value of free XP.
+        :return: dict( <vehicle compact descriptor>: <instance of UnlockProps>, ... )
+        """
+        filtered = filter(lambda item: item in self.__topItems, itemCDs)
+        if not filtered or not unlocked:
+            return {}
+        available = defaultdict(list)
+        parentCDs = set(filter(lambda item: getTypeOfCompactDescr(item) == _VEHICLE, itemCDs))
+        for item in filtered:
+            if item in unlocked:
+                parentCDs |= self.__topItems[item]
+
+        for parentCD in parentCDs:
+            if parentCD not in unlocked:
+                continue
+            nextLevel = self.__nextLevels[parentCD]
+            topIDs = set()
+            for childCD, (idx, xpCost, required) in nextLevel.iteritems():
+                if childCD not in unlocked and required.issubset(unlocked):
+                    topIDs.add(parentCD)
+                    available[childCD].append(UnlockProps(parentCD, idx, xpCost, topIDs))
+
+        result = {}
+        for childCD, compare in available.iteritems():
+            result[childCD] = self._findNext2Unlock(compare, xps=xps, freeXP=freeXP)
+
+        return result
+
+    def getAvailableNations(self):
+        """ Gets available nations in the nation's trees.
+        :return: list of nations.
+        """
+        if self.__availableNations is None:
+            section = ResMgr.openSection(TREE_SHARED_REL_FILE_PATH)
+            if section is None:
+                _xml.raiseWrongXml(None, TREE_SHARED_REL_FILE_PATH, 'can not open or read')
+            xmlCtx = (None, TREE_SHARED_REL_FILE_PATH)
+            self.__availableNations = self.__readAvailableNations(xmlCtx, section)
+        return self.__availableNations[:]
+
+    def getAvailableNationsIndices(self):
+        """ Gets available IDs of nations in the nation's trees.
+        :return: list of nations IDs.
+        """
+        return map(lambda nation: nations.INDICES[nation], self.getAvailableNations())
+
+    def getUnlockPrices(self, compactDescr):
+        """ Gets unlock prices for given item
+        :param compactDescr: int-type compact descriptor.
+        :return: unlock prices dict.
+        """
+        return self.__unlockPrices[compactDescr]
+
+    def getAllPossibleItems2Unlock(self, vehicle, unlocked):
+        """ Gets all possible items to unlocks on vehicle.
+        :param vehicle: instance of vehicle gui item.
+        :param unlocked: set of int-type compact descriptors.
+        :return: dict(int-type compact descriptors: instance of UnlockProps).
+        """
+        items = {}
+        for unlockIdx, xpCost, nodeCD, required in vehicle.getUnlocksDescrs():
+            if required.issubset(unlocked) and nodeCD not in unlocked:
+                items[nodeCD] = UnlockProps(vehicle.intCD, unlockIdx, xpCost, required)
+
+        return items
+
+    def getUnlockedVehicleItems(self, vehicle, unlocked):
+        """ Gets all unlocked items on vehicle.
+        :param vehicle: instance of vehicle gui item.
+        :param unlocked: set of int-type compact descriptors.
+        :return: dict(int-type compact descriptors: instance of UnlockProps).
+        """
+        items = {}
+        for unlockIdx, xpCost, nodeCD, required in vehicle.getUnlocksDescrs():
+            if required.issubset(unlocked) and nodeCD in unlocked:
+                items[nodeCD] = UnlockProps(vehicle.intCD, unlockIdx, xpCost, required)
+
+        return items
+
+    def getAllVehiclePossibleXP(self, nodeCD, unlockStats):
+        criteria = REQ_CRITERIA.VEHICLE.FULLY_ELITE | ~REQ_CRITERIA.IN_CD_LIST([nodeCD])
+        eliteVehicles = self.itemsCache.items.getVehicles(criteria)
+        dirtyResult = sum(map(operator.attrgetter('xp'), eliteVehicles.values()))
+        exchangeRate = self.itemsCache.items.shop.freeXPConversion[0]
+        result = min(int(dirtyResult / exchangeRate) * exchangeRate, self.itemsCache.items.stats.gold * exchangeRate)
+        result += unlockStats.getVehTotalXP(nodeCD)
+        return result
+
+    def isVehicleAvailableToUnlock(self, nodeCD):
+        unlocks = self.itemsCache.items.stats.unlocks
+        xps = self.itemsCache.items.stats.vehiclesXPs
+        freeXP = self.itemsCache.items.stats.actualFreeXP
+        unlockProps = g_techTreeDP.getUnlockProps(nodeCD)
+        parentID = unlockProps.parentID
+        allPossibleXp = self.getAllVehiclePossibleXP(parentID, UnlockStats(unlocks, xps, freeXP))
+        isAvailable, props = self.isNext2Unlock(nodeCD, unlocked=set(unlocks), xps=xps, freeXP=freeXP)
+        return (isAvailable and allPossibleXp >= props.xpCost, props.xpCost, allPossibleXp)
+
+    def getUnlockProps(self, vehicleCD):
+        _, unlockProps = self.isNext2Unlock(vehicleCD, unlocked=self.itemsCache.items.stats.unlocks, xps=self.itemsCache.items.stats.vehiclesXPs, freeXP=self.itemsCache.items.stats.actualFreeXP)
+        return unlockProps
+
+    def getAnnouncementByName(self, name):
+        """ Gets announcement vehicle by name.
+            Note: this vehicle is not added to vehicles cache, it just is defined in GUI.
+        :param name: name of announcement vehicle
+        :return: instance of _AnnouncementInfo or None.
+        """
+        return self.__announcements[name] if name in self.__announcements else None
+
+    def getAnnouncementByCD(self, intCD):
+        """ Gets announcement vehicle by int-type compact descriptor.
+        :param intCD: int-type compact descriptor of vehicle.
+        :return: instance of _AnnouncementInfo or None.
+        """
+        return self.getAnnouncementByName(self.__announcementCDToName[intCD]) if intCD in self.__announcementCDToName else None
+
+    def getNextAnnouncements(self, intCD):
+        """ Gets sequence of int-type compact descriptor that are
+        announcements next vehicles for specified vehicle.
+        :param intCD: int-type compact descriptor of vehicle.
+        :return: generator.
+        """
+        if intCD not in self.__nextAnnouncements:
+            return
+        for nodeCD in self.__nextAnnouncements[intCD]:
+            yield nodeCD
+
     def _clear(self):
-        self.__displayInfo = {}
+        """Clears data."""
+        self.__displayInfo = [None] * len(nations.NAMES)
+        self.__nextTypeIDs = [0] * len(nations.NAMES)
+        self.__nodes = [None] * len(nations.NAMES)
         self.__displaySettings = {}
         self.__topLevels = defaultdict(set)
         self.__topItems = defaultdict(set)
         self.__nextLevels = defaultdict(dict)
         self.__unlockPrices = defaultdict(dict)
+        self.__announcements = {}
+        self.__announcementCDToName = {}
+        self.__nextAnnouncements = defaultdict(list)
+        return
+
+    def _findNext2Unlock(self, compare, xps=None, freeXP=0):
+        xpGetter = xps.get
+
+        def makeItem(item):
+            xp = xpGetter(item.parentID, 0)
+            return (item, xp, item.xpCost - xp)
+
+        def getMinFreeXPSpent(props):
+            _, _, minDelta = min(props, key=lambda item: item[2])
+            filtered = filter(lambda item: item[2] == minDelta, props)
+            recommended, _, _ = min(filtered, key=lambda item: item[1])
+            return recommended
+
+        mapping = map(makeItem, compare)
+        filtered = []
+        recommended = None
+        if xps is not None:
+            filtered = filter(lambda item: item[0].xpCost <= item[1] + freeXP, mapping)
+        if filtered:
+            recommended = getMinFreeXPSpent(filtered)
+        if recommended is None:
+            if filtered:
+                mapping = filtered
+            recommended = getMinFreeXPSpent(mapping)
+        return recommended
 
     def __readShared(self, clearCache=False):
         if clearCache:
@@ -93,6 +399,7 @@ class _TechTreeDataProvider(object):
 
         if self.__availableNations is None:
             self.__availableNations = self.__readAvailableNations((None, TREE_SHARED_REL_FILE_PATH), section)
+        self.__readAnnouncements((None, TREE_SHARED_REL_FILE_PATH), section)
         self.__readSharedMetrics(shared, xmlCtx, section)
         if self.__override:
             subSec = section['overrides/{0:>s}'.format(self.__override)]
@@ -190,6 +497,54 @@ class _TechTreeDataProvider(object):
         names = sorted(names, cmp=lambda item, other: cmp(GUI_NATIONS_ORDER_INDEX.get(item), GUI_NATIONS_ORDER_INDEX.get(other)))
         return names
 
+    def __readAnnouncements(self, xmlCtx, root):
+        for name, section in _xml.getChildren(xmlCtx, root, 'announcements'):
+            if name in self.__announcements:
+                _xml.raiseWrongXml(xmlCtx, 'announcements', 'Announcement vehicles {0:>s} is already added'.format(name))
+            tags = _xml.readNonEmptyString(xmlCtx, section, 'tags')
+            if tags:
+                tags = frozenset(tags.split(' '))
+            else:
+                tags = frozenset()
+            self.__announcements[name] = _AnnouncementInfo(_xml.readNonEmptyString(xmlCtx, section, 'user-string'), _xml.readNonEmptyString(xmlCtx, section, 'tooltip'), tags, _xml.readInt(xmlCtx, section, 'level'), _xml.readNonEmptyString(xmlCtx, section, 'icon'), _xml.readBool(xmlCtx, section, 'is-elite'))
+
+    def __getNextTypeID(self, nationID):
+        nextTypeID = self.__nextTypeIDs[nationID]
+        if not nextTypeID:
+            nextTypeID = max(vehicles.g_list.getList(nationID).keys())
+        nextTypeID += 1
+        self.__nextTypeIDs[nationID] = nextTypeID
+        return nextTypeID
+
+    def __getNodeByName(self, nodeName, nationID, order=0):
+        nodes = self.__nodes[nationID]
+        if nodes is None:
+            nodes = self.__nodes[nationID] = {}
+        if nodeName in nodes:
+            node = nodes[nodeName]
+            if order:
+                node.order = order
+            return node
+        else:
+            isFound = True
+            isAnnouncement = False
+            if nodeName in self.__announcements:
+                isAnnouncement = True
+                vehicleTypeID = self.__getNextTypeID(nationID)
+            else:
+                _, vehicleTypeID = vehicles.g_list.getIDsByName('{0:>s}:{1:>s}'.format(nations.NAMES[nationID], nodeName))
+            try:
+                nodeCD = vehicles.makeIntCompactDescrByID(_VEHICLE_TYPE_NAME, nationID, vehicleTypeID)
+            except AssertionError:
+                nodeCD = 0
+                isFound = False
+
+            if isAnnouncement:
+                self.__announcementCDToName[nodeCD] = nodeName
+            node = BaseNode(nodeName, nationID, vehicleTypeID, nodeCD, isFound=isFound, isAnnouncement=isAnnouncement, order=order)
+            nodes[nodeName] = node
+            return node
+
     def __readNodeLines(self, parentCD, nation, xmlCtx, section, shared):
         linesSec = section['lines']
         if linesSec is None:
@@ -198,23 +553,21 @@ class _TechTreeDataProvider(object):
         nextLevel = self.__nextLevels[parentCD].keys()
         _, xPath = xmlCtx
         xPath = '{0:>s}/lines'.format(xPath)
-        getIDsByName = vehicles.g_list.getIDsByName
-        makeIntCDByID = vehicles.makeIntCompactDescrByID
+        nationID = nations.INDICES[nation]
         for name, sub in linesSec.items():
             xmlCtx = (None, '{0:>s}/lines/{1:>1}'.format(xPath, name))
-            uName = '{0:>s}:{1:>s}'.format(nation, name)
-            try:
-                nodeCD = makeIntCDByID(_VEHICLE_TYPE_NAME, *getIDsByName(uName))
-            except Exception:
-                raise _ConfigError(xmlCtx, 'Unknown vehicle type name {0:>s}'.format(uName))
-
-            if IS_DEVELOPMENT:
-                if nodeCD not in nextLevel:
+            node = self.__getNodeByName(name, nationID)
+            if not node.isFound:
+                raise _ConfigError(xmlCtx, 'Unknown vehicle type name {0:>s}'.format(name))
+            if IS_DEVELOPMENT and not node.isAnnouncement:
+                if node.nodeCD not in nextLevel:
                     _, nationID, vTypeID = vehicles.parseIntCompactDescr(parentCD)
                     pName = vehicles.g_list.getList(nationID)[vTypeID].name
-                    LOG_ERROR('{0:>s} does not have relation with {1:>s}'.format(pName, uName))
+                    LOG_ERROR('{0:>s} does not have relation with {1:>s}'.format(pName, name))
                 else:
-                    nextLevel.remove(nodeCD)
+                    nextLevel.remove(node.nodeCD)
+            if node.isAnnouncement:
+                self.__nextAnnouncements[parentCD].append(node.nodeCD)
             data = shared['default'].copy()
             tags = sub.keys()
             lineShared = shared['lines']
@@ -229,7 +582,7 @@ class _TechTreeDataProvider(object):
             inPin = data['inPin']
             if 'inPin' in tags:
                 inPin = sub.readString('inPin')
-            outPos, lineInfo = self.__getLineInfo(xmlCtx, line, nodeCD, outPin, inPin, lineShared)
+            outPos, lineInfo = self.__getLineInfo(xmlCtx, line, node.nodeCD, outPin, inPin, lineShared)
             result[outPin]['outPin'] = outPos
             result[outPin]['outLiteral'] = outPin
             result[outPin]['inPins'].append(lineInfo)
@@ -269,50 +622,46 @@ class _TechTreeDataProvider(object):
             settings = shared['settings'][settingsName]
             rows = _xml.readInt(xmlCtx, precessed, 'rows')
             columns = _xml.readInt(xmlCtx, precessed, 'columns')
-            self.__displaySettings[nations.INDICES[nation]] = settings
+            nationID = nations.INDICES[nation]
+            self.__displaySettings[nationID] = settings
             nationIndex = self.__availableNations.index(nation)
             hasRoot = settings['hasRoot']
             if hasRoot:
                 coords = self.__makeGridCoordsWithRoot(grid, nationIndex, rows, columns)
             else:
                 coords = self.__makeGridCoordsWoRoot(grid, rows, columns)
-            getIDsByName = vehicles.g_list.getIDsByName
-            makeIntCDByID = vehicles.makeIntCompactDescrByID
             getVehicle = vehicles.g_cache.vehicle
             precessed = _xml.getChildren(xmlCtx, section, 'nodes')
             displayInfo = {}
             for name, nodeSection in precessed:
                 xPath = '{0:>s}/nodes/{1:>s}'.format(xmlPath, name)
                 xmlCtx = (None, xPath)
-                uName = '{0:>s}:{1:>s}'.format(nation, name)
-                try:
-                    nationID, vTypeID = getIDsByName(uName)
-                except Exception:
-                    raise _ConfigError(xmlCtx, 'Unknown vehicle type name {0:>s}'.format(uName))
-
-                nodeCD = makeIntCDByID(_VEHICLE_TYPE_NAME, nationID, vTypeID)
-                vType = getVehicle(nationID, vTypeID)
-                nextLevel = filter(lambda data: getTypeOfCompactDescr(data[1][1]) == _VEHICLE, enumerate(vType.unlocksDescrs))
-                for unlockDescr in vType.unlocksDescrs:
-                    self.__unlockPrices[unlockDescr[1]][vType.compactDescr] = unlockDescr[0]
-
-                for idx, data in nextLevel:
-                    xpCost = data[0]
-                    nextCD = data[1]
-                    required = data[2:]
-                    self.__nextLevels[nodeCD][nextCD] = (idx, xpCost, set(required))
-                    self.__topLevels[nextCD].add(nodeCD)
-                    for itemCD in required:
-                        self.__topItems[itemCD].add(nodeCD)
-
                 row = _xml.readInt(xmlCtx, nodeSection, 'row')
                 column = _xml.readInt(xmlCtx, nodeSection, 'column')
+                node = self.__getNodeByName(name, nationID, order=column * 100 + row)
+                if not node.isFound:
+                    raise _ConfigError(xmlCtx, 'Unknown vehicle type name {0:>s}'.format(node.nodeName))
+                if not node.isAnnouncement:
+                    vType = getVehicle(node.nationID, node.itemTypeID)
+                    nextLevel = filter(lambda data: getTypeOfCompactDescr(data[1][1]) == _VEHICLE, enumerate(vType.unlocksDescrs))
+                    for unlockDescr in vType.unlocksDescrs:
+                        self.__unlockPrices[unlockDescr[1]][vType.compactDescr] = unlockDescr[0]
+
+                    for idx, data in nextLevel:
+                        xpCost = data[0]
+                        nextCD = data[1]
+                        required = data[2:]
+                        self.__nextLevels[node.nodeCD][nextCD] = (idx, xpCost, set(required))
+                        self.__topLevels[nextCD].add(node.nodeCD)
+                        for itemCD in required:
+                            self.__topItems[itemCD].add(node.nodeCD)
+
                 if hasRoot and row > 1 and column is 1:
-                    raise _ConfigError(xmlCtx, 'In first column must be one node - root node, {0:>s} '.format(uName))
+                    raise _ConfigError(xmlCtx, 'In first column must be one node - root node, {0:>s} '.format(node.nodeName))
                 elif row > rows or column > columns:
-                    raise _ConfigError(xmlCtx, 'Invalid row or column index: {0:>s}, {1:d}, {2:d}'.format(uName, row, column))
-                lines = self.__readNodeLines(nodeCD, nation, xmlCtx, nodeSection, shared)
-                displayInfo[nodeCD] = {'row': row,
+                    raise _ConfigError(xmlCtx, 'Invalid row or column index: {0:>s}, {1:d}, {2:d}'.format(node.nodeName, row, column))
+                lines = self.__readNodeLines(node.nodeCD, nation, xmlCtx, nodeSection, shared)
+                displayInfo[node.nodeCD] = {'row': row,
                  'column': column,
                  'position': coords[column - 1][row - 1],
                  'lines': lines}
@@ -320,22 +669,26 @@ class _TechTreeDataProvider(object):
             return displayInfo
 
     def __makeAbsoluteCoordinates(self):
-        iterator = self.__displayInfo.iteritems()
-        for _, info in iterator:
-            lines = info['lines']
-            nodePos = info['position']
-            for lineInfo in lines:
-                pinPos = lineInfo['outPin']
-                lineInfo['outPin'] = (pinPos[0] + nodePos[0], pinPos[1] + nodePos[1])
-                inPins = lineInfo['inPins']
-                for pin in inPins:
-                    if pin['childID'] not in self.__displayInfo:
-                        continue
-                    childInfo = self.__displayInfo[pin['childID']]
-                    childPos = childInfo['position']
-                    pinPos = pin['inPin']
-                    pin['inPin'] = (pinPos[0] + childPos[0], pinPos[1] + childPos[1])
-                    pin['viaPins'] = map(lambda item, offset=nodePos: (item[0] + offset[0], item[1] + offset[1]), pin['viaPins'])
+        for displayInfo in self.__displayInfo:
+            if displayInfo is None:
+                continue
+            for info in displayInfo.itervalues():
+                lines = info['lines']
+                nodePos = info['position']
+                for lineInfo in lines:
+                    pinPos = lineInfo['outPin']
+                    lineInfo['outPin'] = (pinPos[0] + nodePos[0], pinPos[1] + nodePos[1])
+                    inPins = lineInfo['inPins']
+                    for pin in inPins:
+                        if pin['childID'] not in displayInfo:
+                            continue
+                        childInfo = displayInfo[pin['childID']]
+                        childPos = childInfo['position']
+                        pinPos = pin['inPin']
+                        pin['inPin'] = (pinPos[0] + childPos[0], pinPos[1] + childPos[1])
+                        pin['viaPins'] = map(lambda item, offset=nodePos: (item[0] + offset[0], item[1] + offset[1]), pin['viaPins'])
+
+        return
 
     def __makeGridCoordsWithRoot(self, grid, nationIndex, rows, columns):
         start = grid['root']['start']
@@ -360,178 +713,6 @@ class _TechTreeDataProvider(object):
             coordinates.append([ (x, y) for y in vRange ])
 
         return coordinates
-
-    def load(self, isReload=False):
-        if self.__loaded and not isReload:
-            return False
-        LOG_DEBUG('Tech tree data is being loaded')
-        self._clear()
-        try:
-            try:
-                shared = self.__readShared(clearCache=isReload)
-                for nation in self.__availableNations:
-                    info = self.__readNation(shared, nation, clearCache=isReload)
-                    self.__displayInfo.update(info)
-
-            except _ConfigError as error:
-                LOG_ERROR(error)
-
-        finally:
-            self.__makeAbsoluteCoordinates()
-            self.__loaded = True
-
-        return True
-
-    def setOverride(self, override=''):
-        if self.__override != override:
-            self.__override = override
-            self.__loaded = False
-
-    def getDisplaySettings(self, nationID):
-        try:
-            result = self.__displaySettings[nationID]
-        except KeyError:
-            result = {}
-
-        return result
-
-    def getDisplayInfo(self, vTypeCD):
-        result = None
-        if vTypeCD in self.__displayInfo:
-            result = self.__displayInfo[vTypeCD].copy()
-        return result
-
-    def getTopLevel(self, vTypeCD):
-        return self.__topLevels[vTypeCD]
-
-    def getNextLevel(self, vTypeCD):
-        return self.__nextLevels[vTypeCD].keys()
-
-    def _findNext2Unlock(self, compare, xps=None, freeXP=0):
-        xpGetter = xps.get
-
-        def makeItem(item):
-            xp = xpGetter(item.parentID, 0)
-            return (item, xp, item.xpCost - xp)
-
-        def getMinFreeXPSpent(props):
-            _, _, minDelta = min(props, key=lambda item: item[2])
-            filtered = filter(lambda item: item[2] == minDelta, props)
-            recommended, _, _ = min(filtered, key=lambda item: item[1])
-            return recommended
-
-        mapping = map(makeItem, compare)
-        filtered = []
-        recommended = None
-        if xps is not None:
-            filtered = filter(lambda item: item[0].xpCost <= item[1] + freeXP, mapping)
-        if filtered:
-            recommended = getMinFreeXPSpent(filtered)
-        if recommended is None:
-            if filtered:
-                mapping = filtered
-            recommended = getMinFreeXPSpent(mapping)
-        return recommended
-
-    def isNext2Unlock(self, vTypeCD, unlocked=set(), xps=None, freeXP=0):
-        topLevel = self.getTopLevel(vTypeCD)
-        available = False
-        topIDs = set()
-        compare = []
-        result = makeDefUnlockProps()
-        for parentCD in topLevel:
-            nextLevel = self.__nextLevels[parentCD]
-            idx, xpCost, required = nextLevel[vTypeCD]
-            if required.issubset(unlocked) and parentCD in unlocked:
-                topIDs.add(parentCD)
-                compare.append(UnlockProps(parentCD, idx, xpCost, topIDs))
-                available = True
-            if not result.xpCost or result.xpCost > xpCost:
-                result = UnlockProps(parentCD, idx, xpCost, set())
-
-        if available:
-            result = self._findNext2Unlock(compare, xps=xps, freeXP=freeXP)
-        return (available, result)
-
-    def getNext2UnlockByItems(self, itemCDs, unlocked=set(), xps=None, freeXP=0):
-        filtered = filter(lambda item: item in self.__topItems, itemCDs)
-        if not filtered or not unlocked:
-            return {}
-        available = defaultdict(list)
-        parentCDs = set(filter(lambda item: getTypeOfCompactDescr(item) == _VEHICLE, itemCDs))
-        for item in filtered:
-            if item in unlocked:
-                parentCDs |= self.__topItems[item]
-
-        for parentCD in parentCDs:
-            if parentCD not in unlocked:
-                continue
-            nextLevel = self.__nextLevels[parentCD]
-            topIDs = set()
-            for childCD, (idx, xpCost, required) in nextLevel.iteritems():
-                if childCD not in unlocked and required.issubset(unlocked):
-                    topIDs.add(parentCD)
-                    available[childCD].append(UnlockProps(parentCD, idx, xpCost, topIDs))
-
-        result = {}
-        for childCD, compare in available.iteritems():
-            result[childCD] = self._findNext2Unlock(compare, xps=xps, freeXP=freeXP)
-
-        return result
-
-    def getAvailableNations(self):
-        if self.__availableNations is None:
-            section = ResMgr.openSection(TREE_SHARED_REL_FILE_PATH)
-            if section is None:
-                _xml.raiseWrongXml(None, TREE_SHARED_REL_FILE_PATH, 'can not open or read')
-            xmlCtx = (None, TREE_SHARED_REL_FILE_PATH)
-            self.__availableNations = self.__readAvailableNations(xmlCtx, section)
-        return self.__availableNations[:]
-
-    def getAvailableNationsIndices(self):
-        return map(lambda nation: nations.INDICES[nation], self.getAvailableNations())
-
-    def getUnlockPrices(self, compactDescr):
-        return self.__unlockPrices[compactDescr]
-
-    def getAllPossibleItems2Unlock(self, vehicle, unlocked):
-        items = {}
-        for unlockIdx, xpCost, nodeCD, required in vehicle.getUnlocksDescrs():
-            if required.issubset(unlocked) and nodeCD not in unlocked:
-                items[nodeCD] = UnlockProps(vehicle.intCD, unlockIdx, xpCost, required)
-
-        return items
-
-    def getUnlockedVehicleItems(self, vehicle, unlocked):
-        items = {}
-        for unlockIdx, xpCost, nodeCD, required in vehicle.getUnlocksDescrs():
-            if required.issubset(unlocked) and nodeCD in unlocked:
-                items[nodeCD] = UnlockProps(vehicle.intCD, unlockIdx, xpCost, required)
-
-        return items
-
-    def getAllVehiclePossibleXP(self, nodeCD, unlockStats):
-        criteria = REQ_CRITERIA.VEHICLE.FULLY_ELITE | ~REQ_CRITERIA.IN_CD_LIST([nodeCD])
-        eliteVehicles = self.itemsCache.items.getVehicles(criteria)
-        dirtyResult = sum(map(operator.attrgetter('xp'), eliteVehicles.values()))
-        exchangeRate = self.itemsCache.items.shop.freeXPConversion[0]
-        result = min(int(dirtyResult / exchangeRate) * exchangeRate, self.itemsCache.items.stats.gold * exchangeRate)
-        result += unlockStats.getVehTotalXP(nodeCD)
-        return result
-
-    def isVehicleAvailableToUnlock(self, nodeCD):
-        unlocks = self.itemsCache.items.stats.unlocks
-        xps = self.itemsCache.items.stats.vehiclesXPs
-        freeXP = self.itemsCache.items.stats.actualFreeXP
-        unlockProps = g_techTreeDP.getUnlockProps(nodeCD)
-        parentID = unlockProps.parentID
-        allPossibleXp = self.getAllVehiclePossibleXP(parentID, UnlockStats(unlocks, xps, freeXP))
-        isAvailable, props = self.isNext2Unlock(nodeCD, unlocked=set(unlocks), xps=xps, freeXP=freeXP)
-        return (isAvailable and allPossibleXp >= props.xpCost, props.xpCost, allPossibleXp)
-
-    def getUnlockProps(self, vehicleCD):
-        _, unlockProps = self.isNext2Unlock(vehicleCD, unlocked=self.itemsCache.items.stats.unlocks, xps=self.itemsCache.items.stats.vehiclesXPs, freeXP=self.itemsCache.items.stats.actualFreeXP)
-        return unlockProps
 
 
 g_techTreeDP = _TechTreeDataProvider()

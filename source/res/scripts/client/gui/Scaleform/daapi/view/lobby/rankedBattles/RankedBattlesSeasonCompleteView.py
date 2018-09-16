@@ -2,15 +2,19 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/RankedBattlesSeasonCompleteView.py
 import BigWorld
 from adisp import process
+from debug_utils import LOG_WARNING
 from gui.Scaleform.daapi.view.lobby.rankedBattles.finish_awards_view import FinishAwardsView
 from gui.Scaleform.daapi.view.meta.RankedBattlesSeasonCompleteViewMeta import RankedBattlesSeasonCompleteViewMeta
+from gui.Scaleform.genConsts.COMPONENTS_ALIASES import COMPONENTS_ALIASES
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.ranked_battles import ranked_helpers
-from gui.shared.money import Currency
-from shared_utils import first
+from helpers.i18n import makeString as _ms
+from helpers import dependency, int2roman
+from skeletons.gui.shared import IItemsCache
 
 class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta, FinishAwardsView):
+    _INVISIBLE_AWARDS = ()
 
     def __init__(self, ctx=None):
         super(RankedBattlesSeasonCompleteView, self).__init__(ctx)
@@ -42,25 +46,45 @@ class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta, Finis
             leagueData = yield self.rankedController.getLeagueData()
             if leagueData is not None:
                 position = BigWorld.wg_getNiceNumberFormat(leagueData['position'])
+                league = leagueData.get('league', 0)
             else:
-                position = 'N/A'
-            crystalsBonus = first(self._quest.getBonuses(Currency.CRYSTAL))
-            if crystalsBonus is not None:
-                crystalsCount = crystalsBonus.getValue()
+                position = '0'
+                league = 0
+            itemsCache = dependency.instance(IItemsCache)
+            dossier = itemsCache.items.getAccountDossier().getPreviousSeasonRankedStats()
+            seasonRomanNum = int2roman(int(season.getNumber()))
+            seasonPoints = season.getPoints()
+            efficiency = dossier.getStepsEfficiency()
+            if efficiency is not None:
+                efficiencyValue = efficiency * 100
             else:
-                crystalsCount = 0
-            self.as_setDataS({'boxImage': RES_ICONS.getRankedBoxIcon('450x400', 'metal', '_opened', cohort),
-             'scoresValue': BigWorld.wg_getNiceNumberFormat(season.getPoints()),
-             'scoresLabel': RANKED_BATTLES.SEASONCOMPLETE_TOTALSCORES,
+                efficiencyValue = 0
+            avgExp = dossier.getAvgXP()
+            if avgExp is None:
+                avgExp = 0
+            self.as_setDataS({'leagueImage': RES_ICONS.getRankedWebLeagueIcon('big', league),
+             'scoresValue': BigWorld.wg_getNiceNumberFormat(seasonPoints),
+             'scoresLabel': _ms(RANKED_BATTLES.SEASONCOMPLETE_TOTALSCORES),
+             'effectValue': BigWorld.wg_getIntegralFormat(efficiencyValue),
+             'effectLabel': _ms(RANKED_BATTLES.SEASONCOMPLETE_EFFECTLABEL),
              'placeValue': position,
-             'placeHolderVisible': True,
-             'placeLabel': RANKED_BATTLES.SEASONCOMPLETE_PLACEINRATING,
-             'currencyLabel': RANKED_BATTLES.SEASONCOMPLETE_PROXYCURRENCYLABEL,
-             'currencyValue': str(crystalsCount),
-             'congratulationTitle': RANKED_BATTLES.SEASONCOMPLETE_SEASONRESULTS,
-             'nextButtonLabel': RANKED_BATTLES.AWARDS_YES,
-             'awards': self._packAwards(),
-             'bgSource': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_BG_RANK_BLUR})
+             'placeLabel': _ms(RANKED_BATTLES.SEASONCOMPLETE_PLACEINRATING),
+             'expValue': BigWorld.wg_getIntegralFormat(avgExp),
+             'expLabel': _ms(RANKED_BATTLES.SEASONCOMPLETE_EXPLABEL),
+             'congratulationTitle': _ms(RANKED_BATTLES.SEASONCOMPLETE_BIGTITLE, season=seasonRomanNum),
+             'typeTitle': _ms(RANKED_BATTLES.SEASONCOMPLETE_SMALLTITLE),
+             'typeIcon': RES_ICONS.MAPS_ICONS_BATTLETYPES_40X40_RANKED,
+             'nextButtonLabel': _ms(RANKED_BATTLES.SEASONCOMPLETE_LEADERSBUTTON),
+             'bgSource': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_BG_RANK_BLUR,
+             'leagueLabel': _ms(RANKED_BATTLES.SEASONCOMPLETE_UNDERLABEL)})
+            self.as_setRewardsDataS({'ribbonType': 'ribbon2',
+             'rendererLinkage': COMPONENTS_ALIASES.RIBBON_AWARD_ANIM_RENDERER,
+             'gap': 20,
+             'rendererWidth': 80,
+             'rendererHeight': 80,
+             'awards': self._packAwards()})
+        else:
+            LOG_WARNING('Try to show RankedBattlesSeasonCompleteView, but season is None. Params: ', seasonID, cohort)
         return
 
     def _boxAnimationData(self):

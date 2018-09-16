@@ -103,8 +103,6 @@ def makeTableHeaderVO(method, objective, eventType):
      'playerTooltip': makeTooltip(TOOLTIPS.ELEN_EXCEL_PLAYER_HEADER, TOOLTIPS.ELEN_EXCEL_PLAYER_BODY)}
 
 
-_HIGHLIGHT_POSITIONS_COUNT = 10
-
 def makeEventBoardsTableDataVO(rewardCategories, method):
     rewardsFormatter = QuestsBonusComposer(getEventBoardsAwardPacker())
     data = []
@@ -142,8 +140,6 @@ def makeEventBoardsTableDataVO(rewardCategories, method):
                 player['rendererLinkage'] = EVENTBOARDS_ALIASES.TOP_PLAYER_AWARD_RENDERER
             else:
                 player['rendererLinkage'] = EVENTBOARDS_ALIASES.BASE_PLAYER_AWARD_RENDERER
-                if rank <= _HIGHLIGHT_POSITIONS_COUNT and categoryNumber == EVENT_BOARDS_GROUP_TYPES.GOLD:
-                    player['iconPath'] = RES_ICONS.getEventBoardPlace(rank)
             data.append(player)
 
     return ({'tableDP': data}, {'tableDP': stripes})

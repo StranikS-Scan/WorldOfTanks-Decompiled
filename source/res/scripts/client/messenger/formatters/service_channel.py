@@ -30,11 +30,12 @@ from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.ranked_battles import ranked_helpers
 from gui.ranked_battles.ranked_models import PostBattleRankInfo
 from gui.server_events.awards_formatters import CompletionTokensBonusFormatter
+from gui.server_events.bonuses import VehiclesBonus
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
 from gui.shared import formatters as shared_fmts
 from gui.shared.formatters import text_styles
 from gui.shared.formatters.currency import getBWFormatter
-from gui.shared.gui_items.Tankman import Tankman, calculateRoleLevel
+from gui.shared.gui_items.Tankman import Tankman
 from gui.shared.gui_items.Vehicle import getUserName, getShortUserName
 from gui.shared.gui_items.dossier.factories import getAchievementFactory
 from gui.shared.money import Money, MONEY_UNDEFINED, Currency
@@ -358,9 +359,13 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
             achievementsStrings.extend(raresStrings)
         if battleResults.get('guiType', 0) == ARENA_GUI_TYPE.RANKED:
             rankedController = dependency.instance(IRankedBattlesController)
-            stateChange = rankedController.getRankChangeStatus(PostBattleRankInfo.fromDict(battleResults))
+            rankInfo = PostBattleRankInfo.fromDict(battleResults)
+            stateChange = rankedController.getRankChangeStatus(rankInfo)
             stateChangeStr = i18n.makeString(MESSENGER.rankedStateChange(stateChange))
             achievementsStrings.append(stateChangeStr)
+            shieldsStr = MESSENGER.rankedShieldStateChange(rankInfo.shieldState)
+            if shieldsStr is not None:
+                achievementsStrings.append(i18n.makeString(shieldsStr))
         achievementsBlock = ''
         if achievementsStrings:
             achievementsBlock = g_settings.htmlTemplates.format('battleResultAchieves', {'achieves': ', '.join(achievementsStrings)})
@@ -952,9 +957,9 @@ class InvoiceReceivedFormatter(WaitItemsSyncFormatter):
                 if rentDays:
                     rentDays = g_settings.htmlTemplates.format('rentDays', {'value': str(rentDays)})
                     vInfo.append(rentDays)
-            crewLevel = calculateRoleLevel(vehData.get('crewLvl', 50), vehData.get('crewFreeXP', 0))
-            if crewLevel > 50:
-                if vehData.get('crewInBarracks', False) and ('crewFreeXP' in vehData or 'crewLvl' in vehData or 'tankmen' in vehData):
+            crewLevel = VehiclesBonus.getTmanRoleLevel(vehData)
+            if crewLevel is not None and crewLevel > VehiclesBonus.DEFAULT_CREW_LVL:
+                if 'crewInBarracks' in vehData and vehData['crewInBarracks']:
                     crewWithLevelString = cls.__i18nCrewWithLvlDroppedString % crewLevel
                 else:
                     crewWithLevelString = cls.__i18nCrewString % crewLevel
@@ -2020,7 +2025,7 @@ class RentalsExpiredFormatter(ServiceChannelFormatter):
 
     def format(self, message, *args):
         vehTypeCD = message.data.get('vehTypeCD', None)
-        return (self._getMessage(vehTypeCD), self._getGuiSettings(message, self._templateKey)) if vehTypeCD is not None else (None, None)
+        return [_MessageData(self._getMessage(vehTypeCD), self._getGuiSettings(message, self._templateKey))] if vehTypeCD is not None else (None, None)
 
     def _getMessage(self, vehTypeCD):
         vehicleName = getUserName(vehicles_core.getVehicleType(vehTypeCD))
@@ -2331,6 +2336,7 @@ class RankedQuestFormatter(WaitItemsSyncFormatter):
         data = message.data.copy()
         formattedRanks = []
         finalAwards = None
+        savedData = None
         title = ''
         isSynced = yield self._waitForSyncItems()
         if isSynced:
@@ -2348,6 +2354,8 @@ class RankedQuestFormatter(WaitItemsSyncFormatter):
                             if leagueData is not None:
                                 extraAwards['league'] = leagueData['league']
                             finalAwards = self.__packFinalAwards(self.__makeAwardsDict(extraAwards, data))
+                            savedData = {'quest': quest,
+                             'awards': data}
                     elif quest.isForRank() or quest.isForVehicleMastering():
                         if quest.isForVehicleMastering():
                             vehicleIntCD = first(data.get('playerVehicles'))
@@ -2374,8 +2382,13 @@ class RankedQuestFormatter(WaitItemsSyncFormatter):
         if finalAwards:
             awardsBlocks = [finalAwards]
             awardsBlocks.extend(formattedRanks)
+            additionalData = None
+            if savedData is not None:
+                additionalData = {'savedData': savedData}
             formatted = g_settings.msgTemplates.format('rankedCycleQuest', ctx={'awardsBlocks': _EOL.join(awardsBlocks),
-             'title': title})
+             'title': title}, data=additionalData)
+            if additionalData is None and 'buttonsStates' in formatted:
+                formatted['buttonsStates'].update({'submit': 0})
         elif formattedRanks:
             overallAwardsExceptPoints = self.__packRankAwards(data.copy())
             if overallAwardsExceptPoints:

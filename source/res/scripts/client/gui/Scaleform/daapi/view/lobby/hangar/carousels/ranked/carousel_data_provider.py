@@ -16,12 +16,8 @@ class RankedCarouselDataProvider(HangarCarouselDataProvider):
 
     def _buildVehicle(self, vehicle):
         result = super(RankedCarouselDataProvider, self)._buildVehicle(vehicle)
-        vehRank, _ = self._itemsCache.items.ranked.vehRanks.get(vehicle.intCD, (0, 0))
-        if vehRank > 0:
-            result['vehRankVisible'] = True
-            if vehRank > 1:
-                result['vehRankLabel'] = text_styles.counterLabelText(vehRank)
         state, _ = vehicle.getState()
         if state == Vehicle.VEHICLE_STATE.UNSUITABLE_TO_QUEUE:
             result['lockedTooltip'] = makeTooltip(RANKED_BATTLES.RANKEDBATTLESCAROUSEL_LOCKEDTOOLTIP_HEADER, RANKED_BATTLES.RANKEDBATTLESCAROUSEL_LOCKEDTOOLTIP_BODY)
+            result['clickEnabled'] = True
         return result

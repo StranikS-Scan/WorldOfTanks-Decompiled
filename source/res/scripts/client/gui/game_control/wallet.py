@@ -199,7 +199,7 @@ class ShowXPInfoDialogAspect(Aspect):
 class ResearchViewPointcut(Pointcut):
 
     def __init__(self):
-        super(ResearchViewPointcut, self).__init__('gui.Scaleform.daapi.view.lobby.techtree.ResearchView', 'ResearchView', '^unlockItem$')
+        super(ResearchViewPointcut, self).__init__('gui.Scaleform.daapi.view.lobby.techtree.research_view', 'ResearchView', '^unlockItem$')
 
 
 class ExchangeFreeXPToTankmanPointcut(Pointcut):

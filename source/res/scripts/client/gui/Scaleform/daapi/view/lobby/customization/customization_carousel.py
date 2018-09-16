@@ -1,6 +1,6 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/customization/customization_carousel.py
-from gui.Scaleform.daapi.view.lobby.customization.shared import TABS_ITEM_MAPPING, TYPE_TO_TAB_IDX
+from gui.Scaleform.daapi.view.lobby.customization.shared import TABS_ITEM_MAPPING, TYPE_TO_TAB_IDX, TYPES_ORDER
 from gui.Scaleform.framework.entities.DAAPIDataProvider import SortableDAAPIDataProvider
 from gui.Scaleform.locale.VEHICLE_CUSTOMIZATION import VEHICLE_CUSTOMIZATION
 from gui.shared.gui_items import GUI_ITEM_TYPE
@@ -15,7 +15,7 @@ from skeletons.gui.server_events import IEventsCache
 def comparisonKey(item):
     """ Comparison key to sort the the customization carousel.
     """
-    return (item.groupID, item.id)
+    return (TYPES_ORDER.index(item.itemTypeID), item.groupID, item.id)
 
 
 class CustomizationBookmarkVO(object):
@@ -55,9 +55,11 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self._seasonID = SeasonType.SUMMER
         self._onlyOwnedAndFreeItems = False
         self._historicOnlyItems = False
+        self._onlyAppliedItems = False
         self._selectIntCD = None
         self.setItemWrapper(carouselItemWrapper)
         self._proxy = proxy
+        self._currentlyApplied = set()
         self._allSeasonAndTabFilterData = {}
         requirement = self._createBaseRequirements()
         allItems = self.itemsCache.items.getItems(GUI_ITEM_TYPE.CUSTOMIZATIONS, requirement)
@@ -129,6 +131,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
     def clearFilter(self):
         self._onlyOwnedAndFreeItems = False
         self._historicOnlyItems = False
+        self._onlyAppliedItems = False
         seasonAndTabData = self._allSeasonAndTabFilterData[self._tabIndex][self._seasonID]
         seasonAndTabData.selectedGroupIndex = len(seasonAndTabData.allGroups) - 1
         self.buildList(self._tabIndex, self._seasonID)
@@ -150,13 +153,21 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         self._selectedIdx = itemIndex
         self.refresh()
 
+    def refresh(self):
+        self._currentlyApplied = self._proxy.getAppliedItems(isOriginal=False)
+        super(CustomizationCarouselDataProvider, self).refresh()
+
     def getFilterData(self):
         seasonAndTabData = self._allSeasonAndTabFilterData[self._tabIndex][self._seasonID]
         return {'purchasedEnabled': self._onlyOwnedAndFreeItems,
          'historicEnabled': self._historicOnlyItems,
+         'appliedEnabled': self._onlyAppliedItems,
          'groups': seasonAndTabData.allGroups,
          'selectedGroup': seasonAndTabData.selectedGroupIndex,
          'groupCount': len(seasonAndTabData.allGroups)}
+
+    def getCurrentlyApplied(self):
+        return self._currentlyApplied
 
     def buildList(self, tabIndex, season, refresh=True):
         self._tabIndex = tabIndex
@@ -171,12 +182,19 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
         seasonAndTabData.selectedGroupIndex = index
 
     def setHistoricalFilter(self, value):
-        if self._historicOnlyItems != value:
-            self._historicOnlyItems = value
+        self._historicOnlyItems = value
 
     def setOwnedFilter(self, value):
-        if self._onlyOwnedAndFreeItems != value:
-            self._onlyOwnedAndFreeItems = value
+        self._onlyOwnedAndFreeItems = value
+
+    def setAppliedFilter(self, value):
+        self._onlyAppliedItems = value
+
+    def getOwnedFilter(self):
+        return self._onlyOwnedAndFreeItems
+
+    def getAppliedFilter(self):
+        return self._onlyAppliedItems
 
     def _dispose(self):
         del self._customizationItems[:]
@@ -201,11 +219,12 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
             selectedGroup = seasonAndTabData.allGroups[seasonAndTabData.selectedGroupIndex]
             requirement |= REQ_CRITERIA.CUSTOMIZATION.ONLY_IN_GROUP(selectedGroup)
         if self._historicOnlyItems:
-            requirement |= REQ_CRITERIA.CUSTOMIZATION.HISTORICAL
+            requirement |= ~REQ_CRITERIA.CUSTOMIZATION.HISTORICAL
         if self._onlyOwnedAndFreeItems:
-            vehicle = self._currentVehicle.item
-            appliedItems = self._proxy.getAppliedItems()
-            requirement |= REQ_CRITERIA.CUSTOM(lambda item: item.fullInventoryCount(vehicle) > 0 or item.intCD in appliedItems)
+            requirement |= REQ_CRITERIA.CUSTOM(lambda item: self._proxy.getItemInventoryCount(item) > 0)
+        if self._onlyAppliedItems:
+            appliedItems = self._proxy.getAppliedItems(isOriginal=False)
+            requirement |= REQ_CRITERIA.CUSTOM(lambda item: item.intCD in appliedItems)
         allItems = self.itemsCache.items.getItems(TABS_ITEM_MAPPING[self._tabIndex], requirement)
         self._customizationItems = []
         self._customizationBookmarks = []
@@ -217,7 +236,7 @@ class CustomizationCarouselDataProvider(SortableDAAPIDataProvider):
                 self._selectIntCD = None
             if groupID != lastGroupID:
                 lastGroupID = groupID
-                self._customizationBookmarks.append(CustomizationBookmarkVO(item.groupUserName.upper(), idx).asDict())
+                self._customizationBookmarks.append(CustomizationBookmarkVO(item.groupUserName, idx).asDict())
             self._customizationItems.append(item.intCD)
             self._itemSizeData.append(item.isWide())
 

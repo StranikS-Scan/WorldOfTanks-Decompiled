@@ -116,7 +116,7 @@ VEHICLE_ATTRIBUTE_FACTORS = {'engine/power': 1.0,
  'vehicle/maxSpeed': 1.0,
  'chassis/terrainResistance': [1.0, 1.0, 1.0],
  'ramming': 1.0,
- 'crewLevelIncrease': 0,
+ 'crewLevelIncrease': 0.0,
  'crewChanceToHitFactor': 1.0,
  'stunResistanceEffect': 0.0,
  'stunResistanceDuration': 0.0}
@@ -124,6 +124,7 @@ _g_prices = None
 
 def init(preloadEverything, pricesToCollect):
     global g_cache
+    global _g_tiling
     global _g_prices
     global g_list
     if IS_CLIENT or IS_CELLAPP:
@@ -141,6 +142,7 @@ def init(preloadEverything, pricesToCollect):
                 g_cache.vehicle(nationID, vehicleTypeID)
 
         g_cache.customization20()
+        _g_tiling = {}
         _g_prices = None
     return
 
@@ -271,33 +273,37 @@ class VehicleDescriptor(object):
         return
 
     def setPlayerInscription(self, position, inscriptionID, startTime, durationDays, color):
-        p = self.playerInscriptions
-        p[position]
-        if inscriptionID is None:
-            startTime = _CUSTOMIZATION_EPOCH
-            durationDays = 0
-            color = 0
+        if IS_CLIENT:
+            LOG_WARNING('This method cannot be executed on client')
+            return
         else:
-            customization = g_cache.customization(self.type.customizationNationID)
-            groupName = customization['inscriptions'][inscriptionID][0]
-            customization['inscriptionColors'][color]
-            allow, deny = customization['inscriptionGroups'][groupName][3:5]
-            cd = self.type.compactDescr
-            if cd in deny:
-                raise Exception('inscription is incompatible with vehicle')
-            if allow and cd not in allow:
-                raise Exception('inscription is incompatible with vehicle')
-            startTime = int(startTime / 60) * 60
-            if startTime < _CUSTOMIZATION_EPOCH:
-                raise Exception('wrong inscription start time')
-            durationDays = int(durationDays)
-            if not 0 <= durationDays <= 255:
-                raise Exception('wrong inscription duration')
-        self.playerInscriptions = p[:position] + ((inscriptionID,
-          startTime,
-          durationDays,
-          color),) + p[position + 1:]
-        return
+            p = self.playerInscriptions
+            p[position]
+            if inscriptionID is None:
+                startTime = _CUSTOMIZATION_EPOCH
+                durationDays = 0
+                color = 0
+            else:
+                customization = g_cache.customization(self.type.customizationNationID)
+                groupName = customization['inscriptions'][inscriptionID][0]
+                customization['inscriptionColors'][color]
+                allow, deny = customization['inscriptionGroups'][groupName][3:5]
+                cd = self.type.compactDescr
+                if cd in deny:
+                    raise Exception('inscription is incompatible with vehicle')
+                if allow and cd not in allow:
+                    raise Exception('inscription is incompatible with vehicle')
+                startTime = int(startTime / 60) * 60
+                if startTime < _CUSTOMIZATION_EPOCH:
+                    raise Exception('wrong inscription start time')
+                durationDays = int(durationDays)
+                if not 0 <= durationDays <= 255:
+                    raise Exception('wrong inscription duration')
+            self.playerInscriptions = p[:position] + ((inscriptionID,
+              startTime,
+              durationDays,
+              color),) + p[position + 1:]
+            return
 
     def getComponentsByType(self, itemTypeName, positionIndex=0):
         if itemTypeName == 'vehicleChassis':
@@ -968,7 +974,7 @@ class VehicleDescriptor(object):
              'chassisHealthFactor': 1.0,
              'vehicleByChassisDamageFactor': 1.0,
              'fuelTankHealthFactor': 1.0,
-             'crewLevelIncrease': 0,
+             'crewLevelIncrease': 0.0,
              'crewChanceToHitFactor': 1.0,
              'stunResistanceEffect': 0.0,
              'stunResistanceDuration': 0.0}
@@ -3819,15 +3825,11 @@ def _readArtefacts(xmlPath):
 
 
 def _joinCustomizationParams(nationID, commonDescr, customDescr):
-    if 'inscriptionColors' not in customDescr:
-        if 'inscriptionColors' not in commonDescr:
-            raise Exception('inscriptionColors is not specified for nation=%s' % (nations.NAMES[nationID],))
-        customDescr['inscriptionColors'] = commonDescr['inscriptionColors']
-    if IS_CLIENT:
-        if 'armorColor' not in customDescr:
-            if 'armorColor' not in commonDescr:
-                raise Exception('armorColor is not specified  for nation=%s' % (nations.NAMES[nationID],))
-            customDescr['armorColor'] = commonDescr['armorColor']
+    if not IS_CLIENT:
+        if 'inscriptionColors' not in customDescr:
+            if 'inscriptionColors' not in commonDescr:
+                raise Exception('inscriptionColors is not specified for nation=%s' % (nations.NAMES[nationID],))
+            customDescr['inscriptionColors'] = commonDescr['inscriptionColors']
     for name in ('inscriptionGroups', 'inscriptions', 'camouflageGroups', 'camouflages'):
         intersection = set(commonDescr[name].iterkeys()).intersection(customDescr[name].iterkeys())
         if intersection:
@@ -3843,10 +3845,8 @@ def _readCustomization(xmlPath, nationID, idsRange):
         _xml.raiseWrongXml(None, xmlPath, 'can not open or read')
     xmlCtx = (None, xmlPath)
     res = {}
-    if section.has_key('inscriptionColors'):
+    if not IS_CLIENT and section.has_key('inscriptionColors'):
         res['inscriptionColors'] = _readColors(xmlCtx, section, 'inscriptionColors', NUM_INSCRIPTION_COLORS)
-    if IS_CLIENT and section.has_key('armorColor'):
-        res['armorColor'] = _readColor(xmlCtx, section, 'armorColor')
     pricesDest = _g_prices
     if pricesDest is None:
         priceFactors = notInShops = None
@@ -3855,16 +3855,17 @@ def _readCustomization(xmlPath, nationID, idsRange):
         notInShops = pricesDest['notInShopInscriptionGroups'][nationID]
     res['inscriptionGroups'], res['inscriptions'] = _readPlayerInscriptions(xmlCtx, section, 'inscriptions', priceFactors, notInShops, idsRange)
     camouflageGroups = {}
-    for groupName, subsection in _xml.getChildren(xmlCtx, section, 'camouflageGroups'):
-        groupName = intern(groupName)
-        if groupName in camouflageGroups:
-            _xml.raiseWrongXml(xmlCtx, 'camouflages/' + groupName, 'camouflage group name is not unique')
-        groupDescr = {'ids': []}
-        if IS_CLIENT or IS_WEB:
-            groupDescr['userString'] = i18n.makeString(subsection.readString('userString'))
-            groupDescr['hasNew'] = False
-        groupDescr['igrType'] = _readIGRType(_xml, subsection)
-        camouflageGroups[groupName] = groupDescr
+    if not IS_CLIENT:
+        for groupName, subsection in _xml.getChildren(xmlCtx, section, 'camouflageGroups'):
+            groupName = intern(groupName)
+            if groupName in camouflageGroups:
+                _xml.raiseWrongXml(xmlCtx, 'camouflages/' + groupName, 'camouflage group name is not unique')
+            groupDescr = {'ids': []}
+            if IS_CLIENT or IS_WEB:
+                groupDescr['userString'] = i18n.makeString(subsection.readString('userString'))
+                groupDescr['hasNew'] = False
+            groupDescr['igrType'] = _readIGRType(_xml, subsection)
+            camouflageGroups[groupName] = groupDescr
 
     if pricesDest is None:
         priceFactors = notInShops = None
@@ -3872,11 +3873,12 @@ def _readCustomization(xmlPath, nationID, idsRange):
         priceFactors = pricesDest['camouflagePriceFactors'][nationID]
         notInShops = pricesDest['notInShopCamouflages'][nationID]
     camouflages = {}
-    for camName, subsection in _xml.getChildren(xmlCtx, section, 'camouflages'):
-        ctx = (xmlCtx, 'camouflages/' + camName)
-        camID, camDescr = _readCamouflage(ctx, subsection, camouflages, camouflageGroups, nationID, priceFactors, notInShops, idsRange)
-        camDescr['name'] = camName
-        camouflages[camID] = camDescr
+    if not IS_CLIENT:
+        for camName, subsection in _xml.getChildren(xmlCtx, section, 'camouflages'):
+            ctx = (xmlCtx, 'camouflages/' + camName)
+            camID, camDescr = _readCamouflage(ctx, subsection, camouflages, camouflageGroups, nationID, priceFactors, notInShops, idsRange)
+            camDescr['name'] = camName
+            camouflages[camID] = camDescr
 
     res['camouflageGroups'] = camouflageGroups
     res['camouflages'] = camouflages
@@ -4020,7 +4022,7 @@ def _readCamouflageTilings(xmlCtx, section, sectionName, defNationID):
         tiling = _xml.readTupleOfFloats(v.ctx, v.subsection, '', 4)
         if tiling[0] <= 0 or tiling[1] <= 0:
             _xml.raiseWrongSection(v.ctx, v.vehicle_name)
-        res[v.compact_descriptor] = tiling
+        res[v.compact_descriptor] = _g_tiling.setdefault(tiling, tiling)
 
     return res
 
@@ -4047,10 +4049,9 @@ def _readPlayerEmblems(xmlPath):
             pricesDest['playerEmblemGroupPriceFactors'][groupName] = _xml.readNonNegativeFloat(groupCtx, subsection, 'priceFactor')
             if subsection.readBool('notInShop', False):
                 pricesDest['notInShopPlayerEmblemGroups'].add(groupName)
-        if IS_CLIENT:
-            groupUserString = subsection.readString('userString')
-        else:
-            groupUserString = None
+            elif IS_CLIENT:
+                continue
+        groupUserString = None
         emblemIDs = []
         for sname, subsection in _xml.getChildren(groupCtx, subsection, 'emblems'):
             ctx = (groupCtx, sname)
@@ -4060,7 +4061,7 @@ def _readPlayerEmblems(xmlPath):
             if emblems.has_key(emblemID):
                 _xml.raiseWrongXml(ctx, '', 'emblem ID is not unique')
             if IS_CLIENT:
-                emblemUserString = i18n.makeString(subsection.readString('userString'))
+                emblemUserString = i18n.makeString('')
                 texName = _xml.readNonEmptyString(ctx, subsection, 'texName')
                 bumpSubsection = subsection['bumpTexName']
                 if bumpSubsection is None:
@@ -4075,7 +4076,7 @@ def _readPlayerEmblems(xmlPath):
                 isMirrored = False
             tags = _xml.readStringOrNone(ctx, subsection, 'tags')
             tags = frozenset() if tags is None else frozenset(tags.split())
-            qualifier = _xml.readStringOrNone(ctx, subsection, 'qualifier')
+            qualifier = None
             emblemIDs.append(emblemID)
             emblems[emblemID] = (groupName,
              igrType,
@@ -4116,10 +4117,9 @@ def _readPlayerInscriptions(xmlCtx, section, subsectionName, priceFactors, notIn
             priceFactors[groupName] = _xml.readNonNegativeFloat(groupCtx, subsection, 'priceFactor')
             if subsection.readBool('notInShop', False):
                 notInShops.add(groupName)
-        if IS_CLIENT:
-            groupUserString = i18n.makeString(subsection.readString('userString'))
-        else:
-            groupUserString = None
+            elif IS_CLIENT:
+                continue
+        groupUserString = None
         inscrIDs = []
         for sname, subsection in _xml.getChildren(groupCtx, subsection, 'inscriptions'):
             ctx = (groupCtx, sname)
@@ -4134,7 +4134,7 @@ def _readPlayerInscriptions(xmlCtx, section, subsectionName, priceFactors, notIn
             if IS_CLIENT:
                 texName = _xml.readNonEmptyString(ctx, subsection, 'texName')
                 bumpTexName = subsection.readString('bumpTexName', '')
-                inscrUserString = i18n.makeString(subsection.readString('userString'))
+                inscrUserString = i18n.makeString(None)
                 isFeatured = subsection.readBool('isFeatured', False)
                 inscrs[inscrID] = (groupName,
                  igrType,
@@ -4515,6 +4515,7 @@ def _calculateGunCombinedPitchLimits(xmlCtx, hullAimingParams, inOutGuns):
         return
 
 
+_g_tiling = {}
 _EMPTY_INSCRIPTION = (None,
  _CUSTOMIZATION_EPOCH,
  0,

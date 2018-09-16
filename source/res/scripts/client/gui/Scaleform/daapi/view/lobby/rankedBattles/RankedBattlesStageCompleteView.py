@@ -2,6 +2,7 @@
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/RankedBattlesStageCompleteView.py
 from gui.Scaleform.daapi.view.lobby.rankedBattles.finish_awards_view import FinishAwardsView
 from gui.Scaleform.daapi.view.meta.RankedBattlesStageCompleteViewMeta import RankedBattlesStageCompleteViewMeta
+from gui.Scaleform.genConsts.COMPONENTS_ALIASES import COMPONENTS_ALIASES
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.shared.formatters import text_styles
@@ -43,9 +44,14 @@ class RankedBattlesStageCompleteView(RankedBattlesStageCompleteViewMeta, FinishA
              'proxyCurrency': text_styles.highTitle(i18n.makeString(RANKED_BATTLES.SEASONCOMPLETE_PROXYCURRENCY, value=text_styles.superPromoTitle(proxy_currency_count))),
              'scoresTitle': text_styles.highlightText(i18n.makeString(RANKED_BATTLES.SEASONCOMPLETE_SCORESEARNED, scores=text_styles.bonusLocalText(cycle.points))),
              'congratulationTitle': i18n.makeString(RANKED_BATTLES.SEASONCOMPLETE_STAGECOMPLETE, stage=cycle.ordinalNumber),
-             'awards': self._packAwards(),
              'nextButtonLabel': RANKED_BATTLES.AWARDS_YES,
              'bgSource': RES_ICONS.MAPS_ICONS_RANKEDBATTLES_BG_RANK_BLUR})
+            self.as_setRewardsDataS({'ribbonType': 'ribbon2',
+             'rendererLinkage': COMPONENTS_ALIASES.RIBBON_AWARD_ANIM_RENDERER,
+             'gap': 20,
+             'rendererWidth': 80,
+             'rendererHeight': 80,
+             'awards': self._packAwards()})
         return
 
     def _dispose(self):

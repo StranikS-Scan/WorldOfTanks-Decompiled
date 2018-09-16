@@ -11,12 +11,13 @@ class RANKED_BATTLES(object):
     RANKEDBATTLEHEADER_TOOLTIP_CYCLE = '#ranked_battles:rankedBattleHeader/tooltip/cycle/'
     RANKEDBATTLEHEADER_POINTS = '#ranked_battles:rankedBattleHeader/points/'
     RANKEDBATTLESCYCLESVIEW_AWARDBLOCK_BOXTOOLTIP = '#ranked_battles:rankedBattlesCyclesView/awardBlock/boxTooltip'
-    SEASON_NAME_1 = '#ranked_battles:season/name/1'
-    SEASON_NAME_2 = '#ranked_battles:season/name/2'
     RANKEDBATTLEVIEW_TITLE = '#ranked_battles:rankedBattleView/title'
     RANKEDBATTLEVIEW_AWARDBLOCK_POINTS_HEADER = '#ranked_battles:rankedBattleView/awardBlock/points/header'
-    RANKEDBATTLEVIEW_AWARDBLOCK_POINTS_DESCRIPTION = '#ranked_battles:rankedBattleView/awardBlock/points/description'
+    RANKEDBATTLEVIEW_AWARDBLOCK_POINTS_CURRLEAGUEHEADER = '#ranked_battles:rankedBattleView/awardBlock/points/currLeagueHeader'
+    RANKEDBATTLEVIEW_AWARDBLOCK_POINTS_NOLEAGUEHEADER = '#ranked_battles:rankedBattleView/awardBlock/points/noLeagueHeader'
+    RANKEDBATTLEVIEW_AWARDBLOCK_POINTS_NOPRISEHEADER = '#ranked_battles:rankedBattleView/awardBlock/points/noPriseHeader'
     RANKEDBATTLEVIEW_AWARDBLOCK_POINTSALT_DESCRIPTION = '#ranked_battles:rankedBattleView/awardBlock/pointsAlt/description'
+    RANKEDBATTLEVIEW_AWARDBLOCK_POINTS_TOTALLABEL = '#ranked_battles:rankedBattleView/awardBlock/points/totalLabel'
     RANKEDBATTLEVIEW_AWARDBLOCK_EMPTYLEAGUE = '#ranked_battles:rankedBattleView/awardBlock/emptyLeague'
     RANKEDBATTLEVIEW_AWARDBLOCK_QUEST_HEADER = '#ranked_battles:rankedBattleView/awardBlock/quest/header'
     RANKEDBATTLEVIEW_AWARDBLOCK_QUEST_DESCRIPTION_BATTLESLEFT = '#ranked_battles:rankedBattleView/awardBlock/quest/description/battlesLeft'
@@ -27,9 +28,10 @@ class RANKED_BATTLES(object):
     RANKEDBATTLEVIEW_NOTRANKEDBLOCK_OKTOOLTIP_BODY = '#ranked_battles:rankedBattleView/notRankedBlock/okTooltip/body'
     RANKEDBATTLEVIEW_PROGRESSBLOCK_CURRENTRANK = '#ranked_battles:rankedBattleView/progressBlock/currentRank'
     RANKEDBATTLEVIEW_PROGRESSBLOCK_VEHICLERANK = '#ranked_battles:rankedBattleView/progressBlock/vehicleRank'
-    RANKEDBATTLEVIEW_PROGRESSBLOCK_VEHICLEBONUSRANK = '#ranked_battles:rankedBattleView/progressBlock/vehicleBonusRank'
     RANKEDBATTLEVIEW_PROGRESSBLOCK_STEPS = '#ranked_battles:rankedBattleView/progressBlock/steps'
     RANKEDBATTLEVIEW_PROGRESSBLOCK_BESTRANK = '#ranked_battles:rankedBattleView/progressBlock/bestRank'
+    RANKEDBATTLEVIEW_PROGRESSBLOCK_FINALRANK = '#ranked_battles:rankedBattleView/progressBlock/finalRank'
+    RANKEDBATTLEVIEW_PROGRESSBLOCK_CONTINUE = '#ranked_battles:rankedBattleView/progressBlock/continue'
     RANKEDBATTLEVIEW_STATUSBLOCK_STATUSTEXT = '#ranked_battles:rankedBattleView/statusBlock/statusText'
     RANKEDBATTLEVIEW_STATUSBLOCK_CALENDARBTNTOOLTIP_HEADER = '#ranked_battles:rankedBattleView/statusBlock/calendarBtnTooltip/header'
     RANKEDBATTLEVIEW_STATUSBLOCK_CALENDARBTNTOOLTIP_BODY = '#ranked_battles:rankedBattleView/statusBlock/calendarBtnTooltip/body'
@@ -48,12 +50,9 @@ class RANKED_BATTLES(object):
     RANKEDBATTLESCYCLESVIEW_NOACHIEVEMENTS_FUTURE_FOOTER = '#ranked_battles:rankedBattlesCyclesView/noAchievements/future/footer'
     RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_TABLEHEADER_RANK = '#ranked_battles:rankedBattlesCyclesView/currentCycle/tableHeader/rank'
     RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_TABLEHEADER_RANKAWARD = '#ranked_battles:rankedBattlesCyclesView/currentCycle/tableHeader/rankAward'
-    RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_TABLEHEADER_CYCLEAWARD = '#ranked_battles:rankedBattlesCyclesView/currentCycle/tableHeader/cycleAward'
-    RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_TABLEHEADER_POINTS = '#ranked_battles:rankedBattlesCyclesView/currentCycle/tableHeader/points'
+    RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_VEHICLERANKCOMMENT = '#ranked_battles:rankedBattlesCyclesView/currentCycle/vehicleRankComment'
     RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_TOOLTIP_CYCLEAWARD_HEADER = '#ranked_battles:rankedBattlesCyclesView/currentCycle/tooltip/cycleAward/header'
     RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_TOOLTIP_CYCLEAWARD_BODY = '#ranked_battles:rankedBattlesCyclesView/currentCycle/tooltip/cycleAward/body'
-    RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_TOOLTIP_POINTS_HEADER = '#ranked_battles:rankedBattlesCyclesView/currentCycle/tooltip/points/header'
-    RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_TOOLTIP_POINTS_BODY = '#ranked_battles:rankedBattlesCyclesView/currentCycle/tooltip/points/body'
     RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_ITEM_AWARDRECIEVED = '#ranked_battles:rankedBattlesCyclesView/currentCycle/item/awardRecieved'
     RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_ITEM_BOXTOOLTIP_HEADER = '#ranked_battles:rankedBattlesCyclesView/currentCycle/item/boxTooltip/header'
     RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_ITEM_BOXTOOLTIP_BODY = '#ranked_battles:rankedBattlesCyclesView/currentCycle/item/boxTooltip/body'
@@ -61,17 +60,16 @@ class RANKED_BATTLES(object):
     RANKEDBATTLESCYCLESVIEW_AWARDBLOCK_BOXTOOLTIP_BODY = '#ranked_battles:rankedBattlesCyclesView/awardBlock/boxTooltip/body'
     RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_ITEM_CRYSTALTOOLTIP_HEADER = '#ranked_battles:rankedBattlesCyclesView/currentCycle/item/crystalTooltip/header'
     RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_ITEM_CRYSTALTOOLTIP_BODY = '#ranked_battles:rankedBattlesCyclesView/currentCycle/item/crystalTooltip/body'
-    RANKEDBATTLESCYCLESVIEW_CURRENTCYCLE_VEHICLERANKPOINTS = '#ranked_battles:rankedBattlesCyclesView/currentCycle/vehicleRankPoints'
     RANKEDBATTLESCYCLESVIEW_FINAL_TABLEHEADER_POSITION = '#ranked_battles:rankedBattlesCyclesView/final/tableHeader/position'
     RANKEDBATTLESCYCLESVIEW_FINAL_TABLEHEADER_SEASONAWARD = '#ranked_battles:rankedBattlesCyclesView/final/tableHeader/seasonAward'
-    RANKEDBATTLESCYCLESVIEW_FINAL_DESCRIPTION_HEADER = '#ranked_battles:rankedBattlesCyclesView/final/description/header'
-    RANKEDBATTLESCYCLESVIEW_FINAL_DESCRIPTION_BODY = '#ranked_battles:rankedBattlesCyclesView/final/description/body'
+    RANKEDBATTLESCYCLESVIEW_FINAL_TABLEHEADER_NOLEAGUEDATATOOLTIP = '#ranked_battles:rankedBattlesCyclesView/final/tableHeader/noLeagueDataTooltip'
     RANKEDBATTLESCYCLESVIEW_FINAL_BTNLADDER = '#ranked_battles:rankedBattlesCyclesView/final/btnLadder'
     RANKEDBATTLESCYCLESVIEW_FINAL_BTNLADDERTOOLTIP_HEADER = '#ranked_battles:rankedBattlesCyclesView/final/btnLadderTooltip/header'
     RANKEDBATTLESCYCLESVIEW_FINAL_BTNLADDERTOOLTIP_BODY = '#ranked_battles:rankedBattlesCyclesView/final/btnLadderTooltip/body'
     RANKEDBATTLESCYCLESVIEW_FINAL_FIRST = '#ranked_battles:rankedBattlesCyclesView/final/first'
     RANKEDBATTLESCYCLESVIEW_FINAL_INTERMEDIATE = '#ranked_battles:rankedBattlesCyclesView/final/intermediate'
     RANKEDBATTLESCYCLESVIEW_FINAL_LAST = '#ranked_battles:rankedBattlesCyclesView/final/last'
+    RANKEDBATTLESCYCLESVIEW_FINAL_LASTCOMMENT = '#ranked_battles:rankedBattlesCyclesView/final/lastComment'
     RANKEDBATTLESCYCLESVIEW_BTNCLOSE = '#ranked_battles:rankedBattlesCyclesView/btnClose'
     RANKEDBATTLESWIDGET_INITTEXT = '#ranked_battles:rankedBattlesWidget/initText'
     RANKEDBATTLESWIDGET_NEWRANKCONGRAT = '#ranked_battles:rankedBattlesWidget/newRankCongrat'
@@ -86,6 +84,7 @@ class RANKED_BATTLES(object):
     WELCOMESCREEN_RIGHTRULE = '#ranked_battles:welcomeScreen/rightRule'
     WELCOMESCREEN_RIGHTRULETOOLTIP_HEADER = '#ranked_battles:welcomeScreen/rightRuleTooltip/header'
     WELCOMESCREEN_RIGHTRULETOOLTIP_BODY = '#ranked_battles:welcomeScreen/rightRuleTooltip/body'
+    WELCOMESCREEN_RANKDESCR = '#ranked_battles:welcomeScreen/rankDescr'
     WELCOMESCREEN_RANKSDESCR = '#ranked_battles:welcomeScreen/ranksDescr'
     WELCOMESCREEN_RANKS_HEADER = '#ranked_battles:welcomeScreen/ranks/header'
     WELCOMESCREEN_POSITIVE_BODY = '#ranked_battles:welcomeScreen/positive/body'
@@ -100,8 +99,6 @@ class RANKED_BATTLES(object):
     WELCOMESCREEN_CLOSEBTNTOOLTIP_BODY = '#ranked_battles:welcomeScreen/closeBtnTooltip/body'
     RANKEDBATTLESUNREACHABLEVIEW_HEADERTEXT = '#ranked_battles:rankedBattlesUnreachableView/headerText'
     RANKEDBATTLESUNREACHABLEVIEW_UNREACHABLETEXT = '#ranked_battles:rankedBattlesUnreachableView/unreachableText'
-    RANKEDBATTLESUNREACHABLEVIEW_VIDEOBTNLABEL = '#ranked_battles:rankedBattlesUnreachableView/videoBtnLabel'
-    RANKEDBATTLESUNREACHABLEVIEW_LEADERBOARDBTNLABEL = '#ranked_battles:rankedBattlesUnreachableView/leaderboardBtnLabel'
     RANKEDBATTLESUNREACHABLEVIEW_CLOSEBTNLABEL = '#ranked_battles:rankedBattlesUnreachableView/closeBtnLabel'
     RANKEDBATTLESUNREACHABLEVIEW_BOTTOMTEXT = '#ranked_battles:rankedBattlesUnreachableView/bottomText'
     RANKEDBATTLESUNREACHABLEVIEW_BOTTOM_PREMIUM = '#ranked_battles:rankedBattlesUnreachableView/bottom/premium'
@@ -112,8 +109,8 @@ class RANKED_BATTLES(object):
     RANKEDBATTLEHEADER_POINTS_PAST = '#ranked_battles:rankedBattleHeader/points/past'
     RANKEDBATTLEHEADER_POINTS_CURRENT = '#ranked_battles:rankedBattleHeader/points/current'
     RANKEDBATTLEHEADER_POINTS_FINAL = '#ranked_battles:rankedBattleHeader/points/final'
-    RANKEDBATTLEHEADER_CYCLE = '#ranked_battles:rankedBattleHeader/cycle'
-    RANKEDBATTLEHEADER_FINAL = '#ranked_battles:rankedBattleHeader/final'
+    RANKEDBATTLECYCLESVIEW_TABS_RANKS = '#ranked_battles:rankedBattleCyclesView/tabs/ranks'
+    RANKEDBATTLECYCLESVIEW_TABS_FINAL = '#ranked_battles:rankedBattleCyclesView/tabs/final'
     RANKEDBATTLEHEADER_TOOLTIP_CYCLE_PAST_HEADER = '#ranked_battles:rankedBattleHeader/tooltip/cycle/past/header'
     RANKEDBATTLEHEADER_TOOLTIP_CYCLE_PAST_BODY = '#ranked_battles:rankedBattleHeader/tooltip/cycle/past/body'
     RANKEDBATTLEHEADER_TOOLTIP_CYCLE_CURRENT_HEADER = '#ranked_battles:rankedBattleHeader/tooltip/cycle/current/header'
@@ -123,18 +120,34 @@ class RANKED_BATTLES(object):
     RANKEDBATTLEHEADER_TOOLTIP_CYCLE_FUTURE_HEADER = '#ranked_battles:rankedBattleHeader/tooltip/cycle/future/header'
     RANKEDBATTLEHEADER_TOOLTIP_CYCLE_FUTURE_BODY = '#ranked_battles:rankedBattleHeader/tooltip/cycle/future/body'
     RANKEDBATTLEHEADER_TOOLTIP_DATE = '#ranked_battles:rankedBattleHeader/tooltip/date'
+    BATTLERESULT_STAGESEARNED = '#ranked_battles:battleresult/stagesEarned'
     BATTLERESULT_STAGEEARNED = '#ranked_battles:battleresult/stageEarned'
     BATTLERESULT_STAGENOTEARNED = '#ranked_battles:battleresult/stageNotEarned'
     BATTLERESULT_STAGESAVED = '#ranked_battles:battleresult/stageSaved'
     BATTLERESULT_STAGELOST = '#ranked_battles:battleresult/stageLost'
     BATTLERESULT_RANKEARNED = '#ranked_battles:battleresult/rankEarned'
     BATTLERESULT_RANKLOST = '#ranked_battles:battleresult/rankLost'
+    BATTLERESULT_SHIELDLOSE = '#ranked_battles:battleresult/shieldLose'
     BATTLERESULT_INTOP_LOSE = '#ranked_battles:battleresult/inTop/lose'
     BATTLERESULT_INTOP_WIN = '#ranked_battles:battleresult/inTop/win'
     BATTLERESULT_NOTINTOP_LOSE = '#ranked_battles:battleresult/notInTop/lose'
     BATTLERESULT_NOTINTOP_WIN = '#ranked_battles:battleresult/notInTop/win'
     BATTLERESULT_NOTINTOP_STAGESAVED = '#ranked_battles:battleresult/notInTop/stageSaved'
     BATTLERESULT_NOTINTOP_MINXP = '#ranked_battles:battleresult/notInTop/minXP'
+    BATTLERESULT_HEADERTEXT = '#ranked_battles:battleresult/headerText'
+    BATTLERESULT_STATUS_STAGESEARNED = '#ranked_battles:battleresult/status/stagesEarned'
+    BATTLERESULT_STATUS_STAGEEARNED = '#ranked_battles:battleresult/status/stageEarned'
+    BATTLERESULT_STATUS_RANKEARNED = '#ranked_battles:battleresult/status/rankEarned'
+    BATTLERESULT_STATUS_RANKPOINT = '#ranked_battles:battleresult/status/rankPoint'
+    BATTLERESULT_STATUS_STAGELOST = '#ranked_battles:battleresult/status/stageLost'
+    BATTLERESULT_STATUS_RANKLOST = '#ranked_battles:battleresult/status/rankLost'
+    BATTLERESULT_STATUS_SHIELDLOSESTEP = '#ranked_battles:battleresult/status/shieldLoseStep'
+    BATTLERESULT_STATUS_SHIELDLOSE = '#ranked_battles:battleresult/status/shieldLose'
+    BATTLERESULT_STATUS_SHIELDCOUNT = '#ranked_battles:battleresult/status/shieldCount'
+    BATTLERESULT_STATUS_SHIELDWARNING = '#ranked_battles:battleresult/status/shieldWarning'
+    BATTLERESULT_STATUS_SHIELDRENEW = '#ranked_battles:battleresult/status/shieldRenew'
+    BATTLERESULT_STATUS_STAGENOTEARNED = '#ranked_battles:battleresult/status/stageNotEarned'
+    BATTLERESULT_STATUS_STAGESAVED = '#ranked_battles:battleresult/status/stageSaved'
     TOOLTIP_STEP_HEADER = '#ranked_battles:tooltip/step/header'
     TOOLTIP_STEP_DESCRIPTION = '#ranked_battles:tooltip/step/description'
     TOOLTIP_STEP_CONDITIONS_HEADER = '#ranked_battles:tooltip/step/conditions/header'
@@ -143,6 +156,9 @@ class RANKED_BATTLES(object):
     TOOLTIP_STEP_NOTCHARGEDLOSE_DESCRIPTION = '#ranked_battles:tooltip/step/notChargedLose/description'
     TOOLTIP_STEP_DECOMMISSION_HEADER = '#ranked_battles:tooltip/step/decommission/header'
     TOOLTIP_STEP_DECOMMISSION_DESCRIPTION = '#ranked_battles:tooltip/step/decommission/description'
+    TOOLTIP_STEP_DECOMMISSIONWIN_DESCRIPTION = '#ranked_battles:tooltip/step/decommissionWin/description'
+    TOOLTIP_STEP_FROMTILL = '#ranked_battles:tooltip/step/fromTill'
+    TOOLTIP_STEP_DECOMMISSION_BEFORERANK = '#ranked_battles:tooltip/step/decommission/beforeRank'
     TOOLTIP_STEP_OR = '#ranked_battles:tooltip/step/or'
     TOOLTIP_STEP_CONDITIONS = '#ranked_battles:tooltip/step/conditions'
     TOOLTIP_STEP_WINNERS = '#ranked_battles:tooltip/step/winners'
@@ -153,11 +169,6 @@ class RANKED_BATTLES(object):
     STATUS_TIMELEFT_HOURS = '#ranked_battles:status/timeLeft/hours'
     STATUS_TIMELEFT_MIN = '#ranked_battles:status/timeLeft/min'
     STATUS_TIMELEFT_LESSMIN = '#ranked_battles:status/timeLeft/lessMin'
-    RANK_NAME_1 = '#ranked_battles:rank/name/1'
-    RANK_NAME_2 = '#ranked_battles:rank/name/2'
-    RANK_NAME_3 = '#ranked_battles:rank/name/3'
-    RANK_NAME_4 = '#ranked_battles:rank/name/4'
-    RANK_NAME_5 = '#ranked_battles:rank/name/5'
     BATTLERESULT_RANK_PROGRESS_UP = '#ranked_battles:battleResult/rank/progress/up'
     BATTLERESULT_RANK_UP = '#ranked_battles:battleResult/rank/up'
     BATTLERESULT_RANK_UNCHANGED = '#ranked_battles:battleResult/rank/unchanged'
@@ -167,19 +178,23 @@ class RANKED_BATTLES(object):
     BATTLERESULT_LOSERS = '#ranked_battles:battleResult/losers'
     BATTLERESULT_YES = '#ranked_battles:battleResult/yes'
     AWARDS_YES = '#ranked_battles:awards/yes'
-    AWARDS_NEXT = '#ranked_battles:awards/next'
     AWARDS_CONGRATULATION = '#ranked_battles:awards/congratulation'
     AWARDS_NEXTRANKTITLE = '#ranked_battles:awards/nextRankTitle'
-    AWARDS_STAGESTITLE = '#ranked_battles:awards/stagesTitle'
+    AWARDS_LADDERPOINTSTOTAL = '#ranked_battles:awards/ladderPointsTotal'
     AWARDS_GOTRANK = '#ranked_battles:awards/gotRank'
+    AWARDS_GOTLADDERPOINT = '#ranked_battles:awards/gotLadderPoint'
     SEASONCOMPLETE_BESTRANK = '#ranked_battles:seasonComplete/bestRank'
     SEASONCOMPLETE_PROXYCURRENCY = '#ranked_battles:seasonComplete/proxyCurrency'
     SEASONCOMPLETE_SCORESEARNED = '#ranked_battles:seasonComplete/scoresEarned'
     SEASONCOMPLETE_STAGECOMPLETE = '#ranked_battles:seasonComplete/stageComplete'
     SEASONCOMPLETE_TOTALSCORES = '#ranked_battles:seasonComplete/totalScores'
     SEASONCOMPLETE_PLACEINRATING = '#ranked_battles:seasonComplete/placeInRating'
-    SEASONCOMPLETE_PROXYCURRENCYLABEL = '#ranked_battles:seasonComplete/proxyCurrencyLabel'
-    SEASONCOMPLETE_SEASONRESULTS = '#ranked_battles:seasonComplete/seasonResults'
+    SEASONCOMPLETE_EXPLABEL = '#ranked_battles:seasonComplete/expLabel'
+    SEASONCOMPLETE_EFFECTLABEL = '#ranked_battles:seasonComplete/effectLabel'
+    SEASONCOMPLETE_LEADERSBUTTON = '#ranked_battles:seasonComplete/leadersButton'
+    SEASONCOMPLETE_BIGTITLE = '#ranked_battles:seasonComplete/bigTitle'
+    SEASONCOMPLETE_SMALLTITLE = '#ranked_battles:seasonComplete/smallTitle'
+    SEASONCOMPLETE_UNDERLABEL = '#ranked_battles:seasonComplete/underLabel'
     STATISTIC_PLAYERSRAITING = '#ranked_battles:statistic/playersRaiting'
     STATISTIC_VEHICLERANK = '#ranked_battles:statistic/vehicleRank'
     SEASONCOMPLETE_PLACEINRATING_TOOLTIP_BODY = '#ranked_battles:seasonComplete/placeInRating/tooltip/body'
@@ -213,35 +228,14 @@ class RANKED_BATTLES(object):
     NOTIFICATION_RANKEDMESSAGE = '#ranked_battles:notification/rankedMessage'
     RANKEDBATTLESCAROUSEL_LOCKEDTOOLTIP_HEADER = '#ranked_battles:rankedBattlesCarousel/lockedTooltip/header'
     RANKEDBATTLESCAROUSEL_LOCKEDTOOLTIP_BODY = '#ranked_battles:rankedBattlesCarousel/lockedTooltip/body'
-    RANK_NAME_ENUM = (RANK_NAME_1,
-     RANK_NAME_2,
-     RANK_NAME_3,
-     RANK_NAME_4,
-     RANK_NAME_5)
-    SEASON_NAME_ENUM = (SEASON_NAME_1, SEASON_NAME_2)
+    RANKEDBATTLESBATTLERESULTS_ANIMATIONCHECKBOXLABEL = '#ranked_battles:rankedBattlesBattleResults/animationCheckBoxLabel'
+    RANKEDBATTLESVIEWHEADER_TABS_CURRENT = '#ranked_battles:rankedBattlesViewHeader/tabs/current'
+    RANKEDBATTLESVIEWHEADER_TABS_FINAL = '#ranked_battles:rankedBattlesViewHeader/tabs/final'
     BATTLERESULT_INTOP_ENUM = (BATTLERESULT_INTOP_LOSE, BATTLERESULT_INTOP_WIN)
     BATTLERESULT_NOTINTOP_ENUM = (BATTLERESULT_NOTINTOP_LOSE,
      BATTLERESULT_NOTINTOP_WIN,
      BATTLERESULT_NOTINTOP_STAGESAVED,
      BATTLERESULT_NOTINTOP_MINXP)
-
-    @classmethod
-    def rank_name(cls, key0):
-        outcome = '#ranked_battles:rank/name/{}'.format(key0)
-        if outcome not in cls.RANK_NAME_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
-
-    @classmethod
-    def season_name(cls, key0):
-        outcome = '#ranked_battles:season/name/{}'.format(key0)
-        if outcome not in cls.SEASON_NAME_ENUM:
-            LOG_WARNING('Localization key "{}" not found'.format(outcome))
-            return None
-        else:
-            return outcome
 
     @classmethod
     def getBattleResultsInTop(cls, key0):

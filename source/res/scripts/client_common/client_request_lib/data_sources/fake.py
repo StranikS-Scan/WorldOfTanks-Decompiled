@@ -744,6 +744,13 @@ class FakeDataAccessor(base.BaseDataAccessor):
         return self._request_data('give_leadership', unit_id)
 
     @fake_method(example={})
+    def give_equipment_commander(self, periphery_id, unit_id, target_account_id, fields=None):
+        """
+        return fake data from `give_leadership` section
+        """
+        return self._request_data('give_equipment_commander', unit_id)
+
+    @fake_method(example={})
     def leave_room(self, periphery_id, unit_id, fields=None):
         """
         return fake data from `leave_room` section

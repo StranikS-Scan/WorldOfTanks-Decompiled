@@ -1,5 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/meta/RankedBattlesUnreachableViewMeta.py
+"""
+This file was generated using the wgpygen.
+Please, don't edit this file manually.
+"""
 from gui.Scaleform.daapi.view.meta.WrapperViewMeta import WrapperViewMeta
 
 class RankedBattlesUnreachableViewMeta(WrapperViewMeta):
@@ -9,12 +13,6 @@ class RankedBattlesUnreachableViewMeta(WrapperViewMeta):
 
     def onEscapePress(self):
         self._printOverrideError('onEscapePress')
-
-    def onLeaderboardBtnClick(self):
-        self._printOverrideError('onLeaderboardBtnClick')
-
-    def onVideoBtnClick(self):
-        self._printOverrideError('onVideoBtnClick')
 
     def as_setDataS(self, data):
         """

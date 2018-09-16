@@ -7,7 +7,7 @@ import SoundGroups
 from gui.Scaleform.framework.entities.abstract.AbstractViewMeta import AbstractViewMeta
 from gui.doc_loaders import hints_layout
 from gui.shared.events import FocusEvent
-_ViewKey = namedtuple('ViewKey', ['alias', 'name'])
+_ViewKey = namedtuple('_ViewKey', ['alias', 'name'])
 
 class ViewKey(_ViewKey):
     """

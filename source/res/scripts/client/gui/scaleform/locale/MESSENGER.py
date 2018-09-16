@@ -349,9 +349,12 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_BATTLERESULTS_FORT_CLAN = '#messenger:serviceChannelMessages/battleResults/fort/clan'
     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_RANKEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/rankEarned'
     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_RANKLOST = '#messenger:serviceChannelMessages/battleResults/rankedState/rankLost'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_STEPSEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/stepsEarned'
     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_STEPEARNED = '#messenger:serviceChannelMessages/battleResults/rankedState/stepEarned'
     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_STEPLOST = '#messenger:serviceChannelMessages/battleResults/rankedState/stepLost'
     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_NOTHINGCHANGED = '#messenger:serviceChannelMessages/battleResults/rankedState/nothingChanged'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_SHIELD_SHIELD_LOSE = '#messenger:serviceChannelMessages/battleResults/rankedState/shield/shield_lose'
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_SHIELD_SHIELD_LOSE_STEP = '#messenger:serviceChannelMessages/battleResults/rankedState/shield/shield_lose_step'
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_RESULTS_FINISHED = '#messenger:serviceChannelMessages/battleTutorial/results/finished'
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_RESULTS_FAILED = '#messenger:serviceChannelMessages/battleTutorial/results/failed'
     SERVICECHANNELMESSAGES_BATTLETUTORIAL_REASONS_FINISHED = '#messenger:serviceChannelMessages/battleTutorial/reasons/finished'
@@ -508,10 +511,8 @@ class MESSENGER(object):
     SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_CAMOUFLAGES = '#messenger:serviceChannelMessages/sysMsg/converter/camouflages'
     SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_CUSTOMIZATIONS = '#messenger:serviceChannelMessages/sysMsg/converter/customizations'
     SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_CUSTOMIZATIONSBUY = '#messenger:serviceChannelMessages/sysMsg/converter/customizationsBuy'
-    SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_SELL_1 = '#messenger:serviceChannelMessages/sysMsg/customizations/sell_1'
-    SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_SELL_2 = '#messenger:serviceChannelMessages/sysMsg/customizations/sell_2'
-    SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_BUY_1 = '#messenger:serviceChannelMessages/sysMsg/customizations/buy_1'
-    SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_BUY_2 = '#messenger:serviceChannelMessages/sysMsg/customizations/buy_2'
+    SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_SELL = '#messenger:serviceChannelMessages/sysMsg/customizations/sell'
+    SERVICECHANNELMESSAGES_SYSMSG_CUSTOMIZATIONS_BUY = '#messenger:serviceChannelMessages/sysMsg/customizations/buy'
     SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_GOLDRECEIVED = '#messenger:serviceChannelMessages/sysMsg/converter/goldReceived'
     SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_GOLDWITHDRAWN = '#messenger:serviceChannelMessages/sysMsg/converter/goldWithdrawn'
     SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_CRYSTALRECEIVED = '#messenger:serviceChannelMessages/sysMsg/converter/crystalReceived'
@@ -846,9 +847,13 @@ class MESSENGER(object):
      LISTVIEW_EMPTYLIST_OFFER)
     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_ENUM = (SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_RANKEARNED,
      SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_RANKLOST,
+     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_STEPSEARNED,
      SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_STEPEARNED,
      SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_STEPLOST,
-     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_NOTHINGCHANGED)
+     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_NOTHINGCHANGED,
+     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_SHIELD_SHIELD_LOSE,
+     SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_SHIELD_SHIELD_LOSE_STEP)
+    SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_SHIELD_ENUM = (SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_SHIELD_SHIELD_LOSE, SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_SHIELD_SHIELD_LOSE_STEP)
 
     @classmethod
     def client_error_shared(cls, key0):
@@ -944,6 +949,15 @@ class MESSENGER(object):
     def rankedStateChange(cls, key0):
         outcome = '#messenger:serviceChannelMessages/battleResults/rankedState/{}'.format(key0)
         if outcome not in cls.SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_ENUM:
+            LOG_WARNING('Localization key "{}" not found'.format(outcome))
+            return None
+        else:
+            return outcome
+
+    @classmethod
+    def rankedShieldStateChange(cls, key0):
+        outcome = '#messenger:serviceChannelMessages/battleResults/rankedState/shield/{}'.format(key0)
+        if outcome not in cls.SERVICECHANNELMESSAGES_BATTLERESULTS_RANKEDSTATE_SHIELD_ENUM:
             LOG_WARNING('Localization key "{}" not found'.format(outcome))
             return None
         else:

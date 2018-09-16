@@ -57,6 +57,7 @@ class ArenaLoadController(IArenaVehiclesController, ViewComponentsController):
         BigWorld.wg_setReducedFpsMode(False)
         from messenger import MessengerEntry
         MessengerEntry.g_instance.onAvatarShowGUI()
+        BigWorld.enableLoadingTimer(False)
         BigWorld.wg_clearTextureReuseList()
         if self._viewComponents:
             for cmp in self._viewComponents:

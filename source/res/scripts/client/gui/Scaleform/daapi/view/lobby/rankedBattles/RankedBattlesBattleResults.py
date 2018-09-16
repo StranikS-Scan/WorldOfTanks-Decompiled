@@ -1,8 +1,9 @@
 # Python bytecode 2.7 (decompiled from Python 2.7)
 # Embedded file name: scripts/client/gui/Scaleform/daapi/view/lobby/rankedBattles/RankedBattlesBattleResults.py
+from account_helpers import AccountSettings
+from account_helpers.AccountSettings import ENABLE_RANKED_ANIMATIONS
 from gui.Scaleform.daapi.view.meta.RankedBattlesBattleResultsMeta import RankedBattlesBattleResultsMeta
 from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
-from gui.shared import event_dispatcher
 from helpers import dependency
 from skeletons.gui.game_control import IRankedBattlesController
 
@@ -19,7 +20,8 @@ class RankedBattlesBattleResults(RankedBattlesBattleResultsMeta):
         self.__rankInfo = ctx['rankInfo']
         accProgress = (self.__rankInfo.accRank, self.__rankInfo.accStep)
         vehProgress = (self.__rankInfo.vehRank, self.__rankInfo.vehStep)
-        prevAccProgress, prevVehProgress = self.rankedController.getPrevRanks(accProgress, vehProgress, self.__rankInfo.stepChanges)
+        prevAccProgress = (self.__rankInfo.prevAccRank, self.__rankInfo.prevAccStep)
+        prevVehProgress = (self.__rankInfo.prevVehRank, self.__rankInfo.prevVehStep)
         maxProgress = max(accProgress, prevAccProgress)
         self.__ranks = self.rankedController.buildRanksChain(accProgress, maxProgress, prevAccProgress)
         self.__finalRanks = self.rankedController.buildRanksChain(accProgress, maxProgress, accProgress)
@@ -43,29 +45,20 @@ class RankedBattlesBattleResults(RankedBattlesBattleResultsMeta):
     def closeView(self):
         self.__close()
 
-    def ready(self):
-        self.__close()
+    def animationCheckBoxSelected(self, value):
+        AccountSettings.setSettings(ENABLE_RANKED_ANIMATIONS, value)
 
     @property
     def rankedWidget(self):
         """
-        This is small widget in the top of window, after animation is finished.
+        This is big widget in the middle of view
         :return: instance of the component. It is related only to this view
         """
         return self.getComponent(RANKEDBATTLES_ALIASES.RANKED_BATTLE_RESULTS_WIDGET)
 
-    @property
-    def rankedFinalWidget(self):
-        """
-        This is a big widget with animation of Rank/Step changes.
-        :return: instance of the component. It is related only to this view
-        """
-        return self.getComponent(RANKEDBATTLES_ALIASES.RANKED_BATTLE_RESULTS_FINAL_WIDGET)
-
     def _populate(self):
         super(RankedBattlesBattleResults, self)._populate()
         self.__updateRankedWidget()
-        self.__updateRankedFinalWidget()
         self.as_setDataS(self.__rankedResultsVO)
 
     def __setRanks(self, progress, prevProgress, adjustment=0):
@@ -83,10 +76,7 @@ class RankedBattlesBattleResults(RankedBattlesBattleResultsMeta):
             self.rankedWidget.update(self.__ranks, self.__currentRank, self.__lastRank)
         return
 
-    def __updateRankedFinalWidget(self):
-        if self.rankedFinalWidget is not None:
-            self.rankedFinalWidget.update(self.__finalRanks, self.__currentFinalRank, self.__lastFinalRank)
-        return
-
     def __close(self):
+        if self.rankedController.awardWindowShouldBeShown(self.__rankInfo):
+            self.rankedController.showRankedAwardWindow(self.__rankInfo, self.__vehicle)
         self.destroy()

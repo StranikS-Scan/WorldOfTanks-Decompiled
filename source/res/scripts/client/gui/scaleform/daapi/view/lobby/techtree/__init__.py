@@ -17,8 +17,8 @@ def getContextMenuHandlers():
 
 
 def getViewSettings():
-    from gui.Scaleform.daapi.view.lobby.techtree.Research import Research
-    from gui.Scaleform.daapi.view.lobby.techtree.TechTree import TechTree
+    from gui.Scaleform.daapi.view.lobby.techtree.research_page import Research
+    from gui.Scaleform.daapi.view.lobby.techtree.techtree_page import TechTree
     from gui.Scaleform.daapi.view.bootcamp.BCTechTree import BCTechTree
     from gui.Scaleform.daapi.view.bootcamp.BCResearch import BCResearch
     return (ConditionalViewSettings(VIEW_ALIAS.LOBBY_TECHTREE, BootcampComponentOverride(TechTree, BCTechTree), 'techtree.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.LOBBY_TECHTREE, ScopeTemplates.DEFAULT_SCOPE, True), ConditionalViewSettings(VIEW_ALIAS.LOBBY_RESEARCH, BootcampComponentOverride(Research, BCResearch), 'research.swf', ViewTypes.LOBBY_SUB, None, VIEW_ALIAS.LOBBY_RESEARCH, ScopeTemplates.DEFAULT_SCOPE, True))

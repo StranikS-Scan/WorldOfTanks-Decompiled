@@ -316,7 +316,7 @@ class Vehicle(FittingItem, HasStrCD):
 
     def _calcCrewBonuses(self, crew, proxy):
         bonuses = dict()
-        bonuses['equipment'] = 0
+        bonuses['equipment'] = 0.0
         for eq in self.equipment.regularConsumables.getInstalledItems():
             bonuses['equipment'] += eq.crewLevelIncrease
 
@@ -329,14 +329,14 @@ class Vehicle(FittingItem, HasStrCD):
         bonuses['brotherhood'] = tankmen.getSkillsConfig().getSkill('brotherhood').crewLevelIncrease
         for tankmanID in crew:
             if tankmanID is None:
-                bonuses['brotherhood'] = 0
+                bonuses['brotherhood'] = 0.0
                 continue
             tmanInvData = proxy.inventory.getItems(GUI_ITEM_TYPE.TANKMAN, tankmanID)
             if not tmanInvData:
                 continue
             tdescr = tankmen.TankmanDescr(compactDescr=tmanInvData['compDescr'])
             if 'brotherhood' not in tdescr.skills or tdescr.skills.index('brotherhood') == len(tdescr.skills) - 1 and tdescr.lastSkillLevel != tankmen.MAX_SKILL_LEVEL:
-                bonuses['brotherhood'] = 0
+                bonuses['brotherhood'] = 0.0
             if tdescr.role == Tankman.ROLES.COMMANDER:
                 factor, addition = tdescr.efficiencyOnVehicle(self.descriptor)
                 commanderEffRoleLevel = round(tdescr.roleLevel * factor + addition)

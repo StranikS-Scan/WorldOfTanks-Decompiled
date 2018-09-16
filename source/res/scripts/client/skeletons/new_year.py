@@ -197,20 +197,6 @@ class INewYearController(IGameController):
         raise NotImplementedError
 
 
-class ILootBoxManager(object):
-    onLootBoxStateChanged = None
-
-    def init(self):
-        raise NotImplementedError
-
-    def fini(self):
-        raise NotImplementedError
-
-    @property
-    def isQuestBoosterAwardWindowBlocked(self):
-        raise NotImplementedError
-
-
 class INYSoundEvents(object):
 
     def init(self):

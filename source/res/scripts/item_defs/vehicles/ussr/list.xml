@@ -399,7 +399,8 @@
     <description>	#ussr_vehicles:SU122_54_descr	</description>
     <shortUserString>	#ussr_vehicles:SU122_54_short	</shortUserString>
     <price>	3510000	</price>
-    <tags>	AT-SPG mediumAT-SPG improvedVentilation_class2_user largeCaliberTankRammer_user enhancedTorsions3t_user wetCombatPack_class2_user HD	</tags>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG mediumAT-SPG improvedVentilation_class2_user largeCaliberTankRammer_user enhancedTorsions3t_user wetCombatPack_class2_user HD secret unrecoverable	</tags>
     <level>	9	</level>
   </R75_SU122_54>
   <R57_A43>
@@ -445,15 +446,16 @@
     <tags>	mediumTank improvedVentilation_class2_user enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	10	</level>
   </R87_T62A>
-  <R93_Object263>
+  <R93_Object263B>
     <id>	56	</id>
-    <userString>	#ussr_vehicles:Object263	</userString>
-    <description>	#ussr_vehicles:Object263_descr	</description>
-    <shortUserString>	#ussr_vehicles:Object263_short	</shortUserString>
+    <userString>	#ussr_vehicles:Object263B	</userString>
+    <description>	#ussr_vehicles:Object263B_descr	</description>
+    <shortUserString>	#ussr_vehicles:Object263B_short	</shortUserString>
     <price>	6100000	</price>
-    <tags>	AT-SPG sinai heavyAT-SPG enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
+    <notInShop>	true	</notInShop>
+    <tags>	AT-SPG sinai heavyAT-SPG enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD secret unrecoverable	</tags>
     <level>	10	</level>
-  </R93_Object263>
+  </R93_Object263B>
   <R43_T-70>
     <id>	59	</id>
     <userString>	#ussr_vehicles:T-70	</userString>
@@ -522,15 +524,16 @@
     <tags>	mediumTank improvedVentilation_class2_user enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
     <level>	10	</level>
   </R97_Object_140>
-  <R96_Object_430>
+  <R96_Object_430B>
     <id>	67	</id>
-    <userString>	#ussr_vehicles:Object_430	</userString>
-    <description>	#ussr_vehicles:Object_430_descr	</description>
-    <shortUserString>	#ussr_vehicles:Object_430_short	</shortUserString>
+    <userString>	#ussr_vehicles:Object_430B	</userString>
+    <description>	#ussr_vehicles:Object_430B_descr	</description>
+    <shortUserString>	#ussr_vehicles:Object_430B_short	</shortUserString>
     <price>	6100000	</price>
-    <tags>	mediumTank mediumTank3 improvedVentilation_class2_user enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
+    <notInShop>	true	</notInShop>
+    <tags>	mediumTank mediumTank3 improvedVentilation_class2_user enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD secret unrecoverable	</tags>
     <level>	10	</level>
-  </R96_Object_430>
+  </R96_Object_430B>
   <R104_Object_430_II>
     <id>	69	</id>
     <userString>	#ussr_vehicles:R104_Object_430_II	</userString>
@@ -583,6 +586,78 @@
     <tags>	heavyTank improvedVentilation_class3_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
     <level>	6	</level>
   </R106_KV85>
+  <R151_Object_257_2>
+    <id>	77	</id>
+    <userString>	#ussr_vehicles:R151_Object_257_2	</userString>
+    <description>	#ussr_vehicles:R151_Object_257_2_descr	</description>
+    <shortUserString>	#ussr_vehicles:R151_Object_257_2_short	</shortUserString>
+    <price>	3560000	</price>
+    <tags>	heavyTank improvedVentilation_class3_user sinai largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD	</tags>
+    <level>	9	</level>
+  </R151_Object_257_2>
+  <R148_Object_430_U>
+    <id>	78	</id>
+    <userString>	#ussr_vehicles:R148_Object_430_U	</userString>
+    <description>	#ussr_vehicles:R148_Object_430_U_descr	</description>
+    <shortUserString>	#ussr_vehicles:R148_Object_430_U_short	</shortUserString>
+    <price>	6100000	</price>
+    <tags>	mediumTank improvedVentilation_class2_user enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
+    <level>	10	</level>
+  </R148_Object_430_U>
+  <R149_Object_268_4>
+    <id>	79	</id>
+    <userString>	#ussr_vehicles:R149_Object_268_4	</userString>
+    <description>	#ussr_vehicles:R149_Object_268_4_descr	</description>
+    <shortUserString>	#ussr_vehicles:R149_Object_268_4_short	</shortUserString>
+    <price>	6100000	</price>
+    <tags>	AT-SPG sinai heavyAT-SPG improvedVentilation_class3_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
+    <level>	10	</level>
+  </R149_Object_268_4>
+  <R139_IS_2_Sh>
+    <id>	80	</id>
+    <userString>	#ussr_vehicles:R139_IS_2_Sh	</userString>
+    <description>	#ussr_vehicles:R139_IS_2_Sh_descr	</description>
+    <shortUserString>	#ussr_vehicles:R139_IS_2_Sh_short	</shortUserString>
+    <price>	2550000	</price>
+    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user sinai enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD	</tags>
+    <level>	8	</level>
+  </R139_IS_2_Sh>
+  <R153_Object_705>
+    <id>	81	</id>
+    <userString>	#ussr_vehicles:R153_Object_705	</userString>
+    <description>	#ussr_vehicles:R153_Object_705_descr	</description>
+    <shortUserString>	#ussr_vehicles:R153_Object_705_short	</shortUserString>
+    <price>	3570000	</price>
+    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD	</tags>
+    <level>	9	</level>
+  </R153_Object_705>
+  <R145_Object_705_A>
+    <id>	82	</id>
+    <userString>	#ussr_vehicles:R145_Object_705_A	</userString>
+    <description>	#ussr_vehicles:R145_Object_705_A_descr	</description>
+    <shortUserString>	#ussr_vehicles:R145_Object_705_A_short	</shortUserString>
+    <price>	6100000	</price>
+    <tags>	heavyTank heavyTank1 improvedVentilation_class3_user antifragmentationLining_superheavy_user enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user aimingStabilizer_Mk2_user HD	</tags>
+    <level>	10	</level>
+  </R145_Object_705_A>
+  <R93_Object263>
+    <id>	83	</id>
+    <userString>	#ussr_vehicles:R93_Object263	</userString>
+    <description>	#ussr_vehicles:R93_Object263_descr	</description>
+    <shortUserString>	#ussr_vehicles:R93_Object263_short	</shortUserString>
+    <price>	3510000	</price>
+    <tags>	AT-SPG sinai heavyAT-SPG enhancedTorsions5t_user largeCaliberTankRammer_user wetCombatPack_class2_user HD	</tags>
+    <level>	9	</level>
+  </R93_Object263>
+  <R96_Object_430>
+    <id>	84	</id>
+    <userString>	#ussr_vehicles:R96_Object_430	</userString>
+    <description>	#ussr_vehicles:R96_Object_430_descr	</description>
+    <shortUserString>	#ussr_vehicles:R96_Object_430_short	</shortUserString>
+    <price>	3460000	</price>
+    <tags>	mediumTank mediumTank3 improvedVentilation_class2_user enhancedTorsions3t_user mediumCaliberTankRammer_user wetCombatPack_class1_user aimingStabilizer_Mk1_user HD	</tags>
+    <level>	9	</level>
+  </R96_Object_430>
   <R38_KV-220_beta>
     <id>	200	</id>
     <userString>	#ussr_vehicles:KV-220_test	</userString>

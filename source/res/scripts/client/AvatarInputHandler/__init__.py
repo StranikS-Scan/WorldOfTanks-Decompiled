@@ -3,29 +3,29 @@
 import functools
 import math
 from functools import partial
-from AvatarInputHandler.AimingSystems.steady_vehicle_matrix import SteadyVehicleMatrixCalculator
-import BigWorld
+import Keys
 import BattleReplay
+import BigWorld
+import CommandMapping
 import DynamicCameras.ArcadeCamera
+import DynamicCameras.ArtyCamera
 import DynamicCameras.SniperCamera
 import DynamicCameras.StrategicCamera
-import DynamicCameras.ArtyCamera
-import RespawnDeathMode
-import Keys
 import MapCaseMode
 import Math
 import ResMgr
+import RespawnDeathMode
 import cameras
 import constants
 import control_modes
-import CommandMapping
+from AvatarInputHandler import AimingSystems
 from AvatarInputHandler import aih_global_binding, aih_constants, gun_marker_ctrl
 from AvatarInputHandler.AimingSystems.SniperAimingSystem import SniperAimingSystem
-from AvatarInputHandler import AimingSystems
+from AvatarInputHandler.AimingSystems.steady_vehicle_matrix import SteadyVehicleMatrixCalculator
 from AvatarInputHandler.commands.bootcamp_mode_control import BootcampModeControl
 from AvatarInputHandler.commands.siege_mode_control import SiegeModeControl
-from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, SiegeModeCameraShaker
 from AvatarInputHandler.remote_camera_sender import RemoteCameraSender
+from AvatarInputHandler.siege_mode_player_notifications import SiegeModeSoundNotifications, SiegeModeCameraShaker
 from Event import Event
 from constants import ARENA_PERIOD, AIMING_MODE
 from control_modes import _ARCADE_CAM_PIVOT_POS

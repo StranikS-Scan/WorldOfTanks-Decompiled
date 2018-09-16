@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	0.4	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/american/A15_T57/T57_CM.DDS	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <fakeTurrets>
@@ -48,9 +48,9 @@
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
     <models>
-      <undamaged>	vehicles/american/A15_T57/normal/lod0/Hull.model	</undamaged>
-      <destroyed>	vehicles/american/A15_T57/crash/lod0/Hull.model	</destroyed>
-      <exploded>	vehicles/american/A15_T57/crash/lod0/Hull.model	</exploded>
+      <undamaged>	vehicles/russian/R00_Placeholder/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R00_Placeholder/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R00_Placeholder/crash/lod0/Hull.model	</exploded>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -63,11 +63,11 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.917767 -0.804314	</turret>
+      <turret>	0.000000 0.724581 0.554402	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModelServer>	vehicles/american/A15_T57/collision/Hull.model	</collisionModelServer>
-      <collisionModelClient>	vehicles/american/A15_T57/collision_client/Hull.model	</collisionModelClient>
+      <collisionModelServer>	vehicles/russian/R00_Placeholder/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R00_Placeholder/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -107,7 +107,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </inscription>
     </emblemSlots>
-    <hangarShadowTexture>	vehicles/american/A15_T57/T57_HangarShadowMap.dds	</hangarShadowTexture>
+    <hangarShadowTexture>	vehicles/russian/R00_Placeholder/Placeholder_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <VVSS_T36E6>
@@ -135,9 +135,9 @@
       <maxRegenHealth>	30	</maxRegenHealth>
       <repairCost>	1.0	</repairCost>
       <models>
-        <undamaged>	vehicles/american/A15_T57/normal/lod0/Chassis.model	</undamaged>
-        <destroyed>	vehicles/american/A15_T57/crash/lod0/Chassis.model	</destroyed>
-        <exploded>	vehicles/american/A15_T57/crash/lod0/Chassis.model	</exploded>
+        <undamaged>	vehicles/russian/R00_Placeholder/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R00_Placeholder/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R00_Placeholder/crash/lod0/Chassis.model	</exploded>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -154,83 +154,57 @@
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
         <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R0	</name>
-          <radius>	0.35115	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	WD_R	</template>
-          <radius>	0.100254	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	2	</count>
-        </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R3	</name>
-          <radius>	0.100255	</radius>
-        </wheel>
-        <group>
-          <isLeft>	false	</isLeft>
-          <template>	W_R	</template>
-          <radius>	0.242765	</radius>
-          <startIndex>	0	</startIndex>
-          <count>	4	</count>
-        </group>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	W_R4	</name>
-          <radius>	0.416658	</radius>
-        </wheel>
-        <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
+          <isLeading>	true	</isLeading>
           <name>	WD_L0	</name>
-          <radius>	0.35115	</radius>
+          <radius>	0.250289	</radius>
         </wheel>
-        <group>
-          <isLeft>	true	</isLeft>
-          <template>	WD_L	</template>
-          <radius>	0.100254	</radius>
-          <startIndex>	1	</startIndex>
-          <count>	2	</count>
-        </group>
         <wheel>
           <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L3	</name>
-          <radius>	0.100255	</radius>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.265311	</radius>
         </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	W_L	</template>
-          <radius>	0.242765	</radius>
+          <radius>	0.41516	</radius>
           <startIndex>	0	</startIndex>
-          <count>	4	</count>
+          <count>	5	</count>
         </group>
         <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	W_L4	</name>
-          <radius>	0.416658	</radius>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.250289	</radius>
         </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.265311	</radius>
+        </wheel>
+        <group>
+          <isLeft>	false	</isLeft>
+          <template>	W_R	</template>
+          <radius>	0.41516	</radius>
+          <startIndex>	0	</startIndex>
+          <count>	5	</count>
+        </group>
       </wheels>
-      <drivingWheels>	WD_L0 W_L4	</drivingWheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
         <mud>	smallTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_chf_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.701636 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.823819 0.000000	</hullPosition>
       <hitTester>
-        <collisionModelServer>	vehicles/american/A15_T57/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/american/A15_T57/collision_client/Chassis.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/russian/R00_Placeholder/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R00_Placeholder/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	0.978852 1.46975	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.24516 1.86577	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -297,13 +271,13 @@
           </shotDispersionFactors>
           <turretYawLimits>	-15 15	</turretYawLimits>
           <models>
-            <undamaged>	vehicles/american/A15_T57/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/american/A15_T57/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/american/A15_T57/crash/lod0/Gun_01.model	</exploded>
+            <undamaged>	vehicles/russian/R00_Placeholder/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R00_Placeholder/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R00_Placeholder/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/american/A15_T57/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/american/A15_T57/collision_client/Gun_01.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/russian/R00_Placeholder/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R00_Placeholder/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <camouflage>
             <tiling>	1.18 1.18 0.000000 0.000000	</tiling>
@@ -311,15 +285,15 @@
         </_12.7mm_T23>
       </guns>
       <models>
-        <undamaged>	vehicles/american/A15_T57/normal/lod0/Turret_01.model	</undamaged>
-        <destroyed>	vehicles/american/A15_T57/crash/lod0/Turret_01.model	</destroyed>
-        <exploded>	vehicles/american/A15_T57/crash/lod0/Turret_01.model	</exploded>
+        <undamaged>	vehicles/russian/R00_Placeholder/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R00_Placeholder/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R00_Placeholder/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModelServer>	vehicles/american/A15_T57/collision/Turret_01.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/american/A15_T57/collision_client/Turret_01.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/russian/R00_Placeholder/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R00_Placeholder/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.278832 -0.011801	</gunPosition>
+      <gunPosition>	0.019607 0.457312 1.01427	</gunPosition>
       <emblemSlots></emblemSlots>
       <showEmblemsOnGun>	false	</showEmblemsOnGun>
       <physicsShape>	1.000 0.000 1.000 0.000 1.000 0.000 0.500 0.100 0.000 0.500 0.000 0.500 0.000 0.100 0.508	</physicsShape>

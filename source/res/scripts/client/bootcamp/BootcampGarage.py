@@ -155,8 +155,6 @@ class BootcampGarageLesson(object):
         self.__nextHint = None
         self.__hardcodeHint = None
         self.__secondVehicleInvID = None
-        self.__secondVehicleNode = None
-        self.__moduleNode = None
         self.__isInPreview = False
         self.isLessonSuspended = False
         self.__callbacks = {'onBattleReady': BoundMethodWeakref(self.onBattleReady),
@@ -209,8 +207,6 @@ class BootcampGarageLesson(object):
         self.__prevHint = None
         self.__nextHint = None
         self.__hardcodeHint = None
-        self.__secondVehicleNode = None
-        self.__moduleNode = None
         self.isLessonSuspended = False
         self.__account = None
         self.__showActionsHistory = []
@@ -601,14 +597,7 @@ class BootcampGarageLesson(object):
                     data['label'] = data['label'].format(lessonBonuses['equipment']['handExtinguishers']['count'])
         data['label'] = makeString(data['label'])
         data['description'] = makeString(data['description'])
-        content_data = None
-        if data['content_data'] == 'getSecondVehicleNode':
-            content_data = self.__secondVehicleNode
-        elif data['content_data'] == 'getModuleNode':
-            content_data = self.__moduleNode
-            if 'nameString' in content_data:
-                data['description'] = content_data['nameString']
-        data['content_data'] = content_data
+        data['content_data'] = None
         return
 
     def startLobbyAssistance(self):
@@ -842,20 +831,15 @@ class BootcampGarageLesson(object):
         return self.__bootcampGarageActions.getBattleResultsById(lessonId)
 
     def updateNode(self, node):
-        node['state'] = 0
-        node['state'] = NODE_STATE.addIfNot(node['state'], NODE_STATE_FLAGS.UNLOCKED)
+        node.setState(NODE_STATE_FLAGS.UNLOCKED)
 
     def setSecondVehicleNode(self, secondVehicleNode):
-        self.__secondVehicleNode = deepcopy(secondVehicleNode)
-        node = self.__secondVehicleNode
-        self.updateNode(node)
-        node['state'] = NODE_STATE.addIfNot(node['state'], NODE_STATE_FLAGS.WAS_IN_BATTLE)
+        self.updateNode(secondVehicleNode)
+        secondVehicleNode.setState(NODE_STATE.addIfNot(secondVehicleNode.getState(), NODE_STATE_FLAGS.WAS_IN_BATTLE))
 
     def setModuleNode(self, moduleNode):
-        self.__moduleNode = deepcopy(moduleNode)
-        node = self.__moduleNode
-        self.updateNode(node)
-        node['state'] = NODE_STATE.addIfNot(node['state'], NODE_STATE_FLAGS.IN_INVENTORY)
+        self.updateNode(moduleNode)
+        moduleNode.setState(NODE_STATE.addIfNot(moduleNode.getState(), NODE_STATE_FLAGS.IN_INVENTORY))
 
     def initSubscriptions(self):
         self.itemsCache.onSyncCompleted += self.__onItemCacheSyncCompleted

@@ -7,7 +7,7 @@
   </crew>
   <speedLimits>
     <forward>	54	</forward>
-    <backward>	16	</backward>
+    <backward>	18	</backward>
   </speedLimits>
   <invisibility>
     <moving>	0.214	</moving>
@@ -29,26 +29,31 @@
       <battle>	0	</battle>
     </fakeTurrets>
     <armor>
-      <armor_1>	120	</armor_1>
-      <armor_2>	90	</armor_2>
+      <armor_1>	150	</armor_1>
+      <armor_2>	120	</armor_2>
       <armor_3>	75	</armor_3>
       <armor_4>	40	</armor_4>
       <armor_5>	90	</armor_5>
-      <armor_6>	150	</armor_6>
+      <armor_6>	190	</armor_6>
       <armor_7>	45	</armor_7>
       <armor_8>	20	</armor_8>
       <armor_9>	20	</armor_9>
       <armor_10>	15	</armor_10>
       <armor_11>	15	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
       </armor_11>
-      <armor_12>	35	</armor_12>
+      <armor_12>	260	</armor_12>
       <armor_13>	0	</armor_13>
-      <armor_14>	10	</armor_14>
-      <armor_16>	100	</armor_16>
+      <armor_14>	220	</armor_14>
+      <armor_15>	130	</armor_15>
+      <armor_16>	120	</armor_16>
+      <armor_17>	200	</armor_17>
+      <armor_18>	180	</armor_18>
+      <armor_19>	150	</armor_19>
+      <armor_20>	120	</armor_20>
     </armor>
     <primaryArmor>	armor_1 armor_5 armor_4	</primaryArmor>
-    <weight>	21900	</weight>
-    <maxHealth>	792	</maxHealth>
+    <weight>	22100	</weight>
+    <maxHealth>	880	</maxHealth>
     <ammoBayHealth>
       <maxHealth>	180	</maxHealth>
       <maxRegenHealth>	120	</maxRegenHealth>
@@ -131,10 +136,10 @@
       <terrainResistance>	1.1 1.4 2.2	</terrainResistance>
       <brakeForce>	33000	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	34	</rotationSpeed>
+      <rotationSpeed>	23	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.21	</vehicleMovement>
-        <vehicleRotation>	0.21	</vehicleRotation>
+        <vehicleMovement>	0.14	</vehicleMovement>
+        <vehicleRotation>	0.14	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	180	</maxHealth>
@@ -500,10 +505,10 @@
       <terrainResistance>	1 1.2 2	</terrainResistance>
       <brakeForce>	35500	</brakeForce>
       <rotationIsAroundCenter>	true	</rotationIsAroundCenter>
-      <rotationSpeed>	36	</rotationSpeed>
+      <rotationSpeed>	25	</rotationSpeed>
       <shotDispersionFactors>
-        <vehicleMovement>	0.19	</vehicleMovement>
-        <vehicleRotation>	0.19	</vehicleRotation>
+        <vehicleMovement>	0.12	</vehicleMovement>
+        <vehicleRotation>	0.12	</vehicleRotation>
       </shotDispersionFactors>
       <bulkHealthFactor>	3.0	</bulkHealthFactor>
       <maxHealth>	200	</maxHealth>
@@ -864,24 +869,17 @@
       <notInShop>	true	</notInShop>
       <price>	100	</price>
       <armor>
-        <armor_1>	90	</armor_1>
-        <armor_2>	75	</armor_2>
-        <armor_3>	45	</armor_3>
-        <armor_4>	0	</armor_4>
-        <armor_5>	0	</armor_5>
-        <armor_6>	0	</armor_6>
-        <armor_7>	0	</armor_7>
-        <armor_8>	0	</armor_8>
+        <armor_1>	0	</armor_1>
       </armor>
-      <weight>	300	</weight>
-      <maxHealth>	198	</maxHealth>
-      <rotationSpeed>	44	</rotationSpeed>
+      <weight>	100	</weight>
+      <maxHealth>	220	</maxHealth>
+      <rotationSpeed>	26	</rotationSpeed>
       <turretRotatorHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
         <repairCost>	1.0	</repairCost>
       </turretRotatorHealth>
-      <circularVisionRadius>	380	</circularVisionRadius>
+      <circularVisionRadius>	350	</circularVisionRadius>
       <surveyingDeviceHealth>
         <maxHealth>	100	</maxHealth>
         <maxRegenHealth>	50	</maxRegenHealth>
@@ -891,35 +889,31 @@
         <_100mm_D10S_obr_44>	shared	  <maxAmmo>	36	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -18.5 1 -18.5	</minPitch>
-            <maxPitch>	0 2.3 1 2.3	</maxPitch>
+            <maxPitch>	0 3 1 3	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_122mm_D-25C_mod1944	  <cost>	21400	</cost>
-            </gun>
-            <gun>	_100mm_D54S	  <cost>	38000	</cost>
+            <gun>	_100mm_D54S	  <cost>	19400	</cost>
             </gun>
           </unlocks>
           <armor>
-            <armor_1>	170	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	260	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	115	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	240	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
             <gun>	40	</gun>
           </armor>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
-          <aimingTime>	1.7	</aimingTime>
-          <reloadTime>	6.2	</reloadTime>
+          <shotDispersionRadius>	0.4	</shotDispersionRadius>
+          <aimingTime>	2.3	</aimingTime>
+          <reloadTime>	7.1	</reloadTime>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.22	</invisibilityFactorAtShot>
-          <turretYawLimits>	-9.3 9.3	</turretYawLimits>
+          <turretYawLimits>	-10 12	</turretYawLimits>
           <models>
             <undamaged>	vehicles/russian/R58_SU-101/normal/lod0/Gun_01.model	</undamaged>
             <destroyed>	vehicles/russian/R58_SU-101/crash/lod0/Gun_01.model	</destroyed>
@@ -940,87 +934,34 @@
           </emblemSlots>
           <animateEmblemSlots>	true	</animateEmblemSlots>
         </_100mm_D10S_obr_44>
-        <_122mm_D-25C_mod1944>	shared	  <maxAmmo>	28	</maxAmmo>
-          <pitchLimits>
-            <minPitch>	0 -18.3 1 -18.3	</minPitch>
-            <maxPitch>	0 2.2 1 2.2	</maxPitch>
-          </pitchLimits>
-          <armor>
-            <armor_1>	170	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_1>
-            <armor_2>	115	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_2>
-            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
-            <gun>	40	</gun>
-          </armor>
-          <shotDispersionRadius>	0.41	</shotDispersionRadius>
-          <reloadTime>	7.8	</reloadTime>
-          <aimingTime>	2.9	</aimingTime>
-          <shotDispersionFactors>
-            <turretRotation>	0.12	</turretRotation>
-            <afterShot>	3.0	</afterShot>
-            <whileGunDamaged>	2.0	</whileGunDamaged>
-          </shotDispersionFactors>
-          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
-          <turretYawLimits>	-7.3 7.3	</turretYawLimits>
-          <models>
-            <undamaged>	vehicles/russian/R58_SU-101/normal/lod0/Gun_02.model	</undamaged>
-            <destroyed>	vehicles/russian/R58_SU-101/crash/lod0/Gun_02.model	</destroyed>
-            <exploded>	vehicles/russian/R58_SU-101/crash/lod0/Gun_02.model	</exploded>
-          </models>
-          <hitTester>
-            <collisionModelServer>	vehicles/russian/R58_SU-101/collision/Gun_02.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R58_SU-101/collision_client/Gun_02.model	</collisionModelClient>
-          </hitTester>
-          <emblemSlots>
-            <insigniaOnGun>
-              <rayStart>	0.0766056 -0.0994119 1.43081	</rayStart>
-              <rayEnd>	0.102739 -0.0938976 1.42927	</rayEnd>
-              <rayUp>	0.11 0.108 4	</rayUp>
-              <size>	0.569	</size>
-              <hideIfDamaged>	false	</hideIfDamaged>
-            </insigniaOnGun>
-          </emblemSlots>
-          <animateEmblemSlots>	true	</animateEmblemSlots>
-          <camouflage>
-            <tiling>	0.985 0.985 0.000000 0.000000	</tiling>
-          </camouflage>
-        </_122mm_D-25C_mod1944>
         <_100mm_D54S>	shared	  <maxAmmo>	36	</maxAmmo>
           <pitchLimits>
             <minPitch>	0 -18.5 1 -18.5	</minPitch>
-            <maxPitch>	0 2.3 1 2.3	</maxPitch>
+            <maxPitch>	0 3 1 3	</maxPitch>
           </pitchLimits>
           <unlocks>
-            <gun>	_122mm_M62-T2S	  <cost>	64000	</cost>
+            <gun>	_122mm_D_25_SU_101	  <cost>	46200	</cost>
             </gun>
-            <vehicle>	R75_SU122_54	  <cost>	150000	</cost>
-            </vehicle>
           </unlocks>
           <armor>
-            <armor_1>	170	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	260	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	115	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	240	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
             <gun>	40	</gun>
           </armor>
-          <reloadTime>	6.7	</reloadTime>
-          <aimingTime>	2.1	</aimingTime>
-          <shotDispersionRadius>	0.35	</shotDispersionRadius>
+          <reloadTime>	9.1	</reloadTime>
+          <aimingTime>	2.3	</aimingTime>
+          <shotDispersionRadius>	0.39	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.08	</turretRotation>
+            <turretRotation>	0.1	</turretRotation>
             <afterShot>	3	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.154	</invisibilityFactorAtShot>
-          <turretYawLimits>	-9.3 9.3	</turretYawLimits>
+          <turretYawLimits>	-10 12	</turretYawLimits>
           <models>
             <undamaged>	vehicles/russian/R58_SU-101/normal/lod0/Gun_03.model	</undamaged>
             <destroyed>	vehicles/russian/R58_SU-101/crash/lod0/Gun_03.model	</destroyed>
@@ -1044,32 +985,85 @@
             <tiling>	0.895 0.895 0.000000 0.000000	</tiling>
           </camouflage>
         </_100mm_D54S>
-        <_122mm_M62-T2S>	shared	  <maxAmmo>	28	</maxAmmo>
+        <_122mm_D_25_SU_101>	shared	  <maxAmmo>	28	</maxAmmo>
+          <unlocks>
+            <gun>	_122mm_M62-T2S	  <cost>	64000	</cost>
+            </gun>
+          </unlocks>
           <pitchLimits>
             <minPitch>	0 -18.3 1 -18.3	</minPitch>
-            <maxPitch>	0 2.2 1 2.2	</maxPitch>
+            <maxPitch>	0 3 1 3	</maxPitch>
           </pitchLimits>
           <armor>
-            <armor_1>	170	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_1>	260	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_1>
-            <armor_2>	115	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_2>	240	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_2>
-            <armor_3>	100	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            <armor_3>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
             </armor_3>
-            <armor_4>	0	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
-            </armor_4>
+            <gun>	40	</gun>
+          </armor>
+          <shotDispersionRadius>	0.44	</shotDispersionRadius>
+          <reloadTime>	11.1	</reloadTime>
+          <aimingTime>	2.5	</aimingTime>
+          <shotDispersionFactors>
+            <turretRotation>	0.12	</turretRotation>
+            <afterShot>	3.5	</afterShot>
+            <whileGunDamaged>	2.0	</whileGunDamaged>
+          </shotDispersionFactors>
+          <invisibilityFactorAtShot>	0.19	</invisibilityFactorAtShot>
+          <turretYawLimits>	-10 12	</turretYawLimits>
+          <models>
+            <undamaged>	vehicles/russian/R58_SU-101/normal/lod0/Gun_02.model	</undamaged>
+            <destroyed>	vehicles/russian/R58_SU-101/crash/lod0/Gun_02.model	</destroyed>
+            <exploded>	vehicles/russian/R58_SU-101/crash/lod0/Gun_02.model	</exploded>
+          </models>
+          <hitTester>
+            <collisionModelServer>	vehicles/russian/R58_SU-101/collision/Gun_02.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R58_SU-101/collision_client/Gun_02.model	</collisionModelClient>
+          </hitTester>
+          <emblemSlots>
+            <insigniaOnGun>
+              <rayStart>	0.0766056 -0.0994119 1.43081	</rayStart>
+              <rayEnd>	0.102739 -0.0938976 1.42927	</rayEnd>
+              <rayUp>	0.11 0.108 4	</rayUp>
+              <size>	0.569	</size>
+              <hideIfDamaged>	false	</hideIfDamaged>
+            </insigniaOnGun>
+          </emblemSlots>
+          <animateEmblemSlots>	true	</animateEmblemSlots>
+          <camouflage>
+            <tiling>	0.985 0.985 0.000000 0.000000	</tiling>
+          </camouflage>
+        </_122mm_D_25_SU_101>
+        <_122mm_M62-T2S>	shared	  <maxAmmo>	28	</maxAmmo>
+          <unlocks>
+            <vehicle>	R93_Object263	  <cost>	152800	</cost>
+            </vehicle>
+          </unlocks>
+          <pitchLimits>
+            <minPitch>	0 -18.3 1 -18.3	</minPitch>
+            <maxPitch>	0 3 1 3	</maxPitch>
+          </pitchLimits>
+          <armor>
+            <armor_1>	260	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_1>
+            <armor_2>	240	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_2>
+            <armor_3>	150	  <vehicleDamageFactor>	0.0	</vehicleDamageFactor>
+            </armor_3>
             <gun>	50	</gun>
           </armor>
-          <reloadTime>	12	</reloadTime>
-          <aimingTime>	3.1	</aimingTime>
-          <shotDispersionRadius>	0.37	</shotDispersionRadius>
+          <reloadTime>	12.6	</reloadTime>
+          <aimingTime>	2.5	</aimingTime>
+          <shotDispersionRadius>	0.42	</shotDispersionRadius>
           <shotDispersionFactors>
-            <turretRotation>	0.16	</turretRotation>
+            <turretRotation>	0.12	</turretRotation>
             <afterShot>	4	</afterShot>
             <whileGunDamaged>	2.0	</whileGunDamaged>
           </shotDispersionFactors>
           <invisibilityFactorAtShot>	0.18	</invisibilityFactorAtShot>
-          <turretYawLimits>	-7.3 7.3	</turretYawLimits>
+          <turretYawLimits>	-10 12	</turretYawLimits>
           <models>
             <undamaged>	vehicles/russian/R58_SU-101/normal/lod0/Gun_04.model	</undamaged>
             <destroyed>	vehicles/russian/R58_SU-101/crash/lod0/Gun_04.model	</destroyed>
@@ -1116,19 +1110,14 @@
         </engine>
       </unlocks>
     </V-2-44>
-    <V-2-54>	shared	  <unlocks>
-        <engine>	V-54-6	  <cost>	27650	</cost>
-        </engine>
-      </unlocks>
-    </V-2-54>
-    <V-54-6>	shared	</V-54-6>
+    <V-2-54>	shared	</V-2-54>
   </engines>
   <fuelTanks>
     <Heavy>	shared	</Heavy>
   </fuelTanks>
   <radios>
     <_9RM>	shared	  <unlocks>
-        <radio>	R113	  <cost>	8700.0	</cost>
+        <radio>	R113	  <cost>	8700	</cost>
         </radio>
       </unlocks>
     </_9RM>
@@ -1138,14 +1127,11 @@
     <detailed>
       <engines>
         <V-2-44>
-          <smplEnginePower>	592.0775	</smplEnginePower>
+          <smplEnginePower>	560	</smplEnginePower>
         </V-2-44>
         <V-2-54>
-          <smplEnginePower>	655.5143	</smplEnginePower>
+          <smplEnginePower>	620	</smplEnginePower>
         </V-2-54>
-        <V-54-6>
-          <smplEnginePower>	718.9512	</smplEnginePower>
-        </V-54-6>
       </engines>
       <chassis>
         <Chassis_SU-101>

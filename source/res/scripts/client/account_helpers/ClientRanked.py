@@ -28,6 +28,9 @@ class ClientRanked(object):
     def setClientVehRank(self, vehTypeCompDescr, clientRank, clientStep, callback=_skipResponse):
         self.__account._doCmdInt3(AccountCommands.CMD_SET_CLIENT_VEH_RANK, vehTypeCompDescr, clientRank, clientStep, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
 
+    def setClientShields(self, shieldsStatus, callback=_skipResponse):
+        self.__account._doCmdIntArr(AccountCommands.CMD_SET_CLIENT_SHIELDS, shieldsStatus, lambda requestID, resultID, errorCode: callback(resultID, errorCode))
+
     def isEnabled(self):
         rankedConfig = self.__account.serverSettings['ranked_config']
         return rankedConfig is not None and rankedConfig.get('isEnabled', False)
@@ -40,12 +43,6 @@ class ClientRanked(object):
         rankedConfig = self.__account.serverSettings['ranked_config']
         cycleConfig = ranked_common.getCycleConfig(rankedConfig)
         return (rankedConfig, cycleConfig)
-
-    def getPrevRanks(self, accRank, vehRank, rankChange):
-        if not rankChange:
-            return (accRank, vehRank)
-        rankedConfig, cycleConfig = self.getConfigs()
-        return ranked_common.getPrevRanks(accRank, vehRank, rankChange, rankedConfig, cycleConfig)
 
     def onAccountBecomePlayer(self):
         self.__ignore = False

@@ -22,7 +22,7 @@
   <camouflage>
     <priceFactor>	1.0	</priceFactor>
     <tiling>	1 1 0 0	</tiling>
-    <exclusionMask>	vehicles/russian/R05_KV/KV_CM.dds	</exclusionMask>
+    <exclusionMask></exclusionMask>
   </camouflage>
   <hull>
     <armor>
@@ -49,9 +49,9 @@
       <repairCost>	1.0	</repairCost>
     </ammoBayHealth>
     <models>
-      <undamaged>	vehicles/russian/R05_KV/normal/lod0/Hull.model	</undamaged>
-      <destroyed>	vehicles/russian/R05_KV/crash/lod0/Hull.model	</destroyed>
-      <exploded>	vehicles/russian/R05_KV/crash/lod0/Hull.model	</exploded>
+      <undamaged>	vehicles/russian/R00_Placeholder/normal/lod0/Hull.model	</undamaged>
+      <destroyed>	vehicles/russian/R00_Placeholder/crash/lod0/Hull.model	</destroyed>
+      <exploded>	vehicles/russian/R00_Placeholder/crash/lod0/Hull.model	</exploded>
     </models>
     <swinging>
       <lodDist>	FAR	</lodDist>
@@ -64,11 +64,11 @@
       <nodes>	HP_Track_Exhaus_1 HP_Track_Exhaus_2	</nodes>
     </exhaust>
     <turretPositions>
-      <turret>	0.000000 0.8199 0.5362	</turret>
+      <turret>	0.000000 0.724581 0.554402	</turret>
     </turretPositions>
     <hitTester>
-      <collisionModelServer>	vehicles/russian/R05_KV/collision/Hull.model	</collisionModelServer>
-      <collisionModelClient>	vehicles/russian/R05_KV/collision_client/Hull.model	</collisionModelClient>
+      <collisionModelServer>	vehicles/russian/R00_Placeholder/collision/Hull.model	</collisionModelServer>
+      <collisionModelClient>	vehicles/russian/R00_Placeholder/collision_client/Hull.model	</collisionModelClient>
     </hitTester>
     <emblemSlots>
       <clan>
@@ -79,7 +79,7 @@
         <hideIfDamaged>	true	</hideIfDamaged>
       </clan>
     </emblemSlots>
-    <hangarShadowTexture>	vehicles/russian/R05_KV/KV_HangarShadowMap.dds	</hangarShadowTexture>
+    <hangarShadowTexture>	vehicles/russian/R00_Placeholder/Placeholder_HangarShadowMap.dds	</hangarShadowTexture>
   </hull>
   <chassis>
     <KV_1>
@@ -107,9 +107,9 @@
       <maxRegenHealth>	100	</maxRegenHealth>
       <repairCost>	5.0	</repairCost>
       <models>
-        <undamaged>	vehicles/russian/R05_KV/normal/lod0/Chassis.model	</undamaged>
-        <destroyed>	vehicles/russian/R05_KV/crash/lod0/Chassis.model	</destroyed>
-        <exploded>	vehicles/russian/R05_KV/crash/lod0/Chassis.model	</exploded>
+        <undamaged>	vehicles/russian/R00_Placeholder/normal/lod0/Chassis.model	</undamaged>
+        <destroyed>	vehicles/russian/R00_Placeholder/crash/lod0/Chassis.model	</destroyed>
+        <exploded>	vehicles/russian/R00_Placeholder/crash/lod0/Chassis.model	</exploded>
       </models>
       <traces>
         <lodDist>	FAR	</lodDist>
@@ -125,94 +125,58 @@
       </tracks>
       <wheels>
         <lodDist>	MEDIUM	</lodDist>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L0	</name>
+          <radius>	0.250289	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	true	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_L1	</name>
+          <radius>	0.265311	</radius>
+        </wheel>
         <group>
           <isLeft>	true	</isLeft>
           <template>	W_L	</template>
-          <radius>	0.302	</radius>
+          <radius>	0.41516	</radius>
           <startIndex>	0	</startIndex>
-          <count>	6	</count>
+          <count>	5	</count>
         </group>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R0	</name>
+          <radius>	0.250289	</radius>
+        </wheel>
+        <wheel>
+          <isLeft>	false	</isLeft>
+          <isLeading>	true	</isLeading>
+          <name>	WD_R1	</name>
+          <radius>	0.265311	</radius>
+        </wheel>
         <group>
           <isLeft>	false	</isLeft>
           <template>	W_R	</template>
-          <radius>	0.302	</radius>
+          <radius>	0.41516	</radius>
           <startIndex>	0	</startIndex>
-          <count>	6	</count>
+          <count>	5	</count>
         </group>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L0	</name>
-          <radius>	0.34	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L1	</name>
-          <radius>	0.195	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L2	</name>
-          <radius>	0.195	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L3	</name>
-          <radius>	0.195	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	true	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_L4	</name>
-          <radius>	0.454	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R0	</name>
-          <radius>	0.34	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R1	</name>
-          <radius>	0.195	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R2	</name>
-          <radius>	0.195	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R3	</name>
-          <radius>	0.195	</radius>
-        </wheel>
-        <wheel>
-          <isLeft>	false	</isLeft>
-          <isLeading>	false	</isLeading>
-          <name>	WD_R4	</name>
-          <radius>	0.454	</radius>
-        </wheel>
       </wheels>
-      <drivingWheels>	WD_L0 WD_L4	</drivingWheels>
+      <drivingWheels>	WD_L0 WD_L1	</drivingWheels>
       <effects>
         <lodDist>	MEDIUM	</lodDist>
         <mud>	mediumTankMud	</mud>
       </effects>
       <wwsoundPC>	treads_type_pc	</wwsoundPC>
       <wwsoundNPC>	trds_med_npc	</wwsoundNPC>
-      <hullPosition>	0.000000 0.88384 0.000000	</hullPosition>
+      <hullPosition>	0.000000 0.823819 0.000000	</hullPosition>
       <hitTester>
-        <collisionModelServer>	vehicles/russian/R05_KV/collision/Chassis.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/russian/R05_KV/collision_client/Chassis.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/russian/R00_Placeholder/collision/Chassis.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R00_Placeholder/collision_client/Chassis.model	</collisionModelClient>
       </hitTester>
-      <topRightCarryingPoint>	1.3143 2.19341	</topRightCarryingPoint>
+      <topRightCarryingPoint>	1.24516 1.86577	</topRightCarryingPoint>
       <maxClimbAngle>	25	</maxClimbAngle>
       <navmeshGirth>	6.0	</navmeshGirth>
       <AODecals>
@@ -282,13 +246,13 @@
             <maxPitch>	0 8 1 8	</maxPitch>
           </pitchLimits>
           <models>
-            <undamaged>	vehicles/russian/R05_KV/normal/lod0/Gun_01.model	</undamaged>
-            <destroyed>	vehicles/russian/R05_KV/crash/lod0/Gun_01.model	</destroyed>
-            <exploded>	vehicles/russian/R05_KV/crash/lod0/Gun_01.model	</exploded>
+            <undamaged>	vehicles/russian/R00_Placeholder/normal/lod0/Gun_01.model	</undamaged>
+            <destroyed>	vehicles/russian/R00_Placeholder/crash/lod0/Gun_01.model	</destroyed>
+            <exploded>	vehicles/russian/R00_Placeholder/crash/lod0/Gun_01.model	</exploded>
           </models>
           <hitTester>
-            <collisionModelServer>	vehicles/russian/R05_KV/collision/Gun_01.model	</collisionModelServer>
-            <collisionModelClient>	vehicles/russian/R05_KV/collision_client/Gun_01.model	</collisionModelClient>
+            <collisionModelServer>	vehicles/russian/R00_Placeholder/collision/Gun_01.model	</collisionModelServer>
+            <collisionModelClient>	vehicles/russian/R00_Placeholder/collision_client/Gun_01.model	</collisionModelClient>
           </hitTester>
           <emblemSlots></emblemSlots>
           <camouflage>
@@ -297,15 +261,15 @@
         </Gun_01_KV>
       </guns>
       <models>
-        <undamaged>	vehicles/russian/R05_KV/normal/lod0/Turret_01.model	</undamaged>
-        <destroyed>	vehicles/russian/R05_KV/crash/lod0/Turret_01.model	</destroyed>
-        <exploded>	vehicles/russian/R05_KV/crash/lod0/Turret_01.model	</exploded>
+        <undamaged>	vehicles/russian/R00_Placeholder/normal/lod0/Turret_01.model	</undamaged>
+        <destroyed>	vehicles/russian/R00_Placeholder/crash/lod0/Turret_01.model	</destroyed>
+        <exploded>	vehicles/russian/R00_Placeholder/crash/lod0/Turret_01.model	</exploded>
       </models>
       <hitTester>
-        <collisionModelServer>	vehicles/russian/R05_KV/collision/Turret_01.model	</collisionModelServer>
-        <collisionModelClient>	vehicles/russian/R05_KV/collision_client/Turret_01.model	</collisionModelClient>
+        <collisionModelServer>	vehicles/russian/R00_Placeholder/collision/Turret_01.model	</collisionModelServer>
+        <collisionModelClient>	vehicles/russian/R00_Placeholder/collision_client/Turret_01.model	</collisionModelClient>
       </hitTester>
-      <gunPosition>	0.000000 0.3933 0.8146	</gunPosition>
+      <gunPosition>	0.019607 0.457312 1.01427	</gunPosition>
       <emblemSlots>
         <player>
           <rayStart>	-0.950314 0.558178 -0.885143	</rayStart>

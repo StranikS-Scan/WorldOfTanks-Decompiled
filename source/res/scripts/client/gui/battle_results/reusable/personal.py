@@ -329,7 +329,7 @@ class PersonalInfo(shared.UnpackedInfo):
         self.__economicsRecords = _EconomicsRecordsChains()
         self.__lifeTimeInfo = _LifeTimeInfo(False, 0)
         self.__questsProgress = {}
-        self.__rankInfo = PostBattleRankInfo(0, 0, 0, 0, 0)
+        self.__rankInfo = PostBattleRankInfo(0, 0, 0, 0, 0, 0, 0, 0, 0, {}, {})
         if not self.hasUnpackedItems():
             self.__collectRequiredData(personal)
         return
@@ -457,7 +457,6 @@ class PersonalInfo(shared.UnpackedInfo):
         getItemByCD = self.itemsCache.items.getItemByCD
         items = sorted(map(getItemByCD, filter(lambda key: isinstance(key, (int, long, float)), info.keys())))
         lifeTimes = []
-        team = self.__avatar.team
         infoAvatar = info['avatar']
         if infoAvatar:
             self.__questsProgress.update(infoAvatar.get('questsProgress', {}))

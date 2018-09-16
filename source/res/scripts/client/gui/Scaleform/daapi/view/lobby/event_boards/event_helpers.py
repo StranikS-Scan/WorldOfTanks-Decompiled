@@ -165,7 +165,7 @@ class _PrimeTimeCondition(_Condition):
     def getTooltip(self):
         primeTimes = self._event.getPrimeTimes().getPrimeTimes()
         currentPeripheryID = self._connectionMgr.peripheryID
-        showTooltip = any(primeTimes)
+        showTooltip = len(primeTimes) > 1
         return makePrimeTimesTooltipVO(primeTimes, currentPeripheryID, self._lobbyContext.getPeripheryName) if showTooltip else None
 
 
@@ -457,7 +457,8 @@ class EventInfo(object):
             if self._topMeta:
                 recalculationTS = self._topMeta.getLastLeaderboardRecalculationTS()
                 if recalculationTS is not None:
-                    description1 = text_styles.standard(formatUpdateTime(recalculationTS))
+                    if not event.isFinished():
+                        description1 = text_styles.standard(formatUpdateTime(recalculationTS))
                     recalculationInterval = self._topMeta.getRecalculationInterval()
                     if recalculationInterval is not None:
                         interval = int(recalculationInterval / ONE_MINUTE)

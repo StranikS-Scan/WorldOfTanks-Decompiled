@@ -38,10 +38,10 @@ def showRankedBattleResultsWindow(rankedResultsVO, vehicle, rankInfo):
      'rankInfo': rankInfo}), EVENT_BUS_SCOPE.LOBBY)
 
 
-def showRankedAwardWindow(rankID, showNext=True, vehicle=None):
+def showRankedAwardWindow(rankID, vehicle=None, awards=None):
     g_eventBus.handleEvent(events.LoadViewEvent(alias=RANKEDBATTLES_ALIASES.RANKED_BATTLES_AWARD, ctx={'rankID': rankID,
-     'showNext': showNext,
-     'vehicle': vehicle}), EVENT_BUS_SCOPE.LOBBY)
+     'vehicle': vehicle,
+     'awards': awards}), EVENT_BUS_SCOPE.LOBBY)
 
 
 def showRankedPrimeTimeWindow():

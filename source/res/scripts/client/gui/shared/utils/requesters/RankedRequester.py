@@ -101,6 +101,22 @@ class RankedRequester(AbstractSyncDataRequester, IRankedRequester):
         """
         return self.getCacheValue('clientMaxRank', (0, 0))
 
+    @property
+    def shields(self):
+        """
+        Returns rank shields data
+        :return: () -> {rankId: (currentHP, maxHP), ...}
+        """
+        return self.getCacheValue('shields', {})
+
+    @property
+    def clientShields(self):
+        """
+        Returns previous ranks shields data shown to user
+        :return: () -> {rankId: (currentHP, maxHP), ...}
+        """
+        return self.getCacheValue('clientShields', {})
+
     @async
     def _requestCache(self, callback):
         BigWorld.player().ranked.getCache(lambda resID, value: self._response(resID, value, callback))

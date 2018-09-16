@@ -1086,31 +1086,38 @@ class _VehicleAppearance(ComponentSystem):
 class _ClientHangarSpacePathOverride():
 
     def __init__(self):
+        self.__isEnabled = True
         g_playerEvents.onEventNotificationsChanged += self.__onEventNotificationsChanged
         g_playerEvents.onDisconnected += self.__onDisconnected
 
     def destroy(self):
         g_playerEvents.onEventNotificationsChanged -= self.__onEventNotificationsChanged
         g_playerEvents.onDisconnected -= self.__onDisconnected
+        self.__isEnabled = False
 
     def setPremium(self, isPremium):
+        if not self.__isEnabled:
+            return
         from gui.shared.utils.HangarSpace import g_hangarSpace
         g_hangarSpace.refreshSpace(isPremium, True)
 
     def setPath(self, path, isPremium=None, reload=True):
-        if path is not None and not path.startswith('spaces/'):
-            path = 'spaces/' + path
-        from gui.shared.utils.HangarSpace import g_hangarSpace
-        if isPremium is None:
-            isPremium = g_hangarSpace.isPremium
-        if path is not None:
-            _EVENT_HANGAR_PATHS[isPremium] = path
-        elif _EVENT_HANGAR_PATHS.has_key(isPremium):
-            del _EVENT_HANGAR_PATHS[isPremium]
-        readHangarSettings('igrPremHangarPath' + ('CN' if constants.IS_CHINA else ''))
-        if reload:
-            g_hangarSpace.refreshSpace(g_hangarSpace.isPremium, True)
-        return
+        if not self.__isEnabled:
+            return
+        else:
+            if path is not None and not path.startswith('spaces/'):
+                path = 'spaces/' + path
+            from gui.shared.utils.HangarSpace import g_hangarSpace
+            if isPremium is None:
+                isPremium = g_hangarSpace.isPremium
+            if path is not None:
+                _EVENT_HANGAR_PATHS[isPremium] = path
+            elif _EVENT_HANGAR_PATHS.has_key(isPremium):
+                del _EVENT_HANGAR_PATHS[isPremium]
+            readHangarSettings('igrPremHangarPath' + ('CN' if constants.IS_CHINA else ''))
+            if reload:
+                g_hangarSpace.refreshSpace(g_hangarSpace.isPremium, True)
+            return
 
     def __onDisconnected(self):
         global _EVENT_HANGAR_PATHS

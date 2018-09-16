@@ -586,6 +586,9 @@ class IRankedBattlesController(IGameController):
     def setLastRank(self, vehicle=None):
         raise NotImplementedError
 
+    def setLastShields(self):
+        raise NotImplementedError
+
     @async
     @process
     def getLeagueData(self, callback):
@@ -621,7 +624,7 @@ class IRankedBattlesController(IGameController):
     def buildVehicleRanksChain(self, currentProgress, maxProgress, lastProgress, vehicle):
         raise NotImplementedError
 
-    def runQuest(self, quest):
+    def runQuests(self, quests):
         raise NotImplementedError
 
     def getQuestsForCycle(self, cycleID, completedOnly=False):
@@ -658,9 +661,6 @@ class IRankedBattlesController(IGameController):
     def openWebLeaguePage(self, ctx=None):
         raise NotImplementedError
 
-    def getPrevRanks(self, accRank, vehRank, rankChange):
-        raise NotImplementedError
-
     def getCycleRewards(self, cycleID):
         """
         returns reward for max rank achieved in current season for given cycle ID
@@ -673,9 +673,12 @@ class IRankedBattlesController(IGameController):
         """
         pass
 
-    def getRanksTops(self, isLoser=False, earned=False, notRecieved=False, lost=False):
+    def getRanksTops(self, isLoser=False, stepDiff=None):
         """
-        returns ranks changes top values depends on team match result (win or lose)
+        Count of places where players can earn/no_change/lose steps, or count of players if stepDiff is None
+        :param isLoser: win or lose command
+        :param stepDiff: see RANKEDBATTLES_ALIASES.STEP_VALUE_{EARN/NO_CHANGE/LOSE}
+        :return:
         """
         pass
 
@@ -706,6 +709,37 @@ class IRankedBattlesController(IGameController):
     def getSuitableVehicleLevels(self):
         """
         :return: tuple, contains minLevel and maxLevel of suitable vehicle
+        """
+        raise NotImplementedError
+
+    def getShieldStatus(self, rank, isStatic=False):
+        """
+        Status of current rank shield
+        :return: tuple, (prevHP (int), shiedHP (int), maxHP (int), shieldState (string), newShieldState (string))
+        :param rank: Rank
+        :param isStatic: If True - returns static data with maxHP and shieldState == shield_enabled
+        """
+        raise NotImplementedError
+
+    def getCurrentCycleStats(self):
+        """
+        Record from dossier for current ranked cycle
+        :return: dict from dossier with bunch of useful info
+        """
+        raise NotImplementedError
+
+    def showRankedAwardWindow(self, rankInfo, vehicle):
+        """
+        Show RankedBattlesAwardsView if needed
+        :param rankInfo:
+        :param vehicle:
+        """
+        raise NotImplementedError
+
+    def getLadderPoints(self):
+        """
+        Return ladderPoints received by player
+        :return:
         """
         raise NotImplementedError
 

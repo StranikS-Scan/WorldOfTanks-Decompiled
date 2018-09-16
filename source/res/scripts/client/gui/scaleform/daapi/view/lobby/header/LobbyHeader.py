@@ -29,6 +29,7 @@ from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.Scaleform.locale.TOOLTIPS import TOOLTIPS
 from gui.clans.clan_helpers import isStrongholdsEnabled
 from gui.game_control.ServerStats import STATS_TYPE
+from gui.game_control.wallet import WalletController
 from gui.gold_fish import isGoldFishActionActive, isTimeToShowGoldFishPromo
 from gui.prb_control.entities.base.ctx import PrbAction
 from gui.prb_control.entities.listener import IGlobalListener
@@ -44,6 +45,7 @@ from gui.shared.gui_items import GUI_ITEM_TYPE
 from gui.shared.money import Currency
 from gui.shared.tooltips import formatters
 from gui.shared.utils.functions import makeTooltip
+from gui.shared.utils.requesters import wgm_balance_info_requester
 from gui.shared.utils.requesters.ItemsRequester import REQ_CRITERIA
 from gui.shared.view_helpers.emblems import ClanEmblemsHelper
 from helpers import dependency
@@ -471,14 +473,17 @@ class LobbyHeader(LobbyHeaderMeta, ClanEmblemsHelper, IGlobalListener):
     def __onPremiumExpireTimeChanged(self, timestamp):
         self.updateAccountAttrs()
 
-    @staticmethod
-    def __getWalletTooltipSettings(btnType):
+    def __getWalletTooltipSettings(self, btnType):
+        currencyStatus = self.wallet.componentsStatuses.get(btnType, WalletController.STATUS.SYNCING)
         if constants.IS_SINGAPORE and btnType in (LobbyHeader.BUTTONS.CREDITS, LobbyHeader.BUTTONS.GOLD):
-            tooltip = (btnType + TOOLTIPS_CONSTANTS.SINGAPORE_WALLET_STATS, TOOLTIP_TYPES.SPECIAL)
-        elif btnType == LobbyHeader.BUTTONS.CRYSTAL:
-            tooltip = (TOOLTIPS_CONSTANTS.CRYSTAL_INFO, TOOLTIP_TYPES.SPECIAL)
-        else:
+            if not self.itemsCache.items.stats.mayConsumeWalletResources:
+                tooltip = (TOOLTIPS.HEADER_BUTTONS + btnType, TOOLTIP_TYPES.COMPLEX)
+            else:
+                tooltip = (btnType + TOOLTIPS_CONSTANTS.SINGAPORE_WALLET_STATS, TOOLTIP_TYPES.SPECIAL)
+        elif currencyStatus != WalletController.STATUS.AVAILABLE:
             tooltip = (TOOLTIPS.HEADER_BUTTONS + btnType, TOOLTIP_TYPES.COMPLEX)
+        else:
+            tooltip = (btnType + TOOLTIPS_CONSTANTS.HEADER_BUTTON_INFO, TOOLTIP_TYPES.SPECIAL)
         return tooltip
 
     def __setCredits(self, accCredits):

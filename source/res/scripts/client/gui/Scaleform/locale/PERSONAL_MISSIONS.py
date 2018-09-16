@@ -144,6 +144,7 @@ class PERSONAL_MISSIONS(object):
     PERSONALMISSIONSPLANREGION_MAINAWARD_HULL = '#personal_missions:PersonalMissionsPlanRegion/mainAward/hull'
     PERSONALMISSIONSPLANREGION_MAINAWARD_GUN = '#personal_missions:PersonalMissionsPlanRegion/mainAward/gun'
     PERSONALMISSIONSPLANREGION_MAINAWARD_RADIO = '#personal_missions:PersonalMissionsPlanRegion/mainAward/radio'
+    PERSONALMISSIONSPLANREGION_MAINAWARD_HULLANDTURRET = '#personal_missions:PersonalMissionsPlanRegion/mainAward/hullAndTurret'
     PERSONALMISSIONS_VIDEO_TITLE = '#personal_missions:personalMissions/video/title'
     PERSONALMISSIONS_TANKGIRLSPOPOVER_TITLE = '#personal_missions:personalMissions/tankgirlsPopover/title'
     PERSONALMISSIONS_TANKGIRLSPOPOVER_RECRUITBTN = '#personal_missions:personalMissions/tankgirlsPopover/recruitBtn'

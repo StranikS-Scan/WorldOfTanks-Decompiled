@@ -3,6 +3,11 @@
 from collections import defaultdict
 import BigWorld
 import operator
+from helpers import dependency
+from account_helpers.AccountSettings import AccountSettings, LAST_BADGES_VISIT
+from helpers.time_utils import getServerUTCTime
+from skeletons.gui.lobby_context import ILobbyContext
+from skeletons.gui.shared import IItemsCache
 from gui import SystemMessages
 from gui.Scaleform import settings
 from gui.Scaleform.daapi.view.meta.BadgesPageMeta import BadgesPageMeta
@@ -12,9 +17,6 @@ from gui.Scaleform.locale.BADGE import BADGE
 from gui.shared.gui_items.processors.common import BadgesSelector
 from gui.shared.items_cache import CACHE_SYNC_REASON
 from gui.shared.utils import decorators
-from helpers import dependency
-from skeletons.gui.lobby_context import ILobbyContext
-from skeletons.gui.shared import IItemsCache
 
 def _makeBadgeVO(badge):
     return {'id': badge.badgeID,
@@ -23,7 +25,8 @@ def _makeBadgeVO(badge):
      'description': text_styles.main(badge.getUserDescription()),
      'enabled': badge.isAchieved,
      'selected': badge.isSelected,
-     'highlightIcon': badge.getHighlightIcon()}
+     'highlightIcon': badge.getHighlightIcon(),
+     'isFirstLook': badge.isNew()}
 
 
 class BadgesPage(BadgesPageMeta):
@@ -31,6 +34,7 @@ class BadgesPage(BadgesPageMeta):
     lobbyContext = dependency.instance(ILobbyContext)
 
     def onCloseView(self):
+        AccountSettings.setSettings(LAST_BADGES_VISIT, getServerUTCTime())
         showHangar()
 
     def onSelectBadge(self, badgeID):

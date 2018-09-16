@@ -148,9 +148,15 @@ class Customization(FittingItem):
 
     @property
     def season(self):
-        """ Returns season item can be applied on (see SeasonType).
+        """ Returns an integer that describes seasons the item can be applied on (see SeasonType).
         """
         return self.descriptor.season
+
+    @property
+    def seasons(self):
+        """ Returns a list of primitive seasons the item can be applied on.
+        """
+        return [ season for season in SeasonType.SEASONS if season & self.season ]
 
     @property
     def requiredToken(self):

@@ -709,15 +709,17 @@ class StrongholdEntity(UnitEntity):
         slotsIterator = self.getSlotsIterator(unitMgrID, unit)
         clanMembersInRoster = 0
         legionariesInRoster = 0
+        slotsWithPlayers = []
         for slotInfo in slotsIterator:
             player = slotInfo.player
             if player is None:
                 continue
+            slotsWithPlayers.append(slotInfo.index)
             if not player.isLegionary():
                 clanMembersInRoster += 1
             legionariesInRoster += 1
 
-        playersMatchingSlotsCount = len(self.getSlotsInPlayersMatching())
+        playersMatchingSlotsCount = len([ slotId for slotId in self.getSlotsInPlayersMatching() if slotId not in slotsWithPlayers ])
         unitStatsDict = unitStats._asdict()
         return StrongholdUnitStats(clanMembersInRoster=clanMembersInRoster, legionariesInRoster=legionariesInRoster, playersMatchingSlotsCount=playersMatchingSlotsCount, **unitStatsDict)
 

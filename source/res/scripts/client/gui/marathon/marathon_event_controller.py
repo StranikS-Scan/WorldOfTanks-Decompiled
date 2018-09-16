@@ -286,7 +286,7 @@ class MarathonEvent(object):
         startDateStruct = getTimeStructInLocal(startDate)
         finishDateStruct = getTimeStructInLocal(finishDate)
         startDateText = text_styles.main(_ms(TOOLTIPS.BLOGGERS_DATE, day=startDateStruct.tm_mday, month=i18n.makeString(MENU.datetime_months(startDateStruct.tm_mon)), hour=startDateStruct.tm_hour, minutes=i18n.makeString('%02d', startDateStruct.tm_min)))
-        finishDateText = text_styles.main(_ms(TOOLTIPS.BLOGGERS_DATE, day=finishDateStruct.tm_mday, month=i18n.makeString(MENU.datetime_months(startDateStruct.tm_mon)), hour=finishDateStruct.tm_hour, minutes=i18n.makeString('%02d', finishDateStruct.tm_min)))
+        finishDateText = text_styles.main(_ms(TOOLTIPS.BLOGGERS_DATE, day=finishDateStruct.tm_mday, month=i18n.makeString(MENU.datetime_months(finishDateStruct.tm_mon)), hour=finishDateStruct.tm_hour, minutes=i18n.makeString('%02d', finishDateStruct.tm_min)))
         text = text_styles.main(_ms(TOOLTIPS.BLOGGERS_SUBTITLE, startDate=startDateText, finishDate=finishDateText))
         return (None, text)
 

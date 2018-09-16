@@ -183,15 +183,16 @@ class RankInfoHelper(object):
                         return txt.format(text_styles.highlightText(RANKED_BATTLES.BATTLERESULT_STATUS_STAGESEARNED), text_styles.main(RANKED_BATTLES.BATTLERESULT_STATUS_SHIELDRENEW))
         return text_styles.highlightText(self.__STATUS_LABEL_MAP[rankState, isWin])
 
-    def makeDescriptionLabel(self, allyVehicles):
+    def makeDescriptionLabelAndTopIcon(self, allyVehicles):
         """
-        Returns 'description' field for RankChangesBlock
-        :return: string, one from RANKED_BATTLES constants
+        Returns 'description' field for RankChangesBlock and 'topIcon' field for RankChangesBlock
+        :return: tuple(string (one from RANKED_BATTLES constants), string (one from RES_ICONS constants))
         """
         state = self.getState()
         isWin = self.__reusable.getPersonalTeam() == self.__reusable.common.winnerTeam
         accountDBID = self.__reusable.personal.avatar.accountDBID
         topNumber = self.__getTopBoundForPersonalTeam()
+        earnedNumber = self.rankedController.getRanksTops(isLoser=not isWin, stepDiff=RANKEDBATTLES_ALIASES.STEP_VALUE_EARN)
         selfXp = None
         for item in allyVehicles:
             if item.player.dbID == accountDBID:
@@ -201,8 +202,10 @@ class RankInfoHelper(object):
         if len(allyVehicles) <= topNumber or topNumber <= 0 or selfXp is None:
             isInTop = True
         else:
-            topMinXp = min([ item.xp for item in allyVehicles[:topNumber] ])
-            isInTop = selfXp >= topMinXp
+            isInTop = self.__isInTop(selfXp=selfXp, allyVehicles=allyVehicles, topNumber=topNumber)
+            if not isInTop:
+                topNumber = earnedNumber
+                isInTop = self.__isInTop(selfXp=selfXp, allyVehicles=allyVehicles, topNumber=topNumber)
         if selfXp is not None and selfXp < self.getMinXp():
             resKey = RANKED_BATTLES.BATTLERESULT_NOTINTOP_MINXP
         elif not isWin and isInTop and state == RANK_CHANGE_STATES.NOTHING_CHANGED:
@@ -210,15 +213,8 @@ class RankInfoHelper(object):
         else:
             method = RANKED_BATTLES.getBattleResultsInTop if isInTop else RANKED_BATTLES.getBattleResultsNotInTop
             resKey = method('win') if isWin else method('lose')
-        return i18n.makeString(resKey).format(topNumber=topNumber)
-
-    def makeTopIcon(self):
-        """
-        Returns 'topIcon' field for RankChangesBlock
-        :return: string, one from RES_ICONS constants
-        """
-        topIconMethod = self.__TOP_ICON_MAP[self.getState()]
-        return topIconMethod(self.__getTopBoundForPersonalTeam())
+        topIconMethod = self.__TOP_ICON_MAP[state]
+        return (i18n.makeString(resKey).format(topNumber=topNumber), topIconMethod(topNumber))
 
     def makeRankAndShieldInfo(self):
         """
@@ -383,6 +379,10 @@ class RankInfoHelper(object):
         if standoffIndex >= count:
             standoffIndex = count - 1
         return RANKEDBATTLES_ALIASES.NON_NEGATIVE_STANDOFFS[standoffIndex]
+
+    def __isInTop(self, selfXp, allyVehicles, topNumber):
+        topMinXp = min([ item.xp for item in allyVehicles[:topNumber] ])
+        return selfXp >= topMinXp
 
 
 class ArenaShortTimeVO(base.StatsItem):
@@ -605,12 +605,11 @@ class RankChangesBlock(base.StatsBlock):
     def setRecord(self, result, reusable):
         helper = RankInfoHelper(reusable)
         self.state = helper.makeSubTaskState()
-        self.topIcon = helper.makeTopIcon()
         self.rankIcon, self.shieldCount, self.shieldIcon, self.plateIcon = helper.makeRankAndShieldInfo()
         self.linkage = RANKEDBATTLES_ALIASES.BATTLE_RESULTS_SUB_TASK_UI
         self.title = helper.makeTitleLabel()
         allies, _ = reusable.getBiDirectionTeamsIterator(result, sort_keys.VehicleXpSortKey)
-        self.description = helper.makeDescriptionLabel(list(allies))
+        self.description, self.topIcon = helper.makeDescriptionLabelAndTopIcon(list(allies))
 
 
 class RankedResultsStatusBlock(base.StatsItem):

@@ -58,15 +58,15 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
         """ ActionScript call for when an purchase item is checked.
         """
         self._c11nView.soundManager.playInstantSound(SOUNDS.SELECT)
-        selectCount = self.__searchDP.setSelected(itemIdx, True)
-        self.as_setBuyBtnEnabledS(selectCount > 0)
+        selectCount, inventoryCount = self.__searchDP.setSelected(itemIdx, True)
+        self.__setBuyButtonState(selectCount, inventoryCount)
 
     def deselectItem(self, itemIdx):
         """ ActionScript call for when a purchase item is unchecked.
         """
         self._c11nView.soundManager.playInstantSound(SOUNDS.SELECT)
-        selectCount = self.__searchDP.setSelected(itemIdx, False)
-        self.as_setBuyBtnEnabledS(selectCount > 0)
+        selectCount, inventoryCount = self.__searchDP.setSelected(itemIdx, False)
+        self.__setBuyButtonState(selectCount, inventoryCount)
 
     def onWindowClose(self):
         self.destroy()
@@ -116,6 +116,14 @@ class PurchaseWindow(CustomizationBuyWindowMeta):
          'inFormationAlert': inFormationAlert,
          'totalPrice': totalPriceVO[0]})
 
+    def __setBuyButtonState(self, selectCount, inventoryCount):
+        isEnabled = selectCount > 0
+        if selectCount and inventoryCount == selectCount:
+            label = VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_BTNAPPLY
+        else:
+            label = VEHICLE_CUSTOMIZATION.WINDOW_PURCHASE_BTNBUY
+        self.as_setBuyBtnStateS(isEnabled, label)
+
     def __onServerSettingChanged(self, diff):
         if 'isCustomizationEnabled' in diff and not diff.get('isCustomizationEnabled', True):
             self.destroy()
@@ -131,12 +139,14 @@ class PurchaseDataProvider(SortableDAAPIDataProvider):
         self.buildList(self._purchaseItems)
         self.selectionChanged = Event()
         self.numSelected = len(self._purchaseItems)
+        self.numInventory = len([ item for item in purchaseItems if item.isFromInventory ])
 
     def updateCollection(self, purchaseItems):
         del self._list[:]
         self._purchaseItems = purchaseItems
         self.buildList(self._purchaseItems)
-        self.numSelected = len(self._purchaseItems)
+        self.numSelected = len(purchaseItems)
+        self.numInventory = len([ item for item in purchaseItems if item.isFromInventory ])
 
     def emptyItem(self):
         return None
@@ -223,17 +233,21 @@ class PurchaseDataProvider(SortableDAAPIDataProvider):
         self.destroy()
 
     def setSelected(self, itemIdx, selected):
+        self.numSelected = 0
+        self.numInventory = 0
 
         def action(cartItem, listItem):
-            if cartItem.selected and not selected:
-                self.numSelected -= 1
-            elif not cartItem.selected and selected:
-                self.numSelected += 1
             cartItem.selected = selected
             listItem['selected'] = selected
 
         self.__doActionOnItem(itemIdx, action)
-        return self.numSelected
+        for _, _, cartItem in self._iterateOverItems():
+            if cartItem.selected:
+                self.numSelected += 1
+                if cartItem.isFromInventory:
+                    self.numInventory += 1
+
+        return (self.numSelected, self.numInventory)
 
     def _iterateOverItems(self):
         correction = 0

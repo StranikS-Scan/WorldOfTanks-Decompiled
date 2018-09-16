@@ -24,6 +24,7 @@ class WGMCurrencyTooltip(DynamicBlocksTooltipData):
         self._setWidth(290)
         self.__requester = wgm_balance_info_requester.WGMBalanceInfoRequester()
         self.__data = None
+        self._btnType = None
         return
 
     def getWGMCurrencyValue(self, key):
@@ -49,7 +50,9 @@ class WGMCurrencyTooltip(DynamicBlocksTooltipData):
 
     def _packBlocks(self, *args, **kwargs):
         tooltipBlocks = super(WGMCurrencyTooltip, self)._packBlocks(*args, **kwargs)
-        self._btnType = kwargs.get('btnType', None)
+        btnType = kwargs.get('btnType', None)
+        if btnType and btnType != self._btnType:
+            self._btnType = btnType
         if self._btnType is None:
             LOG_ERROR('WGMGoldCurrencyTooltip empty btnType!')
             return tooltipBlocks

@@ -2015,4 +2015,44 @@
       </outfits>
     </style>
   </itemGroup>
+  <itemGroup>
+    <priceGroup>	Rostelecom style notInShop	</priceGroup>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R127_T44_100_P	</vehicles>
+      </include>
+    </vehicleFilter>
+    <style>
+      <id>	133	</id>
+      <userString>	#vehicle_customization:special_style/rostelekom2018_style_01	</userString>
+      <texture>	gui/maps/vehicles/styles/rostelekom2018.png	</texture>
+      <season>	ALL	</season>
+      <historical>	false	</historical>
+      <outfits>
+        <outfit>
+          <season>	ALL	</season>
+          <camouflages>
+            <item>
+              <id>	524	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	16	</appliedTo>
+            </item>
+            <item>
+              <id>	525	</id>
+              <patternSize>	1	</patternSize>
+              <palette>	0	</palette>
+              <appliedTo>	4352	</appliedTo>
+            </item>
+          </camouflages>
+          <paints>
+            <item>
+              <id>	277	</id>
+              <appliedTo>	30583	</appliedTo>
+            </item>
+          </paints>
+        </outfit>
+      </outfits>
+    </style>
+  </itemGroup>
 </list.xml>

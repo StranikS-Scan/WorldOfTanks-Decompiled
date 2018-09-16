@@ -38,5 +38,5 @@ class CustomizationBuyWindowMeta(AbstractWindowView):
         """
         return self.flashObject.as_setTotalData(data) if self._isDAAPIInited() else None
 
-    def as_setBuyBtnEnabledS(self, isEnabled):
-        return self.flashObject.as_setBuyBtnEnabled(isEnabled) if self._isDAAPIInited() else None
+    def as_setBuyBtnStateS(self, isEnabled, label):
+        return self.flashObject.as_setBuyBtnState(isEnabled, label) if self._isDAAPIInited() else None

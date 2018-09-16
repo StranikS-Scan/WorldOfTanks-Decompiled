@@ -7,6 +7,7 @@ from account_shared import validateCustomizationItem
 from invoices_helpers import checkAccountDossierOperation
 from items import vehicles, tankmen
 from items.new_year_types import NATIONAL_SETTINGS_IDS_BY_NAME, TOY_TYPES_IDS_BY_NAME
+from items.components.c11n_constants import SeasonType
 from constants import EVENT_TYPE, DOSSIER_TYPE, IS_DEVELOPMENT
 __all__ = ['getBonusReaders', 'readUTC', 'SUPPORTED_BONUSES']
 
@@ -128,6 +129,10 @@ def __readBonus_vehicle(bonus, _name, section):
         credits = section['customCompensation'].readInt('credits', 0)
         gold = section['customCompensation'].readInt('gold', 0)
         extra['customCompensation'] = (credits, gold)
+    if section.has_key('styleId'):
+        extra['styleId'] = section['styleId'].asInt
+    if section.has_key('outfits'):
+        __readBonus_outfits(extra, None, section['outfits'])
     bonus.setdefault('vehicles', {})[vehCompDescr if vehCompDescr else vehTypeCompDescr] = extra
     return
 
@@ -209,6 +214,18 @@ def __readBonus_rent(bonus, _name, section):
         gold = section['compensation'].readInt('gold', 0)
         rent['compensation'] = (credits, gold)
     bonus['rent'] = rent
+
+
+def __readBonus_outfits(bonus, _name, section):
+    outfits = {}
+    for seasonTypeName, seasonTypeID in {'winter': SeasonType.WINTER,
+     'summer': SeasonType.SUMMER,
+     'desert': SeasonType.DESERT,
+     'event': SeasonType.EVENT}.iteritems():
+        if section.has_key(seasonTypeName):
+            outfits[seasonTypeID] = section[seasonTypeName].asString.decode('base64')
+
+    bonus['outfits'] = outfits
 
 
 def __readBonus_customizations(bonus, _name, section):

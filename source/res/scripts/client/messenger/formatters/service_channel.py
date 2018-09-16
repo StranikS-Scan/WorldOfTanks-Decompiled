@@ -23,12 +23,13 @@ from gui.Scaleform.locale.BADGE import BADGE
 from gui.Scaleform.locale.ITEM_TYPES import ITEM_TYPES
 from gui.Scaleform.locale.MENU import MENU
 from gui.Scaleform.locale.MESSENGER import MESSENGER
+from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
 from gui.Scaleform.locale.SYSTEM_MESSAGES import SYSTEM_MESSAGES
 from gui.SystemMessages import SM_TYPE
 from gui.clans.formatters import getClanFullName
 from gui.prb_control.formatters import getPrebattleFullDescription
 from gui.ranked_battles import ranked_helpers
-from gui.ranked_battles.ranked_models import PostBattleRankInfo
+from gui.ranked_battles.ranked_models import PostBattleRankInfo, RANK_CHANGE_STATES
 from gui.server_events.awards_formatters import CompletionTokensBonusFormatter
 from gui.server_events.bonuses import VehiclesBonus
 from gui.server_events.finders import PERSONAL_MISSION_TOKEN
@@ -361,7 +362,11 @@ class BattleResultsFormatter(WaitItemsSyncFormatter):
             rankedController = dependency.instance(IRankedBattlesController)
             rankInfo = PostBattleRankInfo.fromDict(battleResults)
             stateChange = rankedController.getRankChangeStatus(rankInfo)
-            stateChangeStr = i18n.makeString(MESSENGER.rankedStateChange(stateChange))
+            if stateChange == RANK_CHANGE_STATES.RANK_POINT:
+                stateChangeStr = i18n.makeString(RANKED_BATTLES.BATTLERESULT_STATUS_RANKPOINT)
+            else:
+                winnerStr = 'win' if battleResults.get('isWinner', 0) > 0 else 'lose'
+                stateChangeStr = i18n.makeString(MESSENGER.rankedStateChange(winnerStr, stateChange))
             achievementsStrings.append(stateChangeStr)
             shieldsStr = MESSENGER.rankedShieldStateChange(rankInfo.shieldState)
             if shieldsStr is not None:

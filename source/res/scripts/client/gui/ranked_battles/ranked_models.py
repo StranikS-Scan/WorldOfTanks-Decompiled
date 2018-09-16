@@ -7,7 +7,6 @@ from gui.Scaleform.genConsts.RANKEDBATTLES_ALIASES import RANKEDBATTLES_ALIASES
 from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.ranked_battles.constants import RANK_TYPES
-from gui.shared.formatters import text_styles
 from gui.shared.money import Currency
 from helpers import i18n
 from helpers import time_utils
@@ -44,6 +43,7 @@ class RANK_CHANGE_STATES(object):
     STEPS_EARNED = 'stepsEarned'
     STEP_LOST = 'stepLost'
     NOTHING_CHANGED = 'nothingChanged'
+    RANK_POINT = 'rankPoint'
 
 
 class RankedCycle(namedtuple('RankedCycle', 'ID, status, startDate, endDate, ordinalNumber, points')):
@@ -197,13 +197,6 @@ class RankProgress(object):
 
     def getAcquiredSteps(self):
         return filter(operator.methodcaller('isAcquired'), self._steps)
-
-    def getUserStr(self):
-        return text_styles.main(' / '.join((text_styles.stats(len(self.getAcquiredSteps())), str(len(self.getSteps())))))
-
-    def getNewUserStr(self):
-        stepsSeenByPlayer = filter(lambda s: not s.isNewForPlayer(), self.getSteps())
-        return text_styles.main(' / '.join((text_styles.stats(len(stepsSeenByPlayer)), str(len(self.getSteps())))))
 
 
 class Rank(object):

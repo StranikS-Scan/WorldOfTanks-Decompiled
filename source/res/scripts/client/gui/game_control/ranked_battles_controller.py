@@ -446,13 +446,14 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         stepChanges = changeInfo.stepChanges
         stepToJudge = changeInfo.vehStep or changeInfo.accStep
         if stepChanges > 0:
-            if stepToJudge:
-                if stepChanges > 1:
-                    state = RANK_CHANGE_STATES.STEPS_EARNED
-                else:
-                    state = RANK_CHANGE_STATES.STEP_EARNED
-            else:
+            if changeInfo.accRank > changeInfo.prevAccRank:
                 state = RANK_CHANGE_STATES.RANK_EARNED
+            elif changeInfo.vehRank > changeInfo.prevVehRank:
+                state = RANK_CHANGE_STATES.RANK_POINT
+            elif stepChanges > 1:
+                state = RANK_CHANGE_STATES.STEPS_EARNED
+            else:
+                state = RANK_CHANGE_STATES.STEP_EARNED
         elif stepChanges < 0:
             settings = self.__getSettings()
             if changeInfo.vehRank:
@@ -698,21 +699,23 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
                 total = sum((1 for i in rankChanges if i < 0))
             return total
 
-    def showRankedAwardWindow(self, rankInfo, vehicle):
-        self.__awardWindowWasShown = True
+    def showRankedAwardWindow(self, rankInfo, vehicle, questsProgress):
         completedQuests = []
-        prevAwardReceivedRankID = self.itemsCache.items.ranked.maxRankWithAwardReceived[0] + 1
         rankID = rankInfo.vehRank + rankInfo.accRank
-        while rankID >= prevAwardReceivedRankID:
-            rank = self.getRank(prevAwardReceivedRankID, vehicle=vehicle)
-            rankQuest = rank.getQuest()
-            if rankQuest is not None:
-                completedQuests.append(rankQuest)
-            prevAwardReceivedRankID += 1
 
+        def _filter(q):
+            return ranked_helpers.isRankedQuestID(q.getID())
+
+        quests = self.eventsCache.getHiddenQuests(filterFunc=_filter)
+        for qID, qProgress in questsProgress.iteritems():
+            _, pPrev, pCur = qProgress
+            isCompleted = pCur.get('bonusCount', 0) - pPrev.get('bonusCount', 0) > 0
+            if qID in quests and isCompleted:
+                completedQuests.append(quests[qID])
+
+        self.__awardWindowWasShown = True
         if completedQuests:
             event_dispatcher.showRankedAwardWindow(rankID, vehicle=vehicle, awards=getRankedQuestsOrderedAwards(completedQuests, size=AWARDS_SIZES.BIG))
-        return
 
     def setWebLeague(self, league=0, position=0):
         if constants.IS_DEVELOPMENT:
@@ -856,8 +859,9 @@ class RankedBattlesController(IRankedBattlesController, Notifiable):
         if arenaBonusType == ARENA_BONUS_TYPE.RANKED and arenaUniqueID not in self.__arenaBattleResultsWasShown:
             rankInfo = reusableInfo.personal.getRankInfo()
             vehicle = first(reusableInfo.personal.getVehicleItemsIterator())[1]
+            questsProgress = reusableInfo.personal.getQuestsProgress()
             rankedResultsVO = composer.getResultsTeamsVO()
-            event_dispatcher.showRankedBattleResultsWindow(rankedResultsVO, vehicle, rankInfo)
+            event_dispatcher.showRankedBattleResultsWindow(rankedResultsVO, vehicle, rankInfo, questsProgress)
             self.__arenaBattleResultsWasShown.add(reusableInfo.arenaUniqueID)
         else:
             LOG_WARNING('Ranked Overlay windows will not be shown, received arenaBonusType: ', arenaBonusType)

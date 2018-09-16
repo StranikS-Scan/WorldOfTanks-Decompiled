@@ -10,7 +10,7 @@ from gui.Scaleform.locale.RANKED_BATTLES import RANKED_BATTLES
 from gui.Scaleform.locale.RES_ICONS import RES_ICONS
 from gui.ranked_battles import ranked_helpers
 from helpers.i18n import makeString as _ms
-from helpers import dependency, int2roman
+from helpers import dependency
 from skeletons.gui.shared import IItemsCache
 
 class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta, FinishAwardsView):
@@ -52,7 +52,6 @@ class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta, Finis
                 league = 0
             itemsCache = dependency.instance(IItemsCache)
             dossier = itemsCache.items.getAccountDossier().getPreviousSeasonRankedStats()
-            seasonRomanNum = int2roman(int(season.getNumber()))
             seasonPoints = season.getPoints()
             efficiency = dossier.getStepsEfficiency()
             if efficiency is not None:
@@ -71,7 +70,7 @@ class RankedBattlesSeasonCompleteView(RankedBattlesSeasonCompleteViewMeta, Finis
              'placeLabel': _ms(RANKED_BATTLES.SEASONCOMPLETE_PLACEINRATING),
              'expValue': BigWorld.wg_getIntegralFormat(avgExp),
              'expLabel': _ms(RANKED_BATTLES.SEASONCOMPLETE_EXPLABEL),
-             'congratulationTitle': _ms(RANKED_BATTLES.SEASONCOMPLETE_BIGTITLE, season=seasonRomanNum),
+             'congratulationTitle': _ms(RANKED_BATTLES.SEASONCOMPLETE_BIGTITLE, season=str(season.getNumber())),
              'typeTitle': _ms(RANKED_BATTLES.SEASONCOMPLETE_SMALLTITLE),
              'typeIcon': RES_ICONS.MAPS_ICONS_BATTLETYPES_40X40_RANKED,
              'nextButtonLabel': _ms(RANKED_BATTLES.SEASONCOMPLETE_LEADERSBUTTON),

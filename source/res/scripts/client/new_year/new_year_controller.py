@@ -1009,10 +1009,4 @@ class NewYearController(INewYearController):
         return
 
     def __switchHangar(self, defaultHangar):
-        if defaultHangar:
-            g_clientHangarSpaceOverride.setPath(None, True, False)
-            g_clientHangarSpaceOverride.setPath(None, False, True)
-        else:
-            g_clientHangarSpaceOverride.setPath(NEW_YEAR_HANGAR_PATH, True, False)
-            g_clientHangarSpaceOverride.setPath(NEW_YEAR_HANGAR_PATH, False, True)
-        return
+        pass

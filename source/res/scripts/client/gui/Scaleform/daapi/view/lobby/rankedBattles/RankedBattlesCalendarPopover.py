@@ -26,7 +26,7 @@ class RankedBattlesCalendarPopover(RankedBattlesCalendarPopoverMeta):
         self.__seasonInfo = self.rankedController.getCurrentSeason()
         self.__currentCycle = self.__seasonInfo.getCycleOrdinalNumber()
         self.__selectedDate = time_utils.getCurrentLocalServerTimestamp()
-        self.__weekDays = self._createUtilsManager().getWeekDayNames(full=True, isLower=False, isUpper=False)
+        self.__weekDays = self._createUtilsManager().getWeekDayNames(full=True, isLower=False, isUpper=False, useRegionSettings=False)
         data = ctx.get('data', None)
         if data is not None:
             self.arrowDirection = data.arrowDirection

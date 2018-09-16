@@ -303,6 +303,32 @@
     </paint>
   </itemGroup>
   <itemGroup>
+    <name>	Rostelecom Paint	</name>
+    <priceGroup>	custom paint notInShop	</priceGroup>
+    <userString>	#vehicle_customization:repaint/color_group_03	</userString>
+    <vehicleFilter>
+      <include>
+        <vehicles>	ussr:R127_T44_100_P	</vehicles>
+      </include>
+    </vehicleFilter>
+    <usages>
+      <item>
+        <componentType>	ALL	</componentType>
+        <cost>	1	</cost>
+      </item>
+    </usages>
+    <paint>
+      <id>	277	</id>
+      <texture>	gui/maps/vehicles/repaints/custom_color_21.png	</texture>
+      <color>	73 87 95 255	</color>
+      <gloss>	0.509	</gloss>
+      <metallic>	0.230	</metallic>
+      <userString>	#vehicle_customization:repaint/custom_color_21	</userString>
+      <season>	ALL	</season>
+      <historical>	false	</historical>
+    </paint>
+  </itemGroup>
+  <itemGroup>
     <priceGroup>	historical paint	</priceGroup>
     <name>	chinese colors	</name>
     <userString>	#vehicle_customization:repaint/color_group_02	</userString>

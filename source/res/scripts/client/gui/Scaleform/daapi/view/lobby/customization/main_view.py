@@ -500,7 +500,7 @@ class MainView(CustomizationMainViewMeta):
             if cart.totalPrice != ITEM_PRICE_EMPTY:
                 msgCtx = {'money': formatPrice(cart.totalPrice.price),
                  'count': cart.numSelected}
-                SystemMessages.pushI18nMessage(MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_CUSTOMIZATIONSBUY, type=SM_TYPE.Information, **msgCtx)
+                SystemMessages.pushI18nMessage(MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_CUSTOMIZATIONSBUY, type=CURRENCY_TO_SM_TYPE.get(cart.totalPrice.getCurrency(byWeight=True), SM_TYPE.PurchaseForGold), **msgCtx)
             else:
                 SystemMessages.pushI18nMessage(MESSENGER.SERVICECHANNELMESSAGES_SYSMSG_CONVERTER_CUSTOMIZATIONS, type=SM_TYPE.Information)
             self.__onConfirmCloseWindow(proceed=True)

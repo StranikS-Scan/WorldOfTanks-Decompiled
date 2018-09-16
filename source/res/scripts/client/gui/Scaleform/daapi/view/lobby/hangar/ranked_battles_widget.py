@@ -129,9 +129,6 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
     def _hasAdditionalRankInfo(self):
         return True
 
-    def _getCountLabel(self, rank):
-        pass
-
     def _getFirstRankReceiveStateData(self, currentRank):
         """
         Return First rank first time received VO
@@ -162,9 +159,8 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
         nextInfoText = ''
         rankRightVO = self._buildRankVO(currentRank, True)
         newRankVO = self._buildRankVO(nextRank)
-        newCountText = nextRank.getProgress().getUserStr()
         newSteps = self._buildProgress(nextRank, newStepsState=newStepsState, changeAcquired=changeAcquired)
-        return self._buildVO(state, infoText=infoText, rankRightVO=rankRightVO, newRankVO=newRankVO, steps=steps, newSteps=newSteps, nextInfoText=nextInfoText, newCountText=newCountText, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(currentRank, True), rankRightVO=self._buildRankVO(nextRank), steps=self._buildProgress(nextRank, newStepsState=newStepsState, changeAcquired=changeAcquired)))
+        return self._buildVO(state, infoText=infoText, rankRightVO=rankRightVO, newRankVO=newRankVO, steps=steps, newSteps=newSteps, nextInfoText=nextInfoText, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(currentRank, True), rankRightVO=self._buildRankVO(nextRank), steps=self._buildProgress(nextRank, newStepsState=newStepsState, changeAcquired=changeAcquired)))
 
     def _getRankReceiveForFirstTimeData(self, lastRank, currentRank):
         """
@@ -176,11 +172,9 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
         state = RANKEDBATTLES_ALIASES.RANK_RECEIVE_FOR_FIRST_TIME_STATE
         infoText = text_styles.hightlight(_ms(RANKED_BATTLES.RANKEDBATTLESWIDGET_NEWRANKCONGRAT))
         steps = self._buildProgress(currentRank)
-        countText = currentRank.getProgress().getUserStr()
-        nextCountText = currentRank.getProgress().getNewUserStr()
         rankLeftVO = self._buildRankVO(lastRank, True)
         rankRightVO = self._buildRankVO(currentRank)
-        return self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, infoText=infoText, steps=steps, countText=countText, nextCountText=nextCountText, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(lastRank, True), rankRightVO=self._buildRankVO(currentRank), steps=self._buildProgress(currentRank)))
+        return self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, infoText=infoText, steps=steps, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(lastRank, True), rankRightVO=self._buildRankVO(currentRank), steps=self._buildProgress(currentRank)))
 
     def _getReachievedReceiveStateData(self, lastRank, currentRank, nextRank, stepsState=None, newStepsState=None, changeAcquired=False):
         """
@@ -195,14 +189,11 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
         """
         state = RANKEDBATTLES_ALIASES.RANK_RECEIVE_STATE
         steps = self._buildProgress(currentRank, newStepsState=stepsState)
-        countText = currentRank.getProgress().getUserStr()
-        nextCountText = currentRank.getProgress().getNewUserStr()
         rankLeftVO = self._buildRankVO(lastRank, True)
         rankRightVO = self._buildRankVO(currentRank)
         newSteps = self._buildProgress(nextRank, newStepsState=newStepsState, changeAcquired=changeAcquired)
-        newCountText = nextRank.getProgress().getUserStr()
         newRankVO = self._buildRankVO(nextRank)
-        return self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, newRankVO=newRankVO, steps=steps, newSteps=newSteps, countText=countText, nextCountText=nextCountText, newCountText=newCountText, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(currentRank), rankRightVO=self._buildRankVO(nextRank), steps=self._buildProgress(nextRank, newStepsState=newStepsState, changeAcquired=changeAcquired)))
+        return self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, newRankVO=newRankVO, steps=steps, newSteps=newSteps, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(currentRank), rankRightVO=self._buildRankVO(nextRank), steps=self._buildProgress(nextRank, newStepsState=newStepsState, changeAcquired=changeAcquired)))
 
     def _getLadderPointReceiveData(self, maxRank, vehRank, currentRank):
         state = RANKEDBATTLES_ALIASES.ANIM_ACHIEVE_LADDER_POINT
@@ -211,9 +202,7 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
         rankRightVO = self._buildRankVO(vehRank, isEnabled=True)
         steps = self._buildProgress(currentRank)
         newSteps = self._buildProgress(vehRank)
-        countText = ''
-        newCountText = ''
-        return self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, steps=steps, newSteps=newSteps, countText=countText, newCountText=newCountText, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(maxRank, True, ladderPoints=(points - 1, points), showLadderPoints=True), rankRightVO=self._buildRankVO(vehRank, isEnabled=True), steps=self._buildProgress(vehRank)))
+        return self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, steps=steps, newSteps=newSteps, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(maxRank, True, ladderPoints=(points - 1, points), showLadderPoints=True), rankRightVO=self._buildRankVO(vehRank, isEnabled=True), steps=self._buildProgress(vehRank)))
 
     def _buildData(self, ranks, currentRank, lastRank):
         currentRankID = currentRank.getID()
@@ -223,9 +212,8 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
             nextRank = ranks[currentRankID + 1]
             steps = self._buildProgress(nextRank)
             infoText = text_styles.hightlight(_ms(RANKED_BATTLES.RANKEDBATTLESWIDGET_INITTEXT, battles=str(len(steps))))
-            countText = self._getCountLabel(nextRank)
             rankLeftVO = self._buildRankVO(nextRank)
-            return [self._buildVO(state, infoText=infoText, rankLeftVO=rankLeftVO, steps=steps, countText=countText, finalState=self._buildFinalState(state, self._buildRankVO(nextRank), steps=self._buildProgress(nextRank)))]
+            return [self._buildVO(state, infoText=infoText, rankLeftVO=rankLeftVO, steps=steps, finalState=self._buildFinalState(state, self._buildRankVO(nextRank), steps=self._buildProgress(nextRank)))]
         else:
             maxAccRankID = self.rankedController.getAccRanksTotal()
             skipNewRankCheck = currentRankID == 1 and self.rankedController.wasAwardWindowShown() and not self._isHuge()
@@ -272,16 +260,11 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
                         nextRank = ranks[lastRank.getID() + 1]
                     state = RANKEDBATTLES_ALIASES.RANK_LOST_STATE
                     steps = self._buildProgress(nextRank)
-                    countText = ''
-                    if self._isHuge():
-                        countText = nextRank.getProgress().getUserStr()
-                    nextCountText = nextRank.getProgress().getNewUserStr()
                     newSteps = self._buildProgress(lastRank)
-                    newCountText = lastRank.getProgress().getUserStr()
                     rankLeftVO = self._buildRankVO(lastRank, True)
                     rankRightVO = self._buildRankVO(nextRank)
                     newRankVO = self._buildRankVO(currentRank, True)
-                    return [self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, newRankVO=newRankVO, steps=steps, newSteps=newSteps, countText=countText, nextCountText=nextCountText, newCountText=newCountText, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(currentRank, True), rankRightVO=self._buildRankVO(lastRank), steps=self._buildProgress(lastRank)))]
+                    return [self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, newRankVO=newRankVO, steps=steps, newSteps=newSteps, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(currentRank, True), rankRightVO=self._buildRankVO(lastRank), steps=self._buildProgress(lastRank)))]
             if self._checkClaim() and not currentRank.isRewardClaimed():
                 state = RANKEDBATTLES_ALIASES.NEW_RANK_CONGRAT_STATE
                 infoText = text_styles.hightlight(_ms(RANKED_BATTLES.RANKEDBATTLESWIDGET_NEWRANKCONGRAT))
@@ -289,17 +272,6 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
                 return [self._buildVO(state, infoText=infoText, rankLeftVO=rankLeftVO, finalState=self._buildFinalState(state, rankLeftVO=self._buildRankVO(currentRank, True)))]
             nextRank = ranks[currentRankID + 1]
             steps = self._buildProgress(nextRank)
-            showText = True
-            for step in steps:
-                if step['state'] in [RANKEDBATTLES_ALIASES.STEP_JUST_LOST_STATE, RANKEDBATTLES_ALIASES.STEP_JUST_RECEIVED_STATE, RANKEDBATTLES_ALIASES.STEP_JUST_RECEIVED_SHORT_STATE]:
-                    showText = False
-
-            countText = nextRank.getProgress().getUserStr()
-            if self._isHuge():
-                if not showText:
-                    countText = ''
-                else:
-                    countText = text_styles.stats(_ms(RANKED_BATTLES.RANKEDBATTLESWIDGET_NOCHANGES))
             shieldStatus = self.rankedController.getShieldStatus(currentRank)
             if shieldStatus is not None:
                 prevShieldHP, shiedHP, maxHP, shieldState, _ = shieldStatus
@@ -332,28 +304,23 @@ class RankedBattlesWidget(RankedBattlesWidgetMeta):
                 finalLeftVO = self._buildRankVO(ranks[maxAccRankID], True, showLadderPoints=True, ladderPoints=ladderPoints)
                 rankRightVO = self._buildRankVO(ranks[maxAccRankID + 1])
                 finalRightVO = self._buildRankVO(ranks[maxAccRankID + 1])
-                countText = ''
             else:
                 rankLeftVO = self._buildRankVO(currentRank, True)
                 finalLeftVO = self._buildRankVO(currentRank, True)
                 rankRightVO = self._buildRankVO(nextRank)
                 finalRightVO = self._buildRankVO(nextRank)
             isShieldOneRankState = state in RANKEDBATTLES_ALIASES.ANIM_SHIELD_ONE_RANK_STATES
-            return [self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, steps=steps, countText=countText, finalState=self._buildFinalState(state, rankLeftVO=finalLeftVO, rankRightVO=None if isShieldOneRankState else finalRightVO, steps=None if isShieldOneRankState else self._buildProgress(nextRank)))]
+            return [self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, steps=steps, finalState=self._buildFinalState(state, rankLeftVO=finalLeftVO, rankRightVO=None if isShieldOneRankState else finalRightVO, steps=None if isShieldOneRankState else self._buildProgress(nextRank)))]
 
-    def _buildVO(self, state, infoText='', nextInfoText='', rankLeftVO=None, rankRightVO=None, newRankVO=None, countText='', nextCountText='', steps=None, newCountText='', newSteps=None, finalState=None):
+    def _buildVO(self, state, infoText='', nextInfoText='', rankLeftVO=None, rankRightVO=None, newRankVO=None, steps=None, newSteps=None, finalState=None):
         return {'state': state,
          'infoText': infoText,
          'nextInfoText': nextInfoText,
          'rankLeftVO': rankLeftVO,
          'rankRightVO': rankRightVO,
          'newRankVO': newRankVO,
-         'stepsContainerVO': {'countText': countText,
-                              'nextCountText': nextCountText,
-                              'steps': steps or ()},
-         'newStepsContainerVO': {'countText': newCountText,
-                                 'nextCountText': '',
-                                 'steps': newSteps or ()},
+         'stepsContainerVO': {'steps': steps or ()},
+         'newStepsContainerVO': {'steps': newSteps or ()},
          'isHuge': self._isHuge(),
          'autoPlay': self._isAutoPlay(),
          'finalState': finalState,
@@ -423,8 +390,8 @@ class RankedBattleResultsWidget(RankedBattlesWidget):
     def _isHuge(self):
         return True
 
-    def _buildVO(self, state, infoText='', nextInfoText='', rankLeftVO=None, rankRightVO=None, newRankVO=None, countText='', nextCountText='', steps=None, newCountText='', newSteps=None, finalState=None):
-        vo = super(RankedBattleResultsWidget, self)._buildVO(state, infoText, nextInfoText, rankLeftVO, rankRightVO, newRankVO, countText, nextCountText, steps, newCountText, newSteps, finalState)
+    def _buildVO(self, state, infoText='', nextInfoText='', rankLeftVO=None, rankRightVO=None, newRankVO=None, steps=None, newSteps=None, finalState=None):
+        vo = super(RankedBattleResultsWidget, self)._buildVO(state, infoText=infoText, nextInfoText=nextInfoText, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, newRankVO=newRankVO, steps=steps, newSteps=newSteps, finalState=finalState)
         return vo
 
     def _isAutoPlay(self):
@@ -440,12 +407,15 @@ class RankedBattleResultsWidget(RankedBattlesWidget):
             rankRightVO = self.__setFinalState(rankRightVO)
         if steps is not None:
             for step in steps:
-                state = step['state']
-                if state in RANKEDBATTLES_ALIASES.STEP_RECEIVED_STATES:
+                stepState = step['state']
+                if stepState in RANKEDBATTLES_ALIASES.STEP_RECEIVED_STATES:
                     step['state'] = RANKEDBATTLES_ALIASES.STEP_RECEIVED_STATE
                 step['state'] = RANKEDBATTLES_ALIASES.STEP_NOT_RECEIVED_STATE
 
         return self._buildVO(state, rankLeftVO=rankLeftVO, rankRightVO=rankRightVO, steps=steps)
+
+    def _isAnimationEnabled(self):
+        return bool(AccountSettings.getSettings(ENABLE_RANKED_ANIMATIONS))
 
     def __setFinalState(self, rank):
         shield = rank.get('shield', None)
@@ -461,6 +431,3 @@ class RankedBattleResultsWidget(RankedBattlesWidget):
                 scoreData['newLabel'] = ''
                 rank['scoreData'] = scoreData
         return rank
-
-    def _isAnimationEnabled(self):
-        return bool(AccountSettings.getSettings(ENABLE_RANKED_ANIMATIONS))

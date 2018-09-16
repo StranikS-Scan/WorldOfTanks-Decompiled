@@ -856,51 +856,56 @@ class VehicleDescriptor(object):
                 optionalDeviceSlots >>= 1
                 idx -= 1
 
-            if not emblemPositions & 15:
+            if IS_CLIENT:
                 self.playerEmblems = type._defEmblems
-            else:
-                emblemCache = g_cache.playerEmblems()[1]
-                slots = [None,
-                 None,
-                 None,
-                 None]
-                for idx in _RANGE_4:
-                    if emblemPositions & 1 << idx:
-                        slots[idx] = _unpackIDAndDuration(emblems[:6])
-                        emblems = emblems[6:]
-                        emblemCache[slots[idx][0]]
-                    slots[idx] = type._defEmblem
-
-                self.playerEmblems = tuple(slots)
-            if not emblemPositions & 240:
                 self.playerInscriptions = _EMPTY_INSCRIPTIONS
-            else:
-                slots = [None,
-                 None,
-                 None,
-                 None]
-                for idx in _RANGE_4:
-                    if emblemPositions & 1 << idx + 4:
-                        slots[idx] = _unpackIDAndDuration(inscriptions[:6]) + (ord(inscriptions[6]),)
-                        inscriptions = inscriptions[7:]
-                        customization['inscriptions'][slots[idx][0]]
-                        customization['inscriptionColors'][slots[idx][3]]
-                    slots[idx] = _EMPTY_INSCRIPTION
-
-                self.playerInscriptions = tuple(slots)
-            if not camouflages:
                 self.camouflages = _EMPTY_CAMOUFLAGES
             else:
-                slots = list(_EMPTY_CAMOUFLAGES)
-                while camouflages:
-                    item = _unpackIDAndDuration(camouflages[:6])
-                    camouflages = camouflages[6:]
-                    idx = customization['camouflages'][item[0]]['kind']
-                    if slots[idx][0] is not None:
-                        LOG_WARNING('Second camouflage of same kind', custNationID, item[0], slots[idx][0])
-                    slots[idx] = item
+                if not emblemPositions & 15:
+                    self.playerEmblems = type._defEmblems
+                else:
+                    emblemCache = g_cache.playerEmblems()[1]
+                    slots = [None,
+                     None,
+                     None,
+                     None]
+                    for idx in _RANGE_4:
+                        if emblemPositions & 1 << idx:
+                            slots[idx] = _unpackIDAndDuration(emblems[:6])
+                            emblems = emblems[6:]
+                            emblemCache[slots[idx][0]]
+                        slots[idx] = type._defEmblem
 
-                self.camouflages = tuple(slots)
+                    self.playerEmblems = tuple(slots)
+                if not emblemPositions & 240:
+                    self.playerInscriptions = _EMPTY_INSCRIPTIONS
+                else:
+                    slots = [None,
+                     None,
+                     None,
+                     None]
+                    for idx in _RANGE_4:
+                        if emblemPositions & 1 << idx + 4:
+                            slots[idx] = _unpackIDAndDuration(inscriptions[:6]) + (ord(inscriptions[6]),)
+                            inscriptions = inscriptions[7:]
+                            customization['inscriptions'][slots[idx][0]]
+                            customization['inscriptionColors'][slots[idx][3]]
+                        slots[idx] = _EMPTY_INSCRIPTION
+
+                    self.playerInscriptions = tuple(slots)
+                if not camouflages:
+                    self.camouflages = _EMPTY_CAMOUFLAGES
+                else:
+                    slots = list(_EMPTY_CAMOUFLAGES)
+                    while camouflages:
+                        item = _unpackIDAndDuration(camouflages[:6])
+                        camouflages = camouflages[6:]
+                        idx = customization['camouflages'][item[0]]['kind']
+                        if slots[idx][0] is not None:
+                            LOG_WARNING('Second camouflage of same kind', custNationID, item[0], slots[idx][0])
+                        slots[idx] = item
+
+                    self.camouflages = tuple(slots)
             self.__updateAttributes()
         except Exception:
             LOG_ERROR('(compact descriptor to XML mismatch?)', compactDescr)

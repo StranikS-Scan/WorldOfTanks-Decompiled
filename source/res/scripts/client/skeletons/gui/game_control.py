@@ -728,11 +728,12 @@ class IRankedBattlesController(IGameController):
         """
         raise NotImplementedError
 
-    def showRankedAwardWindow(self, rankInfo, vehicle):
+    def showRankedAwardWindow(self, rankInfo, vehicle, questsProgress):
         """
         Show RankedBattlesAwardsView if needed
         :param rankInfo:
         :param vehicle:
+        :param questsProgress:
         """
         raise NotImplementedError
 
